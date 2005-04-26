@@ -1,0 +1,2 @@
+?package(tress):needs=text|vc section=Apps/Net\
+  title="tress" command="/usr/bin/tress"

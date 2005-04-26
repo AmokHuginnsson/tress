@@ -1,0 +1,7 @@
+# .tressrc is an `tress' 0.0.0 configuration file,
+# this file ought to be in /etc/ and/or your home dirctory.
+
+logfile x_tress.log
+
+# End of configuration file.
+

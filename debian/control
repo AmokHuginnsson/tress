@@ -1,0 +1,11 @@
+Source: tress
+Section: non-free:net
+Priority: optional
+Maintainer: Amok Berserker <amok@utgardian.utgard.org>
+Standards-Version: 3.1.1
+
+Package: tress
+Architecture: i386
+Depends: ${shlibs:Depends}
+Description: tress - absolutelly nesslesscary tool.
+ tress - does very much of very many different usefull things ... really.
