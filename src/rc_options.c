@@ -33,7 +33,6 @@ M_CVSID ( "$CVSHeader$" );
 
 #include "variables.h"
 
-using namespace stdhapi;
 using namespace stdhapi::hcore;
 
 OVariable g_psVars [ ] =
