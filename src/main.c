@@ -111,7 +111,7 @@ public:
 	/*}*/
 protected:
 	/*{*/
-	virtual int run ( void ) __attribute__(( __noreturn__ ));
+	virtual int run ( void );
 	/*}*/
 	};
 
@@ -133,11 +133,14 @@ HCool::~HCool ( void )
 int HCool::run ( void )
 	{
 	M_PROLOG
-	while ( 1 )
+	int l_iCtr = 5;
+	while ( l_iCtr -- )
 		{
-		fprintf ( stderr, "%s\n", static_cast < char * > ( f_oName ) );
+		fprintf ( stderr, "%s %d\n", static_cast < char * > ( f_oName ), l_iCtr );
 		sleep ( 1 );
+		listen ( );
 		}
+	return ( 0 );
 	M_EPILOG
 	}
 
@@ -232,7 +235,7 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 		HCool a ( "a" ), b ( "b" );
 		a.spawn ( );
 		b.spawn ( );
-		sleep ( 5 );
+		sleep ( 2 );
 /*	... there is the place main loop ends. :OD-OT                         */
 		}
 	catch ( ... ) 
