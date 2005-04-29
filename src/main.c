@@ -107,6 +107,7 @@ protected:
 public:
 	/*{*/
 	HCool ( char const * );
+	virtual ~HCool ( void );
 	/*}*/
 protected:
 	/*{*/
@@ -117,6 +118,14 @@ protected:
 HCool::HCool ( char const * a_pcName ) : f_oName ( a_pcName )
 	{
 	M_PROLOG
+	return;
+	M_EPILOG
+	}
+
+HCool::~HCool ( void )
+	{
+	M_PROLOG
+	fprintf ( stderr, "%s bye\n", static_cast < char * > ( f_oName ) );
 	return;
 	M_EPILOG
 	}

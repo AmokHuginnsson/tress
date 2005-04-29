@@ -131,7 +131,7 @@ endif
 %.o: %.c
 	@echo -n "Compiling \`$(subst $(DIR_ROOT)/,,$(<))' ... "; \
 	echo -n "$(@:.o=.d) " > $(@:.o=.d); \
-	$(DXX) $(CXXFLAGS) -MM $(<) -MT $(@) >> $(@:.o=.d); \
+	$(DXX) $(CXXFLAGS) -MM $(<) -MT $(@) | grep -v '^#' >> $(@:.o=.d); \
 	$(CXX) $(CXXFLAGS) $(<) -c -o $(@) 2>&1 | tee -a make.log; \
 	echo -n "done.$(CL)"
 
