@@ -144,6 +144,19 @@ int HCool::run ( void )
 	M_EPILOG
 	}
 
+class HXmlDump : public HXml
+	{
+public:
+	void * parse ( void * );
+	};
+
+void * HXmlDump::parse ( void * )
+	{
+	xml_node_set_ptr_t node = get_node_set_by_path ( "/tabela_kursow/" );
+	fprintf ( stderr, "%s\n", get_leaf_by_name ( node, "data_publikacji" ) );
+	return ( NULL );
+	}
+
 int main ( int a_iArgc, char * a_ppcArgv [ ] )
 	{
 	M_PROLOG
@@ -236,6 +249,9 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 		a.spawn ( );
 		b.spawn ( );
 		sleep ( 2 );
+		HXmlDump xml;
+		xml.init ( "test.xml" );
+		xml.parse ( 0 );
 /*	... there is the place main loop ends. :OD-OT                         */
 		}
 	catch ( ... ) 
