@@ -152,8 +152,17 @@ public:
 
 void * HXmlDump::parse ( void * )
 	{
-	xml_node_set_ptr_t node = get_node_set_by_path ( "/tabela_kursow/" );
-	fprintf ( stderr, "%s\n", get_leaf_by_name ( node, "data_publikacji" ) );
+	int matches = get_node_set_by_path ( "/tabela_kursow/" );
+	char const * ptr;
+	HString str;
+	if ( matches )
+		fprintf ( stderr, "%s\n", get_leaf_by_name ( 0, "data_publikacji" ) );
+	while ( ( ptr = iterate ( str, "/tabela_kursow/pozycja" ) ) )
+		fprintf ( stderr, "[%s]: {%s}\n", ptr, static_cast < char * > ( str ) );
+	while ( ( ptr = iterate ( str, "/tabela_kursow/pozycja/kod_waluty" ) ) )
+		fprintf ( stderr, "[%s]: {%s}\n", ptr, static_cast < char * > ( str ) );
+	while ( ( ptr = iterate ( str, "/tabela_kursow/pozycja/nazwa_waluty" ) ) )
+		fprintf ( stderr, "[%s]: {%s}\n", ptr, static_cast < char * > ( str ) );
 	return ( NULL );
 	}
 
