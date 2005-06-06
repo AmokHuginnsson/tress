@@ -152,16 +152,9 @@ public:
 
 void * HXmlDump::parse ( void * )
 	{
-	int matches = get_node_set_by_path ( "/tabela_kursow/" );
 	char const * ptr;
 	HString str;
-	if ( matches )
-		fprintf ( stderr, "%s\n", get_leaf_by_name ( 0, "data_publikacji" ) );
-	while ( ( ptr = iterate ( str, "/tabela_kursow/pozycja" ) ) )
-		fprintf ( stderr, "[%s]: {%s}\n", ptr, static_cast < char * > ( str ) );
-	while ( ( ptr = iterate ( str, "/tabela_kursow/pozycja/kod_waluty" ) ) )
-		fprintf ( stderr, "[%s]: {%s}\n", ptr, static_cast < char * > ( str ) );
-	while ( ( ptr = iterate ( str, "/tabela_kursow/pozycja/nazwa_waluty" ) ) )
+	while ( ( ptr = iterate ( str, "/" ) ) )
 		fprintf ( stderr, "[%s]: {%s}\n", ptr, static_cast < char * > ( str ) );
 	return ( NULL );
 	}
@@ -234,7 +227,7 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 		fo = "2 * ( 3 + 5 )";
 		cout << fo << " = " << util::atof_ex ( fo, true ) << endl;
 */
-		cout << "PL 12 1470 0002 2201 0010 7060 0001: ";
+/*		cout << "PL 12 1470 0002 2201 0010 7060 0001: ";
 		if ( ! verify_IBAN ( "PL 12 1470 0002 2201 0010 7060 0001" ) )
 			cout << get_last_error ( ) << endl;
 		else 
@@ -257,10 +250,19 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 		HCool a ( "a" ), b ( "b" );
 		a.spawn ( );
 		b.spawn ( );
-		sleep ( 2 );
+		sleep ( 2 );*/
 		HXmlDump xml;
-		xml.init ( "test.xml" );
+		if ( a_iArgc != 2 )
+			M_THROW ( "bad number of arguments", a_iArgc - 1 );
+		xml.init ( a_ppcArgv [ 1 ] );
 		xml.parse ( 0 );
+/*		HAnalyser x;
+		HString eq ( "((2+3+5)*4*6*8)^2^3" );
+		x.analyse ( eq );
+		cout << eq << "=" << x.count ( ) << endl;
+		HString str ( 1024 );
+		cout << str << endl;
+		M_ENSURE ( ! g_iErrNo );*/
 /*	... there is the place main loop ends. :OD-OT                         */
 		}
 	catch ( ... ) 

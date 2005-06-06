@@ -50,7 +50,7 @@ bool set_variables ( HString & a_roOption, HString & a_roValue )
 
 int process_tressrc_file ( void )
 	{
-	rc_file::process_rc_file ( "tress", NULL, g_psVars );
+	rc_file::process_rc_file ( "tress", NULL, g_psVars, NULL );
 	if ( ! g_pcLogFileName )
 		g_pcLogFileName = xstrdup ( "tress.log" );
 	return ( 0 );
