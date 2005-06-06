@@ -152,10 +152,15 @@ public:
 
 void * HXmlDump::parse ( void * )
 	{
-	char const * ptr;
-	HString str;
-	while ( ( ptr = iterate ( str, "/" ) ) )
-		fprintf ( stderr, "[%s]: {%s}\n", ptr, static_cast < char * > ( str ) );
+	char const * name, * prop;
+	HString str, val;
+	while ( ( name = iterate ( str, "/" ) ) )
+		{
+		fprintf ( stderr, "[%s]:\n", name );
+		while ( ( prop = next_property ( val ) ) )
+			fprintf ( stderr, "(%s)->(%s)\n", prop, static_cast < char * > ( val ) );
+		fprintf ( stderr, "{%s}\n", static_cast < char * > ( str ) );
+		}
 	return ( NULL );
 	}
 
