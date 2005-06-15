@@ -177,7 +177,7 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 		g_pcProgramName = a_ppcArgv [ 0 ];
 		process_tressrc_file ( );
 		l_iOpt = decode_switches ( a_iArgc, a_ppcArgv );
-		hcore::log.rehash ( g_pcLogFileName, g_pcProgramName );
+		hcore::log.rehash ( g_oLogPath, g_pcProgramName );
 //		if ( ! is_enabled ( ) )enter_curses (); /* enabling ncurses ablilities*/
 /* *BOOM* */
 //		if ( is_enabled ( ) )leave_curses ();  /* ending ncurses sesion    */
@@ -255,19 +255,33 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 		HCool a ( "a" ), b ( "b" );
 		a.spawn ( );
 		b.spawn ( );
-		sleep ( 2 );*/
+		sleep ( 2 );* /
+		HString string;
 		HXmlDump xml;
+		HFile file;
 		if ( a_iArgc != 2 )
 			M_THROW ( "bad number of arguments", a_iArgc - 1 );
+		if ( file.open ( a_ppcArgv [ 1 ] ) )
+			cout << file.get_error ( ) << ": " << file.get_path ( ) << endl;
+		else
+			{
+			while ( file.read_line ( string, true ) >= 0 )
+				cout << string << endl;
+			file.close ( );
+			}
 		xml.init ( a_ppcArgv [ 1 ] );
-		xml.parse ( 0 );
-/*		HAnalyser x;
+		xml.parse ( 0 );*/
+		HAnalyser x;
 		HString eq ( "((2+3+5)*4*6*8)^2^3" );
+		eq = "Y";
 		x.analyse ( eq );
+		x [ 'Y' ] = 3.;
+		cout << eq << "=" << x.count ( ) << endl;
+		x [ 'Y' ] = 2.;
 		cout << eq << "=" << x.count ( ) << endl;
 		HString str ( 1024 );
 		cout << str << endl;
-		M_ENSURE ( ! g_iErrNo );*/
+		M_ENSURE ( ! g_iErrNo );
 /*	... there is the place main loop ends. :OD-OT                         */
 		}
 	catch ( ... ) 

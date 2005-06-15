@@ -1,7 +1,26 @@
 # .tressrc is an `tress' 0.0.0 configuration file,
 # this file ought to be in /etc/ and/or your home dirctory.
 
-logfile x_tress.log
+log_path x_tress.log
+
+	# ala0x
+	  # ala0x
+ala1# ma kota
+ala2 # ma kota
+ala3	  	# ma kota
+ala4 ma# kota
+ala5	ma# kota
+ala6	 ma 	#kota
+	ala1x# ma kota
+ 		ala2x # ma kota
+  	 ala3x	  	# ma kota
+	 	ala4x ma# kota
+ 		ala5x	ma# kota
+ 			ala6x	 ma 	#kota
+ala7 "ma#" # kota
+  ala7x "ma#" # kota
+ala8 "ma#"# kota
+  ala8x "ma#"# kota
 
 # End of configuration file.
 

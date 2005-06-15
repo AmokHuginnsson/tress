@@ -30,7 +30,7 @@ Copyright:
 extern int g_iWantQuiet;			/* --quiet, --silent */
 extern int g_iWantVerbose;			/* --verbose */
 extern char * g_pcProgramName;
-extern char * g_pcLogFileName;
+extern stdhapi::hcore::HString g_oLogPath;
 extern struct option const * g_sLongOptions;
 
 #endif /* __VARIABLES_H */
