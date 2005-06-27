@@ -22,5 +22,7 @@ ala7 "ma#" # kota
 ala8 "ma#"# kota
   ala8x "ma#"# kota
 
+ala "ma ${HOME}"
+
 # End of configuration file.
 

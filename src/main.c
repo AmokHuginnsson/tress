@@ -164,6 +164,16 @@ void * HXmlDump::parse ( void * )
 	return ( NULL );
 	}
 
+typedef enum
+	{
+	ONE,
+	TWO,
+	THREE
+	} my_en;
+
+M_DEFINE_ENUM_OPERATORS ( my_en );
+
+
 int main ( int a_iArgc, char * a_ppcArgv [ ] )
 	{
 	M_PROLOG

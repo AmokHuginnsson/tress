@@ -37,7 +37,7 @@ using namespace stdhapi::hcore;
 
 OVariable g_psVars [ ] =
 	{
-		{ D_TYPE_HSTRING, "log_path", & g_oLogPath },
+		{ D_HSTRING, "log_path", & g_oLogPath },
 		{ 0, NULL, NULL }
 	};
 
