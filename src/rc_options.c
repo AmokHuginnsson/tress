@@ -38,7 +38,7 @@ using namespace stdhapi::hcore;
 OVariable g_psVars [ ] =
 	{
 		{ D_HSTRING, "log_path", & g_oLogPath },
-		{ 0, NULL, NULL }
+		{ D_NONE, NULL, NULL }
 	};
 
 bool set_variables ( HString & a_roOption, HString & a_roValue )
