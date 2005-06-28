@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	variables.h - this file is integral part of `tress' project.
+	tut.c - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -24,15 +24,32 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#ifndef __VARIABLES_H
-#define __VARIABLES_H
+#include <tut.h>
 
-extern int g_iWantQuiet;			/* --quiet, --silent */
-extern int g_iWantVerbose;			/* --verbose */
-extern char * g_pcProgramName;
-extern stdhapi::hcore::HString g_oLogPath;
-extern int g_iTestNumber;
-extern stdhapi::hcore::HString g_oTestGroup;
-extern struct option const * g_sLongOptions;
+#include <stdhapi.h>
 
-#endif /* __VARIABLES_H */
+using namespace tut;
+using namespace std;
+using namespace stdhapi;
+using namespace stdhapi::hcore;
+using namespace stdhapi::hconsole;
+using namespace stdhapi::tools;
+using namespace stdhapi::tools::util;
+
+struct tut_
+	{
+	};
+
+typedef test_group < tut_ > tut_group;
+typedef tut_group::object module;
+tut_group tut__group ( "" );
+
+#if 0
+
+template < >
+template < >
+void module::test<1> ( void )
+	{
+	}
+
+#endif

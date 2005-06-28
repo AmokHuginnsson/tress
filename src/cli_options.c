@@ -48,6 +48,8 @@ does very much usefull things ... really \n", g_pcProgramName );
 	printf ( "Usage: %s [OPTION]... [FILE]...\n", g_pcProgramName );
 	printf (
 "Options:\n"
+"  -G --group                 select test group\n"
+"  -N --number                select test number for a given group\n"
 "  -q, --quiet, --silent      inhibit usual output\n"
 "  --verbose                  print more information\n"
 "  -h, --help                 display this help and exit\n"
@@ -60,14 +62,26 @@ int decode_switches ( int a_iArgc, char ** a_ppcArgv )
 	int l_c;
 	hcore::log << "Decoding switches ... ";
 	while ( ( l_c = getopt_long ( a_iArgc, a_ppcArgv, 
-					"q"	   /* quiet or silent                                       */
-					"v"	   /* verbose                                               */
-					"h"	   /* help                                                  */
-					"V",	 /* version                                               */
+					"G:" /* group */
+					"N:" /* number */
+					"q"	 /* quiet or silent */
+					"v"	 /* verbose */
+					"h"	 /* help    */
+					"V", /* version */
 					g_sLongOptions, ( int * ) 0 ) ) != EOF )
 		{
 		switch ( l_c )
 			{
+			case ( 'G' ):
+				{
+				g_oTestGroup = optarg;
+				break;
+				}
+			case ( 'N' ):
+				{
+				g_iTestNumber = strtol ( optarg, NULL, 10 );
+				break;
+				}
 			case ( 'q' ):	 /* --quiet, --silent                                     */
 				{
 				g_iWantQuiet = 1;

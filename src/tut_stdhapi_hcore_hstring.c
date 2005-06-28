@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	variables.h - this file is integral part of `tress' project.
+	tut_hstring.c - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -24,15 +24,7 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#ifndef __VARIABLES_H
-#define __VARIABLES_H
-
-extern int g_iWantQuiet;			/* --quiet, --silent */
-extern int g_iWantVerbose;			/* --verbose */
-extern char * g_pcProgramName;
-extern stdhapi::hcore::HString g_oLogPath;
-extern int g_iTestNumber;
-extern stdhapi::hcore::HString g_oTestGroup;
-extern struct option const * g_sLongOptions;
-
-#endif /* __VARIABLES_H */
+#if 0
+		HString str ( 1024 );
+		cout << str << endl;
+#endif

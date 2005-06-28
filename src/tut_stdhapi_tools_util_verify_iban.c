@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	variables.h - this file is integral part of `tress' project.
+	tut_verify_IBAN.c - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -24,15 +24,24 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#ifndef __VARIABLES_H
-#define __VARIABLES_H
-
-extern int g_iWantQuiet;			/* --quiet, --silent */
-extern int g_iWantVerbose;			/* --verbose */
-extern char * g_pcProgramName;
-extern stdhapi::hcore::HString g_oLogPath;
-extern int g_iTestNumber;
-extern stdhapi::hcore::HString g_oTestGroup;
-extern struct option const * g_sLongOptions;
-
-#endif /* __VARIABLES_H */
+/*		cout << "PL 12 1470 0002 2201 0010 7060 0001: ";
+		if ( ! verify_IBAN ( "PL 12 1470 0002 2201 0010 7060 0001" ) )
+			cout << get_last_error ( ) << endl;
+		else 
+			cout << "OK" << endl;
+		cout << "PL 12 1140 2004 0000 3402 3659 1487: ";
+		if ( ! verify_IBAN ( "PL 12 1140 2004 0000 3402 3659 1487" ) )
+			cout << get_last_error ( ) << endl;
+		else 
+			cout << "OK" << endl;
+		cout << "PL 76 1140 2004 0080 3602 3659 1498: ";
+		if ( ! verify_IBAN ( "PL 76 1140 2004 0080 3602 3659 1498" ) )
+			cout << get_last_error ( ) << endl;
+		else 
+			cout << "OK" << endl;
+		cout << "PL 65 1060 0076 0000 3200 0005 7153: ";
+		if ( ! verify_IBAN ( "PL 65 1060 0076 0000 3200 0005 7153" ) )
+			cout << get_last_error ( ) << endl;
+		else 
+			cout << "OK" << endl;
+*/
