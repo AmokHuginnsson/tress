@@ -44,18 +44,9 @@ using namespace stdhapi::hconsole;
 using namespace stdhapi::tools;
 using namespace stdhapi::tools::util;
 
-typedef enum
-	{
-	ONE,
-	TWO,
-	THREE
-	} my_en;
-
-M_DEFINE_ENUM_OPERATORS ( my_en );
-
 namespace tut
 	{
-  test_runner_singleton n_oRunner;
+  test_runner_singleton runner;
 	}
 
 int main ( int a_iArgc, char * a_ppcArgv [ ] )
@@ -85,9 +76,9 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 			if ( ! ( g_iTestNumber || g_oTestGroup ) )
 				l_oRestartable.run_tests ( );
 			else if ( ! g_iTestNumber )
-				n_oRunner.get ( ).run_tests ( static_cast < char * > ( g_oTestGroup ) );
+				runner.get ( ).run_tests ( static_cast < char * > ( g_oTestGroup ) );
 			else
-				n_oRunner.get ( ).run_test ( static_cast < char * > ( g_oTestGroup ), g_iTestNumber );
+				runner.get ( ).run_test ( static_cast < char * > ( g_oTestGroup ), g_iTestNumber );
 			}
 		catch ( const std::exception & e )
 			{

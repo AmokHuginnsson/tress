@@ -43,12 +43,14 @@ class HCool : public HThread
 protected:
 	/*{*/
 	bool		f_bWasStarted;
+	int			f_iLifeLength;
 	HString f_oName;
 	/*}*/
 public:
 	/*{*/
 	HCool ( char const * );
 	virtual ~HCool ( void );
+	void set ( int );
 	/*}*/
 protected:
 	/*{*/
@@ -56,7 +58,8 @@ protected:
 	/*}*/
 	};
 
-HCool::HCool ( char const * a_pcName ) : f_bWasStarted ( false ), f_oName ( a_pcName )
+HCool::HCool ( char const * a_pcName )
+	: f_bWasStarted ( false ), f_iLifeLength ( 0 ), f_oName ( a_pcName )
 	{
 	M_PROLOG
 	return;
@@ -75,15 +78,24 @@ HCool::~HCool ( void )
 int HCool::run ( void )
 	{
 	M_PROLOG
-	int l_iCtr = 5;
+	int l_iCtr = f_iLifeLength;
 	f_bWasStarted = true;
 	while ( l_iCtr -- )
 		{
+		M_CRITICAL_SECTION ( );
 		fprintf ( stderr, "%s %d\n", static_cast < char * > ( f_oName ), l_iCtr );
 		sleep ( 1 );
 		listen ( );
 		}
 	return ( 0 );
+	M_EPILOG
+	}
+
+void HCool::set ( int a_iLength )
+	{
+	M_PROLOG
+	f_iLifeLength = a_iLength;
+	return;
 	M_EPILOG
 	}
 
@@ -105,7 +117,16 @@ template < >
 template < >
 void module::test<1> ( void )
 	{
-	a.spawn ( );
-	b.spawn ( );
-	sleep ( 2 );
+	a.set ( 1 );
+	ensure ( "bad status on fresh thread", ! a.is_alive ( ) );
 	}
+
+template < >
+template < >
+void module::test<2> ( void )
+	{
+	a.set ( 1 );
+	a.spawn ( );
+	ensure ( "thread failed to start", a.is_alive ( ) );
+	}
+
