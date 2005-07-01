@@ -24,8 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#include <tut_restartable.h>
-#include <tut_reporter.h>
+#include "TUT/tut_restartable.h"
+#include "TUT/tut_reporter.h"
 
 #include <unistd.h>
 #include <stdhapi.h>    /* all hAPI headers */
