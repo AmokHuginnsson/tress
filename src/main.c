@@ -66,19 +66,41 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 //		if ( ! is_enabled ( ) )enter_curses (); /* enabling ncurses ablilities*/
 /* *BOOM* */
 		g_iErrNo = 0;
+		if ( g_bRestartable
+				&& ( g_oTestGroup || g_oTestGroupPattern || g_iTestNumber ) )
+			M_THROW ( _ ( "restartable conflicts with other switches" ),
+					g_iTestNumber );
+		if ( g_oTestGroup && g_oTestGroupPattern )
+			M_THROW ( _ ( "pattern and group switches are exclusive" ), g_iErrNo );
+		if ( g_oTestGroupPattern && g_iTestNumber )
+			M_THROW ( _ ( "setting test number for pattern makes no sense" ),
+					g_iTestNumber );
 		if ( g_iTestNumber && ! g_oTestGroup )
-			M_THROW ( _ ( "must specify test group for test number" ), g_iTestNumber );
+			M_THROW ( _ ( "must specify test group for test number" ),
+					g_iTestNumber );
 		try
 			{
-	    tut::reporter l_oVisitor;
+	    tut::reporter l_oVisitor ( cerr );
   	  tut::restartable_wrapper l_oRestartable;
-			l_oRestartable.set_callback ( & l_oVisitor );
-			if ( ! ( g_iTestNumber || g_oTestGroup ) )
+			if ( g_bRestartable )
+				{
+				l_oRestartable.set_callback ( & l_oVisitor );
 				l_oRestartable.run_tests ( );
-			else if ( ! g_iTestNumber )
-				runner.get ( ).run_tests ( static_cast < char * > ( g_oTestGroup ) );
+				}
 			else
-				runner.get ( ).run_test ( static_cast < char * > ( g_oTestGroup ), g_iTestNumber );
+				{
+				runner.get ( ).set_callback ( & l_oVisitor );
+				if ( g_oTestGroupPattern )
+					runner.get ( ).run_pattern_tests (
+							static_cast < char * > ( g_oTestGroupPattern ) );
+				else if ( g_oTestGroup && g_iTestNumber )
+					runner.get ( ).run_test ( static_cast < char * > ( g_oTestGroup ),
+							g_iTestNumber );
+				else if ( g_oTestGroup )
+					runner.get ( ).run_tests ( static_cast < char * > ( g_oTestGroup ) );
+				else
+					runner.get ( ).run_tests ( );
+				}
 			}
 		catch ( const std::exception & e )
 			{

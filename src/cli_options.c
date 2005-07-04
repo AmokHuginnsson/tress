@@ -49,7 +49,9 @@ does very much usefull things ... really \n", g_pcProgramName );
 	printf (
 "Options:\n"
 "  -G --group                 select test group\n"
+"  -P --pattern               select test groups that are matching pattern\n"
 "  -N --number                select test number for a given group\n"
+"  -R --restartable           run tests in restartable mode\n"
 "  -q, --quiet, --silent      inhibit usual output\n"
 "  --verbose                  print more information\n"
 "  -h, --help                 display this help and exit\n"
@@ -63,7 +65,9 @@ int decode_switches ( int a_iArgc, char ** a_ppcArgv )
 	hcore::log << "Decoding switches ... ";
 	while ( ( l_c = getopt_long ( a_iArgc, a_ppcArgv, 
 					"G:" /* group */
+					"P:" /* pattern */
 					"N:" /* number */
+					"R"  /* restartable */
 					"q"	 /* quiet or silent */
 					"v"	 /* verbose */
 					"h"	 /* help    */
@@ -77,9 +81,19 @@ int decode_switches ( int a_iArgc, char ** a_ppcArgv )
 				g_oTestGroup = optarg;
 				break;
 				}
+			case ( 'P' ):
+				{
+				g_oTestGroupPattern = optarg;
+				break;
+				}
 			case ( 'N' ):
 				{
 				g_iTestNumber = strtol ( optarg, NULL, 10 );
+				break;
+				}
+			case ( 'R' ):
+				{
+				g_bRestartable = true;
 				break;
 				}
 			case ( 'q' ):	 /* --quiet, --silent                                     */

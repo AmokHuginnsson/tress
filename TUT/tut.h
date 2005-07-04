@@ -312,6 +312,36 @@ namespace tut
 
       callback_->run_completed();
     }
+		
+    /**
+     * Runs all tests in all groups that are matching pattern.
+     * @param callback Callback object if exists; null otherwise
+     */
+    void run_pattern_tests( char const * pattern ) const
+    {
+      callback_->run_started();
+
+      const_iterator i = groups_.begin();
+      const_iterator e = groups_.end();
+      while( i != e )
+      {
+			if ( i->first.find ( pattern ) != std::string::npos )
+			{
+        try
+        {
+          run_all_tests_in_group_(i);
+        }
+        catch( const no_more_tests& )
+        {
+          // ok
+        }
+			}
+
+        ++i;
+      }
+
+      callback_->run_completed();
+    }
 
     /**
      * Runs all tests in specified group.

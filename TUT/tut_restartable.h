@@ -128,7 +128,7 @@ namespace tut
       tr.message = unescape(tr.message);
       if( !is.good() ) throw std::logic_error("malformed test result");
     }
-  };
+  }
 
   /**
    * Restartable test runner wrapper.

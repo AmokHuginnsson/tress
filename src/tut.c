@@ -36,6 +36,9 @@ using namespace stdhapi::hconsole;
 using namespace stdhapi::tools;
 using namespace stdhapi::tools::util;
 
+namespace tut
+{
+
 struct tut_
 	{
 	};
@@ -53,3 +56,5 @@ void module::test<1> ( void )
 	}
 
 #endif
+
+}

@@ -16,27 +16,27 @@ namespace
     switch(tr.result)
     {
       case tut::test_result::ok: 
-      os << '.'; 
+      os << '.' << std::flush; 
       break;
 
       case tut::test_result::fail: 
-      os << '[' << tr.test << "=F]";
+      os << '[' << tr.test << "=F]" << std::flush;
       break;
 
       case tut::test_result::ex_ctor: 
-      os << '[' << tr.test << "=C]";
+      os << '[' << tr.test << "=C]" << std::flush;
       break;
 
       case tut::test_result::ex: 
-      os << '[' << tr.test << "=X]";
+      os << '[' << tr.test << "=X]" << std::flush;
       break;
 
       case tut::test_result::warn: 
-      os << '[' << tr.test << "=W]";
+      os << '[' << tr.test << "=W]" << std::flush;
       break;
 
       case tut::test_result::term: 
-      os << '[' << tr.test << "=T]";
+      os << '[' << tr.test << "=T]" << std::flush;
       break;
     }
 
@@ -115,7 +115,7 @@ namespace tut
 
            os << "---> " << "group: " << tr.group << ", test: test<" << tr.test << ">" << std::endl;
 
-           os << "     problem: ";
+           os << "     problem: " << std::flush;
            switch(tr.result)
            {
              case test_result::fail: 
@@ -157,12 +157,16 @@ namespace tut
 
       os << std::endl;
 
-      os << "tests summary:";
-      if( terminations_count > 0 ) os << " terminations:" << terminations_count;
-      if( exceptions_count > 0 ) os << " exceptions:" << exceptions_count;
-      if( failures_count > 0 ) os << " failures:" << failures_count;
-      if( warnings_count > 0 ) os << " warnings:" << warnings_count;
-      os << " ok:" << ok_count;
+      os << "tests summary:" << std::flush;
+      if( terminations_count > 0 )
+				os << " terminations:" << terminations_count << std::flush;
+      if( exceptions_count > 0 )
+				os << " exceptions:" << exceptions_count << std::flush;
+      if( failures_count > 0 )
+				os << " failures:" << failures_count << std::flush;
+      if( warnings_count > 0 )
+				os << " warnings:" << warnings_count << std::flush;
+      os << " ok:" << ok_count << std::flush;
       os << std::endl;
     }
 
@@ -183,6 +187,6 @@ namespace tut
       not_passed.clear();
     }    
   };
-};
+}
 
 #endif

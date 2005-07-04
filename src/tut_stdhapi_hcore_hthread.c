@@ -26,6 +26,7 @@ Copyright:
 
 #include "TUT/tut.h"
 
+#include <iostream>
 #include <unistd.h>
 
 #include <stdhapi.h>
@@ -37,6 +38,11 @@ using namespace stdhapi::hcore;
 using namespace stdhapi::hconsole;
 using namespace stdhapi::tools;
 using namespace stdhapi::tools::util;
+
+namespace tut
+{
+
+#define M_DSLEEP( count ) usleep ( ( count ) * 100 * 1000 );
 
 class HCool : public HThread
 	{
@@ -62,6 +68,7 @@ HCool::HCool ( char const * a_pcName )
 	: f_bWasStarted ( false ), f_iLifeLength ( 0 ), f_oName ( a_pcName )
 	{
 	M_PROLOG
+	cout << "Object [" << f_oName << "] constructed." << endl;
 	return;
 	M_EPILOG
 	}
@@ -69,8 +76,7 @@ HCool::HCool ( char const * a_pcName )
 HCool::~HCool ( void )
 	{
 	M_PROLOG
-	if ( f_bWasStarted )
-		fprintf ( stderr, "%s bye\n", static_cast < char * > ( f_oName ) );
+	cout << "Object [" << f_oName << "] destructed." << endl;
 	return;
 	M_EPILOG
 	}
@@ -80,13 +86,14 @@ int HCool::run ( void )
 	M_PROLOG
 	int l_iCtr = f_iLifeLength;
 	f_bWasStarted = true;
-	while ( l_iCtr -- )
+	cout << "Thread [" << f_oName << "] started ... ";
+	while ( is_alive ( ) && l_iCtr -- )
 		{
 		M_CRITICAL_SECTION ( );
-		fprintf ( stderr, "%s %d\n", static_cast < char * > ( f_oName ), l_iCtr );
-		sleep ( 1 );
-		listen ( );
+		cout << l_iCtr << ' ' << flush;
+		M_DSLEEP ( 1 );
 		}
+	cout << " ... and finished" << endl;
 	return ( 0 );
 	M_EPILOG
 	}
@@ -101,32 +108,108 @@ void HCool::set ( int a_iLength )
 
 struct tut_HThread
 	{
-	HCool a;
-	HCool b;
-	tut_HThread ( ) : a ( "a" ), b ( "b" )
-		{
-		
-		}
 	};
 
 typedef test_group < tut_HThread > tut_group;
 typedef tut_group::object module;
-tut_group tut_HThread_group ( "stdhapi/hcore/HThread" );
+tut_group tut_HThread_group ( "stdhapi::hcore::HThread" );
 
+/* Construction and destruction */
 template < >
 template < >
 void module::test<1> ( void )
 	{
-	a.set ( 1 );
-	ensure ( "bad status on fresh thread", ! a.is_alive ( ) );
+	HCool a ( "a" );
+	ensure_equals ( "bad status on fresh thread", a.is_alive ( ), false );
 	}
 
+/* Starting new thread and allowing it to finish */
 template < >
 template < >
 void module::test<2> ( void )
 	{
-	a.set ( 1 );
+	HCool a ( "a" );
+	a.set ( 5 );
 	a.spawn ( );
-	ensure ( "thread failed to start", a.is_alive ( ) );
+	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
+	M_DSLEEP ( 10 );
+	ensure_equals ( "thread failed to finish", a.is_alive ( ), false );
 	}
 
+/* Starting new thread and finishing it prematurely */
+template < >
+template < >
+void module::test<3> ( void )
+	{
+	HTime start, stop;
+	HCool a ( "a" );
+	a.set ( 50 );
+	a.spawn ( );
+	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
+	M_DSLEEP ( 10 );
+	start.set_now ( );
+	a.finish ( );
+	stop.set_now ( );
+	stop -= start;
+	ensure_equals ( "thread failed to stop", a.is_alive ( ), false );
+	ensure_distance ( "thread failed to interrupt",
+			stop.get_second ( ), 0, 2 );
+	}
+
+/* Starting new thread and finishing it prematurely by destructor */
+template < >
+template < >
+void module::test<4> ( void )
+	{
+	HTime start, stop;
+		{
+		HCool a ( "a" );
+		a.set ( 50 );
+		a.spawn ( );
+		ensure_equals ( "thread failed to start", a.is_alive ( ), true );
+		start.set_now ( );
+		a.finish ( );
+		}
+	stop.set_now ( );
+	stop -= start;
+	ensure_distance ( "thread failed to interrupt from destructor",
+			stop.get_second ( ), 0, 2 );
+	}
+
+/* Starting already started thread */
+template < >
+template < >
+void module::test<5> ( void )
+	{
+	HCool a ( "a" );
+	a.set ( 5 );
+	a.spawn ( );
+	try
+		{
+		a.spawn ( );
+		fail ( "Started already started thread." );
+		}
+	catch ( HException & e )
+		{
+		cout << e.what ( ) << endl;
+		}
+	}
+
+/* Finishing thread that was not started */
+template < >
+template < >
+void module::test<6> ( void )
+	{
+	HCool a ( "a" );
+	try
+		{
+		a.finish ( );
+		fail ( "Finishing not started thread successful." );
+		}
+	catch ( HException & e )
+		{
+		cout << e.what ( ) << endl;
+		}
+	}
+
+}

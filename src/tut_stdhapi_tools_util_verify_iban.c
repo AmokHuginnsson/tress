@@ -24,24 +24,49 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-/*		cout << "PL 12 1470 0002 2201 0010 7060 0001: ";
-		if ( ! verify_IBAN ( "PL 12 1470 0002 2201 0010 7060 0001" ) )
-			cout << get_last_error ( ) << endl;
-		else 
-			cout << "OK" << endl;
-		cout << "PL 12 1140 2004 0000 3402 3659 1487: ";
-		if ( ! verify_IBAN ( "PL 12 1140 2004 0000 3402 3659 1487" ) )
-			cout << get_last_error ( ) << endl;
-		else 
-			cout << "OK" << endl;
-		cout << "PL 76 1140 2004 0080 3602 3659 1498: ";
-		if ( ! verify_IBAN ( "PL 76 1140 2004 0080 3602 3659 1498" ) )
-			cout << get_last_error ( ) << endl;
-		else 
-			cout << "OK" << endl;
-		cout << "PL 65 1060 0076 0000 3200 0005 7153: ";
-		if ( ! verify_IBAN ( "PL 65 1060 0076 0000 3200 0005 7153" ) )
-			cout << get_last_error ( ) << endl;
-		else 
-			cout << "OK" << endl;
-*/
+#include "TUT/tut.h"
+
+#include <stdhapi.h>
+
+using namespace tut;
+using namespace std;
+using namespace stdhapi;
+using namespace stdhapi::hcore;
+using namespace stdhapi::hconsole;
+using namespace stdhapi::tools;
+using namespace stdhapi::tools::util;
+
+namespace tut
+{
+
+struct tut_verify_IBAN
+	{
+	};
+
+typedef test_group < tut_verify_IBAN > tut_group;
+typedef tut_group::object module;
+tut_group tut_verify_IBAN_group ( "stdhapi::tools::util::verify_IBAN" );
+
+/* verifing good IBANs */
+template < >
+template < >
+void module::test<1> ( void )
+	{
+	ensure_equals ( "failed to verify IBAN: PL 12 1470 0002 2201 0010 7060 0001",
+			verify_IBAN ( "PL 12 1470 0002 2201 0010 7060 0001" ), false );
+	ensure_equals ( "failed to verify IBAN: PL 12 1140 2004 0000 3402 3659 1487",
+			verify_IBAN ( "PL 12 1140 2004 0000 3402 3659 1487" ), false );
+	ensure_equals ( "failed to verify IBAN: PL 65 1060 0076 0000 3200 0005 7153",
+			verify_IBAN ( "PL 65 1060 0076 0000 3200 0005 7153" ), false );
+	}
+
+/* verifing bad IBANs */
+template < >
+template < >
+void module::test<2> ( void )
+	{
+	ensure_equals ( "failed to verify IBAN: PL 76 1140 2004 0080 3602 3659 1498",
+			verify_IBAN ( "PL 76 1140 2004 0080 3602 3659 1498" ), true );
+	}
+
+}
