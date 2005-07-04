@@ -54,6 +54,8 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 	M_PROLOG
 /*	variables declarations for main loop:                                 */
 	int l_iOpt = 0;
+	tut::reporter l_oVisitor ( cerr );
+	tut::restartable_wrapper l_oRestartable;
 /*	end.                                                                  */
 	try
 		{
@@ -66,23 +68,21 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 //		if ( ! is_enabled ( ) )enter_curses (); /* enabling ncurses ablilities*/
 /* *BOOM* */
 		g_iErrNo = 0;
-		if ( g_bRestartable
-				&& ( g_oTestGroup || g_oTestGroupPattern || g_iTestNumber ) )
-			M_THROW ( _ ( "restartable conflicts with other switches" ),
-					g_iTestNumber );
-		if ( g_oTestGroup && g_oTestGroupPattern )
-			M_THROW ( _ ( "pattern and group switches are exclusive" ), g_iErrNo );
-		if ( g_oTestGroupPattern && g_iTestNumber )
-			M_THROW ( _ ( "setting test number for pattern makes no sense" ),
-					g_iTestNumber );
-		if ( g_iTestNumber && ! g_oTestGroup )
-			M_THROW ( _ ( "must specify test group for test number" ),
-					g_iTestNumber );
 		try
 			{
-	    tut::reporter l_oVisitor ( cerr );
-  	  tut::restartable_wrapper l_oRestartable;
-			if ( g_bRestartable )
+			if ( g_bListGroups )
+				{
+				std::cout << "registered test groups:" << std::endl;
+				tut::groupnames gl = tut::runner.get ( ).list_groups();
+				tut::groupnames::const_iterator i = gl.begin();
+				tut::groupnames::const_iterator e = gl.end();
+				while ( i != e )
+					{
+					std::cout << "  " << *i << std::endl;
+					++ i;
+					}
+				}
+			else if ( g_bRestartable )
 				{
 				l_oRestartable.set_callback ( & l_oVisitor );
 				l_oRestartable.run_tests ( );

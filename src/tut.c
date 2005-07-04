@@ -39,6 +39,8 @@ using namespace stdhapi::tools::util;
 namespace tut
 {
 
+#if 0
+
 struct tut_
 	{
 	};
@@ -46,8 +48,6 @@ struct tut_
 typedef test_group < tut_ > tut_group;
 typedef tut_group::object module;
 tut_group tut__group ( "" );
-
-#if 0
 
 template < >
 template < >

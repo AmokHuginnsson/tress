@@ -31,6 +31,7 @@ extern int g_iWantQuiet;			/* --quiet, --silent */
 extern int g_iWantVerbose;			/* --verbose */
 extern char * g_pcProgramName;
 extern stdhapi::hcore::HString g_oLogPath;
+extern bool g_bListGroups;
 extern bool g_bRestartable;
 extern int g_iTestNumber;
 extern stdhapi::hcore::HString g_oTestGroup;

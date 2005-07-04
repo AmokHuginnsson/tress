@@ -27,6 +27,7 @@ Copyright:
 #include <stdlib.h>
 #include <stdio.h>
 #include <getopt.h>
+#include <libintl.h>
 
 #include <stdhapi.h>
 
@@ -52,6 +53,7 @@ does very much usefull things ... really \n", g_pcProgramName );
 "  -P --pattern               select test groups that are matching pattern\n"
 "  -N --number                select test number for a given group\n"
 "  -R --restartable           run tests in restartable mode\n"
+"  -L --list                  list known test groups\n"
 "  -q, --quiet, --silent      inhibit usual output\n"
 "  --verbose                  print more information\n"
 "  -h, --help                 display this help and exit\n"
@@ -61,20 +63,22 @@ does very much usefull things ... really \n", g_pcProgramName );
 
 int decode_switches ( int a_iArgc, char ** a_ppcArgv )
 	{
-	int l_c;
+	M_PROLOG
+	int l_iChar = 0;
 	hcore::log << "Decoding switches ... ";
-	while ( ( l_c = getopt_long ( a_iArgc, a_ppcArgv, 
+	while ( ( l_iChar = getopt_long ( a_iArgc, a_ppcArgv, 
 					"G:" /* group */
 					"P:" /* pattern */
 					"N:" /* number */
 					"R"  /* restartable */
+					"L"  /* list */
 					"q"	 /* quiet or silent */
 					"v"	 /* verbose */
 					"h"	 /* help    */
 					"V", /* version */
 					g_sLongOptions, ( int * ) 0 ) ) != EOF )
 		{
-		switch ( l_c )
+		switch ( l_iChar )
 			{
 			case ( 'G' ):
 				{
@@ -94,6 +98,11 @@ int decode_switches ( int a_iArgc, char ** a_ppcArgv )
 			case ( 'R' ):
 				{
 				g_bRestartable = true;
+				break;
+				}
+			case ( 'L' ):
+				{
+				g_bListGroups = true;
 				break;
 				}
 			case ( 'q' ):	 /* --quiet, --silent                                     */
@@ -123,6 +132,27 @@ int decode_switches ( int a_iArgc, char ** a_ppcArgv )
 			}
 		}
 	hcore::log << "done" << endl;
+	if ( g_bListGroups
+			&& ( g_bRestartable || g_oTestGroup || g_oTestGroupPattern || g_iTestNumber ) )
+		M_THROW ( _ ( "restartable conflicts with other switches" ),
+				g_iTestNumber );
+	if ( g_bRestartable
+			&& ( g_oTestGroup || g_oTestGroupPattern || g_iTestNumber ) )
+		M_THROW ( _ ( "restartable conflicts with other switches" ),
+				g_iTestNumber );
+	if ( g_bRestartable
+			&& ( g_oTestGroup || g_oTestGroupPattern || g_iTestNumber ) )
+		M_THROW ( _ ( "restartable conflicts with other switches" ),
+				g_iTestNumber );
+	if ( g_oTestGroup && g_oTestGroupPattern )
+		M_THROW ( _ ( "pattern and group switches are exclusive" ), g_iErrNo );
+	if ( g_oTestGroupPattern && g_iTestNumber )
+		M_THROW ( _ ( "setting test number for pattern makes no sense" ),
+				g_iTestNumber );
+	if ( g_iTestNumber && ! g_oTestGroup )
+		M_THROW ( _ ( "must specify test group for test number" ),
+				g_iTestNumber );
 	return ( optind );
+	M_EPILOG
 	}
 
