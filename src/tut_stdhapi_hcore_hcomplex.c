@@ -26,8 +26,11 @@ Copyright:
 
 #include "tut_helpers.h"
 
+#include "TUT/tut.h"
+
 #include <stdhapi.h>
 
+using namespace tut;
 using namespace std;
 using namespace stdhapi;
 using namespace stdhapi::hcore;
@@ -35,18 +38,34 @@ using namespace stdhapi::hconsole;
 using namespace stdhapi::tools;
 using namespace stdhapi::tools::util;
 
-#if 0
-		HComplex a ( 1., 3. );
-		HComplex b ( 2., 1. );
-		HComplex c ( 4, 8. );
-		cout << "<<< complex >>>" << endl;
-		cout << "        a = " << a << endl;
-		cout << "        b = " << b << endl;
-		cout << "        c = " << c << endl;
-		cout << "    c / c = " << c / c << endl;
-		cout << "    a + b = " << a + b << endl;
-		cout << "c = a / b = " << ( c = a / b ) << endl;
-		cout << "    c * b = " << c * b << endl;
-		cout << "      - a = " << - a << endl;
-#endif
+namespace tut
+{
+
+struct tut_stdhapi_hcore_hcomplex
+	{
+	};
+
+typedef test_group < tut_stdhapi_hcore_hcomplex > tut_group;
+typedef tut_group::object module;
+tut_group tut_stdhapi_hcore_hcomplex_group ( "stdhapi::hcore::HComplex" );
+
+template < >
+template < >
+void module::test<1> ( void )
+	{
+	HComplex a ( 1., 3. );
+	HComplex b ( 2., 1. );
+	HComplex c ( 4, 8. );
+	cout << "<<< complex >>>" << endl;
+	cout << "        a = " << a << endl;
+	cout << "        b = " << b << endl;
+	cout << "        c = " << c << endl;
+	cout << "    c / c = " << c / c << endl;
+	cout << "    a + b = " << a + b << endl;
+	cout << "c = a / b = " << ( c = a / b ) << endl;
+	cout << "    c * b = " << c * b << endl;
+	cout << "      - a = " << - a << endl;
+	}
+
+}
 

@@ -26,8 +26,11 @@ Copyright:
 
 #include "tut_helpers.h"
 
+#include "TUT/tut.h"
+
 #include <stdhapi.h>
 
+using namespace tut;
 using namespace std;
 using namespace stdhapi;
 using namespace stdhapi::hcore;
@@ -35,21 +38,37 @@ using namespace stdhapi::hconsole;
 using namespace stdhapi::tools;
 using namespace stdhapi::tools::util;
 
-#if 0
-		HVector < double > v ( 3 );
-		HVector < double > w ( 3 );
-		cout << "<<< vector >>>" << endl;
-		v [ 0 ] = 1.2;	v [ 1 ] = 2.4; v [ 2 ] = 3.5;
-		w [ 0 ] = 4.7;	w [ 1 ] = 5.1; w [ 2 ] = 6.6;
-		cout << "    v = " << v << endl;
-		cout << "    w = " << w << endl;
-		cout << "v + w = " << v + w << endl;
-		cout << "v * 2 = " << v * 2. << endl;
-		cout << "3 * w = " << 3. * w << endl;
-		cout << "w - v = " << w - v << endl;
-		cout << "w / 2 = " << w / 2. << endl;
-		cout << "  ! v = " << ! v << endl;
-		cout << "v | w = " << ( v | w ) << endl;
-		cout << "  - v = " << - v << endl;
-#endif
+namespace tut
+{
+
+struct tut_stdhapi_hcore_hvector
+	{
+	};
+
+typedef test_group < tut_stdhapi_hcore_hvector > tut_group;
+typedef tut_group::object module;
+tut_group tut_stdhapi_hcore_hvector_group ( "stdhapi::hcore::HVector" );
+
+template < >
+template < >
+void module::test<1> ( void )
+	{
+	HVector < double > v ( 3 );
+	HVector < double > w ( 3 );
+	cout << "<<< vector >>>" << endl;
+	v [ 0 ] = 1.2;	v [ 1 ] = 2.4; v [ 2 ] = 3.5;
+	w [ 0 ] = 4.7;	w [ 1 ] = 5.1; w [ 2 ] = 6.6;
+	cout << "    v = " << v << endl;
+	cout << "    w = " << w << endl;
+	cout << "v + w = " << v + w << endl;
+	cout << "v * 2 = " << v * 2. << endl;
+	cout << "3 * w = " << 3. * w << endl;
+	cout << "w - v = " << w - v << endl;
+	cout << "w / 2 = " << w / 2. << endl;
+	cout << "  ! v = " << ! v << endl;
+	cout << "v | w = " << ( v | w ) << endl;
+	cout << "  - v = " << - v << endl;
+	}
+
+}
 

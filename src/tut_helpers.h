@@ -25,11 +25,50 @@ Copyright:
 */
 
 #include <iostream>
+#include <iomanip>
 #include <stdhapi.h>
 
 std::ostream & operator << ( std::ostream &, stdhapi::hcore::HComplex );
+
 template < class tType >
-std::ostream & operator << ( std::ostream &, stdhapi::hcore::HVector < tType > );
+std::ostream & operator << ( std::ostream & out, stdhapi::hcore::HVector < tType > a_oVector )
+	{
+	M_PROLOG
+	int l_iCtr = 0, l_iSize = a_oVector.get_size ( );
+	out << fixed << "< " << setw ( 10 ) << setprecision ( 4 ) << a_oVector [ 0 ];
+	for ( l_iCtr = 1; l_iCtr < l_iSize; l_iCtr ++ )
+		out << ", " << setw ( 10 ) << setprecision ( 4 ) << a_oVector [ l_iCtr ];
+	out << " >";
+	return ( out );
+	M_EPILOG
+	}
+
 template < class tType >
-std::ostream & operator << ( std::ostream &, stdhapi::hcore::HMatrix < tType > );
+std::ostream & operator << ( std::ostream & out, stdhapi::hcore::HMatrix < tType > a_oMatrix )
+	{
+	M_PROLOG
+	int l_iCtr = 0, l_iCtrLoc = 0;
+	int l_iRows = a_oMatrix.row ( ), l_iCols = a_oMatrix.col ( );
+#ifdef __DEBUG__
+/*	out << "rows = " << l_iRows << ", cols = " << l_iCols << endl; */
+#endif /* __DEBUG__ */
+	out << "+--    ";
+	for ( l_iCtr = 1; l_iCtr < l_iCols; l_iCtr ++ )
+		out <<  "            ";
+	out << "    --+" << endl;
+	for ( l_iCtr = 0; l_iCtr < l_iRows; l_iCtr ++ )
+		{
+		out << fixed << "| " << setw ( 10 ) << setprecision ( 4 );
+		out << a_oMatrix [ l_iCtr ] [ 0 ];
+		for ( l_iCtrLoc = 1; l_iCtrLoc < l_iCols; l_iCtrLoc ++ )
+			out << ", " << setw ( 10 ) << setprecision ( 4 ) << a_oMatrix [ l_iCtr ] [ l_iCtrLoc ];
+		out << " |" << endl;
+		}
+	out << "+--    ";
+	for ( l_iCtr = 1; l_iCtr < l_iCols; l_iCtr ++ )
+		out << "            ";
+	out << "    --+" << endl;
+	return ( out );
+	M_EPILOG
+	}
 

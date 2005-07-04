@@ -26,8 +26,11 @@ Copyright:
 
 #include "tut_helpers.h"
 
+#include "TUT/tut.h"
+
 #include <stdhapi.h>
 
+using namespace tut;
 using namespace std;
 using namespace stdhapi;
 using namespace stdhapi::hcore;
@@ -35,26 +38,41 @@ using namespace stdhapi::hconsole;
 using namespace stdhapi::tools;
 using namespace stdhapi::tools::util;
 
-#if 0
-		HMatrix < double > V ( 3, 3 );
-		HMatrix < double > W ( 3, 3 );
-		HMatrix < double > X ( 2, 2 );
-		cout << "<<< matrix >>>" << endl;
-		V [ 0 ] [ 0 ] = 1.2, V [ 0 ] [ 1 ] = 2.3, V [ 0 ] [ 2 ] = 3.4;
-		V [ 1 ] [ 0 ] = 4.3, V [ 1 ] [ 1 ] = 3.2, V [ 1 ] [ 2 ] = 2.1;
-		V [ 2 ] [ 0 ] = 2.4, V [ 2 ] [ 1 ] = 5.6, V [ 2 ] [ 2 ] = 7.7;
-		X [ 0 ] [ 0 ] = 1.2, X [ 0 ] [ 1 ] = 2.3;
-		X [ 1 ] [ 0 ] = 4.3, X [ 1 ] [ 1 ] = 3.2;
-		W = V;
-		W *= 2;
-		cout << "V = ..." << endl << V << endl;
-		cout << "W = ..." << endl << W << endl;
-		cout << "V + W = ..." << endl << V + W << endl;
-		cout << "X = ..." << endl << X << endl;
-		cout << "X ^ - 1 = ..." << endl << X._1 ( ) << endl;
-		cout << "X * X ^ - 1 = ..." << endl << X * X._1 ( ) << endl;
-		cout << "V ^ - 1 = ..." << endl << V._1 ( ) << endl;
-		cout << "V * V ^ - 1 = ..." << endl << V * V._1 ( ) << endl;
+namespace tut
+{
 
-#endif
+struct tut_stdhapi_hcore_hmatrix
+	{
+	};
+
+typedef test_group < tut_stdhapi_hcore_hmatrix > tut_group;
+typedef tut_group::object module;
+tut_group tut_stdhapi_hcore_hmatrix_group ( "stdhapi::hcore::HMatrix" );
+
+template < >
+template < >
+void module::test<1> ( void )
+	{
+	HMatrix < double > V ( 3, 3 );
+	HMatrix < double > W ( 3, 3 );
+	HMatrix < double > X ( 2, 2 );
+	cout << "<<< matrix >>>" << endl;
+	V [ 0 ] [ 0 ] = 1.2, V [ 0 ] [ 1 ] = 2.3, V [ 0 ] [ 2 ] = 3.4;
+	V [ 1 ] [ 0 ] = 4.3, V [ 1 ] [ 1 ] = 3.2, V [ 1 ] [ 2 ] = 2.1;
+	V [ 2 ] [ 0 ] = 2.4, V [ 2 ] [ 1 ] = 5.6, V [ 2 ] [ 2 ] = 7.7;
+	X [ 0 ] [ 0 ] = 1.2, X [ 0 ] [ 1 ] = 2.3;
+	X [ 1 ] [ 0 ] = 4.3, X [ 1 ] [ 1 ] = 3.2;
+	W = V;
+	W *= 2;
+	cout << "V = ..." << endl << V << endl;
+	cout << "W = ..." << endl << W << endl;
+	cout << "V + W = ..." << endl << V + W << endl;
+	cout << "X = ..." << endl << X << endl;
+	cout << "X ^ - 1 = ..." << endl << X._1 ( ) << endl;
+	cout << "X * X ^ - 1 = ..." << endl << X * X._1 ( ) << endl;
+	cout << "V ^ - 1 = ..." << endl << V._1 ( ) << endl;
+	cout << "V * V ^ - 1 = ..." << endl << V * V._1 ( ) << endl;
+	}
+
+}
 

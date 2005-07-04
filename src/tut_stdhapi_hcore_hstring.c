@@ -24,7 +24,36 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#if 0
-		HString str ( 1024 );
-		cout << str << endl;
-#endif
+#include "TUT/tut.h"
+
+#include <stdhapi.h>
+
+using namespace tut;
+using namespace std;
+using namespace stdhapi;
+using namespace stdhapi::hcore;
+using namespace stdhapi::hconsole;
+using namespace stdhapi::tools;
+using namespace stdhapi::tools::util;
+
+namespace tut
+{
+
+struct tut_stdhapi_hcore_hstring
+	{
+	};
+
+typedef test_group < tut_stdhapi_hcore_hstring > tut_group;
+typedef tut_group::object module;
+tut_group tut_stdhapi_hcore_hstring_group ( "stdhapi::hcore::HString" );
+
+template < >
+template < >
+void module::test<1> ( void )
+	{
+	HString str ( 1024 );
+	cout << str << endl;
+	}
+
+}
+

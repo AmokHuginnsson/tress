@@ -24,14 +24,20 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include "TUT/tut.h"
+
 #include <stdhapi.h>
 
+using namespace tut;
 using namespace std;
 using namespace stdhapi;
 using namespace stdhapi::hcore;
 using namespace stdhapi::hconsole;
 using namespace stdhapi::tools;
 using namespace stdhapi::tools::util;
+
+namespace tut
+{
 
 class HXmlDump : public HXml
 	{
@@ -53,21 +59,36 @@ void * HXmlDump::parse ( void * )
 	return ( NULL );
 	}
 
-#if 0
-		HString string;
-		HXmlDump xml;
-		HFile file;
-		if ( a_iArgc != 2 )
-			M_THROW ( "bad number of arguments", a_iArgc - 1 );
-		if ( file.open ( a_ppcArgv [ 1 ] ) )
-			cout << file.get_error ( ) << ": " << file.get_path ( ) << endl;
-		else
-			{
-			while ( file.read_line ( string, true ) >= 0 )
-				cout << string << endl;
-			file.close ( );
-			}
-		xml.init ( a_ppcArgv [ 1 ] );
-		xml.parse ( 0 );
+struct tut_stdhapi_tools_hxml
+	{
+	};
 
-#endif
+typedef test_group < tut_stdhapi_tools_hxml > tut_group;
+typedef tut_group::object module;
+tut_group tut_stdhapi_tools_hxml_group ( "stdhapi::tools::HXml" );
+
+template < >
+template < >
+void module::test<1> ( void )
+	{
+	HString string;
+	HXmlDump xml;
+	HFile file;
+/*
+	if ( a_iArgc != 2 )
+		M_THROW ( "bad number of arguments", a_iArgc - 1 );
+	if ( file.open ( a_ppcArgv [ 1 ] ) )
+		cout << file.get_error ( ) << ": " << file.get_path ( ) << endl;
+	else
+		{
+		while ( file.read_line ( string, true ) >= 0 )
+			cout << string << endl;
+		file.close ( );
+		}
+	xml.init ( a_ppcArgv [ 1 ] );
+*/
+	xml.parse ( 0 );
+	}
+
+}
+

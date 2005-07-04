@@ -24,13 +24,42 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#if 0
-		HAnalyser x;
-		HString eq ( "((2+3+5)*4*6*8)^2^3" );
-		eq = "Y";
-		x.analyse ( eq );
-		x [ 'Y' ] = 3.;
-		cout << eq << "=" << x.count ( ) << endl;
-		x [ 'Y' ] = 2.;
-		cout << eq << "=" << x.count ( ) << endl;
-#endif
+#include "TUT/tut.h"
+
+#include <stdhapi.h>
+
+using namespace tut;
+using namespace std;
+using namespace stdhapi;
+using namespace stdhapi::hcore;
+using namespace stdhapi::hconsole;
+using namespace stdhapi::tools;
+using namespace stdhapi::tools::util;
+
+namespace tut
+{
+
+struct tut_stdhapi_tools_hanalyser
+	{
+	};
+
+typedef test_group < tut_stdhapi_tools_hanalyser > tut_group;
+typedef tut_group::object module;
+tut_group tut_stdhapi_tools_hanalyser_group ( "stdhapi::tools::HAnalyser" );
+
+template < >
+template < >
+void module::test<1> ( void )
+	{
+	HAnalyser x;
+	HString eq ( "((2+3+5)*4*6*8)^2^3" );
+	eq = "Y";
+	x.analyse ( eq );
+	x [ 'Y' ] = 3.;
+	cout << eq << "=" << x.count ( ) << endl;
+	x [ 'Y' ] = 2.;
+	cout << eq << "=" << x.count ( ) << endl;
+	}
+
+}
+
