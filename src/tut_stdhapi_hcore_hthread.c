@@ -106,13 +106,13 @@ void HCool::set ( int a_iLength )
 	M_EPILOG
 	}
 
-struct tut_HThread
+struct tut_stdhapi_hcore_HThread
 	{
 	};
 
-typedef test_group < tut_HThread > tut_group;
+typedef test_group < tut_stdhapi_hcore_HThread > tut_group;
 typedef tut_group::object module;
-tut_group tut_HThread_group ( "stdhapi::hcore::HThread" );
+tut_group tut_stdhapi_hcore_HThread_group ( "stdhapi::hcore::HThread" );
 
 /* Construction and destruction */
 template < >

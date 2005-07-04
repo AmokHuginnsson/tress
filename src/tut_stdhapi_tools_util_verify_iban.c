@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-  tut_stdhapi_tools_util_verify_IBAN.c - this file is integral part of `tress' project.
+  tut_stdhapi_tools_util_verify_iban.c - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -39,13 +39,13 @@ using namespace stdhapi::tools::util;
 namespace tut
 {
 
-struct tut_verify_IBAN
+struct tut_stdhapi_tools_util_verify_iban
 	{
 	};
 
-typedef test_group < tut_verify_IBAN > tut_group;
+typedef test_group < tut_stdhapi_tools_util_verify_iban > tut_group;
 typedef tut_group::object module;
-tut_group tut_verify_IBAN_group ( "stdhapi::tools::util::verify_IBAN" );
+tut_group tut_stdhapi_tools_util_verify_iban_group ( "stdhapi::tools::util::verify_IBAN" );
 
 /* verifing good IBANs */
 template < >

@@ -24,8 +24,35 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#if 0
-		HString fo = "2*(3+5)/sin(3.14159256)";
-		fo = "2 * ( 3 + 5 )";
-		cout << fo << " = " << util::atof_ex ( fo, true ) << endl;
-#endif
+#include "TUT/tut.h"
+
+#include <stdhapi.h>
+
+using namespace tut;
+using namespace std;
+using namespace stdhapi;
+using namespace stdhapi::hcore;
+using namespace stdhapi::hconsole;
+using namespace stdhapi::tools;
+using namespace stdhapi::tools::util;
+
+namespace tut
+{
+
+struct tut_stdahpi_tools_util_atof_ex
+	{
+	};
+
+typedef test_group < tut_stdahpi_tools_util_atof_ex > tut_group;
+typedef tut_group::object module;
+tut_group tut_stdahpi_tools_util_atof_ex_group ( "stdhapi::tools::util::atof_ex" );
+
+template < >
+template < >
+void module::test<1> ( void )
+	{
+	HString formula = "2*(3+5)/sin(3.1415926535/2)";
+	ensure_distance ( "Wrong counting.", atof_ex ( formula, true ), 16., 0.0001 );
+	}
+
+}
