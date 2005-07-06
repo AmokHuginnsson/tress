@@ -91,7 +91,7 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 				{
 				runner.get ( ).set_callback ( & l_oVisitor );
 				if ( g_oTestGroupPattern )
-					runner.get ( ).run_tests (
+					runner.get ( ).run_pattern_tests (
 							static_cast < char * > ( g_oTestGroupPattern ) );
 				else if ( g_oTestGroup && g_iTestNumber )
 					runner.get ( ).run_test ( static_cast < char * > ( g_oTestGroup ),
