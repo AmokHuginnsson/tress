@@ -142,7 +142,7 @@ int decode_switches ( int a_iArgc, char ** a_ppcArgv )
 	if ( g_bListGroups
 			&& ( g_bRestartable || g_oTestGroupListFilePath || g_oTestGroup
 				|| g_oTestGroupPattern || g_iTestNumber ) )
-		M_THROW ( _ ( "restartable conflicts with other switches" ),
+		M_THROW ( _ ( "group listing conflicts with other switches" ),
 				g_iTestNumber );
 	if ( g_bRestartable
 			&& ( g_oTestGroupListFilePath || g_oTestGroup || g_oTestGroupPattern

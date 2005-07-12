@@ -37,6 +37,8 @@ extern int g_iTestNumber;
 extern stdhapi::hcore::HString g_oTestGroup;
 extern stdhapi::hcore::HString g_oTestGroupPattern;
 extern stdhapi::hcore::HString g_oTestGroupListFilePath;
+extern int g_iArgc;
+extern char const * const * g_ppcArgv;
 extern struct option const * g_sLongOptions;
 
 #endif /* __VARIABLES_H */

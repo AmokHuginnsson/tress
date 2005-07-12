@@ -68,6 +68,12 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 		process_tressrc_file ( );
 		l_iOpt = decode_switches ( a_iArgc, a_ppcArgv );
 		hcore::log.rehash ( g_oLogPath, g_pcProgramName );
+		g_iArgc = ( a_iArgc - l_iOpt ) + 1;
+		if ( g_iArgc > 1 )
+			{
+			g_ppcArgv = a_ppcArgv + l_iOpt - 1;
+			a_ppcArgv [ l_iOpt - 1 ] = a_ppcArgv [ 0 ];
+			}
 //		if ( ! is_enabled ( ) )enter_curses (); /* enabling ncurses ablilities*/
 /* *BOOM* */
 		g_iErrNo = 0;
@@ -98,8 +104,11 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 					if ( g_oTestGroupListFilePath == "-" )
 						l_psFile = stdin;
 					HFile l_oFile ( HFile::D_READING, l_psFile );
-					if ( ! l_psFile )
-						l_oFile.open ( g_oTestGroupListFilePath );
+					if ( ! l_psFile && l_oFile.open ( g_oTestGroupListFilePath ) )
+						{
+						cout << l_oFile.get_error ( ) << ": " << l_oFile.get_path ( ) << endl;
+						throw 0;
+						}
 					while ( l_oFile.read_line ( l_oLine,
 								HFile::D_UNBUFFERED_READS | HFile::D_STRIP_NEWLINES ) >= 0 )
 						l_oGroupNames.push_back ( static_cast < char const * > ( l_oLine ) );
@@ -128,6 +137,10 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 //		if ( is_enabled ( ) )leave_curses ();  /* ending ncurses sesion    */
 		M_ENSURE ( ! g_iErrNo );
 /*	... there is the place main loop ends. :OD-OT                         */
+		}
+	catch ( int& )
+		{
+		/* escape from main loop */
 		}
 	catch ( ... ) 
 		{

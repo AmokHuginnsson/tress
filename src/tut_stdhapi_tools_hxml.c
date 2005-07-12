@@ -28,6 +28,8 @@ Copyright:
 
 #include <stdhapi.h>
 
+#include "variables.h"
+
 using namespace tut;
 using namespace std;
 using namespace stdhapi;
@@ -51,10 +53,10 @@ void * HXmlDump::parse ( void * )
 	HString str, val;
 	while ( ( name = iterate ( str, "/" ) ) )
 		{
-		fprintf ( stderr, "[%s]:\n", name );
+		cout << "[" << name << "]:" << endl;
 		while ( ( prop = next_property ( val ) ) )
-			fprintf ( stderr, "(%s)->(%s)\n", prop, static_cast < char * > ( val ) );
-		fprintf ( stderr, "{%s}\n", static_cast < char * > ( str ) );
+			cout << "(" << prop << ")->(" << static_cast < char * > ( val ) << ")" << endl;
+		cout << "{" << static_cast < char * > ( str ) << "}" << endl;
 		}
 	return ( NULL );
 	}
@@ -74,19 +76,17 @@ void module::test<1> ( void )
 	HString string;
 	HXmlDump xml;
 	HFile file;
-/*
-	if ( a_iArgc != 2 )
-		M_THROW ( "bad number of arguments", a_iArgc - 1 );
-	if ( file.open ( a_ppcArgv [ 1 ] ) )
+	if ( g_iArgc != 2 )
+		fail ( "You need to specify one argument for this test" );
+	if ( file.open ( g_ppcArgv [ 1 ] ) )
 		cout << file.get_error ( ) << ": " << file.get_path ( ) << endl;
 	else
 		{
-		while ( file.read_line ( string, true ) >= 0 )
+		while ( file.read_line ( string, HFile::D_STRIP_NEWLINES ) >= 0 )
 			cout << string << endl;
 		file.close ( );
 		}
-	xml.init ( a_ppcArgv [ 1 ] );
-*/
+	xml.init ( g_ppcArgv [ 1 ] );
 	xml.parse ( 0 );
 	}
 
