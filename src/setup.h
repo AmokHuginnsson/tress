@@ -36,6 +36,7 @@ extern bool g_bRestartable;
 extern int g_iTestNumber;
 extern stdhapi::hcore::HString g_oTestGroup;
 extern stdhapi::hcore::HString g_oTestGroupPattern;
+extern stdhapi::hcore::HString g_oTestGroupListFilePath;
 extern struct option const * g_sLongOptions;
 
 #endif /* __VARIABLES_H */

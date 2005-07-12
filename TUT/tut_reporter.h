@@ -38,6 +38,9 @@ namespace
       case tut::test_result::term: 
       os << '[' << tr.test << "=T]" << std::flush;
       break;
+
+			case tut::test_result::setup:
+			os << "no such group" << std::flush;
     }
 
     return os;
@@ -52,7 +55,7 @@ namespace tut
   class reporter : public tut::callback
   {
     std::string current_group;
-    typedef std::vector<tut::test_result> not_passed_list;
+    typedef std::list<tut::test_result> not_passed_list;
     not_passed_list not_passed;
     std::ostream& os;
 
@@ -62,6 +65,7 @@ namespace tut
     int failures_count;
     int terminations_count;
     int warnings_count;
+		int setup_count;
 
     reporter() : os(std::cout)
     {
@@ -92,6 +96,7 @@ namespace tut
       else if( tr.result == tut::test_result::ex_ctor ) exceptions_count++;
       else if( tr.result == tut::test_result::fail ) failures_count++;
       else if( tr.result == tut::test_result::warn ) warnings_count++;
+			else if( tr.result == tut::test_result::setup ) setup_count++;
       else terminations_count++;
 
       if( tr.result != tut::test_result::ok )
@@ -110,6 +115,9 @@ namespace tut
         while( i != not_passed.end() )
         {
            tut::test_result tr = *i;
+           ++i;
+           if ( tr.result == test_result::setup )
+             continue;
 
            os << std::endl;
 
@@ -150,8 +158,6 @@ namespace tut
                os << "     message: \"" << tr.message << "\"" << std::endl;
              }
            }
-
-           ++i;
         }
       }
 
@@ -166,6 +172,8 @@ namespace tut
 				os << " failures:" << failures_count << std::flush;
       if( warnings_count > 0 )
 				os << " warnings:" << warnings_count << std::flush;
+			if( setup_count > 0 )
+				os << " setups:" << setup_count << std::flush;
       os << " ok:" << ok_count << std::flush;
       os << std::endl;
     }
@@ -183,6 +191,7 @@ namespace tut
       failures_count = 0;
       terminations_count = 0;
       warnings_count = 0;
+			setup_count = 0;
 
       not_passed.clear();
     }    

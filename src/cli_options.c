@@ -53,6 +53,7 @@ does very much usefull things ... really \n", g_pcProgramName );
 "  -P --pattern               select test groups that are matching pattern\n"
 "  -N --number                select test number for a given group\n"
 "  -R --restartable           run tests in restartable mode\n"
+"  -F --file                  read test group names from given file\n"
 "  -L --list                  list known test groups\n"
 "  -q, --quiet, --silent      inhibit usual output\n"
 "  --verbose                  print more information\n"
@@ -70,6 +71,7 @@ int decode_switches ( int a_iArgc, char ** a_ppcArgv )
 					"G:" /* group */
 					"P:" /* pattern */
 					"N:" /* number */
+					"F:" /* file */
 					"R"  /* restartable */
 					"L"  /* list */
 					"q"	 /* quiet or silent */
@@ -93,6 +95,11 @@ int decode_switches ( int a_iArgc, char ** a_ppcArgv )
 			case ( 'N' ):
 				{
 				g_iTestNumber = strtol ( optarg, NULL, 10 );
+				break;
+				}
+			case ( 'F' ):
+				{
+				g_oTestGroupListFilePath = optarg;
 				break;
 				}
 			case ( 'R' ):
@@ -133,16 +140,18 @@ int decode_switches ( int a_iArgc, char ** a_ppcArgv )
 		}
 	hcore::log << "done" << endl;
 	if ( g_bListGroups
-			&& ( g_bRestartable || g_oTestGroup || g_oTestGroupPattern || g_iTestNumber ) )
+			&& ( g_bRestartable || g_oTestGroupListFilePath || g_oTestGroup
+				|| g_oTestGroupPattern || g_iTestNumber ) )
 		M_THROW ( _ ( "restartable conflicts with other switches" ),
 				g_iTestNumber );
 	if ( g_bRestartable
-			&& ( g_oTestGroup || g_oTestGroupPattern || g_iTestNumber ) )
+			&& ( g_oTestGroupListFilePath || g_oTestGroup || g_oTestGroupPattern
+				|| g_iTestNumber ) )
 		M_THROW ( _ ( "restartable conflicts with other switches" ),
 				g_iTestNumber );
-	if ( g_bRestartable
+	if ( g_oTestGroupListFilePath
 			&& ( g_oTestGroup || g_oTestGroupPattern || g_iTestNumber ) )
-		M_THROW ( _ ( "restartable conflicts with other switches" ),
+		M_THROW ( _ ( "group names file is an exclusive switch" ),
 				g_iTestNumber );
 	if ( g_oTestGroup && g_oTestGroupPattern )
 		M_THROW ( _ ( "pattern and group switches are exclusive" ), g_iErrNo );

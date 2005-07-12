@@ -54,8 +54,11 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 	M_PROLOG
 /*	variables declarations for main loop:                                 */
 	int l_iOpt = 0;
+	HString l_oLine;
+	FILE * l_psFile = NULL;
 	tut::reporter l_oVisitor ( cerr );
 	tut::restartable_wrapper l_oRestartable;
+	list < string > l_oGroupNames;
 /*	end.                                                                  */
 	try
 		{
@@ -90,14 +93,30 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 			else
 				{
 				runner.get ( ).set_callback ( & l_oVisitor );
-				if ( g_oTestGroupPattern )
+				if ( g_oTestGroupListFilePath )
+					{
+					if ( g_oTestGroupListFilePath == "-" )
+						l_psFile = stdin;
+					HFile l_oFile ( HFile::D_READING, l_psFile );
+					if ( ! l_psFile )
+						l_oFile.open ( g_oTestGroupListFilePath );
+					while ( l_oFile.read_line ( l_oLine,
+								HFile::D_UNBUFFERED_READS | HFile::D_STRIP_NEWLINES ) >= 0 )
+						l_oGroupNames.push_back ( static_cast < char const * > ( l_oLine ) );
+					l_oFile.close ( );
+					runner.get ( ).run_tests ( l_oGroupNames );
+					}
+				else if ( g_oTestGroupPattern )
 					runner.get ( ).run_pattern_tests (
 							static_cast < char * > ( g_oTestGroupPattern ) );
 				else if ( g_oTestGroup && g_iTestNumber )
 					runner.get ( ).run_test ( static_cast < char * > ( g_oTestGroup ),
 							g_iTestNumber );
 				else if ( g_oTestGroup )
-					runner.get ( ).run_tests ( static_cast < char * > ( g_oTestGroup ) );
+					{
+					l_oGroupNames.push_back ( static_cast < char * > ( g_oTestGroup ) );
+					runner.get ( ).run_tests ( l_oGroupNames );
+					}
 				else
 					runner.get ( ).run_tests ( );
 				}

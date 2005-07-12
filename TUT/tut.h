@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <map>
-#include <vector>
+#include <list>
 #include <string>
 #include <sstream>
 #include <stdexcept>
@@ -120,8 +120,9 @@ namespace tut
      * ex - test throwed an exceptions
      * warn - test finished successfully, but test destructor throwed
      * term - test forced test application to terminate abnormally
+		 * setup - bad test setup (no such group or no such test number)
      */
-    typedef enum { ok, fail, ex, warn, term, ex_ctor } result_type;
+    typedef enum { ok, fail, ex, warn, term, ex_ctor, setup } result_type;
     result_type result;
 
     /**
@@ -208,7 +209,7 @@ namespace tut
   /**
    * Typedef for runner::list_groups()
    */
-  typedef std::vector<std::string> groupnames;
+  typedef std::list<std::string> groupnames;
 
   /**
    * Test runner.
@@ -325,17 +326,17 @@ namespace tut
       const_iterator e = groups_.end();
       while( i != e )
       {
-			if ( i->first.find ( pattern ) != std::string::npos )
-			{
-        try
-        {
-          run_all_tests_in_group_(i);
-        }
-        catch( const no_more_tests& )
-        {
-          // ok
-        }
-			}
+				if ( i->first.find ( pattern ) != std::string::npos )
+				{
+					try
+					{
+						run_all_tests_in_group_(i);
+					}
+					catch( const no_more_tests& )
+					{
+						// ok
+					}
+				}
 
         ++i;
       }
@@ -344,26 +345,33 @@ namespace tut
     }
 
     /**
-     * Runs all tests in specified group.
+     * Runs all tests in specified groups.
      */
-    void run_tests(const std::string& group_name) const
+    void run_tests(const std::list < std::string >& group_names) const
     {
       callback_->run_started();
-
-      const_iterator i = groups_.find(group_name);
-      if( i == groups_.end() )
-      {
-        throw no_such_group(group_name);
-      }
-
-      try
-      {
-        run_all_tests_in_group_(i);
-      }
-      catch( const no_more_tests& )
-      {
-        // ok
-      }
+	
+			for ( std::list < std::string >::const_iterator k = group_names.begin ( );
+					k != group_names.end ( ); ++ k )
+			{
+				const_iterator i = groups_.find( *k );
+				if( i == groups_.end() )
+				{
+					test_result tr(*k,0,test_result::setup);
+					callback_->test_completed(tr);
+				}
+				else
+				{
+					try
+					{
+						run_all_tests_in_group_(i);
+					}
+					catch( const no_more_tests& )
+					{
+						// ok
+					}
+				}
+			}
 
       callback_->run_completed();
     }
