@@ -81,7 +81,7 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 			{
 			if ( g_bListGroups )
 				{
-				std::cout << "registered test groups:" << std::endl;
+				std::cerr << "registered test groups:" << std::endl;
 				tut::groupnames gl = tut::runner.get ( ).list_groups();
 				tut::groupnames::const_iterator i = gl.begin();
 				tut::groupnames::const_iterator e = gl.end();
@@ -111,7 +111,11 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 						}
 					while ( l_oFile.read_line ( l_oLine,
 								HFile::D_UNBUFFERED_READS | HFile::D_STRIP_NEWLINES ) >= 0 )
+						{
+						l_oLine.trim_left ( );
+						l_oLine.trim_right ( );
 						l_oGroupNames.push_back ( static_cast < char const * > ( l_oLine ) );
+						}
 					l_oFile.close ( );
 					runner.get ( ).run_tests ( l_oGroupNames );
 					}
