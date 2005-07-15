@@ -3,7 +3,7 @@ dnl configure.ac is integral part of tress project.
 dnl Initialization data.
 AC_INIT([[tress]],[[0.0.0]],[[amok@frihet.ath.cx]])
 
-AC_MSG_RESULT([--- Welcome to tress configurator ---                   [[0%]]])
+AC_MSG_RESULT([--- Welcome to tress configurator ---                    [[0%]]])
 AC_MSG_RESULT([--- Initialization ... ---                               [[6%]]])
 
 dnl Unique file in project: tressrc is sample configuration file.
