@@ -76,6 +76,8 @@ HCool::HCool ( char const * a_pcName )
 HCool::~HCool ( void )
 	{
 	M_PROLOG
+	if ( ( f_oName == "6" ) && is_alive ( ) )
+		finish ( ); /* this is necesarry to avoid pure virtuall call to run */
 	cout << "Object [" << f_oName << "] destructed." << endl;
 	return;
 	M_EPILOG
@@ -176,12 +178,24 @@ void module::test<4> ( void )
 			stop.get_second ( ), 0, 2 );
 	}
 
-/* Starting already started thread */
+/* Starting and immediatelly finishing thread */
 template < >
 template < >
 void module::test<5> ( void )
 	{
 	HCool a ( "a" );
+	a.set ( 50 );
+	a.spawn ( );
+	a.finish ( );
+	ensure_equals ( "thread failed to finish", a.is_alive ( ), false );
+	}
+
+/* Starting already started thread */
+template < >
+template < >
+void module::test<6> ( void )
+	{
+	HCool a ( "6" );
 	a.set ( 5 );
 	a.spawn ( );
 	try
@@ -198,7 +212,7 @@ void module::test<5> ( void )
 /* Finishing thread that was not started */
 template < >
 template < >
-void module::test<6> ( void )
+void module::test<7> ( void )
 	{
 	HCool a ( "a" );
 	try

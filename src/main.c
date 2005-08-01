@@ -76,9 +76,11 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 			}
 //		if ( ! is_enabled ( ) )enter_curses (); /* enabling ncurses ablilities*/
 /* *BOOM* */
-		g_iErrNo = 0;
 		try
 			{
+			if ( ! g_bListGroups )
+				cout << "TUT: " << static_cast < char const * > ( HTime ( ) ) << endl;
+			g_iErrNo = 0;
 			if ( g_bListGroups )
 				{
 				std::cerr << "registered test groups:" << std::endl;
@@ -90,6 +92,7 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 					std::cout << "  " << *i << std::endl;
 					++ i;
 					}
+				g_iErrNo = 0;
 				}
 			else if ( g_bRestartable )
 				{
@@ -133,6 +136,8 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 				else
 					runner.get ( ).run_tests ( );
 				}
+			if ( ! g_bListGroups )
+				cout << "TUT: " << static_cast < char const * > ( HTime ( ) ) << endl;
 			}
 		catch ( const std::exception & e )
 			{

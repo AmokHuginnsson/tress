@@ -47,16 +47,29 @@ public:
 	void * parse ( void * );
 	};
 
-void * HXmlDump::parse ( void * )
+void * HXmlDump::parse ( void * a_pvPath )
 	{
-	char const * name, * prop;
-	HString str, val;
-	while ( ( name = iterate ( str, "/" ) ) )
+	int l_iLevel = - 1;
+	char const * l_pcPath = "/";
+	HString l_oPropertyName, l_oPropertyValue;
+	HXml::ONode l_sNode;
+	if ( a_pvPath )
+		l_pcPath = static_cast < char * > ( a_pvPath );
+	while ( ( l_iLevel = iterate ( l_sNode, l_pcPath ) ) >= 0 )
 		{
-		cout << "[" << name << "]:" << endl;
-		while ( ( prop = next_property ( val ) ) )
-			cout << "(" << prop << ")->(" << static_cast < char * > ( val ) << ")" << endl;
-		cout << "{" << static_cast < char * > ( str ) << "}" << endl;
+		cout << "[" << l_sNode.f_oName << "]<" << l_sNode.f_iLevel << ">:" << endl;
+		while ( l_sNode.f_oProperties.iterate ( l_oPropertyName,
+					l_oPropertyValue ) )
+			{
+			cout << "(" << l_oPropertyName << ")->(";
+			cout << l_oPropertyValue << ")" << endl;
+			}
+		cout << "{" << l_sNode.f_oContents << "}" << endl;
+		if ( l_iLevel != l_sNode.f_iLevel )
+			{
+			cout << "LEVEL: " << l_sNode.f_iLevel << ", RLEVEL: " << l_iLevel << endl;
+			fail ( "bad returned level" );
+			}
 		}
 	return ( NULL );
 	}
@@ -76,18 +89,24 @@ void module::test<1> ( void )
 	HString string;
 	HXmlDump xml;
 	HFile file;
-	if ( g_iArgc != 2 )
+	if ( g_iArgc < 2 )
 		fail ( "You need to specify one argument for this test" );
-	if ( file.open ( g_ppcArgv [ 1 ] ) )
-		cout << file.get_error ( ) << ": " << file.get_path ( ) << endl;
-	else
+	if ( g_iWantVerbose )
 		{
-		while ( file.read_line ( string, HFile::D_STRIP_NEWLINES ) >= 0 )
-			cout << string << endl;
-		file.close ( );
+		if ( file.open ( g_ppcArgv [ 1 ] ) )
+			cout << file.get_error ( ) << ": " << file.get_path ( ) << endl;
+		else
+			{
+			while ( file.read_line ( string, HFile::D_STRIP_NEWLINES ) >= 0 )
+				cout << string << endl;
+			file.close ( );
+			}
 		}
 	xml.init ( g_ppcArgv [ 1 ] );
-	xml.parse ( 0 );
+	if ( g_iArgc > 2 )
+		xml.parse ( const_cast < char * > ( g_ppcArgv [ 2 ] ) );
+	else
+		xml.parse ( NULL );
 	}
 
 }

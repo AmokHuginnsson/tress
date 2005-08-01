@@ -16,7 +16,7 @@ namespace
     switch(tr.result)
     {
       case tut::test_result::ok: 
-      os << '.' << std::flush; 
+      os << ( errno == 0 ? '.' : ',' ) << std::flush; 
       break;
 
       case tut::test_result::fail: 

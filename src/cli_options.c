@@ -138,7 +138,7 @@ int decode_switches ( int a_iArgc, char ** a_ppcArgv )
 				}
 			}
 		}
-	hcore::log << "done" << endl;
+	hcore::log << "done." << endl;
 	if ( g_bListGroups
 			&& ( g_bRestartable || g_oTestGroupListFilePath || g_oTestGroup
 				|| g_oTestGroupPattern || g_iTestNumber ) )

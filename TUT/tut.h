@@ -1,6 +1,7 @@
 #ifndef TUT_H_GUARD
 #define TUT_H_GUARD
 
+#include <errno.h>
 #include <iostream>
 #include <map>
 #include <list>
@@ -796,6 +797,7 @@ namespace tut
     {
       try
       {
+				errno = 0;
         if( run_test_seh_(ti->second,obj) == false )
           throw seh("seh");
       }
