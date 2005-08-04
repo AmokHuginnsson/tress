@@ -29,12 +29,46 @@ Copyright:
 
 #include <stdhapi.h>
 
+#include "tut_helpers.h"
+
 using namespace std;
 using namespace stdhapi;
 using namespace stdhapi::hcore;
 using namespace stdhapi::hconsole;
 using namespace stdhapi::tools;
 using namespace stdhapi::tools::util;
+
+HLogger & HLogger::operator << ( char const * const a_pcString )
+	{
+	M_PROLOG
+	hcore::log << a_pcString;
+	return ( * this );
+	M_EPILOG
+	}
+
+HLogger & HLogger::operator << ( string const & a_oString )
+	{
+	M_PROLOG
+	hcore::log << a_oString.c_str ( );
+	return ( * this );
+	M_EPILOG
+	}
+
+HLogger & HLogger::operator << ( int const & a_iNumber )
+	{
+	M_PROLOG
+	hcore::log << a_iNumber;
+	return ( * this );
+	M_EPILOG
+	}
+
+HLogger & HLogger::operator << ( ostream & ( * const ) ( ostream & ) )
+	{
+	M_PROLOG
+	hcore::log << endl;
+	return ( * this );
+	M_EPILOG
+	}
 
 ostream & operator << ( ostream & out, HComplex a_oComplex )
 	{

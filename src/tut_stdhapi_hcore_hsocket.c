@@ -36,11 +36,8 @@ using namespace stdhapi::hconsole;
 using namespace stdhapi::tools;
 using namespace stdhapi::tools::util;
 
-#define trace hcore::log
-
 namespace tut
 {
-
 
 struct tut_stdhapi_hcore_hsocket
 	{
@@ -50,13 +47,11 @@ typedef test_group < tut_stdhapi_hcore_hsocket > tut_group;
 typedef tut_group::object module;
 tut_group tut_stdhapi_hcore_hsocket_group ( "stdhapi::hcore::HSocket" );
 
-
 /* Simple construction and destruction. */
 template < >
 template < >
 void module::test<1> ( void )
 	{
-	trace << "TUT<" << 1 << ">" << endl;
 	HSocket l_oSocket;
 	ensure_equals ( "uninitialized socket has port", l_oSocket.get_port ( ), 0 );
 	}
@@ -66,7 +61,6 @@ template < >
 template < >
 void module::test<2> ( void )
 	{
-	trace << "TUT<" << 2 << ">" << endl;
 	try
 		{
 		HSocket l_oSocket ( HSocket::D_FILE | HSocket::D_NETWORK );
@@ -92,7 +86,6 @@ template < >
 template < >
 void module::test<3> ( void )
 	{
-	trace << "TUT<" << 3 << ">" << endl;
 	HSocket l_oSocket ( HSocket::D_FILE );
 	try
 		{
@@ -110,7 +103,6 @@ template < >
 template < >
 void module::test<4> ( void )
 	{
-	trace << "TUT<" << 4 << ">" << endl;
 	HSocket l_oSocket ( HSocket::D_NETWORK, 1 );
 	try
 		{
@@ -128,7 +120,6 @@ template < >
 template < >
 void module::test<5> ( void )
 	{
-	trace << "TUT<" << 5 << ">" << endl;
 	HSocket l_oSocket ( HSocket::D_FILE, 1 );
 	try
 		{
@@ -146,7 +137,6 @@ template < >
 template < >
 void module::test<6> ( void )
 	{
-	trace << "TUT<" << 6 << ">" << endl;
 	HSocket l_oSocket ( HSocket::D_FILE, 1 );
 	try
 		{
@@ -164,7 +154,6 @@ template < >
 template < >
 void module::test<7> ( void )
 	{
-	trace << "TUT<" << 7 << ">" << endl;
 	HSocket l_oSocket ( HSocket::D_FILE, 1 );
 	l_oSocket.listen ( "/tmp/TUT_socket" );
 	try
@@ -183,7 +172,6 @@ template < >
 template < >
 void module::test<8> ( void )
 	{
-	trace << "TUT<" << 8 << ">" << endl;
 	HSocket l_oSocket ( HSocket::D_FILE );
 	try
 		{
@@ -201,7 +189,6 @@ template < >
 template < >
 void module::test<9> ( void )
 	{
-	trace << "TUT<" << 9 << ">" << endl;
 	HSocket l_oSocket;
 	try
 		{
@@ -222,7 +209,6 @@ void module::test<20> ( void )
 	char test_data [ ] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
 	char reciv_buffer [ size + 1 ];
-	trace << "TUT<" << 20 << ">" << endl;
 	HSocket l_oServer ( HSocket::D_FILE, 1 );
 	HSocket l_oClient ( HSocket::D_FILE );
 	l_oServer.listen ( "/tmp/TUT_socket" );
@@ -243,7 +229,6 @@ void module::test<21> ( void )
 	char test_data [ ] = "A kot ma wpierdol.";
 	const int size = sizeof ( test_data );
 	char reciv_buffer [ size + 1 ];
-	trace << "TUT<" << 20 << ">" << endl;
 	HSocket l_oServer ( HSocket::D_NETWORK, 1 );
 	HSocket l_oClient ( HSocket::D_NETWORK );
 	l_oServer.listen ( "0.0.0.0", 5555 );

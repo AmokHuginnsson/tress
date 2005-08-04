@@ -199,7 +199,17 @@ namespace tut
      * Called when a test finished.
      * @param tr Test results.
      */
-    virtual void test_completed(const test_result& /*tr*/){};
+    virtual void test_completed(const test_result& /*tr*/){}
+
+		/**
+		 * Called when a new group is about to begin.
+		 */
+    virtual void group_started ( std::string const & /*name*/ ){}
+			
+		/**
+		 * Called when a test is about to start.
+		 */
+		virtual void test_started( const int& /*n*/ ){}
 
     /**
      * Called when all tests in run completed.
@@ -302,6 +312,7 @@ namespace tut
       {
         try
         {
+					callback_->group_started ( i->first );
           run_all_tests_in_group_(i);
         }
         catch( const no_more_tests& )
@@ -331,6 +342,7 @@ namespace tut
 				{
 					try
 					{
+						callback_->group_started ( i->first );
 						run_all_tests_in_group_(i);
 					}
 					catch( const no_more_tests& )
@@ -365,6 +377,7 @@ namespace tut
 				{
 					try
 					{
+						callback_->group_started ( i->first );
 						run_all_tests_in_group_(i);
 					}
 					catch( const no_more_tests& )
@@ -392,6 +405,8 @@ namespace tut
 
       try
       {
+				callback_->group_started ( group_name );
+				callback_->test_started(n);
         test_result tr = i->second->run_test(n);
         callback_->test_completed(tr);
         callback_->run_completed();
@@ -415,8 +430,9 @@ namespace tut
       i->second->rewind();
 			if ( i != i )
 				return;
-      for( ;; )
+      for( int n = 1;; ++n )
       {
+				callback_->test_started(n);
         test_result tr = i->second->run_next();
         callback_->test_completed(tr);
 

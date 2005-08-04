@@ -35,6 +35,7 @@ Copyright:
 #include "variables.h"
 #include "cli_options.h"
 #include "rc_options.h"
+#include "tut_helpers.h"
 
 using namespace tut;
 using namespace std;
@@ -54,9 +55,10 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 	M_PROLOG
 /*	variables declarations for main loop:                                 */
 	int l_iOpt = 0;
-	HString l_oLine;
 	FILE * l_psFile = NULL;
-	tut::reporter l_oVisitor ( cerr );
+	HString l_oLine;
+	HLogger logger;
+	tut::reporter < HLogger > l_oVisitor ( cerr, logger );
 	tut::restartable_wrapper l_oRestartable;
 	list < string > l_oGroupNames;
 /*	end.                                                                  */

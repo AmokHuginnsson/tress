@@ -52,12 +52,14 @@ namespace tut
   /**
    * Default TUT callback handler.
    */
+	template < typename tType = std::ostream >
   class reporter : public tut::callback
   {
     std::string current_group;
     typedef std::list<tut::test_result> not_passed_list;
     not_passed_list not_passed;
     std::ostream& os;
+    tType& ls;
 
   public:
     int ok_count;
@@ -67,12 +69,17 @@ namespace tut
     int warnings_count;
 		int setup_count;
 
-    reporter() : os(std::cout)
+    reporter() : os(std::cout), ls(std::cerr)
+    {
+      init();
+    }
+		
+    reporter(std::ostream& out) : os(out), ls(&out == &std::cout ? std::cerr : std::cout )
     {
       init();
     }
 
-    reporter(std::ostream& out) : os(out)
+    reporter(std::ostream& out, tType& logger) : os(out), ls(logger)
     {
       init();
     }
@@ -82,6 +89,16 @@ namespace tut
       init();
     }
 
+    void group_started ( std::string const & name )
+		{
+				ls << "TUT: group: [" << name << "]" << std::endl;
+		}
+		
+		void test_started( const int& n )
+		{
+			ls << "TUT: module::test<" << n << ">" << std::endl;
+		}
+		
     void test_completed(const tut::test_result& tr)
     {
       if( tr.group != current_group )

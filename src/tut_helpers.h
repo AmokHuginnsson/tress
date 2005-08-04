@@ -28,6 +28,23 @@ Copyright:
 #include <iomanip>
 #include <stdhapi.h>
 
+class HLogger
+	{
+protected:
+	/*{*/
+	/*}*/
+public:
+	/*{*/
+	HLogger & operator << ( char const * const );
+	HLogger & operator << ( std::string const & );
+	HLogger & operator << ( int const & );
+	HLogger & operator << ( std::ostream & ( * const ) ( std::ostream & ) );
+	/*}*/
+protected:
+	/*{*/
+	/*}*/
+	};
+
 std::ostream & operator << ( std::ostream &, stdhapi::hcore::HComplex );
 
 template < class tType >
