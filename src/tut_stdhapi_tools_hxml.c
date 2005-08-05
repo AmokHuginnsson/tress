@@ -89,11 +89,11 @@ void module::test<1> ( void )
 	HString string;
 	HXmlDump xml;
 	HFile file;
-	if ( g_iArgc < 2 )
+	if ( setup.f_iArgc < 2 )
 		fail ( "You need to specify one argument for this test" );
-	if ( g_iWantVerbose )
+	if ( setup.f_bVerbose )
 		{
-		if ( file.open ( g_ppcArgv [ 1 ] ) )
+		if ( file.open ( setup.f_ppcArgv [ 1 ] ) )
 			cout << file.get_error ( ) << ": " << file.get_path ( ) << endl;
 		else
 			{
@@ -102,9 +102,9 @@ void module::test<1> ( void )
 			file.close ( );
 			}
 		}
-	xml.init ( g_ppcArgv [ 1 ] );
-	if ( g_iArgc > 2 )
-		xml.parse ( const_cast < char * > ( g_ppcArgv [ 2 ] ) );
+	xml.init ( setup.f_ppcArgv [ 1 ] );
+	if ( setup.f_iArgc > 2 )
+		xml.parse ( const_cast < char * > ( setup.f_ppcArgv [ 2 ] ) );
 	else
 		xml.parse ( NULL );
 	}

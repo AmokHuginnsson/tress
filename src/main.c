@@ -50,6 +50,8 @@ namespace tut
   test_runner_singleton runner;
 	}
 
+OSetup setup;
+
 int main ( int a_iArgc, char * a_ppcArgv [ ] )
 	{
 	M_PROLOG
@@ -66,24 +68,24 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 		{
 /*	TO-DO:				enter main loop code here                               */
 		signals::set_handlers ( );
-		g_pcProgramName = a_ppcArgv [ 0 ];
+		setup.f_pcProgramName = a_ppcArgv [ 0 ];
 		process_tressrc_file ( );
 		l_iOpt = decode_switches ( a_iArgc, a_ppcArgv );
-		hcore::log.rehash ( g_oLogPath, g_pcProgramName );
-		g_iArgc = ( a_iArgc - l_iOpt ) + 1;
-		if ( g_iArgc > 1 )
+		hcore::log.rehash ( setup.f_oLogPath, setup.f_pcProgramName );
+		setup.f_iArgc = ( a_iArgc - l_iOpt ) + 1;
+		if ( setup.f_iArgc > 1 )
 			{
-			g_ppcArgv = a_ppcArgv + l_iOpt - 1;
+			setup.f_ppcArgv = a_ppcArgv + l_iOpt - 1;
 			a_ppcArgv [ l_iOpt - 1 ] = a_ppcArgv [ 0 ];
 			}
 //		if ( ! is_enabled ( ) )enter_curses (); /* enabling ncurses ablilities*/
 /* *BOOM* */
 		try
 			{
-			if ( ! g_bListGroups )
+			if ( ! setup.f_bListGroups )
 				cout << "TUT: " << static_cast < char const * > ( HTime ( ) ) << endl;
 			g_iErrNo = 0;
-			if ( g_bListGroups )
+			if ( setup.f_bListGroups )
 				{
 				std::cerr << "registered test groups:" << std::endl;
 				tut::groupnames gl = tut::runner.get ( ).list_groups();
@@ -96,7 +98,7 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 					}
 				g_iErrNo = 0;
 				}
-			else if ( g_bRestartable )
+			else if ( setup.f_bRestartable )
 				{
 				l_oRestartable.set_callback ( & l_oVisitor );
 				l_oRestartable.run_tests ( );
@@ -104,12 +106,12 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 			else
 				{
 				runner.get ( ).set_callback ( & l_oVisitor );
-				if ( g_oTestGroupListFilePath )
+				if ( setup.f_oTestGroupListFilePath )
 					{
-					if ( g_oTestGroupListFilePath == "-" )
+					if ( setup.f_oTestGroupListFilePath == "-" )
 						l_psFile = stdin;
 					HFile l_oFile ( HFile::D_READING, l_psFile );
-					if ( ! l_psFile && l_oFile.open ( g_oTestGroupListFilePath ) )
+					if ( ! l_psFile && l_oFile.open ( setup.f_oTestGroupListFilePath ) )
 						{
 						cout << l_oFile.get_error ( ) << ": " << l_oFile.get_path ( ) << endl;
 						throw 0;
@@ -124,21 +126,21 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 					l_oFile.close ( );
 					runner.get ( ).run_tests ( l_oGroupNames );
 					}
-				else if ( g_oTestGroupPattern )
+				else if ( setup.f_oTestGroupPattern )
 					runner.get ( ).run_pattern_tests (
-							static_cast < char * > ( g_oTestGroupPattern ) );
-				else if ( g_oTestGroup && g_iTestNumber )
-					runner.get ( ).run_test ( static_cast < char * > ( g_oTestGroup ),
-							g_iTestNumber );
-				else if ( g_oTestGroup )
+							static_cast < char * > ( setup.f_oTestGroupPattern ) );
+				else if ( setup.f_oTestGroup && setup.f_iTestNumber )
+					runner.get ( ).run_test ( static_cast < char * > ( setup.f_oTestGroup ),
+							setup.f_iTestNumber );
+				else if ( setup.f_oTestGroup )
 					{
-					l_oGroupNames.push_back ( static_cast < char * > ( g_oTestGroup ) );
+					l_oGroupNames.push_back ( static_cast < char * > ( setup.f_oTestGroup ) );
 					runner.get ( ).run_tests ( l_oGroupNames );
 					}
 				else
 					runner.get ( ).run_tests ( );
 				}
-			if ( ! g_bListGroups )
+			if ( ! setup.f_bListGroups )
 				cout << "TUT: " << static_cast < char const * > ( HTime ( ) ) << endl;
 			}
 		catch ( const std::exception & e )

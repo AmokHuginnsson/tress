@@ -26,7 +26,6 @@ Copyright:
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <getopt.h>
 #include <libintl.h>
 
 #include <stdhapi.h>
@@ -42,11 +41,12 @@ using namespace stdhapi::hcore;
 /* Set all the option flags according to the switches specified.
    Return the index of the first non-option argument.                    */
 
-void usage ( int a_iStatus )
+void usage ( void ) __attribute__ ( ( __noreturn__ ) );
+void usage ( void )
 	{
 	printf ( "%s - \
-does very much usefull things ... really \n", g_pcProgramName );
-	printf ( "Usage: %s [OPTION]... [FILE]...\n", g_pcProgramName );
+stdhapi stress testing suite\n", setup.f_pcProgramName );
+	printf ( "Usage: %s [OPTION]... [FILE]...\n", setup.f_pcProgramName );
 	printf (
 "Options:\n"
 "  -G --group                 select test group\n"
@@ -59,109 +59,61 @@ does very much usefull things ... really \n", g_pcProgramName );
 "  --verbose                  print more information\n"
 "  -h, --help                 display this help and exit\n"
 "  -V, --version              output version information and exit\n" );
-	exit ( a_iStatus );
+	exit ( setup.f_bHelp ? 0 : 1 );
+	}
+
+void version ( void ) __attribute__ ( ( __noreturn__ ) );
+void version ( void )
+	{
+	printf ( "`tress' %s\n", VER );
+	exit ( 0 );
 	}
 
 int decode_switches ( int a_iArgc, char ** a_ppcArgv )
 	{
 	M_PROLOG
-	int l_iChar = 0;
-	hcore::log << "Decoding switches ... ";
-	while ( ( l_iChar = getopt_long ( a_iArgc, a_ppcArgv, 
-					"G:" /* group */
-					"P:" /* pattern */
-					"N:" /* number */
-					"F:" /* file */
-					"R"  /* restartable */
-					"L"  /* list */
-					"q"	 /* quiet or silent */
-					"v"	 /* verbose */
-					"h"	 /* help    */
-					"V", /* version */
-					g_sLongOptions, ( int * ) 0 ) ) != EOF )
+	int l_iUnknown = 0, l_iNonOption = 0;
+	OOption l_psOptions [ ] =
 		{
-		switch ( l_iChar )
-			{
-			case ( 'G' ):
-				{
-				g_oTestGroup = optarg;
-				break;
-				}
-			case ( 'P' ):
-				{
-				g_oTestGroupPattern = optarg;
-				break;
-				}
-			case ( 'N' ):
-				{
-				g_iTestNumber = strtol ( optarg, NULL, 10 );
-				break;
-				}
-			case ( 'F' ):
-				{
-				g_oTestGroupListFilePath = optarg;
-				break;
-				}
-			case ( 'R' ):
-				{
-				g_bRestartable = true;
-				break;
-				}
-			case ( 'L' ):
-				{
-				g_bListGroups = true;
-				break;
-				}
-			case ( 'q' ):	 /* --quiet, --silent                                     */
-				{
-				g_iWantQuiet = 1;
-			  break;
-				}
-			case ( 'v' ):
-				{
-				g_iWantVerbose = 1;
-				break;
-				}
-			case ( 'V' ):
-				{
-				printf ( "`tress' %s\n", VER );
-				exit ( 0 );
-				}
-			case ( 'h' ):
-				{
-				usage ( 0 );
-				break;
-				}
-			default:
-				{
-				usage (EXIT_FAILURE);
-				}
-			}
-		}
-	hcore::log << "done." << endl;
-	if ( g_bListGroups
-			&& ( g_bRestartable || g_oTestGroupListFilePath || g_oTestGroup
-				|| g_oTestGroupPattern || g_iTestNumber ) )
+			{ "group",				'G', OOption::D_REQUIRED,	D_HSTRING,	& setup.f_oTestGroup,							NULL },
+			{ "pattern",			'P', OOption::D_REQUIRED,	D_HSTRING,	& setup.f_oTestGroupPattern,			NULL },
+			{ "number",				'N', OOption::D_REQUIRED,	D_INT,			& setup.f_iTestNumber,						NULL },
+			{ "restartable",	'R', OOption::D_NONE,			D_BOOL,			& setup.f_bRestartable,						NULL },
+			{ "list",					'L', OOption::D_NONE,			D_BOOL,			& setup.f_bListGroups,						NULL },
+			{ "file",					'F', OOption::D_REQUIRED,	D_HSTRING,	& setup.f_oTestGroupListFilePath,	NULL },
+			{ "quiet",				'q', OOption::D_NONE,			D_BOOL,			& setup.f_bQuiet,									NULL },
+			{ "silent",				'q', OOption::D_NONE,			D_BOOL,			& setup.f_bQuiet,									NULL },
+			{ "verbose",			'v', OOption::D_NONE,			D_BOOL,			& setup.f_bVerbose,								NULL },
+			{ "help",					'h', OOption::D_NONE,			D_NONE,			NULL,															usage },
+			{ "version",			'V', OOption::D_NONE,			D_NONE,			NULL,															version }
+		};
+	l_iNonOption = cl_switch::decode_switches ( a_iArgc, a_ppcArgv, l_psOptions,
+			sizeof ( l_psOptions ) / sizeof ( OOption ), & l_iUnknown );
+	if ( l_iUnknown > 0 )
+		usage ( );
+	if ( setup.f_bListGroups
+			&& ( setup.f_bRestartable || setup.f_oTestGroupListFilePath || setup.f_oTestGroup
+				|| setup.f_oTestGroupPattern || setup.f_iTestNumber ) )
 		M_THROW ( _ ( "group listing conflicts with other switches" ),
-				g_iTestNumber );
-	if ( g_bRestartable
-			&& ( g_oTestGroupListFilePath || g_oTestGroup || g_oTestGroupPattern
-				|| g_iTestNumber ) )
+				setup.f_iTestNumber );
+	if ( setup.f_bRestartable
+			&& ( setup.f_oTestGroupListFilePath || setup.f_oTestGroup || setup.f_oTestGroupPattern
+				|| setup.f_iTestNumber ) )
 		M_THROW ( _ ( "restartable conflicts with other switches" ),
-				g_iTestNumber );
-	if ( g_oTestGroupListFilePath
-			&& ( g_oTestGroup || g_oTestGroupPattern || g_iTestNumber ) )
+				setup.f_iTestNumber );
+	if ( setup.f_oTestGroupListFilePath
+			&& ( setup.f_oTestGroup || setup.f_oTestGroupPattern || setup.f_iTestNumber ) )
 		M_THROW ( _ ( "group names file is an exclusive switch" ),
-				g_iTestNumber );
-	if ( g_oTestGroup && g_oTestGroupPattern )
+				setup.f_iTestNumber );
+	if ( setup.f_oTestGroup && setup.f_oTestGroupPattern )
 		M_THROW ( _ ( "pattern and group switches are exclusive" ), g_iErrNo );
-	if ( g_oTestGroupPattern && g_iTestNumber )
+	if ( setup.f_oTestGroupPattern && setup.f_iTestNumber )
 		M_THROW ( _ ( "setting test number for pattern makes no sense" ),
-				g_iTestNumber );
-	if ( g_iTestNumber && ! g_oTestGroup )
+				setup.f_iTestNumber );
+	if ( setup.f_iTestNumber && ! setup.f_oTestGroup )
 		M_THROW ( _ ( "must specify test group for test number" ),
-				g_iTestNumber );
-	return ( optind );
+				setup.f_iTestNumber );
+	return ( l_iNonOption );
 	M_EPILOG
 	}
 

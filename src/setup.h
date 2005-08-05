@@ -27,18 +27,23 @@ Copyright:
 #ifndef __VARIABLES_H
 #define __VARIABLES_H
 
-extern int g_iWantQuiet;			/* --quiet, --silent */
-extern int g_iWantVerbose;			/* --verbose */
-extern char * g_pcProgramName;
-extern stdhapi::hcore::HString g_oLogPath;
-extern bool g_bListGroups;
-extern bool g_bRestartable;
-extern int g_iTestNumber;
-extern stdhapi::hcore::HString g_oTestGroup;
-extern stdhapi::hcore::HString g_oTestGroupPattern;
-extern stdhapi::hcore::HString g_oTestGroupListFilePath;
-extern int g_iArgc;
-extern char const * const * g_ppcArgv;
-extern struct option const * g_sLongOptions;
+typedef struct
+	{
+	bool f_bQuiet;			/* --quiet, --silent */
+	bool f_bVerbose;		/* --verbose */
+	bool f_bHelp;
+	bool f_bListGroups;
+	bool f_bRestartable;
+	int f_iTestNumber;
+	int f_iArgc;
+	char const * const * f_ppcArgv;
+	char * f_pcProgramName;
+	stdhapi::hcore::HString f_oLogPath;
+	stdhapi::hcore::HString f_oTestGroup;
+	stdhapi::hcore::HString f_oTestGroupPattern;
+	stdhapi::hcore::HString f_oTestGroupListFilePath;
+	} OSetup;
+
+extern OSetup setup;
 
 #endif /* __VARIABLES_H */

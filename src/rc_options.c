@@ -35,12 +35,6 @@ M_CVSID ( "$CVSHeader$" );
 
 using namespace stdhapi::hcore;
 
-OVariable g_psVars [ ] =
-	{
-		{ D_HSTRING, "log_path", & g_oLogPath },
-		{ D_NONE, NULL, NULL }
-	};
-
 bool set_variables ( HString & a_roOption, HString & a_roValue )
 	{
 	printf ( "option: [%s], value: [%s]\n", ( char * ) a_roOption,
@@ -50,8 +44,14 @@ bool set_variables ( HString & a_roOption, HString & a_roValue )
 
 int process_tressrc_file ( void )
 	{
-	rc_file::process_rc_file ( "tress", NULL, g_psVars, NULL );
-	if ( ! g_oLogPath )
-		g_oLogPath = "tress.log";
+	OVariable l_psVars [ ] =
+		{
+			{ D_HSTRING, "log_path", & setup.f_oLogPath },
+			{ D_NONE, NULL, NULL }
+		};
+	rc_file::process_rc_file ( "tress", NULL, l_psVars, NULL );
+	if ( ! setup.f_oLogPath )
+		setup.f_oLogPath = "tress.log";
 	return ( 0 );
 	}
+
