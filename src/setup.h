@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	variables.h - this file is integral part of `tress' project.
+	setup.h - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -24,11 +24,16 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#ifndef __VARIABLES_H
-#define __VARIABLES_H
+#ifndef __SETUP_H
+#define __SETUP_H
 
-typedef struct
+struct OSetup
 	{
+	OSetup ( void ) : f_bQuiet ( false ), f_bVerbose ( false ),
+										f_bHelp ( false ), f_bListGroups ( false ),
+										f_bRestartable ( false ), f_iTestNumber ( 0 ),
+										f_iArgc ( 0 ), f_ppcArgv ( NULL ),
+										f_pcProgramName ( NULL ) {}
 	bool f_bQuiet;			/* --quiet, --silent */
 	bool f_bVerbose;		/* --verbose */
 	bool f_bHelp;
@@ -42,8 +47,8 @@ typedef struct
 	stdhapi::hcore::HString f_oTestGroup;
 	stdhapi::hcore::HString f_oTestGroupPattern;
 	stdhapi::hcore::HString f_oTestGroupListFilePath;
-	} OSetup;
+	};
 
 extern OSetup setup;
 
-#endif /* __VARIABLES_H */
+#endif /* __SETUP_H */

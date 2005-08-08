@@ -31,8 +31,7 @@ Copyright:
 #include <stdhapi.h>    /* all hAPI headers */
 
 #include "version.h"
-#include "define.h"
-#include "variables.h"
+#include "setup.h"
 #include "cli_options.h"
 #include "rc_options.h"
 #include "tut_helpers.h"

@@ -30,10 +30,9 @@ Copyright:
 
 #include <stdhapi.h>
 
-#include "define.h"
-#include "version.h"
-#include "variables.h"
 #include "cli_options.h"
+#include "version.h"
+#include "setup.h"
 
 using namespace stdhapi;
 using namespace stdhapi::hcore;

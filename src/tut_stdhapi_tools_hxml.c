@@ -28,7 +28,7 @@ Copyright:
 
 #include <stdhapi.h>
 
-#include "variables.h"
+#include "setup.h"
 
 using namespace tut;
 using namespace std;
