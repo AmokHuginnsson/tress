@@ -47,7 +47,7 @@ int process_tressrc_file ( void )
 	OVariable l_psVars [ ] =
 		{
 			{ D_HSTRING, "log_path", & setup.f_oLogPath },
-			{ D_NONE, NULL, NULL }
+			{ D_VOID, NULL, NULL }
 		};
 	rc_file::process_rc_file ( "tress", NULL, l_psVars, NULL );
 	if ( ! setup.f_oLogPath )
