@@ -28,6 +28,7 @@ Copyright:
 #include <iomanip>
 
 #include <stdhapi.h>
+M_CVSID ( "$CVSHeader$" );
 
 #include "tut_helpers.h"
 

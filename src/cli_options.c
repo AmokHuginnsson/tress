@@ -29,6 +29,7 @@ Copyright:
 #include <libintl.h>
 
 #include <stdhapi.h>
+M_CVSID ( "$CVSHeader$" );
 
 #include "cli_options.h"
 #include "version.h"
