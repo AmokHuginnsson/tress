@@ -84,7 +84,7 @@ void module::test<3> ( void )
 		{
 		l_iCtr ++;
 		ensure_equals ( "while syntax: forward iterator made wrong move", * l_piVal, l_iCtr );
-		l_piVal = l_oList.to_tail ( 1, D_TREAT_AS_OPENED );
+		l_piVal = l_oList.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED );
 		}
 	ensure_equals ( "while syntax: not the whole list was iterated", l_iCtr, 5 );
 	}
@@ -103,7 +103,7 @@ void module::test<4> ( void )
 	l_oList.add_tail ( ) = 4;
 	l_oList.add_tail ( ) = 5;
 	for ( l_piVal = & l_oList.go ( 0 );
-			l_piVal; l_piVal = l_oList.to_tail ( 1, D_TREAT_AS_OPENED ) )
+			l_piVal; l_piVal = l_oList.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED ) )
 		{
 		l_iCtr ++;
 		ensure_equals ( "for syntax: forward iterator made wrong move", * l_piVal, l_iCtr );
@@ -129,7 +129,7 @@ void module::test<5> ( void )
 		{
 		ensure_equals ( "while syntax: backward iterator made wrong move", * l_piVal, l_iCtr );
 		l_iCtr --;
-		l_piVal = l_oList.to_head ( 1, D_TREAT_AS_OPENED );
+		l_piVal = l_oList.to_head ( 1, HList < int >::D_TREAT_AS_OPENED );
 		}
 	ensure_equals ( "while syntax: not the whole list was iterated", l_iCtr, 0 );
 	}
@@ -148,7 +148,7 @@ void module::test<6> ( void )
 	l_oList.add_tail ( ) = 4;
 	l_oList.add_tail ( ) = 5;
 	for ( l_piVal = & l_oList.go ( - 1 );
-			l_piVal; l_piVal = l_oList.to_head ( 1, D_TREAT_AS_OPENED ) )
+			l_piVal; l_piVal = l_oList.to_head ( 1, HList < int >::D_TREAT_AS_OPENED ) )
 		{
 		ensure_equals ( "for syntax: backward iterator made wrong move", * l_piVal, l_iCtr );
 		l_iCtr --;
@@ -172,7 +172,7 @@ void module::test<7> ( void )
 	l_oList.add_tail ( ) = 5;
 	l_oAnother = l_oList;
 	for ( l_piVal = & l_oAnother.go ( 0 );
-			l_piVal; l_piVal = l_oAnother.to_tail ( 1, D_TREAT_AS_OPENED ) )
+			l_piVal; l_piVal = l_oAnother.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED ) )
 		{
 		l_iCtr ++;
 		ensure_equals ( "assign operation failed, wrong value", * l_piVal, l_iCtr );
@@ -215,7 +215,7 @@ void module::test<9> ( void )
 	l_oAnother.add_tail ( ) = 8;
 	l_oAnother = l_oList;
 	for ( l_piVal = & l_oAnother.go ( 0 );
-			l_piVal; l_piVal = l_oAnother.to_tail ( 1, D_TREAT_AS_OPENED ) )
+			l_piVal; l_piVal = l_oAnother.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED ) )
 		{
 		l_iCtr ++;
 		ensure_equals ( "assign operation failed, wrong value", * l_piVal, l_iCtr );
@@ -246,7 +246,7 @@ void module::test<10> ( void )
 	l_oAnother.add_tail ( ) = 12;
 	l_oAnother = l_oList;
 	for ( l_piVal = & l_oAnother.go ( 0 );
-			l_piVal; l_piVal = l_oAnother.to_tail ( 1, D_TREAT_AS_OPENED ) )
+			l_piVal; l_piVal = l_oAnother.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED ) )
 		{
 		l_iCtr ++;
 		ensure_equals ( "assign operation failed, wrong value", * l_piVal, l_iCtr );
@@ -271,7 +271,7 @@ void module::test<11> ( void )
 		l_oList.add_tail ( ) = 4;
 		l_oList.add_tail ( ) = 5;
 		for ( l_piVal = & l_oList.go ( - 1 );
-				l_piVal; l_piVal = l_oList.to_head ( 1, D_TREAT_AS_OPENED ) )
+				l_piVal; l_piVal = l_oList.to_head ( 1, HList < int >::D_TREAT_AS_OPENED ) )
 			{
 			while ( 1 )
 				{
@@ -281,7 +281,7 @@ void module::test<11> ( void )
 					re = false;
 					if ( & l_oList.present ( ) == & l_oList.tail ( ) )
 						re = true;
-					l_oList.remove_element ( D_FORCE_REMOVE_ELEMENT | D_TREAT_AS_OPENED );
+					l_oList.remove_element ( HList < int >::D_FORCE_REMOVE_ELEMENT | HList < int >::D_TREAT_AS_OPENED );
 					if ( re )
 						{
 						l_piVal = & l_oList.go ( - 1 );
@@ -307,7 +307,7 @@ void module::test<11> ( void )
 			cout << ( * l_piVal ) << " ";
 			if ( ( * l_piVal ) == i )
 				{
-				l_oList.remove_element ( D_FORCE_REMOVE_ELEMENT | D_TREAT_AS_OPENED, & l_piVal );
+				l_oList.remove_element ( HList < int >::D_FORCE_REMOVE_ELEMENT | HList < int >::D_TREAT_AS_OPENED, & l_piVal );
 				if ( l_piVal && l_oList.quantity ( ) )
 					{
 					l_piVal = & l_oList.present ( );
@@ -315,7 +315,7 @@ void module::test<11> ( void )
 					}
 				else break;
 				}
-			else l_piVal = l_oList.to_tail ( 1, D_TREAT_AS_OPENED );
+			else l_piVal = l_oList.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED );
 			}
 		cout << endl;
 		}
