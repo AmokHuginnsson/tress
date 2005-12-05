@@ -121,20 +121,20 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 						{
 						l_oLine.trim_left ( );
 						l_oLine.trim_right ( );
-						l_oGroupNames.push_back ( static_cast < char const * > ( l_oLine ) );
+						l_oGroupNames.push_back ( static_cast < char const * const > ( l_oLine ) );
 						}
 					l_oFile.close ( );
 					runner.get ( ).run_tests ( l_oGroupNames );
 					}
 				else if ( setup.f_oTestGroupPattern )
 					runner.get ( ).run_pattern_tests (
-							static_cast < char * > ( setup.f_oTestGroupPattern ) );
+							static_cast < char const * const > ( setup.f_oTestGroupPattern ) );
 				else if ( setup.f_oTestGroup && setup.f_iTestNumber )
-					runner.get ( ).run_test ( static_cast < char * > ( setup.f_oTestGroup ),
+					runner.get ( ).run_test ( static_cast < char const * const > ( setup.f_oTestGroup ),
 							setup.f_iTestNumber );
 				else if ( setup.f_oTestGroup )
 					{
-					l_oGroupNames.push_back ( static_cast < char * > ( setup.f_oTestGroup ) );
+					l_oGroupNames.push_back ( static_cast < char const * const > ( setup.f_oTestGroup ) );
 					runner.get ( ).run_tests ( l_oGroupNames );
 					}
 				else

@@ -24,6 +24,9 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#ifndef __TUT_HELPERS_H
+#define __TUT_HELPERS_H
+
 #include <iostream>
 #include <iomanip>
 #include <stdhapi.h>
@@ -97,4 +100,6 @@ std::ostream & operator << ( std::ostream & out,
 	return ( out );
 	M_EPILOG
 	}
+
+#endif /* not __TUT_HELPERS_H */
 
