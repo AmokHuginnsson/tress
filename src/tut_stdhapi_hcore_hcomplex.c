@@ -27,7 +27,7 @@ Copyright:
 #include "TUT/tut.h"
 
 #include <stdhapi.h>
-M_CVSID ( "$CVSHeader$" );
+M_CVSID ( "$CVSHeader$" )
 
 #include "tut_helpers.h"
 

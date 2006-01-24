@@ -30,7 +30,7 @@ Copyright:
 #include <unistd.h>
 
 #include <stdhapi.h>
-M_CVSID ( "$CVSHeader$" );
+M_CVSID ( "$CVSHeader$" )
 
 using namespace tut;
 using namespace std;

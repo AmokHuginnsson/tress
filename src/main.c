@@ -29,7 +29,7 @@ Copyright:
 
 #include <unistd.h>
 #include <stdhapi.h>    /* all hAPI headers */
-M_CVSID ( "$CVSHeader$" );
+M_CVSID ( "$CVSHeader$" )
 
 #include "version.h"
 #include "setup.h"
