@@ -80,10 +80,22 @@ typedef test_group < tut_stdhapi_hcore_hpointer > tut_group;
 typedef tut_group::object module;
 tut_group tut_stdhapi_hcore_hpointer_group ( "stdhapi::hcore::HPointer" );
 
-
+/* Constructor. */
 template < >
 template < >
 void module::test<1> ( void )
+	{
+		{
+		HPointer<counter> ptr ( new counter ( ) );
+		ptr->foo ( );
+		}
+	ensure_equals ( "failed to invoke destructor", counter::get_count ( ), 0 );
+	}
+
+/* Copy constructor. */
+template < >
+template < >
+void module::test<2> ( void )
 	{
 		{
 		HPointer<counter> ptr = HPointer<counter> ( new counter ( ) );
@@ -92,9 +104,10 @@ void module::test<1> ( void )
 	ensure_equals ( "failed to invoke destructor", counter::get_count ( ), 0 );
 	}
 
+/* Assign operator. */
 template < >
 template < >
-void module::test<2> ( void )
+void module::test<3> ( void )
 	{
 		{
 		HPointer<counter> ptr1 = HPointer<counter> ( new counter ( 1 ) );
