@@ -9,16 +9,14 @@ set print asm-demangle on
 set print demangle on
 set print pretty on
 set print object on
-set environment TERM cons25
-#tty /dev/ttyv9
 define go
 	run
 	source .breaks
 end
-file ./build/1exec -readnow
-symbol-file ./build/1exec -readnow
 share
+file ./build/1exec -readnow
 break main
 set language c++
-core-file ./1exec.core
+source .gdb_local
+#core-file ./1exec.core
 #run
