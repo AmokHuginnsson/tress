@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
+<!DOCTYPE my_root [
+<!ENTITY v_data "my_data">
+]>
 <my_root my_type="my_fancy">
-   <my_node my_property="Żółwiątko">Zażółcić gęsią jaźń.</my_node>
+   <my_node my_property="Żółwiątko">Zażółcić gęsią jaźń. &v_data;</my_node>
 </my_root>
