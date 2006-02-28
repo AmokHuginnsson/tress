@@ -42,41 +42,54 @@ using namespace stdhapi::tools::util;
 namespace tut
 {
 
-class HXmlDump : public HXml
-	{
-public:
-	void * parse ( void * );
-	};
-
-void * HXmlDump::parse ( void * a_pvPath )
-	{
-	int l_iLevel = - 1;
-	char const * l_pcPath = "/";
-	HString l_oPropertyName, l_oPropertyValue;
-	HXml::ONode l_sNode;
-	if ( a_pvPath )
-		l_pcPath = static_cast < char * > ( a_pvPath );
-	while ( ( l_iLevel = iterate ( l_sNode, l_pcPath ) ) >= 0 )
-		{
-		cout << "[" << l_sNode.f_oName << "]<" << l_sNode.f_iLevel << ">:" << endl;
-		while ( l_sNode.f_oProperties.iterate ( l_oPropertyName,
-					l_oPropertyValue ) )
-			{
-			cout << "(" << l_oPropertyName << ")->(";
-			cout << l_oPropertyValue << ")" << endl;
-			}
-		cout << "{" << l_sNode.f_oContents << "}" << endl;
-		if ( l_iLevel != l_sNode.f_iLevel )
-			{
-			cout << "LEVEL: " << l_sNode.f_iLevel << ", RLEVEL: " << l_iLevel << endl;
-			fail ( "bad returned level" );
-			}
-		}
-	return ( NULL );
-	}
-
 struct tut_stdhapi_tools_hxml
 	{
+	HString f_oVarTmpBuffer;
+	HXml f_oXml;
+	void dump ( HXml::ONode & a_rsNode )
+		{
+		HString l_oPropertyName, l_oPropertyValue, * l_poContent = NULL;
+		HXml::ONode * l_psNode = NULL;
+		f_oVarTmpBuffer.hs_realloc ( a_rsNode.f_iLevel * 2 + 3 );
+		memset ( f_oVarTmpBuffer.raw ( ), ' ', a_rsNode.f_iLevel * 2 );
+		f_oVarTmpBuffer [ a_rsNode.f_iLevel * 2 ] = 0;
+		if ( ! a_rsNode.f_oName.is_empty ( ) )
+			cout << f_oVarTmpBuffer << "[" << a_rsNode.f_oName << "]<" << a_rsNode.f_iLevel << ">:" << endl;
+		while ( a_rsNode.f_oProperties.iterate ( l_oPropertyName,
+					l_oPropertyValue ) )
+			{
+			cout << f_oVarTmpBuffer << "(" << l_oPropertyName << ")->(";
+			cout << l_oPropertyValue << ")" << endl;
+			}
+		memset ( f_oVarTmpBuffer.raw ( ), ' ', a_rsNode.f_iLevel * 2 + 2 );
+		f_oVarTmpBuffer [ a_rsNode.f_iLevel * 2 + 2 ] = 0;
+		cout << f_oVarTmpBuffer << "{" << endl;
+		if ( a_rsNode.f_oContents.quantity ( ) )
+			l_poContent = & a_rsNode.f_oContents.go ( 0 );
+		if ( a_rsNode.f_oChilds.quantity ( ) )
+			l_psNode = & a_rsNode.f_oChilds.go ( 0 );
+		if ( a_rsNode.f_oTypes.quantity ( ) )
+			{
+			for ( HXml::ONode::type_t * l_peType = & a_rsNode.f_oTypes.go ( 0 );
+					l_peType; l_peType = a_rsNode.f_oTypes.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED ) )
+				{
+				if ( ( * l_peType ) == HXml::ONode::D_NODE )
+					{
+					dump ( * l_psNode );
+					l_psNode = a_rsNode.f_oChilds.to_tail ( );
+					f_oVarTmpBuffer [ a_rsNode.f_iLevel * 2 + 2 ] = 0;
+					}
+				else
+					{
+					if ( l_poContent->get_length ( ) )
+						cout << f_oVarTmpBuffer << ( * l_poContent ) << endl;
+					l_poContent = a_rsNode.f_oContents.to_tail ( );
+					}
+				}
+			}
+		cout << f_oVarTmpBuffer << "}" << endl;
+		return;
+		}
 	};
 
 typedef test_group < tut_stdhapi_tools_hxml > tut_group;
@@ -88,7 +101,6 @@ template < >
 void module::test<1> ( void )
 	{
 	HString string;
-	HXmlDump xml;
 	HFile file;
 	if ( setup.f_iArgc < 2 )
 		fail ( "You need to specify one argument for this test" );
@@ -103,11 +115,12 @@ void module::test<1> ( void )
 			file.close ( );
 			}
 		}
-	xml.init ( setup.f_ppcArgv [ 1 ] );
+	f_oXml.init ( setup.f_ppcArgv [ 1 ] );
 	if ( setup.f_iArgc > 2 )
-		xml.parse ( const_cast < char * > ( setup.f_ppcArgv [ 2 ] ) );
+		f_oXml.parse ( const_cast < char * > ( setup.f_ppcArgv [ 2 ] ) );
 	else
-		xml.parse ( NULL );
+		f_oXml.parse ( );
+	dump ( f_oXml.get_root ( ) );
 	}
 
 }
