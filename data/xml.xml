@@ -3,5 +3,8 @@
 <!ENTITY v_data "my_data">
 ]>
 <my_root my_type="my_fancy">
-   <my_node my_property="¯ó³wi±tko">Za¿ó³ciæ gêsi± ja¼ñ. &v_data;</my_node>
+	<my_node my_property="¯ó³wi±tko">
+		<sub>node</sub>
+		Za¿ó³ciæ gêsi± ja¼ñ. &v_data;
+	</my_node>
 </my_root>
