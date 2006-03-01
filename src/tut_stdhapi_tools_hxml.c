@@ -50,6 +50,8 @@ struct tut_stdhapi_tools_hxml
 		{
 		HString l_oPropertyName, l_oPropertyValue, * l_poContent = NULL;
 		HXml::ONode * l_psNode = NULL;
+		if ( a_rsNode.f_iLevel < 0 )
+			return;
 		f_oVarTmpBuffer.hs_realloc ( a_rsNode.f_iLevel * 2 + 3 );
 		memset ( f_oVarTmpBuffer.raw ( ), ' ', a_rsNode.f_iLevel * 2 );
 		f_oVarTmpBuffer [ a_rsNode.f_iLevel * 2 ] = 0;
