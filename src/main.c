@@ -24,18 +24,16 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#include "TUT/tut_restartable.h"
-#include "TUT/tut_reporter.h"
-
 #include <unistd.h>
-#include <stdhapi.h>    /* all hAPI headers */
+
+#include "header"
 M_CVSID ( "$CVSHeader$" )
+#include "TUT/tut_restartable.h"
 
 #include "version.h"
 #include "setup.h"
 #include "cli_options.h"
 #include "rc_options.h"
-#include "tut_helpers.h"
 
 using namespace tut;
 using namespace std;

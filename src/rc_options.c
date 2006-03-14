@@ -28,7 +28,7 @@ Copyright:
 #include <string.h>
 #include <stdio.h>
 
-#include <stdhapi.h>
+#include "header"
 M_CVSID ( "$CVSHeader$" )
 
 #include "setup.h"

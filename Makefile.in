@@ -163,16 +163,21 @@ $(DIR_BUILD):
 	echo "Program version $(RELEASE)-`date +%Y%m%d`."; \
 	echo "#define VER \"$(RELEASE)-`date +%Y%m%d`\"" > $(DIR_BUILD)/version.h
 
-$(PRJNAME).info : src/$(PRJNAME).texinfo
-	@makeinfo src/$(PRJNAME).texinfo
+header.gch: $(VPATH)/header $(HDRS)
+	@echo -n "Generating precompiled header \`$(subst $(DIR_ROOT)/,,$(<))' ... "; \
+	$(CXX) -xc++-header $(CXXFLAGS) $(<) -o $(@) ;\
+	echo $(NONL) "done.$(CL)"
 
-$(TARGET): $(OBJS)
+$(TARGET): header.gch $(OBJS)
 	@echo -n "Linking \`$@' ... "
 	@$(LXX) $(LINKER_FLAGS) -o $(TARGET) $(OBJS) $(LIBS) 2>&1 | tee -a make.log
 ifdef NODEBUG
 	@strip $(TARGET)
 endif
 	@echo "done."
+
+$(PRJNAME).info : src/$(PRJNAME).texinfo
+	@makeinfo src/$(PRJNAME).texinfo
 
 static:
 	@$(MAKE) LIBS="$(STATICLIBS)"

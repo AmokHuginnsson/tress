@@ -24,12 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#include "TUT/tut.h"
-
-#include <stdhapi.h>
+#include "header"
 M_CVSID ( "$CVSHeader$" )
-
-#include "tut_helpers.h"
 
 using namespace tut;
 using namespace std;
