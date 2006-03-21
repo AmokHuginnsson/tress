@@ -106,7 +106,7 @@ int decode_switches ( int a_iArgc, char ** a_ppcArgv )
 		M_THROW ( _ ( "group names file is an exclusive switch" ),
 				setup.f_iTestNumber );
 	if ( setup.f_oTestGroup && setup.f_oTestGroupPattern )
-		M_THROW ( _ ( "pattern and group switches are exclusive" ), g_iErrNo );
+		M_THROW ( _ ( "pattern and group switches are exclusive" ), errno );
 	if ( setup.f_oTestGroupPattern && setup.f_iTestNumber )
 		M_THROW ( _ ( "setting test number for pattern makes no sense" ),
 				setup.f_iTestNumber );

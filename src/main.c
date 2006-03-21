@@ -82,7 +82,7 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 			{
 			if ( ! setup.f_bListGroups )
 				cout << "TUT: " << static_cast < char const * > ( HTime ( ) ) << endl;
-			g_iErrNo = 0;
+			errno = 0;
 			if ( setup.f_bListGroups )
 				{
 				std::cerr << "registered test groups:" << std::endl;
@@ -94,7 +94,7 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 					std::cout << "  " << *i << std::endl;
 					++ i;
 					}
-				g_iErrNo = 0;
+				errno = 0;
 				}
 			else if ( setup.f_bRestartable )
 				{
@@ -146,7 +146,7 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 			std::cerr << "tut raised ex: " << e.what ( ) << std::endl;
 			}
 //		if ( is_enabled ( ) )leave_curses ();  /* ending ncurses sesion    */
-		M_ENSURE ( ! g_iErrNo );
+		M_ENSURE ( ! errno );
 /*	... there is the place main loop ends. :OD-OT                         */
 		}
 	catch ( int& )
