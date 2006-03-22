@@ -89,7 +89,7 @@ int HCool::run ( void )
 	cout << "Thread [" << f_oName << "] started ... ";
 	while ( is_alive ( ) && l_iCtr -- )
 		{
-		M_CRITICAL_SECTION ( );
+		HLock l_oLock ( f_oMutex );
 		cout << l_iCtr << ' ' << flush;
 		M_DSLEEP ( 1 );
 		}
