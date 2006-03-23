@@ -43,9 +43,10 @@ struct tut_stdhapi_hcore_hpointer
 	class counter
 		{
 		static int f_iCounter;
+		static int f_iSerialNoIterator;
 		int f_iSerialNo;
 	public:
-		counter ( int a_iSerialNo = 0 ) : f_iSerialNo ( a_iSerialNo )
+		counter ( void ) : f_iSerialNo ( f_iSerialNoIterator ++ )
 			{
 			f_iCounter ++;
 			}
@@ -65,6 +66,10 @@ struct tut_stdhapi_hcore_hpointer
 			{
 			cout << "do_foo(" << f_iSerialNo << ")" << endl;
 			}
+		int get_serial_no ( void )
+			{
+			return ( f_iSerialNo );
+			}
 		};
 	tut_stdhapi_hcore_hpointer ( void )
 		{
@@ -73,6 +78,7 @@ struct tut_stdhapi_hcore_hpointer
 	};
 
 int tut_stdhapi_hcore_hpointer::counter::f_iCounter = 0;
+int tut_stdhapi_hcore_hpointer::counter::f_iSerialNoIterator = 0;
 
 typedef test_group < tut_stdhapi_hcore_hpointer > tut_group;
 typedef tut_group::object module;
@@ -108,12 +114,13 @@ template < >
 void module::test<3> ( void )
 	{
 		{
-		HPointer<counter> ptr1 = HPointer<counter> ( new counter ( 1 ) );
-		HPointer<counter> ptr2 = HPointer<counter> ( new counter ( 2 ) );
+		HPointer<counter> ptr1 = HPointer<counter> ( new counter ( ) );
+		HPointer<counter> ptr2 = HPointer<counter> ( new counter ( ) );
 		ptr1->foo ( );
 		ptr2->foo ( );
 		ptr1 = ptr2;
 		ensure_equals ( "failed to invoke destructor", counter::get_count ( ), 1 );
+		ensure_equals ( "failed to assign pointer", ptr1->get_serial_no ( ), ptr2->get_serial_no ( ) );
 		ptr1->foo ( );
 		}
 	ensure_equals ( "failed to invoke destructor", counter::get_count ( ), 0 );
