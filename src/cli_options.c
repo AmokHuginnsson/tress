@@ -59,14 +59,14 @@ stdhapi stress testing suite\n", setup.f_pcProgramName );
 "  --verbose                  print more information\n"
 "  -h, --help                 display this help and exit\n"
 "  -V, --version              output version information and exit\n" );
-	exit ( setup.f_bHelp ? 0 : 1 );
+	throw ( setup.f_bHelp ? 0 : 1 );
 	}
 
 void version ( void ) __attribute__ ( ( __noreturn__ ) );
 void version ( void )
 	{
 	printf ( "`tress' %s\n", VER );
-	exit ( 0 );
+	throw ( 0 );
 	}
 
 int decode_switches ( int a_iArgc, char ** a_ppcArgv )
