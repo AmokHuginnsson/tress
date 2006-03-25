@@ -51,7 +51,51 @@ template < >
 void module::test<1> ( void )
 	{
 	HString str ( 1024 );
-	cout << str << endl;
+	HString exemplar ( "1024" );
+	ensure_equals ( "construction from int or c-string does not work", str, exemplar );
+	}
+
+/* shift_left */
+template < >
+template < >
+void module::test<2> ( void )
+	{
+	HString str ( "Ala ma kota" );
+	HString exemplar ( "ma kota" );
+	str.shift_left ( 4 );
+	ensure_equals ( "left_shift failed", str, exemplar );
+	try
+		{
+		str.shift_left ( - 1 );
+		fail ( "no check for negative shift" );
+		}
+	catch ( HException & e )
+		{
+		cout << e.what ( ) << endl;
+		}
+	str.shift_left ( 100000 );
+	exemplar = "";
+	ensure_equals ( "left_shift failed", str, exemplar );
+	}
+
+/* shift_right */
+template < >
+template < >
+void module::test<3> ( void )
+	{
+	HString str ( "Ala ma kota" );
+	HString exemplar ( "    Ala ma kota" );
+	str.shift_right ( 4 );
+	ensure_equals ( "right_shift failed", str, exemplar );
+	try
+		{
+		str.shift_right ( - 1 );
+		fail ( "no check for negative shift" );
+		}
+	catch ( HException & e )
+		{
+		cout << e.what ( ) << endl;
+		}
 	}
 
 }
