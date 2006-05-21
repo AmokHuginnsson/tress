@@ -90,7 +90,7 @@ template < >
 void module::test<1> ( void )
 	{
 		{
-		HPointer<counter> ptr ( new counter ( ) );
+		HPointer<counter, HPointerScalar, HPointerRelaxed> ptr ( new counter ( ) );
 		ptr->foo ( );
 		}
 	ensure_equals ( "failed to invoke destructor", counter::get_count ( ), 0 );
@@ -102,7 +102,7 @@ template < >
 void module::test<2> ( void )
 	{
 		{
-		HPointer<counter> ptr = HPointer<counter> ( new counter ( ) );
+		HPointer<counter, HPointerScalar, HPointerRelaxed> ptr = HPointer<counter, HPointerScalar, HPointerRelaxed> ( new counter ( ) );
 		ptr->foo ( );
 		}
 	ensure_equals ( "failed to invoke destructor", counter::get_count ( ), 0 );
@@ -114,8 +114,8 @@ template < >
 void module::test<3> ( void )
 	{
 		{
-		HPointer<counter> ptr1 = HPointer<counter> ( new counter ( ) );
-		HPointer<counter> ptr2 = HPointer<counter> ( new counter ( ) );
+		HPointer<counter, HPointerScalar, HPointerRelaxed> ptr1 = HPointer<counter, HPointerScalar, HPointerRelaxed> ( new counter ( ) );
+		HPointer<counter, HPointerScalar, HPointerRelaxed> ptr2 = HPointer<counter, HPointerScalar, HPointerRelaxed> ( new counter ( ) );
 		ptr1->foo ( );
 		ptr2->foo ( );
 		ptr1 = ptr2;
