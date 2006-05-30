@@ -432,8 +432,8 @@ namespace tut
 				return;
       for( int n = 1;; ++n )
       {
-				callback_->test_started(n);
         test_result tr = i->second->run_next();
+				callback_->test_started(n);
         callback_->test_completed(tr);
 
 				if( tr.result == test_result::ex_ctor )

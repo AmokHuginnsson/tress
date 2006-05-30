@@ -38,24 +38,64 @@ using namespace stdhapi::tools::util;
 namespace tut
 {
 
-struct tut_stdhapi_tools_util_distance
+struct tut_stahapi_hcore_harray
 	{
 	};
 
-typedef test_group < tut_stdhapi_tools_util_distance > tut_group;
+typedef test_group < tut_stahapi_hcore_harray > tut_group;
 typedef tut_group::object module;
-tut_group tut_distance_group ( "stdhapi::tools::util::distance" );
+tut_group tut_group_group ( "stdhapi::hcore::HArray" );
 
+/* Constructor. */
 template < >
 template < >
 void module::test<1> ( void )
 	{
-	ensure_equals ( "failed to calculate levenshtein distance",
-			distance::levenshtein_damerau ( "ala", "ola" ), 1 );
-	ensure_equals ( "failed to calculate levenshtein distance",
-			distance::levenshtein_damerau ( "ala", "Cola" ), 2 );
-	ensure_equals ( "failed to calculate levenshtein distance",
-			distance::levenshtein_damerau ( "Sunday", "Saturday" ), 3 );
+	int const BAD_SIZE = - 1;
+	try
+		{
+		HArray<int> l_oArray ( BAD_SIZE );
+		fail ( "array with negative size created" );
+		}
+	catch ( HException & e )
+		{
+		cout << e.what ( ) << endl;
+		}
+	}
+
+/* Constructor and get_size(). */
+template < >
+template < >
+void module::test<2> ( void )
+	{
+	int const SIZE_FOR_ONE = 0;
+	int const SIZE_FOR_TWO = 7;
+	HArray<int> l_oOne ( SIZE_FOR_ONE );
+	ensure_equals ( "inconsistient size with respect to constructor", l_oOne.get_size ( ), SIZE_FOR_ONE );
+	HArray<int> l_oTwo ( SIZE_FOR_TWO );
+	ensure_equals ( "inconsistient size with respect to constructor", l_oTwo.get_size ( ), SIZE_FOR_TWO );
+	}
+
+/* Constructor with filling. */
+template < >
+template < >
+void module::test<3> ( void )
+	{
+	int const BAD_SIZE = - 1;
+	int const SIZE_FOR_ARRAY = 7;
+	int const FILLER_FOR_ARRAY = 13;
+	try
+		{
+		HArray<int> l_oBadArray ( BAD_SIZE, FILLER_FOR_ARRAY );
+		fail ( "array with negative size created" );
+		}
+	catch ( HException & e )
+		{
+		cout << e.what ( ) << endl;
+		}
+	HArray<int> l_oArray ( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
+	for ( int i = 0; i < SIZE_FOR_ARRAY; ++ i )
+		ensure_equals ( "array element not filled with default value", l_oArray [ i ], FILLER_FOR_ARRAY );
 	}
 
 }
