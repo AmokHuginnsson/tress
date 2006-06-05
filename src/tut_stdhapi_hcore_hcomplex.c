@@ -46,22 +46,29 @@ typedef test_group < tut_stdhapi_hcore_hcomplex > tut_group;
 typedef tut_group::object module;
 tut_group tut_stdhapi_hcore_hcomplex_group ( "stdhapi::hcore::HComplex" );
 
+/* Default constructor */
 template < >
 template < >
 void module::test<1> ( void )
 	{
-	HComplex a ( 1., 3. );
-	HComplex b ( 2., 1. );
-	HComplex c ( 4, 8. );
-	cout << "<<< complex >>>" << endl;
-	cout << "        a = " << a << endl;
-	cout << "        b = " << b << endl;
-	cout << "        c = " << c << endl;
-	cout << "    c / c = " << c / c << endl;
-	cout << "    a + b = " << a + b << endl;
-	cout << "c = a / b = " << ( c = a / b ) << endl;
-	cout << "    c * b = " << c * b << endl;
-	cout << "      - a = " << - a << endl;
+	HComplex a;
+	ensure_distance ( "non zero new complex number (re)", a.re ( ), 0., 0.001 );
+	ensure_distance ( "non zero new complex number (im)", a.im ( ), 0., 0.001 );
+	}
+
+/* Constructor with initialization. */
+template < >
+template < >
+void module::test<2> ( void )
+	{
+	double const RE = 3.14159265;
+	double const IM = 2.17;
+	HComplex a ( RE );
+	ensure_distance ( "non zero new complex number (im)", a.im ( ), 0., 0.001 );
+	ensure_distance ( "re incrorrectly set by constructor", a.re ( ), RE, 0.001 );
+	HComplex b ( RE, IM );
+	ensure_distance ( "re incrorrectly set by constructor", b.re ( ), RE, 0.001 );
+	ensure_distance ( "im incrorrectly set by constructor", b.im ( ), IM, 0.001 );
 	}
 
 }

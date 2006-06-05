@@ -98,4 +98,59 @@ void module::test<3> ( void )
 		ensure_equals ( "array element not filled with default value", l_oArray [ i ], FILLER_FOR_ARRAY );
 	}
 
+/* Copy constructor. */
+template < >
+template < >
+void module::test<4> ( void )
+	{
+	int const SIZE = 7;
+	HArray<int> l_oArray ( SIZE );
+	for ( int i = 0; i < SIZE; ++ i )
+		l_oArray [ i ] = i;
+	HArray<int> l_oCopy ( l_oArray );
+	ensure_equals ( "inconsistient size after copy constructor", l_oCopy.get_size ( ), SIZE );
+	for ( int i = 0; i < SIZE; ++ i )
+		ensure_equals ( "wrong content after copy constructor", l_oCopy [ i ], i );
+	}
+
+/* Operator [ ]. */
+template < >
+template < >
+void module::test<5> ( void )
+	{
+	int const SIZE = 7;
+	HArray<int> l_oArray ( SIZE );
+	try
+		{
+		l_oArray [ SIZE ] = 0;
+		fail ( "access beyond size succed" );
+		}
+	catch ( HException & e )
+		{
+		cout << e.what ( ) << endl;
+		}
+	try
+		{
+		l_oArray [ - SIZE - 1 ] = 0;
+		fail ( "access with negative index succed" );
+		}
+	catch ( HException & e )
+		{
+		cout << e.what ( ) << endl;
+		}
+	}
+
+/* Operator bool. */
+template < >
+template < >
+void module::test<6> ( void )
+	{
+	int const EMPTY = 0;
+	int const SIZE = 7;
+	HArray<int> l_oEmpty ( EMPTY );
+	ensure_equals ( "test for array emptiness faild", l_oEmpty, false );
+	HArray<int> l_oNormal ( SIZE );
+	ensure_equals ( "test for array fullness faild", l_oNormal, true );
+	}
+
 }
