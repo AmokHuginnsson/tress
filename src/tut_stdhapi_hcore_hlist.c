@@ -64,7 +64,7 @@ void module::test<2> ( void )
 	ensure_equals ( "list not empty", l_oList.quantity ( ), 3 );
 	}
 
-/* forward iterator while syntax */
+/* poor forward iterator while syntax */
 template < >
 template < >
 void module::test<3> ( void )
@@ -87,7 +87,7 @@ void module::test<3> ( void )
 	ensure_equals ( "while syntax: not the whole list was iterated", l_iCtr, 5 );
 	}
 
-/* forward iterator for syntax */
+/* poor forward iterator for syntax */
 template < >
 template < >
 void module::test<4> ( void )
@@ -109,7 +109,7 @@ void module::test<4> ( void )
 	ensure_equals ( "for syntax: not the whole list was iterated", l_iCtr, 5 );
 	}
 
-/* backward iterator while syntax */
+/* poor backward iterator while syntax */
 template < >
 template < >
 void module::test<5> ( void )
@@ -132,7 +132,7 @@ void module::test<5> ( void )
 	ensure_equals ( "while syntax: not the whole list was iterated", l_iCtr, 0 );
 	}
 
-/* backward iterator for syntax */
+/* poor backward iterator for syntax */
 template < >
 template < >
 void module::test<6> ( void )
@@ -317,6 +317,48 @@ void module::test<11> ( void )
 			}
 		cout << endl;
 		}
+	}
+
+/* true forward iterator */
+template < >
+template < >
+void module::test<12> ( void )
+	{
+	int l_iCtr = 0;
+	HList < int > l_oList;
+	l_oList.add_tail ( ) = 1;
+	l_oList.add_tail ( ) = 2;
+	l_oList.add_tail ( ) = 3;
+	l_oList.add_tail ( ) = 4;
+	l_oList.add_tail ( ) = 5;
+	for ( HList<int>::HIterator it = l_oList.begin ( );
+			it != l_oList.end ( ); ++ it )
+		{
+		l_iCtr ++;
+		ensure_equals ( "for syntax: forward iterator made wrong move", ( * it ), l_iCtr );
+		}
+	ensure_equals ( "for syntax: not the whole list was iterated", l_iCtr, 5 );
+	}
+
+/* true backward iterator */
+template < >
+template < >
+void module::test<13> ( void )
+	{
+	int l_iCtr = 5;
+	HList < int > l_oList;
+	l_oList.add_tail ( ) = 1;
+	l_oList.add_tail ( ) = 2;
+	l_oList.add_tail ( ) = 3;
+	l_oList.add_tail ( ) = 4;
+	l_oList.add_tail ( ) = 5;
+	for ( HList<int>::HIterator it = l_oList.rend ( );
+			it != l_oList.rbegin ( ); -- it )
+		{
+		ensure_equals ( "for syntax: backward iterator made wrong move", ( * it ), l_iCtr );
+		l_iCtr --;
+		}
+	ensure_equals ( "for syntax: not the whole list was iterated", l_iCtr, 0 );
 	}
 
 /* Sorting. */
