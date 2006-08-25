@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-  tut_stdhapi_hcore_hthread.c - this file is integral part of `tress' project.
+  tut_yaal_hcore_hthread.c - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -27,15 +27,15 @@ Copyright:
 #include <unistd.h>
 
 #include "header"
-M_CVSID ( "$CVSHeader$" )
+M_CVSID ( "$CVSHeader: tress/src/tut_yaal_hcore_hthread.c,v 1.9 2006/01/24 11:51:47 amok Exp $" )
 
 using namespace tut;
 using namespace std;
-using namespace stdhapi;
-using namespace stdhapi::hcore;
-using namespace stdhapi::hconsole;
-using namespace stdhapi::tools;
-using namespace stdhapi::tools::util;
+using namespace yaal;
+using namespace yaal::hcore;
+using namespace yaal::hconsole;
+using namespace yaal::tools;
+using namespace yaal::tools::util;
 
 namespace tut
 {
@@ -106,13 +106,13 @@ void HCool::set ( int a_iLength )
 	M_EPILOG
 	}
 
-struct tut_stdhapi_hcore_HThread
+struct tut_yaal_hcore_HThread
 	{
 	};
 
-typedef test_group < tut_stdhapi_hcore_HThread > tut_group;
+typedef test_group < tut_yaal_hcore_HThread > tut_group;
 typedef tut_group::object module;
-tut_group tut_stdhapi_hcore_HThread_group ( "stdhapi::hcore::HThread" );
+tut_group tut_yaal_hcore_HThread_group ( "yaal::hcore::HThread" );
 
 /* Construction and destruction */
 template < >

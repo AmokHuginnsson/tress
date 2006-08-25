@@ -27,7 +27,7 @@ Copyright:
 #include <unistd.h>
 
 #include "header"
-M_CVSID ( "$CVSHeader$" )
+M_CVSID ( "$CVSHeader: tress/src/main.c,v 1.27 2006/01/24 11:51:47 amok Exp $" )
 #include "TUT/tut_restartable.h"
 
 #include "version.h"
@@ -37,11 +37,11 @@ M_CVSID ( "$CVSHeader$" )
 
 using namespace tut;
 using namespace std;
-using namespace stdhapi;
-using namespace stdhapi::hcore;
-using namespace stdhapi::hconsole;
-using namespace stdhapi::tools;
-using namespace stdhapi::tools::util;
+using namespace yaal;
+using namespace yaal::hcore;
+using namespace yaal::hconsole;
+using namespace yaal::tools;
+using namespace yaal::tools::util;
 
 namespace tut
 	{

@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-  tut_stdhapi_tools_hxml.c - this file is integral part of `tress' project.
+  tut_yaal_tools_hxml.c - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -25,22 +25,22 @@ Copyright:
 */
 
 #include "header"
-M_CVSID ( "$CVSHeader$" )
+M_CVSID ( "$CVSHeader: tress/src/tut_yaal_tools_hxml.c,v 1.8 2005/08/16 08:09:41 amok Exp $" )
 
 #include "setup.h"
 
 using namespace tut;
 using namespace std;
-using namespace stdhapi;
-using namespace stdhapi::hcore;
-using namespace stdhapi::hconsole;
-using namespace stdhapi::tools;
-using namespace stdhapi::tools::util;
+using namespace yaal;
+using namespace yaal::hcore;
+using namespace yaal::hconsole;
+using namespace yaal::tools;
+using namespace yaal::tools::util;
 
 namespace tut
 {
 
-struct tut_stdhapi_tools_hxml
+struct tut_yaal_tools_hxml
 	{
 	HString f_oVarTmpBuffer;
 	HXml f_oXml;
@@ -92,9 +92,9 @@ struct tut_stdhapi_tools_hxml
 		}
 	};
 
-typedef test_group < tut_stdhapi_tools_hxml > tut_group;
+typedef test_group < tut_yaal_tools_hxml > tut_group;
 typedef tut_group::object module;
-tut_group tut_stdhapi_tools_hxml_group ( "stdhapi::tools::HXml" );
+tut_group tut_yaal_tools_hxml_group ( "yaal::tools::HXml" );
 
 template < >
 template < >

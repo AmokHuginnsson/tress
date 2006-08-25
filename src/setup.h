@@ -43,10 +43,10 @@ struct OSetup
 	int f_iArgc;
 	char const * const * f_ppcArgv;
 	char * f_pcProgramName;
-	stdhapi::hcore::HString f_oLogPath;
-	stdhapi::hcore::HString f_oTestGroup;
-	stdhapi::hcore::HString f_oTestGroupPattern;
-	stdhapi::hcore::HString f_oTestGroupListFilePath;
+	yaal::hcore::HString f_oLogPath;
+	yaal::hcore::HString f_oTestGroup;
+	yaal::hcore::HString f_oTestGroupPattern;
+	yaal::hcore::HString f_oTestGroupListFilePath;
 	};
 
 extern OSetup setup;

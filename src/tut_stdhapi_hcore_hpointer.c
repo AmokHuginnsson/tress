@@ -25,20 +25,20 @@ Copyright:
 */
 
 #include "header"
-M_CVSID ( "$CVSHeader$" )
+M_CVSID ( "$CVSHeader: tress/src/tut.c,v 1.6 2006/01/24 11:51:47 amok Exp $" )
 
 using namespace tut;
 using namespace std;
-using namespace stdhapi;
-using namespace stdhapi::hcore;
-using namespace stdhapi::hconsole;
-using namespace stdhapi::tools;
-using namespace stdhapi::tools::util;
+using namespace yaal;
+using namespace yaal::hcore;
+using namespace yaal::hconsole;
+using namespace yaal::tools;
+using namespace yaal::tools::util;
 
 namespace tut
 {
 
-struct tut_stdhapi_hcore_hpointer
+struct tut_yaal_hcore_hpointer
 	{
 	class counter
 		{
@@ -71,18 +71,18 @@ struct tut_stdhapi_hcore_hpointer
 			return ( f_iSerialNo );
 			}
 		};
-	tut_stdhapi_hcore_hpointer ( void )
+	tut_yaal_hcore_hpointer ( void )
 		{
 		counter::set_count ( 0 );
 		}
 	};
 
-int tut_stdhapi_hcore_hpointer::counter::f_iCounter = 0;
-int tut_stdhapi_hcore_hpointer::counter::f_iSerialNoIterator = 0;
+int tut_yaal_hcore_hpointer::counter::f_iCounter = 0;
+int tut_yaal_hcore_hpointer::counter::f_iSerialNoIterator = 0;
 
-typedef test_group < tut_stdhapi_hcore_hpointer > tut_group;
+typedef test_group < tut_yaal_hcore_hpointer > tut_group;
 typedef tut_group::object module;
-tut_group tut_stdhapi_hcore_hpointer_group ( "stdhapi::hcore::HPointer" );
+tut_group tut_yaal_hcore_hpointer_group ( "yaal::hcore::HPointer" );
 
 /* Constructor. */
 template < >

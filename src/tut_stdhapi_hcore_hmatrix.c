@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-  tut_stdhapi_hcore_hmatrix.c - this file is integral part of `tress' project.
+  tut_yaal_hcore_hmatrix.c - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -25,26 +25,26 @@ Copyright:
 */
 
 #include "header"
-M_CVSID ( "$CVSHeader$" )
+M_CVSID ( "$CVSHeader: tress/src/tut_yaal_hcore_hmatrix.c,v 1.6 2006/01/24 11:51:47 amok Exp $" )
 
 using namespace tut;
 using namespace std;
-using namespace stdhapi;
-using namespace stdhapi::hcore;
-using namespace stdhapi::hconsole;
-using namespace stdhapi::tools;
-using namespace stdhapi::tools::util;
+using namespace yaal;
+using namespace yaal::hcore;
+using namespace yaal::hconsole;
+using namespace yaal::tools;
+using namespace yaal::tools::util;
 
 namespace tut
 {
 
-struct tut_stdhapi_hcore_hmatrix
+struct tut_yaal_hcore_hmatrix
 	{
 	};
 
-typedef test_group < tut_stdhapi_hcore_hmatrix > tut_group;
+typedef test_group < tut_yaal_hcore_hmatrix > tut_group;
 typedef tut_group::object module;
-tut_group tut_stdhapi_hcore_hmatrix_group ( "stdhapi::hcore::HMatrix" );
+tut_group tut_yaal_hcore_hmatrix_group ( "yaal::hcore::HMatrix" );
 
 template < >
 template < >

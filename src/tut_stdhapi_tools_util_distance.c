@@ -25,26 +25,26 @@ Copyright:
 */
 
 #include "header"
-M_CVSID ( "$CVSHeader$" )
+M_CVSID ( "$CVSHeader: tress/src/tut.c,v 1.6 2006/01/24 11:51:47 amok Exp $" )
 
 using namespace tut;
 using namespace std;
-using namespace stdhapi;
-using namespace stdhapi::hcore;
-using namespace stdhapi::hconsole;
-using namespace stdhapi::tools;
-using namespace stdhapi::tools::util;
+using namespace yaal;
+using namespace yaal::hcore;
+using namespace yaal::hconsole;
+using namespace yaal::tools;
+using namespace yaal::tools::util;
 
 namespace tut
 {
 
-struct tut_stdhapi_tools_util_distance
+struct tut_yaal_tools_util_distance
 	{
 	};
 
-typedef test_group < tut_stdhapi_tools_util_distance > tut_group;
+typedef test_group < tut_yaal_tools_util_distance > tut_group;
 typedef tut_group::object module;
-tut_group tut_distance_group ( "stdhapi::tools::util::distance" );
+tut_group tut_distance_group ( "yaal::tools::util::distance" );
 
 template < >
 template < >

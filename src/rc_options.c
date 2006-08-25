@@ -29,12 +29,12 @@ Copyright:
 #include <stdio.h>
 
 #include "header"
-M_CVSID ( "$CVSHeader$" )
+M_CVSID ( "$CVSHeader: tress/src/rc_options.c,v 1.11 2006/01/24 11:51:47 amok Exp $" )
 
 #include "setup.h"
 
-using namespace stdhapi;
-using namespace stdhapi::hcore;
+using namespace yaal;
+using namespace yaal::hcore;
 
 bool set_variables ( HString & a_roOption, HString & a_roValue )
 	{

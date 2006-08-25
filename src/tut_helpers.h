@@ -29,7 +29,7 @@ Copyright:
 
 #include <iostream>
 #include <iomanip>
-#include <stdhapi.h>
+#include <yaal.h>
 
 class HLogger
 	{
@@ -48,11 +48,11 @@ protected:
 	/*}*/
 	};
 
-std::ostream & operator << ( std::ostream &, stdhapi::hcore::HComplex );
+std::ostream & operator << ( std::ostream &, yaal::hcore::HComplex );
 
 template < class tType >
 std::ostream & operator << ( std::ostream & out,
-		stdhapi::hcore::HVector < tType > a_oVector )
+		yaal::hcore::HVector < tType > a_oVector )
 	{
 	M_PROLOG
 	int l_iCtr = 0, l_iSize = a_oVector.get_size ( );
@@ -70,7 +70,7 @@ std::ostream & operator << ( std::ostream & out,
 
 template < class tType >
 std::ostream & operator << ( std::ostream & out,
-		stdhapi::hcore::HMatrix < tType > a_oMatrix )
+		yaal::hcore::HMatrix < tType > a_oMatrix )
 	{
 	M_PROLOG
 	int l_iCtr = 0, l_iCtrLoc = 0;

@@ -29,14 +29,14 @@ Copyright:
 #include <libintl.h>
 
 #include "header"
-M_CVSID ( "$CVSHeader$" )
+M_CVSID ( "$CVSHeader: tress/src/cli_options.c,v 1.13 2006/01/24 11:51:47 amok Exp $" )
 
 #include "cli_options.h"
 #include "version.h"
 #include "setup.h"
 
-using namespace stdhapi;
-using namespace stdhapi::hcore;
+using namespace yaal;
+using namespace yaal::hcore;
   
 /* Set all the option flags according to the switches specified.
    Return the index of the first non-option argument.                    */
@@ -45,7 +45,7 @@ void usage ( void ) __attribute__ ( ( __noreturn__ ) );
 void usage ( void )
 	{
 	printf ( "%s - \
-stdhapi stress testing suite\n", setup.f_pcProgramName );
+yaal stress testing suite\n", setup.f_pcProgramName );
 	printf ( "Usage: %s [OPTION]... [FILE]...\n", setup.f_pcProgramName );
 	printf (
 "Options:\n"

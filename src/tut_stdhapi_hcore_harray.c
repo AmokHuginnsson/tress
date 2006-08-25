@@ -25,15 +25,15 @@ Copyright:
 */
 
 #include "header"
-M_CVSID ( "$CVSHeader$" )
+M_CVSID ( "$CVSHeader: tress/src/tut.c,v 1.6 2006/01/24 11:51:47 amok Exp $" )
 
 using namespace tut;
 using namespace std;
-using namespace stdhapi;
-using namespace stdhapi::hcore;
-using namespace stdhapi::hconsole;
-using namespace stdhapi::tools;
-using namespace stdhapi::tools::util;
+using namespace yaal;
+using namespace yaal::hcore;
+using namespace yaal::hconsole;
+using namespace yaal::tools;
+using namespace yaal::tools::util;
 
 namespace tut
 {
@@ -44,7 +44,7 @@ struct tut_stahapi_hcore_harray
 
 typedef test_group < tut_stahapi_hcore_harray > tut_group;
 typedef tut_group::object module;
-tut_group tut_group_group ( "stdhapi::hcore::HArray" );
+tut_group tut_group_group ( "yaal::hcore::HArray" );
 
 /* Constructor. */
 template < >

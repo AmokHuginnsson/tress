@@ -25,26 +25,26 @@ Copyright:
 */
 
 #include "header"
-M_CVSID ( "$CVSHeader$" )
+M_CVSID ( "$CVSHeader: tress/src/tut_yaal_hcore_hlist.c,v 1.4 2006/01/24 11:51:47 amok Exp $" )
 
 using namespace tut;
 using namespace std;
-using namespace stdhapi;
-using namespace stdhapi::hcore;
-using namespace stdhapi::hconsole;
-using namespace stdhapi::tools;
-using namespace stdhapi::tools::util;
+using namespace yaal;
+using namespace yaal::hcore;
+using namespace yaal::hconsole;
+using namespace yaal::tools;
+using namespace yaal::tools::util;
 
 namespace tut
 {
 
-struct tut_stdhapi_hcore_hlist
+struct tut_yaal_hcore_hlist
 	{
 	};
 
-typedef test_group < tut_stdhapi_hcore_hlist > tut_group;
+typedef test_group < tut_yaal_hcore_hlist > tut_group;
 typedef tut_group::object module;
-tut_group tut_stdhapi_hcore_hlist_group ( "stdhapi::hcore::HList" );
+tut_group tut_yaal_hcore_hlist_group ( "yaal::hcore::HList" );
 
 /* Simple constructor. */
 template < >
