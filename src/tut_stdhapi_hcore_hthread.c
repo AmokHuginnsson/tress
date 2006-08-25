@@ -27,7 +27,7 @@ Copyright:
 #include <unistd.h>
 
 #include "header"
-M_CVSID ( "$CVSHeader: tress/src/tut_yaal_hcore_hthread.c,v 1.9 2006/01/24 11:51:47 amok Exp $" )
+M_VCSID ( "$CVSHeader: tress/src/tut_yaal_hcore_hthread.c,v 1.9 2006/01/24 11:51:47 amok Exp $" )
 
 using namespace tut;
 using namespace std;
