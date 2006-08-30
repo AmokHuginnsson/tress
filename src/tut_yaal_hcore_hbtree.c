@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-  tut_yaal_hcore_hvector.c - this file is integral part of `tress' project.
+	tut.c - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -38,34 +38,30 @@ using namespace yaal::tools::util;
 namespace tut
 {
 
-struct tut_yaal_hcore_hvector
+struct tut_yaal_hcore_hbtree
 	{
 	};
 
-typedef test_group < tut_yaal_hcore_hvector > tut_group;
+typedef test_group < tut_yaal_hcore_hbtree > tut_group;
 typedef tut_group::object module;
-tut_group tut_yaal_hcore_hvector_group ( "yaal::hcore::HVector" );
+tut_group tut_yaal_hcore_hbtree_group ( "yaal::hcore::HBTree" );
 
 template < >
 template < >
 void module::test<1> ( void )
 	{
-	HVector < double > v ( 3 );
-	HVector < double > w ( 3 );
-	cout << "<<< vector >>>" << endl;
-	v [ 0 ] = 1.2;	v [ 1 ] = 2.4; v [ 2 ] = 3.5;
-	w [ 0 ] = 4.7;	w [ 1 ] = 5.1; w [ 2 ] = 6.6;
-	cout << "    v = " << v << endl;
-	cout << "    w = " << w << endl;
-	cout << "v + w = " << v + w << endl;
-	cout << "v * 2 = " << v * 2. << endl;
-	cout << "3 * w = " << 3. * w << endl;
-	cout << "w - v = " << w - v << endl;
-	cout << "w / 2 = " << w / 2. << endl;
-	cout << "  ! v = " << ! v << endl;
-	cout << "v | w = " << ( v | w ) << endl;
-	cout << "  - v = " << - v << endl;
+	HBTree rb;
+	rb.insert ( 2 );
+	rb.insert ( 7 );
+	rb.insert ( 4 );
+	rb.insert ( 3 );
+	rb.insert ( 11 );
+	rb.insert ( 0 );
+	rb.insert ( 5 );
+	rb.insert ( 6 );
+	rb.insert ( 1 );
+	for ( HBTree::HIterator it = rb.begin ( ); it != rb.end ( ); ++ it )
+		cout << ( *it ) << endl;
 	}
 
 }
-

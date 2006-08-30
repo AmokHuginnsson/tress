@@ -25,7 +25,7 @@ Copyright:
 */
 
 #include "header"
-M_VCSID ( "$CVSHeader: tress/src/tut.c,v 1.6 2006/01/24 11:51:47 amok Exp $" )
+M_VCSID ( "$Id$" )
 
 using namespace tut;
 using namespace std;

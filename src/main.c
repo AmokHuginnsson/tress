@@ -27,7 +27,7 @@ Copyright:
 #include <unistd.h>
 
 #include "header"
-M_VCSID ( "$CVSHeader: tress/src/main.c,v 1.27 2006/01/24 11:51:47 amok Exp $" )
+M_VCSID ( "$Id$" )
 #include "TUT/tut_restartable.h"
 
 #include "version.h"

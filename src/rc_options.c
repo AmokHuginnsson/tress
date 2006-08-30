@@ -29,7 +29,7 @@ Copyright:
 #include <stdio.h>
 
 #include "header"
-M_VCSID ( "$CVSHeader: tress/src/rc_options.c,v 1.11 2006/01/24 11:51:47 amok Exp $" )
+M_VCSID ( "$Id$" )
 
 #include "setup.h"
 

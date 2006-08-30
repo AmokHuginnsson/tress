@@ -29,7 +29,7 @@ Copyright:
 #include <libintl.h>
 
 #include "header"
-M_VCSID ( "$CVSHeader: tress/src/cli_options.c,v 1.13 2006/01/24 11:51:47 amok Exp $" )
+M_VCSID ( "$Id$" )
 
 #include "cli_options.h"
 #include "version.h"

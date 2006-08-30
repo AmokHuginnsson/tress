@@ -25,7 +25,7 @@ Copyright:
 */
 
 #include "header"
-M_VCSID ( "$CVSHeader: tress/src/tut_yaal_tools_hxml.c,v 1.8 2005/08/16 08:09:41 amok Exp $" )
+M_VCSID ( "$Id$" )
 
 #include "setup.h"
 
