@@ -35,6 +35,50 @@ using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 
+namespace yaal
+{
+
+template < typename tType >
+struct set
+	{
+	struct iterator
+		{
+		HBTree::HIterator f_oEngine;
+		explicit iterator ( HBTree::HIterator const & it ) : f_oEngine ( it ){};
+		iterator & operator ++ ( void )
+			{
+			++ f_oEngine;
+			return ( * this );
+			}
+		tType & operator * ( void )
+			{	return ( f_oEngine.get<tType> ( ) );	}
+		tType * operator -> ( void )
+			{ return ( & f_oEngine.get<tType> ( ) );	}
+		bool operator == ( iterator const & it ) const
+			{ return ( f_oEngine == it.f_oEngine ); }
+		bool operator != ( iterator const & it ) const
+			{ return ( f_oEngine != it.f_oEngine ); }
+		};
+	HBTree f_oEngine;
+	set ( void ) : f_oEngine ( ) {};
+	void insert ( tType const & e )
+		{	f_oEngine.insert ( e );	}
+	void remove ( tType const & e )
+		{	f_oEngine.remove ( e );	}
+	iterator find ( tType const & e )
+		{ return ( f_oEngine.find ( e ) ); }
+	iterator begin ( void )
+		{ return ( iterator ( f_oEngine.begin ( ) ) ); }
+	iterator end ( void )
+		{ return ( iterator ( f_oEngine.end ( ) ) ); }
+	iterator rbegin ( void )
+		{ return ( iterator ( f_oEngine.rbegin ( ) ) ); }
+	iterator rend ( void )
+		{ return ( iterator ( f_oEngine.rend ( ) ) ); }
+	};
+
+}
+
 namespace tut
 {
 
@@ -50,18 +94,20 @@ template < >
 template < >
 void module::test<1> ( void )
 	{
-	HBTree rb;
-	rb.insert ( 2 );
-	rb.insert ( 7 );
-	rb.insert ( 4 );
-	rb.insert ( 3 );
-	rb.insert ( 11 );
-	rb.insert ( 0 );
-	rb.insert ( 5 );
-	rb.insert ( 6 );
-	rb.insert ( 1 );
-	for ( HBTree::HIterator it = rb.begin ( ); it != rb.end ( ); ++ it )
-		;/*		cout << ( *it ) << endl;*/
+	set<int> s;
+	s.insert ( 2 );
+	s.insert ( 7 );
+	s.insert ( 4 );
+	s.insert ( 3 );
+	s.insert ( 11 );
+	s.insert ( 0 );
+	s.insert ( 5 );
+	s.insert ( 6 );
+	s.insert ( 1 );
+	cout << "start" << endl;
+	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
+		cout << ( *it ) << endl;
+	cout << "end" << endl;
 	}
 
 }
