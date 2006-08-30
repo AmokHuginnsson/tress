@@ -61,7 +61,7 @@ void module::test<1> ( void )
 	rb.insert ( 6 );
 	rb.insert ( 1 );
 	for ( HBTree::HIterator it = rb.begin ( ); it != rb.end ( ); ++ it )
-		cout << ( *it ) << endl;
+		;/*		cout << ( *it ) << endl;*/
 	}
 
 }
