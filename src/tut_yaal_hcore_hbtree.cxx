@@ -84,22 +84,128 @@ struct set
 namespace tut
 {
 
+struct red_black_tree_stress_test
+	{
+	virtual ~red_black_tree_stress_test ( void ) {}
+	struct node
+		{
+		typedef enum	{	red, black	} color_t;
+		void * nil;
+		color_t color;
+		node * parent;
+		node * left;
+		node * right;
+		};
+	node * root;
+	int long quantity;
+	template < typename T >
+	bool self_test ( set<T> & );
+	template < typename T >
+	bool integrity_test ( set<T> & );
+	template < typename T >
+	bool definition_test ( set<T> & );
+
+private:
+	int long tested_nodes;
+	template < typename T >
+	void init ( set<T>& );
+
+	void helper_test_node_integrity ( node * );
+	void helper_test_node_definition ( node * );
+	};
+
+template<typename T>
+void red_black_tree_stress_test::init ( set<T>& ob )
+	{
+	red_black_tree_stress_test * hack = reinterpret_cast<red_black_tree_stress_test*> ( &ob );
+	tested_nodes = 0;
+	root = hack->root;
+	quantity = hack->quantity;
+	}
+
+void red_black_tree_stress_test::helper_test_node_integrity ( node * n )
+	{
+	if ( ! n->parent && ( n != root ) )
+		fail ( "node with null parent is not root" );
+	if ( n->parent && ( n->parent->left != n ) && ( n->parent->right != n ) )
+		fail ( "parent node does not know about this node" );
+	if ( n->left )
+		{
+		if ( n->left->parent != n )
+			fail ( "child node does not know about its parent (this node)" );
+		helper_test_node_integrity ( n->left );
+		}
+	if ( n->right )
+		{
+		if ( n->right->parent != n )
+			fail ( "child node does not know about its parent (this node)" );
+		helper_test_node_integrity ( n->right );
+		}
+	++ tested_nodes;
+	}
+
+template<typename T>
+bool red_black_tree_stress_test::self_test ( set<T> & ob )
+	{
+	init ( ob );
+	if ( ob.quantity ( ) != quantity )
+		return ( true );
+	if ( root == root->left )
+		return ( true );
+	if ( root == root->right )
+		return ( true );
+	if ( root == root->parent )
+		return ( true );
+	if ( root->left && ( root->left->parent != root ) )
+		return ( true );
+	if ( root->right && ( root->right->parent != root ) )
+		return ( true );
+	return ( false );
+	}
+
+template<typename T>
+bool red_black_tree_stress_test::integrity_test ( set<T> & ob )
+	{
+	init ( ob );
+	helper_test_node_integrity ( root );
+	ensure_equals ( "quantity inconsistency", quantity,  tested_nodes );
+	return ( false );
+	}
+
+template<typename T>
+bool red_black_tree_stress_test::definition_test ( set<T> & ob )
+	{
+	init ( ob );
+	if ( root->color != node::black )
+		fail ( "root is not black" );
+	return ( false );
+	}
+
 struct tut_yaal_hcore_hbtree
 	{
-	static int const NUMBER_OF_TEST_NODES = 20000;
+	static int const NUMBER_OF_TEST_NODES = 2000;
+	red_black_tree_stress_test stress;
 	};
 
 typedef test_group < tut_yaal_hcore_hbtree > tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_hcore_hbtree_group ( "yaal::hcore::HBTree" );
 
+/*
+ * Adding keys in ascending order.
+ */
 template < >
 template < >
 void module::test<1> ( void )
 	{
 	set<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
+		{
 		s.insert ( i );
+		ensure ( "self test failed", ! stress.self_test<int> ( s ) );
+		ensure ( "integrity test failed", ! stress.integrity_test<int> ( s ) );
+		ensure ( "definition test failed", ! stress.definition_test<int> ( s ) );
+		}
 	int biggest = - 1;
 	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
 		{
@@ -108,14 +214,21 @@ void module::test<1> ( void )
 		}
 	}
 
+/*
+ * Adding keys in descending order.
+ */
 template < >
 template < >
 void module::test<2> ( void )
 	{
-	HRandomizer r;
 	set<int> s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
+		{
 		s.insert ( i );
+		ensure ( "self test failed", ! stress.self_test<int> ( s ) );
+		ensure ( "integrity test failed", ! stress.integrity_test<int> ( s ) );
+		ensure ( "definition test failed", ! stress.definition_test<int> ( s ) );
+		}
 	int biggest = - 1;
 	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
 		{
@@ -124,6 +237,9 @@ void module::test<2> ( void )
 		}
 	}
 
+/*
+ * Adding keys in random order.
+ */
 template < >
 template < >
 void module::test<3> ( void )
@@ -131,7 +247,12 @@ void module::test<3> ( void )
 	HRandomizer r;
 	set<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		s.insert ( r.rnd ( 20000 ) );
+		{
+		s.insert ( r.rnd ( 30000 ) );
+		ensure ( "self test failed", ! stress.self_test<int> ( s ) );
+		ensure ( "integrity test failed", ! stress.integrity_test<int> ( s ) );
+		ensure ( "definition test failed", ! stress.definition_test<int> ( s ) );
+		}
 	int biggest = - 1;
 	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
 		{
@@ -139,6 +260,178 @@ void module::test<3> ( void )
 		biggest = *it;
 		}
 	}
+
+#if 0
+/*
+ * Removing keys in ascending order from lower half of the tree that
+ * was created by adding keys in ascending order.
+ */
+
+template < >
+template < >
+void module::test<4> ( void )
+	{
+	set<int> s;
+	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
+		s.insert ( i );
+	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
+		s.remove ( i );
+	int biggest = - 1;
+	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
+		{
+		ensure ( "elements not in order", *it > biggest );
+		biggest = *it;
+		}
+	}
+
+/*
+ * Removing keys in ascending order from upper half of the tree that
+ * was created by adding keys in ascending order.
+ */
+template < >
+template < >
+void module::test<5> ( void )
+	{
+	set<int> s;
+	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
+		s.insert ( i );
+	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
+		s.remove ( i );
+	int biggest = - 1;
+	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
+		{
+		ensure ( "elements not in order", *it > biggest );
+		biggest = *it;
+		}
+	}
+
+/*
+ * Removing keys in ascending order from lower half of the tree that
+ * was created by adding keys in ascending order.
+ */
+template < >
+template < >
+void module::test<6> ( void )
+	{
+	set<int> s;
+	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
+		s.insert ( i );
+	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
+		s.remove ( i );
+	int biggest = - 1;
+	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
+		{
+		ensure ( "elements not in order", *it > biggest );
+		biggest = *it;
+		}
+	}
+
+/*
+ * Removing keys in ascending order from upper half of the tree that
+ * was created by adding keys in ascending order.
+ */
+template < >
+template < >
+void module::test<7> ( void )
+	{
+	set<int> s;
+	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
+		s.insert ( i );
+	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
+		s.remove ( i );
+	int biggest = - 1;
+	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
+		{
+		ensure ( "elements not in order", *it > biggest );
+		biggest = *it;
+		}
+	}
+
+/*
+ * Removing keys in descending order from lower half of the tree that
+ * was created by adding keys in ascending order.
+ */
+template < >
+template < >
+void module::test<8> ( void )
+	{
+	set<int> s;
+	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
+		s.insert ( i );
+	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
+		s.remove ( i );
+	int biggest = - 1;
+	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
+		{
+		ensure ( "elements not in order", *it > biggest );
+		biggest = *it;
+		}
+	}
+
+/*
+ * Removing keys in descending order from upper half of the tree that
+ * was created by adding keys in ascending order.
+ */
+template < >
+template < >
+void module::test<9> ( void )
+	{
+	set<int> s;
+	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
+		s.insert ( i );
+	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
+		s.remove ( i );
+	int biggest = - 1;
+	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
+		{
+		ensure ( "elements not in order", *it > biggest );
+		biggest = *it;
+		}
+	}
+
+/*
+ * Removing keys in descending order from lower half of the tree that
+ * was created by adding keys in ascending order.
+ */
+template < >
+template < >
+void module::test<10> ( void )
+	{
+	set<int> s;
+	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
+		s.insert ( i );
+	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
+		s.remove ( i );
+	int biggest = - 1;
+	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
+		{
+		ensure ( "elements not in order", *it > biggest );
+		biggest = *it;
+		}
+	}
+
+/*
+ * Removing keys in descending order from upper half of the tree that
+ * was created by adding keys in ascending order.
+ */
+template < >
+template < >
+void module::test<11> ( void )
+	{
+	set<int> s;
+	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
+		s.insert ( i );
+	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
+		s.remove ( i );
+	int biggest = - 1;
+	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
+		{
+		ensure ( "elements not in order", *it > biggest );
+		biggest = *it;
+		}
+	}
+
+#endif
 
 }
 
