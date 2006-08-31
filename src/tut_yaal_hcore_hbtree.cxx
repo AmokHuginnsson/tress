@@ -61,6 +61,8 @@ struct set
 		};
 	HBTree f_oEngine;
 	set ( void ) : f_oEngine ( ) {};
+	long int quantity ( void )
+		{ return ( f_oEngine.quantity ( ) );	}
 	void insert ( tType const & e )
 		{	f_oEngine.insert ( e );	}
 	void remove ( tType const & e )
@@ -84,6 +86,7 @@ namespace tut
 
 struct tut_yaal_hcore_hbtree
 	{
+	static int const NUMBER_OF_TEST_NODES = 20000;
 	};
 
 typedef test_group < tut_yaal_hcore_hbtree > tut_group;
@@ -95,19 +98,47 @@ template < >
 void module::test<1> ( void )
 	{
 	set<int> s;
-	s.insert ( 2 );
-	s.insert ( 7 );
-	s.insert ( 4 );
-	s.insert ( 3 );
-	s.insert ( 11 );
-	s.insert ( 0 );
-	s.insert ( 5 );
-	s.insert ( 6 );
-	s.insert ( 1 );
-	cout << "start" << endl;
+	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
+		s.insert ( i );
+	int biggest = - 1;
 	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
-		cout << ( *it ) << endl;
-	cout << "end" << endl;
+		{
+		ensure ( "elements not in order", *it > biggest );
+		biggest = *it;
+		}
+	}
+
+template < >
+template < >
+void module::test<2> ( void )
+	{
+	HRandomizer r;
+	set<int> s;
+	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
+		s.insert ( i );
+	int biggest = - 1;
+	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
+		{
+		ensure ( "elements not in order", *it > biggest );
+		biggest = *it;
+		}
+	}
+
+template < >
+template < >
+void module::test<3> ( void )
+	{
+	HRandomizer r;
+	set<int> s;
+	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
+		s.insert ( r.rnd ( 20000 ) );
+	int biggest = - 1;
+	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
+		{
+		ensure ( "elements not in order", *it > biggest );
+		biggest = *it;
+		}
 	}
 
 }
+
