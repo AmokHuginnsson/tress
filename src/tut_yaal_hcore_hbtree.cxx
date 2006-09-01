@@ -105,20 +105,28 @@ struct red_black_tree_stress_test
 	template < typename T >
 	bool definition_test ( set<T> & );
 
+	static bool red_node_exists;
 private:
 	int long tested_nodes;
+	int black_height;
 	template < typename T >
 	void init ( set<T>& );
 
 	void helper_test_node_integrity ( node * );
 	void helper_test_node_definition ( node * );
+	int helper_count_exemplar_black_height ( node * );
+	int helper_check_black_height ( node * );
 	};
+
+bool red_black_tree_stress_test::red_node_exists = false;
 
 template<typename T>
 void red_black_tree_stress_test::init ( set<T>& ob )
 	{
 	red_black_tree_stress_test * hack = reinterpret_cast<red_black_tree_stress_test*> ( &ob );
 	tested_nodes = 0;
+	black_height = 0;
+	red_node_exists = false;
 	root = hack->root;
 	quantity = hack->quantity;
 	}
@@ -142,6 +150,51 @@ void red_black_tree_stress_test::helper_test_node_integrity ( node * n )
 		helper_test_node_integrity ( n->right );
 		}
 	++ tested_nodes;
+	}
+
+void red_black_tree_stress_test::helper_test_node_definition ( node * n )
+	{
+	if ( n->color == node::red )
+		{
+		red_node_exists = true;
+		if ( ( n->left && ( n->left->color == node::red ) )
+				|| ( n->right && ( n->right->color == node::red ) ) )
+			fail ( "subsequent red nodes" );
+		}
+	if ( n->left )
+		helper_test_node_definition ( n->left );
+	if ( n->right )
+		helper_test_node_definition ( n->right );
+	if ( ! ( n->left || n->right ) )
+		{
+		if ( helper_check_black_height ( n ) != black_height )
+			fail ( "black height is not the same for all the nodes" );
+		}
+	}
+
+int red_black_tree_stress_test::helper_count_exemplar_black_height ( node * n )
+	{
+	int bh = 0;
+	while ( n )
+		{
+		if ( n->color == node::black )
+			++ bh;
+		n = n->left;
+		}
+//	cout << bh << " ";
+	return ( bh );
+	}
+
+int red_black_tree_stress_test::helper_check_black_height ( node * n )
+	{
+	int bh = 0;
+	while ( n )
+		{
+		if ( n->color == node::black )
+			++ bh;
+		n = n->parent;
+		}
+	return ( bh );
 	}
 
 template<typename T>
@@ -178,6 +231,10 @@ bool red_black_tree_stress_test::definition_test ( set<T> & ob )
 	init ( ob );
 	if ( root->color != node::black )
 		fail ( "root is not black" );
+	black_height = helper_count_exemplar_black_height ( root );
+	helper_test_node_definition ( root );
+//	if ( red_node_exists )
+//		cout << "R";
 	return ( false );
 	}
 
@@ -212,6 +269,7 @@ void module::test<1> ( void )
 		ensure ( "elements not in order", *it > biggest );
 		biggest = *it;
 		}
+	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 	}
 
 /*
@@ -235,6 +293,7 @@ void module::test<2> ( void )
 		ensure ( "elements not in order", *it > biggest );
 		biggest = *it;
 		}
+	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 	}
 
 /*
@@ -259,14 +318,13 @@ void module::test<3> ( void )
 		ensure ( "elements not in order", *it > biggest );
 		biggest = *it;
 		}
+	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 	}
 
-#if 0
 /*
  * Removing keys in ascending order from lower half of the tree that
  * was created by adding keys in ascending order.
  */
-
 template < >
 template < >
 void module::test<4> ( void )
@@ -275,7 +333,12 @@ void module::test<4> ( void )
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
+		{
 		s.remove ( i );
+		ensure ( "self test failed", ! stress.self_test<int> ( s ) );
+		ensure ( "integrity test failed", ! stress.integrity_test<int> ( s ) );
+		ensure ( "definition test failed", ! stress.definition_test<int> ( s ) );
+		}
 	int biggest = - 1;
 	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
 		{
@@ -284,6 +347,7 @@ void module::test<4> ( void )
 		}
 	}
 
+#if 0
 /*
  * Removing keys in ascending order from upper half of the tree that
  * was created by adding keys in ascending order.

@@ -18,5 +18,5 @@ file ./build/1exec -readnow
 break main
 set language c++
 source .gdb_local
-#core-file ./1exec.core
+core-file ./1exec.core
 #run
