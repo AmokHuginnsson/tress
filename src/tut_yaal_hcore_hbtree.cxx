@@ -241,6 +241,7 @@ bool red_black_tree_stress_test::definition_test ( set<T> & ob )
 struct tut_yaal_hcore_hbtree
 	{
 	static int const NUMBER_OF_TEST_NODES = 1000;
+	static int const KEY_POOL_SIZE = 30000;
 	red_black_tree_stress_test stress;
 	template < typename object, typename subject, typename key >
 	void helper_stress_test ( object &, subject, key );
@@ -302,7 +303,7 @@ void module::test<3> ( void )
 	HRandomizer r;
 	set<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test ( s, & set<int>::insert, r.rnd ( 30000 ) );
+		helper_stress_test ( s, & set<int>::insert, r.rnd ( KEY_POOL_SIZE ) );
 	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 	}
 
@@ -337,42 +338,12 @@ void module::test<5> ( void )
 	}
 
 /*
- * Removing keys in ascending order from lower half of the tree that
- * was created by adding keys in descending order.
- */
-template < >
-template < >
-void module::test<6> ( void )
-	{
-	set<int> s;
-	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
-		s.insert ( i );
-	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
-		helper_stress_test ( s, & set<int>::remove, i );
-	}
-
-/*
- * Removing keys in ascending order from upper half of the tree that
- * was created by adding keys in descending order.
- */
-template < >
-template < >
-void module::test<7> ( void )
-	{
-	set<int> s;
-	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
-		s.insert ( i );
-	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test ( s, & set<int>::remove, i );
-	}
-
-/*
  * Removing keys in descending order from lower half of the tree that
  * was created by adding keys in ascending order.
  */
 template < >
 template < >
-void module::test<8> ( void )
+void module::test<6> ( void )
 	{
 	set<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
@@ -387,12 +358,42 @@ void module::test<8> ( void )
  */
 template < >
 template < >
-void module::test<9> ( void )
+void module::test<7> ( void )
 	{
 	set<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = NUMBER_OF_TEST_NODES - 1; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
+		helper_stress_test ( s, & set<int>::remove, i );
+	}
+
+/*
+ * Removing keys in ascending order from lower half of the tree that
+ * was created by adding keys in descending order.
+ */
+template < >
+template < >
+void module::test<8> ( void )
+	{
+	set<int> s;
+	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
+		s.insert ( i );
+	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
+		helper_stress_test ( s, & set<int>::remove, i );
+	}
+
+/*
+ * Removing keys in ascending order from upper half of the tree that
+ * was created by adding keys in descending order.
+ */
+template < >
+template < >
+void module::test<9> ( void )
+	{
+	set<int> s;
+	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
+		s.insert ( i );
+	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_test ( s, & set<int>::remove, i );
 	}
 
@@ -424,6 +425,136 @@ void module::test<11> ( void )
 		s.insert ( i );
 	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
 		helper_stress_test ( s, & set<int>::remove, i );
+	}
+
+/*
+ * Removing keys in ascending order from lower half of the tree that
+ * was created by adding keys in random order.
+ */
+template < >
+template < >
+void module::test<12> ( void )
+	{
+	HRandomizer r;
+	set<int> s;
+	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
+		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
+	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
+		{
+		try
+			{
+			helper_stress_test ( s, & set<int>::remove, i );
+			}
+		catch ( HException & e )
+			{
+			if ( e.code ( ) != static_cast < int > ( HBTree::ERROR::E_NON_EXISTING_KEY ) )
+				throw e;
+			}
+		}
+	}
+
+/*
+ * Removing keys in ascending order from upper half of the tree that
+ * was created by adding keys in random order.
+ */
+template < >
+template < >
+void module::test<13> ( void )
+	{
+	HRandomizer r;
+	set<int> s;
+	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
+		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
+	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
+		{
+		try
+			{
+			helper_stress_test ( s, & set<int>::remove, i );
+			}
+		catch ( HException & e )
+			{
+			if ( e.code ( ) != static_cast < int > ( HBTree::ERROR::E_NON_EXISTING_KEY ) )
+				throw e;
+			}
+		}
+	}
+
+/*
+ * Removing keys in descending order from lower half of the tree that
+ * was created by adding keys in random order.
+ */
+template < >
+template < >
+void module::test<14> ( void )
+	{
+	HRandomizer r;
+	set<int> s;
+	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
+		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
+	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
+		{
+		try
+			{
+			helper_stress_test ( s, & set<int>::remove, i );
+			}
+		catch ( HException & e )
+			{
+			if ( e.code ( ) != static_cast < int > ( HBTree::ERROR::E_NON_EXISTING_KEY ) )
+				throw e;
+			}
+		}
+	}
+
+/*
+ * Removing keys in descending order from upper half of the tree that
+ * was created by adding keys in random order.
+ */
+template < >
+template < >
+void module::test<15> ( void )
+	{
+	HRandomizer r;
+	set<int> s;
+	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
+		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
+	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
+		{
+		try
+			{
+			helper_stress_test ( s, & set<int>::remove, i );
+			}
+		catch ( HException & e )
+			{
+			if ( e.code ( ) != static_cast < int > ( HBTree::ERROR::E_NON_EXISTING_KEY ) )
+				throw e;
+			}
+		}
+	}
+
+/*
+ * Removing keys in random order from upper half of the tree that
+ * was created by adding keys in random order.
+ */
+template < >
+template < >
+void module::test<16> ( void )
+	{
+	HRandomizer r;
+	set<int> s;
+	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
+		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
+	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
+		{
+		try
+			{
+			helper_stress_test ( s, & set<int>::remove, r.rnd ( KEY_POOL_SIZE ) );
+			}
+		catch ( HException & e )
+			{
+			if ( e.code ( ) != static_cast < int > ( HBTree::ERROR::E_NON_EXISTING_KEY ) )
+				throw e;
+			}
+		}
 	}
 
 #if 0
