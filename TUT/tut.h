@@ -15,6 +15,8 @@
 #include <winbase.h>
 #endif
 
+#include <hexception.h>
+
 /**
  * Template Unit Tests Framework for C++.
  * http://tut.dozen.ru
@@ -154,6 +156,16 @@ namespace tut
     test_result( const std::string& grp,int pos,
                  result_type res,
                  const std::exception& exc)
+      : group(grp),test(pos),result(res),
+        message(exc.what()),exception_typeid(typeid(exc).name())
+    {
+    }
+    /**
+     * Constructor with exception.
+     */
+    test_result( const std::string& grp,int pos,
+                 result_type res,
+                 const yaal::hcore::HException& exc)
       : group(grp),test(pos),result(res),
         message(exc.what()),exception_typeid(typeid(exc).name())
     {
@@ -846,6 +858,12 @@ namespace tut
         return tr;
       }
       catch(const std::exception& ex)
+      {
+        // test failed with std::exception
+        test_result tr(name_,ti->first,test_result::ex,ex);
+        return tr;
+      }
+      catch(const yaal::hcore::HException& ex)
       {
         // test failed with std::exception
         test_result tr(name_,ti->first,test_result::ex,ex);

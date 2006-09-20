@@ -50,10 +50,10 @@ struct set
 			++ f_oEngine;
 			return ( * this );
 			}
-		tType & operator * ( void )
-			{	return ( f_oEngine.get<tType> ( ) );	}
-		tType * operator -> ( void )
-			{ return ( & f_oEngine.get<tType> ( ) );	}
+		tType const & operator * ( void )
+			{	return ( f_oEngine.operator*<tType> ( ) );	}
+		tType const * const operator -> ( void )
+			{ return ( & f_oEngine.operator*<tType> ( ) );	}
 		bool operator == ( iterator const & it ) const
 			{ return ( f_oEngine == it.f_oEngine ); }
 		bool operator != ( iterator const & it ) const
@@ -240,9 +240,27 @@ bool red_black_tree_stress_test::definition_test ( set<T> & ob )
 
 struct tut_yaal_hcore_hbtree
 	{
-	static int const NUMBER_OF_TEST_NODES = 2000;
+	static int const NUMBER_OF_TEST_NODES = 1000;
 	red_black_tree_stress_test stress;
+	template < typename object, typename subject, typename key >
+	void helper_stress_test ( object &, subject, key );
 	};
+
+template < typename object, typename subject, typename key >
+void tut_yaal_hcore_hbtree::helper_stress_test ( object & ob, subject member, key val )
+	{
+	( ob.*member ) ( val );
+	ensure ( "self test failed", ! stress.self_test<key> ( ob ) );
+	ensure ( "integrity test failed", ! stress.integrity_test<key> ( ob ) );
+	ensure ( "definition test failed", ! stress.definition_test<key> ( ob ) );
+	key biggest = - 1;
+	for ( typename object::iterator it = ob.begin ( ); it != ob.end ( ); ++ it )
+		{
+		ensure ( "elements not in order", *it > biggest );
+		biggest = *it;
+		}
+	return;
+	}
 
 typedef test_group < tut_yaal_hcore_hbtree > tut_group;
 typedef tut_group::object module;
@@ -257,18 +275,7 @@ void module::test<1> ( void )
 	{
 	set<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		{
-		s.insert ( i );
-		ensure ( "self test failed", ! stress.self_test<int> ( s ) );
-		ensure ( "integrity test failed", ! stress.integrity_test<int> ( s ) );
-		ensure ( "definition test failed", ! stress.definition_test<int> ( s ) );
-		}
-	int biggest = - 1;
-	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
-		{
-		ensure ( "elements not in order", *it > biggest );
-		biggest = *it;
-		}
+		helper_stress_test ( s, & set<int>::insert, i );
 	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 	}
 
@@ -281,18 +288,7 @@ void module::test<2> ( void )
 	{
 	set<int> s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
-		{
-		s.insert ( i );
-		ensure ( "self test failed", ! stress.self_test<int> ( s ) );
-		ensure ( "integrity test failed", ! stress.integrity_test<int> ( s ) );
-		ensure ( "definition test failed", ! stress.definition_test<int> ( s ) );
-		}
-	int biggest = - 1;
-	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
-		{
-		ensure ( "elements not in order", *it > biggest );
-		biggest = *it;
-		}
+		helper_stress_test ( s, & set<int>::insert, i );
 	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 	}
 
@@ -306,18 +302,7 @@ void module::test<3> ( void )
 	HRandomizer r;
 	set<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		{
-		s.insert ( r.rnd ( 30000 ) );
-		ensure ( "self test failed", ! stress.self_test<int> ( s ) );
-		ensure ( "integrity test failed", ! stress.integrity_test<int> ( s ) );
-		ensure ( "definition test failed", ! stress.definition_test<int> ( s ) );
-		}
-	int biggest = - 1;
-	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
-		{
-		ensure ( "elements not in order", *it > biggest );
-		biggest = *it;
-		}
+		helper_stress_test ( s, & set<int>::insert, r.rnd ( 30000 ) );
 	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 	}
 
@@ -333,21 +318,9 @@ void module::test<4> ( void )
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
-		{
-		s.remove ( i );
-		ensure ( "self test failed", ! stress.self_test<int> ( s ) );
-		ensure ( "integrity test failed", ! stress.integrity_test<int> ( s ) );
-		ensure ( "definition test failed", ! stress.definition_test<int> ( s ) );
-		}
-	int biggest = - 1;
-	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
-		{
-		ensure ( "elements not in order", *it > biggest );
-		biggest = *it;
-		}
+		helper_stress_test ( s, & set<int>::remove, i );
 	}
 
-#if 0
 /*
  * Removing keys in ascending order from upper half of the tree that
  * was created by adding keys in ascending order.
@@ -360,39 +333,27 @@ void module::test<5> ( void )
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
-		s.remove ( i );
-	int biggest = - 1;
-	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
-		{
-		ensure ( "elements not in order", *it > biggest );
-		biggest = *it;
-		}
+		helper_stress_test ( s, & set<int>::remove, i );
 	}
 
 /*
  * Removing keys in ascending order from lower half of the tree that
- * was created by adding keys in ascending order.
+ * was created by adding keys in descending order.
  */
 template < >
 template < >
 void module::test<6> ( void )
 	{
 	set<int> s;
-	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
+	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		s.insert ( i );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
-		s.remove ( i );
-	int biggest = - 1;
-	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
-		{
-		ensure ( "elements not in order", *it > biggest );
-		biggest = *it;
-		}
+		helper_stress_test ( s, & set<int>::remove, i );
 	}
 
 /*
  * Removing keys in ascending order from upper half of the tree that
- * was created by adding keys in ascending order.
+ * was created by adding keys in descending order.
  */
 template < >
 template < >
@@ -402,13 +363,7 @@ void module::test<7> ( void )
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
-		s.remove ( i );
-	int biggest = - 1;
-	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
-		{
-		ensure ( "elements not in order", *it > biggest );
-		biggest = *it;
-		}
+		helper_stress_test ( s, & set<int>::remove, i );
 	}
 
 /*
@@ -423,13 +378,7 @@ void module::test<8> ( void )
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
-		s.remove ( i );
-	int biggest = - 1;
-	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
-		{
-		ensure ( "elements not in order", *it > biggest );
-		biggest = *it;
-		}
+		helper_stress_test ( s, & set<int>::remove, i );
 	}
 
 /*
@@ -443,40 +392,28 @@ void module::test<9> ( void )
 	set<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
-	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
-		s.remove ( i );
-	int biggest = - 1;
-	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
-		{
-		ensure ( "elements not in order", *it > biggest );
-		biggest = *it;
-		}
+	for ( int i = NUMBER_OF_TEST_NODES - 1; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
+		helper_stress_test ( s, & set<int>::remove, i );
 	}
 
 /*
  * Removing keys in descending order from lower half of the tree that
- * was created by adding keys in ascending order.
+ * was created by adding keys in descending order.
  */
 template < >
 template < >
 void module::test<10> ( void )
 	{
 	set<int> s;
-	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
+	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
-		s.remove ( i );
-	int biggest = - 1;
-	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
-		{
-		ensure ( "elements not in order", *it > biggest );
-		biggest = *it;
-		}
+		helper_stress_test ( s, & set<int>::remove, i );
 	}
 
 /*
  * Removing keys in descending order from upper half of the tree that
- * was created by adding keys in ascending order.
+ * was created by adding keys in descending order.
  */
 template < >
 template < >
@@ -486,15 +423,10 @@ void module::test<11> ( void )
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		s.insert ( i );
 	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
-		s.remove ( i );
-	int biggest = - 1;
-	for ( set<int>::iterator it = s.begin ( ); it != s.end ( ); ++ it )
-		{
-		ensure ( "elements not in order", *it > biggest );
-		biggest = *it;
-		}
+		helper_stress_test ( s, & set<int>::remove, i );
 	}
 
+#if 0
 #endif
 
 }
