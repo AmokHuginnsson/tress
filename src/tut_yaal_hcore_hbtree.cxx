@@ -43,8 +43,8 @@ struct set
 	{
 	struct iterator
 		{
-		HBTree::HIterator f_oEngine;
-		explicit iterator ( HBTree::HIterator const & it ) : f_oEngine ( it ){};
+		HSBBSTree::HIterator f_oEngine;
+		explicit iterator ( HSBBSTree::HIterator const & it ) : f_oEngine ( it ){};
 		iterator & operator ++ ( void )
 			{
 			++ f_oEngine;
@@ -59,7 +59,7 @@ struct set
 		bool operator != ( iterator const & it ) const
 			{ return ( f_oEngine != it.f_oEngine ); }
 		};
-	HBTree f_oEngine;
+	HSBBSTree f_oEngine;
 	set ( void ) : f_oEngine ( ) {};
 	long int quantity ( void )
 		{ return ( f_oEngine.quantity ( ) );	}
@@ -265,7 +265,7 @@ void tut_yaal_hcore_hbtree::helper_stress_test ( object & ob, subject member, ke
 
 typedef test_group < tut_yaal_hcore_hbtree > tut_group;
 typedef tut_group::object module;
-tut_group tut_yaal_hcore_hbtree_group ( "yaal::hcore::HBTree" );
+tut_group tut_yaal_hcore_hbtree_group ( "yaal::hcore::HSBBSTree" );
 
 /*
  * Adding keys in ascending order.
@@ -447,7 +447,7 @@ void module::test<12> ( void )
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast < int > ( HBTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code ( ) != static_cast < int > ( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -473,7 +473,7 @@ void module::test<13> ( void )
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast < int > ( HBTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code ( ) != static_cast < int > ( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -499,7 +499,7 @@ void module::test<14> ( void )
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast < int > ( HBTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code ( ) != static_cast < int > ( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -525,7 +525,7 @@ void module::test<15> ( void )
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast < int > ( HBTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code ( ) != static_cast < int > ( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -551,7 +551,7 @@ void module::test<16> ( void )
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast < int > ( HBTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code ( ) != static_cast < int > ( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
