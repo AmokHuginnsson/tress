@@ -238,7 +238,7 @@ bool red_black_tree_stress_test::definition_test ( set<T> & ob )
 	return ( false );
 	}
 
-struct tut_yaal_hcore_hbtree
+struct tut_yaal_hcore_hsbbstree
 	{
 	static int const NUMBER_OF_TEST_NODES = 1000;
 	static int const KEY_POOL_SIZE = 30000;
@@ -248,7 +248,7 @@ struct tut_yaal_hcore_hbtree
 	};
 
 template < typename object, typename subject, typename key >
-void tut_yaal_hcore_hbtree::helper_stress_test ( object & ob, subject member, key val )
+void tut_yaal_hcore_hsbbstree::helper_stress_test ( object & ob, subject member, key val )
 	{
 	( ob.*member ) ( val );
 	ensure ( "self test failed", ! stress.self_test<key> ( ob ) );
@@ -263,9 +263,9 @@ void tut_yaal_hcore_hbtree::helper_stress_test ( object & ob, subject member, ke
 	return;
 	}
 
-typedef test_group < tut_yaal_hcore_hbtree > tut_group;
+typedef test_group < tut_yaal_hcore_hsbbstree > tut_group;
 typedef tut_group::object module;
-tut_group tut_yaal_hcore_hbtree_group ( "yaal::hcore::HSBBSTree" );
+tut_group tut_yaal_hcore_hsbbstree_group ( "yaal::hcore::HSBBSTree" );
 
 /*
  * Adding keys in ascending order.
