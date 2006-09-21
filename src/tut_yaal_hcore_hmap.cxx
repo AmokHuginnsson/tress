@@ -38,13 +38,13 @@ using namespace yaal::tools::util;
 namespace tut
 {
 
-struct tut_yaal_hcore_hmap
+struct tut_yaal_hcore_hhashmap
 	{
 	};
 
-typedef test_group < tut_yaal_hcore_hmap > tut_group;
+typedef test_group < tut_yaal_hcore_hhashmap > tut_group;
 typedef tut_group::object module;
-tut_group tut_yaal_hcore_hmap_group ( "yaal::hcore::HMap" );
+tut_group tut_yaal_hcore_hhashmap_group ( "yaal::hcore::HHashMap" );
 
 /* Simple constructor. */
 template < >
@@ -53,7 +53,7 @@ void module::test<1> ( void )
 	{
 	try
 		{
-		HMap < int, HString > map ( 0 );
+		HHashMap < int, HString > map ( 0 );
 		fail ( "Created map with bad hash table size." );
 		}
 	catch ( HException const & e )
@@ -68,7 +68,7 @@ template < >
 template < >
 void module::test<2> ( void )
 	{
-	HMap < int, HString > map ( 17 );
+	HHashMap < int, HString > map ( 17 );
 	ensure_equals ( "Newly created map is not empty.", map.quantity ( ), 0 );
 	map [ 0 ] = "foo";
 	ensure_equals ( "Wrong quantity count returned.", map.quantity ( ), 1 );
