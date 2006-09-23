@@ -2,5 +2,5 @@
 #include <iomanip>
 #include "TUT/tut.h"
 #include "TUT/tut_reporter.h"
-#include <yaal.h>
+#include <yaal/yaal.h>
 #include "tut_helpers.h"

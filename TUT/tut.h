@@ -15,7 +15,7 @@
 #include <winbase.h>
 #endif
 
-#include <hexception.h>
+#include <yaal/hcore/hexception.h>
 
 /**
  * Template Unit Tests Framework for C++.

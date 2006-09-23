@@ -29,7 +29,7 @@ Copyright:
 
 #include <iostream>
 #include <iomanip>
-#include <yaal.h>
+#include <yaal/yaal.h>
 
 class HLogger
 	{
