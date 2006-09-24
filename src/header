@@ -4,3 +4,5 @@
 #include "TUT/tut_reporter.h"
 #include <yaal/yaal.h>
 #include "tut_helpers.h"
+
+/* vim: set ft=cpp : */
