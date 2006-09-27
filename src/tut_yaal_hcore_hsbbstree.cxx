@@ -35,52 +35,6 @@ using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 
-namespace yaal
-{
-
-template < typename tType >
-struct set
-	{
-	struct iterator
-		{
-		HSBBSTree::HIterator f_oEngine;
-		explicit iterator ( HSBBSTree::HIterator const & it ) : f_oEngine ( it ){};
-		iterator & operator ++ ( void )
-			{
-			++ f_oEngine;
-			return ( * this );
-			}
-		tType const & operator * ( void )
-			{	return ( f_oEngine.operator*<tType> ( ) );	}
-		tType const * const operator -> ( void )
-			{ return ( & f_oEngine.operator*<tType> ( ) );	}
-		bool operator == ( iterator const & it ) const
-			{ return ( f_oEngine == it.f_oEngine ); }
-		bool operator != ( iterator const & it ) const
-			{ return ( f_oEngine != it.f_oEngine ); }
-		};
-	HSBBSTree f_oEngine;
-	set ( void ) : f_oEngine ( ) {};
-	long int quantity ( void )
-		{ return ( f_oEngine.quantity ( ) );	}
-	void insert ( tType const & e )
-		{	f_oEngine.insert ( e );	}
-	void remove ( tType const & e )
-		{	f_oEngine.remove ( e );	}
-	iterator find ( tType const & e )
-		{ return ( f_oEngine.find ( e ) ); }
-	iterator begin ( void )
-		{ return ( iterator ( f_oEngine.begin ( ) ) ); }
-	iterator end ( void )
-		{ return ( iterator ( f_oEngine.end ( ) ) ); }
-	iterator rbegin ( void )
-		{ return ( iterator ( f_oEngine.rbegin ( ) ) ); }
-	iterator rend ( void )
-		{ return ( iterator ( f_oEngine.rend ( ) ) ); }
-	};
-
-}
-
 namespace tut
 {
 
@@ -97,20 +51,20 @@ struct red_black_tree_stress_test
 		node * right;
 		};
 	node * root;
-	int long quantity;
+	size_t quantity;
 	template < typename T >
-	bool self_test ( set<T> & );
+	bool self_test ( HSet<T> & );
 	template < typename T >
-	bool integrity_test ( set<T> & );
+	bool integrity_test ( HSet<T> & );
 	template < typename T >
-	bool definition_test ( set<T> & );
+	bool definition_test ( HSet<T> & );
 
 	static bool red_node_exists;
 private:
-	int long tested_nodes;
+	size_t tested_nodes;
 	int black_height;
 	template < typename T >
-	void init ( set<T>& );
+	void init ( HSet<T>& );
 
 	void helper_test_node_integrity ( node * );
 	void helper_test_node_definition ( node * );
@@ -121,7 +75,7 @@ private:
 bool red_black_tree_stress_test::red_node_exists = false;
 
 template<typename T>
-void red_black_tree_stress_test::init ( set<T>& ob )
+void red_black_tree_stress_test::init ( HSet<T>& ob )
 	{
 	red_black_tree_stress_test * hack = reinterpret_cast<red_black_tree_stress_test*> ( &ob );
 	tested_nodes = 0;
@@ -198,10 +152,10 @@ int red_black_tree_stress_test::helper_check_black_height ( node * n )
 	}
 
 template<typename T>
-bool red_black_tree_stress_test::self_test ( set<T> & ob )
+bool red_black_tree_stress_test::self_test ( HSet<T> & ob )
 	{
 	init ( ob );
-	if ( ob.quantity ( ) != quantity )
+	if ( ob.size ( ) != quantity )
 		return ( true );
 	if ( root == root->left )
 		return ( true );
@@ -217,7 +171,7 @@ bool red_black_tree_stress_test::self_test ( set<T> & ob )
 	}
 
 template<typename T>
-bool red_black_tree_stress_test::integrity_test ( set<T> & ob )
+bool red_black_tree_stress_test::integrity_test ( HSet<T> & ob )
 	{
 	init ( ob );
 	helper_test_node_integrity ( root );
@@ -226,7 +180,7 @@ bool red_black_tree_stress_test::integrity_test ( set<T> & ob )
 	}
 
 template<typename T>
-bool red_black_tree_stress_test::definition_test ( set<T> & ob )
+bool red_black_tree_stress_test::definition_test ( HSet<T> & ob )
 	{
 	init ( ob );
 	if ( root->color != node::black )
@@ -255,7 +209,7 @@ void tut_yaal_hcore_hsbbstree::helper_stress_test ( object & ob, subject member,
 	ensure ( "integrity test failed", ! stress.integrity_test<key> ( ob ) );
 	ensure ( "definition test failed", ! stress.definition_test<key> ( ob ) );
 	key biggest = - 1;
-	for ( typename object::iterator it = ob.begin ( ); it != ob.end ( ); ++ it )
+	for ( typename object::HIterator it = ob.begin ( ); it != ob.end ( ); ++ it )
 		{
 		ensure ( "elements not in order", *it > biggest );
 		biggest = *it;
@@ -274,9 +228,9 @@ template < >
 template < >
 void module::test<1> ( void )
 	{
-	set<int> s;
+	HSet<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test ( s, & set<int>::insert, i );
+		helper_stress_test ( s, & HSet<int>::insert, i );
 	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 	}
 
@@ -287,9 +241,9 @@ template < >
 template < >
 void module::test<2> ( void )
 	{
-	set<int> s;
+	HSet<int> s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
-		helper_stress_test ( s, & set<int>::insert, i );
+		helper_stress_test ( s, & HSet<int>::insert, i );
 	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 	}
 
@@ -301,9 +255,9 @@ template < >
 void module::test<3> ( void )
 	{
 	HRandomizer r;
-	set<int> s;
+	HSet<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test ( s, & set<int>::insert, r.rnd ( KEY_POOL_SIZE ) );
+		helper_stress_test ( s, & HSet<int>::insert, r.rnd ( KEY_POOL_SIZE ) );
 	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 	}
 
@@ -315,11 +269,11 @@ template < >
 template < >
 void module::test<4> ( void )
 	{
-	set<int> s;
+	HSet<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
-		helper_stress_test ( s, & set<int>::remove, i );
+		helper_stress_test ( s, & HSet<int>::remove, i );
 	}
 
 /*
@@ -330,11 +284,11 @@ template < >
 template < >
 void module::test<5> ( void )
 	{
-	set<int> s;
+	HSet<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test ( s, & set<int>::remove, i );
+		helper_stress_test ( s, & HSet<int>::remove, i );
 	}
 
 /*
@@ -345,11 +299,11 @@ template < >
 template < >
 void module::test<6> ( void )
 	{
-	set<int> s;
+	HSet<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
-		helper_stress_test ( s, & set<int>::remove, i );
+		helper_stress_test ( s, & HSet<int>::remove, i );
 	}
 
 /*
@@ -360,11 +314,11 @@ template < >
 template < >
 void module::test<7> ( void )
 	{
-	set<int> s;
+	HSet<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = NUMBER_OF_TEST_NODES - 1; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
-		helper_stress_test ( s, & set<int>::remove, i );
+		helper_stress_test ( s, & HSet<int>::remove, i );
 	}
 
 /*
@@ -375,11 +329,11 @@ template < >
 template < >
 void module::test<8> ( void )
 	{
-	set<int> s;
+	HSet<int> s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		s.insert ( i );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
-		helper_stress_test ( s, & set<int>::remove, i );
+		helper_stress_test ( s, & HSet<int>::remove, i );
 	}
 
 /*
@@ -390,11 +344,11 @@ template < >
 template < >
 void module::test<9> ( void )
 	{
-	set<int> s;
+	HSet<int> s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test ( s, & set<int>::remove, i );
+		helper_stress_test ( s, & HSet<int>::remove, i );
 	}
 
 /*
@@ -405,11 +359,11 @@ template < >
 template < >
 void module::test<10> ( void )
 	{
-	set<int> s;
+	HSet<int> s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
-		helper_stress_test ( s, & set<int>::remove, i );
+		helper_stress_test ( s, & HSet<int>::remove, i );
 	}
 
 /*
@@ -420,11 +374,11 @@ template < >
 template < >
 void module::test<11> ( void )
 	{
-	set<int> s;
+	HSet<int> s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		s.insert ( i );
 	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
-		helper_stress_test ( s, & set<int>::remove, i );
+		helper_stress_test ( s, & HSet<int>::remove, i );
 	}
 
 /*
@@ -436,14 +390,14 @@ template < >
 void module::test<12> ( void )
 	{
 	HRandomizer r;
-	set<int> s;
+	HSet<int> s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
 		{
 		try
 			{
-			helper_stress_test ( s, & set<int>::remove, i );
+			helper_stress_test ( s, & HSet<int>::remove, i );
 			}
 		catch ( HException & e )
 			{
@@ -462,14 +416,14 @@ template < >
 void module::test<13> ( void )
 	{
 	HRandomizer r;
-	set<int> s;
+	HSet<int> s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
 		{
 		try
 			{
-			helper_stress_test ( s, & set<int>::remove, i );
+			helper_stress_test ( s, & HSet<int>::remove, i );
 			}
 		catch ( HException & e )
 			{
@@ -488,14 +442,14 @@ template < >
 void module::test<14> ( void )
 	{
 	HRandomizer r;
-	set<int> s;
+	HSet<int> s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
 		{
 		try
 			{
-			helper_stress_test ( s, & set<int>::remove, i );
+			helper_stress_test ( s, & HSet<int>::remove, i );
 			}
 		catch ( HException & e )
 			{
@@ -514,14 +468,14 @@ template < >
 void module::test<15> ( void )
 	{
 	HRandomizer r;
-	set<int> s;
+	HSet<int> s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
 	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
 		{
 		try
 			{
-			helper_stress_test ( s, & set<int>::remove, i );
+			helper_stress_test ( s, & HSet<int>::remove, i );
 			}
 		catch ( HException & e )
 			{
@@ -540,14 +494,14 @@ template < >
 void module::test<16> ( void )
 	{
 	HRandomizer r;
-	set<int> s;
+	HSet<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		{
 		try
 			{
-			helper_stress_test ( s, & set<int>::remove, r.rnd ( KEY_POOL_SIZE ) );
+			helper_stress_test ( s, & HSet<int>::remove, r.rnd ( KEY_POOL_SIZE ) );
 			}
 		catch ( HException & e )
 			{
