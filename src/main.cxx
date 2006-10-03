@@ -24,9 +24,9 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#include <unistd.h>
-
 #include "header"
+
+#include <unistd.h>
 M_VCSID ( "$Id$" )
 #include "TUT/tut_restartable.h"
 

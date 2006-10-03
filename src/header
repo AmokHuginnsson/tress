@@ -1,3 +1,8 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <getopt.h>
+#include <string.h>
+#include <libintl.h>
 #include <iostream>
 #include <iomanip>
 #include "TUT/tut.h"
