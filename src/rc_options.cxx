@@ -24,12 +24,11 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#include "header"
-
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
+#include <yaal/yaal.h>
 M_VCSID ( "$Id$" )
 
 #include "setup.h"
