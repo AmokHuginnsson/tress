@@ -54,7 +54,7 @@ template < >
 void module::test<1> ( void )
 	{
 	HList < int > l_oList;
-	ensure_equals ( "list not empty", l_oList.quantity ( ), 0 );
+	ensure_equals ( "list not empty", l_oList.size ( ), 0 );
 	}
 
 /* Parametrized constructor. */
@@ -63,7 +63,7 @@ template < >
 void module::test<2> ( void )
 	{
 	HList < int > l_oList ( 3 );
-	ensure_equals ( "list not empty", l_oList.quantity ( ), 3 );
+	ensure_equals ( "list not empty", l_oList.size ( ), 3 );
 	}
 
 /* poor forward iterator while syntax */
@@ -193,7 +193,7 @@ void module::test<8> ( void )
 	l_oList.add_tail ( ) = 4;
 	l_oList.add_tail ( ) = 5;
 	l_oList = l_oAnother;
-	ensure_equals ( "assign operation failed, wrong size", l_oList.quantity ( ), 0 );
+	ensure_equals ( "assign operation failed, wrong size", l_oList.size ( ), 0 );
 	}
 
 /* assignation operator (full to small) */
@@ -281,7 +281,7 @@ void module::test<11> ( void )
 					re = false;
 					if ( & l_oList.present ( ) == & l_oList.tail ( ) )
 						re = true;
-					l_oList.remove_element ( HList < int >::D_FORCE_REMOVE_ELEMENT | HList < int >::D_TREAT_AS_OPENED );
+					l_oList.remove_element ( HList < int >::D_TREAT_AS_OPENED );
 					if ( re )
 						{
 						l_piVal = & l_oList.go ( - 1 );
@@ -307,8 +307,8 @@ void module::test<11> ( void )
 			cout << ( * l_piVal ) << " ";
 			if ( ( * l_piVal ) == i )
 				{
-				l_oList.remove_element ( HList < int >::D_FORCE_REMOVE_ELEMENT | HList < int >::D_TREAT_AS_OPENED, & l_piVal );
-				if ( l_piVal && l_oList.quantity ( ) )
+				l_oList.remove_element ( HList < int >::D_TREAT_AS_OPENED, & l_piVal );
+				if ( l_piVal && l_oList.size ( ) )
 					{
 					l_piVal = & l_oList.present ( );
 					continue;
@@ -333,7 +333,7 @@ void module::test<12> ( void )
 	l_oList.add_tail ( ) = 3;
 	l_oList.add_tail ( ) = 4;
 	l_oList.add_tail ( ) = 5;
-	for ( HList<int>::HIterator it = l_oList.begin ( );
+	for ( HList<int>::iterator it = l_oList.begin ( );
 			it != l_oList.end ( ); ++ it )
 		{
 		l_iCtr ++;
@@ -354,7 +354,7 @@ void module::test<13> ( void )
 	l_oList.add_tail ( ) = 3;
 	l_oList.add_tail ( ) = 4;
 	l_oList.add_tail ( ) = 5;
-	for ( HList<int>::HIterator it = l_oList.rend ( );
+	for ( HList<int>::iterator it = l_oList.rend ( );
 			it != l_oList.rbegin ( ); -- it )
 		{
 		ensure_equals ( "for syntax: backward iterator made wrong move", ( * it ), l_iCtr );
@@ -368,7 +368,7 @@ template < >
 template < >
 void module::test<40> ( void )
 	{
-	HList < int > l_oList;
+	HList<int> l_oList;
 	l_oList.add_tail ( ) = 3;
 	l_oList.add_tail ( ) = 1;
 	l_oList.add_tail ( ) = 2;

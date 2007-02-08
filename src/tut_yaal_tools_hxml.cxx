@@ -66,11 +66,11 @@ struct tut_yaal_tools_hxml
 		memset ( f_oVarTmpBuffer.raw ( ), ' ', a_rsNode.f_iLevel * 2 + 2 );
 		f_oVarTmpBuffer [ a_rsNode.f_iLevel * 2 + 2 ] = 0;
 		cout << f_oVarTmpBuffer << "{" << endl;
-		if ( a_rsNode.f_oContents.quantity ( ) )
+		if ( a_rsNode.f_oContents.size ( ) )
 			l_poContent = & a_rsNode.f_oContents.go ( 0 );
-		if ( a_rsNode.f_oChilds.quantity ( ) )
+		if ( a_rsNode.f_oChilds.size ( ) )
 			l_psNode = & a_rsNode.f_oChilds.go ( 0 );
-		if ( a_rsNode.f_oTypes.quantity ( ) )
+		if ( a_rsNode.f_oTypes.size ( ) )
 			{
 			for ( HXml::ONode::type_t * l_peType = & a_rsNode.f_oTypes.go ( 0 );
 					l_peType; l_peType = a_rsNode.f_oTypes.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED ) )
