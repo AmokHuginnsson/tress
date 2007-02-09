@@ -354,8 +354,8 @@ void module::test<13> ( void )
 	l_oList.add_tail ( ) = 3;
 	l_oList.add_tail ( ) = 4;
 	l_oList.add_tail ( ) = 5;
-	for ( HList<int>::iterator it = l_oList.rend ( );
-			it != l_oList.rbegin ( ); -- it )
+	for ( HList<int>::iterator it = l_oList.rbegin ( );
+			it != l_oList.rend ( ); -- it )
 		{
 		ensure_equals ( "for syntax: backward iterator made wrong move", ( * it ), l_iCtr );
 		l_iCtr --;
