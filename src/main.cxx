@@ -62,6 +62,7 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 	HString l_oLine;
 	HLogger logger;
 	tut::reporter < HLogger > l_oVisitor ( cerr, logger );
+	HException::set_error_stream( stdout );
 	tut::restartable_wrapper l_oRestartable;
 	list < string > l_oGroupNames;
 /*	end.                                                                  */
