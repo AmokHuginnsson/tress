@@ -150,9 +150,9 @@ void module::test<6> ( void )
 	int const EMPTY = 0;
 	int const SIZE = 7;
 	HArray<int> l_oEmpty ( EMPTY );
-	ensure_equals ( "test for array emptiness faild", l_oEmpty, false );
+	ensure_equals ( "test for array emptiness faild", ! l_oEmpty, true );
 	HArray<int> l_oNormal ( SIZE );
-	ensure_equals ( "test for array fullness faild", l_oNormal, true );
+	ensure_equals ( "test for array fullness faild", ! l_oNormal, false );
 	}
 
 }
