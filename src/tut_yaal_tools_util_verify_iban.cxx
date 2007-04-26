@@ -29,6 +29,8 @@ Copyright:
 #include <yaal/yaal.h>
 M_VCSID ( "$Id$" )
 
+#include "setup.h"
+
 using namespace tut;
 using namespace std;
 using namespace yaal;
@@ -70,4 +72,27 @@ void module::test<2> ( void )
 			verify_IBAN ( "PL 76 1140 2004 0080 3602 3659 1498" ), true );
 	}
 
+template < >
+template < >
+void module::test<3> ( void )
+	{
+	HString string;
+	HFile file;
+	if ( setup.f_iArgc < 2 )
+		fail( "You need to specify one argument for this test" );
+	if ( setup.f_bVerbose )
+		{
+		string = setup.f_ppcArgv [ 1 ];
+		int unknown = string.find( '?' );
+		if ( unknown < 0 )
+			fail( "No unknown characters." );
+		for ( int i = 0; i < 10; ++ i )
+			{
+			string[ unknown ] = i + '0';
+			cout << string << ": " << ( ! verify_IBAN( string ) ? "OK" : "WRONG" ) << endl;
+			}
+		}
+	}
+
 }
+
