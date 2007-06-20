@@ -49,17 +49,17 @@ typedef tut_group::object module;
 tut_group tut_yaal_hcore_hsocket_group ( "yaal::hcore::HSocket" );
 
 /* Simple construction and destruction. */
-template < >
-template < >
+template<>
+template<>
 void module::test<1> ( void )
 	{
 	HSocket l_oSocket;
-	ensure_equals ( "uninitialized socket has port", l_oSocket.get_port ( ), 0 );
+	ensure_equals ( "uninitialized socket has port", l_oSocket.get_port(), 0 );
 	}
 
 /* Constructions with wrong parameters. */
-template < >
-template < >
+template<>
+template<>
 void module::test<2> ( void )
 	{
 	try
@@ -69,7 +69,7 @@ void module::test<2> ( void )
 		}
 	catch ( HException & e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	try
 		{
@@ -78,30 +78,30 @@ void module::test<2> ( void )
 		}
 	catch ( HException & e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	}
 
 /* Getting port on file socket. */
-template < >
-template < >
+template<>
+template<>
 void module::test<3> ( void )
 	{
 	HSocket l_oSocket ( HSocket::D_FILE );
 	try
 		{
-		l_oSocket.get_port ( );
+		l_oSocket.get_port();
 		fail ( "getting port number on file socket possible" );
 		}
 	catch ( HException & e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	}
 
 /* Listening on reserved port. */
-template < >
-template < >
+template<>
+template<>
 void module::test<4> ( void )
 	{
 	HSocket l_oSocket ( HSocket::D_NETWORK, 1 );
@@ -112,13 +112,13 @@ void module::test<4> ( void )
 		}
 	catch ( HException & e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	}
 
 /* Listening on existing file. */
-template < >
-template < >
+template<>
+template<>
 void module::test<5> ( void )
 	{
 	HSocket l_oSocket ( HSocket::D_FILE, 1 );
@@ -129,13 +129,13 @@ void module::test<5> ( void )
 		}
 	catch ( HException & e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	}
 
 /* Listening on protected file. */
-template < >
-template < >
+template<>
+template<>
 void module::test<6> ( void )
 	{
 	HSocket l_oSocket ( HSocket::D_FILE, 1 );
@@ -146,13 +146,13 @@ void module::test<6> ( void )
 		}
 	catch ( HException & e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	}
 
 /* Listening on already listening socket. */
-template < >
-template < >
+template<>
+template<>
 void module::test<7> ( void )
 	{
 	HSocket l_oSocket ( HSocket::D_FILE, 1 );
@@ -162,15 +162,15 @@ void module::test<7> ( void )
 		l_oSocket.listen ( "/tmp/TUT_socket" );
 		fail ( "listening on already listening socket possible" );
 		}
-	catch ( HException & e )
+	catch ( HException& e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	}
 
 /* Listening with bad maximum number of clients. */
-template < >
-template < >
+template<>
+template<>
 void module::test<8> ( void )
 	{
 	HSocket l_oSocket ( HSocket::D_FILE );
@@ -181,50 +181,50 @@ void module::test<8> ( void )
 		}
 	catch ( HException & e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	}
 
 /* Accept on socket that is not listening. */
-template < >
-template < >
+template<>
+template<>
 void module::test<9> ( void )
 	{
 	HSocket l_oSocket;
 	try
 		{
-		l_oSocket.accept ( );
+		l_oSocket.accept();
 		fail ( "accept on socket that is not listening possible" );
 		}
 	catch ( HException & e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	}
 
 /* Transfering data through file. */
-template < >
-template < >
+template<>
+template<>
 void module::test<20> ( void )
 	{
-	char test_data [ ] = "Ala ma kota.";
+	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
-	char reciv_buffer [ size + 1 ];
-	HSocket l_oServer ( HSocket::D_FILE, 1 );
-	HSocket l_oClient ( HSocket::D_FILE );
-	l_oServer.listen ( "/tmp/TUT_socket" );
-	l_oClient.connect ( "/tmp/TUT_socket" );
-	HSocket * l_poLocal = l_oServer.accept ( );
-	l_oClient.write ( test_data, size );
-	l_poLocal->read ( reciv_buffer, size );
-	reciv_buffer [ size ] = 0;
-	ensure_equals ( "data broken during transfer", string ( reciv_buffer ), string ( test_data ) );
+	char reciv_buffer[ size + 1 ];
+	HSocket l_oServer( HSocket::D_FILE, 1 );
+	HSocket l_oClient( HSocket::D_FILE );
+	l_oServer.listen( "/tmp/TUT_socket" );
+	l_oClient.connect( "/tmp/TUT_socket" );
+	HSocket::socket_ptr_t l_oLocal = l_oServer.accept();
+	l_oClient.write( test_data, size );
+	l_oLocal->read( reciv_buffer, size );
+	reciv_buffer[ size ] = 0;
+	ensure_equals( "data broken during transfer", string( reciv_buffer ), string( test_data ) );
 	cout << reciv_buffer << endl;
 	}
 
 /* Transfering data through network. */
-template < >
-template < >
+template<>
+template<>
 void module::test<21> ( void )
 	{
 	char test_data [ ] = "A kot ma wpierdol.";
@@ -234,9 +234,9 @@ void module::test<21> ( void )
 	HSocket l_oClient ( HSocket::D_NETWORK );
 	l_oServer.listen ( "0.0.0.0", 5555 );
 	l_oClient.connect ( "127.0.0.1", 5555 );
-	HSocket * l_poLocal = l_oServer.accept ( );
+	HSocket::socket_ptr_t l_oLocal = l_oServer.accept();
 	l_oClient.write ( test_data, size );
-	l_poLocal->read ( reciv_buffer, size );
+	l_oLocal->read ( reciv_buffer, size );
 	reciv_buffer [ size ] = 0;
 	ensure_equals ( "data broken during transfer", string ( reciv_buffer ), string ( test_data ) );
 	cout << reciv_buffer << endl;

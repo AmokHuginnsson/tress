@@ -1,6 +1,7 @@
 #ifndef TUT_REPORTER
 #define TUT_REPORTER
 
+#include <cxxabi.h>
 #include "tut.h"
 
 /**
@@ -177,8 +178,9 @@ template < typename tType = std::ostream > class reporter:public tut::
 							os << "unexpected exception" << std::endl;
 							if ( tr.exception_typeid != "" )
 								{
+								int status = 0;
 								os << "     exception typeid: "
-								<< tr.exception_typeid << std::endl;
+								<< abi::__cxa_demangle( tr.exception_typeid.c_str(), 0, 0, &status ) << std::endl;
 								}
 							break;
 						case test_result::term:

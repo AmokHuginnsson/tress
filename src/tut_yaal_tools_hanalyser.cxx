@@ -28,6 +28,7 @@ Copyright:
 
 #include <yaal/yaal.h>
 M_VCSID ( "$Id$" )
+#include "tut_helpers.h"
 
 using namespace tut;
 using namespace std;
@@ -53,13 +54,16 @@ template < >
 void module::test<1> ( void )
 	{
 	HAnalyser x;
-	HString eq ( "((2+3+5)*4*6*8)^2^3" );
+//	HString eq( "((2+3+5)*4*6*8)^2^3" );
+	HString eq( "2+3" );
+	x.analyse( eq );
+	cout << eq << "=" << setprecision( 20 ) << x.count() << endl;
 	eq = "Y";
-	x.analyse ( eq );
+	x.analyse( eq );
 	x [ 'Y' ] = 3.;
-	cout << eq << "=" << x.count ( ) << endl;
+	cout << eq << "=" << x.count() << endl;
 	x [ 'Y' ] = 2.;
-	cout << eq << "=" << x.count ( ) << endl;
+	cout << eq << "=" << x.count() << endl;
 	}
 
 }
