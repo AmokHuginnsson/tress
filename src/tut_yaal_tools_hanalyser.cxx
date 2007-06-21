@@ -54,16 +54,23 @@ template < >
 void module::test<1> ( void )
 	{
 	HAnalyser x;
-//	HString eq( "((2+3+5)*4*6*8)^2^3" );
-	HString eq( "2+3" );
+	HString eq( "((2+3+5)*4*6*8)^2^3" );
 	x.analyse( eq );
-	cout << eq << "=" << setprecision( 20 ) << x.count() << endl;
+	double x1 = x.count();
+	double x2 = ((2+3+5)*4*6*8);
+	x2 *= x2;
+	x2 *= x2;
+	x2 *= x2;
+	ensure_equals( "wrong computation", x1, x2 );
+	cout << eq << "=" << setprecision( 20 ) << x1 << endl;
 	eq = "Y";
 	x.analyse( eq );
 	x [ 'Y' ] = 3.;
 	cout << eq << "=" << x.count() << endl;
 	x [ 'Y' ] = 2.;
 	cout << eq << "=" << x.count() << endl;
+	eq = "7+10+(4*)";
+	x.analyse( eq );
 	}
 
 }
