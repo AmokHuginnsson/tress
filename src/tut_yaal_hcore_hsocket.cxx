@@ -214,7 +214,7 @@ void module::test<20> ( void )
 	HSocket l_oClient( HSocket::D_FILE );
 	l_oServer.listen( "/tmp/TUT_socket" );
 	l_oClient.connect( "/tmp/TUT_socket" );
-	HSocket::socket_ptr_t l_oLocal = l_oServer.accept();
+	HSocket::ptr_t l_oLocal = l_oServer.accept();
 	l_oClient.write( test_data, size );
 	l_oLocal->read( reciv_buffer, size );
 	reciv_buffer[ size ] = 0;
@@ -234,7 +234,7 @@ void module::test<21> ( void )
 	HSocket l_oClient ( HSocket::D_NETWORK );
 	l_oServer.listen ( "0.0.0.0", 5555 );
 	l_oClient.connect ( "127.0.0.1", 5555 );
-	HSocket::socket_ptr_t l_oLocal = l_oServer.accept();
+	HSocket::ptr_t l_oLocal = l_oServer.accept();
 	l_oClient.write ( test_data, size );
 	l_oLocal->read ( reciv_buffer, size );
 	reciv_buffer [ size ] = 0;
