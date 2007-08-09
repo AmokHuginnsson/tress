@@ -160,7 +160,8 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 	catch ( ... ) 
 		{
 /* ending ncurses sesion        */
-		if ( is_enabled ( ) )leave_curses ();
+		if ( HCons::get_instance().is_enabled() )
+			HCons::get_instance().leave_curses();
 		throw;
 		}
 	fprintf ( stderr, "Done.\n" );
