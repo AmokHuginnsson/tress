@@ -30,7 +30,7 @@ Copyright:
 #include <TUT/tut_restartable.h>
 
 #include <yaal/yaal.h>
-M_VCSID ( "$Id$" )
+M_VCSID( "$Id$" )
 
 #include "tut_helpers.h"
 #include "version.h"
@@ -53,27 +53,27 @@ namespace tut
 
 OSetup setup;
 
-int main ( int a_iArgc, char * a_ppcArgv [ ] )
+int main( int a_iArgc, char* a_ppcArgv[] )
 	{
 	M_PROLOG
 /*	variables declarations for main loop:                                 */
 	int l_iOpt = 0;
-	FILE * l_psFile = NULL;
+	FILE* l_psFile = NULL;
 	HString l_oLine;
 	HLogger logger;
-	tut::reporter < HLogger > l_oVisitor ( cerr, logger );
+	tut::reporter<HLogger> l_oVisitor( cerr, logger );
 	HException::set_error_stream( stdout );
 	tut::restartable_wrapper l_oRestartable;
-	list < string > l_oGroupNames;
+	list<string> l_oGroupNames;
 /*	end.                                                                  */
 	try
 		{
 /*	TO-DO:				enter main loop code here                               */
-		signals::set_handlers ( );
+		signals::set_handlers();
 		setup.f_pcProgramName = a_ppcArgv [ 0 ];
-		process_tressrc_file ( );
-		l_iOpt = decode_switches ( a_iArgc, a_ppcArgv );
-		hcore::log.rehash ( setup.f_oLogPath, setup.f_pcProgramName );
+		process_tressrc_file();
+		l_iOpt = decode_switches( a_iArgc, a_ppcArgv );
+		hcore::log.rehash( setup.f_oLogPath, setup.f_pcProgramName );
 		setup.f_iArgc = ( a_iArgc - l_iOpt ) + 1;
 		if ( setup.f_iArgc > 1 )
 			{
@@ -103,11 +103,11 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 			else if ( setup.f_bRestartable )
 				{
 				l_oRestartable.set_callback ( & l_oVisitor );
-				l_oRestartable.run_tests ( );
+				l_oRestartable.run_tests();
 				}
 			else
 				{
-				runner.get ( ).set_callback ( & l_oVisitor );
+				runner.get().set_callback ( & l_oVisitor );
 				if ( setup.f_oTestGroupListFilePath )
 					{
 					if ( setup.f_oTestGroupListFilePath == "-" )
@@ -121,29 +121,29 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 					while ( l_oFile.read_line ( l_oLine,
 								HFile::D_UNBUFFERED_READS | HFile::D_STRIP_NEWLINES ) >= 0 )
 						{
-						l_oLine.trim_left ( );
-						l_oLine.trim_right ( );
-						l_oGroupNames.push_back ( static_cast < char const * const > ( l_oLine ) );
+						l_oLine.trim_left();
+						l_oLine.trim_right();
+						l_oGroupNames.push_back( static_cast<char const* const>( l_oLine ) );
 						}
-					l_oFile.close ( );
-					runner.get ( ).run_tests ( l_oGroupNames );
+					l_oFile.close();
+					runner.get().run_tests( l_oGroupNames );
 					}
 				else if ( setup.f_oTestGroupPattern )
-					runner.get ( ).run_pattern_tests (
-							static_cast < char const * const > ( setup.f_oTestGroupPattern ) );
+					runner.get().run_pattern_tests(
+							static_cast<char const* const>( setup.f_oTestGroupPattern ) );
 				else if ( setup.f_oTestGroup && setup.f_iTestNumber )
-					runner.get ( ).run_test ( static_cast < char const * const > ( setup.f_oTestGroup ),
+					runner.get().run_test ( static_cast<char const* const>( setup.f_oTestGroup ),
 							setup.f_iTestNumber );
 				else if ( setup.f_oTestGroup )
 					{
-					l_oGroupNames.push_back ( static_cast < char const * const > ( setup.f_oTestGroup ) );
-					runner.get ( ).run_tests ( l_oGroupNames );
+					l_oGroupNames.push_back ( static_cast<char const* const>( setup.f_oTestGroup ) );
+					runner.get().run_tests ( l_oGroupNames );
 					}
 				else
-					runner.get ( ).run_tests ( );
+					runner.get().run_tests ( );
 				}
 			if ( ! setup.f_bListGroups )
-				cout << "TUT: " << static_cast < char const * > ( HTime ( ) ) << endl;
+				cout << "TUT: " << static_cast<char const*>( HTime() ) << endl;
 			}
 		catch ( const std::exception & e )
 			{
@@ -165,7 +165,11 @@ int main ( int a_iArgc, char * a_ppcArgv [ ] )
 		throw;
 		}
 	fprintf ( stderr, "Done.\n" );
-	return ( 0 );
+	return ( l_oVisitor.exceptions_count
+			+ l_oVisitor.failures_count
+			+ l_oVisitor.terminations_count
+			+ l_oVisitor.warnings_count
+			+ l_oVisitor.setup_count );
 	M_FINAL
 	}
 
