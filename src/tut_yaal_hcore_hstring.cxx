@@ -100,5 +100,63 @@ void module::test<3> ( void )
 		}
 	}
 
+/* mid */
+template<>
+template<>
+void module::test<4>( void )
+	{
+	char source[] = "abecadlo";
+	HString str( source );
+	char mid_failed[] = "mid failed";
+	ensure_equals( mid_failed, str.mid( -10, 100 ), source );
+	ensure_equals( mid_failed, str.mid( 3, 100 ), "cadlo" );
+	ensure_equals( mid_failed, str.mid( 3, -1 ), "" );
+	ensure_equals( mid_failed, str.mid( 35, 5 ), "" );
+	ensure_equals( mid_failed, str.mid( -15, 3 ), "" );
+	ensure_equals( mid_failed, str.mid( -15, 18 ), "abe" );
+	ensure_equals( mid_failed, str.mid( 2, 2 ), "ec" );
+	}
+
+/* split */
+template<>
+template<>
+void module::test<5>( void )
+	{
+	char a[] = ",aa,bb";
+	char b[] = "aa,bb";
+	char c[] = "aa,bb,";
+	char d[] = ",aa,";
+	char e[] = ",,,aa,,";
+	HString str;
+	char split_failed[] = "split failed";
+	str = a;
+	ensure_equals( split_failed, str.split( ",", 0 ), "" );
+	ensure_equals( split_failed, str.split( ",", 1 ), "aa" );
+	ensure_equals( split_failed, str.split( ",", 2 ), "bb" );
+	ensure_equals( split_failed, str.split( ",", 3 ), "" );
+	str = b;
+	ensure_equals( split_failed, str.split( ",", 0 ), "aa" );
+	ensure_equals( split_failed, str.split( ",", 1 ), "bb" );
+	ensure_equals( split_failed, str.split( ",", 2 ), "" );
+	ensure_equals( split_failed, str.split( ",", 3 ), "" );
+	str = c;
+	ensure_equals( split_failed, str.split( ",", 0 ), "aa" );
+	ensure_equals( split_failed, str.split( ",", 1 ), "bb" );
+	ensure_equals( split_failed, str.split( ",", 2 ), "" );
+	ensure_equals( split_failed, str.split( ",", 3 ), "" );
+	str = d;
+	ensure_equals( split_failed, str.split( ",", 0 ), "" );
+	ensure_equals( split_failed, str.split( ",", 1 ), "aa" );
+	ensure_equals( split_failed, str.split( ",", 2 ), "" );
+	ensure_equals( split_failed, str.split( ",", 3 ), "" );
+	str = e;
+	ensure_equals( split_failed, str.split( ",", 0 ), "" );
+	ensure_equals( split_failed, str.split( ",", 1 ), "" );
+	ensure_equals( split_failed, str.split( ",", 2 ), "" );
+	ensure_equals( split_failed, str.split( ",", 3 ), "aa" );
+	ensure_equals( split_failed, str.split( ",", 4 ), "" );
+	ensure_equals( split_failed, str.split( ",", 5 ), "" );
+	}
+
 }
 
