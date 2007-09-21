@@ -42,11 +42,32 @@ namespace tut
 
 struct tut_yaal_hcore_hsocket
 	{
+	tut_yaal_hcore_hsocket( void )
+		{
+		::unlink( "/tmp/TUT_socket" );
+		errno = 0;
+		}
 	};
 
 typedef test_group < tut_yaal_hcore_hsocket > tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_hcore_hsocket_group ( "yaal::hcore::HSocket" );
+
+struct OServer : public HThread
+	{
+	int f_iSize;
+	char* f_pcBuffer;
+	HSocket::ptr_t f_oSocket;
+protected:
+	virtual int run( void );
+	};
+
+int OServer::run( void )
+	{
+	int ret = f_oSocket->read( f_pcBuffer, f_iSize );
+	f_oSocket->close();
+	return ( ret );
+	}
 
 /* Simple construction and destruction. */
 template<>
@@ -205,7 +226,7 @@ void module::test<9> ( void )
 /* Transfering data through file. */
 template<>
 template<>
-void module::test<20> ( void )
+void module::test<19> ( void )
 	{
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
@@ -217,6 +238,31 @@ void module::test<20> ( void )
 	HSocket::ptr_t l_oLocal = l_oServer.accept();
 	l_oClient.write( test_data, size );
 	l_oLocal->read( reciv_buffer, size );
+	reciv_buffer[ size ] = 0;
+	ensure_equals( "data broken during transfer", string( reciv_buffer ), string( test_data ) );
+	cout << reciv_buffer << endl;
+	}
+
+/* Transfering data through file with SSL . */
+template<>
+template<>
+void module::test<20> ( void )
+	{
+	char test_data[] = "Ala ma kota.";
+	const int size = sizeof ( test_data );
+	char reciv_buffer[ size + 1 ];
+	HSocket l_oServer( HSocket::TYPE::D_FILE | HSocket::TYPE::D_SSL_SERVER, 1 );
+	HSocket l_oClient( HSocket::TYPE::D_FILE | HSocket::TYPE::D_SSL_CLIENT );
+	l_oServer.listen( "/tmp/TUT_socket" );
+	l_oClient.connect( "/tmp/TUT_socket" );
+	OServer serv;
+	serv.f_oSocket = l_oServer.accept();
+	serv.f_pcBuffer = reciv_buffer;
+	serv.f_iSize = size;
+	serv.spawn();
+	l_oClient.write( test_data, size );
+	l_oClient.close();
+	serv.finish();
 	reciv_buffer[ size ] = 0;
 	ensure_equals( "data broken during transfer", string( reciv_buffer ), string( test_data ) );
 	cout << reciv_buffer << endl;
@@ -236,7 +282,32 @@ void module::test<21> ( void )
 	l_oClient.connect ( "127.0.0.1", 5555 );
 	HSocket::ptr_t l_oLocal = l_oServer.accept();
 	l_oClient.write ( test_data, size );
-	l_oLocal->read ( reciv_buffer, size );
+	l_oLocal->read( reciv_buffer, size );
+	reciv_buffer [ size ] = 0;
+	ensure_equals ( "data broken during transfer", string ( reciv_buffer ), string ( test_data ) );
+	cout << reciv_buffer << endl;
+	}
+
+/* Transfering data through network with SSL. */
+template<>
+template<>
+void module::test<22> ( void )
+	{
+	char test_data [ ] = "A kot ma wpierdol.";
+	const int size = sizeof ( test_data );
+	char reciv_buffer [ size + 1 ];
+	HSocket l_oServer ( HSocket::TYPE::D_NETWORK | HSocket::TYPE::D_SSL_SERVER, 1 );
+	HSocket l_oClient ( HSocket::TYPE::D_NETWORK | HSocket::TYPE::D_SSL_CLIENT );
+	l_oServer.listen ( "0.0.0.0", 5555 );
+	l_oClient.connect ( "127.0.0.1", 5555 );
+	OServer serv;
+	serv.f_oSocket = l_oServer.accept();
+	serv.f_pcBuffer = reciv_buffer;
+	serv.f_iSize = size;
+	serv.spawn();
+	l_oClient.write ( test_data, size );
+	l_oClient.close();
+	serv.finish();
 	reciv_buffer [ size ] = 0;
 	ensure_equals ( "data broken during transfer", string ( reciv_buffer ), string ( test_data ) );
 	cout << reciv_buffer << endl;
