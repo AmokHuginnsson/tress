@@ -115,6 +115,7 @@ void module::test<4>( void )
 	ensure_equals( mid_failed, str.mid( -15, 3 ), "" );
 	ensure_equals( mid_failed, str.mid( -15, 18 ), "abe" );
 	ensure_equals( mid_failed, str.mid( 2, 2 ), "ec" );
+	ensure_equals( mid_failed, str.mid( 2 ), "ecadlo" );
 	}
 
 /* split */
