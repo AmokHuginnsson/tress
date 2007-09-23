@@ -1,3 +1,9 @@
+/*
+ * With current GCC precompiled headers implementation we have no compilation
+ * time gain. Actually it gets only worse.
+ */
+
+/*
 #include <stdlib.h>
 #include <stdio.h>
 #include <getopt.h>
@@ -8,9 +14,12 @@
 
 #include <TUT/tut.h>
 #include <TUT/tut_reporter.h>
-#include <TUT/tut_restartable.h>
+*/
+/* #include <TUT/tut_restartable.h> */ /* despite GCC team statement, PCH linking bug has not been fixed yet */
+/*
 #include <yaal/yaal.h>
 
 #include "tut_helpers.h"
+*/
 
 /* vim: set ft=cpp : */
