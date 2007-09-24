@@ -75,11 +75,25 @@ HCool::HCool ( char const * a_pcName )
 HCool::~HCool ( void )
 	{
 	M_PROLOG
-	if ( ( f_oName == "6" ) && is_alive ( ) )
-		finish ( ); /* this is necesarry to avoid pure virtuall call to run */
+//	if ( ( f_oName == "6" ) && is_alive ( ) )
+//		finish ( ); /* this is necesarry to avoid pure virtual call to run */
 	cout << "Object [" << f_oName << "] destructed." << endl;
 	return;
 	M_EPILOG
+	}
+
+
+void busy_wait( void )
+	{
+	long q = 3;
+	for ( int i= 0; i < 1000; ++ i )
+		{
+		for ( int j= 0; j < 1000; ++ j )
+			{
+			for ( int k= 0; k < 20; ++ k )
+				q *= 3;
+			}
+		}
 	}
 
 int HCool::run ( void )
@@ -88,11 +102,14 @@ int HCool::run ( void )
 	int l_iCtr = f_iLifeLength;
 	f_bWasStarted = true;
 	cout << "Thread [" << f_oName << "] started ... ";
-	while ( is_alive ( ) && l_iCtr -- )
+	while ( is_alive() && l_iCtr -- )
 		{
 		HLock l_oLock ( f_oMutex );
 		cout << l_iCtr << ' ' << flush;
-		M_DSLEEP ( 1 );
+		if ( f_oName == "busy" )
+			busy_wait();
+		else
+			M_DSLEEP( 1 );
 		}
 	cout << " ... and finished" << endl;
 	return ( 0 );
@@ -137,13 +154,33 @@ void module::test<2> ( void )
 	ensure_equals ( "thread failed to finish", a.is_alive ( ), false );
 	}
 
-/* Starting new thread and finishing it prematurely */
+/* Starting new thread and finishing it prematurely (sleeping body) */
 template < >
 template < >
 void module::test<3> ( void )
 	{
 	HTime start, stop;
-	HCool a ( "a" );
+	HCool a ( "sleeping" );
+	a.set ( 50 );
+	a.spawn ( );
+	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
+	M_DSLEEP ( 10 );
+	start.set_now ( );
+	a.finish ( );
+	stop.set_now ( );
+	stop -= start;
+	ensure_equals ( "thread failed to stop", a.is_alive ( ), false );
+	ensure_distance ( "thread failed to interrupt",
+			stop.get_second ( ), 0, 2 );
+	}
+
+/* Starting new thread and finishing it prematurely (busy body) */
+template < >
+template < >
+void module::test<33> ( void )
+	{
+	HTime start, stop;
+	HCool a ( "busy" );
 	a.set ( 50 );
 	a.spawn ( );
 	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
