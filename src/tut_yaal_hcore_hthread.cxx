@@ -43,10 +43,11 @@ namespace tut
 
 #define M_DSLEEP( count ) usleep ( ( count ) * 100 * 1000 );
 
-class HCool : public HThread
+class HCool
 	{
 protected:
 	/*{*/
+	HMutex	f_oMutex;
 	bool		f_bWasStarted;
 	int			f_iLifeLength;
 	HString f_oName;
@@ -56,15 +57,12 @@ public:
 	HCool ( char const * );
 	virtual ~HCool ( void );
 	void set ( int );
-	/*}*/
-protected:
-	/*{*/
-	virtual int run ( void );
+	int operator() ( HThread const* const );
 	/*}*/
 	};
 
 HCool::HCool ( char const * a_pcName )
-	: f_bWasStarted ( false ), f_iLifeLength ( 0 ), f_oName ( a_pcName )
+	: f_oMutex(), f_bWasStarted ( false ), f_iLifeLength ( 0 ), f_oName ( a_pcName )
 	{
 	M_PROLOG
 	cout << "Object [" << f_oName << "] constructed." << endl;
@@ -75,10 +73,23 @@ HCool::HCool ( char const * a_pcName )
 HCool::~HCool ( void )
 	{
 	M_PROLOG
-//	if ( ( f_oName == "6" ) && is_alive ( ) )
-//		finish ( ); /* this is necesarry to avoid pure virtual call to run */
 	cout << "Object [" << f_oName << "] destructed." << endl;
 	return;
+	M_EPILOG
+	}
+
+int simple( HThread const* const a_poCaller )
+	{
+	M_PROLOG
+	cout << "Thread [simple] started." << endl;
+	int l_iCtr = 50;
+	while ( a_poCaller->is_alive() && l_iCtr -- )
+		{
+		cout << l_iCtr << ' ' << flush;
+		M_DSLEEP( 1 );
+		}
+	cout << "Thread [simple] finished." << endl;
+	return( 0 );
 	M_EPILOG
 	}
 
@@ -96,13 +107,13 @@ void busy_wait( void )
 		}
 	}
 
-int HCool::run ( void )
+int HCool::operator() ( HThread const* const a_poCaller )
 	{
 	M_PROLOG
 	int l_iCtr = f_iLifeLength;
 	f_bWasStarted = true;
 	cout << "Thread [" << f_oName << "] started ... ";
-	while ( is_alive() && l_iCtr -- )
+	while ( a_poCaller->is_alive() && l_iCtr -- )
 		{
 		HLock l_oLock ( f_oMutex );
 		cout << l_iCtr << ' ' << flush;
@@ -124,6 +135,9 @@ void HCool::set ( int a_iLength )
 	M_EPILOG
 	}
 
+typedef HThreadT<HCool> cool_t;
+typedef HThreadT<typeof( simple )> simple_t;
+
 struct tut_yaal_hcore_HThread
 	{
 	};
@@ -137,7 +151,8 @@ template < >
 template < >
 void module::test<1> ( void )
 	{
-	HCool a ( "a" );
+	HCool ca( "a" );
+	cool_t a( ca );
 	ensure_equals ( "bad status on fresh thread", a.is_alive ( ), false );
 	}
 
@@ -146,8 +161,9 @@ template < >
 template < >
 void module::test<2> ( void )
 	{
-	HCool a ( "a" );
-	a.set ( 5 );
+	HCool ca( "a" );
+	cool_t a( ca );
+	ca.set ( 5 );
 	a.spawn ( );
 	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
 	M_DSLEEP ( 10 );
@@ -160,8 +176,9 @@ template < >
 void module::test<3> ( void )
 	{
 	HTime start, stop;
-	HCool a ( "sleeping" );
-	a.set ( 50 );
+	HCool ca( "sleeping" );
+	cool_t a( ca );
+	ca.set ( 50 );
 	a.spawn ( );
 	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
 	M_DSLEEP ( 10 );
@@ -180,8 +197,9 @@ template < >
 void module::test<33> ( void )
 	{
 	HTime start, stop;
-	HCool a ( "busy" );
-	a.set ( 50 );
+	HCool ca( "busy" );
+	cool_t a( ca );
+	ca.set ( 50 );
 	a.spawn ( );
 	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
 	M_DSLEEP ( 10 );
@@ -201,8 +219,9 @@ void module::test<4> ( void )
 	{
 	HTime start, stop;
 		{
-		HCool a ( "a" );
-		a.set ( 50 );
+		HCool ca( "a" );
+		cool_t a( ca );
+		ca.set ( 50 );
 		a.spawn ( );
 		ensure_equals ( "thread failed to start", a.is_alive ( ), true );
 		start.set_now ( );
@@ -219,8 +238,9 @@ template < >
 template < >
 void module::test<5> ( void )
 	{
-	HCool a ( "a" );
-	a.set ( 50 );
+	HCool ca( "a" );
+	cool_t a( ca );
+	ca.set ( 50 );
 	a.spawn ( );
 	a.finish ( );
 	ensure_equals ( "thread failed to finish", a.is_alive ( ), false );
@@ -231,8 +251,9 @@ template < >
 template < >
 void module::test<6> ( void )
 	{
-	HCool a ( "6" );
-	a.set ( 5 );
+	HCool ca( "6" );
+	cool_t a( ca );
+	ca.set ( 5 );
 	a.spawn ( );
 	try
 		{
@@ -250,7 +271,8 @@ template < >
 template < >
 void module::test<7> ( void )
 	{
-	HCool a ( "a" );
+	HCool ca( "a" );
+	cool_t a( ca );
 	try
 		{
 		a.finish ( );
@@ -260,6 +282,24 @@ void module::test<7> ( void )
 		{
 		cout << e.what ( ) << endl;
 		}
+	}
+
+template<>
+template<>
+void module::test<8> ( void )
+	{
+	HTime start, stop;
+	simple_t a( simple );
+	a.spawn();
+	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
+	M_DSLEEP ( 10 );
+	start.set_now ( );
+	a.finish ( );
+	stop.set_now ( );
+	stop -= start;
+	ensure_equals ( "thread failed to stop", a.is_alive ( ), false );
+	ensure_distance ( "thread failed to interrupt",
+			stop.get_second ( ), 0, 2 );
 	}
 
 }
