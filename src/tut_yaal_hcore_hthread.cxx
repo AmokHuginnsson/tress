@@ -47,7 +47,6 @@ class HCool
 	{
 protected:
 	/*{*/
-	HMutex	f_oMutex;
 	bool		f_bWasStarted;
 	int			f_iLifeLength;
 	HString f_oName;
@@ -56,13 +55,13 @@ public:
 	/*{*/
 	HCool ( char const * );
 	virtual ~HCool ( void );
-	void set ( int );
+	void set( int );
 	int operator() ( HThread const* const );
 	/*}*/
 	};
 
 HCool::HCool ( char const * a_pcName )
-	: f_oMutex(), f_bWasStarted ( false ), f_iLifeLength ( 0 ), f_oName ( a_pcName )
+	: f_bWasStarted ( false ), f_iLifeLength ( 0 ), f_oName ( a_pcName )
 	{
 	M_PROLOG
 	cout << "Object [" << f_oName << "] constructed." << endl;
@@ -115,7 +114,6 @@ int HCool::operator() ( HThread const* const a_poCaller )
 	cout << "Thread [" << f_oName << "] started ... ";
 	while ( a_poCaller->is_alive() && l_iCtr -- )
 		{
-		HLock l_oLock ( f_oMutex );
 		cout << l_iCtr << ' ' << flush;
 		if ( f_oName == "busy" )
 			busy_wait();
