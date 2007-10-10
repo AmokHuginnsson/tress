@@ -49,9 +49,9 @@ typedef test_group < tut_yaal_tools_hanalyser > tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_tools_hanalyser_group ( "yaal::tools::HAnalyser" );
 
-template < >
-template < >
-void module::test<1> ( void )
+template<>
+template<>
+void module::test<1>( void )
 	{
 	HAnalyser x;
 	HString eq( "((2+3+5)*4*6*8)^2^3" );

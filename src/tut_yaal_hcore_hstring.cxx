@@ -159,5 +159,14 @@ void module::test<5>( void )
 	ensure_equals( split_failed, str.split( ",", 5 ), "" );
 	}
 
+/* right */
+template<>
+template<>
+void module::test<6>( void )
+	{
+	HString str( "ala/." );
+	ensure_equals( "wring right part extraction", str.right( 1 ), "." );
+	}
+
 }
 
