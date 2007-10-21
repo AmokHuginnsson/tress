@@ -54,7 +54,7 @@ struct tut_yaal_tools_hxml
 			return;
 		f_oVarTmpBuffer.hs_realloc ( a_rsNode.f_iLevel * 2 + 3 );
 		memset ( f_oVarTmpBuffer.raw ( ), ' ', a_rsNode.f_iLevel * 2 );
-		f_oVarTmpBuffer [ a_rsNode.f_iLevel * 2 ] = 0;
+		f_oVarTmpBuffer.set_at( a_rsNode.f_iLevel * 2, 0 );
 		if ( ! a_rsNode.f_oName.is_empty ( ) )
 			cout << f_oVarTmpBuffer << "[" << a_rsNode.f_oName << "]<" << a_rsNode.f_iLevel << ">:" << endl;
 		while ( a_rsNode.f_oProperties.iterate ( l_oPropertyName,
@@ -64,7 +64,7 @@ struct tut_yaal_tools_hxml
 			cout << l_oPropertyValue << ")" << endl;
 			}
 		memset ( f_oVarTmpBuffer.raw ( ), ' ', a_rsNode.f_iLevel * 2 + 2 );
-		f_oVarTmpBuffer [ a_rsNode.f_iLevel * 2 + 2 ] = 0;
+		f_oVarTmpBuffer.set_at( a_rsNode.f_iLevel * 2 + 2, 0 );
 		cout << f_oVarTmpBuffer << "{" << endl;
 		if ( a_rsNode.f_oContents.size ( ) )
 			l_poContent = & a_rsNode.f_oContents.go ( 0 );
@@ -78,8 +78,8 @@ struct tut_yaal_tools_hxml
 				if ( ( * l_peType ) == HXml::ONode::D_NODE )
 					{
 					dump ( * l_psNode );
-					l_psNode = a_rsNode.f_oChilds.to_tail ( );
-					f_oVarTmpBuffer [ a_rsNode.f_iLevel * 2 + 2 ] = 0;
+					l_psNode = a_rsNode.f_oChilds.to_tail();
+					f_oVarTmpBuffer.set_at( a_rsNode.f_iLevel * 2 + 2, 0 );
 					}
 				else
 					{
