@@ -165,7 +165,60 @@ template<>
 void module::test<6>( void )
 	{
 	HString str( "ala/." );
-	ensure_equals( "wring right part extraction", str.right( 1 ), "." );
+	ensure_equals( "wrong right part extraction", str.right( 1 ), "." );
+	}
+
+/* erase */
+template<>
+template<>
+void module::test<7>( void )
+	{
+	HString str;
+	char s[]= "Ala ma kota";
+	char erase_failed[] = "erase failed";
+	str = s;ensure_equals( erase_failed, str.erase( 0, 4 ), "ma kota" );
+	str = s;ensure_equals( erase_failed, str.erase( 2, 4 ), "Al kota" );
+	str = s;ensure_equals( erase_failed, str.erase( -2, 4 ), "a ma kota" );
+	str = s;ensure_equals( erase_failed, str.erase( 4, 100 ), "Ala " );
+	str = s;ensure_equals( erase_failed, str.erase( 0, 100 ), "" );
+	}
+
+/* insert */
+template<>
+template<>
+void module::test<8>( void )
+	{
+	HString str;
+	char s[]= "abcdef";
+	char insert_failed[] = "insert failed";
+	char overflow[] = "overflow passed";
+	str = s;ensure_equals( insert_failed, str.insert( 0, 3, "ABCD" ), "ABCabcdef" );
+	str = s;ensure_equals( insert_failed, str.insert( 2, 3, "ABCD" ), "abABCcdef" );
+	str = s;ensure_equals( insert_failed, str.insert( -2, 2, "ABCD" ), "abcdef" );
+	str = s;ensure_equals( insert_failed, str.insert( -2, 4, "ABCD" ), "CDabcdef" );
+	try
+		{
+		str = s;ensure_equals( insert_failed, str.insert( -5, 3, "ABCD" ), "any" );
+		fail( overflow );
+		}
+	catch ( HException& e )
+		{
+		cout << e.what() << endl;
+		}
+	try
+		{
+		str = s;ensure_equals( insert_failed, str.insert( 0, 5, "ABCD" ), "any" );
+		fail( overflow );
+		}
+	catch ( HException& e )
+		{
+		cout << e.what() << endl;
+		}
+	str = s;ensure_equals( insert_failed, str.insert( 20, 3, "ABCD" ), "abcdef" );
+	str = s;ensure_equals( insert_failed, str.insert( 2, -5, "ABCD" ), "abcdef" );
+	str = s;ensure_equals( insert_failed, str.insert( 5, 3, "ABCD" ), "abcdeABCf" );
+	str = s;ensure_equals( insert_failed, str.insert( 6, 3, "ABCD" ), "abcdefABC" );
+	str = s;ensure_equals( insert_failed, str.insert( 7, 3, "ABCD" ), "abcdef" );
 	}
 
 }
