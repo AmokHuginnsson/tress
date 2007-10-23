@@ -92,6 +92,10 @@ int simple( HThread const* const a_poCaller )
 	M_EPILOG
 	}
 
+int a_fast_one( HThread const* const )
+	{
+	return ( 0 );
+	}
 
 void busy_wait( void )
 	{
@@ -222,10 +226,9 @@ void module::test<4> ( void )
 		ca.set ( 50 );
 		a.spawn ( );
 		ensure_equals ( "thread failed to start", a.is_alive ( ), true );
-		start.set_now ( );
-		a.finish ( );
+		start.set_now();
 		}
-	stop.set_now ( );
+	stop.set_now();
 	stop -= start;
 	ensure_distance ( "thread failed to interrupt from destructor",
 			stop.get_second ( ), 0, 2 );
@@ -282,6 +285,7 @@ void module::test<7> ( void )
 		}
 	}
 
+/* Simple thread (plain function) */
 template<>
 template<>
 void module::test<8> ( void )
@@ -299,5 +303,48 @@ void module::test<8> ( void )
 	ensure_distance ( "thread failed to interrupt",
 			stop.get_second ( ), 0, 2 );
 	}
+
+/* Starting new thread and allowing it to finish, the finich is actualy invoked. */
+template < >
+template < >
+void module::test<9> ( void )
+	{
+	HCool ca( "a" );
+	cool_t a( ca );
+	ca.set ( 5 );
+	a.spawn ( );
+	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
+	M_DSLEEP ( 10 );
+	ensure_equals ( "thread failed to finish", a.is_alive ( ), false );
+	a.finish();
+	}
+
+/* Very short living thread. */
+template<>
+template<>
+void module::test<10> ( void )
+	{
+	HTime start, stop;
+	simple_t a( a_fast_one );
+	a.spawn();
+	cout << __PRETTY_FUNCTION__ << endl;
+	a.finish();
+	/* In case of wrong implementation this test case will hang foreveer. */
+	}
+
+/* Very short living thread, spawned delayed. */
+template<>
+template<>
+void module::test<11> ( void )
+	{
+	HTime start, stop;
+	simple_t a( a_fast_one );
+	a.spawn();
+	M_DSLEEP( 1 );
+	cout << __PRETTY_FUNCTION__ << endl;
+	a.finish();
+	/* In case of wrong implementation this test case will hang foreveer. */
+	}
+
 
 }

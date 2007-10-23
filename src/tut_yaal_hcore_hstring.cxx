@@ -48,9 +48,10 @@ typedef test_group < tut_yaal_hcore_hstring > tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_hcore_hstring_group ( "yaal::hcore::HString" );
 
-template < >
-template < >
-void module::test<1> ( void )
+/* constructors */
+template<>
+template<>
+void module::test<1>( void )
 	{
 	HString str ( 1024 );
 	HString exemplar ( "1024" );
@@ -58,45 +59,45 @@ void module::test<1> ( void )
 	}
 
 /* shift_left */
-template < >
-template < >
-void module::test<2> ( void )
+template<>
+template<>
+void module::test<2>( void )
 	{
-	HString str ( "Ala ma kota" );
-	HString exemplar ( "ma kota" );
-	str.shift_left ( 4 );
-	ensure_equals ( "left_shift failed", str, exemplar );
+	HString str( "Ala ma kota" );
+	HString exemplar( "ma kota" );
+	str.shift_left( 4 );
+	ensure_equals( "left_shift failed", str, exemplar );
 	try
 		{
-		str.shift_left ( - 1 );
+		str.shift_left( - 1 );
 		fail ( "no check for negative shift" );
 		}
-	catch ( HException & e )
+	catch ( HException& e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
-	str.shift_left ( 100000 );
+	str.shift_left( 100000 );
 	exemplar = "";
-	ensure_equals ( "left_shift failed", str, exemplar );
+	ensure_equals( "left_shift failed", str, exemplar );
 	}
 
 /* shift_right */
-template < >
-template < >
+template<>
+template<>
 void module::test<3> ( void )
 	{
-	HString str ( "Ala ma kota" );
-	HString exemplar ( "    Ala ma kota" );
-	str.shift_right ( 4 );
-	ensure_equals ( "right_shift failed", str, exemplar );
+	HString str( "Ala ma kota" );
+	HString exemplar( "    Ala ma kota" );
+	str.shift_right( 4 );
+	ensure_equals( "right_shift failed", str, exemplar );
 	try
 		{
-		str.shift_right ( - 1 );
-		fail ( "no check for negative shift" );
+		str.shift_right( - 1 );
+		fail( "no check for negative shift" );
 		}
-	catch ( HException & e )
+	catch ( HException& e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	}
 
@@ -174,7 +175,7 @@ template<>
 void module::test<7>( void )
 	{
 	HString str;
-	char s[]= "Ala ma kota";
+	char s[] = "Ala ma kota";
 	char erase_failed[] = "erase failed";
 	str = s;ensure_equals( erase_failed, str.erase( 0, 4 ), "ma kota" );
 	str = s;ensure_equals( erase_failed, str.erase( 2, 4 ), "Al kota" );
@@ -189,7 +190,7 @@ template<>
 void module::test<8>( void )
 	{
 	HString str;
-	char s[]= "abcdef";
+	char s[] = "abcdef";
 	char insert_failed[] = "insert failed";
 	char overflow[] = "overflow passed";
 	str = s;ensure_equals( insert_failed, str.insert( 0, 3, "ABCD" ), "ABCabcdef" );
@@ -219,6 +220,124 @@ void module::test<8>( void )
 	str = s;ensure_equals( insert_failed, str.insert( 5, 3, "ABCD" ), "abcdeABCf" );
 	str = s;ensure_equals( insert_failed, str.insert( 6, 3, "ABCD" ), "abcdefABC" );
 	str = s;ensure_equals( insert_failed, str.insert( 7, 3, "ABCD" ), "abcdef" );
+	}
+
+/* find */
+template<>
+template<>
+void module::test<9>( void )
+	{
+	HString str = "abcXYdeYXf";
+	char failed[] = "find failed[%d]";
+	ensure_equals( HString().format( failed, 0 ), str.find( 'A' ), -1 );
+	ensure_equals( HString().format( failed, 1 ), str.find( 'X' ), 3 );
+	ensure_equals( HString().format( failed, 2 ), str.find( 'Y' ), 4 );
+	ensure_equals( HString().format( failed, 3 ), str.find( 'X', -10 ), 3 );
+	ensure_equals( HString().format( failed, 4 ), str.find( 'Y', -10 ), 4 );
+	ensure_equals( HString().format( failed, 5 ), str.find( 'X', 3 ), 3 );
+	ensure_equals( HString().format( failed, 6 ), str.find( 'Y', 3 ), 4 );
+	ensure_equals( HString().format( failed, 7 ), str.find( 'X', 5 ), 8 );
+	ensure_equals( HString().format( failed, 8 ), str.find( 'Y', 5 ), 7 );
+	ensure_equals( HString().format( failed, 9 ), str.find( 'X', 9 ), -1 );
+	ensure_equals( HString().format( failed, 10 ), str.find( 'Y', 9 ), -1 );
+	ensure_equals( HString().format( failed, 11 ), str.find( 'X', 90 ), -1 );
+	ensure_equals( HString().format( failed, 12 ), str.find( 'Y', 90 ), -1 );
+	}
+
+/* find_one_of */
+template<>
+template<>
+void module::test<10>( void )
+	{
+	HString str = "abcXYdeYXf";
+	char failed[] = "find_one_of failed";
+	ensure_equals( failed, str.find_one_of( "ABCD" ), -1 );
+	ensure_equals( failed, str.find_one_of( "AXYB" ), 3 );
+	ensure_equals( failed, str.find_one_of( "AYD" ), 4 );
+	ensure_equals( failed, str.find_one_of( "AXYB", -10 ), 3 );
+	ensure_equals( failed, str.find_one_of( "AYD", -10 ), 4 );
+	ensure_equals( failed, str.find_one_of( "AXYB", 3 ), 3 );
+	ensure_equals( failed, str.find_one_of( "AYD", 3 ), 4 );
+	ensure_equals( failed, str.find_one_of( "AXYB", 5 ), 7 );
+	ensure_equals( failed, str.find_one_of( "AYD", 5 ), 7 );
+	ensure_equals( failed, str.find_one_of( "AXYB", 9 ), -1 );
+	ensure_equals( failed, str.find_one_of( "AYD", 9 ), -1 );
+	ensure_equals( failed, str.find_one_of( "AXYB", 90 ), -1 );
+	ensure_equals( failed, str.find_one_of( "AYD", 90 ), -1 );
+	}
+
+/* find_other_than */
+template<>
+template<>
+void module::test<11>( void )
+	{
+	HString str = "abcXYdeYXfg";
+	char failed[] = "find_other_than failed[%d]";
+	ensure_equals( HString().format( failed, 0 ), str.find_other_than( "abcXYdeYXfg" ), -1 );
+	ensure_equals( HString().format( failed, 1 ), str.find_other_than( "abXYdeYXfg" ), 2 );
+	ensure_equals( HString().format( failed, 2 ), str.find_other_than( "abXYdeYXfg", 2 ), 2 );
+	ensure_equals( HString().format( failed, 3 ), str.find_other_than( "abXYdeYXfg", 3 ), -1 );
+	ensure_equals( HString().format( failed, 4 ), str.find_other_than( "abcdefg" ), 3 );
+	ensure_equals( HString().format( failed, 5 ), str.find_other_than( "abcdefg", 5 ), 7 );
+	}
+
+/* reverse_find */
+template<>
+template<>
+void module::test<12>( void )
+	{
+	HString str = "fXYedYXcba";
+	char failed[] = "reverse_find failed[%d]";
+	ensure_equals( HString().format( failed, 0 ), str.reverse_find( 'A' ), -1 );
+	ensure_equals( HString().format( failed, 1 ), str.reverse_find( 'X' ), 3 );
+	ensure_equals( HString().format( failed, 2 ), str.reverse_find( 'Y' ), 4 );
+	ensure_equals( HString().format( failed, 3 ), str.reverse_find( 'X', -10 ), 3 );
+	ensure_equals( HString().format( failed, 4 ), str.reverse_find( 'Y', -10 ), 4 );
+	ensure_equals( HString().format( failed, 5 ), str.reverse_find( 'X', 3 ), 3 );
+	ensure_equals( HString().format( failed, 6 ), str.reverse_find( 'Y', 3 ), 4 );
+	ensure_equals( HString().format( failed, 7 ), str.reverse_find( 'X', 5 ), 8 );
+	ensure_equals( HString().format( failed, 8 ), str.reverse_find( 'Y', 5 ), 7 );
+	ensure_equals( HString().format( failed, 9 ), str.reverse_find( 'X', 9 ), -1 );
+	ensure_equals( HString().format( failed, 10 ), str.reverse_find( 'Y', 9 ), -1 );
+	ensure_equals( HString().format( failed, 11 ), str.reverse_find( 'X', 90 ), -1 );
+	ensure_equals( HString().format( failed, 12 ), str.reverse_find( 'Y', 90 ), -1 );
+	}
+
+/* reverse_find_one_of */
+template<>
+template<>
+void module::test<13>( void )
+	{
+	HString str = "fXYedYXcba";
+	char failed[] = "reverse_find_one_of failed[%d]";
+	ensure_equals( HString().format( failed, 0 ), str.reverse_find_one_of( "ABCD" ), -1 );
+	ensure_equals( HString().format( failed, 1 ), str.reverse_find_one_of( "AXYB" ), 3 );
+	ensure_equals( HString().format( failed, 2 ), str.reverse_find_one_of( "AYD" ), 4 );
+	ensure_equals( HString().format( failed, 3 ), str.reverse_find_one_of( "AXYB", -10 ), 3 );
+	ensure_equals( HString().format( failed, 4 ), str.reverse_find_one_of( "AYD", -10 ), 4 );
+	ensure_equals( HString().format( failed, 5 ), str.reverse_find_one_of( "AXYB", 3 ), 3 );
+	ensure_equals( HString().format( failed, 6 ), str.reverse_find_one_of( "AYD", 3 ), 4 );
+	ensure_equals( HString().format( failed, 7 ), str.reverse_find_one_of( "AXYB", 5 ), 7 );
+	ensure_equals( HString().format( failed, 8 ), str.reverse_find_one_of( "AYD", 5 ), 7 );
+	ensure_equals( HString().format( failed, 9 ), str.reverse_find_one_of( "AXYB", 9 ), -1 );
+	ensure_equals( HString().format( failed, 10 ), str.reverse_find_one_of( "AYD", 9 ), -1 );
+	ensure_equals( HString().format( failed, 11 ), str.reverse_find_one_of( "AXYB", 90 ), -1 );
+	ensure_equals( HString().format( failed, 12 ), str.reverse_find_one_of( "AYD", 90 ), -1 );
+	}
+
+/* reverse_find_other_than */
+template<>
+template<>
+void module::test<14>( void )
+	{
+	HString str = "gfXYedYXcba";
+	char failed[] = "reverse_find_other_than failed[%d]";
+	ensure_equals( HString().format( failed, 0 ), str.reverse_find_other_than( "abcXYdeYXfg" ), -1 );
+	ensure_equals( HString().format( failed, 1 ), str.reverse_find_other_than( "abXYdeYXfg" ), 2 );
+	ensure_equals( HString().format( failed, 2 ), str.reverse_find_other_than( "abXYdeYXfg", 2 ), 2 );
+	ensure_equals( HString().format( failed, 3 ), str.reverse_find_other_than( "abXYdeYXfg", 3 ), -1 );
+	ensure_equals( HString().format( failed, 4 ), str.reverse_find_other_than( "abcdefg" ), 3 );
+	ensure_equals( HString().format( failed, 5 ), str.reverse_find_other_than( "abcdefg", 5 ), 7 );
 	}
 
 }

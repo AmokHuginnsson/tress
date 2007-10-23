@@ -64,8 +64,16 @@ protected:
 
 int OServer::run( void )
 	{
-	int ret = f_oSocket->read( f_pcBuffer, f_iSize );
-	f_oSocket->close();
+	int ret = -1;
+	try
+		{
+		ret = f_oSocket->read( f_pcBuffer, f_iSize );
+		f_oSocket->close();
+		}
+	catch ( HOpenSSLException& e )
+		{
+		cout << e.what() << endl;
+		}
 	return ( ret );
 	}
 
