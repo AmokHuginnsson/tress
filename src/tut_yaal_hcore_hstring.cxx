@@ -182,6 +182,8 @@ void module::test<7>( void )
 	str = s;ensure_equals( erase_failed, str.erase( -2, 4 ), "a ma kota" );
 	str = s;ensure_equals( erase_failed, str.erase( 4, 100 ), "Ala " );
 	str = s;ensure_equals( erase_failed, str.erase( 0, 100 ), "" );
+	HString str2( "|==--|[100%]" );
+	ensure_equals( erase_failed, str2.erase( 7, 4 ), "|==--|[]" );
 	}
 
 /* insert */
@@ -220,6 +222,8 @@ void module::test<8>( void )
 	str = s;ensure_equals( insert_failed, str.insert( 5, 3, "ABCD" ), "abcdeABCf" );
 	str = s;ensure_equals( insert_failed, str.insert( 6, 3, "ABCD" ), "abcdefABC" );
 	str = s;ensure_equals( insert_failed, str.insert( 7, 3, "ABCD" ), "abcdef" );
+	HString str2( "|==--|[]" );
+	ensure_equals( insert_failed, str2.insert( 7, 4, "done" ), "|==--|[done]" );
 	}
 
 /* find */
