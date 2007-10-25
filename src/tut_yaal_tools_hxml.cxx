@@ -53,7 +53,7 @@ struct tut_yaal_tools_hxml
 		if ( a_rsNode.f_iLevel < 0 )
 			return;
 		f_oVarTmpBuffer.hs_realloc ( a_rsNode.f_iLevel * 2 + 3 );
-		memset ( f_oVarTmpBuffer.raw ( ), ' ', a_rsNode.f_iLevel * 2 );
+		f_oVarTmpBuffer.fill( ' ', a_rsNode.f_iLevel * 2 );
 		f_oVarTmpBuffer.set_at( a_rsNode.f_iLevel * 2, 0 );
 		if ( ! a_rsNode.f_oName.is_empty ( ) )
 			cout << f_oVarTmpBuffer << "[" << a_rsNode.f_oName << "]<" << a_rsNode.f_iLevel << ">:" << endl;
@@ -63,7 +63,7 @@ struct tut_yaal_tools_hxml
 			cout << f_oVarTmpBuffer << "(" << l_oPropertyName << ")->(";
 			cout << l_oPropertyValue << ")" << endl;
 			}
-		memset ( f_oVarTmpBuffer.raw ( ), ' ', a_rsNode.f_iLevel * 2 + 2 );
+		f_oVarTmpBuffer.fill( ' ', a_rsNode.f_iLevel * 2 + 2 );
 		f_oVarTmpBuffer.set_at( a_rsNode.f_iLevel * 2 + 2, 0 );
 		cout << f_oVarTmpBuffer << "{" << endl;
 		if ( a_rsNode.f_oContents.size ( ) )
