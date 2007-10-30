@@ -26,6 +26,9 @@ Copyright:
 
 #include <TUT/tut.h>
 
+#define private public
+#define protected public
+
 #include <yaal/yaal.h>
 M_VCSID ( "$Id$" )
 
@@ -42,68 +45,85 @@ namespace tut
 
 struct tut_yaal_hcore_hlist
 	{
+	typedef HList<int> list_t;
+	void dump( list_t& );
+	void dump( list_t::iterator&, int );
 	};
 
-typedef test_group < tut_yaal_hcore_hlist > tut_group;
+void tut_yaal_hcore_hlist::dump( list_t& l )
+	{
+	int s = l.size();
+	cout << "l(" << s << "): [";
+	for ( list_t::iterator it = l.begin(); it != l.end(); ++ it )
+		cout << *it << ( s -- > 1 ? "," : "" );
+	cout << "]" << endl;
+	}
+
+void tut_yaal_hcore_hlist::dump( list_t::iterator& it, int at )
+	{
+	cout << "it[" << at << "]: o=" << it.f_poOwner << ", c=" << it.f_poCurrent << endl;
+	}
+
+typedef test_group<tut_yaal_hcore_hlist>tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_hcore_hlist_group ( "yaal::hcore::HList" );
 
 /* Simple constructor. */
-template < >
-template < >
+template<>
+template<>
 void module::test<1> ( void )
 	{
-	HList < int > l_oList;
-	ensure_equals ( "list not empty", l_oList.size ( ), 0 );
+	list_t l_oList;
+	ensure_equals ( "list not empty", l_oList.size(), 0 );
 	}
 
 /* Parametrized constructor. */
-template < >
-template < >
+template<>
+template<>
 void module::test<2> ( void )
 	{
-	HList < int > l_oList ( 3 );
-	ensure_equals ( "list not empty", l_oList.size ( ), 3 );
+	list_t l_oList ( 3 );
+	ensure_equals ( "list not empty", l_oList.size(), 3 );
 	}
 
 /* poor forward iterator while syntax */
-template < >
-template < >
+template<>
+template<>
 void module::test<3> ( void )
 	{
 	int l_iCtr = 0;
-	HList < int > l_oList;
+	list_t l_oList;
 	int * l_piVal = NULL;
-	l_oList.add_tail ( ) = 1;
-	l_oList.add_tail ( ) = 2;
-	l_oList.add_tail ( ) = 3;
-	l_oList.add_tail ( ) = 4;
-	l_oList.add_tail ( ) = 5;
+	l_oList.add_tail() = 1;
+	l_oList.add_tail() = 2;
+	l_oList.add_tail() = 3;
+	l_oList.add_tail() = 4;
+	l_oList.add_tail() = 5;
 	l_piVal = & l_oList.go ( 0 );
 	while ( l_piVal )
 		{
 		l_iCtr ++;
 		ensure_equals ( "while syntax: forward iterator made wrong move", * l_piVal, l_iCtr );
-		l_piVal = l_oList.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED );
+		l_piVal = l_oList.to_tail ( 1, list_t::D_TREAT_AS_OPENED );
 		}
 	ensure_equals ( "while syntax: not the whole list was iterated", l_iCtr, 5 );
 	}
 
 /* poor forward iterator for syntax */
-template < >
-template < >
+template<>
+template<>
 void module::test<4> ( void )
 	{
 	int l_iCtr = 0;
-	HList < int > l_oList;
+	list_t l_oList;
 	int * l_piVal = NULL;
-	l_oList.add_tail ( ) = 1;
-	l_oList.add_tail ( ) = 2;
-	l_oList.add_tail ( ) = 3;
-	l_oList.add_tail ( ) = 4;
-	l_oList.add_tail ( ) = 5;
+	l_oList.add_tail() = 1;
+	l_oList.add_tail() = 2;
+	l_oList.add_tail() = 3;
+	l_oList.add_tail() = 4;
+	l_oList.add_tail() = 5;
 	for ( l_piVal = & l_oList.go ( 0 );
-			l_piVal; l_piVal = l_oList.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED ) )
+			l_piVal; l_piVal = l_oList.to_tail ( 1, list_t::D_TREAT_AS_OPENED ) )
 		{
 		l_iCtr ++;
 		ensure_equals ( "for syntax: forward iterator made wrong move", * l_piVal, l_iCtr );
@@ -112,43 +132,43 @@ void module::test<4> ( void )
 	}
 
 /* poor backward iterator while syntax */
-template < >
-template < >
+template<>
+template<>
 void module::test<5> ( void )
 	{
 	int l_iCtr = 5;
-	HList < int > l_oList;
+	list_t l_oList;
 	int * l_piVal = NULL;
-	l_oList.add_tail ( ) = 1;
-	l_oList.add_tail ( ) = 2;
-	l_oList.add_tail ( ) = 3;
-	l_oList.add_tail ( ) = 4;
-	l_oList.add_tail ( ) = 5;
+	l_oList.add_tail() = 1;
+	l_oList.add_tail() = 2;
+	l_oList.add_tail() = 3;
+	l_oList.add_tail() = 4;
+	l_oList.add_tail() = 5;
 	l_piVal = & l_oList.go ( - 1 );
 	while ( l_piVal )
 		{
 		ensure_equals ( "while syntax: backward iterator made wrong move", * l_piVal, l_iCtr );
 		l_iCtr --;
-		l_piVal = l_oList.to_head ( 1, HList < int >::D_TREAT_AS_OPENED );
+		l_piVal = l_oList.to_head ( 1, list_t::D_TREAT_AS_OPENED );
 		}
 	ensure_equals ( "while syntax: not the whole list was iterated", l_iCtr, 0 );
 	}
 
 /* poor backward iterator for syntax */
-template < >
-template < >
+template<>
+template<>
 void module::test<6> ( void )
 	{
 	int l_iCtr = 5;
-	HList < int > l_oList;
+	list_t l_oList;
 	int * l_piVal = NULL;
-	l_oList.add_tail ( ) = 1;
-	l_oList.add_tail ( ) = 2;
-	l_oList.add_tail ( ) = 3;
-	l_oList.add_tail ( ) = 4;
-	l_oList.add_tail ( ) = 5;
+	l_oList.add_tail() = 1;
+	l_oList.add_tail() = 2;
+	l_oList.add_tail() = 3;
+	l_oList.add_tail() = 4;
+	l_oList.add_tail() = 5;
 	for ( l_piVal = & l_oList.go ( - 1 );
-			l_piVal; l_piVal = l_oList.to_head ( 1, HList < int >::D_TREAT_AS_OPENED ) )
+			l_piVal; l_piVal = l_oList.to_head ( 1, list_t::D_TREAT_AS_OPENED ) )
 		{
 		ensure_equals ( "for syntax: backward iterator made wrong move", * l_piVal, l_iCtr );
 		l_iCtr --;
@@ -157,22 +177,22 @@ void module::test<6> ( void )
 	}
 
 /* assignation operator (full to empty) */
-template < >
-template < >
+template<>
+template<>
 void module::test<7> ( void )
 	{
 	int l_iCtr = 0;
-	HList < int > l_oList;
-	HList < int > l_oAnother;
+	list_t l_oList;
+	list_t l_oAnother;
 	int * l_piVal = NULL;
-	l_oList.add_tail ( ) = 1;
-	l_oList.add_tail ( ) = 2;
-	l_oList.add_tail ( ) = 3;
-	l_oList.add_tail ( ) = 4;
-	l_oList.add_tail ( ) = 5;
+	l_oList.add_tail() = 1;
+	l_oList.add_tail() = 2;
+	l_oList.add_tail() = 3;
+	l_oList.add_tail() = 4;
+	l_oList.add_tail() = 5;
 	l_oAnother = l_oList;
 	for ( l_piVal = & l_oAnother.go ( 0 );
-			l_piVal; l_piVal = l_oAnother.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED ) )
+			l_piVal; l_piVal = l_oAnother.to_tail ( 1, list_t::D_TREAT_AS_OPENED ) )
 		{
 		l_iCtr ++;
 		ensure_equals ( "assign operation failed, wrong value", * l_piVal, l_iCtr );
@@ -181,41 +201,41 @@ void module::test<7> ( void )
 	}
 
 /* assignation operator (empty to full) */
-template < >
-template < >
+template<>
+template<>
 void module::test<8> ( void )
 	{
-	HList < int > l_oList;
-	HList < int > l_oAnother;
-	l_oList.add_tail ( ) = 1;
-	l_oList.add_tail ( ) = 2;
-	l_oList.add_tail ( ) = 3;
-	l_oList.add_tail ( ) = 4;
-	l_oList.add_tail ( ) = 5;
+	list_t l_oList;
+	list_t l_oAnother;
+	l_oList.add_tail() = 1;
+	l_oList.add_tail() = 2;
+	l_oList.add_tail() = 3;
+	l_oList.add_tail() = 4;
+	l_oList.add_tail() = 5;
 	l_oList = l_oAnother;
-	ensure_equals ( "assign operation failed, wrong size", l_oList.size ( ), 0 );
+	ensure_equals ( "assign operation failed, wrong size", l_oList.size(), 0 );
 	}
 
 /* assignation operator (full to small) */
-template < >
-template < >
+template<>
+template<>
 void module::test<9> ( void )
 	{
 	int l_iCtr = 0;
-	HList < int > l_oList;
-	HList < int > l_oAnother;
+	list_t l_oList;
+	list_t l_oAnother;
 	int * l_piVal = NULL;
-	l_oList.add_tail ( ) = 1;
-	l_oList.add_tail ( ) = 2;
-	l_oList.add_tail ( ) = 3;
-	l_oList.add_tail ( ) = 4;
-	l_oList.add_tail ( ) = 5;
-	l_oAnother.add_tail ( ) = 6;
-	l_oAnother.add_tail ( ) = 7;
-	l_oAnother.add_tail ( ) = 8;
+	l_oList.add_tail() = 1;
+	l_oList.add_tail() = 2;
+	l_oList.add_tail() = 3;
+	l_oList.add_tail() = 4;
+	l_oList.add_tail() = 5;
+	l_oAnother.add_tail() = 6;
+	l_oAnother.add_tail() = 7;
+	l_oAnother.add_tail() = 8;
 	l_oAnother = l_oList;
 	for ( l_piVal = & l_oAnother.go ( 0 );
-			l_piVal; l_piVal = l_oAnother.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED ) )
+			l_piVal; l_piVal = l_oAnother.to_tail ( 1, list_t::D_TREAT_AS_OPENED ) )
 		{
 		l_iCtr ++;
 		ensure_equals ( "assign operation failed, wrong value", * l_piVal, l_iCtr );
@@ -224,29 +244,29 @@ void module::test<9> ( void )
 	}
 
 /* assignation operator (full to big) */
-template < >
-template < >
+template<>
+template<>
 void module::test<10> ( void )
 	{
 	int l_iCtr = 0;
-	HList < int > l_oList;
-	HList < int > l_oAnother;
+	list_t l_oList;
+	list_t l_oAnother;
 	int * l_piVal = NULL;
-	l_oList.add_tail ( ) = 1;
-	l_oList.add_tail ( ) = 2;
-	l_oList.add_tail ( ) = 3;
-	l_oList.add_tail ( ) = 4;
-	l_oList.add_tail ( ) = 5;
-	l_oAnother.add_tail ( ) = 6;
-	l_oAnother.add_tail ( ) = 7;
-	l_oAnother.add_tail ( ) = 8;
-	l_oAnother.add_tail ( ) = 9;
-	l_oAnother.add_tail ( ) = 10;
-	l_oAnother.add_tail ( ) = 11;
-	l_oAnother.add_tail ( ) = 12;
+	l_oList.add_tail() = 1;
+	l_oList.add_tail() = 2;
+	l_oList.add_tail() = 3;
+	l_oList.add_tail() = 4;
+	l_oList.add_tail() = 5;
+	l_oAnother.add_tail() = 6;
+	l_oAnother.add_tail() = 7;
+	l_oAnother.add_tail() = 8;
+	l_oAnother.add_tail() = 9;
+	l_oAnother.add_tail() = 10;
+	l_oAnother.add_tail() = 11;
+	l_oAnother.add_tail() = 12;
 	l_oAnother = l_oList;
 	for ( l_piVal = & l_oAnother.go ( 0 );
-			l_piVal; l_piVal = l_oAnother.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED ) )
+			l_piVal; l_piVal = l_oAnother.to_tail ( 1, list_t::D_TREAT_AS_OPENED ) )
 		{
 		l_iCtr ++;
 		ensure_equals ( "assign operation failed, wrong value", * l_piVal, l_iCtr );
@@ -255,8 +275,8 @@ void module::test<10> ( void )
 	}
 
 /* remove element */
-template < >
-template < >
+template<>
+template<>
 void module::test<11> ( void )
 	{
 	bool re = false;
@@ -264,14 +284,14 @@ void module::test<11> ( void )
 	cout << endl;
 	for ( int i = 1; i < 6; i ++ )
 		{
-		HList < int > l_oList;
-		l_oList.add_tail ( ) = 1;
-		l_oList.add_tail ( ) = 2;
-		l_oList.add_tail ( ) = 3;
-		l_oList.add_tail ( ) = 4;
-		l_oList.add_tail ( ) = 5;
+		list_t l_oList;
+		l_oList.add_tail() = 1;
+		l_oList.add_tail() = 2;
+		l_oList.add_tail() = 3;
+		l_oList.add_tail() = 4;
+		l_oList.add_tail() = 5;
 		for ( l_piVal = & l_oList.go ( - 1 );
-				l_piVal; l_piVal = l_oList.to_head ( 1, HList < int >::D_TREAT_AS_OPENED ) )
+				l_piVal; l_piVal = l_oList.to_head ( 1, list_t::D_TREAT_AS_OPENED ) )
 			{
 			while ( 1 )
 				{
@@ -279,9 +299,9 @@ void module::test<11> ( void )
 				if ( ( * l_piVal ) == i )
 					{
 					re = false;
-					if ( & l_oList.present ( ) == & l_oList.tail ( ) )
+					if ( & l_oList.present() == & l_oList.tail ( ) )
 						re = true;
-					l_oList.remove_element ( HList < int >::D_TREAT_AS_OPENED );
+					l_oList.remove_element ( list_t::D_TREAT_AS_OPENED );
 					if ( re )
 						{
 						l_piVal = & l_oList.go ( - 1 );
@@ -295,46 +315,46 @@ void module::test<11> ( void )
 		}
 	for ( int i = 1; i < 6; i ++ )
 		{
-		HList < int > l_oList;
-		l_oList.add_tail ( ) = 1;
-		l_oList.add_tail ( ) = 2;
-		l_oList.add_tail ( ) = 3;
-		l_oList.add_tail ( ) = 4;
-		l_oList.add_tail ( ) = 5;
+		list_t l_oList;
+		l_oList.add_tail() = 1;
+		l_oList.add_tail() = 2;
+		l_oList.add_tail() = 3;
+		l_oList.add_tail() = 4;
+		l_oList.add_tail() = 5;
 		l_piVal = & l_oList.go ( 0 );
 		while ( l_piVal )
 			{
 			cout << ( * l_piVal ) << " ";
 			if ( ( * l_piVal ) == i )
 				{
-				l_oList.remove_element ( HList < int >::D_TREAT_AS_OPENED, & l_piVal );
-				if ( l_piVal && l_oList.size ( ) )
+				l_oList.remove_element ( list_t::D_TREAT_AS_OPENED, & l_piVal );
+				if ( l_piVal && l_oList.size() )
 					{
-					l_piVal = & l_oList.present ( );
+					l_piVal = & l_oList.present();
 					continue;
 					}
 				else break;
 				}
-			else l_piVal = l_oList.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED );
+			else l_piVal = l_oList.to_tail ( 1, list_t::D_TREAT_AS_OPENED );
 			}
 		cout << endl;
 		}
 	}
 
 /* true forward iterator */
-template < >
-template < >
+template<>
+template<>
 void module::test<12> ( void )
 	{
 	int l_iCtr = 0;
-	HList < int > l_oList;
-	l_oList.add_tail ( ) = 1;
-	l_oList.add_tail ( ) = 2;
-	l_oList.add_tail ( ) = 3;
-	l_oList.add_tail ( ) = 4;
-	l_oList.add_tail ( ) = 5;
-	for ( HList<int>::iterator it = l_oList.begin ( );
-			it != l_oList.end ( ); ++ it )
+	list_t l_oList;
+	l_oList.add_tail() = 1;
+	l_oList.add_tail() = 2;
+	l_oList.add_tail() = 3;
+	l_oList.add_tail() = 4;
+	l_oList.add_tail() = 5;
+	for ( list_t::iterator it = l_oList.begin();
+			it != l_oList.end(); ++ it )
 		{
 		l_iCtr ++;
 		ensure_equals ( "for syntax: forward iterator made wrong move", ( * it ), l_iCtr );
@@ -343,19 +363,19 @@ void module::test<12> ( void )
 	}
 
 /* true backward iterator */
-template < >
-template < >
+template<>
+template<>
 void module::test<13> ( void )
 	{
 	int l_iCtr = 5;
-	HList < int > l_oList;
-	l_oList.add_tail ( ) = 1;
-	l_oList.add_tail ( ) = 2;
-	l_oList.add_tail ( ) = 3;
-	l_oList.add_tail ( ) = 4;
-	l_oList.add_tail ( ) = 5;
-	for ( HList<int>::iterator it = l_oList.rbegin ( );
-			it != l_oList.rend ( ); -- it )
+	list_t l_oList;
+	l_oList.add_tail() = 1;
+	l_oList.add_tail() = 2;
+	l_oList.add_tail() = 3;
+	l_oList.add_tail() = 4;
+	l_oList.add_tail() = 5;
+	for ( list_t::iterator it = l_oList.rbegin();
+			it != l_oList.rend(); -- it )
 		{
 		ensure_equals ( "for syntax: backward iterator made wrong move", ( * it ), l_iCtr );
 		l_iCtr --;
@@ -363,19 +383,43 @@ void module::test<13> ( void )
 	ensure_equals ( "for syntax: not the whole list was iterated", l_iCtr, 0 );
 	}
 
+/* iterator and erase */
+template<>
+template<>
+void module::test<14>( void )
+	{
+	list_t l;
+	l.push_back( 1 );
+	l.push_back( 2 );
+	cout << endl;
+	for ( list_t::iterator it = l.begin(); it != l.end(); )
+		{
+		dump( l );
+		dump( it, 0 );
+		list_t::iterator e = it;
+		dump( e, 1 );
+		dump( it, 2 );
+		++ it;
+		dump( it, 3 );
+		l.erase( e );
+		dump( e, 4 );
+		dump( it, 5 );
+		}
+	}
+
 /* Sorting. */
-template < >
-template < >
+template<>
+template<>
 void module::test<40> ( void )
 	{
-	HList<int> l_oList;
-	l_oList.add_tail ( ) = 3;
-	l_oList.add_tail ( ) = 1;
-	l_oList.add_tail ( ) = 2;
+	list_t l_oList;
+	l_oList.add_tail() = 3;
+	l_oList.add_tail() = 1;
+	l_oList.add_tail() = 2;
 	ensure_equals ( "operator[] or add_tail failed", l_oList [ 0 ], 3 );
 	ensure_equals ( "operator[] or add_tail failed", l_oList [ 1 ], 1 );
 	ensure_equals ( "operator[] or add_tail failed", l_oList [ 2 ], 2 );
-	l_oList.sort_by_contents ( );
+	l_oList.sort_by_contents();
 	ensure_equals ( "sort failed", l_oList [ 0 ], 1 );
 	ensure_equals ( "sort failed", l_oList [ 1 ], 2 );
 	ensure_equals ( "sort failed", l_oList [ 2 ], 3 );
