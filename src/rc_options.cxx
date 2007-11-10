@@ -46,10 +46,9 @@ bool set_variables ( HString & a_roOption, HString & a_roValue )
 
 int process_tressrc_file ( void )
 	{
-	OVariable l_psVars [ ] =
+	OOption l_psVars [ ] =
 		{
-			{ D_HSTRING, "log_path", & setup.f_oLogPath },
-			{ D_VOID, NULL, NULL }
+			{ "log_path", D_HSTRING, & setup.f_oLogPath, NULL, OOption::D_REQUIRED, "path", "path pointing to file for application logs", NULL }
 		};
 	rc_file::process_rc_file ( "tress", NULL, l_psVars, NULL );
 	if ( ! setup.f_oLogPath )

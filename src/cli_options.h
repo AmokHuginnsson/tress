@@ -27,7 +27,6 @@ Copyright:
 #ifndef __CLI_OPTIONS_H
 #define __CLI_OPTIONS_H
 
-int decode_switches ( int, char ** );
-void usage ( int ) __attribute__  ((noreturn));
+int decode_switches( int, char** );
 
 #endif /* __CLI_OPTIONS_H */
