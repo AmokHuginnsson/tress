@@ -74,7 +74,7 @@ int decode_switches( int a_iArgc, char** a_ppcArgv )
 			{ "list", D_BOOL, &setup.f_bListGroups, "L", OOption::D_NONE, NULL, "list known test groups", NULL },
 			{ "file", D_HSTRING, &setup.f_oTestGroupListFilePath, "F", OOption::D_REQUIRED, "path", "read test group names from given file", NULL },
 			{ "option", D_VOID, NULL, "O", OOption::D_OPTIONAL, "param", "this is not a real option, it was added here to test automated help generation capabilities, this description must be long enought to trigger description wrap, more over is must look good", NULL },
-			{ "absolute", D_VOID, NULL, "O", OOption::D_OPTIONAL, "param", "this is not a real option, it was added here to test automated help generation capabilities, this description must be long enought to trigger description wrap, more over is must look good", NULL },
+			{ "absolute", D_VOID, NULL, "O", OOption::D_OPTIONAL, "param", NULL, NULL },
 			{ "quiet", D_BOOL, &setup.f_bQuiet, "q", OOption::D_NONE, NULL, "inhibit usual output", NULL },
 			{ "silent", D_BOOL, &setup.f_bQuiet, "q", OOption::D_NONE, NULL, "inhibit usual output", NULL },
 			{ "verbose", D_BOOL, &setup.f_bVerbose, "v", OOption::D_NONE, NULL, "print more information", NULL },
