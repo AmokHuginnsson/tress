@@ -39,7 +39,6 @@ using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
 
-
 /* Set all the option flags according to the switches specified.
    Return the index of the first non-option argument.                    */
 
@@ -60,7 +59,7 @@ void version( void* )
 	throw ( 0 );
 	}
 
-int decode_switches ( int a_iArgc, char ** a_ppcArgv )
+int decode_switches( int a_iArgc, char** a_ppcArgv )
 	{
 	M_PROLOG
 	int l_iUnknown = 0, l_iNonOption = 0;
