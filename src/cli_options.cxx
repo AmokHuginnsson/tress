@@ -86,7 +86,7 @@ int decode_switches( int a_iArgc, char** a_ppcArgv )
 	l_iNonOption = cl_switch::decode_switches( a_iArgc, a_ppcArgv, l_psOptions,
 			info.second, &l_iUnknown );
 	if ( l_iUnknown > 0 )
-		usage( NULL );
+		usage( &info );
 	if ( setup.f_bListGroups
 			&& ( setup.f_bRestartable || setup.f_oTestGroupListFilePath || setup.f_oTestGroup
 				|| setup.f_oTestGroupPattern || setup.f_iTestNumber ) )
