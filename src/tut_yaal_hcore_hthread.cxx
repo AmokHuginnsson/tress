@@ -137,6 +137,51 @@ void HCool::set ( int a_iLength )
 	M_EPILOG
 	}
 
+class CVTest
+	{
+	typedef HThreadT<CVTest> worker_t;
+	worker_t f_oWorker;
+	HMutex f_oMutex;
+	HCondition f_oCV;
+	bool f_bLoop;
+public:
+	CVTest( void );
+	int operator() ( HThread const* const );
+	void eat( void );
+	};
+
+CVTest::CVTest( void ) : f_oWorker( *this ), f_oMutex(), f_oCV( f_oMutex ), f_bLoop( false )
+	{
+	}
+
+int CVTest::operator()( HThread const* const )
+	{
+	f_bLoop = true;
+	int ctr = 0;
+	while ( f_bLoop )
+		{
+		f_oCV.signal();
+		cout << "+" << flush;
+		f_oCV.signal();
+		cout << "+" << flush;
+		ctr += 2;
+		}
+	return ( ctr );
+	}
+
+void CVTest::eat( void )
+	{
+	int cnt = 80;
+	HLock l( f_oMutex );
+	f_oWorker.spawn();
+	while ( cnt -- )
+		{
+		f_oCV.wait( 1, 0 );
+		cout << "\b" << flush;
+		}
+	f_bLoop = false;
+	}
+
 typedef HThreadT<HCool> cool_t;
 typedef HThreadT<typeof( simple )> simple_t;
 
@@ -149,8 +194,8 @@ typedef tut_group::object module;
 tut_group tut_yaal_hcore_HThread_group ( "yaal::hcore::HThread" );
 
 /* Construction and destruction */
-template < >
-template < >
+template<>
+template<>
 void module::test<1> ( void )
 	{
 	HCool ca( "a" );
@@ -159,8 +204,8 @@ void module::test<1> ( void )
 	}
 
 /* Starting new thread and allowing it to finish */
-template < >
-template < >
+template<>
+template<>
 void module::test<2> ( void )
 	{
 	HCool ca( "a" );
@@ -173,8 +218,8 @@ void module::test<2> ( void )
 	}
 
 /* Starting new thread and finishing it prematurely (sleeping body) */
-template < >
-template < >
+template<>
+template<>
 void module::test<3> ( void )
 	{
 	HTime start, stop;
@@ -194,8 +239,8 @@ void module::test<3> ( void )
 	}
 
 /* Starting new thread and finishing it prematurely (busy body) */
-template < >
-template < >
+template<>
+template<>
 void module::test<33> ( void )
 	{
 	HTime start, stop;
@@ -215,8 +260,8 @@ void module::test<33> ( void )
 	}
 
 /* Starting new thread and finishing it prematurely by destructor */
-template < >
-template < >
+template<>
+template<>
 void module::test<4> ( void )
 	{
 	HTime start, stop;
@@ -235,8 +280,8 @@ void module::test<4> ( void )
 	}
 
 /* Starting and immediatelly finishing thread */
-template < >
-template < >
+template<>
+template<>
 void module::test<5> ( void )
 	{
 	HCool ca( "a" );
@@ -248,8 +293,8 @@ void module::test<5> ( void )
 	}
 
 /* Starting already started thread */
-template < >
-template < >
+template<>
+template<>
 void module::test<6> ( void )
 	{
 	HCool ca( "6" );
@@ -268,8 +313,8 @@ void module::test<6> ( void )
 	}
 
 /* Finishing thread that was not started */
-template < >
-template < >
+template<>
+template<>
 void module::test<7> ( void )
 	{
 	HCool ca( "a" );
@@ -305,8 +350,8 @@ void module::test<8> ( void )
 	}
 
 /* Starting new thread and allowing it to finish, the finich is actualy invoked. */
-template < >
-template < >
+template<>
+template<>
 void module::test<9> ( void )
 	{
 	HCool ca( "a" );
@@ -346,5 +391,13 @@ void module::test<11> ( void )
 	/* In case of wrong implementation this test case will hang foreveer. */
 	}
 
+/* Conditional variable test. */
+template<>
+template<>
+void module::test<12>( void )
+	{
+	CVTest cvTest;
+	cvTest.eat();
+	}
 
 }
