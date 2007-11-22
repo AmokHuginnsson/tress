@@ -40,23 +40,21 @@ using namespace yaal::tools::util;
 namespace tut
 {
 
-#if 0
-
-struct tut_
+struct tut_yaal_tools_hstringstream
 	{
 	};
 
-typedef test_group<tut_> tut_group;
+typedef test_group<tut_yaal_tools_hstringstream> tut_group;
 typedef tut_group::object module;
-tut_group tut__group( "yaal::" );
+tut_group tut_yaal_tools_hstringstream_group( "yaal::tools::HStringStream" );
 
 template<>
 template<>
 void module::test<1>( void )
 	{
+	HStringStream stream;
+	cout << ( stream << "hello" << ':' << 1024 << ":" << 3.14159265 << '!' << endl << stream ) << flush;
 	}
-
-#endif
 
 }
 
