@@ -26,9 +26,6 @@ Copyright:
 
 #include <TUT/tut.h>
 
-#define private public
-#define protected public
-
 #include <yaal/yaal.h>
 M_VCSID ( "$Id$" )
 
@@ -47,7 +44,6 @@ struct tut_yaal_hcore_hlist
 	{
 	typedef HList<int> list_t;
 	void dump( list_t& );
-	void dump( list_t::iterator&, int );
 	};
 
 void tut_yaal_hcore_hlist::dump( list_t& l )
@@ -57,11 +53,6 @@ void tut_yaal_hcore_hlist::dump( list_t& l )
 	for ( list_t::iterator it = l.begin(); it != l.end(); ++ it )
 		cout << *it << ( s -- > 1 ? "," : "" );
 	cout << "]" << endl;
-	}
-
-void tut_yaal_hcore_hlist::dump( list_t::iterator& it, int at )
-	{
-	cout << "it[" << at << "]: o=" << it.f_poOwner << ", c=" << it.f_poCurrent << endl;
 	}
 
 typedef test_group<tut_yaal_hcore_hlist>tut_group;
@@ -394,16 +385,9 @@ void module::test<14>( void )
 	cout << endl;
 	for ( list_t::iterator it = l.begin(); it != l.end(); )
 		{
-		dump( l );
-		dump( it, 0 );
 		list_t::iterator e = it;
-		dump( e, 1 );
-		dump( it, 2 );
 		++ it;
-		dump( it, 3 );
 		l.erase( e );
-		dump( e, 4 );
-		dump( it, 5 );
 		}
 	}
 

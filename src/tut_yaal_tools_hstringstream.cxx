@@ -54,6 +54,7 @@ void module::test<1>( void )
 	{
 	HStringStream stream;
 	cout << ( stream << "hello" << ':' << 1024 << ":" << 3.14159265 << '!' << endl << stream ) << flush;
+	cout << ( stream << "hello2" << ':' << 17 << ":" << 2.17 << '!' << endl << stream ) << flush;
 	}
 
 }
