@@ -272,5 +272,17 @@ void module::test<11>()
 		}
 	}
 
+/**
+ * assign smart pointers pointing to the same memory.
+ */
+template<>
+template<>
+void module::test<12>()
+	{
+	ptr_t sp1( new counter() );
+	ptr_t sp2 = sp1;
+	sp2 = sp1;
+	}
+
 }
 
