@@ -48,8 +48,7 @@ struct tut_yaal_tools_hxml
 	HXml f_oXml;
 	void dump ( HXml::ONode & a_rsNode )
 		{
-		HString l_oPropertyName, l_oPropertyValue, * l_poContent = NULL;
-		HXml::ONode * l_psNode = NULL;
+		HString l_oPropertyName, l_oPropertyValue;
 		if ( a_rsNode.f_iLevel < 0 )
 			return;
 		f_oVarTmpBuffer.hs_realloc ( a_rsNode.f_iLevel * 2 + 3 );
@@ -66,6 +65,9 @@ struct tut_yaal_tools_hxml
 		f_oVarTmpBuffer.fill( ' ', a_rsNode.f_iLevel * 2 + 2 );
 		f_oVarTmpBuffer.set_at( a_rsNode.f_iLevel * 2 + 2, 0 );
 		cout << f_oVarTmpBuffer << "{" << endl;
+/*
+		HString* l_poContent = NULL;
+		HXml::ONode * l_psNode = NULL;
 		if ( a_rsNode.f_oContents.size ( ) )
 			l_poContent = & a_rsNode.f_oContents.go ( 0 );
 		if ( a_rsNode.f_oChilds.size ( ) )
@@ -89,6 +91,7 @@ struct tut_yaal_tools_hxml
 					}
 				}
 			}
+*/
 		cout << f_oVarTmpBuffer << "}" << endl;
 		return;
 		}
