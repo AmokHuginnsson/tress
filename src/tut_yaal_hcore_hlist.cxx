@@ -42,12 +42,14 @@ namespace tut
 
 struct tut_yaal_hcore_hlist
 	{
-	HString _cache;
+	static HString _cache;
 	typedef HList<int> list_t;
 	template<typename T>
-	HString& to_string( T const& );
+	static HString& to_string( T const& );
 	void dump( list_t& );
 	};
+
+HString tut_yaal_hcore_hlist::_cache;
 
 void tut_yaal_hcore_hlist::dump( list_t& l )
 	{
@@ -76,8 +78,8 @@ template<>
 template<>
 void module::test<1>( void )
 	{
-	list_t l_oList;
-	ensure_equals ( "list not empty", l_oList.size(), 0 );
+	list_t l;
+	ensure_equals ( "list not empty", l.size(), 0 );
 	}
 
 /* Parametrized constructor. */
@@ -85,8 +87,8 @@ template<>
 template<>
 void module::test<2>( void )
 	{
-	list_t l_oList ( 3 );
-	ensure_equals ( "list not empty", l_oList.size(), 3 );
+	list_t l ( 3 );
+	ensure_equals ( "list not empty", l.size(), 3 );
 	}
 
 /* copy constructor */
@@ -95,13 +97,13 @@ template<>
 void module::test<3>( void )
 	{
 	int l_iCtr = 0;
-	list_t l_oList;
-	l_oList.add_tail() = 1;
-	l_oList.add_tail() = 2;
-	l_oList.add_tail() = 3;
-	l_oList.add_tail() = 4;
-	l_oList.add_tail() = 5;
-	list_t l_oAnother( l_oList );
+	list_t l;
+	l.add_tail() = 1;
+	l.add_tail() = 2;
+	l.add_tail() = 3;
+	l.add_tail() = 4;
+	l.add_tail() = 5;
+	list_t l_oAnother( l );
 	for ( list_t::iterator it = l_oAnother.begin();
 			it != l_oAnother.end(); ++ it )
 		{
@@ -117,14 +119,14 @@ template<>
 void module::test<4>( void )
 	{
 	int l_iCtr = 0;
-	list_t l_oList;
+	list_t l;
 	list_t l_oAnother;
-	l_oList.add_tail() = 1;
-	l_oList.add_tail() = 2;
-	l_oList.add_tail() = 3;
-	l_oList.add_tail() = 4;
-	l_oList.add_tail() = 5;
-	l_oAnother = l_oList;
+	l.add_tail() = 1;
+	l.add_tail() = 2;
+	l.add_tail() = 3;
+	l.add_tail() = 4;
+	l.add_tail() = 5;
+	l_oAnother = l;
 	for ( list_t::iterator it = l_oAnother.begin();
 			it != l_oAnother.end(); ++ it )
 		{
@@ -139,15 +141,15 @@ template<>
 template<>
 void module::test<5>( void )
 	{
-	list_t l_oList;
+	list_t l;
 	list_t l_oAnother;
-	l_oList.add_tail() = 1;
-	l_oList.add_tail() = 2;
-	l_oList.add_tail() = 3;
-	l_oList.add_tail() = 4;
-	l_oList.add_tail() = 5;
-	l_oList = l_oAnother;
-	ensure_equals ( "assign operation failed, wrong size", l_oList.size(), 0 );
+	l.add_tail() = 1;
+	l.add_tail() = 2;
+	l.add_tail() = 3;
+	l.add_tail() = 4;
+	l.add_tail() = 5;
+	l = l_oAnother;
+	ensure_equals ( "assign operation failed, wrong size", l.size(), 0 );
 	}
 
 /* assignation operator (full to small) */
@@ -156,17 +158,17 @@ template<>
 void module::test<6>( void )
 	{
 	int l_iCtr = 0;
-	list_t l_oList;
+	list_t l;
 	list_t l_oAnother;
-	l_oList.add_tail() = 1;
-	l_oList.add_tail() = 2;
-	l_oList.add_tail() = 3;
-	l_oList.add_tail() = 4;
-	l_oList.add_tail() = 5;
+	l.add_tail() = 1;
+	l.add_tail() = 2;
+	l.add_tail() = 3;
+	l.add_tail() = 4;
+	l.add_tail() = 5;
 	l_oAnother.add_tail() = 6;
 	l_oAnother.add_tail() = 7;
 	l_oAnother.add_tail() = 8;
-	l_oAnother = l_oList;
+	l_oAnother = l;
 	for ( list_t::iterator it = l_oAnother.begin();
 			it != l_oAnother.end(); ++ it )
 		{
@@ -182,13 +184,13 @@ template<>
 void module::test<7>( void )
 	{
 	int l_iCtr = 0;
-	list_t l_oList;
+	list_t l;
 	list_t l_oAnother;
-	l_oList.add_tail() = 1;
-	l_oList.add_tail() = 2;
-	l_oList.add_tail() = 3;
-	l_oList.add_tail() = 4;
-	l_oList.add_tail() = 5;
+	l.add_tail() = 1;
+	l.add_tail() = 2;
+	l.add_tail() = 3;
+	l.add_tail() = 4;
+	l.add_tail() = 5;
 	l_oAnother.add_tail() = 6;
 	l_oAnother.add_tail() = 7;
 	l_oAnother.add_tail() = 8;
@@ -196,7 +198,7 @@ void module::test<7>( void )
 	l_oAnother.add_tail() = 10;
 	l_oAnother.add_tail() = 11;
 	l_oAnother.add_tail() = 12;
-	l_oAnother = l_oList;
+	l_oAnother = l;
 	for ( list_t::iterator it = l_oAnother.begin();
 			it != l_oAnother.end(); ++ it )
 		{
@@ -211,12 +213,12 @@ template<>
 template<>
 void module::test<8>( void )
 	{
-	list_t lst;
-	lst.push_back( 'a' );
-	lst.push_back( 'b' );
-	lst.push_back( 'c' );
-	ensure_equals( "push_back failed", to_string( lst ), "abc" );
-	list_t::cyclic_iterator it = lst.hook();
+	list_t l;
+	l.push_back( 'a' );
+	l.push_back( 'b' );
+	l.push_back( 'c' );
+	ensure_equals( "push_back failed", to_string( l ), "abc" );
+	list_t::cyclic_iterator it = l.hook();
 	char const* const vec = "abcabc";
 	for ( size_t i = 0; i < strlen( vec ); ++ i )
 		{
@@ -225,7 +227,7 @@ void module::test<8>( void )
 		++ it;
 		}
 	char const* const vec2 = "acbacb";
-	it = lst.hook();
+	it = l.hook();
 	for ( size_t i = 0; i < strlen( vec ); ++ i )
 		{
 		cout << i;
@@ -233,8 +235,8 @@ void module::test<8>( void )
 		-- it;
 		}
 	cout << endl;
-	it = lst.hook();
-	ensure_equals( "hook is not head", *it, lst.head() );
+	it = l.hook();
+	ensure_equals( "hook is not head", *it, l.head() );
 	}
 
 /* forward iterator */
@@ -243,15 +245,15 @@ template<>
 void module::test<9>( void )
 	{
 	int l_iCtr = 0;
-	list_t l_oList;
-	l_oList.add_tail() = 1;
-	l_oList.add_tail() = 2;
-	l_oList.add_tail() = 3;
-	l_oList.add_tail() = 4;
-	l_oList.add_tail() = 5;
+	list_t l;
+	l.add_tail() = 1;
+	l.add_tail() = 2;
+	l.add_tail() = 3;
+	l.add_tail() = 4;
+	l.add_tail() = 5;
 	list_t::iterator it;
-	for ( it = l_oList.begin();
-			it != l_oList.end(); ++ it )
+	for ( it = l.begin();
+			it != l.end(); ++ it )
 		{
 		l_iCtr ++;
 		ensure( "iterator is invalid", it.is_valid() );
@@ -259,7 +261,7 @@ void module::test<9>( void )
 		}
 	ensure_equals( "for syntax: not the whole list was iterated", l_iCtr, 5 );
 	ensure( "iterator is valid", ! it.is_valid() );
-	ensure_equals( "begin is not head", *l_oList.begin(), l_oList.head() );
+	ensure_equals( "begin is not head", *l.begin(), l.head() );
 	}
 
 /* backward iterator */
@@ -268,15 +270,15 @@ template<>
 void module::test<10>( void )
 	{
 	int l_iCtr = 5;
-	list_t l_oList;
-	l_oList.add_tail() = 1;
-	l_oList.add_tail() = 2;
-	l_oList.add_tail() = 3;
-	l_oList.add_tail() = 4;
-	l_oList.add_tail() = 5;
+	list_t l;
+	l.add_tail() = 1;
+	l.add_tail() = 2;
+	l.add_tail() = 3;
+	l.add_tail() = 4;
+	l.add_tail() = 5;
 	list_t::iterator it;
-	for ( it = l_oList.rbegin();
-			it != l_oList.rend(); -- it )
+	for ( it = l.rbegin();
+			it != l.rend(); -- it )
 		{
 		ensure_equals ( "for syntax: backward iterator made wrong move", ( *it ), l_iCtr );
 		ensure( "iterator is invalid", it.is_valid() );
@@ -284,7 +286,7 @@ void module::test<10>( void )
 		}
 	ensure_equals ( "for syntax: not the whole list was iterated", l_iCtr, 0 );
 	ensure( "iterator is valid", ! it.is_valid() );
-	ensure_equals( "begin is not head", *l_oList.rbegin(), l_oList.tail() );
+	ensure_equals( "begin is not head", *l.rbegin(), l.tail() );
 	}
 
 /* clear, size */
@@ -292,13 +294,13 @@ template<>
 template<>
 void module::test<11>( void )
 	{
-	list_t lst;
-	lst.push_back( 'a' );
-	lst.push_back( 'b' );
-	lst.push_back( 'c' );
-	ensure_equals( "size is wrong", lst.size(), 3 );
-	lst.clear();
-	ensure_equals( "clear failed or size is wrong", lst.size(), 0 );
+	list_t l;
+	l.push_back( 'a' );
+	l.push_back( 'b' );
+	l.push_back( 'c' );
+	ensure_equals( "size is wrong", l.size(), 3 );
+	l.clear();
+	ensure_equals( "clear failed or size is wrong", l.size(), 0 );
 	}
 
 /* insert */
@@ -306,6 +308,25 @@ template<>
 template<>
 void module::test<12>( void )
 	{
+	list_t l;
+	l.push_back( '1' );
+	l.push_back( '2' );
+	l.push_back( '3' );
+	list_t::iterator it;
+	ensure_equals( "push_back failed", to_string( l ), "123" );
+	ensure_equals( "list malformed", l.size(), 3 );
+	it = l.insert( l.begin(), 'a' );
+	ensure_equals( "insert failed", to_string( l ), "a123" );
+	ensure_equals( "list malformed", l.size(), 4 );
+	ensure_equals( "bad iterator", *it, 'a' );
+	it = l.insert( l.rbegin(), 'b' );
+	ensure_equals( "insert failed", to_string( l ), "a12b3" );
+	ensure_equals( "list malformed", l.size(), 5 );
+	ensure_equals( "bad iterator", *it, 'b' );
+	it = l.insert( l.hook(), 'x' );
+	ensure_equals( "insert failed", to_string( l ), "a12b3x" );
+	ensure_equals( "list malformed", l.size(), 6 );
+	ensure_equals( "bad iterator", *it, 'x' );
 	}
 
 /* add_tail, push_back */
@@ -313,21 +334,21 @@ template<>
 template<>
 void module::test<13>( void )
 	{
-	list_t lst;
-	ensure_equals( "constructor malfunction", lst.size(), 0 );
-	lst.push_back( 'a' );
-	ensure_equals( "push_back failed", lst.size(), 1 );
-	ensure_equals( "push_back failed", to_string( lst ), "a" );
-	lst.add_tail() = 'b';
-	ensure_equals( "add_tail failed", lst.size(), 2 );
-	ensure_equals( "add_tail failed", to_string( lst ), "ab" );
+	list_t l;
+	ensure_equals( "constructor malfunction", l.size(), 0 );
+	l.push_back( 'a' );
+	ensure_equals( "push_back failed", l.size(), 1 );
+	ensure_equals( "push_back failed", to_string( l ), "a" );
+	l.add_tail() = 'b';
+	ensure_equals( "add_tail failed", l.size(), 2 );
+	ensure_equals( "add_tail failed", to_string( l ), "ab" );
 	int c = 'c';
-	lst.add_tail( &c );
-	ensure_equals( "add_tail failed", lst.size(), 3 );
-	ensure_equals( "add_tail failed", to_string( lst ), "abc" );
-	lst.push_back( 'd' );
-	ensure_equals( "push_back failed", lst.size(), 4 );
-	ensure_equals( "push_back failed", to_string( lst ), "abcd" );
+	l.add_tail( &c );
+	ensure_equals( "add_tail failed", l.size(), 3 );
+	ensure_equals( "add_tail failed", to_string( l ), "abc" );
+	l.push_back( 'd' );
+	ensure_equals( "push_back failed", l.size(), 4 );
+	ensure_equals( "push_back failed", to_string( l ), "abcd" );
 	}
 
 /* pop_back, remove_tail */
@@ -335,26 +356,26 @@ template<>
 template<>
 void module::test<14>( void )
 	{
-	list_t lst;
-	ensure_equals( "constructor malfunction", lst.size(), 0 );
-	lst.push_back( 'a' );
-	lst.add_tail() = 'b';
+	list_t l;
+	ensure_equals( "constructor malfunction", l.size(), 0 );
+	l.push_back( 'a' );
+	l.add_tail() = 'b';
 	int c = 'c';
-	lst.add_tail( &c );
-	ensure_equals( "add_tail failed", lst.size(), 3 );
-	ensure_equals( "add_tail failed", to_string( lst ), "abc" );
-	lst.pop_back();
-	ensure_equals( "pop_back failed", lst.size(), 2 );
-	ensure_equals( "pop_back failed", to_string( lst ), "ab" );
-	lst.remove_tail();
-	ensure_equals( "remove_tail failed", lst.size(), 1 );
-	ensure_equals( "remove_tail failed", to_string( lst ), "a" );
-	lst.pop_back();
-	ensure_equals( "pop_back failed", lst.size(), 0 );
-	ensure_equals( "pop_back failed", to_string( lst ), "" );
+	l.add_tail( &c );
+	ensure_equals( "add_tail failed", l.size(), 3 );
+	ensure_equals( "add_tail failed", to_string( l ), "abc" );
+	l.pop_back();
+	ensure_equals( "pop_back failed", l.size(), 2 );
+	ensure_equals( "pop_back failed", to_string( l ), "ab" );
+	l.remove_tail();
+	ensure_equals( "remove_tail failed", l.size(), 1 );
+	ensure_equals( "remove_tail failed", to_string( l ), "a" );
+	l.pop_back();
+	ensure_equals( "pop_back failed", l.size(), 0 );
+	ensure_equals( "pop_back failed", to_string( l ), "" );
 	try
 		{
-		lst.pop_back();
+		l.pop_back();
 		fail( "poping back empty list did not fail" );
 		}
 	catch ( HException& )
@@ -368,21 +389,21 @@ template<>
 template<>
 void module::test<15>( void )
 	{
-	list_t lst;
-	ensure_equals( "constructor malfunction", lst.size(), 0 );
-	lst.push_front( 'a' );
-	ensure_equals( "push_back failed", lst.size(), 1 );
-	ensure_equals( "push_back failed", to_string( lst ), "a" );
-	lst.add_head() = 'b';
-	ensure_equals( "add_tail failed", lst.size(), 2 );
-	ensure_equals( "add_tail failed", to_string( lst ), "ba" );
+	list_t l;
+	ensure_equals( "constructor malfunction", l.size(), 0 );
+	l.push_front( 'a' );
+	ensure_equals( "push_back failed", l.size(), 1 );
+	ensure_equals( "push_back failed", to_string( l ), "a" );
+	l.add_head() = 'b';
+	ensure_equals( "add_tail failed", l.size(), 2 );
+	ensure_equals( "add_tail failed", to_string( l ), "ba" );
 	int c = 'c';
-	lst.add_head( &c );
-	ensure_equals( "add_tail failed", lst.size(), 3 );
-	ensure_equals( "add_tail failed", to_string( lst ), "cba" );
-	lst.push_front( 'd' );
-	ensure_equals( "push_back failed", lst.size(), 4 );
-	ensure_equals( "push_back failed", to_string( lst ), "dcba" );
+	l.add_head( &c );
+	ensure_equals( "add_tail failed", l.size(), 3 );
+	ensure_equals( "add_tail failed", to_string( l ), "cba" );
+	l.push_front( 'd' );
+	ensure_equals( "push_back failed", l.size(), 4 );
+	ensure_equals( "push_back failed", to_string( l ), "dcba" );
 	}
 
 /* pop_front, remove_head */
@@ -390,26 +411,26 @@ template<>
 template<>
 void module::test<16>( void )
 	{
-	list_t lst;
-	ensure_equals( "constructor malfunction", lst.size(), 0 );
-	lst.push_back( 'a' );
-	lst.add_tail() = 'b';
+	list_t l;
+	ensure_equals( "constructor malfunction", l.size(), 0 );
+	l.push_back( 'a' );
+	l.add_tail() = 'b';
 	int c = 'c';
-	lst.add_tail( &c );
-	ensure_equals( "add_tail failed", lst.size(), 3 );
-	ensure_equals( "add_tail failed", to_string( lst ), "abc" );
-	lst.pop_front();
-	ensure_equals( "pop_front failed", lst.size(), 2 );
-	ensure_equals( "pop_front failed", to_string( lst ), "bc" );
-	lst.remove_head();
-	ensure_equals( "remove_head failed", lst.size(), 1 );
-	ensure_equals( "remove_head failed", to_string( lst ), "c" );
-	lst.pop_front();
-	ensure_equals( "pop_front failed", lst.size(), 0 );
-	ensure_equals( "pop_front failed", to_string( lst ), "" );
+	l.add_tail( &c );
+	ensure_equals( "add_tail failed", l.size(), 3 );
+	ensure_equals( "add_tail failed", to_string( l ), "abc" );
+	l.pop_front();
+	ensure_equals( "pop_front failed", l.size(), 2 );
+	ensure_equals( "pop_front failed", to_string( l ), "bc" );
+	l.remove_head();
+	ensure_equals( "remove_head failed", l.size(), 1 );
+	ensure_equals( "remove_head failed", to_string( l ), "c" );
+	l.pop_front();
+	ensure_equals( "pop_front failed", l.size(), 0 );
+	ensure_equals( "pop_front failed", to_string( l ), "" );
 	try
 		{
-		lst.pop_front();
+		l.pop_front();
 		fail( "poping front empty list did not fail" );
 		}
 	catch ( HException& )
@@ -423,26 +444,61 @@ template<>
 template<>
 void module::test<17>( void )
 	{
-	HList<char> lst;
-	ensure_equals( "constructor malfunction", lst.size(), 0 );
-	lst.add_orderly( 'd', &yaal::less<char> );
-	ensure_equals( "add_orderly failed", lst.size(), 1 );
-	ensure_equals( "add_orderly failed", to_string( lst ), "d" );
-	lst.add_orderly( 'g', &yaal::less<char> );
-	ensure_equals( "add_orderly failed", lst.size(), 2 );
-	ensure_equals( "add_orderly failed", to_string( lst ), "dg" );
-	lst.add_orderly( 'b', &yaal::less<char> );
-	ensure_equals( "add_orderly failed", lst.size(), 3 );
-	ensure_equals( "add_orderly failed", to_string( lst ), "bdg" );
-	lst.add_orderly( 'e', &yaal::less<char> );
-	ensure_equals( "add_orderly failed", lst.size(), 4 );
-	ensure_equals( "add_orderly failed", to_string( lst ), "bdeg" );
-	lst.add_orderly( 'c', &yaal::less<char> );
-	lst.add_orderly( 'a', &yaal::less<char> );
-	lst.add_orderly( 'h', &yaal::less<char> );
-	lst.add_orderly( 'f', &yaal::less<char> );
-	ensure_equals( "add_orderly failed", lst.size(), 8 );
-	ensure_equals( "add_orderly failed", to_string( lst ), "abcdefgh" );
+	HList<char> l;
+	ensure_equals( "constructor malfunction", l.size(), 0 );
+	l.add_orderly( 'd', &yaal::less<char> );
+	ensure_equals( "add_orderly failed", l.size(), 1 );
+	ensure_equals( "add_orderly failed", to_string( l ), "d" );
+	l.add_orderly( 'g', &yaal::less<char> );
+	ensure_equals( "add_orderly failed", l.size(), 2 );
+	ensure_equals( "add_orderly failed", to_string( l ), "dg" );
+	l.add_orderly( 'b', &yaal::less<char> );
+	ensure_equals( "add_orderly failed", l.size(), 3 );
+	ensure_equals( "add_orderly failed", to_string( l ), "bdg" );
+	l.add_orderly( 'e', &yaal::less<char> );
+	ensure_equals( "add_orderly failed", l.size(), 4 );
+	ensure_equals( "add_orderly failed", to_string( l ), "bdeg" );
+	l.add_orderly( 'c', &yaal::less<char> );
+	l.add_orderly( 'a', &yaal::less<char> );
+	l.add_orderly( 'h', &yaal::less<char> );
+	l.add_orderly( 'f', &yaal::less<char> );
+	ensure_equals( "add_orderly failed", l.size(), 8 );
+	ensure_equals( "add_orderly failed", to_string( l ), "abcdefgh" );
+	}
+
+void erase_test_0( tut_yaal_hcore_hlist::list_t& l )
+	{
+	char const* const full = "123456";
+	char const* ptr = full;
+	for ( tut_yaal_hcore_hlist::list_t::iterator it = l.begin(); it != l.end(); )
+		{
+		it = l.erase( it );
+		ensure_equals( "erase failed", tut_yaal_hcore_hlist::to_string( l ), ++ ptr );
+		ensure_equals( "erase failed", l.size(), 6 - ( ptr - full ) );
+		}
+	}
+
+void erase_test_1( tut_yaal_hcore_hlist::list_t& l )
+	{
+	l.erase( l.begin() );
+	ensure_equals( "erase1 failed", tut_yaal_hcore_hlist::to_string( l ), "23456" );
+	ensure_equals( "erase1 failed", l.size(), 5 );
+	}
+
+void erase_test_2( tut_yaal_hcore_hlist::list_t& l )
+	{
+	tut_yaal_hcore_hlist::list_t::iterator it = l.erase( l.rbegin() );
+	ensure_equals( "erase2 failed", tut_yaal_hcore_hlist::to_string( l ), "12345" );
+	ensure_equals( "erase2 failed", l.size(), 5 );
+	ensure( "open list erase for last element leaves bogus iterator", it == l.end() );
+	}
+
+void erase_test_3( tut_yaal_hcore_hlist::list_t& l )
+	{
+	tut_yaal_hcore_hlist::list_t::cyclic_iterator it = l.erase( -- l.hook() );
+	ensure_equals( "erase2 failed", tut_yaal_hcore_hlist::to_string( l ), "12345" );
+	ensure_equals( "erase2 failed", l.size(), 5 );
+	ensure( "open list erase for last element leaves bogus iterator", it == l.hook() );
 	}
 
 /* erase */
@@ -451,14 +507,16 @@ template<>
 void module::test<18>( void )
 	{
 	list_t l;
-	l.push_back( 1 );
-	l.push_back( 2 );
-	cout << endl;
-	for ( list_t::iterator it = l.begin(); it != l.end(); )
+	typedef void (*erase_test_t)( list_t& );
+	erase_test_t erase_tests[] = { erase_test_0, erase_test_1, erase_test_2, erase_test_3 };
+	for ( size_t i = 0; i < sizeof ( erase_tests ) / sizeof ( erase_test_t ); ++ i )
 		{
-		list_t::iterator e = it;
-		++ it;
-		l.erase( e );
+		l.clear();
+		l.push_back( '1' ); l.push_back( '2' ); l.push_back( '3' ); l.push_back( '4' );
+		l.push_back( '5' ); l.push_back( '6' );
+		ensure_equals( "construction failed", l.size(), 6 );
+		ensure_equals( "construction failed", to_string( l ), "123456" );
+		erase_tests[ i ]( l );
 		}
 	}
 
@@ -560,15 +618,15 @@ template<>
 template<>
 void module::test<22>( void )
 	{
-	list_t l_oList;
-	l_oList.add_tail() = '3';
-	l_oList.add_tail() = '1';
-	l_oList.add_tail() = '2';
-	ensure_equals ( "operator[] or add_tail failed", l_oList [ 0 ], '3' );
-	ensure_equals ( "operator[] or add_tail failed", l_oList [ 1 ], '1' );
-	ensure_equals ( "operator[] or add_tail failed", l_oList [ 2 ], '2' );
-	l_oList.sort_by_contents();
-	ensure_equals ( "sort failed", to_string( l_oList ), "123" );
+	list_t l;
+	l.add_tail() = '3';
+	l.add_tail() = '1';
+	l.add_tail() = '2';
+	ensure_equals ( "operator[] or add_tail failed", l [ 0 ], '3' );
+	ensure_equals ( "operator[] or add_tail failed", l [ 1 ], '1' );
+	ensure_equals ( "operator[] or add_tail failed", l [ 2 ], '2' );
+	l.sort_by_contents();
+	ensure_equals ( "sort failed", to_string( l ), "123" );
 	}
 
 /* empty, is_empty */
