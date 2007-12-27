@@ -25,6 +25,7 @@ Copyright:
 */
 
 #include <TUT/tut.h>
+#include <tut_helpers.h>
 
 #include <yaal/yaal.h>
 M_VCSID ( "$Id$" )
@@ -43,7 +44,8 @@ namespace tut
 struct tut_yaal_hcore_htree
 	{
 	static HString _cache;
-	typedef HTree<char> tree_t;
+	typedef counter<char> cc;
+	typedef HTree<cc> tree_t;
 	static HString& to_string( tree_t const& );
 	static void to_string( tree_t::HNode const& );
 	static void draw_tree( tree_t const& );
@@ -80,10 +82,11 @@ void tut_yaal_hcore_htree::draw_tree( tree_t const& t )
 void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n )
 	{
 	int len = _cache.get_length();
-	if ( n.get_parent() )
+	tree_t::const_node_t pn = NULL;
+	if ( ( pn = n.get_parent() ) )
 		{
 		cout << _cache << "\\_ ";
-		if ( n.get_parent()->child_count() > 1 )
+		if ( ( pn->child_count() > 1 ) && ( &*( pn->rbegin() ) != &n ) )
 			_cache += "|  ";
 		else
 			_cache += "   ";
@@ -103,8 +106,11 @@ template<>
 template<>
 void module::test<1>( void )
 	{
+		{
 	tree_t t;
 	ensure_equals( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 
 /* set_new_root/get_root */
@@ -112,11 +118,14 @@ template<>
 template<>
 void module::test<2>( void )
 	{
+		{
 	tree_t t;
 	ensure_equals( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
 	tree_t::node_t n = t.set_new_root();
 	ensure( "root not created", n );
 	ensure_equals( "new root is invalid", t.get_root(), n );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 
 /* setting getting values */
@@ -124,10 +133,13 @@ template<>
 template<>
 void module::test<3>( void )
 	{
+		{
 	tree_t t;
 	tree_t::node_t n = t.set_new_root();
 	(**n) = 'x';
 	ensure_equals( "value set/get failed", **n, 'x' );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 
 /* get_parent */
@@ -135,9 +147,12 @@ template<>
 template<>
 void module::test<4>( void )
 	{
+		{
 	tree_t t;
 	tree_t::node_t n = t.set_new_root();
 	ensure_equals( "root node malformed", n->get_parent(), static_cast<tree_t::node_t>( NULL ) );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 
 /* add_node */
@@ -145,12 +160,15 @@ template<>
 template<>
 void module::test<5>( void )
 	{
+		{
 	tree_t t;
 	tree_t::node_t n = t.set_new_root();
 	(**n) = '0';
 	tree_t::iterator it = n->add_node( 'x' );
 	ensure( "node addition / access failure", it == n->begin() );
 	ensure_equals( "bad value for new node", **it, 'x' );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 
 /* has_childs */
@@ -158,6 +176,7 @@ template<>
 template<>
 void module::test<6>( void )
 	{
+		{
 	tree_t t;
 	tree_t::node_t n = t.set_new_root();
 	ensure( "new node has some spurious childs", ! n->has_childs() );
@@ -165,6 +184,8 @@ void module::test<6>( void )
 	ensure( "childless node reported after node addition", n->has_childs() );
 	n->add_node( 'x' );
 	ensure( "childless node reported after node addition", n->has_childs() );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 
 /* child_count */
@@ -172,6 +193,7 @@ template<>
 template<>
 void module::test<7>( void )
 	{
+		{
 	tree_t t;
 	tree_t::node_t n = t.set_new_root();
 	ensure_equals( "new node has some spurious childs", n->child_count(), 0 );
@@ -179,6 +201,8 @@ void module::test<7>( void )
 	ensure_equals( "childless node reported after node addition", n->child_count(), 1 );
 	n->add_node( 'x' );
 	ensure_equals( "bad child count reported", n->child_count(), 2 );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 
 /* clear */
@@ -186,6 +210,7 @@ template<>
 template<>
 void module::test<8>( void )
 	{
+		{
 	tree_t t;
 	tree_t::node_t n = t.set_new_root();
 	ensure( "new node has some spurious childs", ! n->has_childs() );
@@ -196,6 +221,8 @@ void module::test<8>( void )
 	ensure_equals( "childless node reported after node addition", n->child_count(), 1 );
 	t.clear();
 	ensure_equals( "clear failed", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 
 /* basic shape tests */
@@ -203,6 +230,7 @@ template<>
 template<>
 void module::test<9>( void )
 	{
+		{
 	tree_t t;
 	tree_t::node_t n = t.set_new_root();
 	(**n) = '0';
@@ -226,6 +254,74 @@ void module::test<9>( void )
 	ensure_equals( bad_shape, to_string( t ), "0{x{@{QA{FG}B}}y}" );
 	a->add_node( 'H' );
 	ensure_equals( bad_shape, to_string( t ), "0{x{@{QA{FGH}B}}y}" );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
+	}
+
+/* graft */
+template<>
+template<>
+void module::test<10>( void )
+	{
+		{
+	tree_t t;
+	tree_t::node_t n = t.set_new_root();
+	(**n) = '@';
+	tree_t::iterator it = n->add_node( '0' );
+	it = it->add_node( 'a' );
+	tree_t::node_t b = &*it;
+	it->add_node( 'A' );
+	it->add_node( 'B' );
+	it->add_node( 'C' );
+	it = n->add_node( '1' );
+	it->add_node( 'd' );
+	it->add_node( 'e' );
+	it->add_node( 'f' );
+	it = n->add_node( '2' );
+	it->add_node( 'g' );
+	it->add_node( 'h' );
+	it->add_node( 'i' );
+	cout << endl;
+	draw_tree( t );
+	n->replace_node( n->begin(), b );
+	ensure( "bad parent", b->get_parent() == &*n ); 
+	**b = '0';
+	draw_tree( t );
+	cout << endl;
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
+	}
+
+/* graft downwards */
+template<>
+template<>
+void module::test<11>( void )
+	{
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
+	}
+
+/* graft upwards */
+template<>
+template<>
+void module::test<12>( void )
+	{
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
+	}
+
+/* graft sideways */
+template<>
+template<>
+void module::test<13>( void )
+	{
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
+	}
+
+/* graft from root */
+template<>
+template<>
+void module::test<14>( void )
+	{
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 
 }

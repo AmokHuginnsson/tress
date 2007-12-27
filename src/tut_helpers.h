@@ -101,5 +101,119 @@ std::ostream & operator << ( std::ostream & out,
 	M_EPILOG
 	}
 
+template<typename tType>
+class counter
+	{
+	static int _instances;
+	tType _symbol;
+public:
+	counter( void );
+	counter( tType const& );
+	counter( counter const& );
+	~counter( void );
+	bool operator == ( counter<tType> const& ) const;
+	bool operator != ( counter<tType> const& ) const;
+	bool operator == ( tType const& ) const;
+	bool operator != ( tType const& ) const;
+	operator tType ( void );
+	static int get_instances_count( void );
+	tType get_symbol( void ) const;
+	};
+
+template<typename tType>
+int counter<tType>::_instances = 0;
+
+template<typename tType>
+counter<tType>::counter( void ) : _symbol()
+	{
+	++ _instances;
+	}
+
+template<typename tType>
+counter<tType>::counter( tType const& symbol ) : _symbol( symbol )
+	{
+	++ _instances;
+	}
+
+template<typename tType>
+counter<tType>::counter( counter const& ctr ) : _symbol( ctr._symbol )
+	{
+	++ _instances;
+	}
+
+template<typename tType>
+counter<tType>::~counter( void )
+	{
+	-- _instances;
+	}
+
+template<typename tType>
+bool counter<tType>::operator == ( tType const& val ) const
+	{
+	return ( val == _symbol );
+	}
+
+template<typename tType>
+bool counter<tType>::operator != ( tType const& val ) const
+	{
+	return ( val != _symbol );
+	}
+
+template<typename tType>
+bool counter<tType>::operator == ( counter<tType> const& val ) const
+	{
+	return ( val._symbol == _symbol );
+	}
+
+template<typename tType>
+bool counter<tType>::operator != ( counter<tType> const& val ) const
+	{
+	return ( val._symbol != _symbol );
+	}
+
+template<typename tType>
+bool operator == ( tType const& left, counter<tType> const& right )
+	{
+	return ( left == right.get_symbol() );
+	}
+
+template<typename tType>
+bool operator != ( tType const& left, counter<tType> const& right )
+	{
+	return ( left != right.get_symbol() );
+	}
+
+template<typename tType>
+counter<tType>::operator tType ( void )
+	{
+	return ( _symbol );
+	}
+
+template<typename tType>
+int counter<tType>::get_instances_count( void )
+	{
+	return ( _instances );
+	}
+
+template<typename tType>
+tType counter<tType>::get_symbol( void ) const
+	{
+	return ( _symbol );
+	}
+
+template<typename tType>
+yaal::hcore::HString& operator += ( yaal::hcore::HString& str, counter<tType> const& ctr )
+	{
+	str += ctr.get_symbol();
+	return ( str );
+	}
+
+template<typename tType>
+std::ostream& operator << ( std::ostream& stream, counter<tType> const& ctr )
+	{
+	stream << ctr.get_symbol();
+	return ( stream );
+	}
+
 #endif /* not __TUT_HELPERS_H */
 
