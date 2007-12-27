@@ -62,8 +62,12 @@ HString& tut_yaal_hcore_htree::to_string( tree_t const& t )
 void tut_yaal_hcore_htree::to_string( tree_t::HNode const& n )
 	{
 	_cache += *n;
+	if ( n.has_childs() )
+		_cache += '{';
 	for ( tree_t::iterator it = n.begin(); it != n.end(); ++ it )
 		to_string( *it );
+	if ( n.has_childs() )
+		_cache += '}';
 	}
 
 void tut_yaal_hcore_htree::draw_tree( tree_t const& t )
@@ -75,9 +79,19 @@ void tut_yaal_hcore_htree::draw_tree( tree_t const& t )
 
 void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n )
 	{
-	cout << _cache << *n << endl;
+	int len = _cache.get_length();
+	if ( n.get_parent() )
+		{
+		cout << _cache << "\\_ ";
+		if ( n.get_parent()->child_count() > 1 )
+			_cache += "|  ";
+		else
+			_cache += "   ";
+		}
+	cout << *n << endl;
 	for ( tree_t::iterator it = n.begin(); it != n.end(); ++ it )
 		draw_node( *it );
+	_cache.set_at( len, 0 );
 	}
 
 typedef test_group<tut_yaal_hcore_htree> tut_group;
@@ -93,7 +107,7 @@ void module::test<1>( void )
 	ensure_equals( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
 	}
 
-/* creating root */
+/* set_new_root/get_root */
 template<>
 template<>
 void module::test<2>( void )
@@ -135,12 +149,83 @@ void module::test<5>( void )
 	tree_t::node_t n = t.set_new_root();
 	(**n) = '0';
 	tree_t::iterator it = n->add_node( 'x' );
+	ensure( "node addition / access failure", it == n->begin() );
+	ensure_equals( "bad value for new node", **it, 'x' );
+	}
+
+/* has_childs */
+template<>
+template<>
+void module::test<6>( void )
+	{
+	tree_t t;
+	tree_t::node_t n = t.set_new_root();
+	ensure( "new node has some spurious childs", ! n->has_childs() );
 	n->add_node( 'y' );
-	it->add_node( 'A' );
+	ensure( "childless node reported after node addition", n->has_childs() );
+	n->add_node( 'x' );
+	ensure( "childless node reported after node addition", n->has_childs() );
+	}
+
+/* child_count */
+template<>
+template<>
+void module::test<7>( void )
+	{
+	tree_t t;
+	tree_t::node_t n = t.set_new_root();
+	ensure_equals( "new node has some spurious childs", n->child_count(), 0 );
+	n->add_node( 'y' );
+	ensure_equals( "childless node reported after node addition", n->child_count(), 1 );
+	n->add_node( 'x' );
+	ensure_equals( "bad child count reported", n->child_count(), 2 );
+	}
+
+/* clear */
+template<>
+template<>
+void module::test<8>( void )
+	{
+	tree_t t;
+	tree_t::node_t n = t.set_new_root();
+	ensure( "new node has some spurious childs", ! n->has_childs() );
+	ensure_equals( "new node has some spurious childs", n->child_count(), 0 );
+	(**n) = '0';
+	n->add_node( 'x' );
+	ensure( "childless node reported after node addition", n->has_childs() );
+	ensure_equals( "childless node reported after node addition", n->child_count(), 1 );
+	t.clear();
+	ensure_equals( "clear failed", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
+	}
+
+/* basic shape tests */
+template<>
+template<>
+void module::test<9>( void )
+	{
+	tree_t t;
+	tree_t::node_t n = t.set_new_root();
+	(**n) = '0';
+	char const* const bad_shape = "bad shape";
+	ensure_equals( bad_shape, to_string( t ), "0" );
+	tree_t::iterator it = n->add_node( 'x' );
+	ensure_equals( bad_shape, to_string( t ), "0{x}" );
+	n->add_node( 'y' );
+	ensure_equals( bad_shape, to_string( t ), "0{xy}" );
+	it = it->add_node( '@' );
+	ensure_equals( bad_shape, to_string( t ), "0{x{@}y}" );
+	tree_t::iterator a = it->add_node( 'A' );
+	ensure_equals( bad_shape, to_string( t ), "0{x{@{A}}y}" );
 	it->add_node( 'B' );
+	ensure_equals( bad_shape, to_string( t ), "0{x{@{AB}}y}" );
 	it->insert_node( it->begin(), 'Q' );
-	cout << endl << to_string( t ) << endl;
-	draw_tree( t );
+	ensure_equals( bad_shape, to_string( t ), "0{x{@{QAB}}y}" );
+	a->add_node( 'F' );
+	ensure_equals( bad_shape, to_string( t ), "0{x{@{QA{F}B}}y}" );
+	a->add_node( 'G' );
+	ensure_equals( bad_shape, to_string( t ), "0{x{@{QA{FG}B}}y}" );
+	a->add_node( 'H' );
+	ensure_equals( bad_shape, to_string( t ), "0{x{@{QA{FGH}B}}y}" );
 	}
 
 }
