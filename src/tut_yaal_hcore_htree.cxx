@@ -113,7 +113,7 @@ void module::test<1>( void )
 	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 
-/* set_new_root/get_root */
+/* create_new_root/get_root */
 template<>
 template<>
 void module::test<2>( void )
@@ -121,7 +121,7 @@ void module::test<2>( void )
 		{
 	tree_t t;
 	ensure_equals( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
-	tree_t::node_t n = t.set_new_root();
+	tree_t::node_t n = t.create_new_root();
 	ensure( "root not created", n );
 	ensure_equals( "new root is invalid", t.get_root(), n );
 		}
@@ -135,7 +135,7 @@ void module::test<3>( void )
 	{
 		{
 	tree_t t;
-	tree_t::node_t n = t.set_new_root();
+	tree_t::node_t n = t.create_new_root();
 	(**n) = 'x';
 	ensure_equals( "value set/get failed", **n, 'x' );
 		}
@@ -149,7 +149,7 @@ void module::test<4>( void )
 	{
 		{
 	tree_t t;
-	tree_t::node_t n = t.set_new_root();
+	tree_t::node_t n = t.create_new_root();
 	ensure_equals( "root node malformed", n->get_parent(), static_cast<tree_t::node_t>( NULL ) );
 		}
 	ensure_equals( "leak", cc::get_instances_count(), 0 );
@@ -162,7 +162,7 @@ void module::test<5>( void )
 	{
 		{
 	tree_t t;
-	tree_t::node_t n = t.set_new_root();
+	tree_t::node_t n = t.create_new_root();
 	(**n) = '0';
 	tree_t::iterator it = n->add_node( 'x' );
 	ensure( "node addition / access failure", it == n->begin() );
@@ -178,7 +178,7 @@ void module::test<6>( void )
 	{
 		{
 	tree_t t;
-	tree_t::node_t n = t.set_new_root();
+	tree_t::node_t n = t.create_new_root();
 	ensure( "new node has some spurious childs", ! n->has_childs() );
 	n->add_node( 'y' );
 	ensure( "childless node reported after node addition", n->has_childs() );
@@ -195,7 +195,7 @@ void module::test<7>( void )
 	{
 		{
 	tree_t t;
-	tree_t::node_t n = t.set_new_root();
+	tree_t::node_t n = t.create_new_root();
 	ensure_equals( "new node has some spurious childs", n->child_count(), 0 );
 	n->add_node( 'y' );
 	ensure_equals( "childless node reported after node addition", n->child_count(), 1 );
@@ -212,7 +212,7 @@ void module::test<8>( void )
 	{
 		{
 	tree_t t;
-	tree_t::node_t n = t.set_new_root();
+	tree_t::node_t n = t.create_new_root();
 	ensure( "new node has some spurious childs", ! n->has_childs() );
 	ensure_equals( "new node has some spurious childs", n->child_count(), 0 );
 	(**n) = '0';
@@ -225,14 +225,56 @@ void module::test<8>( void )
 	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 
-/* basic shape tests */
+/* get_level() */
 template<>
 template<>
 void module::test<9>( void )
 	{
+	tree_t t;
+	tree_t::node_t n = t.create_new_root();
+	ensure_equals( "incorrect level value", n->get_level(), 0 );
+	tree_t::iterator it = n->add_node( '1' );
+	ensure_equals( "incorrect level value", it->get_level(), 1 );
+	it = it->add_node( '2' );
+	ensure_equals( "incorrect level value", it->get_level(), 2 );
+	ensure_equals( "incorrect level value", n->get_level(), 0 );
+	}
+
+/* swap() */
+template<>
+template<>
+void module::test<10>( void )
+	{
+		{
+		char const* const bad_shape = "bad shape";
+		char const* const swap_failed = "swap failed";
+		tree_t t1;
+		tree_t::node_t n = t1.create_new_root();
+		**n = '@';
+		n->add_node( 'x' );
+		n->add_node( 'y' );
+		tree_t t2;
+		n = t2.create_new_root();
+		**n = '%';
+		n->add_node( '1' );
+		n->add_node( '2' );
+		ensure_equals( bad_shape, to_string( t1 ), "@{xy}" );
+		ensure_equals( bad_shape, to_string( t2 ), "%{12}" );
+		t1.swap( t2 );
+		ensure_equals( swap_failed, to_string( t2 ), "@{xy}" );
+		ensure_equals( swap_failed, to_string( t1 ), "%{12}" );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
+	}
+
+/* basic shape tests */
+template<>
+template<>
+void module::test<11>( void )
+	{
 		{
 	tree_t t;
-	tree_t::node_t n = t.set_new_root();
+	tree_t::node_t n = t.create_new_root();
 	(**n) = '0';
 	char const* const bad_shape = "bad shape";
 	ensure_equals( bad_shape, to_string( t ), "0" );
@@ -261,11 +303,11 @@ void module::test<9>( void )
 /* graft */
 template<>
 template<>
-void module::test<10>( void )
+void module::test<12>( void )
 	{
 		{
 	tree_t t;
-	tree_t::node_t n = t.set_new_root();
+	tree_t::node_t n = t.create_new_root();
 	(**n) = '@';
 	tree_t::iterator it = n->add_node( '0' );
 	it = it->add_node( 'a' );
@@ -281,13 +323,52 @@ void module::test<10>( void )
 	it->add_node( 'g' );
 	it->add_node( 'h' );
 	it->add_node( 'i' );
-	cout << endl;
-	draw_tree( t );
+	ensure_equals( "bad shape", to_string( t ), "@{0{a{ABC}}1{def}2{ghi}}" );
 	n->replace_node( n->begin(), b );
 	ensure( "bad parent", b->get_parent() == &*n ); 
 	**b = '0';
-	draw_tree( t );
-	cout << endl;
+	ensure_equals( "bad shape", to_string( t ), "@{0{ABC}1{def}2{ghi}}" );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
+	}
+
+/* graft upwards */
+template<>
+template<>
+void module::test<13>( void )
+	{
+		{
+		tree_t t;
+		tree_t::node_t n = t.create_new_root();
+		(**n) = '@';
+		tree_t::iterator it = n->add_node( '0' );
+		tree_t::iterator q = it->add_node( 'q' );
+		tree_t::iterator w = it->add_node( 'w' );
+		q->add_node( '!' );
+		it = q->add_node( '#' );
+		q->add_node( '$' );
+		w->add_node( '%' );
+		w->add_node( '^' );
+		w->add_node( '&' );
+		it = it->add_node( 'a' );
+		tree_t::node_t b = &*it;
+		it->add_node( 'A' );
+		tree_t::iterator B = it->add_node( 'B' );
+		it->add_node( 'C' );
+		it = n->add_node( '1' );
+		it->add_node( 'd' );
+		it->add_node( 'e' );
+		it->add_node( 'f' );
+		it = n->add_node( '2' );
+		it->add_node( 'g' );
+		it->add_node( 'h' );
+		it->add_node( 'i' );
+		ensure_equals( "incorrect level value", B->get_level(), 5 );
+		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		n->replace_node( n->begin(), b );
+		ensure_equals( "incorrect level value", B->get_level(), 2 );
+		ensure( "bad parent", b->get_parent() == &*n ); 
+		ensure_equals( "bad shape", to_string( t ), "@{a{ABC}1{def}2{ghi}}" );
 		}
 	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
@@ -295,32 +376,200 @@ void module::test<10>( void )
 /* graft downwards */
 template<>
 template<>
-void module::test<11>( void )
+void module::test<14>( void )
 	{
-	ensure_equals( "leak", cc::get_instances_count(), 0 );
-	}
-
-/* graft upwards */
-template<>
-template<>
-void module::test<12>( void )
-	{
+		{
+		tree_t t;
+		tree_t::node_t n = t.create_new_root();
+		(**n) = '@';
+		tree_t::iterator it0, it = it0 = n->add_node( '0' );
+		tree_t::iterator q = it->add_node( 'q' );
+		tree_t::iterator w = it->add_node( 'w' );
+		q->add_node( '!' );
+		it = q->add_node( '#' );
+		q->add_node( '$' );
+		w->add_node( '%' );
+		w->add_node( '^' );
+		w->add_node( '&' );
+		tree_t::iterator a = it = it->add_node( 'a' );
+		it->add_node( 'A' );
+		tree_t::iterator B = it->add_node( 'B' );
+		ensure_equals( "incorrect level value", B->get_level(), 5 );
+		it->add_node( 'C' );
+		it = n->add_node( '1' );
+		it->add_node( 'd' );
+		it->add_node( 'e' );
+		it->add_node( 'f' );
+		it = n->add_node( '2' );
+		it->add_node( 'g' );
+		it->add_node( 'h' );
+		it->add_node( 'i' );
+		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		try
+			{
+			a->replace_node( B, &*it0 );
+			fail( "graft downwards succeded, eek!" );
+			}
+		catch ( int& )
+			{
+			// ok
+			}
+		}
 	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 
 /* graft sideways */
 template<>
 template<>
-void module::test<13>( void )
+void module::test<15>( void )
 	{
+		{
+		tree_t t;
+		tree_t::node_t n = t.create_new_root();
+		(**n) = '@';
+		tree_t::iterator it = n->add_node( '0' );
+		tree_t::iterator q = it->add_node( 'q' );
+		tree_t::iterator w = it->add_node( 'w' );
+		q->add_node( '!' );
+		it = q->add_node( '#' );
+		q->add_node( '$' );
+		w->add_node( '%' );
+		w->add_node( '^' );
+		w->add_node( '&' );
+		tree_t::iterator a = it = it->add_node( 'a' );
+		it->add_node( 'A' );
+		it->add_node( 'B' );
+		it->add_node( 'C' );
+		it = n->add_node( '1' );
+		it->add_node( 'd' );
+		tree_t::iterator e = it->add_node( 'e' );
+		it->add_node( 'f' );
+		it = n->add_node( '2' );
+		it->add_node( 'g' );
+		it->add_node( 'h' );
+		it->add_node( 'i' );
+		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		e->get_parent()->replace_node( e, &*a );
+		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{da{ABC}f}2{ghi}}" );
+		}
 	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 
-/* graft from root */
+/* graft to root */
 template<>
 template<>
-void module::test<14>( void )
+void module::test<16>( void )
 	{
+		{
+		tree_t t;
+		tree_t::node_t n = t.create_new_root();
+		(**n) = '@';
+		tree_t::iterator it = n->add_node( '0' );
+		tree_t::iterator q = it->add_node( 'q' );
+		tree_t::iterator w = it->add_node( 'w' );
+		q->add_node( '!' );
+		it = q->add_node( '#' );
+		q->add_node( '$' );
+		w->add_node( '%' );
+		w->add_node( '^' );
+		w->add_node( '&' );
+		tree_t::iterator a = it = it->add_node( 'a' );
+		it->add_node( 'A' );
+		it->add_node( 'B' );
+		it->add_node( 'C' );
+		it = n->add_node( '1' );
+		it->add_node( 'd' );
+		tree_t::iterator e = it->add_node( 'e' );
+		it->add_node( 'f' );
+		it = n->add_node( '2' );
+		it->add_node( 'g' );
+		it->add_node( 'h' );
+		it->add_node( 'i' );
+		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		t.set_new_root( &*a );
+		ensure_equals( "bad shape", to_string( t ), "a{ABC}" );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
+	}
+
+/* across two trees */
+template<>
+template<>
+void module::test<17>( void )
+	{
+		{
+		tree_t::node_t n = NULL;
+		tree_t::iterator it;
+		tree_t t1;
+		n = t1.create_new_root();
+		**n = '@';
+		tree_t::iterator a = it = n->add_node( '1' );
+		it->add_node( '2' );
+		it->add_node( '4' );
+		it->add_node( '6' );
+		it = n->add_node( '3' );
+		it->add_node( '8' );
+		it->add_node( '0' );
+		n->add_node( '5' );
+
+		tree_t t2;
+		n = t2.create_new_root();
+		**n = '%';
+		it = n->add_node( 'a' );
+		it->add_node( 'D' );
+		it->add_node( 'E' );
+		it->add_node( 'F' );
+		it = n->add_node( 'b' );
+		it->add_node( 'G' );
+		it->add_node( 'H' );
+		n->add_node( 'c' );
+		ensure_equals( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ensure_equals( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		it->replace_node( it->rbegin(), &*a );
+		ensure_equals( "bad shape", to_string( t1 ), "@{3{80}5}" );
+		ensure_equals( "bad shape", to_string( t2 ), "%{a{DEF}b{G1{246}}c}" );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
+	}
+
+/* across two trees from root */
+template<>
+template<>
+void module::test<18>( void )
+	{
+		{
+		tree_t::node_t n = NULL;
+		tree_t::iterator it;
+		tree_t t1;
+		n = t1.create_new_root();
+		**n = '@';
+		it = n->add_node( '1' );
+		it->add_node( '2' );
+		it->add_node( '4' );
+		it->add_node( '6' );
+		it = n->add_node( '3' );
+		it->add_node( '8' );
+		it->add_node( '0' );
+		n->add_node( '5' );
+
+		tree_t t2;
+		n = t2.create_new_root();
+		**n = '%';
+		it = n->add_node( 'a' );
+		it->add_node( 'D' );
+		it->add_node( 'E' );
+		it->add_node( 'F' );
+		it = n->add_node( 'b' );
+		it->add_node( 'G' );
+		it->add_node( 'H' );
+		n->add_node( 'c' );
+		ensure_equals( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ensure_equals( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+
+		cout << endl;
+		draw_tree( t1 );
+		draw_tree( t2 );
+		}
 	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
 

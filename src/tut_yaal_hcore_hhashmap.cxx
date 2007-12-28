@@ -71,9 +71,9 @@ template < >
 void module::test<2> ( void )
 	{
 	HHashMap < int, HString > map ( 17 );
-	ensure_equals ( "Newly created map is not empty.", map.quantity ( ), 0 );
+	ensure_equals ( "Newly created map is not empty.", map.size ( ), 0 );
 	map [ 0 ] = "foo";
-	ensure_equals ( "Wrong quantity count returned.", map.quantity ( ), 1 );
+	ensure_equals ( "Wrong size count returned.", map.size ( ), 1 );
 	}
 
 }

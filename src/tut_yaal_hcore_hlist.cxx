@@ -643,4 +643,22 @@ void module::test<23>( void )
 	ensure( "list with some stuff is empty", ! l.is_empty() );
 	}
 
+/* swap */
+template<>
+template<>
+void module::test<24>( void )
+	{
+	list_t l1;
+	l1.push_back( '1' );
+	l1.push_back( '2' );
+	list_t l2;
+	l2.push_back( 'a' );
+	l2.push_back( 'b' );
+	ensure_equals ( "build failed", to_string( l1 ), "12" );
+	ensure_equals ( "build failed", to_string( l2 ), "ab" );
+	l1.swap( l2 );
+	ensure_equals ( "swap failed", to_string( l2 ), "12" );
+	ensure_equals ( "swap failed", to_string( l1 ), "ab" );
+	}
+
 }
