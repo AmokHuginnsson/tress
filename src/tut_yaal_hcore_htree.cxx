@@ -57,7 +57,8 @@ HString tut_yaal_hcore_htree::_cache;
 HString& tut_yaal_hcore_htree::to_string( tree_t const& t )
 	{
 	_cache.clear();
-	to_string( *t.get_root() );
+	if ( t.get_root() )
+		to_string( *t.get_root() );
 	return ( _cache );
 	}
 
@@ -75,7 +76,8 @@ void tut_yaal_hcore_htree::to_string( tree_t::HNode const& n )
 void tut_yaal_hcore_htree::draw_tree( tree_t const& t )
 	{
 	_cache.clear();
-	draw_node( *t.get_root() );
+	if ( t.get_root() )
+		draw_node( *t.get_root() );
 	return;
 	}
 
@@ -565,10 +567,55 @@ void module::test<18>( void )
 		n->add_node( 'c' );
 		ensure_equals( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
 		ensure_equals( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		it->replace_node( it->rbegin(), t1.get_root() );
+		ensure_equals( "bad shape", to_string( t1 ), "" );
+		ensure_equals( "bad shape", to_string( t2 ), "%{a{DEF}b{G@{1{246}3{80}5}}c}" );
+		}
+	ensure_equals( "leak", cc::get_instances_count(), 0 );
+	}
 
-		cout << endl;
-		draw_tree( t1 );
-		draw_tree( t2 );
+/* graft with bad iteroator */
+template<>
+template<>
+void module::test<19>( void )
+	{
+		{
+		tree_t::node_t n = NULL;
+		tree_t::iterator it;
+		tree_t t1;
+		n = t1.create_new_root();
+		**n = '@';
+		it = n->add_node( '1' );
+		it->add_node( '2' );
+		it->add_node( '4' );
+		it->add_node( '6' );
+		it = n->add_node( '3' );
+		it->add_node( '8' );
+		it->add_node( '0' );
+		n->add_node( '5' );
+
+		tree_t t2;
+		n = t2.create_new_root();
+		**n = '%';
+		it = n->add_node( 'a' );
+		it->add_node( 'D' );
+		it->add_node( 'E' );
+		it->add_node( 'F' );
+		it = n->add_node( 'b' );
+		it->add_node( 'G' );
+		it->add_node( 'H' );
+		n->add_node( 'c' );
+		ensure_equals( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ensure_equals( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		try
+			{
+			it->replace_node( it, t1.get_root() );
+			fail( "grafintg with no coherency" );
+			}
+		catch ( int& )
+			{
+			// ok
+			}
 		}
 	ensure_equals( "leak", cc::get_instances_count(), 0 );
 	}
