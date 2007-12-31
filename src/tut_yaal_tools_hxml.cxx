@@ -46,53 +46,33 @@ struct tut_yaal_tools_hxml
 	{
 	HString f_oVarTmpBuffer;
 	HXml f_oXml;
-	void dump ( HXml::ONode & a_rsNode )
+	void dump( HXml::const_xml_element_t a_rsNode )
 		{
 		HString l_oPropertyName, l_oPropertyValue;
-		if ( a_rsNode.f_iLevel < 0 )
-			return;
-		f_oVarTmpBuffer.hs_realloc ( a_rsNode.f_iLevel * 2 + 3 );
-		f_oVarTmpBuffer.fill( ' ', a_rsNode.f_iLevel * 2 );
-		f_oVarTmpBuffer.set_at( a_rsNode.f_iLevel * 2, 0 );
-		if ( ! a_rsNode.f_oName.is_empty ( ) )
-			cout << f_oVarTmpBuffer << "[" << a_rsNode.f_oName << "]<" << a_rsNode.f_iLevel << ">:" << endl;
-		while ( a_rsNode.f_oProperties.iterate ( l_oPropertyName,
-					l_oPropertyValue ) )
+		f_oVarTmpBuffer.hs_realloc ( a_rsNode->get_level() * 2 + 3 );
+		f_oVarTmpBuffer.fill( ' ', a_rsNode->get_level() * 2 );
+		f_oVarTmpBuffer.set_at( a_rsNode->get_level() * 2, 0 );
+		if ( ! (**a_rsNode).f_oName.is_empty ( ) )
+			cout << f_oVarTmpBuffer << "[" << (**a_rsNode).f_oName << "(" << &(**a_rsNode) << ")]<" << a_rsNode->get_level() << ">:" << endl;
+		for ( HXml::OXMLElement::properties_t::HIterator it = (**a_rsNode).f_oProperties.begin(); it != (**a_rsNode).f_oProperties.end(); ++ it )
 			{
-			cout << f_oVarTmpBuffer << "(" << l_oPropertyName << ")->(";
-			cout << l_oPropertyValue << ")" << endl;
+			cout << f_oVarTmpBuffer << "(" << it->first << ")->(";
+			cout << it->second << ")" << endl;
 			}
-		f_oVarTmpBuffer.fill( ' ', a_rsNode.f_iLevel * 2 + 2 );
-		f_oVarTmpBuffer.set_at( a_rsNode.f_iLevel * 2 + 2, 0 );
-		cout << f_oVarTmpBuffer << "{" << endl;
-/*
-		HString* l_poContent = NULL;
-		HXml::ONode * l_psNode = NULL;
-		if ( a_rsNode.f_oContents.size ( ) )
-			l_poContent = & a_rsNode.f_oContents.go ( 0 );
-		if ( a_rsNode.f_oChilds.size ( ) )
-			l_psNode = & a_rsNode.f_oChilds.go ( 0 );
-		if ( a_rsNode.f_oTypes.size ( ) )
+		if ( a_rsNode->has_childs() )
 			{
-			for ( HXml::ONode::type_t * l_peType = & a_rsNode.f_oTypes.go ( 0 );
-					l_peType; l_peType = a_rsNode.f_oTypes.to_tail ( 1, HList < int >::D_TREAT_AS_OPENED ) )
+			f_oVarTmpBuffer.fill( ' ', a_rsNode->get_level() * 2 + 2 );
+			f_oVarTmpBuffer.set_at( a_rsNode->get_level() * 2 + 2, 0 );
+			cout << f_oVarTmpBuffer << "{" << endl;
+			for ( HXml::tree_t::iterator it = a_rsNode->begin(); it != a_rsNode->end(); ++ it )
 				{
-				if ( ( * l_peType ) == HXml::ONode::D_NODE )
-					{
-					dump ( * l_psNode );
-					l_psNode = a_rsNode.f_oChilds.to_tail();
-					f_oVarTmpBuffer.set_at( a_rsNode.f_iLevel * 2 + 2, 0 );
-					}
-				else
-					{
-					if ( l_poContent->get_length ( ) )
-						cout << f_oVarTmpBuffer << ( * l_poContent ) << endl;
-					l_poContent = a_rsNode.f_oContents.to_tail ( );
-					}
+				dump ( &*it );
+				f_oVarTmpBuffer.set_at( a_rsNode->get_level() * 2 + 2, 0 );
 				}
+			cout << f_oVarTmpBuffer << "}" << endl;
 			}
-*/
-		cout << f_oVarTmpBuffer << "}" << endl;
+		else
+			cout << f_oVarTmpBuffer << (**a_rsNode).f_oContents << endl;
 		return;
 		}
 	};
@@ -101,9 +81,9 @@ typedef test_group < tut_yaal_tools_hxml > tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_tools_hxml_group ( "yaal::tools::HXml" );
 
-template < >
-template < >
-void module::test<1> ( void )
+template<>
+template<>
+void module::test<1>( void )
 	{
 	HString string;
 	HFile file;
@@ -111,20 +91,20 @@ void module::test<1> ( void )
 		fail ( "You need to specify one argument for this test" );
 	if ( setup.f_bVerbose )
 		{
-		if ( file.open ( setup.f_ppcArgv [ 1 ] ) )
-			cout << file.get_error ( ) << ": " << file.get_path ( ) << endl;
+		if ( file.open( setup.f_ppcArgv[ 1 ] ) )
+			cout << file.get_error() << ": " << file.get_path() << endl;
 		else
 			{
-			while ( file.read_line ( string, HFile::D_STRIP_NEWLINES ) >= 0 )
+			while ( file.read_line( string, HFile::D_STRIP_NEWLINES ) >= 0 )
 				cout << string << endl;
-			file.close ( );
+			file.close();
 			}
 		}
-	f_oXml.init ( setup.f_ppcArgv [ 1 ] );
+	f_oXml.init( setup.f_ppcArgv[ 1 ] );
 	if ( setup.f_iArgc > 2 )
-		f_oXml.parse ( const_cast < char * > ( setup.f_ppcArgv [ 2 ] ) );
+		f_oXml.parse( const_cast<char*>( setup.f_ppcArgv[ 2 ] ) );
 	else
-		f_oXml.parse ( );
+		f_oXml.parse();
 	dump ( f_oXml.get_root ( ) );
 	}
 
