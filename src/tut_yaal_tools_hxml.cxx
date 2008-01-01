@@ -48,12 +48,11 @@ struct tut_yaal_tools_hxml
 	HXml f_oXml;
 	void dump( HXml::const_xml_element_t a_rsNode )
 		{
-		HString l_oPropertyName, l_oPropertyValue;
 		f_oVarTmpBuffer.hs_realloc ( a_rsNode->get_level() * 2 + 3 );
 		f_oVarTmpBuffer.fill( ' ', a_rsNode->get_level() * 2 );
 		f_oVarTmpBuffer.set_at( a_rsNode->get_level() * 2, 0 );
 		if ( ! (**a_rsNode).f_oName.is_empty ( ) )
-			cout << f_oVarTmpBuffer << "[" << (**a_rsNode).f_oName << "(" << &(**a_rsNode) << ")]<" << a_rsNode->get_level() << ">:" << endl;
+			cout << f_oVarTmpBuffer << "[" << (**a_rsNode).f_oName << "]<" << a_rsNode->get_level() << ">:" << endl;
 		for ( HXml::OXMLElement::properties_t::HIterator it = (**a_rsNode).f_oProperties.begin(); it != (**a_rsNode).f_oProperties.end(); ++ it )
 			{
 			cout << f_oVarTmpBuffer << "(" << it->first << ")->(";
@@ -71,7 +70,7 @@ struct tut_yaal_tools_hxml
 				}
 			cout << f_oVarTmpBuffer << "}" << endl;
 			}
-		else
+		else if ( ! (**a_rsNode).f_oContents.is_empty() )
 			cout << f_oVarTmpBuffer << (**a_rsNode).f_oContents << endl;
 		return;
 		}
@@ -106,6 +105,7 @@ void module::test<1>( void )
 	else
 		f_oXml.parse();
 	dump ( f_oXml.get_root ( ) );
+	return;
 	}
 
 }

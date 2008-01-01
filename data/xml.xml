@@ -4,7 +4,10 @@
 ]>
 <my_root my_type="my_fancy">
 	<my_node my_property="¯ó³wi±tko">
-		<sub>node</sub>
+		<my_sub>node</my_sub>
 		Za¿ó³ciæ gêsi± ja¼ñ. &v_data;
+Filmuj rze¼ ¿±dañ, po¶æ, gnêb ch³ystków!
+Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag.
+		<my_empty my_prop="my_p_val" />
 	</my_node>
 </my_root>
