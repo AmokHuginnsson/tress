@@ -10,4 +10,10 @@ Filmuj rze¼ ¿±dañ, po¶æ, gnêb ch³ystków!
 Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag.
 		<my_empty my_prop="my_p_val" />
 	</my_node>
+	<my_set>
+		<my_item>one</my_item>
+		<my_item>two</my_item>
+		<my_fake>three</my_fake>
+		<my_item>four</my_item>
+	</my_set>
 </my_root>
