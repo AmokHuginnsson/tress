@@ -46,32 +46,35 @@ struct tut_yaal_tools_hxml
 	{
 	HString f_oVarTmpBuffer;
 	HXml f_oXml;
-	void dump( HXml::const_xml_element_t a_rsNode )
+	void dump( HXml::HNodeProxy const& a_rsNode )
 		{
-		f_oVarTmpBuffer.hs_realloc ( a_rsNode->get_level() * 2 + 3 );
-		f_oVarTmpBuffer.fill( ' ', a_rsNode->get_level() * 2 );
-		f_oVarTmpBuffer.set_at( a_rsNode->get_level() * 2, 0 );
-		if ( ! (**a_rsNode).f_oName.is_empty ( ) )
-			cout << f_oVarTmpBuffer << "[" << (**a_rsNode).f_oName << "]<" << a_rsNode->get_level() << ">:" << endl;
-		for ( HXml::OXMLElement::properties_t::HIterator it = (**a_rsNode).f_oProperties.begin(); it != (**a_rsNode).f_oProperties.end(); ++ it )
+		f_oVarTmpBuffer.hs_realloc ( a_rsNode.get_level() * 2 + 3 );
+		f_oVarTmpBuffer.fill( ' ', a_rsNode.get_level() * 2 );
+		f_oVarTmpBuffer.set_at( a_rsNode.get_level() * 2, 0 );
+		if ( a_rsNode.get_type() == HXml::HNode::TYPE::D_NODE )
 			{
-			cout << f_oVarTmpBuffer << "(" << it->first << ")->(";
-			cout << it->second << ")" << endl;
-			}
-		if ( a_rsNode->has_childs() )
-			{
-			f_oVarTmpBuffer.fill( ' ', a_rsNode->get_level() * 2 + 2 );
-			f_oVarTmpBuffer.set_at( a_rsNode->get_level() * 2 + 2, 0 );
-			cout << f_oVarTmpBuffer << "{" << endl;
-			for ( HXml::tree_t::iterator it = a_rsNode->begin(); it != a_rsNode->end(); ++ it )
+			if ( ! a_rsNode.get_name().is_empty() )
+				cout << f_oVarTmpBuffer << "[" << a_rsNode.get_name() << "]<" << a_rsNode.get_level() << ">:" << endl;
+			for ( HXml::HNode::properties_t::HIterator it = a_rsNode.properties().begin(); it != a_rsNode.properties().end(); ++ it )
 				{
-				dump ( &*it );
-				f_oVarTmpBuffer.set_at( a_rsNode->get_level() * 2 + 2, 0 );
+				cout << f_oVarTmpBuffer << "(" << it->first << ")->(";
+				cout << it->second << ")" << endl;
 				}
-			cout << f_oVarTmpBuffer << "}" << endl;
+			if ( a_rsNode.has_childs() )
+				{
+				f_oVarTmpBuffer.fill( ' ', a_rsNode.get_level() * 2 + 2 );
+				f_oVarTmpBuffer.set_at( a_rsNode.get_level() * 2 + 2, 0 );
+				cout << f_oVarTmpBuffer << "{" << endl;
+				for ( HXml::iterator it = a_rsNode.begin(); it != a_rsNode.end(); ++ it )
+					{
+					dump ( *it );
+					f_oVarTmpBuffer.set_at( a_rsNode.get_level() * 2 + 2, 0 );
+					}
+				cout << f_oVarTmpBuffer << "}" << endl;
+				}
 			}
-		else if ( ! (**a_rsNode).f_oContents.is_empty() )
-			cout << f_oVarTmpBuffer << (**a_rsNode).f_oContents << endl;
+		else if ( ! a_rsNode.get_value().is_empty() )
+			cout << f_oVarTmpBuffer << a_rsNode.get_value() << endl;
 		return;
 		}
 	};
