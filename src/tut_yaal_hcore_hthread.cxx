@@ -157,8 +157,7 @@ CVTest::CVTest( void ) : f_oWorker( *this ), f_oMutex(), f_oCV( f_oMutex ), f_bL
 
 CVTest::~CVTest( void )
 	{
-	while ( f_oWorker.is_alive() )
-		;
+	f_oWorker.finish();
 	}
 
 int CVTest::operator()( HThread const* const )
