@@ -146,12 +146,19 @@ class CVTest
 	bool f_bLoop;
 public:
 	CVTest( void );
+	~CVTest( void );
 	int operator() ( HThread const* const );
 	void eat( void );
 	};
 
 CVTest::CVTest( void ) : f_oWorker( *this ), f_oMutex(), f_oCV( f_oMutex ), f_bLoop( false )
 	{
+	}
+
+CVTest::~CVTest( void )
+	{
+	while ( f_oWorker.is_alive() )
+		;
 	}
 
 int CVTest::operator()( HThread const* const )
