@@ -997,7 +997,8 @@ template<>
 template<>
 void module::test<25>( void )
 	{
-	int long unsigned count = 0100000000;
+	//int long unsigned count = 0100000000;
+	int long unsigned count = 01000000;
 	char buf[10];
 	list_t l;
 	check_consistency( l );
