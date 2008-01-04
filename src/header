@@ -9,6 +9,7 @@
 #include <TUT/tut.h>
 #include <TUT/tut_reporter.h>
 
+#define private public
 #include <yaal/yaal.h>
 
 #include "tut_helpers.h"
