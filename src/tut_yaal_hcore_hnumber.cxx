@@ -65,7 +65,7 @@ template<>
 void module::test<2>( void )
 	{
 	HNumber n( 3.14159265 );
-	ensure_equals( "number not created correctly", n.to_string(), "3.141593" );
+	ensure_equals( "number not created correctly", n.to_string(), "3.14159265" );
 	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::D_DEFAULT_PRECISION );
 	cout << n.to_string() << endl;
 	}
@@ -77,7 +77,7 @@ void module::test<3>( void )
 	{
 	int const P1 = 20;
 	HNumber n( 3.14159265, P1 );
-	ensure_equals( "number not created correctly", n.to_string(), "3.141593" );
+	ensure_equals( "number not created correctly", n.to_string(), "3.14159265" );
 	ensure_equals( "bad specified precision", n.get_precision(), P1 );
 	cout << n.to_string() << endl;
 	int const M = 16;
@@ -126,6 +126,24 @@ void module::test<4>( void )
 	try
 		{
 		HNumber n( "-." );
+		fail( "number that is a minus-dot created" );
+		}
+	catch ( HException& )
+		{
+		// ok
+		}
+	try
+		{
+		HNumber n( "-..1" );
+		fail( "number that is a minus-dot created" );
+		}
+	catch ( HException& )
+		{
+		// ok
+		}
+	try
+		{
+		HNumber n( "..1" );
 		fail( "number that is a minus-dot created" );
 		}
 	catch ( HException& )
@@ -213,6 +231,12 @@ void module::test<4>( void )
 	ensure_equals( "number not created correctly", n8.to_string(), "2.7" );
 	ensure_equals( "bad dafault precision", n8.get_precision(), HNumber::D_DEFAULT_PRECISION );
 	cout << "| n8 =" << n8.to_string() << " |" << endl;
+
+	char const* const pn9 = "2.700.566-7576-7657";
+	HNumber n9( pn9 );
+	ensure_equals( "number not created correctly", n9.to_string(), "2.7" );
+	ensure_equals( "bad dafault precision", n9.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	cout << "| n9 =" << n9.to_string() << " |" << endl;
 	}
 
 /* construct from string (prefixes) */
@@ -635,10 +659,10 @@ template<>
 void module::test<9>( void )
 	{
 	HNumber n( 3.14159265 );
-	ensure_equals( "number not created correctly", n.to_string(), "3.141593" );
+	ensure_equals( "number not created correctly", n.to_string(), "3.14159265" );
 	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::D_DEFAULT_PRECISION );
 	HNumber copy( n );
-	ensure_equals( "number not created correctly", copy.to_string(), "3.141593" );
+	ensure_equals( "number not created correctly", copy.to_string(), "3.14159265" );
 	ensure_equals( "bad dafault precision", copy.get_precision(), HNumber::D_DEFAULT_PRECISION );
 	char const* const pn0 = "3.14159265";
 	int const P1 = 20;
@@ -650,45 +674,231 @@ void module::test<9>( void )
 	ensure_equals( "bad dafault precision", copy0.get_precision(), P1 );
 	}
 
-/* equality operator */
+/* set/get precision */
+template<>
+template<>
+void module::test<10>( void )
+	{
+	HNumber n;
+	int const M = 16;
+	int const P = 20;
+	int const S = 10;
+	int const F = 12;
+	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	n.set_precision( P );
+	ensure_equals( "bad modified 1 precision", n.get_precision(), P );
+	n.set_precision( HNumber::D_DEFAULT_PRECISION + P );
+	ensure_equals( "bad modified 2 precision", n.get_precision(), HNumber::D_DEFAULT_PRECISION + P );
+	n.set_precision( HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad modified 3 precision", n.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	int const SAVED = HNumber::D_DEFAULT_PRECISION;
+	HNumber::D_DEFAULT_PRECISION = S;
+	n.set_precision( M );
+	n = "10.1212121212121212121212";
+	ensure_equals( "bad precision from string", n.get_precision(), 22 );
+	n.set_precision( 100 );
+	ensure_equals( "bad modified 4 precision", n.get_precision(), 22 );
+	HNumber s;
+	ensure_equals( "bad default minimum precision", s.get_precision(), M );
+	n.set_precision( F );
+	ensure_equals( "bad modified precision", s.get_precision(), M );
+	HNumber::D_DEFAULT_PRECISION = SAVED;
+	}
+
+/* assignment operator */
 template<>
 template<>
 void module::test<11>( void )
 	{
+	char const* const p0 = "3.14159265";
+	HNumber n( p0 );
+	ensure_equals( "number not created correctly", n.to_string(), p0 );
+	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	HNumber copy;
+	ensure_equals( "number not created correctly", copy.to_string(), "0" );
+	ensure_equals( "bad dafault precision", copy.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	copy = n;
+	ensure_equals( "number not assigned correctly", copy.to_string(), p0 );
+	ensure_equals( "bad assigned precision", copy.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	HNumber another;
+	another.set_precision( HNumber::D_DEFAULT_PRECISION + 5 );
+	another = copy;
+	ensure_equals( "number not assigned correctly", another.to_string(), p0 );
+	ensure_equals( "bad assigned precision", another.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	char const* const p1 = "17";
+	HNumber next( p1 );
+	next.set_precision( HNumber::D_DEFAULT_PRECISION + 5 );
+	ensure_equals( "number not created correctly", next.to_string(), p1 );
+	ensure_equals( "bad dafault precision", next.get_precision(), HNumber::D_DEFAULT_PRECISION + 5 );
+	another = next;
+	ensure_equals( "number not created correctly", another.to_string(), p1 );
+	ensure_equals( "bad dafault precision", another.get_precision(), HNumber::D_DEFAULT_PRECISION + 5 );
+	}
+
+/* equality operator */
+template<>
+template<>
+void module::test<12>( void )
+	{
+	char const* const p0 = "3.14159265";
+	char const* const p1 = "3.14159265";
+	char const* const p2 = "3.141593";
+	HNumber n0( p0 );
+	HNumber n1( p1 );
+	HNumber n2( p2 );
+	ensure( "equality failed", n0 == n1 );
+	ensure( "equality failed (not equal)", ! ( n0 == n2 ) );
 	}
 
 /* difference operator */
 template<>
 template<>
-void module::test<12>( void )
+void module::test<13>( void )
 	{
+	char const* const p0 = "3.14159265";
+	char const* const p1 = "3.14159265";
+	char const* const p2 = "3.141593";
+	HNumber n0( p0 );
+	HNumber n1( p1 );
+	HNumber n2( p2 );
+	ensure( "difference failed", n0 != n2 );
+	ensure( "difference failed (equal)", ! ( n0 != n1 ) );
+	}
+
+/* lower then operator */
+template<>
+template<>
+void module::test<14>( void )
+	{
+	ensure( "lower failed a", HNumber( "-1" ) < HNumber( "1" ) );
+	ensure( "lower failed b", HNumber( "-1" ) < HNumber( "0" ) );
+	ensure( "lower failed c", HNumber( "-1" ) < HNumber( "-0.5" ) );
+	ensure( "lower failed d", HNumber( "0" ) < HNumber( "0.5" ) );
+	ensure( "lower failed e", HNumber( ".2" ) < HNumber( "0.5" ) );
+	ensure( "lower failed f", HNumber( ".2" ) < HNumber( "1" ) );
+	ensure( "lower failed g", HNumber( "2.734543" ) < HNumber( "3.145" ) );
+
+	ensure( "lower failed h", ! ( HNumber( "1" ) < HNumber( "-1" ) ) );
+	ensure( "lower failed i", ! ( HNumber( "0" ) < HNumber( "-1" ) ) );
+	ensure( "lower failed j", ! ( HNumber( "-0.5" ) < HNumber( "-1" ) ) );
+	ensure( "lower failed k", ! ( HNumber( "0.5" ) < HNumber( "0" ) ) );
+	ensure( "lower failed l", ! ( HNumber( "0.5" ) < HNumber( ".2" ) ) );
+	ensure( "lower failed m", ! ( HNumber( "1" ) < HNumber( ".2" ) ) );
+	ensure( "lower failed n", ! ( HNumber( "3.145" ) < HNumber( "2.734543" ) ) );
+	ensure( "lower failed o", ! ( HNumber( "1" ) < HNumber( "1" ) ) );
+	ensure( "lower failed p", ! ( HNumber( "-1" ) < HNumber( "-1" ) ) );
+	ensure( "lower failed q", ! ( HNumber( ".1" ) < HNumber( ".1" ) ) );
+	ensure( "lower failed r", ! ( HNumber( "-.1" ) < HNumber( "-.1" ) ) );
+	ensure( "lower failed s", ! ( HNumber( "0" ) < HNumber( "0" ) ) );
+	}
+
+/* lower or equal then operator */
+template<>
+template<>
+void module::test<15>( void )
+	{
+	ensure( "lower-eq failed a", HNumber( "-1" ) <= HNumber( "1" ) );
+	ensure( "lower-eq failed b", HNumber( "-1" ) <= HNumber( "0" ) );
+	ensure( "lower-eq failed c", HNumber( "-1" ) <= HNumber( "-0.5" ) );
+	ensure( "lower-eq failed d", HNumber( "0" ) <= HNumber( "0.5" ) );
+	ensure( "lower-eq failed e", HNumber( ".2" ) <= HNumber( "0.5" ) );
+	ensure( "lower-eq failed f", HNumber( ".2" ) <= HNumber( "1" ) );
+	ensure( "lower-eq failed g", HNumber( "2.734543" ) <= HNumber( "3.145" ) );
+	ensure( "lower-eq failed o", HNumber( "1" ) <= HNumber( "1" ) );
+	ensure( "lower-eq failed p", HNumber( "-1" ) <= HNumber( "-1" ) );
+	ensure( "lower-eq failed q", HNumber( ".1" ) <= HNumber( ".1" ) );
+	ensure( "lower-eq failed r", HNumber( "-.1" ) <= HNumber( "-.1" ) );
+	ensure( "lower-eq failed s", HNumber( "0" ) <= HNumber( "0" ) );
+
+	ensure( "lower-eq failed h", ! ( HNumber( "1" ) <= HNumber( "-1" ) ) );
+	ensure( "lower-eq failed i", ! ( HNumber( "0" ) <= HNumber( "-1" ) ) );
+	ensure( "lower-eq failed j", ! ( HNumber( "-0.5" ) <= HNumber( "-1" ) ) );
+	ensure( "lower-eq failed k", ! ( HNumber( "0.5" ) <= HNumber( "0" ) ) );
+	ensure( "lower-eq failed l", ! ( HNumber( "0.5" ) <= HNumber( ".2" ) ) );
+	ensure( "lower-eq failed m", ! ( HNumber( "1" ) <= HNumber( ".2" ) ) );
+	ensure( "lower-eq failed n", ! ( HNumber( "3.145" ) <= HNumber( "2.734543" ) ) );
+	}
+
+/* greater then operator */
+template<>
+template<>
+void module::test<16>( void )
+	{
+	ensure( "greater failed a", HNumber( "1" ) > HNumber( "-1" ) );
+	ensure( "greater failed b", HNumber( "0" ) > HNumber( "-1" ) );
+	ensure( "greater failed c", HNumber( "-0.5" ) > HNumber( "-1" ) );
+	ensure( "greater failed d", HNumber( "0.5" ) > HNumber( "0" ) );
+	ensure( "greater failed e", HNumber( "0.5" ) > HNumber( ".2" ) );
+	ensure( "greater failed f", HNumber( "1" ) > HNumber( ".2" ) );
+	ensure( "greater failed g", HNumber( "3.145" ) > HNumber( "2.734543" ) );
+
+	ensure( "greater failed h", ! ( HNumber( "-1" ) > HNumber( "1" ) ) );
+	ensure( "greater failed i", ! ( HNumber( "-1" ) > HNumber( "0" ) ) );
+	ensure( "greater failed j", ! ( HNumber( "-1" ) > HNumber( "-0.5" ) ) );
+	ensure( "greater failed k", ! ( HNumber( "0" ) > HNumber( "0.5" ) ) );
+	ensure( "greater failed l", ! ( HNumber( ".2" ) > HNumber( "0.5" ) ) );
+	ensure( "greater failed m", ! ( HNumber( ".2" ) > HNumber( "1" ) ) );
+	ensure( "greater failed n", ! ( HNumber( "2.734543" ) > HNumber( "3.145" ) ) );
+	ensure( "greater failed o", ! ( HNumber( "1" ) > HNumber( "1" ) ) );
+	ensure( "greater failed p", ! ( HNumber( "-1" ) > HNumber( "-1" ) ) );
+	ensure( "greater failed q", ! ( HNumber( ".1" ) > HNumber( ".1" ) ) );
+	ensure( "greater failed r", ! ( HNumber( "-.1" ) > HNumber( "-.1" ) ) );
+	ensure( "greater failed s", ! ( HNumber( "0" ) > HNumber( "0" ) ) );
+	}
+
+/* greater or equal then operator */
+template<>
+template<>
+void module::test<17>( void )
+	{
+	ensure( "greater-eq failed a", HNumber( "1" ) >= HNumber( "-1" ) );
+	ensure( "greater-eq failed b", HNumber( "0" ) >= HNumber( "-1" ) );
+	ensure( "greater-eq failed c", HNumber( "-0.5" ) >= HNumber( "-1" ) );
+	ensure( "greater-eq failed d", HNumber( "0.5" ) >= HNumber( "0" ) );
+	ensure( "greater-eq failed e", HNumber( "0.5" ) >= HNumber( ".2" ) );
+	ensure( "greater-eq failed f", HNumber( "1" ) >= HNumber( ".2" ) );
+	ensure( "greater-eq failed g", HNumber( "3.145" ) >= HNumber( "2.734543" ) );
+
+	ensure( "greater-eq failed h", ! ( HNumber( "-1" ) >= HNumber( "1" ) ) );
+	ensure( "greater-eq failed i", ! ( HNumber( "-1" ) >= HNumber( "0" ) ) );
+	ensure( "greater-eq failed j", ! ( HNumber( "-1" ) >= HNumber( "-0.5" ) ) );
+	ensure( "greater-eq failed k", ! ( HNumber( "0" ) >= HNumber( "0.5" ) ) );
+	ensure( "greater-eq failed l", ! ( HNumber( ".2" ) >= HNumber( "0.5" ) ) );
+	ensure( "greater-eq failed m", ! ( HNumber( ".2" ) >= HNumber( "1" ) ) );
+	ensure( "greater-eq failed n", ! ( HNumber( "2.734543" ) >= HNumber( "3.145" ) ) );
+	ensure( "greater-eq failed o", HNumber( "1" ) >= HNumber( "1" ) );
+	ensure( "greater-eq failed p", HNumber( "-1" ) >= HNumber( "-1" ) );
+	ensure( "greater-eq failed q", HNumber( ".1" ) >= HNumber( ".1" ) );
+	ensure( "greater-eq failed r", HNumber( "-.1" ) >= HNumber( "-.1" ) );
+	ensure( "greater-eq failed s", HNumber( "0" ) >= HNumber( "0" ) );
 	}
 
 /* addition */
 template<>
 template<>
-void module::test<13>( void )
+void module::test<18>( void )
 	{
+	ensure_equals( "addition failed a", ( HNumber( "" ) + HNumber( "" ) ).to_string(), HNumber( "" ).to_string() );
 	}
 
 /* multiplication */
 template<>
 template<>
-void module::test<14>( void )
+void module::test<19>( void )
 	{
 	}
 
 /* substraction */
 template<>
 template<>
-void module::test<15>( void )
+void module::test<20>( void )
 	{
 	}
 
 /* division */
 template<>
 template<>
-void module::test<16>( void )
+void module::test<21>( void )
 	{
 	}
 

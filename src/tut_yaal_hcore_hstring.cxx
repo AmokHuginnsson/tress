@@ -56,6 +56,22 @@ void module::test<1>( void )
 	HString str ( 1024 );
 	HString exemplar ( "1024" );
 	ensure_equals ( "construction from int or c-string does not work", str, exemplar );
+	double l1 = 22.;
+	double m1 = 7.;
+	HString d1( l1 / m1 );
+	cout << "| d1 = " << d1 << " |" << endl;
+	double long l2 = 22.;
+	double long m2 = 7.;
+	HString d2( l2 / m2 );
+	cout << "| d2 = " << d2 << " |" << endl;
+	d2.shift_left( 1 );
+	double long x = strtold( d2, NULL );
+	double y = strtod( d2, NULL );
+	double long z = strtod( d2, NULL );
+	cout << "| x = " << x << " |" << endl;
+	cout << "| y = " << y << " |" << endl;
+	d2 = z;
+	cout << "| d2 = " << d2 << " |" << endl;
 	}
 
 /* shift_left */
