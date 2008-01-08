@@ -262,9 +262,25 @@ void module::test<4>( void )
 	cout << "| n9 =" << n9.to_string() << " |" << endl;
 	ensure_equals( "number 0 not created correctly", HNumber( "0001200" ).to_string(), "1200" );
 	ensure_equals( "number 1 not created correctly", HNumber( "-00.200" ).to_string(), "-.2" );
-	ensure_equals( "number 2 not created correctly", HNumber( "-00100" ).to_string(), "100" );
+	ensure_equals( "number 2 not created correctly", HNumber( "-00100" ).to_string(), "-100" );
 	ensure_equals( "number 3 not created correctly", HNumber( "00012.3200" ).to_string(), "12.32" );
 	ensure_equals( "number 4 not created correctly", HNumber( "-000034.212000" ).to_string(), "-34.212" );
+	ensure_equals( "number 5 not created correctly", HNumber( "-000" ).to_string(), "0" );
+	ensure_equals( "number 6 not created correctly", HNumber( "000" ).to_string(), "0" );
+	ensure_equals( "number 7 not created correctly", HNumber( ".000" ).to_string(), "0" );
+	ensure_equals( "number 8 not created correctly", HNumber( "000." ).to_string(), "0" );
+	ensure_equals( "number 9 not created correctly", HNumber( "00.000" ).to_string(), "0" );
+	ensure_equals( "number 10 not created correctly", HNumber( "-.000" ).to_string(), "0" );
+	ensure_equals( "number 11 not created correctly", HNumber( "-000.00" ).to_string(), "0" );
+	ensure_equals( "number 12 not created correctly", HNumber( "-000." ).to_string(), "0" );
+	ensure_equals( "number 1 5 not created correctly", HNumber( "-0001" ).to_string(), "-1" );
+	ensure_equals( "number 1 6 not created correctly", HNumber( "0001" ).to_string(), "1" );
+	ensure_equals( "number 1 7 not created correctly", HNumber( ".0001" ).to_string(), ".0001" );
+	ensure_equals( "number 1 8 not created correctly", HNumber( "000.1" ).to_string(), ".1" );
+	ensure_equals( "number 1 9 not created correctly", HNumber( "00.0001" ).to_string(), ".0001" );
+	ensure_equals( "number 1 10 not created correctly", HNumber( "-.0001" ).to_string(), "-.0001" );
+	ensure_equals( "number 1 11 not created correctly", HNumber( "-000.001" ).to_string(), "-.001" );
+	ensure_equals( "number 1 12 not created correctly", HNumber( "-0001." ).to_string(), "-1" );
 	}
 
 /* construct from string (prefixes) */
@@ -969,7 +985,6 @@ void module::test<18>( void )
 		_bc << as << '+' << bs << endl;
 		_bc.read_until( res );
 		msg = "addition of random a = " + as + " and b = " + bs + " failed";
-		cout << msg << endl;
 		ensure_equals( msg, ( a + b ).to_string(), HNumber( res ).to_string() );
 		msg += "(R)";
 		ensure_equals( msg, ( b + a ).to_string(), HNumber( res ).to_string() );
@@ -981,6 +996,7 @@ template<>
 template<>
 void module::test<19>( void )
 	{
+	ensure_equals( "multiplication failed x", ( HNumber( ".011931709189" ) * HNumber( "-154.734375" ) ).to_string(), HNumber( "-1.846245564041671875" ).to_string() );
 	ensure_equals( "multiplication failed a", ( HNumber( "0" ) * HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
 	ensure_equals( "multiplication failed b", ( HNumber( "0" ) * HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
 	ensure_equals( "multiplication failed c", ( HNumber( "2" ) * HNumber( "3" ) ).to_string(), HNumber( "6" ).to_string() );
@@ -990,6 +1006,25 @@ void module::test<19>( void )
 	ensure_equals( "multiplication failed g", ( HNumber( "123.4567" ) * HNumber( "100" ) ).to_string(), HNumber( "12345.67" ).to_string() );
 	ensure_equals( "multiplication failed h", ( HNumber( "12.345" ) * HNumber( "100000" ) ).to_string(), HNumber( "1234500" ).to_string() );
 	ensure_equals( "multiplication failed i", ( HNumber( "1234" ) * HNumber( "0.001" ) ).to_string(), HNumber( "1.234" ).to_string() );
+	_bc.spawn( BC_PATH );
+	HString msg;
+	HString res;
+	HString as;
+	HString bs;
+	_bc << "scale=100" << endl;
+	for ( int i = 0; i < 1000; ++ i )
+		{
+		HNumber a( random_real() );
+		HNumber b( random_real() );
+		as = a.to_string();
+		bs = b.to_string();
+		_bc << as << "* " << bs << endl;
+		_bc.read_until( res );
+		msg = "multiplication of random a = " + as + " and b = " + bs + " failed";
+		ensure_equals( msg, ( a * b ).to_string(), HNumber( res ).to_string() );
+		msg += "(R)";
+		ensure_equals( msg, ( b * a ).to_string(), HNumber( res ).to_string() );
+		}
 	}
 
 /* substraction */
@@ -997,7 +1032,24 @@ template<>
 template<>
 void module::test<20>( void )
 	{
-	ensure_equals( "substraction failed a", ( HNumber( "" ) - HNumber( "" ) ).to_string(), HNumber( "" ).to_string() );
+	_bc.spawn( BC_PATH );
+	HString msg;
+	HString res;
+	HString as;
+	HString bs;
+	for ( int i = 0; i < 1000; ++ i )
+		{
+		HNumber a( random_real() );
+		HNumber b( random_real() );
+		as = a.to_string();
+		bs = b.to_string();
+		msg = "substraction of random a = " + as + " and b = " + bs + " failed";
+		_bc << as << "- " << bs << endl;
+		_bc.read_until( res );
+		ensure_equals( msg, ( a - b ).to_string(), HNumber( res ).to_string() );
+		msg += "(R)";
+		ensure_equals( msg, ( b - a ).to_string(), ( -HNumber( res ) ).to_string() );
+		}
 	}
 
 /* division */
