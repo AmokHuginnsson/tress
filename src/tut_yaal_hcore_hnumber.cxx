@@ -42,7 +42,30 @@ namespace tut
 
 struct tut_yaal_hcore_hnumber
 	{
+	static HString BC_PATH;
+	HRandomizer _rnd;
+	HPipedChild _bc;
+	tut_yaal_hcore_hnumber( void );
+	double long random_real( void );
 	};
+
+HString tut_yaal_hcore_hnumber::BC_PATH = "/usr/bin/bc";
+
+tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void ) : _rnd(), _bc()
+	{
+	randomizer_helper::init_randomizer_from_time( _rnd );
+	}
+
+
+double long tut_yaal_hcore_hnumber::random_real( void )
+	{
+	double long n = _rnd.rnd();
+	double long d = 0;
+	while ( d == 0 )
+		d = _rnd.rnd();
+	( _rnd.rnd() % 2 ) && ( n = -n );
+	return ( n / d );
+	}
 
 typedef test_group<tut_yaal_hcore_hnumber> tut_group;
 typedef tut_group::object module;
@@ -886,12 +909,23 @@ void module::test<17>( void )
 	ensure( "greater-eq failed s", HNumber( "0" ) >= HNumber( "0" ) );
 	}
 
+/*
+ * :::::.:::::::::
+ *    ++.+++++++++
+ * *****.***
+ *
+ * ressize = 2;
+ * dps = 2;
+ *
+ */
+
 /* addition */
 template<>
 template<>
 void module::test<18>( void )
 	{
 	ensure_equals( "addition failed a", ( HNumber( "0" ) + HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
+	ensure_equals( "addition failed a1", ( HNumber( "6" ) + HNumber( "7" ) ).to_string(), HNumber( "13" ).to_string() );
 	ensure_equals( "addition failed b", ( HNumber( "1" ) + HNumber( "0" ) ).to_string(), HNumber( "1" ).to_string() );
 	ensure_equals( "addition failed c", ( HNumber( "0" ) + HNumber( "1" ) ).to_string(), HNumber( "1" ).to_string() );
 	ensure_equals( "addition failed d", ( HNumber( "-1" ) + HNumber( "0" ) ).to_string(), HNumber( "-1" ).to_string() );
@@ -900,7 +934,6 @@ void module::test<18>( void )
 	ensure_equals( "addition failed g", ( HNumber( "1" ) + HNumber( "1" ) ).to_string(), HNumber( "2" ).to_string() );
 	ensure_equals( "addition failed h", ( HNumber( "-1" ) + HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
 	ensure_equals( "addition failed i", ( HNumber( "1" ) + HNumber( "-1" ) ).to_string(), HNumber( "0" ).to_string() );
-	ensure_equals( "addition failed j", ( HNumber( "1.234" ) + HNumber( "2.345" ) ).to_string(), HNumber( "3.579" ).to_string() );
 	ensure_equals( "addition failed j", ( HNumber( "1.234" ) + HNumber( "2.345" ) ).to_string(), HNumber( "3.579" ).to_string() );
 	ensure_equals( "addition failed k", ( HNumber( "2.345" ) + HNumber( "3.455" ) ).to_string(), HNumber( "5.8" ).to_string() );
 	ensure_equals( "addition failed l", ( HNumber( "12.34" ) + HNumber( "4.323" ) ).to_string(), HNumber( "16.663" ).to_string() );
@@ -911,8 +944,8 @@ void module::test<18>( void )
 	ensure_equals( "addition failed 2", ( HNumber( "1.1234" ) + HNumber( "123.1" ) ).to_string(), HNumber( "124.2234" ).to_string() );
 	ensure_equals( "addition failed 3", ( HNumber( "1.12" ) + HNumber( "123.1234" ) ).to_string(), HNumber( "124.2434" ).to_string() );
 	ensure_equals( "addition failed 4", ( HNumber( "-123.1" ) + HNumber( "1.1234" ) ).to_string(), HNumber( "-121.9766" ).to_string() );
-	ensure_equals( "addition failed 5", ( HNumber( "-123.1234" ) + HNumber( "1.12" ) ).to_string(), HNumber( "-121.98" ).to_string() );
-	ensure_equals( "addition failed 6", ( HNumber( "-1.1234" ) + HNumber( "123.1" ) ).to_string(), HNumber( "-121.9766" ).to_string() );
+	ensure_equals( "addition failed 5", ( HNumber( "-123.1234" ) + HNumber( "1.12" ) ).to_string(), HNumber( "-122.0034" ).to_string() );
+	ensure_equals( "addition failed 6", ( HNumber( "-1.1234" ) + HNumber( "123.1" ) ).to_string(), HNumber( "121.9766" ).to_string() );
 	ensure_equals( "addition failed 7", ( HNumber( "-1.12" ) + HNumber( "123.1234" ) ).to_string(), HNumber( "122.0034" ).to_string() );
 	ensure_equals( "addition failed 8", ( HNumber( "123.1" ) + HNumber( "-1.1234" ) ).to_string(), HNumber( "121.9766" ).to_string() );
 	ensure_equals( "addition failed 9", ( HNumber( "123.1234" ) + HNumber( "-1.12" ) ).to_string(), HNumber( "122.0034" ).to_string() );
@@ -922,6 +955,25 @@ void module::test<18>( void )
 	ensure_equals( "addition failed 13", ( HNumber( "-123.1234" ) + HNumber( "-1.12" ) ).to_string(), HNumber( "-124.2434" ).to_string() );
 	ensure_equals( "addition failed 14", ( HNumber( "-1.1234" ) + HNumber( "-123.1" ) ).to_string(), HNumber( "-124.2234" ).to_string() );
 	ensure_equals( "addition failed 15", ( HNumber( "-1.12" ) + HNumber( "-123.1234" ) ).to_string(), HNumber( "-124.2434" ).to_string() );
+	_bc.spawn( BC_PATH );
+	HString msg;
+	HString res;
+	HString as;
+	HString bs;
+	for ( int i = 0; i < 1000; ++ i )
+		{
+		HNumber a( random_real() );
+		HNumber b( random_real() );
+		as = a.to_string();
+		bs = b.to_string();
+		_bc << as << '+' << bs << endl;
+		_bc.read_until( res );
+		msg = "addition of random a = " + as + " and b = " + bs + " failed";
+		cout << msg << endl;
+		ensure_equals( msg, ( a + b ).to_string(), HNumber( res ).to_string() );
+		msg += "(R)";
+		ensure_equals( msg, ( b + a ).to_string(), HNumber( res ).to_string() );
+		}
 	}
 
 /* multiplication */
@@ -962,6 +1014,22 @@ template<>
 void module::test<22>( void )
 	{
 	ensure_equals( "opposite failed a", ( - HNumber( "" ) ).to_string(), HNumber( "" ).to_string() );
+	}
+
+/* bc */
+template<>
+template<>
+void module::test<23>( void )
+	{
+	HPipedChild bc;
+	bc.spawn( "/usr/bin/bc" );
+	HString res;
+	for ( int i = 0; i < 10; ++ i )
+		{
+		bc << i << '*' << i << endl;
+		bc.read_until( res );
+		cout << res << endl;
+		}
 	}
 
 }
