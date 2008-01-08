@@ -237,6 +237,11 @@ void module::test<4>( void )
 	ensure_equals( "number not created correctly", n9.to_string(), "2.7" );
 	ensure_equals( "bad dafault precision", n9.get_precision(), HNumber::D_DEFAULT_PRECISION );
 	cout << "| n9 =" << n9.to_string() << " |" << endl;
+	ensure_equals( "number 0 not created correctly", HNumber( "0001200" ).to_string(), "1200" );
+	ensure_equals( "number 1 not created correctly", HNumber( "-00.200" ).to_string(), "-.2" );
+	ensure_equals( "number 2 not created correctly", HNumber( "-00100" ).to_string(), "100" );
+	ensure_equals( "number 3 not created correctly", HNumber( "00012.3200" ).to_string(), "12.32" );
+	ensure_equals( "number 4 not created correctly", HNumber( "-000034.212000" ).to_string(), "-34.212" );
 	}
 
 /* construct from string (prefixes) */
@@ -776,6 +781,7 @@ void module::test<14>( void )
 	ensure( "lower failed d", HNumber( "0" ) < HNumber( "0.5" ) );
 	ensure( "lower failed e", HNumber( ".2" ) < HNumber( "0.5" ) );
 	ensure( "lower failed f", HNumber( ".2" ) < HNumber( "1" ) );
+	ensure( "lower failed f1", HNumber( ".123" ) < HNumber( ".1231" ) );
 	ensure( "lower failed g", HNumber( "2.734543" ) < HNumber( "3.145" ) );
 
 	ensure( "lower failed h", ! ( HNumber( "1" ) < HNumber( "-1" ) ) );
@@ -784,6 +790,7 @@ void module::test<14>( void )
 	ensure( "lower failed k", ! ( HNumber( "0.5" ) < HNumber( "0" ) ) );
 	ensure( "lower failed l", ! ( HNumber( "0.5" ) < HNumber( ".2" ) ) );
 	ensure( "lower failed m", ! ( HNumber( "1" ) < HNumber( ".2" ) ) );
+	ensure( "lower failed f2", ! ( HNumber( ".1231" ) < HNumber( ".123" ) ) );
 	ensure( "lower failed n", ! ( HNumber( "3.145" ) < HNumber( "2.734543" ) ) );
 	ensure( "lower failed o", ! ( HNumber( "1" ) < HNumber( "1" ) ) );
 	ensure( "lower failed p", ! ( HNumber( "-1" ) < HNumber( "-1" ) ) );
@@ -803,6 +810,7 @@ void module::test<15>( void )
 	ensure( "lower-eq failed d", HNumber( "0" ) <= HNumber( "0.5" ) );
 	ensure( "lower-eq failed e", HNumber( ".2" ) <= HNumber( "0.5" ) );
 	ensure( "lower-eq failed f", HNumber( ".2" ) <= HNumber( "1" ) );
+	ensure( "lower-eq failed f1", HNumber( ".123" ) <= HNumber( ".1231" ) );
 	ensure( "lower-eq failed g", HNumber( "2.734543" ) <= HNumber( "3.145" ) );
 	ensure( "lower-eq failed o", HNumber( "1" ) <= HNumber( "1" ) );
 	ensure( "lower-eq failed p", HNumber( "-1" ) <= HNumber( "-1" ) );
@@ -816,6 +824,7 @@ void module::test<15>( void )
 	ensure( "lower-eq failed k", ! ( HNumber( "0.5" ) <= HNumber( "0" ) ) );
 	ensure( "lower-eq failed l", ! ( HNumber( "0.5" ) <= HNumber( ".2" ) ) );
 	ensure( "lower-eq failed m", ! ( HNumber( "1" ) <= HNumber( ".2" ) ) );
+	ensure( "lower-eq failed f2", ! ( HNumber( ".1231" ) <= HNumber( ".123" ) ) );
 	ensure( "lower-eq failed n", ! ( HNumber( "3.145" ) <= HNumber( "2.734543" ) ) );
 	}
 
@@ -830,6 +839,7 @@ void module::test<16>( void )
 	ensure( "greater failed d", HNumber( "0.5" ) > HNumber( "0" ) );
 	ensure( "greater failed e", HNumber( "0.5" ) > HNumber( ".2" ) );
 	ensure( "greater failed f", HNumber( "1" ) > HNumber( ".2" ) );
+	ensure( "greater failed f1", HNumber( ".1231" ) > HNumber( ".123" ) );
 	ensure( "greater failed g", HNumber( "3.145" ) > HNumber( "2.734543" ) );
 
 	ensure( "greater failed h", ! ( HNumber( "-1" ) > HNumber( "1" ) ) );
@@ -838,6 +848,7 @@ void module::test<16>( void )
 	ensure( "greater failed k", ! ( HNumber( "0" ) > HNumber( "0.5" ) ) );
 	ensure( "greater failed l", ! ( HNumber( ".2" ) > HNumber( "0.5" ) ) );
 	ensure( "greater failed m", ! ( HNumber( ".2" ) > HNumber( "1" ) ) );
+	ensure( "greater failed f2", ! ( HNumber( ".123" ) > HNumber( ".1231" ) ) );
 	ensure( "greater failed n", ! ( HNumber( "2.734543" ) > HNumber( "3.145" ) ) );
 	ensure( "greater failed o", ! ( HNumber( "1" ) > HNumber( "1" ) ) );
 	ensure( "greater failed p", ! ( HNumber( "-1" ) > HNumber( "-1" ) ) );
@@ -857,6 +868,7 @@ void module::test<17>( void )
 	ensure( "greater-eq failed d", HNumber( "0.5" ) >= HNumber( "0" ) );
 	ensure( "greater-eq failed e", HNumber( "0.5" ) >= HNumber( ".2" ) );
 	ensure( "greater-eq failed f", HNumber( "1" ) >= HNumber( ".2" ) );
+	ensure( "greater-eq failed f1", HNumber( ".1231" ) >= HNumber( ".123" ) );
 	ensure( "greater-eq failed g", HNumber( "3.145" ) >= HNumber( "2.734543" ) );
 
 	ensure( "greater-eq failed h", ! ( HNumber( "-1" ) >= HNumber( "1" ) ) );
@@ -865,6 +877,7 @@ void module::test<17>( void )
 	ensure( "greater-eq failed k", ! ( HNumber( "0" ) >= HNumber( "0.5" ) ) );
 	ensure( "greater-eq failed l", ! ( HNumber( ".2" ) >= HNumber( "0.5" ) ) );
 	ensure( "greater-eq failed m", ! ( HNumber( ".2" ) >= HNumber( "1" ) ) );
+	ensure( "greater-eq failed f2", ! ( HNumber( ".123" ) >= HNumber( ".1231" ) ) );
 	ensure( "greater-eq failed n", ! ( HNumber( "2.734543" ) >= HNumber( "3.145" ) ) );
 	ensure( "greater-eq failed o", HNumber( "1" ) >= HNumber( "1" ) );
 	ensure( "greater-eq failed p", HNumber( "-1" ) >= HNumber( "-1" ) );
@@ -878,7 +891,37 @@ template<>
 template<>
 void module::test<18>( void )
 	{
-	ensure_equals( "addition failed a", ( HNumber( "" ) + HNumber( "" ) ).to_string(), HNumber( "" ).to_string() );
+	ensure_equals( "addition failed a", ( HNumber( "0" ) + HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
+	ensure_equals( "addition failed b", ( HNumber( "1" ) + HNumber( "0" ) ).to_string(), HNumber( "1" ).to_string() );
+	ensure_equals( "addition failed c", ( HNumber( "0" ) + HNumber( "1" ) ).to_string(), HNumber( "1" ).to_string() );
+	ensure_equals( "addition failed d", ( HNumber( "-1" ) + HNumber( "0" ) ).to_string(), HNumber( "-1" ).to_string() );
+	ensure_equals( "addition failed e", ( HNumber( "0" ) + HNumber( "-1" ) ).to_string(), HNumber( "-1" ).to_string() );
+	ensure_equals( "addition failed f", ( HNumber( "-1" ) + HNumber( "-1" ) ).to_string(), HNumber( "-2" ).to_string() );
+	ensure_equals( "addition failed g", ( HNumber( "1" ) + HNumber( "1" ) ).to_string(), HNumber( "2" ).to_string() );
+	ensure_equals( "addition failed h", ( HNumber( "-1" ) + HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
+	ensure_equals( "addition failed i", ( HNumber( "1" ) + HNumber( "-1" ) ).to_string(), HNumber( "0" ).to_string() );
+	ensure_equals( "addition failed j", ( HNumber( "1.234" ) + HNumber( "2.345" ) ).to_string(), HNumber( "3.579" ).to_string() );
+	ensure_equals( "addition failed j", ( HNumber( "1.234" ) + HNumber( "2.345" ) ).to_string(), HNumber( "3.579" ).to_string() );
+	ensure_equals( "addition failed k", ( HNumber( "2.345" ) + HNumber( "3.455" ) ).to_string(), HNumber( "5.8" ).to_string() );
+	ensure_equals( "addition failed l", ( HNumber( "12.34" ) + HNumber( "4.323" ) ).to_string(), HNumber( "16.663" ).to_string() );
+	ensure_equals( "addition failed m", ( HNumber( "-1.234" ) + HNumber( "4.2356" ) ).to_string(), HNumber( "3.0016" ).to_string() );
+
+	ensure_equals( "addition failed 0", ( HNumber( "123.1" ) + HNumber( "1.1234" ) ).to_string(), HNumber( "124.2234" ).to_string() );
+	ensure_equals( "addition failed 1", ( HNumber( "123.1234" ) + HNumber( "1.12" ) ).to_string(), HNumber( "124.2434" ).to_string() );
+	ensure_equals( "addition failed 2", ( HNumber( "1.1234" ) + HNumber( "123.1" ) ).to_string(), HNumber( "124.2234" ).to_string() );
+	ensure_equals( "addition failed 3", ( HNumber( "1.12" ) + HNumber( "123.1234" ) ).to_string(), HNumber( "124.2434" ).to_string() );
+	ensure_equals( "addition failed 4", ( HNumber( "-123.1" ) + HNumber( "1.1234" ) ).to_string(), HNumber( "-121.9766" ).to_string() );
+	ensure_equals( "addition failed 5", ( HNumber( "-123.1234" ) + HNumber( "1.12" ) ).to_string(), HNumber( "-121.98" ).to_string() );
+	ensure_equals( "addition failed 6", ( HNumber( "-1.1234" ) + HNumber( "123.1" ) ).to_string(), HNumber( "-121.9766" ).to_string() );
+	ensure_equals( "addition failed 7", ( HNumber( "-1.12" ) + HNumber( "123.1234" ) ).to_string(), HNumber( "122.0034" ).to_string() );
+	ensure_equals( "addition failed 8", ( HNumber( "123.1" ) + HNumber( "-1.1234" ) ).to_string(), HNumber( "121.9766" ).to_string() );
+	ensure_equals( "addition failed 9", ( HNumber( "123.1234" ) + HNumber( "-1.12" ) ).to_string(), HNumber( "122.0034" ).to_string() );
+	ensure_equals( "addition failed 10", ( HNumber( "1.1234" ) + HNumber( "-123.1" ) ).to_string(), HNumber( "-121.9766" ).to_string() );
+	ensure_equals( "addition failed 11", ( HNumber( "1.12" ) + HNumber( "-123.1234" ) ).to_string(), HNumber( "-122.0034" ).to_string() );
+	ensure_equals( "addition failed 12", ( HNumber( "-123.1" ) + HNumber( "-1.1234" ) ).to_string(), HNumber( "-124.2234" ).to_string() );
+	ensure_equals( "addition failed 13", ( HNumber( "-123.1234" ) + HNumber( "-1.12" ) ).to_string(), HNumber( "-124.2434" ).to_string() );
+	ensure_equals( "addition failed 14", ( HNumber( "-1.1234" ) + HNumber( "-123.1" ) ).to_string(), HNumber( "-124.2234" ).to_string() );
+	ensure_equals( "addition failed 15", ( HNumber( "-1.12" ) + HNumber( "-123.1234" ) ).to_string(), HNumber( "-124.2434" ).to_string() );
 	}
 
 /* multiplication */
@@ -886,6 +929,15 @@ template<>
 template<>
 void module::test<19>( void )
 	{
+	ensure_equals( "multiplication failed a", ( HNumber( "0" ) * HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
+	ensure_equals( "multiplication failed b", ( HNumber( "0" ) * HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
+	ensure_equals( "multiplication failed c", ( HNumber( "2" ) * HNumber( "3" ) ).to_string(), HNumber( "6" ).to_string() );
+	ensure_equals( "multiplication failed d", ( HNumber( "-2" ) * HNumber( "3" ) ).to_string(), HNumber( "-6" ).to_string() );
+	ensure_equals( "multiplication failed e", ( HNumber( "-2" ) * HNumber( "-3" ) ).to_string(), HNumber( "6" ).to_string() );
+	ensure_equals( "multiplication failed f", ( HNumber( "12.34" ) * HNumber( "-7.321" ) ).to_string(), HNumber( "-90.34114" ).to_string() );
+	ensure_equals( "multiplication failed g", ( HNumber( "123.4567" ) * HNumber( "100" ) ).to_string(), HNumber( "12345.67" ).to_string() );
+	ensure_equals( "multiplication failed h", ( HNumber( "12.345" ) * HNumber( "100000" ) ).to_string(), HNumber( "1234500" ).to_string() );
+	ensure_equals( "multiplication failed i", ( HNumber( "1234" ) * HNumber( "0.001" ) ).to_string(), HNumber( "1.234" ).to_string() );
 	}
 
 /* substraction */
@@ -893,6 +945,7 @@ template<>
 template<>
 void module::test<20>( void )
 	{
+	ensure_equals( "substraction failed a", ( HNumber( "" ) - HNumber( "" ) ).to_string(), HNumber( "" ).to_string() );
 	}
 
 /* division */
@@ -900,6 +953,15 @@ template<>
 template<>
 void module::test<21>( void )
 	{
+	ensure_equals( "division failed a", ( HNumber( "" ) / HNumber( "" ) ).to_string(), HNumber( "" ).to_string() );
+	}
+
+/* opposite */
+template<>
+template<>
+void module::test<22>( void )
+	{
+	ensure_equals( "opposite failed a", ( - HNumber( "" ) ).to_string(), HNumber( "" ).to_string() );
 	}
 
 }
