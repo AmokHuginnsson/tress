@@ -1012,7 +1012,7 @@ void module::test<19>( void )
 	HString as;
 	HString bs;
 	_bc << "scale=100" << endl;
-	for ( int i = 0; i < 1000; ++ i )
+	for ( int long i = 0; i < 50000; ++ i )
 		{
 		HNumber a( random_real() );
 		HNumber b( random_real() );
@@ -1073,15 +1073,10 @@ template<>
 template<>
 void module::test<23>( void )
 	{
-	HPipedChild bc;
-	bc.spawn( "/usr/bin/bc" );
-	HString res;
-	for ( int i = 0; i < 10; ++ i )
-		{
-		bc << i << '*' << i << endl;
-		bc.read_until( res );
-		cout << res << endl;
-		}
+	HNumber n = 3;
+
+	n ^= 33333;
+	cout << n.to_string() << endl;
 	}
 
 }
