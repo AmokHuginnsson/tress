@@ -1012,7 +1012,7 @@ void module::test<19>( void )
 	HString as;
 	HString bs;
 	_bc << "scale=100" << endl;
-	for ( int long i = 0; i < 50000; ++ i )
+	for ( int long i = 0; i < 1000; ++ i )
 		{
 		HNumber a( random_real() );
 		HNumber b( random_real() );
@@ -1057,7 +1057,28 @@ template<>
 template<>
 void module::test<21>( void )
 	{
-	ensure_equals( "division failed a", ( HNumber( "" ) / HNumber( "" ) ).to_string(), HNumber( "" ).to_string() );
+	try
+		{
+		HNumber n( "1" );
+		HNumber x;
+		n /= x;
+		fail( "division by zero performed" );
+		}
+	catch ( HException& )
+		{
+		// ok
+		}
+	ensure_equals( "division failed a", ( HNumber( "0" ) / HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
+	ensure_equals( "division failed b", ( HNumber( "0" ) / HNumber( "-1" ) ).to_string(), HNumber( "0" ).to_string() );
+	ensure_equals( "division failed c", ( HNumber( "1" ) / HNumber( "1" ) ).to_string(), HNumber( "1" ).to_string() );
+	ensure_equals( "division failed d", ( HNumber( "1" ) / HNumber( "-1" ) ).to_string(), HNumber( "-1" ).to_string() );
+	ensure_equals( "division failed e", ( HNumber( "-1" ) / HNumber( "1" ) ).to_string(), HNumber( "-1" ).to_string() );
+	ensure_equals( "division failed f", ( HNumber( "-1" ) / HNumber( "-1" ) ).to_string(), HNumber( "1" ).to_string() );
+	ensure_equals( "division failed g", ( HNumber( "2" ) / HNumber( "4" ) ).to_string(), HNumber( ".5" ).to_string() );
+	ensure_equals( "division failed h", ( HNumber( "4" ) / HNumber( "2" ) ).to_string(), HNumber( "2" ).to_string() );
+	ensure_equals( "division failed i", ( HNumber( "100" ) / HNumber( "5" ) ).to_string(), HNumber( "20" ).to_string() );
+	ensure_equals( "division failed j", ( HNumber( "5" ) / HNumber( "100" ) ).to_string(), HNumber( ".05" ).to_string() );
+	ensure_equals( "division failed k", ( HNumber( "3.144" ) / HNumber( ".03" ) ).to_string(), HNumber( "104.8" ).to_string() );
 	}
 
 /* opposite */
@@ -1065,7 +1086,11 @@ template<>
 template<>
 void module::test<22>( void )
 	{
-	ensure_equals( "opposite failed a", ( - HNumber( "" ) ).to_string(), HNumber( "" ).to_string() );
+	ensure_equals( "opposite failed a", ( - HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
+	ensure_equals( "opposite failed b", ( - HNumber( "1" ) ).to_string(), HNumber( "-1" ).to_string() );
+	ensure_equals( "opposite failed c", ( - HNumber( "-1" ) ).to_string(), HNumber( "1" ).to_string() );
+	ensure_equals( "opposite failed d", ( - HNumber( ".01" ) ).to_string(), HNumber( "-.01" ).to_string() );
+	ensure_equals( "opposite failed e", ( - HNumber( "-.01" ) ).to_string(), HNumber( ".01" ).to_string() );
 	}
 
 /* bc */
@@ -1075,7 +1100,7 @@ void module::test<23>( void )
 	{
 	HNumber n = 3;
 
-	n ^= 33333;
+	n ^= 3333;
 	cout << n.to_string() << endl;
 	}
 
