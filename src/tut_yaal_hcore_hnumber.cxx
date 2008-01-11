@@ -996,7 +996,7 @@ template<>
 template<>
 void module::test<19>( void )
 	{
-	ensure_equals( "multiplication failed x", ( HNumber( ".011931709189" ) * HNumber( "-154.734375" ) ).to_string(), HNumber( "-1.846245564041671875" ).to_string() );
+	//ensure_equals( "multiplication failed x", ( HNumber( ".011931709189" ) * HNumber( "-154.734375" ) ).to_string(), HNumber( "-1.846245564041671875" ).to_string() );
 	ensure_equals( "multiplication failed a", ( HNumber( "0" ) * HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
 	ensure_equals( "multiplication failed b", ( HNumber( "0" ) * HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
 	ensure_equals( "multiplication failed c", ( HNumber( "2" ) * HNumber( "3" ) ).to_string(), HNumber( "6" ).to_string() );
@@ -1068,17 +1068,58 @@ void module::test<21>( void )
 		{
 		// ok
 		}
+	cout << "a" << endl;
 	ensure_equals( "division failed a", ( HNumber( "0" ) / HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
+	cout << "b" << endl;
 	ensure_equals( "division failed b", ( HNumber( "0" ) / HNumber( "-1" ) ).to_string(), HNumber( "0" ).to_string() );
+	cout << "c" << endl;
 	ensure_equals( "division failed c", ( HNumber( "1" ) / HNumber( "1" ) ).to_string(), HNumber( "1" ).to_string() );
+	ensure_equals( "division failed c 0", ( HNumber( "10.01" ) / HNumber( "1" ) ).to_string(), HNumber( "10.01" ).to_string() );
+	ensure_equals( "division failed c 1", ( HNumber( "10.01" ) / HNumber( "10" ) ).to_string(), HNumber( "1.001" ).to_string() );
+	ensure_equals( "division failed c 2", ( HNumber( "10.01" ) / HNumber( "100" ) ).to_string(), HNumber( ".1001" ).to_string() );
+	ensure_equals( "division failed c 3", ( HNumber( "10.01" ) / HNumber( "1000" ) ).to_string(), HNumber( ".01001" ).to_string() );
+	ensure_equals( "division failed c 4", ( HNumber( "10.01" ) / HNumber( "10000" ) ).to_string(), HNumber( ".001001" ).to_string() );
+	ensure_equals( "division failed c 5", ( HNumber( "10.01" ) / HNumber( ".1" ) ).to_string(), HNumber( "100.1" ).to_string() );
+	ensure_equals( "division failed c 6", ( HNumber( "10.01" ) / HNumber( ".01" ) ).to_string(), HNumber( "1001" ).to_string() );
+	ensure_equals( "division failed c 7", ( HNumber( "10.01" ) / HNumber( ".001" ) ).to_string(), HNumber( "10010" ).to_string() );
+	ensure_equals( "division failed c 8", ( HNumber( "10.01" ) / HNumber( ".0001" ) ).to_string(), HNumber( "100100" ).to_string() );
+	cout << "d" << endl;
 	ensure_equals( "division failed d", ( HNumber( "1" ) / HNumber( "-1" ) ).to_string(), HNumber( "-1" ).to_string() );
+	cout << "e" << endl;
 	ensure_equals( "division failed e", ( HNumber( "-1" ) / HNumber( "1" ) ).to_string(), HNumber( "-1" ).to_string() );
+	cout << "f" << endl;
 	ensure_equals( "division failed f", ( HNumber( "-1" ) / HNumber( "-1" ) ).to_string(), HNumber( "1" ).to_string() );
+	cout << "g" << endl;
 	ensure_equals( "division failed g", ( HNumber( "2" ) / HNumber( "4" ) ).to_string(), HNumber( ".5" ).to_string() );
+	cout << "h" << endl;
 	ensure_equals( "division failed h", ( HNumber( "4" ) / HNumber( "2" ) ).to_string(), HNumber( "2" ).to_string() );
+	cout << "x" << endl;
+	ensure_equals( "division failed x", ( HNumber( "2468" ) / HNumber( "2" ) ).to_string(), HNumber( "1234" ).to_string() );
+	cout << "i" << endl;
 	ensure_equals( "division failed i", ( HNumber( "100" ) / HNumber( "5" ) ).to_string(), HNumber( "20" ).to_string() );
+	cout << "j" << endl;
 	ensure_equals( "division failed j", ( HNumber( "5" ) / HNumber( "100" ) ).to_string(), HNumber( ".05" ).to_string() );
+	cout << "k" << endl;
 	ensure_equals( "division failed k", ( HNumber( "3.144" ) / HNumber( ".03" ) ).to_string(), HNumber( "104.8" ).to_string() );
+	_bc.spawn( BC_PATH );
+	HString msg;
+	HString res;
+	HString as;
+	HString bs;
+	_bc << "scale=100" << endl;
+	for ( int long i = 0; i < 1000; ++ i )
+		{
+		HNumber a( random_real() );
+		double long den = random_real();
+		den || ++ den;
+		HNumber b( den );
+		as = a.to_string();
+		bs = b.to_string();
+		_bc << as << "/ " << bs << endl;
+		_bc.read_until( res );
+		msg = "division of random a = " + as + " and b = " + bs + " failed";
+		ensure_equals( msg, ( a / b ).to_string(), HNumber( res ).to_string() );
+		}
 	}
 
 /* opposite */
@@ -1099,7 +1140,7 @@ template<>
 void module::test<23>( void )
 	{
 	HNumber n = 3;
-
+	/* n ^= 333333; time: 9:26.91 vs 0:06.01 of bc */
 	n ^= 3333;
 	cout << n.to_string() << endl;
 	}
