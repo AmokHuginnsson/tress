@@ -53,6 +53,7 @@ HString tut_yaal_hcore_hnumber::BC_PATH = "/usr/bin/bc";
 
 tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void ) : _rnd(), _bc()
 	{
+	setenv( "BC_LINE_LENGTH", "0", 1 );
 	randomizer_helper::init_randomizer_from_time( _rnd );
 	}
 
@@ -1068,53 +1069,55 @@ void module::test<21>( void )
 		{
 		// ok
 		}
-	cout << "division failed a     " << ( HNumber( "0" ) / HNumber( "1" ) ).to_string() << "\t\t" << HNumber( "0" ).to_string() << endl;
-	cout << "division failed b     " << ( HNumber( "0" ) / HNumber( "-1" ) ).to_string() << "\t\t" << HNumber( "0" ).to_string() << endl;
-	cout << "division failed c     " << ( HNumber( "1" ) / HNumber( "1" ) ).to_string() << "\t\t" << HNumber( "1" ).to_string() << endl;
-	cout << "division failed c x   " << ( HNumber( "1" ) / HNumber( "10" ) ).to_string() << "\t\t" << HNumber( ".1" ).to_string() << endl;
-	cout << "division failed c y   " << ( HNumber( "1" ) / HNumber( "100" ) ).to_string() << "\t\t" << HNumber( ".01" ).to_string() << endl;
-	cout << "division failed c 0   " << ( HNumber( "10.01" ) / HNumber( "1" ) ).to_string() << "\t" << HNumber( "10.01" ).to_string() << endl;
-	cout << "division failed c 0 2 " << ( HNumber( "10.01" ) / HNumber( "2" ) ).to_string() << "\t" << HNumber( "5.005" ).to_string() << endl;
-	cout << "division failed c 1   " << ( HNumber( "10.01" ) / HNumber( "10" ) ).to_string() << "\t" << HNumber( "1.001" ).to_string() << endl;
-	cout << "division failed c 1,0 " << ( HNumber( "10.001" ) / HNumber( "10" ) ).to_string() << "\t" << HNumber( "1.0001" ).to_string() << endl;
-	cout << "division failed c 1,1 " << ( HNumber( "10.001" ) / HNumber( "100" ) ).to_string() << "\t" << HNumber( ".10001" ).to_string() << endl;
-	cout << "division failed c 1,2 " << ( HNumber( "10.001" ) / HNumber( "1000" ) ).to_string() << "\t" << HNumber( ".010001" ).to_string() << endl;
-	cout << "division failed c 1,3 " << ( HNumber( "100.01" ) / HNumber( "10" ) ).to_string() << "\t" << HNumber( "10.001" ).to_string() << endl;
-	cout << "division failed c 1,4 " << ( HNumber( "100.01" ) / HNumber( "100" ) ).to_string() << "\t" << HNumber( "1.0001" ).to_string() << endl;
-	cout << "division failed c 1,5 " << ( HNumber( "100.01" ) / HNumber( "1000" ) ).to_string() << "\t" << HNumber( ".10001" ).to_string() << endl;
-	cout << "division failed c 1 2 " << ( HNumber( "10.01" ) / HNumber( "20" ) ).to_string() << "\t" << HNumber( ".5005" ).to_string() << endl;
-	cout << "division failed c 2   " << ( HNumber( "10.01" ) / HNumber( "100" ) ).to_string() << "\t" << HNumber( ".1001" ).to_string() << endl;
-	cout << "division failed c 2 2 " << ( HNumber( "10.01" ) / HNumber( "200" ) ).to_string() << "\t" << HNumber( ".05005" ).to_string() << endl;
-	cout << "division failed c 3   " << ( HNumber( "10.01" ) / HNumber( "1000" ) ).to_string() << "\t" << HNumber( ".01001" ).to_string() << endl;
-	cout << "division failed c 3 2 " << ( HNumber( "10.01" ) / HNumber( "2000" ) ).to_string() << "\t" << HNumber( ".005005" ).to_string() << endl;
-	cout << "division failed c 4   " << ( HNumber( "10.01" ) / HNumber( "10000" ) ).to_string() << "\t" << HNumber( ".001001" ).to_string() << endl;
-	cout << "division failed c 4 2 " << ( HNumber( "10.01" ) / HNumber( "20000" ) ).to_string() << "\t" << HNumber( ".0005005" ).to_string() << endl;
-	cout << "division failed c 5   " << ( HNumber( "10.01" ) / HNumber( "100000" ) ).to_string() << "\t" << HNumber( ".0001001" ).to_string() << endl;
-	cout << "division failed c 6   " << ( HNumber( "10.01" ) / HNumber( ".1" ) ).to_string() << "\t" << HNumber( "100.1" ).to_string() << endl;
-	cout << "division failed c 6 2 " << ( HNumber( "10.01" ) / HNumber( ".2" ) ).to_string() << "\t" << HNumber( "50.05" ).to_string() << endl;
-	cout << "division failed c 7   " << ( HNumber( "10.01" ) / HNumber( ".01" ) ).to_string() << "\t" << HNumber( "1001" ).to_string() << endl;
-	cout << "division failed c 7 2 " << ( HNumber( "10.01" ) / HNumber( ".02" ) ).to_string() << "\t" << HNumber( "500.5" ).to_string() << endl;
-	cout << "division failed c 8   " << ( HNumber( "10.01" ) / HNumber( ".001" ) ).to_string() << "\t" << HNumber( "10010" ).to_string() << endl;
-	cout << "division failed c 8 2 " << ( HNumber( "10.01" ) / HNumber( ".002" ) ).to_string() << "\t" << HNumber( "5005" ).to_string() << endl;
-	cout << "division failed c 9   " << ( HNumber( "10.01" ) / HNumber( ".0001" ) ).to_string() << "\t" << HNumber( "100100" ).to_string() << endl;
-	cout << "division failed c 9 2 " << ( HNumber( "10.01" ) / HNumber( ".0002" ) ).to_string() << "\t" << HNumber( "50050" ).to_string() << endl;
-	cout << "division failed d     " << ( HNumber( "1" ) / HNumber( "-1" ) ).to_string() << "\t" << HNumber( "-1" ).to_string() << endl;
-	cout << "division failed e     " << ( HNumber( "-1" ) / HNumber( "1" ) ).to_string() << "\t" << HNumber( "-1" ).to_string() << endl;
-	cout << "division failed f     " << ( HNumber( "-1" ) / HNumber( "-1" ) ).to_string() << "\t\t" << HNumber( "1" ).to_string() << endl;
-	cout << "division failed g     " << ( HNumber( "2" ) / HNumber( "4" ) ).to_string() << "\t" << HNumber( ".5" ).to_string() << endl;
-	cout << "division failed h     " << ( HNumber( "4" ) / HNumber( "2" ) ).to_string() << "\t\t" << HNumber( "2" ).to_string() << endl;
-	cout << "division failed x     " << ( HNumber( "2468" ) / HNumber( "2" ) ).to_string() << "\t" << HNumber( "1234" ).to_string() << endl;
-	cout << "division failed i     " << ( HNumber( "100" ) / HNumber( "5" ) ).to_string() << "\t" << HNumber( "20" ).to_string() << endl;
-	cout << "division failed j     " << ( HNumber( "5" ) / HNumber( "100" ) ).to_string() << "\t" << HNumber( ".05" ).to_string() << endl;
-	cout << "division failed k     " << ( HNumber( "3.144" ) / HNumber( ".03" ) ).to_string() << "\t" << HNumber( "104.8" ).to_string() << endl;
-	}
-#if 0
+	ensure_equals( "division failed a     ", ( HNumber( "0" ) / HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
+	ensure_equals( "division failed b     ", ( HNumber( "0" ) / HNumber( "-1" ) ).to_string(), HNumber( "0" ).to_string() );
+	ensure_equals( "division failed c     ", ( HNumber( "1" ) / HNumber( "1" ) ).to_string(), HNumber( "1" ).to_string() );
+	ensure_equals( "division failed c x   ", ( HNumber( "1" ) / HNumber( "10" ) ).to_string(), HNumber( ".1" ).to_string() );
+	ensure_equals( "division failed c y   ", ( HNumber( "1" ) / HNumber( "100" ) ).to_string(), HNumber( ".01" ).to_string() );
+	ensure_equals( "division failed c z   ", ( HNumber( "1" ) / HNumber( "1000" ) ).to_string(), HNumber( ".001" ).to_string() );
+	ensure_equals( "division failed c 0   ", ( HNumber( "10.01" ) / HNumber( "1" ) ).to_string(), HNumber( "10.01" ).to_string() );
+	ensure_equals( "division failed c 0 2 ", ( HNumber( "10.01" ) / HNumber( "2" ) ).to_string(), HNumber( "5.005" ).to_string() );
+	ensure_equals( "division failed c 1   ", ( HNumber( "10.01" ) / HNumber( "10" ) ).to_string(), HNumber( "1.001" ).to_string() );
+	ensure_equals( "division failed c 1,0 ", ( HNumber( "10.001" ) / HNumber( "10" ) ).to_string(), HNumber( "1.0001" ).to_string() );
+	ensure_equals( "division failed c 1,1 ", ( HNumber( "10.001" ) / HNumber( "100" ) ).to_string(), HNumber( ".10001" ).to_string() );
+	ensure_equals( "division failed c 1,2 ", ( HNumber( "10.001" ) / HNumber( "1000" ) ).to_string(), HNumber( ".010001" ).to_string() );
+	ensure_equals( "division failed c 1,3 ", ( HNumber( "100.01" ) / HNumber( "10" ) ).to_string(), HNumber( "10.001" ).to_string() );
+	ensure_equals( "division failed c 1,4 ", ( HNumber( "100.01" ) / HNumber( "100" ) ).to_string(), HNumber( "1.0001" ).to_string() );
+	ensure_equals( "division failed c 1,5 ", ( HNumber( "100.01" ) / HNumber( "1000" ) ).to_string(), HNumber( ".10001" ).to_string() );
+	ensure_equals( "division failed c 1 2 ", ( HNumber( "10.01" ) / HNumber( "20" ) ).to_string(), HNumber( ".5005" ).to_string() );
+	ensure_equals( "division failed c 2   ", ( HNumber( "10.01" ) / HNumber( "100" ) ).to_string(), HNumber( ".1001" ).to_string() );
+	ensure_equals( "division failed c 2 2 ", ( HNumber( "10.01" ) / HNumber( "200" ) ).to_string(), HNumber( ".05005" ).to_string() );
+	ensure_equals( "division failed c 3   ", ( HNumber( "10.01" ) / HNumber( "1000" ) ).to_string(), HNumber( ".01001" ).to_string() );
+	ensure_equals( "division failed c 3 2 ", ( HNumber( "10.01" ) / HNumber( "2000" ) ).to_string(), HNumber( ".005005" ).to_string() );
+	ensure_equals( "division failed c 4   ", ( HNumber( "10.01" ) / HNumber( "10000" ) ).to_string(), HNumber( ".001001" ).to_string() );
+	ensure_equals( "division failed c 4 2 ", ( HNumber( "10.01" ) / HNumber( "20000" ) ).to_string(), HNumber( ".0005005" ).to_string() );
+	ensure_equals( "division failed c 5   ", ( HNumber( "10.01" ) / HNumber( "100000" ) ).to_string(), HNumber( ".0001001" ).to_string() );
+	ensure_equals( "division failed c 5 2 ", ( HNumber( "10.01" ) / HNumber( "200000" ) ).to_string(), HNumber( ".00005005" ).to_string() );
+	ensure_equals( "division failed c 6   ", ( HNumber( "10.01" ) / HNumber( ".1" ) ).to_string(), HNumber( "100.1" ).to_string() );
+	ensure_equals( "division failed c 6 2 ", ( HNumber( "10.01" ) / HNumber( ".2" ) ).to_string(), HNumber( "50.05" ).to_string() );
+	ensure_equals( "division failed c 7   ", ( HNumber( "10.01" ) / HNumber( ".01" ) ).to_string(), HNumber( "1001" ).to_string() );
+	ensure_equals( "division failed c 7 2 ", ( HNumber( "10.01" ) / HNumber( ".02" ) ).to_string(), HNumber( "500.5" ).to_string() );
+	ensure_equals( "division failed c 8   ", ( HNumber( "10.01" ) / HNumber( ".001" ) ).to_string(), HNumber( "10010" ).to_string() );
+	ensure_equals( "division failed c 8 2 ", ( HNumber( "10.01" ) / HNumber( ".002" ) ).to_string(), HNumber( "5005" ).to_string() );
+	ensure_equals( "division failed c 9   ", ( HNumber( "10.01" ) / HNumber( ".0001" ) ).to_string(), HNumber( "100100" ).to_string() );
+	ensure_equals( "division failed c 9 2 ", ( HNumber( "10.01" ) / HNumber( ".0002" ) ).to_string(), HNumber( "50050" ).to_string() );
+	ensure_equals( "division failed d     ", ( HNumber( "1" ) / HNumber( "-1" ) ).to_string(), HNumber( "-1" ).to_string() );
+	ensure_equals( "division failed e     ", ( HNumber( "-1" ) / HNumber( "1" ) ).to_string(), HNumber( "-1" ).to_string() );
+	ensure_equals( "division failed f     ", ( HNumber( "-1" ) / HNumber( "-1" ) ).to_string(), HNumber( "1" ).to_string() );
+	ensure_equals( "division failed g     ", ( HNumber( "2" ) / HNumber( "4" ) ).to_string(), HNumber( ".5" ).to_string() );
+	ensure_equals( "division failed h     ", ( HNumber( "4" ) / HNumber( "2" ) ).to_string(), HNumber( "2" ).to_string() );
+	ensure_equals( "division failed x     ", ( HNumber( "2468" ) / HNumber( "2" ) ).to_string(), HNumber( "1234" ).to_string() );
+	ensure_equals( "division failed i     ", ( HNumber( "100" ) / HNumber( "5" ) ).to_string(), HNumber( "20" ).to_string() );
+	ensure_equals( "division failed j     ", ( HNumber( "5" ) / HNumber( "100" ) ).to_string(), HNumber( ".05" ).to_string() );
+	ensure_equals( "division failed k     ", ( HNumber( "3.144" ) / HNumber( ".03" ) ).to_string(), HNumber( "104.8" ).to_string() );
+	ensure_equals( "division failed k 1   ", ( HNumber( "3.15" ) / HNumber( ".03" ) ).to_string(), HNumber( "105" ).to_string() );
+	ensure_equals( "division failed k 2   ", ( HNumber( "31.44" ) / HNumber( ".03" ) ).to_string(), HNumber( "1048" ).to_string() );
 	_bc.spawn( BC_PATH );
 	HString msg;
 	HString res;
 	HString as;
 	HString bs;
-	_bc << "scale=100" << endl;
+	_bc << "scale=40" << endl;
 	for ( int long i = 0; i < 1000; ++ i )
 		{
 		HNumber a( random_real() );
@@ -1128,7 +1131,7 @@ void module::test<21>( void )
 		msg = "division of random a = " + as + " and b = " + bs + " failed";
 		ensure_equals( msg, ( a / b ).to_string(), HNumber( res ).to_string() );
 		}
-#endif
+	}
 
 /* opposite */
 template<>
