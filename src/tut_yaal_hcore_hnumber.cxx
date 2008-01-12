@@ -740,9 +740,17 @@ void module::test<10>( void )
 	HNumber::D_DEFAULT_PRECISION = S;
 	n.set_precision( M );
 	n = "10.1212121212121212121212";
-	ensure_equals( "bad precision from string", n.get_precision(), 22 );
+	ensure_equals( "bad precision from string", n.get_precision(), 22 + 1 ); /* numbers from strings are always is_exact() */
 	n.set_precision( 100 );
-	ensure_equals( "bad modified 4 precision", n.get_precision(), 22 );
+	ensure_equals( "bad modified 4 precision", n.get_precision(), 100 ); /* number was exact */
+	HNumber numerator( "1" );
+	HNumber denominator( "3" );
+	HNumber division;
+	division.set_precision( P );
+	division = numerator / denominator;
+	division.set_precision( 100 );
+	ensure_equals( "bad modified 4 precision ( 1/3 )", n.get_precision(), P ); /* number was exact */
+
 	HNumber s;
 	ensure_equals( "bad default minimum precision", s.get_precision(), M );
 	n.set_precision( F );
@@ -758,18 +766,14 @@ void module::test<11>( void )
 	char const* const p0 = "3.14159265";
 	HNumber n( p0 );
 	ensure_equals( "number not created correctly", n.to_string(), p0 );
-	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::D_DEFAULT_PRECISION );
 	HNumber copy;
 	ensure_equals( "number not created correctly", copy.to_string(), "0" );
-	ensure_equals( "bad dafault precision", copy.get_precision(), HNumber::D_DEFAULT_PRECISION );
 	copy = n;
 	ensure_equals( "number not assigned correctly", copy.to_string(), p0 );
-	ensure_equals( "bad assigned precision", copy.get_precision(), HNumber::D_DEFAULT_PRECISION );
 	HNumber another;
 	another.set_precision( HNumber::D_DEFAULT_PRECISION + 5 );
 	another = copy;
 	ensure_equals( "number not assigned correctly", another.to_string(), p0 );
-	ensure_equals( "bad assigned precision", another.get_precision(), HNumber::D_DEFAULT_PRECISION );
 	char const* const p1 = "17";
 	HNumber next( p1 );
 	next.set_precision( HNumber::D_DEFAULT_PRECISION + 5 );
