@@ -739,6 +739,9 @@ void module::test<10>( void )
 	int const SAVED = HNumber::D_DEFAULT_PRECISION;
 	HNumber::D_DEFAULT_PRECISION = S;
 	n.set_precision( M );
+	ensure_equals( "bad modified 3 precision M", n.get_precision(), M );
+	n.set_precision( S );
+	ensure_equals( "bad modified 3 precision SM", n.get_precision(), M );
 	n = "10.1212121212121212121212";
 	ensure_equals( "bad precision from string", n.get_precision(), 22 + 1 ); /* numbers from strings are always is_exact() */
 	n.set_precision( 100 );
@@ -746,10 +749,12 @@ void module::test<10>( void )
 	HNumber numerator( "1" );
 	HNumber denominator( "3" );
 	HNumber division;
-	division.set_precision( P );
+	numerator.set_precision( M );
+	denominator.set_precision( M );
 	division = numerator / denominator;
+	ensure_equals( "bad calculated 4 precision ( 1/3 )", division.get_precision(), M + M ); /* number was exact */
 	division.set_precision( 100 );
-	ensure_equals( "bad modified 4 precision ( 1/3 )", n.get_precision(), P ); /* number was exact */
+	ensure_equals( "bad modified 4 precision ( 1/3 )", division.get_precision(), M + M ); /* number was exact */
 
 	HNumber s;
 	ensure_equals( "bad default minimum precision", s.get_precision(), M );
@@ -764,6 +769,7 @@ template<>
 void module::test<11>( void )
 	{
 	char const* const p0 = "3.14159265";
+	HNumber::D_DEFAULT_PRECISION = 20;
 	HNumber n( p0 );
 	ensure_equals( "number not created correctly", n.to_string(), p0 );
 	HNumber copy;
@@ -1116,24 +1122,195 @@ void module::test<21>( void )
 	ensure_equals( "division failed k     ", ( HNumber( "3.144" ) / HNumber( ".03" ) ).to_string(), HNumber( "104.8" ).to_string() );
 	ensure_equals( "division failed k 1   ", ( HNumber( "3.15" ) / HNumber( ".03" ) ).to_string(), HNumber( "105" ).to_string() );
 	ensure_equals( "division failed k 2   ", ( HNumber( "31.44" ) / HNumber( ".03" ) ).to_string(), HNumber( "1048" ).to_string() );
+	HNumber numerator( "1" );
+	HNumber denominator( "3" );
+	int const MIN = 16;
+	numerator.set_precision( MIN );
+	denominator.set_precision( MIN );
+	HNumber division;
+	division = numerator / denominator;
+	ensure_equals( "bad calculus 1", division.to_string(), ".33333333333333333333333333333333" );
+	ensure( "number shall not be exact", ! division.is_exact() );
+	numerator = "2";
+	numerator.set_precision( MIN );
+	division = numerator / denominator;
+	ensure_equals( "bad calculus 2", division.to_string(), ".66666666666666666666666666666666" );
+	ensure( "number shall not be exact", ! division.is_exact() );
+	numerator = "2000";
+	numerator.set_precision( MIN );
+	division = numerator / denominator;
+	ensure_equals( "bad calculus 3", division.to_string(), "666.66666666666666666666666666666666" );
+	ensure( "number shall not be exact", ! division.is_exact() );
+	denominator = "3000000000000";
+	denominator.set_precision( MIN );
+	division = numerator / denominator;
+	ensure_equals( "bad calculus 4", division.to_string(), ".00000000066666666666666666666666" );
+	ensure( "number shall not be exact", ! division.is_exact() );
+	numerator = "2";
+	denominator = "4";
+	division = numerator / denominator;
+	ensure_equals( "bad calculus 5", division.to_string(), ".5" );
+	ensure( "number shall be exact", division.is_exact() );
+		{
+		HString n( ".491401" );
+		HString d( "7.01" );
+		HString r( ".0701" );
+		ensure_equals( "padding front zeros failed 0 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		//.59247871334 and b = 3.404513888889 failed: expected .1740274038163329231239957953559 actual .01740274038163329231239957953559
+		HString n( ".606" );
+		HString d( "3.03" );
+		HString r( ".2" );
+		ensure_equals( "padding front zeros failed 0 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n( ".49" );
+		HString d( "7" );
+		HString r( ".07" );
+		ensure_equals( "padding front zeros failed 0 1 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n( "4.91401" );
+		HString d( "70.1" );
+		HString r( ".0701" );
+		ensure_equals( "padding front zeros failed 0 2 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n( ".491401" );
+		HString d( "70.1" );
+		HString r( ".00701" );
+		ensure_equals( "padding front zeros failed 0 3 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n( ".0491401" );
+		HString d( "70.1" );
+		HString r( ".000701" );
+		ensure_equals( "padding front zeros failed 0 4 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n( ".00491401" );
+		HString d( "70.1" );
+		HString r( ".0000701" );
+		ensure_equals( "padding front zeros failed 0 5 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+
+		{
+		HString n( "4.91401" );
+		HString d( "7.01" );
+		HString r( ".701" );
+		ensure_equals( "padding front zeros failed 0 6 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n( ".491401" );
+		HString d( "7.01" );
+		HString r( ".0701" );
+		ensure_equals( "padding front zeros failed 0 7 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n( ".0491401" );
+		HString d( "7.01" );
+		HString r( ".00701" );
+		ensure_equals( "padding front zeros failed 0 8 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n( ".00491401" );
+		HString d( "7.01" );
+		HString r( ".000701" );
+		ensure_equals( "padding front zeros failed 0 9 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+
+		{
+		HString n( ".491401" );
+		HString d( "701" );
+		HString r( ".000701" );
+		ensure_equals( "padding front zeros failed 1 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n( "491.401" );
+		HString d( "701" );
+		HString r( ".701" );
+		ensure_equals( "padding front zeros failed 1 1 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n( "49.1401" );
+		HString d( "701" );
+		HString r( ".0701" );
+		ensure_equals( "padding front zeros failed 1 2 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n( "4.91401" );
+		HString d( "701" );
+		HString r( ".00701" );
+		ensure_equals( "padding front zeros failed 1 3 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n( ".4961122700545761418014255" );
+		HString d( "-7.059190031153" );
+		HString r( "-.0702789226335" );
+		ensure_equals( "padding front zeros failed a 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n( ".4961122700545761418014255" );
+		HString d( "7.059190031153" );
+		HString r( ".0702789226335" );
+		ensure_equals( "padding front zeros failed b 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+
+	ensure_equals( "division failed uber  ", ( HNumber( ".4961122700545761418014255" ) / HNumber( "-7.059190031153" ) ).to_string(), HNumber( "-.0702789226335" ).to_string() );
+
+		{
+		HString n( ".0077" );
+		HString d( ".77" );
+		HString r( ".01" );
+		ensure_equals( "padding front zeros failed 0 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
+		}
+		{
+		HString n(    ".160963010792" );
+		HString d( "100.264285714286" );
+		HString r( ".001605387" );
+		ensure_equals( "padding front zeros failed 0 0 ", ( HNumber( n ) / HNumber( d ) ).to_string().left( 10 ), HNumber( r ).to_string() );
+		}
+		{
+		HString n(    ".160963010792" );
+		HString d( "100264.285714286" );
+		HString r( ".000001605" );
+		ensure_equals( "padding front zeros failed q 0 ", ( HNumber( n ) / HNumber( d ) ).to_string().left( 10 ), HNumber( r ).to_string() );
+		}
+		{
+		HString n( "1.180629342051" );
+		HString d( "-3.6" );
+		HString r( "-.3279525950141666666666666666" );
+		ensure_equals( "padding front zeros failed q 1 ", ( HNumber( n ) / HNumber( d ) ).to_string().left( 30 ), HNumber( r ).to_string() );
+		}
+
 	_bc.spawn( BC_PATH );
 	HString msg;
 	HString res;
 	HString as;
 	HString bs;
-	_bc << "scale=40" << endl;
+	int const M = 16;
+	_bc << "scale=" << M + M << endl;
 	for ( int long i = 0; i < 1000; ++ i )
 		{
 		HNumber a( random_real() );
 		double long den = random_real();
 		den || ++ den;
 		HNumber b( den );
+		a.set_precision( M );
+		b.set_precision( M );
 		as = a.to_string();
 		bs = b.to_string();
 		_bc << as << "/ " << bs << endl;
 		_bc.read_until( res );
 		msg = "division of random a = " + as + " and b = " + bs + " failed";
-		ensure_equals( msg, ( a / b ).to_string(), HNumber( res ).to_string() );
+		HNumber div = a / b;
+		int len = res.get_length();
+		( len >= ( M + M - 2 ) ) && ( len = M + M - 2 );
+		res = res.left( len );
+		int z = res.reverse_find_other_than( "0" );
+		M_ASSERT( z >= 0 );
+		ensure_equals( msg, div.to_string().left( len - z ), res.left( len - z ) );
 		}
 	}
 
