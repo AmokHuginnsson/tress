@@ -708,11 +708,12 @@ struct tests_registerer <Test, Group, 0 >
  * each new test since we have to have reinitialized 
  * Data base class.
  */
-template < class Data, int MaxTestsInGroup = 50 > class test_group:public group_base
+template<typename Data, int MaxTestsInGroup = 50>
+class test_group:public group_base
 	{
 		const char *name_;
-
-		typedef void ( test_object < Data >::*testmethod ) ();
+		typedef test_object<Data> test_object_data;
+		typedef void ( test_object_data::*testmethod ) ();
 		typedef std::map < int, testmethod > tests;
 		typedef typename tests::iterator tests_iterator;
 		typedef typename tests::const_iterator tests_const_iterator;

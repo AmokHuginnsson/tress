@@ -904,11 +904,11 @@ void module::test<21>( void )
 	l.sort();
 	check_consistency( l );
 	ensure_equals( "sort error", to_string( l ), "1" );
-	char buf[] = "00010000";
+	char buf[] = "00000110";
 	to_list( buf, 8, l );
 	ensure_equals( "to_list failed", to_string( l ), buf );
 	l.sort();
-	ensure_equals( "to_list failed", to_string( l ), "00000001" );
+	ensure_equals( "sort failed", to_string( l ), "00000011" );
 	}
 
 /* Sorting. */
