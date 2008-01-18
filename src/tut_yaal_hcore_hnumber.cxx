@@ -1332,9 +1332,13 @@ template<>
 void module::test<23>( void )
 	{
 	HNumber n = 3;
-	/* n ^= 333333; time: 9:26.91 vs 0:06.01 of bc */
-	n ^= 3333;
-	cout << n.to_string() << endl;
+	n ^= 33333;
+	HString myRes = n.to_string();
+	_bc.spawn( BC_PATH );
+	_bc << "3^33333" << endl;
+	HString bcRes;
+	_bc.read_until( bcRes );
+	ensure_equals( "karatsuba failed", myRes, bcRes );
 	}
 
 }
