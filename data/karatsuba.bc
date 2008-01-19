@@ -1,0 +1,85 @@
+x=read();
+y=read();
+
+scale = 0
+
+define digit_count( n ) {
+	k = 0;
+	while ( n > 0 ) {
+		k = k + 1;
+		n = n / 10;
+	}
+	return ( k );
+}
+
+define max( a, b ) {
+	r = 0;
+	if ( a > b ) {
+		r = a;
+	} else {
+		r = b;
+	}
+	return ( r );
+}
+
+xl = digit_count( x );
+yl = digit_count( y );
+
+print "<<< Karatsuba >>>\n"
+
+print "first factor ", x, " has ", xl, " digits\n"
+print "second factor ", y, " has ", yl, " digits\n"
+
+if ( xl > yl ) {
+	t = x;
+	x = y;
+	y = t;
+	t = xl;
+	xl = yl;
+	yl = t;
+}
+
+ml = max( xl, yl );
+
+m = ml / 2;
+if ( ml % 2 ) {
+	m = m + 1
+}
+
+x1 = x/10^m
+x2 = x%10^m
+y1 = y/10^m
+y2 = y%10^m
+
+#print "upper part of x is ", x1, " lower part of x is ", x2, "\n"
+#print "upper part of y is ", y1, " lower part of y is ", y2, "\n"
+
+r2m = x1*y1
+r = x2*y2
+
+print "r2m is ", r2m, "\n"
+print "r is ", r, "\n"
+
+hx = x1 + x2
+hy = y1 + y2
+
+print "hx is ", hx, "\n"
+print "hy is ", hy, "\n"
+
+z1 = hx * hy
+
+z2 = z1*10^m+r
+
+res0 = z2+r2m*10^(2*m)
+
+res1 = res0-r2m*10^m
+
+result = res1-r*10^m
+
+print "Z is ", z1, "\n"
+print "Z*10^m+r is ", z2, "\n"
+print "Z*10^m+r+r2m*10^2m is ", res0, "\n"
+print "Z*10^m+r-r2m*10^m is ", res1, "\n"
+
+result
+x*y - result
