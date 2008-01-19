@@ -933,6 +933,16 @@ void module::test<22>( void )
 	l.sort();
 	check_consistency( l );
 	ensure_equals ( "sort failed", to_string( l ), "123" );
+	l.clear();
+	l.push_back( '3' );
+	l.push_back( '2' );
+	l.push_back( '1' );
+	l.sort();
+	check_consistency( l );
+	ensure_equals ( "sort failed", to_string( l ), "123" );
+	l.sort( OListBits::D_DESCENDING );
+	check_consistency( l );
+	ensure_equals ( "sort failed", to_string( l ), "321" );
 	}
 
 /* empty, is_empty */
@@ -982,13 +992,25 @@ void module::test<24>( void )
 	ensure_equals ( "exchange failed", to_string( l1 ), "ab" );
 	}
 
-void check_sorted( tut_yaal_hcore_hlist::list_t const& l )
+void check_sorted( tut_yaal_hcore_hlist::list_t const& l, OListBits::sort_order_t order )
 	{
-	int val = 0;
-	for ( tut_yaal_hcore_hlist::list_t::iterator it = l.begin(); it != l.end(); ++ it )
+	if ( order == OListBits::D_ASCENDING )
 		{
-		ensure( "not sorted", val <= *it );
-		val = *it;
+		int val = 0;
+		for ( tut_yaal_hcore_hlist::list_t::iterator it = l.begin(); it != l.end(); ++ it )
+			{
+			ensure( "not sorted", val <= *it );
+			val = *it;
+			}
+		}
+	else
+		{
+		int val = 0;
+		for ( tut_yaal_hcore_hlist::list_t::iterator it = l.rbegin(); it != l.rend(); -- it )
+			{
+			ensure( "not sorted (reversed)", val <= *it );
+			val = *it;
+			}
 		}
 	}
 
@@ -1008,11 +1030,14 @@ void module::test<25>( void )
 		snprintf( buf, 9, "%08lo", i );
 		for ( int k = 0; k < 8; ++ k )
 			l.push_back( buf[ k ] );
-		check_consistency( l );
-		l.sort();
 		try
 			{
-			check_sorted( l );
+			l.sort();
+			check_consistency( l );
+			check_sorted( l, OListBits::D_ASCENDING );
+			l.sort( OListBits::D_DESCENDING );
+			check_consistency( l );
+			check_sorted( l, OListBits::D_DESCENDING );
 			}
 		catch ( ... )
 			{
