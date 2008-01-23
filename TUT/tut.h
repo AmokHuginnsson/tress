@@ -210,6 +210,8 @@ struct group_base
 	// execute tests iteratively
 	virtual void rewind () = 0;
 	virtual test_result run_next () = 0;
+	virtual bool has_next() = 0;
+	virtual int next() = 0;
 
 	// execute one test
 	virtual test_result run_test ( int n ) = 0;
@@ -499,8 +501,9 @@ class test_runner
 				return;
 			for ( int n = 1;; ++n )
 				{
+				if ( i->second->has_next() )
+					callback_->test_started ( i->second->next() );
 				test_result tr = i->second->run_next ();
-				callback_->test_started ( n );
 				callback_->test_completed ( tr );
 
 				if ( tr.result == test_result::ex_ctor )
@@ -879,6 +882,16 @@ class test_group:public group_base
 		void rewind ()
 			{
 			current_test_ = tests_.begin ();
+			}
+
+		virtual bool has_next( void )
+			{
+			return ( current_test_ != tests_.end() );
+			}
+
+		virtual int next( void )
+			{
+			return ( current_test_ != tests_.end() ? current_test_->first : -1 );
 			}
 
 		/**

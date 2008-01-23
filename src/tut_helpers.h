@@ -27,9 +27,13 @@ Copyright:
 #ifndef __TUT_HELPERS_H
 #define __TUT_HELPERS_H
 
+#include <string>
 #include <iostream>
 #include <iomanip>
 #include <yaal/yaal.h>
+
+namespace tut_helpers
+{
 
 class HLogger
 	{
@@ -38,7 +42,7 @@ protected:
 	/*}*/
 public:
 	/*{*/
-	HLogger & operator << ( char const * const );
+	HLogger( void );
 	HLogger & operator << ( std::string const & );
 	HLogger & operator << ( int const & );
 	HLogger & operator << ( std::ostream & ( * const ) ( std::ostream & ) );
@@ -100,6 +104,9 @@ std::ostream & operator << ( std::ostream & out,
 	return ( out );
 	M_EPILOG
 	}
+
+//#define TITLE( title ) void TITLE( tut(title) )
+void TITLE( char const* const );
 
 template<typename tType>
 class counter
@@ -214,6 +221,8 @@ std::ostream& operator << ( std::ostream& stream, counter<tType> const& ctr )
 	stream << ctr.get_symbol();
 	return ( stream );
 	}
+
+}
 
 #endif /* not __TUT_HELPERS_H */
 

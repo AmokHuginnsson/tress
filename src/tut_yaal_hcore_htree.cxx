@@ -31,6 +31,7 @@ Copyright:
 M_VCSID ( "$Id$" )
 
 using namespace tut;
+using namespace tut_helpers;
 using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;

@@ -26,8 +26,9 @@ Copyright:
 
 #include <yaal/yaal.h>
 M_VCSID ( "$Id$" )
-
 #include "tut_helpers.h"
+
+#include "setup.h"
 
 using namespace std;
 using namespace yaal;
@@ -36,17 +37,35 @@ using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 
-HLogger & HLogger::operator << ( char const * const a_pcString )
+namespace tut_helpers
+{
+
+namespace
+{
+
+bool n_bWatchNext = false;
+int n_iNumber = 0;
+std::string n_oGroup;
+
+}
+
+HLogger::HLogger( void )
 	{
-	M_PROLOG
-	hcore::log << a_pcString;
-	return ( * this );
-	M_EPILOG
 	}
 
 HLogger & HLogger::operator << ( string const & a_oString )
 	{
 	M_PROLOG
+	if ( n_bWatchNext )
+		{
+		n_oGroup = a_oString;
+		n_bWatchNext = false;
+		}
+	else
+		{
+		if ( ! strncmp( a_oString.c_str(), "TUT: group", 10 ) )
+			n_bWatchNext = true;
+		}
 	hcore::log << a_oString.c_str ( );
 	return ( * this );
 	M_EPILOG
@@ -55,6 +74,7 @@ HLogger & HLogger::operator << ( string const & a_oString )
 HLogger & HLogger::operator << ( int const & a_iNumber )
 	{
 	M_PROLOG
+	n_iNumber = a_iNumber;
 	hcore::log << a_iNumber;
 	return ( * this );
 	M_EPILOG
@@ -81,4 +101,12 @@ ostream & operator << ( ostream & out, HComplex a_oComplex )
 	return ( out );
 	M_EPILOG
 	}
+
+void TITLE( char const* const title )
+	{
+	if ( setup.f_bVerbose )
+		cout << "TUT: " << n_oGroup << "::<" << n_iNumber << "> " << title << endl;
+	}
+
+}
 
