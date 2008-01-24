@@ -83,6 +83,7 @@ typedef test_group < tut_yaal_tools_hxml > tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_tools_hxml_group ( "yaal::tools::HXml" );
 
+/* init, parse */
 template<>
 template<>
 void module::test<1>( void )
@@ -109,6 +110,16 @@ void module::test<1>( void )
 		f_oXml.parse();
 	dump ( f_oXml.get_root ( ) );
 	return;
+	}
+
+/* load, save */
+template<>
+template<>
+void module::test<2>( void )
+	{
+	HXml xml;
+	xml.load( "data/xml.xml" );
+	xml.save( "out/tut.xml" );
 	}
 
 }

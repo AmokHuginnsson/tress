@@ -262,7 +262,7 @@ void module::test<33> ( void )
 	stop -= start;
 	ensure_equals ( "thread failed to stop", a.is_alive ( ), false );
 	ensure_distance ( "thread failed to interrupt",
-			stop.get_second ( ), 0, 2 );
+			static_cast<double>( stop.get_second() ), 0., 2.5 );
 	}
 
 /* Starting new thread and finishing it prematurely by destructor */
