@@ -109,5 +109,19 @@ void module::test<1>( void )
 	c2.invoke();
 	}
 
+bool greater( int long a, int long b )
+	{
+	return ( a > b );
+	}
+
+template<>
+template<>
+void module::test<2>( void )
+	{
+	bool p = yaal::bind2nd( &greater, 4 )( 3 );
+	bool q = yaal::bind2nd( &greater, 1 )( 3 );
+	cout << p << q << endl;
+	}
+
 }
 
