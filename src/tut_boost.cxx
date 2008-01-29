@@ -30,6 +30,7 @@ Copyright:
 #include <algorithm>
 #include <numeric>
 #include <boost/bind.hpp>
+#include <boost/filesystem.hpp>
 
 #include <TUT/tut.h>
 
@@ -40,6 +41,7 @@ using namespace tut;
 using namespace tut_helpers;
 using namespace std;
 using namespace boost;
+using namespace boost::filesystem;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -96,6 +98,29 @@ void module::test<1>( void )
 	copy( v.begin(), v.end(), ostream_iterator<multi>( cout ) );
 	cout << endl;
 	cout << "}" << endl;
+	}
+
+void dump_dir( path const& dir )
+	{
+	cout << "dir: " << dir << endl;
+	directory_iterator end;
+	for ( directory_iterator it( dir ); it != end; ++ it )
+		{
+		if ( is_directory( *it ) )
+			dump_dir( *it );
+		else
+			cout << "file: " << *it << endl;
+		}
+	return;
+	}
+
+/* filesystem */
+template<>
+template<>
+void module::test<2>( void )
+	{
+	TITLE( "filesystem" );
+	dump_dir( path( "." ) );
 	}
 
 }
