@@ -29,6 +29,7 @@ Copyright:
 #include <iterator>
 #include <algorithm>
 #include <numeric>
+#include <functional>
 #include <boost/bind.hpp>
 
 #include <TUT/tut.h>
@@ -96,7 +97,6 @@ void module::test<2>( void )
 	cout << "}" << endl;
 	}
 
-struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ ); } };
 /* create contents automatically */
 template<>
 template<>

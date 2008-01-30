@@ -54,18 +54,18 @@ namespace tut
 
 OSetup setup;
 
+typedef std::list<std::string> string_list_t;
+void gather_groups_from_file( string_list_t& );
+
 int main( int a_iArgc, char* a_ppcArgv[] )
 	{
 	M_PROLOG
 /*	variables declarations for main loop:                                 */
 	int l_iOpt = 0;
-	FILE* l_psFile = NULL;
-	HString l_oLine;
 	HLogger logger;
 	tut::reporter<HLogger> l_oVisitor( cerr, logger );
 	HException::set_error_stream( stdout );
 	tut::restartable_wrapper l_oRestartable;
-	list<string> l_oGroupNames;
 /*	end.                                                                  */
 	try
 		{
@@ -109,24 +109,10 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 			else
 				{
 				runner.get().set_callback ( &l_oVisitor );
+				string_list_t l_oGroupNames;
 				if ( setup.f_oTestGroupListFilePath )
 					{
-					if ( setup.f_oTestGroupListFilePath == "-" )
-						l_psFile = stdin;
-					HFile l_oFile( HFile::D_READING, l_psFile );
-					if ( ! l_psFile && l_oFile.open( setup.f_oTestGroupListFilePath ) )
-						{
-						cout << l_oFile.get_error() << ": " << l_oFile.get_path() << endl;
-						throw 0;
-						}
-					while ( l_oFile.read_line( l_oLine,
-								HFile::D_UNBUFFERED_READS | HFile::D_STRIP_NEWLINES ) >= 0 )
-						{
-						l_oLine.trim_left();
-						l_oLine.trim_right();
-						l_oGroupNames.push_back( static_cast<char const* const>( l_oLine ) );
-						}
-					l_oFile.close();
+					gather_groups_from_file( l_oGroupNames );
 					runner.get().run_tests( l_oGroupNames );
 					}
 				else if ( setup.f_oTestGroupPattern )
@@ -172,5 +158,30 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 			+ l_oVisitor.warnings_count
 			+ l_oVisitor.setup_count );
 	M_FINAL
+	}
+
+void gather_groups_from_file( string_list_t& lst )
+	{
+	M_PROLOG
+	FILE* l_psFile = NULL;
+	if ( setup.f_oTestGroupListFilePath == "-" )
+		l_psFile = stdin;
+	HFile l_oFile( HFile::D_READING, l_psFile );
+	if ( ! l_psFile && l_oFile.open( setup.f_oTestGroupListFilePath ) )
+		{
+		cout << l_oFile.get_error() << ": " << l_oFile.get_path() << endl;
+		throw 0;
+		}
+	HString l_oLine;
+	while ( l_oFile.read_line( l_oLine,
+				HFile::D_UNBUFFERED_READS | HFile::D_STRIP_NEWLINES ) >= 0 )
+		{
+		l_oLine.trim_left();
+		l_oLine.trim_right();
+		lst.push_back( static_cast<char const* const>( l_oLine ) );
+		}
+	l_oFile.close();
+	return;
+	M_EPILOG
 	}
 

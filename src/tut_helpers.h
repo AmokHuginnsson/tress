@@ -43,20 +43,20 @@ protected:
 public:
 	/*{*/
 	HLogger( void );
-	HLogger & operator << ( std::string const & );
-	HLogger & operator << ( int const & );
-	HLogger & operator << ( std::ostream & ( * const ) ( std::ostream & ) );
+	HLogger& operator << ( std::string const& );
+	HLogger& operator << ( int const& );
+	HLogger& operator << ( std::ostream& ( * const )( std::ostream& ) );
 	/*}*/
 protected:
 	/*{*/
 	/*}*/
 	};
 
-std::ostream & operator << ( std::ostream &, yaal::hcore::HComplex );
+std::ostream& operator << ( std::ostream&, yaal::hcore::HComplex );
 
-template < class tType >
-std::ostream & operator << ( std::ostream & out,
-		yaal::hcore::HVector < tType > a_oVector )
+template<class tType>
+std::ostream& operator << ( std::ostream& out,
+		yaal::hcore::HVector<tType> a_oVector )
 	{
 	M_PROLOG
 	int l_iCtr = 0, l_iSize = a_oVector.get_size ( );
@@ -72,9 +72,9 @@ std::ostream & operator << ( std::ostream & out,
 	M_EPILOG
 	}
 
-template < class tType >
-std::ostream & operator << ( std::ostream & out,
-		yaal::hcore::HMatrix < tType > a_oMatrix )
+template<class tType>
+std::ostream& operator << ( std::ostream& out,
+		yaal::hcore::HMatrix<tType> a_oMatrix )
 	{
 	M_PROLOG
 	int l_iCtr = 0, l_iCtrLoc = 0;
@@ -107,6 +107,7 @@ std::ostream & operator << ( std::ostream & out,
 
 //#define TITLE( title ) void TITLE( tut(title) )
 void TITLE( char const* const );
+struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ ); } };
 
 template<typename tType>
 class counter

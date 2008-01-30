@@ -31,6 +31,7 @@ Copyright:
 #include <numeric>
 #include <boost/bind.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/date_time/gregorian/gregorian.hpp>
 
 #include <TUT/tut.h>
 
@@ -42,6 +43,7 @@ using namespace tut_helpers;
 using namespace std;
 using namespace boost;
 using namespace boost::filesystem;
+using namespace boost::gregorian;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -121,6 +123,132 @@ void module::test<2>( void )
 	{
 	TITLE( "filesystem" );
 	dump_dir( path( "." ) );
+	}
+
+/* date_time */
+template<>
+template<>
+void module::test<3>( void )
+	{
+	TITLE( "date_time" );
+	try
+		{
+		string birthday_s( "1978-05-24" );
+		date birthday( from_simple_string( birthday_s ) );
+		date now = day_clock::local_day();
+		days alive = now - birthday;
+		if ( alive == days( 1 ) )
+			cout << "born yeasterday" << endl;
+		else if ( alive < days( 0 ) )
+			cout << "not yet born" << endl;
+		else
+			cout << "you live " << alive.days() << " days" << endl;
+		}
+	catch ( ... )
+		{
+		cerr << "bad date" << endl;
+		}
+	}
+
+struct test4helper
+	{
+	int _val;
+	test4helper( int val ) : _val( val ) {}
+	int get_val() const { return ( _val ); }
+	};
+
+struct phony
+	{
+	template<typename tType>
+	struct id
+		{
+		tType _val;
+		id( tType val ) : _val( val ) {}
+		tType operator()( void )
+			{ return ( _val ); }
+		};
+	};
+
+template<typename tType,
+	typename init0_t = phony, typename init1_t = phony,
+	typename init2_t = phony, typename init3_t = phony,
+	typename init4_t = phony, typename init5_t = phony>
+struct generator
+	{
+	typedef phony* __;
+	init0_t INIT0;
+	init1_t INIT1;
+	init2_t INIT2;
+	init3_t INIT3;
+	init4_t INIT4;
+	init5_t INIT5;
+	generator( init0_t init0 = init0_t(), init1_t init1 = init1_t(),
+			init2_t init2 = init2_t(), init3_t init3 = init3_t(),
+			init4_t init4 = init4_t(), init5_t init5 = init5_t() )
+		: INIT0( init0 ), INIT1( init1 ), INIT2( init2 ), INIT3( init3 ),
+		INIT4( init4 ), INIT5( init5 ) {}
+	tType make( __, __, __, __, __, __ )
+		{ return ( tType() ); }
+	tType make( init0_t const*, __, __, __, __, __ )
+		{ return ( tType( INIT0() ) ); }
+	tType make( init0_t const*, init1_t const*, __, __, __, __ )
+		{ return ( tType( INIT0(), INIT1() ) ); }
+	tType make( init0_t const*, init1_t const*, init2_t const*, __, __, __ )
+		{ return ( tType( INIT0(), INIT1(), INIT2() ) ); }
+	tType make( init0_t const*, init1_t const*, init2_t const*,
+			init3_t const*, __, __ )
+		{ return ( tType( INIT0(), INIT1(), INIT2(), INIT3() ) ); }
+	tType make( init0_t const*, init1_t const*, init2_t const*,
+			init3_t const*, init4_t const*, __ )
+		{ return ( tType( INIT0(), INIT1(), INIT2(), INIT3(), INIT4() ) ); }
+	tType make( init0_t const*, init1_t const*, init2_t const*,
+			init3_t const*, init4_t const*, init5_t const* )
+		{ return ( tType( INIT0(), INIT1(), INIT2(), INIT3(), INIT4(),
+					INIT5() ) ); }
+	tType operator()()
+		{
+		return (
+				make(
+					static_cast<init0_t*>( NULL ),
+					static_cast<init1_t*>( NULL ),
+					static_cast<init2_t*>( NULL ),
+					static_cast<init3_t*>( NULL ),
+					static_cast<init4_t*>( NULL ),
+					static_cast<init5_t*>( NULL ) ) );
+		}
+	};
+
+typedef pair<int const, test4helper> t4h_t;
+
+ostream& operator << ( ostream& os, t4h_t const& p )
+	{
+	os << "(" << p.first << "," << p.second.get_val() << ")";
+	return ( os );
+	}
+
+template<typename result_t, typename el1_t, typename el2_t>
+result_t plus( el1_t const& el1, el2_t const& el2 )
+	{ return ( el1 + el2 ); }
+
+template<>
+template<>
+void module::test<4>( void )
+	{
+	TITLE( "bind, accumulate, plus" );
+	cout << "accumulate all values returned by some\n"
+		"method of class that represent values in map" << endl;
+	cout << "{" << endl;
+	typedef map<int,test4helper> T;
+	T m;
+	typedef generator<test4helper, inc> t4gh_t;
+	generate_n( insert_iterator<T>( m, m.begin() ), 3,
+			generator<t4h_t, inc, t4gh_t>( inc( 1 ), t4gh_t( inc( 7 ) ) ) );
+	copy( m.begin(), m.end(), ostream_iterator<t4h_t>( cout ) );
+	cout << endl;
+	int sum = accumulate( m.begin(), m.end(), 0,
+			bind( std::plus<int>(), _1, bind( &test4helper::get_val, bind( &t4h_t::second, _2 ) ) ) );
+	cout << sum << endl;
+	cout << "}" << endl;
 	}
 
 }

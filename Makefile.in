@@ -30,7 +30,7 @@ VERSION				= 0
 SUBVERSION		= 0
 EXTRAVERSION	= 0
 include $(DIR_ROOT)/aux/common-paths.mk
-LIBS					= hconsole tools hcore hdata dbwrapper
+LIBS					= hconsole tools hcore hdata dbwrapper boost_filesystem boost_date_time
 TARGET				= 1exec
 ifdef NODEBUG
 	TARGET = $(PRJNAME)
@@ -46,7 +46,7 @@ ifndef NODEBUG
 	COMPILER_DEBUG_FLAGS+=@PCH@
 endif
 CXXWARNING_FLAGS:=$(filter-out -Weffc++,$(CXXWARNING_FLAGS))
-CWARNING_FLAGS								+= @PEDANTIC_ERRORS@ @EXTRA_WARNINGS@ @WARN_SHADOW@
+CWARNING_FLAGS								+= @PEDANTIC_ERRORS@ @EXTRA_WARNINGS@ @WARN_SHADOW@ -Wno-missing-noreturn
 COMPILER_PRIME_FLAGS					+= @DEFS@
 LINKER_PRIME_FLAGS +=	@SPECIAL_LINKER_FLAGS@
 
