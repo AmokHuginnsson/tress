@@ -122,5 +122,16 @@ void module::test<2>( void )
 	xml.save( "out/tut.xml" );
 	}
 
+/* apply stylesheet */
+template<>
+template<>
+void module::test<3>( void )
+	{
+	f_oXml.init( "data/xml.xml" );
+	f_oXml.apply_style( "data/style.xml" );
+	f_oXml.parse();
+	dump( f_oXml.get_root() );
+	}
+
 }
 
