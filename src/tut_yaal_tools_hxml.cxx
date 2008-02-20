@@ -79,14 +79,48 @@ struct tut_yaal_tools_hxml
 		}
 	};
 
-typedef test_group < tut_yaal_tools_hxml > tut_group;
+typedef test_group<tut_yaal_tools_hxml> tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_tools_hxml_group ( "yaal::tools::HXml" );
+
+/* Empty DOM. */
+template<>
+template<>
+void module::test<1>( void )
+	{
+	HXml x;
+	ensure( "fresh DOM not empty", ! x.get_root() );
+	try
+		{
+		x.get_root().get_type();
+		fail( "accessing null node-proxy" );
+		}
+	catch ( int& )
+		{
+		// ok
+		}
+	}
+
+/* Root node. */
+template<>
+template<>
+void module::test<2>( void )
+	{
+	HXml x;
+	static char const* const D_ROOT = "root";
+	x.create_root( D_ROOT );
+	HXml::HNodeProxy n = x.get_root();
+	ensure( "initialized DOM empty", !! n );
+	ensure_equals( "root value not stored", n.get_name(), D_ROOT );
+	ensure_equals( "bad level of root element", n.get_level(), 0 );
+	ensure( "bad type of root element", n.get_type() == HXml::HNode::TYPE::D_NODE );
+	ensure( "fresh node not empty", n.begin() == n.end() );
+	}
 
 /* init, parse */
 template<>
 template<>
-void module::test<1>( void )
+void module::test<41>( void )
 	{
 	HString string;
 	HFile file;
@@ -115,7 +149,7 @@ void module::test<1>( void )
 /* load, save */
 template<>
 template<>
-void module::test<2>( void )
+void module::test<42>( void )
 	{
 	HXml xml;
 	xml.load( "data/xml.xml" );
@@ -125,7 +159,7 @@ void module::test<2>( void )
 /* apply stylesheet */
 template<>
 template<>
-void module::test<3>( void )
+void module::test<43>( void )
 	{
 	f_oXml.init( "data/xml.xml" );
 	f_oXml.apply_style( "data/style.xml" );
