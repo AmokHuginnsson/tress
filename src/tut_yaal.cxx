@@ -63,7 +63,7 @@ struct ci
 	{
 	struct dummy{};
 	virtual ~ci() {}
-	virtual void invoke( void ) = 0;
+	virtual void visit( void ) = 0;
 	};
 
 template<typename c_t, typename m_t,
@@ -76,14 +76,14 @@ struct call : public ci
 	a2t _a2;
 	call( c_t obj, m_t m, a1t a1 = a1t(), a2t a2 = a2t() )
 		: _obj( obj ), M( m ), _a1( a1 ), _a2( a2 ) {}
-	void invoke( a1t const*, a2t const* )
+	void visit( a1t const*, a2t const* )
 		{ (_obj.*M)( _a1, _a2 ); }
-	void invoke( a1t const*, ci::dummy* )
+	void visit( a1t const*, ci::dummy* )
 		{ (_obj.*M)( _a1 ); }
-	void invoke( ci::dummy*, ci::dummy* )
+	void visit( ci::dummy*, ci::dummy* )
 		{ (_obj.*M)(); }
-	virtual void invoke( void )
-		{ invoke( static_cast<a1t*>( NULL ), static_cast<a2t*>( NULL ) ); }
+	virtual void visit( void )
+		{ visit( static_cast<a1t*>( NULL ), static_cast<a2t*>( NULL ) ); }
 	};
 
 struct prod
@@ -102,11 +102,11 @@ void module::test<1>( void )
 	{
 	prod p;
 	call<prod&, typeof( &prod::foo )> c0( p, &prod::foo );
-	c0.invoke();
+	c0.visit();
 	call<prod&, typeof( &prod::bar ), int> c1( p, &prod::bar, 3 );
-	c1.invoke();
+	c1.visit();
 	call<prod&, typeof( &prod::baz ), int, int> c2( p, &prod::baz, 11, -7 );
-	c2.invoke();
+	c2.visit();
 	}
 
 bool greater( int long a, int long b )
@@ -122,6 +122,100 @@ void module::test<2>( void )
 	bool q = yaal::bind2nd( &greater, 1 )( 3 );
 	cout << p << q << endl;
 	}
+
+class Derived;
+class FunkyDerived;
+class Visitor
+	{
+public:
+	virtual ~Visitor( void ) { }
+	virtual void visit( Derived& ) { };
+	virtual void visit( Derived const& ) const { };
+	virtual void visit( FunkyDerived& ) { };
+	virtual void visit( FunkyDerived const& ) const { };
+	};
+
+class HVisitorInterface
+	{
+public:
+	virtual ~HVisitorInterface( void ) { }
+	virtual void accept( Visitor& ) { }
+	virtual void accept( Visitor const& ) const { }
+	};
+
+struct Base : public HVisitorInterface
+	{
+	virtual ~Base( void ) {}
+	virtual void foo( void )
+		{ cout << __PRETTY_FUNCTION__ << endl; }
+	};
+
+struct Derived : public Base
+	{
+	virtual void foo( void )
+		{ cout << __PRETTY_FUNCTION__ << endl; }
+	void baz( void ) const
+		{ cout << __PRETTY_FUNCTION__ << endl; }
+	virtual void accept( Visitor const& call ) const
+		{ call.visit( *this ); }
+	};
+
+struct FunkyDerived : public Base
+	{
+	virtual void foo( void )
+		{ cout << __PRETTY_FUNCTION__ << endl; }
+	void bar( void ) const
+		{ cout << __PRETTY_FUNCTION__ << endl; }
+	virtual void accept( Visitor const& call ) const
+		{ call.visit( *this ); }
+	};
+
+class FunkyDerivedBarCall : public Visitor
+	{
+public:
+	void visit( FunkyDerived const& obj ) const
+		{ obj.bar(); }
+	};
+
+class DerivedBazCall : public Visitor
+	{
+public:
+	void visit( Derived const& obj ) const
+		{ obj.baz(); }
+	};
+
+template<>
+template<>
+void module::test<3>( void )
+	{
+	typedef HPointer<Base,HPointerScalar,HPointerRelaxed> base_ptr_t;
+	base_ptr_t a = base_ptr_t( new Derived );
+	base_ptr_t b = base_ptr_t( new FunkyDerived );
+	(*a).foo();
+	(*b).foo();
+	if ( dynamic_cast<FunkyDerived*>( a.raw() ) )
+		dynamic_cast<FunkyDerived*>( a.raw() )->bar();
+	else
+		cout << "a is not proper type" << endl;
+	if ( dynamic_cast<FunkyDerived*>( b.raw() ) )
+		dynamic_cast<FunkyDerived*>( b.raw() )->bar();
+	else
+		cout << "b is not proper type" << endl;
+	if ( dynamic_cast<Derived*>( a.raw() ) )
+		dynamic_cast<Derived*>( a.raw() )->baz();
+	else
+		cout << "a is not proper type" << endl;
+	if ( dynamic_cast<Derived*>( b.raw() ) )
+		dynamic_cast<Derived*>( b.raw() )->baz();
+	else
+		cout << "b is not proper type" << endl;
+	cout << "now the same but without dynamic cast" << endl;
+	a->accept( FunkyDerivedBarCall() );
+	b->accept( FunkyDerivedBarCall() );
+	a->accept( DerivedBazCall() );
+	b->accept( DerivedBazCall() );
+	}
+
 
 }
 

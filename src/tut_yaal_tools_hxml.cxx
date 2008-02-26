@@ -117,6 +117,48 @@ void module::test<2>( void )
 	ensure( "fresh node not empty", n.begin() == n.end() );
 	}
 
+/* clear */
+template<>
+template<>
+void module::test<3>( void )
+	{
+	HXml x;
+	static char const* const D_ROOT = "root";
+	x.create_root( D_ROOT );
+	HXml::HNodeProxy n = x.get_root();
+	x.clear();
+	ensure( "cleared DOM not empty", ! x.get_root() );
+	try
+		{
+		x.get_root().get_type();
+		fail( "accessing null node-proxy" );
+		}
+	catch ( int& )
+		{
+		// ok
+		}
+	}
+
+/* build, save, load */
+template<>
+template<>
+void module::test<4>( void )
+	{
+	HXml x;
+	static char const* const D_ROOT = "root";
+	static char const* const D_NODE = "node";
+	static char const* const D_CHILD = "child";
+	static char const* const D_OUT_PATH = "out/y_test.xml";
+	x.create_root( D_ROOT );
+	HXml::HNodeProxy n = x.get_root();
+	n.add_node( HXml::HNode::TYPE::D_NODE, D_NODE );
+	HXml::HIterator it = n.add_node( HXml::HNode::TYPE::D_NODE, D_NODE );
+	it->add_node( HXml::HNode::TYPE::D_NODE, D_CHILD );
+	x.save( D_OUT_PATH );
+	HXml y;
+	y.load( D_OUT_PATH );
+	}
+
 /* init, parse */
 template<>
 template<>
