@@ -44,44 +44,99 @@ namespace tut
 
 struct tut_yaal_tools_hxml
 	{
-	HString f_oVarTmpBuffer;
+	static HString f_oVarTmpBuffer;
 	HXml f_oXml;
-	void dump( HXml::HNodeProxy const& a_rsNode )
+	static ostream& dump( ostream& out, HXml::HNodeProxy const& a_rsNode )
 		{
-		f_oVarTmpBuffer.hs_realloc ( a_rsNode.get_level() * 2 + 3 );
+		f_oVarTmpBuffer.hs_realloc( a_rsNode.get_level() * 2 + 3 );
 		f_oVarTmpBuffer.fill( ' ', a_rsNode.get_level() * 2 );
 		f_oVarTmpBuffer.set_at( a_rsNode.get_level() * 2, 0 );
 		if ( a_rsNode.get_type() == HXml::HNode::TYPE::D_NODE )
 			{
 			if ( ! a_rsNode.get_name().is_empty() )
-				cout << f_oVarTmpBuffer << "[" << a_rsNode.get_name() << "]<" << a_rsNode.get_level() << ">:" << endl;
+				out << f_oVarTmpBuffer << "[" << a_rsNode.get_name() << "]<" << a_rsNode.get_level() << ">:" << endl;
 			for ( HXml::HNode::properties_t::HIterator it = a_rsNode.properties().begin(); it != a_rsNode.properties().end(); ++ it )
 				{
-				cout << f_oVarTmpBuffer << "(" << it->first << ")->(";
-				cout << it->second << ")" << endl;
+				out << f_oVarTmpBuffer << "(" << it->first << ")->(";
+				out << it->second << ")" << endl;
 				}
 			if ( a_rsNode.has_childs() )
 				{
 				f_oVarTmpBuffer.fill( ' ', a_rsNode.get_level() * 2 + 2 );
 				f_oVarTmpBuffer.set_at( a_rsNode.get_level() * 2 + 2, 0 );
-				cout << f_oVarTmpBuffer << "{" << endl;
+				out << f_oVarTmpBuffer << "{" << endl;
 				for ( HXml::iterator it = a_rsNode.begin(); it != a_rsNode.end(); ++ it )
 					{
-					dump ( *it );
+					dump( out, *it );
 					f_oVarTmpBuffer.set_at( a_rsNode.get_level() * 2 + 2, 0 );
 					}
-				cout << f_oVarTmpBuffer << "}" << endl;
+				out << f_oVarTmpBuffer << "}" << endl;
 				}
 			}
 		else if ( ! a_rsNode.get_value().is_empty() )
-			cout << f_oVarTmpBuffer << a_rsNode.get_value() << endl;
-		return;
+			out << f_oVarTmpBuffer << a_rsNode.get_value() << endl;
+		return ( out );
 		}
 	};
 
+HString tut_yaal_tools_hxml::f_oVarTmpBuffer;
+
 typedef test_group<tut_yaal_tools_hxml> tut_group;
 typedef tut_group::object module;
-tut_group tut_yaal_tools_hxml_group ( "yaal::tools::HXml" );
+tut_group tut_yaal_tools_hxml_group( "yaal::tools::HXml" );
+
+ostream& operator << ( ostream& out, HXml const& xml )
+	{
+	return ( tut_yaal_tools_hxml::dump( out, xml.get_root() ) );
+	}
+
+bool deep_equals( HXml::HNodeProxy const& left, HXml::HNodeProxy const& right )
+	{
+	HXml::HNode::TYPE::type_t type = left.get_type();
+	bool equals = ( type == right.get_type() );
+
+	if ( equals && ( type == HXml::HNode::TYPE::D_NODE ) )
+		equals = ( left.get_name() == right.get_name() );
+	if ( equals && ( type == HXml::HNode::TYPE::D_CONTENT ) )
+		equals = ( left.get_value() == right.get_value() );
+	if ( equals && ( type == HXml::HNode::TYPE::D_NODE ) )
+		equals = ( left.has_childs() == right.has_childs() );
+	if ( equals && ( type == HXml::HNode::TYPE::D_NODE ) )
+		equals = ( left.child_count() == right.child_count() );
+	if ( equals && ( type == HXml::HNode::TYPE::D_NODE ) )
+		equals = ( left.get_level() == right.get_level() );
+	if ( equals && ( type == HXml::HNode::TYPE::D_NODE ) )
+		{
+		HXml::HNode::properties_t const& propLeft = left.properties();
+		HXml::HNode::properties_t const& propRight = right.properties();
+		HXml::HNode::properties_t::HIterator itLeft = propLeft.begin();
+		HXml::HNode::properties_t::HIterator endLeft = propLeft.end();
+		HXml::HNode::properties_t::HIterator itRight = propRight.begin();
+		HXml::HNode::properties_t::HIterator endRight = propRight.end();
+		for ( ;( itLeft != endLeft ) && equals; ++ itLeft, ++ itRight )
+			equals = ( itRight != endRight ) && ( *itLeft == *itRight );
+		}
+	if ( equals && ( type == HXml::HNode::TYPE::D_NODE ) )
+		{
+		HXml::HIterator itLeft = left.begin();
+		HXml::HIterator endLeft = left.end();
+		HXml::HIterator itRight = right.begin();
+		HXml::HIterator endRight = right.end();
+		for ( ;( itLeft != endLeft ) && equals; ++ itLeft, ++ itRight )
+			equals = ( itRight != endRight ) && deep_equals( *itLeft, *itRight );
+		}
+	return ( equals );
+	}
+
+bool operator == ( HXml const& left, HXml const& right )
+	{
+	return ( deep_equals( left.get_root(), right.get_root() ) );
+	}
+
+bool operator != ( HXml const& left, HXml const& right )
+	{
+	return ( ! ( left == right ) );
+	}
 
 /* Empty DOM. */
 template<>
@@ -157,6 +212,7 @@ void module::test<4>( void )
 	x.save( D_OUT_PATH );
 	HXml y;
 	y.load( D_OUT_PATH );
+	ensure_equals( "DOMs differ", x, y );
 	}
 
 /* init, parse */
@@ -184,7 +240,7 @@ void module::test<41>( void )
 		f_oXml.parse( const_cast<char*>( setup.f_ppcArgv[ 2 ] ) );
 	else
 		f_oXml.parse();
-	dump ( f_oXml.get_root ( ) );
+	dump( cout, f_oXml.get_root ( ) );
 	return;
 	}
 
@@ -206,7 +262,7 @@ void module::test<43>( void )
 	f_oXml.init( "data/xml.xml" );
 	f_oXml.apply_style( "data/style.xml" );
 	f_oXml.parse();
-	dump( f_oXml.get_root() );
+	dump( cout, f_oXml.get_root() );
 	}
 
 }
