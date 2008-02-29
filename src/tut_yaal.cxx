@@ -26,6 +26,7 @@ Copyright:
 
 #include <set>
 #include <vector>
+#include <list>
 #include <iterator>
 #include <algorithm>
 #include <numeric>
@@ -215,7 +216,6 @@ void module::test<3>( void )
 	a->accept( DerivedBazCall() );
 	b->accept( DerivedBazCall() );
 	}
-
 
 }
 

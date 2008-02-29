@@ -69,7 +69,7 @@ template<typename T>
 HString& tut_yaal_hcore_hlist::to_string( T const& list )
 	{
 	_cache.clear();
-	for ( typename T::iterator it = list.begin(); it != list.end(); ++ it )
+	for ( typename T::const_iterator it = list.begin(); it != list.end(); ++ it )
 		_cache += static_cast<char>( *it );
 	return ( _cache );
 	}
@@ -89,7 +89,7 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list )
 	int ctr = 0;
 	bool hook_valid = false;
 	bool index_valid = false;
-	for ( typename T::iterator it = list.begin(); it != list.end(); ++ it, ++ ctr )
+	for ( typename T::const_iterator it = list.begin(); it != list.end(); ++ it, ++ ctr )
 		{
 		if ( it.f_poCurrent == list.f_poHook )
 			hook_valid = true;
@@ -112,7 +112,7 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list )
 	ctr = 0;
 	hook_valid = false;
 	index_valid = false;
-	for ( typename T::iterator it = list.rbegin(); it != list.rend(); -- it, ++ ctr )
+	for ( typename T::const_iterator it = list.rbegin(); it != list.rend(); -- it, ++ ctr )
 		{
 		if ( it.f_poCurrent == list.f_poHook )
 			hook_valid = true;
@@ -997,7 +997,7 @@ void check_sorted( tut_yaal_hcore_hlist::list_t const& l, OListBits::sort_order_
 	if ( order == OListBits::D_ASCENDING )
 		{
 		int val = 0;
-		for ( tut_yaal_hcore_hlist::list_t::iterator it = l.begin(); it != l.end(); ++ it )
+		for ( tut_yaal_hcore_hlist::list_t::const_iterator it = l.begin(); it != l.end(); ++ it )
 			{
 			ensure( "not sorted", val <= *it );
 			val = *it;
@@ -1006,7 +1006,7 @@ void check_sorted( tut_yaal_hcore_hlist::list_t const& l, OListBits::sort_order_
 	else
 		{
 		int val = 0;
-		for ( tut_yaal_hcore_hlist::list_t::iterator it = l.rbegin(); it != l.rend(); -- it )
+		for ( tut_yaal_hcore_hlist::list_t::const_iterator it = l.rbegin(); it != l.rend(); -- it )
 			{
 			ensure( "not sorted (reversed)", val <= *it );
 			val = *it;

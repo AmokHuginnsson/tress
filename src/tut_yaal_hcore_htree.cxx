@@ -71,7 +71,7 @@ void tut_yaal_hcore_htree::to_string( tree_t::HNode const& n )
 	_cache += *n;
 	if ( n.has_childs() )
 		_cache += '{';
-	for ( tree_t::iterator it = n.begin(); it != n.end(); ++ it )
+	for ( tree_t::const_iterator it = n.begin(); it != n.end(); ++ it )
 		to_string( *it );
 	if ( n.has_childs() )
 		_cache += '}';
@@ -98,7 +98,7 @@ void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n )
 			_cache += "   ";
 		}
 	cout << *n << endl;
-	for ( tree_t::iterator it = n.begin(); it != n.end(); ++ it )
+	for ( tree_t::const_iterator it = n.begin(); it != n.end(); ++ it )
 		draw_node( *it );
 	_cache.set_at( len, 0 );
 	}
@@ -107,7 +107,7 @@ void tut_yaal_hcore_htree::check_node( tree_t::const_node_t node, bool root )
 	{
 	if ( ! root )
 		ensure_equals( "bad root", node->f_poTree, static_cast<tree_t*>( NULL ) );
-	for ( tree_t::iterator it = node->begin(); it != node->end(); ++ it )
+	for ( tree_t::const_iterator it = node->begin(); it != node->end(); ++ it )
 		{
 		ensure_equals( "bad parent", it->f_poTrunk, node );
 		check_node( &*it, false );
