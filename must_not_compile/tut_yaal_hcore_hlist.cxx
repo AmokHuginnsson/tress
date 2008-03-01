@@ -33,7 +33,7 @@ using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 
-#if defined ( BUG_000 )
+#if defined ( BUG_0 )
 
 namespace must_not_compile
 {
@@ -60,7 +60,7 @@ int main( int, char** )
 	return ( must_not_compile::sum( l ) );
 	}
 
-#elif defined ( BUG_001 )
+#elif defined ( BUG_1 )
 
 namespace must_not_compile
 {
