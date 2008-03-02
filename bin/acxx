@@ -1,2 +1,75 @@
-#! /bin/sh
+#! /usr/bin/env python
 
+from optparse import OptionParser
+
+class Uber( object ):
+	__name = "Unnamed"
+	def __init__( self, name = None ):
+		if ( name != None ):
+			self.__name = name
+		print "An instance of class " + Uber.__name__ + " named `" + self.__name + "' created."
+
+	def __del__( self ):
+		print "An instance of class " + Uber.__name__ + " named `" + self.__name + "' destroyed."
+
+	def __repr__( self ):
+		return self.__class__.__name__ + "(" + self.__name + ")"
+
+	def name( self ):
+		return ( self.__name )
+
+	def foo( self, *argv, **keywords ):
+		for arg in argv:
+			print arg
+		for key in keywords:
+			print key + "=>" + keywords[key]
+
+
+class Hyper( Uber ):
+	def __init__( self, name = None ):
+		super( Hyper, self ).__init__( name )
+		print "An instance of class " + Hyper.__name__ + " named `" + super( Hyper, self ).name() + "' created."
+
+	def __del__( self ):
+		print "An instance of class " + Hyper.__name__ + " named `" + self.name() + "' destroyed."
+		super( Hyper, self ).__del__()
+
+
+class ErrorlessOptionParses( OptionParser ):
+	def __init__( self, usage = None ):
+		OptionParser.__init__( self, usage )
+		print "ErrorlessOptionParses created"
+
+	def __del__( self ):
+		super( Hyper, self ).__del__()
+		print "ErrorlessOptionParses destroyed"
+
+	def error( self, msg ):
+		return
+
+"""
+Normal use of OptionParser:
+
+	usage = "usage: %prog [options] my arg"
+	parser = ErrorlessOptionParses( usage )
+	parser.add_option("-f", "--file", dest="filename",
+		help="write report to FILE", metavar="FILE")
+	parser.add_option("-q", "--quiet",
+		action="store_false", dest="verbose", default=True,
+		help="don't print status messages to stdout")
+
+	(options, args) = parser.parse_args()
+"""
+
+def main():
+	parser = ErrorlessOptionParses()
+	(options, args) = parser.parse_args()
+
+	print "Program starts here."
+	a = Hyper( "core" )
+	print a
+	a.foo( 1, "ala", 3.14159265, first = "ox" )
+#	print options
+
+if __name__ == "__main__":
+	main()

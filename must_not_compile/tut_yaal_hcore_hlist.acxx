@@ -90,3 +90,4 @@ int main( int, char** )
 #else
 #	error NO_SUCH_BUG
 #endif
+/* vim: set ft=cpp: */
