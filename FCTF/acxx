@@ -131,8 +131,13 @@ def acxx( argv ):
 			bug_status = check_bug( out, input_path )
 			out.close()
 			bug_no += 1
+		if ( access( output_path, F_OK ) ):
+			unlink( output_path )
 		if ( bug_status == 2 ):
 			print >> sys.stderr, "Anti-compilation of BUG number " + str( bug_no - 1 ) + " failed!"
+		else:
+			f = open( output_path, 'w' )
+			f.close()
 	except PebkacError, e:
 		print e
 
