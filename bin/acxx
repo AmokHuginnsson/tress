@@ -1,6 +1,11 @@
 #! /usr/bin/env python2.5
 
 import sys
+from os import unlink, access, F_OK, popen4
+import re
+import linecache
+
+COMPILER = "g++"
 
 class Uber( object ):
 	__name = "Unnamed"
@@ -24,6 +29,9 @@ class Uber( object ):
 		for key in keywords:
 			print key + "=>" + keywords[key]
 
+	def bar( self, first, second ):
+		return ( first, second )
+
 
 class Hyper( Uber ):
 	def __init__( self, name = None ):
@@ -35,16 +43,25 @@ class Hyper( Uber ):
 		super( Hyper, self ).__del__()
 
 
-"""
-Lets learn something about python programming.
+class PebkacError(Exception):
+	__message = ""
+	def __init__( self, msg ):
+		self.__message = msg
+	def __str__( self ):
+		return "PEBKAC Exception occured: " + self.__message
+
+
+# Lets learn something about python programming.
 
 def learn():
 	print "Program starts here."
 	a = Hyper( "core" )
 	print a
 	a.foo( 1, "ala", 3.14159265, first = "ox" )
+	c, d = a.bar( 1, 2 )
+	print c
+	print d
 	print "Program ends here."
-"""
 
 def has_output_opt( opts ):
 	has = 0
@@ -55,20 +72,72 @@ def has_output_opt( opts ):
 			has = 1
 	return ( 1 if ( has == 2 ) else 0 )
 
-def get_output_path( opts ):
+def get_output_path_index( opts ):
 	has = 0
-	output_path = ""
+	output_path_index = 0
 	for opt in opts:
 		if ( has == 1 ):
-			output_path = opt
+			output_path_index += 1
 			break
 		if ( opt == "-o" ):
 			has = 1
-	return output_path
+		output_path_index += 1
+	return output_path_index
+
+def get_input_path( opts ):
+	input_path_match = re.compile( "^[\w/-]+\.acxx$" )
+	input_path = ""
+	for opt in opts:
+		if input_path_match.match( opt ):
+			input_path = opt
+			break
+	if ( input_path == "" ):
+		raise PebkacError( "no input path found" )
+	return input_path
+
+def verify_bug( input_path, line_no ):
+	line = linecache.getline( input_path, int( line_no ) )
+	fail_here_match = re.compile( "\\bMUST_FAIL_HERE\\b" )
+	match = fail_here_match.search( line )
+	if ( match ):
+		return 0
+	return 2
+
+def check_bug( out, input_path ):
+	no_more_bugs_match = re.compile( "^" + input_path + ":[0-9]+:[0-9]+: error: #error NO_SUCH_BUG$" )
+	line_no_match = re.compile( "^" + input_path + ":([0-9]+): error" )
+	for line in out.readlines():
+		match = no_more_bugs_match.match( line )
+		if ( match ):
+			return 1
+		match = line_no_match.match( line )
+		if ( match ):
+			return verify_bug( input_path, match.group( 1 ) )
+	return 2
+
+def acxx( argv ):
+	try:
+		if ( not has_output_opt( argv ) ):
+			raise PebkacError( "Output path option required and not specified" )
+		output_path = argv[ get_output_path_index( argv ) - 1 ]
+		input_path = get_input_path( sys.argv[1:] )
+		if ( access( output_path, F_OK ) ):
+			unlink( output_path )
+		BUG_TEMPLATE = "BUG_"
+		bug_status = 0
+		bug_no = 0
+		while ( bug_status == 0 ):
+			unused, out = popen4( [ COMPILER, "-xc++", "-D" + BUG_TEMPLATE + str( bug_no ) ] + argv );
+			bug_status = check_bug( out, input_path )
+			out.close()
+			bug_no += 1
+		if ( bug_status == 2 ):
+			print >> sys.stderr, "Anti-compilation of BUG number " + str( bug_no - 1 ) + " failed!"
+	except PebkacError, e:
+		print e
 
 def main():
-	if ( has_output_opt( sys.argv ) ):
-		print get_output_path( sys.argv )
+	acxx( sys.argv[1:] )
 #	learn()
 
 if __name__ == "__main__":
