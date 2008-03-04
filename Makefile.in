@@ -50,9 +50,23 @@ CWARNING_FLAGS								+= @PEDANTIC_ERRORS@ @EXTRA_WARNINGS@ @WARN_SHADOW@ -Wno-m
 COMPILER_PRIME_FLAGS					+= @DEFS@
 LINKER_PRIME_FLAGS +=	@SPECIAL_LINKER_FLAGS@
 
+# Anti-compiler stuff (Forbidden compilation test framework (FCTF))
+ACXX = ./FCTF/acxx
+ASS = acxx
+AOS = ao
+ASRCS = $(strip $(sort $(shell cd $(DIR_ROOT)/must_not_compile && $(FIND) . -name "*.$(ASS)")))
+AOBJS = $(patsubst %.$(ASS),%.$(AOS),$(ASRCS))
+
+%.$(AOS): %.$(ASS)
+	@echo -n "Anti-Compiling \`$(subst $(DIR_ROOT)/,,$(<))' ... "; \
+	/bin/rm -f "$(@)"; \
+	$(ACXX) $(CXXFLAGS) $(<) -c -o $(@) 2>&1 | tee -a make.log; \
+	echo $(NONL) "done.$(CL)"
+
 include $(DIR_ROOT)/aux/common-flags-post.mk
 include $(DIR_ROOT)/aux/common-int-libs.mk
 include $(DIR_ROOT)/aux/common-filenames.mk
+OBJS += $(AOBJS)
 include $(DIR_ROOT)/aux/common-implicit-compile.mk
 include $(DIR_ROOT)/aux/common-target-default.mk
 include $(DIR_ROOT)/aux/common-common-targets.mk
