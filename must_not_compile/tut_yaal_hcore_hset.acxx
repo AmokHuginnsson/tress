@@ -43,35 +43,8 @@ typedef HSet<int> int_set_t;
 int sum( int_set_t const& l )
 	{
 	int l_iSum = 0;
-
-	for ( int_set_t::iterator it = l.begin(); it != l.end(); ++ it ) /* MUST_FAIL_HERE */
-		l_iSum += *it;
-	return ( l_iSum );
-	}
-
-}
-
-int main( int, char** )
-	{
-	must_not_compile::int_set_t l;
-	l.insert( 1 );
-	l.insert( 3 );
-	l.insert( 5 );
-	return ( must_not_compile::sum( l ) );
-	}
-
-#elif defined ( BUG_1 )
-
-namespace must_not_compile
-{
-
-typedef HSet<int> int_set_t;
-
-int sum( int_set_t const& l )
-	{
-	int l_iSum = 0;
 	
-	for ( int_set_t::const_iterator it = l.begin(); it != l.end(); ++ it )
+	for ( int_set_t::iterator it = l.begin(); it != l.end(); ++ it )
 		*it = -*it; /* MUST_FAIL_HERE */
 	return ( l_iSum );
 	}
