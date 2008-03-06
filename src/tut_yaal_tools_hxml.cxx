@@ -46,7 +46,7 @@ struct tut_yaal_tools_hxml
 	{
 	static HString f_oVarTmpBuffer;
 	HXml f_oXml;
-	static ostream& dump( ostream& out, HXml::HNodeProxy const& a_rsNode )
+	static ostream& dump( ostream& out, HXml::HConstNodeProxy const& a_rsNode )
 		{
 		f_oVarTmpBuffer.hs_realloc( a_rsNode.get_level() * 2 + 3 );
 		f_oVarTmpBuffer.fill( ' ', a_rsNode.get_level() * 2 );
@@ -55,7 +55,7 @@ struct tut_yaal_tools_hxml
 			{
 			if ( ! a_rsNode.get_name().is_empty() )
 				out << f_oVarTmpBuffer << "[" << a_rsNode.get_name() << "]<" << a_rsNode.get_level() << ">:" << endl;
-			for ( HXml::HNode::properties_t::HIterator it = a_rsNode.properties().begin(); it != a_rsNode.properties().end(); ++ it )
+			for ( HXml::HNode::properties_t::const_iterator it = a_rsNode.properties().begin(); it != a_rsNode.properties().end(); ++ it )
 				{
 				out << f_oVarTmpBuffer << "(" << it->first << ")->(";
 				out << it->second << ")" << endl;
@@ -65,7 +65,7 @@ struct tut_yaal_tools_hxml
 				f_oVarTmpBuffer.fill( ' ', a_rsNode.get_level() * 2 + 2 );
 				f_oVarTmpBuffer.set_at( a_rsNode.get_level() * 2 + 2, 0 );
 				out << f_oVarTmpBuffer << "{" << endl;
-				for ( HXml::iterator it = a_rsNode.begin(); it != a_rsNode.end(); ++ it )
+				for ( HXml::const_iterator it = a_rsNode.begin(); it != a_rsNode.end(); ++ it )
 					{
 					dump( out, *it );
 					f_oVarTmpBuffer.set_at( a_rsNode.get_level() * 2 + 2, 0 );
@@ -90,7 +90,7 @@ ostream& operator << ( ostream& out, HXml const& xml )
 	return ( tut_yaal_tools_hxml::dump( out, xml.get_root() ) );
 	}
 
-bool deep_equals( HXml::HNodeProxy const& left, HXml::HNodeProxy const& right )
+bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const& right )
 	{
 	HXml::HNode::TYPE::type_t type = left.get_type();
 	bool equals = ( type == right.get_type() );
@@ -109,19 +109,19 @@ bool deep_equals( HXml::HNodeProxy const& left, HXml::HNodeProxy const& right )
 		{
 		HXml::HNode::properties_t const& propLeft = left.properties();
 		HXml::HNode::properties_t const& propRight = right.properties();
-		HXml::HNode::properties_t::HIterator itLeft = propLeft.begin();
-		HXml::HNode::properties_t::HIterator endLeft = propLeft.end();
-		HXml::HNode::properties_t::HIterator itRight = propRight.begin();
-		HXml::HNode::properties_t::HIterator endRight = propRight.end();
+		HXml::HNode::properties_t::const_iterator itLeft = propLeft.begin();
+		HXml::HNode::properties_t::const_iterator endLeft = propLeft.end();
+		HXml::HNode::properties_t::const_iterator itRight = propRight.begin();
+		HXml::HNode::properties_t::const_iterator endRight = propRight.end();
 		for ( ;( itLeft != endLeft ) && equals; ++ itLeft, ++ itRight )
 			equals = ( itRight != endRight ) && ( *itLeft == *itRight );
 		}
 	if ( equals && ( type == HXml::HNode::TYPE::D_NODE ) )
 		{
-		HXml::HIterator itLeft = left.begin();
-		HXml::HIterator endLeft = left.end();
-		HXml::HIterator itRight = right.begin();
-		HXml::HIterator endRight = right.end();
+		HXml::const_iterator itLeft = left.begin();
+		HXml::const_iterator endLeft = left.end();
+		HXml::const_iterator itRight = right.begin();
+		HXml::const_iterator endRight = right.end();
 		for ( ;( itLeft != endLeft ) && equals; ++ itLeft, ++ itRight )
 			equals = ( itRight != endRight ) && deep_equals( *itLeft, *itRight );
 		}
@@ -208,7 +208,7 @@ void module::test<4>( void )
 	HXml::HNodeProxy n = x.get_root();
 	n.add_node( HXml::HNode::TYPE::D_NODE, D_NODE );
 	HXml::HIterator it = n.add_node( HXml::HNode::TYPE::D_NODE, D_NODE );
-	it->add_node( HXml::HNode::TYPE::D_NODE, D_CHILD );
+	(*it).add_node( HXml::HNode::TYPE::D_NODE, D_CHILD );
 	x.save( D_OUT_PATH );
 	HXml y;
 	y.load( D_OUT_PATH );
@@ -240,7 +240,7 @@ void module::test<41>( void )
 		f_oXml.parse( const_cast<char*>( setup.f_ppcArgv[ 2 ] ) );
 	else
 		f_oXml.parse();
-	dump( cout, f_oXml.get_root ( ) );
+	dump( cout, f_oXml.get_root() );
 	return;
 	}
 
