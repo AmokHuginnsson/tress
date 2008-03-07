@@ -203,16 +203,29 @@ void module::test<4>( void )
 	static char const* const D_ROOT = "root";
 	static char const* const D_NODE = "node";
 	static char const* const D_CHILD = "child";
+	static char const* const D_PROP = "prop";
+	static char const* const D_PROP_VALUE = "prop_value";
 	static char const* const D_OUT_PATH = "out/y_test.xml";
 	x.create_root( D_ROOT );
 	HXml::HNodeProxy n = x.get_root();
 	n.add_node( HXml::HNode::TYPE::D_NODE, D_NODE );
 	HXml::HIterator it = n.add_node( HXml::HNode::TYPE::D_NODE, D_NODE );
-	(*it).add_node( HXml::HNode::TYPE::D_NODE, D_CHILD );
+	HXml::HIterator child = (*it).add_node( HXml::HNode::TYPE::D_NODE, D_CHILD );
+	(*child).properties().insert( D_PROP, D_PROP_VALUE );
+	n.copy_node( *it );
 	x.save( D_OUT_PATH );
 	HXml y;
 	y.load( D_OUT_PATH );
 	ensure_equals( "DOMs differ", x, y );
+	try
+		{
+		(*it).copy_node( n );
+		fail( "copying from parent node" );
+		}
+	catch ( int& )
+		{
+		// ok
+		}
 	}
 
 /* init, parse */
