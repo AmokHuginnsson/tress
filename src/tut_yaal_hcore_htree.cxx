@@ -25,7 +25,7 @@ Copyright:
 */
 
 #include <TUT/tut.h>
-#include <tut_helpers.h>
+#include "tut_helpers.h"
 
 #include <yaal/yaal.h>
 M_VCSID ( "$Id$" )
