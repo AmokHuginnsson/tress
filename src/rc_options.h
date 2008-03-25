@@ -27,6 +27,11 @@ Copyright:
 #ifndef __RC_OPTIONS_H
 #define __RC_OPTIONS_H
 
+namespace tress
+{
+
 int process_tressrc_file ( void );
+
+}
 
 #endif /* __RC_OPTIONS_H */

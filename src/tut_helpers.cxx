@@ -37,6 +37,9 @@ using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 
+namespace tress
+{
+
 namespace tut_helpers
 {
 
@@ -107,6 +110,8 @@ void TITLE( char const* const title )
 	if ( setup.f_bVerbose )
 		cout << "TUT: " << n_oGroup << "::<" << n_iNumber << "> " << title << endl;
 	}
+
+}
 
 }
 

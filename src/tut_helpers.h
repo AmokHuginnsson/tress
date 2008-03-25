@@ -32,6 +32,9 @@ Copyright:
 #include <iomanip>
 #include <yaal/yaal.h>
 
+namespace tress
+{
+
 namespace tut_helpers
 {
 
@@ -222,6 +225,8 @@ std::ostream& operator << ( std::ostream& stream, counter<tType> const& ctr )
 	stream << ctr.get_symbol();
 	return ( stream );
 	}
+
+}
 
 }
 

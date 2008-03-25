@@ -27,6 +27,11 @@ Copyright:
 #ifndef __CLI_OPTIONS_H
 #define __CLI_OPTIONS_H
 
+namespace tress
+{
+
 int decode_switches( int, char** );
+
+}
 
 #endif /* __CLI_OPTIONS_H */

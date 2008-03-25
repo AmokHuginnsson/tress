@@ -27,6 +27,9 @@ Copyright:
 #ifndef __SETUP_H
 #define __SETUP_H
 
+namespace tress
+{
+
 struct OSetup
 	{
 	OSetup ( void ) : f_bQuiet ( false ), f_bVerbose ( false ),
@@ -50,5 +53,7 @@ struct OSetup
 	};
 
 extern OSetup setup;
+
+}
 
 #endif /* __SETUP_H */

@@ -38,7 +38,6 @@ Copyright:
 M_VCSID ( "$Id$" )
 
 using namespace tut;
-using namespace tut_helpers;
 using namespace std;
 using namespace boost;
 using namespace yaal;
@@ -46,6 +45,7 @@ using namespace yaal::hcore;
 using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
+using namespace tress::tut_helpers;
 
 namespace tut
 {

@@ -36,6 +36,9 @@ M_VCSID ( "$Id$" )
 using namespace yaal;
 using namespace yaal::hcore;
 
+namespace tress
+{
+
 bool set_variables( HString& a_roOption, HString& a_roValue )
 	{
 	::fprintf( stdout, "option: [%s], value: [%s]\n",
@@ -56,4 +59,6 @@ int process_tressrc_file( void )
 		setup.f_oLogPath = "tress.log";
 	return ( 0 );
 	}
+
+}
 

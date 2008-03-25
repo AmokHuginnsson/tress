@@ -39,23 +39,29 @@ M_VCSID( "$Id$" )
 #include "rc_options.h"
 
 using namespace tut;
-using namespace tut_helpers;
 using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
+using namespace tress;
+using namespace tress::tut_helpers;
 
 namespace tut
 	{
   test_runner_singleton runner;
 	}
 
+namespace tress
+{
+
 OSetup setup;
 
 typedef std::list<std::string> string_list_t;
 void gather_groups_from_file( string_list_t& );
+
+}
 
 int main( int a_iArgc, char* a_ppcArgv[] )
 	{
@@ -160,6 +166,9 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 	M_FINAL
 	}
 
+namespace tress
+{
+
 void gather_groups_from_file( string_list_t& lst )
 	{
 	M_PROLOG
@@ -184,4 +193,6 @@ void gather_groups_from_file( string_list_t& lst )
 	return;
 	M_EPILOG
 	}
+
+}
 
