@@ -42,38 +42,106 @@ namespace tut
 
 struct tut_yaal_hcore_hhashmap
 	{
+	typedef HHashMap<int, int> hash_map_t;
+	static int const D_TEST_PRIME = 17;
+	static int const D_ELEM_COUNT = 32;
 	};
 
-typedef test_group < tut_yaal_hcore_hhashmap > tut_group;
+typedef test_group<tut_yaal_hcore_hhashmap> tut_group;
 typedef tut_group::object module;
-tut_group tut_yaal_hcore_hhashmap_group ( "yaal::hcore::HHashMap" );
+tut_group tut_yaal_hcore_hhashmap_group( "yaal::hcore::HHashMap" );
 
 /* Simple constructor. */
-template < >
-template < >
-void module::test<1> ( void )
+template<>
+template<>
+void module::test<1>( void )
 	{
 	try
 		{
-		HHashMap < int, HString > map ( 0 );
+		hash_map_t map( 0 );
 		fail ( "Created map with bad hash table size." );
 		}
-	catch ( HException const & e )
+	catch ( HException const& e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	}
 
-
 /* Quantity test. */
-template < >
-template < >
-void module::test<2> ( void )
+template<>
+template<>
+void module::test<2>( void )
 	{
-	HHashMap < int, HString > map ( 17 );
-	ensure_equals ( "Newly created map is not empty.", map.size ( ), 0 );
-	map [ 0 ] = "foo";
-	ensure_equals ( "Wrong size count returned.", map.size ( ), 1 );
+	hash_map_t map( 17 );
+	ensure_equals ( "newly created map is not empty", map.size(), 0 );
+	map[ 0 ] = 7;
+	ensure_equals ( "wrong size after add", map.size(), 1 );
+	}
+
+/* element insertion */
+template<>
+template<>
+void module::test<3>( void )
+	{
+	hash_map_t map( D_TEST_PRIME );
+	for ( int i = 0; i < D_ELEM_COUNT; ++ i )
+		{
+		map[ i ] = i;
+		ensure_equals ( "wrong size after addition", map.size(), i + 1 );
+		}
+	}
+
+/* iterate */
+template<>
+template<>
+void module::test<4>( void )
+	{
+	hash_map_t map( D_TEST_PRIME );
+	for ( int i = 0; i < D_ELEM_COUNT; ++ i )
+		map[ i ] = i;
+	int key = 0, value = 0;
+	map.rewind();
+	while ( map.iterate( key, value ) )
+		ensure_equals ( "key/value mismatch", value, key );
+	}
+
+/* key, value access */
+template<>
+template<>
+void module::test<5>( void )
+	{
+	hash_map_t map( D_TEST_PRIME );
+	for ( int i = 0; i < D_ELEM_COUNT; ++ i )
+		map[ i ] = i;
+	int value = 0;
+	for ( int i = 0; i < D_ELEM_COUNT; ++ i )
+		{
+		ensure( "key not present", map.has_key( i ) );
+		ensure( "cannot get", map.get( i, value ) );
+		ensure_equals ( "key/value mismatch", value, i );
+		}
+	}
+
+/* key removal */
+template<>
+template<>
+void module::test<6>( void )
+	{
+	hash_map_t map( D_TEST_PRIME );
+	for ( int i = 0; i < D_ELEM_COUNT; ++ i )
+		{
+		map[ i ] = i;
+		ensure_equals ( "wrong size after addition", map.size(), i + 1 );
+		}
+	int key = 0, value = 0;
+	for ( int i = 0; i < D_ELEM_COUNT; ++ i )
+		{
+		map.remove( i );
+		ensure_equals ( "wrong size after add", map.size(), D_ELEM_COUNT - ( i + 1 ) );
+		map.rewind();
+		while ( map.iterate( key, value ) )
+			ensure_equals ( "key/value mismatch", value, key );
+		}
 	}
 
 }
