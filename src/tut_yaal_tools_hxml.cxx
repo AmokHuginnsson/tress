@@ -229,39 +229,10 @@ void module::test<4>( void )
 		}
 	}
 
-/* init, parse */
-template<>
-template<>
-void module::test<41>( void )
-	{
-	HString string;
-	HFile file;
-	if ( setup.f_iArgc < 2 )
-		fail ( "You need to specify one argument for this test" );
-	if ( setup.f_bVerbose )
-		{
-		if ( file.open( setup.f_ppcArgv[ 1 ] ) )
-			cout << file.get_error() << ": " << file.get_path() << endl;
-		else
-			{
-			while ( file.read_line( string, HFile::D_STRIP_NEWLINES ) >= 0 )
-				cout << string << endl;
-			file.close();
-			}
-		}
-	f_oXml.init( setup.f_ppcArgv[ 1 ] );
-	if ( setup.f_iArgc > 2 )
-		f_oXml.parse( const_cast<char*>( setup.f_ppcArgv[ 2 ] ) );
-	else
-		f_oXml.parse();
-	dump( cout, f_oXml.get_root() );
-	return;
-	}
-
 /* load, save */
 template<>
 template<>
-void module::test<42>( void )
+void module::test<41>( void )
 	{
 	HXml xml;
 	xml.load( "data/xml.xml" );
@@ -271,12 +242,41 @@ void module::test<42>( void )
 /* apply stylesheet */
 template<>
 template<>
-void module::test<43>( void )
+void module::test<42>( void )
 	{
 	f_oXml.init( "data/xml.xml" );
 	f_oXml.apply_style( "data/style.xml" );
 	f_oXml.parse();
 	dump( cout, f_oXml.get_root() );
+	}
+
+/* init, parse, apply, save */
+template<>
+template<>
+void module::test<43>( void )
+	{
+	HString string;
+	HFile file;
+	char const* doc = ( setup.f_iArgc > 1 ) ? setup.f_ppcArgv[ 1 ] : "./data/xml.xml";
+	char const* style = ( setup.f_iArgc > 2 ) ? setup.f_ppcArgv[ 2 ] : "./data/style.xml";
+	char const* out = ( setup.f_iArgc > 3 ) ? setup.f_ppcArgv[ 3 ] : "./out/tut.xml";
+	char const* path = ( setup.f_iArgc > 4 ) ? setup.f_ppcArgv[ 4 ] : NULL;
+	if ( setup.f_bVerbose )
+		{
+		if ( file.open( doc ) )
+			cout << file.get_error() << ": " << file.get_path() << endl;
+		else
+			{
+			while ( file.read_line( string, HFile::D_STRIP_NEWLINES ) >= 0 )
+				cout << string << endl;
+			file.close();
+			}
+		}
+	f_oXml.init( doc );
+	f_oXml.apply_style( style );
+	f_oXml.parse( path );
+	f_oXml.save( out );
+	return;
 	}
 
 }

@@ -113,5 +113,48 @@ void module::test<3>( void )
 	cout << "}" << endl;
 	}
 
+/* reverse contents automatically */
+template<>
+template<>
+void module::test<4>( void )
+	{
+	TITLE( "reverse container content" );
+	cout << "reverse container content ..." << endl;
+	cout << "{" << endl;
+	typedef list<int> T;
+	T l;
+	generate_n( back_insert_iterator<T>( l ), 3, inc( 1 ) );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	reverse( l.begin(), l.end() );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	T lc;
+	reverse_copy( l.begin(), l.end(), back_insert_iterator<T>( lc ) );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	copy( lc.begin(), lc.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	cout << "}" << endl;
+	}
+
+/* transform (negate) contents automatically */
+template<>
+template<>
+void module::test<5>( void )
+	{
+	TITLE( "negate container content" );
+	cout << "negate container content ..." << endl;
+	cout << "{" << endl;
+	typedef list<int> T;
+	T l;
+	generate_n( back_insert_iterator<T>( l ), 20, inc( 1 ) );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	std::replace_if(l.begin(), l.end(), std::bind2nd(std::less<int>(), 10), 10);
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	transform( l.begin(), l.end(), l.begin(), negate<int>() );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	transform( l.begin(), l.end(), l.begin(), yaal::bind2nd( plus<int>(), 7 ) );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	cout << "}" << endl;
+	vector<string> vs;
+	}
+
 }
 
