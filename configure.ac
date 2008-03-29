@@ -9,7 +9,7 @@ AC_MSG_RESULT([--- Initialization ... ---                               [[6%]]])
 dnl Unique file in project: tressrc is sample configuration file.
 AC_MSG_RESULT([--- Finding base directory ... ---                      [[12%]]])
 AC_CONFIG_SRCDIR([[tressrc]])
-AC_CONFIG_AUX_DIR([../yaal/aux])
+AC_CONFIG_AUX_DIR([../yaal/_aux])
 
 dnl tress is not Free Software.
 AC_COPYRIGHT([[tress (c) 2003 All rights reserved.]])
