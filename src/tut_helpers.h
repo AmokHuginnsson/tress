@@ -55,11 +55,11 @@ protected:
 	/*}*/
 	};
 
-std::ostream& operator << ( std::ostream&, yaal::hcore::HComplex );
+std::ostream& operator << ( std::ostream&, yaal::hcore::HComplex const& );
 
-template<class tType>
+template<typename tType>
 std::ostream& operator << ( std::ostream& out,
-		yaal::hcore::HVector<tType> a_oVector )
+		yaal::hcore::HVector<tType> const& a_oVector )
 	{
 	M_PROLOG
 	int l_iCtr = 0, l_iSize = a_oVector.get_size ( );
@@ -75,9 +75,9 @@ std::ostream& operator << ( std::ostream& out,
 	M_EPILOG
 	}
 
-template<class tType>
+template<typename tType>
 std::ostream& operator << ( std::ostream& out,
-		yaal::hcore::HMatrix<tType> a_oMatrix )
+		yaal::hcore::HMatrix<tType> const& a_oMatrix )
 	{
 	M_PROLOG
 	int l_iCtr = 0, l_iCtrLoc = 0;

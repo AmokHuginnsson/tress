@@ -29,6 +29,8 @@ Copyright:
 #include <yaal/yaal.h>
 M_VCSID ( "$Id$" )
 
+#include "tut_helpers.h"
+
 using namespace tut;
 using namespace std;
 using namespace yaal;
@@ -36,6 +38,7 @@ using namespace yaal::hcore;
 using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
+using namespace tress::tut_helpers;
 
 namespace tut
 {
@@ -44,13 +47,13 @@ struct tut_yaal_hcore_hvector
 	{
 	};
 
-typedef test_group < tut_yaal_hcore_hvector > tut_group;
+typedef test_group<tut_yaal_hcore_hvector> tut_group;
 typedef tut_group::object module;
-tut_group tut_yaal_hcore_hvector_group ( "yaal::hcore::HVector" );
+tut_group tut_yaal_hcore_hvector_group( "yaal::hcore::HVector" );
 
-template < >
-template < >
-void module::test<1> ( void )
+template<>
+template<>
+void module::test<1>( void )
 	{
 	HVector < double > v ( 3 );
 	HVector < double > w ( 3 );

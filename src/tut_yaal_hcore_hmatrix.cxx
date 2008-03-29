@@ -28,6 +28,7 @@ Copyright:
 
 #include <yaal/yaal.h>
 M_VCSID ( "$Id$" )
+#include "tut_helpers.h"
 
 using namespace tut;
 using namespace std;
@@ -36,6 +37,7 @@ using namespace yaal::hcore;
 using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
+using namespace tress::tut_helpers;
 
 namespace tut
 {
@@ -44,12 +46,12 @@ struct tut_yaal_hcore_hmatrix
 	{
 	};
 
-typedef test_group < tut_yaal_hcore_hmatrix > tut_group;
+typedef test_group<tut_yaal_hcore_hmatrix> tut_group;
 typedef tut_group::object module;
-tut_group tut_yaal_hcore_hmatrix_group ( "yaal::hcore::HMatrix" );
+tut_group tut_yaal_hcore_hmatrix_group( "yaal::hcore::HMatrix" );
 
-template < >
-template < >
+template<>
+template<>
 void module::test<1> ( void )
 	{
 	HMatrix < double > V ( 3, 3 );

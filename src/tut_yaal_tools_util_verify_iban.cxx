@@ -77,13 +77,9 @@ template < >
 template < >
 void module::test<3> ( void )
 	{
-	HString string;
-	HFile file;
-	if ( setup.f_iArgc < 2 )
-		fail( "You need to specify one argument for this test" );
-	if ( setup.f_bVerbose )
+	if ( setup.f_bVerbose && ( setup.f_iArgc > 1 ) )
 		{
-		string = setup.f_ppcArgv [ 1 ];
+		HString string( setup.f_ppcArgv[ 1 ] );
 		int unknown = string.find( '?' );
 		if ( unknown < 0 )
 			fail( "No unknown characters." );

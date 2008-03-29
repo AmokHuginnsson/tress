@@ -56,7 +56,7 @@ HLogger::HLogger( void )
 	{
 	}
 
-HLogger & HLogger::operator << ( string const & a_oString )
+HLogger& HLogger::operator << ( string const& a_oString )
 	{
 	M_PROLOG
 	if ( n_bWatchNext )
@@ -74,7 +74,7 @@ HLogger & HLogger::operator << ( string const & a_oString )
 	M_EPILOG
 	}
 
-HLogger & HLogger::operator << ( int const & a_iNumber )
+HLogger& HLogger::operator << ( int const& a_iNumber )
 	{
 	M_PROLOG
 	n_iNumber = a_iNumber;
@@ -83,7 +83,7 @@ HLogger & HLogger::operator << ( int const & a_iNumber )
 	M_EPILOG
 	}
 
-HLogger & HLogger::operator << ( ostream & ( * const ) ( ostream & ) )
+HLogger& HLogger::operator << ( ostream& ( * const ) ( ostream& ) )
 	{
 	M_PROLOG
 	hcore::log << endl;
@@ -91,7 +91,7 @@ HLogger & HLogger::operator << ( ostream & ( * const ) ( ostream & ) )
 	M_EPILOG
 	}
 
-ostream & operator << ( ostream & out, HComplex a_oComplex )
+ostream& operator << ( ostream & out, HComplex const& a_oComplex )
 	{
 	M_PROLOG
 	double re, im;
