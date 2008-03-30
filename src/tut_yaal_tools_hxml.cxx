@@ -232,6 +232,18 @@ void module::test<4>( void )
 /* load, save */
 template<>
 template<>
+void module::test<5>( void )
+	{
+	HXml xml;
+	xml.init( "data/xml.xml" );
+	xml.parse( "/my_root/my_set/my_item" );
+	xml.parse( "/my_root/my_set/my_item" ); /* mem-leak test */
+	xml.save( "out/set.xml" );
+	}
+
+/* load, save */
+template<>
+template<>
 void module::test<41>( void )
 	{
 	HXml xml;
