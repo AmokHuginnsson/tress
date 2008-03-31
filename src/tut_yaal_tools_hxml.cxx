@@ -244,11 +244,43 @@ void module::test<5>( void )
 /* load, save */
 template<>
 template<>
-void module::test<41>( void )
+void module::test<6>( void )
 	{
 	HXml xml;
 	xml.load( "data/xml.xml" );
 	xml.save( "out/tut.xml" );
+	}
+
+/* load, save, clear, handmade, save */
+template<>
+template<>
+void module::test<7>( void )
+	{
+	HXml xml;
+	xml.load( "data/xml.xml" );
+	xml.save( "out/tut.xml" );
+	xml.clear();
+	xml.create_root( "xml" );
+	HXml::HNodeProxy root = xml.get_root();
+	root.add_node( HXml::HNode::TYPE::D_CONTENT, "Hello World!" );
+	xml.save( "out/hello.xml" );
+	}
+
+/* init, apply_style, parse, save, clear, handmade, save */
+template<>
+template<>
+void module::test<8>( void )
+	{
+	HXml xml;
+	xml.init( "./data/xml.xml" );
+	xml.apply_style( "./data/style.xml" );
+	xml.parse();
+	xml.save( "./out/tut.xml" );
+	xml.clear();
+	xml.create_root( "xml" );
+	HXml::HNodeProxy root = xml.get_root();
+	root.add_node( HXml::HNode::TYPE::D_CONTENT, "Hello World!" );
+	xml.save( "out/hello.xml" );
 	}
 
 /* apply stylesheet */
