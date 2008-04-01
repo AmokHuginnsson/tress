@@ -311,7 +311,7 @@ void module::test<10>( void )
 		check_consistency( t2 );
 		ensure_equals( bad_shape, to_string( t1 ), "@{xy}" );
 		ensure_equals( bad_shape, to_string( t2 ), "%{12}" );
-		t1.swap( t2 );
+		tree_t::swap( t1, t2 );
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ensure_equals( swap_failed, to_string( t2 ), "@{xy}" );
