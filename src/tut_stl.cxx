@@ -4,7 +4,7 @@
 	tut.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
-	ii. You must attach Copyright information to any part of every copy
+	ii. You must attach Copyright information to any part of every yaal::copy
 	    of this software.
 
 Copyright:
@@ -92,7 +92,7 @@ void module::test<2>( void )
 	s.insert( 1 );
 	s.insert( 2 );
 	s.insert( 3 );
-	copy( s.begin(), s.end(), ostream_iterator<int>( cout ) );
+	yaal::copy( s.begin(), s.end(), ostream_iterator<int>( cout ) );
 	cout << endl;
 	cout << "}" << endl;
 	}
@@ -108,7 +108,7 @@ void module::test<3>( void )
 	typedef set<int> T;
 	T s;
 	generate_n( insert_iterator<T>( s, s.begin() ), 3, inc( 1 ) );
-	copy( s.begin(), s.end(), ostream_iterator<int>( cout ) );
+	yaal::copy( s.begin(), s.end(), ostream_iterator<int>( cout ) );
 	cout << endl;
 	cout << "}" << endl;
 	}
@@ -124,13 +124,13 @@ void module::test<4>( void )
 	typedef list<int> T;
 	T l;
 	generate_n( back_insert_iterator<T>( l ), 3, inc( 1 ) );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	reverse( l.begin(), l.end() );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	T lc;
 	reverse_copy( l.begin(), l.end(), back_insert_iterator<T>( lc ) );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
-	copy( lc.begin(), lc.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	yaal::copy( lc.begin(), lc.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	cout << "}" << endl;
 	}
 
@@ -145,13 +145,13 @@ void module::test<5>( void )
 	typedef list<int> T;
 	T l;
 	generate_n( back_insert_iterator<T>( l ), 20, inc( 1 ) );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	std::replace_if(l.begin(), l.end(), std::bind2nd(std::less<int>(), 10), 10);
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	transform( l.begin(), l.end(), l.begin(), negate<int>() );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	transform( l.begin(), l.end(), l.begin(), yaal::bind2nd( plus<int>(), 7 ) );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	cout << "}" << endl;
 	vector<string> vs;
 	}

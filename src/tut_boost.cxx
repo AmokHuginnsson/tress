@@ -4,7 +4,7 @@
 	tut.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
-	ii. You must attach Copyright information to any part of every copy
+	ii. You must attach Copyright information to any part of every yaal::copy
 	    of this software.
 
 Copyright:
@@ -94,10 +94,10 @@ void module::test<1>( void )
 	typedef vector<multi> T;
 	T v;
 	generate_n( back_insert_iterator<T>( v ), 3, make_multi );
-	copy( v.begin(), v.end(), ostream_iterator<multi>( cout ) );
+	yaal::copy( v.begin(), v.end(), ostream_iterator<multi>( cout ) );
 	cout << endl;
 	sort( v.begin(), v.end(), bind( &multi::_first, _1 ) < bind( &multi::_first, _2 ) );
-	copy( v.begin(), v.end(), ostream_iterator<multi>( cout ) );
+	yaal::copy( v.begin(), v.end(), ostream_iterator<multi>( cout ) );
 	cout << endl;
 	cout << "}" << endl;
 	}
@@ -243,7 +243,7 @@ void module::test<4>( void )
 	typedef generator<test4helper, inc> t4gh_t;
 	generate_n( insert_iterator<T>( m, m.begin() ), 3,
 			generator<t4h_t, inc, t4gh_t>( inc( 1 ), t4gh_t( inc( 7 ) ) ) );
-	copy( m.begin(), m.end(), ostream_iterator<t4h_t>( cout ) );
+	yaal::copy( m.begin(), m.end(), ostream_iterator<t4h_t>( cout ) );
 	cout << endl;
 	int sum = accumulate( m.begin(), m.end(), 0,
 			bind( std::plus<int>(), _1, bind( &test4helper::get_val, bind( &t4h_t::second, _2 ) ) ) );

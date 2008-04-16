@@ -217,5 +217,26 @@ void module::test<3>( void )
 	b->accept( DerivedBazCall() );
 	}
 
+struct A
+	{
+	A( void ) { cout << __PRETTY_FUNCTION__ << endl; }
+	~A( void ) { cout << __PRETTY_FUNCTION__ << endl; }
+	};
+
+struct B : public A
+	{
+	B( void ) { cout << __PRETTY_FUNCTION__ << endl; }
+	~B( void ) { cout << __PRETTY_FUNCTION__ << endl; }
+	};
+
+template<>
+template<>
+void module::test<4>( void )
+	{
+	typedef HPointer<A> pa_t;
+
+	pa_t p( new B );
+	}
+
 }
 
