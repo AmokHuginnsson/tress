@@ -66,6 +66,7 @@ void gather_groups_from_file( string_list_t& );
 int main( int a_iArgc, char* a_ppcArgv[] )
 	{
 	M_PROLOG
+	HClock clk;
 /*	variables declarations for main loop:                                 */
 	int l_iOpt = 0;
 	HLogger logger;
@@ -157,7 +158,7 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 			HCons::get_instance().leave_curses();
 		throw;
 		}
-	fprintf( stderr, "Done.\n" );
+	fprintf( stderr, "Done in %ld miliseconds.\n", clk.get_time_elapsed( HClock::UNIT::D_MILISECOND ) );
 	return ( l_oVisitor.exceptions_count
 			+ l_oVisitor.failures_count
 			+ l_oVisitor.terminations_count
