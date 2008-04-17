@@ -370,11 +370,6 @@ int confirm( char const* const str, int const& size, char const* const pat, int 
 	return ( p ? p - str : -1 );
 	}
 
-namespace y
-{
-
-}
-
 struct gen_char
 	{
 	HRandomizer _rnd;
@@ -384,11 +379,6 @@ struct gen_char
 		{ return ( _rnd.rnd( 1 + 'z' - 'a' ) + 'a' ); }
 	};
 
-void gen_sample( char* sample, int const& size )
-	{
-	yaal::generate( sample, sample + size, gen_char() );
-	}
-
 /* find("") */
 template<>
 template<>
@@ -397,7 +387,7 @@ void module::test<15>( void )
 	static int const D_SAMPLE_SIZE = 128;
 	char sample[ D_SAMPLE_SIZE + 1 ];
 	sample[ D_SAMPLE_SIZE ] = 0;
-	gen_sample( sample, D_SAMPLE_SIZE );
+	yaal::generate( sample, sample + D_SAMPLE_SIZE, gen_char() );
 	yaal::copy( sample, sample + D_SAMPLE_SIZE, ostream_iterator<char>( cout ) ); cout << endl;
 	HString str( sample );
 	HString msg;
@@ -405,43 +395,19 @@ void module::test<15>( void )
 		{
 		for ( int offset = 0; offset < D_SAMPLE_SIZE; ++ offset )
 			{
-			msg.format( "find(\"\") failed: %d,%d", len, offset );
-			ensure_equals( msg, str.nfind( sample + offset, len ), confirm( sample, D_SAMPLE_SIZE - offset, sample + offset, len ) );
+			int where = -1;
+			do
+				{
+				int newwhere = ( ( len + offset ) <= D_SAMPLE_SIZE ) ? confirm( sample + where + 1,
+						D_SAMPLE_SIZE - ( where + 1 ), sample + offset, len ) : -1;
+				if ( newwhere >= 0 )
+					newwhere += ( where + 1 );
+				msg.format( "find(\"\") failed: %d,%d,%d", len, offset, where );
+				ensure_equals( msg, where = str.nfind( sample + offset, len, where + 1 ), newwhere );
+				}
+			while ( where >= 0 );
 			}
 		}
-	}
-
-template<>
-template<>
-void module::test<19>( void )
-	{
-/*		{
-	static char const* const rawstr = "alamkotaakotmaale";
-	static char const* const pat = "aako";
-	cout << kmpsearch( rawstr, strlen( rawstr ), pat, strlen( pat ) );
-	cout << confirm( rawstr, pat ) << endl;
-		}
-		{
-	static char const* const rawstr = "allalaalllalla";
-	static char const* const pat = "aalll";
-	cout << kmpsearch( rawstr, strlen( rawstr ), pat, strlen( pat ) );
-	cout << confirm( rawstr, pat ) << endl;
-		}
-		{
-	static char const* const rawstr = "BBAAABBAABAAAAABBBBAABABAABAAAABBBABBAAA";
-	static char const* const pat = "BAAB";
-	cout << kmpsearch( rawstr, strlen( rawstr ), pat, strlen( pat ) );
-	cout << confirm( rawstr, pat ) << endl;
-	static char const* const patbad = "BACAB";
-	cout << kmpsearch( rawstr, strlen( rawstr ), patbad, strlen( patbad ) );
-	cout << confirm( rawstr, patbad ) << endl;
-		}
-		{
-	static char const* const rawstr = "abcdef";
-	static char const* const pat = "f";
-	cout << kmpsearch( rawstr, strlen( rawstr ), pat, strlen( pat ) );
-	cout << confirm( rawstr, pat ) << endl;
-		}*/
 	}
 
 }
