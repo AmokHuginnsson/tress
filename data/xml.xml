@@ -2,7 +2,7 @@
 <!DOCTYPE my_root [
 <!ENTITY v_data "my_data">
 ]>
-<my_root my_type="my_fancy">
+<my_root my_type="my_fancy" xmlns:xi="http://www.w3.org/2003/XInclude">
 	<my_node my_property="¯ó³wi±tko">
 		<my_sub>node</my_sub>
 		Za¿ó³ciæ gêsi± ja¼ñ. &v_data;
@@ -10,6 +10,7 @@ Filmuj rze¼ ¿±dañ, po¶æ, gnêb ch³ystków!
 Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag.
 		<my_empty my_prop="my_p_val" />
 	</my_node>
+	<xi:include href="./bit.xml" />
 	<my_set>
 		<my_item>one</my_item>
 		<my_item>two</my_item>
