@@ -189,7 +189,7 @@ template<>
 template<>
 void module::test<3>( void )
 	{
-	typedef HPointer<Base,HPointerScalar,HPointerRelaxed> base_ptr_t;
+	typedef HPointer<Base> base_ptr_t;
 	base_ptr_t a = base_ptr_t( new Derived );
 	base_ptr_t b = base_ptr_t( new FunkyDerived );
 	(*a).foo();

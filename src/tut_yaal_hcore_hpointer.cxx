@@ -86,20 +86,20 @@ typedef test_group < tut_yaal_hcore_hpointer > tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_hcore_hpointer_group ( "yaal::hcore::HPointer" );
 
-typedef HPointer<tut_yaal_hcore_hpointer::counter, HPointerScalar, HPointerRelaxed> ptr_t;
+typedef HPointer<tut_yaal_hcore_hpointer::counter> ptr_t;
 
 /* Default constructor. */
-template < >
-template < >
+template<>
+template<>
 void module::test<1> ( void )
 	{
 	ptr_t ptr;
-	ensure_equals ( "failed to invoke destructor", ptr.raw(), static_cast<counter*>( 0  ) );
+	ensure_equals ( "failed to invoke destructor", ptr.raw(), static_cast<counter*>( NULL ) );
 	}
 
 /* Constructor. */
-template < >
-template < >
+template<>
+template<>
 void module::test<2> ( void )
 	{
 		{
@@ -108,41 +108,41 @@ void module::test<2> ( void )
 		ensure_equals( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
 		ptr->foo ( );
 		}
-	ensure_equals ( "failed to invoke destructor", counter::get_count ( ), 0 );
+	ensure_equals ( "failed to invoke destructor", counter::get_count(), 0 );
 	}
 
 /* Copy constructor. */
-template < >
-template < >
+template<>
+template<>
 void module::test<3> ( void )
 	{
 		{
 		counter* p = NULL;
 		ptr_t ptr = ptr_t ( p = new counter ( ) );
 		ensure_equals( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
-		ptr->foo ( );
+		ptr->foo();
 		}
-	ensure_equals ( "failed to invoke destructor", counter::get_count ( ), 0 );
+	ensure_equals( "failed to invoke destructor", counter::get_count(), 0 );
 	}
 
 /* Assign operator. */
-template < >
-template < >
+template<>
+template<>
 void module::test<4> ( void )
 	{
 		{
 		counter* p = NULL;
-		ptr_t sp1 = ptr_t ( new counter ( ) );
-		ptr_t sp2 = ptr_t ( p = new counter ( ) );
-		sp1->foo ( );
-		sp2->foo ( );
+		ptr_t sp1 = ptr_t ( new counter() );
+		ptr_t sp2 = ptr_t ( p = new counter() );
+		sp1->foo();
+		sp2->foo();
 		sp1 = sp2;
-		ensure_equals ( "failed to invoke destructor", counter::get_count ( ), 1 );
-		ensure_equals ( "failed to assign pointer", sp1->get_serial_no ( ), sp2->get_serial_no ( ) );
-		ensure_equals ( "failed to assign pointer", sp1.raw(), p );
-		sp1->foo ( );
+		ensure_equals( "failed to invoke destructor", counter::get_count(), 1 );
+		ensure_equals( "failed to assign pointer", sp1->get_serial_no(), sp2->get_serial_no() );
+		ensure_equals( "failed to assign pointer", sp1.raw(), p );
+		sp1->foo();
 		}
-	ensure_equals ( "failed to invoke destructor", counter::get_count ( ), 0 );
+	ensure_equals( "failed to invoke destructor", counter::get_count(), 0 );
 	}
 
 /**
@@ -282,6 +282,46 @@ void module::test<12>()
 	ptr_t sp1( new counter() );
 	ptr_t sp2 = sp1;
 	sp2 = sp1;
+	}
+
+/* Weak pointer related tests. */
+typedef HPointer<tut_yaal_hcore_hpointer::counter, HPointerScalar, HPointerWeak> weak_t;
+
+/* default constructor */
+template<>
+template<>
+void module::test<13>()
+	{
+	weak_t w;
+	ptr_t p( w );
+	ensure( "bad default constructor", p.raw() == NULL );
+	}
+
+/* copy constructor */
+template<>
+template<>
+void module::test<14>()
+	{
+	ptr_t p( new counter() );
+	weak_t w( p );
+	ensure( "bad default constructor", p.raw() != NULL );
+	}
+
+/* accessing nullified weak */
+template<>
+template<>
+void module::test<15>()
+	{
+	weak_t w;
+		{
+		ptr_t p( new counter() );
+		w = p;
+		ensure( "weak could not pass ownership", w == p );
+		ptr_t o( w );
+		ensure( "weak could not pass ownership", o == p );
+		}
+//	ptr_t a( w );
+//	ensure( "weak performed forbidden operation", a.raw() == NULL );
 	}
 
 }
