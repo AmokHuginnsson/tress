@@ -403,7 +403,9 @@ void module::test<15>( void )
 				if ( newwhere >= 0 )
 					newwhere += ( where + 1 );
 				msg.format( "find(\"\") failed: %d,%d,%d", len, offset, where );
-				ensure_equals( msg, where = str.nfind( sample + offset, len, where + 1 ), newwhere );
+				ensure_equals( msg,
+						where = ( offset + len <= D_SAMPLE_SIZE ) ? str.nfind( sample + offset, len, where + 1 ) : -1,
+						newwhere );
 				}
 			while ( where >= 0 );
 			}

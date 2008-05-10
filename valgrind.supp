@@ -13,6 +13,35 @@
    fun:__nss_database_lookup
 }
 {
+   libnss: Debian specific leak
+   Memcheck:Leak
+   fun:malloc
+   fun:__nss_lookup_function
+   obj:*
+   obj:*
+   fun:getpwuid_r@@GLIBC_2.1.2
+   fun:_ZN4yaal5hcore4HLogC1Ev
+   fun:_ZN4yaal5hcore10HSingletonINS0_4HLogEE15create_instanceERKi
+   fun:_ZN4yaal5hcore10HSingletonINS0_4HLogEE12get_instanceERKi
+   fun:_Z41__static_initialization_and_destruction_0ii
+   fun:_GLOBAL__I__ZN4yaal5hcore13n_iDebugLevelE
+}
+{
+   libnss2: Debian specific leak
+   Memcheck:Leak
+   fun:malloc
+   fun:tsearch
+   fun:__nss_lookup_function
+   obj:*
+   obj:*
+   fun:getpwuid_r@@GLIBC_2.1.2
+   fun:_ZN4yaal5hcore4HLogC1Ev
+   fun:_ZN4yaal5hcore10HSingletonINS0_4HLogEE15create_instanceERKi
+   fun:_ZN4yaal5hcore10HSingletonINS0_4HLogEE12get_instanceERKi
+   fun:_Z41__static_initialization_and_destruction_0ii
+   fun:_GLOBAL__I__ZN4yaal5hcore13n_iDebugLevelE
+}
+{
    OpenSSL: insufficient library cleanups
    Memcheck:Leak
    fun:malloc
