@@ -33,8 +33,11 @@ include $(DIR_ROOT)/_aux/common-paths.mk
 LIBS					= hconsole tools hcore hdata dbwrapper boost_filesystem boost_date_time
 EXEC_NAME			= 1exec
 TARGET				= tress
+TARGET_PLUGIN = tressplugin
 SRC_TARGET		= src
-TARGETS				= TARGET
+SRC_TARGET_PLUGIN = data
+LINKER_FLAGS_TARGET_PLUGIN = -shared --allow-shlib-undefined
+TARGETS				= TARGET TARGET_PLUGIN
 ifdef NODEBUG
 	TARGET = $(PRJNAME)
 endif

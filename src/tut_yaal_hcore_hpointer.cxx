@@ -152,12 +152,15 @@ template<>
 template<>
 void module::test<5>()
 	{
-	ptr_t sp1;
-	ensure_equals( "counter::get_count: 0", counter::get_count(), 0 );
-	ptr_t sp2( sp1 );
-	ensure_equals( "counter::get_count: 0", counter::get_count(), 0 );
-	ensure_equals( "counter::get_count: 0", counter::get_count(), 0 );
-	ensure( sp2.raw() == 0 );
+		{
+		ptr_t sp1;
+		ensure_equals( "counter::get_count: 0", counter::get_count(), 0 );
+		ptr_t sp2( sp1 );
+		ensure_equals( "counter::get_count: 0", counter::get_count(), 0 );
+		ensure_equals( "counter::get_count: 0", counter::get_count(), 0 );
+		ensure( sp2.raw() == 0 );
+		}
+	ensure( "leak !!!", counter::get_count() == 0 );
 	}
 
 /**
@@ -173,7 +176,7 @@ void module::test<6>()
 		ptr_t sp2(sp1);
 		ensure_equals( "get", sp1.raw(), p );
 		ensure_equals( "get", sp2.raw(), p );
-		ensure_equals( "cnt", counter::get_count(), 1 );
+		ensure_equals( "leak !!!", counter::get_count(), 1 );
 		}
 	// ptr left scope
 	ensure_equals( "destructed", counter::get_count(), 0 );
@@ -190,10 +193,13 @@ template<>
 template<>
 void module::test<7>()
 	{
-	counter* p = new counter();
-	ptr_t sp( p );
-	ensure("get", sp.raw() == p);
-	ensure("cnt", counter::get_count() == 1);
+		{
+		counter* p = new counter();
+		ptr_t sp( p );
+		ensure("get", sp.raw() == p);
+		ensure("leak !!!", counter::get_count() == 1);
+		}
+	ensure( "leak !!!", counter::get_count() == 0 );
 	}
 
 /**
@@ -210,7 +216,7 @@ void module::test<8>()
 		sp2 = sp1;
 		ensure_equals( "get", sp1.raw(), p );
 		ensure_equals( "get", sp2.raw(), p );
-		ensure_equals( "cnt", counter::get_count(), 1 );
+		ensure_equals( "leak !!!", counter::get_count(), 1 );
 		}
 	ensure_equals( "destructed", counter::get_count(), 0 );
 	}
@@ -222,11 +228,14 @@ template<>
 template<>
 void module::test<9>()
 	{
-	ptr_t sp1( new counter() );
-	sp1 = sp1;
-	ensure("get", sp1.raw() != 0);
-	ensure("cnt", counter::get_count() == 1);
-	ensure_equals( "not destructed", counter::get_count(), 1 );
+		{
+		ptr_t sp1( new counter() );
+		sp1 = sp1;
+		ensure("get", sp1.raw() != 0);
+		ensure("leak !!!", counter::get_count() == 1);
+		ensure_equals( "not destructed", counter::get_count(), 1 );
+		}
+	ensure( "leak !!!", counter::get_count() == 0 );
 	}
 
 
@@ -241,16 +250,19 @@ template<>
 template<>
 void module::test<10>()
 	{
-	counter *p1 = NULL, *p2 = NULL;
-	ptr_t sp1( p1 = new counter());
-	ptr_t sp2( p2 = new counter());
-	ensure_equals( "create 1", sp1->get_serial_no(), p1->get_serial_no() );
-	ensure_equals( "create 2", sp2->get_serial_no(), p2->get_serial_no() );
-	ensure_equals( "cnt=2", counter::get_count(), 2 );
+		{
+		counter *p1 = NULL, *p2 = NULL;
+		ptr_t sp1( p1 = new counter());
+		ptr_t sp2( p2 = new counter());
+		ensure_equals( "create 1", sp1->get_serial_no(), p1->get_serial_no() );
+		ensure_equals( "create 2", sp2->get_serial_no(), p2->get_serial_no() );
+		ensure_equals( "leak !!!=2", counter::get_count(), 2 );
 
-	sp1 = sp2;
-	ensure_equals( "create 2", sp1->get_serial_no(), p2->get_serial_no() );
-	ensure_equals("cnt=1", counter::get_count(), 1 );
+		sp1 = sp2;
+		ensure_equals( "create 2", sp1->get_serial_no(), p2->get_serial_no() );
+		ensure_equals("leak !!!=1", counter::get_count(), 1 );
+		}
+	ensure( "leak !!!", counter::get_count() == 0 );
 	}
 
 /**
@@ -260,16 +272,19 @@ template<>
 template<>
 void module::test<11>()
 	{
-	try
 		{
-		ptr_t sp;
-		sp->get_serial_no();
-		fail("exception expected");
+		try
+			{
+			ptr_t sp;
+			sp->get_serial_no();
+			fail("exception expected");
+			}
+		catch (const int&)
+			{
+			// ok
+			}
 		}
-	catch (const int&)
-		{
-		// ok
-		}
+	ensure( "leak !!!", counter::get_count() == 0 );
 	}
 
 /**
@@ -279,9 +294,12 @@ template<>
 template<>
 void module::test<12>()
 	{
-	ptr_t sp1( new counter() );
-	ptr_t sp2 = sp1;
-	sp2 = sp1;
+		{
+		ptr_t sp1( new counter() );
+		ptr_t sp2 = sp1;
+		sp2 = sp1;
+		}
+	ensure( "leak !!!", counter::get_count() == 0 );
 	}
 
 /* Weak pointer related tests. */
@@ -292,9 +310,12 @@ template<>
 template<>
 void module::test<13>()
 	{
-	weak_t w;
-	ptr_t p( w );
-	ensure( "bad default constructor", p.raw() == NULL );
+		{
+		weak_t w;
+		ptr_t p( w );
+		ensure( "bad default constructor", p.raw() == NULL );
+		}
+	ensure( "leak !!!", counter::get_count() == 0 );
 	}
 
 /* copy constructor */
@@ -302,9 +323,12 @@ template<>
 template<>
 void module::test<14>()
 	{
-	ptr_t p( new counter() );
-	weak_t w( p );
-	ensure( "bad default constructor", p.raw() != NULL );
+		{
+		ptr_t p( new counter() );
+		weak_t w( p );
+		ensure( "bad copy constructor", p.raw() != NULL );
+		}
+	ensure( "leak !!!", counter::get_count() == 0 );
 	}
 
 /* accessing nullified weak */
@@ -312,16 +336,36 @@ template<>
 template<>
 void module::test<15>()
 	{
-	weak_t w;
 		{
-		ptr_t p( new counter() );
-		w = p;
-		ensure( "weak could not pass ownership", w == p );
-		ptr_t o( w );
-		ensure( "weak could not pass ownership", o == p );
+		weak_t w;
+			{
+			ptr_t p( new counter() );
+			w = p;
+			ensure( "weak could not pass ownership", w == p );
+			ptr_t o( w );
+			ensure( "weak could not pass ownership", o == p );
+			}
+		ptr_t a( w );
+		ensure( "weak performed forbidden operation", a.raw() == NULL );
 		}
-//	ptr_t a( w );
-//	ensure( "weak performed forbidden operation", a.raw() == NULL );
+	ensure( "leak !!!", counter::get_count() == 0 );
+	}
+
+struct ODummy : public HPointerFromThisInterface<ODummy>
+	{
+	};
+
+typedef HPointer<ODummy> ftp_t;
+
+/* from this */
+template<>
+template<>
+void module::test<16>()
+	{
+	ODummy* raw = NULL;
+	ftp_t p( raw = new ODummy );
+	ftp_t o( raw->get_pointer() );
+	ensure( "from this failed", p == o );
 	}
 
 }

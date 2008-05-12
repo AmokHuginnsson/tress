@@ -33,31 +33,35 @@ using namespace tut;
 using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
+using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
-using namespace yaal::dbwrapper;
 
 namespace tut
 {
 
-struct tut_yaal_dbwrapper_hrecordset
+struct tut_yaal_tools_hplugin
 	{
 	};
 
-typedef test_group<tut_yaal_dbwrapper_hrecordset> tut_group;
+typedef test_group<tut_yaal_tools_hplugin> tut_group;
 typedef tut_group::object module;
-tut_group tut_yaal_dbwrapper_hrecordset_group( "yaal::dbwrapper::HRecordSet" );
+tut_group tut_yaal_tools_hplugin_group( "yaal::tools::HPlugin" );
+
+typedef int ( * sumator_t )( int, int );
 
 template<>
 template<>
 void module::test<1>( void )
 	{
-	static char const* const D_QUERY = "SELECT * FROM config;";
-	HDataBase::ptr_t db = HDataBase::get_connector();
-	db->connect( "./out/tress", "", "" );
-	HRecordSet rs = db->query( D_QUERY );
-	for ( HRecordSet::iterator it = rs.begin(); it != rs.end(); ++ it )
-		cout << it[ 0 ] << endl;
+	static char const* const D_TRESS_PLUGIN = "./data/tressplugin.so";
+	int const T1 = 7;
+	int const T2 = 13;
+	HPlugin p;
+	p.load( D_TRESS_PLUGIN );
+	sumator_t my_sum;
+	p.resolve( "tut_yaal_tools_hplugin_sum", my_sum );
+	ensure_equals( "cound not utilize plugin", my_sum( T1, T2 ), T1 + T2 );
 	}
 
 }
