@@ -53,7 +53,7 @@ HString tut_yaal_hcore_hnumber::BC_PATH = "/usr/bin/bc";
 
 tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void ) : _rnd(), _bc()
 	{
-	setenv( "BC_LINE_LENGTH", "0", 1 );
+	setenv( "BC_LINE_LENGTH", "40000", 1 );
 	randomizer_helper::init_randomizer_from_time( _rnd );
 	}
 
