@@ -57,7 +57,13 @@ void module::test<1>( void )
 	db->connect( "./out/tress", "", "" );
 	HRecordSet rs = db->query( D_QUERY );
 	for ( HRecordSet::iterator it = rs.begin(); it != rs.end(); ++ it )
-		cout << it[ 0 ] << endl;
+		{
+		cout << "|";
+		int fc = rs.field_count();
+		for ( int i = 0; i < fc; ++ i )
+			cout << it[ i ] << "|";
+		cout << endl;
+		}
 	}
 
 }
