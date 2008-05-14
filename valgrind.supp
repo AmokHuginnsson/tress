@@ -19,12 +19,17 @@
    fun:__nss_lookup_function
    obj:*
    obj:*
-   fun:getpwuid_r@@GLIBC_2.1.2
-   fun:_ZN4yaal5hcore4HLogC1Ev
-   fun:_ZN4yaal5hcore10HSingletonINS0_4HLogEE15create_instanceERKi
-   fun:_ZN4yaal5hcore10HSingletonINS0_4HLogEE12get_instanceERKi
-   fun:_Z41__static_initialization_and_destruction_0ii
-   fun:_GLOBAL__I__ZN4yaal5hcore13n_iDebugLevelE
+   fun:getpwuid_r*
+}
+{
+   Ubuntu specific leak
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/libc-2.6.1.so
+   fun:__nss_database_lookup
+   obj:*
+   obj:*
+   fun:getpwuid_r
 }
 {
    libnss2: Debian specific leak
@@ -34,12 +39,7 @@
    fun:__nss_lookup_function
    obj:*
    obj:*
-   fun:getpwuid_r@@GLIBC_2.1.2
-   fun:_ZN4yaal5hcore4HLogC1Ev
-   fun:_ZN4yaal5hcore10HSingletonINS0_4HLogEE15create_instanceERKi
-   fun:_ZN4yaal5hcore10HSingletonINS0_4HLogEE12get_instanceERKi
-   fun:_Z41__static_initialization_and_destruction_0ii
-   fun:_GLOBAL__I__ZN4yaal5hcore13n_iDebugLevelE
+   fun:getpwuid_r*
 }
 {
    OpenSSL: insufficient library cleanups
@@ -49,6 +49,16 @@
    fun:CRYPTO_malloc
    fun:sk_new
    obj:/usr/lib/i686/cmov/libssl.so.0.9.8
+   fun:SSL_COMP_get_compression_methods
+   fun:SSL_library_init
+}
+{
+   OpenSSL: insufficient library cleanups (Ubuntu)
+   Memcheck:Leak
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:sk_new
+   obj:/usr/lib/libssl.so.0.9.8
    fun:SSL_COMP_get_compression_methods
    fun:SSL_library_init
 }
@@ -134,4 +144,119 @@
    fun:RSA_private_decrypt
    fun:ssl3_get_client_key_exchange
 }
-
+{
+   Ubuntu: libc or ld problem
+   Memcheck:Addr8
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+}
+{
+   Ubuntu: unknown2
+   Memcheck:Addr8
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/libdl-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+}
+{
+   Ubuntu: iconv_open
+   Memcheck:Addr8
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   fun:__libc_dlopen_mode
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+}
+{
+   Ubuntu: iconv_open2
+   Memcheck:Addr8
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   fun:__libc_dlopen_mode
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+}
+{
+   Ubuntu: unknown
+   Memcheck:Addr8
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   fun:__libc_dlopen_mode
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+}
+{
+   Ubuntu: ld leak
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/libdl-2.6.1.so
+   fun:dlopen
+}
+{
+   Ubuntu dlopen problem.
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/libdl-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/libdl-2.6.1.so
+   fun:dlopen
+}
+{
+   Ubuntu dlopen problem2.
+   Memcheck:Addr8
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   fun:__libc_dlsym
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+}
