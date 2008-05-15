@@ -59,7 +59,7 @@ void module::test<1>( void )
 	for ( HRecordSet::iterator it = rs.begin(); it != rs.end(); ++ it )
 		{
 		cout << "|";
-		int fc = rs.field_count();
+		int fc = rs.get_field_count();
 		for ( int i = 0; i < fc; ++ i )
 			cout << it[ i ] << "|";
 		cout << endl;
