@@ -127,8 +127,10 @@ public:
 	bool operator == ( tType const& ) const;
 	bool operator != ( tType const& ) const;
 	operator tType ( void );
-	static int get_instances_count( void );
+	static int get_instance_count( void );
+	static void set_instance_count( int );
 	tType get_symbol( void ) const;
+	void foo( void );
 	};
 
 template<typename tType>
@@ -156,6 +158,18 @@ template<typename tType>
 counter<tType>::~counter( void )
 	{
 	-- _instances;
+	}
+
+template<typename tType>
+void counter<tType>::set_instance_count( int count )
+	{
+	_instances = count;
+	}
+
+template<typename tType>
+void counter<tType>::foo ( void )
+	{
+	std::cout << "do_foo(" << _symbol << ")" << std::endl;
 	}
 
 template<typename tType>
@@ -201,7 +215,7 @@ counter<tType>::operator tType ( void )
 	}
 
 template<typename tType>
-int counter<tType>::get_instances_count( void )
+int counter<tType>::get_instance_count( void )
 	{
 	return ( _instances );
 	}
