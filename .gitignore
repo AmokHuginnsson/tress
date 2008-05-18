@@ -11,3 +11,5 @@ tress.kdevelop
 tress.kdevelop.pcs
 tress.kdevelop.filelist
 tress.kdevses
+out
+data/tressplugin.so
