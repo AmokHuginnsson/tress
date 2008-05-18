@@ -232,6 +232,26 @@
    fun:dlopen
 }
 {
+   Debian: dlerror
+   Memcheck:Leak
+   fun:calloc
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+}
+{
+   Debian: dlopen2
+   Memcheck:Leak
+   fun:malloc
+   fun:add_to_global
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+}
+{
    Ubuntu dlopen problem.
    Memcheck:Leak
    fun:malloc
