@@ -1309,8 +1309,8 @@ void module::test<21>( void )
 		( len >= ( M + M - 2 ) ) && ( len = M + M - 2 );
 		res = res.left( len );
 		int z = res.reverse_find_other_than( "0" );
-		M_ASSERT( z >= 0 );
-		ensure_equals( msg, div.to_string().left( len - z ), res.left( len - z ) );
+		if ( z >= 0 )
+			ensure_equals( msg, div.to_string().left( len - z ), res.left( len - z ) );
 		}
 	}
 
