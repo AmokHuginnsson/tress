@@ -112,129 +112,129 @@ std::ostream& operator << ( std::ostream& out,
 void TITLE( char const* const );
 struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ ); } };
 
-template<typename tType>
+template<typename symbol_t, typename owner_t>
 class counter
 	{
 	static int _instances;
-	tType _symbol;
+	symbol_t _symbol;
 public:
 	counter( void );
-	counter( tType const& );
+	counter( symbol_t const& );
 	counter( counter const& );
 	~counter( void );
-	bool operator == ( counter<tType> const& ) const;
-	bool operator != ( counter<tType> const& ) const;
-	bool operator == ( tType const& ) const;
-	bool operator != ( tType const& ) const;
-	operator tType ( void );
+	bool operator == ( counter<symbol_t, owner_t> const& ) const;
+	bool operator != ( counter<symbol_t, owner_t> const& ) const;
+	bool operator == ( symbol_t const& ) const;
+	bool operator != ( symbol_t const& ) const;
+	operator symbol_t ( void );
 	static int get_instance_count( void );
 	static void set_instance_count( int );
-	tType get_symbol( void ) const;
+	symbol_t get_symbol( void ) const;
 	void foo( void );
 	};
 
-template<typename tType>
-int counter<tType>::_instances = 0;
+template<typename symbol_t, typename owner_t>
+int counter<symbol_t, owner_t>::_instances = 0;
 
-template<typename tType>
-counter<tType>::counter( void ) : _symbol()
+template<typename symbol_t, typename owner_t>
+counter<symbol_t, owner_t>::counter( void ) : _symbol()
 	{
 	++ _instances;
 	}
 
-template<typename tType>
-counter<tType>::counter( tType const& symbol ) : _symbol( symbol )
+template<typename symbol_t, typename owner_t>
+counter<symbol_t, owner_t>::counter( symbol_t const& symbol ) : _symbol( symbol )
 	{
 	++ _instances;
 	}
 
-template<typename tType>
-counter<tType>::counter( counter const& ctr ) : _symbol( ctr._symbol )
+template<typename symbol_t, typename owner_t>
+counter<symbol_t, owner_t>::counter( counter const& ctr ) : _symbol( ctr._symbol )
 	{
 	++ _instances;
 	}
 
-template<typename tType>
-counter<tType>::~counter( void )
+template<typename symbol_t, typename owner_t>
+counter<symbol_t, owner_t>::~counter( void )
 	{
 	-- _instances;
 	}
 
-template<typename tType>
-void counter<tType>::set_instance_count( int count )
+template<typename symbol_t, typename owner_t>
+void counter<symbol_t, owner_t>::set_instance_count( int count )
 	{
 	_instances = count;
 	}
 
-template<typename tType>
-void counter<tType>::foo ( void )
+template<typename symbol_t, typename owner_t>
+void counter<symbol_t, owner_t>::foo ( void )
 	{
 	std::cout << "do_foo(" << _symbol << ")" << std::endl;
 	}
 
-template<typename tType>
-bool counter<tType>::operator == ( tType const& val ) const
+template<typename symbol_t, typename owner_t>
+bool counter<symbol_t, owner_t>::operator == ( symbol_t const& val ) const
 	{
 	return ( val == _symbol );
 	}
 
-template<typename tType>
-bool counter<tType>::operator != ( tType const& val ) const
+template<typename symbol_t, typename owner_t>
+bool counter<symbol_t, owner_t>::operator != ( symbol_t const& val ) const
 	{
 	return ( val != _symbol );
 	}
 
-template<typename tType>
-bool counter<tType>::operator == ( counter<tType> const& val ) const
+template<typename symbol_t, typename owner_t>
+bool counter<symbol_t, owner_t>::operator == ( counter<symbol_t, owner_t> const& val ) const
 	{
 	return ( val._symbol == _symbol );
 	}
 
-template<typename tType>
-bool counter<tType>::operator != ( counter<tType> const& val ) const
+template<typename symbol_t, typename owner_t>
+bool counter<symbol_t, owner_t>::operator != ( counter<symbol_t, owner_t> const& val ) const
 	{
 	return ( val._symbol != _symbol );
 	}
 
-template<typename tType>
-bool operator == ( tType const& left, counter<tType> const& right )
+template<typename symbol_t, typename owner_t>
+bool operator == ( symbol_t const& left, counter<symbol_t, owner_t> const& right )
 	{
 	return ( left == right.get_symbol() );
 	}
 
-template<typename tType>
-bool operator != ( tType const& left, counter<tType> const& right )
+template<typename symbol_t, typename owner_t>
+bool operator != ( symbol_t const& left, counter<symbol_t, owner_t> const& right )
 	{
 	return ( left != right.get_symbol() );
 	}
 
-template<typename tType>
-counter<tType>::operator tType ( void )
+template<typename symbol_t, typename owner_t>
+counter<symbol_t, owner_t>::operator symbol_t ( void )
 	{
 	return ( _symbol );
 	}
 
-template<typename tType>
-int counter<tType>::get_instance_count( void )
+template<typename symbol_t, typename owner_t>
+int counter<symbol_t, owner_t>::get_instance_count( void )
 	{
 	return ( _instances );
 	}
 
-template<typename tType>
-tType counter<tType>::get_symbol( void ) const
+template<typename symbol_t, typename owner_t>
+symbol_t counter<symbol_t, owner_t>::get_symbol( void ) const
 	{
 	return ( _symbol );
 	}
 
-template<typename tType>
-yaal::hcore::HString& operator += ( yaal::hcore::HString& str, counter<tType> const& ctr )
+template<typename symbol_t, typename owner_t>
+yaal::hcore::HString& operator += ( yaal::hcore::HString& str, counter<symbol_t, owner_t> const& ctr )
 	{
 	str += ctr.get_symbol();
 	return ( str );
 	}
 
-template<typename tType>
-std::ostream& operator << ( std::ostream& stream, counter<tType> const& ctr )
+template<typename symbol_t, typename owner_t>
+std::ostream& operator << ( std::ostream& stream, counter<symbol_t, owner_t> const& ctr )
 	{
 	stream << ctr.get_symbol();
 	return ( stream );

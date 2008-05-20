@@ -45,7 +45,7 @@ namespace tut
 
 struct tut_yaal_hcore_hpointer
 	{
-	typedef counter<int> counter_t;
+	typedef counter<int, tut_yaal_hcore_hpointer> counter_t;
 	tut_yaal_hcore_hpointer( void )
 		{
 		counter_t::set_instance_count( 0 );
