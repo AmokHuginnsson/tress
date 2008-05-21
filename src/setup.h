@@ -27,6 +27,8 @@ Copyright:
 #ifndef __SETUP_H
 #define __SETUP_H
 
+#include <yaal/hcore/hstring.h>
+
 namespace tress
 {
 
@@ -35,7 +37,7 @@ struct OSetup
 	OSetup ( void ) : f_bQuiet ( false ), f_bVerbose ( false ),
 										f_bHelp ( false ), f_bListGroups ( false ),
 										f_bRestartable ( false ), f_iTestNumber ( 0 ),
-										f_iArgc ( 0 ), f_ppcArgv ( NULL ),
+										f_iJobs( D_DEFAULT_JOB_COUNT ), f_iArgc ( 0 ), f_ppcArgv ( NULL ),
 										f_pcProgramName ( NULL ) {}
 	bool f_bQuiet;			/* --quiet, --silent */
 	bool f_bVerbose;		/* --verbose */
@@ -43,6 +45,7 @@ struct OSetup
 	bool f_bListGroups;
 	bool f_bRestartable;
 	int f_iTestNumber;
+	int f_iJobs;
 	int f_iArgc;
 	char const * const * f_ppcArgv;
 	char * f_pcProgramName;
@@ -50,6 +53,7 @@ struct OSetup
 	yaal::hcore::HString f_oTestGroup;
 	yaal::hcore::HString f_oTestGroupPattern;
 	yaal::hcore::HString f_oTestGroupListFilePath;
+	static int const D_DEFAULT_JOB_COUNT = 1;
 	};
 
 extern OSetup setup;

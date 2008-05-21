@@ -3,6 +3,7 @@
 
 #include <cxxabi.h>
 #include "tut.h"
+#include <yaal/hcore/hthread.h>
 
 /**
  * Template Unit Tests Framework for C++.
@@ -57,6 +58,7 @@ template < typename tType = std::ostream > class reporter:public tut::
 		typedef std::list < tut::test_result > not_passed_list;
 		not_passed_list not_passed;
 		std::ostream & os;
+		yaal::hcore::HMutex f_oMutex;
 		tType & ls;
 
 	public:
@@ -91,16 +93,19 @@ template < typename tType = std::ostream > class reporter:public tut::
 
 		void group_started ( std::string const &name )
 			{
+			yaal::hcore::HLock l( f_oMutex );
 			ls << "TUT: group: [" << name << "]" << std::endl;
 			}
 
 		void test_started ( const int &n )
 			{
+			yaal::hcore::HLock l( f_oMutex );
 			ls << "TUT: module::test<" << n << ">" << std::endl;
 			}
 
 		void test_completed ( const tut::test_result & tr )
 			{
+			yaal::hcore::HLock l( f_oMutex );
 			if ( tr.group != current_group )
 				{
 				os << std::endl << tr.group << ": " << std::flush;

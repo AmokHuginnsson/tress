@@ -17,6 +17,9 @@
 
 #include <yaal/hcore/hexception.h>
 #include <yaal/hcore/hcall.h>
+#include <yaal/tools/hworkflow.h>
+
+#include "src/setup.h"
 
 /**
  * Template Unit Tests Framework for C++.
@@ -358,14 +361,14 @@ class test_runner
 			{
 			callback_->run_started ();
 			
-			typedef yaal::hcore::HCall<test_runner, typeof( &test_runner::run_group ), const_iterator> group_runner_t;
 			const_iterator e = groups_.end ();
+			yaal::tools::HWorkFlow w( yaal::tools::HWorkFlow::MODE::D_FLAT, tress::setup.f_iJobs );
 			for ( const_iterator i = groups_.begin (); i != e; ++ i )
 				{
 				group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
-				gr->invoke();
+				w.push_task( gr );
 				}
-
+			w.run();
 			callback_->run_completed ();
 			}
 
@@ -376,6 +379,7 @@ class test_runner
 			{
 			callback_->run_started ();
 
+			yaal::tools::HWorkFlow w( yaal::tools::HWorkFlow::MODE::D_FLAT, tress::setup.f_iJobs );
 			for ( std::list < std::string >::const_iterator k = group_names.begin ();
 						k != group_names.end (); ++k )
 				{
@@ -386,8 +390,12 @@ class test_runner
 					callback_->test_completed ( tr );
 					}
 				else
-					run_group( i );
+					{
+					group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
+					w.push_task( gr );
+					}
 				}
+			w.run();
 
 			callback_->run_completed ();
 			}
@@ -400,12 +408,17 @@ class test_runner
 			{
 			callback_->run_started ();
 
+			yaal::tools::HWorkFlow w( yaal::tools::HWorkFlow::MODE::D_FLAT, tress::setup.f_iJobs );
 			const_iterator e = groups_.end ();
 			for ( const_iterator i = groups_.begin (); i != e; ++ i )
 				{
 				if ( i->first.find ( pattern ) != std::string::npos )
-					run_group( i );
+					{
+					group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
+					w.push_task( gr );
+					}
 				}
+			w.run();
 
 			callback_->run_completed ();
 			}
@@ -456,6 +469,8 @@ class test_runner
 		typedef std::map < std::string, group_base * >groups;
 		typedef groups::iterator iterator;
 		typedef groups::const_iterator const_iterator;
+		typedef void ( test_runner::* group_call_t )( const_iterator ) const;
+		typedef yaal::hcore::HCall<test_runner, group_call_t, const_iterator> group_runner_t;
 		groups groups_;
 
 		callback default_callback_;

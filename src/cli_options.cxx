@@ -70,6 +70,7 @@ int decode_switches( int a_iArgc, char** a_ppcArgv )
 	simple_callback_t version_call( version, NULL );
 	OOption l_psOptions[] =
 		{
+			{ "jobs", D_INT, &setup.f_iJobs, "j", OOption::D_REQUIRED, "count", "number of concurrent jobs", NULL },
 			{ "group", D_HSTRING, &setup.f_oTestGroup, "G", OOption::D_REQUIRED, "name", "select test group", NULL },
 			{ "pattern", D_HSTRING, &setup.f_oTestGroupPattern, "P", OOption::D_REQUIRED, "pattern", "select test groups that are matching pattern", NULL },
 			{ "number", D_INT, &setup.f_iTestNumber, "N", OOption::D_REQUIRED, "number", "select test number for a given group", NULL },

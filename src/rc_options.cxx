@@ -51,6 +51,7 @@ int process_tressrc_file( void )
 	{
 	OOption l_psVars[] =
 		{
+			{ "jobs", D_INT, &setup.f_iJobs, NULL, OOption::D_REQUIRED, "count", "number of concurrent jobs", NULL },
 			{ "log_path", D_HSTRING, &setup.f_oLogPath, NULL, OOption::D_REQUIRED, "path", "path pointing to file for application logs", NULL },
 			{ NULL, D_VOID, NULL, NULL, OOption::D_NONE, NULL, NULL, NULL }
 		};
