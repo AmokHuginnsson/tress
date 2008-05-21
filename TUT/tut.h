@@ -16,6 +16,7 @@
 #endif
 
 #include <yaal/hcore/hexception.h>
+#include <yaal/hcore/hcall.h>
 
 /**
  * Template Unit Tests Framework for C++.
@@ -356,22 +357,13 @@ class test_runner
 		void run_tests () const
 			{
 			callback_->run_started ();
-
-			const_iterator i = groups_.begin ();
+			
+			typedef yaal::hcore::HCall<test_runner, typeof( &test_runner::run_group ), const_iterator> group_runner_t;
 			const_iterator e = groups_.end ();
-			while ( i != e )
+			for ( const_iterator i = groups_.begin (); i != e; ++ i )
 				{
-				callback_->group_started ( i->first );
-				try
-					{
-					run_all_tests_in_group_ ( i );
-					}
-				catch ( const no_more_tests & )
-					{
-					callback_->group_completed ( i->first );
-					}
-
-				++i;
+				group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
+				gr->invoke();
 				}
 
 			callback_->run_completed ();
@@ -394,17 +386,7 @@ class test_runner
 					callback_->test_completed ( tr );
 					}
 				else
-					{
-					callback_->group_started ( i->first );
-					try
-						{
-						run_all_tests_in_group_ ( i );
-						}
-					catch ( const no_more_tests & )
-						{
-						callback_->group_completed ( *k );
-						}
-					}
+					run_group( i );
 				}
 
 			callback_->run_completed ();
@@ -418,24 +400,11 @@ class test_runner
 			{
 			callback_->run_started ();
 
-			const_iterator i = groups_.begin ();
 			const_iterator e = groups_.end ();
-			while ( i != e )
+			for ( const_iterator i = groups_.begin (); i != e; ++ i )
 				{
 				if ( i->first.find ( pattern ) != std::string::npos )
-					{
-					try
-						{
-						callback_->group_started ( i->first );
-						run_all_tests_in_group_ ( i );
-						}
-					catch ( const no_more_tests & )
-						{
-						// ok
-						}
-					}
-
-				++i;
+					run_group( i );
 				}
 
 			callback_->run_completed ();
@@ -493,6 +462,19 @@ class test_runner
 		callback *callback_;
 
 	private:
+
+		void run_group( const_iterator i ) const
+			{
+			callback_->group_started ( i->first );
+			try
+				{
+				run_all_tests_in_group_ ( i );
+				}
+			catch ( const no_more_tests & )
+				{
+				callback_->group_completed ( i->first );
+				}
+			}
 
 		void run_all_tests_in_group_ ( const_iterator i ) const
 			{
