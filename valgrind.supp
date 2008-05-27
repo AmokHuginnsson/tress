@@ -1,4 +1,164 @@
 {
+   Ubuntu Hardy c27
+   Memcheck:Addr8
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/ld-2.7.so
+}
+{
+   Ubuntu: libc or ld problem
+   Memcheck:Addr8
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+}
+{
+   Ubuntu Hardy dl27
+   Memcheck:Addr8
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/libdl-2.7.so
+   obj:/lib/ld-2.7.so
+}
+{
+   Ubuntu: unknown2
+   Memcheck:Addr8
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/libdl-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+}
+{
+   Ubuntu Hardy __libc_dlopen_mode
+   Memcheck:Addr8
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/ld-2.7.so
+   fun:__libc_dlopen_mode
+   obj:/lib/libc-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/libc-2.7.so
+}
+{
+   Ubuntu: unknown
+   Memcheck:Addr8
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/ld-2.6.1.so
+   fun:__libc_dlopen_mode
+   obj:/lib/libc-2.6.1.so
+   obj:/lib/libc-2.6.1.so
+}
+{
+   Ubuntu Hardy another __libc_dlopen_mode
+   Memcheck:Addr8
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/ld-2.7.so
+   fun:__libc_dlopen_mode
+   obj:/lib/libc-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/libc-2.7.so
+}
+{
+   Ubuntu Hardy another __libc_dlopen_mode2
+   Memcheck:Addr8
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/ld-2.7.so
+   fun:__libc_dlopen_mode
+   obj:/lib/libc-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/libc-2.7.so
+}
+{
+   Ubuntu Hardy another __libc_dlopen_mode3
+   Memcheck:Addr8
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/ld-2.7.so
+   fun:__libc_dlopen_mode
+   obj:/lib/libc-2.7.so
+   obj:/lib/libc-2.7.so
+}
+{
+   Ubuntu Hardy another __libc_dlopen_mode4
+   Memcheck:Addr8
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/ld-2.7.so
+   fun:__libc_dlsym
+   obj:/lib/libc-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/libc-2.7.so
+   obj:/lib/libc-2.7.so
+}
+{
    LinuxThreads: leaks TLS data for manager thread
    Memcheck:Leak
    fun:calloc
@@ -63,6 +223,15 @@
    fun:SSL_library_init
 }
 {
+   Ubuntu OpenSSL: random numbers are gathered from uninitalized memory
+   Memcheck:Cond
+   fun:BN_mod_inverse
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/usr/lib/libcrypto.so.0.9.8
+   fun:ssl3_send_client_key_exchange
+}
+{
    OpenSSL: random numbers are gathered from uninitalized memory
    Memcheck:Cond
    fun:BN_mod_inverse
@@ -96,6 +265,17 @@
    fun:ssl3_send_client_key_exchange
 }
 {
+   Ubuntu OpenSSL: random numbers are gathered from uninitalized memory
+   Memcheck:Cond
+   fun:BN_div
+   fun:BN_nnmod
+   fun:BN_mod_inverse
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/usr/lib/libcrypto.so.0.9.8
+   fun:ssl3_send_client_key_exchange
+}
+{
    OpenSSL: random numbers are gathered from uninitalized memory
    Memcheck:Cond
    fun:BN_div
@@ -145,36 +325,97 @@
    fun:ssl3_get_client_key_exchange
 }
 {
-   Ubuntu: libc or ld problem
-   Memcheck:Addr8
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/libc-2.6.1.so
-   obj:/lib/ld-2.6.1.so
+   U1
+   Memcheck:Cond
+   fun:BN_div
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/usr/lib/libcrypto.so.0.9.8
+   fun:ssl3_send_client_key_exchange
 }
 {
-   Ubuntu: unknown2
-   Memcheck:Addr8
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/libdl-2.6.1.so
-   obj:/lib/ld-2.6.1.so
+   U2
+   Memcheck:Cond
+   fun:BN_mod_inverse
+   fun:BN_MONT_CTX_set
+   fun:BN_mod_exp_mont
+   fun:BN_BLINDING_create_param
+   fun:RSA_setup_blinding
+   obj:/usr/lib/libcrypto.so.0.9.8
+   obj:/usr/lib/libcrypto.so.0.9.8
+   fun:ssl3_get_client_key_exchange
+}
+{
+   U3
+   Memcheck:Cond
+   fun:BN_div
+   fun:BN_MONT_CTX_set
+   fun:BN_mod_exp_mont
+   fun:BN_BLINDING_create_param
+   fun:RSA_setup_blinding
+   obj:/usr/lib/libcrypto.so.0.9.8
+   obj:/usr/lib/libcrypto.so.0.9.8
+   fun:ssl3_get_client_key_exchange
+}
+{
+   U4
+   Memcheck:Cond
+   fun:BN_mod_inverse
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/usr/lib/libcrypto.so.0.9.8
+   obj:/usr/lib/libcrypto.so.0.9.8
+   fun:ssl3_get_client_key_exchange
+}
+{
+   U5
+   Memcheck:Cond
+   fun:BN_div
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/usr/lib/libcrypto.so.0.9.8
+   obj:/usr/lib/libcrypto.so.0.9.8
+   fun:ssl3_get_client_key_exchange
+}
+{
+   U6
+   Memcheck:Cond
+   fun:BN_mod_inverse
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/usr/lib/libcrypto.so.0.9.8
+   obj:/usr/lib/libcrypto.so.0.9.8
+   fun:ssl3_get_client_key_exchange
+}
+{
+   U7
+   Memcheck:Cond
+   fun:BN_div
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/usr/lib/libcrypto.so.0.9.8
+   obj:/usr/lib/libcrypto.so.0.9.8
+   fun:ssl3_get_client_key_exchange
+}
+{
+   U8
+   Memcheck:Cond
+   fun:BN_mod_inverse
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/usr/lib/libcrypto.so.0.9.8
+   obj:/usr/lib/libcrypto.so.0.9.8
+   fun:ssl3_get_client_key_exchange
+}
+{
+   U9
+   Memcheck:Cond
+   fun:BN_div
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/usr/lib/libcrypto.so.0.9.8
+   obj:/usr/lib/libcrypto.so.0.9.8
+   fun:ssl3_get_client_key_exchange
 }
 {
    Ubuntu: iconv_open
@@ -209,20 +450,17 @@
    obj:/lib/libc-2.6.1.so
 }
 {
-   Ubuntu: unknown
-   Memcheck:Addr8
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   obj:/lib/libc-2.6.1.so
-   obj:/lib/ld-2.6.1.so
-   fun:__libc_dlopen_mode
-   obj:/lib/libc-2.6.1.so
-   obj:/lib/libc-2.6.1.so
+   Ubuntu Hardy dlopen  
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/libdl-2.7.so
+   obj:/lib/ld-2.7.so
+   obj:/lib/libdl-2.7.so
+   fun:dlopen
 }
 {
    Ubuntu: ld leak
@@ -279,4 +517,42 @@
    obj:/lib/libc-2.6.1.so
    obj:/lib/libc-2.6.1.so
    obj:/lib/libc-2.6.1.so
+}
+{
+   U10
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/libdl-2.7.so
+   fun:dlclose
+}
+{
+   U11
+   Memcheck:Leak
+   fun:malloc
+   fun:xmlNewMutex
+   fun:xmlInitGlobals
+   fun:xmlInitializeGlobalState
+   fun:xmlGetGlobalState
+   fun:__xmlLastError
+   fun:xmlResetLastError
+   fun:xmlCleanupParser
+}
+{
+   U12
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/libc-2.7.so
+   fun:__nss_database_lookup
+   obj:*
+   obj:*
+   fun:getpwuid_r
+}
+{
+   U13
+   Memcheck:Leak
+   fun:malloc
+   fun:xmlGetGlobalState
+   fun:__xmlLastError
+   fun:xmlResetLastError
+   fun:xmlCleanupParser
 }
