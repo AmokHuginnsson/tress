@@ -99,10 +99,8 @@ void module::test<4>( void )
 	hash_map_t map( D_TEST_PRIME );
 	for ( int i = 0; i < D_ELEM_COUNT; ++ i )
 		map[ i ] = i;
-	int key = 0, value = 0;
-	map.rewind();
-	while ( map.iterate( key, value ) )
-		ensure_equals ( "key/value mismatch", value, key );
+	for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
+		ensure_equals ( "key/value mismatch", it->value, it->key );
 	}
 
 /* key, value access */
@@ -133,14 +131,12 @@ void module::test<6>( void )
 		map[ i ] = i;
 		ensure_equals ( "wrong size after addition", map.size(), i + 1 );
 		}
-	int key = 0, value = 0;
 	for ( int i = 0; i < D_ELEM_COUNT; ++ i )
 		{
 		map.remove( i );
 		ensure_equals ( "wrong size after add", map.size(), D_ELEM_COUNT - ( i + 1 ) );
-		map.rewind();
-		while ( map.iterate( key, value ) )
-			ensure_equals ( "key/value mismatch", value, key );
+		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
+			ensure_equals ( "key/value mismatch", it->value, it->key );
 		}
 	}
 
