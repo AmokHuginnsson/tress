@@ -44,8 +44,10 @@ struct tut_yaal_hcore_hhashmap
 	{
 	typedef HHashMap<int, int> hash_map_t;
 	static int const D_TEST_PRIME = 17;
-	static int const D_ELEM_COUNT = 32;
+	static int const D_ELEM_COUNT;
 	};
+
+int const tut_yaal_hcore_hhashmap::D_ELEM_COUNT = 32;
 
 typedef test_group<tut_yaal_hcore_hhashmap> tut_group;
 typedef tut_group::object module;
@@ -99,8 +101,10 @@ void module::test<4>( void )
 	hash_map_t map( D_TEST_PRIME );
 	for ( int i = 0; i < D_ELEM_COUNT; ++ i )
 		map[ i ] = i;
-	for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
+	int i = 0;
+	for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it, ++ i )
 		ensure_equals ( "key/value mismatch", it->value, it->key );
+	ensure_equals ( "bad number of iterations", i, D_ELEM_COUNT );
 	}
 
 /* key, value access */
