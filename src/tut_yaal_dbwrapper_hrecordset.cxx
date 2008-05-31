@@ -55,11 +55,11 @@ void module::test<1>( void )
 	static char const* const D_QUERY = "SELECT * FROM config;";
 	HDataBase::ptr_t db = HDataBase::get_connector();
 	db->connect( "./out/tress", "", "" );
-	HRecordSet rs = db->query( D_QUERY );
-	for ( HRecordSet::iterator it = rs.begin(); it != rs.end(); ++ it )
+	HRecordSet::ptr_t rs = db->query( D_QUERY );
+	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); ++ it )
 		{
 		cout << "|";
-		int fc = rs.get_field_count();
+		int fc = rs->get_field_count();
 		for ( int i = 0; i < fc; ++ i )
 			cout << it[ i ] << "|";
 		cout << endl;
