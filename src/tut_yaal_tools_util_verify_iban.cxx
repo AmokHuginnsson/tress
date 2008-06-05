@@ -85,7 +85,7 @@ void module::test<3> ( void )
 			fail( "No unknown characters." );
 		for ( int i = 0; i < 10; ++ i )
 			{
-			string.set_at( unknown, i + '0' );
+			string.set_at( unknown, static_cast<char>( i + '0' ) );
 			cout << string << ": " << ( ! verify_IBAN( string ) ? "OK" : "WRONG" ) << endl;
 			}
 		}

@@ -376,7 +376,7 @@ struct gen_char
 	gen_char( void )
 		{ randomizer_helper::init_randomizer_from_time( _rnd ); }
 	char operator()( void )
-		{ return ( _rnd.rnd( 1 + 'z' - 'a' ) + 'a' ); }
+		{ return ( static_cast<char>( _rnd.rnd( 1 + 'z' - 'a' ) + 'a' ) ); }
 	};
 
 /* find("") */

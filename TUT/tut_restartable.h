@@ -42,8 +42,8 @@ std::string escape ( const std::string & orig )
 		else
 			{
 			rc += '\\';
-			rc += ( 'a' + ( ( ( unsigned int ) *i ) >> 4 ) );
-			rc += ( 'a' + ( ( ( unsigned int ) *i ) & 0xF ) );
+			rc += static_cast<char>( 'a' + ( ( ( unsigned int ) *i ) >> 4 ) );
+			rc += static_cast<char>( 'a' + ( ( ( unsigned int ) *i ) & 0xF ) );
 			}
 
 		++i;
@@ -81,7 +81,7 @@ std::string unescape ( const std::string & orig )
 				throw std::invalid_argument ( "unexpected end of string" );
 				}
 			unsigned int c2 = *i;
-			rc += ( ( ( c1 - 'a' ) << 4 ) + ( c2 - 'a' ) );
+			rc += static_cast<char>( ( ( c1 - 'a' ) << 4 ) + ( c2 - 'a' ) );
 			}
 
 		++i;
