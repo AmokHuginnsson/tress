@@ -35,8 +35,7 @@ M_VCSID( "$Id$" )
 #include "tut_helpers.h"
 #include "version.h"
 #include "setup.h"
-#include "cli_options.h"
-#include "rc_options.h"
+#include "options.h"
 
 using namespace tut;
 using namespace std;

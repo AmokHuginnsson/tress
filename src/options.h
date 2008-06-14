@@ -1,7 +1,7 @@
 /*
----             `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski              ---
+---      `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski         ---
 
-	cli_options.h - this file is integral part of `tress' project.
+	options.h - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -24,14 +24,15 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#ifndef __CLI_OPTIONS_H
-#define __CLI_OPTIONS_H
+#ifndef __OPTIONS_H
+#define __OPTIONS_H
 
 namespace tress
 {
 
+int process_tressrc_file( void );
 int decode_switches( int, char** );
 
 }
 
-#endif /* __CLI_OPTIONS_H */
+#endif /* __OPTIONS_H */
