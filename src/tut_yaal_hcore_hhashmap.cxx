@@ -45,9 +45,13 @@ struct tut_yaal_hcore_hhashmap
 	typedef HHashMap<int, int> hash_map_t;
 	static int const D_TEST_PRIME = 17;
 	static int const D_ELEM_COUNT;
+	static int const D_LARGE_TABLE;
+	static int const D_FEW_ELEMENTS;
 	};
 
 int const tut_yaal_hcore_hhashmap::D_ELEM_COUNT = 32;
+int const tut_yaal_hcore_hhashmap::D_LARGE_TABLE = 251;
+int const tut_yaal_hcore_hhashmap::D_FEW_ELEMENTS = 4;
 
 typedef test_group<tut_yaal_hcore_hhashmap> tut_group;
 typedef tut_group::object module;
@@ -142,6 +146,20 @@ void module::test<6>( void )
 		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
 			ensure_equals ( "key/value mismatch", it->value, it->key );
 		}
+	}
+
+/* iteration on large table with few elements */
+template<>
+template<>
+void module::test<7>( void )
+	{
+	hash_map_t map( D_LARGE_TABLE );
+	for ( int i = 0; i < D_FEW_ELEMENTS; ++ i )
+		map[ i ] = i;
+	int i = 0;
+	for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it, ++ i )
+		ensure_equals ( "key/value mismatch", it->value, it->key );
+	ensure_equals ( "bad number of iterations", i, D_FEW_ELEMENTS );
 	}
 
 }
