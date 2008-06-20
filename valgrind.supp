@@ -526,6 +526,13 @@
    fun:dlclose
 }
 {
+   U10b
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/libdl-2.7.so
+   fun:dlopen
+}
+{
    U11
    Memcheck:Leak
    fun:malloc
