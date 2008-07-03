@@ -412,5 +412,37 @@ void module::test<15>( void )
 		}
 	}
 
+/* trim_left("") */
+template<>
+template<>
+void module::test<16>( void )
+	{
+	static char const* const D_SPACE = "   ";
+	static HString const D_TEXT = "ala ma";
+	static char const* const D_FINE = "1234";
+	HString str( D_SPACE + D_TEXT );
+	ensure_equals( "trim filed", str.trim_left(), str );
+	HString fine( D_FINE );
+	ensure_equals( "trim filed", fine.trim_left(), fine );
+	HString space( D_SPACE );
+	ensure_equals( "trim filed", space.trim_left(), "" );
+	}
+
+/* trim_right("") */
+template<>
+template<>
+void module::test<17>( void )
+	{
+	static char const* const D_SPACE = "   ";
+	static HString const D_TEXT = "ala ma";
+	static char const* const D_FINE = "1234";
+	HString str( D_TEXT + D_SPACE );
+	ensure_equals( "trim filed", str.trim_right(), str );
+	HString fine( D_FINE );
+	ensure_equals( "trim filed", fine.trim_right(), fine );
+	HString space( D_SPACE );
+	ensure_equals( "trim filed", space.trim_right(), "" );
+	}
+
 }
 
