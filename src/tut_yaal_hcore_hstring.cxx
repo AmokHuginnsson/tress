@@ -37,6 +37,7 @@ using namespace yaal::hcore;
 using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
+using namespace tress::tut_helpers;
 
 namespace tut
 {
@@ -49,14 +50,115 @@ typedef test_group < tut_yaal_hcore_hstring > tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_hcore_hstring_group ( "yaal::hcore::HString" );
 
-/* constructors */
+/* trivial constructor */
 template<>
 template<>
 void module::test<1>( void )
 	{
-	HString str ( 1024 );
-	HString exemplar ( "1024" );
-	ensure_equals ( "construction from int or c-string does not work", str, exemplar );
+	HString str;
+	ensure_equals( "trivial construction failed", str, "" );
+	ensure_equals( "trivial construction failed (size)", str.size(), 0 );
+	ensure_equals( "trivial construction failed (capacity)", str.capacity(), -1 );
+	ensure_equals( "trivial construction failed (is_empty)", str.empty(), true );
+	}
+
+/* construction from char* */
+template<>
+template<>
+void module::test<2>( void )
+	{
+	static char const D_CORRECT[] = "1024";
+	HString str( D_CORRECT );
+	ensure_equals ( "construction from c-string does not work", str, D_CORRECT );
+	ensure_equals( "trivial construction failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
+	ensure_equals( "trivial construction failed (capacity)", str.capacity(), 7 );
+	ensure_equals( "trivial construction failed (is_empty)", str.empty(), false );
+	}
+
+/* copy construction */
+template<>
+template<>
+void module::test<3>( void )
+	{
+	static char const D_CORRECT[] = "1024";
+	HString str( D_CORRECT );
+	HString copy( str );
+	ensure_equals ( "construction from c-string does not work", copy, D_CORRECT );
+	ensure_equals( "trivial construction failed (size)", copy.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
+	ensure_equals( "trivial construction failed (capacity)", copy.capacity(), 7 );
+	ensure_equals( "trivial construction failed (is_empty)", copy.empty(), false );
+	}
+
+/* construction from int */
+template<>
+template<>
+void module::test<4>( void )
+	{
+	static int const D_INIT = 1024;
+	static char const D_CORRECT[] = "1024";
+	HString str( D_INIT );
+	ensure_equals ( "construction from int does not work", str, D_CORRECT );
+	ensure_equals( "trivial construction failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
+	ensure_equals( "trivial construction failed (capacity)", str.capacity(), 7 );
+	ensure_equals( "trivial construction failed (is_empty)", str.empty(), false );
+	}
+
+/* construction from int long */
+template<>
+template<>
+void module::test<5>( void )
+	{
+	static int long const D_INIT = 1024;
+	static char const D_CORRECT[] = "1024";
+	HString str( D_INIT );
+	ensure_equals ( "construction from int does not work", str, D_CORRECT );
+	ensure_equals( "trivial construction failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
+	ensure_equals( "trivial construction failed (capacity)", str.capacity(), 7 );
+	ensure_equals( "trivial construction failed (is_empty)", str.empty(), false );
+	}
+
+/* construction from int unsigned */
+template<>
+template<>
+void module::test<6>( void )
+	{
+	static int unsigned const D_INIT = 1024;
+	static char const D_CORRECT[] = "1024";
+	HString str( D_INIT );
+	ensure_equals ( "construction from int does not work", str, D_CORRECT );
+	ensure_equals( "trivial construction failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
+	ensure_equals( "trivial construction failed (capacity)", str.capacity(), 7 );
+	ensure_equals( "trivial construction failed (is_empty)", str.empty(), false );
+	}
+
+/* construction from int long unsigned */
+template<>
+template<>
+void module::test<7>( void )
+	{
+	static int long unsigned const D_INIT = 1024;
+	static char const D_CORRECT[] = "1024";
+	HString str( D_INIT );
+	ensure_equals ( "construction from int does not work", str, D_CORRECT );
+	ensure_equals( "trivial construction failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
+	ensure_equals( "trivial construction failed (capacity)", str.capacity(), 7 );
+	ensure_equals( "trivial construction failed (is_empty)", str.empty(), false );
+	}
+
+/* construction from char */
+template<>
+template<>
+void module::test<8>( void )
+	{
+	static char const D_CORRECT = '1';
+	HString str( D_CORRECT );
+	ensure_equals ( "construction from int does not work", str, D_CORRECT );
+	ensure_equals( "trivial construction failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) ) );
+	ensure_equals( "trivial construction failed (capacity)", str.capacity(), 1 );
+	ensure_equals( "trivial construction failed (is_empty)", str.empty(), false );
+	}
+
+#if 0
 	double l1 = 22.;
 	double m1 = 7.;
 	HString d1( l1 / m1 );
@@ -73,12 +175,12 @@ void module::test<1>( void )
 	cout << "| y = " << y << " |" << endl;
 	d2 = z;
 	cout << "| d2 = " << d2 << " |" << endl;
-	}
+#endif
 
 /* shift_left */
 template<>
 template<>
-void module::test<2>( void )
+void module::test<22>( void )
 	{
 	HString str( "Ala ma kota" );
 	HString exemplar( "ma kota" );
@@ -101,7 +203,7 @@ void module::test<2>( void )
 /* shift_right */
 template<>
 template<>
-void module::test<3> ( void )
+void module::test<23> ( void )
 	{
 	HString str( "Ala ma kota" );
 	HString exemplar( "    Ala ma kota" );
@@ -121,7 +223,7 @@ void module::test<3> ( void )
 /* mid */
 template<>
 template<>
-void module::test<4>( void )
+void module::test<24>( void )
 	{
 	char source[] = "abecadlo";
 	HString str( source );
@@ -139,7 +241,7 @@ void module::test<4>( void )
 /* split */
 template<>
 template<>
-void module::test<5>( void )
+void module::test<25>( void )
 	{
 	char a[] = ",aa,bb";
 	char b[] = "aa,bb";
@@ -180,7 +282,7 @@ void module::test<5>( void )
 /* right */
 template<>
 template<>
-void module::test<6>( void )
+void module::test<26>( void )
 	{
 	HString str( "ala/." );
 	ensure_equals( "wrong right part extraction", str.right( 1 ), "." );
@@ -189,7 +291,7 @@ void module::test<6>( void )
 /* erase */
 template<>
 template<>
-void module::test<7>( void )
+void module::test<27>( void )
 	{
 	HString str;
 	char s[] = "Ala ma kota";
@@ -206,7 +308,7 @@ void module::test<7>( void )
 /* insert */
 template<>
 template<>
-void module::test<8>( void )
+void module::test<28>( void )
 	{
 	HString str;
 	char s[] = "abcdef";
@@ -246,7 +348,7 @@ void module::test<8>( void )
 /* find */
 template<>
 template<>
-void module::test<9>( void )
+void module::test<29>( void )
 	{
 	HString str = "abcXYdeYXf";
 	char failed[] = "find failed[%d]";
@@ -268,7 +370,7 @@ void module::test<9>( void )
 /* find_one_of */
 template<>
 template<>
-void module::test<10>( void )
+void module::test<30>( void )
 	{
 	HString str = "abcXYdeYXf";
 	char failed[] = "find_one_of failed";
@@ -290,7 +392,7 @@ void module::test<10>( void )
 /* find_other_than */
 template<>
 template<>
-void module::test<11>( void )
+void module::test<31>( void )
 	{
 	HString str = "abcXYdeYXfg";
 	char failed[] = "find_other_than failed[%d]";
@@ -305,7 +407,7 @@ void module::test<11>( void )
 /* reverse_find */
 template<>
 template<>
-void module::test<12>( void )
+void module::test<32>( void )
 	{
 	HString str = "fXYedYXcba";
 	char failed[] = "reverse_find failed[%d]";
@@ -327,7 +429,7 @@ void module::test<12>( void )
 /* reverse_find_one_of */
 template<>
 template<>
-void module::test<13>( void )
+void module::test<33>( void )
 	{
 	HString str = "fXYedYXcba";
 	char failed[] = "reverse_find_one_of failed[%d]";
@@ -349,7 +451,7 @@ void module::test<13>( void )
 /* reverse_find_other_than */
 template<>
 template<>
-void module::test<14>( void )
+void module::test<34>( void )
 	{
 	HString str = "gfXYedYXcba";
 	char failed[] = "reverse_find_other_than failed[%d]";
@@ -366,7 +468,7 @@ int confirm( char const* const str, int const& size, char const* const pat, int 
 	static HString fastpat;
 	fastpat = pat;
 	fastpat.set_at( len, 0 );
-	char* p = ( len <= size ) ? strstr( str, fastpat ) : NULL;
+	char* p = ( len <= size ) ? strstr( str, fastpat.raw() ) : NULL;
 	return ( p ? p - str : -1 );
 	}
 
@@ -382,7 +484,7 @@ struct gen_char
 /* find("") */
 template<>
 template<>
-void module::test<15>( void )
+void module::test<35>( void )
 	{
 	static int const D_SAMPLE_SIZE = 128;
 	char sample[ D_SAMPLE_SIZE + 1 ];
@@ -415,7 +517,7 @@ void module::test<15>( void )
 /* trim_left("") */
 template<>
 template<>
-void module::test<16>( void )
+void module::test<36>( void )
 	{
 	static char const* const D_SPACE = "   ";
 	static HString const D_TEXT = "ala ma";
@@ -431,7 +533,7 @@ void module::test<16>( void )
 /* trim_right("") */
 template<>
 template<>
-void module::test<17>( void )
+void module::test<37>( void )
 	{
 	static char const* const D_SPACE = "   ";
 	static HString const D_TEXT = "ala ma";

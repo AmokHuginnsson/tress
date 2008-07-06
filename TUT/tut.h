@@ -632,6 +632,13 @@ void ensure_equals ( const char *msg, const Q & actual,
 	}
 
 template < class T, class Q >
+void ensure_equals ( yaal::hcore::HString const& msg, const Q & actual,
+										 const T & expected )
+	{
+	ensure_equals<>( msg.raw(), actual, expected );
+	}
+
+template < class T, class Q >
 void ensure_equals ( const Q & actual, const T & expected )
 	{
 	ensure_equals <> ( 0, actual, expected );

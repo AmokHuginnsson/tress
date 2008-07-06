@@ -116,20 +116,19 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 				{
 				runner.get().set_callback ( &l_oVisitor );
 				string_list_t l_oGroupNames;
-				if ( setup.f_oTestGroupListFilePath )
+				if ( ! setup.f_oTestGroupListFilePath.is_empty() )
 					{
 					gather_groups_from_file( l_oGroupNames );
 					runner.get().run_tests( l_oGroupNames );
 					}
-				else if ( setup.f_oTestGroupPattern )
-					runner.get().run_pattern_tests(
-							static_cast<char const* const>( setup.f_oTestGroupPattern ) );
-				else if ( setup.f_oTestGroup && setup.f_iTestNumber )
-					runner.get().run_test( static_cast<char const* const>( setup.f_oTestGroup ),
+				else if ( ! setup.f_oTestGroupPattern.is_empty() )
+					runner.get().run_pattern_tests( setup.f_oTestGroupPattern.raw() );
+				else if ( ! setup.f_oTestGroup.is_empty() && setup.f_iTestNumber )
+					runner.get().run_test( setup.f_oTestGroup.raw(),
 							setup.f_iTestNumber );
-				else if ( setup.f_oTestGroup )
+				else if ( ! setup.f_oTestGroup.is_empty() )
 					{
-					l_oGroupNames.push_back( static_cast<char const* const>( setup.f_oTestGroup ) );
+					l_oGroupNames.push_back( setup.f_oTestGroup.raw() );
 					runner.get().run_tests( l_oGroupNames );
 					}
 				else
@@ -187,7 +186,7 @@ void gather_groups_from_file( string_list_t& lst )
 		{
 		l_oLine.trim_left();
 		l_oLine.trim_right();
-		lst.push_back( static_cast<char const* const>( l_oLine ) );
+		lst.push_back( l_oLine.raw() );
 		}
 	l_oFile.close();
 	return;

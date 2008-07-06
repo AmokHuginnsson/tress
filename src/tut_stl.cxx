@@ -156,5 +156,14 @@ void module::test<5>( void )
 	vector<string> vs;
 	}
 
+/* max_size of string */
+template<>
+template<>
+void module::test<6>( void )
+	{
+	string str;
+	cout << str.max_size() << endl;
+	}
+
 }
 

@@ -26,7 +26,6 @@ Copyright:
 
 #include <yaal/yaal.h>
 M_VCSID ( "$Id$" )
-#include "tut_helpers.h"
 
 #include "setup.h"
 
@@ -36,6 +35,7 @@ using namespace yaal::hcore;
 using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
+using namespace tress::tut_helpers;
 
 namespace tress
 {
@@ -103,6 +103,12 @@ ostream& operator << ( ostream & out, HComplex const& a_oComplex )
 		out << re << " - i" << - im;
 	return ( out );
 	M_EPILOG
+	}
+
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s )
+	{
+	out << s.raw();
+	return ( out );
 	}
 
 void TITLE( char const* const title )

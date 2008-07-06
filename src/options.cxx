@@ -47,8 +47,7 @@ namespace tress
 bool set_variables( HString& a_roOption, HString& a_roValue )
 	{
 	::fprintf( stdout, "option: [%s], value: [%s]\n",
-			static_cast<char const* const>( a_roOption ),
-			static_cast<char const* const>( a_roValue ) );
+			a_roOption.raw(), a_roValue.raw() );
 	return ( false );
 	}
 
@@ -101,8 +100,8 @@ OOption n_psOptions[] =
 
 int process_tressrc_file( void )
 	{
-	rc_file::process_rc_file ( "tress", NULL, n_psOptions, NULL );
-	if ( ! setup.f_oLogPath )
+	rc_file::process_rc_file ( "tress", "", n_psOptions, NULL );
+	if ( setup.f_oLogPath.is_empty() )
 		setup.f_oLogPath = "tress.log";
 	return ( 0 );
 	}
@@ -120,25 +119,31 @@ int decode_switches( int a_iArgc, char** a_ppcArgv )
 	if ( l_iUnknown > 0 )
 		usage( &info );
 	if ( setup.f_bListGroups
-			&& ( setup.f_bRestartable || setup.f_oTestGroupListFilePath || setup.f_oTestGroup
-				|| setup.f_oTestGroupPattern || setup.f_iTestNumber ) )
+			&& ( setup.f_bRestartable
+				|| ! setup.f_oTestGroupListFilePath.is_empty()
+				|| ! setup.f_oTestGroup.is_empty()
+				|| ! setup.f_oTestGroupPattern.is_empty() || setup.f_iTestNumber ) )
 		M_THROW ( _ ( "group listing conflicts with other switches" ),
 				setup.f_iTestNumber );
 	if ( setup.f_bRestartable
-			&& ( setup.f_oTestGroupListFilePath || setup.f_oTestGroup || setup.f_oTestGroupPattern
+			&& ( ! setup.f_oTestGroupListFilePath.is_empty()
+				|| ! setup.f_oTestGroup.is_empty()
+				|| ! setup.f_oTestGroupPattern.is_empty()
 				|| setup.f_iTestNumber ) )
 		M_THROW ( _ ( "restartable conflicts with other switches" ),
 				setup.f_iTestNumber );
-	if ( setup.f_oTestGroupListFilePath
-			&& ( setup.f_oTestGroup || setup.f_oTestGroupPattern || setup.f_iTestNumber ) )
+	if ( ! setup.f_oTestGroupListFilePath.is_empty()
+			&& ( ! setup.f_oTestGroup.is_empty()
+				|| ! setup.f_oTestGroupPattern.is_empty()
+				|| setup.f_iTestNumber ) )
 		M_THROW ( _ ( "group names file is an exclusive switch" ),
 				setup.f_iTestNumber );
-	if ( setup.f_oTestGroup && setup.f_oTestGroupPattern )
+	if ( ! setup.f_oTestGroup.is_empty() && ! setup.f_oTestGroupPattern.is_empty() )
 		M_THROW ( _ ( "pattern and group switches are exclusive" ), errno );
-	if ( setup.f_oTestGroupPattern && setup.f_iTestNumber )
+	if ( ! setup.f_oTestGroupPattern.is_empty() && setup.f_iTestNumber )
 		M_THROW ( _ ( "setting test number for pattern makes no sense" ),
 				setup.f_iTestNumber );
-	if ( setup.f_iTestNumber && ! setup.f_oTestGroup )
+	if ( setup.f_iTestNumber && setup.f_oTestGroup.is_empty() )
 		M_THROW ( _ ( "must specify test group for test number" ),
 				setup.f_iTestNumber );
 	return ( l_iNonOption );

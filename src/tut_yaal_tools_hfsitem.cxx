@@ -36,6 +36,7 @@ using namespace yaal::hcore;
 using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
+using namespace tress::tut_helpers;
 
 namespace tut
 {
@@ -48,9 +49,9 @@ typedef test_group<tut_yaal_tools_hfsitem> tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_tools_hfsitem_group ( "yaal::tools::HFSItem" );
 
-void recurse( char const* const a_pcPath )
+void recurse( HString const& a_oPath )
 	{
-	HFSItem l_oDir( a_pcPath );
+	HFSItem l_oDir( a_oPath );
 	cout << "dir: " << l_oDir.get_path() << endl;
 	M_ENSURE( l_oDir.is_directory() );
 	for ( HFSItem::HIterator it = l_oDir.begin(); it != l_oDir.end(); ++ it )

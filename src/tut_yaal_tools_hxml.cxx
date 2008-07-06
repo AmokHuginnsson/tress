@@ -39,6 +39,7 @@ using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress;
+using namespace tress::tut_helpers;
 
 namespace tut
 {
@@ -292,6 +293,12 @@ void module::test<42>( void )
 	f_oXml.apply_style( "data/style.xml" );
 	f_oXml.parse();
 	dump( cout, f_oXml.get_root() );
+	}
+
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s )
+	{
+	out << s.raw();
+	return ( out );
 	}
 
 /* init, parse, apply, save */

@@ -56,6 +56,7 @@ protected:
 	};
 
 std::ostream& operator << ( std::ostream&, yaal::hcore::HComplex const& );
+std::ostream& operator << ( std::ostream&, yaal::hcore::HString const& );
 
 template<typename tType>
 std::ostream& operator << ( std::ostream& out,
