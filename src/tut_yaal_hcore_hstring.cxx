@@ -70,9 +70,9 @@ void module::test<2>( void )
 	static char const D_CORRECT[] = "1024";
 	HString str( D_CORRECT );
 	ensure_equals ( "construction from c-string does not work", str, D_CORRECT );
-	ensure_equals( "trivial construction failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
-	ensure_equals( "trivial construction failed (capacity)", str.capacity(), 7 );
-	ensure_equals( "trivial construction failed (is_empty)", str.empty(), false );
+	ensure_equals( "construction from char* failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
+	ensure_equals( "construction from char* failed (capacity)", str.capacity(), 7 );
+	ensure_equals( "construction from char* failed (is_empty)", str.empty(), false );
 	}
 
 /* copy construction */
@@ -83,10 +83,11 @@ void module::test<3>( void )
 	static char const D_CORRECT[] = "1024";
 	HString str( D_CORRECT );
 	HString copy( str );
-	ensure_equals ( "construction from c-string does not work", copy, D_CORRECT );
-	ensure_equals( "trivial construction failed (size)", copy.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
-	ensure_equals( "trivial construction failed (capacity)", copy.capacity(), 7 );
-	ensure_equals( "trivial construction failed (is_empty)", copy.empty(), false );
+	ensure_equals ( "copy construction does not work", copy, D_CORRECT );
+	ensure_equals( "copy construction failed (size)",
+			copy.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
+	ensure_equals( "copy construction failed (capacity)", copy.capacity(), 7 );
+	ensure_equals( "copy construction failed (is_empty)", copy.empty(), false );
 	}
 
 /* construction from int */
@@ -98,9 +99,10 @@ void module::test<4>( void )
 	static char const D_CORRECT[] = "1024";
 	HString str( D_INIT );
 	ensure_equals ( "construction from int does not work", str, D_CORRECT );
-	ensure_equals( "trivial construction failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
-	ensure_equals( "trivial construction failed (capacity)", str.capacity(), 7 );
-	ensure_equals( "trivial construction failed (is_empty)", str.empty(), false );
+	ensure_equals( "construction from int failed (size)",
+			str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
+	ensure_equals( "construction from int failed (capacity)", str.capacity(), 7 );
+	ensure_equals( "construction from int failed (is_empty)", str.empty(), false );
 	}
 
 /* construction from int long */
@@ -111,10 +113,10 @@ void module::test<5>( void )
 	static int long const D_INIT = 1024;
 	static char const D_CORRECT[] = "1024";
 	HString str( D_INIT );
-	ensure_equals ( "construction from int does not work", str, D_CORRECT );
-	ensure_equals( "trivial construction failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
-	ensure_equals( "trivial construction failed (capacity)", str.capacity(), 7 );
-	ensure_equals( "trivial construction failed (is_empty)", str.empty(), false );
+	ensure_equals ( "construction from int long does not work", str, D_CORRECT );
+	ensure_equals( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
+	ensure_equals( "construction from int long failed (capacity)", str.capacity(), 7 );
+	ensure_equals( "construction from int long failed (is_empty)", str.empty(), false );
 	}
 
 /* construction from int unsigned */
@@ -125,10 +127,11 @@ void module::test<6>( void )
 	static int unsigned const D_INIT = 1024;
 	static char const D_CORRECT[] = "1024";
 	HString str( D_INIT );
-	ensure_equals ( "construction from int does not work", str, D_CORRECT );
-	ensure_equals( "trivial construction failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
-	ensure_equals( "trivial construction failed (capacity)", str.capacity(), 7 );
-	ensure_equals( "trivial construction failed (is_empty)", str.empty(), false );
+	ensure_equals ( "construction from int unsigned does not work", str, D_CORRECT );
+	ensure_equals( "construction from int unsigned failed (size)",
+			str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
+	ensure_equals( "construction from int unsigned failed (capacity)", str.capacity(), 7 );
+	ensure_equals( "construction from int unsigned failed (is_empty)", str.empty(), false );
 	}
 
 /* construction from int long unsigned */
@@ -139,10 +142,11 @@ void module::test<7>( void )
 	static int long unsigned const D_INIT = 1024;
 	static char const D_CORRECT[] = "1024";
 	HString str( D_INIT );
-	ensure_equals ( "construction from int does not work", str, D_CORRECT );
-	ensure_equals( "trivial construction failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
-	ensure_equals( "trivial construction failed (capacity)", str.capacity(), 7 );
-	ensure_equals( "trivial construction failed (is_empty)", str.empty(), false );
+	ensure_equals ( "construction from int long unsigned does not work", str, D_CORRECT );
+	ensure_equals( "construction from int long unsigned failed (size)",
+			str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
+	ensure_equals( "construction from int long unsigned failed (capacity)", str.capacity(), 7 );
+	ensure_equals( "construction from int long unsigned failed (is_empty)", str.empty(), false );
 	}
 
 /* construction from char */
@@ -152,30 +156,136 @@ void module::test<8>( void )
 	{
 	static char const D_CORRECT = '1';
 	HString str( D_CORRECT );
-	ensure_equals ( "construction from int does not work", str, D_CORRECT );
-	ensure_equals( "trivial construction failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) ) );
-	ensure_equals( "trivial construction failed (capacity)", str.capacity(), 1 );
-	ensure_equals( "trivial construction failed (is_empty)", str.empty(), false );
+	ensure_equals ( "construction from char does not work", str, D_CORRECT );
+	ensure_equals( "construction from char failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) ) );
+	ensure_equals( "construction from char failed (capacity)", str.capacity(), 1 );
+	ensure_equals( "construction from char failed (is_empty)", str.empty(), false );
 	}
 
-#if 0
-	double l1 = 22.;
-	double m1 = 7.;
-	HString d1( l1 / m1 );
-	cout << "| d1 = " << d1 << " |" << endl;
-	double long l2 = 22.;
-	double long m2 = 7.;
-	HString d2( l2 / m2 );
-	cout << "| d2 = " << d2 << " |" << endl;
-	d2.shift_left( 1 );
-	double long x = strtold( d2, NULL );
-	double y = strtod( d2, NULL );
-	double long z = strtod( d2, NULL );
-	cout << "| x = " << x << " |" << endl;
-	cout << "| y = " << y << " |" << endl;
-	d2 = z;
-	cout << "| d2 = " << d2 << " |" << endl;
-#endif
+/* construction from double */
+template<>
+template<>
+void module::test<9>( void )
+	{
+	static double D_INIT = 3.141593;
+	static char const* const D_CORRECT = "3.141593";
+	HString str( D_INIT );
+	ensure_equals ( "construction from double does not work", str, D_CORRECT );
+	ensure_equals( "construction from double failed (size)", str.size(), static_cast<int long>( ::strlen( D_CORRECT ) ) );
+	ensure_equals( "construction from double failed (capacity)", str.capacity(), 15 );
+	ensure_equals( "construction from double failed (is_empty)", str.empty(), false );
+	}
+
+/* construction from double long */
+template<>
+template<>
+void module::test<10>( void )
+	{
+	static double long D_INIT = 3.141592653589;
+	static char const* const D_CORRECT = "3.141592653589";
+	HString str( D_INIT );
+	ensure_equals ( "construction from double does not work", str, D_CORRECT );
+	ensure_equals( "construction from double failed (size)", str.size(), static_cast<int long>( ::strlen( D_CORRECT ) ) );
+	ensure_equals( "construction from double failed (capacity)", str.capacity(), 15 );
+	ensure_equals( "construction from double failed (is_empty)", str.empty(), false );
+	}
+
+/* construction from void* */
+template<>
+template<>
+void module::test<11>( void )
+	{
+	static size_t const tmp = 0xdeadbeef;
+	static void* D_INIT = reinterpret_cast<void*>( tmp );
+	static char const* const D_CORRECT = "0xdeadbeef";
+	HString str( D_INIT );
+	ensure_equals ( "construction from void* does not work", str, D_CORRECT );
+	ensure_equals( "construction from void* failed (size)", str.size(), static_cast<int long>( ::strlen( D_CORRECT ) ) );
+	ensure_equals( "construction from void* failed (capacity)", str.capacity(), 15 );
+	ensure_equals( "construction from void* failed (is_empty)", str.empty(), false );
+	}
+
+/* operator += */
+template<>
+template<>
+void module::test<12>( void )
+	{
+	static char const D_INIT[] = "1024";
+	static char const* const D_TEST = "0xdeadbeef";
+	static char const D_CORRECT[] = "10240xdeadbeef";
+	HString str( D_INIT );
+	ensure_equals ( "char* constructor does not work", str, D_INIT );
+	ensure_equals( "char* constructor failed (size)", str.size(), static_cast<int long>( sizeof ( D_INIT ) - 1 ) );
+	ensure_equals( "char* constructor failed (capacity)", str.capacity(), 7 );
+	ensure_equals( "char* constructor failed (is_empty)", str.empty(), false );
+	str += D_TEST;
+	ensure_equals ( "operator+= does not work", str, D_CORRECT );
+	ensure_equals( "operator+= failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT ) - 1 ) );
+	ensure_equals( "operator+= failed (capacity)", str.capacity(), 15 );
+	ensure_equals( "operator+= failed (is_empty)", str.empty(), false );
+	}
+
+/* clear */
+template<>
+template<>
+void module::test<13>( void )
+	{
+	HString str;
+	static char const D_INIT[] = "1024";
+	ensure_equals( "trivial construction failed", str, "" );
+	ensure_equals( "trivial construction failed (size)", str.size(), 0 );
+	ensure_equals( "trivial construction failed (capacity)", str.capacity(), -1 );
+	ensure_equals( "trivial construction failed (is_empty)", str.empty(), true );
+	str += D_INIT;
+	ensure_equals ( "operator+= does not work", str, D_INIT );
+	ensure_equals( "operator+= failed (size)", str.size(), static_cast<int long>( sizeof ( D_INIT ) - 1 ) );
+	ensure_equals( "operator+= failed (capacity)", str.capacity(), 7 );
+	ensure_equals( "operator+= failed (is_empty)", str.empty(), false );
+	str.clear();
+	ensure_equals ( "clear does not work", str, "" );
+	ensure_equals( "clear failed (size)", str.size(), 0 );
+	ensure_equals( "clear failed (capacity)", str.capacity(), 7 );
+	ensure_equals( "clear failed (is_empty)", str.empty(), true );
+	}
+
+/* replace */
+template<>
+template<>
+void module::test<14>( void )
+	{
+	static char const D_INIT[] = "aarererererebb";
+	static char const D_PAT1[] = "rere";
+	static char const D_PAT2[] = "okok";
+	static char const D_CORRECT12[] = "aaokokokokokbb";
+	static char const D_PAT3[] = "rok";
+	static char const D_CORRECT23[] = "aarokrokokbb";
+	static char const D_PAT4[] = "i";
+	static char const D_CORRECT34[] = "aaiiokbb";
+
+	HString str( D_INIT );
+	ensure_equals ( "char* constructor does not work", str, D_INIT );
+	ensure_equals( "char* constructor failed (size)", str.size(), static_cast<int long>( sizeof ( D_INIT ) - 1 ) );
+	ensure_equals( "char* constructor failed (capacity)", str.capacity(), 15 );
+	ensure_equals( "char* constructor failed (is_empty)", str.empty(), false );
+
+	str.replace( D_PAT1, D_PAT2 );
+	ensure_equals ( "replace 1->2 does not work", str, D_CORRECT12 );
+	ensure_equals( "replace 1->2 failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT12 ) - 1 ) );
+	ensure_equals( "replace 1->2 failed (capacity)", str.capacity(), 15 );
+	ensure_equals( "replace 1->2 failed (is_empty)", str.empty(), false );
+
+	str.replace( D_PAT2, D_PAT3 );
+	ensure_equals ( "replace 2->3 does not work", str, D_CORRECT23 );
+	ensure_equals( "replace 2->3 failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT23 ) - 1 ) );
+	ensure_equals( "replace 2->3 failed (capacity)", str.capacity(), 15 );
+	ensure_equals( "replace 2->3 failed (is_empty)", str.empty(), false );
+
+	str.replace( D_PAT3, D_PAT4 );
+	ensure_equals ( "replace 3->4 does not work", str, D_CORRECT34 );
+	ensure_equals( "replace 3->4 failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT34 ) - 1 ) );
+	ensure_equals( "replace 3->4 failed (capacity)", str.capacity(), 15 );
+	ensure_equals( "replace 3->4 failed (is_empty)", str.empty(), false );
+	}
 
 /* shift_left */
 template<>
