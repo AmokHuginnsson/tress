@@ -625,7 +625,7 @@ void ensure_equals ( const char *msg, const Q & actual,
 		std::stringstream ss;
 		ss << ( msg ? msg : "" )
 		<< ( msg ? ":" : "" )
-		<< " expected " << expected << " actual " << actual;
+		<< " expected [" << expected << "] actual [" << actual << "]";
 		throw failure ( ss.str ().c_str () );
 		}
 
@@ -664,7 +664,7 @@ void ensure_distance ( const char *msg, const T & actual,
 		<< ( msg ? ":" : "" )
 		<< "expected ["
 		<< expected - distance
-		<< ";" << expected + distance << "] actual " << actual;
+		<< ";" << expected + distance << "] actual [" << actual << "]";
 		throw failure ( ss.str ().c_str () );
 		}
 

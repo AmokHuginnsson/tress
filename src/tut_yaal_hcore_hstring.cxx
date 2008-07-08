@@ -255,12 +255,12 @@ void module::test<14>( void )
 	{
 	static char const D_INIT[] = "aarererererebb";
 	static char const D_PAT1[] = "rere";
-	static char const D_PAT2[] = "okok";
-	static char const D_CORRECT12[] = "aaokokokokokbb";
+	static char const D_PAT2[] = "OKOK";
+	static char const D_CORRECT12[] = "aaOKOKOKOKrebb";
 	static char const D_PAT3[] = "rok";
-	static char const D_CORRECT23[] = "aarokrokokbb";
-	static char const D_PAT4[] = "i";
-	static char const D_CORRECT34[] = "aaiiokbb";
+	static char const D_CORRECT23[] = "aarokrokrebb";
+	static char const D_PAT4[] = "I";
+	static char const D_CORRECT34[] = "aaIIrebb";
 
 	HString str( D_INIT );
 	ensure_equals ( "char* constructor does not work", str, D_INIT );
@@ -292,13 +292,14 @@ template<>
 template<>
 void module::test<22>( void )
 	{
-	HString str( "Ala ma kota" );
-	HString exemplar( "ma kota" );
-	str.shift_left( 4 );
-	ensure_equals( "left_shift failed", str, exemplar );
+	static char const D_CORRECT[] = "Ala ma kota";
+	static int const D_SHIFT = 4;
+	HString str( D_CORRECT );
+	str.shift_left( D_SHIFT );
+	ensure_equals( "left_shift failed", str, D_CORRECT + D_SHIFT );
 	try
 		{
-		str.shift_left( - 1 );
+		str.shift_left( -1 );
 		fail ( "no check for negative shift" );
 		}
 	catch ( HException& e )
@@ -306,8 +307,7 @@ void module::test<22>( void )
 		cout << e.what() << endl;
 		}
 	str.shift_left( 100000 );
-	exemplar = "";
-	ensure_equals( "left_shift failed", str, exemplar );
+	ensure_equals( "left_shift failed", str, "" );
 	}
 
 /* shift_right */
@@ -315,13 +315,14 @@ template<>
 template<>
 void module::test<23> ( void )
 	{
-	HString str( "Ala ma kota" );
-	HString exemplar( "    Ala ma kota" );
-	str.shift_right( 4 );
-	ensure_equals( "right_shift failed", str, exemplar );
+	static char const D_CORRECT[] = "    Ala ma kota";
+	static int const D_SHIFT = 4;
+	HString str( D_CORRECT + D_SHIFT );
+	str.shift_right( D_SHIFT );
+	ensure_equals( "right_shift failed", str, D_CORRECT );
 	try
 		{
-		str.shift_right( - 1 );
+		str.shift_right( -1 );
 		fail( "no check for negative shift" );
 		}
 	catch ( HException& e )
@@ -409,7 +410,9 @@ void module::test<27>( void )
 	str = s;ensure_equals( erase_failed, str.erase( 0, 4 ), "ma kota" );
 	str = s;ensure_equals( erase_failed, str.erase( 2, 4 ), "Al kota" );
 	str = s;ensure_equals( erase_failed, str.erase( -2, 4 ), "a ma kota" );
-	str = s;ensure_equals( erase_failed, str.erase( 4, 100 ), "Ala " );
+	str = s;str.erase( 4, 100 );
+	ensure_equals( "erase 3 failed (size)", str.size(), 4 );
+	ensure_equals( erase_failed, str, "Ala " );
 	str = s;ensure_equals( erase_failed, str.erase( 0, 100 ), "" );
 	HString str2( "|==--|[100%]" );
 	ensure_equals( erase_failed, str2.erase( 7, 4 ), "|==--|[]" );
@@ -577,7 +580,8 @@ int confirm( char const* const str, int const& size, char const* const pat, int 
 	{
 	static HString fastpat;
 	fastpat = pat;
-	fastpat.set_at( len, 0 );
+	if ( len < fastpat.get_length() )
+		fastpat.set_at( len, 0 );
 	char* p = ( len <= size ) ? strstr( str, fastpat.raw() ) : NULL;
 	return ( p ? p - str : -1 );
 	}
@@ -633,11 +637,11 @@ void module::test<36>( void )
 	static HString const D_TEXT = "ala ma";
 	static char const* const D_FINE = "1234";
 	HString str( D_SPACE + D_TEXT );
-	ensure_equals( "trim filed", str.trim_left(), str );
+	ensure_equals( "trim failed", str.trim_left(), str );
 	HString fine( D_FINE );
-	ensure_equals( "trim filed", fine.trim_left(), fine );
+	ensure_equals( "trim failed", fine.trim_left(), fine );
 	HString space( D_SPACE );
-	ensure_equals( "trim filed", space.trim_left(), "" );
+	ensure_equals( "trim failed", space.trim_left(), "" );
 	}
 
 /* trim_right("") */
@@ -649,11 +653,11 @@ void module::test<37>( void )
 	static HString const D_TEXT = "ala ma";
 	static char const* const D_FINE = "1234";
 	HString str( D_TEXT + D_SPACE );
-	ensure_equals( "trim filed", str.trim_right(), str );
+	ensure_equals( "trim 0 failed", str.trim_right(), str );
 	HString fine( D_FINE );
-	ensure_equals( "trim filed", fine.trim_right(), fine );
+	ensure_equals( "trim 1 failed", fine.trim_right(), fine );
 	HString space( D_SPACE );
-	ensure_equals( "trim filed", space.trim_right(), "" );
+	ensure_equals( "trim 2 failed", space.trim_right(), "" );
 	}
 
 }
