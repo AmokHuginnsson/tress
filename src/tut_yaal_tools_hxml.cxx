@@ -51,8 +51,7 @@ struct tut_yaal_tools_hxml
 	static ostream& dump( ostream& out, HXml::HConstNodeProxy const& a_rsNode )
 		{
 		f_oVarTmpBuffer.hs_realloc( a_rsNode.get_level() * 2 + 3 );
-		f_oVarTmpBuffer.fill( ' ', a_rsNode.get_level() * 2 );
-		f_oVarTmpBuffer.set_at( a_rsNode.get_level() * 2, 0 );
+		f_oVarTmpBuffer.fillz( ' ', a_rsNode.get_level() * 2 + 1 );
 		if ( a_rsNode.get_type() == HXml::HNode::TYPE::D_NODE )
 			{
 			if ( ! a_rsNode.get_name().is_empty() )
@@ -64,8 +63,7 @@ struct tut_yaal_tools_hxml
 				}
 			if ( a_rsNode.has_childs() )
 				{
-				f_oVarTmpBuffer.fill( ' ', a_rsNode.get_level() * 2 + 2 );
-				f_oVarTmpBuffer.set_at( a_rsNode.get_level() * 2 + 2, 0 );
+				f_oVarTmpBuffer.fillz( ' ', a_rsNode.get_level() * 2 + 2 );
 				out << f_oVarTmpBuffer << "{" << endl;
 				for ( HXml::const_iterator it = a_rsNode.begin(); it != a_rsNode.end(); ++ it )
 					{
