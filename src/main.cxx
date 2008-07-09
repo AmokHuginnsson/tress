@@ -17,7 +17,7 @@ Copyright:
   4. If you want redistribute binary package you can not demand any fees
      for this software.
      You can not even demand cost of the carrier (CD for example).
-  5. You can not include it to any commercial enterprise (for example 
+  5. You can not include it to any commercial enterprise (for example
      as a free add-on to payed software or payed newspaper).
  This program is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
@@ -149,7 +149,7 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 		{
 		/* escape from main loop */
 		}
-	catch ( ... ) 
+	catch ( ... )
 		{
 /* ending ncurses sesion        */
 		if ( HCons::get_instance().is_enabled() )

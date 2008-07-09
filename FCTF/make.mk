@@ -11,8 +11,8 @@ AOBJS = $(patsubst %.$(ASS),%.$(AOS),$(ASRCS))
 	mkdir -p $(DIR_BUILD)/must_not_compile ; \
 	echo -n "$(@:.$(AOS)=.$(ADS)) " > $(@:.$(AOS)=.$(ADS)); \
 	/bin/rm -f "$(@)"; \
-	$(DXX) $(CXXFLAGS) -xc++ -DBUG_0 -MM $(<) -MT $(@) | grep -v '^#' >> $(@:.$(AOS)=.$(ADS)); \
-	$(ACXX) $(CXXFLAGS) $(<) -c -o $(@) 2>&1 | tee -a make.log; \
+	$(DXX) $(CXXFLAGS) -xc++ -DBUG_0 -MM $(<) -MT $(@) | grep -v '^#' >> $(@:.$(AOS)=.$(ADS)) && test $${PIPESTATUS} == 0 && \
+	$(ACXX) $(CXXFLAGS) $(<) -c -o $(@) 2>&1 | tee -a make.log && test $${PIPESTATUS} == 0 && \
 	echo $(NONL) "done.$(CL)"
 
 OBJS += $(AOBJS)
