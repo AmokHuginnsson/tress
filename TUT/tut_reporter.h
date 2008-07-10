@@ -203,7 +203,7 @@ template < typename tType = std::ostream > class reporter:public tut::
 						{
 						if ( tr.result == test_result::fail )
 							{
-							os << "     failed assertion: \"" << tr.message << "\""
+							os << "     failed assertion in \"" << tr._file << ":" << tr._line << " " << tr.message << "\""
 							<< std::endl;
 							}
 						else

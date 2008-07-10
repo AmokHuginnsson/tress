@@ -87,9 +87,11 @@ struct bad_ctor:public std::logic_error
  */
 struct failure:public std::logic_error
 	{
-	failure ( const std::string & msg ) :std::logic_error ( msg )
+	char const* _file;
+	int _line;
+	failure( char const* const file, int const& line, const std::string& msg )
+		: std::logic_error( msg ), _file( file ), _line( line )
 		{}
-
 	};
 
 /**
@@ -161,11 +163,13 @@ struct test_result
 	 */
 	std::string message;
 	std::string exception_typeid;
+	char const* _file;
+	int _line;
 
 	/**
 	 * Default constructor.
 	 */
-	test_result () :test ( 0 ), result ( ok )
+	test_result () :test ( 0 ), result ( ok ), _line( -1 )
 		{}
 
 	/**
@@ -173,7 +177,7 @@ struct test_result
 	 */
 	test_result ( const std::string & grp, int pos,
 								const std::string & test_name, result_type res ) :group ( grp ),
-			test ( pos ), name ( test_name ), result ( res )
+			test ( pos ), name ( test_name ), result ( res ), _line( -1 )
 		{}
 
 	/**
@@ -185,7 +189,19 @@ struct test_result
 			test ( pos ),
 			name ( test_name ),
 			result ( res ),
-			message ( exc.what () ), exception_typeid ( typeid ( exc ).name () )
+			message ( exc.what () ), exception_typeid ( typeid ( exc ).name () ), _line( -1 )
+		{}
+
+	/**
+	 * Constructor with failure.
+	 */
+	test_result ( const std::string& grp, int pos,
+								const std::string& test_name, result_type res,
+								const failure& f ) : group ( grp ),
+			test ( pos ),
+			name ( test_name ),
+			result ( res ),
+			message ( f.what () ), exception_typeid ( typeid ( f ).name () ), _file( f._file ), _line( f._line )
 		{}
 
 	/**
@@ -197,7 +213,7 @@ struct test_result
 			test ( pos ),
 			name ( test_name ),
 			result ( res ),
-			message ( exc.what () ), exception_typeid ( typeid ( exc ).name () )
+			message ( exc.what () ), exception_typeid ( typeid ( exc ).name () ), _line( -1 )
 		{}
 
 	};
@@ -586,12 +602,14 @@ namespace
  * Tests provided condition.
  * Throws if false.
  */
-void ensure ( bool cond )
+#define ensure( ... ) ensure_real( __FILE__, __LINE__, #__VA_ARGS__, __VA_ARGS__ )
+
+void ensure_real( char const* const file, int const& line, char const* const msg, bool cond )
 	{
 	if ( !cond )
 		{
 		// TODO: default ctor?
-		throw failure ( "" );
+		throw failure( file, line, msg );
 		}
 
 	}
@@ -600,13 +618,13 @@ void ensure ( bool cond )
  * Tests provided condition.
  * Throws if false.
  */
-template < typename T > void ensure ( const T msg, bool cond )
+template<typename T>
+void ensure_real( char const* const file, int const& line, char const* const, const T msg, bool cond )
 	{
 	if ( !cond )
 		{
-		throw failure ( msg );
+		throw failure( file, line, msg );
 		}
-
 	}
 
 /**
@@ -616,9 +634,11 @@ template < typename T > void ensure ( const T msg, bool cond )
  * NB: both T and Q must have operator << defined somewhere, or
  * client code will not compile at all!
  */
-template < class T, class Q >
-void ensure_equals ( const char *msg, const Q & actual,
-										 const T & expected )
+#define ensure_equals( ... ) ensure_equals_real( __FILE__, __LINE__, #__VA_ARGS__, __VA_ARGS__ )
+
+template<class T, class Q>
+void ensure_equals_real( char const* const file, int const& line, char const* const, const char* msg, const Q& actual,
+										 const T& expected )
 	{
 	if ( expected != actual )
 		{
@@ -626,22 +646,23 @@ void ensure_equals ( const char *msg, const Q & actual,
 		ss << ( msg ? msg : "" )
 		<< ( msg ? ":" : "" )
 		<< " expected [" << expected << "] actual [" << actual << "]";
-		throw failure ( ss.str ().c_str () );
+		throw failure( file, line, ss.str().c_str() );
 		}
 
 	}
 
-template < class T, class Q >
-void ensure_equals ( yaal::hcore::HString const& msg, const Q & actual,
-										 const T & expected )
+template<class T, class Q>
+void ensure_equals_real( char const* const file, int const& line, char const* const, yaal::hcore::HString const& msg, const Q& actual,
+										 const T& expected )
 	{
-	ensure_equals<>( msg.raw(), actual, expected );
+	ensure_equals_real<>( file, line, NULL, msg.raw(), actual, expected );
 	}
 
-template < class T, class Q >
-void ensure_equals ( const Q & actual, const T & expected )
+template< class T, class Q >
+void ensure_equals_real( char const* const file, int const& line, char const* const msg, const Q& actual,
+										 const T& expected )
 	{
-	ensure_equals <> ( 0, actual, expected );
+	ensure_equals_real<>( file, line, NULL, msg, actual, expected );
 	}
 
 /**
@@ -653,9 +674,10 @@ void ensure_equals ( const Q & actual, const T & expected )
  * client code will not compile at all! Also, T shall have
  * operators + and -, and be comparable.
  */
-template < class T >
-void ensure_distance ( const char *msg, const T & actual,
-											 const T & expected, const T & distance )
+#define ensure_distance( ... ) ensure_distance_real( __FILE__, __LINE__, #__VA_ARGS__, __VA_ARGS__ )
+template<class T>
+void ensure_distance_real( char const* const file, int const& line, char const* const, const char *msg, const T& actual,
+											 const T& expected, const T& distance )
 	{
 	if ( expected - distance >= actual || expected + distance <= actual )
 		{
@@ -665,25 +687,27 @@ void ensure_distance ( const char *msg, const T & actual,
 		<< "expected ["
 		<< expected - distance
 		<< ";" << expected + distance << "] actual [" << actual << "]";
-		throw failure ( ss.str ().c_str () );
+		throw failure( file, line, ss.str().c_str() );
 		}
 
 	}
 
-template < class T >
-void ensure_distance ( const T & actual, const T & expected,
-											 const T & distance )
+template<class T>
+void ensure_distance_real( char const* const file, int const& line, const char *msg, const T& actual,
+											 const T& expected, const T& distance )
 	{
-	ensure_distance <> ( 0, actual, expected, distance );
+	ensure_distance_real<>( file, line, NULL, msg, actual, expected, distance );
 	}
 
 /**
  * Unconditionally fails with message.
  */
-void fail ( const char * = "" ) __attribute__ ( ( __noreturn__ ) );
-void fail ( const char *msg )
+
+#define fail( msg ) fail_real( __FILE__, __LINE__, ( msg ) )
+void fail_real( char const* const, int const&, const char * = "" ) __attribute__(( __noreturn__ ));
+void fail_real( char const* const file, int const& line, const char *msg )
 	{
-	throw failure ( msg );
+	throw failure( file, line, msg );
 	}
 
 	}				// end of namespace
