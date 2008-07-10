@@ -2,6 +2,7 @@
 # this file ought to be in /etc/ and/or your home dirctory.
 
 log_path x_tress.log
+jobs 5
 
 	# ala0x
 	  # ala0x
