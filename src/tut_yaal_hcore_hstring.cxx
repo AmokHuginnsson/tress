@@ -261,6 +261,9 @@ void module::test<14>( void )
 	static char const D_CORRECT23[] = "aarokrokrebb";
 	static char const D_PAT4[] = "I";
 	static char const D_CORRECT34[] = "aaIIrebb";
+	static char const D_PAT5[] = "II";
+	static char const D_PAT6[] = "";
+	static char const D_CORRECT56[] = "aarebb";
 
 	HString str( D_INIT );
 	ensure_equals ( "char* constructor does not work", str, D_INIT );
@@ -285,6 +288,25 @@ void module::test<14>( void )
 	ensure_equals( "replace 3->4 failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT34 ) - 1 ) );
 	ensure_equals( "replace 3->4 failed (capacity)", str.capacity(), 15 );
 	ensure_equals( "replace 3->4 failed (is_empty)", str.empty(), false );
+
+	str.replace( D_PAT5, D_PAT6 );
+	ensure_equals ( "replace 5->6 does not work", str, D_CORRECT56 );
+	ensure_equals( "replace 5->6 failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT56 ) - 1 ) );
+	ensure_equals( "replace 5->6 failed (capacity)", str.capacity(), 15 );
+	ensure_equals( "replace 5->6 failed (is_empty)", str.empty(), false );
+
+	static char const D_INIT0[] = "./${NEST}/app/";
+	static char const D_PATA[] = "${NEST}";
+	static char const D_PATB[] = "";
+	static char const D_CORRECT_AB[] = ".//app/";
+	
+	str = D_INIT0;
+	str.replace( D_PATA, D_PATB );
+	ensure_equals ( "replace A->B does not work", str, D_CORRECT_AB );
+	ensure_equals( "replace A->B failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT_AB ) - 1 ) );
+	ensure_equals( "replace A->B failed (capacity)", str.capacity(), 15 );
+	ensure_equals( "replace A->B failed (is_empty)", str.empty(), false );
+
 	}
 
 /* shift_left */
