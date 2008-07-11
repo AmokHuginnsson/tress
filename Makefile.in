@@ -31,14 +31,10 @@ SUBVERSION		= 0
 EXTRAVERSION	= 0
 include $(DIR_ROOT)/_aux/common-paths.mk
 LIBS					= hconsole tools hcore hdata dbwrapper boost_filesystem boost_date_time
-EXEC_NAME			= 1exec
-TARGET				= tress
-TARGET_PLUGIN = tressplugin
-SRC_TARGET		= src
-SRC_TARGET_PLUGIN = data
-COMPILER_FLAGS_TARGET_PLUGIN = -fPIC
-LINKER_FLAGS_TARGET_PLUGIN = -shared --allow-shlib-undefined
-TARGETS				= TARGET TARGET_PLUGIN
+$(eval $(call NEW_TARGET,tress,src))
+$(eval $(call NEW_TARGET,cute,cute))
+$(eval $(call NEW_TARGET,tressplugin,data,-fPIC,-shared --allow-shlib-undefined))
+EXEC_NAME				= 1exec
 ifdef NODEBUG
 	TARGET = $(PRJNAME)
 endif

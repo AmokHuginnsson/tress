@@ -500,6 +500,11 @@ void module::test<29>( void )
 	ensure_equals( HString().format( failed, 10 ), str.find( 'Y', 9 ), -1 );
 	ensure_equals( HString().format( failed, 11 ), str.find( 'X', 90 ), -1 );
 	ensure_equals( HString().format( failed, 12 ), str.find( 'Y', 90 ), -1 );
+	static char const* const D_PREF = "---> group: ";
+	static char const* const D_SUFF = "yaal, tra la la";
+	HString line( D_PREF );
+	line += D_SUFF;
+	ensure_equals( HString().format( failed, 13 ), line.find( D_PREF ), 0 );
 	}
 
 /* find_one_of */

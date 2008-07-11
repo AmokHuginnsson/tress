@@ -236,7 +236,20 @@ void module::test<4>( void )
 	typedef HPointer<A> pa_t;
 
 	pa_t p( new B );
-	//ensure_equals( "Life, Universe and everything ...", 44, 42 );
+	ensure_equals( "Life, Universe and everything ...", 44, 42 );
+	}
+
+template<>
+template<>
+void module::test<5>( void )
+	{
+	}
+
+template<>
+template<>
+void module::test<6>( void )
+	{
+	fail( "just a test" );
 	}
 
 }
