@@ -75,7 +75,6 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 /*	end.                                                                  */
 	try
 		{
-		ala
 /*	TO-DO:				enter main loop code here                               */
 		HSignalServiceFactory::get_instance();
 		setup.f_pcProgramName = a_ppcArgv[ 0 ];
