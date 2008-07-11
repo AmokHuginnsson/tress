@@ -137,6 +137,13 @@ int HCuteReporter::run_ut( int a_iArgc, char* a_ppcArgv[] )
 		*_start += _cnt;
 		_rep.push_back( _out << "#ending " << _group << _out );
 		}
+	else
+		{
+		_rep.push_back( "#beginning tress 1" );
+		_rep.push_back( "#starting test" );
+		_rep.push_back( "#success test OK" );
+		_rep.push_back( "#ending tress" );
+		}
 	for ( report_t::iterator it = _rep.begin(); it != _rep.end(); ++ it )
 		cout << it->raw() << endl;
 	return ( 0 );
@@ -194,7 +201,7 @@ void HCuteReporter::handle_line_of_error( HString const& in )
 		++ _cnt;
 		}
 	else
-		_out = in;
+		cout << in.raw() << endl;
 	if ( ! _out.is_empty() )
 		{
 		_rep.push_back( _out.consume() );
