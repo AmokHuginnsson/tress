@@ -7,7 +7,6 @@
 #include <list>
 #include <string>
 #include <sstream>
-#include <stdexcept>
 #include <typeinfo>
 
 #if defined(TUT_USE_SEH)
@@ -28,16 +27,42 @@
  * @author Vladimir Dyuzhev, Vladimir.Dyuzhev@gmail.com
  */
 namespace tut
+{
+
+
+/**
+ * The base for all TUT exceptions.
+ */
+struct tut_error : public std::exception
 	{
+	tut_error(const std::string& msg)
+			: err_msg(msg)
+		{}
+
+	~tut_error() throw()
+		{}
+
+	const char* what() const throw()
+		{
+			return err_msg.c_str();
+		}
+
+private:
+
+    std::string err_msg;
+	};
+
+
 /**
  * Exception to be throwed when attempted to execute 
  * missed test by number.
  */
-struct no_such_test:public std::logic_error
+struct no_such_test : public tut_error
 	{
-	no_such_test () :std::logic_error ( "no such test" )
+	no_such_test () :tut_error ( "no such test" )
 		{}
-
+	~no_such_test() throw()
+		{}
 	};
 
 /**
@@ -45,18 +70,22 @@ struct no_such_test:public std::logic_error
  * any test number in current group. Used in one-by-one
  * test running when upper bound is not known.
  */
-struct beyond_last_test:public no_such_test
+struct beyond_last_test : public no_such_test
 	{
-	beyond_last_test ()
+	beyond_last_test()
+		{}
+	~beyond_last_test() throw()
 		{}
 	};
 
 /**
  * Group not found exception.
  */
-struct no_such_group:public std::logic_error
+struct no_such_group : public tut_error
 	{
-	no_such_group ( const std::string & grp ) :std::logic_error ( grp )
+	no_such_group( std::string const& grp ) : tut_error( grp )
+		{}
+	~no_such_group() throw ()
 		{}
 	};
 
@@ -66,52 +95,58 @@ struct no_such_group:public std::logic_error
  */
 struct no_more_tests
 	{
-	no_more_tests ()
+	no_more_tests()
 		{}
-
+	~no_more_tests() throw()
+		{}
 	};
 
 /**
  * Internal exception to be throwed when 
  * test constructor has failed.
  */
-struct bad_ctor:public std::logic_error
+struct bad_ctor : public tut_error
 	{
-	bad_ctor ( const std::string & msg ) :std::logic_error ( msg )
+	bad_ctor( std::string const& msg ) : tut_error( msg )
 		{}
-
+	~bad_ctor() throw()
+		{}
 	};
 
 /**
  * Exception to be throwed when ensure() fails or fail() called.
  */
-struct failure:public std::logic_error
+struct failure : public tut_error
 	{
 	char const* _file;
 	int _line;
 	failure( char const* const file, int const& line, const std::string& msg )
-		: std::logic_error( msg ), _file( file ), _line( line )
+		: tut_error( msg ), _file( file ), _line( line )
+		{}
+	~failure() throw()
 		{}
 	};
 
 /**
  * Exception to be throwed when test desctructor throwed an exception.
  */
-struct warning:public std::logic_error
+struct warning : public tut_error
 	{
-	warning ( const std::string & msg ) :std::logic_error ( msg )
+	warning( std::string const& msg ) : tut_error( msg )
 		{}
-
+	~warning() throw()
+		{}
 	};
 
 /**
  * Exception to be throwed when test issued SEH (Win32)
  */
-struct seh:public std::logic_error
+struct seh : public tut_error
 	{
-	seh ( const std::string & msg ) :std::logic_error ( msg )
+	seh( std::string const& msg ) : tut_error( msg )
 		{}
-
+	~seh() throw()
+		{}
 	};
 
 /**
@@ -319,18 +354,18 @@ class test_runner
 			{
 			if ( gr == 0 )
 				{
-				throw std::invalid_argument ( "group shall be non-null" );
+				throw std::invalid_argument( "group shall be non-null" );
 				}
 
 			// TODO: inline variable
 			groups::iterator found = groups_.find ( name );
 			if ( found != groups_.end () )
 				{
-				std::string msg ( "attempt to add already existent group " + name );
+				std::string msg( "attempt to add already existent group " + name );
 				// this exception terminates application so we use cerr also
 				// TODO: should this message appear in stream?
 				std::cerr << msg << std::endl;
-				throw std::logic_error ( msg );
+				throw tut_error( msg );
 				}
 
 			groups_[name] = gr;
@@ -553,7 +588,8 @@ extern test_runner_singleton runner;
  * implementation. Inherited from Data to allow tests to  
  * access test data as members.
  */
-template < class Data > class test_object:public Data
+template<class Data>
+class test_object:public Data
 	{
 	public:
 
@@ -596,7 +632,7 @@ template < class Data > class test_object:public Data
 	};
 
 namespace
-	{
+{
 
 /**
  * Tests provided condition.
@@ -622,10 +658,36 @@ template<typename T>
 void ensure_real( char const* const file, int const& line, char const* const, const T msg, bool cond )
 	{
 	if ( !cond )
+		throw failure( file, line, msg );
+	}
+
+#define ensure_not( ... ) ensure_not_real( __FILE__, __LINE__, #__VA_ARGS__, __VA_ARGS__ )
+
+/**
+ * Tests provided condition.
+ * Throws if true.
+ */
+void ensure_not_real( char const* const file, int const& line, char const* const msg, bool cond )
+{
+	if ( cond )
 		{
+		// TODO: default ctor?
 		throw failure( file, line, msg );
 		}
-	}
+}
+
+
+/**
+ * Tests provided condition.
+ * Throws if true.
+ */
+template<typename T>
+void ensure_not_real( char const* const file, int const& line, char const* const, const T msg, bool cond )
+{
+	if ( cond )
+		throw failure( file, line, msg );
+}
+
 
 /**
  * Tests two objects for being equal.
@@ -684,9 +746,9 @@ void ensure_distance_real( char const* const file, int const& line, char const* 
 		std::stringstream ss;
 		ss << ( msg ? msg : "" )
 		<< ( msg ? ":" : "" )
-		<< "expected ["
+		<< "expected ("
 		<< expected - distance
-		<< ";" << expected + distance << "] actual [" << actual << "]";
+		<< ";" << expected + distance << ") actual [" << actual << "]";
 		throw failure( file, line, ss.str().c_str() );
 		}
 
@@ -710,7 +772,7 @@ void fail_real( char const* const file, int const& line, const char *msg )
 	throw failure( file, line, msg );
 	}
 
-	}				// end of namespace
+}				// end of namespace
 
 /**
  * Walks through test tree and stores address of each
@@ -1203,6 +1265,7 @@ inline int handle_seh_ ( DWORD excode )
 	}
 
 #endif
-	}
+}
 
 #endif
+

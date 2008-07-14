@@ -169,7 +169,7 @@ template < typename tType = std::ostream > class reporter:public tut::
 
 					os << "---> " << "group: " << tr.group
 					<< ", test: test<" << tr.test << ">"
-					<< ( !tr.name.empty () ? ( std::string ( " : " ) + tr.name ) : "" )
+					<< ( !tr.name.empty () ? ( std::string ( " : " ) + tr.name ) : std::string() )
 					<< std::endl;
 
 					os << "     problem: " << std::flush;
