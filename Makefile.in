@@ -48,6 +48,7 @@ include $(DIR_ROOT)/_aux/common-item-paths.mk
 ifndef NODEBUG
 	COMPILER_PCH_FLAGS+=@PCH@
 endif
+-include $(DIR_ROOT)/local.mk
 CXXWARNING_FLAGS:=$(filter-out -Weffc++,$(CXXWARNING_FLAGS))
 CWARNING_FLAGS								+= @EXTRA_WARNINGS@ @WARN_SHADOW@ -Wno-missing-noreturn
 COMPILER_PRIME_FLAGS					+= @DEFS@
