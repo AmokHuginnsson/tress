@@ -87,7 +87,7 @@ void tut_yaal_hcore_htree::draw_tree( tree_t const& t )
 
 void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n )
 	{
-	int len = _cache.get_length();
+	int len = static_cast<int>( _cache.get_length() );
 	tree_t::const_node_t pn = NULL;
 	if ( ( pn = n.get_parent() ) )
 		{

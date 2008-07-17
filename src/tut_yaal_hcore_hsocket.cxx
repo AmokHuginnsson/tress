@@ -68,7 +68,7 @@ int OServer::run( void )
 	int ret = -1;
 	try
 		{
-		ret = f_oSocket->read( f_pcBuffer, f_iSize );
+		ret = static_cast<int>( f_oSocket->read( f_pcBuffer, f_iSize ) );
 		f_oSocket->close();
 		}
 	catch ( HOpenSSLException& e )
@@ -94,19 +94,19 @@ void module::test<2> ( void )
 	{
 	try
 		{
-		HSocket l_oSocket ( HSocket::TYPE::D_FILE | HSocket::TYPE::D_NETWORK );
-		fail ( "creation of bad socket possible (TYPE::D_FILE|TYPE::D_NETWORK)" );
+		HSocket l_oSocket( HSocket::TYPE::D_FILE | HSocket::TYPE::D_NETWORK );
+		fail( "creation of bad socket possible (TYPE::D_FILE|TYPE::D_NETWORK)" );
 		}
-	catch ( HException & e )
+	catch ( HException& e )
 		{
 		cout << e.what() << endl;
 		}
 	try
 		{
-		HSocket l_oSocket ( HSocket::TYPE::D_BLOCKING | HSocket::TYPE::D_NONBLOCKING );
-		fail ( "creation of bad socket possible (TYPE::D_BLOCKING|TYPE::D_NONBLOCKING)" );
+		HSocket l_oSocket( HSocket::TYPE::D_BLOCKING | HSocket::TYPE::D_NONBLOCKING );
+		fail( "creation of bad socket possible (TYPE::D_BLOCKING|TYPE::D_NONBLOCKING)" );
 		}
-	catch ( HException & e )
+	catch ( HException& e )
 		{
 		cout << e.what() << endl;
 		}
@@ -117,13 +117,13 @@ template<>
 template<>
 void module::test<3> ( void )
 	{
-	HSocket l_oSocket ( HSocket::TYPE::D_FILE );
+	HSocket l_oSocket( HSocket::TYPE::D_FILE );
 	try
 		{
 		l_oSocket.get_port();
 		fail ( "getting port number on file socket possible" );
 		}
-	catch ( HException & e )
+	catch ( HException& e )
 		{
 		cout << e.what() << endl;
 		}

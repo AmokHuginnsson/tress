@@ -161,12 +161,12 @@ void HCuteReporter::handle_line_of_error( HString const& in )
 	static char const D_TEST[] = ", test: ";
 	static int const D_TEST_LEN = sizeof ( D_TEST ) - 1;
 	_out.clear();
-	int idx = 0;
+	int long idx = 0;
 	bool start = false;
 	if ( ( idx = in.find( D_GROUP_PREFIX ) ) >= 0 )
 		{
 		idx += D_GROUP_PREFIX_LEN;
-		int coma = in.find( ',', idx );
+		int long coma = in.find( ',', idx );
 		HString g = in.mid( idx, coma - idx );
 		if ( g != _group )
 			{

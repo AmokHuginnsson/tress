@@ -63,7 +63,7 @@ template<>
 template<>
 void module::test<1>( void )
 	{
-	TITLE( "by_hand" );
+	M_TITLE( "by_hand" );
 	cout << "lets do everything by hand ..." << endl;
 	cout << "{" << endl;
 	typedef set<int> T;
@@ -84,7 +84,7 @@ template<>
 template<>
 void module::test<2>( void )
 	{
-	TITLE( "display" );
+	M_TITLE( "display" );
 	cout << "display container contents automatically ..." << endl;
 	cout << "{" << endl;
 	typedef set<int> T;
@@ -102,7 +102,7 @@ template<>
 template<>
 void module::test<3>( void )
 	{
-	TITLE( "create" );
+	M_TITLE( "create" );
 	cout << "create container contents automatically ..." << endl;
 	cout << "{" << endl;
 	typedef set<int> T;
@@ -118,7 +118,7 @@ template<>
 template<>
 void module::test<4>( void )
 	{
-	TITLE( "reverse container content" );
+	M_TITLE( "reverse container content" );
 	cout << "reverse container content ..." << endl;
 	cout << "{" << endl;
 	typedef list<int> T;
@@ -139,7 +139,7 @@ template<>
 template<>
 void module::test<5>( void )
 	{
-	TITLE( "negate container content" );
+	M_TITLE( "negate container content" );
 	cout << "negate container content ..." << endl;
 	cout << "{" << endl;
 	typedef list<int> T;

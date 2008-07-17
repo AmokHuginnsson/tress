@@ -109,9 +109,19 @@ std::ostream& operator << ( std::ostream& out,
 	M_EPILOG
 	}
 
-//#define TITLE( title ) void TITLE( tut(title) )
-void TITLE( char const* const );
 struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ ); } };
+
+void show_title( char const* const );
+void show_end( void );
+
+#define M_TITLE( title ) do { set_test_name( title ); show_title( title ); } while ( 0 )
+#define M_UNIT_TEST( title ) template<> template<> void module::test<__COUNTER__>( void ) { M_TITLE( ( title ) );
+#define M_TEARDOWN() show_end(); }
+#define M_TEST_GROUP( mock, name ) \
+typedef test_group<mock> tut_group; \
+typedef tut_group::object module; \
+tut_group tut_##mock##_group( ( name ) ); \
+namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
 
 template<typename symbol_t, typename owner_t>
 class counter

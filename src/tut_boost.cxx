@@ -73,7 +73,7 @@ multi make_multi( void )
 	static int idx = 0;
 	int i = idx;
 	++ idx;
-	idx %= ( sizeof ( res ) / sizeof ( multi ) );
+	idx %= static_cast<int>( ( sizeof ( res ) / sizeof ( multi ) ) );
 	return ( res[ i ] );
 	}
 
@@ -83,12 +83,11 @@ ostream& operator << ( ostream& out, multi const& m )
 	return ( out );
 	}
 
-/* binding */
 template<>
 template<>
 void module::test<1>( void )
 	{
-	TITLE( "bind" );
+	M_TITLE( "/* binding */" );
 	cout << "sort by field using binding" << endl;
 	cout << "{" << endl;
 	typedef vector<multi> T;
@@ -116,21 +115,19 @@ void dump_dir( path const& dir )
 	return;
 	}
 
-/* filesystem */
 template<>
 template<>
 void module::test<2>( void )
 	{
-	TITLE( "filesystem" );
+	M_TITLE( "/* filesystem */" );
 	dump_dir( path( "." ) );
 	}
 
-/* date_time */
 template<>
 template<>
 void module::test<3>( void )
 	{
-	TITLE( "date_time" );
+	M_TITLE( "/* date_time */" );
 	try
 		{
 		string birthday_s( "1978-05-24" );
@@ -234,7 +231,7 @@ template<>
 template<>
 void module::test<4>( void )
 	{
-	TITLE( "bind, accumulate, plus" );
+	M_TITLE( "bind, accumulate, plus" );
 	cout << "accumulate all values returned by some\n"
 		"method of class that represent values in map" << endl;
 	cout << "{" << endl;

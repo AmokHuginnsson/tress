@@ -610,7 +610,7 @@ int confirm( char const* const str, int const& size, char const* const pat, int 
 	if ( len < fastpat.get_length() )
 		fastpat.set_at( len, 0 );
 	char* p = ( len <= size ) ? strstr( str, fastpat.raw() ) : NULL;
-	return ( p ? p - str : -1 );
+	return ( p ? static_cast<int>( p - str ) : -1 );
 	}
 
 struct gen_char
@@ -647,7 +647,7 @@ void module::test<35>( void )
 					newwhere += ( where + 1 );
 				msg.format( "find(\"\") failed: %d,%d,%d", len, offset, where );
 				ensure_equals( msg,
-						where = ( offset + len <= D_SAMPLE_SIZE ) ? str.nfind( sample + offset, len, where + 1 ) : -1,
+						where = ( offset + len <= D_SAMPLE_SIZE ) ? static_cast<int>( str.nfind( sample + offset, len, where + 1 ) ) : -1,
 						newwhere );
 				}
 			while ( where >= 0 );

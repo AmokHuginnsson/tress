@@ -111,10 +111,19 @@ std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s )
 	return ( out );
 	}
 
-void TITLE( char const* const title )
+void show_title( char const* const title )
 	{
 	if ( setup.f_bVerbose )
+		{
+		cout << "------------------------------------------------------------------------" << endl;
 		cout << "TUT: " << n_oGroup << "::<" << n_iNumber << "> " << title << endl;
+		}
+	}
+
+void show_end( void )
+	{
+	if ( setup.f_bVerbose )
+		cout << "------------------------------------------------------------------------" << endl;
 	}
 
 }

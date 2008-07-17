@@ -81,7 +81,7 @@ void module::test<3> ( void )
 	if ( setup.f_bVerbose && ( setup.f_iArgc > 1 ) )
 		{
 		HString string( setup.f_ppcArgv[ 1 ] );
-		int unknown = string.find( '?' );
+		int unknown = static_cast<int>( string.find( '?' ) );
 		if ( unknown < 0 )
 			fail( "No unknown characters." );
 		for ( int i = 0; i < 10; ++ i )

@@ -1307,10 +1307,10 @@ void module::test<21>( void )
 		_bc.read_until( res );
 		msg = "division of random a = " + as + " and b = " + bs + " failed";
 		HNumber div = a / b;
-		int len = res.get_length();
+		int len = static_cast<int>( res.get_length() );
 		( len >= ( M + M - 2 ) ) && ( len = M + M - 2 );
 		res = res.left( len );
-		int z = res.reverse_find_other_than( "0" );
+		int z = static_cast<int>( res.reverse_find_other_than( "0" ) );
 		if ( z >= 0 )
 			ensure_equals( msg, div.to_string().left( len - z ), res.left( len - z ) );
 		}
