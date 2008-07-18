@@ -47,6 +47,20 @@ struct tut_yaal_tools_hbitmap
 
 M_TEST_GROUP( tut_yaal_tools_hbitmap, "yaal::tools::HBitmap" );
 
+M_UNIT_TEST( "simple use" )
+	static char const D_BUFF[] = "ala ma kota";
+	static int const D_BUFF_BIT_SIZE = ( sizeof ( D_BUFF ) - 1 ) * 8;
+	HBitmap bmp;
+	bmp.copy( D_BUFF, D_BUFF_BIT_SIZE );
+	HBitmap const x( bmp );
+	cout << endl;
+	yaal::copy( x.begin(), x.end(), ostream_iterator<int>( cout ) );
+	yaal::fill_n( bmp.begin(), D_BUFF_BIT_SIZE / 2, true );
+	HBitmap const y( bmp );
+	cout << endl;
+	yaal::copy( y.begin(), y.end(), ostream_iterator<int>( cout ) );
+M_TEARDOWN()
+
 M_UNIT_TEST( "/* Default constructor */" )
 	HBitmap bmp;
 	ensure_equals( "size", bmp.get_size(), 0 );
