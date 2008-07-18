@@ -30,7 +30,7 @@ Copyright:
 #include <libintl.h>
 
 #include <yaal/yaal.h>
-M_VCSID ( "$Id$" )
+M_VCSID( "$Id: "__ID__" $" )
 
 #include "options.h"
 #include "version.h"

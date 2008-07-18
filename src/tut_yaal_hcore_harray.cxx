@@ -27,7 +27,7 @@ Copyright:
 #include <TUT/tut.h>
 
 #include <yaal/yaal.h>
-M_VCSID ( "$Id$" )
+M_VCSID( "$Id: "__ID__" $" )
 
 using namespace tut;
 using namespace std;
@@ -50,8 +50,8 @@ typedef tut_group::object module;
 tut_group tut_group_group ( "yaal::hcore::HArray" );
 
 /* Constructor. */
-template < >
-template < >
+template<>
+template<>
 void module::test<1> ( void )
 	{
 	int const BAD_SIZE = - 1;
@@ -67,8 +67,8 @@ void module::test<1> ( void )
 	}
 
 /* Constructor and get_size(). */
-template < >
-template < >
+template<>
+template<>
 void module::test<2> ( void )
 	{
 	int const SIZE_FOR_ONE = 0;
@@ -80,8 +80,8 @@ void module::test<2> ( void )
 	}
 
 /* Constructor with filling. */
-template < >
-template < >
+template<>
+template<>
 void module::test<3> ( void )
 	{
 	int const BAD_SIZE = - 1;
@@ -102,8 +102,8 @@ void module::test<3> ( void )
 	}
 
 /* Copy constructor. */
-template < >
-template < >
+template<>
+template<>
 void module::test<4> ( void )
 	{
 	int const SIZE = 7;
@@ -117,8 +117,8 @@ void module::test<4> ( void )
 	}
 
 /* Operator [ ]. */
-template < >
-template < >
+template<>
+template<>
 void module::test<5> ( void )
 	{
 	int const SIZE = 7;
@@ -144,8 +144,8 @@ void module::test<5> ( void )
 	}
 
 /* Operator bool. */
-template < >
-template < >
+template<>
+template<>
 void module::test<6> ( void )
 	{
 	int const EMPTY = 0;

@@ -30,7 +30,7 @@ Copyright:
 #include <TUT/tut_restartable.h>
 
 #include <yaal/yaal.h>
-M_VCSID( "$Id$" )
+M_VCSID( "$Id: "__ID__" $" )
 
 #include "tut_helpers.h"
 #include "version.h"

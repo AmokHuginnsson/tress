@@ -28,7 +28,7 @@ Copyright:
 #include "tut_helpers.h"
 
 #include <yaal/yaal.h>
-M_VCSID ( "$Id$" )
+M_VCSID( "$Id: "__ID__" $" )
 
 using namespace tut;
 using namespace std;
