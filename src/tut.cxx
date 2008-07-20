@@ -47,16 +47,10 @@ struct tut_
 	{
 	};
 
-typedef test_group<tut_> tut_group;
-typedef tut_group::object module;
-tut_group tut__group( "yaal::" );
+TUT_TEST_GROUP( tut_, "yaal::" );
 
-template<>
-template<>
-void module::test<1>( void )
-	{
-	TITLE( "the test" );
-	}
+TUT_UNIT_TEST( "the test" )
+TUT_TEARDOWN()
 
 #endif
 

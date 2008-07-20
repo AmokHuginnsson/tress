@@ -14,7 +14,7 @@
 #  include <winbase.h>
 #endif
 
-#include <yaal/hcore/hexception.h>
+#include <yaal/hcore/base.h>
 #include <yaal/hcore/hcall.h>
 #include <yaal/tools/hworkflow.h>
 

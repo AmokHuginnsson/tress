@@ -174,7 +174,7 @@ void gather_groups_from_file( string_list_t& lst )
 	FILE* l_psFile = NULL;
 	if ( setup.f_oTestGroupListFilePath == "-" )
 		l_psFile = stdin;
-	HFile l_oFile( HFile::D_READING, l_psFile );
+	HFile l_oFile( HFile::OPEN::D_READING, l_psFile );
 	if ( ! l_psFile && l_oFile.open( setup.f_oTestGroupListFilePath ) )
 		{
 		cout << l_oFile.get_error() << ": " << l_oFile.get_path() << endl;
@@ -182,7 +182,8 @@ void gather_groups_from_file( string_list_t& lst )
 		}
 	HString l_oLine;
 	while ( l_oFile.read_line( l_oLine,
-				HFile::D_UNBUFFERED_READS | HFile::D_STRIP_NEWLINES ) >= 0 )
+				HFile::READ::D_STRIP_NEWLINES
+				| ( ( l_oLine == stdin ) ? HFile::READ::D_UNBUFFERED_READS : HFile::READ::D_BUFFERED_READS ) ) >= 0 )
 		{
 		l_oLine.trim_left();
 		l_oLine.trim_right();

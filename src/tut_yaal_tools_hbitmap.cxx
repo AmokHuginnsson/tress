@@ -45,9 +45,9 @@ struct tut_yaal_tools_hbitmap
 	{
 	};
 
-M_TEST_GROUP( tut_yaal_tools_hbitmap, "yaal::tools::HBitmap" );
+TUT_TEST_GROUP( tut_yaal_tools_hbitmap, "yaal::tools::HBitmap" );
 
-M_UNIT_TEST( "simple use" )
+TUT_UNIT_TEST( "simple use" )
 	static char const D_BUFF[] = "ala ma kota";
 	static int const D_BUFF_BIT_SIZE = ( sizeof ( D_BUFF ) - 1 ) * 8;
 	HBitmap bmp;
@@ -59,23 +59,23 @@ M_UNIT_TEST( "simple use" )
 	HBitmap const y( bmp );
 	cout << endl;
 	yaal::copy( y.begin(), y.end(), ostream_iterator<int>( cout ) );
-M_TEARDOWN()
+TUT_TEARDOWN()
 
-M_UNIT_TEST( "/* Default constructor */" )
+TUT_UNIT_TEST( "/* Default constructor */" )
 	HBitmap bmp;
 	ensure_equals( "size", bmp.get_size(), 0 );
 	ensure_equals( "raw", bmp.raw(), static_cast<void*>( NULL ) );
-M_TEARDOWN()
+TUT_TEARDOWN()
 
-M_UNIT_TEST( "/* constructor from size */" )
+TUT_UNIT_TEST( "/* constructor from size */" )
 	static int const D_SIZE = 7;
 	HBitmap bmp( D_SIZE );
 	ensure_equals( "constructor from size size", bmp.get_size(), D_SIZE );
 	ensure( "default constructor raw", bmp.raw() != static_cast<void*>( NULL ) );
 	ensure( "default constructor ", bmp.raw() != static_cast<void*>( NULL ) );
-M_TEARDOWN()
+TUT_TEARDOWN()
 
-M_UNIT_TEST( "/* set */" )
+TUT_UNIT_TEST( "/* set */" )
 	HBitmap bmp;
 	try
 		{
@@ -86,9 +86,9 @@ M_UNIT_TEST( "/* set */" )
 		{
 		// ok
 		}
-M_TEARDOWN()
+TUT_TEARDOWN()
 
-M_UNIT_TEST( "/* get */" )
+TUT_UNIT_TEST( "/* get */" )
 	HBitmap bmp;
 	try
 		{
@@ -99,9 +99,9 @@ M_UNIT_TEST( "/* get */" )
 		{
 		// ok
 		}
-M_TEARDOWN()
+TUT_TEARDOWN()
 
-M_UNIT_TEST( "/* rotate_left */" )
+TUT_UNIT_TEST( "/* rotate_left */" )
 	HBitmap bmp;
 	try
 		{
@@ -112,9 +112,9 @@ M_UNIT_TEST( "/* rotate_left */" )
 		{
 		// ok
 		}
-M_TEARDOWN()
+TUT_TEARDOWN()
 
-M_UNIT_TEST( "/* rotate_right */" )
+TUT_UNIT_TEST( "/* rotate_right */" )
 	HBitmap bmp;
 	try
 		{
@@ -125,7 +125,7 @@ M_UNIT_TEST( "/* rotate_right */" )
 		{
 		// ok
 		}
-M_TEARDOWN()
+TUT_TEARDOWN()
 
 }
 

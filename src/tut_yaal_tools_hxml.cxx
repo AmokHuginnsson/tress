@@ -316,7 +316,7 @@ void module::test<43>( void )
 			cout << file.get_error() << ": " << file.get_path() << endl;
 		else
 			{
-			while ( file.read_line( string, HFile::D_STRIP_NEWLINES ) >= 0 )
+			while ( file.read_line( string, HFile::READ::D_STRIP_NEWLINES ) >= 0 )
 				cout << string << endl;
 			file.close();
 			}

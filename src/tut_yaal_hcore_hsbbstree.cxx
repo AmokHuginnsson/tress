@@ -54,7 +54,7 @@ struct red_black_tree_stress_test
 		node * right;
 		};
 	node * root;
-	size_t quantity;
+	int long quantity;
 	template < typename T >
 	bool self_test ( HSet<T> & );
 	template < typename T >
@@ -64,7 +64,7 @@ struct red_black_tree_stress_test
 
 	static bool red_node_exists;
 private:
-	size_t tested_nodes;
+	int long tested_nodes;
 	int black_height;
 	template < typename T >
 	void init ( HSet<T>& );
@@ -157,8 +157,8 @@ int red_black_tree_stress_test::helper_check_black_height ( node * n )
 template<typename T>
 bool red_black_tree_stress_test::self_test ( HSet<T> & ob )
 	{
-	init ( ob );
-	if ( ob.size ( ) != quantity )
+	init( ob );
+	if ( ob.size() != quantity )
 		return ( true );
 	if ( root == root->left )
 		return ( true );
@@ -178,7 +178,7 @@ bool red_black_tree_stress_test::integrity_test ( HSet<T> & ob )
 	{
 	init ( ob );
 	helper_test_node_integrity ( root );
-	ensure_equals ( "quantity inconsistency", quantity,  tested_nodes );
+	ensure_equals( "quantity inconsistency", quantity,  tested_nodes );
 	return ( false );
 	}
 
@@ -205,16 +205,16 @@ struct tut_yaal_hcore_hsbbstree
 	};
 
 template < typename object, typename subject, typename key >
-void tut_yaal_hcore_hsbbstree::helper_stress_test ( object & ob, subject member, key val )
+void tut_yaal_hcore_hsbbstree::helper_stress_test( object& ob, subject member, key val )
 	{
-	( ob.*member ) ( val );
-	ensure ( "self test failed", ! stress.self_test<key> ( ob ) );
-	ensure ( "integrity test failed", ! stress.integrity_test<key> ( ob ) );
-	ensure ( "definition test failed", ! stress.definition_test<key> ( ob ) );
+	( ob.*member )( val );
+	ensure( "self test failed", ! stress.self_test<key>( ob ) );
+	ensure( "integrity test failed", ! stress.integrity_test<key>( ob ) );
+	ensure( "definition test failed", ! stress.definition_test<key>( ob ) );
 	key biggest = - 1;
 	for ( typename object::HIterator it = ob.begin ( ); it != ob.end ( ); ++ it )
 		{
-		ensure ( "elements not in order", *it > biggest );
+		ensure( "elements not in order", *it > biggest );
 		biggest = *it;
 		}
 	return;
