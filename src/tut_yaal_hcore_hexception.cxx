@@ -63,6 +63,7 @@ typedef HExceptionT<A> AE;
 
 class B : public A
 	{
+protected:
 	typedef B self_t;
 	typedef A hier_t;
 	virtual void do_foo( int const& a ) const
@@ -77,6 +78,7 @@ typedef HExceptionT<B,AE> BE;
 
 class C : public B
 	{
+protected:
 	typedef C self_t;
 	typedef B hier_t;
 	virtual void do_foo( int const& a ) const
@@ -121,6 +123,7 @@ typedef HExceptionT<Q,PE> QE;
 
 class R : public Q
 	{
+protected:
 	typedef R self_t;
 	typedef Q hier_t;
 	virtual void do_foo( int const& a ) const
@@ -152,11 +155,20 @@ TUT_UNIT_TEST( "valid ex hier construct for full hier" )
 		{
 		fail( "bad exception caught" );
 		}
-	catch ( AE const& )
+	catch ( AE const& e )
 		{
+		char* ptr = HException::get_type_name( typeid( e ).name() );
+		HString etype( ptr );
+		HException::cleanup( ptr );
+		ptr = HException::get_type_name( typeid( AE ).name() );
+		HString aetype( ptr );
+		HException::cleanup( ptr );
+		ensure_equals( "bad generated type", etype, aetype );
 		}
-	catch ( HException const& )
+	catch ( HException const& e )
 		{
+		cout << e.what() << endl;
+		e.print_error( true );
 		fail( "bad exception caught" );
 		}
 	catch ( ... )
@@ -173,15 +185,26 @@ TUT_UNIT_TEST( "valid ex hier construct for full hier" )
 		{
 		fail( "bad exception caught" );
 		}
-	catch ( BE const& )
+	catch ( BE const& e )
 		{
+		char* ptr = HException::get_type_name( typeid( e ).name() );
+		HString etype( ptr );
+		HException::cleanup( ptr );
+		ptr = HException::get_type_name( typeid( BE ).name() );
+		HString aetype( ptr );
+		HException::cleanup( ptr );
+		ensure_equals( "bad generated type", etype, aetype );
 		}
-	catch ( AE const& )
+	catch ( AE const& e )
 		{
+		cout << e.what() << endl;
+		e.print_error( true );
 		fail( "bad exception caught" );
 		}
-	catch ( HException const& )
+	catch ( HException const& e )
 		{
+		cout << e.what() << endl;
+		e.print_error( true );
 		fail( "bad exception caught" );
 		}
 	catch ( ... )
@@ -194,15 +217,24 @@ TUT_UNIT_TEST( "valid ex hier construct for full hier" )
 		x.foo( 0 );
 		fail( "test bug, exception not thrown" );
 		}
-	catch ( CE const& )
+	catch ( CE const& e )
 		{
+		char* ptr = HException::get_type_name( typeid( e ).name() );
+		HString etype( ptr );
+		HException::cleanup( ptr );
+		ptr = HException::get_type_name( typeid( CE ).name() );
+		HString aetype( ptr );
+		HException::cleanup( ptr );
+		ensure_equals( "bad generated type", etype, aetype );
 		}
 	catch ( BE const& )
 		{
 		fail( "bad exception caught" );
 		}
-	catch ( AE const& )
+	catch ( AE const& e )
 		{
+		cout << e.what() << endl;
+		e.print_error( true );
 		fail( "bad exception caught" );
 		}
 	catch ( HException const& e )
@@ -231,11 +263,20 @@ TUT_UNIT_TEST( "degenerated hier" )
 		{
 		fail( "bad exception caught" );
 		}
-	catch ( PE const& )
+	catch ( PE const& e )
 		{
+		char* ptr = HException::get_type_name( typeid( e ).name() );
+		HString etype( ptr );
+		HException::cleanup( ptr );
+		ptr = HException::get_type_name( typeid( PE ).name() );
+		HString aetype( ptr );
+		HException::cleanup( ptr );
+		ensure_equals( "bad generated type", etype, aetype );
 		}
-	catch ( HException const& )
+	catch ( HException const& e )
 		{
+		cout << e.what() << endl;
+		e.print_error( true );
 		fail( "bad exception caught" );
 		}
 	catch ( ... )
