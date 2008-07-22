@@ -19,9 +19,9 @@
 1. Installation
 
       Requirements:
-        You need XXXXXXX library, additionally XXXXXXX must be 
+        You need yaal library, additionally yaal must be 
         properly configured to run `tress'.
-        You need also XXXXXXX developer package (header files),
+        You need also yaal developer package (header files),
         to compile program.
       Compilation & Installation:
         If you are developer or just wonder profiling states type:

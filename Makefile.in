@@ -39,6 +39,7 @@ ifdef NODEBUG
 	TARGET = $(PRJNAME)
 endif
 CTAGS	= @CTAGS@
+GITID = @GITID@
 include $(DIR_ROOT)/_aux/common-basic.mk
 include $(DIR_ROOT)/_aux/common-term.mk
 include $(DIR_ROOT)/_aux/common-suffix.mk

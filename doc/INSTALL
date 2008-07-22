@@ -7,7 +7,7 @@ First of all, if you did not read READ.ME.FIRST.OR.DIE go there now.
 	libraries:
 	- ncurses
 	- MySQL
-	- PostGreSQL
+	- PostgreSQL
 
 	tools:
 	- autoconf
