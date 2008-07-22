@@ -44,7 +44,7 @@ else
 	AC_MSG_WARN([no git in the first place])
 fi
 
-dnl yaal is still in alpha stage.
+dnl tress is still in alpha stage.
 AC_REVISION(${THIS_ID})
 
 dnl We select default language.
