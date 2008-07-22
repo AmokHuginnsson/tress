@@ -47,6 +47,18 @@ struct tut_yaal_tools_hash_md5
 
 TUT_TEST_GROUP( tut_yaal_tools_hash_md5, "yaal::tools::hash::md5" );
 
+TUT_UNIT_TEST( "from string" )
+	static char const D_INPUT[] = "Ala ma kota";
+	static char const D_HASH[] = "91162629d258a876ee994e9233b2ad87";
+	ensure_equals( "bad hash", hash::md5( HBitSourceMemory( D_INPUT, sizeof ( D_INPUT ) - 1 ) ), D_HASH );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "from string (small alternation)" )
+	static char const D_INPUT[] = "Ala ma koty";
+	static char const D_HASH[] = "6a645004f620c691731b5a292c25d37f";
+	ensure_equals( "bad hash", hash::md5( HBitSourceMemory( D_INPUT, sizeof ( D_INPUT ) - 1 ) ), D_HASH );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "from file" )
 	cout << hash::md5( HBitSourceFile( "./data/karatsuba.bc" ) ) << endl;
 TUT_TEARDOWN()
