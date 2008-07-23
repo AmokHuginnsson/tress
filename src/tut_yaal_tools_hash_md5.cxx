@@ -47,6 +47,60 @@ struct tut_yaal_tools_hash_md5
 
 TUT_TEST_GROUP( tut_yaal_tools_hash_md5, "yaal::tools::hash::md5" );
 
+TUT_UNIT_TEST( "original suite <0> (empty)" )
+	static char const D_INPUT[] = "";
+	static char const D_HASH[] = "d41d8cd98f00b204e9800998ecf8427e";
+	ensure_equals( "bad hash", hash::md5( HBitSourceMemory( D_INPUT, sizeof ( D_INPUT ) - 1 ) ), D_HASH );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "original suite <1>" )
+	static char const D_INPUT[] = "a";
+	static char const D_HASH[] = "0cc175b9c0f1b6a831c399e269772661";
+	ensure_equals( "bad hash", hash::md5( HBitSourceMemory( D_INPUT, sizeof ( D_INPUT ) - 1 ) ), D_HASH );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "original suite <2>" )
+	static char const D_INPUT[] = "abc";
+	static char const D_HASH[] = "900150983cd24fb0d6963f7d28e17f72";
+	ensure_equals( "bad hash", hash::md5( HBitSourceMemory( D_INPUT, sizeof ( D_INPUT ) - 1 ) ), D_HASH );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "original suite <3>" )
+	static char const D_INPUT[] = "message digest";
+	static char const D_HASH[] = "f96b697d7cb7938d525a2f31aaf161d0";
+	ensure_equals( "bad hash", hash::md5( HBitSourceMemory( D_INPUT, sizeof ( D_INPUT ) - 1 ) ), D_HASH );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "original suite <4>" )
+	static char const D_INPUT[] = "abcdefghijklmnopqrstuvwxyz";
+	static char const D_HASH[] = "c3fcd3d76192e4007dfb496cca67e13b";
+	ensure_equals( "bad hash", hash::md5( HBitSourceMemory( D_INPUT, sizeof ( D_INPUT ) - 1 ) ), D_HASH );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "original suite <5>" )
+	static char const D_INPUT[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	static char const D_HASH[] = "d174ab98d277d9f5a5611c2c9f419d9f";
+	ensure_equals( "bad hash", hash::md5( HBitSourceMemory( D_INPUT, sizeof ( D_INPUT ) - 1 ) ), D_HASH );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "original suite <6>" )
+	static char const D_INPUT[] = "12345678901234567890123456789012345678901234567890123456789012345678901234567890";
+	static char const D_HASH[] = "57edf4a22be3c955ac49da2e2107b67a";
+	ensure_equals( "bad hash", hash::md5( HBitSourceMemory( D_INPUT, sizeof ( D_INPUT ) - 1 ) ), D_HASH );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "special A for o.s.<6>" )
+	static char const D_INPUT[] = "1234567890123456789012345678901234567890123456789012345678901234";
+	static char const D_HASH[] = "eb6c4179c0a7c82cc2828c1e6338e165";
+	ensure_equals( "bad hash", hash::md5( HBitSourceMemory( D_INPUT, sizeof ( D_INPUT ) - 1 ) ), D_HASH );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "special B for o.s.<6>" )
+	static char const D_INPUT[] = "123456789012345678901234567890123456789012345678901234567890123";
+	static char const D_HASH[] = "c3eb67ece68488bb394241d4f6a54244";
+	ensure_equals( "bad hash", hash::md5( HBitSourceMemory( D_INPUT, sizeof ( D_INPUT ) - 1 ) ), D_HASH );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "from string" )
 	static char const D_INPUT[] = "Ala ma kota";
 	static char const D_HASH[] = "91162629d258a876ee994e9233b2ad87";
@@ -59,20 +113,10 @@ TUT_UNIT_TEST( "from string (small alternation)" )
 	ensure_equals( "bad hash", hash::md5( HBitSourceMemory( D_INPUT, sizeof ( D_INPUT ) - 1 ) ), D_HASH );
 TUT_TEARDOWN()
 
-#if 0
-MD5 ("") = d41d8cd98f00b204e9800998ecf8427e
-MD5 ("a") = 0cc175b9c0f1b6a831c399e269772661
-MD5 ("abc") = 900150983cd24fb0d6963f7d28e17f72
-MD5 ("message digest") = f96b697d7cb7938d525a2f31aaf161d0
-MD5 ("abcdefghijklmnopqrstuvwxyz") = c3fcd3d76192e4007dfb496cca67e13b
-MD5 ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") =
-d174ab98d277d9f5a5611c2c9f419d9f
-MD5 ("123456789012345678901234567890123456789012345678901234567890123456
-78901234567890") = 57edf4a22be3c955ac49da2e2107b67a
-#endif
-
 TUT_UNIT_TEST( "from file" )
-	cout << hash::md5( HBitSourceFile( "./data/karatsuba.bc" ) ) << endl;
+	static char const D_INPUT[] = "./data/karatsuba.bc";
+	static char const D_HASH[] = "afc851d03c5761909554cc48d1d6c6d2";
+	ensure_equals( "bad hash", hash::md5( HBitSourceFile( D_INPUT ) ), D_HASH );
 TUT_TEARDOWN()
 
 }
