@@ -45,7 +45,7 @@ struct tut_yaal_tools_hash_md5
 	{
 	};
 
-TUT_TEST_GROUP( tut_yaal_tools_hash_md5, "yaal::tools::hash::md5" );
+TUT_TEST_GROUP_N( tut_yaal_tools_hash_md5, "yaal::tools::hash::md5" );
 
 TUT_UNIT_TEST_N( 1, "original suite <0> (empty)" )
 	static char const D_INPUT[] = "";

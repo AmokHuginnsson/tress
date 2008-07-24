@@ -45,7 +45,7 @@ struct tut_yaal_tools_hbitmap
 	{
 	};
 
-TUT_TEST_GROUP( tut_yaal_tools_hbitmap, "yaal::tools::HBitmap" );
+TUT_TEST_GROUP_N( tut_yaal_tools_hbitmap, "yaal::tools::HBitmap" );
 
 TUT_UNIT_TEST_N( 1, "simple use" )
 	static char const D_BUFF[] = "ala ma kota";

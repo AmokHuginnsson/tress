@@ -118,10 +118,12 @@ void show_end( void );
 #define TUT_UNIT_TEST( title ) template<> template<> void module::test<__COUNTER__>( void ) { M_TITLE( ( title ) );
 #define TUT_UNIT_TEST_N( no, title ) template<> template<> void module::test<(no)>( void ) { M_TITLE( ( title ) );
 #define TUT_TEARDOWN() show_end(); }
-#define TUT_TEST_GROUP( mock, name ) \
+#define TUT_TEST_GROUP_N( mock, name ) \
 typedef test_group<mock> tut_group; \
 typedef tut_group::object module; \
-tut_group tut_##mock##_group( ( name ) ); \
+tut_group tut_##mock##_group( ( name ) );
+#define TUT_TEST_GROUP( mock, name ) \
+TUT_TEST_GROUP_N( mock, name ) \
 namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
 
 template<typename symbol_t, typename owner_t>
