@@ -116,6 +116,7 @@ void show_end( void );
 
 #define M_TITLE( title ) do { set_test_name( title ); show_title( title ); } while ( 0 )
 #define TUT_UNIT_TEST( title ) template<> template<> void module::test<__COUNTER__>( void ) { M_TITLE( ( title ) );
+#define TUT_UNIT_TEST_N( no, title ) template<> template<> void module::test<(no)>( void ) { M_TITLE( ( title ) );
 #define TUT_TEARDOWN() show_end(); }
 #define TUT_TEST_GROUP( mock, name ) \
 typedef test_group<mock> tut_group; \

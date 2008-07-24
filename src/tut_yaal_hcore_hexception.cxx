@@ -140,7 +140,7 @@ typedef HExceptionT<R,QE> RE;
 
 TUT_TEST_GROUP( tut_yaal_hcore_hexception, "yaal::hcore::HException" )
 
-TUT_UNIT_TEST( "valid ex hier construct for full hier" )
+TUT_UNIT_TEST_N( 1, "valid ex hier construct for full hier" )
 	try
 		{
 		A x;
@@ -248,7 +248,7 @@ TUT_UNIT_TEST( "valid ex hier construct for full hier" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "degenerated hier" )
+TUT_UNIT_TEST_N( 2, "degenerated hier" )
 	try
 		{
 		P x;
