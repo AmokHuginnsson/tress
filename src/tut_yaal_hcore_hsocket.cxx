@@ -252,11 +252,7 @@ void module::test<19> ( void )
 	cout << reciv_buffer << endl;
 	}
 
-/* Transfering data through file with SSL . */
-template<>
-template<>
-void module::test<20> ( void )
-	{
+TUT_UNIT_TEST_N( 20, "Transfering data through file with SSL." )
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
 	char reciv_buffer[ size + 1 ];
@@ -275,7 +271,7 @@ void module::test<20> ( void )
 	reciv_buffer[ size ] = 0;
 	ensure_equals( "data broken during transfer", string( reciv_buffer ), string( test_data ) );
 	cout << reciv_buffer << endl;
-	}
+TUT_TEARDOWN()
 
 /* Transfering data through network. */
 template<>
@@ -297,11 +293,7 @@ void module::test<21> ( void )
 	cout << reciv_buffer << endl;
 	}
 
-/* Transfering data through network with SSL. */
-template<>
-template<>
-void module::test<22> ( void )
-	{
+TUT_UNIT_TEST_N( 22, "Transfering data through network with SSL." )
 	char test_data [ ] = "A kot ma wpierdol.";
 	const int size = sizeof ( test_data );
 	char reciv_buffer [ size + 1 ];
@@ -320,6 +312,6 @@ void module::test<22> ( void )
 	reciv_buffer [ size ] = 0;
 	ensure_equals ( "data broken during transfer", string ( reciv_buffer ), string ( test_data ) );
 	cout << reciv_buffer << endl;
-	}
+TUT_TEARDOWN()
 
 }

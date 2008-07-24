@@ -215,11 +215,11 @@ struct test_result
 	*/
 	test_result( const std::string& grp, int pos,
 		const std::string& test_name, result_type res,
-		const std::exception& exc ) : group( grp ),
+		const std::exception& exc, char const* const file = NULL, int const& line = -1 ) : group( grp ),
 		test( pos ),
 		name( test_name ),
 		result( res ),
-		message( exc.what() ), exception_typeid( typeid ( exc ).name() ), _line( -1 )
+		message( exc.what() ), exception_typeid( typeid ( exc ).name() ), _file( file ), _line( line )
 		{}
 
 	/**
@@ -239,11 +239,11 @@ struct test_result
 	*/
 	test_result( const std::string& grp, int pos,
 		const std::string& test_name, result_type res,
-		const yaal::hcore::HException& exc ) : group( grp ),
+		const yaal::hcore::HException& exc, char const* const file, int const& line ) : group( grp ),
 		test( pos ),
 		name( test_name ),
 		result( res ),
-		message( exc.what() ), exception_typeid( typeid ( exc ).name() ), _line( -1 )
+		message( exc.what() ), exception_typeid( typeid ( exc ).name() ), _file( file ), _line( line )
 		{}
 	};
 
@@ -587,6 +587,8 @@ extern test_runner_singleton runner;
 template<class Data>
 class test_object : public Data
 	{
+	char const* _file;
+	int _line;
 	public:
 
 	/**
@@ -603,6 +605,22 @@ class test_object : public Data
 	const std::string& get_test_name() const
 		{
 		return ( current_test_name_ ) ;
+		}
+
+	void set_test_src( char const* const file, int const& line )
+		{
+		_file = file;
+		_line = line;
+		}
+
+	char const* get_test_file( void )
+		{
+		return ( _file );
+		}
+
+	int get_test_line( void )
+		{
+		return ( _line );
 		}
 
 	/**
@@ -1041,6 +1059,8 @@ class test_group : public group_base
 		safe_holder<object>&obj )
 		{
 		std::string current_test_name;
+		char const* file = "";
+		int line = -1;
 
 		try
 			{
@@ -1064,8 +1084,7 @@ class test_group : public group_base
 				current_test_name = obj->get_test_name();
 				}
 
-			test_result tr( name_, ti->first, current_test_name,
-			test_result::warn, ex );
+			test_result tr( name_, ti->first, current_test_name, test_result::warn, ex );
 			return ( tr ) ;
 			}
 
@@ -1077,8 +1096,7 @@ class test_group : public group_base
 				current_test_name = obj->get_test_name();
 				}
 
-			test_result tr( name_, ti->first, current_test_name,
-			test_result::fail, ex );
+			test_result tr( name_, ti->first, current_test_name, test_result::fail, ex );
 			return ( tr ) ;
 			}
 		catch ( const seh& ex )
@@ -1089,8 +1107,7 @@ class test_group : public group_base
 				current_test_name = obj->get_test_name();
 				}
 
-			test_result tr( name_, ti->first, current_test_name,
-			test_result::term, ex );
+			test_result tr( name_, ti->first, current_test_name, test_result::term, ex );
 			return ( tr ) ;
 			}
 
@@ -1102,8 +1119,7 @@ class test_group : public group_base
 				current_test_name = obj->get_test_name();
 				}
 
-			test_result tr( name_, ti->first, current_test_name,
-			test_result::ex_ctor, ex );
+			test_result tr( name_, ti->first, current_test_name, test_result::ex_ctor, ex );
 			return ( tr ) ;
 			}
 
@@ -1113,10 +1129,11 @@ class test_group : public group_base
 			if ( obj.get() )
 				{
 				current_test_name = obj->get_test_name();
+				file = obj->get_test_file();
+				line = obj->get_test_line();
 				}
 
-			test_result tr( name_, ti->first, current_test_name,
-			test_result::ex, ex );
+			test_result tr( name_, ti->first, current_test_name, test_result::ex, ex, file, line );
 			return ( tr ) ;
 			}
 
@@ -1126,10 +1143,11 @@ class test_group : public group_base
 			if ( obj.get() )
 				{
 				current_test_name = obj->get_test_name();
+				file = obj->get_test_file();
+				line = obj->get_test_line();
 				}
 
-			test_result tr( name_, ti->first, current_test_name,
-			test_result::ex, ex );
+			test_result tr( name_, ti->first, current_test_name, test_result::ex, ex, file, line );
 			return ( tr ) ;
 			}
 

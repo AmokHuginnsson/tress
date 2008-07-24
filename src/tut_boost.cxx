@@ -83,11 +83,7 @@ ostream& operator << ( ostream& out, multi const& m )
 	return ( out );
 	}
 
-template<>
-template<>
-void module::test<1>( void )
-	{
-	M_TITLE( "/* binding */" );
+TUT_UNIT_TEST_N( 1, "/* binding */" )
 	cout << "sort by field using binding" << endl;
 	cout << "{" << endl;
 	typedef vector<multi> T;
@@ -99,7 +95,7 @@ void module::test<1>( void )
 	yaal::copy( v.begin(), v.end(), ostream_iterator<multi>( cout ) );
 	cout << endl;
 	cout << "}" << endl;
-	}
+TUT_TEARDOWN()
 
 void dump_dir( path const& dir )
 	{
@@ -115,19 +111,11 @@ void dump_dir( path const& dir )
 	return;
 	}
 
-template<>
-template<>
-void module::test<2>( void )
-	{
-	M_TITLE( "/* filesystem */" );
+TUT_UNIT_TEST_N( 2, "/* filesystem */" )
 	dump_dir( path( "." ) );
-	}
+TUT_TEARDOWN()
 
-template<>
-template<>
-void module::test<3>( void )
-	{
-	M_TITLE( "/* date_time */" );
+TUT_UNIT_TEST_N( 3, "/* date_time */" )
 	try
 		{
 		string birthday_s( "1978-05-24" );
@@ -145,7 +133,7 @@ void module::test<3>( void )
 		{
 		cerr << "bad date" << endl;
 		}
-	}
+TUT_TEARDOWN()
 
 struct test4helper
 	{
@@ -227,11 +215,7 @@ template<typename result_t, typename el1_t, typename el2_t>
 result_t plus( el1_t const& el1, el2_t const& el2 )
 	{ return ( el1 + el2 ); }
 
-template<>
-template<>
-void module::test<4>( void )
-	{
-	M_TITLE( "bind, accumulate, plus" );
+TUT_UNIT_TEST_N( 4, "bind, accumulate, plus" )
 	cout << "accumulate all values returned by some\n"
 		"method of class that represent values in map" << endl;
 	cout << "{" << endl;
@@ -246,7 +230,7 @@ void module::test<4>( void )
 			bind( std::plus<int>(), _1, bind( &test4helper::get_val, bind( &t4h_t::second, _2 ) ) ) );
 	cout << sum << endl;
 	cout << "}" << endl;
-	}
+TUT_TEARDOWN()
 
 }
 

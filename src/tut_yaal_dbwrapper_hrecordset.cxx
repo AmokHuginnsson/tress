@@ -49,10 +49,7 @@ typedef test_group<tut_yaal_dbwrapper_hrecordset> tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_dbwrapper_hrecordset_group( "yaal::dbwrapper::HRecordSet" );
 
-template<>
-template<>
-void module::test<1>( void )
-	{
+TUT_UNIT_TEST_N( 1, "simple query" )
 	static char const* const D_QUERY = "SELECT * FROM config;";
 	HDataBase::ptr_t db = HDataBase::get_connector();
 	db->connect( "./out/tress", "", "" );
@@ -65,7 +62,7 @@ void module::test<1>( void )
 			cout << it[ i ] << "|";
 		cout << endl;
 		}
-	}
+TUT_TEARDOWN()
 
 }
 

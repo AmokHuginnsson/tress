@@ -58,12 +58,7 @@ typedef test_group<tut_stl> tut_group;
 typedef tut_group::object module;
 tut_group tut_stl_group( "std" );
 
-/* create */
-template<>
-template<>
-void module::test<1>( void )
-	{
-	M_TITLE( "by_hand" );
+TUT_UNIT_TEST_N( 1, "create by_hand" )
 	cout << "lets do everything by hand ..." << endl;
 	cout << "{" << endl;
 	typedef set<int> T;
@@ -77,14 +72,9 @@ void module::test<1>( void )
 	cout << endl;
 
 	cout << "}" << endl;
-	}
+TUT_TEARDOWN()
 
-/* display automatically */
-template<>
-template<>
-void module::test<2>( void )
-	{
-	M_TITLE( "display" );
+TUT_UNIT_TEST_N( 2, "display automatically" )
 	cout << "display container contents automatically ..." << endl;
 	cout << "{" << endl;
 	typedef set<int> T;
@@ -95,14 +85,9 @@ void module::test<2>( void )
 	yaal::copy( s.begin(), s.end(), ostream_iterator<int>( cout ) );
 	cout << endl;
 	cout << "}" << endl;
-	}
+TUT_TEARDOWN()
 
-/* create contents automatically */
-template<>
-template<>
-void module::test<3>( void )
-	{
-	M_TITLE( "create" );
+TUT_UNIT_TEST_N( 3, "create contents automatically" )
 	cout << "create container contents automatically ..." << endl;
 	cout << "{" << endl;
 	typedef set<int> T;
@@ -111,14 +96,9 @@ void module::test<3>( void )
 	yaal::copy( s.begin(), s.end(), ostream_iterator<int>( cout ) );
 	cout << endl;
 	cout << "}" << endl;
-	}
+TUT_TEARDOWN()
 
-/* reverse contents automatically */
-template<>
-template<>
-void module::test<4>( void )
-	{
-	M_TITLE( "reverse container content" );
+TUT_UNIT_TEST_N( 4, "reverse container content automatically" )
 	cout << "reverse container content ..." << endl;
 	cout << "{" << endl;
 	typedef list<int> T;
@@ -132,14 +112,9 @@ void module::test<4>( void )
 	yaal::copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	yaal::copy( lc.begin(), lc.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	cout << "}" << endl;
-	}
+TUT_TEARDOWN()
 
-/* transform (negate) contents automatically */
-template<>
-template<>
-void module::test<5>( void )
-	{
-	M_TITLE( "negate container content" );
+TUT_UNIT_TEST_N( 5, "transform (negate) container content automatically" )
 	cout << "negate container content ..." << endl;
 	cout << "{" << endl;
 	typedef list<int> T;
@@ -154,16 +129,12 @@ void module::test<5>( void )
 	yaal::copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	cout << "}" << endl;
 	vector<string> vs;
-	}
+TUT_TEARDOWN()
 
-/* max_size of string */
-template<>
-template<>
-void module::test<6>( void )
-	{
+TUT_UNIT_TEST_N( 6, "max_size of string" )
 	string str;
 	cout << str.max_size() << endl;
-	}
+TUT_TEARDOWN()
 
 }
 

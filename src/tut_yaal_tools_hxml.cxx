@@ -138,11 +138,8 @@ bool operator != ( HXml const& left, HXml const& right )
 	return ( ! ( left == right ) );
 	}
 
-/* Empty DOM. */
-template<>
-template<>
-void module::test<1>( void )
-	{
+
+TUT_UNIT_TEST_N( 1, "/* Empty DOM. */" )
 	HXml x;
 	ensure( "fresh DOM not empty", ! x.get_root() );
 	try
@@ -154,13 +151,10 @@ void module::test<1>( void )
 		{
 		// ok
 		}
-	}
+TUT_TEARDOWN()
 
-/* Root node. */
-template<>
-template<>
-void module::test<2>( void )
-	{
+
+TUT_UNIT_TEST_N( 2, "/* Root node. */" )
 	HXml x;
 	static char const* const D_ROOT = "root";
 	x.create_root( D_ROOT );
@@ -170,13 +164,10 @@ void module::test<2>( void )
 	ensure_equals( "bad level of root element", n.get_level(), 0 );
 	ensure( "bad type of root element", n.get_type() == HXml::HNode::TYPE::D_NODE );
 	ensure( "fresh node not empty", n.begin() == n.end() );
-	}
+TUT_TEARDOWN()
 
-/* clear */
-template<>
-template<>
-void module::test<3>( void )
-	{
+
+TUT_UNIT_TEST_N( 3, "/* clear */" )
 	HXml x;
 	static char const* const D_ROOT = "root";
 	x.create_root( D_ROOT );
@@ -192,13 +183,10 @@ void module::test<3>( void )
 		{
 		// ok
 		}
-	}
+TUT_TEARDOWN()
 
-/* build, save, load */
-template<>
-template<>
-void module::test<4>( void )
-	{
+
+TUT_UNIT_TEST_N( 4, "/* build, save, load */" )
 	HXml x;
 	static char const* const D_ROOT = "root";
 	static char const* const D_NODE = "node";
@@ -226,35 +214,23 @@ void module::test<4>( void )
 		{
 		// ok
 		}
-	}
+TUT_TEARDOWN()
 
-/* load, save */
-template<>
-template<>
-void module::test<5>( void )
-	{
+TUT_UNIT_TEST_N( 5, "/* load, save */" )
 	HXml xml;
 	xml.init( "data/xml.xml" );
 	xml.parse( "/my_root/my_set/my_item" );
 	xml.parse( "/my_root/my_set/my_item" ); /* mem-leak test */
 	xml.save( "out/set.xml" );
-	}
+TUT_TEARDOWN()
 
-/* load, save */
-template<>
-template<>
-void module::test<6>( void )
-	{
+TUT_UNIT_TEST_N( 6, "/* load, save */" )
 	HXml xml;
 	xml.load( "data/xml.xml" );
 	xml.save( "out/tut.xml" );
-	}
+TUT_TEARDOWN()
 
-/* load, save, clear, handmade, save */
-template<>
-template<>
-void module::test<7>( void )
-	{
+TUT_UNIT_TEST_N( 7, "/* load, save, clear, handmade, save */" )
 	HXml xml;
 	xml.load( "data/xml.xml" );
 	xml.save( "out/tut.xml" );
@@ -263,13 +239,9 @@ void module::test<7>( void )
 	HXml::HNodeProxy root = xml.get_root();
 	root.add_node( HXml::HNode::TYPE::D_CONTENT, "Hello World!" );
 	xml.save( "out/hello.xml" );
-	}
+TUT_TEARDOWN()
 
-/* init, apply_style, parse, save, clear, handmade, save */
-template<>
-template<>
-void module::test<8>( void )
-	{
+TUT_UNIT_TEST_N( 8, "/* init, apply_style, parse, save, clear, handmade, save */" )
 	HXml xml;
 	xml.init( "./data/xml.xml" );
 	xml.apply_style( "./data/style.xml" );
@@ -280,18 +252,14 @@ void module::test<8>( void )
 	HXml::HNodeProxy root = xml.get_root();
 	root.add_node( HXml::HNode::TYPE::D_CONTENT, "Hello World!" );
 	xml.save( "out/hello.xml" );
-	}
+TUT_TEARDOWN()
 
-/* apply stylesheet */
-template<>
-template<>
-void module::test<42>( void )
-	{
+TUT_UNIT_TEST_N( 9, "/* apply stylesheet */" )
 	f_oXml.init( "data/xml.xml" );
 	f_oXml.apply_style( "data/style.xml" );
 	f_oXml.parse();
 	dump( cout, f_oXml.get_root() );
-	}
+TUT_TEARDOWN()
 
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s )
 	{
@@ -299,11 +267,7 @@ std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s )
 	return ( out );
 	}
 
-/* init, parse, apply, save */
-template<>
-template<>
-void module::test<43>( void )
-	{
+TUT_UNIT_TEST_N( 10, "/* init, parse, apply, save */" )
 	HString string;
 	HFile file;
 	char const* doc = ( setup.f_iArgc > 1 ) ? setup.f_ppcArgv[ 1 ] : "./data/xml.xml";
@@ -326,7 +290,7 @@ void module::test<43>( void )
 	f_oXml.parse( path );
 	f_oXml.save( out );
 	return;
-	}
+TUT_TEARDOWN()
 
 }
 

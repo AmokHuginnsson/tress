@@ -188,15 +188,15 @@ class reporter : public tut::
 				if ( !tr.message.empty() )
 					{
 					if ( tr.result == test_result::fail )
+						os << "     failed assertion in \"" << tr._file << ":" << tr._line << " ";
+					else if ( tr.result == test_result::ex )
 						{
-						os << "     failed assertion in \"" << tr._file << ":" << tr._line << " " << tr.message << "\""
-						<< std::endl;
+						if ( tr._line >= 0 )
+							os << "     unexpected exception in \"" << tr._file << ":" << tr._line << " ";
 						}
 					else
-						{
-						os << "     message: \"" << tr.message << "\""
-						<< std::endl;
-						}
+						os << "     message: \"";
+					os << tr.message << "\"" << std::endl;
 					}
 				}
 			}
