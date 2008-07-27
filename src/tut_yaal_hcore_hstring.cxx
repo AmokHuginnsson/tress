@@ -381,8 +381,16 @@ void module::test<25>( void )
 	char c[] = "aa,bb,";
 	char d[] = ",aa,";
 	char e[] = ",,,aa,,";
+	char f[] = "a";
 	HString str;
 	char split_failed[] = "split failed";
+	str = f;
+	ensure_equals( split_failed, str.split( ";", 0 ), "a" );
+	ensure_equals( split_failed, str.split( ";", 1 ), "" );
+	ensure_equals( split_failed, str.split( ";", 2 ), "" );
+	ensure_equals( split_failed, str.split( "a", 0 ), "" );
+	ensure_equals( split_failed, str.split( "a", 1 ), "" );
+	ensure_equals( split_failed, str.split( "a", 2 ), "" );
 	str = a;
 	ensure_equals( split_failed, str.split( ",", 0 ), "" );
 	ensure_equals( split_failed, str.split( ",", 1 ), "aa" );
