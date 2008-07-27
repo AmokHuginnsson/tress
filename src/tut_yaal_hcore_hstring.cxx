@@ -307,6 +307,32 @@ void module::test<14>( void )
 	ensure_equals( "replace A->B failed (capacity)", str.capacity(), 15 );
 	ensure_equals( "replace A->B failed (is_empty)", str.empty(), false );
 
+		{
+		static char const D_INIT1[] = "@c@";
+		static char const D_PAT1A[] = "@";
+		static char const D_PAT1B[] = "UU";
+		static char const D_CORRECT_1AB[] = "UUcUU";
+		str = D_INIT1;
+		str.replace( D_PAT1A, D_PAT1B );
+		ensure_equals ( "replace A1->B1 does not work", str, D_CORRECT_1AB );
+		ensure_equals( "replace A1->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT_1AB ) - 1 ) );
+		ensure_equals( "replace A1->B1 failed (capacity)", str.capacity(), 15 );
+		ensure_equals( "replace A1->B1 failed (is_empty)", str.empty(), false );
+		ensure_equals( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
+		}
+		{
+		static char const D_INIT1[] = "c@cc@cc@cc@cc@cc@cc";
+		static char const D_PAT1A[] = "@";
+		static char const D_PAT1B[] = "@@";
+		static char const D_CORRECT_1AB[] = "c@@cc@@cc@@cc@@cc@@cc@@cc";
+		str = D_INIT1;
+		str.replace( D_PAT1A, D_PAT1B );
+		ensure_equals ( "replace A1->B1 does not work", str, D_CORRECT_1AB );
+		ensure_equals( "replace A1->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( D_CORRECT_1AB ) - 1 ) );
+		ensure_equals( "replace A1->B1 failed (capacity)", str.capacity(), 31 );
+		ensure_equals( "replace A1->B1 failed (is_empty)", str.empty(), false );
+		ensure_equals( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
+		}
 	}
 
 /* shift_left */
