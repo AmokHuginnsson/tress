@@ -539,6 +539,13 @@
    fun:dlclose
 }
 {
+   U Ibex dlopen
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/libdl-2.8.90.so
+   fun:dlopen
+}
+{
    U Ibex dlclose
    Memcheck:Leak
    fun:calloc
