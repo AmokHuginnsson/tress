@@ -147,7 +147,7 @@ TUT_UNIT_TEST_N( 1, "/* Empty DOM. */" )
 		x.get_root().get_type();
 		fail( "accessing null node-proxy" );
 		}
-	catch ( int& )
+	catch ( HFailedAssertion& )
 		{
 		// ok
 		}
@@ -179,7 +179,7 @@ TUT_UNIT_TEST_N( 3, "/* clear */" )
 		x.get_root().get_type();
 		fail( "accessing null node-proxy" );
 		}
-	catch ( int& )
+	catch ( HFailedAssertion& )
 		{
 		// ok
 		}
@@ -210,7 +210,7 @@ TUT_UNIT_TEST_N( 4, "/* build, save, load */" )
 		(*it).copy_node( n );
 		fail( "copying from parent node" );
 		}
-	catch ( int& )
+	catch ( HFailedAssertion& )
 		{
 		// ok
 		}

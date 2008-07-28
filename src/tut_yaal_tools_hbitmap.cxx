@@ -82,7 +82,7 @@ TUT_UNIT_TEST_N( 4, "/* set */" )
 		bmp.set( 0, true );
 		fail( "default constructor set" );
 		}
-	catch ( int& )
+	catch ( HFailedAssertion& )
 		{
 		// ok
 		}
@@ -95,7 +95,7 @@ TUT_UNIT_TEST_N( 5, "/* get */" )
 		bmp.get( 0 );
 		fail( "default constructor set" );
 		}
-	catch ( int& )
+	catch ( HFailedAssertion& )
 		{
 		// ok
 		}
@@ -108,7 +108,7 @@ TUT_UNIT_TEST_N( 6, "/* rotate_left */" )
 		bmp.rotate_left( 0, 0, 0 );
 		fail( "default constructor set" );
 		}
-	catch ( int& )
+	catch ( HFailedAssertion& )
 		{
 		// ok
 		}
@@ -121,7 +121,7 @@ TUT_UNIT_TEST_N( 7, "/* rotate_right */" )
 		bmp.rotate_right( 0, 0, 0 );
 		fail( "default constructor set" );
 		}
-	catch ( int& )
+	catch ( HFailedAssertion& )
 		{
 		// ok
 		}

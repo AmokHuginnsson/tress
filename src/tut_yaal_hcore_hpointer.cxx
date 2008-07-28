@@ -320,9 +320,9 @@ void module::test<11>()
 			{
 			ptr_t sp;
 			sp->get_symbol();
-			fail("exception expected");
+			fail( "failed assertion expected" );
 			}
-		catch (const int&)
+		catch ( HFailedAssertion& )
 			{
 			// ok
 			}

@@ -509,7 +509,7 @@ void module::test<14>( void )
 			a->replace_node( B, &*it0 );
 			fail( "graft downwards succeded, eek!" );
 			}
-		catch ( int& )
+		catch ( HFailedAssertion& )
 			{
 			check_consistency( t );
 			// ok
@@ -724,7 +724,7 @@ void module::test<19>( void )
 			it->replace_node( it, t1.get_root() );
 			fail( "grafintg with no coherency" );
 			}
-		catch ( int& )
+		catch ( HFailedAssertion& )
 			{
 			check_consistency( t1 );
 			check_consistency( t2 );
