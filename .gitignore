@@ -13,3 +13,15 @@ tress.kdevelop.filelist
 tress.kdevses
 out
 data/tressplugin.so
+cute/cute.h
+local.mk
+.cdtproject
+.cproject
+.externalToolBuilders/
+.project
+Doxyfile
+build.sh
+run_tests
+tress.cbp
+tress.layout
+
