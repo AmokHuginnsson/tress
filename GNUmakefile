@@ -1,7 +1,9 @@
+.PHONY: test-env
+
 .DEFAULT:
 	$(MAKE) -f Makefile $(<)
 
-all: Makefile
+all: test-env Makefile
 	$(MAKE) -f Makefile all
 
 Makefile: configure
@@ -9,3 +11,5 @@ Makefile: configure
 
 configure: configure.ac
 	autoconf
+
+-include local.mk
