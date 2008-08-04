@@ -111,7 +111,10 @@ int HCuteReporter::run_ut( int a_iArgc, char* a_ppcArgv[] )
 	{
 	HPipedChild tress;
 	M_ASSERT( ! a_ppcArgv[ a_iArgc ] );
-	tress.spawn( "./build/tress/1exec", a_ppcArgv );
+	char const* suite = ::getenv( "CUTE_TARGET" );
+	if ( ! suite )
+		suite = "./build/tress/1exec";
+	tress.spawn( suite, a_ppcArgv );
 	HString line;
 	HString err;
 	bool ok = true;
@@ -122,8 +125,6 @@ int HCuteReporter::run_ut( int a_iArgc, char* a_ppcArgv[] )
 		while ( ( s = tress.read_until( line ).code ) == HStreamInterface::STATUS::D_REPEAT )
 			;
 		bool okOut = ( s == HStreamInterface::STATUS::D_OK );
-//		if ( okOut && !! line )
-//			cout << line.raw() << endl;
 		tress.set_csoi( HPipedChild::STREAM::D_ERR );
 		while ( ( s = tress.read_until( err ).code ) == HStreamInterface::STATUS::D_REPEAT )
 			;
