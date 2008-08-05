@@ -114,7 +114,7 @@ struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ 
 void show_title( char const* const );
 void show_end( void );
 
-#define TUT_UNIT_TEST_N( no, title ) template<> template<> void module::test<(no)>( void ) { do { set_test_name( title ); set_test_src( __FILE__, __LINE__ ); show_title( title ); } while ( 0 );
+#define TUT_UNIT_TEST_N( no, title ) template<> template<> void module::test<(no)>( void ) { do { set_test_meta( title, __FILE__, __LINE__ ); show_title( title ); } while ( 0 );
 #define TUT_UNIT_TEST( title ) TUT_UNIT_TEST_N( ( __COUNTER__ ), ( title ) )
 #define TUT_TEARDOWN() show_end(); }
 #define TUT_TEST_GROUP_N( mock, name ) \

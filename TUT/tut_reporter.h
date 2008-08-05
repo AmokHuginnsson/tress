@@ -22,19 +22,19 @@ std::ostream& operator <<( std::ostream& os, const tut::test_result& tr )
 			os << ( errno == 0 ? '.' : ',' ) << std::flush;
 		break;
 		case tut::test_result::fail:
-			os << '[' << tr.test << "=F]" << std::flush;
+			os << '[' << tr._testNo << "=F]" << std::flush;
 		break;
 		case tut::test_result::ex_ctor:
-			os << '[' << tr.test << "=C]" << std::flush;
+			os << '[' << tr._testNo << "=C]" << std::flush;
 		break;
 		case tut::test_result::ex:
-			os << '[' << tr.test << "=X]" << std::flush;
+			os << '[' << tr._testNo << "=X]" << std::flush;
 		break;
 		case tut::test_result::warn:
-			os << '[' << tr.test << "=W]" << std::flush;
+			os << '[' << tr._testNo << "=W]" << std::flush;
 		break;
 		case tut::test_result::term:
-			os << '[' << tr.test << "=T]" << std::flush;
+			os << '[' << tr._testNo << "=T]" << std::flush;
 		break;
 		case tut::test_result::setup:
 			os << "no such group" << std::flush;
@@ -152,9 +152,9 @@ class reporter : public tut::
 				os << std::endl;
 
 				os << "---> " << "group: " << tr.group
-				<< ", test: test<" << tr.test << ">"
-				<< ( !tr.name.empty() ? ( std::string( " : " ) + tr.name ) : std::string() )
-				<< std::endl;
+					<< ", test: test<" << tr._testNo << ">"
+					<< ( !tr._name.empty() ? ( std::string( " : " ) + tr._name ) : std::string() )
+					<< std::endl;
 
 				os << "     problem: " << std::flush;
 				switch ( tr.result )
@@ -166,16 +166,16 @@ class reporter : public tut::
 					case test_result::ex_ctor:
 						{
 						os << "unexpected exception" << std::endl;
-						if ( tr.exception_typeid != "" )
+						if ( tr._exceptionTypeId != "" )
 							{
 							int status = 0;
-							os << "     exception typeid: "
-							<< abi::__cxa_demangle( tr.exception_typeid.c_str(), 0, 0, &status ) << std::endl;
+							os << "     exception typeid: " << abi::__cxa_demangle( tr._exceptionTypeId.c_str(), 0, 0, &status ) << std::endl;
 							}
 						}
 					break;
 					case test_result::term:
 						os << "would be terminated" << std::endl;
+						tr._message = "segmentation fault";
 					break;
 					case test_result::warn:
 						os << "test passed, but cleanup code (destructor) raised"
@@ -185,7 +185,7 @@ class reporter : public tut::
 					break;
 					}
 
-				if ( !tr.message.empty() )
+				if ( ! tr._message.empty() )
 					{
 					if ( tr.result == test_result::fail )
 						os << "     failed assertion in \"" << tr._file << ":" << tr._line << " ";
@@ -194,9 +194,11 @@ class reporter : public tut::
 						if ( tr._line >= 0 )
 							os << "     unexpected exception in \"" << tr._file << ":" << tr._line << " ";
 						}
+					else if ( tr.result == test_result::term )
+						os << "     segmentation fault in \"" << tr._file << ":" << tr._line << " ";
 					else
 						os << "     message: \"";
-					os << tr.message << "\"" << std::endl;
+					os << tr._message << "\"" << std::endl;
 					}
 				}
 			}

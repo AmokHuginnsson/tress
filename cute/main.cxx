@@ -114,25 +114,29 @@ int HCuteReporter::run_ut( int a_iArgc, char* a_ppcArgv[] )
 	char const* suite = ::getenv( "CUTE_TARGET" );
 	if ( ! suite )
 		suite = "./build/tress/1exec";
-	tress.spawn( suite, a_ppcArgv );
 	HString line;
 	HString err;
-	bool ok = true;
-	while ( ok )
+	do
 		{
-		tress.set_csoi( HPipedChild::STREAM::D_OUT );
-		HStreamInterface::STATUS::code_t s;
-		while ( ( s = tress.read_until( line ).code ) == HStreamInterface::STATUS::D_REPEAT )
-			;
-		bool okOut = ( s == HStreamInterface::STATUS::D_OK );
-		tress.set_csoi( HPipedChild::STREAM::D_ERR );
-		while ( ( s = tress.read_until( err ).code ) == HStreamInterface::STATUS::D_REPEAT )
-			;
-		bool okErr = ( s == HStreamInterface::STATUS::D_OK );
-		if ( okErr && !! err )
-			handle_line_of_error( err );
-		ok = okOut || okErr;
+		tress.spawn( suite, a_ppcArgv );
+		bool ok = true;
+		while ( ok )
+			{
+			tress.set_csoi( HPipedChild::STREAM::D_OUT );
+			HStreamInterface::STATUS::code_t s;
+			while ( ( s = tress.read_until( line ).code ) == HStreamInterface::STATUS::D_REPEAT )
+				;
+			bool okOut = ( s == HStreamInterface::STATUS::D_OK );
+			tress.set_csoi( HPipedChild::STREAM::D_ERR );
+			while ( ( s = tress.read_until( err ).code ) == HStreamInterface::STATUS::D_REPEAT )
+				;
+			bool okErr = ( s == HStreamInterface::STATUS::D_OK );
+			if ( okErr && !! err )
+				handle_line_of_error( err );
+			ok = okOut || okErr;
+			}
 		}
+	while ( setup.f_bRestartable && ( tress.finish().type != HPipedChild::STATUS::TYPE::D_NORMAL ) );
 	if ( _start != _rep.end() )
 		{
 		*_start += _cnt;

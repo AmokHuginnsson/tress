@@ -33,7 +33,7 @@ namespace tut
  */
 struct tut_error : public std::exception
 	{
-	tut_error( const std::string& msg ) : err_msg( msg )
+	tut_error( const std::string& msg ) : _errMsg( msg )
 		{}
 
 	~tut_error() throw ( )
@@ -41,12 +41,12 @@ struct tut_error : public std::exception
 
 	const char* what() const throw ( )
 		{
-		return ( err_msg.c_str() ) ;
+		return ( _errMsg.c_str() ) ;
 		}
 
 	private:
 
-	std::string err_msg;
+	std::string _errMsg;
 	};
 
 /**
@@ -70,7 +70,7 @@ struct beyond_last_test : public no_such_test
 	{
 	beyond_last_test()
 		{}
-	~beyond_last_test() throw ( )
+	~beyond_last_test() throw ()
 		{}
 	};
 
@@ -81,7 +81,7 @@ struct no_such_group : public tut_error
 	{
 	no_such_group( std::string const& grp ) : tut_error( grp )
 		{}
-	~no_such_group() throw ( )
+	~no_such_group() throw ()
 		{}
 	};
 
@@ -93,7 +93,7 @@ struct no_more_tests
 	{
 	no_more_tests()
 		{}
-	~no_more_tests() throw ( )
+	~no_more_tests() throw ()
 		{}
 	};
 
@@ -105,7 +105,7 @@ struct bad_ctor : public tut_error
 	{
 	bad_ctor( std::string const& msg ) : tut_error( msg )
 		{}
-	~bad_ctor() throw ( )
+	~bad_ctor() throw ()
 		{}
 	};
 
@@ -114,11 +114,11 @@ struct bad_ctor : public tut_error
  */
 struct failure : public tut_error
 	{
-	char const* _file;
+	std::string _file;
 	int _line;
 	failure( char const* const file, int const& line, const std::string& msg ) : tut_error( msg ), _file( file ), _line( line )
 		{}
-	~failure() throw ( )
+	~failure() throw ()
 		{}
 	};
 
@@ -129,7 +129,7 @@ struct warning : public tut_error
 	{
 	warning( std::string const& msg ) : tut_error( msg )
 		{}
-	~warning() throw ( )
+	~warning() throw ()
 		{}
 	};
 
@@ -140,7 +140,7 @@ struct seh : public tut_error
 	{
 	seh( std::string const& msg ) : tut_error( msg )
 		{}
-	~seh() throw ( )
+	~seh() throw ()
 		{}
 	};
 
@@ -160,12 +160,12 @@ struct test_result
 	/**
 	* Test number in group.
 	*/
-	int test;
+	int _testNo;
 
 	/**
 	* Test name (optional)
 	*/
-	std::string name;
+	std::string _name;
 
 	/**
 	* ok - test finished successfully
@@ -175,75 +175,61 @@ struct test_result
 	* term - test forced test application to terminate abnormally
 	* setup - bad test setup (no such group or no such test number)
 	*/
-	enum result_type
-		{
-		ok,
-		fail,
-		ex,
-		warn,
-		term,
-		ex_ctor,
-		setup
-		};
+	typedef enum { ok, fail, ex, warn, term, ex_ctor, setup } result_type_t;
 
-	result_type result;
+	result_type_t result;
 
 	/**
 	* Exception message for failed test.
 	*/
-	std::string message;
-	std::string exception_typeid;
-	char const* _file;
+	std::string _message;
+	std::string _exceptionTypeId;
+	std::string _file;
 	int _line;
 
 	/**
 	* Default constructor.
 	*/
-	test_result() : test( 0 ), result( ok ), _line( -1 )
+	test_result() : _testNo( 0 ), result( ok ), _line( -1 )
 		{}
 
 	/**
 	* Constructor.
 	*/
 	test_result( const std::string& grp, int pos,
-		const std::string& test_name, result_type res ) : group( grp ),
-		test( pos ), name( test_name ), result( res ), _line( -1 )
+		const std::string& test_name, result_type_t res,
+		char const* const file, int const& line )
+		: group( grp ), _testNo( pos ), _name( test_name ), result( res ), _file( file ), _line( line )
 		{}
 
 	/**
 	* Constructor with exception.
 	*/
 	test_result( const std::string& grp, int pos,
-		const std::string& test_name, result_type res,
-		const std::exception& exc, char const* const file = NULL, int const& line = -1 ) : group( grp ),
-		test( pos ),
-		name( test_name ),
-		result( res ),
-		message( exc.what() ), exception_typeid( typeid ( exc ).name() ), _file( file ), _line( line )
+		const std::string& test_name, result_type_t res,
+		const std::exception& exc, char const* const file, int const& line )
+		: group( grp ), _testNo( pos ), _name( test_name ), result( res ),
+		_message( exc.what() ), _exceptionTypeId( typeid ( exc ).name() ), _file( file ), _line( line )
 		{}
 
 	/**
 	* Constructor with failure.
 	*/
 	test_result( const std::string& grp, int pos,
-		const std::string& test_name, result_type res,
-		const failure& f ) : group( grp ),
-		test( pos ),
-		name( test_name ),
-		result( res ),
-		message( f.what() ), exception_typeid( typeid ( f ).name() ), _file( f._file ), _line( f._line )
+		const std::string& test_name, result_type_t res,
+		const failure& f )
+		: group( grp ), _testNo( pos ), _name( test_name ), result( res ),
+		_message( f.what() ), _exceptionTypeId( typeid ( f ).name() ), _file( f._file ), _line( f._line )
 		{}
 
 	/**
 	* Constructor with exception.
 	*/
 	test_result( const std::string& grp, int pos,
-		const std::string& test_name, result_type res,
-		const yaal::hcore::HException& exc, char const* const file, int const& line ) : group( grp ),
-		test( pos ),
-		name( test_name ),
-		result( res ),
-		message( exc.what() ), exception_typeid( typeid ( exc ).name() ), _file( file ), _line( line )
+		const std::string& test_name, result_type_t res,
+		const yaal::hcore::HException& exc, char const* const file, int const& line )
+		: group( grp ), _testNo( pos ), _name( test_name ), result( res ),
+		_message( exc.what() ), _exceptionTypeId( typeid ( exc ).name() ), _file( file ), _line( line )
 		{}
 	};
 
@@ -327,6 +313,18 @@ struct callback
 typedef std::list<std::string> groupnames;
 
 /**
+ * Listener of tut events.
+ */
+class tut_listener
+	{
+public:
+	void register_execution( const std::string& grp, int test, std::string const& name, std::string const& file, int const& line ) const
+		{ do_register_execution( grp, test, name, file, line ); }
+protected:
+	virtual void do_register_execution( const std::string&, int, std::string const&, std::string const&, int const& ) const = 0;
+	};
+
+/**
  * Test runner.
  */
 class test_runner
@@ -336,7 +334,7 @@ class test_runner
 	/**
 	* Constructor
 	*/
-	test_runner() : callback_( &default_callback_ )
+	test_runner() : _callback( &default_callback_ ), _tutListener( NULL )
 		{}
 
 	/**
@@ -369,7 +367,20 @@ class test_runner
 	*/
 	void set_callback( callback* cb )
 		{
-		callback_ = cb == 0 ? &default_callback_ : cb;
+		_callback = cb == 0 ? &default_callback_ : cb;
+		}
+
+	/**
+	* Stores callback object.
+	*/
+	void set_listener( tut_listener* tl )
+		{
+		_tutListener = tl;
+		}
+	
+	tut_listener* get_listener( void )
+		{
+		return ( _tutListener );
 		}
 
 	/**
@@ -377,7 +388,7 @@ class test_runner
 	*/
 	callback& get_callback() const
 		{
-		return ( *callback_ ) ;
+		return ( *_callback ) ;
 		}
 
 	/**
@@ -404,7 +415,7 @@ class test_runner
 	*/
 	void run_tests() const
 		{
-		callback_->run_started();
+		_callback->run_started();
 
 		const_iterator e = groups_.end();
 		yaal::tools::HWorkFlow w( yaal::tools::HWorkFlow::MODE::D_FLAT, tress::setup.f_iJobs );
@@ -415,25 +426,27 @@ class test_runner
 			}
 
 		w.run();
-		callback_->run_completed();
+		_callback->run_completed();
 		}
 
 	/**
 	* Runs all tests in specified groups.
 	*/
-	void run_tests( const std::list<std::string>&group_names ) const
+	void run_tests( const std::list<std::string>& group_names ) const
 		{
-		callback_->run_started();
+		_callback->run_started();
 
 		yaal::tools::HWorkFlow w( yaal::tools::HWorkFlow::MODE::D_FLAT, tress::setup.f_iJobs );
 		for ( std::list<std::string>::const_iterator k = group_names.begin();
-		k != group_names.end(); ++ k )
+				k != group_names.end(); ++ k )
 			{
 			const_iterator i = groups_.find( *k );
 			if ( i == groups_.end() )
 				{
-				test_result tr( *k, 0, "", test_result::setup );
-				callback_->test_completed( tr );
+				test_result tr( *k, 0, "", test_result::setup,
+						tress::setup.f_oTestGroupListFilePath.raw(),
+						static_cast<int>( std::distance( group_names.begin(), k ) ) );
+				_callback->test_completed( tr );
 				}
 			else
 				{
@@ -444,7 +457,7 @@ class test_runner
 
 		w.run();
 
-		callback_->run_completed();
+		_callback->run_completed();
 		}
 
 	/**
@@ -453,7 +466,7 @@ class test_runner
 	*/
 	void run_pattern_tests( char const* pattern ) const
 		{
-		callback_->run_started();
+		_callback->run_started();
 
 		yaal::tools::HWorkFlow w( yaal::tools::HWorkFlow::MODE::D_FLAT, tress::setup.f_iJobs );
 		const_iterator e = groups_.end();
@@ -468,7 +481,7 @@ class test_runner
 
 		w.run();
 
-		callback_->run_completed();
+		_callback->run_completed();
 		}
 
 	/**
@@ -476,37 +489,36 @@ class test_runner
 	*/
 	test_result run_test( const std::string& group_name, int n ) const
 		{
-		callback_->run_started();
+		_callback->run_started();
 
 		const_iterator i = groups_.find( group_name );
 		if ( i == groups_.end() )
 			{
-			callback_->run_completed();
+			_callback->run_completed();
 			throw no_such_group( group_name );
 			}
 
-		callback_->group_started( group_name );
-		callback_->test_started( n );
+		_callback->group_started( group_name );
+		_callback->test_started( n );
+
 		try
 			{
 			test_result tr = i->second->run_test( n );
-			callback_->test_completed( tr );
-			callback_->group_completed( group_name );
-			callback_->run_completed();
+			_callback->test_completed( tr );
+			_callback->group_completed( group_name );
+			_callback->run_completed();
 			return ( tr ) ;
 			}
-
 		catch ( const beyond_last_test& )
 			{
-			callback_->group_completed( group_name );
-			callback_->run_completed();
+			_callback->group_completed( group_name );
+			_callback->run_completed();
 			throw;
 			}
-
 		catch ( const no_such_test& )
 			{
-			callback_->group_completed( group_name );
-			callback_->run_completed();
+			_callback->group_completed( group_name );
+			_callback->run_completed();
 			throw;
 			}
 		}
@@ -521,20 +533,21 @@ class test_runner
 	groups groups_;
 
 	callback default_callback_;
-	callback* callback_;
+	callback* _callback;
+	tut_listener* _tutListener;
 
 	private:
 
 	void run_group( const_iterator i ) const
 		{
-		callback_->group_started( i->first );
+		_callback->group_started( i->first );
 		try
 			{
 			run_all_tests_in_group_( i );
 			}
 		catch ( const no_more_tests& )
 			{
-			callback_->group_completed( i->first );
+			_callback->group_completed( i->first );
 			}
 		}
 
@@ -547,10 +560,10 @@ class test_runner
 		for ( int n = 1;; ++ n )
 			{
 			if ( i->second->has_next() )
-				callback_->test_started( i->second->next() );
+				_callback->test_started( i->second->next() );
 
 			test_result tr = i->second->run_next();
-			callback_->test_completed( tr );
+			_callback->test_completed( tr );
 
 			if ( tr.result == test_result::ex_ctor )
 				{
@@ -587,6 +600,8 @@ extern test_runner_singleton runner;
 template<class Data>
 class test_object : public Data
 	{
+	std::string _group;
+	int _testNo;
 	char const* _file;
 	int _line;
 	public:
@@ -597,20 +612,25 @@ class test_object : public Data
 	test_object()
 		{}
 
-	void set_test_name( const std::string& current_test_name )
+	void set_test_tut( std::string const& groupName, int const& testNo )
 		{
-		current_test_name_ = current_test_name;
+		_group = groupName;
+		_testNo = testNo;
+		}
+
+	void set_test_meta( const std::string& current_test_name, char const* const file, int const& line )
+		{
+		_currentTestName = current_test_name;
+		_file = file;
+		_line = line;
+		tut_listener* tl = runner.get().get_listener();
+		if ( tress::setup.f_bRestartable && tl )
+			tl->register_execution( _group, _testNo, _currentTestName, _file, _line );
 		}
 
 	const std::string& get_test_name() const
 		{
-		return ( current_test_name_ ) ;
-		}
-
-	void set_test_src( char const* const file, int const& line )
-		{
-		_file = file;
-		_line = line;
+		return ( _currentTestName ) ;
 		}
 
 	char const* get_test_file( void )
@@ -642,7 +662,7 @@ class test_object : public Data
 
 	private:
 
-	std::string current_test_name_;
+	std::string _currentTestName;
 	};
 
 namespace
@@ -791,17 +811,17 @@ void fail_real( char const* const file, int const& line, const char* msg )
  */
 template<class Test, class Group, int n> struct tests_registerer
 	{
-	static void reg( Group& group )
+	static void register_test_method( Group& group )
 		{
-		group.reg( n,&Test::template test<n> );
-		tests_registerer < Test, Group, n - 1 > ::reg( group );
+		group.register_test_method( n, &Test::template test<n> );
+		tests_registerer<Test, Group, n - 1>::register_test_method( group );
 		}
 	};
 
 template<class Test, class Group>
 struct tests_registerer<Test, Group, 0>
 	{
-	static void reg( Group& )
+	static void register_test_method( Group& )
 		{}
 	};
 
@@ -813,18 +833,18 @@ struct tests_registerer<Test, Group, 0>
 template<typename Data, int MaxTestsInGroup = 50>
 class test_group : public group_base
 	{
-	const char* name_;
+	const char* _name;
 	typedef test_object<Data> test_object_data;
 	typedef void ( test_object_data::* testmethod )();
-	typedef std::map<int, testmethod> tests;
-	typedef typename tests::iterator tests_iterator;
-	typedef typename tests::const_iterator tests_const_iterator;
-	typedef typename tests::const_reverse_iterator
+	typedef std::map<int, testmethod> tests_t;
+	typedef typename tests_t::iterator tests_iterator;
+	typedef typename tests_t::const_iterator tests_const_iterator;
+	typedef typename tests_t::const_reverse_iterator
 	tests_const_reverse_iterator;
-	typedef typename tests::size_type size_type;
+	typedef typename tests_t::size_type size_type;
 
-	tests tests_;
-	tests_iterator current_test_;
+	tests_t _tests;
+	tests_iterator _currentTest;
 
 	/**
 	* Exception-in-destructor-safe smart-pointer class.
@@ -832,14 +852,14 @@ class test_group : public group_base
 	template<class T>
 	class safe_holder
 		{
-		T* p_;
+		T* _obj;
 		bool permit_throw_in_dtor;
 
 		safe_holder( const safe_holder& );
 		safe_holder& operator =( const safe_holder& );
 
 		public:
-		safe_holder() : p_( 0 ), permit_throw_in_dtor( false )
+		safe_holder() : _obj( 0 ), permit_throw_in_dtor( false )
 			{}
 
 		~safe_holder()
@@ -849,12 +869,12 @@ class test_group : public group_base
 
 		T* operator ->() const
 			{
-			return ( p_ ) ;
+			return ( _obj ) ;
 			}
 
 		T* get() const
 			{
-			return ( p_ ) ;
+			return ( _obj ) ;
 			}
 
 		/**
@@ -910,7 +930,7 @@ class test_group : public group_base
 			{
 			release();
 			permit_throw_in_dtor = false;
-			p_ = new T();
+			_obj = new T();
 			}
 
 		bool delete_obj()
@@ -919,8 +939,8 @@ class test_group : public group_base
 			__try
 				{
 #endif
-			T* p = p_;
-			p_ = 0;
+			T* p = _obj;
+			_obj = 0;
 			delete p;
 #if defined ( TUT_USE_SEH )
 			}
@@ -945,34 +965,33 @@ class test_group : public group_base
 	/**
 	* Creates and registers test group with specified name.
 	*/
-	test_group( const char* name ) : name_( name )
+	test_group( const char* name ) : _name( name )
 		{
 		// register itself
-		runner.get().register_group( name_, this );
+		runner.get().register_group( _name, this );
 
 		// register all tests
-		tests_registerer<object, test_group, MaxTestsInGroup>::reg( *this );
+		tests_registerer<object, test_group, MaxTestsInGroup>::register_test_method( *this );
 		}
 
 	/**
 	* This constructor is used in self-test run only.
 	*/
-	test_group( const char* name, test_runner& another_runner ) : name_( name )
+	test_group( const char* name, test_runner& another_runner ) : _name( name )
 		{
 		// register itself
-		another_runner.register_group( name_, this );
+		another_runner.register_group( _name, this );
 
 		// register all tests
-		tests_registerer<test_object<Data>, test_group,
-		MaxTestsInGroup>::reg( *this );
+		tests_registerer<test_object<Data>, test_group, MaxTestsInGroup>::register_test_method( *this );
 		}
 
 	/**
 	* Registers test method under given number.
 	*/
-	void reg( int n, testmethod tm )
+	void register_test_method( int n, testmethod tm )
 		{
-		tests_[ n ] = tm;
+		_tests[ n ] = tm;
 		}
 
 	/**
@@ -980,17 +999,17 @@ class test_group : public group_base
 	*/
 	void rewind()
 		{
-		current_test_ = tests_.begin();
+		_currentTest = _tests.begin();
 		}
 
 	virtual bool has_next( void )
 		{
-		return ( current_test_ != tests_.end() );
+		return ( _currentTest != _tests.end() );
 		}
 
 	virtual int next( void )
 		{
-		return ( current_test_ != tests_.end() ? current_test_->first : -1 );
+		return ( _currentTest != _tests.end() ? _currentTest->first : -1 );
 		}
 
 	/**
@@ -998,18 +1017,18 @@ class test_group : public group_base
 	*/
 	test_result run_next()
 		{
-		if ( current_test_ == tests_.end() )
+		if ( _currentTest == _tests.end() )
 			{
 			throw no_more_tests();
 			}
 
 		// find next user-specialized test
 		safe_holder<object> obj;
-		while ( current_test_ != tests_.end() )
+		while ( _currentTest != _tests.end() )
 			{
 			try
 				{
-				return ( run_test_( current_test_ ++, obj ) ) ;
+				return ( run_test( _currentTest ++, obj ) ) ;
 				}
 			catch ( const no_such_test& )
 				{
@@ -1026,25 +1045,25 @@ class test_group : public group_base
 	test_result run_test( int n )
 		{
 		// beyond tests is special case to discover upper limit
-		if ( tests_.rbegin() == tests_.rend() )
+		if ( _tests.rbegin() == _tests.rend() )
 			{
 			throw beyond_last_test();
 			}
 
-		if ( tests_.rbegin()->first < n )
+		if ( _tests.rbegin()->first < n )
 			{
 			throw beyond_last_test();
 			}
 
 		// withing scope; check if given test exists
-		tests_iterator ti = tests_.find( n );
-		if ( ti == tests_.end() )
+		tests_iterator ti = _tests.find( n );
+		if ( ti == _tests.end() )
 			{
 			throw no_such_test();
 			}
 
 		safe_holder<object> obj;
-		return ( run_test_( ti, obj ) ) ;
+		return ( run_test( ti, obj ) ) ;
 		}
 
 	private:
@@ -1055,7 +1074,7 @@ class test_group : public group_base
 	*
 	* TODO: refactoring needed!
 	*/
-	test_result run_test_( const tests_iterator& ti,
+	test_result run_test( const tests_iterator& ti,
 		safe_holder<object>&obj )
 		{
 		std::string current_test_name;
@@ -1070,24 +1089,22 @@ class test_group : public group_base
 				throw seh( "seh" );
 				}
 			}
-
 		catch ( const no_such_test& )
 			{
 			throw;
 			}
-
 		catch ( const warning& ex )
 			{
 			// test ok, but destructor failed
 			if ( obj.get() )
 				{
 				current_test_name = obj->get_test_name();
+				file = obj->get_test_file();
 				}
 
-			test_result tr( name_, ti->first, current_test_name, test_result::warn, ex );
+			test_result tr( _name, ti->first, current_test_name, test_result::warn, ex, file, 1 );
 			return ( tr ) ;
 			}
-
 		catch ( const failure& ex )
 			{
 			// test failed because of ensure() or similar method
@@ -1096,7 +1113,7 @@ class test_group : public group_base
 				current_test_name = obj->get_test_name();
 				}
 
-			test_result tr( name_, ti->first, current_test_name, test_result::fail, ex );
+			test_result tr( _name, ti->first, current_test_name, test_result::fail, ex );
 			return ( tr ) ;
 			}
 		catch ( const seh& ex )
@@ -1105,24 +1122,24 @@ class test_group : public group_base
 			if ( obj.get() )
 				{
 				current_test_name = obj->get_test_name();
+				file = obj->get_test_file();
 				}
 
-			test_result tr( name_, ti->first, current_test_name, test_result::term, ex );
+			test_result tr( _name, ti->first, current_test_name, test_result::term, ex, file, 1 );
 			return ( tr ) ;
 			}
-
 		catch ( const bad_ctor& ex )
 			{
 			// test failed because test ctor failed; stop the whole group
 			if ( obj.get() )
 				{
 				current_test_name = obj->get_test_name();
+				file = obj->get_test_file();
 				}
 
-			test_result tr( name_, ti->first, current_test_name, test_result::ex_ctor, ex );
+			test_result tr( _name, ti->first, current_test_name, test_result::ex_ctor, ex, file, 1 );
 			return ( tr ) ;
 			}
-
 		catch ( const std::exception& ex )
 			{
 			// test failed with std::exception
@@ -1133,10 +1150,9 @@ class test_group : public group_base
 				line = obj->get_test_line();
 				}
 
-			test_result tr( name_, ti->first, current_test_name, test_result::ex, ex, file, line );
+			test_result tr( _name, ti->first, current_test_name, test_result::ex, ex, file, line );
 			return ( tr ) ;
 			}
-
 		catch ( const yaal::hcore::HException& ex )
 			{
 			// test failed with yaal::hcore::HException
@@ -1147,24 +1163,29 @@ class test_group : public group_base
 				line = obj->get_test_line();
 				}
 
-			test_result tr( name_, ti->first, current_test_name, test_result::ex, ex, file, line );
+			test_result tr( _name, ti->first, current_test_name, test_result::ex, ex, file, line );
 			return ( tr ) ;
 			}
-
 		catch ( ... )
 			{
 			// test failed with unknown exception
 			if ( obj.get() )
 				{
 				current_test_name = obj->get_test_name();
+				file = obj->get_test_file();
+				line = obj->get_test_line();
 				}
-
-			test_result tr( name_, ti->first, current_test_name, test_result::ex );
+			test_result tr( _name, ti->first, current_test_name, test_result::ex, file, line );
 			return ( tr ) ;
 			}
 
 		// test passed
-		test_result tr( name_, ti->first, current_test_name, test_result::ok );
+		if ( obj.get() )
+			{
+			file = obj->get_test_file();
+			line = obj->get_test_line();
+			}
+		test_result tr( _name, ti->first, current_test_name, test_result::ok, file, line );
 		return ( tr ) ;
 		}
 
@@ -1190,6 +1211,7 @@ class test_group : public group_base
 		__try
 			{
 #endif
+		obj.get()->set_test_tut( _name, _currentTest->first );
 		( obj.get()->*tm )();
 #if defined ( TUT_USE_SEH )
 		}
