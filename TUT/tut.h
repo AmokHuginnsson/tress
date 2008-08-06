@@ -9,11 +9,6 @@
 #include <sstream>
 #include <typeinfo>
 
-#if defined ( TUT_USE_SEH )
-#  include <windows.h>
-#  include <winbase.h>
-#endif
-
 #include <yaal/hcore/base.h>
 #include <yaal/hcore/hcall.h>
 #include <yaal/tools/hworkflow.h>
@@ -130,17 +125,6 @@ struct warning : public tut_error
 	warning( std::string const& msg ) : tut_error( msg )
 		{}
 	~warning() throw ()
-		{}
-	};
-
-/**
- * Exception to be throwed when test issued SEH (Win32)
- */
-struct seh : public tut_error
-	{
-	seh( std::string const& msg ) : tut_error( msg )
-		{}
-	~seh() throw ()
 		{}
 	};
 
@@ -609,7 +593,7 @@ class test_object : public Data
 	/**
 	* Default constructor
 	*/
-	test_object()
+	test_object() : _group(), _testNo( 0 ), _file( NULL ), _line( 0 ), _currentTestName()
 		{}
 
 	void set_test_tut( std::string const& groupName, int const& testNo )
@@ -897,11 +881,7 @@ class test_group : public group_base
 			{
 			try
 				{
-				if ( delete_obj() == false )
-					{
-					throw warning( "destructor of test object raised"
-						" an SEH exception" );
-					}
+				delete_obj();
 				}
 			catch ( const std::exception& ex )
 				{
@@ -935,25 +915,9 @@ class test_group : public group_base
 
 		bool delete_obj()
 			{
-#if defined (TUT_USE_SEH)
-			__try
-				{
-#endif
 			T* p = _obj;
 			_obj = 0;
 			delete p;
-#if defined ( TUT_USE_SEH )
-			}
-
-		__except( handle_seh_( ::GetExceptionCode() ) )
-			{
-			if ( permit_throw_in_dtor )
-				{
-				return ( false ) ;
-				}
-			}
-
-#endif
 			return ( true ) ;
 			}
 		};
@@ -1056,14 +1020,14 @@ class test_group : public group_base
 			}
 
 		// withing scope; check if given test exists
-		tests_iterator ti = _tests.find( n );
-		if ( ti == _tests.end() )
+		_currentTest = _tests.find( n );
+		if ( _currentTest == _tests.end() )
 			{
 			throw no_such_test();
 			}
 
 		safe_holder<object> obj;
-		return ( run_test( ti, obj ) ) ;
+		return ( run_test( _currentTest, obj ) ) ;
 		}
 
 	private:
@@ -1084,10 +1048,7 @@ class test_group : public group_base
 		try
 			{
 			errno = 0;
-			if ( run_test_seh_( ti->second, obj, current_test_name ) == false )
-				{
-				throw seh( "seh" );
-				}
+			run_test( ti->second, obj, current_test_name );
 			}
 		catch ( const no_such_test& )
 			{
@@ -1114,18 +1075,6 @@ class test_group : public group_base
 				}
 
 			test_result tr( _name, ti->first, current_test_name, test_result::fail, ex );
-			return ( tr ) ;
-			}
-		catch ( const seh& ex )
-			{
-			// test failed with sigsegv, divide by zero, etc
-			if ( obj.get() )
-				{
-				current_test_name = obj->get_test_name();
-				file = obj->get_test_file();
-				}
-
-			test_result tr( _name, ti->first, current_test_name, test_result::term, ex, file, 1 );
 			return ( tr ) ;
 			}
 		catch ( const bad_ctor& ex )
@@ -1190,15 +1139,11 @@ class test_group : public group_base
 		}
 
 	/**
-	* Runs one under SEH if platform supports it.
+	* Runs one.
 	*/
-	bool run_test_seh_( testmethod tm, safe_holder<object>&obj,
+	bool run_test( testmethod tm, safe_holder<object>&obj,
 		std::string& current_test_name )
 		{
-#if defined (TUT_USE_SEH)
-		__try
-			{
-#endif
 		if ( obj.get() == 0 )
 			{
 			reset_holder_( obj );
@@ -1206,24 +1151,8 @@ class test_group : public group_base
 
 		obj->called_method_was_a_dummy_test_ = false;
 
-#if defined (TUT_USE_SEH)
-
-		__try
-			{
-#endif
-		obj.get()->set_test_tut( _name, _currentTest->first );
+		obj->set_test_tut( _name, _currentTest->first );
 		( obj.get()->*tm )();
-#if defined ( TUT_USE_SEH )
-		}
-
-	__except( handle_seh_( ::GetExceptionCode() ) )
-		{
-		// throw seh("SEH");
-		current_test_name = obj->get_test_name();
-		return ( false ) ;
-		}
-
-#endif
 
 		if ( obj->called_method_was_a_dummy_test_ )
 			{
@@ -1234,15 +1163,7 @@ class test_group : public group_base
 		current_test_name = obj->get_test_name();
 		obj.permit_throw();
 		obj.release();
-#if defined ( TUT_USE_SEH )
-		}
-	__except( handle_seh_( ::GetExceptionCode() ) )
-		{
-		return ( false ) ;
-		}
-
-#endif
-		return ( true ) ;
+		return ( true );
 		}
 
 	void reset_holder_( safe_holder<object>&obj )
@@ -1265,43 +1186,6 @@ class test_group : public group_base
 		}
 	};
 
-#if defined ( TUT_USE_SEH )
-/**
- * Decides should we execute handler or ignore SE.
- */
-inline int handle_seh_( DWORD excode )
-	{
-	switch ( excode )
-		{
-		case EXCEPTION_ACCESS_VIOLATION:
-		case EXCEPTION_DATATYPE_MISALIGNMENT:
-		case EXCEPTION_BREAKPOINT:
-		case EXCEPTION_SINGLE_STEP:
-		case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:
-		case EXCEPTION_FLT_DENORMAL_OPERAND:
-		case EXCEPTION_FLT_DIVIDE_BY_ZERO:
-		case EXCEPTION_FLT_INEXACT_RESULT:
-		case EXCEPTION_FLT_INVALID_OPERATION:
-		case EXCEPTION_FLT_OVERFLOW:
-		case EXCEPTION_FLT_STACK_CHECK:
-		case EXCEPTION_FLT_UNDERFLOW:
-		case EXCEPTION_INT_DIVIDE_BY_ZERO:
-		case EXCEPTION_INT_OVERFLOW:
-		case EXCEPTION_PRIV_INSTRUCTION:
-		case EXCEPTION_IN_PAGE_ERROR:
-		case EXCEPTION_ILLEGAL_INSTRUCTION:
-		case EXCEPTION_NONCONTINUABLE_EXCEPTION:
-		case EXCEPTION_STACK_OVERFLOW:
-		case EXCEPTION_INVALID_DISPOSITION:
-		case EXCEPTION_GUARD_PAGE:
-		case EXCEPTION_INVALID_HANDLE:
-			return ( EXCEPTION_EXECUTE_HANDLER );
-		}
-
-	return ( EXCEPTION_CONTINUE_SEARCH );
-	}
-
-#endif
 }
 
 #endif
