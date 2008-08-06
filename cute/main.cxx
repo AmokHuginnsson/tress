@@ -158,15 +158,25 @@ void HCuteReporter::handle_line_of_error( HString const& in )
 	{
 	static char const D_GROUP_PREFIX[] = "---> group: ";
 	static int const D_GROUP_PREFIX_LEN = sizeof ( D_GROUP_PREFIX ) - 1;
+
 	static char const D_PROBLEM_ASSERTION[] = "problem: assertion failed";
 	static char const D_DESC_ASSERTION[] = "failed assertion in \"";
+	static int const D_DESC_ASSERTION_LEN = sizeof ( D_DESC_ASSERTION ) - 1;
+
 	static char const D_PROBLEM_EXCEPTION[] = "problem: unexpected exception";
 	static char const D_DESC_EXCEPTION[] = "unexpected exception in \"";
-	static int const D_DESC_LEN = sizeof ( D_DESC_ASSERTION ) - 1;
+	static int const D_DESC_EXCEPTION_LEN = sizeof ( D_DESC_EXCEPTION ) - 1;
+
+	static char const D_PROBLEM_SEGV[] = "problem: would be terminated";
+	static char const D_DESC_SEGV[] = "segmentation fault in \"";
+	static int const D_DESC_SEGV_LEN = sizeof ( D_DESC_SEGV ) - 1;
+
 	static char const D_NAME[] = "tress/";
 	static int const D_NAME_LEN = sizeof ( D_NAME ) - 1;
+
 	static char const D_TEST[] = ", test: ";
 	static int const D_TEST_LEN = sizeof ( D_TEST ) - 1;
+
 	_out.clear();
 	int long idx = 0;
 	bool start = false;
@@ -201,9 +211,14 @@ void HCuteReporter::handle_line_of_error( HString const& in )
 		{
 		// skip
 		}
-	else if ( ( ( idx = in.find( D_DESC_ASSERTION ) ) >= 0 ) || ( ( idx = in.find( D_DESC_EXCEPTION ) ) >= 0 ) )
+	else if ( in.find( D_PROBLEM_SEGV ) >= 0 )
 		{
-		idx += D_DESC_LEN;
+		// skip
+		}
+	else if ( ( ( ( idx = in.find( D_DESC_ASSERTION ) ) >= 0 ) && ( idx += D_DESC_ASSERTION_LEN ) )
+			|| ( ( ( idx = in.find( D_DESC_EXCEPTION ) ) >= 0 ) && ( idx += D_DESC_EXCEPTION_LEN ) )
+			|| ( ( ( idx = in.find( D_DESC_SEGV ) ) >= 0 ) && ( idx += D_DESC_SEGV_LEN ) ) )
+		{
 		idx = in.find( D_NAME, idx );
 		M_ENSURE( idx >= 0 );
 		idx += D_NAME_LEN;

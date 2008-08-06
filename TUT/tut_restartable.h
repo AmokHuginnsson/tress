@@ -125,7 +125,7 @@ void serialize( std::ostream& os, const tut::test_result& tr )
 			throw std::logic_error( "operator << : bad result_type" );
 		}
 	os << ' ' << escape( tr._name ) << std::endl;
-	os << ' ' << escape( tr._file ) << std::endl;
+	os << escape( tr._file ) << std::endl;
 	os << ' ' << tr._line;
 	os << ' ' << escape( tr._message ) << std::endl;
 	}
@@ -391,12 +391,12 @@ class restartable_wrapper : public tut_listener
 		ilog >> fail_group;
 		fail_group = util::unescape( fail_group );
 		ilog >> fail_test;
-		std::string failFile;
-		ilog >> failFile;
-		failFile = util::unescape( failFile );
 		std::string failName;
 		ilog >> failName;
 		failName = util::unescape( failName );
+		std::string failFile;
+		ilog >> failFile;
+		failFile = util::unescape( failFile );
 		ilog >> failLine;
 		if ( ! ilog.good() )
 			{
