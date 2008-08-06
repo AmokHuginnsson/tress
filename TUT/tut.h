@@ -8,6 +8,7 @@
 #include <string>
 #include <sstream>
 #include <typeinfo>
+#include <stdexcept>
 
 #include <yaal/hcore/base.h>
 #include <yaal/hcore/hcall.h>

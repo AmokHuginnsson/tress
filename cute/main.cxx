@@ -25,6 +25,7 @@ Copyright:
 */
 
 #include <unistd.h>
+#include <iostream>
 
 #include <yaal/yaal.h>
 M_VCSID( "$Id$" )

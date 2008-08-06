@@ -24,11 +24,15 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#define private public
+#define protected public
+
 #include <TUT/tut.h>
 #include "tut_helpers.h"
 
 #include <yaal/yaal.h>
 M_VCSID( "$Id: "__ID__" $" )
+#include "tut_helpers.h"
 
 using namespace tut;
 using namespace std;
