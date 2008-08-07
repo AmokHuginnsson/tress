@@ -26,4 +26,5 @@ build.sh
 run_tests
 tress.cbp
 tress.layout
-
+*/.svn
+.svn
