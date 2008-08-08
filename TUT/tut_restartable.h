@@ -216,6 +216,9 @@ class restartable_wrapper : public tut_listener
 		_log = _dir + '/' + "log.tut";
 		}
 
+	virtual ~restartable_wrapper( void )
+		{ }
+
 	/**
 	 * Stores another group for getting by name.
 	 */

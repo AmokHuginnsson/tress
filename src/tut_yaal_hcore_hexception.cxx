@@ -49,6 +49,7 @@ class A
 	{
 	typedef A self_t;
 public:
+	virtual ~A( void ) { }
 	virtual void foo( int const& a ) const
 		{ do_foo( a ); }
 private:
@@ -64,6 +65,8 @@ typedef HExceptionT<A> AE;
 
 class B : public A
 	{
+public:
+	virtual ~B( void ) { }
 protected:
 	typedef B self_t;
 	typedef A hier_t;
@@ -79,6 +82,8 @@ typedef HExceptionT<B,AE> BE;
 
 class C : public B
 	{
+public:
+	virtual ~C( void ) { }
 protected:
 	typedef C self_t;
 	typedef B hier_t;
@@ -96,6 +101,7 @@ class P
 	{
 	typedef P self_t;
 public:
+	virtual ~P( void ) { }
 	virtual void foo( int const& a ) const
 		{ do_foo( a ); }
 private:
@@ -111,6 +117,9 @@ typedef HExceptionT<P> PE;
 
 class Q : public P
 	{
+public:
+	virtual ~Q( void ) { }
+private:
 	typedef Q self_t;
 	virtual void do_foo( int const& a ) const
 		{
@@ -124,6 +133,8 @@ typedef HExceptionT<Q,PE> QE;
 
 class R : public Q
 	{
+public:
+	virtual ~R( void ) { }
 protected:
 	typedef R self_t;
 	typedef Q hier_t;

@@ -15,7 +15,6 @@ tress.kdevelop.pcs
 tress.kdevelop.filelist
 tress.kdevses
 out
-data/tressplugin.so
 cute/cute.h
 local.mk
 .cdtproject
@@ -27,5 +26,4 @@ build.sh
 run_tests
 tress.cbp
 tress.layout
-*/.svn
 .svn

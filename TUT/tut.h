@@ -305,6 +305,7 @@ class tut_listener
 public:
 	void register_execution( const std::string& grp, int test, std::string const& name, std::string const& file, int const& line ) const
 		{ do_register_execution( grp, test, name, file, line ); }
+	virtual ~tut_listener( void ) { }
 protected:
 	virtual void do_register_execution( const std::string&, int, std::string const&, std::string const&, int const& ) const = 0;
 	};
@@ -594,7 +595,7 @@ class test_object : public Data
 	/**
 	* Default constructor
 	*/
-	test_object() : _group(), _testNo( 0 ), _file( NULL ), _line( 0 ), _currentTestName()
+	test_object() : _group(), _testNo( 0 ), _file( "" ), _line( 0 ), _currentTestName()
 		{}
 
 	void set_test_tut( std::string const& groupName, int const& testNo )
