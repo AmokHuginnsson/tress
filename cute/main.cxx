@@ -117,24 +117,27 @@ int HCuteReporter::run_ut( int a_iArgc, char* a_ppcArgv[] )
 		suite = "./build/tress/1exec";
 	HString line;
 	HString err;
+	timeval t = { 0, 0 };
 	do
 		{
 		tress.spawn( suite, a_ppcArgv );
 		bool ok = true;
-		while ( ok )
+		bool repeat = false;
+		while ( ok || repeat )
 			{
-			tress.set_csoi( HPipedChild::STREAM::D_OUT );
 			HStreamInterface::STATUS::code_t s;
-			while ( ( s = tress.read_until( line ).code ) == HStreamInterface::STATUS::D_REPEAT )
-				;
+			tress.set_csoi( HPipedChild::STREAM::D_OUT );
+			bool repeatOut = tress.read_poll( &t ) || ( ( s = tress.read_until( line ).code ) == HStreamInterface::STATUS::D_REPEAT );
 			bool okOut = ( s == HStreamInterface::STATUS::D_OK );
+			if ( okOut && setup.f_bVerbose )
+				cout << line.raw() << endl;
 			tress.set_csoi( HPipedChild::STREAM::D_ERR );
-			while ( ( s = tress.read_until( err ).code ) == HStreamInterface::STATUS::D_REPEAT )
-				;
+			bool repeatErr = tress.read_poll( &t ) || ( ( s = tress.read_until( err ).code ) == HStreamInterface::STATUS::D_REPEAT );
 			bool okErr = ( s == HStreamInterface::STATUS::D_OK );
-			if ( okErr && !! err )
+			if ( ! repeatErr && okErr && !! err )
 				handle_line_of_error( err );
 			ok = okOut || okErr;
+			repeat = repeatOut || repeatErr;
 			}
 		}
 	while ( setup.f_bRestartable && ( tress.finish().type != HPipedChild::STATUS::TYPE::D_NORMAL ) );
