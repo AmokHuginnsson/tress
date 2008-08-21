@@ -29,6 +29,7 @@ Copyright:
 #include <yaal/yaal.h>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.h"
+#include "setup.h"
 
 using namespace tut;
 using namespace std;
@@ -38,6 +39,7 @@ using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
+using namespace tress;
 
 namespace tut
 {
@@ -126,10 +128,13 @@ TUT_UNIT_TEST_N( 11, "from string (small alternation)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 12, "from file" )
-	static char const D_INPUT[] = "./data/karatsuba.bc";
+	static char const* const D_INPUT = ( setup.f_iArgc > 1 ) ? setup.f_ppcArgv[ 1 ] : "./data/karatsuba.bc";
 	static char const D_HASH[] = "a9e370f394cff1faa63cda940544a7a031d8cb88";
 	HBitSourceFile bs( D_INPUT );
-	ensure_equals( "bad hash", hash::sha1( bs ), D_HASH );
+	if ( setup.f_iArgc > 1 )
+		cout << hash::sha1( bs ) << endl;
+	else
+		ensure_equals( "bad hash", hash::sha1( bs ), D_HASH );
 TUT_TEARDOWN()
 
 }
