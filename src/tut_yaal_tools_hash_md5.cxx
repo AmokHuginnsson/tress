@@ -38,6 +38,7 @@ using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
+using namespace tress;
 
 namespace tut
 {
@@ -126,10 +127,13 @@ TUT_UNIT_TEST_N( 11, "from string (small alternation)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 12, "from file" )
-	static char const D_INPUT[] = "./data/karatsuba.bc";
+	static char const* const D_INPUT = ( setup.f_iArgc > 1 ) ? setup.f_ppcArgv[ 1 ] : "./data/karatsuba.bc";
 	static char const D_HASH[] = "afc851d03c5761909554cc48d1d6c6d2";
 	HBitSourceFile bs( D_INPUT );
-	ensure_equals( "bad hash", hash::md5( bs ), D_HASH );
+	if ( setup.f_iArgc > 1 )
+		cout << hash::md5( bs ) << endl;
+	else
+		ensure_equals( "bad hash", hash::md5( bs ), D_HASH );
 TUT_TEARDOWN()
 
 }
