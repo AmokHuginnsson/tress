@@ -9,10 +9,10 @@ AOBJS = $(patsubst %.$(ASS),%.$(AOS),$(ASRCS))
 %.$(AOS): %.$(ASS)
 	@echo -n "Anti-Compiling \`$(subst $(DIR_ROOT)/,,$(<))' ... "; \
 	mkdir -p $(DIR_BUILD)/must_not_compile ; \
-	echo -n "$(@:.$(AOS)=.$(ADS)) " > $(@:.$(AOS)=.$(ADS)); \
 	/bin/rm -f "$(@)"; \
-	$(DXX) $(CXXFLAGS) -xc++ -DBUG_0 -MM $(<) -MT $(@) | grep -v '^#' >> $(@:.$(AOS)=.$(ADS)) && test $${PIPESTATUS} == 0 && \
-	$(ACXX) $(CXXFLAGS) $(<) -c -o $(@) 2>&1 | tee -a make.log && test $${PIPESTATUS} == 0 && \
+	$(DXX) $(CXXFLAGS) -xc++ -DBUG_0 -MM $(<) -MT $(@) -MT $(@:.$(OS)=.$(DS)) -MF $(@:.$(OS)=.$(DS)) && \
+	$(ACXX) $(CXXFLAGS) $(<) -c -o $(@) 2>&1 | tee -a make.log && \
+	test -f $(@) && \
 	echo $(NONL) "done.$(CL)"
 
 OBJS += $(AOBJS)
