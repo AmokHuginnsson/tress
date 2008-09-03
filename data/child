@@ -1,0 +1,18 @@
+#! /bin/sh
+
+read LINE
+
+case "${LINE}" in
+	"out")
+		echo "hello-OUT" > /dev/stdout
+	;;
+	"err")
+		echo "hello-ERR" > /dev/stderr
+	;;
+	*)
+		echo "error" > /dev/stdout
+		echo "error" > /dev/stderr
+	;;
+esac
+
+exit 0
