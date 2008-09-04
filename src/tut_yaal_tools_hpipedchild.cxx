@@ -55,10 +55,10 @@ struct tut_yaal_tools_hpipedchild
 
 HString tut_yaal_tools_hpipedchild::D_CHILD( "./data/child" );
 HString tut_yaal_tools_hpipedchild::D_CHILD_FAKE( "./data/child_fake" );
-HString tut_yaal_tools_hpipedchild::D_MSG_OUT( "" );
-HString tut_yaal_tools_hpipedchild::D_MSG_ERR( "" );
-HString tut_yaal_tools_hpipedchild::D_ACK_OUT( "" );
-HString tut_yaal_tools_hpipedchild::D_ACK_ERR( "" );
+HString tut_yaal_tools_hpipedchild::D_MSG_OUT( "out" );
+HString tut_yaal_tools_hpipedchild::D_MSG_ERR( "err" );
+HString tut_yaal_tools_hpipedchild::D_ACK_OUT( "hello-OUT" );
+HString tut_yaal_tools_hpipedchild::D_ACK_ERR( "hello-ERR" );
 
 TUT_TEST_GROUP_N( tut_yaal_tools_hpipedchild, "yaal::tools::HPipedChild" );
 
@@ -96,7 +96,10 @@ TUT_UNIT_TEST_N( 4, "spawn, write and read (stdout)" )
 	ensure_equals( "bad state on simple construction", pc.is_running(), false );
 	pc.spawn( D_CHILD );
 	ensure_equals( "bad state after spawn", pc.is_running(), true );
-
+	pc << D_MSG_OUT << endl;
+	HString ack;
+	pc.read_until( ack );
+	ensure_equals( "bad ack OUT", ack, D_ACK_OUT );
 	pc.finish();
 	ensure_equals( "bad state after finish", pc.is_running(), false );
 TUT_TEARDOWN()
