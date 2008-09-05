@@ -1,6 +1,18 @@
 #! /bin/sh
 
+LOG_FILE="./out/hpipedchild.log"
+
+log( ) {
+	echo "[`date`]: ${@}" >> ${LOG_FILE}
+}
+
+/bin/rm -f ${LOG_FILE}
+
+log "child start ..."
+
 read LINE
+
+log "read input: ${LINE}"
 
 case "${LINE}" in
 	"out")
@@ -14,5 +26,8 @@ case "${LINE}" in
 		echo "error" > /dev/stderr
 	;;
 esac
+
+log "written output ..."
+log "exiting"
 
 exit 0
