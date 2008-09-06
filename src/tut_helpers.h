@@ -63,7 +63,7 @@ std::ostream& operator << ( std::ostream& out,
 		yaal::hcore::HVector<tType> const& a_oVector )
 	{
 	M_PROLOG
-	int l_iCtr = 0, l_iSize = a_oVector.get_size ( );
+	int long l_iCtr = 0, l_iSize = a_oVector.dim();
 	out << std::fixed << "< " << std::setw ( 10 ) << std::setprecision ( 4 );
 	out << a_oVector [ 0 ];
 	for ( l_iCtr = 1; l_iCtr < l_iSize; l_iCtr ++ )
