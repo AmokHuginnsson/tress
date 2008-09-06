@@ -118,9 +118,12 @@ int HCuteReporter::run_ut( int a_iArgc, char* a_ppcArgv[] )
 	HString line;
 	HString err;
 	timeval t = { 0, 0 };
+	HPipedChild::argv_t argv( a_iArgc - 1 );
+	for ( int i = 0; i < argv.size(); ++ i )
+		argv[ i ] = a_ppcArgv[ i + 1 ];
 	do
 		{
-		tress.spawn( suite, a_ppcArgv );
+		tress.spawn( suite, argv );
 		bool ok = true;
 		bool repeat = false;
 		while ( ok || repeat )
