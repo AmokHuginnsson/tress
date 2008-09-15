@@ -70,11 +70,12 @@ template<>
 template<>
 void module::test<1>( void )
 	{
+	cout << "Pushing tasks." << endl;
 	simple_functor_t tf( tut_yaal_tools_hworkflow::foo );
 	my_task_t::ptr_t f0( new my_task_t( tf, &simple_functor_t::method, 0, '+', 100 ) );
 	my_task_t::ptr_t f1( new my_task_t( tf, &simple_functor_t::method, 1, '*', 200 ) );
 	my_task_t::ptr_t f2( new my_task_t( tf, &simple_functor_t::method, 2, '@', 300 ) );
-	HWorkFlow w( HWorkFlow::MODE::D_FLAT, 3 );
+	HWorkFlow w( 3 );
 	for ( int i = 0; i < 3; ++ i )
 		{
 		w.push_task( f0 );
@@ -82,26 +83,6 @@ void module::test<1>( void )
 		w.push_task( f2 );
 		}
 	cout << "All tasks pushed." << endl;
-	w.run();
-	}
-
-template<>
-template<>
-void module::test<2>( void )
-	{
-	simple_functor_t tf( tut_yaal_tools_hworkflow::foo );
-	my_task_t::ptr_t f0( new my_task_t( tf, &simple_functor_t::method, 0, '+', 100 ) );
-	my_task_t::ptr_t f1( new my_task_t( tf, &simple_functor_t::method, 1, '*', 200 ) );
-	my_task_t::ptr_t f2( new my_task_t( tf, &simple_functor_t::method, 2, '@', 300 ) );
-	HWorkFlow w( HWorkFlow::MODE::D_PIPE, 3 );
-	for ( int i = 0; i < 3; ++ i )
-		{
-		w.push_task( f0 );
-		w.push_task( f1 );
-		w.push_task( f2 );
-		}
-	cout << "All tasks pushed." << endl;
-	util::sleep::second( 4 );
 	}
 
 }

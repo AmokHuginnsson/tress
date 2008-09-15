@@ -403,15 +403,16 @@ class test_runner
 		{
 		_callback->run_started();
 
-		const_iterator e = groups_.end();
-		yaal::tools::HWorkFlow w( yaal::tools::HWorkFlow::MODE::D_FLAT, tress::setup.f_iJobs );
-		for ( const_iterator i = groups_.begin(); i != e; ++ i )
 			{
-			group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
-			w.push_task( gr );
+			const_iterator e = groups_.end();
+			yaal::tools::HWorkFlow w( tress::setup.f_iJobs );
+			for ( const_iterator i = groups_.begin(); i != e; ++ i )
+				{
+				group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
+				w.push_task( gr );
+				}
 			}
 
-		w.run();
 		_callback->run_completed();
 		}
 
@@ -422,26 +423,26 @@ class test_runner
 		{
 		_callback->run_started();
 
-		yaal::tools::HWorkFlow w( yaal::tools::HWorkFlow::MODE::D_FLAT, tress::setup.f_iJobs );
-		for ( std::list<std::string>::const_iterator k = group_names.begin();
-				k != group_names.end(); ++ k )
 			{
-			const_iterator i = groups_.find( *k );
-			if ( i == groups_.end() )
+			yaal::tools::HWorkFlow w( tress::setup.f_iJobs );
+			for ( std::list<std::string>::const_iterator k = group_names.begin();
+					k != group_names.end(); ++ k )
 				{
-				test_result tr( *k, 0, "", test_result::setup,
-						tress::setup.f_oTestGroupListFilePath.raw(),
-						static_cast<int>( std::distance( group_names.begin(), k ) ) );
-				_callback->test_completed( tr );
-				}
-			else
-				{
-				group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
-				w.push_task( gr );
+				const_iterator i = groups_.find( *k );
+				if ( i == groups_.end() )
+					{
+					test_result tr( *k, 0, "", test_result::setup,
+							tress::setup.f_oTestGroupListFilePath.raw(),
+							static_cast<int>( std::distance( group_names.begin(), k ) ) );
+					_callback->test_completed( tr );
+					}
+				else
+					{
+					group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
+					w.push_task( gr );
+					}
 				}
 			}
-
-		w.run();
 
 		_callback->run_completed();
 		}
@@ -454,18 +455,18 @@ class test_runner
 		{
 		_callback->run_started();
 
-		yaal::tools::HWorkFlow w( yaal::tools::HWorkFlow::MODE::D_FLAT, tress::setup.f_iJobs );
-		const_iterator e = groups_.end();
-		for ( const_iterator i = groups_.begin(); i != e; ++ i )
 			{
-			if ( i->first.find( pattern ) != std::string::npos )
+			yaal::tools::HWorkFlow w( tress::setup.f_iJobs );
+			const_iterator e = groups_.end();
+			for ( const_iterator i = groups_.begin(); i != e; ++ i )
 				{
-				group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
-				w.push_task( gr );
+				if ( i->first.find( pattern ) != std::string::npos )
+					{
+					group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
+					w.push_task( gr );
+					}
 				}
 			}
-
-		w.run();
 
 		_callback->run_completed();
 		}
