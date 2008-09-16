@@ -183,7 +183,7 @@ void gather_groups_from_file( string_list_t& lst )
 	HString l_oLine;
 	while ( l_oFile.read_line( l_oLine,
 				HFile::READ::D_STRIP_NEWLINES
-				| ( ( l_oLine == stdin ) ? HFile::READ::D_UNBUFFERED_READS : HFile::READ::D_BUFFERED_READS ) ) >= 0 )
+				| ( ( l_psFile == stdin ) ? HFile::READ::D_UNBUFFERED_READS : HFile::READ::D_BUFFERED_READS ) ) >= 0 )
 		{
 		l_oLine.trim_left();
 		l_oLine.trim_right();
