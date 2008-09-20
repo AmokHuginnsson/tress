@@ -46,14 +46,9 @@ struct tut_yaal_tools_hanalyser
 	{
 	};
 
-typedef test_group < tut_yaal_tools_hanalyser > tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_tools_hanalyser_group ( "yaal::tools::HAnalyser" );
+TUT_TEST_GROUP_N( tut_yaal_tools_hanalyser, "yaal::tools::HAnalyser" );
 
-template<>
-template<>
-void module::test<1>( void )
-	{
+TUT_UNIT_TEST_N( 1, "complex and valid expression" )
 	HAnalyser x;
 	HString eq( "((2+3+5)*4*6*8)^2^3" );
 	x.analyse( eq );
@@ -70,9 +65,21 @@ void module::test<1>( void )
 	cout << eq << "=" << x.count() << endl;
 	x [ 'Y' ] = 2.;
 	cout << eq << "=" << x.count() << endl;
-	eq = "7+10+(4*)";
-	x.analyse( eq );
-	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 2, "invalid expression" )
+	try
+		{
+		HString eq( "7+10+(4*)" );
+		HAnalyser x;
+		x.analyse( eq );
+		fail( "parsing invalid expression succeded" );
+		}
+	catch ( HAnalyserException& )
+		{
+		// ok
+		}
+TUT_TEARDOWN()
 
 }
 
