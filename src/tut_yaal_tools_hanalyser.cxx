@@ -52,8 +52,8 @@ TUT_UNIT_TEST_N( 1, "complex and valid expression" )
 	HAnalyser x;
 	HString eq( "((2+3+5)*4*6*8)^2^3" );
 	x.analyse( eq );
-	double x1 = x.count();
-	double x2 = ((2+3+5)*4*6*8);
+	double long x1 = x.count();
+	double long x2 = ((2+3+5)*4*6*8);
 	x2 *= x2;
 	x2 *= x2;
 	x2 *= x2;

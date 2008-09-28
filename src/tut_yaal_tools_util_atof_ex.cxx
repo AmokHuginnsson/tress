@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-  tut_stdahpi_tools_util_atof_ex.cxx - this file is integral part of `tress' project.
+  tut_yaal_tools_util_atof_ex.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -42,20 +42,27 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_stdahpi_tools_util_atof_ex
+struct tut_yaal_tools_util_atof_ex
 	{
 	};
 
-typedef test_group < tut_stdahpi_tools_util_atof_ex > tut_group;
-typedef tut_group::object module;
-tut_group tut_stdahpi_tools_util_atof_ex_group ( "yaal::tools::util::atof_ex" );
+TUT_TEST_GROUP_N( tut_yaal_tools_util_atof_ex, "yaal::tools::util::atof_ex" );
 
-template < >
-template < >
-void module::test<1> ( void )
-	{
+TUT_UNIT_TEST_N( 1, "complex and valid number" )
 	HString formula = "2*(3+5)/sin(3.1415926535/2)";
-	ensure_distance ( "Wrong counting.", atof_ex ( formula, true ), 16., 0.0001 );
-	}
+	ensure_distance ( "Wrong counting.", atof_ex ( formula, true ), 16.L, 0.0001L );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 2, "simple but invalid number" )
+	HString formula = "4/e";
+	try
+		{
+		atof_ex( formula, true );
+		}
+	catch ( HAnalyserException& )
+		{
+		// ok
+		}
+TUT_TEARDOWN()
 
 }
