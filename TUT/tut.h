@@ -10,6 +10,11 @@
 #include <typeinfo>
 #include <stdexcept>
 
+#define GET_YAAL_CONFIG
+#include <yaal/yaal.h>
+#undef GET_YAAL_CONFIG
+#undef __YAAL_H
+
 #include <yaal/hcore/base.h>
 #include <yaal/hcore/hcall.h>
 #include <yaal/tools/hworkflow.h>

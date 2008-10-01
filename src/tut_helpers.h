@@ -30,7 +30,10 @@ Copyright:
 #include <string>
 #include <iostream>
 #include <iomanip>
-#include <yaal/yaal.h>
+
+#include <yaal/hcore/hcomplex.h>
+#include <yaal/hcore/hvector.h>
+#include <yaal/hcore/hmatrix.h>
 
 namespace tress
 {
