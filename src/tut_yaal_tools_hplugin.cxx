@@ -39,6 +39,16 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
+#define RESOLE_MACRO_FOR_MAKE_C_STRING( x ) ( #x )
+#define MAKE_C_STRING( x ) RESOLE_MACRO_FOR_MAKE_C_STRING( x )
+
+#define SELF_SUMATOR self_sumator
+extern "C"
+int SELF_SUMATOR( int a, int b )
+	{
+	return ( a + b );
+	}
+
 namespace tut
 {
 
@@ -46,16 +56,11 @@ struct tut_yaal_tools_hplugin
 	{
 	};
 
-typedef test_group<tut_yaal_tools_hplugin> tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_tools_hplugin_group( "yaal::tools::HPlugin" );
+TUT_TEST_GROUP_N( tut_yaal_tools_hplugin, "yaal::tools::HPlugin" );
 
 typedef int ( * sumator_t )( int, int );
 
-template<>
-template<>
-void module::test<1>( void )
-	{
+TUT_UNIT_TEST_N( 1, "load external library and resolve symbol" )
 	static char const* const D_TRESS_PLUGIN = "./data/tressplugin.so";
 	int const T1 = 7;
 	int const T2 = 13;
@@ -64,7 +69,17 @@ void module::test<1>( void )
 	sumator_t my_sum;
 	p.resolve( "tut_yaal_tools_hplugin_sum", my_sum );
 	ensure_equals( "cound not utilize plugin", my_sum( T1, T2 ), T1 + T2 );
-	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 2, "resolve symbol from self" )
+	int const T1 = 7;
+	int const T2 = 13;
+	HPlugin p;
+	p.load( HString() );
+	sumator_t my_sum;
+	p.resolve( MAKE_C_STRING( SELF_SUMATOR ), my_sum );
+	ensure_equals( "cound not utilise self-contained symbols", my_sum( T1, T2 ), T1 + T2 );
+TUT_TEARDOWN()
 
 }
 
