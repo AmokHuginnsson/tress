@@ -125,7 +125,7 @@ void module::test<5>( void )
 	for ( int i = 0; i < D_ELEM_COUNT; ++ i )
 		{
 		ensure( "key not present", map.has_key( i ) );
-		ensure( "cannot get", map.get( i, value ) );
+		ensure( "cannot get", ! map.get( i, value ) );
 		ensure_equals ( "key/value mismatch", value, i );
 		}
 	}
