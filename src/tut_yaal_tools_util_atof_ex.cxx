@@ -59,7 +59,7 @@ TUT_UNIT_TEST_N( 2, "simple but invalid number" )
 		{
 		atof_ex( formula, true );
 		}
-	catch ( HAnalyserException& )
+	catch ( HExpressionException& )
 		{
 		// ok
 		}

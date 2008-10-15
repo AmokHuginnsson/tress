@@ -46,13 +46,13 @@ struct tut_yaal_tools_hanalyser
 	{
 	};
 
-TUT_TEST_GROUP_N( tut_yaal_tools_hanalyser, "yaal::tools::HAnalyser" );
+TUT_TEST_GROUP_N( tut_yaal_tools_hanalyser, "yaal::tools::HExpression" );
 
 TUT_UNIT_TEST_N( 1, "complex and valid expression" )
-	HAnalyser x;
+	HExpression x;
 	HString eq( "((2+3+5)*4*6*8)^2^3" );
-	x.analyse( eq );
-	double long x1 = x.count();
+	x.compile( eq );
+	double long x1 = x.evaluate();
 	double long x2 = ((2+3+5)*4*6*8);
 	x2 *= x2;
 	x2 *= x2;
@@ -60,22 +60,22 @@ TUT_UNIT_TEST_N( 1, "complex and valid expression" )
 	ensure_equals( "wrong computation", x1, x2 );
 	cout << eq << "=" << setprecision( 20 ) << x1 << endl;
 	eq = "Y";
-	x.analyse( eq );
+	x.compile( eq );
 	x [ 'Y' ] = 3.;
-	cout << eq << "=" << x.count() << endl;
+	cout << eq << "=" << x.evaluate() << endl;
 	x [ 'Y' ] = 2.;
-	cout << eq << "=" << x.count() << endl;
+	cout << eq << "=" << x.evaluate() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "invalid expression" )
 	try
 		{
 		HString eq( "7+10+(4*)" );
-		HAnalyser x;
-		x.analyse( eq );
+		HExpression x;
+		x.compile( eq );
 		fail( "parsing invalid expression succeded" );
 		}
-	catch ( HAnalyserException& )
+	catch ( HExpressionException& )
 		{
 		// ok
 		}
