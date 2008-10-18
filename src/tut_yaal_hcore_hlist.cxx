@@ -990,7 +990,7 @@ void module::test<24>( void )
 	check_consistency( l2 );
 	ensure_equals ( "build failed", to_string( l1 ), "12" );
 	ensure_equals ( "build failed", to_string( l2 ), "ab" );
-	list_t::swap( l1, l2 );
+	swap( l1, l2 );
 	check_consistency( l1 );
 	check_consistency( l2 );
 	ensure_equals ( "exchange failed", to_string( l2 ), "12" );
