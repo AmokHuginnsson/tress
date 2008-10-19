@@ -218,43 +218,17 @@ void module::test<3>( void )
 	b->accept( DerivedBazCall() );
 	}
 
-struct A
-	{
-	A( void ) { cout << __PRETTY_FUNCTION__ << endl; }
-	~A( void ) { cout << __PRETTY_FUNCTION__ << endl; }
-	};
-
-struct B : public A
-	{
-	B( void ) { cout << __PRETTY_FUNCTION__ << endl; }
-	~B( void ) { cout << __PRETTY_FUNCTION__ << endl; }
-	};
-
 template<>
 template<>
 void module::test<4>( void )
 	{
-	typedef HPointer<A> pa_t;
-
-	pa_t p( new B );
-	/*
-	 * CUTE test
-	 * ensure_equals( "Life, Universe and everything ...", 44, 42 );
-	}
-
-template<>
-template<>
-void module::test<5>( void )
-	{
-	}
-
-template<>
-template<>
-void module::test<6>( void )
-	{
-	 * CUTE test
-	 * fail( "just a test" );
-	 */
+	int tab1[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
+	int tab2[] = { 0, -1, -2, -3, -4, -5, -6, -7 };
+	yaal::copy( tab2 + 2, tab2 + 5, tab1 + 2 );
+	ensure_equals( "copy started too early", tab1[ 1 ], 1 );
+	ensure_equals( "copy started too late", tab1[ 2 ], -2 );
+	ensure_equals( "copy finished too early", tab1[ 4 ], -4 );
+	ensure_equals( "copy finished too late", tab1[ 5 ], 5 );
 	}
 
 }
