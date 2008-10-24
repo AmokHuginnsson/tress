@@ -124,9 +124,9 @@ TUT_UNIT_TEST_N( 5, "transform (negate) container content automatically" )
 	yaal::copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	std::replace_if(l.begin(), l.end(), std::bind2nd(std::less<int>(), 10), 10);
 	yaal::copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
-	transform( l.begin(), l.end(), l.begin(), negate<int>() );
+	yaal::transform( l.begin(), l.end(), l.begin(), negate<int>() );
 	yaal::copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
-	transform( l.begin(), l.end(), l.begin(), yaal::bind2nd( plus<int>(), 7 ) );
+	yaal::transform( l.begin(), l.end(), l.begin(), yaal::bind2nd( yaal::plus<int>(), 7 ) );
 	yaal::copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	cout << "}" << endl;
 	vector<string> vs;

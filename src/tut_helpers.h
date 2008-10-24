@@ -96,7 +96,7 @@ std::ostream& operator << ( std::ostream& out,
 	for ( l_iCtr = 0; l_iCtr < l_iRows; l_iCtr ++ )
 		{
 		out << std::fixed << "| " << std::setw ( 10 ) << std::setprecision ( 4 );
-		out << a_oMatrix [ l_iCtr ] [ 0 ];
+		out << a_oMatrix[ l_iCtr ] [ 0 ];
 		for ( l_iCtrLoc = 1; l_iCtrLoc < l_iCols; l_iCtrLoc ++ )
 			{
 			out << ", " << std::setw ( 10 ) << std::setprecision ( 4 );
