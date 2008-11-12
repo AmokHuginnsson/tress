@@ -30,7 +30,8 @@ Copyright:
 #include <algorithm>
 #include <numeric>
 #include <boost/bind.hpp>
-#include <boost/filesystem.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/convenience.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>
 
 #include <TUT/tut.h>
@@ -100,14 +101,14 @@ TUT_TEARDOWN()
 
 void dump_dir( path const& dir )
 	{
-	cout << "dir: " << dir << endl;
+	cout << "dir: " << dir.native_file_string() << endl;
 	directory_iterator end;
 	for ( directory_iterator it( dir ); it != end; ++ it )
 		{
 		if ( is_directory( *it ) )
 			dump_dir( *it );
 		else
-			cout << "file: " << *it << endl;
+			cout << "file: " << it->leaf() << endl;
 		}
 	return;
 	}
