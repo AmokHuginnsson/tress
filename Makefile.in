@@ -30,7 +30,7 @@ VERSION				= 0
 SUBVERSION		= 0
 EXTRAVERSION	= 0
 include $(DIR_ROOT)/_aux/mk/0_paths.mk
-LIBS					= hdata hconsole dbwrapper tools hcore boost_filesystem boost_date_time
+LIBS					= hcore tools dbwrapper hconsole hdata hconsole dbwrapper tools hcore boost_filesystem boost_date_time
 $(eval $(call NEW_TARGET,tress,src,,-rdynamic))
 $(eval $(call NEW_TARGET,cute,cute))
 $(eval $(call NEW_TARGET,tressplugin,data,-fPIC,-shared --allow-shlib-undefined))
