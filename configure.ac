@@ -1,6 +1,7 @@
 dnl configure.ac is integral part of tress project.
 
 dnl Initialization data.
+m4_include([_aux/aclib.m4])
 AC_INIT([[tress]],[[0.0.0]],[[amok@codestation.org]])
 
 AC_MSG_RESULT([--- Welcome to tress configurator ---                    [[0%]]])
@@ -71,26 +72,7 @@ dnl Looking for main libc headers
 AC_MSG_RESULT([--- Looking for main libc headers ... ---               [[41%]]])
 AC_HEADER_MAJOR
 
-dnl We need to know what operating system tress will be compiled on.
-AC_MSG_RESULT([--- Guessing host operating system ... ---              [[64%]]])
-AC_CHECK_FILE(
-	[[/etc/rc]],
-	[AC_DEFINE([__HOST_OS_TYPE_FREEBSD__],[],[The operating system is FreeBSD.]) _HOST________=['FreeBSD. ---  ']],
-	[AC_CHECK_FILE(
-		[[/etc/debconf.conf]],
-		[AC_DEFINE([__HOST_OS_TYPE_DEBIAN__],[],[The operating system is Debian.]) _HOST________=['Debian. ---   ']],
-		[AC_CHECK_FILE(
-			[[/etc/poldek/poldek.conf]],
-			[AC_DEFINE([__HOST_OS_TYPE_PLD__],[],[The operating system is PLD.]) _HOST________=['PLD. ---      ']],
-			[AC_CHECK_FILE(
-				[[/etc/random-seed]],
-				[AC_DEFINE([__HOST_OS_TYPE_SLACKWARE__],[],[The operating system is Slackware.]) _HOST________=['Slackware. ---']],
-				[AC_MSG_ERROR([Can not recognize host operating system type!])]
-			)]
-		)]
-	)]
-)
-AC_MSG_RESULT([--- Guessed host operating system is $_HOST________     [[70%]]])
+YAAL_DETECT_OPERATING_SYSTEM
 
 dnl What special compiler flags we can set?
 AC_MSG_RESULT([--- Guessing specific compiler/linker features ... ---  [[71%]]])
