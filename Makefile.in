@@ -30,17 +30,17 @@ VERSION				= 0
 SUBVERSION		= 0
 EXTRAVERSION	= 0
 include $(DIR_ROOT)/_aux/mk/0_paths.mk
-LIBS					= hcore tools dbwrapper hconsole hdata hconsole dbwrapper tools hcore boost_filesystem boost_date_time
-$(eval $(call NEW_TARGET,tress,src,,-rdynamic))
+include $(DIR_ROOT)/_aux/mk/1_basic.mk
+LIBS					= hcore tools dbwrapper hconsole hdata hconsole dbwrapper tools hcore boost_filesystem-gcc-mt boost_date_time-gcc-mt intl
+$(eval $(call NEW_TARGET,tress,src,,-rdynamic @TARGET_LINKER_FLAGS@))
 $(eval $(call NEW_TARGET,cute,cute))
-$(eval $(call NEW_TARGET,tressplugin,data,-fPIC,-shared --allow-shlib-undefined))
+$(eval $(call NEW_TARGET,tressplugin,data,@FKPIC@,-shared --allow-shlib-undefined))
 EXEC_NAME				= 1exec
 ifdef NODEBUG
 	TARGET = $(PRJNAME)
 endif
 CTAGS	= @CTAGS@
 GITID = @GITID@
-include $(DIR_ROOT)/_aux/mk/1_basic.mk
 include $(DIR_ROOT)/_aux/mk/2_term.mk
 include $(DIR_ROOT)/_aux/mk/3_suffix.mk
 include $(DIR_ROOT)/_aux/mk/4_wrapper.mk

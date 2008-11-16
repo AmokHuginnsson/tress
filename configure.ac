@@ -76,6 +76,8 @@ YAAL_DETECT_OPERATING_SYSTEM
 
 dnl What special compiler flags we can set?
 AC_MSG_RESULT([--- Guessing specific compiler/linker features ... ---  [[71%]]])
+
+YAAL_DETECT_FLAGS(FKPIC, [-fPIC], [C++])
 _FLAGS=''
 CXXFLAGS_ORIG=$CXXFLAGS;
 CXXFLAGS=["-Wextra"]
@@ -95,13 +97,9 @@ AC_TRY_COMPILE([#include <stdlib.h>],[],
 							_FLAGS=["$_FLAGS -pedantic-errors"]],
 							[AC_MSG_WARN([[Can not use -pedantic-errors!]])])
 CXXFLAGS=["$CXXFLAGS -Wl,--no-undefined -Wl,--fatal-warnings"]
-AC_LINK_IFELSE([[extern int my_undefined_symbol;int main(void){return(my_undefined_symbol);}]],
-				[CXXFLAGS=$CXXFLAGS_ORIG],
-				[AC_SUBST([SPECIAL_LINKER_FLAGS],
-					[[-Wl,--allow-shlib-undefined]])]
-					_FLAGS=[['-Wl,--allow-shlib-undefined. ---']]
-					CXXFLAGS=["$CXXFLAGS_ORIG -Wl,--allow-shlib-undefined"]
-					[AC_MSG_WARN([[We must use -Wl,--allow-shlib-undefined!]])])
+AC_LINK_IFELSE([[extern int my_undefined_symbol;void foo(void){my_undefined_symbol=0;}]],
+							[SPECIAL_LINKER_FLAGS=["$SPECIAL_LINKER_FLAGS -Wl,--no-undefined"] _FLAGS=["$_FLAGS -Wl,--no-undefined."]],
+							[AC_MSG_WARN([[Cannot use -Wl,--no-undefined!]])])
 if test ["$_FLAGS"] = [""] ; then
 	_FLAGS='none. ---                      [[76%]]'
 fi
@@ -135,6 +133,10 @@ AC_MSG_RESULT([--- Done looking for needed header, all found. ---      [[92%]]])
 
 dnl We need to check if out ncurses devel is not brain-damaged.
 AC_MSG_RESULT([--- Libraries/environment sanity check ... ---          [[93%]]])
+
+AC_SUBST([FKPIC],[${FKPIC}])
+AC_SUBST([SPECIAL_LINKER_FLAGS],["$SPECIAL_LINKER_FLAGS"])
+AC_SUBST([TARGET_LINKER_FLAGS],["$TARGET_LINKER_FLAGS"])
 
 AH_TOP([/* $Id$ */
 
