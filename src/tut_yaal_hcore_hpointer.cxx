@@ -457,5 +457,24 @@ void module::test<17>()
 		}
 	}
 
+struct non_virt_dtor
+	{
+	~non_virt_dtor( void ) {};
+	};
+
+struct NVDDerive : public non_virt_dtor
+	{
+	tut_yaal_hcore_hpointer::counter_t _counter;
+	~NVDDerive( void ) {};
+	};
+
+TUT_UNIT_TEST_N( 18, "non virtual destructor" )
+	typedef HPointer<non_virt_dtor> p_t;
+		{
+		p_t p( new NVDDerive );
+		}
+	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
+TUT_TEARDOWN()
+
 }
 
