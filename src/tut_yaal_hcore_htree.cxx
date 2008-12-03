@@ -28,11 +28,11 @@ Copyright:
 #define protected public
 
 #include <TUT/tut.h>
-#include "tut_helpers.h"
+#include "tut_helpers.hxx"
 
-#include <yaal/yaal.h>
+#include <yaal/yaal.hxx>
 M_VCSID( "$Id: "__ID__" $" )
-#include "tut_helpers.h"
+#include "tut_helpers.hxx"
 
 using namespace tut;
 using namespace std;

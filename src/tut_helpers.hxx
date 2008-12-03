@@ -31,9 +31,9 @@ Copyright:
 #include <iostream>
 #include <iomanip>
 
-#include <yaal/hcore/hcomplex.h>
-#include <yaal/hcore/hvector.h>
-#include <yaal/hcore/hmatrix.h>
+#include <yaal/hcore/hcomplex.hxx>
+#include <yaal/hcore/hvector.hxx>
+#include <yaal/hcore/hmatrix.hxx>
 
 namespace tress
 {

@@ -24,11 +24,11 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#include <yaal/yaal.h>
+#include <yaal/yaal.hxx>
 M_VCSID( "$Id: "__ID__" $" )
-#include "tut_helpers.h"
+#include "tut_helpers.hxx"
 
-#include "setup.h"
+#include "setup.hxx"
 
 using namespace std;
 using namespace yaal;

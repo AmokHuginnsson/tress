@@ -11,15 +11,15 @@
 #include <stdexcept>
 
 #define GET_YAAL_CONFIG
-#include <yaal/yaal.h>
+#include <yaal/yaal.hxx>
 #undef GET_YAAL_CONFIG
-#undef __YAAL_H
+#undef YAAL_HXX_INCLUDED
 
-#include <yaal/hcore/base.h>
-#include <yaal/hcore/hcall.h>
-#include <yaal/tools/hworkflow.h>
+#include <yaal/hcore/base.hxx>
+#include <yaal/hcore/hcall.hxx>
+#include <yaal/tools/hworkflow.hxx>
 
-#include "src/setup.h"
+#include "src/setup.hxx"
 
 /**
  * Template Unit Tests Framework for C++.

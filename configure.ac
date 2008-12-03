@@ -38,7 +38,7 @@ AC_LANG([C++])
 CXXFLAGS=["-L~/lib -L/usr/local/lib -I~/usr/include -I/usr/local/include"]
 
 dnl Set up how configure will handle header checks.
-AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([config.hxx])
 
 dnl Cheching for machine type.
 AC_MSG_RESULT([--- Checking for machine type ... ---                   [[14%]]])
@@ -128,7 +128,7 @@ AC_CHECK_LIB([hdata],[yaal_hdata_main],
 AC_MSG_RESULT([--- All needed libraries found. ---                     [[83%]]])
 
 AC_MSG_RESULT([--- Looking for needed headers ... ---                  [[84%]]])
-AC_CHECK_HEADERS([yaal/yaal.h],,
+AC_CHECK_HEADERS([yaal/yaal.hxx],,
 			[AC_MSG_ERROR([[Can not continue without yaal devel!]])])
 AC_MSG_RESULT([--- Done looking for needed header, all found. ---      [[92%]]])
 
@@ -141,12 +141,12 @@ AC_SUBST([TARGET_LINKER_FLAGS],["$TARGET_LINKER_FLAGS"])
 
 AH_TOP([/* $Id$ */
 
-#ifndef __TRESS_CONFIG_H
-#define __TRESS_CONFIG_H
+#ifndef TRESS_CONFIG_HXX_INCLUDED
+#define TRESS_CONFIG_HXX_INCLUDED
 
 /* Define core behavior here. */])
 AH_BOTTOM([
-#endif /* not __TRESS_CONFIG_H */
+#endif /* not TRESS_CONFIG_HXX_INCLUDED */
 ])
 
 dnl We have to set up proper compiler/linker flags.

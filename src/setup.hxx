@@ -27,7 +27,7 @@ Copyright:
 #ifndef __SETUP_H
 #define __SETUP_H
 
-#include <yaal/hcore/hstring.h>
+#include <yaal/hcore/hstring.hxx>
 
 namespace tress
 {

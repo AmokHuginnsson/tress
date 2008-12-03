@@ -3,7 +3,7 @@
 
 #include <cxxabi.h>
 #include "tut.h"
-#include <yaal/hcore/hthread.h>
+#include <yaal/hcore/hthread.hxx>
 
 /**
  * Template Unit Tests Framework for C++.

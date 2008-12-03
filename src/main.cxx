@@ -29,13 +29,13 @@ Copyright:
 #include <TUT/tut_reporter.h>
 #include <TUT/tut_restartable.h>
 
-#include <yaal/yaal.h>
+#include <yaal/yaal.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 
-#include "tut_helpers.h"
-#include "version.h"
-#include "setup.h"
-#include "options.h"
+#include "tut_helpers.hxx"
+#include "version.hxx"
+#include "setup.hxx"
+#include "options.hxx"
 
 using namespace tut;
 using namespace std;

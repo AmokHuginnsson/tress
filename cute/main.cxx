@@ -27,12 +27,12 @@ Copyright:
 #include <unistd.h>
 #include <iostream>
 
-#include <yaal/yaal.h>
+#include <yaal/yaal.hxx>
 M_VCSID( "$Id$" )
 
-#include "version.h"
-#include "setup.h"
-#include "options.h"
+#include "version.hxx"
+#include "setup.hxx"
+#include "options.hxx"
 
 using namespace std;
 using namespace yaal;
