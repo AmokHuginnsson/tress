@@ -119,10 +119,11 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 12, "from file" )
 	static char const* const D_INPUT = ( setup.f_iArgc > 1 ) ? setup.f_ppcArgv[ 1 ] : "./data/karatsuba.bc";
 	static char const D_HASH[] = "a9e370f394cff1faa63cda940544a7a031d8cb88";
+	HFile f( D_INPUT );
 	if ( setup.f_iArgc > 1 )
-		cout << hash::sha1( HFile( D_INPUT ) ) << endl;
+		cout << hash::sha1( f ) << endl;
 	else
-		ensure_equals( "bad hash", hash::sha1( HFile( D_INPUT ) ), D_HASH );
+		ensure_equals( "bad hash", hash::sha1( f ), D_HASH );
 TUT_TEARDOWN()
 
 }
