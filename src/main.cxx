@@ -24,7 +24,7 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#include <unistd.h>
+#include <cstdio>
 #include <TUT/tut.h>
 #include <TUT/tut_reporter.h>
 #include <TUT/tut_restartable.h>
