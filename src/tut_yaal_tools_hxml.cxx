@@ -202,9 +202,9 @@ TUT_UNIT_TEST_N( 4, "/* build, save, load */" )
 	HXml::HIterator child = (*it).add_node( HXml::HNode::TYPE::D_NODE, D_CHILD );
 	(*child).properties().insert( D_PROP, D_PROP_VALUE );
 	n.copy_node( *it );
-	x.save( D_OUT_PATH );
+	x.save( HStreamInterface::ptr_t( new HFile( D_OUT_PATH, HFile::OPEN::D_WRITING ) ) );
 	HXml y;
-	y.load( D_OUT_PATH );
+	y.load( HStreamInterface::ptr_t( new HFile( D_OUT_PATH ) ) );
 	ensure_equals( "DOMs differ", x, y );
 	try
 		{
@@ -219,44 +219,44 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* load, save */" )
 	HXml xml;
-	xml.init( "data/xml.xml" );
+	xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml" ) ) );
 	xml.parse( "/my_root/my_set/my_item" );
 	xml.parse( "/my_root/my_set/my_item" ); /* mem-leak test */
-	xml.save( "out/set.xml" );
+	xml.save( HStreamInterface::ptr_t( new HFile( "out/set.xml", HFile::OPEN::D_WRITING ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* load, save */" )
 	HXml xml;
-	xml.load( "data/xml.xml" );
-	xml.save( "out/tut.xml" );
+	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml" ) ) );
+	xml.save( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::D_WRITING ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "/* load, save, clear, handmade, save */" )
 	HXml xml;
-	xml.load( "data/xml.xml" );
-	xml.save( "out/tut.xml" );
+	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml" ) ) );
+	xml.save( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::D_WRITING ) ) );
 	xml.clear();
 	xml.create_root( "xml" );
 	HXml::HNodeProxy root = xml.get_root();
 	root.add_node( HXml::HNode::TYPE::D_CONTENT, "Hello World!" );
-	xml.save( "out/hello.xml" );
+	xml.save( HStreamInterface::ptr_t( new HFile( "out/hello.xml", HFile::OPEN::D_WRITING ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* init, apply_style, parse, save, clear, handmade, save */" )
 	HXml xml;
-	xml.init( "./data/xml.xml" );
+	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml" ) ) );
 	xml.apply_style( "./data/style.xml" );
 	xml.parse();
-	xml.save( "./out/tut.xml" );
+	xml.save( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::D_WRITING ) ) );
 	xml.clear();
 	xml.create_root( "xml" );
 	HXml::HNodeProxy root = xml.get_root();
 	root.add_node( HXml::HNode::TYPE::D_CONTENT, "Hello World!" );
-	xml.save( "out/hello.xml" );
+	xml.save( HStreamInterface::ptr_t( new HFile( "out/hello.xml", HFile::OPEN::D_WRITING ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "/* apply stylesheet */" )
-	f_oXml.init( "data/xml.xml" );
+	f_oXml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml" ) ) );
 	f_oXml.apply_style( "data/style.xml" );
 	f_oXml.parse();
 	dump( cout, f_oXml.get_root() );
@@ -286,10 +286,10 @@ TUT_UNIT_TEST_N( 10, "/* init, parse, apply, save */" )
 			file.close();
 			}
 		}
-	f_oXml.init( doc );
+	f_oXml.init( HStreamInterface::ptr_t( new HFile( doc ) ) );
 	f_oXml.apply_style( style );
 	f_oXml.parse( path );
-	f_oXml.save( out );
+	f_oXml.save( HStreamInterface::ptr_t( new HFile( out, HFile::OPEN::D_WRITING ) ) );
 	return;
 TUT_TEARDOWN()
 
