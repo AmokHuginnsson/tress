@@ -36,8 +36,12 @@ std::ostream& operator <<( std::ostream& os, const tut::test_result& tr )
 		case tut::test_result::term:
 			os << '[' << tr._testNo << "=T]" << std::flush;
 		break;
+		case tut::test_result::rethrown:
+			os << '[' << tr._testNo << "=P]" << std::flush;
+		break;
 		case tut::test_result::setup:
 			os << "no such group" << std::flush;
+		break;
 		}
 
 	return ( os );
@@ -124,6 +128,8 @@ class reporter : public tut::
 			exceptions_count ++;
 		else if ( tr._result == tut::test_result::fail )
 			failures_count ++;
+		else if ( tr._result == tut::test_result::rethrown )
+			failures_count ++;
 		else if ( tr._result == tut::test_result::warn )
 			warnings_count ++;
 		else if ( tr._result == tut::test_result::setup )
@@ -156,9 +162,19 @@ class reporter : public tut::
 					<< ( !tr._name.empty() ? ( std::string( " : " ) + tr._name ) : std::string() )
 					<< std::endl;
 
+#if defined ( TUT_USE_POSIX )
+				if ( tr.pid != getpid() )
+					{
+					os << "     child pid: " << tr.pid << std::endl;
+					}
+
+#endif
 				os << "     problem: " << std::flush;
 				switch ( tr._result )
 					{
+					case test_result::rethrown:
+						os << "assertion failed in child" << std::endl;
+					break;
 					case test_result::fail :
 						os << "assertion failed" << std::endl;
 					break;

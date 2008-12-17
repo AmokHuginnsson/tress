@@ -2,6 +2,7 @@
 #define TUT_EXCEPTION_H_GUARD
 
 #include <stdexcept>
+#include "tut_result.hpp"
 
 namespace tut
 {
@@ -14,13 +15,18 @@ struct tut_error : public std::exception
 	tut_error( const std::string& msg ) : _errMsg( msg )
 		{}
 
-	~tut_error() throw ( )
-		{}
+	virtual test_result::result_type_t result() const
+		{
+		return ( test_result::ex ) ;
+		}
 
 	const char* what() const throw ( )
 		{
 		return ( _errMsg.c_str() ) ;
 		}
+
+	~tut_error() throw ( )
+		{}
 
 	private:
 
@@ -83,6 +89,10 @@ struct bad_ctor : public tut_error
 	{
 	bad_ctor( std::string const& msg ) : tut_error( msg )
 		{}
+	virtual test_result::result_type_t result() const
+		{
+		return ( test_result::ex_ctor );
+		}
 	~bad_ctor() throw ()
 		{}
 	};
@@ -92,10 +102,14 @@ struct bad_ctor : public tut_error
  */
 struct failure : public tut_error
 	{
-	std::string _file;
 	int _line;
-	failure( char const* const file, int const& line, const std::string& msg ) : tut_error( msg ), _file( file ), _line( line )
+	char const* _file;
+	failure( char const* const file, int const& line, const std::string& msg ) : tut_error( msg ), _line( line ), _file( file )
 		{}
+	virtual test_result::result_type_t result() const
+		{
+		return ( test_result::fail );
+		}
 	~failure() throw ()
 		{}
 	};
@@ -107,8 +121,31 @@ struct warning : public tut_error
 	{
 	warning( std::string const& msg ) : tut_error( msg )
 		{}
+	virtual test_result::result_type_t result() const
+		{
+		return ( test_result::warn );
+		}
 	~warning() throw ()
 		{}
+	};
+
+/**
+ * Exception to be throwed when child processes fail.
+ */
+struct rethrown : public failure
+	{
+	explicit rethrown( const test_result& res ) : failure( 0, 0, res._message ), _tr( res )
+		  {}
+
+	virtual test_result::result_type_t result() const
+		{
+		return ( test_result::rethrown );
+		}
+
+	~rethrown() throw ( )
+		  {}
+
+	const test_result _tr;
 	};
 
 }

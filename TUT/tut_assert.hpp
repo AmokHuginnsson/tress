@@ -139,16 +139,39 @@ void ensure_distance_real( char const* const file, int const& line, const char* 
 	ensure_distance_real<>( file, line, NULL, msg, actual, expected, distance );
 	}
 
+#define ensure_errno( ... ) ensure_errno_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
+void ensure_errno_real( char const* const file, int const& line, char const* const, char const* msg, bool cond )
+	{
+	if( ! cond )
+		{
+#if defined(TUT_USE_POSIX)
+		char e[512];
+		std::stringstream ss;
+		ss << ( msg ? msg : "" )
+			<< ( msg? ": " : "" )
+			<< strerror_r( errno, e, sizeof ( e ) );
+		throw failure( file, line, ss.str() );
+#else
+		throw failure( file, line, msg );
+#endif
+		}
+	}
+
 /**
  * Unconditionally fails with message.
  */
-
 #define fail( msg ) fail_real( __FILE__, __LINE__, ( msg ) )
 void fail_real( char const* const, int const&, const char* = "" ) __attribute__( ( __noreturn__ ) );
 void fail_real( char const* const file, int const& line, const char* msg )
 	{
 	throw failure( file, line, msg );
 	}
+
+void fail_real( char const* const file, int const& line, std::string const& msg )
+	{
+	throw failure( file, line, msg );
+	}
+
 }       // end of namespace
 
 }

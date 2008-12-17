@@ -5,6 +5,18 @@
 
 namespace tut
 {
+#if defined ( TUT_USE_POSIX )
+struct test_result_posix
+	{
+	test_result_posix() : pid( getpid() )
+		  {}
+
+	pid_t pid;
+	};
+#else
+struct test_result_posix
+	{};
+#endif
 
 /**
  * Return type of runned test/test group.
@@ -12,7 +24,7 @@ namespace tut
  * For test: contains result of test and, possible, message
  * for failure or exception.
  */
-struct test_result
+struct test_result : public test_result_posix
 	{
 	/**
 	* Test group name.
@@ -37,7 +49,7 @@ struct test_result
 	* term - test forced test application to terminate abnormally
 	* setup - bad test setup (no such group or no such test number)
 	*/
-	typedef enum { ok, fail, ex, warn, term, ex_ctor, setup } result_type_t;
+	typedef enum { ok, fail, ex, warn, term, ex_ctor, setup, rethrown } result_type_t;
 
 	result_type_t _result;
 
@@ -79,9 +91,9 @@ struct test_result
 	*/
 	test_result( const std::string& grp, int pos,
 		const std::string& test_name, result_type_t res,
-		const failure& f )
+		const failure_info& f )
 		: _group( grp ), _testNo( pos ), _name( test_name ), _result( res ),
-		_message( f.what() ), _exceptionTypeId( typeid ( f ).name() ), _file( f._file ), _line( f._line )
+		_message( f._msg ), _exceptionTypeId( typeid ( f ).name() ), _file( f._file ), _line( f._line )
 		{}
 
 	/**
@@ -93,6 +105,16 @@ struct test_result
 		: _group( grp ), _testNo( pos ), _name( test_name ), _result( res ),
 		_message( exc.what() ), _exceptionTypeId( typeid ( exc ).name() ), _file( file ), _line( line )
 		{}
+
+	/** Constructor with typeid.
+	 */
+	test_result( const std::string& grp, int pos,
+		const std::string& test_name, result_type_t res,
+		const std::string& ex_typeid,
+		const std::string& msg )
+		: _group( grp ),	_testNo( pos ), _name( test_name ), _result( res ),
+		_message( msg ), _exceptionTypeId( ex_typeid )
+		  {}
 	};
 
 }

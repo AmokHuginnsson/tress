@@ -124,9 +124,7 @@ class test_runner
 			throw std::invalid_argument( "group shall be non-null" );
 			}
 
-		// TODO: inline variable
-		groups::iterator found = groups_.find( name );
-		if ( found != groups_.end() )
+		if ( groups_.find( name ) != groups_.end() )
 			{
 			std::string msg( "attempt to add already existent group " + name );
 
@@ -136,7 +134,7 @@ class test_runner
 			throw tut_error( msg );
 			}
 
-		groups_[ name ] = gr;
+		groups_.insert( std::make_pair( name, gr ) );
 		}
 
 	/**

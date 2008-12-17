@@ -8,7 +8,6 @@
 #include <string>
 #include <sstream>
 #include <typeinfo>
-#include <stdexcept>
 
 #include <yaal/config.hxx>
 #include <yaal/hcore/base.hxx>
@@ -16,6 +15,17 @@
 #include <yaal/tools/hworkflow.hxx>
 
 #include "src/setup.hxx"
+
+namespace tut
+{
+struct failure_info
+	{
+	int _line;
+	char const* _file;
+	std::string _msg;
+	failure_info( int const& line, char const* file, std::string const& msg ) : _line( line ), _file( file ), _msg( msg ) {}
+	};
+}
 
 #include "tut_exception.hpp"
 #include "tut_result.hpp"
@@ -390,7 +400,7 @@ class test_group : public group_base
 				current_test_name = obj->get_test_name();
 				}
 
-			test_result tr( _name, ti->first, current_test_name, test_result::fail, ex );
+			test_result tr( _name, ti->first, current_test_name, test_result::fail, failure_info( ex._line, ex._file, ex.what() ) );
 			return ( tr ) ;
 			}
 		catch ( const bad_ctor& ex )
