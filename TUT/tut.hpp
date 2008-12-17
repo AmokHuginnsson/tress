@@ -48,7 +48,7 @@ namespace tut
  * access test data as members.
  */
 template<class Data>
-class test_object : public Data
+class test_object : public Data, public test_object_posix
 	{
 	std::string _group;
 	int _testNo;
@@ -94,24 +94,23 @@ class test_object : public Data
 		}
 
 	/**
-	* Default do-nothing test.
-	*/
+	 * Default do-nothing test.
+	 */
 	template<int n> void test()
 		{
 		called_method_was_a_dummy_test_ = true;
 		}
 
 	/**
-	* The flag is set to true by default (dummy) test.
-	* Used to detect usused test numbers and avoid unnecessary
-	* test object creation which may be time-consuming depending
-	* on operations described in Data::Data() and Data::~Data().
-	* TODO: replace with throwing special exception from default test.
-	*/
+	 * The flag is set to true by default (dummy) test.
+	 * Used to detect usused test numbers and avoid unnecessary
+	 * test object creation which may be time-consuming depending
+	 * on operations described in Data::Data() and Data::~Data().
+	 * TODO: replace with throwing special exception from default test.
+	 */
 	bool called_method_was_a_dummy_test_;
 
 	private:
-
 	std::string _currentTestName;
 	};
 
@@ -119,7 +118,8 @@ class test_object : public Data
  * Walks through test tree and stores address of each
  * test method in group. Instantiation stops at 0.
  */
-template<class Test, class Group, int n> struct tests_registerer
+template<class Test, class Group, int n>
+struct tests_registerer
 	{
 	static void register_test_method( Group& group )
 		{
@@ -141,7 +141,7 @@ struct tests_registerer<Test, Group, 0>
  * Data base class.
  */
 template<typename Data, int MaxTestsInGroup = 50>
-class test_group : public group_base
+class test_group : public group_base, public test_group_posix
 	{
 	const char* _name;
 	typedef test_object<Data> test_object_data;
@@ -277,16 +277,16 @@ class test_group : public group_base
 		}
 
 	/**
-	* Registers test method under given number.
-	*/
+	 * Registers test method under given number.
+	 */
 	void register_test_method( int n, testmethod tm )
 		{
 		_tests[ n ] = tm;
 		}
 
 	/**
-	* Reset test position before first test.
-	*/
+	 * Reset test position before first test.
+	 */
 	void rewind()
 		{
 		_currentTest = _tests.begin();
@@ -303,8 +303,8 @@ class test_group : public group_base
 		}
 
 	/**
-	* Runs next test.
-	*/
+	 * Runs next test.
+	 */
 	test_result run_next()
 		{
 		if ( _currentTest == _tests.end() )
@@ -318,7 +318,11 @@ class test_group : public group_base
 			{
 			try
 				{
-				return ( run_test( _currentTest ++, obj ) ) ;
+				tests_iterator current_test = _currentTest ++;
+
+				test_result tr = run_test( current_test, obj );
+
+				return ( tr ) ;
 				}
 			catch ( const no_such_test& )
 				{
@@ -353,23 +357,20 @@ class test_group : public group_base
 			}
 
 		safe_holder<object> obj;
-		return ( run_test( _currentTest, obj ) ) ;
+		test_result tr = run_test( _currentTest, obj );
+
+		return ( tr ) ;
 		}
 
-	private:
-
 	/**
-	* VC allows only one exception handling type per function,
-	* so I have to split the method.
-	*
-	* TODO: refactoring needed!
-	*/
-	test_result run_test( const tests_iterator& ti,
-		safe_holder<object>&obj )
+	 * VC allows only one exception handling type per function,
+	 * so I have to split the method.
+	 */
+	test_result run_test( const tests_iterator& ti, safe_holder<object>& obj )
 		{
-		std::string current_test_name;
-		char const* file = "";
-		int line = -1;
+		std::string current_test_name = obj.get() ? obj->get_test_name() : std::string();
+		char const* file = obj.get() ? obj->get_test_file() : "";
+		int line = obj.get() ? obj->get_test_line() : -1;
 
 		try
 			{
@@ -380,14 +381,16 @@ class test_group : public group_base
 			{
 			throw;
 			}
+		catch ( const rethrown& ex )
+			{
+			test_result tr( _name, ti->first, current_test_name, test_result::ok, file, line );
+			tr = ex._tr;
+			tr._result = test_result::rethrown;
+			return ( tr );
+			}
 		catch ( const warning& ex )
 			{
 			// test ok, but destructor failed
-			if ( obj.get() )
-				{
-				current_test_name = obj->get_test_name();
-				file = obj->get_test_file();
-				}
 
 			test_result tr( _name, ti->first, current_test_name, test_result::warn, ex, file, 1 );
 			return ( tr ) ;
@@ -395,10 +398,6 @@ class test_group : public group_base
 		catch ( const failure& ex )
 			{
 			// test failed because of ensure() or similar method
-			if ( obj.get() )
-				{
-				current_test_name = obj->get_test_name();
-				}
 
 			test_result tr( _name, ti->first, current_test_name, test_result::fail, failure_info( ex._line, ex._file, ex.what() ) );
 			return ( tr ) ;
@@ -406,11 +405,6 @@ class test_group : public group_base
 		catch ( const bad_ctor& ex )
 			{
 			// test failed because test ctor failed; stop the whole group
-			if ( obj.get() )
-				{
-				current_test_name = obj->get_test_name();
-				file = obj->get_test_file();
-				}
 
 			test_result tr( _name, ti->first, current_test_name, test_result::ex_ctor, ex, file, 1 );
 			return ( tr ) ;
@@ -418,12 +412,6 @@ class test_group : public group_base
 		catch ( const std::exception& ex )
 			{
 			// test failed with std::exception
-			if ( obj.get() )
-				{
-				current_test_name = obj->get_test_name();
-				file = obj->get_test_file();
-				line = obj->get_test_line();
-				}
 
 			test_result tr( _name, ti->first, current_test_name, test_result::ex, ex, file, line );
 			return ( tr ) ;
@@ -431,12 +419,6 @@ class test_group : public group_base
 		catch ( const yaal::hcore::HException& ex )
 			{
 			// test failed with yaal::hcore::HException
-			if ( obj.get() )
-				{
-				current_test_name = obj->get_test_name();
-				file = obj->get_test_file();
-				line = obj->get_test_line();
-				}
 
 			test_result tr( _name, ti->first, current_test_name, test_result::ex, ex, file, line );
 			return ( tr ) ;
@@ -444,22 +426,13 @@ class test_group : public group_base
 		catch ( ... )
 			{
 			// test failed with unknown exception
-			if ( obj.get() )
-				{
-				current_test_name = obj->get_test_name();
-				file = obj->get_test_file();
-				line = obj->get_test_line();
-				}
+
 			test_result tr( _name, ti->first, current_test_name, test_result::ex, file, line );
 			return ( tr ) ;
 			}
 
 		// test passed
-		if ( obj.get() )
-			{
-			file = obj->get_test_file();
-			line = obj->get_test_line();
-			}
+
 		test_result tr( _name, ti->first, current_test_name, test_result::ok, file, line );
 		return ( tr ) ;
 		}
