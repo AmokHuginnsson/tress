@@ -27,7 +27,7 @@ Copyright:
 #define private public
 #define protected public
 
-#include <TUT/tut.h>
+#include <TUT/tut.hpp>
 
 #include <yaal/yaal.hxx>
 M_VCSID( "$Id: "__ID__" $" )

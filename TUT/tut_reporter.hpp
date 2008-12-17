@@ -2,7 +2,7 @@
 #define TUT_REPORTER
 
 #include <cxxabi.h>
-#include "tut.h"
+#include "tut.hpp"
 #include <yaal/hcore/hthread.hxx>
 
 /**
@@ -16,7 +16,7 @@ namespace
 
 std::ostream& operator <<( std::ostream& os, const tut::test_result& tr )
 	{
-	switch ( tr.result )
+	switch ( tr._result )
 		{
 		case tut::test_result::ok:
 			os << ( errno == 0 ? '.' : ',' ) << std::flush;
@@ -108,30 +108,30 @@ class reporter : public tut::
 		{
 		yaal::hcore::HLock l( f_oMutex );
 
-		if ( tr.group != current_group )
+		if ( tr._group != current_group )
 			{
-			os << std::endl << tr.group << ": " << std::flush;
-			current_group = tr.group;
+			os << std::endl << tr._group << ": " << std::flush;
+			current_group = tr._group;
 			}
 
 		os << tr << std::flush;
-		if ( tr.result == tut::test_result::ok )
+		if ( tr._result == tut::test_result::ok )
 			ok_count ++;
 
-		else if ( tr.result == tut::test_result::ex )
+		else if ( tr._result == tut::test_result::ex )
 			exceptions_count ++;
-		else if ( tr.result == tut::test_result::ex_ctor )
+		else if ( tr._result == tut::test_result::ex_ctor )
 			exceptions_count ++;
-		else if ( tr.result == tut::test_result::fail )
+		else if ( tr._result == tut::test_result::fail )
 			failures_count ++;
-		else if ( tr.result == tut::test_result::warn )
+		else if ( tr._result == tut::test_result::warn )
 			warnings_count ++;
-		else if ( tr.result == tut::test_result::setup )
+		else if ( tr._result == tut::test_result::setup )
 			setup_count ++;
 		else
 			terminations_count ++;
 
-		if ( tr.result != tut::test_result::ok )
+		if ( tr._result != tut::test_result::ok )
 			not_passed.push_back( tr );
 		}
 
@@ -146,18 +146,18 @@ class reporter : public tut::
 				{
 				tut::test_result tr = *i;
 				++ i;
-				if ( tr.result == test_result::setup )
+				if ( tr._result == test_result::setup )
 					continue;
 
 				os << std::endl;
 
-				os << "---> " << "group: " << tr.group
+				os << "---> " << "group: " << tr._group
 					<< ", test: test<" << tr._testNo << ">"
 					<< ( !tr._name.empty() ? ( std::string( " : " ) + tr._name ) : std::string() )
 					<< std::endl;
 
 				os << "     problem: " << std::flush;
-				switch ( tr.result )
+				switch ( tr._result )
 					{
 					case test_result::fail :
 						os << "assertion failed" << std::endl;
@@ -187,14 +187,14 @@ class reporter : public tut::
 
 				if ( ! tr._message.empty() )
 					{
-					if ( tr.result == test_result::fail )
+					if ( tr._result == test_result::fail )
 						os << "     failed assertion in \"" << tr._file << ":" << tr._line << " ";
-					else if ( tr.result == test_result::ex )
+					else if ( tr._result == test_result::ex )
 						{
 						if ( tr._line >= 0 )
 							os << "     unexpected exception in \"" << tr._file << ":" << tr._line << " ";
 						}
-					else if ( tr.result == test_result::term )
+					else if ( tr._result == test_result::term )
 						os << "     segmentation fault in \"" << tr._file << ":" << tr._line << " ";
 					else
 						os << "     message: \"";

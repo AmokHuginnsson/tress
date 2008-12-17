@@ -34,7 +34,7 @@ Copyright:
 #include <boost/filesystem/convenience.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>
 
-#include <TUT/tut.h>
+#include <TUT/tut.hpp>
 
 #include <yaal/yaal.hxx>
 M_VCSID( "$Id: "__ID__" $" )

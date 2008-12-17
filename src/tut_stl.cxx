@@ -32,7 +32,7 @@ Copyright:
 #include <functional>
 #include <boost/bind.hpp>
 
-#include <TUT/tut.h>
+#include <TUT/tut.hpp>
 
 #include <yaal/yaal.hxx>
 M_VCSID( "$Id: "__ID__" $" )

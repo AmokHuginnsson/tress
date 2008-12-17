@@ -27,7 +27,7 @@ Copyright:
 #define private public
 #define protected public
 
-#include <TUT/tut.h>
+#include <TUT/tut.hpp>
 #include "tut_helpers.hxx"
 
 #include <yaal/yaal.hxx>

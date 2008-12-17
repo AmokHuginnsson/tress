@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "tut.h"
+#include "tut.hpp"
 
 /**
  * Template Unit Tests Framework for C++.
@@ -102,9 +102,9 @@ std::string unescape( const std::string& orig )
  */
 void serialize( std::ostream& os, const tut::test_result& tr )
 	{
-	os << escape( tr.group ) << std::endl;
+	os << escape( tr._group ) << std::endl;
 	os << tr._testNo << ' ';
-	switch ( tr.result )
+	switch ( tr._result )
 		{
 		case test_result::ok:
 			os << 0;
@@ -135,13 +135,13 @@ void serialize( std::ostream& os, const tut::test_result& tr )
  */
 void deserialize( std::istream& is, tut::test_result& tr )
 	{
-	std::getline( is, tr.group );
+	std::getline( is, tr._group );
 	if ( is.eof() )
 		{
 		throw tut::no_more_tests();
 		}
 
-	tr.group = unescape( tr.group );
+	tr._group = unescape( tr._group );
 
 	tr._testNo = -1;
 	is >> tr._testNo;
@@ -155,19 +155,19 @@ void deserialize( std::istream& is, tut::test_result& tr )
 	switch ( n )
 		{
 		case 0:
-			tr.result = test_result::ok;
+			tr._result = test_result::ok;
 		break;
 		case 1:
-			tr.result = test_result::fail;
+			tr._result = test_result::fail;
 		break;
 		case 2:
-			tr.result = test_result::ex;
+			tr._result = test_result::ex;
 		break;
 		case 3:
-			tr.result = test_result::warn;
+			tr._result = test_result::warn;
 		break;
 		case 4:
-			tr.result = test_result::term;
+			tr._result = test_result::term;
 		break;
 		default:
 			throw std::logic_error( "operator >> : bad result_type" );

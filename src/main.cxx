@@ -25,9 +25,9 @@ Copyright:
 */
 
 #include <cstdio>
-#include <TUT/tut.h>
-#include <TUT/tut_reporter.h>
-#include <TUT/tut_restartable.h>
+#include <TUT/tut.hpp>
+#include <TUT/tut_reporter.hpp>
+#include <TUT/tut_restartable.hpp>
 
 #include <yaal/yaal.hxx>
 M_VCSID( "$Id: "__ID__" $" )
