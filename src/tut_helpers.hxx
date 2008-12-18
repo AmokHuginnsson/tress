@@ -24,8 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#ifndef __TUT_HELPERS_H
-#define __TUT_HELPERS_H
+#ifndef TRESS_TUT_HELPERS_HXX_INCLUDED
+#define TRESS_TUT_HELPERS_HXX_INCLUDED
 
 #include <string>
 #include <iostream>
@@ -260,5 +260,5 @@ std::ostream& operator << ( std::ostream& stream, counter<symbol_t, owner_t> con
 
 }
 
-#endif /* not __TUT_HELPERS_H */
+#endif /* not TRESS_TUT_HELPERS_HXX_INCLUDED */
 

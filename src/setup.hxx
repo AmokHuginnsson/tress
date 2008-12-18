@@ -24,8 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#ifndef __SETUP_H
-#define __SETUP_H
+#ifndef TRESS_SETUP_HXX_INCLUDED
+#define TRESS_SETUP_HXX_INCLUDED
 
 #include <yaal/hcore/hstring.hxx>
 
@@ -60,4 +60,4 @@ extern OSetup setup;
 
 }
 
-#endif /* __SETUP_H */
+#endif /* TRESS_SETUP_HXX_INCLUDED */

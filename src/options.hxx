@@ -24,8 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#ifndef __OPTIONS_H
-#define __OPTIONS_H
+#ifndef TRESS_OPTIONS_HXX_INCLUDED
+#define TRESS_OPTIONS_HXX_INCLUDED
 
 namespace tress
 {
@@ -35,4 +35,5 @@ int decode_switches( int, char** );
 
 }
 
-#endif /* __OPTIONS_H */
+#endif /* TRESS_OPTIONS_HXX_INCLUDED */
+
