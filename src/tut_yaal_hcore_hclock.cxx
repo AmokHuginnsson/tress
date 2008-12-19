@@ -46,7 +46,7 @@ struct tut_yaal_hcore_hclock
 	{
 	};
 
-TUT_TEST_GROUP( tut_yaal_hcore_hclock, "yaal::hcore::HClock" );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hclock, "yaal::hcore::HClock" );
 
 TUT_UNIT_TEST_N( 1, "1 second accuracy" )
 	static int long const D_SLEEP = 1;
