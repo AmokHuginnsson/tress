@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_yaal_tools_hplugin.cxx - this file is integral part of `tress' project.
+	tut_yaal_hcore_hclock.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -39,46 +39,47 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-#define RESOLE_MACRO_FOR_MAKE_C_STRING( x ) ( #x )
-#define MAKE_C_STRING( x ) RESOLE_MACRO_FOR_MAKE_C_STRING( x )
-
-#define SELF_SUMATOR self_sumator
-extern "C"
-int SELF_SUMATOR( int a, int b )
-	{
-	return ( a + b );
-	}
-
 namespace tut
 {
 
-struct tut_yaal_tools_hplugin
+struct tut_yaal_hcore_hclock
 	{
 	};
 
-TUT_TEST_GROUP_N( tut_yaal_tools_hplugin, "yaal::tools::HPlugin" );
+TUT_TEST_GROUP( tut_yaal_hcore_hclock, "yaal::hcore::HClock" );
 
-typedef int ( * sumator_t )( int, int );
-
-TUT_UNIT_TEST_N( 1, "load external library and resolve symbol" )
-	static char const* const D_TRESS_PLUGIN = "./data/tressplugin.so";
-	int const T1 = 7;
-	int const T2 = 13;
-	HPlugin p;
-	p.load( D_TRESS_PLUGIN );
-	sumator_t my_sum;
-	p.resolve( "tut_yaal_tools_hplugin_sum", my_sum );
-	ensure_equals( "cound not utilize plugin", my_sum( T1, T2 ), T1 + T2 );
+TUT_UNIT_TEST_N( 1, "1 second accuracy" )
+	static int long const D_SLEEP = 1;
+	static int long const D_PASSED = 1;
+	HClock clk;
+	::sleep( D_SLEEP );
+	ensure_equals( "time measured incorrectly", clk.get_time_elapsed(), D_PASSED );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "resolve symbol from self" )
-	int const T1 = 7;
-	int const T2 = 13;
-	HPlugin p;
-	p.load( HString() );
-	sumator_t my_sum;
-	p.resolve( MAKE_C_STRING( SELF_SUMATOR ), my_sum );
-	ensure_equals( "cound not utilise self-contained symbols", my_sum( T1, T2 ), T1 + T2 );
+TUT_UNIT_TEST_N( 2, "1 mili-second accuracy" )
+	static int long const D_SLEEP = 1;
+	static int long const D_PASSED = power<10,3>::value;
+	HClock clk;
+	::sleep( D_SLEEP );
+	ensure_equals( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_MILISECOND ), D_PASSED );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 3, "1 micro-second accuracy" )
+	static int long const D_SLEEP = 1;
+	static int long const D_PASSED = power<10,6>::value;
+	static int long const D_QUALITY = 50;
+	HClock clk;
+	::sleep( D_SLEEP );
+	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_MICROSECOND ), D_PASSED, D_QUALITY );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 4, "1 nano-second accuracy" )
+	static int long const D_SLEEP = 1;
+	static int long const D_PASSED = power<10,9>::value;
+	static int long const D_QUALITY = 20000;
+	HClock clk;
+	::sleep( D_SLEEP );
+	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_NANOSECOND ), D_PASSED, D_QUALITY );
 TUT_TEARDOWN()
 
 }
