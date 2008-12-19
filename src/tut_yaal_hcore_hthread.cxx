@@ -43,7 +43,7 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-#define M_DSLEEP( count ) sleep::milisecond ( ( count ) * 100 );
+#define M_DSLEEP( count ) util::sleep::milisecond ( ( count ) * 100 );
 
 class HCool
 	{
