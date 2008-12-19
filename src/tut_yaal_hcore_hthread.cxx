@@ -24,7 +24,7 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#include <unistd.h>
+#include <cstdio>
 #include <TUT/tut.hpp>
 
 #include <yaal/yaal.hxx>
@@ -43,7 +43,7 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-#define M_DSLEEP( count ) usleep ( ( count ) * 100 * 1000 );
+#define M_DSLEEP( count ) sleep::milisecond ( ( count ) * 10 * 1000 );
 
 class HCool
 	{
@@ -197,107 +197,107 @@ struct tut_yaal_hcore_HThread
 	{
 	};
 
-typedef test_group < tut_yaal_hcore_HThread > tut_group;
+typedef test_group<tut_yaal_hcore_HThread> tut_group;
 typedef tut_group::object module;
-tut_group tut_yaal_hcore_HThread_group ( "yaal::hcore::HThread" );
+tut_group tut_yaal_hcore_HThread_group( "yaal::hcore::HThread" );
 
 /* Construction and destruction */
 template<>
 template<>
-void module::test<1> ( void )
+void module::test<1>( void )
 	{
 	HCool ca( "a" );
 	cool_t a( ca );
-	ensure_equals ( "bad status on fresh thread", a.is_alive ( ), false );
+	ensure_equals( "bad status on fresh thread", a.is_alive(), false );
 	}
 
 /* Starting new thread and allowing it to finish */
 template<>
 template<>
-void module::test<2> ( void )
+void module::test<2>( void )
 	{
 	HCool ca( "a" );
 	cool_t a( ca );
-	ca.set ( 5 );
-	a.spawn ( );
-	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
-	M_DSLEEP ( 10 );
-	ensure_equals ( "thread failed to finish", a.is_alive ( ), false );
+	ca.set( 5 );
+	a.spawn();
+	ensure_equals( "thread failed to start", a.is_alive(), true );
+	M_DSLEEP( 10 );
+	ensure_equals( "thread failed to finish", a.is_alive(), false );
 	}
 
 /* Starting new thread and finishing it prematurely (sleeping body) */
 template<>
 template<>
-void module::test<3> ( void )
+void module::test<3>( void )
 	{
 	HTime start, stop;
 	HCool ca( "sleeping" );
 	cool_t a( ca );
-	ca.set ( 50 );
-	a.spawn ( );
-	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
-	M_DSLEEP ( 10 );
-	start.set_now ( );
-	a.finish ( );
-	stop.set_now ( );
+	ca.set( 50 );
+	a.spawn();
+	ensure_equals( "thread failed to start", a.is_alive(), true );
+	M_DSLEEP( 10 );
+	start.set_now();
+	a.finish();
+	stop.set_now();
 	stop -= start;
-	ensure_equals ( "thread failed to stop", a.is_alive ( ), false );
-	ensure_distance ( "thread failed to interrupt",
-			stop.get_second ( ), 0, 2 );
+	ensure_equals( "thread failed to stop", a.is_alive(), false );
+	ensure_distance( "thread failed to interrupt",
+			stop.get_second(), 0, 2 );
 	}
 
 /* Starting new thread and finishing it prematurely (busy body) */
 template<>
 template<>
-void module::test<33> ( void )
+void module::test<33>( void )
 	{
 	HTime start, stop;
 	HCool ca( "busy" );
 	cool_t a( ca );
-	ca.set ( 50 );
-	a.spawn ( );
-	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
-	M_DSLEEP ( 10 );
-	start.set_now ( );
-	a.finish ( );
-	stop.set_now ( );
+	ca.set( 50 );
+	a.spawn();
+	ensure_equals( "thread failed to start", a.is_alive(), true );
+	M_DSLEEP( 10 );
+	start.set_now();
+	a.finish();
+	stop.set_now();
 	stop -= start;
-	ensure_equals ( "thread failed to stop", a.is_alive ( ), false );
-	ensure_distance ( "thread failed to interrupt",
+	ensure_equals( "thread failed to stop", a.is_alive(), false );
+	ensure_distance( "thread failed to interrupt",
 			static_cast<double>( stop.get_second() ), 0., 2.5 );
 	}
 
 /* Starting new thread and finishing it prematurely by destructor */
 template<>
 template<>
-void module::test<4> ( void )
+void module::test<4>( void )
 	{
 	HTime start, stop;
 		{
 		HCool ca( "a" );
 		cool_t a( ca );
-		ca.set ( 50 );
-		a.spawn ( );
-		ensure_equals ( "thread failed to start", a.is_alive ( ), true );
+		ca.set( 50 );
+		a.spawn();
+		ensure_equals( "thread failed to start", a.is_alive(), true );
 		start.set_now();
 		}
 	stop.set_now();
 	stop -= start;
-	ensure_distance ( "thread failed to interrupt from destructor",
-			stop.get_second ( ), 0, 2 );
+	ensure_distance( "thread failed to interrupt from destructor",
+			stop.get_second(), 0, 2 );
 	}
 
 /* Starting and immediatelly finishing thread */
 template<>
 template<>
-void module::test<5> ( void )
+void module::test<5>( void )
 	{
 	HCool ca( "a" );
 	cool_t a( ca );
-	ca.set ( 50 );
-	a.spawn ( );
-	a.finish ( );
-	ensure_equals ( "thread failed to finish", a.is_alive ( ), false );
+	ca.set( 50 );
+	a.spawn();
+	a.finish();
+	ensure_equals( "thread failed to finish", a.is_alive(), false );
 	}
 
 /* Starting already started thread */
@@ -307,75 +307,75 @@ void module::test<6> ( void )
 	{
 	HCool ca( "6" );
 	cool_t a( ca );
-	ca.set ( 5 );
-	a.spawn ( );
+	ca.set( 5 );
+	a.spawn();
 	try
 		{
-		a.spawn ( );
-		fail ( "Started already started thread." );
+		a.spawn();
+		fail( "Started already started thread." );
 		}
-	catch ( HException & e )
+	catch ( HException& e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	}
 
 /* Finishing thread that was not started */
 template<>
 template<>
-void module::test<7> ( void )
+void module::test<7>( void )
 	{
 	HCool ca( "a" );
 	cool_t a( ca );
 	try
 		{
-		a.finish ( );
-		fail ( "Finishing not started thread successful." );
+		a.finish();
+		fail( "Finishing not started thread successful." );
 		}
-	catch ( HException & e )
+	catch ( HException& e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	}
 
 /* Simple thread (plain function) */
 template<>
 template<>
-void module::test<8> ( void )
+void module::test<8>( void )
 	{
 	HTime start, stop;
 	simple_t a( simple );
 	a.spawn();
-	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
-	M_DSLEEP ( 10 );
-	start.set_now ( );
-	a.finish ( );
-	stop.set_now ( );
+	ensure_equals( "thread failed to start", a.is_alive(), true );
+	M_DSLEEP( 10 );
+	start.set_now();
+	a.finish();
+	stop.set_now();
 	stop -= start;
-	ensure_equals ( "thread failed to stop", a.is_alive ( ), false );
-	ensure_distance ( "thread failed to interrupt",
-			stop.get_second ( ), 0, 2 );
+	ensure_equals( "thread failed to stop", a.is_alive(), false );
+	ensure_distance( "thread failed to interrupt",
+			stop.get_second(), 0, 2 );
 	}
 
 /* Starting new thread and allowing it to finish, the finich is actualy invoked. */
 template<>
 template<>
-void module::test<9> ( void )
+void module::test<9>( void )
 	{
 	HCool ca( "a" );
 	cool_t a( ca );
-	ca.set ( 5 );
-	a.spawn ( );
-	ensure_equals ( "thread failed to start", a.is_alive ( ), true );
-	M_DSLEEP ( 10 );
-	ensure_equals ( "thread failed to finish", a.is_alive ( ), false );
+	ca.set( 5 );
+	a.spawn();
+	ensure_equals( "thread failed to start", a.is_alive(), true );
+	M_DSLEEP( 10 );
+	ensure_equals( "thread failed to finish", a.is_alive(), false );
 	a.finish();
 	}
 
 /* Very short living thread. */
 template<>
 template<>
-void module::test<10> ( void )
+void module::test<10>( void )
 	{
 	HTime start, stop;
 	simple_t a( a_fast_one );
@@ -388,7 +388,7 @@ void module::test<10> ( void )
 /* Very short living thread, spawned delayed. */
 template<>
 template<>
-void module::test<11> ( void )
+void module::test<11>( void )
 	{
 	HTime start, stop;
 	simple_t a( a_fast_one );

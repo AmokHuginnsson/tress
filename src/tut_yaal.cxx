@@ -125,8 +125,8 @@ void module::test<2>( void )
 	cout << p << q << endl;
 	}
 
-class Derived;
-class FunkyDerived;
+struct Derived;
+struct FunkyDerived;
 class Visitor
 	{
 public:

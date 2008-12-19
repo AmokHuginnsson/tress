@@ -644,7 +644,7 @@ int confirm( char const* const str, int const& size, char const* const pat, int 
 	fastpat = pat;
 	if ( len < fastpat.get_length() )
 		fastpat.set_at( len, 0 );
-	char* p = ( len <= size ) ? strstr( str, fastpat.raw() ) : NULL;
+	char const* p = ( len <= size ) ? strstr( str, fastpat.raw() ) : NULL;
 	return ( p ? static_cast<int>( p - str ) : -1 );
 	}
 
