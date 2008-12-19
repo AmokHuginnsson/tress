@@ -74,7 +74,7 @@ TUT_UNIT_TEST_N( 2, "1 mili-second accuracy" )
 	static int long const D_QUALITY = get_speed( HClock::UNIT::D_MILISECOND );
 	HClock clk;
 	::sleep( D_SLEEP );
-	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_MILISECOND ), D_PASSED, D_QUALITY + 5 );
+	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_MILISECOND ), D_PASSED, D_QUALITY + 10 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "1 micro-second accuracy" )
