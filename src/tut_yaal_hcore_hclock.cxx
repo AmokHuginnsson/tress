@@ -74,13 +74,13 @@ TUT_UNIT_TEST_N( 2, "1 mili-second accuracy" )
 	static int long const D_QUALITY = get_speed( HClock::UNIT::D_MILISECOND );
 	HClock clk;
 	::sleep( D_SLEEP );
-	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_MILISECOND ), D_PASSED, D_QUALITY ? D_QUALITY : 1 );
+	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_MILISECOND ), D_PASSED, D_QUALITY + 5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "1 micro-second accuracy" )
 	static int long const D_SLEEP = 1;
 	static int long const D_PASSED = power<10,6>::value;
-	static int long const D_QUALITY = get_speed( HClock::UNIT::D_MICROSECOND );
+	static int long const D_QUALITY = get_speed( HClock::UNIT::D_MICROSECOND ) * 100;
 	HClock clk;
 	::sleep( D_SLEEP );
 	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_MICROSECOND ), D_PASSED, D_QUALITY ? D_QUALITY : 1 );
@@ -89,7 +89,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 4, "1 nano-second accuracy" )
 	static int long const D_SLEEP = 1;
 	static int long const D_PASSED = power<10,9>::value;
-	static int long const D_QUALITY = get_speed( HClock::UNIT::D_NANOSECOND );
+	static int long const D_QUALITY = get_speed( HClock::UNIT::D_NANOSECOND ) * 100;
 	HClock clk;
 	::sleep( D_SLEEP );
 	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_NANOSECOND ), D_PASSED, D_QUALITY ? D_QUALITY : 1 );
