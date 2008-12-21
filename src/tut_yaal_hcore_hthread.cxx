@@ -43,7 +43,7 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-#define M_DSLEEP( count ) util::sleep::milisecond ( ( count ) * 100 );
+#define M_DSLEEP( count ) util::sleep::milisecond( ( count ) * 100 );
 
 class HCool
 	{
@@ -55,15 +55,15 @@ protected:
 	/*}*/
 public:
 	/*{*/
-	HCool ( char const * );
-	virtual ~HCool ( void );
+	HCool( char const* );
+	virtual ~HCool( void );
 	void set( int );
 	int operator() ( HThread const* const );
 	/*}*/
 	};
 
-HCool::HCool ( char const * a_pcName )
-	: f_bWasStarted ( false ), f_iLifeLength ( 0 ), f_oName ( a_pcName )
+HCool::HCool( char const* a_pcName )
+	: f_bWasStarted( false ), f_iLifeLength( 0 ), f_oName( a_pcName )
 	{
 	M_PROLOG
 	cout << "Object [" << f_oName << "] constructed." << endl;
@@ -71,7 +71,7 @@ HCool::HCool ( char const * a_pcName )
 	M_EPILOG
 	}
 
-HCool::~HCool ( void )
+HCool::~HCool( void )
 	{
 	M_PROLOG
 	cout << "Object [" << f_oName << "] destructed." << endl;
@@ -90,7 +90,7 @@ int simple( HThread const* const a_poCaller )
 		M_DSLEEP( 1 );
 		}
 	cout << "Thread [simple] finished." << endl;
-	return( 0 );
+	return ( 0 );
 	M_EPILOG
 	}
 
@@ -131,7 +131,7 @@ int HCool::operator() ( HThread const* const a_poCaller )
 	M_EPILOG
 	}
 
-void HCool::set ( int a_iLength )
+void HCool::set( int a_iLength )
 	{
 	M_PROLOG
 	f_iLifeLength = a_iLength;
