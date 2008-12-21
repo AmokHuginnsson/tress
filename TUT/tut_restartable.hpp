@@ -410,7 +410,9 @@ class restartable_wrapper : public tut_listener
 		else
 			{
 			// test was terminated...
-			tut::test_result tr( fail_group, fail_test, failName, tut::test_result::term, failFile.c_str(), failLine );
+			tut::test_result tr( fail_group, fail_test );
+			tr.set_meta( tut::test_result::term );
+			tr.set_meta( failName, failFile.c_str(), failLine );
 			register_test( tr );
 			}
 		}

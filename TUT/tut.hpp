@@ -368,14 +368,14 @@ class test_group : public group_base, public test_group_posix
 	 */
 	test_result run_test( const tests_iterator& ti, safe_holder<object>& obj )
 		{
-		std::string current_test_name = obj.get() ? obj->get_test_name() : std::string();
-		char const* file = obj.get() ? obj->get_test_file() : "";
-		int line = obj.get() ? obj->get_test_line() : -1;
+		test_result tr( _name, ti->first );
 
+		char const* file = NULL;
+		int line = -1;
 		try
 			{
 			errno = 0;
-			run_test( ti->second, obj, current_test_name );
+			run_test( ti->second, obj );
 			}
 		catch ( const no_such_test& )
 			{
@@ -383,65 +383,52 @@ class test_group : public group_base, public test_group_posix
 			}
 		catch ( const rethrown& ex )
 			{
-			test_result tr( _name, ti->first, current_test_name, test_result::ok, file, line );
 			tr = ex._tr;
 			tr._result = test_result::rethrown;
-			return ( tr );
-			}
-		catch ( const warning& ex )
-			{
-			// test ok, but destructor failed
-
-			test_result tr( _name, ti->first, current_test_name, test_result::warn, ex, file, 1 );
-			return ( tr ) ;
 			}
 		catch ( const failure& ex )
 			{
 			// test failed because of ensure() or similar method
 
-			test_result tr( _name, ti->first, current_test_name, test_result::fail, failure_info( ex._line, ex._file, ex.what() ) );
-			return ( tr ) ;
+			line = ex._line;
+			file = ex._file;
+			tr.set_meta( ex.result(), typeid( ex ).name(), ex.what() );
 			}
-		catch ( const bad_ctor& ex )
+		catch ( const tut_error& ex )
 			{
-			// test failed because test ctor failed; stop the whole group
-
-			test_result tr( _name, ti->first, current_test_name, test_result::ex_ctor, ex, file, 1 );
-			return ( tr ) ;
+			tr.set_meta( ex.result(), typeid( ex ).name(), ex.what() );
 			}
 		catch ( const std::exception& ex )
 			{
 			// test failed with std::exception
 
-			test_result tr( _name, ti->first, current_test_name, test_result::ex, ex, file, line );
-			return ( tr ) ;
+			tr.set_meta( test_result::ex, typeid( ex ).name(), ex.what() );
 			}
 		catch ( const yaal::hcore::HException& ex )
 			{
 			// test failed with yaal::hcore::HException
 
-			test_result tr( _name, ti->first, current_test_name, test_result::ex, ex, file, line );
-			return ( tr ) ;
+			tr.set_meta( test_result::ex, typeid( ex ).name(), ex.what() );
 			}
 		catch ( ... )
 			{
 			// test failed with unknown exception
 
-			test_result tr( _name, ti->first, current_test_name, test_result::ex, file, line );
-			return ( tr ) ;
+			tr.set_meta( test_result::ex );
 			}
+
+		if ( obj.get() )
+			tr.set_meta( obj->get_test_name(), file ? file : obj->get_test_file(), line > 0 ? line : obj->get_test_line() );
 
 		// test passed
 
-		test_result tr( _name, ti->first, current_test_name, test_result::ok, file, line );
-		return ( tr ) ;
+		return ( tr );
 		}
 
 	/**
 	* Runs one.
 	*/
-	bool run_test( testmethod tm, safe_holder<object>&obj,
-		std::string& current_test_name )
+	bool run_test( testmethod tm, safe_holder<object>&obj )
 		{
 		if ( obj.get() == 0 )
 			{
@@ -459,7 +446,6 @@ class test_group : public group_base, public test_group_posix
 			throw no_such_test();
 			}
 
-		current_test_name = obj->get_test_name();
 		obj.permit_throw();
 		obj.release();
 		return ( true );

@@ -62,59 +62,38 @@ struct test_result : public test_result_posix
 	int _line;
 
 	/**
-	* Default constructor.
-	*/
-	test_result() : _testNo( 0 ), _result( ok ), _line( -1 )
-		{}
-
-	/**
-	* Constructor.
-	*/
-	test_result( const std::string& grp, int pos,
-		const std::string& test_name, result_type_t res,
-		char const* const file, int const& line )
-		: _group( grp ), _testNo( pos ), _name( test_name ), _result( res ), _file( file ), _line( line )
-		{}
-
-	/**
-	* Constructor with exception.
-	*/
-	test_result( const std::string& grp, int pos,
-		const std::string& test_name, result_type_t res,
-		const std::exception& exc, char const* const file, int const& line )
-		: _group( grp ), _testNo( pos ), _name( test_name ), _result( res ),
-		_message( exc.what() ), _exceptionTypeId( typeid ( exc ).name() ), _file( file ), _line( line )
-		{}
-
-	/**
-	* Constructor with failure.
-	*/
-	test_result( const std::string& grp, int pos,
-		const std::string& test_name, result_type_t res,
-		const failure_info& f )
-		: _group( grp ), _testNo( pos ), _name( test_name ), _result( res ),
-		_message( f._msg ), _exceptionTypeId( typeid ( f ).name() ), _file( f._file ), _line( f._line )
-		{}
-
-	/**
-	* Constructor with exception.
-	*/
-	test_result( const std::string& grp, int pos,
-		const std::string& test_name, result_type_t res,
-		const yaal::hcore::HException& exc, char const* const file, int const& line )
-		: _group( grp ), _testNo( pos ), _name( test_name ), _result( res ),
-		_message( exc.what() ), _exceptionTypeId( typeid ( exc ).name() ), _file( file ), _line( line )
-		{}
-
-	/** Constructor with typeid.
+	 * Default constructor.
 	 */
-	test_result( const std::string& grp, int pos,
-		const std::string& test_name, result_type_t res,
-		const std::string& ex_typeid,
-		const std::string& msg )
-		: _group( grp ),	_testNo( pos ), _name( test_name ), _result( res ),
-		_message( msg ), _exceptionTypeId( ex_typeid )
-		  {}
+	test_result() : _testNo( 0 ), _result( ok ), _file( "" ), _line( -1 )
+		{}
+
+	/**
+	 * Constructor.
+	 */
+	test_result( std::string const& grp, int pos )
+		: _group( grp ), _testNo( pos ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 )
+		{}
+
+	/**
+	 * Set addtional per-exception information (that is always available/meaningful.
+	 */
+	void set_meta( std::string const& test_name, char const* const file, int const& line )
+		{
+		_name = test_name;
+		_file = file;
+		_line = line;
+		}
+
+	/**
+	 * Set exception specific informational data.
+	 */
+	void set_meta( result_type_t res, std::string const& ex_typeid = std::string(), std::string const& msg = std::string() )
+		{
+		_result = res;
+		_exceptionTypeId = ex_typeid;
+		_message = msg;
+		}
+
 	};
 
 }

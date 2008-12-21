@@ -220,9 +220,9 @@ class test_runner
 				const_iterator i = groups_.find( *k );
 				if ( i == groups_.end() )
 					{
-					test_result tr( *k, 0, "", test_result::setup,
-							tress::setup.f_oTestGroupListFilePath.raw(),
-							static_cast<int>( std::distance( group_names.begin(), k ) ) );
+					test_result tr( *k, 0 );
+					tr.set_meta( test_result::setup, "", "no such group" );
+					tr.set_meta( tress::setup.f_oTestGroupListFilePath.raw(), "-", static_cast<int>( std::distance( group_names.begin(), k ) ) );
 					_callback->test_completed( tr );
 					}
 				else
