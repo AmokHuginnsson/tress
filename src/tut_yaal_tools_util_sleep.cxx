@@ -65,7 +65,7 @@ TUT_UNIT_TEST_N( 1, "the 1 second granularity sleep" )
 	static int long const D_PASSED = power<10,3>::value;
 	static int long const D_QUALITY = get_speed( HClock::UNIT::D_MILISECOND );
 	HClock clk;
-	cout << "E" << sleep::second( D_SLEEP, true ) << "E" << endl;
+	cout << "E" << util::sleep::second( D_SLEEP, true ) << "E" << endl;
 	cout << "$" << clk.get_time_elapsed( HClock::UNIT::D_MILISECOND, false ) << "$" << endl;
 	ensure_distance( "slept for bad number of thousends of seconds", clk.get_time_elapsed( HClock::UNIT::D_MILISECOND, false ), D_PASSED, D_QUALITY + 50 );
 	cout << "$" << clk.get_time_elapsed( HClock::UNIT::D_MILISECOND ) << "$" << endl;
@@ -76,7 +76,7 @@ TUT_UNIT_TEST_N( 2, "the 1 milisecond granularity sleep" )
 	static int long const D_PASSED = 333;
 	static int long const D_QUALITY = get_speed( HClock::UNIT::D_MILISECOND );
 	HClock clk;
-	cout << "E" << sleep::milisecond( D_SLEEP, true ) << "E" << endl;
+	cout << "E" << util::sleep::milisecond( D_SLEEP, true ) << "E" << endl;
 	cout << "$" << clk.get_time_elapsed( HClock::UNIT::D_MILISECOND, false ) << "$" << endl;
 	ensure_distance( "slept for bad number of miliseconds", clk.get_time_elapsed( HClock::UNIT::D_MILISECOND, false ), D_PASSED, D_QUALITY + 50 );
 	cout << "$" << clk.get_time_elapsed( HClock::UNIT::D_MILISECOND, false ) << "$" << endl;
