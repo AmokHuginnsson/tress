@@ -57,11 +57,11 @@ TUT_UNIT_TEST_N( 1, "simple use" )
 	bmp.copy( D_BUFF, D_BUFF_BIT_SIZE );
 	HBitmap const x( bmp );
 	cout << endl;
-	yaal::copy( x.begin(), x.end(), ostream_iterator<int>( cout ) );
+	yaal::copy( x.begin(), x.end(), stream_iterator( cout ) );
 	yaal::fill_n( bmp.begin(), D_BUFF_BIT_SIZE / 2, true );
 	HBitmap const y( bmp );
 	cout << endl;
-	yaal::copy( y.begin(), y.end(), ostream_iterator<int>( cout ) );
+	yaal::copy( y.begin(), y.end(), stream_iterator( cout ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Default constructor */" )

@@ -666,7 +666,7 @@ void module::test<35>( void )
 	char sample[ D_SAMPLE_SIZE + 1 ];
 	sample[ D_SAMPLE_SIZE ] = 0;
 	yaal::generate( sample, sample + D_SAMPLE_SIZE, gen_char() );
-	yaal::copy( sample, sample + D_SAMPLE_SIZE, ostream_iterator<char>( cout ) ); cout << endl;
+	yaal::copy( sample, sample + D_SAMPLE_SIZE, stream_iterator( cout ) ); cout << endl;
 	HString str( sample );
 	HString msg;
 	for ( int len = 1; len <= D_SAMPLE_SIZE; ++ len )
