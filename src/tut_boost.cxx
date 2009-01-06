@@ -101,14 +101,14 @@ TUT_TEARDOWN()
 
 void dump_dir( path const& dir )
 	{
-	cout << "dir: " << dir.file_string() << endl;
+	cout << "dir: " << dir.string() << endl;
 	directory_iterator end;
 	for ( directory_iterator it( dir ); it != end; ++ it )
 		{
 		if ( is_directory( *it ) )
 			dump_dir( *it );
 		else
-			cout << "file: " << it->path() << endl;
+			cout << "file: " << it->string() << endl;
 		}
 	return;
 	}
