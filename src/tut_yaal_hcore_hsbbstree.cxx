@@ -44,93 +44,98 @@ namespace tut
 
 struct red_black_tree_stress_test
 	{
-	virtual ~red_black_tree_stress_test ( void ) {}
+	virtual ~red_black_tree_stress_test( void ) {}
 	struct node
 		{
-		typedef enum	{	red, black	} color_t;
-		void * nil;
+		typedef enum { red, black } color_t;
+		void* nil;
 		color_t color;
-		node * parent;
-		node * left;
-		node * right;
+		node* parent;
+		node* left;
+		node* right;
 		};
-	node * root;
+	node* root;
 	int long quantity;
-	template < typename T >
-	bool self_test ( HSet<T> & );
-	template < typename T >
-	bool integrity_test ( HSet<T> & );
-	template < typename T >
-	bool definition_test ( HSet<T> & );
+	template<typename T>
+	bool self_test( HSet<T>& );
+	template<typename T>
+	bool integrity_test( HSet<T>& );
+	template<typename T>
+	bool definition_test( HSet<T>& );
 
 	static bool red_node_exists;
+	static bool black_node_exists;
 private:
 	int long tested_nodes;
 	int black_height;
-	template < typename T >
-	void init ( HSet<T>& );
+	template< typename T >
+	void init( HSet<T>& );
 
-	void helper_test_node_integrity ( node * );
-	void helper_test_node_definition ( node * );
-	int helper_count_exemplar_black_height ( node * );
-	int helper_check_black_height ( node * );
+	void helper_test_node_integrity( node* );
+	void helper_test_node_definition( node* );
+	int helper_count_exemplar_black_height( node* );
+	int helper_check_black_height( node* );
 	};
 
 bool red_black_tree_stress_test::red_node_exists = false;
+bool red_black_tree_stress_test::black_node_exists = false;
 
 template<typename T>
-void red_black_tree_stress_test::init ( HSet<T>& ob )
+void red_black_tree_stress_test::init( HSet<T>& ob )
 	{
 	red_black_tree_stress_test * hack = reinterpret_cast<red_black_tree_stress_test*> ( &ob );
 	tested_nodes = 0;
 	black_height = 0;
 	red_node_exists = false;
+	black_node_exists = false;
 	root = hack->root;
 	quantity = hack->quantity;
 	}
 
-void red_black_tree_stress_test::helper_test_node_integrity ( node * n )
+void red_black_tree_stress_test::helper_test_node_integrity( node* n )
 	{
 	if ( ! n->parent && ( n != root ) )
-		fail ( "node with null parent is not root" );
+		fail( "node with null parent is not root" );
 	if ( n->parent && ( n->parent->left != n ) && ( n->parent->right != n ) )
-		fail ( "parent node does not know about this node" );
+		fail( "parent node does not know about this node" );
 	if ( n->left )
 		{
 		if ( n->left->parent != n )
-			fail ( "child node does not know about its parent (this node)" );
+			fail( "child node does not know about its parent (this node)" );
 		helper_test_node_integrity ( n->left );
 		}
 	if ( n->right )
 		{
 		if ( n->right->parent != n )
-			fail ( "child node does not know about its parent (this node)" );
+			fail( "child node does not know about its parent (this node)" );
 		helper_test_node_integrity ( n->right );
 		}
 	++ tested_nodes;
 	}
 
-void red_black_tree_stress_test::helper_test_node_definition ( node * n )
+void red_black_tree_stress_test::helper_test_node_definition( node* n )
 	{
 	if ( n->color == node::red )
 		{
 		red_node_exists = true;
 		if ( ( n->left && ( n->left->color == node::red ) )
 				|| ( n->right && ( n->right->color == node::red ) ) )
-			fail ( "subsequent red nodes" );
+			fail( "subsequent red nodes" );
 		}
+	else
+		black_node_exists = true;
 	if ( n->left )
-		helper_test_node_definition ( n->left );
+		helper_test_node_definition( n->left );
 	if ( n->right )
-		helper_test_node_definition ( n->right );
+		helper_test_node_definition( n->right );
 	if ( ! ( n->left || n->right ) )
 		{
-		if ( helper_check_black_height ( n ) != black_height )
-			fail ( "black height is not the same for all the nodes" );
+		if ( helper_check_black_height( n ) != black_height )
+			fail( "black height is not the same for all the nodes" );
 		}
 	}
 
-int red_black_tree_stress_test::helper_count_exemplar_black_height ( node * n )
+int red_black_tree_stress_test::helper_count_exemplar_black_height( node* n )
 	{
 	int bh = 0;
 	while ( n )
@@ -143,7 +148,7 @@ int red_black_tree_stress_test::helper_count_exemplar_black_height ( node * n )
 	return ( bh );
 	}
 
-int red_black_tree_stress_test::helper_check_black_height ( node * n )
+int red_black_tree_stress_test::helper_check_black_height( node* n )
 	{
 	int bh = 0;
 	while ( n )
@@ -156,7 +161,7 @@ int red_black_tree_stress_test::helper_check_black_height ( node * n )
 	}
 
 template<typename T>
-bool red_black_tree_stress_test::self_test ( HSet<T> & ob )
+bool red_black_tree_stress_test::self_test( HSet<T>& ob )
 	{
 	init( ob );
 	if ( ob.size() != quantity )
@@ -175,22 +180,22 @@ bool red_black_tree_stress_test::self_test ( HSet<T> & ob )
 	}
 
 template<typename T>
-bool red_black_tree_stress_test::integrity_test ( HSet<T> & ob )
+bool red_black_tree_stress_test::integrity_test( HSet<T>& ob )
 	{
 	init ( ob );
 	helper_test_node_integrity ( root );
-	ensure_equals( "quantity inconsistency", quantity,  tested_nodes );
+	ensure_equals( "quantity inconsistency", quantity, tested_nodes );
 	return ( false );
 	}
 
 template<typename T>
-bool red_black_tree_stress_test::definition_test ( HSet<T> & ob )
+bool red_black_tree_stress_test::definition_test( HSet<T>& ob )
 	{
-	init ( ob );
+	init( ob );
 	if ( root->color != node::black )
 		fail ( "root is not black" );
-	black_height = helper_count_exemplar_black_height ( root );
-	helper_test_node_definition ( root );
+	black_height = helper_count_exemplar_black_height( root );
+	helper_test_node_definition( root );
 //	if ( red_node_exists )
 //		cout << "R";
 	return ( false );
@@ -202,10 +207,10 @@ struct tut_yaal_hcore_hsbbstree
 	static int const KEY_POOL_SIZE = 30000;
 	red_black_tree_stress_test stress;
 	template < typename object, typename subject, typename key >
-	void helper_stress_test ( object &, subject, key );
+	void helper_stress_test( object&, subject, key );
 	};
 
-template < typename object, typename subject, typename key >
+template<typename object, typename subject, typename key>
 void tut_yaal_hcore_hsbbstree::helper_stress_test( object& ob, subject member, key val )
 	{
 	( ob.*member )( val );
@@ -213,7 +218,7 @@ void tut_yaal_hcore_hsbbstree::helper_stress_test( object& ob, subject member, k
 	ensure( "integrity test failed", ! stress.integrity_test<key>( ob ) );
 	ensure( "definition test failed", ! stress.definition_test<key>( ob ) );
 	key biggest = - 1;
-	for ( typename object::HIterator it = ob.begin ( ); it != ob.end ( ); ++ it )
+	for ( typename object::HIterator it = ob.begin(); it != ob.end(); ++ it )
 		{
 		ensure( "elements not in order", *it > biggest );
 		biggest = *it;
@@ -221,28 +226,28 @@ void tut_yaal_hcore_hsbbstree::helper_stress_test( object& ob, subject member, k
 	return;
 	}
 
-typedef test_group < tut_yaal_hcore_hsbbstree > tut_group;
+typedef test_group<tut_yaal_hcore_hsbbstree> tut_group;
 typedef tut_group::object module;
-tut_group tut_yaal_hcore_hsbbstree_group ( "yaal::hcore::HSBBSTree" );
+tut_group tut_yaal_hcore_hsbbstree_group( "yaal::hcore::HSBBSTree" );
 
 /*
  * Adding keys in ascending order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<1> ( void )
 	{
 	HSet<int> s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test ( s, & HSet<int>::insert, i );
+		helper_stress_test( s, &HSet<int>::insert, i );
 	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 	}
 
 /*
  * Adding keys in descending order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<2> ( void )
 	{
 	HSet<int> s;
@@ -254,8 +259,8 @@ void module::test<2> ( void )
 /*
  * Adding keys in random order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<3> ( void )
 	{
 	HRandomizer r;
@@ -269,8 +274,8 @@ void module::test<3> ( void )
  * Removing keys in ascending order from lower half of the tree that
  * was created by adding keys in ascending order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<4> ( void )
 	{
 	HSet<int> s;
@@ -284,8 +289,8 @@ void module::test<4> ( void )
  * Removing keys in ascending order from upper half of the tree that
  * was created by adding keys in ascending order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<5> ( void )
 	{
 	HSet<int> s;
@@ -299,8 +304,8 @@ void module::test<5> ( void )
  * Removing keys in descending order from lower half of the tree that
  * was created by adding keys in ascending order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<6> ( void )
 	{
 	HSet<int> s;
@@ -314,8 +319,8 @@ void module::test<6> ( void )
  * Removing keys in descending order from upper half of the tree that
  * was created by adding keys in ascending order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<7> ( void )
 	{
 	HSet<int> s;
@@ -329,8 +334,8 @@ void module::test<7> ( void )
  * Removing keys in ascending order from lower half of the tree that
  * was created by adding keys in descending order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<8> ( void )
 	{
 	HSet<int> s;
@@ -344,8 +349,8 @@ void module::test<8> ( void )
  * Removing keys in ascending order from upper half of the tree that
  * was created by adding keys in descending order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<9> ( void )
 	{
 	HSet<int> s;
@@ -359,8 +364,8 @@ void module::test<9> ( void )
  * Removing keys in descending order from lower half of the tree that
  * was created by adding keys in descending order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<10> ( void )
 	{
 	HSet<int> s;
@@ -374,8 +379,8 @@ void module::test<10> ( void )
  * Removing keys in descending order from upper half of the tree that
  * was created by adding keys in descending order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<11> ( void )
 	{
 	HSet<int> s;
@@ -389,8 +394,8 @@ void module::test<11> ( void )
  * Removing keys in ascending order from lower half of the tree that
  * was created by adding keys in random order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<12> ( void )
 	{
 	HRandomizer r;
@@ -405,7 +410,7 @@ void module::test<12> ( void )
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast < int > ( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -415,8 +420,8 @@ void module::test<12> ( void )
  * Removing keys in ascending order from upper half of the tree that
  * was created by adding keys in random order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<13> ( void )
 	{
 	HRandomizer r;
@@ -431,7 +436,7 @@ void module::test<13> ( void )
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast < int > ( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -441,8 +446,8 @@ void module::test<13> ( void )
  * Removing keys in descending order from lower half of the tree that
  * was created by adding keys in random order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<14> ( void )
 	{
 	HRandomizer r;
@@ -457,7 +462,7 @@ void module::test<14> ( void )
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast < int > ( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -467,8 +472,8 @@ void module::test<14> ( void )
  * Removing keys in descending order from upper half of the tree that
  * was created by adding keys in random order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<15> ( void )
 	{
 	HRandomizer r;
@@ -483,7 +488,7 @@ void module::test<15> ( void )
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast < int > ( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -493,8 +498,8 @@ void module::test<15> ( void )
  * Removing keys in random order from upper half of the tree that
  * was created by adding keys in random order.
  */
-template < >
-template < >
+template<>
+template<>
 void module::test<16> ( void )
 	{
 	HRandomizer r;
@@ -509,7 +514,7 @@ void module::test<16> ( void )
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast < int > ( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}

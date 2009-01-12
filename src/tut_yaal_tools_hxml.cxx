@@ -200,7 +200,7 @@ TUT_UNIT_TEST_N( 4, "/* build, save, load */" )
 	n.add_node( HXml::HNode::TYPE::D_NODE, D_NODE );
 	HXml::HIterator it = n.add_node( HXml::HNode::TYPE::D_NODE, D_NODE );
 	HXml::HIterator child = (*it).add_node( HXml::HNode::TYPE::D_NODE, D_CHILD );
-	(*child).properties().insert( D_PROP, D_PROP_VALUE );
+	(*child).properties().insert( yaal::hcore::make_pair( D_PROP, D_PROP_VALUE ) );
 	n.copy_node( *it );
 	x.save( HStreamInterface::ptr_t( new HFile( D_OUT_PATH, HFile::OPEN::D_WRITING ) ) );
 	HXml y;
