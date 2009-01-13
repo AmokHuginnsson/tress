@@ -44,12 +44,17 @@ namespace tut
 
 struct tut_yaal_hcore_hmap
 	{
+	struct Crazy
+		{
+		Crazy() { throw 0; }
+		};
+	typedef HMap<int, int> i2i_t;
+	typedef HMap<int, Crazy> i2c_t;
 	};
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hmap, "yaal::hcore::HMap" );
 
 TUT_UNIT_TEST_N( 1, "HMap insert of already existing key")
-	typedef HMap<int, int> i2i_t;
 	i2i_t m;
 	static int const D_KEY = 1;
 	static int const D_ORIGINAL_VAL = 2;
@@ -60,6 +65,20 @@ TUT_UNIT_TEST_N( 1, "HMap insert of already existing key")
 	insert_result_t ir = m.insert( yaal::hcore::make_pair( D_KEY, D_NEXT_VAL ) );
 	ensure_equals( "insertion of already existing key reported successful", ir.second, false );
 	ensure_equals( "element with already existing key inserted", ir.first->second, D_ORIGINAL_VAL );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 2, "exception during map[key] = val;" )
+	i2c_t m;
+	try
+		{
+		m[ 0 ] = Crazy();
+		fail( "FATAL: bad exec path!" );
+		}
+	catch ( int const& )
+		{
+		// ok
+		}
+	ensure_equals( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 
 }
