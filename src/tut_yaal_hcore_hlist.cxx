@@ -63,7 +63,7 @@ HString tut_yaal_hcore_hlist::_cache;
 
 void tut_yaal_hcore_hlist::dump( list_t& l )
 	{
-	int s = l.size();
+	int long s = l.size();
 	cout << "l(" << s << "): [";
 	for ( list_t::iterator it = l.begin(); it != l.end(); ++ it )
 		cout << *it << ( s -- > 1 ? "," : "" );
