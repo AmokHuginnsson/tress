@@ -231,5 +231,13 @@ void module::test<4>( void )
 	ensure_equals( "copy finished too late", tab1[ 5 ], 5 );
 	}
 
+template<>
+template<>
+void module::test<5>( void )
+	{
+	int long unsigned q = static_max<sizeof ( int ), sizeof ( char ), sizeof ( double long ), sizeof ( void* ), sizeof ( int long ), sizeof ( int short )>::value;
+	ensure_equals( "static_max failed", q, sizeof ( double long ) );
+	}
+
 }
 
