@@ -44,11 +44,14 @@ namespace tut
 
 struct tut_yaal_hcore_hvariant
 	{
+	typedef HVariant<int, HString, double long> variant_t;
 	};
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hvariant, "yaal::hcore::HVariant" );
 
 TUT_UNIT_TEST_N( 1, "the test" )
+	variant_t v = HString( "ala ma kota" );
+	cout << v.get<HString>() << endl;
 TUT_TEARDOWN()
 
 }
