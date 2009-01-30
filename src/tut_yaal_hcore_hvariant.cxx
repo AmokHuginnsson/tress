@@ -44,14 +44,35 @@ namespace tut
 
 struct tut_yaal_hcore_hvariant
 	{
-	typedef HVariant<int, HString, double long> variant_t;
+	typedef HVariant<int, HString, double long> small_variant_t;
+	typedef HVariant<bool, char, int short, int, int long, void*, double, double long, HString> variant_t;
 	};
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hvariant, "yaal::hcore::HVariant" );
 
-TUT_UNIT_TEST_N( 1, "the test" )
+TUT_UNIT_TEST_N( 1, "PoC of HVariant<>" )
 	variant_t v = HString( "ala ma kota" );
-	cout << v.get<HString>() << endl;
+	cout << "\"" << v.get<HString>() << "\" of type: " << v.type() << endl;
+	cout << "sizeof ( variant_t ): " << sizeof ( v ) << endl;
+	cout << "sizeof ( HString ): " << sizeof ( HString ) << endl;
+	cout << "sizeof ( double long ): " << sizeof ( double long ) << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 2, "uninitialized HVariant<>" )
+	variant_t v;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 3, "copy of uninitialized HVariant<>" )
+	variant_t v;
+	variant_t w = v;
+	variant_t x;
+	variant_t const z;
+	x = v;
+	x = z;
+	variant_t t( v );
+	variant_t u( z );
+	variant_t const& rz = z;
+	variant_t tmp( rz );
 TUT_TEARDOWN()
 
 }
