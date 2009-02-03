@@ -68,8 +68,8 @@ TUT_UNIT_TEST_N( 2, "empty format and param" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 49, "well-formed format tests" )
-  double long D_PI = 3.141592653589793;
-  char const* const s = "ala";
+	double long D_PI = 3.141592653589793;
+	char const* const s = "ala";
 	ensure_equals( "bad format output", ( HFormat( "[%Lf]\n" ) % D_PI ).string(), "3.141593" );
 	ensure_equals( "bad format output", ( HFormat( "[%.3Lf]\n" ) % D_PI ).string(), "3.142" );
 	ensure_equals( "bad format output", ( HFormat( "[%.8Lf]\n" ) % D_PI ).string(), "3.14159265" );
