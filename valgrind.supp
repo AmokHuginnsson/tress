@@ -1490,3 +1490,242 @@
    fun:pthread_once
    fun:backtrace
 }
+{
+   Jaunty1
+   Memcheck:Cond
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:*
+   obj:*
+}
+{
+   Jaunty2
+   Memcheck:Cond
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:*
+   obj:*
+}
+{
+   Jaunty3
+   Memcheck:Cond
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:*
+   obj:*
+}
+{
+   Jaunty4
+   Memcheck:Cond
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:*
+   obj:*
+}
+{
+   Jaunty5
+   Memcheck:Cond
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/ld-2.9.so
+   fun:__libc_dlopen_mode
+   fun:__nss_lookup_function
+   obj:/lib/libc-2.9.so
+   fun:getpwuid_r
+}
+{
+   Jaunty6
+   Memcheck:Addr8
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/ld-2.9.so
+   fun:__libc_dlopen_mode
+   fun:__nss_lookup_function
+   obj:/lib/libc-2.9.so
+   fun:getpwuid_r
+}
+{
+   Jaunty7
+   Memcheck:Addr8
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libdl-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libdl-2.9.so
+   fun:dlopen
+}
+{
+   Jaunty8
+   Memcheck:Cond
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libdl-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libdl-2.9.so
+   fun:dlopen
+}
+{
+   Jaunty9
+   Memcheck:Cond
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libdl-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libdl-2.9.so
+   fun:dlopen
+}
+{
+   Jaunty10
+   Memcheck:Addr8
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/ld-2.9.so
+   fun:__libc_dlopen_mode
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   fun:iconv_open
+}
+{
+   Jaunty11
+   Memcheck:Addr8
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/ld-2.9.so
+   fun:__libc_dlopen_mode
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   fun:iconv_open
+}
+{
+   Jaunty12
+   Memcheck:Addr8
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/ld-2.9.so
+   fun:__libc_dlopen_mode
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   fun:iconv_open
+}
+{
+   Jaunty13
+   Memcheck:Addr8
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/ld-2.9.so
+   fun:__libc_dlsym
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/libc-2.9.so
+   fun:iconv_open
+}
+{
+   Jaunty14
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/libdl-2.9.so
+   fun:dlclose
+}
+{
+   Jaunty15
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/libc-2.9.so
+   fun:__nss_database_lookup
+   obj:*
+   obj:*
+   fun:getpwuid_r
+}
+{
+   Jaunty16
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libdl-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libdl-2.9.so
+   fun:dlopen
+}
