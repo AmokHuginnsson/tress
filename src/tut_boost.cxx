@@ -90,7 +90,7 @@ TUT_UNIT_TEST_N( 1, "/* binding */" )
 	cout << "{" << endl;
 	typedef vector<multi> T;
 	T v;
-	generate_n( back_insert_iterator<T>( v ), 3, make_multi );
+	generate_n( std::back_insert_iterator<T>( v ), 3, make_multi );
 	yaal::copy( v.begin(), v.end(), stream_iterator( cout ) );
 	cout << endl;
 	sort( v.begin(), v.end(), bind( &multi::_first, _1 ) < bind( &multi::_first, _2 ) );
@@ -224,7 +224,7 @@ TUT_UNIT_TEST_N( 4, "bind, accumulate, plus" )
 	typedef map<int,test4helper> T;
 	T m;
 	typedef generator<test4helper, inc> t4gh_t;
-	generate_n( insert_iterator<T>( m, m.begin() ), 3,
+	generate_n( std::insert_iterator<T>( m, m.begin() ), 3,
 			generator<t4h_t, inc, t4gh_t>( inc( 1 ), t4gh_t( inc( 7 ) ) ) );
 	yaal::copy( m.begin(), m.end(), stream_iterator( cout ) );
 	cout << endl;

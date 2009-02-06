@@ -93,7 +93,7 @@ TUT_UNIT_TEST_N( 3, "create contents automatically" )
 	cout << "{" << endl;
 	typedef set<int> T;
 	T s;
-	generate_n( insert_iterator<T>( s, s.begin() ), 3, inc( 1 ) );
+	generate_n( std::insert_iterator<T>( s, s.begin() ), 3, inc( 1 ) );
 	yaal::copy( s.begin(), s.end(), stream_iterator( cout ) );
 	cout << endl;
 	cout << "}" << endl;
@@ -104,12 +104,12 @@ TUT_UNIT_TEST_N( 4, "reverse container content automatically" )
 	cout << "{" << endl;
 	typedef list<int> T;
 	T l;
-	generate_n( back_insert_iterator<T>( l ), 3, inc( 1 ) );
+	generate_n( std::back_insert_iterator<T>( l ), 3, inc( 1 ) );
 	yaal::copy( l.begin(), l.end(), stream_iterator( cout ) ); cout << endl;
 	reverse( l.begin(), l.end() );
 	yaal::copy( l.begin(), l.end(), stream_iterator( cout ) ); cout << endl;
 	T lc;
-	reverse_copy( l.begin(), l.end(), back_insert_iterator<T>( lc ) );
+	reverse_copy( l.begin(), l.end(), std::back_insert_iterator<T>( lc ) );
 	yaal::copy( l.begin(), l.end(), stream_iterator( cout ) ); cout << endl;
 	yaal::copy( lc.begin(), lc.end(), stream_iterator( cout ) ); cout << endl;
 	cout << "}" << endl;
@@ -120,7 +120,7 @@ TUT_UNIT_TEST_N( 5, "transform (negate) container content automatically" )
 	cout << "{" << endl;
 	typedef list<int> T;
 	T l;
-	generate_n( back_insert_iterator<T>( l ), 20, inc( 1 ) );
+	generate_n( std::back_insert_iterator<T>( l ), 20, inc( 1 ) );
 	yaal::copy( l.begin(), l.end(), stream_iterator( cout ) ); cout << endl;
 	std::replace_if(l.begin(), l.end(), std::bind2nd( std::less<int>(), 10 ), 10);
 	yaal::copy( l.begin(), l.end(), stream_iterator( cout ) ); cout << endl;

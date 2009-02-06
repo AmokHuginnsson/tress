@@ -239,5 +239,29 @@ void module::test<5>( void )
 	ensure_equals( "static_max failed", q, sizeof ( double long ) );
 	}
 
+template<>
+template<>
+void module::test<6>( void )
+	{
+	int d1[] = { 1, 2, 4 };
+	int d2[] = { 2, 3, 5, 7 };
+	int d3[] = { 3, 14, 15, 9265, 35, 89, 79, 3 };
+	typedef HList<int> list_t;
+
+	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
+	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
+	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
+
+	yaal::copy( l1.begin(), l1.end(), stream_iterator( std::cout, " " ) ); std::cout << std::endl;
+	yaal::copy( l2.begin(), l2.end(), stream_iterator( std::cout, " " ) ); std::cout << std::endl;
+	yaal::copy( l3.begin(), l3.end(), stream_iterator( std::cout, " " ) ); std::cout << std::endl;
+
+	list_t l;
+	yaal::copy( l1.begin(), l1.end(), yaal::hcore::back_insert_iterator( l ) );
+	yaal::copy( l2.begin(), l2.end(), yaal::hcore::back_insert_iterator( l ) );
+	yaal::copy( l3.begin(), l3.end(), yaal::hcore::back_insert_iterator( l ) );
+	yaal::copy( l.begin(), l.end(), stream_iterator( std::cout, " " ) ); std::cout << std::endl;
+	}
+
 }
 
