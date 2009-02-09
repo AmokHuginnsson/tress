@@ -11,13 +11,13 @@ Copyright:
 
  You are free to use this program as is, you can redistribute binary
  package freely but:
-  1. You can not use any part of sources of this software.
-  2. You can not redistribute any part of sources of this software.
+  1. You cannot use any part of sources of this software.
+  2. You cannot redistribute any part of sources of this software.
   3. No reverse engineering is allowed.
-  4. If you want redistribute binary package you can not demand any fees
+  4. If you want redistribute binary package you cannot demand any fees
      for this software.
-     You can not even demand cost of the carrier (CD for example).
-  5. You can not include it to any commercial enterprise (for example 
+     You cannot even demand cost of the carrier (CD for example).
+  5. You cannot include it to any commercial enterprise (for example 
      as a free add-on to payed software or payed newspaper).
  This program is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
@@ -55,9 +55,7 @@ struct tut_yaal
 	{
 	};
 
-typedef test_group<tut_yaal> tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_group( "yaal" );
+TUT_TEST_GROUP_N( tut_yaal, "yaal" );
 
 /* abstract call */
 
@@ -98,10 +96,8 @@ struct prod
 		{ cout << __PRETTY_FUNCTION__ << ": " << a1 << ", " << a2 << endl; }
 	};
 
-template<>
-template<>
-void module::test<1>( void )
-	{
+
+TUT_UNIT_TEST_N( 1, "call method resolving" )
 	prod p;
 	call<prod&, typeof( &prod::foo )> c0( p, &prod::foo );
 	c0.visit();
@@ -109,21 +105,19 @@ void module::test<1>( void )
 	c1.visit();
 	call<prod&, typeof( &prod::baz ), int, int> c2( p, &prod::baz, 11, -7 );
 	c2.visit();
-	}
+TUT_TEARDOWN()
 
 bool greater( int long a, int long b )
 	{
 	return ( a > b );
 	}
 
-template<>
-template<>
-void module::test<2>( void )
-	{
+TUT_UNIT_TEST_N( 2, "bind2nd" )
 	bool p = yaal::bind2nd( &greater, 4 )( 3 );
+	ensure_not( "greater functor binded incorrectly", p );
 	bool q = yaal::bind2nd( &greater, 1 )( 3 );
-	cout << p << q << endl;
-	}
+	ensure( "greater functor binded incorrectly", q );
+TUT_TEARDOWN()
 
 struct Derived;
 struct FunkyDerived;
@@ -186,10 +180,7 @@ public:
 		{ obj.baz(); }
 	};
 
-template<>
-template<>
-void module::test<3>( void )
-	{
+TUT_UNIT_TEST_N( 3, "visitor pattern" )
 	typedef HPointer<Base> base_ptr_t;
 	base_ptr_t a = base_ptr_t( new Derived );
 	base_ptr_t b = base_ptr_t( new FunkyDerived );
@@ -216,12 +207,9 @@ void module::test<3>( void )
 	b->accept( FunkyDerivedBarCall() );
 	a->accept( DerivedBazCall() );
 	b->accept( DerivedBazCall() );
-	}
+TUT_TEARDOWN()
 
-template<>
-template<>
-void module::test<4>( void )
-	{
+TUT_UNIT_TEST_N( 4, "copy algorithm" )
 	int tab1[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
 	int tab2[] = { 0, -1, -2, -3, -4, -5, -6, -7 };
 	yaal::copy( tab2 + 2, tab2 + 5, tab1 + 2 );
@@ -229,20 +217,14 @@ void module::test<4>( void )
 	ensure_equals( "copy started too late", tab1[ 2 ], -2 );
 	ensure_equals( "copy finished too early", tab1[ 4 ], -4 );
 	ensure_equals( "copy finished too late", tab1[ 5 ], 5 );
-	}
+TUT_TEARDOWN()
 
-template<>
-template<>
-void module::test<5>( void )
-	{
+TUT_UNIT_TEST_N( 5, "static_max" )
 	int long unsigned q = static_max<sizeof ( int ), sizeof ( char ), sizeof ( double long ), sizeof ( void* ), sizeof ( int long ), sizeof ( int short )>::value;
 	ensure_equals( "static_max failed", q, sizeof ( double long ) );
-	}
+TUT_TEARDOWN()
 
-template<>
-template<>
-void module::test<6>( void )
-	{
+TUT_UNIT_TEST_N( 6, "back_insert_iterator" )
 	int d1[] = { 1, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 3, 14, 15, 9265, 35, 89, 79, 3 };
@@ -261,7 +243,7 @@ void module::test<6>( void )
 	yaal::copy( l2.begin(), l2.end(), yaal::hcore::back_insert_iterator( l ) );
 	yaal::copy( l3.begin(), l3.end(), yaal::hcore::back_insert_iterator( l ) );
 	yaal::copy( l.begin(), l.end(), stream_iterator( std::cout, " " ) ); std::cout << std::endl;
-	}
+TUT_TEARDOWN()
 
 }
 
