@@ -48,8 +48,32 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
+namespace yaal
+{
+
+template<typename iter_in1_t, typename iter_in2_t, typename iter_out_t>
+iter_out_t set_( iter_in1_t it1, iter_in1_t end1, iter_in2_t it2, iter_in2_t end2, iter_out_t out )
+	{
+	return ( out );
+	}
+
+}
+
 namespace tut
 {
+
+template<typename tType>
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HList<tType> const& l )
+	{
+	out << "list(";yaal::copy( l.begin(), l.end(), stream_iterator( out, " " ) ); out << "\b)" << std::flush;
+	return ( out );
+	}
+
+template<typename tType>
+bool operator != ( yaal::hcore::HList<tType> const& l1, yaal::hcore::HList<tType> const& l2 )
+	{
+	return ( ! equal( l1.begin(), l1.end(), l2.begin(), l2.end() ) );
+	}
 
 struct tut_yaal
 	{
@@ -228,21 +252,92 @@ TUT_UNIT_TEST_N( 6, "back_insert_iterator" )
 	int d1[] = { 1, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 3, 14, 15, 9265, 35, 89, 79, 3 };
+	int d4[] = { 1, 2, 4, 2, 3, 5, 7, 3, 14, 15, 9265, 35, 89, 79, 3 };
 	typedef HList<int> list_t;
 
 	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
 	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
 	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
-
-	yaal::copy( l1.begin(), l1.end(), stream_iterator( std::cout, " " ) ); std::cout << std::endl;
-	yaal::copy( l2.begin(), l2.end(), stream_iterator( std::cout, " " ) ); std::cout << std::endl;
-	yaal::copy( l3.begin(), l3.end(), stream_iterator( std::cout, " " ) ); std::cout << std::endl;
-
+	list_t l4( d4, d4 + sizeof ( d4 ) / sizeof ( int ) );
 	list_t l;
 	yaal::copy( l1.begin(), l1.end(), yaal::hcore::back_insert_iterator( l ) );
 	yaal::copy( l2.begin(), l2.end(), yaal::hcore::back_insert_iterator( l ) );
 	yaal::copy( l3.begin(), l3.end(), yaal::hcore::back_insert_iterator( l ) );
-	yaal::copy( l.begin(), l.end(), stream_iterator( std::cout, " " ) ); std::cout << std::endl;
+	ensure_equals( "set_union failed", l, l4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 7, "equal" )
+	typedef HList<int> list_t;
+	int d1[] = { 1, 2, 4 };
+	int d2[] = { 2, 3, 5, 7 };
+	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
+	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
+	ensure( "positive test for equality failed", equal( l1.begin(), l1.end(), d1, d1 + sizeof ( d1 ) / sizeof ( int ) ) );
+	ensure_not( "negative test for equality failed", equal( l1.begin(), l1.end(), l2.begin(), l2.end() ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 8, "set_union uniqe" )
+	typedef HList<int> list_t;
+	int d1[] = { 1, 2, 4 };
+	int d2[] = { 2, 3, 5, 7 };
+	int d3[] = { 1, 2, 3, 4, 5, 7 };
+	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
+	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
+	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
+	list_t l;
+	yaal::set_union( l1.begin(), l1.end(), l2.begin(), l2.end(), yaal::hcore::back_insert_iterator( l ) );
+	ensure_equals( "set_union failed", l, l3 );
+	l.clear();
+	yaal::set_union( l2.begin(), l2.end(), l1.begin(), l1.end(), yaal::hcore::back_insert_iterator( l ) );
+	ensure_equals( "set_union failed", l, l3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 9, "set_union duplicates" )
+	typedef HList<int> list_t;
+	int d1[] = { 1, 2, 2, 4 };
+	int d2[] = { 2, 3, 5, 7 };
+	int d3[] = { 1, 2, 2, 3, 4, 5, 7 };
+	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
+	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
+	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
+	list_t l;
+	yaal::set_union( l1.begin(), l1.end(), l2.begin(), l2.end(), yaal::hcore::back_insert_iterator( l ) );
+	ensure_equals( "set_union failed", l, l3 );
+	l.clear();
+	yaal::set_union( l2.begin(), l2.end(), l1.begin(), l1.end(), yaal::hcore::back_insert_iterator( l ) );
+	ensure_equals( "set_union failed", l, l3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 10, "set_intersection unique" )
+	typedef HList<int> list_t;
+	int d1[] = { 1, 2, 2, 4 };
+	int d2[] = { 2, 3, 5, 7 };
+	int d3[] = { 2 };
+	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
+	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
+	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
+	list_t l;
+	yaal::set_intersection( l1.begin(), l1.end(), l2.begin(), l2.end(), yaal::hcore::back_insert_iterator( l ) );
+	ensure_equals( "set_intersection failed", l, l3 );
+	l.clear();
+	yaal::set_intersection( l2.begin(), l2.end(), l1.begin(), l1.end(), yaal::hcore::back_insert_iterator( l ) );
+	ensure_equals( "set_intersection failed", l, l3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 11, "set_intersection duplicates" )
+	typedef HList<int> list_t;
+	int d1[] = { 1, 2, 2, 4 };
+	int d2[] = { 2, 2, 3, 5, 7 };
+	int d3[] = { 2, 2 };
+	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
+	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
+	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
+	list_t l;
+	yaal::set_intersection( l1.begin(), l1.end(), l2.begin(), l2.end(), yaal::hcore::back_insert_iterator( l ) );
+	ensure_equals( "set_intersection failed", l, l3 );
+	l.clear();
+	yaal::set_intersection( l2.begin(), l2.end(), l1.begin(), l1.end(), yaal::hcore::back_insert_iterator( l ) );
+	ensure_equals( "set_intersection failed", l, l3 );
 TUT_TEARDOWN()
 
 }
