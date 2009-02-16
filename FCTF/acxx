@@ -106,11 +106,14 @@ def verify_bug( input_path, line_no ):
 def check_bug( out, input_path ):
 	no_more_bugs_match = re.compile( "^" + input_path + ":[0-9]+:[0-9]+: error: #error NO_SUCH_BUG$" )
 	line_number_match = re.compile( "^" + input_path + ":([0-9]+): error" )
+	line_number_match_alt = re.compile( "^" + input_path + ":([0-9]+): +instantiated from here" )
 	for line in out.readlines():
 		match = no_more_bugs_match.match( line )
 		if ( match ):
 			return 1
 		match = line_number_match.match( line )
+		if ( not match ):
+			match = line_number_match_alt.match( line )
 		if ( match ):
 			return verify_bug( input_path, match.group( 1 ) )
 	return 2
