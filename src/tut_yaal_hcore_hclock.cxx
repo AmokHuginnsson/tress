@@ -24,6 +24,7 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <unistd.h>
 #include <TUT/tut.hpp>
 
 #include <yaal/yaal.hxx>

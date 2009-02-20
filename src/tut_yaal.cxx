@@ -272,8 +272,8 @@ TUT_UNIT_TEST_N( 7, "equal" )
 	int d2[] = { 2, 3, 5, 7 };
 	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
 	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
-	ensure( "positive test for equality failed", equal( l1.begin(), l1.end(), d1, d1 + sizeof ( d1 ) / sizeof ( int ) ) );
-	ensure_not( "negative test for equality failed", equal( l1.begin(), l1.end(), l2.begin(), l2.end() ) );
+	ensure( "positive test for equality failed", yaal::equal( l1.begin(), l1.end(), d1, d1 + sizeof ( d1 ) / sizeof ( int ) ) );
+	ensure_not( "negative test for equality failed", yaal::equal( l1.begin(), l1.end(), l2.begin(), l2.end() ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "set_union uniqe" )

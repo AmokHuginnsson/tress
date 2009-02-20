@@ -108,7 +108,7 @@ void dump_dir( path const& dir )
 		if ( is_directory( *it ) )
 			dump_dir( *it );
 		else
-			cout << "file: " << it->string() << endl;
+			cout << "file: " << (*it).path() << endl;
 		}
 	return;
 	}
