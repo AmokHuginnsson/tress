@@ -83,7 +83,7 @@ TUT_UNIT_TEST_N( 24, "well-formed format tests" )
 	ensure_equals( "bad format output", ( HFormat( "[%.8Lf]" ) % D_PI ).string(), "[3.14159265]" );
 TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 25, "well-formed format tests" )
-	ensure_equals( "bad format output", ( HFormat( "[%.20Lf]" ) % D_PI ).string(), "[3.14159265350000005412]" );
+	ensure_equals( "bad format output", ( HFormat( "[%.20Lf]" ) % D_PI ).string(), "[3.14159265358979311600]" );
 TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 26, "well-formed format tests" )
 	ensure_equals( "bad format output", ( HFormat( "[%15Lf]" ) % D_PI ).string(), "[       3.141593]" );
