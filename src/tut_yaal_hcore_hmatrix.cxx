@@ -57,7 +57,7 @@ void module::test<1> ( void )
 	HMatrix < double > V ( 3, 3 );
 	HMatrix < double > W ( 3, 3 );
 	HMatrix < double > X ( 2, 2 );
-	cout << "<<< matrix >>>" << endl;
+	std::cout << "<<< matrix >>>" << std::endl;
 	V [ 0 ] [ 0 ] = 1.2, V [ 0 ] [ 1 ] = 2.3, V [ 0 ] [ 2 ] = 3.4;
 	V [ 1 ] [ 0 ] = 4.3, V [ 1 ] [ 1 ] = 3.2, V [ 1 ] [ 2 ] = 2.1;
 	V [ 2 ] [ 0 ] = 2.4, V [ 2 ] [ 1 ] = 5.6, V [ 2 ] [ 2 ] = 7.7;
@@ -65,14 +65,14 @@ void module::test<1> ( void )
 	X [ 1 ] [ 0 ] = 4.3, X [ 1 ] [ 1 ] = 3.2;
 	W = V;
 	W *= 2;
-	cout << "V = ..." << endl << V << endl;
-	cout << "W = ..." << endl << W << endl;
-	cout << "V + W = ..." << endl << V + W << endl;
-	cout << "X = ..." << endl << X << endl;
-	cout << "X ^ - 1 = ..." << endl << X._1 ( ) << endl;
-	cout << "X * X ^ - 1 = ..." << endl << X * X._1 ( ) << endl;
-	cout << "V ^ - 1 = ..." << endl << V._1 ( ) << endl;
-	cout << "V * V ^ - 1 = ..." << endl << V * V._1 ( ) << endl;
+	std::cout << "V = ..." << std::endl << V << std::endl;
+	std::cout << "W = ..." << std::endl << W << std::endl;
+	std::cout << "V + W = ..." << std::endl << V + W << std::endl;
+	std::cout << "X = ..." << std::endl << X << std::endl;
+	std::cout << "X ^ - 1 = ..." << std::endl << X._1 ( ) << std::endl;
+	std::cout << "X * X ^ - 1 = ..." << std::endl << X * X._1 ( ) << std::endl;
+	std::cout << "V ^ - 1 = ..." << std::endl << V._1 ( ) << std::endl;
+	std::cout << "V * V ^ - 1 = ..." << std::endl << V * V._1 ( ) << std::endl;
 	}
 
 }

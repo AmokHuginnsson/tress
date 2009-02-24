@@ -31,7 +31,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -45,10 +44,12 @@ namespace tut
 struct tut_yaal_hcore_hformat
 	{
 	static double long D_PI;
+	static double long D_E;
 	static char const* const D_STR;
 	};
 
 double long tut_yaal_hcore_hformat::D_PI = 3.141592653589793;
+double long tut_yaal_hcore_hformat::D_E = 2.718281828459045;
 char const* const tut_yaal_hcore_hformat::D_STR = "ala";
 
 
@@ -59,7 +60,7 @@ TUT_UNIT_TEST_N( 1, "empty format" )
 	ensure_equals( "bad empty format output", f.string(), HString() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "empty format and param" )
+TUT_UNIT_TEST_N( 2, "param given for an empty format" )
 	HFormat f;
 	try
 		{
@@ -71,6 +72,48 @@ TUT_UNIT_TEST_N( 2, "empty format and param" )
 		{
 		// ok
 		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 3, "no params for non empty format" )
+	HFormat f( "%d" );
+	try
+		{
+		f.string();
+		fail( "non empty format generated string based on zero args" );
+		}
+	catch ( HFormatException& )
+		{
+		// ok
+		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 4, "bad order of params" )
+	HFormat f( "[%1$*2$.*3$Lf]" );
+	try
+		{
+		f % 8 % D_PI % 3;
+		fail( "incorrect arg type accepted" );
+		}
+	catch ( HFormatException& )
+		{
+		// ok
+		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 5, "reuse of format" )
+	HFormat f( "[%.15Lf]" );
+	f % D_PI;
+	ensure_equals( "bad format output", f.string(), "[3.141592653589793]" );
+	f % D_E;
+	ensure_equals( "bad format output", f.string(), "[2.718281828459045]" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 6, "format and streams interaction" )
+	typedef HFormat format;
+	cout << "PI: " << format( "[%2$*1$.*3$Lf]" ) % 30 % D_PI % 15 << endl;
+	HStringStream ss;
+	ss << format( "[%2$*1$.*3$Lf]" ) % 30 % D_PI % 15 << flush;
+	ensure_equals( "format feeded stream with garbage", ss.string(), "[             3.141592653589793]" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 22, "well-formed format tests" )
@@ -119,10 +162,10 @@ TUT_UNIT_TEST_N( 36, "well-formed format tests" )
 	ensure_equals( "bad format output", ( HFormat( "[%2$.*1$Lf]" ) % 3 % D_PI ).string(), "[3.142]" );
 TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 37, "well-formed format tests" )
-	ensure_equals( "bad format output", ( HFormat( "[%1$*2$.*3$Lf]" ) % D_PI % 8% 3 ).string(), "[   3.142]" );
+	ensure_equals( "bad format output", ( HFormat( "[%1$*2$.*3$Lf]" ) % D_PI % 8 % 3 ).string(), "[   3.142]" );
 TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 38, "well-formed format tests" )
-	ensure_equals( "bad format output", ( HFormat( "[%1$*3$.*2$Lf]" ) % D_PI % 3% 8 ).string(), "[   3.142]" );
+	ensure_equals( "bad format output", ( HFormat( "[%1$*3$.*2$Lf]" ) % D_PI % 3 % 8 ).string(), "[   3.142]" );
 TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 39, "well-formed format tests" )
 	ensure_equals( "bad format output", ( HFormat( "[%2$*3$.*1$Lf]" ) % 3 % D_PI % 8 ).string(), "[   3.142]" );

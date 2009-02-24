@@ -39,7 +39,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace boost;
 using namespace yaal;
 using namespace yaal::hcore;

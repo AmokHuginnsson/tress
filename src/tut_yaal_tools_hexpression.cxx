@@ -31,7 +31,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -58,7 +57,7 @@ TUT_UNIT_TEST_N( 1, "complex and valid expression" )
 	x2 *= x2;
 	x2 *= x2;
 	ensure_equals( "wrong computation", x1, x2 );
-	cout << eq << "=" << setprecision( 20 ) << x1 << endl;
+	std::cout << eq << "=" << std::setprecision( 20 ) << x1 << std::endl;
 	eq = "Y";
 	x.compile( eq );
 	x [ 'Y' ] = 3.;

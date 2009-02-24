@@ -34,7 +34,6 @@ M_VCSID( "$Id$" )
 #include "setup.hxx"
 #include "options.hxx"
 
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;

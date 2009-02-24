@@ -35,7 +35,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -101,7 +100,7 @@ void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n )
 		else
 			_cache += "   ";
 		}
-	cout << *n << endl;
+	std::cout << *n << std::endl;
 	for ( tree_t::const_iterator it = n.begin(); it != n.end(); ++ it )
 		draw_node( *it );
 	_cache.set_at( len, 0 );

@@ -54,21 +54,21 @@ template<>
 template<>
 void module::test<1>( void )
 	{
-	HVector < double > v ( 3 );
-	HVector < double > w ( 3 );
-	cout << "<<< vector >>>" << endl;
-	v [ 0 ] = 1.2;	v [ 1 ] = 2.4; v [ 2 ] = 3.5;
-	w [ 0 ] = 4.7;	w [ 1 ] = 5.1; w [ 2 ] = 6.6;
-	cout << "    v = " << v << endl;
-	cout << "    w = " << w << endl;
-	cout << "v + w = " << v + w << endl;
-	cout << "v * 2 = " << v * 2. << endl;
-	cout << "3 * w = " << 3. * w << endl;
-	cout << "w - v = " << w - v << endl;
-	cout << "w / 2 = " << w / 2. << endl;
-	cout << "  ! v = " << ! v << endl;
-	cout << "v | w = " << ( v | w ) << endl;
-	cout << "  - v = " << - v << endl;
+	HVector<double> v( 3 );
+	HVector<double> w( 3 );
+	std::cout << "<<< vector >>>" << std::endl;
+	v[ 0 ] = 1.2;	v[ 1 ] = 2.4; v[ 2 ] = 3.5;
+	w[ 0 ] = 4.7;	w[ 1 ] = 5.1; w[ 2 ] = 6.6;
+	std::cout << "    v = " << v << std::endl;
+	std::cout << "    w = " << w << std::endl;
+	std::cout << "v + w = " << v + w << std::endl;
+	std::cout << "v * 2 = " << v * 2. << std::endl;
+	std::cout << "3 * w = " << 3. * w << std::endl;
+	std::cout << "w - v = " << w - v << std::endl;
+	std::cout << "w / 2 = " << w / 2. << std::endl;
+	std::cout << "  ! v = " << ! v << std::endl;
+	std::cout << "v | w = " << ( v | w ) << std::endl;
+	std::cout << "  - v = " << - v << std::endl;
 	}
 
 }

@@ -42,7 +42,6 @@ using namespace tut;
 using namespace std;
 using namespace boost;
 using namespace yaal;
-using namespace yaal::hcore;
 using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
@@ -83,7 +82,7 @@ TUT_UNIT_TEST_N( 2, "display automatically" )
 	s.insert( 1 );
 	s.insert( 2 );
 	s.insert( 3 );
-	yaal::copy( s.begin(), s.end(), stream_iterator( cout ) );
+	yaal::copy( s.begin(), s.end(), hcore::stream_iterator( cout ) );
 	cout << endl;
 	cout << "}" << endl;
 TUT_TEARDOWN()
@@ -94,7 +93,7 @@ TUT_UNIT_TEST_N( 3, "create contents automatically" )
 	typedef set<int> T;
 	T s;
 	generate_n( std::insert_iterator<T>( s, s.begin() ), 3, inc( 1 ) );
-	yaal::copy( s.begin(), s.end(), stream_iterator( cout ) );
+	yaal::copy( s.begin(), s.end(), hcore::stream_iterator( cout ) );
 	cout << endl;
 	cout << "}" << endl;
 TUT_TEARDOWN()
@@ -105,13 +104,13 @@ TUT_UNIT_TEST_N( 4, "reverse container content automatically" )
 	typedef list<int> T;
 	T l;
 	generate_n( std::back_insert_iterator<T>( l ), 3, inc( 1 ) );
-	yaal::copy( l.begin(), l.end(), stream_iterator( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
 	reverse( l.begin(), l.end() );
-	yaal::copy( l.begin(), l.end(), stream_iterator( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
 	T lc;
 	reverse_copy( l.begin(), l.end(), std::back_insert_iterator<T>( lc ) );
-	yaal::copy( l.begin(), l.end(), stream_iterator( cout ) ); cout << endl;
-	yaal::copy( lc.begin(), lc.end(), stream_iterator( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
+	yaal::copy( lc.begin(), lc.end(), hcore::stream_iterator( cout ) ); cout << endl;
 	cout << "}" << endl;
 TUT_TEARDOWN()
 
@@ -121,13 +120,13 @@ TUT_UNIT_TEST_N( 5, "transform (negate) container content automatically" )
 	typedef list<int> T;
 	T l;
 	generate_n( std::back_insert_iterator<T>( l ), 20, inc( 1 ) );
-	yaal::copy( l.begin(), l.end(), stream_iterator( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
 	std::replace_if(l.begin(), l.end(), std::bind2nd( std::less<int>(), 10 ), 10);
-	yaal::copy( l.begin(), l.end(), stream_iterator( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
 	yaal::transform( l.begin(), l.end(), l.begin(), negate<int>() );
-	yaal::copy( l.begin(), l.end(), stream_iterator( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
 	yaal::transform( l.begin(), l.end(), l.begin(), yaal::bind2nd( yaal::plus<int>(), 7 ) );
-	yaal::copy( l.begin(), l.end(), stream_iterator( cout ) ); cout << endl;
+	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
 	cout << "}" << endl;
 	vector<string> vs;
 TUT_TEARDOWN()

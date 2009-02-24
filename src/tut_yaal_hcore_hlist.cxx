@@ -34,7 +34,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -1029,7 +1028,7 @@ void module::test<25>( void )
 	char buf[10];
 	list_t l;
 	check_consistency( l );
-	cout << setprecision( 2 ) << fixed;
+	std::cout << std::setprecision( 2 ) << std::fixed;
 	for ( int long unsigned i = 0; i < count; ++ i )
 		{
 		snprintf( buf, 9, "%08lo", i );
@@ -1046,14 +1045,14 @@ void module::test<25>( void )
 			}
 		catch ( ... )
 			{
-			cout << "(" << setw( 8 ) << setfill( '0' ) << oct << i << ")[" << to_string( l ) << "]" << endl;
+			std::cout << "(" << std::setw( 8 ) << std::setfill( '0' ) << std::oct << i << ")[" << to_string( l ) << "]" << std::endl;
 			throw;
 			}
 		check_consistency( l );
 		l.clear();
 		check_consistency( l );
 		if ( ! ( i % 8192 ) )
-			cout << "\r               \r" << setw( 6 ) << 100. * ( static_cast<double>( i ) / static_cast<double>( count ) ) << '%' << flush;
+			std::cout << "\r               \r" << std::setw( 6 ) << 100. * ( static_cast<double>( i ) / static_cast<double>( count ) ) << '%' << std::flush;
 		}
 	}
 

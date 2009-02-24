@@ -1729,3 +1729,18 @@
    obj:/lib/libdl-2.9.so
    fun:dlopen
 }
+{
+   Jaunty17
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/libc-2.9.so
+   obj:/lib/ld-2.9.so
+   fun:__libc_dlopen_mode
+   obj:/lib/libc-2.9.so
+   fun:pthread_once
+   fun:backtrace
+}

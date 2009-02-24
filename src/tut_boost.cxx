@@ -46,7 +46,6 @@ using namespace boost;
 using namespace boost::filesystem;
 using namespace boost::gregorian;
 using namespace yaal;
-using namespace yaal::hcore;
 using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
@@ -91,10 +90,10 @@ TUT_UNIT_TEST_N( 1, "/* binding */" )
 	typedef vector<multi> T;
 	T v;
 	generate_n( std::back_insert_iterator<T>( v ), 3, make_multi );
-	yaal::copy( v.begin(), v.end(), stream_iterator( cout ) );
+	yaal::copy( v.begin(), v.end(), hcore::stream_iterator( cout ) );
 	cout << endl;
 	sort( v.begin(), v.end(), bind( &multi::_first, _1 ) < bind( &multi::_first, _2 ) );
-	yaal::copy( v.begin(), v.end(), stream_iterator( cout ) );
+	yaal::copy( v.begin(), v.end(), hcore::stream_iterator( cout ) );
 	cout << endl;
 	cout << "}" << endl;
 TUT_TEARDOWN()
@@ -226,7 +225,7 @@ TUT_UNIT_TEST_N( 4, "bind, accumulate, plus" )
 	typedef generator<test4helper, inc> t4gh_t;
 	generate_n( std::insert_iterator<T>( m, m.begin() ), 3,
 			generator<t4h_t, inc, t4gh_t>( inc( 1 ), t4gh_t( inc( 7 ) ) ) );
-	yaal::copy( m.begin(), m.end(), stream_iterator( cout ) );
+	yaal::copy( m.begin(), m.end(), hcore::stream_iterator( cout ) );
 	cout << endl;
 	int sum = accumulate( m.begin(), m.end(), 0,
 			bind( std::plus<int>(), _1, bind( &test4helper::get_val, bind( &t4h_t::second, _2 ) ) ) );

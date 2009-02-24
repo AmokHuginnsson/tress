@@ -30,7 +30,6 @@ M_VCSID( "$Id: "__ID__" $" )
 
 #include "setup.hxx"
 
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -57,7 +56,7 @@ HLogger::HLogger( void )
 	{
 	}
 
-HLogger& HLogger::operator << ( string const& a_oString )
+HLogger& HLogger::operator << ( std::string const& a_oString )
 	{
 	M_PROLOG
 	if ( n_bWatchNext )
@@ -84,7 +83,7 @@ HLogger& HLogger::operator << ( int const& a_iNumber )
 	M_EPILOG
 	}
 
-HLogger& HLogger::operator << ( ostream& ( * const ) ( ostream& ) )
+HLogger& HLogger::operator << ( std::ostream& ( * const ) ( std::ostream& ) )
 	{
 	M_PROLOG
 	hcore::log << endl;
@@ -92,7 +91,7 @@ HLogger& HLogger::operator << ( ostream& ( * const ) ( ostream& ) )
 	M_EPILOG
 	}
 
-ostream& operator << ( ostream & out, HComplex const& a_oComplex )
+std::ostream& operator << ( std::ostream& out, HComplex const& a_oComplex )
 	{
 	M_PROLOG
 	double re, im;
@@ -109,6 +108,12 @@ ostream& operator << ( ostream & out, HComplex const& a_oComplex )
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s )
 	{
 	out << s.raw();
+	return ( out );
+	}
+
+HStreamInterface& operator << ( HStreamInterface& out, std::string const& s )
+	{
+	out << s.c_str();
 	return ( out );
 	}
 

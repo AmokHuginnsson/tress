@@ -33,7 +33,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -251,7 +250,7 @@ void module::test<19> ( void )
 	l_oClient.write( test_data, size );
 	l_oLocal->read( reciv_buffer, size );
 	reciv_buffer[ size ] = 0;
-	ensure_equals( "data broken during transfer", string( reciv_buffer ), string( test_data ) );
+	ensure_equals( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
 	cout << reciv_buffer << endl;
 	}
 
@@ -272,48 +271,48 @@ TUT_UNIT_TEST_N( 20, "Transfering data through file with SSL." )
 	l_oClient.close();
 	serv.finish();
 	reciv_buffer[ size ] = 0;
-	ensure_equals( "data broken during transfer", string( reciv_buffer ), string( test_data ) );
+	ensure_equals( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
 	cout << reciv_buffer << endl;
 TUT_TEARDOWN()
 
 /* Transfering data through network. */
 template<>
 template<>
-void module::test<21> ( void )
+void module::test<21>( void )
 	{
-	char test_data [ ] = "A kot ma wpierdol.";
+	char test_data[] = "A kot ma wpierdol.";
 	const int size = sizeof ( test_data );
-	char reciv_buffer [ size + 1 ];
-	HSocket l_oServer ( HSocket::TYPE::D_NETWORK, 1 );
-	HSocket l_oClient ( HSocket::TYPE::D_NETWORK );
-	l_oServer.listen ( "0.0.0.0", 5555 );
-	l_oClient.connect ( "127.0.0.1", 5555 );
+	char reciv_buffer[ size + 1 ];
+	HSocket l_oServer( HSocket::TYPE::D_NETWORK, 1 );
+	HSocket l_oClient( HSocket::TYPE::D_NETWORK );
+	l_oServer.listen( "0.0.0.0", 5555 );
+	l_oClient.connect( "127.0.0.1", 5555 );
 	HSocket::ptr_t l_oLocal = l_oServer.accept();
-	l_oClient.write ( test_data, size );
+	l_oClient.write( test_data, size );
 	l_oLocal->read( reciv_buffer, size );
-	reciv_buffer [ size ] = 0;
-	ensure_equals ( "data broken during transfer", string ( reciv_buffer ), string ( test_data ) );
+	reciv_buffer[ size ] = 0;
+	ensure_equals( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
 	cout << reciv_buffer << endl;
 	}
 
 TUT_UNIT_TEST_N( 22, "Transfering data through network with SSL." )
-	char test_data [ ] = "A kot ma wpierdol.";
+	char test_data[] = "A kot ma wpierdol.";
 	const int size = sizeof ( test_data );
-	char reciv_buffer [ size + 1 ];
-	HSocket l_oServer ( HSocket::TYPE::D_NETWORK | HSocket::TYPE::D_SSL_SERVER, 1 );
-	HSocket l_oClient ( HSocket::TYPE::D_NETWORK | HSocket::TYPE::D_SSL_CLIENT );
-	l_oServer.listen ( "0.0.0.0", 5555 );
-	l_oClient.connect ( "127.0.0.1", 5555 );
+	char reciv_buffer[ size + 1 ];
+	HSocket l_oServer( HSocket::TYPE::D_NETWORK | HSocket::TYPE::D_SSL_SERVER, 1 );
+	HSocket l_oClient( HSocket::TYPE::D_NETWORK | HSocket::TYPE::D_SSL_CLIENT );
+	l_oServer.listen( "0.0.0.0", 5555 );
+	l_oClient.connect( "127.0.0.1", 5555 );
 	OServer serv;
 	serv.f_oSocket = l_oServer.accept();
 	serv.f_pcBuffer = reciv_buffer;
 	serv.f_iSize = size;
 	serv.spawn();
-	l_oClient.write ( test_data, size );
+	l_oClient.write( test_data, size );
 	l_oClient.close();
 	serv.finish();
-	reciv_buffer [ size ] = 0;
-	ensure_equals ( "data broken during transfer", string ( reciv_buffer ), string ( test_data ) );
+	reciv_buffer[ size ] = 0;
+	ensure_equals( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
 	cout << reciv_buffer << endl;
 TUT_TEARDOWN()
 

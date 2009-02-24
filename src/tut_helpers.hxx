@@ -31,6 +31,7 @@ Copyright:
 #include <iostream>
 #include <iomanip>
 
+#include <yaal/hcore/hstreaminterface.hxx>
 #include <yaal/hcore/hcomplex.hxx>
 #include <yaal/hcore/hvector.hxx>
 #include <yaal/hcore/hmatrix.hxx>
@@ -60,6 +61,7 @@ protected:
 
 std::ostream& operator << ( std::ostream&, yaal::hcore::HComplex const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HString const& );
+yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface&, std::string const& );
 
 template<typename tType>
 std::ostream& operator << ( std::ostream& out,

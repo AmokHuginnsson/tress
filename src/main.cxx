@@ -38,7 +38,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "options.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -69,7 +68,7 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 /*	variables declarations for main loop:                                 */
 	int l_iOpt = 0;
 	HLogger logger;
-	tut::reporter<HLogger> l_oVisitor( cerr, logger );
+	tut::reporter<HLogger> l_oVisitor( std::cerr, logger );
 	HException::set_error_stream( stdout );
 	tut::restartable_wrapper l_oRestartable;
 /*	end.                                                                  */

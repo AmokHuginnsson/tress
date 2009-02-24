@@ -33,7 +33,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "setup.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -49,33 +48,33 @@ struct tut_yaal_tools_hxml
 	{
 	static HString f_oVarTmpBuffer;
 	HXml f_oXml;
-	static ostream& dump( ostream& out, HXml::HConstNodeProxy const& a_rsNode )
+	static std::ostream& dump( std::ostream& out, HXml::HConstNodeProxy const& a_rsNode )
 		{
 		f_oVarTmpBuffer.hs_realloc( a_rsNode.get_level() * 2 + 3 );
 		f_oVarTmpBuffer.fillz( ' ', a_rsNode.get_level() * 2 + 1 );
 		if ( a_rsNode.get_type() == HXml::HNode::TYPE::D_NODE )
 			{
 			if ( ! a_rsNode.get_name().is_empty() )
-				out << f_oVarTmpBuffer << "[" << a_rsNode.get_name() << "]<" << a_rsNode.get_level() << ">:" << endl;
+				out << f_oVarTmpBuffer << "[" << a_rsNode.get_name() << "]<" << a_rsNode.get_level() << ">:" << std::endl;
 			for ( HXml::HNode::properties_t::const_iterator it = a_rsNode.properties().begin(); it != a_rsNode.properties().end(); ++ it )
 				{
 				out << f_oVarTmpBuffer << "(" << it->first << ")->(";
-				out << it->second << ")" << endl;
+				out << it->second << ")" << std::endl;
 				}
 			if ( a_rsNode.has_childs() )
 				{
 				f_oVarTmpBuffer.fillz( ' ', a_rsNode.get_level() * 2 + 2 );
-				out << f_oVarTmpBuffer << "{" << endl;
+				out << f_oVarTmpBuffer << "{" << std::endl;
 				for ( HXml::const_iterator it = a_rsNode.begin(); it != a_rsNode.end(); ++ it )
 					{
 					dump( out, *it );
 					f_oVarTmpBuffer.set_at( a_rsNode.get_level() * 2 + 2, 0 );
 					}
-				out << f_oVarTmpBuffer << "}" << endl;
+				out << f_oVarTmpBuffer << "}" << std::endl;
 				}
 			}
 		else if ( ! a_rsNode.get_value().is_empty() )
-			out << f_oVarTmpBuffer << a_rsNode.get_value() << endl;
+			out << f_oVarTmpBuffer << a_rsNode.get_value() << std::endl;
 		return ( out );
 		}
 	};
@@ -86,7 +85,7 @@ typedef test_group<tut_yaal_tools_hxml> tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_tools_hxml_group( "yaal::tools::HXml" );
 
-ostream& operator << ( ostream& out, HXml const& xml )
+std::ostream& operator << ( std::ostream& out, HXml const& xml )
 	{
 	return ( tut_yaal_tools_hxml::dump( out, xml.get_root() ) );
 	}
@@ -259,7 +258,7 @@ TUT_UNIT_TEST_N( 9, "/* apply stylesheet */" )
 	f_oXml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml" ) ) );
 	f_oXml.apply_style( "data/style.xml" );
 	f_oXml.parse();
-	dump( cout, f_oXml.get_root() );
+	dump( std::cout, f_oXml.get_root() );
 TUT_TEARDOWN()
 
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s )
