@@ -436,8 +436,8 @@ class test_group : public group_base, public test_group_posix
 			}
 
 		obj->called_method_was_a_dummy_test_ = false;
-
-		obj->set_test_tut( _name, _currentTest->first );
+		if ( _currentTest != _tests.end() )
+			obj->set_test_tut( _name, _currentTest->first );
 		( obj.get()->*tm )();
 
 		if ( obj->called_method_was_a_dummy_test_ )

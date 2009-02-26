@@ -333,7 +333,7 @@ class test_runner
 		if ( i != i )
 			return;
 
-		for ( int n = 1;; ++ n )
+		for ( ;; )
 			{
 			if ( i->second->has_next() )
 				_callback->test_started( i->second->next() );
