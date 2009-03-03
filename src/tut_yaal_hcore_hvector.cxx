@@ -42,13 +42,8 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_hcore_hvector
-	{
-	};
-
-typedef test_group<tut_yaal_hcore_hvector> tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_hcore_hvector_group( "yaal::hcore::HVector" );
+TUT_SIMPLE_MOCK( tut_yaal_hcore_hvector );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hvector, "yaal::hcore::HVector" );
 
 template<>
 template<>

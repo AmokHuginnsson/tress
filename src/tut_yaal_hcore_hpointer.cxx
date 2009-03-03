@@ -48,6 +48,8 @@ struct tut_yaal_hcore_hpointer
 		{
 		counter_t::set_instance_count( 0 );
 		}
+	virtual ~tut_yaal_hcore_hpointer( void )
+		{}
 
 	struct Base
 		{
@@ -132,7 +134,7 @@ typedef HPointer<tut_yaal_hcore_hpointer::counter_t> ptr_t;
 /* Default constructor. */
 template<>
 template<>
-void module::test<1> ( void )
+void module::test<1>( void )
 	{
 	ptr_t ptr;
 	ensure_equals ( "failed to invoke destructor", ptr.raw(), static_cast<counter_t*>( NULL ) );
@@ -141,13 +143,13 @@ void module::test<1> ( void )
 /* Constructor. */
 template<>
 template<>
-void module::test<2> ( void )
+void module::test<2>( void )
 	{
 		{
 		counter_t* p = NULL;
-		ptr_t ptr ( p = new counter_t ( ) );
+		ptr_t ptr( p = new counter_t() );
 		ensure_equals( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
-		ptr->foo ( );
+		ptr->foo();
 		}
 	ensure_equals ( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 	}
@@ -155,11 +157,11 @@ void module::test<2> ( void )
 /* Copy constructor. */
 template<>
 template<>
-void module::test<3> ( void )
+void module::test<3>( void )
 	{
 		{
 		counter_t* p = NULL;
-		ptr_t ptr = ptr_t ( p = new counter_t ( ) );
+		ptr_t ptr = ptr_t( p = new counter_t() );
 		ensure_equals( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
 		ptr->foo();
 		}
@@ -169,12 +171,12 @@ void module::test<3> ( void )
 /* Assign operator. */
 template<>
 template<>
-void module::test<4> ( void )
+void module::test<4>( void )
 	{
 		{
 		counter_t* p = NULL;
-		ptr_t sp1 = ptr_t ( new counter_t() );
-		ptr_t sp2 = ptr_t ( p = new counter_t() );
+		ptr_t sp1 = ptr_t( new counter_t() );
+		ptr_t sp2 = ptr_t( p = new counter_t() );
 		sp1->foo();
 		sp2->foo();
 		sp1 = sp2;
@@ -272,8 +274,8 @@ void module::test<9>()
 		{
 		ptr_t sp1( new counter_t() );
 		sp1 = sp1;
-		ensure("get", sp1.raw() != 0);
-		ensure("leak !!!", counter_t::get_instance_count() == 1);
+		ensure( "get", sp1.raw() != 0 );
+		ensure( "leak !!!", counter_t::get_instance_count() == 1 );
 		ensure_equals( "not destructed", counter_t::get_instance_count(), 1 );
 		}
 	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
@@ -301,7 +303,7 @@ void module::test<10>()
 
 		sp1 = sp2;
 		ensure_equals( "create 2", sp1->get_symbol(), p2->get_symbol() );
-		ensure_equals("leak !!!=1", counter_t::get_instance_count(), 1 );
+		ensure_equals( "leak !!!=1", counter_t::get_instance_count(), 1 );
 		}
 	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
 	}
@@ -445,16 +447,18 @@ void module::test<17>()
 		spe->A::foo( "spe->A::foo" );
 		spe->E::foo( "spe->E::foo" );
 		spe->foo( "spe->foo" );
-		a->bar("a->bar");
-		a->A::bar("a->A::bar");
-		spa->bar("spa->bar");
-		spa->A::bar("spa->A::bar");
-		e->A::bar("e->A::bar");
-		e->bar("e->bar");
-		spe->A::bar("spe->A::bar");
-		spe->bar("spe->bar");
+		a->bar( "a->bar" );
+		a->A::bar( "a->A::bar" );
+		spa->bar( "spa->bar" );
+		spa->A::bar( "spa->A::bar" );
+		e->A::bar( "e->A::bar" );
+		e->bar( "e->bar" );
+		spe->A::bar( "spe->A::bar" );
+		spe->bar( "spe->bar" );
 		}
 	}
+
+#pragma GCC diagnostic ignored "-Weffc++"
 
 struct non_virt_dtor
 	{
@@ -474,6 +478,8 @@ TUT_UNIT_TEST_N( 18, "non virtual destructor" )
 		}
 	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
 TUT_TEARDOWN()
+
+#pragma GCC diagnostic error "-Weffc++"
 
 }
 

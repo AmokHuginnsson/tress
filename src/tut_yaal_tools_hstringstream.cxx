@@ -41,13 +41,8 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_tools_hstringstream
-	{
-	};
-
-typedef test_group<tut_yaal_tools_hstringstream> tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_tools_hstringstream_group( "yaal::tools::HStringStream" );
+TUT_SIMPLE_MOCK( tut_yaal_tools_hstringstream );
+TUT_TEST_GROUP_N( tut_yaal_tools_hstringstream, "yaal::tools::HStringStream" );
 
 template<>
 template<>

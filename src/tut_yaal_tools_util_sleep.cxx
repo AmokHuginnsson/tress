@@ -43,6 +43,8 @@ namespace tut
 
 struct tut_yaal_tools_util_sleep
 	{
+	virtual ~tut_yaal_tools_util_sleep( void )
+		{}
 	int long get_speed( HClock::UNIT::unit_t const& );
 	};
 

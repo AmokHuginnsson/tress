@@ -50,6 +50,8 @@ struct tut_yaal_hcore_hmap
 		};
 	typedef HMap<int, int> i2i_t;
 	typedef HMap<int, Crazy> i2c_t;
+	virtual ~tut_yaal_hcore_hmap( void )
+		{}
 	};
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hmap, "yaal::hcore::HMap" );

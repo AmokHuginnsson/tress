@@ -179,6 +179,8 @@ struct tut_yaal_hcore_hcall
 		_int[ 8 ] = i8;
 		_int[ 9 ] = i9;
 		}
+	virtual ~tut_yaal_hcore_hcall( void )
+		{}
 	};
 
 int const tut_yaal_hcore_hcall::SIGNATURE::D_INVALID = -1;

@@ -41,13 +41,8 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_stahapi_hcore_harray
-	{
-	};
-
-typedef test_group < tut_stahapi_hcore_harray > tut_group;
-typedef tut_group::object module;
-tut_group tut_group_group ( "yaal::hcore::HArray" );
+TUT_SIMPLE_MOCK( tut_stahapi_hcore_harray );
+TUT_TEST_GROUP_N( tut_stahapi_hcore_harray, "yaal::hcore::HArray" );
 
 /* Constructor. */
 template<>

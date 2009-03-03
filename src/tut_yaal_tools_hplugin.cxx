@@ -52,10 +52,7 @@ int SELF_SUMATOR( int a, int b )
 namespace tut
 {
 
-struct tut_yaal_tools_hplugin
-	{
-	};
-
+TUT_SIMPLE_MOCK( tut_yaal_tools_hplugin );
 TUT_TEST_GROUP_N( tut_yaal_tools_hplugin, "yaal::tools::HPlugin" );
 
 typedef int ( * sumator_t )( int, int );

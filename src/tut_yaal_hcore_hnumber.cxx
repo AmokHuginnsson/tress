@@ -49,6 +49,8 @@ struct tut_yaal_hcore_hnumber
 	HPipedChild _bc;
 	tut_yaal_hcore_hnumber( void );
 	double long random_real( void );
+	virtual ~tut_yaal_hcore_hnumber( void )
+		{}
 	};
 
 HString tut_yaal_hcore_hnumber::BC_PATH = "/usr/bin/bc";

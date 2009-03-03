@@ -42,10 +42,7 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_tools_util_atof_ex
-	{
-	};
-
+TUT_SIMPLE_MOCK( tut_yaal_tools_util_atof_ex );
 TUT_TEST_GROUP_N( tut_yaal_tools_util_atof_ex, "yaal::tools::util::atof_ex" );
 
 TUT_UNIT_TEST_N( 1, "complex and valid number" )

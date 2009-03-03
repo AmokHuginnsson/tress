@@ -147,6 +147,8 @@ protected:
 
 typedef HExceptionT<R,QE> RE;
 
+	virtual ~tut_yaal_hcore_hexception( void )
+		{}
 	};
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hexception, "yaal::hcore::HException" )

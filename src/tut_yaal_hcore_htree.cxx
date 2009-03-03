@@ -48,6 +48,8 @@ namespace tut
 struct tut_yaal_hcore_htree
 	{
 	static HString _cache;
+	virtual ~tut_yaal_hcore_htree( void )
+		{}
 	typedef counter<char, tut_yaal_hcore_htree> cc;
 	typedef HTree<cc> tree_t;
 	static HString& to_string( tree_t const& );

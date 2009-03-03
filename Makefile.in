@@ -47,7 +47,6 @@ include $(DIR_ROOT)/_aux/mk/4_wrapper.mk
 include $(DIR_ROOT)/_aux/mk/5_flags.mk
 include $(DIR_ROOT)/_aux/mk/6_item-paths.mk
 -include $(DIR_ROOT)/local.mk
-CXXWARNING_FLAGS:=$(filter-out -Weffc++,$(CXXWARNING_FLAGS))
 CWARNING_FLAGS								+= @EXTRA_WARNINGS@ @WARN_SHADOW@ -Wno-missing-noreturn
 COMPILER_PRIME_FLAGS					+= @DEFS@
 LINKER_PRIME_FLAGS +=	@SPECIAL_LINKER_FLAGS@

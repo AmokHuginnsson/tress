@@ -106,6 +106,18 @@ struct failure : public tut_error
 	char const* _file;
 	failure( char const* const file, int const& line, const std::string& msg ) : tut_error( msg ), _line( line ), _file( file )
 		{}
+	failure( failure const& fi ) : tut_error( fi ), _line( fi._line ), _file( fi._file ) {}
+	failure& operator = ( failure const& fi )
+		{
+		if ( &fi != this )
+			{
+			using std::swap;
+			failure tmp( fi );
+			swap( _line, tmp._line );
+			swap( _file, tmp._file );
+			}
+		return ( *this );
+		}
 	virtual test_result::result_type_t result() const
 		{
 		return ( test_result::fail );

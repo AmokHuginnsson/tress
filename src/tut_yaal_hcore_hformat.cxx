@@ -46,6 +46,8 @@ struct tut_yaal_hcore_hformat
 	static double long D_PI;
 	static double long D_E;
 	static char const* const D_STR;
+	virtual ~tut_yaal_hcore_hformat( void )
+		{}
 	};
 
 double long tut_yaal_hcore_hformat::D_PI = 3.141592653589793;

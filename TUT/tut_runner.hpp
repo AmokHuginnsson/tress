@@ -106,12 +106,12 @@ protected:
  */
 class test_runner
 	{
-	public:
+public:
 
 	/**
 	* Constructor
 	*/
-	test_runner() : _callback( &default_callback_ ), _tutListener( NULL )
+	test_runner() : _groups(), _defaultCallback(), _callback( &_defaultCallback ), _tutListener( NULL )
 		{}
 
 	/**
@@ -124,7 +124,7 @@ class test_runner
 			throw std::invalid_argument( "group shall be non-null" );
 			}
 
-		if ( groups_.find( name ) != groups_.end() )
+		if ( _groups.find( name ) != _groups.end() )
 			{
 			std::string msg( "attempt to add already existent group " + name );
 
@@ -134,7 +134,7 @@ class test_runner
 			throw tut_error( msg );
 			}
 
-		groups_.insert( std::make_pair( name, gr ) );
+		_groups.insert( std::make_pair( name, gr ) );
 		}
 
 	/**
@@ -142,7 +142,7 @@ class test_runner
 	*/
 	void set_callback( callback* cb )
 		{
-		_callback = cb == 0 ? &default_callback_ : cb;
+		_callback = cb == 0 ? &_defaultCallback : cb;
 		}
 
 	/**
@@ -172,8 +172,8 @@ class test_runner
 	const groupnames list_groups() const
 		{
 		groupnames ret;
-		const_iterator i = groups_.begin();
-		const_iterator e = groups_.end();
+		const_iterator i = _groups.begin();
+		const_iterator e = _groups.end();
 
 		while ( i != e )
 			{
@@ -193,9 +193,9 @@ class test_runner
 		_callback->run_started();
 
 			{
-			const_iterator e = groups_.end();
+			const_iterator e = _groups.end();
 			yaal::tools::HWorkFlow w( tress::setup.f_iJobs );
-			for ( const_iterator i = groups_.begin(); i != e; ++ i )
+			for ( const_iterator i = _groups.begin(); i != e; ++ i )
 				{
 				group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
 				w.push_task( gr );
@@ -217,8 +217,8 @@ class test_runner
 			for ( std::list<std::string>::const_iterator k = group_names.begin();
 					k != group_names.end(); ++ k )
 				{
-				const_iterator i = groups_.find( *k );
-				if ( i == groups_.end() )
+				const_iterator i = _groups.find( *k );
+				if ( i == _groups.end() )
 					{
 					test_result tr( *k, 0 );
 					tr.set_meta( test_result::setup, "", "no such group" );
@@ -246,8 +246,8 @@ class test_runner
 
 			{
 			yaal::tools::HWorkFlow w( tress::setup.f_iJobs );
-			const_iterator e = groups_.end();
-			for ( const_iterator i = groups_.begin(); i != e; ++ i )
+			const_iterator e = _groups.end();
+			for ( const_iterator i = _groups.begin(); i != e; ++ i )
 				{
 				if ( i->first.find( pattern ) != std::string::npos )
 					{
@@ -267,8 +267,8 @@ class test_runner
 		{
 		_callback->run_started();
 
-		const_iterator i = groups_.find( group_name );
-		if ( i == groups_.end() )
+		const_iterator i = _groups.find( group_name );
+		if ( i == _groups.end() )
 			{
 			_callback->run_completed();
 			throw no_such_group( group_name );
@@ -299,20 +299,20 @@ class test_runner
 			}
 		}
 
-	protected:
+protected:
 
 	typedef std::map<std::string, group_base*>groups;
 	typedef groups::iterator iterator;
 	typedef groups::const_iterator const_iterator;
 	typedef void ( test_runner::* group_call_t )( const_iterator ) const;
-	typedef yaal::hcore::HCall<test_runner, group_call_t, const_iterator> group_runner_t;
-	groups groups_;
+	typedef yaal::hcore::HCall<test_runner const&, group_call_t, const_iterator> group_runner_t;
+	groups _groups;
 
-	callback default_callback_;
+	callback _defaultCallback;
 	callback* _callback;
 	tut_listener* _tutListener;
 
-	private:
+private:
 
 	void run_group( const_iterator i ) const
 		{
@@ -347,6 +347,9 @@ class test_runner
 				}
 			}
 		}
+private:
+	test_runner( test_runner const& );
+	test_runner& operator = ( test_runner const& );
 	};
 
 /**

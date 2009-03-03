@@ -42,13 +42,8 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_hcore_hstring
-	{
-	};
-
-typedef test_group < tut_yaal_hcore_hstring > tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_hcore_hstring_group ( "yaal::hcore::HString" );
+TUT_SIMPLE_MOCK( tut_yaal_hcore_hstring );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hstring, "yaal::hcore::HString" );
 
 /* trivial constructor */
 template<>
@@ -650,7 +645,7 @@ int confirm( char const* const str, int const& size, char const* const pat, int 
 struct gen_char
 	{
 	HRandomizer _rnd;
-	gen_char( void )
+	gen_char( void ) : _rnd()
 		{ randomizer_helper::init_randomizer_from_time( _rnd ); }
 	char operator()( void )
 		{ return ( static_cast<char>( _rnd.rnd( 1 + 'z' - 'a' ) + 'a' ) ); }

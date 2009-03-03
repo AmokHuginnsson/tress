@@ -50,13 +50,8 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_stl
-	{
-	};
-
-typedef test_group<tut_stl> tut_group;
-typedef tut_group::object module;
-tut_group tut_stl_group( "std" );
+TUT_SIMPLE_MOCK( tut_stl );
+TUT_TEST_GROUP_N( tut_stl, "std" );
 
 TUT_UNIT_TEST_N( 1, "create by_hand" )
 	cout << "lets do everything by hand ..." << endl;

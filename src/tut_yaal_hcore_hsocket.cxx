@@ -50,19 +50,23 @@ struct tut_yaal_hcore_hsocket
 		::unlink( "/tmp/TUT_socket" );
 		errno = 0;
 		}
+	virtual ~tut_yaal_hcore_hsocket( void )
+		{}
 	};
 
-typedef test_group < tut_yaal_hcore_hsocket > tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_hcore_hsocket_group ( "yaal::hcore::HSocket" );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hsocket, "yaal::hcore::HSocket" );
 
 struct OServer : public HThread
 	{
 	int f_iSize;
 	char* f_pcBuffer;
 	HSocket::ptr_t f_oSocket;
+	OServer( void ) : f_iSize( 0 ), f_pcBuffer( NULL ), f_oSocket() {}
 protected:
 	virtual int run( void );
+private:
+	OServer( OServer const& );
+	OServer& operator = ( OServer const& );
 	};
 
 int OServer::run( void )

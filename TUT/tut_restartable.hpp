@@ -202,18 +202,17 @@ class restartable_wrapper : public tut_listener
 	std::string _log;     // log file: last test being executed
 	std::string _journal;     // journal file: results of all executed tests
 
-	public:
+public:
 	/**
 	 * Default constructor.
 	 * @param dir Directory where to search/put log and journal files
 	 */
 	restartable_wrapper( const std::string& dir = "." )
-		: _runner( runner.get() ), _callback( 0 ), _dir( dir )
+		: _runner( runner.get() ), _callback( 0 ), _dir( dir ),
+		_log( _dir + '/' + "log.tut" ), _journal( _dir + '/' + "journal.tut" )
 		{
 		_runner.set_listener( this );
 		// dozen: it works, but it would be better to use system path separator
-		_journal = _dir + '/' + "journal.tut";
-		_log = _dir + '/' + "log.tut";
 		}
 
 	virtual ~restartable_wrapper( void )
@@ -315,7 +314,7 @@ class restartable_wrapper : public tut_listener
 		truncate();
 		}
 
-	private:
+private:
 	/**
 	 * Shows results from journal file.
 	 */
@@ -416,6 +415,9 @@ class restartable_wrapper : public tut_listener
 			register_test( tr );
 			}
 		}
+private:
+	restartable_wrapper( restartable_wrapper const& );
+	restartable_wrapper& operator = ( restartable_wrapper const& );
 	};
 }
 

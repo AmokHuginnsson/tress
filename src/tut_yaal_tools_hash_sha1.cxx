@@ -43,10 +43,7 @@ using namespace tress;
 namespace tut
 {
 
-struct tut_yaal_tools_hash_sha1
-	{
-	};
-
+TUT_SIMPLE_MOCK( tut_yaal_tools_hash_sha1 );
 TUT_TEST_GROUP_N( tut_yaal_tools_hash_sha1, "yaal::tools::hash::sha1" );
 
 TUT_UNIT_TEST_N( 1, "original suite <0> (empty)" )

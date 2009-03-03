@@ -10,12 +10,17 @@ struct test_result_posix
 	{
 	test_result_posix() : pid( getpid() )
 		  {}
+	virtual ~test_result_posix( void )
+		{}
 
 	pid_t pid;
 	};
 #else
 struct test_result_posix
-	{};
+	{
+	virtual ~test_result_posix( void )
+		{}
+	};
 #endif
 
 /**
@@ -64,7 +69,7 @@ struct test_result : public test_result_posix
 	/**
 	 * Default constructor.
 	 */
-	test_result() : _testNo( 0 ), _result( ok ), _file( "" ), _line( -1 )
+	test_result() : _group(), _testNo( 0 ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 )
 		{}
 
 	/**

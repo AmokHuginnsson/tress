@@ -54,13 +54,8 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_boost
-	{
-	};
-
-typedef test_group<tut_boost> tut_group;
-typedef tut_group::object module;
-tut_group tut_boost_group( "boost" );
+TUT_SIMPLE_MOCK( tut_boost );
+TUT_TEST_GROUP_N( tut_boost, "boost" );
 
 struct multi
 	{

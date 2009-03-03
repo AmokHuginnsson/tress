@@ -42,23 +42,18 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_tools_util_distance
-	{
-	};
+TUT_SIMPLE_MOCK( tut_yaal_tools_util_distance );
+TUT_TEST_GROUP_N( tut_yaal_tools_util_distance, "yaal::tools::util::distance" );
 
-typedef test_group < tut_yaal_tools_util_distance > tut_group;
-typedef tut_group::object module;
-tut_group tut_distance_group ( "yaal::tools::util::distance" );
-
-template < >
-template < >
+template<>
+template<>
 void module::test<1> ( void )
 	{
-	ensure_equals ( "failed to calculate levenshtein distance",
+	ensure_equals( "failed to calculate levenshtein distance",
 			distance::levenshtein_damerau ( "ala", "ola" ), 1 );
-	ensure_equals ( "failed to calculate levenshtein distance",
+	ensure_equals( "failed to calculate levenshtein distance",
 			distance::levenshtein_damerau ( "ala", "Cola" ), 2 );
-	ensure_equals ( "failed to calculate levenshtein distance",
+	ensure_equals( "failed to calculate levenshtein distance",
 			distance::levenshtein_damerau ( "Sunday", "Saturday" ), 3 );
 	}
 

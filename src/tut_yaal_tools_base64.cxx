@@ -42,10 +42,7 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_tools_base64
-	{
-	};
-
+TUT_SIMPLE_MOCK( tut_yaal_tools_base64 );
 TUT_TEST_GROUP_N( tut_yaal_tools_base64, "yaal::tools::base64" );
 
 TUT_UNIT_TEST_N( 1, "original suite <0> (empty)" )

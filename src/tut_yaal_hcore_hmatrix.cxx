@@ -42,13 +42,8 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_hcore_hmatrix
-	{
-	};
-
-typedef test_group<tut_yaal_hcore_hmatrix> tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_hcore_hmatrix_group( "yaal::hcore::HMatrix" );
+TUT_SIMPLE_MOCK( tut_yaal_hcore_hmatrix );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hmatrix, "yaal::hcore::HMatrix" );
 
 template<>
 template<>

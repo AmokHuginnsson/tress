@@ -51,6 +51,8 @@ struct tut_yaal_tools_hpipedchild
 	static HString D_MSG_ERR;
 	static HString D_ACK_OUT;
 	static HString D_ACK_ERR;
+	virtual ~tut_yaal_tools_hpipedchild( void )
+		{}
 	};
 
 HString tut_yaal_tools_hpipedchild::D_CHILD( "./data/child" );

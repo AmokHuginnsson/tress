@@ -102,9 +102,9 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 namespace tress
 {
 
-HCuteReporter::HCuteReporter( void ) : _cnt( 0 )
+HCuteReporter::HCuteReporter( void )
+	: _out(), _group(), _test(), _cnt( 0 ), _rep(), _start( _rep.end() )
 	{
-	_start = _rep.end();
 	}
 
 int HCuteReporter::run_ut( int a_iArgc, char* a_ppcArgv[] )

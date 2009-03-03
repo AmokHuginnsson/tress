@@ -46,6 +46,8 @@ namespace tut
 struct tut_yaal_hcore_hclock
 	{
 	int long get_speed( HClock::UNIT::unit_t const& );
+	virtual ~tut_yaal_hcore_hclock( void )
+		{}
 	};
 
 int long tut_yaal_hcore_hclock::get_speed( HClock::UNIT::unit_t const& u )

@@ -44,13 +44,8 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_tools_util_verify_iban
-	{
-	};
-
-typedef test_group < tut_yaal_tools_util_verify_iban > tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_tools_util_verify_iban_group ( "yaal::tools::util::verify_IBAN" );
+TUT_SIMPLE_MOCK( tut_yaal_tools_util_verify_iban );
+TUT_TEST_GROUP_N( tut_yaal_tools_util_verify_iban, "yaal::tools::util::verify_IBAN" );
 
 /* verifing good IBANs */
 template < >

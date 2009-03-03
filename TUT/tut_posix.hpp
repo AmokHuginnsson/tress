@@ -431,6 +431,8 @@ namespace tut
 
 struct test_object_posix
 {
+	virtual ~test_object_posix( void )
+		{}
 };
 
 struct test_group_posix
@@ -439,6 +441,8 @@ struct test_group_posix
     void send_result_(const T*, const test_result &)
     {
     }
+		virtual ~test_group_posix( void )
+			{}
 };
 
 } // namespace tut

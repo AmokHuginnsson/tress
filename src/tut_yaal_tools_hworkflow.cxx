@@ -43,6 +43,8 @@ namespace tut
 
 struct tut_yaal_tools_hworkflow
 	{
+	virtual ~tut_yaal_tools_hworkflow( void )
+		{}
 	static void foo( int, char, int );
 	typedef HFunctor<typeof( tut_yaal_tools_hworkflow::foo ), int, char, int> simple_functor_t;
 	typedef void ( simple_functor_t::* simple_functor_forwarder_t )( int, char, int );

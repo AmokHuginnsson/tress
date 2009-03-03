@@ -48,6 +48,8 @@ struct tut_yaal_hcore_hhashmap
 	static int const D_ELEM_COUNT;
 	static int const D_LARGE_TABLE;
 	static int const D_FEW_ELEMENTS;
+	virtual ~tut_yaal_hcore_hhashmap( void )
+		{}
 	};
 
 int const tut_yaal_hcore_hhashmap::D_ELEM_COUNT = 32;

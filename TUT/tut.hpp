@@ -24,6 +24,19 @@ struct failure_info
 	char const* _file;
 	std::string _msg;
 	failure_info( int const& line, char const* file, std::string const& msg ) : _line( line ), _file( file ), _msg( msg ) {}
+	failure_info( failure_info const& fi ) : _line( fi._line ), _file( fi._file ), _msg( fi._msg ) {}
+	failure_info& operator = ( failure_info const& fi )
+		{
+		if ( &fi != this )
+			{
+			using std::swap;
+			failure_info tmp( fi );
+			swap( _line, tmp._line );
+			swap( _file, tmp._file );
+			swap( _msg, tmp._msg );
+			}
+		return ( *this );
+		}
 	};
 }
 
@@ -54,12 +67,14 @@ class test_object : public Data, public test_object_posix
 	int _testNo;
 	char const* _file;
 	int _line;
-	public:
+public:
 
 	/**
 	* Default constructor
 	*/
-	test_object() : _group(), _testNo( 0 ), _file( "" ), _line( 0 ), _currentTestName()
+	test_object()
+		: _group(), _testNo( 0 ), _file( "" ), _line( 0 ),
+		called_method_was_a_dummy_test_( false ), _currentTestName()
 		{}
 
 	void set_test_tut( std::string const& groupName, int const& testNo )
@@ -110,8 +125,11 @@ class test_object : public Data, public test_object_posix
 	 */
 	bool called_method_was_a_dummy_test_;
 
-	private:
+private:
 	std::string _currentTestName;
+private:
+	test_object( test_object const& );
+	test_object& operator = ( test_object const& );
 	};
 
 /**
@@ -168,7 +186,7 @@ class test_group : public group_base, public test_group_posix
 		safe_holder( const safe_holder& );
 		safe_holder& operator =( const safe_holder& );
 
-		public:
+	public:
 		safe_holder() : _obj( 0 ), permit_throw_in_dtor( false )
 			{}
 
@@ -248,14 +266,15 @@ class test_group : public group_base, public test_group_posix
 			}
 		};
 
-	public:
+public:
 
 	typedef test_object<Data> object;
 
 	/**
 	* Creates and registers test group with specified name.
 	*/
-	test_group( const char* name ) : _name( name )
+	test_group( const char* name )
+		: _name( name ), _tests(), _currentTest()
 		{
 		// register itself
 		runner.get().register_group( _name, this );
@@ -267,7 +286,8 @@ class test_group : public group_base, public test_group_posix
 	/**
 	* This constructor is used in self-test run only.
 	*/
-	test_group( const char* name, test_runner& another_runner ) : _name( name )
+	test_group( const char* name, test_runner& another_runner )
+		: _name( name ), _tests(), _currentTest()
 		{
 		// register itself
 		another_runner.register_group( _name, this );
@@ -469,6 +489,9 @@ class test_group : public group_base, public test_group_posix
 				" group execution is terminated" );
 			}
 		}
+private:
+	test_group( test_group const& );
+	test_group& operator = ( test_group const& );
 	};
 
 }

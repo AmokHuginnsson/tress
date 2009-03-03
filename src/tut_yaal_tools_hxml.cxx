@@ -48,6 +48,10 @@ struct tut_yaal_tools_hxml
 	{
 	static HString f_oVarTmpBuffer;
 	HXml f_oXml;
+	tut_yaal_tools_hxml( void ) : f_oXml()
+		{}
+	virtual ~tut_yaal_tools_hxml( void )
+		{}
 	static std::ostream& dump( std::ostream& out, HXml::HConstNodeProxy const& a_rsNode )
 		{
 		f_oVarTmpBuffer.hs_realloc( a_rsNode.get_level() * 2 + 3 );

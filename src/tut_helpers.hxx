@@ -129,6 +129,11 @@ tut_group tut_##mock##_group( ( name ) );
 #define TUT_TEST_GROUP( mock, name ) \
 TUT_TEST_GROUP_N( mock, name ) \
 namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
+#define TUT_SIMPLE_MOCK( name ) struct name \
+	{ \
+	virtual ~name( void ) \
+		{} \
+	}
 
 template<typename symbol_t, typename owner_t>
 class counter

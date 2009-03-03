@@ -192,13 +192,8 @@ void CVTest::eat( void )
 typedef HThreadT<HCool> cool_t;
 typedef HThreadT<typeof( simple )> simple_t;
 
-struct tut_yaal_hcore_HThread
-	{
-	};
-
-typedef test_group<tut_yaal_hcore_HThread> tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_hcore_HThread_group( "yaal::hcore::HThread" );
+TUT_SIMPLE_MOCK( tut_yaal_hcore_hthread );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hthread, "yaal::hcore::HThread" );
 
 /* Construction and destruction */
 template<>

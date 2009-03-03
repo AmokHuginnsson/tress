@@ -74,10 +74,7 @@ bool operator != ( yaal::hcore::HList<tType> const& l1, yaal::hcore::HList<tType
 	return ( ! equal( l1.begin(), l1.end(), l2.begin(), l2.end() ) );
 	}
 
-struct tut_yaal
-	{
-	};
-
+TUT_SIMPLE_MOCK( tut_yaal );
 TUT_TEST_GROUP_N( tut_yaal, "yaal" );
 
 /* abstract call */

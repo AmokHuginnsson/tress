@@ -156,11 +156,11 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 		throw;
 		}
 	fprintf( stderr, "Done in %ld miliseconds.\n", clk.get_time_elapsed( HClock::UNIT::D_MILISECOND ) );
-	return ( l_oVisitor.exceptions_count
-			+ l_oVisitor.failures_count
-			+ l_oVisitor.terminations_count
-			+ l_oVisitor.warnings_count
-			+ l_oVisitor.setup_count );
+	return ( l_oVisitor._exceptionsCount
+			+ l_oVisitor._failuresCount
+			+ l_oVisitor._terminationsCount
+			+ l_oVisitor._warningsCount
+			+ l_oVisitor._setupCount );
 	M_FINAL
 	}
 

@@ -44,6 +44,9 @@ namespace tut
 
 struct red_black_tree_stress_test
 	{
+	red_black_tree_stress_test( void )
+		: root( NULL ), quantity( 0 ), tested_nodes( 0 ), black_height( 0 )
+		{}
 	virtual ~red_black_tree_stress_test( void ) {}
 	struct node
 		{
@@ -75,6 +78,9 @@ private:
 	void helper_test_node_definition( node* );
 	int helper_count_exemplar_black_height( node* );
 	int helper_check_black_height( node* );
+private:
+	red_black_tree_stress_test( red_black_tree_stress_test const& );
+	red_black_tree_stress_test& operator = ( red_black_tree_stress_test const& );
 	};
 
 bool red_black_tree_stress_test::red_node_exists = false;
@@ -182,7 +188,7 @@ bool red_black_tree_stress_test::self_test( HSet<T>& ob )
 template<typename T>
 bool red_black_tree_stress_test::integrity_test( HSet<T>& ob )
 	{
-	init ( ob );
+	init( ob );
 	helper_test_node_integrity ( root );
 	ensure_equals( "quantity inconsistency", quantity, tested_nodes );
 	return ( false );
@@ -206,7 +212,11 @@ struct tut_yaal_hcore_hsbbstree
 	static int const NUMBER_OF_TEST_NODES = 1000;
 	static int const KEY_POOL_SIZE = 30000;
 	red_black_tree_stress_test stress;
-	template < typename object, typename subject, typename key >
+	tut_yaal_hcore_hsbbstree( void ) : stress()
+		{}
+	virtual ~tut_yaal_hcore_hsbbstree( void )
+		{}
+	template<typename object, typename subject, typename key>
 	void helper_stress_test( object&, subject, key );
 	typedef HSet<int> set_t;
 	typedef HPair<set_t::iterator, bool> (set_t::*set_insert_t)( int const& );

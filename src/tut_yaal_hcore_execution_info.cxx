@@ -42,10 +42,7 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_hcore_execution_info
-	{
-	};
-
+TUT_SIMPLE_MOCK( tut_yaal_hcore_execution_info );
 TUT_TEST_GROUP_N( tut_yaal_hcore_execution_info, "yaal::hcore::execution_info" );
 
 TUT_UNIT_TEST_N( 1, "dump call stack" )

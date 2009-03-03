@@ -45,6 +45,8 @@ struct tut_yaal_hcore_hvariant
 	{
 	typedef HVariant<int, HString, double long> small_variant_t;
 	typedef HVariant<bool, char, int short, int, int long, void*, double, double long, HString> variant_t;
+	virtual ~tut_yaal_hcore_hvariant( void )
+		{}
 	};
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hvariant, "yaal::hcore::HVariant" );

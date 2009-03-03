@@ -41,13 +41,8 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_tools_hfsitem
-	{
-	};
-
-typedef test_group<tut_yaal_tools_hfsitem> tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_tools_hfsitem_group ( "yaal::tools::HFSItem" );
+TUT_SIMPLE_MOCK( tut_yaal_tools_hfsitem );
+TUT_TEST_GROUP_N( tut_yaal_tools_hfsitem, "yaal::tools::HFSItem" );
 
 void recurse( HString const& a_oPath )
 	{

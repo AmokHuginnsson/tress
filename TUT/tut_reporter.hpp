@@ -14,37 +14,37 @@
 namespace
 {
 
-std::ostream& operator <<( std::ostream& os, const tut::test_result& tr )
+std::ostream& operator <<( std::ostream& _os, const tut::test_result& tr )
 	{
 	switch ( tr._result )
 		{
 		case tut::test_result::ok:
-			os << ( errno == 0 ? '.' : ',' ) << std::flush;
+			_os << ( errno == 0 ? '.' : ',' ) << std::flush;
 		break;
 		case tut::test_result::fail:
-			os << '[' << tr._testNo << "=F]" << std::flush;
+			_os << '[' << tr._testNo << "=F]" << std::flush;
 		break;
 		case tut::test_result::ex_ctor:
-			os << '[' << tr._testNo << "=C]" << std::flush;
+			_os << '[' << tr._testNo << "=C]" << std::flush;
 		break;
 		case tut::test_result::ex:
-			os << '[' << tr._testNo << "=X]" << std::flush;
+			_os << '[' << tr._testNo << "=X]" << std::flush;
 		break;
 		case tut::test_result::warn:
-			os << '[' << tr._testNo << "=W]" << std::flush;
+			_os << '[' << tr._testNo << "=W]" << std::flush;
 		break;
 		case tut::test_result::term:
-			os << '[' << tr._testNo << "=T]" << std::flush;
+			_os << '[' << tr._testNo << "=T]" << std::flush;
 		break;
 		case tut::test_result::rethrown:
-			os << '[' << tr._testNo << "=P]" << std::flush;
+			_os << '[' << tr._testNo << "=P]" << std::flush;
 		break;
 		case tut::test_result::setup:
-			os << "no such group" << std::flush;
+			_os << "no such group" << std::flush;
 		break;
 		}
 
-	return ( os );
+	return ( _os );
 	}
 }         // end of namespace
 
@@ -54,110 +54,116 @@ namespace tut
  * Default TUT callback handler.
  */
 template<typename tType = std::ostream>
-class reporter : public tut::
-	callback
+class reporter : public tut::callback
 	{
-	std::string current_group;
-	typedef std::list<tut::test_result> not_passed_list;
-	not_passed_list not_passed;
-	std::ostream& os;
+	std::string _currentGroup;
+	typedef std::list<tut::test_result> not_passed_list_t;
+	not_passed_list_t _notPassed;
+	std::ostream& _os;
 	yaal::hcore::HMutex f_oMutex;
-	tType& ls;
+	tType& _ls;
 
 	public:
 
-	int ok_count;
-	int exceptions_count;
-	int failures_count;
-	int terminations_count;
-	int warnings_count;
-	int setup_count;
+	int _okCount;
+	int _exceptionsCount;
+	int _failuresCount;
+	int _terminationsCount;
+	int _warningsCount;
+	int _setupCount;
 
-	reporter() : os( std::cout ), ls( std::cerr )
+	reporter()
+		: _currentGroup(), _notPassed(), _os( std::cout ), f_oMutex(), _ls( std::cerr ),
+		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
+		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 )
 		{
-		init();
+		clear();
 		}
 
-	reporter( std::ostream& out ) : os( out ),
-		ls( &out == &std::cout ? std::cerr : std::cout )
+	reporter( std::ostream& out )
+		: _currentGroup(), _notPassed(), _os( out ), f_oMutex(),
+		_ls( &out == &std::cout ? std::cerr : std::cout ),
+		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
+		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 )
 		{
-		init();
 		}
 
-	reporter( std::ostream& out, tType& logger ) : os( out ), ls( logger )
+	reporter( std::ostream& out, tType& logger )
+		: _currentGroup(), _notPassed(), _os( out ), f_oMutex(), _ls( logger ),
+		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
+		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 )
 		{
-		init();
 		}
 
 	void run_started()
 		{
-		init();
+		clear();
 		}
 
 	void group_started( std::string const&name )
 		{
 		yaal::hcore::HLock l( f_oMutex );
 
-		ls << "TUT: group: [" << name << "]" << std::endl;
+		_ls << "TUT: group: [" << name << "]" << std::endl;
 		}
 
 	void test_started( const int&n )
 		{
 		yaal::hcore::HLock l( f_oMutex );
 
-		ls << "TUT: module::test<" << n << ">" << std::endl;
+		_ls << "TUT: module::test<" << n << ">" << std::endl;
 		}
 
 	void test_completed( const tut::test_result& tr )
 		{
 		yaal::hcore::HLock l( f_oMutex );
 
-		if ( tr._group != current_group )
+		if ( tr._group != _currentGroup )
 			{
-			os << std::endl << tr._group << ": " << std::flush;
-			current_group = tr._group;
+			_os << std::endl << tr._group << ": " << std::flush;
+			_currentGroup = tr._group;
 			}
 
-		os << tr << std::flush;
+		_os << tr << std::flush;
 		if ( tr._result == tut::test_result::ok )
-			ok_count ++;
+			_okCount ++;
 
 		else if ( tr._result == tut::test_result::ex )
-			exceptions_count ++;
+			_exceptionsCount ++;
 		else if ( tr._result == tut::test_result::ex_ctor )
-			exceptions_count ++;
+			_exceptionsCount ++;
 		else if ( tr._result == tut::test_result::fail )
-			failures_count ++;
+			_failuresCount ++;
 		else if ( tr._result == tut::test_result::rethrown )
-			failures_count ++;
+			_failuresCount ++;
 		else if ( tr._result == tut::test_result::warn )
-			warnings_count ++;
+			_warningsCount ++;
 		else if ( tr._result == tut::test_result::setup )
-			setup_count ++;
+			_setupCount ++;
 		else
-			terminations_count ++;
+			_terminationsCount ++;
 
 		if ( tr._result != tut::test_result::ok )
-			not_passed.push_back( tr );
+			_notPassed.push_back( tr );
 		}
 
 	void run_completed()
 		{
-		os << std::endl;
+		_os << std::endl;
 
-		if ( not_passed.size() > 0 )
+		if ( _notPassed.size() > 0 )
 			{
-			not_passed_list::const_iterator i = not_passed.begin();
-			while ( i != not_passed.end() )
+			not_passed_list_t::const_iterator i = _notPassed.begin();
+			while ( i != _notPassed.end() )
 				{
 				tut::test_result tr = *i;
 				++ i;
 				if ( tr._result == test_result::setup )
 					continue;
 
-				os << std::endl;
+				_os << std::endl;
 
-				os << "---> " << "group: " << tr._group
+				_os << "---> " << "group: " << tr._group
 					<< ", test: test<" << tr._testNo << ">"
 					<< ( !tr._name.empty() ? ( std::string( " : " ) + tr._name ) : std::string() )
 					<< std::endl;
@@ -165,36 +171,36 @@ class reporter : public tut::
 #if defined ( TUT_USE_POSIX )
 				if ( tr.pid != getpid() )
 					{
-					os << "     child pid: " << tr.pid << std::endl;
+					_os << "     child pid: " << tr.pid << std::endl;
 					}
 
 #endif
-				os << "     problem: " << std::flush;
+				_os << "     problem: " << std::flush;
 				switch ( tr._result )
 					{
 					case test_result::rethrown:
-						os << "assertion failed in child" << std::endl;
+						_os << "assertion failed in child" << std::endl;
 					break;
 					case test_result::fail :
-						os << "assertion failed" << std::endl;
+						_os << "assertion failed" << std::endl;
 					break;
 					case test_result::ex:
 					case test_result::ex_ctor:
 						{
-						os << "unexpected exception" << std::endl;
+						_os << "unexpected exception" << std::endl;
 						if ( tr._exceptionTypeId != "" )
 							{
 							int status = 0;
-							os << "     exception typeid: " << abi::__cxa_demangle( tr._exceptionTypeId.c_str(), 0, 0, &status ) << std::endl;
+							_os << "     exception typeid: " << abi::__cxa_demangle( tr._exceptionTypeId.c_str(), 0, 0, &status ) << std::endl;
 							}
 						}
 					break;
 					case test_result::term:
-						os << "would be terminated" << std::endl;
+						_os << "would be terminated" << std::endl;
 						tr._message = "segmentation fault";
 					break;
 					case test_result::warn:
-						os << "test passed, but cleanup code (destructor) raised"
+						_os << "test passed, but cleanup code (destructor) raised"
 						" an exception" << std::endl;
 					break;
 					default:
@@ -204,69 +210,70 @@ class reporter : public tut::
 				if ( ! tr._message.empty() )
 					{
 					if ( tr._result == test_result::fail )
-						os << "     failed assertion in \"" << tr._file << ":" << tr._line << " ";
+						_os << "     failed assertion in \"" << tr._file << ":" << tr._line << " ";
 					else if ( tr._result == test_result::ex )
 						{
 						if ( tr._line >= 0 )
-							os << "     unexpected exception in \"" << tr._file << ":" << tr._line << " ";
+							_os << "     unexpected exception in \"" << tr._file << ":" << tr._line << " ";
 						}
 					else if ( tr._result == test_result::term )
-						os << "     segmentation fault in \"" << tr._file << ":" << tr._line << " ";
+						_os << "     segmentation fault in \"" << tr._file << ":" << tr._line << " ";
 					else
-						os << "     message: \"";
-					os << tr._message << "\"" << std::endl;
+						_os << "     message: \"";
+					_os << tr._message << "\"" << std::endl;
 					}
 				}
 			}
 
-		os << std::endl;
+		_os << std::endl;
 
-		os << "tests summary:" << std::flush;
-		if ( terminations_count > 0 )
+		_os << "tests summary:" << std::flush;
+		if ( _terminationsCount > 0 )
 			{
-			os << " terminations:" << terminations_count << std::flush;
+			_os << " terminations:" << _terminationsCount << std::flush;
 			}
 
-		if ( exceptions_count > 0 )
+		if ( _exceptionsCount > 0 )
 			{
-			os << " exceptions:" << exceptions_count << std::flush;
+			_os << " exceptions:" << _exceptionsCount << std::flush;
 			}
 
-		if ( failures_count > 0 )
+		if ( _failuresCount > 0 )
 			{
-			os << " failures:" << failures_count << std::flush;
+			_os << " failures:" << _failuresCount << std::flush;
 			}
 
-		if ( warnings_count > 0 )
+		if ( _warningsCount > 0 )
 			{
-			os << " warnings:" << warnings_count << std::flush;
+			_os << " warnings:" << _warningsCount << std::flush;
 			}
 
-		if ( setup_count > 0 )
+		if ( _setupCount > 0 )
 			{
-			os << " setups:" << setup_count << std::flush;
+			_os << " setups:" << _setupCount << std::flush;
 			}
 
-		os << " ok:" << ok_count << std::flush;
-		os << std::endl;
+		_os << " ok:" << _okCount << std::flush;
+		_os << std::endl;
 		}
 
 	bool all_ok() const
 		{
-		return ( not_passed.empty() ) ;
+		return ( _notPassed.empty() ) ;
 		}
 
 	private:
 
-	void init()
+	void clear()
 		{
-		ok_count = 0;
-		exceptions_count = 0;
-		failures_count = 0;
-		terminations_count = 0;
-		warnings_count = 0;
-		setup_count = 0;
-		not_passed.clear();
+		_okCount = 0;
+		_exceptionsCount = 0;
+		_failuresCount = 0;
+		_terminationsCount = 0;
+		_warningsCount = 0;
+		_setupCount = 0;
+		_currentGroup.clear();
+		_notPassed.clear();
 		}
 	};
 }

@@ -42,13 +42,8 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_hcore_hcomplex
-	{
-	};
-
-typedef test_group < tut_yaal_hcore_hcomplex > tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_hcore_hcomplex_group ( "yaal::hcore::HComplex" );
+TUT_SIMPLE_MOCK( tut_yaal_hcore_hcomplex );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hcomplex, "yaal::hcore::HComplex" );
 
 /* Default constructor */
 template < >

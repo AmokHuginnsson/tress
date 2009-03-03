@@ -55,6 +55,8 @@ struct tut_yaal_hcore_hlist
 	static void check_consistency( T const& );
 	template<typename T>
 	void to_list( char const* const, int, T& );
+	virtual ~tut_yaal_hcore_hlist( void )
+		{}
 private:
 	};
 
