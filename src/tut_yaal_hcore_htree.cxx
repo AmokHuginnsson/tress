@@ -134,23 +134,36 @@ typedef test_group<tut_yaal_hcore_htree> tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_hcore_htree_group( "yaal::hcore::HTree" );
 
-/* trivial constructor */
-template<>
-template<>
-void module::test<1>( void )
-	{
+TUT_UNIT_TEST_N( 1, "/* trivial constructor */" )
 		{
 	tree_t t;
 	ensure_equals( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* create_new_root/get_root */
-template<>
-template<>
-void module::test<2>( void )
-	{
+TUT_UNIT_TEST_N( 2, "/* copy constructor of empty trees (both are empty) */" )
+		{
+	tree_t t1;
+	tree_t t2( t1 );
+	ensure_equals( "new tree not clear", t1.get_root(), static_cast<tree_t::node_t>( NULL ) );
+	ensure_equals( "copied tree not clear", t2.get_root(), static_cast<tree_t::node_t>( NULL ) );
+		}
+	ensure_equals( "leak", cc::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 3, "/* swap empty trees (both are empty) */" )
+		{
+	tree_t t1;
+	tree_t t2;
+	t1.swap( t2 );
+	ensure_equals( "new tree not clear", t1.get_root(), static_cast<tree_t::node_t>( NULL ) );
+	ensure_equals( "copied tree not clear", t2.get_root(), static_cast<tree_t::node_t>( NULL ) );
+		}
+	ensure_equals( "leak", cc::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 4, "/* create_new_root/get_root */" )
 		{
 	tree_t t;
 	ensure_equals( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
@@ -160,13 +173,9 @@ void module::test<2>( void )
 	ensure_equals( "new root is invalid", t.get_root(), n );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* setting getting values */
-template<>
-template<>
-void module::test<3>( void )
-	{
+TUT_UNIT_TEST_N( 5, "/* setting getting values */" )
 		{
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
@@ -175,13 +184,9 @@ void module::test<3>( void )
 	ensure_equals( "value set/get failed", **n, 'x' );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* get_parent */
-template<>
-template<>
-void module::test<4>( void )
-	{
+TUT_UNIT_TEST_N( 6, "/* get_parent */" )
 		{
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
@@ -189,13 +194,9 @@ void module::test<4>( void )
 	ensure_equals( "root node malformed", n->get_parent(), static_cast<tree_t::node_t>( NULL ) );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* add_node */
-template<>
-template<>
-void module::test<5>( void )
-	{
+TUT_UNIT_TEST_N( 7, "/* add_node */" )
 		{
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
@@ -207,13 +208,9 @@ void module::test<5>( void )
 	ensure_equals( "bad value for new node", **it, 'x' );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* has_childs */
-template<>
-template<>
-void module::test<6>( void )
-	{
+TUT_UNIT_TEST_N( 8, "/* has_childs */" )
 		{
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
@@ -227,13 +224,9 @@ void module::test<6>( void )
 	ensure( "childless node reported after node addition", n->has_childs() );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* child_count */
-template<>
-template<>
-void module::test<7>( void )
-	{
+TUT_UNIT_TEST_N( 9, "/* child_count */" )
 		{
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
@@ -247,13 +240,9 @@ void module::test<7>( void )
 	ensure_equals( "bad child count reported", n->child_count(), 2 );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* clear */
-template<>
-template<>
-void module::test<8>( void )
-	{
+TUT_UNIT_TEST_N( 10, "/* clear */" )
 		{
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
@@ -270,13 +259,9 @@ void module::test<8>( void )
 	ensure_equals( "clear failed", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* get_level() */
-template<>
-template<>
-void module::test<9>( void )
-	{
+TUT_UNIT_TEST_N( 11, "/* get_level() */" )
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -288,13 +273,9 @@ void module::test<9>( void )
 	check_consistency( t );
 	ensure_equals( "incorrect level value", it->get_level(), 2 );
 	ensure_equals( "incorrect level value", n->get_level(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* swap() */
-template<>
-template<>
-void module::test<10>( void )
-	{
+TUT_UNIT_TEST_N( 12, "/* swap() */" )
 		{
 		char const* const bad_shape = "bad shape";
 		char const* const swap_failed = "swap failed";
@@ -323,13 +304,9 @@ void module::test<10>( void )
 		ensure_equals( swap_failed, to_string( t1 ), "%{12}" );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* basic shape tests */
-template<>
-template<>
-void module::test<11>( void )
-	{
+TUT_UNIT_TEST_N( 13, "/* basic shape tests */" )
 		{
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
@@ -366,13 +343,9 @@ void module::test<11>( void )
 	ensure_equals( bad_shape, to_string( t ), "0{x{@{QA{FGH}B}}y}" );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* graft ( replace_node ) */
-template<>
-template<>
-void module::test<12>( void )
-	{
+TUT_UNIT_TEST_N( 14, "/* graft ( replace_node ) */" )
 		{
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
@@ -412,13 +385,9 @@ void module::test<12>( void )
 	ensure_equals( "bad shape", to_string( t ), "@{0{ABC}1{def}2{ghi}}" );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* graft upwards ( replace_node ) */
-template<>
-template<>
-void module::test<13>( void )
-	{
+TUT_UNIT_TEST_N( 15, "/* graft upwards ( replace_node ) */" )
 		{
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
@@ -474,13 +443,9 @@ void module::test<13>( void )
 		ensure_equals( "bad shape", to_string( t ), "@{a{ABC}1{def}2{ghi}}" );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* graft downwards (replace_node) */
-template<>
-template<>
-void module::test<14>( void )
-	{
+TUT_UNIT_TEST_N( 16, "/* graft downwards (replace_node) */" )
 		{
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
@@ -521,13 +486,9 @@ void module::test<14>( void )
 			}
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* graft sideways (replace_node) */
-template<>
-template<>
-void module::test<15>( void )
-	{
+TUT_UNIT_TEST_N( 17, "/* graft sideways (replace_node) */" )
 		{
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
@@ -560,13 +521,9 @@ void module::test<15>( void )
 		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{da{ABC}f}2{ghi}}" );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* graft to root (replace_node) */
-template<>
-template<>
-void module::test<16>( void )
-	{
+TUT_UNIT_TEST_N( 18, "/* graft to root (replace_node) */" )
 		{
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
@@ -599,13 +556,9 @@ void module::test<16>( void )
 		ensure_equals( "bad shape", to_string( t ), "a{ABC}" );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* across two trees (replace_node) */
-template<>
-template<>
-void module::test<17>( void )
-	{
+TUT_UNIT_TEST_N( 19, "/* across two trees (replace_node) */" )
 		{
 		tree_t::node_t n = NULL;
 		tree_t::iterator it;
@@ -643,13 +596,9 @@ void module::test<17>( void )
 		ensure_equals( "bad shape", to_string( t2 ), "%{a{DEF}b{G1{246}}c}" );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* across two trees from root (replace_node) */
-template<>
-template<>
-void module::test<18>( void )
-	{
+TUT_UNIT_TEST_N( 20, "/* across two trees from root (replace_node) */" )
 		{
 		tree_t::node_t n = NULL;
 		tree_t::iterator it;
@@ -687,13 +636,9 @@ void module::test<18>( void )
 		ensure_equals( "bad shape", to_string( t2 ), "%{a{DEF}b{G@{1{246}3{80}5}}c}" );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* graft with bad iteroator (replace_node) */
-template<>
-template<>
-void module::test<19>( void )
-	{
+TUT_UNIT_TEST_N( 21, "/* graft with bad iteroator (replace_node) */" )
 		{
 		tree_t::node_t n = NULL;
 		tree_t::iterator it;
@@ -737,13 +682,9 @@ void module::test<19>( void )
 			}
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* move_node(it,node) */
-template<>
-template<>
-void module::test<20>( void )
-	{
+TUT_UNIT_TEST_N( 22, "/* move_node(it,node) */" )
 		{
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
@@ -776,13 +717,9 @@ void module::test<20>( void )
 		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{da{ABC}ef}2{ghi}}" );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* move_node(node) */
-template<>
-template<>
-void module::test<21>( void )
-	{
+TUT_UNIT_TEST_N( 23, "/* move_node(node) */" )
 		{
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
@@ -815,13 +752,9 @@ void module::test<21>( void )
 		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{defa{ABC}}2{ghi}}" );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* copy_node(it,node) */
-template<>
-template<>
-void module::test<22>( void )
-	{
+TUT_UNIT_TEST_N( 24, "/* copy_node(it,node) */" )
 		{
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
@@ -854,13 +787,9 @@ void module::test<22>( void )
 		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{da{ABC}ef}2{ghi}}" );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* copy_node(node) */
-template<>
-template<>
-void module::test<23>( void )
-	{
+TUT_UNIT_TEST_N( 25, "/* copy_node(node) */" )
 		{
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
@@ -893,7 +822,7 @@ void module::test<23>( void )
 		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{defa{ABC}}2{ghi}}" );
 		}
 	ensure_equals( "leak", cc::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
 }
 
