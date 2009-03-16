@@ -100,7 +100,7 @@ void module::test<2> ( void )
 	{
 	try
 		{
-		HSocket l_oSocket( HSocket::TYPE::D_FILE | HSocket::TYPE::D_NETWORK );
+		HSocket l_oSocket( HSocket::socket_type_t( HSocket::TYPE::D_FILE ) | HSocket::TYPE::D_NETWORK );
 		fail( "creation of bad socket possible (TYPE::D_FILE|TYPE::D_NETWORK)" );
 		}
 	catch ( HException& e )
@@ -109,7 +109,7 @@ void module::test<2> ( void )
 		}
 	try
 		{
-		HSocket l_oSocket( HSocket::TYPE::D_BLOCKING | HSocket::TYPE::D_NONBLOCKING );
+		HSocket l_oSocket( HSocket::socket_type_t( HSocket::TYPE::D_BLOCKING ) | HSocket::TYPE::D_NONBLOCKING );
 		fail( "creation of bad socket possible (TYPE::D_BLOCKING|TYPE::D_NONBLOCKING)" );
 		}
 	catch ( HException& e )
@@ -262,8 +262,8 @@ TUT_UNIT_TEST_N( 20, "Transfering data through file with SSL." )
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
 	char reciv_buffer[ size + 1 ];
-	HSocket l_oServer( HSocket::TYPE::D_FILE | HSocket::TYPE::D_SSL_SERVER, 1 );
-	HSocket l_oClient( HSocket::TYPE::D_FILE | HSocket::TYPE::D_SSL_CLIENT );
+	HSocket l_oServer( HSocket::socket_type_t( HSocket::TYPE::D_FILE ) | HSocket::TYPE::D_SSL_SERVER, 1 );
+	HSocket l_oClient( HSocket::socket_type_t( HSocket::TYPE::D_FILE ) | HSocket::TYPE::D_SSL_CLIENT );
 	l_oServer.listen( "/tmp/TUT_socket" );
 	l_oClient.connect( "/tmp/TUT_socket" );
 	OServer serv;
@@ -303,8 +303,8 @@ TUT_UNIT_TEST_N( 22, "Transfering data through network with SSL." )
 	char test_data[] = "A kot ma wpierdol.";
 	const int size = sizeof ( test_data );
 	char reciv_buffer[ size + 1 ];
-	HSocket l_oServer( HSocket::TYPE::D_NETWORK | HSocket::TYPE::D_SSL_SERVER, 1 );
-	HSocket l_oClient( HSocket::TYPE::D_NETWORK | HSocket::TYPE::D_SSL_CLIENT );
+	HSocket l_oServer( HSocket::socket_type_t( HSocket::TYPE::D_NETWORK ) | HSocket::TYPE::D_SSL_SERVER, 1 );
+	HSocket l_oClient( HSocket::socket_type_t( HSocket::TYPE::D_NETWORK ) | HSocket::TYPE::D_SSL_CLIENT );
 	l_oServer.listen( "0.0.0.0", 5555 );
 	l_oClient.connect( "127.0.0.1", 5555 );
 	OServer serv;

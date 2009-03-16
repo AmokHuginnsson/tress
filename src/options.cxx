@@ -77,23 +77,23 @@ simple_callback_t dump( usage, NULL );
 simple_callback_t version_call( version, NULL );
 OOption n_psOptions[] =
 	{
-		{ "log_path", D_HSTRING, &setup.f_oLogPath, NULL, OOption::D_REQUIRED, "path", "path pointing to file for application logs", NULL },
-		{ "jobs", D_INT, &setup.f_iJobs, "j", OOption::D_REQUIRED, "count", "number of concurrent jobs", NULL },
-		{ "group", D_HSTRING, &setup.f_oTestGroup, "G", OOption::D_REQUIRED, "name", "select test group", NULL },
-		{ "pattern", D_HSTRING, &setup.f_oTestGroupPattern, "P", OOption::D_REQUIRED, "pattern", "select test groups that are matching pattern", NULL },
-		{ "number", D_INT, &setup.f_iTestNumber, "N", OOption::D_REQUIRED, "number", "select test number for a given group", NULL },
-		{ "restartable", D_BOOL, &setup.f_bRestartable, "R", OOption::D_NONE, NULL, "run tests in restartable mode", NULL },
-		{ "list", D_BOOL, &setup.f_bListGroups, "L", OOption::D_NONE, NULL, "list known test groups", NULL },
-		{ "file", D_HSTRING, &setup.f_oTestGroupListFilePath, "F", OOption::D_REQUIRED, "path", "read test group names from given file", NULL },
-		{ "option", D_VOID, NULL, "O", OOption::D_OPTIONAL, "param", "this is not a real option, it was added here to test automated help generation capabilities, this description must be long enought to trigger description wrap, more over is must look good", NULL },
-		{ "absolute", D_VOID, NULL, "O", OOption::D_OPTIONAL, "param", NULL, NULL },
-		{ "quiet", D_BOOL, &setup.f_bQuiet, "q", OOption::D_NONE, NULL, "inhibit usual output", NULL },
-		{ "silent", D_BOOL, &setup.f_bQuiet, "q", OOption::D_NONE, NULL, "inhibit usual output", NULL },
-		{ "verbose", D_BOOL, &setup.f_bVerbose, "v", OOption::D_NONE, NULL, "print more information", NULL },
-		{ "help", D_BOOL, &setup.f_bHelp, "h", OOption::D_NONE, NULL, "display this help and exit", &help },
-		{ "dump-configuration", D_VOID, NULL, "W", OOption::D_NONE, NULL, "dump current configuration", &dump },
-		{ "version", D_VOID, NULL, "V", OOption::D_NONE, NULL, "output version information and exit", &version_call },
-		{ NULL, D_VOID, NULL, NULL, OOption::D_NONE, NULL, NULL, NULL }
+		{ "log_path", TYPE::D_HSTRING, &setup.f_oLogPath, NULL, OOption::D_REQUIRED, "path", "path pointing to file for application logs", NULL },
+		{ "jobs", TYPE::D_INT, &setup.f_iJobs, "j", OOption::D_REQUIRED, "count", "number of concurrent jobs", NULL },
+		{ "group", TYPE::D_HSTRING, &setup.f_oTestGroup, "G", OOption::D_REQUIRED, "name", "select test group", NULL },
+		{ "pattern", TYPE::D_HSTRING, &setup.f_oTestGroupPattern, "P", OOption::D_REQUIRED, "pattern", "select test groups that are matching pattern", NULL },
+		{ "number", TYPE::D_INT, &setup.f_iTestNumber, "N", OOption::D_REQUIRED, "number", "select test number for a given group", NULL },
+		{ "restartable", TYPE::D_BOOL, &setup.f_bRestartable, "R", OOption::D_NONE, NULL, "run tests in restartable mode", NULL },
+		{ "list", TYPE::D_BOOL, &setup.f_bListGroups, "L", OOption::D_NONE, NULL, "list known test groups", NULL },
+		{ "file", TYPE::D_HSTRING, &setup.f_oTestGroupListFilePath, "F", OOption::D_REQUIRED, "path", "read test group names from given file", NULL },
+		{ "option", TYPE::D_VOID, NULL, "O", OOption::D_OPTIONAL, "param", "this is not a real option, it was added here to test automated help generation capabilities, this description must be long enought to trigger description wrap, more over is must look good", NULL },
+		{ "absolute", TYPE::D_VOID, NULL, "O", OOption::D_OPTIONAL, "param", NULL, NULL },
+		{ "quiet", TYPE::D_BOOL, &setup.f_bQuiet, "q", OOption::D_NONE, NULL, "inhibit usual output", NULL },
+		{ "silent", TYPE::D_BOOL, &setup.f_bQuiet, "q", OOption::D_NONE, NULL, "inhibit usual output", NULL },
+		{ "verbose", TYPE::D_BOOL, &setup.f_bVerbose, "v", OOption::D_NONE, NULL, "print more information", NULL },
+		{ "help", TYPE::D_BOOL, &setup.f_bHelp, "h", OOption::D_NONE, NULL, "display this help and exit", &help },
+		{ "dump-configuration", TYPE::D_VOID, NULL, "W", OOption::D_NONE, NULL, "dump current configuration", &dump },
+		{ "version", TYPE::D_VOID, NULL, "V", OOption::D_NONE, NULL, "output version information and exit", &version_call },
+		{ NULL, TYPE::D_VOID, NULL, NULL, OOption::D_NONE, NULL, NULL, NULL }
 	};
 
 }
