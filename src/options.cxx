@@ -58,7 +58,7 @@ void usage( void* ) __attribute__((__noreturn__));
 void usage( void* arg )
 	{
 	OOptionInfo* info = static_cast<OOptionInfo*>( arg );
-	info->PROC( info->_opt, info->_size, setup.f_pcProgramName, "yaal stress testing suite", NULL );
+	info->PROC( info->_opt, setup.f_pcProgramName, "yaal stress testing suite", NULL );
 	throw ( setup.f_bHelp ? 0 : 1 );
 	}
 
@@ -72,83 +72,47 @@ void version( void* )
 namespace
 {
 
-simple_callback_t help( usage, NULL );
-simple_callback_t dump( usage, NULL );
-simple_callback_t version_call( version, NULL );
-OOption n_psOptions[] =
-	{
-		{ "log_path", TYPE::D_HSTRING, &setup.f_oLogPath, NULL, OOption::D_REQUIRED, "path", "path pointing to file for application logs", NULL },
-		{ "jobs", TYPE::D_INT, &setup.f_iJobs, "j", OOption::D_REQUIRED, "count", "number of concurrent jobs", NULL },
-		{ "group", TYPE::D_HSTRING, &setup.f_oTestGroup, "G", OOption::D_REQUIRED, "name", "select test group", NULL },
-		{ "pattern", TYPE::D_HSTRING, &setup.f_oTestGroupPattern, "P", OOption::D_REQUIRED, "pattern", "select test groups that are matching pattern", NULL },
-		{ "number", TYPE::D_INT, &setup.f_iTestNumber, "N", OOption::D_REQUIRED, "number", "select test number for a given group", NULL },
-		{ "restartable", TYPE::D_BOOL, &setup.f_bRestartable, "R", OOption::D_NONE, NULL, "run tests in restartable mode", NULL },
-		{ "list", TYPE::D_BOOL, &setup.f_bListGroups, "L", OOption::D_NONE, NULL, "list known test groups", NULL },
-		{ "file", TYPE::D_HSTRING, &setup.f_oTestGroupListFilePath, "F", OOption::D_REQUIRED, "path", "read test group names from given file", NULL },
-		{ "option", TYPE::D_VOID, NULL, "O", OOption::D_OPTIONAL, "param", "this is not a real option, it was added here to test automated help generation capabilities, this description must be long enought to trigger description wrap, more over is must look good", NULL },
-		{ "absolute", TYPE::D_VOID, NULL, "O", OOption::D_OPTIONAL, "param", NULL, NULL },
-		{ "quiet", TYPE::D_BOOL, &setup.f_bQuiet, "q", OOption::D_NONE, NULL, "inhibit usual output", NULL },
-		{ "silent", TYPE::D_BOOL, &setup.f_bQuiet, "q", OOption::D_NONE, NULL, "inhibit usual output", NULL },
-		{ "verbose", TYPE::D_BOOL, &setup.f_bVerbose, "v", OOption::D_NONE, NULL, "print more information", NULL },
-		{ "help", TYPE::D_BOOL, &setup.f_bHelp, "h", OOption::D_NONE, NULL, "display this help and exit", &help },
-		{ "dump-configuration", TYPE::D_VOID, NULL, "W", OOption::D_NONE, NULL, "dump current configuration", &dump },
-		{ "version", TYPE::D_VOID, NULL, "V", OOption::D_NONE, NULL, "output version information and exit", &version_call },
-		{ NULL, TYPE::D_VOID, NULL, NULL, OOption::D_NONE, NULL, NULL, NULL }
-	};
+HProgramOptionsHandler::simple_callback_t help( usage, NULL );
+HProgramOptionsHandler::simple_callback_t dump( usage, NULL );
+HProgramOptionsHandler::simple_callback_t version_call( version, NULL );
 
 }
 
-int process_tressrc_file( void )
-	{
-	rc_file::process_rc_file ( "tress", "", n_psOptions, NULL );
-	if ( setup.f_oLogPath.is_empty() )
-		setup.f_oLogPath = "tress.log";
-	return ( 0 );
-	}
-
-int decode_switches( int a_iArgc, char** a_ppcArgv )
+int handle_program_options( int a_iArgc, char** a_ppcArgv )
 	{
 	M_PROLOG
+	HProgramOptionsHandler po;
+	po( "log_path", program_options_helper::option_value( setup.f_oLogPath ), NULL, HProgramOptionsHandler::OOption::TYPE::D_REQUIRED, "path", "path pointing to file for application logs", NULL )
+		( "jobs", program_options_helper::option_value( setup.f_iJobs ), "j", HProgramOptionsHandler::OOption::TYPE::D_REQUIRED, "count", "number of concurrent jobs", NULL )
+		( "group", program_options_helper::option_value( setup.f_oTestGroup ), "G", HProgramOptionsHandler::OOption::TYPE::D_REQUIRED, "name", "select test group", NULL )
+		( "pattern", program_options_helper::option_value( setup.f_oTestGroupPattern ), "P", HProgramOptionsHandler::OOption::TYPE::D_REQUIRED, "pattern", "select test groups that are matching pattern", NULL )
+		( "number", program_options_helper::option_value( setup.f_iTestNumber ), "N", HProgramOptionsHandler::OOption::TYPE::D_REQUIRED, "number", "select test number for a given group", NULL )
+		( "restartable", program_options_helper::option_value( setup.f_bRestartable ), "R", HProgramOptionsHandler::OOption::TYPE::D_NONE, NULL, "run tests in restartable mode", NULL )
+		( "list", program_options_helper::option_value( setup.f_bListGroups ), "L", HProgramOptionsHandler::OOption::TYPE::D_NONE, NULL, "list known test groups", NULL )
+		( "file", program_options_helper::option_value( setup.f_oTestGroupListFilePath ), "F", HProgramOptionsHandler::OOption::TYPE::D_REQUIRED, "path", "read test group names from given file", NULL )
+		( "option", program_options_helper::no_value, "O", HProgramOptionsHandler::OOption::TYPE::D_OPTIONAL, "param", "this is not a real option, it was added here to test automated help generation capabilities, this description must be long enought to trigger description wrap, more over is must look good", NULL )
+		( "absolute", program_options_helper::no_value, "O", HProgramOptionsHandler::OOption::TYPE::D_OPTIONAL, "param", NULL, NULL )
+		( "quiet", program_options_helper::option_value( setup.f_bQuiet ), "q", HProgramOptionsHandler::OOption::TYPE::D_NONE, NULL, "inhibit usual output", NULL )
+		( "silent", program_options_helper::option_value( setup.f_bQuiet ), "q", HProgramOptionsHandler::OOption::TYPE::D_NONE, NULL, "inhibit usual output", NULL )
+		( "verbose", program_options_helper::option_value( setup.f_bVerbose ), "v", HProgramOptionsHandler::OOption::TYPE::D_NONE, NULL, "print more information", NULL )
+		( "help", program_options_helper::option_value( setup.f_bHelp ), "h", HProgramOptionsHandler::OOption::TYPE::D_NONE, NULL, "display this help and exit", &help )
+		( "dump-configuration", program_options_helper::no_value, "W", HProgramOptionsHandler::OOption::TYPE::D_NONE, NULL, "dump current configuration", &dump )
+		( "version", program_options_helper::no_value, "V", HProgramOptionsHandler::OOption::TYPE::D_NONE, NULL, "output version information and exit", &version_call );
+	po.process_rc_file( "tress", "", NULL );
+	if ( setup.f_oLogPath.is_empty() )
+		setup.f_oLogPath = "tress.log";
 	int l_iUnknown = 0, l_iNonOption = 0;
-	OOptionInfo info( n_psOptions, sizeof ( n_psOptions ) / sizeof ( OOption ), util::show_help );
-	OOptionInfo infoConf( n_psOptions, sizeof ( n_psOptions ) / sizeof ( OOption ), util::dump_configuration );
+	OOptionInfo info( po.get_options(), util::show_help );
+	OOptionInfo infoConf( po.get_options(), util::dump_configuration );
 	help.second = &info;
 	dump.second = &infoConf;
-	l_iNonOption = cl_switch::decode_switches( a_iArgc, a_ppcArgv, n_psOptions,
-			info._size, &l_iUnknown );
+	l_iNonOption = po.process_command_line( a_iArgc, a_ppcArgv, &l_iUnknown );
 	if ( l_iUnknown > 0 )
 		usage( &info );
-	if ( setup.f_bListGroups
-			&& ( setup.f_bRestartable
-				|| ! setup.f_oTestGroupListFilePath.is_empty()
-				|| ! setup.f_oTestGroup.is_empty()
-				|| ! setup.f_oTestGroupPattern.is_empty() || setup.f_iTestNumber ) )
-		M_THROW ( _ ( "group listing conflicts with other switches" ),
-				setup.f_iTestNumber );
-	if ( setup.f_bRestartable
-			&& ( ! setup.f_oTestGroupListFilePath.is_empty()
-				|| ! setup.f_oTestGroup.is_empty()
-				|| ! setup.f_oTestGroupPattern.is_empty()
-				|| setup.f_iTestNumber ) )
-		M_THROW ( _ ( "restartable conflicts with other switches" ),
-				setup.f_iTestNumber );
-	if ( ! setup.f_oTestGroupListFilePath.is_empty()
-			&& ( ! setup.f_oTestGroup.is_empty()
-				|| ! setup.f_oTestGroupPattern.is_empty()
-				|| setup.f_iTestNumber ) )
-		M_THROW ( _ ( "group names file is an exclusive switch" ),
-				setup.f_iTestNumber );
-	if ( ! setup.f_oTestGroup.is_empty() && ! setup.f_oTestGroupPattern.is_empty() )
-		M_THROW ( _ ( "pattern and group switches are exclusive" ), errno );
-	if ( ! setup.f_oTestGroupPattern.is_empty() && setup.f_iTestNumber )
-		M_THROW ( _ ( "setting test number for pattern makes no sense" ),
-				setup.f_iTestNumber );
-	if ( setup.f_iTestNumber && setup.f_oTestGroup.is_empty() )
-		M_THROW ( _ ( "must specify test group for test number" ),
-				setup.f_iTestNumber );
 	return ( l_iNonOption );
 	M_EPILOG
 	}
+
 
 }
 

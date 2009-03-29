@@ -55,6 +55,7 @@ struct OSetup
 	yaal::hcore::HString f_oTestGroupPattern;
 	yaal::hcore::HString f_oTestGroupListFilePath;
 	static int const D_DEFAULT_JOB_COUNT = 1;
+	void test_setup( void );
 private:
 	OSetup( OSetup const& );
 	OSetup& operator = ( OSetup const& );
