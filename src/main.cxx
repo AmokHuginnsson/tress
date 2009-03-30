@@ -144,8 +144,9 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 		M_ENSURE ( ! errno );
 /*	... there is the place main loop ends. :OD-OT                         */
 		}
-	catch ( int& )
+	catch ( int const& e )
 		{
+		l_oVisitor._exceptionsCount += e;
 		/* escape from main loop */
 		}
 	catch ( ... )

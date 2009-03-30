@@ -34,22 +34,21 @@ namespace tress
 
 struct OSetup
 	{
-	OSetup ( void )
-		: f_bQuiet ( false ), f_bVerbose ( false ), f_bHelp ( false ),
-		f_bListGroups ( false ), f_bRestartable ( false ), f_iTestNumber ( 0 ),
-		f_iJobs( D_DEFAULT_JOB_COUNT ), f_iArgc ( 0 ), f_ppcArgv ( NULL ),
-		f_pcProgramName ( NULL ), f_oLogPath(), f_oTestGroup(),
+	OSetup( void )
+		: f_bQuiet( false ), f_bVerbose( false ),
+		f_bListGroups( false ), f_bRestartable( false ), f_iTestNumber( 0 ),
+		f_iJobs( D_DEFAULT_JOB_COUNT ), f_iArgc( 0 ), f_ppcArgv( NULL ),
+		f_pcProgramName( NULL ), f_oLogPath(), f_oTestGroup(),
 		f_oTestGroupPattern(), f_oTestGroupListFilePath() {}
 	bool f_bQuiet;			/* --quiet, --silent */
 	bool f_bVerbose;		/* --verbose */
-	bool f_bHelp;
 	bool f_bListGroups;
 	bool f_bRestartable;
 	int f_iTestNumber;
 	int f_iJobs;
 	int f_iArgc;
-	char const * const * f_ppcArgv;
-	char * f_pcProgramName;
+	char const* const* f_ppcArgv;
+	char* f_pcProgramName;
 	yaal::hcore::HString f_oLogPath;
 	yaal::hcore::HString f_oTestGroup;
 	yaal::hcore::HString f_oTestGroupPattern;
