@@ -1744,3 +1744,98 @@
    fun:pthread_once
    fun:backtrace
 }
+{
+   Jaunty18
+   Memcheck:Cond
+   fun:BN_mod_inverse
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/lib/libcrypto.so.0.9.8
+   fun:ssl3_send_client_key_exchange
+   fun:ssl3_connect
+   fun:ssl23_connect
+}
+{
+   Jaunty19
+   Memcheck:Cond
+   fun:BN_div
+   fun:BN_nnmod
+   fun:BN_mod_inverse
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/lib/libcrypto.so.0.9.8
+   fun:ssl3_send_client_key_exchange
+   fun:ssl3_connect
+   fun:ssl23_connect
+}
+{
+   Jaunty20
+   Memcheck:Cond
+   fun:BN_div
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/lib/libcrypto.so.0.9.8
+   fun:ssl3_send_client_key_exchange
+   fun:ssl3_connect
+   fun:ssl23_connect
+}
+{
+   Jaunty21
+   Memcheck:Cond
+   fun:BN_mod_inverse
+   fun:BN_MONT_CTX_set
+   fun:BN_mod_exp_mont
+   fun:BN_BLINDING_create_param
+   fun:RSA_setup_blinding
+}
+{
+   Jaunty22
+   Memcheck:Cond
+   fun:BN_div
+   fun:BN_MONT_CTX_set
+   fun:BN_mod_exp_mont
+   fun:BN_BLINDING_create_param
+   fun:RSA_setup_blinding
+   obj:/lib/libcrypto.so.0.9.8
+   obj:/lib/libcrypto.so.0.9.8
+   fun:ssl3_get_client_key_exchange
+   fun:ssl3_accept
+   fun:ssl23_get_client_hello
+   fun:ssl23_accept
+}
+{
+   Jaunty23
+   Memcheck:Cond
+   fun:BN_mod_inverse
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/lib/libcrypto.so.0.9.8
+   obj:/lib/libcrypto.so.0.9.8
+   fun:ssl3_get_client_key_exchange
+   fun:ssl3_accept
+   fun:ssl23_get_client_hello
+   fun:ssl23_accept
+}
+{
+   Jaunty24
+   Memcheck:Cond
+   fun:BN_div
+   fun:BN_MONT_CTX_set
+   fun:BN_MONT_CTX_set_locked
+   obj:/lib/libcrypto.so.0.9.8
+   obj:/lib/libcrypto.so.0.9.8
+   fun:ssl3_get_client_key_exchange
+   fun:ssl3_accept
+   fun:ssl23_get_client_hello
+   fun:ssl23_accept
+}
+{
+   Jaunty25
+   Memcheck:Leak
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:sk_new
+   obj:/lib/libssl.so.0.9.8
+   fun:SSL_COMP_get_compression_methods
+   fun:SSL_library_init
+}
