@@ -392,55 +392,6 @@ void module::test<24>( void )
 	ensure_equals( mid_failed, str.mid( 2 ), "ecadlo" );
 	}
 
-/* split */
-template<>
-template<>
-void module::test<25>( void )
-	{
-	char a[] = ",aa,bb";
-	char b[] = "aa,bb";
-	char c[] = "aa,bb,";
-	char d[] = ",aa,";
-	char e[] = ",,,aa,,";
-	char f[] = "a";
-	HString str;
-	char split_failed[] = "split failed";
-	str = f;
-	ensure_equals( split_failed, str.split( ";", 0 ), "a" );
-	ensure_equals( split_failed, str.split( ";", 1 ), "" );
-	ensure_equals( split_failed, str.split( ";", 2 ), "" );
-	ensure_equals( split_failed, str.split( "a", 0 ), "" );
-	ensure_equals( split_failed, str.split( "a", 1 ), "" );
-	ensure_equals( split_failed, str.split( "a", 2 ), "" );
-	str = a;
-	ensure_equals( split_failed, str.split( ",", 0 ), "" );
-	ensure_equals( split_failed, str.split( ",", 1 ), "aa" );
-	ensure_equals( split_failed, str.split( ",", 2 ), "bb" );
-	ensure_equals( split_failed, str.split( ",", 3 ), "" );
-	str = b;
-	ensure_equals( split_failed, str.split( ",", 0 ), "aa" );
-	ensure_equals( split_failed, str.split( ",", 1 ), "bb" );
-	ensure_equals( split_failed, str.split( ",", 2 ), "" );
-	ensure_equals( split_failed, str.split( ",", 3 ), "" );
-	str = c;
-	ensure_equals( split_failed, str.split( ",", 0 ), "aa" );
-	ensure_equals( split_failed, str.split( ",", 1 ), "bb" );
-	ensure_equals( split_failed, str.split( ",", 2 ), "" );
-	ensure_equals( split_failed, str.split( ",", 3 ), "" );
-	str = d;
-	ensure_equals( split_failed, str.split( ",", 0 ), "" );
-	ensure_equals( split_failed, str.split( ",", 1 ), "aa" );
-	ensure_equals( split_failed, str.split( ",", 2 ), "" );
-	ensure_equals( split_failed, str.split( ",", 3 ), "" );
-	str = e;
-	ensure_equals( split_failed, str.split( ",", 0 ), "" );
-	ensure_equals( split_failed, str.split( ",", 1 ), "" );
-	ensure_equals( split_failed, str.split( ",", 2 ), "" );
-	ensure_equals( split_failed, str.split( ",", 3 ), "aa" );
-	ensure_equals( split_failed, str.split( ",", 4 ), "" );
-	ensure_equals( split_failed, str.split( ",", 5 ), "" );
-	}
-
 /* right */
 template<>
 template<>
