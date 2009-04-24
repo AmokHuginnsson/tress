@@ -36,28 +36,16 @@ using namespace yaal::tools::util;
 namespace must_not_compile
 {
 
-typedef HMap<int, int> map_t;
+typedef HMultiMap<int, int> map_t;
 
 #if defined ( BUG_0 )
-
 
 int sum( map_t const& l )
 	{
 	int l_iSum = 0;
 
 	for ( map_t::iterator it = l.begin(); it != l.end(); ++ it ) /* MUST_FAIL_HERE */
-		l_iSum += it->second;
-	return ( l_iSum );
-	}
-
-#elif defined ( BUG_1 )
-
-int sum( map_t const& l )
-	{
-	int l_iSum = 0;
-	
-	for ( map_t::const_iterator it = l.begin(); it != l.end(); ++ it )
-		it->second = -it->second; /* MUST_FAIL_HERE */
+		l_iSum += (*it).second;
 	return ( l_iSum );
 	}
 
@@ -70,9 +58,9 @@ int sum( map_t const& l )
 int main( int, char** )
 	{
 	must_not_compile::map_t l;
-	l.insert( 1, 7 );
-	l.insert( 3, 11 );
-	l.insert( 5, 13 );
+	l.insert( make_pair( 1, 7 ) );
+	l.insert( make_pair( 3, 11 ) );
+	l.insert( make_pair( 5, 13 ) );
 	return ( must_not_compile::sum( l ) );
 	}
 
