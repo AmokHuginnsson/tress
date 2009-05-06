@@ -52,70 +52,70 @@ struct tut_yaal_hcore_hclock
 
 int long tut_yaal_hcore_hclock::get_speed( HClock::UNIT::unit_t const& u )
 	{
-	double long D_PI = 3.14159265;
-	static int const D_LOOPS = 5000;
-	double long x = D_PI;
+	double long PI = 3.14159265;
+	static int const LOOPS = 5000;
+	double long x = PI;
 	HClock c;
-	for ( int i = 0; i < D_LOOPS; ++ i )
-		x *= D_PI;
+	for ( int i = 0; i < LOOPS; ++ i )
+		x *= PI;
 	return ( static_cast<int long>( c.get_time_elapsed( u ) ) );
 	}
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hclock, "yaal::hcore::HClock" );
 
 TUT_UNIT_TEST_N( 1, "1 second accuracy" )
-	static int long const D_SLEEP = 1;
-	static int long const D_PASSED = 1;
+	static int long const SLEEP = 1;
+	static int long const PASSED = 1;
 	HClock clk;
-	::sleep( D_SLEEP );
-	ensure_equals( "time measured incorrectly", clk.get_time_elapsed(), D_PASSED );
+	::sleep( SLEEP );
+	ensure_equals( "time measured incorrectly", clk.get_time_elapsed(), PASSED );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "1 mili-second accuracy" )
-	static int long const D_SLEEP = 1;
-	static int long const D_PASSED = power<10,3>::value;
-	static int long const D_QUALITY = get_speed( HClock::UNIT::D_MILISECOND );
+	static int long const SLEEP = 1;
+	static int long const PASSED = power<10,3>::value;
+	static int long const QUALITY = get_speed( HClock::UNIT::MILISECOND );
 	HClock clk;
-	::sleep( D_SLEEP );
-	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_MILISECOND ), D_PASSED, D_QUALITY + 10 );
+	::sleep( SLEEP );
+	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::MILISECOND ), PASSED, QUALITY + 10 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "1 micro-second accuracy" )
-	static int long const D_SLEEP = 1;
-	static int long const D_PASSED = power<10,6>::value;
-	static int long const D_QUALITY = get_speed( HClock::UNIT::D_MICROSECOND ) * 200;
+	static int long const SLEEP = 1;
+	static int long const PASSED = power<10,6>::value;
+	static int long const QUALITY = get_speed( HClock::UNIT::MICROSECOND ) * 200;
 	HClock clk;
-	::sleep( D_SLEEP );
-	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_MICROSECOND ), D_PASSED, D_QUALITY ? D_QUALITY : 1 );
+	::sleep( SLEEP );
+	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::MICROSECOND ), PASSED, QUALITY ? QUALITY : 1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "1 nano-second accuracy" )
-	static int long const D_SLEEP = 1;
-	static int long const D_PASSED = power<10,9>::value;
-	static int long const D_QUALITY = get_speed( HClock::UNIT::D_NANOSECOND ) * 200;
+	static int long const SLEEP = 1;
+	static int long const PASSED = power<10,9>::value;
+	static int long const QUALITY = get_speed( HClock::UNIT::NANOSECOND ) * 200;
 	HClock clk;
-	::sleep( D_SLEEP );
-	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_NANOSECOND ), D_PASSED, D_QUALITY ? D_QUALITY : 1 );
+	::sleep( SLEEP );
+	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::NANOSECOND ), PASSED, QUALITY ? QUALITY : 1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "measue twice without reset" )
-	static int long const D_SLEEP = 1;
-	static int long const D_PASSED = 1;
+	static int long const SLEEP = 1;
+	static int long const PASSED = 1;
 	HClock clk;
-	::sleep( D_SLEEP );
-	ensure_equals( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_SECOND, false ), D_PASSED );
-	::sleep( D_SLEEP );
-	ensure_equals( "time measured incorrectly", clk.get_time_elapsed(), D_PASSED + D_PASSED );
+	::sleep( SLEEP );
+	ensure_equals( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::SECOND, false ), PASSED );
+	::sleep( SLEEP );
+	ensure_equals( "time measured incorrectly", clk.get_time_elapsed(), PASSED + PASSED );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "measue twice with reset" )
-	static int long const D_SLEEP = 1;
-	static int long const D_PASSED = 1;
+	static int long const SLEEP = 1;
+	static int long const PASSED = 1;
 	HClock clk;
-	::sleep( D_SLEEP );
-	ensure_equals( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::D_SECOND, true ), D_PASSED );
-	::sleep( D_SLEEP );
-	ensure_equals( "time measured incorrectly", clk.get_time_elapsed(), D_PASSED );
+	::sleep( SLEEP );
+	ensure_equals( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::SECOND, true ), PASSED );
+	::sleep( SLEEP );
+	ensure_equals( "time measured incorrectly", clk.get_time_elapsed(), PASSED );
 TUT_TEARDOWN()
 
 }

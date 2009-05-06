@@ -45,22 +45,22 @@ namespace tut
 
 struct tut_yaal_tools_hpipedchild
 	{
-	static HString D_CHILD;
-	static HString D_CHILD_FAKE;
-	static HString D_MSG_OUT;
-	static HString D_MSG_ERR;
-	static HString D_ACK_OUT;
-	static HString D_ACK_ERR;
+	static HString CHILD;
+	static HString CHILD_FAKE;
+	static HString MSG_OUT;
+	static HString MSG_ERR;
+	static HString ACK_OUT;
+	static HString ACK_ERR;
 	virtual ~tut_yaal_tools_hpipedchild( void )
 		{}
 	};
 
-HString tut_yaal_tools_hpipedchild::D_CHILD( "./data/child" );
-HString tut_yaal_tools_hpipedchild::D_CHILD_FAKE( "./data/child_fake" );
-HString tut_yaal_tools_hpipedchild::D_MSG_OUT( "out" );
-HString tut_yaal_tools_hpipedchild::D_MSG_ERR( "err" );
-HString tut_yaal_tools_hpipedchild::D_ACK_OUT( "hello-OUT" );
-HString tut_yaal_tools_hpipedchild::D_ACK_ERR( "hello-ERR" );
+HString tut_yaal_tools_hpipedchild::CHILD( "./data/child" );
+HString tut_yaal_tools_hpipedchild::CHILD_FAKE( "./data/child_fake" );
+HString tut_yaal_tools_hpipedchild::MSG_OUT( "out" );
+HString tut_yaal_tools_hpipedchild::MSG_ERR( "err" );
+HString tut_yaal_tools_hpipedchild::ACK_OUT( "hello-OUT" );
+HString tut_yaal_tools_hpipedchild::ACK_ERR( "hello-ERR" );
 
 TUT_TEST_GROUP_N( tut_yaal_tools_hpipedchild, "yaal::tools::HPipedChild" );
 
@@ -72,7 +72,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 2, "spawn and finish" )
 	HPipedChild pc;
 	ensure_equals( "bad state on simple construction", pc.is_running(), false );
-	pc.spawn( D_CHILD );
+	pc.spawn( CHILD );
 	ensure_equals( "bad state after spawn", pc.is_running(), true );
 	pc.finish();
 	ensure_equals( "bad state after finish", pc.is_running(), false );
@@ -83,7 +83,7 @@ TUT_UNIT_TEST_N( 3, "spawn on non-execuable" )
 	ensure_equals( "bad state on simple construction", pc.is_running(), false );
 	try
 		{
-		pc.spawn( D_CHILD_FAKE );
+		pc.spawn( CHILD_FAKE );
 		fail( "spawning non-executable" );
 		}
 	catch ( HPipedChildException& )
@@ -96,12 +96,12 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 4, "spawn, write and read (stdout)" )
 	HPipedChild pc;
 	ensure_equals( "bad state on simple construction", pc.is_running(), false );
-	pc.spawn( D_CHILD );
+	pc.spawn( CHILD );
 	ensure_equals( "bad state after spawn", pc.is_running(), true );
-	pc << D_MSG_OUT << endl;
+	pc << MSG_OUT << endl;
 	HString ack;
 	pc.read_until( ack );
-	ensure_equals( "bad ack OUT", ack, D_ACK_OUT );
+	ensure_equals( "bad ack OUT", ack, ACK_OUT );
 	pc.finish();
 	ensure_equals( "bad state after finish", pc.is_running(), false );
 TUT_TEARDOWN()

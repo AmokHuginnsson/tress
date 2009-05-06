@@ -58,15 +58,15 @@ TUT_TEST_GROUP_N( tut_yaal_hcore_hmap, "yaal::hcore::HMap" );
 
 TUT_UNIT_TEST_N( 1, "HMap insert of already existing key")
 	i2i_t m;
-	static int const D_KEY = 1;
-	static int const D_ORIGINAL_VAL = 2;
-	static int const D_NEXT_VAL = 3;
-	m.insert( yaal::hcore::make_pair( D_KEY, D_ORIGINAL_VAL ) );
-	ensure( "element not inserted", m.find( D_KEY ) != m.end() );
+	static int const KEY = 1;
+	static int const ORIGINAL_VAL = 2;
+	static int const NEXT_VAL = 3;
+	m.insert( yaal::hcore::make_pair( KEY, ORIGINAL_VAL ) );
+	ensure( "element not inserted", m.find( KEY ) != m.end() );
 	typedef HPair<i2i_t::iterator, bool> insert_result_t;
-	insert_result_t ir = m.insert( yaal::hcore::make_pair( D_KEY, D_NEXT_VAL ) );
+	insert_result_t ir = m.insert( yaal::hcore::make_pair( KEY, NEXT_VAL ) );
 	ensure_equals( "insertion of already existing key reported successful", ir.second, false );
-	ensure_equals( "element with already existing key inserted", ir.first->second, D_ORIGINAL_VAL );
+	ensure_equals( "element with already existing key inserted", ir.first->second, ORIGINAL_VAL );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "exception during map[key] = val;" )

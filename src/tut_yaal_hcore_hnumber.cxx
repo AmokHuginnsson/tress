@@ -83,7 +83,7 @@ void module::test<1>( void )
 	{
 	HNumber n;
 	ensure_equals( "bad default number", n.to_string(), "0" );
-	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << n.to_string() << endl;
 	}
 
@@ -94,7 +94,7 @@ void module::test<2>( void )
 	{
 	HNumber n( 3.14159265 );
 	ensure_equals( "number not created correctly", n.to_string(), "3.14159265" );
-	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << n.to_string() << endl;
 	}
 
@@ -122,7 +122,7 @@ void module::test<4>( void )
 	char const* const pn0 = "3.14159265";
 	HNumber n0( pn0 );
 	ensure_equals( "number not created correctly", n0.to_string(), pn0 );
-	ensure_equals( "bad dafault precision", n0.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n0 = " << n0.to_string() << " |" << endl;
 	try
 		{
@@ -182,25 +182,25 @@ void module::test<4>( void )
 	char const* const pn1 = "-1";
 	HNumber n1( pn1 );
 	ensure_equals( "number not created correctly", n1.to_string(), pn1 );
-	ensure_equals( "bad dafault precision", n1.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n1.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n1 =" << n1.to_string() << " |" << endl;
 
 	char const* const pn2 = ".5";
 	HNumber n2( pn2 );
 	ensure_equals( "number not created correctly", n2.to_string(), pn2 );
-	ensure_equals( "bad dafault precision", n2.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n2.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n2 =" << n2.to_string() << " |" << endl;
 
 	char const* const pn3 = "-.7";
 	HNumber n3( pn3 );
 	ensure_equals( "number not created correctly", n3.to_string(), pn3 );
-	ensure_equals( "bad dafault precision", n3.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n3.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n3 =" << n3.to_string() << " |" << endl;
 
 	char const* const pn4 = "-2.7";
 	HNumber n4( pn4 );
 	ensure_equals( "number not created correctly", n4.to_string(), pn4 );
-	ensure_equals( "bad dafault precision", n4.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n4 =" << n4.to_string() << " |" << endl;
 
 	try
@@ -239,31 +239,31 @@ void module::test<4>( void )
 	char const* const pn5 = ".2.7";
 	HNumber n5( pn5 );
 	ensure_equals( "number not created correctly", n5.to_string(), ".2" );
-	ensure_equals( "bad dafault precision", n5.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n5.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n5 =" << n5.to_string() << " |" << endl;
 
 	char const* const pn6 = "2.7.44";
 	HNumber n6( pn6 );
 	ensure_equals( "number not created correctly", n6.to_string(), "2.7" );
-	ensure_equals( "bad dafault precision", n6.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n6.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n6 =" << n6.to_string() << " |" << endl;
 
 	char const* const pn7 = "7-44";
 	HNumber n7( pn7 );
 	ensure_equals( "number not created correctly", n7.to_string(), "7" );
-	ensure_equals( "bad dafault precision", n7.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n7.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n7 =" << n7.to_string() << " |" << endl;
 
 	char const* const pn8 = "2.7.44";
 	HNumber n8( pn8 );
 	ensure_equals( "number not created correctly", n8.to_string(), "2.7" );
-	ensure_equals( "bad dafault precision", n8.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n8.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n8 =" << n8.to_string() << " |" << endl;
 
 	char const* const pn9 = "2.700.566-7576-7657";
 	HNumber n9( pn9 );
 	ensure_equals( "number not created correctly", n9.to_string(), "2.7" );
-	ensure_equals( "bad dafault precision", n9.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n9.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n9 =" << n9.to_string() << " |" << endl;
 	ensure_equals( "number 0 not created correctly", HNumber( "0001200" ).to_string(), "1200" );
 	ensure_equals( "number 1 not created correctly", HNumber( "-00.200" ).to_string(), "-.2" );
@@ -296,7 +296,7 @@ void module::test<5>( void )
 	char const* const pn0 = "???3.14159265";
 	HNumber n0( pn0 );
 	ensure_equals( "number not created correctly", n0.to_string(), pn0 + 3 );
-	ensure_equals( "bad dafault precision", n0.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n0 = " << n0.to_string() << " |" << endl;
 	try
 		{
@@ -338,25 +338,25 @@ void module::test<5>( void )
 	char const* const pn1 = "$$$-1";
 	HNumber n1( pn1 );
 	ensure_equals( "number not created correctly", n1.to_string(), pn1 + 3 );
-	ensure_equals( "bad dafault precision", n1.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n1.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n1 =" << n1.to_string() << " |" << endl;
 
 	char const* const pn2 = "???.5";
 	HNumber n2( pn2 );
 	ensure_equals( "number not created correctly", n2.to_string(), pn2 + 3 );
-	ensure_equals( "bad dafault precision", n2.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n2.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n2 =" << n2.to_string() << " |" << endl;
 
 	char const* const pn3 = "$$$-.7";
 	HNumber n3( pn3 );
 	ensure_equals( "number not created correctly", n3.to_string(), pn3 + 3 );
-	ensure_equals( "bad dafault precision", n3.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n3.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n3 =" << n3.to_string() << " |" << endl;
 
 	char const* const pn4 = "$$$-2.7";
 	HNumber n4( pn4 );
 	ensure_equals( "number not created correctly", n4.to_string(), pn4 + 3 );
-	ensure_equals( "bad dafault precision", n4.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n4 =" << n4.to_string() << " |" << endl;
 
 	try
@@ -395,25 +395,25 @@ void module::test<5>( void )
 	char const* const pn5 = "???.2.7";
 	HNumber n5( pn5 );
 	ensure_equals( "number not created correctly", n5.to_string(), ".2" );
-	ensure_equals( "bad dafault precision", n5.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n5.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n5 =" << n5.to_string() << " |" << endl;
 
 	char const* const pn6 = "???2.7.44";
 	HNumber n6( pn6 );
 	ensure_equals( "number not created correctly", n6.to_string(), "2.7" );
-	ensure_equals( "bad dafault precision", n6.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n6.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n6 =" << n6.to_string() << " |" << endl;
 
 	char const* const pn7 = "???7-44";
 	HNumber n7( pn7 );
 	ensure_equals( "number not created correctly", n7.to_string(), "7" );
-	ensure_equals( "bad dafault precision", n7.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n7.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n7 =" << n7.to_string() << " |" << endl;
 
 	char const* const pn8 = "???2.7.44";
 	HNumber n8( pn8 );
 	ensure_equals( "number not created correctly", n8.to_string(), "2.7" );
-	ensure_equals( "bad dafault precision", n8.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n8.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n8 =" << n8.to_string() << " |" << endl;
 	}
 
@@ -426,7 +426,7 @@ void module::test<6>( void )
 	char const* const pn0 = "3.14159265???";
 	HNumber n0( pn0 );
 	ensure_equals( "number not created correctly", n0.to_string(), pn0ok );
-	ensure_equals( "bad dafault precision", n0.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n0 = " << n0.to_string() << " |" << endl;
 	try
 		{
@@ -469,28 +469,28 @@ void module::test<6>( void )
 	char const* const pn1 = "-1???";
 	HNumber n1( pn1 );
 	ensure_equals( "number not created correctly", n1.to_string(), pn1ok );
-	ensure_equals( "bad dafault precision", n1.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n1.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n1 =" << n1.to_string() << " |" << endl;
 
 	char const* const pn2ok = ".5";
 	char const* const pn2 = ".5???";
 	HNumber n2( pn2 );
 	ensure_equals( "number not created correctly", n2.to_string(), pn2ok );
-	ensure_equals( "bad dafault precision", n2.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n2.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n2 =" << n2.to_string() << " |" << endl;
 
 	char const* const pn3ok = "-.7";
 	char const* const pn3 = "-.7???";
 	HNumber n3( pn3 );
 	ensure_equals( "number not created correctly", n3.to_string(), pn3ok );
-	ensure_equals( "bad dafault precision", n3.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n3.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n3 =" << n3.to_string() << " |" << endl;
 
 	char const* const pn4ok = "-2.7";
 	char const* const pn4 = "-2.7???";
 	HNumber n4( pn4 );
 	ensure_equals( "number not created correctly", n4.to_string(), pn4ok );
-	ensure_equals( "bad dafault precision", n4.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n4 =" << n4.to_string() << " |" << endl;
 
 	try
@@ -529,25 +529,25 @@ void module::test<6>( void )
 	char const* const pn5 = ".2.7???";
 	HNumber n5( pn5 );
 	ensure_equals( "number not created correctly", n5.to_string(), ".2" );
-	ensure_equals( "bad dafault precision", n5.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n5.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n5 =" << n5.to_string() << " |" << endl;
 
 	char const* const pn6 = "2.7.44???";
 	HNumber n6( pn6 );
 	ensure_equals( "number not created correctly", n6.to_string(), "2.7" );
-	ensure_equals( "bad dafault precision", n6.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n6.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n6 =" << n6.to_string() << " |" << endl;
 
 	char const* const pn7 = "7-44???";
 	HNumber n7( pn7 );
 	ensure_equals( "number not created correctly", n7.to_string(), "7" );
-	ensure_equals( "bad dafault precision", n7.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n7.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n7 =" << n7.to_string() << " |" << endl;
 
 	char const* const pn8 = "2.7.44???";
 	HNumber n8( pn8 );
 	ensure_equals( "number not created correctly", n8.to_string(), "2.7" );
-	ensure_equals( "bad dafault precision", n8.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n8.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n8 =" << n8.to_string() << " |" << endl;
 	}
 
@@ -560,7 +560,7 @@ void module::test<7>( void )
 	char const* const pn0 = "???3.14159265???";
 	HNumber n0( pn0 );
 	ensure_equals( "number not created correctly", n0.to_string(), pn0ok );
-	ensure_equals( "bad dafault precision", n0.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n0 = " << n0.to_string() << " |" << endl;
 	try
 		{
@@ -603,28 +603,28 @@ void module::test<7>( void )
 	char const* const pn1 = "$$$-1???";
 	HNumber n1( pn1 );
 	ensure_equals( "number not created correctly", n1.to_string(), pn1ok );
-	ensure_equals( "bad dafault precision", n1.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n1.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n1 =" << n1.to_string() << " |" << endl;
 
 	char const* const pn2ok = ".5";
 	char const* const pn2 = "$$$.5???";
 	HNumber n2( pn2 );
 	ensure_equals( "number not created correctly", n2.to_string(), pn2ok );
-	ensure_equals( "bad dafault precision", n2.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n2.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n2 =" << n2.to_string() << " |" << endl;
 
 	char const* const pn3ok = "-.7";
 	char const* const pn3 = "$$$-.7???";
 	HNumber n3( pn3 );
 	ensure_equals( "number not created correctly", n3.to_string(), pn3ok );
-	ensure_equals( "bad dafault precision", n3.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n3.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n3 =" << n3.to_string() << " |" << endl;
 
 	char const* const pn4ok = "-2.7";
 	char const* const pn4 = "$$$-2.7???";
 	HNumber n4( pn4 );
 	ensure_equals( "number not created correctly", n4.to_string(), pn4ok );
-	ensure_equals( "bad dafault precision", n4.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n4 =" << n4.to_string() << " |" << endl;
 
 	try
@@ -663,25 +663,25 @@ void module::test<7>( void )
 	char const* const pn5 = "???.2.7???";
 	HNumber n5( pn5 );
 	ensure_equals( "number not created correctly", n5.to_string(), ".2" );
-	ensure_equals( "bad dafault precision", n5.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n5.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n5 =" << n5.to_string() << " |" << endl;
 
 	char const* const pn6 = "???2.7.44???";
 	HNumber n6( pn6 );
 	ensure_equals( "number not created correctly", n6.to_string(), "2.7" );
-	ensure_equals( "bad dafault precision", n6.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n6.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n6 =" << n6.to_string() << " |" << endl;
 
 	char const* const pn7 = "???7-44???";
 	HNumber n7( pn7 );
 	ensure_equals( "number not created correctly", n7.to_string(), "7" );
-	ensure_equals( "bad dafault precision", n7.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n7.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n7 =" << n7.to_string() << " |" << endl;
 
 	char const* const pn8 = "???2.7.44???";
 	HNumber n8( pn8 );
 	ensure_equals( "number not created correctly", n8.to_string(), "2.7" );
-	ensure_equals( "bad dafault precision", n8.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n8.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n8 =" << n8.to_string() << " |" << endl;
 	}
 
@@ -709,10 +709,10 @@ void module::test<9>( void )
 	{
 	HNumber n( 3.14159265 );
 	ensure_equals( "number not created correctly", n.to_string(), "3.14159265" );
-	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
 	HNumber copy( n );
 	ensure_equals( "number not created correctly", copy.to_string(), "3.14159265" );
-	ensure_equals( "bad dafault precision", copy.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", copy.get_precision(), HNumber::DEFAULT_PRECISION );
 	char const* const pn0 = "3.14159265";
 	int const P1 = 20;
 	HNumber n0( pn0, P1 );
@@ -733,15 +733,15 @@ void module::test<10>( void )
 	int const P = 20;
 	int const S = 10;
 	int const F = 12;
-	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::D_DEFAULT_PRECISION );
+	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
 	n.set_precision( P );
 	ensure_equals( "bad modified 1 precision", n.get_precision(), P );
-	n.set_precision( HNumber::D_DEFAULT_PRECISION + P );
-	ensure_equals( "bad modified 2 precision", n.get_precision(), HNumber::D_DEFAULT_PRECISION + P );
-	n.set_precision( HNumber::D_DEFAULT_PRECISION );
-	ensure_equals( "bad modified 3 precision", n.get_precision(), HNumber::D_DEFAULT_PRECISION );
-	int const SAVED = HNumber::D_DEFAULT_PRECISION;
-	HNumber::D_DEFAULT_PRECISION = S;
+	n.set_precision( HNumber::DEFAULT_PRECISION + P );
+	ensure_equals( "bad modified 2 precision", n.get_precision(), HNumber::DEFAULT_PRECISION + P );
+	n.set_precision( HNumber::DEFAULT_PRECISION );
+	ensure_equals( "bad modified 3 precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
+	int const SAVED = HNumber::DEFAULT_PRECISION;
+	HNumber::DEFAULT_PRECISION = S;
 	n.set_precision( M );
 	ensure_equals( "bad modified 3 precision M", n.get_precision(), M );
 	n.set_precision( S );
@@ -764,7 +764,7 @@ void module::test<10>( void )
 	ensure_equals( "bad default minimum precision", s.get_precision(), M );
 	n.set_precision( F );
 	ensure_equals( "bad modified precision", s.get_precision(), M );
-	HNumber::D_DEFAULT_PRECISION = SAVED;
+	HNumber::DEFAULT_PRECISION = SAVED;
 	}
 
 /* assignment operator */
@@ -773,7 +773,7 @@ template<>
 void module::test<11>( void )
 	{
 	char const* const p0 = "3.14159265";
-	HNumber::D_DEFAULT_PRECISION = 20;
+	HNumber::DEFAULT_PRECISION = 20;
 	HNumber n( p0 );
 	ensure_equals( "number not created correctly", n.to_string(), p0 );
 	HNumber copy;
@@ -781,17 +781,17 @@ void module::test<11>( void )
 	copy = n;
 	ensure_equals( "number not assigned correctly", copy.to_string(), p0 );
 	HNumber another;
-	another.set_precision( HNumber::D_DEFAULT_PRECISION + 5 );
+	another.set_precision( HNumber::DEFAULT_PRECISION + 5 );
 	another = copy;
 	ensure_equals( "number not assigned correctly", another.to_string(), p0 );
 	char const* const p1 = "17";
 	HNumber next( p1 );
-	next.set_precision( HNumber::D_DEFAULT_PRECISION + 5 );
+	next.set_precision( HNumber::DEFAULT_PRECISION + 5 );
 	ensure_equals( "number not created correctly", next.to_string(), p1 );
-	ensure_equals( "bad dafault precision", next.get_precision(), HNumber::D_DEFAULT_PRECISION + 5 );
+	ensure_equals( "bad dafault precision", next.get_precision(), HNumber::DEFAULT_PRECISION + 5 );
 	another = next;
 	ensure_equals( "number not created correctly", another.to_string(), p1 );
-	ensure_equals( "bad dafault precision", another.get_precision(), HNumber::D_DEFAULT_PRECISION + 5 );
+	ensure_equals( "bad dafault precision", another.get_precision(), HNumber::DEFAULT_PRECISION + 5 );
 	}
 
 /* equality operator */

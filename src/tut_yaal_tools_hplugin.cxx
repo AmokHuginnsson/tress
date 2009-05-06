@@ -58,11 +58,11 @@ TUT_TEST_GROUP_N( tut_yaal_tools_hplugin, "yaal::tools::HPlugin" );
 typedef int ( * sumator_t )( int, int );
 
 TUT_UNIT_TEST_N( 1, "load external library and resolve symbol" )
-	static char const* const D_TRESS_PLUGIN = "./data/tressplugin.so";
+	static char const* const TRESS_PLUGIN = "./data/tressplugin.so";
 	int const T1 = 7;
 	int const T2 = 13;
 	HPlugin p;
-	p.load( D_TRESS_PLUGIN );
+	p.load( TRESS_PLUGIN );
 	sumator_t my_sum;
 	p.resolve( "tut_yaal_tools_hplugin_sum", my_sum );
 	ensure_equals( "cound not utilize plugin", my_sum( T1, T2 ), T1 + T2 );

@@ -45,10 +45,10 @@ TUT_SIMPLE_MOCK( tut_yaal_dbwrapper_hrecordset );
 TUT_TEST_GROUP_N( tut_yaal_dbwrapper_hrecordset, "yaal::dbwrapper::HRecordSet" );
 
 TUT_UNIT_TEST_N( 1, "simple query" )
-	static char const* const D_QUERY = "SELECT * FROM config;";
+	static char const* const QUERY = "SELECT * FROM config;";
 	HDataBase::ptr_t db = HDataBase::get_connector();
 	db->connect( "./out/tress", "", "" );
-	HRecordSet::ptr_t rs = db->query( D_QUERY );
+	HRecordSet::ptr_t rs = db->query( QUERY );
 	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); ++ it )
 		{
 		cout << "|";

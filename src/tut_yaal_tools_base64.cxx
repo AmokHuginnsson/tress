@@ -46,80 +46,80 @@ TUT_SIMPLE_MOCK( tut_yaal_tools_base64 );
 TUT_TEST_GROUP_N( tut_yaal_tools_base64, "yaal::tools::base64" );
 
 TUT_UNIT_TEST_N( 1, "original suite <0> (empty)" )
-	static char const D_INPUT[] = "";
-	static char const D_BASE64ENC[] = "";
-	ensure_equals( "bad encode", base64::encode( D_INPUT ), D_BASE64ENC );
-	ensure_equals( "bad decode", base64::decode( D_BASE64ENC ), D_INPUT );
+	static char const INPUT[] = "";
+	static char const BASE64ENC[] = "";
+	ensure_equals( "bad encode", base64::encode( INPUT ), BASE64ENC );
+	ensure_equals( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "original suite <1>" )
-	static char const D_INPUT[] = "a";
-	static char const D_BASE64ENC[] = "YQ==";
-	ensure_equals( "bad encode", base64::encode( D_INPUT ), D_BASE64ENC );
-	ensure_equals( "bad decode", base64::decode( D_BASE64ENC ), D_INPUT );
+	static char const INPUT[] = "a";
+	static char const BASE64ENC[] = "YQ==";
+	ensure_equals( "bad encode", base64::encode( INPUT ), BASE64ENC );
+	ensure_equals( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "original suite <2>" )
-	static char const D_INPUT[] = "abc";
-	static char const D_BASE64ENC[] = "YWJj";
-	ensure_equals( "bad encode", base64::encode( D_INPUT ), D_BASE64ENC );
-	ensure_equals( "bad decode", base64::decode( D_BASE64ENC ), D_INPUT );
+	static char const INPUT[] = "abc";
+	static char const BASE64ENC[] = "YWJj";
+	ensure_equals( "bad encode", base64::encode( INPUT ), BASE64ENC );
+	ensure_equals( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "original suite <3>" )
-	static char const D_INPUT[] = "message digest";
-	static char const D_BASE64ENC[] = "bWVzc2FnZSBkaWdlc3Q=";
-	ensure_equals( "bad encode", base64::encode( D_INPUT ), D_BASE64ENC );
-	ensure_equals( "bad decode", base64::decode( D_BASE64ENC ), D_INPUT );
+	static char const INPUT[] = "message digest";
+	static char const BASE64ENC[] = "bWVzc2FnZSBkaWdlc3Q=";
+	ensure_equals( "bad encode", base64::encode( INPUT ), BASE64ENC );
+	ensure_equals( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "original suite <4>" )
-	static char const D_INPUT[] = "abcdefghijklmnopqrstuvwxyz";
-	static char const D_BASE64ENC[] = "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXo=";
-	ensure_equals( "bad encode", base64::encode( D_INPUT ), D_BASE64ENC );
-	ensure_equals( "bad decode", base64::decode( D_BASE64ENC ), D_INPUT );
+	static char const INPUT[] = "abcdefghijklmnopqrstuvwxyz";
+	static char const BASE64ENC[] = "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXo=";
+	ensure_equals( "bad encode", base64::encode( INPUT ), BASE64ENC );
+	ensure_equals( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "original suite <5>" )
-	static char const D_INPUT[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	static char const D_BASE64ENC[] = "QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVphYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ejAxMjM0NTY3ODk=";
-	ensure_equals( "bad encode", base64::encode( D_INPUT ), D_BASE64ENC );
-	ensure_equals( "bad decode", base64::decode( D_BASE64ENC ), D_INPUT );
+	static char const INPUT[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	static char const BASE64ENC[] = "QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVphYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ejAxMjM0NTY3ODk=";
+	ensure_equals( "bad encode", base64::encode( INPUT ), BASE64ENC );
+	ensure_equals( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "original suite <6>" )
-	static char const D_INPUT[] = "12345678901234567890123456789012345678901234567890123456789012345678901234567890";
-	static char const D_BASE64ENC[] = "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTA=";
-	ensure_equals( "bad encode", base64::encode( D_INPUT ), D_BASE64ENC );
-	ensure_equals( "bad decode", base64::decode( D_BASE64ENC ), D_INPUT );
+	static char const INPUT[] = "12345678901234567890123456789012345678901234567890123456789012345678901234567890";
+	static char const BASE64ENC[] = "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTA=";
+	ensure_equals( "bad encode", base64::encode( INPUT ), BASE64ENC );
+	ensure_equals( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "special A for o.s.<6>" )
-	static char const D_INPUT[] = "1234567890123456789012345678901234567890123456789012345678901234";
-	static char const D_BASE64ENC[] = "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNA==";
-	ensure_equals( "bad encode", base64::encode( D_INPUT ), D_BASE64ENC );
-	ensure_equals( "bad decode", base64::decode( D_BASE64ENC ), D_INPUT );
+	static char const INPUT[] = "1234567890123456789012345678901234567890123456789012345678901234";
+	static char const BASE64ENC[] = "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNA==";
+	ensure_equals( "bad encode", base64::encode( INPUT ), BASE64ENC );
+	ensure_equals( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "special B for o.s.<6>" )
-	static char const D_INPUT[] = "123456789012345678901234567890123456789012345678901234567890123";
-	static char const D_BASE64ENC[] = "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIz";
-	ensure_equals( "bad encode", base64::encode( D_INPUT ), D_BASE64ENC );
-	ensure_equals( "bad decode", base64::decode( D_BASE64ENC ), D_INPUT );
+	static char const INPUT[] = "123456789012345678901234567890123456789012345678901234567890123";
+	static char const BASE64ENC[] = "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIz";
+	ensure_equals( "bad encode", base64::encode( INPUT ), BASE64ENC );
+	ensure_equals( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "from string" )
-	static char const D_INPUT[] = "Ala ma kota";
-	static char const D_BASE64ENC[] = "QWxhIG1hIGtvdGE=";
-	ensure_equals( "bad encode", base64::encode( D_INPUT ), D_BASE64ENC );
-	ensure_equals( "bad decode", base64::decode( D_BASE64ENC ), D_INPUT );
+	static char const INPUT[] = "Ala ma kota";
+	static char const BASE64ENC[] = "QWxhIG1hIGtvdGE=";
+	ensure_equals( "bad encode", base64::encode( INPUT ), BASE64ENC );
+	ensure_equals( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "from string (small alternation)" )
-	static char const D_INPUT[] = "Ala ma koty";
-	static char const D_BASE64ENC[] = "QWxhIG1hIGtvdHk=";
-	ensure_equals( "bad encode", base64::encode( D_INPUT ), D_BASE64ENC );
-	ensure_equals( "bad decode", base64::decode( D_BASE64ENC ), D_INPUT );
+	static char const INPUT[] = "Ala ma koty";
+	static char const BASE64ENC[] = "QWxhIG1hIGtvdHk=";
+	ensure_equals( "bad encode", base64::encode( INPUT ), BASE64ENC );
+	ensure_equals( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
 }

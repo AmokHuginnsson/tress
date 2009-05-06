@@ -50,37 +50,37 @@ struct tut_yaal_tools_util_sleep
 
 int long tut_yaal_tools_util_sleep::get_speed( HClock::UNIT::unit_t const& u )
 	{
-	double long D_PI = 3.14159265;
-	static int const D_LOOPS = 5000;
-	double long x = D_PI;
+	double long PI = 3.14159265;
+	static int const LOOPS = 5000;
+	double long x = PI;
 	HClock c;
-	for ( int i = 0; i < D_LOOPS; ++ i )
-		x *= D_PI;
+	for ( int i = 0; i < LOOPS; ++ i )
+		x *= PI;
 	return ( static_cast<int long>( c.get_time_elapsed( u ) ) );
 	}
 
 TUT_TEST_GROUP_N( tut_yaal_tools_util_sleep, "yaal::tools::util::sleep" );
 
 TUT_UNIT_TEST_N( 1, "the 1 second granularity sleep" )
-	static int long const D_SLEEP = 1;
-	static int long const D_PASSED = power<10,3>::value;
-	static int long const D_QUALITY = get_speed( HClock::UNIT::D_MILISECOND );
+	static int long const SLEEP = 1;
+	static int long const PASSED = power<10,3>::value;
+	static int long const QUALITY = get_speed( HClock::UNIT::MILISECOND );
 	HClock clk;
-	cout << "E" << util::sleep::second( D_SLEEP, true ) << "E" << endl;
-	cout << "$" << clk.get_time_elapsed( HClock::UNIT::D_MILISECOND, false ) << "$" << endl;
-	ensure_distance( "slept for bad number of thousends of seconds", clk.get_time_elapsed( HClock::UNIT::D_MILISECOND, false ), D_PASSED, D_QUALITY + 50 );
-	cout << "$" << clk.get_time_elapsed( HClock::UNIT::D_MILISECOND ) << "$" << endl;
+	cout << "E" << util::sleep::second( SLEEP, true ) << "E" << endl;
+	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ) << "$" << endl;
+	ensure_distance( "slept for bad number of thousends of seconds", clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ), PASSED, QUALITY + 50 );
+	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND ) << "$" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "the 1 milisecond granularity sleep" )
-	static int long const D_SLEEP = 333;
-	static int long const D_PASSED = 333;
-	static int long const D_QUALITY = get_speed( HClock::UNIT::D_MILISECOND );
+	static int long const SLEEP = 333;
+	static int long const PASSED = 333;
+	static int long const QUALITY = get_speed( HClock::UNIT::MILISECOND );
 	HClock clk;
-	cout << "E" << util::sleep::milisecond( D_SLEEP, true ) << "E" << endl;
-	cout << "$" << clk.get_time_elapsed( HClock::UNIT::D_MILISECOND, false ) << "$" << endl;
-	ensure_distance( "slept for bad number of miliseconds", clk.get_time_elapsed( HClock::UNIT::D_MILISECOND, false ), D_PASSED, D_QUALITY + 50 );
-	cout << "$" << clk.get_time_elapsed( HClock::UNIT::D_MILISECOND, false ) << "$" << endl;
+	cout << "E" << util::sleep::milisecond( SLEEP, true ) << "E" << endl;
+	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ) << "$" << endl;
+	ensure_distance( "slept for bad number of miliseconds", clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ), PASSED, QUALITY + 50 );
+	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ) << "$" << endl;
 TUT_TEARDOWN()
 
 }

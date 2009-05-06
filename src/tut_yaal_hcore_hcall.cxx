@@ -46,51 +46,51 @@ struct tut_yaal_hcore_hcall
 	struct SIGNATURE
 		{
 		typedef int signature_t;
-		static int const D_INVALID;
-		static int const D_FV;
-		static int const D_F1I;
-		static int const D_F2I;
-		static int const D_F3I;
-		static int const D_F4I;
-		static int const D_F5I;
-		static int const D_F6I;
-		static int const D_F7I;
-		static int const D_F8I;
-		static int const D_F9I;
-		static int const D_F10I;
+		static int const INVALID;
+		static int const FV;
+		static int const F1I;
+		static int const F2I;
+		static int const F3I;
+		static int const F4I;
+		static int const F5I;
+		static int const F6I;
+		static int const F7I;
+		static int const F8I;
+		static int const F9I;
+		static int const F10I;
 		};
 	SIGNATURE::signature_t _signature;
 	int _int[10];
 	double _double[10];
-	tut_yaal_hcore_hcall( void ) : _signature( SIGNATURE::D_INVALID ) {}
+	tut_yaal_hcore_hcall( void ) : _signature( SIGNATURE::INVALID ) {}
 	void reset( void )
 		{
-		_signature = SIGNATURE::D_INVALID;
+		_signature = SIGNATURE::INVALID;
 		yaal::fill( _int, _int + sizeof( _int ) / sizeof ( int ), -1 );
 		yaal::fill( _double, _double + sizeof( _double ) / sizeof ( double ), -1 );
 		}
 	void fv( void )
 		{
 		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::D_FV;
+		_signature = SIGNATURE::FV;
 		}
 	void f1i( int i0 )
 		{
 		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::D_F1I;
+		_signature = SIGNATURE::F1I;
 		_int[ 0 ] = i0;
 		}
 	void f2i( int i0, int i1 )
 		{
 		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::D_F2I;
+		_signature = SIGNATURE::F2I;
 		_int[ 0 ] = i0;
 		_int[ 1 ] = i1;
 		}
 	void f3i( int i0, int i1, int i2 )
 		{
 		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::D_F3I;
+		_signature = SIGNATURE::F3I;
 		_int[ 0 ] = i0;
 		_int[ 1 ] = i1;
 		_int[ 2 ] = i2;
@@ -98,7 +98,7 @@ struct tut_yaal_hcore_hcall
 	void f4i( int i0, int i1, int i2, int i3 )
 		{
 		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::D_F4I;
+		_signature = SIGNATURE::F4I;
 		_int[ 0 ] = i0;
 		_int[ 1 ] = i1;
 		_int[ 2 ] = i2;
@@ -107,7 +107,7 @@ struct tut_yaal_hcore_hcall
 	void f5i( int i0, int i1, int i2, int i3, int i4 )
 		{
 		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::D_F5I;
+		_signature = SIGNATURE::F5I;
 		_int[ 0 ] = i0;
 		_int[ 1 ] = i1;
 		_int[ 2 ] = i2;
@@ -117,7 +117,7 @@ struct tut_yaal_hcore_hcall
 	void f6i( int i0, int i1, int i2, int i3, int i4, int i5 )
 		{
 		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::D_F6I;
+		_signature = SIGNATURE::F6I;
 		_int[ 0 ] = i0;
 		_int[ 1 ] = i1;
 		_int[ 2 ] = i2;
@@ -128,7 +128,7 @@ struct tut_yaal_hcore_hcall
 	void f7i( int i0, int i1, int i2, int i3, int i4, int i5, int i6 )
 		{
 		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::D_F7I;
+		_signature = SIGNATURE::F7I;
 		_int[ 0 ] = i0;
 		_int[ 1 ] = i1;
 		_int[ 2 ] = i2;
@@ -140,7 +140,7 @@ struct tut_yaal_hcore_hcall
 	void f8i( int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7 )
 		{
 		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::D_F8I;
+		_signature = SIGNATURE::F8I;
 		_int[ 0 ] = i0;
 		_int[ 1 ] = i1;
 		_int[ 2 ] = i2;
@@ -153,7 +153,7 @@ struct tut_yaal_hcore_hcall
 	void f9i( int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8 )
 		{
 		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::D_F9I;
+		_signature = SIGNATURE::F9I;
 		_int[ 0 ] = i0;
 		_int[ 1 ] = i1;
 		_int[ 2 ] = i2;
@@ -167,7 +167,7 @@ struct tut_yaal_hcore_hcall
 	void f10i( int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9 )
 		{
 		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::D_F10I;
+		_signature = SIGNATURE::F10I;
 		_int[ 0 ] = i0;
 		_int[ 1 ] = i1;
 		_int[ 2 ] = i2;
@@ -183,18 +183,18 @@ struct tut_yaal_hcore_hcall
 		{}
 	};
 
-int const tut_yaal_hcore_hcall::SIGNATURE::D_INVALID = -1;
-int const tut_yaal_hcore_hcall::SIGNATURE::D_FV = 0;
-int const tut_yaal_hcore_hcall::SIGNATURE::D_F1I = 1;
-int const tut_yaal_hcore_hcall::SIGNATURE::D_F2I = 2;
-int const tut_yaal_hcore_hcall::SIGNATURE::D_F3I = 3;
-int const tut_yaal_hcore_hcall::SIGNATURE::D_F4I = 4;
-int const tut_yaal_hcore_hcall::SIGNATURE::D_F5I = 5;
-int const tut_yaal_hcore_hcall::SIGNATURE::D_F6I = 6;
-int const tut_yaal_hcore_hcall::SIGNATURE::D_F7I = 7;
-int const tut_yaal_hcore_hcall::SIGNATURE::D_F8I = 8;
-int const tut_yaal_hcore_hcall::SIGNATURE::D_F9I = 9;
-int const tut_yaal_hcore_hcall::SIGNATURE::D_F10I = 10;
+int const tut_yaal_hcore_hcall::SIGNATURE::INVALID = -1;
+int const tut_yaal_hcore_hcall::SIGNATURE::FV = 0;
+int const tut_yaal_hcore_hcall::SIGNATURE::F1I = 1;
+int const tut_yaal_hcore_hcall::SIGNATURE::F2I = 2;
+int const tut_yaal_hcore_hcall::SIGNATURE::F3I = 3;
+int const tut_yaal_hcore_hcall::SIGNATURE::F4I = 4;
+int const tut_yaal_hcore_hcall::SIGNATURE::F5I = 5;
+int const tut_yaal_hcore_hcall::SIGNATURE::F6I = 6;
+int const tut_yaal_hcore_hcall::SIGNATURE::F7I = 7;
+int const tut_yaal_hcore_hcall::SIGNATURE::F8I = 8;
+int const tut_yaal_hcore_hcall::SIGNATURE::F9I = 9;
+int const tut_yaal_hcore_hcall::SIGNATURE::F10I = 10;
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hcall, "yaal::hcore::HCall" );
 
@@ -205,7 +205,7 @@ TUT_UNIT_TEST_N( 1, "a member (no args)" )
 	call_two_t c( *this, &tut_yaal_hcore_hcall::fv );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::D_FV );
+	ensure_equals( "bad method called", _signature, SIGNATURE::FV );
 	for ( int i = 0; i < 10; ++ i )
 		ensure_equals( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
@@ -217,7 +217,7 @@ TUT_UNIT_TEST_N( 2, "a member (one int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f1i, 0 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::D_F1I );
+	ensure_equals( "bad method called", _signature, SIGNATURE::F1I );
 	for ( int i = 0; i < 10; ++ i )
 		ensure_equals( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
@@ -229,7 +229,7 @@ TUT_UNIT_TEST_N( 3, "a member (two int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f2i, 0, 1 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::D_F2I );
+	ensure_equals( "bad method called", _signature, SIGNATURE::F2I );
 	for ( int i = 0; i < 10; ++ i )
 		ensure_equals( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
@@ -241,7 +241,7 @@ TUT_UNIT_TEST_N( 4, "a member (3 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f3i, 0, 1, 2 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::D_F3I );
+	ensure_equals( "bad method called", _signature, SIGNATURE::F3I );
 	for ( int i = 0; i < 10; ++ i )
 		ensure_equals( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
@@ -253,7 +253,7 @@ TUT_UNIT_TEST_N( 5, "a member (4 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f4i, 0, 1, 2, 3 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::D_F4I );
+	ensure_equals( "bad method called", _signature, SIGNATURE::F4I );
 	for ( int i = 0; i < 10; ++ i )
 		ensure_equals( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
@@ -265,7 +265,7 @@ TUT_UNIT_TEST_N( 6, "a member (5 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f5i, 0, 1, 2, 3, 4 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::D_F5I );
+	ensure_equals( "bad method called", _signature, SIGNATURE::F5I );
 	for ( int i = 0; i < 10; ++ i )
 		ensure_equals( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
@@ -277,7 +277,7 @@ TUT_UNIT_TEST_N( 7, "a member (6 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f6i, 0, 1, 2, 3, 4, 5 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::D_F6I );
+	ensure_equals( "bad method called", _signature, SIGNATURE::F6I );
 	for ( int i = 0; i < 10; ++ i )
 		ensure_equals( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
@@ -289,7 +289,7 @@ TUT_UNIT_TEST_N( 8, "a member (7 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f7i, 0, 1, 2, 3, 4, 5, 6 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::D_F7I );
+	ensure_equals( "bad method called", _signature, SIGNATURE::F7I );
 	for ( int i = 0; i < 10; ++ i )
 		ensure_equals( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
@@ -301,7 +301,7 @@ TUT_UNIT_TEST_N( 9, "a member (8 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f8i, 0, 1, 2, 3, 4, 5, 6, 7 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::D_F8I );
+	ensure_equals( "bad method called", _signature, SIGNATURE::F8I );
 	for ( int i = 0; i < 10; ++ i )
 		ensure_equals( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
@@ -313,7 +313,7 @@ TUT_UNIT_TEST_N( 10, "a member (9 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f9i, 0, 1, 2, 3, 4, 5, 6, 7, 8 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::D_F9I );
+	ensure_equals( "bad method called", _signature, SIGNATURE::F9I );
 	for ( int i = 0; i < 10; ++ i )
 		ensure_equals( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
@@ -325,7 +325,7 @@ TUT_UNIT_TEST_N( 11, "a member (10 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f10i, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::D_F10I );
+	ensure_equals( "bad method called", _signature, SIGNATURE::F10I );
 	for ( int i = 0; i < 10; ++ i )
 		ensure_equals( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()

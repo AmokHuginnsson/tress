@@ -417,11 +417,11 @@ template<>
 void module::test<17>()
 	{
 		{
-		static int const D_MY_VAL = 2;
+		static int const MY_VAL = 2;
 		A* rpa = NULL;
 		E* rpe = NULL;
 		sp_a_t spa( rpa = new A( 1 ) );
-		sp_e_t spe( rpe = new E( D_MY_VAL, "2" ) );
+		sp_e_t spe( rpe = new E( MY_VAL, "2" ) );
 		rpa = rpe;
 		spa = spe;
 		A*a = spe.raw();
@@ -440,7 +440,7 @@ void module::test<17>()
 		a->foo( "a->foo" );
 		spa->A::foo( "spa->A::foo" );
 		spa->foo( "spa->foo" );
-		ensure_equals( "hierarchy problem", spa->A::foo( "ensure" ), D_MY_VAL );
+		ensure_equals( "hierarchy problem", spa->A::foo( "ensure" ), MY_VAL );
 		e->A::foo( "e->A::foo" );
 		e->E::foo( "e->E::foo" );
 		e->foo( "e->foo" );

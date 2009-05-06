@@ -425,7 +425,7 @@ void module::test<12> ( void )
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -451,7 +451,7 @@ void module::test<13> ( void )
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -477,7 +477,7 @@ void module::test<14> ( void )
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -503,7 +503,7 @@ void module::test<15>( void )
 			}
 		catch ( HException& e )
 			{
-			if ( e.code() != static_cast<int>( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code() != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -529,7 +529,7 @@ void module::test<16>( void )
 			}
 		catch ( HException& e )
 			{
-			if ( e.code() != static_cast<int>( HSBBSTree::ERROR::E_NON_EXISTING_KEY ) )
+			if ( e.code() != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}

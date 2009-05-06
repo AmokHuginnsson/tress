@@ -47,14 +47,14 @@ TUT_SIMPLE_MOCK( tut_yaal_tools_hbitmap );
 TUT_TEST_GROUP_N( tut_yaal_tools_hbitmap, "yaal::tools::HBitmap" );
 
 TUT_UNIT_TEST_N( 1, "simple use" )
-	static char const D_BUFF[] = "ala ma kota";
-	static int const D_BUFF_BIT_SIZE = ( sizeof ( D_BUFF ) - 1 ) * 8;
+	static char const BUFF[] = "ala ma kota";
+	static int const BUFF_BIT_SIZE = ( sizeof ( BUFF ) - 1 ) * 8;
 	HBitmap bmp;
-	bmp.copy( D_BUFF, D_BUFF_BIT_SIZE );
+	bmp.copy( BUFF, BUFF_BIT_SIZE );
 	HBitmap const x( bmp );
 	cout << endl;
 	yaal::copy( x.begin(), x.end(), stream_iterator( cout ) );
-	yaal::fill_n( bmp.begin(), D_BUFF_BIT_SIZE / 2, true );
+	yaal::fill_n( bmp.begin(), BUFF_BIT_SIZE / 2, true );
 	HBitmap const y( bmp );
 	cout << endl;
 	yaal::copy( y.begin(), y.end(), stream_iterator( cout ) );
@@ -67,9 +67,9 @@ TUT_UNIT_TEST_N( 2, "/* Default constructor */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* constructor from size */" )
-	static int const D_SIZE = 7;
-	HBitmap bmp( D_SIZE );
-	ensure_equals( "constructor from size size", bmp.get_size(), D_SIZE );
+	static int const SIZE = 7;
+	HBitmap bmp( SIZE );
+	ensure_equals( "constructor from size size", bmp.get_size(), SIZE );
 	ensure( "default constructor raw", bmp.raw() != static_cast<void*>( NULL ) );
 	ensure( "default constructor ", bmp.raw() != static_cast<void*>( NULL ) );
 TUT_TEARDOWN()

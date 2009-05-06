@@ -78,17 +78,17 @@ TUT_UNIT_TEST_N( 2, "invalid expression" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "copy semantics" )
-	static int const D_MAGIC = 7;
-	static int const D_SPOOKY = 13;
+	static int const MAGIC = 7;
+	static int const SPOOKY = 13;
 	HExpression e( "1" );
 	double long* v = e.variables();
-	v[ 0 ] = D_MAGIC;
+	v[ 0 ] = MAGIC;
 	HExpression e2( e );
 	v = e2.variables();
-	e[ 0 ] = D_SPOOKY;
-	ensure_equals( "variables not copied", v[ 0 ], D_MAGIC );
+	e[ 0 ] = SPOOKY;
+	ensure_equals( "variables not copied", v[ 0 ], MAGIC );
 	e2 = e;
-	ensure_equals( "variables not copied", v[ 0 ], D_SPOOKY );
+	ensure_equals( "variables not copied", v[ 0 ], SPOOKY );
 TUT_TEARDOWN()
 
 }

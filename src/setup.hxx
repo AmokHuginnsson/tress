@@ -37,7 +37,7 @@ struct OSetup
 	OSetup( void )
 		: f_bQuiet( false ), f_bVerbose( false ),
 		f_bListGroups( false ), f_bRestartable( false ), f_iTestNumber( 0 ),
-		f_iJobs( D_DEFAULT_JOB_COUNT ), f_iArgc( 0 ), f_ppcArgv( NULL ),
+		f_iJobs( DEFAULT_JOB_COUNT ), f_iArgc( 0 ), f_ppcArgv( NULL ),
 		f_pcProgramName( NULL ), f_oLogPath(), f_oTestGroup(),
 		f_oTestGroupPattern(), f_oTestGroupListFilePath() {}
 	bool f_bQuiet;			/* --quiet, --silent */
@@ -53,7 +53,7 @@ struct OSetup
 	yaal::hcore::HString f_oTestGroup;
 	yaal::hcore::HString f_oTestGroupPattern;
 	yaal::hcore::HString f_oTestGroupListFilePath;
-	static int const D_DEFAULT_JOB_COUNT = 1;
+	static int const DEFAULT_JOB_COUNT = 1;
 	void test_setup( void );
 private:
 	OSetup( OSetup const& );

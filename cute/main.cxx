@@ -128,21 +128,21 @@ int HCuteReporter::run_ut( int a_iArgc, char* a_ppcArgv[] )
 		while ( ok || repeat )
 			{
 			HStreamInterface::STATUS::code_t s;
-			tress.set_csoi( HPipedChild::STREAM::D_OUT );
-			bool repeatOut = tress.read_poll( &t ) || ( ( s = tress.read_until( line ).code ) == HStreamInterface::STATUS::D_REPEAT );
-			bool okOut = ( s == HStreamInterface::STATUS::D_OK );
+			tress.set_csoi( HPipedChild::STREAM::OUT );
+			bool repeatOut = tress.read_poll( &t ) || ( ( s = tress.read_until( line ).code ) == HStreamInterface::STATUS::REPEAT );
+			bool okOut = ( s == HStreamInterface::STATUS::OK );
 			if ( okOut && setup.f_bVerbose )
 				cout << line.raw() << endl;
-			tress.set_csoi( HPipedChild::STREAM::D_ERR );
-			bool repeatErr = tress.read_poll( &t ) || ( ( s = tress.read_until( err ).code ) == HStreamInterface::STATUS::D_REPEAT );
-			bool okErr = ( s == HStreamInterface::STATUS::D_OK );
+			tress.set_csoi( HPipedChild::STREAM::ERR );
+			bool repeatErr = tress.read_poll( &t ) || ( ( s = tress.read_until( err ).code ) == HStreamInterface::STATUS::REPEAT );
+			bool okErr = ( s == HStreamInterface::STATUS::OK );
 			if ( ! repeatErr && okErr && !! err )
 				handle_line_of_error( err );
 			ok = okOut || okErr;
 			repeat = repeatOut || repeatErr;
 			}
 		}
-	while ( setup.f_bRestartable && ( tress.finish().type != HPipedChild::STATUS::TYPE::D_NORMAL ) );
+	while ( setup.f_bRestartable && ( tress.finish().type != HPipedChild::STATUS::TYPE::NORMAL ) );
 	if ( _start != _rep.end() )
 		{
 		*_start += _cnt;
@@ -162,33 +162,33 @@ int HCuteReporter::run_ut( int a_iArgc, char* a_ppcArgv[] )
 
 void HCuteReporter::handle_line_of_error( HString const& in )
 	{
-	static char const D_GROUP_PREFIX[] = "---> group: ";
-	static int const D_GROUP_PREFIX_LEN = sizeof ( D_GROUP_PREFIX ) - 1;
+	static char const GROUP_PREFIX[] = "---> group: ";
+	static int const GROUP_PREFIX_LEN = sizeof ( GROUP_PREFIX ) - 1;
 
-	static char const D_PROBLEM_ASSERTION[] = "problem: assertion failed";
-	static char const D_DESC_ASSERTION[] = "failed assertion in \"";
-	static int const D_DESC_ASSERTION_LEN = sizeof ( D_DESC_ASSERTION ) - 1;
+	static char const PROBLEM_ASSERTION[] = "problem: assertion failed";
+	static char const DESC_ASSERTION[] = "failed assertion in \"";
+	static int const DESC_ASSERTION_LEN = sizeof ( DESC_ASSERTION ) - 1;
 
-	static char const D_PROBLEM_EXCEPTION[] = "problem: unexpected exception";
-	static char const D_DESC_EXCEPTION[] = "unexpected exception in \"";
-	static int const D_DESC_EXCEPTION_LEN = sizeof ( D_DESC_EXCEPTION ) - 1;
+	static char const PROBLEM_EXCEPTION[] = "problem: unexpected exception";
+	static char const DESC_EXCEPTION[] = "unexpected exception in \"";
+	static int const DESC_EXCEPTION_LEN = sizeof ( DESC_EXCEPTION ) - 1;
 
-	static char const D_PROBLEM_SEGV[] = "problem: would be terminated";
-	static char const D_DESC_SEGV[] = "segmentation fault in \"";
-	static int const D_DESC_SEGV_LEN = sizeof ( D_DESC_SEGV ) - 1;
+	static char const PROBLEM_SEGV[] = "problem: would be terminated";
+	static char const DESC_SEGV[] = "segmentation fault in \"";
+	static int const DESC_SEGV_LEN = sizeof ( DESC_SEGV ) - 1;
 
-	static char const D_NAME[] = "tress/";
-	static int const D_NAME_LEN = sizeof ( D_NAME ) - 1;
+	static char const NAME[] = "tress/";
+	static int const NAME_LEN = sizeof ( NAME ) - 1;
 
-	static char const D_TEST[] = ", test: ";
-	static int const D_TEST_LEN = sizeof ( D_TEST ) - 1;
+	static char const TEST[] = ", test: ";
+	static int const TEST_LEN = sizeof ( TEST ) - 1;
 
 	_out.clear();
 	int long idx = 0;
 	bool start = false;
-	if ( ( idx = in.find( D_GROUP_PREFIX ) ) >= 0 )
+	if ( ( idx = in.find( GROUP_PREFIX ) ) >= 0 )
 		{
-		idx += D_GROUP_PREFIX_LEN;
+		idx += GROUP_PREFIX_LEN;
 		int long coma = in.find( ',', idx );
 		HString g = in.mid( idx, coma - idx );
 		if ( g != _group )
@@ -203,31 +203,31 @@ void HCuteReporter::handle_line_of_error( HString const& in )
 			_out << "#beginning " << _group << " ";
 			_cnt = 0;
 			}
-		idx = in.find( D_TEST, coma );
+		idx = in.find( TEST, coma );
 		M_ENSURE( idx >= 0 );
-		idx += D_TEST_LEN;
+		idx += TEST_LEN;
 		HString t = in.mid( idx );
 		_test = t;
 		}
-	else if ( in.find( D_PROBLEM_ASSERTION ) >= 0 )
+	else if ( in.find( PROBLEM_ASSERTION ) >= 0 )
 		{
 		// skip
 		}
-	else if ( in.find( D_PROBLEM_EXCEPTION ) >= 0 )
+	else if ( in.find( PROBLEM_EXCEPTION ) >= 0 )
 		{
 		// skip
 		}
-	else if ( in.find( D_PROBLEM_SEGV ) >= 0 )
+	else if ( in.find( PROBLEM_SEGV ) >= 0 )
 		{
 		// skip
 		}
-	else if ( ( ( ( idx = in.find( D_DESC_ASSERTION ) ) >= 0 ) && ( idx += D_DESC_ASSERTION_LEN ) )
-			|| ( ( ( idx = in.find( D_DESC_EXCEPTION ) ) >= 0 ) && ( idx += D_DESC_EXCEPTION_LEN ) )
-			|| ( ( ( idx = in.find( D_DESC_SEGV ) ) >= 0 ) && ( idx += D_DESC_SEGV_LEN ) ) )
+	else if ( ( ( ( idx = in.find( DESC_ASSERTION ) ) >= 0 ) && ( idx += DESC_ASSERTION_LEN ) )
+			|| ( ( ( idx = in.find( DESC_EXCEPTION ) ) >= 0 ) && ( idx += DESC_EXCEPTION_LEN ) )
+			|| ( ( ( idx = in.find( DESC_SEGV ) ) >= 0 ) && ( idx += DESC_SEGV_LEN ) ) )
 		{
-		idx = in.find( D_NAME, idx );
+		idx = in.find( NAME, idx );
 		M_ENSURE( idx >= 0 );
-		idx += D_NAME_LEN;
+		idx += NAME_LEN;
 		_out << "#starting " << _test << endl;
 		_out << "#failure " << _test << " ./" << in.mid( idx, ( in.get_length() - idx ) - 1 );
 		++ _cnt;

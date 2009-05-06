@@ -110,7 +110,7 @@ TUT_UNIT_TEST_N( 6, "/* direct split include empty set[f]*/" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "/* direct split skip empty set[a]*/" )
-	HTokenizer t( ",aa,bb", ",", HTokenizer::D_SKIP_EMPTY );
+	HTokenizer t( ",aa,bb", ",", HTokenizer::SKIP_EMPTY );
 	ensure_equals( split_skip_failed, t[ 0 ], "aa" );
 	ensure_equals( split_skip_failed, t[ 1 ], "bb" );
 	try
@@ -125,7 +125,7 @@ TUT_UNIT_TEST_N( 7, "/* direct split skip empty set[a]*/" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* direct split skip empty set[b]*/" )
-	HTokenizer t( "aa,bb", ",", HTokenizer::D_SKIP_EMPTY );
+	HTokenizer t( "aa,bb", ",", HTokenizer::SKIP_EMPTY );
 	ensure_equals( split_skip_failed, t[ 0 ], "aa" );
 	ensure_equals( split_skip_failed, t[ 1 ], "bb" );
 	try
@@ -140,7 +140,7 @@ TUT_UNIT_TEST_N( 8, "/* direct split skip empty set[b]*/" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "/* direct split skip empty set[c]*/" )
-	HTokenizer t( "aa,bb,", ",", HTokenizer::D_SKIP_EMPTY );
+	HTokenizer t( "aa,bb,", ",", HTokenizer::SKIP_EMPTY );
 	ensure_equals( split_skip_failed, t[ 0 ], "aa" );
 	ensure_equals( split_skip_failed, t[ 1 ], "bb" );
 	try
@@ -155,7 +155,7 @@ TUT_UNIT_TEST_N( 9, "/* direct split skip empty set[c]*/" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "/* direct split skip empty set[d]*/" )
-	HTokenizer t( ",aa,", ",", HTokenizer::D_SKIP_EMPTY );
+	HTokenizer t( ",aa,", ",", HTokenizer::SKIP_EMPTY );
 	ensure_equals( split_skip_failed, t[ 0 ], "aa" );
 	try
 		{
@@ -169,7 +169,7 @@ TUT_UNIT_TEST_N( 10, "/* direct split skip empty set[d]*/" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "/* direct split skip empty set[e]*/" )
-	HTokenizer t( ",,,aa,,", ",", HTokenizer::D_SKIP_EMPTY );
+	HTokenizer t( ",,,aa,,", ",", HTokenizer::SKIP_EMPTY );
 	ensure_equals( split_skip_failed, t[ 0 ], "aa" );
 	try
 		{
@@ -183,8 +183,8 @@ TUT_UNIT_TEST_N( 11, "/* direct split skip empty set[e]*/" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 12, "/* direct split skip empty set[f]*/" )
-	HTokenizer t1( "a", ";", HTokenizer::D_SKIP_EMPTY );
-	HTokenizer t2( "a", "a", HTokenizer::D_SKIP_EMPTY );
+	HTokenizer t1( "a", ";", HTokenizer::SKIP_EMPTY );
+	HTokenizer t2( "a", "a", HTokenizer::SKIP_EMPTY );
 	ensure_equals( split_skip_failed, t1[ 0 ], "a" );
 	try
 		{

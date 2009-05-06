@@ -100,8 +100,8 @@ void module::test<2> ( void )
 	{
 	try
 		{
-		HSocket l_oSocket( HSocket::socket_type_t( HSocket::TYPE::D_FILE ) | HSocket::TYPE::D_NETWORK );
-		fail( "creation of bad socket possible (TYPE::D_FILE|TYPE::D_NETWORK)" );
+		HSocket l_oSocket( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::NETWORK );
+		fail( "creation of bad socket possible (TYPE::FILE|TYPE::NETWORK)" );
 		}
 	catch ( HException& e )
 		{
@@ -109,8 +109,8 @@ void module::test<2> ( void )
 		}
 	try
 		{
-		HSocket l_oSocket( HSocket::socket_type_t( HSocket::TYPE::D_BLOCKING ) | HSocket::TYPE::D_NONBLOCKING );
-		fail( "creation of bad socket possible (TYPE::D_BLOCKING|TYPE::D_NONBLOCKING)" );
+		HSocket l_oSocket( HSocket::socket_type_t( HSocket::TYPE::BLOCKING ) | HSocket::TYPE::NONBLOCKING );
+		fail( "creation of bad socket possible (TYPE::BLOCKING|TYPE::NONBLOCKING)" );
 		}
 	catch ( HException& e )
 		{
@@ -123,7 +123,7 @@ template<>
 template<>
 void module::test<3> ( void )
 	{
-	HSocket l_oSocket( HSocket::TYPE::D_FILE );
+	HSocket l_oSocket( HSocket::TYPE::FILE );
 	try
 		{
 		l_oSocket.get_port();
@@ -140,7 +140,7 @@ template<>
 template<>
 void module::test<4> ( void )
 	{
-	HSocket l_oSocket ( HSocket::TYPE::D_NETWORK, 1 );
+	HSocket l_oSocket ( HSocket::TYPE::NETWORK, 1 );
 	try
 		{
 		l_oSocket.listen ( "0.0.0.0", 22 );
@@ -157,7 +157,7 @@ template<>
 template<>
 void module::test<5> ( void )
 	{
-	HSocket l_oSocket ( HSocket::TYPE::D_FILE, 1 );
+	HSocket l_oSocket ( HSocket::TYPE::FILE, 1 );
 	try
 		{
 		l_oSocket.listen ( "/etc/shadow" );
@@ -174,7 +174,7 @@ template<>
 template<>
 void module::test<6> ( void )
 	{
-	HSocket l_oSocket ( HSocket::TYPE::D_FILE, 1 );
+	HSocket l_oSocket ( HSocket::TYPE::FILE, 1 );
 	try
 		{
 		l_oSocket.listen ( "/etc/TUT_socket" );
@@ -191,7 +191,7 @@ template<>
 template<>
 void module::test<7> ( void )
 	{
-	HSocket l_oSocket ( HSocket::TYPE::D_FILE, 1 );
+	HSocket l_oSocket ( HSocket::TYPE::FILE, 1 );
 	l_oSocket.listen ( "/tmp/TUT_socket" );
 	try
 		{
@@ -209,7 +209,7 @@ template<>
 template<>
 void module::test<8> ( void )
 	{
-	HSocket l_oSocket ( HSocket::TYPE::D_FILE );
+	HSocket l_oSocket ( HSocket::TYPE::FILE );
 	try
 		{
 		l_oSocket.listen ( "/tmp/TUT_socket" );
@@ -246,8 +246,8 @@ void module::test<19> ( void )
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
 	char reciv_buffer[ size + 1 ];
-	HSocket l_oServer( HSocket::TYPE::D_FILE, 1 );
-	HSocket l_oClient( HSocket::TYPE::D_FILE );
+	HSocket l_oServer( HSocket::TYPE::FILE, 1 );
+	HSocket l_oClient( HSocket::TYPE::FILE );
 	l_oServer.listen( "/tmp/TUT_socket" );
 	l_oClient.connect( "/tmp/TUT_socket" );
 	HSocket::ptr_t l_oLocal = l_oServer.accept();
@@ -262,8 +262,8 @@ TUT_UNIT_TEST_N( 20, "Transfering data through file with SSL." )
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
 	char reciv_buffer[ size + 1 ];
-	HSocket l_oServer( HSocket::socket_type_t( HSocket::TYPE::D_FILE ) | HSocket::TYPE::D_SSL_SERVER, 1 );
-	HSocket l_oClient( HSocket::socket_type_t( HSocket::TYPE::D_FILE ) | HSocket::TYPE::D_SSL_CLIENT );
+	HSocket l_oServer( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::SSL_SERVER, 1 );
+	HSocket l_oClient( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::SSL_CLIENT );
 	l_oServer.listen( "/tmp/TUT_socket" );
 	l_oClient.connect( "/tmp/TUT_socket" );
 	OServer serv;
@@ -287,8 +287,8 @@ void module::test<21>( void )
 	char test_data[] = "A kot ma wpierdol.";
 	const int size = sizeof ( test_data );
 	char reciv_buffer[ size + 1 ];
-	HSocket l_oServer( HSocket::TYPE::D_NETWORK, 1 );
-	HSocket l_oClient( HSocket::TYPE::D_NETWORK );
+	HSocket l_oServer( HSocket::TYPE::NETWORK, 1 );
+	HSocket l_oClient( HSocket::TYPE::NETWORK );
 	l_oServer.listen( "0.0.0.0", 5555 );
 	l_oClient.connect( "127.0.0.1", 5555 );
 	HSocket::ptr_t l_oLocal = l_oServer.accept();
@@ -303,8 +303,8 @@ TUT_UNIT_TEST_N( 22, "Transfering data through network with SSL." )
 	char test_data[] = "A kot ma wpierdol.";
 	const int size = sizeof ( test_data );
 	char reciv_buffer[ size + 1 ];
-	HSocket l_oServer( HSocket::socket_type_t( HSocket::TYPE::D_NETWORK ) | HSocket::TYPE::D_SSL_SERVER, 1 );
-	HSocket l_oClient( HSocket::socket_type_t( HSocket::TYPE::D_NETWORK ) | HSocket::TYPE::D_SSL_CLIENT );
+	HSocket l_oServer( HSocket::socket_type_t( HSocket::TYPE::NETWORK ) | HSocket::TYPE::SSL_SERVER, 1 );
+	HSocket l_oClient( HSocket::socket_type_t( HSocket::TYPE::NETWORK ) | HSocket::TYPE::SSL_CLIENT );
 	l_oServer.listen( "0.0.0.0", 5555 );
 	l_oClient.connect( "127.0.0.1", 5555 );
 	OServer serv;

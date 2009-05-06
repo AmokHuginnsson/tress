@@ -56,7 +56,7 @@ struct tut_yaal_tools_hxml
 		{
 		f_oVarTmpBuffer.hs_realloc( a_rsNode.get_level() * 2 + 3 );
 		f_oVarTmpBuffer.fillz( ' ', a_rsNode.get_level() * 2 + 1 );
-		if ( a_rsNode.get_type() == HXml::HNode::TYPE::D_NODE )
+		if ( a_rsNode.get_type() == HXml::HNode::TYPE::NODE )
 			{
 			if ( ! a_rsNode.get_name().is_empty() )
 				out << f_oVarTmpBuffer << "[" << a_rsNode.get_name() << "]<" << a_rsNode.get_level() << ">:" << std::endl;
@@ -99,17 +99,17 @@ bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const
 	HXml::HNode::TYPE::type_t type = left.get_type();
 	bool equals = ( type == right.get_type() );
 
-	if ( equals && ( type == HXml::HNode::TYPE::D_NODE ) )
+	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
 		equals = ( left.get_name() == right.get_name() );
-	if ( equals && ( type == HXml::HNode::TYPE::D_CONTENT ) )
+	if ( equals && ( type == HXml::HNode::TYPE::CONTENT ) )
 		equals = ( left.get_value() == right.get_value() );
-	if ( equals && ( type == HXml::HNode::TYPE::D_NODE ) )
+	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
 		equals = ( left.has_childs() == right.has_childs() );
-	if ( equals && ( type == HXml::HNode::TYPE::D_NODE ) )
+	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
 		equals = ( left.child_count() == right.child_count() );
-	if ( equals && ( type == HXml::HNode::TYPE::D_NODE ) )
+	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
 		equals = ( left.get_level() == right.get_level() );
-	if ( equals && ( type == HXml::HNode::TYPE::D_NODE ) )
+	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
 		{
 		HXml::HNode::properties_t const& propLeft = left.properties();
 		HXml::HNode::properties_t const& propRight = right.properties();
@@ -120,7 +120,7 @@ bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const
 		for ( ;( itLeft != endLeft ) && equals; ++ itLeft, ++ itRight )
 			equals = ( itRight != endRight ) && ( *itLeft == *itRight );
 		}
-	if ( equals && ( type == HXml::HNode::TYPE::D_NODE ) )
+	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
 		{
 		HXml::const_iterator itLeft = left.begin();
 		HXml::const_iterator endLeft = left.end();
@@ -160,21 +160,21 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Root node. */" )
 	HXml x;
-	static char const* const D_ROOT = "root";
-	x.create_root( D_ROOT );
+	static char const* const ROOT = "root";
+	x.create_root( ROOT );
 	HXml::HNodeProxy n = x.get_root();
 	ensure( "initialized DOM empty", !! n );
-	ensure_equals( "root value not stored", n.get_name(), D_ROOT );
+	ensure_equals( "root value not stored", n.get_name(), ROOT );
 	ensure_equals( "bad level of root element", n.get_level(), 0 );
-	ensure( "bad type of root element", n.get_type() == HXml::HNode::TYPE::D_NODE );
+	ensure( "bad type of root element", n.get_type() == HXml::HNode::TYPE::NODE );
 	ensure( "fresh node not empty", n.begin() == n.end() );
 TUT_TEARDOWN()
 
 
 TUT_UNIT_TEST_N( 3, "/* clear */" )
 	HXml x;
-	static char const* const D_ROOT = "root";
-	x.create_root( D_ROOT );
+	static char const* const ROOT = "root";
+	x.create_root( ROOT );
 	HXml::HNodeProxy n = x.get_root();
 	x.clear();
 	ensure( "cleared DOM not empty", ! x.get_root() );
@@ -192,22 +192,22 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "/* build, save, load */" )
 	HXml x;
-	static char const* const D_ROOT = "root";
-	static char const* const D_NODE = "node";
-	static char const* const D_CHILD = "child";
-	static char const* const D_PROP = "prop";
-	static char const* const D_PROP_VALUE = "prop_value";
-	static char const* const D_OUT_PATH = "out/y_test.xml";
-	x.create_root( D_ROOT );
+	static char const* const ROOT = "root";
+	static char const* const NODE = "node";
+	static char const* const CHILD = "child";
+	static char const* const PROP = "prop";
+	static char const* const PROP_VALUE = "prop_value";
+	static char const* const OUT_PATH = "out/y_test.xml";
+	x.create_root( ROOT );
 	HXml::HNodeProxy n = x.get_root();
-	n.add_node( HXml::HNode::TYPE::D_NODE, D_NODE );
-	HXml::HIterator it = n.add_node( HXml::HNode::TYPE::D_NODE, D_NODE );
-	HXml::HIterator child = (*it).add_node( HXml::HNode::TYPE::D_NODE, D_CHILD );
-	(*child).properties().insert( yaal::hcore::make_pair( D_PROP, D_PROP_VALUE ) );
+	n.add_node( HXml::HNode::TYPE::NODE, NODE );
+	HXml::HIterator it = n.add_node( HXml::HNode::TYPE::NODE, NODE );
+	HXml::HIterator child = (*it).add_node( HXml::HNode::TYPE::NODE, CHILD );
+	(*child).properties().insert( yaal::hcore::make_pair( PROP, PROP_VALUE ) );
 	n.copy_node( *it );
-	x.save( HStreamInterface::ptr_t( new HFile( D_OUT_PATH, HFile::OPEN::D_WRITING ) ) );
+	x.save( HStreamInterface::ptr_t( new HFile( OUT_PATH, HFile::OPEN::WRITING ) ) );
 	HXml y;
-	y.load( HStreamInterface::ptr_t( new HFile( D_OUT_PATH ) ) );
+	y.load( HStreamInterface::ptr_t( new HFile( OUT_PATH ) ) );
 	ensure_equals( "DOMs differ", x, y );
 	try
 		{
@@ -225,24 +225,24 @@ TUT_UNIT_TEST_N( 5, "/* load, save */" )
 	xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml" ) ) );
 	xml.parse( "/my_root/my_set/my_item" );
 	xml.parse( "/my_root/my_set/my_item" ); /* mem-leak test */
-	xml.save( HStreamInterface::ptr_t( new HFile( "out/set.xml", HFile::OPEN::D_WRITING ) ) );
+	xml.save( HStreamInterface::ptr_t( new HFile( "out/set.xml", HFile::OPEN::WRITING ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* load, save */" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml" ) ) );
-	xml.save( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::D_WRITING ) ) );
+	xml.save( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "/* load, save, clear, handmade, save */" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml" ) ) );
-	xml.save( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::D_WRITING ) ) );
+	xml.save( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) );
 	xml.clear();
 	xml.create_root( "xml" );
 	HXml::HNodeProxy root = xml.get_root();
-	root.add_node( HXml::HNode::TYPE::D_CONTENT, "Hello World!" );
-	xml.save( HStreamInterface::ptr_t( new HFile( "out/hello.xml", HFile::OPEN::D_WRITING ) ) );
+	root.add_node( HXml::HNode::TYPE::CONTENT, "Hello World!" );
+	xml.save( HStreamInterface::ptr_t( new HFile( "out/hello.xml", HFile::OPEN::WRITING ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* init, apply_style, parse, save, clear, handmade, save */" )
@@ -250,12 +250,12 @@ TUT_UNIT_TEST_N( 8, "/* init, apply_style, parse, save, clear, handmade, save */
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml" ) ) );
 	xml.apply_style( "./data/style.xml" );
 	xml.parse();
-	xml.save( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::D_WRITING ) ) );
+	xml.save( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::WRITING ) ) );
 	xml.clear();
 	xml.create_root( "xml" );
 	HXml::HNodeProxy root = xml.get_root();
-	root.add_node( HXml::HNode::TYPE::D_CONTENT, "Hello World!" );
-	xml.save( HStreamInterface::ptr_t( new HFile( "out/hello.xml", HFile::OPEN::D_WRITING ) ) );
+	root.add_node( HXml::HNode::TYPE::CONTENT, "Hello World!" );
+	xml.save( HStreamInterface::ptr_t( new HFile( "out/hello.xml", HFile::OPEN::WRITING ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "/* apply stylesheet */" )
@@ -284,7 +284,7 @@ TUT_UNIT_TEST_N( 10, "/* init, parse, apply, save */" )
 			cout << file.get_error() << ": " << file.get_path() << endl;
 		else
 			{
-			while ( file.read_line( string, HFile::READ::D_STRIP_NEWLINES ) >= 0 )
+			while ( file.read_line( string, HFile::READ::STRIP_NEWLINES ) >= 0 )
 				cout << string << endl;
 			file.close();
 			}
@@ -292,7 +292,7 @@ TUT_UNIT_TEST_N( 10, "/* init, parse, apply, save */" )
 	f_oXml.init( HStreamInterface::ptr_t( new HFile( doc ) ) );
 	f_oXml.apply_style( style );
 	f_oXml.parse( path );
-	f_oXml.save( HStreamInterface::ptr_t( new HFile( out, HFile::OPEN::D_WRITING ) ) );
+	f_oXml.save( HStreamInterface::ptr_t( new HFile( out, HFile::OPEN::WRITING ) ) );
 	return;
 TUT_TEARDOWN()
 

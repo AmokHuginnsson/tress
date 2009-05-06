@@ -946,7 +946,7 @@ void module::test<22>( void )
 	l.sort();
 	check_consistency( l );
 	ensure_equals ( "sort failed", to_string( l ), "123" );
-	l.sort( OListBits::D_DESCENDING );
+	l.sort( OListBits::DESCENDING );
 	check_consistency( l );
 	ensure_equals ( "sort failed", to_string( l ), "321" );
 	}
@@ -1000,7 +1000,7 @@ void module::test<24>( void )
 
 void check_sorted( tut_yaal_hcore_hlist::list_t const& l, OListBits::sort_order_t order )
 	{
-	if ( order == OListBits::D_ASCENDING )
+	if ( order == OListBits::ASCENDING )
 		{
 		int val = 0;
 		for ( tut_yaal_hcore_hlist::list_t::const_iterator it = l.begin(); it != l.end(); ++ it )
@@ -1040,10 +1040,10 @@ void module::test<25>( void )
 			{
 			l.sort();
 			check_consistency( l );
-			check_sorted( l, OListBits::D_ASCENDING );
-			l.sort( OListBits::D_DESCENDING );
+			check_sorted( l, OListBits::ASCENDING );
+			l.sort( OListBits::DESCENDING );
 			check_consistency( l );
-			check_sorted( l, OListBits::D_DESCENDING );
+			check_sorted( l, OListBits::DESCENDING );
 			}
 		catch ( ... )
 			{

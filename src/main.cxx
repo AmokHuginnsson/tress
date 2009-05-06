@@ -156,7 +156,7 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 			HCons::get_instance().leave_curses();
 		throw;
 		}
-	fprintf( stderr, "Done in %ld miliseconds.\n", clk.get_time_elapsed( HClock::UNIT::D_MILISECOND ) );
+	fprintf( stderr, "Done in %ld miliseconds.\n", clk.get_time_elapsed( HClock::UNIT::MILISECOND ) );
 	return ( l_oVisitor._exceptionsCount
 			+ l_oVisitor._failuresCount
 			+ l_oVisitor._terminationsCount
@@ -174,7 +174,7 @@ void gather_groups_from_file( string_list_t& lst )
 	FILE* l_psFile = NULL;
 	if ( setup.f_oTestGroupListFilePath == "-" )
 		l_psFile = stdin;
-	HFile l_oFile( HFile::OPEN::D_READING, l_psFile );
+	HFile l_oFile( HFile::OPEN::READING, l_psFile );
 	if ( ! l_psFile && l_oFile.open( setup.f_oTestGroupListFilePath ) )
 		{
 		cout << l_oFile.get_error() << ": " << l_oFile.get_path() << endl;
@@ -182,8 +182,8 @@ void gather_groups_from_file( string_list_t& lst )
 		}
 	HString l_oLine;
 	while ( l_oFile.read_line( l_oLine,
-				HFile::read_t( HFile::READ::D_STRIP_NEWLINES )
-				| ( ( l_psFile == stdin ) ? HFile::READ::D_UNBUFFERED_READS : HFile::READ::D_BUFFERED_READS ) ) >= 0 )
+				HFile::read_t( HFile::READ::STRIP_NEWLINES )
+				| ( ( l_psFile == stdin ) ? HFile::READ::UNBUFFERED_READS : HFile::READ::BUFFERED_READS ) ) >= 0 )
 		{
 		l_oLine.trim_left();
 		l_oLine.trim_right();
