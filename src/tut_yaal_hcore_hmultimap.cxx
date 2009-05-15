@@ -44,23 +44,24 @@ namespace tut
 struct tut_yaal_hcore_hmultimap
 	{
 	virtual ~tut_yaal_hcore_hmultimap( void ) {}
-	typedef HMultiMap<int, int> mm_t;
+	typedef HMultiMap<int, int, HMultiMapStorage::HPacked> mmp_t;
+	typedef HMultiMap<int, int, HMultiMapStorage::HTransparent> mmt_t;
 	};
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hmultimap, "yaal::hcore::HMultiMap" );
 
 TUT_UNIT_TEST_N( 1, "find/upper_bound on non existing" )
-	mm_t mm;
+	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
 	mm.insert( make_pair( 3, 4 ) );
 	mm.insert( make_pair( 3, 5 ) );
-	for ( mm_t::const_iterator it = mm.find( 2 ), end = mm.upper_bound( 2 ); it != end; ++ it )
+	for ( mmp_t::const_iterator it = mm.find( 2 ), end = mm.upper_bound( 2 ); it != end; ++ it )
 		fail( "find/upper_bound ranges skewed" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "find/upper_bound on existing" )
-	mm_t mm;
+	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
 	mm.insert( make_pair( 2, 7 ) );
@@ -68,7 +69,31 @@ TUT_UNIT_TEST_N( 2, "find/upper_bound on existing" )
 	mm.insert( make_pair( 3, 4 ) );
 	mm.insert( make_pair( 3, 5 ) );
 	int acc = 0;
-	for ( mm_t::const_iterator it = mm.find( 2 ), end = mm.upper_bound( 2 ); it != end; ++ it )
+	for ( mmp_t::const_iterator it = mm.find( 2 ), end = mm.upper_bound( 2 ); it != end; ++ it )
+		acc += (*it).second;
+	ensure_equals( "bad elements selected throu find/upper_bound", acc, 15 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 31, "find/upper_bound on non existing" )
+	mmt_t mm;
+	mm.insert( make_pair( 1, 2 ) );
+	mm.insert( make_pair( 1, 3 ) );
+	mm.insert( make_pair( 3, 4 ) );
+	mm.insert( make_pair( 3, 5 ) );
+	for ( mmt_t::const_iterator it = mm.find( 2 ), end = mm.upper_bound( 2 ); it != end; ++ it )
+		fail( "find/upper_bound ranges skewed" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 32, "find/upper_bound on existing" )
+	mmt_t mm;
+	mm.insert( make_pair( 1, 2 ) );
+	mm.insert( make_pair( 1, 3 ) );
+	mm.insert( make_pair( 2, 7 ) );
+	mm.insert( make_pair( 2, 8 ) );
+	mm.insert( make_pair( 3, 4 ) );
+	mm.insert( make_pair( 3, 5 ) );
+	int acc = 0;
+	for ( mmt_t::const_iterator it = mm.find( 2 ), end = mm.upper_bound( 2 ); it != end; ++ it )
 		acc += (*it).second;
 	ensure_equals( "bad elements selected throu find/upper_bound", acc, 15 );
 TUT_TEARDOWN()
