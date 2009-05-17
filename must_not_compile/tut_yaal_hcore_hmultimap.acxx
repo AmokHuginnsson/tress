@@ -36,16 +36,30 @@ using namespace yaal::tools::util;
 namespace must_not_compile
 {
 
-typedef HMultiMap<int, int> map_t;
+typedef HMultiMap<int, int, HMultiMapStorage::HPacked> mapp_t;
+typedef HMultiMap<int, int, HMultiMapStorage::HTransparent> mapt_t;
 
 #if defined ( BUG_0 )
 
-int sum( map_t const& l )
+template<typename mm_t>
+int sum( mm_t const& m )
 	{
 	int l_iSum = 0;
 
-	for ( map_t::iterator it = l.begin(); it != l.end(); ++ it ) /* MUST_FAIL_HERE */
+	for ( typename mm_t::iterator it = m.begin(); it != m.end(); ++ it ) /* MUST_FAIL_HERE */
 		l_iSum += (*it).second;
+	return ( l_iSum );
+	}
+
+#elif defined ( BUG_1 )
+
+template<typename mm_t>
+int sum( mm_t const& m )
+	{
+	int l_iSum = 0;
+
+	for ( typename mm_t::const_iterator it = m.begin(); it != m.end(); ++ it )
+		(*it).second = 0; /* MUST_FAIL_HERE */
 	return ( l_iSum );
 	}
 
@@ -57,11 +71,15 @@ int sum( map_t const& l )
 
 int main( int, char** )
 	{
-	must_not_compile::map_t l;
-	l.insert( make_pair( 1, 7 ) );
-	l.insert( make_pair( 3, 11 ) );
-	l.insert( make_pair( 5, 13 ) );
-	return ( must_not_compile::sum( l ) );
+	must_not_compile::mapp_t mp;
+	mp.insert( make_pair( 1, 7 ) );
+	mp.insert( make_pair( 3, 11 ) );
+	mp.insert( make_pair( 5, 13 ) );
+	must_not_compile::mapt_t mt;
+	mt.insert( make_pair( 1, 7 ) );
+	mt.insert( make_pair( 3, 11 ) );
+	mt.insert( make_pair( 5, 13 ) );
+	return ( must_not_compile::sum( mp ) + must_not_compile::sum( mt ) );
 	}
 
 /* vim: set ft=cpp: */

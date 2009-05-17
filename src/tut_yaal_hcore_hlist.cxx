@@ -219,10 +219,11 @@ void module::test<4>( void )
 	o = l;
 	check_consistency( l );
 	check_consistency( o );
-	for ( list_t::iterator it = o.begin();
-			it != o.end(); ++ it )
+	list_t const& ro = o;
+	for ( list_t::const_iterator it = ro.begin();
+			it != ro.end(); ++ it )
 		{
-		check_consistency( o );
+		check_consistency( ro );
 		l_iCtr ++;
 		ensure_equals ( "assign operation failed, wrong value", *it, l_iCtr );
 		}

@@ -6,6 +6,7 @@ import re
 import linecache
 
 COMPILER = "g++"
+verbose = 0
 
 class Uber( object ):
 	__name = "Unnamed"
@@ -63,14 +64,20 @@ def learn():
 	print d
 	print "Program ends here."
 
-def has_output_opt( opts ):
-	has = 0
-	for opt in opts:
-		if ( has == 1 ):
-			has += 1
-		if ( opt == "-o" ):
-			has = 1
-	return ( 1 if ( has == 2 ) else 0 )
+def msg( str, nonl = 0 ):
+	if ( verbose ):
+		print str,
+		if ( not nonl ):
+			print ""
+
+def has_opt( opts, short, long ):
+	return ( opts.count( short ) + opts.count( long ) )
+
+def erase_opt( opts, short, long ):
+	if ( opts.count( short ) > 0 ):
+		opts.remove( short )
+	if ( opts.count( long ) > 0 ):
+		opts.remove( long )
 
 def get_output_path_index( opts ):
 	has = 0
@@ -106,30 +113,47 @@ def verify_bug( input_path, line_no ):
 def check_bug( out, input_path ):
 	no_more_bugs_match = re.compile( "^" + input_path + ":[0-9]+:[0-9]+: error: #error NO_SUCH_BUG$" )
 	line_number_match = re.compile( "^" + input_path + ":([0-9]+): error" )
-	line_number_match_alt = re.compile( "^" + input_path + ":([0-9]+): +instantiated from here" )
+	line_number_match_alt = re.compile( "^" + input_path + ":([0-9]+): +instantiated from" )
+	ret = 2
 	for line in out.readlines():
-		match = no_more_bugs_match.match( line )
-		if ( match ):
-			return 1
-		match = line_number_match.match( line )
-		if ( not match ):
-			match = line_number_match_alt.match( line )
-		if ( match ):
-			return verify_bug( input_path, match.group( 1 ) )
-	return 2
+		msg( line, 1 )
+		if ( ret == 2 ):
+			match = no_more_bugs_match.match( line )
+			if ( match ):
+				ret = 1
+			else:
+				match = line_number_match.match( line )
+				if ( not match ):
+					match = line_number_match_alt.match( line )
+				if ( match ):
+					ret = verify_bug( input_path, match.group( 1 ) )
+	return ret
 
 def acxx( argv ):
 	try:
-		if ( not has_output_opt( argv ) ):
+		if ( has_opt( argv, "-h", "--help" ) ):
+			print "acxx -o output/path/object.ao some/dir/source.acxx"
+			print "options:"
+			print "-o, --output output/path/object.ao - output path for ao files"
+			print "-h, --help - this help screen"
+			print "-v, --verbose - print some informational messages"
+			return
+		if ( not has_opt( argv, "-o", "--output" ) ):
 			raise PebkacError( "Output path option required and not specified" )
+		global verbose
+		verbose = has_opt( argv, "-v", "--verbose" )
+		erase_opt( argv, "-v", "--verbose" )
 		output_path = argv[ get_output_path_index( argv ) - 1 ]
 		input_path = get_input_path( sys.argv[1:] )
+		msg( "source file is: " + input_path )
+		msg( "output path is: " + output_path )
 		if ( access( output_path, F_OK ) ):
 			unlink( output_path )
 		BUG_TEMPLATE = "BUG_"
 		bug_status = 0
 		bug_no = 0
 		while ( bug_status == 0 ):
+			msg( "################ processing bug no: " + str( bug_no ) + " ################" )
 			unused, out = popen4( [ COMPILER, "-xc++", "-D" + BUG_TEMPLATE + str( bug_no ) ] + argv );
 			bug_status = check_bug( out, input_path )
 			out.close()
