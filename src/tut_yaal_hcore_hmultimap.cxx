@@ -109,12 +109,22 @@ TUT_UNIT_TEST_N( 32, "find/upper_bound on existing" )
 	ensure_equals( "bad elements selected throu find/upper_bound", acc, 15 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 33, "modify transparent by iterator" )
+TUT_UNIT_TEST_N( 33, "modify transparent by iterator and operator*" )
 	mmt_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mmt_t::iterator it = mm.begin();
 	int const VERIFY = 0;
 	(*it).second = VERIFY;
+	mmt_t::iterator it_ver = mm.begin();
+	ensure_equals( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 34, "modify transparent by iterator and operator->" )
+	mmt_t mm;
+	mm.insert( make_pair( 1, 2 ) );
+	mmt_t::iterator it = mm.begin();
+	int const VERIFY = 0;
+	it->second = VERIFY;
 	mmt_t::iterator it_ver = mm.begin();
 	ensure_equals( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
 TUT_TEARDOWN()

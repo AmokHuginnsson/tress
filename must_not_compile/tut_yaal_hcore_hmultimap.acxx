@@ -63,6 +63,18 @@ int sum( mm_t const& m )
 	return ( l_iSum );
 	}
 
+#elif defined ( BUG_2 )
+
+template<typename mm_t>
+int sum( mm_t const& m )
+	{
+	int l_iSum = 0;
+
+	for ( typename mm_t::const_iterator it = m.begin(); it != m.end(); ++ it )
+		it->second = 0; /* MUST_FAIL_HERE */
+	return ( l_iSum );
+	}
+
 #else
 #	error NO_SUCH_BUG
 #endif
