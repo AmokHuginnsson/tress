@@ -2,7 +2,6 @@
 #define TUT_H_GUARD
 
 #include <cerrno>
-#include <iostream>
 #include <map>
 #include <list>
 #include <string>

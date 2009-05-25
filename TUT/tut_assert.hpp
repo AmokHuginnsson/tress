@@ -4,7 +4,7 @@
 #include "tut_exception.hpp"
 
 #if defined(TUT_USE_POSIX)
-#include <errno.h>
+#include <cerrno>
 #include <cstring>
 #endif
 

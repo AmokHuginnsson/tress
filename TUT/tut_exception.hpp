@@ -2,6 +2,7 @@
 #define TUT_EXCEPTION_H_GUARD
 
 #include <stdexcept>
+
 #include "tut_result.hpp"
 
 namespace tut

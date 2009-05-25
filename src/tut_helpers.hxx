@@ -118,6 +118,21 @@ struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ 
 
 void show_title( char const* const );
 void show_end( void );
+void hadle_exception_outside_of_main( void );
+
+template<typename global_t>
+class HExceptionSafeGlobal
+	{
+	global_t _object;
+public:
+	HExceptionSafeGlobal( void ) try : _object() {} catch ( ... ) { hadle_exception_outside_of_main(); }
+	template<typename a0_t>
+	HExceptionSafeGlobal( a0_t const& a0_ ) try : _object( a0_ ) {} catch ( ... ) { hadle_exception_outside_of_main(); }
+	template<typename a0_t, typename a1_t>
+	HExceptionSafeGlobal( a0_t const& a0_, a1_t const& a1_ ) try : _object( a0_, a1_ ) {} catch ( ... ) { hadle_exception_outside_of_main(); }
+	global_t& instance( void )
+		{ return ( _object ); }
+	};
 
 #define TUT_UNIT_TEST_N( no, title ) template<> template<> void module::test<(no)>( void ) { do { set_test_meta( title, __FILE__, __LINE__ ); show_title( title ); } while ( 0 );
 #define TUT_UNIT_TEST( title ) TUT_UNIT_TEST_N( ( __COUNTER__ ), ( title ) )
@@ -125,7 +140,8 @@ void show_end( void );
 #define TUT_TEST_GROUP_N( mock, name ) \
 typedef test_group<mock> tut_group; \
 typedef tut_group::object module; \
-tut_group tut_##mock##_group( ( name ) );
+typedef HExceptionSafeGlobal<tut_group> tut_group_holder; \
+tut_group_holder tut_##mock##_group( ( name ) );
 #define TUT_TEST_GROUP( mock, name ) \
 TUT_TEST_GROUP_N( mock, name ) \
 namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
@@ -133,7 +149,7 @@ namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
 	{ \
 	virtual ~name( void ) \
 		{} \
-	}
+	};
 
 template<typename symbol_t, typename owner_t>
 class counter

@@ -3,11 +3,11 @@
 
 #include <string>
 #include <vector>
+
 #include "tut_exception.hpp"
 
 namespace tut
 {
-
 
 /**
  * Interface.
@@ -120,17 +120,11 @@ public:
 	void register_group( const std::string& name, group_base* gr )
 		{
 		if ( gr == 0 )
-			{
 			throw std::invalid_argument( "group shall be non-null" );
-			}
 
 		if ( _groups.find( name ) != _groups.end() )
 			{
 			std::string msg( "attempt to add already existent group " + name );
-
-			// this exception terminates application so we use cerr also
-			// TODO: should this message appear in stream?
-			std::cerr << msg << std::endl;
 			throw tut_error( msg );
 			}
 

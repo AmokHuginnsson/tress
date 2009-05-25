@@ -2,6 +2,8 @@
 #define TUT_REPORTER
 
 #include <cxxabi.h>
+#include <iostream>
+
 #include "tut.hpp"
 #include <yaal/hcore/hthread.hxx>
 

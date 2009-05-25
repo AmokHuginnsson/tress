@@ -132,6 +132,23 @@ void show_end( void )
 		cout << "------------------------------------------------------------------------" << endl;
 	}
 
+void hadle_exception_outside_of_main( void )
+	{
+	try
+		{
+		throw;
+		}
+	catch ( std::exception const& e )
+		{
+		std::cerr << "Exception `" << e.what() << "' thrown from outside of main() scope." << std::endl;
+		}
+	catch ( ... )
+		{
+		std::cerr << "Exception of unknown type thrown from outside of main() scope." << std::endl;
+		}
+	exit( 1 );
+	}
+
 }
 
 }
