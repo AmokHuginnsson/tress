@@ -132,11 +132,15 @@ void show_end( void )
 		cout << "------------------------------------------------------------------------" << endl;
 	}
 
-void hadle_exception_outside_of_main( void )
+void HSTDGlobalScopeExceptionHandlingPolicy::hadle_exception( void )
 	{
 	try
 		{
 		throw;
+		}
+	catch ( HException const& e )
+		{
+		std::cerr << "Exception `" << e.what() << "' thrown from outside of main() scope." << std::endl;
 		}
 	catch ( std::exception const& e )
 		{

@@ -51,7 +51,7 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_stl );
-TUT_TEST_GROUP_N( tut_stl, "std" );
+TUT_TEST_GROUP_N( tut_stl, yaal::hcore::n_iDebugLevel > yaal::hcore::DEBUG_LEVEL::ABORT_ON_ASSERT ? "yaal" : "stl" );
 
 TUT_UNIT_TEST_N( 1, "create by_hand" )
 	cout << "lets do everything by hand ..." << endl;

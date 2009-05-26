@@ -348,5 +348,13 @@ TUT_UNIT_TEST_N( 2, "degenerated hier" )
 		}
 TUT_TEARDOWN()
 
+char const HEXCEPTIONSAFEGLOBAL_TEST_VAR[] = "ala";
+HExceptionSafeGlobal<HString> globalVarHolder( HEXCEPTIONSAFEGLOBAL_TEST_VAR );
+HString& globalVar = globalVarHolder.instance();
+
+TUT_UNIT_TEST_N( 3, "safe initialization of global variables" )
+	ensure_equals( "global variable not initialized correctly", globalVar, HEXCEPTIONSAFEGLOBAL_TEST_VAR );
+TUT_TEARDOWN()
+
 }
 
