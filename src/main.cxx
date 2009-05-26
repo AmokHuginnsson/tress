@@ -47,9 +47,11 @@ using namespace tress;
 using namespace tress::tut_helpers;
 
 namespace tut
-	{
-  test_runner_singleton runner;
-	}
+{
+
+test_runner_singleton runner;
+
+}
 
 namespace tress
 {
@@ -113,7 +115,7 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 				}
 			else
 				{
-				runner.get().set_callback ( &l_oVisitor );
+				runner.get().set_callback( &l_oVisitor );
 				string_list_t l_oGroupNames;
 				if ( ! setup.f_oTestGroupListFilePath.is_empty() )
 					{
