@@ -195,21 +195,13 @@ typedef HThreadT<typeof( simple )> simple_t;
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hthread );
 TUT_TEST_GROUP_N( tut_yaal_hcore_hthread, "yaal::hcore::HThread" );
 
-/* Construction and destruction */
-template<>
-template<>
-void module::test<1>( void )
-	{
+TUT_UNIT_TEST_N( 1, "/* Construction and destruction */" )
 	HCool ca( "a" );
 	cool_t a( ca );
 	ensure_equals( "bad status on fresh thread", a.is_alive(), false );
-	}
+TUT_TEARDOWN()
 
-/* Starting new thread and allowing it to finish */
-template<>
-template<>
-void module::test<2>( void )
-	{
+TUT_UNIT_TEST_N( 2, "/* Starting new thread and allowing it to finish */" )
 	HCool ca( "a" );
 	cool_t a( ca );
 	ca.set( 5 );
@@ -217,13 +209,9 @@ void module::test<2>( void )
 	ensure_equals( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	ensure_equals( "thread failed to finish", a.is_alive(), false );
-	}
+TUT_TEARDOWN()
 
-/* Starting new thread and finishing it prematurely (sleeping body) */
-template<>
-template<>
-void module::test<3>( void )
-	{
+TUT_UNIT_TEST_N( 3, "/* Starting new thread and finishing it prematurely (sleeping body) */" )
 	HTime start, stop;
 	HCool ca( "sleeping" );
 	cool_t a( ca );
@@ -238,13 +226,9 @@ void module::test<3>( void )
 	ensure_equals( "thread failed to stop", a.is_alive(), false );
 	ensure_distance( "thread failed to interrupt",
 			stop.get_second(), 0, 2 );
-	}
+TUT_TEARDOWN()
 
-/* Starting new thread and finishing it prematurely (busy body) */
-template<>
-template<>
-void module::test<33>( void )
-	{
+TUT_UNIT_TEST_N( 33, "/* Starting new thread and finishing it prematurely (busy body) */" )
 	HTime start, stop;
 	HCool ca( "busy" );
 	cool_t a( ca );
@@ -259,13 +243,9 @@ void module::test<33>( void )
 	ensure_equals( "thread failed to stop", a.is_alive(), false );
 	ensure_distance( "thread failed to interrupt",
 			static_cast<double>( stop.get_second() ), 0., 2.5 );
-	}
+TUT_TEARDOWN()
 
-/* Starting new thread and finishing it prematurely by destructor */
-template<>
-template<>
-void module::test<4>( void )
-	{
+TUT_UNIT_TEST_N( 4, "/* Starting new thread and finishing it prematurely by destructor */" )
 	HTime start, stop;
 		{
 		HCool ca( "a" );
@@ -279,26 +259,18 @@ void module::test<4>( void )
 	stop -= start;
 	ensure_distance( "thread failed to interrupt from destructor",
 			stop.get_second(), 0, 2 );
-	}
+TUT_TEARDOWN()
 
-/* Starting and immediatelly finishing thread */
-template<>
-template<>
-void module::test<5>( void )
-	{
+TUT_UNIT_TEST_N( 5, "/* Starting and immediatelly finishing thread */" )
 	HCool ca( "a" );
 	cool_t a( ca );
 	ca.set( 50 );
 	a.spawn();
 	a.finish();
 	ensure_equals( "thread failed to finish", a.is_alive(), false );
-	}
+TUT_TEARDOWN()
 
-/* Starting already started thread */
-template<>
-template<>
-void module::test<6> ( void )
-	{
+TUT_UNIT_TEST_N( 6, "/* Starting already started thread */" )
 	HCool ca( "6" );
 	cool_t a( ca );
 	ca.set( 5 );
@@ -312,13 +284,9 @@ void module::test<6> ( void )
 		{
 		cout << e.what() << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* Finishing thread that was not started */
-template<>
-template<>
-void module::test<7>( void )
-	{
+TUT_UNIT_TEST_N( 7, "/* Finishing thread that was not started */" )
 	HCool ca( "a" );
 	cool_t a( ca );
 	try
@@ -330,13 +298,9 @@ void module::test<7>( void )
 		{
 		cout << e.what() << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* Simple thread (plain function) */
-template<>
-template<>
-void module::test<8>( void )
-	{
+TUT_UNIT_TEST_N( 8, "/* Simple thread (plain function) */" )
 	HTime start, stop;
 	simple_t a( simple );
 	a.spawn();
@@ -349,13 +313,9 @@ void module::test<8>( void )
 	ensure_equals( "thread failed to stop", a.is_alive(), false );
 	ensure_distance( "thread failed to interrupt",
 			stop.get_second(), 0, 2 );
-	}
+TUT_TEARDOWN()
 
-/* Starting new thread and allowing it to finish, the finich is actualy invoked. */
-template<>
-template<>
-void module::test<9>( void )
-	{
+TUT_UNIT_TEST_N( 9, "/* Starting new thread and allowing it to finish, the finich is actualy invoked. */" )
 	HCool ca( "a" );
 	cool_t a( ca );
 	ca.set( 5 );
@@ -364,26 +324,18 @@ void module::test<9>( void )
 	M_DSLEEP( 10 );
 	ensure_equals( "thread failed to finish", a.is_alive(), false );
 	a.finish();
-	}
+TUT_TEARDOWN()
 
-/* Very short living thread. */
-template<>
-template<>
-void module::test<10>( void )
-	{
+TUT_UNIT_TEST_N( 10, "/* Very short living thread. */" )
 	HTime start, stop;
 	simple_t a( a_fast_one );
 	a.spawn();
 	cout << __PRETTY_FUNCTION__ << endl;
 	a.finish();
 	/* In case of wrong implementation this test case will hang foreveer. */
-	}
+TUT_TEARDOWN()
 
-/* Very short living thread, spawned delayed. */
-template<>
-template<>
-void module::test<11>( void )
-	{
+TUT_UNIT_TEST_N( 11, "/* Very short living thread, spawned delayed. */" )
 	HTime start, stop;
 	simple_t a( a_fast_one );
 	a.spawn();
@@ -391,15 +343,11 @@ void module::test<11>( void )
 	cout << __PRETTY_FUNCTION__ << endl;
 	a.finish();
 	/* In case of wrong implementation this test case will hang foreveer. */
-	}
+TUT_TEARDOWN()
 
-/* Conditional variable test. */
-template<>
-template<>
-void module::test<12>( void )
-	{
+TUT_UNIT_TEST_N( 12, "/* Conditional variable test. */" )
 	CVTest cvTest;
 	cvTest.eat();
-	}
+TUT_TEARDOWN()
 
 }

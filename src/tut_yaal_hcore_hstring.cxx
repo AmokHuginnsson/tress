@@ -45,36 +45,24 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hstring );
 TUT_TEST_GROUP_N( tut_yaal_hcore_hstring, "yaal::hcore::HString" );
 
-/* trivial constructor */
-template<>
-template<>
-void module::test<1>( void )
-	{
+TUT_UNIT_TEST_N( 1, "/* trivial constructor */" )
 	HString str;
 	ensure_equals( "trivial construction failed", str, "" );
 	ensure_equals( "trivial construction failed (size)", str.size(), 0 );
 	ensure_equals( "trivial construction failed (capacity)", str.capacity(), -1 );
 	ensure_equals( "trivial construction failed (is_empty)", str.empty(), true );
-	}
+TUT_TEARDOWN()
 
-/* construction from char* */
-template<>
-template<>
-void module::test<2>( void )
-	{
+TUT_UNIT_TEST_N( 2, "/* construction from char* */" )
 	static char const CORRECT[] = "1024";
 	HString str( CORRECT );
 	ensure_equals ( "construction from c-string does not work", str, CORRECT );
 	ensure_equals( "construction from char* failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
 	ensure_equals( "construction from char* failed (capacity)", str.capacity(), 7 );
 	ensure_equals( "construction from char* failed (is_empty)", str.empty(), false );
-	}
+TUT_TEARDOWN()
 
-/* copy construction */
-template<>
-template<>
-void module::test<3>( void )
-	{
+TUT_UNIT_TEST_N( 3, "/* copy construction */" )
 	static char const CORRECT[] = "1024";
 	HString str( CORRECT );
 	HString copy( str );
@@ -83,13 +71,9 @@ void module::test<3>( void )
 			copy.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
 	ensure_equals( "copy construction failed (capacity)", copy.capacity(), 7 );
 	ensure_equals( "copy construction failed (is_empty)", copy.empty(), false );
-	}
+TUT_TEARDOWN()
 
-/* construction from int */
-template<>
-template<>
-void module::test<4>( void )
-	{
+TUT_UNIT_TEST_N( 4, "/* construction from int */" )
 	static int const INIT = 1024;
 	static char const CORRECT[] = "1024";
 	HString str( INIT );
@@ -98,13 +82,9 @@ void module::test<4>( void )
 			str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
 	ensure_equals( "construction from int failed (capacity)", str.capacity(), 7 );
 	ensure_equals( "construction from int failed (is_empty)", str.empty(), false );
-	}
+TUT_TEARDOWN()
 
-/* construction from int long */
-template<>
-template<>
-void module::test<5>( void )
-	{
+TUT_UNIT_TEST_N( 5, "/* construction from int long */" )
 	static int long const INIT = 1024;
 	static char const CORRECT[] = "1024";
 	HString str( INIT );
@@ -112,13 +92,9 @@ void module::test<5>( void )
 	ensure_equals( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
 	ensure_equals( "construction from int long failed (capacity)", str.capacity(), 7 );
 	ensure_equals( "construction from int long failed (is_empty)", str.empty(), false );
-	}
+TUT_TEARDOWN()
 
-/* construction from int unsigned */
-template<>
-template<>
-void module::test<6>( void )
-	{
+TUT_UNIT_TEST_N( 6, "/* construction from int unsigned */" )
 	static int unsigned const INIT = 1024;
 	static char const CORRECT[] = "1024";
 	HString str( INIT );
@@ -127,13 +103,9 @@ void module::test<6>( void )
 			str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
 	ensure_equals( "construction from int unsigned failed (capacity)", str.capacity(), 7 );
 	ensure_equals( "construction from int unsigned failed (is_empty)", str.empty(), false );
-	}
+TUT_TEARDOWN()
 
-/* construction from int long unsigned */
-template<>
-template<>
-void module::test<7>( void )
-	{
+TUT_UNIT_TEST_N( 7, "/* construction from int long unsigned */" )
 	static int long unsigned const INIT = 1024;
 	static char const CORRECT[] = "1024";
 	HString str( INIT );
@@ -142,26 +114,18 @@ void module::test<7>( void )
 			str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
 	ensure_equals( "construction from int long unsigned failed (capacity)", str.capacity(), 7 );
 	ensure_equals( "construction from int long unsigned failed (is_empty)", str.empty(), false );
-	}
+TUT_TEARDOWN()
 
-/* construction from char */
-template<>
-template<>
-void module::test<8>( void )
-	{
+TUT_UNIT_TEST_N( 8, "/* construction from char */" )
 	static char const CORRECT = '1';
 	HString str( CORRECT );
 	ensure_equals ( "construction from char does not work", str, CORRECT );
 	ensure_equals( "construction from char failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) ) );
 	ensure_equals( "construction from char failed (capacity)", str.capacity(), 1 );
 	ensure_equals( "construction from char failed (is_empty)", str.empty(), false );
-	}
+TUT_TEARDOWN()
 
-/* construction from double */
-template<>
-template<>
-void module::test<9>( void )
-	{
+TUT_UNIT_TEST_N( 9, "/* construction from double */" )
 	static double INIT = 3.141593;
 	static char const* const CORRECT = "3.141593";
 	HString str( INIT );
@@ -169,13 +133,9 @@ void module::test<9>( void )
 	ensure_equals( "construction from double failed (size)", str.size(), static_cast<int long>( ::strlen( CORRECT ) ) );
 	ensure_equals( "construction from double failed (capacity)", str.capacity(), 15 );
 	ensure_equals( "construction from double failed (is_empty)", str.empty(), false );
-	}
+TUT_TEARDOWN()
 
-/* construction from double long */
-template<>
-template<>
-void module::test<10>( void )
-	{
+TUT_UNIT_TEST_N( 10, "/* construction from double long */" )
 	static double long INIT = 3.141592653589;
 	static char const* const CORRECT = "3.141592653589";
 	HString str( INIT );
@@ -183,13 +143,9 @@ void module::test<10>( void )
 	ensure_equals( "construction from double failed (size)", str.size(), static_cast<int long>( ::strlen( CORRECT ) ) );
 	ensure_equals( "construction from double failed (capacity)", str.capacity(), 15 );
 	ensure_equals( "construction from double failed (is_empty)", str.empty(), false );
-	}
+TUT_TEARDOWN()
 
-/* construction from void* */
-template<>
-template<>
-void module::test<11>( void )
-	{
+TUT_UNIT_TEST_N( 11, "/* construction from void* */" )
 	static size_t const tmp = 0xdeadbeef;
 	static void* INIT = reinterpret_cast<void*>( tmp );
 	static char const* const CORRECT = "0xdeadbeef";
@@ -198,13 +154,9 @@ void module::test<11>( void )
 	ensure_equals( "construction from void* failed (size)", str.size(), static_cast<int long>( ::strlen( CORRECT ) ) );
 	ensure_equals( "construction from void* failed (capacity)", str.capacity(), 15 );
 	ensure_equals( "construction from void* failed (is_empty)", str.empty(), false );
-	}
+TUT_TEARDOWN()
 
-/* operator += */
-template<>
-template<>
-void module::test<12>( void )
-	{
+TUT_UNIT_TEST_N( 12, "/* operator += */" )
 	static char const INIT[] = "1024";
 	static char const* const TEST = "0xdeadbeef";
 	static char const CORRECT[] = "10240xdeadbeef";
@@ -218,13 +170,9 @@ void module::test<12>( void )
 	ensure_equals( "operator+= failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
 	ensure_equals( "operator+= failed (capacity)", str.capacity(), 15 );
 	ensure_equals( "operator+= failed (is_empty)", str.empty(), false );
-	}
+TUT_TEARDOWN()
 
-/* clear */
-template<>
-template<>
-void module::test<13>( void )
-	{
+TUT_UNIT_TEST_N( 13, "/* clear */" )
 	HString str;
 	static char const INIT[] = "1024";
 	ensure_equals( "trivial construction failed", str, "" );
@@ -241,13 +189,9 @@ void module::test<13>( void )
 	ensure_equals( "clear failed (size)", str.size(), 0 );
 	ensure_equals( "clear failed (capacity)", str.capacity(), 7 );
 	ensure_equals( "clear failed (is_empty)", str.empty(), true );
-	}
+TUT_TEARDOWN()
 
-/* replace */
-template<>
-template<>
-void module::test<14>( void )
-	{
+TUT_UNIT_TEST_N( 14, "/* replace */" )
 	static char const INIT[] = "aarererererebb";
 	static char const PAT1[] = "rere";
 	static char const PAT2[] = "OKOK";
@@ -328,13 +272,9 @@ void module::test<14>( void )
 		ensure_equals( "replace A1->B1 failed (is_empty)", str.empty(), false );
 		ensure_equals( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
 		}
-	}
+TUT_TEARDOWN()
 
-/* shift_left */
-template<>
-template<>
-void module::test<22>( void )
-	{
+TUT_UNIT_TEST_N( 22, "/* shift_left */" )
 	static char const CORRECT[] = "Ala ma kota";
 	static int const SHIFT = 4;
 	HString str( CORRECT );
@@ -351,13 +291,9 @@ void module::test<22>( void )
 		}
 	str.shift_left( 100000 );
 	ensure_equals( "left_shift failed", str, "" );
-	}
+TUT_TEARDOWN()
 
-/* shift_right */
-template<>
-template<>
-void module::test<23> ( void )
-	{
+TUT_UNIT_TEST_N( 23, "/* shift_right */" )
 	static char const CORRECT[] = "    Ala ma kota";
 	static int const SHIFT = 4;
 	HString str( CORRECT + SHIFT );
@@ -372,13 +308,9 @@ void module::test<23> ( void )
 		{
 		cout << e.what() << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* mid */
-template<>
-template<>
-void module::test<24>( void )
-	{
+TUT_UNIT_TEST_N( 24, "/* mid */" )
 	char source[] = "abecadlo";
 	HString str( source );
 	char mid_failed[] = "mid failed";
@@ -390,22 +322,14 @@ void module::test<24>( void )
 	ensure_equals( mid_failed, str.mid( -15, 18 ), "abe" );
 	ensure_equals( mid_failed, str.mid( 2, 2 ), "ec" );
 	ensure_equals( mid_failed, str.mid( 2 ), "ecadlo" );
-	}
+TUT_TEARDOWN()
 
-/* right */
-template<>
-template<>
-void module::test<26>( void )
-	{
+TUT_UNIT_TEST_N( 26, "/* right */" )
 	HString str( "ala/." );
 	ensure_equals( "wrong right part extraction", str.right( 1 ), "." );
-	}
+TUT_TEARDOWN()
 
-/* erase */
-template<>
-template<>
-void module::test<27>( void )
-	{
+TUT_UNIT_TEST_N( 27, "/* erase */" )
 	HString str;
 	char s[] = "Ala ma kota";
 	char erase_failed[] = "erase failed";
@@ -418,13 +342,9 @@ void module::test<27>( void )
 	str = s;ensure_equals( erase_failed, str.erase( 0, 100 ), "" );
 	HString str2( "|==--|[100%]" );
 	ensure_equals( erase_failed, str2.erase( 7, 4 ), "|==--|[]" );
-	}
+TUT_TEARDOWN()
 
-/* insert */
-template<>
-template<>
-void module::test<28>( void )
-	{
+TUT_UNIT_TEST_N( 28, "/* insert */" )
 	HString str;
 	char s[] = "abcdef";
 	char insert_failed[] = "insert failed";
@@ -458,13 +378,9 @@ void module::test<28>( void )
 	str = s;ensure_equals( insert_failed, str.insert( 7, 3, "ABCD" ), "abcdef" );
 	HString str2( "|==--|[]" );
 	ensure_equals( insert_failed, str2.insert( 7, 4, "done" ), "|==--|[done]" );
-	}
+TUT_TEARDOWN()
 
-/* find */
-template<>
-template<>
-void module::test<29>( void )
-	{
+TUT_UNIT_TEST_N( 29, "/* find */" )
 	HString str = "abcXYdeYXf";
 	char failed[] = "find failed[%d]";
 	ensure_equals( HString().format( failed, 0 ), str.find( 'A' ), -1 );
@@ -485,13 +401,9 @@ void module::test<29>( void )
 	HString line( PREF );
 	line += SUFF;
 	ensure_equals( HString().format( failed, 13 ), line.find( PREF ), 0 );
-	}
+TUT_TEARDOWN()
 
-/* find_one_of */
-template<>
-template<>
-void module::test<30>( void )
-	{
+TUT_UNIT_TEST_N( 30, "/* find_one_of */" )
 	HString str = "abcXYdeYXf";
 	char failed[] = "find_one_of failed";
 	ensure_equals( failed, str.find_one_of( "ABCD" ), -1 );
@@ -507,13 +419,9 @@ void module::test<30>( void )
 	ensure_equals( failed, str.find_one_of( "AYD", 9 ), -1 );
 	ensure_equals( failed, str.find_one_of( "AXYB", 90 ), -1 );
 	ensure_equals( failed, str.find_one_of( "AYD", 90 ), -1 );
-	}
+TUT_TEARDOWN()
 
-/* find_other_than */
-template<>
-template<>
-void module::test<31>( void )
-	{
+TUT_UNIT_TEST_N( 31, "/* find_other_than */" )
 	HString str = "abcXYdeYXfg";
 	char failed[] = "find_other_than failed[%d]";
 	ensure_equals( HString().format( failed, 0 ), str.find_other_than( "abcXYdeYXfg" ), -1 );
@@ -522,13 +430,9 @@ void module::test<31>( void )
 	ensure_equals( HString().format( failed, 3 ), str.find_other_than( "abXYdeYXfg", 3 ), -1 );
 	ensure_equals( HString().format( failed, 4 ), str.find_other_than( "abcdefg" ), 3 );
 	ensure_equals( HString().format( failed, 5 ), str.find_other_than( "abcdefg", 5 ), 7 );
-	}
+TUT_TEARDOWN()
 
-/* reverse_find */
-template<>
-template<>
-void module::test<32>( void )
-	{
+TUT_UNIT_TEST_N( 32, "/* reverse_find */" )
 	HString str = "fXYedYXcba";
 	char failed[] = "reverse_find failed[%d]";
 	ensure_equals( HString().format( failed, 0 ), str.reverse_find( 'A' ), -1 );
@@ -544,13 +448,9 @@ void module::test<32>( void )
 	ensure_equals( HString().format( failed, 10 ), str.reverse_find( 'Y', 9 ), -1 );
 	ensure_equals( HString().format( failed, 11 ), str.reverse_find( 'X', 90 ), -1 );
 	ensure_equals( HString().format( failed, 12 ), str.reverse_find( 'Y', 90 ), -1 );
-	}
+TUT_TEARDOWN()
 
-/* reverse_find_one_of */
-template<>
-template<>
-void module::test<33>( void )
-	{
+TUT_UNIT_TEST_N( 33, "/* reverse_find_one_of */" )
 	HString str = "fXYedYXcba";
 	char failed[] = "reverse_find_one_of failed[%d]";
 	ensure_equals( HString().format( failed, 0 ), str.reverse_find_one_of( "ABCD" ), -1 );
@@ -566,13 +466,9 @@ void module::test<33>( void )
 	ensure_equals( HString().format( failed, 10 ), str.reverse_find_one_of( "AYD", 9 ), -1 );
 	ensure_equals( HString().format( failed, 11 ), str.reverse_find_one_of( "AXYB", 90 ), -1 );
 	ensure_equals( HString().format( failed, 12 ), str.reverse_find_one_of( "AYD", 90 ), -1 );
-	}
+TUT_TEARDOWN()
 
-/* reverse_find_other_than */
-template<>
-template<>
-void module::test<34>( void )
-	{
+TUT_UNIT_TEST_N( 34, "/* reverse_find_other_than */" )
 	HString str = "gfXYedYXcba";
 	char failed[] = "reverse_find_other_than failed[%d]";
 	ensure_equals( HString().format( failed, 0 ), str.reverse_find_other_than( "abcXYdeYXfg" ), -1 );
@@ -581,7 +477,7 @@ void module::test<34>( void )
 	ensure_equals( HString().format( failed, 3 ), str.reverse_find_other_than( "abXYdeYXfg", 3 ), -1 );
 	ensure_equals( HString().format( failed, 4 ), str.reverse_find_other_than( "abcdefg" ), 3 );
 	ensure_equals( HString().format( failed, 5 ), str.reverse_find_other_than( "abcdefg", 5 ), 7 );
-	}
+TUT_TEARDOWN()
 
 int confirm( char const* const str, int const& size, char const* const pat, int const& len )
 	{
@@ -602,11 +498,7 @@ struct gen_char
 		{ return ( static_cast<char>( _rnd.rnd( 1 + 'z' - 'a' ) + 'a' ) ); }
 	};
 
-/* find("") */
-template<>
-template<>
-void module::test<35>( void )
-	{
+TUT_UNIT_TEST_N( 35, "/* find("") */" )
 	static int const SAMPLE_SIZE = 128;
 	char sample[ SAMPLE_SIZE + 1 ];
 	sample[ SAMPLE_SIZE ] = 0;
@@ -633,13 +525,9 @@ void module::test<35>( void )
 			while ( where >= 0 );
 			}
 		}
-	}
+TUT_TEARDOWN()
 
-/* trim_left("") */
-template<>
-template<>
-void module::test<36>( void )
-	{
+TUT_UNIT_TEST_N( 36, "/* trim_left("") */" )
 	static char const* const SPACE = "   ";
 	static HString const TEXT = "ala ma";
 	static char const* const FINE = "1234";
@@ -649,13 +537,9 @@ void module::test<36>( void )
 	ensure_equals( "trim failed", fine.trim_left(), fine );
 	HString space( SPACE );
 	ensure_equals( "trim failed", space.trim_left(), "" );
-	}
+TUT_TEARDOWN()
 
-/* trim_right("") */
-template<>
-template<>
-void module::test<37>( void )
-	{
+TUT_UNIT_TEST_N( 37, "/* trim_right("") */" )
 	static char const* const SPACE = "   ";
 	static HString const TEXT = "ala ma";
 	static char const* const FINE = "1234";
@@ -665,7 +549,7 @@ void module::test<37>( void )
 	ensure_equals( "trim 1 failed", fine.trim_right(), fine );
 	HString space( SPACE );
 	ensure_equals( "trim 2 failed", space.trim_right(), "" );
-	}
+TUT_TEARDOWN()
 
 }
 

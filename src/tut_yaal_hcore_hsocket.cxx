@@ -43,6 +43,8 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
+#define STEP( code ) do { cout << "executing: " << #code << "... " << flush; { code; } cout << " ok." << endl; } while( 0 )
+
 struct tut_yaal_hcore_hsocket
 	{
 	tut_yaal_hcore_hsocket( void )
@@ -56,20 +58,26 @@ struct tut_yaal_hcore_hsocket
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hsocket, "yaal::hcore::HSocket" );
 
-struct OServer : public HThread
+struct OServer
 	{
+	typedef HThreadT<OServer> thread_t;
 	int f_iSize;
 	char* f_pcBuffer;
 	HSocket::ptr_t f_oSocket;
-	OServer( void ) : f_iSize( 0 ), f_pcBuffer( NULL ), f_oSocket() {}
-protected:
-	virtual int run( void );
+	thread_t f_oThread;
+	OServer( void ) : f_iSize( 0 ), f_pcBuffer( NULL ), f_oSocket(), f_oThread( *this ) {}
+public:
+	void start( void )
+		{ f_oThread.spawn(); }
+	void stop( void )
+		{ f_oThread.finish(); }
+	int operator()( thread_t const* const );
 private:
 	OServer( OServer const& );
 	OServer& operator = ( OServer const& );
 	};
 
-int OServer::run( void )
+int OServer::operator()( thread_t const* const )
 	{
 	int ret = -1;
 	try
@@ -84,20 +92,12 @@ int OServer::run( void )
 	return ( ret );
 	}
 
-/* Simple construction and destruction. */
-template<>
-template<>
-void module::test<1> ( void )
-	{
+TUT_UNIT_TEST_N( 1, "/* Simple construction and destruction. */" )
 	HSocket l_oSocket;
 	ensure_equals ( "uninitialized socket has port", l_oSocket.get_port(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* Constructions with wrong parameters. */
-template<>
-template<>
-void module::test<2> ( void )
-	{
+TUT_UNIT_TEST_N( 2, "/* Constructions with wrong parameters. */" )
 	try
 		{
 		HSocket l_oSocket( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::NETWORK );
@@ -116,13 +116,9 @@ void module::test<2> ( void )
 		{
 		cout << e.what() << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* Getting port on file socket. */
-template<>
-template<>
-void module::test<3> ( void )
-	{
+TUT_UNIT_TEST_N( 3, "/* Getting port on file socket. */" )
 	HSocket l_oSocket( HSocket::TYPE::FILE );
 	try
 		{
@@ -133,13 +129,9 @@ void module::test<3> ( void )
 		{
 		cout << e.what() << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* Listening on reserved port. */
-template<>
-template<>
-void module::test<4> ( void )
-	{
+TUT_UNIT_TEST_N( 4, "/* Listening on reserved port. */" )
 	HSocket l_oSocket ( HSocket::TYPE::NETWORK, 1 );
 	try
 		{
@@ -150,13 +142,9 @@ void module::test<4> ( void )
 		{
 		cout << e.what() << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* Listening on existing file. */
-template<>
-template<>
-void module::test<5> ( void )
-	{
+TUT_UNIT_TEST_N( 5, "/* Listening on existing file. */" )
 	HSocket l_oSocket ( HSocket::TYPE::FILE, 1 );
 	try
 		{
@@ -167,13 +155,9 @@ void module::test<5> ( void )
 		{
 		cout << e.what() << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* Listening on protected file. */
-template<>
-template<>
-void module::test<6> ( void )
-	{
+TUT_UNIT_TEST_N( 6, "/* Listening on protected file. */" )
 	HSocket l_oSocket ( HSocket::TYPE::FILE, 1 );
 	try
 		{
@@ -184,13 +168,9 @@ void module::test<6> ( void )
 		{
 		cout << e.what() << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* Listening on already listening socket. */
-template<>
-template<>
-void module::test<7> ( void )
-	{
+TUT_UNIT_TEST_N( 7, "/* Listening on already listening socket. */" )
 	HSocket l_oSocket ( HSocket::TYPE::FILE, 1 );
 	l_oSocket.listen ( "/tmp/TUT_socket" );
 	try
@@ -202,13 +182,9 @@ void module::test<7> ( void )
 		{
 		cout << e.what() << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* Listening with bad maximum number of clients. */
-template<>
-template<>
-void module::test<8> ( void )
-	{
+TUT_UNIT_TEST_N( 8, "/* Listening with bad maximum number of clients. */" )
 	HSocket l_oSocket ( HSocket::TYPE::FILE );
 	try
 		{
@@ -219,13 +195,9 @@ void module::test<8> ( void )
 		{
 		cout << e.what() << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* Accept on socket that is not listening. */
-template<>
-template<>
-void module::test<9> ( void )
-	{
+TUT_UNIT_TEST_N( 9, "/* Accept on socket that is not listening. */" )
 	HSocket l_oSocket;
 	try
 		{
@@ -236,13 +208,9 @@ void module::test<9> ( void )
 		{
 		cout << e.what() << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* Transfering data through file. */
-template<>
-template<>
-void module::test<19> ( void )
-	{
+TUT_UNIT_TEST_N( 19, "/* Transfering data through file. */" )
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
 	char reciv_buffer[ size + 1 ];
@@ -256,7 +224,7 @@ void module::test<19> ( void )
 	reciv_buffer[ size ] = 0;
 	ensure_equals( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
 	cout << reciv_buffer << endl;
-	}
+TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 20, "Transfering data through file with SSL." )
 	char test_data[] = "Ala ma kota.";
@@ -270,20 +238,16 @@ TUT_UNIT_TEST_N( 20, "Transfering data through file with SSL." )
 	serv.f_oSocket = l_oServer.accept();
 	serv.f_pcBuffer = reciv_buffer;
 	serv.f_iSize = size;
-	serv.spawn();
-	l_oClient.write( test_data, size );
-	l_oClient.close();
-	serv.finish();
+	STEP( serv.start() );
+	STEP( l_oClient.write( test_data, size ) );
+	STEP( l_oClient.close() );
+	STEP( serv.stop() );
 	reciv_buffer[ size ] = 0;
 	ensure_equals( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
 	cout << reciv_buffer << endl;
 TUT_TEARDOWN()
 
-/* Transfering data through network. */
-template<>
-template<>
-void module::test<21>( void )
-	{
+TUT_UNIT_TEST_N( 21, "/* Transfering data through network. */" )
 	char test_data[] = "A kot ma wpierdol.";
 	const int size = sizeof ( test_data );
 	char reciv_buffer[ size + 1 ];
@@ -297,7 +261,7 @@ void module::test<21>( void )
 	reciv_buffer[ size ] = 0;
 	ensure_equals( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
 	cout << reciv_buffer << endl;
-	}
+TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 22, "Transfering data through network with SSL." )
 	char test_data[] = "A kot ma wpierdol.";
@@ -311,10 +275,10 @@ TUT_UNIT_TEST_N( 22, "Transfering data through network with SSL." )
 	serv.f_oSocket = l_oServer.accept();
 	serv.f_pcBuffer = reciv_buffer;
 	serv.f_iSize = size;
-	serv.spawn();
+	serv.start();
 	l_oClient.write( test_data, size );
 	l_oClient.close();
-	serv.finish();
+	serv.stop();
 	reciv_buffer[ size ] = 0;
 	ensure_equals( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
 	cout << reciv_buffer << endl;

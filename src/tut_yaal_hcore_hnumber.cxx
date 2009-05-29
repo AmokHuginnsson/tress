@@ -76,33 +76,21 @@ typedef test_group<tut_yaal_hcore_hnumber> tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_hcore_hnumber_group( "yaal::hcore::HNumber" );
 
-/* default constructor / check default precision */
-template<>
-template<>
-void module::test<1>( void )
-	{
+TUT_UNIT_TEST_N( 1, "/* default constructor / check default precision */" )
 	HNumber n;
 	ensure_equals( "bad default number", n.to_string(), "0" );
 	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << n.to_string() << endl;
-	}
+TUT_TEARDOWN()
 
-/* construct from double */
-template<>
-template<>
-void module::test<2>( void )
-	{
+TUT_UNIT_TEST_N( 2, "/* construct from double */" )
 	HNumber n( 3.14159265 );
 	ensure_equals( "number not created correctly", n.to_string(), "3.14159265" );
 	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << n.to_string() << endl;
-	}
+TUT_TEARDOWN()
 
-/* construct from double and specify precision / get precision */
-template<>
-template<>
-void module::test<3>( void )
-	{
+TUT_UNIT_TEST_N( 3, "/* construct from double and specify precision / get precision */" )
 	int const P1 = 20;
 	HNumber n( 3.14159265, P1 );
 	ensure_equals( "number not created correctly", n.to_string(), "3.14159265" );
@@ -112,13 +100,9 @@ void module::test<3>( void )
 	int const P2 = 4;
 	HNumber n2( 3.14159265, P2 );
 	ensure_equals( "bad precision (shall be at least hardcoded minimum)", n2.get_precision(), M );
-	}
+TUT_TEARDOWN()
 
-/* construct from string */
-template<>
-template<>
-void module::test<4>( void )
-	{
+TUT_UNIT_TEST_N( 4, "/* construct from string */" )
 	char const* const pn0 = "3.14159265";
 	HNumber n0( pn0 );
 	ensure_equals( "number not created correctly", n0.to_string(), pn0 );
@@ -286,13 +270,9 @@ void module::test<4>( void )
 	ensure_equals( "number 1 10 not created correctly", HNumber( "-.0001" ).to_string(), "-.0001" );
 	ensure_equals( "number 1 11 not created correctly", HNumber( "-000.001" ).to_string(), "-.001" );
 	ensure_equals( "number 1 12 not created correctly", HNumber( "-0001." ).to_string(), "-1" );
-	}
+TUT_TEARDOWN()
 
-/* construct from string (prefixes) */
-template<>
-template<>
-void module::test<5>( void )
-	{
+TUT_UNIT_TEST_N( 5, "/* construct from string (prefixes) */" )
 	char const* const pn0 = "???3.14159265";
 	HNumber n0( pn0 );
 	ensure_equals( "number not created correctly", n0.to_string(), pn0 + 3 );
@@ -415,13 +395,9 @@ void module::test<5>( void )
 	ensure_equals( "number not created correctly", n8.to_string(), "2.7" );
 	ensure_equals( "bad dafault precision", n8.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n8 =" << n8.to_string() << " |" << endl;
-	}
+TUT_TEARDOWN()
 
-/* construct from string (postfixes) */
-template<>
-template<>
-void module::test<6>( void )
-	{
+TUT_UNIT_TEST_N( 6, "/* construct from string (postfixes) */" )
 	char const* const pn0ok = "3.14159265";
 	char const* const pn0 = "3.14159265???";
 	HNumber n0( pn0 );
@@ -549,13 +525,9 @@ void module::test<6>( void )
 	ensure_equals( "number not created correctly", n8.to_string(), "2.7" );
 	ensure_equals( "bad dafault precision", n8.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n8 =" << n8.to_string() << " |" << endl;
-	}
+TUT_TEARDOWN()
 
-/* construct from string (prepostfixes) */
-template<>
-template<>
-void module::test<7>( void )
-	{
+TUT_UNIT_TEST_N( 7, "/* construct from string (prepostfixes) */" )
 	char const* const pn0ok = "3.14159265";
 	char const* const pn0 = "???3.14159265???";
 	HNumber n0( pn0 );
@@ -683,13 +655,9 @@ void module::test<7>( void )
 	ensure_equals( "number not created correctly", n8.to_string(), "2.7" );
 	ensure_equals( "bad dafault precision", n8.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n8 =" << n8.to_string() << " |" << endl;
-	}
+TUT_TEARDOWN()
 
-/* construct from string and specify precision */
-template<>
-template<>
-void module::test<8>( void )
-	{
+TUT_UNIT_TEST_N( 8, "/* construct from string and specify precision */" )
 	char const* const pn0 = "3.14159265";
 	int const P1 = 20;
 	HNumber n0( pn0, P1 );
@@ -700,13 +668,9 @@ void module::test<8>( void )
 	int const P2 = 4;
 	HNumber n2( pn0, P2 );
 	ensure_equals( "bad precision (shall be at least hardcoded minimum)", n2.get_precision(), M );
-	}
+TUT_TEARDOWN()
 
-/* copy constructor */
-template<>
-template<>
-void module::test<9>( void )
-	{
+TUT_UNIT_TEST_N( 9, "/* copy constructor */" )
 	HNumber n( 3.14159265 );
 	ensure_equals( "number not created correctly", n.to_string(), "3.14159265" );
 	ensure_equals( "bad dafault precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
@@ -721,13 +685,9 @@ void module::test<9>( void )
 	HNumber copy0( n0 );
 	ensure_equals( "number not created correctly", copy0.to_string(), pn0 );
 	ensure_equals( "bad dafault precision", copy0.get_precision(), P1 );
-	}
+TUT_TEARDOWN()
 
-/* set/get precision */
-template<>
-template<>
-void module::test<10>( void )
-	{
+TUT_UNIT_TEST_N( 10, "/* set/get precision */" )
 	HNumber n;
 	int const M = 16;
 	int const P = 20;
@@ -765,13 +725,9 @@ void module::test<10>( void )
 	n.set_precision( F );
 	ensure_equals( "bad modified precision", s.get_precision(), M );
 	HNumber::DEFAULT_PRECISION = SAVED;
-	}
+TUT_TEARDOWN()
 
-/* assignment operator */
-template<>
-template<>
-void module::test<11>( void )
-	{
+TUT_UNIT_TEST_N( 11, "/* assignment operator */" )
 	char const* const p0 = "3.14159265";
 	HNumber::DEFAULT_PRECISION = 20;
 	HNumber n( p0 );
@@ -792,13 +748,9 @@ void module::test<11>( void )
 	another = next;
 	ensure_equals( "number not created correctly", another.to_string(), p1 );
 	ensure_equals( "bad dafault precision", another.get_precision(), HNumber::DEFAULT_PRECISION + 5 );
-	}
+TUT_TEARDOWN()
 
-/* equality operator */
-template<>
-template<>
-void module::test<12>( void )
-	{
+TUT_UNIT_TEST_N( 12, "/* equality operator */" )
 	char const* const p0 = "3.14159265";
 	char const* const p1 = "3.14159265";
 	char const* const p2 = "3.141593";
@@ -807,13 +759,9 @@ void module::test<12>( void )
 	HNumber n2( p2 );
 	ensure( "equality failed", n0 == n1 );
 	ensure( "equality failed (not equal)", ! ( n0 == n2 ) );
-	}
+TUT_TEARDOWN()
 
-/* difference operator */
-template<>
-template<>
-void module::test<13>( void )
-	{
+TUT_UNIT_TEST_N( 13, "/* difference operator */" )
 	char const* const p0 = "3.14159265";
 	char const* const p1 = "3.14159265";
 	char const* const p2 = "3.141593";
@@ -822,13 +770,9 @@ void module::test<13>( void )
 	HNumber n2( p2 );
 	ensure( "difference failed", n0 != n2 );
 	ensure( "difference failed (equal)", ! ( n0 != n1 ) );
-	}
+TUT_TEARDOWN()
 
-/* lower then operator */
-template<>
-template<>
-void module::test<14>( void )
-	{
+TUT_UNIT_TEST_N( 14, "/* lower then operator */" )
 	ensure( "lower failed a", HNumber( "-1" ) < HNumber( "1" ) );
 	ensure( "lower failed b", HNumber( "-1" ) < HNumber( "0" ) );
 	ensure( "lower failed c", HNumber( "-1" ) < HNumber( "-0.5" ) );
@@ -851,13 +795,9 @@ void module::test<14>( void )
 	ensure( "lower failed q", ! ( HNumber( ".1" ) < HNumber( ".1" ) ) );
 	ensure( "lower failed r", ! ( HNumber( "-.1" ) < HNumber( "-.1" ) ) );
 	ensure( "lower failed s", ! ( HNumber( "0" ) < HNumber( "0" ) ) );
-	}
+TUT_TEARDOWN()
 
-/* lower or equal then operator */
-template<>
-template<>
-void module::test<15>( void )
-	{
+TUT_UNIT_TEST_N( 15, "/* lower or equal then operator */" )
 	ensure( "lower-eq failed a", HNumber( "-1" ) <= HNumber( "1" ) );
 	ensure( "lower-eq failed b", HNumber( "-1" ) <= HNumber( "0" ) );
 	ensure( "lower-eq failed c", HNumber( "-1" ) <= HNumber( "-0.5" ) );
@@ -880,13 +820,9 @@ void module::test<15>( void )
 	ensure( "lower-eq failed m", ! ( HNumber( "1" ) <= HNumber( ".2" ) ) );
 	ensure( "lower-eq failed f2", ! ( HNumber( ".1231" ) <= HNumber( ".123" ) ) );
 	ensure( "lower-eq failed n", ! ( HNumber( "3.145" ) <= HNumber( "2.734543" ) ) );
-	}
+TUT_TEARDOWN()
 
-/* greater then operator */
-template<>
-template<>
-void module::test<16>( void )
-	{
+TUT_UNIT_TEST_N( 16, "/* greater then operator */" )
 	ensure( "greater failed a", HNumber( "1" ) > HNumber( "-1" ) );
 	ensure( "greater failed b", HNumber( "0" ) > HNumber( "-1" ) );
 	ensure( "greater failed c", HNumber( "-0.5" ) > HNumber( "-1" ) );
@@ -909,13 +845,9 @@ void module::test<16>( void )
 	ensure( "greater failed q", ! ( HNumber( ".1" ) > HNumber( ".1" ) ) );
 	ensure( "greater failed r", ! ( HNumber( "-.1" ) > HNumber( "-.1" ) ) );
 	ensure( "greater failed s", ! ( HNumber( "0" ) > HNumber( "0" ) ) );
-	}
+TUT_TEARDOWN()
 
-/* greater or equal then operator */
-template<>
-template<>
-void module::test<17>( void )
-	{
+TUT_UNIT_TEST_N( 17, "/* greater or equal then operator */" )
 	ensure( "greater-eq failed a", HNumber( "1" ) >= HNumber( "-1" ) );
 	ensure( "greater-eq failed b", HNumber( "0" ) >= HNumber( "-1" ) );
 	ensure( "greater-eq failed c", HNumber( "-0.5" ) >= HNumber( "-1" ) );
@@ -938,7 +870,7 @@ void module::test<17>( void )
 	ensure( "greater-eq failed q", HNumber( ".1" ) >= HNumber( ".1" ) );
 	ensure( "greater-eq failed r", HNumber( "-.1" ) >= HNumber( "-.1" ) );
 	ensure( "greater-eq failed s", HNumber( "0" ) >= HNumber( "0" ) );
-	}
+TUT_TEARDOWN()
 
 /*
  * :::::.:::::::::
@@ -950,11 +882,7 @@ void module::test<17>( void )
  *
  */
 
-/* addition */
-template<>
-template<>
-void module::test<18>( void )
-	{
+TUT_UNIT_TEST_N( 18, "/* addition */" )
 	ensure_equals( "addition failed a", ( HNumber( "0" ) + HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
 	ensure_equals( "addition failed a1", ( HNumber( "6" ) + HNumber( "7" ) ).to_string(), HNumber( "13" ).to_string() );
 	ensure_equals( "addition failed b", ( HNumber( "1" ) + HNumber( "0" ) ).to_string(), HNumber( "1" ).to_string() );
@@ -1004,13 +932,9 @@ void module::test<18>( void )
 		msg += "(R)";
 		ensure_equals( msg, ( b + a ).to_string(), HNumber( res ).to_string() );
 		}
-	}
+TUT_TEARDOWN()
 
-/* multiplication */
-template<>
-template<>
-void module::test<19>( void )
-	{
+TUT_UNIT_TEST_N( 19, "/* multiplication */" )
 	//ensure_equals( "multiplication failed x", ( HNumber( ".011931709189" ) * HNumber( "-154.734375" ) ).to_string(), HNumber( "-1.846245564041671875" ).to_string() );
 	ensure_equals( "multiplication failed a", ( HNumber( "0" ) * HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
 	ensure_equals( "multiplication failed b", ( HNumber( "0" ) * HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
@@ -1040,13 +964,9 @@ void module::test<19>( void )
 		msg += "(R)";
 		ensure_equals( msg, ( b * a ).to_string(), HNumber( res ).to_string() );
 		}
-	}
+TUT_TEARDOWN()
 
-/* substraction */
-template<>
-template<>
-void module::test<20>( void )
-	{
+TUT_UNIT_TEST_N( 20, "/* substraction */" )
 	_bc.spawn( BC_PATH );
 	HString msg;
 	HString res;
@@ -1065,13 +985,9 @@ void module::test<20>( void )
 		msg += "(R)";
 		ensure_equals( msg, ( b - a ).to_string(), ( -HNumber( res ) ).to_string() );
 		}
-	}
+TUT_TEARDOWN()
 
-/* division */
-template<>
-template<>
-void module::test<21>( void )
-	{
+TUT_UNIT_TEST_N( 21, "/* division */" )
 	try
 		{
 		HNumber n( "1" );
@@ -1316,25 +1232,17 @@ void module::test<21>( void )
 		if ( z >= 0 )
 			ensure_equals( msg, div.to_string().left( len - z ), res.left( len - z ) );
 		}
-	}
+TUT_TEARDOWN()
 
-/* opposite */
-template<>
-template<>
-void module::test<22>( void )
-	{
+TUT_UNIT_TEST_N( 22, "/* opposite */" )
 	ensure_equals( "opposite failed a", ( - HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
 	ensure_equals( "opposite failed b", ( - HNumber( "1" ) ).to_string(), HNumber( "-1" ).to_string() );
 	ensure_equals( "opposite failed c", ( - HNumber( "-1" ) ).to_string(), HNumber( "1" ).to_string() );
 	ensure_equals( "opposite failed d", ( - HNumber( ".01" ) ).to_string(), HNumber( "-.01" ).to_string() );
 	ensure_equals( "opposite failed e", ( - HNumber( "-.01" ) ).to_string(), HNumber( ".01" ).to_string() );
-	}
+TUT_TEARDOWN()
 
-/* bc */
-template<>
-template<>
-void module::test<23>( void )
-	{
+TUT_UNIT_TEST_N( 23, "/* bc */" )
 	HNumber n = 3;
 	n ^= 33333;
 	HString myRes = n.to_string();
@@ -1343,7 +1251,7 @@ void module::test<23>( void )
 	HString bcRes;
 	_bc.read_until( bcRes );
 	ensure_equals( "karatsuba failed", myRes, bcRes );
-	}
+TUT_TEARDOWN()
 
 }
 

@@ -60,11 +60,7 @@ typedef test_group<tut_yaal_hcore_hhashmap> tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_hcore_hhashmap_group( "yaal::hcore::HHashMap" );
 
-/* Simple constructor. */
-template<>
-template<>
-void module::test<1>( void )
-	{
+TUT_UNIT_TEST_N( 1, "/* Simple constructor. */" )
 	try
 		{
 		hash_map_t map( 0 );
@@ -74,37 +70,25 @@ void module::test<1>( void )
 		{
 		cout << e.what() << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* Quantity test. */
-template<>
-template<>
-void module::test<2>( void )
-	{
+TUT_UNIT_TEST_N( 2, "/* Quantity test. */" )
 	hash_map_t map( 17 );
 	ensure_equals ( "newly created map is not empty", map.size(), 0 );
 	map[ 0 ] = 7;
 	ensure_equals ( "wrong size after add", map.size(), 1 );
-	}
+TUT_TEARDOWN()
 
-/* element insertion */
-template<>
-template<>
-void module::test<3>( void )
-	{
+TUT_UNIT_TEST_N( 3, "/* element insertion */" )
 	hash_map_t map( TEST_PRIME );
 	for ( int i = 0; i < ELEM_COUNT; ++ i )
 		{
 		map[ i ] = i;
 		ensure_equals ( "wrong size after addition", map.size(), i + 1 );
 		}
-	}
+TUT_TEARDOWN()
 
-/* iterate */
-template<>
-template<>
-void module::test<4>( void )
-	{
+TUT_UNIT_TEST_N( 4, "/* iterate */" )
 	hash_map_t map( TEST_PRIME );
 	for ( int i = 0; i < ELEM_COUNT; ++ i )
 		map[ i ] = i;
@@ -112,13 +96,9 @@ void module::test<4>( void )
 	for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it, ++ i )
 		ensure_equals ( "key/value mismatch", it->value, it->key );
 	ensure_equals ( "bad number of iterations", i, ELEM_COUNT );
-	}
+TUT_TEARDOWN()
 
-/* key, value access */
-template<>
-template<>
-void module::test<5>( void )
-	{
+TUT_UNIT_TEST_N( 5, "/* key, value access */" )
 	hash_map_t map( TEST_PRIME );
 	for ( int i = 0; i < ELEM_COUNT; ++ i )
 		map[ i ] = i;
@@ -129,13 +109,9 @@ void module::test<5>( void )
 		ensure( "cannot get", ! map.get( i, value ) );
 		ensure_equals ( "key/value mismatch", value, i );
 		}
-	}
+TUT_TEARDOWN()
 
-/* key removal */
-template<>
-template<>
-void module::test<6>( void )
-	{
+TUT_UNIT_TEST_N( 6, "/* key removal */" )
 	hash_map_t map( TEST_PRIME );
 	for ( int i = 0; i < ELEM_COUNT; ++ i )
 		{
@@ -149,13 +125,9 @@ void module::test<6>( void )
 		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
 			ensure_equals ( "key/value mismatch", it->value, it->key );
 		}
-	}
+TUT_TEARDOWN()
 
-/* iteration on large table with few elements */
-template<>
-template<>
-void module::test<7>( void )
-	{
+TUT_UNIT_TEST_N( 7, "/* iteration on large table with few elements */" )
 	hash_map_t map( LARGE_TABLE );
 	for ( int i = 0; i < FEW_ELEMENTS; ++ i )
 		map[ i ] = i;
@@ -163,6 +135,6 @@ void module::test<7>( void )
 	for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it, ++ i )
 		ensure_equals ( "key/value mismatch", it->value, it->key );
 	ensure_equals ( "bad number of iterations", i, FEW_ELEMENTS );
-	}
+TUT_TEARDOWN()
 
 }

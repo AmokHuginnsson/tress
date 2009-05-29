@@ -131,20 +131,12 @@ tut_group tut_yaal_hcore_hpointer_group ( "yaal::hcore::HPointer" );
 
 typedef HPointer<tut_yaal_hcore_hpointer::counter_t> ptr_t;
 
-/* Default constructor. */
-template<>
-template<>
-void module::test<1>( void )
-	{
+TUT_UNIT_TEST_N( 1, "/* Default constructor. */" )
 	ptr_t ptr;
 	ensure_equals ( "failed to invoke destructor", ptr.raw(), static_cast<counter_t*>( NULL ) );
-	}
+TUT_TEARDOWN()
 
-/* Constructor. */
-template<>
-template<>
-void module::test<2>( void )
-	{
+TUT_UNIT_TEST_N( 2, "/* Constructor. */" )
 		{
 		counter_t* p = NULL;
 		ptr_t ptr( p = new counter_t() );
@@ -152,13 +144,9 @@ void module::test<2>( void )
 		ptr->foo();
 		}
 	ensure_equals ( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* Copy constructor. */
-template<>
-template<>
-void module::test<3>( void )
-	{
+TUT_UNIT_TEST_N( 3, "/* Copy constructor. */" )
 		{
 		counter_t* p = NULL;
 		ptr_t ptr = ptr_t( p = new counter_t() );
@@ -166,13 +154,9 @@ void module::test<3>( void )
 		ptr->foo();
 		}
 	ensure_equals( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* Assign operator. */
-template<>
-template<>
-void module::test<4>( void )
-	{
+TUT_UNIT_TEST_N( 4, "/* Assign operator. */" )
 		{
 		counter_t* p = NULL;
 		ptr_t sp1 = ptr_t( new counter_t() );
@@ -186,15 +170,9 @@ void module::test<4>( void )
 		sp1->foo();
 		}
 	ensure_equals( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/**
- * Checks constructor with another ptr_t with no module.
- */
-template<>
-template<>
-void module::test<5>()
-	{
+TUT_UNIT_TEST_N( 5, "/* Checks constructor with another ptr_t with no module. */" )
 		{
 		ptr_t sp1;
 		ensure_equals( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
@@ -204,15 +182,9 @@ void module::test<5>()
 		ensure( sp2.raw() == 0 );
 		}
 	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
-	}
+TUT_TEARDOWN()
 
-/**
- * Checks constructor with another ptr_t with module.
- */
-template<>
-template<>
-void module::test<6>()
-	{
+TUT_UNIT_TEST_N( 6, "/* Checks constructor with another ptr_t with module. */" )
 		{
 		counter_t* p = new counter_t();
 		ptr_t sp1(p);
@@ -223,19 +195,13 @@ void module::test<6>()
 		}
 	// ptr left scope
 	ensure_equals( "destructed", counter_t::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
 // =================================================
 // Assignment operators
 // =================================================
 
-/**
- * Checks assignment with non-null module.
- */
-template<>
-template<>
-void module::test<7>()
-	{
+TUT_UNIT_TEST_N( 7, "/* Checks assignment with non-null module. */" )
 		{
 		counter_t* p = new counter_t();
 		ptr_t sp( p );
@@ -243,15 +209,9 @@ void module::test<7>()
 		ensure("leak !!!", counter_t::get_instance_count() == 1);
 		}
 	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
-	}
+TUT_TEARDOWN()
 
-/**
- * Checks assignment with ptr_t with non-null module.
- */
-template<>
-template<>
-void module::test<8>()
-	{
+TUT_UNIT_TEST_N( 8, "/* Checks assignment with ptr_t with non-null module. */" )
 		{
 		counter_t* p = NULL;
 		ptr_t sp1( p = new counter_t() );
@@ -262,15 +222,9 @@ void module::test<8>()
 		ensure_equals( "leak !!!", counter_t::get_instance_count(), 1 );
 		}
 	ensure_equals( "destructed", counter_t::get_instance_count(), 0 );
-	}
+TUT_TEARDOWN()
 
-/**
- * Checks assignment with itself.
- */
-template<>
-template<>
-void module::test<9>()
-	{
+TUT_UNIT_TEST_N( 9, "/* Checks assignment with itself. */" )
 		{
 		ptr_t sp1( new counter_t() );
 		sp1 = sp1;
@@ -279,20 +233,14 @@ void module::test<9>()
 		ensure_equals( "not destructed", counter_t::get_instance_count(), 1 );
 		}
 	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
-	}
+TUT_TEARDOWN()
 
 
 // =================================================
 // Passing ownership
 // =================================================
 
-/**
- * Checks passing ownership via assignment.
- */
-template<>
-template<>
-void module::test<10>()
-	{
+TUT_UNIT_TEST_N( 10, "/* Checks passing ownership via assignment. */" )
 		{
 		counter_t *p1 = NULL, *p2 = NULL;
 		ptr_t sp1( p1 = new counter_t( 1 ));
@@ -306,15 +254,9 @@ void module::test<10>()
 		ensure_equals( "leak !!!=1", counter_t::get_instance_count(), 1 );
 		}
 	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
-	}
+TUT_TEARDOWN()
 
-/**
- * Checks operator -&gt; throws instead of returning null.
- */
-template<>
-template<>
-void module::test<11>()
-	{
+TUT_UNIT_TEST_N( 11, "/* Checks operator -&gt; throws instead of returning null. */" )
 		{
 		try
 			{
@@ -328,57 +270,39 @@ void module::test<11>()
 			}
 		}
 	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
-	}
+TUT_TEARDOWN()
 
-/**
- * assign smart pointers pointing to the same memory.
- */
-template<>
-template<>
-void module::test<12>()
-	{
+TUT_UNIT_TEST_N( 12, "/* assign smart pointers pointing to the same memory. */" )
 		{
 		ptr_t sp1( new counter_t() );
 		ptr_t sp2 = sp1;
 		sp2 = sp1;
 		}
 	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
-	}
+TUT_TEARDOWN()
 
 /* Weak pointer related tests. */
 typedef HPointer<tut_yaal_hcore_hpointer::counter_t, HPointerScalar, HPointerWeak> weak_t;
 
-/* default constructor */
-template<>
-template<>
-void module::test<13>()
-	{
+TUT_UNIT_TEST_N( 13, "/* default constructor */" )
 		{
 		weak_t w;
 		ptr_t p( w );
 		ensure( "bad default constructor", p.raw() == NULL );
 		}
 	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
-	}
+TUT_TEARDOWN()
 
-/* copy constructor */
-template<>
-template<>
-void module::test<14>()
-	{
+TUT_UNIT_TEST_N( 14, "/* copy constructor */" )
 		{
 		ptr_t p( new counter_t() );
 		weak_t w( p );
 		ensure( "bad copy constructor", p.raw() != NULL );
 		}
 	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
-	}
+TUT_TEARDOWN()
 
-/* accessing nullified weak */
-template<>
-template<>
-void module::test<15>()
-	{
+TUT_UNIT_TEST_N( 15, "/* accessing nullified weak */" )
 		{
 		weak_t w;
 			{
@@ -392,7 +316,7 @@ void module::test<15>()
 		ensure( "weak performed forbidden operation", a.raw() == NULL );
 		}
 	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
-	}
+TUT_TEARDOWN()
 
 struct ODummy : public HPointerFromThisInterface<ODummy>
 	{
@@ -400,22 +324,14 @@ struct ODummy : public HPointerFromThisInterface<ODummy>
 
 typedef HPointer<ODummy> ftp_t;
 
-/* from this */
-template<>
-template<>
-void module::test<16>()
-	{
+TUT_UNIT_TEST_N( 16, "/* from this */" )
 	ODummy* raw = NULL;
 	ftp_t p( raw = new ODummy );
 	ftp_t o( raw->get_pointer() );
 	ensure( "from this failed", p == o );
-	}
+TUT_TEARDOWN()
 
-/* hierarchy issues */
-template<>
-template<>
-void module::test<17>()
-	{
+TUT_UNIT_TEST_N( 17, "/* hierarchy issues */" )
 		{
 		static int const MY_VAL = 2;
 		A* rpa = NULL;
@@ -456,7 +372,7 @@ void module::test<17>()
 		spe->A::bar( "spe->A::bar" );
 		spe->bar( "spe->bar" );
 		}
-	}
+TUT_TEARDOWN()
 
 #pragma GCC diagnostic ignored "-Weffc++"
 

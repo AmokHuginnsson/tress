@@ -242,177 +242,96 @@ typedef test_group<tut_yaal_hcore_hsbbstree> tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_hcore_hsbbstree_group( "yaal::hcore::HSBBSTree" );
 
-/*
- * Adding keys in ascending order.
- */
-template<>
-template<>
-void module::test<1> ( void )
-	{
+TUT_UNIT_TEST_N( 1, "/* Adding keys in ascending order. */" )
 	set_t s;
 	set_insert_t insert = &set_t::insert;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_test( s, insert, i );
 	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
-	}
+TUT_TEARDOWN()
 
-/*
- * Adding keys in descending order.
- */
-template<>
-template<>
-void module::test<2> ( void )
-	{
+TUT_UNIT_TEST_N( 2, "/* Adding keys in descending order. */" )
 	set_t s;
 	set_insert_t insert = &set_t::insert;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		helper_stress_test( s, insert, i );
 	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
-	}
+TUT_TEARDOWN()
 
-/*
- * Adding keys in random order.
- */
-template<>
-template<>
-void module::test<3> ( void )
-	{
+TUT_UNIT_TEST_N( 3, "/* Adding keys in random order. */" )
 	HRandomizer r;
 	set_t s;
 	set_insert_t insert = &set_t::insert;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_test( s, insert, r.rnd ( KEY_POOL_SIZE ) );
 	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
-	}
+TUT_TEARDOWN()
 
-/*
- * Removing keys in ascending order from lower half of the tree that
- * was created by adding keys in ascending order.
- */
-template<>
-template<>
-void module::test<4> ( void )
-	{
+TUT_UNIT_TEST_N( 4, "/* Removing keys in ascending order from lower half of the tree that was created by adding keys in ascending order. */" )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
 		helper_stress_test ( s, & set_t::remove, i );
-	}
+TUT_TEARDOWN()
 
-/*
- * Removing keys in ascending order from upper half of the tree that
- * was created by adding keys in ascending order.
- */
-template<>
-template<>
-void module::test<5> ( void )
-	{
+TUT_UNIT_TEST_N( 5, "/* Removing keys in ascending order from upper half of the tree that was created by adding keys in ascending order. */" )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_test ( s, & set_t::remove, i );
-	}
+TUT_TEARDOWN()
 
-/*
- * Removing keys in descending order from lower half of the tree that
- * was created by adding keys in ascending order.
- */
-template<>
-template<>
-void module::test<6> ( void )
-	{
+TUT_UNIT_TEST_N( 6, "/* Removing keys in descending order from lower half of the tree that was created by adding keys in ascending order. */" )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
 		helper_stress_test ( s, & set_t::remove, i );
-	}
+TUT_TEARDOWN()
 
-/*
- * Removing keys in descending order from upper half of the tree that
- * was created by adding keys in ascending order.
- */
-template<>
-template<>
-void module::test<7> ( void )
-	{
+TUT_UNIT_TEST_N( 7, "/* Removing keys in descending order from upper half of the tree that was created by adding keys in ascending order. */" )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = NUMBER_OF_TEST_NODES - 1; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
 		helper_stress_test ( s, & set_t::remove, i );
-	}
+TUT_TEARDOWN()
 
-/*
- * Removing keys in ascending order from lower half of the tree that
- * was created by adding keys in descending order.
- */
-template<>
-template<>
-void module::test<8> ( void )
-	{
+TUT_UNIT_TEST_N( 8, "/* Removing keys in ascending order from lower half of the tree that was created by adding keys in descending order. */" )
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		s.insert ( i );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
 		helper_stress_test ( s, & set_t::remove, i );
-	}
+TUT_TEARDOWN()
 
-/*
- * Removing keys in ascending order from upper half of the tree that
- * was created by adding keys in descending order.
- */
-template<>
-template<>
-void module::test<9> ( void )
-	{
+TUT_UNIT_TEST_N( 9, "/* Removing keys in ascending order from upper half of the tree that was created by adding keys in descending order. */" )
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_test ( s, & set_t::remove, i );
-	}
+TUT_TEARDOWN()
 
-/*
- * Removing keys in descending order from lower half of the tree that
- * was created by adding keys in descending order.
- */
-template<>
-template<>
-void module::test<10> ( void )
-	{
+TUT_UNIT_TEST_N( 10, "/* Removing keys in descending order from lower half of the tree that was created by adding keys in descending order. */" )
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
 		helper_stress_test ( s, & set_t::remove, i );
-	}
+TUT_TEARDOWN()
 
-/*
- * Removing keys in descending order from upper half of the tree that
- * was created by adding keys in descending order.
- */
-template<>
-template<>
-void module::test<11> ( void )
-	{
+TUT_UNIT_TEST_N( 11, "/* Removing keys in descending order from upper half of the tree that was created by adding keys in descending order. */" )
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		s.insert ( i );
 	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
 		helper_stress_test ( s, & set_t::remove, i );
-	}
+TUT_TEARDOWN()
 
-/*
- * Removing keys in ascending order from lower half of the tree that
- * was created by adding keys in random order.
- */
-template<>
-template<>
-void module::test<12> ( void )
-	{
+TUT_UNIT_TEST_N( 12, "/* Removing keys in ascending order from lower half of the tree that was created by adding keys in random order. */" )
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
@@ -429,16 +348,9 @@ void module::test<12> ( void )
 				throw e;
 			}
 		}
-	}
+TUT_TEARDOWN()
 
-/*
- * Removing keys in ascending order from upper half of the tree that
- * was created by adding keys in random order.
- */
-template<>
-template<>
-void module::test<13> ( void )
-	{
+TUT_UNIT_TEST_N( 13, "/* Removing keys in ascending order from upper half of the tree that was created by adding keys in random order. */" )
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
@@ -455,16 +367,9 @@ void module::test<13> ( void )
 				throw e;
 			}
 		}
-	}
+TUT_TEARDOWN()
 
-/*
- * Removing keys in descending order from lower half of the tree that
- * was created by adding keys in random order.
- */
-template<>
-template<>
-void module::test<14> ( void )
-	{
+TUT_UNIT_TEST_N( 14, "/* Removing keys in descending order from lower half of the tree that was created by adding keys in random order. */" )
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
@@ -481,16 +386,9 @@ void module::test<14> ( void )
 				throw e;
 			}
 		}
-	}
+TUT_TEARDOWN()
 
-/*
- * Removing keys in descending order from upper half of the tree that
- * was created by adding keys in random order.
- */
-template<>
-template<>
-void module::test<15>( void )
-	{
+TUT_UNIT_TEST_N( 15, "/* Removing keys in descending order from upper half of the tree that was created by adding keys in random order. */" )
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
@@ -507,16 +405,9 @@ void module::test<15>( void )
 				throw e;
 			}
 		}
-	}
+TUT_TEARDOWN()
 
-/*
- * Removing keys in random order from upper half of the tree that
- * was created by adding keys in random order.
- */
-template<>
-template<>
-void module::test<16>( void )
-	{
+TUT_UNIT_TEST_N( 16, "/* Removing keys in random order from upper half of the tree that was created by adding keys in random order. */" )
 	HRandomizer r;
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
@@ -533,7 +424,7 @@ void module::test<16>( void )
 				throw e;
 			}
 		}
-	}
+TUT_TEARDOWN()
 
 #if 0
 #endif

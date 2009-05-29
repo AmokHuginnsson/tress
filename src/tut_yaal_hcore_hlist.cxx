@@ -144,33 +144,21 @@ typedef test_group<tut_yaal_hcore_hlist>tut_group;
 typedef tut_group::object module;
 tut_group tut_yaal_hcore_hlist_group ( "yaal::hcore::HList" );
 
-/* Simple constructor. */
-template<>
-template<>
-void module::test<1>( void )
-	{
+TUT_UNIT_TEST_N( 1, "/* Simple constructor. */" )
 	list_t l;
 	check_consistency( l );
 	ensure_equals ( "list not empty", l.size(), 0 );
 	check_consistency( l );
-	}
+TUT_TEARDOWN()
 
-/* Parametrized constructor. */
-template<>
-template<>
-void module::test<2>( void )
-	{
+TUT_UNIT_TEST_N( 2, "/* Parametrized constructor. */" )
 	list_t l ( 3 );
 	check_consistency( l );
 	ensure_equals ( "list not empty", l.size(), 3 );
 	check_consistency( l );
-	}
+TUT_TEARDOWN()
 
-/* copy constructor */
-template<>
-template<>
-void module::test<3>( void )
-	{
+TUT_UNIT_TEST_N( 3, "/* copy constructor */" )
 	int l_iCtr = 0;
 	list_t l;
 	check_consistency( l );
@@ -194,13 +182,9 @@ void module::test<3>( void )
 		ensure_equals ( "assign operation failed, wrong value", *it, l_iCtr );
 		}
 	ensure_equals ( "assign operation failed, wrong size", l_iCtr, 5 );
-	}
+TUT_TEARDOWN()
 
-/* assignation operator (full to empty) */
-template<>
-template<>
-void module::test<4>( void )
-	{
+TUT_UNIT_TEST_N( 4, "/* assignation operator (full to empty) */" )
 	int l_iCtr = 0;
 	list_t l;
 	check_consistency( l );
@@ -228,13 +212,9 @@ void module::test<4>( void )
 		ensure_equals ( "assign operation failed, wrong value", *it, l_iCtr );
 		}
 	ensure_equals ( "assign operation failed, wrong size", l_iCtr, 5 );
-	}
+TUT_TEARDOWN()
 
-/* assignation operator (empty to full) */
-template<>
-template<>
-void module::test<5>( void )
-	{
+TUT_UNIT_TEST_N( 5, "/* assignation operator (empty to full) */" )
 	list_t l;
 	check_consistency( l );
 	list_t o;
@@ -253,13 +233,9 @@ void module::test<5>( void )
 	check_consistency( l );
 	check_consistency( o );
 	ensure_equals ( "assign operation failed, wrong size", l.size(), 0 );
-	}
+TUT_TEARDOWN()
 
-/* assignation operator (full to small) */
-template<>
-template<>
-void module::test<6>( void )
-	{
+TUT_UNIT_TEST_N( 6, "/* assignation operator (full to small) */" )
 	int l_iCtr = 0;
 	list_t l;
 	check_consistency( l );
@@ -292,13 +268,9 @@ void module::test<6>( void )
 		ensure_equals ( "assign operation failed, wrong value", *it, l_iCtr );
 		}
 	ensure_equals ( "assign operation failed, wrong size", l_iCtr, 5 );
-	}
+TUT_TEARDOWN()
 
-/* assignation operator (full to big) */
-template<>
-template<>
-void module::test<7>( void )
-	{
+TUT_UNIT_TEST_N( 7, "/* assignation operator (full to big) */" )
 	int l_iCtr = 0;
 	list_t l;
 	check_consistency( l );
@@ -339,13 +311,9 @@ void module::test<7>( void )
 		ensure_equals ( "assign operation failed, wrong value", *it, l_iCtr );
 		}
 	ensure_equals ( "assign operation failed, wrong size", l_iCtr, 5 );
-	}
+TUT_TEARDOWN()
 
-/* .hook(), cyclic_iterator */
-template<>
-template<>
-void module::test<8>( void )
-	{
+TUT_UNIT_TEST_N( 8, "/* .hook(), cyclic_iterator */" )
 	list_t l;
 	check_consistency( l );
 	l.push_back( 'a' );
@@ -378,13 +346,9 @@ void module::test<8>( void )
 	check_consistency( l );
 	ensure_equals( "hook is not head", *it, l.head() );
 	check_consistency( l );
-	}
+TUT_TEARDOWN()
 
-/* forward iterator */
-template<>
-template<>
-void module::test<9>( void )
-	{
+TUT_UNIT_TEST_N( 9, "/* forward iterator */" )
 	int l_iCtr = 0;
 	list_t l;
 	check_consistency( l );
@@ -412,13 +376,9 @@ void module::test<9>( void )
 	check_consistency( l );
 	ensure_equals( "begin is not head", *l.begin(), l.head() );
 	check_consistency( l );
-	}
+TUT_TEARDOWN()
 
-/* backward iterator */
-template<>
-template<>
-void module::test<10>( void )
-	{
+TUT_UNIT_TEST_N( 10, "/* backward iterator */" )
 	int l_iCtr = 5;
 	list_t l;
 	check_consistency( l );
@@ -446,13 +406,9 @@ void module::test<10>( void )
 	check_consistency( l );
 	ensure_equals( "begin is not head", *l.rbegin(), l.tail() );
 	check_consistency( l );
-	}
+TUT_TEARDOWN()
 
-/* clear, size */
-template<>
-template<>
-void module::test<11>( void )
-	{
+TUT_UNIT_TEST_N( 11, "/* clear, size */" )
 	list_t l;
 	check_consistency( l );
 	l.push_back( 'a' );
@@ -467,13 +423,9 @@ void module::test<11>( void )
 	check_consistency( l );
 	ensure_equals( "clear failed or size is wrong", l.size(), 0 );
 	check_consistency( l );
-	}
+TUT_TEARDOWN()
 
-/* insert */
-template<>
-template<>
-void module::test<12>( void )
-	{
+TUT_UNIT_TEST_N( 12, "/* insert */" )
 	list_t l;
 	check_consistency( l );
 	l.push_back( '1' );
@@ -504,13 +456,9 @@ void module::test<12>( void )
 	ensure_equals( "list malformed", l.size(), 6 );
 	check_consistency( l );
 	ensure_equals( "bad iterator", *it, 'x' );
-	}
+TUT_TEARDOWN()
 
-/* add_tail, push_back */
-template<>
-template<>
-void module::test<13>( void )
-	{
+TUT_UNIT_TEST_N( 13, "/* add_tail, push_back */" )
 	list_t l;
 	check_consistency( l );
 	ensure_equals( "constructor malfunction", l.size(), 0 );
@@ -535,13 +483,9 @@ void module::test<13>( void )
 	ensure_equals( "push_back failed", l.size(), 4 );
 	check_consistency( l );
 	ensure_equals( "push_back failed", to_string( l ), "abcd" );
-	}
+TUT_TEARDOWN()
 
-/* pop_back, remove_tail */
-template<>
-template<>
-void module::test<14>( void )
-	{
+TUT_UNIT_TEST_N( 14, "/* pop_back, remove_tail */" )
 	list_t l;
 	check_consistency( l );
 	ensure_equals( "constructor malfunction", l.size(), 0 );
@@ -580,13 +524,9 @@ void module::test<14>( void )
 		{
 		// ok
 		}
-	}
+TUT_TEARDOWN()
 
-/* add_head, push_front */
-template<>
-template<>
-void module::test<15>( void )
-	{
+TUT_UNIT_TEST_N( 15, "/* add_head, push_front */" )
 	list_t l;
 	check_consistency( l );
 	ensure_equals( "constructor malfunction", l.size(), 0 );
@@ -612,13 +552,9 @@ void module::test<15>( void )
 	ensure_equals( "push_back failed", l.size(), 4 );
 	check_consistency( l );
 	ensure_equals( "push_back failed", to_string( l ), "dcba" );
-	}
+TUT_TEARDOWN()
 
-/* pop_front, remove_head */
-template<>
-template<>
-void module::test<16>( void )
-	{
+TUT_UNIT_TEST_N( 16, "/* pop_front, remove_head */" )
 	list_t l;
 	check_consistency( l );
 	ensure_equals( "constructor malfunction", l.size(), 0 );
@@ -657,13 +593,9 @@ void module::test<16>( void )
 		{
 		// ok
 		}
-	}
+TUT_TEARDOWN()
 
-/* add_orderly */
-template<>
-template<>
-void module::test<17>( void )
-	{
+TUT_UNIT_TEST_N( 17, "/* add_orderly */" )
 	HList<char> l;
 	check_consistency( l );
 	ensure_equals( "constructor malfunction", l.size(), 0 );
@@ -699,7 +631,7 @@ void module::test<17>( void )
 	ensure_equals( "add_orderly failed", l.size(), 8 );
 	check_consistency( l );
 	ensure_equals( "add_orderly failed", to_string( l ), "abcdefgh" );
-	}
+TUT_TEARDOWN()
 
 void erase_test_0( tut_yaal_hcore_hlist::list_t& l )
 	{
@@ -745,11 +677,7 @@ void erase_test_3( tut_yaal_hcore_hlist::list_t& l )
 	tut_yaal_hcore_hlist::check_consistency( l );
 	}
 
-/* erase */
-template<>
-template<>
-void module::test<18>( void )
-	{
+TUT_UNIT_TEST_N( 18, "/* erase */" )
 	list_t l;
 	typedef void (*erase_test_t)( list_t& );
 	erase_test_t erase_tests[] = { erase_test_0, erase_test_1, erase_test_2, erase_test_3 };
@@ -766,13 +694,9 @@ void module::test<18>( void )
 		erase_tests[ i ]( l );
 		check_consistency( l );
 		}
-	}
+TUT_TEARDOWN()
 
-/* n_th */
-template<>
-template<>
-void module::test<19>( void )
-	{
+TUT_UNIT_TEST_N( 19, "/* n_th */" )
 	list_t l;
 	check_consistency( l );
 	l.push_back( '1' );
@@ -815,13 +739,9 @@ void module::test<19>( void )
 		{
 		// ok
 		}
-	}
+TUT_TEARDOWN()
 
-/* operator[] */
-template<>
-template<>
-void module::test<20>( void )
-	{
+TUT_UNIT_TEST_N( 20, "/* operator[] */" )
 	list_t l;
 	check_consistency( l );
 	l.push_back( '1' );
@@ -864,13 +784,9 @@ void module::test<20>( void )
 		{
 		// ok
 		}
-	}
+TUT_TEARDOWN()
 
-/* exchange */
-template<>
-template<>
-void module::test<21>( void )
-	{
+TUT_UNIT_TEST_N( 21, "/* exchange */" )
 	list_t l;
 	check_consistency( l );
 	l.push_back( '1' );
@@ -916,13 +832,9 @@ void module::test<21>( void )
 	ensure_equals( "to_list failed", to_string( l ), buf );
 	l.sort();
 	ensure_equals( "sort failed", to_string( l ), "00000011" );
-	}
+TUT_TEARDOWN()
 
-/* Sorting. */
-template<>
-template<>
-void module::test<22>( void )
-	{
+TUT_UNIT_TEST_N( 22, "/* Sorting. */" )
 	list_t l;
 	check_consistency( l );
 	l.add_tail() = '3';
@@ -950,13 +862,9 @@ void module::test<22>( void )
 	l.sort( OListBits::DESCENDING );
 	check_consistency( l );
 	ensure_equals ( "sort failed", to_string( l ), "321" );
-	}
+TUT_TEARDOWN()
 
-/* empty, is_empty */
-template<>
-template<>
-void module::test<23>( void )
-	{
+TUT_UNIT_TEST_N( 23, "/* empty, is_empty */" )
 	list_t l;
 	check_consistency( l );
 	ensure( "new list not empty", l.empty() );
@@ -971,13 +879,9 @@ void module::test<23>( void )
 	check_consistency( l );
 	ensure( "list with some stuff is empty", ! l.is_empty() );
 	check_consistency( l );
-	}
+TUT_TEARDOWN()
 
-/* exchange */
-template<>
-template<>
-void module::test<24>( void )
-	{
+TUT_UNIT_TEST_N( 24, "/* exchange */" )
 	list_t l1;
 	check_consistency( l1 );
 	l1.push_back( '1' );
@@ -997,7 +901,7 @@ void module::test<24>( void )
 	check_consistency( l2 );
 	ensure_equals ( "exchange failed", to_string( l2 ), "12" );
 	ensure_equals ( "exchange failed", to_string( l1 ), "ab" );
-	}
+TUT_TEARDOWN()
 
 void check_sorted( tut_yaal_hcore_hlist::list_t const& l, OListBits::sort_order_t order )
 	{
@@ -1021,11 +925,7 @@ void check_sorted( tut_yaal_hcore_hlist::list_t const& l, OListBits::sort_order_
 		}
 	}
 
-/* sort serious */
-template<>
-template<>
-void module::test<25>( void )
-	{
+TUT_UNIT_TEST_N( 25, "/* sort serious */" )
 	//int long unsigned count = 0100000000;
 	int long unsigned count = 01000000;
 	char buf[10];
@@ -1057,7 +957,7 @@ void module::test<25>( void )
 		if ( ! ( i % 8192 ) )
 			std::cout << "\r               \r" << std::setw( 6 ) << 100. * ( static_cast<double>( i ) / static_cast<double>( count ) ) << '%' << std::flush;
 		}
-	}
+TUT_TEARDOWN()
 
 }
 
