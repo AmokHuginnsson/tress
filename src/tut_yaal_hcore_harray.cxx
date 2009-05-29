@@ -44,11 +44,7 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_stahapi_hcore_harray );
 TUT_TEST_GROUP_N( tut_stahapi_hcore_harray, "yaal::hcore::HArray" );
 
-/* Constructor. */
-template<>
-template<>
-void module::test<1> ( void )
-	{
+TUT_UNIT_TEST_N( 1, "/* Constructor. */" )
 	int const BAD_SIZE = - 1;
 	try
 		{
@@ -59,26 +55,18 @@ void module::test<1> ( void )
 		{
 		cout << e.what ( ) << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* Constructor and get_size(). */
-template<>
-template<>
-void module::test<2> ( void )
-	{
+TUT_UNIT_TEST_N( 2, "/* Constructor and get_size(). */" )
 	int const SIZE_FOR_ONE = 0;
 	int const SIZE_FOR_TWO = 7;
 	HArray<int> l_oOne ( SIZE_FOR_ONE );
 	ensure_equals ( "inconsistient size with respect to constructor", l_oOne.get_size ( ), SIZE_FOR_ONE );
 	HArray<int> l_oTwo ( SIZE_FOR_TWO );
 	ensure_equals ( "inconsistient size with respect to constructor", l_oTwo.get_size ( ), SIZE_FOR_TWO );
-	}
+TUT_TEARDOWN()
 
-/* Constructor with filling. */
-template<>
-template<>
-void module::test<3> ( void )
-	{
+TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
 	int const BAD_SIZE = - 1;
 	int const SIZE_FOR_ARRAY = 7;
 	int const FILLER_FOR_ARRAY = 13;
@@ -94,13 +82,9 @@ void module::test<3> ( void )
 	HArray<int> l_oArray ( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
 	for ( int i = 0; i < SIZE_FOR_ARRAY; ++ i )
 		ensure_equals ( "array element not filled with default value", l_oArray [ i ], FILLER_FOR_ARRAY );
-	}
+TUT_TEARDOWN()
 
-/* Copy constructor. */
-template<>
-template<>
-void module::test<4> ( void )
-	{
+TUT_UNIT_TEST_N( 4, "/* Copy constructor. */" )
 	int const SIZE = 7;
 	HArray<int> l_oArray ( SIZE );
 	for ( int i = 0; i < SIZE; ++ i )
@@ -109,13 +93,9 @@ void module::test<4> ( void )
 	ensure_equals ( "inconsistient size after copy constructor", l_oCopy.get_size ( ), SIZE );
 	for ( int i = 0; i < SIZE; ++ i )
 		ensure_equals ( "wrong content after copy constructor", l_oCopy [ i ], i );
-	}
+TUT_TEARDOWN()
 
-/* Operator [ ]. */
-template<>
-template<>
-void module::test<5> ( void )
-	{
+TUT_UNIT_TEST_N( 5, "/* Operator [ ]. */" )
 	int const SIZE = 7;
 	HArray<int> l_oArray ( SIZE );
 	try
@@ -136,19 +116,15 @@ void module::test<5> ( void )
 		{
 		cout << e.what ( ) << endl;
 		}
-	}
+TUT_TEARDOWN()
 
-/* Operator bool. */
-template<>
-template<>
-void module::test<6> ( void )
-	{
+TUT_UNIT_TEST_N( 6, "/* Operator bool. */" )
 	int const EMPTY = 0;
 	int const SIZE = 7;
 	HArray<int> l_oEmpty ( EMPTY );
 	ensure_equals ( "test for array emptiness faild", ! l_oEmpty, true );
 	HArray<int> l_oNormal ( SIZE );
 	ensure_equals ( "test for array fullness faild", ! l_oNormal, false );
-	}
+TUT_TEARDOWN()
 
 }
