@@ -66,6 +66,7 @@ int handle_program_options( int a_iArgc, char** a_ppcArgv )
 	HProgramOptionsHandler po;
 	OOptionInfo info( po, setup.f_pcProgramName, "yaal stress testing suite", NULL );
 	bool stop = false;
+	int dummyValue( 0 );
 	po( "log_path", program_options_helper::option_value( setup.f_oLogPath ), NULL, HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path", "path pointing to file for application logs" )
 		( "jobs", program_options_helper::option_value( setup.f_iJobs ), "j", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "count", "number of concurrent jobs" )
 		( "group", program_options_helper::option_value( setup.f_oTestGroup ), "G", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "name", "select test group" )
@@ -74,8 +75,8 @@ int handle_program_options( int a_iArgc, char** a_ppcArgv )
 		( "restartable", program_options_helper::option_value( setup.f_bRestartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, NULL, "run tests in restartable mode" )
 		( "list", program_options_helper::option_value( setup.f_bListGroups ), "L", HProgramOptionsHandler::OOption::TYPE::NONE, NULL, "list known test groups" )
 		( "file", program_options_helper::option_value( setup.f_oTestGroupListFilePath ), "F", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path", "read test group names from given file" )
-		( "option", program_options_helper::no_value, "O", HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "param", "this is not a real option, it was added here to test automated help generation capabilities, this description must be long enought to trigger description wrap, more over is must look good" )
-		( "absolute", program_options_helper::no_value, "O", HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "param", NULL )
+		( "option", program_options_helper::option_value( dummyValue ), "O", HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "param", "this is not a real option, it was added here to test automated help generation capabilities, this description must be long enought to trigger description wrap, more over is must look good" )
+		( "absolute", program_options_helper::option_value( dummyValue ), "O", HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "param", NULL )
 		( "quiet", program_options_helper::option_value( setup.f_bQuiet ), "q", HProgramOptionsHandler::OOption::TYPE::NONE, NULL, "inhibit usual output" )
 		( "silent", program_options_helper::option_value( setup.f_bQuiet ), "q", HProgramOptionsHandler::OOption::TYPE::NONE, NULL, "inhibit usual output" )
 		( "verbose", program_options_helper::option_value( setup.f_bVerbose ), "v", HProgramOptionsHandler::OOption::TYPE::NONE, NULL, "print more information" )
