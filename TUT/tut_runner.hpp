@@ -190,10 +190,7 @@ public:
 			const_iterator e = _groups.end();
 			yaal::tools::HWorkFlow w( tress::setup.f_iJobs );
 			for ( const_iterator i = _groups.begin(); i != e; ++ i )
-				{
-				group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
-				w.push_task( gr );
-				}
+				w.push_task( yaal::hcore::call<tut::test_runner const&>( *this, &test_runner::run_group, i ) );
 			}
 
 		_callback->run_completed();
@@ -220,10 +217,7 @@ public:
 					_callback->test_completed( tr );
 					}
 				else
-					{
-					group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
-					w.push_task( gr );
-					}
+					w.push_task( yaal::hcore::call<tut::test_runner const&>( *this, &test_runner::run_group, i ) );
 				}
 			}
 
@@ -244,10 +238,7 @@ public:
 			for ( const_iterator i = _groups.begin(); i != e; ++ i )
 				{
 				if ( i->first.find( pattern ) != std::string::npos )
-					{
-					group_runner_t::ptr_t gr( new group_runner_t( *this, &test_runner::run_group, i ) );
-					w.push_task( gr );
-					}
+					w.push_task( yaal::hcore::call<tut::test_runner const&>( *this, &test_runner::run_group, i ) );
 				}
 			}
 
@@ -298,8 +289,6 @@ protected:
 	typedef std::map<std::string, group_base*>groups;
 	typedef groups::iterator iterator;
 	typedef groups::const_iterator const_iterator;
-	typedef void ( test_runner::* group_call_t )( const_iterator ) const;
-	typedef yaal::hcore::HCall<test_runner const&, group_call_t, const_iterator> group_runner_t;
 	groups _groups;
 
 	callback _defaultCallback;
