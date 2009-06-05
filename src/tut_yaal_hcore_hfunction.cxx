@@ -53,6 +53,12 @@ public:
 	Sumator( int arg_ ) : _arg( arg_ ) {}
 	int calculate( int arg_ )
 		{ return ( _arg + arg_ ); }
+	int calculate_const( int arg_ ) const
+		{ return ( _arg + arg_ ); }
+	int calculate_volatile( int arg_ ) volatile
+		{ return ( _arg + arg_ ); }
+	int calculate_const_volatile( int arg_ ) const volatile
+		{ return ( _arg + arg_ ); }
 	};
 
 class HFunction
@@ -68,6 +74,12 @@ HFunction function( CLASS_t c )
 	return ( HFunction( call( c ) ) );
 	}
 
+template<typename unknown_t>
+bool member( unknown_t )
+	{
+	return ( trait::is_member<unknown_t>::value );
+	}
+
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hfunction );
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hfunction, "yaal::hcore::HFunction" );
@@ -76,6 +88,11 @@ TUT_UNIT_TEST_N( 1, "one arg function call" )
 	Sumator s( 2 );
 //	ensure_equals( "function call failed", function( sum, 2, _1 )( 3 ), 5 );
 //	ensure_equals( "function call failed", function( s, &Sumator::calculate, _1 )( 3 ), 5 );
+	cout << "member: " << member( &Sumator::calculate ) << endl;
+	cout << "member const: " << member( &Sumator::calculate_const ) << endl;
+	cout << "member volatile: " << member( &Sumator::calculate_volatile ) << endl;
+	cout << "member const volatile: " << member( &Sumator::calculate_const_volatile ) << endl;
+	cout << "function: " << member( sum ) << endl;
 TUT_TEARDOWN()
 
 }
