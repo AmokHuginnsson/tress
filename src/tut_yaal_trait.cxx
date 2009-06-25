@@ -62,5 +62,9 @@ TUT_UNIT_TEST_N( 2, "return type" )
 	ensure_not( "int, int* (char, double)", same_type<int, return_type<int* (*)(char, double)>::type>::value );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 3, "count types" )
+	ensure_equals( "type count is wrong", count_type<int, char, double, int, float, int, void*>::value, 2 );
+TUT_TEARDOWN()
+
 }
 
