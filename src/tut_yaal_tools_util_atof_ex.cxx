@@ -47,7 +47,7 @@ TUT_TEST_GROUP_N( tut_yaal_tools_util_atof_ex, "yaal::tools::util::atof_ex" );
 
 TUT_UNIT_TEST_N( 1, "complex and valid number" )
 	HString formula = "2*(3+5)/sin(3.1415926535/2)";
-	ensure_distance ( "Wrong counting.", atof_ex ( formula, true ), 16.L, 0.0001L );
+	ENSURE_DISTANCE ( "Wrong counting.", atof_ex ( formula, true ), 16.L, 0.0001L );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "simple but invalid number" )

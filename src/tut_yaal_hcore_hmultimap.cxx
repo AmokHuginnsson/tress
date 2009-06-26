@@ -58,7 +58,7 @@ TUT_UNIT_TEST_N( 1, "find/upper_bound on non existing" )
 	mm.insert( make_pair( 3, 5 ) );
 	mmp_t const& m = mm;
 	for ( mmp_t::const_iterator it = m.find( 2 ), end = m.upper_bound( 2 ); it != end; ++ it )
-		fail( "find/upper_bound ranges skewed" );
+		FAIL( "find/upper_bound ranges skewed" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "find/upper_bound on existing" )
@@ -72,7 +72,7 @@ TUT_UNIT_TEST_N( 2, "find/upper_bound on existing" )
 	int acc = 0;
 	for ( mmp_t::const_iterator it = mm.find( 2 ), end = mm.upper_bound( 2 ); it != end; ++ it )
 		acc += (*it).second;
-	ensure_equals( "bad elements selected throu find/upper_bound", acc, 15 );
+	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", acc, 15 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "modify packed by iterator" )
@@ -82,7 +82,7 @@ TUT_UNIT_TEST_N( 3, "modify packed by iterator" )
 	int const VERIFY = 0;
 	(*it).second = VERIFY;
 	mmp_t::iterator it_ver = mm.begin();
-	ensure_equals( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
+	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 31, "find/upper_bound on non existing" )
@@ -92,7 +92,7 @@ TUT_UNIT_TEST_N( 31, "find/upper_bound on non existing" )
 	mm.insert( make_pair( 3, 4 ) );
 	mm.insert( make_pair( 3, 5 ) );
 	for ( mmt_t::const_iterator it = mm.find( 2 ), end = mm.upper_bound( 2 ); it != end; ++ it )
-		fail( "find/upper_bound ranges skewed" );
+		FAIL( "find/upper_bound ranges skewed" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 32, "find/upper_bound on existing" )
@@ -106,7 +106,7 @@ TUT_UNIT_TEST_N( 32, "find/upper_bound on existing" )
 	int acc = 0;
 	for ( mmt_t::const_iterator it = mm.find( 2 ), end = mm.upper_bound( 2 ); it != end; ++ it )
 		acc += (*it).second;
-	ensure_equals( "bad elements selected throu find/upper_bound", acc, 15 );
+	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", acc, 15 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 33, "modify transparent by iterator and operator*" )
@@ -116,7 +116,7 @@ TUT_UNIT_TEST_N( 33, "modify transparent by iterator and operator*" )
 	int const VERIFY = 0;
 	(*it).second = VERIFY;
 	mmt_t::iterator it_ver = mm.begin();
-	ensure_equals( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
+	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 34, "modify transparent by iterator and operator->" )
@@ -126,7 +126,7 @@ TUT_UNIT_TEST_N( 34, "modify transparent by iterator and operator->" )
 	int const VERIFY = 0;
 	it->second = VERIFY;
 	mmt_t::iterator it_ver = mm.begin();
-	ensure_equals( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
+	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
 TUT_TEARDOWN()
 
 }

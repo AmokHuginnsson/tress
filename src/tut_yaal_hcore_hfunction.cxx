@@ -86,8 +86,8 @@ TUT_TEST_GROUP_N( tut_yaal_hcore_hfunction, "yaal::hcore::HFunction" );
 
 TUT_UNIT_TEST_N( 1, "one arg function call" )
 	Sumator s( 2 );
-//	ensure_equals( "function call failed", function( sum, 2, _1 )( 3 ), 5 );
-//	ensure_equals( "function call failed", function( s, &Sumator::calculate, _1 )( 3 ), 5 );
+//	ENSURE_EQUALS( "function call failed", function( sum, 2, _1 )( 3 ), 5 );
+//	ENSURE_EQUALS( "function call failed", function( s, &Sumator::calculate, _1 )( 3 ), 5 );
 	cout << "member: " << member( &Sumator::calculate ) << endl;
 	cout << "member const: " << member( &Sumator::calculate_const ) << endl;
 	cout << "member volatile: " << member( &Sumator::calculate_volatile ) << endl;

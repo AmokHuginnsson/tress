@@ -53,7 +53,7 @@ TUT_UNIT_TEST_N( 1, "complex and valid expression" )
 	x2 *= x2;
 	x2 *= x2;
 	x2 *= x2;
-	ensure_equals( "wrong computation", x1, x2 );
+	ENSURE_EQUALS( "wrong computation", x1, x2 );
 	std::cout << eq << "=" << std::setprecision( 20 ) << x1 << std::endl;
 	eq = "Y";
 	x.compile( eq );
@@ -69,7 +69,7 @@ TUT_UNIT_TEST_N( 2, "invalid expression" )
 		HString eq( "7+10+(4*)" );
 		HExpression x;
 		x.compile( eq );
-		fail( "parsing invalid expression succeded" );
+		FAIL( "parsing invalid expression succeded" );
 		}
 	catch ( HExpressionException& )
 		{
@@ -86,9 +86,9 @@ TUT_UNIT_TEST_N( 3, "copy semantics" )
 	HExpression e2( e );
 	v = e2.variables();
 	e[ 0 ] = SPOOKY;
-	ensure_equals( "variables not copied", v[ 0 ], MAGIC );
+	ENSURE_EQUALS( "variables not copied", v[ 0 ], MAGIC );
 	e2 = e;
-	ensure_equals( "variables not copied", v[ 0 ], SPOOKY );
+	ENSURE_EQUALS( "variables not copied", v[ 0 ], SPOOKY );
 TUT_TEARDOWN()
 
 }

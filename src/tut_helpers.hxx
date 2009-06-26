@@ -32,36 +32,22 @@ Copyright:
 #include <iomanip>
 
 #include <yaal/hcore/hstreaminterface.hxx>
+#include <yaal/hcore/hpair.hxx>
 #include <yaal/hcore/hcomplex.hxx>
 #include <yaal/hcore/hvector.hxx>
 #include <yaal/hcore/hmatrix.hxx>
 
-namespace tress
+namespace std
 {
-
-namespace tut_helpers
-{
-
-class HLogger
-	{
-protected:
-	/*{*/
-	/*}*/
-public:
-	/*{*/
-	HLogger( void );
-	HLogger& operator << ( std::string const& );
-	HLogger& operator << ( int const& );
-	HLogger& operator << ( std::ostream& ( * const )( std::ostream& ) );
-	/*}*/
-protected:
-	/*{*/
-	/*}*/
-	};
 
 std::ostream& operator << ( std::ostream&, yaal::hcore::HComplex const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HString const& );
-yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface&, std::string const& );
+template<typename first_t, typename second_t>
+std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second_t> const& p )
+	{
+	os << "(" << p.first << "," << p.second << ")";
+	return ( os );
+	}
 
 template<typename tType>
 std::ostream& operator << ( std::ostream& out,
@@ -114,6 +100,32 @@ std::ostream& operator << ( std::ostream& out,
 	M_EPILOG
 	}
 
+}
+
+namespace tress
+{
+
+namespace tut_helpers
+{
+
+class HLogger
+	{
+protected:
+	/*{*/
+	/*}*/
+public:
+	/*{*/
+	HLogger( void );
+	HLogger& operator << ( std::string const& );
+	HLogger& operator << ( int const& );
+	HLogger& operator << ( std::ostream& ( * const )( std::ostream& ) );
+	/*}*/
+protected:
+	/*{*/
+	/*}*/
+	};
+
+yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface&, std::string const& );
 struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ ); } };
 
 void show_title( char const* const );

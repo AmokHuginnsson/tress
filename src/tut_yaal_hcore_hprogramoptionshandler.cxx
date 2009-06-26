@@ -70,7 +70,7 @@ TUT_UNIT_TEST_N( 1, "duplicated long option" )
 			( "number", program_options_helper::option_value( _testNumber ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number", "select test number for a given group" )
 			( "number", program_options_helper::option_value( otherValue ), "X", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number", "select test number for a given group" )
 			( "_restartable", program_options_helper::option_value( _restartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, NULL, "run tests in _restartable mode" );
-		fail( "program options handler with duplicated long option created" );
+		FAIL( "program options handler with duplicated long option created" );
 		}
 	catch ( HProgramOptionsHandlerException const& )
 		{
@@ -90,7 +90,7 @@ TUT_UNIT_TEST_N( 2, "duplicated short option" )
 			( "number", program_options_helper::option_value( _testNumber ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number", "select test number for a given group" )
 			( "other", program_options_helper::option_value( otherValue ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number", "select test number for a given group" )
 			( "_restartable", program_options_helper::option_value( _restartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, NULL, "run tests in _restartable mode" );
-		fail( "program options handler with duplicated short option created" );
+		FAIL( "program options handler with duplicated short option created" );
 		}
 	catch ( HProgramOptionsHandlerException const& )
 		{

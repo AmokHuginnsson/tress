@@ -52,11 +52,11 @@ template < >
 template < >
 void module::test<1> ( void )
 	{
-	ensure_equals ( "failed to verify IBAN: PL 12 1470 0002 2201 0010 7060 0001",
+	ENSURE_EQUALS ( "failed to verify IBAN: PL 12 1470 0002 2201 0010 7060 0001",
 			verify_IBAN ( "PL 12 1470 0002 2201 0010 7060 0001" ), false );
-	ensure_equals ( "failed to verify IBAN: PL 12 1140 2004 0000 3402 3659 1487",
+	ENSURE_EQUALS ( "failed to verify IBAN: PL 12 1140 2004 0000 3402 3659 1487",
 			verify_IBAN ( "PL 12 1140 2004 0000 3402 3659 1487" ), false );
-	ensure_equals ( "failed to verify IBAN: PL 65 1060 0076 0000 3200 0005 7153",
+	ENSURE_EQUALS ( "failed to verify IBAN: PL 65 1060 0076 0000 3200 0005 7153",
 			verify_IBAN ( "PL 65 1060 0076 0000 3200 0005 7153" ), false );
 	}
 
@@ -65,7 +65,7 @@ template < >
 template < >
 void module::test<2> ( void )
 	{
-	ensure_equals ( "failed to verify IBAN: PL 76 1140 2004 0080 3602 3659 1498",
+	ENSURE_EQUALS ( "failed to verify IBAN: PL 76 1140 2004 0080 3602 3659 1498",
 			verify_IBAN ( "PL 76 1140 2004 0080 3602 3659 1498" ), true );
 	}
 
@@ -78,7 +78,7 @@ void module::test<3> ( void )
 		HString string( setup.f_ppcArgv[ 1 ] );
 		int unknown = static_cast<int>( string.find( '?' ) );
 		if ( unknown < 0 )
-			fail( "No unknown characters." );
+			FAIL( "No unknown characters." );
 		for ( int i = 0; i < 10; ++ i )
 			{
 			string.set_at( unknown, static_cast<char>( i + '0' ) );

@@ -145,11 +145,11 @@ bool operator != ( HXml const& left, HXml const& right )
 
 TUT_UNIT_TEST_N( 1, "/* Empty DOM. */" )
 	HXml x;
-	ensure( "fresh DOM not empty", ! x.get_root() );
+	ENSURE( "fresh DOM not empty", ! x.get_root() );
 	try
 		{
 		x.get_root().get_type();
-		fail( "accessing null node-proxy" );
+		FAIL( "accessing null node-proxy" );
 		}
 	catch ( HFailedAssertion& )
 		{
@@ -163,11 +163,11 @@ TUT_UNIT_TEST_N( 2, "/* Root node. */" )
 	static char const* const ROOT = "root";
 	x.create_root( ROOT );
 	HXml::HNodeProxy n = x.get_root();
-	ensure( "initialized DOM empty", !! n );
-	ensure_equals( "root value not stored", n.get_name(), ROOT );
-	ensure_equals( "bad level of root element", n.get_level(), 0 );
-	ensure( "bad type of root element", n.get_type() == HXml::HNode::TYPE::NODE );
-	ensure( "fresh node not empty", n.begin() == n.end() );
+	ENSURE( "initialized DOM empty", !! n );
+	ENSURE_EQUALS( "root value not stored", n.get_name(), ROOT );
+	ENSURE_EQUALS( "bad level of root element", n.get_level(), 0 );
+	ENSURE( "bad type of root element", n.get_type() == HXml::HNode::TYPE::NODE );
+	ENSURE( "fresh node not empty", n.begin() == n.end() );
 TUT_TEARDOWN()
 
 
@@ -177,11 +177,11 @@ TUT_UNIT_TEST_N( 3, "/* clear */" )
 	x.create_root( ROOT );
 	HXml::HNodeProxy n = x.get_root();
 	x.clear();
-	ensure( "cleared DOM not empty", ! x.get_root() );
+	ENSURE( "cleared DOM not empty", ! x.get_root() );
 	try
 		{
 		x.get_root().get_type();
-		fail( "accessing null node-proxy" );
+		FAIL( "accessing null node-proxy" );
 		}
 	catch ( HFailedAssertion& )
 		{
@@ -208,11 +208,11 @@ TUT_UNIT_TEST_N( 4, "/* build, save, load */" )
 	x.save( HStreamInterface::ptr_t( new HFile( OUT_PATH, HFile::OPEN::WRITING ) ) );
 	HXml y;
 	y.load( HStreamInterface::ptr_t( new HFile( OUT_PATH ) ) );
-	ensure_equals( "DOMs differ", x, y );
+	ENSURE_EQUALS( "DOMs differ", x, y );
 	try
 		{
 		(*it).copy_node( n );
-		fail( "copying from parent node" );
+		FAIL( "copying from parent node" );
 		}
 	catch ( HFailedAssertion& )
 		{
@@ -264,12 +264,6 @@ TUT_UNIT_TEST_N( 9, "/* apply stylesheet */" )
 	f_oXml.parse();
 	dump( std::cout, f_oXml.get_root() );
 TUT_TEARDOWN()
-
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s )
-	{
-	out << s.raw();
-	return ( out );
-	}
 
 TUT_UNIT_TEST_N( 10, "/* init, parse, apply, save */" )
 	HString string;

@@ -66,44 +66,44 @@ TUT_TEST_GROUP_N( tut_yaal_tools_hpipedchild, "yaal::tools::HPipedChild" );
 
 TUT_UNIT_TEST_N( 1, "simple constructor" )
 	HPipedChild pc;
-	ensure_equals( "bad state on simple construction", pc.is_running(), false );
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "spawn and finish" )
 	HPipedChild pc;
-	ensure_equals( "bad state on simple construction", pc.is_running(), false );
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
 	pc.spawn( CHILD );
-	ensure_equals( "bad state after spawn", pc.is_running(), true );
+	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
 	pc.finish();
-	ensure_equals( "bad state after finish", pc.is_running(), false );
+	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "spawn on non-execuable" )
 	HPipedChild pc;
-	ensure_equals( "bad state on simple construction", pc.is_running(), false );
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
 	try
 		{
 		pc.spawn( CHILD_FAKE );
-		fail( "spawning non-executable" );
+		FAIL( "spawning non-executable" );
 		}
 	catch ( HPipedChildException& )
 		{
 		// ok
 		}
-	ensure_equals( "running after failed spawn", pc.is_running(), false );
+	ENSURE_EQUALS( "running after failed spawn", pc.is_running(), false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "spawn, write and read (stdout)" )
 	HPipedChild pc;
-	ensure_equals( "bad state on simple construction", pc.is_running(), false );
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
 	pc.spawn( CHILD );
-	ensure_equals( "bad state after spawn", pc.is_running(), true );
+	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
 	pc << MSG_OUT << endl;
 	HString ack;
 	pc.read_until( ack );
-	ensure_equals( "bad ack OUT", ack, ACK_OUT );
+	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
 	pc.finish();
-	ensure_equals( "bad state after finish", pc.is_running(), false );
+	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
 TUT_TEARDOWN()
 
 }

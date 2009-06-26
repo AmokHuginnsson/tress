@@ -17,8 +17,6 @@ namespace
  * Tests provided condition.
  * Throws if false.
  */
-#define ensure( ... ) ensure_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-
 void ensure_real( char const* const file, int const& line, char const* const msg, bool cond )
 	{
 	if ( !cond )
@@ -27,19 +25,26 @@ void ensure_real( char const* const file, int const& line, char const* const msg
 		throw failure( file, line, msg );
 		}
 	}
+void ensure( char const* const msg, bool cond )
+	{
+	ensure_real( NULL, 0, msg, cond );
+	}
 
 /**
  * Tests provided condition.
  * Throws if false.
  */
 template<typename T>
-void ensure_real( char const* const file, int const& line, char const* const, const T msg, bool cond )
+void ensure_real( char const* const file, int const& line, char const* const, T const& msg, bool cond )
 	{
 	if ( !cond )
 		throw failure( file, line, msg );
 	}
-
-#define ensure_not( ... ) ensure_not_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
+template<typename T>
+void ensure( T const& msg, bool cond )
+	{
+	ensure_real( NULL, 0, NULL, msg, cond );
+	}
 
 /**
  * Tests provided condition.
@@ -53,16 +58,25 @@ void ensure_not_real( char const* const file, int const& line, char const* const
 		throw failure( file, line, msg );
 		}
 	}
+void ensure_not( char const* const msg, bool cond )
+	{
+	ensure_not_real( NULL, 0, msg, cond );
+	}
 
 /**
  * Tests provided condition.
  * Throws if true.
  */
 template<typename T>
-void ensure_not_real( char const* const file, int const& line, char const* const, const T msg, bool cond )
+void ensure_not_real( char const* const file, int const& line, char const* const, T const& msg, bool cond )
 	{
 	if ( cond )
 		throw failure( file, line, msg );
+	}
+template<typename T>
+void ensure_not( T const& msg, bool cond )
+	{
+	ensure_not_real( NULL, 0, NULL, msg, cond );
 	}
 
 /**
@@ -72,8 +86,6 @@ void ensure_not_real( char const* const file, int const& line, char const* const
  * NB: both T and Q must have operator << defined somewhere, or
  * client code will not compile at all!
  */
-#define ensure_equals( ... ) ensure_equals_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-
 template<class T, class Q>
 void ensure_equals_real( char const* const file, int const& line, char const* const, const char* msg, const Q& actual,
 	const T& expected )
@@ -87,6 +99,11 @@ void ensure_equals_real( char const* const file, int const& line, char const* co
 		throw failure( file, line, ss.str().c_str() );
 		}
 	}
+template<class T, class Q>
+void ensure_equals( const char* msg, const Q& actual, const T& expected )
+	{
+	ensure_equals_real( NULL, 0, NULL, msg, actual, expected );
+	}
 
 template<class T, class Q>
 void ensure_equals_real( char const* const file,
@@ -97,6 +114,11 @@ void ensure_equals_real( char const* const file,
 	const T& expected )
 	{
 	ensure_equals_real<>( file, line, NULL, msg.raw(), actual, expected );
+	}
+template<class T, class Q>
+void ensure_equals( yaal::hcore::HString const& msg, const Q& actual, const T& expected )
+	{
+	ensure_equals_real( NULL, 0, NULL, msg, actual, expected );
 	}
 
 template<class T, class Q>
@@ -115,7 +137,6 @@ void ensure_equals_real( char const* const file, int const& line, char const* co
  * client code will not compile at all! Also, T shall have
  * operators + and -, and be comparable.
  */
-#define ensure_distance( ... ) ensure_distance_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
 template<class T>
 void ensure_distance_real( char const* const file, int const& line, char const* const, const char* msg, const T& actual,
 	const T& expected, const T& distance )
@@ -131,6 +152,11 @@ void ensure_distance_real( char const* const file, int const& line, char const* 
 		throw failure( file, line, ss.str().c_str() );
 		}
 	}
+template<class T>
+void ensure_distance( const char* msg, const T& actual, const T& expected, const T& distance )
+	{
+	ensure_distance_real( NULL, 0, NULL, msg, actual, expected, distance );
+	}
 
 template<class T>
 void ensure_distance_real( char const* const file, int const& line, const char* msg, const T& actual,
@@ -139,7 +165,6 @@ void ensure_distance_real( char const* const file, int const& line, const char* 
 	ensure_distance_real<>( file, line, NULL, msg, actual, expected, distance );
 	}
 
-#define ensure_errno( ... ) ensure_errno_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
 void ensure_errno_real( char const* const file, int const& line, char const* const, char const* msg, bool cond )
 	{
 	if( ! cond )
@@ -156,15 +181,22 @@ void ensure_errno_real( char const* const file, int const& line, char const* con
 #endif
 		}
 	}
+void ensure_errno( char const* msg, bool cond )
+	{
+	ensure_errno_real( NULL, 0, NULL, msg, cond );
+	}
 
 /**
  * Unconditionally fails with message.
  */
-#define fail( msg ) fail_real( __FILE__, __LINE__, ( msg ) )
 void fail_real( char const* const, int const&, const char* = "" ) __attribute__( ( __noreturn__ ) );
 void fail_real( char const* const file, int const& line, const char* msg )
 	{
 	throw failure( file, line, msg );
+	}
+void fail( const char* msg )
+	{
+	fail_real( NULL, 0, msg );
 	}
 
 void fail_real( char const* const file, int const& line, std::string const& msg )

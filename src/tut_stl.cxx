@@ -135,10 +135,10 @@ TUT_UNIT_TEST_N( 7, "map insert of already existing key")
 	typedef map<int, int> i2i_t;
 	i2i_t m;
 	m.insert( std::make_pair( 1, 2 ) );
-	ensure( "element not inserted", m.find( 1 ) != m.end() );
+	ENSURE( "element not inserted", m.find( 1 ) != m.end() );
 	typedef pair<i2i_t::iterator, bool> insert_result_t;
 	insert_result_t ir = m.insert( std::make_pair( 1, 3 ) );
-	ensure_equals( "element with already existing key inserted", ir.second, false );
+	ENSURE_EQUALS( "element with already existing key inserted", ir.second, false );
 	cout << (*ir.first).second << endl;
 TUT_TEARDOWN()
 

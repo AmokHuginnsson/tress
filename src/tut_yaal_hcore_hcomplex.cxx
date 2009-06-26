@@ -51,8 +51,8 @@ template < >
 void module::test<1> ( void )
 	{
 	HComplex a;
-	ensure_distance ( "non zero new complex number (re)", a.re ( ), 0., 0.001 );
-	ensure_distance ( "non zero new complex number (im)", a.im ( ), 0., 0.001 );
+	ENSURE_DISTANCE ( "non zero new complex number (re)", a.re ( ), 0., 0.001 );
+	ENSURE_DISTANCE ( "non zero new complex number (im)", a.im ( ), 0., 0.001 );
 	}
 
 /* Constructor with initialization. */
@@ -63,11 +63,11 @@ void module::test<2> ( void )
 	double const RE = 3.14159265;
 	double const IM = 2.17;
 	HComplex a ( RE );
-	ensure_distance ( "non zero new complex number (im)", a.im ( ), 0., 0.001 );
-	ensure_distance ( "re incrorrectly set by constructor", a.re ( ), RE, 0.001 );
+	ENSURE_DISTANCE ( "non zero new complex number (im)", a.im ( ), 0., 0.001 );
+	ENSURE_DISTANCE ( "re incrorrectly set by constructor", a.re ( ), RE, 0.001 );
 	HComplex b ( RE, IM );
-	ensure_distance ( "re incrorrectly set by constructor", b.re ( ), RE, 0.001 );
-	ensure_distance ( "im incrorrectly set by constructor", b.im ( ), IM, 0.001 );
+	ENSURE_DISTANCE ( "re incrorrectly set by constructor", b.re ( ), RE, 0.001 );
+	ENSURE_DISTANCE ( "im incrorrectly set by constructor", b.im ( ), IM, 0.001 );
 	}
 
 }

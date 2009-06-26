@@ -158,15 +158,15 @@ TUT_UNIT_TEST_N( 1, "valid ex hier construct for full hier" )
 		{
 		A x;
 		x.foo( 0 );
-		fail( "test bug, exception not thrown" );
+		FAIL( "test bug, exception not thrown" );
 		}
 	catch ( CE const& )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( BE const& )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( AE const& e )
 		{
@@ -176,27 +176,27 @@ TUT_UNIT_TEST_N( 1, "valid ex hier construct for full hier" )
 		ptr = HException::get_type_name( typeid( AE ).name() );
 		HString aetype( ptr );
 		HException::cleanup( ptr );
-		ensure_equals( "bad generated type", etype, aetype );
+		ENSURE_EQUALS( "bad generated type", etype, aetype );
 		}
 	catch ( HException const& e )
 		{
 		cout << e.what() << endl;
 		e.print_error( true );
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( ... )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	try
 		{
 		B x;
 		x.foo( 0 );
-		fail( "test bug, exception not thrown" );
+		FAIL( "test bug, exception not thrown" );
 		}
 	catch ( CE const& )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( BE const& e )
 		{
@@ -206,29 +206,29 @@ TUT_UNIT_TEST_N( 1, "valid ex hier construct for full hier" )
 		ptr = HException::get_type_name( typeid( BE ).name() );
 		HString aetype( ptr );
 		HException::cleanup( ptr );
-		ensure_equals( "bad generated type", etype, aetype );
+		ENSURE_EQUALS( "bad generated type", etype, aetype );
 		}
 	catch ( AE const& e )
 		{
 		cout << e.what() << endl;
 		e.print_error( true );
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( HException const& e )
 		{
 		cout << e.what() << endl;
 		e.print_error( true );
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( ... )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	try
 		{
 		C x;
 		x.foo( 0 );
-		fail( "test bug, exception not thrown" );
+		FAIL( "test bug, exception not thrown" );
 		}
 	catch ( CE const& e )
 		{
@@ -238,26 +238,26 @@ TUT_UNIT_TEST_N( 1, "valid ex hier construct for full hier" )
 		ptr = HException::get_type_name( typeid( CE ).name() );
 		HString aetype( ptr );
 		HException::cleanup( ptr );
-		ensure_equals( "bad generated type", etype, aetype );
+		ENSURE_EQUALS( "bad generated type", etype, aetype );
 		}
 	catch ( BE const& )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( AE const& e )
 		{
 		cout << e.what() << endl;
 		e.print_error( true );
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( HException const& e )
 		{
 		cout << e.what() << endl;
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( ... )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 TUT_TEARDOWN()
 
@@ -266,15 +266,15 @@ TUT_UNIT_TEST_N( 2, "degenerated hier" )
 		{
 		P x;
 		x.foo( 0 );
-		fail( "test bug, exception not thrown" );
+		FAIL( "test bug, exception not thrown" );
 		}
 	catch ( RE const& )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( QE const& )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( PE const& e )
 		{
@@ -284,67 +284,67 @@ TUT_UNIT_TEST_N( 2, "degenerated hier" )
 		ptr = HException::get_type_name( typeid( PE ).name() );
 		HString aetype( ptr );
 		HException::cleanup( ptr );
-		ensure_equals( "bad generated type", etype, aetype );
+		ENSURE_EQUALS( "bad generated type", etype, aetype );
 		}
 	catch ( HException const& e )
 		{
 		cout << e.what() << endl;
 		e.print_error( true );
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( ... )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	try
 		{
 		Q x;
 		x.foo( 0 );
-		fail( "test bug, exception not thrown" );
+		FAIL( "test bug, exception not thrown" );
 		}
 	catch ( RE const& )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( QE const& )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( PE const& )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( HException const& )
 		{
 		}
 	catch ( ... )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	try
 		{
 		R x;
 		x.foo( 0 );
-		fail( "test bug, exception not thrown" );
+		FAIL( "test bug, exception not thrown" );
 		}
 	catch ( RE const& )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( QE const& )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( PE const& )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 	catch ( HException const& )
 		{
 		}
 	catch ( ... )
 		{
-		fail( "bad exception caught" );
+		FAIL( "bad exception caught" );
 		}
 TUT_TEARDOWN()
 
@@ -353,7 +353,7 @@ HExceptionSafeGlobal<HString> globalVarHolder( HEXCEPTIONSAFEGLOBAL_TEST_VAR );
 HString& globalVar = globalVarHolder.instance();
 
 TUT_UNIT_TEST_N( 3, "safe initialization of global variables" )
-	ensure_equals( "global variable not initialized correctly", globalVar, HEXCEPTIONSAFEGLOBAL_TEST_VAR );
+	ENSURE_EQUALS( "global variable not initialized correctly", globalVar, HEXCEPTIONSAFEGLOBAL_TEST_VAR );
 TUT_TEARDOWN()
 
 }

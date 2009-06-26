@@ -46,24 +46,24 @@ struct tut_yaal_trait
 TUT_TEST_GROUP_N( tut_yaal_trait, "yaal::trait" );
 
 TUT_UNIT_TEST_N( 1, "same stype" )
-	ensure( "int, int", same_type<int, int>::value );
-	ensure_not( "int, int const", same_type<int, int const>::value );
-	ensure_not( "int, int*", same_type<int, int*>::value );
-	ensure_not( "int, int&", same_type<int, int&>::value );
-	ensure_not( "int, int short", same_type<int, int short>::value );
-	ensure( "int (char, double), int (char, double)", same_type<int (char, double), int (char, double)>::value );
-	ensure_not( "int (char, double), int (char, double long)", same_type<int (*)(char, double), int (*)(char, double long)>::value );
+	ENSURE( "int, int", same_type<int, int>::value );
+	ENSURE_NOT( "int, int const", same_type<int, int const>::value );
+	ENSURE_NOT( "int, int*", same_type<int, int*>::value );
+	ENSURE_NOT( "int, int&", same_type<int, int&>::value );
+	ENSURE_NOT( "int, int short", same_type<int, int short>::value );
+	ENSURE( "int (char, double), int (char, double)", same_type<int (char, double), int (char, double)>::value );
+	ENSURE_NOT( "int (char, double), int (char, double long)", same_type<int (*)(char, double), int (*)(char, double long)>::value );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "return type" )
-	ensure( "int, int (char, double)", same_type<int, return_type<int (*)(char, double)>::type>::value );
-	ensure( "int*, int* (char, double)", same_type<int*, return_type<int* (*)(char, double)>::type>::value );
-	ensure_not( "int*, int (char, double)", same_type<int*, return_type<int (*)(char, double)>::type>::value );
-	ensure_not( "int, int* (char, double)", same_type<int, return_type<int* (*)(char, double)>::type>::value );
+	ENSURE( "int, int (char, double)", same_type<int, return_type<int (*)(char, double)>::type>::value );
+	ENSURE( "int*, int* (char, double)", same_type<int*, return_type<int* (*)(char, double)>::type>::value );
+	ENSURE_NOT( "int*, int (char, double)", same_type<int*, return_type<int (*)(char, double)>::type>::value );
+	ENSURE_NOT( "int, int* (char, double)", same_type<int, return_type<int* (*)(char, double)>::type>::value );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "count types" )
-	ensure_equals( "type count is wrong", count_type<int, char, double, int, float, int, void*>::value, 2 );
+	ENSURE_EQUALS( "type count is wrong", count_type<int, char, double, int, float, int, void*>::value, 2 );
 TUT_TEARDOWN()
 
 }

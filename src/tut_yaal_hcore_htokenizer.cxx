@@ -58,65 +58,65 @@ TUT_TEST_GROUP_N( tut_yaal_hcore_htokenizer, "yaal::hcore::HTokenizer" );
 
 TUT_UNIT_TEST_N( 1, "/* direct split include empty set[a]*/" )
 	HTokenizer t( ",aa,bb", "," );
-	ensure_equals( split_inc_failed, t[ 0 ], "" );
-	ensure_equals( split_inc_failed, t[ 1 ], "aa" );
-	ensure_equals( split_inc_failed, t[ 2 ], "bb" );
-	ensure_equals( split_inc_failed, t[ 3 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 0 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 1 ], "aa" );
+	ENSURE_EQUALS( split_inc_failed, t[ 2 ], "bb" );
+	ENSURE_EQUALS( split_inc_failed, t[ 3 ], "" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* direct split include empty set[b]*/" )
 	HTokenizer t( "aa,bb", "," );
-	ensure_equals( split_inc_failed, t[ 0 ], "aa" );
-	ensure_equals( split_inc_failed, t[ 1 ], "bb" );
-	ensure_equals( split_inc_failed, t[ 2 ], "" );
-	ensure_equals( split_inc_failed, t[ 3 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 0 ], "aa" );
+	ENSURE_EQUALS( split_inc_failed, t[ 1 ], "bb" );
+	ENSURE_EQUALS( split_inc_failed, t[ 2 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 3 ], "" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* direct split include empty set[c]*/" )
 	HTokenizer t( "aa,bb,", "," );
-	ensure_equals( split_inc_failed, t[ 0 ], "aa" );
-	ensure_equals( split_inc_failed, t[ 1 ], "bb" );
-	ensure_equals( split_inc_failed, t[ 2 ], "" );
-	ensure_equals( split_inc_failed, t[ 3 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 0 ], "aa" );
+	ENSURE_EQUALS( split_inc_failed, t[ 1 ], "bb" );
+	ENSURE_EQUALS( split_inc_failed, t[ 2 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 3 ], "" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "/* direct split include empty set[d]*/" )
 	HTokenizer t( ",aa,", "," );
-	ensure_equals( split_inc_failed, t[ 0 ], "" );
-	ensure_equals( split_inc_failed, t[ 1 ], "aa" );
-	ensure_equals( split_inc_failed, t[ 2 ], "" );
-	ensure_equals( split_inc_failed, t[ 3 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 0 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 1 ], "aa" );
+	ENSURE_EQUALS( split_inc_failed, t[ 2 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 3 ], "" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* direct split include empty set[e]*/" )
 	HTokenizer t( ",,,aa,,", "," );
-	ensure_equals( split_inc_failed, t[ 0 ], "" );
-	ensure_equals( split_inc_failed, t[ 1 ], "" );
-	ensure_equals( split_inc_failed, t[ 2 ], "" );
-	ensure_equals( split_inc_failed, t[ 3 ], "aa" );
-	ensure_equals( split_inc_failed, t[ 4 ], "" );
-	ensure_equals( split_inc_failed, t[ 5 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 0 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 1 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 2 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 3 ], "aa" );
+	ENSURE_EQUALS( split_inc_failed, t[ 4 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t[ 5 ], "" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* direct split include empty set[f]*/" )
 	HTokenizer t1( "a", ";" );
 	HTokenizer t2( "a", "a" );
-	ensure_equals( split_inc_failed, t1[ 0 ], "a" );
-	ensure_equals( split_inc_failed, t1[ 1 ], "" );
-	ensure_equals( split_inc_failed, t1[ 2 ], "" );
-	ensure_equals( split_inc_failed, t2[ 0 ], "" );
-	ensure_equals( split_inc_failed, t2[ 1 ], "" );
-	ensure_equals( split_inc_failed, t2[ 2 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t1[ 0 ], "a" );
+	ENSURE_EQUALS( split_inc_failed, t1[ 1 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t1[ 2 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t2[ 0 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t2[ 1 ], "" );
+	ENSURE_EQUALS( split_inc_failed, t2[ 2 ], "" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "/* direct split skip empty set[a]*/" )
 	HTokenizer t( ",aa,bb", ",", HTokenizer::SKIP_EMPTY );
-	ensure_equals( split_skip_failed, t[ 0 ], "aa" );
-	ensure_equals( split_skip_failed, t[ 1 ], "bb" );
+	ENSURE_EQUALS( split_skip_failed, t[ 0 ], "aa" );
+	ENSURE_EQUALS( split_skip_failed, t[ 1 ], "bb" );
 	try
 		{
 		t[ 2 ];
-		fail( split_invalid_success );
+		FAIL( split_invalid_success );
 		}
 	catch ( HTokenizerException const& )
 		{
@@ -126,12 +126,12 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* direct split skip empty set[b]*/" )
 	HTokenizer t( "aa,bb", ",", HTokenizer::SKIP_EMPTY );
-	ensure_equals( split_skip_failed, t[ 0 ], "aa" );
-	ensure_equals( split_skip_failed, t[ 1 ], "bb" );
+	ENSURE_EQUALS( split_skip_failed, t[ 0 ], "aa" );
+	ENSURE_EQUALS( split_skip_failed, t[ 1 ], "bb" );
 	try
 		{
 		t[ 2 ];
-		fail( split_invalid_success );
+		FAIL( split_invalid_success );
 		}
 	catch ( HTokenizerException const& )
 		{
@@ -141,12 +141,12 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "/* direct split skip empty set[c]*/" )
 	HTokenizer t( "aa,bb,", ",", HTokenizer::SKIP_EMPTY );
-	ensure_equals( split_skip_failed, t[ 0 ], "aa" );
-	ensure_equals( split_skip_failed, t[ 1 ], "bb" );
+	ENSURE_EQUALS( split_skip_failed, t[ 0 ], "aa" );
+	ENSURE_EQUALS( split_skip_failed, t[ 1 ], "bb" );
 	try
 		{
 		t[ 2 ];
-		fail( split_invalid_success );
+		FAIL( split_invalid_success );
 		}
 	catch ( HTokenizerException const& )
 		{
@@ -156,11 +156,11 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "/* direct split skip empty set[d]*/" )
 	HTokenizer t( ",aa,", ",", HTokenizer::SKIP_EMPTY );
-	ensure_equals( split_skip_failed, t[ 0 ], "aa" );
+	ENSURE_EQUALS( split_skip_failed, t[ 0 ], "aa" );
 	try
 		{
 		t[ 1 ];
-		fail( split_invalid_success );
+		FAIL( split_invalid_success );
 		}
 	catch ( HTokenizerException const& )
 		{
@@ -170,11 +170,11 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "/* direct split skip empty set[e]*/" )
 	HTokenizer t( ",,,aa,,", ",", HTokenizer::SKIP_EMPTY );
-	ensure_equals( split_skip_failed, t[ 0 ], "aa" );
+	ENSURE_EQUALS( split_skip_failed, t[ 0 ], "aa" );
 	try
 		{
 		t[ 1 ];
-		fail( split_invalid_success );
+		FAIL( split_invalid_success );
 		}
 	catch ( HTokenizerException const& )
 		{
@@ -185,11 +185,11 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 12, "/* direct split skip empty set[f]*/" )
 	HTokenizer t1( "a", ";", HTokenizer::SKIP_EMPTY );
 	HTokenizer t2( "a", "a", HTokenizer::SKIP_EMPTY );
-	ensure_equals( split_skip_failed, t1[ 0 ], "a" );
+	ENSURE_EQUALS( split_skip_failed, t1[ 0 ], "a" );
 	try
 		{
 		t1[ 1 ];
-		fail( split_invalid_success );
+		FAIL( split_invalid_success );
 		}
 	catch ( HTokenizerException const& )
 		{
@@ -198,7 +198,7 @@ TUT_UNIT_TEST_N( 12, "/* direct split skip empty set[f]*/" )
 	try
 		{
 		t2[ 0 ];
-		fail( split_invalid_success );
+		FAIL( split_invalid_success );
 		}
 	catch ( HTokenizerException const& )
 		{

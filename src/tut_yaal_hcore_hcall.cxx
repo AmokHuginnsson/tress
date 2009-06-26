@@ -205,9 +205,9 @@ TUT_UNIT_TEST_N( 1, "a member (no args)" )
 	call_two_t c( *this, &tut_yaal_hcore_hcall::fv );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::FV );
+	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::FV );
 	for ( int i = 0; i < 10; ++ i )
-		ensure_equals( "args persistance failed", _int[i], post[i] );
+		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "a member (one int arg)" )
@@ -217,9 +217,9 @@ TUT_UNIT_TEST_N( 2, "a member (one int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f1i, 0 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::F1I );
+	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F1I );
 	for ( int i = 0; i < 10; ++ i )
-		ensure_equals( "args persistance failed", _int[i], post[i] );
+		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "a member (two int arg)" )
@@ -229,9 +229,9 @@ TUT_UNIT_TEST_N( 3, "a member (two int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f2i, 0, 1 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::F2I );
+	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F2I );
 	for ( int i = 0; i < 10; ++ i )
-		ensure_equals( "args persistance failed", _int[i], post[i] );
+		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "a member (3 int arg)" )
@@ -241,9 +241,9 @@ TUT_UNIT_TEST_N( 4, "a member (3 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f3i, 0, 1, 2 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::F3I );
+	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F3I );
 	for ( int i = 0; i < 10; ++ i )
-		ensure_equals( "args persistance failed", _int[i], post[i] );
+		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "a member (4 int arg)" )
@@ -253,9 +253,9 @@ TUT_UNIT_TEST_N( 5, "a member (4 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f4i, 0, 1, 2, 3 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::F4I );
+	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F4I );
 	for ( int i = 0; i < 10; ++ i )
-		ensure_equals( "args persistance failed", _int[i], post[i] );
+		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "a member (5 int arg)" )
@@ -265,9 +265,9 @@ TUT_UNIT_TEST_N( 6, "a member (5 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f5i, 0, 1, 2, 3, 4 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::F5I );
+	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F5I );
 	for ( int i = 0; i < 10; ++ i )
-		ensure_equals( "args persistance failed", _int[i], post[i] );
+		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "a member (6 int arg)" )
@@ -277,9 +277,9 @@ TUT_UNIT_TEST_N( 7, "a member (6 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f6i, 0, 1, 2, 3, 4, 5 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::F6I );
+	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F6I );
 	for ( int i = 0; i < 10; ++ i )
-		ensure_equals( "args persistance failed", _int[i], post[i] );
+		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "a member (7 int arg)" )
@@ -289,9 +289,9 @@ TUT_UNIT_TEST_N( 8, "a member (7 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f7i, 0, 1, 2, 3, 4, 5, 6 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::F7I );
+	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F7I );
 	for ( int i = 0; i < 10; ++ i )
-		ensure_equals( "args persistance failed", _int[i], post[i] );
+		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "a member (8 int arg)" )
@@ -301,9 +301,9 @@ TUT_UNIT_TEST_N( 9, "a member (8 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f8i, 0, 1, 2, 3, 4, 5, 6, 7 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::F8I );
+	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F8I );
 	for ( int i = 0; i < 10; ++ i )
-		ensure_equals( "args persistance failed", _int[i], post[i] );
+		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "a member (9 int arg)" )
@@ -313,9 +313,9 @@ TUT_UNIT_TEST_N( 10, "a member (9 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f9i, 0, 1, 2, 3, 4, 5, 6, 7, 8 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::F9I );
+	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F9I );
 	for ( int i = 0; i < 10; ++ i )
-		ensure_equals( "args persistance failed", _int[i], post[i] );
+		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "a member (10 int arg)" )
@@ -325,9 +325,9 @@ TUT_UNIT_TEST_N( 11, "a member (10 int arg)" )
 	call_t c( *this, &tut_yaal_hcore_hcall::f10i, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 );
 	cout << sizeof ( c ) << endl;
 	c.invoke();
-	ensure_equals( "bad method called", _signature, SIGNATURE::F10I );
+	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F10I );
 	for ( int i = 0; i < 10; ++ i )
-		ensure_equals( "args persistance failed", _int[i], post[i] );
+		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
 }

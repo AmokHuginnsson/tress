@@ -133,27 +133,27 @@ typedef HPointer<tut_yaal_hcore_hpointer::counter_t> ptr_t;
 
 TUT_UNIT_TEST_N( 1, "/* Default constructor. */" )
 	ptr_t ptr;
-	ensure_equals ( "failed to invoke destructor", ptr.raw(), static_cast<counter_t*>( NULL ) );
+	ENSURE_EQUALS ( "failed to invoke destructor", ptr.raw(), static_cast<counter_t*>( NULL ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Constructor. */" )
 		{
 		counter_t* p = NULL;
 		ptr_t ptr( p = new counter_t() );
-		ensure_equals( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
+		ENSURE_EQUALS( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
 		ptr->foo();
 		}
-	ensure_equals ( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
+	ENSURE_EQUALS ( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* Copy constructor. */" )
 		{
 		counter_t* p = NULL;
 		ptr_t ptr = ptr_t( p = new counter_t() );
-		ensure_equals( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
+		ENSURE_EQUALS( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
 		ptr->foo();
 		}
-	ensure_equals( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
+	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "/* Assign operator. */" )
@@ -164,24 +164,24 @@ TUT_UNIT_TEST_N( 4, "/* Assign operator. */" )
 		sp1->foo();
 		sp2->foo();
 		sp1 = sp2;
-		ensure_equals( "failed to invoke destructor", counter_t::get_instance_count(), 1 );
-		ensure_equals( "failed to assign pointer", sp1->get_symbol(), sp2->get_symbol() );
-		ensure_equals( "failed to assign pointer", sp1.raw(), p );
+		ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "failed to assign pointer", sp1->get_symbol(), sp2->get_symbol() );
+		ENSURE_EQUALS( "failed to assign pointer", sp1.raw(), p );
 		sp1->foo();
 		}
-	ensure_equals( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
+	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* Checks constructor with another ptr_t with no module. */" )
 		{
 		ptr_t sp1;
-		ensure_equals( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
+		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
 		ptr_t sp2( sp1 );
-		ensure_equals( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
-		ensure_equals( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
-		ensure( sp2.raw() == 0 );
+		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
+		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
+		ENSURE( sp2.raw() == 0 );
 		}
-	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* Checks constructor with another ptr_t with module. */" )
@@ -189,12 +189,12 @@ TUT_UNIT_TEST_N( 6, "/* Checks constructor with another ptr_t with module. */" )
 		counter_t* p = new counter_t();
 		ptr_t sp1(p);
 		ptr_t sp2(sp1);
-		ensure_equals( "get", sp1.raw(), p );
-		ensure_equals( "get", sp2.raw(), p );
-		ensure_equals( "leak !!!", counter_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "get", sp1.raw(), p );
+		ENSURE_EQUALS( "get", sp2.raw(), p );
+		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
 		}
 	// ptr left scope
-	ensure_equals( "destructed", counter_t::get_instance_count(), 0 );
+	ENSURE_EQUALS( "destructed", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 // =================================================
@@ -205,10 +205,10 @@ TUT_UNIT_TEST_N( 7, "/* Checks assignment with non-null module. */" )
 		{
 		counter_t* p = new counter_t();
 		ptr_t sp( p );
-		ensure("get", sp.raw() == p);
-		ensure("leak !!!", counter_t::get_instance_count() == 1);
+		ENSURE("get", sp.raw() == p);
+		ENSURE("leak !!!", counter_t::get_instance_count() == 1);
 		}
-	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* Checks assignment with ptr_t with non-null module. */" )
@@ -217,22 +217,22 @@ TUT_UNIT_TEST_N( 8, "/* Checks assignment with ptr_t with non-null module. */" )
 		ptr_t sp1( p = new counter_t() );
 		ptr_t sp2;
 		sp2 = sp1;
-		ensure_equals( "get", sp1.raw(), p );
-		ensure_equals( "get", sp2.raw(), p );
-		ensure_equals( "leak !!!", counter_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "get", sp1.raw(), p );
+		ENSURE_EQUALS( "get", sp2.raw(), p );
+		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
 		}
-	ensure_equals( "destructed", counter_t::get_instance_count(), 0 );
+	ENSURE_EQUALS( "destructed", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "/* Checks assignment with itself. */" )
 		{
 		ptr_t sp1( new counter_t() );
 		sp1 = sp1;
-		ensure( "get", sp1.raw() != 0 );
-		ensure( "leak !!!", counter_t::get_instance_count() == 1 );
-		ensure_equals( "not destructed", counter_t::get_instance_count(), 1 );
+		ENSURE( "get", sp1.raw() != 0 );
+		ENSURE( "leak !!!", counter_t::get_instance_count() == 1 );
+		ENSURE_EQUALS( "not destructed", counter_t::get_instance_count(), 1 );
 		}
-	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
 TUT_TEARDOWN()
 
 
@@ -245,15 +245,15 @@ TUT_UNIT_TEST_N( 10, "/* Checks passing ownership via assignment. */" )
 		counter_t *p1 = NULL, *p2 = NULL;
 		ptr_t sp1( p1 = new counter_t( 1 ));
 		ptr_t sp2( p2 = new counter_t( 2 ));
-		ensure_equals( "create 1", sp1->get_symbol(), p1->get_symbol() );
-		ensure_equals( "create 2", sp2->get_symbol(), p2->get_symbol() );
-		ensure_equals( "leak !!!=2", counter_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "create 1", sp1->get_symbol(), p1->get_symbol() );
+		ENSURE_EQUALS( "create 2", sp2->get_symbol(), p2->get_symbol() );
+		ENSURE_EQUALS( "leak !!!=2", counter_t::get_instance_count(), 2 );
 
 		sp1 = sp2;
-		ensure_equals( "create 2", sp1->get_symbol(), p2->get_symbol() );
-		ensure_equals( "leak !!!=1", counter_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "create 2", sp1->get_symbol(), p2->get_symbol() );
+		ENSURE_EQUALS( "leak !!!=1", counter_t::get_instance_count(), 1 );
 		}
-	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "/* Checks operator -&gt; throws instead of returning null. */" )
@@ -262,14 +262,14 @@ TUT_UNIT_TEST_N( 11, "/* Checks operator -&gt; throws instead of returning null.
 			{
 			ptr_t sp;
 			sp->get_symbol();
-			fail( "failed assertion expected" );
+			FAIL( "failed assertion expected" );
 			}
 		catch ( HFailedAssertion& )
 			{
 			// ok
 			}
 		}
-	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 12, "/* assign smart pointers pointing to the same memory. */" )
@@ -278,7 +278,7 @@ TUT_UNIT_TEST_N( 12, "/* assign smart pointers pointing to the same memory. */" 
 		ptr_t sp2 = sp1;
 		sp2 = sp1;
 		}
-	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
 TUT_TEARDOWN()
 
 /* Weak pointer related tests. */
@@ -288,18 +288,18 @@ TUT_UNIT_TEST_N( 13, "/* default constructor */" )
 		{
 		weak_t w;
 		ptr_t p( w );
-		ensure( "bad default constructor", p.raw() == NULL );
+		ENSURE( "bad default constructor", p.raw() == NULL );
 		}
-	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 14, "/* copy constructor */" )
 		{
 		ptr_t p( new counter_t() );
 		weak_t w( p );
-		ensure( "bad copy constructor", p.raw() != NULL );
+		ENSURE( "bad copy constructor", p.raw() != NULL );
 		}
-	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 15, "/* accessing nullified weak */" )
@@ -308,14 +308,14 @@ TUT_UNIT_TEST_N( 15, "/* accessing nullified weak */" )
 			{
 			ptr_t p( new counter_t() );
 			w = p;
-			ensure( "weak could not pass ownership", w == p );
+			ENSURE( "weak could not pass ownership", w == p );
 			ptr_t o( w );
-			ensure( "weak could not pass ownership", o == p );
+			ENSURE( "weak could not pass ownership", o == p );
 			}
 		ptr_t a( w );
-		ensure( "weak performed forbidden operation", a.raw() == NULL );
+		ENSURE( "weak performed forbidden operation", a.raw() == NULL );
 		}
-	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
 TUT_TEARDOWN()
 
 struct ODummy : public HPointerFromThisInterface<ODummy>
@@ -328,7 +328,7 @@ TUT_UNIT_TEST_N( 16, "/* from this */" )
 	ODummy* raw = NULL;
 	ftp_t p( raw = new ODummy );
 	ftp_t o( raw->get_pointer() );
-	ensure( "from this failed", p == o );
+	ENSURE( "from this failed", p == o );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 17, "/* hierarchy issues */" )
@@ -356,7 +356,7 @@ TUT_UNIT_TEST_N( 17, "/* hierarchy issues */" )
 		a->foo( "a->foo" );
 		spa->A::foo( "spa->A::foo" );
 		spa->foo( "spa->foo" );
-		ensure_equals( "hierarchy problem", spa->A::foo( "ensure" ), MY_VAL );
+		ENSURE_EQUALS( "hierarchy problem", spa->A::foo( "ENSURE" ), MY_VAL );
 		e->A::foo( "e->A::foo" );
 		e->E::foo( "e->E::foo" );
 		e->foo( "e->foo" );
@@ -392,7 +392,7 @@ TUT_UNIT_TEST_N( 18, "non virtual destructor" )
 		{
 		p_t p( new NVDDerive );
 		}
-	ensure( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
 TUT_TEARDOWN()
 
 }

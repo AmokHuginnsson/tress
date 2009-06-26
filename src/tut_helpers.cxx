@@ -37,6 +37,31 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
+namespace std
+{
+
+std::ostream& operator << ( std::ostream& out, HComplex const& a_oComplex )
+	{
+	M_PROLOG
+	double re, im;
+	re = a_oComplex.re ( );
+	im = a_oComplex.im ( );
+	if ( im >= 0 )
+		out << re << " + i" << im;
+	else
+		out << re << " - i" << - im;
+	return ( out );
+	M_EPILOG
+	}
+
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s )
+	{
+	out << s.raw();
+	return ( out );
+	}
+
+}
+
 namespace tress
 {
 
@@ -89,26 +114,6 @@ HLogger& HLogger::operator << ( std::ostream& ( * const ) ( std::ostream& ) )
 	hcore::log << endl;
 	return ( * this );
 	M_EPILOG
-	}
-
-std::ostream& operator << ( std::ostream& out, HComplex const& a_oComplex )
-	{
-	M_PROLOG
-	double re, im;
-	re = a_oComplex.re ( );
-	im = a_oComplex.im ( );
-	if ( im >= 0 )
-		out << re << " + i" << im;
-	else
-		out << re << " - i" << - im;
-	return ( out );
-	M_EPILOG
-	}
-
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s )
-	{
-	out << s.raw();
-	return ( out );
 	}
 
 HStreamInterface& operator << ( HStreamInterface& out, std::string const& s )

@@ -65,7 +65,7 @@ TUT_UNIT_TEST_N( 1, "load external library and resolve symbol" )
 	p.load( TRESS_PLUGIN );
 	sumator_t my_sum;
 	p.resolve( "tut_yaal_tools_hplugin_sum", my_sum );
-	ensure_equals( "cound not utilize plugin", my_sum( T1, T2 ), T1 + T2 );
+	ENSURE_EQUALS( "cound not utilize plugin", my_sum( T1, T2 ), T1 + T2 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "resolve symbol from self" )
@@ -75,7 +75,7 @@ TUT_UNIT_TEST_N( 2, "resolve symbol from self" )
 	p.load( HString() );
 	sumator_t my_sum;
 	p.resolve( MAKE_C_STRING( SELF_SUMATOR ), my_sum );
-	ensure_equals( "cound not utilise self-contained symbols", my_sum( T1, T2 ), T1 + T2 );
+	ENSURE_EQUALS( "cound not utilise self-contained symbols", my_sum( T1, T2 ), T1 + T2 );
 TUT_TEARDOWN()
 
 }

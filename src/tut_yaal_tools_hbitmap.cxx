@@ -62,16 +62,16 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Default constructor */" )
 	HBitmap bmp;
-	ensure_equals( "size", bmp.get_size(), 0 );
-	ensure_equals( "raw", bmp.raw(), static_cast<void*>( NULL ) );
+	ENSURE_EQUALS( "size", bmp.get_size(), 0 );
+	ENSURE_EQUALS( "raw", bmp.raw(), static_cast<void*>( NULL ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* constructor from size */" )
 	static int const SIZE = 7;
 	HBitmap bmp( SIZE );
-	ensure_equals( "constructor from size size", bmp.get_size(), SIZE );
-	ensure( "default constructor raw", bmp.raw() != static_cast<void*>( NULL ) );
-	ensure( "default constructor ", bmp.raw() != static_cast<void*>( NULL ) );
+	ENSURE_EQUALS( "constructor from size size", bmp.get_size(), SIZE );
+	ENSURE( "default constructor raw", bmp.raw() != static_cast<void*>( NULL ) );
+	ENSURE( "default constructor ", bmp.raw() != static_cast<void*>( NULL ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "/* set */" )
@@ -79,7 +79,7 @@ TUT_UNIT_TEST_N( 4, "/* set */" )
 	try
 		{
 		bmp.set( 0, true );
-		fail( "default constructor set" );
+		FAIL( "default constructor set" );
 		}
 	catch ( HFailedAssertion& )
 		{
@@ -92,7 +92,7 @@ TUT_UNIT_TEST_N( 5, "/* get */" )
 	try
 		{
 		bmp.get( 0 );
-		fail( "default constructor set" );
+		FAIL( "default constructor set" );
 		}
 	catch ( HFailedAssertion& )
 		{
@@ -105,7 +105,7 @@ TUT_UNIT_TEST_N( 6, "/* rotate_left */" )
 	try
 		{
 		bmp.rotate_left( 0, 0, 0 );
-		fail( "default constructor set" );
+		FAIL( "default constructor set" );
 		}
 	catch ( HFailedAssertion& )
 		{
@@ -118,7 +118,7 @@ TUT_UNIT_TEST_N( 7, "/* rotate_right */" )
 	try
 		{
 		bmp.rotate_right( 0, 0, 0 );
-		fail( "default constructor set" );
+		FAIL( "default constructor set" );
 		}
 	catch ( HFailedAssertion& )
 		{

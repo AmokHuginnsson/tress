@@ -111,10 +111,10 @@ void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n )
 void tut_yaal_hcore_htree::check_node( tree_t::const_node_t node, bool root )
 	{
 	if ( ! root )
-		ensure_equals( "bad root", node->f_poTree, static_cast<tree_t*>( NULL ) );
+		ENSURE_EQUALS( "bad root", node->f_poTree, static_cast<tree_t*>( NULL ) );
 	for ( tree_t::const_iterator it = node->begin(); it != node->end(); ++ it )
 		{
-		ensure_equals( "bad parent", it->f_poTrunk, node );
+		ENSURE_EQUALS( "bad parent", it->f_poTrunk, node );
 		check_node( &*it, false );
 		}
 	}
@@ -124,8 +124,8 @@ void tut_yaal_hcore_htree::check_consistency( T const& tree )
 	{
 	if ( tree.get_root() )
 		{
-		ensure_equals( "bad root", tree.get_root()->f_poTree, &tree );
-		ensure_equals( "bad parent for root", tree.get_root()->f_poTrunk, static_cast<typename T::node_t>( NULL ) );
+		ENSURE_EQUALS( "bad root", tree.get_root()->f_poTree, &tree );
+		ENSURE_EQUALS( "bad parent for root", tree.get_root()->f_poTrunk, static_cast<typename T::node_t>( NULL ) );
 		check_node( tree.get_root(), true );
 		}
 	}
@@ -137,19 +137,19 @@ tut_group tut_yaal_hcore_htree_group( "yaal::hcore::HTree" );
 TUT_UNIT_TEST_N( 1, "/* trivial constructor */" )
 		{
 	tree_t t;
-	ensure_equals( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
+	ENSURE_EQUALS( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* copy constructor of empty trees (both are empty) */" )
 		{
 	tree_t t1;
 	tree_t t2( t1 );
-	ensure_equals( "new tree not clear", t1.get_root(), static_cast<tree_t::node_t>( NULL ) );
-	ensure_equals( "copied tree not clear", t2.get_root(), static_cast<tree_t::node_t>( NULL ) );
+	ENSURE_EQUALS( "new tree not clear", t1.get_root(), static_cast<tree_t::node_t>( NULL ) );
+	ENSURE_EQUALS( "copied tree not clear", t2.get_root(), static_cast<tree_t::node_t>( NULL ) );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* swap empty trees (both are empty) */" )
@@ -157,22 +157,22 @@ TUT_UNIT_TEST_N( 3, "/* swap empty trees (both are empty) */" )
 	tree_t t1;
 	tree_t t2;
 	t1.swap( t2 );
-	ensure_equals( "new tree not clear", t1.get_root(), static_cast<tree_t::node_t>( NULL ) );
-	ensure_equals( "copied tree not clear", t2.get_root(), static_cast<tree_t::node_t>( NULL ) );
+	ENSURE_EQUALS( "new tree not clear", t1.get_root(), static_cast<tree_t::node_t>( NULL ) );
+	ENSURE_EQUALS( "copied tree not clear", t2.get_root(), static_cast<tree_t::node_t>( NULL ) );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "/* create_new_root/get_root */" )
 		{
 	tree_t t;
-	ensure_equals( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
+	ENSURE_EQUALS( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
-	ensure( "root not created", n );
-	ensure_equals( "new root is invalid", t.get_root(), n );
+	ENSURE( "root not created", n );
+	ENSURE_EQUALS( "new root is invalid", t.get_root(), n );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* setting getting values */" )
@@ -181,9 +181,9 @@ TUT_UNIT_TEST_N( 5, "/* setting getting values */" )
 	tree_t::node_t n = t.create_new_root();
 	(**n) = 'x';
 	check_consistency( t );
-	ensure_equals( "value set/get failed", **n, 'x' );
+	ENSURE_EQUALS( "value set/get failed", **n, 'x' );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* get_parent */" )
@@ -191,9 +191,9 @@ TUT_UNIT_TEST_N( 6, "/* get_parent */" )
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
-	ensure_equals( "root node malformed", n->get_parent(), static_cast<tree_t::node_t>( NULL ) );
+	ENSURE_EQUALS( "root node malformed", n->get_parent(), static_cast<tree_t::node_t>( NULL ) );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "/* add_node */" )
@@ -204,10 +204,10 @@ TUT_UNIT_TEST_N( 7, "/* add_node */" )
 	(**n) = '0';
 	tree_t::iterator it = n->add_node( 'x' );
 	check_consistency( t );
-	ensure( "node addition / access failure", it == n->begin() );
-	ensure_equals( "bad value for new node", **it, 'x' );
+	ENSURE( "node addition / access failure", it == n->begin() );
+	ENSURE_EQUALS( "bad value for new node", **it, 'x' );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* has_childs */" )
@@ -215,15 +215,15 @@ TUT_UNIT_TEST_N( 8, "/* has_childs */" )
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
-	ensure( "new node has some spurious childs", ! n->has_childs() );
+	ENSURE( "new node has some spurious childs", ! n->has_childs() );
 	n->add_node( 'y' );
 	check_consistency( t );
-	ensure( "childless node reported after node addition", n->has_childs() );
+	ENSURE( "childless node reported after node addition", n->has_childs() );
 	n->add_node( 'x' );
 	check_consistency( t );
-	ensure( "childless node reported after node addition", n->has_childs() );
+	ENSURE( "childless node reported after node addition", n->has_childs() );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "/* child_count */" )
@@ -231,15 +231,15 @@ TUT_UNIT_TEST_N( 9, "/* child_count */" )
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
-	ensure_equals( "new node has some spurious childs", n->child_count(), 0 );
+	ENSURE_EQUALS( "new node has some spurious childs", n->child_count(), 0 );
 	n->add_node( 'y' );
 	check_consistency( t );
-	ensure_equals( "childless node reported after node addition", n->child_count(), 1 );
+	ENSURE_EQUALS( "childless node reported after node addition", n->child_count(), 1 );
 	n->add_node( 'x' );
 	check_consistency( t );
-	ensure_equals( "bad child count reported", n->child_count(), 2 );
+	ENSURE_EQUALS( "bad child count reported", n->child_count(), 2 );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "/* clear */" )
@@ -247,32 +247,32 @@ TUT_UNIT_TEST_N( 10, "/* clear */" )
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
-	ensure( "new node has some spurious childs", ! n->has_childs() );
-	ensure_equals( "new node has some spurious childs", n->child_count(), 0 );
+	ENSURE( "new node has some spurious childs", ! n->has_childs() );
+	ENSURE_EQUALS( "new node has some spurious childs", n->child_count(), 0 );
 	(**n) = '0';
 	n->add_node( 'x' );
 	check_consistency( t );
-	ensure( "childless node reported after node addition", n->has_childs() );
-	ensure_equals( "childless node reported after node addition", n->child_count(), 1 );
+	ENSURE( "childless node reported after node addition", n->has_childs() );
+	ENSURE_EQUALS( "childless node reported after node addition", n->child_count(), 1 );
 	t.clear();
 	check_consistency( t );
-	ensure_equals( "clear failed", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
+	ENSURE_EQUALS( "clear failed", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "/* get_level() */" )
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
-	ensure_equals( "incorrect level value", n->get_level(), 0 );
+	ENSURE_EQUALS( "incorrect level value", n->get_level(), 0 );
 	tree_t::iterator it = n->add_node( '1' );
 	check_consistency( t );
-	ensure_equals( "incorrect level value", it->get_level(), 1 );
+	ENSURE_EQUALS( "incorrect level value", it->get_level(), 1 );
 	it = it->add_node( '2' );
 	check_consistency( t );
-	ensure_equals( "incorrect level value", it->get_level(), 2 );
-	ensure_equals( "incorrect level value", n->get_level(), 0 );
+	ENSURE_EQUALS( "incorrect level value", it->get_level(), 2 );
+	ENSURE_EQUALS( "incorrect level value", n->get_level(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 12, "/* swap() */" )
@@ -295,15 +295,15 @@ TUT_UNIT_TEST_N( 12, "/* swap() */" )
 		check_consistency( t2 );
 		n->add_node( '2' );
 		check_consistency( t2 );
-		ensure_equals( bad_shape, to_string( t1 ), "@{xy}" );
-		ensure_equals( bad_shape, to_string( t2 ), "%{12}" );
+		ENSURE_EQUALS( bad_shape, to_string( t1 ), "@{xy}" );
+		ENSURE_EQUALS( bad_shape, to_string( t2 ), "%{12}" );
 		swap( t1, t2 );
 		check_consistency( t1 );
 		check_consistency( t2 );
-		ensure_equals( swap_failed, to_string( t2 ), "@{xy}" );
-		ensure_equals( swap_failed, to_string( t1 ), "%{12}" );
+		ENSURE_EQUALS( swap_failed, to_string( t2 ), "@{xy}" );
+		ENSURE_EQUALS( swap_failed, to_string( t1 ), "%{12}" );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 13, "/* basic shape tests */" )
@@ -313,36 +313,36 @@ TUT_UNIT_TEST_N( 13, "/* basic shape tests */" )
 	check_consistency( t );
 	(**n) = '0';
 	char const* const bad_shape = "bad shape";
-	ensure_equals( bad_shape, to_string( t ), "0" );
+	ENSURE_EQUALS( bad_shape, to_string( t ), "0" );
 	tree_t::iterator it = n->add_node( 'x' );
 	check_consistency( t );
-	ensure_equals( bad_shape, to_string( t ), "0{x}" );
+	ENSURE_EQUALS( bad_shape, to_string( t ), "0{x}" );
 	n->add_node( 'y' );
 	check_consistency( t );
-	ensure_equals( bad_shape, to_string( t ), "0{xy}" );
+	ENSURE_EQUALS( bad_shape, to_string( t ), "0{xy}" );
 	it = it->add_node( '@' );
 	check_consistency( t );
-	ensure_equals( bad_shape, to_string( t ), "0{x{@}y}" );
+	ENSURE_EQUALS( bad_shape, to_string( t ), "0{x{@}y}" );
 	tree_t::iterator a = it->add_node( 'A' );
 	check_consistency( t );
-	ensure_equals( bad_shape, to_string( t ), "0{x{@{A}}y}" );
+	ENSURE_EQUALS( bad_shape, to_string( t ), "0{x{@{A}}y}" );
 	it->add_node( 'B' );
 	check_consistency( t );
-	ensure_equals( bad_shape, to_string( t ), "0{x{@{AB}}y}" );
+	ENSURE_EQUALS( bad_shape, to_string( t ), "0{x{@{AB}}y}" );
 	it->insert_node( it->begin(), 'Q' );
 	check_consistency( t );
-	ensure_equals( bad_shape, to_string( t ), "0{x{@{QAB}}y}" );
+	ENSURE_EQUALS( bad_shape, to_string( t ), "0{x{@{QAB}}y}" );
 	a->add_node( 'F' );
 	check_consistency( t );
-	ensure_equals( bad_shape, to_string( t ), "0{x{@{QA{F}B}}y}" );
+	ENSURE_EQUALS( bad_shape, to_string( t ), "0{x{@{QA{F}B}}y}" );
 	a->add_node( 'G' );
 	check_consistency( t );
-	ensure_equals( bad_shape, to_string( t ), "0{x{@{QA{FG}B}}y}" );
+	ENSURE_EQUALS( bad_shape, to_string( t ), "0{x{@{QA{FG}B}}y}" );
 	a->add_node( 'H' );
 	check_consistency( t );
-	ensure_equals( bad_shape, to_string( t ), "0{x{@{QA{FGH}B}}y}" );
+	ENSURE_EQUALS( bad_shape, to_string( t ), "0{x{@{QA{FGH}B}}y}" );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 14, "/* graft ( replace_node ) */" )
@@ -377,14 +377,14 @@ TUT_UNIT_TEST_N( 14, "/* graft ( replace_node ) */" )
 	check_consistency( t );
 	it->add_node( 'i' );
 	check_consistency( t );
-	ensure_equals( "bad shape", to_string( t ), "@{0{a{ABC}}1{def}2{ghi}}" );
+	ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{a{ABC}}1{def}2{ghi}}" );
 	n->replace_node( n->begin(), b );
 	check_consistency( t );
-	ensure( "bad parent", b->get_parent() == &*n ); 
+	ENSURE( "bad parent", b->get_parent() == &*n ); 
 	**b = '0';
-	ensure_equals( "bad shape", to_string( t ), "@{0{ABC}1{def}2{ghi}}" );
+	ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{ABC}1{def}2{ghi}}" );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 15, "/* graft upwards ( replace_node ) */" )
@@ -434,15 +434,15 @@ TUT_UNIT_TEST_N( 15, "/* graft upwards ( replace_node ) */" )
 		check_consistency( t );
 		it->add_node( 'i' );
 		check_consistency( t );
-		ensure_equals( "incorrect level value", B->get_level(), 5 );
-		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		ENSURE_EQUALS( "incorrect level value", B->get_level(), 5 );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
 		n->replace_node( n->begin(), b );
 		check_consistency( t );
-		ensure_equals( "incorrect level value", B->get_level(), 2 );
-		ensure( "bad parent", b->get_parent() == &*n ); 
-		ensure_equals( "bad shape", to_string( t ), "@{a{ABC}1{def}2{ghi}}" );
+		ENSURE_EQUALS( "incorrect level value", B->get_level(), 2 );
+		ENSURE( "bad parent", b->get_parent() == &*n ); 
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{a{ABC}1{def}2{ghi}}" );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 16, "/* graft downwards (replace_node) */" )
@@ -462,7 +462,7 @@ TUT_UNIT_TEST_N( 16, "/* graft downwards (replace_node) */" )
 		tree_t::iterator a = it = it->add_node( 'a' );
 		it->add_node( 'A' );
 		tree_t::iterator B = it->add_node( 'B' );
-		ensure_equals( "incorrect level value", B->get_level(), 5 );
+		ENSURE_EQUALS( "incorrect level value", B->get_level(), 5 );
 		it->add_node( 'C' );
 		it = n->add_node( '1' );
 		it->add_node( 'd' );
@@ -472,12 +472,12 @@ TUT_UNIT_TEST_N( 16, "/* graft downwards (replace_node) */" )
 		it->add_node( 'g' );
 		it->add_node( 'h' );
 		it->add_node( 'i' );
-		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
 		try
 			{
 			check_consistency( t );
 			a->replace_node( B, &*it0 );
-			fail( "graft downwards succeded, eek!" );
+			FAIL( "graft downwards succeded, eek!" );
 			}
 		catch ( HFailedAssertion& )
 			{
@@ -485,7 +485,7 @@ TUT_UNIT_TEST_N( 16, "/* graft downwards (replace_node) */" )
 			// ok
 			}
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 17, "/* graft sideways (replace_node) */" )
@@ -514,13 +514,13 @@ TUT_UNIT_TEST_N( 17, "/* graft sideways (replace_node) */" )
 		it->add_node( 'g' );
 		it->add_node( 'h' );
 		it->add_node( 'i' );
-		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
 		check_consistency( t );
 		e->get_parent()->replace_node( e, &*a );
 		check_consistency( t );
-		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{da{ABC}f}2{ghi}}" );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{da{ABC}f}2{ghi}}" );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 18, "/* graft to root (replace_node) */" )
@@ -549,13 +549,13 @@ TUT_UNIT_TEST_N( 18, "/* graft to root (replace_node) */" )
 		it->add_node( 'g' );
 		it->add_node( 'h' );
 		it->add_node( 'i' );
-		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
 		check_consistency( t );
 		t.set_new_root( &*a );
 		check_consistency( t );
-		ensure_equals( "bad shape", to_string( t ), "a{ABC}" );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "a{ABC}" );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 19, "/* across two trees (replace_node) */" )
@@ -585,17 +585,17 @@ TUT_UNIT_TEST_N( 19, "/* across two trees (replace_node) */" )
 		it->add_node( 'G' );
 		it->add_node( 'H' );
 		n->add_node( 'c' );
-		ensure_equals( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
-		ensure_equals( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
 		it->replace_node( it->rbegin(), &*a );
 		check_consistency( t1 );
 		check_consistency( t2 );
-		ensure_equals( "bad shape", to_string( t1 ), "@{3{80}5}" );
-		ensure_equals( "bad shape", to_string( t2 ), "%{a{DEF}b{G1{246}}c}" );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G1{246}}c}" );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 20, "/* across two trees from root (replace_node) */" )
@@ -625,17 +625,17 @@ TUT_UNIT_TEST_N( 20, "/* across two trees from root (replace_node) */" )
 		it->add_node( 'G' );
 		it->add_node( 'H' );
 		n->add_node( 'c' );
-		ensure_equals( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
-		ensure_equals( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
 		it->replace_node( it->rbegin(), t1.get_root() );
 		check_consistency( t1 );
 		check_consistency( t2 );
-		ensure_equals( "bad shape", to_string( t1 ), "" );
-		ensure_equals( "bad shape", to_string( t2 ), "%{a{DEF}b{G@{1{246}3{80}5}}c}" );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G@{1{246}3{80}5}}c}" );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 21, "/* graft with bad iteroator (replace_node) */" )
@@ -665,14 +665,14 @@ TUT_UNIT_TEST_N( 21, "/* graft with bad iteroator (replace_node) */" )
 		it->add_node( 'G' );
 		it->add_node( 'H' );
 		n->add_node( 'c' );
-		ensure_equals( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
-		ensure_equals( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		try
 			{
 			check_consistency( t1 );
 			check_consistency( t2 );
 			it->replace_node( it, t1.get_root() );
-			fail( "grafintg with no coherency" );
+			FAIL( "grafintg with no coherency" );
 			}
 		catch ( HFailedAssertion& )
 			{
@@ -681,7 +681,7 @@ TUT_UNIT_TEST_N( 21, "/* graft with bad iteroator (replace_node) */" )
 			// ok
 			}
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 22, "/* move_node(it,node) */" )
@@ -710,13 +710,13 @@ TUT_UNIT_TEST_N( 22, "/* move_node(it,node) */" )
 		it->add_node( 'g' );
 		it->add_node( 'h' );
 		it->add_node( 'i' );
-		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
 		check_consistency( t );
 		e->get_parent()->move_node( e, &*a );
 		check_consistency( t );
-		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{da{ABC}ef}2{ghi}}" );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{da{ABC}ef}2{ghi}}" );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 23, "/* move_node(node) */" )
@@ -745,13 +745,13 @@ TUT_UNIT_TEST_N( 23, "/* move_node(node) */" )
 		it->add_node( 'g' );
 		it->add_node( 'h' );
 		it->add_node( 'i' );
-		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
 		check_consistency( t );
 		e->get_parent()->move_node( &*a );
 		check_consistency( t );
-		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{defa{ABC}}2{ghi}}" );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{defa{ABC}}2{ghi}}" );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 24, "/* copy_node(it,node) */" )
@@ -780,13 +780,13 @@ TUT_UNIT_TEST_N( 24, "/* copy_node(it,node) */" )
 		it->add_node( 'g' );
 		it->add_node( 'h' );
 		it->add_node( 'i' );
-		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
 		check_consistency( t );
 		e->get_parent()->copy_node( e, &*a );
 		check_consistency( t );
-		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{da{ABC}ef}2{ghi}}" );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{da{ABC}ef}2{ghi}}" );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 25, "/* copy_node(node) */" )
@@ -815,13 +815,13 @@ TUT_UNIT_TEST_N( 25, "/* copy_node(node) */" )
 		it->add_node( 'g' );
 		it->add_node( 'h' );
 		it->add_node( 'i' );
-		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
 		check_consistency( t );
 		e->get_parent()->copy_node( &*a );
 		check_consistency( t );
-		ensure_equals( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{defa{ABC}}2{ghi}}" );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{defa{ABC}}2{ghi}}" );
 		}
-	ensure_equals( "leak", cc::get_instance_count(), 0 );
+	ENSURE_EQUALS( "leak", cc::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 }

@@ -94,14 +94,14 @@ int OServer::operator()( thread_t const* const )
 
 TUT_UNIT_TEST_N( 1, "/* Simple construction and destruction. */" )
 	HSocket l_oSocket;
-	ensure_equals ( "uninitialized socket has port", l_oSocket.get_port(), 0 );
+	ENSURE_EQUALS ( "uninitialized socket has port", l_oSocket.get_port(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Constructions with wrong parameters. */" )
 	try
 		{
 		HSocket l_oSocket( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::NETWORK );
-		fail( "creation of bad socket possible (TYPE::FILE|TYPE::NETWORK)" );
+		FAIL( "creation of bad socket possible (TYPE::FILE|TYPE::NETWORK)" );
 		}
 	catch ( HException& e )
 		{
@@ -110,7 +110,7 @@ TUT_UNIT_TEST_N( 2, "/* Constructions with wrong parameters. */" )
 	try
 		{
 		HSocket l_oSocket( HSocket::socket_type_t( HSocket::TYPE::BLOCKING ) | HSocket::TYPE::NONBLOCKING );
-		fail( "creation of bad socket possible (TYPE::BLOCKING|TYPE::NONBLOCKING)" );
+		FAIL( "creation of bad socket possible (TYPE::BLOCKING|TYPE::NONBLOCKING)" );
 		}
 	catch ( HException& e )
 		{
@@ -123,7 +123,7 @@ TUT_UNIT_TEST_N( 3, "/* Getting port on file socket. */" )
 	try
 		{
 		l_oSocket.get_port();
-		fail ( "getting port number on file socket possible" );
+		FAIL ( "getting port number on file socket possible" );
 		}
 	catch ( HException& e )
 		{
@@ -136,7 +136,7 @@ TUT_UNIT_TEST_N( 4, "/* Listening on reserved port. */" )
 	try
 		{
 		l_oSocket.listen ( "0.0.0.0", 22 );
-		fail ( "listening on reserved port possible" );
+		FAIL ( "listening on reserved port possible" );
 		}
 	catch ( HException & e )
 		{
@@ -149,7 +149,7 @@ TUT_UNIT_TEST_N( 5, "/* Listening on existing file. */" )
 	try
 		{
 		l_oSocket.listen ( "/etc/shadow" );
-		fail ( "listening on existing file possible" );
+		FAIL ( "listening on existing file possible" );
 		}
 	catch ( HException & e )
 		{
@@ -162,7 +162,7 @@ TUT_UNIT_TEST_N( 6, "/* Listening on protected file. */" )
 	try
 		{
 		l_oSocket.listen ( "/etc/TUT_socket" );
-		fail ( "listening on protected file possible" );
+		FAIL ( "listening on protected file possible" );
 		}
 	catch ( HException & e )
 		{
@@ -176,7 +176,7 @@ TUT_UNIT_TEST_N( 7, "/* Listening on already listening socket. */" )
 	try
 		{
 		l_oSocket.listen ( "/tmp/TUT_socket" );
-		fail ( "listening on already listening socket possible" );
+		FAIL ( "listening on already listening socket possible" );
 		}
 	catch ( HException& e )
 		{
@@ -189,7 +189,7 @@ TUT_UNIT_TEST_N( 8, "/* Listening with bad maximum number of clients. */" )
 	try
 		{
 		l_oSocket.listen ( "/tmp/TUT_socket" );
-		fail ( "listening with bad maximum number of clients possible" );
+		FAIL ( "listening with bad maximum number of clients possible" );
 		}
 	catch ( HException & e )
 		{
@@ -202,7 +202,7 @@ TUT_UNIT_TEST_N( 9, "/* Accept on socket that is not listening. */" )
 	try
 		{
 		l_oSocket.accept();
-		fail ( "accept on socket that is not listening possible" );
+		FAIL ( "accept on socket that is not listening possible" );
 		}
 	catch ( HException & e )
 		{
@@ -222,7 +222,7 @@ TUT_UNIT_TEST_N( 19, "/* Transfering data through file. */" )
 	l_oClient.write( test_data, size );
 	l_oLocal->read( reciv_buffer, size );
 	reciv_buffer[ size ] = 0;
-	ensure_equals( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
+	ENSURE_EQUALS( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
 	cout << reciv_buffer << endl;
 TUT_TEARDOWN()
 
@@ -243,7 +243,7 @@ TUT_UNIT_TEST_N( 20, "Transfering data through file with SSL." )
 	STEP( l_oClient.close() );
 	STEP( serv.stop() );
 	reciv_buffer[ size ] = 0;
-	ensure_equals( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
+	ENSURE_EQUALS( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
 	cout << reciv_buffer << endl;
 TUT_TEARDOWN()
 
@@ -259,7 +259,7 @@ TUT_UNIT_TEST_N( 21, "/* Transfering data through network. */" )
 	l_oClient.write( test_data, size );
 	l_oLocal->read( reciv_buffer, size );
 	reciv_buffer[ size ] = 0;
-	ensure_equals( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
+	ENSURE_EQUALS( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
 	cout << reciv_buffer << endl;
 TUT_TEARDOWN()
 
@@ -280,7 +280,7 @@ TUT_UNIT_TEST_N( 22, "Transfering data through network with SSL." )
 	l_oClient.close();
 	serv.stop();
 	reciv_buffer[ size ] = 0;
-	ensure_equals( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
+	ENSURE_EQUALS( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
 	cout << reciv_buffer << endl;
 TUT_TEARDOWN()
 

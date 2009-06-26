@@ -68,7 +68,7 @@ TUT_UNIT_TEST_N( 1, "1 second accuracy" )
 	static int long const PASSED = 1;
 	HClock clk;
 	::sleep( SLEEP );
-	ensure_equals( "time measured incorrectly", clk.get_time_elapsed(), PASSED );
+	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed(), PASSED );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "1 mili-second accuracy" )
@@ -77,7 +77,7 @@ TUT_UNIT_TEST_N( 2, "1 mili-second accuracy" )
 	static int long const QUALITY = get_speed( HClock::UNIT::MILISECOND );
 	HClock clk;
 	::sleep( SLEEP );
-	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::MILISECOND ), PASSED, QUALITY + 10 );
+	ENSURE_DISTANCE( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::MILISECOND ), PASSED, QUALITY + 10 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "1 micro-second accuracy" )
@@ -86,7 +86,7 @@ TUT_UNIT_TEST_N( 3, "1 micro-second accuracy" )
 	static int long const QUALITY = get_speed( HClock::UNIT::MICROSECOND ) * 200;
 	HClock clk;
 	::sleep( SLEEP );
-	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::MICROSECOND ), PASSED, QUALITY ? QUALITY : 1 );
+	ENSURE_DISTANCE( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::MICROSECOND ), PASSED, QUALITY ? QUALITY : 1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "1 nano-second accuracy" )
@@ -95,7 +95,7 @@ TUT_UNIT_TEST_N( 4, "1 nano-second accuracy" )
 	static int long const QUALITY = get_speed( HClock::UNIT::NANOSECOND ) * 200;
 	HClock clk;
 	::sleep( SLEEP );
-	ensure_distance( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::NANOSECOND ), PASSED, QUALITY ? QUALITY : 1 );
+	ENSURE_DISTANCE( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::NANOSECOND ), PASSED, QUALITY ? QUALITY : 1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "measue twice without reset" )
@@ -103,9 +103,9 @@ TUT_UNIT_TEST_N( 5, "measue twice without reset" )
 	static int long const PASSED = 1;
 	HClock clk;
 	::sleep( SLEEP );
-	ensure_equals( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::SECOND, false ), PASSED );
+	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::SECOND, false ), PASSED );
 	::sleep( SLEEP );
-	ensure_equals( "time measured incorrectly", clk.get_time_elapsed(), PASSED + PASSED );
+	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed(), PASSED + PASSED );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "measue twice with reset" )
@@ -113,9 +113,9 @@ TUT_UNIT_TEST_N( 6, "measue twice with reset" )
 	static int long const PASSED = 1;
 	HClock clk;
 	::sleep( SLEEP );
-	ensure_equals( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::SECOND, true ), PASSED );
+	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::SECOND, true ), PASSED );
 	::sleep( SLEEP );
-	ensure_equals( "time measured incorrectly", clk.get_time_elapsed(), PASSED );
+	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed(), PASSED );
 TUT_TEARDOWN()
 
 }

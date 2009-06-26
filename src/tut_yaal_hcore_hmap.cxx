@@ -62,11 +62,11 @@ TUT_UNIT_TEST_N( 1, "HMap insert of already existing key")
 	static int const ORIGINAL_VAL = 2;
 	static int const NEXT_VAL = 3;
 	m.insert( yaal::hcore::make_pair( KEY, ORIGINAL_VAL ) );
-	ensure( "element not inserted", m.find( KEY ) != m.end() );
+	ENSURE( "element not inserted", m.find( KEY ) != m.end() );
 	typedef HPair<i2i_t::iterator, bool> insert_result_t;
 	insert_result_t ir = m.insert( yaal::hcore::make_pair( KEY, NEXT_VAL ) );
-	ensure_equals( "insertion of already existing key reported successful", ir.second, false );
-	ensure_equals( "element with already existing key inserted", ir.first->second, ORIGINAL_VAL );
+	ENSURE_EQUALS( "insertion of already existing key reported successful", ir.second, false );
+	ENSURE_EQUALS( "element with already existing key inserted", ir.first->second, ORIGINAL_VAL );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "exception during map[key] = val;" )
@@ -74,13 +74,13 @@ TUT_UNIT_TEST_N( 2, "exception during map[key] = val;" )
 	try
 		{
 		m[ 0 ] = Crazy();
-		fail( "FATAL: bad exec path!" );
+		FAIL( "FATAL: bad exec path!" );
 		}
 	catch ( int const& )
 		{
 		// ok
 		}
-	ensure_equals( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
+	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 
 }

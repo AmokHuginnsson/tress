@@ -134,9 +134,9 @@ bool greater( int long a, int long b )
 
 TUT_UNIT_TEST_N( 2, "bind2nd" )
 	bool p = yaal::bind2nd( &greater, 4 )( 3 );
-	ensure_not( "greater functor binded incorrectly", p );
+	ENSURE_NOT( "greater functor binded incorrectly", p );
 	bool q = yaal::bind2nd( &greater, 1 )( 3 );
-	ensure( "greater functor binded incorrectly", q );
+	ENSURE( "greater functor binded incorrectly", q );
 TUT_TEARDOWN()
 
 struct Derived;
@@ -233,15 +233,15 @@ TUT_UNIT_TEST_N( 4, "copy algorithm" )
 	int tab1[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
 	int tab2[] = { 0, -1, -2, -3, -4, -5, -6, -7 };
 	yaal::copy( tab2 + 2, tab2 + 5, tab1 + 2 );
-	ensure_equals( "copy started too early", tab1[ 1 ], 1 );
-	ensure_equals( "copy started too late", tab1[ 2 ], -2 );
-	ensure_equals( "copy finished too early", tab1[ 4 ], -4 );
-	ensure_equals( "copy finished too late", tab1[ 5 ], 5 );
+	ENSURE_EQUALS( "copy started too early", tab1[ 1 ], 1 );
+	ENSURE_EQUALS( "copy started too late", tab1[ 2 ], -2 );
+	ENSURE_EQUALS( "copy finished too early", tab1[ 4 ], -4 );
+	ENSURE_EQUALS( "copy finished too late", tab1[ 5 ], 5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "static_max" )
 	int long unsigned q = static_max<sizeof ( int ), sizeof ( char ), sizeof ( double long ), sizeof ( void* ), sizeof ( int long ), sizeof ( int short )>::value;
-	ensure_equals( "static_max failed", q, sizeof ( double long ) );
+	ENSURE_EQUALS( "static_max failed", q, sizeof ( double long ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "back_insert_iterator" )
@@ -259,7 +259,7 @@ TUT_UNIT_TEST_N( 6, "back_insert_iterator" )
 	yaal::copy( l1.begin(), l1.end(), yaal::hcore::back_insert_iterator( l ) );
 	yaal::copy( l2.begin(), l2.end(), yaal::hcore::back_insert_iterator( l ) );
 	yaal::copy( l3.begin(), l3.end(), yaal::hcore::back_insert_iterator( l ) );
-	ensure_equals( "back_insert_iterator failed", l, l4 );
+	ENSURE_EQUALS( "back_insert_iterator failed", l, l4 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "equal" )
@@ -268,8 +268,8 @@ TUT_UNIT_TEST_N( 7, "equal" )
 	int d2[] = { 2, 3, 5, 7 };
 	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
 	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
-	ensure( "positive test for equality failed", yaal::equal( l1.begin(), l1.end(), d1, d1 + sizeof ( d1 ) / sizeof ( int ) ) );
-	ensure_not( "negative test for equality failed", yaal::equal( l1.begin(), l1.end(), l2.begin(), l2.end() ) );
+	ENSURE( "positive test for equality failed", yaal::equal( l1.begin(), l1.end(), d1, d1 + sizeof ( d1 ) / sizeof ( int ) ) );
+	ENSURE_NOT( "negative test for equality failed", yaal::equal( l1.begin(), l1.end(), l2.begin(), l2.end() ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "set_union uniqe" )
@@ -282,10 +282,10 @@ TUT_UNIT_TEST_N( 8, "set_union uniqe" )
 	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
 	list_t l;
 	yaal::set_union( l1.begin(), l1.end(), l2.begin(), l2.end(), yaal::hcore::back_insert_iterator( l ) );
-	ensure_equals( "set_union failed l1 + l2", l, l3 );
+	ENSURE_EQUALS( "set_union failed l1 + l2", l, l3 );
 	l.clear();
 	yaal::set_union( l2.begin(), l2.end(), l1.begin(), l1.end(), yaal::hcore::back_insert_iterator( l ) );
-	ensure_equals( "set_union failed l2 + l1", l, l3 );
+	ENSURE_EQUALS( "set_union failed l2 + l1", l, l3 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "set_union duplicates" )
@@ -298,10 +298,10 @@ TUT_UNIT_TEST_N( 9, "set_union duplicates" )
 	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
 	list_t l;
 	yaal::set_union( l1.begin(), l1.end(), l2.begin(), l2.end(), yaal::hcore::back_insert_iterator( l ) );
-	ensure_equals( "set_union failed l1 + l2", l, l3 );
+	ENSURE_EQUALS( "set_union failed l1 + l2", l, l3 );
 	l.clear();
 	yaal::set_union( l2.begin(), l2.end(), l1.begin(), l1.end(), yaal::hcore::back_insert_iterator( l ) );
-	ensure_equals( "set_union failed l2 + l1", l, l3 );
+	ENSURE_EQUALS( "set_union failed l2 + l1", l, l3 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "set_intersection unique" )
@@ -314,10 +314,10 @@ TUT_UNIT_TEST_N( 10, "set_intersection unique" )
 	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
 	list_t l;
 	yaal::set_intersection( l1.begin(), l1.end(), l2.begin(), l2.end(), yaal::hcore::back_insert_iterator( l ) );
-	ensure_equals( "set_intersection failed l1 * l2", l, l3 );
+	ENSURE_EQUALS( "set_intersection failed l1 * l2", l, l3 );
 	l.clear();
 	yaal::set_intersection( l2.begin(), l2.end(), l1.begin(), l1.end(), yaal::hcore::back_insert_iterator( l ) );
-	ensure_equals( "set_intersection failed l2 * l1", l, l3 );
+	ENSURE_EQUALS( "set_intersection failed l2 * l1", l, l3 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "set_intersection duplicates" )
@@ -330,10 +330,10 @@ TUT_UNIT_TEST_N( 11, "set_intersection duplicates" )
 	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
 	list_t l;
 	yaal::set_intersection( l1.begin(), l1.end(), l2.begin(), l2.end(), yaal::hcore::back_insert_iterator( l ) );
-	ensure_equals( "set_intersection failed l1 * l2", l, l3 );
+	ENSURE_EQUALS( "set_intersection failed l1 * l2", l, l3 );
 	l.clear();
 	yaal::set_intersection( l2.begin(), l2.end(), l1.begin(), l1.end(), yaal::hcore::back_insert_iterator( l ) );
-	ensure_equals( "set_intersection failed l2 * l1", l, l3 );
+	ENSURE_EQUALS( "set_intersection failed l2 * l1", l, l3 );
 TUT_TEARDOWN()
 
 }

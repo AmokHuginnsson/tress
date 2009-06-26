@@ -101,19 +101,19 @@ void red_black_tree_stress_test::init( HSet<T>& ob )
 void red_black_tree_stress_test::helper_test_node_integrity( node* n )
 	{
 	if ( ! n->parent && ( n != root ) )
-		fail( "node with null parent is not root" );
+		FAIL( "node with null parent is not root" );
 	if ( n->parent && ( n->parent->left != n ) && ( n->parent->right != n ) )
-		fail( "parent node does not know about this node" );
+		FAIL( "parent node does not know about this node" );
 	if ( n->left )
 		{
 		if ( n->left->parent != n )
-			fail( "child node does not know about its parent (this node)" );
+			FAIL( "child node does not know about its parent (this node)" );
 		helper_test_node_integrity ( n->left );
 		}
 	if ( n->right )
 		{
 		if ( n->right->parent != n )
-			fail( "child node does not know about its parent (this node)" );
+			FAIL( "child node does not know about its parent (this node)" );
 		helper_test_node_integrity ( n->right );
 		}
 	++ tested_nodes;
@@ -126,7 +126,7 @@ void red_black_tree_stress_test::helper_test_node_definition( node* n )
 		red_node_exists = true;
 		if ( ( n->left && ( n->left->color == node::red ) )
 				|| ( n->right && ( n->right->color == node::red ) ) )
-			fail( "subsequent red nodes" );
+			FAIL( "subsequent red nodes" );
 		}
 	else
 		black_node_exists = true;
@@ -137,7 +137,7 @@ void red_black_tree_stress_test::helper_test_node_definition( node* n )
 	if ( ! ( n->left || n->right ) )
 		{
 		if ( helper_check_black_height( n ) != black_height )
-			fail( "black height is not the same for all the nodes" );
+			FAIL( "black height is not the same for all the nodes" );
 		}
 	}
 
@@ -190,7 +190,7 @@ bool red_black_tree_stress_test::integrity_test( HSet<T>& ob )
 	{
 	init( ob );
 	helper_test_node_integrity ( root );
-	ensure_equals( "quantity inconsistency", quantity, tested_nodes );
+	ENSURE_EQUALS( "quantity inconsistency", quantity, tested_nodes );
 	return ( false );
 	}
 
@@ -199,7 +199,7 @@ bool red_black_tree_stress_test::definition_test( HSet<T>& ob )
 	{
 	init( ob );
 	if ( root->color != node::black )
-		fail ( "root is not black" );
+		FAIL ( "root is not black" );
 	black_height = helper_count_exemplar_black_height( root );
 	helper_test_node_definition( root );
 //	if ( red_node_exists )
@@ -226,13 +226,13 @@ template<typename object, typename subject, typename key>
 void tut_yaal_hcore_hsbbstree::helper_stress_test( object& ob, subject member, key val )
 	{
 	( ob.*member )( val );
-	ensure( "self test failed", ! stress.self_test<key>( ob ) );
-	ensure( "integrity test failed", ! stress.integrity_test<key>( ob ) );
-	ensure( "definition test failed", ! stress.definition_test<key>( ob ) );
+	ENSURE( "self test failed", ! stress.self_test<key>( ob ) );
+	ENSURE( "integrity test failed", ! stress.integrity_test<key>( ob ) );
+	ENSURE( "definition test failed", ! stress.definition_test<key>( ob ) );
 	key biggest = - 1;
 	for ( typename object::HIterator it = ob.begin(); it != ob.end(); ++ it )
 		{
-		ensure( "elements not in order", *it > biggest );
+		ENSURE( "elements not in order", *it > biggest );
 		biggest = *it;
 		}
 	return;
@@ -247,7 +247,7 @@ TUT_UNIT_TEST_N( 1, "/* Adding keys in ascending order. */" )
 	set_insert_t insert = &set_t::insert;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_test( s, insert, i );
-	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
+	ENSURE ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Adding keys in descending order. */" )
@@ -255,7 +255,7 @@ TUT_UNIT_TEST_N( 2, "/* Adding keys in descending order. */" )
 	set_insert_t insert = &set_t::insert;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		helper_stress_test( s, insert, i );
-	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
+	ENSURE ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* Adding keys in random order. */" )
@@ -264,7 +264,7 @@ TUT_UNIT_TEST_N( 3, "/* Adding keys in random order. */" )
 	set_insert_t insert = &set_t::insert;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_test( s, insert, r.rnd ( KEY_POOL_SIZE ) );
-	ensure ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
+	ENSURE ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "/* Removing keys in ascending order from lower half of the tree that was created by adding keys in ascending order. */" )

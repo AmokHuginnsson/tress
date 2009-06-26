@@ -198,7 +198,7 @@ TUT_TEST_GROUP_N( tut_yaal_hcore_hthread, "yaal::hcore::HThread" );
 TUT_UNIT_TEST_N( 1, "/* Construction and destruction */" )
 	HCool ca( "a" );
 	cool_t a( ca );
-	ensure_equals( "bad status on fresh thread", a.is_alive(), false );
+	ENSURE_EQUALS( "bad status on fresh thread", a.is_alive(), false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Starting new thread and allowing it to finish */" )
@@ -206,9 +206,9 @@ TUT_UNIT_TEST_N( 2, "/* Starting new thread and allowing it to finish */" )
 	cool_t a( ca );
 	ca.set( 5 );
 	a.spawn();
-	ensure_equals( "thread failed to start", a.is_alive(), true );
+	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
-	ensure_equals( "thread failed to finish", a.is_alive(), false );
+	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* Starting new thread and finishing it prematurely (sleeping body) */" )
@@ -217,14 +217,14 @@ TUT_UNIT_TEST_N( 3, "/* Starting new thread and finishing it prematurely (sleepi
 	cool_t a( ca );
 	ca.set( 50 );
 	a.spawn();
-	ensure_equals( "thread failed to start", a.is_alive(), true );
+	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	start.set_now();
 	a.finish();
 	stop.set_now();
 	stop -= start;
-	ensure_equals( "thread failed to stop", a.is_alive(), false );
-	ensure_distance( "thread failed to interrupt",
+	ENSURE_EQUALS( "thread failed to stop", a.is_alive(), false );
+	ENSURE_DISTANCE( "thread failed to interrupt",
 			stop.get_second(), 0, 2 );
 TUT_TEARDOWN()
 
@@ -234,14 +234,14 @@ TUT_UNIT_TEST_N( 33, "/* Starting new thread and finishing it prematurely (busy 
 	cool_t a( ca );
 	ca.set( 50 );
 	a.spawn();
-	ensure_equals( "thread failed to start", a.is_alive(), true );
+	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	start.set_now();
 	a.finish();
 	stop.set_now();
 	stop -= start;
-	ensure_equals( "thread failed to stop", a.is_alive(), false );
-	ensure_distance( "thread failed to interrupt",
+	ENSURE_EQUALS( "thread failed to stop", a.is_alive(), false );
+	ENSURE_DISTANCE( "thread failed to interrupt",
 			static_cast<double>( stop.get_second() ), 0., 2.5 );
 TUT_TEARDOWN()
 
@@ -252,12 +252,12 @@ TUT_UNIT_TEST_N( 4, "/* Starting new thread and finishing it prematurely by dest
 		cool_t a( ca );
 		ca.set( 50 );
 		a.spawn();
-		ensure_equals( "thread failed to start", a.is_alive(), true );
+		ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 		start.set_now();
 		}
 	stop.set_now();
 	stop -= start;
-	ensure_distance( "thread failed to interrupt from destructor",
+	ENSURE_DISTANCE( "thread failed to interrupt from destructor",
 			stop.get_second(), 0, 2 );
 TUT_TEARDOWN()
 
@@ -267,7 +267,7 @@ TUT_UNIT_TEST_N( 5, "/* Starting and immediatelly finishing thread */" )
 	ca.set( 50 );
 	a.spawn();
 	a.finish();
-	ensure_equals( "thread failed to finish", a.is_alive(), false );
+	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* Starting already started thread */" )
@@ -278,7 +278,7 @@ TUT_UNIT_TEST_N( 6, "/* Starting already started thread */" )
 	try
 		{
 		a.spawn();
-		fail( "Started already started thread." );
+		FAIL( "Started already started thread." );
 		}
 	catch ( HException& e )
 		{
@@ -292,7 +292,7 @@ TUT_UNIT_TEST_N( 7, "/* Finishing thread that was not started */" )
 	try
 		{
 		a.finish();
-		fail( "Finishing not started thread successful." );
+		FAIL( "Finishing not started thread successful." );
 		}
 	catch ( HException& e )
 		{
@@ -304,14 +304,14 @@ TUT_UNIT_TEST_N( 8, "/* Simple thread (plain function) */" )
 	HTime start, stop;
 	simple_t a( simple );
 	a.spawn();
-	ensure_equals( "thread failed to start", a.is_alive(), true );
+	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	start.set_now();
 	a.finish();
 	stop.set_now();
 	stop -= start;
-	ensure_equals( "thread failed to stop", a.is_alive(), false );
-	ensure_distance( "thread failed to interrupt",
+	ENSURE_EQUALS( "thread failed to stop", a.is_alive(), false );
+	ENSURE_DISTANCE( "thread failed to interrupt",
 			stop.get_second(), 0, 2 );
 TUT_TEARDOWN()
 
@@ -320,9 +320,9 @@ TUT_UNIT_TEST_N( 9, "/* Starting new thread and allowing it to finish, the finic
 	cool_t a( ca );
 	ca.set( 5 );
 	a.spawn();
-	ensure_equals( "thread failed to start", a.is_alive(), true );
+	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
-	ensure_equals( "thread failed to finish", a.is_alive(), false );
+	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
 	a.finish();
 TUT_TEARDOWN()
 

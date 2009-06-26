@@ -46,7 +46,6 @@ using namespace boost;
 using namespace boost::filesystem;
 using namespace boost::gregorian;
 using namespace yaal;
-using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
@@ -57,37 +56,27 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_boost );
 TUT_TEST_GROUP_N( tut_boost, "boost" );
 
-struct multi
-	{
-	int _first;
-	int _second;
-	};
+typedef hcore::HPair<int, int> pair_t;
 
-multi make_multi( void )
+pair_t make_multi( void )
 	{
-	static multi res[] = { { 1, 3 }, { 4, 1 }, { 2, 4 }, { 3, 2 } };
+	static pair_t res[] = { hcore::make_pair( 1, 3 ), hcore::make_pair( 4, 1 ), hcore::make_pair( 2, 4 ), hcore::make_pair( 3, 2 ) };
 	static int idx = 0;
 	int i = idx;
 	++ idx;
-	idx %= static_cast<int>( ( sizeof ( res ) / sizeof ( multi ) ) );
+	idx %= static_cast<int>( ( sizeof ( res ) / sizeof ( pair_t ) ) );
 	return ( res[ i ] );
-	}
-
-ostream& operator << ( ostream& out, multi const& m )
-	{
-	out << "(" << m._first << "," << m._second << ")";
-	return ( out );
 	}
 
 TUT_UNIT_TEST_N( 1, "/* binding */" )
 	cout << "sort by field using binding" << endl;
 	cout << "{" << endl;
-	typedef vector<multi> T;
+	typedef vector<pair_t> T;
 	T v;
 	generate_n( std::back_insert_iterator<T>( v ), 3, make_multi );
 	yaal::copy( v.begin(), v.end(), hcore::stream_iterator( cout ) );
 	cout << endl;
-	sort( v.begin(), v.end(), bind( &multi::_first, _1 ) < bind( &multi::_first, _2 ) );
+	sort( v.begin(), v.end(), bind( &pair_t::first, _1 ) < bind( &pair_t::first, _2 ) );
 	yaal::copy( v.begin(), v.end(), hcore::stream_iterator( cout ) );
 	cout << endl;
 	cout << "}" << endl;
@@ -226,6 +215,15 @@ TUT_UNIT_TEST_N( 4, "bind, accumulate, plus" )
 			bind( std::plus<int>(), _1, bind( &test4helper::get_val, bind( &t4h_t::second, _2 ) ) ) );
 	cout << sum << endl;
 	cout << "}" << endl;
+TUT_TEARDOWN()
+
+pair_t foo( int first, int second )
+	{
+	return ( hcore::make_pair( first, second ) );
+	}
+
+TUT_UNIT_TEST_N( 5, "bind features" )
+	ENSURE_EQUALS( "no arg bind", bind( &foo, _1, _2 )( 1, 2 ), hcore::make_pair( 1, 2 ) );
 TUT_TEARDOWN()
 
 }

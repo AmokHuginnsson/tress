@@ -49,11 +49,11 @@ template<>
 template<>
 void module::test<1> ( void )
 	{
-	ensure_equals( "failed to calculate levenshtein distance",
+	ENSURE_EQUALS( "failed to calculate levenshtein distance",
 			distance::levenshtein_damerau ( "ala", "ola" ), 1 );
-	ensure_equals( "failed to calculate levenshtein distance",
+	ENSURE_EQUALS( "failed to calculate levenshtein distance",
 			distance::levenshtein_damerau ( "ala", "Cola" ), 2 );
-	ensure_equals( "failed to calculate levenshtein distance",
+	ENSURE_EQUALS( "failed to calculate levenshtein distance",
 			distance::levenshtein_damerau ( "Sunday", "Saturday" ), 3 );
 	}
 
