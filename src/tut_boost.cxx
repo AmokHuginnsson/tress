@@ -223,7 +223,10 @@ pair_t foo( int first, int second )
 	}
 
 TUT_UNIT_TEST_N( 5, "bind features" )
-	ENSURE_EQUALS( "no arg bind", bind( &foo, _1, _2 )( 1, 2 ), hcore::make_pair( 1, 2 ) );
+	ENSURE_EQUALS( "no args bind", bind( &foo, _1, _2 )( 1, 2 ), hcore::make_pair( 1, 2 ) );
+	ENSURE_EQUALS( "no args bind", bind( &foo, _2, _1 )( 1, 2 ), hcore::make_pair( 2, 1 ) );
+	ENSURE_EQUALS( "one arg bind _1, 4", bind( &foo, _1, 4 )( 3 ), hcore::make_pair( 3, 4 ) );
+	ENSURE_EQUALS( "one arg bind 4, _1", bind( &foo, 4, _1 )( 3 ), hcore::make_pair( 4, 3 ) );
 TUT_TEARDOWN()
 
 }
