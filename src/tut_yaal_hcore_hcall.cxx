@@ -86,6 +86,19 @@ template<typename CLASS_t, typename METHOD_t,
 	typename a8_t = trait::no_type, typename a9_t = trait::no_type>
 struct call_calculator
 	{
+	struct free_standing_args
+		{
+		static int const value = ternary<has_type<a0_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>, 1, 0>
+			+ ternary<has_type<a1_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
+			+ ternary<has_type<a2_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
+			+ ternary<has_type<a3_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
+			+ ternary<has_type<a4_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
+			+ ternary<has_type<a5_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
+			+ ternary<has_type<a6_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
+			+ ternary<has_type<a7_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
+			+ ternary<has_type<a8_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
+			+ ternary<has_type<a9_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value;
+		};
 	};
 
 /*! \brief Interface to abstration of any-method of any-class invocation.
