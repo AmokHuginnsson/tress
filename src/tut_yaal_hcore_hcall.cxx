@@ -88,16 +88,17 @@ struct call_calculator
 	{
 	struct free_standing_args
 		{
-		static int const value = ternary<has_type<a0_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>, 1, 0>
-			+ ternary<has_type<a1_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
-			+ ternary<has_type<a2_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
-			+ ternary<has_type<a3_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
-			+ ternary<has_type<a4_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
-			+ ternary<has_type<a5_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
-			+ ternary<has_type<a6_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
-			+ ternary<has_type<a7_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
-			+ ternary<has_type<a8_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value
-			+ ternary<has_type<a9_t, free_standing_call_args::arg_base::free_standing_call_arg_type_t>::value, 1, 0>::value;
+		static int const value =
+			ternary<trait::is_kind_of<a0_t, free_standing_call_args::arg_base>::value, 1, 0>::value
+			+ ternary<trait::is_kind_of<a1_t, free_standing_call_args::arg_base>::value, 1, 0>::value
+			+ ternary<trait::is_kind_of<a2_t, free_standing_call_args::arg_base>::value, 1, 0>::value
+			+ ternary<trait::is_kind_of<a3_t, free_standing_call_args::arg_base>::value, 1, 0>::value
+			+ ternary<trait::is_kind_of<a4_t, free_standing_call_args::arg_base>::value, 1, 0>::value
+			+ ternary<trait::is_kind_of<a5_t, free_standing_call_args::arg_base>::value, 1, 0>::value
+			+ ternary<trait::is_kind_of<a6_t, free_standing_call_args::arg_base>::value, 1, 0>::value
+			+ ternary<trait::is_kind_of<a7_t, free_standing_call_args::arg_base>::value, 1, 0>::value
+			+ ternary<trait::is_kind_of<a8_t, free_standing_call_args::arg_base>::value, 1, 0>::value
+			+ ternary<trait::is_kind_of<a9_t, free_standing_call_args::arg_base>::value, 1, 0>::value;
 		};
 	};
 
@@ -987,9 +988,21 @@ public:
 		}
 	};
 
+template<typename a0_t, typename a1_t, typename a2_t, typename a3_t,
+	typename a4_t, typename a5_t>
+int cf( a0_t = trait::no_type(), a1_t = trait::no_type(),
+		a2_t = trait::no_type(), a3_t = trait::no_type(),
+		a4_t = trait::no_type(), a5_t = trait::no_type() )
+	{
+	return ( call_calculator<int, int, a0_t, a1_t, a2_t, a3_t, a4_t, a5_t>::free_standing_args::value );
+	}
+
 TUT_UNIT_TEST_N( 12, "4 free standing args" )
 	Sumator s( 1 );
+#if 0
 	call( 2, _1, 4, 8, _2, 16 )( 100, 2000 );
+#endif
+	cout << cf( 2, _1, 4, 8, _2, 16 ) << endl;
 TUT_TEARDOWN()
 
 }
