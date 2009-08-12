@@ -104,17 +104,20 @@ struct call_calculator
 
 /*! \brief Interface to abstration of any-method of any-class invocation.
  */
-class HCallInterface
+template<typename return_t = void>
+class HCallInterface0
 	{
 public:
-	typedef yaal::hcore::HPointer<HCallInterface> ptr_t;
-	virtual ~HCallInterface( void ) {}
-	void operator()( void )
-		{ invoke(); }
-	void invoke( void )
-		{ do_invoke(); }
-	void invoke( void ) const
-		{ do_invoke(); }
+	typedef yaal::hcore::HPointer<HCallInterface0<return_t> > ptr_t;
+	virtual ~HCallInterface0( void ) {}
+	return_t operator()( void )
+		{ return ( do_invoke() ); }
+	return_t operator()( void ) const
+		{ return ( do_invoke() ); }
+	return_t invoke( void )
+		{ return ( do_invoke() ); }
+	return_t invoke( void ) const
+		{ return ( do_invoke() ); }
 	void const* id( void ) const
 		{ return ( do_id() ); }
 protected:
@@ -181,7 +184,7 @@ public:
 /*! \brief Base class for HCall<1..10>.
  */
 template<typename CLASS_t, typename METHOD_t>
-class HCallBase : public HCallInterface
+class HCallBase : public HCallInterface0<typename trait::return_type<METHOD_t>::type>
 	{
 protected:
 	CLASS_t f_oObject;
@@ -194,31 +197,21 @@ protected:
 	};
 
 template<typename CLASS_t, typename METHOD_t,
-	typename a0_t = trait::no_type,
-	typename a1_t = trait::no_type,
-	typename a2_t = trait::no_type,
-	typename a3_t = trait::no_type,
-	typename a4_t = trait::no_type,
-	typename a5_t = trait::no_type,
-	typename a6_t = trait::no_type,
-	typename a7_t = trait::no_type,
-	typename a8_t = trait::no_type,
-	typename a9_t = trait::no_type>
+	typename a0_t = trait::no_type, typename a1_t = trait::no_type,
+	typename a2_t = trait::no_type, typename a3_t = trait::no_type,
+	typename a4_t = trait::no_type, typename a5_t = trait::no_type,
+	typename a6_t = trait::no_type, typename a7_t = trait::no_type,
+	typename a8_t = trait::no_type, typename a9_t = trait::no_type>
 class HCall;
 
 /*! \cond */
 template<typename CLASS_t, typename METHOD_t>
 class HCall<CLASS_t, METHOD_t,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
 	{
 	typedef HCallBase<CLASS_t, METHOD_t> base_t;
 public:
@@ -235,14 +228,10 @@ template<typename CLASS_t, typename METHOD_t,
 	typename a0_t>
 class HCall<CLASS_t, METHOD_t,
 	a0_t,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type,
 	trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
 	{
 	typedef HCallBase<CLASS_t, METHOD_t> base_t;
@@ -263,14 +252,10 @@ template<typename CLASS_t, typename METHOD_t,
 	typename a0_t, typename a1_t>
 class HCall<CLASS_t, METHOD_t,
 	a0_t, a1_t,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
 	{
 	typedef HCallBase<CLASS_t, METHOD_t> base_t;
 protected:
@@ -291,12 +276,9 @@ template<typename CLASS_t, typename METHOD_t,
 	typename a0_t, typename a1_t, typename a2_t>
 class HCall<CLASS_t, METHOD_t,
 	a0_t, a1_t, a2_t,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type,
 	trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
 	{
 	typedef HCallBase<CLASS_t, METHOD_t> base_t;
@@ -320,12 +302,9 @@ template<typename CLASS_t, typename METHOD_t,
 	typename a0_t, typename a1_t, typename a2_t, typename a3_t>
 class HCall<CLASS_t, METHOD_t,
 	a0_t, a1_t, a2_t, a3_t,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
 	{
 	typedef HCallBase<CLASS_t, METHOD_t> base_t;
 protected:
@@ -350,10 +329,8 @@ template<typename CLASS_t, typename METHOD_t,
 	typename a4_t>
 class HCall<CLASS_t, METHOD_t,
 	a0_t, a1_t, a2_t, a3_t, a4_t,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type,
 	trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
 	{
 	typedef HCallBase<CLASS_t, METHOD_t> base_t;
@@ -380,10 +357,8 @@ template<typename CLASS_t, typename METHOD_t,
 	typename a4_t, typename a5_t>
 class HCall<CLASS_t, METHOD_t,
 	a0_t, a1_t, a2_t, a3_t, a4_t, a5_t,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type,
-	trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
+	trait::no_type, trait::no_type,
+	trait::no_type, trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
 	{
 	typedef HCallBase<CLASS_t, METHOD_t> base_t;
 protected:
@@ -411,8 +386,7 @@ template<typename CLASS_t, typename METHOD_t,
 	typename a4_t, typename a5_t, typename a6_t>
 class HCall<CLASS_t, METHOD_t,
 	a0_t, a1_t, a2_t, a3_t, a4_t, a5_t, a6_t,
-	trait::no_type,
-	trait::no_type,
+	trait::no_type, trait::no_type,
 	trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
 	{
 	typedef HCallBase<CLASS_t, METHOD_t> base_t;
@@ -442,8 +416,7 @@ template<typename CLASS_t, typename METHOD_t,
 	typename a4_t, typename a5_t, typename a6_t, typename a7_t>
 class HCall<CLASS_t, METHOD_t,
 	a0_t, a1_t, a2_t, a3_t, a4_t, a5_t, a6_t, a7_t,
-	trait::no_type,
-	trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
+	trait::no_type, trait::no_type> : public HCallBase<CLASS_t, METHOD_t>
 	{
 	typedef HCallBase<CLASS_t, METHOD_t> base_t;
 protected:
@@ -543,97 +516,100 @@ protected:
 	};
 
 template<typename CLASS_t, typename METHOD_t>
-HCallInterface::ptr_t call( CLASS_t obj, METHOD_t A_METHOD )
-	{ return ( HCallInterface::ptr_t(
+HCallInterface0<>::ptr_t call( CLASS_t obj, METHOD_t A_METHOD )
+	{ return ( HCallInterface0<>::ptr_t(
 				new HCall<CLASS_t, METHOD_t>(
 					obj, A_METHOD ) ) ); }
 
 template<typename CLASS_t, typename METHOD_t, typename a0_t>
-HCallInterface::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
+HCallInterface0<>::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
 		a0_t a0 )
-	{ return ( HCallInterface::ptr_t(
+	{ return ( HCallInterface0<>::ptr_t(
 				new HCall<CLASS_t, METHOD_t, a0_t>(
 					obj, A_METHOD, a0 ) ) ); }
 
 template<typename CLASS_t, typename METHOD_t, typename a0_t,
 	typename a1_t>
-HCallInterface::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
+HCallInterface0<>::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
 		a0_t a0, a1_t a1 )
-	{ return ( HCallInterface::ptr_t(
+	{ return ( HCallInterface0<>::ptr_t(
 				new HCall<CLASS_t, METHOD_t, a0_t, a1_t>(
 					obj, A_METHOD, a0, a1 ) ) ); }
 
 template<typename CLASS_t, typename METHOD_t, typename a0_t,
 	typename a1_t,
 	typename a2_t>
-HCallInterface::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
+HCallInterface0<>::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
 		a0_t a0, a1_t a1, a2_t a2 )
-	{ return ( HCallInterface::ptr_t(
+	{ return ( HCallInterface0<>::ptr_t(
 				new HCall<CLASS_t, METHOD_t, a0_t, a1_t, a2_t>(
 					obj, A_METHOD, a0, a1, a2 ) ) ); }
 
 template<typename CLASS_t, typename METHOD_t, typename a0_t,
 	typename a1_t, typename a2_t, typename a3_t>
-HCallInterface::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
+HCallInterface0<>::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
 		a0_t a0, a1_t a1, a2_t a2, a3_t a3 )
-	{ return ( HCallInterface::ptr_t(
+	{ return ( HCallInterface0<>::ptr_t(
 				new HCall<CLASS_t, METHOD_t, a0_t, a1_t, a2_t, a3_t>(
 					obj, A_METHOD, a0, a1, a2, a3 ) ) ); }
 
 template<typename CLASS_t, typename METHOD_t, typename a0_t,
 	typename a1_t, typename a2_t, typename a3_t, typename a4_t>
-HCallInterface::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
+HCallInterface0<>::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
 		a0_t a0, a1_t a1, a2_t a2, a3_t a3, a4_t a4 )
-	{ return ( HCallInterface::ptr_t(
+	{ return ( HCallInterface0<>::ptr_t(
 				new HCall<CLASS_t, METHOD_t, a0_t, a1_t, a2_t, a3_t, a4_t>(
 					obj, A_METHOD, a0, a1, a2, a3, a4 ) ) ); }
 
 template<typename CLASS_t, typename METHOD_t, typename a0_t, typename a1_t,
 	typename a2_t, typename a3_t, typename a4_t, typename a5_t>
-HCallInterface::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
+HCallInterface0<>::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
 		a0_t a0, a1_t a1, a2_t a2, a3_t a3, a4_t a4, a5_t a5 )
-	{ return ( HCallInterface::ptr_t(
+	{ return ( HCallInterface0<>::ptr_t(
 				new HCall<CLASS_t, METHOD_t, a0_t, a1_t, a2_t, a3_t, a4_t, a5_t>(
 					obj, A_METHOD, a0, a1, a2, a3, a4, a5 ) ) ); }
 
 template<typename CLASS_t, typename METHOD_t, typename a0_t, typename a1_t,
 	typename a2_t, typename a3_t, typename a4_t, typename a5_t, typename a6_t>
-HCallInterface::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
+HCallInterface0<>::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
 		a0_t a0, a1_t a1, a2_t a2, a3_t a3, a4_t a4, a5_t a5, a6_t a6 )
-	{ return ( HCallInterface::ptr_t(
+	{ return ( HCallInterface0<>::ptr_t(
 				new HCall<CLASS_t, METHOD_t, a0_t, a1_t, a2_t, a3_t, a4_t, a5_t, a6_t>(
 					obj, A_METHOD, a0, a1, a2, a3, a4, a5, a6 ) ) ); }
 
 template<typename CLASS_t, typename METHOD_t, typename a0_t, typename a1_t,
 	typename a2_t, typename a3_t, typename a4_t, typename a5_t, typename a6_t,
 	typename a7_t>
-HCallInterface::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
+HCallInterface0<>::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
 		a0_t a0, a1_t a1, a2_t a2, a3_t a3, a4_t a4, a5_t a5, a6_t a6, a7_t a7 )
-	{ return ( HCallInterface::ptr_t(
+	{ return ( HCallInterface0<>::ptr_t(
 				new HCall<CLASS_t, METHOD_t, a0_t, a1_t, a2_t, a3_t, a4_t, a5_t, a6_t, a7_t>(
 					obj, A_METHOD, a0, a1, a2, a3, a4, a5, a6, a7 ) ) ); }
 
 template<typename CLASS_t, typename METHOD_t, typename a0_t, typename a1_t,
 	typename a2_t, typename a3_t, typename a4_t, typename a5_t, typename a6_t,
 	typename a7_t, typename a8_t>
-HCallInterface::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
+HCallInterface0<>::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
 		a0_t a0, a1_t a1, a2_t a2, a3_t a3, a4_t a4, a5_t a5, a6_t a6, a7_t a7, a8_t a8 )
-	{ return ( HCallInterface::ptr_t(
+	{ return ( HCallInterface0<>::ptr_t(
 				new HCall<CLASS_t, METHOD_t, a0_t, a1_t, a2_t, a3_t, a4_t, a5_t, a6_t, a7_t, a8_t>(
 					obj, A_METHOD, a0, a1, a2, a3, a4, a5, a6, a7, a8 ) ) ); }
 
 template<typename CLASS_t, typename METHOD_t, typename a0_t, typename a1_t,
 	typename a2_t, typename a3_t, typename a4_t, typename a5_t, typename a6_t,
 	typename a7_t, typename a8_t, typename a9_t>
-HCallInterface::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
+HCallInterface0<>::ptr_t call( CLASS_t obj, METHOD_t A_METHOD,
 		a0_t a0, a1_t a1, a2_t a2, a3_t a3, a4_t a4, a5_t a5, a6_t a6, a7_t a7, a8_t a8, a9_t a9 )
-	{ return ( HCallInterface::ptr_t(
+	{ return ( HCallInterface0<>::ptr_t(
 				new HCall<CLASS_t, METHOD_t, a0_t, a1_t, a2_t, a3_t, a4_t, a5_t, a6_t, a7_t, a8_t, a9_t>(
 					obj, A_METHOD, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9 ) ) ); }
 
+typedef HCallInterface0<> HCallInterface;
+
 }
 
 }
+
 
 #endif /* not YAAL_HCORE_HCALL_HXX_INCLUDED */
 
