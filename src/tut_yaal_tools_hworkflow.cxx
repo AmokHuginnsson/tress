@@ -46,9 +46,8 @@ struct tut_yaal_tools_hworkflow
 	virtual ~tut_yaal_tools_hworkflow( void )
 		{}
 	static void foo( int, char, int );
-	typedef HFunctor<typeof( tut_yaal_tools_hworkflow::foo ), int, char, int> simple_functor_t;
-	typedef void ( simple_functor_t::* simple_functor_forwarder_t )( int, char, int );
-	typedef HCall<simple_functor_t&, simple_functor_forwarder_t, int, char, int> my_task_t;
+	typedef void ( *simple_functor_t )( int, char, int );
+	typedef HBoundCall<simple_functor_t, int, char, int> my_task_t;
 	};
 
 typedef test_group<tut_yaal_tools_hworkflow> tut_group;
@@ -72,10 +71,9 @@ template<>
 void module::test<1>( void )
 	{
 	cout << "Pushing tasks." << endl;
-	simple_functor_t tf( tut_yaal_tools_hworkflow::foo );
-	my_task_t::ptr_t f0( new my_task_t( tf, &simple_functor_t::method, 0, '+', 100 ) );
-	my_task_t::ptr_t f1( new my_task_t( tf, &simple_functor_t::method, 1, '*', 200 ) );
-	my_task_t::ptr_t f2( new my_task_t( tf, &simple_functor_t::method, 2, '@', 300 ) );
+	my_task_t::ptr_t f0( new my_task_t( tut_yaal_tools_hworkflow::foo, 0, '+', 100 ) );
+	my_task_t::ptr_t f1( new my_task_t( tut_yaal_tools_hworkflow::foo, 1, '*', 200 ) );
+	my_task_t::ptr_t f2( new my_task_t( tut_yaal_tools_hworkflow::foo, 2, '@', 300 ) );
 	HWorkFlow w( 3 );
 	for ( int i = 0; i < 3; ++ i )
 		{
