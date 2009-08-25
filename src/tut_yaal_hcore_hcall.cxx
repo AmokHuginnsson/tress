@@ -349,17 +349,23 @@ public:
 		}
 	};
 
+int square( int i )
+	{
+	return ( i * i );
+	}
+
 template<typename a0_t, typename a1_t, typename a2_t, typename a3_t,
 	typename a4_t, typename a5_t>
 int cf( a0_t = trait::no_type(), a1_t = trait::no_type(),
 		a2_t = trait::no_type(), a3_t = trait::no_type(),
 		a4_t = trait::no_type(), a5_t = trait::no_type() )
 	{
-	return ( call_calculator<int, int, a0_t, a1_t, a2_t, a3_t, a4_t, a5_t>::free_standing_args::value );
+	return ( call_calculator<void(*)(void), int, a0_t, a1_t, a2_t, a3_t, a4_t, a5_t>::free_standing_args::value );
 	}
 
 TUT_UNIT_TEST_N( 12, "4 free standing args" )
 	Sumator s( 1 );
+	call( square, 2 )();
 #if 0
 	call( 2, _1, 4, 8, _2, 16 )( 100, 2000 );
 #endif
