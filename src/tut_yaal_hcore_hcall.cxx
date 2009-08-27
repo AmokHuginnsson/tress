@@ -335,6 +335,8 @@ class Sumator
 	int _arg;
 public:
 	Sumator( int arg_ ) : _arg( arg_ ) {}
+	int calculate( void )
+		{ return ( _arg ); }
 	int calculate( int arg_ )
 		{ return ( _arg + arg_ ); }
 	int calculate_const( int arg_ ) const
@@ -366,6 +368,7 @@ int cf( a0_t = trait::no_type(), a1_t = trait::no_type(),
 TUT_UNIT_TEST_N( 12, "4 free standing args" )
 	Sumator s( 1 );
 	call( square, 2 )();
+	call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), &s );
 #if 0
 	call( 2, _1, 4, 8, _2, 16 )( 100, 2000 );
 #endif
