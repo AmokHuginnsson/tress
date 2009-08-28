@@ -372,14 +372,16 @@ int cf( a0_t = trait::no_type(), a1_t = trait::no_type(),
 
 TUT_UNIT_TEST_N( 12, "4 free standing args" )
 	Sumator s( 1 );
-	call( square, 2 )();
 	call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), &s );
 #if 0
 	call( 2, _1, 4, 8, _2, 16 )( 100, 2000 );
 #endif
 	cout << cf( 2, _1, 4, 8, _2, 16 ) << endl;
+	cout << call( square, _1 )( 2 ) << endl;
 	cout << call( foobar, _1, 2 )( 3 ) << endl;
 	cout << call( foobar, 2, _1 )( 3 ) << endl;
+	cout << call( foobar, _1, _2 )( 1, 2 ) << endl;
+	cout << call( foobar, _2, _1 )( 1, 2 ) << endl;
 TUT_TEARDOWN()
 
 }
