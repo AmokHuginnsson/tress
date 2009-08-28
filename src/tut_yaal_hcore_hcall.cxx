@@ -196,7 +196,7 @@ int const tut_yaal_hcore_hcall::SIGNATURE::F8I = 8;
 int const tut_yaal_hcore_hcall::SIGNATURE::F9I = 9;
 int const tut_yaal_hcore_hcall::SIGNATURE::F10I = 10;
 
-TUT_TEST_GROUP_N( tut_yaal_hcore_hcall, "yaal::hcore::HBoundCall" );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hcall, "yaal::hcore::HCall" );
 
 TUT_UNIT_TEST_N( 1, "a member (no args)" )
 	reset();
@@ -356,6 +356,11 @@ int square( int i )
 	return ( i * i );
 	}
 
+int foobar( int a, int b )
+	{
+	return ( 3 * a + 7 * b );
+	}
+
 template<typename a0_t, typename a1_t, typename a2_t, typename a3_t,
 	typename a4_t, typename a5_t>
 int cf( a0_t = trait::no_type(), a1_t = trait::no_type(),
@@ -373,6 +378,8 @@ TUT_UNIT_TEST_N( 12, "4 free standing args" )
 	call( 2, _1, 4, 8, _2, 16 )( 100, 2000 );
 #endif
 	cout << cf( 2, _1, 4, 8, _2, 16 ) << endl;
+	cout << call( foobar, _1, 2 )( 3 ) << endl;
+	cout << call( foobar, 2, _1 )( 3 ) << endl;
 TUT_TEARDOWN()
 
 }
