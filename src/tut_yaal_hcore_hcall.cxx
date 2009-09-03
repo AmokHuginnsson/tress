@@ -351,14 +351,36 @@ public:
 		}
 	};
 
-int square( int i )
+HString foo1( int a0 )
 	{
-	return ( i * i );
+	HStringStream ss;
+	ss << __PRETTY_FUNCTION__ << ": a0 = " << a0;
+	return ( ss.string() );
 	}
 
-int foobar( int a, int b )
+HString foo2( int a0, int a1 )
 	{
-	return ( 3 * a + 7 * b );
+	HStringStream ss;
+	ss << __PRETTY_FUNCTION__ << ": a0 = " << a0 << ", a1 = " << a1;
+	return ( ss.string() );
+	}
+
+HString foo3( int a0, int a1, int a2 )
+	{
+	HStringStream ss;
+	ss << __PRETTY_FUNCTION__ << ": a0 = " << a0 << ", a1 = " << a1 << ", a2 = " << a2;
+	return ( ss.string() );
+	}
+
+HString foo10( int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9 )
+	{
+	HStringStream ss;
+	ss << __PRETTY_FUNCTION__ << ": a0 = " << a0 << ", a1 = " << a1
+		<< ", a2 = " << a2 << ", a3 = " << a3
+		<< ", a4 = " << a4 << ", a5 = " << a5
+		<< ", a6 = " << a6 << ", a7 = " << a7
+		<< ", a8 = " << a8 << ", a9 = " << a9;
+	return ( ss.string() );
 	}
 
 template<typename a0_t, typename a1_t, typename a2_t, typename a3_t,
@@ -376,12 +398,21 @@ TUT_UNIT_TEST_N( 12, "4 free standing args" )
 #if 0
 	call( 2, _1, 4, 8, _2, 16 )( 100, 2000 );
 #endif
-	cout << cf( 2, _1, 4, 8, _2, 16 ) << endl;
-	cout << call( square, _1 )( 2 ) << endl;
-	cout << call( foobar, _1, 2 )( 3 ) << endl;
-	cout << call( foobar, 2, _1 )( 3 ) << endl;
-	cout << call( foobar, _1, _2 )( 1, 2 ) << endl;
-	cout << call( foobar, _2, _1 )( 1, 2 ) << endl;
+	cout << "free arg count: " << cf( 2, _1, 4, 8, _2, 16 ) << endl;
+	cout << call( foo1, _1 )( 2 ) << endl;
+	cout << call( foo2, _1, 2 )( 3 ) << endl;
+	cout << call( foo2, 2, _1 )( 3 ) << endl;
+	cout << call( foo2, _1, _2 )( 1, 2 ) << endl;
+	cout << call( foo2, _2, _1 )( 1, 2 ) << endl;
+	cout << call( foo3, 0, 1, 2 )() << endl;
+	cout << call( foo3, _1, 1, 2 )( 3 ) << endl;
+	cout << call( foo3, 0, _1, 2 )( 4 ) << endl;
+	cout << call( foo3, 0, 1, _1 )( 5 ) << endl;
+	cout << call( foo3, _1, _2, 2 )( 3, 4 ) << endl;
+	cout << call( foo3, _2, _1, 2 )( 3, 4 ) << endl;
+	cout << call( foo3, 0, _1, _2 )( 4, 5 ) << endl;
+	cout << call( foo3, _2, 1, _1 )( 5, 6 ) << endl;
+	cout << call( foo10, 0, 1, 2, _3, 4, _2, 6, _1, 8, _4 )( -1, -2, -3, -4 ) << endl;
 TUT_TEARDOWN()
 
 }
