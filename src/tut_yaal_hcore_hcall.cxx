@@ -392,7 +392,19 @@ int cf( a0_t = trait::no_type(), a1_t = trait::no_type(),
 	return ( call_calculator<void(*)(void), int, a0_t, a1_t, a2_t, a3_t, a4_t, a5_t>::free_standing_args::value );
 	}
 
-TUT_UNIT_TEST_N( 12, "4 free standing args" )
+void show_rectangle( int a, int b )
+	{
+	cout << "a: " << a << ", b: " << b << endl;
+	}
+
+TUT_UNIT_TEST_N( 12, "use call as a functor in an algorithm" )
+	HArray<int> tab( 10 );
+	generate_n( tab.begin(), tab.size(), inc( 1 ) );
+	for_each( tab.begin(), tab.end(), call( show_rectangle, _1, 2 ) );
+	for_each( tab.begin(), tab.end(), call( show_rectangle, 2, _1 ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 13, "4 free standing args" )
 	Sumator s( 1 );
 	call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), &s );
 #if 0
