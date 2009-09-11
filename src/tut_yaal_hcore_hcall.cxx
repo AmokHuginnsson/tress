@@ -183,6 +183,102 @@ struct tut_yaal_hcore_hcall
 		{}
 	};
 
+HString foo0( void )
+	{
+	HStringStream ss;
+	ss << __FUNCTION__;
+	return ( ss.string() );
+	}
+
+HString foo1( int a1 )
+	{
+	HStringStream ss;
+	ss << __FUNCTION__ << ": a1 = " << a1;
+	return ( ss.string() );
+	}
+
+HString foo2( int a1, int a2 )
+	{
+	HStringStream ss;
+	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2;
+	return ( ss.string() );
+	}
+
+HString foo3( int a1, int a2, int a3 )
+	{
+	HStringStream ss;
+	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2 << ", a3 = " << a3;
+	return ( ss.string() );
+	}
+
+HString foo4( int a1, int a2, int a3, int a4 )
+	{
+	HStringStream ss;
+	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+		<< ", a3 = " << a3 << ", a4 = " << a4;
+	return ( ss.string() );
+	}
+
+HString foo5( int a1, int a2, int a3, int a4, int a5 )
+	{
+	HStringStream ss;
+	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+		<< ", a3 = " << a3 << ", a4 = " << a4
+		<< ", a5 = " << a5;
+	return ( ss.string() );
+	}
+
+HString foo6( int a1, int a2, int a3, int a4, int a5, int a6 )
+	{
+	HStringStream ss;
+	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+		<< ", a3 = " << a3 << ", a4 = " << a4
+		<< ", a5 = " << a5 << ", a6 = " << a6;
+	return ( ss.string() );
+	}
+
+HString foo7( int a1, int a2, int a3, int a4, int a5, int a6, int a7 )
+	{
+	HStringStream ss;
+	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+		<< ", a3 = " << a3 << ", a4 = " << a4
+		<< ", a5 = " << a5 << ", a6 = " << a6
+		<< ", a7 = " << a7;
+	return ( ss.string() );
+	}
+
+HString foo8( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8 )
+	{
+	HStringStream ss;
+	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+		<< ", a3 = " << a3 << ", a4 = " << a4
+		<< ", a5 = " << a5 << ", a6 = " << a6
+		<< ", a7 = " << a7 << ", a8 = " << a8;
+	return ( ss.string() );
+	}
+
+HString foo9( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9 )
+	{
+	HStringStream ss;
+	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+		<< ", a3 = " << a3 << ", a4 = " << a4
+		<< ", a5 = " << a5 << ", a6 = " << a6
+		<< ", a7 = " << a7 << ", a8 = " << a8
+		<< ", a9 = " << a9;
+	return ( ss.string() );
+	}
+
+HString foo10( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10 )
+	{
+	HStringStream ss;
+	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+		<< ", a3 = " << a3 << ", a4 = " << a4
+		<< ", a5 = " << a5 << ", a6 = " << a6
+		<< ", a7 = " << a7 << ", a8 = " << a8
+		<< ", a9 = " << a9 << ", a10 = " << a10;
+	return ( ss.string() );
+	}
+
 int const tut_yaal_hcore_hcall::SIGNATURE::INVALID = -1;
 int const tut_yaal_hcore_hcall::SIGNATURE::FV = 0;
 int const tut_yaal_hcore_hcall::SIGNATURE::F1I = 1;
@@ -198,7 +294,95 @@ int const tut_yaal_hcore_hcall::SIGNATURE::F10I = 10;
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hcall, "yaal::hcore::HCall" );
 
-TUT_UNIT_TEST_N( 1, "a member (no args)" )
+TUT_UNIT_TEST_N( 1, "no args, no free args" )
+	ENSURE_EQUALS( "function bind failed", call( foo0 )(), "foo0" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 2, "1 arg, no free args" )
+	ENSURE_EQUALS( "function bind failed", call( foo1, 1 )(), "foo1: a1 = 1" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 3, "1 arg, 1 free arg" )
+	ENSURE_EQUALS( "function bind failed", call( foo1, _1 )( -1 ), "foo1: a1 = -1" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 4, "2 args, no free args" )
+	ENSURE_EQUALS( "function bind failed", call( foo2, 1, 2 )(), "foo2: a1 = 1, a2 = 2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 5, "2 args, 1 free arg" )
+	ENSURE_EQUALS( "function bind failed", call( foo2, _1, 2 )( -1 ), "foo2: a1 = -1, a2 = 2" );
+	ENSURE_EQUALS( "function bind failed", call( foo2, 1, _1 )( -2 ), "foo2: a1 = 1, a2 = -2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 6, "2 args, 2 free args" )
+	ENSURE_EQUALS( "function bind failed", call( foo2, _1, _2 )( -1, -2 ), "foo2: a1 = -1, a2 = -2" );
+	ENSURE_EQUALS( "function bind failed", call( foo2, _2, _1 )( -2, -1 ), "foo2: a1 = -1, a2 = -2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 7, "3 args, no free args" )
+	ENSURE_EQUALS( "function bind failed", call( foo3, 1, 2, 3 )(), "foo3: a1 = 1, a2 = 2, a3 = 3" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 8, "3 args, 1 free arg" )
+	ENSURE_EQUALS( "function bind failed", call( foo3, _1, 2, 3 )( -1 ), "foo3: a1 = -1, a2 = 2, a3 = 3" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, 1, _1, 3 )( -2 ), "foo3: a1 = 1, a2 = -2, a3 = 3" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, 1, 2, _1 )( -3 ), "foo3: a1 = 1, a2 = 2, a3 = -3" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 9, "3 args, 2 free args" )
+	ENSURE_EQUALS( "function bind failed", call( foo3, _1, _2, 3 )( -1, -2 ), "foo3: a1 = -1, a2 = -2, a3 = 3" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, _1, 2, _2 )( -1, -3 ), "foo3: a1 = -1, a2 = 2, a3 = -3" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, 1, _1, _2 )( -2, -3 ), "foo3: a1 = 1, a2 = -2, a3 = -3" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, _2, _1, 3 )( -2, -1 ), "foo3: a1 = -1, a2 = -2, a3 = 3" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, _2, 2, _1 )( -3, -1 ), "foo3: a1 = -1, a2 = 2, a3 = -3" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, 1, _2, _1 )( -3, -2 ), "foo3: a1 = 1, a2 = -2, a3 = -3" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 10, "3 args, 3 free args" )
+	ENSURE_EQUALS( "function bind failed", call( foo3, _1, _2, _3 )( -1, -2, -3 ), "foo3: a1 = -1, a2 = -2, a3 = -3" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, _1, _3, _2 )( -1, -3, -2 ), "foo3: a1 = -1, a2 = -2, a3 = -3" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, _2, _1, _3 )( -2, -1, -3 ), "foo3: a1 = -1, a2 = -2, a3 = -3" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, _2, _3, _1 )( -3, -1, -2 ), "foo3: a1 = -1, a2 = -2, a3 = -3" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, _3, _1, _2 )( -2, -3, -1 ), "foo3: a1 = -1, a2 = -2, a3 = -3" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, _3, _2, _1 )( -3, -2, -1 ), "foo3: a1 = -1, a2 = -2, a3 = -3" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 11, "4 args, no free args" )
+	ENSURE_EQUALS( "function bind failed", call( foo4, 1, 2, 3, 4 )(), "foo4: a1 = 1, a2 = 2, a3 = 3, a4 = 4" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 12, "4 args, 1 free arg" )
+	ENSURE_EQUALS( "function bind failed", call( foo4, _1, 2, 3, 4 )( -1 ), "foo4: a1 = -1, a2 = 2, a3 = 3, a4 = 4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, 1, _1, 3, 4 )( -2 ), "foo4: a1 = 1, a2 = -2, a3 = 3, a4 = 4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, 1, 2, _1, 4 )( -3 ), "foo4: a1 = 1, a2 = 2, a3 = -3, a4 = 4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, 1, 2, 3, _1 )( -4 ), "foo4: a1 = 1, a2 = 2, a3 = 3, a4 = -4" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 13, "4 args, 2 free args" )
+	ENSURE_EQUALS( "function bind failed", call( foo4, _1, _2, 3, 4 )( -1, -2 ), "foo4: a1 = -1, a2 = -2, a3 = 3, a4 = 4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, _1, 2, _2, 4 )( -1, -3 ), "foo4: a1 = -1, a2 = 2, a3 = -3, a4 = 4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, _1, 2, 3, _2 )( -1, -4 ), "foo4: a1 = -1, a2 = 2, a3 = 3, a4 = -4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, 1, _1, _2, 4 )( -2, -3 ), "foo4: a1 = 1, a2 = -2, a3 = -3, a4 = 4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, 1, _1, 3, _2 )( -2, -4 ), "foo4: a1 = 1, a2 = -2, a3 = 3, a4 = -4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, 1, 2, _1, _2 )( -3, -4 ), "foo4: a1 = 1, a2 = 2, a3 = -3, a4 = -4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, _2, _1, 3, 4 )( -2, -1 ), "foo4: a1 = -1, a2 = -2, a3 = 3, a4 = 4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, _2, 2, _1, 4 )( -3, -1 ), "foo4: a1 = -1, a2 = 2, a3 = -3, a4 = 4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, _2, 2, 3, _1 )( -4, -1 ), "foo4: a1 = -1, a2 = 2, a3 = 3, a4 = -4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, 1, _2, _1, 4 )( -3, -2 ), "foo4: a1 = 1, a2 = -2, a3 = -3, a4 = 4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, 1, _2, 3, _1 )( -4, -2 ), "foo4: a1 = 1, a2 = -2, a3 = 3, a4 = -4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, 1, 2, _2, _1 )( -4, -3 ), "foo4: a1 = 1, a2 = 2, a3 = -3, a4 = -4" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 14, "4 args, 3 free args" )
+	ENSURE_EQUALS( "function bind failed", call( foo4, _1, _2, _3, 4 )( -1, -2, -3 ), "foo4: a1 = -1, a2 = -2, a3 = -3, a4 = 4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, _1, _2, 3, _3 )( -1, -2, -4 ), "foo4: a1 = -1, a2 = -2, a3 = 3, a4 = -4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, _1, 2, _2, _3 )( -1, -3, -4 ), "foo4: a1 = -1, a2 = 2, a3 = -3, a4 = -4" );
+	ENSURE_EQUALS( "function bind failed", call( foo4, 1, _1, _2, _3 )( -2, -3, -4 ), "foo4: a1 = 1, a2 = -2, a3 = -3, a4 = -4" );
+	/* TODO: add rest of the cases here. */
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 31, "a member (no args)" )
 	reset();
 	static int const post[10] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
 	typedef HBoundCall<HFunctor<tut_yaal_hcore_hcall&, __decltype ( &tut_yaal_hcore_hcall::fv )> > call_two_t;
@@ -210,7 +394,7 @@ TUT_UNIT_TEST_N( 1, "a member (no args)" )
 		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "a member (one int arg)" )
+TUT_UNIT_TEST_N( 32, "a member (one int arg)" )
 	reset();
 	static int const post[10] = { 0, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
 	typedef HBoundCall<HFunctor<tut_yaal_hcore_hcall&, __decltype ( &tut_yaal_hcore_hcall::f1i )>, int> call_t;
@@ -222,7 +406,7 @@ TUT_UNIT_TEST_N( 2, "a member (one int arg)" )
 		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "a member (two int arg)" )
+TUT_UNIT_TEST_N( 33, "a member (two int arg)" )
 	reset();
 	static int const post[10] = { 0, 1, -1, -1, -1, -1, -1, -1, -1, -1 };
 	typedef HBoundCall<HFunctor<tut_yaal_hcore_hcall&, __decltype ( &tut_yaal_hcore_hcall::f2i )>, int, int> call_t;
@@ -234,7 +418,7 @@ TUT_UNIT_TEST_N( 3, "a member (two int arg)" )
 		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "a member (3 int arg)" )
+TUT_UNIT_TEST_N( 34, "a member (3 int arg)" )
 	reset();
 	static int const post[10] = { 0, 1, 2, -1, -1, -1, -1, -1, -1, -1 };
 	typedef HBoundCall<HFunctor<tut_yaal_hcore_hcall&, __decltype ( &tut_yaal_hcore_hcall::f3i )>, int, int, int> call_t;
@@ -246,7 +430,7 @@ TUT_UNIT_TEST_N( 4, "a member (3 int arg)" )
 		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "a member (4 int arg)" )
+TUT_UNIT_TEST_N( 35, "a member (4 int arg)" )
 	reset();
 	static int const post[10] = { 0, 1, 2, 3, -1, -1, -1, -1, -1, -1 };
 	typedef HBoundCall<HFunctor<tut_yaal_hcore_hcall&, __decltype ( &tut_yaal_hcore_hcall::f4i )>, int, int, int, int> call_t;
@@ -258,7 +442,7 @@ TUT_UNIT_TEST_N( 5, "a member (4 int arg)" )
 		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "a member (5 int arg)" )
+TUT_UNIT_TEST_N( 36, "a member (5 int arg)" )
 	reset();
 	static int const post[10] = { 0, 1, 2, 3, 4, -1, -1, -1, -1, -1 };
 	typedef HBoundCall<HFunctor<tut_yaal_hcore_hcall&, __decltype ( &tut_yaal_hcore_hcall::f5i )>, int, int, int, int, int> call_t;
@@ -270,7 +454,7 @@ TUT_UNIT_TEST_N( 6, "a member (5 int arg)" )
 		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "a member (6 int arg)" )
+TUT_UNIT_TEST_N( 37, "a member (6 int arg)" )
 	reset();
 	static int const post[10] = { 0, 1, 2, 3, 4, 5, -1, -1, -1, -1 };
 	typedef HBoundCall<HFunctor<tut_yaal_hcore_hcall&, __decltype ( &tut_yaal_hcore_hcall::f6i )>, int, int, int, int, int, int> call_t;
@@ -282,7 +466,7 @@ TUT_UNIT_TEST_N( 7, "a member (6 int arg)" )
 		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "a member (7 int arg)" )
+TUT_UNIT_TEST_N( 38, "a member (7 int arg)" )
 	reset();
 	static int const post[10] = { 0, 1, 2, 3, 4, 5, 6, -1, -1, -1 };
 	typedef HBoundCall<HFunctor<tut_yaal_hcore_hcall&, __decltype ( &tut_yaal_hcore_hcall::f7i )>, int, int, int, int, int, int, int> call_t;
@@ -294,7 +478,7 @@ TUT_UNIT_TEST_N( 8, "a member (7 int arg)" )
 		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "a member (8 int arg)" )
+TUT_UNIT_TEST_N( 39, "a member (8 int arg)" )
 	reset();
 	static int const post[10] = { 0, 1, 2, 3, 4, 5, 6, 7, -1, -1 };
 	typedef HBoundCall<HFunctor<tut_yaal_hcore_hcall&, __decltype ( &tut_yaal_hcore_hcall::f8i )>, int, int, int, int, int, int, int, int> call_t;
@@ -306,7 +490,7 @@ TUT_UNIT_TEST_N( 9, "a member (8 int arg)" )
 		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 10, "a member (9 int arg)" )
+TUT_UNIT_TEST_N( 40, "a member (9 int arg)" )
 	reset();
 	static int const post[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, -1 };
 	typedef HBoundCall<HFunctor<tut_yaal_hcore_hcall&, __decltype ( &tut_yaal_hcore_hcall::f9i )>, int, int, int, int, int, int, int, int, int> call_t;
@@ -318,7 +502,7 @@ TUT_UNIT_TEST_N( 10, "a member (9 int arg)" )
 		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 11, "a member (10 int arg)" )
+TUT_UNIT_TEST_N( 41, "a member (10 int arg)" )
 	reset();
 	static int const post[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	typedef HBoundCall<HFunctor<tut_yaal_hcore_hcall&, __decltype ( &tut_yaal_hcore_hcall::f10i )>, int, int, int, int, int, int, int, int, int, int> call_t;
@@ -345,43 +529,11 @@ public:
 		{ return ( _arg + arg_ ); }
 	int calculate_const_volatile( int arg_ ) const volatile
 		{ return ( _arg + arg_ ); }
-	int sum( int a0, int a1, int a2, int a3, int a4, int a5 )
+	int sum( int a1, int a2, int a3, int a4, int a5, int a6 )
 		{
-		return ( _arg + a0 + a1 + a2 + a3 + a4 + a5 );
+		return ( _arg + a1 + a2 + a3 + a4 + a5 + a6 );
 		}
 	};
-
-HString foo1( int a0 )
-	{
-	HStringStream ss;
-	ss << __PRETTY_FUNCTION__ << ": a0 = " << a0;
-	return ( ss.string() );
-	}
-
-HString foo2( int a0, int a1 )
-	{
-	HStringStream ss;
-	ss << __PRETTY_FUNCTION__ << ": a0 = " << a0 << ", a1 = " << a1;
-	return ( ss.string() );
-	}
-
-HString foo3( int a0, int a1, int a2 )
-	{
-	HStringStream ss;
-	ss << __PRETTY_FUNCTION__ << ": a0 = " << a0 << ", a1 = " << a1 << ", a2 = " << a2;
-	return ( ss.string() );
-	}
-
-HString foo10( int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9 )
-	{
-	HStringStream ss;
-	ss << __PRETTY_FUNCTION__ << ": a0 = " << a0 << ", a1 = " << a1
-		<< ", a2 = " << a2 << ", a3 = " << a3
-		<< ", a4 = " << a4 << ", a5 = " << a5
-		<< ", a6 = " << a6 << ", a7 = " << a7
-		<< ", a8 = " << a8 << ", a9 = " << a9;
-	return ( ss.string() );
-	}
 
 template<typename a0_t, typename a1_t, typename a2_t, typename a3_t,
 	typename a4_t, typename a5_t>
@@ -397,14 +549,14 @@ void show_rectangle( int a, int b )
 	cout << "a: " << a << ", b: " << b << endl;
 	}
 
-TUT_UNIT_TEST_N( 12, "use call as a functor in an algorithm" )
+TUT_UNIT_TEST_N( 42, "use call as a functor in an algorithm" )
 	HArray<int> tab( 10 );
 	generate_n( tab.begin(), tab.size(), inc( 1 ) );
 	for_each( tab.begin(), tab.end(), call( show_rectangle, _1, 2 ) );
 	for_each( tab.begin(), tab.end(), call( show_rectangle, 2, _1 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 13, "4 free standing args" )
+TUT_UNIT_TEST_N( 43, "4 free standing args" )
 	Sumator s( 1 );
 	call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), &s );
 #if 0
