@@ -62,7 +62,13 @@ struct tut_yaal_hcore_hcall
 	SIGNATURE::signature_t _signature;
 	int _int[10];
 	double _double[10];
-	tut_yaal_hcore_hcall( void ) : _signature( SIGNATURE::INVALID ) {}
+	tut_yaal_hcore_hcall( void ) : _signature( SIGNATURE::INVALID )
+		{
+		if ( getenv( "GEN_YAAL_HCORE_HCALL" ) )
+			generate_yaal_hcore_hcall_tests();
+		}
+	virtual ~tut_yaal_hcore_hcall( void )
+		{}
 	void reset( void )
 		{
 		_signature = SIGNATURE::INVALID;
@@ -179,9 +185,51 @@ struct tut_yaal_hcore_hcall
 		_int[ 8 ] = i8;
 		_int[ 9 ] = i9;
 		}
-	virtual ~tut_yaal_hcore_hcall( void )
-		{}
+	void generate_yaal_hcore_hcall_tests( void );
+	void generate_yaal_hcore_hcall_test( int, int, int );
 	};
+
+void tut_yaal_hcore_hcall::generate_yaal_hcore_hcall_tests( void )
+	{
+	int testNo = 0;
+	for ( int arg = 0; arg <= 4; ++ arg )
+		{
+		for ( int freeArg = 0; freeArg <= arg; ++ freeArg, ++ testNo )
+			{
+			generate_yaal_hcore_hcall_test( testNo, arg, freeArg );
+			}
+		}
+	}
+
+void tut_yaal_hcore_hcall::generate_yaal_hcore_hcall_test( int testNo, int arg, int freeArg )
+	{
+	cout << "TUT_UNIT_TEST_N( " << testNo << ", \"" << ( arg ? HString( arg ) : HString( "no" )  )
+		<< " arg" << ( arg == 1 ? "" : "s" ) << ", " << ( freeArg ? HString( freeArg ) : HString( "no" ) )
+		<< " free arg" << ( freeArg == 1 ? "" : "s" ) << "\" )" << endl;
+	cout << "\tENSURE_EQUALS( \"function bind failed\", call( foo" << arg;
+	for ( int i = 1; i <= arg; ++ i )
+		{
+		cout << ", " << i;
+		}
+	cout << " )(" << ( freeArg ? " " : "" );
+	for ( int i = 1; i <= freeArg; ++ i )
+		{
+		if ( i > 1 )
+			cout << ", ";
+		cout << -i;
+		}
+	cout << ( freeArg ? " " : "" ) << "), \"foo" << arg << ( arg ? ": " : "" );
+	for ( int i = 1; i <= arg; ++ i )
+		{
+		if ( i > 1 )
+			cout << ", ";
+		cout << "a" << i << " = " << i;
+		}
+
+	cout << "\" );" << endl;
+	cout << "TUT_TEARDOWN()" << endl;
+	return;
+	}
 
 HString foo0( void )
 	{
