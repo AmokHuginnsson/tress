@@ -1839,3 +1839,482 @@
    fun:SSL_COMP_get_compression_methods
    fun:SSL_library_init
 }
+{
+   Karmic1
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:*
+}
+{
+   Karmic2
+   Memcheck:Param
+   open(filename)
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+}
+{
+   Karmic3
+   Memcheck:Param
+   arch_prctl(arg2)
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+}
+{
+   Karmic4
+   Memcheck:Cond
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:*
+}
+{
+   Karmic5
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   fun:__pthread_initialize_minimal
+   obj:/lib/libpthread-2.10.1.so
+   obj:*
+}
+{
+   Karmic6
+   Memcheck:Value8
+   fun:__pthread_initialize_minimal
+   obj:/lib/libpthread-2.10.1.so
+   obj:*
+}
+{
+   Karmic7
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:*
+}
+{
+   Karmic8
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   fun:OPENSSL_cpuid_setup
+   obj:/lib/libcrypto.so.0.9.8
+   obj:*
+}
+{
+   Karmic9
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/usr/lib/libstdc++.so.6.0.13
+   obj:/usr/lib/libstdc++.so.6.0.13
+   obj:/usr/lib/libstdc++.so.6.0.13
+   obj:*
+}
+{
+   Karmic10
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/usr/lib/libboost_system-mt.so.1.37.0
+   obj:/usr/lib/libboost_system-mt.so.1.37.0
+   obj:/usr/lib/libboost_system-mt.so.1.37.0
+   obj:*
+}
+{
+   Karmic11
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   fun:*
+   obj:/usr/lib/libboost_system-mt.so.1.37.0
+   obj:/usr/lib/libboost_system-mt.so.1.37.0
+   obj:/usr/lib/libboost_system-mt.so.1.37.0
+   obj:*
+}
+{
+   Karmic12
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   fun:__libc_dlopen_mode
+   fun:__nss_lookup_function
+   obj:/lib/libc-2.10.1.so
+   fun:getpwuid_r
+}
+{
+   Karmic13
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   fun:__libc_dlsym
+   fun:__nss_lookup_function
+   obj:/lib/libc-2.10.1.so
+   fun:getpwuid_r
+}
+{
+   Karmic14
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   fun:__libc_dlopen_mode
+   fun:__nss_lookup_function
+   obj:/lib/libnss_compat-2.10.1.so
+   fun:_nss_compat_getpwuid_r
+   fun:getpwuid_r
+}
+{
+   Karmic15
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   fun:__libc_dlsym
+   fun:__nss_lookup_function
+   obj:/lib/libnss_compat-2.10.1.so
+   fun:_nss_compat_getpwuid_r
+   fun:getpwuid_r
+}
+{
+   Karmic16
+   Memcheck:Value8
+   obj:/lib/libnss_compat-2.10.1.so
+   fun:_nss_compat_getpwuid_r
+   fun:getpwuid_r
+}
+{
+   Karmic17
+   Memcheck:Value8
+   fun:_dl_allocate_tls_init
+   fun:pthread_create@@GLIBC_2.2.5
+}
+{
+   Karmic18
+   Memcheck:Cond
+   fun:dl_iterate_phdr
+   fun:_Unwind_Find_FDE
+   obj:/lib/libgcc_s.so.1
+   obj:/lib/libgcc_s.so.1
+   fun:_Unwind_RaiseException
+   fun:__cxa_throw
+}
+{
+   Karmic19
+   Memcheck:Cond
+   fun:dl_iterate_phdr
+   fun:_Unwind_Find_FDE
+   obj:/lib/libgcc_s.so.1
+   fun:_Unwind_RaiseException
+   fun:__cxa_throw
+}
+{
+   Karmic20
+   Memcheck:Cond
+   fun:_dl_allocate_tls_init
+   fun:pthread_create@@GLIBC_2.2.5
+}
+{
+   Karmic21
+   Memcheck:Value8
+   fun:dl_iterate_phdr
+   fun:_Unwind_Find_FDE
+   obj:/lib/libgcc_s.so.1
+   obj:/lib/libgcc_s.so.1
+   fun:_Unwind_RaiseException
+   fun:__cxa_throw
+}
+{
+   Karmic22
+   Memcheck:Value8
+   obj:/lib/libc-2.10.1.so
+   obj:/lib/libdl-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/libdl-2.10.1.so
+   fun:dlsym
+}
+{
+   Karmic23
+   Memcheck:Value8
+   fun:dl_iterate_phdr
+   fun:_Unwind_Find_FDE
+   obj:/lib/libgcc_s.so.1
+   fun:_Unwind_RaiseException
+   fun:__cxa_throw
+}
+{
+   Karmic24
+   Memcheck:Value8
+   obj:/lib/libc-2.10.1.so
+   obj:/lib/libdl-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/libdl-2.10.1.so
+   fun:dlsym
+}
+{
+   Karmic25
+   Memcheck:Cond
+   obj:/lib/libc-2.10.1.so
+   fun:pthread_once
+   fun:backtrace
+}
+{
+   Karmic26
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/libc-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   fun:__libc_dlsym
+   obj:/lib/libc-2.10.1.so
+   fun:pthread_once
+   fun:backtrace
+}
+{
+   Karmic27
+   Memcheck:Cond
+   fun:__libc_dlsym
+   obj:/lib/libc-2.10.1.so
+   fun:pthread_once
+   fun:backtrace
+}
+{
+   Karmic28
+   Memcheck:Value8
+   fun:dl_iterate_phdr
+   fun:_Unwind_Find_FDE
+   obj:/lib/libgcc_s.so.1
+   fun:_Unwind_Backtrace
+   fun:backtrace
+}
+{
+   Karmic29
+   Memcheck:Cond
+   fun:_dl_addr
+   fun:backtrace_symbols
+}
+{
+   Karmic30
+   Memcheck:Value8
+   fun:_dl_addr
+   fun:backtrace_symbols
+}
+{
+   Karmic31
+   Memcheck:Cond
+   obj:/lib/libc-2.10.1.so
+   obj:/lib/libdl-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/libdl-2.10.1.so
+   fun:dlsym
+}
+{
+   Karmic32
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   fun:dl_iterate_phdr
+   fun:_Unwind_Find_FDE
+   obj:/lib/libgcc_s.so.1
+   obj:/lib/libgcc_s.so.1
+   fun:_Unwind_RaiseException
+   fun:__cxa_throw
+}
+{
+   Karmic33
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/libdl-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/libdl-2.10.1.so
+   fun:dlopen
+}
+{
+   Karmic34
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/libc-2.10.1.so
+   fun:__nss_database_lookup
+   obj:*
+   obj:*
+   fun:getpwuid_r
+}
+{
+   Karmic35
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/libc-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   fun:__libc_dlopen_mode
+   obj:/lib/libc-2.10.1.so
+   fun:pthread_once
+   fun:backtrace
+}
+{
+   Karmic36
+   Memcheck:Value8
+   obj:/lib/libc-2.10.1.so
+   obj:/lib/libc-2.10.1.so
+   fun:_vgnU_freeres
+   fun:exit
+}
+{
+   Karmic37
+   Memcheck:Cond
+   obj:/lib/libc-2.10.1.so
+   obj:/lib/libc-2.10.1.so
+   fun:_vgnU_freeres
+   fun:exit
+}
+{
+   Karmic38
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   fun:__libc_dlclose
+   obj:/lib/libc-2.10.1.so
+   obj:/lib/libc-2.10.1.so
+   fun:_vgnU_freeres
+   fun:exit
+}
+{
+   Karmic39
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   fun:__libc_dlclose
+   obj:/lib/libc-2.10.1.so
+   fun:tdestroy
+   obj:/lib/libc-2.10.1.so
+   obj:/lib/libc-2.10.1.so
+   fun:_vgnU_freeres
+   fun:exit
+}
+{
+   Karmic40
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   fun:exit
+}
+{
+   Karmic41
+   Memcheck:Value8
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/libdl-2.10.1.so
+   fun:dlclose
+}
+{
+   Karmic42
+   Memcheck:Cond
+   obj:/lib/ld-2.10.1.so
+   obj:/lib/libc-2.10.1.so
+   obj:/lib/ld-2.10.1.so
+   fun:__libc_dlsym
+   obj:/lib/libc-2.10.1.so
+   fun:pthread_once
+   fun:backtrace
+}
+{
+   Karmic43
+   Memcheck:Value8
+   fun:__libc_dlsym
+   obj:/lib/libc-2.10.1.so
+   fun:pthread_once
+   fun:backtrace
+}
+{
+   Karmic44
+   Memcheck:Cond
+   fun:dl_iterate_phdr
+   fun:_Unwind_Find_FDE
+   obj:/lib/libgcc_s.so.1
+   fun:_Unwind_Backtrace
+   fun:backtrace
+}
+{
+   Karmic45
+   Memcheck:Cond
+   fun:backtrace_symbols
+}
+{
+   Karmic46
+   Memcheck:Value8
+   fun:backtrace_symbols
+}
+{
+   Karmic47
+   Memcheck:Value8
+   fun:strlen
+   fun:backtrace_symbols
+}
+{
+   Karmic48
+   Memcheck:Cond
+   fun:vfprintf
+   fun:vsprintf
+   fun:sprintf
+   fun:backtrace_symbols
+}
+{
+   Karmic49
+   Memcheck:Value8
+   fun:vfprintf
+   fun:vsprintf
+   fun:sprintf
+   fun:backtrace_symbols
+}
+{
+   Karmic50
+   Memcheck:Cond
+   fun:mempcpy
+   fun:_IO_default_xsputn
+   fun:vfprintf
+   fun:vsprintf
+   fun:sprintf
+   fun:backtrace_symbols
+}
+{
+   Karmic51
+   Memcheck:Value8
+   fun:mempcpy
+   fun:_IO_default_xsputn
+   fun:vfprintf
+   fun:vsprintf
+   fun:sprintf
+   fun:backtrace_symbols
+}
+{
+   Karmic52
+   Memcheck:Value8
+   fun:_IO_default_xsputn
+   fun:vfprintf
+   fun:vsprintf
+   fun:sprintf
+   fun:backtrace_symbols
+}
+{
+   Karmic53
+   Memcheck:Cond
+   fun:_IO_default_xsputn
+   fun:vfprintf
+   fun:vsprintf
+   fun:sprintf
+   fun:backtrace_symbols
+}
+{
+   Karmic54
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/libdl-2.10.1.so
+   fun:dlclose
+}
+{
+   Karmic55
+   Memcheck:Cond
+   fun:__tls_get_addr
+   fun:__cxa_get_globals
+}
