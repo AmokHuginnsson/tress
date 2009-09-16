@@ -100,7 +100,7 @@ TUT_UNIT_TEST_N( 4, "reverse container content automatically" )
 	T l;
 	generate_n( std::back_insert_iterator<T>( l ), 3, inc( 1 ) );
 	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
-	reverse( l.begin(), l.end() );
+	std::reverse( l.begin(), l.end() );
 	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
 	T lc;
 	reverse_copy( l.begin(), l.end(), std::back_insert_iterator<T>( lc ) );
