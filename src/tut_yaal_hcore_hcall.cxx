@@ -484,6 +484,8 @@ TUT_UNIT_TEST_N( 14, "4 args, 4 free args" )
 	ENSURE_EQUALS( "function bind failed", call( foo4, _4, _3, _2, _1 )( -4, -3, -2, -1 ), "foo4: a1 = -1, a2 = -2, a3 = -3, a4 = -4" );
 TUT_TEARDOWN()
 
+#if defined(__PHYSICAL_MEMORY__) && ( __PHYSICAL_MEMORY__ >= 1000 )
+
 TUT_UNIT_TEST_N( 15, "5 args, no free args" )
 	ENSURE_EQUALS( "function bind failed", call( foo5, 1, 2, 3, 4, 5 )(), "foo5: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5" );
 TUT_TEARDOWN()
@@ -827,6 +829,10 @@ TUT_UNIT_TEST_N( 20, "5 args, 5 free args" )
 	ENSURE_EQUALS( "function bind failed", call( foo5, _5, _4, _3, _1, _2 )( -4, -5, -3, -2, -1 ), "foo5: a1 = -1, a2 = -2, a3 = -3, a4 = -4, a5 = -5" );
 	ENSURE_EQUALS( "function bind failed", call( foo5, _5, _4, _3, _2, _1 )( -5, -4, -3, -2, -1 ), "foo5: a1 = -1, a2 = -2, a3 = -3, a4 = -4, a5 = -5" );
 TUT_TEARDOWN()
+
+#endif /* defined(__PHYSICAL_MEMORY__) && ( __PHYSICAL_MEMORY__ >= 1000 ) */
+
+#if defined(__PHYSICAL_MEMORY__) && ( __PHYSICAL_MEMORY__ >= 3000 )
 
 TUT_UNIT_TEST_N( 21, "6 args, no free args" )
 	ENSURE_EQUALS( "function bind failed", call( foo6, 1, 2, 3, 4, 5, 6 )(), "foo6: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6" );
@@ -2805,6 +2811,8 @@ TUT_UNIT_TEST_N( 27, "6 args, 6 free args" )
 	ENSURE_EQUALS( "function bind failed", call( foo6, _6, _5, _4, _3, _1, _2 )( -5, -6, -4, -3, -2, -1 ), "foo6: a1 = -1, a2 = -2, a3 = -3, a4 = -4, a5 = -5, a6 = -6" );
 	ENSURE_EQUALS( "function bind failed", call( foo6, _6, _5, _4, _3, _2, _1 )( -6, -5, -4, -3, -2, -1 ), "foo6: a1 = -1, a2 = -2, a3 = -3, a4 = -4, a5 = -5, a6 = -6" );
 TUT_TEARDOWN()
+
+#endif /* defined(__PHYSICAL_MEMORY__) && ( __PHYSICAL_MEMORY__ >= 3000 ) */
 
 TUT_UNIT_TEST_N( 36, "a member (no args)" )
 	reset();
