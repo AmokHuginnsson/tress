@@ -2,7 +2,8 @@ dnl configure.ac is integral part of tress project.
 
 dnl Initialization data.
 m4_include([_aux/aclib.m4])
-AC_INIT([[tress]],[[0.0.0]],[[amok@codestation.org]])
+pushdef([MY_PACKAGE_VERSION],[0.0.0-esyscmd(date +%Y%m%d|tr -d '\n')])
+AC_INIT([[tress]],[MY_PACKAGE_VERSION],[[amok@codestation.org]])
 
 AC_MSG_RESULT([--- Welcome to tress configurator ---                    [[0%]]])
 AC_MSG_RESULT([--- Initialization ... ---                               [[6%]]])
