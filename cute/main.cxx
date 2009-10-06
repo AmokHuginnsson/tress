@@ -30,7 +30,6 @@ Copyright:
 #include <yaal/yaal.hxx>
 M_VCSID( "$Id$" )
 
-#include "version.hxx"
 #include "setup.hxx"
 #include "options.hxx"
 

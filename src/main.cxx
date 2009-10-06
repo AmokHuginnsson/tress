@@ -33,7 +33,6 @@ Copyright:
 M_VCSID( "$Id: "__ID__" $" )
 
 #include "tut_helpers.hxx"
-#include "version.hxx"
 #include "setup.hxx"
 #include "options.hxx"
 
