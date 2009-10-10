@@ -63,13 +63,13 @@ TUT_UNIT_TEST_N( 1, "duplicated long option" )
 	try
 		{
 		int otherValue( 0 );
-		po( "log_path", program_options_helper::option_value( _logPath ), NULL, HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path", "path pointing to file for application logs" )
-			( "_jobs", program_options_helper::option_value( _jobs ), "j", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "count", "number of concurrent _jobs" )
-			( "group", program_options_helper::option_value( _testGroup ), "G", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "name", "select test group" )
-			( "pattern", program_options_helper::option_value( _testGroupPattern ), "P", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "pattern", "select test groups that are matching pattern" )
-			( "number", program_options_helper::option_value( _testNumber ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number", "select test number for a given group" )
-			( "number", program_options_helper::option_value( otherValue ), "X", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number", "select test number for a given group" )
-			( "_restartable", program_options_helper::option_value( _restartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, NULL, "run tests in _restartable mode" );
+		po( "log_path", program_options_helper::option_value( _logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
+			( "_jobs", program_options_helper::option_value( _jobs ), "j", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number of concurrent _jobs", "count" )
+			( "group", program_options_helper::option_value( _testGroup ), "G", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test group", "name" )
+			( "pattern", program_options_helper::option_value( _testGroupPattern ), "P", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test groups that are matching pattern", "pattern" )
+			( "number", program_options_helper::option_value( _testNumber ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test number for a given group", "number" )
+			( "number", program_options_helper::option_value( otherValue ), "X", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test number for a given group", "number" )
+			( "_restartable", program_options_helper::option_value( _restartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, "run tests in _restartable mode" );
 		FAIL( "program options handler with duplicated long option created" );
 		}
 	catch ( HProgramOptionsHandlerException const& )
@@ -83,13 +83,13 @@ TUT_UNIT_TEST_N( 2, "duplicated short option" )
 	try
 		{
 		int otherValue( 0 );
-		po( "log_path", program_options_helper::option_value( _logPath ), NULL, HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path", "path pointing to file for application logs" )
-			( "_jobs", program_options_helper::option_value( _jobs ), "j", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "count", "number of concurrent _jobs" )
-			( "group", program_options_helper::option_value( _testGroup ), "G", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "name", "select test group" )
-			( "pattern", program_options_helper::option_value( _testGroupPattern ), "P", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "pattern", "select test groups that are matching pattern" )
-			( "number", program_options_helper::option_value( _testNumber ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number", "select test number for a given group" )
-			( "other", program_options_helper::option_value( otherValue ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number", "select test number for a given group" )
-			( "_restartable", program_options_helper::option_value( _restartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, NULL, "run tests in _restartable mode" );
+		po( "log_path", program_options_helper::option_value( _logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
+			( "_jobs", program_options_helper::option_value( _jobs ), "j", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number of concurrent _jobs", "count" )
+			( "group", program_options_helper::option_value( _testGroup ), "G", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test group", "name" )
+			( "pattern", program_options_helper::option_value( _testGroupPattern ), "P", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test groups that are matching pattern", "pattern" )
+			( "number", program_options_helper::option_value( _testNumber ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test number for a given group", "number" )
+			( "other", program_options_helper::option_value( otherValue ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test number for a given group", "number" )
+			( "_restartable", program_options_helper::option_value( _restartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, "run tests in _restartable mode" );
 		FAIL( "program options handler with duplicated short option created" );
 		}
 	catch ( HProgramOptionsHandlerException const& )
@@ -100,24 +100,24 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "duplicated long option, duplication is legeal due to usage of the same physical value destination" )
 	HProgramOptionsHandler po;
-	po( "log_path", program_options_helper::option_value( _logPath ), NULL, HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path", "path pointing to file for application logs" )
+	po( "log_path", program_options_helper::option_value( _logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path", "path pointing to file for application logs" )
 		( "_jobs", program_options_helper::option_value( _jobs ), "j", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "count", "number of concurrent _jobs" )
 		( "group", program_options_helper::option_value( _testGroup ), "G", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "name", "select test group" )
 		( "pattern", program_options_helper::option_value( _testGroupPattern ), "P", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "pattern", "select test groups that are matching pattern" )
 		( "number", program_options_helper::option_value( _testNumber ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number", "select test number for a given group" )
 		( "number", program_options_helper::option_value( _testNumber ), "X", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number", "select test number for a given group" )
-		( "_restartable", program_options_helper::option_value( _restartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, NULL, "run tests in _restartable mode" );
+		( "_restartable", program_options_helper::option_value( _restartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, "run tests in _restartable mode" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "duplicated short option, duplication is legeal due to usage of the same physical value destination" )
 	HProgramOptionsHandler po;
-	po( "log_path", program_options_helper::option_value( _logPath ), NULL, HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path", "path pointing to file for application logs" )
-		( "_jobs", program_options_helper::option_value( _jobs ), "j", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "count", "number of concurrent _jobs" )
-		( "group", program_options_helper::option_value( _testGroup ), "G", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "name", "select test group" )
-		( "pattern", program_options_helper::option_value( _testGroupPattern ), "P", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "pattern", "select test groups that are matching pattern" )
-		( "number", program_options_helper::option_value( _testNumber ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number", "select test number for a given group" )
-		( "other", program_options_helper::option_value( _testNumber ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number", "select test number for a given group" )
-		( "_restartable", program_options_helper::option_value( _restartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, NULL, "run tests in _restartable mode" );
+	po( "log_path", program_options_helper::option_value( _logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
+		( "_jobs", program_options_helper::option_value( _jobs ), "j", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number of concurrent _jobs", "count" )
+		( "group", program_options_helper::option_value( _testGroup ), "G", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test group", "name" )
+		( "pattern", program_options_helper::option_value( _testGroupPattern ), "P", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test groups that are matching pattern", "pattern" )
+		( "number", program_options_helper::option_value( _testNumber ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test number for a given group", "number" )
+		( "other", program_options_helper::option_value( _testNumber ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test number for a given group", "number" )
+		( "_restartable", program_options_helper::option_value( _restartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, "run tests in _restartable mode" );
 TUT_TEARDOWN()
 
 }
