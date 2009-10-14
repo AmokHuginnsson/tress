@@ -239,9 +239,9 @@ TUT_UNIT_TEST_N( 4, "copy algorithm" )
 	ENSURE_EQUALS( "copy finished too late", tab1[ 5 ], 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "static_max" )
-	int long unsigned q = static_max<sizeof ( int ), sizeof ( char ), sizeof ( double long ), sizeof ( void* ), sizeof ( int long ), sizeof ( int short )>::value;
-	ENSURE_EQUALS( "static_max failed", q, sizeof ( double long ) );
+TUT_UNIT_TEST_N( 5, "meta::max" )
+	int long unsigned q = meta::max<sizeof ( int ), sizeof ( char ), sizeof ( double long ), sizeof ( void* ), sizeof ( int long ), sizeof ( int short )>::value;
+	ENSURE_EQUALS( "meta::max failed", q, sizeof ( double long ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "back_insert_iterator" )

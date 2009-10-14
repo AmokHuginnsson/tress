@@ -67,5 +67,13 @@ TUT_UNIT_TEST_N( 3, "this and 1 arg, one free" )
 	ENSURE_EQUALS( "bind for this failed", call( &tut_yaal_hcore_hcall_this::square, _1, 2 )( this ), 2 * 2 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 4, "this and 2 free args, this is first" )
+	ENSURE_EQUALS( "bind for this failed", call( &tut_yaal_hcore_hcall_this::square, _1, _2 )( this, 2 ), 2 * 2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 5, "this and 2 free args, this is second" )
+	ENSURE_EQUALS( "bind for this failed", call( &tut_yaal_hcore_hcall_this::square, _2, _1 )( 2, this ), 2 * 2 );
+TUT_TEARDOWN()
+
 }
 
