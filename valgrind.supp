@@ -2318,3 +2318,25 @@
    fun:__tls_get_addr
    fun:__cxa_get_globals
 }
+{
+   Karmic56
+   Memcheck:Leak
+   fun:malloc
+   fun:CRYPTO_malloc
+   obj:/lib/libssl.so.0.9.8
+   fun:SSL_COMP_get_compression_methods
+   fun:SSL_library_init
+}
+{
+   Karmic57
+   Memcheck:Leak
+   fun:malloc
+   fun:add_to_global
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.2.5
+}
