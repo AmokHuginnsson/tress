@@ -45,6 +45,19 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_tools_base64 );
 TUT_TEST_GROUP_N( tut_yaal_tools_base64, "yaal::tools::base64" );
 
+TUT_UNIT_TEST_N( 14, "000" )
+	static int const MAX_TEST_LEN = 4;
+	char input[ MAX_TEST_LEN ];
+	for ( int len = 0; len < MAX_TEST_LEN; ++ len )
+		{
+		for ( int val = 0; val < 256; ++ val )
+			{
+			fill_n( input, MAX_TEST_LEN, val );
+			HMemory m( input, len );
+			}
+		}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST_N( 1, "original suite <0> (empty)" )
 	static char const INPUT[] = "";
 	static char const BASE64ENC[] = "";
