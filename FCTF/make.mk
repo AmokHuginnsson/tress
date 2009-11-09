@@ -5,6 +5,7 @@ AOS = ao
 ADS = ad
 ASRCS = $(strip $(sort $(shell cd $(DIR_ROOT)/ && $(FIND) ./must_not_compile -name "*.$(ASS)")))
 AOBJS = $(patsubst %.$(ASS),%.$(AOS),$(ASRCS))
+DIRS += $(DIR_BUILD)/must_not_compile
 
 %.$(AOS): %.$(ASS)
 	@echo -n "Anti-Compiling \`$(subst $(DIR_ROOT)/,,$(<))' ... "; \
@@ -15,4 +16,4 @@ AOBJS = $(patsubst %.$(ASS),%.$(AOS),$(ASRCS))
 	test -f $(@) && \
 	echo $(NONL) "done.$(CL)"
 
-OBJS += $(AOBJS)
+EXTRA_DEPS_TARGET_tress=$(AOBJS)

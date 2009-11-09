@@ -66,5 +66,15 @@ TUT_UNIT_TEST_N( 1, "constructor" )
 		}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 2, "simple write" )
+	int const SIZE = 256;
+	char buf[SIZE];
+	char const pattern[] = "Ala ma kota.\n";
+	::memset( buf, 0, SIZE );
+	HMemory m( buf, SIZE );
+	m << pattern << endl;
+	ENSURE_EQUALS( "simple write failed", memcmp( buf, pattern, sizeof ( pattern ) ), 0 );
+TUT_TEARDOWN()
+
 }
 
