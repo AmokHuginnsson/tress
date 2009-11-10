@@ -41,7 +41,13 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-TUT_SIMPLE_MOCK( tut_yaal_tools_hmemory );
+struct tut_yaal_tools_hmemory
+	{
+	static int const SIZE = 256;
+	char _buf[SIZE];
+	virtual ~tut_yaal_tools_hmemory( void ) {}
+	};
+
 TUT_TEST_GROUP_N( tut_yaal_tools_hmemory, "yaal::tools::HMemory" );
 
 TUT_UNIT_TEST_N( 1, "constructor" )
@@ -67,13 +73,25 @@ TUT_UNIT_TEST_N( 1, "constructor" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "simple write" )
-	int const SIZE = 256;
-	char buf[SIZE];
-	char const pattern[] = "Ala ma kota.\n";
-	::memset( buf, 0, SIZE );
-	HMemory m( buf, SIZE );
-	m << pattern << endl;
-	ENSURE_EQUALS( "simple write failed", memcmp( buf, pattern, sizeof ( pattern ) ), 0 );
+	char const pattern[] = "Ala ma kota.";
+	::memset( _buf, 0, SIZE );
+	HMemory m( _buf, SIZE );
+	m << pattern;
+	ENSURE_EQUALS( "simple write failed", memcmp( _buf, pattern, sizeof ( pattern ) ), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 3, "stacked writes" )
+	char const pattern[] = "Ala ma kota.";
+	char const pattern_hi[] = "Ala ma";
+	char const pattern_lo[] = " kota.";
+	::memset( _buf, 0, SIZE );
+	HMemory m( _buf, SIZE );
+	m << pattern_hi << pattern_lo;
+	ENSURE_EQUALS( "simple write failed", memcmp( _buf, pattern, sizeof ( pattern ) ), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 4, "read from empty" )
+	HMemory m( _buf, SIZE );
 TUT_TEARDOWN()
 
 }
