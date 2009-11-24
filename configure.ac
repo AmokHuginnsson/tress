@@ -113,10 +113,7 @@ CPPFLAGS=$CXXFLAGS;
 AC_MSG_RESULT([--- Looking for needed libraries ... ---                [[77%]]])
 AC_CHECK_LIB([ncurses],[initscr],
 							[],[AC_MSG_ERROR([Can not continue without ncurses.])])
-dnl WARNING!!! Names in c++ objects are _mangled_ so we need to use
-dnl WARNING!!! this cryptic names here (I hope it is portable).
-dnl UPDATE!: Now I know it is not portable across different versions of
-dnl UPDATE!: compiller, so I used tricky hack with 'main'.
+AC_SEARCH_LIBS([libintl_gettext],[intl],,[AC_SEARCH_LIBS([gettext],[intl],,[AC_MSG_ERROR([Cannot continue without localization library.])])]) HCORE_LIBS="${HCORE_LIBS} ${LIBS}" LIBS=""
 AC_CHECK_LIB([hcore],[yaal_hcore_main],
 							[],[AC_MSG_ERROR([Can not continue without hcore.])])
 AC_CHECK_LIB([hconsole],[yaal_hconsole_main],

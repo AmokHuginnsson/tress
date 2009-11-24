@@ -92,6 +92,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "read from empty" )
 	HMemory m( _buf, SIZE );
+	HString line;
+	m.read_until( line );
 TUT_TEARDOWN()
 
 }
