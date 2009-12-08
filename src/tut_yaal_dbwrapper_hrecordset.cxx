@@ -44,11 +44,10 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_dbwrapper_hrecordset );
 TUT_TEST_GROUP_N( tut_yaal_dbwrapper_hrecordset, "yaal::dbwrapper::HRecordSet" );
 
-TUT_UNIT_TEST_N( 1, "simple query" )
-	static char const* const QUERY = "SELECT * FROM config;";
-	HDataBase::ptr_t db = HDataBase::get_connector();
-	db->connect( "./out/tress", "", "" );
-	HRecordSet::ptr_t rs = db->query( QUERY );
+void dump_query_result( HDataBase::ptr_t db, char const* const query )
+	{
+	M_PROLOG
+	HRecordSet::ptr_t rs = db->query( query );
 	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); ++ it )
 		{
 		cout << "|";
@@ -57,6 +56,40 @@ TUT_UNIT_TEST_N( 1, "simple query" )
 			cout << it[ i ] << "|";
 		cout << endl;
 		}
+	return;
+	M_EPILOG
+	}
+
+static char const* const QUERY = "SELECT * FROM config;";
+
+TUT_UNIT_TEST_N( 1, "simple query" )
+	HDataBase::ptr_t db = HDataBase::get_connector();
+	db->connect( "./out/tress", "", "" );
+	dump_query_result( db, QUERY );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 2, "different engines" )
+#if defined( HAVE_SQLITE3_H )
+	{
+	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
+	db->connect( "./out/tress", "", "" );
+	dump_query_result( db, QUERY );
+	}
+#endif /* defined( HAVE_SQLITE3_H ) */
+#if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
+	{
+	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL );
+	db->connect( "tress", "tress", "tr3ss" );
+	dump_query_result( db, QUERY );
+	}
+#endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
+#if defined( HAVE_MYSQL_MYSQL_H )
+	{
+	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
+	db->connect( "tress", "tress", "tr3ss" );
+	dump_query_result( db, QUERY );
+	}
+#endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 TUT_TEARDOWN()
 
 }
