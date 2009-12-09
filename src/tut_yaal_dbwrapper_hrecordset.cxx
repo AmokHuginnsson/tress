@@ -62,33 +62,53 @@ void dump_query_result( HDataBase::ptr_t db, char const* const query )
 
 static char const* const QUERY = "SELECT * FROM config;";
 
-TUT_UNIT_TEST_N( 1, "simple query" )
+TUT_UNIT_TEST_N( 1, "simple query on default engine" )
 	HDataBase::ptr_t db = HDataBase::get_connector();
 	db->connect( "./out/tress", "", "" );
 	dump_query_result( db, QUERY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "different engines" )
+TUT_UNIT_TEST_N( 2, "SQLite engine" )
 #if defined( HAVE_SQLITE3_H )
-	{
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
-	db->connect( "./out/tress", "", "" );
-	dump_query_result( db, QUERY );
-	}
+	HDataBase::ptr_t dbSQLite = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
+	dbSQLite->connect( "./out/tress", "", "" );
+	dump_query_result( dbSQLite, QUERY );
+#else /* defined( HAVE_SQLITE3_H ) */
+
+#endif /* not defined( HAVE_SQLITE3_H ) */
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 3, "PostgreSQL engine" )
+#if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
+	HDataBase::ptr_t dbPostgreSQL = HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL );
+	dbPostgreSQL->connect( "tress", "tress", "tr3ss" );
+	dump_query_result( dbPostgreSQL, QUERY );
+#endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 4, "MySQL engine" )
+#if defined( HAVE_MYSQL_MYSQL_H )
+	HDataBase::ptr_t dbMySQL = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
+	dbMySQL->connect( "tress", "tress", "tr3ss" );
+	dump_query_result( dbMySQL, QUERY );
+#endif /* defined( HAVE_MYSQL_MYSQL_H ) */
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 5, "different engines all in one" )
+#if defined( HAVE_SQLITE3_H )
+	HDataBase::ptr_t dbSQLite = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
+	dbSQLite->connect( "./out/tress", "", "" );
+	dump_query_result( dbSQLite, QUERY );
 #endif /* defined( HAVE_SQLITE3_H ) */
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
-	{
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL );
-	db->connect( "tress", "tress", "tr3ss" );
-	dump_query_result( db, QUERY );
-	}
+	HDataBase::ptr_t dbPostgreSQL = HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL );
+	dbPostgreSQL->connect( "tress", "tress", "tr3ss" );
+	dump_query_result( dbPostgreSQL, QUERY );
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
 #if defined( HAVE_MYSQL_MYSQL_H )
-	{
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
-	db->connect( "tress", "tress", "tr3ss" );
-	dump_query_result( db, QUERY );
-	}
+	HDataBase::ptr_t dbMySQL = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
+	dbMySQL->connect( "tress", "tress", "tr3ss" );
+	dump_query_result( dbMySQL, QUERY );
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 TUT_TEARDOWN()
 
