@@ -2,7 +2,7 @@ DROP TABLE config;
 CREATE TABLE config
 	(
 	id INTEGER PRIMARY KEY,
-	name VARCHAR(16) NOT NULL,
+	name VARCHAR(16) UNIQUE NOT NULL,
 	value VARCHAR( 255 )
 	);
 

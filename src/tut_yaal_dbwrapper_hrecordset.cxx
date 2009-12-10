@@ -70,9 +70,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "SQLite engine" )
 #if defined( HAVE_SQLITE3_H )
-	HDataBase::ptr_t dbSQLite = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
-	dbSQLite->connect( "./out/tress", "", "" );
-	dump_query_result( dbSQLite, QUERY );
+	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
+	db->connect( "./out/tress", "", "" );
+	dump_query_result( db, QUERY );
 #else /* defined( HAVE_SQLITE3_H ) */
 
 #endif /* not defined( HAVE_SQLITE3_H ) */
@@ -80,17 +80,17 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "PostgreSQL engine" )
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
-	HDataBase::ptr_t dbPostgreSQL = HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL );
-	dbPostgreSQL->connect( "tress", "tress", "tr3ss" );
-	dump_query_result( dbPostgreSQL, QUERY );
+	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL );
+	db->connect( "tress", "tress", "tr3ss" );
+	dump_query_result( db, QUERY );
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "MySQL engine" )
 #if defined( HAVE_MYSQL_MYSQL_H )
-	HDataBase::ptr_t dbMySQL = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
-	dbMySQL->connect( "tress", "tress", "tr3ss" );
-	dump_query_result( dbMySQL, QUERY );
+	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
+	db->connect( "tress", "tress", "tr3ss" );
+	dump_query_result( db, QUERY );
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 TUT_TEARDOWN()
 
@@ -109,6 +109,52 @@ TUT_UNIT_TEST_N( 5, "different engines all in one" )
 	HDataBase::ptr_t dbMySQL = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
 	dbMySQL->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( dbMySQL, QUERY );
+#endif /* defined( HAVE_MYSQL_MYSQL_H ) */
+TUT_TEARDOWN()
+
+static char const* const SPECIAL_QUERY = "SELECT * FROM config WHERE name = 'special';";
+static char const* const SPECIAL_INSERT = "INSERT INTO config ( name, value ) VALUES( 'special', 'first' );";
+static char const* const SPECIAL_UPDATE = "UPDATE config SET value = 'second' WHERE name = 'special';";
+static char const* const SPECIAL_DELETE = "DELETE FROM config WHERE name = 'special';";
+
+void test_dml( HDataBase::ptr_t db )
+	{
+	M_PROLOG
+	HRecordSet::ptr_t rs = db->query( SPECIAL_QUERY );
+	ENSURE( "empty result not entirelly empty ???", rs->begin() == rs->end() );
+	rs = db->query( SPECIAL_INSERT );
+	rs = db->query( SPECIAL_QUERY );
+	ENSURE( "INSERT failed?", ( rs->begin() != rs->end() ) && ( rs->begin()[1] == "special" ) && ( rs->begin()[2] == "first" ) );
+	rs = db->query( SPECIAL_UPDATE );
+	rs = db->query( SPECIAL_QUERY );
+	ENSURE( "UPDATE failed?", ( rs->begin() != rs->end() ) && ( rs->begin()[1] == "special" ) && ( rs->begin()[2] == "second" ) );
+	rs = db->query( SPECIAL_DELETE );
+	ENSURE( "DELETE failed?", rs->begin() == rs->end() );
+	return;
+	M_EPILOG
+	}
+
+TUT_UNIT_TEST_N( 6, "dml on SQLite" )
+#if defined( HAVE_SQLITE3_H )
+	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
+	db->connect( "./out/tress", "", "" );
+	test_dml( db );
+#endif /* defined( HAVE_SQLITE3_H ) */
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 7, "PostgreSQL engine" )
+#if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
+	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL );
+	db->connect( "tress", "tress", "tr3ss" );
+	test_dml( db );
+#endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 8, "MySQL engine" )
+#if defined( HAVE_MYSQL_MYSQL_H )
+	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
+	db->connect( "tress", "tress", "tr3ss" );
+	test_dml( db );
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 TUT_TEARDOWN()
 

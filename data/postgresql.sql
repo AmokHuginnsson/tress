@@ -9,7 +9,7 @@ CREATE DATABASE tress WITH OWNER tress ENCODING 'latin2';
 CREATE TABLE config
 	(
 	id SERIAL,
-	name VARCHAR(16) NOT NULL,
+	name VARCHAR(16) UNIQUE NOT NULL,
 	value VARCHAR( 255 )
 	);
 
