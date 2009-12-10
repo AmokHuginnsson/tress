@@ -121,15 +121,15 @@ void test_dml( HDataBase::ptr_t db )
 	{
 	M_PROLOG
 	HRecordSet::ptr_t rs = db->query( SPECIAL_QUERY );
-	ENSURE( "empty result not entirelly empty ???", rs->begin() == rs->end() );
+	ENSURE( "empty result not entirelly empty ???", ! rs || ( rs->begin() == rs->end() ) );
 	rs = db->query( SPECIAL_INSERT );
 	rs = db->query( SPECIAL_QUERY );
-	ENSURE( "INSERT failed?", ( rs->begin() != rs->end() ) && ( rs->begin()[1] == "special" ) && ( rs->begin()[2] == "first" ) );
+	ENSURE( "INSERT failed?", !! rs && ( rs->begin() != rs->end() ) && ( rs->begin()[1] == "special" ) && ( rs->begin()[2] == "first" ) );
 	rs = db->query( SPECIAL_UPDATE );
 	rs = db->query( SPECIAL_QUERY );
-	ENSURE( "UPDATE failed?", ( rs->begin() != rs->end() ) && ( rs->begin()[1] == "special" ) && ( rs->begin()[2] == "second" ) );
+	ENSURE( "UPDATE failed?", !! rs && ( rs->begin() != rs->end() ) && ( rs->begin()[1] == "special" ) && ( rs->begin()[2] == "second" ) );
 	rs = db->query( SPECIAL_DELETE );
-	ENSURE( "DELETE failed?", rs->begin() == rs->end() );
+	ENSURE( "DELETE failed?", ! rs || ( rs->begin() == rs->end() ) );
 	return;
 	M_EPILOG
 	}
