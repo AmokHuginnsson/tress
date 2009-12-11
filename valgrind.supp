@@ -2340,3 +2340,67 @@
    fun:_dlerror_run
    fun:dlopen@@GLIBC_2.2.5
 }
+{
+   Lucid1
+   Memcheck:Leak
+   fun:calloc
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.2.5
+}
+{
+   Lucid2
+   Memcheck:Param
+   write(buf)
+   obj:/lib/libc-2.10.2.so
+   obj:/usr/lib/libsqlite3.so.0.8.6
+   obj:/usr/lib/libsqlite3.so.0.8.6
+   obj:/usr/lib/libsqlite3.so.0.8.6
+   obj:/usr/lib/libsqlite3.so.0.8.6
+   obj:/usr/lib/libsqlite3.so.0.8.6
+   fun:sqlite3_step
+   fun:sqlite3_exec
+   fun:sqlite3_get_table
+}
+{
+   Lucid3
+   Memcheck:Addr8
+   fun:AES_cbc_encrypt
+   obj:*
+}
+{
+   Lucid4
+   Memcheck:Addr8
+   fun:AES_cbc_encrypt
+}
+{
+   Lucid5
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_scope_free
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:do_dlopen
+   fun:_dl_catch_error
+   fun:__libc_dlopen_mode
+   fun:__nss_lookup_function
+   fun:__nss_lookup
+   fun:getservbyname_r@@GLIBC_2.2.5
+   fun:getservbyname
+}
+{
+   Lucid6
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:do_dlopen
+   fun:_dl_catch_error
+   fun:__libc_dlopen_mode
+   fun:init
+   fun:pthread_once
+   fun:backtrace
+}

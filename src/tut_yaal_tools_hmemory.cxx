@@ -45,8 +45,14 @@ struct tut_yaal_tools_hmemory
 	{
 	static int const SIZE = 256;
 	char _buf[SIZE];
+	tut_yaal_tools_hmemory( void );
 	virtual ~tut_yaal_tools_hmemory( void ) {}
 	};
+
+tut_yaal_tools_hmemory::tut_yaal_tools_hmemory( void ) : _buf()
+	{
+	fill_n( _buf, SIZE, 0 );
+	}
 
 TUT_TEST_GROUP_N( tut_yaal_tools_hmemory, "yaal::tools::HMemory" );
 
