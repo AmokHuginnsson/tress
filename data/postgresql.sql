@@ -19,3 +19,4 @@ INSERT INTO config ( id, name, value ) VALUES( 3, 'three', '333' );
 INSERT INTO config ( id, name, value ) VALUES( 4, 'four', '4444' );
 
 GRANT SELECT,INSERT,UPDATE,DELETE ON config TO tress;
+GRANT SELECT,UPDATE ON config_id_seq TO tress;

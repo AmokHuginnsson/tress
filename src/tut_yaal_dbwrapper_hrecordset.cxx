@@ -129,6 +129,7 @@ void test_dml( HDataBase::ptr_t db )
 	rs = db->query( SPECIAL_QUERY );
 	ENSURE( "UPDATE failed?", !! rs && ( rs->begin() != rs->end() ) && ( rs->begin()[1] == "special" ) && ( rs->begin()[2] == "second" ) );
 	rs = db->query( SPECIAL_DELETE );
+	rs = db->query( SPECIAL_QUERY );
 	ENSURE( "DELETE failed?", ! rs || ( rs->begin() == rs->end() ) );
 	return;
 	M_EPILOG
