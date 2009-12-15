@@ -48,6 +48,7 @@ struct tut_
 	{
 	};
 
+TUT_SIMPLE_MOCK( tut_ );
 TUT_TEST_GROUP( tut_, "yaal::" );
 
 TUT_UNIT_TEST( "the test" )

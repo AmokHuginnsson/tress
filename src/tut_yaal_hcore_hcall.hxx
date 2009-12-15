@@ -29,18 +29,8 @@ Copyright:
 
 #include <yaal/hcore/hstring.hxx>
 
-#include "tut_helpers.hxx"
-
 namespace tut
 {
-
-struct tut_yaal_hcore_hcall
-	{
-	tut_yaal_hcore_hcall( void );
-	virtual ~tut_yaal_hcore_hcall( void ) {}
-	void generate_yaal_hcore_hcall_tests( void );
-	void generate_yaal_hcore_hcall_test( int, int, int );
-	};
 
 yaal::hcore::HString foo0( void );
 yaal::hcore::HString foo1( int a1 );
@@ -53,8 +43,6 @@ yaal::hcore::HString foo7( int a1, int a2, int a3, int a4, int a5, int a6, int a
 yaal::hcore::HString foo8( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8 );
 yaal::hcore::HString foo9( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9 );
 yaal::hcore::HString foo10( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10 );
-
-TUT_TEST_GROUP_N( tut_yaal_hcore_hcall, "yaal::hcore::HCall" );
 
 }
 

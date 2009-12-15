@@ -142,7 +142,7 @@ struct HSTDGlobalScopeExceptionHandlingPolicy
 #define TUT_TEST_GROUP_N( mock, name ) \
 typedef test_group<mock> tut_group; \
 typedef tut_group::object module; \
-typedef yaal::hcore::HExceptionSafeGlobal<tut_group, HSTDGlobalScopeExceptionHandlingPolicy> tut_group_holder; \
+typedef yaal::hcore::HExceptionSafeGlobal<tut_group, tress::tut_helpers::HSTDGlobalScopeExceptionHandlingPolicy> tut_group_holder; \
 tut_group_holder tut_##mock##_group( ( name ) );
 #define TUT_TEST_GROUP( mock, name ) \
 TUT_TEST_GROUP_N( mock, name ) \

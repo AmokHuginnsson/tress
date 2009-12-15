@@ -38,11 +38,7 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_trait
-	{
-	virtual ~tut_yaal_trait( void ) {}
-	};
-
+TUT_SIMPLE_MOCK( tut_yaal_trait );
 TUT_TEST_GROUP_N( tut_yaal_trait, "yaal::trait" );
 
 TUT_UNIT_TEST_N( 1, "same stype" )
