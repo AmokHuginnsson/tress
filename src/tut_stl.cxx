@@ -142,5 +142,21 @@ TUT_UNIT_TEST_N( 7, "map insert of already existing key")
 	cout << (*ir.first).second << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 8, "manipulators" )
+	string str;
+	int i( 7 );
+	cout << "[O] i = '" << i << "'" << endl;
+	cout << "[M] i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
+	cout << "[O] i = '" << i << "'" << endl;
+	cout << "[M] i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
+	cout << "[O] i = '" << i << "'" << endl;
+	cout << "[M] i = '" << setfill( '0' ) << setw( 5 ) << i << "'" << " \tsetfill( '0' ), setw( 5 )" << endl;
+	cout << "[O] i = '" << i << "'" << endl;
+	cout << "[M] i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
+	cout << "[O] i = '" << i << "'" << endl;
+	cout << "[M] i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
+	cout << "[O] i = '" << i << "'" << endl;
+TUT_TEARDOWN()
+
 }
 

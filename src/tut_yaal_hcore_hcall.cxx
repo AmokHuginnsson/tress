@@ -68,9 +68,9 @@ tut_yaal_hcore_hcall::~tut_yaal_hcore_hcall( void )
 	{
 	}
 
-static int const MAX_TESTED_ARGS = 8;
+static int const MAX_TESTED_ARGS = 5;
 static int const MAX_UT_PER_SUIT = 50;
-static int const MAX_TEST_PER_UT = 10;
+static int const MAX_TEST_PER_UT = 20;
 
 void tut_yaal_hcore_hcall::generate_yaal_hcore_hcall_tests( void )
 	{
@@ -269,6 +269,69 @@ HString foo10( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, i
 	return ( ss.string() );
 	}
 
+YaalHCoreHCallClass::YaalHCoreHCallClass( void )
+	{
+	}
+
+YaalHCoreHCallClass::~YaalHCoreHCallClass( void )
+	{
+	}
+
+HString YaalHCoreHCallClass::foo0( void )
+	{
+	return ( tut::foo0() );
+	}
+
+HString YaalHCoreHCallClass::foo1( int a1 )
+	{
+	return ( tut::foo1( a1 ) );
+	}
+
+HString YaalHCoreHCallClass::foo2( int a1, int a2 )
+	{
+	return ( tut::foo2( a1, a2 ) );
+	}
+
+HString YaalHCoreHCallClass::foo3( int a1, int a2, int a3 )
+	{
+	return ( tut::foo3( a1, a2, a3 ) );
+	}
+
+HString YaalHCoreHCallClass::foo4( int a1, int a2, int a3, int a4 )
+	{
+	return ( tut::foo4( a1, a2, a3, a4 ) );
+	}
+
+HString YaalHCoreHCallClass::foo5( int a1, int a2, int a3, int a4, int a5 )
+	{
+	return ( tut::foo5( a1, a2, a3, a4, a5 ) );
+	}
+
+HString YaalHCoreHCallClass::foo6( int a1, int a2, int a3, int a4, int a5, int a6 )
+	{
+	return ( tut::foo6( a1, a2, a3, a4, a5, a6 ) );
+	}
+
+HString YaalHCoreHCallClass::foo7( int a1, int a2, int a3, int a4, int a5, int a6, int a7 )
+	{
+	return ( tut::foo7( a1, a2, a3, a4, a5, a6, a7 ) );
+	}
+
+HString YaalHCoreHCallClass::foo8( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8 )
+	{
+	return ( tut::foo8( a1, a2, a3, a4, a5, a6, a7, a8 ) );
+	}
+
+HString YaalHCoreHCallClass::foo9( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9 )
+	{
+	return ( tut::foo9( a1, a2, a3, a4, a5, a6, a7, a8, a9 ) );
+	}
+
+HString YaalHCoreHCallClass::foo10( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10 )
+	{
+	return ( tut::foo10( a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 ) );
+	}
+
 class Sumator
 	{
 	int _arg;
@@ -304,14 +367,17 @@ void show_rectangle( int a, int b )
 	cout << "a: " << a << ", b: " << b << endl;
 	}
 
-TUT_UNIT_TEST_N( 1, "use call as a functor in an algorithm" )
+TUT_UNIT_TEST_N( 1, "(hand written) no arg" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 30, "use call as a functor in an algorithm" )
 	HArray<int> tab( 10 );
 	generate_n( tab.begin(), tab.size(), inc( 1 ) );
 	for_each( tab.begin(), tab.end(), call( show_rectangle, _1, 2 ) );
 	for_each( tab.begin(), tab.end(), call( show_rectangle, 2, _1 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "random free standing args" )
+TUT_UNIT_TEST_N( 31, "random free standing args" )
 	Sumator s( 1 );
 	call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), &s );
 #if 0
