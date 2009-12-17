@@ -87,7 +87,7 @@ void tut_yaal_hcore_hcall::generate_yaal_hcore_hcall_tests( void )
 
 void tut_yaal_hcore_hcall::file_header( void )
 	{
-	_out.open( ( HFormat( "./src/tut_yaal_hcore_hcall_%03d.cxx" ) % _fileNo ).string() );
+	_out.open( ( HFormat( "./src/tut_yaal_hcore_hcall_auto_%03d.cxx" ) % _fileNo ).string() );
 	_out <<
 "#include <TUT/tut.hpp>\n"
 "\n"
@@ -106,8 +106,8 @@ void tut_yaal_hcore_hcall::file_header( void )
 "namespace tut\n"
 "{\n"
 "\n"
-"TUT_SIMPLE_MOCK( tut_yaal_hcore_hcall_" << _fileNo << " );\n"
-"TUT_TEST_GROUP_N( tut_yaal_hcore_hcall_" << _fileNo << " , \"yaal::hcore::HCall::" << _fileNo << "\" );\n"
+"TUT_SIMPLE_MOCK( tut_yaal_hcore_hcall_" << setfill( '0' ) << setw( 3 ) << _fileNo << " );\n"
+"TUT_TEST_GROUP_N( tut_yaal_hcore_hcall_" << setw( 3 ) << _fileNo << " , \"yaal::hcore::HCall::" << setw( 3 ) << _fileNo << "\" );\n"
 "\n" << flush;
 	}
 

@@ -156,6 +156,10 @@ TUT_UNIT_TEST_N( 8, "manipulators" )
 	cout << "[O] i = '" << i << "'" << endl;
 	cout << "[M] i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
 	cout << "[O] i = '" << i << "'" << endl;
+	int k( 103 );
+	cout << "[O] k = '" << k << "'" << endl;
+	cout << "[M] k = '" << hex << k << "' \thex" << endl;
+	cout << "[O] k = '" << k << "'" << endl;
 TUT_TEARDOWN()
 
 }
