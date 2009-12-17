@@ -368,6 +368,46 @@ void show_rectangle( int a, int b )
 	}
 
 TUT_UNIT_TEST_N( 1, "(hand written) no arg" )
+	ENSURE_EQUALS( "function bind failed", call( foo0 )(), "foo0" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 2, "(hand written) 1 (free) arg" )
+	ENSURE_EQUALS( "function bind failed", call( foo1, _1 )( -2 ), "foo1: a1 = -2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 3, "(hand written) 2 (1 free) args" )
+	ENSURE_EQUALS( "function bind failed", call( foo2, _1, 2 )( -3 ), "foo2: a1 = -3, a2 = 2" );
+	ENSURE_EQUALS( "function bind failed", call( foo2, 2, _1 )( -3 ), "foo2: a1 = 2, a2 = -3" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 4, "(hand written) 2 (2 free) args" )
+	ENSURE_EQUALS( "function bind failed", call( foo2, _1, _2 )( -1, -2 ), "foo2: a1 = -1, a2 = -2" );
+	ENSURE_EQUALS( "function bind failed", call( foo2, _2, _1 )( -1, -2 ), "foo2: a1 = -2, a2 = -1" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 5, "(hand written) 3 (0 free) args" )
+	ENSURE_EQUALS( "function bind failed", call( foo3, 0, 1, 2 )(), "foo3: a1 = 0, a2 = 1, a3 = 2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 6, "(hand written) 3 (1 free) args" )
+	ENSURE_EQUALS( "function bind failed", call( foo3, _1, 1, 2 )( -3 ), "foo3: a1 = -3, a2 = 1, a3 = 2" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, 0, _1, 2 )( -4 ), "foo3: a1 = 0, a2 = -4, a3 = 2" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, 0, 1, _1 )( -5 ), "foo3: a1 = 0, a2 = 1, a3 = -5" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 7, "(hand written) 3 (2 free) args" )
+	ENSURE_EQUALS( "function bind failed", call( foo3, _1, _2, 2 )( -3, -4 ), "foo3: a1 = -3, a2 = -4, a3 = 2" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, _2, _1, 2 )( -3, -4 ), "foo3: a1 = -4, a2 = -3, a3 = 2" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, 0, _1, _2 )( -4, -5 ), "foo3: a1 = 0, a2 = -4, a3 = -5" );
+	ENSURE_EQUALS( "function bind failed", call( foo3, _2, 1, _1 )( -5, -6 ), "foo3: a1 = -6, a2 = 1, a3 = -5" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 8, "(hand written) 6 (2 free) args" )
+	ENSURE_EQUALS( "function bind failed", call( foo6, 2, _1, 4, 8, _2, 16 )( -100, -2000 ), "foo6: a1 = 2, a2 = -100, a3 = 4, a4 = 8, a5 = -2000, a6 = 16" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 9, "(hand written) 10 (4 free) args" )
+	ENSURE_EQUALS( "function bind failed", call( foo10, 7, 1, 2, _3, 4, _2, 6, _1, 8, _4 )( -1, -2, -3, -4 ), "foo10: a1 = 7, a2 = 1, a3 = 2, a4 = -3, a5 = 4, a6 = -2, a7 = 6, a8 = -1, a9 = 8, a10 = -4" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 30, "use call as a functor in an algorithm" )
@@ -380,24 +420,6 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 31, "random free standing args" )
 	Sumator s( 1 );
 	call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), &s );
-#if 0
-	call( 2, _1, 4, 8, _2, 16 )( 100, 2000 );
-#endif
-	cout << "free arg count: " << cf( 2, _1, 4, 8, _2, 16 ) << endl;
-	cout << call( foo1, _1 )( 2 ) << endl;
-	cout << call( foo2, _1, 2 )( 3 ) << endl;
-	cout << call( foo2, 2, _1 )( 3 ) << endl;
-	cout << call( foo2, _1, _2 )( 1, 2 ) << endl;
-	cout << call( foo2, _2, _1 )( 1, 2 ) << endl;
-	cout << call( foo3, 0, 1, 2 )() << endl;
-	cout << call( foo3, _1, 1, 2 )( 3 ) << endl;
-	cout << call( foo3, 0, _1, 2 )( 4 ) << endl;
-	cout << call( foo3, 0, 1, _1 )( 5 ) << endl;
-	cout << call( foo3, _1, _2, 2 )( 3, 4 ) << endl;
-	cout << call( foo3, _2, _1, 2 )( 3, 4 ) << endl;
-	cout << call( foo3, 0, _1, _2 )( 4, 5 ) << endl;
-	cout << call( foo3, _2, 1, _1 )( 5, 6 ) << endl;
-	cout << call( foo10, 0, 1, 2, _3, 4, _2, 6, _1, 8, _4 )( -1, -2, -3, -4 ) << endl;
 TUT_TEARDOWN()
 
 }
