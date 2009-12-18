@@ -126,15 +126,15 @@ int HCuteReporter::run_ut( int a_iArgc, char* a_ppcArgv[] )
 		bool repeat = false;
 		while ( ok || repeat )
 			{
-			HStreamInterface::STATUS::code_t s;
 			tress.set_csoi( HPipedChild::STREAM::OUT );
-			bool repeatOut = tress.read_poll( &t ) || ( ( s = tress.read_until( line ).code ) == HStreamInterface::STATUS::REPEAT );
-			bool okOut = ( s == HStreamInterface::STATUS::OK );
+			int long count( 0 );
+			bool repeatOut = tress.read_poll( &t ) || ( ( count = tress.read_until( line ) ) < 0 );
+			bool okOut = ( count >= 0 );
 			if ( okOut && setup.f_bVerbose )
 				cout << line.raw() << endl;
 			tress.set_csoi( HPipedChild::STREAM::ERR );
-			bool repeatErr = tress.read_poll( &t ) || ( ( s = tress.read_until( err ).code ) == HStreamInterface::STATUS::REPEAT );
-			bool okErr = ( s == HStreamInterface::STATUS::OK );
+			bool repeatErr = tress.read_poll( &t ) || ( ( count = tress.read_until( err ) ) < 0 );
+			bool okErr = ( count >= 0 );
 			if ( ! repeatErr && okErr && !! err )
 				handle_line_of_error( err );
 			ok = okOut || okErr;

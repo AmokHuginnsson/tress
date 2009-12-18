@@ -97,9 +97,9 @@ TUT_UNIT_TEST_N( 3, "stacked writes" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "read from empty" )
-	HMemory m( _buf, SIZE );
+	HMemory m( _buf, SIZE, HMemory::INITIAL_STATE::INVALID );
 	HString line;
-	m.read_until( line );
+	ENSURE_EQUALS( "read byte count from empty", m.read_until( line ), 0 );
 TUT_TEARDOWN()
 
 }
