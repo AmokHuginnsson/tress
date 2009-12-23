@@ -75,12 +75,24 @@ AC_HEADER_MAJOR
 
 YAAL_DETECT_OPERATING_SYSTEM
 YAAL_DETECT_PHYSICAL_MEMORY
-SPECIAL_LINKER_FLAGS=""
 
 dnl What special compiler flags we can set?
 AC_MSG_RESULT([--- Guessing specific compiler/linker features ... ---  [[71%]]])
 
-YAAL_DETECT_FLAGS(FKPIC, [-fPIC], [C++])
+YAAL_DETECT_FLAGS(YAAL_CXXFLAGS, [-fPIC], [C++])
+YAAL_DETECT_FLAGS(YAAL_LXXFLAGS, [-Wl,--fatal-warnings], [C++])
+YAAL_DETECT_FLAGS(YAAL_LXXFLAGS, [-Wl,--export-dynamic], [C++])
+YAAL_DETECT_FLAGS(YAAL_LXXFLAGS, [-Wl,--no-undefined], [C++])
+YAAL_DETECT_FLAGS(YAAL_LXXFLAGS, [-Wl,--enable-auto-import], [C++])
+YAAL_DETECT_FLAGS(START_GROUP, [-Wl,--start-group], [C++])
+YAAL_DETECT_FLAGS(SONAME_FLAG, [-Wl,-soname,foo], [C++])
+if test ["x${START_GROUP}"] != ["x"] ; then
+	START_GROUP="-Wl\$(COMA)--start-group"
+	END_GROUP="-Wl\$(COMA)--end-group"
+fi
+if test ["x${SONAME_FLAG}"] != ["x"] ; then
+	SONAME_FLAG="-Wl\$(COMA)-soname\$(COMA)\$(SONAME_\$(NAME))"
+fi
 _FLAGS=''
 CXXFLAGS_ORIG=$CXXFLAGS;
 CXXFLAGS=["-Wextra"]
@@ -99,10 +111,8 @@ AC_TRY_COMPILE([#include <stdlib.h>],[],
 							[AC_SUBST([PEDANTIC_ERRORS],	[-pedantic-errors])
 							_FLAGS=["$_FLAGS -pedantic-errors"]],
 							[AC_MSG_WARN([[Can not use -pedantic-errors!]])])
-CXXFLAGS=["$CXXFLAGS -Wl,--no-undefined -Wl,--fatal-warnings"]
-AC_LINK_IFELSE([[extern int my_undefined_symbol;void foo(void){my_undefined_symbol=0;}]],
-							[SPECIAL_LINKER_FLAGS=["$SPECIAL_LINKER_FLAGS -Wl,--no-undefined"] _FLAGS=["$_FLAGS -Wl,--no-undefined."]],
-							[AC_MSG_WARN([[Cannot use -Wl,--no-undefined!]])])
+CXXFLAGS_ORIG=${CXXFLAGS}
+CXXFLAGS=${CXXFLAGS_ORIG}
 if test ["$_FLAGS"] = [""] ; then
 	_FLAGS='none. ---                      [[76%]]'
 fi
@@ -111,9 +121,9 @@ AC_MSG_RESULT([--- Guessed fetures are: $_FLAGS])
 dnl Now we can look for all needed libraries.
 CPPFLAGS=$CXXFLAGS;
 AC_MSG_RESULT([--- Looking for needed libraries ... ---                [[77%]]])
+AC_SEARCH_LIBS([libintl_gettext],[intl],,[AC_SEARCH_LIBS([gettext],[intl],,[AC_MSG_ERROR([Cannot continue without localization library.])])])
 AC_CHECK_LIB([ncurses],[initscr],
 							[],[AC_MSG_ERROR([Can not continue without ncurses.])])
-AC_SEARCH_LIBS([libintl_gettext],[intl],,[AC_SEARCH_LIBS([gettext],[intl],,[AC_MSG_ERROR([Cannot continue without localization library.])])]) HCORE_LIBS="${HCORE_LIBS} ${LIBS}" LIBS=""
 AC_CHECK_LIB([hcore],[yaal_hcore_main],
 							[],[AC_MSG_ERROR([Can not continue without hcore.])])
 AC_CHECK_LIB([hconsole],[yaal_hconsole_main],
@@ -134,9 +144,10 @@ AC_MSG_RESULT([--- Done looking for needed header, all found. ---      [[92%]]])
 dnl We need to check if out ncurses devel is not brain-damaged.
 AC_MSG_RESULT([--- Libraries/environment sanity check ... ---          [[93%]]])
 
-AC_SUBST([FKPIC],[${FKPIC}])
-AC_SUBST([SPECIAL_LINKER_FLAGS],["$SPECIAL_LINKER_FLAGS"])
-AC_SUBST([TARGET_LINKER_FLAGS],["$TARGET_LINKER_FLAGS"])
+AC_SUBST([YAAL_CXXFLAGS],[${YAAL_CXXFLAGS}])
+AC_SUBST([YAAL_LXXFLAGS],[${YAAL_LXXFLAGS}])
+AC_SUBST([START_GROUP],[${START_GROUP}])
+AC_SUBST([END_GROUP],[${END_GROUP}])
 
 AH_TOP([/* $Id$ */
 

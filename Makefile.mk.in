@@ -32,9 +32,11 @@ EXTRAVERSION	= 0
 include $(DIR_ROOT)/_aux/mk/0_paths.mk
 include $(DIR_ROOT)/_aux/mk/1_basic.mk
 LIBS					= hcore tools dbwrapper hconsole hdata hconsole dbwrapper tools hcore boost_filesystem-mt boost_system-mt boost_date_time-mt
-$(eval $(call NEW_TARGET,tress,src,,-rdynamic @TARGET_LINKER_FLAGS@ @LIBS@))
+$(eval $(call NEW_TARGET,tress,src,,-rdynamic @YAAL_LXXFLAGS@ @LIBS@))
 $(eval $(call NEW_TARGET,cute,cute))
-$(eval $(call NEW_TARGET,tressplugin,data,@FKPIC@,-shared --allow-shlib-undefined @TARGET_LINKER_FLAGS@ @LIBS@))
+$(eval $(call NEW_TARGET,tressplugin,data,@YAAL_CXXFLAGS@,-shared --allow-shlib-undefined @YAAL_LXXFLAGS@ @LIBS@))
+START_GROUP=@START_GROUP@
+END_GROUP=@END_GROUP@
 EXEC_NAME				= 1exec
 ifdef NODEBUG
 	TARGET = $(PRJNAME)
@@ -49,7 +51,6 @@ include $(DIR_ROOT)/_aux/mk/6_item-paths.mk
 -include $(DIR_ROOT)/local.mk
 CWARNING_FLAGS								+= @EXTRA_WARNINGS@ @WARN_SHADOW@ -Wno-missing-noreturn
 COMPILER_PRIME_FLAGS					+= @DEFS@
-LINKER_PRIME_FLAGS +=	@SPECIAL_LINKER_FLAGS@
 
 include $(DIR_ROOT)/_aux/mk/7_flags-post.mk
 include $(DIR_ROOT)/_aux/mk/8_int-libs.mk
