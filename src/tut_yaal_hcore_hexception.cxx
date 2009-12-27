@@ -151,7 +151,7 @@ typedef HExceptionT<R,QE> RE;
 		{}
 	};
 
-TUT_TEST_GROUP_N( tut_yaal_hcore_hexception, "yaal::hcore::HException" )
+TUT_TEST_GROUP_N( tut_yaal_hcore_hexception, "yaal::hcore::HException" );
 
 TUT_UNIT_TEST_N( 1, "valid ex hier construct for full hier" )
 	try

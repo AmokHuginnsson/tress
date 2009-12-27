@@ -32,9 +32,9 @@ EXTRAVERSION	= 0
 include $(DIR_ROOT)/_aux/mk/0_paths.mk
 include $(DIR_ROOT)/_aux/mk/1_basic.mk
 LIBS					= hcore tools dbwrapper hconsole hdata hconsole dbwrapper tools hcore boost_filesystem-mt boost_system-mt boost_date_time-mt
-$(eval $(call NEW_TARGET,tress,src,,-rdynamic @YAAL_LXXFLAGS@ @LIBS@))
+$(eval $(call NEW_TARGET,tress,src,-Wno-variadic-macros,@RDYNAMIC@))
 $(eval $(call NEW_TARGET,cute,cute))
-$(eval $(call NEW_TARGET,tressplugin,data,@YAAL_CXXFLAGS@,-shared --allow-shlib-undefined @YAAL_LXXFLAGS@ @LIBS@))
+$(eval $(call NEW_TARGET,tressplugin,data,,-shared))
 START_GROUP=@START_GROUP@
 END_GROUP=@END_GROUP@
 EXEC_NAME				= 1exec
@@ -47,19 +47,18 @@ include $(DIR_ROOT)/_aux/mk/2_term.mk
 include $(DIR_ROOT)/_aux/mk/3_suffix.mk
 include $(DIR_ROOT)/_aux/mk/4_wrapper.mk
 include $(DIR_ROOT)/_aux/mk/5_flags.mk
-include $(DIR_ROOT)/_aux/mk/6_item-paths.mk
 -include $(DIR_ROOT)/local.mk
-CWARNING_FLAGS								+= @EXTRA_WARNINGS@ @WARN_SHADOW@ -Wno-missing-noreturn
-COMPILER_PRIME_FLAGS					+= @DEFS@
+CXXFLAGS += @EXTRA_CXXFLAGS@ @DEFS@ -Wno-missing-noreturn
+LXXFLAGS += @EXTRA_LXXFLAGS@
+LIBS += @LIBS@
 
-include $(DIR_ROOT)/_aux/mk/7_flags-post.mk
-include $(DIR_ROOT)/_aux/mk/8_int-libs.mk
+include $(DIR_ROOT)/_aux/mk/6_int-libs.mk
 include $(DIR_ROOT)/FCTF/make.mk
-include $(DIR_ROOT)/FCTF/e_target-default.mk
-include $(DIR_ROOT)/_aux/mk/9_func.mk
-include $(DIR_ROOT)/_aux/mk/a_prepare-target.mk
-include $(DIR_ROOT)/_aux/mk/b_common-targets.mk
-include $(DIR_ROOT)/_aux/mk/c_filenames.mk
-include $(DIR_ROOT)/_aux/mk/f_target-tags.mk
-include $(DIR_ROOT)/_aux/mk/g_deps.mk
+include $(DIR_ROOT)/FCTF/c_target-default.mk
+include $(DIR_ROOT)/_aux/mk/7_func.mk
+include $(DIR_ROOT)/_aux/mk/8_prepare-target.mk
+include $(DIR_ROOT)/_aux/mk/9_common-targets.mk
+include $(DIR_ROOT)/_aux/mk/a_filenames.mk
+include $(DIR_ROOT)/_aux/mk/d_target-tags.mk
+include $(DIR_ROOT)/_aux/mk/e_deps.mk
 

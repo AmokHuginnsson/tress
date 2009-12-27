@@ -143,7 +143,7 @@ struct HSTDGlobalScopeExceptionHandlingPolicy
 typedef test_group<mock> tut_group; \
 typedef tut_group::object module; \
 typedef yaal::hcore::HExceptionSafeGlobal<tut_group, tress::tut_helpers::HSTDGlobalScopeExceptionHandlingPolicy> tut_group_holder; \
-tut_group_holder tut_##mock##_group( ( name ) );
+tut_group_holder tut_##mock##_group( ( name ) )
 #define TUT_TEST_GROUP( mock, name ) \
 TUT_TEST_GROUP_N( mock, name ) \
 namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
@@ -151,7 +151,7 @@ namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
 	{ \
 	virtual ~name( void ) \
 		{} \
-	};
+	}
 
 template<typename symbol_t, typename owner_t>
 class counter
