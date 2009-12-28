@@ -34,7 +34,9 @@ include $(DIR_ROOT)/_aux/mk/1_basic.mk
 LIBS					= hcore tools dbwrapper hconsole hdata hconsole dbwrapper tools hcore boost_filesystem-mt boost_system-mt boost_date_time-mt
 $(eval $(call NEW_TARGET,tress,src,-Wno-variadic-macros,@RDYNAMIC@))
 $(eval $(call NEW_TARGET,cute,cute))
-$(eval $(call NEW_TARGET,tressplugin,data,,-shared))
+NAME=tressplugin
+SONAME_tressplugin=libtressplugin-0.0
+$(eval $(call NEW_TARGET,tressplugin,data,,-shared $(call quotecoma,@SONAME_FLAG@)))
 START_GROUP=@START_GROUP@
 END_GROUP=@END_GROUP@
 EXEC_NAME				= 1exec
