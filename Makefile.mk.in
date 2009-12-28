@@ -37,8 +37,6 @@ $(eval $(call NEW_TARGET,cute,cute))
 NAME=tressplugin
 SONAME_tressplugin=libtressplugin-0.0
 $(eval $(call NEW_TARGET,tressplugin,data,,-shared $(call quotecoma,@SONAME_FLAG@)))
-START_GROUP=@START_GROUP@
-END_GROUP=@END_GROUP@
 EXEC_NAME				= 1exec
 ifdef NODEBUG
 	TARGET = $(PRJNAME)
@@ -50,8 +48,11 @@ include $(DIR_ROOT)/_aux/mk/3_suffix.mk
 include $(DIR_ROOT)/_aux/mk/4_wrapper.mk
 include $(DIR_ROOT)/_aux/mk/5_flags.mk
 -include $(DIR_ROOT)/local.mk
+
 CXXFLAGS += @EXTRA_CXXFLAGS@ @DEFS@ -Wno-missing-noreturn
 LXXFLAGS += @EXTRA_LXXFLAGS@
+START_GROUP = @START_GROUP@
+END_GROUP = @END_GROUP@
 LIBS += @LIBS@
 
 include $(DIR_ROOT)/_aux/mk/6_int-libs.mk
