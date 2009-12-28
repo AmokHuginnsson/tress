@@ -29,7 +29,6 @@ PRJNAME				= tress
 VERSION				= 0
 SUBVERSION		= 0
 EXTRAVERSION	= 0
-include $(DIR_ROOT)/_aux/mk/0_paths.mk
 include $(DIR_ROOT)/_aux/mk/1_basic.mk
 LIBS					= hcore tools dbwrapper hconsole hdata hconsole dbwrapper tools hcore boost_filesystem-mt boost_system-mt boost_date_time-mt
 $(eval $(call NEW_TARGET,tress,src,-Wno-variadic-macros,@RDYNAMIC@))
