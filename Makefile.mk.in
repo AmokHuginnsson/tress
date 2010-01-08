@@ -30,7 +30,7 @@ VERSION				= 0
 SUBVERSION		= 0
 EXTRAVERSION	= 0
 include $(DIR_ROOT)/_aux/mk/1_basic.mk
-LIBS					= hcore tools dbwrapper hconsole hdata hconsole dbwrapper tools hcore boost_filesystem-mt boost_system-mt boost_date_time-mt
+LIBS					= hcore tools dbwrapper hconsole hdata hconsole dbwrapper tools hcore @BOOST_FILESYSTEM_LIB@ @BOOST_SYSTEM_LIB@ @BOOST_DATE_TIME_LIB@
 $(eval $(call NEW_TARGET,tress,src,-Wno-variadic-macros,@RDYNAMIC@))
 $(eval $(call NEW_TARGET,cute,cute))
 NAME=tressplugin
