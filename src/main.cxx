@@ -25,6 +25,7 @@ Copyright:
 */
 
 #include <cstdio>
+#include <libintl.h>
 #include <TUT/tut.hpp>
 #include <TUT/tut_reporter.hpp>
 #include <TUT/tut_restartable.hpp>
@@ -65,6 +66,7 @@ void gather_groups_from_file( string_list_t& );
 int main( int a_iArgc, char* a_ppcArgv[] )
 	{
 	M_PROLOG
+	init_locale( PACKAGE_NAME );
 	HClock clk;
 /*	variables declarations for main loop:                                 */
 	int l_iOpt = 0;
@@ -157,7 +159,7 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 			HCons::get_instance().leave_curses();
 		throw;
 		}
-	fprintf( stderr, "Done in %ld miliseconds.\n", clk.get_time_elapsed( HClock::UNIT::MILISECOND ) );
+	cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % clk.get_time_elapsed( HClock::UNIT::MILISECOND ) ).string() << endl;
 	return ( l_oVisitor._exceptionsCount
 			+ l_oVisitor._failuresCount
 			+ l_oVisitor._terminationsCount
