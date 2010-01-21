@@ -128,6 +128,7 @@ TUT_UNIT_TEST_N( 14, "000" )
 	static int const MAX_TEST_LEN = 4;
 	char input[ MAX_TEST_LEN ];
 	HStringStream ss;
+	HStringStream msg;
 	for ( int len = 1; len < MAX_TEST_LEN; ++ len )
 		{
 		for ( int val = 0; val < 256; ++ val )
@@ -136,9 +137,22 @@ TUT_UNIT_TEST_N( 14, "000" )
 			HMemory m( input, len );
 			ss.clear();
 			base64::encode( m, ss, true );
-			ENSURE_EQUALS( "bad encode", ss.string(), cases[ ( len - 1 ) * 256 + val ] );
+			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << input;
+			ENSURE_EQUALS( msg.string(), ss.string(), cases[ ( len - 1 ) * 256 + val ] );
+			msg.clear();
 			}
 		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 15, "000" )
+	static int const MAX_TEST_LEN = 4;
+	char input[ MAX_TEST_LEN ];
+	HStringStream ss;
+	fill_n( input, MAX_TEST_LEN, 128 );
+	HMemory m( input, 2 );
+	ss.clear();
+	base64::encode( m, ss, true );
+	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 1, "original suite <0> (empty)" )

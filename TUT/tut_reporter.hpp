@@ -2,6 +2,7 @@
 #define TUT_REPORTER
 
 #include <cxxabi.h>
+#include <cstdlib>
 #include <iostream>
 
 #include "tut.hpp"
@@ -193,7 +194,10 @@ class reporter : public tut::callback
 						if ( tr._exceptionTypeId != "" )
 							{
 							int status = 0;
-							_os << "     exception typeid: " << abi::__cxa_demangle( tr._exceptionTypeId.c_str(), 0, 0, &status ) << std::endl;
+							char* ptr = abi::__cxa_demangle( tr._exceptionTypeId.c_str(), 0, 0, &status );
+							_os << "     exception typeid: " << ( ptr ? ptr : "(nil)" ) << std::endl;
+							if ( ptr )
+								free( ptr );
 							}
 						}
 					break;
