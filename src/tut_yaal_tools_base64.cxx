@@ -124,50 +124,6 @@ char const cases[][5] = {
 "7u7u", "7+/v", "8PDw", "8fHx", "8vLy", "8/Pz", "9PT0", "9fX1", "9vb2", "9/f3",
 "+Pj4", "+fn5", "+vr6", "+/v7", "/Pz8", "/f39", "/v7+", "////" };
 
-TUT_UNIT_TEST_N( 14, "full encode tests" )
-	static int const MAX_TEST_LEN = 4;
-	char input[ MAX_TEST_LEN ];
-	HStringStream ss;
-	HStringStream msg;
-	for ( int len = 1; len < MAX_TEST_LEN; ++ len )
-		{
-		for ( int val = 0; val < 256; ++ val )
-			{
-			fill_n( input, MAX_TEST_LEN, val );
-			HMemory m( input, len );
-			ss.clear();
-			base64::encode( m, ss, true );
-			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << input;
-			ENSURE_EQUALS( msg.string(), ss.string(), cases[ ( len - 1 ) * 256 + val ] );
-			msg.clear();
-			}
-		}
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST_N( 15, "full decode test" )
-	static int const MAX_TEST_LEN = 4;
-	char input[ MAX_TEST_LEN ];
-	char output[ MAX_TEST_LEN ];
-	HStringStream ss;
-	HStringStream msg;
-	for ( int len = 1; len < MAX_TEST_LEN; ++ len )
-		{
-		for ( int val = 0; val < 256; ++ val )
-			{
-			fill_n( input, MAX_TEST_LEN, val );
-			HMemory m( input, len );
-			ss.clear();
-			ss << cases[ ( len - 1 ) * 256 + val ] << flush;
-			base64::decode( ss, m, true );
-			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << input;
-			int nRead = static_cast<int>( m.read( output, 100 ) );
-			ENSURE_EQUALS( msg.string(), nRead, len );
-			ENSURE( msg.string(), ! ::memcmp( output, input, nRead ) );
-			msg.clear();
-			}
-		}
-TUT_TEARDOWN()
-
 TUT_UNIT_TEST_N( 1, "original suite <0> (empty)" )
 	static char const INPUT[] = "";
 	static char const BASE64ENC[] = "";
@@ -245,8 +201,94 @@ TUT_UNIT_TEST_N( 11, "from string (small alternation)" )
 	ENSURE_EQUALS( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 12, "from file" )
+TUT_UNIT_TEST_N( 12, "encode from file (no newlines)" )
 	static char const* const INPUT = ( setup.f_iArgc > 1 ) ? setup.f_ppcArgv[ 1 ] : "./data/karatsuba.bc";
+	static char const BASE64ENC[] =
+"eD1yZWFkKCk7Cnk9cmVhZCgpOwoKc2NhbGUgPSAwCgpkZWZpbmUgZGlnaXRfY291bnQoIG4gKSB7"
+"CglrID0gMDsKCXdoaWxlICggbiA+IDAgKSB7CgkJayA9IGsgKyAxOwoJCW4gPSBuIC8gMTA7Cgl9"
+"CglyZXR1cm4gKCBrICk7Cn0KCmRlZmluZSBtYXgoIGEsIGIgKSB7CglyID0gMDsKCWlmICggYSA+"
+"IGIgKSB7CgkJciA9IGE7Cgl9IGVsc2UgewoJCXIgPSBiOwoJfQoJcmV0dXJuICggciApOwp9Cgp4"
+"bCA9IGRpZ2l0X2NvdW50KCB4ICk7CnlsID0gZGlnaXRfY291bnQoIHkgKTsKCnByaW50ICI8PDwg"
+"S2FyYXRzdWJhID4+PlxuIgoKcHJpbnQgImZpcnN0IGZhY3RvciAiLCB4LCAiIGhhcyAiLCB4bCwg"
+"IiBkaWdpdHNcbiIKcHJpbnQgInNlY29uZCBmYWN0b3IgIiwgeSwgIiBoYXMgIiwgeWwsICIgZGln"
+"aXRzXG4iCgppZiAoIHhsID4geWwgKSB7Cgl0ID0geDsKCXggPSB5OwoJeSA9IHQ7Cgl0ID0geGw7"
+"Cgl4bCA9IHlsOwoJeWwgPSB0Owp9CgptbCA9IG1heCggeGwsIHlsICk7CgptID0gbWwgLyAyOwpp"
+"ZiAoIG1sICUgMiApIHsKCW0gPSBtICsgMQp9Cgp4MSA9IHgvMTBebQp4MiA9IHglMTBebQp5MSA9"
+"IHkvMTBebQp5MiA9IHklMTBebQoKI3ByaW50ICJ1cHBlciBwYXJ0IG9mIHggaXMgIiwgeDEsICIg"
+"bG93ZXIgcGFydCBvZiB4IGlzICIsIHgyLCAiXG4iCiNwcmludCAidXBwZXIgcGFydCBvZiB5IGlz"
+"ICIsIHkxLCAiIGxvd2VyIHBhcnQgb2YgeSBpcyAiLCB5MiwgIlxuIgoKcjJtID0geDEqeTEKciA9"
+"IHgyKnkyCgpwcmludCAicjJtIGlzICIsIHIybSwgIlxuIgpwcmludCAiciBpcyAiLCByLCAiXG4i"
+"CgpoeCA9IHgxICsgeDIKaHkgPSB5MSArIHkyCgpwcmludCAiaHggaXMgIiwgaHgsICJcbiIKcHJp"
+"bnQgImh5IGlzICIsIGh5LCAiXG4iCgp6MSA9IGh4ICogaHkKCnoyID0gejEqMTBebStyCgpyZXMw"
+"ID0gejIrcjJtKjEwXigyKm0pCgpyZXMxID0gcmVzMC1yMm0qMTBebQoKcmVzdWx0ID0gcmVzMS1y"
+"KjEwXm0KCnByaW50ICJaIGlzICIsIHoxLCAiXG4iCnByaW50ICJaKjEwXm0rciBpcyAiLCB6Miwg"
+"IlxuIgpwcmludCAiWioxMF5tK3IrcjJtKjEwXjJtIGlzICIsIHJlczAsICJcbiIKcHJpbnQgIloq"
+"MTBebStyLXIybSoxMF5tIGlzICIsIHJlczEsICJcbiIKCnJlc3VsdAp4KnkgLSByZXN1bHQK";
+	if ( setup.f_iArgc > 1 )
+		{
+		if ( HString( "-" ) == INPUT )
+			base64::encode( cin, cout );
+		else
+			{
+			HFile f( INPUT );
+			base64::encode( f, cout );
+			}
+		cout << endl;
+		}
+	else
+		{
+		HFile f( INPUT );
+		HStringStream ss;
+		base64::encode( f, ss, true );
+		ENSURE_EQUALS( "badly encoded", ss.string(), BASE64ENC );
+		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 13, "encode from file (with newlines)" )
+	static char const* const INPUT = ( setup.f_iArgc > 1 ) ? setup.f_ppcArgv[ 1 ] : "./data/karatsuba.bc";
+	static char const BASE64ENC[] =
+"eD1yZWFkKCk7Cnk9cmVhZCgpOwoKc2NhbGUgPSAwCgpkZWZpbmUgZGlnaXRfY291bnQoIG4gKSB7\n"
+"CglrID0gMDsKCXdoaWxlICggbiA+IDAgKSB7CgkJayA9IGsgKyAxOwoJCW4gPSBuIC8gMTA7Cgl9\n"
+"CglyZXR1cm4gKCBrICk7Cn0KCmRlZmluZSBtYXgoIGEsIGIgKSB7CglyID0gMDsKCWlmICggYSA+\n"
+"IGIgKSB7CgkJciA9IGE7Cgl9IGVsc2UgewoJCXIgPSBiOwoJfQoJcmV0dXJuICggciApOwp9Cgp4\n"
+"bCA9IGRpZ2l0X2NvdW50KCB4ICk7CnlsID0gZGlnaXRfY291bnQoIHkgKTsKCnByaW50ICI8PDwg\n"
+"S2FyYXRzdWJhID4+PlxuIgoKcHJpbnQgImZpcnN0IGZhY3RvciAiLCB4LCAiIGhhcyAiLCB4bCwg\n"
+"IiBkaWdpdHNcbiIKcHJpbnQgInNlY29uZCBmYWN0b3IgIiwgeSwgIiBoYXMgIiwgeWwsICIgZGln\n"
+"aXRzXG4iCgppZiAoIHhsID4geWwgKSB7Cgl0ID0geDsKCXggPSB5OwoJeSA9IHQ7Cgl0ID0geGw7\n"
+"Cgl4bCA9IHlsOwoJeWwgPSB0Owp9CgptbCA9IG1heCggeGwsIHlsICk7CgptID0gbWwgLyAyOwpp\n"
+"ZiAoIG1sICUgMiApIHsKCW0gPSBtICsgMQp9Cgp4MSA9IHgvMTBebQp4MiA9IHglMTBebQp5MSA9\n"
+"IHkvMTBebQp5MiA9IHklMTBebQoKI3ByaW50ICJ1cHBlciBwYXJ0IG9mIHggaXMgIiwgeDEsICIg\n"
+"bG93ZXIgcGFydCBvZiB4IGlzICIsIHgyLCAiXG4iCiNwcmludCAidXBwZXIgcGFydCBvZiB5IGlz\n"
+"ICIsIHkxLCAiIGxvd2VyIHBhcnQgb2YgeSBpcyAiLCB5MiwgIlxuIgoKcjJtID0geDEqeTEKciA9\n"
+"IHgyKnkyCgpwcmludCAicjJtIGlzICIsIHIybSwgIlxuIgpwcmludCAiciBpcyAiLCByLCAiXG4i\n"
+"CgpoeCA9IHgxICsgeDIKaHkgPSB5MSArIHkyCgpwcmludCAiaHggaXMgIiwgaHgsICJcbiIKcHJp\n"
+"bnQgImh5IGlzICIsIGh5LCAiXG4iCgp6MSA9IGh4ICogaHkKCnoyID0gejEqMTBebStyCgpyZXMw\n"
+"ID0gejIrcjJtKjEwXigyKm0pCgpyZXMxID0gcmVzMC1yMm0qMTBebQoKcmVzdWx0ID0gcmVzMS1y\n"
+"KjEwXm0KCnByaW50ICJaIGlzICIsIHoxLCAiXG4iCnByaW50ICJaKjEwXm0rciBpcyAiLCB6Miwg\n"
+"IlxuIgpwcmludCAiWioxMF5tK3IrcjJtKjEwXjJtIGlzICIsIHJlczAsICJcbiIKcHJpbnQgIloq\n"
+"MTBebStyLXIybSoxMF5tIGlzICIsIHJlczEsICJcbiIKCnJlc3VsdAp4KnkgLSByZXN1bHQK\n";
+	if ( setup.f_iArgc > 1 )
+		{
+		if ( HString( "-" ) == INPUT )
+			base64::encode( cin, cout );
+		else
+			{
+			HFile f( INPUT );
+			base64::encode( f, cout );
+			}
+		cout << endl;
+		}
+	else
+		{
+		HFile f( INPUT );
+		HStringStream ss;
+		base64::encode( f, ss, true, 76 );
+		ENSURE_EQUALS( "badly encoded", ss.string(), BASE64ENC );
+		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 14, "decode from file (newlines)" )
+	static char const* const OUTPUT = "./out/decoded.txt";
 	static char const BASE64ENC[] =
 "eD1yZWFkKCk7Cnk9cmVhZCgpOwoKc2NhbGUgPSAwCgpkZWZpbmUgZGlnaXRfY291bnQoIG4gKSB7"
 "CglrID0gMDsKCXdoaWxlICggbiA+IDAgKSB7CgkJayA9IGsgKyAxOwoJCW4gPSBuIC8gMTA7Cgl9"
@@ -271,25 +313,26 @@ TUT_UNIT_TEST_N( 12, "from file" )
 
 	if ( setup.f_iArgc > 1 )
 		{
-		if ( HString( "-" ) == INPUT )
-			base64::encode( cin, cout );
+		if ( HString( "-" ) == setup.f_ppcArgv[ 1 ] )
+			base64::decode( cin, cout );
 		else
 			{
-			HFile f( INPUT );
-			base64::encode( f, cout );
+			HFile f( setup.f_ppcArgv[ 1 ] );
+			base64::decode( f, cout );
 			}
 		cout << endl;
 		}
 	else
 		{
-		HFile f( INPUT );
 		HStringStream ss;
-		base64::encode( f, ss, true );
-		ENSURE_EQUALS( "badly encoded", ss.string(), BASE64ENC );
+		ss << BASE64ENC;
+		HFile o( OUTPUT, HFile::OPEN::WRITING );
+		base64::decode( ss, o, true );
+//		ENSURE_EQUALS( "badly encoded", ss.string(), BASE64ENC );
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 13, "from file" )
+TUT_UNIT_TEST_N( 15, "decode from file (with newlines)" )
 	static char const* const OUTPUT = "./out/decoded.txt";
 	static char const BASE64ENC[] =
 "eD1yZWFkKCk7Cnk9cmVhZCgpOwoKc2NhbGUgPSAwCgpkZWZpbmUgZGlnaXRfY291bnQoIG4gKSB7\n"
@@ -331,6 +374,50 @@ TUT_UNIT_TEST_N( 13, "from file" )
 		HFile o( OUTPUT, HFile::OPEN::WRITING );
 		base64::decode( ss, o, true );
 //		ENSURE_EQUALS( "badly encoded", ss.string(), BASE64ENC );
+		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 16, "full encode tests" )
+	static int const MAX_TEST_LEN = 4;
+	char input[ MAX_TEST_LEN ];
+	HStringStream ss;
+	HStringStream msg;
+	for ( int len = 1; len < MAX_TEST_LEN; ++ len )
+		{
+		for ( int val = 0; val < 256; ++ val )
+			{
+			fill_n( input, MAX_TEST_LEN, val );
+			HMemory m( input, len );
+			ss.clear();
+			base64::encode( m, ss, true );
+			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << input;
+			ENSURE_EQUALS( msg.string(), ss.string(), cases[ ( len - 1 ) * 256 + val ] );
+			msg.clear();
+			}
+		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 17, "full decode test" )
+	static int const MAX_TEST_LEN = 4;
+	char input[ MAX_TEST_LEN ];
+	char output[ MAX_TEST_LEN ];
+	HStringStream ss;
+	HStringStream msg;
+	for ( int len = 1; len < MAX_TEST_LEN; ++ len )
+		{
+		for ( int val = 0; val < 256; ++ val )
+			{
+			fill_n( input, MAX_TEST_LEN, val );
+			HMemory m( input, len );
+			ss.clear();
+			ss << cases[ ( len - 1 ) * 256 + val ] << flush;
+			base64::decode( ss, m, true );
+			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << input;
+			int nRead = static_cast<int>( m.read( output, 100 ) );
+			ENSURE_EQUALS( msg.string(), nRead, len );
+			ENSURE( msg.string(), ! ::memcmp( output, input, nRead ) );
+			msg.clear();
+			}
 		}
 TUT_TEARDOWN()
 

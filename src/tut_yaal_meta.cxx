@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_yaal_hcore_hstreaminterface.cxx - this file is integral part of `tress' project.
+	tut_yaal_meta.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -32,6 +32,7 @@ M_VCSID( "$Id: "__ID__" $" )
 
 using namespace tut;
 using namespace yaal;
+using namespace yaal::meta;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
 using namespace yaal::tools;
@@ -41,29 +42,14 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-TUT_SIMPLE_MOCK( tut_yaal_hcore_hstreaminterface );
-TUT_TEST_GROUP_N( tut_yaal_hcore_hstreaminterface, "yaal::hcore::HStreamInterface" );
+TUT_SIMPLE_MOCK( tut_yaal_meta );
+TUT_TEST_GROUP_N( tut_yaal_meta, "yaal::meta" );
 
-TUT_UNIT_TEST_N( 1, "manipulators" )
-	int i( 7 );
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setfill( '0' ) << setw( 5 ) << i << "'" << " \tsetfill( '0' ), setw( 5 )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
-	int k( 103 );
-	cout << "[O] k = '" << k << "'" << endl;
-	cout << "[M] k = '" << hex << k << "' \thex" << endl;
-	cout << "[O] k = '" << k << "'" << endl;
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST_N( 2, "read_until_n" )
+TUT_UNIT_TEST_N( 1, "max_signed" )
+	cout << "char = " << hex << static_cast<int>( max_signed<char>::value ) << endl;
+	cout << "short = " << hex << max_signed<short>::value << endl;
+	cout << "int = " << hex << max_signed<int>::value << endl;
+	cout << "long = " << hex << max_signed<long>::value << endl;
 TUT_TEARDOWN()
 
 }
