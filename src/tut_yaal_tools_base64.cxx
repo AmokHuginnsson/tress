@@ -124,7 +124,7 @@ char const cases[][5] = {
 "7u7u", "7+/v", "8PDw", "8fHx", "8vLy", "8/Pz", "9PT0", "9fX1", "9vb2", "9/f3",
 "+Pj4", "+fn5", "+vr6", "+/v7", "/Pz8", "/f39", "/v7+", "////" };
 
-TUT_UNIT_TEST_N( 14, "000" )
+TUT_UNIT_TEST_N( 14, "full encode tests" )
 	static int const MAX_TEST_LEN = 4;
 	char input[ MAX_TEST_LEN ];
 	HStringStream ss;
@@ -144,15 +144,28 @@ TUT_UNIT_TEST_N( 14, "000" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 15, "000" )
+TUT_UNIT_TEST_N( 15, "full decode test" )
 	static int const MAX_TEST_LEN = 4;
 	char input[ MAX_TEST_LEN ];
+	char output[ MAX_TEST_LEN ];
 	HStringStream ss;
-	fill_n( input, MAX_TEST_LEN, 128 );
-	HMemory m( input, 2 );
-	ss.clear();
-	base64::encode( m, ss, true );
-	cout << ss.string() << endl;
+	HStringStream msg;
+	for ( int len = 1; len < MAX_TEST_LEN; ++ len )
+		{
+		for ( int val = 0; val < 256; ++ val )
+			{
+			fill_n( input, MAX_TEST_LEN, val );
+			HMemory m( input, len );
+			ss.clear();
+			ss << cases[ ( len - 1 ) * 256 + val ] << flush;
+			base64::decode( ss, m, true );
+			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << input;
+			int nRead = static_cast<int>( m.read( output, 100 ) );
+			ENSURE_EQUALS( msg.string(), nRead, len );
+			ENSURE( msg.string(), ! ::memcmp( output, input, nRead ) );
+			msg.clear();
+			}
+		}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 1, "original suite <0> (empty)" )

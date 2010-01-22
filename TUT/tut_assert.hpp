@@ -34,11 +34,14 @@ void ensure( char const* const msg, bool cond )
  * Tests provided condition.
  * Throws if false.
  */
-template<typename T>
-void ensure_real( char const* const file, int const& line, char const* const, T const& msg, bool cond )
+void ensure_real( char const* const file, int const& line, char const* const, char const* const& msg, bool cond )
 	{
 	if ( !cond )
 		throw failure( file, line, msg );
+	}
+void ensure_real( char const* const file, int const& line, char const* const, yaal::hcore::HString const& msg, bool cond )
+	{
+	ensure_real( file, line, msg.raw(), cond );
 	}
 template<typename T>
 void ensure( T const& msg, bool cond )
