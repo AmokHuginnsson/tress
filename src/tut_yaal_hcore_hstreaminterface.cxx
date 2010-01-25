@@ -82,7 +82,7 @@ TUT_UNIT_TEST_N( 2, "read_until (delims stripped)" )
 	ENSURE_EQUALS( "bad data read", line, "kota." );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "read_until (delims stripped)" )
+TUT_UNIT_TEST_N( 3, "read_until (delims not stripped)" )
 	static char data[] = "Ala\nma\nkota.";
 	HMemory m( data, sizeof( data ) - 1 );
 	HString line;
@@ -152,12 +152,12 @@ TUT_UNIT_TEST_N( 6, "read_until_n (delim not stripped, by delim)" )
 	int long nRead( 0 );
 	nRead = m.read_until_n( line, 4, HStreamInterface::eols, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 4 );
-	ENSURE_EQUALS( "delim stripped", line.get_length(), 3 );
-	ENSURE_EQUALS( "bad data read", line, "Ala" );
+	ENSURE_EQUALS( "delim stripped", line.get_length(), 4 );
+	ENSURE_EQUALS( "bad data read", line, "Ala\n" );
 	nRead = m.read_until_n( line, 3, HStreamInterface::eols, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 3 );
-	ENSURE_EQUALS( "delim stripped", line.get_length(), 2 );
-	ENSURE_EQUALS( "bad data read", line, "ma" );
+	ENSURE_EQUALS( "delim stripped", line.get_length(), 3 );
+	ENSURE_EQUALS( "bad data read", line, "ma\n" );
 	nRead = m.read_until_n( line, 5, HStreamInterface::eols, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 5 );
