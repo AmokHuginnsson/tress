@@ -43,16 +43,16 @@ namespace tut
 
 struct tut_yaal_tools_hworkflow
 	{
+	typedef counter<int, tut_yaal_tools_hworkflow> counter_t;
 	virtual ~tut_yaal_tools_hworkflow( void )
 		{}
 	static void foo( int, char, int );
 	typedef void ( *simple_functor_t )( int, char, int );
 	typedef HBoundCall<simple_functor_t, int, char, int> my_task_t;
+	static void bar( counter_t );
 	};
 
-typedef test_group<tut_yaal_tools_hworkflow> tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_tools_hworkflow_group( "yaal::tools::HWorkFlow" );
+TUT_TEST_GROUP_N( tut_yaal_tools_hworkflow, "yaal::tools::HWorkFlow" );
 
 void tut_yaal_tools_hworkflow::foo( int id, char symbol, int waitTime )
 	{
@@ -66,11 +66,12 @@ void tut_yaal_tools_hworkflow::foo( int id, char symbol, int waitTime )
 	cout << "[" << id << "]" << endl;
 	}
 
-template<>
-template<>
-void module::test<1>( void )
+void tut_yaal_tools_hworkflow::bar( counter_t c )
 	{
-	cout << "Pushing tasks." << endl;
+	c.foo();
+	}
+
+TUT_UNIT_TEST_N( 1, "Pushing tasks." )
 	my_task_t::ptr_t f0( new my_task_t( tut_yaal_tools_hworkflow::foo, 0, '+', 100 ) );
 	my_task_t::ptr_t f1( new my_task_t( tut_yaal_tools_hworkflow::foo, 1, '*', 200 ) );
 	my_task_t::ptr_t f2( new my_task_t( tut_yaal_tools_hworkflow::foo, 2, '@', 300 ) );
@@ -81,8 +82,16 @@ void module::test<1>( void )
 		w.push_task( f1 );
 		w.push_task( f2 );
 		}
-	cout << "All tasks pushed." << endl;
-	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 2, "Cleanup of finished tasks." )
+		{
+		HWorkFlow w( 3 );
+		w.push_task( bound_call( tut_yaal_tools_hworkflow::bar, counter_t() ) );
+		util::sleep::milisecond( 100 );
+		ENSURE_EQUALS( "HWorkFlow did not cleaned its task list.", counter_t::get_instance_count(), 0 );
+		}
+TUT_TEARDOWN()
 
 }
 

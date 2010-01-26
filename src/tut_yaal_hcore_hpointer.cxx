@@ -133,7 +133,7 @@ typedef HPointer<tut_yaal_hcore_hpointer::counter_t> ptr_t;
 
 TUT_UNIT_TEST_N( 1, "/* Default constructor. */" )
 	ptr_t ptr;
-	ENSURE_EQUALS ( "failed to invoke destructor", ptr.raw(), static_cast<counter_t*>( NULL ) );
+	ENSURE_EQUALS( "failed to invoke destructor", ptr.raw(), static_cast<counter_t*>( NULL ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Constructor. */" )
@@ -143,7 +143,7 @@ TUT_UNIT_TEST_N( 2, "/* Constructor. */" )
 		ENSURE_EQUALS( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
 		ptr->foo();
 		}
-	ENSURE_EQUALS ( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
+	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* Copy constructor. */" )
@@ -181,7 +181,7 @@ TUT_UNIT_TEST_N( 5, "/* Checks constructor with another ptr_t with no module. */
 		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
 		ENSURE( sp2.raw() == 0 );
 		}
-	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* Checks constructor with another ptr_t with module. */" )
@@ -206,9 +206,9 @@ TUT_UNIT_TEST_N( 7, "/* Checks assignment with non-null module. */" )
 		counter_t* p = new counter_t();
 		ptr_t sp( p );
 		ENSURE("get", sp.raw() == p);
-		ENSURE("leak !!!", counter_t::get_instance_count() == 1);
+		ENSURE_EQUALS("leak !!!", counter_t::get_instance_count(), 1);
 		}
-	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* Checks assignment with ptr_t with non-null module. */" )
@@ -229,10 +229,10 @@ TUT_UNIT_TEST_N( 9, "/* Checks assignment with itself. */" )
 		ptr_t sp1( new counter_t() );
 		sp1 = sp1;
 		ENSURE( "get", sp1.raw() != 0 );
-		ENSURE( "leak !!!", counter_t::get_instance_count() == 1 );
+		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
 		ENSURE_EQUALS( "not destructed", counter_t::get_instance_count(), 1 );
 		}
-	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 
@@ -253,7 +253,7 @@ TUT_UNIT_TEST_N( 10, "/* Checks passing ownership via assignment. */" )
 		ENSURE_EQUALS( "create 2", sp1->get_symbol(), p2->get_symbol() );
 		ENSURE_EQUALS( "leak !!!=1", counter_t::get_instance_count(), 1 );
 		}
-	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "/* Checks operator -&gt; throws instead of returning null. */" )
@@ -269,7 +269,7 @@ TUT_UNIT_TEST_N( 11, "/* Checks operator -&gt; throws instead of returning null.
 			// ok
 			}
 		}
-	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 12, "/* assign smart pointers pointing to the same memory. */" )
@@ -278,7 +278,7 @@ TUT_UNIT_TEST_N( 12, "/* assign smart pointers pointing to the same memory. */" 
 		ptr_t sp2 = sp1;
 		sp2 = sp1;
 		}
-	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 /* Weak pointer related tests. */
@@ -290,7 +290,7 @@ TUT_UNIT_TEST_N( 13, "/* default constructor */" )
 		ptr_t p( w );
 		ENSURE( "bad default constructor", p.raw() == NULL );
 		}
-	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 14, "/* copy constructor */" )
@@ -299,7 +299,7 @@ TUT_UNIT_TEST_N( 14, "/* copy constructor */" )
 		weak_t w( p );
 		ENSURE( "bad copy constructor", p.raw() != NULL );
 		}
-	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 15, "/* accessing nullified weak */" )
@@ -315,7 +315,7 @@ TUT_UNIT_TEST_N( 15, "/* accessing nullified weak */" )
 		ptr_t a( w );
 		ENSURE( "weak performed forbidden operation", a.raw() == NULL );
 		}
-	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 struct ODummy : public HPointerFromThisInterface<ODummy>
@@ -392,7 +392,7 @@ TUT_UNIT_TEST_N( 18, "non virtual destructor" )
 		{
 		p_t p( new NVDDerive );
 		}
-	ENSURE( "leak !!!", counter_t::get_instance_count() == 0 );
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 }
