@@ -144,14 +144,14 @@ template<class T>
 void ensure_distance_real( char const* const file, int const& line, char const* const, const char* msg, const T& actual,
 	const T& expected, const T& distance )
 	{
-	if ( ( expected - distance >= actual ) || ( expected + distance <= actual ) )
+	if ( ( ( expected - distance ) >= actual ) || ( ( expected + distance ) <= actual ) )
 		{
 		std::stringstream ss;
 		ss << ( msg ? msg : "" )
 		<< ( msg ? ":" : "" )
 		<< "expected ("
 		<< expected - distance
-		<< ";" << expected + distance << ") actual [" << actual << "]";
+		<< ";" << expected + distance << ") actual [" << actual << "] distance <" << distance << ">";
 		throw failure( file, line, ss.str().c_str() );
 		}
 	}

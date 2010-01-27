@@ -46,14 +46,14 @@ TUT_TEST_GROUP_N( tut_yaal_tools_hanalyser, "yaal::tools::HExpression" );
 
 TUT_UNIT_TEST_N( 1, "complex and valid expression" )
 	HExpression x;
-	HString eq( "((2+3+5)*4*6*8)^2^3" );
+	HString eq( "(((2+3+5)*4*6*8)/123)^2^3" );
 	x.compile( eq );
 	double long x1 = x.evaluate();
-	double long x2 = ((2+3+5)*4*6*8);
+	double long x2 = ((2.+3.+5.)*4.*6.*8.)/123.;
 	x2 *= x2;
 	x2 *= x2;
 	x2 *= x2;
-	ENSURE_EQUALS( "wrong computation", x1, x2 );
+	ENSURE_DISTANCE( "wrong computation", x1, x2, static_cast<double long>( 0.000001 ) );
 	std::cout << eq << "=" << std::setprecision( 20 ) << x1 << std::endl;
 	eq = "Y";
 	x.compile( eq );

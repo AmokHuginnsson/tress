@@ -53,7 +53,7 @@ struct tut_yaal_hcore_hnumber
 		{}
 	};
 
-HString tut_yaal_hcore_hnumber::BC_PATH = "/usr/bin/bc";
+HString tut_yaal_hcore_hnumber::BC_PATH = ::getenv( "BC_PATH" ) ? ::getenv( "BC_PATH" ) : "/usr/bin/bc";
 
 tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void ) : _rnd(), _bc()
 	{
