@@ -1,6 +1,6 @@
 .DEFAULT:
 	@if [ "$(suffix $(<))" != ".$(DS)" -a "$(suffix $(<))" != ".$(ADS)" -a "$(suffix $(<))" != ".mk" ] ; then \
-	echo -n "$(BOLD)$(RED)"; \
-	echo "Lack of \`$(<)'." | tee -a make.log; \
-	echo -n "$(RS)"; fi
+	printf "%b" "$(BOLD)$(RED)"; \
+	printf "%b\n" "Lack of \`$(<)'." | tee -a make.log; \
+	printf "%b" "$(RS)"; fi
 
