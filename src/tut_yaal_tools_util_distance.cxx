@@ -42,19 +42,32 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
+char const* const failMsg = "failed to calculate levenshtein distance";
+
 TUT_SIMPLE_MOCK( tut_yaal_tools_util_distance );
 TUT_TEST_GROUP_N( tut_yaal_tools_util_distance, "yaal::tools::util::distance" );
 
-template<>
-template<>
-void module::test<1> ( void )
-	{
-	ENSURE_EQUALS( "failed to calculate levenshtein distance",
-			distance::levenshtein_damerau ( "ala", "ola" ), 1 );
-	ENSURE_EQUALS( "failed to calculate levenshtein distance",
-			distance::levenshtein_damerau ( "ala", "Cola" ), 2 );
-	ENSURE_EQUALS( "failed to calculate levenshtein distance",
-			distance::levenshtein_damerau ( "Sunday", "Saturday" ), 3 );
-	}
+TUT_UNIT_TEST_N( 1, "same strings" )
+	ENSURE_EQUALS( failMsg,
+			distance::levenshtein_damerau( "tut_yaal_tools_util_distance", "tut_yaal_tools_util_distance", true ), 0 );
+	ENSURE_EQUALS( failMsg,
+			distance::levenshtein_damerau( "tut_yaal_tools_util_distance", "tut_yaal_tools_util_distance", false ), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 2, "different strings" )
+	ENSURE_EQUALS( failMsg,
+			distance::levenshtein_damerau( "ala", "ola" ), 1 );
+	ENSURE_EQUALS( failMsg,
+			distance::levenshtein_damerau( "ala", "Cola" ), 2 );
+	ENSURE_EQUALS( failMsg,
+			distance::levenshtein_damerau( "Sunday", "Saturday" ), 3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 49, "alike bug" )
+	ENSURE_EQUALS( failMsg,
+			distance::levenshtein_damerau( "3_revenge_of_the_sith.ddr.av.cd2.txt", "3_revenge_of_the_sith_cd1.avi" ), 11 );
+	ENSURE_EQUALS( failMsg,
+			distance::levenshtein_damerau( "3_revenge_of_the_sith.ddr.av.cd2.txt", "3_revenge_of_the_sith_cd2.avi" ), 10 );
+TUT_TEARDOWN()
 
 }
