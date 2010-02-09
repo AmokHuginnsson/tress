@@ -63,11 +63,4 @@ TUT_UNIT_TEST_N( 2, "different strings" )
 			distance::levenshtein_damerau( "Sunday", "Saturday" ), 3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 49, "alike bug" )
-	ENSURE_EQUALS( failMsg,
-			distance::levenshtein_damerau( "3_revenge_of_the_sith.ddr.av.cd2.txt", "3_revenge_of_the_sith_cd1.avi" ), 11 );
-	ENSURE_EQUALS( failMsg,
-			distance::levenshtein_damerau( "3_revenge_of_the_sith.ddr.av.cd2.txt", "3_revenge_of_the_sith_cd2.avi" ), 10 );
-TUT_TEARDOWN()
-
 }
