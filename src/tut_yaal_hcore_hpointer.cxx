@@ -125,11 +125,9 @@ struct tut_yaal_hcore_hpointer
 	typedef HPointer<E> sp_e_t;
 	};
 
-typedef test_group < tut_yaal_hcore_hpointer > tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_hcore_hpointer_group ( "yaal::hcore::HPointer" );
-
 typedef HPointer<tut_yaal_hcore_hpointer::counter_t> ptr_t;
+
+TUT_TEST_GROUP_N( tut_yaal_hcore_hpointer, "yaal::hcore::HPointer" );
 
 TUT_UNIT_TEST_N( 1, "/* Default constructor. */" )
 	ptr_t ptr;

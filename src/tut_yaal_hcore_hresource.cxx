@@ -31,7 +31,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -45,19 +44,303 @@ namespace tut
 struct tut_yaal_hcore_hresource
 	{
 	typedef counter<int, tut_yaal_hcore_hresource> counter_t;
-	virtual ~tut_yaal_hcore_hresource( void ) {}
+	tut_yaal_hcore_hresource( void )
+		{
+		counter_t::set_instance_count( 0 );
+		}
+	virtual ~tut_yaal_hcore_hresource( void )
+		{}
+
+	struct Base
+		{
+		int _tab[0x100];
+		Base( void )
+			{	cout << __PRETTY_FUNCTION__ << ": " << this << endl;	}
+		virtual ~Base( void )
+			{	cout << __PRETTY_FUNCTION__ << ": " << this << endl;	}
+		virtual int foo( char const* const by )
+			{
+			cout << __PRETTY_FUNCTION__ << ": " << this << ", by: " << by << endl;
+			return ( -1 );
+			}
+		};
+
+	struct A : virtual public Base
+		{
+		int _one;
+		A ( int one ) : _one ( one )
+			{	cout << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray << ", " << _one << endl;	}
+		virtual ~A ( void )
+			{	cout << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray <<  ", " << _one << endl;	}
+		void bar( char const* const by )
+			{ cout << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray << ", " << _one << ", by: " << by << endl; }
+		virtual int foo( char const* const by )
+			{
+			cout << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray << ", " << _one << ", by: " << by << endl;
+			return ( _one );
+			}
+		};
+
+	struct X
+		{
+		int long _quality;
+		int long _quality1;
+		int long _quality2;
+		int long _quality3;
+		int long _quality4;
+		int long _quality5;
+		int long _quality6;
+		int long _quality7;
+		int long _quality8;
+		X( void )
+			: _quality( 0 ), _quality1( -1 ), _quality2( -2 ), _quality3( -3 ),
+			_quality4( -4 ), _quality5( -5 ), _quality6( -6 ), _quality7( -7 ),
+			_quality8( -8 )
+			{ cout << __PRETTY_FUNCTION__ << ": " << yellow << this << lightgray << endl; }
+		virtual ~X ( void )
+			{ cout << __PRETTY_FUNCTION__ << ": " << yellow << this << lightgray << endl; }
+		virtual int foo( char const* const by )
+			{
+			cout << __PRETTY_FUNCTION__ << ": " << yellow << this << lightgray << ", by: " << by << endl;
+			return ( 0 );
+			}
+		};
+
+	struct E : public X, public A
+		{
+		HString _four;
+		E ( int one, HString const& four ) : A( one ), _four ( four )
+			{ cout << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << endl; }
+		virtual ~E ( void )
+			{ cout << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << endl; }
+		virtual int foo( char const* const by )
+			{
+			cout << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << ", by: " << by << endl;
+			return ( _one );
+			}
+		};
+
+	typedef HResource<Base> sp_base_t;
+	typedef HResource<A> sp_a_t;
+	typedef HResource<E> sp_e_t;
 	};
+
+typedef HResource<tut_yaal_hcore_hresource::counter_t> ptr_t;
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hresource, "yaal::hcore::HResource" );
 
 TUT_UNIT_TEST_N( 1, "default constructor" )
-	HResource<counter_t> c;
+	ptr_t c;
 	ENSURE_EQUALS( "dirty default initialized resurce holder", c.get(), static_cast<counter_t*>( NULL ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "freeing the new allocated object" )
-	HResource<counter_t> c( new counter_t() );
-	ENSURE( "dirty default initialized resurce holder", c.get() );
+		{
+		counter_t* p = NULL;
+		ptr_t ptr( p = new counter_t() );
+		ENSURE_EQUALS( "smart pointer does not hold proper get pointer", ptr.get(), p );
+		ptr->foo();
+		}
+	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 3, "/* Copy constructor. */" )
+		{
+		counter_t* p = NULL;
+		ptr_t ptr = ptr_t( p = new counter_t() );
+		ENSURE_EQUALS( "smart pointer does not hold proper get pointer", ptr.get(), p );
+		ptr->foo();
+		}
+	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 4, "/* Assign operator. */" )
+		{
+		counter_t* p = NULL;
+		ptr_t sp1 = ptr_t( new counter_t() );
+		ptr_t sp2 = ptr_t( p = new counter_t() );
+		sp1->foo();
+		sp2->foo();
+		sp1 = sp2;
+		ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "failed to pass pointer", sp2.get(), static_cast<counter_t*>( NULL ) );
+		ENSURE_EQUALS( "failed to assign pointer", sp1.get(), p );
+		sp1->foo();
+		}
+	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 5, "/* Checks constructor with another ptr_t with no module. */" )
+		{
+		ptr_t sp1;
+		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
+		ptr_t sp2( sp1 );
+		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
+		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
+		ENSURE( sp2.get() == 0 );
+		}
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 6, "/* Checks constructor with another ptr_t with module. */" )
+		{
+		counter_t* p = new counter_t();
+		ptr_t sp1(p);
+		ptr_t sp2(sp1);
+		ENSURE_EQUALS( "get", sp1.get(), p );
+		ENSURE_EQUALS( "get", sp2.get(), p );
+		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
+		}
+	// ptr left scope
+	ENSURE_EQUALS( "destructed", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+// =================================================
+// Assignment operators
+// =================================================
+
+TUT_UNIT_TEST_N( 7, "/* Checks assignment with non-null module. */" )
+		{
+		counter_t* p = new counter_t();
+		ptr_t sp( p );
+		ENSURE("get", sp.get() == p);
+		ENSURE_EQUALS("leak !!!", counter_t::get_instance_count(), 1);
+		}
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 8, "/* Checks assignment with ptr_t with non-null module. */" )
+		{
+		counter_t* p = NULL;
+		ptr_t sp1( p = new counter_t() );
+		ptr_t sp2;
+		sp2 = sp1;
+		ENSURE_EQUALS( "get", sp1.get(), p );
+		ENSURE_EQUALS( "get", sp2.get(), p );
+		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
+		}
+	ENSURE_EQUALS( "destructed", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 9, "/* Checks assignment with itself. */" )
+		{
+		ptr_t sp1( new counter_t() );
+		sp1 = sp1;
+		ENSURE( "get", sp1.get() != 0 );
+		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "not destructed", counter_t::get_instance_count(), 1 );
+		}
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+
+// =================================================
+// Passing ownership
+// =================================================
+
+TUT_UNIT_TEST_N( 10, "/* Checks passing ownership via assignment. */" )
+		{
+		counter_t *p1 = NULL, *p2 = NULL;
+		ptr_t sp1( p1 = new counter_t( 1 ));
+		ptr_t sp2( p2 = new counter_t( 2 ));
+		ENSURE_EQUALS( "create 1", sp1->get_symbol(), p1->get_symbol() );
+		ENSURE_EQUALS( "create 2", sp2->get_symbol(), p2->get_symbol() );
+		ENSURE_EQUALS( "leak !!!=2", counter_t::get_instance_count(), 2 );
+
+		sp1 = sp2;
+		ENSURE_EQUALS( "create 2", sp1->get_symbol(), p2->get_symbol() );
+		ENSURE_EQUALS( "leak !!!=1", counter_t::get_instance_count(), 1 );
+		}
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 11, "/* Checks operator -> throws instead of returning null. */" )
+		{
+		try
+			{
+			ptr_t sp;
+			sp->get_symbol();
+			FAIL( "failed assertion expected" );
+			}
+		catch ( HFailedAssertion& )
+			{
+			// ok
+			}
+		}
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 12, "/* assign smart pointers pointing to the same memory. */" )
+		{
+		ptr_t sp1( new counter_t() );
+		ptr_t sp2 = sp1;
+		sp2 = sp1;
+		}
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 13, "/* hierarchy issues */" )
+		{
+		static int const MY_VAL = 2;
+		A* rpa = NULL;
+		E* rpe = NULL;
+		sp_a_t spa( rpa = new A( 1 ) );
+		sp_e_t spe( rpe = new E( MY_VAL, "2" ) );
+		rpa = rpe;
+		spa = spe;
+		A*a = spe.get();
+		E*e = spe.get();
+		M_ASSERT( a == rpa );
+		M_ASSERT( e == rpe );
+		rpa->A::foo( "rpa->A::foo" );
+		rpa->foo( "rpa->foo" );
+		rpe->A::foo( "rpe->A::foo" );
+		rpe->foo( "rpe->foo" );
+		rpa->A::bar( "rpa->A::bar" );
+		rpa->bar( "rpa->bar" );
+		rpe->A::bar( "rpe->A::bar" );
+		rpe->bar( "rpe->bar" );
+		a->A::foo( "a->A::foo" );
+		a->foo( "a->foo" );
+		spa->A::foo( "spa->A::foo" );
+		spa->foo( "spa->foo" );
+		ENSURE_EQUALS( "hierarchy problem", spa->A::foo( "ENSURE" ), MY_VAL );
+		e->A::foo( "e->A::foo" );
+		e->E::foo( "e->E::foo" );
+		e->foo( "e->foo" );
+		spe->A::foo( "spe->A::foo" );
+		spe->E::foo( "spe->E::foo" );
+		spe->foo( "spe->foo" );
+		a->bar( "a->bar" );
+		a->A::bar( "a->A::bar" );
+		spa->bar( "spa->bar" );
+		spa->A::bar( "spa->A::bar" );
+		e->A::bar( "e->A::bar" );
+		e->bar( "e->bar" );
+		spe->A::bar( "spe->A::bar" );
+		spe->bar( "spe->bar" );
+		}
+TUT_TEARDOWN()
+
+#pragma GCC diagnostic ignored "-Weffc++"
+
+struct non_virt_dtor
+	{
+	~non_virt_dtor( void ) {};
+	};
+
+struct NVDDerive : public non_virt_dtor
+	{
+	tut_yaal_hcore_hresource::counter_t _counter;
+	~NVDDerive( void ) {};
+	};
+
+TUT_UNIT_TEST_N( 14, "non virtual destructor" )
+	typedef HResource<non_virt_dtor> p_t;
+		{
+		p_t p( new NVDDerive );
+		}
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 }
