@@ -67,6 +67,7 @@ int handle_program_options( int a_iArgc, char** a_ppcArgv )
 	bool stop = false;
 	po( "log_path", program_options_helper::option_value( setup.f_oLogPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
 		( "exit_status", program_options_helper::option_value( setup.f_iExitStatus ), 'E' ,HProgramOptionsHandler::OOption::TYPE::REQUIRED, "set exit status for child", "status" )
+		( "terminate", program_options_helper::option_value( setup.f_oTerminate ), 'T' ,HProgramOptionsHandler::OOption::TYPE::REQUIRED, "terminate process abruptly", "signal" )
 		( "script", program_options_helper::option_value( setup.f_oScript ), 'S' ,HProgramOptionsHandler::OOption::TYPE::REQUIRED, "run this script in child session", "code" )
 		( "quiet", program_options_helper::option_value( setup.f_bQuiet ), 'q', HProgramOptionsHandler::OOption::TYPE::NONE, "inhibit usual output" )
 		( "silent", program_options_helper::option_value( setup.f_bQuiet ), 'q', HProgramOptionsHandler::OOption::TYPE::NONE, "inhibit usual output" )

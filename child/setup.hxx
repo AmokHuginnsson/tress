@@ -40,11 +40,13 @@ struct OSetup
 	char* f_pcProgramName;
 	yaal::hcore::HString f_oLogPath;
 	int f_iExitStatus;
+	yaal::hcore::HString f_oTerminate;
 	yaal::hcore::HString f_oScript;
 	/* self-sufficient */
 	OSetup( void )
 		: f_bQuiet( false ), f_bVerbose( false ),
-		f_pcProgramName( NULL ), f_oLogPath(), f_iExitStatus( 0 ), f_oScript() {}
+		f_pcProgramName( NULL ), f_oLogPath(), f_iExitStatus( 0 ),
+		f_oTerminate(), f_oScript() {}
 	void test_setup( void );
 private:
 	OSetup( OSetup const& );

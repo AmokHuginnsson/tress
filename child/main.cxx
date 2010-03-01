@@ -24,6 +24,9 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <unistd.h>
+#include <signal.h>
+
 #include <yaal/yaal.hxx> /* all hAPI headers */
 M_VCSID( "$Id: "__ID__" $" )
 
@@ -58,11 +61,62 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 		setup.test_setup();
 		if ( !! setup.f_oScript )
 			{
+			HString nonWord;
+			int const SIZE = static_cast<int>( ::strlen( n_pcWord ) );
+			for ( int c = 1; c < 256; ++ c )
+				{
+				if ( ! memchr( n_pcWord, c, SIZE ) )
+					nonWord += static_cast<char>( c );
+				}
 			HTokenizer t( setup.f_oScript, ";", HTokenizer::SKIP_EMPTY );
 			for ( HTokenizer::HIterator it = t.begin(), end = t.end(); it != end; ++ it )
 				{
-				cout << "t: " << *it << endl;
+				HTokenizer w( *it, nonWord, HTokenizer::SKIP_EMPTY );
+				HString cmd;
+				HString arg;
+				HTokenizer::HIterator word = w.begin();
+				if ( word != w.end() )
+					{
+					cmd = *word;
+					++ word;
+					if ( word != w.end() )
+						arg = *word;
+					}
+				if ( cmd == "write" )
+					cout << arg << endl;
+				else if ( cmd == "errlog" )
+					cerr << arg << endl;
+				else if ( cmd == "read" )
+					cin >> arg;
+				else if ( cmd == "close" )
+					::close( lexical_cast<int>( arg ) );
+				else
+					M_THROW( "syntax error at: " + cmd, errno );
 				}
+			}
+		if ( !! setup.f_oTerminate )
+			{
+			typedef HMap<HString, int> str2int_dict_t;
+			str2int_dict_t signalNames;
+			signalNames.insert( make_pair<char const* const>( "ALRM", SIGALRM ) );
+			signalNames.insert( make_pair<char const* const>( "HUP", SIGHUP ) );
+			signalNames.insert( make_pair<char const* const>( "INT", SIGINT ) );
+			signalNames.insert( make_pair<char const* const>( "KILL", SIGKILL ) );
+			signalNames.insert( make_pair<char const* const>( "PIPE", SIGPIPE ) );
+			signalNames.insert( make_pair<char const* const>( "TERM", SIGTERM ) );
+			signalNames.insert( make_pair<char const* const>( "TSTP", SIGTSTP ) );
+			signalNames.insert( make_pair<char const* const>( "CONT", SIGCONT ) );
+			signalNames.insert( make_pair<char const* const>( "CHLD", SIGCHLD ) );
+			signalNames.insert( make_pair<char const* const>( "ABRT", SIGABRT ) );
+			signalNames.insert( make_pair<char const* const>( "ILL", SIGILL ) );
+			signalNames.insert( make_pair<char const* const>( "FPE", SIGFPE ) );
+			signalNames.insert( make_pair<char const* const>( "QUIT", SIGQUIT ) );
+			signalNames.insert( make_pair<char const* const>( "TRAP", SIGTRAP ) );
+			signalNames.insert( make_pair<char const* const>( "SEGV", SIGSEGV ) );
+			str2int_dict_t::const_iterator it = signalNames.find( setup.f_oTerminate );
+			if ( it != signalNames.end() )
+				kill( getpid(), it->second );
+			M_THROW( "unknown signal: " + setup.f_oTerminate, errno );
 			}
 		}
 	catch ( ... )
