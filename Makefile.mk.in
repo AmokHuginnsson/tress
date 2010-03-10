@@ -25,35 +25,39 @@
 # FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 
 $(foreach DIR,$(subst /, ,$(CURDIR)), $(eval $(eval DIR_ROOT_TEST=$(DIR_ROOT_TEST)/$(DIR)) $(if $(wildcard $(DIR_ROOT_TEST)/Makefile.mk.in),export DIR_ROOT ?= $(DIR_ROOT_TEST))))
-PRJNAME				= tress
-VERSION				= 0
-SUBVERSION		= 0
-EXTRAVERSION	= 0
+PRJNAME      = tress
+VERSION      = 0
+SUBVERSION   = 0
+EXTRAVERSION = 0
 include $(DIR_ROOT)/_aux/mk/1_basic.mk
-LIBS					= hcore tools dbwrapper hconsole hdata hconsole dbwrapper tools hcore @BOOST_FILESYSTEM_LIB@ @BOOST_SYSTEM_LIB@ @BOOST_DATE_TIME_LIB@
+LIBS         = hcore$(LIB_INFIX) tools$(LIB_INFIX) dbwrapper$(LIB_INFIX) hconsole$(LIB_INFIX) \
+               hdata$(LIB_INFIX) \
+               hconsole$(LIB_INFIX) dbwrapper$(LIB_INFIX) tools$(LIB_INFIX) hcore$(LIB_INFIX) \
+               @BOOST_FILESYSTEM_LIB@ @BOOST_SYSTEM_LIB@ @BOOST_DATE_TIME_LIB@
 $(eval $(call NEW_TARGET,tress,src,-Wno-variadic-macros,@RDYNAMIC@))
 $(eval $(call NEW_TARGET,cute,cute))
 $(eval $(call NEW_TARGET,child,child))
-NAME=tressplugin
-SONAME_tressplugin=libtressplugin-0.0
+NAME = tressplugin
+SONAME_tressplugin = libtressplugin-0.0
 $(eval $(call NEW_TARGET,tressplugin,data,,-shared $(call quotecoma,@SONAME_FLAG@)))
-EXEC_NAME				= 1exec
+EXEC_NAME    = 1exec
+DO_@DO_TARGET@=1
 ifdef NODEBUG
-	TARGET = $(PRJNAME)
+	TARGET     = $(PRJNAME)
 endif
-CTAGS	= @CTAGS@
-GITID = @GITID@
+CTAGS        = @CTAGS@
+GITID        = @GITID@
 include $(DIR_ROOT)/_aux/mk/2_term.mk
 include $(DIR_ROOT)/_aux/mk/3_suffix.mk
 include $(DIR_ROOT)/_aux/mk/4_wrapper.mk
 include $(DIR_ROOT)/_aux/mk/5_flags.mk
 -include $(DIR_ROOT)/local.mk
 
-CXXFLAGS += @EXTRA_CXXFLAGS@ @DEFS@ -Wno-missing-noreturn
-LXXFLAGS += @EXTRA_LXXFLAGS@
-START_GROUP = @START_GROUP@
-END_GROUP = @END_GROUP@
-LIBS += @LIBS@
+CXXFLAGS     += @EXTRA_CXXFLAGS@ @DEFS@ -Wno-missing-noreturn
+LXXFLAGS     += @EXTRA_LXXFLAGS@
+START_GROUP  = @START_GROUP@
+END_GROUP    = @END_GROUP@
+LIBS         += @LIBS@
 
 include $(DIR_ROOT)/_aux/mk/6_int-libs.mk
 include $(DIR_ROOT)/FCTF/make.mk
