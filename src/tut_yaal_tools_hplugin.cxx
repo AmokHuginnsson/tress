@@ -58,7 +58,7 @@ TUT_TEST_GROUP_N( tut_yaal_tools_hplugin, "yaal::tools::HPlugin" );
 typedef int ( * sumator_t )( int, int );
 
 TUT_UNIT_TEST_N( 1, "load external library and resolve symbol" )
-	static char const* const TRESS_PLUGIN = "./data/tressplugin.so";
+	static char const* const TRESS_PLUGIN = "./data/tressplugin"LIB_INFIX".so";
 	int const T1 = 7;
 	int const T2 = 13;
 	HPlugin p;
