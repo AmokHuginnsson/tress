@@ -69,3 +69,8 @@ include $(DIR_ROOT)/_aux/mk/a_filenames.mk
 include $(DIR_ROOT)/_aux/mk/d_target-tags.mk
 include $(DIR_ROOT)/_aux/mk/e_deps.mk
 
+.PHONY: test
+
+test:
+	@cd $(DIR_ROOT) && mkdir -p out && sqlite3 out/tress.db3 < data/sqlite.sql && \
+	./build/debug/tress/1exec > /dev/null

@@ -1,4 +1,4 @@
-DROP TABLE config;
+DROP TABLE IF EXISTS config;
 CREATE TABLE config
 	(
 	id INTEGER PRIMARY KEY,
