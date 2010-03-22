@@ -73,4 +73,4 @@ include $(DIR_ROOT)/_aux/mk/e_deps.mk
 
 test:
 	@cd $(DIR_ROOT) && mkdir -p out && sqlite3 out/tress.db3 < data/sqlite.sql && \
-	./build/debug/tress/1exec > /dev/null
+	$(TRESS_ENV) ./build/debug/tress/1exec $(TRESS_ARG) > /dev/null
