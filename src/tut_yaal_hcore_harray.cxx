@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_stahapi_hcore_harray.cxx - this file is integral part of `tress' project.
+	tut_yaal_hcore_harray.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -41,8 +41,13 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-TUT_SIMPLE_MOCK( tut_stahapi_hcore_harray );
-TUT_TEST_GROUP_N( tut_stahapi_hcore_harray, "yaal::hcore::HArray" );
+struct tut_yaal_hcore_harray
+	{
+	typedef HInstanceTracker<tut_yaal_hcore_harray> item_t;
+	virtual ~tut_yaal_hcore_harray( void ) {}
+	};
+
+TUT_TEST_GROUP_N( tut_yaal_hcore_harray, "yaal::hcore::HArray" );
 
 TUT_UNIT_TEST_N( 1, "/* Constructor. */" )
 	int const BAD_SIZE = - 1;

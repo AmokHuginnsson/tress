@@ -162,6 +162,7 @@ class HInstanceTracker
 	static int _instances;
 	static int _autoIncrement;
 	int _id;
+	yaal::hcore::HString _origin;
 public:
 	HInstanceTracker( int = -1 );
 	HInstanceTracker( HInstanceTracker const& );
@@ -184,17 +185,21 @@ template<typename owner_t>
 int HInstanceTracker<owner_t>::_autoIncrement = 0;
 
 template<typename owner_t>
-HInstanceTracker<owner_t>::HInstanceTracker( int id_ ) : _id( id_ >= 0 ? id_ : _autoIncrement )
+HInstanceTracker<owner_t>::HInstanceTracker( int id_ ) : _id( id_ >= 0 ? id_ : _autoIncrement ), _origin()
 	{
 	++ _instances;
-	++ _autoIncrement;
+	if ( _autoIncrement >= 0 )
+		++ _autoIncrement;
 	}
 
 template<typename owner_t>
-HInstanceTracker<owner_t>::HInstanceTracker( HInstanceTracker const& ) : _id( _autoIncrement )
+HInstanceTracker<owner_t>::HInstanceTracker( HInstanceTracker const& itrck )
+	: _id( _autoIncrement >= 0 ? _autoIncrement : itrck._id ),
+	_origin( itrck._origin + ":" + itrck._id )
 	{
 	++ _instances;
-	++ _autoIncrement;
+	if ( _autoIncrement >= 0 )
+		++ _autoIncrement;
 	}
 
 template<typename owner_t>
@@ -221,7 +226,7 @@ yaal::hcore::HString HInstanceTracker<owner_t>::to_string( void ) const
 	yaal::tools::HStringStream ss;
 	int status = 0;
 	char* ptr = abi::__cxa_demangle( typeid( owner_t ).name(), 0, 0, &status );
-	ss << "HInstanceTracker<" << ( ptr ? ptr : "" ) << ">(" << _id << ")";
+	ss << "HInstanceTracker<" << ( ptr ? ptr : "" ) << ">(" << _origin << ":" << _id << ")";
 	yaal::hcore::xfree( ptr );
 	return ( ss.string() );
 	}

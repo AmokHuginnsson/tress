@@ -47,8 +47,6 @@ struct tut_yaal_tools_hworkflow
 	virtual ~tut_yaal_tools_hworkflow( void )
 		{}
 	static void foo( int, char, int );
-	typedef void ( *simple_functor_t )( int, char, int );
-	typedef HBoundCall<simple_functor_t, int, char, int> my_task_t;
 	static void bar( counter_t );
 	};
 
@@ -72,15 +70,12 @@ void tut_yaal_tools_hworkflow::bar( counter_t c )
 	}
 
 TUT_UNIT_TEST_N( 1, "Pushing tasks." )
-	my_task_t::ptr_t f0( new my_task_t( tut_yaal_tools_hworkflow::foo, 0, '+', 100 ) );
-	my_task_t::ptr_t f1( new my_task_t( tut_yaal_tools_hworkflow::foo, 1, '*', 200 ) );
-	my_task_t::ptr_t f2( new my_task_t( tut_yaal_tools_hworkflow::foo, 2, '@', 300 ) );
 	HWorkFlow w( 3 );
 	for ( int i = 0; i < 3; ++ i )
 		{
-		w.push_task( f0 );
-		w.push_task( f1 );
-		w.push_task( f2 );
+		w.push_task( bound_call( tut_yaal_tools_hworkflow::foo, 0, '+', 100 ) );
+		w.push_task( bound_call( tut_yaal_tools_hworkflow::foo, 1, '*', 200 ) );
+		w.push_task( bound_call( tut_yaal_tools_hworkflow::foo, 2, '@', 300 ) );
 		}
 TUT_TEARDOWN()
 

@@ -48,6 +48,7 @@ namespace tut
 struct tut_yaal_hcore_htree
 	{
 	static HString _cache;
+	tut_yaal_hcore_htree( void );
 	virtual ~tut_yaal_hcore_htree( void )
 		{}
 	typedef HInstanceTracker<tut_yaal_hcore_htree> item_t;
@@ -63,6 +64,11 @@ struct tut_yaal_hcore_htree
 
 HString tut_yaal_hcore_htree::_cache;
 
+tut_yaal_hcore_htree::tut_yaal_hcore_htree( void )
+	{
+	item_t::set_start_id( -1 );
+	}
+
 HString& tut_yaal_hcore_htree::to_string( tree_t const& t )
 	{
 	_cache.clear();
@@ -73,7 +79,7 @@ HString& tut_yaal_hcore_htree::to_string( tree_t const& t )
 
 void tut_yaal_hcore_htree::to_string( tree_t::HNode const& n )
 	{
-	_cache += *n;
+	_cache += static_cast<char>( n->id() );
 	if ( n.has_childs() )
 		_cache += '{';
 	for ( tree_t::const_iterator it = n.begin(); it != n.end(); ++ it )
