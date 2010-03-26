@@ -133,7 +133,7 @@ void show_end( void );
 
 struct HSTDGlobalScopeExceptionHandlingPolicy
 	{
-	static void hadle_exception( void ) __attribute__(( __noreturn__ ));
+	static void handle_exception( void ) __attribute__(( __noreturn__ ));
 	};
 
 #define TUT_UNIT_TEST_N( no, title ) template<> template<> void module::test<(no)>( void ) { do { set_test_meta( title, __FILE__, __LINE__ ); show_title( title ); } while ( 0 );

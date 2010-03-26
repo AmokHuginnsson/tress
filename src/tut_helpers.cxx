@@ -47,9 +47,9 @@ std::ostream& operator << ( std::ostream& out, HComplex const& a_oComplex )
 	re = a_oComplex.re ( );
 	im = a_oComplex.im ( );
 	if ( im >= 0 )
-		out << re << " + i" << im;
+		out << re << "+i" << im;
 	else
-		out << re << " - i" << - im;
+		out << re << "-i" << - im;
 	return ( out );
 	M_EPILOG
 	}
@@ -137,7 +137,7 @@ void show_end( void )
 		cout << "------------------------------------------------------------------------" << endl;
 	}
 
-void HSTDGlobalScopeExceptionHandlingPolicy::hadle_exception( void )
+void HSTDGlobalScopeExceptionHandlingPolicy::handle_exception( void )
 	{
 	try
 		{
