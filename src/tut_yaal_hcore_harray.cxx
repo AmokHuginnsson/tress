@@ -44,6 +44,7 @@ namespace tut
 struct tut_yaal_hcore_harray
 	{
 	typedef HInstanceTracker<tut_yaal_hcore_harray> item_t;
+	typedef HArray<item_t> array_t;
 	virtual ~tut_yaal_hcore_harray( void ) {}
 	};
 
@@ -53,22 +54,24 @@ TUT_UNIT_TEST_N( 1, "/* Constructor. */" )
 	int const BAD_SIZE = - 1;
 	try
 		{
-		HArray<int> l_oArray ( BAD_SIZE );
-		FAIL ( "array with negative size created" );
+		array_t l_oArray( BAD_SIZE );
+		FAIL( "array with negative size created" );
 		}
-	catch ( HException & e )
+	catch ( HException const& e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Constructor and get_size(). */" )
 	int const SIZE_FOR_ONE = 0;
 	int const SIZE_FOR_TWO = 7;
-	HArray<int> l_oOne ( SIZE_FOR_ONE );
-	ENSURE_EQUALS ( "inconsistient size with respect to constructor", l_oOne.get_size ( ), SIZE_FOR_ONE );
-	HArray<int> l_oTwo ( SIZE_FOR_TWO );
-	ENSURE_EQUALS ( "inconsistient size with respect to constructor", l_oTwo.get_size ( ), SIZE_FOR_TWO );
+	array_t l_oOne( SIZE_FOR_ONE );
+	ENSURE_EQUALS( "wrong number of items created", item_t::get_instance_count(), SIZE_FOR_ONE );
+	ENSURE_EQUALS( "inconsistient size with respect to constructor", l_oOne.get_size(), SIZE_FOR_ONE );
+	array_t l_oTwo( SIZE_FOR_TWO );
+	ENSURE_EQUALS( "wrong number of items created", item_t::get_instance_count(), SIZE_FOR_ONE + SIZE_FOR_TWO );
+	ENSURE_EQUALS( "inconsistient size with respect to constructor", l_oTwo.get_size(), SIZE_FOR_TWO );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
@@ -77,59 +80,68 @@ TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
 	int const FILLER_FOR_ARRAY = 13;
 	try
 		{
-		HArray<int> l_oBadArray ( BAD_SIZE, FILLER_FOR_ARRAY );
+		array_t l_oBadArray( BAD_SIZE, FILLER_FOR_ARRAY );
 		FAIL ( "array with negative size created" );
 		}
-	catch ( HException & e )
+	catch ( HException const& e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
-	HArray<int> l_oArray ( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
+	array_t l_oArray( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
 	for ( int i = 0; i < SIZE_FOR_ARRAY; ++ i )
 		ENSURE_EQUALS ( "array element not filled with default value", l_oArray [ i ], FILLER_FOR_ARRAY );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "/* Copy constructor. */" )
 	int const SIZE = 7;
-	HArray<int> l_oArray ( SIZE );
+	array_t l_oArray( SIZE );
 	for ( int i = 0; i < SIZE; ++ i )
 		l_oArray [ i ] = i;
-	HArray<int> l_oCopy ( l_oArray );
-	ENSURE_EQUALS ( "inconsistient size after copy constructor", l_oCopy.get_size ( ), SIZE );
+	array_t l_oCopy( l_oArray );
+	ENSURE_EQUALS( "inconsistient size after copy constructor", l_oCopy.get_size(), SIZE );
 	for ( int i = 0; i < SIZE; ++ i )
-		ENSURE_EQUALS ( "wrong content after copy constructor", l_oCopy [ i ], i );
+		ENSURE_EQUALS( "wrong content after copy constructor", l_oCopy[ i ], i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* Operator [ ]. */" )
 	int const SIZE = 7;
-	HArray<int> l_oArray ( SIZE );
+	array_t l_oArray ( SIZE );
 	try
 		{
 		l_oArray [ SIZE ] = 0;
-		FAIL ( "access beyond size succed" );
+		FAIL( "access beyond size succed" );
 		}
-	catch ( HException & e )
+	catch ( HException const& e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 	try
 		{
-		l_oArray [ - SIZE - 1 ] = 0;
-		FAIL ( "access with negative index succed" );
+		l_oArray[ - SIZE - 1 ] = 0;
+		FAIL( "access with negative index succed" );
 		}
-	catch ( HException & e )
+	catch ( HException const& e )
 		{
-		cout << e.what ( ) << endl;
+		cout << e.what() << endl;
 		}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* Operator bool. */" )
 	int const EMPTY = 0;
 	int const SIZE = 7;
-	HArray<int> l_oEmpty ( EMPTY );
-	ENSURE_EQUALS ( "test for array emptiness faild", ! l_oEmpty, true );
-	HArray<int> l_oNormal ( SIZE );
-	ENSURE_EQUALS ( "test for array fullness faild", ! l_oNormal, false );
+	array_t l_oEmpty( EMPTY );
+	ENSURE_EQUALS( "test for array emptiness faild", ! l_oEmpty, true );
+	array_t l_oNormal( SIZE );
+	ENSURE_EQUALS( "test for array fullness faild", ! l_oNormal, false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 7, "push_back" )
+	item_t i;
+	array_t a1;
+	a1.resize( 5 );
+	a1.resize( 2 );
+	array_t a2;
+	a2.push_back( i );
 TUT_TEARDOWN()
 
 }
