@@ -43,7 +43,7 @@ namespace tut
 
 struct tut_yaal_hcore_hpointer
 	{
-	typedef counter<int, tut_yaal_hcore_hpointer> counter_t;
+	typedef HInstanceTracker<tut_yaal_hcore_hpointer> counter_t;
 	tut_yaal_hcore_hpointer( void )
 		{
 		counter_t::set_instance_count( 0 );
@@ -139,7 +139,7 @@ TUT_UNIT_TEST_N( 2, "/* Constructor. */" )
 		counter_t* p = NULL;
 		ptr_t ptr( p = new counter_t() );
 		ENSURE_EQUALS( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
-		ptr->foo();
+		cout << ptr->to_string() << endl;
 		}
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -149,7 +149,7 @@ TUT_UNIT_TEST_N( 3, "/* Copy constructor. */" )
 		counter_t* p = NULL;
 		ptr_t ptr = ptr_t( p = new counter_t() );
 		ENSURE_EQUALS( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
-		ptr->foo();
+		cout << ptr->to_string() << endl;
 		}
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -159,13 +159,13 @@ TUT_UNIT_TEST_N( 4, "/* Assign operator. */" )
 		counter_t* p = NULL;
 		ptr_t sp1 = ptr_t( new counter_t() );
 		ptr_t sp2 = ptr_t( p = new counter_t() );
-		sp1->foo();
-		sp2->foo();
+		cout << sp1->to_string() << endl;
+		cout << sp2->to_string() << endl;
 		sp1 = sp2;
 		ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 1 );
-		ENSURE_EQUALS( "failed to assign pointer", sp1->get_symbol(), sp2->get_symbol() );
+		ENSURE_EQUALS( "failed to assign pointer", sp1->get_id(), sp2->get_id() );
 		ENSURE_EQUALS( "failed to assign pointer", sp1.raw(), p );
-		sp1->foo();
+		cout << sp1->to_string() << endl;
 		}
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -241,14 +241,14 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 10, "/* Checks passing ownership via assignment. */" )
 		{
 		counter_t *p1 = NULL, *p2 = NULL;
-		ptr_t sp1( p1 = new counter_t( 1 ));
-		ptr_t sp2( p2 = new counter_t( 2 ));
-		ENSURE_EQUALS( "create 1", sp1->get_symbol(), p1->get_symbol() );
-		ENSURE_EQUALS( "create 2", sp2->get_symbol(), p2->get_symbol() );
+		ptr_t sp1( p1 = new counter_t());
+		ptr_t sp2( p2 = new counter_t());
+		ENSURE_EQUALS( "create 1", sp1->get_id(), p1->get_id() );
+		ENSURE_EQUALS( "create 2", sp2->get_id(), p2->get_id() );
 		ENSURE_EQUALS( "leak !!!=2", counter_t::get_instance_count(), 2 );
 
 		sp1 = sp2;
-		ENSURE_EQUALS( "create 2", sp1->get_symbol(), p2->get_symbol() );
+		ENSURE_EQUALS( "create 2", sp1->get_id(), p2->get_id() );
 		ENSURE_EQUALS( "leak !!!=1", counter_t::get_instance_count(), 1 );
 		}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
@@ -259,7 +259,7 @@ TUT_UNIT_TEST_N( 11, "/* Checks operator -&gt; throws instead of returning null.
 		try
 			{
 			ptr_t sp;
-			sp->get_symbol();
+			sp->get_id();
 			FAIL( "failed assertion expected" );
 			}
 		catch ( HFailedAssertion& )

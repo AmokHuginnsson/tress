@@ -43,7 +43,7 @@ namespace tut
 
 struct tut_yaal_tools_hworkflow
 	{
-	typedef counter<int, tut_yaal_tools_hworkflow> counter_t;
+	typedef HInstanceTracker<tut_yaal_tools_hworkflow> counter_t;
 	virtual ~tut_yaal_tools_hworkflow( void )
 		{}
 	static void foo( int, char, int );
@@ -68,7 +68,7 @@ void tut_yaal_tools_hworkflow::foo( int id, char symbol, int waitTime )
 
 void tut_yaal_tools_hworkflow::bar( counter_t c )
 	{
-	c.foo();
+	cout << c.to_string() << endl;
 	}
 
 TUT_UNIT_TEST_N( 1, "Pushing tasks." )

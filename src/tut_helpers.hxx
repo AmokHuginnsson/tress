@@ -30,12 +30,15 @@ Copyright:
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <cxxabi.h>
 
 #include <yaal/hcore/hstreaminterface.hxx>
 #include <yaal/hcore/hpair.hxx>
 #include <yaal/hcore/hcomplex.hxx>
 #include <yaal/hcore/hvector.hxx>
 #include <yaal/hcore/hmatrix.hxx>
+#include <yaal/hcore/xalloc.hxx>
+#include <yaal/tools/hstringstream.hxx>
 
 namespace std
 {
@@ -153,131 +156,141 @@ namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
 		{} \
 	}
 
-template<typename symbol_t, typename owner_t>
-class counter
+template<typename owner_t>
+class HInstanceTracker
 	{
 	static int _instances;
-	symbol_t _symbol;
+	static int _autoIncrement;
+	int _id;
 public:
-	counter( void );
-	counter( symbol_t const& );
-	counter( counter const& );
-	~counter( void );
-	bool operator == ( counter<symbol_t, owner_t> const& ) const;
-	bool operator != ( counter<symbol_t, owner_t> const& ) const;
-	bool operator == ( symbol_t const& ) const;
-	bool operator != ( symbol_t const& ) const;
-	operator symbol_t ( void );
+	HInstanceTracker( int = -1 );
+	HInstanceTracker( HInstanceTracker const& );
+	~HInstanceTracker( void );
+	bool operator == ( HInstanceTracker<owner_t> const& ) const;
+	bool operator != ( HInstanceTracker<owner_t> const& ) const;
+	bool operator == ( int const& ) const;
+	bool operator != ( int const& ) const;
 	static int get_instance_count( void );
-	static void set_instance_count( int );
-	symbol_t get_symbol( void ) const;
-	void foo( void );
+	static void set_instance_count( int = 0 );
+	static void set_start_id( int = 0 );
+	int get_id( void ) const;
+	int id( void ) const;
+	yaal::hcore::HString to_string( void ) const;
 	};
 
-template<typename symbol_t, typename owner_t>
-int counter<symbol_t, owner_t>::_instances = 0;
+template<typename owner_t>
+int HInstanceTracker<owner_t>::_instances = 0;
+template<typename owner_t>
+int HInstanceTracker<owner_t>::_autoIncrement = 0;
 
-template<typename symbol_t, typename owner_t>
-counter<symbol_t, owner_t>::counter( void ) : _symbol()
+template<typename owner_t>
+HInstanceTracker<owner_t>::HInstanceTracker( int id_ ) : _id( id_ >= 0 ? id_ : _autoIncrement )
 	{
 	++ _instances;
+	++ _autoIncrement;
 	}
 
-template<typename symbol_t, typename owner_t>
-counter<symbol_t, owner_t>::counter( symbol_t const& symbol ) : _symbol( symbol )
+template<typename owner_t>
+HInstanceTracker<owner_t>::HInstanceTracker( HInstanceTracker const& ) : _id( _autoIncrement )
 	{
 	++ _instances;
+	++ _autoIncrement;
 	}
 
-template<typename symbol_t, typename owner_t>
-counter<symbol_t, owner_t>::counter( counter const& ctr ) : _symbol( ctr._symbol )
-	{
-	++ _instances;
-	}
-
-template<typename symbol_t, typename owner_t>
-counter<symbol_t, owner_t>::~counter( void )
+template<typename owner_t>
+HInstanceTracker<owner_t>::~HInstanceTracker( void )
 	{
 	-- _instances;
 	}
 
-template<typename symbol_t, typename owner_t>
-void counter<symbol_t, owner_t>::set_instance_count( int count )
+template<typename owner_t>
+void HInstanceTracker<owner_t>::set_instance_count( int count_ )
 	{
-	_instances = count;
+	_instances = count_;
 	}
 
-template<typename symbol_t, typename owner_t>
-void counter<symbol_t, owner_t>::foo ( void )
+template<typename owner_t>
+void HInstanceTracker<owner_t>::set_start_id( int startId_ )
 	{
-	std::cout << "do_foo(" << _symbol << ")" << std::endl;
+	_autoIncrement = startId_;
 	}
 
-template<typename symbol_t, typename owner_t>
-bool counter<symbol_t, owner_t>::operator == ( symbol_t const& val ) const
+template<typename owner_t>
+yaal::hcore::HString HInstanceTracker<owner_t>::to_string( void ) const
 	{
-	return ( val == _symbol );
+	yaal::tools::HStringStream ss;
+	int status = 0;
+	char* ptr = abi::__cxa_demangle( typeid( owner_t ).name(), 0, 0, &status );
+	ss << "HInstanceTracker<" << ( ptr ? ptr : "" ) << ">(" << _id << ")";
+	yaal::hcore::xfree( ptr );
+	return ( ss.string() );
 	}
 
-template<typename symbol_t, typename owner_t>
-bool counter<symbol_t, owner_t>::operator != ( symbol_t const& val ) const
+template<typename owner_t>
+bool HInstanceTracker<owner_t>::operator == ( int const& val ) const
 	{
-	return ( val != _symbol );
+	return ( val == _id );
 	}
 
-template<typename symbol_t, typename owner_t>
-bool counter<symbol_t, owner_t>::operator == ( counter<symbol_t, owner_t> const& val ) const
+template<typename owner_t>
+bool HInstanceTracker<owner_t>::operator != ( int const& val ) const
 	{
-	return ( val._symbol == _symbol );
+	return ( val != _id );
 	}
 
-template<typename symbol_t, typename owner_t>
-bool counter<symbol_t, owner_t>::operator != ( counter<symbol_t, owner_t> const& val ) const
+template<typename owner_t>
+bool HInstanceTracker<owner_t>::operator == ( HInstanceTracker<owner_t> const& val ) const
 	{
-	return ( val._symbol != _symbol );
+	return ( val._id == _id );
 	}
 
-template<typename symbol_t, typename owner_t>
-bool operator == ( symbol_t const& left, counter<symbol_t, owner_t> const& right )
+template<typename owner_t>
+bool HInstanceTracker<owner_t>::operator != ( HInstanceTracker<owner_t> const& val ) const
 	{
-	return ( left == right.get_symbol() );
+	return ( val._id != _id );
 	}
 
-template<typename symbol_t, typename owner_t>
-bool operator != ( symbol_t const& left, counter<symbol_t, owner_t> const& right )
+template<typename owner_t>
+bool operator == ( int const& left, HInstanceTracker<owner_t> const& right )
 	{
-	return ( left != right.get_symbol() );
+	return ( left == right.get_id() );
 	}
 
-template<typename symbol_t, typename owner_t>
-counter<symbol_t, owner_t>::operator symbol_t ( void )
+template<typename owner_t>
+bool operator != ( int const& left, HInstanceTracker<owner_t> const& right )
 	{
-	return ( _symbol );
+	return ( left != right.get_id() );
 	}
 
-template<typename symbol_t, typename owner_t>
-int counter<symbol_t, owner_t>::get_instance_count( void )
+template<typename owner_t>
+int HInstanceTracker<owner_t>::get_instance_count( void )
 	{
 	return ( _instances );
 	}
 
-template<typename symbol_t, typename owner_t>
-symbol_t counter<symbol_t, owner_t>::get_symbol( void ) const
+template<typename owner_t>
+int HInstanceTracker<owner_t>::get_id( void ) const
 	{
-	return ( _symbol );
+	return ( _id );
 	}
 
-template<typename symbol_t, typename owner_t>
-yaal::hcore::HString& operator += ( yaal::hcore::HString& str, counter<symbol_t, owner_t> const& ctr )
+template<typename owner_t>
+int HInstanceTracker<owner_t>::id( void ) const
 	{
-	str += ctr.get_symbol();
+	return ( _id );
+	}
+
+template<typename owner_t>
+yaal::hcore::HString& operator += ( yaal::hcore::HString& str, HInstanceTracker<owner_t> const& itrck )
+	{
+	str += itrck.to_string();
 	return ( str );
 	}
 
-template<typename symbol_t, typename owner_t>
-std::ostream& operator << ( std::ostream& stream, counter<symbol_t, owner_t> const& ctr )
+template<typename owner_t>
+std::ostream& operator << ( std::ostream& stream, HInstanceTracker<owner_t> const& itrck )
 	{
-	stream << ctr.get_symbol();
+	stream << itrck.to_string();
 	return ( stream );
 	}
 
