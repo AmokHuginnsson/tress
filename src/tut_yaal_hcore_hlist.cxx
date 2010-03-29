@@ -472,8 +472,7 @@ TUT_UNIT_TEST_N( 13, "/* add_tail, push_back */" )
 	ENSURE_EQUALS( "add_tail failed", l.size(), 2 );
 	check_consistency( l );
 	ENSURE_EQUALS( "add_tail failed", to_string( l ), "ab" );
-	int c = 'c';
-	l.add_tail( &c );
+	l.add_tail() = 'c';
 	check_consistency( l );
 	ENSURE_EQUALS( "add_tail failed", l.size(), 3 );
 	check_consistency( l );
@@ -494,8 +493,7 @@ TUT_UNIT_TEST_N( 14, "/* pop_back, remove_tail */" )
 	check_consistency( l );
 	l.add_tail() = 'b';
 	check_consistency( l );
-	int c = 'c';
-	l.add_tail( &c );
+	l.add_tail() = 'c';
 	check_consistency( l );
 	ENSURE_EQUALS( "add_tail failed", l.size(), 3 );
 	check_consistency( l );
@@ -533,25 +531,24 @@ TUT_UNIT_TEST_N( 15, "/* add_head, push_front */" )
 	check_consistency( l );
 	l.push_front( 'a' );
 	check_consistency( l );
-	ENSURE_EQUALS( "push_back failed", l.size(), 1 );
+	ENSURE_EQUALS( "push_front failed", l.size(), 1 );
 	check_consistency( l );
-	ENSURE_EQUALS( "push_back failed", to_string( l ), "a" );
+	ENSURE_EQUALS( "push_front failed", to_string( l ), "a" );
 	l.add_head() = 'b';
 	check_consistency( l );
-	ENSURE_EQUALS( "add_tail failed", l.size(), 2 );
+	ENSURE_EQUALS( "add_head failed", l.size(), 2 );
 	check_consistency( l );
-	ENSURE_EQUALS( "add_tail failed", to_string( l ), "ba" );
-	int c = 'c';
-	l.add_head( &c );
+	ENSURE_EQUALS( "add_head failed", to_string( l ), "ba" );
+	l.add_head() = 'c';
 	check_consistency( l );
-	ENSURE_EQUALS( "add_tail failed", l.size(), 3 );
+	ENSURE_EQUALS( "add_head failed", l.size(), 3 );
 	check_consistency( l );
-	ENSURE_EQUALS( "add_tail failed", to_string( l ), "cba" );
+	ENSURE_EQUALS( "add_head failed", to_string( l ), "cba" );
 	l.push_front( 'd' );
 	check_consistency( l );
-	ENSURE_EQUALS( "push_back failed", l.size(), 4 );
+	ENSURE_EQUALS( "push_front failed", l.size(), 4 );
 	check_consistency( l );
-	ENSURE_EQUALS( "push_back failed", to_string( l ), "dcba" );
+	ENSURE_EQUALS( "push_front failed", to_string( l ), "dcba" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 16, "/* pop_front, remove_head */" )
@@ -563,8 +560,7 @@ TUT_UNIT_TEST_N( 16, "/* pop_front, remove_head */" )
 	check_consistency( l );
 	l.add_tail() = 'b';
 	check_consistency( l );
-	int c = 'c';
-	l.add_tail( &c );
+	l.add_tail() = 'c';
 	check_consistency( l );
 	ENSURE_EQUALS( "add_tail failed", l.size(), 3 );
 	check_consistency( l );
