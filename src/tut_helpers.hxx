@@ -166,6 +166,7 @@ class HInstanceTracker
 public:
 	HInstanceTracker( int = -1 );
 	HInstanceTracker( HInstanceTracker const& );
+	HInstanceTracker& operator = ( HInstanceTracker const& );
 	~HInstanceTracker( void );
 	bool operator == ( HInstanceTracker<owner_t> const& ) const;
 	bool operator != ( HInstanceTracker<owner_t> const& ) const;
@@ -177,6 +178,7 @@ public:
 	int get_id( void ) const;
 	int id( void ) const;
 	yaal::hcore::HString to_string( void ) const;
+	void swap( HInstanceTracker& );
 	};
 
 template<typename owner_t>
@@ -188,24 +190,45 @@ template<typename owner_t>
 HInstanceTracker<owner_t>::HInstanceTracker( int id_ ) : _id( id_ >= 0 ? id_ : _autoIncrement ), _origin()
 	{
 	++ _instances;
-	if ( _autoIncrement >= 0 )
-		++ _autoIncrement;
+	++ _autoIncrement;
 	}
 
 template<typename owner_t>
 HInstanceTracker<owner_t>::HInstanceTracker( HInstanceTracker const& itrck )
-	: _id( _autoIncrement >= 0 ? _autoIncrement : itrck._id ),
+	: _id( itrck._id ),
 	_origin( itrck._origin + ":" + itrck._id )
 	{
 	++ _instances;
-	if ( _autoIncrement >= 0 )
-		++ _autoIncrement;
+	++ _autoIncrement;
 	}
 
 template<typename owner_t>
 HInstanceTracker<owner_t>::~HInstanceTracker( void )
 	{
 	-- _instances;
+	}
+
+template<typename owner_t>
+HInstanceTracker<owner_t>& HInstanceTracker<owner_t>::operator = ( HInstanceTracker const& itrck )
+	{
+	if ( &itrck != this )
+		{
+		HInstanceTracker<owner_t> tmp( itrck );
+		swap( tmp );
+		}
+	return ( *this );
+	}
+
+template<typename owner_t>
+void HInstanceTracker<owner_t>::swap( HInstanceTracker& itrck )
+	{
+	if ( &itrck != this )
+		{
+		using yaal::swap;
+		swap( _id, itrck._id );
+		swap( _origin, itrck._origin );
+		}
+	return;
 	}
 
 template<typename owner_t>
@@ -300,6 +323,12 @@ std::ostream& operator << ( std::ostream& stream, HInstanceTracker<owner_t> cons
 	}
 
 }
+
+template<typename owner_t>
+inline void swap( tress::tut_helpers::HInstanceTracker<owner_t>& a, tress::tut_helpers::HInstanceTracker<owner_t>& b )
+	{
+	a.swap( b );
+	}
 
 }
 

@@ -51,6 +51,7 @@ struct tut_yaal_hcore_harray
 TUT_TEST_GROUP_N( tut_yaal_hcore_harray, "yaal::hcore::HArray" );
 
 TUT_UNIT_TEST_N( 1, "/* Constructor. */" )
+	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
 	try
 		{
@@ -64,6 +65,7 @@ TUT_UNIT_TEST_N( 1, "/* Constructor. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Constructor and get_size(). */" )
+	item_t::set_start_id( 0 );
 	int const SIZE_FOR_ONE = 0;
 	int const SIZE_FOR_TWO = 7;
 	array_t l_oOne( SIZE_FOR_ONE );
@@ -75,13 +77,14 @@ TUT_UNIT_TEST_N( 2, "/* Constructor and get_size(). */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
+	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
 	int const SIZE_FOR_ARRAY = 7;
 	int const FILLER_FOR_ARRAY = 13;
 	try
 		{
 		array_t l_oBadArray( BAD_SIZE, FILLER_FOR_ARRAY );
-		FAIL ( "array with negative size created" );
+		FAIL( "array with negative size created" );
 		}
 	catch ( HException const& e )
 		{
@@ -89,10 +92,11 @@ TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
 		}
 	array_t l_oArray( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
 	for ( int i = 0; i < SIZE_FOR_ARRAY; ++ i )
-		ENSURE_EQUALS ( "array element not filled with default value", l_oArray [ i ], FILLER_FOR_ARRAY );
+		ENSURE_EQUALS( "array element not filled with default value", l_oArray[ i ], FILLER_FOR_ARRAY );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "/* Copy constructor. */" )
+	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	array_t l_oArray( SIZE );
 	for ( int i = 0; i < SIZE; ++ i )
@@ -104,6 +108,7 @@ TUT_UNIT_TEST_N( 4, "/* Copy constructor. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* Operator [ ]. */" )
+	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	array_t l_oArray ( SIZE );
 	try
@@ -127,6 +132,7 @@ TUT_UNIT_TEST_N( 5, "/* Operator [ ]. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* Operator bool. */" )
+	item_t::set_start_id( 0 );
 	int const EMPTY = 0;
 	int const SIZE = 7;
 	array_t l_oEmpty( EMPTY );
@@ -136,6 +142,7 @@ TUT_UNIT_TEST_N( 6, "/* Operator bool. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "push_back" )
+	item_t::set_start_id( 0 );
 	item_t i;
 	array_t a1;
 	a1.resize( 5 );
