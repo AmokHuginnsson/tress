@@ -32,7 +32,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::meta;
 using namespace yaal::hcore;
@@ -54,7 +53,7 @@ struct tut_yaal_hcore_hclock
 int long tut_yaal_hcore_hclock::get_speed( HClock::UNIT::unit_t const& u )
 	{
 	double long PI = 3.14159265;
-	static int const LOOPS = 5000;
+	static int long const LOOPS = 20000L;
 	double long x = PI;
 	HClock c;
 	for ( int i = 0; i < LOOPS; ++ i )
@@ -78,25 +77,31 @@ TUT_UNIT_TEST_N( 2, "1 mili-second accuracy" )
 	static int long const QUALITY = get_speed( HClock::UNIT::MILISECOND );
 	HClock clk;
 	::sleep( SLEEP );
-	ENSURE_DISTANCE( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::MILISECOND ), PASSED, QUALITY + 10 );
+	int long elapsed( 0 );
+	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( HClock::UNIT::MILISECOND ), PASSED, QUALITY ? QUALITY : 1 );
+	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "1 micro-second accuracy" )
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,6>::value;
-	static int long const QUALITY = get_speed( HClock::UNIT::MICROSECOND ) * 200;
+	static int long const QUALITY = get_speed( HClock::UNIT::MICROSECOND );
 	HClock clk;
 	::sleep( SLEEP );
-	ENSURE_DISTANCE( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::MICROSECOND ), PASSED, QUALITY ? QUALITY : 1 );
+	int long elapsed( 0 );
+	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( HClock::UNIT::MICROSECOND ), PASSED, QUALITY ? QUALITY : 1 );
+	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "1 nano-second accuracy" )
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,9>::value;
-	static int long const QUALITY = get_speed( HClock::UNIT::NANOSECOND ) * 200;
+	static int long const QUALITY = get_speed( HClock::UNIT::NANOSECOND );
 	HClock clk;
 	::sleep( SLEEP );
-	ENSURE_DISTANCE( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::NANOSECOND ), PASSED, QUALITY ? QUALITY : 1 );
+	int long elapsed( 0 );
+	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( HClock::UNIT::NANOSECOND ), PASSED, QUALITY ? QUALITY : 1 );
+	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "measue twice without reset" )

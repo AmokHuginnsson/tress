@@ -921,7 +921,7 @@ TUT_UNIT_TEST_N( 23, "/* empty, is_empty */" )
 	check_consistency( l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 24, "/* exchange */" )
+TUT_UNIT_TEST_N( 24, "/* swap */" )
 	list_t l1;
 	check_consistency( l1 );
 	l1.push_back( '1' );
