@@ -8,7 +8,6 @@
 #include <sstream>
 #include <typeinfo>
 
-#include <yaal/config.hxx>
 #include <yaal/hcore/base.hxx>
 #include <yaal/hcore/hcall.hxx>
 #include <yaal/tools/hworkflow.hxx>

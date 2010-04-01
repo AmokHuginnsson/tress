@@ -27,8 +27,9 @@ Copyright:
 #ifndef CHILD_SETUP_HXX_INCLUDED
 #define CHILD_SETUP_HXX_INCLUDED
 
-#include <libintl.h>
 #include <yaal/hcore/hstring.hxx>
+
+#include "config.hxx"
 
 namespace child
 {

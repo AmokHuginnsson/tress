@@ -33,8 +33,8 @@ Copyright:
 #include <yaal/yaal.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 
-#include "tut_helpers.hxx"
 #include "setup.hxx"
+#include "tut_helpers.hxx"
 #include "options.hxx"
 
 using namespace tut;

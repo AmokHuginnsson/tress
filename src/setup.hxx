@@ -29,6 +29,8 @@ Copyright:
 
 #include <yaal/hcore/hstring.hxx>
 
+#include "config.hxx"
+
 namespace tress
 {
 
