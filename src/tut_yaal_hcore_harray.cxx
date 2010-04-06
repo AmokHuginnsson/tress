@@ -151,4 +151,12 @@ TUT_UNIT_TEST_N( 7, "push_back" )
 	a2.push_back( i );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 8, "copy constructor (of empty)" )
+	array_t a1;
+	ENSURE( "construction of empty array", a1.is_empty() );
+	array_t a2( a1 );
+	ENSURE( "construction of empty array", a2.is_empty() );
+TUT_TEARDOWN()
+
+
 }
