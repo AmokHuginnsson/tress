@@ -53,7 +53,7 @@ struct tut_yaal_hcore_hclock
 int long tut_yaal_hcore_hclock::get_speed( HClock::UNIT::unit_t const& u )
 	{
 	double long PI = 3.14159265;
-	static int long const LOOPS = 20000L;
+	static int long const LOOPS = 240000L;
 	double long x = PI;
 	HClock c;
 	for ( int i = 0; i < LOOPS; ++ i )
