@@ -420,6 +420,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 31, "random free standing args" )
 	Sumator s( 1 );
 	call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), &s );
+	ENSURE_EQUALS( "this as free standing", call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), _1 )( &s ), 1 );
 TUT_TEARDOWN()
 
 }
