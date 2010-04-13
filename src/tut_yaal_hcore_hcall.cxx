@@ -279,57 +279,57 @@ YaalHCoreHCallClass::~YaalHCoreHCallClass( void )
 
 HString YaalHCoreHCallClass::foo0( void )
 	{
-	return ( tut::foo0() );
+	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo0() );
 	}
 
 HString YaalHCoreHCallClass::foo1( int a1 )
 	{
-	return ( tut::foo1( a1 ) );
+	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo1( a1 ) );
 	}
 
 HString YaalHCoreHCallClass::foo2( int a1, int a2 )
 	{
-	return ( tut::foo2( a1, a2 ) );
+	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo2( a1, a2 ) );
 	}
 
 HString YaalHCoreHCallClass::foo3( int a1, int a2, int a3 )
 	{
-	return ( tut::foo3( a1, a2, a3 ) );
+	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo3( a1, a2, a3 ) );
 	}
 
 HString YaalHCoreHCallClass::foo4( int a1, int a2, int a3, int a4 )
 	{
-	return ( tut::foo4( a1, a2, a3, a4 ) );
+	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo4( a1, a2, a3, a4 ) );
 	}
 
 HString YaalHCoreHCallClass::foo5( int a1, int a2, int a3, int a4, int a5 )
 	{
-	return ( tut::foo5( a1, a2, a3, a4, a5 ) );
+	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo5( a1, a2, a3, a4, a5 ) );
 	}
 
 HString YaalHCoreHCallClass::foo6( int a1, int a2, int a3, int a4, int a5, int a6 )
 	{
-	return ( tut::foo6( a1, a2, a3, a4, a5, a6 ) );
+	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo6( a1, a2, a3, a4, a5, a6 ) );
 	}
 
 HString YaalHCoreHCallClass::foo7( int a1, int a2, int a3, int a4, int a5, int a6, int a7 )
 	{
-	return ( tut::foo7( a1, a2, a3, a4, a5, a6, a7 ) );
+	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo7( a1, a2, a3, a4, a5, a6, a7 ) );
 	}
 
 HString YaalHCoreHCallClass::foo8( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8 )
 	{
-	return ( tut::foo8( a1, a2, a3, a4, a5, a6, a7, a8 ) );
+	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo8( a1, a2, a3, a4, a5, a6, a7, a8 ) );
 	}
 
 HString YaalHCoreHCallClass::foo9( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9 )
 	{
-	return ( tut::foo9( a1, a2, a3, a4, a5, a6, a7, a8, a9 ) );
+	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo9( a1, a2, a3, a4, a5, a6, a7, a8, a9 ) );
 	}
 
 HString YaalHCoreHCallClass::foo10( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10 )
 	{
-	return ( tut::foo10( a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 ) );
+	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo10( a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 ) );
 	}
 
 class Sumator

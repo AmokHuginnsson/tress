@@ -29,6 +29,7 @@ Copyright:
 #include <yaal/yaal.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
+#include "tut_yaal_hcore_hcall.hxx"
 
 using namespace tut;
 using namespace yaal;
@@ -43,270 +44,104 @@ namespace tut
 
 struct tut_yaal_hcore_hboundcall
 	{
-	struct SIGNATURE
-		{
-		typedef int signature_t;
-		static int const INVALID;
-		static int const FV;
-		static int const F1I;
-		static int const F2I;
-		static int const F3I;
-		static int const F4I;
-		static int const F5I;
-		static int const F6I;
-		static int const F7I;
-		static int const F8I;
-		static int const F9I;
-		static int const F10I;
-		};
-	SIGNATURE::signature_t _signature;
-	int _int[10];
-	double _double[10];
-	tut_yaal_hcore_hboundcall( void ) : _signature( SIGNATURE::INVALID )
+	YaalHCoreHCallClass _callable;
+	tut_yaal_hcore_hboundcall( void ) : _callable()
 		{}
 	virtual ~tut_yaal_hcore_hboundcall( void )
 		{}
-	void reset( void )
-		{
-		_signature = SIGNATURE::INVALID;
-		yaal::fill( _int, _int + sizeof( _int ) / sizeof ( int ), -1 );
-		yaal::fill( _double, _double + sizeof( _double ) / sizeof ( double ), -1 );
-		}
-	void fv( void )
-		{
-		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::FV;
-		}
-	void f1i( int i0 )
-		{
-		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::F1I;
-		_int[ 0 ] = i0;
-		}
-	void f2i( int i0, int i1 )
-		{
-		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::F2I;
-		_int[ 0 ] = i0;
-		_int[ 1 ] = i1;
-		}
-	void f3i( int i0, int i1, int i2 )
-		{
-		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::F3I;
-		_int[ 0 ] = i0;
-		_int[ 1 ] = i1;
-		_int[ 2 ] = i2;
-		}
-	void f4i( int i0, int i1, int i2, int i3 )
-		{
-		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::F4I;
-		_int[ 0 ] = i0;
-		_int[ 1 ] = i1;
-		_int[ 2 ] = i2;
-		_int[ 3 ] = i3;
-		}
-	void f5i( int i0, int i1, int i2, int i3, int i4 )
-		{
-		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::F5I;
-		_int[ 0 ] = i0;
-		_int[ 1 ] = i1;
-		_int[ 2 ] = i2;
-		_int[ 3 ] = i3;
-		_int[ 4 ] = i4;
-		}
-	void f6i( int i0, int i1, int i2, int i3, int i4, int i5 )
-		{
-		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::F6I;
-		_int[ 0 ] = i0;
-		_int[ 1 ] = i1;
-		_int[ 2 ] = i2;
-		_int[ 3 ] = i3;
-		_int[ 4 ] = i4;
-		_int[ 5 ] = i5;
-		}
-	void f7i( int i0, int i1, int i2, int i3, int i4, int i5, int i6 )
-		{
-		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::F7I;
-		_int[ 0 ] = i0;
-		_int[ 1 ] = i1;
-		_int[ 2 ] = i2;
-		_int[ 3 ] = i3;
-		_int[ 4 ] = i4;
-		_int[ 5 ] = i5;
-		_int[ 6 ] = i6;
-		}
-	void f8i( int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7 )
-		{
-		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::F8I;
-		_int[ 0 ] = i0;
-		_int[ 1 ] = i1;
-		_int[ 2 ] = i2;
-		_int[ 3 ] = i3;
-		_int[ 4 ] = i4;
-		_int[ 5 ] = i5;
-		_int[ 6 ] = i6;
-		_int[ 7 ] = i7;
-		}
-	void f9i( int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8 )
-		{
-		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::F9I;
-		_int[ 0 ] = i0;
-		_int[ 1 ] = i1;
-		_int[ 2 ] = i2;
-		_int[ 3 ] = i3;
-		_int[ 4 ] = i4;
-		_int[ 5 ] = i5;
-		_int[ 6 ] = i6;
-		_int[ 7 ] = i7;
-		_int[ 8 ] = i8;
-		}
-	void f10i( int i0, int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9 )
-		{
-		cout << __PRETTY_FUNCTION__ << endl;
-		_signature = SIGNATURE::F10I;
-		_int[ 0 ] = i0;
-		_int[ 1 ] = i1;
-		_int[ 2 ] = i2;
-		_int[ 3 ] = i3;
-		_int[ 4 ] = i4;
-		_int[ 5 ] = i5;
-		_int[ 6 ] = i6;
-		_int[ 7 ] = i7;
-		_int[ 8 ] = i8;
-		_int[ 9 ] = i9;
-		}
 	};
-
-int const tut_yaal_hcore_hboundcall::SIGNATURE::INVALID = -1;
-int const tut_yaal_hcore_hboundcall::SIGNATURE::FV = 0;
-int const tut_yaal_hcore_hboundcall::SIGNATURE::F1I = 1;
-int const tut_yaal_hcore_hboundcall::SIGNATURE::F2I = 2;
-int const tut_yaal_hcore_hboundcall::SIGNATURE::F3I = 3;
-int const tut_yaal_hcore_hboundcall::SIGNATURE::F4I = 4;
-int const tut_yaal_hcore_hboundcall::SIGNATURE::F5I = 5;
-int const tut_yaal_hcore_hboundcall::SIGNATURE::F6I = 6;
-int const tut_yaal_hcore_hboundcall::SIGNATURE::F7I = 7;
-int const tut_yaal_hcore_hboundcall::SIGNATURE::F8I = 8;
-int const tut_yaal_hcore_hboundcall::SIGNATURE::F9I = 9;
-int const tut_yaal_hcore_hboundcall::SIGNATURE::F10I = 10;
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hboundcall, "yaal::hcore::HBoundCall" );
 
 TUT_UNIT_TEST_N( 1, "a member (no args)" )
-	reset();
-	static int const post[10] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-	HBoundCallInterface::ptr_t c( bound_call( &tut_yaal_hcore_hboundcall::fv, this ) );
-	c->invoke();
-	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::FV );
-	for ( int i = 0; i < 10; ++ i )
-		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
+	HBoundCallInterface<0, HString>::ptr_t c( bound_call( &YaalHCoreHCallClass::foo0, _callable ) );
+	ENSURE_EQUALS( "bad method called", c->invoke(), "YaalHCoreHCallClass: foo0" );
+	HBoundCallInterface<0, HString>::ptr_t f( bound_call( &tut::foo0 ) );
+	ENSURE_EQUALS( "bad function called", f->invoke(), "foo0" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "a member (one int arg)" )
-	reset();
-	static int const post[10] = { 0, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-	HBoundCallInterface::ptr_t c( bound_call( &tut_yaal_hcore_hboundcall::f1i, this, 0 ) );
-	c->invoke();
-	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F1I );
-	for ( int i = 0; i < 10; ++ i )
-		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
+	HBoundCallInterface<0, HString>::ptr_t c( bound_call( &YaalHCoreHCallClass::foo1, _callable, 1 ) );
+	ENSURE_EQUALS( "bad method called", c->invoke(), "YaalHCoreHCallClass: foo1: a1 = 1" );
+	HBoundCallInterface<0, HString>::ptr_t f( bound_call( &tut::foo1, 1 ) );
+	ENSURE_EQUALS( "bad function called", f->invoke(), "foo1: a1 = 1" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "a member (two int arg)" )
-	reset();
-	static int const post[10] = { 0, 1, -1, -1, -1, -1, -1, -1, -1, -1 };
-	HBoundCallInterface::ptr_t c( bound_call( &tut_yaal_hcore_hboundcall::f2i, this, 0, 1 ) );
-	c->invoke();
-	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F2I );
-	for ( int i = 0; i < 10; ++ i )
-		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
+	HBoundCallInterface<0, HString>::ptr_t c( bound_call( &YaalHCoreHCallClass::foo2, _callable, 1, 2 ) );
+	ENSURE_EQUALS( "bad method called", c->invoke(), "YaalHCoreHCallClass: foo2: a1 = 1, a2 = 2" );
+	HBoundCallInterface<0, HString>::ptr_t f( bound_call( &tut::foo2, 1, 2 ) );
+	ENSURE_EQUALS( "bad function called", f->invoke(), "foo2: a1 = 1, a2 = 2" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "a member (3 int arg)" )
-	reset();
-	static int const post[10] = { 0, 1, 2, -1, -1, -1, -1, -1, -1, -1 };
-	HBoundCallInterface::ptr_t c( bound_call( &tut_yaal_hcore_hboundcall::f3i, this, 0, 1, 2 ) );
-	c->invoke();
-	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F3I );
-	for ( int i = 0; i < 10; ++ i )
-		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
+	HBoundCallInterface<0, HString>::ptr_t c( bound_call( &YaalHCoreHCallClass::foo3, _callable, 1, 2, 3 ) );
+	ENSURE_EQUALS( "bad method called", c->invoke(), "YaalHCoreHCallClass: foo3: a1 = 1, a2 = 2, a3 = 3" );
+	HBoundCallInterface<0, HString>::ptr_t f( bound_call( &tut::foo3, 1, 2, 3 ) );
+	ENSURE_EQUALS( "bad method called", f->invoke(), "foo3: a1 = 1, a2 = 2, a3 = 3" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "a member (4 int arg)" )
-	reset();
-	static int const post[10] = { 0, 1, 2, 3, -1, -1, -1, -1, -1, -1 };
-	HBoundCallInterface::ptr_t c( bound_call( &tut_yaal_hcore_hboundcall::f4i, this, 0, 1, 2, 3 ) );
-	c->invoke();
-	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F4I );
-	for ( int i = 0; i < 10; ++ i )
-		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
+	HBoundCallInterface<0, HString>::ptr_t c( bound_call( &YaalHCoreHCallClass::foo4, _callable, 1, 2, 3, 4 ) );
+	ENSURE_EQUALS( "bad method called", c->invoke(), "YaalHCoreHCallClass: foo4: a1 = 1, a2 = 2, a3 = 3, a4 = 4" );
+	HBoundCallInterface<0, HString>::ptr_t f( bound_call( &tut::foo4, 1, 2, 3, 4 ) );
+	ENSURE_EQUALS( "bad method called", f->invoke(), "foo4: a1 = 1, a2 = 2, a3 = 3, a4 = 4" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "a member (5 int arg)" )
-	reset();
-	static int const post[10] = { 0, 1, 2, 3, 4, -1, -1, -1, -1, -1 };
-	HBoundCallInterface::ptr_t c( bound_call( &tut_yaal_hcore_hboundcall::f5i, this, 0, 1, 2, 3, 4 ) );
-	c->invoke();
-	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F5I );
-	for ( int i = 0; i < 10; ++ i )
-		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
+	HBoundCallInterface<0, HString>::ptr_t c( bound_call( &YaalHCoreHCallClass::foo5, _callable, 1, 2, 3, 4, 5 ) );
+	ENSURE_EQUALS( "bad method called", c->invoke(), "YaalHCoreHCallClass: foo5: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5" );
+	HBoundCallInterface<0, HString>::ptr_t f( bound_call( &tut::foo5, 1, 2, 3, 4, 5 ) );
+	ENSURE_EQUALS( "bad method called", f->invoke(), "foo5: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "a member (6 int arg)" )
-	reset();
-	static int const post[10] = { 0, 1, 2, 3, 4, 5, -1, -1, -1, -1 };
-	HBoundCallInterface::ptr_t c( bound_call( &tut_yaal_hcore_hboundcall::f6i, this, 0, 1, 2, 3, 4, 5 ) );
-	c->invoke();
-	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F6I );
-	for ( int i = 0; i < 10; ++ i )
-		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
+	HBoundCallInterface<0, HString>::ptr_t c( bound_call( &YaalHCoreHCallClass::foo6, _callable, 1, 2, 3, 4, 5, 6 ) );
+	ENSURE_EQUALS( "bad method called", c->invoke(), "YaalHCoreHCallClass: foo6: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6" );
+	HBoundCallInterface<0, HString>::ptr_t f( bound_call( &tut::foo6, 1, 2, 3, 4, 5, 6 ) );
+	ENSURE_EQUALS( "bad method called", f->invoke(), "foo6: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "a member (7 int arg)" )
-	reset();
-	static int const post[10] = { 0, 1, 2, 3, 4, 5, 6, -1, -1, -1 };
-	HBoundCallInterface::ptr_t c( bound_call( &tut_yaal_hcore_hboundcall::f7i, this, 0, 1, 2, 3, 4, 5, 6 ) );
-	c->invoke();
-	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F7I );
-	for ( int i = 0; i < 10; ++ i )
-		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
+	HBoundCallInterface<0, HString>::ptr_t c( bound_call( &YaalHCoreHCallClass::foo7, _callable, 1, 2, 3, 4, 5, 6, 7 ) );
+	ENSURE_EQUALS( "bad method called", c->invoke(), "YaalHCoreHCallClass: foo7: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7" );
+	HBoundCallInterface<0, HString>::ptr_t f( bound_call( &tut::foo7, 1, 2, 3, 4, 5, 6, 7 ) );
+	ENSURE_EQUALS( "bad method called", f->invoke(), "foo7: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "a member (8 int arg)" )
-	reset();
-	static int const post[10] = { 0, 1, 2, 3, 4, 5, 6, 7, -1, -1 };
-	HBoundCallInterface::ptr_t c( bound_call( &tut_yaal_hcore_hboundcall::f8i, this, 0, 1, 2, 3, 4, 5, 6, 7 ) );
-	c->invoke();
-	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F8I );
-	for ( int i = 0; i < 10; ++ i )
-		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
+	HBoundCallInterface<0, HString>::ptr_t c( bound_call( &YaalHCoreHCallClass::foo8, _callable, 1, 2, 3, 4, 5, 6, 7, 8 ) );
+	ENSURE_EQUALS( "bad method called", c->invoke(), "YaalHCoreHCallClass: foo8: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8" );
+	HBoundCallInterface<0, HString>::ptr_t f( bound_call( &tut::foo8, 1, 2, 3, 4, 5, 6, 7, 8 ) );
+	ENSURE_EQUALS( "bad method called", f->invoke(), "foo8: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "a member (9 int arg)" )
-	reset();
-	static int const post[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, -1 };
-	HBoundCallInterface::ptr_t c( bound_call( &tut_yaal_hcore_hboundcall::f9i, this, 0, 1, 2, 3, 4, 5, 6, 7, 8 ) );
-	c->invoke();
-	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F9I );
-	for ( int i = 0; i < 10; ++ i )
-		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
+	HBoundCallInterface<0, HString>::ptr_t c( bound_call( &YaalHCoreHCallClass::foo9, _callable, 1, 2, 3, 4, 5, 6, 7, 8, 9 ) );
+	ENSURE_EQUALS( "bad method called", c->invoke(), "YaalHCoreHCallClass: foo9: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8, a9 = 9" );
+	HBoundCallInterface<0, HString>::ptr_t f( bound_call( &tut::foo9, 1, 2, 3, 4, 5, 6, 7, 8, 9 ) );
+	ENSURE_EQUALS( "bad method called", f->invoke(), "foo9: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8, a9 = 9" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "a member (10 int arg)" )
-	reset();
-	static int const post[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	HBoundCallInterface::ptr_t c( bound_call( &tut_yaal_hcore_hboundcall::f10i, this, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ) );
-	c->invoke();
-	ENSURE_EQUALS( "bad method called", _signature, SIGNATURE::F10I );
-	for ( int i = 0; i < 10; ++ i )
-		ENSURE_EQUALS( "args persistance failed", _int[i], post[i] );
+	HBoundCallInterface<0, HString>::ptr_t c( bound_call( &YaalHCoreHCallClass::foo10, _callable, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ) );
+	ENSURE_EQUALS( "bad method called", c->invoke(), "YaalHCoreHCallClass: foo10: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8, a9 = 9, a10 = 10" );
+	HBoundCallInterface<0, HString>::ptr_t f( bound_call( &tut::foo10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ) );
+	ENSURE_EQUALS( "bad method called", f->invoke(), "foo10: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8, a9 = 9, a10 = 10" );
+TUT_TEARDOWN()
+
+class Boom
+	{
+	int _val;
+public:
+	Boom( int val_ ) : _val( val_ ) {}
+	int foo( double val_ )
+		{ return ( _val * static_cast<int>( val_ ) ); }
+	};
+
+TUT_UNIT_TEST_N( 12, "free standing arg in method" )
+	Boom b( 7 );
+//	HBoundCallInterface<1, int, double> c( bound_call( &Boom::foo, b, _1 ) );
 TUT_TEARDOWN()
 
 }
