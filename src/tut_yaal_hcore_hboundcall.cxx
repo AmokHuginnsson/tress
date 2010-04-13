@@ -137,11 +137,17 @@ public:
 	Boom( int val_ ) : _val( val_ ) {}
 	int foo( double val_ )
 		{ return ( _val * static_cast<int>( val_ ) ); }
+	int bar( double val_, int i )
+		{ return ( _val * static_cast<int>( val_ ) + i ); }
 	};
 
 TUT_UNIT_TEST_N( 12, "free standing arg in method" )
 	Boom b( 7 );
-//	HBoundCallInterface<1, int, double> c( bound_call( &Boom::foo, b, _1 ) );
+	HBoundCallInterface<1, int, double>::ptr_t c( bound_call( &Boom::foo, b, _1 ) );
+	cout << c->invoke( 3 ) << endl;
+//	HBoundCallInterface<1, int, int>::ptr_t c2( bound_call( &Boom::bar, b, 4., _1 ) );
+//	bound_call( &Boom::bar, b, 4., _1 );
+//	cout << c2->invoke( 3 ) << endl;
 TUT_TEARDOWN()
 
 }
