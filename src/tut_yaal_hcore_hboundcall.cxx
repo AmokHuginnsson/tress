@@ -145,14 +145,14 @@ TUT_UNIT_TEST_N( 12, "free standing arg in method" )
 	Boom b0( 7 );
 	Boom b1( 4 );
 	HBoundCallInterface<1, int, double>::ptr_t c0( bound_call( &Boom::foo, b0, _1 ) );
-	cout << c0->invoke( 2 ) << endl;
+	ENSURE_EQUALS( "bad call: bound_call( &Boom::foo, b0, _1 )( 2 )", c0->invoke( 2 ), 7 * 2 );
 	HBoundCallInterface<1, int, int>::ptr_t c1( bound_call( &Boom::bar, b0, 4., _1 ) );
-	cout << c1->invoke( 3 ) << endl;
-	HBoundCallInterface<1, int, double>::ptr_t c2( bound_call( &Boom::bar, b0, _1, 3. ) );
-	cout << c2->invoke( 5 ) << endl;
-	HBoundCallInterface<1, int, Boom*>::ptr_t c3( bound_call( &Boom::bar, _1, 2, 3. ) );
-	cout << c3->invoke( &b0 ) << endl;
-	cout << c3->invoke( &b1 ) << endl;
+	ENSURE_EQUALS( "bad call: bound_call( &Boom::bar, b0, 4., _1 )( 3 )", c1->invoke( 3 ), 7 * 4 + 3 );
+	HBoundCallInterface<1, int, double>::ptr_t c2( bound_call( &Boom::bar, b0, _1, static_cast<int>( 3. ) ) );
+	ENSURE_EQUALS( "bad call: bound_call( &Boom::bar, b0, _1, static_cast<int>( 3. ) )( 5 )", c2->invoke( 5 ), 7 * 5 + 3 );
+	HBoundCallInterface<1, int, Boom*>::ptr_t c3( bound_call( &Boom::bar, _1, 2, static_cast<int>( 3. ) ) );
+	ENSURE_EQUALS( "bad call: bound_call( &Boom::bar, _1, 2, static_cast<int>( 3. )( Boom( 7 ) )", c3->invoke( &b0 ), 7 * 2 + 3 );
+	ENSURE_EQUALS( "bad call: bound_call( &Boom::bar, _1, 2, static_cast<int>( 3. )( Boom( 4 ) )", c3->invoke( &b1 ), 4 * 2 + 3 );
 TUT_TEARDOWN()
 
 }
