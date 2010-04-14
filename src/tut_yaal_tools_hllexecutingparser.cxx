@@ -76,7 +76,7 @@ public:
 	} real;
 
 template<typename container_t>
-typename HBoundCallInterface<1, void, typename container_t::value_t const&>::ptr_t push_back( container_t& container )
+typename HBoundCallInterface<1, void, typename container_t::value_type const&>::ptr_t push_back( container_t& container )
 	{
 	return ( bound_call( &container_t::push_back, &container, _1 ) );
 	}
