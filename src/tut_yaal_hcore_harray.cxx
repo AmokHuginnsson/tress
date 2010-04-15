@@ -158,5 +158,26 @@ TUT_UNIT_TEST_N( 8, "copy constructor (of empty)" )
 	ENSURE( "construction of empty array", a2.is_empty() );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 9, "resize vs capacity" )
+	array_t a;
+	a.resize( 1 );
+	ENSURE_EQUALS( "resize( 1 ) failed (resize)", a.size(), 1 );
+	ENSURE_EQUALS( "resize( 1 ) failed (capacity)", a.capacity(), 1 );
+	a.resize( 5 );
+	ENSURE_EQUALS( "resize( 5 ) failed (resize)", a.size(), 5 );
+	ENSURE_EQUALS( "resize( 5 ) failed (capacity)", a.capacity(), 5 );
+	a.resize( 13 );
+	ENSURE_EQUALS( "resize( 13 ) failed (resize)", a.size(), 13 );
+	ENSURE_EQUALS( "resize( 13 ) failed (capacity)", a.capacity(), 13 );
+
+	array_t large;
+	large.resize( 7 );
+	ENSURE_EQUALS( "resize( 7 ) failed (resize)", large.size(), 7 );
+	ENSURE_EQUALS( "resize( 7 ) failed (capacity)", large.capacity(), 7 );
+	large.resize( 13 );
+	ENSURE_EQUALS( "resize( 13 ) failed (resize)", large.size(), 13 );
+	ENSURE_EQUALS( "resize( 13 ) failed (capacity)", large.capacity(), 14 );
+TUT_TEARDOWN()
+
 
 }
