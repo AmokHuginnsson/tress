@@ -393,5 +393,13 @@ TUT_UNIT_TEST_N( 18, "non virtual destructor" )
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 19, "generic pointer" )
+		{
+		typedef HPointer<void> void_t;
+		void_t p( new counter_t() );
+		}
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
 }
 
