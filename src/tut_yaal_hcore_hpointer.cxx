@@ -401,5 +401,15 @@ TUT_UNIT_TEST_N( 19, "generic pointer" )
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 20, "pointer_static_cast<>" )
+		{
+		typedef HPointer<void> void_t;
+		void_t v( new counter_t( 7 ) );
+		ptr_t p( pointer_static_cast<counter_t>( v ) );
+		ENSURE_EQUALS( "cast failed", p->get_id(), 7 );
+		}
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
 }
 
