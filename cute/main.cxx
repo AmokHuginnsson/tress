@@ -24,8 +24,9 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#include <unistd.h>
+#include <cstdlib>
 #include <iostream>
+#include <unistd.h>
 
 #include <yaal/yaal.hxx>
 M_VCSID( "$Id$" )
