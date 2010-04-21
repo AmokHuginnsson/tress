@@ -81,7 +81,7 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 		HSignalServiceFactory::get_instance();
 		setup.f_pcProgramName = a_ppcArgv[ 0 ];
 		l_iOpt = handle_program_options( a_iArgc, a_ppcArgv );
-		hcore::log( call( static_cast<void ( HLog::* )( HString const&, char const* const )>( &HLog::rehash ), _1, setup.f_oLogPath, setup.f_pcProgramName ) );
+		hcore::log.rehash( setup.f_oLogPath, setup.f_pcProgramName );
 		setup.test_setup();
 		setup.f_iArgc = ( a_iArgc - l_iOpt ) + 1;
 		if ( setup.f_iArgc > 1 )
@@ -177,8 +177,8 @@ void gather_groups_from_file( string_list_t& lst )
 	FILE* l_psFile = NULL;
 	if ( setup.f_oTestGroupListFilePath == "-" )
 		l_psFile = stdin;
-	HFile l_oFile( HFile::OPEN::READING, l_psFile );
-	if ( ! l_psFile && l_oFile.open( setup.f_oTestGroupListFilePath ) )
+	HFile l_oFile( l_psFile );
+	if ( ! l_psFile && l_oFile.open( setup.f_oTestGroupListFilePath, HFile::OPEN::READING ) )
 		{
 		cout << l_oFile.get_error() << ": " << l_oFile.get_path() << endl;
 		throw 0;

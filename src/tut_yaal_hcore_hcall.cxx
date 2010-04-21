@@ -59,7 +59,7 @@ struct tut_yaal_hcore_hcall
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hcall, "yaal::hcore::HCall" );
 
-tut_yaal_hcore_hcall::tut_yaal_hcore_hcall( void ) : _callNo( 0 ), _fileNo( 0 ), _suitUt( 0 ), _out( HFile::open_t( HFile::OPEN::WRITING ) )
+tut_yaal_hcore_hcall::tut_yaal_hcore_hcall( void ) : _callNo( 0 ), _fileNo( 0 ), _suitUt( 0 ), _out()
 	{
 	if ( getenv( "GEN_YAAL_HCORE_HCALL" ) )
 		generate_yaal_hcore_hcall_tests();
@@ -88,7 +88,7 @@ void tut_yaal_hcore_hcall::generate_yaal_hcore_hcall_tests( void )
 
 void tut_yaal_hcore_hcall::file_header( void )
 	{
-	_out.open( ( HFormat( "./src/tut_yaal_hcore_hcall_auto_%03d.cxx" ) % _fileNo ).string() );
+	_out.open( ( HFormat( "./src/tut_yaal_hcore_hcall_auto_%03d.cxx" ) % _fileNo ).string(), HFile::open_t( HFile::OPEN::WRITING ) );
 	_out <<
 "#include <TUT/tut.hpp>\n"
 "\n"

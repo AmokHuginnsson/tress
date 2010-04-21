@@ -76,7 +76,7 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 		setup.f_pcProgramName = a_ppcArgv[ 0 ];
 		l_iOpt = handle_program_options( a_iArgc, a_ppcArgv );
 		setup.test_setup();
-		hcore::log( call( static_cast<void ( HLog::* )( HString const&, char const* const )>( &HLog::rehash ), _1, "x_cute.log", setup.f_pcProgramName ) );
+		hcore::log.rehash( "x_cute.log", setup.f_pcProgramName );
 //		if ( ! is_enabled ( ) )enter_curses (); /* enabling ncurses ablilities*/
 /* *BOOM* */
 		HCuteReporter r;

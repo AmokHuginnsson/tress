@@ -230,14 +230,14 @@ TUT_UNIT_TEST_N( 12, "encode from file (no newlines)" )
 			base64::encode( cin, cout );
 		else
 			{
-			HFile f( INPUT );
+			HFile f( INPUT, HFile::OPEN::READING );
 			base64::encode( f, cout );
 			}
 		cout << endl;
 		}
 	else
 		{
-		HFile f( INPUT );
+		HFile f( INPUT, HFile::OPEN::READING );
 		HStringStream ss;
 		base64::encode( f, ss, true );
 		ENSURE_EQUALS( "badly encoded", ss.string(), BASE64ENC );
@@ -273,14 +273,14 @@ TUT_UNIT_TEST_N( 13, "encode from file (with newlines)" )
 			base64::encode( cin, cout );
 		else
 			{
-			HFile f( INPUT );
+			HFile f( INPUT, HFile::OPEN::READING );
 			base64::encode( f, cout );
 			}
 		cout << endl;
 		}
 	else
 		{
-		HFile f( INPUT );
+		HFile f( INPUT, HFile::OPEN::READING );
 		HStringStream ss;
 		base64::encode( f, ss, true, 76 );
 		ENSURE_EQUALS( "badly encoded", ss.string(), BASE64ENC );
@@ -317,7 +317,7 @@ TUT_UNIT_TEST_N( 14, "decode from file (newlines)" )
 			base64::decode( cin, cout );
 		else
 			{
-			HFile f( setup.f_ppcArgv[ 1 ] );
+			HFile f( setup.f_ppcArgv[ 1 ], HFile::OPEN::READING );
 			base64::decode( f, cout );
 			}
 		cout << endl;
@@ -362,7 +362,7 @@ TUT_UNIT_TEST_N( 15, "decode from file (with newlines)" )
 			base64::decode( cin, cout );
 		else
 			{
-			HFile f( setup.f_ppcArgv[ 1 ] );
+			HFile f( setup.f_ppcArgv[ 1 ], HFile::OPEN::READING );
 			base64::decode( f, cout );
 			}
 		cout << endl;

@@ -125,7 +125,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 12, "from file" )
 	static char const* const INPUT = ( setup.f_iArgc > 1 ) ? setup.f_ppcArgv[ 1 ] : "./data/karatsuba.bc";
 	static char const HASH[] = "afc851d03c5761909554cc48d1d6c6d2";
-	HFile f( INPUT );
+	HFile f( INPUT, HFile::OPEN::READING );
 	if ( setup.f_iArgc > 1 )
 		cout << hash::md5( f ) << endl;
 	else
