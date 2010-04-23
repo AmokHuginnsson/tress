@@ -156,8 +156,8 @@ namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
 		{} \
 	}
 
-#define TUT_DECLARE( statement ) cout << brightgreen << ">> " << #statement << reset << endl; statement cout << green << ">> end" << reset << endl;
-#define TUT_INVOKE( statement ) do { cout << brightcyan << ">> " << #statement << reset << endl; do { statement } while ( 0 ); cout << cyan << ">> end" << reset << endl; } while ( 0 )
+#define TUT_DECLARE( statement ) clog << brightgreen << ">> " << #statement << reset << endl; statement clog << green << ">> end" << reset << endl;
+#define TUT_INVOKE( statement ) do { clog << brightcyan << ">> " << #statement << reset << endl; do { statement } while ( 0 ); clog << cyan << ">> end" << reset << endl; } while ( 0 )
 
 template<typename owner_t>
 class HInstanceTracker

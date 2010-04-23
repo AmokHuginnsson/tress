@@ -315,6 +315,7 @@ TUT_UNIT_TEST_N( 19, "/* Transfering data through file. */" )
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
 	TUT_DECLARE( HServer serv( HSocket::TYPE::FILE, 1 ); );
+	TUT_INVOKE( cout << sizeof ( serv ) << endl; );
 	TUT_DECLARE( HSocket l_oClient( HSocket::TYPE::FILE ); );
 	TUT_INVOKE( serv.listen( "/tmp/TUT_socket" ); );
 	TUT_INVOKE( serv.start(); );
