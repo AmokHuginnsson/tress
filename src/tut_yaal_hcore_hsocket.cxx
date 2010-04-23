@@ -43,8 +43,6 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-#define STEP( code ) do { cout << "executing: " << #code << "... " << flush; { code; } cout << " ok." << endl; } while( 0 )
-
 struct tut_yaal_hcore_hsocket
 	{
 	tut_yaal_hcore_hsocket( void )
@@ -60,20 +58,21 @@ TUT_TEST_GROUP_N( tut_yaal_hcore_hsocket, "yaal::hcore::HSocket" );
 
 struct HServer
 	{
-	typedef HThreadT<HServer> thread_t;
 	static int const NO_FD = 17;
 	static int const LATENCY = 1;
 	HString _buffer;
 	HProcess _dispatcher;
 	HSocket _socket;
-	thread_t f_oThread;
+	HThread f_oThread;
+	HEvent _event;
 	HServer( HSocket::socket_type_t, int );
 public:
 	void start( void );
 	void stop( void );
   void listen( yaal::hcore::HString const&, int const = 0 );
 	HString const& buffer( void ) const;
-	int operator()( thread_t const* const );
+	void* run( void );
+	void wait( void );
 private:
 	void handler_connection( int );
 	void handler_message( int );
@@ -85,7 +84,7 @@ private:
 HServer::HServer( HSocket::socket_type_t type_, int maxConn_ )
 	: _buffer(),
 	_dispatcher( NO_FD, LATENCY ), _socket( type_, maxConn_ ),
-	f_oThread( *this )
+	f_oThread(), _event()
 	{}
 
 void HServer::listen( yaal::hcore::HString const& path_, int const port_ )
@@ -102,7 +101,7 @@ void HServer::start( void )
 	M_PROLOG
 	cout << "starting server thread ..." << endl;
 	_dispatcher.register_file_descriptor_handler( _socket.get_file_descriptor(), bound_call( &HServer::handler_connection, this, _1 ) );
-	f_oThread.spawn();
+	f_oThread.spawn( bound_call( &HServer::run, this ) );
 	return;
 	M_EPILOG
 	}
@@ -110,8 +109,17 @@ void HServer::start( void )
 void HServer::stop( void )
 	{
 	M_PROLOG
+	_dispatcher.stop();
 	f_oThread.finish();
 	cout << "server thread stopped ..." << endl;
+	return;
+	M_EPILOG
+	}
+
+void HServer::wait( void )
+	{
+	M_PROLOG
+	_event.wait();
 	return;
 	M_EPILOG
 	}
@@ -140,6 +148,7 @@ void HServer::handler_message( int a_iFileDescriptor )
 			{
 			_buffer += l_oMessage;
 			cout << "<-" << l_oMessage << endl;
+			_event.signal();
 			}
 		else if ( ! nRead )
 			disconnect_client( l_oClient );
@@ -168,9 +177,8 @@ HString const& HServer::buffer( void ) const
 	M_EPILOG
 	}
 
-int HServer::operator()( thread_t const* const )
+void* HServer::run( void )
 	{
-	int ret = -1;
 	try
 		{
 		cout << "starting dispatcher ..." << endl;
@@ -182,7 +190,7 @@ int HServer::operator()( thread_t const* const )
 		{
 		cout << e.what() << endl;
 		}
-	return ( ret );
+	return ( NULL );
 	}
 
 TUT_UNIT_TEST_N( 1, "/* Simple construction and destruction. */" )
@@ -312,71 +320,59 @@ TUT_UNIT_TEST_N( 19, "/* Transfering data through file. */" )
 	TUT_INVOKE( serv.start(); );
 	TUT_INVOKE( l_oClient.connect( "/tmp/TUT_socket" ); );
 	TUT_INVOKE( l_oClient.write( test_data, size ); );
+	TUT_INVOKE( serv.wait(); );
+	TUT_INVOKE( serv.stop(); );
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
 	cout << serv.buffer() << endl;
 TUT_TEARDOWN()
 
-
-TUT_UNIT_TEST_N( 20, "Transfering data through file with SSL." )
 /*
+TUT_UNIT_TEST_N( 20, "Transfering data through file with SSL." )
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
-	char reciv_buffer[ size + 1 ];
-	HSocket l_oServer( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::SSL_SERVER, 1 );
-	HSocket l_oClient( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::SSL_CLIENT );
-	l_oServer.listen( "/tmp/TUT_socket" );
-	l_oClient.connect( "/tmp/TUT_socket" );
-	HServer serv;
-	serv._socket = l_oServer.accept();
-	serv._buffer = reciv_buffer;
-	serv.f_iSize = size;
-	STEP( serv.start() );
-	STEP( l_oClient.write( test_data, size ) );
-	STEP( l_oClient.close() );
-	STEP( serv.stop() );
-	reciv_buffer[ size ] = 0;
-	ENSURE_EQUALS( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
-	cout << reciv_buffer << endl;
-*/
+	TUT_DECLARE( HServer serv( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::SSL_SERVER, 1 ); );
+	TUT_DECLARE( HSocket l_oClient( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::SSL_CLIENT ); );
+	TUT_INVOKE( serv.listen( "/tmp/TUT_socket" ); );
+	TUT_INVOKE( serv.start(); );
+	TUT_INVOKE( l_oClient.connect( "/tmp/TUT_socket" ); );
+	TUT_INVOKE( l_oClient.write( test_data, size ); );
+	TUT_INVOKE( serv.wait(); );
+	TUT_INVOKE( serv.stop(); );
+	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
+	cout << serv.buffer() << endl;
 TUT_TEARDOWN()
+*/
 
 TUT_UNIT_TEST_N( 21, "/* Transfering data through network. */" )
 	char test_data[] = "A kot ma wpierdol.";
 	const int size = sizeof ( test_data );
-	char reciv_buffer[ size + 1 ];
-	HSocket l_oServer( HSocket::TYPE::NETWORK, 1 );
-	HSocket l_oClient( HSocket::TYPE::NETWORK );
-	l_oServer.listen( "0.0.0.0", 5555 );
-	l_oClient.connect( "127.0.0.1", 5555 );
-	HSocket::ptr_t l_oLocal = l_oServer.accept();
-	l_oClient.write( test_data, size );
-	l_oLocal->read( reciv_buffer, size );
-	reciv_buffer[ size ] = 0;
-	ENSURE_EQUALS( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
-	cout << reciv_buffer << endl;
+	TUT_DECLARE( HServer serv( HSocket::TYPE::NETWORK, 1 ); );
+	TUT_DECLARE( HSocket l_oClient( HSocket::TYPE::NETWORK ); );
+	TUT_INVOKE( serv.listen( "0.0.0.0", 5555 ); );
+	TUT_INVOKE( serv.start(); );
+	TUT_INVOKE( l_oClient.connect( "127.0.0.1", 5555 ); );
+	TUT_INVOKE( l_oClient.write( test_data, size ); );
+	TUT_INVOKE( serv.wait(); );
+	TUT_INVOKE( serv.stop(); );
+	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
+	cout << serv.buffer() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 22, "Transfering data through network with SSL." )
 /*
+TUT_UNIT_TEST_N( 22, "Transfering data through network with SSL." )
 	char test_data[] = "A kot ma wpierdol.";
 	const int size = sizeof ( test_data );
-	char reciv_buffer[ size + 1 ];
-	HSocket l_oServer( HSocket::socket_type_t( HSocket::TYPE::NETWORK ) | HSocket::TYPE::SSL_SERVER, 1 );
-	HSocket l_oClient( HSocket::socket_type_t( HSocket::TYPE::NETWORK ) | HSocket::TYPE::SSL_CLIENT );
-	l_oServer.listen( "0.0.0.0", 5555 );
-	l_oClient.connect( "127.0.0.1", 5555 );
-	HServer serv;
-	serv._socket = l_oServer.accept();
-	serv._buffer = reciv_buffer;
-	serv.f_iSize = size;
-	serv.start();
-	l_oClient.write( test_data, size );
-	l_oClient.close();
-	serv.stop();
-	reciv_buffer[ size ] = 0;
-	ENSURE_EQUALS( "data broken during transfer", std::string( reciv_buffer ), std::string( test_data ) );
-	cout << reciv_buffer << endl;
-*/
+	TUT_DECLARE( HServer serv( HSocket::socket_type_t( HSocket::TYPE::NETWORK ) | HSocket::TYPE::SSL_SERVER, 1 ); );
+	TUT_DECLARE( HSocket l_oClient( HSocket::socket_type_t( HSocket::TYPE::NETWORK ) | HSocket::TYPE::SSL_CLIENT ); );
+	TUT_INVOKE( serv.listen( "0.0.0.0", 5555 ); );
+	TUT_INVOKE( serv.start(); );
+	TUT_INVOKE( l_oClient.connect( "127.0.0.1", 5555 ); );
+	TUT_INVOKE( l_oClient.write( test_data, size ); );
+	TUT_INVOKE( serv.wait(); );
+	TUT_INVOKE( serv.stop(); );
+	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
+	cout << serv.buffer() << endl;
 TUT_TEARDOWN()
+*/
 
 }

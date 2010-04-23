@@ -57,7 +57,7 @@ public:
 	HCool( char const* );
 	virtual ~HCool( void );
 	void set( int );
-	int operator() ( HThread const* const );
+	void* run( HThread const* );
 	/*}*/
 	};
 
@@ -78,7 +78,7 @@ HCool::~HCool( void )
 	M_EPILOG
 	}
 
-int simple( HThread const* const a_poCaller )
+void* simple( HThread const* const a_poCaller )
 	{
 	M_PROLOG
 	cout << "Thread [simple] started." << endl;
@@ -93,7 +93,7 @@ int simple( HThread const* const a_poCaller )
 	M_EPILOG
 	}
 
-int a_fast_one( HThread const* const )
+void* a_fast_one( HThread const* const )
 	{
 	return ( 0 );
 	}
@@ -111,7 +111,7 @@ void busy_wait( void )
 		}
 	}
 
-int HCool::operator() ( HThread const* const a_poCaller )
+void* HCool::run( HThread const* a_poCaller )
 	{
 	M_PROLOG
 	int l_iCtr = f_iLifeLength;
@@ -140,28 +140,27 @@ void HCool::set( int a_iLength )
 
 class CVTest
 	{
-	typedef HThreadT<CVTest> worker_t;
-	worker_t f_oWorker;
+	HThread _thread;
 	HMutex f_oMutex;
 	HCondition f_oCV;
 	bool f_bLoop;
 public:
 	CVTest( void );
 	~CVTest( void );
-	int operator() ( HThread const* const );
+	void* run( void );
 	void eat( void );
 	};
 
-CVTest::CVTest( void ) : f_oWorker( *this ), f_oMutex(), f_oCV( f_oMutex ), f_bLoop( false )
+CVTest::CVTest( void ) : _thread(), f_oMutex(), f_oCV( f_oMutex ), f_bLoop( false )
 	{
 	}
 
 CVTest::~CVTest( void )
 	{
-	f_oWorker.finish();
+	_thread.finish();
 	}
 
-int CVTest::operator()( HThread const* const )
+void* CVTest::run( void )
 	{
 	f_bLoop = true;
 	int ctr = 0;
@@ -173,14 +172,14 @@ int CVTest::operator()( HThread const* const )
 		cout << "+" << flush;
 		ctr += 2;
 		}
-	return ( ctr );
+	return ( reinterpret_cast<void*>( ctr ) );
 	}
 
 void CVTest::eat( void )
 	{
 	int cnt = 80;
 	HLock l( f_oMutex );
-	f_oWorker.spawn();
+	_thread.spawn( bound_call( &CVTest::run, this ) );
 	while ( cnt -- )
 		{
 		f_oCV.wait( 1, 0 );
@@ -189,23 +188,19 @@ void CVTest::eat( void )
 	f_bLoop = false;
 	}
 
-typedef HThreadT<HCool> cool_t;
-typedef HThreadT<typeof( simple )> simple_t;
-
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hthread );
 TUT_TEST_GROUP_N( tut_yaal_hcore_hthread, "yaal::hcore::HThread" );
 
 TUT_UNIT_TEST_N( 1, "/* Construction and destruction */" )
-	HCool ca( "a" );
-	cool_t a( ca );
+	HThread a;
 	ENSURE_EQUALS( "bad status on fresh thread", a.is_alive(), false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Starting new thread and allowing it to finish */" )
 	HCool ca( "a" );
-	cool_t a( ca );
+	HThread a;
 	ca.set( 5 );
-	a.spawn();
+	a.spawn( bound_call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
@@ -214,9 +209,9 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 3, "/* Starting new thread and finishing it prematurely (sleeping body) */" )
 	HTime start, stop;
 	HCool ca( "sleeping" );
-	cool_t a( ca );
+	HThread a;
 	ca.set( 50 );
-	a.spawn();
+	a.spawn( bound_call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	start.set_now();
@@ -231,9 +226,9 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 33, "/* Starting new thread and finishing it prematurely (busy body) */" )
 	HTime start, stop;
 	HCool ca( "busy" );
-	cool_t a( ca );
+	HThread a;
 	ca.set( 50 );
-	a.spawn();
+	a.spawn( bound_call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	start.set_now();
@@ -249,9 +244,9 @@ TUT_UNIT_TEST_N( 4, "/* Starting new thread and finishing it prematurely by dest
 	HTime start, stop;
 		{
 		HCool ca( "a" );
-		cool_t a( ca );
+		HThread a;
 		ca.set( 50 );
-		a.spawn();
+		a.spawn( bound_call( &HCool::run, &ca, &a ) );
 		ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 		start.set_now();
 		}
@@ -263,21 +258,21 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* Starting and immediatelly finishing thread */" )
 	HCool ca( "a" );
-	cool_t a( ca );
+	HThread a;
 	ca.set( 50 );
-	a.spawn();
+	a.spawn( bound_call( &HCool::run, &ca, &a ) );
 	a.finish();
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* Starting already started thread */" )
 	HCool ca( "6" );
-	cool_t a( ca );
+	HThread a;
 	ca.set( 5 );
-	a.spawn();
+	a.spawn( bound_call( &HCool::run, &ca, &a ) );
 	try
 		{
-		a.spawn();
+		a.spawn( bound_call( &HCool::run, &ca, &a ) );
 		FAIL( "Started already started thread." );
 		}
 	catch ( HException& e )
@@ -287,8 +282,7 @@ TUT_UNIT_TEST_N( 6, "/* Starting already started thread */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "/* Finishing thread that was not started */" )
-	HCool ca( "a" );
-	cool_t a( ca );
+	HThread a;
 	try
 		{
 		a.finish();
@@ -302,8 +296,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* Simple thread (plain function) */" )
 	HTime start, stop;
-	simple_t a( simple );
-	a.spawn();
+	HThread a;
+	a.spawn( bound_call( &simple, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	start.set_now();
@@ -317,9 +311,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "/* Starting new thread and allowing it to finish, the finich is actualy invoked. */" )
 	HCool ca( "a" );
-	cool_t a( ca );
+	HThread a;
 	ca.set( 5 );
-	a.spawn();
+	a.spawn( bound_call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
@@ -328,8 +322,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "/* Very short living thread. */" )
 	HTime start, stop;
-	simple_t a( a_fast_one );
-	a.spawn();
+	HThread a;
+	a.spawn( bound_call( a_fast_one, &a ) );
 	cout << __PRETTY_FUNCTION__ << endl;
 	a.finish();
 	/* In case of wrong implementation this test case will hang foreveer. */
@@ -337,8 +331,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "/* Very short living thread, spawned delayed. */" )
 	HTime start, stop;
-	simple_t a( a_fast_one );
-	a.spawn();
+	HThread a;
+	a.spawn( bound_call( a_fast_one, &a ) );
 	M_DSLEEP( 1 );
 	cout << __PRETTY_FUNCTION__ << endl;
 	a.finish();
