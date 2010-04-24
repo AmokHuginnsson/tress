@@ -24,6 +24,7 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <iostream>
 #include <libintl.h>
 
 #include <yaal/yaal.hxx>
@@ -43,8 +44,13 @@ void OSetup::test_setup( void )
 				_( "quiet and verbose options are exclusive\n" ) );
 	if ( f_bVerbose )
 		clog.reset( HStreamInterface::ptr_t( new HFile( stdout ) ) );
+	else
+		std::clog.rdbuf( NULL );
 	if ( f_bQuiet )
+		{
 		cout.reset();
+		std::cout.rdbuf( NULL );
+		}
 	if ( setup.f_bListGroups
 			&& ( setup.f_bRestartable
 				|| ! setup.f_oTestGroupListFilePath.is_empty()
