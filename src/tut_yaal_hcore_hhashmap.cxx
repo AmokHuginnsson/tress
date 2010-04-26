@@ -74,9 +74,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Quantity test. */" )
 	hash_map_t map( 17 );
-	ENSURE_EQUALS ( "newly created map is not empty", map.size(), 0 );
+	ENSURE_EQUALS( "newly created map is not empty", map.size(), 0 );
 	map[ 0 ] = 7;
-	ENSURE_EQUALS ( "wrong size after add", map.size(), 1 );
+	ENSURE_EQUALS( "wrong size after add", map.size(), 1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* element insertion */" )
@@ -84,7 +84,7 @@ TUT_UNIT_TEST_N( 3, "/* element insertion */" )
 	for ( int i = 0; i < ELEM_COUNT; ++ i )
 		{
 		map[ i ] = i;
-		ENSURE_EQUALS ( "wrong size after addition", map.size(), i + 1 );
+		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
 		}
 TUT_TEARDOWN()
 
@@ -106,7 +106,7 @@ TUT_UNIT_TEST_N( 5, "/* key, value access */" )
 		{
 		hash_map_t::iterator it( map.find( i ) );
 		ENSURE( "key not present", it != map.end() );
-		ENSURE_EQUALS ( "key/value mismatch", it->second, i );
+		ENSURE_EQUALS( "key/value mismatch", it->second, i );
 		}
 TUT_TEARDOWN()
 
@@ -115,14 +115,14 @@ TUT_UNIT_TEST_N( 6, "/* key removal */" )
 	for ( int i = 0; i < ELEM_COUNT; ++ i )
 		{
 		map[ i ] = i;
-		ENSURE_EQUALS ( "wrong size after addition", map.size(), i + 1 );
+		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
 		}
 	for ( int i = 0; i < ELEM_COUNT; ++ i )
 		{
 		map.erase( i );
-		ENSURE_EQUALS ( "wrong size after add", map.size(), ELEM_COUNT - ( i + 1 ) );
+		ENSURE_EQUALS( "wrong size after add", map.size(), ELEM_COUNT - ( i + 1 ) );
 		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
-			ENSURE_EQUALS ( "key/value mismatch", it->second, it->first );
+			ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
 		}
 TUT_TEARDOWN()
 
@@ -132,8 +132,30 @@ TUT_UNIT_TEST_N( 7, "/* iteration on large table with few elements */" )
 		map[ i ] = i;
 	int i = 0;
 	for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it, ++ i )
-		ENSURE_EQUALS ( "key/value mismatch", it->second, it->first );
-	ENSURE_EQUALS ( "bad number of iterations", i, FEW_ELEMENTS );
+		ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
+	ENSURE_EQUALS( "bad number of iterations", i, FEW_ELEMENTS );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 8, "/* copy contructor */" )
+	hash_map_t map( TEST_PRIME );
+	for ( int i = 0; i < ELEM_COUNT; ++ i )
+		{
+		map[ i ] = i;
+		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
+		}
+	hash_map_t map2( map );
+	ENSURE_EQUALS( "wrong size after addition", map2.size(), ELEM_COUNT );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 9, "/* contructor from sequence */" )
+	hash_map_t map( TEST_PRIME );
+	for ( int i = 0; i < ELEM_COUNT; ++ i )
+		{
+		map[ i ] = i;
+		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
+		}
+	hash_map_t map2( map.begin(), map.end() );
+	ENSURE_EQUALS( "wrong size after addition", map2.size(), ELEM_COUNT );
 TUT_TEARDOWN()
 
 }
