@@ -24,6 +24,7 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <cstdio>
 #include <libintl.h>
 
 #include <yaal/yaal.hxx>
