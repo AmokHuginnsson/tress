@@ -349,7 +349,7 @@ TUT_UNIT_TEST_N( 21, "/* Transfering data through network. */" )
 	const int size = sizeof ( test_data );
 	TUT_DECLARE( HServer serv( HSocket::TYPE::NETWORK, 1 ); );
 	TUT_DECLARE( HSocket l_oClient( HSocket::TYPE::NETWORK ); );
-	TUT_INVOKE( serv.listen( "0.0.0.0", 5555 ); );
+	TUT_INVOKE( serv.listen( "127.0.0.1", 5555 ); );
 	TUT_INVOKE( serv.start(); );
 	TUT_INVOKE( l_oClient.connect( "127.0.0.1", 5555 ); );
 	TUT_INVOKE( l_oClient.write( test_data, size ); );

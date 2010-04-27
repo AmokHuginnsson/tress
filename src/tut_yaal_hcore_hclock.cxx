@@ -74,33 +74,33 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 2, "1 mili-second accuracy" )
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,3>::value;
-	static int long const QUALITY = get_speed( HClock::UNIT::MILISECOND );
+	static int long const QUALITY = get_speed( HClock::UNIT::MILISECOND ) + 2;
 	HClock clk;
 	::sleep( SLEEP );
 	int long elapsed( 0 );
-	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( HClock::UNIT::MILISECOND ), PASSED, QUALITY ? QUALITY : 1 );
+	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( HClock::UNIT::MILISECOND ), PASSED, QUALITY );
 	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "1 micro-second accuracy" )
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,6>::value;
-	static int long const QUALITY = get_speed( HClock::UNIT::MICROSECOND );
+	static int long const QUALITY = get_speed( HClock::UNIT::MICROSECOND ) + 2 * power<10,3>::value;
 	HClock clk;
 	::sleep( SLEEP );
 	int long elapsed( 0 );
-	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( HClock::UNIT::MICROSECOND ), PASSED, QUALITY ? QUALITY : 1 );
+	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( HClock::UNIT::MICROSECOND ), PASSED, QUALITY );
 	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "1 nano-second accuracy" )
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,9>::value;
-	static int long const QUALITY = get_speed( HClock::UNIT::NANOSECOND );
+	static int long const QUALITY = get_speed( HClock::UNIT::NANOSECOND ) + 2 * power<10,6>::value;
 	HClock clk;
 	::sleep( SLEEP );
 	int long elapsed( 0 );
-	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( HClock::UNIT::NANOSECOND ), PASSED, QUALITY ? QUALITY : 1 );
+	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( HClock::UNIT::NANOSECOND ), PASSED, QUALITY );
 	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 

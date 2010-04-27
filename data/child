@@ -16,14 +16,14 @@ log "read input: ${LINE}"
 
 case "${LINE}" in
 	"out")
-		echo "hello-OUT" > /dev/stdout
+		echo "hello-OUT"
 	;;
 	"err")
-		echo "hello-ERR" > /dev/stderr
+		echo "hello-ERR" >&2
 	;;
 	*)
-		echo "error" > /dev/stdout
-		echo "error" > /dev/stderr
+		echo "error"
+		echo "error" >&2
 	;;
 esac
 

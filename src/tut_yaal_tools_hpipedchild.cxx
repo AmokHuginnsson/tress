@@ -31,7 +31,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -100,8 +99,22 @@ TUT_UNIT_TEST_N( 4, "spawn, write and read (stdout)" )
 	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
 	pc << MSG_OUT << endl;
 	HString ack;
-	pc.read_until( ack );
+	TUT_INVOKE( cout << pc.read_until( ack ) << endl; );
 	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
+	pc.finish();
+	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 5, "spawn, write and read (stderr)" )
+	HPipedChild pc;
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
+	pc.spawn( CHILD );
+	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
+	pc << MSG_ERR << endl;
+	pc.set_csoi( HPipedChild::STREAM::ERR );
+	HString ack;
+	TUT_INVOKE( cout << pc.read_until( ack ) << endl; );
+	ENSURE_EQUALS( "bad ack ERR", ack, ACK_ERR );
 	pc.finish();
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
 TUT_TEARDOWN()
