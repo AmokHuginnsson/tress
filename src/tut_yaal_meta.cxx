@@ -50,6 +50,7 @@ TUT_UNIT_TEST_N( 1, "max_signed" )
 	cout << "short = " << hex << max_signed<short>::value << endl;
 	cout << "int = " << hex << max_signed<int>::value << endl;
 	cout << "long = " << hex << max_signed<long>::value << endl;
+	cout << dec;
 TUT_TEARDOWN()
 
 }
