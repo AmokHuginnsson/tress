@@ -61,6 +61,7 @@ TUT_UNIT_TEST_N( 1, "manipulators" )
 	cout << "[O] k = '" << k << "'" << endl;
 	cout << "[M] k = '" << hex << k << "' \thex" << endl;
 	cout << "[O] k = '" << k << "'" << endl;
+	cout << dec;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "read_until (delims stripped)" )
