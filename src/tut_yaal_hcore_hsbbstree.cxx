@@ -272,7 +272,7 @@ TUT_UNIT_TEST_N( 4, "/* Removing keys in ascending order from lower half of the 
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
-		helper_stress_test ( s, & set_t::remove, i );
+		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* Removing keys in ascending order from upper half of the tree that was created by adding keys in ascending order. */" )
@@ -280,7 +280,7 @@ TUT_UNIT_TEST_N( 5, "/* Removing keys in ascending order from upper half of the 
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test ( s, & set_t::remove, i );
+		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* Removing keys in descending order from lower half of the tree that was created by adding keys in ascending order. */" )
@@ -288,7 +288,7 @@ TUT_UNIT_TEST_N( 6, "/* Removing keys in descending order from lower half of the
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
-		helper_stress_test ( s, & set_t::remove, i );
+		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "/* Removing keys in descending order from upper half of the tree that was created by adding keys in ascending order. */" )
@@ -296,7 +296,7 @@ TUT_UNIT_TEST_N( 7, "/* Removing keys in descending order from upper half of the
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		s.insert ( i );
 	for ( int i = NUMBER_OF_TEST_NODES - 1; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
-		helper_stress_test ( s, & set_t::remove, i );
+		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( & set_t::erase ), i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* Removing keys in ascending order from lower half of the tree that was created by adding keys in descending order. */" )
@@ -304,7 +304,7 @@ TUT_UNIT_TEST_N( 8, "/* Removing keys in ascending order from lower half of the 
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		s.insert ( i );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
-		helper_stress_test ( s, & set_t::remove, i );
+		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "/* Removing keys in ascending order from upper half of the tree that was created by adding keys in descending order. */" )
@@ -312,7 +312,7 @@ TUT_UNIT_TEST_N( 9, "/* Removing keys in ascending order from upper half of the 
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test ( s, & set_t::remove, i );
+		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "/* Removing keys in descending order from lower half of the tree that was created by adding keys in descending order. */" )
@@ -320,7 +320,7 @@ TUT_UNIT_TEST_N( 10, "/* Removing keys in descending order from lower half of th
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		s.insert ( i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
-		helper_stress_test ( s, & set_t::remove, i );
+		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "/* Removing keys in descending order from upper half of the tree that was created by adding keys in descending order. */" )
@@ -328,7 +328,7 @@ TUT_UNIT_TEST_N( 11, "/* Removing keys in descending order from upper half of th
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		s.insert ( i );
 	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
-		helper_stress_test ( s, & set_t::remove, i );
+		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 12, "/* Removing keys in ascending order from lower half of the tree that was created by adding keys in random order. */" )
@@ -340,7 +340,7 @@ TUT_UNIT_TEST_N( 12, "/* Removing keys in ascending order from lower half of the
 		{
 		try
 			{
-			helper_stress_test ( s, & set_t::remove, i );
+			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 			}
 		catch ( HException & e )
 			{
@@ -359,7 +359,7 @@ TUT_UNIT_TEST_N( 13, "/* Removing keys in ascending order from upper half of the
 		{
 		try
 			{
-			helper_stress_test ( s, & set_t::remove, i );
+			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 			}
 		catch ( HException & e )
 			{
@@ -378,7 +378,7 @@ TUT_UNIT_TEST_N( 14, "/* Removing keys in descending order from lower half of th
 		{
 		try
 			{
-			helper_stress_test ( s, &set_t::remove, i );
+			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 			}
 		catch ( HException & e )
 			{
@@ -397,7 +397,7 @@ TUT_UNIT_TEST_N( 15, "/* Removing keys in descending order from upper half of th
 		{
 		try
 			{
-			helper_stress_test( s, &set_t::remove, i );
+			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 			}
 		catch ( HException& e )
 			{
@@ -416,7 +416,7 @@ TUT_UNIT_TEST_N( 16, "/* Removing keys in random order from upper half of the tr
 		{
 		try
 			{
-			helper_stress_test( s, &set_t::remove, r.rnd ( KEY_POOL_SIZE ) );
+			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), r.rnd ( KEY_POOL_SIZE ) );
 			}
 		catch ( HException& e )
 			{
