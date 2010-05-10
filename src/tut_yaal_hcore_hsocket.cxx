@@ -327,7 +327,6 @@ TUT_UNIT_TEST_N( 19, "/* Transfering data through file. */" )
 	cout << serv.buffer() << endl;
 TUT_TEARDOWN()
 
-/*
 TUT_UNIT_TEST_N( 20, "Transfering data through file with SSL." )
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
@@ -342,7 +341,6 @@ TUT_UNIT_TEST_N( 20, "Transfering data through file with SSL." )
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
 	cout << serv.buffer() << endl;
 TUT_TEARDOWN()
-*/
 
 TUT_UNIT_TEST_N( 21, "/* Transfering data through network. */" )
 	char test_data[] = "A kot ma wpierdol.";
@@ -359,7 +357,6 @@ TUT_UNIT_TEST_N( 21, "/* Transfering data through network. */" )
 	cout << serv.buffer() << endl;
 TUT_TEARDOWN()
 
-/*
 TUT_UNIT_TEST_N( 22, "Transfering data through network with SSL." )
 	char test_data[] = "A kot ma wpierdol.";
 	const int size = sizeof ( test_data );
@@ -374,6 +371,5 @@ TUT_UNIT_TEST_N( 22, "Transfering data through network with SSL." )
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
 	cout << serv.buffer() << endl;
 TUT_TEARDOWN()
-*/
 
 }
