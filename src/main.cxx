@@ -174,10 +174,9 @@ namespace tress
 void gather_groups_from_file( string_list_t& lst )
 	{
 	M_PROLOG
-	FILE* file = NULL;
+	HFile file;
 	if ( setup._testGroupListFilePath == "-" )
-		file = stdin;
-	HFile file( file );
+		file.open( stdin );
 	if ( ! file && file.open( setup._testGroupListFilePath, HFile::OPEN::READING ) )
 		{
 		cout << file.get_error() << ": " << file.get_path() << endl;
@@ -186,7 +185,7 @@ void gather_groups_from_file( string_list_t& lst )
 	HString line;
 	while ( file.read_line( line,
 				HFile::read_t( HFile::READ::STRIP_NEWLINES )
-				| ( ( file == stdin ) ? HFile::READ::UNBUFFERED_READS : HFile::READ::BUFFERED_READS ) ) >= 0 )
+				| ( ( setup._testGroupListFilePath == "-" ) ? HFile::READ::UNBUFFERED_READS : HFile::READ::BUFFERED_READS ) ) >= 0 )
 		{
 		line.trim_left();
 		line.trim_right();

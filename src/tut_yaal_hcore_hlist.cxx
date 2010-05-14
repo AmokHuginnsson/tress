@@ -101,7 +101,7 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list )
 		{
 		if ( it._current == list._hook )
 			hook_valid = true;
-		if ( list._index == it._current )
+		if ( list._indexElement == it._current )
 			{
 			ENSURE_EQUALS( "bad forward index", list._index, ctr );
 			index_valid = true;
@@ -109,7 +109,7 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list )
 		ENSURE_EQUALS( "links broken", it._current->_next->_previous, it._current );
 		ENSURE_EQUALS( "links broken", it._current->_previous->_next, it._current );
 		}
-	if ( ! list._index )
+	if ( ! list._indexElement )
 		index_valid = true;
 	if ( ! ctr && ( list._hook == NULL ) )
 		hook_valid = true;
@@ -124,7 +124,7 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list )
 		{
 		if ( it._current == list._hook )
 			hook_valid = true;
-		if ( list._index == it._current )
+		if ( list._indexElement == it._current )
 			{
 			ENSURE_EQUALS( "bad backward index", list._index, ( list._size - ctr ) - 1 );
 			index_valid = true;
@@ -132,7 +132,7 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list )
 		ENSURE_EQUALS( "links broken", it._current->_next->_previous, it._current );
 		ENSURE_EQUALS( "links broken", it._current->_previous->_next, it._current );
 		}
-	if ( ! list._index )
+	if ( ! list._indexElement )
 		index_valid = true;
 	if ( ! ctr && ( list._hook == NULL ) )
 		hook_valid = true;
