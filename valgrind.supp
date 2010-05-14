@@ -2433,3 +2433,221 @@
    fun:ERR_get_state
    fun:ERR_clear_error
 }
+{
+   Maverick4 curses
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   fun:_nc_setupterm
+   fun:newterm
+   fun:initscr
+}
+{
+   Maverick5 curses
+   Memcheck:Leak
+   fun:malloc
+   fun:_nc_home_terminfo
+   fun:_nc_next_db
+   fun:_nc_read_entry
+   obj:/lib/libncurses.so.5.7
+   fun:_nc_setupterm
+   fun:newterm
+   fun:initscr
+}
+{
+   Maverick6 curses
+   Memcheck:Leak
+   fun:calloc
+   fun:_nc_add_to_try
+   fun:_nc_init_keytry
+   fun:_nc_keypad
+}
+{
+   Maverick7 curses
+   Memcheck:Leak
+   fun:realloc
+   fun:_nc_doalloc
+   fun:_nc_read_termtype
+   fun:_nc_read_file_entry
+   fun:_nc_read_entry
+   obj:/lib/libncurses.so.5.7
+   fun:_nc_setupterm
+   fun:newterm
+   fun:initscr
+}
+{
+   Maverick8 curses
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.2.5
+   obj:/lib/libncurses.so.5.7
+   obj:/lib/libncurses.so.5.7
+   fun:mousemask
+}
+{
+   Maverick9 curses
+   Memcheck:Leak
+   fun:realloc
+   fun:_nc_doalloc
+   obj:/lib/libncurses.so.5.7
+   fun:tparm
+   fun:_nc_mvcur_init
+   fun:newterm
+   fun:initscr
+}
+{
+   Maverick10 curses
+   Memcheck:Leak
+   fun:realloc
+   fun:_nc_doalloc
+   fun:_nc_read_termtype
+   fun:_nc_read_file_entry
+   fun:_nc_read_entry
+   obj:/lib/libncurses.so.5.7
+   fun:_nc_setupterm
+   fun:newterm
+   fun:initscr
+}
+{
+   Maverick11 curses
+   Memcheck:Leak
+   fun:realloc
+   fun:_nc_doalloc
+   fun:_nc_tparm_analyze
+   fun:tparm
+   fun:vidputs
+   obj:/lib/libncurses.so.5.7
+   fun:doupdate
+   fun:wrefresh
+}
+{
+   Maverick12 curses
+   Memcheck:Leak
+   fun:calloc
+   fun:_nc_setupscreen
+   fun:newterm
+   fun:initscr
+}
+{
+   Maverick13 curses
+   Memcheck:Leak
+   fun:calloc
+   fun:start_color
+}
+{
+   Maverick14 curses
+   Memcheck:Leak
+   fun:malloc
+   fun:_nc_read_termtype
+   fun:_nc_read_file_entry
+   fun:_nc_read_entry
+   obj:/lib/libncurses.so.5.7
+   fun:_nc_setupterm
+   fun:newterm
+   fun:initscr
+}
+{
+   Maverick15 curses
+   Memcheck:Leak
+   fun:malloc
+   fun:Gpm_get_console
+   fun:Gpm_Open
+   obj:/lib/libncurses.so.5.7
+   obj:/lib/libncurses.so.5.7
+   fun:mousemask
+}
+{
+   Maverick16 curses
+   Memcheck:Leak
+   fun:calloc
+   fun:_nc_setupterm
+   fun:newterm
+   fun:initscr
+}
+{
+   Maverick17 curses
+   Memcheck:Leak
+   fun:calloc
+   fun:_nc_read_termtype
+   fun:_nc_read_file_entry
+   fun:_nc_read_entry
+   obj:/lib/libncurses.so.5.7
+   fun:_nc_setupterm
+   fun:newterm
+   fun:initscr
+}
+{
+   Maverick18 curses
+   Memcheck:Leak
+   fun:malloc
+   fun:_nc_scroll_optimize
+   fun:doupdate
+   fun:wrefresh
+}
+{
+   Maverick19 curses
+   Memcheck:Leak
+   fun:calloc
+   fun:_nc_hash_map
+   fun:_nc_scroll_optimize
+   fun:doupdate
+   fun:wrefresh
+}
+{
+   Maverick20 curses
+   Memcheck:Leak
+   fun:calloc
+   fun:_nc_hash_map
+   fun:_nc_scroll_optimize
+   fun:doupdate
+   fun:wrefresh
+}
+{
+   Maverick21 curses
+   Memcheck:Leak
+   fun:malloc
+   fun:_nc_set_buffer
+   fun:_nc_setupscreen
+   fun:newterm
+   fun:initscr
+}
+{
+   Maverick22 curses
+   Memcheck:Leak
+   fun:malloc
+   fun:_nc_hash_map
+   fun:_nc_scroll_optimize
+   fun:doupdate
+   fun:wrefresh
+}
+{
+   Maverick23 curses
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/libncurses.so.5.7
+   fun:_nc_find_type_entry
+   fun:tigetflag
+   fun:assume_default_colors
+}
+{
+   Maverick24 curses
+   Memcheck:Leak
+   fun:malloc
+   fun:_nc_printf_string
+   fun:vwprintw
+}
+{
+   Maverick25 xml2
+   Memcheck:Leak
+   fun:malloc
+   fun:xmlNewRMutex
+   obj:/usr/lib/libxml2.so.2.7.6
+   fun:xmlDictFree
+}
