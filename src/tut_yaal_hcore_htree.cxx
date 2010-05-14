@@ -117,10 +117,10 @@ void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n )
 void tut_yaal_hcore_htree::check_node( tree_t::const_node_t node, bool root )
 	{
 	if ( ! root )
-		ENSURE_EQUALS( "bad root", node->f_poTree, static_cast<tree_t*>( NULL ) );
+		ENSURE_EQUALS( "bad root", node->_tree, static_cast<tree_t*>( NULL ) );
 	for ( tree_t::const_iterator it = node->begin(); it != node->end(); ++ it )
 		{
-		ENSURE_EQUALS( "bad parent", it->f_poTrunk, node );
+		ENSURE_EQUALS( "bad parent", it->_trunk, node );
 		check_node( &*it, false );
 		}
 	}
@@ -130,8 +130,8 @@ void tut_yaal_hcore_htree::check_consistency( T const& tree )
 	{
 	if ( tree.get_root() )
 		{
-		ENSURE_EQUALS( "bad root", tree.get_root()->f_poTree, &tree );
-		ENSURE_EQUALS( "bad parent for root", tree.get_root()->f_poTrunk, static_cast<typename T::node_t>( NULL ) );
+		ENSURE_EQUALS( "bad root", tree.get_root()->_tree, &tree );
+		ENSURE_EQUALS( "bad parent for root", tree.get_root()->_trunk, static_cast<typename T::node_t>( NULL ) );
 		check_node( tree.get_root(), true );
 		}
 	}

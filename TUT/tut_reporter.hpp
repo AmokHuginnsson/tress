@@ -63,7 +63,7 @@ class reporter : public tut::callback
 	typedef std::list<tut::test_result> not_passed_list_t;
 	not_passed_list_t _notPassed;
 	std::ostream& _os;
-	yaal::hcore::HMutex f_oMutex;
+	yaal::hcore::HMutex _mutex;
 	tType& _ls;
 
 	public:
@@ -76,7 +76,7 @@ class reporter : public tut::callback
 	int _setupCount;
 
 	reporter()
-		: _currentGroup(), _notPassed(), _os( std::cout ), f_oMutex(), _ls( std::cerr ),
+		: _currentGroup(), _notPassed(), _os( std::cout ), _mutex(), _ls( std::cerr ),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
 		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 )
 		{
@@ -84,7 +84,7 @@ class reporter : public tut::callback
 		}
 
 	reporter( std::ostream& out )
-		: _currentGroup(), _notPassed(), _os( out ), f_oMutex(),
+		: _currentGroup(), _notPassed(), _os( out ), _mutex(),
 		_ls( &out == &std::cout ? std::cerr : std::cout ),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
 		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 )
@@ -92,7 +92,7 @@ class reporter : public tut::callback
 		}
 
 	reporter( std::ostream& out, tType& logger )
-		: _currentGroup(), _notPassed(), _os( out ), f_oMutex(), _ls( logger ),
+		: _currentGroup(), _notPassed(), _os( out ), _mutex(), _ls( logger ),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
 		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 )
 		{
@@ -105,21 +105,21 @@ class reporter : public tut::callback
 
 	void group_started( std::string const&name )
 		{
-		yaal::hcore::HLock l( f_oMutex );
+		yaal::hcore::HLock l( _mutex );
 
 		_ls << "TUT: group: [" << name << "]" << std::endl;
 		}
 
 	void test_started( const int&n )
 		{
-		yaal::hcore::HLock l( f_oMutex );
+		yaal::hcore::HLock l( _mutex );
 
 		_ls << "TUT: module::test<" << n << ">" << std::endl;
 		}
 
 	void test_completed( const tut::test_result& tr )
 		{
-		yaal::hcore::HLock l( f_oMutex );
+		yaal::hcore::HLock l( _mutex );
 
 		if ( tr._group != _currentGroup )
 			{

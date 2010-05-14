@@ -36,18 +36,18 @@ namespace child
 
 struct OSetup
 	{
-	bool f_bQuiet;			/* --quiet, --silent */
-	bool f_bVerbose;		/* --verbose */
-	char* f_pcProgramName;
-	yaal::hcore::HString f_oLogPath;
-	int f_iExitStatus;
-	yaal::hcore::HString f_oTerminate;
-	yaal::hcore::HString f_oScript;
+	bool _quiet;			/* --quiet, --silent */
+	bool _verbose;		/* --verbose */
+	char* _programName;
+	yaal::hcore::HString _logPath;
+	int _exitStatus;
+	yaal::hcore::HString _terminate;
+	yaal::hcore::HString _script;
 	/* self-sufficient */
 	OSetup( void )
-		: f_bQuiet( false ), f_bVerbose( false ),
-		f_pcProgramName( NULL ), f_oLogPath(), f_iExitStatus( 0 ),
-		f_oTerminate(), f_oScript() {}
+		: _quiet( false ), _verbose( false ),
+		_programName( NULL ), _logPath(), _exitStatus( 0 ),
+		_terminate(), _script() {}
 	void test_setup( void );
 private:
 	OSetup( OSetup const& );

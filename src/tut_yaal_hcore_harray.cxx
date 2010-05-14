@@ -55,7 +55,7 @@ TUT_UNIT_TEST_N( 1, "/* Constructor. */" )
 	int const BAD_SIZE = - 1;
 	try
 		{
-		array_t l_oArray( BAD_SIZE );
+		array_t array( BAD_SIZE );
 		FAIL( "array with negative size created" );
 		}
 	catch ( HException const& e )
@@ -68,12 +68,12 @@ TUT_UNIT_TEST_N( 2, "/* Constructor and get_size(). */" )
 	item_t::set_start_id( 0 );
 	int const SIZE_FOR_ONE = 0;
 	int const SIZE_FOR_TWO = 7;
-	array_t l_oOne( SIZE_FOR_ONE );
+	array_t one( SIZE_FOR_ONE );
 	ENSURE_EQUALS( "wrong number of items created", item_t::get_instance_count(), SIZE_FOR_ONE );
-	ENSURE_EQUALS( "inconsistient size with respect to constructor", l_oOne.get_size(), SIZE_FOR_ONE );
-	array_t l_oTwo( SIZE_FOR_TWO );
+	ENSURE_EQUALS( "inconsistient size with respect to constructor", one.get_size(), SIZE_FOR_ONE );
+	array_t two( SIZE_FOR_TWO );
 	ENSURE_EQUALS( "wrong number of items created", item_t::get_instance_count(), SIZE_FOR_ONE + SIZE_FOR_TWO );
-	ENSURE_EQUALS( "inconsistient size with respect to constructor", l_oTwo.get_size(), SIZE_FOR_TWO );
+	ENSURE_EQUALS( "inconsistient size with respect to constructor", two.get_size(), SIZE_FOR_TWO );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
@@ -83,37 +83,37 @@ TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
 	int const FILLER_FOR_ARRAY = 13;
 	try
 		{
-		array_t l_oBadArray( BAD_SIZE, FILLER_FOR_ARRAY );
+		array_t badArray( BAD_SIZE, FILLER_FOR_ARRAY );
 		FAIL( "array with negative size created" );
 		}
 	catch ( HException const& e )
 		{
 		cout << e.what() << endl;
 		}
-	array_t l_oArray( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
+	array_t array( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
 	for ( int i = 0; i < SIZE_FOR_ARRAY; ++ i )
-		ENSURE_EQUALS( "array element not filled with default value", l_oArray[ i ], FILLER_FOR_ARRAY );
+		ENSURE_EQUALS( "array element not filled with default value", array[ i ], FILLER_FOR_ARRAY );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "/* Copy constructor. */" )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
-	array_t l_oArray( SIZE );
+	array_t array( SIZE );
 	for ( int i = 0; i < SIZE; ++ i )
-		l_oArray [ i ] = i;
-	array_t l_oCopy( l_oArray );
-	ENSURE_EQUALS( "inconsistient size after copy constructor", l_oCopy.get_size(), SIZE );
+		array [ i ] = i;
+	array_t copy( array );
+	ENSURE_EQUALS( "inconsistient size after copy constructor", copy.get_size(), SIZE );
 	for ( int i = 0; i < SIZE; ++ i )
-		ENSURE_EQUALS( "wrong content after copy constructor", l_oCopy[ i ], i );
+		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* Operator [ ]. */" )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
-	array_t l_oArray ( SIZE );
+	array_t array ( SIZE );
 	try
 		{
-		l_oArray [ SIZE ] = 0;
+		array [ SIZE ] = 0;
 		FAIL( "access beyond size succed" );
 		}
 	catch ( HException const& e )
@@ -122,7 +122,7 @@ TUT_UNIT_TEST_N( 5, "/* Operator [ ]. */" )
 		}
 	try
 		{
-		l_oArray[ - SIZE - 1 ] = 0;
+		array[ - SIZE - 1 ] = 0;
 		FAIL( "access with negative index succed" );
 		}
 	catch ( HException const& e )
@@ -135,10 +135,10 @@ TUT_UNIT_TEST_N( 6, "/* Operator bool. */" )
 	item_t::set_start_id( 0 );
 	int const EMPTY = 0;
 	int const SIZE = 7;
-	array_t l_oEmpty( EMPTY );
-	ENSURE_EQUALS( "test for array emptiness faild", ! l_oEmpty, true );
-	array_t l_oNormal( SIZE );
-	ENSURE_EQUALS( "test for array fullness faild", ! l_oNormal, false );
+	array_t empty( EMPTY );
+	ENSURE_EQUALS( "test for array emptiness faild", ! empty, true );
+	array_t normal( SIZE );
+	ENSURE_EQUALS( "test for array fullness faild", ! normal, false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "push_back" )

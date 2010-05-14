@@ -48,9 +48,9 @@ class HCool
 	{
 protected:
 	/*{*/
-	bool		f_bWasStarted;
-	int			f_iLifeLength;
-	HString f_oName;
+	bool		_wasStarted;
+	int			_lifeLength;
+	HString _name;
 	/*}*/
 public:
 	/*{*/
@@ -61,11 +61,11 @@ public:
 	/*}*/
 	};
 
-HCool::HCool( char const* a_pcName )
-	: f_bWasStarted( false ), f_iLifeLength( 0 ), f_oName( a_pcName )
+HCool::HCool( char const* name_ )
+	: _wasStarted( false ), _lifeLength( 0 ), _name( name_ )
 	{
 	M_PROLOG
-	cout << "Object [" << f_oName << "] constructed." << endl;
+	cout << "Object [" << _name << "] constructed." << endl;
 	return;
 	M_EPILOG
 	}
@@ -73,19 +73,19 @@ HCool::HCool( char const* a_pcName )
 HCool::~HCool( void )
 	{
 	M_PROLOG
-	cout << "Object [" << f_oName << "] destructed." << endl;
+	cout << "Object [" << _name << "] destructed." << endl;
 	return;
 	M_EPILOG
 	}
 
-void* simple( HThread const* const a_poCaller )
+void* simple( HThread const* const caller_ )
 	{
 	M_PROLOG
 	cout << "Thread [simple] started." << endl;
-	int l_iCtr = 50;
-	while ( a_poCaller->is_alive() && l_iCtr -- )
+	int ctr = 50;
+	while ( caller_->is_alive() && ctr -- )
 		{
-		cout << l_iCtr << ' ' << flush;
+		cout << ctr << ' ' << flush;
 		M_DSLEEP( 1 );
 		}
 	cout << "Thread [simple] finished." << endl;
@@ -111,16 +111,16 @@ void busy_wait( void )
 		}
 	}
 
-void* HCool::run( HThread const* a_poCaller )
+void* HCool::run( HThread const* caller_ )
 	{
 	M_PROLOG
-	int l_iCtr = f_iLifeLength;
-	f_bWasStarted = true;
-	cout << "Thread [" << f_oName << "] started ... ";
-	while ( a_poCaller->is_alive() && l_iCtr -- )
+	int ctr = _lifeLength;
+	_wasStarted = true;
+	cout << "Thread [" << _name << "] started ... ";
+	while ( caller_->is_alive() && ctr -- )
 		{
-		cout << l_iCtr << ' ' << flush;
-		if ( f_oName == "busy" )
+		cout << ctr << ' ' << flush;
+		if ( _name == "busy" )
 			busy_wait();
 		else
 			M_DSLEEP( 1 );
@@ -130,10 +130,10 @@ void* HCool::run( HThread const* a_poCaller )
 	M_EPILOG
 	}
 
-void HCool::set( int a_iLength )
+void HCool::set( int length_ )
 	{
 	M_PROLOG
-	f_iLifeLength = a_iLength;
+	_lifeLength = length_;
 	return;
 	M_EPILOG
 	}
@@ -141,9 +141,9 @@ void HCool::set( int a_iLength )
 class CVTest
 	{
 	HThread _thread;
-	HMutex f_oMutex;
-	HCondition f_oCV;
-	bool f_bLoop;
+	HMutex _mutex;
+	HCondition _cV;
+	bool _loop;
 public:
 	CVTest( void );
 	~CVTest( void );
@@ -151,7 +151,7 @@ public:
 	void eat( void );
 	};
 
-CVTest::CVTest( void ) : _thread(), f_oMutex(), f_oCV( f_oMutex ), f_bLoop( false )
+CVTest::CVTest( void ) : _thread(), _mutex(), _cV( _mutex ), _loop( false )
 	{
 	}
 
@@ -162,13 +162,13 @@ CVTest::~CVTest( void )
 
 void* CVTest::run( void )
 	{
-	f_bLoop = true;
+	_loop = true;
 	int ctr = 0;
-	while ( f_bLoop )
+	while ( _loop )
 		{
-		f_oCV.signal();
+		_cV.signal();
 		cout << "+" << flush;
-		f_oCV.signal();
+		_cV.signal();
 		cout << "+" << flush;
 		ctr += 2;
 		}
@@ -178,14 +178,14 @@ void* CVTest::run( void )
 void CVTest::eat( void )
 	{
 	int cnt = 80;
-	HLock l( f_oMutex );
+	HLock l( _mutex );
 	_thread.spawn( bound_call( &CVTest::run, this ) );
 	while ( cnt -- )
 		{
-		f_oCV.wait( 1, 0 );
+		_cV.wait( 1, 0 );
 		cout << "\b" << flush;
 		}
-	f_bLoop = false;
+	_loop = false;
 	}
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hthread );

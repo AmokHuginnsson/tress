@@ -99,21 +99,21 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list )
 	bool index_valid = false;
 	for ( typename T::const_iterator it = list.begin(); it != list.end(); ++ it, ++ ctr )
 		{
-		if ( it.f_poCurrent == list.f_poHook )
+		if ( it._current == list._hook )
 			hook_valid = true;
-		if ( list.f_poIndex == it.f_poCurrent )
+		if ( list._index == it._current )
 			{
-			ENSURE_EQUALS( "bad forward index", list.f_iIndex, ctr );
+			ENSURE_EQUALS( "bad forward index", list._index, ctr );
 			index_valid = true;
 			}
-		ENSURE_EQUALS( "links broken", it.f_poCurrent->f_poNext->f_poPrevious, it.f_poCurrent );
-		ENSURE_EQUALS( "links broken", it.f_poCurrent->f_poPrevious->f_poNext, it.f_poCurrent );
+		ENSURE_EQUALS( "links broken", it._current->_next->_previous, it._current );
+		ENSURE_EQUALS( "links broken", it._current->_previous->_next, it._current );
 		}
-	if ( ! list.f_poIndex )
+	if ( ! list._index )
 		index_valid = true;
-	if ( ! ctr && ( list.f_poHook == NULL ) )
+	if ( ! ctr && ( list._hook == NULL ) )
 		hook_valid = true;
-	ENSURE_EQUALS( "forward cycle", ctr, list.f_iSize );
+	ENSURE_EQUALS( "forward cycle", ctr, list._size );
 	ENSURE( "no hook", hook_valid );
 	ENSURE( "invalid index", index_valid );
 	
@@ -122,21 +122,21 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list )
 	index_valid = false;
 	for ( typename T::const_iterator it = list.rbegin(); it != list.rend(); -- it, ++ ctr )
 		{
-		if ( it.f_poCurrent == list.f_poHook )
+		if ( it._current == list._hook )
 			hook_valid = true;
-		if ( list.f_poIndex == it.f_poCurrent )
+		if ( list._index == it._current )
 			{
-			ENSURE_EQUALS( "bad backward index", list.f_iIndex, ( list.f_iSize - ctr ) - 1 );
+			ENSURE_EQUALS( "bad backward index", list._index, ( list._size - ctr ) - 1 );
 			index_valid = true;
 			}
-		ENSURE_EQUALS( "links broken", it.f_poCurrent->f_poNext->f_poPrevious, it.f_poCurrent );
-		ENSURE_EQUALS( "links broken", it.f_poCurrent->f_poPrevious->f_poNext, it.f_poCurrent );
+		ENSURE_EQUALS( "links broken", it._current->_next->_previous, it._current );
+		ENSURE_EQUALS( "links broken", it._current->_previous->_next, it._current );
 		}
-	if ( ! list.f_poIndex )
+	if ( ! list._index )
 		index_valid = true;
-	if ( ! ctr && ( list.f_poHook == NULL ) )
+	if ( ! ctr && ( list._hook == NULL ) )
 		hook_valid = true;
-	ENSURE_EQUALS( "backward cycle", ctr, list.f_iSize );
+	ENSURE_EQUALS( "backward cycle", ctr, list._size );
 	ENSURE( "no hook", hook_valid );
 	ENSURE( "invalid index", index_valid );
 	return;
@@ -161,7 +161,7 @@ TUT_UNIT_TEST_N( 2, "/* Parametrized constructor. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* copy constructor */" )
-	int l_iCtr = 0;
+	int ctr = 0;
 	list_t l;
 	check_consistency( l );
 	l.add_tail() = 1;
@@ -180,14 +180,14 @@ TUT_UNIT_TEST_N( 3, "/* copy constructor */" )
 			it != o.end(); ++ it )
 		{
 		check_consistency( o );
-		l_iCtr ++;
-		ENSURE_EQUALS( "assign operation failed, wrong value", *it, l_iCtr );
+		ctr ++;
+		ENSURE_EQUALS( "assign operation failed, wrong value", *it, ctr );
 		}
-	ENSURE_EQUALS( "assign operation failed, wrong size", l_iCtr, 5 );
+	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "/* assignation operator (full to empty) */" )
-	int l_iCtr = 0;
+	int ctr = 0;
 	list_t l;
 	check_consistency( l );
 	list_t o;
@@ -210,10 +210,10 @@ TUT_UNIT_TEST_N( 4, "/* assignation operator (full to empty) */" )
 			it != ro.end(); ++ it )
 		{
 		check_consistency( ro );
-		l_iCtr ++;
-		ENSURE_EQUALS( "assign operation failed, wrong value", *it, l_iCtr );
+		ctr ++;
+		ENSURE_EQUALS( "assign operation failed, wrong value", *it, ctr );
 		}
-	ENSURE_EQUALS( "assign operation failed, wrong size", l_iCtr, 5 );
+	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* assignation operator (empty to full) */" )
@@ -238,7 +238,7 @@ TUT_UNIT_TEST_N( 5, "/* assignation operator (empty to full) */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* assignation operator (full to small) */" )
-	int l_iCtr = 0;
+	int ctr = 0;
 	list_t l;
 	check_consistency( l );
 	list_t o;
@@ -266,14 +266,14 @@ TUT_UNIT_TEST_N( 6, "/* assignation operator (full to small) */" )
 			it != o.end(); ++ it )
 		{
 		check_consistency( o );
-		l_iCtr ++;
-		ENSURE_EQUALS( "assign operation failed, wrong value", *it, l_iCtr );
+		ctr ++;
+		ENSURE_EQUALS( "assign operation failed, wrong value", *it, ctr );
 		}
-	ENSURE_EQUALS( "assign operation failed, wrong size", l_iCtr, 5 );
+	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "/* assignation operator (full to big) */" )
-	int l_iCtr = 0;
+	int ctr = 0;
 	list_t l;
 	check_consistency( l );
 	list_t o;
@@ -309,10 +309,10 @@ TUT_UNIT_TEST_N( 7, "/* assignation operator (full to big) */" )
 			it != o.end(); ++ it )
 		{
 		check_consistency( o );
-		l_iCtr ++;
-		ENSURE_EQUALS( "assign operation failed, wrong value", *it, l_iCtr );
+		ctr ++;
+		ENSURE_EQUALS( "assign operation failed, wrong value", *it, ctr );
 		}
-	ENSURE_EQUALS( "assign operation failed, wrong size", l_iCtr, 5 );
+	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* .hook(), cyclic_iterator */" )
@@ -351,7 +351,7 @@ TUT_UNIT_TEST_N( 8, "/* .hook(), cyclic_iterator */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "/* forward iterator */" )
-	int l_iCtr = 0;
+	int ctr = 0;
 	list_t l;
 	check_consistency( l );
 	l.add_tail() = 1;
@@ -369,11 +369,11 @@ TUT_UNIT_TEST_N( 9, "/* forward iterator */" )
 			it != l.end(); ++ it )
 		{
 		check_consistency( l );
-		l_iCtr ++;
+		ctr ++;
 		ENSURE( "iterator is invalid", it.is_valid() );
-		ENSURE_EQUALS( "for syntax: forward iterator made wrong move", ( *it ), l_iCtr );
+		ENSURE_EQUALS( "for syntax: forward iterator made wrong move", ( *it ), ctr );
 		}
-	ENSURE_EQUALS( "for syntax: not the whole list was iterated", l_iCtr, 5 );
+	ENSURE_EQUALS( "for syntax: not the whole list was iterated", ctr, 5 );
 	ENSURE( "iterator is valid", ! it.is_valid() );
 	check_consistency( l );
 	ENSURE_EQUALS( "begin is not head", *l.begin(), l.head() );
@@ -381,7 +381,7 @@ TUT_UNIT_TEST_N( 9, "/* forward iterator */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "/* backward iterator */" )
-	int l_iCtr = 5;
+	int ctr = 5;
 	list_t l;
 	check_consistency( l );
 	l.add_tail() = 1;
@@ -399,11 +399,11 @@ TUT_UNIT_TEST_N( 10, "/* backward iterator */" )
 			it != l.rend(); -- it )
 		{
 		check_consistency( l );
-		ENSURE_EQUALS( "for syntax: backward iterator made wrong move", ( *it ), l_iCtr );
+		ENSURE_EQUALS( "for syntax: backward iterator made wrong move", ( *it ), ctr );
 		ENSURE( "iterator is invalid", it.is_valid() );
-		l_iCtr --;
+		ctr --;
 		}
-	ENSURE_EQUALS( "for syntax: not the whole list was iterated", l_iCtr, 0 );
+	ENSURE_EQUALS( "for syntax: not the whole list was iterated", ctr, 0 );
 	ENSURE( "iterator is valid", ! it.is_valid() );
 	check_consistency( l );
 	ENSURE_EQUALS( "begin is not head", *l.rbegin(), l.tail() );

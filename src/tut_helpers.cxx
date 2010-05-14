@@ -42,12 +42,12 @@ using namespace tress::tut_helpers;
 namespace std
 {
 
-std::ostream& operator << ( std::ostream& out, HComplex const& a_oComplex )
+std::ostream& operator << ( std::ostream& out, HComplex const& complex_ )
 	{
 	M_PROLOG
 	double re, im;
-	re = a_oComplex.re ( );
-	im = a_oComplex.im ( );
+	re = complex_.re ( );
+	im = complex_.im ( );
 	if ( im >= 0 )
 		out << re << "+i" << im;
 	else
@@ -73,9 +73,9 @@ namespace tut_helpers
 namespace
 {
 
-bool n_bWatchNext = false;
-int n_iNumber = 0;
-std::string n_oGroup;
+bool _watchNext_ = false;
+int _number_ = 0;
+std::string _group_;
 
 }
 
@@ -83,29 +83,29 @@ HLogger::HLogger( void )
 	{
 	}
 
-HLogger& HLogger::operator << ( std::string const& a_oString )
+HLogger& HLogger::operator << ( std::string const& string_ )
 	{
 	M_PROLOG
-	if ( n_bWatchNext )
+	if ( _watchNext_ )
 		{
-		n_oGroup = a_oString;
-		n_bWatchNext = false;
+		_group_ = string_;
+		_watchNext_ = false;
 		}
 	else
 		{
-		if ( ! strncmp( a_oString.c_str(), "TUT: group", 10 ) )
-			n_bWatchNext = true;
+		if ( ! strncmp( string_.c_str(), "TUT: group", 10 ) )
+			_watchNext_ = true;
 		}
-	hcore::log << a_oString.c_str ( );
+	hcore::log << string_.c_str ( );
 	return ( * this );
 	M_EPILOG
 	}
 
-HLogger& HLogger::operator << ( int const& a_iNumber )
+HLogger& HLogger::operator << ( int const& number_ )
 	{
 	M_PROLOG
-	n_iNumber = a_iNumber;
-	hcore::log << a_iNumber;
+	_number_ = number_;
+	hcore::log << number_;
 	return ( * this );
 	M_EPILOG
 	}
@@ -126,16 +126,16 @@ HStreamInterface& operator << ( HStreamInterface& out, std::string const& s )
 
 void show_title( char const* const title )
 	{
-	if ( setup.f_bVerbose )
+	if ( setup._verbose )
 		{
 		cout << "------------------------------------------------------------------------" << endl;
-		cout << "TUT: " << n_oGroup << "::<" << n_iNumber << "> " << title << endl;
+		cout << "TUT: " << _group_ << "::<" << _number_ << "> " << title << endl;
 		}
 	}
 
 void show_end( void )
 	{
-	if ( setup.f_bVerbose )
+	if ( setup._verbose )
 		cout << "------------------------------------------------------------------------" << endl;
 	}
 

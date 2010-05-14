@@ -54,16 +54,16 @@ std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second
 
 template<typename tType>
 std::ostream& operator << ( std::ostream& out,
-		yaal::hcore::HVector<tType> const& a_oVector )
+		yaal::hcore::HVector<tType> const& vector_ )
 	{
 	M_PROLOG
-	int long l_iCtr = 0, l_iSize = a_oVector.dim();
+	int long ctr = 0, size = vector_.dim();
 	out << std::fixed << "< " << std::setw ( 10 ) << std::setprecision ( 4 );
-	out << a_oVector [ 0 ];
-	for ( l_iCtr = 1; l_iCtr < l_iSize; l_iCtr ++ )
+	out << vector_ [ 0 ];
+	for ( ctr = 1; ctr < size; ctr ++ )
 		{
 		out << ", " << std::setw ( 10 ) << std::setprecision ( 4 );
-		out << a_oVector [ l_iCtr ];
+		out << vector_ [ ctr ];
 		}
 	out << " >";
 	return ( out );
@@ -72,31 +72,31 @@ std::ostream& operator << ( std::ostream& out,
 
 template<typename tType>
 std::ostream& operator << ( std::ostream& out,
-		yaal::hcore::HMatrix<tType> const& a_oMatrix )
+		yaal::hcore::HMatrix<tType> const& matrix_ )
 	{
 	M_PROLOG
-	int l_iCtr = 0, l_iCtrLoc = 0;
-	int l_iRows = a_oMatrix.row ( ), l_iCols = a_oMatrix.col ( );
+	int ctr = 0, ctrLoc = 0;
+	int rows = matrix_.row ( ), cols = matrix_.col ( );
 #ifdef __DEBUG__
-/*	out << "rows = " << l_iRows << ", cols = " << l_iCols << endl; */
+/*	out << "rows = " << rows << ", cols = " << cols << endl; */
 #endif /* __DEBUG__ */
 	out << "+--    ";
-	for ( l_iCtr = 1; l_iCtr < l_iCols; l_iCtr ++ )
+	for ( ctr = 1; ctr < cols; ctr ++ )
 		out <<  "            ";
 	out << "    --+" << std::endl;
-	for ( l_iCtr = 0; l_iCtr < l_iRows; l_iCtr ++ )
+	for ( ctr = 0; ctr < rows; ctr ++ )
 		{
 		out << std::fixed << "| " << std::setw ( 10 ) << std::setprecision ( 4 );
-		out << a_oMatrix[ l_iCtr ] [ 0 ];
-		for ( l_iCtrLoc = 1; l_iCtrLoc < l_iCols; l_iCtrLoc ++ )
+		out << matrix_[ ctr ] [ 0 ];
+		for ( ctrLoc = 1; ctrLoc < cols; ctrLoc ++ )
 			{
 			out << ", " << std::setw ( 10 ) << std::setprecision ( 4 );
-			out << a_oMatrix [ l_iCtr ] [ l_iCtrLoc ];
+			out << matrix_ [ ctr ] [ ctrLoc ];
 			}
 		out << " |" << std::endl;
 		}
 	out << "+--    ";
-	for ( l_iCtr = 1; l_iCtr < l_iCols; l_iCtr ++ )
+	for ( ctr = 1; ctr < cols; ctr ++ )
 		out << "            ";
 	out << "    --+" << std::endl;
 	return ( out );

@@ -94,7 +94,7 @@ public:
 		_file = file;
 		_line = line;
 		tut_listener* tl = runner.get().get_listener();
-		if ( tress::setup.f_bRestartable && tl )
+		if ( tress::setup._restartable && tl )
 			tl->register_execution( _group, _testNo, _currentTestName, _file, _line );
 		}
 

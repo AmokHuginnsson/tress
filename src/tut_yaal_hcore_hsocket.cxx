@@ -63,7 +63,7 @@ struct HServer
 	HString _buffer;
 	HProcess _dispatcher;
 	HSocket _socket;
-	HThread f_oThread;
+	HThread _thread;
 	HEvent _event;
 	HServer( HSocket::socket_type_t, int );
 public:
@@ -84,7 +84,7 @@ private:
 HServer::HServer( HSocket::socket_type_t type_, int maxConn_ )
 	: _buffer(),
 	_dispatcher( NO_FD, LATENCY ), _socket( type_, maxConn_ ),
-	f_oThread(), _event()
+	_thread(), _event()
 	{}
 
 void HServer::listen( yaal::hcore::HString const& path_, int const port_ )
@@ -101,7 +101,7 @@ void HServer::start( void )
 	M_PROLOG
 	cout << "starting server thread ..." << endl;
 	_dispatcher.register_file_descriptor_handler( _socket.get_file_descriptor(), bound_call( &HServer::handler_connection, this, _1 ) );
-	f_oThread.spawn( bound_call( &HServer::run, this ) );
+	_thread.spawn( bound_call( &HServer::run, this ) );
 	return;
 	M_EPILOG
 	}
@@ -110,7 +110,7 @@ void HServer::stop( void )
 	{
 	M_PROLOG
 	_dispatcher.stop();
-	f_oThread.finish();
+	_thread.finish();
 	cout << "server thread stopped ..." << endl;
 	return;
 	M_EPILOG
@@ -127,44 +127,44 @@ void HServer::wait( void )
 void HServer::handler_connection( int )
 	{
 	M_PROLOG
-	HSocket::ptr_t l_oClient = _socket.accept();
-	M_ASSERT( !! l_oClient );
-	int fd = l_oClient->get_file_descriptor();
+	HSocket::ptr_t client = _socket.accept();
+	M_ASSERT( !! client );
+	int fd = client->get_file_descriptor();
 	_dispatcher.register_file_descriptor_handler( fd, bound_call( &HServer::handler_message, this, _1 ) );
 	cout << green << "new connection" << lightgray << endl;
 	return;
 	M_EPILOG
 	}
 
-void HServer::handler_message( int a_iFileDescriptor )
+void HServer::handler_message( int fileDescriptor_ )
 	{
 	M_PROLOG
-	HString l_oMessage;
-	HSocket::ptr_t l_oClient = _socket.get_client( a_iFileDescriptor );
-	if ( !! l_oClient )
+	HString message;
+	HSocket::ptr_t client = _socket.get_client( fileDescriptor_ );
+	if ( !! client )
 		{
 		int long nRead( 0 );
-		if ( ( nRead = l_oClient->read_until( l_oMessage ) ) > 0 )
+		if ( ( nRead = client->read_until( message ) ) > 0 )
 			{
-			_buffer += l_oMessage;
-			cout << "<-" << l_oMessage << endl;
+			_buffer += message;
+			cout << "<-" << message << endl;
 			_event.signal();
 			}
 		else if ( ! nRead )
-			disconnect_client( l_oClient );
+			disconnect_client( client );
 		/* else nRead < 0 => REPEAT */
 		}
 	return;
 	M_EPILOG
 	}
 
-void HServer::disconnect_client( yaal::hcore::HSocket::ptr_t& a_oClient )
+void HServer::disconnect_client( yaal::hcore::HSocket::ptr_t& client_ )
 	{
 	M_PROLOG
-	M_ASSERT( !! a_oClient );
-	int l_iFileDescriptor = a_oClient->get_file_descriptor();
-	_dispatcher.unregister_file_descriptor_handler( l_iFileDescriptor );
-	_socket.shutdown_client( l_iFileDescriptor );
+	M_ASSERT( !! client_ );
+	int fileDescriptor = client_->get_file_descriptor();
+	_dispatcher.unregister_file_descriptor_handler( fileDescriptor );
+	_socket.shutdown_client( fileDescriptor );
 	cout << "client closed connection" << endl;
 	return;
 	M_EPILOG
@@ -194,14 +194,14 @@ void* HServer::run( void )
 	}
 
 TUT_UNIT_TEST_N( 1, "/* Simple construction and destruction. */" )
-	HSocket l_oSocket;
-	ENSURE_EQUALS ( "uninitialized socket has port", l_oSocket.get_port(), 0 );
+	HSocket socket;
+	ENSURE_EQUALS ( "uninitialized socket has port", socket.get_port(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Constructions with wrong parameters. */" )
 	try
 		{
-		HSocket l_oSocket( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::NETWORK );
+		HSocket socket( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::NETWORK );
 		FAIL( "creation of bad socket possible (TYPE::FILE|TYPE::NETWORK)" );
 		}
 	catch ( HException& e )
@@ -210,7 +210,7 @@ TUT_UNIT_TEST_N( 2, "/* Constructions with wrong parameters. */" )
 		}
 	try
 		{
-		HSocket l_oSocket( HSocket::socket_type_t( HSocket::TYPE::BLOCKING ) | HSocket::TYPE::NONBLOCKING );
+		HSocket socket( HSocket::socket_type_t( HSocket::TYPE::BLOCKING ) | HSocket::TYPE::NONBLOCKING );
 		FAIL( "creation of bad socket possible (TYPE::BLOCKING|TYPE::NONBLOCKING)" );
 		}
 	catch ( HException& e )
@@ -220,10 +220,10 @@ TUT_UNIT_TEST_N( 2, "/* Constructions with wrong parameters. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* Getting port on file socket. */" )
-	HSocket l_oSocket( HSocket::TYPE::FILE );
+	HSocket socket( HSocket::TYPE::FILE );
 	try
 		{
-		l_oSocket.get_port();
+		socket.get_port();
 		FAIL ( "getting port number on file socket possible" );
 		}
 	catch ( HException& e )
@@ -233,10 +233,10 @@ TUT_UNIT_TEST_N( 3, "/* Getting port on file socket. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "/* Listening on reserved port. */" )
-	HSocket l_oSocket ( HSocket::TYPE::NETWORK, 1 );
+	HSocket socket ( HSocket::TYPE::NETWORK, 1 );
 	try
 		{
-		l_oSocket.listen ( "0.0.0.0", 22 );
+		socket.listen ( "0.0.0.0", 22 );
 		FAIL ( "listening on reserved port possible" );
 		}
 	catch ( HException & e )
@@ -246,10 +246,10 @@ TUT_UNIT_TEST_N( 4, "/* Listening on reserved port. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* Listening on existing file. */" )
-	HSocket l_oSocket ( HSocket::TYPE::FILE, 1 );
+	HSocket socket ( HSocket::TYPE::FILE, 1 );
 	try
 		{
-		l_oSocket.listen ( "/etc/shadow" );
+		socket.listen ( "/etc/shadow" );
 		FAIL ( "listening on existing file possible" );
 		}
 	catch ( HException & e )
@@ -259,10 +259,10 @@ TUT_UNIT_TEST_N( 5, "/* Listening on existing file. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* Listening on protected file. */" )
-	HSocket l_oSocket ( HSocket::TYPE::FILE, 1 );
+	HSocket socket ( HSocket::TYPE::FILE, 1 );
 	try
 		{
-		l_oSocket.listen ( "/etc/TUT_socket" );
+		socket.listen ( "/etc/TUT_socket" );
 		FAIL ( "listening on protected file possible" );
 		}
 	catch ( HException & e )
@@ -272,11 +272,11 @@ TUT_UNIT_TEST_N( 6, "/* Listening on protected file. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "/* Listening on already listening socket. */" )
-	HSocket l_oSocket ( HSocket::TYPE::FILE, 1 );
-	l_oSocket.listen ( "/tmp/TUT_socket" );
+	HSocket socket ( HSocket::TYPE::FILE, 1 );
+	socket.listen ( "/tmp/TUT_socket" );
 	try
 		{
-		l_oSocket.listen ( "/tmp/TUT_socket" );
+		socket.listen ( "/tmp/TUT_socket" );
 		FAIL ( "listening on already listening socket possible" );
 		}
 	catch ( HException& e )
@@ -286,10 +286,10 @@ TUT_UNIT_TEST_N( 7, "/* Listening on already listening socket. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* Listening with bad maximum number of clients. */" )
-	HSocket l_oSocket ( HSocket::TYPE::FILE );
+	HSocket socket ( HSocket::TYPE::FILE );
 	try
 		{
-		l_oSocket.listen ( "/tmp/TUT_socket" );
+		socket.listen ( "/tmp/TUT_socket" );
 		FAIL ( "listening with bad maximum number of clients possible" );
 		}
 	catch ( HException & e )
@@ -299,10 +299,10 @@ TUT_UNIT_TEST_N( 8, "/* Listening with bad maximum number of clients. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "/* Accept on socket that is not listening. */" )
-	HSocket l_oSocket;
+	HSocket socket;
 	try
 		{
-		l_oSocket.accept();
+		socket.accept();
 		FAIL ( "accept on socket that is not listening possible" );
 		}
 	catch ( HException & e )
@@ -316,11 +316,11 @@ TUT_UNIT_TEST_N( 19, "/* Transfering data through file. */" )
 	const int size = sizeof ( test_data );
 	TUT_DECLARE( HServer serv( HSocket::TYPE::FILE, 1 ); );
 	TUT_INVOKE( cout << sizeof ( serv ) << endl; );
-	TUT_DECLARE( HSocket l_oClient( HSocket::TYPE::FILE ); );
+	TUT_DECLARE( HSocket client( HSocket::TYPE::FILE ); );
 	TUT_INVOKE( serv.listen( "/tmp/TUT_socket" ); );
 	TUT_INVOKE( serv.start(); );
-	TUT_INVOKE( l_oClient.connect( "/tmp/TUT_socket" ); );
-	TUT_INVOKE( l_oClient.write( test_data, size ); );
+	TUT_INVOKE( client.connect( "/tmp/TUT_socket" ); );
+	TUT_INVOKE( client.write( test_data, size ); );
 	TUT_INVOKE( serv.wait(); );
 	TUT_INVOKE( serv.stop(); );
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
@@ -331,11 +331,11 @@ TUT_UNIT_TEST_N( 20, "Transfering data through file with SSL." )
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
 	TUT_DECLARE( HServer serv( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::SSL_SERVER, 1 ); );
-	TUT_DECLARE( HSocket l_oClient( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::SSL_CLIENT ); );
+	TUT_DECLARE( HSocket client( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::SSL_CLIENT ); );
 	TUT_INVOKE( serv.listen( "/tmp/TUT_socket" ); );
 	TUT_INVOKE( serv.start(); );
-	TUT_INVOKE( l_oClient.connect( "/tmp/TUT_socket" ); );
-	TUT_INVOKE( l_oClient.write( test_data, size ); );
+	TUT_INVOKE( client.connect( "/tmp/TUT_socket" ); );
+	TUT_INVOKE( client.write( test_data, size ); );
 	TUT_INVOKE( serv.wait(); );
 	TUT_INVOKE( serv.stop(); );
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
@@ -346,11 +346,11 @@ TUT_UNIT_TEST_N( 21, "/* Transfering data through network. */" )
 	char test_data[] = "A kot ma wpierdol.";
 	const int size = sizeof ( test_data );
 	TUT_DECLARE( HServer serv( HSocket::TYPE::NETWORK, 1 ); );
-	TUT_DECLARE( HSocket l_oClient( HSocket::TYPE::NETWORK ); );
+	TUT_DECLARE( HSocket client( HSocket::TYPE::NETWORK ); );
 	TUT_INVOKE( serv.listen( "127.0.0.1", 5555 ); );
 	TUT_INVOKE( serv.start(); );
-	TUT_INVOKE( l_oClient.connect( "127.0.0.1", 5555 ); );
-	TUT_INVOKE( l_oClient.write( test_data, size ); );
+	TUT_INVOKE( client.connect( "127.0.0.1", 5555 ); );
+	TUT_INVOKE( client.write( test_data, size ); );
 	TUT_INVOKE( serv.wait(); );
 	TUT_INVOKE( serv.stop(); );
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
@@ -361,11 +361,11 @@ TUT_UNIT_TEST_N( 22, "Transfering data through network with SSL." )
 	char test_data[] = "A kot ma wpierdol.";
 	const int size = sizeof ( test_data );
 	TUT_DECLARE( HServer serv( HSocket::socket_type_t( HSocket::TYPE::NETWORK ) | HSocket::TYPE::SSL_SERVER, 1 ); );
-	TUT_DECLARE( HSocket l_oClient( HSocket::socket_type_t( HSocket::TYPE::NETWORK ) | HSocket::TYPE::SSL_CLIENT ); );
+	TUT_DECLARE( HSocket client( HSocket::socket_type_t( HSocket::TYPE::NETWORK ) | HSocket::TYPE::SSL_CLIENT ); );
 	TUT_INVOKE( serv.listen( "0.0.0.0", 5555 ); );
 	TUT_INVOKE( serv.start(); );
-	TUT_INVOKE( l_oClient.connect( "127.0.0.1", 5555 ); );
-	TUT_INVOKE( l_oClient.write( test_data, size ); );
+	TUT_INVOKE( client.connect( "127.0.0.1", 5555 ); );
+	TUT_INVOKE( client.write( test_data, size ); );
 	TUT_INVOKE( serv.wait(); );
 	TUT_INVOKE( serv.stop(); );
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );

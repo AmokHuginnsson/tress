@@ -46,44 +46,44 @@ namespace tut
 
 struct tut_yaal_tools_hxml
 	{
-	static HString f_oVarTmpBuffer;
-	HXml f_oXml;
-	tut_yaal_tools_hxml( void ) : f_oXml()
+	static HString _varTmpBuffer;
+	HXml _xml;
+	tut_yaal_tools_hxml( void ) : _xml()
 		{}
 	virtual ~tut_yaal_tools_hxml( void )
 		{}
-	static std::ostream& dump( std::ostream& out, HXml::HConstNodeProxy const& a_rsNode )
+	static std::ostream& dump( std::ostream& out, HXml::HConstNodeProxy const& node_ )
 		{
-		f_oVarTmpBuffer.hs_realloc( a_rsNode.get_level() * 2 + 3 );
-		f_oVarTmpBuffer.fillz( ' ', 0, a_rsNode.get_level() * 2 + 1 );
-		if ( a_rsNode.get_type() == HXml::HNode::TYPE::NODE )
+		_varTmpBuffer.hs_realloc( node_.get_level() * 2 + 3 );
+		_varTmpBuffer.fillz( ' ', 0, node_.get_level() * 2 + 1 );
+		if ( node_.get_type() == HXml::HNode::TYPE::NODE )
 			{
-			if ( ! a_rsNode.get_name().is_empty() )
-				out << f_oVarTmpBuffer << "[" << a_rsNode.get_name() << "]<" << a_rsNode.get_level() << ">:" << std::endl;
-			for ( HXml::HNode::properties_t::const_iterator it = a_rsNode.properties().begin(); it != a_rsNode.properties().end(); ++ it )
+			if ( ! node_.get_name().is_empty() )
+				out << _varTmpBuffer << "[" << node_.get_name() << "]<" << node_.get_level() << ">:" << std::endl;
+			for ( HXml::HNode::properties_t::const_iterator it = node_.properties().begin(); it != node_.properties().end(); ++ it )
 				{
-				out << f_oVarTmpBuffer << "(" << it->first << ")->(";
+				out << _varTmpBuffer << "(" << it->first << ")->(";
 				out << it->second << ")" << std::endl;
 				}
-			if ( a_rsNode.has_childs() )
+			if ( node_.has_childs() )
 				{
-				f_oVarTmpBuffer.fillz( ' ', 0, a_rsNode.get_level() * 2 + 2 );
-				out << f_oVarTmpBuffer << "{" << std::endl;
-				for ( HXml::const_iterator it = a_rsNode.begin(); it != a_rsNode.end(); ++ it )
+				_varTmpBuffer.fillz( ' ', 0, node_.get_level() * 2 + 2 );
+				out << _varTmpBuffer << "{" << std::endl;
+				for ( HXml::const_iterator it = node_.begin(); it != node_.end(); ++ it )
 					{
 					dump( out, *it );
-					f_oVarTmpBuffer.set_at( a_rsNode.get_level() * 2 + 2, 0 );
+					_varTmpBuffer.set_at( node_.get_level() * 2 + 2, 0 );
 					}
-				out << f_oVarTmpBuffer << "}" << std::endl;
+				out << _varTmpBuffer << "}" << std::endl;
 				}
 			}
-		else if ( ! a_rsNode.get_value().is_empty() )
-			out << f_oVarTmpBuffer << a_rsNode.get_value() << std::endl;
+		else if ( ! node_.get_value().is_empty() )
+			out << _varTmpBuffer << node_.get_value() << std::endl;
 		return ( out );
 		}
 	};
 
-HString tut_yaal_tools_hxml::f_oVarTmpBuffer;
+HString tut_yaal_tools_hxml::_varTmpBuffer;
 
 typedef test_group<tut_yaal_tools_hxml> tut_group;
 typedef tut_group::object module;
@@ -259,20 +259,20 @@ TUT_UNIT_TEST_N( 8, "/* init, apply_style, parse, save, clear, handmade, save */
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "/* apply stylesheet */" )
-	f_oXml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ) );
-	f_oXml.apply_style( "data/style.xml" );
-	f_oXml.parse();
-	dump( std::cout, f_oXml.get_root() );
+	_xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ) );
+	_xml.apply_style( "data/style.xml" );
+	_xml.parse();
+	dump( std::cout, _xml.get_root() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "/* init, parse, apply, save */" )
 	HString string;
 	HFile file;
-	char const* doc = ( setup.f_iArgc > 1 ) ? setup.f_ppcArgv[ 1 ] : "./data/xml.xml";
-	char const* style = ( setup.f_iArgc > 2 ) ? setup.f_ppcArgv[ 2 ] : "./data/style.xml";
-	char const* out = ( setup.f_iArgc > 3 ) ? setup.f_ppcArgv[ 3 ] : "./out/tut.xml";
-	char const* path = ( setup.f_iArgc > 4 ) ? setup.f_ppcArgv[ 4 ] : NULL;
-	if ( setup.f_bVerbose )
+	char const* doc = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/xml.xml";
+	char const* style = ( setup._argc > 2 ) ? setup._argv[ 2 ] : "./data/style.xml";
+	char const* out = ( setup._argc > 3 ) ? setup._argv[ 3 ] : "./out/tut.xml";
+	char const* path = ( setup._argc > 4 ) ? setup._argv[ 4 ] : NULL;
+	if ( setup._verbose )
 		{
 		if ( file.open( doc, HFile::OPEN::READING ) )
 			cout << file.get_error() << ": " << file.get_path() << endl;
@@ -283,10 +283,10 @@ TUT_UNIT_TEST_N( 10, "/* init, parse, apply, save */" )
 			file.close();
 			}
 		}
-	f_oXml.init( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ) );
-	f_oXml.apply_style( style );
-	f_oXml.parse( path );
-	f_oXml.save( HStreamInterface::ptr_t( new HFile( out, HFile::OPEN::WRITING ) ) );
+	_xml.init( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ) );
+	_xml.apply_style( style );
+	_xml.parse( path );
+	_xml.save( HStreamInterface::ptr_t( new HFile( out, HFile::OPEN::WRITING ) ) );
 	return;
 TUT_TEARDOWN()
 

@@ -63,40 +63,40 @@ void gather_groups_from_file( string_list_t& );
 
 }
 
-int main( int a_iArgc, char* a_ppcArgv[] )
+int main( int argc_, char* argv_[] )
 	{
 	M_PROLOG
 	init_locale( PACKAGE_NAME );
 	HClock clk;
 /*	variables declarations for main loop:                                 */
-	int l_iOpt = 0;
+	int opt = 0;
 	HLogger logger;
-	tut::reporter<HLogger> l_oVisitor( std::cerr, logger );
+	tut::reporter<HLogger> visitor( std::cerr, logger );
 	HException::set_error_stream( stdout );
-	tut::restartable_wrapper l_oRestartable;
+	tut::restartable_wrapper restartable;
 /*	end.                                                                  */
 	try
 		{
 /*	TO-DO:				enter main loop code here                               */
 		HSignalServiceFactory::get_instance();
-		setup.f_pcProgramName = a_ppcArgv[ 0 ];
-		l_iOpt = handle_program_options( a_iArgc, a_ppcArgv );
-		hcore::log.rehash( setup.f_oLogPath, setup.f_pcProgramName );
+		setup._programName = argv_[ 0 ];
+		opt = handle_program_options( argc_, argv_ );
+		hcore::log.rehash( setup._logPath, setup._programName );
 		setup.test_setup();
-		setup.f_iArgc = ( a_iArgc - l_iOpt ) + 1;
-		if ( setup.f_iArgc > 1 )
+		setup._argc = ( argc_ - opt ) + 1;
+		if ( setup._argc > 1 )
 			{
-			setup.f_ppcArgv = a_ppcArgv + l_iOpt - 1;
-			a_ppcArgv [ l_iOpt - 1 ] = a_ppcArgv [ 0 ];
+			setup._argv = argv_ + opt - 1;
+			argv_ [ opt - 1 ] = argv_ [ 0 ];
 			}
 //		if ( ! is_enabled ( ) )enter_curses (); /* enabling ncurses ablilities*/
 /* *BOOM* */
 		try
 			{
-			if ( ! setup.f_bListGroups )
+			if ( ! setup._listGroups )
 				cout << "TUT: " << static_cast<char const*>( HTime() ) << endl;
 			errno = 0;
-			if ( setup.f_bListGroups )
+			if ( setup._listGroups )
 				{
 				std::cerr << "registered test groups:" << std::endl;
 				tut::groupnames gl = tut::runner.get().list_groups();
@@ -109,34 +109,34 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 					}
 				errno = 0;
 				}
-			else if ( setup.f_bRestartable )
+			else if ( setup._restartable )
 				{
-				l_oRestartable.set_callback( &l_oVisitor );
-				l_oRestartable.run_tests();
+				restartable.set_callback( &visitor );
+				restartable.run_tests();
 				}
 			else
 				{
-				runner.get().set_callback( &l_oVisitor );
-				string_list_t l_oGroupNames;
-				if ( ! setup.f_oTestGroupListFilePath.is_empty() )
+				runner.get().set_callback( &visitor );
+				string_list_t groupNames;
+				if ( ! setup._testGroupListFilePath.is_empty() )
 					{
-					gather_groups_from_file( l_oGroupNames );
-					runner.get().run_tests( l_oGroupNames );
+					gather_groups_from_file( groupNames );
+					runner.get().run_tests( groupNames );
 					}
-				else if ( ! setup.f_oTestGroupPattern.is_empty() )
-					runner.get().run_pattern_tests( setup.f_oTestGroupPattern.raw() );
-				else if ( ! setup.f_oTestGroup.is_empty() && setup.f_iTestNumber )
-					runner.get().run_test( setup.f_oTestGroup.raw(),
-							setup.f_iTestNumber );
-				else if ( ! setup.f_oTestGroup.is_empty() )
+				else if ( ! setup._testGroupPattern.is_empty() )
+					runner.get().run_pattern_tests( setup._testGroupPattern.raw() );
+				else if ( ! setup._testGroup.is_empty() && setup._testNumber )
+					runner.get().run_test( setup._testGroup.raw(),
+							setup._testNumber );
+				else if ( ! setup._testGroup.is_empty() )
 					{
-					l_oGroupNames.push_back( setup.f_oTestGroup.raw() );
-					runner.get().run_tests( l_oGroupNames );
+					groupNames.push_back( setup._testGroup.raw() );
+					runner.get().run_tests( groupNames );
 					}
 				else
 					runner.get().run_tests();
 				}
-			if ( ! setup.f_bListGroups )
+			if ( ! setup._listGroups )
 				cout << "TUT: " << static_cast<char const*>( HTime() ) << endl;
 			}
 		catch ( const std::exception& e )
@@ -149,7 +149,7 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 		}
 	catch ( int const& e )
 		{
-		l_oVisitor._exceptionsCount += e;
+		visitor._exceptionsCount += e;
 		/* escape from main loop */
 		}
 	catch ( ... )
@@ -160,11 +160,11 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 		throw;
 		}
 	cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % clk.get_time_elapsed( HClock::UNIT::MILISECOND ) ).string() << endl;
-	return ( l_oVisitor._exceptionsCount
-			+ l_oVisitor._failuresCount
-			+ l_oVisitor._terminationsCount
-			+ l_oVisitor._warningsCount
-			+ l_oVisitor._setupCount );
+	return ( visitor._exceptionsCount
+			+ visitor._failuresCount
+			+ visitor._terminationsCount
+			+ visitor._warningsCount
+			+ visitor._setupCount );
 	M_FINAL
 	}
 
@@ -174,25 +174,25 @@ namespace tress
 void gather_groups_from_file( string_list_t& lst )
 	{
 	M_PROLOG
-	FILE* l_psFile = NULL;
-	if ( setup.f_oTestGroupListFilePath == "-" )
-		l_psFile = stdin;
-	HFile l_oFile( l_psFile );
-	if ( ! l_psFile && l_oFile.open( setup.f_oTestGroupListFilePath, HFile::OPEN::READING ) )
+	FILE* file = NULL;
+	if ( setup._testGroupListFilePath == "-" )
+		file = stdin;
+	HFile file( file );
+	if ( ! file && file.open( setup._testGroupListFilePath, HFile::OPEN::READING ) )
 		{
-		cout << l_oFile.get_error() << ": " << l_oFile.get_path() << endl;
+		cout << file.get_error() << ": " << file.get_path() << endl;
 		throw 0;
 		}
-	HString l_oLine;
-	while ( l_oFile.read_line( l_oLine,
+	HString line;
+	while ( file.read_line( line,
 				HFile::read_t( HFile::READ::STRIP_NEWLINES )
-				| ( ( l_psFile == stdin ) ? HFile::READ::UNBUFFERED_READS : HFile::READ::BUFFERED_READS ) ) >= 0 )
+				| ( ( file == stdin ) ? HFile::READ::UNBUFFERED_READS : HFile::READ::BUFFERED_READS ) ) >= 0 )
 		{
-		l_oLine.trim_left();
-		l_oLine.trim_right();
-		lst.push_back( l_oLine.raw() );
+		line.trim_left();
+		line.trim_right();
+		lst.push_back( line.raw() );
 		}
-	l_oFile.close();
+	file.close();
 	return;
 	M_EPILOG
 	}

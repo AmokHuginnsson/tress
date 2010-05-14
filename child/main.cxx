@@ -48,28 +48,28 @@ OSetup setup;
 
 }
 
-int main( int a_iArgc, char* a_ppcArgv[] )
+int main( int argc_, char* argv_[] )
 	{
 	M_PROLOG
 /* variables declarations for main loop: */
-	int l_iOpt = 0;
+	int opt = 0;
 /* end. */
 	try
 		{
-		setup.f_pcProgramName = a_ppcArgv[ 0 ];
-		l_iOpt = handle_program_options( a_iArgc, a_ppcArgv );
-		hcore::log.rehash( "x_child.log", setup.f_pcProgramName );
+		setup._programName = argv_[ 0 ];
+		opt = handle_program_options( argc_, argv_ );
+		hcore::log.rehash( "x_child.log", setup._programName );
 		setup.test_setup();
-		if ( !! setup.f_oScript )
+		if ( !! setup._script )
 			{
 			HString nonWord;
-			int const SIZE = static_cast<int>( ::strlen( n_pcWord ) );
+			int const SIZE = static_cast<int>( ::strlen( _word_ ) );
 			for ( int c = 1; c < 256; ++ c )
 				{
-				if ( ! memchr( n_pcWord, c, SIZE ) )
+				if ( ! memchr( _word_, c, SIZE ) )
 					nonWord += static_cast<char>( c );
 				}
-			HTokenizer t( setup.f_oScript, ";", HTokenizer::SKIP_EMPTY );
+			HTokenizer t( setup._script, ";", HTokenizer::SKIP_EMPTY );
 			for ( HTokenizer::HIterator it = t.begin(), end = t.end(); it != end; ++ it )
 				{
 				HTokenizer w( *it, nonWord, HTokenizer::SKIP_EMPTY );
@@ -95,7 +95,7 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 					M_THROW( "syntax error at: " + cmd, errno );
 				}
 			}
-		if ( !! setup.f_oTerminate )
+		if ( !! setup._terminate )
 			{
 			typedef HMap<HString, int> str2int_dict_t;
 			str2int_dict_t signalNames;
@@ -114,17 +114,17 @@ int main( int a_iArgc, char* a_ppcArgv[] )
 			signalNames.insert( make_pair<char const* const>( "QUIT", SIGQUIT ) );
 			signalNames.insert( make_pair<char const* const>( "TRAP", SIGTRAP ) );
 			signalNames.insert( make_pair<char const* const>( "SEGV", SIGSEGV ) );
-			str2int_dict_t::const_iterator it = signalNames.find( setup.f_oTerminate );
+			str2int_dict_t::const_iterator it = signalNames.find( setup._terminate );
 			if ( it != signalNames.end() )
 				kill( getpid(), it->second );
-			M_THROW( "unknown signal: " + setup.f_oTerminate, errno );
+			M_THROW( "unknown signal: " + setup._terminate, errno );
 			}
 		}
 	catch ( ... )
 		{
 		hcore::log << "Unexpected exception cauht!" << endl;
 		}
-	return ( setup.f_iExitStatus );
+	return ( setup._exitStatus );
 	M_FINAL
 	}
 

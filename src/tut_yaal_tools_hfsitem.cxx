@@ -44,19 +44,19 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_tools_hfsitem );
 TUT_TEST_GROUP_N( tut_yaal_tools_hfsitem, "yaal::tools::HFSItem" );
 
-void recurse( HString const& a_oPath )
+void recurse( HString const& path_ )
 	{
-	HFSItem l_oDir( a_oPath );
-	cout << "dir: " << l_oDir.get_path() << endl;
-	M_ENSURE( l_oDir.is_directory() );
-	for ( HFSItem::HIterator it = l_oDir.begin(); it != l_oDir.end(); ++ it )
+	HFSItem dir( path_ );
+	cout << "dir: " << dir.get_path() << endl;
+	M_ENSURE( dir.is_directory() );
+	for ( HFSItem::HIterator it = dir.begin(); it != dir.end(); ++ it )
 		{
 		cout << "item: " << it->get_path() << endl;
 		if ( it->is_directory() && ( it->get_name() != "." ) && ( it->get_name() != ".." ) )
 			{
 			cout << "descending into ";
 			recurse( it->get_path() );
-			cout << "back at: " << l_oDir.get_path() << endl;
+			cout << "back at: " << dir.get_path() << endl;
 			}
 		}
 	}

@@ -63,24 +63,24 @@ public:
 
 }
 
-int main( int a_iArgc, char* a_ppcArgv[] )
+int main( int argc_, char* argv_[] )
 	{
 	M_PROLOG
 /*	variables declarations for main loop:                                 */
-	int l_iOpt = 0;
+	int opt = 0;
 /*	end.                                                                  */
 	try
 		{
 /*	TO-DO:				enter main loop code here                               */
 		HSignalServiceFactory::get_instance();
-		setup.f_pcProgramName = a_ppcArgv[ 0 ];
-		l_iOpt = handle_program_options( a_iArgc, a_ppcArgv );
+		setup._programName = argv_[ 0 ];
+		opt = handle_program_options( argc_, argv_ );
 		setup.test_setup();
-		hcore::log.rehash( "x_cute.log", setup.f_pcProgramName );
+		hcore::log.rehash( "x_cute.log", setup._programName );
 //		if ( ! is_enabled ( ) )enter_curses (); /* enabling ncurses ablilities*/
 /* *BOOM* */
 		HCuteReporter r;
-		r.run_ut( a_iArgc, a_ppcArgv );
+		r.run_ut( argc_, argv_ );
 //		if ( is_enabled ( ) )leave_curses ();  /* ending ncurses sesion    */
 /*	... there is the place main loop ends. :OD-OT                         */
 		}
@@ -107,19 +107,19 @@ HCuteReporter::HCuteReporter( void )
 	{
 	}
 
-int HCuteReporter::run_ut( int a_iArgc, char* a_ppcArgv[] )
+int HCuteReporter::run_ut( int argc_, char* argv_[] )
 	{
 	HPipedChild tress;
-	M_ASSERT( ! a_ppcArgv[ a_iArgc ] );
+	M_ASSERT( ! argv_[ argc_ ] );
 	char const* suite = ::getenv( "CUTE_TARGET" );
 	if ( ! suite )
 		suite = "./build/tress/1exec";
 	HString line;
 	HString err;
 	timeval t = { 0, 0 };
-	HPipedChild::argv_t argv( a_iArgc - 1 );
+	HPipedChild::argv_t argv( argc_ - 1 );
 	for ( int i = 0; i < argv.size(); ++ i )
-		argv[ i ] = a_ppcArgv[ i + 1 ];
+		argv[ i ] = argv_[ i + 1 ];
 	do
 		{
 		tress.spawn( suite, argv );
@@ -131,7 +131,7 @@ int HCuteReporter::run_ut( int a_iArgc, char* a_ppcArgv[] )
 			int long count( 0 );
 			bool repeatOut = tress.read_poll( &t ) || ( ( count = tress.read_until( line ) ) < 0 );
 			bool okOut = ( count >= 0 );
-			if ( okOut && setup.f_bVerbose )
+			if ( okOut && setup._verbose )
 				cout << line.raw() << endl;
 			tress.set_csoi( HPipedChild::STREAM::ERR );
 			bool repeatErr = tress.read_poll( &t ) || ( ( count = tress.read_until( err ) ) < 0 );
@@ -142,7 +142,7 @@ int HCuteReporter::run_ut( int a_iArgc, char* a_ppcArgv[] )
 			repeat = repeatOut || repeatErr;
 			}
 		}
-	while ( setup.f_bRestartable && ( tress.finish().type != HPipedChild::STATUS::TYPE::NORMAL ) );
+	while ( setup._restartable && ( tress.finish().type != HPipedChild::STATUS::TYPE::NORMAL ) );
 	if ( _start != _rep.end() )
 		{
 		*_start += _cnt;

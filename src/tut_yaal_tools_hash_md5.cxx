@@ -123,10 +123,10 @@ TUT_UNIT_TEST_N( 11, "from string (small alternation)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 12, "from file" )
-	static char const* const INPUT = ( setup.f_iArgc > 1 ) ? setup.f_ppcArgv[ 1 ] : "./data/karatsuba.bc";
+	static char const* const INPUT = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/karatsuba.bc";
 	static char const HASH[] = "afc851d03c5761909554cc48d1d6c6d2";
 	HFile f( INPUT, HFile::OPEN::READING );
-	if ( setup.f_iArgc > 1 )
+	if ( setup._argc > 1 )
 		cout << hash::md5( f ) << endl;
 	else
 		ENSURE_EQUALS( "bad hash", hash::md5( f ), HASH );

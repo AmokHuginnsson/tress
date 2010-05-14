@@ -37,24 +37,24 @@ namespace tress
 struct OSetup
 	{
 	OSetup( void )
-		: f_bQuiet( false ), f_bVerbose( false ),
-		f_bListGroups( false ), f_bRestartable( false ), f_iTestNumber( 0 ),
-		f_iJobs( DEFAULT_JOB_COUNT ), f_iArgc( 0 ), f_ppcArgv( NULL ),
-		f_pcProgramName( NULL ), f_oLogPath(), f_oTestGroup(),
-		f_oTestGroupPattern(), f_oTestGroupListFilePath() {}
-	bool f_bQuiet;			/* --quiet, --silent */
-	bool f_bVerbose;		/* --verbose */
-	bool f_bListGroups;
-	bool f_bRestartable;
-	int f_iTestNumber;
-	int f_iJobs;
-	int f_iArgc;
-	char const* const* f_ppcArgv;
-	char* f_pcProgramName;
-	yaal::hcore::HString f_oLogPath;
-	yaal::hcore::HString f_oTestGroup;
-	yaal::hcore::HString f_oTestGroupPattern;
-	yaal::hcore::HString f_oTestGroupListFilePath;
+		: _quiet( false ), _verbose( false ),
+		_listGroups( false ), _restartable( false ), _testNumber( 0 ),
+		_jobs( DEFAULT_JOB_COUNT ), _argc( 0 ), _argv( NULL ),
+		_programName( NULL ), _logPath(), _testGroup(),
+		_testGroupPattern(), _testGroupListFilePath() {}
+	bool _quiet;			/* --quiet, --silent */
+	bool _verbose;		/* --verbose */
+	bool _listGroups;
+	bool _restartable;
+	int _testNumber;
+	int _jobs;
+	int _argc;
+	char const* const* _argv;
+	char* _programName;
+	yaal::hcore::HString _logPath;
+	yaal::hcore::HString _testGroup;
+	yaal::hcore::HString _testGroupPattern;
+	yaal::hcore::HString _testGroupListFilePath;
 	static int const DEFAULT_JOB_COUNT = 1;
 	void test_setup( void );
 private:

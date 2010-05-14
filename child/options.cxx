@@ -43,10 +43,10 @@ using namespace yaal::tools::util;
 namespace child
 {
 
-bool set_variables( HString& a_roOption, HString& a_roValue )
+bool set_variables( HString& option_, HString& value_ )
 	{
 	::fprintf( stdout, "option: [%s], value: [%s]\n",
-			a_roOption.raw(), a_roValue.raw() );
+			option_.raw(), value_.raw() );
 	return ( false );
 	}
 
@@ -59,35 +59,35 @@ void version( void* )
 
 /* Set all the option flags according to the switches specified.
    Return the index of the first non-option argument.                    */
-int handle_program_options( int a_iArgc, char** a_ppcArgv )
+int handle_program_options( int argc_, char** argv_ )
 	{
 	M_PROLOG
 	HProgramOptionsHandler po;
-	OOptionInfo info( po, setup.f_pcProgramName, "does very much usefull things ... really", NULL );
+	OOptionInfo info( po, setup._programName, "does very much usefull things ... really", NULL );
 	bool stop = false;
-	po( "log_path", program_options_helper::option_value( setup.f_oLogPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
-		( "exit_status", program_options_helper::option_value( setup.f_iExitStatus ), 'E' ,HProgramOptionsHandler::OOption::TYPE::REQUIRED, "set exit status for child", "status" )
-		( "terminate", program_options_helper::option_value( setup.f_oTerminate ), 'T' ,HProgramOptionsHandler::OOption::TYPE::REQUIRED, "terminate process abruptly", "signal" )
-		( "script", program_options_helper::option_value( setup.f_oScript ), 'S' ,HProgramOptionsHandler::OOption::TYPE::REQUIRED, "run this script in child session", "code" )
-		( "quiet", program_options_helper::option_value( setup.f_bQuiet ), 'q', HProgramOptionsHandler::OOption::TYPE::NONE, "inhibit usual output" )
-		( "silent", program_options_helper::option_value( setup.f_bQuiet ), 'q', HProgramOptionsHandler::OOption::TYPE::NONE, "inhibit usual output" )
-		( "verbose", program_options_helper::option_value( setup.f_bVerbose ), 'v', HProgramOptionsHandler::OOption::TYPE::NONE, "print more information" )
+	po( "log_path", program_options_helper::option_value( setup._logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
+		( "exit_status", program_options_helper::option_value( setup._exitStatus ), 'E' ,HProgramOptionsHandler::OOption::TYPE::REQUIRED, "set exit status for child", "status" )
+		( "terminate", program_options_helper::option_value( setup._terminate ), 'T' ,HProgramOptionsHandler::OOption::TYPE::REQUIRED, "terminate process abruptly", "signal" )
+		( "script", program_options_helper::option_value( setup._script ), 'S' ,HProgramOptionsHandler::OOption::TYPE::REQUIRED, "run this script in child session", "code" )
+		( "quiet", program_options_helper::option_value( setup._quiet ), 'q', HProgramOptionsHandler::OOption::TYPE::NONE, "inhibit usual output" )
+		( "silent", program_options_helper::option_value( setup._quiet ), 'q', HProgramOptionsHandler::OOption::TYPE::NONE, "inhibit usual output" )
+		( "verbose", program_options_helper::option_value( setup._verbose ), 'v', HProgramOptionsHandler::OOption::TYPE::NONE, "print more information" )
 		( "help", program_options_helper::option_value( stop ), 'h', HProgramOptionsHandler::OOption::TYPE::NONE, "display this help and stop", program_options_helper::callback( util::show_help, &info ) )
 		( "dump-configuration", program_options_helper::option_value( stop ), 'W', HProgramOptionsHandler::OOption::TYPE::NONE, "dump current configuration", program_options_helper::callback( util::dump_configuration, &info ) )
 		( "version", program_options_helper::no_value, 'V', HProgramOptionsHandler::OOption::TYPE::NONE, "output version information and stop", program_options_helper::callback( version, NULL ) );
 	po.process_rc_file( "child", "", NULL );
-	if ( setup.f_oLogPath.is_empty() )
-		setup.f_oLogPath = "child.log";
-	int l_iUnknown = 0, l_iNonOption = 0;
-	l_iNonOption = po.process_command_line( a_iArgc, a_ppcArgv, &l_iUnknown );
-	if ( l_iUnknown > 0 )
+	if ( setup._logPath.is_empty() )
+		setup._logPath = "child.log";
+	int unknown = 0, nonOption = 0;
+	nonOption = po.process_command_line( argc_, argv_, &unknown );
+	if ( unknown > 0 )
 		{
 		util::show_help( &info );
-		throw l_iUnknown;
+		throw unknown;
 		}
 	if ( stop )
 		throw 0;
-	return ( l_iNonOption );
+	return ( nonOption );
 	M_EPILOG
 	}
 

@@ -188,7 +188,7 @@ public:
 
 			{
 			const_iterator e = _groups.end();
-			yaal::tools::HWorkFlow w( tress::setup.f_iJobs );
+			yaal::tools::HWorkFlow w( tress::setup._jobs );
 			for ( const_iterator i = _groups.begin(); i != e; ++ i )
 				w.push_task( yaal::hcore::bound_call( &test_runner::run_group, this, i ) );
 			}
@@ -204,7 +204,7 @@ public:
 		_callback->run_started();
 
 			{
-			yaal::tools::HWorkFlow w( tress::setup.f_iJobs );
+			yaal::tools::HWorkFlow w( tress::setup._jobs );
 			for ( std::list<std::string>::const_iterator k = group_names.begin();
 					k != group_names.end(); ++ k )
 				{
@@ -213,7 +213,7 @@ public:
 					{
 					test_result tr( *k, 0 );
 					tr.set_meta( test_result::setup, "", "no such group" );
-					tr.set_meta( tress::setup.f_oTestGroupListFilePath.raw(), "-", static_cast<int>( std::distance( group_names.begin(), k ) ) );
+					tr.set_meta( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( group_names.begin(), k ) ) );
 					_callback->test_completed( tr );
 					}
 				else
@@ -233,7 +233,7 @@ public:
 		_callback->run_started();
 
 			{
-			yaal::tools::HWorkFlow w( tress::setup.f_iJobs );
+			yaal::tools::HWorkFlow w( tress::setup._jobs );
 			const_iterator e = _groups.end();
 			for ( const_iterator i = _groups.begin(); i != e; ++ i )
 				{

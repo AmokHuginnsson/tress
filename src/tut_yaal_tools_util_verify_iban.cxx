@@ -73,9 +73,9 @@ template < >
 template < >
 void module::test<3> ( void )
 	{
-	if ( setup.f_bVerbose && ( setup.f_iArgc > 1 ) )
+	if ( setup._verbose && ( setup._argc > 1 ) )
 		{
-		HString string( setup.f_ppcArgv[ 1 ] );
+		HString string( setup._argv[ 1 ] );
 		int unknown = static_cast<int>( string.find( '?' ) );
 		if ( unknown < 0 )
 			FAIL( "No unknown characters." );

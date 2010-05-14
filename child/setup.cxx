@@ -39,12 +39,12 @@ namespace child
 void OSetup::test_setup( void )
 	{
 	M_PROLOG
-	if ( f_bQuiet && f_bVerbose )
+	if ( _quiet && _verbose )
 		yaal::tools::util::failure( 1,
 				_( "quiet and verbose options are exclusive\n" ) );
-	if ( f_bVerbose )
+	if ( _verbose )
 		clog.reset( HStreamInterface::ptr_t( new HFile( stdout ) ) );
-	if ( f_bQuiet )
+	if ( _quiet )
 		cout.reset();
 	return;
 	M_EPILOG

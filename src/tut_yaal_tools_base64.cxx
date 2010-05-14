@@ -202,7 +202,7 @@ TUT_UNIT_TEST_N( 11, "from string (small alternation)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 12, "encode from file (no newlines)" )
-	static char const* const INPUT = ( setup.f_iArgc > 1 ) ? setup.f_ppcArgv[ 1 ] : "./data/karatsuba.bc";
+	static char const* const INPUT = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/karatsuba.bc";
 	static char const BASE64ENC[] =
 "eD1yZWFkKCk7Cnk9cmVhZCgpOwoKc2NhbGUgPSAwCgpkZWZpbmUgZGlnaXRfY291bnQoIG4gKSB7"
 "CglrID0gMDsKCXdoaWxlICggbiA+IDAgKSB7CgkJayA9IGsgKyAxOwoJCW4gPSBuIC8gMTA7Cgl9"
@@ -224,7 +224,7 @@ TUT_UNIT_TEST_N( 12, "encode from file (no newlines)" )
 "KjEwXm0KCnByaW50ICJaIGlzICIsIHoxLCAiXG4iCnByaW50ICJaKjEwXm0rciBpcyAiLCB6Miwg"
 "IlxuIgpwcmludCAiWioxMF5tK3IrcjJtKjEwXjJtIGlzICIsIHJlczAsICJcbiIKcHJpbnQgIloq"
 "MTBebStyLXIybSoxMF5tIGlzICIsIHJlczEsICJcbiIKCnJlc3VsdAp4KnkgLSByZXN1bHQK";
-	if ( setup.f_iArgc > 1 )
+	if ( setup._argc > 1 )
 		{
 		if ( HString( "-" ) == INPUT )
 			base64::encode( cin, cout );
@@ -245,7 +245,7 @@ TUT_UNIT_TEST_N( 12, "encode from file (no newlines)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 13, "encode from file (with newlines)" )
-	static char const* const INPUT = ( setup.f_iArgc > 1 ) ? setup.f_ppcArgv[ 1 ] : "./data/karatsuba.bc";
+	static char const* const INPUT = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/karatsuba.bc";
 	static char const BASE64ENC[] =
 "eD1yZWFkKCk7Cnk9cmVhZCgpOwoKc2NhbGUgPSAwCgpkZWZpbmUgZGlnaXRfY291bnQoIG4gKSB7\n"
 "CglrID0gMDsKCXdoaWxlICggbiA+IDAgKSB7CgkJayA9IGsgKyAxOwoJCW4gPSBuIC8gMTA7Cgl9\n"
@@ -267,7 +267,7 @@ TUT_UNIT_TEST_N( 13, "encode from file (with newlines)" )
 "KjEwXm0KCnByaW50ICJaIGlzICIsIHoxLCAiXG4iCnByaW50ICJaKjEwXm0rciBpcyAiLCB6Miwg\n"
 "IlxuIgpwcmludCAiWioxMF5tK3IrcjJtKjEwXjJtIGlzICIsIHJlczAsICJcbiIKcHJpbnQgIloq\n"
 "MTBebStyLXIybSoxMF5tIGlzICIsIHJlczEsICJcbiIKCnJlc3VsdAp4KnkgLSByZXN1bHQK\n";
-	if ( setup.f_iArgc > 1 )
+	if ( setup._argc > 1 )
 		{
 		if ( HString( "-" ) == INPUT )
 			base64::encode( cin, cout );
@@ -311,13 +311,13 @@ TUT_UNIT_TEST_N( 14, "decode from file (newlines)" )
 "IlxuIgpwcmludCAiWioxMF5tK3IrcjJtKjEwXjJtIGlzICIsIHJlczAsICJcbiIKcHJpbnQgIloq"
 "MTBebStyLXIybSoxMF5tIGlzICIsIHJlczEsICJcbiIKCnJlc3VsdAp4KnkgLSByZXN1bHQK";
 
-	if ( setup.f_iArgc > 1 )
+	if ( setup._argc > 1 )
 		{
-		if ( HString( "-" ) == setup.f_ppcArgv[ 1 ] )
+		if ( HString( "-" ) == setup._argv[ 1 ] )
 			base64::decode( cin, cout );
 		else
 			{
-			HFile f( setup.f_ppcArgv[ 1 ], HFile::OPEN::READING );
+			HFile f( setup._argv[ 1 ], HFile::OPEN::READING );
 			base64::decode( f, cout );
 			}
 		cout << endl;
@@ -356,13 +356,13 @@ TUT_UNIT_TEST_N( 15, "decode from file (with newlines)" )
 "IlxuIgpwcmludCAiWioxMF5tK3IrcjJtKjEwXjJtIGlzICIsIHJlczAsICJcbiIKcHJpbnQgIloq\n"
 "MTBebStyLXIybSoxMF5tIGlzICIsIHJlczEsICJcbiIKCnJlc3VsdAp4KnkgLSByZXN1bHQK\n";
 
-	if ( setup.f_iArgc > 1 )
+	if ( setup._argc > 1 )
 		{
-		if ( HString( "-" ) == setup.f_ppcArgv[ 1 ] )
+		if ( HString( "-" ) == setup._argv[ 1 ] )
 			base64::decode( cin, cout );
 		else
 			{
-			HFile f( setup.f_ppcArgv[ 1 ], HFile::OPEN::READING );
+			HFile f( setup._argv[ 1 ], HFile::OPEN::READING );
 			base64::decode( f, cout );
 			}
 		cout << endl;
