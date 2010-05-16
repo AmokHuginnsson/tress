@@ -62,6 +62,12 @@ std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s )
 	return ( out );
 	}
 
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HNumber const& n )
+	{
+	out << n.to_string();
+	return ( out );
+	}
+
 }
 
 namespace tress

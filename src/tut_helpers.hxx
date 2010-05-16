@@ -35,6 +35,7 @@ Copyright:
 #include <yaal/hcore/hstreaminterface.hxx>
 #include <yaal/hcore/hpair.hxx>
 #include <yaal/hcore/hcomplex.hxx>
+#include <yaal/hcore/hnumber.hxx>
 #include <yaal/hcore/hvector.hxx>
 #include <yaal/hcore/hmatrix.hxx>
 #include <yaal/hcore/xalloc.hxx>
@@ -44,6 +45,7 @@ namespace std
 {
 
 std::ostream& operator << ( std::ostream&, yaal::hcore::HComplex const& );
+std::ostream& operator << ( std::ostream&, yaal::hcore::HNumber const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HString const& );
 template<typename first_t, typename second_t>
 std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second_t> const& p )

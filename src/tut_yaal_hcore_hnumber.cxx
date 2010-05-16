@@ -1236,11 +1236,11 @@ TUT_UNIT_TEST_N( 21, "/* division */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 22, "/* opposite */" )
-	ENSURE_EQUALS( "opposite failed a", ( - HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
-	ENSURE_EQUALS( "opposite failed b", ( - HNumber( "1" ) ).to_string(), HNumber( "-1" ).to_string() );
-	ENSURE_EQUALS( "opposite failed c", ( - HNumber( "-1" ) ).to_string(), HNumber( "1" ).to_string() );
-	ENSURE_EQUALS( "opposite failed d", ( - HNumber( ".01" ) ).to_string(), HNumber( "-.01" ).to_string() );
-	ENSURE_EQUALS( "opposite failed e", ( - HNumber( "-.01" ) ).to_string(), HNumber( ".01" ).to_string() );
+	ENSURE_EQUALS( "opposite failed a", - HNumber( "0" ), HNumber( "0" ) );
+	ENSURE_EQUALS( "opposite failed b", - HNumber( "1" ), HNumber( "-1" ) );
+	ENSURE_EQUALS( "opposite failed c", - HNumber( "-1" ), HNumber( "1" ) );
+	ENSURE_EQUALS( "opposite failed d", - HNumber( ".01" ), HNumber( "-.01" ) );
+	ENSURE_EQUALS( "opposite failed e", - HNumber( "-.01" ), HNumber( ".01" ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 23, "/* bc */" )
@@ -1252,6 +1252,38 @@ TUT_UNIT_TEST_N( 23, "/* bc */" )
 	HString bcRes;
 	_bc.read_until( bcRes );
 	ENSURE_EQUALS( "karatsuba failed", myRes, bcRes );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 24, "/* preincrementation */" )
+	HNumber n;
+	HNumber k = ++ n;
+	ENSURE_EQUALS( "preincrementation failed orig", n, HNumber( "1" ) );
+	ENSURE_EQUALS( "preincrementation failed copy", k, HNumber( "1" ) );
+	ENSURE_EQUALS( "preincrementation failed", ++ n, HNumber( "2" ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 25, "/* predecrementation */" )
+	HNumber n;
+	HNumber k = -- n;
+	ENSURE_EQUALS( "predecrementation failed orig", n, HNumber( "-1" ) );
+	ENSURE_EQUALS( "predecrementation failed copy", k, HNumber( "-1" ) );
+	ENSURE_EQUALS( "predecrementation failed", -- n, HNumber( "-2" ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 26, "/* postincrementation */" )
+	HNumber n;
+	HNumber k = n ++;
+	ENSURE_EQUALS( "postincrementation failed orig", n, HNumber( "1" ) );
+	ENSURE_EQUALS( "postincrementation failed copy", k, HNumber( "0" ) );
+	ENSURE_EQUALS( "postincrementation failed", n ++, HNumber( "1" ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 27, "/* postdecrementation */" )
+	HNumber n;
+	HNumber k = n --;
+	ENSURE_EQUALS( "postdecrementation failed orig", n, HNumber( "-1" ) );
+	ENSURE_EQUALS( "postdecrementation failed copy", k, HNumber( "0" ) );
+	ENSURE_EQUALS( "postdecrementation failed", n --, HNumber( "-1" ) );
 TUT_TEARDOWN()
 
 }
