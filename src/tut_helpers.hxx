@@ -166,22 +166,22 @@ class HInstanceTracker
 	{
 	static int _instances;
 	static int _autoIncrement;
-	int _id;
+	int long _id;
 	yaal::hcore::HString _origin;
 public:
-	HInstanceTracker( int = -1 );
+	HInstanceTracker( int long = -1 );
 	HInstanceTracker( HInstanceTracker const& );
 	HInstanceTracker& operator = ( HInstanceTracker const& );
 	~HInstanceTracker( void );
 	bool operator == ( HInstanceTracker<owner_t> const& ) const;
 	bool operator != ( HInstanceTracker<owner_t> const& ) const;
-	bool operator == ( int const& ) const;
-	bool operator != ( int const& ) const;
+	bool operator == ( int long const& ) const;
+	bool operator != ( int long const& ) const;
 	static int get_instance_count( void );
 	static void set_instance_count( int = 0 );
 	static void set_start_id( int = 0 );
-	int get_id( void ) const;
-	int id( void ) const;
+	int long get_id( void ) const;
+	int long id( void ) const;
 	yaal::hcore::HString to_string( void ) const;
 	void swap( HInstanceTracker& );
 	};
@@ -192,7 +192,7 @@ template<typename owner_t>
 int HInstanceTracker<owner_t>::_autoIncrement = 0;
 
 template<typename owner_t>
-HInstanceTracker<owner_t>::HInstanceTracker( int id_ ) : _id( id_ >= 0 ? id_ : _autoIncrement ), _origin()
+HInstanceTracker<owner_t>::HInstanceTracker( int long id_ ) : _id( id_ >= 0 ? id_ : _autoIncrement ), _origin()
 	{
 	++ _instances;
 	++ _autoIncrement;
@@ -260,13 +260,13 @@ yaal::hcore::HString HInstanceTracker<owner_t>::to_string( void ) const
 	}
 
 template<typename owner_t>
-bool HInstanceTracker<owner_t>::operator == ( int const& val ) const
+bool HInstanceTracker<owner_t>::operator == ( int long const& val ) const
 	{
 	return ( val == _id );
 	}
 
 template<typename owner_t>
-bool HInstanceTracker<owner_t>::operator != ( int const& val ) const
+bool HInstanceTracker<owner_t>::operator != ( int long const& val ) const
 	{
 	return ( val != _id );
 	}
@@ -284,13 +284,13 @@ bool HInstanceTracker<owner_t>::operator != ( HInstanceTracker<owner_t> const& v
 	}
 
 template<typename owner_t>
-bool operator == ( int const& left, HInstanceTracker<owner_t> const& right )
+bool operator == ( int long const& left, HInstanceTracker<owner_t> const& right )
 	{
 	return ( left == right.get_id() );
 	}
 
 template<typename owner_t>
-bool operator != ( int const& left, HInstanceTracker<owner_t> const& right )
+bool operator != ( int long const& left, HInstanceTracker<owner_t> const& right )
 	{
 	return ( left != right.get_id() );
 	}
@@ -302,13 +302,13 @@ int HInstanceTracker<owner_t>::get_instance_count( void )
 	}
 
 template<typename owner_t>
-int HInstanceTracker<owner_t>::get_id( void ) const
+int long HInstanceTracker<owner_t>::get_id( void ) const
 	{
 	return ( _id );
 	}
 
 template<typename owner_t>
-int HInstanceTracker<owner_t>::id( void ) const
+int long HInstanceTracker<owner_t>::id( void ) const
 	{
 	return ( _id );
 	}

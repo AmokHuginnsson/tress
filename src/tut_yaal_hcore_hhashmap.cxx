@@ -47,19 +47,21 @@ namespace tut
 struct tut_yaal_hcore_hhashmap
 	{
 	typedef HInstanceTracker<tut_yaal_hcore_hhashmap> item_t;
-	typedef HHashMap<int, item_t> hash_map_t;
-	static int const TEST_PRIME = 17;
-	static int const ELEM_COUNT;
-	static int const LARGE_TABLE;
-	static int const FEW_ELEMENTS;
+	typedef HHashMap<int long, item_t> hash_map_t;
+	static int long const TEST_PRIME = 17;
+	static int long const ELEM_COUNT;
+	static int long const LARGE_TABLE;
+	static int long const HUGE_TABLE;
+	static int long const FEW_ELEMENTS;
 	virtual ~tut_yaal_hcore_hhashmap( void )
 		{}
 	void check_consitency( hash_map_t const& );
 	};
 
-int const tut_yaal_hcore_hhashmap::ELEM_COUNT = 32;
-int const tut_yaal_hcore_hhashmap::LARGE_TABLE = 251;
-int const tut_yaal_hcore_hhashmap::FEW_ELEMENTS = 4;
+int long const tut_yaal_hcore_hhashmap::ELEM_COUNT = 32;
+int long const tut_yaal_hcore_hhashmap::LARGE_TABLE = 251;
+int long const tut_yaal_hcore_hhashmap::HUGE_TABLE = 2750;
+int long const tut_yaal_hcore_hhashmap::FEW_ELEMENTS = 4;
 
 void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ )
 	{
@@ -71,23 +73,30 @@ void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ )
 	ENSURE( "wrong prime / alloc status", exor( buckets != NULL, map_._engine._prime != 0 ) );
 	int long realSize( 0 );
 	int long collisions( 0 );
+	int long longestCollision( 0 );
 	for ( int long i( 0 ); i < map_._engine._prime; ++ i )
 		{
 		atom_t* a( buckets[ i ] );
+		int long localCollisions( 0 );
 		while ( a )
 			{
-			ENSURE_EQUALS( "atom in wrong bucket", i, map_._hasher( a->_value.first ) % map_._engine._prime );
+			ENSURE_EQUALS( "atom in wrong bucket", i, abs( map_._hasher( a->_value.first ) ) % map_._engine._prime );
 			a = static_cast<atom_t*>( a->_next );
 			if ( a )
+				{
 				++ collisions;
+				++ localCollisions;
+				}
 			++ realSize;
 			}
+		if ( localCollisions > longestCollision )
+			longestCollision = localCollisions;
 		}
 	for ( int long i( map_._engine._prime ); i < bucketCount; ++ i )
 		ENSURE_EQUALS( "dirty bucket", buckets[ i ], static_cast<atom_t*>( NULL ) );
 	ENSURE_EQUALS( "size inconsistent", map_._engine._size, realSize );
 	if ( collisions )
-		clog << "collisions: " << collisions << endl;
+		clog << "collisions: " << collisions << ", longest collision: " << longestCollision << endl;
 	}
 
 typedef test_group<tut_yaal_hcore_hhashmap> tut_group;
@@ -139,7 +148,7 @@ TUT_UNIT_TEST_N( 4, "/* iterate */" )
 		map[ i ] = i;
 		check_consitency( map );
 		}
-	int i = 0;
+	int long i( 0 );
 	for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it, ++ i )
 		ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
 	ENSURE_EQUALS( "bad number of iterations", i, ELEM_COUNT );
@@ -282,6 +291,30 @@ TUT_UNIT_TEST_N( 11, "/* auto grow large table */" )
 		map.erase( i * 3 );
 		check_consitency( map );
 		ENSURE_EQUALS( "wrong size after erase", map.size(), LARGE_TABLE - ( i + 1 ) );
+		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
+			ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
+		}
+	}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 12, "/* auto grow huge table */" )
+	{
+	hash_map_t map;
+	check_consitency( map );
+	for ( int long i = 0; i < HUGE_TABLE; ++ i )
+		{
+		map[ i * i * i ] = i * i * i;
+		check_consitency( map );
+		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
+		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
+			ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
+		}
+	for ( int long i = 0; i < HUGE_TABLE; ++ i )
+		{
+		map.erase( i * i * i );
+		check_consitency( map );
+		ENSURE_EQUALS( "wrong size after erase", map.size(), HUGE_TABLE - ( i + 1 ) );
 		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
 			ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
 		}
