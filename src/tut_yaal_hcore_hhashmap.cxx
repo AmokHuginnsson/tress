@@ -60,7 +60,7 @@ struct tut_yaal_hcore_hhashmap
 
 int long const tut_yaal_hcore_hhashmap::ELEM_COUNT = 32;
 int long const tut_yaal_hcore_hhashmap::LARGE_TABLE = 251;
-int long const tut_yaal_hcore_hhashmap::HUGE_TABLE = 2750;
+int long const tut_yaal_hcore_hhashmap::HUGE_TABLE = sizeof ( int long ) > 2 ? 2750 : 2048;
 int long const tut_yaal_hcore_hhashmap::FEW_ELEMENTS = 4;
 
 void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ )
