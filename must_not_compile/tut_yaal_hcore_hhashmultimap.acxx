@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	must_not_compile/tut_yaal_hcore_hmap.cxx - this file is integral part of `tress' project.
+	must_not_compile/tut_yaal_hcore_hhashmultimap.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -36,8 +36,8 @@ using namespace yaal::tools::util;
 namespace must_not_compile
 {
 
-typedef HMultiMap<int, int, HMultiContainerStorage::HPacked> mapp_t;
-typedef HMultiMap<int, int, HMultiContainerStorage::HTransparent> mapt_t;
+typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_function_type, HMultiContainerStorage::HPacked> mapp_t;
+typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_function_type, HMultiContainerStorage::HTransparent> mapt_t;
 
 #if defined ( BUG_0 )
 

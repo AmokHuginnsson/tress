@@ -322,4 +322,11 @@ TUT_UNIT_TEST_N( 12, "/* auto grow huge table */" )
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 13, "/* find on empty map */" )
+	hash_map_t map;
+	hash_map_t::iterator it( map.find( 0 ) );
+	ENSURE( "find on empty returned bogus iterator", it == map.end() );
+TUT_TEARDOWN()
+
+
 }

@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_yaal_hcore_hmultimap.cxx - this file is integral part of `tress' project.
+	tut_yaal_hcore_hhashmultimap.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -41,14 +41,14 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_hcore_hmultimap
+struct tut_yaal_hcore_hhashmultimap
 	{
-	virtual ~tut_yaal_hcore_hmultimap( void ) {}
-	typedef HMultiMap<int, int, HMultiContainerStorage::HPacked> mmp_t;
-	typedef HMultiMap<int, int, HMultiContainerStorage::HTransparent> mmt_t;
+	virtual ~tut_yaal_hcore_hhashmultimap( void ) {}
+	typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_function_type, HMultiContainerStorage::HPacked> mmp_t;
+	typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_function_type, HMultiContainerStorage::HTransparent> mmt_t;
 	};
 
-TUT_TEST_GROUP_N( tut_yaal_hcore_hmultimap, "yaal::hcore::HMultiMap" );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hhashmultimap, "yaal::hcore::HHashMultiMap" );
 
 TUT_UNIT_TEST_N( 1, "find/upper_bound on non existing" )
 	mmp_t mm;
