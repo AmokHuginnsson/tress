@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	must_not_compile/tut_yaal_hcore_hmap.cxx - this file is integral part of `tress' project.
+	must_not_compile/tut_yaal_hcore_hset.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -33,56 +33,34 @@ using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 
+#if defined ( BUG_0 )
+
 namespace must_not_compile
 {
 
-typedef HMap<int, int> map_t;
+typedef HHashSet<int> int_set_t;
 
-#if defined ( BUG_0 )
-
-
-int sum( map_t const& l )
-	{
-	int l_iSum = 0;
-
-	for ( map_t::iterator it = l.begin(); it != l.end(); ++ it ) /* MUST_FAIL_HERE */
-		l_iSum += it->second;
-	return ( l_iSum );
-	}
-
-#elif defined ( BUG_1 )
-
-int sum( map_t const& l )
+int sum( int_set_t const& l )
 	{
 	int l_iSum = 0;
 	
-	for ( map_t::const_iterator it = l.begin(); it != l.end(); ++ it )
-		it->second = -it->second; /* MUST_FAIL_HERE */
+	for ( int_set_t::iterator it = l.begin(); it != l.end(); ++ it )
+		*it = -*it; /* MUST_FAIL_HERE */
 	return ( l_iSum );
 	}
-
-#elif defined ( BUG_2 )
-
-int sum( map_t& l )
-	{
-	map_t::iterator it( l.begin() );
-	it->first = 0; /* MUST_FAIL_HERE */
-	return ( 0 );
-	}
-
-#else
-#	error NO_SUCH_BUG
-#endif
 
 }
 
 int main( int, char** )
 	{
-	must_not_compile::map_t l;
-	l.insert( 1, 7 );
-	l.insert( 3, 11 );
-	l.insert( 5, 13 );
+	must_not_compile::int_set_t l;
+	l.insert( 1 );
+	l.insert( 3 );
+	l.insert( 5 );
 	return ( must_not_compile::sum( l ) );
 	}
 
+#else
+#	error NO_SUCH_BUG
+#endif
 /* vim: set ft=cpp: */

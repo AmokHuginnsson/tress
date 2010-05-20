@@ -36,7 +36,7 @@ using namespace yaal::tools::util;
 namespace must_not_compile
 {
 
-typedef HMap<int, int> map_t;
+typedef HHashMap<int, int> map_t;
 
 #if defined ( BUG_0 )
 
