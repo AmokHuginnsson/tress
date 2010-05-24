@@ -83,5 +83,25 @@ TUT_UNIT_TEST_N( 2, "exception during map[key] = val;" )
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 50, "/* sample data */" )
+	typedef HMap<HString, int> string_to_int_map_t;
+	string_to_int_map_t map;
+	map["one"] = 1;
+	map["two"] = 2;
+	map["three"] = 3;
+	map["four"] = 4;
+	map["five"] = 5;
+	map["six"] = 6;
+	map["seven"] = 7;
+	ENSURE_EQUALS( "failed to insert [] (data)", map["one"], 1 );
+	ENSURE_EQUALS( "failed to insert [] (data)", map["two"], 2 );
+	ENSURE_EQUALS( "failed to insert [] (data)", map["three"], 3 );
+	ENSURE_EQUALS( "failed to insert [] (data)", map["four"], 4 );
+	ENSURE_EQUALS( "failed to insert [] (data)", map["five"], 5 );
+	ENSURE_EQUALS( "failed to insert [] (data)", map["six"], 6 );
+	ENSURE_EQUALS( "failed to insert [] (data)", map["seven"], 7 );
+	ENSURE_EQUALS( "failed to insert [] (size)", map.size(), 7 );
+TUT_TEARDOWN()
+
 }
 

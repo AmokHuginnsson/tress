@@ -129,5 +129,53 @@ TUT_UNIT_TEST_N( 34, "modify transparent by iterator and operator->" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 50, "/* sample data */" )
+	typedef HHashMultiMap<HString, int> string_to_int_hashmultimap_t;
+	string_to_int_hashmultimap_t map;
+	map.insert( make_pair<HString>( "one", 1 ) );
+	map.insert( make_pair<HString>( "two", 2 ) );
+	map.insert( make_pair<HString>( "two", 2 ) );
+	map.insert( make_pair<HString>( "three", 3 ) );
+	map.insert( make_pair<HString>( "three", 3 ) );
+	map.insert( make_pair<HString>( "three", 3 ) );
+	map.insert( make_pair<HString>( "four", 4 ) );
+	map.insert( make_pair<HString>( "four", 4 ) );
+	map.insert( make_pair<HString>( "four", 4 ) );
+	map.insert( make_pair<HString>( "four", 4 ) );
+	map.insert( make_pair<HString>( "five", 5 ) );
+	map.insert( make_pair<HString>( "five", 5 ) );
+	map.insert( make_pair<HString>( "five", 5 ) );
+	map.insert( make_pair<HString>( "five", 5 ) );
+	map.insert( make_pair<HString>( "five", 5 ) );
+	map.insert( make_pair<HString>( "six", 6 ) );
+	map.insert( make_pair<HString>( "six", 6 ) );
+	map.insert( make_pair<HString>( "six", 6 ) );
+	map.insert( make_pair<HString>( "six", 6 ) );
+	map.insert( make_pair<HString>( "six", 6 ) );
+	map.insert( make_pair<HString>( "six", 6 ) );
+	map.insert( make_pair<HString>( "seven", 7 ) );
+	map.insert( make_pair<HString>( "seven", 7 ) );
+	map.insert( make_pair<HString>( "seven", 7 ) );
+	map.insert( make_pair<HString>( "seven", 7 ) );
+	map.insert( make_pair<HString>( "seven", 7 ) );
+	map.insert( make_pair<HString>( "seven", 7 ) );
+	map.insert( make_pair<HString>( "seven", 7 ) );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.count( "one" ), 1 );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.lower_bound( "one" )->second, 1 );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.count( "two" ), 2 );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.lower_bound( "two" )->second, 2 );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.count( "three" ), 3 );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.lower_bound( "three" )->second, 3 );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.count( "four" ), 4 );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.lower_bound( "four" )->second, 4 );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.count( "five" ), 5 );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.lower_bound( "five" )->second, 5 );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.count( "six" ), 6 );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.lower_bound( "six" )->second, 6 );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.count( "seven" ), 7 );
+	ENSURE_EQUALS( "failed to insert insert (data)", map.lower_bound( "seven" )->second, 7 );
+	ENSURE_EQUALS( "failed to insert insert (size)", map.size(), 1 + 2 + 3 + 4 + 5 + 6 + 7 );
+TUT_TEARDOWN()
+
 }
 
