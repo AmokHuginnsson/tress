@@ -28,6 +28,7 @@ Copyright:
 #define TRESS_SETUP_HXX_INCLUDED
 
 #include <yaal/hcore/hstring.hxx>
+#include <yaal/hcore/hset.hxx>
 
 #include "config.hxx"
 
@@ -40,8 +41,9 @@ struct OSetup
 		: _quiet( false ), _verbose( false ),
 		_listGroups( false ), _restartable( false ), _testNumber( 0 ),
 		_jobs( DEFAULT_JOB_COUNT ), _argc( 0 ), _argv( NULL ),
-		_programName( NULL ), _logPath(), _testGroup(),
+		_programName( NULL ), _logPath(), _testGroups(),
 		_testGroupPattern(), _testGroupListFilePath() {}
+	typedef yaal::hcore::HSet<yaal::hcore::HString> group_names_t;
 	bool _quiet;			/* --quiet, --silent */
 	bool _verbose;		/* --verbose */
 	bool _listGroups;
@@ -52,7 +54,7 @@ struct OSetup
 	char const* const* _argv;
 	char* _programName;
 	yaal::hcore::HString _logPath;
-	yaal::hcore::HString _testGroup;
+	group_names_t _testGroups;
 	yaal::hcore::HString _testGroupPattern;
 	yaal::hcore::HString _testGroupListFilePath;
 	static int const DEFAULT_JOB_COUNT = 1;

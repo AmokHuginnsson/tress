@@ -55,31 +55,33 @@ void OSetup::test_setup( void )
 	if ( setup._listGroups
 			&& ( setup._restartable
 				|| ! setup._testGroupListFilePath.is_empty()
-				|| ! setup._testGroup.is_empty()
+				|| ! setup._testGroups.is_empty()
 				|| ! setup._testGroupPattern.is_empty() || setup._testNumber ) )
 		M_THROW( _( "group listing conflicts with other switches" ),
 				setup._testNumber );
 	if ( setup._restartable
 			&& ( ! setup._testGroupListFilePath.is_empty()
-				|| ! setup._testGroup.is_empty()
+				|| ! setup._testGroups.is_empty()
 				|| ! setup._testGroupPattern.is_empty()
 				|| setup._testNumber ) )
 		M_THROW( _( "restartable conflicts with other switches" ),
 				setup._testNumber );
 	if ( ! setup._testGroupListFilePath.is_empty()
-			&& ( ! setup._testGroup.is_empty()
+			&& ( ! setup._testGroups.is_empty()
 				|| ! setup._testGroupPattern.is_empty()
 				|| setup._testNumber ) )
 		M_THROW( _( "group names file is an exclusive switch" ),
 				setup._testNumber );
-	if ( ! setup._testGroup.is_empty() && ! setup._testGroupPattern.is_empty() )
+	if ( ! setup._testGroups.is_empty() && ! setup._testGroupPattern.is_empty() )
 		M_THROW( _( "pattern and group switches are exclusive" ), errno );
 	if ( ! setup._testGroupPattern.is_empty() && setup._testNumber )
 		M_THROW( _( "setting test number for pattern makes no sense" ),
 				setup._testNumber );
-	if ( setup._testNumber && setup._testGroup.is_empty() )
+	if ( setup._testNumber && setup._testGroups.is_empty() )
 		M_THROW( _( "must specify test group for test number" ),
 				setup._testNumber );
+	if ( ( setup._testGroups.size() > 1 ) && ( setup._testNumber ) )
+		M_THROW( _( "test number not supported while running multiple groups" ), setup._testNumber );
 	return;
 	M_EPILOG
 	}

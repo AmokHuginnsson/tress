@@ -125,12 +125,13 @@ int main( int argc_, char* argv_[] )
 					}
 				else if ( ! setup._testGroupPattern.is_empty() )
 					runner.get().run_pattern_tests( setup._testGroupPattern.raw() );
-				else if ( ! setup._testGroup.is_empty() && setup._testNumber )
-					runner.get().run_test( setup._testGroup.raw(),
+				else if ( ! setup._testGroups.is_empty() && setup._testNumber )
+					runner.get().run_test( setup._testGroups.begin()->raw(),
 							setup._testNumber );
-				else if ( ! setup._testGroup.is_empty() )
+				else if ( ! setup._testGroups.is_empty() )
 					{
-					groupNames.push_back( setup._testGroup.raw() );
+					for ( OSetup::group_names_t::iterator it( setup._testGroups.begin() ), end( setup._testGroups.end() ); it != end; ++ it )
+					groupNames.push_back( it->raw() );
 					runner.get().run_tests( groupNames );
 					}
 				else

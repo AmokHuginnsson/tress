@@ -31,7 +31,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -84,6 +83,13 @@ TUT_UNIT_TEST_N( 50, "/* sample data */" )
 	ENSURE_EQUALS( "failed to insert .insert() (data)", set.count( "six" ), 6 );
 	ENSURE_EQUALS( "failed to insert .insert() (data)", set.count( "seven" ), 7 );
 	ENSURE_EQUALS( "failed to insert .insert() (size)", set.size(), 1 + 2 + 3 + 4 + 5 + 6 + 7 );
+	string_multi_set_t setCopy( set.begin(), set.end() );
+	HStringStream ssSet;
+	copy( set.begin(), set.end(), stream_iterator( ssSet ) );
+	HStringStream ssCopy;
+	copy( setCopy.begin(), setCopy.end(), stream_iterator( ssCopy ) );
+	ENSURE_EQUALS( "copy through iters failed size", setCopy.size(), set.size() );
+	ENSURE_EQUALS( "copy through iters failed data", ssCopy.string(), ssSet.string() );
 TUT_TEARDOWN()
 
 }

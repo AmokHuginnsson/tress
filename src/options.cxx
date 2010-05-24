@@ -69,7 +69,7 @@ int handle_program_options( int argc_, char** argv_ )
 	int dummyValue( 0 );
 	po( "log_path", program_options_helper::option_value( setup._logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
 		( "jobs", program_options_helper::option_value( setup._jobs ), 'j', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number of concurrent jobs", "count" )
-		( "group", program_options_helper::option_value( setup._testGroup ), 'G', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test group", "name" )
+		( "group", program_options_helper::option_value( setup._testGroups ), 'G', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test group", "name" )
 		( "pattern", program_options_helper::option_value( setup._testGroupPattern ), 'P', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test groups that are matching pattern", "pattern" )
 		( "number", program_options_helper::option_value( setup._testNumber ), 'N', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test number for a given group", "number" )
 		( "restartable", program_options_helper::option_value( setup._restartable ), 'R', HProgramOptionsHandler::OOption::TYPE::NONE, "run tests in restartable mode" )
