@@ -2651,3 +2651,49 @@
    obj:/usr/lib/libxml2.so.2.7.6
    fun:xmlDictFree
 }
+{
+   Maverick26 xml2
+   Memcheck:Cond
+   fun:inflateReset2
+   fun:inflateInit2_
+   obj:/lib/libz.so.1.2.3.4
+   obj:/usr/lib/libxml2.so.2.7.6
+   fun:__xmlParserInputBufferCreateFilename
+   fun:xmlNewInputFromFile
+   obj:/usr/lib/libxml2.so.2.7.6
+   obj:/usr/lib/libxml2.so.2.7.6
+   fun:xmlXIncludeProcessTreeFlagsData
+}
+{
+   Maverick27 mysql
+   Memcheck:Leak
+   fun:malloc
+   fun:my_malloc
+   fun:my_error_register
+   fun:mysql_server_init
+   fun:mysql_init
+}
+{
+   Maverick28 mysql
+   Memcheck:Leak
+   fun:malloc
+   fun:my_once_alloc
+   obj:/usr/lib/libmysqlclient.so.16.0.0
+   obj:/usr/lib/libmysqlclient.so.16.0.0
+   fun:get_charset_by_csname
+   fun:mysql_init_character_set
+   fun:mysql_real_connect
+}
+{
+   Maverick29 LD_PRELOAD trick
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.2.5
+}
