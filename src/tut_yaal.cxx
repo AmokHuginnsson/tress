@@ -77,54 +77,14 @@ bool operator != ( yaal::hcore::HList<tType> const& l1, yaal::hcore::HList<tType
 TUT_SIMPLE_MOCK( tut_yaal );
 TUT_TEST_GROUP_N( tut_yaal, "yaal" );
 
-/* abstract call */
-
-struct ci
-	{
-	struct dummy{};
-	virtual ~ci() {}
-	virtual void visit( void ) = 0;
-	};
-
-template<typename c_t, typename m_t,
-	typename a1t = ci::dummy, typename a2t = ci::dummy>
-struct call : public ci
-	{
-	c_t _obj;
-	m_t M;
-	a1t _a1;
-	a2t _a2;
-	call( c_t obj, m_t m, a1t a1 = a1t(), a2t a2 = a2t() )
-		: _obj( obj ), M( m ), _a1( a1 ), _a2( a2 ) {}
-	void visit( a1t const*, a2t const* )
-		{ (_obj.*M)( _a1, _a2 ); }
-	void visit( a1t const*, ci::dummy* )
-		{ (_obj.*M)( _a1 ); }
-	void visit( ci::dummy*, ci::dummy* )
-		{ (_obj.*M)(); }
-	virtual void visit( void )
-		{ visit( static_cast<a1t*>( NULL ), static_cast<a2t*>( NULL ) ); }
-	};
-
-struct prod
-	{
-	void foo()
-		{ cout << __PRETTY_FUNCTION__ << endl; }
-	void bar( int a1 )
-		{ cout << __PRETTY_FUNCTION__ << ": " << a1 << endl; }
-	void baz( int a1, int a2 )
-		{ cout << __PRETTY_FUNCTION__ << ": " << a1 << ", " << a2 << endl; }
-	};
-
-
-TUT_UNIT_TEST_N( 1, "call method resolving" )
-	prod p;
-	call<prod&, typeof( &prod::foo )> c0( p, &prod::foo );
-	c0.visit();
-	call<prod&, typeof( &prod::bar ), int> c1( p, &prod::bar, 3 );
-	c1.visit();
-	call<prod&, typeof( &prod::baz ), int, int> c2( p, &prod::baz, 11, -7 );
-	c2.visit();
+TUT_UNIT_TEST_N( 1, "swap" )
+	int a( 7 );
+	int b( 13 );
+	ENSURE_EQUALS( "init failed", a, 7 );
+	ENSURE_EQUALS( "init failed", b, 13 );
+	yaal::swap( a, b );
+	ENSURE_EQUALS( "swap failed", a, 13 );
+	ENSURE_EQUALS( "swap failed", b, 7 );
 TUT_TEARDOWN()
 
 bool greater( int long a, int long b )
@@ -137,96 +97,6 @@ TUT_UNIT_TEST_N( 2, "bind2nd" )
 	ENSURE_NOT( "greater functor binded incorrectly", p );
 	bool q = yaal::bind2nd( &greater, 1 )( 3 );
 	ENSURE( "greater functor binded incorrectly", q );
-TUT_TEARDOWN()
-
-struct Derived;
-struct FunkyDerived;
-class Visitor
-	{
-public:
-	virtual ~Visitor( void ) { }
-	virtual void visit( Derived& ) { };
-	virtual void visit( Derived const& ) const { };
-	virtual void visit( FunkyDerived& ) { };
-	virtual void visit( FunkyDerived const& ) const { };
-	};
-
-class HVisitorInterface
-	{
-public:
-	virtual ~HVisitorInterface( void ) { }
-	virtual void accept( Visitor& ) { }
-	virtual void accept( Visitor const& ) const { }
-	};
-
-struct Base : public HVisitorInterface
-	{
-	virtual ~Base( void ) {}
-	virtual void foo( void )
-		{ cout << __PRETTY_FUNCTION__ << endl; }
-	};
-
-struct Derived : public Base
-	{
-	virtual void foo( void )
-		{ cout << __PRETTY_FUNCTION__ << endl; }
-	void baz( void ) const
-		{ cout << __PRETTY_FUNCTION__ << endl; }
-	virtual void accept( Visitor const& call ) const
-		{ call.visit( *this ); }
-	};
-
-struct FunkyDerived : public Base
-	{
-	virtual void foo( void )
-		{ cout << __PRETTY_FUNCTION__ << endl; }
-	void bar( void ) const
-		{ cout << __PRETTY_FUNCTION__ << endl; }
-	virtual void accept( Visitor const& call ) const
-		{ call.visit( *this ); }
-	};
-
-class FunkyDerivedBarCall : public Visitor
-	{
-public:
-	void visit( FunkyDerived const& obj ) const
-		{ obj.bar(); }
-	};
-
-class DerivedBazCall : public Visitor
-	{
-public:
-	void visit( Derived const& obj ) const
-		{ obj.baz(); }
-	};
-
-TUT_UNIT_TEST_N( 3, "visitor pattern" )
-	typedef HPointer<Base> base_ptr_t;
-	base_ptr_t a = base_ptr_t( new Derived );
-	base_ptr_t b = base_ptr_t( new FunkyDerived );
-	(*a).foo();
-	(*b).foo();
-	if ( dynamic_cast<FunkyDerived*>( a.raw() ) )
-		dynamic_cast<FunkyDerived*>( a.raw() )->bar();
-	else
-		cout << "a is not proper type" << endl;
-	if ( dynamic_cast<FunkyDerived*>( b.raw() ) )
-		dynamic_cast<FunkyDerived*>( b.raw() )->bar();
-	else
-		cout << "b is not proper type" << endl;
-	if ( dynamic_cast<Derived*>( a.raw() ) )
-		dynamic_cast<Derived*>( a.raw() )->baz();
-	else
-		cout << "a is not proper type" << endl;
-	if ( dynamic_cast<Derived*>( b.raw() ) )
-		dynamic_cast<Derived*>( b.raw() )->baz();
-	else
-		cout << "b is not proper type" << endl;
-	cout << "now the same but without dynamic cast" << endl;
-	a->accept( FunkyDerivedBarCall() );
-	b->accept( FunkyDerivedBarCall() );
-	a->accept( DerivedBazCall() );
-	b->accept( DerivedBazCall() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "copy algorithm" )
@@ -334,6 +204,22 @@ TUT_UNIT_TEST_N( 11, "set_intersection duplicates" )
 	l.clear();
 	yaal::set_intersection( l2.begin(), l2.end(), l1.begin(), l1.end(), yaal::hcore::back_insert_iterator( l ) );
 	ENSURE_EQUALS( "set_intersection failed l2 * l1", l, l3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 12, "remove_if algorithm" )
+	typedef HList<int> list_t;
+	int a[] = { 1, -2, 3, -4, 9, -8, 7, -6, 5 };
+	list_t l( a, a + sizeof ( a ) / sizeof ( a[ 0 ] ) );
+	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
+	cout << endl;
+	list_t::iterator end( remove_if( l.begin(), l.end(), bind2nd( &less<int>, 0 ) ) ); 
+	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
+	cout << endl;
+	l.erase( end, l.end() );
+	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
+	cout << endl;
+	int b[] = { 1, 3, 9, 7, 5 };
+	ENSURE( "remove_if failed", equal( l.begin(), l.end(), b, b + sizeof ( b ) / sizeof ( b[0] ) ) );
 TUT_TEARDOWN()
 
 }
