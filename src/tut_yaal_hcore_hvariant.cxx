@@ -43,8 +43,9 @@ namespace tut
 
 struct tut_yaal_hcore_hvariant
 	{
+	typedef HInstanceTracker<tut_yaal_hcore_hvariant> instance_tracker_t;
 	typedef HVariant<int, HString, double long> small_variant_t;
-	typedef HVariant<bool, char, int short, int, int long, void*, double, double long, HString> variant_t;
+	typedef HVariant<bool, char, int short, int, int long, void*, double, double long, HString, instance_tracker_t> variant_t;
 	virtual ~tut_yaal_hcore_hvariant( void )
 		{}
 	};
@@ -57,10 +58,22 @@ TUT_UNIT_TEST_N( 1, "PoC of HVariant<>" )
 	cout << "sizeof ( variant_t ): " << sizeof ( v ) << endl;
 	cout << "sizeof ( HString ): " << sizeof ( HString ) << endl;
 	cout << "sizeof ( double long ): " << sizeof ( double long ) << endl;
+	cout << "sizeof ( instance_tracker_t ): " << sizeof ( instance_tracker_t ) << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "uninitialized HVariant<>" )
 	variant_t v;
+	try { v.get<bool>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	try { v.get<char>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	try { v.get<int short>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	try { v.get<int>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	try { v.get<int long>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	try { v.get<void*>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	try { v.get<double>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	try { v.get<double long>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	try { v.get<HString>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	try { v.get<instance_tracker_t>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	ENSURE_EQUALS( "bad type id on uninitialized", v.type(), -1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "copy of uninitialized HVariant<>" )
@@ -74,6 +87,20 @@ TUT_UNIT_TEST_N( 3, "copy of uninitialized HVariant<>" )
 	variant_t u( z );
 	variant_t const& rz = z;
 	variant_t tmp( rz );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 4, "consistency on assign (same types)" )
+	variant_t v = instance_tracker_t( 1 );
+	variant_t w = instance_tracker_t( 2 );
+	w = v;
+	ENSURE( "inconsistent bits after assign", w.get<instance_tracker_t>().is_self() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 5, "consistency on assign (different types)" )
+	variant_t v = instance_tracker_t( 1 );
+	variant_t w = 1;
+	w = v;
+	ENSURE( "inconsistent bits after assign", w.get<instance_tracker_t>().is_self() );
 TUT_TEARDOWN()
 
 }

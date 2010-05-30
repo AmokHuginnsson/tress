@@ -164,10 +164,12 @@ namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
 template<typename owner_t>
 class HInstanceTracker
 	{
+	typedef HInstanceTracker<owner_t> self_t;
 	static int _instances;
 	static int _autoIncrement;
 	int long _id;
 	yaal::hcore::HString _origin;
+	self_t* _self;
 public:
 	HInstanceTracker( int long = -1 );
 	HInstanceTracker( HInstanceTracker const& );
@@ -182,6 +184,7 @@ public:
 	static void set_start_id( int = 0 );
 	int long get_id( void ) const;
 	int long id( void ) const;
+	bool is_self( void ) const;
 	yaal::hcore::HString to_string( void ) const;
 	void swap( HInstanceTracker& );
 	};
@@ -192,7 +195,7 @@ template<typename owner_t>
 int HInstanceTracker<owner_t>::_autoIncrement = 0;
 
 template<typename owner_t>
-HInstanceTracker<owner_t>::HInstanceTracker( int long id_ ) : _id( id_ >= 0 ? id_ : _autoIncrement ), _origin()
+HInstanceTracker<owner_t>::HInstanceTracker( int long id_ ) : _id( id_ >= 0 ? id_ : _autoIncrement ), _origin(), _self( this )
 	{
 	++ _instances;
 	++ _autoIncrement;
@@ -201,7 +204,7 @@ HInstanceTracker<owner_t>::HInstanceTracker( int long id_ ) : _id( id_ >= 0 ? id
 template<typename owner_t>
 HInstanceTracker<owner_t>::HInstanceTracker( HInstanceTracker const& itrck )
 	: _id( itrck._id ),
-	_origin( itrck._origin + ":" + itrck._id )
+	_origin( itrck._origin + ":" + itrck._id ), _self( this )
 	{
 	++ _instances;
 	++ _autoIncrement;
@@ -281,6 +284,12 @@ template<typename owner_t>
 bool HInstanceTracker<owner_t>::operator != ( HInstanceTracker<owner_t> const& val ) const
 	{
 	return ( val._id != _id );
+	}
+
+template<typename owner_t>
+bool HInstanceTracker<owner_t>::is_self( void ) const
+	{
+	return ( _self == this );
 	}
 
 template<typename owner_t>
