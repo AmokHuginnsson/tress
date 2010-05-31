@@ -106,7 +106,7 @@ TUT_TEST_GROUP_N( tut_yaal_tools_hllexecutingparser, "yaal::tools::HLLExecutingP
 TUT_UNIT_TEST_N( 1, "the test" )
 	HArray<double> v;
 	real[push_back(v)]( "3.14159265" );
-//	( real[push_back(v)] >> *( ',' >> real[push_back(v)] ) )( "3.14152653578, 2.1728182818459045" );
+//	( real[push_back(v)] >> *( ',' >> real[push_back(v)] ) )( "3.141592653589793, 2.1728182818459045" );
 	copy( v.begin(), v.end(), stream_iterator( cout, endl ) );
 TUT_TEARDOWN()
 

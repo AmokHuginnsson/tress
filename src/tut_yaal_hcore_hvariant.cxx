@@ -45,7 +45,7 @@ struct tut_yaal_hcore_hvariant
 	{
 	typedef HInstanceTracker<tut_yaal_hcore_hvariant> instance_tracker_t;
 	typedef HVariant<int, HString, double long> small_variant_t;
-	typedef HVariant<bool, char, int short, int, int long, void*, double, double long, HString, instance_tracker_t> variant_t;
+	typedef HVariant<bool, char, int short, int, int long, void*, double, double long, HString, HNumber, instance_tracker_t> variant_t;
 	virtual ~tut_yaal_hcore_hvariant( void )
 		{}
 	};
@@ -57,6 +57,7 @@ TUT_UNIT_TEST_N( 1, "PoC of HVariant<>" )
 	cout << "\"" << v.get<HString>() << "\" of type: " << v.type() << endl;
 	cout << "sizeof ( variant_t ): " << sizeof ( v ) << endl;
 	cout << "sizeof ( HString ): " << sizeof ( HString ) << endl;
+	cout << "sizeof ( HNumber ): " << sizeof ( HNumber ) << endl;
 	cout << "sizeof ( double long ): " << sizeof ( double long ) << endl;
 	cout << "sizeof ( instance_tracker_t ): " << sizeof ( instance_tracker_t ) << endl;
 TUT_TEARDOWN()
@@ -72,6 +73,7 @@ TUT_UNIT_TEST_N( 2, "uninitialized HVariant<>" )
 	try { v.get<double>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
 	try { v.get<double long>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
 	try { v.get<HString>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	try { v.get<HNumber>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
 	try { v.get<instance_tracker_t>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
 	ENSURE_EQUALS( "bad type id on uninitialized", v.type(), variant_t::INVALID );
 TUT_TEARDOWN()
@@ -101,6 +103,28 @@ TUT_UNIT_TEST_N( 5, "consistency on assign (different types)" )
 	variant_t w = 1;
 	w = v;
 	ENSURE( "inconsistent bits after assign", w.get<instance_tracker_t>().is_self() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 6, "identity switches" )
+	variant_t v;
+	v = true;
+	ENSURE_EQUALS( "bad value (bool)", v.get<bool>(), true );
+	v = 1;
+	try { v.get<bool>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	ENSURE_EQUALS( "bad value (int)", v.get<int>(), 1 );
+	v = 3.141592653589793L;
+	try { v.get<int>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	ENSURE_EQUALS( "bad value (double long)", v.get<double long>(), 3.141592653589793L );
+	v = HString( "Ala ma kota." );
+	try { v.get<double long>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	ENSURE_EQUALS( "bad value (HString)", v.get<HString>(), HString( "Ala ma kota." ) );
+	v = HNumber( "2.1718281828459045" );
+	try { v.get<HString>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	ENSURE_EQUALS( "bad value (HNumber)", v.get<HNumber>(), HNumber( "2.1718281828459045" ) );
+	v = false;
+	try { v.get<HNumber>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	ENSURE_EQUALS( "bad value (bool)", v.get<bool>(), false );
+
 TUT_TEARDOWN()
 
 }
