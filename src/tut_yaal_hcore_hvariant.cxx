@@ -73,7 +73,7 @@ TUT_UNIT_TEST_N( 2, "uninitialized HVariant<>" )
 	try { v.get<double long>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
 	try { v.get<HString>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
 	try { v.get<instance_tracker_t>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
-	ENSURE_EQUALS( "bad type id on uninitialized", v.type(), -1 );
+	ENSURE_EQUALS( "bad type id on uninitialized", v.type(), variant_t::INVALID );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "copy of uninitialized HVariant<>" )
