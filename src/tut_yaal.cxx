@@ -212,7 +212,7 @@ TUT_UNIT_TEST_N( 12, "remove_if algorithm" )
 	list_t l( a, a + sizeof ( a ) / sizeof ( a[ 0 ] ) );
 	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
 	cout << endl;
-	list_t::iterator end( remove_if( l.begin(), l.end(), bind2nd( &less<int>, 0 ) ) ); 
+	list_t::iterator end( remove_if( l.begin(), l.end(), bind2nd( less<int>(), 0 ) ) ); 
 	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
 	cout << endl;
 	l.erase( end, l.end() );
