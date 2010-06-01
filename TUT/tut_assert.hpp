@@ -93,7 +93,7 @@ template<class T, class Q>
 void ensure_equals_real( char const* const file, int const& line, char const* const, const char* msg, const Q& actual,
 	const T& expected )
 	{
-	if ( expected != actual )
+	if ( ! ( expected == actual ) )
 		{
 		std::stringstream ss;
 		ss << ( msg ? msg : "" )

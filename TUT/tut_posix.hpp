@@ -95,8 +95,6 @@ struct tut_posix
 
     std::set<pid_t> get_pids() const
     {
-        using namespace std;
-
         const test_object<T> *self = dynamic_cast< const tut::test_object<T>* >(this);
         ensure("trying to call 'get_pids' in ctor of test object", self != NULL);
 
@@ -407,8 +405,6 @@ private:
 
     std::set<pid_t> get_pids_() const
     {
-        using namespace std;
-
         set<pid_t> pids;
         for(pid_map::const_iterator i = pids_.begin(); i != pids_.end(); ++i)
         {
