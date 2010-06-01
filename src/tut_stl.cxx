@@ -4,7 +4,7 @@
 	tut_stl.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
-	ii. You must attach Copyright information to any part of every yaal::copy
+	ii. You must attach Copyright information to any part of every copy
 	    of this software.
 
 Copyright:
@@ -41,10 +41,6 @@ M_VCSID( "$Id: "__ID__" $" )
 using namespace tut;
 using namespace std;
 using namespace boost;
-using namespace yaal;
-using namespace yaal::hconsole;
-using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
 namespace tut
@@ -77,7 +73,7 @@ TUT_UNIT_TEST_N( 2, "display automatically" )
 	s.insert( 1 );
 	s.insert( 2 );
 	s.insert( 3 );
-	yaal::copy( s.begin(), s.end(), hcore::stream_iterator( cout ) );
+	copy( s.begin(), s.end(), ostream_iterator<int>( cout ) );
 	cout << endl;
 	cout << "}" << endl;
 TUT_TEARDOWN()
@@ -88,7 +84,7 @@ TUT_UNIT_TEST_N( 3, "create contents automatically" )
 	typedef set<int> T;
 	T s;
 	generate_n( std::insert_iterator<T>( s, s.begin() ), 3, inc( 1 ) );
-	yaal::copy( s.begin(), s.end(), hcore::stream_iterator( cout ) );
+	copy( s.begin(), s.end(), ostream_iterator<int>( cout ) );
 	cout << endl;
 	cout << "}" << endl;
 TUT_TEARDOWN()
@@ -99,13 +95,13 @@ TUT_UNIT_TEST_N( 4, "reverse container content automatically" )
 	typedef list<int> T;
 	T l;
 	generate_n( std::back_insert_iterator<T>( l ), 3, inc( 1 ) );
-	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
-	std::reverse( l.begin(), l.end() );
-	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	reverse( l.begin(), l.end() );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	T lc;
 	reverse_copy( l.begin(), l.end(), std::back_insert_iterator<T>( lc ) );
-	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
-	yaal::copy( lc.begin(), lc.end(), hcore::stream_iterator( cout ) ); cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	copy( lc.begin(), lc.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	cout << "}" << endl;
 TUT_TEARDOWN()
 
@@ -115,13 +111,13 @@ TUT_UNIT_TEST_N( 5, "transform (negate) container content automatically" )
 	typedef list<int> T;
 	T l;
 	generate_n( std::back_insert_iterator<T>( l ), 20, inc( 1 ) );
-	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
-	std::replace_if(l.begin(), l.end(), std::bind2nd( std::less<int>(), 10 ), 10);
-	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
-	yaal::transform( l.begin(), l.end(), l.begin(), negate<int>() );
-	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
-	yaal::transform( l.begin(), l.end(), l.begin(), yaal::bind2nd( yaal::plus<int>(), 7 ) );
-	yaal::copy( l.begin(), l.end(), hcore::stream_iterator( cout ) ); cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	replace_if(l.begin(), l.end(), std::bind2nd( less<int>(), 10 ), 10);
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	transform( l.begin(), l.end(), l.begin(), negate<int>() );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	transform( l.begin(), l.end(), l.begin(), bind2nd( plus<int>(), 7 ) );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
 	cout << "}" << endl;
 	vector<string> vs;
 TUT_TEARDOWN()
