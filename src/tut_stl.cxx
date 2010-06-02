@@ -158,6 +158,7 @@ TUT_UNIT_TEST_N( 8, "manipulators" )
 	cout << "[O] k = '" << k << "'" << endl;
 	cout << "[M] k = '" << hex << k << "' \thex" << endl;
 	cout << "[O] k = '" << k << "'" << endl;
+	cout << dec << flush;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "ptr_fun" )
@@ -195,6 +196,19 @@ TUT_UNIT_TEST_N( 12, "compose2" )
 	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ),
 			compose2(
 				logical_and<bool>(),
+				bind1st( less<int>(), 30 ),
+				bind1st( greater<int>(), 60 ) ) );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 13, "not2" )
+	typedef list<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ),
+			compose2(
+				not2(	logical_and<bool>() ),
 				bind1st( less<int>(), 30 ),
 				bind1st( greater<int>(), 60 ) ) );
 	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );

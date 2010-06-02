@@ -249,5 +249,36 @@ TUT_UNIT_TEST_N( 17, "compose2" )
 	cout << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 18, "count" )
+	int a[] = { 1, 4, 9, 16, 25, 36, 16, 49, 64, 81, 100, 16 };
+	ENSURE_EQUALS( "misscounted 16", count( a, a + countof( a ), 16 ), 3 );
+	ENSURE_EQUALS( "misscounted 16", count( a, a + countof( a ), 17 ), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 19, "count_if" )
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), bind2nd( less<int>(), 50 ) ), 7 );
+	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), bind2nd( less<int>(), 1 ) ), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 20, "not1" )
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), not1( bind2nd( less<int>(), 50 ) ) ), countof( a ) - 7 );
+	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), not1( bind2nd( less<int>(), 1 ) ) ), countof( a ) - 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 21, "not2" )
+	typedef HList<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
+			compose2(
+				not2(	logical_and<bool>() ),
+				bind1st( less<int>(), 30 ),
+				bind1st( greater<int>(), 60 ) ) );
+	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
 }
 
