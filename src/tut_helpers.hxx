@@ -41,6 +41,10 @@ Copyright:
 #include <yaal/hcore/xalloc.hxx>
 #include <yaal/tools/hstringstream.hxx>
 
+#if defined( __GNUC__ ) && ! defined( stdext )
+#define stdext __gnu_cxx
+#endif /* defined( __GNUC__ ) && ! defined( stdext ) */
+
 namespace std
 {
 

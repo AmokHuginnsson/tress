@@ -30,6 +30,7 @@ Copyright:
 #include <algorithm>
 #include <numeric>
 #include <functional>
+#include <ext/functional>
 #include <boost/bind.hpp>
 
 #include <TUT/tut.hpp>
@@ -40,6 +41,7 @@ M_VCSID( "$Id: "__ID__" $" )
 
 using namespace tut;
 using namespace std;
+using namespace stdext;
 using namespace boost;
 using namespace tress::tut_helpers;
 
@@ -156,6 +158,47 @@ TUT_UNIT_TEST_N( 8, "manipulators" )
 	cout << "[O] k = '" << k << "'" << endl;
 	cout << "[M] k = '" << hex << k << "' \thex" << endl;
 	cout << "[O] k = '" << k << "'" << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 9, "ptr_fun" )
+	typedef list<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	transform( static_cast<int*>( a ), a + countof( a ), back_insert_iterator<list_t>( l ), sqrtl );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 10, "compose1" )
+	typedef list<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	transform( a, a + countof( a ), back_insert_iterator<list_t>( l ), compose1( negate<int>(), bind1st( plus<int>(), 1 ) ) );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 11, "remove_copy_if" )
+	typedef list<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ),
+				bind1st( less<int>(), 30 ) );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 12, "compose2" )
+	typedef list<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ),
+			compose2(
+				logical_and<bool>(),
+				bind1st( less<int>(), 30 ),
+				bind1st( greater<int>(), 60 ) ) );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
+	cout << endl;
 TUT_TEARDOWN()
 
 }

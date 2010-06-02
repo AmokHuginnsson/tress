@@ -187,7 +187,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 12, "remove_if algorithm" )
 	typedef HList<int> list_t;
 	int a[] = { 1, -2, 3, -4, 9, -8, 7, -6, 5 };
-	list_t l( a, a + sizeof ( a ) / sizeof ( a[ 0 ] ) );
+	list_t l( a, a + countof( a ) );
 	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
 	cout << endl;
 	list_t::iterator end( remove_if( l.begin(), l.end(), bind2nd( less<int>(), 0 ) ) ); 
@@ -197,7 +197,56 @@ TUT_UNIT_TEST_N( 12, "remove_if algorithm" )
 	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
 	cout << endl;
 	int b[] = { 1, 3, 9, 7, 5 };
-	ENSURE( "remove_if failed", equal( l.begin(), l.end(), b, b + sizeof ( b ) / sizeof ( b[0] ) ) );
+	ENSURE( "remove_if failed", equal( l.begin(), l.end(), b, b + countof( b ) ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 13, "transform" )
+	typedef HList<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	transform( a, a + countof( a ), back_insert_iterator( l ), sqrt );
+	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 14, "negate" )
+	typedef HList<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	transform( a, a + countof( a ), back_insert_iterator( l ), negate<int>() );
+	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 15, "compose1" )
+	typedef HList<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	transform( a, a + countof( a ), back_insert_iterator( l ), compose1( negate<int>(), bind1st( plus<int>(), 1 ) ) );
+	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+TUT_UNIT_TEST_N( 16, "remove_copy_if" )
+	typedef HList<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
+				bind1st( less<int>(), 30 ) );
+	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 17, "compose2" )
+	typedef HList<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
+			compose2(
+				logical_and<bool>(),
+				bind1st( less<int>(), 30 ),
+				bind1st( greater<int>(), 60 ) ) );
+	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
+	cout << endl;
 TUT_TEARDOWN()
 
 }
