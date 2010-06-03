@@ -161,11 +161,11 @@ TUT_UNIT_TEST_N( 8, "manipulators" )
 	cout << dec << flush;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "ptr_fun" )
+TUT_UNIT_TEST_N( 9, "transform" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	transform( static_cast<int*>( a ), a + countof( a ), back_insert_iterator<list_t>( l ), sqrtl );
+	transform( static_cast<int*>( a ), a + countof( a ), back_insert_iterator<list_t>( l ), static_cast<double (*)( double )>( sqrt ) );
 	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
 	cout << endl;
 TUT_TEARDOWN()
@@ -210,6 +210,32 @@ TUT_UNIT_TEST_N( 13, "not2" )
 			compose2(
 				not2(	logical_and<bool>() ),
 				bind1st( less<int>(), 30 ),
+				bind1st( greater<int>(), 60 ) ) );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 14, "identity" )
+	typedef list<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ),
+			compose2(
+				not2(	logical_and<bool>() ),
+				compose1( bind1st( less<int>(), 30 ), identity<int>() ),
+				bind1st( greater<int>(), 60 ) ) );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 15, "ptr_fun" )
+	typedef list<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ),
+			compose2(
+				not2(	logical_and<bool>() ),
+				compose1( bind1st( less<int>(), 5 ), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ),
 				bind1st( greater<int>(), 60 ) ) );
 	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
 	cout << endl;

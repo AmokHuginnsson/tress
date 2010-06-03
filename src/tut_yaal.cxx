@@ -280,5 +280,31 @@ TUT_UNIT_TEST_N( 21, "not2" )
 	cout << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 22, "identity" )
+	typedef HList<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
+			compose2(
+				not2(	logical_and<bool>() ),
+				compose1( bind1st( less<int>(), 30 ), identity<int>() ),
+				bind1st( greater<int>(), 60 ) ) );
+	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 23, "ptr_fun" )
+	typedef HList<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
+			compose2(
+				not2(	logical_and<bool>() ),
+				compose1( bind1st( less<int>(), 5 ), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ),
+				bind1st( greater<int>(), 60 ) ) );
+	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
 }
 
