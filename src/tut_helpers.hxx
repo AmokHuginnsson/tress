@@ -45,6 +45,23 @@ Copyright:
 #define stdext __gnu_cxx
 #endif /* defined( __GNUC__ ) && ! defined( stdext ) */
 
+namespace yaal
+{
+
+namespace hcore
+{
+
+template<typename first_t, typename second_t>
+yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& os, yaal::hcore::HPair<first_t, second_t> const& p )
+	{
+	os << "(" << p.first << "," << p.second << ")";
+	return ( os );
+	}
+
+}
+
+}
+
 namespace std
 {
 
@@ -53,6 +70,13 @@ std::ostream& operator << ( std::ostream&, yaal::hcore::HNumber const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HString const& );
 template<typename first_t, typename second_t>
 std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second_t> const& p )
+	{
+	os << "(" << p.first << "," << p.second << ")";
+	return ( os );
+	}
+
+template<typename first_t, typename second_t>
+std::ostream& operator << ( std::ostream& os, std::pair<first_t, second_t> const& p )
 	{
 	os << "(" << p.first << "," << p.second << ")";
 	return ( os );

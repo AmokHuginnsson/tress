@@ -4,7 +4,7 @@
 	tut_boost.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
-	ii. You must attach Copyright information to any part of every yaal::copy
+	ii. You must attach Copyright information to any part of every copy
 	    of this software.
 
 Copyright:
@@ -45,9 +45,6 @@ using namespace std;
 using namespace boost;
 using namespace boost::filesystem;
 using namespace boost::gregorian;
-using namespace yaal;
-using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
 namespace tut
@@ -56,11 +53,12 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_boost );
 TUT_TEST_GROUP_N( tut_boost, "boost" );
 
-typedef hcore::HPair<int, int> pair_t;
+typedef pair<int, int> pair_t;
+typedef pair<string, string> person_t;
 
 pair_t make_multi( void )
 	{
-	static pair_t res[] = { hcore::make_pair( 1, 3 ), hcore::make_pair( 4, 1 ), hcore::make_pair( 2, 4 ), hcore::make_pair( 3, 2 ) };
+	static pair_t res[] = { make_pair( 1, 3 ), make_pair( 4, 1 ), make_pair( 2, 4 ), make_pair( 3, 2 ) };
 	static int idx = 0;
 	int i = idx;
 	++ idx;
@@ -73,11 +71,11 @@ TUT_UNIT_TEST_N( 1, "/* binding */" )
 	cout << "{" << endl;
 	typedef vector<pair_t> T;
 	T v;
-	generate_n( std::back_insert_iterator<T>( v ), 3, make_multi );
-	yaal::copy( v.begin(), v.end(), hcore::stream_iterator( cout ) );
+	generate_n( back_insert_iterator<T>( v ), 3, make_multi );
+	copy( v.begin(), v.end(), ostream_iterator<pair_t>( cout ) );
 	cout << endl;
 	sort( v.begin(), v.end(), bind( &pair_t::first, _1 ) < bind( &pair_t::first, _2 ) );
-	yaal::copy( v.begin(), v.end(), hcore::stream_iterator( cout ) );
+	copy( v.begin(), v.end(), ostream_iterator<pair_t>( cout ) );
 	cout << endl;
 	cout << "}" << endl;
 TUT_TEARDOWN()
@@ -209,7 +207,7 @@ TUT_UNIT_TEST_N( 4, "bind, accumulate, plus" )
 	typedef generator<test4helper, inc> t4gh_t;
 	generate_n( std::insert_iterator<T>( m, m.begin() ), 3,
 			generator<t4h_t, inc, t4gh_t>( inc( 1 ), t4gh_t( inc( 7 ) ) ) );
-	yaal::copy( m.begin(), m.end(), hcore::stream_iterator( cout ) );
+	copy( m.begin(), m.end(), ostream_iterator<t4h_t>( cout ) );
 	cout << endl;
 	int sum = accumulate( m.begin(), m.end(), 0,
 			bind( std::plus<int>(), _1, bind( &test4helper::get_val, bind( &t4h_t::second, _2 ) ) ) );
@@ -219,14 +217,22 @@ TUT_TEARDOWN()
 
 pair_t foo( int first, int second )
 	{
-	return ( hcore::make_pair( first, second ) );
+	return ( make_pair( first, second ) );
 	}
 
 TUT_UNIT_TEST_N( 5, "bind features" )
-	ENSURE_EQUALS( "no args bind", bind( &foo, _1, _2 )( 1, 2 ), hcore::make_pair( 1, 2 ) );
-	ENSURE_EQUALS( "no args bind", bind( &foo, _2, _1 )( 1, 2 ), hcore::make_pair( 2, 1 ) );
-	ENSURE_EQUALS( "one arg bind _1, 4", bind( &foo, _1, 4 )( 3 ), hcore::make_pair( 3, 4 ) );
-	ENSURE_EQUALS( "one arg bind 4, _1", bind( &foo, 4, _1 )( 3 ), hcore::make_pair( 4, 3 ) );
+	ENSURE_EQUALS( "no args bind", bind( &foo, _1, _2 )( 1, 2 ), make_pair( 1, 2 ) );
+	ENSURE_EQUALS( "no args bind", bind( &foo, _2, _1 )( 1, 2 ), make_pair( 2, 1 ) );
+	ENSURE_EQUALS( "one arg bind _1, 4", bind( &foo, _1, 4 )( 3 ), make_pair( 3, 4 ) );
+	ENSURE_EQUALS( "one arg bind 4, _1", bind( &foo, 4, _1 )( 3 ), make_pair( 4, 3 ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 6, "bind filed assign" )
+	person_t p( "Ala", "Nowak" );
+	cout << p << endl;
+	string const s( "Kowalska" );
+	cout << ( bind( &person_t::second, &p )() < s ) << endl;
+	cout << ( bind( &person_t::second, &p )() > s ) << endl;
 TUT_TEARDOWN()
 
 }
