@@ -30,6 +30,7 @@ Copyright:
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
+using namespace yaal;
 using namespace yaal::hcore;
 
 namespace yaal
@@ -57,11 +58,11 @@ public:
 
 class HReal : public HRule
 	{
-	typedef HBoundCallInterface<1, void, double const&>::ptr_t action_t;
+	typedef HBoundCall<1, void, double const&> action_t;
 	action_t _action;
 public:
 	HReal( void ) : _action() {}
-	HRule& operator[]( action_t action_ )
+	HRule& operator[]( action_t const& action_ )
 		{
 		_action = action_;
 		return ( *this );
@@ -70,15 +71,15 @@ public:
 		{
 		double d( lexical_cast<double>( input_ ) );
 		if ( !! _action )
-			_action->invoke( d );
+			_action( d );
 		return ( 0 );
 		}
 	} real;
 
 template<typename container_t>
-typename HBoundCallInterface<1, void, typename container_t::value_type const&>::ptr_t push_back( container_t& container )
+HBoundCall<1, void, typename container_t::value_type const&> push_back( container_t& container )
 	{
-	return ( bound_call( &container_t::push_back, &container, _1 ) );
+	return ( call( &container_t::push_back, &container, _1 ) );
 	}
 
 }

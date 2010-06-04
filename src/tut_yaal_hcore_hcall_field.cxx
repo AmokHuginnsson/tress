@@ -48,6 +48,11 @@ struct tut_yaal_hcore_hcall_field
 	void foo( void ) {}
 	};
 
+HString full_name( tut_yaal_hcore_hcall_field::person_t const& p_ )
+	{
+	return ( p_.first + " " + p_.second );
+	}
+
 TUT_TEST_GROUP_N( tut_yaal_hcore_hcall_field, "yaal::hcore::HCall,field" );
 
 TUT_UNIT_TEST_N( 1, "call field read (holder set)" )
@@ -66,6 +71,12 @@ TUT_UNIT_TEST_N( 3, "call field less comparator" )
 	person_t p1( "Ala", "Nowak" );
 	person_t p2( "Ola", "Kowalska" );
 	ENSURE( "comparation failed", call( &person_t::second, _1 )( &p1 ) > call( &person_t::second, _1 )( &p2 ) );
+	ENSURE( "comparation failed", ( call( &person_t::second, _1 ) > call( &person_t::second, _1 ) )( &p1, &p2 ) );
+TUT_TEARDOWN()
+	
+TUT_UNIT_TEST_N( 4, "call field operator overloading with generic HCall<>" )
+	person_t p1( "Ala", "Nowak" );
+//	cout << ( call( &full_name, _1 ) < call( &person_t::second, _1 ) )( p1, &p1 ) << endl;
 TUT_TEARDOWN()
 
 }

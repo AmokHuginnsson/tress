@@ -179,7 +179,7 @@ void CVTest::eat( void )
 	{
 	int cnt = 80;
 	HLock l( _mutex );
-	_thread.spawn( bound_call( &CVTest::run, this ) );
+	_thread.spawn( call( &CVTest::run, this ) );
 	while ( cnt -- )
 		{
 		_cV.wait( 1, 0 );
@@ -200,7 +200,7 @@ TUT_UNIT_TEST_N( 2, "/* Starting new thread and allowing it to finish */" )
 	HCool ca( "a" );
 	HThread a;
 	ca.set( 5 );
-	a.spawn( bound_call( &HCool::run, &ca, &a ) );
+	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
@@ -211,7 +211,7 @@ TUT_UNIT_TEST_N( 3, "/* Starting new thread and finishing it prematurely (sleepi
 	HCool ca( "sleeping" );
 	HThread a;
 	ca.set( 50 );
-	a.spawn( bound_call( &HCool::run, &ca, &a ) );
+	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	start.set_now();
@@ -228,7 +228,7 @@ TUT_UNIT_TEST_N( 33, "/* Starting new thread and finishing it prematurely (busy 
 	HCool ca( "busy" );
 	HThread a;
 	ca.set( 50 );
-	a.spawn( bound_call( &HCool::run, &ca, &a ) );
+	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	start.set_now();
@@ -246,7 +246,7 @@ TUT_UNIT_TEST_N( 4, "/* Starting new thread and finishing it prematurely by dest
 		HCool ca( "a" );
 		HThread a;
 		ca.set( 50 );
-		a.spawn( bound_call( &HCool::run, &ca, &a ) );
+		a.spawn( call( &HCool::run, &ca, &a ) );
 		ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 		start.set_now();
 		}
@@ -260,7 +260,7 @@ TUT_UNIT_TEST_N( 5, "/* Starting and immediatelly finishing thread */" )
 	HCool ca( "a" );
 	HThread a;
 	ca.set( 50 );
-	a.spawn( bound_call( &HCool::run, &ca, &a ) );
+	a.spawn( call( &HCool::run, &ca, &a ) );
 	a.finish();
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
 TUT_TEARDOWN()
@@ -269,10 +269,10 @@ TUT_UNIT_TEST_N( 6, "/* Starting already started thread */" )
 	HCool ca( "6" );
 	HThread a;
 	ca.set( 5 );
-	a.spawn( bound_call( &HCool::run, &ca, &a ) );
+	a.spawn( call( &HCool::run, &ca, &a ) );
 	try
 		{
-		a.spawn( bound_call( &HCool::run, &ca, &a ) );
+		a.spawn( call( &HCool::run, &ca, &a ) );
 		FAIL( "Started already started thread." );
 		}
 	catch ( HException& e )
@@ -297,7 +297,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 8, "/* Simple thread (plain function) */" )
 	HTime start, stop;
 	HThread a;
-	a.spawn( bound_call( &simple, &a ) );
+	a.spawn( call( &simple, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	start.set_now();
@@ -313,7 +313,7 @@ TUT_UNIT_TEST_N( 9, "/* Starting new thread and allowing it to finish, the finic
 	HCool ca( "a" );
 	HThread a;
 	ca.set( 5 );
-	a.spawn( bound_call( &HCool::run, &ca, &a ) );
+	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
@@ -323,7 +323,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 10, "/* Very short living thread. */" )
 	HTime start, stop;
 	HThread a;
-	a.spawn( bound_call( a_fast_one, &a ) );
+	a.spawn( call( a_fast_one, &a ) );
 	cout << __PRETTY_FUNCTION__ << endl;
 	a.finish();
 	/* In case of wrong implementation this test case will hang foreveer. */
@@ -332,7 +332,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 11, "/* Very short living thread, spawned delayed. */" )
 	HTime start, stop;
 	HThread a;
-	a.spawn( bound_call( a_fast_one, &a ) );
+	a.spawn( call( a_fast_one, &a ) );
 	M_DSLEEP( 1 );
 	cout << __PRETTY_FUNCTION__ << endl;
 	a.finish();

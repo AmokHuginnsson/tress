@@ -190,7 +190,7 @@ public:
 			const_iterator e = _groups.end();
 			yaal::tools::HWorkFlow w( tress::setup._jobs );
 			for ( const_iterator i = _groups.begin(); i != e; ++ i )
-				w.push_task( yaal::hcore::bound_call( &test_runner::run_group, this, i ) );
+				w.push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
 			}
 
 		_callback->run_completed();
@@ -217,7 +217,7 @@ public:
 					_callback->test_completed( tr );
 					}
 				else
-					w.push_task( yaal::hcore::bound_call( &test_runner::run_group, this, i ) );
+					w.push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
 				}
 			}
 
@@ -238,7 +238,7 @@ public:
 			for ( const_iterator i = _groups.begin(); i != e; ++ i )
 				{
 				if ( i->first.find( pattern ) != std::string::npos )
-					w.push_task( yaal::hcore::bound_call( &test_runner::run_group, this, i ) );
+					w.push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
 				}
 			}
 

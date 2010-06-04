@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_yaal_tools_hworkflow.cxx - this file is integral part of `tress' project.
+	tut_yaal_hcore_hcall_bound.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -41,51 +41,16 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_tools_hworkflow
+struct tut_yaal_hcore_hcall_bound
 	{
-	typedef HInstanceTracker<tut_yaal_tools_hworkflow> counter_t;
-	virtual ~tut_yaal_tools_hworkflow( void )
-		{}
-	static void foo( int, char, int );
-	static void bar( counter_t );
+	virtual ~tut_yaal_hcore_hcall_bound( void ) {}
+	void foo( void ) {}
 	};
 
-TUT_TEST_GROUP_N( tut_yaal_tools_hworkflow, "yaal::tools::HWorkFlow" );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hcall_bound, "yaal::hcore::HCall,bound" );
 
-void tut_yaal_tools_hworkflow::foo( int id, char symbol, int waitTime )
-	{
-	cout << "foo" << id << flush;
-	HClock c;
-	for ( int i = 0; i < 3; ++ i )
-		{
-		util::sleep::milisecond( waitTime );
-		cout << symbol << flush;
-		}
-	cout << "[" << id << "]" << endl;
-	}
-
-void tut_yaal_tools_hworkflow::bar( counter_t c )
-	{
-	cout << c.to_string() << endl;
-	}
-
-TUT_UNIT_TEST_N( 1, "Pushing tasks." )
-	HWorkFlow w( 3 );
-	for ( int i = 0; i < 3; ++ i )
-		{
-		w.push_task( call( tut_yaal_tools_hworkflow::foo, 0, '+', 100 ) );
-		w.push_task( call( tut_yaal_tools_hworkflow::foo, 1, '*', 200 ) );
-		w.push_task( call( tut_yaal_tools_hworkflow::foo, 2, '@', 300 ) );
-		}
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST_N( 2, "Cleanup of finished tasks." )
-		{
-		HWorkFlow w( 3 );
-		w.push_task( call( tut_yaal_tools_hworkflow::bar, counter_t() ) );
-		util::sleep::milisecond( 100 );
-		ENSURE_EQUALS( "HWorkFlow did not cleaned its task list.", counter_t::get_instance_count(), 0 );
-		}
+TUT_UNIT_TEST_N( 1, "Constructor." )
+	HBoundCall<> c( call( &tut_yaal_hcore_hcall_bound::foo, this ) );
 TUT_TEARDOWN()
 
 }

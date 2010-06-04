@@ -100,8 +100,8 @@ void HServer::start( void )
 	{
 	M_PROLOG
 	cout << "starting server thread ..." << endl;
-	_dispatcher.register_file_descriptor_handler( _socket.get_file_descriptor(), bound_call( &HServer::handler_connection, this, _1 ) );
-	_thread.spawn( bound_call( &HServer::run, this ) );
+	_dispatcher.register_file_descriptor_handler( _socket.get_file_descriptor(), call( &HServer::handler_connection, this, _1 ) );
+	_thread.spawn( call( &HServer::run, this ) );
 	return;
 	M_EPILOG
 	}
@@ -130,7 +130,7 @@ void HServer::handler_connection( int )
 	HSocket::ptr_t client = _socket.accept();
 	M_ASSERT( !! client );
 	int fd = client->get_file_descriptor();
-	_dispatcher.register_file_descriptor_handler( fd, bound_call( &HServer::handler_message, this, _1 ) );
+	_dispatcher.register_file_descriptor_handler( fd, call( &HServer::handler_message, this, _1 ) );
 	cout << green << "new connection" << lightgray << endl;
 	return;
 	M_EPILOG

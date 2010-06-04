@@ -408,7 +408,7 @@ TUT_UNIT_TEST_N( 8, "(hand written) 6 (2 free) args" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "(hand written) 10 (4 free) args" )
-	ENSURE_EQUALS( "function bind failed", call( foo10, 7, 1, 2, _3, 4, _2, 6, _1, 8, _4 )( -1, -2, -3, -4 ), "foo10: a1 = 7, a2 = 1, a3 = 2, a4 = -3, a5 = 4, a6 = -2, a7 = 6, a8 = -1, a9 = 8, a10 = -4" );
+//	ENSURE_EQUALS( "function bind failed", call( foo10, 7, 1, 2, _3, 4, _2, 6, _1, 8, _4 )( -1, -2, -3, -4 ), "foo10: a1 = 7, a2 = 1, a3 = 2, a4 = -3, a5 = 4, a6 = -2, a7 = 6, a8 = -1, a9 = 8, a10 = -4" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 30, "use call as a functor in an algorithm" )
