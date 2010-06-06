@@ -76,7 +76,7 @@ TUT_TEARDOWN()
 	
 TUT_UNIT_TEST_N( 4, "call field operator overloading with generic HCall<>" )
 	person_t p1( "Ala", "Nowak" );
-//	cout << ( call( &full_name, _1 ) < call( &person_t::second, _1 ) )( p1, &p1 ) << endl;
+	cout << ( call( &full_name, _1 ) < call( &person_t::second, _1 ) )( p1, &p1 ) << endl;
 TUT_TEARDOWN()
 
 }

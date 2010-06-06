@@ -306,5 +306,29 @@ TUT_UNIT_TEST_N( 23, "ptr_fun" )
 	cout << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 24, "call as bind1st/bind2nd" )
+	bool p = call( less<int>(), 4, _1 )( 3 );
+	ENSURE_NOT( "greater functor binded incorrectly", p );
+	bool q = call( less<int>(), 1, _1 )( 3 );
+	ENSURE( "greater functor binded incorrectly", q );
+	bool r = call( greater<int>(), _1, 4 )( 3 );
+	ENSURE_NOT( "greater functor binded incorrectly", r );
+	bool s = call( greater<int>(), _1, 1 )( 3 );
+	ENSURE( "greater functor binded incorrectly", s );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 25, "call in superposition" )
+	typedef HList<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
+			compose2(
+				logical_and<bool>(),
+				call( less<int>(), 30, _1 ),
+				call( greater<int>(), 60, _1 ) ) );
+	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
 }
 
