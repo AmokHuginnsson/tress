@@ -33,6 +33,7 @@ M_VCSID( "$Id: "__ID__" $" )
 using namespace tut;
 using namespace yaal;
 using namespace yaal::trait;
+using namespace yaal::hcore;
 using namespace tress::tut_helpers;
 
 namespace tut
@@ -60,6 +61,29 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "count types" )
 	ENSURE_EQUALS( "type count is wrong", count_type<int, char, double, int, float, int, void*>::value, 2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 4, "ref vs const" )
+	cout << trait::is_reference<int&>::value << endl;
+	cout << trait::is_reference<int*&>::value << endl;
+	cout << trait::is_reference<int const&>::value << endl;
+	cout << trait::is_reference<int const*&>::value << endl;
+	cout << trait::is_reference<int* const&>::value << endl;
+	cout << trait::is_reference<int* const*&>::value << endl << endl;
+
+	cout << trait::is_reference<trait::strip_reference<int&>::type>::value << endl;
+	cout << trait::is_reference<trait::strip_reference<int*&>::type>::value << endl;
+	cout << trait::is_reference<trait::strip_reference<int const&>::type>::value << endl;
+	cout << trait::is_reference<trait::strip_reference<int const*&>::type>::value << endl;
+	cout << trait::is_reference<trait::strip_reference<int* const&>::type>::value << endl;
+	cout << trait::is_reference<trait::strip_reference<int* const*&>::type>::value << endl;
+
+	typedef trait::make_const_ref_ptr<trait::strip_reference<int&>::type>::type T1;
+	typedef trait::make_const_ref_ptr<trait::strip_reference<int*&>::type>::type T2;
+	typedef trait::make_const_ref_ptr<trait::strip_reference<int const&>::type>::type T3;
+	typedef trait::make_const_ref_ptr<trait::strip_reference<int const*&>::type>::type T4;
+	typedef trait::make_const_ref_ptr<trait::strip_reference<int* const&>::type>::type T5;
+	typedef trait::make_const_ref_ptr<trait::strip_reference<int* const*&>::type>::type T6;
 TUT_TEARDOWN()
 
 }

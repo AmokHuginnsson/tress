@@ -364,6 +364,13 @@ std::ostream& operator << ( std::ostream& stream, HInstanceTracker<owner_t> cons
 	return ( stream );
 	}
 
+template<typename owner_t>
+yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& stream, HInstanceTracker<owner_t> const& itrck )
+	{
+	stream << itrck.to_string();
+	return ( stream );
+	}
+
 }
 
 template<typename owner_t>

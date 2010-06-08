@@ -50,7 +50,12 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-TUT_SIMPLE_MOCK( tut_boost );
+struct tut_boost
+	{
+	typedef HInstanceTracker<tut_boost> item_t;
+	virtual ~tut_boost( void ) {}
+	};
+
 TUT_TEST_GROUP_N( tut_boost, "boost" );
 
 typedef pair<int, int> pair_t;
@@ -233,6 +238,15 @@ TUT_UNIT_TEST_N( 6, "bind filed assign" )
 	string const s( "Kowalska" );
 	cout << ( bind( &person_t::second, &p )() < s ) << endl;
 	cout << ( bind( &person_t::second, &p )() > s ) << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 7, "compare with constant." )
+	typedef list<item_t> list_t;
+	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ), bind( &item_t::id, _1 ) < 50 );
+	copy( l.begin(), l.end(), ostream_iterator<item_t>( cout, " " ) );
+	cout << endl;
 TUT_TEARDOWN()
 
 }
