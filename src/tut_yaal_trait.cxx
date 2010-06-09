@@ -86,5 +86,18 @@ TUT_UNIT_TEST_N( 4, "ref vs const" )
 	typedef trait::make_const_ref_ptr<trait::strip_reference<int* const*&>::type>::type T6;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 5, "arg type deduction on functional functors :)" )
+	cout << trait::same_type<trait::argument_type<less<int>, 0>::type, int>::value << endl;
+	cout << trait::same_type<trait::argument_type<less<int>, 1>::type, int>::value << endl;
+	cout << trait::same_type<trait::argument_type<less<int>, 0>::type, double>::value << endl;
+	cout << trait::same_type<trait::argument_type<less<int>, 1>::type, double>::value << endl;
+	cout << "neg " << trait::same_type<trait::argument_type<negate<int>, 0>::type, int>::value << endl;
+	cout << "neg " << trait::same_type<trait::argument_type<negate<int>, 3>::type, int>::value << endl;
+	cout << "binary " << trait::same_type<trait::argument_type<binary_function<bool, int, double>, 0>::type, int>::value << endl;
+	cout << "binary " << trait::same_type<trait::argument_type<binary_function<bool, int, double>, 1>::type, double>::value << endl;
+	cout << "binary composition " << trait::same_type<trait::argument_type<binary_composition<plus<int>, negate<int>, negate<int> >, 0>::type, int >::value << endl;
+	cout << "binary composition " << trait::same_type<trait::argument_type<binary_composition<plus<int>, negate<int>, negate<int> >, 1>::type, int >::value << endl;
+TUT_TEARDOWN()
+
 }
 

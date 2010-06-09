@@ -70,7 +70,7 @@ void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ )
 	int long bucketCount( map_._engine._buckets.get_size() / sizeof ( atom_t* ) );
 	ENSURE( "wrong bucket count/prime", bucketCount >= map_._engine._prime );
 	ENSURE( "wrong bucket prime/size", map_._engine._prime >= map_._engine._size );
-	ENSURE( "wrong prime / alloc status", exor( buckets != NULL, map_._engine._prime != 0 ) );
+	ENSURE( "wrong prime / alloc status", xnor( buckets != NULL, map_._engine._prime != 0 ) );
 	int long realSize( 0 );
 	int long collisions( 0 );
 	int long longestCollision( 0 );

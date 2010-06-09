@@ -54,11 +54,20 @@ TUT_UNIT_TEST_N( 1, "Constructor." )
 	HBoundCall<> c( call( &tut_yaal_hcore_hcall_bound::foo, this ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "compare with constant." )
+TUT_UNIT_TEST_N( 2, "compare with constant less." )
 	typedef HList<item_t> list_t;
 	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ), call( &item_t::id, _1 ) < 50 );
+	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 3, "compare with constant greater." )
+	typedef HList<item_t> list_t;
+	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ), call( &item_t::id, _1 ) > 50 );
 	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
 	cout << endl;
 TUT_TEARDOWN()

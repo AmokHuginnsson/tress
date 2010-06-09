@@ -53,5 +53,12 @@ TUT_UNIT_TEST_N( 1, "max_signed" )
 	cout << dec;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 2, "xor" )
+	ENSURE_NOT( "xor failed", meta::boolean_xor<false, false>::value );
+	ENSURE( "xor failed", meta::boolean_xor<false, true>::value );
+	ENSURE( "xor failed", meta::boolean_xor<true, false>::value );
+	ENSURE_NOT( "xor failed", meta::boolean_xor<true, true>::value );
+TUT_TEARDOWN()
+
 }
 
