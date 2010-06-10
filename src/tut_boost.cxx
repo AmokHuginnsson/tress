@@ -33,6 +33,7 @@ Copyright:
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/convenience.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>
+#include <boost/lambda/lambda.hpp>
 
 #include <TUT/tut.hpp>
 
@@ -42,6 +43,7 @@ M_VCSID( "$Id: "__ID__" $" )
 
 using namespace tut;
 using namespace std;
+using namespace boost;
 using namespace boost;
 using namespace boost::filesystem;
 using namespace boost::gregorian;
@@ -246,6 +248,27 @@ TUT_UNIT_TEST_N( 7, "compare with constant." )
 	list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ), bind( &item_t::id, _1 ) < 50 );
 	copy( l.begin(), l.end(), ostream_iterator<item_t>( cout, " " ) );
+	cout << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 8, "lambda test." )
+	using boost::lambda::_1;
+	typedef list<int> list_t;
+	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	list_t l;
+	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ), _1 < 50 );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
+	cout << endl;
+	l.clear();
+	transform( a, a + countof( a ), back_insert_iterator<list_t>( l ), _1 + 10 );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
+	cout << endl;
+	l.clear();
+	transform( a, a + countof( a ), back_insert_iterator<list_t>( l ), _1 * 2 + 10 );
+	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
+	cout << endl;
+	l.clear();
+	for_each( a, a + countof( a ), cout << ( _1 << 1 ) << " " );
 	cout << endl;
 TUT_TEARDOWN()
 
