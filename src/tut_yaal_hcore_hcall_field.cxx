@@ -43,6 +43,7 @@ namespace tut
 
 struct tut_yaal_hcore_hcall_field
 	{
+	typedef HInstanceTracker<tut_yaal_hcore_hcall_field> item_t;
 	typedef HPair<HString, HString> person_t;
 	virtual ~tut_yaal_hcore_hcall_field( void ) {}
 	void foo( void ) {}
@@ -63,21 +64,29 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 2, "call field read (holder variable)" )
 	person_t p1( "Ala", "Nowak" );
 	person_t p2( "Ola", "Kowalska" );
-	ENSURE_EQUALS( "field access failed",  call( &person_t::second, _1 )( &p1 ), p1.second );
-	ENSURE_EQUALS( "field access failed",  call( &person_t::second, _1 )( &p2 ), p2.second );
+	ENSURE_EQUALS( "field access failed",  call( &person_t::second, _1 )( p1 ), p1.second );
+	ENSURE_EQUALS( "field access failed",  call( &person_t::second, _1 )( p2 ), p2.second );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "call field less comparator" )
 	person_t p1( "Ala", "Nowak" );
 	person_t p2( "Ola", "Kowalska" );
-	ENSURE( "comparation failed", call( &person_t::second, _1 )( &p1 ) > call( &person_t::second, _1 )( &p2 ) );
-	ENSURE( "comparation failed", ( call( &person_t::second, _1 ) > call( &person_t::second, _1 ) )( &p1, &p2 ) );
+	ENSURE( "comparation failed", call( &person_t::second, _1 )( p1 ) > call( &person_t::second, _1 )( p2 ) );
+	ENSURE( "comparation failed", ( call( &person_t::second, _1 ) > call( &person_t::second, _1 ) )( p1, p2 ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "call field operator overloading with generic HCall<>" )
 	person_t p1( "Ala", "Nowak" );
-	person_t p2( "Ola", "Kowalska" );
-	cout << ( call( &full_name, _1 ) < call( &person_t::second, _1 ) )( p1, &p1 ) << endl;
+	person_t const p2( "Ola", "Kowalska" );
+	cout << ( call( &full_name, _1 ) < call( &person_t::second, _1 ) )( p1, p2 ) << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 5, "call field bind in algorithm" )
+	person_t a[] = { person_t( "Ala", "Kowalska" ), person_t( "Diana", "B³aszczyk" ), person_t( "Marcin", "Konarski" ), person_t( "Magdalena", "Rêbowska" ), person_t( "Wojciech", "Peisert" ) };
+	transform( a, a + countof( a ), stream_iterator( cout, " " ), call( &person_t::first, _1 ) );
+	cout << endl;
+	transform( a, a + countof( a ), stream_iterator( cout, " " ), call( &person_t::second, _1 ) );
+	cout << endl;
 TUT_TEARDOWN()
 
 }
