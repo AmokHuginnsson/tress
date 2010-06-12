@@ -46,7 +46,7 @@ struct tut_yaal_hcore_hexception
 
 class A
 	{
-	typedef A self_t;
+	typedef A this_type;
 public:
 	virtual ~A( void ) { }
 	virtual void foo( int const& a ) const
@@ -67,8 +67,8 @@ class B : public A
 public:
 	virtual ~B( void ) { }
 protected:
-	typedef B self_t;
-	typedef A hier_t;
+	typedef B this_type;
+	typedef A base_type;
 	virtual void do_foo( int const& a ) const
 		{
 		if ( ! a )
@@ -84,8 +84,8 @@ class C : public B
 public:
 	virtual ~C( void ) { }
 protected:
-	typedef C self_t;
-	typedef B hier_t;
+	typedef C this_type;
+	typedef B base_type;
 	virtual void do_foo( int const& a ) const
 		{
 		if ( ! a )
@@ -98,7 +98,7 @@ typedef HExceptionT<C,BE> CE;
 
 class P
 	{
-	typedef P self_t;
+	typedef P this_type;
 public:
 	virtual ~P( void ) { }
 	virtual void foo( int const& a ) const
@@ -119,7 +119,7 @@ class Q : public P
 public:
 	virtual ~Q( void ) { }
 private:
-	typedef Q self_t;
+	typedef Q this_type;
 	virtual void do_foo( int const& a ) const
 		{
 		if ( ! a )
@@ -135,8 +135,8 @@ class R : public Q
 public:
 	virtual ~R( void ) { }
 protected:
-	typedef R self_t;
-	typedef Q hier_t;
+	typedef R this_type;
+	typedef Q base_type;
 	virtual void do_foo( int const& a ) const
 		{
 		if ( ! a )

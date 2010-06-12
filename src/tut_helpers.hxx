@@ -192,12 +192,12 @@ namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
 template<typename owner_t>
 class HInstanceTracker
 	{
-	typedef HInstanceTracker<owner_t> self_t;
+	typedef HInstanceTracker<owner_t> this_type;
 	static int _instances;
 	static int _autoIncrement;
 	int long _id;
 	yaal::hcore::HString _origin;
-	self_t* _self;
+	this_type* _self;
 public:
 	HInstanceTracker( int long = -1 );
 	HInstanceTracker( HInstanceTracker const& );
