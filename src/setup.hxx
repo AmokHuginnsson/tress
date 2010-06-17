@@ -39,8 +39,9 @@ struct OSetup
 	{
 	OSetup( void )
 		: _quiet( false ), _verbose( false ),
-		_listGroups( false ), _restartable( false ), _testNumber( 0 ),
-		_jobs( DEFAULT_JOB_COUNT ), _argc( 0 ), _argv( NULL ),
+		_listGroups( false ), _restartable( false ), _exit( false ),
+		_testNumber( 0 ), _jobs( DEFAULT_JOB_COUNT ),
+		_argc( 0 ), _argv( NULL ),
 		_programName( NULL ), _logPath(), _testGroups(),
 		_testGroupPattern(), _testGroupListFilePath() {}
 	typedef yaal::hcore::HSet<yaal::hcore::HString> group_names_t;
@@ -48,6 +49,7 @@ struct OSetup
 	bool _verbose;		/* --verbose */
 	bool _listGroups;
 	bool _restartable;
+	bool _exit;
 	int _testNumber;
 	int _jobs;
 	int _argc;

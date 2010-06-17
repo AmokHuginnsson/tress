@@ -77,6 +77,7 @@ int handle_program_options( int argc_, char** argv_ )
 		( "file", program_options_helper::option_value( setup._testGroupListFilePath ), 'F', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "read test group names from given file", "path" )
 		( "option", program_options_helper::option_value( dummyValue ), 'O', HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "this is not a real option, it was added here to test automated help generation capabilities, this description must be long enought to trigger description wrap, more over is must look good", "param" )
 		( "absolute", program_options_helper::option_value( dummyValue ), 'O', HProgramOptionsHandler::OOption::TYPE::OPTIONAL, NULL, "param" )
+		( "exit", program_options_helper::option_value( setup._exit ), 'E', HProgramOptionsHandler::OOption::TYPE::NONE, "exit program gracefuly and do not perform any test" )
 		( "quiet", program_options_helper::option_value( setup._quiet ), 'q', HProgramOptionsHandler::OOption::TYPE::NONE, "inhibit usual output" )
 		( "silent", program_options_helper::option_value( setup._quiet ), 'q', HProgramOptionsHandler::OOption::TYPE::NONE, "inhibit usual output" )
 		( "verbose", program_options_helper::option_value( setup._verbose ), 'v', HProgramOptionsHandler::OOption::TYPE::NONE, "print more information" )
@@ -95,6 +96,9 @@ int handle_program_options( int argc_, char** argv_ )
 		}
 	if ( stop )
 		throw 0;
+	setup._argc = ( argc_ - nonOption ) + 1;
+	setup._argv = argv_ + nonOption - 1;
+	argv_[ nonOption - 1 ] = argv_[ 0 ];
 	return ( nonOption );
 	M_EPILOG
 	}

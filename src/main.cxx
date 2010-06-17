@@ -83,12 +83,6 @@ int main( int argc_, char* argv_[] )
 		opt = handle_program_options( argc_, argv_ );
 		hcore::log.rehash( setup._logPath, setup._programName );
 		setup.test_setup();
-		setup._argc = ( argc_ - opt ) + 1;
-		if ( setup._argc > 1 )
-			{
-			setup._argv = argv_ + opt - 1;
-			argv_ [ opt - 1 ] = argv_ [ 0 ];
-			}
 //		if ( ! is_enabled ( ) )enter_curses (); /* enabling ncurses ablilities*/
 /* *BOOM* */
 		try
@@ -96,7 +90,9 @@ int main( int argc_, char* argv_[] )
 			if ( ! setup._listGroups )
 				cout << "TUT: " << static_cast<char const*>( HTime() ) << endl;
 			errno = 0;
-			if ( setup._listGroups )
+			if ( setup._exit )
+				;
+			else if ( setup._listGroups )
 				{
 				std::cerr << "registered test groups:" << std::endl;
 				tut::groupnames gl = tut::runner.get().list_groups();

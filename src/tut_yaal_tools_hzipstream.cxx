@@ -48,7 +48,7 @@ TUT_SIMPLE_MOCK( tut_yaal_tools_hzipstream );
 TUT_TEST_GROUP_N( tut_yaal_tools_hzipstream, "yaal::tools::HZipStream" );
 
 TUT_UNIT_TEST_N( 1, "compress file" )
-	static char const* const INPUT = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/karatsuba.bc";
+	static char const* const INPUT = ( setup._argc > 2 ) ? setup._argv[ 1 ] : "./data/karatsuba.bc";
 	static char const* const OUTPUT = ( setup._argc > 2 ) ? setup._argv[ 2 ] : "./out/karatsuba.bc.z";
 	HChunk buf( 128 );
 	HFile in;
@@ -71,7 +71,7 @@ TUT_UNIT_TEST_N( 1, "compress file" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "decompress file" )
-	static char const* const INPUT = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./out/karatsuba.bc.z";
+	static char const* const INPUT = ( setup._argc > 2 ) ? setup._argv[ 1 ] : "./out/karatsuba.bc.z";
 	static char const* const OUTPUT = ( setup._argc > 2 ) ? setup._argv[ 2 ] : "./out/karatsuba.bc";
 	HChunk buf( 128 );
 	HFile in;
