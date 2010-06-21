@@ -167,6 +167,25 @@ void HSTDGlobalScopeExceptionHandlingPolicy::handle_exception( void )
 	exit( 1 );
 	}
 
+bool file_compare( yaal::hcore::HString const& path1_, yaal::hcore::HString const& path2_ )
+	{
+	HFile f1( path1_, HFile::OPEN::READING );
+	HFile f2( path2_, HFile::OPEN::READING );
+	static int const BUF_SIZE( 1024 );
+	char buf1[BUF_SIZE];
+	char buf2[BUF_SIZE];
+	bool different( false );
+	int long nRead1( 0 );
+	do
+		{
+		nRead1 = f1.read( buf1, BUF_SIZE );
+		int long nRead2( f2.read( buf2, BUF_SIZE ) );
+		different = ( nRead1 != nRead2 ) || ( memcmp( buf1, buf2, nRead1 ) != 0 );
+		}
+	while ( ! different && ( nRead1 == BUF_SIZE ) );
+	return ( different );
+	}
+
 }
 
 }
