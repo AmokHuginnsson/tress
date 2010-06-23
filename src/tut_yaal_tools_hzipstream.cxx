@@ -47,50 +47,95 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_tools_hzipstream );
 TUT_TEST_GROUP_N( tut_yaal_tools_hzipstream, "yaal::tools::HZipStream" );
 
-TUT_UNIT_TEST_N( 1, "compress file" )
-	static char const* const INPUT = ( setup._argc > 2 ) ? setup._argv[ 1 ] : "./data/karatsuba.bc";
-	static char const* const OUTPUT = ( setup._argc > 2 ) ? setup._argv[ 2 ] : "./out/karatsuba.bc.z";
-	HChunk buf( 128 );
-	HFile in;
-	HFile out;
-	if ( HString( "-" ) == INPUT )
-		in.open( stdin );
-	else
-		in.open( INPUT, HFile::OPEN::READING );
-	if ( HString( "-" ) == OUTPUT )
-		out.open( stdout );
-	else
-		out.open( OUTPUT, HFile::OPEN::WRITING );
-	HZipStream z( out, HZipStream::MODE::DEFLATE );
+template<typename tType>
+class HTmpValue
+	{
+	tType _orig;
+	tType& _value;
+public:
+	HTmpValue( tType& value_ ) : _orig( value_), _value( value_ ) {}
+	~HTmpValue( void )
+		{ _value = _orig; }
+	};
+
+bool test_zipstream( int long zipBufSize_, int long clientBufSize_ )
+	{
+	HTmpValue<int long> t( _zBufferSize_ );
+	_zBufferSize_ = zipBufSize_;
+	static char const* const INPUT( "./data/karatsuba.bc" );
+	static char const* const OUTPUT_ZIP( "./out/karatsuba.bc.z" );
+	static char const* const OUTPUT_RAW( "./out/karatsuba.bc" );
 	int long nRead( 0 );
-	while ( ( nRead = in.read( buf.raw(), buf.get_size() ) ) > 0 )
-		z.write( buf.raw(), nRead );
-	if ( setup._argc < 1 )
+		HChunk buf( clientBufSize_ );
 		{
+		HFile	inRaw( INPUT, HFile::OPEN::READING );
+		HFile outZip( OUTPUT_ZIP, HFile::OPEN::WRITING );
+		HZipStream zOut( outZip, HZipStream::MODE::DEFLATE );
+		while ( ( nRead = inRaw.read( buf.raw(), buf.get_size() ) ) > 0 )
+			zOut.write( buf.raw(), nRead );
 		}
+		{
+		HFile	inZip( OUTPUT_ZIP, HFile::OPEN::READING );
+		HFile outRaw( OUTPUT_RAW, HFile::OPEN::WRITING );
+		HZipStream zIn( inZip, HZipStream::MODE::INFLATE );
+		while ( ( nRead = zIn.read( buf.raw(), buf.get_size() ) ) > 0 )
+			outRaw.write( buf.raw(), nRead );
+		}
+	return ( file_compare( INPUT, OUTPUT_RAW ) );
+	}
+
+TUT_UNIT_TEST_N( 1, "zpipe: compress file, or auto 192, 128" )
+	if ( setup._argc > 2 )
+		{
+		static char const* const INPUT( setup._argv[ 1 ] );
+		static char const* const OUTPUT( setup._argv[ 2 ] );
+		HChunk buf( 128 );
+		HFile in;
+		HFile out;
+		if ( HString( "-" ) == INPUT )
+			in.open( stdin );
+		else
+			in.open( INPUT, HFile::OPEN::READING );
+		if ( HString( "-" ) == OUTPUT )
+			out.open( stdout );
+		else
+			out.open( OUTPUT, HFile::OPEN::WRITING );
+		HZipStream z( out, HZipStream::MODE::DEFLATE );
+		int long nRead( 0 );
+		while ( ( nRead = in.read( buf.raw(), buf.get_size() ) ) > 0 )
+			z.write( buf.raw(), nRead );
+		}
+	else
+		ENSURE_NOT( "(de)compression failed", test_zipstream( 192, 128 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "decompress file" )
-	static char const* const INPUT = ( setup._argc > 2 ) ? setup._argv[ 1 ] : "./out/karatsuba.bc.z";
-	static char const* const OUTPUT = ( setup._argc > 2 ) ? setup._argv[ 2 ] : "./out/karatsuba.bc";
-	HChunk buf( 128 );
-	HFile in;
-	HFile out;
-	if ( HString( "-" ) == INPUT )
-		in.open( stdin );
-	else
-		in.open( INPUT, HFile::OPEN::READING );
-	if ( HString( "-" ) == OUTPUT )
-		out.open( stdout );
-	else
-		out.open( OUTPUT, HFile::OPEN::WRITING );
-	HZipStream z( in, HZipStream::MODE::INFLATE );
-	int long nRead( 0 );
-	while ( ( nRead = z.read( buf.raw(), buf.get_size() ) ) > 0 )
-		out.write( buf.raw(), nRead );
-	if ( setup._argc < 1 )
+TUT_UNIT_TEST_N( 2, "zpipe: decompress file, or auto 128, 192" )
+	if ( setup._argc > 2 )
 		{
+		static char const* const INPUT( setup._argv[ 1 ] );
+		static char const* const OUTPUT( setup._argv[ 2 ] );
+		HChunk buf( 128 );
+		HFile in;
+		HFile out;
+		if ( HString( "-" ) == INPUT )
+			in.open( stdin );
+		else
+			in.open( INPUT, HFile::OPEN::READING );
+		if ( HString( "-" ) == OUTPUT )
+			out.open( stdout );
+		else
+			out.open( OUTPUT, HFile::OPEN::WRITING );
+		HZipStream z( in, HZipStream::MODE::INFLATE );
+		int long nRead( 0 );
+		while ( ( nRead = z.read( buf.raw(), buf.get_size() ) ) > 0 )
+			out.write( buf.raw(), nRead );
 		}
+	else
+		ENSURE_NOT( "(de)compression failed", test_zipstream( 128, 192 ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 3, "auto 128, 128" )
+	ENSURE_NOT( "(de)compression failed", test_zipstream( 128, 128 ) );
 TUT_TEARDOWN()
 
 }
