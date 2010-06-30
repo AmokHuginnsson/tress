@@ -1,7 +1,6 @@
 #ifndef TUT_REPORTER
 #define TUT_REPORTER
 
-#include <cxxabi.h>
 #include <cstdlib>
 #include <iostream>
 
@@ -193,11 +192,8 @@ class reporter : public tut::callback
 						_os << "unexpected exception" << std::endl;
 						if ( tr._exceptionTypeId != "" )
 							{
-							int status = 0;
-							char* ptr = abi::__cxa_demangle( tr._exceptionTypeId.c_str(), 0, 0, &status );
-							_os << "     exception typeid: " << ( ptr ? ptr : "(nil)" ) << std::endl;
-							if ( ptr )
-								free( ptr );
+							std::string symbol( yaal::hcore::demangle( tr._exceptionTypeId.c_str() ).raw() );
+							_os << "     exception typeid: " << ( symbol.empty() ? std::string( "(nil)" ) : symbol ) << std::endl;
 							}
 						}
 					break;
