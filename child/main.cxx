@@ -26,8 +26,7 @@ Copyright:
 
 #include <cstring>
 #include <cstdlib>
-#include <unistd.h>
-#include <signal.h>
+#include <csignal>
 
 #include <yaal/yaal.hxx> /* all hAPI headers */
 M_VCSID( "$Id: "__ID__" $" )
@@ -91,7 +90,7 @@ int main( int argc_, char* argv_[] )
 				else if ( cmd == "read" )
 					cin >> arg;
 				else if ( cmd == "close" )
-					::close( lexical_cast<int>( arg ) );
+					close_fd( lexical_cast<int>( arg ) );
 				else
 					M_THROW( "syntax error at: " + cmd, errno );
 				}
@@ -117,7 +116,7 @@ int main( int argc_, char* argv_[] )
 			signalNames.insert( make_pair<char const* const>( "SEGV", SIGSEGV ) );
 			str2int_dict_t::const_iterator it = signalNames.find( setup._terminate );
 			if ( it != signalNames.end() )
-				kill( getpid(), it->second );
+				kill( get_pid(), it->second );
 			M_THROW( "unknown signal: " + setup._terminate, errno );
 			}
 		}

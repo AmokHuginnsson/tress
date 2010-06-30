@@ -25,7 +25,6 @@ Copyright:
 */
 
 #include <cstdio>
-#include <unistd.h>
 #include <TUT/tut.hpp>
 
 #include <yaal/yaal.hxx>
