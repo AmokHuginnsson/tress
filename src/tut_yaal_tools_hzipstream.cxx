@@ -47,26 +47,14 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_tools_hzipstream );
 TUT_TEST_GROUP_N( tut_yaal_tools_hzipstream, "yaal::tools::HZipStream" );
 
-template<typename tType>
-class HTmpValue
-	{
-	tType _orig;
-	tType& _value;
-public:
-	HTmpValue( tType& value_ ) : _orig( value_), _value( value_ ) {}
-	~HTmpValue( void )
-		{ _value = _orig; }
-	};
-
 bool test_zipstream( int long zipBufSize_, int long clientBufSize_ )
 	{
-	HTmpValue<int long> t( _zBufferSize_ );
-	_zBufferSize_ = zipBufSize_;
+	HScopedValueReplacement<int long> t( _zBufferSize_, zipBufSize_ );
 	static char const* const INPUT( "./data/karatsuba.bc" );
 	static char const* const OUTPUT_ZIP( "./out/karatsuba.bc.z" );
 	static char const* const OUTPUT_RAW( "./out/karatsuba.bc" );
 	int long nRead( 0 );
-		HChunk buf( clientBufSize_ );
+	HChunk buf( clientBufSize_ );
 		{
 		HFile	inRaw( INPUT, HFile::OPEN::READING );
 		HFile outZip( OUTPUT_ZIP, HFile::OPEN::WRITING );
