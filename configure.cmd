@@ -1,0 +1,1 @@
+wscript ../yaal/configure.js

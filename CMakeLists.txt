@@ -7,12 +7,16 @@ find_package( Boost COMPONENTS filesystem date_time REQUIRED )
 find_package( yaal COMPONENTS hcore tools dbwrapper hconsole REQUIRED )
 
 include_directories( . )
-configure_file( ../yaal/_aux/cmake-client-config.hxx build/${CMAKE_BUILD_TYPE}/config.hxx )
+configure_file( ../yaal/_aux/cmake-client-config.hxx ${TARGET_PATH}/config.hxx )
 
 file( GLOB SRCS ./src/*.cxx )
-add_executable( ${PROJECT_NAME} ${SRCS} )
+file( GLOB HDRS ./src/*.hxx )
+file( GLOB TUT ./TUT/*.hpp )
+add_executable( ${PROJECT_NAME} ${SRCS} ${HDRS} ../yaal/_aux/cmake-client-config.hxx )
+add_library( TUT ${TUT} )
 add_library( tressplugin MODULE data/plugin.cxx )
 set_target_properties( ${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX OUTPUT_NAME 1exec RUNTIME_OUTPUT_DIRECTORY build/${CMAKE_BUILD_TYPE}/tress )
+set_target_properties( TUT PROPERTIES LINKER_LANGUAGE CXX )
 set_target_properties( tressplugin PROPERTIES LINKER_LANGUAGE CXX OUTPUT_NAME 1exec PREFIX "" SUFFIX "" LIBRARY_OUTPUT_DIRECTORY build/${CMAKE_BUILD_TYPE}/tressplugin )
 target_link_libraries( ${PROJECT_NAME} ${yaal_LIBRARIES} ${Boost_LIBRARIES} )
 
