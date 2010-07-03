@@ -29,6 +29,8 @@ Copyright:
 #include <iterator>
 #include <algorithm>
 #include <numeric>
+#define BOOST_ALL_DYN_LINK 1
+#include <boost/config/user.hpp>
 #include <boost/bind.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/convenience.hpp>

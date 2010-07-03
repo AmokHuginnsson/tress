@@ -204,7 +204,7 @@ TUT_UNIT_TEST_N( 13, "transform" )
 	typedef HList<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	transform( a, a + countof( a ), back_insert_iterator( l ), sqrt );
+	transform( a, a + countof( a ), back_insert_iterator( l ), static_cast<double (*)( double )>( sqrt ) );
 	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
 	cout << endl;
 TUT_TEARDOWN()

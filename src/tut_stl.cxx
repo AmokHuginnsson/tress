@@ -24,14 +24,19 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#ifndef __GNUC__
+#define _HAS_TRADITIONAL_STL 1
+#endif /* not __GNUC__ */
+
 #include <set>
 #include <vector>
 #include <iterator>
 #include <algorithm>
 #include <numeric>
 #include <functional>
+#ifdef __GNUC__
 #include <ext/functional>
-#include <boost/bind.hpp>
+#endif /* __GNUC__ */
 
 #include <TUT/tut.hpp>
 
@@ -42,7 +47,6 @@ M_VCSID( "$Id: "__ID__" $" )
 using namespace tut;
 using namespace std;
 using namespace stdext;
-using namespace boost;
 using namespace tress::tut_helpers;
 
 namespace tut

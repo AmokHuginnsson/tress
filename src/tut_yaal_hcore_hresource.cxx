@@ -63,8 +63,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "freeing the new allocated object" )
 		{
-		counter_t* p = NULL;
-		ptr_t ptr( p = new counter_t() );
+		counter_t* p = new counter_t();
+		ptr_t ptr( p );
 		ENSURE_EQUALS( "smart pointer does not hold proper get pointer", ptr.get(), p );
 		cout << ptr->to_string() << endl;
 		}

@@ -30,7 +30,6 @@ Copyright:
 #include <string>
 #include <iostream>
 #include <iomanip>
-#include <cxxabi.h>
 
 #include <yaal/hcore/hstreaminterface.hxx>
 #include <yaal/hcore/hpair.hxx>
@@ -284,10 +283,7 @@ template<typename owner_t>
 yaal::hcore::HString HInstanceTracker<owner_t>::to_string( void ) const
 	{
 	yaal::tools::HStringStream ss;
-	int status = 0;
-	char* ptr = abi::__cxa_demangle( typeid( owner_t ).name(), 0, 0, &status );
-	ss << "HInstanceTracker<" << ( ptr ? ptr : "" ) << ">(" << _origin << ":" << _id << ")";
-	yaal::hcore::xfree( ptr );
+	ss << "HInstanceTracker<" << yaal::hcore::demangle( typeid( owner_t ).name() ) << ">(" << _origin << ":" << _id << ")";
 	return ( ss.string() );
 	}
 
