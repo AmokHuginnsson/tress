@@ -72,57 +72,73 @@ bool test_zipstream( int long zipBufSize_, int long clientBufSize_ )
 	return ( file_compare( INPUT, OUTPUT_RAW ) );
 	}
 
-TUT_UNIT_TEST_N( 1, "zpipe: compress file, or auto 192, 128" )
-	if ( setup._argc > 2 )
-		{
-		static char const* const INPUT( setup._argv[ 1 ] );
-		static char const* const OUTPUT( setup._argv[ 2 ] );
-		HChunk buf( 128 );
-		HFile in;
-		HFile out;
-		if ( HString( "-" ) == INPUT )
-			in.open( stdin );
-		else
-			in.open( INPUT, HFile::OPEN::READING );
-		if ( HString( "-" ) == OUTPUT )
-			out.open( stdout );
-		else
-			out.open( OUTPUT, HFile::OPEN::WRITING );
-		HZipStream z( out, HZipStream::MODE::DEFLATE );
-		int long nRead( 0 );
-		while ( ( nRead = in.read( buf.raw(), buf.get_size() ) ) > 0 )
-			z.write( buf.raw(), nRead );
-		}
+void zpipe_compress( HString const& src_, HString const& dst_ )
+	{
+	M_PROLOG
+	HChunk buf( 128 );
+	HFile in;
+	HFile out;
+	if ( src_ == "-" )
+		in.open( stdin );
 	else
-		ENSURE_NOT( "(de)compression failed", test_zipstream( 192, 128 ) );
+		in.open( src_, HFile::OPEN::READING );
+	if ( dst_ == "-" )
+		out.open( stdout );
+	else
+		out.open( dst_, HFile::OPEN::WRITING );
+	HZipStream z( out, HZipStream::MODE::DEFLATE );
+	int long nRead( 0 );
+	while ( ( nRead = in.read( buf.raw(), buf.get_size() ) ) > 0 )
+		z.write( buf.raw(), nRead );
+	return;
+	M_EPILOG
+	}
+
+void zpipe_decompress( HString const& src_, HString const& dst_ )
+	{
+	M_PROLOG
+	HChunk buf( 128 );
+	HFile in;
+	HFile out;
+	if ( src_ == "-" )
+		in.open( stdin );
+	else
+		in.open( src_, HFile::OPEN::READING );
+	if ( dst_ == "-" )
+		out.open( stdout );
+	else
+		out.open( dst_, HFile::OPEN::WRITING );
+	HZipStream z( in, HZipStream::MODE::INFLATE );
+	int long nRead( 0 );
+	while ( ( nRead = z.read( buf.raw(), buf.get_size() ) ) > 0 )
+		out.write( buf.raw(), nRead );
+	return;
+	M_EPILOG
+	}
+
+TUT_UNIT_TEST_N( 1, "default zipstream buffer, client buffer 128 octets" )
+	if ( setup._argc > 2 )
+		zpipe_compress( setup._argv[ 1 ], setup._argv[ 2 ] );
+	else
+		ENSURE_NOT( "(de)compression failed", test_zipstream( _zBufferSize_, 128 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "zpipe: decompress file, or auto 128, 192" )
+TUT_UNIT_TEST_N( 2, "default zipstream buffer, client buffer same size" )
 	if ( setup._argc > 2 )
-		{
-		static char const* const INPUT( setup._argv[ 1 ] );
-		static char const* const OUTPUT( setup._argv[ 2 ] );
-		HChunk buf( 128 );
-		HFile in;
-		HFile out;
-		if ( HString( "-" ) == INPUT )
-			in.open( stdin );
-		else
-			in.open( INPUT, HFile::OPEN::READING );
-		if ( HString( "-" ) == OUTPUT )
-			out.open( stdout );
-		else
-			out.open( OUTPUT, HFile::OPEN::WRITING );
-		HZipStream z( in, HZipStream::MODE::INFLATE );
-		int long nRead( 0 );
-		while ( ( nRead = z.read( buf.raw(), buf.get_size() ) ) > 0 )
-			out.write( buf.raw(), nRead );
-		}
+		zpipe_decompress( setup._argv[ 1 ], setup._argv[ 2 ] );
 	else
-		ENSURE_NOT( "(de)compression failed", test_zipstream( 128, 192 ) );
+		ENSURE_NOT( "(de)compression failed", test_zipstream( _zBufferSize_, _zBufferSize_ ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "auto 128, 128" )
+TUT_UNIT_TEST_N( 3, "zpipe: compress file, or auto 192, 128" )
+	ENSURE_NOT( "(de)compression failed", test_zipstream( 192, 128 ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 4, "zpipe: decompress file, or auto 128, 192" )
+	ENSURE_NOT( "(de)compression failed", test_zipstream( 128, 192 ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 5, "auto 128, 128" )
 	ENSURE_NOT( "(de)compression failed", test_zipstream( 128, 128 ) );
 TUT_TEARDOWN()
 
