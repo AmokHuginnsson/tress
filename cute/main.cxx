@@ -26,6 +26,7 @@ Copyright:
 
 #include <cstdlib>
 #include <iostream>
+#include <sys/time.h>
 
 #include <yaal/yaal.hxx>
 M_VCSID( "$Id$" )
