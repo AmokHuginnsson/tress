@@ -154,9 +154,11 @@ int main( int argc_, char* argv_[] )
 /* ending ncurses sesion        */
 		if ( HCons::get_instance().is_enabled() )
 			HCons::get_instance().leave_curses();
+		HSignalServiceFactory::get_instance().stop();
 		throw;
 		}
 	cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % clk.get_time_elapsed( HClock::UNIT::MILISECOND ) ).string() << endl;
+	HSignalServiceFactory::get_instance().stop();
 	return ( visitor._exceptionsCount
 			+ visitor._failuresCount
 			+ visitor._terminationsCount
