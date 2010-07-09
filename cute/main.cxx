@@ -72,7 +72,7 @@ int main( int argc_, char* argv_[] )
 	try
 		{
 /*	TO-DO:				enter main loop code here                               */
-		HSignalServiceFactory::get_instance();
+		HSignalService::get_instance();
 		setup._programName = argv_[ 0 ];
 		opt = handle_program_options( argc_, argv_ );
 		setup.test_setup();
@@ -91,8 +91,8 @@ int main( int argc_, char* argv_[] )
 	catch ( ... )
 		{
 /* ending ncurses sesion        */
-		if ( HCons::get_instance().is_enabled() )
-			HCons::get_instance().leave_curses();
+		if ( HConsole::get_instance().is_enabled() )
+			HConsole::get_instance().leave_curses();
 		throw;
 		}
 	return ( 0 );

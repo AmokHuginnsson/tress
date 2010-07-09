@@ -78,12 +78,11 @@ int main( int argc_, char* argv_[] )
 	try
 		{
 /*	TO-DO:				enter main loop code here                               */
-		HSignalServiceFactory::get_instance();
+		HSignalService::get_instance();
 		setup._programName = argv_[ 0 ];
 		opt = handle_program_options( argc_, argv_ );
 		hcore::log.rehash( setup._logPath, setup._programName );
 		setup.test_setup();
-//		if ( ! is_enabled ( ) )enter_curses (); /* enabling ncurses ablilities*/
 /* *BOOM* */
 		try
 			{
@@ -140,7 +139,6 @@ int main( int argc_, char* argv_[] )
 			{
 			std::cerr << "tut raised ex: " << e.what() << std::endl;
 			}
-//		if ( is_enabled ( ) )leave_curses ();  /* ending ncurses sesion    */
 		M_ENSURE ( ! errno );
 /*	... there is the place main loop ends. :OD-OT                         */
 		}
@@ -152,13 +150,13 @@ int main( int argc_, char* argv_[] )
 	catch ( ... )
 		{
 /* ending ncurses sesion        */
-		if ( HCons::get_instance().is_enabled() )
-			HCons::get_instance().leave_curses();
-		HSignalServiceFactory::get_instance().stop();
+		if ( HConsole::get_instance().is_enabled() )
+			HConsole::get_instance().leave_curses();
+		HSignalService::get_instance().stop();
 		throw;
 		}
 	cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % clk.get_time_elapsed( HClock::UNIT::MILISECOND ) ).string() << endl;
-	HSignalServiceFactory::get_instance().stop();
+	HSignalService::get_instance().stop();
 	return ( visitor._exceptionsCount
 			+ visitor._failuresCount
 			+ visitor._terminationsCount
