@@ -65,6 +65,7 @@ void gather_groups_from_file( string_list_t& );
 
 int main( int argc_, char* argv_[] )
 	{
+	M_AT_END_OF_SCOPE( HSignalService::get_instance().stop(); );
 	M_PROLOG
 	init_locale( PACKAGE_NAME );
 	HClock clk;
@@ -152,11 +153,9 @@ int main( int argc_, char* argv_[] )
 /* ending ncurses sesion        */
 		if ( HConsole::get_instance().is_enabled() )
 			HConsole::get_instance().leave_curses();
-		HSignalService::get_instance().stop();
 		throw;
 		}
 	cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % clk.get_time_elapsed( HClock::UNIT::MILISECOND ) ).string() << endl;
-	HSignalService::get_instance().stop();
 	return ( visitor._exceptionsCount
 			+ visitor._failuresCount
 			+ visitor._terminationsCount
