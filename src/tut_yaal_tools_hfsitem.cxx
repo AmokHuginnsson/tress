@@ -65,7 +65,8 @@ template<>
 template<>
 void module::test<1>( void )
 	{
-	recurse( "/home/amok/bin" );
+	char const* home( getenv( "HOME" ) );
+	recurse( home ? HString( home  ) + "/bin" : HString( "." ) );
 	}
 
 }
