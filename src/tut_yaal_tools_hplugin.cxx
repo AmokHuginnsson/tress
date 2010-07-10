@@ -56,15 +56,17 @@ TUT_SIMPLE_MOCK( tut_yaal_tools_hplugin );
 TUT_TEST_GROUP_N( tut_yaal_tools_hplugin, "yaal::tools::HPlugin" );
 
 typedef int ( * sumator_t )( int, int );
+static char const* const TRESS_PLUGIN = "./data/tressplugin"LIB_INFIX".so";
 
 TUT_UNIT_TEST_N( 1, "load external library and resolve symbol" )
-	static char const* const TRESS_PLUGIN = "./data/tressplugin"LIB_INFIX".so";
 	int const T1 = 7;
 	int const T2 = 13;
 	HPlugin p;
 	p.load( TRESS_PLUGIN );
-	sumator_t my_sum;
+	ENSURE( "failed to load plugin", p.is_loaded() );
+	sumator_t my_sum( NULL );
 	p.resolve( "tut_yaal_tools_hplugin_sum", my_sum );
+	ENSURE( "failed to resolve symbol", my_sum != NULL );
 	ENSURE_EQUALS( "cound not utilize plugin", my_sum( T1, T2 ), T1 + T2 );
 TUT_TEARDOWN()
 
@@ -76,6 +78,35 @@ TUT_UNIT_TEST_N( 2, "resolve symbol from self" )
 	sumator_t my_sum;
 	p.resolve( MAKE_C_STRING( SELF_SUMATOR ), my_sum );
 	ENSURE_EQUALS( "cound not utilise self-contained symbols", my_sum( T1, T2 ), T1 + T2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 3, "load non-existing plugin" )
+	try
+		{
+		HPlugin p;
+		p.load( "/non/existing/plugin" );
+		FAIL( "non-existing plugin loaded" );
+		}
+	catch ( HPluginException const& )
+		{
+		/* ok */
+		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 4, "resolve non-existing symbol" )
+	try
+		{
+		HPlugin p;
+		p.load( TRESS_PLUGIN );
+		ENSURE( "failed to load plugin", p.is_loaded() );
+		void (*sym)(void) = NULL;
+		p.resolve( "non_existing_symbol", sym );
+		FAIL( "non-existing plugin loaded" );
+		}
+	catch ( HPluginException const& )
+		{
+		/* ok */
+		}
 TUT_TEARDOWN()
 
 }
