@@ -44,7 +44,7 @@ using namespace tress::tut_helpers;
 
 #define SELF_SUMATOR self_sumator
 extern "C"
-int SELF_SUMATOR( int a, int b )
+M_EXPORT_SYMBOL int SELF_SUMATOR( int a, int b )
 	{
 	return ( a + b );
 	}
@@ -87,25 +87,35 @@ TUT_UNIT_TEST_N( 3, "load non-existing plugin" )
 		p.load( "/non/existing/plugin" );
 		FAIL( "non-existing plugin loaded" );
 		}
-	catch ( HPluginException const& )
+	catch ( HPluginException const& e )
 		{
-		/* ok */
+		hcore::log << "expected: " << e.what() << endl;
+		}
+	catch ( HException const& e )
+		{
+		FAIL( std::string( "unexpected: " ) + e.what() );
+		}
+	catch ( ... )
+		{
+		FAIL( "unexpected unknown exception!" );
 		}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "resolve non-existing symbol" )
+	bool loaded( false );
 	try
 		{
 		HPlugin p;
 		p.load( TRESS_PLUGIN );
-		ENSURE( "failed to load plugin", p.is_loaded() );
+		loaded = p.is_loaded();
 		void (*sym)(void) = NULL;
 		p.resolve( "non_existing_symbol", sym );
 		FAIL( "non-existing plugin loaded" );
 		}
-	catch ( HPluginException const& )
+	catch ( HPluginException const& e )
 		{
-		/* ok */
+		ENSURE( "failed to load plugin", loaded );
+		hcore::log << "expected: " << e.what() << endl;
 		}
 TUT_TEARDOWN()
 
