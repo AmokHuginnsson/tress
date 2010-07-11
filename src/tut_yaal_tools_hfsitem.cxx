@@ -63,12 +63,82 @@ void recurse( HString const& path_ )
 		}
 	}
 
-template<>
-template<>
-void module::test<1>( void )
-	{
+TUT_UNIT_TEST_N( 1, "exists" )
+	char const err[] = "failed to recognize onhological status of given file";
+	HFSItem dit1( "./data" );
+	ENSURE( err, !! dit1 );
+	HFSItem dit2( "./data/" );
+	ENSURE( err, !! dit2 );
+	HFSItem dit3( "./data/non-existing" );
+	ENSURE( err, ! dit3 );
+	HFSItem dit4( "./data/non-existing/" );
+	ENSURE( err, ! dit4 );
+	HFSItem dit5( "./data/xml.xml" );
+	ENSURE( err, !! dit5 );
+	HFSItem dit6( "./data/xml.xml/" );
+	ENSURE( err, ! dit6 );
+	HFSItem dit7( "." );
+	ENSURE( err, !! dit7 );
+	HFSItem dit8( "./" );
+	ENSURE( err, !! dit8 );
+	HFSItem dit9( ".." );
+	ENSURE( err, !! dit9 );
+	HFSItem dit10( "../" );
+	ENSURE( err, !! dit10 );
+	HFSItem dit11( "/" );
+	ENSURE( err, !! dit11 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 2, "is_directory" )
+	char const err[] = "failed to recognize directoriesness of given file";
+	char const err2[] = "spurious status on non-exeisting item acquired";
+	HFSItem dit1( "./data" );
+	ENSURE( err, dit1.is_directory() );
+	HFSItem dit2( "./data/" );
+	ENSURE( err, dit2.is_directory() );
+	try
+		{
+		HFSItem dit3( "./data/non-existing" );
+		ENSURE( err, ! dit3.is_directory() );
+		FAIL( err2 );
+		}
+	catch ( HFSItemException const& )
+		{
+		}
+	try
+		{
+		HFSItem dit4( "./data/non-existing/" );
+		ENSURE( err, ! dit4.is_directory() );
+		FAIL( err2 );
+		}
+	catch ( HFSItemException const& )
+		{
+		}
+	HFSItem dit5( "./data/xml.xml" );
+	ENSURE( err, ! dit5.is_directory() );
+	try
+		{
+		HFSItem dit6( "./data/xml.xml/" );
+		ENSURE( err, ! dit6.is_directory() );
+		}
+	catch ( HFSItemException const& )
+		{
+		}
+	HFSItem dit7( "." );
+	ENSURE( err, dit7.is_directory() );
+	HFSItem dit8( "./" );
+	ENSURE( err, dit8.is_directory() );
+	HFSItem dit9( ".." );
+	ENSURE( err, dit9.is_directory() );
+	HFSItem dit10( "../" );
+	ENSURE( err, dit10.is_directory() );
+	HFSItem dit11( "/" );
+	ENSURE( err, dit11.is_directory() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 49, "recurively scan directories" )
 	char const* home( getenv( "HOME" ) );
 	recurse( home ? HString( home  ) + "/bin" : HString( "." ) );
-	}
+TUT_TEARDOWN()
 
 }
