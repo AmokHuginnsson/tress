@@ -63,35 +63,52 @@ void recurse( HString const& path_ )
 		}
 	}
 
+struct path_test
+	{
+	char const* _path;
+	bool _exists;
+	};
+
 TUT_UNIT_TEST_N( 1, "exists" )
-	char const err[] = "failed to recognize onhological status of given file";
-	HFSItem dit1( "./data" );
-	ENSURE( err, !! dit1 );
-	HFSItem dit2( "./data/" );
-	ENSURE( err, !! dit2 );
-	HFSItem dit3( "./data/non-existing" );
-	ENSURE( err, ! dit3 );
-	HFSItem dit4( "./data/non-existing/" );
-	ENSURE( err, ! dit4 );
-	HFSItem dit5( "./data/xml.xml" );
-	ENSURE( err, !! dit5 );
-	HFSItem dit6( "./data/xml.xml/" );
-	ENSURE( err, ! dit6 );
-	HFSItem dit7( "." );
-	ENSURE( err, !! dit7 );
-	HFSItem dit8( "./" );
-	ENSURE( err, !! dit8 );
-	HFSItem dit9( ".." );
-	ENSURE( err, !! dit9 );
-	HFSItem dit10( "../" );
-	ENSURE( err, !! dit10 );
-	HFSItem dit11( "/" );
-	ENSURE( err, !! dit11 );
+	HString err( "failed to recognize onhological status of given file: " );
+	path_test test[] =
+		{
+			{ "./data", true },
+			{ "./data/", true },
+			{ "./data/non-existing", false },
+			{ "./data/non-existing/", false },
+			{ "./data/xml.xml", true },
+			{ "./data/xml.xml/", false },
+			{ ".", true },
+			{ "./", true },
+			{ "..", true },
+			{ "../", true },
+			{ "/", true },
+			{ "./data//", true },
+			{ "./data\\", true },
+			{ "./data///", true },
+			{ "./data\\\\", true },
+			{ "./data\\/\\/", true },
+			{ "./\\/\\/", true },
+			{ ".\\/\\/\\/", true },
+			{ "/\\/\\/", true },
+			{ "\\/\\/\\/", true },
+			{ "../\\/\\/", true },
+			{ "..\\/\\/\\/", true },
+			{ "\\", true },
+			{ "\\\\", true },
+			{ "//", true }
+		};
+	for ( int i( 0 ); i < countof ( test ); ++ i )
+		{
+		HFSItem fit( test[i]._path );
+		ENSURE( err + test[i]._path, xnor( !! fit, test[i]._exists ) );
+		}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "is_directory" )
 	char const err[] = "failed to recognize directoriesness of given file";
-	char const err2[] = "spurious status on non-exeisting item acquired";
+	char const err2[] = "spurious status on non-existing item acquired";
 	HFSItem dit1( "./data" );
 	ENSURE( err, dit1.is_directory() );
 	HFSItem dit2( "./data/" );
