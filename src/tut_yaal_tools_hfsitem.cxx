@@ -63,7 +63,7 @@ void recurse( HString const& path_ )
 		}
 	}
 
-struct path_test
+struct PathTest
 	{
 	char const* _path;
 	bool _exists;
@@ -71,7 +71,7 @@ struct path_test
 
 TUT_UNIT_TEST_N( 1, "exists" )
 	HString err( "failed to recognize onhological status of given file: " );
-	path_test test[] =
+	PathTest pathTest[] =
 		{
 			{ "./data", true },
 			{ "./data/", true },
@@ -85,24 +85,13 @@ TUT_UNIT_TEST_N( 1, "exists" )
 			{ "../", true },
 			{ "/", true },
 			{ "./data//", true },
-			{ "./data\\", true },
 			{ "./data///", true },
-			{ "./data\\\\", true },
-			{ "./data\\/\\/", true },
-			{ "./\\/\\/", true },
-			{ ".\\/\\/\\/", true },
-			{ "/\\/\\/", true },
-			{ "\\/\\/\\/", true },
-			{ "../\\/\\/", true },
-			{ "..\\/\\/\\/", true },
-			{ "\\", true },
-			{ "\\\\", true },
 			{ "//", true }
 		};
-	for ( int i( 0 ); i < countof ( test ); ++ i )
+	for ( int i( 0 ); i < countof ( pathTest ); ++ i )
 		{
-		HFSItem fit( test[i]._path );
-		ENSURE( err + test[i]._path, xnor( !! fit, test[i]._exists ) );
+		HFSItem fit( pathTest[i]._path );
+		ENSURE( err + pathTest[i]._path, xnor( !! fit, pathTest[i]._exists ) );
 		}
 TUT_TEARDOWN()
 
