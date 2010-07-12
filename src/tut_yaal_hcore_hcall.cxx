@@ -274,6 +274,11 @@ YaalHCoreHCallClass::YaalHCoreHCallClass( void )
 	{
 	}
 
+YaalHCoreHCallClass::YaalHCoreHCallClass( YaalHCoreHCallClass const& )
+	{
+	FAIL( "one shall not copy me!" );
+	}
+
 YaalHCoreHCallClass::~YaalHCoreHCallClass( void )
 	{
 	}

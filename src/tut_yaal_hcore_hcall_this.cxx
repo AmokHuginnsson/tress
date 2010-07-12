@@ -29,6 +29,7 @@ Copyright:
 #include <yaal/yaal.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
+#include "tut_yaal_hcore_hcall.hxx"
 
 using namespace tut;
 using namespace yaal;
@@ -43,36 +44,135 @@ namespace tut
 
 struct tut_yaal_hcore_hcall_this
 	{
-	static int const CORRECT_ANSWER;
+	YaalHCoreHCallClass _callable;
+	tut_yaal_hcore_hcall_this( void ) : _callable() {}
 	virtual ~tut_yaal_hcore_hcall_this( void ) {}
-	int square( int x )
-		{ return ( x * x ); }
-	int life_the_universe_and_everything( void ) const
-		{ return ( CORRECT_ANSWER ); }
 	};
-
-int const tut_yaal_hcore_hcall_this::CORRECT_ANSWER = 42;
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hcall_this, "yaal::hcore::HCall,this" );
 
 TUT_UNIT_TEST_N( 1, "no-op bind of this" )
-	ENSURE_EQUALS( "bind for this failed", call( &tut_yaal_hcore_hcall_this::life_the_universe_and_everything, this )(), CORRECT_ANSWER );
+	ENSURE_EQUALS( "bad method called", call( &YaalHCoreHCallClass::foo0, &_callable )(), "YaalHCoreHCallClass: foo0" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "this and no args" )
-	ENSURE_EQUALS( "bind for this failed", call( &tut_yaal_hcore_hcall_this::life_the_universe_and_everything, _1 )( *this ), CORRECT_ANSWER );
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo0, _1 )( _callable ), "YaalHCoreHCallClass: foo0" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "this and 1 arg, one free" )
-	ENSURE_EQUALS( "bind for this failed", call( &tut_yaal_hcore_hcall_this::square, _1, 2 )( *this ), 2 * 2 );
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo1, _1, 1 )( _callable ), "YaalHCoreHCallClass: foo1: a1 = 1" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "this and 2 free args, this is first" )
-	ENSURE_EQUALS( "bind for this failed", call( &tut_yaal_hcore_hcall_this::square, _1, _2 )( *this, 2 ), 2 * 2 );
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo1, _1, _2 )( _callable, 1 ), "YaalHCoreHCallClass: foo1: a1 = 1" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "this and 2 free args, this is second" )
-	ENSURE_EQUALS( "bind for this failed", call( &tut_yaal_hcore_hcall_this::square, _2, _1 )( 2, *this ), 2 * 2 );
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo1, _2, _1 )( 1, _callable ), "YaalHCoreHCallClass: foo1: a1 = 1" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 6, "this and 3 free args, this is first" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo2, _1, _2, _3 )( _callable, 1, 2 ), "YaalHCoreHCallClass: foo2: a1 = 1, a2 = 2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 7, "this and 3 free args, this is second" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo2, _2, _1, _3 )( 1, _callable, 2 ), "YaalHCoreHCallClass: foo2: a1 = 1, a2 = 2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 8, "this and 3 free args, this is third" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo2, _3, _1, _2 )( 1, 2, _callable ), "YaalHCoreHCallClass: foo2: a1 = 1, a2 = 2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 9, "this and 4 free args, this is first" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo3, _1, _2, _3, _4 )( _callable, 1, 2, 3 ), "YaalHCoreHCallClass: foo3: a1 = 1, a2 = 2, a3 = 3" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 10, "this and 4 free args, this is second" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo3, _2, _1, _3, _4 )( 1, _callable, 2, 3 ), "YaalHCoreHCallClass: foo3: a1 = 1, a2 = 2, a3 = 3" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 11, "this and 4 free args, this is third" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo3, _3, _1, _2, _4 )( 1, 2, _callable, 3 ), "YaalHCoreHCallClass: foo3: a1 = 1, a2 = 2, a3 = 3" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 12, "this and 4 free args, this is fourth" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo3, _4, _1, _2, _3 )( 1, 2, 3, _callable ), "YaalHCoreHCallClass: foo3: a1 = 1, a2 = 2, a3 = 3" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 13, "this and 5 free args, this is first" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo4, _1, _2, _3, _4, _5 )( _callable, 1, 2, 3, 4 ), "YaalHCoreHCallClass: foo4: a1 = 1, a2 = 2, a3 = 3, a4 = 4" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 14, "this and 5 free args, this is second" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo4, _2, _1, _3, _4, _5 )( 1, _callable, 2, 3, 4 ), "YaalHCoreHCallClass: foo4: a1 = 1, a2 = 2, a3 = 3, a4 = 4" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 15, "this and 5 free args, this is third" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo4, _3, _1, _2, _4, _5 )( 1, 2, _callable, 3, 4 ), "YaalHCoreHCallClass: foo4: a1 = 1, a2 = 2, a3 = 3, a4 = 4" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 16, "this and 5 free args, this is fourth" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo4, _4, _1, _2, _3, _5 )( 1, 2, 3, _callable, 4 ), "YaalHCoreHCallClass: foo4: a1 = 1, a2 = 2, a3 = 3, a4 = 4" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 17, "this and 5 free args, this is fourth" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo4, _5, _1, _2, _3, _4 )( 1, 2, 3, 4, _callable ), "YaalHCoreHCallClass: foo4: a1 = 1, a2 = 2, a3 = 3, a4 = 4" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 18, "this and 2 free args, this is first" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo2, _1, -1, _2 )( _callable, 1 ), "YaalHCoreHCallClass: foo2: a1 = -1, a2 = 1" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 19, "this and 2 free args, this is second" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo2, _2, _1, -1 )( 1, _callable ), "YaalHCoreHCallClass: foo2: a1 = 1, a2 = -1" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 20, "this and 2 free args, this is third" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo2, _1, -1, -2 )( _callable ), "YaalHCoreHCallClass: foo2: a1 = -1, a2 = -2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 21, "this and 3 free args, this is first" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo3, _1, -1, _2, _3 )( _callable, 1, 2 ), "YaalHCoreHCallClass: foo3: a1 = -1, a2 = 1, a3 = 2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 22, "this and 3 free args, this is second" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo3, _2, _1, -1, _3 )( 1, _callable, 2 ), "YaalHCoreHCallClass: foo3: a1 = 1, a2 = -1, a3 = 2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 23, "this and 3 free args, this is third" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo3, _3, _1, _2, -1 )( 1, 2, _callable ), "YaalHCoreHCallClass: foo3: a1 = 1, a2 = 2, a3 = -1" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 24, "this and 3 free args, this is first" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo3, _1, -1, -2, _2 )( _callable, 1 ), "YaalHCoreHCallClass: foo3: a1 = -1, a2 = -2, a3 = 1" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 25, "this and 3 free args, this is second" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo3, _2, -1, -2, _1 )( 1, _callable ), "YaalHCoreHCallClass: foo3: a1 = -1, a2 = -2, a3 = 1" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 26, "this and 4 free args, this is first" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo4, _1, -1, _2, _3, _4 )( _callable, 1, 2, 3 ), "YaalHCoreHCallClass: foo4: a1 = -1, a2 = 1, a3 = 2, a4 = 3" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 27, "this and 4 free args, this is second" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo4, _2, _1, -1, _3, _4 )( 1, _callable, 2, 3 ), "YaalHCoreHCallClass: foo4: a1 = 1, a2 = -1, a3 = 2, a4 = 3" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 28, "this and 4 free args, this is third" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo4, _3, _1, _2, -1, _4 )( 1, 2, _callable, 3 ), "YaalHCoreHCallClass: foo4: a1 = 1, a2 = 2, a3 = -1, a4 = 3" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 29, "this and 4 free args, this is fourth" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo4, _4, _1, _2, _3, -1 )( 1, 2, 3, _callable ), "YaalHCoreHCallClass: foo4: a1 = 1, a2 = 2, a3 = 3, a4 = -1" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 30, "this and 4 free args, this is fourth" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo4, _1, -1, -2, _2, _3 )(  _callable, 1, 2 ), "YaalHCoreHCallClass: foo4: a1 = -1, a2 = -2, a3 = 1, a4 = 2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 31, "this and 4 free args, this is fourth" )
+	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo4, _2, -1, -2, _1, _3 )(  1, _callable, 2 ), "YaalHCoreHCallClass: foo4: a1 = -1, a2 = -2, a3 = 1, a4 = 2" );
 TUT_TEARDOWN()
 
 }

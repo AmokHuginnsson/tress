@@ -51,6 +51,7 @@ class YaalHCoreHCallClass
 	{
 public:
 	YaalHCoreHCallClass( void );
+	YaalHCoreHCallClass( YaalHCoreHCallClass const& );
 	virtual ~YaalHCoreHCallClass( void );
 	TUT_YAAL_HCORE_HCALL_CALLABLE
 	};
