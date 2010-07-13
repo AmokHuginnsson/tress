@@ -88,7 +88,7 @@ int main( int argc_, char* argv_[] )
 		try
 			{
 			if ( ! setup._listGroups )
-				cout << "TUT: " << static_cast<char const*>( HTime() ) << endl;
+				cout << "TUT: " << HTime().string() << endl;
 			errno = 0;
 			if ( setup._exit )
 				;
@@ -134,7 +134,7 @@ int main( int argc_, char* argv_[] )
 					runner.get().run_tests();
 				}
 			if ( ! setup._listGroups )
-				cout << "TUT: " << static_cast<char const*>( HTime() ) << endl;
+				cout << "TUT: " << HTime().string() << endl;
 			}
 		catch ( const std::exception& e )
 			{

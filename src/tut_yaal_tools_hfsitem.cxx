@@ -49,16 +49,16 @@ TUT_TEST_GROUP_N( tut_yaal_tools_hfsitem, "yaal::tools::HFSItem" );
 void recurse( HString const& path_ )
 	{
 	HFSItem dir( path_ );
-	cout << "dir: " << dir.get_path() << endl;
+	cout << "dir: " << blue << bold << dir.get_path() << reset << endl;
 	M_ENSURE( dir.is_directory() );
 	for ( HFSItem::HIterator it = dir.begin(); it != dir.end(); ++ it )
 		{
-		cout << "item: " << it->get_path() << endl;
+		cout << bold << ( it->is_directory() ? "[dir]" : "     " ) << " " << ( it->is_executable() ? "[exec]" : "      " ) << " " << "[" << setw( 10 ) << it->get_size() << "]" << reset << " " << it->get_path() << " " << it->modified().string() << endl;
 		if ( it->is_directory() && ( it->get_name() != "." ) && ( it->get_name() != ".." ) )
 			{
 			cout << "descending into ";
 			recurse( it->get_path() );
-			cout << "back at: " << dir.get_path() << endl;
+			cout << "back at: " << blue << bold << dir.get_path() << reset << endl;
 			}
 		}
 	}
@@ -143,8 +143,7 @@ TUT_UNIT_TEST_N( 2, "is_directory" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 49, "recurively scan directories" )
-	char const* home( getenv( "HOME" ) );
-	recurse( home ? HString( home  ) + "/bin" : HString( "." ) );
+	recurse( "./build/" );
 TUT_TEARDOWN()
 
 }
