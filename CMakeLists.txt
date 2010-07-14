@@ -2,6 +2,12 @@ cmake_minimum_required( VERSION 2.8 )
 project( tress CXX )
 include( ../yaal/_aux/cmakelib.cmake )
 
+if ( NOT ( "$ENV{BOOST_INSTALL_PATH}" STREQUAL "" ) )
+	set( BOOST_ROOT "$ENV{BOOST_INSTALL_PATH}" )
+elseif ( NOT ( "${BOOST_INSTALL_PATH}" STREQUAL "" ) )
+	set( BOOST_ROOT "${BOOST_INSTALL_PATH}" )
+endif()
+
 use_cxx_compiler_flag( -Wno-missing-noreturn )
 find_package( Boost COMPONENTS filesystem date_time REQUIRED )
 find_package( yaal COMPONENTS hcore tools dbwrapper hconsole REQUIRED )
