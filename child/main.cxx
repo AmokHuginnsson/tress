@@ -50,6 +50,7 @@ OSetup setup;
 
 int main( int argc_, char* argv_[] )
 	{
+//	M_AT_END_OF_SCOPE( HSignalService::get_instance().stop(); );
 	M_PROLOG
 /* variables declarations for main loop: */
 	int opt = 0;
@@ -90,7 +91,7 @@ int main( int argc_, char* argv_[] )
 				else if ( cmd == "read" )
 					cin >> arg;
 				else if ( cmd == "close" )
-					close_fd( lexical_cast<int>( arg ) );
+					system::close( lexical_cast<int>( arg ) );
 				else
 					M_THROW( "syntax error at: " + cmd, errno );
 				}
@@ -116,7 +117,7 @@ int main( int argc_, char* argv_[] )
 			signalNames.insert( make_pair<char const* const>( "SEGV", SIGSEGV ) );
 			str2int_dict_t::const_iterator it = signalNames.find( setup._terminate );
 			if ( it != signalNames.end() )
-				kill( get_pid(), it->second );
+				system::kill( system::getpid(), it->second );
 			M_THROW( "unknown signal: " + setup._terminate, errno );
 			}
 		}
