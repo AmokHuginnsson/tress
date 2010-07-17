@@ -54,7 +54,7 @@ struct tut_yaal_tools_hpipedchild
 		{}
 	};
 
-HString tut_yaal_tools_hpipedchild::CHILD( "./data/child" );
+HString tut_yaal_tools_hpipedchild::CHILD( "./data/child"EXE_SUFFIX );
 HString tut_yaal_tools_hpipedchild::CHILD_FAKE( "./data/child_fake" );
 HString tut_yaal_tools_hpipedchild::MSG_OUT( "out" );
 HString tut_yaal_tools_hpipedchild::MSG_ERR( "err" );
