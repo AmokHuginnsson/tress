@@ -174,38 +174,44 @@ void tut_yaal_hcore_hcall::generate_yaal_hcore_hcall_test( int arg, int freeArg 
 	return;
 	}
 
+#ifdef __MSVCXX__
+static int const NSSKIP = sizeof ( "tut::" ) - 1;
+#else
+static int const NSSKIP = 0;
+#endif
+
 HString foo0( void )
 	{
 	HStringStream ss;
-	ss << __FUNCTION__;
+	ss << ( __FUNCTION__ + NSSKIP );
 	return ( ss.string() );
 	}
 
 HString foo1( int a1 )
 	{
 	HStringStream ss;
-	ss << __FUNCTION__ << ": a1 = " << a1;
+	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1;
 	return ( ss.string() );
 	}
 
 HString foo2( int a1, int a2 )
 	{
 	HStringStream ss;
-	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2;
+	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2;
 	return ( ss.string() );
 	}
 
 HString foo3( int a1, int a2, int a3 )
 	{
 	HStringStream ss;
-	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2 << ", a3 = " << a3;
+	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2 << ", a3 = " << a3;
 	return ( ss.string() );
 	}
 
 HString foo4( int a1, int a2, int a3, int a4 )
 	{
 	HStringStream ss;
-	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4;
 	return ( ss.string() );
 	}
@@ -213,7 +219,7 @@ HString foo4( int a1, int a2, int a3, int a4 )
 HString foo5( int a1, int a2, int a3, int a4, int a5 )
 	{
 	HStringStream ss;
-	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4
 		<< ", a5 = " << a5;
 	return ( ss.string() );
@@ -222,7 +228,7 @@ HString foo5( int a1, int a2, int a3, int a4, int a5 )
 HString foo6( int a1, int a2, int a3, int a4, int a5, int a6 )
 	{
 	HStringStream ss;
-	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4
 		<< ", a5 = " << a5 << ", a6 = " << a6;
 	return ( ss.string() );
@@ -231,7 +237,7 @@ HString foo6( int a1, int a2, int a3, int a4, int a5, int a6 )
 HString foo7( int a1, int a2, int a3, int a4, int a5, int a6, int a7 )
 	{
 	HStringStream ss;
-	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4
 		<< ", a5 = " << a5 << ", a6 = " << a6
 		<< ", a7 = " << a7;
@@ -241,7 +247,7 @@ HString foo7( int a1, int a2, int a3, int a4, int a5, int a6, int a7 )
 HString foo8( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8 )
 	{
 	HStringStream ss;
-	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4
 		<< ", a5 = " << a5 << ", a6 = " << a6
 		<< ", a7 = " << a7 << ", a8 = " << a8;
@@ -251,7 +257,7 @@ HString foo8( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8 )
 HString foo9( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9 )
 	{
 	HStringStream ss;
-	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4
 		<< ", a5 = " << a5 << ", a6 = " << a6
 		<< ", a7 = " << a7 << ", a8 = " << a8
@@ -262,7 +268,7 @@ HString foo9( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, in
 HString foo10( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10 )
 	{
 	HStringStream ss;
-	ss << __FUNCTION__ << ": a1 = " << a1 << ", a2 = " << a2
+	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4
 		<< ", a5 = " << a5 << ", a6 = " << a6
 		<< ", a7 = " << a7 << ", a8 = " << a8
