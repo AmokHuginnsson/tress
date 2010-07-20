@@ -927,7 +927,7 @@ TUT_UNIT_TEST_N( 18, "/* addition */" )
 		as = a.to_string();
 		bs = b.to_string();
 		_bc << as << '+' << bs << endl;
-		_bc.read_until( res );
+		do _bc.read_until( res ); while ( res.is_empty() );
 		msg = "addition of random a = " + as + " and b = " + bs + " failed";
 		ENSURE_EQUALS( msg, ( a + b ).to_string(), HNumber( res ).to_string() );
 		msg += "(R)";
@@ -959,7 +959,7 @@ TUT_UNIT_TEST_N( 19, "/* multiplication */" )
 		as = a.to_string();
 		bs = b.to_string();
 		_bc << as << "* " << bs << endl;
-		_bc.read_until( res );
+		do _bc.read_until( res ); while ( res.is_empty() );
 		msg = "multiplication of random a = " + as + " and b = " + bs + " failed";
 		ENSURE_EQUALS( msg, ( a * b ).to_string(), HNumber( res ).to_string() );
 		msg += "(R)";
@@ -981,7 +981,7 @@ TUT_UNIT_TEST_N( 20, "/* substraction */" )
 		bs = b.to_string();
 		msg = "substraction of random a = " + as + " and b = " + bs + " failed";
 		_bc << as << "- " << bs << endl;
-		_bc.read_until( res );
+		do _bc.read_until( res ); while ( res.is_empty() );
 		ENSURE_EQUALS( msg, ( a - b ).to_string(), HNumber( res ).to_string() );
 		msg += "(R)";
 		ENSURE_EQUALS( msg, ( b - a ).to_string(), ( -HNumber( res ) ).to_string() );
@@ -1223,7 +1223,7 @@ TUT_UNIT_TEST_N( 21, "/* division */" )
 		as = a.to_string();
 		bs = b.to_string();
 		_bc << as << "/ " << bs << endl;
-		_bc.read_until( res );
+		do _bc.read_until( res ); while ( res.is_empty() );
 		msg = "division of random a = " + as + " and b = " + bs + " failed";
 		HNumber div = a / b;
 		int len = static_cast<int>( res.get_length() );
@@ -1249,9 +1249,9 @@ TUT_UNIT_TEST_N( 23, "/* bc */" )
 	HString myRes = n.to_string();
 	_bc.spawn( BC_PATH );
 	_bc << "3^33333" << endl;
-	HString bcRes;
-	_bc.read_until( bcRes );
-	ENSURE_EQUALS( "karatsuba failed", myRes, bcRes );
+	HString res;
+	do _bc.read_until( res ); while ( res.is_empty() );
+	ENSURE_EQUALS( "karatsuba failed", myRes, res );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 24, "/* preincrementation */" )
