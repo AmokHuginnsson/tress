@@ -91,7 +91,7 @@ int main( int argc_, char* argv_[] )
 				else if ( cmd == "read" )
 					cin >> arg;
 				else if ( cmd == "close" )
-					system::close( lexical_cast<int>( arg ) );
+					hcore::system::close( lexical_cast<int>( arg ) );
 				else
 					M_THROW( "syntax error at: " + cmd, errno );
 				}
@@ -117,7 +117,7 @@ int main( int argc_, char* argv_[] )
 			signalNames.insert( make_pair<char const* const>( "SEGV", SIGSEGV ) );
 			str2int_dict_t::const_iterator it = signalNames.find( setup._terminate );
 			if ( it != signalNames.end() )
-				system::kill( system::getpid(), it->second );
+				hcore::system::kill( hcore::system::getpid(), it->second );
 			M_THROW( "unknown signal: " + setup._terminate, errno );
 			}
 		}
