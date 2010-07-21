@@ -41,3 +41,4 @@ int main( int, char** )
 	log << now() << ": exiting" << endl;
 	return ( 0 );
 	}
+
