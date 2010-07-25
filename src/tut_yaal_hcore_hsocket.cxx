@@ -60,7 +60,7 @@ struct HServer
 	static int const NO_FD = 17;
 	static int const LATENCY = 1;
 	HString _buffer;
-	HProcess _dispatcher;
+	HIODispatcher _dispatcher;
 	HSocket _socket;
 	HThread _thread;
 	HEvent _event;
