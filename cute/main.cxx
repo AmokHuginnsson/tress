@@ -116,7 +116,7 @@ int HCuteReporter::run_ut( int argc_, char* argv_[] )
 		suite = "./build/tress/1exec";
 	HString line;
 	HString err;
-	timeval t = { 0, 0 };
+	int long t( 0 );
 	HPipedChild::argv_t argv( argc_ - 1 );
 	for ( int i = 0; i < argv.size(); ++ i )
 		argv[ i ] = argv_[ i + 1 ];
