@@ -112,7 +112,7 @@ def verify_bug( input_path, line_no ):
 	return 2
 
 def check_bug( out, input_path ):
-	no_more_bugs_match = re.compile( "^" + input_path + ":[0-9]+: error: #error NO_SUCH_BUG$" )
+	no_more_bugs_match = re.compile( "^" + input_path + "(:[0-9]+)+: error: #error NO_SUCH_BUG$" )
 	line_number_match = re.compile( "^" + input_path + ":([0-9]+): error" )
 	line_number_match_alt = re.compile( "^" + input_path + ":([0-9]+): +instantiated from" )
 	ret = 2
