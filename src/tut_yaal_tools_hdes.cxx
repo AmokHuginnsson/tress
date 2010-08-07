@@ -64,11 +64,25 @@ void do_des( HString src_, HString dst_, HDes::action_t const& action_ )
 		out.open( dst_, HFile::OPEN::WRITING );
 	int long nRead( 0 );
 	HDes des( passwd );
+	char gap( 0 );
+	HRandomizer r;
+	randomizer_helper::init_randomizer_from_time( r );
 	while ( ( nRead = in.read( buf.raw(), buf.get_size() ) ) > 0 )
 		{
-		des.crypt( buf.get<u8_t>(), static_cast<int>( nRead ), action_ );
-		out.write( buf.raw(), nRead );
+		gap = static_cast<char>( nRead % 8 );
+		if ( gap )
+			{
+			if ( action_ == HDes::CRYPT )
+				generate_n( buf.raw() + buf.get_size() - gap, gap, call( &HRandomizer::rnd, &r, 255 ) );
+			else
+				gap = buf.get<char>()[ nRead - 1 ];
+			}
+		int long toWrite( ( static_cast<int>( nRead ) >> 3 ) + ( gap && ( action_ == HDes::CRYPT ) ? 1 : 0 ) );
+		des.crypt( buf.get<u8_t>(), toWrite, action_ );
+		out.write( buf.raw(), ( toWrite << 3 ) - ( gap && ( action_ == HDes::DECRYPT ) ? gap : 0 ) );
 		}
+	if ( action_ == HDes::CRYPT )
+		out.write( &gap, 1 );
 	}
 
 TUT_UNIT_TEST_N( 1, "crypt file" )
