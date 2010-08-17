@@ -78,7 +78,7 @@ void do_des( HString src_, HString dst_, HDes::action_t const& action_ )
 				gap = buf.get<char>()[ nRead - 1 ];
 			}
 		int long toWrite( ( static_cast<int>( nRead ) >> 3 ) + ( gap && ( action_ == HDes::CRYPT ) ? 1 : 0 ) );
-		des.crypt( buf.get<u8_t>(), toWrite, action_ );
+		des.crypt( buf.get<u8_t>(), static_cast<int>( toWrite ), action_ );
 		out.write( buf.raw(), ( toWrite << 3 ) - ( gap && ( action_ == HDes::DECRYPT ) ? gap : 0 ) );
 		}
 	if ( action_ == HDes::CRYPT )
