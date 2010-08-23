@@ -25,6 +25,7 @@ Copyright:
 */
 
 #include <cstdio>
+#include <cstring>
 #include <TUT/tut.hpp>
 
 #include <yaal/yaal.hxx>
@@ -71,11 +72,41 @@ void do_des( HString src_, HString dst_, HDes::action_t const& action_ )
 TUT_UNIT_TEST_N( 1, "crypt file" )
 	if ( setup._argc > 2 )
 		do_des( setup._argv[ 1 ], setup._argv[ 2 ], HDes::CRYPT );
+	else
+		{
+		HDes d( "kotek" );
+		char const prototype[] = "test1234";
+		char buf[ sizeof ( prototype ) ];
+		strncpy( buf, prototype, sizeof ( prototype ) );
+		d.crypt( reinterpret_cast<u8_t*>( buf ), 8, HDes::CRYPT );
+		for ( int i( 0 ); i < ( static_cast<int>( sizeof ( prototype ) ) - 1 ); ++ i )
+			ENSURE_NOT( "crypto failed", buf[i] == prototype[i] );
+		d.crypt( reinterpret_cast<u8_t*>( buf ), 8, HDes::DECRYPT );
+		ENSURE( "crypto or decrypt failed", equal( buf, buf + sizeof ( prototype ) - 1, prototype ) );
+		}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "decrypt file" )
 	if ( setup._argc > 2 )
 		do_des( setup._argv[ 1 ], setup._argv[ 2 ], HDes::DECRYPT );
+	else
+		{
+		char prototype[] = "test1234";
+		char buf[ sizeof ( prototype ) ];
+		char buf2[ sizeof ( prototype ) ];
+		HMemory src( prototype, sizeof ( prototype ) - 1, HMemory::INITIAL_STATE::VALID );
+		HMemory dst( buf, sizeof ( buf ) );
+		strncpy( buf, prototype, sizeof ( prototype ) );
+		strncpy( buf2, prototype, sizeof ( prototype ) );
+		crypto::crypt_3des( src, dst, "kotek" );
+		HDes d( "kotek" );
+		d.crypt( reinterpret_cast<u8_t*>( buf2 ), 8, HDes::CRYPT );
+		ENSURE( "crypto through streams failed", equal( buf, buf + sizeof ( prototype ) - 1, buf2 ) );
+		for ( int i( 0 ); i < ( static_cast<int>( sizeof ( prototype ) ) - 1 ); ++ i )
+			ENSURE_NOT( "crypto failed", buf[i] == prototype[i] );
+		d.crypt( reinterpret_cast<u8_t*>( buf ), 8, HDes::DECRYPT );
+		ENSURE( "crypto or decrypt failed", equal( buf, buf + sizeof ( prototype ) - 1, prototype ) );
+		}
 TUT_TEARDOWN()
 
 }
