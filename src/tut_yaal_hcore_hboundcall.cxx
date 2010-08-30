@@ -54,79 +54,79 @@ struct tut_yaal_hcore_hboundcall
 TUT_TEST_GROUP_N( tut_yaal_hcore_hboundcall, "yaal::hcore::HBoundCall" );
 
 TUT_UNIT_TEST_N( 1, "a member (no args)" )
-	HBoundCall<0, HString> c( call( &YaalHCoreHCallClass::foo0, &_callable ) );
+	HBoundCall<HString ( void )> c( call( &YaalHCoreHCallClass::foo0, &_callable ) );
 	ENSURE_EQUALS( "bad method called", c(), "YaalHCoreHCallClass: foo0" );
-	HBoundCall<0, HString> f( call( &tut::foo0 ) );
+	HBoundCall<HString ( void )> f( call( &tut::foo0 ) );
 	ENSURE_EQUALS( "bad function called", f(), "foo0" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "a member (one int arg)" )
-	HBoundCall<0, HString> c( call( &YaalHCoreHCallClass::foo1, &_callable, 1 ) );
+	HBoundCall<HString ( void )> c( call( &YaalHCoreHCallClass::foo1, &_callable, 1 ) );
 	ENSURE_EQUALS( "bad method called", c(), "YaalHCoreHCallClass: foo1: a1 = 1" );
-	HBoundCall<0, HString> f( call( &tut::foo1, 1 ) );
+	HBoundCall<HString ( void )> f( call( &tut::foo1, 1 ) );
 	ENSURE_EQUALS( "bad function called", f(), "foo1: a1 = 1" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "a member (two int arg)" )
-	HBoundCall<0, HString> c( call( &YaalHCoreHCallClass::foo2, &_callable, 1, 2 ) );
+	HBoundCall<HString ( void )> c( call( &YaalHCoreHCallClass::foo2, &_callable, 1, 2 ) );
 	ENSURE_EQUALS( "bad method called", c(), "YaalHCoreHCallClass: foo2: a1 = 1, a2 = 2" );
-	HBoundCall<0, HString> f( call( &tut::foo2, 1, 2 ) );
+	HBoundCall<HString ( void )> f( call( &tut::foo2, 1, 2 ) );
 	ENSURE_EQUALS( "bad function called", f(), "foo2: a1 = 1, a2 = 2" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "a member (3 int arg)" )
-	HBoundCall<0, HString> c( call( &YaalHCoreHCallClass::foo3, &_callable, 1, 2, 3 ) );
+	HBoundCall<HString ( void )> c( call( &YaalHCoreHCallClass::foo3, &_callable, 1, 2, 3 ) );
 	ENSURE_EQUALS( "bad method called", c(), "YaalHCoreHCallClass: foo3: a1 = 1, a2 = 2, a3 = 3" );
-	HBoundCall<0, HString> f( call( &tut::foo3, 1, 2, 3 ) );
+	HBoundCall<HString ( void )> f( call( &tut::foo3, 1, 2, 3 ) );
 	ENSURE_EQUALS( "bad method called", f(), "foo3: a1 = 1, a2 = 2, a3 = 3" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "a member (4 int arg)" )
-	HBoundCall<0, HString> c( call( &YaalHCoreHCallClass::foo4, &_callable, 1, 2, 3, 4 ) );
+	HBoundCall<HString ( void )> c( call( &YaalHCoreHCallClass::foo4, &_callable, 1, 2, 3, 4 ) );
 	ENSURE_EQUALS( "bad method called", c(), "YaalHCoreHCallClass: foo4: a1 = 1, a2 = 2, a3 = 3, a4 = 4" );
-	HBoundCall<0, HString> f( call( &tut::foo4, 1, 2, 3, 4 ) );
+	HBoundCall<HString ( void )> f( call( &tut::foo4, 1, 2, 3, 4 ) );
 	ENSURE_EQUALS( "bad method called", f(), "foo4: a1 = 1, a2 = 2, a3 = 3, a4 = 4" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "a member (5 int arg)" )
-	HBoundCall<0, HString> c( call( &YaalHCoreHCallClass::foo5, &_callable, 1, 2, 3, 4, 5 ) );
+	HBoundCall<HString ( void )> c( call( &YaalHCoreHCallClass::foo5, &_callable, 1, 2, 3, 4, 5 ) );
 	ENSURE_EQUALS( "bad method called", c(), "YaalHCoreHCallClass: foo5: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5" );
-	HBoundCall<0, HString> f( call( &tut::foo5, 1, 2, 3, 4, 5 ) );
+	HBoundCall<HString ( void )> f( call( &tut::foo5, 1, 2, 3, 4, 5 ) );
 	ENSURE_EQUALS( "bad method called", f(), "foo5: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "a member (6 int arg)" )
-	HBoundCall<0, HString> c( call( &YaalHCoreHCallClass::foo6, &_callable, 1, 2, 3, 4, 5, 6 ) );
+	HBoundCall<HString ( void )> c( call( &YaalHCoreHCallClass::foo6, &_callable, 1, 2, 3, 4, 5, 6 ) );
 	ENSURE_EQUALS( "bad method called", c(), "YaalHCoreHCallClass: foo6: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6" );
-	HBoundCall<0, HString> f( call( &tut::foo6, 1, 2, 3, 4, 5, 6 ) );
+	HBoundCall<HString ( void )> f( call( &tut::foo6, 1, 2, 3, 4, 5, 6 ) );
 	ENSURE_EQUALS( "bad method called", f(), "foo6: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "a member (7 int arg)" )
-	HBoundCall<0, HString> c( call( &YaalHCoreHCallClass::foo7, &_callable, 1, 2, 3, 4, 5, 6, 7 ) );
+	HBoundCall<HString ( void )> c( call( &YaalHCoreHCallClass::foo7, &_callable, 1, 2, 3, 4, 5, 6, 7 ) );
 	ENSURE_EQUALS( "bad method called", c(), "YaalHCoreHCallClass: foo7: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7" );
-	HBoundCall<0, HString> f( call( &tut::foo7, 1, 2, 3, 4, 5, 6, 7 ) );
+	HBoundCall<HString ( void )> f( call( &tut::foo7, 1, 2, 3, 4, 5, 6, 7 ) );
 	ENSURE_EQUALS( "bad method called", f(), "foo7: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "a member (8 int arg)" )
-	HBoundCall<0, HString> c( call( &YaalHCoreHCallClass::foo8, &_callable, 1, 2, 3, 4, 5, 6, 7, 8 ) );
+	HBoundCall<HString ( void )> c( call( &YaalHCoreHCallClass::foo8, &_callable, 1, 2, 3, 4, 5, 6, 7, 8 ) );
 	ENSURE_EQUALS( "bad method called", c(), "YaalHCoreHCallClass: foo8: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8" );
-	HBoundCall<0, HString> f( call( &tut::foo8, 1, 2, 3, 4, 5, 6, 7, 8 ) );
+	HBoundCall<HString ( void )> f( call( &tut::foo8, 1, 2, 3, 4, 5, 6, 7, 8 ) );
 	ENSURE_EQUALS( "bad method called", f(), "foo8: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "a member (9 int arg)" )
-	HBoundCall<0, HString> c( call( &YaalHCoreHCallClass::foo9, &_callable, 1, 2, 3, 4, 5, 6, 7, 8, 9 ) );
+	HBoundCall<HString ( void )> c( call( &YaalHCoreHCallClass::foo9, &_callable, 1, 2, 3, 4, 5, 6, 7, 8, 9 ) );
 	ENSURE_EQUALS( "bad method called", c(), "YaalHCoreHCallClass: foo9: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8, a9 = 9" );
-	HBoundCall<0, HString> f( call( &tut::foo9, 1, 2, 3, 4, 5, 6, 7, 8, 9 ) );
+	HBoundCall<HString ( void )> f( call( &tut::foo9, 1, 2, 3, 4, 5, 6, 7, 8, 9 ) );
 	ENSURE_EQUALS( "bad method called", f(), "foo9: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8, a9 = 9" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "a member (10 int arg)" )
-	HBoundCall<0, HString> c( call( &YaalHCoreHCallClass::foo10, &_callable, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ) );
+	HBoundCall<HString ( void )> c( call( &YaalHCoreHCallClass::foo10, &_callable, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ) );
 	ENSURE_EQUALS( "bad method called", c(), "YaalHCoreHCallClass: foo10: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8, a9 = 9, a10 = 10" );
-	HBoundCall<0, HString> f( call( &tut::foo10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ) );
+	HBoundCall<HString ( void )> f( call( &tut::foo10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ) );
 	ENSURE_EQUALS( "bad method called", f(), "foo10: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8, a9 = 9, a10 = 10" );
 TUT_TEARDOWN()
 
@@ -144,13 +144,13 @@ public:
 TUT_UNIT_TEST_N( 12, "free standing arg in method" )
 	Boom b0( 7 );
 	Boom b1( 4 );
-	HBoundCall<1, int, double> c0( call( &Boom::foo, b0, _1 ) );
+	HBoundCall<int ( double )> c0( call( &Boom::foo, b0, _1 ) );
 	ENSURE_EQUALS( "bad call: call( &Boom::foo, b0, _1 )( 2 )", c0( 2 ), 7 * 2 );
-	HBoundCall<1, int, int> c1( call( &Boom::bar, b0, 4., _1 ) );
+	HBoundCall<int ( int )> c1( call( &Boom::bar, b0, 4., _1 ) );
 	ENSURE_EQUALS( "bad call: call( &Boom::bar, b0, 4., _1 )( 3 )", c1( 3 ), 7 * 4 + 3 );
-	HBoundCall<1, int, double> c2( call( &Boom::bar, b0, _1, static_cast<int>( 3. ) ) );
+	HBoundCall<int ( double )> c2( call( &Boom::bar, b0, _1, static_cast<int>( 3. ) ) );
 	ENSURE_EQUALS( "bad call: call( &Boom::bar, b0, _1, static_cast<int>( 3. ) )( 5 )", c2( 5 ), 7 * 5 + 3 );
-	HBoundCall<1, int, Boom&> c3( call( &Boom::bar, _1, 2, static_cast<int>( 3. ) ) );
+	HBoundCall<int ( Boom& )> c3( call( &Boom::bar, _1, 2, static_cast<int>( 3. ) ) );
 	ENSURE_EQUALS( "bad call: call( &Boom::bar, _1, 2, static_cast<int>( 3. )( Boom( 7 ) )", c3( b0 ), 7 * 2 + 3 );
 	ENSURE_EQUALS( "bad call: call( &Boom::bar, _1, 2, static_cast<int>( 3. )( Boom( 4 ) )", c3( b1 ), 4 * 2 + 3 );
 TUT_TEARDOWN()

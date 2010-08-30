@@ -58,7 +58,7 @@ public:
 
 class HReal : public HRule
 	{
-	typedef HBoundCall<1, void, double const&> action_t;
+	typedef HBoundCall<void ( double const& )> action_t;
 	action_t _action;
 public:
 	HReal( void ) : _action() {}
@@ -77,7 +77,7 @@ public:
 	} real;
 
 template<typename container_t>
-HBoundCall<1, void, typename container_t::value_type const&> push_back( container_t& container )
+HBoundCall<void ( typename container_t::value_type const& )> push_back( container_t& container )
 	{
 	return ( call( &container_t::push_back, &container, _1 ) );
 	}
