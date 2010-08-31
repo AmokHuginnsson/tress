@@ -48,7 +48,6 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_tools_hdes );
 TUT_TEST_GROUP_N( tut_yaal_tools_hdes, "yaal::tool::HDes" );
 
-
 void do_des( HString src_, HString dst_, HDes::action_t const& action_ )
 	{
 	HFile in;
@@ -67,6 +66,34 @@ void do_des( HString src_, HString dst_, HDes::action_t const& action_ )
 		crypto::crypt_3des( in, out, passwd );
 	else
 		crypto::decrypt_3des( in, out, passwd );
+	}
+
+void crypt_decrypt_test( int onSize_ )
+	{
+	HChunk m( onSize_ + 1 );
+	clog << "+" << endl;
+	for ( int i( 0 ); i < onSize_; ++ i )
+		m.raw()[ i ] = static_cast<char>( ( i % 26 ) + 'a' );
+	HStringStream ss;
+
+		{
+		HFile out( "./out/crypted", HFile::OPEN::WRITING );
+		if ( onSize_ > 0 )
+			{
+			HMemory protype( m.raw(), onSize_, HMemory::INITIAL_STATE::VALID );
+			crypto::crypt_3des( protype, out, "kalafior" );
+			}
+		else
+			crypto::crypt_3des( ss, out, "kalafior" );
+		}
+
+		{
+		HFile in( "./out/crypted", HFile::OPEN::READING );
+		crypto::decrypt_3des( in, ss, "kalafior" );		
+		}
+	HString check( ss.string() );
+	ENSURE_EQUALS( "decrypted lenght is incorrect", check.get_length(), onSize_ );
+	ENSURE_EQUALS( "decrypted data is incorrect", check, m.raw() );
 	}
 
 TUT_UNIT_TEST_N( 1, "crypt file" )
@@ -107,6 +134,11 @@ TUT_UNIT_TEST_N( 2, "decrypt file" )
 		d.crypt( reinterpret_cast<u8_t*>( buf ), 8, HDes::DECRYPT );
 		ENSURE( "crypto or decrypt failed", equal( buf, buf + sizeof ( prototype ) - 1, prototype ) );
 		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 3, "en/de cryption of various lengths" )
+	for ( int i( 0 ); i < 300; ++ i )
+		crypt_decrypt_test( i );
 TUT_TEARDOWN()
 
 }
