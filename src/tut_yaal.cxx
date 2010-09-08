@@ -330,5 +330,72 @@ TUT_UNIT_TEST_N( 25, "call in superposition" )
 	cout << endl;
 TUT_TEARDOWN()
 
+class MemFunTest
+	{
+	int _base;
+public:
+	MemFunTest( int base_ ) : _base( base_ ) {}
+	int value( void )
+		{ return ( _base ); }
+	int calc( int arg_ )
+		{ return ( _base + arg_ ); }
+
+	};
+
+TUT_UNIT_TEST_N( 26, "mem_fun, mem_fun_ref" )
+	typedef HPointer<MemFunTest> mem_fun_test_ptr_t;
+	typedef HList<mem_fun_test_ptr_t> list_t;
+	typedef HList<MemFunTest*> naked_list_t;
+
+	list_t l;
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 0 ) ) );
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 1 ) ) );
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 3 ) ) );
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 7 ) ) );
+
+	naked_list_t nl;
+	transform( l.begin(), l.end(), back_insert_iterator( nl ), mem_fun_ref( &mem_fun_test_ptr_t::raw ) );
+	HStringStream ss;
+	transform( nl.begin(), nl.end(), stream_iterator( ss, " " ), mem_fun( &MemFunTest::value ) );
+	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "0 1 3 7 " );
+	cout << ss.string() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 27, "mem_fun1" )
+	int a[] = { 1, 4, 9, 16 };
+	typedef HPointer<MemFunTest> mem_fun_test_ptr_t;
+	typedef HList<mem_fun_test_ptr_t> list_t;
+	typedef HList<MemFunTest*> naked_list_t;
+
+	list_t l;
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 0 ) ) );
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 1 ) ) );
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 3 ) ) );
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 7 ) ) );
+
+	naked_list_t nl;
+	transform( l.begin(), l.end(), back_insert_iterator( nl ), mem_fun_ref( &mem_fun_test_ptr_t::raw ) );
+	HStringStream ss;
+	transform( nl.begin(), nl.end(), a, stream_iterator( ss, " " ), mem_fun1( &MemFunTest::calc ) );
+	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "1 5 12 23 " );
+	cout << ss.string() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 28, "mem_fun1_ref" )
+	int a[] = { 1, 4, 9, 16 };
+	typedef HList<MemFunTest> list_t;
+
+	list_t l;
+	l.push_back( MemFunTest( 0 ) );
+	l.push_back( MemFunTest( 1 ) );
+	l.push_back( MemFunTest( 3 ) );
+	l.push_back( MemFunTest( 7 ) );
+
+	HStringStream ss;
+	transform( l.begin(), l.end(), a, stream_iterator( ss, " " ), mem_fun1_ref( &MemFunTest::calc ) );
+	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "1 5 12 23 " );
+	cout << ss.string() << endl;
+TUT_TEARDOWN()
+
 }
 
