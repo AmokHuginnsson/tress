@@ -116,8 +116,10 @@ TUT_UNIT_TEST_N( 7, "equal" )
 	int d2[] = { 2, 3, 5, 7 };
 	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
 	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
-	ENSURE( "positive test for equality failed", equal( l1.begin(), l1.end(), d1, d1 + sizeof ( d1 ) / sizeof ( int ) ) );
-	ENSURE_NOT( "negative test for equality failed", equal( l1.begin(), l1.end(), l2.begin(), l2.end() ) );
+	ENSURE( "positive test for equality failed", safe_equal( l1.begin(), l1.end(), d1, d1 + sizeof ( d1 ) / sizeof ( int ) ) );
+	ENSURE( "positive test for equality failed", equal( l1.begin(), l1.end(), d1 ) );
+	ENSURE_NOT( "negative test for equality failed", safe_equal( l1.begin(), l1.end(), l2.begin(), l2.end() ) );
+	ENSURE_NOT( "negative test for equality failed", equal( l1.begin(), l1.end(), l2.begin() ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "set_union uniqe" )
@@ -197,7 +199,7 @@ TUT_UNIT_TEST_N( 12, "remove_if algorithm" )
 	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
 	cout << endl;
 	int b[] = { 1, 3, 9, 7, 5 };
-	ENSURE( "remove_if failed", equal( l.begin(), l.end(), b, b + countof( b ) ) );
+	ENSURE( "remove_if failed", safe_equal( l.begin(), l.end(), b, b + countof( b ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 13, "transform" )
@@ -205,8 +207,10 @@ TUT_UNIT_TEST_N( 13, "transform" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
 	transform( a, a + countof( a ), back_insert_iterator( l ), static_cast<double (*)( double )>( sqrt ) );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	HStringStream ss;
+	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
+	ENSURE_EQUALS( "transform failed", ss.string(), "1 2 3 4 5 6 7 8 9 10 " );
+	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 14, "negate" )
@@ -214,8 +218,10 @@ TUT_UNIT_TEST_N( 14, "negate" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
 	transform( a, a + countof( a ), back_insert_iterator( l ), negate<int>() );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	HStringStream ss;
+	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
+	ENSURE_EQUALS( "negate failed", ss.string(), "-1 -4 -9 -16 -25 -36 -49 -64 -81 -100 " );
+	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 15, "compose1" )
@@ -223,17 +229,22 @@ TUT_UNIT_TEST_N( 15, "compose1" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
 	transform( a, a + countof( a ), back_insert_iterator( l ), compose1( negate<int>(), bind1st( plus<int>(), 1 ) ) );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	HStringStream ss;
+	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
+	ENSURE_EQUALS( "compose1 failed", ss.string(), "-2 -5 -10 -17 -26 -37 -50 -65 -82 -101 " );
+	cout << ss.string() << endl;
 TUT_TEARDOWN()
+
 TUT_UNIT_TEST_N( 16, "remove_copy_if" )
 	typedef HList<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
 				bind1st( less<int>(), 30 ) );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	HStringStream ss;
+	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
+	ENSURE_EQUALS( "remove_copy_if failed", ss.string(), "1 4 9 16 25 " );
+	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 17, "compose2" )
@@ -245,8 +256,10 @@ TUT_UNIT_TEST_N( 17, "compose2" )
 				logical_and<bool>(),
 				bind1st( less<int>(), 30 ),
 				bind1st( greater<int>(), 60 ) ) );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	HStringStream ss;
+	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
+	ENSURE_EQUALS( "compose2 failed", ss.string(), "1 4 9 16 25 64 81 100 " );
+	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 18, "count" )
@@ -276,8 +289,10 @@ TUT_UNIT_TEST_N( 21, "not2" )
 				not2(	logical_and<bool>() ),
 				bind1st( less<int>(), 30 ),
 				bind1st( greater<int>(), 60 ) ) );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	HStringStream ss;
+	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
+	ENSURE_EQUALS( "not2 failed", ss.string(), "36 49 " );
+	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 22, "identity" )
@@ -289,8 +304,10 @@ TUT_UNIT_TEST_N( 22, "identity" )
 				not2(	logical_and<bool>() ),
 				compose1( bind1st( less<int>(), 30 ), identity<int>() ),
 				bind1st( greater<int>(), 60 ) ) );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	HStringStream ss;
+	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
+	ENSURE_EQUALS( "identity failed", ss.string(), "36 49 " );
+	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 23, "ptr_fun" )
@@ -302,8 +319,10 @@ TUT_UNIT_TEST_N( 23, "ptr_fun" )
 				not2(	logical_and<bool>() ),
 				compose1( bind1st( less<int>(), 5 ), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ),
 				bind1st( greater<int>(), 60 ) ) );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	HStringStream ss;
+	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
+	ENSURE_EQUALS( "ptr_fun failed", ss.string(), "36 49 " );
+	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 24, "call as bind1st/bind2nd" )
@@ -394,6 +413,15 @@ TUT_UNIT_TEST_N( 28, "mem_fun1_ref" )
 	HStringStream ss;
 	transform( l.begin(), l.end(), a, stream_iterator( ss, " " ), mem_fun1_ref( &MemFunTest::calc ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "1 5 12 23 " );
+	cout << ss.string() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 29, "replace" )
+	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	replace( a, a + countof ( a ), 36, 7 );
+	HStringStream ss;
+	copy( a, a + countof ( a ), stream_iterator( ss, " " ) );
+	ENSURE_EQUALS( "replace failed", ss.string(), "7 1 4 9 16 25 7 49 64 81 100 7 " );
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
