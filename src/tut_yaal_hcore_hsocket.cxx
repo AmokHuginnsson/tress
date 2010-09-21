@@ -58,7 +58,7 @@ TUT_TEST_GROUP_N( tut_yaal_hcore_hsocket, "yaal::hcore::HSocket" );
 struct HServer
 	{
 	static int const NO_FD = 17;
-	static int const LATENCY = 1;
+	static int const LATENCY = 1000; /* number of miliseconds */
 	HString _buffer;
 	HIODispatcher _dispatcher;
 	HSocket _socket;
