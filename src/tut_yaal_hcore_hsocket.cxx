@@ -223,7 +223,7 @@ TUT_UNIT_TEST_N( 3, "/* Getting port on file socket. */" )
 	try
 		{
 		socket.get_port();
-		FAIL ( "getting port number on file socket possible" );
+		FAIL( "getting port number on file socket possible" );
 		}
 	catch ( HException& e )
 		{
@@ -232,11 +232,11 @@ TUT_UNIT_TEST_N( 3, "/* Getting port on file socket. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "/* Listening on reserved port. */" )
-	HSocket socket ( HSocket::TYPE::NETWORK, 1 );
+	HSocket socket( HSocket::TYPE::NETWORK, 1 );
 	try
 		{
-		socket.listen ( "0.0.0.0", 22 );
-		FAIL ( "listening on reserved port possible" );
+		socket.listen( "0.0.0.0", ( ::getenv( "windir" ) ? 135 : 22 ) );
+		FAIL( "listening on reserved port possible" );
 		}
 	catch ( HException & e )
 		{
@@ -245,38 +245,38 @@ TUT_UNIT_TEST_N( 4, "/* Listening on reserved port. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* Listening on existing file. */" )
-	HSocket socket ( HSocket::TYPE::FILE, 1 );
+	HSocket socket( HSocket::TYPE::FILE, 1 );
 	try
 		{
-		socket.listen ( "/etc/shadow" );
-		FAIL ( "listening on existing file possible" );
+		socket.listen( "/etc/shadow" );
+		FAIL( "listening on existing file possible" );
 		}
-	catch ( HException & e )
+	catch ( HException& e )
 		{
 		cout << e.what() << endl;
 		}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* Listening on protected file. */" )
-	HSocket socket ( HSocket::TYPE::FILE, 1 );
+	HSocket socket( HSocket::TYPE::FILE, 1 );
 	try
 		{
-		socket.listen ( "/etc/TUT_socket" );
-		FAIL ( "listening on protected file possible" );
+		socket.listen( "/etc/TUT_socket" );
+		FAIL( "listening on protected file possible" );
 		}
-	catch ( HException & e )
+	catch ( HException& e )
 		{
 		cout << e.what() << endl;
 		}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "/* Listening on already listening socket. */" )
-	HSocket socket ( HSocket::TYPE::FILE, 1 );
-	socket.listen ( "/tmp/TUT_socket" );
+	HSocket socket( HSocket::TYPE::FILE, 1 );
+	socket.listen( "/tmp/TUT_socket" );
 	try
 		{
-		socket.listen ( "/tmp/TUT_socket" );
-		FAIL ( "listening on already listening socket possible" );
+		socket.listen( "/tmp/TUT_socket" );
+		FAIL( "listening on already listening socket possible" );
 		}
 	catch ( HException& e )
 		{
@@ -285,13 +285,13 @@ TUT_UNIT_TEST_N( 7, "/* Listening on already listening socket. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* Listening with bad maximum number of clients. */" )
-	HSocket socket ( HSocket::TYPE::FILE );
+	HSocket socket( HSocket::TYPE::FILE );
 	try
 		{
-		socket.listen ( "/tmp/TUT_socket" );
-		FAIL ( "listening with bad maximum number of clients possible" );
+		socket.listen( "/tmp/TUT_socket" );
+		FAIL( "listening with bad maximum number of clients possible" );
 		}
-	catch ( HException & e )
+	catch ( HException& e )
 		{
 		cout << e.what() << endl;
 		}
@@ -302,7 +302,7 @@ TUT_UNIT_TEST_N( 9, "/* Accept on socket that is not listening. */" )
 	try
 		{
 		socket.accept();
-		FAIL ( "accept on socket that is not listening possible" );
+		FAIL( "accept on socket that is not listening possible" );
 		}
 	catch ( HException & e )
 		{
