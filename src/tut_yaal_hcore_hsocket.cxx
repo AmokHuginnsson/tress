@@ -311,65 +311,50 @@ TUT_UNIT_TEST_N( 9, "/* Accept on socket that is not listening. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 19, "/* Transfering data through file. */" )
+void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port_ = 0, bool withSsl_ = false )
+	{
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
-	TUT_DECLARE( HServer serv( HSocket::TYPE::FILE, 1 ); );
+	TUT_DECLARE( HServer serv( type_ | ( withSsl_ ? HSocket::TYPE::SSL_SERVER : HSocket::TYPE::DEFAULT ), 1 ); );
 	TUT_INVOKE( cout << sizeof ( serv ) << endl; );
-	TUT_DECLARE( HSocket client( HSocket::TYPE::FILE ); );
-	TUT_INVOKE( serv.listen( "/tmp/TUT_socket" ); );
+	TUT_DECLARE( HSocket client( type_ | ( withSsl_ ? HSocket::TYPE::SSL_CLIENT : HSocket::TYPE::DEFAULT ) ); );
+	TUT_INVOKE( serv.listen( path_, port_ ); );
 	TUT_INVOKE( serv.start(); );
-	TUT_INVOKE( client.connect( "/tmp/TUT_socket" ); );
+	TUT_INVOKE( client.connect( path_, port_ ); );
 	TUT_INVOKE( client.write( test_data, size ); );
 	TUT_INVOKE( serv.wait(); );
 	TUT_INVOKE( serv.stop(); );
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
 	cout << serv.buffer() << endl;
+	return;
+	}
+
+TUT_UNIT_TEST_N( 19, "/* Transfering data through file (blocking). */" )
+	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 20, "Transfering data through file with SSL." )
-	char test_data[] = "Ala ma kota.";
-	const int size = sizeof ( test_data );
-	TUT_DECLARE( HServer serv( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::SSL_SERVER, 1 ); );
-	TUT_DECLARE( HSocket client( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::SSL_CLIENT ); );
-	TUT_INVOKE( serv.listen( "/tmp/TUT_socket" ); );
-	TUT_INVOKE( serv.start(); );
-	TUT_INVOKE( client.connect( "/tmp/TUT_socket" ); );
-	TUT_INVOKE( client.write( test_data, size ); );
-	TUT_INVOKE( serv.wait(); );
-	TUT_INVOKE( serv.stop(); );
-	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
-	cout << serv.buffer() << endl;
+#if 0
+TUT_UNIT_TEST_N( 20, "/* Transfering data through file (non-blocking). */" )
+	play_scenario( HSocket::socket_type_t( HSocket::TYPE::DEFAULT ) | HSocket::TYPE::FILE | HSocket::TYPE::NONBLOCKING, "/tmp/TUT_socket" );
+TUT_TEARDOWN()
+#endif
+
+TUT_UNIT_TEST_N( 21, "Transfering data through file with SSL." )
+	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 21, "/* Transfering data through network. */" )
-	char test_data[] = "A kot ma wpierdol.";
-	const int size = sizeof ( test_data );
-	TUT_DECLARE( HServer serv( HSocket::TYPE::NETWORK, 1 ); );
-	TUT_DECLARE( HSocket client( HSocket::TYPE::NETWORK ); );
-	TUT_INVOKE( serv.listen( "127.0.0.1", 5555 ); );
-	TUT_INVOKE( serv.start(); );
-	TUT_INVOKE( client.connect( "127.0.0.1", 5555 ); );
-	TUT_INVOKE( client.write( test_data, size ); );
-	TUT_INVOKE( serv.wait(); );
-	TUT_INVOKE( serv.stop(); );
-	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
-	cout << serv.buffer() << endl;
+TUT_UNIT_TEST_N( 22, "/* Transfering data through network (blocking). */" )
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 22, "Transfering data through network with SSL." )
-	char test_data[] = "A kot ma wpierdol.";
-	const int size = sizeof ( test_data );
-	TUT_DECLARE( HServer serv( HSocket::socket_type_t( HSocket::TYPE::NETWORK ) | HSocket::TYPE::SSL_SERVER, 1 ); );
-	TUT_DECLARE( HSocket client( HSocket::socket_type_t( HSocket::TYPE::NETWORK ) | HSocket::TYPE::SSL_CLIENT ); );
-	TUT_INVOKE( serv.listen( "0.0.0.0", 5555 ); );
-	TUT_INVOKE( serv.start(); );
-	TUT_INVOKE( client.connect( "127.0.0.1", 5555 ); );
-	TUT_INVOKE( client.write( test_data, size ); );
-	TUT_INVOKE( serv.wait(); );
-	TUT_INVOKE( serv.stop(); );
-	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
-	cout << serv.buffer() << endl;
+#if 0
+TUT_UNIT_TEST_N( 23, "/* Transfering data through network (non-blocking). */" )
+	play_scenario( HSocket::socket_type_t( HSocket::TYPE::DEFAULT ) | HSocket::TYPE::NETWORK | HSocket::TYPE::NONBLOCKING, "127.0.0.1", 5555 );
+TUT_TEARDOWN()
+#endif
+
+TUT_UNIT_TEST_N( 24, "Transfering data through network with SSL." )
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, true );
 TUT_TEARDOWN()
 
 }
