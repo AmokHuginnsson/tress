@@ -108,7 +108,7 @@ HLogger& HLogger::operator << ( std::string const& string_ )
 	M_EPILOG
 	}
 
-HLogger& HLogger::operator << ( int const& number_ )
+HLogger& HLogger::operator << ( int number_ )
 	{
 	M_PROLOG
 	_number_ = number_;

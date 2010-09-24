@@ -480,7 +480,7 @@ TUT_UNIT_TEST_N( 34, "/* reverse_find_other_than */" )
 	ENSURE_EQUALS( HString().format( failed, 5 ), str.reverse_find_other_than( "abcdefg", 5 ), 7 );
 TUT_TEARDOWN()
 
-int confirm( char const* const str, int const& size, char const* const pat, int const& len )
+int confirm( char const* const str, int size, char const* const pat, int len )
 	{
 	static HString fastpat;
 	fastpat = pat;

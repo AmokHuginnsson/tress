@@ -49,10 +49,10 @@ class A
 	typedef A this_type;
 public:
 	virtual ~A( void ) { }
-	virtual void foo( int const& a ) const
+	virtual void foo( int a ) const
 		{ do_foo( a ); }
 private:
-	virtual void do_foo( int const& a ) const
+	virtual void do_foo( int a ) const
 		{
 		if ( ! a )
 			M_THROW( "bad arg A", a );
@@ -69,7 +69,7 @@ public:
 protected:
 	typedef B this_type;
 	typedef A base_type;
-	virtual void do_foo( int const& a ) const
+	virtual void do_foo( int a ) const
 		{
 		if ( ! a )
 			M_THROW( "bad arg B", a );
@@ -86,7 +86,7 @@ public:
 protected:
 	typedef C this_type;
 	typedef B base_type;
-	virtual void do_foo( int const& a ) const
+	virtual void do_foo( int a ) const
 		{
 		if ( ! a )
 			M_THROW( "bad arg C", a );
@@ -101,10 +101,10 @@ class P
 	typedef P this_type;
 public:
 	virtual ~P( void ) { }
-	virtual void foo( int const& a ) const
+	virtual void foo( int a ) const
 		{ do_foo( a ); }
 private:
-	virtual void do_foo( int const& a ) const
+	virtual void do_foo( int a ) const
 		{
 		if ( ! a )
 			M_THROW( "bad arg P", a );
@@ -120,7 +120,7 @@ public:
 	virtual ~Q( void ) { }
 private:
 	typedef Q this_type;
-	virtual void do_foo( int const& a ) const
+	virtual void do_foo( int a ) const
 		{
 		if ( ! a )
 			M_THROW( "bad arg Q", a );
@@ -137,7 +137,7 @@ public:
 protected:
 	typedef R this_type;
 	typedef Q base_type;
-	virtual void do_foo( int const& a ) const
+	virtual void do_foo( int a ) const
 		{
 		if ( ! a )
 			M_THROW( "bad arg R", a );

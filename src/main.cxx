@@ -143,7 +143,7 @@ int main( int argc_, char* argv_[] )
 		M_ENSURE ( ! errno );
 /*	... there is the place main loop ends. :OD-OT                         */
 		}
-	catch ( int const& e )
+	catch ( int e )
 		{
 		visitor._exceptionsCount += e;
 		/* escape from main loop */

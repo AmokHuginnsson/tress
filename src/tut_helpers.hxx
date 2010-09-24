@@ -149,7 +149,7 @@ public:
 	/*{*/
 	HLogger( void );
 	HLogger& operator << ( std::string const& );
-	HLogger& operator << ( int const& );
+	HLogger& operator << ( int );
 	HLogger& operator << ( std::ostream& ( * const )( std::ostream& ) );
 	/*}*/
 protected:
@@ -205,8 +205,8 @@ public:
 	~HInstanceTracker( void );
 	bool operator == ( HInstanceTracker<owner_t> const& ) const;
 	bool operator != ( HInstanceTracker<owner_t> const& ) const;
-	bool operator == ( int long const& ) const;
-	bool operator != ( int long const& ) const;
+	bool operator == ( int long ) const;
+	bool operator != ( int long ) const;
 	static int get_instance_count( void );
 	static void set_instance_count( int = 0 );
 	static void set_start_id( int = 0 );
@@ -288,13 +288,13 @@ yaal::hcore::HString HInstanceTracker<owner_t>::to_string( void ) const
 	}
 
 template<typename owner_t>
-bool HInstanceTracker<owner_t>::operator == ( int long const& val ) const
+bool HInstanceTracker<owner_t>::operator == ( int long val ) const
 	{
 	return ( val == _id );
 	}
 
 template<typename owner_t>
-bool HInstanceTracker<owner_t>::operator != ( int long const& val ) const
+bool HInstanceTracker<owner_t>::operator != ( int long val ) const
 	{
 	return ( val != _id );
 	}
@@ -318,13 +318,13 @@ bool HInstanceTracker<owner_t>::is_self( void ) const
 	}
 
 template<typename owner_t>
-bool operator == ( int long const& left, HInstanceTracker<owner_t> const& right )
+bool operator == ( int long left, HInstanceTracker<owner_t> const& right )
 	{
 	return ( left == right.get_id() );
 	}
 
 template<typename owner_t>
-bool operator != ( int long const& left, HInstanceTracker<owner_t> const& right )
+bool operator != ( int long left, HInstanceTracker<owner_t> const& right )
 	{
 	return ( left != right.get_id() );
 	}

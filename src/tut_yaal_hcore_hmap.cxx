@@ -76,7 +76,7 @@ TUT_UNIT_TEST_N( 2, "exception during map[key] = val;" )
 		m[ 0 ] = Crazy();
 		FAIL( "FATAL: bad exec path!" );
 		}
-	catch ( int const& )
+	catch ( int )
 		{
 		// ok
 		}
