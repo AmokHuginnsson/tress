@@ -72,6 +72,10 @@ int sum( map_t& l )
 
 #else
 #	error NO_SUCH_BUG
+int sum( map_t& l )
+	{
+	return ( 0 );
+	}
 #endif
 
 }

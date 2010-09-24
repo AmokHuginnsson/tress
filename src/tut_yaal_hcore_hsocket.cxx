@@ -333,11 +333,9 @@ TUT_UNIT_TEST_N( 19, "/* Transfering data through file (blocking). */" )
 	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket" );
 TUT_TEARDOWN()
 
-#if 0
 TUT_UNIT_TEST_N( 20, "/* Transfering data through file (non-blocking). */" )
 	play_scenario( HSocket::socket_type_t( HSocket::TYPE::DEFAULT ) | HSocket::TYPE::FILE | HSocket::TYPE::NONBLOCKING, "/tmp/TUT_socket" );
 TUT_TEARDOWN()
-#endif
 
 TUT_UNIT_TEST_N( 21, "Transfering data through file with SSL." )
 	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, true );
@@ -347,11 +345,9 @@ TUT_UNIT_TEST_N( 22, "/* Transfering data through network (blocking). */" )
 	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555 );
 TUT_TEARDOWN()
 
-#if 0
 TUT_UNIT_TEST_N( 23, "/* Transfering data through network (non-blocking). */" )
 	play_scenario( HSocket::socket_type_t( HSocket::TYPE::DEFAULT ) | HSocket::TYPE::NETWORK | HSocket::TYPE::NONBLOCKING, "127.0.0.1", 5555 );
 TUT_TEARDOWN()
-#endif
 
 TUT_UNIT_TEST_N( 24, "Transfering data through network with SSL." )
 	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, true );

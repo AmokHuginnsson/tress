@@ -77,6 +77,11 @@ int sum( mm_t const& m )
 
 #else
 #	error NO_SUCH_BUG
+template<typename mm_t>
+int sum( mm_t const& m )
+	{
+	return ( 0 );
+	}
 #endif
 
 }
