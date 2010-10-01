@@ -21,23 +21,24 @@ string now( void )
 int main( int, char** )
 	{
 #ifdef __MSVCXX__
-	// DebugBreak();
+	/* DebugBreak(); */
 #endif
 	ofstream log( ".\\out\\hpipedchild.log" );
 	log << now() << ": child start ..." << endl;
 	string line;
 	cin >> line;
 	log << now() << ": read input: " << line << endl;
+	string output;
 	if ( line == "out" )
-		cout << "hello-OUT" << endl;
+		cout << ( output = "hello-OUT" ) << endl;
 	else if ( line == "err" )
-		cerr << "hello-ERR" << endl;
+		cerr << ( output = "hello-ERR" ) << endl;
 	else
 		{
-		cout << "error" <<endl;
-		cerr << "error" <<endl;
+		cout << ( output = "error" ) << endl;
+		cerr << output << endl;
 		}
-	log << now() << ": written output ..." << endl;
+	log << now() << ": written output [" << output << "]" << endl;
 	log << now() << ": exiting" << endl;
 	return ( 0 );
 	}
