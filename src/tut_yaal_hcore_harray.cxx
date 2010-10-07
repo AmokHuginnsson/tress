@@ -24,6 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <vector>
+
 #include <TUT/tut.hpp>
 
 #include <yaal/yaal.hxx>
@@ -95,7 +97,14 @@ TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
 		ENSURE_EQUALS( "array element not filled with default value", array[ i ], FILLER_FOR_ARRAY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "/* Copy constructor. */" )
+TUT_UNIT_TEST_N( 4, "/* Constructor with range initialization. */" )
+	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	item_t::set_start_id( 0 );
+	array_t array( a, a + countof ( a ) );
+	ENSURE( "range initialization failed", safe_equal( array.begin(), array.end(), a, a + countof ( a ) ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 5, "/* Copy constructor. */" )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	array_t array( SIZE );
@@ -107,7 +116,7 @@ TUT_UNIT_TEST_N( 4, "/* Copy constructor. */" )
 		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "/* Operator [ ]. */" )
+TUT_UNIT_TEST_N( 6, "/* Operator [ ]. */" )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	array_t array ( SIZE );
@@ -131,7 +140,7 @@ TUT_UNIT_TEST_N( 5, "/* Operator [ ]. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "/* Operator bool. */" )
+TUT_UNIT_TEST_N( 7, "/* Operator bool. */" )
 	item_t::set_start_id( 0 );
 	int const EMPTY = 0;
 	int const SIZE = 7;
@@ -141,7 +150,7 @@ TUT_UNIT_TEST_N( 6, "/* Operator bool. */" )
 	ENSURE_EQUALS( "test for array fullness faild", ! normal, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "push_back" )
+TUT_UNIT_TEST_N( 8, "push_back" )
 	item_t::set_start_id( 0 );
 	item_t i;
 	array_t a1;
@@ -151,14 +160,14 @@ TUT_UNIT_TEST_N( 7, "push_back" )
 	a2.push_back( i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "copy constructor (of empty)" )
+TUT_UNIT_TEST_N( 9, "copy constructor (of empty)" )
 	array_t a1;
 	ENSURE( "construction of empty array", a1.is_empty() );
 	array_t a2( a1 );
 	ENSURE( "construction of empty array", a2.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "resize vs capacity" )
+TUT_UNIT_TEST_N( 10, "resize vs capacity" )
 	array_t a;
 	a.resize( 1 );
 	ENSURE_EQUALS( "resize( 1 ) failed (resize)", a.size(), 1 );
@@ -179,5 +188,23 @@ TUT_UNIT_TEST_N( 9, "resize vs capacity" )
 	ENSURE_EQUALS( "resize( 13 ) failed (capacity)", large.capacity(), 14 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 11, "/* insert( pos, value ) */" )
+	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	item_t::set_start_id( 0 );
+	typedef std::vector<int> proto_t;
+	proto_t proto( a, a + countof ( a ) );
+	array_t array( a, a + countof ( a ) );
+	ENSURE_EQUALS( "insertion failed", array, proto );
+	array.insert( array.begin(), -7 );
+	proto.insert( proto.begin(), -7 );
+	ENSURE_EQUALS( "insertion failed", array, proto );
+	array.insert( array.begin() + 5, -7 );
+	proto.insert( proto.begin() + 5, -7 );
+	ENSURE_EQUALS( "insertion failed", array, proto );
+	array.insert( array.end() - 1, -7 );
+	proto.insert( proto.end() - 1, -7 );
+	ENSURE_EQUALS( "insertion failed", array, proto );
+TUT_TEARDOWN()
 
 }
+

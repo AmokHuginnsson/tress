@@ -41,15 +41,6 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-template<typename tType>
-std::ostream& operator << ( std::ostream& out, HList<tType> const& l )
-	{
-	out << "list(";
-	yaal::copy( l.begin(), l.end(), stream_iterator( out, " " ) );
-	out << "\b)" << std::flush;
-	return ( out );
-	}
-
 TUT_SIMPLE_MOCK( tut_yaal );
 TUT_TEST_GROUP_N( tut_yaal, "yaal" );
 
@@ -424,6 +415,21 @@ TUT_UNIT_TEST_N( 29, "replace" )
 	ENSURE_EQUALS( "replace failed", ss.string(), "7 1 4 9 16 25 7 49 64 81 100 7 " );
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 30, "for_each of for_each" )
+	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	typedef HArray<int> array_t;
+	array_t a0( a, a + countof ( a ) );
+	typedef HArray<array_t> matrix_t;
+	matrix_t m;
+	m.push_back( a0 );
+	transform( a0.begin(), a0.end(), a0.begin(), a0.begin(), multiplies<int>() );
+	m.push_back( a0 );
+	transform( a0.begin(), a0.end(), a, a0.begin(), minus<int>() );
+	m.push_back( a0 );
+	copy( m.begin(), m.end(), stream_iterator( cout, endl ) );
+TUT_TEARDOWN()
+
 
 }
 

@@ -52,15 +52,6 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-template<typename tType>
-std::ostream& operator << ( std::ostream& out, list<tType> const& l )
-	{
-	out << "list(";
-	yaal::copy( l.begin(), l.end(), ostream_iterator<tType>( out, " " ) );
-	out << "\b)" << std::flush;
-	return ( out );
-	}
-
 TUT_SIMPLE_MOCK( tut_stl );
 TUT_TEST_GROUP_N( tut_stl, yaal::hcore::_debugLevel_ > yaal::hcore::DEBUG_LEVEL::ABORT_ON_ASSERT ? "yaal" : "stl" );
 

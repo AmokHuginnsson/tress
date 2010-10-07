@@ -29,10 +29,15 @@ Copyright:
 
 #include <string>
 #include <iostream>
+#include <iterator>
 #include <iomanip>
+#include <list>
+#include <vector>
 
 #include <yaal/hcore/hstreaminterface.hxx>
 #include <yaal/hcore/hpair.hxx>
+#include <yaal/hcore/harray.hxx>
+#include <yaal/hcore/hlist.hxx>
 #include <yaal/hcore/hcomplex.hxx>
 #include <yaal/hcore/hnumber.hxx>
 #include <yaal/hcore/hvector.hxx>
@@ -57,9 +62,39 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& os, 
 	return ( os );
 	}
 
+template<typename tType>
+yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& out, yaal::hcore::HArray<tType> const& a )
+	{
+	out << "array(";
+	yaal::copy( a.begin(), a.end(), stream_iterator( out, " " ) );
+	out << "\b)" << yaal::hcore::flush;
+	return ( out );
+	}
+
+template<typename tType>
+yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& out, yaal::hcore::HList<tType> const& l )
+	{
+	out << "list(";
+	yaal::copy( l.begin(), l.end(), stream_iterator( out, " " ) );
+	out << "\b)" << flush;
+	return ( out );
+	}
+
 }
 
 }
+
+template<typename T1, typename T2>
+bool operator == ( yaal::hcore::HArray<T1> const& a, std::vector<T2> const& v )
+	{
+	return ( yaal::safe_equal( a.begin(), a.end(), v.begin(), v.end() ) );
+	}
+
+template<typename T1, typename T2>
+bool operator == ( yaal::hcore::HList<T1> const& l, std::list<T2> const& sl )
+	{
+	return ( yaal::safe_equal( l.begin(), l.end(), sl.begin(), sl.end() ) );
+	}
 
 namespace std
 {
@@ -74,11 +109,47 @@ std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second
 	return ( os );
 	}
 
+template<typename tType>
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HArray<tType> const& l )
+	{
+	out << "array(";
+	yaal::copy( l.begin(), l.end(), std::ostream_iterator<tType>( out, " " ) );
+	out << "\b)" << std::flush;
+	return ( out );
+	}
+
+template<typename tType>
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HList<tType> const& l )
+	{
+	out << "list(";
+	yaal::copy( l.begin(), l.end(), std::ostream_iterator<tType>( out, " " ) );
+	out << "\b)" << std::flush;
+	return ( out );
+	}
+
 template<typename first_t, typename second_t>
 std::ostream& operator << ( std::ostream& os, std::pair<first_t, second_t> const& p )
 	{
 	os << "(" << p.first << "," << p.second << ")";
 	return ( os );
+	}
+
+template<typename tType>
+std::ostream& operator << ( std::ostream& out, std::list<tType> const& l )
+	{
+	out << "list(";
+	yaal::copy( l.begin(), l.end(), std::ostream_iterator<tType>( out, " " ) );
+	out << "\b)" << std::flush;
+	return ( out );
+	}
+
+template<typename tType>
+std::ostream& operator << ( std::ostream& out, std::vector<tType> const& v )
+	{
+	out << "vector(";
+	yaal::copy( v.begin(), v.end(), std::ostream_iterator<tType>( out, " " ) );
+	out << "\b)" << std::flush;
+	return ( out );
 	}
 
 template<typename tType>
@@ -199,7 +270,7 @@ class HInstanceTracker
 	yaal::hcore::HString _origin;
 	this_type* _self;
 public:
-	HInstanceTracker( int long = -1 );
+	HInstanceTracker( int long = yaal::meta::max_signed<int long>::value );
 	HInstanceTracker( HInstanceTracker const& );
 	HInstanceTracker& operator = ( HInstanceTracker const& );
 	~HInstanceTracker( void );
@@ -223,7 +294,7 @@ template<typename owner_t>
 int HInstanceTracker<owner_t>::_autoIncrement = 0;
 
 template<typename owner_t>
-HInstanceTracker<owner_t>::HInstanceTracker( int long id_ ) : _id( id_ >= 0 ? id_ : _autoIncrement ), _origin(), _self( this )
+HInstanceTracker<owner_t>::HInstanceTracker( int long id_ ) : _id( id_ != yaal::meta::max_signed<int long>::value ? id_ : _autoIncrement ), _origin(), _self( this )
 	{
 	++ _instances;
 	++ _autoIncrement;
