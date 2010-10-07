@@ -206,5 +206,18 @@ TUT_UNIT_TEST_N( 11, "/* insert( pos, value ) */" )
 	ENSURE_EQUALS( "insertion failed", array, proto );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 12, "/* assign operator (=) */" )
+	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	int a1[] = { -36, -1, -4, -9 };
+	item_t::set_start_id( 0 );
+	array_t array( a0, a0 + countof ( a0 ) );
+	array_t small( a1, a1 + countof ( a1 ) );
+	array = small;
+	ENSURE_EQUALS( "assgin failed", array, small );
+	array_t big( a0, a0 + countof ( a0 ) );
+	array = big;
+	ENSURE_EQUALS( "assgin failed", array, big );
+TUT_TEARDOWN()
+
 }
 

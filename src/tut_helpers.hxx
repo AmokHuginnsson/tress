@@ -67,7 +67,7 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& out,
 	{
 	out << "array(";
 	yaal::copy( a.begin(), a.end(), stream_iterator( out, " " ) );
-	out << "\b)" << yaal::hcore::flush;
+	out << ( ( a.begin() != a.end() ) ? "\b)" : ")" ) << flush;
 	return ( out );
 	}
 
@@ -77,6 +77,7 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& out,
 	out << "list(";
 	yaal::copy( l.begin(), l.end(), stream_iterator( out, " " ) );
 	out << "\b)" << flush;
+	out << ( ( l.begin() != l.end() ) ? "\b)" : ")" ) << flush;
 	return ( out );
 	}
 
@@ -110,11 +111,11 @@ std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second
 	}
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HArray<tType> const& l )
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HArray<tType> const& a )
 	{
 	out << "array(";
-	yaal::copy( l.begin(), l.end(), std::ostream_iterator<tType>( out, " " ) );
-	out << "\b)" << std::flush;
+	yaal::copy( a.begin(), a.end(), std::ostream_iterator<tType>( out, " " ) );
+	out << ( ( a.begin() != a.end() ) ? "\b)" : ")" ) << std::flush;
 	return ( out );
 	}
 
@@ -123,7 +124,7 @@ std::ostream& operator << ( std::ostream& out, yaal::hcore::HList<tType> const& 
 	{
 	out << "list(";
 	yaal::copy( l.begin(), l.end(), std::ostream_iterator<tType>( out, " " ) );
-	out << "\b)" << std::flush;
+	out << ( ( l.begin() != l.end() ) ? "\b)" : ")" ) << std::flush;
 	return ( out );
 	}
 
@@ -139,7 +140,7 @@ std::ostream& operator << ( std::ostream& out, std::list<tType> const& l )
 	{
 	out << "list(";
 	yaal::copy( l.begin(), l.end(), std::ostream_iterator<tType>( out, " " ) );
-	out << "\b)" << std::flush;
+	out << ( ( l.begin() != l.end() ) ? "\b)" : ")" ) << std::flush;
 	return ( out );
 	}
 
@@ -148,7 +149,7 @@ std::ostream& operator << ( std::ostream& out, std::vector<tType> const& v )
 	{
 	out << "vector(";
 	yaal::copy( v.begin(), v.end(), std::ostream_iterator<tType>( out, " " ) );
-	out << "\b)" << std::flush;
+	out << ( ( v.begin() != v.end() ) ? "\b)" : ")" ) << std::flush;
 	return ( out );
 	}
 
