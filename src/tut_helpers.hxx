@@ -58,7 +58,7 @@ namespace hcore
 template<typename first_t, typename second_t>
 yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& os, yaal::hcore::HPair<first_t, second_t> const& p )
 	{
-	os << "(" << p.first << "," << p.second << ")";
+	os << "pair(" << p.first << "," << p.second << ")";
 	return ( os );
 	}
 
@@ -106,7 +106,7 @@ std::ostream& operator << ( std::ostream&, yaal::hcore::HString const& );
 template<typename first_t, typename second_t>
 std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second_t> const& p )
 	{
-	os << "(" << p.first << "," << p.second << ")";
+	os << "pair(" << p.first << "," << p.second << ")";
 	return ( os );
 	}
 
@@ -131,7 +131,7 @@ std::ostream& operator << ( std::ostream& out, yaal::hcore::HList<tType> const& 
 template<typename first_t, typename second_t>
 std::ostream& operator << ( std::ostream& os, std::pair<first_t, second_t> const& p )
 	{
-	os << "(" << p.first << "," << p.second << ")";
+	os << "pair(" << p.first << "," << p.second << ")";
 	return ( os );
 	}
 

@@ -47,8 +47,8 @@ std::ostream& operator << ( std::ostream& out, HComplex const& complex_ )
 	{
 	M_PROLOG
 	double re, im;
-	re = complex_.re ( );
-	im = complex_.im ( );
+	re = complex_.re();
+	im = complex_.im();
 	if ( im >= 0 )
 		out << re << "+i" << im;
 	else
