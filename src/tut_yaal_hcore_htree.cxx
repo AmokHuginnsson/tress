@@ -595,7 +595,7 @@ TUT_UNIT_TEST_N( 19, "/* across two trees (replace_node) */" )
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
-		it->replace_node( it->rbegin(), &*a );
+		it->replace_node( it->rbegin().base(), &*a );
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{3{80}5}" );
@@ -635,7 +635,7 @@ TUT_UNIT_TEST_N( 20, "/* across two trees from root (replace_node) */" )
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
-		it->replace_node( it->rbegin(), t1.get_root() );
+		it->replace_node( it->rbegin().base(), t1.get_root() );
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "" );

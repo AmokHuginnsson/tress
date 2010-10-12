@@ -238,7 +238,7 @@ void HCuteReporter::handle_line_of_error( HString const& in )
 		{
 		_rep.push_back( _out.consume() );
 		if ( start )
-			_start = _rep.rbegin();
+			_start = _rep.rbegin().base();
 		}
 	}
 

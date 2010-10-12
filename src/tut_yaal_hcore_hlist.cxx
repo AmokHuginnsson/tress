@@ -121,17 +121,17 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list )
 	ctr = 0;
 	hook_valid = false;
 	index_valid = false;
-	for ( typename T::const_iterator it = list.rbegin(); it != list.rend(); -- it, ++ ctr )
+	for ( typename T::const_reverse_iterator it = list.rbegin(); it != list.rend(); ++ it, ++ ctr )
 		{
-		if ( it._current == list._hook )
+		if ( it.base()._current == list._hook )
 			hook_valid = true;
-		if ( list._indexElement == it._current )
+		if ( list._indexElement == it.base()._current )
 			{
 			ENSURE_EQUALS( "bad backward index", list._index, ( list._size - ctr ) - 1 );
 			index_valid = true;
 			}
-		ENSURE_EQUALS( "links broken", it._current->_next->_previous, it._current );
-		ENSURE_EQUALS( "links broken", it._current->_previous->_next, it._current );
+		ENSURE_EQUALS( "links broken", it.base()._current->_next->_previous, it.base()._current );
+		ENSURE_EQUALS( "links broken", it.base()._current->_previous->_next, it.base()._current );
 		}
 	if ( ! list._indexElement )
 		index_valid = true;
@@ -371,11 +371,9 @@ TUT_UNIT_TEST_N( 9, "/* forward iterator */" )
 		{
 		check_consistency( l );
 		ctr ++;
-		ENSURE( "iterator is invalid", it.is_valid() );
 		ENSURE_EQUALS( "for syntax: forward iterator made wrong move", ( *it ), ctr );
 		}
 	ENSURE_EQUALS( "for syntax: not the whole list was iterated", ctr, 5 );
-	ENSURE( "iterator is valid", ! it.is_valid() );
 	check_consistency( l );
 	ENSURE_EQUALS( "begin is not head", *l.begin(), l.head() );
 	check_consistency( l );
@@ -395,17 +393,13 @@ TUT_UNIT_TEST_N( 10, "/* backward iterator */" )
 	check_consistency( l );
 	l.add_tail() = 5;
 	check_consistency( l );
-	list_t::iterator it;
-	for ( it = l.rbegin();
-			it != l.rend(); -- it )
+	for ( list_t::reverse_iterator it( l.rbegin() ); it != l.rend(); ++ it )
 		{
 		check_consistency( l );
 		ENSURE_EQUALS( "for syntax: backward iterator made wrong move", ( *it ), ctr );
-		ENSURE( "iterator is invalid", it.is_valid() );
 		ctr --;
 		}
 	ENSURE_EQUALS( "for syntax: not the whole list was iterated", ctr, 0 );
-	ENSURE( "iterator is valid", ! it.is_valid() );
 	check_consistency( l );
 	ENSURE_EQUALS( "begin is not head", *l.rbegin(), l.tail() );
 	check_consistency( l );
@@ -447,7 +441,7 @@ TUT_UNIT_TEST_N( 12, "/* insert */" )
 	ENSURE_EQUALS( "list malformed", l.size(), 4 );
 	check_consistency( l );
 	ENSURE_EQUALS( "bad iterator", *it, 'a' );
-	it = l.insert( l.rbegin(), 'b' );
+	it = l.insert( l.rbegin().base(), 'b' );
 	check_consistency( l );
 	ENSURE_EQUALS( "insert failed", to_string( l ), "a12b3" );
 	ENSURE_EQUALS( "list malformed", l.size(), 5 );
@@ -656,7 +650,7 @@ void erase_test_1( tut_yaal_hcore_hlist::list_t& l )
 
 void erase_test_2( tut_yaal_hcore_hlist::list_t& l )
 	{
-	tut_yaal_hcore_hlist::list_t::iterator it = l.erase( l.rbegin() );
+	tut_yaal_hcore_hlist::list_t::iterator it = l.erase( l.rbegin().base() );
 	tut_yaal_hcore_hlist::check_consistency( l );
 	ENSURE_EQUALS( "erase2 failed", tut_yaal_hcore_hlist::to_string( l ), "12345" );
 	ENSURE_EQUALS( "erase2 failed", l.size(), 5 );
@@ -801,7 +795,7 @@ TUT_UNIT_TEST_N( 21, "/* exchange */" )
 	l.push_back( '6' );
 	check_consistency( l );
 	ENSURE_EQUALS( "construct error", to_string( l ), "123456" );
-	l.exchange( l.begin(), l.rbegin() );
+	l.exchange( l.begin(), l.rbegin().base() );
 	check_consistency( l );
 	ENSURE_EQUALS( "ends exchange error", to_string( l ), "623451" );
 	l.exchange( l.n_th( 1 ), l.n_th( 3 ) );
@@ -960,7 +954,7 @@ void check_sorted( tut_yaal_hcore_hlist::list_t const& l, OListBits::sort_order_
 	else
 		{
 		int val = 0;
-		for ( tut_yaal_hcore_hlist::list_t::const_iterator it = l.rbegin(); it != l.rend(); -- it )
+		for ( tut_yaal_hcore_hlist::list_t::const_reverse_iterator it = l.rbegin(); it != l.rend(); ++ it )
 			{
 			ENSURE( "not sorted (reversed)", val <= *it );
 			val = *it;

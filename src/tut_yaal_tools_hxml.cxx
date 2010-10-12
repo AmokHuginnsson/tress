@@ -164,9 +164,9 @@ TUT_UNIT_TEST_N( 2, "/* Root node. */" )
 	x.create_root( ROOT );
 	HXml::HNodeProxy n = x.get_root();
 	ENSURE( "initialized DOM empty", !! n );
+	ENSURE( "bad type of root element", n.get_type() == HXml::HNode::TYPE::NODE );
 	ENSURE_EQUALS( "root value not stored", n.get_name(), ROOT );
 	ENSURE_EQUALS( "bad level of root element", n.get_level(), 0 );
-	ENSURE( "bad type of root element", n.get_type() == HXml::HNode::TYPE::NODE );
 	ENSURE( "fresh node not empty", n.begin() == n.end() );
 TUT_TEARDOWN()
 
