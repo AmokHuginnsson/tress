@@ -996,5 +996,14 @@ TUT_UNIT_TEST_N( 25, "/* sort serious */" )
 		}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 26, "/* reverse iterator */" )
+	int a[] = { 2, 3, 5, 7 };
+	int ra[] = { 7, 5, 3, 2 };
+	list_t l( a, a + countof ( a ) );
+	list_t r( l.rbegin(), l.rend() );
+	list_t proto( ra, ra + countof ( ra ) );
+	ENSURE_EQUALS( "reverse iterarion failed", r, proto );
+TUT_TEARDOWN()
+
 }
 
