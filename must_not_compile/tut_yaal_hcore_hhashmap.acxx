@@ -70,6 +70,23 @@ int sum( map_t& l )
 	return ( 0 );
 	}
 
+#elif defined ( BUG_3 )
+
+int sum( map_t const& l )
+	{
+	map_t::reverse_iterator rit( l.begin() ); /* MUST_FAIL_HERE */
+	return ( 0 );
+	}
+
+#elif defined ( BUG_4 )
+
+int sum( map_t const& l )
+	{
+	map_t::const_reverse_iterator rit( l.begin() );
+	*rit = 0; /* MUST_FAIL_HERE */
+	return ( 0 );
+	}
+
 #else
 #	error NO_SUCH_BUG
 int sum( map_t& )

@@ -75,6 +75,25 @@ int sum( mm_t const& m )
 	return ( l_iSum );
 	}
 
+#elif defined ( BUG_3 )
+
+template<typename mm_t>
+int sum( mm_t const& l )
+	{
+	mm_t::reverse_iterator rit( l.begin() ); /* MUST_FAIL_HERE */
+	return ( 0 );
+	}
+
+#elif defined ( BUG_4 )
+
+template<typename mm_t>
+int sum( mm_t const& l )
+	{
+	mm_t::const_reverse_iterator rit( l.begin() );
+	*rit = 0; /* MUST_FAIL_HERE */
+	return ( 0 );
+	}
+
 #else
 #	error NO_SUCH_BUG
 template<typename mm_t>
