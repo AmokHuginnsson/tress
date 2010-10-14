@@ -42,6 +42,10 @@ Copyright:
     
     % make
 
+    And then to run unit test:
+
+    % make test
+
     That is all.
 
     You really want to stop here, do not go any further!
