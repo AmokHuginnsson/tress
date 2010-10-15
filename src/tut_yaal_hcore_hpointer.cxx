@@ -254,7 +254,7 @@ TUT_UNIT_TEST_N( 10, "/* Checks passing ownership via assignment. */" )
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 11, "/* Checks operator -&gt; throws instead of returning null. */" )
+TUT_UNIT_TEST_N( 11, "/* Checks operator->() throws instead of returning null. */" )
 		{
 		try
 			{
