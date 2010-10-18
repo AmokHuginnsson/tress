@@ -206,5 +206,13 @@ TUT_UNIT_TEST_N( 12, "/* direct split skip empty set[f]*/" )
 		}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 13, "dereference iterator for single token" )
+	HString text( "list_commands" );
+	HTokenizer tokenizer( text, _whiteSpace_ );
+	HTokenizer::HIterator it( tokenizer.begin() );
+	ENSURE( "begin failed", it != tokenizer.end() );
+	ENSURE_EQUALS( "dereferencing token iterator failed", *it, text );
+TUT_TEARDOWN()
+
 }
 
