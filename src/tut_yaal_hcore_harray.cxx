@@ -43,13 +43,7 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-struct tut_yaal_hcore_harray
-	{
-	typedef HInstanceTracker<tut_yaal_hcore_harray> item_t;
-	typedef HArray<item_t> array_t;
-	virtual ~tut_yaal_hcore_harray( void ) {}
-	};
-
+TUT_SIMPLE_MOCK( tut_yaal_hcore_harray );
 TUT_TEST_GROUP_N( tut_yaal_hcore_harray, "yaal::hcore::HArray" );
 
 TUT_UNIT_TEST_N( 1, "/* Constructor. */" )

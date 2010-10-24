@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_.cxx - this file is integral part of `tress' project.
+	tut_yaal_hcore_lambda.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -31,7 +31,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -39,22 +38,19 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
+
 namespace tut
 {
 
-#if 0
+TUT_SIMPLE_MOCK( tut_yaal_hcore_lambda );
+TUT_TEST_GROUP_N( tut_yaal_hcore_lambda, "yaal::hcore::lambda" );
 
-struct tut_ : public simple_mock<tut_>
-	{
-	};
-
-TUT_SIMPLE_MOCK( tut_ );
-TUT_TEST_GROUP( tut_, "yaal::" );
-
-TUT_UNIT_TEST( "the test" )
+TUT_UNIT_TEST_N( 1, "the test" )
+	int a[] = { 1, 3, 5, 7, 11, 13, 17, 19, 23 };
+	int_list_t l( a, a + countof ( a ) );
+	for_each( l.begin(), l.end(), cout << _1 << endl )
+		;
 TUT_TEARDOWN()
-
-#endif
 
 }
 

@@ -252,7 +252,7 @@ tut_group_holder tut_##mock##_group( ( name ) )
 #define TUT_TEST_GROUP( mock, name ) \
 TUT_TEST_GROUP_N( mock, name ) \
 namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
-#define TUT_SIMPLE_MOCK( name ) struct name \
+#define TUT_SIMPLE_MOCK( name ) struct name : public simple_mock<name> \
 	{ \
 	virtual ~name( void ) \
 		{} \
@@ -279,6 +279,10 @@ public:
 	bool operator != ( HInstanceTracker<owner_t> const& ) const;
 	bool operator == ( int long ) const;
 	bool operator != ( int long ) const;
+	bool operator < ( HInstanceTracker<owner_t> const& ) const;
+	bool operator < ( int long ) const;
+	bool operator > ( HInstanceTracker<owner_t> const& ) const;
+	bool operator > ( int long ) const;
 	static int get_instance_count( void );
 	static void set_instance_count( int = 0 );
 	static void set_start_id( int = 0 );
@@ -287,6 +291,16 @@ public:
 	bool is_self( void ) const;
 	yaal::hcore::HString to_string( void ) const;
 	void swap( HInstanceTracker& );
+	};
+
+template<typename T>
+struct simple_mock
+	{
+	typedef HInstanceTracker<T> item_t;
+	typedef yaal::hcore::HList<item_t> list_t;
+	typedef yaal::hcore::HArray<item_t> array_t;
+	typedef yaal::hcore::HList<int> int_list_t;
+	typedef yaal::hcore::HArray<int> int_array_t;
 	};
 
 template<typename owner_t>
@@ -381,6 +395,30 @@ template<typename owner_t>
 bool HInstanceTracker<owner_t>::operator != ( HInstanceTracker<owner_t> const& val ) const
 	{
 	return ( val._id != _id );
+	}
+
+template<typename owner_t>
+bool HInstanceTracker<owner_t>::operator < ( HInstanceTracker<owner_t> const& val ) const
+	{
+	return ( _id < val._id );
+	}
+
+template<typename owner_t>
+bool HInstanceTracker<owner_t>::operator < ( int long val ) const
+	{
+	return ( _id < val );
+	}
+
+template<typename owner_t>
+bool HInstanceTracker<owner_t>::operator > ( HInstanceTracker<owner_t> const& val ) const
+	{
+	return ( _id > val._id );
+	}
+
+template<typename owner_t>
+bool HInstanceTracker<owner_t>::operator > ( int long val ) const
+	{
+	return ( _id > val );
 	}
 
 template<typename owner_t>

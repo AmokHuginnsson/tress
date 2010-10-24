@@ -88,13 +88,12 @@ TUT_UNIT_TEST_N( 6, "back_insert_iterator" )
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 3, 14, 15, 9265, 35, 89, 79, 3 };
 	int d4[] = { 1, 2, 4, 2, 3, 5, 7, 3, 14, 15, 9265, 35, 89, 79, 3 };
-	typedef HList<int> list_t;
 
-	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
-	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
-	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
-	list_t l4( d4, d4 + sizeof ( d4 ) / sizeof ( int ) );
-	list_t l;
+	int_list_t l1( d1, d1 + countof ( d1 ) );
+	int_list_t l2( d2, d2 + countof ( d2 ) );
+	int_list_t l3( d3, d3 + countof ( d3 ) );
+	int_list_t l4( d4, d4 + sizeof ( d4 ) / sizeof ( int ) );
+	int_list_t l;
 	copy( l1.begin(), l1.end(), back_insert_iterator( l ) );
 	copy( l2.begin(), l2.end(), back_insert_iterator( l ) );
 	copy( l3.begin(), l3.end(), back_insert_iterator( l ) );
@@ -102,26 +101,24 @@ TUT_UNIT_TEST_N( 6, "back_insert_iterator" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "equal" )
-	typedef HList<int> list_t;
 	int d1[] = { 1, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
-	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
-	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
-	ENSURE( "positive test for equality failed", safe_equal( l1.begin(), l1.end(), d1, d1 + sizeof ( d1 ) / sizeof ( int ) ) );
+	int_list_t l1( d1, d1 + countof ( d1 ) );
+	int_list_t l2( d2, d2 + countof ( d2 ) );
+	ENSURE( "positive test for equality failed", safe_equal( l1.begin(), l1.end(), d1, d1 + countof ( d1 ) ) );
 	ENSURE( "positive test for equality failed", equal( l1.begin(), l1.end(), d1 ) );
 	ENSURE_NOT( "negative test for equality failed", safe_equal( l1.begin(), l1.end(), l2.begin(), l2.end() ) );
 	ENSURE_NOT( "negative test for equality failed", equal( l1.begin(), l1.end(), l2.begin() ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "set_union uniqe" )
-	typedef HList<int> list_t;
 	int d1[] = { 1, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 1, 2, 3, 4, 5, 7 };
-	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
-	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
-	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
-	list_t l;
+	int_list_t l1( d1, d1 + countof ( d1 ) );
+	int_list_t l2( d2, d2 + countof ( d2 ) );
+	int_list_t l3( d3, d3 + countof ( d3 ) );
+	int_list_t l;
 	set_union( l1.begin(), l1.end(), l2.begin(), l2.end(), back_insert_iterator( l ) );
 	ENSURE_EQUALS( "set_union failed l1 + l2", l, l3 );
 	l.clear();
@@ -130,14 +127,13 @@ TUT_UNIT_TEST_N( 8, "set_union uniqe" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "set_union duplicates" )
-	typedef HList<int> list_t;
 	int d1[] = { 1, 2, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 1, 2, 2, 3, 4, 5, 7 };
-	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
-	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
-	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
-	list_t l;
+	int_list_t l1( d1, d1 + countof ( d1 ) );
+	int_list_t l2( d2, d2 + countof ( d2 ) );
+	int_list_t l3( d3, d3 + countof ( d3 ) );
+	int_list_t l;
 	set_union( l1.begin(), l1.end(), l2.begin(), l2.end(), back_insert_iterator( l ) );
 	ENSURE_EQUALS( "set_union failed l1 + l2", l, l3 );
 	l.clear();
@@ -146,14 +142,13 @@ TUT_UNIT_TEST_N( 9, "set_union duplicates" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "set_intersection unique" )
-	typedef HList<int> list_t;
 	int d1[] = { 1, 2, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 2 };
-	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
-	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
-	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
-	list_t l;
+	int_list_t l1( d1, d1 + countof ( d1 ) );
+	int_list_t l2( d2, d2 + countof ( d2 ) );
+	int_list_t l3( d3, d3 + countof ( d3 ) );
+	int_list_t l;
 	set_intersection( l1.begin(), l1.end(), l2.begin(), l2.end(), back_insert_iterator( l ) );
 	ENSURE_EQUALS( "set_intersection failed l1 * l2", l, l3 );
 	l.clear();
@@ -162,14 +157,13 @@ TUT_UNIT_TEST_N( 10, "set_intersection unique" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "set_intersection duplicates" )
-	typedef HList<int> list_t;
 	int d1[] = { 1, 2, 2, 4 };
 	int d2[] = { 2, 2, 3, 5, 7 };
 	int d3[] = { 2, 2 };
-	list_t l1( d1, d1 + sizeof ( d1 ) / sizeof ( int ) );
-	list_t l2( d2, d2 + sizeof ( d2 ) / sizeof ( int ) );
-	list_t l3( d3, d3 + sizeof ( d3 ) / sizeof ( int ) );
-	list_t l;
+	int_list_t l1( d1, d1 + countof ( d1 ) );
+	int_list_t l2( d2, d2 + countof ( d2 ) );
+	int_list_t l3( d3, d3 + countof ( d3 ) );
+	int_list_t l;
 	set_intersection( l1.begin(), l1.end(), l2.begin(), l2.end(), back_insert_iterator( l ) );
 	ENSURE_EQUALS( "set_intersection failed l1 * l2", l, l3 );
 	l.clear();
@@ -178,12 +172,11 @@ TUT_UNIT_TEST_N( 11, "set_intersection duplicates" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 12, "remove_if algorithm" )
-	typedef HList<int> list_t;
 	int a[] = { 1, -2, 3, -4, 9, -8, 7, -6, 5 };
-	list_t l( a, a + countof( a ) );
+	int_list_t l( a, a + countof( a ) );
 	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
 	cout << endl;
-	list_t::iterator end( remove_if( l.begin(), l.end(), bind2nd( less<int>(), 0 ) ) ); 
+	int_list_t::iterator end( remove_if( l.begin(), l.end(), bind2nd( less<int>(), 0 ) ) ); 
 	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
 	cout << endl;
 	l.erase( end, l.end() );
@@ -194,9 +187,8 @@ TUT_UNIT_TEST_N( 12, "remove_if algorithm" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 13, "transform" )
-	typedef HList<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	list_t l;
+	int_list_t l;
 	transform( a, a + countof( a ), back_insert_iterator( l ), static_cast<double (*)( double )>( sqrt ) );
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
@@ -205,9 +197,8 @@ TUT_UNIT_TEST_N( 13, "transform" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 14, "negate" )
-	typedef HList<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	list_t l;
+	int_list_t l;
 	transform( a, a + countof( a ), back_insert_iterator( l ), negate<int>() );
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
@@ -216,9 +207,8 @@ TUT_UNIT_TEST_N( 14, "negate" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 15, "compose1" )
-	typedef HList<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	list_t l;
+	int_list_t l;
 	transform( a, a + countof( a ), back_insert_iterator( l ), compose1( negate<int>(), bind1st( plus<int>(), 1 ) ) );
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
@@ -227,9 +217,8 @@ TUT_UNIT_TEST_N( 15, "compose1" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 16, "remove_copy_if" )
-	typedef HList<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	list_t l;
+	int_list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
 				bind1st( less<int>(), 30 ) );
 	HStringStream ss;
@@ -239,9 +228,8 @@ TUT_UNIT_TEST_N( 16, "remove_copy_if" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 17, "compose2" )
-	typedef HList<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	list_t l;
+	int_list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
 			compose2(
 				logical_and<bool>(),
@@ -272,9 +260,8 @@ TUT_UNIT_TEST_N( 20, "not1" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 21, "not2" )
-	typedef HList<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	list_t l;
+	int_list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
 			compose2(
 				not2(	logical_and<bool>() ),
@@ -287,9 +274,8 @@ TUT_UNIT_TEST_N( 21, "not2" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 22, "identity" )
-	typedef HList<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	list_t l;
+	int_list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
 			compose2(
 				not2(	logical_and<bool>() ),
@@ -302,9 +288,8 @@ TUT_UNIT_TEST_N( 22, "identity" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 23, "ptr_fun" )
-	typedef HList<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	list_t l;
+	int_list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
 			compose2(
 				not2(	logical_and<bool>() ),
@@ -328,9 +313,8 @@ TUT_UNIT_TEST_N( 24, "call as bind1st/bind2nd" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 25, "call in superposition" )
-	typedef HList<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	list_t l;
+	int_list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
 			compose2(
 				logical_and<bool>(),
@@ -354,10 +338,10 @@ public:
 
 TUT_UNIT_TEST_N( 26, "mem_fun, mem_fun_ref" )
 	typedef HPointer<MemFunTest> mem_fun_test_ptr_t;
-	typedef HList<mem_fun_test_ptr_t> list_t;
+	typedef HList<mem_fun_test_ptr_t> mem_fun_ptr_list_t;
 	typedef HList<MemFunTest*> naked_list_t;
 
-	list_t l;
+	mem_fun_ptr_list_t l;
 	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 0 ) ) );
 	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 1 ) ) );
 	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 3 ) ) );
@@ -374,10 +358,10 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 27, "mem_fun1" )
 	int a[] = { 1, 4, 9, 16 };
 	typedef HPointer<MemFunTest> mem_fun_test_ptr_t;
-	typedef HList<mem_fun_test_ptr_t> list_t;
+	typedef HList<mem_fun_test_ptr_t> mem_fun_ptr_list_t;
 	typedef HList<MemFunTest*> naked_list_t;
 
-	list_t l;
+	mem_fun_ptr_list_t l;
 	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 0 ) ) );
 	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 1 ) ) );
 	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 3 ) ) );
@@ -393,9 +377,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 28, "mem_fun1_ref" )
 	int a[] = { 1, 4, 9, 16 };
-	typedef HList<MemFunTest> list_t;
+	typedef HList<MemFunTest> mem_fun_list_t;
 
-	list_t l;
+	mem_fun_list_t l;
 	l.push_back( MemFunTest( 0 ) );
 	l.push_back( MemFunTest( 1 ) );
 	l.push_back( MemFunTest( 3 ) );
@@ -418,9 +402,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 30, "for_each of for_each" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
-	typedef HArray<int> array_t;
-	array_t a0( a, a + countof ( a ) );
-	typedef HArray<array_t> matrix_t;
+	int_array_t a0( a, a + countof ( a ) );
+	typedef HArray<int_array_t> matrix_t;
 	matrix_t m;
 	m.push_back( a0 );
 	transform( a0.begin(), a0.end(), a0.begin(), a0.begin(), multiplies<int>() );

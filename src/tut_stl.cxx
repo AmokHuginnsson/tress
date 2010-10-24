@@ -52,7 +52,11 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-TUT_SIMPLE_MOCK( tut_stl );
+struct tut_stl
+	{
+	virtual ~tut_stl( void ) {}
+	};
+
 TUT_TEST_GROUP_N( tut_stl, yaal::hcore::_debugLevel_ > yaal::hcore::DEBUG_LEVEL::ABORT_ON_ASSERT ? "yaal" : "stl" );
 
 TUT_UNIT_TEST_N( 1, "swap" )
