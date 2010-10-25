@@ -301,6 +301,7 @@ struct simple_mock
 	typedef yaal::hcore::HArray<item_t> array_t;
 	typedef yaal::hcore::HList<int> int_list_t;
 	typedef yaal::hcore::HArray<int> int_array_t;
+	virtual ~simple_mock( void ) {}
 	};
 
 template<typename owner_t>
