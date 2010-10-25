@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_yaal_hcore_lambda.cxx - this file is integral part of `tress' project.
+	tut_yaal_tools_lambda.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -42,8 +42,8 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-TUT_SIMPLE_MOCK( tut_yaal_hcore_lambda );
-TUT_TEST_GROUP_N( tut_yaal_hcore_lambda, "yaal::hcore::lambda" );
+TUT_SIMPLE_MOCK( tut_yaal_tools_lambda );
+TUT_TEST_GROUP_N( tut_yaal_tools_lambda, "yaal::tools::lambda" );
 
 TUT_UNIT_TEST_N( 1, "the test" )
 	int a[] = { 1, 3, 5, 7, 11, 13, 17, 19, 23 };
