@@ -299,6 +299,7 @@ private:
 
 	void run_group( const_iterator i ) const
 		{
+		yaal::hcore::HThread::set_name( i->first.c_str() + std::max( 0, static_cast<int>( i->first.length() - 15 ) ) );
 		_callback->group_started( i->first );
 		try
 			{

@@ -46,7 +46,7 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hdes );
-TUT_TEST_GROUP_N( tut_yaal_tools_hdes, "yaal::tool::HDes" );
+TUT_TEST_GROUP_N( tut_yaal_tools_hdes, "yaal::tools::HDes" );
 
 void do_des( HString src_, HString dst_, HDes::action_t const& action_ )
 	{
