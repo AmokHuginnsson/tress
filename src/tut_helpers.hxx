@@ -33,10 +33,12 @@ Copyright:
 #include <iomanip>
 #include <list>
 #include <vector>
+#include <deque>
 
 #include <yaal/hcore/hstreaminterface.hxx>
 #include <yaal/hcore/hpair.hxx>
 #include <yaal/hcore/harray.hxx>
+#include <yaal/hcore/hdeque.hxx>
 #include <yaal/hcore/hlist.hxx>
 #include <yaal/hcore/hcomplex.hxx>
 #include <yaal/hcore/hnumber.hxx>
@@ -72,6 +74,15 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& out,
 	}
 
 template<typename tType>
+yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& out, yaal::hcore::HDeque<tType> const& a )
+	{
+	out << "deque(";
+	yaal::copy( a.begin(), a.end(), stream_iterator( out, " " ) );
+	out << ( ( a.begin() != a.end() ) ? "\b)" : ")" ) << flush;
+	return ( out );
+	}
+
+template<typename tType>
 yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& out, yaal::hcore::HList<tType> const& l )
 	{
 	out << "list(";
@@ -87,6 +98,12 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& out,
 
 template<typename T1, typename T2>
 bool operator == ( yaal::hcore::HArray<T1> const& a, std::vector<T2> const& v )
+	{
+	return ( yaal::safe_equal( a.begin(), a.end(), v.begin(), v.end() ) );
+	}
+
+template<typename T1, typename T2>
+bool operator == ( yaal::hcore::HDeque<T1> const& a, std::deque<T2> const& v )
 	{
 	return ( yaal::safe_equal( a.begin(), a.end(), v.begin(), v.end() ) );
 	}
@@ -114,6 +131,15 @@ template<typename tType>
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HArray<tType> const& a )
 	{
 	out << "array(";
+	yaal::copy( a.begin(), a.end(), std::ostream_iterator<tType>( out, " " ) );
+	out << ( ( a.begin() != a.end() ) ? "\b)" : ")" ) << std::flush;
+	return ( out );
+	}
+
+template<typename tType>
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HDeque<tType> const& a )
+	{
+	out << "deque(";
 	yaal::copy( a.begin(), a.end(), std::ostream_iterator<tType>( out, " " ) );
 	out << ( ( a.begin() != a.end() ) ? "\b)" : ")" ) << std::flush;
 	return ( out );
@@ -148,6 +174,15 @@ template<typename tType>
 std::ostream& operator << ( std::ostream& out, std::vector<tType> const& v )
 	{
 	out << "vector(";
+	yaal::copy( v.begin(), v.end(), std::ostream_iterator<tType>( out, " " ) );
+	out << ( ( v.begin() != v.end() ) ? "\b)" : ")" ) << std::flush;
+	return ( out );
+	}
+
+template<typename tType>
+std::ostream& operator << ( std::ostream& out, std::deque<tType> const& v )
+	{
+	out << "deque(";
 	yaal::copy( v.begin(), v.end(), std::ostream_iterator<tType>( out, " " ) );
 	out << ( ( v.begin() != v.end() ) ? "\b)" : ")" ) << std::flush;
 	return ( out );
@@ -299,8 +334,10 @@ struct simple_mock
 	typedef HInstanceTracker<T> item_t;
 	typedef yaal::hcore::HList<item_t> list_t;
 	typedef yaal::hcore::HArray<item_t> array_t;
+	typedef yaal::hcore::HDeque<item_t> deque_t;
 	typedef yaal::hcore::HList<int> int_list_t;
 	typedef yaal::hcore::HArray<int> int_array_t;
+	typedef yaal::hcore::HDeque<int> int_deque_t;
 	virtual ~simple_mock( void ) {}
 	};
 
