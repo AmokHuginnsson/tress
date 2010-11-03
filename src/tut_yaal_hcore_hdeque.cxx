@@ -51,15 +51,13 @@ struct tut_yaal_hcore_hdeque : public simple_mock<tut_yaal_hcore_hdeque>
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
 
-#if 0
-
 TUT_UNIT_TEST_N( 1, "/* Constructor. */" )
 	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
 	try
 		{
-		deque_t array( BAD_SIZE );
-		FAIL( "array with negative size created" );
+		deque_t deque( BAD_SIZE );
+		FAIL( "deque with negative size created" );
 		}
 	catch ( HException const& e )
 		{
@@ -86,32 +84,34 @@ TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
 	int const FILLER_FOR_ARRAY = 13;
 	try
 		{
-		deque_t badArray( BAD_SIZE, FILLER_FOR_ARRAY );
-		FAIL( "array with negative size created" );
+		deque_t badDeque( BAD_SIZE, FILLER_FOR_ARRAY );
+		FAIL( "deque with negative size created" );
 		}
 	catch ( HException const& e )
 		{
 		cout << e.what() << endl;
 		}
-	deque_t array( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
+	deque_t deque( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
 	for ( int i = 0; i < SIZE_FOR_ARRAY; ++ i )
-		ENSURE_EQUALS( "array element not filled with default value", array[ i ], FILLER_FOR_ARRAY );
+		ENSURE_EQUALS( "deque element not filled with default value", deque[ i ], FILLER_FOR_ARRAY );
 TUT_TEARDOWN()
+
+#if 0
 
 TUT_UNIT_TEST_N( 4, "/* Constructor with range initialization. */" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
-	deque_t array( a, a + countof ( a ) );
-	ENSURE( "range initialization failed", safe_equal( array.begin(), array.end(), a, a + countof ( a ) ) );
+	deque_t deque( a, a + countof ( a ) );
+	ENSURE( "range initialization failed", safe_equal( deque.begin(), deque.end(), a, a + countof ( a ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* Copy constructor. */" )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
-	deque_t array( SIZE );
+	deque_t deque( SIZE );
 	for ( int i = 0; i < SIZE; ++ i )
-		array [ i ] = i;
-	deque_t copy( array );
+		deque [ i ] = i;
+	deque_t copy( deque );
 	ENSURE_EQUALS( "inconsistient size after copy constructor", copy.get_size(), SIZE );
 	for ( int i = 0; i < SIZE; ++ i )
 		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
@@ -120,10 +120,10 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 6, "/* Operator [ ]. */" )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
-	deque_t array ( SIZE );
+	deque_t deque ( SIZE );
 	try
 		{
-		array [ SIZE ] = 0;
+		deque [ SIZE ] = 0;
 		FAIL( "access beyond size succed" );
 		}
 	catch ( HException const& e )
@@ -132,7 +132,7 @@ TUT_UNIT_TEST_N( 6, "/* Operator [ ]. */" )
 		}
 	try
 		{
-		array[ - SIZE - 1 ] = 0;
+		deque[ - SIZE - 1 ] = 0;
 		FAIL( "access with negative index succed" );
 		}
 	catch ( HException const& e )
@@ -146,9 +146,9 @@ TUT_UNIT_TEST_N( 7, "/* Operator bool. */" )
 	int const EMPTY = 0;
 	int const SIZE = 7;
 	deque_t empty( EMPTY );
-	ENSURE_EQUALS( "test for array emptiness faild", ! empty, true );
+	ENSURE_EQUALS( "test for deque emptiness faild", ! empty, true );
 	deque_t normal( SIZE );
-	ENSURE_EQUALS( "test for array fullness faild", ! normal, false );
+	ENSURE_EQUALS( "test for deque fullness faild", ! normal, false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "push_back" )
@@ -163,9 +163,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "copy constructor (of empty)" )
 	deque_t a1;
-	ENSURE( "construction of empty array", a1.is_empty() );
+	ENSURE( "construction of empty deque", a1.is_empty() );
 	deque_t a2( a1 );
-	ENSURE( "construction of empty array", a2.is_empty() );
+	ENSURE( "construction of empty deque", a2.is_empty() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "/* insert( pos, value ) */" )
@@ -173,30 +173,30 @@ TUT_UNIT_TEST_N( 10, "/* insert( pos, value ) */" )
 	item_t::set_start_id( 0 );
 	typedef std::deque<int> proto_t;
 	proto_t proto( a, a + countof ( a ) );
-	deque_t array( a, a + countof ( a ) );
-	ENSURE_EQUALS( "insertion failed", array, proto );
-	array.insert( array.begin(), -7 );
+	deque_t deque( a, a + countof ( a ) );
+	ENSURE_EQUALS( "insertion failed", deque, proto );
+	deque.insert( deque.begin(), -7 );
 	proto.insert( proto.begin(), -7 );
-	ENSURE_EQUALS( "insertion failed", array, proto );
-	array.insert( array.begin() + 5, -7 );
+	ENSURE_EQUALS( "insertion failed", deque, proto );
+	deque.insert( deque.begin() + 5, -7 );
 	proto.insert( proto.begin() + 5, -7 );
-	ENSURE_EQUALS( "insertion failed", array, proto );
-	array.insert( array.end() - 1, -7 );
+	ENSURE_EQUALS( "insertion failed", deque, proto );
+	deque.insert( deque.end() - 1, -7 );
 	proto.insert( proto.end() - 1, -7 );
-	ENSURE_EQUALS( "insertion failed", array, proto );
+	ENSURE_EQUALS( "insertion failed", deque, proto );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "/* assign operator (=) */" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { -36, -1, -4, -9 };
 	item_t::set_start_id( 0 );
-	deque_t array( a0, a0 + countof ( a0 ) );
+	deque_t deque( a0, a0 + countof ( a0 ) );
 	deque_t small( a1, a1 + countof ( a1 ) );
-	array = small;
-	ENSURE_EQUALS( "assgin failed", array, small );
+	deque = small;
+	ENSURE_EQUALS( "assgin failed", deque, small );
 	deque_t big( a0, a0 + countof ( a0 ) );
-	array = big;
-	ENSURE_EQUALS( "assgin failed", array, big );
+	deque = big;
+	ENSURE_EQUALS( "assgin failed", deque, big );
 TUT_TEARDOWN()
 
 #endif
