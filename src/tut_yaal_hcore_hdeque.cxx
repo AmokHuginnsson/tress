@@ -51,6 +51,8 @@ struct tut_yaal_hcore_hdeque : public simple_mock<tut_yaal_hcore_hdeque>
 	virtual ~tut_yaal_hcore_hdeque( void ) {}
 	template<typename deque_type>
 	void check_consistency( deque_type const& );
+	template<int const item_size>
+	void test_resize( void );
 	};
 
 template<typename deque_type>
@@ -65,8 +67,9 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_ )
 	else
 		ENSURE_EQUALS( "bad indexes for empty deque", lastChunkIndex, firstChunkIndex );
 	int long startGap( firstChunkIndex );
-	int long endGap( chunksCount - lastChunkIndex );
-	ENSURE( "chunks are not centered", abs( endGap - startGap ) <= 1 );
+	int long endGap( ( chunksCount - lastChunkIndex ) - 1 );
+	if ( deque_._size > 0 )
+		ENSURE( "chunks are not centered", abs( endGap - startGap ) <= 1 );
 	}
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
@@ -84,6 +87,55 @@ TUT_UNIT_TEST_N( 1, "/* Constructor. */" )
 		cout << e.what() << endl;
 		}
 TUT_TEARDOWN()
+
+template<int const item_size>
+void tut_yaal_hcore_hdeque::test_resize( void )
+	{
+	clog << "testing resize: " << item_size << endl;
+	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
+	typedef HDeque<item_t> deque_type;
+		{
+		deque_type deque;
+		check_consistency( deque );
+		deque.resize( 1 );
+		check_consistency( deque );
+		deque.resize( 2 );
+		check_consistency( deque );
+		deque.resize( 3 );
+		check_consistency( deque );
+		deque.resize( 7 );
+		check_consistency( deque );
+		deque.resize( 15 );
+		check_consistency( deque );
+		deque.resize( 16 );
+		check_consistency( deque );
+		deque.resize( 17 );
+		check_consistency( deque );
+		deque.resize( 64 );
+		check_consistency( deque );
+		deque.resize( 128 );
+		check_consistency( deque );
+		deque.resize( 64 );
+		check_consistency( deque );
+		deque.resize( 17 );
+		check_consistency( deque );
+		deque.resize( 16 );
+		check_consistency( deque );
+		deque.resize( 15 );
+		check_consistency( deque );
+		deque.resize( 7 );
+		check_consistency( deque );
+		deque.resize( 3 );
+		check_consistency( deque );
+		deque.resize( 2 );
+		check_consistency( deque );
+		deque.resize( 1 );
+		check_consistency( deque );
+		deque.resize( 0 );
+		check_consistency( deque );
+		}
+	return;
+	}
 
 TUT_UNIT_TEST_N( 2, "/* Constructor and get_size(). */" )
 	{
@@ -120,6 +172,23 @@ TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
 	check_consistency( deque );
 	for ( int i = 0; i < SIZE_FOR_ARRAY; ++ i )
 		ENSURE_EQUALS( "deque element not filled with default value", deque[ i ], FILLER_FOR_ARRAY );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 4, "resize" )
+	test_resize<1>();
+	test_resize<2>();
+	test_resize<3>();
+	test_resize<7>();
+	test_resize<15>();
+	test_resize<16>();
+	test_resize<17>();
+	test_resize<64>();
+	test_resize<128>();
+	test_resize<200>();
+	test_resize<511>();
+	test_resize<512>();
+	test_resize<513>();
+	test_resize<640>();
 TUT_TEARDOWN()
 
 #if 0
