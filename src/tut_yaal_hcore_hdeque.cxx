@@ -26,6 +26,9 @@ Copyright:
 
 #include <deque>
 
+#define private public
+#define protected public
+
 #include <TUT/tut.hpp>
 
 #include <yaal/yaal.hxx>
@@ -45,9 +48,26 @@ namespace tut
 
 struct tut_yaal_hcore_hdeque : public simple_mock<tut_yaal_hcore_hdeque>
 	{
-	typedef HDeque<item_t> deque_t;
 	virtual ~tut_yaal_hcore_hdeque( void ) {}
+	template<typename deque_type>
+	void check_consistency( deque_type const& );
 	};
+
+template<typename deque_type>
+void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_ )
+	{
+	ENSURE_EQUALS( "deque size with respect to allocated objects", deque_.get_size(), deque_type::value_type::get_instance_count() );
+	int long firstChunkIndex( deque_._start / deque_type::VALUES_PER_CHUNK );
+	int long lastChunkIndex( deque_._size > 0 ? ( ( deque_._start + deque_._size - 1 ) / deque_type::VALUES_PER_CHUNK ) : 0 );
+	int long chunksCount = deque_._chunks.template count_of<typename deque_type::value_type*>();
+	if ( deque_._size > 0 )
+		ENSURE( "chunk range bigger than chunks count", ( lastChunkIndex - firstChunkIndex ) < chunksCount );
+	else
+		ENSURE_EQUALS( "bad indexes for empty deque", lastChunkIndex, firstChunkIndex );
+	int long startGap( firstChunkIndex );
+	int long endGap( chunksCount - lastChunkIndex );
+	ENSURE( "chunks are not centered", abs( endGap - startGap ) <= 1 );
+	}
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
 
@@ -66,15 +86,20 @@ TUT_UNIT_TEST_N( 1, "/* Constructor. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Constructor and get_size(). */" )
+	{
 	item_t::set_start_id( 0 );
 	int const SIZE_FOR_ONE = 0;
 	int const SIZE_FOR_TWO = 7;
 	deque_t one( SIZE_FOR_ONE );
 	ENSURE_EQUALS( "wrong number of items created", item_t::get_instance_count(), SIZE_FOR_ONE );
 	ENSURE_EQUALS( "inconsistient size with respect to constructor", one.get_size(), SIZE_FOR_ONE );
+	check_consistency( one );
 	deque_t two( SIZE_FOR_TWO );
 	ENSURE_EQUALS( "wrong number of items created", item_t::get_instance_count(), SIZE_FOR_ONE + SIZE_FOR_TWO );
 	ENSURE_EQUALS( "inconsistient size with respect to constructor", two.get_size(), SIZE_FOR_TWO );
+	check_consistency( two );
+	}
+	ENSURE_EQUALS( "object leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
@@ -92,6 +117,7 @@ TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
 		cout << e.what() << endl;
 		}
 	deque_t deque( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
+	check_consistency( deque );
 	for ( int i = 0; i < SIZE_FOR_ARRAY; ++ i )
 		ENSURE_EQUALS( "deque element not filled with default value", deque[ i ], FILLER_FOR_ARRAY );
 TUT_TEARDOWN()
