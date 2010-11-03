@@ -236,7 +236,7 @@ TUT_UNIT_TEST_N( 4, "/* Listening on reserved port. */" )
 	HSocket socket( HSocket::TYPE::NETWORK, 1 );
 	try
 		{
-		socket.listen( "0.0.0.0", ( ::getenv( "windir" ) ? 135 : 22 ) );
+		socket.listen( "0.0.0.0", ( ::getenv( "windir" ) || ::getenv( "WINDIR" ) ? 135 : 22 ) );
 		FAIL( "listening on reserved port possible" );
 		}
 	catch ( HException & e )
