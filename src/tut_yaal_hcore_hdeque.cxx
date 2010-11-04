@@ -60,7 +60,7 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_ )
 	{
 	ENSURE_EQUALS( "deque size with respect to allocated objects", deque_.get_size(), deque_type::value_type::get_instance_count() );
 	int long firstChunkIndex( deque_._start / deque_type::VALUES_PER_CHUNK );
-	int long lastChunkIndex( deque_._size > 0 ? ( ( deque_._start + deque_._size - 1 ) / deque_type::VALUES_PER_CHUNK ) : 0 );
+	int long lastChunkIndex( deque_._size > 0 ? ( ( deque_._start + deque_._size - 1 ) / deque_type::VALUES_PER_CHUNK ) : ( deque_._start / deque_type::VALUES_PER_CHUNK ) );
 	int long chunksCount = deque_._chunks.template count_of<typename deque_type::value_type*>();
 	if ( deque_._size > 0 )
 		ENSURE( "chunk range bigger than chunks count", ( lastChunkIndex - firstChunkIndex ) < chunksCount );
@@ -70,6 +70,11 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_ )
 	int long endGap( ( chunksCount - lastChunkIndex ) - 1 );
 	if ( deque_._size > 0 )
 		ENSURE( "chunks are not centered", abs( endGap - startGap ) <= 1 );
+	typename deque_type::value_type const* const* chunks = deque_._chunks.template get<typename deque_type::value_type const*>();
+	for ( int long i( 0 ); i < firstChunkIndex; ++ i )
+		ENSURE_EQUALS( "non used chunks at the begining not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
+	for ( int long i( lastChunkIndex + 1 ); i < chunksCount; ++ i )
+		ENSURE_EQUALS( "non used chunks at the end not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
 	}
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
