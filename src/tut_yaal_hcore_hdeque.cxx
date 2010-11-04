@@ -198,14 +198,14 @@ TUT_TEARDOWN()
 
 #if 0
 
-TUT_UNIT_TEST_N( 4, "/* Constructor with range initialization. */" )
+TUT_UNIT_TEST_N( 5, "/* Constructor with range initialization. */" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
 	deque_t deque( a, a + countof ( a ) );
 	ENSURE( "range initialization failed", safe_equal( deque.begin(), deque.end(), a, a + countof ( a ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "/* Copy constructor. */" )
+TUT_UNIT_TEST_N( 7, "/* Copy constructor. */" )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	deque_t deque( SIZE );
@@ -217,7 +217,7 @@ TUT_UNIT_TEST_N( 5, "/* Copy constructor. */" )
 		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "/* Operator [ ]. */" )
+TUT_UNIT_TEST_N( 8, "/* Operator [ ]. */" )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	deque_t deque ( SIZE );
@@ -241,7 +241,7 @@ TUT_UNIT_TEST_N( 6, "/* Operator [ ]. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "/* Operator bool. */" )
+TUT_UNIT_TEST_N( 9, "/* Operator bool. */" )
 	item_t::set_start_id( 0 );
 	int const EMPTY = 0;
 	int const SIZE = 7;
@@ -251,7 +251,7 @@ TUT_UNIT_TEST_N( 7, "/* Operator bool. */" )
 	ENSURE_EQUALS( "test for deque fullness faild", ! normal, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "push_back" )
+TUT_UNIT_TEST_N( 10, "push_back" )
 	item_t::set_start_id( 0 );
 	item_t i;
 	deque_t a1;
@@ -261,14 +261,14 @@ TUT_UNIT_TEST_N( 8, "push_back" )
 	a2.push_back( i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "copy constructor (of empty)" )
+TUT_UNIT_TEST_N( 12, "copy constructor (of empty)" )
 	deque_t a1;
 	ENSURE( "construction of empty deque", a1.is_empty() );
 	deque_t a2( a1 );
 	ENSURE( "construction of empty deque", a2.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 10, "/* insert( pos, value ) */" )
+TUT_UNIT_TEST_N( 13, "/* insert( pos, value ) */" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
 	typedef std::deque<int> proto_t;
@@ -286,7 +286,7 @@ TUT_UNIT_TEST_N( 10, "/* insert( pos, value ) */" )
 	ENSURE_EQUALS( "insertion failed", deque, proto );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 11, "/* assign operator (=) */" )
+TUT_UNIT_TEST_N( 14, "/* assign operator (=) */" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { -36, -1, -4, -9 };
 	item_t::set_start_id( 0 );
