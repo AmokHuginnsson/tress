@@ -54,6 +54,10 @@ struct tut_yaal_hcore_hdeque : public simple_mock<tut_yaal_hcore_hdeque>
 	void check_consistency( deque_type const&, int = 0 );
 	template<int const item_size>
 	void test_resize( void );
+	template<int const item_size>
+	void test_erase( int, int );
+	template<int const item_size>
+	void test_erase( void );
 	};
 
 template<typename deque_type>
@@ -73,9 +77,14 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_, int ext
 		ENSURE( "chunks are not centered", abs( endGap - startGap ) <= 1 );
 	typename deque_type::value_type const* const* chunks = deque_._chunks.template get<typename deque_type::value_type const*>();
 	for ( int long i( 0 ); i < firstChunkIndex; ++ i )
-		ENSURE_EQUALS( "non used chunks at the begining not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
+		ENSURE_EQUALS( "not used chunks at the begining not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
 	for ( int long i( lastChunkIndex + 1 ); i < chunksCount; ++ i )
-		ENSURE_EQUALS( "non used chunks at the end not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
+		ENSURE_EQUALS( "not used chunks at the end not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
+	if ( deque_._size > 0 )
+		{
+		for ( int long i( firstChunkIndex ); i < ( lastChunkIndex + 1 ); ++ i )
+			ENSURE_EQUALS( "a nil in used chunks range", chunks[ i ] ? true : false, true );
+		}
 	}
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
@@ -140,6 +149,7 @@ void tut_yaal_hcore_hdeque::test_resize( void )
 		deque.resize( 0 );
 		check_consistency( deque );
 		}
+	ENSURE_EQUALS( "object leak", item_type::get_instance_count(), 0 );
 	return;
 	}
 
@@ -198,7 +208,7 @@ TUT_UNIT_TEST_N( 4, "resize" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* Constructor with range initialization. */" )
-	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	int a[] = { 7, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 13 };
 	item_t::set_start_id( 0 );
 	deque_t deque( a, a + countof ( a ) );
 	proto_t proto( a, a + countof ( a ) );
@@ -252,6 +262,62 @@ TUT_UNIT_TEST_N( 9, "/* Operator bool. */" )
 	ENSURE_EQUALS( "test for deque emptiness faild", ! empty, true );
 	deque_t normal( SIZE );
 	ENSURE_EQUALS( "test for deque fullness faild", ! normal, false );
+TUT_TEARDOWN()
+
+int a[] = { 7, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 13 };
+
+template<int const item_size>
+void tut_yaal_hcore_hdeque::test_erase( int first_, int last_ )
+	{
+	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
+	typedef HDeque<item_t> deque_type;
+		{
+		clog << "testing erase: " << item_size << ", first: " << first_ << ", last: " << last_ << endl;
+		item_type::set_start_id( 0 );
+		deque_type deque( a, a + countof ( a ) );
+		proto_t proto( a, a + countof ( a ) );
+		proto.erase( proto.begin() + first_, proto.begin() + last_ );
+		deque.erase( deque.begin() + first_, deque.begin() + last_ );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range initialization failed", deque, proto );
+		}
+
+	ENSURE_EQUALS( "object leak", item_type::get_instance_count(), 0 );
+	}
+
+template<int const item_size>
+void tut_yaal_hcore_hdeque::test_erase( void )
+	{
+	test_erase<item_size>( 0, countof( a ) / 2 );
+	test_erase<item_size>( countof( a ) / 2, countof( a ) );
+	test_erase<item_size>( 0, countof( a ) );
+	test_erase<item_size>( 0, 1 );
+	test_erase<item_size>( countof ( a ) - 1, countof ( a ) );
+	test_erase<item_size>( 1, countof ( a ) - 1 );
+	test_erase<item_size>( 3, 6 );
+	test_erase<item_size>( countof ( a ) - 6, countof ( a ) - 3 );
+	test_erase<item_size>( countof ( a ) / 2 - 3, countof ( a ) / 2 + 3 );
+	test_erase<item_size>( 0, countof( a ) / 2 + countof ( a ) / 4 );
+	test_erase<item_size>( 3, countof( a ) / 2 + countof ( a ) / 4 );
+	test_erase<item_size>( countof ( a ) / 4, countof( a ) );
+	test_erase<item_size>( countof ( a ) / 4, countof( a ) - 3 );
+	}
+
+TUT_UNIT_TEST_N( 10, "/* range erase */" )
+	test_erase<1>();
+	test_erase<2>();
+	test_erase<3>();
+	test_erase<7>();
+	test_erase<15>();
+	test_erase<16>();
+	test_erase<17>();
+	test_erase<64>();
+	test_erase<128>();
+	test_erase<200>();
+	test_erase<511>();
+	test_erase<512>();
+	test_erase<513>();
+	test_erase<640>();
 TUT_TEARDOWN()
 
 #if 0
