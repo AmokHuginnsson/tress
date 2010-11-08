@@ -198,6 +198,9 @@ TUT_UNIT_TEST_N( 11, "/* insert( pos, value ) */" )
 	array.insert( array.end() - 1, -7 );
 	proto.insert( proto.end() - 1, -7 );
 	ENSURE_EQUALS( "insertion failed", array, proto );
+	array.insert( array.end(), -99 );
+	proto.insert( proto.end(), -99 );
+	ENSURE_EQUALS( "insertion failed", array, proto );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 12, "/* assign operator (=) */" )

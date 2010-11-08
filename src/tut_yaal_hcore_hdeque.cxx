@@ -48,17 +48,18 @@ namespace tut
 
 struct tut_yaal_hcore_hdeque : public simple_mock<tut_yaal_hcore_hdeque>
 	{
+	typedef std::deque<int> proto_t;
 	virtual ~tut_yaal_hcore_hdeque( void ) {}
 	template<typename deque_type>
-	void check_consistency( deque_type const& );
+	void check_consistency( deque_type const&, int = 0 );
 	template<int const item_size>
 	void test_resize( void );
 	};
 
 template<typename deque_type>
-void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_ )
+void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_, int extraItems )
 	{
-	ENSURE_EQUALS( "deque size with respect to allocated objects", deque_.get_size(), deque_type::value_type::get_instance_count() );
+	ENSURE_EQUALS( "deque size with respect to allocated objects", deque_.get_size(), deque_type::value_type::get_instance_count() - extraItems );
 	int long firstChunkIndex( deque_._start / deque_type::VALUES_PER_CHUNK );
 	int long lastChunkIndex( deque_._size > 0 ? ( ( deque_._start + deque_._size - 1 ) / deque_type::VALUES_PER_CHUNK ) : ( deque_._start / deque_type::VALUES_PER_CHUNK ) );
 	int long chunksCount = deque_._chunks.template count_of<typename deque_type::value_type*>();
@@ -196,13 +197,13 @@ TUT_UNIT_TEST_N( 4, "resize" )
 	test_resize<640>();
 TUT_TEARDOWN()
 
-#if 0
-
 TUT_UNIT_TEST_N( 5, "/* Constructor with range initialization. */" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
 	deque_t deque( a, a + countof ( a ) );
-	ENSURE( "range initialization failed", safe_equal( deque.begin(), deque.end(), a, a + countof ( a ) ) );
+	proto_t proto( a, a + countof ( a ) );
+	check_consistency( deque );
+	ENSURE_EQUALS( "range initialization failed", deque, proto );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "/* Copy constructor. */" )
@@ -210,8 +211,10 @@ TUT_UNIT_TEST_N( 7, "/* Copy constructor. */" )
 	int const SIZE = 7;
 	deque_t deque( SIZE );
 	for ( int i = 0; i < SIZE; ++ i )
-		deque [ i ] = i;
+		deque[ i ] = i;
+	check_consistency( deque );
 	deque_t copy( deque );
+	check_consistency( copy, SIZE );
 	ENSURE_EQUALS( "inconsistient size after copy constructor", copy.get_size(), SIZE );
 	for ( int i = 0; i < SIZE; ++ i )
 		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
@@ -251,6 +254,8 @@ TUT_UNIT_TEST_N( 9, "/* Operator bool. */" )
 	ENSURE_EQUALS( "test for deque fullness faild", ! normal, false );
 TUT_TEARDOWN()
 
+#if 0
+
 TUT_UNIT_TEST_N( 10, "push_back" )
 	item_t::set_start_id( 0 );
 	item_t i;
@@ -271,7 +276,6 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 13, "/* insert( pos, value ) */" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
-	typedef std::deque<int> proto_t;
 	proto_t proto( a, a + countof ( a ) );
 	deque_t deque( a, a + countof ( a ) );
 	ENSURE_EQUALS( "insertion failed", deque, proto );
@@ -283,6 +287,9 @@ TUT_UNIT_TEST_N( 13, "/* insert( pos, value ) */" )
 	ENSURE_EQUALS( "insertion failed", deque, proto );
 	deque.insert( deque.end() - 1, -7 );
 	proto.insert( proto.end() - 1, -7 );
+	ENSURE_EQUALS( "insertion failed", deque, proto );
+	deque.insert( deque.end(), -99 );
+	proto.insert( proto.end(), -99 );
 	ENSURE_EQUALS( "insertion failed", deque, proto );
 TUT_TEARDOWN()
 
