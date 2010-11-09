@@ -58,6 +58,10 @@ struct tut_yaal_hcore_hdeque : public simple_mock<tut_yaal_hcore_hdeque>
 	void test_erase( int, int );
 	template<int const item_size>
 	void test_erase( void );
+	template<int const item_size>
+	void test_push_back( void );
+	template<int const item_size>
+	void test_push_front( void );
 	};
 
 template<typename deque_type>
@@ -216,7 +220,7 @@ TUT_UNIT_TEST_N( 5, "/* Constructor with range initialization. */" )
 	ENSURE_EQUALS( "range initialization failed", deque, proto );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "/* Copy constructor. */" )
+TUT_UNIT_TEST_N( 6, "/* Copy constructor. */" )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	deque_t deque( SIZE );
@@ -230,7 +234,7 @@ TUT_UNIT_TEST_N( 7, "/* Copy constructor. */" )
 		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "/* Operator [ ]. */" )
+TUT_UNIT_TEST_N( 7, "/* Operator [ ]. */" )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	deque_t deque ( SIZE );
@@ -254,7 +258,7 @@ TUT_UNIT_TEST_N( 8, "/* Operator [ ]. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "/* Operator bool. */" )
+TUT_UNIT_TEST_N( 8, "/* Operator bool. */" )
 	item_t::set_start_id( 0 );
 	int const EMPTY = 0;
 	int const SIZE = 7;
@@ -303,7 +307,7 @@ void tut_yaal_hcore_hdeque::test_erase( void )
 	test_erase<item_size>( countof ( a ) / 4, countof( a ) - 3 );
 	}
 
-TUT_UNIT_TEST_N( 10, "/* range erase */" )
+TUT_UNIT_TEST_N( 9, "/* range erase */" )
 	test_erase<1>();
 	test_erase<2>();
 	test_erase<3>();
@@ -320,27 +324,86 @@ TUT_UNIT_TEST_N( 10, "/* range erase */" )
 	test_erase<640>();
 TUT_TEARDOWN()
 
-#if 0
+template<int const item_size>
+void tut_yaal_hcore_hdeque::test_push_back( void )
+	{
+	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
+	typedef HDeque<item_t> deque_type;
+	clog << "testing push_back: " << item_size << endl;
+		{
+		deque_type deque;
+		proto_t proto;
+		for ( int i( 0 ); i < 128; ++ i )
+			{
+			proto.push_back( i );
+			deque.push_back( i );
+			check_consistency( deque );
+			ENSURE_EQUALS( "push_back failed", deque, proto );
+			}
+		}
+	}
 
 TUT_UNIT_TEST_N( 10, "push_back" )
-	item_t::set_start_id( 0 );
-	item_t i;
-	deque_t a1;
-	a1.resize( 5 );
-	a1.resize( 2 );
-	deque_t a2;
-	a2.push_back( i );
+	test_push_back<1>();
+	test_push_back<2>();
+	test_push_back<3>();
+	test_push_back<7>();
+	test_push_back<15>();
+	test_push_back<16>();
+	test_push_back<17>();
+	test_push_back<64>();
+	test_push_back<128>();
+	test_push_back<200>();
+	test_push_back<511>();
+	test_push_back<512>();
+	test_push_back<513>();
+	test_push_back<640>();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 12, "copy constructor (of empty)" )
+template<int const item_size>
+void tut_yaal_hcore_hdeque::test_push_front( void )
+	{
+	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
+	typedef HDeque<item_t> deque_type;
+	clog << "testing push_front: " << item_size << endl;
+		{
+		deque_type deque;
+		proto_t proto;
+		for ( int i( 0 ); i < 128; ++ i )
+			{
+			proto.push_front( i );
+			deque.push_front( i );
+			check_consistency( deque );
+			ENSURE_EQUALS( "push_front failed", deque, proto );
+			}
+		}
+	}
+
+TUT_UNIT_TEST_N( 11, "push_front" )
+	test_push_front<1>();
+	test_push_front<2>();
+	test_push_front<3>();
+	test_push_front<7>();
+	test_push_front<15>();
+	test_push_front<16>();
+	test_push_front<17>();
+	test_push_front<64>();
+	test_push_front<128>();
+	test_push_front<200>();
+	test_push_front<511>();
+	test_push_front<512>();
+	test_push_front<513>();
+	test_push_front<640>();
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 13, "copy constructor (of empty)" )
 	deque_t a1;
 	ENSURE( "construction of empty deque", a1.is_empty() );
 	deque_t a2( a1 );
 	ENSURE( "construction of empty deque", a2.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 13, "/* insert( pos, value ) */" )
-	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+TUT_UNIT_TEST_N( 14, "/* insert( pos, value ) */" )
 	item_t::set_start_id( 0 );
 	proto_t proto( a, a + countof ( a ) );
 	deque_t deque( a, a + countof ( a ) );
@@ -359,7 +422,7 @@ TUT_UNIT_TEST_N( 13, "/* insert( pos, value ) */" )
 	ENSURE_EQUALS( "insertion failed", deque, proto );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 14, "/* assign operator (=) */" )
+TUT_UNIT_TEST_N( 15, "/* assign operator (=) */" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { -36, -1, -4, -9 };
 	item_t::set_start_id( 0 );
@@ -371,8 +434,6 @@ TUT_UNIT_TEST_N( 14, "/* assign operator (=) */" )
 	deque = big;
 	ENSURE_EQUALS( "assgin failed", deque, big );
 TUT_TEARDOWN()
-
-#endif
 
 }
 
