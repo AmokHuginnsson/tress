@@ -94,8 +94,11 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 4, "/* Constructor with range initialization. */" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
-	array_t array( a, a + countof ( a ) );
-	ENSURE( "range initialization failed", safe_equal( array.begin(), array.end(), a, a + countof ( a ) ) );
+		{
+		array_t array( a, a + countof ( a ) );
+		ENSURE( "range initialization failed", safe_equal( array.begin(), array.end(), a, a + countof ( a ) ) );
+		}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "/* Copy constructor. */" )
@@ -145,13 +148,18 @@ TUT_UNIT_TEST_N( 7, "/* Operator bool. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "push_back" )
-	item_t::set_start_id( 0 );
-	item_t i;
-	array_t a1;
-	a1.resize( 5 );
-	a1.resize( 2 );
-	array_t a2;
-	a2.push_back( i );
+	typedef std::vector<int> proto_t;
+	proto_t proto;
+		{
+		array_t array;
+		for ( int long i( 0 ); i < 2048; ++ i )
+			{
+			proto.push_back( static_cast<int>( i ) );
+			array.push_back( static_cast<int>( i ) );
+			ENSURE_EQUALS( "push_back failed", array, proto );
+			}
+		}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "copy constructor (of empty)" )
@@ -214,6 +222,24 @@ TUT_UNIT_TEST_N( 12, "/* assign operator (=) */" )
 	array_t big( a0, a0 + countof ( a0 ) );
 	array = big;
 	ENSURE_EQUALS( "assgin failed", array, big );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 13, "push_back" )
+	typedef std::vector<int> proto_t;
+		{
+		array_t array( 2048 );
+		proto_t proto( 2048 );
+		generate( array.begin(), array.end(), inc( 0 ) );
+		generate( proto.begin(), proto.end(), inc( 0 ) );
+		for ( int long i( 0 ); i < 2048; ++ i )
+			{
+			proto.pop_back();
+			array.pop_back();
+			ENSURE_EQUALS( "pop_back failed", array, proto );
+			}
+		ENSURE_EQUALS( "not empty!", array.is_empty(), true );
+		}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 49, "speed test" )

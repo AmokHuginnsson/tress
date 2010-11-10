@@ -62,6 +62,10 @@ struct tut_yaal_hcore_hdeque : public simple_mock<tut_yaal_hcore_hdeque>
 	void test_push_back( void );
 	template<int const item_size>
 	void test_push_front( void );
+	template<int const item_size>
+	void test_pop_back( void );
+	template<int const item_size>
+	void test_pop_front( void );
 	};
 
 template<typename deque_type>
@@ -396,14 +400,92 @@ TUT_UNIT_TEST_N( 11, "push_front" )
 	test_push_front<640>();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 13, "copy constructor (of empty)" )
+template<int const item_size>
+void tut_yaal_hcore_hdeque::test_pop_back( void )
+	{
+	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
+	typedef HDeque<item_t> deque_type;
+	clog << "testing pop_back: " << item_size << endl;
+		{
+		deque_type deque( 2048 );
+		proto_t proto( 2048 );
+		generate( deque.begin(), deque.end(), inc( 0 ) );
+		generate( proto.begin(), proto.end(), inc( 0 ) );
+		for ( int long i( 0 ); i < 2048; ++ i )
+			{
+			proto.pop_back();
+			deque.pop_back();
+			ENSURE_EQUALS( "pop_back failed", deque, proto );
+			}
+		ENSURE_EQUALS( "not empty!", deque.is_empty(), true );
+		}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+	}
+
+TUT_UNIT_TEST_N( 12, "pop_back" )
+	test_pop_back<1>();
+	test_pop_back<2>();
+	test_pop_back<3>();
+	test_pop_back<7>();
+	test_pop_back<15>();
+	test_pop_back<16>();
+	test_pop_back<17>();
+	test_pop_back<64>();
+	test_pop_back<128>();
+	test_pop_back<200>();
+	test_pop_back<511>();
+	test_pop_back<512>();
+	test_pop_back<513>();
+	test_pop_back<640>();
+TUT_TEARDOWN()
+
+template<int const item_size>
+void tut_yaal_hcore_hdeque::test_pop_front( void )
+	{
+	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
+	typedef HDeque<item_t> deque_type;
+	clog << "testing pop_front: " << item_size << endl;
+		{
+		deque_type deque( 2048 );
+		proto_t proto( 2048 );
+		generate( deque.begin(), deque.end(), inc( 0 ) );
+		generate( proto.begin(), proto.end(), inc( 0 ) );
+		for ( int long i( 0 ); i < 2048; ++ i )
+			{
+			proto.pop_front();
+			deque.pop_front();
+			ENSURE_EQUALS( "pop_front failed", deque, proto );
+			}
+		ENSURE_EQUALS( "not empty!", deque.is_empty(), true );
+		}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+	}
+
+TUT_UNIT_TEST_N( 13, "pop_front" )
+	test_pop_front<1>();
+	test_pop_front<2>();
+	test_pop_front<3>();
+	test_pop_front<7>();
+	test_pop_front<15>();
+	test_pop_front<16>();
+	test_pop_front<17>();
+	test_pop_front<64>();
+	test_pop_front<128>();
+	test_pop_front<200>();
+	test_pop_front<511>();
+	test_pop_front<512>();
+	test_pop_front<513>();
+	test_pop_front<640>();
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 14, "copy constructor (of empty)" )
 	deque_t a1;
 	ENSURE( "construction of empty deque", a1.is_empty() );
 	deque_t a2( a1 );
 	ENSURE( "construction of empty deque", a2.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 14, "/* insert( pos, value ) */" )
+TUT_UNIT_TEST_N( 15, "/* insert( pos, value ) */" )
 	item_t::set_start_id( 0 );
 	proto_t proto( a, a + countof ( a ) );
 	deque_t deque( a, a + countof ( a ) );
@@ -422,7 +504,7 @@ TUT_UNIT_TEST_N( 14, "/* insert( pos, value ) */" )
 	ENSURE_EQUALS( "insertion failed", deque, proto );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 15, "/* assign operator (=) */" )
+TUT_UNIT_TEST_N( 16, "/* assign operator (=) */" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { -36, -1, -4, -9 };
 	item_t::set_start_id( 0 );
