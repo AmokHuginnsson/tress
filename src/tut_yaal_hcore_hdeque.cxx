@@ -78,7 +78,7 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_, int ext
 	int long startGap( firstChunkIndex );
 	int long endGap( ( chunksCount - lastChunkIndex ) - 1 );
 	if ( deque_._size > 0 )
-		ENSURE( "chunks are not centered", abs( endGap - startGap ) <= 1 );
+		ENSURE_DISTANCE( "chunks are not centered", abs( endGap - startGap ), 0l, 2l );
 	typename deque_type::value_type const* const* chunks = deque_._chunks.template get<typename deque_type::value_type const*>();
 	for ( int long i( 0 ); i < firstChunkIndex; ++ i )
 		ENSURE_EQUALS( "not used chunks at the begining not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
@@ -333,7 +333,7 @@ void tut_yaal_hcore_hdeque::test_push_back( void )
 		{
 		deque_type deque;
 		proto_t proto;
-		for ( int i( 0 ); i < 128; ++ i )
+		for ( int i( 0 ); i < 1024; ++ i )
 			{
 			proto.push_back( i );
 			deque.push_back( i );
@@ -369,7 +369,7 @@ void tut_yaal_hcore_hdeque::test_push_front( void )
 		{
 		deque_type deque;
 		proto_t proto;
-		for ( int i( 0 ); i < 128; ++ i )
+		for ( int i( 0 ); i < 1024; ++ i )
 			{
 			proto.push_front( i );
 			deque.push_front( i );
