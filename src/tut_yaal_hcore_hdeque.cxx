@@ -333,10 +333,10 @@ void tut_yaal_hcore_hdeque::test_push_back( void )
 		{
 		deque_type deque;
 		proto_t proto;
-		for ( int i( 0 ); i < 1024; ++ i )
+		for ( int long i( 0 ); i < 2048; ++ i )
 			{
-			proto.push_back( i );
-			deque.push_back( i );
+			proto.push_back( static_cast<int>( i ) );
+			deque.push_back( static_cast<int>( i ) );
 			check_consistency( deque );
 			ENSURE_EQUALS( "push_back failed", deque, proto );
 			}
@@ -369,10 +369,10 @@ void tut_yaal_hcore_hdeque::test_push_front( void )
 		{
 		deque_type deque;
 		proto_t proto;
-		for ( int i( 0 ); i < 1024; ++ i )
+		for ( int long i( 0 ); i < 2048; ++ i )
 			{
-			proto.push_front( i );
-			deque.push_front( i );
+			proto.push_front( static_cast<int>( i ) );
+			deque.push_front( static_cast<int>( i ) );
 			check_consistency( deque );
 			ENSURE_EQUALS( "push_front failed", deque, proto );
 			}
@@ -433,6 +433,39 @@ TUT_UNIT_TEST_N( 15, "/* assign operator (=) */" )
 	deque_t big( a0, a0 + countof ( a0 ) );
 	deque = big;
 	ENSURE_EQUALS( "assgin failed", deque, big );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 49, "speed test" )
+	typedef HDeque<int> deque_type;
+	int long LOOPS( 1000000 );
+		{
+		proto_t proto;
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			proto.push_back( static_cast<int>( i ) );
+		clog << "*speed* std::deque<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
+		{
+		deque_type deque;
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			deque.push_back( static_cast<int>( i ) );
+		clog << "*speed* yaal::hcore::HDeque<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
+		{
+		proto_t proto;
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			proto.push_front( static_cast<int>( i ) );
+		clog << "*speed* std::deque<>::push_front() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
+		{
+		deque_type deque;
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			deque.push_front( static_cast<int>( i ) );
+		clog << "*speed* yaal::hcore::HDeque<>::push_front() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
 TUT_TEARDOWN()
 
 }
