@@ -216,5 +216,25 @@ TUT_UNIT_TEST_N( 12, "/* assign operator (=) */" )
 	ENSURE_EQUALS( "assgin failed", array, big );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 49, "speed test" )
+	typedef std::vector<int> proto_t;
+	typedef HArray<int> array_type;
+	int long LOOPS( 10000000 );
+		{
+		proto_t proto;
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			proto.push_back( static_cast<int>( i ) );
+		clog << "*speed* std::vector<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
+		{
+		array_type deque;
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			deque.push_back( static_cast<int>( i ) );
+		clog << "*speed* yaal::hcore::HArray<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
+TUT_TEARDOWN()
+
 }
 
