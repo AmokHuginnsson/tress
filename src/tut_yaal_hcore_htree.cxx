@@ -175,7 +175,7 @@ TUT_UNIT_TEST_N( 4, "/* create_new_root/get_root */" )
 	ENSURE_EQUALS( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
-	ENSURE( "root not created", n );
+	ENSURE( "root not created", n ? true : false );
 	ENSURE_EQUALS( "new root is invalid", t.get_root(), n );
 		}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );

@@ -308,9 +308,15 @@ protected:
 	std::string _origin;
 	this_type* _self;
 	static int const forced_size_calc = forced_size
+#ifdef __MSVCXX__
+				- ( static_cast<int>( sizeof ( int long ) )
+					+ static_cast<int>( sizeof ( std::string ) )
+					+ static_cast<int>( sizeof ( this_type* ) ) );
+#else /* #ifdef __MSVCXX__ */
 				- ( static_cast<int>( sizeof ( static_cast<this_type*>( NULL )->_id ) )
 					+ static_cast<int>( sizeof ( static_cast<this_type*>( NULL )->_origin ) )
 					+ static_cast<int>( sizeof ( static_cast<this_type*>( NULL )->_self ) ) );
+#endif /* #else #ifdef __MSVCXX__ */
 	char _forcedSize[ forced_size_calc > 0 ? forced_size_calc : 1 ];
 public:
 	HInstanceTracker( int long = yaal::meta::max_signed<int long>::value );
