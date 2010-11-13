@@ -48,6 +48,15 @@ namespace tut
 
 struct tut_yaal_hcore_hdeque : public simple_mock<tut_yaal_hcore_hdeque>
 	{
+	struct StatePreserver
+		{
+		int long _size;
+		int long _usedChunks;
+		int long _availChunks;
+		int long _firstChunkIndex;
+		int long _lastChunkIndex;
+		};
+	StatePreserver _statePreserver;
 	typedef std::deque<int> proto_t;
 	virtual ~tut_yaal_hcore_hdeque( void ) {}
 	template<typename deque_type>
@@ -66,6 +75,7 @@ struct tut_yaal_hcore_hdeque : public simple_mock<tut_yaal_hcore_hdeque>
 	void test_pop_back( void );
 	template<int const item_size>
 	void test_pop_front( void );
+	tut_yaal_hcore_hdeque( void ) : _statePreserver() {}
 	};
 
 template<typename deque_type>
@@ -75,14 +85,35 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_, int ext
 	int long firstChunkIndex( deque_._start / deque_type::VALUES_PER_CHUNK );
 	int long lastChunkIndex( deque_._size > 0 ? ( ( deque_._start + deque_._size - 1 ) / deque_type::VALUES_PER_CHUNK ) : ( deque_._start / deque_type::VALUES_PER_CHUNK ) );
 	int long chunksCount = deque_._chunks.template count_of<typename deque_type::value_type*>();
+	int long usedChunks = deque_.used_chunks();
 	if ( deque_._size > 0 )
+		{
 		ENSURE( "chunk range bigger than chunks count", ( lastChunkIndex - firstChunkIndex ) < chunksCount );
+		ENSURE( "last chunk outside avail chunks", lastChunkIndex < chunksCount );
+		}
 	else
 		ENSURE_EQUALS( "bad indexes for empty deque", lastChunkIndex, firstChunkIndex );
-	int long startGap( firstChunkIndex );
-	int long endGap( ( chunksCount - lastChunkIndex ) - 1 );
-	if ( deque_._size > 0 )
-		ENSURE_DISTANCE( "chunks are not centered", abs( endGap - startGap ), 0l, 2l );
+	ENSURE( "first chunk outsize avail chunks", deque_._start >= 0 );
+	if ( ( chunksCount > _statePreserver._availChunks )
+			|| ( ( firstChunkIndex < _statePreserver._firstChunkIndex ) && ( ( _statePreserver._firstChunkIndex + usedChunks ) >= _statePreserver._availChunks ) )
+			|| ( ( lastChunkIndex > _statePreserver._lastChunkIndex ) && ( ( _statePreserver._lastChunkIndex + 1 - usedChunks ) < 0 ) ) )
+		{
+		int long startGap( firstChunkIndex );
+		int long endGap( ( chunksCount - lastChunkIndex ) - 1 );
+/*
+		clog << "_lastChunkIndex: " << _statePreserver._lastChunkIndex << endl;
+		clog << "chunksCount: " << chunksCount << ", firstChunkIndex: " << firstChunkIndex << ", lastChunkIndex: " << lastChunkIndex << ", startGap: " << startGap << ", endGap: " << endGap << endl;
+*/
+		if ( deque_._size > 0 )
+			ENSURE_DISTANCE( "chunks are not centered", abs( endGap - startGap ), 0l, 2l );
+		}
+	else if ( ( firstChunkIndex > _statePreserver._firstChunkIndex ) || ( lastChunkIndex < _statePreserver._lastChunkIndex ) )
+		{
+/*
+		clog << "firstChunkIndex: " << firstChunkIndex << ", _statePreserver._firstChunkIndex: " << _statePreserver._firstChunkIndex << ", lastChunkIndex: " << lastChunkIndex << ", _statePreserver._lastChunkIndex: " << _statePreserver._lastChunkIndex << ", deque_._size: " << deque_._size << ", _statePreserver._size: " << _statePreserver._size << ", chunksCount: " << chunksCount << ", _statePreserver._availChunks: " << _statePreserver._availChunks << endl;
+*/
+		ENSURE( "unnecesarry chunks move", ( deque_._size < _statePreserver._size ) || ( chunksCount > _statePreserver._availChunks ) );
+		}
 	typename deque_type::value_type const* const* chunks = deque_._chunks.template get<typename deque_type::value_type const*>();
 	for ( int long i( 0 ); i < firstChunkIndex; ++ i )
 		ENSURE_EQUALS( "not used chunks at the begining not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
@@ -93,6 +124,11 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_, int ext
 		for ( int long i( firstChunkIndex ); i < ( lastChunkIndex + 1 ); ++ i )
 			ENSURE_EQUALS( "a nil in used chunks range", chunks[ i ] ? true : false, true );
 		}
+	_statePreserver._size = deque_._size;
+	_statePreserver._usedChunks = usedChunks;
+	_statePreserver._availChunks = chunksCount;
+	_statePreserver._firstChunkIndex = firstChunkIndex;
+	_statePreserver._lastChunkIndex = lastChunkIndex;
 	}
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
