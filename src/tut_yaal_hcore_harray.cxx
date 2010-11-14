@@ -242,7 +242,7 @@ TUT_UNIT_TEST_N( 13, "push_back" )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 49, "speed test" )
+TUT_UNIT_TEST_N( 50, "speed test" )
 	typedef std::vector<int> proto_t;
 	typedef HArray<int> array_type;
 	int long LOOPS( 10000000 );

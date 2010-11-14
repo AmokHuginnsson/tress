@@ -553,7 +553,7 @@ TUT_UNIT_TEST_N( 16, "/* assign operator (=) */" )
 	ENSURE_EQUALS( "assgin failed", deque, big );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 49, "speed test" )
+TUT_UNIT_TEST_N( 50, "speed test" )
 	typedef HDeque<int> deque_type;
 	int long LOOPS( 1000000 );
 		{

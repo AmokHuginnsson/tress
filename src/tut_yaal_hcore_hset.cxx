@@ -24,6 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <set>
+
 #include <TUT/tut.hpp>
 
 #include <yaal/yaal.hxx>
@@ -31,7 +33,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -45,7 +46,7 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hset );
 TUT_TEST_GROUP_N( tut_yaal_hcore_hset, "yaal::hcore::HSet" );
 
-TUT_UNIT_TEST_N( 50, "/* sample data */" )
+TUT_UNIT_TEST_N( 49, "/* sample data */" )
 	typedef HSet<HString> string_set_t;
 	string_set_t set;
 	set.insert( "one" );
@@ -66,6 +67,26 @@ TUT_UNIT_TEST_N( 50, "/* sample data */" )
 	ENSURE_EQUALS( "failed to insert .insert() (data)", set.count( "six" ), 1 );
 	ENSURE_EQUALS( "failed to insert .insert() (data)", set.count( "seven" ), 1 );
 	ENSURE_EQUALS( "failed to insert .insert() (size)", set.size(), 7 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 50, "speed test" )
+	typedef std::set<int> proto_t;
+	typedef HSet<int> set_type;
+	int long LOOPS( 500000 );
+		{
+		proto_t proto;
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			proto.insert( static_cast<int>( i ) );
+		clog << "*speed* std::set<>::insert() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
+		{
+		set_type set;
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			set.insert( static_cast<int>( i ) );
+		clog << "*speed* yaal::hcore::HSet<>::insert() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
 TUT_TEARDOWN()
 
 }

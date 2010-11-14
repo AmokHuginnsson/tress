@@ -1005,7 +1005,7 @@ TUT_UNIT_TEST_N( 26, "/* reverse iterator */" )
 	ENSURE_EQUALS( "reverse iterarion failed", r, proto );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 49, "speed test" )
+TUT_UNIT_TEST_N( 50, "speed test" )
 	typedef std::list<int> proto_t;
 	typedef HList<int> list_type;
 	int long LOOPS( 1000000 );
