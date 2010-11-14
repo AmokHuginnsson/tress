@@ -1005,5 +1005,25 @@ TUT_UNIT_TEST_N( 26, "/* reverse iterator */" )
 	ENSURE_EQUALS( "reverse iterarion failed", r, proto );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 49, "speed test" )
+	typedef std::list<int> proto_t;
+	typedef HList<int> list_type;
+	int long LOOPS( 1000000 );
+		{
+		proto_t proto;
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			proto.push_back( static_cast<int>( i ) );
+		clog << "*speed* std::list<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
+		{
+		list_type list;
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			list.push_back( static_cast<int>( i ) );
+		clog << "*speed* yaal::hcore::HList<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
+TUT_TEARDOWN()
+
 }
 
