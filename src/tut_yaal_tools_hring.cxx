@@ -44,8 +44,8 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_tools_hring );
 TUT_TEST_GROUP_N( tut_yaal_tools_hring, "yaal::tools::HRing" );
 
-TUT_UNIT_TEST_N( 49, "data test" )
-	HRing<int> ring( 3 );
+TUT_UNIT_TEST_N( 47, "data test" )
+	HRing<int> ring( ring::capacity( 3 ) );
 
 	// Insert some elements into the buffer.
 	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 0 );
@@ -102,6 +102,67 @@ TUT_UNIT_TEST_N( 49, "data test" )
 	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 0 );
 	ENSURE_EQUALS( "clear failed", ring.is_empty(), true );
 
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 48, "iterator" )
+	HRing<int> ring( ring::capacity( 3 ) );
+	ring.push_back( 1 );
+	ring.push_back( 2 );
+	ring.push_back( 3 );
+	HRing<int>::iterator it( ring.begin() );
+	ENSURE_EQUALS( "begin failed", *it, 1 );
+	++ it;
+	ENSURE_EQUALS( "iterator incrementationt failed", *it, 2 );
+	++ it;
+	ENSURE_EQUALS( "iterator incrementationt failed", *it, 3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 49, "more data tests" )
+	// create a circular container of capacity 3
+	HRing<int> ring( ring::capacity( 3 ) );
+
+	// insert some elements into the circular buffer
+	ring.push_back( 1 );
+	ring.push_back( 2 );
+
+	// assertions
+	ENSURE_EQUALS( "push_back failed", ring[0], 1 );
+	ENSURE_EQUALS( "push_back failed", ring[1], 2 );
+	ENSURE_EQUALS( "reserve/full failed", ring.full(), false );
+	ENSURE_EQUALS( "size falsed", ring.size(), 2 );
+	ENSURE_EQUALS( "reserve/capacity falsed", ring.capacity(), 3 );
+
+	// insert some other elements
+	ring.push_back( 3 );
+	try
+		{
+		ring.push_back( 4 );
+		fail( "pushing to full ring succeeded" );
+		}
+	catch ( HException const& )
+		{
+		/* ok */
+		}
+
+	ENSURE_EQUALS( "full failed", ring.full(), true );
+	ring.reserve( 5 );
+	ring.push_back( 4 );
+	ring.pop_front();
+
+	// evaluate the sum
+	int sum = accumulate( ring.begin(), ring.end(), 0 );
+
+	// assertions
+	ENSURE_EQUALS( "push/pop oper failed", ring[0], 2 );
+	ENSURE_EQUALS( "push/pop oper failed", ring[1], 3 );
+	ENSURE_EQUALS( "push/pop oper failed", ring[2], 4 );
+	ENSURE_EQUALS( "begin/iter deref failed", *ring.begin(), 2 );
+	ENSURE_EQUALS( "front failed", ring.front(), 2 );
+	ENSURE_EQUALS( "back failed", ring.back(), 4 );
+	ENSURE_EQUALS( "bad contents", sum, 9 );
+	ENSURE_EQUALS( "full failed", ring.full(), false );
+	ENSURE_EQUALS( "size failed", ring.size(), 3 );
+	ENSURE_EQUALS( "capacity failed", ring.capacity(), 6 );
 TUT_TEARDOWN()
 
 }
