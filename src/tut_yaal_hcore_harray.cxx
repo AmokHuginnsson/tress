@@ -229,8 +229,9 @@ TUT_UNIT_TEST_N( 13, "push_back" )
 		{
 		array_t array( 2048 );
 		proto_t proto( 2048 );
-		generate( array.begin(), array.end(), inc( 0 ) );
-		generate( proto.begin(), proto.end(), inc( 0 ) );
+		/* Bug in GCC 4.2.1 enforces namespace prefix here. */
+		yaal::generate( array.begin(), array.end(), inc( 0 ) );
+		yaal::generate( proto.begin(), proto.end(), inc( 0 ) );
 		for ( int long i( 0 ); i < 2048; ++ i )
 			{
 			proto.pop_back();

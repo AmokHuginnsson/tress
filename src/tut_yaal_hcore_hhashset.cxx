@@ -25,7 +25,11 @@ Copyright:
 */
 
 #undef __DEPRECATED
+#if defined( __GNUC__ ) && ( ( __GNUC__ == 4 ) && ( __GNUC_MINOR__ <= 2 ) )
+#include <ext/hash_set>
+#else /* #if defined( __GNUC__ ) && ( ( __GNUC__ == 4 ) && ( __GNUC_MINOR__ <= 2 ) ) */
 #include <hash_set>
+#endif /* #else #if defined( __GNUC__ ) && ( ( __GNUC__ == 4 ) && ( __GNUC_MINOR__ <= 2 ) ) */
 
 #include <TUT/tut.hpp>
 

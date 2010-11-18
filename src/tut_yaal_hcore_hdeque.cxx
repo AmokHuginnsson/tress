@@ -23,7 +23,6 @@ Copyright:
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
-
 #include <deque>
 
 #define private public
@@ -445,8 +444,9 @@ void tut_yaal_hcore_hdeque::test_pop_back( void )
 		{
 		deque_type deque( 2048 );
 		proto_t proto( 2048 );
-		generate( deque.begin(), deque.end(), inc( 0 ) );
-		generate( proto.begin(), proto.end(), inc( 0 ) );
+		/* Bug in GCC 4.2.1 enforces namespace prefix here. */
+		yaal::generate( deque.begin(), deque.end(), inc( 0 ) );
+		yaal::generate( proto.begin(), proto.end(), inc( 0 ) );
 		for ( int long i( 0 ); i < 2048; ++ i )
 			{
 			proto.pop_back();
@@ -484,8 +484,9 @@ void tut_yaal_hcore_hdeque::test_pop_front( void )
 		{
 		deque_type deque( 2048 );
 		proto_t proto( 2048 );
-		generate( deque.begin(), deque.end(), inc( 0 ) );
-		generate( proto.begin(), proto.end(), inc( 0 ) );
+		/* Bug in GCC 4.2.1 enforces namespace prefix here. */
+		yaal::generate( deque.begin(), deque.end(), inc( 0 ) );
+		yaal::generate( proto.begin(), proto.end(), inc( 0 ) );
 		for ( int long i( 0 ); i < 2048; ++ i )
 			{
 			proto.pop_front();
