@@ -153,7 +153,7 @@ void tut_yaal_hcore_hdeque::test_resize( void )
 	{
 	clog << "testing resize: " << item_size << endl;
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
-	typedef HDeque<item_t> deque_type;
+	typedef HDeque<item_type> deque_type;
 		{
 		deque_type deque;
 		check_consistency( deque );
@@ -316,8 +316,9 @@ TUT_UNIT_TEST_N( 4, "resize" )
 	test_resize<640>();
 TUT_TEARDOWN()
 
+int a[] = { 7, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 13 };
+
 TUT_UNIT_TEST_N( 5, "/* Constructor with range initialization. */" )
-	int a[] = { 7, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 13 };
 	item_t::set_start_id( 0 );
 	deque_t deque( a, a + countof ( a ) );
 	proto_t proto( a, a + countof ( a ) );
@@ -378,13 +379,11 @@ TUT_UNIT_TEST_N( 8, "/* Operator bool. */" )
 	ENSURE_EQUALS( "test for deque fullness faild", ! normal, false );
 TUT_TEARDOWN()
 
-int a[] = { 7, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 13 };
-
 template<int const item_size>
 void tut_yaal_hcore_hdeque::test_erase( int first_, int last_ )
 	{
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
-	typedef HDeque<item_t> deque_type;
+	typedef HDeque<item_type> deque_type;
 		{
 		clog << "testing erase: " << item_size << ", first: " << first_ << ", last: " << last_ << endl;
 		item_type::set_start_id( 0 );
@@ -438,7 +437,7 @@ template<int const item_size>
 void tut_yaal_hcore_hdeque::test_push_back( void )
 	{
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
-	typedef HDeque<item_t> deque_type;
+	typedef HDeque<item_type> deque_type;
 	clog << "testing push_back: " << item_size << endl;
 		{
 		deque_type deque;
@@ -475,7 +474,7 @@ template<int const item_size>
 void tut_yaal_hcore_hdeque::test_push_front( void )
 	{
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
-	typedef HDeque<item_t> deque_type;
+	typedef HDeque<item_type> deque_type;
 	clog << "testing push_front: " << item_size << endl;
 		{
 		deque_type deque;
@@ -512,7 +511,7 @@ template<int const item_size>
 void tut_yaal_hcore_hdeque::test_pop_back( void )
 	{
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
-	typedef HDeque<item_t> deque_type;
+	typedef HDeque<item_type> deque_type;
 	clog << "testing pop_back: " << item_size << endl;
 		{
 		deque_type deque( 2048 );
@@ -554,7 +553,7 @@ template<int const item_size>
 void tut_yaal_hcore_hdeque::test_pop_front( void )
 	{
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
-	typedef HDeque<item_t> deque_type;
+	typedef HDeque<item_type> deque_type;
 	clog << "testing pop_front: " << item_size << endl;
 		{
 		deque_type deque( 2048 );
@@ -605,7 +604,7 @@ template<int const item_size>
 void tut_yaal_hcore_hdeque::test_insert_pos( void )
 	{
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
-	typedef HDeque<item_t> deque_type;
+	typedef HDeque<item_type> deque_type;
 	clog << "testing insert(pos): " << item_size << endl;
 	item_t::set_start_id( 0 );
 		{
