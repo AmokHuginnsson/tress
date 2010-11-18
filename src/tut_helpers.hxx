@@ -296,7 +296,11 @@ namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
 #define TUT_DECLARE( statement ) clog << brightgreen << ">> " << #statement << reset << endl; statement clog << green << ">> end" << reset << endl;
 #define TUT_INVOKE( statement ) do { clog << brightcyan << ">> " << #statement << reset << endl; do { statement } while ( 0 ); clog << cyan << ">> end" << reset << endl; } while ( 0 )
 
+#ifndef __sun__
 #pragma pack( push, 1 )
+#else /* #ifndef __sun__ */
+#pragma pack( 1 )
+#endif /* #else #ifndef __sun__ */
 template<typename owner_t, int const forced_size = 1>
 class HInstanceTracker
 	{
@@ -340,7 +344,11 @@ public:
 	yaal::hcore::HString to_string( void ) const;
 	void swap( HInstanceTracker& );
 	};
+#ifndef __sun__
 #pragma pack( pop )
+#else /* #ifndef __sun__ */
+#pragma pack()
+#endif /* #else #ifndef __sun__ */
 
 template<typename T>
 struct simple_mock
