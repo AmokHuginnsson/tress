@@ -74,6 +74,8 @@ struct tut_yaal_hcore_hdeque : public simple_mock<tut_yaal_hcore_hdeque>
 	void test_pop_back( void );
 	template<int const item_size>
 	void test_pop_front( void );
+	template<int const item_size>
+	void test_insert_pos( void );
 	tut_yaal_hcore_hdeque( void ) : _statePreserver() {}
 	};
 
@@ -191,6 +193,28 @@ void tut_yaal_hcore_hdeque::test_resize( void )
 		check_consistency( deque );
 		deque.resize( 0 );
 		check_consistency( deque );
+		deque.resize( 33 );
+		check_consistency( deque );
+		deque.resize( 333 );
+		check_consistency( deque );
+		deque.resize( 3333 );
+		check_consistency( deque );
+		deque.resize( 33 );
+		check_consistency( deque );
+		deque.resize( 333 );
+		check_consistency( deque );
+		deque.resize( 3 );
+		check_consistency( deque );
+		deque.resize( 3333 );
+		check_consistency( deque );
+		deque.resize( 333 );
+		check_consistency( deque );
+		deque.resize( 3 );
+		check_consistency( deque );
+		deque.resize( 0 );
+		check_consistency( deque );
+		deque.resize( 0 );
+		check_consistency( deque );
 		}
 	ENSURE_EQUALS( "object leak", item_type::get_instance_count(), 0 );
 	return;
@@ -237,10 +261,52 @@ TUT_UNIT_TEST_N( 4, "resize" )
 	test_resize<1>();
 	test_resize<2>();
 	test_resize<3>();
+	test_resize<4>();
+	test_resize<5>();
+	test_resize<6>();
 	test_resize<7>();
+	test_resize<8>();
+	test_resize<9>();
+	test_resize<10>();
+	test_resize<11>();
+	test_resize<12>();
+	test_resize<13>();
+	test_resize<14>();
 	test_resize<15>();
 	test_resize<16>();
 	test_resize<17>();
+	test_resize<18>();
+	test_resize<19>();
+	test_resize<20>();
+	test_resize<21>();
+	test_resize<22>();
+	test_resize<23>();
+	test_resize<24>();
+	test_resize<25>();
+	test_resize<26>();
+	test_resize<27>();
+	test_resize<28>();
+	test_resize<29>();
+	test_resize<30>();
+	test_resize<31>();
+	test_resize<32>();
+	test_resize<33>();
+	test_resize<34>();
+	test_resize<35>();
+	test_resize<36>();
+	test_resize<37>();
+	test_resize<38>();
+	test_resize<39>();
+	test_resize<40>();
+	test_resize<41>();
+	test_resize<42>();
+	test_resize<43>();
+	test_resize<44>();
+	test_resize<45>();
+	test_resize<46>();
+	test_resize<47>();
+	test_resize<48>();
+	test_resize<49>();
 	test_resize<64>();
 	test_resize<128>();
 	test_resize<200>();
@@ -257,6 +323,11 @@ TUT_UNIT_TEST_N( 5, "/* Constructor with range initialization. */" )
 	proto_t proto( a, a + countof ( a ) );
 	check_consistency( deque );
 	ENSURE_EQUALS( "range initialization failed", deque, proto );
+	typedef HInstanceTracker<tut_yaal_hcore_hdeque, 128> big_item_t;
+	typedef HDeque<big_item_t> big_deque_t;
+	big_deque_t big_deque( a, a + countof ( a ) );
+	check_consistency( deque );
+	ENSURE_EQUALS( "range initialization failed", big_deque, proto );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "/* Copy constructor. */" )
@@ -380,6 +451,7 @@ void tut_yaal_hcore_hdeque::test_push_back( void )
 			ENSURE_EQUALS( "push_back failed", deque, proto );
 			}
 		}
+	ENSURE_EQUALS( "object leak", item_type::get_instance_count(), 0 );
 	}
 
 TUT_UNIT_TEST_N( 10, "push_back" )
@@ -416,6 +488,7 @@ void tut_yaal_hcore_hdeque::test_push_front( void )
 			ENSURE_EQUALS( "push_front failed", deque, proto );
 			}
 		}
+	ENSURE_EQUALS( "object leak", item_type::get_instance_count(), 0 );
 	}
 
 TUT_UNIT_TEST_N( 11, "push_front" )
@@ -443,6 +516,7 @@ void tut_yaal_hcore_hdeque::test_pop_back( void )
 	clog << "testing pop_back: " << item_size << endl;
 		{
 		deque_type deque( 2048 );
+		check_consistency( deque );
 		proto_t proto( 2048 );
 		/* Bug in GCC 4.2.1 enforces namespace prefix here. */
 		yaal::generate( deque.begin(), deque.end(), inc( 0 ) );
@@ -451,6 +525,7 @@ void tut_yaal_hcore_hdeque::test_pop_back( void )
 			{
 			proto.pop_back();
 			deque.pop_back();
+			check_consistency( deque );
 			ENSURE_EQUALS( "pop_back failed", deque, proto );
 			}
 		ENSURE_EQUALS( "not empty!", deque.is_empty(), true );
@@ -483,6 +558,7 @@ void tut_yaal_hcore_hdeque::test_pop_front( void )
 	clog << "testing pop_front: " << item_size << endl;
 		{
 		deque_type deque( 2048 );
+		check_consistency( deque );
 		proto_t proto( 2048 );
 		/* Bug in GCC 4.2.1 enforces namespace prefix here. */
 		yaal::generate( deque.begin(), deque.end(), inc( 0 ) );
@@ -491,6 +567,7 @@ void tut_yaal_hcore_hdeque::test_pop_front( void )
 			{
 			proto.pop_front();
 			deque.pop_front();
+			check_consistency( deque );
 			ENSURE_EQUALS( "pop_front failed", deque, proto );
 			}
 		ENSURE_EQUALS( "not empty!", deque.is_empty(), true );
@@ -517,41 +594,81 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 14, "copy constructor (of empty)" )
 	deque_t a1;
+	check_consistency( a1 );
 	ENSURE( "construction of empty deque", a1.is_empty() );
 	deque_t a2( a1 );
+	check_consistency( a2 );
 	ENSURE( "construction of empty deque", a2.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 15, "/* insert( pos, value ) */" )
+template<int const item_size>
+void tut_yaal_hcore_hdeque::test_insert_pos( void )
+	{
+	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
+	typedef HDeque<item_t> deque_type;
+	clog << "testing insert(pos): " << item_size << endl;
 	item_t::set_start_id( 0 );
-	proto_t proto( a, a + countof ( a ) );
-	deque_t deque( a, a + countof ( a ) );
-	ENSURE_EQUALS( "insertion failed", deque, proto );
-	deque.insert( deque.begin(), -7 );
-	proto.insert( proto.begin(), -7 );
-	ENSURE_EQUALS( "insertion failed", deque, proto );
-	deque.insert( deque.begin() + 5, -7 );
-	proto.insert( proto.begin() + 5, -7 );
-	ENSURE_EQUALS( "insertion failed", deque, proto );
-	deque.insert( deque.end() - 1, -7 );
-	proto.insert( proto.end() - 1, -7 );
-	ENSURE_EQUALS( "insertion failed", deque, proto );
-	deque.insert( deque.end(), -99 );
-	proto.insert( proto.end(), -99 );
-	ENSURE_EQUALS( "insertion failed", deque, proto );
+		{
+		proto_t proto( a, a + countof ( a ) );
+		deque_type deque( a, a + countof ( a ) );
+		check_consistency( deque );
+		ENSURE_EQUALS( "insertion failed", deque, proto );
+		deque.insert( deque.begin(), -7 );
+		check_consistency( deque );
+		proto.insert( proto.begin(), -7 );
+		ENSURE_EQUALS( "insertion failed", deque, proto );
+		deque.insert( deque.begin() + 5, -7 );
+		check_consistency( deque );
+		proto.insert( proto.begin() + 5, -7 );
+		ENSURE_EQUALS( "insertion failed", deque, proto );
+		deque.insert( deque.end() - 1, -7 );
+		check_consistency( deque );
+		proto.insert( proto.end() - 1, -7 );
+		ENSURE_EQUALS( "insertion failed", deque, proto );
+		deque.insert( deque.end(), -99 );
+		check_consistency( deque );
+		proto.insert( proto.end(), -99 );
+		ENSURE_EQUALS( "insertion failed", deque, proto );
+		}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+	}
+
+TUT_UNIT_TEST_N( 15, "/* insert( pos, value ) */" )
+	test_insert_pos<1>();
+	test_insert_pos<2>();
+	test_insert_pos<3>();
+	test_insert_pos<7>();
+	test_insert_pos<15>();
+	test_insert_pos<16>();
+	test_insert_pos<17>();
+	test_insert_pos<64>();
+	test_insert_pos<128>();
+	test_insert_pos<200>();
+	test_insert_pos<511>();
+	test_insert_pos<512>();
+	test_insert_pos<513>();
+	test_insert_pos<640>();
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 16, "/* assign operator (=) */" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { -36, -1, -4, -9 };
 	item_t::set_start_id( 0 );
-	deque_t deque( a0, a0 + countof ( a0 ) );
-	deque_t small( a1, a1 + countof ( a1 ) );
-	deque = small;
-	ENSURE_EQUALS( "assgin failed", deque, small );
-	deque_t big( a0, a0 + countof ( a0 ) );
-	deque = big;
-	ENSURE_EQUALS( "assgin failed", deque, big );
+		{
+		deque_t deque( a0, a0 + countof ( a0 ) );
+		check_consistency( deque );
+		deque_t small( a1, a1 + countof ( a1 ) );
+		check_consistency( small );
+		deque = small;
+		check_consistency( deque );
+		ENSURE_EQUALS( "assgin failed", deque, small );
+		deque_t big( a0, a0 + countof ( a0 ) );
+		check_consistency( big );
+		deque = big;
+		check_consistency( deque );
+		ENSURE_EQUALS( "assgin failed", deque, big );
+		}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 50, "speed test" )
