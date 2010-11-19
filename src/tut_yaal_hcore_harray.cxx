@@ -43,7 +43,13 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-TUT_SIMPLE_MOCK( tut_yaal_hcore_harray );
+struct tut_yaal_hcore_harray : public simple_mock<tut_yaal_hcore_harray>
+	{
+	typedef std::vector<int> proto_t;
+	~tut_yaal_hcore_harray( void ) {}
+	void test_erase( int, int );
+	};
+
 TUT_TEST_GROUP_N( tut_yaal_hcore_harray, "yaal::hcore::HArray" );
 
 TUT_UNIT_TEST_N( 1, "/* Constructor. */" )
@@ -148,7 +154,6 @@ TUT_UNIT_TEST_N( 7, "/* Operator bool. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "push_back" )
-	typedef std::vector<int> proto_t;
 	proto_t proto;
 		{
 		array_t array;
@@ -193,7 +198,6 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 11, "/* insert( pos, value ) */" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
-	typedef std::vector<int> proto_t;
 	proto_t proto( a, a + countof ( a ) );
 	array_t array( a, a + countof ( a ) );
 	ENSURE_EQUALS( "insertion failed", array, proto );
@@ -225,7 +229,6 @@ TUT_UNIT_TEST_N( 12, "/* assign operator (=) */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 13, "push_back" )
-	typedef std::vector<int> proto_t;
 		{
 		array_t array( 2048 );
 		proto_t proto( 2048 );
@@ -243,8 +246,154 @@ TUT_UNIT_TEST_N( 13, "push_back" )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
+void tut_yaal_hcore_harray::test_erase( int first_, int last_ )
+	{
+		{
+		clog << "testing erase - first: " << first_ << ", last: " << last_ << endl;
+		item_t::set_start_id( 0 );
+		array_t array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		proto_t proto( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		proto.erase( proto.begin() + first_, proto.begin() + last_ );
+		array.erase( array.begin() + first_, array.begin() + last_ );
+		ENSURE_EQUALS( "range initialization failed", array, proto );
+		}
+
+	ENSURE_EQUALS( "object leak", item_t::get_instance_count(), 0 );
+	}
+
+TUT_UNIT_TEST_N( 14, "ranged erase" )
+	test_erase( 0, countof( _testData_[0] ) / 2 );
+	test_erase( countof( _testData_[0] ) / 2, countof( _testData_[0] ) );
+	test_erase( 0, countof( _testData_[0] ) );
+	test_erase( 0, 1 );
+	test_erase( countof ( _testData_[0] ) - 1, countof ( _testData_[0] ) );
+	test_erase( 1, countof ( _testData_[0] ) - 1 );
+	test_erase( 3, 6 );
+	test_erase( countof ( _testData_[0] ) - 6, countof ( _testData_[0] ) - 3 );
+	test_erase( countof ( _testData_[0] ) / 2 - 3, countof ( _testData_[0] ) / 2 + 3 );
+	test_erase( 0, countof( _testData_[0] ) / 2 + countof ( _testData_[0] ) / 4 );
+	test_erase( 3, countof( _testData_[0] ) / 2 + countof ( _testData_[0] ) / 4 );
+	test_erase( countof ( _testData_[0] ) / 4, countof( _testData_[0] ) );
+	test_erase( countof ( _testData_[0] ) / 4, countof( _testData_[0] ) - 3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 15, "ranged insert" )
+	item_t::set_start_id( 0 );
+		{
+		int const len0( countof ( _testData_[0] ) );
+		int const len1( countof ( _testData_[1] ) );
+		proto_t proto( _testData_[0], _testData_[0] + len0 );
+		array_t array( _testData_[0], _testData_[0] + len0 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.insert( array.begin(), _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.begin(), _testData_[1], _testData_[1] + len1 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.insert( array.begin(), _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.begin(), _testData_[1], _testData_[1] + len1 / 2 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.insert( array.end(), _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.end(), _testData_[1], _testData_[1] + len1 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.insert( array.end(), _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.end(), _testData_[1], _testData_[1] + len1 / 2 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.insert( array.end() - 1, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.end() - 1, _testData_[1], _testData_[1] + len1 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.insert( array.end() - 1, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.end() - 1, _testData_[1], _testData_[1] + len1 / 2 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.insert( array.begin() + array.size() / 2, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.begin() + proto.size() / 2, _testData_[1], _testData_[1] + len1 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.insert( array.begin() + array.size() / 2, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.begin() + proto.size() / 2, _testData_[1], _testData_[1] + len1 / 2 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.insert( array.begin() + array.size() / 3, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.begin() + proto.size() / 3, _testData_[1], _testData_[1] + len1 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.insert( array.begin() + array.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.begin() + proto.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.insert( array.end() - array.size() / 3, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.end() - proto.size() / 3, _testData_[1], _testData_[1] + len1 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.insert( array.end() - array.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.end() - proto.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+		{
+		int const len0( countof ( _testData_[0] ) );
+		int const len1( countof ( _testData_[1] ) );
+		proto_t proto( _testData_[0], _testData_[0] + len0 );
+		array_t array( _testData_[0], _testData_[0] + len0 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		array.insert( array.begin(), _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.begin(), _testData_[1], _testData_[1] + len1 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		array.insert( array.begin(), _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.begin(), _testData_[1], _testData_[1] + len1 / 2 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		array.insert( array.end(), _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.end(), _testData_[1], _testData_[1] + len1 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		array.insert( array.end(), _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.end(), _testData_[1], _testData_[1] + len1 / 2 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		array.insert( array.end() - 1, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.end() - 1, _testData_[1], _testData_[1] + len1 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		array.insert( array.end() - 1, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.end() - 1, _testData_[1], _testData_[1] + len1 / 2 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		array.insert( array.begin() + array.size() / 2, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.begin() + proto.size() / 2, _testData_[1], _testData_[1] + len1 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		array.insert( array.begin() + array.size() / 2, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.begin() + proto.size() / 2, _testData_[1], _testData_[1] + len1 / 2 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		array.insert( array.begin() + array.size() / 3, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.begin() + proto.size() / 3, _testData_[1], _testData_[1] + len1 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		array.insert( array.begin() + array.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.begin() + proto.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		array.insert( array.end() - array.size() / 3, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.end() - proto.size() / 3, _testData_[1], _testData_[1] + len1 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		array.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		array.insert( array.end() - array.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.end() - proto.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		ENSURE_EQUALS( "range insertion failed", array, proto );
+		}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST_N( 50, "speed test" )
-	typedef std::vector<int> proto_t;
 	typedef HArray<int> array_type;
 	int long LOOPS( 10000000 );
 		{
@@ -255,10 +404,10 @@ TUT_UNIT_TEST_N( 50, "speed test" )
 		clog << "*speed* std::vector<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
 		}
 		{
-		array_type deque;
+		array_type array;
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
-			deque.push_back( static_cast<int>( i ) );
+			array.push_back( static_cast<int>( i ) );
 		clog << "*speed* yaal::hcore::HArray<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
 		}
 TUT_TEARDOWN()
