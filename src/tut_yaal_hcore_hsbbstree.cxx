@@ -263,7 +263,7 @@ TUT_UNIT_TEST_N( 3, "/* Adding keys in random order. */" )
 	set_t s;
 	set_insert_t insert = &set_t::insert;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test( s, insert, r.rnd ( KEY_POOL_SIZE ) );
+		helper_stress_test( s, insert, r( KEY_POOL_SIZE ) );
 	ENSURE ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
 TUT_TEARDOWN()
 
@@ -335,7 +335,7 @@ TUT_UNIT_TEST_N( 12, "/* Removing keys in ascending order from lower half of the
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
-		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
+		s.insert ( r( KEY_POOL_SIZE ) );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
 		{
 		try
@@ -344,7 +344,7 @@ TUT_UNIT_TEST_N( 12, "/* Removing keys in ascending order from lower half of the
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
+			if ( e.code() != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -354,7 +354,7 @@ TUT_UNIT_TEST_N( 13, "/* Removing keys in ascending order from upper half of the
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
-		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
+		s.insert ( r( KEY_POOL_SIZE ) );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
 		{
 		try
@@ -363,7 +363,7 @@ TUT_UNIT_TEST_N( 13, "/* Removing keys in ascending order from upper half of the
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
+			if ( e.code() != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -373,7 +373,7 @@ TUT_UNIT_TEST_N( 14, "/* Removing keys in descending order from lower half of th
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
-		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
+		s.insert ( r( KEY_POOL_SIZE ) );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
 		{
 		try
@@ -382,7 +382,7 @@ TUT_UNIT_TEST_N( 14, "/* Removing keys in descending order from lower half of th
 			}
 		catch ( HException & e )
 			{
-			if ( e.code ( ) != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
+			if ( e.code() != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
 				throw e;
 			}
 		}
@@ -392,7 +392,7 @@ TUT_UNIT_TEST_N( 15, "/* Removing keys in descending order from upper half of th
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
-		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
+		s.insert ( r( KEY_POOL_SIZE ) );
 	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
 		{
 		try
@@ -411,12 +411,12 @@ TUT_UNIT_TEST_N( 16, "/* Removing keys in random order from upper half of the tr
 	HRandomizer r;
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		s.insert ( r.rnd ( KEY_POOL_SIZE ) );
+		s.insert ( r( KEY_POOL_SIZE ) );
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		{
 		try
 			{
-			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), r.rnd ( KEY_POOL_SIZE ) );
+			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), r( KEY_POOL_SIZE ) );
 			}
 		catch ( HException& e )
 			{

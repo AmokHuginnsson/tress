@@ -38,7 +38,7 @@ namespace tress
 struct OSetup
 	{
 	OSetup( void )
-		: _quiet( false ), _verbose( false ),
+		: _quiet( false ), _verbose( false ), _debug( false ),
 		_listGroups( false ), _restartable( false ), _exit( false ),
 		_testNumber( 0 ), _jobs( DEFAULT_JOB_COUNT ),
 		_argc( 0 ), _argv( NULL ),
@@ -47,6 +47,7 @@ struct OSetup
 	typedef yaal::hcore::HSet<yaal::hcore::HString> group_names_t;
 	bool _quiet;			/* --quiet, --silent */
 	bool _verbose;		/* --verbose */
+	bool _debug;      /* --debug */
 	bool _listGroups;
 	bool _restartable;
 	bool _exit;

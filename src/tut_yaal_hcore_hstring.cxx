@@ -493,10 +493,11 @@ int confirm( char const* const str, int size, char const* const pat, int len )
 struct gen_char
 	{
 	HRandomizer _rnd;
-	gen_char( void ) : _rnd()
-		{ randomizer_helper::init_randomizer_from_time( _rnd ); }
+	gen_char( void )
+		: _rnd( randomizer_helper::make_randomizer() )
+		{ }
 	char operator()( void )
-		{ return ( static_cast<char>( _rnd.rnd( 1 + 'z' - 'a' ) + 'a' ) ); }
+		{ return ( static_cast<char>( _rnd( 1 + 'z' - 'a' ) + 'a' ) ); }
 	};
 
 TUT_UNIT_TEST_N( 35, "/* find("") */" )

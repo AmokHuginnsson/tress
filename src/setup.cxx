@@ -31,7 +31,11 @@ Copyright:
 #include <yaal/yaal.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "setup.hxx"
+#ifdef __TRESS__
+#include "tut_helpers.hxx"
+#endif /* #ifdef __TRESS__ */
 
+using namespace yaal;
 using namespace yaal::hcore;
 
 namespace tress
@@ -87,6 +91,14 @@ void OSetup::test_setup( void )
 		cout << "setup._argc = " << setup._argc << endl;
 		for ( int i = 0; i < _argc; ++ i )
 			cout << "setup._argv[" << i << "] = " << _argv[i] << endl;
+#ifdef __TRESS__
+		if ( _debug )
+			{
+			clog << "test data: ";
+			copy( tut_helpers::_testData_[0], tut_helpers::_testData_[0] + countof ( tut_helpers::_testData_[0] ), stream_iterator( clog, " " ) );
+			clog << endl;
+			}
+#endif /* #ifdef __TRESS__ */
 		}
 	return;
 	M_EPILOG

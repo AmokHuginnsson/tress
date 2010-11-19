@@ -34,9 +34,9 @@ LIBS         = hcore$(LIB_INFIX) tools$(LIB_INFIX) dbwrapper$(LIB_INFIX) hconsol
                hdata$(LIB_INFIX) \
                hconsole$(LIB_INFIX) dbwrapper$(LIB_INFIX) tools$(LIB_INFIX) hcore$(LIB_INFIX) \
                @BOOST_FILESYSTEM_LIB@ @BOOST_SYSTEM_LIB@ @BOOST_DATE_TIME_LIB@
-$(eval $(call NEW_TARGET,tress,src,-Wno-variadic-macros,@RDYNAMIC@))
-$(eval $(call NEW_TARGET,cute,cute))
-$(eval $(call NEW_TARGET,child,child))
+$(eval $(call NEW_TARGET,tress,src,-D__TRESS__ -Wno-variadic-macros,@RDYNAMIC@))
+$(eval $(call NEW_TARGET,cute,cute,-D__CUTE__))
+$(eval $(call NEW_TARGET,child,child,-D__CHILD__))
 NAME = tressplugin
 SONAME_tressplugin = $(LIB_PREFIX)tressplugin$(LIB_INFIX).$(LIB_SUFFIX)-0.0
 $(eval $(call NEW_TARGET,tressplugin,data,,-shared $(call quotecoma,@SONAME_FLAG@)))

@@ -56,20 +56,20 @@ struct tut_yaal_hcore_hnumber
 
 HString tut_yaal_hcore_hnumber::BC_PATH = ::getenv( "BC_PATH" ) ? ::getenv( "BC_PATH" ) : "/usr/bin/bc";
 
-tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void ) : _rnd(), _bc()
+tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void )
+	: _rnd( randomizer_helper::make_randomizer() ), _bc()
 	{
 	set_env( "BC_LINE_LENGTH", "40000" );
-	randomizer_helper::init_randomizer_from_time( _rnd );
 	}
 
 
 double long tut_yaal_hcore_hnumber::random_real( void )
 	{
-	double long n = _rnd.rnd();
+	double long n = _rnd();
 	double long d = 0;
 	while ( d == 0 )
-		d = _rnd.rnd();
-	( _rnd.rnd() % 2 ) && ( n = -n );
+		d = _rnd();
+	( _rnd() % 2 ) && ( n = -n );
 	return ( n / d );
 	}
 

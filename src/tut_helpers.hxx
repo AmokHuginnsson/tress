@@ -247,6 +247,8 @@ namespace tress
 namespace tut_helpers
 {
 
+extern int const _testData_[2][ 100 ];
+
 class HLogger
 	{
 protected:

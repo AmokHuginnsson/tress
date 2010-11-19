@@ -57,6 +57,8 @@ struct tut_yaal_hcore_hdeque : public simple_mock<tut_yaal_hcore_hdeque>
 		};
 	StatePreserver _statePreserver;
 	typedef std::deque<int> proto_t;
+	tut_yaal_hcore_hdeque( void )
+		: _statePreserver() {}
 	virtual ~tut_yaal_hcore_hdeque( void ) {}
 	template<typename deque_type>
 	void check_consistency( deque_type const&, int = 0 );
@@ -76,7 +78,8 @@ struct tut_yaal_hcore_hdeque : public simple_mock<tut_yaal_hcore_hdeque>
 	void test_pop_front( void );
 	template<int const item_size>
 	void test_insert_pos( void );
-	tut_yaal_hcore_hdeque( void ) : _statePreserver() {}
+	template<int const item_size>
+	void test_insert( void );
 	};
 
 template<typename deque_type>
@@ -316,17 +319,15 @@ TUT_UNIT_TEST_N( 4, "resize" )
 	test_resize<640>();
 TUT_TEARDOWN()
 
-int a[] = { 7, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 13 };
-
 TUT_UNIT_TEST_N( 5, "/* Constructor with range initialization. */" )
 	item_t::set_start_id( 0 );
-	deque_t deque( a, a + countof ( a ) );
-	proto_t proto( a, a + countof ( a ) );
+	deque_t deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	proto_t proto( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	check_consistency( deque );
 	ENSURE_EQUALS( "range initialization failed", deque, proto );
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque, 128> big_item_t;
 	typedef HDeque<big_item_t> big_deque_t;
-	big_deque_t big_deque( a, a + countof ( a ) );
+	big_deque_t big_deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	check_consistency( deque );
 	ENSURE_EQUALS( "range initialization failed", big_deque, proto );
 TUT_TEARDOWN()
@@ -387,8 +388,8 @@ void tut_yaal_hcore_hdeque::test_erase( int first_, int last_ )
 		{
 		clog << "testing erase: " << item_size << ", first: " << first_ << ", last: " << last_ << endl;
 		item_type::set_start_id( 0 );
-		deque_type deque( a, a + countof ( a ) );
-		proto_t proto( a, a + countof ( a ) );
+		deque_type deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		proto_t proto( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 		proto.erase( proto.begin() + first_, proto.begin() + last_ );
 		deque.erase( deque.begin() + first_, deque.begin() + last_ );
 		check_consistency( deque );
@@ -401,19 +402,19 @@ void tut_yaal_hcore_hdeque::test_erase( int first_, int last_ )
 template<int const item_size>
 void tut_yaal_hcore_hdeque::test_erase( void )
 	{
-	test_erase<item_size>( 0, countof( a ) / 2 );
-	test_erase<item_size>( countof( a ) / 2, countof( a ) );
-	test_erase<item_size>( 0, countof( a ) );
+	test_erase<item_size>( 0, countof( _testData_[0] ) / 2 );
+	test_erase<item_size>( countof( _testData_[0] ) / 2, countof( _testData_[0] ) );
+	test_erase<item_size>( 0, countof( _testData_[0] ) );
 	test_erase<item_size>( 0, 1 );
-	test_erase<item_size>( countof ( a ) - 1, countof ( a ) );
-	test_erase<item_size>( 1, countof ( a ) - 1 );
+	test_erase<item_size>( countof ( _testData_[0] ) - 1, countof ( _testData_[0] ) );
+	test_erase<item_size>( 1, countof ( _testData_[0] ) - 1 );
 	test_erase<item_size>( 3, 6 );
-	test_erase<item_size>( countof ( a ) - 6, countof ( a ) - 3 );
-	test_erase<item_size>( countof ( a ) / 2 - 3, countof ( a ) / 2 + 3 );
-	test_erase<item_size>( 0, countof( a ) / 2 + countof ( a ) / 4 );
-	test_erase<item_size>( 3, countof( a ) / 2 + countof ( a ) / 4 );
-	test_erase<item_size>( countof ( a ) / 4, countof( a ) );
-	test_erase<item_size>( countof ( a ) / 4, countof( a ) - 3 );
+	test_erase<item_size>( countof ( _testData_[0] ) - 6, countof ( _testData_[0] ) - 3 );
+	test_erase<item_size>( countof ( _testData_[0] ) / 2 - 3, countof ( _testData_[0] ) / 2 + 3 );
+	test_erase<item_size>( 0, countof( _testData_[0] ) / 2 + countof ( _testData_[0] ) / 4 );
+	test_erase<item_size>( 3, countof( _testData_[0] ) / 2 + countof ( _testData_[0] ) / 4 );
+	test_erase<item_size>( countof ( _testData_[0] ) / 4, countof( _testData_[0] ) );
+	test_erase<item_size>( countof ( _testData_[0] ) / 4, countof( _testData_[0] ) - 3 );
 	}
 
 TUT_UNIT_TEST_N( 9, "/* range erase */" )
@@ -608,25 +609,25 @@ void tut_yaal_hcore_hdeque::test_insert_pos( void )
 	clog << "testing insert(pos): " << item_size << endl;
 	item_t::set_start_id( 0 );
 		{
-		proto_t proto( a, a + countof ( a ) );
-		deque_type deque( a, a + countof ( a ) );
+		proto_t proto( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		deque_type deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 		check_consistency( deque );
 		ENSURE_EQUALS( "insertion failed", deque, proto );
 		deque.insert( deque.begin(), -7 );
-		check_consistency( deque );
 		proto.insert( proto.begin(), -7 );
+		check_consistency( deque );
 		ENSURE_EQUALS( "insertion failed", deque, proto );
 		deque.insert( deque.begin() + 5, -7 );
-		check_consistency( deque );
 		proto.insert( proto.begin() + 5, -7 );
+		check_consistency( deque );
 		ENSURE_EQUALS( "insertion failed", deque, proto );
 		deque.insert( deque.end() - 1, -7 );
-		check_consistency( deque );
 		proto.insert( proto.end() - 1, -7 );
+		check_consistency( deque );
 		ENSURE_EQUALS( "insertion failed", deque, proto );
 		deque.insert( deque.end(), -99 );
-		check_consistency( deque );
 		proto.insert( proto.end(), -99 );
+		check_consistency( deque );
 		ENSURE_EQUALS( "insertion failed", deque, proto );
 		}
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
@@ -668,6 +669,165 @@ TUT_UNIT_TEST_N( 16, "/* assign operator (=) */" )
 		ENSURE_EQUALS( "assgin failed", deque, big );
 		}
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+template<int const item_size>
+void tut_yaal_hcore_hdeque::test_insert( void )
+	{
+	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
+	typedef HDeque<item_type> deque_type;
+	clog << "testing insert range: " << item_size << endl;
+	item_t::set_start_id( 0 );
+		{
+		int const len0( countof ( _testData_[0] ) );
+		int const len1( countof ( _testData_[1] ) );
+		proto_t proto( _testData_[0], _testData_[0] + len0 );
+		deque_type deque( _testData_[0], _testData_[0] + len0 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.insert( deque.begin(), _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.begin(), _testData_[1], _testData_[1] + len1 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.insert( deque.begin(), _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.begin(), _testData_[1], _testData_[1] + len1 / 2 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.insert( deque.end(), _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.end(), _testData_[1], _testData_[1] + len1 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.insert( deque.end(), _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.end(), _testData_[1], _testData_[1] + len1 / 2 );
+		check_consistency( deque );
+		deque.insert( deque.end() - 1, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.end() - 1, _testData_[1], _testData_[1] + len1 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.insert( deque.end() - 1, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.end() - 1, _testData_[1], _testData_[1] + len1 / 2 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.insert( deque.begin() + deque.size() / 2, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.begin() + proto.size() / 2, _testData_[1], _testData_[1] + len1 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.insert( deque.begin() + deque.size() / 2, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.begin() + proto.size() / 2, _testData_[1], _testData_[1] + len1 / 2 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.insert( deque.begin() + deque.size() / 3, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.begin() + proto.size() / 3, _testData_[1], _testData_[1] + len1 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.insert( deque.begin() + deque.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.begin() + proto.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.insert( deque.end() - deque.size() / 3, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.end() - proto.size() / 3, _testData_[1], _testData_[1] + len1 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.insert( deque.end() - deque.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.end() - proto.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		}
+		{
+		int const len0( countof ( _testData_[0] ) );
+		int const len1( countof ( _testData_[1] ) );
+		proto_t proto( _testData_[0], _testData_[0] + len0 );
+		deque_type deque( _testData_[0], _testData_[0] + len0 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		deque.insert( deque.begin(), _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.begin(), _testData_[1], _testData_[1] + len1 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		deque.insert( deque.begin(), _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.begin(), _testData_[1], _testData_[1] + len1 / 2 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		deque.insert( deque.end(), _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.end(), _testData_[1], _testData_[1] + len1 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		deque.insert( deque.end(), _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.end(), _testData_[1], _testData_[1] + len1 / 2 );
+		check_consistency( deque );
+		deque.insert( deque.end() - 1, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.end() - 1, _testData_[1], _testData_[1] + len1 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		deque.insert( deque.end() - 1, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.end() - 1, _testData_[1], _testData_[1] + len1 / 2 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		deque.insert( deque.begin() + deque.size() / 2, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.begin() + proto.size() / 2, _testData_[1], _testData_[1] + len1 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		deque.insert( deque.begin() + deque.size() / 2, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.begin() + proto.size() / 2, _testData_[1], _testData_[1] + len1 / 2 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		deque.insert( deque.begin() + deque.size() / 3, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.begin() + proto.size() / 3, _testData_[1], _testData_[1] + len1 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		deque.insert( deque.begin() + deque.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.begin() + proto.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		deque.insert( deque.end() - deque.size() / 3, _testData_[1], _testData_[1] + len1 );
+		proto.insert( proto.end() - proto.size() / 3, _testData_[1], _testData_[1] + len1 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		deque.assign( _testData_[0], _testData_[0] + len0 );
+		proto.assign( _testData_[0], _testData_[0] + len0 );
+		deque.insert( deque.end() - deque.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		proto.insert( proto.end() - proto.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "range insertion failed", deque, proto );
+		}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+	}
+
+TUT_UNIT_TEST_N( 17, "/* insert range */" )
+	test_insert<1>();
+	test_insert<2>();
+	test_insert<3>();
+	test_insert<7>();
+	test_insert<15>();
+	test_insert<16>();
+	test_insert<17>();
+	test_insert<64>();
+	test_insert<128>();
+	test_insert<200>();
+	test_insert<511>();
+	test_insert<512>();
+	test_insert<513>();
+	test_insert<640>();
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 50, "speed test" )
