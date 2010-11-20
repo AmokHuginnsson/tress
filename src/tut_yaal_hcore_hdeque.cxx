@@ -40,6 +40,7 @@ using namespace yaal::hcore;
 using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
+using namespace tress;
 using namespace tress::tut_helpers;
 
 namespace tut
@@ -90,14 +91,19 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_, int ext
 	int long lastChunkIndex( deque_._size > 0 ? ( ( deque_._start + deque_._size - 1 ) / deque_type::VALUES_PER_CHUNK ) : ( deque_._start / deque_type::VALUES_PER_CHUNK ) );
 	int long chunksCount = deque_._chunks.template count_of<typename deque_type::value_type*>();
 	int long usedChunks = deque_.used_chunks();
+	if ( setup._debug )
+		clog << "firstChunkIndex: " << firstChunkIndex << ", _statePreserver._firstChunkIndex: " << _statePreserver._firstChunkIndex << ", lastChunkIndex: " << lastChunkIndex << ", _statePreserver._lastChunkIndex: " << _statePreserver._lastChunkIndex << ", deque_._size: " << deque_._size << ", _statePreserver._size: " << _statePreserver._size << ", chunksCount: " << chunksCount << ", _statePreserver._availChunks: " << _statePreserver._availChunks << endl;
 	if ( deque_._size > 0 )
 		{
 		ENSURE( "chunk range bigger than chunks count", ( lastChunkIndex - firstChunkIndex ) < chunksCount );
 		ENSURE( "last chunk outside avail chunks", lastChunkIndex < chunksCount );
 		}
 	else
+		{
 		ENSURE_EQUALS( "bad indexes for empty deque", lastChunkIndex, firstChunkIndex );
-	ENSURE( "first chunk outsize avail chunks", deque_._start >= 0 );
+		ENSURE_EQUALS( "wrong number of used chunks calculated", deque_.used_chunks(), 0 );
+		}
+	ENSURE( "first chunk outside avail chunks", deque_._start >= 0 );
 	if ( ( chunksCount > _statePreserver._availChunks )
 			|| ( ( firstChunkIndex < _statePreserver._firstChunkIndex ) && ( ( _statePreserver._firstChunkIndex + usedChunks ) >= _statePreserver._availChunks ) )
 			|| ( ( lastChunkIndex > _statePreserver._lastChunkIndex ) && ( ( _statePreserver._lastChunkIndex + 1 - usedChunks ) < 0 ) ) )
@@ -111,11 +117,10 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_, int ext
 		if ( deque_._size > 0 )
 			ENSURE_DISTANCE( "chunks are not centered", abs( endGap - startGap ), 0l, 2l );
 		}
-	else if ( ( firstChunkIndex > _statePreserver._firstChunkIndex ) || ( lastChunkIndex < _statePreserver._lastChunkIndex ) )
+	else if ( _statePreserver._size
+			&& ( chunksCount >= _statePreserver._availChunks )
+			&& ( ( firstChunkIndex > _statePreserver._firstChunkIndex ) || ( lastChunkIndex < _statePreserver._lastChunkIndex ) ) )
 		{
-/*
-		clog << "firstChunkIndex: " << firstChunkIndex << ", _statePreserver._firstChunkIndex: " << _statePreserver._firstChunkIndex << ", lastChunkIndex: " << lastChunkIndex << ", _statePreserver._lastChunkIndex: " << _statePreserver._lastChunkIndex << ", deque_._size: " << deque_._size << ", _statePreserver._size: " << _statePreserver._size << ", chunksCount: " << chunksCount << ", _statePreserver._availChunks: " << _statePreserver._availChunks << endl;
-*/
 		ENSURE( "unnecesarry chunks move", ( deque_._size < _statePreserver._size ) || ( chunksCount > _statePreserver._availChunks ) );
 		}
 	typename deque_type::value_type const* const* chunks = deque_._chunks.template get<typename deque_type::value_type const*>();
@@ -123,6 +128,8 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_, int ext
 		ENSURE_EQUALS( "not used chunks at the begining not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
 	for ( int long i( lastChunkIndex + 1 ); i < chunksCount; ++ i )
 		ENSURE_EQUALS( "not used chunks at the end not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
+	if ( ( chunksCount > 0 ) && ! deque_._size )
+		ENSURE_EQUALS( "not all chunks are nulled after resize( 0 )", chunks[ firstChunkIndex ], static_cast<typename deque_type::value_type*>( NULL ) );
 	if ( deque_._size > 0 )
 		{
 		for ( int long i( firstChunkIndex ); i < ( lastChunkIndex + 1 ); ++ i )
@@ -216,6 +223,47 @@ void tut_yaal_hcore_hdeque::test_resize( void )
 		check_consistency( deque );
 		TUT_INVOKE( deque.resize( 0 ); );
 		check_consistency( deque );
+		TUT_INVOKE( deque.resize( 333 ); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.pop_front(); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.resize( 0 ); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.resize( 333 ); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.pop_front(); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.resize( 33 ); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.resize( 3333 ); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.resize( 2 ); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.pop_front(); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.resize( 0 ); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.resize( deque_type::VALUES_PER_CHUNK ); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.pop_front(); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.resize( 0 ); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.resize( deque_type::VALUES_PER_CHUNK + 1 ); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.pop_front(); );
+		check_consistency( deque );
+		TUT_INVOKE( deque.resize( 0 ); );
+		check_consistency( deque );
+		if ( deque_type::VALUES_PER_CHUNK > 1 )
+			{
+			TUT_INVOKE( deque.resize( deque_type::VALUES_PER_CHUNK - 1 ); );
+			check_consistency( deque );
+			TUT_INVOKE( deque.pop_front(); );
+			check_consistency( deque );
+			TUT_INVOKE( deque.resize( 0 ); );
+			check_consistency( deque );
+			}
 		TUT_INVOKE( deque.resize( 0 ); );
 		check_consistency( deque );
 		}
