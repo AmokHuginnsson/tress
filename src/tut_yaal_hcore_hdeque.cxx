@@ -110,10 +110,8 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_, int ext
 		{
 		int long startGap( firstChunkIndex );
 		int long endGap( ( chunksCount - lastChunkIndex ) - 1 );
-/*
-		clog << "_lastChunkIndex: " << _statePreserver._lastChunkIndex << endl;
-		clog << "chunksCount: " << chunksCount << ", firstChunkIndex: " << firstChunkIndex << ", lastChunkIndex: " << lastChunkIndex << ", startGap: " << startGap << ", endGap: " << endGap << endl;
-*/
+		if ( setup._debug )
+			clog << "startGap: " << startGap << ", endGap: " << endGap << endl;
 		if ( deque_._size > 0 )
 			ENSURE_DISTANCE( "chunks are not centered", abs( endGap - startGap ), 0l, 2l );
 		}
