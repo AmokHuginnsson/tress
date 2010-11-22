@@ -105,8 +105,8 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_, int ext
 		}
 	ENSURE( "first chunk outside avail chunks", deque_._start >= 0 );
 	if ( ( chunksCount > _statePreserver._availChunks )
-			|| ( ( firstChunkIndex < _statePreserver._firstChunkIndex ) && ( ( _statePreserver._firstChunkIndex + usedChunks ) >= _statePreserver._availChunks ) )
-			|| ( ( lastChunkIndex > _statePreserver._lastChunkIndex ) && ( ( _statePreserver._lastChunkIndex + 1 - usedChunks ) < 0 ) ) )
+			|| ( ( firstChunkIndex != _statePreserver._firstChunkIndex ) && ( ( _statePreserver._firstChunkIndex - abs( usedChunks - _statePreserver._usedChunks ) ) < 0 ) )
+			|| ( ( lastChunkIndex != _statePreserver._lastChunkIndex ) && ( ( _statePreserver._lastChunkIndex + 1 + abs( usedChunks - _statePreserver._usedChunks ) ) >= _statePreserver._availChunks ) ) )
 		{
 		int long startGap( firstChunkIndex );
 		int long endGap( ( chunksCount - lastChunkIndex ) - 1 );
@@ -142,7 +142,126 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_, int ext
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
 
-TUT_UNIT_TEST_N( 1, "/* Constructor. */" )
+#ifndef __sun__
+#pragma pack( push, 1 )
+#else /* #ifndef __sun__ */
+#pragma pack( 1 )
+#endif /* #else #ifndef __sun__ */
+	template<int const SIZE>
+	class FixedArray
+		{
+		char _data[SIZE];
+		};
+#ifndef __sun__
+#pragma pack( pop )
+#else /* #ifndef __sun__ */
+#pragma pack()
+#endif /* #else #ifndef __sun__ */
+
+TUT_UNIT_TEST_N( 1, "/* CHUNK_SIZE, VALUES_PER_CHUNK and Constructor. */" )
+	STATIC_ASSERT( sizeof ( FixedArray<1> ) == 1 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<1> >::CHUNK_SIZE, 512 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<1> >::VALUES_PER_CHUNK, 512 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<2> >::CHUNK_SIZE, 512 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<2> >::VALUES_PER_CHUNK, 256 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<3> >::CHUNK_SIZE, 513 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<3> >::VALUES_PER_CHUNK, 171 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<4> >::CHUNK_SIZE, 512 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<4> >::VALUES_PER_CHUNK, 128 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<5> >::CHUNK_SIZE, 510 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<5> >::VALUES_PER_CHUNK, 102 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<6> >::CHUNK_SIZE, 510 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<6> >::VALUES_PER_CHUNK, 85 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<7> >::CHUNK_SIZE, 511 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<7> >::VALUES_PER_CHUNK, 73 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<8> >::CHUNK_SIZE, 512 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<8> >::VALUES_PER_CHUNK, 64 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<9> >::CHUNK_SIZE, 513 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<9> >::VALUES_PER_CHUNK, 57 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<10> >::CHUNK_SIZE, 510 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<10> >::VALUES_PER_CHUNK, 51 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<11> >::CHUNK_SIZE, 517 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<11> >::VALUES_PER_CHUNK, 47 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<12> >::CHUNK_SIZE, 516 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<12> >::VALUES_PER_CHUNK, 43 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<13> >::CHUNK_SIZE, 507 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<13> >::VALUES_PER_CHUNK, 39 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<14> >::CHUNK_SIZE, 518 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<14> >::VALUES_PER_CHUNK, 37 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<15> >::CHUNK_SIZE, 510 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<15> >::VALUES_PER_CHUNK, 34 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<16> >::CHUNK_SIZE, 512 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<16> >::VALUES_PER_CHUNK, 32 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<17> >::CHUNK_SIZE, 510 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<17> >::VALUES_PER_CHUNK, 30 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<18> >::CHUNK_SIZE, 504 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<18> >::VALUES_PER_CHUNK, 28 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<19> >::CHUNK_SIZE, 513 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<19> >::VALUES_PER_CHUNK, 27 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<20> >::CHUNK_SIZE, 520 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<20> >::VALUES_PER_CHUNK, 26 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<21> >::CHUNK_SIZE, 504 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<21> >::VALUES_PER_CHUNK, 24 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<22> >::CHUNK_SIZE, 506 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<22> >::VALUES_PER_CHUNK, 23 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<23> >::CHUNK_SIZE, 506 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<23> >::VALUES_PER_CHUNK, 22 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<24> >::CHUNK_SIZE, 504 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<24> >::VALUES_PER_CHUNK, 21 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<25> >::CHUNK_SIZE, 500 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<25> >::VALUES_PER_CHUNK, 20 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<26> >::CHUNK_SIZE, 520 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<26> >::VALUES_PER_CHUNK, 20 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<27> >::CHUNK_SIZE, 513 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<27> >::VALUES_PER_CHUNK, 19 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<28> >::CHUNK_SIZE, 504 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<28> >::VALUES_PER_CHUNK, 18 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<29> >::CHUNK_SIZE, 522 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<29> >::VALUES_PER_CHUNK, 18 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<30> >::CHUNK_SIZE, 510 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<30> >::VALUES_PER_CHUNK, 17 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<31> >::CHUNK_SIZE, 527 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<31> >::VALUES_PER_CHUNK, 17 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<32> >::CHUNK_SIZE, 512 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<32> >::VALUES_PER_CHUNK, 16 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<33> >::CHUNK_SIZE, 528 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<33> >::VALUES_PER_CHUNK, 16 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<34> >::CHUNK_SIZE, 510 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<34> >::VALUES_PER_CHUNK, 15 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<35> >::CHUNK_SIZE, 525 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<35> >::VALUES_PER_CHUNK, 15 );
+
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<255> >::CHUNK_SIZE, 510 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<255> >::VALUES_PER_CHUNK, 2 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<256> >::CHUNK_SIZE, 512 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<256> >::VALUES_PER_CHUNK, 2 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<257> >::CHUNK_SIZE, 514 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<257> >::VALUES_PER_CHUNK, 2 );
+
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<300> >::CHUNK_SIZE, 600 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<300> >::VALUES_PER_CHUNK, 2 );
+
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<340> >::CHUNK_SIZE, 680 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<340> >::VALUES_PER_CHUNK, 2 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<341> >::CHUNK_SIZE, 682 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<341> >::VALUES_PER_CHUNK, 2 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<342> >::CHUNK_SIZE, 342 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<382> >::VALUES_PER_CHUNK, 1 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<343> >::CHUNK_SIZE, 343 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<343> >::VALUES_PER_CHUNK, 1 );
+
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<511> >::CHUNK_SIZE, 511 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<511> >::VALUES_PER_CHUNK, 1 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<512> >::CHUNK_SIZE, 512 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<512> >::VALUES_PER_CHUNK, 1 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<513> >::CHUNK_SIZE, 513 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<513> >::VALUES_PER_CHUNK, 1 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<767> >::CHUNK_SIZE, 767 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<767> >::VALUES_PER_CHUNK, 1 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<768> >::CHUNK_SIZE, 768 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<768> >::VALUES_PER_CHUNK, 1 );
+	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<769> >::CHUNK_SIZE, 769 );
+	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<769> >::VALUES_PER_CHUNK, 1 );
 	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
 	try
