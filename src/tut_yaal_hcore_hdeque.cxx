@@ -508,6 +508,7 @@ TUT_UNIT_TEST_N( 5, "/* Constructor with range initialization. */" )
 	typedef HDeque<big_item_t> big_deque_t;
 	big_deque_t big_deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	check_consistency( deque );
+	check_consistency( big_deque );
 	ENSURE_EQUALS( "range initialization failed", big_deque, proto );
 TUT_TEARDOWN()
 
