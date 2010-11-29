@@ -73,5 +73,23 @@ TUT_UNIT_TEST_N( 3, "copy constructor" )
 	ENSURE_EQUALS( "bad copy", *str, "Ala" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 4, "const reference" )
+	HString const ala( "ala" );
+	HOptional<HString const&> opt( ala );
+	ENSURE_EQUALS( "bad value", &*opt, &ala );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 5, "swap on const reference" )
+	HString const ala( "ala" );
+	HString const kot( "kot" );
+	HOptional<HString const&> optAla( ala );
+	HOptional<HString const&> optKot( kot );
+	ENSURE_EQUALS( "bad value", &*optAla, &ala );
+	ENSURE_EQUALS( "bad value", &*optKot, &kot );
+	swap( optAla, optKot );
+	ENSURE_EQUALS( "bad value", &*optAla, &kot );
+	ENSURE_EQUALS( "bad value", &*optKot, &ala );
+TUT_TEARDOWN()
+
 }
 
