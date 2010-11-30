@@ -51,51 +51,6 @@ Copyright:
 #define stdext __gnu_cxx
 #endif /* defined( __GNUC__ ) && ! defined( stdext ) */
 
-namespace yaal
-{
-
-namespace hcore
-{
-
-template<typename first_t, typename second_t>
-yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& os, yaal::hcore::HPair<first_t, second_t> const& p )
-	{
-	os << "pair(" << p.first << "," << p.second << ")";
-	return ( os );
-	}
-
-template<typename tType>
-yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& out, yaal::hcore::HArray<tType> const& a )
-	{
-	out << "array(";
-	yaal::copy( a.begin(), a.end(), stream_iterator( out, " " ) );
-	out << ( ( a.begin() != a.end() ) ? "\b)" : ")" ) << flush;
-	return ( out );
-	}
-
-template<typename tType>
-yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& out, yaal::hcore::HDeque<tType> const& a )
-	{
-	out << "deque(";
-	yaal::copy( a.begin(), a.end(), stream_iterator( out, " " ) );
-	out << ( ( a.begin() != a.end() ) ? "\b)" : ")" ) << flush;
-	return ( out );
-	}
-
-template<typename tType>
-yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& out, yaal::hcore::HList<tType> const& l )
-	{
-	out << "list(";
-	yaal::copy( l.begin(), l.end(), stream_iterator( out, " " ) );
-	out << "\b)" << flush;
-	out << ( ( l.begin() != l.end() ) ? "\b)" : ")" ) << flush;
-	return ( out );
-	}
-
-}
-
-}
-
 template<typename T1, typename T2>
 bool operator == ( yaal::hcore::HArray<T1> const& a, std::vector<T2> const& v )
 	{
