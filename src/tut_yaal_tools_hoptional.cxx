@@ -91,5 +91,19 @@ TUT_UNIT_TEST_N( 5, "swap on const reference" )
 	ENSURE_EQUALS( "bad value", &*optKot, &ala );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 6, "non-const reference to const reference" )
+	HString ala( "ala" );
+	HString const kot( "kot" );
+	HOptional<HString&> optAla( ala );
+	HOptional<HString const&> optKot( kot );
+	optKot = optAla;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 7, "non-const to const" )
+	HOptional<HString> const optAla( "ala" );
+	HOptional<HString> optKot( "kot" );
+	optKot = optAla;
+TUT_TEARDOWN()
+
 }
 
