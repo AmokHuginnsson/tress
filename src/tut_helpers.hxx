@@ -51,6 +51,26 @@ Copyright:
 #define stdext __gnu_cxx
 #endif /* defined( __GNUC__ ) && ! defined( stdext ) */
 
+#define TUT_UNIT_TEST_N( no, title ) template<> template<> void module::test<(no)>( void ) { do { set_test_meta( title, __FILE__, __LINE__ ); show_title( title ); } while ( 0 );
+#define TUT_UNIT_TEST( title ) TUT_UNIT_TEST_N( ( __COUNTER__ ), ( title ) )
+#define TUT_TEARDOWN() show_end(); }
+#define TUT_TEST_GROUP_N( mock, name ) \
+typedef test_group<mock> tut_group; \
+typedef tut_group::object module; \
+typedef yaal::hcore::HExceptionSafeGlobal<tut_group, tress::tut_helpers::HSTDGlobalScopeExceptionHandlingPolicy> tut_group_holder; \
+tut_group_holder tut_##mock##_group( ( name ) )
+#define TUT_TEST_GROUP( mock, name ) \
+TUT_TEST_GROUP_N( mock, name ) \
+namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
+#define TUT_SIMPLE_MOCK( name ) struct name : public simple_mock<name> \
+	{ \
+	virtual ~name( void ) \
+		{} \
+	}
+
+#define TUT_DECLARE( statement ) clog << brightgreen << ">> " << #statement << reset << endl; statement clog << green << ">> end" << reset << endl;
+#define TUT_INVOKE( statement ) do { clog << brightcyan << ">> " << #statement << reset << endl; do { statement } while ( 0 ); clog << cyan << ">> end" << reset << endl; } while ( 0 )
+
 template<typename T1, typename T2>
 bool operator == ( yaal::hcore::HArray<T1> const& a, std::vector<T2> const& v )
 	{
@@ -232,26 +252,6 @@ struct HSTDGlobalScopeExceptionHandlingPolicy
 	{
 	static void handle_exception( void ) __attribute__(( __noreturn__ ));
 	};
-
-#define TUT_UNIT_TEST_N( no, title ) template<> template<> void module::test<(no)>( void ) { do { set_test_meta( title, __FILE__, __LINE__ ); show_title( title ); } while ( 0 );
-#define TUT_UNIT_TEST( title ) TUT_UNIT_TEST_N( ( __COUNTER__ ), ( title ) )
-#define TUT_TEARDOWN() show_end(); }
-#define TUT_TEST_GROUP_N( mock, name ) \
-typedef test_group<mock> tut_group; \
-typedef tut_group::object module; \
-typedef yaal::hcore::HExceptionSafeGlobal<tut_group, tress::tut_helpers::HSTDGlobalScopeExceptionHandlingPolicy> tut_group_holder; \
-tut_group_holder tut_##mock##_group( ( name ) )
-#define TUT_TEST_GROUP( mock, name ) \
-TUT_TEST_GROUP_N( mock, name ) \
-namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
-#define TUT_SIMPLE_MOCK( name ) struct name : public simple_mock<name> \
-	{ \
-	virtual ~name( void ) \
-		{} \
-	}
-
-#define TUT_DECLARE( statement ) clog << brightgreen << ">> " << #statement << reset << endl; statement clog << green << ">> end" << reset << endl;
-#define TUT_INVOKE( statement ) do { clog << brightcyan << ">> " << #statement << reset << endl; do { statement } while ( 0 ); clog << cyan << ">> end" << reset << endl; } while ( 0 )
 
 #ifndef __sun__
 #pragma pack( push, 1 )
