@@ -134,5 +134,19 @@ TUT_UNIT_TEST_N( 1, "visitor pattern" )
 	b->accept( DerivedBazCall() );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 50, "yaal data types instantiations for gdb-pretty-printers and MSVC++ [Visualisers] testing." )
+	HString str( "Ala ma kota." );
+	HNumber pi( "3.141592653589793" );
+	HNumber e( "2.718281828459045" );
+	HArray<int> array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HDeque<int> deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HSet<int> set( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HHashSet<int> hashSet( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HRing<int> ring( ring::capacity( countof( _testData_[0] ) * 2 ),
+		_testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HString result( ( pi * e ).to_string() );
+TUT_TEARDOWN()
+
 }
 
