@@ -53,7 +53,11 @@ void recurse( HString const& path_ )
 	M_ENSURE( dir.is_directory() );
 	for ( HFSItem::HIterator it = dir.begin(); it != dir.end(); ++ it )
 		{
-		cout << bold << ( it->is_directory() ? "[dir]" : "     " ) << " " << ( it->is_executable() ? "[exec]" : "      " ) << " " << "[" << setw( 10 ) << it->get_size() << "]" << reset << " " << it->get_path() << " " << it->modified().string() << endl;
+		cout << yellow << ( it->is_directory() ? "[dir]" : "     " ) << " " << ( it->is_executable() ? "[exec]" : "      " )
+			<< " [" << setw( 10 ) << it->get_size() << "] "
+			<< white << setw( 8 ) << it->get_user() << " " << setw( 8 ) << it->get_group()
+			<< " " << brightmagenta << oct << setw( 4 ) << ( it->get_permissions() & 0777 ) << dec
+			<< reset << " " << it->get_path() << " " << it->modified().string() << endl;
 		if ( it->is_directory() && ( it->get_name() != "." ) && ( it->get_name() != ".." ) )
 			{
 			cout << "descending into ";
