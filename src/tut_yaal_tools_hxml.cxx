@@ -93,6 +93,8 @@ tut_group tut_yaal_tools_hxml_group( "yaal::tools::HXml" );
 
 std::ostream& operator << ( std::ostream& out, HXml const& xml )
 	{
+	for ( HXml::const_entity_iterator it( xml.entity_begin() ), end( xml.entity_end() ); it != end; ++ it )
+		out << "@: " << it->first << "=>" << it->second << std::endl;
 	return ( tut_yaal_tools_hxml::dump( out, xml.get_root() ) );
 	}
 
@@ -264,7 +266,7 @@ TUT_UNIT_TEST_N( 9, "/* apply stylesheet */" )
 	_xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ) );
 	_xml.apply_style( "data/style.xml" );
 	_xml.parse( HXml::PARSER::STRIP_EMPTY );
-	dump( std::cout, _xml.get_root() );
+	std::cout << _xml;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 10, "/* init, parse, apply, save */" )
