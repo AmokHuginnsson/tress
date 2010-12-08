@@ -77,6 +77,8 @@ struct tut_yaal_tools_hxml
 				out << _varTmpBuffer << "}" << std::endl;
 				}
 			}
+		else if ( node_.get_type() == HXml::HNode::TYPE::COMMENT )
+			out << _varTmpBuffer << "/* " << node_.get_value() << " */" << std::endl;
 		else if ( ! node_.get_value().is_empty() )
 			out << _varTmpBuffer << node_.get_value() << std::endl;
 		return ( out );
@@ -261,7 +263,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 9, "/* apply stylesheet */" )
 	_xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ) );
 	_xml.apply_style( "data/style.xml" );
-	_xml.parse();
+	_xml.parse( HXml::PARSER::STRIP_EMPTY );
 	dump( std::cout, _xml.get_root() );
 TUT_TEARDOWN()
 

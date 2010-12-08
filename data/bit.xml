@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
+<!DOCTYPE bit [
+<!ENTITY my_local_data "(squared)">
+<!ENTITY copy "&#x41;">
+]>
 <bit>
-	<parity>true</parity>
-	<hw_flow>false</hw_flow>
+	<parity>true&copy;</parity>
+	<hw_flow>false&my_local_data;</hw_flow>
+	<!--even_odd>true&trade;</even_odd-->
 </bit>

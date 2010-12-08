@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!DOCTYPE my_root [
 <!ENTITY v_data "my_data">
+<!ENTITY trade "&#x41;">
 ]>
 <my_root my_type="my_fancy" xmlns:xi="http://www.w3.org/2003/XInclude">
 	<my_node my_property="Żółwiątko">
@@ -12,7 +13,7 @@ Mężny bądź, chroń pułk twój i sześć flag.
 	</my_node>
 	<xi:include href="./bit.xml" />
 	<my_set>
-		<my_item>one</my_item>
+		<my_item>one&trade;</my_item>
 		<my_item>two</my_item>
 		<my_fake>three</my_fake>
 		<my_item>four</my_item>
