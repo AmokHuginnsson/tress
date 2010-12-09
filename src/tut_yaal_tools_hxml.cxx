@@ -79,6 +79,8 @@ struct tut_yaal_tools_hxml
 			}
 		else if ( node_.get_type() == HXml::HNode::TYPE::COMMENT )
 			out << _varTmpBuffer << "/* " << node_.get_value() << " */" << std::endl;
+		else if ( node_.get_type() == HXml::HNode::TYPE::ENTITY )
+			out << _varTmpBuffer << node_.get_value() << "(" << node_.get_name() << ")" << std::endl;
 		else if ( ! node_.get_value().is_empty() )
 			out << _varTmpBuffer << node_.get_value() << std::endl;
 		return ( out );
@@ -263,7 +265,7 @@ TUT_UNIT_TEST_N( 8, "/* init, apply_style, parse, save, clear, handmade, save */
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "/* apply stylesheet */" )
-	_xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ) );
+	_xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	_xml.apply_style( "data/style.xml" );
 	_xml.parse( HXml::PARSER::STRIP_EMPTY );
 	std::cout << _xml;
@@ -292,6 +294,12 @@ TUT_UNIT_TEST_N( 10, "/* init, parse, apply, save */" )
 	_xml.parse( path );
 	_xml.save( HStreamInterface::ptr_t( new HFile( out, HFile::OPEN::WRITING ) ) );
 	return;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 11, "load -> console dump" )
+	char const* doc = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/xml.xml";
+	_xml.load( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ), HXml::PARSER::STRIP_EMPTY );
+	std::cout << _xml;
 TUT_TEARDOWN()
 
 }

@@ -12,4 +12,7 @@
 			<xsl:apply-templates select="node()" />
 		</uber_item>
 	</xsl:template>
+	<xsl:template match="entity_reference">
+		<xsl:value-of disable-output-escaping="yes" select="text()" />
+	</xsl:template>
 </xsl:stylesheet>
