@@ -253,7 +253,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* init, apply_style, parse, save, clear, handmade, save */" )
 	HXml xml;
-	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ) );
+	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.apply_style( "./data/style.xml" );
 	xml.parse();
 	xml.save( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::WRITING ) ) );
@@ -289,7 +289,7 @@ TUT_UNIT_TEST_N( 10, "/* init, parse, apply, save */" )
 			file.close();
 			}
 		}
-	_xml.init( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ) );
+	_xml.init( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	_xml.apply_style( style );
 	_xml.parse( path );
 	_xml.save( HStreamInterface::ptr_t( new HFile( out, HFile::OPEN::WRITING ) ) );
