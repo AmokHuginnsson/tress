@@ -299,7 +299,8 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 11, "load -> console dump" )
 	char const* doc = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/xml.xml";
 	_xml.load( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ) );
-	std::cout << _xml;
+	_xml.save( cout );
+	std::clog << _xml;
 TUT_TEARDOWN()
 
 }
