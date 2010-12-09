@@ -267,7 +267,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 9, "/* apply stylesheet */" )
 	_xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	_xml.apply_style( "data/style.xml" );
-	_xml.parse( HXml::PARSER::STRIP_EMPTY );
+	_xml.parse();
 	std::cout << _xml;
 TUT_TEARDOWN()
 
@@ -298,7 +298,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 11, "load -> console dump" )
 	char const* doc = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/xml.xml";
-	_xml.load( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ), HXml::PARSER::STRIP_EMPTY );
+	_xml.load( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ) );
 	std::cout << _xml;
 TUT_TEARDOWN()
 
