@@ -275,6 +275,46 @@ TUT_UNIT_TEST_N( 14, "/* replace */" )
 		}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 15, "/* construction from int short */" )
+	static int short const INIT = 1024;
+	static char const CORRECT[] = "1024";
+	HString str( INIT );
+	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
+	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), 7 );
+	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 16, "/* construction from int short unsigned */" )
+	static int short unsigned const INIT = 1024;
+	static char const CORRECT[] = "1024";
+	HString str( INIT );
+	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
+	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), 7 );
+	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 17, "/* construction from char unsigned */" )
+	static char unsigned const INIT = static_cast<char unsigned>( '±' );
+	static char const CORRECT[] = "±";
+	HString str( INIT );
+	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
+	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), 1 );
+	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 18, "/* construction from float */" )
+	static float const INIT = 2.718281828459045;
+	static char const CORRECT[] = "2.718282";
+	HString str( INIT );
+	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
+	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), 15 );
+	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST_N( 22, "/* shift_left */" )
 	static char const CORRECT[] = "Ala ma kota";
 	static int const SHIFT = 4;
