@@ -306,7 +306,7 @@ TUT_UNIT_TEST_N( 17, "/* construction from char unsigned */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 18, "/* construction from float */" )
-	static float const INIT = 2.718281828459045;
+	static float const INIT = static_cast<float>( 2.718281828459045 );
 	static char const CORRECT[] = "2.718282";
 	HString str( INIT );
 	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
