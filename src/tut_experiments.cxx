@@ -138,6 +138,7 @@ TUT_UNIT_TEST_N( 50, "yaal data types instantiations for gdb-pretty-printers and
 	HString str( "Ala ma kota." );
 	HNumber pi( "3.141592653589793" );
 	HNumber e( "2.718281828459045" );
+	HPair<HString, double> p( make_pair<HString>( "PI", pi.to_double() ) );
 	HArray<int> array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HDeque<int> deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
@@ -146,6 +147,17 @@ TUT_UNIT_TEST_N( 50, "yaal data types instantiations for gdb-pretty-printers and
 	HRing<int> ring( ring::capacity( countof( _testData_[0] ) * 2 ),
 		_testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HString result( ( pi * e ).to_string() );
+	cout << str << endl;
+	cout << pi << endl;
+	cout << e << endl;
+	cout << p << endl;
+	cout << array << endl;
+	cout << deque << endl;
+	cout << list << endl;
+	cout << set << endl;
+	cout << hashSet << endl;
+	cout << ring << endl;
+	cout << result << endl;
 TUT_TEARDOWN()
 
 }
