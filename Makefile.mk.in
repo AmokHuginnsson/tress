@@ -39,7 +39,7 @@ $(eval $(call NEW_TARGET,cute,cute,-D__CUTE__))
 $(eval $(call NEW_TARGET,child,child,-D__CHILD__))
 NAME = tressplugin
 SONAME_tressplugin = $(LIB_PREFIX)tressplugin$(LIB_INFIX).$(LIB_SUFFIX)-0.0
-$(eval $(call NEW_TARGET,tressplugin,data,,-shared $(call quotecoma,@SONAME_FLAG@)))
+$(eval $(call NEW_TARGET,tressplugin,data,,-lc -shared $(call quotecoma,@SONAME_FLAG@)))
 EXEC_NAME    = 1exec
 DO_@DO_TARGET@=1
 ifdef NODEBUG
