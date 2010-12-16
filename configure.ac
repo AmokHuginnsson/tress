@@ -12,7 +12,7 @@ if test ["x${SONAME_FLAG}"] != ["x"] ; then
 fi
 AC_SUBST([SONAME_FLAG],[${SONAME_FLAG}])
 CXXFLAGS_ORIG="${CXXFLAGS}"
-CXXFLAGS+=" -Wno-long-long"
+CXXFLAGS="${CXXFLAGS} -Wno-long-long"
 m4_include([_aux.local/m4_ax_boost_base.m4])
 m4_include([_aux.local/m4_ax_boost_system.m4])
 m4_include([_aux.local/m4_ax_boost_filesystem.m4])
