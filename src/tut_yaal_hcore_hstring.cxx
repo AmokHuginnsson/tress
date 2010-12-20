@@ -520,6 +520,64 @@ TUT_UNIT_TEST_N( 34, "/* reverse_find_other_than */" )
 	ENSURE_EQUALS( HString().format( failed, 5 ), str.reverse_find_other_than( "abcdefg", 5 ), 7 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 35, "/* find_last */" )
+	HString str = "fXYedYXcba";
+	char failed[] = "find_last failed[%d]";
+	ENSURE_EQUALS( HString().format( failed, 0 ), str.find_last( 'A' ), -1 );
+	ENSURE_EQUALS( HString().format( failed, 1 ), str.find_last( 'X' ), 6 );
+	ENSURE_EQUALS( HString().format( failed, 2 ), str.find_last( 'Y' ), 5 );
+	ENSURE_EQUALS( HString().format( failed, 3 ), str.find_last( 'X', -10 ), -1 );
+	ENSURE_EQUALS( HString().format( failed, 4 ), str.find_last( 'Y', -10 ), -1 );
+	ENSURE_EQUALS( HString().format( failed, 5 ), str.find_last( 'X', 3 ), 1 );
+	ENSURE_EQUALS( HString().format( failed, 6 ), str.find_last( 'Y', 3 ), 2 );
+	ENSURE_EQUALS( HString().format( failed, 7 ), str.find_last( 'X', 5 ), 1 );
+	ENSURE_EQUALS( HString().format( failed, 8 ), str.find_last( 'Y', 5 ), 5 );
+	ENSURE_EQUALS( HString().format( failed, 9 ), str.find_last( 'X', 9 ), 6 );
+	ENSURE_EQUALS( HString().format( failed, 10 ), str.find_last( 'Y', 9 ), 5 );
+	ENSURE_EQUALS( HString().format( failed, 11 ), str.find_last( 'X', 90 ), 6 );
+	ENSURE_EQUALS( HString().format( failed, 12 ), str.find_last( 'Y', 90 ), 5 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 36, "/* find_last_one_of */" )
+	HString str = "fXYedYXcba";
+	char failed[] = "find_last_one_of failed[%d]";
+	ENSURE_EQUALS( HString().format( failed, 0 ), str.find_last_one_of( "ABCD" ), -1 );
+	ENSURE_EQUALS( HString().format( failed, 1 ), str.find_last_one_of( "AXYB" ), 6 );
+	ENSURE_EQUALS( HString().format( failed, 2 ), str.find_last_one_of( "AYD" ), 5 );
+	ENSURE_EQUALS( HString().format( failed, 3 ), str.find_last_one_of( "AXYB", -10 ), -1 );
+	ENSURE_EQUALS( HString().format( failed, 4 ), str.find_last_one_of( "AYD", -10 ), -1 );
+	ENSURE_EQUALS( HString().format( failed, 5 ), str.find_last_one_of( "AXYB", 3 ), 2 );
+	ENSURE_EQUALS( HString().format( failed, 6 ), str.find_last_one_of( "AXB", 3 ), 1 );
+	ENSURE_EQUALS( HString().format( failed, 7 ), str.find_last_one_of( "AYD", 3 ), 2 );
+	ENSURE_EQUALS( HString().format( failed, 8 ), str.find_last_one_of( "AXYB", 5 ), 5 );
+	ENSURE_EQUALS( HString().format( failed, 9 ), str.find_last_one_of( "AXB", 5 ), 1 );
+	ENSURE_EQUALS( HString().format( failed, 10 ), str.find_last_one_of( "AYD", 5 ), 5 );
+	ENSURE_EQUALS( HString().format( failed, 11 ), str.find_last_one_of( "AXYB", 9 ), 6 );
+	ENSURE_EQUALS( HString().format( failed, 12 ), str.find_last_one_of( "AYD", 9 ), 5 );
+	ENSURE_EQUALS( HString().format( failed, 13 ), str.find_last_one_of( "AXYB", 90 ), 6 );
+	ENSURE_EQUALS( HString().format( failed, 14 ), str.find_last_one_of( "AYD", 90 ), 5 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 37, "/* find_last_other_than */" )
+	HString str = "gfXYedYXcba";
+	char failed[] = "find_last_other_than failed[%d]";
+	ENSURE_EQUALS( HString().format( failed, 0 ), str.find_last_other_than( "abcXYdeYXfg" ), -1 );
+	ENSURE_EQUALS( HString().format( failed, 1 ), str.find_last_other_than( "abXYdeYXfg" ), 8 );
+	ENSURE_EQUALS( HString().format( failed, 2 ), str.find_last_other_than( "abXYdeYXfg", 2 ), -1 );
+	ENSURE_EQUALS( HString().format( failed, 3 ), str.find_last_other_than( "abXYdeYXfg", 7 ), -1 );
+	ENSURE_EQUALS( HString().format( failed, 4 ), str.find_last_other_than( "abXYdeYXfg", 8 ), 8 );
+	ENSURE_EQUALS( HString().format( failed, 5 ), str.find_last_other_than( "abXYdeYXfg", 100 ), 8 );
+	ENSURE_EQUALS( HString().format( failed, 6 ), str.find_last_other_than( "abcdefg" ), 7 );
+	ENSURE_EQUALS( HString().format( failed, 7 ), str.find_last_other_than( "abcdefg", 1 ), -1 );
+	ENSURE_EQUALS( HString().format( failed, 8 ), str.find_last_other_than( "abcdefg", 2 ), 2 );
+	ENSURE_EQUALS( HString().format( failed, 9 ), str.find_last_other_than( "abcdefg", 3 ), 3 );
+	ENSURE_EQUALS( HString().format( failed, 10 ), str.find_last_other_than( "abcdefg", 4 ), 3 );
+	ENSURE_EQUALS( HString().format( failed, 11 ), str.find_last_other_than( "abcdefg", 5 ), 3 );
+	ENSURE_EQUALS( HString().format( failed, 12 ), str.find_last_other_than( "abcdefg", 6 ), 6 );
+	ENSURE_EQUALS( HString().format( failed, 13 ), str.find_last_other_than( "abcdefg", 7 ), 7 );
+	ENSURE_EQUALS( HString().format( failed, 14 ), str.find_last_other_than( "abcdefg", 8 ), 7 );
+TUT_TEARDOWN()
+
 int confirm( char const* const str, int size, char const* const pat, int len )
 	{
 	static HString fastpat;
@@ -540,7 +598,7 @@ struct gen_char
 		{ return ( static_cast<char>( _rnd( 1 + 'z' - 'a' ) + 'a' ) ); }
 	};
 
-TUT_UNIT_TEST_N( 35, "/* find("") */" )
+TUT_UNIT_TEST_N( 38, "/* find("") */" )
 	static int const SAMPLE_SIZE = 128;
 	char sample[ SAMPLE_SIZE + 1 ];
 	sample[ SAMPLE_SIZE ] = 0;
@@ -569,7 +627,7 @@ TUT_UNIT_TEST_N( 35, "/* find("") */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 36, "/* trim_left("") */" )
+TUT_UNIT_TEST_N( 39, "/* trim_left("") */" )
 	static char const* const SPACE = "   ";
 	static HString const TEXT = "ala ma";
 	static char const* const FINE = "1234";
@@ -581,7 +639,7 @@ TUT_UNIT_TEST_N( 36, "/* trim_left("") */" )
 	ENSURE_EQUALS( "trim failed", space.trim_left(), "" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 37, "/* trim_right("") */" )
+TUT_UNIT_TEST_N( 40, "/* trim_right("") */" )
 	static char const* const SPACE = "   ";
 	static HString const TEXT = "ala ma";
 	static char const* const FINE = "1234";
@@ -591,6 +649,41 @@ TUT_UNIT_TEST_N( 37, "/* trim_right("") */" )
 	ENSURE_EQUALS( "trim 1 failed", fine.trim_right(), fine );
 	HString space( SPACE );
 	ENSURE_EQUALS( "trim 2 failed", space.trim_right(), "" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 41, "/* hs_realloc( size ) */" )
+	HString str;
+	ENSURE_EQUALS( "bad capacity on never-used empty string", str.get_capacity(), -1 );
+	str.hs_realloc( 1 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 0 );
+	str.hs_realloc( 2 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 1 );
+	str.hs_realloc( 3 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 3 );
+	str.hs_realloc( 5 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 7 );
+	str.hs_realloc( 7 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 7 );
+	str.hs_realloc( 11 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 15 );
+	try
+		{
+		str.hs_realloc( -1 );
+		FAIL( "absurd reallocation size allowed" );
+		}
+	catch ( HStringException const& )
+		{
+		/* ok */
+		}
+	try
+		{
+		str.hs_realloc( str.get_max_size() + 2 );
+		FAIL( "huge (too big) reallocation size allowed" );
+		}
+	catch ( HStringException const& )
+		{
+		/* ok */
+		}
 TUT_TEARDOWN()
 
 }
