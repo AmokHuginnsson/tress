@@ -1,0 +1,2 @@
+<!ENTITY v_data "my precious data">
+<!ENTITY trade "<xml:entity_reference>&amp;trade;</xml:entity_reference>">

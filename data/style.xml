@@ -2,8 +2,9 @@
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:yaal="http://codestation.org/yaal"
-	exclude-result-prefixes="yaal">
-	<xsl:output method="xml" encoding="ISO-8859-2" indent="yes" omit-xml-declaration="yes" />
+	xmlns:saxon="http://icl.com/saxon"
+	exclude-result-prefixes="yaal saxon">
+	<xsl:output method="xml" encoding="ISO-8859-2" indent="yes" omit-xml-declaration="no" />
 	<xsl:template match="@* | node()">
 		<xsl:copy>
 			<xsl:apply-templates select="@* | node()" />
@@ -11,6 +12,7 @@
 	</xsl:template>
 	<xsl:template match="my_item">
 		<uber_item>
+			<xsl:element name="line_no"><xsl:value-of select="saxon:line-number()" /></xsl:element>
 			<xsl:apply-templates select="node()" />
 		</uber_item>
 	</xsl:template>
