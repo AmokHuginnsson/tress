@@ -24,6 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <algorithm>
+#include <ext/algorithm>
 #include <TUT/tut.hpp>
 
 #include <yaal/yaal.hxx>
@@ -756,6 +758,30 @@ TUT_UNIT_TEST_N( 11, "prev_permutation (odd)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "12345" ) );
 	ENSURE_EQUALS( "first permutation test failed", prev_permutation( s, s + LEN ), false );
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "54321" ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 12, "is_heap" )
+	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	for ( int i( 2 ); i < countof ( _testData_[0] ); ++ i )
+		{
+		ENSURE_EQUALS( "stdext::is_heap false positive: " + lexical_cast<HString>( i ), stdext::is_heap( v.begin(), v.begin() + i ), false );
+		ENSURE_EQUALS( "yaal::is_heap false positive: " + lexical_cast<HString>( i ), yaal::is_heap( v.begin(), v.begin() + i ), false );
+		std::push_heap( v.begin(), v.begin() + i );
+		ENSURE_EQUALS( "yaal::is_heap false negative: " + lexical_cast<HString>( i ), yaal::is_heap( v.begin(), v.begin() + i ), true );
+		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 13, "push_heap" )
+	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	int_array_t a( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	for ( int i( 2 ); i < countof ( _testData_[0] ); ++ i )
+		{
+		ENSURE_EQUALS( "yaal::is_heap false positive: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), false );
+		std::push_heap( v.begin(), v.begin() + i );
+		push_heap( a.begin(), a.begin() + i );
+		ENSURE_EQUALS( "yaal::push_heap wrong", a, v );
+		ENSURE_EQUALS( "yaal::push_heap failed: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), true );
+		}
 TUT_TEARDOWN()
 
 }

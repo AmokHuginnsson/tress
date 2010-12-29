@@ -2738,3 +2738,20 @@
    fun:inflateReset2
    fun:inflateInit2_
 }
+{
+   Natty01
+   Memcheck:Leak
+   fun:malloc
+   fun:tsearch
+   fun:__nss_lookup_function
+   obj:*
+   fun:getpwuid_r@@GLIBC_2.2.5
+}
+{
+   Natty02
+   Memcheck:Leak
+   fun:malloc
+   fun:__nss_lookup_function
+   obj:*
+   fun:getpwuid_r@@GLIBC_2.2.5
+}

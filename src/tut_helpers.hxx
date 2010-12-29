@@ -317,6 +317,9 @@ struct simple_mock
 	typedef yaal::hcore::HList<int> int_list_t;
 	typedef yaal::hcore::HArray<int> int_array_t;
 	typedef yaal::hcore::HDeque<int> int_deque_t;
+	typedef std::list<int> std_list_t;
+	typedef std::vector<int> std_vector_t;
+	typedef std::deque<int> stD_deque_t;
 	virtual ~simple_mock( void ) {}
 	};
 
