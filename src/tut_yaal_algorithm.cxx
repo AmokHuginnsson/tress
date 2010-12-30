@@ -774,14 +774,65 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 13, "push_heap" )
 	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	int_array_t a( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	for ( int i( 2 ); i < countof ( _testData_[0] ); ++ i )
+	for ( int i( 2 ); i <= countof ( _testData_[0] ); ++ i )
 		{
 		ENSURE_EQUALS( "yaal::is_heap false positive: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), false );
 		std::push_heap( v.begin(), v.begin() + i );
 		push_heap( a.begin(), a.begin() + i );
-		ENSURE_EQUALS( "yaal::push_heap wrong", a, v );
 		ENSURE_EQUALS( "yaal::push_heap failed: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), true );
+		ENSURE_EQUALS( "yaal::push_heap wrong: " + lexical_cast<HString>( i ), a, v );
 		}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 14, "pop_heap" )
+	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	int_array_t a( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	for ( int i( 2 ); i <= countof ( _testData_[0] ); ++ i )
+		{
+		ENSURE_EQUALS( "yaal::is_heap false positive: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), false );
+		std::push_heap( v.begin(), v.begin() + i );
+		push_heap( a.begin(), a.begin() + i );
+		ENSURE_EQUALS( "yaal::push_heap failed: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), true );
+		ENSURE_EQUALS( "yaal::push_heap wrong: " + lexical_cast<HString>( i ), a, v );
+		}
+
+	for ( int i( countof ( _testData_[0] ) ); i > 0; -- i )
+		{
+		std::pop_heap( v.begin(), v.begin() + i );
+		pop_heap( a.begin(), a.begin() + i );
+		ENSURE_EQUALS( "yaal::pop_heap wrong: " + lexical_cast<HString>( i ), a, v );
+		ENSURE_EQUALS( "yaal::pop_heap failed: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i - 1 ), true );
+		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 15, "make_heap" )
+	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	int_array_t a( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	ENSURE_EQUALS( "yaal::is_heap false positive", yaal::is_heap( a.begin(), a.end() ), false );
+	std::make_heap( v.begin(), v.end() );
+	make_heap( a.begin(), a.end() );
+	ENSURE_EQUALS( "yaal::make_heap failed", yaal::is_heap( a.begin(), a.end() ), true );
+	ENSURE_EQUALS( "yaal::make_heap wrong", a, v );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 16, "sort_heap" )
+	std_vector_t v( 100 );
+	int_array_t a( 100 );
+	std::generate( v.begin(), v.end(), HRandomizer( 0, 255 ) );
+	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
+	*v.rbegin() = -1;
+	*a.rbegin() = -1;
+	ENSURE_EQUALS( "wrong generation", a, v );
+	clog << a << endl;
+	ENSURE_EQUALS( "yaal::is_heap false positive", yaal::is_heap( a.begin(), a.end() ), false );
+	std::make_heap( v.begin(), v.end() );
+	make_heap( a.begin(), a.end() );
+	ENSURE_EQUALS( "yaal::make_heap failed", yaal::is_heap( a.begin(), a.end() ), true );
+	/* ENSURE_EQUALS( "yaal::make_heap wrong", a, v ); */
+	std::sort_heap( v.begin(), v.end() );
+	sort_heap( a.begin(), a.end() );
+	ENSURE_EQUALS( "yaal::sort_heap wrong", a, v );
+TUT_TEARDOWN()
+
 }
+
