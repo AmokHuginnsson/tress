@@ -839,5 +839,17 @@ TUT_UNIT_TEST_N( 16, "sort_heap" )
 	ENSURE_EQUALS( "yaal::sort_heap wrong", a, v );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 17, "sort" )
+	int_array_t a( 100 );
+	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
+	*a.rbegin() = -1;
+	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
+	clog << a << endl;
+	std::sort( v.begin(), v.end() );
+	sort( a.begin(), a.end() );
+	ENSURE_EQUALS( "yaal::sort wrong", a, v );
+	clog << a << endl;
+TUT_TEARDOWN()
+
 }
 
