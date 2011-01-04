@@ -851,5 +851,21 @@ TUT_UNIT_TEST_N( 17, "sort" )
 	clog << a << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 18, "unique" )
+	int_array_t a( 100 );
+	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
+	*a.rbegin() = -1;
+	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
+	clog << a << endl;
+	std::sort( v.begin(), v.end() );
+	sort( a.begin(), a.end() );
+	ENSURE_EQUALS( "yaal::sort wrong", a, v );
+	clog << a << endl;
+	v.erase( std::unique( v.begin(), v.end() ), v.end() );
+	a.erase( unique( a.begin(), a.end() ), a.end() );
+	ENSURE_EQUALS( "yaal::sort wrong", a, v );
+	clog << a << endl;
+TUT_TEARDOWN()
+
 }
 
