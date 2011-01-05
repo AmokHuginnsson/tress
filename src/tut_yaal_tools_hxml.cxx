@@ -315,5 +315,25 @@ TUT_UNIT_TEST_N( 12, "parse bofere apply_style and after apply_style" )
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 13, "HXml copy." )
+	HXml copy;
+		{
+		HXml intermediate;
+			{
+			HXml xml;
+			xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ) );
+			xml.parse();
+			intermediate = xml;
+			std::clog << xml;
+			xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/raw.xml", HFile::OPEN::WRITING ) ) ), true );
+			}
+		intermediate.apply_style( "./data/style.xml" );
+		intermediate.parse();
+		copy = intermediate;
+		}
+	std::clog << copy;
+	copy.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::WRITING ) ) ) );
+TUT_TEARDOWN()
+
 }
 
