@@ -867,5 +867,20 @@ TUT_UNIT_TEST_N( 18, "unique" )
 	clog << a << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 19, "rotate" )
+	int_array_t a( 100 );
+	yaal::generate( a.begin(), a.end(), inc( 1 ) );
+	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
+	clog << a << endl;
+	int_array_t::iterator it( rotate( a.begin(), a.begin() + 33, a.end() ) );
+	std::rotate( v.begin(), v.begin() + 33, v.end() );
+	ENSURE_EQUALS( "yaal::rotate wrong", a, v );
+	clog << "(" << *it << ") " << a << endl;
+	int_array_t::iterator it2( rotate( a.begin(), it, a.end() ) );
+	std::rotate( v.begin(), v.begin() + 67, v.end() );
+	ENSURE_EQUALS( "yaal::rotate wrong", a, v );
+	clog << "(" << *it2 << ") " << a << endl;
+TUT_TEARDOWN()
+
 }
 
