@@ -882,5 +882,43 @@ TUT_UNIT_TEST_N( 19, "rotate" )
 	clog << "(" << *it2 << ") " << a << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 20, "inplace_merge" )
+	int_array_t a( 100 );
+	yaal::generate( a.begin(), a.end(), inc( 1 ) );
+	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
+	clog << a << endl;
+	int_array_t::iterator it( rotate( a.begin(), a.begin() + 33, a.end() ) );
+	std::rotate( v.begin(), v.begin() + 33, v.end() );
+	ENSURE_EQUALS( "yaal::rotate wrong", a, v );
+	clog << "(" << *it << ") " << a << endl;
+	inplace_merge( a.begin(), it, a.end() );
+	std::inplace_merge( v.begin(), v.begin() + 67, v.end() );
+	ENSURE_EQUALS( "yaal::inplace_merge wrong", a, v );
+	clog << a << endl;
+	int arrTempl[] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 3, 6, 9, 15, 18, 21, 24, 27, 30 };
+	int_array_t arr( arrTempl, arrTempl + countof ( arrTempl ) );
+	std_vector_t varr( &*arr.begin(), &*arr.begin() + arr.get_size() );
+	std::clog << varr << std::endl;
+	std::inplace_merge( varr.begin(), varr.begin() + 9, varr.end() );
+	std::clog << varr << std::endl;
+	clog << arr << endl;
+	inplace_merge( arr.begin(), arr.begin() + 9, arr.end() );
+	clog << arr << endl;
+	ENSURE_EQUALS( "yaal::inplace_merge wrong", arr, varr );
+	std::copy( arrTempl, arrTempl + countof ( arrTempl ), varr.begin() );
+	std::rotate( varr.begin(), varr.begin() + 9, varr.end() );
+	std::clog << varr << std::endl;
+	copy( arrTempl, arrTempl + countof ( arrTempl ), arr.begin() );
+	rotate( arr.begin(), arr.begin() + 9, arr.end() );
+	clog << arr << endl;
+	ENSURE_EQUALS( "yaal::copy + yaal::rotate wrong", arr, varr );
+	std::inplace_merge( varr.begin(), varr.begin() + 9, varr.end() );
+	std::clog << varr << std::endl;
+	inplace_merge( arr.begin(), arr.begin() + 9, arr.end() );
+	clog << arr << endl;
+	ENSURE_EQUALS( "yaal::inplace_merge wrong", arr, varr );
+
+TUT_TEARDOWN()
+
 }
 
