@@ -917,7 +917,66 @@ TUT_UNIT_TEST_N( 20, "inplace_merge" )
 	inplace_merge( arr.begin(), arr.begin() + 9, arr.end() );
 	clog << arr << endl;
 	ENSURE_EQUALS( "yaal::inplace_merge wrong", arr, varr );
+TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 21, "insert_sort" )
+	int_array_t a( 100 );
+	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
+	*a.rbegin() = -1;
+	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
+	clog << a << endl;
+	std::sort( v.begin(), v.end() );
+	insert_sort( a.begin(), a.end(), less<int>() );
+	ENSURE_EQUALS( "yaal::insert_sort wrong", a, v );
+	clog << a << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 22, "stable_sort" )
+	int_array_t a( 100 );
+	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
+	*a.rbegin() = -1;
+	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
+	clog << a << endl;
+	std::stable_sort( v.begin(), v.end() );
+	stable_sort( a.begin(), a.end() );
+	ENSURE_EQUALS( "yaal::stable_sort wrong", a, v );
+	clog << a << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 50, "sort speed" )
+	int_array_t a( 5000 );
+		{
+		yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
+		*a.rbegin() = -1;
+		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
+			{
+			HClock c;
+			std::stable_sort( v.begin(), v.end() );
+			clog << "*speed* std::stable_sort = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+			}
+			{
+			HClock c;
+			stable_sort( a.begin(), a.end() );
+			clog << "*speed* yaal::stable_sort = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+			}
+		ENSURE_EQUALS( "yaal::stable_sort wrong", a, v );
+		}
+		{
+		yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
+		*a.rbegin() = -1;
+		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
+			{
+			HClock c;
+			std::sort( v.begin(), v.end() );
+			clog << "*speed* std::sort = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+			}
+			{
+			HClock c;
+			sort( a.begin(), a.end() );
+			clog << "*speed* yaal::sort = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+			}
+		ENSURE_EQUALS( "yaal::sort wrong", a, v );
+		}
 TUT_TEARDOWN()
 
 }
