@@ -265,6 +265,7 @@ protected:
 	typedef HInstanceTracker<owner_t, forced_size> this_type;
 	static int _instances;
 	static int _autoIncrement;
+	static int _integrityFailures;
 	int long _id;
 	std::string _origin;
 	this_type* _self;
@@ -293,6 +294,7 @@ public:
 	bool operator > ( HInstanceTracker const& ) const;
 	bool operator > ( int long ) const;
 	static int get_instance_count( void );
+	static int get_integrity_failures( void );
 	static void set_instance_count( int = 0 );
 	static void set_start_id( int = 0 );
 	int long get_id( void ) const;
@@ -319,7 +321,7 @@ struct simple_mock
 	typedef yaal::hcore::HDeque<int> int_deque_t;
 	typedef std::list<int> std_list_t;
 	typedef std::vector<int> std_vector_t;
-	typedef std::deque<int> stD_deque_t;
+	typedef std::deque<int> std_deque_t;
 	virtual ~simple_mock( void ) {}
 	};
 
@@ -327,6 +329,8 @@ template<typename owner_t, int const forced_size>
 int HInstanceTracker<owner_t, forced_size>::_instances = 0;
 template<typename owner_t, int const forced_size>
 int HInstanceTracker<owner_t, forced_size>::_autoIncrement = 0;
+template<typename owner_t, int const forced_size>
+int HInstanceTracker<owner_t, forced_size>::_integrityFailures = 0;
 
 template<typename owner_t, int const forced_size>
 HInstanceTracker<owner_t, forced_size>::HInstanceTracker( int long id_ )
@@ -350,6 +354,8 @@ template<typename owner_t, int const forced_size>
 HInstanceTracker<owner_t, forced_size>::~HInstanceTracker( void )
 	{
 	-- _instances;
+	if ( this != _self )
+		++ _integrityFailures;
 	}
 
 template<typename owner_t, int const forced_size>
@@ -465,6 +471,12 @@ template<typename owner_t, int const forced_size>
 int HInstanceTracker<owner_t, forced_size>::get_instance_count( void )
 	{
 	return ( _instances );
+	}
+
+template<typename owner_t, int const forced_size>
+int HInstanceTracker<owner_t, forced_size>::get_integrity_failures( void )
+	{
+	return ( _integrityFailures );
 	}
 
 template<typename owner_t, int const forced_size>
