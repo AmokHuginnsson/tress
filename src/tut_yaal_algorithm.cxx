@@ -944,7 +944,7 @@ TUT_UNIT_TEST_N( 22, "stable_sort" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 50, "sort speed" )
-	int_array_t a( 20000 );
+	int_array_t a( 50000 );
 		{
 		yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
 		*a.rbegin() = -1;
