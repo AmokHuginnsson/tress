@@ -45,7 +45,7 @@ TUT_SIMPLE_MOCK( tut_yaal_hcore_system );
 TUT_TEST_GROUP_N( tut_yaal_hcore_system, "yaal::hcore::system" );
 
 TUT_UNIT_TEST_N( 1, "free memory test" )
-	int long freeMem( system::get_available_memory_size() );
+	int long freeMem( hcore::system::get_available_memory_size() );
 	cout << "Free memory: " << freeMem << " (" << ( freeMem / 1024 ) << " KiB)" << endl;
 TUT_TEARDOWN()
 
