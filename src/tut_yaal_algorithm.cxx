@@ -943,8 +943,54 @@ TUT_UNIT_TEST_N( 22, "stable_sort" )
 	clog << a << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 23, "distance" )
+	HArray<int> array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HDeque<int> deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HSet<int> set( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HHashSet<int> hashSet( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HRing<int> ring( ring::capacity( countof ( _testData_[0] ) * 2 ),
+		_testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	using yaal::distance;
+	ENSURE_EQUALS( "distance on HArray<> failed", distance( array.begin(), array.end() ), countof ( _testData_[0] ) );
+	ENSURE_EQUALS( "distance on HDeque<> failed", distance( deque.begin(), deque.end() ), countof ( _testData_[0] ) );
+	ENSURE_EQUALS( "distance on HList<> failed", distance( list.begin(), list.end() ), countof ( _testData_[0] ) );
+	ENSURE_EQUALS( "distance on HSet<> failed", distance( set.begin(), set.end() ), countof ( _testData_[0] ) );
+	ENSURE_EQUALS( "distance on HHashSet<> failed", distance( hashSet.begin(), hashSet.end() ), countof ( _testData_[0] ) );
+	ENSURE_EQUALS( "distance on HRing<> failed", distance( ring.begin(), ring.end() ), countof ( _testData_[0] ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 24, "swap" )
+	HArray<int> array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HDeque<int> deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HSet<int> set( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HHashSet<int> hashSet( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HRing<int> ring( ring::capacity( countof ( _testData_[0] ) * 2 ),
+		_testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	using yaal::distance;
+	HArray<int> array2;
+	HDeque<int> deque2;
+	HList<int> list2;
+	HSet<int> set2;
+	HHashSet<int> hashSet2;
+	HRing<int> ring2;
+	swap( array, array2 );
+	swap( deque, deque2 );
+	swap( list, list2 );
+	swap( set, set2 );
+	swap( hashSet, hashSet2 );
+	swap( ring, ring2 );
+	ENSURE_EQUALS( "swap on HArray<> failed", distance( array2.begin(), array2.end() ), countof ( _testData_[0] ) );
+	ENSURE_EQUALS( "swap on HDeque<> failed", distance( deque2.begin(), deque2.end() ), countof ( _testData_[0] ) );
+	ENSURE_EQUALS( "swap on HList<> failed", distance( list2.begin(), list2.end() ), countof ( _testData_[0] ) );
+	ENSURE_EQUALS( "swap on HSet<> failed", distance( set2.begin(), set2.end() ), countof ( _testData_[0] ) );
+	ENSURE_EQUALS( "swap on HHashSet<> failed", distance( hashSet2.begin(), hashSet2.end() ), countof ( _testData_[0] ) );
+	ENSURE_EQUALS( "swap on HRing<> failed", distance( ring2.begin(), ring2.end() ), countof ( _testData_[0] ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST_N( 50, "sort speed" )
-	int_array_t a( 50000 );
+	int_array_t a( 100000 );
 		{
 		yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
 		*a.rbegin() = -1;

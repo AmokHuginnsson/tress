@@ -144,7 +144,7 @@ TUT_UNIT_TEST_N( 50, "yaal data types instantiations for gdb-pretty-printers and
 	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HSet<int> set( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HHashSet<int> hashSet( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	HRing<int> ring( ring::capacity( countof( _testData_[0] ) * 2 ),
+	HRing<int> ring( ring::capacity( countof ( _testData_[0] ) * 2 ),
 		_testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HString result( ( pi * e ).to_string() );
 	cout << str << endl;
