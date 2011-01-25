@@ -920,15 +920,28 @@ TUT_UNIT_TEST_N( 20, "inplace_merge" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 21, "insert_sort" )
-	int_array_t a( 100 );
-	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
+	{
+	int_array_t a( 8000 );
+	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
-	clog << a << endl;
 	std::sort( v.begin(), v.end() );
-	insert_sort( a.begin(), a.end(), less<int>() );
+	HClock c;
+	insert_sort( a.begin(), a.end(), less<int>(), iterator_category::forward() );
+	clog << "*speed* yaal::insert_sort(forward) = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
 	ENSURE_EQUALS( "yaal::insert_sort wrong", a, v );
-	clog << a << endl;
+	}
+	{
+	int_array_t a( 8000 );
+	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
+	*a.rbegin() = -1;
+	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
+	std::sort( v.begin(), v.end() );
+	HClock c;
+	insert_sort( a.begin(), a.end(), less<int>(), iterator_category::random_access() );
+	clog << "*speed* yaal::insert_sort(random_access) = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+	ENSURE_EQUALS( "yaal::insert_sort wrong", a, v );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 22, "stable_sort" )
