@@ -2755,3 +2755,20 @@
    obj:*
    fun:getpwuid_r@@GLIBC_2.2.5
 }
+{
+   Natty03 getgrgid_r
+   Memcheck:Leak
+   fun:malloc
+   fun:__nss_lookup_function
+   obj:*
+   fun:getgrgid_r@@GLIBC_2.2.5
+}
+{
+   Natty04 getgrgid_r
+   Memcheck:Leak
+   fun:malloc
+   fun:tsearch
+   fun:__nss_lookup_function
+   obj:*
+   fun:getgrgid_r@@GLIBC_2.2.5
+}

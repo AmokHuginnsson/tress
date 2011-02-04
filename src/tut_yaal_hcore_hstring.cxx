@@ -43,6 +43,8 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
+static int const MIN_CAPACITY = sizeof ( HString ) - 2;
+
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hstring );
 TUT_TEST_GROUP_N( tut_yaal_hcore_hstring, "yaal::hcore::HString" );
 
@@ -50,7 +52,7 @@ TUT_UNIT_TEST_N( 1, "/* trivial constructor */" )
 	HString str;
 	ENSURE_EQUALS( "trivial construction failed", str, "" );
 	ENSURE_EQUALS( "trivial construction failed (size)", str.size(), 0 );
-	ENSURE_EQUALS( "trivial construction failed (capacity)", str.capacity(), -1 );
+	ENSURE_EQUALS( "trivial construction failed (capacity)", str.capacity(), MIN_CAPACITY );
 	ENSURE_EQUALS( "trivial construction failed (is_empty)", str.empty(), true );
 TUT_TEARDOWN()
 
@@ -59,7 +61,7 @@ TUT_UNIT_TEST_N( 2, "/* construction from char* */" )
 	HString str( CORRECT );
 	ENSURE_EQUALS ( "construction from c-string does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from char* failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from char* failed (capacity)", str.capacity(), 7 );
+	ENSURE_EQUALS( "construction from char* failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from char* failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -70,7 +72,7 @@ TUT_UNIT_TEST_N( 3, "/* copy construction */" )
 	ENSURE_EQUALS ( "copy construction does not work", copy, CORRECT );
 	ENSURE_EQUALS( "copy construction failed (size)",
 			copy.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "copy construction failed (capacity)", copy.capacity(), 7 );
+	ENSURE_EQUALS( "copy construction failed (capacity)", copy.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "copy construction failed (is_empty)", copy.empty(), false );
 TUT_TEARDOWN()
 
@@ -81,7 +83,7 @@ TUT_UNIT_TEST_N( 4, "/* construction from int */" )
 	ENSURE_EQUALS ( "construction from int does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from int failed (size)",
 			str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int failed (capacity)", str.capacity(), 7 );
+	ENSURE_EQUALS( "construction from int failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from int failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -91,7 +93,7 @@ TUT_UNIT_TEST_N( 5, "/* construction from int long */" )
 	HString str( INIT );
 	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), 7 );
+	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -102,7 +104,7 @@ TUT_UNIT_TEST_N( 6, "/* construction from int unsigned */" )
 	ENSURE_EQUALS ( "construction from int unsigned does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from int unsigned failed (size)",
 			str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int unsigned failed (capacity)", str.capacity(), 7 );
+	ENSURE_EQUALS( "construction from int unsigned failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from int unsigned failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -113,7 +115,7 @@ TUT_UNIT_TEST_N( 7, "/* construction from int long unsigned */" )
 	ENSURE_EQUALS ( "construction from int long unsigned does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from int long unsigned failed (size)",
 			str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int long unsigned failed (capacity)", str.capacity(), 7 );
+	ENSURE_EQUALS( "construction from int long unsigned failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from int long unsigned failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -122,7 +124,7 @@ TUT_UNIT_TEST_N( 8, "/* construction from char */" )
 	HString str( CORRECT );
 	ENSURE_EQUALS ( "construction from char does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from char failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) ) );
-	ENSURE_EQUALS( "construction from char failed (capacity)", str.capacity(), 1 );
+	ENSURE_EQUALS( "construction from char failed (capacity)", str.capacity(), max( 1, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from char failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -132,7 +134,7 @@ TUT_UNIT_TEST_N( 9, "/* construction from double */" )
 	HString str( INIT );
 	ENSURE_EQUALS ( "construction from double does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from double failed (size)", str.size(), static_cast<int long>( ::strlen( CORRECT ) ) );
-	ENSURE_EQUALS( "construction from double failed (capacity)", str.capacity(), 15 );
+	ENSURE_EQUALS( "construction from double failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from double failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -142,7 +144,7 @@ TUT_UNIT_TEST_N( 10, "/* construction from double long */" )
 	HString str( INIT );
 	ENSURE_EQUALS ( "construction from double does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from double failed (size)", str.size(), static_cast<int long>( ::strlen( CORRECT ) ) );
-	ENSURE_EQUALS( "construction from double failed (capacity)", str.capacity(), 15 );
+	ENSURE_EQUALS( "construction from double failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from double failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -153,7 +155,7 @@ TUT_UNIT_TEST_N( 11, "/* construction from void* */" )
 	HString str( INIT );
 	ENSURE_EQUALS ( "construction from void* does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from void* failed (size)", str.size(), static_cast<int long>( ::strlen( CORRECT ) ) );
-	ENSURE_EQUALS( "construction from void* failed (capacity)", str.capacity(), 15 );
+	ENSURE_EQUALS( "construction from void* failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from void* failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -164,12 +166,12 @@ TUT_UNIT_TEST_N( 12, "/* operator += */" )
 	HString str( INIT );
 	ENSURE_EQUALS ( "char* constructor does not work", str, INIT );
 	ENSURE_EQUALS( "char* constructor failed (size)", str.size(), static_cast<int long>( sizeof ( INIT ) - 1 ) );
-	ENSURE_EQUALS( "char* constructor failed (capacity)", str.capacity(), 7 );
+	ENSURE_EQUALS( "char* constructor failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "char* constructor failed (is_empty)", str.empty(), false );
 	str += TEST;
 	ENSURE_EQUALS ( "operator+= does not work", str, CORRECT );
 	ENSURE_EQUALS( "operator+= failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "operator+= failed (capacity)", str.capacity(), 15 );
+	ENSURE_EQUALS( "operator+= failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "operator+= failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -178,17 +180,17 @@ TUT_UNIT_TEST_N( 13, "/* clear */" )
 	static char const INIT[] = "1024";
 	ENSURE_EQUALS( "trivial construction failed", str, "" );
 	ENSURE_EQUALS( "trivial construction failed (size)", str.size(), 0 );
-	ENSURE_EQUALS( "trivial construction failed (capacity)", str.capacity(), -1 );
+	ENSURE_EQUALS( "trivial construction failed (capacity)", str.capacity(), MIN_CAPACITY );
 	ENSURE_EQUALS( "trivial construction failed (is_empty)", str.empty(), true );
 	str += INIT;
 	ENSURE_EQUALS ( "operator+= does not work", str, INIT );
 	ENSURE_EQUALS( "operator+= failed (size)", str.size(), static_cast<int long>( sizeof ( INIT ) - 1 ) );
-	ENSURE_EQUALS( "operator+= failed (capacity)", str.capacity(), 7 );
+	ENSURE_EQUALS( "operator+= failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "operator+= failed (is_empty)", str.empty(), false );
 	str.clear();
 	ENSURE_EQUALS ( "clear does not work", str, "" );
 	ENSURE_EQUALS( "clear failed (size)", str.size(), 0 );
-	ENSURE_EQUALS( "clear failed (capacity)", str.capacity(), 7 );
+	ENSURE_EQUALS( "clear failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "clear failed (is_empty)", str.empty(), true );
 TUT_TEARDOWN()
 
@@ -208,31 +210,31 @@ TUT_UNIT_TEST_N( 14, "/* replace */" )
 	HString str( INIT );
 	ENSURE_EQUALS ( "char* constructor does not work", str, INIT );
 	ENSURE_EQUALS( "char* constructor failed (size)", str.size(), static_cast<int long>( sizeof ( INIT ) - 1 ) );
-	ENSURE_EQUALS( "char* constructor failed (capacity)", str.capacity(), 15 );
+	ENSURE_EQUALS( "char* constructor failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "char* constructor failed (is_empty)", str.empty(), false );
 
 	str.replace( PAT1, PAT2 );
 	ENSURE_EQUALS ( "replace 1->2 does not work", str, CORRECT12 );
 	ENSURE_EQUALS( "replace 1->2 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT12 ) - 1 ) );
-	ENSURE_EQUALS( "replace 1->2 failed (capacity)", str.capacity(), 15 );
+	ENSURE_EQUALS( "replace 1->2 failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "replace 1->2 failed (is_empty)", str.empty(), false );
 
 	str.replace( PAT2, PAT3 );
 	ENSURE_EQUALS ( "replace 2->3 does not work", str, CORRECT23 );
 	ENSURE_EQUALS( "replace 2->3 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT23 ) - 1 ) );
-	ENSURE_EQUALS( "replace 2->3 failed (capacity)", str.capacity(), 15 );
+	ENSURE_EQUALS( "replace 2->3 failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "replace 2->3 failed (is_empty)", str.empty(), false );
 
 	str.replace( PAT3, PAT4 );
 	ENSURE_EQUALS ( "replace 3->4 does not work", str, CORRECT34 );
 	ENSURE_EQUALS( "replace 3->4 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT34 ) - 1 ) );
-	ENSURE_EQUALS( "replace 3->4 failed (capacity)", str.capacity(), 15 );
+	ENSURE_EQUALS( "replace 3->4 failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "replace 3->4 failed (is_empty)", str.empty(), false );
 
 	str.replace( PAT5, PAT6 );
 	ENSURE_EQUALS ( "replace 5->6 does not work", str, CORRECT56 );
 	ENSURE_EQUALS( "replace 5->6 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT56 ) - 1 ) );
-	ENSURE_EQUALS( "replace 5->6 failed (capacity)", str.capacity(), 15 );
+	ENSURE_EQUALS( "replace 5->6 failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "replace 5->6 failed (is_empty)", str.empty(), false );
 
 	static char const INIT0[] = "./${NEST}/app/";
@@ -244,7 +246,7 @@ TUT_UNIT_TEST_N( 14, "/* replace */" )
 	str.replace( PATA, PATB );
 	ENSURE_EQUALS ( "replace A->B does not work", str, CORRECT_AB );
 	ENSURE_EQUALS( "replace A->B failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT_AB ) - 1 ) );
-	ENSURE_EQUALS( "replace A->B failed (capacity)", str.capacity(), 15 );
+	ENSURE_EQUALS( "replace A->B failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "replace A->B failed (is_empty)", str.empty(), false );
 
 		{
@@ -256,7 +258,7 @@ TUT_UNIT_TEST_N( 14, "/* replace */" )
 		str.replace( PAT1A, PAT1B );
 		ENSURE_EQUALS ( "replace A1->B1 does not work", str, CORRECT_1AB );
 		ENSURE_EQUALS( "replace A1->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT_1AB ) - 1 ) );
-		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), 15 );
+		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (is_empty)", str.empty(), false );
 		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
 		}
@@ -269,7 +271,7 @@ TUT_UNIT_TEST_N( 14, "/* replace */" )
 		str.replace( PAT1A, PAT1B );
 		ENSURE_EQUALS ( "replace A1->B1 does not work", str, CORRECT_1AB );
 		ENSURE_EQUALS( "replace A1->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT_1AB ) - 1 ) );
-		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), 31 );
+		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), max( 31, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (is_empty)", str.empty(), false );
 		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
 		}
@@ -281,7 +283,7 @@ TUT_UNIT_TEST_N( 15, "/* construction from int short */" )
 	HString str( INIT );
 	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), 7 );
+	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -291,7 +293,7 @@ TUT_UNIT_TEST_N( 16, "/* construction from int short unsigned */" )
 	HString str( INIT );
 	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), 7 );
+	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -301,7 +303,7 @@ TUT_UNIT_TEST_N( 17, "/* construction from char unsigned */" )
 	HString str( INIT );
 	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), 1 );
+	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 1, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -311,7 +313,7 @@ TUT_UNIT_TEST_N( 18, "/* construction from float */" )
 	HString str( INIT );
 	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), 15 );
+	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -653,19 +655,27 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 41, "/* hs_realloc( size ) */" )
 	HString str;
-	ENSURE_EQUALS( "bad capacity on never-used empty string", str.get_capacity(), -1 );
+	ENSURE_EQUALS( "bad capacity on never-used empty string", str.get_capacity(), MIN_CAPACITY );
 	str.hs_realloc( 1 );
-	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 0 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), max( 0, MIN_CAPACITY ) );
 	str.hs_realloc( 2 );
-	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 1 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), max( 1, MIN_CAPACITY ) );
 	str.hs_realloc( 3 );
-	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 3 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), max( 3, MIN_CAPACITY ) );
 	str.hs_realloc( 5 );
-	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 7 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), max( 7, MIN_CAPACITY ) );
 	str.hs_realloc( 7 );
-	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 7 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), max( 7, MIN_CAPACITY ) );
 	str.hs_realloc( 11 );
-	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 15 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), max( 15, MIN_CAPACITY ) );
+	str.hs_realloc( MIN_CAPACITY - 1 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), MIN_CAPACITY );
+	str.hs_realloc( MIN_CAPACITY );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), MIN_CAPACITY );
+	str.hs_realloc( MIN_CAPACITY + 1 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), MIN_CAPACITY );
+	str.hs_realloc( MIN_CAPACITY + 2 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 31 );
 	try
 		{
 		str.hs_realloc( -1 );
