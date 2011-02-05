@@ -134,7 +134,7 @@ TUT_UNIT_TEST_N( 9, "/* construction from double */" )
 	HString str( INIT );
 	ENSURE_EQUALS ( "construction from double does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from double failed (size)", str.size(), static_cast<int long>( ::strlen( CORRECT ) ) );
-	ENSURE_EQUALS( "construction from double failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "construction from double failed (capacity)", str.capacity(), MIN_CAPACITY );
 	ENSURE_EQUALS( "construction from double failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -155,7 +155,7 @@ TUT_UNIT_TEST_N( 11, "/* construction from void* */" )
 	HString str( INIT );
 	ENSURE_EQUALS ( "construction from void* does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from void* failed (size)", str.size(), static_cast<int long>( ::strlen( CORRECT ) ) );
-	ENSURE_EQUALS( "construction from void* failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "construction from void* failed (capacity)", str.capacity(), MIN_CAPACITY );
 	ENSURE_EQUALS( "construction from void* failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -313,7 +313,7 @@ TUT_UNIT_TEST_N( 18, "/* construction from float */" )
 	HString str( INIT );
 	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), MIN_CAPACITY );
 	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
@@ -667,7 +667,7 @@ TUT_UNIT_TEST_N( 41, "/* hs_realloc( size ) */" )
 	str.hs_realloc( 7 );
 	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), max( 7, MIN_CAPACITY ) );
 	str.hs_realloc( 11 );
-	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), max( 15, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), MIN_CAPACITY );
 	str.hs_realloc( MIN_CAPACITY - 1 );
 	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), MIN_CAPACITY );
 	str.hs_realloc( MIN_CAPACITY );
@@ -675,7 +675,7 @@ TUT_UNIT_TEST_N( 41, "/* hs_realloc( size ) */" )
 	str.hs_realloc( MIN_CAPACITY + 1 );
 	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), MIN_CAPACITY );
 	str.hs_realloc( MIN_CAPACITY + 2 );
-	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 31 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), ( MIN_CAPACITY < 16 ? 15 : 31 ) );
 	try
 		{
 		str.hs_realloc( -1 );
