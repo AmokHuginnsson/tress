@@ -2772,3 +2772,79 @@
    obj:*
    fun:getgrgid_r@@GLIBC_2.2.5
 }
+{
+   Debian Sid getgrgid_r
+   Memcheck:Leak
+   fun:malloc
+   fun:__nss_lookup_function
+   obj:*
+   obj:*
+   fun:getgrgid_r@@GLIBC_2.1.2
+}
+{
+   Debian Sid OpenSSL SSL_COMP_get_compression_methods
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/i686/cmov/libcrypto.so.0.9.8
+   fun:CRYPTO_malloc
+   obj:/usr/lib/i686/cmov/libssl.so.0.9.8
+   fun:SSL_COMP_get_compression_methods
+   fun:SSL_library_init
+}
+{
+   Debian Sid OpenSSL ERR_get_state
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/i686/cmov/libcrypto.so.0.9.8
+   fun:CRYPTO_malloc
+   fun:lh_insert
+   obj:/usr/lib/i686/cmov/libcrypto.so.0.9.8
+   fun:ERR_get_state
+   fun:ERR_clear_error
+}
+{
+   Debian Sid getgrgid_r
+   Memcheck:Leak
+   fun:malloc
+   fun:tsearch
+   fun:__nss_lookup_function
+   obj:*
+   obj:*
+   fun:getgrgid_r@@GLIBC_2.1.2
+}
+{
+   Debian Sid dl_open_worker
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:do_dlopen
+   fun:_dl_catch_error
+   fun:dlerror_run
+   fun:__libc_dlopen_mode
+   fun:init
+   fun:pthread_once
+}
+{
+   Debian Sid lh_new
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/i686/cmov/libcrypto.so.0.9.8
+   fun:CRYPTO_malloc
+   fun:lh_new
+   obj:/usr/lib/i686/cmov/libcrypto.so.0.9.8
+   obj:/usr/lib/i686/cmov/libcrypto.so.0.9.8
+   fun:ERR_get_state
+   fun:ERR_clear_error
+}
+{
+   Debian Sid OpenSSL ERR_get_state
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/i686/cmov/libcrypto.so.0.9.8
+   fun:CRYPTO_malloc
+   fun:ERR_get_state
+   fun:ERR_clear_error
+}
