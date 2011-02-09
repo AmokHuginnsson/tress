@@ -135,6 +135,7 @@ TUT_UNIT_TEST_N( 1, "visitor pattern" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 50, "yaal data types instantiations for gdb-pretty-printers and MSVC++ [Visualisers] testing." )
+	HString shortStr( "huginn" );
 	HString str( "Ala ma kota." );
 	HNumber pi( "3.141592653589793" );
 	HNumber e( "2.718281828459045" );
@@ -147,6 +148,7 @@ TUT_UNIT_TEST_N( 50, "yaal data types instantiations for gdb-pretty-printers and
 	HRing<int> ring( ring::capacity( countof ( _testData_[0] ) * 2 ),
 		_testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HString result( ( pi * e ).to_string() );
+	cout << shortStr << endl;
 	cout << str << endl;
 	cout << pi << endl;
 	cout << e << endl;
