@@ -189,7 +189,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST_N( 13, "transform" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
-	transform( a, a + countof( a ), back_insert_iterator( l ), static_cast<double (*)( double )>( sqrt ) );
+	transform( a, a + countof( a ), back_insert_iterator( l ), compose1( bound_cast<int, double>(), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ) );
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "transform failed", ss.string(), "1 2 3 4 5 6 7 8 9 10 " );
@@ -293,7 +293,7 @@ TUT_UNIT_TEST_N( 23, "ptr_fun" )
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
 			compose2(
 				not2(	logical_and<bool>() ),
-				compose1( bind1st( less<int>(), 5 ), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ),
+				compose1( bind1st( less<int>(), 5 ), compose1( compose1( bound_cast<int, double>(), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ), bound_cast<int, int>() ) ),
 				bind1st( greater<int>(), 60 ) ) );
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );

@@ -201,11 +201,20 @@ TUT_UNIT_TEST_N( 12, "remove_if algorithm" )
 	ENSURE( "remove_if failed", equal( l.begin(), l.end(), b ) );
 TUT_TEARDOWN()
 
+template<typename to_t, typename from_t>
+struct cast : public std::unary_function<from_t, to_t>
+	{
+	to_t operator()( from_t from_ ) const
+		{
+		return ( static_cast<to_t>( from_ ) );
+		}
+	};
+
 TUT_UNIT_TEST_N( 13, "transform" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	transform( static_cast<int*>( a ), a + countof( a ), back_insert_iterator<list_t>( l ), static_cast<double (*)( double )>( sqrt ) );
+	transform( static_cast<int*>( a ), a + countof( a ), back_insert_iterator<list_t>( l ), compose1( cast<int, double>(), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ) );
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "transform failed", ss.str(), "1 2 3 4 5 6 7 8 9 10 " );
@@ -316,7 +325,7 @@ TUT_UNIT_TEST_N( 23, "ptr_fun" )
 	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ),
 			compose2(
 				not2(	logical_and<bool>() ),
-				compose1( bind1st( less<int>(), 5 ), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ),
+				compose1( compose1( bind1st( less<int>(), 5 ), compose1( cast<int, double>(), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ) ), cast<int, int>() ),
 				bind1st( greater<int>(), 60 ) ) );
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
