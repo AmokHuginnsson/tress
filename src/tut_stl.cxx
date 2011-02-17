@@ -221,7 +221,7 @@ TUT_UNIT_TEST_N( 13, "transform" )
 	ENSURE_EQUALS( "transform failed", ss.str(), "1 2 3 4 5 6 7 8 9 10 " );
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
-#pragma GCC diagnostic error "-Weffc++"
+#pragma GCC diagnostic warning "-Weffc++"
 
 TUT_UNIT_TEST_N( 14, "negate" )
 	typedef list<int> list_t;
@@ -320,7 +320,6 @@ TUT_UNIT_TEST_N( 22, "identity" )
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
 
-#pragma GCC diagnostic ignored "-Weffc++"
 TUT_UNIT_TEST_N( 23, "ptr_fun" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
@@ -335,7 +334,6 @@ TUT_UNIT_TEST_N( 23, "ptr_fun" )
 	ENSURE_EQUALS( "ptr_fun failed", ss.str(), "36 49 " );
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
-#pragma GCC diagnostic error "-Weffc++"
 
 class MemFunTest
 	{
