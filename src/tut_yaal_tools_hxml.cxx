@@ -284,7 +284,7 @@ TUT_UNIT_TEST_N( 10, "/* init, parse, apply, save */" )
 			cout << file.get_error() << ": " << file.get_path() << endl;
 		else
 			{
-			while ( file.read_line( string, HFile::READ::STRIP_NEWLINES ) >= 0 )
+			while ( file.read_line( string ) >= 0 )
 				cout << string << endl;
 			file.close();
 			}

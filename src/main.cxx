@@ -179,9 +179,7 @@ void gather_groups_from_file( string_list_t& lst )
 		throw 0;
 		}
 	HString line;
-	while ( file.read_line( line,
-				HFile::read_t( HFile::READ::STRIP_NEWLINES )
-				| ( ( setup._testGroupListFilePath == "-" ) ? HFile::READ::UNBUFFERED_READS : HFile::READ::BUFFERED_READS ) ) >= 0 )
+	while ( file.read_line( line, ( setup._testGroupListFilePath == "-" ) ? HFile::READ::UNBUFFERED_READS : HFile::READ::BUFFERED_READS ) >= 0 )
 		{
 		line.trim_left();
 		line.trim_right();
