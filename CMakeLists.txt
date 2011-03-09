@@ -8,6 +8,11 @@ elseif ( NOT ( "${BOOST_INSTALL_PATH}" STREQUAL "" ) )
 	set( BOOST_ROOT "${BOOST_INSTALL_PATH}" )
 endif()
 
+if ( CMAKE_HOST_WIN32 )
+	include_directories( ${BOOST_ROOT} )
+	link_directories( ${BOOST_ROOT}/lib )
+endif()
+
 use_cxx_compiler_flag( -Wno-missing-noreturn )
 find_package( Boost COMPONENTS filesystem date_time system REQUIRED )
 find_package( yaal COMPONENTS hcore tools dbwrapper hconsole REQUIRED )
