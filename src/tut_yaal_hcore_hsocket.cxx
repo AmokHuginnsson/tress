@@ -245,7 +245,23 @@ TUT_UNIT_TEST_N( 4, "/* Listening on reserved port. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "/* Listening on existing file. */" )
+TUT_UNIT_TEST_N( 5, "/* Listening on port in use. */" )
+	int const obscurePort( 61928 );
+	HSocket block( HSocket::TYPE::NETWORK, 1 );
+	block.listen( "0.0.0.0", obscurePort );
+	HSocket socket( HSocket::TYPE::NETWORK, 1 );
+	try
+		{
+		socket.listen( "0.0.0.0", obscurePort );
+		FAIL( "listening on port in use possible" );
+		}
+	catch ( HException & e )
+		{
+		cout << e.what() << endl;
+		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST_N( 6, "/* Listening on existing file. */" )
 	HSocket socket( HSocket::TYPE::FILE, 1 );
 	try
 		{
@@ -258,7 +274,7 @@ TUT_UNIT_TEST_N( 5, "/* Listening on existing file. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "/* Listening on protected file. */" )
+TUT_UNIT_TEST_N( 7, "/* Listening on protected file. */" )
 	HSocket socket( HSocket::TYPE::FILE, 1 );
 	try
 		{
@@ -271,7 +287,7 @@ TUT_UNIT_TEST_N( 6, "/* Listening on protected file. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "/* Listening on already listening socket. */" )
+TUT_UNIT_TEST_N( 8, "/* Listening on already listening socket. */" )
 	HSocket socket( HSocket::TYPE::FILE, 1 );
 	socket.listen( "/tmp/TUT_socket" );
 	try
@@ -285,7 +301,7 @@ TUT_UNIT_TEST_N( 7, "/* Listening on already listening socket. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "/* Listening with bad maximum number of clients. */" )
+TUT_UNIT_TEST_N( 9, "/* Listening with bad maximum number of clients. */" )
 	HSocket socket( HSocket::TYPE::FILE );
 	try
 		{
@@ -298,7 +314,7 @@ TUT_UNIT_TEST_N( 8, "/* Listening with bad maximum number of clients. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "/* Accept on socket that is not listening. */" )
+TUT_UNIT_TEST_N( 10, "/* Accept on socket that is not listening. */" )
 	HSocket socket;
 	try
 		{
