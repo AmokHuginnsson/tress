@@ -219,7 +219,7 @@ struct tut_yaal_hcore_hsbbstree
 	template<typename object, typename subject, typename key>
 	void helper_stress_test( object&, subject, key );
 	typedef HSet<int> set_t;
-	typedef HPair<set_t::iterator, bool> (set_t::*set_insert_t)( int const& );
+	typedef set_t::insert_result (set_t::*set_insert_t)( int const& );
 	};
 
 template<typename object, typename subject, typename key>

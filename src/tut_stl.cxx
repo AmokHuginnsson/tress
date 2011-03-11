@@ -221,7 +221,6 @@ TUT_UNIT_TEST_N( 13, "transform" )
 	ENSURE_EQUALS( "transform failed", ss.str(), "1 2 3 4 5 6 7 8 9 10 " );
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
-#pragma GCC diagnostic warning "-Weffc++"
 
 TUT_UNIT_TEST_N( 14, "negate" )
 	typedef list<int> list_t;
