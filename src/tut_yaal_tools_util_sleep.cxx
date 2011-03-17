@@ -69,7 +69,7 @@ TUT_UNIT_TEST_N( 1, "the 1 second granularity sleep" )
 	HClock clk;
 	cout << "E" << util::sleep::second( SLEEP, true ) << "E" << endl;
 	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ) << "$" << endl;
-	ENSURE_DISTANCE( "slept for bad number of thousends of seconds", clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ), PASSED, QUALITY + 50 );
+	ENSURE_DISTANCE( "slept for bad number of thousends of seconds", clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ), PASSED, QUALITY + 100 );
 	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND ) << "$" << endl;
 TUT_TEARDOWN()
 
@@ -80,7 +80,7 @@ TUT_UNIT_TEST_N( 2, "the 1 milisecond granularity sleep" )
 	HClock clk;
 	cout << "E" << util::sleep::milisecond( SLEEP, true ) << "E" << endl;
 	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ) << "$" << endl;
-	ENSURE_DISTANCE( "slept for bad number of miliseconds", clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ), PASSED, QUALITY + 50 );
+	ENSURE_DISTANCE( "slept for bad number of miliseconds", clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ), PASSED, QUALITY + 100 );
 	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ) << "$" << endl;
 TUT_TEARDOWN()
 
