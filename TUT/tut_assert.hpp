@@ -8,11 +8,14 @@
 #include <cstring>
 #endif
 
+#include <yaal/hcore/hclock.hxx>
+
 namespace tut
 {
 
 namespace
 {
+
 /**
  * Tests provided condition.
  * Throws if false.
@@ -206,6 +209,29 @@ void fail_real( char const* const file, int const& line, std::string const& msg 
 	{
 	throw failure( file, line, msg );
 	}
+
+class time_constraint
+	{
+	int long _constraint;
+	char const* _path;
+	int _line;
+	yaal::hcore::HClock _timer;
+public:
+	time_constraint( int long ms_, char const* path_ = NULL, int line_ = 0 )
+		: _constraint( ms_ ), _path( path_ ), _line( line_ ), _timer() {}
+	~time_constraint( void )
+		{
+		int long elapsed( _timer.get_time_elapsed( yaal::hcore::HClock::UNIT::MILISECOND ) );
+		if ( elapsed > _constraint )
+			{
+			std::stringstream ss;
+			ss << "time constraint exceeded, expected [" << _constraint
+				<< "ms] actual [" << elapsed << "ms]";
+			fail_real( _path, _line, ss.str() );
+			}
+		}
+	};
+
 
 }       // end of namespace
 
