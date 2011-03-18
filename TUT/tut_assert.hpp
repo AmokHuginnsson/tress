@@ -152,7 +152,7 @@ void ensure_distance_real( char const* const file, int const& line, char const* 
 		std::stringstream ss;
 		ss << ( msg ? msg : "" )
 		<< ( msg ? ":" : "" )
-		<< "expected ("
+		<< " expected ("
 		<< expected - distance
 		<< ";" << expected + distance << ") actual [" << actual << "] distance <" << distance << ">";
 		throw failure( file, line, ss.str().c_str() );
@@ -225,7 +225,7 @@ public:
 		if ( elapsed > _constraint )
 			{
 			std::stringstream ss;
-			ss << "time constraint exceeded, expected [" << _constraint
+			ss << "time constraint exceeded: expected [" << _constraint
 				<< "ms] actual [" << elapsed << "ms]";
 			fail_real( _path, _line, ss.str() );
 			}
