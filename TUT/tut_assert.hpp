@@ -230,6 +230,9 @@ public:
 			fail_real( _path, _line, ss.str() );
 			}
 		}
+private:
+	time_constraint( time_constraint const& );
+	time_constraint& operator = ( time_constraint const& );
 	};
 
 
