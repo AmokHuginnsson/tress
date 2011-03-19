@@ -1242,6 +1242,7 @@ TUT_UNIT_TEST_N( 22, "/* opposite */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 23, "/* bc */" )
+	TIME_CONSTRAINT_EXEMPT();
 	HNumber n = 3;
 	n ^= 33333;
 	HString myRes = n.to_string();

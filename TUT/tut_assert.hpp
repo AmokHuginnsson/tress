@@ -222,13 +222,21 @@ public:
 	~time_constraint( void )
 		{
 		int long elapsed( _timer.get_time_elapsed( yaal::hcore::HClock::UNIT::MILISECOND ) );
-		if ( elapsed > _constraint )
+		if ( _constraint && ( elapsed > _constraint ) )
 			{
 			std::stringstream ss;
 			ss << "time constraint exceeded: expected [" << _constraint
 				<< "ms] actual [" << elapsed << "ms]";
 			fail_real( _path, _line, ss.str() );
 			}
+		}
+	void reset( void )
+		{
+		_timer.get_time_elapsed( yaal::hcore::HClock::UNIT::SECOND, true );
+		}
+	void disable( void )
+		{
+		_constraint = 0;
 		}
 private:
 	time_constraint( time_constraint const& );

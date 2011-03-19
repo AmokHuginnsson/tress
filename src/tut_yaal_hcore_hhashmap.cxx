@@ -297,6 +297,7 @@ TUT_UNIT_TEST_N( 11, "/* auto grow large table */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 12, "/* auto grow huge table */" )
+	TIME_CONSTRAINT_EXEMPT();
 	{
 	hash_map_t map;
 	check_consitency( map );

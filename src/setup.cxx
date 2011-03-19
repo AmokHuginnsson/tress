@@ -86,6 +86,10 @@ void OSetup::test_setup( void )
 				_testNumber );
 	if ( ( _testGroups.size() > 1 ) && ( _testNumber ) )
 		M_THROW( _( "test number not supported while running multiple groups" ), _testNumber );
+	if ( _jobs < 0 )
+		M_THROW( _( "bad job count" ), _jobs );
+	if ( _timeConstraint < 0 )
+		M_THROW( _( "bad time constraint" ), _timeConstraint );
 	if ( _verbose )
 		{
 		cout << "setup._argc = " << setup._argc << endl;

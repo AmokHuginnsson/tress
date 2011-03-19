@@ -71,9 +71,10 @@ namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
 	virtual ~name( void ) \
 		{} \
 	}
+#define TIME_CONSTRAINT_EXEMPT time_constraint_exempt
 
-#define TUT_DECLARE( statement ) clog << brightgreen << ">> " << #statement << reset << endl; statement clog << green << ">> end" << reset << endl;
-#define TUT_INVOKE( statement ) do { clog << brightcyan << ">> " << #statement << reset << endl; do { statement } while ( 0 ); clog << cyan << ">> end" << reset << endl; } while ( 0 )
+#define TUT_DECLARE( statement ) clog << brightgreen << ">> " << #statement << hconsole::reset << endl; statement clog << green << ">> end" << hconsole::reset << endl;
+#define TUT_INVOKE( statement ) do { clog << brightcyan << ">> " << #statement << hconsole::reset << endl; do { statement } while ( 0 ); clog << cyan << ">> end" << hconsole::reset << endl; } while ( 0 )
 
 template<typename T1, typename T2>
 bool operator == ( yaal::hcore::HArray<T1> const& a, std::vector<T2> const& v )
@@ -327,6 +328,7 @@ struct simple_mock
 	typedef std::vector<int> std_vector_t;
 	typedef std::deque<int> std_deque_t;
 	virtual ~simple_mock( void ) {}
+	virtual void time_constraint_exempt( void ) = 0;
 	};
 
 template<typename owner_t, int const forced_size>

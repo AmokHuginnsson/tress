@@ -137,6 +137,7 @@ TUT_UNIT_TEST_N( 2, "decrypt file" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "en/de cryption of various lengths" )
+	TIME_CONSTRAINT_EXEMPT();
 	for ( int i( 0 ); i < 300; ++ i )
 		crypt_decrypt_test( i );
 TUT_TEARDOWN()

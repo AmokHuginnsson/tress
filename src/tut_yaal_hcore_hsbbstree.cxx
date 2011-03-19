@@ -406,6 +406,7 @@ TUT_UNIT_TEST_N( 15, "/* Removing keys in descending order from upper half of th
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 16, "/* Removing keys in random order from upper half of the tree that was created by adding keys in random order. */" )
+	TIME_CONSTRAINT_EXEMPT();
 	HRandomizer r;
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )

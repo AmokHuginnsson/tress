@@ -63,6 +63,7 @@ int long tut_yaal_hcore_hclock::get_speed( HClock::UNIT::unit_t const& u )
 TUT_TEST_GROUP_N( tut_yaal_hcore_hclock, "yaal::hcore::HClock" );
 
 TUT_UNIT_TEST_N( 1, "1 second accuracy" )
+	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = 1;
 	HClock clk;
@@ -72,6 +73,7 @@ TUT_UNIT_TEST_N( 1, "1 second accuracy" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "1 mili-second accuracy" )
+	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,3>::value;
 	static int long const QUALITY = get_speed( HClock::UNIT::MILISECOND ) + 2;
@@ -83,6 +85,7 @@ TUT_UNIT_TEST_N( 2, "1 mili-second accuracy" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "1 micro-second accuracy" )
+	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,6>::value;
 	static int long const QUALITY = get_speed( HClock::UNIT::MICROSECOND ) + 2 * power<10,3>::value;
@@ -94,6 +97,7 @@ TUT_UNIT_TEST_N( 3, "1 micro-second accuracy" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "1 nano-second accuracy" )
+	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,9>::value;
 	static int long const QUALITY = get_speed( HClock::UNIT::NANOSECOND ) + 2 * power<10,6>::value;
@@ -105,6 +109,7 @@ TUT_UNIT_TEST_N( 4, "1 nano-second accuracy" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 5, "measured twice without reset" )
+	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = 1;
 	HClock clk;
@@ -117,6 +122,7 @@ TUT_UNIT_TEST_N( 5, "measured twice without reset" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 6, "measured twice with reset" )
+	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = 1;
 	HClock clk;

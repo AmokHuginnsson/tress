@@ -52,6 +52,7 @@ struct tut_yaal_tools_util_sleep
 TUT_TEST_GROUP_N( tut_yaal_tools_util_sleep, "yaal::tools::util::sleep" );
 
 TUT_UNIT_TEST_N( 1, "the 1 second granularity sleep" )
+	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const SHOULD_SLEEP_MS = power<10,3>::value;
 	int long SKEW( 2 );

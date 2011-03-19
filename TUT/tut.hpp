@@ -73,13 +73,14 @@ class test_object : public Data, public test_object_posix
 	int _testNo;
 	char const* _file;
 	int _line;
+	bool _slow;
 public:
 
 	/**
 	* Default constructor
 	*/
 	test_object()
-		: _group(), _testNo( 0 ), _file( "" ), _line( 0 ),
+		: _group(), _testNo( 0 ), _file( "" ), _line( 0 ), _slow( false ),
 		called_method_was_a_dummy_test_( false ), _currentTestName()
 		{}
 
@@ -117,6 +118,21 @@ public:
 	int get_test_line( void )
 		{
 		return ( _line );
+		}
+
+	virtual void time_constraint_exempt( void )
+		{
+		_slow = true;
+		}
+
+	void reset( void )
+		{
+		_slow = false;
+		}
+
+	bool is_slow( void )
+		{
+		return ( _slow );
 		}
 
 	/**
@@ -183,6 +199,7 @@ class test_group : public group_base, public test_group_posix
 	typedef typename tests_t::size_type size_type;
 
 	int _realTestCount;
+	int long _timeConstraint;
 	tests_t _tests;
 	tests_iterator _currentTest;
 
@@ -286,7 +303,7 @@ public:
 	* Creates and registers test group with specified name.
 	*/
 	test_group( const char* name )
-		: _name( name ), _realTestCount( 0 ), _tests(), _currentTest()
+		: _name( name ), _realTestCount( 0 ), _timeConstraint( 0 ), _tests(), _currentTest()
 		{
 		// register itself
 		runner.get().register_group( _name, this );
@@ -299,7 +316,7 @@ public:
 	* This constructor is used in self-test run only.
 	*/
 	test_group( const char* name, test_runner& another_runner )
-		: _name( name ), _realTestCount( 0 ), _tests(), _currentTest()
+		: _name( name ), _realTestCount( 0 ), _timeConstraint( 0 ), _tests(), _currentTest()
 		{
 		// register itself
 		another_runner.register_group( _name, this );
@@ -325,6 +342,11 @@ public:
 	virtual int get_real_test_count( void ) const
 		{
 		return ( _realTestCount );
+		}
+
+	virtual void set_time_constraint( int long timeConstraint_ )
+		{
+		_timeConstraint = timeConstraint_;
 		}
 
 	/**
@@ -481,7 +503,15 @@ public:
 		obj->called_method_was_a_dummy_test_ = false;
 		if ( _currentTest != _tests.end() )
 			obj->set_test_tut( _name, _currentTest->first );
-		( obj.get()->*tm )();
+
+		/* Scope for time constraint. */
+			{
+			time_constraint timeConstraint( _timeConstraint );
+			obj->reset();
+			( obj.get()->*tm )();
+			if ( obj->is_slow() )
+				timeConstraint.disable();
+			}
 
 		if ( obj->called_method_was_a_dummy_test_ )
 			{

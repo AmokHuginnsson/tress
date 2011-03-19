@@ -70,6 +70,7 @@ TUT_UNIT_TEST_N( 49, "/* sample data */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 50, "speed test" )
+	TIME_CONSTRAINT_EXEMPT();
 	typedef std::set<int> proto_t;
 	typedef HSet<int> set_type;
 	int long LOOPS( 500000 );

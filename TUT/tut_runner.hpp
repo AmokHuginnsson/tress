@@ -27,6 +27,7 @@ struct group_base
 	// execute one test
 	virtual test_result run_test( int n ) = 0;
 	virtual int get_real_test_count( void ) const = 0;
+	virtual void set_time_constraint( int long ) = 0;
 	};
 
 /**
@@ -116,7 +117,8 @@ public:
 	/**
 	* Constructor
 	*/
-	test_runner() : _groups(), _defaultCallback(), _callback( &_defaultCallback ), _tutListener( NULL )
+	test_runner( void )
+		: _groups(), _defaultCallback(), _callback( &_defaultCallback ), _tutListener( NULL )
 		{}
 
 	/**
@@ -186,6 +188,12 @@ public:
 	groups const& get_groups( void ) const
 		{
 		return ( _groups );
+		}
+
+	void set_time_constraint( int long timeConstraint_ )
+		{
+		for ( const_iterator i( _groups.begin() ), e( _groups.end() ); i != e; ++ i )
+			i->second->set_time_constraint( timeConstraint_ );
 		}
 
 	/**

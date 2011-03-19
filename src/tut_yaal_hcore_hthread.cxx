@@ -197,6 +197,7 @@ TUT_UNIT_TEST_N( 1, "/* Construction and destruction */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "/* Starting new thread and allowing it to finish */" )
+	TIME_CONSTRAINT_EXEMPT();
 	HCool ca( "a" );
 	HThread a;
 	ca.set( 5 );
@@ -207,6 +208,7 @@ TUT_UNIT_TEST_N( 2, "/* Starting new thread and allowing it to finish */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 3, "/* Starting new thread and finishing it prematurely (sleeping body) */" )
+	TIME_CONSTRAINT_EXEMPT();
 	HTime start, stop;
 	HCool ca( "sleeping" );
 	HThread a;
@@ -224,6 +226,7 @@ TUT_UNIT_TEST_N( 3, "/* Starting new thread and finishing it prematurely (sleepi
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 33, "/* Starting new thread and finishing it prematurely (busy body) */" )
+	TIME_CONSTRAINT_EXEMPT();
 	HTime start, stop;
 	HCool ca( "busy" );
 	HThread a;
@@ -295,6 +298,7 @@ TUT_UNIT_TEST_N( 7, "/* Finishing thread that was not started */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 8, "/* Simple thread (plain function) */" )
+	TIME_CONSTRAINT_EXEMPT();
 	HTime start, stop;
 	HThread a;
 	a.spawn( call( &simple, &a ) );
@@ -310,6 +314,7 @@ TUT_UNIT_TEST_N( 8, "/* Simple thread (plain function) */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 9, "/* Starting new thread and allowing it to finish, the finich is actualy invoked. */" )
+	TIME_CONSTRAINT_EXEMPT();
 	HCool ca( "a" );
 	HThread a;
 	ca.set( 5 );

@@ -920,6 +920,7 @@ TUT_UNIT_TEST_N( 20, "inplace_merge" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 21, "insert_sort" )
+	TIME_CONSTRAINT_EXEMPT();
 	{
 	int_array_t a( 8000 );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
@@ -1003,6 +1004,7 @@ TUT_UNIT_TEST_N( 24, "swap" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 50, "sort speed" )
+	TIME_CONSTRAINT_EXEMPT();
 	int_array_t a( 100000 );
 		{
 		yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );

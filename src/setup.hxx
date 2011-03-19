@@ -40,7 +40,7 @@ struct OSetup
 	OSetup( void )
 		: _quiet( false ), _verbose( false ), _debug( false ),
 		_listGroups( false ), _restartable( false ), _exit( false ),
-		_testNumber( 0 ), _jobs( DEFAULT_JOB_COUNT ),
+		_testNumber( 0 ), _jobs( DEFAULT_JOB_COUNT ), _timeConstraint( DEFAULT_TIME_CONSTRAINT ),
 		_argc( 0 ), _argv( NULL ),
 		_programName( NULL ), _logPath(), _testGroups(),
 		_testGroupPattern(), _testGroupListFilePath() {}
@@ -53,6 +53,7 @@ struct OSetup
 	bool _exit;
 	int _testNumber;
 	int _jobs;
+	int long _timeConstraint;
 	int _argc;
 	char const* const* _argv;
 	char* _programName;
@@ -61,6 +62,7 @@ struct OSetup
 	yaal::hcore::HString _testGroupPattern;
 	yaal::hcore::HString _testGroupListFilePath;
 	static int const DEFAULT_JOB_COUNT = 1;
+	static int long const DEFAULT_TIME_CONSTRAINT = 0;
 	void test_setup( void );
 private:
 	OSetup( OSetup const& );

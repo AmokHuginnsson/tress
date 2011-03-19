@@ -440,6 +440,7 @@ TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 4, "resize" )
+	TIME_CONSTRAINT_EXEMPT();
 	test_resize<1>();
 	test_resize<2>();
 	test_resize<3>();
@@ -636,6 +637,7 @@ void tut_yaal_hcore_hdeque::test_push_back( void )
 	}
 
 TUT_UNIT_TEST_N( 10, "push_back" )
+	TIME_CONSTRAINT_EXEMPT();
 	test_push_back<1>();
 	test_push_back<2>();
 	test_push_back<3>();
@@ -673,6 +675,7 @@ void tut_yaal_hcore_hdeque::test_push_front( void )
 	}
 
 TUT_UNIT_TEST_N( 11, "push_front" )
+	TIME_CONSTRAINT_EXEMPT();
 	test_push_front<1>();
 	test_push_front<2>();
 	test_push_front<3>();
@@ -715,6 +718,7 @@ void tut_yaal_hcore_hdeque::test_pop_back( void )
 	}
 
 TUT_UNIT_TEST_N( 12, "pop_back" )
+	TIME_CONSTRAINT_EXEMPT();
 	test_pop_back<1>();
 	test_pop_back<2>();
 	test_pop_back<3>();
@@ -757,6 +761,7 @@ void tut_yaal_hcore_hdeque::test_pop_front( void )
 	}
 
 TUT_UNIT_TEST_N( 13, "pop_front" )
+	TIME_CONSTRAINT_EXEMPT();
 	test_pop_front<1>();
 	test_pop_front<2>();
 	test_pop_front<3>();
@@ -1028,6 +1033,7 @@ TUT_UNIT_TEST_N( 17, "/* insert range */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 50, "speed test" )
+	TIME_CONSTRAINT_EXEMPT();
 	typedef HDeque<int> deque_type;
 	int long LOOPS( 1000000 );
 		{

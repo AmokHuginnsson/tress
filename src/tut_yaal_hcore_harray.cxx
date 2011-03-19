@@ -394,6 +394,7 @@ TUT_UNIT_TEST_N( 15, "ranged insert" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 50, "speed test" )
+	TIME_CONSTRAINT_EXEMPT();
 	typedef HArray<int> array_type;
 	int long LOOPS( 10000000 );
 		{

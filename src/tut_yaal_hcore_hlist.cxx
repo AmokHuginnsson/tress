@@ -961,6 +961,7 @@ void check_sorted( tut_yaal_hcore_hlist::list_t const& l, OListBits::sort_order_
 	}
 
 TUT_UNIT_TEST_N( 25, "/* sort serious */" )
+	TIME_CONSTRAINT_EXEMPT();
 	//int long unsigned count = 0100000000;
 	int long unsigned count = 01000000;
 	char buf[10];
@@ -1004,6 +1005,7 @@ TUT_UNIT_TEST_N( 26, "/* reverse iterator */" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 50, "speed test" )
+	TIME_CONSTRAINT_EXEMPT();
 	typedef std::list<int> proto_t;
 	typedef HList<int> list_type;
 	int long LOOPS( 1000000 );
