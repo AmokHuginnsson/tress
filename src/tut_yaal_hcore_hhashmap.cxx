@@ -99,9 +99,7 @@ void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ )
 		clog << "collisions: " << collisions << ", longest collision: " << longestCollision << endl;
 	}
 
-typedef test_group<tut_yaal_hcore_hhashmap> tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_hcore_hhashmap_group( "yaal::hcore::HHashMap" );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hhashmap, "yaal::hcore::HHashMap" );
 
 TUT_UNIT_TEST_N( 1, "/* Simple constructor. */" )
 	try

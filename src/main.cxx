@@ -60,6 +60,7 @@ OSetup setup;
 
 typedef std::list<std::string> string_list_t;
 void gather_groups_from_file( string_list_t& );
+void list_groups( void );
 
 }
 
@@ -93,18 +94,7 @@ int main( int argc_, char* argv_[] )
 			if ( setup._exit )
 				;
 			else if ( setup._listGroups )
-				{
-				std::cerr << "registered test groups:" << std::endl;
-				tut::groupnames gl = tut::runner.get().list_groups();
-				tut::groupnames::const_iterator i = gl.begin();
-				tut::groupnames::const_iterator e = gl.end();
-				while ( i != e )
-					{
-					std::cout << "  " << *i << std::endl;
-					++ i;
-					}
-				errno = 0;
-				}
+				list_groups();
 			else if ( setup._restartable )
 				{
 				restartable.set_callback( &visitor );
@@ -186,6 +176,31 @@ void gather_groups_from_file( string_list_t& lst )
 		lst.push_back( line.raw() );
 		}
 	file.close();
+	return;
+	M_EPILOG
+	}
+
+void list_groups( void )
+	{
+	M_PROLOG
+	std::cerr << "registered test groups:" << std::endl;
+	tut::test_runner::groups groups( tut::runner.get().get_groups() );
+	tut::test_runner::const_iterator i = groups.begin();
+	tut::test_runner::const_iterator e = groups.end();
+	int totalTestsCount( 0 );
+	while ( i != e )
+		{
+		int realTestCount( i->second->get_real_test_count() );
+		totalTestsCount += realTestCount;
+		std::cout << "  " << std::setw( 36 ) << std::left << i->first;
+		if ( setup._verbose && realTestCount )
+			std::cout << " " << std::right << std::setw( 2 ) << realTestCount;
+		std::cout << std::endl;
+		++ i;
+		}
+	if ( setup._verbose )
+		std::cout << "total test count: " << totalTestsCount << std::endl;
+	errno = 0;
 	return;
 	M_EPILOG
 	}

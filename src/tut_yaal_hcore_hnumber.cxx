@@ -73,9 +73,7 @@ double long tut_yaal_hcore_hnumber::random_real( void )
 	return ( n / d );
 	}
 
-typedef test_group<tut_yaal_hcore_hnumber> tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_hcore_hnumber_group( "yaal::hcore::HNumber" );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hnumber, "yaal::hcore::HNumber" );
 
 TUT_UNIT_TEST_N( 1, "/* default constructor / check default precision */" )
 	HNumber n;

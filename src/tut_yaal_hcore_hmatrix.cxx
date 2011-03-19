@@ -45,10 +45,7 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hmatrix );
 TUT_TEST_GROUP_N( tut_yaal_hcore_hmatrix, "yaal::hcore::HMatrix" );
 
-template<>
-template<>
-void module::test<1> ( void )
-	{
+TUT_UNIT_TEST_N( 1, "basic matrix operations" )
 	HMatrix < double > V ( 3, 3 );
 	HMatrix < double > W ( 3, 3 );
 	HMatrix < double > X ( 2, 2 );
@@ -68,7 +65,7 @@ void module::test<1> ( void )
 	std::cout << "X * X ^ - 1 = ..." << std::endl << X * X._1 ( ) << std::endl;
 	std::cout << "V ^ - 1 = ..." << std::endl << V._1 ( ) << std::endl;
 	std::cout << "V * V ^ - 1 = ..." << std::endl << V * V._1 ( ) << std::endl;
-	}
+TUT_TEARDOWN()
 
 }
 

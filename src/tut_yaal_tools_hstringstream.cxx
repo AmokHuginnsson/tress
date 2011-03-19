@@ -44,14 +44,11 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_tools_hstringstream );
 TUT_TEST_GROUP_N( tut_yaal_tools_hstringstream, "yaal::tools::HStringStream" );
 
-template<>
-template<>
-void module::test<1>( void )
-	{
+TUT_UNIT_TEST_N( 1, "basic stringstream operations" )
 	HStringStream stream;
 	cout << ( stream << "hello" << ':' << 1024 << ":" << 3.14159265 << '!' << endl << stream ) << flush;
 	cout << ( stream << "hello2" << ':' << 17 << ":" << 2.17 << '!' << endl << stream ) << flush;
-	}
+TUT_TEARDOWN()
 
 }
 

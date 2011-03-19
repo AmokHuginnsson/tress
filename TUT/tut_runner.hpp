@@ -26,6 +26,7 @@ struct group_base
 
 	// execute one test
 	virtual test_result run_test( int n ) = 0;
+	virtual int get_real_test_count( void ) const = 0;
 	};
 
 /**
@@ -108,6 +109,10 @@ class test_runner
 	{
 public:
 
+	typedef std::map<std::string, group_base*>groups;
+	typedef groups::iterator iterator;
+	typedef groups::const_iterator const_iterator;
+
 	/**
 	* Constructor
 	*/
@@ -176,6 +181,11 @@ public:
 			}
 
 		return ( ret ) ;
+		}
+
+	groups const& get_groups( void ) const
+		{
+		return ( _groups );
 		}
 
 	/**
@@ -285,10 +295,6 @@ public:
 		}
 
 protected:
-
-	typedef std::map<std::string, group_base*>groups;
-	typedef groups::iterator iterator;
-	typedef groups::const_iterator const_iterator;
 	groups _groups;
 
 	callback _defaultCallback;

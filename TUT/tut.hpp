@@ -99,9 +99,14 @@ public:
 			tl->register_execution( _group, _testNo, _currentTestName, _file, _line );
 		}
 
-	const std::string& get_test_name() const
+	std::string const& get_test_name( void ) const
 		{
 		return ( _currentTestName ) ;
+		}
+
+	std::string const& get_test_group( void ) const
+		{
+		return ( _group ) ;
 		}
 
 	char const* get_test_file( void )
@@ -177,6 +182,7 @@ class test_group : public group_base, public test_group_posix
 	tests_const_reverse_iterator;
 	typedef typename tests_t::size_type size_type;
 
+	int _realTestCount;
 	tests_t _tests;
 	tests_iterator _currentTest;
 
@@ -280,7 +286,7 @@ public:
 	* Creates and registers test group with specified name.
 	*/
 	test_group( const char* name )
-		: _name( name ), _tests(), _currentTest()
+		: _name( name ), _realTestCount( 0 ), _tests(), _currentTest()
 		{
 		// register itself
 		runner.get().register_group( _name, this );
@@ -293,7 +299,7 @@ public:
 	* This constructor is used in self-test run only.
 	*/
 	test_group( const char* name, test_runner& another_runner )
-		: _name( name ), _tests(), _currentTest()
+		: _name( name ), _realTestCount( 0 ), _tests(), _currentTest()
 		{
 		// register itself
 		another_runner.register_group( _name, this );
@@ -308,6 +314,17 @@ public:
 	void register_test_method( int n, testmethod tm )
 		{
 		_tests[ n ] = tm;
+		}
+
+	int bump_real_test_count( void )
+		{
+		++ _realTestCount;
+		return ( 0 );
+		}
+
+	virtual int get_real_test_count( void ) const
+		{
+		return ( _realTestCount );
 		}
 
 	/**

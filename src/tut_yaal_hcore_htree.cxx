@@ -136,9 +136,7 @@ void tut_yaal_hcore_htree::check_consistency( T const& tree )
 		}
 	}
 
-typedef test_group<tut_yaal_hcore_htree> tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_hcore_htree_group( "yaal::hcore::HTree" );
+TUT_TEST_GROUP_N( tut_yaal_hcore_htree, "yaal::hcore::HTree" );
 
 TUT_UNIT_TEST_N( 1, "/* trivial constructor */" )
 		{

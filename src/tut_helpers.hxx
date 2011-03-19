@@ -51,14 +51,18 @@ Copyright:
 #define stdext __gnu_cxx
 #endif /* defined( __GNUC__ ) && ! defined( stdext ) */
 
-#define TUT_UNIT_TEST_N( no, title ) template<> template<> void module::test<(no)>( void ) { do { set_test_meta( title, __FILE__, __LINE__ ); show_title( title ); } while ( 0 );
+#define TUT_UNIT_TEST_N( no, title ) \
+namespace { static int const M_CONCAT( dropIt, __LINE__ ) __attribute__(( __used__ )) = group.bump_real_test_count(); } \
+template<> template<> void module::test<(no)>( void ) { do { set_test_meta( title, __FILE__, __LINE__ ); show_title( title ); } while ( 0 );
 #define TUT_UNIT_TEST( title ) TUT_UNIT_TEST_N( ( __COUNTER__ ), ( title ) )
 #define TUT_TEARDOWN() show_end(); }
 #define TUT_TEST_GROUP_N( mock, name ) \
 typedef test_group<mock> tut_group; \
 typedef tut_group::object module; \
 typedef yaal::hcore::HExceptionSafeGlobal<tut_group, tress::tut_helpers::HSTDGlobalScopeExceptionHandlingPolicy> tut_group_holder; \
-tut_group_holder tut_##mock##_group( ( name ) )
+tut_group_holder mock##_group( ( name ) ); \
+namespace { tut_group& group( mock##_group.instance() ); } \
+typedef void void_type
 #define TUT_TEST_GROUP( mock, name ) \
 TUT_TEST_GROUP_N( mock, name ) \
 namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }

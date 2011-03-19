@@ -45,30 +45,22 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hcomplex );
 TUT_TEST_GROUP_N( tut_yaal_hcore_hcomplex, "yaal::hcore::HComplex" );
 
-/* Default constructor */
-template < >
-template < >
-void module::test<1> ( void )
-	{
+TUT_UNIT_TEST_N( 1, "/* Default constructor */" )
 	HComplex a;
-	ENSURE_DISTANCE ( "non zero new complex number (re)", a.re ( ), 0., 0.001 );
-	ENSURE_DISTANCE ( "non zero new complex number (im)", a.im ( ), 0., 0.001 );
-	}
+	ENSURE_DISTANCE( "non zero new complex number (re)", a.re ( ), 0., 0.001 );
+	ENSURE_DISTANCE( "non zero new complex number (im)", a.im ( ), 0., 0.001 );
+TUT_TEARDOWN()
 
-/* Constructor with initialization. */
-template < >
-template < >
-void module::test<2> ( void )
-	{
+TUT_UNIT_TEST_N( 2, "/* Constructor with initialization. */" )
 	double const RE = 3.14159265;
 	double const IM = 2.17;
 	HComplex a ( RE );
-	ENSURE_DISTANCE ( "non zero new complex number (im)", a.im ( ), 0., 0.001 );
-	ENSURE_DISTANCE ( "re incrorrectly set by constructor", a.re ( ), RE, 0.001 );
+	ENSURE_DISTANCE( "non zero new complex number (im)", a.im ( ), 0., 0.001 );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re ( ), RE, 0.001 );
 	HComplex b ( RE, IM );
-	ENSURE_DISTANCE ( "re incrorrectly set by constructor", b.re ( ), RE, 0.001 );
-	ENSURE_DISTANCE ( "im incrorrectly set by constructor", b.im ( ), IM, 0.001 );
-	}
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", b.re ( ), RE, 0.001 );
+	ENSURE_DISTANCE( "im incrorrectly set by constructor", b.im ( ), IM, 0.001 );
+TUT_TEARDOWN()
 
 }
 

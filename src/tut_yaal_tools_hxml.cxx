@@ -89,9 +89,7 @@ struct tut_yaal_tools_hxml
 
 HString tut_yaal_tools_hxml::_varTmpBuffer;
 
-typedef test_group<tut_yaal_tools_hxml> tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_tools_hxml_group( "yaal::tools::HXml" );
+TUT_TEST_GROUP_N( tut_yaal_tools_hxml, "yaal::tools::HXml" );
 
 std::ostream& operator << ( std::ostream& out, HXml const& xml )
 	{

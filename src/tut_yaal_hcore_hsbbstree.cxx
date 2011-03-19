@@ -238,9 +238,7 @@ void tut_yaal_hcore_hsbbstree::helper_stress_test( object& ob, subject member, k
 	return;
 	}
 
-typedef test_group<tut_yaal_hcore_hsbbstree> tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_hcore_hsbbstree_group( "yaal::hcore::HSBBSTree" );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hsbbstree, "yaal::hcore::HSBBSTree" );
 
 TUT_UNIT_TEST_N( 1, "/* Adding keys in ascending order. */" )
 	set_t s;

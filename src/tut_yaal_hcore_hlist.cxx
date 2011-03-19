@@ -143,9 +143,7 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list )
 	return;
 	}
 
-typedef test_group<tut_yaal_hcore_hlist>tut_group;
-typedef tut_group::object module;
-tut_group tut_yaal_hcore_hlist_group ( "yaal::hcore::HList" );
+TUT_TEST_GROUP_N( tut_yaal_hcore_hlist, "yaal::hcore::HList" );
 
 TUT_UNIT_TEST_N( 1, "/* Simple constructor. */" )
 	list_t l;
