@@ -60,6 +60,12 @@ tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void )
 	: _rnd( randomizer_helper::make_randomizer() ), _bc()
 	{
 	set_env( "BC_LINE_LENGTH", "40000" );
+	char const WIN_BC_PATH[] = "..\\..\\..\\..\\usr\\windows\\bin\\bc.exe";
+	char const SOLARIS_BC_PATH[] = "/opt/csw/bin/bc";
+	if ( HFSItem( WIN_BC_PATH ).is_file() )
+		BC_PATH = WIN_BC_PATH;
+	else if ( HFSItem( SOLARIS_BC_PATH ).is_file() )
+		BC_PATH = SOLARIS_BC_PATH;
 	}
 
 

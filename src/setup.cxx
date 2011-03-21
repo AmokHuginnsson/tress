@@ -38,6 +38,22 @@ M_VCSID( "$Id: "__ID__" $" )
 using namespace yaal;
 using namespace yaal::hcore;
 
+template<typename Ch, typename Traits = std::char_traits<Ch> >
+struct basic_nullbuf : std::basic_streambuf<Ch, Traits>
+	{
+	typedef std::basic_streambuf<Ch, Traits> base_type;
+	typedef typename base_type::int_type int_type;
+	typedef typename base_type::traits_type traits_type;
+
+	virtual int_type overflow(int_type c)
+		{
+		return traits_type::not_eof(c);
+		}
+	};
+
+typedef basic_nullbuf<char> nullbuf;
+nullbuf cnull_obj;
+
 namespace tress
 {
 
@@ -50,11 +66,11 @@ void OSetup::test_setup( void )
 	if ( _verbose )
 		clog.reset( HStreamInterface::ptr_t( new HFile( stdout ) ) );
 	else
-		std::clog.rdbuf( NULL );
+		std::clog.rdbuf( &cnull_obj );
 	if ( _quiet )
 		{
 		cout.reset();
-		std::cout.rdbuf( NULL );
+		std::cout.rdbuf( &cnull_obj );
 		}
 	if ( _listGroups
 			&& ( _restartable

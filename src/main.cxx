@@ -64,6 +64,7 @@ void list_groups( void );
 
 }
 
+M_EXPORT_SYMBOL
 int main( int argc_, char* argv_[] )
 	{
 	M_AT_END_OF_SCOPE( HSignalService::get_instance().stop(); );
