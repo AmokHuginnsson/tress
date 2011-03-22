@@ -106,6 +106,9 @@ void OSetup::test_setup( void )
 		M_THROW( _( "bad job count" ), _jobs );
 	if ( _timeConstraint < 0 )
 		M_THROW( _( "bad time constraint" ), _timeConstraint );
+	char const* IDE[] = { "console", "vim", "eclipse", "visualstudio" };
+	if ( ! count( IDE, IDE + countof ( IDE ), _errorLine ) )
+		M_THROW( _( "invalid IDE specified: " ) + _errorLine, 0 );
 	if ( _verbose )
 		{
 		cout << "setup._argc = " << setup._argc << endl;

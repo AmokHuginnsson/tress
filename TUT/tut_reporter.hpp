@@ -52,18 +52,77 @@ std::ostream& operator <<( std::ostream& _os, const tut::test_result& tr )
 
 namespace tut
 {
+
+std::string console_error_line( tut::test_result const& tr_ )
+	{
+	std::stringstream ss;
+	if ( tr_._result == test_result::fail )
+		ss << "     failed assertion in \"" << tr_._file << ":" << tr_._line << " ";
+	else if ( tr_._result == test_result::ex )
+		{
+		if ( tr_._line >= 0 )
+			ss << "     unexpected exception in \"" << tr_._file << ":" << tr_._line << " ";
+		}
+	else if ( tr_._result == test_result::term )
+		ss << "     segmentation fault in \"" << tr_._file << ":" << tr_._line << " ";
+	else
+		ss << "     message: \"";
+	ss << tr_._message << "\"" << std::endl;
+	return ( ss.str() );
+	}
+
+std::string vim_error_line( tut::test_result const& tr_ )
+	{
+	std::stringstream ss;
+	if ( tr_._result == test_result::fail )
+		ss << tr_._file << ":" << tr_._line << ": failed assertion \"";
+	else if ( tr_._result == test_result::ex )
+		{
+		if ( tr_._line >= 0 )
+			ss << tr_._file << ":" << tr_._line << ": unexpected exception \"";
+		}
+	else if ( tr_._result == test_result::term )
+		ss << tr_._file << ":" << tr_._line << ": segmentation fault in \"";
+	else
+		ss << "message: \"";
+	ss << tr_._message << "\"" << std::endl;
+	return ( ss.str() );
+	}
+
+std::string visual_studio_error_line( tut::test_result const& tr_ )
+	{
+	std::stringstream ss;
+	if ( tr_._result == test_result::fail )
+		ss << tr_._file << "(" << tr_._line << "): failed assertion \"";
+	else if ( tr_._result == test_result::ex )
+		{
+		if ( tr_._line >= 0 )
+			ss << tr_._file << "(" << tr_._line << "): unexpected exception \"";
+		}
+	else if ( tr_._result == test_result::term )
+		ss << tr_._file << "(" << tr_._line << "): segmentation fault in \"";
+	else
+		ss << "message: \"";
+	ss << tr_._message << "\"" << std::endl;
+	return ( ss.str() );
+	}
+
 /**
  * Default TUT callback handler.
  */
-template<typename tType = std::ostream>
+template<typename stream_t = std::ostream>
 class reporter : public tut::callback
 	{
+	typedef std::string ( *error_line_t )( tut::test_result const& );
+	typedef stream_t stream_type;
+	typedef error_line_t error_line_type;
 	std::string _currentGroup;
 	typedef std::list<tut::test_result> not_passed_list_t;
 	not_passed_list_t _notPassed;
 	std::ostream& _os;
 	yaal::hcore::HMutex _mutex;
-	tType& _ls;
+	stream_type& _ls;
+	error_line_type _errorLine;
 
 	public:
 
@@ -76,6 +135,7 @@ class reporter : public tut::callback
 
 	reporter()
 		: _currentGroup(), _notPassed(), _os( std::cout ), _mutex(), _ls( std::cerr ),
+		_errorLine( &console_error_line ),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
 		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 )
 		{
@@ -85,13 +145,15 @@ class reporter : public tut::callback
 	reporter( std::ostream& out )
 		: _currentGroup(), _notPassed(), _os( out ), _mutex(),
 		_ls( &out == &std::cout ? std::cerr : std::cout ),
+		_errorLine( &console_error_line ),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
 		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 )
 		{
 		}
 
-	reporter( std::ostream& out, tType& logger )
+	reporter( std::ostream& out, stream_type& logger )
 		: _currentGroup(), _notPassed(), _os( out ), _mutex(), _ls( logger ),
+		_errorLine( &console_error_line ),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
 		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 )
 		{
@@ -100,6 +162,10 @@ class reporter : public tut::callback
 	void run_started()
 		{
 		clear();
+		}
+	void set_error_line( error_line_type errorLine_ )
+		{
+		_errorLine = errorLine_;
 		}
 
 	void group_started( std::string const&name )
@@ -210,20 +276,7 @@ class reporter : public tut::callback
 					}
 
 				if ( ! tr._message.empty() )
-					{
-					if ( tr._result == test_result::fail )
-						_os << "     failed assertion in \"" << tr._file << ":" << tr._line << " ";
-					else if ( tr._result == test_result::ex )
-						{
-						if ( tr._line >= 0 )
-							_os << "     unexpected exception in \"" << tr._file << ":" << tr._line << " ";
-						}
-					else if ( tr._result == test_result::term )
-						_os << "     segmentation fault in \"" << tr._file << ":" << tr._line << " ";
-					else
-						_os << "     message: \"";
-					_os << tr._message << "\"" << std::endl;
-					}
+					_os << _errorLine( tr );
 				}
 			}
 
