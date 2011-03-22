@@ -93,14 +93,14 @@ std::string visual_studio_error_line( tut::test_result const& tr_ )
 	{
 	std::stringstream ss;
 	if ( tr_._result == test_result::fail )
-		ss << tr_._file << "(" << tr_._line << "): failed assertion \"";
+		ss << tr_._file << "(" << tr_._line << ") : failed assertion \"";
 	else if ( tr_._result == test_result::ex )
 		{
 		if ( tr_._line >= 0 )
-			ss << tr_._file << "(" << tr_._line << "): unexpected exception \"";
+			ss << tr_._file << "(" << tr_._line << ") : unexpected exception \"";
 		}
 	else if ( tr_._result == test_result::term )
-		ss << tr_._file << "(" << tr_._line << "): segmentation fault in \"";
+		ss << tr_._file << "(" << tr_._line << ") : segmentation fault in \"";
 	else
 		ss << "message: \"";
 	ss << tr_._message << "\"" << std::endl;
