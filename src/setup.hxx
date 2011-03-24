@@ -28,7 +28,7 @@ Copyright:
 #define TRESS_SETUP_HXX_INCLUDED
 
 #include <yaal/hcore/hstring.hxx>
-#include <yaal/hcore/hset.hxx>
+#include <yaal/hcore/hdeque.hxx>
 
 #include "config.hxx"
 
@@ -45,7 +45,7 @@ struct OSetup
 		_programName( NULL ), _logPath(), _testGroups(),
 		_testGroupPattern(), _testGroupListFilePath(),
 		_errorLine( "console" ) {}
-	typedef yaal::hcore::HSet<yaal::hcore::HString> group_names_t;
+	typedef yaal::hcore::HDeque<yaal::hcore::HString> group_names_t;
 	bool _quiet;			/* --quiet, --silent */
 	bool _verbose;		/* --verbose */
 	bool _debug;      /* --debug */
