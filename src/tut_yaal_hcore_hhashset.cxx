@@ -82,6 +82,9 @@ TUT_UNIT_TEST_N( 50, "speed test" )
 		{
 		proto_t proto;
 		HClock c;
+#ifdef __MSVCXX__
+		LOOPS /= 10;
+#endif /* #ifdef __MSVCXX__ */
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.insert( static_cast<int>( i ) );
 		clog << "*speed* std::hash_set<>::insert() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
