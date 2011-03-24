@@ -65,6 +65,7 @@ struct HServer
 	HSocket _socket;
 	HThread _thread;
 	HEvent _event;
+	bool _signaled;
 	HServer( HSocket::socket_type_t, int );
 public:
 	void start( void );
@@ -84,7 +85,7 @@ private:
 HServer::HServer( HSocket::socket_type_t type_, int maxConn_ )
 	: _buffer(),
 	_dispatcher( NO_FD, LATENCY ), _socket( type_, maxConn_ ),
-	_thread(), _event()
+	_thread(), _event(), _signaled( false )
 	{}
 
 void HServer::listen( yaal::hcore::HString const& path_, int const port_ )
@@ -149,6 +150,7 @@ void HServer::handler_message( int fileDescriptor_ )
 			_buffer += message;
 			cout << "<-" << message << endl;
 			_event.signal();
+			_signaled = true;
 			}
 		else if ( ! nRead )
 			disconnect_client( client );
@@ -189,6 +191,11 @@ void* HServer::run( void )
 	catch ( HOpenSSLException& e )
 		{
 		cout << e.what() << endl;
+		}
+	if ( ! _signaled )
+		{
+		_event.signal();
+		_signaled = true;
 		}
 	return ( NULL );
 	}
