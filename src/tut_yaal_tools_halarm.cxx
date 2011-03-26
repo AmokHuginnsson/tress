@@ -47,7 +47,7 @@ TUT_TEST_GROUP_N( tut_yaal_tools_halarm, "yaal::tools::HAlarm" );
 TUT_UNIT_TEST_N( 1, "alarm wake" )
 	static int const ALARM_TIME( 500 );
 	HAlarm alarm( ALARM_TIME );
-	ENSURE_EQUALS( "alarm failed to interrupt sleep", sleep::second( 1 ), true );
+	ENSURE_EQUALS( "alarm failed to interrupt sleep", util::sleep::second( 1 ), true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "alarm deregistered" )
@@ -56,7 +56,7 @@ TUT_UNIT_TEST_N( 2, "alarm deregistered" )
 		HAlarm alarm( ALARM_TIME );
 		ENSURE_EQUALS( "alarm interrupted sleep prematurely", sleep::milisecond( 100 ), false );
 		}
-	ENSURE_EQUALS( "alaram did not deregister!", sleep::second( 1 ), false );
+	ENSURE_EQUALS( "alaram did not deregister!", util::sleep::second( 1 ), false );
 TUT_TEARDOWN()
 
 }
