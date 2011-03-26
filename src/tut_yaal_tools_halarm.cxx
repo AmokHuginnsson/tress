@@ -54,7 +54,7 @@ TUT_UNIT_TEST_N( 2, "alarm deregistered" )
 	static int const ALARM_TIME( 500 );
 		{
 		HAlarm alarm( ALARM_TIME );
-		ENSURE_EQUALS( "alarm interrupted sleep prematurely", sleep::milisecond( 100 ), false );
+		ENSURE_EQUALS( "alarm interrupted sleep prematurely", util::sleep::milisecond( 100 ), false );
 		}
 	ENSURE_EQUALS( "alaram did not deregister!", util::sleep::second( 1 ), false );
 TUT_TEARDOWN()
