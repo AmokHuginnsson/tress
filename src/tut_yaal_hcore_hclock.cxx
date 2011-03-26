@@ -44,21 +44,9 @@ namespace tut
 
 struct tut_yaal_hcore_hclock
 	{
-	int long get_speed( HClock::UNIT::unit_t const& );
 	virtual ~tut_yaal_hcore_hclock( void )
 		{}
 	};
-
-int long tut_yaal_hcore_hclock::get_speed( HClock::UNIT::unit_t const& u )
-	{
-	double long PI = 3.14159265;
-	static int long const LOOPS = 320000L;
-	double long x = PI;
-	HClock c;
-	for ( int i = 0; i < LOOPS; ++ i )
-		x *= PI;
-	return ( static_cast<int long>( c.get_time_elapsed( u ) ) );
-	}
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hclock, "yaal::hcore::HClock" );
 

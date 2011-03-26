@@ -249,6 +249,7 @@ protected:
 yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface&, std::string const& );
 struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ ); } };
 bool file_compare( yaal::hcore::HString const&, yaal::hcore::HString const& );
+int long get_speed( yaal::hcore::HClock::UNIT::unit_t );
 
 void show_title( char const* const );
 void show_end( void );
