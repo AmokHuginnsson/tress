@@ -207,7 +207,7 @@ public:
 			{
 			const_iterator e = _groups.end();
 			yaal::tools::HWorkFlow w( tress::setup._jobs );
-			for ( const_iterator i = _groups.begin(); i != e; ++ i )
+			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
 				w.push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
 			}
 
@@ -224,7 +224,7 @@ public:
 			{
 			yaal::tools::HWorkFlow w( tress::setup._jobs );
 			for ( std::list<std::string>::const_iterator k = group_names.begin();
-					k != group_names.end(); ++ k )
+					! yaal::_isKilled_ && ( k != group_names.end() ); ++ k )
 				{
 				const_iterator i = _groups.find( *k );
 				if ( i == _groups.end() )
@@ -253,7 +253,7 @@ public:
 			{
 			yaal::tools::HWorkFlow w( tress::setup._jobs );
 			const_iterator e = _groups.end();
-			for ( const_iterator i = _groups.begin(); i != e; ++ i )
+			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
 				{
 				if ( i->first.find( pattern ) != std::string::npos )
 					w.push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
@@ -331,7 +331,7 @@ private:
 		if ( i != i )
 			return;
 
-		for ( ;; )
+		for ( ; ! yaal::_isKilled_ ; )
 			{
 			if ( i->second->has_next() )
 				_callback->test_started( i->second->next() );
