@@ -83,6 +83,9 @@ struct callback
 	*/
 	virtual void run_completed()
 		{}
+
+	virtual void test_count( int )
+		{}
 	};
 
 /**
@@ -144,6 +147,7 @@ public:
 	void set_callback( callback* cb )
 		{
 		_callback = cb == 0 ? &_defaultCallback : cb;
+		_callback->test_count( test_count() );
 		}
 
 	/**
@@ -188,6 +192,14 @@ public:
 	groups const& get_groups( void ) const
 		{
 		return ( _groups );
+		}
+
+	int test_count( void ) const
+		{
+		int total( 0 );
+		for ( const_iterator i( _groups.begin() ), e( _groups.end() ); i != e; ++ i )
+			total += i->second->get_real_test_count();
+		return ( total );
 		}
 
 	void set_time_constraint( int long timeConstraint_ )

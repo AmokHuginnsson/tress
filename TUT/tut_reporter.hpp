@@ -132,12 +132,13 @@ class reporter : public tut::callback
 	int _terminationsCount;
 	int _warningsCount;
 	int _setupCount;
+	int _totalTestCount;
 
 	reporter()
 		: _currentGroup(), _notPassed(), _os( std::cout ), _mutex(), _ls( std::cerr ),
 		_errorLine( &console_error_line ),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
-		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 )
+		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 )
 		{
 		clear();
 		}
@@ -147,7 +148,7 @@ class reporter : public tut::callback
 		_ls( &out == &std::cout ? std::cerr : std::cout ),
 		_errorLine( &console_error_line ),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
-		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 )
+		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 )
 		{
 		}
 
@@ -155,7 +156,7 @@ class reporter : public tut::callback
 		: _currentGroup(), _notPassed(), _os( out ), _mutex(), _ls( logger ),
 		_errorLine( &console_error_line ),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
-		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 )
+		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 )
 		{
 		}
 
@@ -163,6 +164,7 @@ class reporter : public tut::callback
 		{
 		clear();
 		}
+
 	void set_error_line( error_line_type errorLine_ )
 		{
 		_errorLine = errorLine_;
@@ -180,6 +182,11 @@ class reporter : public tut::callback
 		yaal::hcore::HLock l( _mutex );
 
 		_ls << "TUT: module::test<" << n << ">" << std::endl;
+		}
+
+	virtual void test_count( int totalTestCount_ )
+		{
+		_totalTestCount = totalTestCount_;
 		}
 
 	void test_completed( const tut::test_result& tr )
@@ -283,32 +290,34 @@ class reporter : public tut::callback
 		_os << std::endl;
 
 		_os << "tests summary:" << std::flush;
+		int total( _terminationsCount + _exceptionsCount + _failuresCount + _warningsCount + _setupCount + _okCount );
+		_os << " run:" << total << "/" << _totalTestCount << " (" << ( ( total * 100. ) / _totalTestCount ) << "%)" << std::flush;
 		if ( _terminationsCount > 0 )
 			{
-			_os << " terminations:" << _terminationsCount << std::flush;
+			_os << ", terminations:" << _terminationsCount << " (" << ( ( 100. * _terminationsCount ) / _totalTestCount ) <<  "%)" << std::flush;
 			}
 
 		if ( _exceptionsCount > 0 )
 			{
-			_os << " exceptions:" << _exceptionsCount << std::flush;
+			_os << ", exceptions:" << _exceptionsCount << " (" << ( ( 100. * _exceptionsCount ) / _totalTestCount ) <<  "%)" << std::flush;
 			}
 
 		if ( _failuresCount > 0 )
 			{
-			_os << " failures:" << _failuresCount << std::flush;
+			_os << ", failures:" << _failuresCount << " (" << ( ( 100. * _failuresCount ) / _totalTestCount ) <<  "%)" << std::flush;
 			}
 
 		if ( _warningsCount > 0 )
 			{
-			_os << " warnings:" << _warningsCount << std::flush;
+			_os << ", warnings:" << _warningsCount << " (" << ( ( 100. * _warningsCount ) / _totalTestCount ) <<  "%)" << std::flush;
 			}
 
 		if ( _setupCount > 0 )
 			{
-			_os << " setups:" << _setupCount << std::flush;
+			_os << ", setups:" << _setupCount << " (" << ( ( 100. * _setupCount ) / _totalTestCount ) <<  "%)" << std::flush;
 			}
 
-		_os << " ok:" << _okCount << std::flush;
+		_os << ", ok:" << _okCount << " (" << ( ( 100. * _okCount ) / _totalTestCount ) <<  "%)" << std::flush;
 		_os << std::endl;
 		}
 
