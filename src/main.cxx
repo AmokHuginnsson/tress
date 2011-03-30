@@ -156,6 +156,8 @@ int main( int argc_, char* argv_[] )
 		throw;
 		}
 	cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % clk.get_time_elapsed( HClock::UNIT::MILISECOND ) ).string() << endl;
+	if ( yaal::_isKilled_ )
+		cerr << "Killed" << endl;
 	return ( visitor._exceptionsCount
 			+ visitor._failuresCount
 			+ visitor._terminationsCount
