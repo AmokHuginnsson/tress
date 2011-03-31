@@ -147,7 +147,6 @@ public:
 	void set_callback( callback* cb )
 		{
 		_callback = cb == 0 ? &_defaultCallback : cb;
-		_callback->test_count( test_count() );
 		}
 
 	/**
@@ -194,14 +193,6 @@ public:
 		return ( _groups );
 		}
 
-	int test_count( void ) const
-		{
-		int total( 0 );
-		for ( const_iterator i( _groups.begin() ), e( _groups.end() ); i != e; ++ i )
-			total += i->second->get_real_test_count();
-		return ( total );
-		}
-
 	void set_time_constraint( int long timeConstraint_ )
 		{
 		for ( const_iterator i( _groups.begin() ), e( _groups.end() ); i != e; ++ i )
@@ -215,14 +206,19 @@ public:
 	void run_tests() const
 		{
 		_callback->run_started();
+		int total( 0 );
 
 			{
 			const_iterator e = _groups.end();
 			yaal::tools::HWorkFlow w( tress::setup._jobs );
 			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
+				{
+				total += i->second->get_real_test_count();
 				w.push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
+				}
 			}
 
+		_callback->test_count( total );
 		_callback->run_completed();
 		}
 
@@ -232,6 +228,7 @@ public:
 	void run_tests( const std::list<std::string>& group_names ) const
 		{
 		_callback->run_started();
+		int total( 0 );
 
 			{
 			yaal::tools::HWorkFlow w( tress::setup._jobs );
@@ -247,10 +244,13 @@ public:
 					_callback->test_completed( tr );
 					}
 				else
+					{
+					total += i->second->get_real_test_count();
 					w.push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
+					}
 				}
 			}
-
+		_callback->test_count( total );
 		_callback->run_completed();
 		}
 
@@ -261,6 +261,7 @@ public:
 	void run_pattern_tests( char const* pattern ) const
 		{
 		_callback->run_started();
+		int total( 0 );
 
 			{
 			yaal::tools::HWorkFlow w( tress::setup._jobs );
@@ -268,10 +269,14 @@ public:
 			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
 				{
 				if ( i->first.find( pattern ) != std::string::npos )
+					{
+					total += i->second->get_real_test_count();
 					w.push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
+					}
 				}
 			}
 
+		_callback->test_count( total );
 		_callback->run_completed();
 		}
 
@@ -297,6 +302,7 @@ public:
 			test_result tr = i->second->run_test( n );
 			_callback->test_completed( tr );
 			_callback->group_completed( group_name );
+			_callback->test_count( 1 );
 			_callback->run_completed();
 			return ( tr ) ;
 			}
