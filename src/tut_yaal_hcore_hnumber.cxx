@@ -60,15 +60,20 @@ tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void )
 	: _rnd( randomizer_helper::make_randomizer() ), _bc()
 	{
 	set_env( "BC_LINE_LENGTH", "40000" );
+#ifdef __MSVCXX__
 	char const WIN_BC_PATH[] = "..\\..\\..\\..\\usr\\windows\\bin\\bc.exe";
 	char const WIN_BC_PATH_ALT[] = "..\\..\\..\\usr\\windows\\bin\\bc.exe";
+#endif /* #ifdef __MSVCXX__ */
 	char const SOLARIS_BC_PATH[] = "/opt/csw/bin/bc";
-	if ( !! HFSItem( WIN_BC_PATH ) )
+	if ( !! HFSItem( SOLARIS_BC_PATH ) )
+		BC_PATH = SOLARIS_BC_PATH;
+#ifdef __MSVCXX__
+	else if ( !! HFSItem( WIN_BC_PATH ) )
 		BC_PATH = WIN_BC_PATH;
 	else if ( !! HFSItem( WIN_BC_PATH_ALT ) )
 		BC_PATH = WIN_BC_PATH_ALT;
-	else if ( !! HFSItem( SOLARIS_BC_PATH ) )
-		BC_PATH = SOLARIS_BC_PATH;
+#endif /* #ifdef __MSVCXX__ */
+	return;
 	}
 
 
