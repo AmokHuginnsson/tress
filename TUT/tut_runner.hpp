@@ -210,11 +210,16 @@ public:
 
 			{
 			const_iterator e = _groups.end();
-			yaal::tools::HWorkFlow w( tress::setup._jobs );
+			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
+					? yaal::tools::HWorkFlow::ptr_t( new yaal::tools::HWorkFlow( tress::setup._jobs ) )
+					: yaal::tools::HWorkFlow::ptr_t() );
 			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
 				{
 				total += i->second->get_real_test_count();
-				w.push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
+				if ( !! w )
+					w->push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
+				else
+					run_group( i );
 				}
 			}
 
@@ -231,7 +236,9 @@ public:
 		int total( 0 );
 
 			{
-			yaal::tools::HWorkFlow w( tress::setup._jobs );
+			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
+					? yaal::tools::HWorkFlow::ptr_t( new yaal::tools::HWorkFlow( tress::setup._jobs ) )
+					: yaal::tools::HWorkFlow::ptr_t() );
 			for ( std::list<std::string>::const_iterator k = group_names.begin();
 					! yaal::_isKilled_ && ( k != group_names.end() ); ++ k )
 				{
@@ -246,7 +253,10 @@ public:
 				else
 					{
 					total += i->second->get_real_test_count();
-					w.push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
+					if ( !! w )
+						w->push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
+					else
+						run_group( i );
 					}
 				}
 			}
@@ -264,14 +274,19 @@ public:
 		int total( 0 );
 
 			{
-			yaal::tools::HWorkFlow w( tress::setup._jobs );
 			const_iterator e = _groups.end();
+			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
+					? yaal::tools::HWorkFlow::ptr_t( new yaal::tools::HWorkFlow( tress::setup._jobs ) )
+					: yaal::tools::HWorkFlow::ptr_t() );
 			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
 				{
 				if ( i->first.find( pattern ) != std::string::npos )
 					{
 					total += i->second->get_real_test_count();
-					w.push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
+					if ( !! w )
+						w->push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
+					else
+						run_group( i );
 					}
 				}
 			}
