@@ -170,18 +170,32 @@ class reporter : public tut::callback
 		_errorLine = errorLine_;
 		}
 
-	void group_started( std::string const&name )
+	void group_started( std::string const& name )
 		{
 		yaal::hcore::HLock l( _mutex );
 
 		_ls << "TUT: group: [" << name << "]" << std::endl;
 		}
 
-	void test_started( const int&n )
+	void group_completed( std::string const& )
 		{
-		yaal::hcore::HLock l( _mutex );
+		if ( tress::setup._verbose )
+			_os << "------------------------------------------------------------------------" << std::endl;
+		}
 
-		_ls << "TUT: module::test<" << n << ">" << std::endl;
+	void test_started( int n, char const* const title_ )
+		{
+		if ( title_ )
+			{
+			yaal::hcore::HLock l( _mutex );
+
+			_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
+			if ( tress::setup._verbose )
+				{
+				_os << "------------------------------------------------------------------------" << std::endl;
+				_os << "TUT: " << _currentGroup << "::<" << n << "> " << title_ << std::endl;
+				}
+			}
 		}
 
 	virtual void test_count( int totalTestCount_ )

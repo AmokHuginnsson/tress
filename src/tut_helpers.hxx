@@ -52,10 +52,10 @@ Copyright:
 #endif /* defined( __GNUC__ ) && ! defined( stdext ) */
 
 #define TUT_UNIT_TEST_N( no, title ) \
-namespace { static int const M_CONCAT( dropIt, __LINE__ ) __attribute__(( __used__ )) = group.bump_real_test_count(); } \
-template<> template<> void module::test<(no)>( void ) { do { set_test_meta( title, __FILE__, __LINE__ ); show_title( title ); } while ( 0 );
+namespace { static int const M_CONCAT( dropIt, __LINE__ ) __attribute__(( __used__ )) = group.register_test( no, title ); } \
+template<> template<> void module::test<(no)>( void ) { do { set_test_meta( title, __FILE__, __LINE__ ); } while ( 0 );
 #define TUT_UNIT_TEST( title ) TUT_UNIT_TEST_N( ( __COUNTER__ ), ( title ) )
-#define TUT_TEARDOWN() show_end(); }
+#define TUT_TEARDOWN() }
 #define TUT_TEST_GROUP_N( mock, name ) \
 typedef test_group<mock> tut_group; \
 typedef tut_group::object module; \
@@ -97,6 +97,9 @@ bool operator == ( yaal::hcore::HList<T1> const& l, std::list<T2> const& sl )
 namespace std
 {
 
+yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface&, std::string const& );
+typedef std::ostream& ( *stream_mod_t )( std::ostream& );
+yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface&, stream_mod_t const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HComplex const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HNumber const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HString const& );
@@ -228,31 +231,9 @@ namespace tut_helpers
 {
 
 extern int const _testData_[2][ 100 ];
-
-class HLogger
-	{
-protected:
-	/*{*/
-	/*}*/
-public:
-	/*{*/
-	HLogger( void );
-	HLogger& operator << ( std::string const& );
-	HLogger& operator << ( int );
-	HLogger& operator << ( std::ostream& ( * const )( std::ostream& ) );
-	/*}*/
-protected:
-	/*{*/
-	/*}*/
-	};
-
-yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface&, std::string const& );
 struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ ); } };
 bool file_compare( yaal::hcore::HString const&, yaal::hcore::HString const& );
 int long get_speed( yaal::hcore::HClock::UNIT::unit_t );
-
-void show_title( char const* const );
-void show_end( void );
 
 struct HSTDGlobalScopeExceptionHandlingPolicy
 	{

@@ -27,6 +27,7 @@ struct group_base
 	// execute one test
 	virtual test_result run_test( int n ) = 0;
 	virtual int get_real_test_count( void ) const = 0;
+	virtual char const* get_test_title( int ) const = 0;
 	virtual void set_time_constraint( int long ) = 0;
 	};
 
@@ -48,44 +49,37 @@ struct callback
 	/**
 	* Called when new test run started.
 	*/
-	virtual void run_started()
-		{}
+	virtual void run_started() = 0;
 
 	/**
 	* Called when a group started
 	* @param name Name of the group
 	*/
-	virtual void group_started( const std::string& /*name */ )
-		{}
+	virtual void group_started( const std::string& /*name */ ) = 0;
 
 	/**
 	* Called when a test finished.
 	* @param tr Test results.
 	*/
-	virtual void test_completed( const test_result& /*tr */ )
-		{}
+	virtual void test_completed( const test_result& /*tr */ ) = 0;
 
 	/**
 	* Called when a group is completed
 	* @param name Name of the group
 	*/
-	virtual void group_completed( const std::string& /*name */ )
-		{}
+	virtual void group_completed( const std::string& /*name */ ) = 0;
 
 	/**
 	* Called when a test is about to start.
 	*/
-	virtual void test_started( const int& /*n */ )
-		{}
+	virtual void test_started( int /*n */, char const* const ) = 0;
 
 	/**
 	* Called when all tests in run completed.
 	*/
-	virtual void run_completed()
-		{}
+	virtual void run_completed() = 0;
 
-	virtual void test_count( int )
-		{}
+	virtual void test_count( int ) = 0;
 	};
 
 /**
@@ -121,7 +115,7 @@ public:
 	* Constructor
 	*/
 	test_runner( void )
-		: _groups(), _defaultCallback(), _callback( &_defaultCallback ), _tutListener( NULL )
+		: _groups(), _callback( NULL ), _tutListener( NULL )
 		{}
 
 	/**
@@ -146,7 +140,7 @@ public:
 	*/
 	void set_callback( callback* cb )
 		{
-		_callback = cb == 0 ? &_defaultCallback : cb;
+		_callback = cb;
 		}
 
 	/**
@@ -310,7 +304,7 @@ public:
 			}
 
 		_callback->group_started( group_name );
-		_callback->test_started( n );
+		_callback->test_started( n, i->second->get_test_title( n ) );
 
 		try
 			{
@@ -338,7 +332,6 @@ public:
 protected:
 	groups _groups;
 
-	callback _defaultCallback;
 	callback* _callback;
 	tut_listener* _tutListener;
 
@@ -367,7 +360,10 @@ private:
 		for ( ; ! yaal::_isKilled_ ; )
 			{
 			if ( i->second->has_next() )
-				_callback->test_started( i->second->next() );
+				{
+				int no( i->second->next() );
+				_callback->test_started( no, i->second->get_test_title( no ) );
+				}
 
 			test_result tr = i->second->run_next();
 			_callback->test_completed( tr );

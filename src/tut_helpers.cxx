@@ -69,6 +69,23 @@ std::ostream& operator << ( std::ostream& out, yaal::hcore::HNumber const& n )
 	return ( out );
 	}
 
+HStreamInterface& operator << ( HStreamInterface& os, std::string const& s )
+	{
+	os << s.c_str();
+	return ( os );
+	}
+
+yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& os, stream_mod_t const& mod )
+	{
+	if ( mod == static_cast<stream_mod_t const&>( std::endl ) )
+		os << hcore::endl;
+	else if ( mod == static_cast<stream_mod_t const&>( std::flush ) )
+		os << hcore::flush;
+	else
+		M_ASSERT( !"unsupported stream modifier" );
+	return ( os );
+	}
+
 }
 
 namespace tress
@@ -104,75 +121,6 @@ int const _testData_[2][ 100 ] =
 	-467, -479, -487, -491, -499, -503, -509, -521, -523, -541
 	}
 	};
-
-namespace
-{
-
-bool _watchNext_ = false;
-int _number_ = 0;
-std::string _group_;
-
-}
-
-HLogger::HLogger( void )
-	{
-	}
-
-HLogger& HLogger::operator << ( std::string const& string_ )
-	{
-	M_PROLOG
-	if ( _watchNext_ )
-		{
-		_group_ = string_;
-		_watchNext_ = false;
-		}
-	else
-		{
-		if ( ! strncmp( string_.c_str(), "TUT: group", 10 ) )
-			_watchNext_ = true;
-		}
-	hcore::log << string_.c_str ( );
-	return ( * this );
-	M_EPILOG
-	}
-
-HLogger& HLogger::operator << ( int number_ )
-	{
-	M_PROLOG
-	_number_ = number_;
-	hcore::log << number_;
-	return ( * this );
-	M_EPILOG
-	}
-
-HLogger& HLogger::operator << ( std::ostream& ( * const ) ( std::ostream& ) )
-	{
-	M_PROLOG
-	hcore::log << endl;
-	return ( * this );
-	M_EPILOG
-	}
-
-HStreamInterface& operator << ( HStreamInterface& out, std::string const& s )
-	{
-	out << s.c_str();
-	return ( out );
-	}
-
-void show_title( char const* const title )
-	{
-	if ( setup._verbose )
-		{
-		cout << "------------------------------------------------------------------------" << endl;
-		cout << "TUT: " << _group_ << "::<" << _number_ << "> " << title << endl;
-		}
-	}
-
-void show_end( void )
-	{
-	if ( setup._verbose )
-		cout << "------------------------------------------------------------------------" << endl;
-	}
 
 void HSTDGlobalScopeExceptionHandlingPolicy::handle_exception( void )
 	{

@@ -73,8 +73,7 @@ int main( int argc_, char* argv_[] )
 	HClock clk;
 /*	variables declarations for main loop:                                 */
 	int opt = 0;
-	HLogger logger;
-	tut::reporter<HLogger> visitor( std::cerr, logger );
+	tut::reporter<HLog> visitor( std::cerr, hcore::log );
 	HException::set_error_stream( stdout );
 	tut::restartable_wrapper restartable;
 /*	end.                                                                  */

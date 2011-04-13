@@ -197,8 +197,9 @@ class test_group : public group_base, public test_group_posix
 	typedef typename tests_t::const_reverse_iterator
 	tests_const_reverse_iterator;
 	typedef typename tests_t::size_type size_type;
+	typedef std::map<int, char const*> titles_t;
 
-	int _realTestCount;
+	titles_t _titles;
 	int long _timeConstraint;
 	tests_t _tests;
 	tests_iterator _currentTest;
@@ -303,7 +304,7 @@ public:
 	* Creates and registers test group with specified name.
 	*/
 	test_group( const char* name )
-		: _name( name ), _realTestCount( 0 ), _timeConstraint( 0 ), _tests(), _currentTest()
+		: _name( name ), _titles(), _timeConstraint( 0 ), _tests(), _currentTest()
 		{
 		// register itself
 		runner.get().register_group( _name, this );
@@ -316,7 +317,7 @@ public:
 	* This constructor is used in self-test run only.
 	*/
 	test_group( const char* name, test_runner& another_runner )
-		: _name( name ), _realTestCount( 0 ), _timeConstraint( 0 ), _tests(), _currentTest()
+		: _name( name ), _titles(), _timeConstraint( 0 ), _tests(), _currentTest()
 		{
 		// register itself
 		another_runner.register_group( _name, this );
@@ -333,15 +334,21 @@ public:
 		_tests[ n ] = tm;
 		}
 
-	int bump_real_test_count( void )
+	int register_test( int no_, char const* const title_ )
 		{
-		++ _realTestCount;
+		_titles[ no_ ] = title_;
 		return ( 0 );
+		}
+
+	char const* get_test_title( int no_ ) const
+		{
+		titles_t::const_iterator it( _titles.find( no_ ) );
+		return ( ( it != _titles.end() ) ? it->second : NULL );
 		}
 
 	virtual int get_real_test_count( void ) const
 		{
-		return ( _realTestCount );
+		return ( static_cast<int>( _titles.size() ) );
 		}
 
 	virtual void set_time_constraint( int long timeConstraint_ )
