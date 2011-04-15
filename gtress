@@ -1,11 +1,18 @@
 #! /usr/bin/env python
 
 import sys
+from types import *
 
 try:
 	import subprocess
 except:
 	print "Importing `subprocess' module failed!"
+	sys.exit( 1 )
+
+try:
+	import csv
+except:
+	print "Importing `csv' module failed!"
 	sys.exit( 1 )
 
 try:
@@ -18,9 +25,35 @@ except:
 	print "GTK/Pango/Glade not availible!"
 	sys.exit( 1 )
 
+class SuiteList:
+	def __init__( self, path_ ):
+		self._suites = {}
+		self._candidates = {}
+		self._path = path_
+		try:
+			csvreader = csv.reader( open( self._path, "rb" ) )
+			for row in csvreader:
+				self._candidates[ row[0] ] = 0 # row[1]
+		except:
+			pass
+	def __del__( self ):
+		self.save()
+	def save( self ):
+		csvwriter = csv.writer( open( self._path, "wb" ) )
+		csvwriter.writerows( map( lambda e: [ e ], sorted( self._suites.keys() ) ) )
+	def set_suite( self, suite_, enabled_, tests_ ):
+		if enabled_:
+			self._suites[ suite_ ] = tests_
+		elif suite_ in self._suites:
+			del self._suites[ suite_ ]
+	def was_enabled( self, suite_ ):
+		return suite_ in self._candidates
+
 class GTress:
-	def __init__( self ):
-		self._gui = gtk.glade.XML( "gtress.xrc" )
+	def __init__( self, suiteList_ ):
+		self._suiteList = suiteList_
+		self._currentFilter = ""
+		self._gui = gtk.glade.XML( "gtress.glade" )
 		signals = {
 			"destroy" : self.destroy,
 			"delete_event" : self.delete_event
@@ -28,6 +61,8 @@ class GTress:
 		self._gui.signal_autoconnect( signals )
 		self._list = self._gui.get_widget( "GUI_LIST" )
 		self._data = gtk.ListStore( str, int, bool )
+		self._filter = self._data.filter_new()
+		self._filter.set_visible_func( self.apply_filter )
 		self._listSuiteNameColumn = gtk.TreeViewColumn( "suite names" )
 		self._listSuiteNameCellRenderer = gtk.CellRendererText()
 		self._listSuiteNameColumn.pack_start( self._listSuiteNameCellRenderer, True )
@@ -53,7 +88,7 @@ class GTress:
 		self._listSuiteEnabledCellRenderer.set_property( "xalign", 0.5 )
 		self._listSuiteEnabledColumn.pack_start( self._listSuiteEnabledCellRenderer, True )
 		self._listSuiteEnabledColumn.add_attribute( self._listSuiteEnabledCellRenderer, "active", 2 )
-		self._listSuiteEnabledCellRenderer.connect( "toggled", self.col1_toggled_cb, self._data )
+		self._listSuiteEnabledCellRenderer.connect( "toggled", self.col2_toggled_cb, self._filter )
 		self._listSuiteEnabledColumn.set_sizing( gtk.TREE_VIEW_COLUMN_FIXED )
 		self._listSuiteEnabledColumn.set_fixed_width( 64 )
 		self._listSuiteEnabledColumn.set_resizable( False )
@@ -62,21 +97,65 @@ class GTress:
 		self._list.append_column( self._listSuiteNameColumn )
 		self._list.append_column( self._listTestCountColumn )
 		self._list.append_column( self._listSuiteEnabledColumn )
-		self._list.set_model( self._data )
+		self._list.get_selection().set_mode( gtk.SELECTION_MULTIPLE )
+		self._list.set_model( self._filter )
+		self._filterEdit = self._gui.get_widget( "GUI_NAME_FILTER" )
+		self._filterEdit.connect( "changed", self.filter_changed )
+		self._gui.get_widget( "GUI_CLEAR_FILTER" ).connect( "clicked", self.clear_filter )
+		self._gui.get_widget( "GUI_RUN" ).connect( "clicked", self.run )
+		self._all = self._gui.get_widget( "GUI_ALL" )
+		self._all.connect( "toggled", self.all_toggled )
+
 		tests = subprocess.Popen( [ "./build/debug/tress/1exec", "-L", "-v" ], stdout = subprocess.PIPE ).stdout
 		total = 0;
 		for line in tests.readlines():
 			fields = line.lstrip( " \t" ).strip( "\n" ).split()
 			if ( fields[0] != "setup._argc" ) and ( fields[0] != "setup._argv[0]" ) and ( fields[0] != "total" ):
+
 				total += int( fields[1] )
-				self._data.append( [ fields[0], int( fields[1] ), False ] )
+				wasEnabled = self._suiteList.was_enabled( fields[0] )
+				self._data.append( [ fields[0], int( fields[1] ), wasEnabled ] )
+				self._suiteList.set_suite( fields[0], wasEnabled, fields[1] )
 		self._totalTestCount = self._gui.get_widget( "GUI_TOTAL_TEST_COUNT" )
 		self._totalEnabledSuites = self._gui.get_widget( "GUI_TOTAL_ENABLED_SUITES" )
 		self._totalTestCount.set_text( str( total ) )
 
-	def col1_toggled_cb( self, cell, path, model ):
-		model[path][2] = not model[path][2]
+	def col2_toggled_cb( self, cell, path_, model ):
+		path = self._filter.convert_path_to_child_path( path_ )
+		self._data[path][2] = not model[path_][2]
+		self._all.set_inconsistent( True )
 		return
+
+	def all_toggled( self, toggle_ ):
+		toggle_.set_inconsistent( False )
+		all = toggle_.get_active()
+		i = self._filter.get_iter_first()
+		while i != None:
+			self._data[self._filter.convert_iter_to_child_iter( i )][2] = all
+			i = self._filter.iter_next( i )
+
+	def apply_filter( self, model_, iter_ ):
+		visible = ( type( model_[iter_][0] ) != NoneType ) and ( model_[iter_][0].find( self._currentFilter ) >= 0 )
+		return visible
+
+	def filter_changed( self, edit_ ):
+		self._currentFilter = edit_.get_text()
+		self._filter.refilter()
+
+	def clear_filter( self, button_ ):
+		self._all.set_inconsistent( True )
+		self._currentFilter = ""
+		self._filterEdit.set_text( self._currentFilter )
+		self._filter.refilter()
+
+	def update_suite_list( self ):
+		for row in self._data:
+			self._suiteList.set_suite( row[0], row[2], row[1] )
+
+	def run( self, button_ ):
+		self.update_suite_list()
+		self._suiteList.save()
+		subprocess.Popen( [ "./build/debug/tress/1exec", "-F", self._suiteList._path ] )
 
 	def main( self ):
 		gtk.main()
@@ -85,9 +164,15 @@ class GTress:
 		return False
 
 	def destroy( self, widget, data = None ):
+		self.update_suite_list()
 		gtk.main_quit()
+	
+	def __del__( self ):
+		pass
 
 if __name__ == "__main__":
-	gtress = GTress()
+	suiteList = SuiteList( "tress.suites" )
+	gtress = GTress( suiteList )
 	gtress.main()
+	suiteList.save()
 
