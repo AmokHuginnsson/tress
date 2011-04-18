@@ -167,12 +167,16 @@ class GTress:
 		self._totalTestCount = self._gui.get_widget( "GUI_TOTAL_TEST_COUNT" )
 		self._totalEnabledSuites = self._gui.get_widget( "GUI_TOTAL_ENABLED_SUITES" )
 		self._passed = self._gui.get_widget( "GUI_PASSED" )
+		self._progress = self._gui.get_widget( "GUI_PROGRESS" )
 		self._totalTestCount.set_text( str( totalTests ) )
 		self._totalEnabledSuites.set_text( str( totalSuites ) )
 
 	def update_passed( self, suite_, passed_ ):
 		self._data[self._suiteMap[suite_]][3] += passed_
-		self._passed.set_text( str( int( self._passed.get_text() ) + passed_ ) )
+		passed = int( self._passed.get_text() ) + passed_
+		self._passed.set_text( str( passed ) )
+		total = float( self._totalTestCount.get_text() )
+		self._progress.set_fraction( passed / total )
 
 	def col2_toggled_cb( self, cell, path_, model ):
 		path = self._filter.convert_path_to_child_path( path_ )

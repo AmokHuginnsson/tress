@@ -204,6 +204,18 @@
           </packing>
         </child>
         <child>
+          <widget class="GtkProgressBar" id="GUI_PROGRESS">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="padding">8</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
           <widget class="GtkAlignment" id="GUI_ALIGNMENT_RUN">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -252,7 +264,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </widget>
