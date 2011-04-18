@@ -54,9 +54,9 @@ class SuiteList:
 	def is_enabled( self, suite_ ):
 		return suite_ in self._suites
 
-def run_tests( gtress_ ):
+def run_tests( gtress_, jobs_ ):
 	try:
-		gtress_._child = subprocess.Popen( [ "./build/debug/tress/1exec", "-F", gtress_._suiteList._path ], bufsize = 0, stdout = os.open( os.devnull, os.O_RDWR ), stderr = subprocess.PIPE )
+		gtress_._child = subprocess.Popen( [ "./build/debug/tress/1exec", "-j", str( jobs_ ), "-F", gtress_._suiteList._path ], bufsize = 0, stdout = os.open( os.devnull, os.O_RDWR ), stderr = subprocess.PIPE )
 		stderr = gtress_._child.stderr
 		while True:
 			line = stderr.readline()
@@ -143,6 +143,7 @@ class GTress:
 		self._gui.get_widget( "GUI_CLEAR_FILTER" ).connect( "clicked", self.clear_filter )
 		self._gui.get_widget( "GUI_RUN" ).connect( "clicked", self.run )
 		self._gui.get_widget( "GUI_QUIT" ).connect( "clicked", self.destroy )
+		self._jobs = self._gui.get_widget( "GUI_JOBS" )
 		self._all = self._gui.get_widget( "GUI_ALL" )
 		self._all.connect( "toggled", self.all_toggled )
 
@@ -236,7 +237,7 @@ class GTress:
 		for row in self._data:
 			row[3] = 0
 		self._passed.set_text( "0" )
-		self._thread = threading.Thread( target = run_tests, args = [self] )
+		self._thread = threading.Thread( target = run_tests, args = [self, self._jobs.get_value()] )
 		self._thread.start()
 
 	def main( self ):
