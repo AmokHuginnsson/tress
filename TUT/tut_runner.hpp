@@ -239,6 +239,7 @@ public:
 				const_iterator i = _groups.find( *k );
 				if ( i == _groups.end() )
 					{
+					++ total;
 					test_result tr( *k, 0 );
 					tr.set_meta( test_result::setup, "", "no such group" );
 					tr.set_meta( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( group_names.begin(), k ) ) );

@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 
 import sys
+import os
+import threading
 from types import *
 
 try:
@@ -19,6 +21,7 @@ try:
 	import pygtk
 	pygtk.require( "2.0" )
 	import pango
+	import gobject
 	import gtk
 	import gtk.glade
 except:
@@ -31,7 +34,7 @@ class SuiteList:
 		self._candidates = {}
 		self._path = path_
 		try:
-			csvreader = csv.reader( open( self._path, "rb" ) )
+			csvreader = csv.reader( open( self._path, "rb" ), delimiter = ';' )
 			for row in csvreader:
 				self._candidates[ row[0] ] = 0 # row[1]
 		except:
@@ -39,7 +42,7 @@ class SuiteList:
 	def __del__( self ):
 		self.save()
 	def save( self ):
-		csvwriter = csv.writer( open( self._path, "wb" ) )
+		csvwriter = csv.writer( open( self._path, "wb" ), delimiter = ';' )
 		csvwriter.writerows( map( lambda e: [ e ], sorted( self._suites.keys() ) ) )
 	def set_suite( self, suite_, enabled_, tests_ ):
 		if enabled_:
@@ -48,11 +51,35 @@ class SuiteList:
 			del self._suites[ suite_ ]
 	def was_enabled( self, suite_ ):
 		return suite_ in self._candidates
+	def is_enabled( self, suite_ ):
+		return suite_ in self._suites
+
+def run_tests( gtress_ ):
+	try:
+		gtress_._child = subprocess.Popen( [ "./build/debug/tress/1exec", "-F", gtress_._suiteList._path ], bufsize = 0, stdout = os.open( os.devnull, os.O_RDWR ), stderr = subprocess.PIPE )
+		stderr = gtress_._child.stderr
+		while True:
+			line = stderr.readline()
+			if line == "":
+				break;
+			print line.lstrip( " \t" ).strip( "\n" )
+			fields = map( lambda s : s.lstrip( " \t" ).strip( " \t" ), line.split( ": " ) )
+			if gtress_._suiteList.is_enabled( fields[0] ):
+				passed = fields[1].count( "." ) + fields[1].count( "," )
+				gobject.idle_add( gtress_.update_passed, fields[0], passed )
+	finally:
+		if gtress_._child != None:
+			gtress_._child.wait()
+	gtress_._child = None
 
 class GTress:
 	def __init__( self, suiteList_ ):
+		self._child = None
+		self._thread = None
 		self._suiteList = suiteList_
 		self._currentFilter = ""
+		self._suiteMap = {}
+		gtk.gdk.threads_init()
 		self._gui = gtk.glade.XML( "gtress.glade" )
 		signals = {
 			"destroy" : self.destroy,
@@ -60,7 +87,7 @@ class GTress:
 		}
 		self._gui.signal_autoconnect( signals )
 		self._list = self._gui.get_widget( "GUI_LIST" )
-		self._data = gtk.ListStore( str, int, bool )
+		self._data = gtk.ListStore( str, int, bool, int )
 		self._filter = self._data.filter_new()
 		self._filter.set_visible_func( self.apply_filter )
 		self._listSuiteNameColumn = gtk.TreeViewColumn( "suite names" )
@@ -93,46 +120,90 @@ class GTress:
 		self._listSuiteEnabledColumn.set_fixed_width( 64 )
 		self._listSuiteEnabledColumn.set_resizable( False )
 		self._listSuiteEnabledColumn.set_expand( False )
+	
+		self._listPassedColumn = gtk.TreeViewColumn( "passed" )
+		self._listPassedCellRenderer = gtk.CellRendererText()
+		self._listPassedCellRenderer.set_property( "xalign", 1 )
+		self._listPassedCellRenderer.set_property( "xpad", 8 )
+		self._listPassedColumn.pack_start( self._listPassedCellRenderer, True )
+		self._listPassedColumn.add_attribute( self._listPassedCellRenderer, "text", 3 )
+		self._listPassedColumn.set_sizing( gtk.TREE_VIEW_COLUMN_FIXED )
+		self._listPassedColumn.set_fixed_width( 80 )
+		self._listPassedColumn.set_resizable( False )
+		self._listPassedColumn.set_expand( False )
 
 		self._list.append_column( self._listSuiteNameColumn )
 		self._list.append_column( self._listTestCountColumn )
 		self._list.append_column( self._listSuiteEnabledColumn )
+		self._list.append_column( self._listPassedColumn )
 		self._list.get_selection().set_mode( gtk.SELECTION_MULTIPLE )
 		self._list.set_model( self._filter )
 		self._filterEdit = self._gui.get_widget( "GUI_NAME_FILTER" )
 		self._filterEdit.connect( "changed", self.filter_changed )
 		self._gui.get_widget( "GUI_CLEAR_FILTER" ).connect( "clicked", self.clear_filter )
 		self._gui.get_widget( "GUI_RUN" ).connect( "clicked", self.run )
+		self._gui.get_widget( "GUI_QUIT" ).connect( "clicked", self.destroy )
 		self._all = self._gui.get_widget( "GUI_ALL" )
 		self._all.connect( "toggled", self.all_toggled )
 
-		tests = subprocess.Popen( [ "./build/debug/tress/1exec", "-L", "-v" ], stdout = subprocess.PIPE ).stdout
-		total = 0;
+		self._child = subprocess.Popen( [ "./build/debug/tress/1exec", "-L", "-v" ], stdout = subprocess.PIPE )
+		tests = self._child.stdout
+		totalTests = 0
+		totalSuites = 0
+		suiteNo = 0
 		for line in tests.readlines():
 			fields = line.lstrip( " \t" ).strip( "\n" ).split()
 			if ( fields[0] != "setup._argc" ) and ( fields[0] != "setup._argv[0]" ) and ( fields[0] != "total" ):
-
-				total += int( fields[1] )
 				wasEnabled = self._suiteList.was_enabled( fields[0] )
-				self._data.append( [ fields[0], int( fields[1] ), wasEnabled ] )
+				if wasEnabled:
+					totalTests += int( fields[1] )
+					totalSuites += 1
+				self._data.append( [ fields[0], int( fields[1] ), wasEnabled, 0 ] )
 				self._suiteList.set_suite( fields[0], wasEnabled, fields[1] )
+				self._suiteMap[fields[0]] = suiteNo
+				suiteNo += 1
+		self._child.wait()
+		self._child = None
 		self._totalTestCount = self._gui.get_widget( "GUI_TOTAL_TEST_COUNT" )
 		self._totalEnabledSuites = self._gui.get_widget( "GUI_TOTAL_ENABLED_SUITES" )
-		self._totalTestCount.set_text( str( total ) )
+		self._passed = self._gui.get_widget( "GUI_PASSED" )
+		self._totalTestCount.set_text( str( totalTests ) )
+		self._totalEnabledSuites.set_text( str( totalSuites ) )
+
+	def update_passed( self, suite_, passed_ ):
+		self._data[self._suiteMap[suite_]][3] += passed_
+		self._passed.set_text( str( int( self._passed.get_text() ) + passed_ ) )
 
 	def col2_toggled_cb( self, cell, path_, model ):
 		path = self._filter.convert_path_to_child_path( path_ )
-		self._data[path][2] = not model[path_][2]
+		on = self._data[path][2] = not model[path_][2]
 		self._all.set_inconsistent( True )
+		totalModified = model[path_][1]
+		suite = 1
+		if ( not on ):
+			totalModified = -totalModified
+			suite = -suite;
+		self._totalTestCount.set_text( str( int( self._totalTestCount.get_text() ) + totalModified ) )
+		self._totalEnabledSuites.set_text( str( int( self._totalEnabledSuites.get_text() ) + suite ) )
 		return
 
 	def all_toggled( self, toggle_ ):
 		toggle_.set_inconsistent( False )
 		all = toggle_.get_active()
 		i = self._filter.get_iter_first()
+		totalModified = 0
+		suite = 0
 		while i != None:
+			if self._data[self._filter.convert_iter_to_child_iter( i )][2] != all:
+				totalModified += self._data[self._filter.convert_iter_to_child_iter( i )][1]
+				suite += 1
 			self._data[self._filter.convert_iter_to_child_iter( i )][2] = all
 			i = self._filter.iter_next( i )
+		if ( not all ):
+			totalModified = -totalModified
+			suite = -suite;
+		self._totalTestCount.set_text( str( int( self._totalTestCount.get_text() ) + totalModified ) )
+		self._totalEnabledSuites.set_text( str( int( self._totalEnabledSuites.get_text() ) + suite ) )
 
 	def apply_filter( self, model_, iter_ ):
 		visible = ( type( model_[iter_][0] ) != NoneType ) and ( model_[iter_][0].find( self._currentFilter ) >= 0 )
@@ -155,7 +226,14 @@ class GTress:
 	def run( self, button_ ):
 		self.update_suite_list()
 		self._suiteList.save()
-		subprocess.Popen( [ "./build/debug/tress/1exec", "-F", self._suiteList._path ] )
+		if self._thread != None:
+			self._thread.join()
+			self._thread = None
+		for row in self._data:
+			row[3] = 0
+		self._passed.set_text( "0" )
+		self._thread = threading.Thread( target = run_tests, args = [self] )
+		self._thread.start()
 
 	def main( self ):
 		gtk.main()
@@ -164,6 +242,11 @@ class GTress:
 		return False
 
 	def destroy( self, widget, data = None ):
+		if self._thread != None:
+			self._thread.join()
+			self._thread = None
+		if self._child != None:
+			self._child.wait()
 		self.update_suite_list()
 		gtk.main_quit()
 	

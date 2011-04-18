@@ -155,10 +155,10 @@
             </child>
             <child>
               <widget class="GtkLabel" id="GUI_TOTAL_ENABLED_SUITES">
-                <property name="width_request">60</property>
+                <property name="width_request">64</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
+                <property name="xalign">0.80000001192092896</property>
                 <property name="label" translatable="yes">0</property>
               </widget>
               <packing>
@@ -168,8 +168,22 @@
               </packing>
             </child>
             <child>
+              <widget class="GtkLabel" id="GUI_PASSED">
+                <property name="width_request">80</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">0</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
               <widget class="GtkAlignment" id="alignment1">
-                <property name="width_request">32</property>
+                <property name="width_request">27</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -179,7 +193,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </widget>
@@ -196,14 +210,42 @@
             <property name="xalign">1</property>
             <property name="xscale">0</property>
             <child>
-              <widget class="GtkButton" id="GUI_RUN">
-                <property name="label">gtk-execute</property>
+              <widget class="GtkHButtonBox" id="GUI_BUTTON_BOX">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="clicked" swapped="no"/>
+                <property name="can_focus">False</property>
+                <property name="spacing">16</property>
+                <child>
+                  <widget class="GtkButton" id="GUI_RUN">
+                    <property name="label">gtk-execute</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="use_stock">True</property>
+                    <signal name="clicked" handler="clicked" swapped="no"/>
+                  </widget>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkButton" id="GUI_QUIT">
+                    <property name="label">gtk-quit</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="use_stock">True</property>
+                    <signal name="clicked" handler="clicked" swapped="no"/>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </widget>
             </child>
           </widget>
