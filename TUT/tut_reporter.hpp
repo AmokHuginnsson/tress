@@ -138,12 +138,14 @@ class reporter : public tut::callback
 	int _warningsCount;
 	int _setupCount;
 	int _totalTestCount;
+	int _currentGroupTestCount;
 
 	reporter()
 		: _currentGroup(), _notPassed(), _os( std::cout ), _mutex(), _ls( std::cerr ),
 		_errorLine( &console_error_line ),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
-		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 )
+		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 ),
+		_currentGroupTestCount( 0 )
 		{
 		clear();
 		}
@@ -153,7 +155,8 @@ class reporter : public tut::callback
 		_ls( &out == &std::cout ? std::cerr : std::cout ),
 		_errorLine( &console_error_line ),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
-		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 )
+		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 ),
+		_currentGroupTestCount( 0 )
 		{
 		}
 
@@ -161,7 +164,8 @@ class reporter : public tut::callback
 		: _currentGroup(), _notPassed(), _os( out ), _mutex(), _ls( logger ),
 		_errorLine( &console_error_line ),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
-		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 )
+		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 ),
+		_currentGroupTestCount( 0 )
 		{
 		}
 
@@ -217,12 +221,12 @@ class reporter : public tut::callback
 			{
 			_os << std::endl << name << ": " << std::flush;
 			_currentGroup = name;
+			_currentGroupTestCount = 0;
 			}
 
 		_os << tr << std::flush;
 		if ( tr._result == tut::test_result::ok )
 			_okCount ++;
-
 		else if ( tr._result == tut::test_result::ex )
 			_exceptionsCount ++;
 		else if ( tr._result == tut::test_result::ex_ctor )
@@ -238,15 +242,26 @@ class reporter : public tut::callback
 		else
 			_terminationsCount ++;
 
+		if ( tr._result == tut::test_result::ok )
+			++ _currentGroupTestCount;
+		else
+			_currentGroupTestCount += ( tr._testNo < 10 ? 5 : ( tr._testNo < 100 ? 6 : 7 ) );
+
 		if ( tr._result != tut::test_result::ok )
 			_notPassed.push_back( tr );
 		group_base::run_stat_t status( tr._group->get_stat() );
-		if ( tress::setup._color && ( status.second == tr._group->get_real_test_count() ) )
+		if ( status.second == tr._group->get_real_test_count() )
 			{
+			int spaceCount( 72 - ( static_cast<int>( name.length() ) + _currentGroupTestCount ) );
+			if ( spaceCount > 0 )
+				{
+				std::string space( spaceCount, ' ' );
+				_os << space;
+				}
 			if ( status.first == status.second )
-				_os << " " << yaal::hconsole::brightgreen << "[Pass]" << yaal::hconsole::reset << std::flush;
+				_os << " " << ( tress::setup._color ? yaal::hconsole::brightgreen : "" ) << "[Pass]" << ( tress::setup._color ? yaal::hconsole::reset : "" ) << std::flush;
 			else
-				_os << " " << yaal::hconsole::brightred << "[Fail]" << yaal::hconsole::reset << std::flush;
+				_os << " " << ( tress::setup._color ? yaal::hconsole::brightred : "" ) << "[Fail]" << ( tress::setup._color ? yaal::hconsole::reset : "" ) << std::flush;
 			}
 		}
 

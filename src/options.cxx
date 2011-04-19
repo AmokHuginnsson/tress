@@ -65,12 +65,14 @@ int handle_program_options( int argc_, char** argv_ )
 	M_PROLOG
 	HProgramOptionsHandler po;
 	OOptionInfo info( po, setup._programName, "yaal stress testing suite", NULL );
-	bool stop = false;
+	bool stop( false );
+	bool noColor( false );
 	int dummyValue( 0 );
 	po( "log_path", program_options_helper::option_value( setup._logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
 		( "jobs", program_options_helper::option_value( setup._jobs ), 'j', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number of concurrent jobs", "count" )
 		( "error-line", program_options_helper::option_value( setup._errorLine ), 'I', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "generator for reporting errors", "IDE" )
 		( "color", program_options_helper::option_value( setup._color ), 'C', HProgramOptionsHandler::OOption::TYPE::NONE, "colorize output" )
+		( "no-color", program_options_helper::option_value( noColor ), HProgramOptionsHandler::OOption::TYPE::NONE, "disable output colorizing" )
 		( "time-constraint", program_options_helper::option_value( setup._timeConstraint ), 'T', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "constrain time for execution of single unit test", "miliseconds" )
 		( "group", program_options_helper::option_value( setup._testGroups ), 'G', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test group", "name" )
 		( "pattern", program_options_helper::option_value( setup._testGroupPattern ), 'P', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test groups that are matching pattern", "pattern" )
@@ -100,6 +102,8 @@ int handle_program_options( int argc_, char** argv_ )
 		}
 	if ( stop )
 		throw 0;
+	if ( noColor )
+		setup._color = false;
 	setup._argc = ( argc_ - nonOption ) + 1;
 	setup._argv = argv_ + nonOption - 1;
 	argv_[ nonOption - 1 ] = argv_[ 0 ];
