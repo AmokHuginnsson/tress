@@ -71,18 +71,22 @@ struct test_result : public test_result_posix
 	/**
 	 * Default constructor.
 	 */
-	test_result() : _group( NULL ), _testNo( 0 ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 )
+	test_result()
+		: test_result_posix(),
+		_group( NULL ), _testNo( 0 ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 )
 		{}
 
 	/**
 	 * Constructor.
 	 */
 	test_result( group_base* grp, int pos )
-		: _group( grp ), _testNo( pos ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 )
+		: test_result_posix(),
+		_group( grp ), _testNo( pos ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 )
 		{}
 
 	test_result( test_result const& tr_ )
-		: _group( tr_._group ), _testNo( tr_._testNo ),
+		: test_result_posix(),
+		_group( tr_._group ), _testNo( tr_._testNo ),
 		_name( tr_._name ), _result( tr_._result ), _message( tr_._message ),
 		_exceptionTypeId( tr_._exceptionTypeId ), _file( tr_._file ),
 		_line( tr_._line )
