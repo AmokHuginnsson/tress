@@ -212,10 +212,11 @@ class reporter : public tut::callback
 		{
 		yaal::hcore::HLock l( _mutex );
 
-		if ( tr._group != _currentGroup )
+		std::string const& name( tr._group->get_name() );
+		if ( name != _currentGroup )
 			{
-			_os << std::endl << tr._group << ": " << std::flush;
-			_currentGroup = tr._group;
+			_os << std::endl << name << ": " << std::flush;
+			_currentGroup = name;
 			}
 
 		_os << tr << std::flush;
@@ -239,6 +240,14 @@ class reporter : public tut::callback
 
 		if ( tr._result != tut::test_result::ok )
 			_notPassed.push_back( tr );
+		group_base::run_stat_t status( tr._group->get_stat() );
+		if ( tress::setup._color && ( status.second == tr._group->get_real_test_count() ) )
+			{
+			if ( status.first == status.second )
+				_os << " " << yaal::hconsole::brightgreen << "[Pass]" << yaal::hconsole::reset << std::flush;
+			else
+				_os << " " << yaal::hconsole::brightred << "[Fail]" << yaal::hconsole::reset << std::flush;
+			}
 		}
 
 	void run_completed()
@@ -257,7 +266,7 @@ class reporter : public tut::callback
 
 				_os << std::endl;
 
-				_os << "---> " << "group: " << tr._group
+				_os << "---> " << "group: " << tr._group->get_name()
 					<< ", test: test<" << tr._testNo << ">"
 					<< ( !tr._name.empty() ? ( std::string( " : " ) + tr._name ) : std::string() )
 					<< std::endl;

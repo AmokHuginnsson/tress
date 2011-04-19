@@ -15,6 +15,7 @@ namespace tut
  */
 struct group_base
 	{
+	typedef std::pair<int, int> run_stat_t;
 	virtual ~group_base()
 		{}
 
@@ -29,6 +30,9 @@ struct group_base
 	virtual int get_real_test_count( void ) const = 0;
 	virtual char const* get_test_title( int ) const = 0;
 	virtual void set_time_constraint( int long ) = 0;
+	virtual std::string const& get_name() const = 0;
+	virtual void set_name( std::string const& ) = 0;
+	virtual run_stat_t get_stat() const = 0;
 	};
 
 /**
@@ -187,6 +191,12 @@ public:
 		return ( _groups );
 		}
 
+	group_base* get_group( std::string const& name_ )
+		{
+		iterator it( _groups.find( name_ ) );
+		return ( it != _groups.end() ? it->second : NULL );
+		}
+
 	void set_time_constraint( int long timeConstraint_ )
 		{
 		for ( const_iterator i( _groups.begin() ), e( _groups.end() ); i != e; ++ i )
@@ -240,7 +250,7 @@ public:
 				if ( i == _groups.end() )
 					{
 					++ total;
-					test_result tr( *k, 0 );
+					test_result tr( i->second, 0 );
 					tr.set_meta( test_result::setup, "", "no such group" );
 					tr.set_meta( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( group_names.begin(), k ) ) );
 					_callback->test_completed( tr );

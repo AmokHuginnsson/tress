@@ -102,7 +102,7 @@ std::string unescape( const std::string& orig )
  */
 void serialize( std::ostream& os, const tut::test_result& tr )
 	{
-	os << escape( tr._group ) << std::endl;
+	os << escape( tr._group->get_name() ) << std::endl;
 	os << tr._testNo << ' ';
 	switch ( tr._result )
 		{
@@ -135,13 +135,14 @@ void serialize( std::ostream& os, const tut::test_result& tr )
  */
 void deserialize( std::istream& is, tut::test_result& tr )
 	{
-	std::getline( is, tr._group );
+	std::string name;
+	std::getline( is, name );
 	if ( is.eof() )
 		{
 		throw tut::no_more_tests();
 		}
 
-	tr._group = unescape( tr._group );
+	tr._group->set_name( unescape( name ) );
 
 	tr._testNo = -1;
 	is >> tr._testNo;
@@ -409,7 +410,7 @@ private:
 		else
 			{
 			// test was terminated...
-			tut::test_result tr( fail_group, fail_test );
+			tut::test_result tr( _runner.get_group( fail_group ), fail_test );
 			tr.set_meta( tut::test_result::term );
 			tr.set_meta( failName, failFile.c_str(), failLine );
 			register_test( tr );

@@ -23,6 +23,8 @@ struct test_result_posix
 	};
 #endif
 
+struct group_base;
+
 /**
  * Return type of runned test/test group.
  *
@@ -34,7 +36,7 @@ struct test_result : public test_result_posix
 	/**
 	* Test group name.
 	*/
-	std::string _group;
+	group_base* _group;
 
 	/**
 	* Test number in group.
@@ -69,14 +71,21 @@ struct test_result : public test_result_posix
 	/**
 	 * Default constructor.
 	 */
-	test_result() : _group(), _testNo( 0 ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 )
+	test_result() : _group( NULL ), _testNo( 0 ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 )
 		{}
 
 	/**
 	 * Constructor.
 	 */
-	test_result( std::string const& grp, int pos )
+	test_result( group_base* grp, int pos )
 		: _group( grp ), _testNo( pos ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 )
+		{}
+
+	test_result( test_result const& tr_ )
+		: _group( tr_._group ), _testNo( tr_._testNo ),
+		_name( tr_._name ), _result( tr_._result ), _message( tr_._message ),
+		_exceptionTypeId( tr_._exceptionTypeId ), _file( tr_._file ),
+		_line( tr_._line )
 		{}
 
 	/**
@@ -97,6 +106,33 @@ struct test_result : public test_result_posix
 		_result = res;
 		_exceptionTypeId = ex_typeid;
 		_message = msg;
+		}
+
+	test_result& operator = ( test_result const& tr_ )
+		{
+		if ( &tr_ != this )
+			{
+			test_result tmp( tr_ );
+			swap( tmp );
+			}
+		return ( *this );
+		}
+
+	void swap( test_result& tr_ )
+		{
+		if ( &tr_ != this )
+			{
+			using std::swap;
+			swap( _group, tr_._group );
+			swap( _testNo, tr_._testNo );
+			swap( _name, tr_._name );
+			swap( _result, tr_._result );
+			swap( _message, tr_._message );
+			swap( _exceptionTypeId, tr_._exceptionTypeId );
+			swap( _file, tr_._file );
+			swap( _line, tr_._line );
+			}
+		return;
 		}
 
 	};

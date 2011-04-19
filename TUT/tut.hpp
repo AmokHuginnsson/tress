@@ -188,7 +188,6 @@ struct tests_registerer<Test, Group, 0>
 template<typename Data, int MaxTestsInGroup = 50>
 class test_group : public group_base, public test_group_posix
 	{
-	const char* _name;
 	typedef test_object<Data> test_object_data;
 	typedef void ( test_object_data::* testmethod )();
 	typedef std::map<int, testmethod> tests_t;
@@ -199,10 +198,13 @@ class test_group : public group_base, public test_group_posix
 	typedef typename tests_t::size_type size_type;
 	typedef std::map<int, char const*> titles_t;
 
+	std::string _name;
 	titles_t _titles;
 	int long _timeConstraint;
 	tests_t _tests;
 	tests_iterator _currentTest;
+	int _passed;
+	int _runned;
 
 	/**
 	* Exception-in-destructor-safe smart-pointer class.
@@ -304,7 +306,7 @@ public:
 	* Creates and registers test group with specified name.
 	*/
 	test_group( const char* name )
-		: _name( name ), _titles(), _timeConstraint( 0 ), _tests(), _currentTest()
+		: _name( name ), _titles(), _timeConstraint( 0 ), _tests(), _currentTest(), _passed( 0 ), _runned( 0 )
 		{
 		// register itself
 		runner.get().register_group( _name, this );
@@ -317,7 +319,7 @@ public:
 	* This constructor is used in self-test run only.
 	*/
 	test_group( const char* name, test_runner& another_runner )
-		: _name( name ), _titles(), _timeConstraint( 0 ), _tests(), _currentTest()
+		: _name( name ), _titles(), _timeConstraint( 0 ), _tests(), _currentTest(), _passed( 0 ), _runned( 0 )
 		{
 		// register itself
 		another_runner.register_group( _name, this );
@@ -356,6 +358,21 @@ public:
 		_timeConstraint = timeConstraint_;
 		}
 
+	virtual std::string const& get_name() const
+		{
+		return ( _name );
+		}
+
+	virtual void set_name( std::string const& name_ )
+		{
+		_name = name_;
+		}
+
+	virtual run_stat_t get_stat() const
+		{
+		return ( std::make_pair( _passed, _runned ) );
+		}
+
 	/**
 	 * Reset test position before first test.
 	 */
@@ -392,7 +409,7 @@ public:
 				{
 				tests_iterator current_test = _currentTest ++;
 
-				test_result tr = run_test( current_test, obj );
+				test_result tr( run_test( current_test, obj ) );
 
 				return ( tr ) ;
 				}
@@ -440,7 +457,7 @@ public:
 	 */
 	test_result run_test( const tests_iterator& ti, safe_holder<object>& obj )
 		{
-		test_result tr( _name, ti->first );
+		test_result tr( this, ti->first );
 
 		char const* file = NULL;
 		int line = -1;
@@ -448,6 +465,7 @@ public:
 			{
 			errno = 0;
 			run_test( ti->second, obj );
+			++ _passed;
 			}
 		catch ( const no_such_test& )
 			{
@@ -515,6 +533,7 @@ public:
 			{
 			time_constraint timeConstraint( _timeConstraint );
 			obj->reset();
+			++ _runned;
 			( obj.get()->*tm )();
 			if ( obj->is_slow() )
 				timeConstraint.disable();
@@ -523,6 +542,7 @@ public:
 		if ( obj->called_method_was_a_dummy_test_ )
 			{
 			// do not call obj.release(); reuse object
+			-- _runned;
 			throw no_such_test();
 			}
 
