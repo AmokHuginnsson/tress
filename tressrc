@@ -3,6 +3,7 @@
 
 log_path x_tress.log
 jobs 5
+color
 
 	# ala0x
 	  # ala0x

@@ -6,6 +6,7 @@
 
 #include "tut.hpp"
 #include <yaal/hcore/hthread.hxx>
+#include <yaal/hconsole/console.hxx>
 
 /**
  * Template Unit Tests Framework for C++.
@@ -18,6 +19,8 @@ namespace
 
 std::ostream& operator <<( std::ostream& _os, const tut::test_result& tr )
 	{
+	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
+		_os << yaal::hconsole::brightred;
 	switch ( tr._result )
 		{
 		case tut::test_result::ok:
@@ -45,6 +48,8 @@ std::ostream& operator <<( std::ostream& _os, const tut::test_result& tr )
 			_os << "no such group" << std::flush;
 		break;
 		}
+	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
+		_os << yaal::hconsole::reset << std::flush;
 
 	return ( _os );
 	}
