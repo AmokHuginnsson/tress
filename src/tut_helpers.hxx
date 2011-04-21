@@ -46,6 +46,7 @@ Copyright:
 #include <yaal/hcore/hmatrix.hxx>
 #include <yaal/hcore/xalloc.hxx>
 #include <yaal/tools/hstringstream.hxx>
+#include <yaal/hcore/hclock.hxx>
 
 #if defined( __GNUC__ ) && ! defined( stdext )
 #define stdext __gnu_cxx

@@ -17,7 +17,7 @@
 namespace
 {
 
-std::ostream& operator <<( std::ostream& _os, const tut::test_result& tr )
+std::ostream& operator << ( std::ostream& _os, const tut::test_result& tr )
 	{
 	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
 		_os << yaal::hconsole::brightred;
@@ -182,7 +182,7 @@ class reporter : public tut::callback
 	void group_started( std::string const& name )
 		{
 		yaal::hcore::HLock l( _mutex );
-
+		using std::operator <<;
 		_ls << "TUT: group: [" << name << "]" << std::endl;
 		}
 
@@ -197,7 +197,7 @@ class reporter : public tut::callback
 		if ( title_ )
 			{
 			yaal::hcore::HLock l( _mutex );
-
+			using std::operator <<;
 			_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
 			if ( tress::setup._verbose )
 				{
