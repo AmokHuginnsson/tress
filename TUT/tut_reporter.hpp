@@ -250,7 +250,7 @@ class reporter : public tut::callback
 		if ( tr._result != tut::test_result::ok )
 			_notPassed.push_back( tr );
 		group_base::run_stat_t status( tr._group->get_stat() );
-		if ( status.second == tr._group->get_real_test_count() )
+		if ( tress::setup._fancy && ( status.second == tr._group->get_real_test_count() ) )
 			{
 			int spaceCount( 72 - ( static_cast<int>( name.length() ) + _currentGroupTestCount ) );
 			if ( spaceCount > 0 )

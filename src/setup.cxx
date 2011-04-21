@@ -110,7 +110,7 @@ void OSetup::test_setup( void )
 	char const* IDE[] = { "console", "vim", "eclipse", "visualstudio" };
 	if ( ! count( IDE, IDE + countof ( IDE ), _errorLine ) )
 		M_THROW( _( "invalid IDE specified: " ) + _errorLine, 0 );
-	if ( ( _errorLine != IDE[0] ) || ! ::getenv( "TERM" ) )
+	if ( ! _fancy || ( _errorLine != IDE[0] ) || ! ::getenv( "TERM" ) )
 		_color = false;
 	if ( _verbose )
 		{
