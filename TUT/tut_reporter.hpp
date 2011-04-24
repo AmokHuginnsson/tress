@@ -6,6 +6,7 @@
 
 #include "tut.hpp"
 #include <yaal/hcore/hthread.hxx>
+#include <yaal/tools/xmath.hxx>
 #include <yaal/hconsole/console.hxx>
 
 /**
@@ -20,7 +21,7 @@ namespace
 std::ostream& operator << ( std::ostream& _os, const tut::test_result& tr )
 	{
 	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
-		_os << yaal::hconsole::brightred;
+		_os << yaal::hconsole::red;
 	switch ( tr._result )
 		{
 		case tut::test_result::ok:
@@ -252,16 +253,18 @@ class reporter : public tut::callback
 		group_base::run_stat_t status( tr._group->get_stat() );
 		if ( tress::setup._fancy && ( status.second == tr._group->get_real_test_count() ) )
 			{
-			int spaceCount( 72 - ( static_cast<int>( name.length() ) + _currentGroupTestCount ) );
+			static char const* COLUMNS( ::getenv( "COLUMNS" ) );
+			static int const columns( COLUMNS ? static_cast<int>( ::strtol( COLUMNS, NULL, 10 ) ) : 80 );
+			int spaceCount( ( yaal::tools::xmath::clip( 80, columns, 128 ) - 9 ) - ( static_cast<int>( name.length() ) + _currentGroupTestCount ) );
 			if ( spaceCount > 0 )
 				{
 				std::string space( spaceCount, ' ' );
 				_os << space;
 				}
 			if ( status.first == status.second )
-				_os << " " << ( tress::setup._color ? yaal::hconsole::brightgreen : "" ) << "[Pass]" << ( tress::setup._color ? yaal::hconsole::reset : "" ) << std::flush;
+				_os << " [" << ( tress::setup._color ? yaal::hconsole::green : "" ) << "Pass" << ( tress::setup._color ? yaal::hconsole::reset : "" ) << "]" << std::flush;
 			else
-				_os << " " << ( tress::setup._color ? yaal::hconsole::brightred : "" ) << "[Fail]" << ( tress::setup._color ? yaal::hconsole::reset : "" ) << std::flush;
+				_os << " [" << ( tress::setup._color ? yaal::hconsole::red : "" ) << "Fail" << ( tress::setup._color ? yaal::hconsole::reset : "" ) << "]" << std::flush;
 			}
 		}
 
