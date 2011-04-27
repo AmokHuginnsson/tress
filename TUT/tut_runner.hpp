@@ -218,8 +218,10 @@ public:
 					? yaal::tools::HWorkFlow::ptr_t( new yaal::tools::HWorkFlow( tress::setup._jobs ) )
 					: yaal::tools::HWorkFlow::ptr_t() );
 			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
-				{
 				total += i->second->get_real_test_count();
+			_callback->test_count( total );
+			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
+				{
 				if ( !! w )
 					w->push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
 				else
@@ -227,7 +229,6 @@ public:
 				}
 			}
 
-		_callback->test_count( total );
 		_callback->run_completed();
 		}
 
@@ -243,6 +244,16 @@ public:
 			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
 					? yaal::tools::HWorkFlow::ptr_t( new yaal::tools::HWorkFlow( tress::setup._jobs ) )
 					: yaal::tools::HWorkFlow::ptr_t() );
+			for ( std::list<std::string>::const_iterator k = group_names.begin();
+					! yaal::_isKilled_ && ( k != group_names.end() ); ++ k )
+				{
+				const_iterator i = _groups.find( *k );
+				if ( i == _groups.end() )
+					++ total;
+				else
+					total += i->second->get_real_test_count();
+				}
+			_callback->test_count( total );
 			for ( std::list<std::string>::const_iterator k = group_names.begin();
 					! yaal::_isKilled_ && ( k != group_names.end() ); ++ k )
 				{
@@ -265,7 +276,6 @@ public:
 					}
 				}
 			}
-		_callback->test_count( total );
 		_callback->run_completed();
 		}
 
@@ -286,8 +296,13 @@ public:
 			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
 				{
 				if ( i->first.find( pattern ) != std::string::npos )
-					{
 					total += i->second->get_real_test_count();
+				}
+			_callback->test_count( total );
+			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
+				{
+				if ( i->first.find( pattern ) != std::string::npos )
+					{
 					if ( !! w )
 						w->push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
 					else
@@ -296,7 +311,6 @@ public:
 				}
 			}
 
-		_callback->test_count( total );
 		_callback->run_completed();
 		}
 
@@ -319,10 +333,10 @@ public:
 
 		try
 			{
+			_callback->test_count( 1 );
 			test_result tr = i->second->run_test( n );
 			_callback->test_completed( tr );
 			_callback->group_completed( group_name );
-			_callback->test_count( 1 );
 			_callback->run_completed();
 			return ( tr ) ;
 			}

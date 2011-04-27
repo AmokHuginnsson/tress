@@ -129,6 +129,7 @@ class reporter : public tut::callback
 	yaal::hcore::HMutex _mutex;
 	stream_type& _ls;
 	error_line_type _errorLine;
+	std::stringstream _groupTestLog;
 
 	public:
 
@@ -143,7 +144,7 @@ class reporter : public tut::callback
 
 	reporter()
 		: _currentGroup(), _notPassed(), _os( std::cout ), _mutex(), _ls( std::cerr ),
-		_errorLine( &console_error_line ),
+		_errorLine( &console_error_line ), _groupTestLog(),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
 		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 ),
 		_currentGroupTestCount( 0 )
@@ -154,7 +155,7 @@ class reporter : public tut::callback
 	reporter( std::ostream& out )
 		: _currentGroup(), _notPassed(), _os( out ), _mutex(),
 		_ls( &out == &std::cout ? std::cerr : std::cout ),
-		_errorLine( &console_error_line ),
+		_errorLine( &console_error_line ), _groupTestLog(),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
 		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 ),
 		_currentGroupTestCount( 0 )
@@ -163,7 +164,7 @@ class reporter : public tut::callback
 
 	reporter( std::ostream& out, stream_type& logger )
 		: _currentGroup(), _notPassed(), _os( out ), _mutex(), _ls( logger ),
-		_errorLine( &console_error_line ),
+		_errorLine( &console_error_line ), _groupTestLog(),
 		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
 		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 ),
 		_currentGroupTestCount( 0 )
@@ -218,14 +219,21 @@ class reporter : public tut::callback
 		yaal::hcore::HLock l( _mutex );
 
 		std::string const& name( tr._group->get_name() );
+		static char const* COLUMNS( ::getenv( "COLUMNS" ) );
+		static int const columns( COLUMNS ? static_cast<int>( ::strtol( COLUMNS, NULL, 10 ) ) : 80 );
+		static int const maxWidth( yaal::tools::xmath::clip( 80, columns, 128 ) );
+
 		if ( name != _currentGroup )
 			{
-			_os << std::endl << name << ": " << std::flush;
+			if ( ( _errorLine == console_error_line ) && tress::setup._fancy )
+				_os << "\n\r" << std::string( maxWidth - 1, ' ' ) << "\r" << name << std::flush;
+			else
+				_os << std::endl << name << ": " << std::flush;
 			_currentGroup = name;
 			_currentGroupTestCount = 0;
+			_groupTestLog.str( std::string() );
 			}
-
-		_os << tr << std::flush;
+		
 		if ( tr._result == tut::test_result::ok )
 			_okCount ++;
 		else if ( tr._result == tut::test_result::ex )
@@ -243,6 +251,21 @@ class reporter : public tut::callback
 		else
 			_terminationsCount ++;
 
+		if ( ( _errorLine == console_error_line ) && tress::setup._fancy )
+			{
+			_groupTestLog << tr << std::flush;
+			int progressMax( maxWidth - 12 );
+			int total( _terminationsCount + _exceptionsCount + _failuresCount + _warningsCount + _setupCount + _okCount );
+			int progressCur( ( progressMax * total ) / _totalTestCount );
+			if ( total )
+				_os << "\n";
+			_os << "tress: " << std::string( progressCur, '=' ) << std::string( progressMax - progressCur, ' ' )
+				<< " " << ( ( 100 * total ) / _totalTestCount ) << "%"
+				<< "\r\b\r" << _currentGroup << ": " << _groupTestLog.str() << std::flush;
+			}
+		else
+			_os << tr << std::flush;
+
 		if ( tr._result == tut::test_result::ok )
 			++ _currentGroupTestCount;
 		else
@@ -253,9 +276,7 @@ class reporter : public tut::callback
 		group_base::run_stat_t status( tr._group->get_stat() );
 		if ( tress::setup._fancy && ( status.second == tr._group->get_real_test_count() ) )
 			{
-			static char const* COLUMNS( ::getenv( "COLUMNS" ) );
-			static int const columns( COLUMNS ? static_cast<int>( ::strtol( COLUMNS, NULL, 10 ) ) : 80 );
-			int spaceCount( ( yaal::tools::xmath::clip( 80, columns, 128 ) - 9 ) - ( static_cast<int>( name.length() ) + _currentGroupTestCount ) );
+			int spaceCount( ( maxWidth - 9 ) - ( static_cast<int>( name.length() ) + _currentGroupTestCount ) );
 			if ( spaceCount > 0 )
 				{
 				std::string space( spaceCount, ' ' );
