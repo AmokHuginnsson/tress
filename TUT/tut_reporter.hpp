@@ -225,10 +225,12 @@ class reporter : public tut::callback
 
 		if ( name != _currentGroup )
 			{
+			if ( ! _currentGroup.empty() )
+				_os << "\n";
 			if ( ( _errorLine == console_error_line ) && tress::setup._fancy )
-				_os << "\n\r" << std::string( maxWidth - 1, ' ' ) << "\r" << name << std::flush;
+				_os << "\r" << std::string( maxWidth - 1, ' ' ) << "\r" << name << std::flush;
 			else
-				_os << std::endl << name << ": " << std::flush;
+				_os << name << ": " << std::flush;
 			_currentGroup = name;
 			_currentGroupTestCount = 0;
 			_groupTestLog.str( std::string() );
