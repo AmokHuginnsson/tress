@@ -53,7 +53,7 @@ void dump_query_result( HDataBase::ptr_t db, char const* const query )
 		cout << "|";
 		int fc = rs->get_field_count();
 		for ( int i = 0; i < fc; ++ i )
-			cout << it[ i ] << "|";
+			cout << *it[ i ] << "|";
 		cout << endl;
 		}
 	return;
