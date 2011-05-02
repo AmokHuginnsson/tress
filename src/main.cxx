@@ -72,7 +72,6 @@ int main( int argc_, char* argv_[] )
 	init_locale( PACKAGE_NAME );
 	HClock clk;
 /*	variables declarations for main loop:                                 */
-	int opt = 0;
 	tut::reporter<HLog> visitor( std::cerr, hcore::log );
 	HException::set_error_stream( stdout );
 	tut::restartable_wrapper restartable;
@@ -82,7 +81,7 @@ int main( int argc_, char* argv_[] )
 /*	TO-DO:				enter main loop code here                               */
 		HSignalService::get_instance();
 		setup._programName = argv_[ 0 ];
-		opt = handle_program_options( argc_, argv_ );
+		handle_program_options( argc_, argv_ );
 		hcore::log.rehash( setup._logPath, setup._programName );
 		setup.test_setup();
 		if ( setup._errorLine == "vim" )
