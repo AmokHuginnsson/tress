@@ -55,7 +55,7 @@ TUT_UNIT_TEST_N( 1, "1 second accuracy" )
 	static int long const SLEEP = 1;
 	static int long const PASSED = 1;
 	HClock clk;
-	util::sleep::second( SLEEP );
+	TUT_EVAL( util::sleep::second( SLEEP ) );
 	get_speed( HClock::UNIT::MILISECOND ); /* Additional sleep. */
 	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed(), PASSED );
 TUT_TEARDOWN()

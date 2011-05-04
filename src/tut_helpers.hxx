@@ -76,6 +76,7 @@ namespace { static int const dropIt __attribute__(( __used__ )) = __COUNTER__; }
 
 #define TUT_DECLARE( statement ) clog << brightgreen << ">> " << #statement << hconsole::reset << endl; statement clog << green << ">> end" << hconsole::reset << endl;
 #define TUT_INVOKE( statement ) do { clog << brightcyan << ">> " << #statement << hconsole::reset << endl; do { statement } while ( 0 ); clog << cyan << ">> end" << hconsole::reset << endl; } while ( 0 )
+#define TUT_EVAL( statement ) do { clog << brightcyan << ">> " << #statement << hconsole::reset << " = " << hconsole::yellow << ( statement ) << hconsole::reset << endl; } while ( 0 )
 
 template<typename T1, typename T2>
 bool operator == ( yaal::hcore::HArray<T1> const& a, std::vector<T2> const& v )
