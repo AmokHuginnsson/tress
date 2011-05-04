@@ -201,6 +201,7 @@ TUT_UNIT_TEST_N( 12, "remove_if algorithm" )
 	ENSURE( "remove_if failed", equal( l.begin(), l.end(), b ) );
 TUT_TEARDOWN()
 
+#pragma GCC diagnostic ignored "-Weffc++"
 template<typename to_t, typename from_t>
 struct cast : public std::unary_function<from_t, to_t>
 	{
@@ -210,7 +211,6 @@ struct cast : public std::unary_function<from_t, to_t>
 		}
 	};
 
-#pragma GCC diagnostic ignored "-Weffc++"
 TUT_UNIT_TEST_N( 13, "transform" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
