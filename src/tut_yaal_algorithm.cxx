@@ -1003,6 +1003,13 @@ TUT_UNIT_TEST_N( 24, "swap" )
 	ENSURE_EQUALS( "swap on HRing<> failed", distance( ring2.begin(), ring2.end() ), countof ( _testData_[0] ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 25, "search" )
+	char const S1[] = "Hello, world!";
+	char const S2[] = "world";
+	char const* p( search( S1, ( S1 + countof ( S1 ) - 1 ), S2, ( S2 + countof( S2 ) ) - 1 ) );
+	ENSURE_EQUALS( "search failed", p, S1 + 7 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST_N( 50, "sort speed" )
 	TIME_CONSTRAINT_EXEMPT();
 	int_array_t a( 100000 );
