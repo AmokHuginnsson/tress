@@ -126,5 +126,17 @@ TUT_UNIT_TEST_N( 7, "/* rotate_right */" )
 		}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 8, "/* reverse iteration */" )
+	static char const BUFF[] = "ala ma kota";
+	static int const BUFF_BIT_SIZE = ( sizeof ( BUFF ) - 1 ) * 8;
+	HBitmap bmp;
+	bmp.copy( BUFF, BUFF_BIT_SIZE );
+	cout << endl;
+	yaal::copy( bmp.begin(), bmp.end(), stream_iterator( cout ) );
+	cout << endl;
+	yaal::copy( bmp.rbegin(), bmp.rend(), stream_iterator( cout ) );
+	cout << endl;
+TUT_TEARDOWN()
+
 }
 
