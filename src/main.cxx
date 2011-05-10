@@ -90,6 +90,14 @@ int main( int argc_, char* argv_[] )
 			visitor.set_error_line( &vim_error_line );
 		else if ( setup._errorLine == "visualstudio" )
 			visitor.set_error_line( &visual_studio_error_line );
+		else if ( setup._errorLine == "cute" )
+			{
+			setup._fancy = false;
+			setup._color = false;
+			if ( setup._jobs > 1 )
+				setup._jobs = 1;
+			visitor.set_error_line( &cute_error_line );
+			}
 		else
 			visitor.set_error_line( &console_error_line );
 		tut::runner.get().set_time_constraint( setup._timeConstraint );
@@ -125,7 +133,7 @@ int main( int argc_, char* argv_[] )
 				else if ( ! setup._testGroups.is_empty() )
 					{
 					for ( OSetup::group_names_t::iterator it( setup._testGroups.begin() ), end( setup._testGroups.end() ); it != end; ++ it )
-					groupNames.push_back( it->raw() );
+						groupNames.push_back( it->raw() );
 					runner.get().run_tests( groupNames );
 					}
 				else

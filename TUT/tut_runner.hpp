@@ -59,7 +59,7 @@ struct callback
 	* Called when a group started
 	* @param name Name of the group
 	*/
-	virtual void group_started( const std::string& /*name */ ) = 0;
+	virtual void group_started( const std::string& /*name */, int /* total test count for group */ ) = 0;
 
 	/**
 	* Called when a test finished.
@@ -328,12 +328,12 @@ public:
 			throw no_such_group( group_name );
 			}
 
-		_callback->group_started( group_name );
+		_callback->test_count( 1 );
+		_callback->group_started( group_name, 1 );
 		_callback->test_started( n, i->second->get_test_title( n ) );
 
 		try
 			{
-			_callback->test_count( 1 );
 			test_result tr = i->second->run_test( n );
 			_callback->test_completed( tr );
 			_callback->group_completed( group_name );
@@ -365,7 +365,7 @@ private:
 	void run_group( const_iterator i ) const
 		{
 		yaal::hcore::HThread::set_name( i->first.c_str() + std::max( 0, static_cast<int>( i->first.length() - 15 ) ) );
-		_callback->group_started( i->first );
+		_callback->group_started( i->first, i->second->get_real_test_count() );
 		try
 			{
 			run_all_tests_in_group_( i );

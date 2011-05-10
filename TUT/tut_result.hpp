@@ -95,10 +95,11 @@ struct test_result : public test_result_posix
 	/**
 	 * Set addtional per-exception information (that is always available/meaningful.
 	 */
-	void set_meta( std::string const& test_name, char const* const file, int const& line )
+	void set_meta( std::string const& testName_, char const* const file = NULL, int const& line = -1 )
 		{
-		_name = test_name;
-		_file = file;
+		_name = testName_;
+		if ( file )
+			_file = file;
 		_line = line;
 		}
 

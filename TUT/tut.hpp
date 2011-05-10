@@ -197,12 +197,15 @@ class test_group : public group_base, public test_group_posix
 	tests_const_reverse_iterator;
 	typedef typename tests_t::size_type size_type;
 	typedef std::map<int, char const*> titles_t;
+	typedef typename titles_t::const_iterator titles_iterator;
 
 	std::string _name;
 	titles_t _titles;
 	int long _timeConstraint;
 	tests_t _tests;
 	tests_iterator _currentTest;
+	titles_iterator _currentTitle;
+
 	int _passed;
 	int _runned;
 
@@ -306,7 +309,7 @@ public:
 	* Creates and registers test group with specified name.
 	*/
 	test_group( const char* name )
-		: _name( name ), _titles(), _timeConstraint( 0 ), _tests(), _currentTest(), _passed( 0 ), _runned( 0 )
+		: _name( name ), _titles(), _timeConstraint( 0 ), _tests(), _currentTest(), _currentTitle(), _passed( 0 ), _runned( 0 )
 		{
 		// register itself
 		runner.get().register_group( _name, this );
@@ -319,7 +322,7 @@ public:
 	* This constructor is used in self-test run only.
 	*/
 	test_group( const char* name, test_runner& another_runner )
-		: _name( name ), _titles(), _timeConstraint( 0 ), _tests(), _currentTest(), _passed( 0 ), _runned( 0 )
+		: _name( name ), _titles(), _timeConstraint( 0 ), _tests(), _currentTest(), _currentTitle(), _passed( 0 ), _runned( 0 )
 		{
 		// register itself
 		another_runner.register_group( _name, this );
@@ -379,16 +382,20 @@ public:
 	void rewind()
 		{
 		_currentTest = _tests.begin();
+		_currentTitle = _titles.begin();
 		}
 
 	virtual bool has_next( void )
 		{
-		return ( _currentTest != _tests.end() );
+		return ( _currentTitle != _titles.end() );
 		}
 
 	virtual int next( void )
 		{
-		return ( _currentTest != _tests.end() ? _currentTest->first : -1 );
+		int n( _currentTitle != _titles.end() ? _currentTitle->first : -1 );
+		if ( _currentTitle != _titles.end() )
+			++ _currentTitle;
+		return ( n );
 		}
 
 	/**
@@ -440,6 +447,7 @@ public:
 
 		// withing scope; check if given test exists
 		_currentTest = _tests.find( n );
+		_currentTitle = _titles.find( n );
 		if ( _currentTest == _tests.end() )
 			{
 			throw no_such_test();
@@ -464,6 +472,9 @@ public:
 		try
 			{
 			errno = 0;
+			char const* title( get_test_title( ti->first ) );
+			if ( title )
+				tr.set_meta( title );
 			run_test( ti->second, obj );
 			++ _passed;
 			}

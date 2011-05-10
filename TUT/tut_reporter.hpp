@@ -2,6 +2,7 @@
 #define TUT_REPORTER
 
 #include <cstdlib>
+#include <algorithm>
 #include <iostream>
 
 #include "tut.hpp"
@@ -18,42 +19,65 @@
 namespace
 {
 
-std::ostream& operator << ( std::ostream& _os, const tut::test_result& tr )
+std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr )
 	{
 	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
-		_os << yaal::hconsole::red;
+		os_ << yaal::hconsole::red;
 	switch ( tr._result )
 		{
 		case tut::test_result::ok:
-			_os << ( errno == 0 ? '.' : ',' ) << std::flush;
+			os_ << ( errno == 0 ? '.' : ',' ) << std::flush;
 		break;
 		case tut::test_result::fail:
-			_os << '[' << tr._testNo << "=F]" << std::flush;
+			os_ << '[' << tr._testNo << "=F]" << std::flush;
 		break;
 		case tut::test_result::ex_ctor:
-			_os << '[' << tr._testNo << "=C]" << std::flush;
+			os_ << '[' << tr._testNo << "=C]" << std::flush;
 		break;
 		case tut::test_result::ex:
-			_os << '[' << tr._testNo << "=X]" << std::flush;
+			os_ << '[' << tr._testNo << "=X]" << std::flush;
 		break;
 		case tut::test_result::warn:
-			_os << '[' << tr._testNo << "=W]" << std::flush;
+			os_ << '[' << tr._testNo << "=W]" << std::flush;
 		break;
 		case tut::test_result::term:
-			_os << '[' << tr._testNo << "=T]" << std::flush;
+			os_ << '[' << tr._testNo << "=T]" << std::flush;
 		break;
 		case tut::test_result::rethrown:
-			_os << '[' << tr._testNo << "=P]" << std::flush;
+			os_ << '[' << tr._testNo << "=P]" << std::flush;
 		break;
 		case tut::test_result::setup:
-			_os << "no such group" << std::flush;
+			os_ << "no such group" << std::flush;
 		break;
 		}
 	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
-		_os << yaal::hconsole::reset << std::flush;
+		os_ << yaal::hconsole::reset << std::flush;
 
-	return ( _os );
+	return ( os_ );
 	}
+
+std::ostream& cute_result( std::ostream& os_, tut::test_result const& tr_ )
+	{
+	if ( tr_._result == tut::test_result::ok )
+		os_ << "\n#success " << tr_._name << " OK" << std::endl;
+	else
+		{
+		std::stringstream ss;
+		if ( tr_._result == tut::test_result::fail )
+			ss << "#failure " << tr_._name << ( ! tr_._name.empty() ? " " : "" ) << tr_._file << ":" << tr_._line << " ";
+		else if ( tr_._result == tut::test_result::ex )
+			{
+			if ( tr_._line >= 0 )
+				ss <<  "#exception " << tr_._name << ( ! tr_._name.empty() ? " " : "" ) <<  tr_._file << ":" << tr_._line << " ";
+			}
+		else if ( tr_._result == tut::test_result::term )
+			ss << "#segv " << tr_._file << ":" << tr_._line << " ";
+		ss << tr_._message << std::endl;
+		os_ << ss.str();
+		}
+	return ( os_ );
+	}
+
 }         // end of namespace
 
 namespace tut
@@ -111,6 +135,11 @@ std::string visual_studio_error_line( tut::test_result const& tr_ )
 		ss << "message: \"";
 	ss << tr_._message << "\"" << std::endl;
 	return ( ss.str() );
+	}
+
+std::string cute_error_line( tut::test_result const& )
+	{
+	return ( std::string() );
 	}
 
 /**
@@ -181,17 +210,21 @@ class reporter : public tut::callback
 		_errorLine = errorLine_;
 		}
 
-	void group_started( std::string const& name )
+	virtual void group_started( std::string const& name, int count_ )
 		{
 		yaal::hcore::HLock l( _mutex );
 		using std::operator <<;
 		_ls << "TUT: group: [" << name << "]" << std::endl;
+		if ( _errorLine == cute_error_line )
+			_os << "\n#beginning " << name << " " << count_ << std::endl;
 		}
 
-	void group_completed( std::string const& )
+	void group_completed( std::string const& name_ )
 		{
 		if ( tress::setup._verbose )
 			_os << "------------------------------------------------------------------------" << std::endl;
+		if ( _errorLine == cute_error_line )
+			_os << "\n#ending " << name_ << std::endl;
 		}
 
 	void test_started( int n, char const* const title_ )
@@ -206,6 +239,8 @@ class reporter : public tut::callback
 				_os << "------------------------------------------------------------------------" << std::endl;
 				_os << "TUT: " << _currentGroup << "::<" << n << "> " << title_ << std::endl;
 				}
+			if ( _errorLine == cute_error_line )
+				_os << "\n#starting " << title_ << std::endl;
 			}
 		}
 
@@ -225,12 +260,15 @@ class reporter : public tut::callback
 
 		if ( name != _currentGroup )
 			{
-			if ( ! _currentGroup.empty() )
-				_os << "\n";
-			if ( ( _errorLine == console_error_line ) && tress::setup._fancy )
-				_os << "\r" << std::string( maxWidth - 1, ' ' ) << "\r" << name << std::flush;
-			else
-				_os << name << ": " << std::flush;
+			if ( _errorLine != cute_error_line )
+				{
+				if ( ! _currentGroup.empty() )
+					_os << "\n";
+				if ( ( _errorLine == console_error_line ) && tress::setup._fancy )
+					_os << "\r" << std::string( maxWidth - 1, ' ' ) << "\r" << name << std::flush;
+				else
+					_os << name << ": " << std::flush;
+				}
 			_currentGroup = name;
 			_currentGroupTestCount = 0;
 			_groupTestLog.str( std::string() );
@@ -266,7 +304,12 @@ class reporter : public tut::callback
 				<< "\r\b\r" << _currentGroup << ": " << _groupTestLog.str() << std::flush;
 			}
 		else
-			_os << tr << std::flush;
+			{
+			if ( _errorLine == cute_error_line )
+				cute_result( _os, tr );
+			else
+				_os << tr << std::flush;
+			}
 
 		if ( tr._result == tut::test_result::ok )
 			++ _currentGroupTestCount;
@@ -309,7 +352,7 @@ class reporter : public tut::callback
 
 				_os << "---> " << "group: " << tr._group->get_name()
 					<< ", test: test<" << tr._testNo << ">"
-					<< ( !tr._name.empty() ? ( std::string( " : " ) + tr._name ) : std::string() )
+					<< ( ! tr._name.empty() ? ( std::string( " : " ) + tr._name ) : std::string() )
 					<< std::endl;
 
 #if defined ( TUT_USE_POSIX )
