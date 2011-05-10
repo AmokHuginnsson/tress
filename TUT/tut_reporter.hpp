@@ -338,7 +338,7 @@ class reporter : public tut::callback
 		{
 		_os << std::endl;
 
-		if ( _notPassed.size() > 0 )
+		if ( ( _notPassed.size() > 0 ) && ( _errorLine != cute_error_line ) )
 			{
 			not_passed_list_t::const_iterator i = _notPassed.begin();
 			while ( i != _notPassed.end() )
