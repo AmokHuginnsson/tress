@@ -10,6 +10,12 @@
 #include <yaal/tools/xmath.hxx>
 #include <yaal/hconsole/console.hxx>
 
+#ifdef __MSVCXX__
+#include <windows.h>
+#include <yaal/cleanup.hxx>
+#endif /* __MSVCXX__ */
+
+
 /**
  * Template Unit Tests Framework for C++.
  * http://tut.dozen.ru
@@ -141,6 +147,9 @@ std::string visual_studio_error_line( tut::test_result const& tr_ )
 	else
 		ss << "message: \"";
 	ss << tr_._message << "\"" << std::endl;
+#ifdef __MSVCXX__
+	::OutputDebugString( ss.str().c_str() );
+#endif /* __MSVCXX__ */
 	return ( ss.str() );
 	}
 
