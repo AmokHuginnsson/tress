@@ -62,16 +62,23 @@ std::ostream& cute_result( std::ostream& os_, tut::test_result const& tr_ )
 		os_ << "\n#success " << tr_._name << " OK" << std::endl;
 	else
 		{
+		std::string file( tr_._file );
+		size_t prjRootIdx( file.find( PACKAGE_NAME ) );
+		if ( prjRootIdx != std::string::npos )
+			{
+			file.erase( 0, prjRootIdx + sizeof ( PACKAGE_NAME ) );
+			file.insert( 0, "./" );
+			}
 		std::stringstream ss;
 		if ( tr_._result == tut::test_result::fail )
-			ss << "#failure " << tr_._name << ( ! tr_._name.empty() ? " " : "" ) << tr_._file << ":" << tr_._line << " ";
+			ss << "#failure " << tr_._name << ( ! tr_._name.empty() ? " " : "" ) << file << ":" << tr_._line << " ";
 		else if ( tr_._result == tut::test_result::ex )
 			{
 			if ( tr_._line >= 0 )
-				ss <<  "#exception " << tr_._name << ( ! tr_._name.empty() ? " " : "" ) <<  tr_._file << ":" << tr_._line << " ";
+				ss <<  "#exception " << tr_._name << ( ! tr_._name.empty() ? " " : "" ) << file << ":" << tr_._line << " ";
 			}
 		else if ( tr_._result == tut::test_result::term )
-			ss << "#segv " << tr_._file << ":" << tr_._line << " ";
+			ss << "#segv " << file << ":" << tr_._line << " ";
 		ss << tr_._message << std::endl;
 		os_ << ss.str();
 		}
