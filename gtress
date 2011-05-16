@@ -66,7 +66,8 @@ def run_tests( gtress_, jobs_ ):
 			fields = map( lambda s : s.lstrip( " \t" ).strip( " \t" ), line.split( ": " ) )
 			if gtress_._suiteList.is_enabled( fields[0] ):
 				passed = fields[1].count( "." ) + fields[1].count( "," )
-				gobject.idle_add( gtress_.update_passed, fields[0], passed )
+				failed = fields[1].count( "[" )
+				gobject.idle_add( gtress_.update_passed, fields[0], passed, failed )
 	finally:
 		if gtress_._child != None:
 			gtress_._child.wait()
@@ -87,13 +88,14 @@ class GTress:
 		}
 		self._gui.signal_autoconnect( signals )
 		self._list = self._gui.get_widget( "GUI_LIST" )
-		self._data = gtk.ListStore( str, int, bool, int )
+		self._data = gtk.ListStore( str, int, bool, int, int, gtk.gdk.Color, str )
 		self._filter = self._data.filter_new()
 		self._filter.set_visible_func( self.apply_filter )
 		self._listSuiteNameColumn = gtk.TreeViewColumn( "suite names" )
 		self._listSuiteNameCellRenderer = gtk.CellRendererText()
 		self._listSuiteNameColumn.pack_start( self._listSuiteNameCellRenderer, True )
 		self._listSuiteNameColumn.add_attribute( self._listSuiteNameCellRenderer, "text", 0 )
+		self._listSuiteNameColumn.add_attribute( self._listSuiteNameCellRenderer, "background-gdk", 5 )
 		self._listSuiteNameColumn.set_sizing( gtk.TREE_VIEW_COLUMN_AUTOSIZE )
 		self._listSuiteNameColumn.set_resizable( True )
 		self._listSuiteNameColumn.set_expand( True )
@@ -104,6 +106,7 @@ class GTress:
 		self._listTestCountCellRenderer.set_property( "xpad", 8 )
 		self._listTestCountColumn.pack_start( self._listTestCountCellRenderer, True )
 		self._listTestCountColumn.add_attribute( self._listTestCountCellRenderer, "text", 1 )
+		self._listTestCountColumn.add_attribute( self._listTestCountCellRenderer, "background-gdk", 5 )
 		self._listTestCountColumn.set_sizing( gtk.TREE_VIEW_COLUMN_FIXED )
 		self._listTestCountColumn.set_fixed_width( 80 )
 		self._listTestCountColumn.set_resizable( False )
@@ -115,6 +118,7 @@ class GTress:
 		self._listSuiteEnabledCellRenderer.set_property( "xalign", 0.5 )
 		self._listSuiteEnabledColumn.pack_start( self._listSuiteEnabledCellRenderer, True )
 		self._listSuiteEnabledColumn.add_attribute( self._listSuiteEnabledCellRenderer, "active", 2 )
+		self._listSuiteEnabledColumn.add_attribute( self._listSuiteEnabledCellRenderer, "cell-background-gdk", 5 )
 		self._listSuiteEnabledCellRenderer.connect( "toggled", self.col2_toggled_cb, self._filter )
 		self._listSuiteEnabledColumn.set_sizing( gtk.TREE_VIEW_COLUMN_FIXED )
 		self._listSuiteEnabledColumn.set_fixed_width( 64 )
@@ -127,17 +131,32 @@ class GTress:
 		self._listPassedCellRenderer.set_property( "xpad", 8 )
 		self._listPassedColumn.pack_start( self._listPassedCellRenderer, True )
 		self._listPassedColumn.add_attribute( self._listPassedCellRenderer, "text", 3 )
+		self._listPassedColumn.add_attribute( self._listPassedCellRenderer, "background-gdk", 5 )
 		self._listPassedColumn.set_sizing( gtk.TREE_VIEW_COLUMN_FIXED )
 		self._listPassedColumn.set_fixed_width( 80 )
 		self._listPassedColumn.set_resizable( False )
 		self._listPassedColumn.set_expand( False )
 
+		self._listFailedColumn = gtk.TreeViewColumn( "failed" )
+		self._listFailedCellRenderer = gtk.CellRendererText()
+		self._listFailedCellRenderer.set_property( "xalign", 1 )
+		self._listFailedCellRenderer.set_property( "xpad", 8 )
+		self._listFailedColumn.pack_start( self._listFailedCellRenderer, True )
+		self._listFailedColumn.add_attribute( self._listFailedCellRenderer, "text", 4 )
+		self._listFailedColumn.add_attribute( self._listFailedCellRenderer, "background-gdk", 5 )
+		self._listFailedColumn.set_sizing( gtk.TREE_VIEW_COLUMN_FIXED )
+		self._listFailedColumn.set_fixed_width( 80 )
+		self._listFailedColumn.set_resizable( False )
+		self._listFailedColumn.set_expand( False )
+
 		self._list.append_column( self._listSuiteNameColumn )
 		self._list.append_column( self._listTestCountColumn )
 		self._list.append_column( self._listSuiteEnabledColumn )
 		self._list.append_column( self._listPassedColumn )
+		self._list.append_column( self._listFailedColumn )
 		self._list.get_selection().set_mode( gtk.SELECTION_MULTIPLE )
 		self._list.set_model( self._filter )
+		self._list.set_tooltip_column( 6 )
 		self._filterEdit = self._gui.get_widget( "GUI_NAME_FILTER" )
 		self._filterEdit.connect( "changed", self.filter_changed )
 		self._gui.get_widget( "GUI_CLEAR_FILTER" ).connect( "clicked", self.clear_filter )
@@ -159,7 +178,7 @@ class GTress:
 				if wasEnabled:
 					totalTests += int( fields[1] )
 					totalSuites += 1
-				self._data.append( [ fields[0], int( fields[1] ), wasEnabled, 0 ] )
+				self._data.append( [ fields[0], int( fields[1] ), wasEnabled, 0, 0, gtk.gdk.Color( 65535, 65535, 65535 ), None ] )
 				self._suiteList.set_suite( fields[0], wasEnabled, fields[1] )
 				self._suiteMap[fields[0]] = suiteNo
 				suiteNo += 1
@@ -168,14 +187,25 @@ class GTress:
 		self._totalTestCount = self._gui.get_widget( "GUI_TOTAL_TEST_COUNT" )
 		self._totalEnabledSuites = self._gui.get_widget( "GUI_TOTAL_ENABLED_SUITES" )
 		self._passed = self._gui.get_widget( "GUI_PASSED" )
+		self._failed = self._gui.get_widget( "GUI_FAILED" )
 		self._progress = self._gui.get_widget( "GUI_PROGRESS" )
+		self._okStyle = self._progress.get_style().copy()
+		self._failStyle = self._okStyle.copy()
+		self._failColor = gtk.gdk.Color( 65535, 40000, 40000 )
+		self._failStyle.bg[gtk.STATE_NORMAL] = self._failColor
 		self._totalTestCount.set_text( str( totalTests ) )
 		self._totalEnabledSuites.set_text( str( totalSuites ) )
 
-	def update_passed( self, suite_, passed_ ):
+	def update_passed( self, suite_, passed_, failed_ ):
 		self._data[self._suiteMap[suite_]][3] += passed_
+		self._data[self._suiteMap[suite_]][4] += failed_
+		if ( failed_ > 0 ):
+			self._data[self._suiteMap[suite_]][5] = self._failColor
+			self._progress.set_style( self._failStyle )
 		passed = int( self._passed.get_text() ) + passed_
+		failed = int( self._failed.get_text() ) + failed_ 
 		self._passed.set_text( str( passed ) )
+		self._failed.set_text( str( failed ) )
 		total = float( self._totalTestCount.get_text() )
 		self._progress.set_fraction( passed / total )
 
@@ -236,7 +266,12 @@ class GTress:
 			self._thread = None
 		for row in self._data:
 			row[3] = 0
+			row[4] = 0
+			row[5] = gtk.gdk.Color( 65535, 65535, 65535 )
+			row[6] = None
+		self._progress.set_style( self._okStyle )
 		self._passed.set_text( "0" )
+		self._failed.set_text( "0" )
 		self._thread = threading.Thread( target = run_tests, args = [self, self._jobs.get_value()] )
 		self._thread.start()
 
