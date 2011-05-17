@@ -188,6 +188,22 @@ void CVTest::eat( void )
 	_loop = false;
 	}
 
+void* unstable( HThread* caller_ )
+	{
+	M_PROLOG
+	try
+		{
+		throw HFileException( "testing hthread exception propagation" );
+		}
+	catch ( HException& e )
+		{
+		e.log( __FILE__, __LINE__, __PRETTY_FUNCTION__ );
+		caller_->stack_exception( e.what(), e.code() );
+		}
+	return ( NULL );
+	M_EPILOG
+	}
+
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hthread );
 TUT_TEST_GROUP_N( tut_yaal_hcore_hthread, "yaal::hcore::HThread" );
 
@@ -349,4 +365,19 @@ TUT_UNIT_TEST_N( 12, "/* Conditional variable test. */" )
 	cvTest.eat();
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 13, "Exception propagation." )
+	HThread a;
+	a.spawn( call( unstable, &a ) );
+	try
+		{
+		a.finish();
+		FAIL( "Exception not propagated!" );
+		}
+	catch ( HThreadException& e )
+		{
+		e.log( __FILE__, __LINE__, __PRETTY_FUNCTION__ );
+		}
+TUT_TEARDOWN()
+
 }
+
