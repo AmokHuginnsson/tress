@@ -49,5 +49,11 @@ TUT_UNIT_TEST_N( 1, "free memory test" )
 	cout << "Free memory: " << freeMem << " (" << ( freeMem / 1024 ) << " KiB)" << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_N( 2, "free disk space test" )
+	char const fspath[] = "/";
+	int long freeDisk( hcore::system::get_available_disk_space( fspath ) );
+	cout << "Free space on `" << fspath << "': " << freeDisk << " (" << ( freeDisk / ( 1024 * 1024 ) ) << " MiB)" << endl;
+TUT_TEARDOWN()
+
 }
 
