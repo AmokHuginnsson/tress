@@ -183,14 +183,25 @@ void* HServer::run( void )
 	{
 	try
 		{
-		cout << "starting dispatcher ..." << endl;
-		_dispatcher.run();
-		cout << "dispatcher finished ..." << endl;
-		_socket.close();
+		try
+			{
+			cout << "starting dispatcher ..." << endl;
+			_dispatcher.run();
+			cout << "dispatcher finished ..." << endl;
+			_socket.close();
+			}
+		catch ( HOpenSSLException& e )
+			{
+			cout << e.what() << endl;
+			}
 		}
-	catch ( HOpenSSLException& e )
+	catch ( HException& e )
 		{
-		cout << e.what() << endl;
+		_thread.stack_exception( e.what(), e.code() );
+		}
+	catch ( ... )
+		{
+		_thread.stack_exception( "unknown exception", errno );
 		}
 	if ( ! _signaled )
 		{
