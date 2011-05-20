@@ -45,14 +45,22 @@ TUT_SIMPLE_MOCK( tut_yaal_hcore_system );
 TUT_TEST_GROUP_N( tut_yaal_hcore_system, "yaal::hcore::system" );
 
 TUT_UNIT_TEST_N( 1, "free memory test" )
-	int long freeMem( hcore::system::get_available_memory_size() );
-	cout << "Free memory: " << freeMem << " (" << ( freeMem / 1024 ) << " KiB)" << endl;
+	system::HResourceInfo ri( hcore::system::get_memory_size_info() );
+	cout << "\nTotal memory:       " << setw( 14 ) << ri.total() << " (" << setw( 8 ) << ( ri.total() / 1024 ) << " KiB)" << " (" << setw( 5 ) << ( ri.total() / ( 1024ll * 1024ll ) ) << " MiB)" << endl;
+	cout << "Free memory:        " << setw( 14 ) << ri.free() << " (" << setw( 8 ) << ( ri.free() / 1024 ) << " KiB)" << " (" << setw( 5 ) << ( ri.free() / ( 1024ll * 1024ll ) ) << " MiB)" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "free disk space test" )
 	char const fspath[] = "/";
-	i64_t freeDisk( hcore::system::get_available_disk_space( fspath ) );
-	cout << "Free space on `" << fspath << "': " << freeDisk << " (" << ( freeDisk / ( 1024 * 1024 ) ) << " MiB)" << endl;
+	system::HResourceInfo ri( hcore::system::get_disk_space_info( fspath ) );
+	cout << "\nTotal space on `" << fspath << "': "
+		<< setw( 14 ) << ri.total()
+		<< " (" << setw( 8 ) << ( ri.total() / ( 1024 * 1024 ) ) << " MiB)"
+		<< " (" << setw( 5 ) << ( ri.total() / ( 1024ll * 1024ll * 1024ll ) ) << " GiB)" << endl;
+	cout << "Free space on `" << fspath << "':  "
+		<< setw( 14 ) << ri.free()
+		<< " (" << setw( 8 ) << ( ri.free() / ( 1024 * 1024 ) ) << " MiB)"
+		<< " (" << setw( 5 ) << ( ri.free() / ( 1024ll * 1024ll * 1024ll ) ) << " GiB)" << endl;
 TUT_TEARDOWN()
 
 }
