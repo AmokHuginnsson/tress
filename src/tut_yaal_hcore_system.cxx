@@ -48,19 +48,24 @@ TUT_UNIT_TEST_N( 1, "free memory test" )
 	hcore::system::HResourceInfo ri( hcore::system::get_memory_size_info() );
 	cout << "\nTotal memory:       " << setw( 14 ) << ri.total() << " (" << setw( 8 ) << ( ri.total() / 1024 ) << " KiB)" << " (" << setw( 5 ) << ( ri.total() / ( 1024ll * 1024ll ) ) << " MiB)" << endl;
 	cout << "Free memory:        " << setw( 14 ) << ri.free() << " (" << setw( 8 ) << ( ri.free() / 1024 ) << " KiB)" << " (" << setw( 5 ) << ( ri.free() / ( 1024ll * 1024ll ) ) << " MiB)" << endl;
+	cout << "Available memory:   " << setw( 14 ) << ri.available() << " (" << setw( 8 ) << ( ri.available() / 1024 ) << " KiB)" << " (" << setw( 5 ) << ( ri.available() / ( 1024ll * 1024ll ) ) << " MiB)" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 2, "free disk space test" )
 	char const fspath[] = "/";
 	hcore::system::HResourceInfo ri( hcore::system::get_disk_space_info( fspath ) );
-	cout << "\nTotal space on `" << fspath << "': "
+	cout << "\nTotal space on     `" << fspath << "': "
 		<< setw( 14 ) << ri.total()
 		<< " (" << setw( 8 ) << ( ri.total() / ( 1024 * 1024 ) ) << " MiB)"
 		<< " (" << setw( 5 ) << ( ri.total() / ( 1024ll * 1024ll * 1024ll ) ) << " GiB)" << endl;
-	cout << "Free space on `" << fspath << "':  "
+	cout << "Free space on      `" << fspath << "':  "
 		<< setw( 14 ) << ri.free()
 		<< " (" << setw( 8 ) << ( ri.free() / ( 1024 * 1024 ) ) << " MiB)"
 		<< " (" << setw( 5 ) << ( ri.free() / ( 1024ll * 1024ll * 1024ll ) ) << " GiB)" << endl;
+	cout << "Available space on `" << fspath << "':  "
+		<< setw( 14 ) << ri.available()
+		<< " (" << setw( 8 ) << ( ri.available() / ( 1024 * 1024 ) ) << " MiB)"
+		<< " (" << setw( 5 ) << ( ri.available() / ( 1024ll * 1024ll * 1024ll ) ) << " GiB)" << endl;
 TUT_TEARDOWN()
 
 }
