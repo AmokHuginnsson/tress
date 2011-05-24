@@ -172,7 +172,7 @@ TUT_TEST_GROUP_N( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
 #pragma pack()
 #endif /* #else #ifndef __sun__ */
 
-TUT_UNIT_TEST_N( 1, "/* CHUNK_SIZE, VALUES_PER_CHUNK and Constructor. */" )
+TUT_UNIT_TEST_N( 1, "CHUNK_SIZE, VALUES_PER_CHUNK and Constructor." )
 	STATIC_ASSERT( sizeof ( FixedArray<1> ) == 1 );
 	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<1> >::CHUNK_SIZE, 512 );
 	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<1> >::VALUES_PER_CHUNK, 512 );
@@ -402,7 +402,7 @@ void tut_yaal_hcore_hdeque::test_resize( void )
 	return;
 	}
 
-TUT_UNIT_TEST_N( 2, "/* Constructor and get_size(). */" )
+TUT_UNIT_TEST_N( 2, "Constructor and get_size()." )
 	{
 	item_t::set_start_id( 0 );
 	int const SIZE_FOR_ONE = 0;
@@ -419,7 +419,7 @@ TUT_UNIT_TEST_N( 2, "/* Constructor and get_size(). */" )
 	ENSURE_EQUALS( "object leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "/* Constructor with filling. */" )
+TUT_UNIT_TEST_N( 3, "Constructor with filling." )
 	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
 	int const SIZE_FOR_ARRAY = 7;
@@ -499,7 +499,7 @@ TUT_UNIT_TEST_N( 4, "resize" )
 	test_resize<640>();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "/* Constructor with range initialization. */" )
+TUT_UNIT_TEST_N( 5, "Constructor with range initialization." )
 	item_t::set_start_id( 0 );
 	deque_t deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	proto_t proto( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
@@ -513,7 +513,7 @@ TUT_UNIT_TEST_N( 5, "/* Constructor with range initialization. */" )
 	ENSURE_EQUALS( "range initialization failed", big_deque, proto );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "/* Copy constructor. */" )
+TUT_UNIT_TEST_N( 6, "Copy constructor." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	deque_t deque( SIZE );
@@ -527,7 +527,7 @@ TUT_UNIT_TEST_N( 6, "/* Copy constructor. */" )
 		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "/* Operator [ ]. */" )
+TUT_UNIT_TEST_N( 7, "Operator [ ]." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	deque_t deque ( SIZE );
@@ -551,7 +551,7 @@ TUT_UNIT_TEST_N( 7, "/* Operator [ ]. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "/* Operator bool. */" )
+TUT_UNIT_TEST_N( 8, "Operator bool." )
 	item_t::set_start_id( 0 );
 	int const EMPTY = 0;
 	int const SIZE = 7;
@@ -599,7 +599,7 @@ void tut_yaal_hcore_hdeque::test_erase( void )
 	test_erase<item_size>( countof ( _testData_[0] ) / 4, countof( _testData_[0] ) - 3 );
 	}
 
-TUT_UNIT_TEST_N( 9, "/* range erase */" )
+TUT_UNIT_TEST_N( 9, "range erase" )
 	test_erase<1>();
 	test_erase<2>();
 	test_erase<3>();
@@ -819,7 +819,7 @@ void tut_yaal_hcore_hdeque::test_insert_pos( void )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 	}
 
-TUT_UNIT_TEST_N( 15, "/* insert( pos, value ) */" )
+TUT_UNIT_TEST_N( 15, "insert( pos, value )" )
 	test_insert_pos<1>();
 	test_insert_pos<2>();
 	test_insert_pos<3>();
@@ -836,7 +836,7 @@ TUT_UNIT_TEST_N( 15, "/* insert( pos, value ) */" )
 	test_insert_pos<640>();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 16, "/* assign operator (=) */" )
+TUT_UNIT_TEST_N( 16, "assign operator (=)" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { -36, -1, -4, -9 };
 	item_t::set_start_id( 0 );
@@ -1015,7 +1015,7 @@ void tut_yaal_hcore_hdeque::test_insert( void )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 	}
 
-TUT_UNIT_TEST_N( 17, "/* insert range */" )
+TUT_UNIT_TEST_N( 17, "insert range" )
 	test_insert<1>();
 	test_insert<2>();
 	test_insert<3>();

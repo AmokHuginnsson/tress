@@ -207,12 +207,12 @@ void* unstable( HThread* caller_ )
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hthread );
 TUT_TEST_GROUP_N( tut_yaal_hcore_hthread, "yaal::hcore::HThread" );
 
-TUT_UNIT_TEST_N( 1, "/* Construction and destruction */" )
+TUT_UNIT_TEST_N( 1, "Construction and destruction" )
 	HThread a;
 	ENSURE_EQUALS( "bad status on fresh thread", a.is_alive(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "/* Starting new thread and allowing it to finish */" )
+TUT_UNIT_TEST_N( 2, "Starting new thread and allowing it to finish" )
 	TIME_CONSTRAINT_EXEMPT();
 	HCool ca( "a" );
 	HThread a;
@@ -223,7 +223,7 @@ TUT_UNIT_TEST_N( 2, "/* Starting new thread and allowing it to finish */" )
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "/* Starting new thread and finishing it prematurely (sleeping body) */" )
+TUT_UNIT_TEST_N( 3, "Starting new thread and finishing it prematurely (sleeping body)" )
 	TIME_CONSTRAINT_EXEMPT();
 	HTime start, stop;
 	HCool ca( "sleeping" );
@@ -241,7 +241,7 @@ TUT_UNIT_TEST_N( 3, "/* Starting new thread and finishing it prematurely (sleepi
 			stop.get_second(), 0, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 33, "/* Starting new thread and finishing it prematurely (busy body) */" )
+TUT_UNIT_TEST_N( 33, "Starting new thread and finishing it prematurely (busy body)" )
 	TIME_CONSTRAINT_EXEMPT();
 	HTime start, stop;
 	HCool ca( "busy" );
@@ -259,7 +259,7 @@ TUT_UNIT_TEST_N( 33, "/* Starting new thread and finishing it prematurely (busy 
 			static_cast<double>( stop.get_second() ), 0., 2.5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "/* Starting new thread and finishing it prematurely by destructor */" )
+TUT_UNIT_TEST_N( 4, "Starting new thread and finishing it prematurely by destructor" )
 	HTime start, stop;
 		{
 		HCool ca( "a" );
@@ -275,7 +275,7 @@ TUT_UNIT_TEST_N( 4, "/* Starting new thread and finishing it prematurely by dest
 			stop.get_second(), 0, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "/* Starting and immediatelly finishing thread */" )
+TUT_UNIT_TEST_N( 5, "Starting and immediatelly finishing thread" )
 	HCool ca( "a" );
 	HThread a;
 	ca.set( 50 );
@@ -284,7 +284,7 @@ TUT_UNIT_TEST_N( 5, "/* Starting and immediatelly finishing thread */" )
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "/* Starting already started thread */" )
+TUT_UNIT_TEST_N( 6, "Starting already started thread" )
 	HCool ca( "6" );
 	HThread a;
 	ca.set( 5 );
@@ -300,7 +300,7 @@ TUT_UNIT_TEST_N( 6, "/* Starting already started thread */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "/* Finishing thread that was not started */" )
+TUT_UNIT_TEST_N( 7, "Finishing thread that was not started" )
 	HThread a;
 	try
 		{
@@ -313,7 +313,7 @@ TUT_UNIT_TEST_N( 7, "/* Finishing thread that was not started */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "/* Simple thread (plain function) */" )
+TUT_UNIT_TEST_N( 8, "Simple thread (plain function)" )
 	TIME_CONSTRAINT_EXEMPT();
 	HTime start, stop;
 	HThread a;
@@ -329,7 +329,7 @@ TUT_UNIT_TEST_N( 8, "/* Simple thread (plain function) */" )
 			stop.get_second(), 0, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "/* Starting new thread and allowing it to finish, the finich is actualy invoked. */" )
+TUT_UNIT_TEST_N( 9, "Starting new thread and allowing it to finish, the finich is actualy invoked." )
 	TIME_CONSTRAINT_EXEMPT();
 	HCool ca( "a" );
 	HThread a;
@@ -341,7 +341,7 @@ TUT_UNIT_TEST_N( 9, "/* Starting new thread and allowing it to finish, the finic
 	a.finish();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 10, "/* Very short living thread. */" )
+TUT_UNIT_TEST_N( 10, "Very short living thread." )
 	HTime start, stop;
 	HThread a;
 	a.spawn( call( a_fast_one, &a ) );
@@ -350,7 +350,7 @@ TUT_UNIT_TEST_N( 10, "/* Very short living thread. */" )
 	/* In case of wrong implementation this test case will hang foreveer. */
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 11, "/* Very short living thread, spawned delayed. */" )
+TUT_UNIT_TEST_N( 11, "Very short living thread, spawned delayed." )
 	HTime start, stop;
 	HThread a;
 	a.spawn( call( a_fast_one, &a ) );
@@ -360,7 +360,7 @@ TUT_UNIT_TEST_N( 11, "/* Very short living thread, spawned delayed. */" )
 	/* In case of wrong implementation this test case will hang foreveer. */
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 12, "/* Conditional variable test. */" )
+TUT_UNIT_TEST_N( 12, "Conditional variable test." )
 	CVTest cvTest;
 	cvTest.eat();
 TUT_TEARDOWN()

@@ -129,7 +129,7 @@ TUT_UNIT_TEST_N( 34, "modify transparent by iterator and operator->" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 50, "/* sample data */" )
+TUT_UNIT_TEST_N( 50, "sample data" )
 	typedef HHashMultiMap<HString, int> string_to_int_hashmultimap_t;
 	string_to_int_hashmultimap_t map;
 	map.insert( make_pair<HString>( "one", 1 ) );

@@ -44,7 +44,7 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hmultiset );
 TUT_TEST_GROUP_N( tut_yaal_hcore_hmultiset, "yaal::hcore::HMultiSet" );
 
-TUT_UNIT_TEST_N( 50, "/* sample data */" )
+TUT_UNIT_TEST_N( 50, "sample data" )
 	typedef HMultiSet<HString> string_multi_set_t;
 	string_multi_set_t set;
 	set.insert( "one" );

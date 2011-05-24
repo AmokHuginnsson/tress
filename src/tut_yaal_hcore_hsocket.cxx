@@ -211,12 +211,12 @@ void* HServer::run( void )
 	return ( NULL );
 	}
 
-TUT_UNIT_TEST_N( 1, "/* Simple construction and destruction. */" )
+TUT_UNIT_TEST_N( 1, "Simple construction and destruction." )
 	HSocket socket;
 	ENSURE_EQUALS ( "uninitialized socket has port", socket.get_port(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "/* Constructions with wrong parameters. */" )
+TUT_UNIT_TEST_N( 2, "Constructions with wrong parameters." )
 	try
 		{
 		HSocket socket( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::NETWORK );
@@ -237,7 +237,7 @@ TUT_UNIT_TEST_N( 2, "/* Constructions with wrong parameters. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "/* Getting port on file socket. */" )
+TUT_UNIT_TEST_N( 3, "Getting port on file socket." )
 	HSocket socket( HSocket::TYPE::FILE );
 	try
 		{
@@ -250,7 +250,7 @@ TUT_UNIT_TEST_N( 3, "/* Getting port on file socket. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "/* Listening on reserved port. */" )
+TUT_UNIT_TEST_N( 4, "Listening on reserved port." )
 	HSocket socket( HSocket::TYPE::NETWORK, 1 );
 	try
 		{
@@ -263,7 +263,7 @@ TUT_UNIT_TEST_N( 4, "/* Listening on reserved port. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "/* Listening on port in use. */" )
+TUT_UNIT_TEST_N( 5, "Listening on port in use." )
 	int const obscurePort( 61928 );
 	HSocket block( HSocket::TYPE::NETWORK, 1 );
 	block.listen( "0.0.0.0", obscurePort );
@@ -279,7 +279,7 @@ TUT_UNIT_TEST_N( 5, "/* Listening on port in use. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "/* Listening on existing file. */" )
+TUT_UNIT_TEST_N( 6, "Listening on existing file." )
 	HSocket socket( HSocket::TYPE::FILE, 1 );
 	try
 		{
@@ -292,7 +292,7 @@ TUT_UNIT_TEST_N( 6, "/* Listening on existing file. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "/* Listening on protected file. */" )
+TUT_UNIT_TEST_N( 7, "Listening on protected file." )
 	HSocket socket( HSocket::TYPE::FILE, 1 );
 	try
 		{
@@ -305,7 +305,7 @@ TUT_UNIT_TEST_N( 7, "/* Listening on protected file. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "/* Listening on already listening socket. */" )
+TUT_UNIT_TEST_N( 8, "Listening on already listening socket." )
 	HSocket socket( HSocket::TYPE::FILE, 1 );
 	socket.listen( "/tmp/TUT_socket" );
 	try
@@ -319,7 +319,7 @@ TUT_UNIT_TEST_N( 8, "/* Listening on already listening socket. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "/* Listening with bad maximum number of clients. */" )
+TUT_UNIT_TEST_N( 9, "Listening with bad maximum number of clients." )
 	HSocket socket( HSocket::TYPE::FILE );
 	try
 		{
@@ -332,7 +332,7 @@ TUT_UNIT_TEST_N( 9, "/* Listening with bad maximum number of clients. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 10, "/* Accept on socket that is not listening. */" )
+TUT_UNIT_TEST_N( 10, "Accept on socket that is not listening." )
 	HSocket socket;
 	try
 		{
@@ -377,11 +377,11 @@ void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port
 	return;
 	}
 
-TUT_UNIT_TEST_N( 19, "/* Transfering data through file (blocking). */" )
+TUT_UNIT_TEST_N( 19, "Transfering data through file (blocking)." )
 	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 20, "/* Transfering data through file (non-blocking). */" )
+TUT_UNIT_TEST_N( 20, "Transfering data through file (non-blocking)." )
 	play_scenario( HSocket::socket_type_t( HSocket::TYPE::DEFAULT ) | HSocket::TYPE::FILE | HSocket::TYPE::NONBLOCKING, "/tmp/TUT_socket" );
 TUT_TEARDOWN()
 
@@ -389,11 +389,11 @@ TUT_UNIT_TEST_N( 21, "Transfering data through file with SSL." )
 	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 22, "/* Transfering data through network (blocking). */" )
+TUT_UNIT_TEST_N( 22, "Transfering data through network (blocking)." )
 	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 23, "/* Transfering data through network (non-blocking). */" )
+TUT_UNIT_TEST_N( 23, "Transfering data through network (non-blocking)." )
 	play_scenario( HSocket::socket_type_t( HSocket::TYPE::DEFAULT ) | HSocket::TYPE::NETWORK | HSocket::TYPE::NONBLOCKING, "127.0.0.1", 5555 );
 TUT_TEARDOWN()
 

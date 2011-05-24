@@ -60,13 +60,13 @@ TUT_UNIT_TEST_N( 1, "simple use" )
 	yaal::copy( y.begin(), y.end(), stream_iterator( cout ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "/* Default constructor */" )
+TUT_UNIT_TEST_N( 2, "Default constructor" )
 	HBitmap bmp;
 	ENSURE_EQUALS( "size", bmp.get_size(), 0 );
 	ENSURE_EQUALS( "raw", bmp.raw(), static_cast<void*>( NULL ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "/* constructor from size */" )
+TUT_UNIT_TEST_N( 3, "constructor from size" )
 	static int const SIZE = 7;
 	HBitmap bmp( SIZE );
 	ENSURE_EQUALS( "constructor from size size", bmp.get_size(), SIZE );
@@ -74,7 +74,7 @@ TUT_UNIT_TEST_N( 3, "/* constructor from size */" )
 	ENSURE( "default constructor ", bmp.raw() != static_cast<void*>( NULL ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "/* set */" )
+TUT_UNIT_TEST_N( 4, "set" )
 	HBitmap bmp;
 	try
 		{
@@ -87,7 +87,7 @@ TUT_UNIT_TEST_N( 4, "/* set */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "/* get */" )
+TUT_UNIT_TEST_N( 5, "get" )
 	HBitmap bmp;
 	try
 		{
@@ -100,7 +100,7 @@ TUT_UNIT_TEST_N( 5, "/* get */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "/* rotate_left */" )
+TUT_UNIT_TEST_N( 6, "rotate_left" )
 	HBitmap bmp;
 	try
 		{
@@ -113,7 +113,7 @@ TUT_UNIT_TEST_N( 6, "/* rotate_left */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "/* rotate_right */" )
+TUT_UNIT_TEST_N( 7, "rotate_right" )
 	HBitmap bmp;
 	try
 		{
@@ -126,7 +126,7 @@ TUT_UNIT_TEST_N( 7, "/* rotate_right */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "/* reverse iteration */" )
+TUT_UNIT_TEST_N( 8, "reverse iteration" )
 	static char const BUFF[] = "ala ma kota";
 	static int const BUFF_BIT_SIZE = ( sizeof ( BUFF ) - 1 ) * 8;
 	HBitmap bmp;

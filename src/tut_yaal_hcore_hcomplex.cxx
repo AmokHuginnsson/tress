@@ -45,13 +45,13 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hcomplex );
 TUT_TEST_GROUP_N( tut_yaal_hcore_hcomplex, "yaal::hcore::HComplex" );
 
-TUT_UNIT_TEST_N( 1, "/* Default constructor */" )
+TUT_UNIT_TEST_N( 1, "Default constructor" )
 	HComplex a;
 	ENSURE_DISTANCE( "non zero new complex number (re)", a.re ( ), 0., 0.001 );
 	ENSURE_DISTANCE( "non zero new complex number (im)", a.im ( ), 0., 0.001 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "/* Constructor with initialization. */" )
+TUT_UNIT_TEST_N( 2, "Constructor with initialization." )
 	double const RE = 3.14159265;
 	double const IM = 2.17;
 	HComplex a ( RE );

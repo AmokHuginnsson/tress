@@ -82,7 +82,7 @@ TUT_UNIT_TEST_N( 2, "exception during map[key] = val;" )
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 50, "/* sample data */" )
+TUT_UNIT_TEST_N( 50, "sample data" )
 	typedef HMap<HString, int> string_to_int_map_t;
 	string_to_int_map_t map;
 	map["one"] = 1;

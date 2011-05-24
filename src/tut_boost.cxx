@@ -75,7 +75,7 @@ pair_t make_multi( void )
 	return ( res[ i ] );
 	}
 
-TUT_UNIT_TEST_N( 1, "/* binding */" )
+TUT_UNIT_TEST_N( 1, "binding" )
 	cout << "sort by field using binding" << endl;
 	cout << "{" << endl;
 	typedef vector<pair_t> T;
@@ -103,11 +103,11 @@ void dump_dir( path const& dir )
 	return;
 	}
 
-TUT_UNIT_TEST_N( 2, "/* filesystem */" )
+TUT_UNIT_TEST_N( 2, "filesystem" )
 	dump_dir( path( "." ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "/* date_time */" )
+TUT_UNIT_TEST_N( 3, "date_time" )
 	try
 		{
 		string birthday_s( "1978-05-24" );

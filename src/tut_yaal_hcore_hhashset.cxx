@@ -51,7 +51,7 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hhashset );
 TUT_TEST_GROUP_N( tut_yaal_hcore_hhashset, "yaal::hcore::HHashSet" );
 
-TUT_UNIT_TEST_N( 49, "/* sample data */" )
+TUT_UNIT_TEST_N( 49, "sample data" )
 	typedef HHashSet<HString> string_hash_set_t;
 	string_hash_set_t set;
 	set.insert( "one" );

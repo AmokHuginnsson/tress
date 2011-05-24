@@ -101,7 +101,7 @@ void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ )
 
 TUT_TEST_GROUP_N( tut_yaal_hcore_hhashmap, "yaal::hcore::HHashMap" );
 
-TUT_UNIT_TEST_N( 1, "/* Simple constructor. */" )
+TUT_UNIT_TEST_N( 1, "Simple constructor." )
 	try
 		{
 		hash_map_t map( 0 );
@@ -113,7 +113,7 @@ TUT_UNIT_TEST_N( 1, "/* Simple constructor. */" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "/* Quantity test. */" )
+TUT_UNIT_TEST_N( 2, "Quantity test." )
 	{
 	hash_map_t map( 17 );
 	check_consitency( map );
@@ -125,7 +125,7 @@ TUT_UNIT_TEST_N( 2, "/* Quantity test. */" )
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "/* element insertion */" )
+TUT_UNIT_TEST_N( 3, "element insertion" )
 	{
 	hash_map_t map( TEST_PRIME );
 	for ( int i = 0; i < ELEM_COUNT; ++ i )
@@ -137,7 +137,7 @@ TUT_UNIT_TEST_N( 3, "/* element insertion */" )
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "/* iterate */" )
+TUT_UNIT_TEST_N( 4, "iterate" )
 	{
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
@@ -154,7 +154,7 @@ TUT_UNIT_TEST_N( 4, "/* iterate */" )
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "/* key, value access */" )
+TUT_UNIT_TEST_N( 5, "key, value access" )
 	{
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
@@ -173,7 +173,7 @@ TUT_UNIT_TEST_N( 5, "/* key, value access */" )
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "/* key removal */" )
+TUT_UNIT_TEST_N( 6, "key removal" )
 	{
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
@@ -195,7 +195,7 @@ TUT_UNIT_TEST_N( 6, "/* key removal */" )
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "/* iteration on large table with few elements */" )
+TUT_UNIT_TEST_N( 7, "iteration on large table with few elements" )
 	{
 	hash_map_t map( LARGE_TABLE );
 	check_consitency( map );
@@ -212,7 +212,7 @@ TUT_UNIT_TEST_N( 7, "/* iteration on large table with few elements */" )
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "/* copy contructor */" )
+TUT_UNIT_TEST_N( 8, "copy contructor" )
 	{
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
@@ -230,7 +230,7 @@ TUT_UNIT_TEST_N( 8, "/* copy contructor */" )
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "/* contructor from sequence */" )
+TUT_UNIT_TEST_N( 9, "contructor from sequence" )
 	{
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
@@ -248,7 +248,7 @@ TUT_UNIT_TEST_N( 9, "/* contructor from sequence */" )
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 10, "/* auto grow */" )
+TUT_UNIT_TEST_N( 10, "auto grow" )
 	{
 	hash_map_t map;
 	check_consitency( map );
@@ -272,7 +272,7 @@ TUT_UNIT_TEST_N( 10, "/* auto grow */" )
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 11, "/* auto grow large table */" )
+TUT_UNIT_TEST_N( 11, "auto grow large table" )
 	{
 	hash_map_t map;
 	check_consitency( map );
@@ -296,7 +296,7 @@ TUT_UNIT_TEST_N( 11, "/* auto grow large table */" )
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 12, "/* auto grow huge table */" )
+TUT_UNIT_TEST_N( 12, "auto grow huge table" )
 	TIME_CONSTRAINT_EXEMPT();
 	{
 	hash_map_t map;
@@ -321,13 +321,13 @@ TUT_UNIT_TEST_N( 12, "/* auto grow huge table */" )
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 13, "/* find on empty map */" )
+TUT_UNIT_TEST_N( 13, "find on empty map" )
 	hash_map_t map;
 	hash_map_t::iterator it( map.find( 0 ) );
 	ENSURE( "find on empty returned bogus iterator", it == map.end() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 50, "/* sample data */" )
+TUT_UNIT_TEST_N( 50, "sample data" )
 	typedef HHashMap<HString, int> string_to_int_hashmap_t;
 	string_to_int_hashmap_t map;
 	map["one"] = 1;

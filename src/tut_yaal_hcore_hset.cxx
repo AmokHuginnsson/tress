@@ -46,7 +46,7 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hset );
 TUT_TEST_GROUP_N( tut_yaal_hcore_hset, "yaal::hcore::HSet" );
 
-TUT_UNIT_TEST_N( 49, "/* sample data */" )
+TUT_UNIT_TEST_N( 49, "sample data" )
 	typedef HSet<HString> string_set_t;
 	string_set_t set;
 	set.insert( "one" );
