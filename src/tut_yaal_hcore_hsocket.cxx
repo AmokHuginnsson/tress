@@ -353,10 +353,24 @@ void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port
 	TUT_INVOKE( cout << sizeof ( serv ) << endl; );
 	TUT_DECLARE( HSocket client( type_ | ( withSsl_ ? HSocket::TYPE::SSL_CLIENT : HSocket::TYPE::DEFAULT ) ); );
 	TUT_INVOKE( serv.listen( path_, port_ ); );
-	TUT_INVOKE( serv.start(); );
-	TUT_INVOKE( client.connect( path_, port_ ); );
-	TUT_INVOKE( client.write( test_data, size ); );
-	TUT_INVOKE( serv.wait(); );
+	try
+		{
+		TUT_INVOKE( serv.start(); );
+		TUT_INVOKE( client.connect( path_, port_ ); );
+		TUT_INVOKE( client.write( test_data, size ); );
+		TUT_INVOKE( serv.wait(); );
+		}
+	catch ( HException const& e )
+		{
+		cout << e.what() << endl;
+		TUT_INVOKE( serv.stop(); );
+		throw;
+		}
+	catch ( ... )
+		{
+		TUT_INVOKE( serv.stop(); );
+		throw;
+		}
 	TUT_INVOKE( serv.stop(); );
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
 	cout << serv.buffer() << endl;
