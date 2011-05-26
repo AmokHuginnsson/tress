@@ -261,8 +261,8 @@ public:
 				if ( i == _groups.end() )
 					{
 					++ total;
-					test_result tr( i->second, 0 );
-					tr.set_meta( test_result::setup, "", "no such group" );
+					test_result tr;
+					tr.set_meta( test_result::setup, "", *k );
 					tr.set_meta( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( group_names.begin(), k ) ) );
 					_callback->test_completed( tr );
 					}

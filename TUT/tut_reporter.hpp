@@ -53,7 +53,7 @@ std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr )
 			os_ << '[' << tr._testNo << "=P]" << std::flush;
 		break;
 		case tut::test_result::setup:
-			os_ << "no such group" << std::flush;
+			os_ << "no such group: `" << tr._message << "'\n" << std::flush;
 		break;
 		}
 	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
@@ -269,7 +269,7 @@ class reporter : public tut::callback
 		{
 		yaal::hcore::HLock l( _mutex );
 
-		std::string const& name( tr._group->get_name() );
+		std::string const& name( tr._group ? tr._group->get_name() : tr._message );
 		static char const* COLUMNS( ::getenv( "COLUMNS" ) );
 		static int const columns( COLUMNS ? static_cast<int>( ::strtol( COLUMNS, NULL, 10 ) ) : 80 );
 		static int const maxWidth( yaal::tools::xmath::clip( 80, columns, 128 ) );
@@ -334,8 +334,8 @@ class reporter : public tut::callback
 
 		if ( tr._result != tut::test_result::ok )
 			_notPassed.push_back( tr );
-		group_base::run_stat_t status( tr._group->get_stat() );
-		if ( tress::setup._fancy && ( status.second == tr._group->get_real_test_count() ) )
+		group_base::run_stat_t status( tr._group ? tr._group->get_stat() : group_base::run_stat_t( 0, 0 ) );
+		if ( tress::setup._fancy && tr._group && ( status.second == tr._group->get_real_test_count() ) )
 			{
 			int spaceCount( ( maxWidth - 9 ) - ( static_cast<int>( name.length() ) + _currentGroupTestCount ) );
 			if ( spaceCount > 0 )
@@ -366,7 +366,7 @@ class reporter : public tut::callback
 
 				_os << std::endl;
 
-				_os << "---> " << "group: " << tr._group->get_name()
+				_os << "---> " << "group: " << ( tr._group ? tr._group->get_name() : "" )
 					<< ", test: test<" << tr._testNo << ">"
 					<< ( ! tr._name.empty() ? ( std::string( " : " ) + tr._name ) : std::string() )
 					<< std::endl;
