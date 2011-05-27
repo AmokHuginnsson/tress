@@ -83,7 +83,7 @@ TUT_UNIT_TEST_N( 1, "binding" )
 	generate_n( back_insert_iterator<T>( v ), 3, make_multi );
 	copy( v.begin(), v.end(), ostream_iterator<pair_t>( cout ) );
 	cout << endl;
-	sort( v.begin(), v.end(), bind( &pair_t::first, _1 ) < bind( &pair_t::first, _2 ) );
+	sort( v.begin(), v.end(), boost::bind( &pair_t::first, _1 ) < boost::bind( &pair_t::first, _2 ) );
 	copy( v.begin(), v.end(), ostream_iterator<pair_t>( cout ) );
 	cout << endl;
 	cout << "}" << endl;
@@ -207,7 +207,7 @@ template<typename result_t, typename el1_t, typename el2_t>
 result_t plus( el1_t const& el1, el2_t const& el2 )
 	{ return ( el1 + el2 ); }
 
-TUT_UNIT_TEST_N( 4, "bind, accumulate, plus" )
+TUT_UNIT_TEST_N( 4, "boost::bind, accumulate, plus" )
 	cout << "accumulate all values returned by some\n"
 		"method of class that represent values in map" << endl;
 	cout << "{" << endl;
@@ -219,7 +219,7 @@ TUT_UNIT_TEST_N( 4, "bind, accumulate, plus" )
 	copy( m.begin(), m.end(), ostream_iterator<t4h_t>( cout ) );
 	cout << endl;
 	int sum = accumulate( m.begin(), m.end(), 0,
-			bind( std::plus<int>(), _1, bind( &test4helper::get_val, bind( &t4h_t::second, _2 ) ) ) );
+			boost::bind( std::plus<int>(), _1, boost::bind( &test4helper::get_val, boost::bind( &t4h_t::second, _2 ) ) ) );
 	cout << sum << endl;
 	cout << "}" << endl;
 TUT_TEARDOWN()
@@ -229,26 +229,26 @@ pair_t foo( int first, int second )
 	return ( make_pair( first, second ) );
 	}
 
-TUT_UNIT_TEST_N( 5, "bind features" )
-	ENSURE_EQUALS( "no args bind", bind( &foo, _1, _2 )( 1, 2 ), make_pair( 1, 2 ) );
-	ENSURE_EQUALS( "no args bind", bind( &foo, _2, _1 )( 1, 2 ), make_pair( 2, 1 ) );
-	ENSURE_EQUALS( "one arg bind _1, 4", bind( &foo, _1, 4 )( 3 ), make_pair( 3, 4 ) );
-	ENSURE_EQUALS( "one arg bind 4, _1", bind( &foo, 4, _1 )( 3 ), make_pair( 4, 3 ) );
+TUT_UNIT_TEST_N( 5, "boost::bind features" )
+	ENSURE_EQUALS( "no args bind", boost::bind( &foo, _1, _2 )( 1, 2 ), make_pair( 1, 2 ) );
+	ENSURE_EQUALS( "no args bind", boost::bind( &foo, _2, _1 )( 1, 2 ), make_pair( 2, 1 ) );
+	ENSURE_EQUALS( "one arg bind _1, 4", boost::bind( &foo, _1, 4 )( 3 ), make_pair( 3, 4 ) );
+	ENSURE_EQUALS( "one arg bind 4, _1", boost::bind( &foo, 4, _1 )( 3 ), make_pair( 4, 3 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "bind filed assign" )
+TUT_UNIT_TEST_N( 6, "boost::bind filed assign" )
 	person_t p( "Ala", "Nowak" );
 	cout << p << endl;
 	string const s( "Kowalska" );
-	cout << ( bind( &person_t::second, &p )() < s ) << endl;
-	cout << ( bind( &person_t::second, &p )() > s ) << endl;
+	cout << ( boost::bind( &person_t::second, &p )() < s ) << endl;
+	cout << ( boost::bind( &person_t::second, &p )() > s ) << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST_N( 7, "compare with constant." )
 	typedef list<item_t> list_t;
 	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ), bind( &item_t::id, _1 ) < 50 );
+	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ), boost::bind( &item_t::id, _1 ) < 50 );
 	copy( l.begin(), l.end(), ostream_iterator<item_t>( cout, " " ) );
 	cout << endl;
 TUT_TEARDOWN()
