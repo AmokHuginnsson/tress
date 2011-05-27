@@ -211,6 +211,8 @@ struct cast : public std::unary_function<from_t, to_t>
 		}
 	};
 
+#ifdef HAVE_SGI_STL_EXTENSIONS
+
 TUT_UNIT_TEST_N( 13, "transform" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
@@ -221,6 +223,8 @@ TUT_UNIT_TEST_N( 13, "transform" )
 	ENSURE_EQUALS( "transform failed", ss.str(), "1 2 3 4 5 6 7 8 9 10 " );
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
+
+#endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 
 TUT_UNIT_TEST_N( 14, "negate" )
 	typedef list<int> list_t;
@@ -233,6 +237,8 @@ TUT_UNIT_TEST_N( 14, "negate" )
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
 
+#ifdef HAVE_SGI_STL_EXTENSIONS
+
 TUT_UNIT_TEST_N( 15, "compose1" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
@@ -243,6 +249,8 @@ TUT_UNIT_TEST_N( 15, "compose1" )
 	ENSURE_EQUALS( "compose1 failed", ss.str(), "-2 -5 -10 -17 -26 -37 -50 -65 -82 -101 " );
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
+
+#endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 
 TUT_UNIT_TEST_N( 16, "remove_copy_if" )
 	typedef list<int> list_t;
@@ -255,6 +263,8 @@ TUT_UNIT_TEST_N( 16, "remove_copy_if" )
 	ENSURE_EQUALS( "remove_copy_if failed", ss.str(), "1 4 9 16 25 " );
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
+
+#ifdef HAVE_SGI_STL_EXTENSIONS
 
 TUT_UNIT_TEST_N( 17, "compose2" )
 	typedef list<int> list_t;
@@ -270,6 +280,8 @@ TUT_UNIT_TEST_N( 17, "compose2" )
 	ENSURE_EQUALS( "compose2 failed", ss.str(), "1 4 9 16 25 64 81 100 " );
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
+
+#endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 
 TUT_UNIT_TEST_N( 18, "count" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 16, 49, 64, 81, 100, 16 };
@@ -288,6 +300,8 @@ TUT_UNIT_TEST_N( 20, "not1" )
 	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), not1( bind2nd( less<int>(), 50 ) ) ), countof( a ) - 7 );
 	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), not1( bind2nd( less<int>(), 1 ) ) ), countof( a ) - 0 );
 TUT_TEARDOWN()
+
+#ifdef HAVE_SGI_STL_EXTENSIONS
 
 TUT_UNIT_TEST_N( 21, "not2" )
 	typedef list<int> list_t;
@@ -333,6 +347,8 @@ TUT_UNIT_TEST_N( 23, "ptr_fun" )
 	ENSURE_EQUALS( "ptr_fun failed", ss.str(), "36 49 " );
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
+
+#endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 
 class MemFunTest
 	{

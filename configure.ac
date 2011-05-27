@@ -17,6 +17,25 @@ m4_include([_aux.local/m4_ax_boost_base.m4])
 m4_include([_aux.local/m4_ax_boost_system.m4])
 m4_include([_aux.local/m4_ax_boost_filesystem.m4])
 m4_include([_aux.local/m4_ax_boost_date_time.m4])
+AC_MSG_CHECKING([whether you have SGI STL extensions])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+#ifdef __GNUC__
+#include <ext/functional>
+using namespace __gnu_cxx;
+#else
+#define _HAS_TRADITIONAL_STL 1
+#include <functional>
+#endif
+
+using namespace std;
+
+int main( int, char** )
+	{
+	compose1( negate<int>(), negate<int>() )( 7 );
+	return ( 0 );
+	}
+]])], [AC_DEFINE([HAVE_SGI_STL_EXTENSIONS],[],[Do you have SGI STL extensions?])] RESULT=["yes"])
+AC_MSG_RESULT([$RESULT])
 AX_BOOST_BASE([1.35])
 AX_BOOST_SYSTEM
 AX_BOOST_FILESYSTEM

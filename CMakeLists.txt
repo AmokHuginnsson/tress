@@ -18,6 +18,24 @@ use_cxx_compiler_flag( -Wno-missing-noreturn )
 find_package( Boost COMPONENTS filesystem date_time system REQUIRED )
 find_package( yaal COMPONENTS hcore tools dbwrapper hconsole REQUIRED )
 
+check_cxx_source_compiles( "
+#ifdef __GNUC__
+#include <ext/functional>
+using namespace __gnu_cxx;
+#else
+#define _HAS_TRADITIONAL_STL 1
+#include <functional>
+#endif
+
+using namespace std;
+
+int main( int, char** )
+	{
+	compose1( negate<int>(), negate<int>() )( 7 );
+	return ( 0 );
+	}
+" HAVE_SGI_STL_EXTENSIONS )
+
 include_directories( . )
 configure_file( ../yaal/_aux/cmake-client-config.hxx ${TARGET_PATH}/config.hxx )
 
