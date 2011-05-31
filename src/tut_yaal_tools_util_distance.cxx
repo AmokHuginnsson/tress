@@ -45,16 +45,16 @@ namespace tut
 char const* const failMsg = "failed to calculate levenshtein distance";
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_util_distance );
-TUT_TEST_GROUP_N( tut_yaal_tools_util_distance, "yaal::tools::util::distance" );
+TUT_TEST_GROUP( tut_yaal_tools_util_distance, "yaal::tools::util::distance" );
 
-TUT_UNIT_TEST_N( 1, "same strings" )
+TUT_UNIT_TEST( 1, "same strings" )
 	ENSURE_EQUALS( failMsg,
 			distance::levenshtein_damerau( "tut_yaal_tools_util_distance", "tut_yaal_tools_util_distance", true ), 0 );
 	ENSURE_EQUALS( failMsg,
 			distance::levenshtein_damerau( "tut_yaal_tools_util_distance", "tut_yaal_tools_util_distance", false ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "different strings" )
+TUT_UNIT_TEST( 2, "different strings" )
 	ENSURE_EQUALS( failMsg,
 			distance::levenshtein_damerau( "ala", "ola" ), 1 );
 	ENSURE_EQUALS( failMsg,

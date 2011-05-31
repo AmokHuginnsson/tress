@@ -44,9 +44,9 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hset );
-TUT_TEST_GROUP_N( tut_yaal_hcore_hset, "yaal::hcore::HSet" );
+TUT_TEST_GROUP( tut_yaal_hcore_hset, "yaal::hcore::HSet" );
 
-TUT_UNIT_TEST_N( 49, "sample data" )
+TUT_UNIT_TEST( 49, "sample data" )
 	typedef HSet<HString> string_set_t;
 	string_set_t set;
 	set.insert( "one" );
@@ -69,7 +69,7 @@ TUT_UNIT_TEST_N( 49, "sample data" )
 	ENSURE_EQUALS( "failed to insert .insert() (size)", set.size(), 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 50, "speed test" )
+TUT_UNIT_TEST( 50, "speed test" )
 	TIME_CONSTRAINT_EXEMPT();
 	typedef std::set<int> proto_t;
 	typedef HSet<int> set_type;

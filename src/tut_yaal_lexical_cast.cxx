@@ -42,79 +42,79 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_lexical_cast );
-TUT_TEST_GROUP_N( tut_yaal_lexical_cast, "yaal::lexical_cast" );
+TUT_TEST_GROUP( tut_yaal_lexical_cast, "yaal::lexical_cast" );
 
-TUT_UNIT_TEST_N( 1, "0" )
+TUT_UNIT_TEST( 1, "0" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "-0" )
+TUT_UNIT_TEST( 2, "-0" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "0Ala" )
+TUT_UNIT_TEST( 3, "0Ala" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "-0Ala" )
+TUT_UNIT_TEST( 4, "-0Ala" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "0xOla" )
+TUT_UNIT_TEST( 5, "0xOla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "-0xOla" )
+TUT_UNIT_TEST( 6, "-0xOla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "9xOla" )
+TUT_UNIT_TEST( 7, "9xOla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 9 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "-9xOla" )
+TUT_UNIT_TEST( 8, "-9xOla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), -9 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "9xOlab" )
+TUT_UNIT_TEST( 9, "9xOlab" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 9 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 10, "-9xOlab" )
+TUT_UNIT_TEST( 10, "-9xOlab" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), -9 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 11, "axOla" )
+TUT_UNIT_TEST( 11, "axOla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
@@ -129,7 +129,7 @@ TUT_UNIT_TEST_N( 11, "axOla" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 12, "-axOla" )
+TUT_UNIT_TEST( 12, "-axOla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
@@ -144,63 +144,63 @@ TUT_UNIT_TEST_N( 12, "-axOla" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 13, "0xAla" )
+TUT_UNIT_TEST( 13, "0xAla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 16 based cast", lexical_cast<int>( get_test_name().c_str() ), 10 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 14, "-0xAla" )
+TUT_UNIT_TEST( 14, "-0xAla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 16 based cast", lexical_cast<int>( get_test_name().c_str() ), -10 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 15, "0x" )
+TUT_UNIT_TEST( 15, "0x" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 16, "-0x" )
+TUT_UNIT_TEST( 16, "-0x" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 17, "0x10b" )
+TUT_UNIT_TEST( 17, "0x10b" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 16 based cast", lexical_cast<int>( get_test_name().c_str() ), 267 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 18, "-0x10b" )
+TUT_UNIT_TEST( 18, "-0x10b" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 16 based cast", lexical_cast<int>( get_test_name().c_str() ), -267 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 19, "x10b" )
+TUT_UNIT_TEST( 19, "x10b" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 16 based cast", lexical_cast<int>( get_test_name().c_str() ), 267 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 20, "-x10b" )
+TUT_UNIT_TEST( 20, "-x10b" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 16 based cast", lexical_cast<int>( get_test_name().c_str() ), -267 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 21, "xOla" )
+TUT_UNIT_TEST( 21, "xOla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
@@ -215,7 +215,7 @@ TUT_UNIT_TEST_N( 21, "xOla" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 22, "-xOla" )
+TUT_UNIT_TEST( 22, "-xOla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
@@ -230,154 +230,154 @@ TUT_UNIT_TEST_N( 22, "-xOla" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 23, "xAla" )
+TUT_UNIT_TEST( 23, "xAla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 16 based cast", lexical_cast<int>( get_test_name().c_str() ), 10 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 24, "-xAla" )
+TUT_UNIT_TEST( 24, "-xAla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 16 based cast", lexical_cast<int>( get_test_name().c_str() ), -10 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 25, "0Ala" )
+TUT_UNIT_TEST( 25, "0Ala" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 26, "-0Ala" )
+TUT_UNIT_TEST( 26, "-0Ala" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 27, "01Ala" )
+TUT_UNIT_TEST( 27, "01Ala" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 28, "-01Ala" )
+TUT_UNIT_TEST( 28, "-01Ala" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), -1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 29, "07Ala" )
+TUT_UNIT_TEST( 29, "07Ala" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 30, "-07Ala" )
+TUT_UNIT_TEST( 30, "-07Ala" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), -7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 31, "08Ala" )
+TUT_UNIT_TEST( 31, "08Ala" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 32, "-08Ala" )
+TUT_UNIT_TEST( 32, "-08Ala" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 33, "078Ala" )
+TUT_UNIT_TEST( 33, "078Ala" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 34, "-078Ala" )
+TUT_UNIT_TEST( 34, "-078Ala" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), -7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 35, "01" )
+TUT_UNIT_TEST( 35, "01" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 36, "-01" )
+TUT_UNIT_TEST( 36, "-01" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), -1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 37, "0110b" )
+TUT_UNIT_TEST( 37, "0110b" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad 2 based cast", lexical_cast<int>( get_test_name().c_str() ), 6 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 38, "-0110b" )
+TUT_UNIT_TEST( 38, "-0110b" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad 2 based cast", lexical_cast<int>( get_test_name().c_str() ), -6 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 39, "0110c" )
+TUT_UNIT_TEST( 39, "0110c" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), 72 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 40, "-0110c" )
+TUT_UNIT_TEST( 40, "-0110c" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), -72 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 41, "1010c" )
+TUT_UNIT_TEST( 41, "1010c" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 1010 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 42, "-1010c" )
+TUT_UNIT_TEST( 42, "-1010c" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), -1010 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 43, "1010b" )
+TUT_UNIT_TEST( 43, "1010b" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad 2 based cast", lexical_cast<int>( get_test_name().c_str() ), 10 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 44, "-1010b" )
+TUT_UNIT_TEST( 44, "-1010b" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), true );

@@ -48,9 +48,9 @@ struct tut_yaal_hcore_hhashmultimap
 	typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_function_type, HMultiContainerStorage::HTransparent> mmt_t;
 	};
 
-TUT_TEST_GROUP_N( tut_yaal_hcore_hhashmultimap, "yaal::hcore::HHashMultiMap" );
+TUT_TEST_GROUP( tut_yaal_hcore_hhashmultimap, "yaal::hcore::HHashMultiMap" );
 
-TUT_UNIT_TEST_N( 1, "find/upper_bound on non existing" )
+TUT_UNIT_TEST( 1, "find/upper_bound on non existing" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
@@ -61,7 +61,7 @@ TUT_UNIT_TEST_N( 1, "find/upper_bound on non existing" )
 		FAIL( "find/upper_bound ranges skewed" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "find/upper_bound on existing" )
+TUT_UNIT_TEST( 2, "find/upper_bound on existing" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
@@ -75,7 +75,7 @@ TUT_UNIT_TEST_N( 2, "find/upper_bound on existing" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", acc, 15 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "modify packed by iterator" )
+TUT_UNIT_TEST( 3, "modify packed by iterator" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mmp_t::iterator it = mm.begin();
@@ -85,7 +85,7 @@ TUT_UNIT_TEST_N( 3, "modify packed by iterator" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 31, "find/upper_bound on non existing" )
+TUT_UNIT_TEST( 31, "find/upper_bound on non existing" )
 	mmt_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
@@ -95,7 +95,7 @@ TUT_UNIT_TEST_N( 31, "find/upper_bound on non existing" )
 		FAIL( "find/upper_bound ranges skewed" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 32, "find/upper_bound on existing" )
+TUT_UNIT_TEST( 32, "find/upper_bound on existing" )
 	mmt_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
@@ -109,7 +109,7 @@ TUT_UNIT_TEST_N( 32, "find/upper_bound on existing" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", acc, 15 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 33, "modify transparent by iterator and operator*" )
+TUT_UNIT_TEST( 33, "modify transparent by iterator and operator*" )
 	mmt_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mmt_t::iterator it = mm.begin();
@@ -119,7 +119,7 @@ TUT_UNIT_TEST_N( 33, "modify transparent by iterator and operator*" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 34, "modify transparent by iterator and operator->" )
+TUT_UNIT_TEST( 34, "modify transparent by iterator and operator->" )
 	mmt_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mmt_t::iterator it = mm.begin();
@@ -129,7 +129,7 @@ TUT_UNIT_TEST_N( 34, "modify transparent by iterator and operator->" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 50, "sample data" )
+TUT_UNIT_TEST( 50, "sample data" )
 	typedef HHashMultiMap<HString, int> string_to_int_hashmultimap_t;
 	string_to_int_hashmultimap_t map;
 	map.insert( make_pair<HString>( "one", 1 ) );

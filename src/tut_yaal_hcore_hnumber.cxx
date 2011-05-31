@@ -87,23 +87,23 @@ double long tut_yaal_hcore_hnumber::random_real( void )
 	return ( n / d );
 	}
 
-TUT_TEST_GROUP_N( tut_yaal_hcore_hnumber, "yaal::hcore::HNumber" );
+TUT_TEST_GROUP( tut_yaal_hcore_hnumber, "yaal::hcore::HNumber" );
 
-TUT_UNIT_TEST_N( 1, "default constructor / check default precision" )
+TUT_UNIT_TEST( 1, "default constructor / check default precision" )
 	HNumber n;
 	ENSURE_EQUALS( "bad default number", n.to_string(), "0" );
 	ENSURE_EQUALS( "bad dafault precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << n.to_string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "construct from double" )
+TUT_UNIT_TEST( 2, "construct from double" )
 	HNumber n( 3.14159265 );
 	ENSURE_EQUALS( "number not created correctly", n.to_string(), "3.14159265" );
 	ENSURE_EQUALS( "bad dafault precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << n.to_string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "construct from double and specify precision / get precision" )
+TUT_UNIT_TEST( 3, "construct from double and specify precision / get precision" )
 	int const P1 = 20;
 	HNumber n( 3.14159265, P1 );
 	ENSURE_EQUALS( "number not created correctly", n.to_string(), "3.14159265" );
@@ -115,7 +115,7 @@ TUT_UNIT_TEST_N( 3, "construct from double and specify precision / get precision
 	ENSURE_EQUALS( "bad precision (shall be at least hardcoded minimum)", n2.get_precision(), M );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "construct from string" )
+TUT_UNIT_TEST( 4, "construct from string" )
 	char const* const pn0 = "3.14159265";
 	HNumber n0( pn0 );
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0 );
@@ -285,7 +285,7 @@ TUT_UNIT_TEST_N( 4, "construct from string" )
 	ENSURE_EQUALS( "number 1 12 not created correctly", HNumber( "-0001." ).to_string(), "-1" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "construct from string (prefixes)" )
+TUT_UNIT_TEST( 5, "construct from string (prefixes)" )
 	char const* const pn0 = "???3.14159265";
 	HNumber n0( pn0 );
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0 + 3 );
@@ -410,7 +410,7 @@ TUT_UNIT_TEST_N( 5, "construct from string (prefixes)" )
 	cout << "| n8 =" << n8.to_string() << " |" << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "construct from string (postfixes)" )
+TUT_UNIT_TEST( 6, "construct from string (postfixes)" )
 	char const* const pn0ok = "3.14159265";
 	char const* const pn0 = "3.14159265???";
 	HNumber n0( pn0 );
@@ -540,7 +540,7 @@ TUT_UNIT_TEST_N( 6, "construct from string (postfixes)" )
 	cout << "| n8 =" << n8.to_string() << " |" << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "construct from string (prepostfixes)" )
+TUT_UNIT_TEST( 7, "construct from string (prepostfixes)" )
 	char const* const pn0ok = "3.14159265";
 	char const* const pn0 = "???3.14159265???";
 	HNumber n0( pn0 );
@@ -670,7 +670,7 @@ TUT_UNIT_TEST_N( 7, "construct from string (prepostfixes)" )
 	cout << "| n8 =" << n8.to_string() << " |" << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "construct from string and specify precision" )
+TUT_UNIT_TEST( 8, "construct from string and specify precision" )
 	char const* const pn0 = "3.14159265";
 	int const P1 = 20;
 	HNumber n0( pn0, P1 );
@@ -683,7 +683,7 @@ TUT_UNIT_TEST_N( 8, "construct from string and specify precision" )
 	ENSURE_EQUALS( "bad precision (shall be at least hardcoded minimum)", n2.get_precision(), M );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "copy constructor" )
+TUT_UNIT_TEST( 9, "copy constructor" )
 	HNumber n( 3.14159265 );
 	ENSURE_EQUALS( "number not created correctly", n.to_string(), "3.14159265" );
 	ENSURE_EQUALS( "bad dafault precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
@@ -700,7 +700,7 @@ TUT_UNIT_TEST_N( 9, "copy constructor" )
 	ENSURE_EQUALS( "bad dafault precision", copy0.get_precision(), P1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 10, "set/get precision" )
+TUT_UNIT_TEST( 10, "set/get precision" )
 	HNumber n;
 	int const M = 16;
 	int const P = 20;
@@ -740,7 +740,7 @@ TUT_UNIT_TEST_N( 10, "set/get precision" )
 	HNumber::DEFAULT_PRECISION = SAVED;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 11, "assignment operator" )
+TUT_UNIT_TEST( 11, "assignment operator" )
 	char const* const p0 = "3.14159265";
 	HNumber::DEFAULT_PRECISION = 20;
 	HNumber n( p0 );
@@ -763,7 +763,7 @@ TUT_UNIT_TEST_N( 11, "assignment operator" )
 	ENSURE_EQUALS( "bad dafault precision", another.get_precision(), HNumber::DEFAULT_PRECISION + 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 12, "equality operator" )
+TUT_UNIT_TEST( 12, "equality operator" )
 	char const* const p0 = "3.14159265";
 	char const* const p1 = "3.14159265";
 	char const* const p2 = "3.141593";
@@ -774,7 +774,7 @@ TUT_UNIT_TEST_N( 12, "equality operator" )
 	ENSURE( "equality failed (not equal)", ! ( n0 == n2 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 13, "difference operator" )
+TUT_UNIT_TEST( 13, "difference operator" )
 	char const* const p0 = "3.14159265";
 	char const* const p1 = "3.14159265";
 	char const* const p2 = "3.141593";
@@ -785,7 +785,7 @@ TUT_UNIT_TEST_N( 13, "difference operator" )
 	ENSURE( "difference failed (equal)", ! ( n0 != n1 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 14, "lower then operator" )
+TUT_UNIT_TEST( 14, "lower then operator" )
 	ENSURE( "lower failed a", HNumber( "-1" ) < HNumber( "1" ) );
 	ENSURE( "lower failed b", HNumber( "-1" ) < HNumber( "0" ) );
 	ENSURE( "lower failed c", HNumber( "-1" ) < HNumber( "-0.5" ) );
@@ -810,7 +810,7 @@ TUT_UNIT_TEST_N( 14, "lower then operator" )
 	ENSURE( "lower failed s", ! ( HNumber( "0" ) < HNumber( "0" ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 15, "lower or equal then operator" )
+TUT_UNIT_TEST( 15, "lower or equal then operator" )
 	ENSURE( "lower-eq failed a", HNumber( "-1" ) <= HNumber( "1" ) );
 	ENSURE( "lower-eq failed b", HNumber( "-1" ) <= HNumber( "0" ) );
 	ENSURE( "lower-eq failed c", HNumber( "-1" ) <= HNumber( "-0.5" ) );
@@ -835,7 +835,7 @@ TUT_UNIT_TEST_N( 15, "lower or equal then operator" )
 	ENSURE( "lower-eq failed n", ! ( HNumber( "3.145" ) <= HNumber( "2.734543" ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 16, "greater then operator" )
+TUT_UNIT_TEST( 16, "greater then operator" )
 	ENSURE( "greater failed a", HNumber( "1" ) > HNumber( "-1" ) );
 	ENSURE( "greater failed b", HNumber( "0" ) > HNumber( "-1" ) );
 	ENSURE( "greater failed c", HNumber( "-0.5" ) > HNumber( "-1" ) );
@@ -860,7 +860,7 @@ TUT_UNIT_TEST_N( 16, "greater then operator" )
 	ENSURE( "greater failed s", ! ( HNumber( "0" ) > HNumber( "0" ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 17, "greater or equal then operator" )
+TUT_UNIT_TEST( 17, "greater or equal then operator" )
 	ENSURE( "greater-eq failed a", HNumber( "1" ) >= HNumber( "-1" ) );
 	ENSURE( "greater-eq failed b", HNumber( "0" ) >= HNumber( "-1" ) );
 	ENSURE( "greater-eq failed c", HNumber( "-0.5" ) >= HNumber( "-1" ) );
@@ -895,7 +895,7 @@ TUT_TEARDOWN()
  *
  */
 
-TUT_UNIT_TEST_N( 18, "addition" )
+TUT_UNIT_TEST( 18, "addition" )
 	ENSURE_EQUALS( "addition failed a", ( HNumber( "0" ) + HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
 	ENSURE_EQUALS( "addition failed a1", ( HNumber( "6" ) + HNumber( "7" ) ).to_string(), HNumber( "13" ).to_string() );
 	ENSURE_EQUALS( "addition failed b", ( HNumber( "1" ) + HNumber( "0" ) ).to_string(), HNumber( "1" ).to_string() );
@@ -947,7 +947,7 @@ TUT_UNIT_TEST_N( 18, "addition" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 19, "multiplication" )
+TUT_UNIT_TEST( 19, "multiplication" )
 	//ENSURE_EQUALS( "multiplication failed x", ( HNumber( ".011931709189" ) * HNumber( "-154.734375" ) ).to_string(), HNumber( "-1.846245564041671875" ).to_string() );
 	ENSURE_EQUALS( "multiplication failed a", ( HNumber( "0" ) * HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
 	ENSURE_EQUALS( "multiplication failed b", ( HNumber( "0" ) * HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
@@ -979,7 +979,7 @@ TUT_UNIT_TEST_N( 19, "multiplication" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 20, "substraction" )
+TUT_UNIT_TEST( 20, "substraction" )
 	_bc.spawn( BC_PATH );
 	HString msg;
 	HString res;
@@ -1000,7 +1000,7 @@ TUT_UNIT_TEST_N( 20, "substraction" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 21, "division" )
+TUT_UNIT_TEST( 21, "division" )
 	try
 		{
 		HNumber n( "1" );
@@ -1247,7 +1247,7 @@ TUT_UNIT_TEST_N( 21, "division" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 22, "opposite" )
+TUT_UNIT_TEST( 22, "opposite" )
 	ENSURE_EQUALS( "opposite failed a", - HNumber( "0" ), HNumber( "0" ) );
 	ENSURE_EQUALS( "opposite failed b", - HNumber( "1" ), HNumber( "-1" ) );
 	ENSURE_EQUALS( "opposite failed c", - HNumber( "-1" ), HNumber( "1" ) );
@@ -1255,7 +1255,7 @@ TUT_UNIT_TEST_N( 22, "opposite" )
 	ENSURE_EQUALS( "opposite failed e", - HNumber( "-.01" ), HNumber( ".01" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 23, "bc" )
+TUT_UNIT_TEST( 23, "bc" )
 	TIME_CONSTRAINT_EXEMPT();
 	HNumber n = 3;
 	n ^= 33333;
@@ -1267,7 +1267,7 @@ TUT_UNIT_TEST_N( 23, "bc" )
 	ENSURE_EQUALS( "karatsuba failed", myRes, res );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 24, "preincrementation" )
+TUT_UNIT_TEST( 24, "preincrementation" )
 	HNumber n;
 	HNumber k = ++ n;
 	ENSURE_EQUALS( "preincrementation failed orig", n, HNumber( "1" ) );
@@ -1275,7 +1275,7 @@ TUT_UNIT_TEST_N( 24, "preincrementation" )
 	ENSURE_EQUALS( "preincrementation failed", ++ n, HNumber( "2" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 25, "predecrementation" )
+TUT_UNIT_TEST( 25, "predecrementation" )
 	HNumber n;
 	HNumber k = -- n;
 	ENSURE_EQUALS( "predecrementation failed orig", n, HNumber( "-1" ) );
@@ -1283,7 +1283,7 @@ TUT_UNIT_TEST_N( 25, "predecrementation" )
 	ENSURE_EQUALS( "predecrementation failed", -- n, HNumber( "-2" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 26, "postincrementation" )
+TUT_UNIT_TEST( 26, "postincrementation" )
 	HNumber n;
 	HNumber k = n ++;
 	ENSURE_EQUALS( "postincrementation failed orig", n, HNumber( "1" ) );
@@ -1291,7 +1291,7 @@ TUT_UNIT_TEST_N( 26, "postincrementation" )
 	ENSURE_EQUALS( "postincrementation failed", n ++, HNumber( "1" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 27, "postdecrementation" )
+TUT_UNIT_TEST( 27, "postdecrementation" )
 	HNumber n;
 	HNumber k = n --;
 	ENSURE_EQUALS( "postdecrementation failed orig", n, HNumber( "-1" ) );

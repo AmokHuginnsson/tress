@@ -54,9 +54,9 @@ struct tut_yaal_hcore_hmap
 		{}
 	};
 
-TUT_TEST_GROUP_N( tut_yaal_hcore_hmap, "yaal::hcore::HMap" );
+TUT_TEST_GROUP( tut_yaal_hcore_hmap, "yaal::hcore::HMap" );
 
-TUT_UNIT_TEST_N( 1, "HMap insert of already existing key")
+TUT_UNIT_TEST( 1, "HMap insert of already existing key")
 	i2i_t m;
 	static int const KEY = 1;
 	static int const ORIGINAL_VAL = 2;
@@ -68,7 +68,7 @@ TUT_UNIT_TEST_N( 1, "HMap insert of already existing key")
 	ENSURE_EQUALS( "element with already existing key inserted", ir.first->second, ORIGINAL_VAL );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "exception during map[key] = val;" )
+TUT_UNIT_TEST( 2, "exception during map[key] = val;" )
 	i2c_t m;
 	try
 		{
@@ -82,7 +82,7 @@ TUT_UNIT_TEST_N( 2, "exception during map[key] = val;" )
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 50, "sample data" )
+TUT_UNIT_TEST( 50, "sample data" )
 	typedef HMap<HString, int> string_to_int_map_t;
 	string_to_int_map_t map;
 	map["one"] = 1;

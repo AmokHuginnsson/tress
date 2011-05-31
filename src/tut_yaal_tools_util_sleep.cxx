@@ -49,9 +49,9 @@ struct tut_yaal_tools_util_sleep
 	int long get_speed( HClock::UNIT::unit_t const& );
 	};
 
-TUT_TEST_GROUP_N( tut_yaal_tools_util_sleep, "yaal::tools::util::sleep" );
+TUT_TEST_GROUP( tut_yaal_tools_util_sleep, "yaal::tools::util::sleep" );
 
-TUT_UNIT_TEST_N( 1, "the 1 second granularity sleep" )
+TUT_UNIT_TEST( 1, "the 1 second granularity sleep" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const SHOULD_SLEEP_MS = power<10,3>::value;
@@ -63,7 +63,7 @@ TUT_UNIT_TEST_N( 1, "the 1 second granularity sleep" )
 	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND ) << "$" << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "the 1 milisecond granularity sleep" )
+TUT_UNIT_TEST( 2, "the 1 milisecond granularity sleep" )
 	static int long const SLEEP = 333;
 	static int long const SHOULD_SLEEP_MS = 333;
 	int long SKEW( 2 );

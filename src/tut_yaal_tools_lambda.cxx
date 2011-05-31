@@ -42,30 +42,30 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_lambda );
-TUT_TEST_GROUP_N( tut_yaal_tools_lambda, "yaal::tools::lambda" );
+TUT_TEST_GROUP( tut_yaal_tools_lambda, "yaal::tools::lambda" );
 
-TUT_UNIT_TEST_N( 1, "streams" )
+TUT_UNIT_TEST( 1, "streams" )
 	int a[] = { 2, 3, 5, 7, 11, 13, 17, 19, 23 };
 	int_list_t l( a, a + countof ( a ) );
 	for_each( l.begin(), l.end(), cout << *_1 << endl );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "plus" )
+TUT_UNIT_TEST( 2, "plus" )
 	int a[] = { 2, 3, 5, 7, 11, 13, 17, 19, 23 };
 	int_list_t l( a, a + countof ( a ) );
 	transform( l.begin(), l.end(), stream_iterator( cout, " " ), 1 + _1 );
 	transform( l.begin(), l.end(), stream_iterator( cout, " " ), _1 + 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "plus both args are free" )
+TUT_UNIT_TEST( 3, "plus both args are free" )
 	cout << ( _1 + _2 )( 3, 4 ) << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "plus both args are free, one integral, one floating point" )
+TUT_UNIT_TEST( 4, "plus both args are free, one integral, one floating point" )
 	cout << ( _1 + _2 )( 3.14, 4 ) << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "plus both args are free, at least one floating point, but we force return type" )
+TUT_UNIT_TEST( 5, "plus both args are free, at least one floating point, but we force return type" )
 	cout << ret<int>( _1 + _2 )( 3.14, 4 ) << endl;
 TUT_TEARDOWN()
 

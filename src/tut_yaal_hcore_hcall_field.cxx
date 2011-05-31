@@ -54,34 +54,34 @@ HString full_name( tut_yaal_hcore_hcall_field::person_t const& p_ )
 	return ( p_.first + " " + p_.second );
 	}
 
-TUT_TEST_GROUP_N( tut_yaal_hcore_hcall_field, "yaal::hcore::HCall,field" );
+TUT_TEST_GROUP( tut_yaal_hcore_hcall_field, "yaal::hcore::HCall,field" );
 
-TUT_UNIT_TEST_N( 1, "call field read (holder set)" )
+TUT_UNIT_TEST( 1, "call field read (holder set)" )
 	person_t p( "Ala", "Nowak" );
 	ENSURE_EQUALS( "field access failed",  call( &person_t::second, &p )(), p.second );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "call field read (holder variable)" )
+TUT_UNIT_TEST( 2, "call field read (holder variable)" )
 	person_t p1( "Ala", "Nowak" );
 	person_t p2( "Ola", "Kowalska" );
 	ENSURE_EQUALS( "field access failed",  call( &person_t::second, _1 )( p1 ), p1.second );
 	ENSURE_EQUALS( "field access failed",  call( &person_t::second, _1 )( p2 ), p2.second );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "call field less comparator" )
+TUT_UNIT_TEST( 3, "call field less comparator" )
 	person_t p1( "Ala", "Nowak" );
 	person_t p2( "Ola", "Kowalska" );
 	ENSURE( "comparation failed", call( &person_t::second, _1 )( p1 ) > call( &person_t::second, _1 )( p2 ) );
 	ENSURE( "comparation failed", ( call( &person_t::second, _1 ) > call( &person_t::second, _1 ) )( p1, p2 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "call field operator overloading with generic HCall<>" )
+TUT_UNIT_TEST( 4, "call field operator overloading with generic HCall<>" )
 	person_t p1( "Ala", "Nowak" );
 	person_t const p2( "Ola", "Kowalska" );
 	cout << ( call( &full_name, _1 ) < call( &person_t::second, _1 ) )( p1, p2 ) << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "call field bind in algorithm" )
+TUT_UNIT_TEST( 5, "call field bind in algorithm" )
 	person_t a[] = { person_t( "Ala", "Kowalska" ), person_t( "Diana", "B³aszczyk" ), person_t( "Marcin", "Konarski" ), person_t( "Magdalena", "Rêbowska" ), person_t( "Wojciech", "Peisert" ) };
 	transform( a, a + countof( a ), stream_iterator( cout, " " ), call( &person_t::first, _1 ) );
 	cout << endl;

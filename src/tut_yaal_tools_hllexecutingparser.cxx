@@ -102,9 +102,9 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hllexecutingparser );
-TUT_TEST_GROUP_N( tut_yaal_tools_hllexecutingparser, "yaal::tools::HLLExecutingParser" );
+TUT_TEST_GROUP( tut_yaal_tools_hllexecutingparser, "yaal::tools::HLLExecutingParser" );
 
-TUT_UNIT_TEST_N( 1, "the test" )
+TUT_UNIT_TEST( 1, "the test" )
 	HArray<double> v;
 	real[push_back(v)]( "3.14159265" );
 //	( real[push_back(v)] >> *( ',' >> real[push_back(v)] ) )( "3.141592653589793, 2.1728182818459045" );

@@ -57,7 +57,7 @@ struct tut_yaal_hcore_hcall
 	void file_footer( void );
 	};
 
-TUT_TEST_GROUP_N( tut_yaal_hcore_hcall, "yaal::hcore::HCall" );
+TUT_TEST_GROUP( tut_yaal_hcore_hcall, "yaal::hcore::HCall" );
 
 tut_yaal_hcore_hcall::tut_yaal_hcore_hcall( void ) : _callNo( 0 ), _fileNo( 0 ), _suitUt( 0 ), _out()
 	{
@@ -108,7 +108,7 @@ void tut_yaal_hcore_hcall::file_header( void )
 "{\n"
 "\n"
 "TUT_SIMPLE_MOCK( tut_yaal_hcore_hcall_" << setfill( '0' ) << setw( 3 ) << _fileNo << " );\n"
-"TUT_TEST_GROUP_N( tut_yaal_hcore_hcall_" << setw( 3 ) << _fileNo << " , \"yaal::hcore::HCall::" << setw( 3 ) << _fileNo << "\" );\n"
+"TUT_TEST_GROUP( tut_yaal_hcore_hcall_" << setw( 3 ) << _fileNo << " , \"yaal::hcore::HCall::" << setw( 3 ) << _fileNo << "\" );\n"
 "\n" << flush;
 	}
 
@@ -131,7 +131,7 @@ void tut_yaal_hcore_hcall::generate_yaal_hcore_hcall_test( int arg, int freeArg 
 	while ( hasNext )
 		{
 		int localCall( 0 );
-		_out << "TUT_UNIT_TEST_N( " << _suitUt  + 1 << ", \"" << ( arg ? HString( arg ) : HString( "no" )  )
+		_out << "TUT_UNIT_TEST( " << _suitUt  + 1 << ", \"" << ( arg ? HString( arg ) : HString( "no" )  )
 			<< " arg" << ( arg == 1 ? "" : "s" ) << ", " << ( freeArg ? HString( freeArg ) : HString( "no" ) )
 			<< " free arg" << ( freeArg == 1 ? "" : "s" ) << ", call #" << _callNo << "... \" )" << endl;
 		do
@@ -379,57 +379,57 @@ void show_rectangle( int a, int b )
 	cout << "a: " << a << ", b: " << b << endl;
 	}
 
-TUT_UNIT_TEST_N( 1, "(hand written) no arg" )
+TUT_UNIT_TEST( 1, "(hand written) no arg" )
 	ENSURE_EQUALS( "function bind failed", call( foo0 )(), "foo0" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "(hand written) 1 (free) arg" )
+TUT_UNIT_TEST( 2, "(hand written) 1 (free) arg" )
 	ENSURE_EQUALS( "function bind failed", call( foo1, _1 )( -2 ), "foo1: a1 = -2" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "(hand written) 2 (1 free) args" )
+TUT_UNIT_TEST( 3, "(hand written) 2 (1 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo2, _1, 2 )( -3 ), "foo2: a1 = -3, a2 = 2" );
 	ENSURE_EQUALS( "function bind failed", call( foo2, 2, _1 )( -3 ), "foo2: a1 = 2, a2 = -3" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "(hand written) 2 (2 free) args" )
+TUT_UNIT_TEST( 4, "(hand written) 2 (2 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo2, _1, _2 )( -1, -2 ), "foo2: a1 = -1, a2 = -2" );
 	ENSURE_EQUALS( "function bind failed", call( foo2, _2, _1 )( -1, -2 ), "foo2: a1 = -2, a2 = -1" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "(hand written) 3 (0 free) args" )
+TUT_UNIT_TEST( 5, "(hand written) 3 (0 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo3, 0, 1, 2 )(), "foo3: a1 = 0, a2 = 1, a3 = 2" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "(hand written) 3 (1 free) args" )
+TUT_UNIT_TEST( 6, "(hand written) 3 (1 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo3, _1, 1, 2 )( -3 ), "foo3: a1 = -3, a2 = 1, a3 = 2" );
 	ENSURE_EQUALS( "function bind failed", call( foo3, 0, _1, 2 )( -4 ), "foo3: a1 = 0, a2 = -4, a3 = 2" );
 	ENSURE_EQUALS( "function bind failed", call( foo3, 0, 1, _1 )( -5 ), "foo3: a1 = 0, a2 = 1, a3 = -5" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "(hand written) 3 (2 free) args" )
+TUT_UNIT_TEST( 7, "(hand written) 3 (2 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo3, _1, _2, 2 )( -3, -4 ), "foo3: a1 = -3, a2 = -4, a3 = 2" );
 	ENSURE_EQUALS( "function bind failed", call( foo3, _2, _1, 2 )( -3, -4 ), "foo3: a1 = -4, a2 = -3, a3 = 2" );
 	ENSURE_EQUALS( "function bind failed", call( foo3, 0, _1, _2 )( -4, -5 ), "foo3: a1 = 0, a2 = -4, a3 = -5" );
 	ENSURE_EQUALS( "function bind failed", call( foo3, _2, 1, _1 )( -5, -6 ), "foo3: a1 = -6, a2 = 1, a3 = -5" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "(hand written) 6 (2 free) args" )
+TUT_UNIT_TEST( 8, "(hand written) 6 (2 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo6, 2, _1, 4, 8, _2, 16 )( -100, -2000 ), "foo6: a1 = 2, a2 = -100, a3 = 4, a4 = 8, a5 = -2000, a6 = 16" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "(hand written) 10 (4 free) args" )
+TUT_UNIT_TEST( 9, "(hand written) 10 (4 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo10, 7, 1, 2, _3, 4, _2, 6, _1, 8, _4 )( -1, -2, -3, -4 ), "foo10: a1 = 7, a2 = 1, a3 = 2, a4 = -3, a5 = 4, a6 = -2, a7 = 6, a8 = -1, a9 = 8, a10 = -4" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 30, "use call as a functor in an algorithm" )
+TUT_UNIT_TEST( 30, "use call as a functor in an algorithm" )
 	HArray<int> tab( 10 );
 	generate_n( tab.begin(), tab.size(), inc( 1 ) );
 	for_each( tab.begin(), tab.end(), call( show_rectangle, _1, 2 ) );
 	for_each( tab.begin(), tab.end(), call( show_rectangle, 2, _1 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 31, "random free standing args" )
+TUT_UNIT_TEST( 31, "random free standing args" )
 	Sumator s( 1 );
 	call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), &s );
 	ENSURE_EQUALS( "this as free standing", call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), _1 )( s ), 1 );

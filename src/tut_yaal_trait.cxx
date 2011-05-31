@@ -40,9 +40,9 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_trait );
-TUT_TEST_GROUP_N( tut_yaal_trait, "yaal::trait" );
+TUT_TEST_GROUP( tut_yaal_trait, "yaal::trait" );
 
-TUT_UNIT_TEST_N( 1, "same stype" )
+TUT_UNIT_TEST( 1, "same stype" )
 	ENSURE( "int, int", same_type<int, int>::value );
 	ENSURE_NOT( "int, int const", same_type<int, int const>::value );
 	ENSURE_NOT( "int, int*", same_type<int, int*>::value );
@@ -52,18 +52,18 @@ TUT_UNIT_TEST_N( 1, "same stype" )
 	ENSURE_NOT( "int (char, double), int (char, double long)", same_type<int (*)(char, double), int (*)(char, double long)>::value );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "return type" )
+TUT_UNIT_TEST( 2, "return type" )
 	ENSURE( "int, int (char, double)", same_type<int, return_type<int (*)(char, double)>::type>::value );
 	ENSURE( "int*, int* (char, double)", same_type<int*, return_type<int* (*)(char, double)>::type>::value );
 	ENSURE_NOT( "int*, int (char, double)", same_type<int*, return_type<int (*)(char, double)>::type>::value );
 	ENSURE_NOT( "int, int* (char, double)", same_type<int, return_type<int* (*)(char, double)>::type>::value );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "count types" )
+TUT_UNIT_TEST( 3, "count types" )
 	ENSURE_EQUALS( "type count is wrong", count_type<int, char, double, int, float, int, void*>::value, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "ref vs const" )
+TUT_UNIT_TEST( 4, "ref vs const" )
 	cout << trait::is_reference<int&>::value << endl;
 	cout << trait::is_reference<int*&>::value << endl;
 	cout << trait::is_reference<int const&>::value << endl;
@@ -86,7 +86,7 @@ TUT_UNIT_TEST_N( 4, "ref vs const" )
 	typedef trait::make_const_ref_ptr<trait::strip_reference<int* const*&>::type>::type T6;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "arg type deduction on functional functors :)" )
+TUT_UNIT_TEST( 5, "arg type deduction on functional functors :)" )
 	cout << trait::same_type<trait::argument_type<less<int>, 0>::type, int>::value << endl;
 	cout << trait::same_type<trait::argument_type<less<int>, 1>::type, int>::value << endl;
 	cout << trait::same_type<trait::argument_type<less<int>, 0>::type, double>::value << endl;

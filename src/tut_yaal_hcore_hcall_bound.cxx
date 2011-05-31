@@ -48,13 +48,13 @@ struct tut_yaal_hcore_hcall_bound
 	void foo( void ) {}
 	};
 
-TUT_TEST_GROUP_N( tut_yaal_hcore_hcall_bound, "yaal::hcore::HCall,bound" );
+TUT_TEST_GROUP( tut_yaal_hcore_hcall_bound, "yaal::hcore::HCall,bound" );
 
-TUT_UNIT_TEST_N( 1, "Constructor." )
+TUT_UNIT_TEST( 1, "Constructor." )
 	HBoundCall<> c( call( &tut_yaal_hcore_hcall_bound::foo, this ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "compare with constant less." )
+TUT_UNIT_TEST( 2, "compare with constant less." )
 	typedef HList<item_t> list_t;
 	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
@@ -63,7 +63,7 @@ TUT_UNIT_TEST_N( 2, "compare with constant less." )
 	cout << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "compare with constant greater." )
+TUT_UNIT_TEST( 3, "compare with constant greater." )
 	typedef HList<item_t> list_t;
 	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;

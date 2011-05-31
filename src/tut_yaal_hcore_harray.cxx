@@ -50,9 +50,9 @@ struct tut_yaal_hcore_harray : public simple_mock<tut_yaal_hcore_harray>
 	void test_erase( int, int );
 	};
 
-TUT_TEST_GROUP_N( tut_yaal_hcore_harray, "yaal::hcore::HArray" );
+TUT_TEST_GROUP( tut_yaal_hcore_harray, "yaal::hcore::HArray" );
 
-TUT_UNIT_TEST_N( 1, "Constructor." )
+TUT_UNIT_TEST( 1, "Constructor." )
 	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
 	try
@@ -66,7 +66,7 @@ TUT_UNIT_TEST_N( 1, "Constructor." )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "Constructor and get_size()." )
+TUT_UNIT_TEST( 2, "Constructor and get_size()." )
 	item_t::set_start_id( 0 );
 	int const SIZE_FOR_ONE = 0;
 	int const SIZE_FOR_TWO = 7;
@@ -78,7 +78,7 @@ TUT_UNIT_TEST_N( 2, "Constructor and get_size()." )
 	ENSURE_EQUALS( "inconsistient size with respect to constructor", two.get_size(), SIZE_FOR_TWO );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "Constructor with filling." )
+TUT_UNIT_TEST( 3, "Constructor with filling." )
 	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
 	int const SIZE_FOR_ARRAY = 7;
@@ -97,7 +97,7 @@ TUT_UNIT_TEST_N( 3, "Constructor with filling." )
 		ENSURE_EQUALS( "array element not filled with default value", array[ i ], FILLER_FOR_ARRAY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "Constructor with range initialization." )
+TUT_UNIT_TEST( 4, "Constructor with range initialization." )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
 		{
@@ -107,7 +107,7 @@ TUT_UNIT_TEST_N( 4, "Constructor with range initialization." )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "Copy constructor." )
+TUT_UNIT_TEST( 5, "Copy constructor." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	array_t array( SIZE );
@@ -119,7 +119,7 @@ TUT_UNIT_TEST_N( 5, "Copy constructor." )
 		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "Operator [ ]." )
+TUT_UNIT_TEST( 6, "Operator [ ]." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	array_t array ( SIZE );
@@ -143,7 +143,7 @@ TUT_UNIT_TEST_N( 6, "Operator [ ]." )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "Operator bool." )
+TUT_UNIT_TEST( 7, "Operator bool." )
 	item_t::set_start_id( 0 );
 	int const EMPTY = 0;
 	int const SIZE = 7;
@@ -153,7 +153,7 @@ TUT_UNIT_TEST_N( 7, "Operator bool." )
 	ENSURE_EQUALS( "test for array fullness faild", ! normal, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "push_back" )
+TUT_UNIT_TEST( 8, "push_back" )
 	proto_t proto;
 		{
 		array_t array;
@@ -167,14 +167,14 @@ TUT_UNIT_TEST_N( 8, "push_back" )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "copy constructor (of empty)" )
+TUT_UNIT_TEST( 9, "copy constructor (of empty)" )
 	array_t a1;
 	ENSURE( "construction of empty array", a1.is_empty() );
 	array_t a2( a1 );
 	ENSURE( "construction of empty array", a2.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 10, "resize vs capacity" )
+TUT_UNIT_TEST( 10, "resize vs capacity" )
 	array_t a;
 	a.resize( 1 );
 	ENSURE_EQUALS( "resize( 1 ) failed (resize)", a.size(), 1 );
@@ -195,7 +195,7 @@ TUT_UNIT_TEST_N( 10, "resize vs capacity" )
 	ENSURE_EQUALS( "resize( 13 ) failed (capacity)", large.capacity(), 14 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 11, "insert( pos, value )" )
+TUT_UNIT_TEST( 11, "insert( pos, value )" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
 	proto_t proto( a, a + countof ( a ) );
@@ -215,7 +215,7 @@ TUT_UNIT_TEST_N( 11, "insert( pos, value )" )
 	ENSURE_EQUALS( "insertion failed", array, proto );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 12, "assign operator (=)" )
+TUT_UNIT_TEST( 12, "assign operator (=)" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { -36, -1, -4, -9 };
 	item_t::set_start_id( 0 );
@@ -228,7 +228,7 @@ TUT_UNIT_TEST_N( 12, "assign operator (=)" )
 	ENSURE_EQUALS( "assgin failed", array, big );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 13, "push_back" )
+TUT_UNIT_TEST( 13, "push_back" )
 		{
 		array_t array( 2048 );
 		proto_t proto( 2048 );
@@ -261,7 +261,7 @@ void tut_yaal_hcore_harray::test_erase( int first_, int last_ )
 	ENSURE_EQUALS( "object leak", item_t::get_instance_count(), 0 );
 	}
 
-TUT_UNIT_TEST_N( 14, "ranged erase" )
+TUT_UNIT_TEST( 14, "ranged erase" )
 	test_erase( 0, countof( _testData_[0] ) / 2 );
 	test_erase( countof( _testData_[0] ) / 2, countof( _testData_[0] ) );
 	test_erase( 0, countof( _testData_[0] ) );
@@ -277,7 +277,7 @@ TUT_UNIT_TEST_N( 14, "ranged erase" )
 	test_erase( countof ( _testData_[0] ) / 4, countof( _testData_[0] ) - 3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 15, "ranged insert" )
+TUT_UNIT_TEST( 15, "ranged insert" )
 	item_t::set_start_id( 0 );
 		{
 		int const len0( countof ( _testData_[0] ) );
@@ -393,7 +393,7 @@ TUT_UNIT_TEST_N( 15, "ranged insert" )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 50, "speed test" )
+TUT_UNIT_TEST( 50, "speed test" )
 	TIME_CONSTRAINT_EXEMPT();
 	typedef HArray<int> array_type;
 	int long LOOPS( 10000000 );

@@ -44,7 +44,7 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hfsitem );
-TUT_TEST_GROUP_N( tut_yaal_tools_hfsitem, "yaal::tools::HFSItem" );
+TUT_TEST_GROUP( tut_yaal_tools_hfsitem, "yaal::tools::HFSItem" );
 
 void recurse( HString const& path_ )
 	{
@@ -73,7 +73,7 @@ struct PathTest
 	bool _exists;
 	};
 
-TUT_UNIT_TEST_N( 1, "exists" )
+TUT_UNIT_TEST( 1, "exists" )
 	HString err( "failed to recognize onhological status of given file: " );
 	PathTest pathTest[] =
 		{
@@ -99,7 +99,7 @@ TUT_UNIT_TEST_N( 1, "exists" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "is_directory" )
+TUT_UNIT_TEST( 2, "is_directory" )
 	char const err[] = "failed to recognize directoriesness of given file";
 	char const err2[] = "spurious status on non-existing item acquired";
 	HFSItem dit1( "./data" );
@@ -146,7 +146,7 @@ TUT_UNIT_TEST_N( 2, "is_directory" )
 	ENSURE( err, dit11.is_directory() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 49, "recurively scan directories" )
+TUT_UNIT_TEST( 49, "recurively scan directories" )
 	recurse( "./build/" );
 TUT_TEARDOWN()
 

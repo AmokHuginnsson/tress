@@ -154,7 +154,7 @@ void tut_yaal_hcore_hdeque::check_consistency( deque_type const& deque_, int lon
 		_statePreserver._lastChunk = chunks[ lastChunkIndex ];
 	}
 
-TUT_TEST_GROUP_N( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
+TUT_TEST_GROUP( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
 
 #ifndef __sun__
 #pragma pack( push, 1 )
@@ -172,7 +172,7 @@ TUT_TEST_GROUP_N( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
 #pragma pack()
 #endif /* #else #ifndef __sun__ */
 
-TUT_UNIT_TEST_N( 1, "CHUNK_SIZE, VALUES_PER_CHUNK and Constructor." )
+TUT_UNIT_TEST( 1, "CHUNK_SIZE, VALUES_PER_CHUNK and Constructor." )
 	STATIC_ASSERT( sizeof ( FixedArray<1> ) == 1 );
 	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<1> >::CHUNK_SIZE, 512 );
 	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<1> >::VALUES_PER_CHUNK, 512 );
@@ -402,7 +402,7 @@ void tut_yaal_hcore_hdeque::test_resize( void )
 	return;
 	}
 
-TUT_UNIT_TEST_N( 2, "Constructor and get_size()." )
+TUT_UNIT_TEST( 2, "Constructor and get_size()." )
 	{
 	item_t::set_start_id( 0 );
 	int const SIZE_FOR_ONE = 0;
@@ -419,7 +419,7 @@ TUT_UNIT_TEST_N( 2, "Constructor and get_size()." )
 	ENSURE_EQUALS( "object leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "Constructor with filling." )
+TUT_UNIT_TEST( 3, "Constructor with filling." )
 	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
 	int const SIZE_FOR_ARRAY = 7;
@@ -439,7 +439,7 @@ TUT_UNIT_TEST_N( 3, "Constructor with filling." )
 		ENSURE_EQUALS( "deque element not filled with default value", deque[ i ], FILLER_FOR_ARRAY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "resize" )
+TUT_UNIT_TEST( 4, "resize" )
 	TIME_CONSTRAINT_EXEMPT();
 	test_resize<1>();
 	test_resize<2>();
@@ -499,7 +499,7 @@ TUT_UNIT_TEST_N( 4, "resize" )
 	test_resize<640>();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "Constructor with range initialization." )
+TUT_UNIT_TEST( 5, "Constructor with range initialization." )
 	item_t::set_start_id( 0 );
 	deque_t deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	proto_t proto( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
@@ -513,7 +513,7 @@ TUT_UNIT_TEST_N( 5, "Constructor with range initialization." )
 	ENSURE_EQUALS( "range initialization failed", big_deque, proto );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "Copy constructor." )
+TUT_UNIT_TEST( 6, "Copy constructor." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	deque_t deque( SIZE );
@@ -527,7 +527,7 @@ TUT_UNIT_TEST_N( 6, "Copy constructor." )
 		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "Operator [ ]." )
+TUT_UNIT_TEST( 7, "Operator [ ]." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	deque_t deque ( SIZE );
@@ -551,7 +551,7 @@ TUT_UNIT_TEST_N( 7, "Operator [ ]." )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "Operator bool." )
+TUT_UNIT_TEST( 8, "Operator bool." )
 	item_t::set_start_id( 0 );
 	int const EMPTY = 0;
 	int const SIZE = 7;
@@ -599,7 +599,7 @@ void tut_yaal_hcore_hdeque::test_erase( void )
 	test_erase<item_size>( countof ( _testData_[0] ) / 4, countof( _testData_[0] ) - 3 );
 	}
 
-TUT_UNIT_TEST_N( 9, "range erase" )
+TUT_UNIT_TEST( 9, "range erase" )
 	test_erase<1>();
 	test_erase<2>();
 	test_erase<3>();
@@ -636,7 +636,7 @@ void tut_yaal_hcore_hdeque::test_push_back( void )
 	ENSURE_EQUALS( "object leak", item_type::get_instance_count(), 0 );
 	}
 
-TUT_UNIT_TEST_N( 10, "push_back" )
+TUT_UNIT_TEST( 10, "push_back" )
 	TIME_CONSTRAINT_EXEMPT();
 	test_push_back<1>();
 	test_push_back<2>();
@@ -674,7 +674,7 @@ void tut_yaal_hcore_hdeque::test_push_front( void )
 	ENSURE_EQUALS( "object leak", item_type::get_instance_count(), 0 );
 	}
 
-TUT_UNIT_TEST_N( 11, "push_front" )
+TUT_UNIT_TEST( 11, "push_front" )
 	TIME_CONSTRAINT_EXEMPT();
 	test_push_front<1>();
 	test_push_front<2>();
@@ -717,7 +717,7 @@ void tut_yaal_hcore_hdeque::test_pop_back( void )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 	}
 
-TUT_UNIT_TEST_N( 12, "pop_back" )
+TUT_UNIT_TEST( 12, "pop_back" )
 	TIME_CONSTRAINT_EXEMPT();
 	test_pop_back<1>();
 	test_pop_back<2>();
@@ -760,7 +760,7 @@ void tut_yaal_hcore_hdeque::test_pop_front( void )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 	}
 
-TUT_UNIT_TEST_N( 13, "pop_front" )
+TUT_UNIT_TEST( 13, "pop_front" )
 	TIME_CONSTRAINT_EXEMPT();
 	test_pop_front<1>();
 	test_pop_front<2>();
@@ -778,7 +778,7 @@ TUT_UNIT_TEST_N( 13, "pop_front" )
 	test_pop_front<640>();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 14, "copy constructor (of empty)" )
+TUT_UNIT_TEST( 14, "copy constructor (of empty)" )
 	deque_t a1;
 	check_consistency( a1 );
 	ENSURE( "construction of empty deque", a1.is_empty() );
@@ -819,7 +819,7 @@ void tut_yaal_hcore_hdeque::test_insert_pos( void )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 	}
 
-TUT_UNIT_TEST_N( 15, "insert( pos, value )" )
+TUT_UNIT_TEST( 15, "insert( pos, value )" )
 	test_insert_pos<1>();
 	test_insert_pos<2>();
 	test_insert_pos<3>();
@@ -836,7 +836,7 @@ TUT_UNIT_TEST_N( 15, "insert( pos, value )" )
 	test_insert_pos<640>();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 16, "assign operator (=)" )
+TUT_UNIT_TEST( 16, "assign operator (=)" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { -36, -1, -4, -9 };
 	item_t::set_start_id( 0 );
@@ -1015,7 +1015,7 @@ void tut_yaal_hcore_hdeque::test_insert( void )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 	}
 
-TUT_UNIT_TEST_N( 17, "insert range" )
+TUT_UNIT_TEST( 17, "insert range" )
 	test_insert<1>();
 	test_insert<2>();
 	test_insert<3>();
@@ -1032,7 +1032,7 @@ TUT_UNIT_TEST_N( 17, "insert range" )
 	test_insert<640>();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 50, "speed test" )
+TUT_UNIT_TEST( 50, "speed test" )
 	TIME_CONSTRAINT_EXEMPT();
 	typedef HDeque<int> deque_type;
 	int long LOOPS( 1000000 );

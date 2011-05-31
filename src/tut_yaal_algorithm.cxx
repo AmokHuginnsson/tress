@@ -47,9 +47,9 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_algorithm );
-TUT_TEST_GROUP_N( tut_yaal_algorithm, "yaal::algorithm" );
+TUT_TEST_GROUP( tut_yaal_algorithm, "yaal::algorithm" );
 
-TUT_UNIT_TEST_N( 1, "reverse" )
+TUT_UNIT_TEST( 1, "reverse" )
 	int const LENE = 4;
 	HPointer<char, HPointerArray> spe( new char[ LENE + 1 ] );
 	char* se( spe.raw() );
@@ -71,7 +71,7 @@ TUT_UNIT_TEST_N( 1, "reverse" )
 	ENSURE_EQUALS( "reverse of even number of elements failed", HString( so ), HString( revdatao ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "next_permutation, len = 1 (even)" )
+TUT_UNIT_TEST( 2, "next_permutation, len = 1 (even)" )
 	int const LEN = 1;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -81,7 +81,7 @@ TUT_UNIT_TEST_N( 2, "next_permutation, len = 1 (even)" )
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "1" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "next_permutation, len = 2 (even)" )
+TUT_UNIT_TEST( 3, "next_permutation, len = 2 (even)" )
 	int const LEN = 2;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -93,7 +93,7 @@ TUT_UNIT_TEST_N( 3, "next_permutation, len = 2 (even)" )
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "12" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "next_permutation (odd)" )
+TUT_UNIT_TEST( 4, "next_permutation (odd)" )
 	int const LEN = 3;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -113,7 +113,7 @@ TUT_UNIT_TEST_N( 4, "next_permutation (odd)" )
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "123" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "next_permutation (even)" )
+TUT_UNIT_TEST( 5, "next_permutation (even)" )
 	int const LEN = 4;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -169,7 +169,7 @@ TUT_UNIT_TEST_N( 5, "next_permutation (even)" )
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "1234" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "next_permutation (odd)" )
+TUT_UNIT_TEST( 6, "next_permutation (odd)" )
 	int const LEN = 5;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -417,7 +417,7 @@ TUT_UNIT_TEST_N( 6, "next_permutation (odd)" )
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "12345" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "prev_permutation, len = 1 (even)" )
+TUT_UNIT_TEST( 7, "prev_permutation, len = 1 (even)" )
 	int const LEN = 1;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -427,7 +427,7 @@ TUT_UNIT_TEST_N( 7, "prev_permutation, len = 1 (even)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "1" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "prev_permutation, len = 2 (even)" )
+TUT_UNIT_TEST( 8, "prev_permutation, len = 2 (even)" )
 	int const LEN = 2;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -439,7 +439,7 @@ TUT_UNIT_TEST_N( 8, "prev_permutation, len = 2 (even)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "21" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "prev_permutation (odd)" )
+TUT_UNIT_TEST( 9, "prev_permutation (odd)" )
 	int const LEN = 3;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -459,7 +459,7 @@ TUT_UNIT_TEST_N( 9, "prev_permutation (odd)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "321" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 10, "prev_permutation (even)" )
+TUT_UNIT_TEST( 10, "prev_permutation (even)" )
 	int const LEN = 4;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -515,7 +515,7 @@ TUT_UNIT_TEST_N( 10, "prev_permutation (even)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "4321" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 11, "prev_permutation (odd)" )
+TUT_UNIT_TEST( 11, "prev_permutation (odd)" )
 	int const LEN = 5;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -763,7 +763,7 @@ TUT_UNIT_TEST_N( 11, "prev_permutation (odd)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "54321" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 12, "is_heap" )
+TUT_UNIT_TEST( 12, "is_heap" )
 	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	for ( int i( 2 ); i < countof ( _testData_[0] ); ++ i )
 		{
@@ -776,7 +776,7 @@ TUT_UNIT_TEST_N( 12, "is_heap" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 13, "push_heap" )
+TUT_UNIT_TEST( 13, "push_heap" )
 	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	int_array_t a( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	for ( int i( 2 ); i <= countof ( _testData_[0] ); ++ i )
@@ -789,7 +789,7 @@ TUT_UNIT_TEST_N( 13, "push_heap" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 14, "pop_heap" )
+TUT_UNIT_TEST( 14, "pop_heap" )
 	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	int_array_t a( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	for ( int i( 2 ); i <= countof ( _testData_[0] ); ++ i )
@@ -810,7 +810,7 @@ TUT_UNIT_TEST_N( 14, "pop_heap" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 15, "make_heap" )
+TUT_UNIT_TEST( 15, "make_heap" )
 	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	int_array_t a( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	ENSURE_EQUALS( "yaal::is_heap false positive", yaal::is_heap( a.begin(), a.end() ), false );
@@ -820,7 +820,7 @@ TUT_UNIT_TEST_N( 15, "make_heap" )
 	ENSURE_EQUALS( "yaal::make_heap wrong", a, v );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 16, "sort_heap" )
+TUT_UNIT_TEST( 16, "sort_heap" )
 	std_vector_t v( 100 );
 	int_array_t a( 100 );
 	std::generate( v.begin(), v.end(), HRandomizer( 0, 255 ) );
@@ -839,7 +839,7 @@ TUT_UNIT_TEST_N( 16, "sort_heap" )
 	ENSURE_EQUALS( "yaal::sort_heap wrong", a, v );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 17, "sort" )
+TUT_UNIT_TEST( 17, "sort" )
 	int_array_t a( 100 );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
 	*a.rbegin() = -1;
@@ -851,7 +851,7 @@ TUT_UNIT_TEST_N( 17, "sort" )
 	clog << a << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 18, "unique" )
+TUT_UNIT_TEST( 18, "unique" )
 	int_array_t a( 100 );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
 	*a.rbegin() = -1;
@@ -867,7 +867,7 @@ TUT_UNIT_TEST_N( 18, "unique" )
 	clog << a << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 19, "rotate" )
+TUT_UNIT_TEST( 19, "rotate" )
 	int_array_t a( 100 );
 	yaal::generate( a.begin(), a.end(), inc( 1 ) );
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
@@ -882,7 +882,7 @@ TUT_UNIT_TEST_N( 19, "rotate" )
 	clog << "(" << *it2 << ") " << a << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 20, "inplace_merge" )
+TUT_UNIT_TEST( 20, "inplace_merge" )
 	int_array_t a( 100 );
 	yaal::generate( a.begin(), a.end(), inc( 1 ) );
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
@@ -919,7 +919,7 @@ TUT_UNIT_TEST_N( 20, "inplace_merge" )
 	ENSURE_EQUALS( "yaal::inplace_merge wrong", arr, varr );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 21, "insert_sort" )
+TUT_UNIT_TEST( 21, "insert_sort" )
 	TIME_CONSTRAINT_EXEMPT();
 	{
 	int_array_t a( 8000 );
@@ -945,7 +945,7 @@ TUT_UNIT_TEST_N( 21, "insert_sort" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 22, "stable_sort" )
+TUT_UNIT_TEST( 22, "stable_sort" )
 	int_array_t a( 100 );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
 	*a.rbegin() = -1;
@@ -957,7 +957,7 @@ TUT_UNIT_TEST_N( 22, "stable_sort" )
 	clog << a << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 23, "distance" )
+TUT_UNIT_TEST( 23, "distance" )
 	HArray<int> array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HDeque<int> deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
@@ -974,7 +974,7 @@ TUT_UNIT_TEST_N( 23, "distance" )
 	ENSURE_EQUALS( "distance on HRing<> failed", distance( ring.begin(), ring.end() ), countof ( _testData_[0] ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 24, "swap" )
+TUT_UNIT_TEST( 24, "swap" )
 	HArray<int> array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HDeque<int> deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
@@ -1003,14 +1003,14 @@ TUT_UNIT_TEST_N( 24, "swap" )
 	ENSURE_EQUALS( "swap on HRing<> failed", distance( ring2.begin(), ring2.end() ), countof ( _testData_[0] ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 25, "search" )
+TUT_UNIT_TEST( 25, "search" )
 	char const S1[] = "Hello, world!";
 	char const S2[] = "world";
 	char const* p( search( S1, ( S1 + countof ( S1 ) - 1 ), S2, ( S2 + countof( S2 ) ) - 1 ) );
 	ENSURE_EQUALS( "search failed", p, S1 + 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 50, "sort speed" )
+TUT_UNIT_TEST( 50, "sort speed" )
 	TIME_CONSTRAINT_EXEMPT();
 	int_array_t a( 100000 );
 		{

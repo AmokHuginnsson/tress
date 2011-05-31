@@ -60,9 +60,9 @@ struct tut_yaal_hcore_htls : public simple_mock<tut_yaal_hcore_htls>
 	virtual ~tut_yaal_hcore_htls( void ) {}
 	typedef HTLS<TLSTest> tls_t;
 	};
-TUT_TEST_GROUP_N( tut_yaal_hcore_htls, "yaal::hcore::HTLS" );
+TUT_TEST_GROUP( tut_yaal_hcore_htls, "yaal::hcore::HTLS" );
 
-TUT_UNIT_TEST_N( 1, "the test" )
+TUT_UNIT_TEST( 1, "the test" )
 	tls_t tls;
 	tls->foo();
 	tls_t::external_lock l( tls.acquire() );

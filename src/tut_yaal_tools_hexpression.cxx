@@ -42,9 +42,9 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hanalyser );
-TUT_TEST_GROUP_N( tut_yaal_tools_hanalyser, "yaal::tools::HExpression" );
+TUT_TEST_GROUP( tut_yaal_tools_hanalyser, "yaal::tools::HExpression" );
 
-TUT_UNIT_TEST_N( 1, "complex and valid expression" )
+TUT_UNIT_TEST( 1, "complex and valid expression" )
 	HExpression x;
 	HString eq( "(((2+3+5)*4*6*8)/123)^2^3" );
 	x.compile( eq );
@@ -63,7 +63,7 @@ TUT_UNIT_TEST_N( 1, "complex and valid expression" )
 	cout << eq << "=" << x.evaluate() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "invalid expression" )
+TUT_UNIT_TEST( 2, "invalid expression" )
 	try
 		{
 		HString eq( "7+10+(4*)" );
@@ -77,7 +77,7 @@ TUT_UNIT_TEST_N( 2, "invalid expression" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "copy semantics" )
+TUT_UNIT_TEST( 3, "copy semantics" )
 	static int const MAGIC = 7;
 	static int const SPOOKY = 13;
 	HExpression e( "1" );

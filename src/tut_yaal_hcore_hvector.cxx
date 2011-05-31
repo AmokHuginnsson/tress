@@ -43,9 +43,9 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hvector );
-TUT_TEST_GROUP_N( tut_yaal_hcore_hvector, "yaal::hcore::HVector" );
+TUT_TEST_GROUP( tut_yaal_hcore_hvector, "yaal::hcore::HVector" );
 
-TUT_UNIT_TEST_N( 1, "basic vector operations" )
+TUT_UNIT_TEST( 1, "basic vector operations" )
 	HVector<double> v( 3 );
 	HVector<double> w( 3 );
 	std::cout << "<<< vector >>>" << std::endl;

@@ -50,7 +50,7 @@ struct tut_yaal_tools_hworkflow
 	static void bar( counter_t );
 	};
 
-TUT_TEST_GROUP_N( tut_yaal_tools_hworkflow, "yaal::tools::HWorkFlow" );
+TUT_TEST_GROUP( tut_yaal_tools_hworkflow, "yaal::tools::HWorkFlow" );
 
 void tut_yaal_tools_hworkflow::foo( int id, char symbol, int waitTime )
 	{
@@ -69,7 +69,7 @@ void tut_yaal_tools_hworkflow::bar( counter_t c )
 	cout << c.to_string() << endl;
 	}
 
-TUT_UNIT_TEST_N( 1, "Pushing tasks." )
+TUT_UNIT_TEST( 1, "Pushing tasks." )
 	TIME_CONSTRAINT_EXEMPT();
 	HWorkFlow w( 3 );
 	for ( int i = 0; i < 3; ++ i )
@@ -80,7 +80,7 @@ TUT_UNIT_TEST_N( 1, "Pushing tasks." )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "Cleanup of finished tasks." )
+TUT_UNIT_TEST( 2, "Cleanup of finished tasks." )
 	{
 	HWorkFlow w( 3 );
 	w.push_task( call( tut_yaal_tools_hworkflow::bar, counter_t() ) );

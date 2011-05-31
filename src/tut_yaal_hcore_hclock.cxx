@@ -48,9 +48,9 @@ struct tut_yaal_hcore_hclock
 		{}
 	};
 
-TUT_TEST_GROUP_N( tut_yaal_hcore_hclock, "yaal::hcore::HClock" );
+TUT_TEST_GROUP( tut_yaal_hcore_hclock, "yaal::hcore::HClock" );
 
-TUT_UNIT_TEST_N( 1, "1 second accuracy" )
+TUT_UNIT_TEST( 1, "1 second accuracy" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = 1;
@@ -60,7 +60,7 @@ TUT_UNIT_TEST_N( 1, "1 second accuracy" )
 	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed(), PASSED );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "1 mili-second accuracy" )
+TUT_UNIT_TEST( 2, "1 mili-second accuracy" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,3>::value;
@@ -72,7 +72,7 @@ TUT_UNIT_TEST_N( 2, "1 mili-second accuracy" )
 	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "1 micro-second accuracy" )
+TUT_UNIT_TEST( 3, "1 micro-second accuracy" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,6>::value;
@@ -84,7 +84,7 @@ TUT_UNIT_TEST_N( 3, "1 micro-second accuracy" )
 	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "1 nano-second accuracy" )
+TUT_UNIT_TEST( 4, "1 nano-second accuracy" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,9>::value;
@@ -96,7 +96,7 @@ TUT_UNIT_TEST_N( 4, "1 nano-second accuracy" )
 	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "measured twice without reset" )
+TUT_UNIT_TEST( 5, "measured twice without reset" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = 1;
@@ -109,7 +109,7 @@ TUT_UNIT_TEST_N( 5, "measured twice without reset" )
 	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed(), PASSED + PASSED );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "measured twice with reset" )
+TUT_UNIT_TEST( 6, "measured twice with reset" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = 1;

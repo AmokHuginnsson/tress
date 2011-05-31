@@ -42,9 +42,9 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hring );
-TUT_TEST_GROUP_N( tut_yaal_tools_hring, "yaal::tools::HRing" );
+TUT_TEST_GROUP( tut_yaal_tools_hring, "yaal::tools::HRing" );
 
-TUT_UNIT_TEST_N( 47, "data test" )
+TUT_UNIT_TEST( 47, "data test" )
 	HRing<int> ring( ring::capacity( 3 ) );
 
 	// Insert some elements into the buffer.
@@ -104,7 +104,7 @@ TUT_UNIT_TEST_N( 47, "data test" )
 
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 48, "iterator" )
+TUT_UNIT_TEST( 48, "iterator" )
 	HRing<int> ring( ring::capacity( 3 ) );
 	ring.push_back( 1 );
 	ring.push_back( 2 );
@@ -117,7 +117,7 @@ TUT_UNIT_TEST_N( 48, "iterator" )
 	ENSURE_EQUALS( "iterator incrementationt failed", *it, 3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 49, "more data tests" )
+TUT_UNIT_TEST( 49, "more data tests" )
 	// create a circular container of capacity 3
 	HRing<int> ring( ring::capacity( 3 ) );
 

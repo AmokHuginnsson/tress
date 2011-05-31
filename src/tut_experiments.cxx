@@ -42,7 +42,7 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_experiments );
-TUT_TEST_GROUP_N( tut_experiments, "::experiments" );
+TUT_TEST_GROUP( tut_experiments, "::experiments" );
 
 struct Derived;
 struct FunkyDerived;
@@ -105,7 +105,7 @@ public:
 		{ obj.baz(); }
 	};
 
-TUT_UNIT_TEST_N( 1, "visitor pattern" )
+TUT_UNIT_TEST( 1, "visitor pattern" )
 	typedef HPointer<Base> base_ptr_t;
 	base_ptr_t a = base_ptr_t( new Derived );
 	base_ptr_t b = base_ptr_t( new FunkyDerived );
@@ -134,7 +134,7 @@ TUT_UNIT_TEST_N( 1, "visitor pattern" )
 	b->accept( DerivedBazCall() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 50, "yaal data types instantiations for gdb-pretty-printers and MSVC++ [Visualisers] testing." )
+TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and MSVC++ [Visualisers] testing." )
 	HString shortStr( "huginn" );
 	HString str( "Ala ma kota." );
 	HNumber pi( "3.141592653589793" );

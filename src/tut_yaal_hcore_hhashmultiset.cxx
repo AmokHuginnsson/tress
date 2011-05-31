@@ -42,9 +42,9 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hhashmultiset );
-TUT_TEST_GROUP_N( tut_yaal_hcore_hhashmultiset, "yaal::hcore::HHashMultiSet" );
+TUT_TEST_GROUP( tut_yaal_hcore_hhashmultiset, "yaal::hcore::HHashMultiSet" );
 
-TUT_UNIT_TEST_N( 50, "sample data" )
+TUT_UNIT_TEST( 50, "sample data" )
 	typedef HHashMultiSet<HString> string_hash_multi_set_t;
 	string_hash_multi_set_t set;
 	set.insert( "one" );

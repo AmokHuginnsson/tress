@@ -46,7 +46,7 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hdes );
-TUT_TEST_GROUP_N( tut_yaal_tools_hdes, "yaal::tools::HDes" );
+TUT_TEST_GROUP( tut_yaal_tools_hdes, "yaal::tools::HDes" );
 
 void do_des( HString src_, HString dst_, HDes::action_t const& action_ )
 	{
@@ -96,7 +96,7 @@ void crypt_decrypt_test( int onSize_ )
 	ENSURE_EQUALS( "decrypted data is incorrect", check, m.raw() );
 	}
 
-TUT_UNIT_TEST_N( 1, "crypt file" )
+TUT_UNIT_TEST( 1, "crypt file" )
 	if ( setup._argc > 2 )
 		do_des( setup._argv[ 1 ], setup._argv[ 2 ], HDes::CRYPT );
 	else
@@ -113,7 +113,7 @@ TUT_UNIT_TEST_N( 1, "crypt file" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "decrypt file" )
+TUT_UNIT_TEST( 2, "decrypt file" )
 	if ( setup._argc > 2 )
 		do_des( setup._argv[ 1 ], setup._argv[ 2 ], HDes::DECRYPT );
 	else
@@ -136,7 +136,7 @@ TUT_UNIT_TEST_N( 2, "decrypt file" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "en/de cryption of various lengths" )
+TUT_UNIT_TEST( 3, "en/de cryption of various lengths" )
 	TIME_CONSTRAINT_EXEMPT();
 	for ( int i( 0 ); i < 300; ++ i )
 		crypt_decrypt_test( i );

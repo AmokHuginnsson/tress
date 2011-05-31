@@ -42,7 +42,7 @@ namespace tut
 {
 
 TUT_SIMPLE_MOCK( tut_yaal_dbwrapper_hrecordset );
-TUT_TEST_GROUP_N( tut_yaal_dbwrapper_hrecordset, "yaal::dbwrapper::HRecordSet" );
+TUT_TEST_GROUP( tut_yaal_dbwrapper_hrecordset, "yaal::dbwrapper::HRecordSet" );
 
 void dump_query_result( HDataBase::ptr_t db, char const* const query )
 	{
@@ -62,13 +62,13 @@ void dump_query_result( HDataBase::ptr_t db, char const* const query )
 
 static char const* const QUERY = "SELECT * FROM config;";
 
-TUT_UNIT_TEST_N( 1, "simple query on default engine" )
+TUT_UNIT_TEST( 1, "simple query on default engine" )
 	HDataBase::ptr_t db = HDataBase::get_connector();
 	db->connect( "./out/tress", "", "" );
 	dump_query_result( db, QUERY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "SQLite engine" )
+TUT_UNIT_TEST( 2, "SQLite engine" )
 #if defined( HAVE_SQLITE3_H )
 	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
 	db->connect( "./out/tress", "", "" );
@@ -78,7 +78,7 @@ TUT_UNIT_TEST_N( 2, "SQLite engine" )
 #endif /* not defined( HAVE_SQLITE3_H ) */
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "PostgreSQL engine" )
+TUT_UNIT_TEST( 3, "PostgreSQL engine" )
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
 	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL );
 	db->connect( "tress", "tress", "tr3ss" );
@@ -86,7 +86,7 @@ TUT_UNIT_TEST_N( 3, "PostgreSQL engine" )
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "MySQL engine" )
+TUT_UNIT_TEST( 4, "MySQL engine" )
 #if defined( HAVE_MYSQL_MYSQL_H )
 	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
 	db->connect( "tress", "tress", "tr3ss" );
@@ -94,7 +94,7 @@ TUT_UNIT_TEST_N( 4, "MySQL engine" )
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "different engines all in one" )
+TUT_UNIT_TEST( 5, "different engines all in one" )
 #if defined( HAVE_SQLITE3_H )
 	HDataBase::ptr_t dbSQLite = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
 	dbSQLite->connect( "./out/tress", "", "" );
@@ -135,7 +135,7 @@ void test_dml( HDataBase::ptr_t db )
 	M_EPILOG
 	}
 
-TUT_UNIT_TEST_N( 6, "dml on SQLite" )
+TUT_UNIT_TEST( 6, "dml on SQLite" )
 #if defined( HAVE_SQLITE3_H )
 	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
 	db->connect( "./out/tress", "", "" );
@@ -143,7 +143,7 @@ TUT_UNIT_TEST_N( 6, "dml on SQLite" )
 #endif /* defined( HAVE_SQLITE3_H ) */
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "PostgreSQL engine" )
+TUT_UNIT_TEST( 7, "PostgreSQL engine" )
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
 	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL );
 	db->connect( "tress", "tress", "tr3ss" );
@@ -151,7 +151,7 @@ TUT_UNIT_TEST_N( 7, "PostgreSQL engine" )
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "MySQL engine" )
+TUT_UNIT_TEST( 8, "MySQL engine" )
 #if defined( HAVE_MYSQL_MYSQL_H )
 	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
 	db->connect( "tress", "tress", "tr3ss" );

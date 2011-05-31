@@ -46,9 +46,9 @@ namespace tut
 static int const MIN_CAPACITY = sizeof ( HString ) - 2;
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hstring );
-TUT_TEST_GROUP_N( tut_yaal_hcore_hstring, "yaal::hcore::HString" );
+TUT_TEST_GROUP( tut_yaal_hcore_hstring, "yaal::hcore::HString" );
 
-TUT_UNIT_TEST_N( 1, "trivial constructor" )
+TUT_UNIT_TEST( 1, "trivial constructor" )
 	HString str;
 	ENSURE_EQUALS( "trivial construction failed", str, "" );
 	ENSURE_EQUALS( "trivial construction failed (size)", str.size(), 0 );
@@ -56,7 +56,7 @@ TUT_UNIT_TEST_N( 1, "trivial constructor" )
 	ENSURE_EQUALS( "trivial construction failed (is_empty)", str.empty(), true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "construction from char*" )
+TUT_UNIT_TEST( 2, "construction from char*" )
 	static char const CORRECT[] = "1024";
 	HString str( CORRECT );
 	ENSURE_EQUALS ( "construction from c-string does not work", str, CORRECT );
@@ -65,7 +65,7 @@ TUT_UNIT_TEST_N( 2, "construction from char*" )
 	ENSURE_EQUALS( "construction from char* failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "copy construction" )
+TUT_UNIT_TEST( 3, "copy construction" )
 	static char const CORRECT[] = "1024";
 	HString str( CORRECT );
 	HString copy( str );
@@ -76,7 +76,7 @@ TUT_UNIT_TEST_N( 3, "copy construction" )
 	ENSURE_EQUALS( "copy construction failed (is_empty)", copy.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "construction from int" )
+TUT_UNIT_TEST( 4, "construction from int" )
 	static int const INIT = 1024;
 	static char const CORRECT[] = "1024";
 	HString str( INIT );
@@ -87,7 +87,7 @@ TUT_UNIT_TEST_N( 4, "construction from int" )
 	ENSURE_EQUALS( "construction from int failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "construction from int long" )
+TUT_UNIT_TEST( 5, "construction from int long" )
 	static int long const INIT = 1024;
 	static char const CORRECT[] = "1024";
 	HString str( INIT );
@@ -97,7 +97,7 @@ TUT_UNIT_TEST_N( 5, "construction from int long" )
 	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "construction from int unsigned" )
+TUT_UNIT_TEST( 6, "construction from int unsigned" )
 	static int unsigned const INIT = 1024;
 	static char const CORRECT[] = "1024";
 	HString str( INIT );
@@ -108,7 +108,7 @@ TUT_UNIT_TEST_N( 6, "construction from int unsigned" )
 	ENSURE_EQUALS( "construction from int unsigned failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "construction from int long unsigned" )
+TUT_UNIT_TEST( 7, "construction from int long unsigned" )
 	static int long unsigned const INIT = 1024;
 	static char const CORRECT[] = "1024";
 	HString str( INIT );
@@ -119,7 +119,7 @@ TUT_UNIT_TEST_N( 7, "construction from int long unsigned" )
 	ENSURE_EQUALS( "construction from int long unsigned failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "construction from char" )
+TUT_UNIT_TEST( 8, "construction from char" )
 	static char const CORRECT = '1';
 	HString str( CORRECT );
 	ENSURE_EQUALS ( "construction from char does not work", str, CORRECT );
@@ -128,7 +128,7 @@ TUT_UNIT_TEST_N( 8, "construction from char" )
 	ENSURE_EQUALS( "construction from char failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "construction from double" )
+TUT_UNIT_TEST( 9, "construction from double" )
 	static double INIT = 3.141593;
 	static char const* const CORRECT = "3.141593";
 	HString str( INIT );
@@ -138,7 +138,7 @@ TUT_UNIT_TEST_N( 9, "construction from double" )
 	ENSURE_EQUALS( "construction from double failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 10, "construction from double long" )
+TUT_UNIT_TEST( 10, "construction from double long" )
 	static double long INIT = 3.141592653589;
 	static char const* const CORRECT = "3.141592653589";
 	HString str( INIT );
@@ -148,7 +148,7 @@ TUT_UNIT_TEST_N( 10, "construction from double long" )
 	ENSURE_EQUALS( "construction from double failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 11, "construction from void*" )
+TUT_UNIT_TEST( 11, "construction from void*" )
 	static size_t const tmp = 0xdeadbeef;
 	static void* INIT = reinterpret_cast<void*>( tmp );
 	static char const* const CORRECT = "0xdeadbeef";
@@ -159,7 +159,7 @@ TUT_UNIT_TEST_N( 11, "construction from void*" )
 	ENSURE_EQUALS( "construction from void* failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 12, "operator +=" )
+TUT_UNIT_TEST( 12, "operator +=" )
 	static char const INIT[] = "1024";
 	static char const* const TEST = "0xdeadbeef";
 	static char const CORRECT[] = "10240xdeadbeef";
@@ -175,7 +175,7 @@ TUT_UNIT_TEST_N( 12, "operator +=" )
 	ENSURE_EQUALS( "operator+= failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 13, "clear" )
+TUT_UNIT_TEST( 13, "clear" )
 	HString str;
 	static char const INIT[] = "1024";
 	ENSURE_EQUALS( "trivial construction failed", str, "" );
@@ -194,7 +194,7 @@ TUT_UNIT_TEST_N( 13, "clear" )
 	ENSURE_EQUALS( "clear failed (is_empty)", str.empty(), true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 14, "replace" )
+TUT_UNIT_TEST( 14, "replace" )
 	static char const INIT[] = "aarererererebb";
 	static char const PAT1[] = "rere";
 	static char const PAT2[] = "OKOK";
@@ -277,7 +277,7 @@ TUT_UNIT_TEST_N( 14, "replace" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 15, "construction from int short" )
+TUT_UNIT_TEST( 15, "construction from int short" )
 	static int short const INIT = 1024;
 	static char const CORRECT[] = "1024";
 	HString str( INIT );
@@ -287,7 +287,7 @@ TUT_UNIT_TEST_N( 15, "construction from int short" )
 	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 16, "construction from int short unsigned" )
+TUT_UNIT_TEST( 16, "construction from int short unsigned" )
 	static int short unsigned const INIT = 1024;
 	static char const CORRECT[] = "1024";
 	HString str( INIT );
@@ -297,7 +297,7 @@ TUT_UNIT_TEST_N( 16, "construction from int short unsigned" )
 	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 17, "construction from char unsigned" )
+TUT_UNIT_TEST( 17, "construction from char unsigned" )
 	static char unsigned const INIT = static_cast<char unsigned>( '±' );
 	static char const CORRECT[] = "±";
 	HString str( INIT );
@@ -307,7 +307,7 @@ TUT_UNIT_TEST_N( 17, "construction from char unsigned" )
 	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 18, "construction from float" )
+TUT_UNIT_TEST( 18, "construction from float" )
 	static float const INIT = static_cast<float>( 2.718281828459045 );
 	static char const CORRECT[] = "2.718282";
 	HString str( INIT );
@@ -317,7 +317,7 @@ TUT_UNIT_TEST_N( 18, "construction from float" )
 	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 22, "shift_left" )
+TUT_UNIT_TEST( 22, "shift_left" )
 	static char const CORRECT[] = "Ala ma kota";
 	static int const SHIFT = 4;
 	HString str( CORRECT );
@@ -336,7 +336,7 @@ TUT_UNIT_TEST_N( 22, "shift_left" )
 	ENSURE_EQUALS( "left_shift failed", str, "" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 23, "shift_right" )
+TUT_UNIT_TEST( 23, "shift_right" )
 	static char const CORRECT[] = "    Ala ma kota";
 	static int const SHIFT = 4;
 	HString str( CORRECT + SHIFT );
@@ -353,7 +353,7 @@ TUT_UNIT_TEST_N( 23, "shift_right" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 24, "mid" )
+TUT_UNIT_TEST( 24, "mid" )
 	char source[] = "abecadlo";
 	HString str( source );
 	char mid_failed[] = "mid failed";
@@ -367,12 +367,12 @@ TUT_UNIT_TEST_N( 24, "mid" )
 	ENSURE_EQUALS( mid_failed, str.mid( 2 ), "ecadlo" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 26, "right" )
+TUT_UNIT_TEST( 26, "right" )
 	HString str( "ala/." );
 	ENSURE_EQUALS( "wrong right part extraction", str.right( 1 ), "." );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 27, "erase" )
+TUT_UNIT_TEST( 27, "erase" )
 	HString str;
 	char s[] = "Ala ma kota";
 	char erase_failed[] = "erase failed";
@@ -387,7 +387,7 @@ TUT_UNIT_TEST_N( 27, "erase" )
 	ENSURE_EQUALS( erase_failed, str2.erase( 7, 4 ), "|==--|[]" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 28, "insert" )
+TUT_UNIT_TEST( 28, "insert" )
 	HString str;
 	char s[] = "abcdef";
 	char insert_failed[] = "insert failed";
@@ -423,7 +423,7 @@ TUT_UNIT_TEST_N( 28, "insert" )
 	ENSURE_EQUALS( insert_failed, str2.insert( 7, 4, "done" ), "|==--|[done]" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 29, "find" )
+TUT_UNIT_TEST( 29, "find" )
 	HString str = "abcXYdeYXf";
 	char failed[] = "find failed[%d]";
 	ENSURE_EQUALS( HString().format( failed, 0 ), str.find( 'A' ), -1 );
@@ -446,7 +446,7 @@ TUT_UNIT_TEST_N( 29, "find" )
 	ENSURE_EQUALS( HString().format( failed, 13 ), line.find( PREF ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 30, "find_one_of" )
+TUT_UNIT_TEST( 30, "find_one_of" )
 	HString str = "abcXYdeYXf";
 	char failed[] = "find_one_of failed";
 	ENSURE_EQUALS( failed, str.find_one_of( "ABCD" ), -1 );
@@ -464,7 +464,7 @@ TUT_UNIT_TEST_N( 30, "find_one_of" )
 	ENSURE_EQUALS( failed, str.find_one_of( "AYD", 90 ), -1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 31, "find_other_than" )
+TUT_UNIT_TEST( 31, "find_other_than" )
 	HString str = "abcXYdeYXfg";
 	char failed[] = "find_other_than failed[%d]";
 	ENSURE_EQUALS( HString().format( failed, 0 ), str.find_other_than( "abcXYdeYXfg" ), -1 );
@@ -475,7 +475,7 @@ TUT_UNIT_TEST_N( 31, "find_other_than" )
 	ENSURE_EQUALS( HString().format( failed, 5 ), str.find_other_than( "abcdefg", 5 ), 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 32, "reverse_find" )
+TUT_UNIT_TEST( 32, "reverse_find" )
 	HString str = "fXYedYXcba";
 	char failed[] = "reverse_find failed[%d]";
 	ENSURE_EQUALS( HString().format( failed, 0 ), str.reverse_find( 'A' ), -1 );
@@ -493,7 +493,7 @@ TUT_UNIT_TEST_N( 32, "reverse_find" )
 	ENSURE_EQUALS( HString().format( failed, 12 ), str.reverse_find( 'Y', 90 ), -1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 33, "reverse_find_one_of" )
+TUT_UNIT_TEST( 33, "reverse_find_one_of" )
 	HString str = "fXYedYXcba";
 	char failed[] = "reverse_find_one_of failed[%d]";
 	ENSURE_EQUALS( HString().format( failed, 0 ), str.reverse_find_one_of( "ABCD" ), -1 );
@@ -511,7 +511,7 @@ TUT_UNIT_TEST_N( 33, "reverse_find_one_of" )
 	ENSURE_EQUALS( HString().format( failed, 12 ), str.reverse_find_one_of( "AYD", 90 ), -1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 34, "reverse_find_other_than" )
+TUT_UNIT_TEST( 34, "reverse_find_other_than" )
 	HString str = "gfXYedYXcba";
 	char failed[] = "reverse_find_other_than failed[%d]";
 	ENSURE_EQUALS( HString().format( failed, 0 ), str.reverse_find_other_than( "abcXYdeYXfg" ), -1 );
@@ -522,7 +522,7 @@ TUT_UNIT_TEST_N( 34, "reverse_find_other_than" )
 	ENSURE_EQUALS( HString().format( failed, 5 ), str.reverse_find_other_than( "abcdefg", 5 ), 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 35, "find_last" )
+TUT_UNIT_TEST( 35, "find_last" )
 	HString str = "fXYedYXcba";
 	char failed[] = "find_last failed[%d]";
 	ENSURE_EQUALS( HString().format( failed, 0 ), str.find_last( 'A' ), -1 );
@@ -540,7 +540,7 @@ TUT_UNIT_TEST_N( 35, "find_last" )
 	ENSURE_EQUALS( HString().format( failed, 12 ), str.find_last( 'Y', 90 ), 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 36, "find_last_one_of" )
+TUT_UNIT_TEST( 36, "find_last_one_of" )
 	HString str = "fXYedYXcba";
 	char failed[] = "find_last_one_of failed[%d]";
 	ENSURE_EQUALS( HString().format( failed, 0 ), str.find_last_one_of( "ABCD" ), -1 );
@@ -560,7 +560,7 @@ TUT_UNIT_TEST_N( 36, "find_last_one_of" )
 	ENSURE_EQUALS( HString().format( failed, 14 ), str.find_last_one_of( "AYD", 90 ), 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 37, "find_last_other_than" )
+TUT_UNIT_TEST( 37, "find_last_other_than" )
 	HString str = "gfXYedYXcba";
 	char failed[] = "find_last_other_than failed[%d]";
 	ENSURE_EQUALS( HString().format( failed, 0 ), str.find_last_other_than( "abcXYdeYXfg" ), -1 );
@@ -600,7 +600,7 @@ struct gen_char
 		{ return ( static_cast<char>( _rnd( 1 + 'z' - 'a' ) + 'a' ) ); }
 	};
 
-TUT_UNIT_TEST_N( 38, "find("")" )
+TUT_UNIT_TEST( 38, "find("")" )
 	static int const SAMPLE_SIZE = 128;
 	char sample[ SAMPLE_SIZE + 1 ];
 	sample[ SAMPLE_SIZE ] = 0;
@@ -629,7 +629,7 @@ TUT_UNIT_TEST_N( 38, "find("")" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 39, "trim_left("")" )
+TUT_UNIT_TEST( 39, "trim_left("")" )
 	static char const* const SPACE = "   ";
 	static HString const TEXT = "ala ma";
 	static char const* const FINE = "1234";
@@ -641,7 +641,7 @@ TUT_UNIT_TEST_N( 39, "trim_left("")" )
 	ENSURE_EQUALS( "trim failed", space.trim_left(), "" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 40, "trim_right("")" )
+TUT_UNIT_TEST( 40, "trim_right("")" )
 	static char const* const SPACE = "   ";
 	static HString const TEXT = "ala ma";
 	static char const* const FINE = "1234";
@@ -653,7 +653,7 @@ TUT_UNIT_TEST_N( 40, "trim_right("")" )
 	ENSURE_EQUALS( "trim 2 failed", space.trim_right(), "" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 41, "hs_realloc( size )" )
+TUT_UNIT_TEST( 41, "hs_realloc( size )" )
 	HString str;
 	ENSURE_EQUALS( "bad capacity on never-used empty string", str.get_capacity(), MIN_CAPACITY );
 	str.hs_realloc( 1 );

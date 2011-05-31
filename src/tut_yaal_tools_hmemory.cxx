@@ -56,9 +56,9 @@ tut_yaal_tools_hmemory::tut_yaal_tools_hmemory( void ) : _buf()
 	fill_n( _buf, SIZE, 0 );
 	}
 
-TUT_TEST_GROUP_N( tut_yaal_tools_hmemory, "yaal::tools::HMemory" );
+TUT_TEST_GROUP( tut_yaal_tools_hmemory, "yaal::tools::HMemory" );
 
-TUT_UNIT_TEST_N( 1, "constructor" )
+TUT_UNIT_TEST( 1, "constructor" )
 	try
 		{
 		HMemory m( NULL, 10 );
@@ -80,7 +80,7 @@ TUT_UNIT_TEST_N( 1, "constructor" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "simple write" )
+TUT_UNIT_TEST( 2, "simple write" )
 	char const pattern[] = "Ala ma kota.";
 	::memset( _buf, 0, SIZE );
 	HMemory m( _buf, SIZE );
@@ -88,7 +88,7 @@ TUT_UNIT_TEST_N( 2, "simple write" )
 	ENSURE_EQUALS( "simple write failed", memcmp( _buf, pattern, sizeof ( pattern ) ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "stacked writes" )
+TUT_UNIT_TEST( 3, "stacked writes" )
 	char const pattern[] = "Ala ma kota.";
 	char const pattern_hi[] = "Ala ma";
 	char const pattern_lo[] = " kota.";
@@ -98,7 +98,7 @@ TUT_UNIT_TEST_N( 3, "stacked writes" )
 	ENSURE_EQUALS( "simple write failed", memcmp( _buf, pattern, sizeof ( pattern ) ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "read from empty" )
+TUT_UNIT_TEST( 4, "read from empty" )
 	HMemory m( _buf, SIZE, HMemory::INITIAL_STATE::INVALID );
 	HString line;
 	ENSURE_EQUALS( "read byte count from empty", m.read_until( line ), 0 );

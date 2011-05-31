@@ -54,14 +54,14 @@ struct tut_yaal_hcore_hresource
 
 typedef HResource<tut_yaal_hcore_hresource::counter_t> ptr_t;
 
-TUT_TEST_GROUP_N( tut_yaal_hcore_hresource, "yaal::hcore::HResource" );
+TUT_TEST_GROUP( tut_yaal_hcore_hresource, "yaal::hcore::HResource" );
 
-TUT_UNIT_TEST_N( 1, "default constructor" )
+TUT_UNIT_TEST( 1, "default constructor" )
 	ptr_t c;
 	ENSURE_EQUALS( "dirty default initialized resurce holder", c.get(), static_cast<counter_t*>( NULL ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 2, "freeing the new allocated object" )
+TUT_UNIT_TEST( 2, "freeing the new allocated object" )
 		{
 		counter_t* p = new counter_t();
 		ptr_t ptr( p );
@@ -71,7 +71,7 @@ TUT_UNIT_TEST_N( 2, "freeing the new allocated object" )
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 3, "Copy constructor." )
+TUT_UNIT_TEST( 3, "Copy constructor." )
 		{
 		counter_t* p = NULL;
 		ptr_t ptr = ptr_t( p = new counter_t() );
@@ -81,7 +81,7 @@ TUT_UNIT_TEST_N( 3, "Copy constructor." )
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 4, "Assign operator." )
+TUT_UNIT_TEST( 4, "Assign operator." )
 		{
 		counter_t* p = NULL;
 		ptr_t sp1 = ptr_t( new counter_t() );
@@ -98,7 +98,7 @@ TUT_UNIT_TEST_N( 4, "Assign operator." )
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "Checks constructor with another ptr_t with no module." )
+TUT_UNIT_TEST( 5, "Checks constructor with another ptr_t with no module." )
 		{
 		ptr_t sp1;
 		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
@@ -110,7 +110,7 @@ TUT_UNIT_TEST_N( 5, "Checks constructor with another ptr_t with no module." )
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "Checks constructor with another ptr_t with module." )
+TUT_UNIT_TEST( 6, "Checks constructor with another ptr_t with module." )
 		{
 		counter_t* p = new counter_t();
 		ptr_t sp1(p);
@@ -128,7 +128,7 @@ TUT_TEARDOWN()
 // Assignment operators
 // =================================================
 
-TUT_UNIT_TEST_N( 7, "Checks assignment with non-null module." )
+TUT_UNIT_TEST( 7, "Checks assignment with non-null module." )
 		{
 		counter_t* p = new counter_t();
 		ptr_t sp( p );
@@ -138,7 +138,7 @@ TUT_UNIT_TEST_N( 7, "Checks assignment with non-null module." )
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "Checks assignment with ptr_t with non-null module." )
+TUT_UNIT_TEST( 8, "Checks assignment with ptr_t with non-null module." )
 		{
 		counter_t* p = NULL;
 		ptr_t sp1( p = new counter_t() );
@@ -152,7 +152,7 @@ TUT_UNIT_TEST_N( 8, "Checks assignment with ptr_t with non-null module." )
 	ENSURE_EQUALS( "destructed", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "Checks assignment with itself." )
+TUT_UNIT_TEST( 9, "Checks assignment with itself." )
 		{
 		ptr_t sp1( new counter_t() );
 		sp1 = sp1;
@@ -168,7 +168,7 @@ TUT_TEARDOWN()
 // Passing ownership
 // =================================================
 
-TUT_UNIT_TEST_N( 10, "Checks passing ownership via assignment." )
+TUT_UNIT_TEST( 10, "Checks passing ownership via assignment." )
 		{
 		counter_t *p1 = NULL, *p2 = NULL;
 		ptr_t sp1( p1 = new counter_t( 1 ));
@@ -184,7 +184,7 @@ TUT_UNIT_TEST_N( 10, "Checks passing ownership via assignment." )
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 11, "Checks operator -> throws instead of returning null." )
+TUT_UNIT_TEST( 11, "Checks operator -> throws instead of returning null." )
 		{
 		try
 			{
@@ -200,7 +200,7 @@ TUT_UNIT_TEST_N( 11, "Checks operator -> throws instead of returning null." )
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 12, "assign smart pointers pointing to the same memory." )
+TUT_UNIT_TEST( 12, "assign smart pointers pointing to the same memory." )
 		{
 		ptr_t sp1( new counter_t() );
 		ptr_t sp2 = sp1;
@@ -222,7 +222,7 @@ struct NVDDerive : public non_virt_dtor
 	~NVDDerive( void ) {};
 	};
 
-TUT_UNIT_TEST_N( 13, "non virtual destructor" )
+TUT_UNIT_TEST( 13, "non virtual destructor" )
 	typedef HResource<non_virt_dtor> p_t;
 		{
 		p_t p( new NVDDerive );

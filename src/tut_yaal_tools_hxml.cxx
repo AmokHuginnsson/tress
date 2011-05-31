@@ -89,7 +89,7 @@ struct tut_yaal_tools_hxml
 
 HString tut_yaal_tools_hxml::_varTmpBuffer;
 
-TUT_TEST_GROUP_N( tut_yaal_tools_hxml, "yaal::tools::HXml" );
+TUT_TEST_GROUP( tut_yaal_tools_hxml, "yaal::tools::HXml" );
 
 std::ostream& operator << ( std::ostream& out, HXml const& xml )
 	{
@@ -147,7 +147,7 @@ bool operator != ( HXml const& left, HXml const& right )
 	}
 
 
-TUT_UNIT_TEST_N( 1, "Empty DOM." )
+TUT_UNIT_TEST( 1, "Empty DOM." )
 	HXml x;
 	ENSURE( "fresh DOM not empty", ! x.get_root() );
 	try
@@ -162,7 +162,7 @@ TUT_UNIT_TEST_N( 1, "Empty DOM." )
 TUT_TEARDOWN()
 
 
-TUT_UNIT_TEST_N( 2, "Root node." )
+TUT_UNIT_TEST( 2, "Root node." )
 	HXml x;
 	static char const* const ROOT = "root";
 	x.create_root( ROOT );
@@ -175,7 +175,7 @@ TUT_UNIT_TEST_N( 2, "Root node." )
 TUT_TEARDOWN()
 
 
-TUT_UNIT_TEST_N( 3, "clear" )
+TUT_UNIT_TEST( 3, "clear" )
 	HXml x;
 	static char const* const ROOT = "root";
 	x.create_root( ROOT );
@@ -194,7 +194,7 @@ TUT_UNIT_TEST_N( 3, "clear" )
 TUT_TEARDOWN()
 
 
-TUT_UNIT_TEST_N( 4, "build, save, load" )
+TUT_UNIT_TEST( 4, "build, save, load" )
 	HXml x;
 	static char const* const ROOT = "root";
 	static char const* const NODE = "node";
@@ -224,7 +224,7 @@ TUT_UNIT_TEST_N( 4, "build, save, load" )
 		}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 5, "load, save" )
+TUT_UNIT_TEST( 5, "load, save" )
 	HXml xml;
 	xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ) );
 	xml.parse( "/my_root/my_set/my_item" );
@@ -232,13 +232,13 @@ TUT_UNIT_TEST_N( 5, "load, save" )
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/set.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 6, "load, save" )
+TUT_UNIT_TEST( 6, "load, save" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ) );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 7, "load, save, clear, handmade, save" )
+TUT_UNIT_TEST( 7, "load, save, clear, handmade, save" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ) );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ) );
@@ -249,7 +249,7 @@ TUT_UNIT_TEST_N( 7, "load, save, clear, handmade, save" )
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/hello.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 8, "init, apply_style, parse, save, clear, handmade, save" )
+TUT_UNIT_TEST( 8, "init, apply_style, parse, save, clear, handmade, save" )
 	HXml xml;
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.apply_style( "./data/style.xml" );
@@ -262,14 +262,14 @@ TUT_UNIT_TEST_N( 8, "init, apply_style, parse, save, clear, handmade, save" )
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/hello.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 9, "apply stylesheet" )
+TUT_UNIT_TEST( 9, "apply stylesheet" )
 	_xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	_xml.apply_style( "data/style.xml" );
 	_xml.parse();
 	std::cout << _xml;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 10, "init, parse, apply, save" )
+TUT_UNIT_TEST( 10, "init, parse, apply, save" )
 	HString string;
 	HFile file;
 	char const* doc = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/xml.xml";
@@ -294,7 +294,7 @@ TUT_UNIT_TEST_N( 10, "init, parse, apply, save" )
 	return;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 11, "load -> console dump" )
+TUT_UNIT_TEST( 11, "load -> console dump" )
 	char const* doc = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/xml.xml";
 	_xml.load( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ) );
 	if ( cout.is_valid() )
@@ -302,7 +302,7 @@ TUT_UNIT_TEST_N( 11, "load -> console dump" )
 	std::clog << _xml;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 12, "parse bofere apply_style and after apply_style" )
+TUT_UNIT_TEST( 12, "parse bofere apply_style and after apply_style" )
 	HXml xml;
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ) );
 	xml.parse();
@@ -314,7 +314,7 @@ TUT_UNIT_TEST_N( 12, "parse bofere apply_style and after apply_style" )
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST_N( 13, "HXml copy." )
+TUT_UNIT_TEST( 13, "HXml copy." )
 	HXml copy;
 		{
 		HXml intermediate;
