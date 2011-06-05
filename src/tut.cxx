@@ -46,6 +46,7 @@ namespace tut
 
 struct tut_ : public simple_mock<tut_>
 	{
+	virtual ~tut_( void ) {}
 	};
 
 TUT_SIMPLE_MOCK( tut_ );
