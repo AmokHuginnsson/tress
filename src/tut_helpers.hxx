@@ -34,19 +34,23 @@ Copyright:
 #include <list>
 #include <vector>
 #include <deque>
+#include <set>
 
 #include <yaal/hcore/hstreaminterface.hxx>
 #include <yaal/hcore/hpair.hxx>
 #include <yaal/hcore/harray.hxx>
 #include <yaal/hcore/hdeque.hxx>
+#include <yaal/hcore/hset.hxx>
 #include <yaal/hcore/hlist.hxx>
 #include <yaal/hcore/hcomplex.hxx>
 #include <yaal/hcore/hnumber.hxx>
 #include <yaal/hcore/hvector.hxx>
 #include <yaal/hcore/hmatrix.hxx>
 #include <yaal/hcore/xalloc.hxx>
-#include <yaal/tools/hstringstream.hxx>
 #include <yaal/hcore/hclock.hxx>
+#include <yaal/tools/hstringstream.hxx>
+#include <yaal/tools/hring.hxx>
+#include <yaal/tools/htwowaymap.hxx>
 
 #if defined( __GNUC__ ) && ! defined( stdext )
 #define stdext __gnu_cxx
@@ -108,31 +112,66 @@ std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second
 	return ( os );
 	}
 
-template<typename tType>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HArray<tType> const& a )
+template<typename container>
+std::ostream& container_dump( std::ostream& out,
+		container const& container_, char sep_, char const* const name_ )
 	{
-	out << "array(";
-	yaal::copy( a.begin(), a.end(), std::ostream_iterator<tType>( out, " " ) );
-	out << ( ( a.begin() != a.end() ) ? "\b)" : ")" ) << std::flush;
+	out << ( name_ ? name_ : "" );
+	char sep( '(' );
+	for ( typename container::const_iterator it( container_.begin() ), end( container_.end() ); it != end; ++ it, sep = sep_ )
+		out << sep << *it;
+	out << ")" << std::flush;
 	return ( out );
 	}
 
-template<typename tType>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HDeque<tType> const& a )
+template<typename container>
+std::ostream& container_dump( std::ostream& out,
+		container const& container_, char sep_ )
 	{
-	out << "deque(";
-	yaal::copy( a.begin(), a.end(), std::ostream_iterator<tType>( out, " " ) );
-	out << ( ( a.begin() != a.end() ) ? "\b)" : ")" ) << std::flush;
-	return ( out );
+	return ( container_dump( out, container_, sep_, NULL ) );
+	}
+
+template<typename container>
+std::ostream& container_dump( std::ostream& out,
+		container const& container_, char const* const name_  )
+	{
+	return ( container_dump( out, container_, ' ', name_ ) );
+	}
+
+template<typename tType>
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HArray<tType> const& a )
+	{
+	return ( container_dump( out, a, "array" ) );
+	}
+
+template<typename tType>
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HDeque<tType> const& d )
+	{
+	return ( container_dump( out, d, "deque" ) );
 	}
 
 template<typename tType>
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HList<tType> const& l )
 	{
-	out << "list(";
-	yaal::copy( l.begin(), l.end(), std::ostream_iterator<tType>( out, " " ) );
-	out << ( ( l.begin() != l.end() ) ? "\b)" : ")" ) << std::flush;
-	return ( out );
+	return ( container_dump( out, l, "list" ) );
+	}
+
+template<typename tType>
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HSet<tType> const& s )
+	{
+	return ( container_dump( out, s, "set" ) );
+	}
+
+template<typename tType>
+std::ostream& operator << ( std::ostream& out, yaal::tools::HRing<tType> const& r )
+	{
+	return ( container_dump( out, r, "ring" ) );
+	}
+
+template<typename left, typename right>
+std::ostream& operator << ( std::ostream& out, yaal::tools::HTwoWayMap<left, right> const& twm )
+	{
+	return ( container_dump( out, twm, "twowaymap" ) );
 	}
 
 template<typename first_t, typename second_t>
@@ -301,12 +340,17 @@ struct simple_mock
 	typedef yaal::hcore::HList<item_t> list_t;
 	typedef yaal::hcore::HArray<item_t> array_t;
 	typedef yaal::hcore::HDeque<item_t> deque_t;
+	typedef yaal::hcore::HSet<item_t> set_t;
+	typedef yaal::tools::HRing<item_t> ring_t;
 	typedef yaal::hcore::HList<int> int_list_t;
 	typedef yaal::hcore::HArray<int> int_array_t;
 	typedef yaal::hcore::HDeque<int> int_deque_t;
+	typedef yaal::hcore::HSet<int> int_set_t;
+	typedef yaal::tools::HRing<int> int_ring_t;
 	typedef std::list<int> std_list_t;
 	typedef std::vector<int> std_vector_t;
 	typedef std::deque<int> std_deque_t;
+	typedef std::set<int> std_set_t;
 	virtual ~simple_mock( void ) {}
 	virtual void time_constraint_exempt( void ) = 0;
 	};

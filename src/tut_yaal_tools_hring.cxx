@@ -44,6 +44,12 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_tools_hring );
 TUT_TEST_GROUP( tut_yaal_tools_hring, "yaal::tools::HRing" );
 
+TUT_UNIT_TEST( 2, "equals (==)" )
+	ring_t r1;
+	ring_t r2;
+	ENSURE_EQUALS( "empty rings not equal", r1, r2 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 47, "data test" )
 	HRing<int> ring( ring::capacity( 3 ) );
 

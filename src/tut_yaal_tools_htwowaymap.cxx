@@ -148,5 +148,11 @@ TUT_UNIT_TEST( 8, "erase() by position" )
 	ENSURE_EQUALS( "should have 0 elements", twm.get_size(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 9, "equals (==)" )
+	int2int_t twm1;
+	int2int_t twm2;
+	ENSURE_EQUALS( "empty twowaymaps not equal", twm1, twm2 );
+TUT_TEARDOWN()
+
 }
 
