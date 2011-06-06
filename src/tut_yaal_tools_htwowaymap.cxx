@@ -152,6 +152,103 @@ TUT_UNIT_TEST( 9, "equals (==)" )
 	int2int_t twm1;
 	int2int_t twm2;
 	ENSURE_EQUALS( "empty twowaymaps not equal", twm1, twm2 );
+	twm1.insert( make_pair( 1, 2 ) );
+	ENSURE_NOT( "equality test failed (false positive)", twm1 == twm2 );
+	twm2.insert( make_pair( 2, 3 ) );
+	ENSURE_NOT( "equality test failed (false positive)", twm1 == twm2 );
+	twm2.insert( make_pair( 1, 2 ) );
+	ENSURE_NOT( "equality test failed (false positive)", twm1 == twm2 );
+	twm1.insert( make_pair( 2, 3 ) );
+	ENSURE_EQUALS( "equality test failed (false negative)", twm1, twm2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 10, "constructor with range initialization" )
+	typedef HPair<int, int> int_pair_t;
+	typedef HArray<int_pair_t> int_pair_array_t;
+	int_pair_array_t arr;
+	arr.push_back( make_pair( 1, 2) );
+	arr.push_back( make_pair( 2, 3) );
+	arr.push_back( make_pair( 1, 3) );
+	arr.push_back( make_pair( 3, 4) );
+	arr.push_back( make_pair( 2, 2) );
+	arr.push_back( make_pair( 4, 5) );
+	int2int_t twm( arr.begin(), arr.end() );
+	int2int_t twmref;
+	twmref.insert( make_pair( 4, 5 ) );
+	twmref.insert( make_pair( 1, 2 ) );
+	twmref.insert( make_pair( 2, 3 ) );
+	twmref.insert( make_pair( 3, 4 ) );
+	ENSURE_EQUALS( "range constructor failed", twm, twmref );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 11, "assign" )
+	typedef HPair<int, int> int_pair_t;
+	typedef HArray<int_pair_t> int_pair_array_t;
+	int_pair_array_t arr;
+	arr.push_back( make_pair( 1, 2) );
+	arr.push_back( make_pair( 2, 3) );
+	arr.push_back( make_pair( 1, 3) );
+	arr.push_back( make_pair( 3, 4) );
+	arr.push_back( make_pair( 2, 2) );
+	arr.push_back( make_pair( 4, 5) );
+	int2int_t twm;
+	twm.insert( make_pair( 6, 7 ) );
+	twm.assign( arr.begin(), arr.end() );
+	int2int_t twmref;
+	twmref.insert( make_pair( 4, 5 ) );
+	twmref.insert( make_pair( 1, 2 ) );
+	twmref.insert( make_pair( 2, 3 ) );
+	twmref.insert( make_pair( 3, 4 ) );
+	ENSURE_EQUALS( "assign failed", twm, twmref );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 12, "erase() ranged" )
+	int2int_t twmref;
+	twmref.insert( make_pair( 4, 5 ) );
+	twmref.insert( make_pair( 5, 6 ) );
+	twmref.insert( make_pair( 1, 2 ) );
+	twmref.insert( make_pair( 2, 3 ) );
+	twmref.insert( make_pair( 3, 4 ) );
+	int2int_t twmref_erased;
+	twmref_erased.insert( make_pair( 5, 6 ) );
+	twmref_erased.insert( make_pair( 1, 2 ) );
+	int2int_t twm;
+	twm.insert( make_pair( 1, 2 ) );
+	twm.insert( make_pair( 2, 3 ) );
+	twm.insert( make_pair( 3, 4 ) );
+	twm.insert( make_pair( 4, 5 ) );
+	twm.insert( make_pair( 5, 6 ) );
+	ENSURE_EQUALS( "assign failed", twm, twmref );
+	int2int_t::iterator it( twm.begin() );
+	++ it;
+	twm.erase( it, twm.rbegin().base() );
+	ENSURE_EQUALS( "assign failed", twm, twmref_erased );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 13, "copy constructor" )
+	typedef HPair<int, int> int_pair_t;
+	int2int_t twmsrc;
+	twmsrc.insert( make_pair( 1, 2) );
+	twmsrc.insert( make_pair( 2, 3) );
+	twmsrc.insert( make_pair( 3, 4) );
+	twmsrc.insert( make_pair( 4, 5) );
+	int2int_t twmdst( twmsrc );
+	ENSURE_EQUALS( "copy constructor failed", twmdst, twmsrc );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 14, "operator = ()" )
+	typedef HPair<int, int> int_pair_t;
+	int2int_t twmsrc;
+	twmsrc.insert( make_pair( 1, 2) );
+	twmsrc.insert( make_pair( 2, 3) );
+	twmsrc.insert( make_pair( 3, 4) );
+	twmsrc.insert( make_pair( 4, 5) );
+	int2int_t twmdst;
+	ENSURE_NOT( "equality test failed (false positive)", twmdst == twmsrc );
+	twmdst.insert( make_pair( 6, 7 ) );
+	ENSURE_NOT( "equality test failed (false positive)", twmdst == twmsrc );
+	twmdst = twmsrc;
+	ENSURE_EQUALS( "assign failed", twmdst, twmsrc );
 TUT_TEARDOWN()
 
 }
