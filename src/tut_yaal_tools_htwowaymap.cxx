@@ -251,5 +251,10 @@ TUT_UNIT_TEST( 14, "operator = ()" )
 	ENSURE_EQUALS( "assign failed", twmdst, twmsrc );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 15, "left()" )
+	int2int_t twm;
+	ENSURE( "empty left view iterators", twm.left().begin() == twm.left().end() );
+TUT_TEARDOWN()
+
 }
 
