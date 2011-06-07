@@ -46,6 +46,26 @@ namespace tut
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hset );
 TUT_TEST_GROUP( tut_yaal_hcore_hset, "yaal::hcore::HSet" );
 
+TUT_UNIT_TEST( 1, "lower_bound()" )
+	int_set_t set;
+	set.insert( 1 );
+	set.insert( 2 );
+	set.insert( 4 );
+	set.insert( 5 );
+	int_set_t::const_iterator it( set.lower_bound( 3 ) );
+	ENSURE_EQUALS( "lower_bound failed", *it, 4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "upper_bound()" )
+	int_set_t set;
+	set.insert( 1 );
+	set.insert( 2 );
+	set.insert( 4 );
+	set.insert( 5 );
+	int_set_t::const_iterator it( set.upper_bound( 3 ) );
+	ENSURE_EQUALS( "lower_bound failed", *it, 4 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 49, "sample data" )
 	typedef HSet<HString> string_set_t;
 	string_set_t set;

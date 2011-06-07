@@ -254,6 +254,14 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 15, "left()" )
 	int2int_t twm;
 	ENSURE( "empty left view iterators", twm.left().begin() == twm.left().end() );
+	twm.insert( make_pair( 4, 5) );
+	twm.insert( make_pair( 1, 2) );
+	twm.insert( make_pair( 3, 4) );
+	twm.insert( make_pair( 2, 3) );
+	copy( twm.left().begin(), twm.left().end(), stream_iterator( cout ) );
+	cout << endl;
+	copy( twm.right().begin(), twm.right().end(), stream_iterator( cout ) );
+	cout << endl;
 TUT_TEARDOWN()
 
 }
