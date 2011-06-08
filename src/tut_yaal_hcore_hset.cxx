@@ -43,27 +43,115 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
-TUT_SIMPLE_MOCK( tut_yaal_hcore_hset );
+struct tut_yaal_hcore_hset : simple_mock<tut_yaal_hcore_hset>
+	{
+	virtual ~tut_yaal_hcore_hset( void ) {}
+	void lower_bound_test( int );
+	void upper_bound_test( int );
+	};
+
 TUT_TEST_GROUP( tut_yaal_hcore_hset, "yaal::hcore::HSet" );
 
-TUT_UNIT_TEST( 1, "lower_bound()" )
+TUT_UNIT_TEST( 1, "find()" )
+	int_set_t set;
+	set.insert( 1 );
+	set.insert( 2 );
+	set.insert( 4 );
+	set.insert( 5 );
+	int_set_t::const_iterator it( set.find( 3 ) );
+	ENSURE( "find with false positive", ! ( it != set.end() ) );
+	set.insert( 3 );
+	it = set.find( 3 );
+	ENSURE( "find with false negative", it != set.end() );
+	ENSURE_EQUALS( "find failed", *it, 3 );
+TUT_TEARDOWN()
+
+void tut_yaal_hcore_hset::lower_bound_test( int size_ )
+	{
+	int_set_t set;
+	for ( int i( 0 ); i < size_; i += 2 )
+		set.insert( i );
+	for ( int i( 0 ); i < ( size_ - 1 ); ++i )
+		{
+		int_set_t::const_iterator it( set.lower_bound( i ) );
+		ENSURE( "lower_bound not found", it != set.end() );
+		ENSURE_EQUALS( "lower_bound failed", *it, ( i % 2 ) ? i + 1 : i );
+		}
+	set.clear();
+	for ( int i( size_ - 2 ); i >= 0; i -= 2 )
+		set.insert( i );
+	for ( int i( 0 ); i < ( size_ - 1 ); ++i )
+		{
+		int_set_t::const_iterator it( set.lower_bound( i ) );
+		ENSURE( "lower_bound not found", it != set.end() );
+		ENSURE_EQUALS( "lower_bound failed", *it, ( i % 2 ) ? i + 1 : i );
+		}
+	}
+
+void tut_yaal_hcore_hset::upper_bound_test( int size_ )
+	{
+	int_set_t set;
+	for ( int i( 0 ); i < size_; i += 2 )
+		set.insert( i );
+	for ( int i( 0 ); i < ( size_ - 2 ); ++i )
+		{
+		int_set_t::const_iterator it( set.upper_bound( i ) );
+		ENSURE( "upper_bound not found", it != set.end() );
+		ENSURE_EQUALS( "upper_bound failed", *it, ( i % 2 ) ? i + 1 : i + 2 );
+		}
+	int_set_t::const_iterator end( set.upper_bound( *set.rbegin() ) );
+	ENSURE( "upper_bound found", !( end != set.end() ) );
+	set.clear();
+	for ( int i( size_ - 2 ); i >= 0; i -= 2 )
+		set.insert( i );
+	for ( int i( 0 ); i < ( size_ - 2 ); ++i )
+		{
+		int_set_t::const_iterator it( set.upper_bound( i ) );
+		ENSURE( "upper_bound not found", it != set.end() );
+		ENSURE_EQUALS( "upper_bound failed", *it, ( i % 2 ) ? i + 1 : i + 2 );
+		}
+	int_set_t::const_iterator end2( set.upper_bound( *set.rbegin() ) );
+	ENSURE( "upper_bound found", !( end2 != set.end() ) );
+	}
+
+TUT_UNIT_TEST( 2, "lower_bound()" )
 	int_set_t set;
 	set.insert( 1 );
 	set.insert( 2 );
 	set.insert( 4 );
 	set.insert( 5 );
 	int_set_t::const_iterator it( set.lower_bound( 3 ) );
+	ENSURE( "lower_bound not found", it != set.end() );
 	ENSURE_EQUALS( "lower_bound failed", *it, 4 );
+	set.insert( 3 );
+	it = set.lower_bound( 3 );
+	ENSURE( "lower_bound not found", it != set.end() );
+	ENSURE_EQUALS( "lower_bound failed", *it, 3 );
+
+/* Let's be serious. */
+	static int const RANGE( 1024 );
+	for ( int i( 0 ); i < RANGE; i += 2 )
+		lower_bound_test( i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "upper_bound()" )
+TUT_UNIT_TEST( 3, "upper_bound()" )
 	int_set_t set;
 	set.insert( 1 );
 	set.insert( 2 );
 	set.insert( 4 );
 	set.insert( 5 );
 	int_set_t::const_iterator it( set.upper_bound( 3 ) );
-	ENSURE_EQUALS( "lower_bound failed", *it, 4 );
+	ENSURE( "upper_bound not found", it != set.end() );
+	ENSURE_EQUALS( "upper_bound failed", *it, 4 );
+	set.insert( 3 );
+	it = set.upper_bound( 3 );
+	ENSURE( "upper_bound not found", it != set.end() );
+	ENSURE_EQUALS( "upper_bound failed", *it, 4 );
+
+/* Let's be serious. */
+	static int const RANGE( 1024 );
+	for ( int i( 2 ); i < RANGE; i += 2 )
+		upper_bound_test( i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 49, "sample data" )

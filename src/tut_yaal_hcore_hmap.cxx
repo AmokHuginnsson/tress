@@ -31,7 +31,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -52,11 +51,115 @@ struct tut_yaal_hcore_hmap
 	typedef HMap<int, Crazy> i2c_t;
 	virtual ~tut_yaal_hcore_hmap( void )
 		{}
+	void lower_bound_test( int );
+	void upper_bound_test( int );
 	};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hmap, "yaal::hcore::HMap" );
 
-TUT_UNIT_TEST( 1, "HMap insert of already existing key")
+TUT_UNIT_TEST( 1, "find()" )
+	i2i_t map;
+	map.insert( make_pair( 1, 1 ) );
+	map.insert( make_pair( 2, 2 ) );
+	map.insert( make_pair( 4, 4 ) );
+	map.insert( make_pair( 5, 5 ) );
+	i2i_t::const_iterator it( map.find( 3 ) );
+	ENSURE( "find with false positive", ! ( it != map.end() ) );
+	map.insert( make_pair( 3, 3 ) );
+	it = map.find( 3 );
+	ENSURE( "find with false negative", it != map.end() );
+	ENSURE_EQUALS( "find failed", it->first, 3 );
+TUT_TEARDOWN()
+
+void tut_yaal_hcore_hmap::lower_bound_test( int size_ )
+	{
+	i2i_t map;
+	for ( int i( 0 ); i < size_; i += 2 )
+		map.insert( make_pair( i, i ) );
+	for ( int i( 0 ); i < ( size_ - 1 ); ++i )
+		{
+		i2i_t::const_iterator it( map.lower_bound( i ) );
+		ENSURE( "lower_bound not found", it != map.end() );
+		ENSURE_EQUALS( "lower_bound failed", it->first, ( i % 2 ) ? i + 1 : i );
+		}
+	map.clear();
+	for ( int i( size_ - 2 ); i >= 0; i -= 2 )
+		map.insert( make_pair( i, i ) );
+	for ( int i( 0 ); i < ( size_ - 1 ); ++i )
+		{
+		i2i_t::const_iterator it( map.lower_bound( i ) );
+		ENSURE( "lower_bound not found", it != map.end() );
+		ENSURE_EQUALS( "lower_bound failed", it->first, ( i % 2 ) ? i + 1 : i );
+		}
+	}
+
+void tut_yaal_hcore_hmap::upper_bound_test( int size_ )
+	{
+	i2i_t map;
+	for ( int i( 0 ); i < size_; i += 2 )
+		map.insert( make_pair( i, i ) );
+	for ( int i( 0 ); i < ( size_ - 2 ); ++i )
+		{
+		i2i_t::const_iterator it( map.upper_bound( i ) );
+		ENSURE( "upper_bound not found", it != map.end() );
+		ENSURE_EQUALS( "upper_bound failed", it->first, ( i % 2 ) ? i + 1 : i + 2 );
+		}
+	i2i_t::const_iterator end( map.upper_bound( map.rbegin()->first ) );
+	ENSURE( "upper_bound found", !( end != map.end() ) );
+	map.clear();
+	for ( int i( size_ - 2 ); i >= 0; i -= 2 )
+		map.insert( make_pair( i, i ) );
+	for ( int i( 0 ); i < ( size_ - 2 ); ++i )
+		{
+		i2i_t::const_iterator it( map.upper_bound( i ) );
+		ENSURE( "upper_bound not found", it != map.end() );
+		ENSURE_EQUALS( "upper_bound failed", it->first, ( i % 2 ) ? i + 1 : i + 2 );
+		}
+	i2i_t::const_iterator end2( map.upper_bound( map.rbegin()->first ) );
+	ENSURE( "upper_bound found", !( end2 != map.end() ) );
+	}
+
+TUT_UNIT_TEST( 2, "lower_bound()" )
+	i2i_t map;
+	map.insert( make_pair( 1, 1 ) );
+	map.insert( make_pair( 2, 2 ) );
+	map.insert( make_pair( 4, 5 ) );
+	map.insert( make_pair( 5, 5 ) );
+	i2i_t::const_iterator it( map.lower_bound( 3 ) );
+	ENSURE( "lower_bound not found", it != map.end() );
+	ENSURE_EQUALS( "lower_bound failed", it->first, 4 );
+	map.insert( make_pair( 3, 3 ) );
+	it = map.lower_bound( 3 );
+	ENSURE( "lower_bound not found", it != map.end() );
+	ENSURE_EQUALS( "lower_bound failed", it->first, 3 );
+
+/* Let's be serious. */
+	static int const RANGE( 1024 );
+	for ( int i( 0 ); i < RANGE; i += 2 )
+		lower_bound_test( i );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 3, "upper_bound()" )
+	i2i_t map;
+	map.insert( make_pair( 1, 1 ) );
+	map.insert( make_pair( 2, 2 ) );
+	map.insert( make_pair( 4, 4 ) );
+	map.insert( make_pair( 5, 5 ) );
+	i2i_t::const_iterator it( map.upper_bound( 3 ) );
+	ENSURE( "upper_bound not found", it != map.end() );
+	ENSURE_EQUALS( "upper_bound failed", it->first, 4 );
+	map.insert( make_pair( 3, 3 ) );
+	it = map.upper_bound( 3 );
+	ENSURE( "upper_bound not found", it != map.end() );
+	ENSURE_EQUALS( "upper_bound failed", it->first, 4 );
+
+/* Let's be serious. */
+	static int const RANGE( 1024 );
+	for ( int i( 2 ); i < RANGE; i += 2 )
+		upper_bound_test( i );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "HMap insert of already existing key")
 	i2i_t m;
 	static int const KEY = 1;
 	static int const ORIGINAL_VAL = 2;
@@ -68,7 +171,7 @@ TUT_UNIT_TEST( 1, "HMap insert of already existing key")
 	ENSURE_EQUALS( "element with already existing key inserted", ir.first->second, ORIGINAL_VAL );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "exception during map[key] = val;" )
+TUT_UNIT_TEST( 5, "exception during map[key] = val;" )
 	i2c_t m;
 	try
 		{

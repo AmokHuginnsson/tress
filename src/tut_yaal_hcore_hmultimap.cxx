@@ -57,8 +57,8 @@ TUT_UNIT_TEST( 1, "find/upper_bound on non existing" )
 	mm.insert( make_pair( 3, 4 ) );
 	mm.insert( make_pair( 3, 5 ) );
 	mmp_t const& m = mm;
-	for ( mmp_t::const_iterator it = m.find( 2 ), end = m.upper_bound( 2 ); it != end; ++ it )
-		FAIL( "find/upper_bound ranges skewed" );
+	ENSURE( "find() false positive", ! ( m.find( 2 ) != m.end() ) );
+	ENSURE( "upper_bound() failed", m.upper_bound( 2 ) == m.find( 3 ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "find/upper_bound on existing" )
@@ -91,8 +91,9 @@ TUT_UNIT_TEST( 31, "find/upper_bound on non existing" )
 	mm.insert( make_pair( 1, 3 ) );
 	mm.insert( make_pair( 3, 4 ) );
 	mm.insert( make_pair( 3, 5 ) );
-	for ( mmt_t::const_iterator it = mm.find( 2 ), end = mm.upper_bound( 2 ); it != end; ++ it )
-		FAIL( "find/upper_bound ranges skewed" );
+	mmt_t const& m = mm;
+	ENSURE( "find() false positive", ! ( m.find( 2 ) != m.end() ) );
+	ENSURE( "upper_bound() failed", m.upper_bound( 2 ) == m.find( 3 ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 32, "find/upper_bound on existing" )
