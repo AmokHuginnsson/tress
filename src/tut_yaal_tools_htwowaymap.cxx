@@ -255,6 +255,7 @@ TUT_UNIT_TEST( 15, "left()" )
 	int2int_t twm;
 	ENSURE( "empty left view iterators", twm.left().begin() == twm.left().end() );
 	twm.insert( make_pair( 4, 5) );
+	ENSURE( "empty range on view when twowaymap not empty", twm.left().begin() != twm.left().end() );
 	twm.insert( make_pair( 1, 2) );
 	twm.insert( make_pair( 3, 4) );
 	twm.insert( make_pair( 2, 3) );
@@ -262,6 +263,24 @@ TUT_UNIT_TEST( 15, "left()" )
 	cout << endl;
 	copy( twm.right().begin(), twm.right().end(), stream_iterator( cout ) );
 	cout << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 16, "view methods" )
+	int2int_t twm;
+	twm.insert( make_pair( 4, 5) );
+	twm.insert( make_pair( 1, 2) );
+	twm.insert( make_pair( 3, 4) );
+	twm.insert( make_pair( 2, 3) );
+	ENSURE_EQUALS( "count failed", twm.left().count( 1 ), 1 );
+	ENSURE_EQUALS( "count failed", twm.left().count( 2 ), 1 );
+	ENSURE_EQUALS( "count failed", twm.left().count( 3 ), 1 );
+	ENSURE_EQUALS( "count failed", twm.left().count( 4 ), 1 );
+	ENSURE_EQUALS( "count failed", twm.left().count( 5 ), 0 );
+	ENSURE_EQUALS( "count failed", twm.right().count( 1 ), 0 );
+	ENSURE_EQUALS( "count failed", twm.right().count( 2 ), 1 );
+	ENSURE_EQUALS( "count failed", twm.right().count( 3 ), 1 );
+	ENSURE_EQUALS( "count failed", twm.right().count( 4 ), 1 );
+	ENSURE_EQUALS( "count failed", twm.right().count( 5 ), 1 );
 TUT_TEARDOWN()
 
 }
