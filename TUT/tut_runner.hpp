@@ -115,6 +115,10 @@ public:
 	typedef groups::iterator iterator;
 	typedef groups::const_iterator const_iterator;
 
+	typedef std::vector<int> test_numbers_t;
+	typedef std::pair<std::string, test_numbers_t> test_set_t;
+	typedef std::list<test_set_t> test_sets_t;
+
 	/**
 	* Constructor
 	*/
@@ -280,6 +284,53 @@ public:
 		}
 
 	/**
+	* Runs specific tests from specified groups.
+	*/
+	void run_tests( test_sets_t const& testSets_ ) const
+		{
+		_callback->run_started();
+		int total( 0 );
+
+			{
+			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
+					? yaal::tools::HWorkFlow::ptr_t( new yaal::tools::HWorkFlow( tress::setup._jobs ) )
+					: yaal::tools::HWorkFlow::ptr_t() );
+			for ( test_sets_t::const_iterator k = testSets_.begin();
+					! yaal::_isKilled_ && ( k != testSets_.end() ); ++ k )
+				{
+				const_iterator i = _groups.find( k->first );
+				if ( i == _groups.end() )
+					++ total;
+				else
+					total += i->second->get_real_test_count();
+				}
+			_callback->test_count( total );
+			for ( test_sets_t::const_iterator k = testSets_.begin();
+					! yaal::_isKilled_ && ( k != testSets_.end() ); ++ k )
+				{
+				const_iterator i = _groups.find( k->first );
+				if ( i == _groups.end() )
+					{
+					++ total;
+					test_result tr;
+					tr.set_meta( test_result::setup, "", k->first );
+					tr.set_meta( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( testSets_.begin(), k ) ) );
+					_callback->test_completed( tr );
+					}
+				else
+					{
+					total += i->second->get_real_test_count();
+					if ( !! w )
+						w->push_task( yaal::hcore::call( &test_runner::run_in_group, this, i, k->second ) );
+					else
+						run_in_group( i, k->second );
+					}
+				}
+			}
+		_callback->run_completed();
+		}
+
+	/**
 	* Runs all tests in all groups that are matching pattern.
 	* @param callback Callback object if exists; null otherwise
 	*/
@@ -373,6 +424,27 @@ private:
 		catch ( const no_more_tests& )
 			{
 			_callback->group_completed( i->first );
+			}
+		}
+
+	void run_in_group( const_iterator i, test_numbers_t const& testNumbers_ ) const
+		{
+		yaal::hcore::HThread::set_name( i->first.c_str() + std::max( 0, static_cast<int>( i->first.length() - 15 ) ) );
+		_callback->group_started( i->first, i->second->get_real_test_count() );
+		if ( testNumbers_.empty() )
+			{
+			try
+				{
+				run_all_tests_in_group_( i );
+				}
+			catch ( const no_more_tests& )
+				{
+				_callback->group_completed( i->first );
+				}
+			}
+		else
+			{
+
 			}
 		}
 

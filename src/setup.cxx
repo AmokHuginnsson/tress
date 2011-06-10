@@ -82,24 +82,31 @@ void OSetup::test_setup( void )
 			&& ( _restartable
 				|| ! _testGroupListFilePath.is_empty()
 				|| ! _testGroups.is_empty()
+				|| ! _testSets.is_empty()
 				|| ! _testGroupPattern.is_empty() || _testNumber ) )
 		M_THROW( _( "group listing conflicts with other switches" ),
 				_testNumber );
 	if ( _restartable
 			&& ( ! _testGroupListFilePath.is_empty()
 				|| ! _testGroups.is_empty()
+				|| ! _testSets.is_empty()
 				|| ! _testGroupPattern.is_empty()
 				|| _testNumber ) )
 		M_THROW( _( "restartable conflicts with other switches" ),
 				_testNumber );
 	if ( ! _testGroupListFilePath.is_empty()
 			&& ( ! _testGroups.is_empty()
+				|| ! _testSets.is_empty()
 				|| ! _testGroupPattern.is_empty()
 				|| _testNumber ) )
 		M_THROW( _( "group names file is an exclusive switch" ),
 				_testNumber );
 	if ( ! _testGroups.is_empty() && ! _testGroupPattern.is_empty() )
 		M_THROW( _( "pattern and group switches are exclusive" ), errno );
+	if ( ! _testSets.is_empty() && ! _testGroupPattern.is_empty() )
+		M_THROW( _( "pattern and set switches are exclusive" ), errno );
+	if ( ! _testSets.is_empty() && ! _testGroups.is_empty() )
+		M_THROW( _( "group and set switches are exclusive" ), errno );
 	if ( ! _testGroupPattern.is_empty() && _testNumber )
 		M_THROW( _( "setting test number for pattern makes no sense" ),
 				_testNumber );

@@ -61,6 +61,7 @@ OSetup setup;
 typedef std::list<std::string> string_list_t;
 void gather_groups_from_file( string_list_t& );
 void list_groups( void );
+tut::test_runner::test_sets_t prepare_testsets( OSetup::set_definitions_t const& );
 
 }
 
@@ -135,6 +136,11 @@ int main( int argc_, char* argv_[] )
 					for ( OSetup::group_names_t::iterator it( setup._testGroups.begin() ), end( setup._testGroups.end() ); it != end; ++ it )
 						groupNames.push_back( it->raw() );
 					runner.get().run_tests( groupNames );
+					}
+				else if ( ! setup._testSets.is_empty() )
+					{
+					tut::test_runner::test_sets_t testSets( prepare_testsets( setup._testSets ) );
+					runner.get().run_tests( testSets );
 					}
 				else
 					runner.get().run_tests();
@@ -220,6 +226,37 @@ void list_groups( void )
 		std::cout << "total test count: " << totalTestsCount << std::endl;
 	errno = 0;
 	return;
+	M_EPILOG
+	}
+
+tut::test_runner::test_sets_t prepare_testsets( OSetup::set_definitions_t const& sets_ )
+	{
+	M_PROLOG
+	tut::test_runner::groups groups( tut::runner.get().get_groups() );
+	tut::test_runner::test_sets_t tss;
+	HTokenizer tokenizer( "@", HTokenizer::SKIP_EMPTY );
+	HTokenizer noTokenizer( ",", HTokenizer::SKIP_EMPTY );
+	int setIdx( 1 );
+	for ( OSetup::set_definitions_t::const_iterator it( sets_.begin() ), end( sets_.end() ); it != end; ++ it, ++ setIdx )
+		{
+		if ( it->is_empty() )
+			tools::util::failure( setIdx, "empty set\n" );
+		tokenizer.assign( *it );
+		HTokenizer::iterator token( tokenizer.begin() );
+		if ( token->is_empty() )
+			tools::util::failure( setIdx, "empty set name\n" );
+		tut::test_runner::test_set_t ts;
+		ts.first = token->raw();
+		++ token;
+		if ( token != tokenizer.end() )
+			{
+			noTokenizer.assign( *token );
+			for ( HTokenizer::iterator no( noTokenizer.begin() ), noEnd( noTokenizer.end() ); no != noEnd; ++ no )
+				ts.second.push_back( lexical_cast<int>( *no ) );
+			}
+		tss.push_back( ts );
+		}
+	return ( tss );
 	M_EPILOG
 	}
 

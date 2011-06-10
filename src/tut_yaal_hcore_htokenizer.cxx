@@ -214,5 +214,39 @@ TUT_UNIT_TEST( 13, "dereference iterator for single token" )
 	ENSURE_EQUALS( "dereferencing token iterator failed", *it, text );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 14, "tokenize on empty (skip empty)" )
+	{
+	HTokenizer tokenizer( "", "@", HTokenizer::SKIP_EMPTY );
+	ENSURE( "bogus tokens on empty", ! ( tokenizer.begin() != tokenizer.end() ) );
+	}
+	{
+	HTokenizer tokenizer( "@", HTokenizer::SKIP_EMPTY );
+	tokenizer.assign( "" );
+	ENSURE( "bogus tokens on empty", ! ( tokenizer.begin() != tokenizer.end() ) );
+	}
+	{
+	HTokenizer tokenizer( "Ala@ma@kota.", "@", HTokenizer::SKIP_EMPTY );
+	tokenizer.assign( "" );
+	ENSURE( "bogus tokens on empty", ! ( tokenizer.begin() != tokenizer.end() ) );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 15, "tokenize on empty (include empty)" )
+	{
+	HTokenizer tokenizer( "", "@", HTokenizer::INCLUDE_EMPTY );
+	ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
+	}
+	{
+	HTokenizer tokenizer( "@", HTokenizer::INCLUDE_EMPTY );
+	tokenizer.assign( "" );
+	ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
+	}
+	{
+	HTokenizer tokenizer( "Ala@ma@kota.", "@", HTokenizer::INCLUDE_EMPTY );
+	tokenizer.assign( "" );
+	ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
+	}
+TUT_TEARDOWN()
+
 }
 

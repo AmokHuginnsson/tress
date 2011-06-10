@@ -42,10 +42,11 @@ struct OSetup
 		_listGroups( false ), _restartable( false ), _exit( false ), _fancy( false ), _color( false ),
 		_testNumber( 0 ), _jobs( DEFAULT_JOB_COUNT ), _timeConstraint( DEFAULT_TIME_CONSTRAINT ),
 		_argc( 0 ), _argv( NULL ),
-		_programName( NULL ), _logPath(), _testGroups(),
+		_programName( NULL ), _logPath(), _testGroups(), _testSets(),
 		_testGroupPattern(), _testGroupListFilePath(),
 		_errorLine( "console" ) {}
 	typedef yaal::hcore::HDeque<yaal::hcore::HString> group_names_t;
+	typedef yaal::hcore::HDeque<yaal::hcore::HString> set_definitions_t;
 	bool _quiet;			/* --quiet, --silent */
 	bool _verbose;		/* --verbose */
 	bool _debug;      /* --debug */
@@ -62,6 +63,7 @@ struct OSetup
 	char* _programName;
 	yaal::hcore::HString _logPath;
 	group_names_t _testGroups;
+	set_definitions_t _testSets;
 	yaal::hcore::HString _testGroupPattern;
 	yaal::hcore::HString _testGroupListFilePath;
 	yaal::hcore::HString _errorLine;
