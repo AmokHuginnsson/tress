@@ -54,9 +54,10 @@ struct test_result : public test_result_posix
 	* ex - test throwed an exceptions
 	* warn - test finished successfully, but test destructor throwed
 	* term - test forced test application to terminate abnormally
-	* setup - bad test setup (no such group or no such test number)
+	* setup - bad test setup no such group
+	* setup_test_number - bad test setup no such test number
 	*/
-	typedef enum { ok, fail, ex, warn, term, ex_ctor, setup, rethrown } result_type_t;
+	typedef enum { ok, fail, ex, warn, term, ex_ctor, setup, setup_test_number, rethrown } result_type_t;
 
 	result_type_t _result;
 

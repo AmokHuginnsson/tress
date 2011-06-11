@@ -152,7 +152,7 @@ int main( int argc_, char* argv_[] )
 			{
 			std::cerr << "tut raised ex: " << e.what() << std::endl;
 			}
-		M_ENSURE ( ! errno );
+		M_ENSURE( ! errno );
 /*	... there is the place main loop ends. :OD-OT                         */
 		}
 	catch ( int e )

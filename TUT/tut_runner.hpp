@@ -264,7 +264,6 @@ public:
 				const_iterator i = _groups.find( *k );
 				if ( i == _groups.end() )
 					{
-					++ total;
 					test_result tr;
 					tr.set_meta( test_result::setup, "", *k );
 					tr.set_meta( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( group_names.begin(), k ) ) );
@@ -272,7 +271,6 @@ public:
 					}
 				else
 					{
-					total += i->second->get_real_test_count();
 					if ( !! w )
 						w->push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
 					else
@@ -302,7 +300,10 @@ public:
 				if ( i == _groups.end() )
 					++ total;
 				else
-					total += i->second->get_real_test_count();
+					{
+					int selected( static_cast<int>( k->second.size() ) );
+					total += selected ? selected : i->second->get_real_test_count();
+					}
 				}
 			_callback->test_count( total );
 			for ( test_sets_t::const_iterator k = testSets_.begin();
@@ -311,7 +312,6 @@ public:
 				const_iterator i = _groups.find( k->first );
 				if ( i == _groups.end() )
 					{
-					++ total;
 					test_result tr;
 					tr.set_meta( test_result::setup, "", k->first );
 					tr.set_meta( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( testSets_.begin(), k ) ) );
@@ -319,7 +319,6 @@ public:
 					}
 				else
 					{
-					total += i->second->get_real_test_count();
 					if ( !! w )
 						w->push_task( yaal::hcore::call( &test_runner::run_in_group, this, i, k->second ) );
 					else
@@ -389,7 +388,7 @@ public:
 			_callback->test_completed( tr );
 			_callback->group_completed( group_name );
 			_callback->run_completed();
-			return ( tr ) ;
+			return ( tr );
 			}
 		catch ( const beyond_last_test& )
 			{
@@ -430,7 +429,8 @@ private:
 	void run_in_group( const_iterator i, test_numbers_t const& testNumbers_ ) const
 		{
 		yaal::hcore::HThread::set_name( i->first.c_str() + std::max( 0, static_cast<int>( i->first.length() - 15 ) ) );
-		_callback->group_started( i->first, i->second->get_real_test_count() );
+		int selected( static_cast<int>( testNumbers_.size() ) );
+		_callback->group_started( i->first, selected ? selected : i->second->get_real_test_count() );
 		if ( testNumbers_.empty() )
 			{
 			try
@@ -444,7 +444,28 @@ private:
 			}
 		else
 			{
+			for ( test_numbers_t::const_iterator no( testNumbers_.begin() ), noEnd( testNumbers_.end() ); no != noEnd; ++ no )
+				{
+				_callback->test_started( *no, i->second->get_test_title( *no ) );
 
+				try
+					{
+					test_result tr = i->second->run_test( *no );
+					_callback->test_completed( tr );
+					}
+				catch ( const beyond_last_test& )
+					{
+					break;
+					}
+				catch ( const no_such_test& )
+					{
+					test_result tr( i->second, *no );
+					tr.set_meta( test_result::setup_test_number, "", "no such test number" );
+					tr.set_meta( "no such test" );
+					_callback->test_completed( tr );
+					}
+				}
+			_callback->group_completed( i->first );
 			}
 		}
 

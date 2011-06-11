@@ -54,6 +54,8 @@ std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr )
 		break;
 		case tut::test_result::setup:
 			os_ << "no such group: `" << tr._message << "'\n" << std::flush;
+		case tut::test_result::setup_test_number:
+			os_ << '[' << tr._testNo << "=S]" << std::flush;
 		break;
 		}
 	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
