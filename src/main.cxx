@@ -59,7 +59,7 @@ namespace tress
 OSetup setup;
 
 typedef std::list<std::string> string_list_t;
-void gather_groups_from_file( string_list_t& );
+void gather_groups_from_file( OSetup::set_definitions_t& );
 void list_groups( void );
 tut::test_runner::test_sets_t prepare_testsets( OSetup::set_definitions_t const& );
 
@@ -120,11 +120,12 @@ int main( int argc_, char* argv_[] )
 			else
 				{
 				runner.get().set_callback( &visitor );
-				string_list_t groupNames;
 				if ( ! setup._testGroupListFilePath.is_empty() )
 					{
-					gather_groups_from_file( groupNames );
-					runner.get().run_tests( groupNames );
+					OSetup::set_definitions_t sets;
+					gather_groups_from_file( sets );
+					tut::test_runner::test_sets_t testSets( prepare_testsets( sets ) );
+					runner.get().run_tests( testSets );
 					}
 				else if ( ! setup._testGroupPattern.is_empty() )
 					runner.get().run_pattern_tests( setup._testGroupPattern.raw() );
@@ -133,6 +134,7 @@ int main( int argc_, char* argv_[] )
 							setup._testNumber );
 				else if ( ! setup._testGroups.is_empty() )
 					{
+					string_list_t groupNames;
 					for ( OSetup::group_names_t::iterator it( setup._testGroups.begin() ), end( setup._testGroups.end() ); it != end; ++ it )
 						groupNames.push_back( it->raw() );
 					runner.get().run_tests( groupNames );
@@ -181,7 +183,7 @@ int main( int argc_, char* argv_[] )
 namespace tress
 {
 
-void gather_groups_from_file( string_list_t& lst )
+void gather_groups_from_file( OSetup::set_definitions_t& lst )
 	{
 	M_PROLOG
 	HFile file;
