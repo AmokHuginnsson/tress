@@ -31,7 +31,6 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
@@ -42,24 +41,55 @@ using namespace tress::tut_helpers;
 namespace tut
 {
 
+static double long const epsilon = 0.0001;
+
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hcomplex );
 TUT_TEST_GROUP( tut_yaal_hcore_hcomplex, "yaal::hcore::HComplex" );
 
 TUT_UNIT_TEST( 1, "Default constructor" )
 	HComplex a;
-	ENSURE_DISTANCE( "non zero new complex number (re)", a.re ( ), 0., 0.001 );
-	ENSURE_DISTANCE( "non zero new complex number (im)", a.im ( ), 0., 0.001 );
+	ENSURE_DISTANCE( "non zero new complex number (re)", a.re(), 0.L, epsilon );
+	ENSURE_DISTANCE( "non zero new complex number (im)", a.im(), 0.L, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "Constructor with initialization." )
-	double const RE = 3.14159265;
-	double const IM = 2.17;
-	HComplex a ( RE );
-	ENSURE_DISTANCE( "non zero new complex number (im)", a.im ( ), 0., 0.001 );
-	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re ( ), RE, 0.001 );
-	HComplex b ( RE, IM );
-	ENSURE_DISTANCE( "re incrorrectly set by constructor", b.re ( ), RE, 0.001 );
-	ENSURE_DISTANCE( "im incrorrectly set by constructor", b.im ( ), IM, 0.001 );
+	double long const RE = 3.141592653589793;
+	double long const IM = 2.718281828459045;
+	HComplex a( RE );
+	ENSURE_DISTANCE( "non zero new complex number (im)", a.im(), 0.L, epsilon );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), RE, epsilon );
+	HComplex b( RE, IM );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", b.re(), RE, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by constructor", b.im(), IM, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 3, "modulus()" )
+	HComplex a( 3, 4 );
+	ENSURE_DISTANCE( "bad modulus value calculted", a.modulus(), 5.L, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "argument()" )
+	HComplex a( 1, 0 );
+	ENSURE_DISTANCE( "bad argument value calculted", a.argument(), 0.L, epsilon );
+	HComplex b( 1, 1 );
+	ENSURE_DISTANCE( "bad argument value calculted", b.argument(), PI / 4.L, epsilon );
+	HComplex c( -1, 1 );
+	ENSURE_DISTANCE( "bad argument value calculted", c.argument(), PI - PI / 4.L, epsilon );
+	HComplex d( -1, -1 );
+	ENSURE_DISTANCE( "bad argument value calculted", d.argument(), - ( PI - PI / 4.L ), epsilon );
+	HComplex e( 1, -1 );
+	ENSURE_DISTANCE( "bad argument value calculted", e.argument(), - PI / 4.L, epsilon );
+	try
+		{
+		HComplex z;
+		z.argument();
+		FAIL( "getting argument from 0 + 0i succeeded" );
+		}
+	catch ( HComplexException const& ex )
+		{
+		// ok
+		cout << ex.what() << endl;
+		}
 TUT_TEARDOWN()
 
 }

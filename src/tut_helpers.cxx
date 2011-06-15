@@ -46,7 +46,7 @@ namespace std
 std::ostream& operator << ( std::ostream& out, HComplex const& complex_ )
 	{
 	M_PROLOG
-	double re, im;
+	double long re, im;
 	re = complex_.re();
 	im = complex_.im();
 	if ( im >= 0 )
@@ -93,6 +93,9 @@ namespace tress
 
 namespace tut_helpers
 {
+
+double long PI = 3.141592653589793L;
+double long E =  2.718281828459045L;
 
 int const _testData_[2][ 100 ] =
 	{
@@ -164,7 +167,6 @@ bool file_compare( yaal::hcore::HString const& path1_, yaal::hcore::HString cons
 
 int long get_speed( HClock::UNIT::unit_t u )
 	{
-	double long PI = 3.14159265;
 	static int long const LOOPS = 320000L;
 	double long x = PI;
 	HClock c;
