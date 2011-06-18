@@ -23,7 +23,6 @@ try:
 	import pango
 	import gobject
 	import gtk
-	import gtk.glade
 except:
 	print "GTK/Pango/Glade not availible!"
 	sys.exit( 1 )
@@ -81,13 +80,9 @@ class GTress:
 		self._currentFilter = ""
 		self._suiteMap = {}
 		gtk.gdk.threads_init()
-		self._gui = gtk.glade.XML( "gtress.glade" )
-		signals = {
-			"destroy" : self.destroy,
-			"delete_event" : self.delete_event
-		}
-		self._gui.signal_autoconnect( signals )
-		self._list = self._gui.get_widget( "GUI_LIST" )
+		self._gui = gtk.Builder()
+		self._gui.add_from_file( "gtress.ui" )
+		self._list = self._gui.get_object( "GUI_LIST" )
 		self._data = gtk.ListStore( str, int, bool, int, int, gtk.gdk.Color, str )
 		self._filter = self._data.filter_new()
 		self._filter.set_visible_func( self.apply_filter )
@@ -157,14 +152,11 @@ class GTress:
 		self._list.get_selection().set_mode( gtk.SELECTION_MULTIPLE )
 		self._list.set_model( self._filter )
 		self._list.set_tooltip_column( 6 )
-		self._filterEdit = self._gui.get_widget( "GUI_NAME_FILTER" )
-		self._filterEdit.connect( "changed", self.filter_changed )
-		self._gui.get_widget( "GUI_CLEAR_FILTER" ).connect( "clicked", self.clear_filter )
-		self._gui.get_widget( "GUI_RUN" ).connect( "clicked", self.run )
-		self._gui.get_widget( "GUI_QUIT" ).connect( "clicked", self.destroy )
-		self._jobs = self._gui.get_widget( "GUI_JOBS" )
-		self._all = self._gui.get_widget( "GUI_ALL" )
-		self._all.connect( "toggled", self.all_toggled )
+		self._filterEdit = self._gui.get_object( "GUI_NAME_FILTER" )
+		self._gui.get_object( "GUI_QUIT" ).connect( "clicked", self.destroy )
+		self._jobs = self._gui.get_object( "GUI_JOBS" )
+		self._all = self._gui.get_object( "GUI_ALL" )
+		self._gui.connect_signals( self )
 
 		self._child = subprocess.Popen( [ "./build/debug/tress/1exec", "-L", "-v" ], stdout = subprocess.PIPE )
 		tests = self._child.stdout
@@ -184,11 +176,11 @@ class GTress:
 				suiteNo += 1
 		self._child.wait()
 		self._child = None
-		self._totalTestCount = self._gui.get_widget( "GUI_TOTAL_TEST_COUNT" )
-		self._totalEnabledSuites = self._gui.get_widget( "GUI_TOTAL_ENABLED_SUITES" )
-		self._passed = self._gui.get_widget( "GUI_PASSED" )
-		self._failed = self._gui.get_widget( "GUI_FAILED" )
-		self._progress = self._gui.get_widget( "GUI_PROGRESS" )
+		self._totalTestCount = self._gui.get_object( "GUI_TOTAL_TEST_COUNT" )
+		self._totalEnabledSuites = self._gui.get_object( "GUI_TOTAL_ENABLED_SUITES" )
+		self._passed = self._gui.get_object( "GUI_PASSED" )
+		self._failed = self._gui.get_object( "GUI_FAILED" )
+		self._progress = self._gui.get_object( "GUI_PROGRESS" )
 		self._okStyle = self._progress.get_style().copy()
 		self._failStyle = self._okStyle.copy()
 		self._failColor = gtk.gdk.Color( 65535, 40000, 40000 )
