@@ -339,10 +339,10 @@ TUT_UNIT_TEST( 12, "Removing keys in ascending order from lower half of the tree
 			{
 			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 			}
-		catch ( HException & e )
+		catch ( HException const& e )
 			{
 			if ( e.code() != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
-				throw e;
+				throw;
 			}
 		}
 TUT_TEARDOWN()
@@ -358,10 +358,10 @@ TUT_UNIT_TEST( 13, "Removing keys in ascending order from upper half of the tree
 			{
 			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 			}
-		catch ( HException & e )
+		catch ( HException const& e )
 			{
 			if ( e.code() != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
-				throw e;
+				throw;
 			}
 		}
 TUT_TEARDOWN()
@@ -377,10 +377,10 @@ TUT_UNIT_TEST( 14, "Removing keys in descending order from lower half of the tre
 			{
 			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 			}
-		catch ( HException & e )
+		catch ( HException const& e )
 			{
 			if ( e.code() != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
-				throw e;
+				throw;
 			}
 		}
 TUT_TEARDOWN()
@@ -396,10 +396,10 @@ TUT_UNIT_TEST( 15, "Removing keys in descending order from upper half of the tre
 			{
 			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
 			}
-		catch ( HException& e )
+		catch ( HException const& e )
 			{
 			if ( e.code() != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
-				throw e;
+				throw;
 			}
 		}
 TUT_TEARDOWN()
@@ -416,10 +416,10 @@ TUT_UNIT_TEST( 16, "Removing keys in random order from upper half of the tree th
 			{
 			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), r( KEY_POOL_SIZE ) );
 			}
-		catch ( HException& e )
+		catch ( HException const& e )
 			{
 			if ( e.code() != static_cast<int>( HSBBSTree::ERROR::NON_EXISTING_KEY ) )
-				throw e;
+				throw;
 			}
 		}
 TUT_TEARDOWN()
