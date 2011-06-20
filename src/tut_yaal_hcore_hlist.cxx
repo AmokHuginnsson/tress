@@ -27,6 +27,8 @@ Copyright:
 #include <cstring>
 #include <cstdio>
 
+#include <yaal/hcore/hexception.hxx>
+
 #define private public
 #define protected public
 

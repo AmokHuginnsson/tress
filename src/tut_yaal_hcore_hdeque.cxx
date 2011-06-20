@@ -25,6 +25,8 @@ Copyright:
 */
 #include <deque>
 
+#include <yaal/hcore/hexception.hxx>
+
 #define private public
 #define protected public
 

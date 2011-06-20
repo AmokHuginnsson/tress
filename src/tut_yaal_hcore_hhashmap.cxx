@@ -24,6 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <yaal/hcore/hexception.hxx>
+
 #define private public
 #define protected public
 
