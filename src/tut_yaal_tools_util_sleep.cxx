@@ -66,7 +66,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 2, "the 1 milisecond granularity sleep" )
 	static int long const SLEEP = 333;
 	static int long const SHOULD_SLEEP_MS = 333;
-	int long SKEW( 2 );
+	int long SKEW( 3 );
 	HClock clk;
 	cout << "E" << util::sleep::milisecond( SLEEP, true ) << "E" << endl;
 	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ) << "$" << endl;
