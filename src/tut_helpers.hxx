@@ -46,7 +46,6 @@ Copyright:
 #include <yaal/hcore/hnumber.hxx>
 #include <yaal/hcore/hvector.hxx>
 #include <yaal/hcore/hmatrix.hxx>
-#include <yaal/hcore/xalloc.hxx>
 #include <yaal/hcore/hclock.hxx>
 #include <yaal/tools/hstringstream.hxx>
 #include <yaal/tools/hring.hxx>
