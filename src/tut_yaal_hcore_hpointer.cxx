@@ -413,5 +413,13 @@ TUT_UNIT_TEST( 20, "pointer_static_cast<>" )
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 21, "make_pointer" )
+		{
+		ptr_t p( make_pointer<counter_t>( 7 ) );
+		ENSURE_EQUALS( "cast failed", p->get_id(), 7 );
+		}
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
 }
 
