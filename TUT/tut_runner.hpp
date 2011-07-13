@@ -219,7 +219,7 @@ public:
 			{
 			const_iterator e = _groups.end();
 			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
-					? yaal::tools::HWorkFlow::ptr_t( new yaal::tools::HWorkFlow( tress::setup._jobs ) )
+					? yaal::hcore::make_pointer<yaal::tools::HWorkFlow>( tress::setup._jobs )
 					: yaal::tools::HWorkFlow::ptr_t() );
 			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
 				total += i->second->get_real_test_count();
@@ -246,7 +246,7 @@ public:
 
 			{
 			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
-					? yaal::tools::HWorkFlow::ptr_t( new yaal::tools::HWorkFlow( tress::setup._jobs ) )
+					? yaal::hcore::make_pointer<yaal::tools::HWorkFlow>( tress::setup._jobs )
 					: yaal::tools::HWorkFlow::ptr_t() );
 			for ( std::list<std::string>::const_iterator k = group_names.begin();
 					! yaal::_isKilled_ && ( k != group_names.end() ); ++ k )
@@ -291,7 +291,7 @@ public:
 
 			{
 			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
-					? yaal::tools::HWorkFlow::ptr_t( new yaal::tools::HWorkFlow( tress::setup._jobs ) )
+					? yaal::hcore::make_pointer<yaal::tools::HWorkFlow>( tress::setup._jobs )
 					: yaal::tools::HWorkFlow::ptr_t() );
 			for ( test_sets_t::const_iterator k = testSets_.begin();
 					! yaal::_isKilled_ && ( k != testSets_.end() ); ++ k )
@@ -341,7 +341,7 @@ public:
 			{
 			const_iterator e = _groups.end();
 			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
-					? yaal::tools::HWorkFlow::ptr_t( new yaal::tools::HWorkFlow( tress::setup._jobs ) )
+					? yaal::hcore::make_pointer<yaal::tools::HWorkFlow>( tress::setup._jobs )
 					: yaal::tools::HWorkFlow::ptr_t() );
 			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
 				{
