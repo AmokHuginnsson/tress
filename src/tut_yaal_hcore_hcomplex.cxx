@@ -53,22 +53,56 @@ TUT_UNIT_TEST( 1, "Default constructor" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "Constructor with initialization." )
-	double long const RE = 3.141592653589793;
-	double long const IM = 2.718281828459045;
-	HComplex a( RE );
+	HComplex a( math::PI );
 	ENSURE_DISTANCE( "non zero new complex number (im)", a.im(), 0.L, epsilon );
-	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), RE, epsilon );
-	HComplex b( RE, IM );
-	ENSURE_DISTANCE( "re incrorrectly set by constructor", b.re(), RE, epsilon );
-	ENSURE_DISTANCE( "im incrorrectly set by constructor", b.im(), IM, epsilon );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), math::PI, epsilon );
+	HComplex b( math::PI, math::E );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", b.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by constructor", b.im(), math::E, epsilon );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "modulus()" )
+TUT_UNIT_TEST( 3, "copy constructor." )
+	HComplex a( math::PI, math::E );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by constructor", a.im(), math::E, epsilon );
+	HComplex b( a );
+	ENSURE_DISTANCE( "re incrorrectly set by copy constructor", b.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by copy constructor", b.im(), math::E, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "set_real()" )
+	HComplex a;
+	ENSURE_DISTANCE( "non zero new complex number (re)", a.re(), 0.L, epsilon );
+	a.set_real( math::PI );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), math::PI, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 5, "set_imaginary()" )
+	HComplex a;
+	ENSURE_DISTANCE( "non zero new complex number (im)", a.im(), 0.L, epsilon );
+	a.set_imaginary( math::E );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.im(), math::E, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 6, "set_real()" )
+	HComplex a;
+	ENSURE_DISTANCE( "non zero new complex number (re)", a.re(), 0.L, epsilon );
+	ENSURE_DISTANCE( "non zero new complex number (im)", a.im(), 0.L, epsilon );
+	a.set( math::PI, math::E );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.im(), math::E, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 7, "modulus()" )
 	HComplex a( 3, 4 );
 	ENSURE_DISTANCE( "bad modulus value calculted", a.modulus(), 5.L, epsilon );
+	HComplex b( 3 );
+	ENSURE_DISTANCE( "bad modulus value calculted", b.modulus(), 3.L, epsilon );
+	HComplex c( 0, 4 );
+	ENSURE_DISTANCE( "bad modulus value calculted", c.modulus(), 4.L, epsilon );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "argument()" )
+TUT_UNIT_TEST( 8, "argument()" )
 	HComplex a( 1, 0 );
 	ENSURE_DISTANCE( "bad argument value calculted", a.argument(), 0.L, epsilon );
 	HComplex b( 1, 1 );
@@ -90,6 +124,32 @@ TUT_UNIT_TEST( 4, "argument()" )
 		// ok
 		cout << ex.what() << endl;
 		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 9, "asignment operator" )
+	HComplex a( math::PI, math::E );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by constructor", a.im(), math::E, epsilon );
+	HComplex b;
+	b = a;
+	ENSURE_DISTANCE( "re incrorrectly set by copy constructor", b.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by copy constructor", b.im(), math::E, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 10, "equality test" )
+	HComplex a( math::PI, math::E );
+	HComplex b;
+	ENSURE_EQUALS( "not equal as equal", a == b, false );
+	b = a;
+	ENSURE_EQUALS( "equality test failed", a, b );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 11, "differentiness test" )
+	HComplex a( math::PI, math::E );
+	HComplex b;
+	ENSURE_EQUALS( "not equal as equal", a != b, true );
+	b = a;
+	ENSURE_EQUALS( "differentiness test failed", a != b, false );
 TUT_TEARDOWN()
 
 }
