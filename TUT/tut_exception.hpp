@@ -64,7 +64,7 @@ struct beyond_last_test : public no_such_test
  */
 struct no_such_group : public tut_error
 	{
-	no_such_group( std::string const& grp ) : tut_error( grp )
+	no_such_group( std::string const& grp ) : tut_error( std::string( "no such group: " ) + grp )
 		{}
 	~no_such_group() throw ()
 		{}
