@@ -3,8 +3,14 @@
 
 #include <string>
 #include <vector>
+#include <map>
+
+#include <yaal/tools/hworkflow.hxx>
 
 #include "tut_exception.hpp"
+
+#include "src/setup.hxx"
+
 
 namespace tut
 {
@@ -76,7 +82,7 @@ struct callback
 	/**
 	* Called when a test is about to start.
 	*/
-	virtual void test_started( int /*n */, char const* const ) = 0;
+	virtual void test_started( char const* const, int /*n */, char const* const ) = 0;
 
 	/**
 	* Called when all tests in run completed.
@@ -380,7 +386,7 @@ public:
 
 		_callback->test_count( 1 );
 		_callback->group_started( group_name, 1 );
-		_callback->test_started( n, i->second->get_test_title( n ) );
+		_callback->test_started( group_name.c_str(), n, i->second->get_test_title( n ) );
 
 		try
 			{
@@ -446,7 +452,7 @@ private:
 			{
 			for ( test_numbers_t::const_iterator no( testNumbers_.begin() ), noEnd( testNumbers_.end() ); no != noEnd; ++ no )
 				{
-				_callback->test_started( *no, i->second->get_test_title( *no ) );
+				_callback->test_started( i->first.c_str(), *no, i->second->get_test_title( *no ) );
 
 				try
 					{
@@ -480,7 +486,7 @@ private:
 			if ( i->second->has_next() )
 				{
 				int no( i->second->next() );
-				_callback->test_started( no, i->second->get_test_title( no ) );
+				_callback->test_started( i->first.c_str(), no, i->second->get_test_title( no ) );
 				}
 
 			test_result tr = i->second->run_next();

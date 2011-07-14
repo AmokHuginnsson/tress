@@ -10,9 +10,6 @@
 
 #include <yaal/hcore/base.hxx>
 #include <yaal/hcore/hcall.hxx>
-#include <yaal/tools/hworkflow.hxx>
-
-#include "src/setup.hxx"
 
 namespace tut
 {

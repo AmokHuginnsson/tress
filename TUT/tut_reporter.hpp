@@ -232,6 +232,7 @@ class reporter : public tut::callback
 		{
 		yaal::hcore::HLock l( _mutex );
 		using std::operator <<;
+		_currentGroup = name;
 		_ls << "TUT: group: [" << name << "]" << std::endl;
 		if ( _errorLine == cute_error_line )
 			_os << "\n#beginning " << name << " " << count_ << std::endl;
@@ -245,7 +246,7 @@ class reporter : public tut::callback
 			_os << "\n#ending " << name_ << std::endl;
 		}
 
-	void test_started( int n, char const* const title_ )
+	virtual void test_started( char const* const groupName_, int n, char const* const title_ )
 		{
 		if ( title_ )
 			{
@@ -255,7 +256,7 @@ class reporter : public tut::callback
 			if ( tress::setup._verbose )
 				{
 				_os << "------------------------------------------------------------------------" << std::endl;
-				_os << "TUT: " << _currentGroup << "::<" << n << "> " << title_ << std::endl;
+				_os << "TUT: " << groupName_ << "::<" << n << "> " << title_ << std::endl;
 				}
 			if ( _errorLine == cute_error_line )
 				_os << "\n#starting " << title_ << std::endl;
