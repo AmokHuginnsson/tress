@@ -233,7 +233,6 @@ class reporter : public tut::callback
 		{
 		yaal::hcore::HLock l( _mutex );
 		using std::operator <<;
-		_currentGroup = name;
 		_ls << "TUT: group: [" << name << "]" << std::endl;
 		if ( _errorLine == cute_error_line )
 			_os << "\n#beginning " << name << " " << count_ << std::endl;
