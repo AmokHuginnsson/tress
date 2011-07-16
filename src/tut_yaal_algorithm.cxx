@@ -945,7 +945,32 @@ TUT_UNIT_TEST( 21, "insert_sort" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 22, "stable_sort" )
+TUT_UNIT_TEST( 22, "selection_sort" )
+	TIME_CONSTRAINT_EXEMPT();
+	int_array_t a( 8000 );
+	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
+	*a.rbegin() = -1;
+	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
+	std::sort( v.begin(), v.end() );
+	HClock c;
+	selection_sort( a.begin(), a.end(), less<int>() );
+	clog << "*speed* yaal::selection_sort = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+	ENSURE_EQUALS( "yaal::selection_sort wrong", a, v );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 23, "heap_sort" )
+	int_array_t a( 8000 );
+	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
+	*a.rbegin() = -1;
+	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
+	std::sort( v.begin(), v.end() );
+	HClock c;
+	heap_sort( a.begin(), a.end() );
+	clog << "*speed* yaal::heap_sort = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+	ENSURE_EQUALS( "yaal::stable_sort wrong", a, v );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 24, "stable_sort" )
 	int_array_t a( 100 );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
 	*a.rbegin() = -1;
@@ -957,7 +982,7 @@ TUT_UNIT_TEST( 22, "stable_sort" )
 	clog << a << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 23, "distance" )
+TUT_UNIT_TEST( 25, "distance" )
 	HArray<int> array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HDeque<int> deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
@@ -974,7 +999,7 @@ TUT_UNIT_TEST( 23, "distance" )
 	ENSURE_EQUALS( "distance on HRing<> failed", distance( ring.begin(), ring.end() ), countof ( _testData_[0] ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "swap" )
+TUT_UNIT_TEST( 26, "swap" )
 	HArray<int> array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HDeque<int> deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
@@ -1003,7 +1028,7 @@ TUT_UNIT_TEST( 24, "swap" )
 	ENSURE_EQUALS( "swap on HRing<> failed", distance( ring2.begin(), ring2.end() ), countof ( _testData_[0] ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 25, "search" )
+TUT_UNIT_TEST( 27, "search" )
 	char const S1[] = "Hello, world!";
 	char const S2[] = "world";
 	char const* p( search( S1, ( S1 + countof ( S1 ) - 1 ), S2, ( S2 + countof( S2 ) ) - 1 ) );
@@ -1042,6 +1067,23 @@ TUT_UNIT_TEST( 50, "sort speed" )
 			HClock c;
 			sort( a.begin(), a.end() );
 			clog << "*speed* yaal::sort = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+			}
+		ENSURE_EQUALS( "yaal::sort wrong", a, v );
+		}
+		{
+		yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
+		*a.rbegin() = -1;
+		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
+			{
+			HClock c;
+			std::make_heap( v.begin(), v.end() );
+			std::sort_heap( v.begin(), v.end() );
+			clog << "*speed* std::heap_sort = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+			}
+			{
+			HClock c;
+			heap_sort( a.begin(), a.end() );
+			clog << "*speed* yaal::heap_sort = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
 			}
 		ENSURE_EQUALS( "yaal::sort wrong", a, v );
 		}
