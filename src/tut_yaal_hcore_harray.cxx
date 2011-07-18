@@ -148,9 +148,9 @@ TUT_UNIT_TEST( 7, "Operator bool." )
 	int const EMPTY = 0;
 	int const SIZE = 7;
 	array_t empty( EMPTY );
-	ENSURE_EQUALS( "test for array emptiness faild", ! empty, true );
+	ENSURE_EQUALS( "test for array emptiness failed", ! empty, true );
 	array_t normal( SIZE );
-	ENSURE_EQUALS( "test for array fullness faild", ! normal, false );
+	ENSURE_EQUALS( "test for array fullness failed", ! normal, false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "push_back" )
