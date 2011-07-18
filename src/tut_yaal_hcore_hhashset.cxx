@@ -78,24 +78,27 @@ TUT_UNIT_TEST( 50, "speed test" )
 	TIME_CONSTRAINT_EXEMPT();
 	typedef stdext::hash_set<int> proto_t;
 	typedef HHashSet<int> hashset_type;
+	proto_t proto;
+	hashset_type hashset;
+	double long st( 0 );
+	double long yt( 0 );
 	int long LOOPS( 1000000 );
 		{
-		proto_t proto;
 		HClock c;
 #ifdef __MSVCXX__
 		LOOPS /= 10;
 #endif /* #ifdef __MSVCXX__ */
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.insert( static_cast<int>( i ) );
-		clog << "*speed* std::hash_set<>::insert() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		clog << "*speed* std::hash_set<>::insert() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 		}
 		{
-		hashset_type hashset;
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			hashset.insert( static_cast<int>( i ) );
-		clog << "*speed* yaal::hcore::HHashSet<>::insert() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		clog << "*speed* yaal::hcore::HHashSet<>::insert() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 		}
+	clog << "*speed* HHashSet<>::insert() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()
 
 }

@@ -181,21 +181,24 @@ TUT_UNIT_TEST( 50, "speed test" )
 	TIME_CONSTRAINT_EXEMPT();
 	typedef std::set<int> proto_t;
 	typedef HSet<int> set_type;
+	proto_t proto;
+	set_type set;
+	double long st( 0 );
+	double long yt( 0 );
 	int long LOOPS( 500000 );
 		{
-		proto_t proto;
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.insert( static_cast<int>( i ) );
-		clog << "*speed* std::set<>::insert() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		clog << "*speed* std::set<>::insert() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 		}
 		{
-		set_type set;
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			set.insert( static_cast<int>( i ) );
-		clog << "*speed* yaal::hcore::HSet<>::insert() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		clog << "*speed* yaal::hcore::HSet<>::insert() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 		}
+	clog << "*speed* HSet<>::insert() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()
 
 }

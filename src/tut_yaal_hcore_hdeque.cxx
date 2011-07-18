@@ -1038,34 +1038,62 @@ TUT_UNIT_TEST( 50, "speed test" )
 	TIME_CONSTRAINT_EXEMPT();
 	typedef HDeque<int> deque_type;
 	int long LOOPS( 1000000 );
+	proto_t proto;
+	deque_type deque;
+	double long st( 0 );
+	double long yt( 0 );
 		{
-		proto_t proto;
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.push_back( static_cast<int>( i ) );
-		clog << "*speed* std::deque<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		clog << "*speed* std::deque<>::push_back() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 		}
 		{
-		deque_type deque;
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.push_back( static_cast<int>( i ) );
-		clog << "*speed* yaal::hcore::HDeque<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		clog << "*speed* yaal::hcore::HDeque<>::push_back() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+		}
+	clog << "*speed* HDeque<>::push_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
+		{
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			proto.pop_back();
+		clog << "*speed* std::deque<>::pop_back() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 		}
 		{
-		proto_t proto;
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			deque.pop_back();
+		clog << "*speed* yaal::hcore::HDeque<>::pop_back() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+		}
+	clog << "*speed* HDeque<>::pop_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
+		{
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.push_front( static_cast<int>( i ) );
-		clog << "*speed* std::deque<>::push_front() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		clog << "*speed* std::deque<>::push_front() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 		}
 		{
-		deque_type deque;
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.push_front( static_cast<int>( i ) );
-		clog << "*speed* yaal::hcore::HDeque<>::push_front() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		clog << "*speed* yaal::hcore::HDeque<>::push_front() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 		}
+	clog << "*speed* HDeque<>::push_front() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
+		{
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			proto.pop_front();
+		clog << "*speed* std::deque<>::pop_front() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+		}
+		{
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			deque.pop_front();
+		clog << "*speed* yaal::hcore::HDeque<>::pop_front() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+		}
+	clog << "*speed* HDeque<>::pop_front() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()
 
 }

@@ -1010,21 +1010,37 @@ TUT_UNIT_TEST( 50, "speed test" )
 	TIME_CONSTRAINT_EXEMPT();
 	typedef std::list<int> proto_t;
 	typedef HList<int> list_type;
+	proto_t proto;
+	list_type list;
+	double long st( 0 );
+	double long yt( 0 );
 	int long LOOPS( 1000000 );
 		{
-		proto_t proto;
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.push_back( static_cast<int>( i ) );
-		clog << "*speed* std::list<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		clog << "*speed* std::list<>::push_back() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 		}
 		{
-		list_type list;
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			list.push_back( static_cast<int>( i ) );
-		clog << "*speed* yaal::hcore::HList<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		clog << "*speed* yaal::hcore::HList<>::push_back() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 		}
+	clog << "*speed* HList<>::push_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
+		{
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			proto.pop_back();
+		clog << "*speed* std::list<>::pop_back() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+		}
+		{
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			list.pop_back();
+		clog << "*speed* yaal::hcore::HList<>::pop_back() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+		}
+	clog << "*speed* HList<>::pop_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()
 
 }

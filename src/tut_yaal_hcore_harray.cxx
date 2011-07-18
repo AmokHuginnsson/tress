@@ -396,21 +396,37 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 50, "speed test" )
 	TIME_CONSTRAINT_EXEMPT();
 	typedef HArray<int> array_type;
+	proto_t proto;
+	array_type array;
+	double long st( 0 );
+	double long yt( 0 );
 	int long LOOPS( 10000000 );
 		{
-		proto_t proto;
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.push_back( static_cast<int>( i ) );
-		clog << "*speed* std::vector<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		clog << "*speed* std::vector<>::push_back() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 		}
 		{
-		array_type array;
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			array.push_back( static_cast<int>( i ) );
-		clog << "*speed* yaal::hcore::HArray<>::push_back() = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		clog << "*speed* yaal::hcore::HArray<>::push_back() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 		}
+	clog << "*speed* HArray<>::push_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
+		{
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			proto.pop_back();
+		clog << "*speed* std::vector<>::pop_back() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+		}
+		{
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			array.pop_back();
+		clog << "*speed* yaal::hcore::HArray<>::pop_back() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+		}
+	clog << "*speed* HArray<>::pop_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()
 
 }
