@@ -85,6 +85,10 @@ struct tut_yaal_hcore_hdeque : public simple_mock<tut_yaal_hcore_hdeque>
 	void test_insert_pos( void );
 	template<int const item_size>
 	void test_insert( void );
+	template<int const item_size>
+	void test_roll_forward( int, int, int );
+	template<int const item_size>
+	void test_roll_backward( int, int, int );
 	};
 
 template<typename deque_type>
@@ -1034,6 +1038,134 @@ TUT_UNIT_TEST( 17, "insert range" )
 	test_insert<640>();
 TUT_TEARDOWN()
 
+template<int const item_size>
+void tut_yaal_hcore_hdeque::test_roll_forward( int shift_, int pack_, int distance_ )
+	{
+	clog << "testing roll forward: " << item_size << ", " << shift_ << ", " << pack_ << endl;
+	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
+	typedef HDeque<item_type> deque_type;
+		{
+		proto_t proto;
+		deque_type deque;
+		int i( 0 );
+		for ( ; i < shift_; ++ i )
+			{
+			proto.push_back( i );
+			deque.push_back( i );
+			check_consistency( deque );
+			ENSURE_EQUALS( "push_back failed", deque, proto );
+			}
+		while ( i < distance_ )
+			{
+			for ( int p( 0 ); p < pack_; ++ p, ++ i )
+				{
+				proto.push_back( i );
+				deque.push_back( i );
+				check_consistency( deque );
+				ENSURE_EQUALS( "push_back failed", deque, proto );
+				}
+			for ( int p( 0 ); p < pack_; ++ p )
+				{
+				proto.pop_front();
+				deque.pop_front();
+				check_consistency( deque );
+				ENSURE_EQUALS( "push_back failed", deque, proto );
+				}
+			}
+		}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+	}
+
+TUT_UNIT_TEST( 18, "roll forward (push_back/pop_front)" )
+	int shift[] = { 1, 2, 3, 4, 5, 6, 7, 8, 16, 32 };
+	int pack[] = { 1, 2, 3, 4, 5, 7, 8 };
+	int distance( 1024 );
+	for ( int s( 0 ); s < countof ( shift ); ++ s )
+		{
+		for ( int p( 0 ); p < countof ( pack ); ++ p )
+			{
+			test_roll_forward<1>( shift[s], pack[p], distance );
+			test_roll_forward<2>( shift[s], pack[p], distance );
+			test_roll_forward<3>( shift[s], pack[p], distance );
+			test_roll_forward<7>( shift[s], pack[p], distance );
+			test_roll_forward<15>( shift[s], pack[p], distance );
+			test_roll_forward<16>( shift[s], pack[p], distance );
+			test_roll_forward<17>( shift[s], pack[p], distance );
+			test_roll_forward<64>( shift[s], pack[p], distance );
+			test_roll_forward<128>( shift[s], pack[p], distance );
+			test_roll_forward<200>( shift[s], pack[p], distance );
+			test_roll_forward<511>( shift[s], pack[p], distance );
+			test_roll_forward<512>( shift[s], pack[p], distance );
+			test_roll_forward<513>( shift[s], pack[p], distance );
+			test_roll_forward<640>( shift[s], pack[p], distance );
+			}
+		}
+TUT_TEARDOWN()
+
+template<int const item_size>
+void tut_yaal_hcore_hdeque::test_roll_backward( int shift_, int pack_, int distance_ )
+	{
+	clog << "testing roll backward: " << item_size << ", " << shift_ << ", " << pack_ << endl;
+	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
+	typedef HDeque<item_type> deque_type;
+		{
+		proto_t proto;
+		deque_type deque;
+		int i( 0 );
+		for ( ; i < shift_; ++ i )
+			{
+			proto.push_front( i );
+			deque.push_front( i );
+			check_consistency( deque );
+			ENSURE_EQUALS( "push_back failed", deque, proto );
+			}
+		while ( i < distance_ )
+			{
+			for ( int p( 0 ); p < pack_; ++ p, ++ i )
+				{
+				proto.push_front( i );
+				deque.push_front( i );
+				check_consistency( deque );
+				ENSURE_EQUALS( "push_back failed", deque, proto );
+				}
+			for ( int p( 0 ); p < pack_; ++ p )
+				{
+				proto.pop_back();
+				deque.pop_back();
+				check_consistency( deque );
+				ENSURE_EQUALS( "push_back failed", deque, proto );
+				}
+			}
+		}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+	}
+
+TUT_UNIT_TEST( 19, "roll backward (push_front/pop_back)" )
+	int shift[] = { 1, 2, 3, 4, 5, 6, 7, 8, 16, 32 };
+	int pack[] = { 1, 2, 3, 4, 5, 7, 8 };
+	int distance( 1024 );
+	for ( int s( 0 ); s < countof ( shift ); ++ s )
+		{
+		for ( int p( 0 ); p < countof ( pack ); ++ p )
+			{
+			test_roll_backward<1>( shift[s], pack[p], distance );
+			test_roll_backward<2>( shift[s], pack[p], distance );
+			test_roll_backward<3>( shift[s], pack[p], distance );
+			test_roll_backward<7>( shift[s], pack[p], distance );
+			test_roll_backward<15>( shift[s], pack[p], distance );
+			test_roll_backward<16>( shift[s], pack[p], distance );
+			test_roll_backward<17>( shift[s], pack[p], distance );
+			test_roll_backward<64>( shift[s], pack[p], distance );
+			test_roll_backward<128>( shift[s], pack[p], distance );
+			test_roll_backward<200>( shift[s], pack[p], distance );
+			test_roll_backward<511>( shift[s], pack[p], distance );
+			test_roll_backward<512>( shift[s], pack[p], distance );
+			test_roll_backward<513>( shift[s], pack[p], distance );
+			test_roll_backward<640>( shift[s], pack[p], distance );
+			}
+		}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "speed test" )
 	TIME_CONSTRAINT_EXEMPT();
 	typedef HDeque<int> deque_type;
@@ -1094,6 +1226,41 @@ TUT_UNIT_TEST( 50, "speed test" )
 		clog << "*speed* yaal::hcore::HDeque<>::pop_front() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 		}
 	clog << "*speed* HDeque<>::pop_front() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
+/* erase */
+	for ( int long i( 0 ); i < LOOPS; ++ i )
+		proto.push_back( static_cast<int>( i ) );
+	for ( int long i( 0 ); i < LOOPS; ++ i )
+		deque.push_back( static_cast<int>( i ) );
+		{
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			proto.erase( proto.end() - 1 );
+		clog << "*speed* std::deque<>::erase() back = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+		}
+		{
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			deque.erase( deque.end() - 1 );
+		clog << "*speed* yaal::hcore::HDeque<>::erase() back = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+		}
+	clog << "*speed* HDeque<>::erase() back result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
+	for ( int long i( 0 ); i < LOOPS; ++ i )
+		proto.push_front( static_cast<int>( i ) );
+	for ( int long i( 0 ); i < LOOPS; ++ i )
+		deque.push_front( static_cast<int>( i ) );
+		{
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			proto.erase( proto.begin() );
+		clog << "*speed* std::deque<>::erase() front = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+		}
+		{
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			deque.erase( deque.begin() );
+		clog << "*speed* yaal::hcore::HDeque<>::erase() front = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+		}
+	clog << "*speed* HDeque<>::erase() front = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()
 
 }
