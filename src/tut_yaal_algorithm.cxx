@@ -927,10 +927,18 @@ TUT_UNIT_TEST( 21, "insert_sort" )
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	std::sort( v.begin(), v.end() );
-	HClock c;
-	insert_sort( a.begin(), a.end(), less<int>(), iterator_category::forward() );
-	clog << "*speed* yaal::insert_sort(forward) = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
-	ENSURE_EQUALS( "yaal::insert_sort wrong", a, v );
+		{
+		HClock c;
+		insert_sort( a.begin(), a.end(), less<int>(), iterator_category::forward() );
+		clog << "*speed* yaal::insert_sort(forward) = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
+	ENSURE_EQUALS( "yaal::insert_sort(forward) wrong", a, v );
+		{
+		HClock c;
+		insert_sort( a.begin(), a.end(), less<int>(), iterator_category::forward() );
+		clog << "*speed* yaal::insert_sort(forward) sorted = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
+	ENSURE_EQUALS( "yaal::insert_sort(forward) wrong", a, v );
 	}
 	{
 	int_array_t a( 8000 );
@@ -938,10 +946,18 @@ TUT_UNIT_TEST( 21, "insert_sort" )
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	std::sort( v.begin(), v.end() );
-	HClock c;
-	insert_sort( a.begin(), a.end(), less<int>(), iterator_category::random_access() );
-	clog << "*speed* yaal::insert_sort(random_access) = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
-	ENSURE_EQUALS( "yaal::insert_sort wrong", a, v );
+		{
+		HClock c;
+		insert_sort( a.begin(), a.end(), less<int>(), iterator_category::random_access() );
+		clog << "*speed* yaal::insert_sort(random_access) = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
+	ENSURE_EQUALS( "yaal::insert_sort(random_access) wrong", a, v );
+		{
+		HClock c;
+		insert_sort( a.begin(), a.end(), less<int>(), iterator_category::random_access() );
+		clog << "*speed* yaal::insert_sort(random_access) = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		}
+	ENSURE_EQUALS( "yaal::insert_sort(random_access) wrong", a, v );
 	}
 TUT_TEARDOWN()
 
