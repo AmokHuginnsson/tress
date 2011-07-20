@@ -9,7 +9,7 @@ elseif ( NOT ( "${BOOST_INSTALL_PATH}" STREQUAL "" ) )
 endif()
 
 if ( CMAKE_HOST_WIN32 )
-	add_definitions( /D_SECURE_SCL=0 )
+	add_definitions( /D_HAS_ITERATOR_DEBUGGING=0 )
 	include_directories( ${BOOST_ROOT} )
 	link_directories( ${BOOST_ROOT}/lib )
 endif()
