@@ -136,7 +136,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and MSVC++ [Visualisers] testing." )
 	HString shortStr( "huginn" );
-	HString str( "Ala ma kota." );
+	HString str( "Ala ma kota, a kot ma mleczko." );
 	HNumber pi( "3.141592653589793" );
 	HNumber e( "2.718281828459045" );
 	HPair<HString, double> p( make_pair<HString>( "PI", pi.to_double() ) );
