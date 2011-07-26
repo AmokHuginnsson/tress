@@ -65,7 +65,7 @@ TUT_TEST_GROUP( tut_yaal_hcore_htls, "yaal::hcore::HTLS" );
 TUT_UNIT_TEST( 1, "the test" )
 	tls_t tls;
 	tls->foo();
-	tls_t::external_lock l( tls.acquire() );
+	external_lock_t l( tls.acquire() );
 	tls_t::iterator it( tls.begin() );
 	ENSURE( "inconsitient state", tls.operator->() == it->get() );
 TUT_TEARDOWN()
