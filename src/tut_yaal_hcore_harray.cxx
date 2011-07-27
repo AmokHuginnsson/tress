@@ -393,6 +393,50 @@ TUT_UNIT_TEST( 15, "ranged insert" )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 16, "swap" )
+	int const A1INIT( 10 );
+	int const A2INIT( 100 );
+	int const A1D( 11 );
+	int const A2D( 101 );
+	array_t a1( A1INIT );
+	array_t a2( A2INIT );
+	ENSURE_EQUALS( "bad size from constructor a1", a1.size(), A1INIT );
+	ENSURE_EQUALS( "bad size from constructor a2", a2.size(), A2INIT );
+	ENSURE_EQUALS( "bad capacity from constructor a1", a1.capacity(), A1INIT );
+	ENSURE_EQUALS( "bad capacity from constructor a2", a2.capacity(), A2INIT );
+	a1.resize( A1D );
+	a2.resize( A2D );
+	ENSURE_EQUALS( "bad size from resize a1", a1.size(), A1D );
+	ENSURE_EQUALS( "bad size from resize a2", a2.size(), A2D );
+	ENSURE_EQUALS( "bad capacity from resize a1", a1.capacity(), A1INIT * 2 );
+	ENSURE_EQUALS( "bad capacity from resize a2", a2.capacity(), A2INIT * 2 );
+
+	array_t::const_iterator a1it( a1.begin() );
+	array_t::const_iterator a2it( a2.begin() );
+	
+	ENSURE( "inconsistent iterator from begin() a1", &*a1it == &a1.front() );
+	ENSURE( "inconsistent iterator from begin() a2", &*a2it == &a2.front() );
+	ENSURE( "ambiguous iterator ownership from begin() a1", &*a2it != &a1.front() );
+	ENSURE( "ambiguous iterator ownership from begin() a2", &*a1it != &a2.front() );
+
+	/* now the actual test */
+
+	a1.swap( a2 );
+
+	ENSURE_EQUALS( "bad size from resize a1 after swap", a1.size(), A2D );
+	ENSURE_EQUALS( "bad size from resize a2 after swap", a2.size(), A1D );
+	ENSURE_EQUALS( "bad capacity from resize a1 after swap", a1.capacity(), A2INIT * 2 );
+	ENSURE_EQUALS( "bad capacity from resize a2 after swap", a2.capacity(), A1INIT * 2 );
+
+/*
+	ENSURE( "bad value retrieved from iterator a1 after swap", &*a1it == &a2.front() );
+	ENSURE( "bad value retrieved from iterator a2 after swap", &*a2it == &a1.front() );
+	ENSURE( "ambiguous iterator ownership a1 after swap", &*a2it != &a2.front() );
+	ENSURE( "ambiguous iterator ownership a2 after swap", &*a1it != &a1.front() );
+*/
+
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "speed test" )
 	TIME_CONSTRAINT_EXEMPT();
 	typedef HArray<int> array_type;
