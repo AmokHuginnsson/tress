@@ -1051,6 +1051,42 @@ TUT_UNIT_TEST( 27, "search" )
 	ENSURE_EQUALS( "search failed", p, S1 + 7 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 28, "find_first_of" )
+	char const S1[] = "Hello, world!";
+	char const S2[] = "world";
+	char const S3[] = "word";
+	char const* p( find_first_of( S1, ( S1 + countof ( S1 ) - 1 ), S2, ( S2 + countof( S2 ) ) - 1 ) );
+	ENSURE_EQUALS( "find_first_of failed (world)", p, S1 + 2 );
+	char const* p2( find_first_of( S1, ( S1 + countof ( S1 ) - 1 ), S3, ( S3 + countof( S3 ) ) - 1 ) );
+	ENSURE_EQUALS( "find_first_of failed (word)", p2, S1 + 4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 29, "find_first_of(cond)" )
+	typedef HPair<HString, HString> person_t;
+	person_t a[] = { person_t( "Ala", "Kowalska" ), person_t( "Diana", "B³aszczyk" ), person_t( "Marcin", "Konarski" ), person_t( "Magdalena", "Rêbowska" ), person_t( "Wojciech", "Peisert" ) };
+	HString n[] = { "Marcin", "Wojciech", "Magdalena" };
+	person_t* p( find_first_of( a, a + countof( a ), n, n + countof ( n ), compose_binary( equal_to<HString>(), select1st<person_t>(), identity<HString>() ) ) );
+	ENSURE_EQUALS( "find_first_of failed (word)", p, a + 2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 30, "find_first_not_of" )
+	char const S1[] = "Hello, world!";
+	char const S2[] = "worldH";
+	char const S3[] = "worldHe";
+	char const* p( find_first_not_of( S1, ( S1 + countof ( S1 ) - 1 ), S2, ( S2 + countof( S2 ) ) - 1 ) );
+	ENSURE_EQUALS( "find_first_not_of failed (worldH)", p, S1 + 1 );
+	char const* p2( find_first_not_of( S1, ( S1 + countof ( S1 ) - 1 ), S3, ( S3 + countof( S3 ) ) - 1 ) );
+	ENSURE_EQUALS( "find_first_not_of failed (worldHe)", p2, S1 + 5 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 31, "find_first_not_of(cond)" )
+	typedef HPair<HString, HString> person_t;
+	person_t a[] = { person_t( "Ala", "Kowalska" ), person_t( "Diana", "B³aszczyk" ), person_t( "Marcin", "Konarski" ), person_t( "Magdalena", "Rêbowska" ), person_t( "Wojciech", "Peisert" ) };
+	HString n[] = { "Ala", "Diana", "Magdalena" };
+	person_t* p( find_first_not_of( a, a + countof( a ), n, n + countof ( n ), compose_binary( equal_to<HString>(), select1st<person_t>(), identity<HString>() ) ) );
+	ENSURE_EQUALS( "find_first_not_of failed (word)", p, a + 2 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "sort speed" )
 	TIME_CONSTRAINT_EXEMPT();
 	double long st( 0 );
