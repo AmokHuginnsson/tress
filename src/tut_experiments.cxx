@@ -140,11 +140,17 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	HNumber pi( "3.141592653589793" );
 	HNumber e( "2.718281828459045" );
 	HPair<HString, double> p( make_pair<HString>( "PI", pi.to_double() ) );
+	HArray<int> emptyArray;
 	HArray<int> array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HDeque<int> emptyDeque;
 	HDeque<int> deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HList<int> emptyList;
 	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HSet<int> emptySet;
 	HSet<int> set( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HHashSet<int> emptyHashSet;
 	HHashSet<int> hashSet( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HRing<int> emptyRing;
 	HRing<int> ring( ring::capacity( countof ( _testData_[0] ) * 2 ),
 		_testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HString result( ( pi * e ).to_string() );
