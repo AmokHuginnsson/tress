@@ -143,7 +143,9 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	HArray<int> emptyArray;
 	HArray<int> array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HDeque<int> emptyDeque;
+	HDeque<int short> dequeShort( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HDeque<int> deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HDeque<int long> dequeLong( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HList<int> emptyList;
 	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HSet<int> emptySet;
