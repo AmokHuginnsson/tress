@@ -55,6 +55,31 @@ Copyright:
 #define stdext __gnu_cxx
 #endif /* defined( __GNUC__ ) && ! defined( stdext ) */
 
+#ifdef TUT_UNIT_TEST
+#	error Tress redefines TUT_UNIT_TEST macro.
+#endif /* #ifdef TUT_UNIT_TEST */
+#ifdef TUT_TEARDOWN
+#	error Tress redefines TUT_TEARDOWN macro.
+#endif /* #ifdef TUT_TEARDOWN */
+#ifdef TUT_TEST_GROUP
+#	error Tress redefines TUT_TEST_GROUP macro.
+#endif /* #ifdef TUT_TEST_GROUP */
+#ifdef TUT_SIMPLE_MOCK
+#	error Tress redefines TUT_SIMPLE_MOCK macro.
+#endif /* #ifdef TUT_SIMPLE_MOCK */
+#ifdef TIME_CONSTRAINT_EXEMPT
+#	error Tress redefines TIME_CONSTRAINT_EXEMPT macro.
+#endif /* #ifdef TIME_CONSTRAINT_EXEMPT */
+#ifdef TUT_DECLARE
+#	error Tress redefines TUT_DECLARE macro.
+#endif /* #ifdef TUT_DECLARE */
+#ifdef TUT_INVOKE
+#	error Tress redefines TUT_INVOKE macro.
+#endif /* #ifdef TUT_INVOKE */
+#ifdef TUT_EVAL
+#	error Tress redefines TUT_EVAL macro.
+#endif /* #ifdef TUT_EVAL */
+
 #define TUT_UNIT_TEST( no, title ) \
 namespace { static int const M_CONCAT( dropIt, __LINE__ ) __attribute__(( __used__ )) = group.register_test( no, title ); } \
 template<> template<> void module::test<(no)>( void ) { do { set_test_meta( title, __FILE__, __LINE__ ); } while ( 0 );

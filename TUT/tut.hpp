@@ -40,14 +40,7 @@ struct failure_info
 #include "tut_posix.hpp"
 #include "tut_assert.hpp"
 #include "tut_runner.hpp"
-
-#define ENSURE( ... ) ensure_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define ENSURE_NOT( ... ) ensure_not_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define ENSURE_EQUALS( ... ) ensure_equals_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define ENSURE_DISTANCE( ... ) ensure_distance_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define ENSURE_ERRNO( ... ) ensure_errno_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define FAIL( msg ) fail_real( __FILE__, __LINE__, ( msg ) )
-#define TIME_CONSTRAINT( ms ) time_constraint M_CONCAT( time_constraint_at_, __LINE__ )( ( ms ), __FILE__, __LINE__ )
+#include "tut_macro.hpp"
 
 /**
  * Template Unit Tests Framework for C++.
