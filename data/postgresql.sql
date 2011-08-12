@@ -11,7 +11,7 @@ CREATE TABLE config
 	id SERIAL,
 	name VARCHAR(16) UNIQUE NOT NULL,
 	value VARCHAR( 255 )
-	);
+	) WITH OIDS;
 
 INSERT INTO config ( id, name, value ) VALUES( 1, 'one', '1' );
 INSERT INTO config ( id, name, value ) VALUES( 2, 'two', '22' );
