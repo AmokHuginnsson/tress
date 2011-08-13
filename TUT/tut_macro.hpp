@@ -23,12 +23,12 @@
 #	error Tress redefines TIME_CONSTRAINT macro.
 #endif /* #ifdef TIME_CONSTRAINT */
 
-#define ENSURE( ... ) ensure_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define ENSURE_NOT( ... ) ensure_not_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define ENSURE_EQUALS( ... ) ensure_equals_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define ENSURE_DISTANCE( ... ) ensure_distance_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define ENSURE_ERRNO( ... ) ensure_errno_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define FAIL( msg ) fail_real( __FILE__, __LINE__, ( msg ) )
-#define TIME_CONSTRAINT( ms ) time_constraint M_CONCAT( time_constraint_at_, __LINE__ )( ( ms ), __FILE__, __LINE__ )
+#define ENSURE( ... ) tut::ensure_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
+#define ENSURE_NOT( ... ) tut::ensure_not_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
+#define ENSURE_EQUALS( ... ) tut::ensure_equals_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
+#define ENSURE_DISTANCE( ... ) tut::ensure_distance_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
+#define ENSURE_ERRNO( ... ) tut::ensure_errno_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
+#define FAIL( msg ) tut::fail_real( __FILE__, __LINE__, ( msg ) )
+#define TIME_CONSTRAINT( ms ) tut::time_constraint M_CONCAT( time_constraint_at_, __LINE__ )( ( ms ), __FILE__, __LINE__ )
 
 #endif /* TUT_MACRO_H_GUARD */
