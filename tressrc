@@ -24,7 +24,26 @@ ala7 "ma#" # kota
 ala8 "ma#"# kota
   ala8x "ma#"# kota
 
-ala "ma ${HOME}"
+ala9 "ma ${HOME}"
+
+ala10=ma kota
+ala11= ma kota
+ala12 =ma kota
+ala13 = ma kota
+ala14  = ma kota
+ala15 =  ma kota
+ala16=  ma kota
+ala17  =ma kota
+ala18  =  ma kota
+ala19="ma kota"
+ala20= "ma kota"
+ala21 ="ma kota"
+ala22 = "ma kota"
+ala23  = "ma kota"
+ala24 =  "ma kota"
+ala25=  "ma kota"
+ala26  ="ma kota"
+ala27  =  "ma kota"
 
 # End of configuration file.
 
