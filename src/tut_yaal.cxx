@@ -324,6 +324,9 @@ TUT_UNIT_TEST( 25, "call in superposition" )
 	cout << endl;
 TUT_TEARDOWN()
 
+namespace
+{
+
 class MemFunTest
 	{
 	int _base;
@@ -338,6 +341,8 @@ public:
 	int calc_const( int arg_ ) const
 		{ return ( _base + arg_ ); }
 	};
+
+}
 
 TUT_UNIT_TEST( 26, "mem_fun, mem_fun_ref" )
 	typedef HPointer<MemFunTest> mem_fun_test_ptr_t;

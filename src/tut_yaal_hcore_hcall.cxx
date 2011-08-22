@@ -422,6 +422,95 @@ TUT_UNIT_TEST( 9, "(hand written) 10 (4 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo10, 7, 1, 2, _3, 4, _2, 6, _1, 8, _4 )( -1, -2, -3, -4 ), "foo10: a1 = 7, a2 = 1, a3 = 2, a4 = -3, a5 = 4, a6 = -2, a7 = 6, a8 = -1, a9 = 8, a10 = -4" );
 TUT_TEARDOWN()
 
+namespace
+{
+
+class MemFunTest
+	{
+	int _base;
+public:
+	MemFunTest( int base_ ) : _base( base_ ) {}
+	int value( void )
+		{ return ( _base ); }
+	int value_const( void ) const
+		{ return ( _base ); }
+	int calc( int arg_ )
+		{ return ( _base + arg_ ); }
+	int calc_const( int arg_ ) const
+		{ return ( _base + arg_ ); }
+	};
+
+}
+
+TUT_UNIT_TEST( 20, "call() and const call on ptr and on ref" )
+	typedef HPointer<MemFunTest> mem_fun_test_ptr_t;
+	typedef HList<mem_fun_test_ptr_t> mem_fun_ptr_list_t;
+	typedef HList<MemFunTest*> naked_list_t;
+	typedef HList<MemFunTest const*> const_naked_list_t;
+
+	mem_fun_ptr_list_t l;
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 0 ) ) );
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 1 ) ) );
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 3 ) ) );
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 7 ) ) );
+
+	naked_list_t nl;
+	const_naked_list_t cnl;
+	transform( l.begin(), l.end(), back_insert_iterator( nl ), call( static_cast<tut::MemFunTest* ( yaal::hcore::HPointer<tut::MemFunTest>::* )( void )>( &mem_fun_test_ptr_t::raw ), _1 ) );
+	transform( l.begin(), l.end(), back_insert_iterator( cnl ), call( static_cast<tut::MemFunTest const* ( yaal::hcore::HPointer<tut::MemFunTest>::* )( void ) const>( &mem_fun_test_ptr_t::raw ), _1 ) );
+	HStringStream ss;
+	transform( nl.begin(), nl.end(), stream_iterator( ss, " " ), call( &MemFunTest::value, _1 ) );
+	ENSURE_EQUALS( "call failed", ss.string(), "0 1 3 7 " );
+	cout << ss.string() << endl;
+	ss.clear();
+	transform( cnl.begin(), cnl.end(), stream_iterator( ss, " " ), call( &MemFunTest::value_const, _1 ) );
+	ENSURE_EQUALS( "call failed", ss.string(), "0 1 3 7 " );
+	cout << ss.string() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 21, "call(arg) const and non-const ref and ptr." )
+	int a[] = { 1, 4, 9, 16 };
+	typedef HPointer<MemFunTest> mem_fun_test_ptr_t;
+	typedef HList<mem_fun_test_ptr_t> mem_fun_ptr_list_t;
+	typedef HList<MemFunTest*> naked_list_t;
+	typedef HList<MemFunTest const*> const_naked_list_t;
+
+	mem_fun_ptr_list_t l;
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 0 ) ) );
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 1 ) ) );
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 3 ) ) );
+	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 7 ) ) );
+
+	naked_list_t nl;
+	const_naked_list_t cnl;
+	transform( l.begin(), l.end(), back_insert_iterator( nl ), call( static_cast<tut::MemFunTest* ( yaal::hcore::HPointer<tut::MemFunTest>::* )( void )>( &mem_fun_test_ptr_t::raw ), _1 ) );
+	transform( l.begin(), l.end(), back_insert_iterator( cnl ), call( static_cast<tut::MemFunTest const* ( yaal::hcore::HPointer<tut::MemFunTest>::* )( void ) const>( &mem_fun_test_ptr_t::raw ), _1 ) );
+	HStringStream ss;
+	transform( nl.begin(), nl.end(), a, stream_iterator( ss, " " ), call( &MemFunTest::calc, _1, _2 ) );
+	ENSURE_EQUALS( "call failed", ss.string(), "1 5 12 23 " );
+	cout << ss.string() << endl;
+	ss.clear();
+	transform( cnl.begin(), cnl.end(), a, stream_iterator( ss, " " ), call( &MemFunTest::calc_const, _1, _2 ) );
+	ENSURE_EQUALS( "call failed", ss.string(), "1 5 12 23 " );
+	cout << ss.string() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 22, "call(arg) ref" )
+	int a[] = { 1, 4, 9, 16 };
+	typedef HList<MemFunTest> mem_fun_list_t;
+
+	mem_fun_list_t l;
+	l.push_back( MemFunTest( 0 ) );
+	l.push_back( MemFunTest( 1 ) );
+	l.push_back( MemFunTest( 3 ) );
+	l.push_back( MemFunTest( 7 ) );
+
+	HStringStream ss;
+	transform( l.begin(), l.end(), a, stream_iterator( ss, " " ), call( &MemFunTest::calc, _1, _2 ) );
+	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "1 5 12 23 " );
+	cout << ss.string() << endl;
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 30, "use call as a functor in an algorithm" )
 	HArray<int> tab( 10 );
 	generate_n( tab.begin(), tab.size(), inc( 1 ) );
