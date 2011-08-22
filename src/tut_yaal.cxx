@@ -331,15 +331,19 @@ public:
 	MemFunTest( int base_ ) : _base( base_ ) {}
 	int value( void )
 		{ return ( _base ); }
+	int value_const( void ) const
+		{ return ( _base ); }
 	int calc( int arg_ )
 		{ return ( _base + arg_ ); }
-
+	int calc_const( int arg_ ) const
+		{ return ( _base + arg_ ); }
 	};
 
 TUT_UNIT_TEST( 26, "mem_fun, mem_fun_ref" )
 	typedef HPointer<MemFunTest> mem_fun_test_ptr_t;
 	typedef HList<mem_fun_test_ptr_t> mem_fun_ptr_list_t;
 	typedef HList<MemFunTest*> naked_list_t;
+	typedef HList<MemFunTest const*> const_naked_list_t;
 
 	mem_fun_ptr_list_t l;
 	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 0 ) ) );
@@ -348,9 +352,15 @@ TUT_UNIT_TEST( 26, "mem_fun, mem_fun_ref" )
 	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 7 ) ) );
 
 	naked_list_t nl;
-	transform( l.begin(), l.end(), back_insert_iterator( nl ), mem_fun_ref( &mem_fun_test_ptr_t::raw ) );
+	const_naked_list_t cnl;
+	transform( l.begin(), l.end(), back_insert_iterator( nl ), mem_fun_ref( static_cast<tut::MemFunTest* ( yaal::hcore::HPointer<tut::MemFunTest>::* )( void )>( &mem_fun_test_ptr_t::raw ) ) );
+	transform( l.begin(), l.end(), back_insert_iterator( cnl ), mem_fun_ref( static_cast<tut::MemFunTest const* ( yaal::hcore::HPointer<tut::MemFunTest>::* )( void ) const>( &mem_fun_test_ptr_t::raw ) ) );
 	HStringStream ss;
 	transform( nl.begin(), nl.end(), stream_iterator( ss, " " ), mem_fun( &MemFunTest::value ) );
+	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "0 1 3 7 " );
+	cout << ss.string() << endl;
+	ss.clear();
+	transform( cnl.begin(), cnl.end(), stream_iterator( ss, " " ), mem_fun( &MemFunTest::value_const ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "0 1 3 7 " );
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
@@ -360,6 +370,7 @@ TUT_UNIT_TEST( 27, "mem_fun1" )
 	typedef HPointer<MemFunTest> mem_fun_test_ptr_t;
 	typedef HList<mem_fun_test_ptr_t> mem_fun_ptr_list_t;
 	typedef HList<MemFunTest*> naked_list_t;
+	typedef HList<MemFunTest const*> const_naked_list_t;
 
 	mem_fun_ptr_list_t l;
 	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 0 ) ) );
@@ -368,9 +379,15 @@ TUT_UNIT_TEST( 27, "mem_fun1" )
 	l.push_back( mem_fun_test_ptr_t( new MemFunTest( 7 ) ) );
 
 	naked_list_t nl;
-	transform( l.begin(), l.end(), back_insert_iterator( nl ), mem_fun_ref( &mem_fun_test_ptr_t::raw ) );
+	const_naked_list_t cnl;
+	transform( l.begin(), l.end(), back_insert_iterator( nl ), mem_fun_ref( static_cast<tut::MemFunTest* ( yaal::hcore::HPointer<tut::MemFunTest>::* )( void )>( &mem_fun_test_ptr_t::raw ) ) );
+	transform( l.begin(), l.end(), back_insert_iterator( cnl ), mem_fun_ref( static_cast<tut::MemFunTest const* ( yaal::hcore::HPointer<tut::MemFunTest>::* )( void ) const>( &mem_fun_test_ptr_t::raw ) ) );
 	HStringStream ss;
 	transform( nl.begin(), nl.end(), a, stream_iterator( ss, " " ), mem_fun1( &MemFunTest::calc ) );
+	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "1 5 12 23 " );
+	cout << ss.string() << endl;
+	ss.clear();
+	transform( cnl.begin(), cnl.end(), a, stream_iterator( ss, " " ), mem_fun1( &MemFunTest::calc_const ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "1 5 12 23 " );
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
