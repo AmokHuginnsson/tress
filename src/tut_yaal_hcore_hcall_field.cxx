@@ -46,7 +46,6 @@ struct tut_yaal_hcore_hcall_field
 	typedef HInstanceTracker<tut_yaal_hcore_hcall_field> item_t;
 	typedef HPair<HString, HString> person_t;
 	virtual ~tut_yaal_hcore_hcall_field( void ) {}
-	void foo( void ) {}
 	};
 
 HString full_name( tut_yaal_hcore_hcall_field::person_t const& p_ )

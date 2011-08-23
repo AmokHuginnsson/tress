@@ -100,6 +100,7 @@ void* a_fast_one( HThread const* const )
 
 void busy_wait( void )
 	{
+/* cppcheck-suppress unreadVariable */
 	long q = 3;
 	for ( int i= 0; i < 1000; ++ i )
 		{

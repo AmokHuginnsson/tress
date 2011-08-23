@@ -52,7 +52,7 @@ public:
 		{
 		cout << __PRETTY_FUNCTION__ << endl;
 		}
-	void foo( void ) {}
+	void foo( void ) const {}
 	};
 
 struct tut_yaal_hcore_htls : public simple_mock<tut_yaal_hcore_htls>

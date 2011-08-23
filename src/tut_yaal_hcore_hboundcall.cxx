@@ -135,9 +135,15 @@ class Boom
 	int _val;
 public:
 	Boom( int val_ ) : _val( val_ ) {}
+/* cppcheck-suppress functionConst */
 	int foo( double val_ )
 		{ return ( _val * static_cast<int>( val_ ) ); }
+	int foo_const( double val_ ) const
+		{ return ( _val * static_cast<int>( val_ ) ); }
+/* cppcheck-suppress functionConst */
 	int bar( double val_, int i )
+		{ return ( _val * static_cast<int>( val_ ) + i ); }
+	int bar_const( double val_, int i ) const
 		{ return ( _val * static_cast<int>( val_ ) + i ); }
 	};
 
@@ -153,6 +159,18 @@ TUT_UNIT_TEST( 12, "free standing arg in method" )
 	HBoundCall<int ( Boom& )> c3( call( &Boom::bar, _1, 2, static_cast<int>( 3. ) ) );
 	ENSURE_EQUALS( "bad call: call( &Boom::bar, _1, 2, static_cast<int>( 3. )( Boom( 7 ) )", c3( b0 ), 7 * 2 + 3 );
 	ENSURE_EQUALS( "bad call: call( &Boom::bar, _1, 2, static_cast<int>( 3. )( Boom( 4 ) )", c3( b1 ), 4 * 2 + 3 );
+
+	Boom const& b0c( b0 );
+	Boom const& b1c( b1 );
+	HBoundCall<int ( double )> c0c( call( &Boom::foo_const, b0c, _1 ) );
+	ENSURE_EQUALS( "bad call: call( &Boom::foo_const, b0, _1 )( 2 )", c0c( 2 ), 7 * 2 );
+	HBoundCall<int ( int )> c1c( call( &Boom::bar_const, b0c, 4., _1 ) );
+	ENSURE_EQUALS( "bad call: call( &Boom::bar_const, b0, 4., _1 )( 3 )", c1c( 3 ), 7 * 4 + 3 );
+	HBoundCall<int ( double )> c2c( call( &Boom::bar_const, b0c, _1, static_cast<int>( 3. ) ) );
+	ENSURE_EQUALS( "bad call: call( &Boom::bar_const, b0, _1, static_cast<int>( 3. ) )( 5 )", c2c( 5 ), 7 * 5 + 3 );
+	HBoundCall<int ( Boom const& )> c3c( call( &Boom::bar_const, _1, 2, static_cast<int>( 3. ) ) );
+	ENSURE_EQUALS( "bad call: call( &Boom::bar_const, _1, 2, static_cast<int>( 3. )( Boom( 7 ) )", c3c( b0c ), 7 * 2 + 3 );
+	ENSURE_EQUALS( "bad call: call( &Boom::bar_const, _1, 2, static_cast<int>( 3. )( Boom( 4 ) )", c3c( b1c ), 4 * 2 + 3 );
 TUT_TEARDOWN()
 
 }

@@ -55,6 +55,7 @@ struct tut_yaal_hcore_hpointer
 		{
 		int _tab[0x100];
 		Base( void )
+			: _tab()
 			{	cout << __PRETTY_FUNCTION__ << ": " << this << endl;	}
 		virtual ~Base( void )
 			{	cout << __PRETTY_FUNCTION__ << ": " << this << endl;	}
@@ -68,7 +69,8 @@ struct tut_yaal_hcore_hpointer
 	struct A : virtual public Base
 		{
 		int _one;
-		A ( int one ) : _one ( one )
+		A ( int one )
+			: Base(), _one ( one )
 			{	cout << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray << ", " << _one << endl;	}
 		virtual ~A ( void )
 			{	cout << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray <<  ", " << _one << endl;	}
@@ -109,7 +111,8 @@ struct tut_yaal_hcore_hpointer
 	struct E : public X, public A
 		{
 		HString _four;
-		E ( int one, HString const& four ) : A( one ), _four ( four )
+		E ( int one, HString const& four )
+			: X(), A( one ), _four ( four )
 			{ cout << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << endl; }
 		virtual ~E ( void )
 			{ cout << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << endl; }

@@ -349,12 +349,14 @@ class Sumator
 	int _arg;
 public:
 	Sumator( int arg_ ) : _arg( arg_ ) {}
+/* cppcheck-suppress functionConst */
 	int calculate( void )
 		{ return ( _arg ); }
 	int calculate( int arg_ )
 		{ return ( _arg + arg_ ); }
 	int calculate_const( int arg_ ) const
 		{ return ( _arg + arg_ ); }
+/* cppcheck-suppress functionConst */
 	int calculate_volatile( int arg_ ) volatile
 		{ return ( _arg + arg_ ); }
 	int calculate_const_volatile( int arg_ ) const volatile
@@ -422,6 +424,14 @@ TUT_UNIT_TEST( 9, "(hand written) 10 (4 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo10, 7, 1, 2, _3, 4, _2, 6, _1, 8, _4 )( -1, -2, -3, -4 ), "foo10: a1 = 7, a2 = 1, a3 = 2, a4 = -3, a5 = 4, a6 = -2, a7 = 6, a8 = -1, a9 = 8, a10 = -4" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 10, "const, volatile qualifiers" )
+	Sumator s( 1 );
+	ENSURE_EQUALS( "no qualifiers failed", call( static_cast<int (Sumator::*)( int )>( &Sumator::calculate ), &s, _1 )( 3 ), 4 );
+	ENSURE_EQUALS( "const qualifier failed", call( &Sumator::calculate_const, &s, _1 )( 3 ), 4 );
+	ENSURE_EQUALS( "volatile qualifier failed", call( &Sumator::calculate_volatile, &s, _1 )( 3 ), 4 );
+	ENSURE_EQUALS( "const volatile qualifier failed", call( &Sumator::calculate_const_volatile, &s, _1 )( 3 ), 4 );
+TUT_TEARDOWN()
+
 namespace
 {
 
@@ -430,10 +440,12 @@ class MemFunTest
 	int _base;
 public:
 	MemFunTest( int base_ ) : _base( base_ ) {}
+/* cppcheck-suppress functionConst */
 	int value( void )
 		{ return ( _base ); }
 	int value_const( void ) const
 		{ return ( _base ); }
+/* cppcheck-suppress functionConst */
 	int calc( int arg_ )
 		{ return ( _base + arg_ ); }
 	int calc_const( int arg_ ) const

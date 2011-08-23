@@ -332,10 +332,12 @@ class MemFunTest
 	int _base;
 public:
 	MemFunTest( int base_ ) : _base( base_ ) {}
+/* cppcheck-suppress functionConst */
 	int value( void )
 		{ return ( _base ); }
 	int value_const( void ) const
 		{ return ( _base ); }
+/* cppcheck-suppress functionConst */
 	int calc( int arg_ )
 		{ return ( _base + arg_ ); }
 	int calc_const( int arg_ ) const
