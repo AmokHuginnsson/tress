@@ -74,6 +74,7 @@ public:
 	HString const& buffer( void ) const;
 	void* run( void );
 	void wait( void );
+	void do_not_signal( void );
 private:
 	void handler_connection( int );
 	void handler_message( int );
@@ -120,7 +121,9 @@ void HServer::stop( void )
 void HServer::wait( void )
 	{
 	M_PROLOG
+	cout << "waiting for event ..." << endl;
 	_event.wait();
+	cout << "event arrived ..." << endl;
 	return;
 	M_EPILOG
 	}
@@ -145,6 +148,7 @@ void HServer::handler_message( int fileDescriptor_ )
 	if ( !! client )
 		{
 		int long nRead( 0 );
+		cout << "reading data ..." << endl;
 		if ( ( nRead = client->read_until( message ) ) > 0 )
 			{
 			_buffer += message;
@@ -164,10 +168,11 @@ void HServer::disconnect_client( yaal::hcore::HSocket::ptr_t& client_ )
 	{
 	M_PROLOG
 	M_ASSERT( !! client_ );
+	cout << "closing client connection ..." << endl;
 	int fileDescriptor = client_->get_file_descriptor();
 	_dispatcher.unregister_file_descriptor_handler( fileDescriptor );
 	_socket.shutdown_client( fileDescriptor );
-	cout << "client closed connection" << endl;
+	cout << "client closed connection ..." << endl;
 	return;
 	M_EPILOG
 	}
@@ -189,6 +194,7 @@ void* HServer::run( void )
 			_dispatcher.run();
 			cout << "dispatcher finished ..." << endl;
 			_socket.close();
+			cout << "socket closed ..." << endl;
 			}
 		catch ( HOpenSSLException& e )
 			{
@@ -209,6 +215,11 @@ void* HServer::run( void )
 		_signaled = true;
 		}
 	return ( NULL );
+	}
+
+void HServer::do_not_signal( void )
+	{
+	_signaled = true;
 	}
 
 TUT_UNIT_TEST( 1, "Simple construction and destruction." )
@@ -363,11 +374,13 @@ void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port
 	catch ( HException const& e )
 		{
 		cout << e.what() << endl;
+		serv.do_not_signal();
 		TUT_INVOKE( serv.stop(); );
 		throw;
 		}
 	catch ( ... )
 		{
+		serv.do_not_signal();
 		TUT_INVOKE( serv.stop(); );
 		throw;
 		}
