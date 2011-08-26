@@ -382,6 +382,11 @@ TUT_UNIT_TEST( 27, "erase" )
 	str = s;str.erase( 4, 100 );
 	ENSURE_EQUALS( "erase 3 failed (size)", str.size(), 4 );
 	ENSURE_EQUALS( erase_failed, str, "Ala " );
+	str = s;str.erase( 4 );
+	ENSURE_EQUALS( "erase 3 failed (size)", str.size(), 4 );
+	ENSURE_EQUALS( erase_failed, str, "Ala " );
+	str = s;str.erase();
+	ENSURE_EQUALS( erase_failed, str.is_empty(), true );
 	str = s;ENSURE_EQUALS( erase_failed, str.erase( 0, 100 ), "" );
 	HString str2( "|==--|[100%]" );
 	ENSURE_EQUALS( erase_failed, str2.erase( 7, 4 ), "|==--|[]" );
@@ -693,6 +698,45 @@ TUT_UNIT_TEST( 41, "hs_realloc( size )" )
 	catch ( HStringException const& )
 		{
 		/* ok */
+		}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 42, "assign( HString ... )" )
+	static char const ss[] = "Ala ma kota.";
+	static char const sl[] = "Ala ma kota, a kot ma mleczko.";
+	HString source( ss );
+	HString dest( "dummy" );
+	char const err[] = "assign failed";
+	dest = source;
+	ENSURE_EQUALS( err, dest.assign( source, 0, 0 ), "" );
+	dest = source;
+	ENSURE_EQUALS( err, dest.assign( source, source.get_length() * 2, source.get_length() ), "" );
+	ENSURE_EQUALS( err, dest.assign( source, 0, HString::MAX_STRING_LENGTH ), source );
+	ENSURE_EQUALS( err, dest.assign( source, 0, 5 ), "Ala m" );
+	ENSURE_EQUALS( err, dest.assign( source, 4, 5 ), "ma ko" );
+	ENSURE_EQUALS( err, dest.assign( source, 7, 5 ), "kota." );
+	ENSURE_EQUALS( err, dest.assign( source, 8, 5 ), "ota." );
+	ENSURE_EQUALS( err, dest.assign( source, sizeof ( ss ) - 2, 5 ), "." );
+	ENSURE_EQUALS( err, dest.assign( source, sizeof ( ss ) - 1, 5 ), "" );
+	ENSURE_EQUALS( err, dest.assign( source, sizeof ( ss ), 5 ), "" );
+	source.assign( sl, sizeof ( sl ) - 1 );
+	try
+		{
+		dest.assign( source, -1, 2 );
+		FAIL( "assign with negative offset succeeded" );
+		}
+	catch ( HStringException const& )
+		{
+		// ok
+		}
+	try
+		{
+		dest.assign( source, 0, -1 );
+		FAIL( "assign with negative lenght succeeded" );
+		}
+	catch ( HStringException const& )
+		{
+		// ok
 		}
 TUT_TEARDOWN()
 
