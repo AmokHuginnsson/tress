@@ -63,10 +63,9 @@ int main( int argc_, char* argv_[] )
 		if ( !! setup._script )
 			{
 			HString nonWord;
-			int const SIZE = static_cast<int>( ::strlen( _word_ ) );
 			for ( int c = 1; c < 256; ++ c )
 				{
-				if ( ! memchr( _word_, c, SIZE ) )
+				if ( ! memchr( _word_.data(), c, _word_.size() ) )
 					nonWord += static_cast<char>( c );
 				}
 			HTokenizer t( setup._script, ";", HTokenizer::SKIP_EMPTY );

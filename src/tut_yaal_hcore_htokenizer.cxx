@@ -208,7 +208,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 13, "dereference iterator for single token" )
 	HString text( "list_commands" );
-	HTokenizer tokenizer( text, _whiteSpace_ );
+	HTokenizer tokenizer( text, _whiteSpace_.data() );
 	HTokenizer::HIterator it( tokenizer.begin() );
 	ENSURE( "begin failed", it != tokenizer.end() );
 	ENSURE_EQUALS( "dereferencing token iterator failed", *it, text );
