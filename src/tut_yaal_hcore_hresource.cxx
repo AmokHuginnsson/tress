@@ -38,19 +38,16 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hresource
-	{
+struct tut_yaal_hcore_hresource {
 	typedef HInstanceTracker<tut_yaal_hcore_hresource> counter_t;
-	tut_yaal_hcore_hresource( void )
-		{
+	tut_yaal_hcore_hresource( void ) {
 		counter_t::set_instance_count( 0 );
-		}
+	}
 	virtual ~tut_yaal_hcore_hresource( void )
 		{}
-	};
+};
 
 typedef HResource<tut_yaal_hcore_hresource::counter_t> ptr_t;
 
@@ -61,28 +58,25 @@ TUT_UNIT_TEST( 1, "default constructor" )
 	ENSURE_EQUALS( "dirty default initialized resurce holder", c.get(), static_cast<counter_t*>( NULL ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "freeing the new allocated object" )
-		{
+TUT_UNIT_TEST( 2, "freeing the new allocated object" ) {
 		counter_t* p = new counter_t();
 		ptr_t ptr( p );
 		ENSURE_EQUALS( "smart pointer does not hold proper get pointer", ptr.get(), p );
 		cout << ptr->to_string() << endl;
-		}
+	}
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "Copy constructor." )
-		{
+TUT_UNIT_TEST( 3, "Copy constructor." ) {
 		counter_t* p = NULL;
 		ptr_t ptr = ptr_t( p = new counter_t() );
 		ENSURE_EQUALS( "smart pointer does not hold proper get pointer", ptr.get(), p );
 		cout << ptr->to_string() << endl;
-		}
+	}
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "Assign operator." )
-		{
+TUT_UNIT_TEST( 4, "Assign operator." ) {
 		counter_t* p = NULL;
 		ptr_t sp1 = ptr_t( new counter_t() );
 		ptr_t sp2 = ptr_t( p = new counter_t() );
@@ -94,24 +88,22 @@ TUT_UNIT_TEST( 4, "Assign operator." )
 		ENSURE_EQUALS( "failed to pass pointer", sp2.get(), static_cast<counter_t*>( NULL ) );
 		ENSURE_EQUALS( "failed to assign pointer", sp1.get(), p );
 		cout << sp1->to_string() << endl;
-		}
+	}
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "Checks constructor with another ptr_t with no module." )
-		{
+TUT_UNIT_TEST( 5, "Checks constructor with another ptr_t with no module." ) {
 		ptr_t sp1;
 		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
 		ptr_t sp2( sp1 );
 		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
 		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
 		ENSURE( sp2.get() == 0 );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "Checks constructor with another ptr_t with module." )
-		{
+TUT_UNIT_TEST( 6, "Checks constructor with another ptr_t with module." ) {
 		counter_t* p = new counter_t();
 		ptr_t sp1(p);
 		ENSURE_EQUALS( "get", sp1.get(), p );
@@ -119,7 +111,7 @@ TUT_UNIT_TEST( 6, "Checks constructor with another ptr_t with module." )
 		ENSURE_EQUALS( "get", sp1.get(), static_cast<counter_t*>( NULL ) );
 		ENSURE_EQUALS( "get", sp2.get(), p );
 		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
-		}
+	}
 	// ptr left scope
 	ENSURE_EQUALS( "destructed", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -128,18 +120,16 @@ TUT_TEARDOWN()
 // Assignment operators
 // =================================================
 
-TUT_UNIT_TEST( 7, "Checks assignment with non-null module." )
-		{
+TUT_UNIT_TEST( 7, "Checks assignment with non-null module." ) {
 		counter_t* p = new counter_t();
 		ptr_t sp( p );
 		ENSURE("get", sp.get() == p);
 		ENSURE_EQUALS("leak !!!", counter_t::get_instance_count(), 1);
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "Checks assignment with ptr_t with non-null module." )
-		{
+TUT_UNIT_TEST( 8, "Checks assignment with ptr_t with non-null module." ) {
 		counter_t* p = NULL;
 		ptr_t sp1( p = new counter_t() );
 		ENSURE_EQUALS( "get", sp1.get(), p );
@@ -148,18 +138,17 @@ TUT_UNIT_TEST( 8, "Checks assignment with ptr_t with non-null module." )
 		ENSURE_EQUALS( "get", sp1.get(), static_cast<counter_t*>( NULL ) );
 		ENSURE_EQUALS( "get", sp2.get(), p );
 		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
-		}
+	}
 	ENSURE_EQUALS( "destructed", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "Checks assignment with itself." )
-		{
+TUT_UNIT_TEST( 9, "Checks assignment with itself." ) {
 		ptr_t sp1( new counter_t() );
 		sp1 = sp1;
 		ENSURE( "get", sp1.get() != 0 );
 		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
 		ENSURE_EQUALS( "not destructed", counter_t::get_instance_count(), 1 );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
@@ -168,8 +157,7 @@ TUT_TEARDOWN()
 // Passing ownership
 // =================================================
 
-TUT_UNIT_TEST( 10, "Checks passing ownership via assignment." )
-		{
+TUT_UNIT_TEST( 10, "Checks passing ownership via assignment." ) {
 		counter_t *p1 = NULL, *p2 = NULL;
 		ptr_t sp1( p1 = new counter_t( 1 ));
 		ptr_t sp2( p2 = new counter_t( 2 ));
@@ -180,53 +168,45 @@ TUT_UNIT_TEST( 10, "Checks passing ownership via assignment." )
 		sp1 = sp2;
 		ENSURE_EQUALS( "create 2", sp1->get_id(), p2->get_id() );
 		ENSURE_EQUALS( "leak !!!=1", counter_t::get_instance_count(), 1 );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "Checks operator -> throws instead of returning null." )
-		{
-		try
-			{
+TUT_UNIT_TEST( 11, "Checks operator -> throws instead of returning null." ) {
+		try {
 			ptr_t sp;
 			sp->get_id();
 			FAIL( "failed assertion expected" );
-			}
-		catch ( HFailedAssertion& )
-			{
+		} catch ( HFailedAssertion& ) {
 			// ok
-			}
 		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "assign smart pointers pointing to the same memory." )
-		{
+TUT_UNIT_TEST( 12, "assign smart pointers pointing to the same memory." ) {
 		ptr_t sp1( new counter_t() );
 		ptr_t sp2 = sp1;
 		sp2 = sp1;
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 #pragma GCC diagnostic ignored "-Weffc++"
 
-struct non_virt_dtor
-	{
+struct non_virt_dtor {
 	~non_virt_dtor( void ) {};
-	};
+};
 
-struct NVDDerive : public non_virt_dtor
-	{
+struct NVDDerive : public non_virt_dtor {
 	tut_yaal_hcore_hresource::counter_t _counter;
 	~NVDDerive( void ) {};
-	};
+};
 
 TUT_UNIT_TEST( 13, "non virtual destructor" )
-	typedef HResource<non_virt_dtor> p_t;
-		{
+	typedef HResource<non_virt_dtor> p_t; {
 		p_t p( new NVDDerive );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 

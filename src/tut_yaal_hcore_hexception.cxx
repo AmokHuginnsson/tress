@@ -38,298 +38,218 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hexception
-	{
+struct tut_yaal_hcore_hexception {
 
-class A
-	{
+class A {
 	typedef A this_type;
 public:
 	virtual ~A( void ) { }
 	virtual void foo( int a ) const
 		{ do_foo( a ); }
 private:
-	virtual void do_foo( int a ) const
-		{
+	virtual void do_foo( int a ) const {
 		if ( ! a )
 			M_THROW( "bad arg A", a );
 		cout << a << endl;
-		}
-	};
+	}
+};
 
 typedef HExceptionT<A> AE;
 
-class B : public A
-	{
+class B : public A {
 public:
 	virtual ~B( void ) { }
 protected:
 	typedef B this_type;
 	typedef A base_type;
-	virtual void do_foo( int a ) const
-		{
+	virtual void do_foo( int a ) const {
 		if ( ! a )
 			M_THROW( "bad arg B", a );
 		cout << a << endl;
-		}
-	};
+	}
+};
 
 typedef HExceptionT<B,AE> BE;
 
-class C : public B
-	{
+class C : public B {
 public:
 	virtual ~C( void ) { }
 protected:
 	typedef C this_type;
 	typedef B base_type;
-	virtual void do_foo( int a ) const
-		{
+	virtual void do_foo( int a ) const {
 		if ( ! a )
 			M_THROW( "bad arg C", a );
 		cout << a << endl;
-		}
-	};
+	}
+};
 
 typedef HExceptionT<C,BE> CE;
 
-class P
-	{
+class P {
 	typedef P this_type;
 public:
 	virtual ~P( void ) { }
 	virtual void foo( int a ) const
 		{ do_foo( a ); }
 private:
-	virtual void do_foo( int a ) const
-		{
+	virtual void do_foo( int a ) const {
 		if ( ! a )
 			M_THROW( "bad arg P", a );
 		cout << a << endl;
-		}
-	};
+	}
+};
 
 typedef HExceptionT<P> PE;
 
-class Q : public P
-	{
+class Q : public P {
 public:
 	virtual ~Q( void ) { }
 private:
 	typedef Q this_type;
-	virtual void do_foo( int a ) const
-		{
+	virtual void do_foo( int a ) const {
 		if ( ! a )
 			M_THROW( "bad arg Q", a );
 		cout << a << endl;
-		}
-	};
+	}
+};
 
 typedef HExceptionT<Q,PE> QE;
 
-class R : public Q
-	{
+class R : public Q {
 public:
 	virtual ~R( void ) { }
 protected:
 	typedef R this_type;
 	typedef Q base_type;
-	virtual void do_foo( int a ) const
-		{
+	virtual void do_foo( int a ) const {
 		if ( ! a )
 			M_THROW( "bad arg R", a );
 		cout << a << endl;
-		}
-	};
+	}
+};
 
 typedef HExceptionT<R,QE> RE;
 
 	virtual ~tut_yaal_hcore_hexception( void )
 		{}
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hexception, "yaal::hcore::HException" );
 
 TUT_UNIT_TEST( 1, "valid ex hier construct for full hier" )
-	try
-		{
+	try {
 		A x;
 		x.foo( 0 );
 		FAIL( "test bug, exception not thrown" );
-		}
-	catch ( CE const& )
-		{
+	} catch ( CE const& ) {
 		FAIL( "bad exception caught" );
-		}
-	catch ( BE const& )
-		{
+	} catch ( BE const& ) {
 		FAIL( "bad exception caught" );
-		}
-	catch ( AE const& e )
-		{
+	} catch ( AE const& e ) {
 		HString etype( demangle( typeid( e ).name() ) );
 		HString aetype( demangle( typeid( AE ).name() ) );
 		ENSURE_EQUALS( "bad generated type", etype, aetype );
-		}
-	catch ( HException const& e )
-		{
+	} catch ( HException const& e ) {
 		cout << e.what() << endl;
 		e.print_error();
 		FAIL( "bad exception caught" );
-		}
-	catch ( ... )
-		{
+	} catch ( ... ) {
 		FAIL( "bad exception caught" );
-		}
-	try
-		{
+	}
+	try {
 		B x;
 		x.foo( 0 );
 		FAIL( "test bug, exception not thrown" );
-		}
-	catch ( CE const& )
-		{
+	} catch ( CE const& ) {
 		FAIL( "bad exception caught" );
-		}
-	catch ( BE const& e )
-		{
+	} catch ( BE const& e ) {
 		HString etype( demangle( typeid( e ).name() ) );
 		HString aetype( demangle( typeid( BE ).name() ) );
 		ENSURE_EQUALS( "bad generated type", etype, aetype );
-		}
-	catch ( AE const& e )
-		{
+	} catch ( AE const& e ) {
 		cout << e.what() << endl;
 		e.print_error();
 		FAIL( "bad exception caught" );
-		}
-	catch ( HException const& e )
-		{
+	} catch ( HException const& e ) {
 		cout << e.what() << endl;
 		e.print_error();
 		FAIL( "bad exception caught" );
-		}
-	catch ( ... )
-		{
+	} catch ( ... ) {
 		FAIL( "bad exception caught" );
-		}
-	try
-		{
+	}
+	try {
 		C x;
 		x.foo( 0 );
 		FAIL( "test bug, exception not thrown" );
-		}
-	catch ( CE const& e )
-		{
+	} catch ( CE const& e ) {
 		HString etype( demangle( typeid( e ).name() ) );
 		HString aetype( demangle( typeid( CE ).name() ) );
 		ENSURE_EQUALS( "bad generated type", etype, aetype );
-		}
-	catch ( BE const& )
-		{
+	} catch ( BE const& ) {
 		FAIL( "bad exception caught" );
-		}
-	catch ( AE const& e )
-		{
+	} catch ( AE const& e ) {
 		cout << e.what() << endl;
 		e.print_error();
 		FAIL( "bad exception caught" );
-		}
-	catch ( HException const& e )
-		{
+	} catch ( HException const& e ) {
 		cout << e.what() << endl;
 		FAIL( "bad exception caught" );
-		}
-	catch ( ... )
-		{
+	} catch ( ... ) {
 		FAIL( "bad exception caught" );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "degenerated hier" )
-	try
-		{
+	try {
 		P x;
 		x.foo( 0 );
 		FAIL( "test bug, exception not thrown" );
-		}
-	catch ( RE const& )
-		{
+	} catch ( RE const& ) {
 		FAIL( "bad exception caught" );
-		}
-	catch ( QE const& )
-		{
+	} catch ( QE const& ) {
 		FAIL( "bad exception caught" );
-		}
-	catch ( PE const& e )
-		{
+	} catch ( PE const& e ) {
 		HString etype( demangle( typeid( e ).name() ) );
 		HString aetype( demangle( typeid( PE ).name() ) );
 		ENSURE_EQUALS( "bad generated type", etype, aetype );
-		}
-	catch ( HException const& e )
-		{
+	} catch ( HException const& e ) {
 		cout << e.what() << endl;
 		e.print_error();
 		FAIL( "bad exception caught" );
-		}
-	catch ( ... )
-		{
+	} catch ( ... ) {
 		FAIL( "bad exception caught" );
-		}
-	try
-		{
+	}
+	try {
 		Q x;
 		x.foo( 0 );
 		FAIL( "test bug, exception not thrown" );
-		}
-	catch ( RE const& )
-		{
+	} catch ( RE const& ) {
 		FAIL( "bad exception caught" );
-		}
-	catch ( QE const& )
-		{
+	} catch ( QE const& ) {
 		FAIL( "bad exception caught" );
-		}
-	catch ( PE const& )
-		{
+	} catch ( PE const& ) {
 		FAIL( "bad exception caught" );
-		}
-	catch ( HException const& )
-		{
-		}
-	catch ( ... )
-		{
+	} catch ( HException const& ) {
+	} catch ( ... ) {
 		FAIL( "bad exception caught" );
-		}
-	try
-		{
+	}
+	try {
 		R x;
 		x.foo( 0 );
 		FAIL( "test bug, exception not thrown" );
-		}
-	catch ( RE const& )
-		{
+	} catch ( RE const& ) {
 		FAIL( "bad exception caught" );
-		}
-	catch ( QE const& )
-		{
+	} catch ( QE const& ) {
 		FAIL( "bad exception caught" );
-		}
-	catch ( PE const& )
-		{
+	} catch ( PE const& ) {
 		FAIL( "bad exception caught" );
-		}
-	catch ( HException const& )
-		{
-		}
-	catch ( ... )
-		{
+	} catch ( HException const& ) {
+	} catch ( ... ) {
 		FAIL( "bad exception caught" );
-		}
+	}
 TUT_TEARDOWN()
 
 char const HEXCEPTIONSAFEGLOBAL_TEST_VAR[] = "ala";

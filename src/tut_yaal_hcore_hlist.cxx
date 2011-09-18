@@ -46,11 +46,9 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hlist
-	{
+struct tut_yaal_hcore_hlist {
 	static HString _cache;
 	typedef HList<int> list_t;
 	template<typename T>
@@ -63,55 +61,49 @@ struct tut_yaal_hcore_hlist
 	virtual ~tut_yaal_hcore_hlist( void )
 		{}
 private:
-	};
+};
 
 HString tut_yaal_hcore_hlist::_cache;
 
-void tut_yaal_hcore_hlist::dump( list_t& l )
-	{
+void tut_yaal_hcore_hlist::dump( list_t& l ) {
 	int long s = l.size();
 	cout << "l(" << s << "): [";
 	for ( list_t::iterator it = l.begin(); it != l.end(); ++ it )
 		cout << *it << ( s -- > 1 ? "," : "" );
 	cout << "]" << endl;
-	}
+}
 
 template<typename T>
-HString& tut_yaal_hcore_hlist::to_string( T const& list )
-	{
+HString& tut_yaal_hcore_hlist::to_string( T const& list ) {
 	_cache.clear();
 	for ( typename T::const_iterator it = list.begin(); it != list.end(); ++ it )
 		_cache += static_cast<char>( *it );
 	return ( _cache );
-	}
+}
 
 template<typename T>
-void tut_yaal_hcore_hlist::to_list( char const* const templ, int size, T& list )
-	{
+void tut_yaal_hcore_hlist::to_list( char const* const templ, int size, T& list ) {
 	list.clear();
 	for ( int i = 0; i < size; ++ i )
 		list.push_back( templ[ i ] );
 	return;
-	}
+}
 
 template<typename T>
-void tut_yaal_hcore_hlist::check_consistency( T const& list )
-	{
+void tut_yaal_hcore_hlist::check_consistency( T const& list ) {
 	int ctr = 0;
 	bool hook_valid = false;
 	bool index_valid = false;
-	for ( typename T::const_iterator it = list.begin(); it != list.end(); ++ it, ++ ctr )
-		{
+	for ( typename T::const_iterator it = list.begin(); it != list.end(); ++ it, ++ ctr ) {
 		if ( it._current == list._hook )
 			hook_valid = true;
-		if ( list._indexElement == it._current )
-			{
+		if ( list._indexElement == it._current ) {
 			ENSURE_EQUALS( "bad forward index", list._index, ctr );
 			index_valid = true;
-			}
+		}
 		ENSURE_EQUALS( "links broken", it._current->_next->_previous, it._current );
 		ENSURE_EQUALS( "links broken", it._current->_previous->_next, it._current );
-		}
+	}
 	if ( ! list._indexElement )
 		index_valid = true;
 	if ( ! ctr && ( list._hook == NULL ) )
@@ -123,18 +115,16 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list )
 	ctr = 0;
 	hook_valid = false;
 	index_valid = false;
-	for ( typename T::const_reverse_iterator it = list.rbegin(); it != list.rend(); ++ it, ++ ctr )
-		{
+	for ( typename T::const_reverse_iterator it = list.rbegin(); it != list.rend(); ++ it, ++ ctr ) {
 		if ( it.base()._current == list._hook )
 			hook_valid = true;
-		if ( list._indexElement == it.base()._current )
-			{
+		if ( list._indexElement == it.base()._current ) {
 			ENSURE_EQUALS( "bad backward index", list._index, ( list._size - ctr ) - 1 );
 			index_valid = true;
-			}
+		}
 		ENSURE_EQUALS( "links broken", it.base()._current->_next->_previous, it.base()._current );
 		ENSURE_EQUALS( "links broken", it.base()._current->_previous->_next, it.base()._current );
-		}
+	}
 	if ( ! list._indexElement )
 		index_valid = true;
 	if ( ! ctr && ( list._hook == NULL ) )
@@ -143,7 +133,7 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list )
 	ENSURE( "no hook", hook_valid );
 	ENSURE( "invalid index", index_valid );
 	return;
-	}
+}
 
 TUT_TEST_GROUP( tut_yaal_hcore_hlist, "yaal::hcore::HList" );
 
@@ -178,12 +168,11 @@ TUT_UNIT_TEST( 3, "copy constructor" )
 	list_t o( l );
 	check_consistency( o );
 	for ( list_t::iterator it = o.begin();
-			it != o.end(); ++ it )
-		{
+			it != o.end(); ++ it ) {
 		check_consistency( o );
 		ctr ++;
 		ENSURE_EQUALS( "assign operation failed, wrong value", *it, ctr );
-		}
+	}
 	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
@@ -208,12 +197,11 @@ TUT_UNIT_TEST( 4, "assignation operator (full to empty)" )
 	check_consistency( o );
 	list_t const& ro = o;
 	for ( list_t::const_iterator it = ro.begin();
-			it != ro.end(); ++ it )
-		{
+			it != ro.end(); ++ it ) {
 		check_consistency( ro );
 		ctr ++;
 		ENSURE_EQUALS( "assign operation failed, wrong value", *it, ctr );
-		}
+	}
 	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
@@ -264,12 +252,11 @@ TUT_UNIT_TEST( 6, "assignation operator (full to small)" )
 	check_consistency( l );
 	check_consistency( o );
 	for ( list_t::iterator it = o.begin();
-			it != o.end(); ++ it )
-		{
+			it != o.end(); ++ it ) {
 		check_consistency( o );
 		ctr ++;
 		ENSURE_EQUALS( "assign operation failed, wrong value", *it, ctr );
-		}
+	}
 	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
@@ -307,12 +294,11 @@ TUT_UNIT_TEST( 7, "assignation operator (full to big)" )
 	check_consistency( l );
 	check_consistency( o );
 	for ( list_t::iterator it = o.begin();
-			it != o.end(); ++ it )
-		{
+			it != o.end(); ++ it ) {
 		check_consistency( o );
 		ctr ++;
 		ENSURE_EQUALS( "assign operation failed, wrong value", *it, ctr );
-		}
+	}
 	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
@@ -329,21 +315,19 @@ TUT_UNIT_TEST( 8, ".hook(), cyclic_iterator" )
 	list_t::cyclic_iterator it = l.hook();
 	check_consistency( l );
 	char const* const vec = "abcabc";
-	for ( size_t i = 0; i < strlen( vec ); ++ i )
-		{
+	for ( size_t i = 0; i < strlen( vec ); ++ i ) {
 		cout << i;
 		ENSURE_EQUALS( "cyclic_iterator failed", static_cast<char>( *it ), vec[ i ] );
 		++ it;
-		}
+	}
 	char const* const vec2 = "acbacb";
 	it = l.hook();
 	check_consistency( l );
-	for ( size_t i = 0; i < strlen( vec ); ++ i )
-		{
+	for ( size_t i = 0; i < strlen( vec ); ++ i ) {
 		cout << i;
 		ENSURE_EQUALS( "cyclic_iterator failed", static_cast<char>( *it ), vec2[ i ] );
 		-- it;
-		}
+	}
 	cout << endl;
 	it = l.hook();
 	check_consistency( l );
@@ -367,12 +351,11 @@ TUT_UNIT_TEST( 9, "forward iterator" )
 	check_consistency( l );
 	list_t::iterator it;
 	for ( it = l.begin();
-			it != l.end(); ++ it )
-		{
+			it != l.end(); ++ it ) {
 		check_consistency( l );
 		ctr ++;
 		ENSURE_EQUALS( "for syntax: forward iterator made wrong move", ( *it ), ctr );
-		}
+	}
 	ENSURE_EQUALS( "for syntax: not the whole list was iterated", ctr, 5 );
 	check_consistency( l );
 	ENSURE_EQUALS( "begin is not head", *l.begin(), l.head() );
@@ -393,12 +376,11 @@ TUT_UNIT_TEST( 10, "backward iterator" )
 	check_consistency( l );
 	l.add_tail() = 5;
 	check_consistency( l );
-	for ( list_t::reverse_iterator it( l.rbegin() ); it != l.rend(); ++ it )
-		{
+	for ( list_t::reverse_iterator it( l.rbegin() ); it != l.rend(); ++ it ) {
 		check_consistency( l );
 		ENSURE_EQUALS( "for syntax: backward iterator made wrong move", ( *it ), ctr );
 		ctr --;
-		}
+	}
 	ENSURE_EQUALS( "for syntax: not the whole list was iterated", ctr, 0 );
 	check_consistency( l );
 	ENSURE_EQUALS( "begin is not head", *l.rbegin(), l.tail() );
@@ -510,15 +492,12 @@ TUT_UNIT_TEST( 14, "pop_back, remove_tail" )
 	ENSURE_EQUALS( "pop_back failed", l.size(), 0 );
 	check_consistency( l );
 	ENSURE_EQUALS( "pop_back failed", to_string( l ), "" );
-	try
-		{
+	try {
 		l.pop_back();
 		FAIL( "poping back empty list did not FAIL" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 15, "add_head, push_front" )
@@ -577,15 +556,12 @@ TUT_UNIT_TEST( 16, "pop_front, remove_head" )
 	ENSURE_EQUALS( "pop_front failed", l.size(), 0 );
 	check_consistency( l );
 	ENSURE_EQUALS( "pop_front failed", to_string( l ), "" );
-	try
-		{
+	try {
 		l.pop_front();
 		FAIL( "poping front empty list did not FAIL" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 17, "add_orderly" )
@@ -626,30 +602,26 @@ TUT_UNIT_TEST( 17, "add_orderly" )
 	ENSURE_EQUALS( "add_orderly failed", to_string( l ), "abcdefgh" );
 TUT_TEARDOWN()
 
-void erase_test_0( tut_yaal_hcore_hlist::list_t& l )
-	{
+void erase_test_0( tut_yaal_hcore_hlist::list_t& l ) {
 	char const* const full = "123456";
 	char const* ptr = full;
-	for ( tut_yaal_hcore_hlist::list_t::iterator it = l.begin(); it != l.end(); )
-		{
+	for ( tut_yaal_hcore_hlist::list_t::iterator it = l.begin(); it != l.end(); ) {
 		it = l.erase( it );
 		tut_yaal_hcore_hlist::check_consistency( l );
 		ENSURE_EQUALS( "erase failed", tut_yaal_hcore_hlist::to_string( l ), ++ ptr );
 		ENSURE_EQUALS( "erase failed", l.size(), 6 - ( ptr - full ) );
-		}
 	}
+}
 
-void erase_test_1( tut_yaal_hcore_hlist::list_t& l )
-	{
+void erase_test_1( tut_yaal_hcore_hlist::list_t& l ) {
 	l.erase( l.begin() );
 	tut_yaal_hcore_hlist::check_consistency( l );
 	ENSURE_EQUALS( "erase1 failed", tut_yaal_hcore_hlist::to_string( l ), "23456" );
 	ENSURE_EQUALS( "erase1 failed", l.size(), 5 );
 	tut_yaal_hcore_hlist::check_consistency( l );
-	}
+}
 
-void erase_test_2( tut_yaal_hcore_hlist::list_t& l )
-	{
+void erase_test_2( tut_yaal_hcore_hlist::list_t& l ) {
 	tut_yaal_hcore_hlist::list_t::iterator it = l.erase( l.rbegin().base() );
 	tut_yaal_hcore_hlist::check_consistency( l );
 	ENSURE_EQUALS( "erase2 failed", tut_yaal_hcore_hlist::to_string( l ), "12345" );
@@ -657,10 +629,9 @@ void erase_test_2( tut_yaal_hcore_hlist::list_t& l )
 	tut_yaal_hcore_hlist::check_consistency( l );
 	ENSURE( "open list erase for last element leaves bogus iterator", it == l.end() );
 	tut_yaal_hcore_hlist::check_consistency( l );
-	}
+}
 
-void erase_test_3( tut_yaal_hcore_hlist::list_t& l )
-	{
+void erase_test_3( tut_yaal_hcore_hlist::list_t& l ) {
 	tut_yaal_hcore_hlist::list_t::cyclic_iterator it = l.erase( -- l.hook() );
 	tut_yaal_hcore_hlist::check_consistency( l );
 	ENSURE_EQUALS( "erase2 failed", tut_yaal_hcore_hlist::to_string( l ), "12345" );
@@ -668,14 +639,13 @@ void erase_test_3( tut_yaal_hcore_hlist::list_t& l )
 	tut_yaal_hcore_hlist::check_consistency( l );
 	ENSURE( "open list erase for last element leaves bogus iterator", it == l.hook() );
 	tut_yaal_hcore_hlist::check_consistency( l );
-	}
+}
 
 TUT_UNIT_TEST( 18, "erase" )
 	list_t l;
 	typedef void (*erase_test_t)( list_t& );
 	erase_test_t erase_tests[] = { erase_test_0, erase_test_1, erase_test_2, erase_test_3 };
-	for ( size_t i = 0; i < sizeof ( erase_tests ) / sizeof ( erase_test_t ); ++ i )
-		{
+	for ( size_t i = 0; i < sizeof ( erase_tests ) / sizeof ( erase_test_t ); ++ i ) {
 		l.clear();
 		check_consistency( l );
 		l.push_back( '1' ); l.push_back( '2' ); l.push_back( '3' ); l.push_back( '4' );
@@ -686,7 +656,7 @@ TUT_UNIT_TEST( 18, "erase" )
 		ENSURE_EQUALS( "construction failed", to_string( l ), "123456" );
 		erase_tests[ i ]( l );
 		check_consistency( l );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 19, "n_th" )
@@ -704,34 +674,26 @@ TUT_UNIT_TEST( 19, "n_th" )
 	check_consistency( l );
 	l.push_back( '6' );
 	check_consistency( l );
-	for ( int i = 0; i < 6; ++ i )
-		{
+	for ( int i = 0; i < 6; ++ i ) {
 		ENSURE_EQUALS( "n_th( n ) gives bogus result", *l.n_th( i ), i + '1' );
 		check_consistency( l );
-		}
-	for ( int i = -1; i > -7; -- i )
-		{
+	}
+	for ( int i = -1; i > -7; -- i ) {
 		ENSURE_EQUALS( "n_th( -n ) gives bogus result", *l.n_th( i ), ( 6 + i ) + '1' );
 		check_consistency( l );
-		}
-	try
-		{
+	}
+	try {
 		l.n_th( 6 );
 		FAIL( "index too big and ok ??" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		l.n_th( -7 );
 		FAIL( "index out of range and ok ??" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 20, "operator[]" )
@@ -749,34 +711,26 @@ TUT_UNIT_TEST( 20, "operator[]" )
 	check_consistency( l );
 	l.push_back( '6' );
 	check_consistency( l );
-	for ( int i = 0; i < 6; ++ i )
-		{
+	for ( int i = 0; i < 6; ++ i ) {
 		ENSURE_EQUALS( "operator[] malfunction", l[ i ], i + 1 + '0' );
 		check_consistency( l );
-		}
-	for ( int i = -1; i > -7; -- i )
-		{
+	}
+	for ( int i = -1; i > -7; -- i ) {
 		ENSURE_EQUALS( "operator[ -n ] malfunction", l[ i ], i + 6 + '1' );
 		check_consistency( l );
-		}
-	try
-		{
+	}
+	try {
 		l[ 6 ];
 		FAIL( "index too big and ok ??" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		l[ -7 ];
 		FAIL( "index out of range and ok ??" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 21, "exchange" )
@@ -940,27 +894,21 @@ TUT_UNIT_TEST( 24, "swap" )
 	ENSURE_EQUALS( "exchange failed", to_string( l1 ), "ab" );
 TUT_TEARDOWN()
 
-void check_sorted( tut_yaal_hcore_hlist::list_t const& l, OListBits::sort_order_t order )
-	{
-	if ( order == OListBits::ASCENDING )
-		{
+void check_sorted( tut_yaal_hcore_hlist::list_t const& l, OListBits::sort_order_t order ) {
+	if ( order == OListBits::ASCENDING ) {
 		int val = 0;
-		for ( tut_yaal_hcore_hlist::list_t::const_iterator it = l.begin(); it != l.end(); ++ it )
-			{
+		for ( tut_yaal_hcore_hlist::list_t::const_iterator it = l.begin(); it != l.end(); ++ it ) {
 			ENSURE( "not sorted", val <= *it );
 			val = *it;
-			}
 		}
-	else
-		{
+	} else {
 		int val = 0;
-		for ( tut_yaal_hcore_hlist::list_t::const_reverse_iterator it = l.rbegin(); it != l.rend(); ++ it )
-			{
+		for ( tut_yaal_hcore_hlist::list_t::const_reverse_iterator it = l.rbegin(); it != l.rend(); ++ it ) {
 			ENSURE( "not sorted (reversed)", val <= *it );
 			val = *it;
-			}
 		}
 	}
+}
 
 TUT_UNIT_TEST( 25, "sort serious" )
 	TIME_CONSTRAINT_EXEMPT();
@@ -970,31 +918,27 @@ TUT_UNIT_TEST( 25, "sort serious" )
 	list_t l;
 	check_consistency( l );
 	std::cout << std::setprecision( 2 ) << std::fixed;
-	for ( int long unsigned i = 0; i < count; ++ i )
-		{
+	for ( int long unsigned i = 0; i < count; ++ i ) {
 		snprintf( buf, 9, "%08lo", i );
 		for ( int k = 0; k < 8; ++ k )
 			l.push_back( buf[ k ] );
-		try
-			{
+		try {
 			l.sort();
 			check_consistency( l );
 			check_sorted( l, OListBits::ASCENDING );
 			l.sort( OListBits::DESCENDING );
 			check_consistency( l );
 			check_sorted( l, OListBits::DESCENDING );
-			}
-		catch ( ... )
-			{
+		} catch ( ... ) {
 			std::cout << "(" << std::setw( 8 ) << std::setfill( '0' ) << std::oct << i << ")[" << to_string( l ) << "]" << std::endl;
 			throw;
-			}
+		}
 		check_consistency( l );
 		l.clear();
 		check_consistency( l );
 		if ( ! ( i % 8192 ) )
 			std::cout << "\r               \r" << std::setw( 6 ) << 100. * ( static_cast<double>( i ) / static_cast<double>( count ) ) << '%' << std::flush;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 26, "reverse iterator" )
@@ -1014,32 +958,28 @@ TUT_UNIT_TEST( 50, "speed test" )
 	list_type list;
 	double long st( 0 );
 	double long yt( 0 );
-	int long LOOPS( 1000000 );
-		{
+	int long LOOPS( 1000000 ); {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.push_back( static_cast<int>( i ) );
 		clog << "*speed* std::list<>::push_back() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-		{
+	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			list.push_back( static_cast<int>( i ) );
 		clog << "*speed* yaal::hcore::HList<>::push_back() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-	clog << "*speed* HList<>::push_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-		{
+	}
+	clog << "*speed* HList<>::push_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.pop_back();
 		clog << "*speed* std::list<>::pop_back() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-		{
+	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			list.pop_back();
 		clog << "*speed* yaal::hcore::HList<>::pop_back() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
+	}
 	clog << "*speed* HList<>::pop_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()
 

@@ -38,17 +38,15 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hformat
-	{
+struct tut_yaal_hcore_hformat {
 	static double long PI;
 	static double long E;
 	static char const* const STR;
 	virtual ~tut_yaal_hcore_hformat( void )
 		{}
-	};
+};
 
 double long tut_yaal_hcore_hformat::PI = 3.141592653589793;
 double long tut_yaal_hcore_hformat::E = 2.718281828459045;
@@ -64,42 +62,33 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "param given for an empty format" )
 	HFormat f;
-	try
-		{
+	try {
 		int i = 0;
 		f % i;
 		FAIL( "parameter for empty format swallowed" );
-		}
-	catch ( HFormatException& )
-		{
+	} catch ( HFormatException& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "no params for non empty format" )
 	HFormat f( "%d" );
-	try
-		{
+	try {
 		f.string();
 		FAIL( "non empty format generated string based on zero args" );
-		}
-	catch ( HFormatException& )
-		{
+	} catch ( HFormatException& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "bad order of params" )
 	HFormat f( "[%1$*2$.*3$Lf]" );
-	try
-		{
+	try {
 		f % 8 % PI % 3;
 		FAIL( "incorrect arg type accepted" );
-		}
-	catch ( HFormatException& )
-		{
+	} catch ( HFormatException& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "reuse of format" )

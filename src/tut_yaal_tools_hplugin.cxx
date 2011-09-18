@@ -43,13 +43,11 @@ using namespace tress::tut_helpers;
 
 #define SELF_SUMATOR self_sumator
 extern "C"
-M_EXPORT_SYMBOL int SELF_SUMATOR( int a, int b )
-	{
+M_EXPORT_SYMBOL int SELF_SUMATOR( int a, int b ) {
 	return ( a + b );
-	}
+}
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hplugin );
 TUT_TEST_GROUP( tut_yaal_tools_hplugin, "yaal::tools::HPlugin" );
@@ -80,42 +78,32 @@ TUT_UNIT_TEST( 2, "resolve symbol from self" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "load non-existing plugin" )
-	try
-		{
+	try {
 		HPlugin p;
 		p.load( "/non/existing/plugin" );
 		FAIL( "non-existing plugin loaded" );
-		}
-	catch ( HPluginException const& e )
-		{
+	} catch ( HPluginException const& e ) {
 		hcore::log << "expected: " << e.what() << endl;
-		}
-	catch ( HException const& e )
-		{
+	} catch ( HException const& e ) {
 		FAIL( std::string( "unexpected: " ) + e.what() );
-		}
-	catch ( ... )
-		{
+	} catch ( ... ) {
 		FAIL( "unexpected unknown exception!" );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "resolve non-existing symbol" )
 	bool loaded( false );
-	try
-		{
+	try {
 		HPlugin p;
 		p.load( TRESS_PLUGIN );
 		loaded = p.is_loaded();
 		void (*sym)(void) = NULL;
 		p.resolve( "non_existing_symbol", sym );
 		FAIL( "non-existing plugin loaded" );
-		}
-	catch ( HPluginException const& e )
-		{
+	} catch ( HPluginException const& e ) {
 		ENSURE( "failed to load plugin", loaded );
 		hcore::log << "expected: " << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 }

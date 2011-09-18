@@ -38,14 +38,12 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_tools_htwowaymap : public simple_mock<tut_yaal_tools_htwowaymap>
-	{
+struct tut_yaal_tools_htwowaymap : public simple_mock<tut_yaal_tools_htwowaymap> {
 	typedef HTwoWayMap<int, int> int2int_t;
 	virtual ~tut_yaal_tools_htwowaymap( void ) {}
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_tools_htwowaymap, "yaal::tools::HTwoWayMap" );
 

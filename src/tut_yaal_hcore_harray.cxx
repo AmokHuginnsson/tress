@@ -40,30 +40,25 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_harray : public simple_mock<tut_yaal_hcore_harray>
-	{
+struct tut_yaal_hcore_harray : public simple_mock<tut_yaal_hcore_harray> {
 	typedef std::vector<int> proto_t;
 	~tut_yaal_hcore_harray( void ) {}
 	void test_erase( int, int );
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_harray, "yaal::hcore::HArray" );
 
 TUT_UNIT_TEST( 1, "Constructor." )
 	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
-	try
-		{
+	try {
 		array_t array( BAD_SIZE );
 		FAIL( "array with negative size created" );
-		}
-	catch ( HException const& e )
-		{
+	} catch ( HException const& e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "Constructor and get_size()." )
@@ -83,15 +78,12 @@ TUT_UNIT_TEST( 3, "Constructor with filling." )
 	int const BAD_SIZE = - 1;
 	int const SIZE_FOR_ARRAY = 7;
 	int const FILLER_FOR_ARRAY = 13;
-	try
-		{
+	try {
 		array_t badArray( BAD_SIZE, FILLER_FOR_ARRAY );
 		FAIL( "array with negative size created" );
-		}
-	catch ( HException const& e )
-		{
+	} catch ( HException const& e ) {
 		cout << e.what() << endl;
-		}
+	}
 	array_t array( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
 	for ( int i = 0; i < SIZE_FOR_ARRAY; ++ i )
 		ENSURE_EQUALS( "array element not filled with default value", array[ i ], FILLER_FOR_ARRAY );
@@ -99,11 +91,10 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "Constructor with range initialization." )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
-	item_t::set_start_id( 0 );
-		{
+	item_t::set_start_id( 0 ); {
 		array_t array( a, a + countof ( a ) );
 		ENSURE( "range initialization failed", safe_equal( array.begin(), array.end(), a, a + countof ( a ) ) );
-		}
+	}
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
@@ -123,24 +114,18 @@ TUT_UNIT_TEST( 6, "Operator [ ]." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	array_t array ( SIZE );
-	try
-		{
+	try {
 		array [ SIZE ] = 0;
 		FAIL( "access beyond size succed" );
-		}
-	catch ( HException const& e )
-		{
+	} catch ( HException const& e ) {
 		cout << e.what() << endl;
-		}
-	try
-		{
+	}
+	try {
 		array[ - SIZE - 1 ] = 0;
 		FAIL( "access with negative index succed" );
-		}
-	catch ( HException const& e )
-		{
+	} catch ( HException const& e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 7, "Operator bool." )
@@ -154,16 +139,14 @@ TUT_UNIT_TEST( 7, "Operator bool." )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "push_back" )
-	proto_t proto;
-		{
+	proto_t proto; {
 		array_t array;
-		for ( int long i( 0 ); i < 2048; ++ i )
-			{
+		for ( int long i( 0 ); i < 2048; ++ i ) {
 			proto.push_back( static_cast<int>( i ) );
 			array.push_back( static_cast<int>( i ) );
 			ENSURE_EQUALS( "push_back failed", array, proto );
-			}
 		}
+	}
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
@@ -228,27 +211,23 @@ TUT_UNIT_TEST( 12, "assign operator (=)" )
 	ENSURE_EQUALS( "assgin failed", array, big );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "push_back" )
-		{
+TUT_UNIT_TEST( 13, "push_back" ) {
 		array_t array( 2048 );
 		proto_t proto( 2048 );
 		/* Bug in GCC 4.2.1 enforces namespace prefix here. */
 		yaal::generate( array.begin(), array.end(), inc( 0 ) );
 		yaal::generate( proto.begin(), proto.end(), inc( 0 ) );
-		for ( int long i( 0 ); i < 2048; ++ i )
-			{
+		for ( int long i( 0 ); i < 2048; ++ i ) {
 			proto.pop_back();
 			array.pop_back();
 			ENSURE_EQUALS( "pop_back failed", array, proto );
-			}
-		ENSURE_EQUALS( "not empty!", array.is_empty(), true );
 		}
+		ENSURE_EQUALS( "not empty!", array.is_empty(), true );
+	}
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-void tut_yaal_hcore_harray::test_erase( int first_, int last_ )
-	{
-		{
+void tut_yaal_hcore_harray::test_erase( int first_, int last_ ) { {
 		clog << "testing erase - first: " << first_ << ", last: " << last_ << endl;
 		item_t::set_start_id( 0 );
 		array_t array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
@@ -256,10 +235,10 @@ void tut_yaal_hcore_harray::test_erase( int first_, int last_ )
 		proto.erase( proto.begin() + first_, proto.begin() + last_ );
 		array.erase( array.begin() + first_, array.begin() + last_ );
 		ENSURE_EQUALS( "range initialization failed", array, proto );
-		}
+	}
 
 	ENSURE_EQUALS( "object leak", item_t::get_instance_count(), 0 );
-	}
+}
 
 TUT_UNIT_TEST( 14, "ranged erase" )
 	test_erase( 0, countof( _testData_[0] ) / 2 );
@@ -278,8 +257,7 @@ TUT_UNIT_TEST( 14, "ranged erase" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 15, "ranged insert" )
-	item_t::set_start_id( 0 );
-		{
+	item_t::set_start_id( 0 ); {
 		int const len0( countof ( _testData_[0] ) );
 		int const len1( countof ( _testData_[1] ) );
 		proto_t proto( _testData_[0], _testData_[0] + len0 );
@@ -321,9 +299,8 @@ TUT_UNIT_TEST( 15, "ranged insert" )
 		array.insert( array.end() - array.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
 		proto.insert( proto.end() - proto.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
 		ENSURE_EQUALS( "range insertion failed", array, proto );
-		}
-	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
-		{
+	}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 ); {
 		int const len0( countof ( _testData_[0] ) );
 		int const len1( countof ( _testData_[1] ) );
 		proto_t proto( _testData_[0], _testData_[0] + len0 );
@@ -389,7 +366,7 @@ TUT_UNIT_TEST( 15, "ranged insert" )
 		array.insert( array.end() - array.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
 		proto.insert( proto.end() - proto.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
 		ENSURE_EQUALS( "range insertion failed", array, proto );
-		}
+	}
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
@@ -444,32 +421,28 @@ TUT_UNIT_TEST( 50, "speed test" )
 	array_type array;
 	double long st( 0 );
 	double long yt( 0 );
-	int long LOOPS( 10000000 );
-		{
+	int long LOOPS( 10000000 ); {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.push_back( static_cast<int>( i ) );
 		clog << "*speed* std::vector<>::push_back() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-		{
+	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			array.push_back( static_cast<int>( i ) );
 		clog << "*speed* yaal::hcore::HArray<>::push_back() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-	clog << "*speed* HArray<>::push_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-		{
+	}
+	clog << "*speed* HArray<>::push_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.pop_back();
 		clog << "*speed* std::vector<>::pop_back() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-		{
+	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			array.pop_back();
 		clog << "*speed* yaal::hcore::HArray<>::pop_back() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
+	}
 	clog << "*speed* HArray<>::pop_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()
 

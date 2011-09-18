@@ -29,8 +29,7 @@ Copyright:
 
 #include <yaal/hcore/hstring.hxx>
 
-namespace tut
-{
+namespace tut {
 
 #define TUT_YAAL_HCORE_HCALL_CALLABLE \
 yaal::hcore::HString foo0( void ); \
@@ -47,14 +46,13 @@ yaal::hcore::HString foo10( int a1, int a2, int a3, int a4, int a5, int a6, int 
 
 TUT_YAAL_HCORE_HCALL_CALLABLE
 
-class YaalHCoreHCallClass
-	{
+class YaalHCoreHCallClass {
 public:
 	YaalHCoreHCallClass( void );
 	YaalHCoreHCallClass( YaalHCoreHCallClass const& );
 	virtual ~YaalHCoreHCallClass( void );
 	TUT_YAAL_HCORE_HCALL_CALLABLE
-	};
+};
 
 }
 

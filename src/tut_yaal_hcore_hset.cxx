@@ -40,15 +40,13 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hset : simple_mock<tut_yaal_hcore_hset>
-	{
+struct tut_yaal_hcore_hset : simple_mock<tut_yaal_hcore_hset> {
 	virtual ~tut_yaal_hcore_hset( void ) {}
 	void lower_bound_test( int );
 	void upper_bound_test( int );
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hset, "yaal::hcore::HSet" );
 
@@ -66,53 +64,47 @@ TUT_UNIT_TEST( 1, "find()" )
 	ENSURE_EQUALS( "find failed", *it, 3 );
 TUT_TEARDOWN()
 
-void tut_yaal_hcore_hset::lower_bound_test( int size_ )
-	{
+void tut_yaal_hcore_hset::lower_bound_test( int size_ ) {
 	int_set_t set;
 	for ( int i( 0 ); i < size_; i += 2 )
 		set.insert( i );
-	for ( int i( 0 ); i < ( size_ - 1 ); ++i )
-		{
+	for ( int i( 0 ); i < ( size_ - 1 ); ++i ) {
 		int_set_t::const_iterator it( set.lower_bound( i ) );
 		ENSURE( "lower_bound not found", it != set.end() );
 		ENSURE_EQUALS( "lower_bound failed", *it, ( i % 2 ) ? i + 1 : i );
-		}
+	}
 	set.clear();
 	for ( int i( size_ - 2 ); i >= 0; i -= 2 )
 		set.insert( i );
-	for ( int i( 0 ); i < ( size_ - 1 ); ++i )
-		{
+	for ( int i( 0 ); i < ( size_ - 1 ); ++i ) {
 		int_set_t::const_iterator it( set.lower_bound( i ) );
 		ENSURE( "lower_bound not found", it != set.end() );
 		ENSURE_EQUALS( "lower_bound failed", *it, ( i % 2 ) ? i + 1 : i );
-		}
 	}
+}
 
-void tut_yaal_hcore_hset::upper_bound_test( int size_ )
-	{
+void tut_yaal_hcore_hset::upper_bound_test( int size_ ) {
 	int_set_t set;
 	for ( int i( 0 ); i < size_; i += 2 )
 		set.insert( i );
-	for ( int i( 0 ); i < ( size_ - 2 ); ++i )
-		{
+	for ( int i( 0 ); i < ( size_ - 2 ); ++i ) {
 		int_set_t::const_iterator it( set.upper_bound( i ) );
 		ENSURE( "upper_bound not found", it != set.end() );
 		ENSURE_EQUALS( "upper_bound failed", *it, ( i % 2 ) ? i + 1 : i + 2 );
-		}
+	}
 	int_set_t::const_iterator end( set.upper_bound( *set.rbegin() ) );
 	ENSURE( "upper_bound found", !( end != set.end() ) );
 	set.clear();
 	for ( int i( size_ - 2 ); i >= 0; i -= 2 )
 		set.insert( i );
-	for ( int i( 0 ); i < ( size_ - 2 ); ++i )
-		{
+	for ( int i( 0 ); i < ( size_ - 2 ); ++i ) {
 		int_set_t::const_iterator it( set.upper_bound( i ) );
 		ENSURE( "upper_bound not found", it != set.end() );
 		ENSURE_EQUALS( "upper_bound failed", *it, ( i % 2 ) ? i + 1 : i + 2 );
-		}
+	}
 	int_set_t::const_iterator end2( set.upper_bound( *set.rbegin() ) );
 	ENSURE( "upper_bound found", !( end2 != set.end() ) );
-	}
+}
 
 TUT_UNIT_TEST( 2, "lower_bound()" )
 	int_set_t set;
@@ -185,19 +177,17 @@ TUT_UNIT_TEST( 50, "speed test" )
 	set_type set;
 	double long st( 0 );
 	double long yt( 0 );
-	int long LOOPS( 500000 );
-		{
+	int long LOOPS( 500000 ); {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.insert( static_cast<int>( i ) );
 		clog << "*speed* std::set<>::insert() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-		{
+	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			set.insert( static_cast<int>( i ) );
 		clog << "*speed* yaal::hcore::HSet<>::insert() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
+	}
 	clog << "*speed* HSet<>::insert() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()
 

@@ -38,27 +38,24 @@ using namespace yaal::tools::util;
 using namespace yaal::dbwrapper;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_dbwrapper_hrecordset );
 TUT_TEST_GROUP( tut_yaal_dbwrapper_hrecordset, "yaal::dbwrapper::HRecordSet" );
 
-void dump_query_result( HDataBase::ptr_t db, char const* const query )
-	{
+void dump_query_result( HDataBase::ptr_t db, char const* const query ) {
 	M_PROLOG
 	HRecordSet::ptr_t rs = db->query( query );
-	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); ++ it )
-		{
+	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); ++ it ) {
 		cout << "|";
 		int fc = rs->get_field_count();
 		for ( int i = 0; i < fc; ++ i )
 			cout << *it[ i ] << "|";
 		cout << endl;
-		}
+	}
 	return;
 	M_EPILOG
-	}
+}
 
 static char const* const QUERY = "SELECT * FROM config;";
 
@@ -117,8 +114,7 @@ static char const* const SPECIAL_INSERT = "INSERT INTO config ( name, value ) VA
 static char const* const SPECIAL_UPDATE = "UPDATE config SET value = 'second' WHERE name = 'special';";
 static char const* const SPECIAL_DELETE = "DELETE FROM config WHERE name = 'special';";
 
-void test_dml( HDataBase::ptr_t db )
-	{
+void test_dml( HDataBase::ptr_t db ) {
 	M_PROLOG
 	TUT_DECLARE( HRecordSet::ptr_t rs( db->query( SPECIAL_QUERY ) ); );
 	ENSURE( "empty result not entirelly empty ???", ! rs || ( rs->begin() == rs->end() ) );
@@ -142,7 +138,7 @@ void test_dml( HDataBase::ptr_t db )
 	ENSURE( "DELETE failed?", ! rs || ( rs->begin() == rs->end() ) );
 	return;
 	M_EPILOG
-	}
+}
 
 TUT_UNIT_TEST( 6, "dml on SQLite" )
 #if defined( HAVE_SQLITE3_H )

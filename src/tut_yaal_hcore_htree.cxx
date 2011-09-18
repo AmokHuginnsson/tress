@@ -43,11 +43,9 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_htree
-	{
+struct tut_yaal_hcore_htree {
 	static HString _cache;
 	tut_yaal_hcore_htree( void );
 	virtual ~tut_yaal_hcore_htree( void )
@@ -61,25 +59,22 @@ struct tut_yaal_hcore_htree
 	template<typename T>
 	static void check_consistency( T const& );
 	static void check_node( tree_t::const_node_t, bool );
-	};
+};
 
 HString tut_yaal_hcore_htree::_cache;
 
-tut_yaal_hcore_htree::tut_yaal_hcore_htree( void )
-	{
+tut_yaal_hcore_htree::tut_yaal_hcore_htree( void ) {
 	item_t::set_start_id( -1 );
-	}
+}
 
-HString& tut_yaal_hcore_htree::to_string( tree_t const& t )
-	{
+HString& tut_yaal_hcore_htree::to_string( tree_t const& t ) {
 	_cache.clear();
 	if ( t.get_root() )
 		to_string( *t.get_root() );
 	return ( _cache );
-	}
+}
 
-void tut_yaal_hcore_htree::to_string( tree_t::HNode const& n )
-	{
+void tut_yaal_hcore_htree::to_string( tree_t::HNode const& n ) {
 	_cache += static_cast<char>( n->id() );
 	if ( n.has_childs() )
 		_cache += '{';
@@ -87,122 +82,108 @@ void tut_yaal_hcore_htree::to_string( tree_t::HNode const& n )
 		to_string( *it );
 	if ( n.has_childs() )
 		_cache += '}';
-	}
+}
 
-void tut_yaal_hcore_htree::draw_tree( tree_t const& t )
-	{
+void tut_yaal_hcore_htree::draw_tree( tree_t const& t ) {
 	_cache.clear();
 	if ( t.get_root() )
 		draw_node( *t.get_root() );
 	return;
-	}
+}
 
-void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n )
-	{
+void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n ) {
 	int len = static_cast<int>( _cache.get_length() );
 	tree_t::const_node_t pn = NULL;
-	if ( ( pn = n.get_parent() ) )
-		{
+	if ( ( pn = n.get_parent() ) ) {
 		cout << _cache << "\\_ ";
 		if ( ( pn->child_count() > 1 ) && ( &*( pn->rbegin() ) != &n ) )
 			_cache += "|  ";
 		else
 			_cache += "   ";
-		}
+	}
 	std::cout << *n << std::endl;
 	for ( tree_t::const_iterator it = n.begin(); it != n.end(); ++ it )
 		draw_node( *it );
 	_cache.set_at( len, 0 );
-	}
+}
 
-void tut_yaal_hcore_htree::check_node( tree_t::const_node_t node, bool root )
-	{
+void tut_yaal_hcore_htree::check_node( tree_t::const_node_t node, bool root ) {
 	if ( ! root )
 		ENSURE_EQUALS( "bad root", node->_tree, static_cast<tree_t*>( NULL ) );
-	for ( tree_t::const_iterator it = node->begin(); it != node->end(); ++ it )
-		{
+	for ( tree_t::const_iterator it = node->begin(); it != node->end(); ++ it ) {
 		ENSURE_EQUALS( "bad parent", it->_trunk, node );
 		check_node( &*it, false );
-		}
 	}
+}
 
 template<typename T>
-void tut_yaal_hcore_htree::check_consistency( T const& tree )
-	{
-	if ( tree.get_root() )
-		{
+void tut_yaal_hcore_htree::check_consistency( T const& tree ) {
+	if ( tree.get_root() ) {
 		ENSURE_EQUALS( "bad root", tree.get_root()->_tree, &tree );
 		ENSURE_EQUALS( "bad parent for root", tree.get_root()->_trunk, static_cast<typename T::node_t>( NULL ) );
 		check_node( tree.get_root(), true );
-		}
 	}
+}
 
 TUT_TEST_GROUP( tut_yaal_hcore_htree, "yaal::hcore::HTree" );
 
-TUT_UNIT_TEST( 1, "trivial constructor" )
-		{
+TUT_UNIT_TEST( 1, "trivial constructor" ) {
 	tree_t t;
 	ENSURE_EQUALS( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "copy constructor of empty trees (both are empty)" )
-		{
+TUT_UNIT_TEST( 2, "copy constructor of empty trees (both are empty)" ) {
 	tree_t t1;
 	tree_t t2( t1 );
 	ENSURE_EQUALS( "new tree not clear", t1.get_root(), static_cast<tree_t::node_t>( NULL ) );
 	ENSURE_EQUALS( "copied tree not clear", t2.get_root(), static_cast<tree_t::node_t>( NULL ) );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "swap empty trees (both are empty)" )
-		{
+TUT_UNIT_TEST( 3, "swap empty trees (both are empty)" ) {
 	tree_t t1;
 	tree_t t2;
 	t1.swap( t2 );
 	ENSURE_EQUALS( "new tree not clear", t1.get_root(), static_cast<tree_t::node_t>( NULL ) );
 	ENSURE_EQUALS( "copied tree not clear", t2.get_root(), static_cast<tree_t::node_t>( NULL ) );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "create_new_root/get_root" )
-		{
+TUT_UNIT_TEST( 4, "create_new_root/get_root" ) {
 	tree_t t;
 	ENSURE_EQUALS( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
 	ENSURE( "root not created", n ? true : false );
 	ENSURE_EQUALS( "new root is invalid", t.get_root(), n );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "setting getting values" )
-		{
+TUT_UNIT_TEST( 5, "setting getting values" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	(**n) = 'x';
 	check_consistency( t );
 	ENSURE_EQUALS( "value set/get failed", **n, 'x' );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "get_parent" )
-		{
+TUT_UNIT_TEST( 6, "get_parent" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
 	ENSURE_EQUALS( "root node malformed", n->get_parent(), static_cast<tree_t::node_t>( NULL ) );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "add_node" )
-		{
+TUT_UNIT_TEST( 7, "add_node" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -211,12 +192,11 @@ TUT_UNIT_TEST( 7, "add_node" )
 	check_consistency( t );
 	ENSURE( "node addition / access failure", it == n->begin() );
 	ENSURE_EQUALS( "bad value for new node", **it, 'x' );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "has_childs" )
-		{
+TUT_UNIT_TEST( 8, "has_childs" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -227,12 +207,11 @@ TUT_UNIT_TEST( 8, "has_childs" )
 	n->add_node( 'x' );
 	check_consistency( t );
 	ENSURE( "childless node reported after node addition", n->has_childs() );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "child_count" )
-		{
+TUT_UNIT_TEST( 9, "child_count" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -243,12 +222,11 @@ TUT_UNIT_TEST( 9, "child_count" )
 	n->add_node( 'x' );
 	check_consistency( t );
 	ENSURE_EQUALS( "bad child count reported", n->child_count(), 2 );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "clear" )
-		{
+TUT_UNIT_TEST( 10, "clear" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -262,7 +240,7 @@ TUT_UNIT_TEST( 10, "clear" )
 	t.clear();
 	check_consistency( t );
 	ENSURE_EQUALS( "clear failed", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
@@ -280,8 +258,7 @@ TUT_UNIT_TEST( 11, "get_level()" )
 	ENSURE_EQUALS( "incorrect level value", n->get_level(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "swap()" )
-		{
+TUT_UNIT_TEST( 12, "swap()" ) {
 		char const* const bad_shape = "bad shape";
 		char const* const swap_failed = "swap failed";
 		tree_t t1;
@@ -307,12 +284,11 @@ TUT_UNIT_TEST( 12, "swap()" )
 		check_consistency( t2 );
 		ENSURE_EQUALS( swap_failed, to_string( t2 ), "@{xy}" );
 		ENSURE_EQUALS( swap_failed, to_string( t1 ), "%{12}" );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "basic shape tests" )
-		{
+TUT_UNIT_TEST( 13, "basic shape tests" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -346,12 +322,11 @@ TUT_UNIT_TEST( 13, "basic shape tests" )
 	a->add_node( 'H' );
 	check_consistency( t );
 	ENSURE_EQUALS( bad_shape, to_string( t ), "0{x{@{QA{FGH}B}}y}" );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "graft ( replace_node )" )
-		{
+TUT_UNIT_TEST( 14, "graft ( replace_node )" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -388,12 +363,11 @@ TUT_UNIT_TEST( 14, "graft ( replace_node )" )
 	ENSURE( "bad parent", b->get_parent() == &*n ); 
 	**b = '0';
 	ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{ABC}1{def}2{ghi}}" );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "graft upwards ( replace_node )" )
-		{
+TUT_UNIT_TEST( 15, "graft upwards ( replace_node )" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		check_consistency( t );
@@ -446,12 +420,11 @@ TUT_UNIT_TEST( 15, "graft upwards ( replace_node )" )
 		ENSURE_EQUALS( "incorrect level value", B->get_level(), 2 );
 		ENSURE( "bad parent", b->get_parent() == &*n ); 
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{a{ABC}1{def}2{ghi}}" );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "graft downwards (replace_node)" )
-		{
+TUT_UNIT_TEST( 16, "graft downwards (replace_node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -478,23 +451,19 @@ TUT_UNIT_TEST( 16, "graft downwards (replace_node)" )
 		it->add_node( 'h' );
 		it->add_node( 'i' );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
-		try
-			{
+		try {
 			check_consistency( t );
 			a->replace_node( B, &*it0 );
 			FAIL( "graft downwards succeded, eek!" );
-			}
-		catch ( HFailedAssertion& )
-			{
+		} catch ( HFailedAssertion& ) {
 			check_consistency( t );
 			// ok
-			}
 		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "graft sideways (replace_node)" )
-		{
+TUT_UNIT_TEST( 17, "graft sideways (replace_node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -524,12 +493,11 @@ TUT_UNIT_TEST( 17, "graft sideways (replace_node)" )
 		e->get_parent()->replace_node( e, &*a );
 		check_consistency( t );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{da{ABC}f}2{ghi}}" );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 18, "graft to root (replace_node)" )
-		{
+TUT_UNIT_TEST( 18, "graft to root (replace_node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -559,12 +527,11 @@ TUT_UNIT_TEST( 18, "graft to root (replace_node)" )
 		t.set_new_root( &*a );
 		check_consistency( t );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "a{ABC}" );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 19, "across two trees (replace_node)" )
-		{
+TUT_UNIT_TEST( 19, "across two trees (replace_node)" ) {
 		tree_t::node_t n = NULL;
 		tree_t::iterator it;
 		tree_t t1;
@@ -599,12 +566,11 @@ TUT_UNIT_TEST( 19, "across two trees (replace_node)" )
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{3{80}5}" );
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G1{246}}c}" );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "across two trees from root (replace_node)" )
-		{
+TUT_UNIT_TEST( 20, "across two trees from root (replace_node)" ) {
 		tree_t::node_t n = NULL;
 		tree_t::iterator it;
 		tree_t t1;
@@ -639,12 +605,11 @@ TUT_UNIT_TEST( 20, "across two trees from root (replace_node)" )
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "" );
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G@{1{246}3{80}5}}c}" );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "graft with bad iteroator (replace_node)" )
-		{
+TUT_UNIT_TEST( 21, "graft with bad iteroator (replace_node)" ) {
 		tree_t::node_t n = NULL;
 		tree_t::iterator it;
 		tree_t t1;
@@ -672,25 +637,21 @@ TUT_UNIT_TEST( 21, "graft with bad iteroator (replace_node)" )
 		n->add_node( 'c' );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
-		try
-			{
+		try {
 			check_consistency( t1 );
 			check_consistency( t2 );
 			it->replace_node( it, t1.get_root() );
 			FAIL( "grafintg with no coherency" );
-			}
-		catch ( HFailedAssertion& )
-			{
+		} catch ( HFailedAssertion& ) {
 			check_consistency( t1 );
 			check_consistency( t2 );
 			// ok
-			}
 		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 22, "move_node(it,node)" )
-		{
+TUT_UNIT_TEST( 22, "move_node(it,node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -720,12 +681,11 @@ TUT_UNIT_TEST( 22, "move_node(it,node)" )
 		e->get_parent()->move_node( e, &*a );
 		check_consistency( t );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{da{ABC}ef}2{ghi}}" );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 23, "move_node(node)" )
-		{
+TUT_UNIT_TEST( 23, "move_node(node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -755,12 +715,11 @@ TUT_UNIT_TEST( 23, "move_node(node)" )
 		e->get_parent()->move_node( &*a );
 		check_consistency( t );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{defa{ABC}}2{ghi}}" );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "copy_node(it,node)" )
-		{
+TUT_UNIT_TEST( 24, "copy_node(it,node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -790,12 +749,11 @@ TUT_UNIT_TEST( 24, "copy_node(it,node)" )
 		e->get_parent()->copy_node( e, &*a );
 		check_consistency( t );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{da{ABC}ef}2{ghi}}" );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 25, "copy_node(node)" )
-		{
+TUT_UNIT_TEST( 25, "copy_node(node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -825,7 +783,7 @@ TUT_UNIT_TEST( 25, "copy_node(node)" )
 		e->get_parent()->copy_node( &*a );
 		check_consistency( t );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{defa{ABC}}2{ghi}}" );
-		}
+	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 

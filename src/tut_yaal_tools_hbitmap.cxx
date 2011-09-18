@@ -40,8 +40,7 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hbitmap );
 TUT_TEST_GROUP( tut_yaal_tools_hbitmap, "yaal::tools::HBitmap" );
@@ -76,54 +75,42 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "set" )
 	HBitmap bmp;
-	try
-		{
+	try {
 		bmp.set( 0, true );
 		FAIL( "default constructor set" );
-		}
-	catch ( HFailedAssertion& )
-		{
+	} catch ( HFailedAssertion& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "get" )
 	HBitmap bmp;
-	try
-		{
+	try {
 		bmp.get( 0 );
 		FAIL( "default constructor set" );
-		}
-	catch ( HFailedAssertion& )
-		{
+	} catch ( HFailedAssertion& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "rotate_left" )
 	HBitmap bmp;
-	try
-		{
+	try {
 		bmp.rotate_left( 0, 0, 0 );
 		FAIL( "default constructor set" );
-		}
-	catch ( HFailedAssertion& )
-		{
+	} catch ( HFailedAssertion& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 7, "rotate_right" )
 	HBitmap bmp;
-	try
-		{
+	try {
 		bmp.rotate_right( 0, 0, 0 );
 		FAIL( "default constructor set" );
-		}
-	catch ( HFailedAssertion& )
-		{
+	} catch ( HFailedAssertion& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "reverse iteration" )

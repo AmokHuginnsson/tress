@@ -1,12 +1,10 @@
 #include <yaal/hcore/macro.hxx>
 
-extern "C"
-{
+extern "C" {
 
-M_EXPORT_SYMBOL int tut_yaal_tools_hplugin_sum( int a, int b )
-	{
+M_EXPORT_SYMBOL int tut_yaal_tools_hplugin_sum( int a, int b ) {
 	return ( a + b );
-	}
+}
 
 }
 

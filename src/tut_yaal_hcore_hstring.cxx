@@ -40,8 +40,7 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 static int const MIN_CAPACITY = sizeof ( HString ) - 2;
 
@@ -248,8 +247,7 @@ TUT_UNIT_TEST( 14, "replace" )
 	ENSURE_EQUALS( "replace A->B failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT_AB ) - 1 ) );
 	ENSURE_EQUALS( "replace A->B failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "replace A->B failed (is_empty)", str.empty(), false );
-
-		{
+ {
 		static char const INIT1[] = "@c@";
 		static char const PAT1A[] = "@";
 		static char const PAT1B[] = "UU";
@@ -261,8 +259,7 @@ TUT_UNIT_TEST( 14, "replace" )
 		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (is_empty)", str.empty(), false );
 		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
-		}
-		{
+	} {
 		static char const INIT1[] = "c@cc@cc@cc@cc@cc@cc";
 		static char const PAT1A[] = "@";
 		static char const PAT1B[] = "@@";
@@ -274,7 +271,7 @@ TUT_UNIT_TEST( 14, "replace" )
 		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), max( 31, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (is_empty)", str.empty(), false );
 		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 15, "construction from int short" )
@@ -323,15 +320,12 @@ TUT_UNIT_TEST( 22, "shift_left" )
 	HString str( CORRECT );
 	str.shift_left( SHIFT );
 	ENSURE_EQUALS( "left_shift failed", str, CORRECT + SHIFT );
-	try
-		{
+	try {
 		str.shift_left( -1 );
 		FAIL ( "no check for negative shift" );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		cout << e.what() << endl;
-		}
+	}
 	str.shift_left( 100000 );
 	ENSURE_EQUALS( "left_shift failed", str, "" );
 TUT_TEARDOWN()
@@ -342,15 +336,12 @@ TUT_UNIT_TEST( 23, "shift_right" )
 	HString str( CORRECT + SHIFT );
 	str.shift_right( SHIFT );
 	ENSURE_EQUALS( "right_shift failed", str, CORRECT );
-	try
-		{
+	try {
 		str.shift_right( -1 );
 		FAIL( "no check for negative shift" );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 24, "mid" )
@@ -401,24 +392,18 @@ TUT_UNIT_TEST( 28, "insert" )
 	str = s;ENSURE_EQUALS( insert_failed, str.insert( 2, 3, "ABCD" ), "abABCcdef" );
 	str = s;ENSURE_EQUALS( insert_failed, str.insert( -2, 2, "ABCD" ), "abcdef" );
 	str = s;ENSURE_EQUALS( insert_failed, str.insert( -2, 4, "ABCD" ), "CDabcdef" );
-	try
-		{
+	try {
 		str = s;ENSURE_EQUALS( insert_failed, str.insert( -5, 3, "ABCD" ), "any" );
 		FAIL( overflow );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		cout << e.what() << endl;
-		}
-	try
-		{
+	}
+	try {
 		str = s;ENSURE_EQUALS( insert_failed, str.insert( 0, 5, "ABCD" ), "any" );
 		FAIL( overflow );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		cout << e.what() << endl;
-		}
+	}
 	str = s;ENSURE_EQUALS( insert_failed, str.insert( 20, 3, "ABCD" ), "abcdef" );
 	str = s;ENSURE_EQUALS( insert_failed, str.insert( 2, -5, "ABCD" ), "abcdef" );
 	str = s;ENSURE_EQUALS( insert_failed, str.insert( 5, 3, "ABCD" ), "abcdeABCf" );
@@ -585,25 +570,23 @@ TUT_UNIT_TEST( 37, "find_last_other_than" )
 	ENSURE_EQUALS( HString().format( failed, 14 ), str.find_last_other_than( "abcdefg", 8 ), 7 );
 TUT_TEARDOWN()
 
-int confirm( char const* const str, int size, char const* const pat, int len )
-	{
+int confirm( char const* const str, int size, char const* const pat, int len ) {
 	static HString fastpat;
 	fastpat = pat;
 	if ( len < fastpat.get_length() )
 		fastpat.set_at( len, 0 );
 	char const* p = ( len <= size ) ? strstr( str, fastpat.raw() ) : NULL;
 	return ( p ? static_cast<int>( p - str ) : -1 );
-	}
+}
 
-struct gen_char
-	{
+struct gen_char {
 	HRandomizer _rnd;
 	gen_char( void )
 		: _rnd( randomizer_helper::make_randomizer() )
 		{ }
 	char operator()( void )
 		{ return ( static_cast<char>( _rnd( 1 + 'z' - 'a' ) + 'a' ) ); }
-	};
+};
 
 TUT_UNIT_TEST( 38, "find("")" )
 	static int const SAMPLE_SIZE = 128;
@@ -613,13 +596,10 @@ TUT_UNIT_TEST( 38, "find("")" )
 	yaal::copy( sample, sample + SAMPLE_SIZE, stream_iterator( cout ) ); cout << endl;
 	HString str( sample );
 	HString msg;
-	for ( int len = 1; len <= SAMPLE_SIZE; ++ len )
-		{
-		for ( int offset = 0; offset < SAMPLE_SIZE; ++ offset )
-			{
+	for ( int len = 1; len <= SAMPLE_SIZE; ++ len ) {
+		for ( int offset = 0; offset < SAMPLE_SIZE; ++ offset ) {
 			int where = -1;
-			do
-				{
+			do {
 				int newwhere = ( ( len + offset ) <= SAMPLE_SIZE ) ? confirm( sample + where + 1,
 						SAMPLE_SIZE - ( where + 1 ), sample + offset, len ) : -1;
 				if ( newwhere >= 0 )
@@ -628,10 +608,9 @@ TUT_UNIT_TEST( 38, "find("")" )
 				ENSURE_EQUALS( msg,
 						where = ( offset + len <= SAMPLE_SIZE ) ? static_cast<int>( str.nfind( sample + offset, len, where + 1 ) ) : -1,
 						newwhere );
-				}
-			while ( where >= 0 );
-			}
+			} while ( where >= 0 );
 		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 39, "trim_left("")" )
@@ -681,24 +660,18 @@ TUT_UNIT_TEST( 41, "hs_realloc( size )" )
 	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), MIN_CAPACITY );
 	str.hs_realloc( MIN_CAPACITY + 2 );
 	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), ( MIN_CAPACITY < 16 ? 15 : 31 ) );
-	try
-		{
+	try {
 		str.hs_realloc( -1 );
 		FAIL( "absurd reallocation size allowed" );
-		}
-	catch ( HStringException const& )
-		{
+	} catch ( HStringException const& ) {
 		/* ok */
-		}
-	try
-		{
+	}
+	try {
 		str.hs_realloc( str.get_max_size() + 2 );
 		FAIL( "huge (too big) reallocation size allowed" );
-		}
-	catch ( HStringException const& )
-		{
+	} catch ( HStringException const& ) {
 		/* ok */
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 42, "assign( HString ... )" )
@@ -720,24 +693,18 @@ TUT_UNIT_TEST( 42, "assign( HString ... )" )
 	ENSURE_EQUALS( err, dest.assign( source, sizeof ( ss ) - 1, 5 ), "" );
 	ENSURE_EQUALS( err, dest.assign( source, sizeof ( ss ), 5 ), "" );
 	source.assign( sl, sizeof ( sl ) - 1 );
-	try
-		{
+	try {
 		dest.assign( source, -1, 2 );
 		FAIL( "assign with negative offset succeeded" );
-		}
-	catch ( HStringException const& )
-		{
+	} catch ( HStringException const& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		dest.assign( source, 0, -1 );
 		FAIL( "assign with negative lenght succeeded" );
-		}
-	catch ( HStringException const& )
-		{
+	} catch ( HStringException const& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 }

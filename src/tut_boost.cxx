@@ -51,29 +51,26 @@ using namespace boost::filesystem;
 using namespace boost::gregorian;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_boost
-	{
+struct tut_boost {
 	typedef HInstanceTracker<tut_boost> item_t;
 	virtual ~tut_boost( void ) {}
-	};
+};
 
 TUT_TEST_GROUP( tut_boost, "boost" );
 
 typedef pair<int, int> pair_t;
 typedef pair<string, string> person_t;
 
-pair_t make_multi( void )
-	{
+pair_t make_multi( void ) {
 	static pair_t res[] = { make_pair( 1, 3 ), make_pair( 4, 1 ), make_pair( 2, 4 ), make_pair( 3, 2 ) };
 	static int idx = 0;
 	int i = idx;
 	++ idx;
 	idx %= static_cast<int>( ( sizeof ( res ) / sizeof ( pair_t ) ) );
 	return ( res[ i ] );
-	}
+}
 
 TUT_UNIT_TEST( 1, "binding" )
 	cout << "sort by field using binding" << endl;
@@ -89,27 +86,24 @@ TUT_UNIT_TEST( 1, "binding" )
 	cout << "}" << endl;
 TUT_TEARDOWN()
 
-void dump_dir( path const& dir )
-	{
+void dump_dir( path const& dir ) {
 	cout << "dir: " << dir.string() << endl;
 	directory_iterator end;
-	for ( directory_iterator it( dir ); it != end; ++ it )
-		{
+	for ( directory_iterator it( dir ); it != end; ++ it ) {
 		if ( is_directory( *it ) )
 			dump_dir( *it );
 		else
 			cout << "file: " << (*it).path() << endl;
-		}
-	return;
 	}
+	return;
+}
 
 TUT_UNIT_TEST( 2, "filesystem" )
 	dump_dir( path( "." ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "date_time" )
-	try
-		{
+	try {
 		string birthday_s( "1978-05-24" );
 		date birthday( from_simple_string( birthday_s ) );
 		date now = day_clock::local_day();
@@ -120,38 +114,32 @@ TUT_UNIT_TEST( 3, "date_time" )
 			cout << "not yet born" << endl;
 		else
 			cout << "you live " << alive.days() << " days" << endl;
-		}
-	catch ( ... )
-		{
+	} catch ( ... ) {
 		cerr << "bad date" << endl;
-		}
+	}
 TUT_TEARDOWN()
 
-struct test4helper
-	{
+struct test4helper {
 	int _val;
 	test4helper( int val ) : _val( val ) {}
 	int get_val() const { return ( _val ); }
-	};
+};
 
-struct phony
-	{
+struct phony {
 	template<typename tType>
-	struct id
-		{
+	struct id {
 		tType _val;
 		id( tType val ) : _val( val ) {}
 		tType operator()( void )
 			{ return ( _val ); }
-		};
 	};
+};
 
 template<typename tType,
 	typename init0_t = phony, typename init1_t = phony,
 	typename init2_t = phony, typename init3_t = phony,
 	typename init4_t = phony, typename init5_t = phony>
-struct generator
-	{
+struct generator {
 	typedef phony* __;
 	init0_t INIT0;
 	init1_t INIT1;
@@ -182,8 +170,7 @@ struct generator
 			init3_t const*, init4_t const*, init5_t const* )
 		{ return ( tType( INIT0(), INIT1(), INIT2(), INIT3(), INIT4(),
 					INIT5() ) ); }
-	tType operator()()
-		{
+	tType operator()() {
 		return (
 				make(
 					static_cast<init0_t*>( NULL ),
@@ -192,16 +179,15 @@ struct generator
 					static_cast<init3_t*>( NULL ),
 					static_cast<init4_t*>( NULL ),
 					static_cast<init5_t*>( NULL ) ) );
-		}
-	};
+	}
+};
 
 typedef pair<int const, test4helper> t4h_t;
 
-ostream& operator << ( ostream& os, t4h_t const& p )
-	{
+ostream& operator << ( ostream& os, t4h_t const& p ) {
 	os << "(" << p.first << "," << p.second.get_val() << ")";
 	return ( os );
-	}
+}
 
 template<typename result_t, typename el1_t, typename el2_t>
 result_t plus( el1_t const& el1, el2_t const& el2 )
@@ -224,10 +210,9 @@ TUT_UNIT_TEST( 4, "boost::bind, accumulate, plus" )
 	cout << "}" << endl;
 TUT_TEARDOWN()
 
-pair_t foo( int first, int second )
-	{
+pair_t foo( int first, int second ) {
 	return ( make_pair( first, second ) );
-	}
+}
 
 TUT_UNIT_TEST( 5, "boost::bind features" )
 	ENSURE_EQUALS( "no args bind", boost::bind( &foo, _1, _2 )( 1, 2 ), make_pair( 1, 2 ) );

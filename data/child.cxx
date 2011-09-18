@@ -10,23 +10,20 @@
 
 using namespace std;
 
-string now( void )
-	{
+string now( void ) {
 	char buf[256];
 	time_t t( time( NULL ) );
 	tm* b( localtime( &t ) );
 	::strftime( buf, sizeof ( buf ) - 1, "%a, %d %b %Y %H:%M:%S %z", b );
 	return ( buf );
-	}
+}
 
-int main( int, char** )
-	{
+int main( int, char** ) {
 #ifdef __MSVCXX__
 	/* DebugBreak(); */
 #endif
 	int ret( 0 );
-	try
-		{
+	try {
 		string const path( "./out/hpipedchild.log" );
 		ofstream log( path.c_str() );
 		if ( ! log )
@@ -41,19 +38,16 @@ int main( int, char** )
 			cout << ( output = "hello-OUT" ) << endl;
 		else if ( line == "err" )
 			cerr << ( output = "hello-ERR" ) << endl;
-		else
-			{
+		else {
 			cout << ( output = "error" ) << endl;
 			cerr << output << endl;
-			}
+		}
 		log << now() << ": written output [" << output << "]" << endl;
 		log << now() << ": exiting" << endl;
-		}
-	catch ( exception const& e )
-		{
+	} catch ( exception const& e ) {
 		cerr << "Exception caught: " << e.what() << endl;
 		ret = 1;
-		}
-	return ( ret );
 	}
+	return ( ret );
+}
 

@@ -39,60 +39,51 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_huniquemovable : public simple_mock<tut_yaal_hcore_huniquemovable>
-	{
+struct tut_yaal_hcore_huniquemovable : public simple_mock<tut_yaal_hcore_huniquemovable> {
 	virtual ~tut_yaal_hcore_huniquemovable( void ) {}
 	typedef HUniqueMovable<item_t> um_t;
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_huniquemovable, "yaal::hcore::HUniqueMovable" );
 
-TUT_UNIT_TEST( 1, "constructor with no parameters" )
-		{
+TUT_UNIT_TEST( 1, "constructor with no parameters" ) {
 		um_t um;
 		ENSURE_EQUALS( "bad constructor called", (*um).id(), 0 );
 		ENSURE_EQUALS( "bad constructor called", um->id(), 0 );
 		ENSURE_EQUALS( "inconsistent instance count", item_t::get_instance_count(), 1 );
-		}
+	}
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "constructor with parameters" )
-		{
+TUT_UNIT_TEST( 2, "constructor with parameters" ) {
 		um_t um( 7 );
 		ENSURE_EQUALS( "bad constructor called", (*um).id(), 7 );
 		ENSURE_EQUALS( "bad constructor called", um->id(), 7 );
 		ENSURE_EQUALS( "inconsistent instance count", item_t::get_instance_count(), 1 );
-		}
+	}
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "copy constructor" )
-		{
+TUT_UNIT_TEST( 3, "copy constructor" ) {
 		um_t um( 7 );
 		ENSURE_EQUALS( "bad constructor called", um->id(), 7 );
 		ENSURE_EQUALS( "inconsistent instance count", item_t::get_instance_count(), 1 );
 		um_t copy( um );
 		ENSURE_EQUALS( "bad constructor called", copy->id(), 7 );
 		ENSURE_EQUALS( "inconsistent instance count", item_t::get_instance_count(), 1 );
-		try
-			{
+		try {
 			um->id();
 			FAIL( "accessing invalidated HUniqueMovable<> succeeded" );
-			}
-		catch ( HFailedAssertion const& )
-			{
+		} catch ( HFailedAssertion const& ) {
 			// ok
-			}
 		}
+	}
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "assignment operator" )
-		{
+TUT_UNIT_TEST( 4, "assignment operator" ) {
 		um_t um( 7 );
 		ENSURE_EQUALS( "bad constructor called", um->id(), 7 );
 		ENSURE_EQUALS( "inconsistent instance count", item_t::get_instance_count(), 1 );
@@ -102,16 +93,13 @@ TUT_UNIT_TEST( 4, "assignment operator" )
 		copy = um;
 		ENSURE_EQUALS( "inconsistent instance count", item_t::get_instance_count(), 1 );
 		ENSURE_EQUALS( "bad constructor called", copy->id(), 7 );
-		try
-			{
+		try {
 			um->id();
 			FAIL( "accessing invalidated HUniqueMovable<> succeeded" );
-			}
-		catch ( HFailedAssertion const& )
-			{
+		} catch ( HFailedAssertion const& ) {
 			// ok
-			}
 		}
+	}
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 

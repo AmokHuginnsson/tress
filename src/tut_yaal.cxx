@@ -38,8 +38,7 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal );
 TUT_TEST_GROUP( tut_yaal, "yaal" );
@@ -324,11 +323,9 @@ TUT_UNIT_TEST( 25, "call in superposition" )
 	cout << endl;
 TUT_TEARDOWN()
 
-namespace
-{
+namespace {
 
-class MemFunTest
-	{
+class MemFunTest {
 	int _base;
 public:
 	MemFunTest( int base_ ) : _base( base_ ) {}
@@ -342,7 +339,7 @@ public:
 		{ return ( _base + arg_ ); }
 	int calc_const( int arg_ ) const
 		{ return ( _base + arg_ ); }
-	};
+};
 
 }
 

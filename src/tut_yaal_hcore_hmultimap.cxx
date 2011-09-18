@@ -38,15 +38,13 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hmultimap
-	{
+struct tut_yaal_hcore_hmultimap {
 	virtual ~tut_yaal_hcore_hmultimap( void ) {}
 	typedef HMultiMap<int, int, HMultiContainerStorage::HPacked> mmp_t;
 	typedef HMultiMap<int, int, HMultiContainerStorage::HTransparent> mmt_t;
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hmultimap, "yaal::hcore::HMultiMap" );
 

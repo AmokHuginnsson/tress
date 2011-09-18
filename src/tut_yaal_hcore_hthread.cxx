@@ -39,13 +39,11 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 #define M_DSLEEP( count ) util::sleep::milisecond( ( count ) * 100 );
 
-class HCool
-	{
+class HCool {
 protected:
 	/*{*/
 	bool		_wasStarted;
@@ -59,88 +57,76 @@ public:
 	void set( int );
 	void* run( HThread const* );
 	/*}*/
-	};
+};
 
 HCool::HCool( char const* name_ )
-	: _wasStarted( false ), _lifeLength( 0 ), _name( name_ )
-	{
+	: _wasStarted( false ), _lifeLength( 0 ), _name( name_ ) {
 	M_PROLOG
 	cout << "Object [" << _name << "] constructed." << endl;
 	return;
 	M_EPILOG
-	}
+}
 
-HCool::~HCool( void )
-	{
+HCool::~HCool( void ) {
 	M_PROLOG
 	cout << "Object [" << _name << "] destructed." << endl;
 	return;
 	M_EPILOG
-	}
+}
 
-void* simple( HThread const* const caller_ )
-	{
+void* simple( HThread const* const caller_ ) {
 	M_PROLOG
 	cout << "Thread [simple] started." << endl;
 	int ctr = 50;
-	while ( caller_->is_alive() && ctr -- )
-		{
+	while ( caller_->is_alive() && ctr -- ) {
 		cout << ctr << ' ' << flush;
 		M_DSLEEP( 1 );
-		}
+	}
 	cout << "Thread [simple] finished." << endl;
 	return ( 0 );
 	M_EPILOG
-	}
+}
 
-void* a_fast_one( HThread const* const )
-	{
+void* a_fast_one( HThread const* const ) {
 	return ( 0 );
-	}
+}
 
-void busy_wait( void )
-	{
+void busy_wait( void ) {
 /* cppcheck-suppress unreadVariable */
 	long q = 3;
-	for ( int i= 0; i < 1000; ++ i )
-		{
-		for ( int j= 0; j < 1000; ++ j )
-			{
+	for ( int i= 0; i < 1000; ++ i ) {
+		for ( int j= 0; j < 1000; ++ j ) {
 			for ( int k= 0; k < 20; ++ k )
 				q *= 3;
-			}
 		}
 	}
+}
 
-void* HCool::run( HThread const* caller_ )
-	{
+void* HCool::run( HThread const* caller_ ) {
 	M_PROLOG
 	int ctr = _lifeLength;
 	_wasStarted = true;
 	cout << "Thread [" << _name << "] started ... ";
-	while ( caller_->is_alive() && ctr -- )
-		{
+	while ( caller_->is_alive() && ctr -- ) {
 		cout << ctr << ' ' << flush;
 		if ( _name == "busy" )
 			busy_wait();
 		else
 			M_DSLEEP( 1 );
-		}
+	}
 	cout << " ... and finished" << endl;
 	return ( 0 );
 	M_EPILOG
-	}
+}
 
-void HCool::set( int length_ )
-	{
+void HCool::set( int length_ ) {
 	M_PROLOG
 	_lifeLength = length_;
 	return;
 	M_EPILOG
-	}
+}
 
-class CVTest
-	{
+class CVTest {
 	HThread _thread;
 	HMutex _mutex;
 	HCondition _cV;
@@ -150,60 +136,50 @@ public:
 	~CVTest( void );
 	void* run( void );
 	void eat( void );
-	};
+};
 
-CVTest::CVTest( void ) : _thread(), _mutex(), _cV( _mutex ), _loop( false )
-	{
-	}
+CVTest::CVTest( void ) : _thread(), _mutex(), _cV( _mutex ), _loop( false ) {
+}
 
-CVTest::~CVTest( void )
-	{
+CVTest::~CVTest( void ) {
 	_thread.finish();
-	}
+}
 
-void* CVTest::run( void )
-	{
+void* CVTest::run( void ) {
 	_loop = true;
 	int ctr = 0;
-	while ( _loop )
-		{
+	while ( _loop ) {
 		_cV.signal();
 		cout << "+" << flush;
 		_cV.signal();
 		cout << "+" << flush;
 		ctr += 2;
-		}
-	return ( reinterpret_cast<void*>( ctr ) );
 	}
+	return ( reinterpret_cast<void*>( ctr ) );
+}
 
-void CVTest::eat( void )
-	{
+void CVTest::eat( void ) {
 	int cnt = 80;
 	HLock l( _mutex );
 	_thread.spawn( call( &CVTest::run, this ) );
-	while ( cnt -- )
-		{
+	while ( cnt -- ) {
 		_cV.wait( 1, 0 );
 		cout << "\b" << flush;
-		}
-	_loop = false;
 	}
+	_loop = false;
+}
 
-void* unstable( HThread* caller_ )
-	{
+void* unstable( HThread* caller_ ) {
 	M_PROLOG
-	try
-		{
+	try {
 		throw HFileException( "testing hthread exception propagation" );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		e.log( __FILE__, __LINE__, __PRETTY_FUNCTION__ );
 		caller_->stack_exception( e.what(), e.code() );
-		}
+	}
 	return ( NULL );
 	M_EPILOG
-	}
+}
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hthread );
 TUT_TEST_GROUP( tut_yaal_hcore_hthread, "yaal::hcore::HThread" );
@@ -261,15 +237,14 @@ TUT_UNIT_TEST( 33, "Starting new thread and finishing it prematurely (busy body)
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "Starting new thread and finishing it prematurely by destructor" )
-	HTime start, stop;
-		{
+	HTime start, stop; {
 		HCool ca( "a" );
 		HThread a;
 		ca.set( 50 );
 		a.spawn( call( &HCool::run, &ca, &a ) );
 		ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 		start.set_now();
-		}
+	}
 	stop.set_now();
 	stop -= start;
 	ENSURE_DISTANCE( "thread failed to interrupt from destructor",
@@ -290,28 +265,22 @@ TUT_UNIT_TEST( 6, "Starting already started thread" )
 	HThread a;
 	ca.set( 5 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
-	try
-		{
+	try {
 		a.spawn( call( &HCool::run, &ca, &a ) );
 		FAIL( "Started already started thread." );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 7, "Finishing thread that was not started" )
 	HThread a;
-	try
-		{
+	try {
 		a.finish();
 		FAIL( "Finishing not started thread successful." );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "Simple thread (plain function)" )
@@ -369,15 +338,12 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 13, "Exception propagation." )
 	HThread a;
 	a.spawn( call( unstable, &a ) );
-	try
-		{
+	try {
 		a.finish();
 		FAIL( "Exception not propagated!" );
-		}
-	catch ( HThreadException& e )
-		{
+	} catch ( HThreadException& e ) {
 		e.log( __FILE__, __LINE__, __PRETTY_FUNCTION__ );
-		}
+	}
 TUT_TEARDOWN()
 
 }

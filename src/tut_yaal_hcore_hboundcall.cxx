@@ -39,17 +39,15 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hboundcall
-	{
+struct tut_yaal_hcore_hboundcall {
 	YaalHCoreHCallClass _callable;
 	tut_yaal_hcore_hboundcall( void ) : _callable()
 		{}
 	virtual ~tut_yaal_hcore_hboundcall( void )
 		{}
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hboundcall, "yaal::hcore::HBoundCall" );
 
@@ -130,8 +128,7 @@ TUT_UNIT_TEST( 11, "a member (10 int arg)" )
 	ENSURE_EQUALS( "bad method called", f(), "foo10: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8, a9 = 9, a10 = 10" );
 TUT_TEARDOWN()
 
-class Boom
-	{
+class Boom {
 	int _val;
 public:
 	Boom( int val_ ) : _val( val_ ) {}
@@ -145,7 +142,7 @@ public:
 		{ return ( _val * static_cast<int>( val_ ) + i ); }
 	int bar_const( double val_, int i ) const
 		{ return ( _val * static_cast<int>( val_ ) + i ); }
-	};
+};
 
 TUT_UNIT_TEST( 12, "free standing arg in method" )
 	Boom b0( 7 );

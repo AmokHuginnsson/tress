@@ -27,8 +27,7 @@ Copyright:
 #ifndef TRESS_OPTIONS_HXX_INCLUDED
 #define TRESS_OPTIONS_HXX_INCLUDED
 
-namespace tress
-{
+namespace tress {
 
 int handle_program_options( int, char** );
 

@@ -38,15 +38,13 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hhashmultimap
-	{
+struct tut_yaal_hcore_hhashmultimap {
 	virtual ~tut_yaal_hcore_hhashmultimap( void ) {}
 	typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_function_type, HMultiContainerStorage::HPacked> mmp_t;
 	typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_function_type, HMultiContainerStorage::HTransparent> mmt_t;
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hhashmultimap, "yaal::hcore::HHashMultiMap" );
 

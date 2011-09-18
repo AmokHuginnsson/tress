@@ -49,13 +49,11 @@ using namespace std;
 using namespace stdext;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_stl
-	{
+struct tut_stl {
 	virtual ~tut_stl( void ) {}
-	};
+};
 
 TUT_TEST_GROUP( tut_stl, yaal::hcore::_debugLevel_ <= yaal::hcore::DEBUG_LEVEL::ABORT_ON_ASSERT ? "stl" : "yaal" );
 
@@ -203,13 +201,11 @@ TUT_TEARDOWN()
 
 #pragma GCC diagnostic ignored "-Weffc++"
 template<typename to_t, typename from_t>
-struct cast : public std::unary_function<from_t, to_t>
-	{
-	to_t operator()( from_t from_ ) const
-		{
+struct cast : public std::unary_function<from_t, to_t> {
+	to_t operator()( from_t from_ ) const {
 		return ( static_cast<to_t>( from_ ) );
-		}
-	};
+	}
+};
 
 #ifdef HAVE_SGI_STL_EXTENSIONS
 
@@ -350,8 +346,7 @@ TUT_TEARDOWN()
 
 #endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 
-class MemFunTest
-	{
+class MemFunTest {
 	int _base;
 public:
 	MemFunTest( int base_ ) : _base( base_ ) {}
@@ -362,7 +357,7 @@ public:
 	int calc( int arg_ )
 		{ return ( _base + arg_ ); }
 
-	};
+};
 
 template<typename T>
 T* get_pointer( T& x )

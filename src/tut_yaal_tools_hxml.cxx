@@ -41,65 +41,55 @@ using namespace yaal::tools::util;
 using namespace tress;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_tools_hxml
-	{
+struct tut_yaal_tools_hxml {
 	static HString _varTmpBuffer;
 	HXml _xml;
 	tut_yaal_tools_hxml( void ) : _xml()
 		{}
 	virtual ~tut_yaal_tools_hxml( void )
 		{}
-	static std::ostream& dump( std::ostream& out, HXml::HConstNodeProxy const& node_ )
-		{
+	static std::ostream& dump( std::ostream& out, HXml::HConstNodeProxy const& node_ ) {
 		_varTmpBuffer.hs_realloc( node_.get_level() * 2 + 3 );
 		_varTmpBuffer.fillz( ' ', 0, node_.get_level() * 2 + 1 );
-		if ( node_.get_type() == HXml::HNode::TYPE::NODE )
-			{
+		if ( node_.get_type() == HXml::HNode::TYPE::NODE ) {
 			if ( ! node_.get_name().is_empty() )
 				out << _varTmpBuffer << "[" << node_.get_name() << "]<" << node_.get_level() << ">:" << std::endl;
-			for ( HXml::HNode::properties_t::const_iterator it = node_.properties().begin(); it != node_.properties().end(); ++ it )
-				{
+			for ( HXml::HNode::properties_t::const_iterator it = node_.properties().begin(); it != node_.properties().end(); ++ it ) {
 				out << _varTmpBuffer << "(" << it->first << ")->(";
 				out << it->second << ")" << std::endl;
-				}
-			if ( node_.has_childs() )
-				{
+			}
+			if ( node_.has_childs() ) {
 				_varTmpBuffer.fillz( ' ', 0, node_.get_level() * 2 + 2 );
 				out << _varTmpBuffer << "{" << std::endl;
-				for ( HXml::const_iterator it = node_.begin(); it != node_.end(); ++ it )
-					{
+				for ( HXml::const_iterator it = node_.begin(); it != node_.end(); ++ it ) {
 					dump( out, *it );
 					_varTmpBuffer.set_at( node_.get_level() * 2 + 2, 0 );
-					}
-				out << _varTmpBuffer << "}" << std::endl;
 				}
+				out << _varTmpBuffer << "}" << std::endl;
 			}
-		else if ( node_.get_type() == HXml::HNode::TYPE::COMMENT )
+		} else if ( node_.get_type() == HXml::HNode::TYPE::COMMENT )
 			out << _varTmpBuffer << "" << node_.get_value() << "" << std::endl;
 		else if ( node_.get_type() == HXml::HNode::TYPE::ENTITY )
 			out << _varTmpBuffer << node_.get_value() << "(" << node_.get_name() << ")" << std::endl;
 		else if ( ! node_.get_value().is_empty() )
 			out << _varTmpBuffer << node_.get_value() << std::endl;
 		return ( out );
-		}
-	};
+	}
+};
 
 HString tut_yaal_tools_hxml::_varTmpBuffer;
 
 TUT_TEST_GROUP( tut_yaal_tools_hxml, "yaal::tools::HXml" );
 
-std::ostream& operator << ( std::ostream& out, HXml const& xml )
-	{
+std::ostream& operator << ( std::ostream& out, HXml const& xml ) {
 	for ( HXml::const_entity_iterator it( xml.entity_begin() ), end( xml.entity_end() ); it != end; ++ it )
 		out << "@: " << it->first << "=>" << it->second << std::endl;
 	return ( tut_yaal_tools_hxml::dump( out, xml.get_root() ) );
-	}
+}
 
-bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const& right )
-	{
+bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const& right ) {
 	HXml::HNode::TYPE::type_t type = left.get_type();
 	bool equals = ( type == right.get_type() );
 
@@ -113,8 +103,7 @@ bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const
 		equals = ( left.child_count() == right.child_count() );
 	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
 		equals = ( left.get_level() == right.get_level() );
-	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
-		{
+	if ( equals && ( type == HXml::HNode::TYPE::NODE ) ) {
 		HXml::HNode::properties_t const& propLeft = left.properties();
 		HXml::HNode::properties_t const& propRight = right.properties();
 		HXml::HNode::properties_t::const_iterator itLeft = propLeft.begin();
@@ -123,42 +112,36 @@ bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const
 		HXml::HNode::properties_t::const_iterator endRight = propRight.end();
 		for ( ;( itLeft != endLeft ) && equals; ++ itLeft, ++ itRight )
 			equals = ( itRight != endRight ) && ( *itLeft == *itRight );
-		}
-	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
-		{
+	}
+	if ( equals && ( type == HXml::HNode::TYPE::NODE ) ) {
 		HXml::const_iterator itLeft = left.begin();
 		HXml::const_iterator endLeft = left.end();
 		HXml::const_iterator itRight = right.begin();
 		HXml::const_iterator endRight = right.end();
 		for ( ;( itLeft != endLeft ) && equals; ++ itLeft, ++ itRight )
 			equals = ( itRight != endRight ) && deep_equals( *itLeft, *itRight );
-		}
+	}
 	return ( equals );
-	}
+}
 
-bool operator == ( HXml const& left, HXml const& right )
-	{
+bool operator == ( HXml const& left, HXml const& right ) {
 	return ( deep_equals( left.get_root(), right.get_root() ) );
-	}
+}
 
-bool operator != ( HXml const& left, HXml const& right )
-	{
+bool operator != ( HXml const& left, HXml const& right ) {
 	return ( ! ( left == right ) );
-	}
+}
 
 
 TUT_UNIT_TEST( 1, "Empty DOM." )
 	HXml x;
 	ENSURE( "fresh DOM not empty", ! x.get_root() );
-	try
-		{
+	try {
 		x.get_root().get_type();
 		FAIL( "accessing null node-proxy" );
-		}
-	catch ( HFailedAssertion& )
-		{
+	} catch ( HFailedAssertion& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 
@@ -182,15 +165,12 @@ TUT_UNIT_TEST( 3, "clear" )
 	HXml::HNodeProxy n = x.get_root();
 	x.clear();
 	ENSURE( "cleared DOM not empty", ! x.get_root() );
-	try
-		{
+	try {
 		x.get_root().get_type();
 		FAIL( "accessing null node-proxy" );
-		}
-	catch ( HFailedAssertion& )
-		{
+	} catch ( HFailedAssertion& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 
@@ -213,15 +193,12 @@ TUT_UNIT_TEST( 4, "build, save, load" )
 	HXml y;
 	y.load( HStreamInterface::ptr_t( new HFile( OUT_PATH, HFile::OPEN::READING ) ) );
 	ENSURE_EQUALS( "DOMs differ", x, y );
-	try
-		{
+	try {
 		(*it).copy_node( n );
 		FAIL( "copying from parent node" );
-		}
-	catch ( HFailedAssertion& )
-		{
+	} catch ( HFailedAssertion& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "load, save" )
@@ -276,17 +253,15 @@ TUT_UNIT_TEST( 10, "init, parse, apply, save" )
 	char const* style = ( setup._argc > 2 ) ? setup._argv[ 2 ] : "./data/style.xml";
 	char const* out = ( setup._argc > 3 ) ? setup._argv[ 3 ] : "./out/tut.xml";
 	char const* path = ( setup._argc > 4 ) ? setup._argv[ 4 ] : NULL;
-	if ( setup._verbose )
-		{
+	if ( setup._verbose ) {
 		if ( file.open( doc, HFile::OPEN::READING ) )
 			cout << file.get_error() << ": " << file.get_path() << endl;
-		else
-			{
+		else {
 			while ( file.read_line( string ) >= 0 )
 				cout << string << endl;
 			file.close();
-			}
 		}
+	}
 	_xml.init( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	_xml.apply_style( style );
 	_xml.parse( path );
@@ -315,21 +290,19 @@ TUT_UNIT_TEST( 12, "parse bofere apply_style and after apply_style" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 13, "HXml copy." )
-	HXml copy;
-		{
-		HXml intermediate;
-			{
+	HXml copy; {
+		HXml intermediate; {
 			HXml xml;
 			xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ) );
 			xml.parse();
 			intermediate = xml;
 			std::clog << xml;
 			xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/raw.xml", HFile::OPEN::WRITING ) ) ), true );
-			}
+		}
 		intermediate.apply_style( "./data/style.xml" );
 		intermediate.parse();
 		copy = intermediate;
-		}
+	}
 	std::clog << copy;
 	copy.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()

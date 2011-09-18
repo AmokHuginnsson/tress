@@ -31,11 +31,9 @@ Copyright:
 
 #include "config.hxx"
 
-namespace child
-{
+namespace child {
 
-struct OSetup
-	{
+struct OSetup {
 	bool _quiet;			/* --quiet, --silent */
 	bool _verbose;		/* --verbose */
 	char* _programName;
@@ -52,7 +50,7 @@ struct OSetup
 private:
 	OSetup( OSetup const& );
 	OSetup& operator = ( OSetup const& );
-	};
+};
 
 extern OSetup setup;
 

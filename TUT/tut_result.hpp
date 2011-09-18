@@ -3,24 +3,21 @@
 
 #include <string>
 
-namespace tut
-{
+namespace tut {
 #if defined ( TUT_USE_POSIX )
-struct test_result_posix
-	{
+struct test_result_posix {
 	test_result_posix() : pid( getpid() )
 		  {}
 	virtual ~test_result_posix( void )
 		{}
 
 	pid_t pid;
-	};
+};
 #else
-struct test_result_posix
-	{
+struct test_result_posix {
 	virtual ~test_result_posix( void )
 		{}
-	};
+};
 #endif
 
 struct group_base;
@@ -31,8 +28,7 @@ struct group_base;
  * For test: contains result of test and, possible, message
  * for failure or exception.
  */
-struct test_result : public test_result_posix
-	{
+struct test_result : public test_result_posix {
 	/**
 	* Test group name.
 	*/
@@ -96,38 +92,32 @@ struct test_result : public test_result_posix
 	/**
 	 * Set addtional per-exception information (that is always available/meaningful.
 	 */
-	void set_meta( std::string const& testName_, char const* const file = NULL, int const& line = -1 )
-		{
+	void set_meta( std::string const& testName_, char const* const file = NULL, int const& line = -1 ) {
 		_name = testName_;
 		if ( file )
 			_file = file;
 		_line = line;
-		}
+	}
 
 	/**
 	 * Set exception specific informational data.
 	 */
-	void set_meta( result_type_t res, std::string const& ex_typeid = std::string(), std::string const& msg = std::string() )
-		{
+	void set_meta( result_type_t res, std::string const& ex_typeid = std::string(), std::string const& msg = std::string() ) {
 		_result = res;
 		_exceptionTypeId = ex_typeid;
 		_message = msg;
-		}
+	}
 
-	test_result& operator = ( test_result const& tr_ )
-		{
-		if ( &tr_ != this )
-			{
+	test_result& operator = ( test_result const& tr_ ) {
+		if ( &tr_ != this ) {
 			test_result tmp( tr_ );
 			swap( tmp );
-			}
-		return ( *this );
 		}
+		return ( *this );
+	}
 
-	void swap( test_result& tr_ )
-		{
-		if ( &tr_ != this )
-			{
+	void swap( test_result& tr_ ) {
+		if ( &tr_ != this ) {
 			using std::swap;
 			swap( _group, tr_._group );
 			swap( _testNo, tr_._testNo );
@@ -137,11 +127,11 @@ struct test_result : public test_result_posix
 			swap( _exceptionTypeId, tr_._exceptionTypeId );
 			swap( _file, tr_._file );
 			swap( _line, tr_._line );
-			}
-		return;
 		}
+		return;
+	}
 
-	};
+};
 
 }
 

@@ -38,17 +38,15 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hvariant
-	{
+struct tut_yaal_hcore_hvariant {
 	typedef HInstanceTracker<tut_yaal_hcore_hvariant> instance_tracker_t;
 	typedef HVariant<int, HString, double long> small_variant_t;
 	typedef HVariant<bool, char, int short, int, int long, void*, double, double long, HString, HNumber, instance_tracker_t> variant_t;
 	virtual ~tut_yaal_hcore_hvariant( void )
 		{}
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hvariant, "yaal::hcore::HVariant" );
 

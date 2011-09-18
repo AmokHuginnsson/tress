@@ -38,8 +38,7 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 static double long const epsilon = 0.0001;
 
@@ -113,17 +112,14 @@ TUT_UNIT_TEST( 8, "argument()" )
 	ENSURE_DISTANCE( "bad argument value calculted", d.argument(), - ( PI - PI / 4.L ), epsilon );
 	HComplex e( 1, -1 );
 	ENSURE_DISTANCE( "bad argument value calculted", e.argument(), - PI / 4.L, epsilon );
-	try
-		{
+	try {
 		HComplex z;
 		z.argument();
 		FAIL( "getting argument from 0 + 0i succeeded" );
-		}
-	catch ( HComplexException const& ex )
-		{
+	} catch ( HComplexException const& ex ) {
 		// ok
 		cout << ex.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 9, "asignment operator" )

@@ -39,8 +39,7 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_util_atof_ex );
 TUT_TEST_GROUP( tut_yaal_tools_util_atof_ex, "yaal::tools::util::atof_ex" );
@@ -52,14 +51,11 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "simple but invalid number" )
 	HString formula = "4/e";
-	try
-		{
+	try {
 		atof_ex( formula, true );
-		}
-	catch ( HExpressionException& )
-		{
+	} catch ( HExpressionException& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 }

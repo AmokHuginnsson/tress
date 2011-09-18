@@ -40,32 +40,27 @@ using namespace yaal;
 using namespace yaal::hcore;
 
 template<typename Ch, typename Traits = std::char_traits<Ch> >
-struct basic_nullbuf : std::basic_streambuf<Ch, Traits>
-	{
+struct basic_nullbuf : std::basic_streambuf<Ch, Traits> {
 	typedef std::basic_streambuf<Ch, Traits> base_type;
 	typedef typename base_type::int_type int_type;
 	typedef typename base_type::traits_type traits_type;
 
-	virtual int_type overflow(int_type c)
-		{
+	virtual int_type overflow(int_type c) {
 		return traits_type::not_eof(c);
-		}
-	};
+	}
+};
 
 typedef basic_nullbuf<char> nullbuf;
 nullbuf cnull_obj;
 
-namespace tress
-{
+namespace tress {
 
-void OSetup::test_setup( void )
-	{
+void OSetup::test_setup( void ) {
 	M_PROLOG
-	if ( _errorLine == "cute" )
-		{
+	if ( _errorLine == "cute" ) {
 		_quiet = true;
 		_verbose = false;
-		}
+	}
 	if ( _quiet && _verbose )
 		yaal::tools::util::failure( 1,
 				_( "quiet and verbose options are exclusive\n" ) );
@@ -73,11 +68,10 @@ void OSetup::test_setup( void )
 		clog.reset( make_pointer<HFile>( stdout ) );
 	else
 		std::clog.rdbuf( &cnull_obj );
-	if ( _quiet )
-		{
+	if ( _quiet ) {
 		cout.reset();
 		std::cout.rdbuf( &cnull_obj );
-		}
+	}
 	if ( _listGroups
 			&& ( _restartable
 				|| ! _testGroupListFilePath.is_empty()
@@ -124,23 +118,21 @@ void OSetup::test_setup( void )
 		M_THROW( _( "invalid IDE specified: " ) + _errorLine, 0 );
 	if ( ! _fancy || ( _errorLine != IDE[0] ) || ! ::getenv( "TERM" ) )
 		_color = false;
-	if ( _verbose )
-		{
+	if ( _verbose ) {
 		cout << "setup._argc = " << setup._argc << endl;
 		for ( int i = 0; i < _argc; ++ i )
 			cout << "setup._argv[" << i << "] = " << _argv[i] << endl;
 #ifdef __TRESS__
-		if ( _debug )
-			{
+		if ( _debug ) {
 			clog << "test data: ";
 			copy( tut_helpers::_testData_[0], tut_helpers::_testData_[0] + countof ( tut_helpers::_testData_[0] ), stream_iterator( clog, " " ) );
 			clog << endl;
-			}
-#endif /* #ifdef __TRESS__ */
 		}
+#endif /* #ifdef __TRESS__ */
+	}
 	return;
 	M_EPILOG
-	}
+}
 
 }
 

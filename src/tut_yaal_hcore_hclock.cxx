@@ -39,14 +39,12 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hclock
-	{
+struct tut_yaal_hcore_hclock {
 	virtual ~tut_yaal_hcore_hclock( void )
 		{}
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hclock, "yaal::hcore::HClock" );
 

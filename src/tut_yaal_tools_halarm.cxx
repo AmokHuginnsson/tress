@@ -38,8 +38,7 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_halarm );
 TUT_TEST_GROUP( tut_yaal_tools_halarm, "yaal::tools::HAlarm" );
@@ -53,11 +52,10 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "alarm deregistered" )
 	TIME_CONSTRAINT_EXEMPT();
-	static int const ALARM_TIME( 500 );
-		{
+	static int const ALARM_TIME( 500 ); {
 		HAlarm alarm( ALARM_TIME );
 		ENSURE_EQUALS( "alarm interrupted sleep prematurely", util::sleep::milisecond( 100 ), false );
-		}
+	}
 	ENSURE_EQUALS( "alaram did not deregister!", util::sleep::second( 1 ), false );
 TUT_TEARDOWN()
 

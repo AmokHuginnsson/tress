@@ -41,8 +41,7 @@ using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 using namespace tress;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_base64 );
 TUT_TEST_GROUP( tut_yaal_tools_base64, "yaal::tools::base64" );
@@ -226,24 +225,20 @@ TUT_UNIT_TEST( 12, "encode from file (no newlines)" )
 "KjEwXm0KCnByaW50ICJaIGlzICIsIHoxLCAiXG4iCnByaW50ICJaKjEwXm0rciBpcyAiLCB6Miwg"
 "IlxuIgpwcmludCAiWioxMF5tK3IrcjJtKjEwXjJtIGlzICIsIHJlczAsICJcbiIKcHJpbnQgIloq"
 "MTBebStyLXIybSoxMF5tIGlzICIsIHJlczEsICJcbiIKCnJlc3VsdAp4KnkgLSByZXN1bHQK";
-	if ( setup._argc > 1 )
-		{
+	if ( setup._argc > 1 ) {
 		if ( HString( "-" ) == INPUT )
 			base64::encode( cin, cout );
-		else
-			{
+		else {
 			HFile f( INPUT, HFile::OPEN::READING );
 			base64::encode( f, cout );
-			}
-		cout << endl;
 		}
-	else
-		{
+		cout << endl;
+	} else {
 		HFile f( INPUT, HFile::OPEN::READING );
 		HStringStream ss;
 		base64::encode( f, ss, true );
 		ENSURE_EQUALS( "badly encoded", ss.string(), BASE64ENC );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 13, "encode from file (with newlines)" )
@@ -269,24 +264,20 @@ TUT_UNIT_TEST( 13, "encode from file (with newlines)" )
 "KjEwXm0KCnByaW50ICJaIGlzICIsIHoxLCAiXG4iCnByaW50ICJaKjEwXm0rciBpcyAiLCB6Miwg\n"
 "IlxuIgpwcmludCAiWioxMF5tK3IrcjJtKjEwXjJtIGlzICIsIHJlczAsICJcbiIKcHJpbnQgIloq\n"
 "MTBebStyLXIybSoxMF5tIGlzICIsIHJlczEsICJcbiIKCnJlc3VsdAp4KnkgLSByZXN1bHQK\n";
-	if ( setup._argc > 1 )
-		{
+	if ( setup._argc > 1 ) {
 		if ( HString( "-" ) == INPUT )
 			base64::encode( cin, cout );
-		else
-			{
+		else {
 			HFile f( INPUT, HFile::OPEN::READING );
 			base64::encode( f, cout );
-			}
-		cout << endl;
 		}
-	else
-		{
+		cout << endl;
+	} else {
 		HFile f( INPUT, HFile::OPEN::READING );
 		HStringStream ss;
 		base64::encode( f, ss, true, 76 );
 		ENSURE_EQUALS( "badly encoded", ss.string(), BASE64ENC );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 14, "decode from file (newlines)" )
@@ -313,25 +304,21 @@ TUT_UNIT_TEST( 14, "decode from file (newlines)" )
 "IlxuIgpwcmludCAiWioxMF5tK3IrcjJtKjEwXjJtIGlzICIsIHJlczAsICJcbiIKcHJpbnQgIloq"
 "MTBebStyLXIybSoxMF5tIGlzICIsIHJlczEsICJcbiIKCnJlc3VsdAp4KnkgLSByZXN1bHQK";
 
-	if ( setup._argc > 1 )
-		{
+	if ( setup._argc > 1 ) {
 		if ( HString( "-" ) == setup._argv[ 1 ] )
 			base64::decode( cin, cout );
-		else
-			{
+		else {
 			HFile f( setup._argv[ 1 ], HFile::OPEN::READING );
 			base64::decode( f, cout );
-			}
-		cout << endl;
 		}
-	else
-		{
+		cout << endl;
+	} else {
 		HStringStream ss;
 		ss << BASE64ENC;
 		HFile o( OUTPUT, HFile::OPEN::WRITING );
 		base64::decode( ss, o, true );
 //		ENSURE_EQUALS( "badly encoded", ss.string(), BASE64ENC );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 15, "decode from file (with newlines)" )
@@ -358,25 +345,21 @@ TUT_UNIT_TEST( 15, "decode from file (with newlines)" )
 "IlxuIgpwcmludCAiWioxMF5tK3IrcjJtKjEwXjJtIGlzICIsIHJlczAsICJcbiIKcHJpbnQgIloq\n"
 "MTBebStyLXIybSoxMF5tIGlzICIsIHJlczEsICJcbiIKCnJlc3VsdAp4KnkgLSByZXN1bHQK\n";
 
-	if ( setup._argc > 1 )
-		{
+	if ( setup._argc > 1 ) {
 		if ( HString( "-" ) == setup._argv[ 1 ] )
 			base64::decode( cin, cout );
-		else
-			{
+		else {
 			HFile f( setup._argv[ 1 ], HFile::OPEN::READING );
 			base64::decode( f, cout );
-			}
-		cout << endl;
 		}
-	else
-		{
+		cout << endl;
+	} else {
 		HStringStream ss;
 		ss << BASE64ENC;
 		HFile o( OUTPUT, HFile::OPEN::WRITING );
 		base64::decode( ss, o, true );
 //		ENSURE_EQUALS( "badly encoded", ss.string(), BASE64ENC );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 16, "full encode tests" )
@@ -384,10 +367,8 @@ TUT_UNIT_TEST( 16, "full encode tests" )
 	char input[ MAX_TEST_LEN ];
 	HStringStream ss;
 	HStringStream msg;
-	for ( int len = 1; len < MAX_TEST_LEN; ++ len )
-		{
-		for ( int val = 0; val < 256; ++ val )
-			{
+	for ( int len = 1; len < MAX_TEST_LEN; ++ len ) {
+		for ( int val = 0; val < 256; ++ val ) {
 			fill_n( input, MAX_TEST_LEN, val );
 			HMemory m( input, len );
 			ss.clear();
@@ -395,8 +376,8 @@ TUT_UNIT_TEST( 16, "full encode tests" )
 			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << input;
 			ENSURE_EQUALS( msg.string(), ss.string(), cases[ ( len - 1 ) * 256 + val ] );
 			msg.clear();
-			}
 		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 17, "full decode test" )
@@ -405,10 +386,8 @@ TUT_UNIT_TEST( 17, "full decode test" )
 	char output[ MAX_TEST_LEN ];
 	HStringStream ss;
 	HStringStream msg;
-	for ( int len = 1; len < MAX_TEST_LEN; ++ len )
-		{
-		for ( int val = 0; val < 256; ++ val )
-			{
+	for ( int len = 1; len < MAX_TEST_LEN; ++ len ) {
+		for ( int val = 0; val < 256; ++ val ) {
 			fill_n( input, MAX_TEST_LEN, val );
 			HMemory m( input, len );
 			ss.clear();
@@ -419,8 +398,8 @@ TUT_UNIT_TEST( 17, "full decode test" )
 			ENSURE_EQUALS( msg.string(), nRead, len );
 			ENSURE( msg.string(), ! ::memcmp( output, input, nRead ) );
 			msg.clear();
-			}
 		}
+	}
 TUT_TEARDOWN()
 
 }

@@ -40,8 +40,7 @@ using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 using namespace tress;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hash_sha1 );
 TUT_TEST_GROUP( tut_yaal_tools_hash_sha1, "yaal::tools::hash::sha1" );

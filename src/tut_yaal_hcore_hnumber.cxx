@@ -40,11 +40,9 @@ using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hnumber
-	{
+struct tut_yaal_hcore_hnumber {
 	static HString BC_PATH;
 	HRandomizer _rnd;
 	HPipedChild _bc;
@@ -52,13 +50,12 @@ struct tut_yaal_hcore_hnumber
 	double long random_real( void );
 	virtual ~tut_yaal_hcore_hnumber( void )
 		{}
-	};
+};
 
 HString tut_yaal_hcore_hnumber::BC_PATH = ::getenv( "BC_PATH" ) ? ::getenv( "BC_PATH" ) : "/usr/bin/bc";
 
 tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void )
-	: _rnd( randomizer_helper::make_randomizer() ), _bc()
-	{
+	: _rnd( randomizer_helper::make_randomizer() ), _bc() {
 	set_env( "BC_LINE_LENGTH", "40000" );
 #ifdef __MSVCXX__
 	char const WIN_BC_PATH[] = "..\\..\\..\\..\\usr\\windows\\bin\\bc.exe";
@@ -74,18 +71,17 @@ tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void )
 		BC_PATH = WIN_BC_PATH_ALT;
 #endif /* #ifdef __MSVCXX__ */
 	return;
-	}
+}
 
 
-double long tut_yaal_hcore_hnumber::random_real( void )
-	{
+double long tut_yaal_hcore_hnumber::random_real( void ) {
 	double long n = _rnd();
 	double long d = 0;
 	while ( d == 0 )
 		d = _rnd();
 	( _rnd() % 2 ) && ( n = -n );
 	return ( n / d );
-	}
+}
 
 TUT_TEST_GROUP( tut_yaal_hcore_hnumber, "yaal::hcore::HNumber" );
 
@@ -121,60 +117,42 @@ TUT_UNIT_TEST( 4, "construct from string" )
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0 );
 	ENSURE_EQUALS( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n0 = " << n0.to_string() << " |" << endl;
-	try
-		{
+	try {
 		HNumber n( "" );
 		FAIL( "empty number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( "-" );
 		FAIL( "number that is a minus created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( "." );
 		FAIL( "number that is a dot created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( "-." );
 		FAIL( "number that is a minus-dot created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( "-..1" );
 		FAIL( "number that is a minus-dot created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( "..1" );
 		FAIL( "number that is a minus-dot created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
 	char const* const pn1 = "-1";
 	HNumber n1( pn1 );
@@ -200,38 +178,29 @@ TUT_UNIT_TEST( 4, "construct from string" )
 	ENSURE_EQUALS( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n4 =" << n4.to_string() << " |" << endl;
 
-	try
-		{
+	try {
 		HNumber nx( "--2.7" );
 		cout << "| nx =" << nx.to_string() << " |" << endl;
 		FAIL( "phony number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
-	try
-		{
+	try {
 		HNumber nx( "..27" );
 		cout << "| nx =" << nx.to_string() << " |" << endl;
 		FAIL( "phony number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
-	try
-		{
+	try {
 		HNumber nx( "-.-2.7" );
 		cout << "| nx =" << nx.to_string() << " |" << endl;
 		FAIL( "phony number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
 	char const* const pn5 = ".2.7";
 	HNumber n5( pn5 );
@@ -291,42 +260,30 @@ TUT_UNIT_TEST( 5, "construct from string (prefixes)" )
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0 + 3 );
 	ENSURE_EQUALS( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n0 = " << n0.to_string() << " |" << endl;
-	try
-		{
+	try {
 		HNumber n( "???" );
 		FAIL( "empty number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( "$$$-" );
 		FAIL( "number that is a minus created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( "???." );
 		FAIL( "number that is a dot created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( "$$$-." );
 		FAIL( "number that is a minus-dot created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
 	char const* const pn1 = "$$$-1";
 	HNumber n1( pn1 );
@@ -352,38 +309,29 @@ TUT_UNIT_TEST( 5, "construct from string (prefixes)" )
 	ENSURE_EQUALS( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n4 =" << n4.to_string() << " |" << endl;
 
-	try
-		{
+	try {
 		HNumber nx( "$$$--2.7" );
 		cout << "| nx =" << nx.to_string() << " |" << endl;
 		FAIL( "phony number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
-	try
-		{
+	try {
 		HNumber nx( "???..27" );
 		cout << "| nx =" << nx.to_string() << " |" << endl;
 		FAIL( "phony number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
-	try
-		{
+	try {
 		HNumber nx( "$$$-.-2.7" );
 		cout << "| nx =" << nx.to_string() << " |" << endl;
 		FAIL( "phony number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
 	char const* const pn5 = "???.2.7";
 	HNumber n5( pn5 );
@@ -417,42 +365,30 @@ TUT_UNIT_TEST( 6, "construct from string (postfixes)" )
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0ok );
 	ENSURE_EQUALS( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n0 = " << n0.to_string() << " |" << endl;
-	try
-		{
+	try {
 		HNumber n( "???" );
 		FAIL( "empty number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( "-???" );
 		FAIL( "number that is a minus created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( ".???" );
 		FAIL( "number that is a dot created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( "-.???" );
 		FAIL( "number that is a minus-dot created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
 	char const* const pn1ok = "-1";
 	char const* const pn1 = "-1???";
@@ -482,38 +418,29 @@ TUT_UNIT_TEST( 6, "construct from string (postfixes)" )
 	ENSURE_EQUALS( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n4 =" << n4.to_string() << " |" << endl;
 
-	try
-		{
+	try {
 		HNumber nx( "--2.7???" );
 		cout << "| nx =" << nx.to_string() << " |" << endl;
 		FAIL( "phony number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
-	try
-		{
+	try {
 		HNumber nx( "..27???" );
 		cout << "| nx =" << nx.to_string() << " |" << endl;
 		FAIL( "phony number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
-	try
-		{
+	try {
 		HNumber nx( "-.-2.7???" );
 		cout << "| nx =" << nx.to_string() << " |" << endl;
 		FAIL( "phony number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
 	char const* const pn5 = ".2.7???";
 	HNumber n5( pn5 );
@@ -547,42 +474,30 @@ TUT_UNIT_TEST( 7, "construct from string (prepostfixes)" )
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0ok );
 	ENSURE_EQUALS( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n0 = " << n0.to_string() << " |" << endl;
-	try
-		{
+	try {
 		HNumber n( "???" );
 		FAIL( "empty number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( "$$$-???" );
 		FAIL( "number that is a minus created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( "???.???" );
 		FAIL( "number that is a dot created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		HNumber n( "$$$-.???" );
 		FAIL( "number that is a minus-dot created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
 	char const* const pn1ok = "-1";
 	char const* const pn1 = "$$$-1???";
@@ -612,38 +527,29 @@ TUT_UNIT_TEST( 7, "construct from string (prepostfixes)" )
 	ENSURE_EQUALS( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n4 =" << n4.to_string() << " |" << endl;
 
-	try
-		{
+	try {
 		HNumber nx( "$$$--2.7???" );
 		cout << "| nx =" << nx.to_string() << " |" << endl;
 		FAIL( "phony number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
-	try
-		{
+	try {
 		HNumber nx( "???..27???" );
 		cout << "| nx =" << nx.to_string() << " |" << endl;
 		FAIL( "phony number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
-	try
-		{
+	try {
 		HNumber nx( "$$$-.-2.7???" );
 		cout << "| nx =" << nx.to_string() << " |" << endl;
 		FAIL( "phony number created" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 
 	char const* const pn5 = "???.2.7???";
 	HNumber n5( pn5 );
@@ -932,8 +838,7 @@ TUT_UNIT_TEST( 18, "addition" )
 	HString res;
 	HString as;
 	HString bs;
-	for ( int i = 0; i < 1000; ++ i )
-		{
+	for ( int i = 0; i < 1000; ++ i ) {
 		HNumber a( random_real() );
 		HNumber b( random_real() );
 		as = a.to_string();
@@ -944,7 +849,7 @@ TUT_UNIT_TEST( 18, "addition" )
 		ENSURE_EQUALS( msg, ( a + b ).to_string(), HNumber( res ).to_string() );
 		msg += "(R)";
 		ENSURE_EQUALS( msg, ( b + a ).to_string(), HNumber( res ).to_string() );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 19, "multiplication" )
@@ -964,8 +869,7 @@ TUT_UNIT_TEST( 19, "multiplication" )
 	HString as;
 	HString bs;
 	_bc << "scale=100" << endl;
-	for ( int long i = 0; i < 1000; ++ i )
-		{
+	for ( int long i = 0; i < 1000; ++ i ) {
 		HNumber a( random_real() );
 		HNumber b( random_real() );
 		as = a.to_string();
@@ -976,7 +880,7 @@ TUT_UNIT_TEST( 19, "multiplication" )
 		ENSURE_EQUALS( msg, ( a * b ).to_string(), HNumber( res ).to_string() );
 		msg += "(R)";
 		ENSURE_EQUALS( msg, ( b * a ).to_string(), HNumber( res ).to_string() );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 20, "substraction" )
@@ -985,8 +889,7 @@ TUT_UNIT_TEST( 20, "substraction" )
 	HString res;
 	HString as;
 	HString bs;
-	for ( int i = 0; i < 1000; ++ i )
-		{
+	for ( int i = 0; i < 1000; ++ i ) {
 		HNumber a( random_real() );
 		HNumber b( random_real() );
 		as = a.to_string();
@@ -997,21 +900,18 @@ TUT_UNIT_TEST( 20, "substraction" )
 		ENSURE_EQUALS( msg, ( a - b ).to_string(), HNumber( res ).to_string() );
 		msg += "(R)";
 		ENSURE_EQUALS( msg, ( b - a ).to_string(), ( -HNumber( res ) ).to_string() );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 21, "division" )
-	try
-		{
+	try {
 		HNumber n( "1" );
 		HNumber x;
 		n /= x;
 		FAIL( "division by zero performed" );
-		}
-	catch ( HException& )
-		{
+	} catch ( HException& ) {
 		// ok
-		}
+	}
 	ENSURE_EQUALS( "division failed a     ", ( HNumber( "0" ) / HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
 	ENSURE_EQUALS( "division failed b     ", ( HNumber( "0" ) / HNumber( "-1" ) ).to_string(), HNumber( "0" ).to_string() );
 	ENSURE_EQUALS( "division failed c     ", ( HNumber( "1" ) / HNumber( "1" ) ).to_string(), HNumber( "1" ).to_string() );
@@ -1083,139 +983,118 @@ TUT_UNIT_TEST( 21, "division" )
 	denominator = "4";
 	division = numerator / denominator;
 	ENSURE_EQUALS( "bad calculus 5", division.to_string(), ".5" );
-	ENSURE( "number shall be exact", division.is_exact() );
-		{
+	ENSURE( "number shall be exact", division.is_exact() ); {
 		HString n( ".491401" );
 		HString d( "7.01" );
 		HString r( ".0701" );
 		ENSURE_EQUALS( "padding front zeros failed 0 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		//.59247871334 and b = 3.404513888889 failed: expected .1740274038163329231239957953559 actual .01740274038163329231239957953559
 		HString n( ".606" );
 		HString d( "3.03" );
 		HString r( ".2" );
 		ENSURE_EQUALS( "padding front zeros failed 0 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( ".49" );
 		HString d( "7" );
 		HString r( ".07" );
 		ENSURE_EQUALS( "padding front zeros failed 0 1 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( "4.91401" );
 		HString d( "70.1" );
 		HString r( ".0701" );
 		ENSURE_EQUALS( "padding front zeros failed 0 2 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( ".491401" );
 		HString d( "70.1" );
 		HString r( ".00701" );
 		ENSURE_EQUALS( "padding front zeros failed 0 3 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( ".0491401" );
 		HString d( "70.1" );
 		HString r( ".000701" );
 		ENSURE_EQUALS( "padding front zeros failed 0 4 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( ".00491401" );
 		HString d( "70.1" );
 		HString r( ".0000701" );
 		ENSURE_EQUALS( "padding front zeros failed 0 5 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-
-		{
+	}
+ {
 		HString n( "4.91401" );
 		HString d( "7.01" );
 		HString r( ".701" );
 		ENSURE_EQUALS( "padding front zeros failed 0 6 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( ".491401" );
 		HString d( "7.01" );
 		HString r( ".0701" );
 		ENSURE_EQUALS( "padding front zeros failed 0 7 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( ".0491401" );
 		HString d( "7.01" );
 		HString r( ".00701" );
 		ENSURE_EQUALS( "padding front zeros failed 0 8 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( ".00491401" );
 		HString d( "7.01" );
 		HString r( ".000701" );
 		ENSURE_EQUALS( "padding front zeros failed 0 9 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-
-		{
+	}
+ {
 		HString n( ".491401" );
 		HString d( "701" );
 		HString r( ".000701" );
 		ENSURE_EQUALS( "padding front zeros failed 1 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( "491.401" );
 		HString d( "701" );
 		HString r( ".701" );
 		ENSURE_EQUALS( "padding front zeros failed 1 1 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( "49.1401" );
 		HString d( "701" );
 		HString r( ".0701" );
 		ENSURE_EQUALS( "padding front zeros failed 1 2 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( "4.91401" );
 		HString d( "701" );
 		HString r( ".00701" );
 		ENSURE_EQUALS( "padding front zeros failed 1 3 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( ".4961122700545761418014255" );
 		HString d( "-7.059190031153" );
 		HString r( "-.0702789226335" );
 		ENSURE_EQUALS( "padding front zeros failed a 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( ".4961122700545761418014255" );
 		HString d( "7.059190031153" );
 		HString r( ".0702789226335" );
 		ENSURE_EQUALS( "padding front zeros failed b 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
+	}
 
 	ENSURE_EQUALS( "division failed uber  ", ( HNumber( ".4961122700545761418014255" ) / HNumber( "-7.059190031153" ) ).to_string(), HNumber( "-.0702789226335" ).to_string() );
-
-		{
+ {
 		HString n( ".0077" );
 		HString d( ".77" );
 		HString r( ".01" );
 		ENSURE_EQUALS( "padding front zeros failed 0 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n(    ".160963010792" );
 		HString d( "100.264285714286" );
 		HString r( ".001605387" );
 		ENSURE_EQUALS( "padding front zeros failed 0 0 ", ( HNumber( n ) / HNumber( d ) ).to_string().left( 10 ), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n(    ".160963010792" );
 		HString d( "100264.285714286" );
 		HString r( ".000001605" );
 		ENSURE_EQUALS( "padding front zeros failed q 0 ", ( HNumber( n ) / HNumber( d ) ).to_string().left( 10 ), HNumber( r ).to_string() );
-		}
-		{
+	} {
 		HString n( "1.180629342051" );
 		HString d( "-3.6" );
 		HString r( "-.3279525950141666666666666666" );
 		ENSURE_EQUALS( "padding front zeros failed q 1 ", ( HNumber( n ) / HNumber( d ) ).to_string().left( 30 ), HNumber( r ).to_string() );
-		}
+	}
 
 	_bc.spawn( BC_PATH );
 	HString msg;
@@ -1224,8 +1103,7 @@ TUT_UNIT_TEST( 21, "division" )
 	HString bs;
 	int const M = 16;
 	_bc << "scale=" << M + M << endl;
-	for ( int long i = 0; i < 1000; ++ i )
-		{
+	for ( int long i = 0; i < 1000; ++ i ) {
 		HNumber a( random_real() );
 		double long den = random_real();
 		den || ++ den;
@@ -1244,7 +1122,7 @@ TUT_UNIT_TEST( 21, "division" )
 		int z = static_cast<int>( res.reverse_find_other_than( "0" ) );
 		if ( z >= 0 )
 			ENSURE_EQUALS( msg, div.to_string().left( len - z ), res.left( len - z ) );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 22, "opposite" )

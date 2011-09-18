@@ -41,39 +41,34 @@ using namespace yaal::tools::util;
 using namespace tress;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hzipstream );
 TUT_TEST_GROUP( tut_yaal_tools_hzipstream, "yaal::tools::HZipStream" );
 
-bool test_zipstream( int long zipBufSize_, int long clientBufSize_ )
-	{
+bool test_zipstream( int long zipBufSize_, int long clientBufSize_ ) {
 	HScopedValueReplacement<int long> t( _zBufferSize_, zipBufSize_ );
 	static char const* const INPUT( "./data/karatsuba.bc" );
 	static char const* const OUTPUT_ZIP( "./out/karatsuba.bc.z" );
 	static char const* const OUTPUT_RAW( "./out/karatsuba.bc" );
 	int long nRead( 0 );
-	HChunk buf( clientBufSize_ );
-		{
+	HChunk buf( clientBufSize_ ); {
 		HFile	inRaw( INPUT, HFile::OPEN::READING );
 		HFile outZip( OUTPUT_ZIP, HFile::OPEN::WRITING );
 		HZipStream zOut( outZip, HZipStream::MODE::DEFLATE );
 		while ( ( nRead = inRaw.read( buf.raw(), buf.get_size() ) ) > 0 )
 			zOut.write( buf.raw(), nRead );
-		}
-		{
+	} {
 		HFile	inZip( OUTPUT_ZIP, HFile::OPEN::READING );
 		HFile outRaw( OUTPUT_RAW, HFile::OPEN::WRITING );
 		HZipStream zIn( inZip, HZipStream::MODE::INFLATE );
 		while ( ( nRead = zIn.read( buf.raw(), buf.get_size() ) ) > 0 )
 			outRaw.write( buf.raw(), nRead );
-		}
-	return ( file_compare( INPUT, OUTPUT_RAW ) );
 	}
+	return ( file_compare( INPUT, OUTPUT_RAW ) );
+}
 
-void zpipe_compress( HString const& src_, HString const& dst_ )
-	{
+void zpipe_compress( HString const& src_, HString const& dst_ ) {
 	M_PROLOG
 	HChunk buf( 128 );
 	HFile in;
@@ -92,10 +87,9 @@ void zpipe_compress( HString const& src_, HString const& dst_ )
 		z.write( buf.raw(), nRead );
 	return;
 	M_EPILOG
-	}
+}
 
-void zpipe_decompress( HString const& src_, HString const& dst_ )
-	{
+void zpipe_decompress( HString const& src_, HString const& dst_ ) {
 	M_PROLOG
 	HChunk buf( 128 );
 	HFile in;
@@ -114,7 +108,7 @@ void zpipe_decompress( HString const& src_, HString const& dst_ )
 		out.write( buf.raw(), nRead );
 	return;
 	M_EPILOG
-	}
+}
 
 TUT_UNIT_TEST( 1, "default zipstream buffer, client buffer 128 octets" )
 	if ( setup._argc > 2 )

@@ -38,20 +38,17 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hcall_field
-	{
+struct tut_yaal_hcore_hcall_field {
 	typedef HInstanceTracker<tut_yaal_hcore_hcall_field> item_t;
 	typedef HPair<HString, HString> person_t;
 	virtual ~tut_yaal_hcore_hcall_field( void ) {}
-	};
+};
 
-HString full_name( tut_yaal_hcore_hcall_field::person_t const& p_ )
-	{
+HString full_name( tut_yaal_hcore_hcall_field::person_t const& p_ ) {
 	return ( p_.first + " " + p_.second );
-	}
+}
 
 TUT_TEST_GROUP( tut_yaal_hcore_hcall_field, "yaal::hcore::HCall,field" );
 

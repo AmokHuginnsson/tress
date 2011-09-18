@@ -40,11 +40,9 @@ using namespace yaal::tools::util;
 using namespace tress;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hdeque_2 : public tut_yaal_hcore_hdeque_base<2>
-	{
+struct tut_yaal_hcore_hdeque_2 : public tut_yaal_hcore_hdeque_base<2> {
 	virtual ~tut_yaal_hcore_hdeque_2( void ) {}
 	template<int const item_size>
 	void test_insert_pos( void );
@@ -54,7 +52,7 @@ struct tut_yaal_hcore_hdeque_2 : public tut_yaal_hcore_hdeque_base<2>
 	void test_roll_backward_insert_erase( int, int, int );
 	template<int const item_size>
 	void test_roll_backward_greedy_insert_erase( int, int );
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hdeque_2, "yaal::hcore::HDeque,2" );
 
@@ -68,13 +66,11 @@ TUT_UNIT_TEST( 14, "copy constructor (of empty)" )
 TUT_TEARDOWN()
 
 template<int const item_size>
-void tut_yaal_hcore_hdeque_2::test_insert_pos( void )
-	{
+void tut_yaal_hcore_hdeque_2::test_insert_pos( void ) {
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque_2, item_size> item_type;
 	typedef HDeque<item_type> deque_type;
 	clog << "testing insert(pos): " << item_size << endl;
-	item_t::set_start_id( 0 );
-		{
+	item_t::set_start_id( 0 ); {
 		proto_t proto( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 		deque_type deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 		check_consistency( deque );
@@ -95,9 +91,9 @@ void tut_yaal_hcore_hdeque_2::test_insert_pos( void )
 		proto.insert( proto.end(), -99 );
 		check_consistency( deque );
 		ENSURE_EQUALS( "insertion failed", deque, proto );
-		}
-	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 	}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+}
 
 TUT_UNIT_TEST( 15, "insert( pos, value )" )
 	test_insert_pos<1>();
@@ -119,8 +115,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 16, "assign operator (=)" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { -36, -1, -4, -9 };
-	item_t::set_start_id( 0 );
-		{
+	item_t::set_start_id( 0 ); {
 		deque_t deque( a0, a0 + countof ( a0 ) );
 		check_consistency( deque );
 		deque_t small( a1, a1 + countof ( a1 ) );
@@ -133,18 +128,16 @@ TUT_UNIT_TEST( 16, "assign operator (=)" )
 		deque = big;
 		check_consistency( deque, big.get_size() + small.get_size() );
 		ENSURE_EQUALS( "assgin failed", deque, big );
-		}
+	}
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 template<int const item_size>
-void tut_yaal_hcore_hdeque_2::test_insert( void )
-	{
+void tut_yaal_hcore_hdeque_2::test_insert( void ) {
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque_2, item_size> item_type;
 	typedef HDeque<item_type> deque_type;
 	clog << "testing insert range: " << item_size << endl;
-	item_t::set_start_id( 0 );
-		{
+	item_t::set_start_id( 0 ); {
 		int const len0( countof ( _testData_[0] ) );
 		int const len1( countof ( _testData_[1] ) );
 		proto_t proto( _testData_[0], _testData_[0] + len0 );
@@ -199,8 +192,7 @@ void tut_yaal_hcore_hdeque_2::test_insert( void )
 		proto.insert( proto.end() - proto.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
 		check_consistency( deque );
 		ENSURE_EQUALS( "range insertion failed", deque, proto );
-		}
-		{
+	} {
 		int const len0( countof ( _testData_[0] ) );
 		int const len1( countof ( _testData_[1] ) );
 		proto_t proto( _testData_[0], _testData_[0] + len0 );
@@ -291,9 +283,9 @@ void tut_yaal_hcore_hdeque_2::test_insert( void )
 		proto.insert( proto.end() - proto.size() / 3, _testData_[1], _testData_[1] + len1 / 2 );
 		check_consistency( deque );
 		ENSURE_EQUALS( "range insertion failed", deque, proto );
-		}
-	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 	}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+}
 
 TUT_UNIT_TEST( 17, "insert range" )
 	test_insert<1>();
@@ -313,103 +305,85 @@ TUT_UNIT_TEST( 17, "insert range" )
 TUT_TEARDOWN()
 
 template<int const item_size>
-void tut_yaal_hcore_hdeque_2::test_roll_backward_greedy_insert_erase( int shift_, int distance_ )
-	{
+void tut_yaal_hcore_hdeque_2::test_roll_backward_greedy_insert_erase( int shift_, int distance_ ) {
 	clog << "testing roll backward greedy insert erase: " << item_size << ", " << shift_ << endl;
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque_2, item_size> item_type;
-	typedef HDeque<item_type> deque_type;
-		{
+	typedef HDeque<item_type> deque_type; {
 		proto_t proto;
 		deque_type deque;
 		int i( 0 );
-		for ( ; i < shift_; ++ i )
-			{
+		for ( ; i < shift_; ++ i ) {
 			proto.insert( proto.begin(), i );
 			deque.insert( deque.begin(), i );
 			check_consistency( deque );
 			ENSURE_EQUALS( "insert front failed", deque, proto );
-			}
-		while ( i < distance_ )
-			{
-			for ( int s( 0 ); s < shift_; ++ s )
-				{
+		} while ( i < distance_ ) {
+			for ( int s( 0 ); s < shift_; ++ s ) {
 				proto.erase( proto.end() - 1 );
 				deque.erase( deque.end() - 1 );
 				check_consistency( deque );
 				ENSURE_EQUALS( "erase back failed", deque, proto );
-				}
-			for ( int s( 0 ); s < shift_; ++ s, ++ i )
-				{
+			}
+			for ( int s( 0 ); s < shift_; ++ s, ++ i ) {
 				proto.insert( proto.begin(), i );
 				deque.insert( deque.begin(), i );
 				check_consistency( deque );
 				ENSURE_EQUALS( "insert front failed", deque, proto );
-				}
 			}
-		for ( i = 0; i < shift_; ++ i )
-			{
+		}
+		for ( i = 0; i < shift_; ++ i ) {
 			proto.erase( proto.end() - 1 );
 			deque.erase( deque.end() - 1 );
 			check_consistency( deque );
 			ENSURE_EQUALS( "erase back failed", deque, proto );
-			}
 		}
-	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 	}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+}
 
 template<int const item_size>
-void tut_yaal_hcore_hdeque_2::test_roll_backward_insert_erase( int shift_, int pack_, int distance_ )
-	{
+void tut_yaal_hcore_hdeque_2::test_roll_backward_insert_erase( int shift_, int pack_, int distance_ ) {
 	clog << "testing roll backward insert erase: " << item_size << ", " << shift_ << ", " << pack_ << endl;
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque_2, item_size> item_type;
-	typedef HDeque<item_type> deque_type;
-		{
+	typedef HDeque<item_type> deque_type; {
 		proto_t proto;
 		deque_type deque;
 		int i( 0 );
-		for ( ; i < shift_; ++ i )
-			{
+		for ( ; i < shift_; ++ i ) {
 			proto.insert( proto.begin(), i );
 			deque.insert( deque.begin(), i );
 			check_consistency( deque );
 			ENSURE_EQUALS( "insert front failed", deque, proto );
-			}
-		while ( i < distance_ )
-			{
-			for ( int p( 0 ); p < pack_; ++ p, ++ i )
-				{
+		} while ( i < distance_ ) {
+			for ( int p( 0 ); p < pack_; ++ p, ++ i ) {
 				proto.insert( proto.begin(), i );
 				deque.insert( deque.begin(), i );
 				check_consistency( deque );
 				ENSURE_EQUALS( "insert front failed", deque, proto );
-				}
-			for ( int p( 0 ); p < pack_; ++ p )
-				{
+			}
+			for ( int p( 0 ); p < pack_; ++ p ) {
 				proto.erase( proto.end() - 1 );
 				deque.erase( deque.end() - 1 );
 				check_consistency( deque );
 				ENSURE_EQUALS( "erase back failed", deque, proto );
-				}
 			}
-		for ( i = 0; i < shift_; ++ i )
-			{
+		}
+		for ( i = 0; i < shift_; ++ i ) {
 			proto.erase( proto.end() - 1 );
 			deque.erase( deque.end() - 1 );
 			check_consistency( deque );
 			ENSURE_EQUALS( "erase back failed", deque, proto );
-			}
 		}
-	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 	}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+}
 
 TUT_UNIT_TEST( 19, "roll backward (push_front/pop_back) insert erase" )
 	int shift[] = { 1, 2, 3, 4, 5, 6, 7, 8, 16, 32 };
 	int pack[] = { 1, 2, 3, 4, 5, 7, 8 };
 	int distance( 1024 );
-	for ( int s( 0 ); s < countof ( shift ); ++ s )
-		{
-		for ( int p( 0 ); p < countof ( pack ); ++ p )
-			{
+	for ( int s( 0 ); s < countof ( shift ); ++ s ) {
+		for ( int p( 0 ); p < countof ( pack ); ++ p ) {
 			test_roll_backward_insert_erase<1>( shift[s], pack[p], distance );
 			test_roll_backward_insert_erase<2>( shift[s], pack[p], distance );
 			test_roll_backward_insert_erase<3>( shift[s], pack[p], distance );
@@ -424,10 +398,9 @@ TUT_UNIT_TEST( 19, "roll backward (push_front/pop_back) insert erase" )
 			test_roll_backward_insert_erase<512>( shift[s], pack[p], distance );
 			test_roll_backward_insert_erase<513>( shift[s], pack[p], distance );
 			test_roll_backward_insert_erase<640>( shift[s], pack[p], distance );
-			}
 		}
-	for ( int s( 0 ); s < countof ( shift ); ++ s )
-		{
+	}
+	for ( int s( 0 ); s < countof ( shift ); ++ s ) {
 		test_roll_backward_greedy_insert_erase<1>( shift[s], distance );
 		test_roll_backward_greedy_insert_erase<2>( shift[s], distance );
 		test_roll_backward_greedy_insert_erase<3>( shift[s], distance );
@@ -442,7 +415,7 @@ TUT_UNIT_TEST( 19, "roll backward (push_front/pop_back) insert erase" )
 		test_roll_backward_greedy_insert_erase<512>( shift[s], distance );
 		test_roll_backward_greedy_insert_erase<513>( shift[s], distance );
 		test_roll_backward_greedy_insert_erase<640>( shift[s], distance );
-		}
+	}
 TUT_TEARDOWN()
 
 }

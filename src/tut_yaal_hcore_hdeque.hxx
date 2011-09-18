@@ -41,14 +41,11 @@ Copyright:
 
 #include "tut_helpers.hxx"
 
-namespace tress
-{
+namespace tress {
 
 template<int const pack>
-struct tut_yaal_hcore_hdeque_base : public tut_helpers::simple_mock<tut_yaal_hcore_hdeque_base<pack> >
-	{
-	struct StatePreserver
-		{
+struct tut_yaal_hcore_hdeque_base : public tut_helpers::simple_mock<tut_yaal_hcore_hdeque_base<pack> > {
+	struct StatePreserver {
 		int long _size;
 		int long _usedChunks;
 		int long _availChunks;
@@ -56,7 +53,7 @@ struct tut_yaal_hcore_hdeque_base : public tut_helpers::simple_mock<tut_yaal_hco
 		int long _lastChunkIndex;
 		void const* _firstChunk;
 		void const* _lastChunk;
-		};
+	};
 	StatePreserver _statePreserver;
 	typedef std::deque<int> proto_t;
 	tut_yaal_hcore_hdeque_base( void )
@@ -64,12 +61,11 @@ struct tut_yaal_hcore_hdeque_base : public tut_helpers::simple_mock<tut_yaal_hco
 	virtual ~tut_yaal_hcore_hdeque_base( void ) {}
 	template<typename deque_type>
 	void check_consistency( deque_type const&, int long = 0 );
-	};
+};
 
 template<int const pack>
 template<typename deque_type>
-void tut_yaal_hcore_hdeque_base<pack>::check_consistency( deque_type const& deque_, int long extraItems )
-	{
+void tut_yaal_hcore_hdeque_base<pack>::check_consistency( deque_type const& deque_, int long extraItems ) {
 	ENSURE_EQUALS( "deque size with respect to allocated objects", deque_.get_size(), deque_type::value_type::get_instance_count() - extraItems );
 	int long firstChunkIndex( deque_._start / deque_type::VALUES_PER_CHUNK );
 	int long lastChunkIndex( deque_._size > 0 ? ( ( deque_._start + deque_._size - 1 ) / deque_type::VALUES_PER_CHUNK ) : ( deque_._start / deque_type::VALUES_PER_CHUNK ) );
@@ -85,16 +81,13 @@ void tut_yaal_hcore_hdeque_base<pack>::check_consistency( deque_type const& dequ
 			<< ", _statePreserver._size: " << _statePreserver._size
 			<< ", chunksCount: " << chunksCount
 			<< ", _statePreserver._availChunks: " << _statePreserver._availChunks << yaal::hcore::endl;
-	if ( deque_._size > 0 )
-		{
+	if ( deque_._size > 0 ) {
 		ENSURE( "chunk range bigger than chunks count", ( lastChunkIndex - firstChunkIndex ) < chunksCount );
 		ENSURE( "last chunk outside avail chunks", lastChunkIndex < chunksCount );
-		}
-	else
-		{
+	} else {
 		ENSURE_EQUALS( "bad indexes for empty deque", lastChunkIndex, firstChunkIndex );
 		ENSURE_EQUALS( "wrong number of used chunks calculated", deque_.used_chunks(), 0 );
-		}
+	}
 	ENSURE( "first chunk outside avail chunks", deque_._start >= 0 );
 	if ( ( chunksCount > _statePreserver._availChunks )
 			|| ( ( true /* deque_._size > _statePreserver._size */ )
@@ -106,32 +99,28 @@ void tut_yaal_hcore_hdeque_base<pack>::check_consistency( deque_type const& dequ
 						&& ( lastChunkIndex != _statePreserver._lastChunkIndex )
 						&& ( chunks[ lastChunkIndex ] == _statePreserver._lastChunk )
 						&& ( ( _statePreserver._firstChunkIndex - yaal::abs( usedChunks - _statePreserver._usedChunks ) ) < 0 ) )
-					) ) )
-		{
+					) ) ) {
 		int long startGap( firstChunkIndex );
 		int long endGap( ( chunksCount - lastChunkIndex ) - 1 );
 		if ( setup._debug )
 			yaal::hcore::clog << "startGap: " << startGap << ", endGap: " << endGap << yaal::hcore::endl;
 		if ( deque_._size > 0 )
 			ENSURE_DISTANCE( "chunks are not centered", yaal::abs( endGap - startGap ), 0l, 2l );
-		}
-	else if ( _statePreserver._size
+	} else if ( _statePreserver._size
 			&& ( chunksCount >= _statePreserver._availChunks )
-			&& ( ( firstChunkIndex > _statePreserver._firstChunkIndex ) || ( lastChunkIndex < _statePreserver._lastChunkIndex ) ) )
-		{
+			&& ( ( firstChunkIndex > _statePreserver._firstChunkIndex ) || ( lastChunkIndex < _statePreserver._lastChunkIndex ) ) ) {
 		ENSURE( "unnecesarry chunks move", ( deque_._size < _statePreserver._size ) || ( chunksCount > _statePreserver._availChunks ) );
-		}
+	}
 	for ( int long i( 0 ); i < firstChunkIndex; ++ i )
 		ENSURE_EQUALS( "not used chunks at the begining not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
 	for ( int long i( lastChunkIndex + 1 ); i < chunksCount; ++ i )
 		ENSURE_EQUALS( "not used chunks at the end not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
 	if ( ( chunksCount > 0 ) && ! deque_._size )
 		ENSURE_EQUALS( "not all chunks are nulled after resize( 0 )", chunks[ firstChunkIndex ], static_cast<typename deque_type::value_type*>( NULL ) );
-	if ( deque_._size > 0 )
-		{
+	if ( deque_._size > 0 ) {
 		for ( int long i( firstChunkIndex ); i < ( lastChunkIndex + 1 ); ++ i )
 			ENSURE_EQUALS( "a nil in used chunks range", chunks[ i ] ? true : false, true );
-		}
+	}
 	_statePreserver._size = deque_._size;
 	_statePreserver._usedChunks = usedChunks;
 	_statePreserver._availChunks = chunksCount;
@@ -141,7 +130,7 @@ void tut_yaal_hcore_hdeque_base<pack>::check_consistency( deque_type const& dequ
 		_statePreserver._firstChunk = chunks[ firstChunkIndex ];
 	if ( lastChunkIndex < chunksCount )
 		_statePreserver._lastChunk = chunks[ lastChunkIndex ];
-	}
+}
 
 #ifndef __sun__
 #pragma pack( push, 1 )
@@ -149,10 +138,9 @@ void tut_yaal_hcore_hdeque_base<pack>::check_consistency( deque_type const& dequ
 #pragma pack( 1 )
 #endif /* #else #ifndef __sun__ */
 	template<int const SIZE>
-	class FixedArray
-		{
+	class FixedArray {
 		char _data[SIZE];
-		};
+	};
 #ifndef __sun__
 #pragma pack( pop )
 #else /* #ifndef __sun__ */

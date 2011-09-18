@@ -39,8 +39,7 @@ using namespace yaal::tools::util;
 using namespace yaal::tools::xmath;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_xmath );
 TUT_TEST_GROUP( tut_yaal_tools_xmath, "yaal::tools::xmath" );

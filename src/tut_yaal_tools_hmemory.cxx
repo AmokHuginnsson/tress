@@ -40,44 +40,35 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_tools_hmemory
-	{
+struct tut_yaal_tools_hmemory {
 	static int const SIZE = 256;
 	char _buf[SIZE];
 	tut_yaal_tools_hmemory( void );
 	virtual ~tut_yaal_tools_hmemory( void ) {}
-	};
+};
 
-tut_yaal_tools_hmemory::tut_yaal_tools_hmemory( void ) : _buf()
-	{
+tut_yaal_tools_hmemory::tut_yaal_tools_hmemory( void ) : _buf() {
 	fill_n( _buf, SIZE, 0 );
-	}
+}
 
 TUT_TEST_GROUP( tut_yaal_tools_hmemory, "yaal::tools::HMemory" );
 
 TUT_UNIT_TEST( 1, "constructor" )
-	try
-		{
+	try {
 		HMemory m( NULL, 10 );
 		FAIL( "construction of null block succeeded" );
-		}
-	catch ( HFailedAssertion const& )
-		{
+	} catch ( HFailedAssertion const& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		char b[10];
 		HMemory m( b, 0 );
 		FAIL( "zero length block construction succeeded" );
-		}
-	catch ( HFailedAssertion const& )
-		{
+	} catch ( HFailedAssertion const& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "simple write" )

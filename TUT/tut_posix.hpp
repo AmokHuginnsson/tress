@@ -19,8 +19,7 @@
 #include "tut_assert.hpp"
 #include "tut_runner.hpp"
 
-namespace tut
-{
+namespace tut {
 
 template<typename, int>
 class test_group;
@@ -28,8 +27,7 @@ class test_group;
 template<typename T>
 class test_object;
 
-class test_group_posix
-{
+class test_group_posix {
 private:
     template<typename, int>
     friend class test_group;
@@ -60,8 +58,7 @@ private:
 };
 
 template<typename T>
-struct tut_posix
-{
+struct tut_posix {
     pid_t fork()
     {
         test_object<T> *self = dynamic_cast< tut::test_object<T>* >(this);
@@ -107,8 +104,7 @@ struct tut_posix
 
 };
 
-class test_object_posix
-{
+class test_object_posix {
 public:
     typedef std::map<pid_t, int> pid_map;
 
@@ -422,17 +418,14 @@ private:
 
 #else
 
-namespace tut
-{
+namespace tut {
 
-struct test_object_posix
-{
+struct test_object_posix {
 	virtual ~test_object_posix( void )
 		{}
 };
 
-struct test_group_posix
-{
+struct test_group_posix {
     template<typename T>
     void send_result_(const T*, const test_result &)
     {

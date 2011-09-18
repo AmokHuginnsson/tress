@@ -38,22 +38,19 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hmap
-	{
-	struct Crazy
-		{
+struct tut_yaal_hcore_hmap {
+	struct Crazy {
 		Crazy() { throw 0; }
-		};
+	};
 	typedef HMap<int, int> i2i_t;
 	typedef HMap<int, Crazy> i2c_t;
 	virtual ~tut_yaal_hcore_hmap( void )
 		{}
 	void lower_bound_test( int );
 	void upper_bound_test( int );
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hmap, "yaal::hcore::HMap" );
 
@@ -71,53 +68,47 @@ TUT_UNIT_TEST( 1, "find()" )
 	ENSURE_EQUALS( "find failed", it->first, 3 );
 TUT_TEARDOWN()
 
-void tut_yaal_hcore_hmap::lower_bound_test( int size_ )
-	{
+void tut_yaal_hcore_hmap::lower_bound_test( int size_ ) {
 	i2i_t map;
 	for ( int i( 0 ); i < size_; i += 2 )
 		map.insert( make_pair( i, i ) );
-	for ( int i( 0 ); i < ( size_ - 1 ); ++i )
-		{
+	for ( int i( 0 ); i < ( size_ - 1 ); ++i ) {
 		i2i_t::const_iterator it( map.lower_bound( i ) );
 		ENSURE( "lower_bound not found", it != map.end() );
 		ENSURE_EQUALS( "lower_bound failed", it->first, ( i % 2 ) ? i + 1 : i );
-		}
+	}
 	map.clear();
 	for ( int i( size_ - 2 ); i >= 0; i -= 2 )
 		map.insert( make_pair( i, i ) );
-	for ( int i( 0 ); i < ( size_ - 1 ); ++i )
-		{
+	for ( int i( 0 ); i < ( size_ - 1 ); ++i ) {
 		i2i_t::const_iterator it( map.lower_bound( i ) );
 		ENSURE( "lower_bound not found", it != map.end() );
 		ENSURE_EQUALS( "lower_bound failed", it->first, ( i % 2 ) ? i + 1 : i );
-		}
 	}
+}
 
-void tut_yaal_hcore_hmap::upper_bound_test( int size_ )
-	{
+void tut_yaal_hcore_hmap::upper_bound_test( int size_ ) {
 	i2i_t map;
 	for ( int i( 0 ); i < size_; i += 2 )
 		map.insert( make_pair( i, i ) );
-	for ( int i( 0 ); i < ( size_ - 2 ); ++i )
-		{
+	for ( int i( 0 ); i < ( size_ - 2 ); ++i ) {
 		i2i_t::const_iterator it( map.upper_bound( i ) );
 		ENSURE( "upper_bound not found", it != map.end() );
 		ENSURE_EQUALS( "upper_bound failed", it->first, ( i % 2 ) ? i + 1 : i + 2 );
-		}
+	}
 	i2i_t::const_iterator end( map.upper_bound( map.rbegin()->first ) );
 	ENSURE( "upper_bound found", !( end != map.end() ) );
 	map.clear();
 	for ( int i( size_ - 2 ); i >= 0; i -= 2 )
 		map.insert( make_pair( i, i ) );
-	for ( int i( 0 ); i < ( size_ - 2 ); ++i )
-		{
+	for ( int i( 0 ); i < ( size_ - 2 ); ++i ) {
 		i2i_t::const_iterator it( map.upper_bound( i ) );
 		ENSURE( "upper_bound not found", it != map.end() );
 		ENSURE_EQUALS( "upper_bound failed", it->first, ( i % 2 ) ? i + 1 : i + 2 );
-		}
+	}
 	i2i_t::const_iterator end2( map.upper_bound( map.rbegin()->first ) );
 	ENSURE( "upper_bound found", !( end2 != map.end() ) );
-	}
+}
 
 TUT_UNIT_TEST( 2, "lower_bound()" )
 	i2i_t map;
@@ -173,15 +164,12 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "exception during map[key] = val;" )
 	i2c_t m;
-	try
-		{
+	try {
 		m[ 0 ] = Crazy();
 		FAIL( "FATAL: bad exec path!" );
-		}
-	catch ( int )
-		{
+	} catch ( int ) {
 		// ok
-		}
+	}
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 

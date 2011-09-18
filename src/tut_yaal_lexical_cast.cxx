@@ -38,8 +38,7 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_lexical_cast );
 TUT_TEST_GROUP( tut_yaal_lexical_cast, "yaal::lexical_cast" );
@@ -118,30 +117,24 @@ TUT_UNIT_TEST( 11, "axOla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
-	try
-		{
+	try {
 		lexical_cast<int>( get_test_name().c_str() );
 		FAIL( "lexical_cast to an int from a garbage succeeded" );
-		}
-	catch ( HLexicalCastException const& )
-		{
+	} catch ( HLexicalCastException const& ) {
 		/* ok */
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 12, "-axOla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
-	try
-		{
+	try {
 		lexical_cast<int>( get_test_name().c_str() );
 		FAIL( "lexical_cast to an int from a garbage succeeded" );
-		}
-	catch ( HLexicalCastException const& )
-		{
+	} catch ( HLexicalCastException const& ) {
 		/* ok */
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 13, "0xAla" )
@@ -204,30 +197,24 @@ TUT_UNIT_TEST( 21, "xOla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
-	try
-		{
+	try {
 		lexical_cast<int>( get_test_name().c_str() );
 		FAIL( "lexical_cast to an int from a garbage succeeded" );
-		}
-	catch ( HLexicalCastException const& )
-		{
+	} catch ( HLexicalCastException const& ) {
 		/* ok */
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 22, "-xOla" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
-	try
-		{
+	try {
 		lexical_cast<int>( get_test_name().c_str() );
 		FAIL( "lexical_cast to an int from a garbage succeeded" );
-		}
-	catch ( HLexicalCastException const& )
-		{
+	} catch ( HLexicalCastException const& ) {
 		/* ok */
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 23, "xAla" )
@@ -389,16 +376,13 @@ TUT_UNIT_TEST( 45, "string to bool" )
 	ENSURE_EQUALS( "no to bool failed", lexical_cast<bool>( static_cast<char const*>( "no" ) ), false );
 	ENSURE_EQUALS( "true to bool failed", lexical_cast<bool>( static_cast<char const*>( "true" ) ), true );
 	ENSURE_EQUALS( "false to bool failed", lexical_cast<bool>( static_cast<char const*>( "false" ) ), false );
-	try
-		{
+	try {
 		lexical_cast<bool>( static_cast<char const*>( "invalid" ) );
 		FAIL( "casting garbage to bool did not throw" );
-		}
-	catch ( HLexicalCastException const& e )
-		{
+	} catch ( HLexicalCastException const& e ) {
 		// ok
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 }

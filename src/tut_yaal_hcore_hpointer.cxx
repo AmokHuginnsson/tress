@@ -38,36 +38,30 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hpointer
-	{
+struct tut_yaal_hcore_hpointer {
 	typedef HInstanceTracker<tut_yaal_hcore_hpointer> counter_t;
-	tut_yaal_hcore_hpointer( void )
-		{
+	tut_yaal_hcore_hpointer( void ) {
 		counter_t::set_instance_count( 0 );
-		}
+	}
 	virtual ~tut_yaal_hcore_hpointer( void )
 		{}
 
-	struct Base
-		{
+	struct Base {
 		int _tab[0x100];
 		Base( void )
 			: _tab()
 			{	cout << __PRETTY_FUNCTION__ << ": " << this << endl;	}
 		virtual ~Base( void )
 			{	cout << __PRETTY_FUNCTION__ << ": " << this << endl;	}
-		virtual int foo( char const* const by )
-			{
+		virtual int foo( char const* const by ) {
 			cout << __PRETTY_FUNCTION__ << ": " << this << ", by: " << by << endl;
 			return ( -1 );
-			}
-		};
+		}
+	};
 
-	struct A : virtual public Base
-		{
+	struct A : virtual public Base {
 		int _one;
 		A ( int one )
 			: Base(), _one ( one )
@@ -76,15 +70,13 @@ struct tut_yaal_hcore_hpointer
 			{	cout << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray <<  ", " << _one << endl;	}
 		void bar( char const* const by )
 			{ cout << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray << ", " << _one << ", by: " << by << endl; }
-		virtual int foo( char const* const by )
-			{
+		virtual int foo( char const* const by ) {
 			cout << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray << ", " << _one << ", by: " << by << endl;
 			return ( _one );
-			}
-		};
+		}
+	};
 
-	struct X
-		{
+	struct X {
 		int long _quality;
 		int long _quality1;
 		int long _quality2;
@@ -101,32 +93,29 @@ struct tut_yaal_hcore_hpointer
 			{ cout << __PRETTY_FUNCTION__ << ": " << yellow << this << lightgray << endl; }
 		virtual ~X ( void )
 			{ cout << __PRETTY_FUNCTION__ << ": " << yellow << this << lightgray << endl; }
-		virtual int foo( char const* const by )
-			{
+		virtual int foo( char const* const by ) {
 			cout << __PRETTY_FUNCTION__ << ": " << yellow << this << lightgray << ", by: " << by << endl;
 			return ( 0 );
-			}
-		};
+		}
+	};
 
-	struct E : public X, public A
-		{
+	struct E : public X, public A {
 		HString _four;
 		E ( int one, HString const& four )
 			: X(), A( one ), _four ( four )
 			{ cout << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << endl; }
 		virtual ~E ( void )
 			{ cout << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << endl; }
-		virtual int foo( char const* const by )
-			{
+		virtual int foo( char const* const by ) {
 			cout << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << ", by: " << by << endl;
 			return ( _one );
-			}
-		};
+		}
+	};
 
 	typedef HPointer<Base> sp_base_t;
 	typedef HPointer<A> sp_a_t;
 	typedef HPointer<E> sp_e_t;
-	};
+};
 
 typedef HPointer<tut_yaal_hcore_hpointer::counter_t> ptr_t;
 
@@ -137,28 +126,25 @@ TUT_UNIT_TEST( 1, "Default constructor." )
 	ENSURE_EQUALS( "failed to invoke destructor", ptr.raw(), static_cast<counter_t*>( NULL ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Constructor." )
-		{
+TUT_UNIT_TEST( 2, "Constructor." ) {
 		counter_t* p = NULL;
 		ptr_t ptr( p = new counter_t() );
 		ENSURE_EQUALS( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
 		cout << ptr->to_string() << endl;
-		}
+	}
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "Copy constructor." )
-		{
+TUT_UNIT_TEST( 3, "Copy constructor." ) {
 		counter_t* p = NULL;
 		ptr_t ptr = ptr_t( p = new counter_t() );
 		ENSURE_EQUALS( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
 		cout << ptr->to_string() << endl;
-		}
+	}
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "Assign operator." )
-		{
+TUT_UNIT_TEST( 4, "Assign operator." ) {
 		counter_t* p = NULL;
 		ptr_t sp1 = ptr_t( new counter_t() );
 		ptr_t sp2 = ptr_t( p = new counter_t() );
@@ -169,31 +155,29 @@ TUT_UNIT_TEST( 4, "Assign operator." )
 		ENSURE_EQUALS( "failed to assign pointer", sp1->get_id(), sp2->get_id() );
 		ENSURE_EQUALS( "failed to assign pointer", sp1.raw(), p );
 		cout << sp1->to_string() << endl;
-		}
+	}
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "Checks constructor with another ptr_t with no module." )
-		{
+TUT_UNIT_TEST( 5, "Checks constructor with another ptr_t with no module." ) {
 		ptr_t sp1;
 		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
 		ptr_t sp2( sp1 );
 		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
 		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
 		ENSURE( sp2.raw() == 0 );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "Checks constructor with another ptr_t with module." )
-		{
+TUT_UNIT_TEST( 6, "Checks constructor with another ptr_t with module." ) {
 		counter_t* p = new counter_t();
 		ptr_t sp1(p);
 		ptr_t sp2(sp1);
 		ENSURE_EQUALS( "get", sp1.raw(), p );
 		ENSURE_EQUALS( "get", sp2.raw(), p );
 		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
-		}
+	}
 	// ptr left scope
 	ENSURE_EQUALS( "destructed", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -202,18 +186,16 @@ TUT_TEARDOWN()
 // Assignment operators
 // =================================================
 
-TUT_UNIT_TEST( 7, "Checks assignment with non-null module." )
-		{
+TUT_UNIT_TEST( 7, "Checks assignment with non-null module." ) {
 		counter_t* p = new counter_t();
 		ptr_t sp( p );
 		ENSURE("get", sp.raw() == p);
 		ENSURE_EQUALS("leak !!!", counter_t::get_instance_count(), 1);
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "Checks assignment with ptr_t with non-null module." )
-		{
+TUT_UNIT_TEST( 8, "Checks assignment with ptr_t with non-null module." ) {
 		counter_t* p = NULL;
 		ptr_t sp1( p = new counter_t() );
 		ptr_t sp2;
@@ -221,18 +203,17 @@ TUT_UNIT_TEST( 8, "Checks assignment with ptr_t with non-null module." )
 		ENSURE_EQUALS( "get", sp1.raw(), p );
 		ENSURE_EQUALS( "get", sp2.raw(), p );
 		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
-		}
+	}
 	ENSURE_EQUALS( "destructed", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "Checks assignment with itself." )
-		{
+TUT_UNIT_TEST( 9, "Checks assignment with itself." ) {
 		ptr_t sp1( new counter_t() );
 		sp1 = sp1;
 		ENSURE( "get", sp1.raw() != 0 );
 		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
 		ENSURE_EQUALS( "not destructed", counter_t::get_instance_count(), 1 );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
@@ -241,8 +222,7 @@ TUT_TEARDOWN()
 // Passing ownership
 // =================================================
 
-TUT_UNIT_TEST( 10, "Checks passing ownership via assignment." )
-		{
+TUT_UNIT_TEST( 10, "Checks passing ownership via assignment." ) {
 		counter_t *p1 = NULL, *p2 = NULL;
 		ptr_t sp1( p1 = new counter_t());
 		ptr_t sp2( p2 = new counter_t());
@@ -253,75 +233,65 @@ TUT_UNIT_TEST( 10, "Checks passing ownership via assignment." )
 		sp1 = sp2;
 		ENSURE_EQUALS( "create 2", sp1->get_id(), p2->get_id() );
 		ENSURE_EQUALS( "leak !!!=1", counter_t::get_instance_count(), 1 );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "Checks operator->() throws instead of returning null." )
-		{
-		try
-			{
+TUT_UNIT_TEST( 11, "Checks operator->() throws instead of returning null." ) {
+		try {
 			ptr_t sp;
 			sp->get_id();
 			FAIL( "failed assertion expected" );
-			}
-		catch ( HFailedAssertion& )
-			{
+		} catch ( HFailedAssertion& ) {
 			// ok
-			}
 		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "assign smart pointers pointing to the same memory." )
-		{
+TUT_UNIT_TEST( 12, "assign smart pointers pointing to the same memory." ) {
 		ptr_t sp1( new counter_t() );
 		ptr_t sp2 = sp1;
 		sp2 = sp1;
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 /* Weak pointer related tests. */
 typedef HPointer<tut_yaal_hcore_hpointer::counter_t, HPointerScalar, HPointerWeak> weak_t;
 
-TUT_UNIT_TEST( 13, "default constructor" )
-		{
+TUT_UNIT_TEST( 13, "default constructor" ) {
 		weak_t w;
 		ptr_t p( w );
 		ENSURE( "bad default constructor", p.raw() == NULL );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "copy constructor" )
-		{
+TUT_UNIT_TEST( 14, "copy constructor" ) {
 		ptr_t p( new counter_t() );
 		weak_t w( p );
 		ENSURE( "bad copy constructor", p.raw() != NULL );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "accessing nullified weak" )
-		{
-		weak_t w;
-			{
+TUT_UNIT_TEST( 15, "accessing nullified weak" ) {
+		weak_t w; {
 			ptr_t p( new counter_t() );
 			w = p;
 			ENSURE( "weak could not pass ownership", w == p );
 			ptr_t o( w );
 			ENSURE( "weak could not pass ownership", o == p );
-			}
+		}
 		ptr_t a( w );
 		ENSURE( "weak performed forbidden operation", a.raw() == NULL );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-struct ODummy : public HPointerFromThisInterface<ODummy>
-	{
-	};
+struct ODummy : public HPointerFromThisInterface<ODummy> {
+};
 
 typedef HPointer<ODummy> ftp_t;
 
@@ -332,8 +302,7 @@ TUT_UNIT_TEST( 16, "from this" )
 	ENSURE( "from this failed", p == o );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "hierarchy issues" )
-		{
+TUT_UNIT_TEST( 17, "hierarchy issues" ) {
 		static int const MY_VAL = 2;
 		A* rpa = NULL;
 		E* rpe = NULL;
@@ -372,55 +341,49 @@ TUT_UNIT_TEST( 17, "hierarchy issues" )
 		e->bar( "e->bar" );
 		spe->A::bar( "spe->A::bar" );
 		spe->bar( "spe->bar" );
-		}
+	}
 TUT_TEARDOWN()
 
 #pragma GCC diagnostic ignored "-Weffc++"
 
-struct non_virt_dtor
-	{
+struct non_virt_dtor {
 	~non_virt_dtor( void ) {};
-	};
+};
 
-struct NVDDerive : public non_virt_dtor
-	{
+struct NVDDerive : public non_virt_dtor {
 	tut_yaal_hcore_hpointer::counter_t _counter;
 	~NVDDerive( void ) {};
-	};
+};
 
 TUT_UNIT_TEST( 18, "non virtual destructor" )
-	typedef HPointer<non_virt_dtor> p_t;
-		{
+	typedef HPointer<non_virt_dtor> p_t; {
 		p_t p( new NVDDerive );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 #pragma GCC diagnostic warning "-Weffc++"
 
-TUT_UNIT_TEST( 19, "generic pointer" )
-		{
+TUT_UNIT_TEST( 19, "generic pointer" ) {
 		typedef HPointer<void> void_t;
 		void_t p( new counter_t() );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "pointer_static_cast<>" )
-		{
+TUT_UNIT_TEST( 20, "pointer_static_cast<>" ) {
 		typedef HPointer<void> void_t;
 		void_t v( new counter_t( 7 ) );
 		ptr_t p( pointer_static_cast<counter_t>( v ) );
 		ENSURE_EQUALS( "cast failed", p->get_id(), 7 );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "make_pointer" )
-		{
+TUT_UNIT_TEST( 21, "make_pointer" ) {
 		ptr_t p( make_pointer<counter_t>( 7 ) );
 		ENSURE_EQUALS( "cast failed", p->get_id(), 7 );
-		}
+	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 

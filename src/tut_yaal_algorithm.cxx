@@ -43,8 +43,7 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_algorithm );
 TUT_TEST_GROUP( tut_yaal_algorithm, "yaal::algorithm" );
@@ -765,49 +764,45 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 12, "is_heap" )
 	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	for ( int i( 2 ); i < countof ( _testData_[0] ); ++ i )
-		{
+	for ( int i( 2 ); i < countof ( _testData_[0] ); ++ i ) {
 #ifndef _MSC_VER
 		ENSURE_EQUALS( "stdext::is_heap false positive: " + lexical_cast<HString>( i ), stdext::is_heap( v.begin(), v.begin() + i ), false );
 #endif /* #ifndef _MSC_VER */
 		ENSURE_EQUALS( "yaal::is_heap false positive: " + lexical_cast<HString>( i ), yaal::is_heap( v.begin(), v.begin() + i ), false );
 		std::push_heap( v.begin(), v.begin() + i );
 		ENSURE_EQUALS( "yaal::is_heap false negative: " + lexical_cast<HString>( i ), yaal::is_heap( v.begin(), v.begin() + i ), true );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 13, "push_heap" )
 	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	int_array_t a( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	for ( int i( 2 ); i <= countof ( _testData_[0] ); ++ i )
-		{
+	for ( int i( 2 ); i <= countof ( _testData_[0] ); ++ i ) {
 		ENSURE_EQUALS( "yaal::is_heap false positive: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), false );
 		std::push_heap( v.begin(), v.begin() + i );
 		push_heap( a.begin(), a.begin() + i );
 		ENSURE_EQUALS( "yaal::push_heap failed: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), true );
 		ENSURE_EQUALS( "yaal::push_heap wrong: " + lexical_cast<HString>( i ), a, v );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 14, "pop_heap" )
 	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	int_array_t a( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	for ( int i( 2 ); i <= countof ( _testData_[0] ); ++ i )
-		{
+	for ( int i( 2 ); i <= countof ( _testData_[0] ); ++ i ) {
 		ENSURE_EQUALS( "yaal::is_heap false positive: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), false );
 		std::push_heap( v.begin(), v.begin() + i );
 		push_heap( a.begin(), a.begin() + i );
 		ENSURE_EQUALS( "yaal::push_heap failed: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), true );
 		ENSURE_EQUALS( "yaal::push_heap wrong: " + lexical_cast<HString>( i ), a, v );
-		}
+	}
 
-	for ( int i( countof ( _testData_[0] ) ); i > 0; -- i )
-		{
+	for ( int i( countof ( _testData_[0] ) ); i > 0; -- i ) {
 		std::pop_heap( v.begin(), v.begin() + i );
 		pop_heap( a.begin(), a.begin() + i );
 		ENSURE_EQUALS( "yaal::pop_heap wrong: " + lexical_cast<HString>( i ), a, v );
 		ENSURE_EQUALS( "yaal::pop_heap failed: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i - 1 ), true );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 15, "make_heap" )
@@ -920,45 +915,39 @@ TUT_UNIT_TEST( 20, "inplace_merge" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 21, "insert_sort" )
-	TIME_CONSTRAINT_EXEMPT();
-	{
+	TIME_CONSTRAINT_EXEMPT(); {
 	int_array_t a( 8000 );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
-	std::sort( v.begin(), v.end() );
-		{
+	std::sort( v.begin(), v.end() ); {
 		HClock c;
 		insert_sort( a.begin(), a.end(), less<int>(), iterator_category::forward() );
 		clog << "*speed* yaal::insert_sort(forward) = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
-		}
-	ENSURE_EQUALS( "yaal::insert_sort(forward) wrong", a, v );
-		{
+	}
+	ENSURE_EQUALS( "yaal::insert_sort(forward) wrong", a, v ); {
 		HClock c;
 		insert_sort( a.begin(), a.end(), less<int>(), iterator_category::forward() );
 		clog << "*speed* yaal::insert_sort(forward) sorted = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
-		}
-	ENSURE_EQUALS( "yaal::insert_sort(forward) wrong", a, v );
 	}
-	{
+	ENSURE_EQUALS( "yaal::insert_sort(forward) wrong", a, v );
+} {
 	int_array_t a( 8000 );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
-	std::sort( v.begin(), v.end() );
-		{
+	std::sort( v.begin(), v.end() ); {
 		HClock c;
 		insert_sort( a.begin(), a.end(), less<int>(), iterator_category::random_access() );
 		clog << "*speed* yaal::insert_sort(random_access) = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
-		}
-	ENSURE_EQUALS( "yaal::insert_sort(random_access) wrong", a, v );
-		{
-		HClock c;
-		insert_sort( a.begin(), a.end(), less<int>(), iterator_category::random_access() );
-		clog << "*speed* yaal::insert_sort(random_access) = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
-		}
-	ENSURE_EQUALS( "yaal::insert_sort(random_access) wrong", a, v );
 	}
+	ENSURE_EQUALS( "yaal::insert_sort(random_access) wrong", a, v ); {
+		HClock c;
+		insert_sort( a.begin(), a.end(), less<int>(), iterator_category::random_access() );
+		clog << "*speed* yaal::insert_sort(random_access) = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+	}
+	ENSURE_EQUALS( "yaal::insert_sort(random_access) wrong", a, v );
+}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 22, "selection_sort" )
@@ -1091,96 +1080,81 @@ TUT_UNIT_TEST( 50, "sort speed" )
 	TIME_CONSTRAINT_EXEMPT();
 	double long st( 0 );
 	double long yt( 0 );
-	int_array_t a( 100000 );
-		{
+	int_array_t a( 100000 ); {
 		yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
 		*a.rbegin() = -1;
-		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
-			{
+		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() ); {
 			HClock c;
 			std::stable_sort( v.begin(), v.end() );
 			clog << "*speed* std::stable_sort = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-			}
-			{
+		} {
 			HClock c;
 			stable_sort( a.begin(), a.end() );
 			clog << "*speed* yaal::stable_sort = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-			}
+		}
 		ENSURE_EQUALS( "yaal::stable_sort wrong", a, v );
-		clog << "*speed* stable_sort result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-			{
+		clog << "*speed* stable_sort result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 			HClock c;
 			std::stable_sort( v.begin(), v.end() );
 			clog << "*speed* std::stable_sort (on sorted) = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-			}
-			{
+		} {
 			HClock c;
 			stable_sort( a.begin(), a.end() );
 			clog << "*speed* yaal::stable_sort (on sorted) = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-			}
+		}
 		ENSURE_EQUALS( "yaal::stable_sort (on sorted) wrong", a, v );
 		clog << "*speed* stable_sort (on sorted) result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-		}
-		{
+	} {
 		yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
 		*a.rbegin() = -1;
-		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
-			{
+		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() ); {
 			HClock c;
 			std::sort( v.begin(), v.end() );
 			clog << "*speed* std::sort = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-			}
-			{
+		} {
 			HClock c;
 			sort( a.begin(), a.end() );
 			clog << "*speed* yaal::sort = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-			}
+		}
 		ENSURE_EQUALS( "yaal::sort wrong", a, v );
-		clog << "*speed* sort result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-			{
+		clog << "*speed* sort result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 			HClock c;
 			std::sort( v.begin(), v.end() );
 			clog << "*speed* std::sort (on sorted) = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-			}
-			{
+		} {
 			HClock c;
 			sort( a.begin(), a.end() );
 			clog << "*speed* yaal::sort (on sorted) = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-			}
+		}
 		ENSURE_EQUALS( "yaal::sort (on sorted) wrong", a, v );
 		clog << "*speed* sort (on sorted) result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-		}
-		{
+	} {
 		yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
 		*a.rbegin() = -1;
-		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
-			{
+		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() ); {
 			HClock c;
 			std::make_heap( v.begin(), v.end() );
 			std::sort_heap( v.begin(), v.end() );
 			clog << "*speed* std::heap_sort = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-			}
-			{
+		} {
 			HClock c;
 			heap_sort( a.begin(), a.end() );
 			clog << "*speed* yaal::heap_sort = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-			}
+		}
 		ENSURE_EQUALS( "yaal::heap_sort wrong", a, v );
-		clog << "*speed* heap_sort result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-			{
+		clog << "*speed* heap_sort result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 			HClock c;
 			std::make_heap( v.begin(), v.end() );
 			std::sort_heap( v.begin(), v.end() );
 			clog << "*speed* std::heap_sort (on sorted) = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-			}
-			{
+		} {
 			HClock c;
 			heap_sort( a.begin(), a.end() );
 			clog << "*speed* yaal::heap_sort (on sorted) = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-			}
+		}
 		ENSURE_EQUALS( "yaal::heap_sort (on sorted) wrong", a, v );
 		clog << "*speed* heap_sort (on sorted) result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 }

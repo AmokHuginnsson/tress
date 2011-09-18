@@ -39,11 +39,9 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hprogram_options_handler
-	{
+struct tut_yaal_hcore_hprogram_options_handler {
 	bool _restartable;
 	int _jobs;
 	int _testNumber;
@@ -54,14 +52,13 @@ struct tut_yaal_hcore_hprogram_options_handler
 		: _restartable( false ), _jobs( 0 ), _testNumber( 0 ), _logPath(), _testGroup(), _testGroupPattern()
 		{}
 	virtual ~tut_yaal_hcore_hprogram_options_handler( void ) {}
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hprogram_options_handler, "yaal::hcore::HProgramOptionsHandler" );
 
 TUT_UNIT_TEST( 1, "duplicated long option" )
 	HProgramOptionsHandler po;
-	try
-		{
+	try {
 		int otherValue( 0 );
 		po( "log_path", program_options_helper::option_value( _logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
 			( "_jobs", program_options_helper::option_value( _jobs ), "j", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number of concurrent _jobs", "count" )
@@ -71,17 +68,14 @@ TUT_UNIT_TEST( 1, "duplicated long option" )
 			( "number", program_options_helper::option_value( otherValue ), "X", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test number for a given group", "number" )
 			( "_restartable", program_options_helper::option_value( _restartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, "run tests in _restartable mode" );
 		FAIL( "program options handler with duplicated long option created" );
-		}
-	catch ( HProgramOptionsHandlerException const& )
-		{
+	} catch ( HProgramOptionsHandlerException const& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "duplicated short option" )
 	HProgramOptionsHandler po;
-	try
-		{
+	try {
 		int otherValue( 0 );
 		po( "log_path", program_options_helper::option_value( _logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
 			( "_jobs", program_options_helper::option_value( _jobs ), "j", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number of concurrent _jobs", "count" )
@@ -91,11 +85,9 @@ TUT_UNIT_TEST( 2, "duplicated short option" )
 			( "other", program_options_helper::option_value( otherValue ), "N", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test number for a given group", "number" )
 			( "_restartable", program_options_helper::option_value( _restartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, "run tests in _restartable mode" );
 		FAIL( "program options handler with duplicated short option created" );
-		}
-	catch ( HProgramOptionsHandlerException const& )
-		{
+	} catch ( HProgramOptionsHandlerException const& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "duplicated long option, duplication is legeal due to usage of the same physical value destination" )

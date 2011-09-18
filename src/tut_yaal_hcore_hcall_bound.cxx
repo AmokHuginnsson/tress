@@ -38,17 +38,15 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hcall_bound
-	{
+struct tut_yaal_hcore_hcall_bound {
 	typedef HInstanceTracker<tut_yaal_hcore_hcall_bound> item_t;
 	virtual ~tut_yaal_hcore_hcall_bound( void ) {}
 /* cppcheck-suppress functionConst */
 	void foo( void ) {}
 	void foo_const( void ) {}
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hcall_bound, "yaal::hcore::HCall,bound" );
 

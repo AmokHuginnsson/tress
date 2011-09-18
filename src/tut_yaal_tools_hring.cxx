@@ -38,8 +38,7 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hring );
 TUT_TEST_GROUP( tut_yaal_tools_hring, "yaal::tools::HRing" );
@@ -69,15 +68,12 @@ TUT_UNIT_TEST( 47, "data test" )
 	// The buffer is full now, pushing subsequent
 	// elements will throw.
 
-	try
-		{
+	try {
 		ring.push_back( 4 );  // Overwrite 1 with 4.
 		FAIL( "pushing into full ring succeeded" );
-		}
-	catch ( HException const& )
-		{
+	} catch ( HException const& ) {
 		/* ok */
-		}
+	}
 
 	ring.pop_front();
 	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 2 );
@@ -140,15 +136,12 @@ TUT_UNIT_TEST( 49, "more data tests" )
 
 	// insert some other elements
 	ring.push_back( 3 );
-	try
-		{
+	try {
 		ring.push_back( 4 );
 		fail( "pushing to full ring succeeded" );
-		}
-	catch ( HException const& )
-		{
+	} catch ( HException const& ) {
 		/* ok */
-		}
+	}
 
 	ENSURE_EQUALS( "full failed", ring.full(), true );
 	ring.reserve( 5 );

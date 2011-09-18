@@ -41,8 +41,7 @@ using namespace yaal::tools::util;
 using namespace tress;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_util_verify_iban );
 TUT_TEST_GROUP( tut_yaal_tools_util_verify_iban, "yaal::tools::util::verify_IBAN" );
@@ -62,18 +61,16 @@ TUT_UNIT_TEST( 2, "verifing bad IBANs" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "verifing ad-hoc IBANs" )
-	if ( setup._verbose && ( setup._argc > 1 ) )
-		{
+	if ( setup._verbose && ( setup._argc > 1 ) ) {
 		HString string( setup._argv[ 1 ] );
 		int unknown = static_cast<int>( string.find( '?' ) );
 		if ( unknown < 0 )
 			FAIL( "No unknown characters." );
-		for ( int i = 0; i < 10; ++ i )
-			{
+		for ( int i = 0; i < 10; ++ i ) {
 			string.set_at( unknown, static_cast<char>( i + '0' ) );
 			cout << string << ": " << ( ! verify_IBAN( string ) ? "OK" : "WRONG" ) << endl;
-			}
 		}
+	}
 TUT_TEARDOWN()
 
 }

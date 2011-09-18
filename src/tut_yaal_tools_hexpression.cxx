@@ -38,8 +38,7 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hanalyser );
 TUT_TEST_GROUP( tut_yaal_tools_hanalyser, "yaal::tools::HExpression" );
@@ -64,17 +63,14 @@ TUT_UNIT_TEST( 1, "complex and valid expression" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "invalid expression" )
-	try
-		{
+	try {
 		HString eq( "7+10+(4*)" );
 		HExpression x;
 		x.compile( eq );
 		FAIL( "parsing invalid expression succeded" );
-		}
-	catch ( HExpressionException& )
-		{
+	} catch ( HExpressionException& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "copy semantics" )

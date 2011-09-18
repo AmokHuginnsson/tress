@@ -39,8 +39,7 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hoptional );
 TUT_TEST_GROUP( tut_yaal_tools_hoptional, "yaal::tools::HOptional" );
@@ -48,16 +47,13 @@ TUT_TEST_GROUP( tut_yaal_tools_hoptional, "yaal::tools::HOptional" );
 TUT_UNIT_TEST( 1, "default constructor" )
 	HOptional<int> opt;
 	ENSURE_EQUALS( "bad initialization status", opt ? true : false, false );
-	try
-		{
+	try {
 		int i( *opt );
 		FAIL( "dereferencing unititialized optional" );
 		++ i;
-		}
-	catch ( HFailedAssertion const& )
-		{
+	} catch ( HFailedAssertion const& ) {
 		/* ok */
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "initialized optional" )

@@ -39,15 +39,13 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 #if 0
 
-struct tut_ : public simple_mock<tut_>
-	{
+struct tut_ : public simple_mock<tut_> {
 	virtual ~tut_( void ) {}
-	};
+};
 
 TUT_SIMPLE_MOCK( tut_ );
 TUT_TEST_GROUP( tut_, "yaal::" );

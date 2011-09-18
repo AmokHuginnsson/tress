@@ -95,7 +95,7 @@ typedef void void_type
 	{ \
 	virtual ~name( void ) \
 		{} \
-	}
+}
 #define TIME_CONSTRAINT_EXEMPT time_constraint_exempt
 
 #define TUT_DECLARE( statement ) clog << hconsole::brightgreen << ">> " << #statement << hconsole::reset << endl; statement clog << hconsole::green << ">> end" << hconsole::reset << endl;
@@ -103,25 +103,21 @@ typedef void void_type
 #define TUT_EVAL( statement ) do { clog << hconsole::brightcyan << ">> " << #statement << hconsole::reset << " = " << hconsole::yellow << ( statement ) << hconsole::reset << endl; } while ( 0 )
 
 template<typename T1, typename T2>
-bool operator == ( yaal::hcore::HArray<T1> const& a, std::vector<T2> const& v )
-	{
+bool operator == ( yaal::hcore::HArray<T1> const& a, std::vector<T2> const& v ) {
 	return ( yaal::safe_equal( a.begin(), a.end(), v.begin(), v.end() ) );
-	}
+}
 
 template<typename T1, typename T2>
-bool operator == ( yaal::hcore::HDeque<T1> const& a, std::deque<T2> const& v )
-	{
+bool operator == ( yaal::hcore::HDeque<T1> const& a, std::deque<T2> const& v ) {
 	return ( yaal::safe_equal( a.begin(), a.end(), v.begin(), v.end() ) );
-	}
+}
 
 template<typename T1, typename T2>
-bool operator == ( yaal::hcore::HList<T1> const& l, std::list<T2> const& sl )
-	{
+bool operator == ( yaal::hcore::HList<T1> const& l, std::list<T2> const& sl ) {
 	return ( yaal::safe_equal( l.begin(), l.end(), sl.begin(), sl.end() ) );
-	}
+}
 
-namespace std
-{
+namespace std {
 
 yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface&, std::string const& );
 typedef std::ostream& ( *stream_mod_t )( std::ostream& );
@@ -130,130 +126,113 @@ std::ostream& operator << ( std::ostream&, yaal::hcore::HComplex const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HNumber const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HString const& );
 template<typename first_t, typename second_t>
-std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second_t> const& p )
-	{
+std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second_t> const& p ) {
 	os << "pair(" << p.first << "," << p.second << ")";
 	return ( os );
-	}
+}
 
 template<typename container>
 std::ostream& container_dump( std::ostream& out,
-		container const& container_, char sep_, char const* const name_ )
-	{
+		container const& container_, char sep_, char const* const name_ ) {
 	out << ( name_ ? name_ : "" );
 	char sep( '(' );
 	for ( typename container::const_iterator it( container_.begin() ), end( container_.end() ); it != end; ++ it, sep = sep_ )
 		out << sep << *it;
 	out << ")" << std::flush;
 	return ( out );
-	}
+}
 
 template<typename container>
 std::ostream& container_dump( std::ostream& out,
-		container const& container_, char sep_ )
-	{
+		container const& container_, char sep_ ) {
 	return ( container_dump( out, container_, sep_, NULL ) );
-	}
+}
 
 template<typename container>
 std::ostream& container_dump( std::ostream& out,
-		container const& container_, char const* const name_  )
-	{
+		container const& container_, char const* const name_  ) {
 	return ( container_dump( out, container_, ' ', name_ ) );
-	}
+}
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HArray<tType> const& a )
-	{
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HArray<tType> const& a ) {
 	return ( container_dump( out, a, "array" ) );
-	}
+}
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HDeque<tType> const& d )
-	{
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HDeque<tType> const& d ) {
 	return ( container_dump( out, d, "deque" ) );
-	}
+}
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HList<tType> const& l )
-	{
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HList<tType> const& l ) {
 	return ( container_dump( out, l, "list" ) );
-	}
+}
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HSet<tType> const& s )
-	{
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HSet<tType> const& s ) {
 	return ( container_dump( out, s, "set" ) );
-	}
+}
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, yaal::tools::HRing<tType> const& r )
-	{
+std::ostream& operator << ( std::ostream& out, yaal::tools::HRing<tType> const& r ) {
 	return ( container_dump( out, r, "ring" ) );
-	}
+}
 
 template<typename left, typename right>
-std::ostream& operator << ( std::ostream& out, yaal::tools::HTwoWayMap<left, right> const& twm )
-	{
+std::ostream& operator << ( std::ostream& out, yaal::tools::HTwoWayMap<left, right> const& twm ) {
 	return ( container_dump( out, twm, "twowaymap" ) );
-	}
+}
 
 template<typename first_t, typename second_t>
-std::ostream& operator << ( std::ostream& os, std::pair<first_t, second_t> const& p )
-	{
+std::ostream& operator << ( std::ostream& os, std::pair<first_t, second_t> const& p ) {
 	os << "pair(" << p.first << "," << p.second << ")";
 	return ( os );
-	}
+}
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, std::list<tType> const& l )
-	{
+std::ostream& operator << ( std::ostream& out, std::list<tType> const& l ) {
 	out << "list(";
 	yaal::copy( l.begin(), l.end(), std::ostream_iterator<tType>( out, " " ) );
 	out << ( ( l.begin() != l.end() ) ? "\b)" : ")" ) << std::flush;
 	return ( out );
-	}
+}
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, std::vector<tType> const& v )
-	{
+std::ostream& operator << ( std::ostream& out, std::vector<tType> const& v ) {
 	out << "vector(";
 	yaal::copy( v.begin(), v.end(), std::ostream_iterator<tType>( out, " " ) );
 	out << ( ( v.begin() != v.end() ) ? "\b)" : ")" ) << std::flush;
 	return ( out );
-	}
+}
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, std::deque<tType> const& v )
-	{
+std::ostream& operator << ( std::ostream& out, std::deque<tType> const& v ) {
 	out << "deque(";
 	yaal::copy( v.begin(), v.end(), std::ostream_iterator<tType>( out, " " ) );
 	out << ( ( v.begin() != v.end() ) ? "\b)" : ")" ) << std::flush;
 	return ( out );
-	}
+}
 
 template<typename tType>
 std::ostream& operator << ( std::ostream& out,
-		yaal::hcore::HVector<tType> const& vector_ )
-	{
+		yaal::hcore::HVector<tType> const& vector_ ) {
 	M_PROLOG
 	int long ctr = 0, size = vector_.dim();
 	out << std::fixed << "< " << std::setw ( 10 ) << std::setprecision ( 4 );
 	out << vector_ [ 0 ];
-	for ( ctr = 1; ctr < size; ctr ++ )
-		{
+	for ( ctr = 1; ctr < size; ctr ++ ) {
 		out << ", " << std::setw ( 10 ) << std::setprecision ( 4 );
 		out << vector_ [ ctr ];
-		}
+	}
 	out << " >";
 	return ( out );
 	M_EPILOG
-	}
+}
 
 template<typename tType>
 std::ostream& operator << ( std::ostream& out,
-		yaal::hcore::HMatrix<tType> const& matrix_ )
-	{
+		yaal::hcore::HMatrix<tType> const& matrix_ ) {
 	M_PROLOG
 	int ctr = 0, ctrLoc = 0;
 	int rows = matrix_.row ( ), cols = matrix_.col ( );
@@ -264,32 +243,28 @@ std::ostream& operator << ( std::ostream& out,
 	for ( ctr = 1; ctr < cols; ctr ++ )
 		out <<  "            ";
 	out << "    --+" << std::endl;
-	for ( ctr = 0; ctr < rows; ctr ++ )
-		{
+	for ( ctr = 0; ctr < rows; ctr ++ ) {
 		out << std::fixed << "| " << std::setw ( 10 ) << std::setprecision ( 4 );
 		out << matrix_[ ctr ] [ 0 ];
-		for ( ctrLoc = 1; ctrLoc < cols; ctrLoc ++ )
-			{
+		for ( ctrLoc = 1; ctrLoc < cols; ctrLoc ++ ) {
 			out << ", " << std::setw ( 10 ) << std::setprecision ( 4 );
 			out << matrix_ [ ctr ] [ ctrLoc ];
-			}
-		out << " |" << std::endl;
 		}
+		out << " |" << std::endl;
+	}
 	out << "+--    ";
 	for ( ctr = 1; ctr < cols; ctr ++ )
 		out << "            ";
 	out << "    --+" << std::endl;
 	return ( out );
 	M_EPILOG
-	}
+}
 
 }
 
-namespace tress
-{
+namespace tress {
 
-namespace tut_helpers
-{
+namespace tut_helpers {
 
 extern double long PI;
 extern double long E;
@@ -298,10 +273,9 @@ struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ 
 bool file_compare( yaal::hcore::HString const&, yaal::hcore::HString const& );
 int long get_speed( yaal::hcore::HClock::UNIT::unit_t );
 
-struct HSTDGlobalScopeExceptionHandlingPolicy
-	{
+struct HSTDGlobalScopeExceptionHandlingPolicy {
 	static void handle_exception( void ) __attribute__(( __noreturn__ ));
-	};
+};
 
 #ifndef __sun__
 #pragma pack( push, 1 )
@@ -309,8 +283,7 @@ struct HSTDGlobalScopeExceptionHandlingPolicy
 #pragma pack( 1 )
 #endif /* #else #ifndef __sun__ */
 template<typename owner_t, int const forced_size = 1>
-class HInstanceTracker
-	{
+class HInstanceTracker {
 protected:
 	typedef HInstanceTracker<owner_t, forced_size> this_type;
 	static int _instances;
@@ -352,7 +325,7 @@ public:
 	bool is_self( void ) const;
 	yaal::hcore::HString to_string( void ) const;
 	void swap( HInstanceTracker& );
-	};
+};
 #ifndef __sun__
 #pragma pack( pop )
 #else /* #ifndef __sun__ */
@@ -360,8 +333,7 @@ public:
 #endif /* #else #ifndef __sun__ */
 
 template<typename T>
-struct simple_mock
-	{
+struct simple_mock {
 	typedef HInstanceTracker<T> item_t;
 	typedef yaal::hcore::HList<item_t> list_t;
 	typedef yaal::hcore::HArray<item_t> array_t;
@@ -379,7 +351,7 @@ struct simple_mock
 	typedef std::set<int> std_set_t;
 	virtual ~simple_mock( void ) {}
 	virtual void time_constraint_exempt( void ) = 0;
-	};
+};
 
 template<typename owner_t, int const forced_size>
 int HInstanceTracker<owner_t, forced_size>::_instances = 0;
@@ -391,190 +363,161 @@ int HInstanceTracker<owner_t, forced_size>::_integrityFailures = 0;
 template<typename owner_t, int const forced_size>
 HInstanceTracker<owner_t, forced_size>::HInstanceTracker( int long id_ )
 	: _id( id_ != yaal::meta::max_signed<int long>::value ? id_ : _autoIncrement ),
-	_origin(), _self( this ), _forcedSize()
-	{
+	_origin(), _self( this ), _forcedSize() {
 	++ _instances;
 	++ _autoIncrement;
-	}
+}
 
 template<typename owner_t, int const forced_size>
 HInstanceTracker<owner_t, forced_size>::HInstanceTracker( HInstanceTracker const& itrck )
 	: _id( itrck._id ),
-	_origin( itrck._origin + ":" + yaal::hcore::HString( itrck._id ).c_str() ), _self( this ), _forcedSize()
-	{
+	_origin( itrck._origin + ":" + yaal::hcore::HString( itrck._id ).c_str() ), _self( this ), _forcedSize() {
 	++ _instances;
 	++ _autoIncrement;
-	}
+}
 
 template<typename owner_t, int const forced_size>
-HInstanceTracker<owner_t, forced_size>::~HInstanceTracker( void )
-	{
+HInstanceTracker<owner_t, forced_size>::~HInstanceTracker( void ) {
 	-- _instances;
 	if ( this != _self )
 		++ _integrityFailures;
-	}
+}
 
 template<typename owner_t, int const forced_size>
-HInstanceTracker<owner_t, forced_size>& HInstanceTracker<owner_t, forced_size>::operator = ( HInstanceTracker const& itrck )
-	{
-	if ( &itrck != this )
-		{
+HInstanceTracker<owner_t, forced_size>& HInstanceTracker<owner_t, forced_size>::operator = ( HInstanceTracker const& itrck ) {
+	if ( &itrck != this ) {
 		HInstanceTracker<owner_t, forced_size> tmp( itrck );
 		swap( tmp );
-		}
-	return ( *this );
 	}
+	return ( *this );
+}
 
 template<typename owner_t, int const forced_size>
-void HInstanceTracker<owner_t, forced_size>::swap( HInstanceTracker& itrck )
-	{
-	if ( &itrck != this )
-		{
+void HInstanceTracker<owner_t, forced_size>::swap( HInstanceTracker& itrck ) {
+	if ( &itrck != this ) {
 		using yaal::swap;
 		swap( _id, itrck._id );
 		swap( _origin, itrck._origin );
-		}
+	}
 	return;
-	}
+}
 
 template<typename owner_t, int const forced_size>
-void HInstanceTracker<owner_t, forced_size>::set_instance_count( int count_ )
-	{
+void HInstanceTracker<owner_t, forced_size>::set_instance_count( int count_ ) {
 	_instances = count_;
-	}
+}
 
 template<typename owner_t, int const forced_size>
-void HInstanceTracker<owner_t, forced_size>::set_start_id( int startId_ )
-	{
+void HInstanceTracker<owner_t, forced_size>::set_start_id( int startId_ ) {
 	_autoIncrement = startId_;
-	}
+}
 
 template<typename owner_t, int const forced_size>
-yaal::hcore::HString HInstanceTracker<owner_t, forced_size>::to_string( void ) const
-	{
+yaal::hcore::HString HInstanceTracker<owner_t, forced_size>::to_string( void ) const {
 	yaal::tools::HStringStream ss;
 	ss << "HInstanceTracker<" << yaal::hcore::demangle( typeid( owner_t ).name() ) << ">(" << _origin << ":" << _id << ")";
 	return ( ss.string() );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator == ( int long val ) const
-	{
+bool HInstanceTracker<owner_t, forced_size>::operator == ( int long val ) const {
 	return ( val == _id );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator != ( int long val ) const
-	{
+bool HInstanceTracker<owner_t, forced_size>::operator != ( int long val ) const {
 	return ( val != _id );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator == ( HInstanceTracker const& val ) const
-	{
+bool HInstanceTracker<owner_t, forced_size>::operator == ( HInstanceTracker const& val ) const {
 	return ( val._id == _id );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator != ( HInstanceTracker const& val ) const
-	{
+bool HInstanceTracker<owner_t, forced_size>::operator != ( HInstanceTracker const& val ) const {
 	return ( val._id != _id );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator < ( HInstanceTracker const& val ) const
-	{
+bool HInstanceTracker<owner_t, forced_size>::operator < ( HInstanceTracker const& val ) const {
 	return ( _id < val._id );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator < ( int long val ) const
-	{
+bool HInstanceTracker<owner_t, forced_size>::operator < ( int long val ) const {
 	return ( _id < val );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator > ( HInstanceTracker const& val ) const
-	{
+bool HInstanceTracker<owner_t, forced_size>::operator > ( HInstanceTracker const& val ) const {
 	return ( _id > val._id );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator > ( int long val ) const
-	{
+bool HInstanceTracker<owner_t, forced_size>::operator > ( int long val ) const {
 	return ( _id > val );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::is_self( void ) const
-	{
+bool HInstanceTracker<owner_t, forced_size>::is_self( void ) const {
 	return ( _self == this );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-bool operator == ( int long left, HInstanceTracker<owner_t, forced_size> const& right )
-	{
+bool operator == ( int long left, HInstanceTracker<owner_t, forced_size> const& right ) {
 	return ( left == right.get_id() );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-bool operator != ( int long left, HInstanceTracker<owner_t, forced_size> const& right )
-	{
+bool operator != ( int long left, HInstanceTracker<owner_t, forced_size> const& right ) {
 	return ( left != right.get_id() );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-int HInstanceTracker<owner_t, forced_size>::get_instance_count( void )
-	{
+int HInstanceTracker<owner_t, forced_size>::get_instance_count( void ) {
 	return ( _instances );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-int HInstanceTracker<owner_t, forced_size>::get_integrity_failures( void )
-	{
+int HInstanceTracker<owner_t, forced_size>::get_integrity_failures( void ) {
 	return ( _integrityFailures );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-int long HInstanceTracker<owner_t, forced_size>::get_id( void ) const
-	{
+int long HInstanceTracker<owner_t, forced_size>::get_id( void ) const {
 	return ( _id );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-int long HInstanceTracker<owner_t, forced_size>::id( void ) const
-	{
+int long HInstanceTracker<owner_t, forced_size>::id( void ) const {
 	return ( _id );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-yaal::hcore::HString& operator += ( yaal::hcore::HString& str, HInstanceTracker<owner_t, forced_size> const& itrck )
-	{
+yaal::hcore::HString& operator += ( yaal::hcore::HString& str, HInstanceTracker<owner_t, forced_size> const& itrck ) {
 	str += itrck.to_string();
 	return ( str );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-std::ostream& operator << ( std::ostream& stream, HInstanceTracker<owner_t, forced_size> const& itrck )
-	{
+std::ostream& operator << ( std::ostream& stream, HInstanceTracker<owner_t, forced_size> const& itrck ) {
 	stream << itrck.to_string();
 	return ( stream );
-	}
+}
 
 template<typename owner_t, int const forced_size>
-yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& stream, HInstanceTracker<owner_t, forced_size> const& itrck )
-	{
+yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& stream, HInstanceTracker<owner_t, forced_size> const& itrck ) {
 	stream << itrck.to_string();
 	return ( stream );
-	}
+}
 
 }
 
 template<typename owner_t, int const forced_size>
-inline void swap( tress::tut_helpers::HInstanceTracker<owner_t, forced_size>& a, tress::tut_helpers::HInstanceTracker<owner_t, forced_size>& b )
-	{
+inline void swap( tress::tut_helpers::HInstanceTracker<owner_t, forced_size>& a, tress::tut_helpers::HInstanceTracker<owner_t, forced_size>& b ) {
 	a.swap( b );
-	}
+}
 
 }
 

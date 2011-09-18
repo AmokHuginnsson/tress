@@ -32,11 +32,9 @@ Copyright:
 
 #include "config.hxx"
 
-namespace tress
-{
+namespace tress {
 
-struct OSetup
-	{
+struct OSetup {
 	OSetup( void )
 		: _quiet( false ), _verbose( false ), _debug( false ),
 		_listGroups( false ), _restartable( false ), _exit( false ), _fancy( false ), _color( false ),
@@ -73,7 +71,7 @@ struct OSetup
 private:
 	OSetup( OSetup const& );
 	OSetup& operator = ( OSetup const& );
-	};
+};
 
 extern OSetup setup;
 

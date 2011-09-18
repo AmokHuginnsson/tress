@@ -38,72 +38,64 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_experiments );
 TUT_TEST_GROUP( tut_experiments, "::experiments" );
 
 struct Derived;
 struct FunkyDerived;
-class Visitor
-	{
+class Visitor {
 public:
 	virtual ~Visitor( void ) { }
 	virtual void visit( Derived& ) { };
 	virtual void visit( Derived const& ) const { };
 	virtual void visit( FunkyDerived& ) { };
 	virtual void visit( FunkyDerived const& ) const { };
-	};
+};
 
-class HVisitorInterface
-	{
+class HVisitorInterface {
 public:
 	virtual ~HVisitorInterface( void ) { }
 	virtual void accept( Visitor& ) { }
 	virtual void accept( Visitor const& ) const { }
-	};
+};
 
-struct Base : public HVisitorInterface
-	{
+struct Base : public HVisitorInterface {
 	virtual ~Base( void ) {}
 	virtual void foo( void )
 		{ cout << __PRETTY_FUNCTION__ << endl; }
-	};
+};
 
-struct Derived : public Base
-	{
+struct Derived : public Base {
 	virtual void foo( void )
 		{ cout << __PRETTY_FUNCTION__ << endl; }
 	void baz( void ) const
 		{ cout << __PRETTY_FUNCTION__ << endl; }
 	virtual void accept( Visitor const& call ) const
 		{ call.visit( *this ); }
-	};
+};
 
-struct FunkyDerived : public Base
-	{
+struct FunkyDerived : public Base {
 	virtual void foo( void )
 		{ cout << __PRETTY_FUNCTION__ << endl; }
 	void bar( void ) const
 		{ cout << __PRETTY_FUNCTION__ << endl; }
 	virtual void accept( Visitor const& call ) const
 		{ call.visit( *this ); }
-	};
+};
 
-class FunkyDerivedBarCall : public Visitor
-	{
+class FunkyDerivedBarCall : public Visitor {
 public:
 	void visit( FunkyDerived const& obj ) const
 		{ obj.bar(); }
-	};
+};
 
-class DerivedBazCall : public Visitor
-	{
+class DerivedBazCall : public Visitor {
 public:
 	void visit( Derived const& obj ) const
 		{ obj.baz(); }
-	};
+};
 
 TUT_UNIT_TEST( 1, "visitor pattern" )
 	typedef HPointer<Base> base_ptr_t;

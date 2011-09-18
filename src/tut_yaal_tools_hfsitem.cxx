@@ -40,43 +40,37 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hfsitem );
 TUT_TEST_GROUP( tut_yaal_tools_hfsitem, "yaal::tools::HFSItem" );
 
-void recurse( HString const& path_ )
-	{
+void recurse( HString const& path_ ) {
 	HFSItem dir( path_ );
 	cout << "dir: " << blue << bold << dir.get_path() << reset << endl;
 	M_ENSURE( dir.is_directory() );
-	for ( HFSItem::HIterator it = dir.begin(); it != dir.end(); ++ it )
-		{
+	for ( HFSItem::HIterator it = dir.begin(); it != dir.end(); ++ it ) {
 		cout << yellow << ( it->is_directory() ? "[dir]" : "     " ) << " " << ( it->is_executable() ? "[exec]" : "      " )
 			<< " [" << setw( 10 ) << it->get_size() << "] "
 			<< white << setw( 8 ) << it->get_user() << " " << setw( 8 ) << it->get_group()
 			<< " " << brightmagenta << oct << setw( 4 ) << ( it->get_permissions() & 0777 ) << dec
 			<< reset << " " << it->get_path() << " " << it->modified().string() << endl;
-		if ( it->is_directory() && ( it->get_name() != "." ) && ( it->get_name() != ".." ) )
-			{
+		if ( it->is_directory() && ( it->get_name() != "." ) && ( it->get_name() != ".." ) ) {
 			cout << "descending into ";
 			recurse( it->get_path() );
 			cout << "back at: " << blue << bold << dir.get_path() << reset << endl;
-			}
 		}
 	}
+}
 
-struct PathTest
-	{
+struct PathTest {
 	char const* _path;
 	bool _exists;
-	};
+};
 
 TUT_UNIT_TEST( 1, "exists" )
 	HString err( "failed to recognize onhological status of given file: " );
-	PathTest pathTest[] =
-		{
+	PathTest pathTest[] = {
 			{ "./data", true },
 			{ "./data/", true },
 			{ "./data/non-existing", false },
@@ -91,12 +85,11 @@ TUT_UNIT_TEST( 1, "exists" )
 			{ "./data//", true },
 			{ "./data///", true },
 			{ "//", true }
-		};
-	for ( int i( 0 ); i < countof ( pathTest ); ++ i )
-		{
+	};
+	for ( int i( 0 ); i < countof ( pathTest ); ++ i ) {
 		HFSItem fit( pathTest[i]._path );
 		ENSURE( err + pathTest[i]._path, xnor( !! fit, pathTest[i]._exists ) );
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "is_directory" )
@@ -106,34 +99,25 @@ TUT_UNIT_TEST( 2, "is_directory" )
 	ENSURE( err, dit1.is_directory() );
 	HFSItem dit2( "./data/" );
 	ENSURE( err, dit2.is_directory() );
-	try
-		{
+	try {
 		HFSItem dit3( "./data/non-existing" );
 		ENSURE( err, ! dit3.is_directory() );
 		FAIL( err2 );
-		}
-	catch ( HFSItemException const& )
-		{
-		}
-	try
-		{
+	} catch ( HFSItemException const& ) {
+	}
+	try {
 		HFSItem dit4( "./data/non-existing/" );
 		ENSURE( err, ! dit4.is_directory() );
 		FAIL( err2 );
-		}
-	catch ( HFSItemException const& )
-		{
-		}
+	} catch ( HFSItemException const& ) {
+	}
 	HFSItem dit5( "./data/xml.xml" );
 	ENSURE( err, ! dit5.is_directory() );
-	try
-		{
+	try {
 		HFSItem dit6( "./data/xml.xml/" );
 		ENSURE( err, ! dit6.is_directory() );
-		}
-	catch ( HFSItemException const& )
-		{
-		}
+	} catch ( HFSItemException const& ) {
+	}
 	HFSItem dit7( "." );
 	ENSURE( err, dit7.is_directory() );
 	HFSItem dit8( "./" );

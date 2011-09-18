@@ -39,11 +39,9 @@ using namespace yaal::tools::util;
 using namespace tress;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hdeque : public tut_yaal_hcore_hdeque_base<0>
-	{
+struct tut_yaal_hcore_hdeque : public tut_yaal_hcore_hdeque_base<0> {
 	virtual ~tut_yaal_hcore_hdeque( void ) {}
 	template<int const item_size>
 	void test_resize( void );
@@ -51,7 +49,7 @@ struct tut_yaal_hcore_hdeque : public tut_yaal_hcore_hdeque_base<0>
 	void test_pop_back( void );
 	template<int const item_size>
 	void test_pop_front( void );
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
 
@@ -161,19 +159,15 @@ TUT_UNIT_TEST( 1, "CHUNK_SIZE, VALUES_PER_CHUNK and Constructor." )
 	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<769> >::VALUES_PER_CHUNK, 1 );
 	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
-	try
-		{
+	try {
 		deque_t deque( BAD_SIZE );
 		FAIL( "deque with negative size created" );
-		}
-	catch ( HException const& e )
-		{
+	} catch ( HException const& e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Constructor and get_size()." )
-	{
+TUT_UNIT_TEST( 2, "Constructor and get_size()." ) {
 	item_t::set_start_id( 0 );
 	int const SIZE_FOR_ONE = 0;
 	int const SIZE_FOR_TWO = 7;
@@ -185,7 +179,7 @@ TUT_UNIT_TEST( 2, "Constructor and get_size()." )
 	ENSURE_EQUALS( "wrong number of items created", item_t::get_instance_count(), SIZE_FOR_ONE + SIZE_FOR_TWO );
 	ENSURE_EQUALS( "inconsistient size with respect to constructor", two.get_size(), SIZE_FOR_TWO );
 	check_consistency( two );
-	}
+}
 	ENSURE_EQUALS( "object leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
@@ -194,15 +188,12 @@ TUT_UNIT_TEST( 3, "Constructor with filling." )
 	int const BAD_SIZE = - 1;
 	int const SIZE_FOR_ARRAY = 7;
 	int const FILLER_FOR_ARRAY = 13;
-	try
-		{
+	try {
 		deque_t badDeque( BAD_SIZE, FILLER_FOR_ARRAY );
 		FAIL( "deque with negative size created" );
-		}
-	catch ( HException const& e )
-		{
+	} catch ( HException const& e ) {
 		cout << e.what() << endl;
-		}
+	}
 	deque_t deque( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
 	check_consistency( deque );
 	for ( int i = 0; i < SIZE_FOR_ARRAY; ++ i )
@@ -210,12 +201,10 @@ TUT_UNIT_TEST( 3, "Constructor with filling." )
 TUT_TEARDOWN()
 
 template<int const item_size>
-void tut_yaal_hcore_hdeque::test_resize( void )
-	{
+void tut_yaal_hcore_hdeque::test_resize( void ) {
 	clog << "testing resize: " << item_size << endl;
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
-	typedef HDeque<item_type> deque_type;
-		{
+	typedef HDeque<item_type> deque_type; {
 		deque_type deque;
 		check_consistency( deque );
 		TUT_INVOKE( deque.resize( 1 ); );
@@ -306,21 +295,20 @@ void tut_yaal_hcore_hdeque::test_resize( void )
 		check_consistency( deque );
 		TUT_INVOKE( deque.resize( 0 ); );
 		check_consistency( deque );
-		if ( deque_type::VALUES_PER_CHUNK > 1 )
-			{
+		if ( deque_type::VALUES_PER_CHUNK > 1 ) {
 			TUT_INVOKE( deque.resize( deque_type::VALUES_PER_CHUNK - 1 ); );
 			check_consistency( deque );
 			TUT_INVOKE( deque.pop_front(); );
 			check_consistency( deque );
 			TUT_INVOKE( deque.resize( 0 ); );
 			check_consistency( deque );
-			}
+		}
 		TUT_INVOKE( deque.resize( 0 ); );
 		check_consistency( deque );
-		}
+	}
 	ENSURE_EQUALS( "object leak", item_type::get_instance_count(), 0 );
 	return;
-	}
+}
 
 TUT_UNIT_TEST( 4, "resize" )
 	TIME_CONSTRAINT_EXEMPT();
@@ -383,29 +371,26 @@ TUT_UNIT_TEST( 4, "resize" )
 TUT_TEARDOWN()
 
 template<int const item_size>
-void tut_yaal_hcore_hdeque::test_pop_back( void )
-	{
+void tut_yaal_hcore_hdeque::test_pop_back( void ) {
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
 	typedef HDeque<item_type> deque_type;
-	clog << "testing pop_back: " << item_size << endl;
-		{
+	clog << "testing pop_back: " << item_size << endl; {
 		deque_type deque( 2048 );
 		check_consistency( deque );
 		proto_t proto( 2048 );
 		/* Bug in GCC 4.2.1 enforces namespace prefix here. */
 		yaal::generate( deque.begin(), deque.end(), inc( 0 ) );
 		yaal::generate( proto.begin(), proto.end(), inc( 0 ) );
-		for ( int long i( 0 ); i < 2048; ++ i )
-			{
+		for ( int long i( 0 ); i < 2048; ++ i ) {
 			proto.pop_back();
 			deque.pop_back();
 			check_consistency( deque );
 			ENSURE_EQUALS( "pop_back failed", deque, proto );
-			}
-		ENSURE_EQUALS( "not empty!", deque.is_empty(), true );
 		}
-	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+		ENSURE_EQUALS( "not empty!", deque.is_empty(), true );
 	}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+}
 
 TUT_UNIT_TEST( 12, "pop_back" )
 	TIME_CONSTRAINT_EXEMPT();
@@ -426,29 +411,26 @@ TUT_UNIT_TEST( 12, "pop_back" )
 TUT_TEARDOWN()
 
 template<int const item_size>
-void tut_yaal_hcore_hdeque::test_pop_front( void )
-	{
+void tut_yaal_hcore_hdeque::test_pop_front( void ) {
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque, item_size> item_type;
 	typedef HDeque<item_type> deque_type;
-	clog << "testing pop_front: " << item_size << endl;
-		{
+	clog << "testing pop_front: " << item_size << endl; {
 		deque_type deque( 2048 );
 		check_consistency( deque );
 		proto_t proto( 2048 );
 		/* Bug in GCC 4.2.1 enforces namespace prefix here. */
 		yaal::generate( deque.begin(), deque.end(), inc( 0 ) );
 		yaal::generate( proto.begin(), proto.end(), inc( 0 ) );
-		for ( int long i( 0 ); i < 2048; ++ i )
-			{
+		for ( int long i( 0 ); i < 2048; ++ i ) {
 			proto.pop_front();
 			deque.pop_front();
 			check_consistency( deque );
 			ENSURE_EQUALS( "pop_front failed", deque, proto );
-			}
-		ENSURE_EQUALS( "not empty!", deque.is_empty(), true );
 		}
-	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+		ENSURE_EQUALS( "not empty!", deque.is_empty(), true );
 	}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+}
 
 TUT_UNIT_TEST( 13, "pop_front" )
 	TIME_CONSTRAINT_EXEMPT();
@@ -475,93 +457,81 @@ TUT_UNIT_TEST( 50, "speed test" )
 	proto_t proto;
 	deque_type deque;
 	double long st( 0 );
-	double long yt( 0 );
-		{
+	double long yt( 0 ); {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.push_back( static_cast<int>( i ) );
 		clog << "*speed* std::deque<>::push_back() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-		{
+	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.push_back( static_cast<int>( i ) );
 		clog << "*speed* yaal::hcore::HDeque<>::push_back() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-	clog << "*speed* HDeque<>::push_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-		{
+	}
+	clog << "*speed* HDeque<>::push_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.pop_back();
 		clog << "*speed* std::deque<>::pop_back() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-		{
+	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.pop_back();
 		clog << "*speed* yaal::hcore::HDeque<>::pop_back() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-	clog << "*speed* HDeque<>::pop_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-		{
+	}
+	clog << "*speed* HDeque<>::pop_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.push_front( static_cast<int>( i ) );
 		clog << "*speed* std::deque<>::push_front() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-		{
+	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.push_front( static_cast<int>( i ) );
 		clog << "*speed* yaal::hcore::HDeque<>::push_front() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-	clog << "*speed* HDeque<>::push_front() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-		{
+	}
+	clog << "*speed* HDeque<>::push_front() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.pop_front();
 		clog << "*speed* std::deque<>::pop_front() = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-		{
+	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.pop_front();
 		clog << "*speed* yaal::hcore::HDeque<>::pop_front() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
+	}
 	clog << "*speed* HDeque<>::pop_front() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 /* erase */
 	for ( int long i( 0 ); i < LOOPS; ++ i )
 		proto.push_back( static_cast<int>( i ) );
 	for ( int long i( 0 ); i < LOOPS; ++ i )
-		deque.push_back( static_cast<int>( i ) );
-		{
+		deque.push_back( static_cast<int>( i ) ); {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.erase( proto.end() - 1 );
 		clog << "*speed* std::deque<>::erase() back = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-		{
+	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.erase( deque.end() - 1 );
 		clog << "*speed* yaal::hcore::HDeque<>::erase() back = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
+	}
 	clog << "*speed* HDeque<>::erase() back result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 	for ( int long i( 0 ); i < LOOPS; ++ i )
 		proto.push_front( static_cast<int>( i ) );
 	for ( int long i( 0 ); i < LOOPS; ++ i )
-		deque.push_front( static_cast<int>( i ) );
-		{
+		deque.push_front( static_cast<int>( i ) ); {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.erase( proto.begin() );
 		clog << "*speed* std::deque<>::erase() front = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
-		{
+	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.erase( deque.begin() );
 		clog << "*speed* yaal::hcore::HDeque<>::erase() front = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
-		}
+	}
 	clog << "*speed* HDeque<>::erase() front = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()
 

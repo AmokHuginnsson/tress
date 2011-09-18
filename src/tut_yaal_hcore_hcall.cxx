@@ -40,11 +40,9 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hcall
-	{
+struct tut_yaal_hcore_hcall {
 	int _callNo;
 	int _fileNo;
 	int _suitUt;
@@ -55,39 +53,33 @@ struct tut_yaal_hcore_hcall
 	void generate_yaal_hcore_hcall_test( int, int );
 	void file_header( void );
 	void file_footer( void );
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hcall, "yaal::hcore::HCall" );
 
-tut_yaal_hcore_hcall::tut_yaal_hcore_hcall( void ) : _callNo( 0 ), _fileNo( 0 ), _suitUt( 0 ), _out()
-	{
+tut_yaal_hcore_hcall::tut_yaal_hcore_hcall( void ) : _callNo( 0 ), _fileNo( 0 ), _suitUt( 0 ), _out() {
 	if ( getenv( "GEN_YAAL_HCORE_HCALL" ) )
 		generate_yaal_hcore_hcall_tests();
-	}
+}
 
-tut_yaal_hcore_hcall::~tut_yaal_hcore_hcall( void )
-	{
-	}
+tut_yaal_hcore_hcall::~tut_yaal_hcore_hcall( void ) {
+}
 
 static int const MAX_TESTED_ARGS = 5;
 static int const MAX_UT_PER_SUIT = 50;
 static int const MAX_TEST_PER_UT = 20;
 
-void tut_yaal_hcore_hcall::generate_yaal_hcore_hcall_tests( void )
-	{
+void tut_yaal_hcore_hcall::generate_yaal_hcore_hcall_tests( void ) {
 	file_header();
-	for ( int arg = 0; arg <= MAX_TESTED_ARGS; ++ arg )
-		{
-		for ( int freeArg = 0; freeArg <= arg; ++ freeArg )
-			{
+	for ( int arg = 0; arg <= MAX_TESTED_ARGS; ++ arg ) {
+		for ( int freeArg = 0; freeArg <= arg; ++ freeArg ) {
 			generate_yaal_hcore_hcall_test( arg, freeArg );
-			}
 		}
-	file_footer();
 	}
+	file_footer();
+}
 
-void tut_yaal_hcore_hcall::file_header( void )
-	{
+void tut_yaal_hcore_hcall::file_header( void ) {
 	_out.open( ( HFormat( "./src/tut_yaal_hcore_hcall_auto_%03d.cxx" ) % _fileNo ).string(), HFile::open_t( HFile::OPEN::WRITING ) );
 	_out <<
 "#include <TUT/tut.hpp>\n"
@@ -110,69 +102,60 @@ void tut_yaal_hcore_hcall::file_header( void )
 "TUT_SIMPLE_MOCK( tut_yaal_hcore_hcall_" << setfill( '0' ) << setw( 3 ) << _fileNo << " );\n"
 "TUT_TEST_GROUP( tut_yaal_hcore_hcall_" << setw( 3 ) << _fileNo << " , \"yaal::hcore::HCall::" << setw( 3 ) << _fileNo << "\" );\n"
 "\n" << flush;
-	}
+}
 
-void tut_yaal_hcore_hcall::file_footer( void )
-	{
+void tut_yaal_hcore_hcall::file_footer( void ) {
 	_out <<
 "}\n"
 "\n" << flush;
 	_out.close();
-	}
+}
 
-void tut_yaal_hcore_hcall::generate_yaal_hcore_hcall_test( int arg, int freeArg )
-	{
+void tut_yaal_hcore_hcall::generate_yaal_hcore_hcall_test( int arg, int freeArg ) {
 	typedef HArray<int> int_vec_t;
 	int_vec_t v( arg );
 	fill_n( v.begin(), arg - freeArg, 0 );
 	generate_n( v.begin() + ( arg - freeArg ), freeArg, inc( 1 ) );
 	_callNo = 1;
 	bool hasNext( true );
-	while ( hasNext )
-		{
+	while ( hasNext ) {
 		int localCall( 0 );
 		_out << "TUT_UNIT_TEST( " << _suitUt  + 1 << ", \"" << ( arg ? HString( arg ) : HString( "no" )  )
 			<< " arg" << ( arg == 1 ? "" : "s" ) << ", " << ( freeArg ? HString( freeArg ) : HString( "no" ) )
 			<< " free arg" << ( freeArg == 1 ? "" : "s" ) << ", call #" << _callNo << "... \" )" << endl;
-		do
-			{
+		do {
 			_out << "\tENSURE_EQUALS( \"function bind failed\", call( foo" << arg;
-			for ( int i = 1; i <= arg; ++ i )
-				{
+			for ( int i = 1; i <= arg; ++ i ) {
 				_out << ", " << ( v[i - 1] ? "_" : "" ) << ( v[i - 1] ? v[i - 1] : i );
-				}
+			}
 			_out << " )(" << ( freeArg ? " " : "" );
-			for ( int i = 1; i <= freeArg; ++ i )
-				{
+			for ( int i = 1; i <= freeArg; ++ i ) {
 				if ( i > 1 )
 					_out << ", ";
 				_out << - ( ( find( v.begin(), v.end(), i ) - v.begin() ) + 1 );
-				}
+			}
 			_out << ( freeArg ? " " : "" ) << "), \"foo" << arg << ( arg ? ": " : "" );
-			for ( int i = 1; i <= arg; ++ i )
-				{
+			for ( int i = 1; i <= arg; ++ i ) {
 				if ( i > 1 )
 					_out << ", ";
 				_out << "a" << i << " = " << ( v[i - 1] ? "-" : "" ) << i;
-				}
+			}
 
 			_out << "\" );" << endl;
 			++ _callNo;
 			++ localCall;
-			}
-		while ( ( hasNext = next_permutation( v.begin(), v.end() ) ) && ( localCall < MAX_TEST_PER_UT ) );
+		} while ( ( hasNext = next_permutation( v.begin(), v.end() ) ) && ( localCall < MAX_TEST_PER_UT ) );
 		_out << "TUT_TEARDOWN()" << endl << endl;
 		++ _suitUt;
-		if ( hasNext && ( _suitUt >= MAX_UT_PER_SUIT ) )
-			{
+		if ( hasNext && ( _suitUt >= MAX_UT_PER_SUIT ) ) {
 			_suitUt = 0;
 			file_footer();
 			++ _fileNo;
 			file_header();
-			}
 		}
-	return;
 	}
+	return;
+}
 
 #ifdef __MSVCXX__
 static int const NSSKIP = sizeof ( "tut::" ) - 1;
@@ -180,82 +163,72 @@ static int const NSSKIP = sizeof ( "tut::" ) - 1;
 static int const NSSKIP = 0;
 #endif
 
-HString foo0( void )
-	{
+HString foo0( void ) {
 	HStringStream ss;
 	ss << ( __FUNCTION__ + NSSKIP );
 	return ( ss.string() );
-	}
+}
 
-HString foo1( int a1 )
-	{
+HString foo1( int a1 ) {
 	HStringStream ss;
 	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1;
 	return ( ss.string() );
-	}
+}
 
-HString foo2( int a1, int a2 )
-	{
+HString foo2( int a1, int a2 ) {
 	HStringStream ss;
 	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2;
 	return ( ss.string() );
-	}
+}
 
-HString foo3( int a1, int a2, int a3 )
-	{
+HString foo3( int a1, int a2, int a3 ) {
 	HStringStream ss;
 	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2 << ", a3 = " << a3;
 	return ( ss.string() );
-	}
+}
 
-HString foo4( int a1, int a2, int a3, int a4 )
-	{
+HString foo4( int a1, int a2, int a3, int a4 ) {
 	HStringStream ss;
 	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4;
 	return ( ss.string() );
-	}
+}
 
-HString foo5( int a1, int a2, int a3, int a4, int a5 )
-	{
+HString foo5( int a1, int a2, int a3, int a4, int a5 ) {
 	HStringStream ss;
 	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4
 		<< ", a5 = " << a5;
 	return ( ss.string() );
-	}
+}
 
-HString foo6( int a1, int a2, int a3, int a4, int a5, int a6 )
-	{
+HString foo6( int a1, int a2, int a3, int a4, int a5, int a6 ) {
 	HStringStream ss;
 	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4
 		<< ", a5 = " << a5 << ", a6 = " << a6;
 	return ( ss.string() );
-	}
+}
 
-HString foo7( int a1, int a2, int a3, int a4, int a5, int a6, int a7 )
-	{
+HString foo7( int a1, int a2, int a3, int a4, int a5, int a6, int a7 ) {
 	HStringStream ss;
 	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4
 		<< ", a5 = " << a5 << ", a6 = " << a6
 		<< ", a7 = " << a7;
 	return ( ss.string() );
-	}
+}
 
-HString foo8( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8 )
-	{
+HString foo8( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8 ) {
 	HStringStream ss;
 	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4
 		<< ", a5 = " << a5 << ", a6 = " << a6
 		<< ", a7 = " << a7 << ", a8 = " << a8;
 	return ( ss.string() );
-	}
+}
 
-HString foo9( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9 )
-	{
+HString foo9( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9 ) {
 	HStringStream ss;
 	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4
@@ -263,10 +236,9 @@ HString foo9( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, in
 		<< ", a7 = " << a7 << ", a8 = " << a8
 		<< ", a9 = " << a9;
 	return ( ss.string() );
-	}
+}
 
-HString foo10( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10 )
-	{
+HString foo10( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10 ) {
 	HStringStream ss;
 	ss << ( __FUNCTION__ + NSSKIP ) << ": a1 = " << a1 << ", a2 = " << a2
 		<< ", a3 = " << a3 << ", a4 = " << a4
@@ -274,78 +246,63 @@ HString foo10( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, i
 		<< ", a7 = " << a7 << ", a8 = " << a8
 		<< ", a9 = " << a9 << ", a10 = " << a10;
 	return ( ss.string() );
-	}
+}
 
-YaalHCoreHCallClass::YaalHCoreHCallClass( void )
-	{
-	}
+YaalHCoreHCallClass::YaalHCoreHCallClass( void ) {
+}
 
-YaalHCoreHCallClass::YaalHCoreHCallClass( YaalHCoreHCallClass const& )
-	{
+YaalHCoreHCallClass::YaalHCoreHCallClass( YaalHCoreHCallClass const& ) {
 	FAIL( "one shall not copy me!" );
-	}
+}
 
-YaalHCoreHCallClass::~YaalHCoreHCallClass( void )
-	{
-	}
+YaalHCoreHCallClass::~YaalHCoreHCallClass( void ) {
+}
 
-HString YaalHCoreHCallClass::foo0( void )
-	{
+HString YaalHCoreHCallClass::foo0( void ) {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo0() );
-	}
+}
 
-HString YaalHCoreHCallClass::foo1( int a1 )
-	{
+HString YaalHCoreHCallClass::foo1( int a1 ) {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo1( a1 ) );
-	}
+}
 
-HString YaalHCoreHCallClass::foo2( int a1, int a2 )
-	{
+HString YaalHCoreHCallClass::foo2( int a1, int a2 ) {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo2( a1, a2 ) );
-	}
+}
 
-HString YaalHCoreHCallClass::foo3( int a1, int a2, int a3 )
-	{
+HString YaalHCoreHCallClass::foo3( int a1, int a2, int a3 ) {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo3( a1, a2, a3 ) );
-	}
+}
 
-HString YaalHCoreHCallClass::foo4( int a1, int a2, int a3, int a4 )
-	{
+HString YaalHCoreHCallClass::foo4( int a1, int a2, int a3, int a4 ) {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo4( a1, a2, a3, a4 ) );
-	}
+}
 
-HString YaalHCoreHCallClass::foo5( int a1, int a2, int a3, int a4, int a5 )
-	{
+HString YaalHCoreHCallClass::foo5( int a1, int a2, int a3, int a4, int a5 ) {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo5( a1, a2, a3, a4, a5 ) );
-	}
+}
 
-HString YaalHCoreHCallClass::foo6( int a1, int a2, int a3, int a4, int a5, int a6 )
-	{
+HString YaalHCoreHCallClass::foo6( int a1, int a2, int a3, int a4, int a5, int a6 ) {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo6( a1, a2, a3, a4, a5, a6 ) );
-	}
+}
 
-HString YaalHCoreHCallClass::foo7( int a1, int a2, int a3, int a4, int a5, int a6, int a7 )
-	{
+HString YaalHCoreHCallClass::foo7( int a1, int a2, int a3, int a4, int a5, int a6, int a7 ) {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo7( a1, a2, a3, a4, a5, a6, a7 ) );
-	}
+}
 
-HString YaalHCoreHCallClass::foo8( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8 )
-	{
+HString YaalHCoreHCallClass::foo8( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8 ) {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo8( a1, a2, a3, a4, a5, a6, a7, a8 ) );
-	}
+}
 
-HString YaalHCoreHCallClass::foo9( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9 )
-	{
+HString YaalHCoreHCallClass::foo9( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9 ) {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo9( a1, a2, a3, a4, a5, a6, a7, a8, a9 ) );
-	}
+}
 
-HString YaalHCoreHCallClass::foo10( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10 )
-	{
+HString YaalHCoreHCallClass::foo10( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10 ) {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo10( a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 ) );
-	}
+}
 
-class Sumator
-	{
+class Sumator {
 	int _arg;
 public:
 	Sumator( int arg_ ) : _arg( arg_ ) {}
@@ -361,25 +318,22 @@ public:
 		{ return ( _arg + arg_ ); }
 	int calculate_const_volatile( int arg_ ) const volatile
 		{ return ( _arg + arg_ ); }
-	int sum( int a1, int a2, int a3, int a4, int a5, int a6 )
-		{
+	int sum( int a1, int a2, int a3, int a4, int a5, int a6 ) {
 		return ( _arg + a1 + a2 + a3 + a4 + a5 + a6 );
-		}
-	};
+	}
+};
 
 template<typename a0_t, typename a1_t, typename a2_t, typename a3_t,
 	typename a4_t, typename a5_t>
 int cf( a0_t = trait::no_type(), a1_t = trait::no_type(),
 		a2_t = trait::no_type(), a3_t = trait::no_type(),
-		a4_t = trait::no_type(), a5_t = trait::no_type() )
-	{
+		a4_t = trait::no_type(), a5_t = trait::no_type() ) {
 	return ( call_calculator<void(*)(void), int, a0_t, a1_t, a2_t, a3_t, a4_t, a5_t>::free_standing_args::value );
-	}
+}
 
-void show_rectangle( int a, int b )
-	{
+void show_rectangle( int a, int b ) {
 	cout << "a: " << a << ", b: " << b << endl;
-	}
+}
 
 TUT_UNIT_TEST( 1, "(hand written) no arg" )
 	ENSURE_EQUALS( "function bind failed", call( foo0 )(), "foo0" );
@@ -432,11 +386,9 @@ TUT_UNIT_TEST( 10, "const, volatile qualifiers" )
 	ENSURE_EQUALS( "const volatile qualifier failed", call( &Sumator::calculate_const_volatile, &s, _1 )( 3 ), 4 );
 TUT_TEARDOWN()
 
-namespace
-{
+namespace {
 
-class MemFunTest
-	{
+class MemFunTest {
 	int _base;
 public:
 	MemFunTest( int base_ ) : _base( base_ ) {}
@@ -450,7 +402,7 @@ public:
 		{ return ( _base + arg_ ); }
 	int calc_const( int arg_ ) const
 		{ return ( _base + arg_ ); }
-	};
+};
 
 }
 

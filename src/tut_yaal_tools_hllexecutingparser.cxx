@@ -33,54 +33,45 @@ M_VCSID( "$Id: "__ID__" $" )
 using namespace yaal;
 using namespace yaal::hcore;
 
-namespace yaal
-{
+namespace yaal {
 
-namespace tools
-{
+namespace tools {
 
-namespace ll
-{
+namespace ll {
 
-class HRule
-	{
+class HRule {
 public:
 	virtual ~HRule( void ) {}
 	HRule operator >> ( HRule& );
 	HRule operator*( void );
 	int operator()( HString const& input_ )
 		{ return ( do_parse( input_ ) ); }
-	virtual int do_parse( HString const& )
-		{
+	virtual int do_parse( HString const& ) {
 		return ( 0 );
-		}
-	};
+	}
+};
 
-class HReal : public HRule
-	{
+class HReal : public HRule {
 	typedef HBoundCall<void ( double const& )> action_t;
 	action_t _action;
 public:
 	HReal( void ) : _action() {}
-	HRule& operator[]( action_t const& action_ )
-		{
+	HRule& operator[]( action_t const& action_ ) {
 		_action = action_;
 		return ( *this );
-		}
-	virtual int do_parse( HString const& input_ )
-		{
+	}
+	virtual int do_parse( HString const& input_ ) {
 		double d( lexical_cast<double>( input_ ) );
 		if ( !! _action )
 			_action( d );
 		return ( 0 );
-		}
-	} real;
+	}
+} real;
 
 template<typename container_t>
-HBoundCall<void ( typename container_t::value_type const& )> push_back( container_t& container )
-	{
+HBoundCall<void ( typename container_t::value_type const& )> push_back( container_t& container ) {
 	return ( call( &container_t::push_back, &container, _1 ) );
-	}
+}
 
 }
 
@@ -98,8 +89,7 @@ using namespace tress::tut_helpers;
 
 using namespace yaal::tools::ll;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hllexecutingparser );
 TUT_TEST_GROUP( tut_yaal_tools_hllexecutingparser, "yaal::tools::HLLExecutingParser" );

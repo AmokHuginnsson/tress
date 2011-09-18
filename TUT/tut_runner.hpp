@@ -12,15 +12,13 @@
 #include "src/setup.hxx"
 
 
-namespace tut
-{
+namespace tut {
 
 /**
  * Interface.
  * Test group operations.
  */
-struct group_base
-	{
+struct group_base {
 	typedef std::pair<int, int> run_stat_t;
 	virtual ~group_base()
 		{}
@@ -39,7 +37,7 @@ struct group_base
 	virtual std::string const& get_name() const = 0;
 	virtual void set_name( std::string const& ) = 0;
 	virtual run_stat_t get_stat() const = 0;
-	};
+};
 
 /**
  * Test runner callback interface.
@@ -48,8 +46,7 @@ struct group_base
  * any of callback methods, and leave unused
  * in default implementation.
  */
-struct callback
-	{
+struct callback {
 	/**
 	* Virtual destructor is a must for subclassed types.
 	*/
@@ -90,7 +87,7 @@ struct callback
 	virtual void run_completed() = 0;
 
 	virtual void test_count( int ) = 0;
-	};
+};
 
 /**
  * Typedef for runner::list_groups()
@@ -100,21 +97,19 @@ typedef std::list<std::string> groupnames;
 /**
  * Listener of tut events.
  */
-class tut_listener
-	{
+class tut_listener {
 public:
 	void register_execution( const std::string& grp, int test, std::string const& name, std::string const& file, int const& line ) const
 		{ do_register_execution( grp, test, name, file, line ); }
 	virtual ~tut_listener( void ) { }
 protected:
 	virtual void do_register_execution( const std::string&, int, std::string const&, std::string const&, int const& ) const = 0;
-	};
+};
 
 /**
  * Test runner.
  */
-class test_runner
-	{
+class test_runner {
 public:
 
 	typedef std::map<std::string, group_base*>groups;
@@ -135,94 +130,81 @@ public:
 	/**
 	* Stores another group for getting by name.
 	*/
-	void register_group( const std::string& name, group_base* gr )
-		{
+	void register_group( const std::string& name, group_base* gr ) {
 		if ( gr == 0 )
 			throw std::invalid_argument( "group shall be non-null" );
 
-		if ( _groups.find( name ) != _groups.end() )
-			{
+		if ( _groups.find( name ) != _groups.end() ) {
 			std::string msg( "attempt to add already existent group " + name );
 			throw tut_error( msg );
-			}
+		}
 
 		_groups.insert( std::make_pair( name, gr ) );
-		}
+	}
 
 	/**
 	* Stores callback object.
 	*/
-	void set_callback( callback* cb )
-		{
+	void set_callback( callback* cb ) {
 		_callback = cb;
-		}
+	}
 
 	/**
 	* Stores callback object.
 	*/
-	void set_listener( tut_listener* tl )
-		{
+	void set_listener( tut_listener* tl ) {
 		_tutListener = tl;
-		}
+	}
 	
-	tut_listener* get_listener( void )
-		{
+	tut_listener* get_listener( void ) {
 		return ( _tutListener );
-		}
+	}
 
 	/**
 	* Returns callback object.
 	*/
-	callback& get_callback() const
-		{
+	callback& get_callback() const {
 		return ( *_callback ) ;
-		}
+	}
 
 	/**
 	* Returns list of known test groups.
 	*/
-	const groupnames list_groups() const
-		{
+	const groupnames list_groups() const {
 		groupnames ret;
 		const_iterator i = _groups.begin();
 		const_iterator e = _groups.end();
 
-		while ( i != e )
-			{
+		while ( i != e ) {
 			ret.push_back( i->first );
 			++ i;
-			}
+		}
 
 		return ( ret ) ;
-		}
+	}
 
-	groups const& get_groups( void ) const
-		{
+	groups const& get_groups( void ) const {
 		return ( _groups );
-		}
+	}
 
-	group_base* get_group( std::string const& name_ )
-		{
+	group_base* get_group( std::string const& name_ ) {
 		iterator it( _groups.find( name_ ) );
 		return ( it != _groups.end() ? it->second : NULL );
-		}
+	}
 
-	void set_time_constraint( int long timeConstraint_ )
-		{
+	void set_time_constraint( int long timeConstraint_ ) {
 		for ( const_iterator i( _groups.begin() ), e( _groups.end() ); i != e; ++ i )
 			i->second->set_time_constraint( timeConstraint_ );
-		}
+	}
 
 	/**
 	* Runs all tests in all groups.
 	* @param callback Callback object if exists; null otherwise
 	*/
-	void run_tests() const
-		{
+	void run_tests() const {
 		_callback->run_started();
 		int total( 0 );
-
-			{
+ {
 			const_iterator e = _groups.end();
 			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
 					? yaal::hcore::make_pointer<yaal::tools::HWorkFlow>( tress::setup._jobs )
@@ -230,185 +212,157 @@ public:
 			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
 				total += i->second->get_real_test_count();
 			_callback->test_count( total );
-			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
-				{
+			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i ) {
 				if ( !! w )
 					w->push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
 				else
 					run_group( i );
-				}
 			}
+		}
 
 		_callback->run_completed();
-		}
+	}
 
 	/**
 	* Runs all tests in specified groups.
 	*/
-	void run_tests( const std::list<std::string>& group_names ) const
-		{
+	void run_tests( const std::list<std::string>& group_names ) const {
 		_callback->run_started();
 		int total( 0 );
-
-			{
+ {
 			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
 					? yaal::hcore::make_pointer<yaal::tools::HWorkFlow>( tress::setup._jobs )
 					: yaal::tools::HWorkFlow::ptr_t() );
 			for ( std::list<std::string>::const_iterator k = group_names.begin();
-					! yaal::_isKilled_ && ( k != group_names.end() ); ++ k )
-				{
+					! yaal::_isKilled_ && ( k != group_names.end() ); ++ k ) {
 				const_iterator i = _groups.find( *k );
 				if ( i == _groups.end() )
 					++ total;
 				else
 					total += i->second->get_real_test_count();
-				}
+			}
 			_callback->test_count( total );
 			for ( std::list<std::string>::const_iterator k = group_names.begin();
-					! yaal::_isKilled_ && ( k != group_names.end() ); ++ k )
-				{
+					! yaal::_isKilled_ && ( k != group_names.end() ); ++ k ) {
 				const_iterator i = _groups.find( *k );
-				if ( i == _groups.end() )
-					{
+				if ( i == _groups.end() ) {
 					test_result tr;
 					tr.set_meta( test_result::setup, "", *k );
 					tr.set_meta( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( group_names.begin(), k ) ) );
 					_callback->test_completed( tr );
-					}
-				else
-					{
+				} else {
 					if ( !! w )
 						w->push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
 					else
 						run_group( i );
-					}
 				}
 			}
-		_callback->run_completed();
 		}
+		_callback->run_completed();
+	}
 
 	/**
 	* Runs specific tests from specified groups.
 	*/
-	void run_tests( test_sets_t const& testSets_ ) const
-		{
+	void run_tests( test_sets_t const& testSets_ ) const {
 		_callback->run_started();
 		int total( 0 );
-
-			{
+ {
 			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
 					? yaal::hcore::make_pointer<yaal::tools::HWorkFlow>( tress::setup._jobs )
 					: yaal::tools::HWorkFlow::ptr_t() );
 			for ( test_sets_t::const_iterator k = testSets_.begin();
-					! yaal::_isKilled_ && ( k != testSets_.end() ); ++ k )
-				{
+					! yaal::_isKilled_ && ( k != testSets_.end() ); ++ k ) {
 				const_iterator i = _groups.find( k->first );
 				if ( i == _groups.end() )
 					++ total;
-				else
-					{
+				else {
 					int selected( static_cast<int>( k->second.size() ) );
 					total += selected ? selected : i->second->get_real_test_count();
-					}
 				}
+			}
 			_callback->test_count( total );
 			for ( test_sets_t::const_iterator k = testSets_.begin();
-					! yaal::_isKilled_ && ( k != testSets_.end() ); ++ k )
-				{
+					! yaal::_isKilled_ && ( k != testSets_.end() ); ++ k ) {
 				const_iterator i = _groups.find( k->first );
-				if ( i == _groups.end() )
-					{
+				if ( i == _groups.end() ) {
 					test_result tr;
 					tr.set_meta( test_result::setup, "", k->first );
 					tr.set_meta( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( testSets_.begin(), k ) ) );
 					_callback->test_completed( tr );
-					}
-				else
-					{
+				} else {
 					if ( !! w )
 						w->push_task( yaal::hcore::call( &test_runner::run_in_group, this, i, k->second ) );
 					else
 						run_in_group( i, k->second );
-					}
 				}
 			}
-		_callback->run_completed();
 		}
+		_callback->run_completed();
+	}
 
 	/**
 	* Runs all tests in all groups that are matching pattern.
 	* @param callback Callback object if exists; null otherwise
 	*/
-	void run_pattern_tests( char const* pattern ) const
-		{
+	void run_pattern_tests( char const* pattern ) const {
 		_callback->run_started();
 		int total( 0 );
-
-			{
+ {
 			const_iterator e = _groups.end();
 			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
 					? yaal::hcore::make_pointer<yaal::tools::HWorkFlow>( tress::setup._jobs )
 					: yaal::tools::HWorkFlow::ptr_t() );
-			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
-				{
+			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i ) {
 				if ( i->first.find( pattern ) != std::string::npos )
 					total += i->second->get_real_test_count();
-				}
+			}
 			_callback->test_count( total );
-			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i )
-				{
-				if ( i->first.find( pattern ) != std::string::npos )
-					{
+			for ( const_iterator i = _groups.begin(); ! yaal::_isKilled_ && ( i != e ); ++ i ) {
+				if ( i->first.find( pattern ) != std::string::npos ) {
 					if ( !! w )
 						w->push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
 					else
 						run_group( i );
-					}
 				}
 			}
+		}
 
 		_callback->run_completed();
-		}
+	}
 
 	/**
 	* Runs one test in specified group.
 	*/
-	test_result run_test( const std::string& group_name, int n ) const
-		{
+	test_result run_test( const std::string& group_name, int n ) const {
 		_callback->run_started();
 
 		const_iterator i = _groups.find( group_name );
-		if ( i == _groups.end() )
-			{
+		if ( i == _groups.end() ) {
 			_callback->run_completed();
 			throw no_such_group( group_name );
-			}
+		}
 
 		_callback->test_count( 1 );
 		_callback->group_started( group_name, 1 );
 		_callback->test_started( group_name.c_str(), n, i->second->get_test_title( n ) );
 
-		try
-			{
+		try {
 			test_result tr = i->second->run_test( n );
 			_callback->test_completed( tr );
 			_callback->group_completed( group_name );
 			_callback->run_completed();
 			return ( tr );
-			}
-		catch ( const beyond_last_test& )
-			{
+		} catch ( const beyond_last_test& ) {
 			_callback->group_completed( group_name );
 			_callback->run_completed();
 			throw;
-			}
-		catch ( const no_such_test& )
-			{
+		} catch ( const no_such_test& ) {
 			_callback->group_completed( group_name );
 			_callback->run_completed();
 			throw;
-			}
 		}
+	}
 
 protected:
 	groups _groups;
@@ -418,107 +372,84 @@ protected:
 
 private:
 
-	void run_group( const_iterator i ) const
-		{
+	void run_group( const_iterator i ) const {
 		yaal::hcore::HThread::set_name( i->first.c_str() + std::max( 0, static_cast<int>( i->first.length() - 15 ) ) );
 		_callback->group_started( i->first, i->second->get_real_test_count() );
-		try
-			{
+		try {
 			run_all_tests_in_group_( i );
-			}
-		catch ( const no_more_tests& )
-			{
+		} catch ( const no_more_tests& ) {
 			_callback->group_completed( i->first );
-			}
 		}
+	}
 
-	void run_in_group( const_iterator i, test_numbers_t const& testNumbers_ ) const
-		{
+	void run_in_group( const_iterator i, test_numbers_t const& testNumbers_ ) const {
 		yaal::hcore::HThread::set_name( i->first.c_str() + std::max( 0, static_cast<int>( i->first.length() - 15 ) ) );
 		int selected( static_cast<int>( testNumbers_.size() ) );
 		_callback->group_started( i->first, selected ? selected : i->second->get_real_test_count() );
-		if ( testNumbers_.empty() )
-			{
-			try
-				{
+		if ( testNumbers_.empty() ) {
+			try {
 				run_all_tests_in_group_( i );
-				}
-			catch ( const no_more_tests& )
-				{
+			} catch ( const no_more_tests& ) {
 				_callback->group_completed( i->first );
-				}
 			}
-		else
-			{
-			for ( test_numbers_t::const_iterator no( testNumbers_.begin() ), noEnd( testNumbers_.end() ); no != noEnd; ++ no )
-				{
+		} else {
+			for ( test_numbers_t::const_iterator no( testNumbers_.begin() ), noEnd( testNumbers_.end() ); no != noEnd; ++ no ) {
 				_callback->test_started( i->first.c_str(), *no, i->second->get_test_title( *no ) );
 
-				try
-					{
+				try {
 					test_result tr = i->second->run_test( *no );
 					_callback->test_completed( tr );
-					}
-				catch ( const beyond_last_test& )
-					{
+				} catch ( const beyond_last_test& ) {
 					break;
-					}
-				catch ( const no_such_test& )
-					{
+				} catch ( const no_such_test& ) {
 					test_result tr( i->second, *no );
 					tr.set_meta( test_result::setup_test_number, "", "no such test number" );
 					tr.set_meta( "no such test" );
 					_callback->test_completed( tr );
-					}
 				}
-			_callback->group_completed( i->first );
 			}
+			_callback->group_completed( i->first );
 		}
+	}
 
-	void run_all_tests_in_group_( const_iterator i ) const
-		{
+	void run_all_tests_in_group_( const_iterator i ) const {
 		i->second->rewind();
 		if ( i != i )
 			return;
 
-		for ( ; ! yaal::_isKilled_ ; )
-			{
-			if ( i->second->has_next() )
-				{
+		for ( ; ! yaal::_isKilled_ ; ) {
+			if ( i->second->has_next() ) {
 				int no( i->second->next() );
 				_callback->test_started( i->first.c_str(), no, i->second->get_test_title( no ) );
-				}
+			}
 
 			test_result tr = i->second->run_next();
 			_callback->test_completed( tr );
 
-			if ( tr._result == test_result::ex_ctor )
-				{
+			if ( tr._result == test_result::ex_ctor ) {
 				throw no_more_tests();
-				}
 			}
 		}
+	}
 private:
 	test_runner( test_runner const& );
 	test_runner& operator = ( test_runner const& );
-	};
+};
 
 /**
  * Singleton for test_runner implementation.
  * Instance with name runner_singleton shall be implemented
  * by user.
  */
-class test_runner_singleton
-	{
+class test_runner_singleton {
 	public:
 
-	static test_runner& get()
-		{
+	static test_runner& get() {
 		static test_runner tr;
 
 		return ( tr ) ;
-		}
-	};
+	}
+};
 
 extern test_runner_singleton runner;
 

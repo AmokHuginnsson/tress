@@ -41,47 +41,40 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace child;
 
-namespace child
-{
+namespace child {
 
 OSetup setup;
 
 }
 
-int main( int argc_, char* argv_[] )
-	{
+int main( int argc_, char* argv_[] ) {
 //	M_AT_END_OF_SCOPE( HSignalService::get_instance().stop(); );
 	M_PROLOG
 /* variables declarations for main loop: */
 /* end. */
-	try
-		{
+	try {
 		setup._programName = argv_[ 0 ];
 		handle_program_options( argc_, argv_ );
 		hcore::log.rehash( "x_child.log", setup._programName );
 		setup.test_setup();
-		if ( !! setup._script )
-			{
+		if ( !! setup._script ) {
 			HString nonWord;
-			for ( int c = 1; c < 256; ++ c )
-				{
+			for ( int c = 1; c < 256; ++ c ) {
 				if ( ! memchr( _word_.data(), c, _word_.size() ) )
 					nonWord += static_cast<char>( c );
-				}
+			}
 			HTokenizer t( setup._script, ";", HTokenizer::SKIP_EMPTY );
-			for ( HTokenizer::HIterator it = t.begin(), end = t.end(); it != end; ++ it )
-				{
+			for ( HTokenizer::HIterator it = t.begin(), end = t.end(); it != end; ++ it ) {
 				HTokenizer w( *it, nonWord, HTokenizer::SKIP_EMPTY );
 				HString cmd;
 				HString arg;
 				HTokenizer::HIterator word = w.begin();
-				if ( word != w.end() )
-					{
+				if ( word != w.end() ) {
 					cmd = *word;
 					++ word;
 					if ( word != w.end() )
 						arg = *word;
-					}
+				}
 				if ( cmd == "write" )
 					cout << arg << endl;
 				else if ( cmd == "errlog" )
@@ -92,10 +85,9 @@ int main( int argc_, char* argv_[] )
 					hcore::system::close( lexical_cast<int>( arg ) );
 				else
 					M_THROW( "syntax error at: " + cmd, errno );
-				}
 			}
-		if ( !! setup._terminate )
-			{
+		}
+		if ( !! setup._terminate ) {
 			typedef HMap<HString, int> str2int_dict_t;
 			str2int_dict_t signalNames;
 			signalNames.insert( make_pair<char const* const>( "ALRM", SIGALRM ) );
@@ -117,13 +109,11 @@ int main( int argc_, char* argv_[] )
 			if ( it != signalNames.end() )
 				hcore::system::kill( hcore::system::getpid(), it->second );
 			M_THROW( "unknown signal: " + setup._terminate, errno );
-			}
 		}
-	catch ( ... )
-		{
+	} catch ( ... ) {
 		hcore::log << "Unexpected exception cauht!" << endl;
-		}
+	}
 	return ( setup._exitStatus );
 	M_FINAL
-	}
+}
 

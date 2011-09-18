@@ -38,28 +38,23 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-class TLSTest
-	{
+class TLSTest {
 public:
-	TLSTest( void )
-		{
+	TLSTest( void ) {
 		cout << __PRETTY_FUNCTION__ << endl;
-		}
-	~TLSTest( void )
-		{
+	}
+	~TLSTest( void ) {
 		cout << __PRETTY_FUNCTION__ << endl;
-		}
+	}
 	void foo( void ) const {}
-	};
+};
 
-struct tut_yaal_hcore_htls : public simple_mock<tut_yaal_hcore_htls>
-	{
+struct tut_yaal_hcore_htls : public simple_mock<tut_yaal_hcore_htls> {
 	virtual ~tut_yaal_hcore_htls( void ) {}
 	typedef HTLS<TLSTest> tls_t;
-	};
+};
 TUT_TEST_GROUP( tut_yaal_hcore_htls, "yaal::hcore::HTLS" );
 
 TUT_UNIT_TEST( 1, "the test" )

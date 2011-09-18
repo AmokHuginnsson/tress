@@ -36,8 +36,7 @@ using namespace yaal::trait;
 using namespace yaal::hcore;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_trait );
 TUT_TEST_GROUP( tut_yaal_trait, "yaal::trait" );

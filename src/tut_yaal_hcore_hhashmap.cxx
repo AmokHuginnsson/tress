@@ -43,11 +43,9 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hhashmap
-	{
+struct tut_yaal_hcore_hhashmap {
 	typedef HInstanceTracker<tut_yaal_hcore_hhashmap> item_t;
 	typedef HHashMap<int long, item_t> hash_map_t;
 	static int long const TEST_PRIME = 17;
@@ -58,15 +56,14 @@ struct tut_yaal_hcore_hhashmap
 	virtual ~tut_yaal_hcore_hhashmap( void )
 		{}
 	void check_consitency( hash_map_t const& );
-	};
+};
 
 int long const tut_yaal_hcore_hhashmap::ELEM_COUNT = 32;
 int long const tut_yaal_hcore_hhashmap::LARGE_TABLE = 251;
 int long const tut_yaal_hcore_hhashmap::HUGE_TABLE = sizeof ( int long ) > 4 ? 2750 : 1290;
 int long const tut_yaal_hcore_hhashmap::FEW_ELEMENTS = 4;
 
-void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ )
-	{
+void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ ) {
 	typedef HHashContainer::HAtom<hash_map_t::value_type> atom_t;
 	atom_t* const* buckets = map_._engine._buckets.get<atom_t*>();
 	int long bucketCount( map_._engine._buckets.get_size() / sizeof ( atom_t* ) );
@@ -76,250 +73,218 @@ void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ )
 	int long realSize( 0 );
 	int long collisions( 0 );
 	int long longestCollision( 0 );
-	for ( int long i( 0 ); i < map_._engine._prime; ++ i )
-		{
+	for ( int long i( 0 ); i < map_._engine._prime; ++ i ) {
 		atom_t* a( buckets[ i ] );
 		int long localCollisions( 0 );
-		while ( a )
-			{
+		while ( a ) {
 			ENSURE_EQUALS( "atom in wrong bucket", i, abs( map_._hasher( a->_value.first ) ) % map_._engine._prime );
 			a = static_cast<atom_t*>( a->_next );
-			if ( a )
-				{
+			if ( a ) {
 				++ collisions;
 				++ localCollisions;
-				}
-			++ realSize;
 			}
+			++ realSize;
+		}
 		if ( localCollisions > longestCollision )
 			longestCollision = localCollisions;
-		}
+	}
 	for ( int long i( map_._engine._prime ); i < bucketCount; ++ i )
 		ENSURE_EQUALS( "dirty bucket", buckets[ i ], static_cast<atom_t*>( NULL ) );
 	ENSURE_EQUALS( "size inconsistent", map_._engine._size, realSize );
 	if ( collisions )
 		clog << "collisions: " << collisions << ", longest collision: " << longestCollision << endl;
-	}
+}
 
 TUT_TEST_GROUP( tut_yaal_hcore_hhashmap, "yaal::hcore::HHashMap" );
 
 TUT_UNIT_TEST( 1, "Simple constructor." )
-	try
-		{
+	try {
 		hash_map_t map( 0 );
 		FAIL ( "Created map with bad hash table size." );
-		}
-	catch ( HException const& e )
-		{
+	} catch ( HException const& e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Quantity test." )
-	{
+TUT_UNIT_TEST( 2, "Quantity test." ) {
 	hash_map_t map( 17 );
 	check_consitency( map );
 	ENSURE_EQUALS( "newly created map is not empty", map.size(), 0 );
 	map[ 0 ] = 7;
 	check_consitency( map );
 	ENSURE_EQUALS( "wrong size after add", map.size(), 1 );
-	}
+}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "element insertion" )
-	{
+TUT_UNIT_TEST( 3, "element insertion" ) {
 	hash_map_t map( TEST_PRIME );
-	for ( int i = 0; i < ELEM_COUNT; ++ i )
-		{
+	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
 		map[ i ] = i;
 		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
-		}
 	}
+}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "iterate" )
-	{
+TUT_UNIT_TEST( 4, "iterate" ) {
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
-	for ( int i = 0; i < ELEM_COUNT; ++ i )
-		{
+	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
 		map[ i ] = i;
 		check_consitency( map );
-		}
+	}
 	int long i( 0 );
 	for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it, ++ i )
 		ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
 	ENSURE_EQUALS( "bad number of iterations", i, ELEM_COUNT );
-	}
+}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "key, value access" )
-	{
+TUT_UNIT_TEST( 5, "key, value access" ) {
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
-	for ( int i = 0; i < ELEM_COUNT; ++ i )
-		{
+	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
 		map[ i ] = i;
 		check_consitency( map );
-		}
-	for ( int i = 0; i < ELEM_COUNT; ++ i )
-		{
+	}
+	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
 		hash_map_t::iterator it( map.find( i ) );
 		ENSURE( "key not present", it != map.end() );
 		ENSURE_EQUALS( "key/value mismatch", it->second, i );
-		}
 	}
+}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "key removal" )
-	{
+TUT_UNIT_TEST( 6, "key removal" ) {
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
-	for ( int i = 0; i < ELEM_COUNT; ++ i )
-		{
+	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
 		map[ i ] = i;
 		check_consitency( map );
 		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
-		}
-	for ( int i = 0; i < ELEM_COUNT; ++ i )
-		{
+	}
+	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
 		map.erase( i );
 		check_consitency( map );
 		ENSURE_EQUALS( "wrong size after erase", map.size(), ELEM_COUNT - ( i + 1 ) );
 		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
 			ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
-		}
 	}
+}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "iteration on large table with few elements" )
-	{
+TUT_UNIT_TEST( 7, "iteration on large table with few elements" ) {
 	hash_map_t map( LARGE_TABLE );
 	check_consitency( map );
-	for ( int i = 0; i < FEW_ELEMENTS; ++ i )
-		{
+	for ( int i = 0; i < FEW_ELEMENTS; ++ i ) {
 		map[ i ] = i;
 		check_consitency( map );
-		}
+	}
 	int i = 0;
 	for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it, ++ i )
 		ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
 	ENSURE_EQUALS( "bad number of iterations", i, FEW_ELEMENTS );
-	}
+}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "copy contructor" )
-	{
+TUT_UNIT_TEST( 8, "copy contructor" ) {
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
-	for ( int i = 0; i < ELEM_COUNT; ++ i )
-		{
+	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
 		map[ i ] = i;
 		check_consitency( map );
 		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
-		}
+	}
 	hash_map_t map2( map );
 	check_consitency( map );
 	check_consitency( map2 );
 	ENSURE_EQUALS( "wrong size after addition", map2.size(), ELEM_COUNT );
-	}
+}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "contructor from sequence" )
-	{
+TUT_UNIT_TEST( 9, "contructor from sequence" ) {
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
-	for ( int i = 0; i < ELEM_COUNT; ++ i )
-		{
+	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
 		map[ i ] = i;
 		check_consitency( map );
 		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
-		}
+	}
 	hash_map_t map2( map.begin(), map.end() );
 	check_consitency( map );
 	check_consitency( map2 );
 	ENSURE_EQUALS( "wrong size after addition", map2.size(), ELEM_COUNT );
-	}
+}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "auto grow" )
-	{
+TUT_UNIT_TEST( 10, "auto grow" ) {
 	hash_map_t map;
 	check_consitency( map );
-	for ( int i = 0; i < ELEM_COUNT; ++ i )
-		{
+	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
 		map[ i * 3 ] = i * 3;
 		check_consitency( map );
 		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
 		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
 			ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
-		}
-	for ( int i = 0; i < ELEM_COUNT; ++ i )
-		{
+	}
+	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
 		map.erase( i * 3 );
 		check_consitency( map );
 		ENSURE_EQUALS( "wrong size after erase", map.size(), ELEM_COUNT - ( i + 1 ) );
 		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
 			ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
-		}
 	}
+}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "auto grow large table" )
-	{
+TUT_UNIT_TEST( 11, "auto grow large table" ) {
 	hash_map_t map;
 	check_consitency( map );
-	for ( int i = 0; i < LARGE_TABLE; ++ i )
-		{
+	for ( int i = 0; i < LARGE_TABLE; ++ i ) {
 		map[ i * 3 ] = i * 3;
 		check_consitency( map );
 		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
 		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
 			ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
-		}
-	for ( int i = 0; i < LARGE_TABLE; ++ i )
-		{
+	}
+	for ( int i = 0; i < LARGE_TABLE; ++ i ) {
 		map.erase( i * 3 );
 		check_consitency( map );
 		ENSURE_EQUALS( "wrong size after erase", map.size(), LARGE_TABLE - ( i + 1 ) );
 		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
 			ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
-		}
 	}
+}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 12, "auto grow huge table" )
-	TIME_CONSTRAINT_EXEMPT();
-	{
+	TIME_CONSTRAINT_EXEMPT(); {
 	hash_map_t map;
 	check_consitency( map );
-	for ( int long i = 0; i < HUGE_TABLE; ++ i )
-		{
+	for ( int long i = 0; i < HUGE_TABLE; ++ i ) {
 		map[ i * i * i ] = i * i * i;
 		check_consitency( map );
 		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
 		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
 			ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
-		}
-	for ( int long i = 0; i < HUGE_TABLE; ++ i )
-		{
+	}
+	for ( int long i = 0; i < HUGE_TABLE; ++ i ) {
 		map.erase( i * i * i );
 		check_consitency( map );
 		ENSURE_EQUALS( "wrong size after erase", map.size(), HUGE_TABLE - ( i + 1 ) );
 		for ( hash_map_t::iterator it = map.begin(); it != map.end(); ++ it )
 			ENSURE_EQUALS( "key/value mismatch", it->second, it->first );
-		}
 	}
+}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 

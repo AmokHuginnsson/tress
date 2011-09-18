@@ -38,12 +38,10 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
 
-struct tut_yaal_tools_hpipedchild
-	{
+struct tut_yaal_tools_hpipedchild {
 	static HString CHILD;
 	static HString CHILD_FAKE;
 	static HString MSG_OUT;
@@ -52,7 +50,7 @@ struct tut_yaal_tools_hpipedchild
 	static HString ACK_ERR;
 	virtual ~tut_yaal_tools_hpipedchild( void )
 		{}
-	};
+};
 
 HString tut_yaal_tools_hpipedchild::CHILD( "./data/child"EXE_SUFFIX );
 HString tut_yaal_tools_hpipedchild::CHILD_FAKE( "./data/child_fake" );
@@ -80,15 +78,12 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 3, "spawn on non-execuable" )
 	HPipedChild pc;
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
-	try
-		{
+	try {
 		pc.spawn( CHILD_FAKE );
 		FAIL( "spawning non-executable" );
-		}
-	catch ( HPipedChildException& )
-		{
+	} catch ( HPipedChildException& ) {
 		// ok
-		}
+	}
 	ENSURE_EQUALS( "running after failed spawn", pc.is_running(), false );
 TUT_TEARDOWN()
 

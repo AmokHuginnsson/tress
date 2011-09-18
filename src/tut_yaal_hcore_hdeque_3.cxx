@@ -39,11 +39,9 @@ using namespace yaal::tools::util;
 using namespace tress;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hdeque_3 : public tut_yaal_hcore_hdeque_base<3>
-	{
+struct tut_yaal_hcore_hdeque_3 : public tut_yaal_hcore_hdeque_base<3> {
 	virtual ~tut_yaal_hcore_hdeque_3( void ) {}
 	template<int const item_size>
 	void test_push_back( void );
@@ -51,29 +49,26 @@ struct tut_yaal_hcore_hdeque_3 : public tut_yaal_hcore_hdeque_base<3>
 	void test_roll_forward( int, int, int );
 	template<int const item_size>
 	void test_roll_forward_greedy( int, int );
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hdeque_3, "yaal::hcore::HDeque,3" );
 
 template<int const item_size>
-void tut_yaal_hcore_hdeque_3::test_push_back( void )
-	{
+void tut_yaal_hcore_hdeque_3::test_push_back( void ) {
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque_3, item_size> item_type;
 	typedef HDeque<item_type> deque_type;
-	clog << "testing push_back: " << item_size << endl;
-		{
+	clog << "testing push_back: " << item_size << endl; {
 		deque_type deque;
 		proto_t proto;
-		for ( int long i( 0 ); i < 2048; ++ i )
-			{
+		for ( int long i( 0 ); i < 2048; ++ i ) {
 			proto.push_back( static_cast<int>( i ) );
 			deque.push_back( static_cast<int>( i ) );
 			check_consistency( deque );
 			ENSURE_EQUALS( "push_back failed", deque, proto );
-			}
 		}
-	ENSURE_EQUALS( "object leak", item_type::get_instance_count(), 0 );
 	}
+	ENSURE_EQUALS( "object leak", item_type::get_instance_count(), 0 );
+}
 
 TUT_UNIT_TEST( 10, "push_back" )
 	TIME_CONSTRAINT_EXEMPT();
@@ -94,103 +89,85 @@ TUT_UNIT_TEST( 10, "push_back" )
 TUT_TEARDOWN()
 
 template<int const item_size>
-void tut_yaal_hcore_hdeque_3::test_roll_forward( int shift_, int pack_, int distance_ )
-	{
+void tut_yaal_hcore_hdeque_3::test_roll_forward( int shift_, int pack_, int distance_ ) {
 	clog << "testing roll forward: " << item_size << ", " << shift_ << ", " << pack_ << endl;
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque_3, item_size> item_type;
-	typedef HDeque<item_type> deque_type;
-		{
+	typedef HDeque<item_type> deque_type; {
 		proto_t proto;
 		deque_type deque;
 		int i( 0 );
-		for ( ; i < shift_; ++ i )
-			{
+		for ( ; i < shift_; ++ i ) {
 			proto.push_back( i );
 			deque.push_back( i );
 			check_consistency( deque );
 			ENSURE_EQUALS( "push_back failed", deque, proto );
-			}
-		while ( i < distance_ )
-			{
-			for ( int p( 0 ); p < pack_; ++ p, ++ i )
-				{
+		} while ( i < distance_ ) {
+			for ( int p( 0 ); p < pack_; ++ p, ++ i ) {
 				proto.push_back( i );
 				deque.push_back( i );
 				check_consistency( deque );
 				ENSURE_EQUALS( "push_back failed", deque, proto );
-				}
-			for ( int p( 0 ); p < pack_; ++ p )
-				{
+			}
+			for ( int p( 0 ); p < pack_; ++ p ) {
 				proto.pop_front();
 				deque.pop_front();
 				check_consistency( deque );
 				ENSURE_EQUALS( "pop_front failed", deque, proto );
-				}
 			}
-		for ( i = 0; i < shift_; ++ i )
-			{
+		}
+		for ( i = 0; i < shift_; ++ i ) {
 			proto.pop_front();
 			deque.pop_front();
 			check_consistency( deque );
 			ENSURE_EQUALS( "pop_front failed", deque, proto );
-			}
 		}
-	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 	}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+}
 
 template<int const item_size>
-void tut_yaal_hcore_hdeque_3::test_roll_forward_greedy( int shift_, int distance_ )
-	{
+void tut_yaal_hcore_hdeque_3::test_roll_forward_greedy( int shift_, int distance_ ) {
 	clog << "testing roll forward greedy: " << item_size << ", " << shift_ << endl;
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque_3, item_size> item_type;
-	typedef HDeque<item_type> deque_type;
-		{
+	typedef HDeque<item_type> deque_type; {
 		proto_t proto;
 		deque_type deque;
 		int i( 0 );
-		for ( ; i < shift_; ++ i )
-			{
+		for ( ; i < shift_; ++ i ) {
 			proto.push_back( i );
 			deque.push_back( i );
 			check_consistency( deque );
 			ENSURE_EQUALS( "push_back failed", deque, proto );
-			}
-		while ( i < distance_ )
-			{
-			for ( int s( 0 ); s < shift_; ++ s )
-				{
+		} while ( i < distance_ ) {
+			for ( int s( 0 ); s < shift_; ++ s ) {
 				proto.pop_front();
 				deque.pop_front();
 				check_consistency( deque );
 				ENSURE_EQUALS( "pop_front failed", deque, proto );
-				}
-			for ( int s( 0 ); s < shift_; ++ s, ++ i )
-				{
+			}
+			for ( int s( 0 ); s < shift_; ++ s, ++ i ) {
 				proto.push_back( i );
 				deque.push_back( i );
 				check_consistency( deque );
 				ENSURE_EQUALS( "push_back failed", deque, proto );
-				}
 			}
-		for ( i = 0; i < shift_; ++ i )
-			{
+		}
+		for ( i = 0; i < shift_; ++ i ) {
 			proto.pop_front();
 			deque.pop_front();
 			check_consistency( deque );
 			ENSURE_EQUALS( "pop_front failed", deque, proto );
-			}
 		}
-	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 	}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+}
 
 TUT_UNIT_TEST( 20, "roll forward (push_back/pop_front)" )
 	int shift[] = { 1, 2, 3, 4, 5, 6, 7, 8, 16, 32 };
 	int pack[] = { 1, 2, 3, 4, 5, 7, 8 };
 	int distance( 1024 );
-	for ( int s( 0 ); s < countof ( shift ); ++ s )
-		{
-		for ( int p( 0 ); p < countof ( pack ); ++ p )
-			{
+	for ( int s( 0 ); s < countof ( shift ); ++ s ) {
+		for ( int p( 0 ); p < countof ( pack ); ++ p ) {
 			test_roll_forward<1>( shift[s], pack[p], distance );
 			test_roll_forward<2>( shift[s], pack[p], distance );
 			test_roll_forward<3>( shift[s], pack[p], distance );
@@ -205,10 +182,9 @@ TUT_UNIT_TEST( 20, "roll forward (push_back/pop_front)" )
 			test_roll_forward<512>( shift[s], pack[p], distance );
 			test_roll_forward<513>( shift[s], pack[p], distance );
 			test_roll_forward<640>( shift[s], pack[p], distance );
-			}
 		}
-	for ( int s( 0 ); s < countof ( shift ); ++ s )
-		{
+	}
+	for ( int s( 0 ); s < countof ( shift ); ++ s ) {
 		test_roll_forward_greedy<1>( shift[s], distance );
 		test_roll_forward_greedy<2>( shift[s], distance );
 		test_roll_forward_greedy<3>( shift[s], distance );
@@ -223,7 +199,7 @@ TUT_UNIT_TEST( 20, "roll forward (push_back/pop_front)" )
 		test_roll_forward_greedy<512>( shift[s], distance );
 		test_roll_forward_greedy<513>( shift[s], distance );
 		test_roll_forward_greedy<640>( shift[s], distance );
-		}
+	}
 TUT_TEARDOWN()
 
 }

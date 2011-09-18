@@ -40,24 +40,20 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_hsocket
-	{
-	tut_yaal_hcore_hsocket( void )
-		{
+struct tut_yaal_hcore_hsocket {
+	tut_yaal_hcore_hsocket( void ) {
 		::unlink( "/tmp/TUT_socket" );
 		errno = 0;
-		}
+	}
 	virtual ~tut_yaal_hcore_hsocket( void )
 		{}
-	};
+};
 
 TUT_TEST_GROUP( tut_yaal_hcore_hsocket, "yaal::hcore::HSocket" );
 
-struct HServer
-	{
+struct HServer {
 	static int const NO_FD = 17;
 	static int const LATENCY = 1000; /* number of miliseconds */
 	HString _buffer;
@@ -81,7 +77,7 @@ private:
 	void disconnect_client( yaal::hcore::HSocket::ptr_t& );
 	HServer( HServer const& );
 	HServer& operator = ( HServer const& );
-	};
+};
 
 HServer::HServer( HSocket::socket_type_t type_, int maxConn_ )
 	: _buffer(),
@@ -89,47 +85,42 @@ HServer::HServer( HSocket::socket_type_t type_, int maxConn_ )
 	_thread(), _event(), _signaled( false )
 	{}
 
-void HServer::listen( yaal::hcore::HString const& path_, int const port_ )
-	{
+void HServer::listen( yaal::hcore::HString const& path_, int const port_ ) {
 	M_PROLOG
 	_socket.listen( path_, port_ );
 	cout << "listening on: " << path_ << ( port_ ? ":" : "" ) << ( port_ ? HString( port_ ) : HString() ) << endl;
 	return;
 	M_EPILOG
-	}
+}
 
-void HServer::start( void )
-	{
+void HServer::start( void ) {
 	M_PROLOG
 	cout << "starting server thread ..." << endl;
 	_dispatcher.register_file_descriptor_handler( _socket.get_file_descriptor(), call( &HServer::handler_connection, this, _1 ) );
 	_thread.spawn( call( &HServer::run, this ) );
 	return;
 	M_EPILOG
-	}
+}
 
-void HServer::stop( void )
-	{
+void HServer::stop( void ) {
 	M_PROLOG
 	_dispatcher.stop();
 	_thread.finish();
 	cout << "server thread stopped ..." << endl;
 	return;
 	M_EPILOG
-	}
+}
 
-void HServer::wait( void )
-	{
+void HServer::wait( void ) {
 	M_PROLOG
 	cout << "waiting for event ..." << endl;
 	_event.wait();
 	cout << "event arrived ..." << endl;
 	return;
 	M_EPILOG
-	}
+}
 
-void HServer::handler_connection( int )
-	{
+void HServer::handler_connection( int ) {
 	M_PROLOG
 	HSocket::ptr_t client = _socket.accept();
 	M_ASSERT( !! client );
@@ -138,34 +129,29 @@ void HServer::handler_connection( int )
 	cout << green << "new connection" << lightgray << endl;
 	return;
 	M_EPILOG
-	}
+}
 
-void HServer::handler_message( int fileDescriptor_ )
-	{
+void HServer::handler_message( int fileDescriptor_ ) {
 	M_PROLOG
 	HString message;
 	HSocket::ptr_t client = _socket.get_client( fileDescriptor_ );
-	if ( !! client )
-		{
+	if ( !! client ) {
 		int long nRead( 0 );
 		cout << "reading data ..." << endl;
-		if ( ( nRead = client->read_until( message ) ) > 0 )
-			{
+		if ( ( nRead = client->read_until( message ) ) > 0 ) {
 			_buffer += message;
 			cout << "<-" << message << endl;
 			_event.signal();
 			_signaled = true;
-			}
-		else if ( ! nRead )
+		} else if ( ! nRead )
 			disconnect_client( client );
 		/* else nRead < 0 => REPEAT */
-		}
+	}
 	return;
 	M_EPILOG
-	}
+}
 
-void HServer::disconnect_client( yaal::hcore::HSocket::ptr_t& client_ )
-	{
+void HServer::disconnect_client( yaal::hcore::HSocket::ptr_t& client_ ) {
 	M_PROLOG
 	M_ASSERT( !! client_ );
 	cout << "closing client connection ..." << endl;
@@ -175,52 +161,40 @@ void HServer::disconnect_client( yaal::hcore::HSocket::ptr_t& client_ )
 	cout << "client closed connection ..." << endl;
 	return;
 	M_EPILOG
-	}
+}
 
-HString const& HServer::buffer( void ) const
-	{
+HString const& HServer::buffer( void ) const {
 	M_PROLOG
 	return ( _buffer );
 	M_EPILOG
-	}
+}
 
-void* HServer::run( void )
-	{
-	try
-		{
-		try
-			{
+void* HServer::run( void ) {
+	try {
+		try {
 			cout << "starting dispatcher ..." << endl;
 			_dispatcher.run();
 			cout << "dispatcher finished ..." << endl;
 			_socket.close();
 			cout << "socket closed ..." << endl;
-			}
-		catch ( HOpenSSLException& e )
-			{
+		} catch ( HOpenSSLException& e ) {
 			cout << e.what() << endl;
-			}
 		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		_thread.stack_exception( e.what(), e.code() );
-		}
-	catch ( ... )
-		{
+	} catch ( ... ) {
 		_thread.stack_exception( "unknown exception", errno );
-		}
-	if ( ! _signaled )
-		{
+	}
+	if ( ! _signaled ) {
 		_event.signal();
 		_signaled = true;
-		}
+	}
 	return ( NULL );
-	}
+}
 
-void HServer::do_not_signal( void )
-	{
+void HServer::do_not_signal( void ) {
 	_signaled = true;
-	}
+}
 
 TUT_UNIT_TEST( 1, "Simple construction and destruction." )
 	HSocket socket;
@@ -228,50 +202,38 @@ TUT_UNIT_TEST( 1, "Simple construction and destruction." )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "Constructions with wrong parameters." )
-	try
-		{
+	try {
 		HSocket socket( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::NETWORK );
 		FAIL( "creation of bad socket possible (TYPE::FILE|TYPE::NETWORK)" );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		cout << e.what() << endl;
-		}
-	try
-		{
+	}
+	try {
 		HSocket socket( HSocket::socket_type_t( HSocket::TYPE::BLOCKING ) | HSocket::TYPE::NONBLOCKING );
 		FAIL( "creation of bad socket possible (TYPE::BLOCKING|TYPE::NONBLOCKING)" );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "Getting port on file socket." )
 	HSocket socket( HSocket::TYPE::FILE );
-	try
-		{
+	try {
 		socket.get_port();
 		FAIL( "getting port number on file socket possible" );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "Listening on reserved port." )
 	HSocket socket( HSocket::TYPE::NETWORK, 1 );
-	try
-		{
+	try {
 		socket.listen( "0.0.0.0", ( ::getenv( "windir" ) || ::getenv( "WINDIR" ) ? 135 : 22 ) );
 		FAIL( "listening on reserved port possible" );
-		}
-	catch ( HException & e )
-		{
+	} catch ( HException & e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "Listening on port in use." )
@@ -279,116 +241,92 @@ TUT_UNIT_TEST( 5, "Listening on port in use." )
 	HSocket block( HSocket::TYPE::NETWORK, 1 );
 	block.listen( "0.0.0.0", obscurePort );
 	HSocket socket( HSocket::TYPE::NETWORK, 1 );
-	try
-		{
+	try {
 		socket.listen( "0.0.0.0", obscurePort );
 		FAIL( "listening on port in use possible" );
-		}
-	catch ( HException & e )
-		{
+	} catch ( HException & e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "Listening on existing file." )
 	HSocket socket( HSocket::TYPE::FILE, 1 );
-	try
-		{
+	try {
 		socket.listen( "/etc/shadow" );
 		FAIL( "listening on existing file possible" );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 7, "Listening on protected file." )
 	HSocket socket( HSocket::TYPE::FILE, 1 );
-	try
-		{
+	try {
 		socket.listen( "/etc/TUT_socket" );
 		FAIL( "listening on protected file possible" );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "Listening on already listening socket." )
 	HSocket socket( HSocket::TYPE::FILE, 1 );
 	socket.listen( "/tmp/TUT_socket" );
-	try
-		{
+	try {
 		socket.listen( "/tmp/TUT_socket" );
 		FAIL( "listening on already listening socket possible" );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 9, "Listening with bad maximum number of clients." )
 	HSocket socket( HSocket::TYPE::FILE );
-	try
-		{
+	try {
 		socket.listen( "/tmp/TUT_socket" );
 		FAIL( "listening with bad maximum number of clients possible" );
-		}
-	catch ( HException& e )
-		{
+	} catch ( HException& e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 10, "Accept on socket that is not listening." )
 	HSocket socket;
-	try
-		{
+	try {
 		socket.accept();
 		FAIL( "accept on socket that is not listening possible" );
-		}
-	catch ( HException & e )
-		{
+	} catch ( HException & e ) {
 		cout << e.what() << endl;
-		}
+	}
 TUT_TEARDOWN()
 
-void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port_ = 0, bool withSsl_ = false )
-	{
+void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port_ = 0, bool withSsl_ = false ) {
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
 	TUT_DECLARE( HServer serv( type_ | ( withSsl_ ? HSocket::TYPE::SSL_SERVER : HSocket::TYPE::DEFAULT ), 1 ); );
 	TUT_INVOKE( cout << sizeof ( serv ) << endl; );
 	TUT_DECLARE( HSocket client( type_ | ( withSsl_ ? HSocket::TYPE::SSL_CLIENT : HSocket::TYPE::DEFAULT ) ); );
 	TUT_INVOKE( serv.listen( path_, port_ ); );
-	try
-		{
+	try {
 		TUT_INVOKE( serv.start(); );
 		TUT_INVOKE( client.connect( path_, port_ ); );
 		TUT_INVOKE( client.write( test_data, size ); );
 		TUT_INVOKE( serv.wait(); );
-		}
-	catch ( HException const& e )
-		{
+	} catch ( HException const& e ) {
 		cout << e.what() << endl;
 		serv.do_not_signal();
 		TUT_INVOKE( serv.stop(); );
 		throw;
-		}
-	catch ( ... )
-		{
+	} catch ( ... ) {
 		serv.do_not_signal();
 		TUT_INVOKE( serv.stop(); );
 		throw;
-		}
+	}
 	TUT_INVOKE( serv.stop(); );
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
 	cout << serv.buffer() << endl;
 	return;
-	}
+}
 
 TUT_UNIT_TEST( 19, "Transfering data through file (blocking)." )
 	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket" );

@@ -39,16 +39,14 @@ using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
-namespace tut
-{
+namespace tut {
 
-struct tut_yaal_hcore_htokenizer
-	{
+struct tut_yaal_hcore_htokenizer {
 	static char const* const split_inc_failed;
 	static char const* const split_skip_failed;
 	static char const* const split_invalid_success;
 	virtual ~tut_yaal_hcore_htokenizer( void ) {}
-	};
+};
 
 char const* const tut_yaal_hcore_htokenizer::split_inc_failed = "split include empty failed";
 char const* const tut_yaal_hcore_htokenizer::split_skip_failed = "split skip empty failed";
@@ -113,97 +111,76 @@ TUT_UNIT_TEST( 7, "direct split skip empty set[a]*/" )
 	HTokenizer t( ",aa,bb", ",", HTokenizer::SKIP_EMPTY );
 	ENSURE_EQUALS( split_skip_failed, t[ 0 ], "aa" );
 	ENSURE_EQUALS( split_skip_failed, t[ 1 ], "bb" );
-	try
-		{
+	try {
 		t[ 2 ];
 		FAIL( split_invalid_success );
-		}
-	catch ( HTokenizerException const& )
-		{
+	} catch ( HTokenizerException const& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "direct split skip empty set[b]*/" )
 	HTokenizer t( "aa,bb", ",", HTokenizer::SKIP_EMPTY );
 	ENSURE_EQUALS( split_skip_failed, t[ 0 ], "aa" );
 	ENSURE_EQUALS( split_skip_failed, t[ 1 ], "bb" );
-	try
-		{
+	try {
 		t[ 2 ];
 		FAIL( split_invalid_success );
-		}
-	catch ( HTokenizerException const& )
-		{
+	} catch ( HTokenizerException const& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 9, "direct split skip empty set[c]*/" )
 	HTokenizer t( "aa,bb,", ",", HTokenizer::SKIP_EMPTY );
 	ENSURE_EQUALS( split_skip_failed, t[ 0 ], "aa" );
 	ENSURE_EQUALS( split_skip_failed, t[ 1 ], "bb" );
-	try
-		{
+	try {
 		t[ 2 ];
 		FAIL( split_invalid_success );
-		}
-	catch ( HTokenizerException const& )
-		{
+	} catch ( HTokenizerException const& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 10, "direct split skip empty set[d]*/" )
 	HTokenizer t( ",aa,", ",", HTokenizer::SKIP_EMPTY );
 	ENSURE_EQUALS( split_skip_failed, t[ 0 ], "aa" );
-	try
-		{
+	try {
 		t[ 1 ];
 		FAIL( split_invalid_success );
-		}
-	catch ( HTokenizerException const& )
-		{
+	} catch ( HTokenizerException const& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 11, "direct split skip empty set[e]*/" )
 	HTokenizer t( ",,,aa,,", ",", HTokenizer::SKIP_EMPTY );
 	ENSURE_EQUALS( split_skip_failed, t[ 0 ], "aa" );
-	try
-		{
+	try {
 		t[ 1 ];
 		FAIL( split_invalid_success );
-		}
-	catch ( HTokenizerException const& )
-		{
+	} catch ( HTokenizerException const& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 12, "direct split skip empty set[f]*/" )
 	HTokenizer t1( "a", ";", HTokenizer::SKIP_EMPTY );
 	HTokenizer t2( "a", "a", HTokenizer::SKIP_EMPTY );
 	ENSURE_EQUALS( split_skip_failed, t1[ 0 ], "a" );
-	try
-		{
+	try {
 		t1[ 1 ];
 		FAIL( split_invalid_success );
-		}
-	catch ( HTokenizerException const& )
-		{
+	} catch ( HTokenizerException const& ) {
 		// ok
-		}
-	try
-		{
+	}
+	try {
 		t2[ 0 ];
 		FAIL( split_invalid_success );
-		}
-	catch ( HTokenizerException const& )
-		{
+	} catch ( HTokenizerException const& ) {
 		// ok
-		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 13, "dereference iterator for single token" )
@@ -214,38 +191,32 @@ TUT_UNIT_TEST( 13, "dereference iterator for single token" )
 	ENSURE_EQUALS( "dereferencing token iterator failed", *it, text );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "tokenize on empty (skip empty)" )
-	{
+TUT_UNIT_TEST( 14, "tokenize on empty (skip empty)" ) {
 	HTokenizer tokenizer( "", "@", HTokenizer::SKIP_EMPTY );
 	ENSURE( "bogus tokens on empty", ! ( tokenizer.begin() != tokenizer.end() ) );
-	}
-	{
+} {
 	HTokenizer tokenizer( "@", HTokenizer::SKIP_EMPTY );
 	tokenizer.assign( "" );
 	ENSURE( "bogus tokens on empty", ! ( tokenizer.begin() != tokenizer.end() ) );
-	}
-	{
+} {
 	HTokenizer tokenizer( "Ala@ma@kota.", "@", HTokenizer::SKIP_EMPTY );
 	tokenizer.assign( "" );
 	ENSURE( "bogus tokens on empty", ! ( tokenizer.begin() != tokenizer.end() ) );
-	}
+}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "tokenize on empty (include empty)" )
-	{
+TUT_UNIT_TEST( 15, "tokenize on empty (include empty)" ) {
 	HTokenizer tokenizer( "", "@", HTokenizer::INCLUDE_EMPTY );
 	ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
-	}
-	{
+} {
 	HTokenizer tokenizer( "@", HTokenizer::INCLUDE_EMPTY );
 	tokenizer.assign( "" );
 	ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
-	}
-	{
+} {
 	HTokenizer tokenizer( "Ala@ma@kota.", "@", HTokenizer::INCLUDE_EMPTY );
 	tokenizer.assign( "" );
 	ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
-	}
+}
 TUT_TEARDOWN()
 
 }
