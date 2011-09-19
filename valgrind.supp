@@ -2888,3 +2888,44 @@
    fun:ERR_get_state
    fun:ERR_clear_error
 }
+{
+   Oneiric, OpenSSL SSL_COMP_get_compression_methods 1
+   Memcheck:Leak
+   fun:malloc
+   fun:CRYPTO_malloc
+   obj:/lib/x86_64-linux-gnu/libssl.so.1.0.0
+   fun:SSL_COMP_get_compression_methods
+   fun:SSL_library_init
+}
+{
+   Oneiric, OpenSSL ERR_clear_error 1
+   Memcheck:Leak
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_insert
+   obj:/lib/x86_64-linux-gnu/libcrypto.so.1.0.0
+   fun:ERR_get_state
+   fun:ERR_clear_error
+}
+{
+   Oneiric, OpenSSL SSL_COMP_get_compression_methods 2
+   Memcheck:Leak
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:sk_new
+   obj:/lib/x86_64-linux-gnu/libssl.so.1.0.0
+   fun:SSL_COMP_get_compression_methods
+   fun:SSL_library_init
+}
+{
+   Oneiric, OpenSSL ERR_clear_error 2
+   Memcheck:Leak
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_new
+   obj:/lib/x86_64-linux-gnu/libcrypto.so.1.0.0
+   obj:/lib/x86_64-linux-gnu/libcrypto.so.1.0.0
+   fun:ERR_get_state
+   fun:ERR_clear_error
+}
+

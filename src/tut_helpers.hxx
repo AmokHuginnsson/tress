@@ -91,8 +91,7 @@ typedef yaal::hcore::HExceptionSafeGlobal<tut_group, tress::tut_helpers::HSTDGlo
 tut_group_holder mock##_group( ( name ) ); \
 namespace { tut_group& group( mock##_group.instance() ); } \
 typedef void void_type
-#define TUT_SIMPLE_MOCK( name ) struct name : public simple_mock<name> \
-	{ \
+#define TUT_SIMPLE_MOCK( name ) struct name : public simple_mock<name> { \
 	virtual ~name( void ) \
 		{} \
 }
