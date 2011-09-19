@@ -787,5 +787,16 @@ TUT_UNIT_TEST( 25, "copy_node(node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 26, "get_parent" ) {
+	tree_t t;
+	tree_t::node_t n = t.create_new_root();
+	check_consistency( t );
+	ENSURE_EQUALS( "root node malformed", &n->get_tree(), &t );
+	tree_t::iterator it( n->add_node( 'a' ) );
+	ENSURE_EQUALS( "child node malformed, failed to get tree", &it->get_tree(), &t );
+	}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
 }
 
