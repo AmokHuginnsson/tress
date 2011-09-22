@@ -78,7 +78,7 @@ void tut_yaal_hcore_htree::to_string( tree_t::HNode const& n ) {
 	_cache += static_cast<char>( n->id() );
 	if ( n.has_childs() )
 		_cache += '{';
-	for ( tree_t::const_iterator it = n.begin(); it != n.end(); ++ it )
+	for ( tree_t::HNode::const_iterator it = n.begin(); it != n.end(); ++ it )
 		to_string( *it );
 	if ( n.has_childs() )
 		_cache += '}';
@@ -102,7 +102,7 @@ void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n ) {
 			_cache += "   ";
 	}
 	std::cout << *n << std::endl;
-	for ( tree_t::const_iterator it = n.begin(); it != n.end(); ++ it )
+	for ( tree_t::HNode::const_iterator it = n.begin(); it != n.end(); ++ it )
 		draw_node( *it );
 	_cache.set_at( len, 0 );
 }
@@ -110,7 +110,7 @@ void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n ) {
 void tut_yaal_hcore_htree::check_node( tree_t::const_node_t node, bool root ) {
 	if ( ! root )
 		ENSURE_EQUALS( "bad root", node->_tree, static_cast<tree_t*>( NULL ) );
-	for ( tree_t::const_iterator it = node->begin(); it != node->end(); ++ it ) {
+	for ( tree_t::HNode::const_iterator it = node->begin(); it != node->end(); ++ it ) {
 		ENSURE_EQUALS( "bad parent", it->_trunk, node );
 		check_node( &*it, false );
 	}
@@ -188,7 +188,7 @@ TUT_UNIT_TEST( 7, "add_node" ) {
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
 	(**n) = '0';
-	tree_t::iterator it = n->add_node( 'x' );
+	tree_t::HNode::iterator it = n->add_node( 'x' );
 	check_consistency( t );
 	ENSURE( "node addition / access failure", it == n->begin() );
 	ENSURE_EQUALS( "bad value for new node", **it, 'x' );
@@ -249,7 +249,7 @@ TUT_UNIT_TEST( 11, "get_level()" )
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
 	ENSURE_EQUALS( "incorrect level value", n->get_level(), 0 );
-	tree_t::iterator it = n->add_node( '1' );
+	tree_t::HNode::iterator it = n->add_node( '1' );
 	check_consistency( t );
 	ENSURE_EQUALS( "incorrect level value", it->get_level(), 1 );
 	it = it->add_node( '2' );
@@ -295,7 +295,7 @@ TUT_UNIT_TEST( 13, "basic shape tests" ) {
 	(**n) = '0';
 	char const* const bad_shape = "bad shape";
 	ENSURE_EQUALS( bad_shape, to_string( t ), "0" );
-	tree_t::iterator it = n->add_node( 'x' );
+	tree_t::HNode::iterator it = n->add_node( 'x' );
 	check_consistency( t );
 	ENSURE_EQUALS( bad_shape, to_string( t ), "0{x}" );
 	n->add_node( 'y' );
@@ -304,7 +304,7 @@ TUT_UNIT_TEST( 13, "basic shape tests" ) {
 	it = it->add_node( '@' );
 	check_consistency( t );
 	ENSURE_EQUALS( bad_shape, to_string( t ), "0{x{@}y}" );
-	tree_t::iterator a = it->add_node( 'A' );
+	tree_t::HNode::iterator a = it->add_node( 'A' );
 	check_consistency( t );
 	ENSURE_EQUALS( bad_shape, to_string( t ), "0{x{@{A}}y}" );
 	it->add_node( 'B' );
@@ -331,7 +331,7 @@ TUT_UNIT_TEST( 14, "graft ( replace_node )" ) {
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
 	(**n) = '@';
-	tree_t::iterator it = n->add_node( '0' );
+	tree_t::HNode::iterator it = n->add_node( '0' );
 	it = it->add_node( 'a' );
 	check_consistency( t );
 	tree_t::node_t b = &*it;
@@ -372,11 +372,11 @@ TUT_UNIT_TEST( 15, "graft upwards ( replace_node )" ) {
 		tree_t::node_t n = t.create_new_root();
 		check_consistency( t );
 		(**n) = '@';
-		tree_t::iterator it = n->add_node( '0' );
+		tree_t::HNode::iterator it = n->add_node( '0' );
 		check_consistency( t );
-		tree_t::iterator q = it->add_node( 'q' );
+		tree_t::HNode::iterator q = it->add_node( 'q' );
 		check_consistency( t );
-		tree_t::iterator w = it->add_node( 'w' );
+		tree_t::HNode::iterator w = it->add_node( 'w' );
 		check_consistency( t );
 		q->add_node( '!' );
 		check_consistency( t );
@@ -395,7 +395,7 @@ TUT_UNIT_TEST( 15, "graft upwards ( replace_node )" ) {
 		tree_t::node_t b = &*it;
 		it->add_node( 'A' );
 		check_consistency( t );
-		tree_t::iterator B = it->add_node( 'B' );
+		tree_t::HNode::iterator B = it->add_node( 'B' );
 		check_consistency( t );
 		it->add_node( 'C' );
 		check_consistency( t );
@@ -428,18 +428,18 @@ TUT_UNIT_TEST( 16, "graft downwards (replace_node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
-		tree_t::iterator it0, it = it0 = n->add_node( '0' );
-		tree_t::iterator q = it->add_node( 'q' );
-		tree_t::iterator w = it->add_node( 'w' );
+		tree_t::HNode::iterator it0, it = it0 = n->add_node( '0' );
+		tree_t::HNode::iterator q = it->add_node( 'q' );
+		tree_t::HNode::iterator w = it->add_node( 'w' );
 		q->add_node( '!' );
 		it = q->add_node( '#' );
 		q->add_node( '$' );
 		w->add_node( '%' );
 		w->add_node( '^' );
 		w->add_node( '&' );
-		tree_t::iterator a = it = it->add_node( 'a' );
+		tree_t::HNode::iterator a = it = it->add_node( 'a' );
 		it->add_node( 'A' );
-		tree_t::iterator B = it->add_node( 'B' );
+		tree_t::HNode::iterator B = it->add_node( 'B' );
 		ENSURE_EQUALS( "incorrect level value", B->get_level(), 5 );
 		it->add_node( 'C' );
 		it = n->add_node( '1' );
@@ -467,22 +467,22 @@ TUT_UNIT_TEST( 17, "graft sideways (replace_node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
-		tree_t::iterator it = n->add_node( '0' );
-		tree_t::iterator q = it->add_node( 'q' );
-		tree_t::iterator w = it->add_node( 'w' );
+		tree_t::HNode::iterator it = n->add_node( '0' );
+		tree_t::HNode::iterator q = it->add_node( 'q' );
+		tree_t::HNode::iterator w = it->add_node( 'w' );
 		q->add_node( '!' );
 		it = q->add_node( '#' );
 		q->add_node( '$' );
 		w->add_node( '%' );
 		w->add_node( '^' );
 		w->add_node( '&' );
-		tree_t::iterator a = it = it->add_node( 'a' );
+		tree_t::HNode::iterator a = it = it->add_node( 'a' );
 		it->add_node( 'A' );
 		it->add_node( 'B' );
 		it->add_node( 'C' );
 		it = n->add_node( '1' );
 		it->add_node( 'd' );
-		tree_t::iterator e = it->add_node( 'e' );
+		tree_t::HNode::iterator e = it->add_node( 'e' );
 		it->add_node( 'f' );
 		it = n->add_node( '2' );
 		it->add_node( 'g' );
@@ -501,22 +501,22 @@ TUT_UNIT_TEST( 18, "graft to root (replace_node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
-		tree_t::iterator it = n->add_node( '0' );
-		tree_t::iterator q = it->add_node( 'q' );
-		tree_t::iterator w = it->add_node( 'w' );
+		tree_t::HNode::iterator it = n->add_node( '0' );
+		tree_t::HNode::iterator q = it->add_node( 'q' );
+		tree_t::HNode::iterator w = it->add_node( 'w' );
 		q->add_node( '!' );
 		it = q->add_node( '#' );
 		q->add_node( '$' );
 		w->add_node( '%' );
 		w->add_node( '^' );
 		w->add_node( '&' );
-		tree_t::iterator a = it = it->add_node( 'a' );
+		tree_t::HNode::iterator a = it = it->add_node( 'a' );
 		it->add_node( 'A' );
 		it->add_node( 'B' );
 		it->add_node( 'C' );
 		it = n->add_node( '1' );
 		it->add_node( 'd' );
-		tree_t::iterator e = it->add_node( 'e' );
+		tree_t::HNode::iterator e = it->add_node( 'e' );
 		it->add_node( 'f' );
 		it = n->add_node( '2' );
 		it->add_node( 'g' );
@@ -533,11 +533,11 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 19, "across two trees (replace_node)" ) {
 		tree_t::node_t n = NULL;
-		tree_t::iterator it;
+		tree_t::HNode::iterator it;
 		tree_t t1;
 		n = t1.create_new_root();
 		**n = '@';
-		tree_t::iterator a = it = n->add_node( '1' );
+		tree_t::HNode::iterator a = it = n->add_node( '1' );
 		it->add_node( '2' );
 		it->add_node( '4' );
 		it->add_node( '6' );
@@ -572,7 +572,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 20, "across two trees from root (replace_node)" ) {
 		tree_t::node_t n = NULL;
-		tree_t::iterator it;
+		tree_t::HNode::iterator it;
 		tree_t t1;
 		n = t1.create_new_root();
 		**n = '@';
@@ -611,7 +611,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 21, "graft with bad iteroator (replace_node)" ) {
 		tree_t::node_t n = NULL;
-		tree_t::iterator it;
+		tree_t::HNode::iterator it;
 		tree_t t1;
 		n = t1.create_new_root();
 		**n = '@';
@@ -655,22 +655,22 @@ TUT_UNIT_TEST( 22, "move_node(it,node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
-		tree_t::iterator it = n->add_node( '0' );
-		tree_t::iterator q = it->add_node( 'q' );
-		tree_t::iterator w = it->add_node( 'w' );
+		tree_t::HNode::iterator it = n->add_node( '0' );
+		tree_t::HNode::iterator q = it->add_node( 'q' );
+		tree_t::HNode::iterator w = it->add_node( 'w' );
 		q->add_node( '!' );
 		it = q->add_node( '#' );
 		q->add_node( '$' );
 		w->add_node( '%' );
 		w->add_node( '^' );
 		w->add_node( '&' );
-		tree_t::iterator a = it = it->add_node( 'a' );
+		tree_t::HNode::iterator a = it = it->add_node( 'a' );
 		it->add_node( 'A' );
 		it->add_node( 'B' );
 		it->add_node( 'C' );
 		it = n->add_node( '1' );
 		it->add_node( 'd' );
-		tree_t::iterator e = it->add_node( 'e' );
+		tree_t::HNode::iterator e = it->add_node( 'e' );
 		it->add_node( 'f' );
 		it = n->add_node( '2' );
 		it->add_node( 'g' );
@@ -689,22 +689,22 @@ TUT_UNIT_TEST( 23, "move_node(node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
-		tree_t::iterator it = n->add_node( '0' );
-		tree_t::iterator q = it->add_node( 'q' );
-		tree_t::iterator w = it->add_node( 'w' );
+		tree_t::HNode::iterator it = n->add_node( '0' );
+		tree_t::HNode::iterator q = it->add_node( 'q' );
+		tree_t::HNode::iterator w = it->add_node( 'w' );
 		q->add_node( '!' );
 		it = q->add_node( '#' );
 		q->add_node( '$' );
 		w->add_node( '%' );
 		w->add_node( '^' );
 		w->add_node( '&' );
-		tree_t::iterator a = it = it->add_node( 'a' );
+		tree_t::HNode::iterator a = it = it->add_node( 'a' );
 		it->add_node( 'A' );
 		it->add_node( 'B' );
 		it->add_node( 'C' );
 		it = n->add_node( '1' );
 		it->add_node( 'd' );
-		tree_t::iterator e = it->add_node( 'e' );
+		tree_t::HNode::iterator e = it->add_node( 'e' );
 		it->add_node( 'f' );
 		it = n->add_node( '2' );
 		it->add_node( 'g' );
@@ -723,22 +723,22 @@ TUT_UNIT_TEST( 24, "copy_node(it,node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
-		tree_t::iterator it = n->add_node( '0' );
-		tree_t::iterator q = it->add_node( 'q' );
-		tree_t::iterator w = it->add_node( 'w' );
+		tree_t::HNode::iterator it = n->add_node( '0' );
+		tree_t::HNode::iterator q = it->add_node( 'q' );
+		tree_t::HNode::iterator w = it->add_node( 'w' );
 		q->add_node( '!' );
 		it = q->add_node( '#' );
 		q->add_node( '$' );
 		w->add_node( '%' );
 		w->add_node( '^' );
 		w->add_node( '&' );
-		tree_t::iterator a = it = it->add_node( 'a' );
+		tree_t::HNode::iterator a = it = it->add_node( 'a' );
 		it->add_node( 'A' );
 		it->add_node( 'B' );
 		it->add_node( 'C' );
 		it = n->add_node( '1' );
 		it->add_node( 'd' );
-		tree_t::iterator e = it->add_node( 'e' );
+		tree_t::HNode::iterator e = it->add_node( 'e' );
 		it->add_node( 'f' );
 		it = n->add_node( '2' );
 		it->add_node( 'g' );
@@ -757,22 +757,22 @@ TUT_UNIT_TEST( 25, "copy_node(node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
-		tree_t::iterator it = n->add_node( '0' );
-		tree_t::iterator q = it->add_node( 'q' );
-		tree_t::iterator w = it->add_node( 'w' );
+		tree_t::HNode::iterator it = n->add_node( '0' );
+		tree_t::HNode::iterator q = it->add_node( 'q' );
+		tree_t::HNode::iterator w = it->add_node( 'w' );
 		q->add_node( '!' );
 		it = q->add_node( '#' );
 		q->add_node( '$' );
 		w->add_node( '%' );
 		w->add_node( '^' );
 		w->add_node( '&' );
-		tree_t::iterator a = it = it->add_node( 'a' );
+		tree_t::HNode::iterator a = it = it->add_node( 'a' );
 		it->add_node( 'A' );
 		it->add_node( 'B' );
 		it->add_node( 'C' );
 		it = n->add_node( '1' );
 		it->add_node( 'd' );
-		tree_t::iterator e = it->add_node( 'e' );
+		tree_t::HNode::iterator e = it->add_node( 'e' );
 		it->add_node( 'f' );
 		it = n->add_node( '2' );
 		it->add_node( 'g' );
@@ -792,10 +792,44 @@ TUT_UNIT_TEST( 26, "get_parent" ) {
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
 	ENSURE_EQUALS( "root node malformed", &n->get_tree(), &t );
-	tree_t::iterator it( n->add_node( 'a' ) );
+	tree_t::HNode::iterator it( n->add_node( 'a' ) );
 	ENSURE_EQUALS( "child node malformed, failed to get tree", &it->get_tree(), &t );
 	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 27, "get_parent" ) {
+		tree_t t;
+		tree_t::node_t n = t.create_new_root();
+		(**n) = '@';
+		tree_t::HNode::iterator it = n->add_node( '0' );
+		tree_t::HNode::iterator q = it->add_node( 'q' );
+		tree_t::HNode::iterator w = it->add_node( 'w' );
+		q->add_node( '!' );
+		it = q->add_node( '#' );
+		q->add_node( '$' );
+		w->add_node( '%' );
+		w->add_node( '^' );
+		w->add_node( '&' );
+		tree_t::HNode::iterator a = it = it->add_node( 'a' );
+		it->add_node( 'A' );
+		it->add_node( 'B' );
+		it->add_node( 'C' );
+		it = n->add_node( '1' );
+		it->add_node( 'd' );
+		tree_t::HNode::iterator e = it->add_node( 'e' );
+		it->add_node( 'f' );
+		it = n->add_node( '2' );
+		it->add_node( 'g' );
+		it->add_node( 'h' );
+		it->add_node( 'i' );
+		for ( tree_t::const_iterator tit( t.begin() ), end( t.end() ); tit != end; ++ tit )
+			cout << static_cast<char>( tit->id() );
+		cout << endl;
+//		for ( tree_t::const_reverse_iterator tit( t.rbegin() ), end( t.rend() ); tit != end; ++ tit )
+//			cout << static_cast<char>( tit->id() );
+//		cout << endl;
+	}
 TUT_TEARDOWN()
 
 }
