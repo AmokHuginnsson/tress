@@ -68,6 +68,10 @@ TUT_UNIT_TEST( 1, "reverse" )
 	ENSURE_EQUALS( "test init failed (odd)", HString( so ), HString( datao ) );
 	reverse( so, so + LENO );
 	ENSURE_EQUALS( "reverse of even number of elements failed", HString( so ), HString( revdatao ) );
+	HString s1( "!ABCa#$q%^&w0def1ghi2@" );
+	HString s2( "@2ihg1fed0w&^%q$#aCBA!" );
+	reverse( s2.begin(), s2.end() );
+	ENSURE_EQUALS( "reverse on HString failed", s2, s1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "next_permutation, len = 1 (even)" )

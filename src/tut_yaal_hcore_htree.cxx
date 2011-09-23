@@ -823,12 +823,16 @@ TUT_UNIT_TEST( 27, "get_parent" ) {
 		it->add_node( 'g' );
 		it->add_node( 'h' );
 		it->add_node( 'i' );
+		HString forward;
 		for ( tree_t::const_iterator tit( t.begin() ), end( t.end() ); tit != end; ++ tit )
-			cout << static_cast<char>( tit->id() );
-		cout << endl;
-//		for ( tree_t::const_reverse_iterator tit( t.rbegin() ), end( t.rend() ); tit != end; ++ tit )
-//			cout << static_cast<char>( tit->id() );
-//		cout << endl;
+			forward += static_cast<char>( tit->id() );
+		HString backward;
+		for ( tree_t::const_reverse_iterator tit( t.rbegin() ), end( t.rend() ); tit != end; ++ tit )
+			backward += static_cast<char>( tit->id() );
+		cout << forward << endl;
+		cout << backward << endl;
+		reverse( backward.begin(), backward.end() );
+		ENSURE_EQUALS( "forward/backward iteration failed", backward, forward );
 	}
 TUT_TEARDOWN()
 
