@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-  tut_yaal_tools_hanalyser.cxx - this file is integral part of `tress' project.
+  tut_yaal_tools_hexpression.cxx - this file is integral part of `tress' project.
 
 	i.  You may not make any changes in Copyright information.
 	ii. You must attach Copyright information to any part of every copy
@@ -40,10 +40,86 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-TUT_SIMPLE_MOCK( tut_yaal_tools_hanalyser );
-TUT_TEST_GROUP( tut_yaal_tools_hanalyser, "yaal::tools::HExpression" );
+TUT_SIMPLE_MOCK( tut_yaal_tools_hexpression );
+TUT_TEST_GROUP( tut_yaal_tools_hexpression, "yaal::tools::HExpression" );
 
-TUT_UNIT_TEST( 1, "complex and valid expression" )
+TUT_UNIT_TEST( 1, "empty expression variables" )
+	HExpression e;
+	for ( int i( 0 ); i < HExpression::MAX_VARIABLE_COUNT; ++ i )
+		ENSURE_EQUALS( "variables not initialized", e[ i ], 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "copy semantics" )
+	static int const MAGIC = 7;
+	static int const SPOOKY = 13;
+	HExpression e( "1" );
+	double long* v = e.variables();
+	v[ 0 ] = MAGIC;
+	HExpression e2( e );
+	v = e2.variables();
+	e[ 0 ] = SPOOKY;
+	ENSURE_EQUALS( "variables not copied", v[ 0 ], MAGIC );
+	e2 = e;
+	ENSURE_EQUALS( "variables not copied", v[ 0 ], SPOOKY );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 3, "variable index range" )
+	HExpression e;
+	try {
+		e[ -1 ];
+		FAIL( "bad variable index accepted" );
+	} catch ( HExpressionException const& ) {
+		// ok
+	}
+	try {
+		e[ HExpression::MAX_VARIABLE_COUNT ];
+		FAIL( "bad variable index accepted" );
+	} catch ( HExpressionException const& ) {
+		// ok
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "addition" )
+	HExpression e( "2+3" );
+	ENSURE_EQUALS( "addition failed", e.evaluate(), 5l );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 5, "substraction" )
+	HExpression e( "2-3" );
+	ENSURE_EQUALS( "substraction failed", e.evaluate(), -1l );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 6, "multiplication" )
+	HExpression e( "2*3" );
+	ENSURE_EQUALS( "multiplication failed", e.evaluate(), 6l );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 7, "division" )
+	HExpression e( "3/2" );
+	ENSURE_EQUALS( "division failed", e.evaluate(), 1.5l );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 8, "modulo" )
+	HExpression e( "3%2" );
+	ENSURE_EQUALS( "modulo failed", e.evaluate(), 1l );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 9, "power" )
+	HExpression e( "2^3" );
+	ENSURE_EQUALS( "power failed", e.evaluate(), 8l );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 10, "negate" )
+	HExpression e( "-(2)" );
+	ENSURE_EQUALS( "negate failed", e.evaluate(), -2l );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 11, "factorial" )
+	HExpression e( "6!" );
+	ENSURE_EQUALS( "factorial failed", e.evaluate(), 720l );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 47, "complex and valid expression" )
 	HExpression x;
 	HString eq( "(((2+3+5)*4*6*8)/123)^2^3" );
 	x.compile( eq );
@@ -62,7 +138,7 @@ TUT_UNIT_TEST( 1, "complex and valid expression" )
 	cout << eq << "=" << x.evaluate() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "invalid expression" )
+TUT_UNIT_TEST( 48, "invalid expression" )
 	try {
 		HString eq( "7+10+(4*)" );
 		HExpression x;
@@ -71,20 +147,6 @@ TUT_UNIT_TEST( 2, "invalid expression" )
 	} catch ( HExpressionException& ) {
 		// ok
 	}
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 3, "copy semantics" )
-	static int const MAGIC = 7;
-	static int const SPOOKY = 13;
-	HExpression e( "1" );
-	double long* v = e.variables();
-	v[ 0 ] = MAGIC;
-	HExpression e2( e );
-	v = e2.variables();
-	e[ 0 ] = SPOOKY;
-	ENSURE_EQUALS( "variables not copied", v[ 0 ], MAGIC );
-	e2 = e;
-	ENSURE_EQUALS( "variables not copied", v[ 0 ], SPOOKY );
 TUT_TEARDOWN()
 
 }
