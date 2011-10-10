@@ -107,6 +107,8 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 9, "power" )
 	HExpression e( "2^3" );
 	ENSURE_EQUALS( "power failed", e.evaluate(), 8l );
+	HExpression e2( "4^3^2" );
+	ENSURE_EQUALS( "power failed", e2.evaluate(), 262144l );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 10, "negate" )
@@ -117,6 +119,21 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 11, "factorial" )
 	HExpression e( "6!" );
 	ENSURE_EQUALS( "factorial failed", e.evaluate(), 720l );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 12, "parenthesis" )
+	HExpression e( "2*(3+1)" );
+	ENSURE_EQUALS( "parenthesis failed", e.evaluate(), 8l );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 13, "absolute value" )
+	HExpression e( "2*|1-3|" );
+	ENSURE_EQUALS( "absolute value failed", e.evaluate(), 4l );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 14, "order of addition and multiplication" )
+	HExpression e( "2+2*2" );
+	ENSURE_EQUALS( "order of addition and multiplication failed", e.evaluate(), 6l );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 47, "complex and valid expression" )
