@@ -27,18 +27,19 @@ Copyright:
 #include <cstdlib>
 #include <TUT/tut.hpp>
 
-#include <yaal/yaal.hxx>
+#include <yaal/hcore/hnumber.hxx>
+#include <yaal/hcore/hrandomizer.hxx>
+#include <yaal/hcore/hcore.hxx>
+#include <yaal/tools/hpipedchild.hxx>
+#include <yaal/tools/hfsitem.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::hconsole;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
-
 
 namespace tut {
 

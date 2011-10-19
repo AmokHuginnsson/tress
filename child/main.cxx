@@ -28,7 +28,9 @@ Copyright:
 #include <cstdlib>
 #include <csignal>
 
-#include <yaal/yaal.hxx> /* all hAPI headers */
+#include <yaal/hcore/hfile.hxx>
+#include <yaal/hcore/htokenizer.hxx>
+#include <yaal/hcore/hlog.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 
 #include "setup.hxx"
@@ -36,9 +38,6 @@ M_VCSID( "$Id: "__ID__" $" )
 
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::hconsole;
-using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace child;
 
 namespace child {

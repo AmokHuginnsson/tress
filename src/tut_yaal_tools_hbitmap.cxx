@@ -24,20 +24,16 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#include <iterator>
-
 #include <TUT/tut.hpp>
 
-#include <yaal/yaal.hxx>
+#include <yaal/tools/hbitmap.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::hconsole;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
 namespace tut {

@@ -30,7 +30,12 @@ Copyright:
 #include <TUT/tut_reporter.hpp>
 #include <TUT/tut_restartable.hpp>
 
-#include <yaal/yaal.hxx>
+#include <yaal/hcore/hcore.hxx>
+#include <yaal/hcore/hlog.hxx>
+#include <yaal/hcore/htime.hxx>
+#include <yaal/hcore/hformat.hxx>
+#include <yaal/hcore/htokenizer.hxx>
+#include <yaal/tools/util.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 
 #include "setup.hxx"

@@ -26,15 +26,14 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
-#include <yaal/yaal.hxx>
+#include <yaal/tools/util.hxx>
+#include <yaal/tools/hexpression.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
-using namespace std;
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
@@ -59,3 +58,4 @@ TUT_UNIT_TEST( 2, "simple but invalid number" )
 TUT_TEARDOWN()
 
 }
+

@@ -27,14 +27,15 @@ Copyright:
 #include <cstdio>
 #include <TUT/tut.hpp>
 
-#include <yaal/yaal.hxx>
+#include <yaal/hcore/hthread.hxx>
+#include <yaal/hcore/htime.hxx>
+#include <yaal/tools/util.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;

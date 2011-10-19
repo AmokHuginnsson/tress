@@ -27,7 +27,7 @@ Copyright:
 
 #include "tut_yaal_hcore_hdeque.hxx"
 
-#include <yaal/yaal.hxx>
+#include <yaal/hcore/hdeque.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 
 using namespace tut;
@@ -35,7 +35,6 @@ using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace tress;
 using namespace tress::tut_helpers;
 

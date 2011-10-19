@@ -26,8 +26,9 @@ Copyright:
 
 #include <cstring>
 #include <cstdlib>
+#include <iostream>
 
-#include <yaal/yaal.hxx>
+#include <yaal/hcore/macro.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
@@ -35,9 +36,7 @@ M_VCSID( "$Id: "__ID__" $" )
 
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::hconsole;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
 namespace std {

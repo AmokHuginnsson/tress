@@ -24,14 +24,12 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#include <yaal/yaal.hxx>
+#include <yaal/hcore/hhashmultimap.hxx>
 M_VCSID ( "$Id$" )
 
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::hconsole;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
 
 namespace must_not_compile
 {

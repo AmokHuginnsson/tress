@@ -26,7 +26,7 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
-#include <yaal/yaal.hxx>
+#include <yaal/dbwrapper/hdatabase.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
@@ -34,7 +34,6 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace yaal::dbwrapper;
 using namespace tress::tut_helpers;
 

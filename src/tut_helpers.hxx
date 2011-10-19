@@ -37,6 +37,7 @@ Copyright:
 #include <set>
 
 #include <yaal/hcore/hstreaminterface.hxx>
+#include <yaal/hcore/hfile.hxx>
 #include <yaal/hcore/hpair.hxx>
 #include <yaal/hcore/harray.hxx>
 #include <yaal/hcore/hdeque.hxx>
@@ -50,6 +51,7 @@ Copyright:
 #include <yaal/tools/hstringstream.hxx>
 #include <yaal/tools/hring.hxx>
 #include <yaal/tools/htwowaymap.hxx>
+#include <yaal/hconsole/console.hxx>
 
 #if defined( __GNUC__ ) && ! defined( stdext )
 #define stdext __gnu_cxx

@@ -29,7 +29,8 @@ Copyright:
 #include <cstdio>
 #include <libintl.h>
 
-#include <yaal/yaal.hxx>
+#include <yaal/hcore/hprogramoptionshandler.hxx>
+#include <yaal/tools/util.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 
 #include "options.hxx"
