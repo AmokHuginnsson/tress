@@ -42,7 +42,14 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_meta );
 TUT_TEST_GROUP( tut_yaal_meta, "yaal::meta" );
 
-TUT_UNIT_TEST( 1, "max_signed" )
+TUT_UNIT_TEST( 1, "is_signed" )
+	ENSURE_EQUALS( "signedness detection false negative", is_signed<int>::value, true );
+	ENSURE_EQUALS( "signedness detection false positive", is_signed<int unsigned>::value, false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "max_signed" )
+	ENSURE_EQUALS( "bad max signed value", max_signed<char>::value, 127 );
+	ENSURE_EQUALS( "bad max signed value", max_signed<short>::value, 32767 );
 	cout << "char = " << hex << static_cast<int>( max_signed<char>::value ) << endl;
 	cout << "short = " << hex << max_signed<short>::value << endl;
 	cout << "int = " << hex << max_signed<int>::value << endl;
@@ -50,7 +57,7 @@ TUT_UNIT_TEST( 1, "max_signed" )
 	cout << dec;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "xor" )
+TUT_UNIT_TEST( 3, "xor" )
 	ENSURE_NOT( "xor failed", meta::boolean_xor<false, false>::value );
 	ENSURE( "xor failed", meta::boolean_xor<false, true>::value );
 	ENSURE( "xor failed", meta::boolean_xor<true, false>::value );
