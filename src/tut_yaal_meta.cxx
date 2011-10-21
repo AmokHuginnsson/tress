@@ -57,7 +57,24 @@ TUT_UNIT_TEST( 2, "max_signed" )
 	cout << dec;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "xor" )
+TUT_UNIT_TEST( 3, "max" )
+	ENSURE_EQUALS( "bad max", meta::max<4, 5, -1, 9, 0, 2>::value, 9 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "min" )
+	ENSURE_EQUALS( "bad min", meta::min<4, 5, -1, 9, 0, 2>::value, -1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 5, "integer_cast<>" )
+	cout << integer_cast<int, 4>::value << endl;
+	cout << integer_cast<char, 127>::value << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 6, "unsigned_integer_cast<>" )
+	cout << unsigned_integer_cast<int unsigned, static_cast<int unsigned>( 4 )>::value << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 20, "xor" )
 	ENSURE_NOT( "xor failed", meta::boolean_xor<false, false>::value );
 	ENSURE( "xor failed", meta::boolean_xor<false, true>::value );
 	ENSURE( "xor failed", meta::boolean_xor<true, false>::value );
