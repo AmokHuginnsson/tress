@@ -58,7 +58,7 @@ protected:
 	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator ) {
 		return ( first_ );
 	}
-	static HString::const_iterator skip_space( HString::const_iterator& first_, HString::const_iterator last_ ) {
+	static HString::const_iterator skip_space( HString::const_iterator first_, HString::const_iterator last_ ) {
 		while ( ( first_ != last_ ) && isspace( *first_ ) )
 			++ first_;
 		return ( first_ );
@@ -90,10 +90,16 @@ protected:
 	}
 	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator last_ ) {
 		HString::const_iterator orig( first_ );
-		HString::const_iterator old( last_ );
-		for ( rules_t::iterator it( _rules.begin() ), end( _rules.end() ); ( old != first_ ) && ( it != end ); ++ it )
-			first_ = (*it)->parse( old = first_, last_ );
-		return ( first_ == last_ ? first_ : orig );
+		bool matched( true );
+		for ( rules_t::iterator it( _rules.begin() ), end( _rules.end() ); it != end; ++ it ) {
+			HString::const_iterator old( first_ );
+			first_ = (*it)->parse( first_, last_ );
+			if ( first_ == old ) {
+				matched = false;
+				break;
+			}
+		}
+		return ( matched ? first_ : orig );
 	}
 };
 
@@ -172,10 +178,9 @@ public:
 		return ( HReal( action_double_t(), action_double_long_t(), action_number_t(), action_ ) );
 	}
 	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator last_ ) {
-		first_ = skip_space( first_, last_ );
+		HString::const_iterator scan( skip_space( first_, last_ ) );
 		_cache.clear();
 		real_paring_state_t state( START );
-		HString::const_iterator scan( first_ );
 		while ( scan != last_ ) {
 			bool stop( false );
 			char ch( *scan );
