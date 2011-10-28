@@ -43,27 +43,56 @@ class HRule {
 public:
 	typedef HRule this_type;
 	typedef yaal::hcore::HPointer<HRule> ptr_t;
+protected:
+	ptr_t _rule;
+	int long _charactersLeft;
+public:
+	HRule( void )
+		: _rule(), _charactersLeft( 0 )
+		{}
+	HRule( HRule const& rule_ )
+		: _rule( rule_.clone() ),
+		_charactersLeft( rule_._charactersLeft )
+		{}
 	virtual ~HRule( void )
 		{}
 	bool operator()( HString const& input_ )
 		{ return ( do_parse( input_.begin(), input_.end() ) != input_.end() ); }
 	bool operator()( HString::const_iterator first_, HString::const_iterator last_ )
 		{ return ( do_parse( first_, last_ ) != last_ ); }
+	void operator()( void )
+		{ do_execute(); }
+	void execute( void )
+		{ do_execute(); }
+	int long characters_left( void ) const
+		{ return ( _charactersLeft ); }
 	HString::const_iterator parse( HString::const_iterator first_, HString::const_iterator last_ )
 		{ return ( do_parse( first_, last_ ) ); }
 	ptr_t clone( void ) const {
 		return ( do_clone() );
 	}
 protected:
-	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator ) {
+	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator last_ ) {
+		if ( !! _rule ) {
+			HString::const_iterator old( first_ );
+			first_ = _rule->parse( first_, last_ );
+			if ( first_ == old )
+				_charactersLeft = _rule->characters_left();
+		}
 		return ( first_ );
+	}
+	virtual void do_execute( void ) {
+		if ( !! _rule )
+			_rule->execute();
+	}
+	virtual ptr_t do_clone( void ) const {
+		return ( !! _rule ? _rule->clone() : ptr_t() );
 	}
 	static HString::const_iterator skip_space( HString::const_iterator first_, HString::const_iterator last_ ) {
 		while ( ( first_ != last_ ) && isspace( *first_ ) )
 			++ first_;
 		return ( first_ );
 	}
-	virtual ptr_t do_clone( void ) const = 0;
 };
 
 class HFollows : public HRule {
@@ -73,12 +102,12 @@ public:
 	typedef HFollows this_type;
 	typedef HRule base_type;
 	HFollows( HRule const& predecessor_, HRule const& successor_ )
-		: _rules() {
+		: HRule(), _rules() {
 		_rules.push_back( predecessor_.clone() );
 		_rules.push_back( successor_.clone() );
 	}
 	HFollows( HFollows const& follows_ )
-		: _rules() {
+		: HRule(), _rules() {
 		for ( rules_t::const_iterator it( follows_._rules.begin() ), end( follows_._rules.end() ); it != end; ++ it )
 			_rules.push_back( (*it)->clone() );
 	}
@@ -95,24 +124,30 @@ protected:
 			HString::const_iterator old( first_ );
 			first_ = (*it)->parse( first_, last_ );
 			if ( first_ == old ) {
+				_charactersLeft = (*it)->characters_left();
 				matched = false;
 				break;
 			}
 		}
 		return ( matched ? first_ : orig );
 	}
+	void do_execute( void ) {
+		for ( rules_t::iterator it( _rules.begin() ), end( _rules.end() ); it != end; ++ it )
+			(*it)->execute();
+		return;
+	}
 };
 
 class HKleeneStar : public HRule {
-	HRule::ptr_t _rule;
+	int long _matchCount;
 public:
 	typedef HKleeneStar this_type;
 	typedef HRule base_type;
 	HKleeneStar( HRule const& rule_ )
-		: _rule( rule_.clone() )
+		: HRule( rule_ ), _matchCount( 0 )
 		{}
 	HKleeneStar( HKleeneStar const& kleeneStar_ )
-		: _rule( kleeneStar_._rule->clone() )
+		: HRule( *kleeneStar_._rule ), _matchCount( kleeneStar_._matchCount )
 		{}
 	virtual ~HKleeneStar( void )
 		{}
@@ -121,10 +156,49 @@ protected:
 		return ( ptr_t( new HKleeneStar( *this ) ) );
 	}
 	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator last_ ) {
-		for ( HString::const_iterator old( last_ ); ( first_ != old ) && ( first_ != last_ ); ) {
-			first_ = _rule->parse( old = first_, last_ );
+		while ( first_ != last_ ) {
+			HString::const_iterator old( first_ );
+			first_ = HRule::do_parse( old = first_, last_ );
+			if ( first_ != old )
+				++ _matchCount;
+			else
+				break;
 		}
 		return ( first_ );
+	}
+	void do_execute( void ) {
+	}
+};
+
+class HKleenePlus : public HRule {
+	int long _matchCount;
+public:
+	typedef HKleenePlus this_type;
+	typedef HRule base_type;
+	HKleenePlus( HRule const& rule_ )
+		: HRule( rule_ ), _matchCount( 0 )
+		{}
+	HKleenePlus( HKleenePlus const& kleeneStar_ )
+		: HRule( *kleeneStar_._rule ), _matchCount( kleeneStar_._matchCount )
+		{}
+	virtual ~HKleenePlus( void )
+		{}
+protected:
+	ptr_t do_clone( void ) const {
+		return ( ptr_t( new HKleenePlus( *this ) ) );
+	}
+	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator last_ ) {
+		while ( first_ != last_ ) {
+			HString::const_iterator old( first_ );
+			first_ = HRule::do_parse( old = first_, last_ );
+			if ( first_ != old )
+				++ _matchCount;
+			else
+				break;
+		}
+		return ( first_ );
+	}
+	void do_execute( void ) {
 	}
 };
 
@@ -134,6 +208,10 @@ HFollows operator >> ( HRule const& predecessor_, HRule const& successor_ ) {
 
 HKleeneStar operator* ( HRule const& rule_ ) {
 	return ( HKleeneStar( rule_ ) );
+}
+
+HKleenePlus operator+ ( HRule const& rule_ ) {
+	return ( HKleenePlus( rule_ ) );
 }
 
 class HReal : public HRule {
@@ -157,14 +235,17 @@ public:
 	typedef HReal this_type;
 	typedef HRule base_type;
 	HReal( void )
-		: _actionDouble(), _actionDoubleLong(),
+		: HRule(), _actionDouble(), _actionDoubleLong(),
 		_actionNumber(), _actionString(), _cache()
 		{}
 	HReal( action_double_t actionDouble_, action_double_long_t actionDoubleLong_,
 			action_number_t actionNumber_, action_string_t actionString_ )
-		: _actionDouble( actionDouble_ ), _actionDoubleLong( actionDoubleLong_ ),
+		: HRule(), _actionDouble( actionDouble_ ), _actionDoubleLong( actionDoubleLong_ ),
 		_actionNumber( actionNumber_ ), _actionString( actionString_ ), _cache()
 		{}
+	HReal( HReal const& real_ )
+		: HRule(), _actionDouble( real_._actionDouble ), _actionDoubleLong( real_._actionDoubleLong ),
+		_actionNumber( real_._actionNumber ), _actionString( real_._actionString ), _cache( real_._cache ) {}
 	HReal operator[]( action_double_t const& action_ ) {
 		return ( HReal( action_, action_double_long_t(), action_number_t(), action_string_t() ) );
 	}
@@ -215,8 +296,10 @@ public:
 					M_ASSERT( ! "invalid hardcoded state" );
 				}
 			}
-			if ( stop )
+			if ( stop ) {
+				_charactersLeft = last_ - scan;
 				break;
+			}
 			_cache.push_back( *scan );
 			++ scan;
 		}
@@ -242,6 +325,104 @@ protected:
 	}
 } real;
 
+class HInteger : public HRule {
+	typedef HBoundCall<void ( int long const& )> action_int_long_t;
+	typedef HBoundCall<void ( int const& )> action_int_t;
+	typedef HBoundCall<void ( HNumber const& )> action_number_t;
+	typedef HBoundCall<void ( HString const& )> action_string_t;
+	action_int_long_t _actionIntLong;
+	action_int_t _actionInt;
+	action_number_t _actionNumber;
+	action_string_t _actionString;
+	HString _cache;
+	typedef enum {
+		START = 0,
+		MINUS = 1,
+		DIGIT = 2
+	} real_paring_state_t;
+public:
+	typedef HInteger this_type;
+	typedef HRule base_type;
+	HInteger( void )
+		: HRule(), _actionIntLong(), _actionInt(),
+		_actionNumber(), _actionString(), _cache()
+		{}
+	HInteger( action_int_long_t actionDouble_, action_int_t actionDoubleLong_,
+			action_number_t actionNumber_, action_string_t actionString_ )
+		: HRule(), _actionIntLong( actionDouble_ ), _actionInt( actionDoubleLong_ ),
+		_actionNumber( actionNumber_ ), _actionString( actionString_ ), _cache()
+		{}
+	HInteger( HInteger const& real_ )
+		: HRule(), _actionIntLong( real_._actionIntLong ), _actionInt( real_._actionInt ),
+		_actionNumber( real_._actionNumber ), _actionString( real_._actionString ), _cache( real_._cache ) {}
+	HInteger operator[]( action_int_long_t const& action_ ) {
+		return ( HInteger( action_, action_int_t(), action_number_t(), action_string_t() ) );
+	}
+	HInteger operator[]( action_int_t const& action_ ) {
+		return ( HInteger( action_int_long_t(), action_, action_number_t(), action_string_t() ) );
+	}
+	HInteger operator[]( action_number_t const& action_ ) {
+		return ( HInteger( action_int_long_t(), action_int_t(), action_, action_string_t() ) );
+	}
+	HInteger operator[]( action_string_t const& action_ ) {
+		return ( HInteger( action_int_long_t(), action_int_t(), action_number_t(), action_ ) );
+	}
+	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator last_ ) {
+		HString::const_iterator scan( skip_space( first_, last_ ) );
+		_cache.clear();
+		real_paring_state_t state( START );
+		while ( scan != last_ ) {
+			bool stop( false );
+			char ch( *scan );
+			switch ( state ) {
+				case ( START ): {
+					if ( isdigit( ch ) )
+						state = DIGIT;
+					else if ( ch == '-' )
+						state = MINUS;
+					else
+						stop = true;
+				} break;
+				case ( MINUS ):
+				case ( DIGIT ): {
+					if ( isdigit( ch ) )
+						state = DIGIT;
+					else
+						stop = true;
+				} break;
+				default: {
+					M_ASSERT( ! "invalid hardcoded state" );
+				}
+			}
+			if ( stop ) {
+				_charactersLeft = last_ - scan;
+				break;
+			}
+			_cache.push_back( *scan );
+			++ scan;
+		}
+		if ( state >= DIGIT ) {
+			first_ = scan;
+			if ( !! _actionIntLong ) {
+				int long il( lexical_cast<int long>( _cache ) );
+				_actionIntLong( il );
+			} else if ( !! _actionInt ) {
+				int i( lexical_cast<int>( _cache ) );
+				_actionInt( i );
+			} else if ( !! _actionNumber ) {
+				_actionNumber( _cache );
+			} else if ( !! _actionString ) {
+				_actionString( _cache );
+			}
+		}
+		return ( first_ );
+	}
+protected:
+	ptr_t do_clone( void ) const {
+		return ( ptr_t( new HInteger( *this ) ) );
+	}
+} integer;
+
 class HCharacter : public HRule {
 	typedef HBoundCall<void ( char const& )> action_t;
 	char _character;
@@ -250,10 +431,13 @@ public:
 	typedef HCharacter this_type;
 	typedef HRule base_type;
 	HCharacter( char character_ = 0 )
-		: _character( character_ ), _action() {}
-	HCharacter( char character_, action_t action_ )
-		: _character( character_ ), _action( action_ )
+		: HRule(), _character( character_ ), _action()
 		{}
+	HCharacter( char character_, action_t action_ )
+		: HRule(), _character( character_ ), _action( action_ )
+		{}
+	HCharacter( HCharacter const& character_ )
+		: HRule(), _character( character_._character ), _action( character_._action ) {}
 	virtual ~HCharacter( void )
 		{}
 	HCharacter operator[]( action_t const& action_ ) {
@@ -263,13 +447,18 @@ public:
 		return ( HCharacter( character_, _action ) );
 	}
 	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator last_ ) {
-		first_ = skip_space( first_, last_ );
 		M_ENSURE( first_ != last_ );
-		char c( *first_ );
-		M_ENSURE( ! _character || ( c == _character ) );
-		if ( !! _action )
-			_action( c );
-		++ first_;
+		HString::const_iterator scan( skip_space( first_, last_ ) );
+		char c( *scan );
+		if ( _character ) {
+			if ( ! _character || ( c == _character ) ) {
+				if ( !! _action )
+					_action( c );
+				++ scan;
+				first_ = scan;
+			} else
+				_charactersLeft = last_ - scan; 
+		}
 		return ( first_ );
 	}
 protected:
@@ -296,7 +485,6 @@ HBoundCall<void ( typename container_t::value_type const& )> push_back( containe
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
@@ -312,7 +500,8 @@ TUT_UNIT_TEST( 1, "the test" )
 	HArray<double> v;
 	if ( real[push_back(v)]( "3.141592653589793" ) )
 		cout << "1: failed to consume input" << endl;
-	if ( ( real[push_back(v)] >> *( ',' >> real[push_back(v)] ) )( "3.141592653589793, -2.718281828459045, 17, kupa" ) )
+	HRule r( real[push_back(v)] >> *( ',' >> real[push_back(v)] ) );
+	if ( r( "3.141592653589793, -2.718281828459045, 17, kupa" ) )
 		cout << "2: failed to consume input" << endl;
 	copy( v.begin(), v.end(), stream_iterator( cout, endl ) );
 TUT_TEARDOWN()
