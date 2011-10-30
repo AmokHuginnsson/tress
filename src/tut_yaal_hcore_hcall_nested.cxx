@@ -1,0 +1,269 @@
+/*
+---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
+
+	tut_yaal_hcore_hcall_nested.cxx - this file is integral part of `tress' project.
+
+	i.  You may not make any changes in Copyright information.
+	ii. You must attach Copyright information to any part of every copy
+	    of this software.
+
+Copyright:
+
+ You are free to use this program as is, you can redistribute binary
+ package freely but:
+  1. You cannot use any part of sources of this software.
+  2. You cannot redistribute any part of sources of this software.
+  3. No reverse engineering is allowed.
+  4. If you want redistribute binary package you cannot demand any fees
+     for this software.
+     You cannot even demand cost of the carrier (CD for example).
+  5. You cannot include it to any commercial enterprise (for example 
+     as a free add-on to payed software or payed newspaper).
+ This program is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
+*/
+
+#include <TUT/tut.hpp>
+
+#include <yaal/hcore/hcall.hxx>
+M_VCSID( "$Id: "__ID__" $" )
+#include "tut_helpers.hxx"
+#include "tut_yaal_hcore_hcall.hxx"
+
+using namespace tut;
+using namespace yaal;
+using namespace yaal::hcore;
+using namespace yaal::tools;
+using namespace tress::tut_helpers;
+
+namespace tut {
+
+TUT_SIMPLE_MOCK( tut_yaal_hcore_hcall_nested );
+TUT_TEST_GROUP( tut_yaal_hcore_hcall_nested, "yaal::hcore::HCall,nested" );
+
+TUT_UNIT_TEST( 1, "nested call (x, y) -> (y) -> ()" )
+	typedef typename call_calculator<HString (*)( int, int ), higher_order::placeholder<1>, int>::type::type func1_t;
+	func1_t f( call( &foo2, _1, 2 ) );
+	cout << f( 1 ) << endl;
+	cout << call( f, 1 )() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "nested call ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+	typedef typename call_calculator<HString (*)( int, int, int ), higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
+	typedef typename call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+	func2_t f2( call( &foo3, _1, _2, 3 ) );
+	func1_t f1( call( f2, _1, 2 ) );
+	cout << f2( 1, 2 ) << endl;
+	cout << f1( 1 ) << endl;
+	cout << call( f1, 1 )() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 3, "nested call ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+	typedef typename call_calculator<HString (*)( int, int, int, int ), higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
+	typedef typename call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
+	typedef typename call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+	func3_t f3( call( &foo4, _1, _2, _3, 4 ) );
+	func2_t f2( call( f3, _1, _2, 3 ) );
+	func1_t f1( call( f2, _1, 2 ) );
+	cout << f3( 1, 2, 3 ) << endl;
+	cout << f2( 1, 2 ) << endl;
+	cout << f1( 1 ) << endl;
+	cout << call( f1, 1 )() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "nested call ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+	typedef typename call_calculator<HString (*)( int, int, int, int, int ), higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, higher_order::placeholder<4>, int>::type::type func4_t;
+	typedef typename call_calculator<func4_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
+	typedef typename call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
+	typedef typename call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+	func4_t f4( call( &foo5, _1, _2, _3, _4, 5 ) );
+	func3_t f3( call( f4, _1, _2, _3, 4 ) );
+	func2_t f2( call( f3, _1, _2, 3 ) );
+	func1_t f1( call( f2, _1, 2 ) );
+	cout << f4( 1, 2, 3, 4 ) << endl;
+	cout << f3( 1, 2, 3 ) << endl;
+	cout << f2( 1, 2 ) << endl;
+	cout << f1( 1 ) << endl;
+	cout << call( f1, 1 )() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 5, "nested call ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+	typedef typename call_calculator<HString (*)( int, int, int, int, int, int ),
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, int>::type::type func5_t;
+	typedef typename call_calculator<func5_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, higher_order::placeholder<4>, int>::type::type func4_t;
+	typedef typename call_calculator<func4_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
+	typedef typename call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
+	typedef typename call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+	func5_t f5( call( &foo6, _1, _2, _3, _4, _5, 6 ) );
+	func4_t f4( call( f5, _1, _2, _3, _4, 5 ) );
+	func3_t f3( call( f4, _1, _2, _3, 4 ) );
+	func2_t f2( call( f3, _1, _2, 3 ) );
+	func1_t f1( call( f2, _1, 2 ) );
+	cout << f5( 1, 2, 3, 4, 5 ) << endl;
+	cout << f4( 1, 2, 3, 4 ) << endl;
+	cout << f3( 1, 2, 3 ) << endl;
+	cout << f2( 1, 2 ) << endl;
+	cout << f1( 1 ) << endl;
+	cout << call( f1, 1 )() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 6, "nested call ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+	typedef typename call_calculator<HString (*)( int, int, int, int, int, int, int ),
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, higher_order::placeholder<6>, int>::type::type func6_t;
+	typedef typename call_calculator<func6_t,
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, int>::type::type func5_t;
+	typedef typename call_calculator<func5_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, higher_order::placeholder<4>, int>::type::type func4_t;
+	typedef typename call_calculator<func4_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
+	typedef typename call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
+	typedef typename call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+	func6_t f6( call( &foo7, _1, _2, _3, _4, _5, _6, 7 ) );
+	func5_t f5( call( f6, _1, _2, _3, _4, _5, 6 ) );
+	func4_t f4( call( f5, _1, _2, _3, _4, 5 ) );
+	func3_t f3( call( f4, _1, _2, _3, 4 ) );
+	func2_t f2( call( f3, _1, _2, 3 ) );
+	func1_t f1( call( f2, _1, 2 ) );
+	cout << f6( 1, 2, 3, 4, 5, 6 ) << endl;
+	cout << f5( 1, 2, 3, 4, 5 ) << endl;
+	cout << f4( 1, 2, 3, 4 ) << endl;
+	cout << f3( 1, 2, 3 ) << endl;
+	cout << f2( 1, 2 ) << endl;
+	cout << f1( 1 ) << endl;
+	cout << call( f1, 1 )() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 7, "nested call ( 8 args ) -> ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+	typedef typename call_calculator<HString (*)( int, int, int, int, int, int, int, int ),
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, higher_order::placeholder<6>,
+					higher_order::placeholder<7>, int>::type::type func7_t;
+	typedef typename call_calculator<func7_t,
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, higher_order::placeholder<6>, int>::type::type func6_t;
+	typedef typename call_calculator<func6_t,
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, int>::type::type func5_t;
+	typedef typename call_calculator<func5_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, higher_order::placeholder<4>, int>::type::type func4_t;
+	typedef typename call_calculator<func4_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
+	typedef typename call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
+	typedef typename call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+	func7_t f7( call( &foo8, _1, _2, _3, _4, _5, _6, _7, 8 ) );
+	func6_t f6( call( f7, _1, _2, _3, _4, _5, _6, 7 ) );
+	func5_t f5( call( f6, _1, _2, _3, _4, _5, 6 ) );
+	func4_t f4( call( f5, _1, _2, _3, _4, 5 ) );
+	func3_t f3( call( f4, _1, _2, _3, 4 ) );
+	func2_t f2( call( f3, _1, _2, 3 ) );
+	func1_t f1( call( f2, _1, 2 ) );
+	cout << f7( 1, 2, 3, 4, 5, 6, 7 ) << endl;
+	cout << f6( 1, 2, 3, 4, 5, 6 ) << endl;
+	cout << f5( 1, 2, 3, 4, 5 ) << endl;
+	cout << f4( 1, 2, 3, 4 ) << endl;
+	cout << f3( 1, 2, 3 ) << endl;
+	cout << f2( 1, 2 ) << endl;
+	cout << f1( 1 ) << endl;
+	cout << call( f1, 1 )() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 8, "nested call ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+	typedef typename call_calculator<HString (*)( int, int, int, int, int, int, int, int, int ),
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, higher_order::placeholder<6>,
+					higher_order::placeholder<7>, higher_order::placeholder<8>, int>::type::type func8_t;
+	typedef typename call_calculator<func8_t,
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, higher_order::placeholder<6>,
+					higher_order::placeholder<7>, int>::type::type func7_t;
+	typedef typename call_calculator<func7_t,
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, higher_order::placeholder<6>, int>::type::type func6_t;
+	typedef typename call_calculator<func6_t,
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, int>::type::type func5_t;
+	typedef typename call_calculator<func5_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, higher_order::placeholder<4>, int>::type::type func4_t;
+	typedef typename call_calculator<func4_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
+	typedef typename call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
+	typedef typename call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+	func8_t f8( call( &foo9, _1, _2, _3, _4, _5, _6, _7, _8, 9 ) );
+	func7_t f7( call( f8, _1, _2, _3, _4, _5, _6, _7, 8 ) );
+	func6_t f6( call( f7, _1, _2, _3, _4, _5, _6, 7 ) );
+	func5_t f5( call( f6, _1, _2, _3, _4, _5, 6 ) );
+	func4_t f4( call( f5, _1, _2, _3, _4, 5 ) );
+	func3_t f3( call( f4, _1, _2, _3, 4 ) );
+	func2_t f2( call( f3, _1, _2, 3 ) );
+	func1_t f1( call( f2, _1, 2 ) );
+	cout << f8( 1, 2, 3, 4, 5, 6, 7, 8 ) << endl;
+	cout << f7( 1, 2, 3, 4, 5, 6, 7 ) << endl;
+	cout << f6( 1, 2, 3, 4, 5, 6 ) << endl;
+	cout << f5( 1, 2, 3, 4, 5 ) << endl;
+	cout << f4( 1, 2, 3, 4 ) << endl;
+	cout << f3( 1, 2, 3 ) << endl;
+	cout << f2( 1, 2 ) << endl;
+	cout << f1( 1 ) << endl;
+	cout << call( f1, 1 )() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 9, "nested call ( 10 args ) -> ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( 5 args ) -> ( 4 args ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+	typedef typename call_calculator<HString (*)( int, int, int, int, int, int, int, int, int, int ),
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, higher_order::placeholder<6>,
+					higher_order::placeholder<7>, higher_order::placeholder<8>,
+					higher_order::placeholder<9>, int>::type::type func9_t;
+	typedef typename call_calculator<func9_t,
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, higher_order::placeholder<6>,
+					higher_order::placeholder<7>, higher_order::placeholder<8>, int>::type::type func8_t;
+	typedef typename call_calculator<func8_t,
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, higher_order::placeholder<6>,
+					higher_order::placeholder<7>, int>::type::type func7_t;
+	typedef typename call_calculator<func7_t,
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, higher_order::placeholder<6>, int>::type::type func6_t;
+	typedef typename call_calculator<func6_t,
+					higher_order::placeholder<1>, higher_order::placeholder<2>,
+					higher_order::placeholder<3>, higher_order::placeholder<4>,
+					higher_order::placeholder<5>, int>::type::type func5_t;
+	typedef typename call_calculator<func5_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, higher_order::placeholder<4>, int>::type::type func4_t;
+	typedef typename call_calculator<func4_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
+	typedef typename call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
+	typedef typename call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+	func9_t f9( call( &foo10, _1, _2, _3, _4, _5, _6, _7, _8, _9, 10 ) );
+	func8_t f8( call( f9, _1, _2, _3, _4, _5, _6, _7, _8, 9 ) );
+	func7_t f7( call( f8, _1, _2, _3, _4, _5, _6, _7, 8 ) );
+	func6_t f6( call( f7, _1, _2, _3, _4, _5, _6, 7 ) );
+	func5_t f5( call( f6, _1, _2, _3, _4, _5, 6 ) );
+	func4_t f4( call( f5, _1, _2, _3, _4, 5 ) );
+	func3_t f3( call( f4, _1, _2, _3, 4 ) );
+	func2_t f2( call( f3, _1, _2, 3 ) );
+	func1_t f1( call( f2, _1, 2 ) );
+	cout << f9( 1, 2, 3, 4, 5, 6, 7, 8, 9 ) << endl;
+	cout << f8( 1, 2, 3, 4, 5, 6, 7, 8 ) << endl;
+	cout << f7( 1, 2, 3, 4, 5, 6, 7 ) << endl;
+	cout << f6( 1, 2, 3, 4, 5, 6 ) << endl;
+	cout << f5( 1, 2, 3, 4, 5 ) << endl;
+	cout << f4( 1, 2, 3, 4 ) << endl;
+	cout << f3( 1, 2, 3 ) << endl;
+	cout << f2( 1, 2 ) << endl;
+	cout << f1( 1 ) << endl;
+	cout << call( f1, 1 )() << endl;
+TUT_TEARDOWN()
+
+}
+
