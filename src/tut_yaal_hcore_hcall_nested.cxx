@@ -42,11 +42,16 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hcall_nested );
 TUT_TEST_GROUP( tut_yaal_hcore_hcall_nested, "yaal::hcore::HCall,nested" );
 
+namespace {
+	char const err[] = "function bind failed";
+}
+
 TUT_UNIT_TEST( 1, "nested call (x, y) -> (y) -> ()" )
 	typedef typename call_calculator<HString (*)( int, int ), higher_order::placeholder<1>, int>::type::type func1_t;
 	func1_t f( call( &foo2, _1, 2 ) );
-	cout << f( 1 ) << endl;
-	cout << call( f, 1 )() << endl;
+	char const expected[] = "foo2: a1 = 1, a2 = 2";
+	ENSURE_EQUALS( err, f( 1 ), expected );
+	ENSURE_EQUALS( err, call( f, 1 )(), expected );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "nested call ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
@@ -54,9 +59,10 @@ TUT_UNIT_TEST( 2, "nested call ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef typename call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
 	func2_t f2( call( &foo3, _1, _2, 3 ) );
 	func1_t f1( call( f2, _1, 2 ) );
-	cout << f2( 1, 2 ) << endl;
-	cout << f1( 1 ) << endl;
-	cout << call( f1, 1 )() << endl;
+	char const expected[] = "foo3: a1 = 1, a2 = 2, a3 = 3";
+	ENSURE_EQUALS( err, f2( 1, 2 ), expected );
+	ENSURE_EQUALS( err, f1( 1 ), expected );
+	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "nested call ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
@@ -66,10 +72,11 @@ TUT_UNIT_TEST( 3, "nested call ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z 
 	func3_t f3( call( &foo4, _1, _2, _3, 4 ) );
 	func2_t f2( call( f3, _1, _2, 3 ) );
 	func1_t f1( call( f2, _1, 2 ) );
-	cout << f3( 1, 2, 3 ) << endl;
-	cout << f2( 1, 2 ) << endl;
-	cout << f1( 1 ) << endl;
-	cout << call( f1, 1 )() << endl;
+	char const expected[] = "foo4: a1 = 1, a2 = 2, a3 = 3, a4 = 4";
+	ENSURE_EQUALS( err, f3( 1, 2, 3 ), expected );
+	ENSURE_EQUALS( err, f2( 1, 2 ), expected );
+	ENSURE_EQUALS( err, f1( 1 ), expected );
+	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "nested call ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
@@ -81,11 +88,12 @@ TUT_UNIT_TEST( 4, "nested call ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z 
 	func3_t f3( call( f4, _1, _2, _3, 4 ) );
 	func2_t f2( call( f3, _1, _2, 3 ) );
 	func1_t f1( call( f2, _1, 2 ) );
-	cout << f4( 1, 2, 3, 4 ) << endl;
-	cout << f3( 1, 2, 3 ) << endl;
-	cout << f2( 1, 2 ) << endl;
-	cout << f1( 1 ) << endl;
-	cout << call( f1, 1 )() << endl;
+	char const expected[] = "foo5: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5";
+	ENSURE_EQUALS( err, f4( 1, 2, 3, 4 ), expected );
+	ENSURE_EQUALS( err, f3( 1, 2, 3 ), expected );
+	ENSURE_EQUALS( err, f2( 1, 2 ), expected );
+	ENSURE_EQUALS( err, f1( 1 ), expected );
+	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "nested call ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
@@ -102,12 +110,13 @@ TUT_UNIT_TEST( 5, "nested call ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w,
 	func3_t f3( call( f4, _1, _2, _3, 4 ) );
 	func2_t f2( call( f3, _1, _2, 3 ) );
 	func1_t f1( call( f2, _1, 2 ) );
-	cout << f5( 1, 2, 3, 4, 5 ) << endl;
-	cout << f4( 1, 2, 3, 4 ) << endl;
-	cout << f3( 1, 2, 3 ) << endl;
-	cout << f2( 1, 2 ) << endl;
-	cout << f1( 1 ) << endl;
-	cout << call( f1, 1 )() << endl;
+	char const expected[] = "foo6: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6";
+	ENSURE_EQUALS( err, f5( 1, 2, 3, 4, 5 ), expected );
+	ENSURE_EQUALS( err, f4( 1, 2, 3, 4 ), expected );
+	ENSURE_EQUALS( err, f3( 1, 2, 3 ), expected );
+	ENSURE_EQUALS( err, f2( 1, 2 ), expected );
+	ENSURE_EQUALS( err, f1( 1 ), expected );
+	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "nested call ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
@@ -129,13 +138,14 @@ TUT_UNIT_TEST( 6, "nested call ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -
 	func3_t f3( call( f4, _1, _2, _3, 4 ) );
 	func2_t f2( call( f3, _1, _2, 3 ) );
 	func1_t f1( call( f2, _1, 2 ) );
-	cout << f6( 1, 2, 3, 4, 5, 6 ) << endl;
-	cout << f5( 1, 2, 3, 4, 5 ) << endl;
-	cout << f4( 1, 2, 3, 4 ) << endl;
-	cout << f3( 1, 2, 3 ) << endl;
-	cout << f2( 1, 2 ) << endl;
-	cout << f1( 1 ) << endl;
-	cout << call( f1, 1 )() << endl;
+	char const expected[] = "foo7: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7";
+	ENSURE_EQUALS( err, f6( 1, 2, 3, 4, 5, 6 ), expected );
+	ENSURE_EQUALS( err, f5( 1, 2, 3, 4, 5 ), expected );
+	ENSURE_EQUALS( err, f4( 1, 2, 3, 4 ), expected );
+	ENSURE_EQUALS( err, f3( 1, 2, 3 ), expected );
+	ENSURE_EQUALS( err, f2( 1, 2 ), expected );
+	ENSURE_EQUALS( err, f1( 1 ), expected );
+	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 7, "nested call ( 8 args ) -> ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
@@ -163,14 +173,15 @@ TUT_UNIT_TEST( 7, "nested call ( 8 args ) -> ( t, u, v, w, x, y, z ) -> ( u, v, 
 	func3_t f3( call( f4, _1, _2, _3, 4 ) );
 	func2_t f2( call( f3, _1, _2, 3 ) );
 	func1_t f1( call( f2, _1, 2 ) );
-	cout << f7( 1, 2, 3, 4, 5, 6, 7 ) << endl;
-	cout << f6( 1, 2, 3, 4, 5, 6 ) << endl;
-	cout << f5( 1, 2, 3, 4, 5 ) << endl;
-	cout << f4( 1, 2, 3, 4 ) << endl;
-	cout << f3( 1, 2, 3 ) << endl;
-	cout << f2( 1, 2 ) << endl;
-	cout << f1( 1 ) << endl;
-	cout << call( f1, 1 )() << endl;
+	char const expected[] = "foo8: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8";
+	ENSURE_EQUALS( err, f7( 1, 2, 3, 4, 5, 6, 7 ), expected );
+	ENSURE_EQUALS( err, f6( 1, 2, 3, 4, 5, 6 ), expected );
+	ENSURE_EQUALS( err, f5( 1, 2, 3, 4, 5 ), expected );
+	ENSURE_EQUALS( err, f4( 1, 2, 3, 4 ), expected );
+	ENSURE_EQUALS( err, f3( 1, 2, 3 ), expected );
+	ENSURE_EQUALS( err, f2( 1, 2 ), expected );
+	ENSURE_EQUALS( err, f1( 1 ), expected );
+	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "nested call ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
@@ -204,15 +215,16 @@ TUT_UNIT_TEST( 8, "nested call ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 arg
 	func3_t f3( call( f4, _1, _2, _3, 4 ) );
 	func2_t f2( call( f3, _1, _2, 3 ) );
 	func1_t f1( call( f2, _1, 2 ) );
-	cout << f8( 1, 2, 3, 4, 5, 6, 7, 8 ) << endl;
-	cout << f7( 1, 2, 3, 4, 5, 6, 7 ) << endl;
-	cout << f6( 1, 2, 3, 4, 5, 6 ) << endl;
-	cout << f5( 1, 2, 3, 4, 5 ) << endl;
-	cout << f4( 1, 2, 3, 4 ) << endl;
-	cout << f3( 1, 2, 3 ) << endl;
-	cout << f2( 1, 2 ) << endl;
-	cout << f1( 1 ) << endl;
-	cout << call( f1, 1 )() << endl;
+	char const expected[] = "foo9: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8, a9 = 9";
+	ENSURE_EQUALS( err, f8( 1, 2, 3, 4, 5, 6, 7, 8 ), expected );
+	ENSURE_EQUALS( err, f7( 1, 2, 3, 4, 5, 6, 7 ), expected );
+	ENSURE_EQUALS( err, f6( 1, 2, 3, 4, 5, 6 ), expected );
+	ENSURE_EQUALS( err, f5( 1, 2, 3, 4, 5 ), expected );
+	ENSURE_EQUALS( err, f4( 1, 2, 3, 4 ), expected );
+	ENSURE_EQUALS( err, f3( 1, 2, 3 ), expected );
+	ENSURE_EQUALS( err, f2( 1, 2 ), expected );
+	ENSURE_EQUALS( err, f1( 1 ), expected );
+	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 9, "nested call ( 10 args ) -> ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( 5 args ) -> ( 4 args ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
@@ -253,16 +265,17 @@ TUT_UNIT_TEST( 9, "nested call ( 10 args ) -> ( 9 args ) -> ( 8 args ) -> ( 7 ar
 	func3_t f3( call( f4, _1, _2, _3, 4 ) );
 	func2_t f2( call( f3, _1, _2, 3 ) );
 	func1_t f1( call( f2, _1, 2 ) );
-	cout << f9( 1, 2, 3, 4, 5, 6, 7, 8, 9 ) << endl;
-	cout << f8( 1, 2, 3, 4, 5, 6, 7, 8 ) << endl;
-	cout << f7( 1, 2, 3, 4, 5, 6, 7 ) << endl;
-	cout << f6( 1, 2, 3, 4, 5, 6 ) << endl;
-	cout << f5( 1, 2, 3, 4, 5 ) << endl;
-	cout << f4( 1, 2, 3, 4 ) << endl;
-	cout << f3( 1, 2, 3 ) << endl;
-	cout << f2( 1, 2 ) << endl;
-	cout << f1( 1 ) << endl;
-	cout << call( f1, 1 )() << endl;
+	char const expected[] = "foo10: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8, a9 = 9, a10 = 10";
+	ENSURE_EQUALS( err, f9( 1, 2, 3, 4, 5, 6, 7, 8, 9 ), expected );
+	ENSURE_EQUALS( err, f8( 1, 2, 3, 4, 5, 6, 7, 8 ), expected );
+	ENSURE_EQUALS( err, f7( 1, 2, 3, 4, 5, 6, 7 ), expected );
+	ENSURE_EQUALS( err, f6( 1, 2, 3, 4, 5, 6 ), expected );
+	ENSURE_EQUALS( err, f5( 1, 2, 3, 4, 5 ), expected );
+	ENSURE_EQUALS( err, f4( 1, 2, 3, 4 ), expected );
+	ENSURE_EQUALS( err, f3( 1, 2, 3 ), expected );
+	ENSURE_EQUALS( err, f2( 1, 2 ), expected );
+	ENSURE_EQUALS( err, f1( 1 ), expected );
+	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
 }
