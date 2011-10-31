@@ -275,7 +275,9 @@ TUT_UNIT_TEST( 9, "nested call ( 10 args ) -> ( 9 args ) -> ( 8 args ) -> ( 7 ar
 	ENSURE_EQUALS( err, f3( 1, 2, 3 ), expected );
 	ENSURE_EQUALS( err, f2( 1, 2 ), expected );
 	ENSURE_EQUALS( err, f1( 1 ), expected );
+#ifndef _MSC_VER
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
+#endif /* #ifndef _MSC_VER */
 TUT_TEARDOWN()
 
 }
