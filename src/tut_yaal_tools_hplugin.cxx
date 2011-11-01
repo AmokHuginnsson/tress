@@ -26,8 +26,8 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
-#include <yaal/tools/hplugin.hxx>
 #include <yaal/hcore/hlog.hxx>
+#include <yaal/tools/hplugin.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 

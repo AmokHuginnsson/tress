@@ -9,6 +9,7 @@
 #include <typeinfo>
 
 #include <yaal/hcore/base.hxx>
+#include "config.hxx" /* disable warning C4503 in msvcxx */
 #include <yaal/hcore/hcall.hxx>
 
 namespace tut {
