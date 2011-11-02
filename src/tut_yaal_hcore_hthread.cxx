@@ -197,7 +197,7 @@ TUT_UNIT_TEST( 2, "Starting new thread and allowing it to finish" )
 	ca.set( 5 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
-	M_DSLEEP( 10 );
+	M_DSLEEP( 20 );
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
 TUT_TEARDOWN()
 
@@ -206,11 +206,12 @@ TUT_UNIT_TEST( 3, "Starting new thread and finishing it prematurely (sleeping bo
 	HTime start, stop;
 	HCool ca( "sleeping" );
 	HThread a;
-	ca.set( 50 );
+	ca.set( 40 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
-	M_DSLEEP( 10 );
+	M_DSLEEP( 8 );
 	start.set_now();
+	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	a.finish();
 	stop.set_now();
 	stop -= start;
@@ -224,11 +225,12 @@ TUT_UNIT_TEST( 33, "Starting new thread and finishing it prematurely (busy body)
 	HTime start, stop;
 	HCool ca( "busy" );
 	HThread a;
-	ca.set( 50 );
+	ca.set( 40 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
-	M_DSLEEP( 10 );
+	M_DSLEEP( 5 );
 	start.set_now();
+	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	a.finish();
 	stop.set_now();
 	stop -= start;
@@ -257,6 +259,7 @@ TUT_UNIT_TEST( 5, "Starting and immediatelly finishing thread" )
 	HThread a;
 	ca.set( 50 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
+	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	a.finish();
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
 TUT_TEARDOWN()
