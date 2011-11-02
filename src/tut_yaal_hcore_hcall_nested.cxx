@@ -147,6 +147,8 @@ TUT_UNIT_TEST( 6, "nested call ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
+#ifndef __sun__
+
 TUT_UNIT_TEST( 7, "nested call ( 8 args ) -> ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int, int, int, int, int, int ),
 					higher_order::placeholder<1>, higher_order::placeholder<2>,
@@ -278,6 +280,8 @@ TUT_UNIT_TEST( 9, "nested call ( 10 args ) -> ( 9 args ) -> ( 8 args ) -> ( 7 ar
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 #endif /* #ifndef _MSC_VER */
 TUT_TEARDOWN()
+
+#endif /* #ifndef __sun__ */
 
 }
 
