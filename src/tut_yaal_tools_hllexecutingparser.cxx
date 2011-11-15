@@ -45,14 +45,12 @@ public:
 	typedef yaal::hcore::HPointer<HRule> ptr_t;
 protected:
 	ptr_t _rule;
-	int long _charactersLeft;
 public:
 	HRule( void )
-		: _rule(), _charactersLeft( 0 )
+		: _rule()
 		{}
 	HRule( HRule const& rule_ )
-		: _rule( rule_.clone() ),
-		_charactersLeft( rule_._charactersLeft )
+		: _rule( rule_.clone() )
 		{}
 	virtual ~HRule( void )
 		{}
@@ -64,8 +62,6 @@ public:
 		{ do_execute(); }
 	void execute( void )
 		{ do_execute(); }
-	int long characters_left( void ) const
-		{ return ( _charactersLeft ); }
 	HString::const_iterator parse( HString::const_iterator first_, HString::const_iterator last_ )
 		{ return ( do_parse( first_, last_ ) ); }
 	ptr_t clone( void ) const {
@@ -73,13 +69,7 @@ public:
 	}
 protected:
 	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator last_ ) {
-		if ( !! _rule ) {
-			HString::const_iterator old( first_ );
-			first_ = _rule->parse( first_, last_ );
-			if ( first_ == old )
-				_charactersLeft = _rule->characters_left();
-		}
-		return ( first_ );
+		return ( !! _rule ? _rule->parse( first_, last_ ) : first_ );
 	}
 	virtual void do_execute( void ) {
 		if ( !! _rule )
@@ -124,7 +114,6 @@ protected:
 			HString::const_iterator old( first_ );
 			first_ = (*it)->parse( first_, last_ );
 			if ( first_ == old ) {
-				_charactersLeft = (*it)->characters_left();
 				matched = false;
 				break;
 			}
@@ -296,10 +285,8 @@ public:
 					M_ASSERT( ! "invalid hardcoded state" );
 				}
 			}
-			if ( stop ) {
-				_charactersLeft = last_ - scan;
+			if ( stop )
 				break;
-			}
 			_cache.push_back( *scan );
 			++ scan;
 		}
@@ -394,10 +381,8 @@ public:
 					M_ASSERT( ! "invalid hardcoded state" );
 				}
 			}
-			if ( stop ) {
-				_charactersLeft = last_ - scan;
+			if ( stop )
 				break;
-			}
 			_cache.push_back( *scan );
 			++ scan;
 		}
@@ -456,8 +441,7 @@ public:
 					_action( c );
 				++ scan;
 				first_ = scan;
-			} else
-				_charactersLeft = last_ - scan; 
+			}
 		}
 		return ( first_ );
 	}
