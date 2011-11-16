@@ -41,19 +41,26 @@ namespace ll {
 
 class HRule {
 public:
+	typedef HBoundCall<> action_t;
+	typedef HBoundCall<> executor_t;
 	typedef HRule this_type;
 	typedef yaal::hcore::HPointer<HRule> ptr_t;
 protected:
 	ptr_t _rule;
+	action_t _action;
+	executor_t _excutor;
 public:
 	HRule( void )
-		: _rule()
+		: _rule(), _action(), _excutor()
 		{}
+public:
 	HRule( HRule const& rule_ )
-		: _rule( rule_.clone() )
+		: _rule( rule_.clone() ), _action(), _excutor()
 		{}
 	virtual ~HRule( void )
 		{}
+	HRule operator[]( action_t action_ )
+		{ return ( HRule( _rule, action_ ) ); }
 	bool operator()( HString const& input_ )
 		{ return ( do_parse( input_.begin(), input_.end() ) != input_.end() ); }
 	bool operator()( HString::const_iterator first_, HString::const_iterator last_ )
@@ -67,13 +74,22 @@ public:
 	ptr_t clone( void ) const {
 		return ( do_clone() );
 	}
+private:
+	HRule( ptr_t rule_, action_t action_ )
+		: _rule( rule_ ), _action( action_ ), _excutor()
+		{}
 protected:
 	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator last_ ) {
-		return ( !! _rule ? _rule->parse( first_, last_ ) : first_ );
+		HString::const_iterator ret( !! _rule ? _rule->parse( first_, last_ ) : first_ );
+		if ( ret == last_ )
+			_excutor = _action;
+		return ( ret );
 	}
 	virtual void do_execute( void ) {
 		if ( !! _rule )
 			_rule->execute();
+		if ( !! _excutor )
+			_excutor();
 	}
 	virtual ptr_t do_clone( void ) const {
 		return ( !! _rule ? _rule->clone() : ptr_t() );
@@ -235,6 +251,7 @@ public:
 	HReal( HReal const& real_ )
 		: HRule(), _actionDouble( real_._actionDouble ), _actionDoubleLong( real_._actionDoubleLong ),
 		_actionNumber( real_._actionNumber ), _actionString( real_._actionString ), _cache( real_._cache ) {}
+	using HRule::operator[];
 	HReal operator[]( action_double_t const& action_ ) {
 		return ( HReal( action_, action_double_long_t(), action_number_t(), action_string_t() ) );
 	}
@@ -342,6 +359,7 @@ public:
 	HInteger( HInteger const& real_ )
 		: HRule(), _actionIntLong( real_._actionIntLong ), _actionInt( real_._actionInt ),
 		_actionNumber( real_._actionNumber ), _actionString( real_._actionString ), _cache( real_._cache ) {}
+	using HRule::operator[];
 	HInteger operator[]( action_int_long_t const& action_ ) {
 		return ( HInteger( action_, action_int_t(), action_number_t(), action_string_t() ) );
 	}
@@ -425,6 +443,7 @@ public:
 		: HRule(), _character( character_._character ), _action( character_._action ) {}
 	virtual ~HCharacter( void )
 		{}
+	using HRule::operator[];
 	HCharacter operator[]( action_t const& action_ ) {
 		return ( HCharacter( _character, action_ ) );
 	}
