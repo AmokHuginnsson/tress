@@ -43,32 +43,40 @@ class HRule {
 public:
 	typedef HBoundCall<> action_t;
 	typedef HBoundCall<> executor_t;
+	typedef HArray<executor_t> executors_t;
 	typedef HRule this_type;
 	typedef yaal::hcore::HPointer<HRule> ptr_t;
 protected:
 	ptr_t _rule;
 	action_t _action;
-	executor_t _excutor;
+	executors_t _excutors;
 public:
 	HRule( void )
-		: _rule(), _action(), _excutor()
+		: _rule(), _action(), _excutors()
 		{}
 public:
 	HRule( HRule const& rule_ )
-		: _rule( rule_.clone() ), _action(), _excutor()
+		: _rule( rule_.clone() ), _action(), _excutors()
 		{}
 	virtual ~HRule( void )
 		{}
 	HRule operator[]( action_t action_ )
 		{ return ( HRule( _rule, action_ ) ); }
 	bool operator()( HString const& input_ )
-		{ return ( do_parse( input_.begin(), input_.end() ) != input_.end() ); }
+		{ return ( parse( input_.begin(), input_.end() ) != input_.end() ); }
 	bool operator()( HString::const_iterator first_, HString::const_iterator last_ )
-		{ return ( do_parse( first_, last_ ) != last_ ); }
+		{ return ( parse( first_, last_ ) != last_ ); }
 	void operator()( void )
-		{ do_execute(); }
-	void execute( void )
-		{ do_execute(); }
+		{ execute(); }
+	void execute( void ) {
+		do_execute();
+		for ( executors_t::iterator it( _excutors.begin() ), end( _excutors.end() ); it != end; ++ it )
+			(*it)();
+	}
+	void cancel_execution( void ) {
+		do_cancel_execution();
+		_excutors.clear();
+	}
 	HString::const_iterator parse( HString::const_iterator first_, HString::const_iterator last_ )
 		{ return ( do_parse( first_, last_ ) ); }
 	ptr_t clone( void ) const {
@@ -76,20 +84,22 @@ public:
 	}
 private:
 	HRule( ptr_t rule_, action_t action_ )
-		: _rule( rule_ ), _action( action_ ), _excutor()
+		: _rule( rule_ ), _action( action_ ), _excutors()
 		{}
 protected:
 	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator last_ ) {
 		HString::const_iterator ret( !! _rule ? _rule->parse( first_, last_ ) : first_ );
 		if ( ret == last_ )
-			_excutor = _action;
+			_excutors.push_back( _action );
 		return ( ret );
 	}
 	virtual void do_execute( void ) {
 		if ( !! _rule )
 			_rule->execute();
-		if ( !! _excutor )
-			_excutor();
+	}
+	virtual void do_cancel_execution( void ) {
+		if ( !! _rule )
+			_rule->cancel_execution();
 	}
 	virtual ptr_t do_clone( void ) const {
 		return ( !! _rule ? _rule->clone() : ptr_t() );
@@ -142,6 +152,11 @@ protected:
 		}
 		return ( matched ? first_ : orig );
 	}
+	void do_cancel_execution( void ) {
+		for ( rules_t::iterator it( _rules.begin() ), end( _rules.end() ); it != end; ++ it )
+			(*it)->cancel_execution();
+		return;
+	}
 	void do_execute( void ) {
 		for ( rules_t::iterator it( _rules.begin() ), end( _rules.end() ); it != end; ++ it )
 			(*it)->execute();
@@ -150,15 +165,14 @@ protected:
 };
 
 class HKleeneStar : public HRule {
-	int long _matchCount;
 public:
 	typedef HKleeneStar this_type;
 	typedef HRule base_type;
 	HKleeneStar( HRule const& rule_ )
-		: HRule( rule_ ), _matchCount( 0 )
+		: HRule( rule_ )
 		{}
 	HKleeneStar( HKleeneStar const& kleeneStar_ )
-		: HRule( *kleeneStar_._rule ), _matchCount( kleeneStar_._matchCount )
+		: HRule( *kleeneStar_._rule )
 		{}
 	virtual ~HKleeneStar( void )
 		{}
@@ -167,30 +181,22 @@ protected:
 		return ( ptr_t( new HKleeneStar( *this ) ) );
 	}
 	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator last_ ) {
-		while ( first_ != last_ ) {
-			HString::const_iterator old( first_ );
+		HString::const_iterator old( last_ );
+		while ( ( first_ != last_ ) && ( first_ != old ) )
 			first_ = HRule::do_parse( old = first_, last_ );
-			if ( first_ != old )
-				++ _matchCount;
-			else
-				break;
-		}
 		return ( first_ );
-	}
-	void do_execute( void ) {
 	}
 };
 
 class HKleenePlus : public HRule {
-	int long _matchCount;
 public:
 	typedef HKleenePlus this_type;
 	typedef HRule base_type;
 	HKleenePlus( HRule const& rule_ )
-		: HRule( rule_ ), _matchCount( 0 )
+		: HRule( rule_ )
 		{}
-	HKleenePlus( HKleenePlus const& kleeneStar_ )
-		: HRule( *kleeneStar_._rule ), _matchCount( kleeneStar_._matchCount )
+	HKleenePlus( HKleenePlus const& kleenePlus_ )
+		: HRule( *kleenePlus_._rule )
 		{}
 	virtual ~HKleenePlus( void )
 		{}
@@ -199,17 +205,10 @@ protected:
 		return ( ptr_t( new HKleenePlus( *this ) ) );
 	}
 	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator last_ ) {
-		while ( first_ != last_ ) {
-			HString::const_iterator old( first_ );
+		HString::const_iterator old( last_ );
+		while ( ( first_ != last_ ) && ( first_ != old ) )
 			first_ = HRule::do_parse( old = first_, last_ );
-			if ( first_ != old )
-				++ _matchCount;
-			else
-				break;
-		}
 		return ( first_ );
-	}
-	void do_execute( void ) {
 	}
 };
 
@@ -321,14 +320,14 @@ public:
 			first_ = scan;
 			if ( !! _actionDouble ) {
 				double d( lexical_cast<double>( _cache ) );
-				_actionDouble( d );
+				_excutors.push_back( call( _actionDouble, d ) );
 			} else if ( !! _actionDoubleLong ) {
 				double long dl( lexical_cast<double long>( _cache ) );
-				_actionDoubleLong( dl );
+				_excutors.push_back( call( _actionDoubleLong, dl ) );
 			} else if ( !! _actionNumber ) {
-				_actionNumber( _cache );
+				_excutors.push_back( call( _actionNumber, _cache ) );
 			} else if ( !! _actionString ) {
-				_actionString( _cache );
+				_excutors.push_back( call( _actionString, _cache ) );
 			}
 		}
 		return ( first_ );
@@ -418,14 +417,14 @@ public:
 			first_ = scan;
 			if ( !! _actionIntLong ) {
 				int long il( lexical_cast<int long>( _cache ) );
-				_actionIntLong( il );
+				_excutors.push_back( call( _actionIntLong, il ) );
 			} else if ( !! _actionInt ) {
 				int i( lexical_cast<int>( _cache ) );
-				_actionInt( i );
+				_excutors.push_back( call( _actionInt, i ) );
 			} else if ( !! _actionNumber ) {
-				_actionNumber( _cache );
+				_excutors.push_back( call( _actionNumber, _cache ) );
 			} else if ( !! _actionString ) {
-				_actionString( _cache );
+				_excutors.push_back( call( _actionString, _cache ) );
 			}
 		}
 		return ( first_ );
@@ -467,7 +466,7 @@ public:
 		if ( _character ) {
 			if ( ! _character || ( c == _character ) ) {
 				if ( !! _action )
-					_action( c );
+					_excutors.push_back( call( _action, c ) );
 				++ scan;
 				first_ = scan;
 			}
@@ -514,6 +513,8 @@ TUT_UNIT_TEST( 1, "the test" )
 	if ( real[push_back(v)]( "3.141592653589793" ) )
 		cout << "1: failed to consume input" << endl;
 	HRule r( real[push_back(v)] >> *( ',' >> real[push_back(v)] ) );
+	r( "3.141592653589793, -2.718281828459045, 17, kupa" );
+	r();
 	if ( r( "3.141592653589793, -2.718281828459045, 17, kupa" ) )
 		cout << "2: failed to consume input" << endl;
 	copy( v.begin(), v.end(), stream_iterator( cout, endl ) );
