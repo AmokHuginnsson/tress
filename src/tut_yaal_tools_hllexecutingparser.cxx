@@ -82,6 +82,8 @@ public:
 	ptr_t clone( void ) const {
 		return ( do_clone() );
 	}
+	bool is_optional( void ) const
+		{ return ( do_is_optional() ); }
 private:
 	HRule( ptr_t rule_, action_t action_ )
 		: _rule( rule_ ), _action( action_ ), _excutors()
@@ -104,6 +106,8 @@ protected:
 	virtual ptr_t do_clone( void ) const {
 		return ( !! _rule ? _rule->clone() : ptr_t() );
 	}
+	virtual bool do_is_optional( void ) const
+		{ return ( false ); }
 	static HString::const_iterator skip_space( HString::const_iterator first_, HString::const_iterator last_ ) {
 		while ( ( first_ != last_ ) && isspace( *first_ ) )
 			++ first_;
@@ -145,7 +149,7 @@ protected:
 		for ( rules_t::iterator it( _rules.begin() ), end( _rules.end() ); it != end; ++ it ) {
 			HString::const_iterator old( first_ );
 			first_ = (*it)->parse( first_, last_ );
-			if ( first_ == old ) {
+			if ( ( first_ == old ) && ( !(*it)->is_optional() ) ) {
 				matched = false;
 				break;
 			}
@@ -180,6 +184,8 @@ protected:
 	ptr_t do_clone( void ) const {
 		return ( ptr_t( new HKleeneStar( *this ) ) );
 	}
+	bool do_is_optional( void ) const
+		{ return ( true ); }
 	virtual HString::const_iterator do_parse( HString::const_iterator first_, HString::const_iterator last_ ) {
 		HString::const_iterator old( last_ );
 		while ( ( first_ != last_ ) && ( first_ != old ) )
