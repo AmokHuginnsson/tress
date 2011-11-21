@@ -675,6 +675,62 @@ HFollows operator >> ( char character_, HRule const& successor_ ) {
 	M_EPILOG
 }
 
+class HString : public HRule {
+	typedef HBoundCall<void ( HString const& )> action_t;
+	hcore::HString _string;
+	action_t _action;
+public:
+	typedef HString this_type;
+	typedef HRule base_type;
+	HString( hcore::HString const& string_ = hcore::HString() )
+		: HRule(), _string( string_ ), _action()
+		{}
+	HString( hcore::HString const& string_, action_t action_ )
+		: HRule(), _string( string_ ), _action( action_ )
+		{}
+	HString( HString const& string_ )
+		: HRule(), _string( string_._string ), _action( string_._action ) {}
+	virtual ~HString( void )
+		{}
+	using HRule::operator[];
+	HString operator[]( action_t const& action_ ) {
+		M_PROLOG
+		return ( HString( _string, action_ ) );
+		M_EPILOG
+	}
+	HString operator() ( hcore::HString const& string_ ) {
+		M_PROLOG
+		return ( HString( string_, _action ) );
+		M_EPILOG
+	}
+	virtual hcore::HString::const_iterator do_parse( hcore::HString::const_iterator first_, hcore::HString::const_iterator last_ ) {
+		M_PROLOG
+		M_ENSURE( first_ != last_ );
+		return ( first_ );
+		M_EPILOG
+	}
+protected:
+	virtual ptr_t do_clone( void ) const {
+		M_PROLOG
+		return ( ptr_t( new HString( *this ) ) );
+		M_EPILOG
+	}
+} string;
+
+typedef HExceptionT<HString, HRuleException> HStringException;
+
+HFollows operator >> ( char const* string_, HRule const& successor_ ) {
+	M_PROLOG
+	return ( HFollows( HString( string_ ), successor_  ) );
+	M_EPILOG
+}
+
+HFollows operator >> ( hcore::HString const& string_, HRule const& successor_ ) {
+	M_PROLOG
+	return ( HFollows( HString( string_ ), successor_  ) );
+	M_EPILOG
+}
+
 template<typename container_t>
 HBoundCall<void ( typename container_t::value_type const& )> push_back( container_t& container ) {
 	M_PROLOG
@@ -704,7 +760,7 @@ TUT_TEST_GROUP( tut_yaal_tools_hllexecutingparser, "yaal::tools::HLLExecutingPar
 
 TUT_UNIT_TEST( 1, "empty parser" )
 	HRule r;
-	HString text( "1+2" );
+	hcore::HString text( "1+2" );
 	ENSURE( "empty parser consumed input", r.parse( text.begin(), text.end() ) == text.begin() );
 	ENSURE( "empty parser succeeded on non empty input", r( text ) );
 	try {
