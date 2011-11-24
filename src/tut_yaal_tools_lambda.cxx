@@ -26,6 +26,8 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
+#include <yaal/hcore/macro.hxx>
+#include <yaal/hcore/static_assert.hxx>
 #include <yaal/tools/lambda.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
@@ -38,31 +40,72 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
+static int const MAX_DATA = 9;
+STATIC_ASSERT(( MAX_DATA <= countof ( _testData_[0] ) ));
+
 TUT_SIMPLE_MOCK( tut_yaal_tools_lambda );
 TUT_TEST_GROUP( tut_yaal_tools_lambda, "yaal::tools::lambda" );
 
 TUT_UNIT_TEST( 1, "streams" )
-	int a[] = { 2, 3, 5, 7, 11, 13, 17, 19, 23 };
-	int_list_t l( a, a + countof ( a ) );
-	for_each( l.begin(), l.end(), cout << *_1 << endl );
+	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
+	HStringStream ss;
+	for_each( l.begin(), l.end(), ss << *_1 << ", " );
+	ENSURE_EQUALS( "stream lambda failed", ss.string(), "2, 3, 5, 7, 11, 13, 17, 19, 23, " );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "plus" )
-	int a[] = { 2, 3, 5, 7, 11, 13, 17, 19, 23 };
-	int_list_t l( a, a + countof ( a ) );
-	transform( l.begin(), l.end(), stream_iterator( cout, " " ), 1 + _1 );
-	transform( l.begin(), l.end(), stream_iterator( cout, " " ), _1 + 1 );
+TUT_UNIT_TEST( 2, "preincrement" )
+	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
+	HStringStream ss;
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), ++ _1 );
+	ENSURE_EQUALS( "preincrement lambda failed", ss.string(), "3 4 6 8 12 14 18 20 24 " );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "plus both args are free" )
+TUT_UNIT_TEST( 3, "postincrement" )
+	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
+	HStringStream ss;
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 ++ );
+	ENSURE_EQUALS( "postincrement lambda failed", ss.string(), "2 3 5 7 11 13 17 19 23 " );
+	ss.clear();
+	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
+	ENSURE_EQUALS( "postincrement lambda failed", ss.string(), "3 4 6 8 12 14 18 20 24 " );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "predecrement" )
+	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
+	HStringStream ss;
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), -- _1 );
+	ENSURE_EQUALS( "predecrement lambda failed", ss.string(), "1 2 4 6 10 12 16 18 22 " );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 5, "postdecrement" )
+	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
+	HStringStream ss;
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 -- );
+	ENSURE_EQUALS( "postdecrement lambda failed", ss.string(), "2 3 5 7 11 13 17 19 23 " );
+	ss.clear();
+	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
+	ENSURE_EQUALS( "postdecrement lambda failed", ss.string(), "1 2 4 6 10 12 16 18 22 " );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 6, "plus" )
+	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
+	HStringStream ss;
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 1 + _1 );
+	ENSURE_EQUALS( "plus lambda failed", ss.string(), "3 4 6 8 12 14 18 20 24 " );
+	ss.clear();
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 + 1 );
+	ENSURE_EQUALS( "plus lambda failed", ss.string(), "3 4 6 8 12 14 18 20 24 " );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 7, "plus both args are free" )
 	cout << ( _1 + _2 )( 3, 4 ) << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "plus both args are free, one integral, one floating point" )
+TUT_UNIT_TEST( 8, "plus both args are free, one integral, one floating point" )
 	cout << ( _1 + _2 )( 3.14, 4 ) << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "plus both args are free, at least one floating point, but we force return type" )
+TUT_UNIT_TEST( 9, "plus both args are free, at least one floating point, but we force return type" )
 	cout << ret<int>( _1 + _2 )( 3.14, 4 ) << endl;
 TUT_TEARDOWN()
 
