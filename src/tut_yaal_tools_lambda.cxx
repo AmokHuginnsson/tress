@@ -46,11 +46,10 @@ STATIC_ASSERT(( MAX_DATA <= countof ( _testData_[0] ) ));
 TUT_SIMPLE_MOCK( tut_yaal_tools_lambda );
 TUT_TEST_GROUP( tut_yaal_tools_lambda, "yaal::tools::lambda" );
 
-TUT_UNIT_TEST( 1, "streams" )
-	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
-	HStringStream ss;
-	for_each( l.begin(), l.end(), ss << *_1 << ", " );
-	ENSURE_EQUALS( "stream lambda failed", ss.string(), "2, 3, 5, 7, 11, 13, 17, 19, 23, " );
+TUT_UNIT_TEST( 1, "lambda value" )
+	ENSURE_EQUALS( "_1 value failed", _1( 1 ), 1 );
+	ENSURE_EQUALS( "_2 value failed", _2( 1, 2 ), 2 );
+	ENSURE_EQUALS( "_3 value failed", _3( 1, 2, 3 ), 3 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "preincrement" )
@@ -98,15 +97,32 @@ TUT_UNIT_TEST( 6, "plus" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 7, "plus both args are free" )
-	cout << ( _1 + _2 )( 3, 4 ) << endl;
+	ENSURE_EQUALS( "plus failed", ( _1 + _2 )( 3, 4 ), 7 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "plus both args are free, one integral, one floating point" )
-	cout << ( _1 + _2 )( 3.14, 4 ) << endl;
+	ENSURE_EQUALS( "plus failed", ( _1 + _2 )( 3.14, 4 ), 3.14 + 4 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 9, "plus both args are free, at least one floating point, but we force return type" )
-	cout << ret<int>( _1 + _2 )( 3.14, 4 ) << endl;
+	ENSURE_EQUALS( "forcing return type failed", ret<int>( _1 + _2 )( 3.14, 4 ), 7 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 10, "combined lambda operations" )
+	ENSURE_EQUALS( "combined + * lambda failed", ( _1 + _2 * _3 )( 1, 2, 3 ), 7 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 48, "streams" )
+	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
+	HStringStream ss;
+	for_each( l.begin(), l.end(), ss << *_1 << ", " );
+	ENSURE_EQUALS( "stream lambda failed", ss.string(), "2, 3, 5, 7, 11, 13, 17, 19, 23, " );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 49, "experiment" )
+	int i( 0 );
+	( ++ _1, ++ _1 )( i );
+	ENSURE_EQUALS( "coma filed", i, 2 );
 TUT_TEARDOWN()
 
 }
