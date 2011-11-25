@@ -56,7 +56,7 @@ TUT_UNIT_TEST( 2, "ip_to_string" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "get_name" )
-	HString localhost( system::get_host_name() );
+	HString localhost( hcore::system::get_host_name() );
 	HString resolved( resolver::get_name( HIP( 127, 0, 0, 1 ) ) );
 	ENSURE( "get_name failure", ( resolved == "localhost" ) || ( resolved == localhost ) );
 TUT_TEARDOWN()
