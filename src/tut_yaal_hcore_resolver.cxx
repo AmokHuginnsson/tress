@@ -26,15 +26,14 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
-#include <yaal/yaal.hxx>
+#include <yaal/hcore/resolver.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
+#include <yaal/hcore/htokenizer.hxx>
 
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
 std::ostream& operator << ( std::ostream& stream, ip_t const& ip_ ) {
@@ -56,8 +55,11 @@ TUT_UNIT_TEST( 2, "ip_to_string" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "get_name" )
-	HString localhost( hcore::system::get_host_name() );
+	HTokenizer t( hcore::system::get_host_name(), "." );
+	HString localhost( t[0] );
 	HString resolved( resolver::get_name( HIP( 127, 0, 0, 1 ) ) );
+	cout << localhost << endl;
+	cout << resolved << endl;
 	ENSURE( "get_name failure", ( resolved == "localhost" ) || ( resolved == localhost ) );
 TUT_TEARDOWN()
 
