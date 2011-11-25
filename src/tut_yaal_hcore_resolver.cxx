@@ -56,7 +56,12 @@ TUT_UNIT_TEST( 2, "ip_to_string" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "get_name" )
-	ENSURE_EQUALS( "get_name failure", resolver::get_name( HIP( 127, 0, 0, 1 ) ), "localhost" );
+#if defined ( __HOST_OS_TYPE_WINDOWS__ ) || defined ( __HOST_OS_TYPE_CYGWIN__ )
+	HString localhost( system::get_host_name() );
+#else /* #if defined ( __HOST_OS_TYPE_WINDOWS__ ) || defined ( __HOST_OS_TYPE_CYGWIN__ ) */
+	HString localhost( "localhost" );
+#endif /* #else #if defined ( __HOST_OS_TYPE_WINDOWS__ ) || defined ( __HOST_OS_TYPE_CYGWIN__ ) */
+	ENSURE_EQUALS( "get_name failure", resolver::get_name( HIP( 127, 0, 0, 1 ) ), localhost );
 TUT_TEARDOWN()
 
 }
