@@ -300,17 +300,17 @@ TUT_UNIT_TEST( 10, "Accept on socket that is not listening." )
 	}
 TUT_TEARDOWN()
 
-void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port_ = 0, bool withSsl_ = false ) {
+void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_ ) {
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
-	TUT_DECLARE( HServer serv( type_ | ( withSsl_ ? HSocket::TYPE::SSL_SERVER : HSocket::TYPE::DEFAULT ), 1 ); );
+	TUT_DECLARE( HServer serv( type_ | ( withSsl_ ? HSocket::TYPE::SSL_SERVER : HSocket::TYPE::DEFAULT ) | ( nonBlockingServer_ ? HSocket::TYPE::NONBLOCKING : HSocket::TYPE::DEFAULT ), 1 ); );
 	TUT_INVOKE( cout << sizeof ( serv ) << endl; );
-	TUT_DECLARE( HSocket client( type_ | ( withSsl_ ? HSocket::TYPE::SSL_CLIENT : HSocket::TYPE::DEFAULT ) ); );
+	TUT_DECLARE( HSocket client( type_ | ( withSsl_ ? HSocket::TYPE::SSL_CLIENT : HSocket::TYPE::DEFAULT ) | ( nonBlockingClient_ ? HSocket::TYPE::NONBLOCKING : HSocket::TYPE::DEFAULT ) ); );
 	TUT_INVOKE( serv.listen( path_, port_ ); );
 	try {
 		TUT_INVOKE( serv.start(); );
 		TUT_INVOKE( client.connect( path_, port_ ); );
-		TUT_INVOKE( client.write( test_data, size ); );
+		TUT_EVAL( client.write( test_data, size ) );
 		TUT_INVOKE( serv.wait(); );
 	} catch ( HException const& e ) {
 		cout << e.what() << endl;
@@ -328,28 +328,69 @@ void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port
 	return;
 }
 
-TUT_UNIT_TEST( 19, "Transfering data through file (blocking)." )
-	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket" );
+TUT_UNIT_TEST( 11, "Transfering data through file (blocking)." )
+	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, false, false, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "Transfering data through file (non-blocking)." )
-	play_scenario( HSocket::socket_type_t( HSocket::TYPE::DEFAULT ) | HSocket::TYPE::FILE | HSocket::TYPE::NONBLOCKING, "/tmp/TUT_socket" );
+TUT_UNIT_TEST( 12, "Transfering data through file (non-blocking)." )
+	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, false, true, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "Transfering data through file with SSL." )
-	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, true );
+TUT_UNIT_TEST( 13, "Transfering data through file (blocking server, nonblocking client)." )
+	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, false, false, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 22, "Transfering data through network (blocking)." )
-	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555 );
+TUT_UNIT_TEST( 14, "Transfering data through file (non-blocking server, blocking client)." )
+	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, false, true, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 23, "Transfering data through network (non-blocking)." )
-	play_scenario( HSocket::socket_type_t( HSocket::TYPE::DEFAULT ) | HSocket::TYPE::NETWORK | HSocket::TYPE::NONBLOCKING, "127.0.0.1", 5555 );
+TUT_UNIT_TEST( 15, "Transfering data through file with SSL. (blocking)" )
+	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, true, false, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "Transfering data through network with SSL." )
-	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, true );
+TUT_UNIT_TEST( 16, "Transfering data through file with SSL (non-blocking)." )
+	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, true, false, false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 17, "Transfering data through file with SSL. (blocking server, nonblocking client)" )
+	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, true, false, true );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 18, "Transfering data through file with SSL (non-blocking server, blocking client)." )
+	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, true, true, false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 19, "Transfering data through network (blocking)." )
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, false, false, false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 20, "Transfering data through network (non-blocking)." )
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, false, true, true );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 21, "Transfering data through network (blocking server, nonblocking client)." )
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, false, false, true );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 22, "Transfering data through network (non-blocking server, blocking client)." )
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, false, true, false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 23, "Transfering data through network with SSL. (blocking)" )
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, true, false, false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 24, "Transfering data through network wiht SSL (non-blocking)." )
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, true, true, true );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 25, "Transfering data through network with SSL. (blocking server, nonblocking client)" )
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, true, false, true );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 26, "Transfering data through network wiht SSL (non-blocking server, blocking client)." )
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, true, true, false );
 TUT_TEARDOWN()
 
 }
+
