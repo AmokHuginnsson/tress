@@ -186,7 +186,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "bind on reserved port." )
 	try {
-		HUDPSocket socket( ( ::getenv( "windir" ) || ::getenv( "WINDIR" ) ? 135 : 22 ) );
+		HUDPSocket socket( ( ::getenv( "windir" ) || ::getenv( "WINDIR" ) ? 137 : 22 ) );
 		FAIL( "bind on reserved port possible" );
 	} catch ( HUDPSocketException const& e ) {
 		cout << e.what() << endl;
