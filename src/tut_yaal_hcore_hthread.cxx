@@ -308,7 +308,7 @@ TUT_UNIT_TEST( 8, "Simple thread (plain function)" )
 	stop -= start;
 	ENSURE_EQUALS( "thread failed to stop", a.is_alive(), false );
 	ENSURE_DISTANCE( "thread failed to interrupt",
-			stop.get_second(), 0, 2 );
+			stop.get_second(), 0, TOLERANCE );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 9, "Starting new thread and allowing it to finish, the finish is actualy invoked." )
