@@ -42,6 +42,14 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
+#ifdef __HOST_OS_TYPE_CYGWIN__
+static int const FINISH_DELAY = 40;
+static int const TOLERANCE = 3;
+#else /* #ifdef __HOST_OS_TYPE_CYGWIN__ */
+static int const FINISH_DELAY = 20;
+static int const TOLERANCE = 2;
+#endif /* #else #ifdef __HOST_OS_TYPE_CYGWIN__ */
+
 #define M_DSLEEP( count ) util::sleep::milisecond( ( count ) * 100 );
 
 class HCool {
@@ -197,7 +205,7 @@ TUT_UNIT_TEST( 2, "Starting new thread and allowing it to finish" )
 	ca.set( 5 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
-	M_DSLEEP( 20 );
+	M_DSLEEP( FINISH_DELAY );
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
 TUT_TEARDOWN()
 
@@ -217,7 +225,7 @@ TUT_UNIT_TEST( 3, "Starting new thread and finishing it prematurely (sleeping bo
 	stop -= start;
 	ENSURE_EQUALS( "thread failed to stop", a.is_alive(), false );
 	ENSURE_DISTANCE( "thread failed to interrupt",
-			stop.get_second(), 0, 2 );
+			stop.get_second(), 0, TOLERANCE );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 33, "Starting new thread and finishing it prematurely (busy body)" )
@@ -303,14 +311,14 @@ TUT_UNIT_TEST( 8, "Simple thread (plain function)" )
 			stop.get_second(), 0, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "Starting new thread and allowing it to finish, the finich is actualy invoked." )
+TUT_UNIT_TEST( 9, "Starting new thread and allowing it to finish, the finish is actualy invoked." )
 	TIME_CONSTRAINT_EXEMPT();
 	HCool ca( "a" );
 	HThread a;
 	ca.set( 5 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
-	M_DSLEEP( 10 );
+	M_DSLEEP( FINISH_DELAY );
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
 	a.finish();
 TUT_TEARDOWN()
