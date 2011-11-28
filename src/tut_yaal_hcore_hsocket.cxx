@@ -180,7 +180,7 @@ void* HServer::run( void ) {
 		} catch ( HOpenSSLException& e ) {
 			cout << e.what() << endl;
 		}
-	} catch ( HException& e ) {
+	} catch ( HSocketException& e ) {
 		_thread.stack_exception( e.what(), e.code() );
 	} catch ( ... ) {
 		_thread.stack_exception( "unknown exception", errno );
@@ -205,13 +205,13 @@ TUT_UNIT_TEST( 2, "Constructions with wrong parameters." )
 	try {
 		HSocket socket( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::NETWORK );
 		FAIL( "creation of bad socket possible (TYPE::FILE|TYPE::NETWORK)" );
-	} catch ( HException& e ) {
+	} catch ( HSocketException& e ) {
 		cout << e.what() << endl;
 	}
 	try {
 		HSocket socket( HSocket::socket_type_t( HSocket::TYPE::BLOCKING ) | HSocket::TYPE::NONBLOCKING );
 		FAIL( "creation of bad socket possible (TYPE::BLOCKING|TYPE::NONBLOCKING)" );
-	} catch ( HException& e ) {
+	} catch ( HSocketException& e ) {
 		cout << e.what() << endl;
 	}
 TUT_TEARDOWN()
@@ -221,7 +221,7 @@ TUT_UNIT_TEST( 3, "Getting port on file socket." )
 	try {
 		socket.get_port();
 		FAIL( "getting port number on file socket possible" );
-	} catch ( HException& e ) {
+	} catch ( HSocketException& e ) {
 		cout << e.what() << endl;
 	}
 TUT_TEARDOWN()
@@ -231,7 +231,7 @@ TUT_UNIT_TEST( 4, "Listening on reserved port." )
 	try {
 		socket.listen( "0.0.0.0", ( ::getenv( "windir" ) || ::getenv( "WINDIR" ) ? 135 : 22 ) );
 		FAIL( "listening on reserved port possible" );
-	} catch ( HException & e ) {
+	} catch ( HSocketException & e ) {
 		cout << e.what() << endl;
 	}
 TUT_TEARDOWN()
@@ -244,7 +244,7 @@ TUT_UNIT_TEST( 5, "Listening on port in use." )
 	try {
 		socket.listen( "0.0.0.0", obscurePort );
 		FAIL( "listening on port in use possible" );
-	} catch ( HException & e ) {
+	} catch ( HSocketException & e ) {
 		cout << e.what() << endl;
 	}
 TUT_TEARDOWN()
@@ -254,7 +254,7 @@ TUT_UNIT_TEST( 6, "Listening on existing file." )
 	try {
 		socket.listen( "/etc/shadow" );
 		FAIL( "listening on existing file possible" );
-	} catch ( HException& e ) {
+	} catch ( HSocketException& e ) {
 		cout << e.what() << endl;
 	}
 TUT_TEARDOWN()
@@ -264,7 +264,7 @@ TUT_UNIT_TEST( 7, "Listening on protected file." )
 	try {
 		socket.listen( "/etc/TUT_socket" );
 		FAIL( "listening on protected file possible" );
-	} catch ( HException& e ) {
+	} catch ( HSocketException& e ) {
 		cout << e.what() << endl;
 	}
 TUT_TEARDOWN()
@@ -275,7 +275,7 @@ TUT_UNIT_TEST( 8, "Listening on already listening socket." )
 	try {
 		socket.listen( "/tmp/TUT_socket" );
 		FAIL( "listening on already listening socket possible" );
-	} catch ( HException& e ) {
+	} catch ( HSocketException& e ) {
 		cout << e.what() << endl;
 	}
 TUT_TEARDOWN()
@@ -285,7 +285,7 @@ TUT_UNIT_TEST( 9, "Listening with bad maximum number of clients." )
 	try {
 		socket.listen( "/tmp/TUT_socket" );
 		FAIL( "listening with bad maximum number of clients possible" );
-	} catch ( HException& e ) {
+	} catch ( HSocketException& e ) {
 		cout << e.what() << endl;
 	}
 TUT_TEARDOWN()
@@ -295,7 +295,7 @@ TUT_UNIT_TEST( 10, "Accept on socket that is not listening." )
 	try {
 		socket.accept();
 		FAIL( "accept on socket that is not listening possible" );
-	} catch ( HException & e ) {
+	} catch ( HSocketException & e ) {
 		cout << e.what() << endl;
 	}
 TUT_TEARDOWN()
@@ -312,7 +312,7 @@ void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port
 		TUT_INVOKE( client.connect( path_, port_ ); );
 		TUT_EVAL( client.write( test_data, size ) );
 		TUT_INVOKE( serv.wait(); );
-	} catch ( HException const& e ) {
+	} catch ( HSocketException const& e ) {
 		cout << e.what() << endl;
 		serv.do_not_signal();
 		TUT_INVOKE( serv.stop(); );
