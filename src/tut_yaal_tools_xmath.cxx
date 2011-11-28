@@ -94,9 +94,8 @@ TUT_UNIT_TEST( 5, "number set stats: sum" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "number set stats: average" )
-	ENSURE_EQUALS( "number_set_stats().average() failed", number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).average(), 241.33L );
+	ENSURE_EQUALS( "number_set_stats().average() failed", number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).average(), 24133 / 100. );
 TUT_TEARDOWN()
-
 
 }
 
