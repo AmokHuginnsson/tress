@@ -251,19 +251,19 @@ TUT_TEARDOWN()
 #if 0
 
 TUT_UNIT_TEST( 23, "Transfering data through network with SSL. (blocking)" )
-	play_scenario( "127.0.0.1", 5555, true, false, false );
+	play_scenario( 5555, ip_t( 127, 0, 0, 1 ), true, false, false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 24, "Transfering data through network wiht SSL (non-blocking)." )
-	play_scenario( "127.0.0.1", 5555, true, true, true );
+	play_scenario( 5555, ip_t( 127, 0, 0, 1 ), true, true, true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 25, "Transfering data through network with SSL. (blocking server, nonblocking client)" )
-	play_scenario( "127.0.0.1", 5555, true, false, true );
+	play_scenario( 5555, ip_t( 127, 0, 0, 1 ), true, false, true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 26, "Transfering data through network wiht SSL (non-blocking server, blocking client)." )
-	play_scenario( "127.0.0.1", 5555, true, true, false );
+	play_scenario( 5555, ip_t( 127, 0, 0, 1 ), true, true, false );
 TUT_TEARDOWN()
 
 #endif
