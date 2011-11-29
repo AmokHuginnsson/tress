@@ -96,7 +96,7 @@ TUT_UNIT_TEST( 5, "Firebird engine" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) */
 
-#if defined( HAVE_OCI_H )
+#if 0 && defined( HAVE_OCI_H )
 TUT_UNIT_TEST( 6, "Oracle engine" )
 	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::ORACLE );
 	db->connect( "tress", "tress", "tr3ss" );
@@ -126,7 +126,7 @@ TUT_UNIT_TEST( 7, "different engines all in one" )
 	dbFirebird->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( dbFirebird, QUERY );
 #endif /* defined( HAVE_IBASE_H ) */
-#if defined( HAVE_OCI_H )
+#if 0 && defined( HAVE_OCI_H )
 	HDataBase::ptr_t dbOracle = HDataBase::get_connector( ODBConnector::DRIVER::ORACLE );
 	dbOracle->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( dbOracle, QUERY );
@@ -197,7 +197,7 @@ TUT_UNIT_TEST( 11, "Firebird engine" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) */
 
-#if defined( HAVE_OCI_H )
+#if 0 && defined( HAVE_OCI_H )
 TUT_UNIT_TEST( 12, "Oracle engine" )
 	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::ORACLE );
 	db->connect( "tress", "tress", "tr3ss" );
