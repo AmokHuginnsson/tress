@@ -97,7 +97,7 @@ TUT_UNIT_TEST( 6, "number set stats: average" )
 #ifdef __HOST_OS_TYPE_CYGWIN__
 	double expected( 24133 / 100. );
 #else /* #ifdef __HOST_OS_TYPE_CYGWIN__ */
-	double expected( 24133 / 100.l );
+	double long expected( 24133 / 100.l );
 #endif /* #else #ifdef __HOST_OS_TYPE_CYGWIN__ */
 	ENSURE_EQUALS( "number_set_stats().average() failed", number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).average(), expected );
 TUT_TEARDOWN()
