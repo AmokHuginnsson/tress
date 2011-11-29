@@ -43,8 +43,8 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 #ifdef __HOST_OS_TYPE_CYGWIN__
-static int const FINISH_DELAY = 40;
-static int const TOLERANCE = 3;
+static int const FINISH_DELAY = 50;
+static int const TOLERANCE = 5;
 #else /* #ifdef __HOST_OS_TYPE_CYGWIN__ */
 static int const FINISH_DELAY = 10;
 static int const TOLERANCE = 2;
