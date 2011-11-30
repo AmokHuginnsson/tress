@@ -43,8 +43,8 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 #ifdef __HOST_OS_TYPE_CYGWIN__
-static int const FINISH_DELAY = 50;
-static int const TOLERANCE = 5;
+static int const FINISH_DELAY = 60;
+static int const TOLERANCE = 6;
 #else /* #ifdef __HOST_OS_TYPE_CYGWIN__ */
 static int const FINISH_DELAY = 10;
 static int const TOLERANCE = 2;
@@ -244,7 +244,7 @@ TUT_UNIT_TEST( 33, "Starting new thread and finishing it prematurely (busy body)
 	stop -= start;
 	ENSURE_EQUALS( "thread failed to stop", a.is_alive(), false );
 	ENSURE_DISTANCE( "thread failed to interrupt",
-			static_cast<double>( stop.get_second() ), 0., 2.5 );
+			static_cast<double>( stop.get_second() ), 0., TOLERANCE + .5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "Starting new thread and finishing it prematurely by destructor" )
