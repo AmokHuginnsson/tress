@@ -135,8 +135,8 @@ TUT_TEARDOWN()
 #endif /* #if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || defined( HAVE_OCI_H ) */
 
 static char const* const SPECIAL_QUERY = "SELECT * FROM config WHERE name = 'special';";
-static char const* const SPECIAL_INSERT = "INSERT INTO config ( name, value ) VALUES( 'special', 'first' );";
-static char const* const SPECIAL_UPDATE = "UPDATE config SET value = 'second' WHERE name = 'special';";
+static char const* const SPECIAL_INSERT = "INSERT INTO config ( name, data ) VALUES( 'special', 'first' );";
+static char const* const SPECIAL_UPDATE = "UPDATE config SET data = 'second' WHERE name = 'special';";
 static char const* const SPECIAL_DELETE = "DELETE FROM config WHERE name = 'special';";
 
 void test_dml( HDataBase::ptr_t db ) {
