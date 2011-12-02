@@ -88,7 +88,7 @@ TUT_UNIT_TEST( 4, "MySQL engine" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 
-#if 0 && defined( HAVE_IBASE_H )
+#if defined( HAVE_IBASE_H )
 TUT_UNIT_TEST( 5, "Firebird engine" )
 	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD );
 	db->connect( "tress", "tress", "tr3ss" );
@@ -121,7 +121,7 @@ TUT_UNIT_TEST( 7, "different engines all in one" )
 	dbMySQL->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( dbMySQL, QUERY );
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
-#if 0 && defined( HAVE_IBASE_H )
+#if defined( HAVE_IBASE_H )
 	HDataBase::ptr_t dbFirebird = HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD );
 	dbFirebird->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( dbFirebird, QUERY );
