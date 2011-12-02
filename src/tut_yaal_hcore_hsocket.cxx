@@ -170,6 +170,7 @@ HString const& HServer::buffer( void ) const {
 }
 
 void* HServer::run( void ) {
+	HThread::set_name( "HSocket::server" );
 	try {
 		try {
 			cout << "starting dispatcher ..." << endl;
