@@ -170,7 +170,7 @@ HString const& HServer::buffer( void ) const {
 }
 
 void* HServer::run( void ) {
-	HThread::set_name( "HSocket::server" );
+	HThread::set_name( "tut_yaal_hcore_hsocket::server" );
 	try {
 		try {
 			cout << "starting dispatcher ..." << endl;

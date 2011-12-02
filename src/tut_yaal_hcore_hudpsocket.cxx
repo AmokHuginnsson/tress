@@ -140,6 +140,7 @@ HString const& HUDPServer::buffer( void ) const {
 }
 
 void* HUDPServer::run( void ) {
+	HThread::set_name( "tut_yaal_hcore_hudpsocket::server" );
 	try {
 		try {
 			cout << "starting dispatcher ..." << endl;
