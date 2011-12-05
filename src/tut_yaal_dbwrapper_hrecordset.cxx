@@ -45,6 +45,10 @@ TUT_TEST_GROUP( tut_yaal_dbwrapper_hrecordset, "yaal::dbwrapper::HRecordSet" );
 void dump_query_result( HDataBase::ptr_t db, char const* const query ) {
 	M_PROLOG
 	HRecordSet::ptr_t rs = db->query( query );
+	cout << "|";
+	for ( int i( 0 ), COUNT( rs->get_field_count() ); i < COUNT; ++ i )
+		cout << rs->get_column_name( i ) << "|";
+	cout << endl;
 	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); ++ it ) {
 		cout << "|";
 		int fc = rs->get_field_count();
