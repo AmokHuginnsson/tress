@@ -27,9 +27,22 @@ CREATE TABLE config
 	name VARCHAR(16) UNIQUE NOT NULL,
 	data VARCHAR( 255 )
 	);
+CREATE GENERATOR gen_config_id;
+SET GENERATOR gen_config_id TO 0;
+
+set term !! ;
+CREATE TRIGGER tgg_config_insert FOR config
+ACTIVE BEFORE INSERT POSITION 0
+AS
+BEGIN
+if ( NEW.ID is NULL ) then NEW.ID = GEN_ID( gen_config_id, 1 );
+RDB$SET_CONTEXT('USER_SESSION', 'LAST_INSERT_ID', NEW.ID);
+END!!
+set term ; !!
 
 INSERT INTO config ( id, name, data ) VALUES( 1, 'one', '1' );
 INSERT INTO config ( id, name, data ) VALUES( 2, 'two', '22' );
 INSERT INTO config ( id, name, data ) VALUES( 3, 'three', '333' );
 INSERT INTO config ( id, name, data ) VALUES( 4, 'four', '4444' );
+SET GENERATOR gen_config_id TO 4;
 
