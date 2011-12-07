@@ -108,8 +108,85 @@ TUT_UNIT_TEST( 9, "plus both args are free, at least one floating point, but we 
 	ENSURE_EQUALS( "forcing return type failed", ret<int>( _1 + _2 )( 3.14, 4 ), 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "combined lambda operations" )
+TUT_UNIT_TEST( 10, "minus" )
+	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
+	HStringStream ss;
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 1 - _1 );
+	ENSURE_EQUALS( "minus lambda failed", ss.string(), "-1 -2 -4 -6 -10 -12 -16 -18 -22 " );
+	ss.clear();
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 - 1 );
+	ENSURE_EQUALS( "minus lambda failed", ss.string(), "1 2 4 6 10 12 16 18 22 " );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 11, "minus both args are free" )
+	ENSURE_EQUALS( "minus failed", ( _1 - _2 )( 3, 4 ), -1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 12, "minus both args are free, one integral, one floating point" )
+	ENSURE_EQUALS( "minus failed", ( _1 - _2 )( 3.14, 4 ), 3.14 - 4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 13, "minus both args are free, at least one floating point, but we force return type" )
+	ENSURE_EQUALS( "forcing return type failed", ret<int>( _1 - _2 )( 3.14, 4 ), 0 );
+TUT_TEARDOWN()
+
+	/* 2 3 5 7 11 13 17 19 23 */
+
+TUT_UNIT_TEST( 14, "multiplies" )
+	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
+	HStringStream ss;
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 2 * _1 );
+	ENSURE_EQUALS( "multiplies lambda failed", ss.string(), "4 6 10 14 22 26 34 38 46 " );
+	ss.clear();
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 * 2 );
+	ENSURE_EQUALS( "multiplies lambda failed", ss.string(), "4 6 10 14 22 26 34 38 46 " );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 15, "multiplies both args are free" )
+	ENSURE_EQUALS( "multiplies failed", ( _1 * _2 )( 3, 4 ), 12 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 16, "multiplies both args are free, one integral, one floating point" )
+	ENSURE_EQUALS( "multiplies failed", ( _1 * _2 )( 3.14, 4 ), 3.14 * 4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 17, "multiplies both args are free, at least one floating point, but we force return type" )
+	ENSURE_EQUALS( "forcing return type failed", ret<int>( _1 * _2 )( 3.14, 4 ), 12 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 18, "divides" )
+	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
+	HStringStream ss;
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 223092870 / _1 );
+	ENSURE_EQUALS( "divides lambda failed", ss.string(), "111546435 74364290 44618574 31870410 20281170 17160990 13123110 11741730 9699690 " );
+	ss.clear();
+	transform( l.begin(), l.end(), l.begin(), _1 * 2 );
+	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
+	ENSURE_EQUALS( "divides lambda failed", ss.string(), "4 6 10 14 22 26 34 38 46 " );
+	ss.clear();
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 / 2 );
+	ENSURE_EQUALS( "divides lambda failed", ss.string(), "2 3 5 7 11 13 17 19 23 " );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 19, "divides both args are free" )
+	ENSURE_EQUALS( "divides failed", ( _1 / _2 )( 3, 4 ), 0 );
+	ENSURE_EQUALS( "divides failed", ( _1 / _2 )( 4, 3 ), 1 );
+	ENSURE_EQUALS( "divides failed", ( _1 / _2 )( 12, 3 ), 4 );
+	ENSURE_EQUALS( "divides failed", ( _1 / _2 )( 12, 4 ), 3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 20, "divides both args are free, one integral, one floating point" )
+	ENSURE_EQUALS( "divides failed", ( _1 / _2 )( 3.14, 4 ), 3.14 / 4 );
+	TUT_EVAL(( ( _1 / _2 )( 3.14, 4 ) ));
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 21, "divides both args are free, at least one floating point, but we force return type" )
+	ENSURE_EQUALS( "forcing return type failed", ret<int>( _1 / _2 )( 3.14, 4 ), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 30, "combined lambda operations" )
 	ENSURE_EQUALS( "combined + * lambda failed", ( _1 + _2 * _3 )( 1, 2, 3 ), 7 );
+	ENSURE_EQUALS( "combined + * lambda failed", ( ( _1 + _2 ) * _3 )( 1, 2, 3 ), 9 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 48, "streams" )
