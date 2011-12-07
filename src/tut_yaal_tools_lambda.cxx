@@ -185,8 +185,10 @@ TUT_UNIT_TEST( 21, "divides both args are free, at least one floating point, but
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 30, "combined lambda operations" )
+	ENSURE_EQUALS( "combined + const + lambda failed", ( _1 + 2 + _2 )( 1, 3 ), 6 );
+	ENSURE_EQUALS( "combined + const + lambda failed", ( _1 + _2 + 3 )( 1, 2 ), 6 );
 	ENSURE_EQUALS( "combined + * lambda failed", ( _1 + _2 * _3 )( 1, 2, 3 ), 7 );
-	ENSURE_EQUALS( "combined + * lambda failed", ( ( _1 + _2 ) * _3 )( 1, 2, 3 ), 9 );
+	ENSURE_EQUALS( "combined ( + ) * lambda failed", ( ( _1 + _2 ) * _3 )( 1, 2, 3 ), 9 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 48, "streams" )
