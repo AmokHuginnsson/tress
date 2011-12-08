@@ -184,9 +184,59 @@ TUT_UNIT_TEST( 21, "divides both args are free, at least one floating point, but
 	ENSURE_EQUALS( "forcing return type failed", ret<int>( _1 / _2 )( 3.14, 4 ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 30, "combined lambda operations" )
+TUT_UNIT_TEST( 22, "modulo" )
+	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
+	HStringStream ss;
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 1000 % _1 );
+	ENSURE_EQUALS( "modulo lambda failed", ss.string(), "0 1 0 6 10 12 14 12 11 " );
+	ss.clear();
+	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 % 10 );
+	ENSURE_EQUALS( "modulo lambda failed", ss.string(), "2 3 5 7 1 3 7 9 3 " );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 23, "modulo both args are free" )
+	ENSURE_EQUALS( "modulo failed", ( _1 % _2 )( 3, 4 ), 3 );
+	ENSURE_EQUALS( "modulo failed", ( _1 % _2 )( 4, 3 ), 1 );
+	ENSURE_EQUALS( "modulo failed", ( _1 % _2 )( 12, 3 ), 0 );
+	ENSURE_EQUALS( "modulo failed", ( _1 % _2 )( 12, 4 ), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 24, "combined lambda plus operations" )
 	ENSURE_EQUALS( "combined + const + lambda failed", ( _1 + 2 + _2 )( 1, 3 ), 6 );
 	ENSURE_EQUALS( "combined + const + lambda failed", ( _1 + _2 + 3 )( 1, 2 ), 6 );
+	ENSURE_EQUALS( "combined const + const + lambda failed", ( 1 + ( 2 + _1  ) )( 3 ), 6 );
+	ENSURE_EQUALS( "combined + const + const lambda failed", ( ( _1 + 2 ) + 3 )( 1 ), 6 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 25, "combined lambda minus operations" )
+	ENSURE_EQUALS( "combined - const - lambda failed", ( _1 - 2 - _2 )( 1, 3 ), -4 );
+	ENSURE_EQUALS( "combined - const - lambda failed", ( _1 - _2 - 3 )( 1, 2 ), -4 );
+	ENSURE_EQUALS( "combined const - const - lambda failed", ( 1 - ( 2 - _1  ) )( 3 ), 2 );
+	ENSURE_EQUALS( "combined - const - const lambda failed", ( ( _1 - 2 ) - 3 )( 1 ), -4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 26, "combined lambda multiplies operations" )
+	ENSURE_EQUALS( "combined * const * lambda failed", ( _1 * 3 * _2 )( 2, 5 ), 30 );
+	ENSURE_EQUALS( "combined * const * lambda failed", ( _1 * _2 * 5 )( 2, 3 ), 30 );
+	ENSURE_EQUALS( "combined const * const * lambda failed", ( 2 * ( 3 * _1  ) )( 5 ), 30 );
+	ENSURE_EQUALS( "combined * const * const lambda failed", ( ( _1 * 3 ) * 5 )( 2 ), 30 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 27, "combined lambda divides operations" )
+	ENSURE_EQUALS( "combined / const / lambda failed", ( _1 / 24 / _2 )( 96, 2 ), 2 );
+	ENSURE_EQUALS( "combined / const / lambda failed", ( _1 / _2 / 2 )( 96, 24 ), 2 );
+	ENSURE_EQUALS( "combined const / const / lambda failed", ( 96 / ( 24 / _1  ) )( 2 ), 8 );
+	ENSURE_EQUALS( "combined / const / const lambda failed", ( ( _1 / 24 ) / 2 )( 96 ), 2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 28, "combined lambda modulo operations" )
+	ENSURE_EQUALS( "combined % const % lambda failed", ( _1 % 29 % _2 )( 97, 13 ), 10 );
+	ENSURE_EQUALS( "combined % const % lambda failed", ( _1 % _2 % 13 )( 97, 29 ), 10 );
+	ENSURE_EQUALS( "combined const % const % lambda failed", ( 97 % ( 29 % _1  ) )( 13 ), 1 );
+	ENSURE_EQUALS( "combined % const % const lambda failed", ( ( _1 % 29 ) % 13 )( 97 ), 10 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 30, "mixed lambda operations" )
 	ENSURE_EQUALS( "combined + * lambda failed", ( _1 + _2 * _3 )( 1, 2, 3 ), 7 );
 	ENSURE_EQUALS( "combined ( + ) * lambda failed", ( ( _1 + _2 ) * _3 )( 1, 2, 3 ), 9 );
 TUT_TEARDOWN()
