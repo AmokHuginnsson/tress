@@ -236,7 +236,15 @@ TUT_UNIT_TEST( 28, "combined lambda modulo operations" )
 	ENSURE_EQUALS( "combined % const % const lambda failed", ( ( _1 % 29 ) % 13 )( 97 ), 10 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 30, "mixed lambda operations" )
+TUT_UNIT_TEST( 29, "assign" )
+	int a( 0 );
+	( _::_1 = 7 )( a );
+	ENSURE_EQUALS( "assign const failed", a, 7 );
+	( _::_1 = _2 )( a, 13 );
+	ENSURE_EQUALS( "assign const failed", a, 13 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 47, "mixed lambda operations" )
 	ENSURE_EQUALS( "combined + * lambda failed", ( _1 + _2 * _3 )( 1, 2, 3 ), 7 );
 	ENSURE_EQUALS( "combined ( + ) * lambda failed", ( ( _1 + _2 ) * _3 )( 1, 2, 3 ), 9 );
 TUT_TEARDOWN()
