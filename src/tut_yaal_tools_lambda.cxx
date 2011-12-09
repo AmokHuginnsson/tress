@@ -246,11 +246,9 @@ TUT_UNIT_TEST( 48, "streams" )
 	HStringStream ss;
 	for_each( l.begin(), l.end(), ss << _1 << ", " );
 	ENSURE_EQUALS( "stream lambda failed", ss.string(), "2, 3, 5, 7, 11, 13, 17, 19, 23, " );
-/*
 	ss.clear();
 	for_each( l.begin(), l.end(), ss << ( _1 * 2 ) << ", " );
 	ENSURE_EQUALS( "stream lambda failed", ss.string(), "4, 6, 10, 14, 22, 26, 34, 38, 46, " );
-*/
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 49, "experiment" )
