@@ -306,6 +306,44 @@ TUT_UNIT_TEST( 34, "modulo assign" )
 	ENSURE_EQUALS( "modulo assign lambda expr failed", a, 5 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 35, "equality" )
+	ENSURE( "equality failed", ( _1 == 1 )( 1 ) );
+	ENSURE_NOT( "equality failed", ( _1 == 1 )( 2 ) );
+	ENSURE( "equality failed", ( _1 == _2 )( 1, 1 ) );
+	ENSURE_NOT( "equality failed", ( _1 == _2 )( 1, 2 ) );
+	ENSURE( "equality failed", ( 1 == _1 )( 1 ) );
+	ENSURE_NOT( "equality failed", ( 1 == _1 )( 2 ) );
+	ENSURE( "equality failed", ( _1 == ( _2 * 2 ) )( 4, 2 ) );
+	ENSURE_NOT( "equality failed", ( _1 == ( _2 * 2 ) )( 7, 2 ) );
+	ENSURE( "equality failed", ( ( _2 * 2 ) == _1 )( 4, 2 ) );
+	ENSURE_NOT( "equality failed", ( ( _2 * 2 ) == _1 )( 7, 2 ) );
+	ENSURE( "equality failed", ( 4 == ( _1 * 2 ) )( 2 ) );
+	ENSURE_NOT( "equality failed", ( 7 == ( _1 * 2 ) )( 2 ) );
+	ENSURE( "equality failed", ( ( _1 * 2 ) == 4 )( 2 ) );
+	ENSURE_NOT( "equality failed", ( ( _1 * 2 ) == 7 )( 2 ) );
+	ENSURE( "equality failed", ( ( _1 * 2 ) == ( _2 * 3 ) )( 3, 2 ) );
+	ENSURE_NOT( "equality failed", ( ( _1 * 2 ) == ( _2 * 3 ) )( 3, 3 ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 36, "non-equality" )
+	ENSURE_NOT( "non-equality failed", ( _1 != 1 )( 1 ) );
+	ENSURE( "non-equality failed", ( _1 != 1 )( 2 ) );
+	ENSURE_NOT( "non-equality failed", ( _1 != _2 )( 1, 1 ) );
+	ENSURE( "non-equality failed", ( _1 != _2 )( 1, 2 ) );
+	ENSURE_NOT( "non-equality failed", ( 1 != _1 )( 1 ) );
+	ENSURE( "non-equality failed", ( 1 != _1 )( 2 ) );
+	ENSURE_NOT( "non-equality failed", ( _1 != ( _2 * 2 ) )( 4, 2 ) );
+	ENSURE( "non-equality failed", ( _1 != ( _2 * 2 ) )( 7, 2 ) );
+	ENSURE_NOT( "non-equality failed", ( ( _2 * 2 ) != _1 )( 4, 2 ) );
+	ENSURE( "non-equality failed", ( ( _2 * 2 ) != _1 )( 7, 2 ) );
+	ENSURE_NOT( "non-equality failed", ( 4 != ( _1 * 2 ) )( 2 ) );
+	ENSURE( "non-equality failed", ( 7 != ( _1 * 2 ) )( 2 ) );
+	ENSURE_NOT( "non-equality failed", ( ( _1 * 2 ) != 4 )( 2 ) );
+	ENSURE( "non-equality failed", ( ( _1 * 2 ) != 7 )( 2 ) );
+	ENSURE_NOT( "non-equality failed", ( ( _1 * 2 ) != ( _2 * 3 ) )( 3, 2 ) );
+	ENSURE( "non-equality failed", ( ( _1 * 2 ) != ( _2 * 3 ) )( 3, 3 ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 47, "mixed lambda operations" )
 	ENSURE_EQUALS( "combined + * lambda failed", ( _1 + _2 * _3 )( 1, 2, 3 ), 7 );
 	ENSURE_EQUALS( "combined ( + ) * lambda failed", ( ( _1 + _2 ) * _3 )( 1, 2, 3 ), 9 );
