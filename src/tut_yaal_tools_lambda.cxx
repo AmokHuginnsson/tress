@@ -344,6 +344,44 @@ TUT_UNIT_TEST( 36, "non-equality" )
 	ENSURE( "non-equality failed", ( ( _1 * 2 ) != ( _2 * 3 ) )( 3, 3 ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 37, "less" )
+	ENSURE( "less failed", ( _1 < 1 )( 0 ) );
+	ENSURE_NOT( "less failed", ( _1 < 1 )( 1 ) );
+	ENSURE( "less failed", ( _1 < _2 )( 0, 1 ) );
+	ENSURE_NOT( "less failed", ( _1 < _2 )( 1, 1 ) );
+	ENSURE( "less failed", ( 1 < _1 )( 2 ) );
+	ENSURE_NOT( "less failed", ( 1 < _1 )( 1 ) );
+	ENSURE( "less failed", ( _1 < ( _2 * 2 ) )( 2, 2 ) );
+	ENSURE_NOT( "less failed", ( _1 < ( _2 * 2 ) )( 4, 2 ) );
+	ENSURE( "less failed", ( ( _2 * 2 ) < _1 )( 7, 2 ) );
+	ENSURE_NOT( "less failed", ( ( _2 * 2 ) < _1 )( 4, 2 ) );
+	ENSURE( "less failed", ( 4 < ( _1 * 2 ) )( 3 ) );
+	ENSURE_NOT( "less failed", ( 4 < ( _1 * 2 ) )( 2 ) );
+	ENSURE( "less failed", ( ( _1 * 2 ) < 7 )( 2 ) );
+	ENSURE_NOT( "less failed", ( ( _1 * 2 ) < 4 )( 2 ) );
+	ENSURE( "less failed", ( ( _1 * 2 ) < ( _2 * 3 ) )( 2, 2 ) );
+	ENSURE_NOT( "less failed", ( ( _1 * 2 ) < ( _2 * 3 ) )( 3, 2 ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 38, "greater" )
+	ENSURE( "greater failed", ( _1 > 1 )( 2 ) );
+	ENSURE_NOT( "greater failed", ( _1 > 1 )( 1 ) );
+	ENSURE( "greater failed", ( _1 > _2 )( 2, 1 ) );
+	ENSURE_NOT( "greater failed", ( _1 > _2 )( 1, 1 ) );
+	ENSURE( "greater failed", ( 1 > _1 )( 0 ) );
+	ENSURE_NOT( "greater failed", ( 1 > _1 )( 1 ) );
+	ENSURE( "greater failed", ( _1 > ( _2 * 2 ) )( 7, 2 ) );
+	ENSURE_NOT( "greater failed", ( _1 > ( _2 * 2 ) )( 4, 2 ) );
+	ENSURE( "greater failed", ( ( _2 * 2 ) > _1 )( 2, 2 ) );
+	ENSURE_NOT( "greater failed", ( ( _2 * 2 ) > _1 )( 4, 2 ) );
+	ENSURE( "greater failed", ( 7 > ( _1 * 2 ) )( 2 ) );
+	ENSURE_NOT( "greater failed", ( 4 > ( _1 * 2 ) )( 2 ) );
+	ENSURE( "greater failed", ( ( _1 * 2 ) > 4 )( 3 ) );
+	ENSURE_NOT( "greater failed", ( ( _1 * 2 ) > 4 )( 2 ) );
+	ENSURE( "greater failed", ( ( _1 * 2 ) > ( _2 * 3 ) )( 4, 2 ) );
+	ENSURE_NOT( "greater failed", ( ( _1 * 2 ) > ( _2 * 3 ) )( 3, 2 ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 47, "mixed lambda operations" )
 	ENSURE_EQUALS( "combined + * lambda failed", ( _1 + _2 * _3 )( 1, 2, 3 ), 7 );
 	ENSURE_EQUALS( "combined ( + ) * lambda failed", ( ( _1 + _2 ) * _3 )( 1, 2, 3 ), 9 );
