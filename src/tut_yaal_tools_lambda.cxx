@@ -382,6 +382,60 @@ TUT_UNIT_TEST( 38, "greater" )
 	ENSURE_NOT( "greater failed", ( ( _1 * 2 ) > ( _2 * 3 ) )( 3, 2 ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 39, "less-or-equal" )
+	ENSURE( "less-or-equal failed", ( _1 <= 1 )( 0 ) );
+	ENSURE( "less-or-equal failed", ( _1 <= 1 )( 1 ) );
+	ENSURE_NOT( "less-or-equal failed", ( _1 <= 1 )( 2 ) );
+	ENSURE( "less-or-equal failed", ( _1 <= _2 )( 0, 1 ) );
+	ENSURE( "less-or-equal failed", ( _1 <= _2 )( 1, 1 ) );
+	ENSURE_NOT( "less-or-equal failed", ( _1 <= _2 )( 2, 1 ) );
+	ENSURE( "less-or-equal failed", ( 1 <= _1 )( 2 ) );
+	ENSURE( "less-or-equal failed", ( 1 <= _1 )( 1 ) );
+	ENSURE_NOT( "less-or-equal failed", ( 1 <= _1 )( 0 ) );
+	ENSURE( "less-or-equal failed", ( _1 <= ( _2 * 2 ) )( 2, 2 ) );
+	ENSURE( "less-or-equal failed", ( _1 <= ( _2 * 2 ) )( 4, 2 ) );
+	ENSURE_NOT( "less-or-equal failed", ( _1 <= ( _2 * 2 ) )( 7, 2 ) );
+	ENSURE( "less-or-equal failed", ( ( _2 * 2 ) <= _1 )( 7, 2 ) );
+	ENSURE( "less-or-equal failed", ( ( _2 * 2 ) <= _1 )( 4, 2 ) );
+	ENSURE_NOT( "less-or-equal failed", ( ( _2 * 2 ) <= _1 )( 2, 2 ) );
+	ENSURE( "less-or-equal failed", ( 4 <= ( _1 * 2 ) )( 3 ) );
+	ENSURE( "less-or-equal failed", ( 4 <= ( _1 * 2 ) )( 2 ) );
+	ENSURE_NOT( "less-or-equal failed", ( 7 <= ( _1 * 2 ) )( 2 ) );
+	ENSURE( "less-or-equal failed", ( ( _1 * 2 ) <= 7 )( 2 ) );
+	ENSURE( "less-or-equal failed", ( ( _1 * 2 ) <= 4 )( 2 ) );
+	ENSURE_NOT( "less-or-equal failed", ( ( _1 * 2 ) <= 4 )( 4 ) );
+	ENSURE( "less-or-equal failed", ( ( _1 * 2 ) <= ( _2 * 3 ) )( 2, 2 ) );
+	ENSURE( "less-or-equal failed", ( ( _1 * 2 ) <= ( _2 * 3 ) )( 3, 2 ) );
+	ENSURE_NOT( "less-or-equal failed", ( ( _1 * 2 ) <= ( _2 * 3 ) )( 4, 2 ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 40, "greater-or-equal" )
+	ENSURE( "greater-or-equal failed", ( _1 >= 1 )( 2 ) );
+	ENSURE( "greater-or-equal failed", ( _1 >= 1 )( 1 ) );
+	ENSURE_NOT( "greater-or-equal failed", ( _1 >= 1 )( 0 ) );
+	ENSURE( "greater-or-equal failed", ( _1 >= _2 )( 2, 1 ) );
+	ENSURE( "greater-or-equal failed", ( _1 >= _2 )( 1, 1 ) );
+	ENSURE_NOT( "greater-or-equal failed", ( _1 >= _2 )( 0, 1 ) );
+	ENSURE( "greater-or-equal failed", ( 1 >= _1 )( 0 ) );
+	ENSURE( "greater-or-equal failed", ( 1 >= _1 )( 1 ) );
+	ENSURE_NOT( "greater-or-equal failed", ( 1 >= _1 )( 2 ) );
+	ENSURE( "greater-or-equal failed", ( _1 >= ( _2 * 2 ) )( 7, 2 ) );
+	ENSURE( "greater-or-equal failed", ( _1 >= ( _2 * 2 ) )( 4, 2 ) );
+	ENSURE_NOT( "greater-or-equal failed", ( _1 >= ( _2 * 2 ) )( 2, 2 ) );
+	ENSURE( "greater-or-equal failed", ( ( _2 * 2 ) >= _1 )( 2, 2 ) );
+	ENSURE( "greater-or-equal failed", ( ( _2 * 2 ) >= _1 )( 4, 2 ) );
+	ENSURE_NOT( "greater-or-equal failed", ( ( _2 * 2 ) >= _1 )( 7, 2 ) );
+	ENSURE( "greater-or-equal failed", ( 7 >= ( _1 * 2 ) )( 2 ) );
+	ENSURE( "greater-or-equal failed", ( 4 >= ( _1 * 2 ) )( 2 ) );
+	ENSURE_NOT( "greater-or-equal failed", ( 3 >= ( _1 * 2 ) )( 2 ) );
+	ENSURE( "greater-or-equal failed", ( ( _1 * 2 ) >= 3 )( 2 ) );
+	ENSURE( "greater-or-equal failed", ( ( _1 * 2 ) >= 4 )( 2 ) );
+	ENSURE_NOT( "greater-or-equal failed", ( ( _1 * 2 ) >= 7 )( 2 ) );
+	ENSURE( "greater-or-equal failed", ( ( _1 * 2 ) >= ( _2 * 3 ) )( 4, 2 ) );
+	ENSURE( "greater-or-equal failed", ( ( _1 * 2 ) >= ( _2 * 3 ) )( 3, 2 ) );
+	ENSURE_NOT( "greater-or-equal failed", ( ( _1 * 2 ) >= ( _2 * 3 ) )( 2, 2 ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 47, "mixed lambda operations" )
 	ENSURE_EQUALS( "combined + * lambda failed", ( _1 + _2 * _3 )( 1, 2, 3 ), 7 );
 	ENSURE_EQUALS( "combined ( + ) * lambda failed", ( ( _1 + _2 ) * _3 )( 1, 2, 3 ), 9 );
