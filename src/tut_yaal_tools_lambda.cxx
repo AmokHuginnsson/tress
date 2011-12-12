@@ -241,7 +241,69 @@ TUT_UNIT_TEST( 29, "assign" )
 	( _::_1 = 7 )( a );
 	ENSURE_EQUALS( "assign const failed", a, 7 );
 	( _::_1 = _2 )( a, 13 );
-	ENSURE_EQUALS( "assign const failed", a, 13 );
+	ENSURE_EQUALS( "assign lambda var failed", a, 13 );
+	( _::_1 = _2 * 2 )( a, 7 );
+	ENSURE_EQUALS( "assign lambda expr failed", a, 14 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 30, "plus assign" )
+	int a( 3 );
+	( _1 += 7 )( a );
+	ENSURE_EQUALS( "plus assign const failed", a, 10 );
+	a = 3;
+	( _1 += _2 )( a, 13 );
+	ENSURE_EQUALS( "plus assign lambda var failed", a, 16 );
+	a = 3;
+	( _1 += ( _2 * 2 ) )( a, 7 );
+	ENSURE_EQUALS( "plus assign lambda expr failed", a, 17 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 31, "minus assign" )
+	int a( 3 );
+	( _1 -= 7 )( a );
+	ENSURE_EQUALS( "minus assign const failed", a, -4 );
+	a = 3;
+	( _1 -= _2 )( a, 13 );
+	ENSURE_EQUALS( "minus assign lambda var failed", a, -10 );
+	a = 3;
+	( _1 -= ( _2 * 2 ) )( a, 7 );
+	ENSURE_EQUALS( "minus assign lambda expr failed", a, -11 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 32, "multiplies assign" )
+	int a( 3 );
+	( _1 *= 7 )( a );
+	ENSURE_EQUALS( "multiplies assign const failed", a, 21 );
+	a = 3;
+	( _1 *= _2 )( a, 13 );
+	ENSURE_EQUALS( "multiplies assign lambda var failed", a, 39 );
+	a = 3;
+	( _1 *= ( _2 * 2 ) )( a, 7 );
+	ENSURE_EQUALS( "multiplies assign lambda expr failed", a, 42 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 33, "divides assign" )
+	int a( 3 * 7 );
+	( _1 /= 7 )( a );
+	ENSURE_EQUALS( "divides assign const failed", a, 3 );
+	a = 39;
+	( _1 /= _2 )( a, 13 );
+	ENSURE_EQUALS( "divides assign lambda var failed", a, 3 );
+	a = 42;
+	( _1 /= ( _2 * 2 ) )( a, 7 );
+	ENSURE_EQUALS( "divides assign lambda expr failed", a, 3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 34, "modulo assign" )
+	int a( 19 );
+	( _1 %= 7 )( a );
+	ENSURE_EQUALS( "modulo assign const failed", a, 5 );
+	a = 19;
+	( _1 %= _2 )( a, 13 );
+	ENSURE_EQUALS( "modulo assign lambda var failed", a, 6 );
+	a = 19;
+	( _1 %= ( _2 * 2 ) )( a, 7 );
+	ENSURE_EQUALS( "modulo assign lambda expr failed", a, 5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 47, "mixed lambda operations" )
