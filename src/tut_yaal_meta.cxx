@@ -75,10 +75,10 @@ TUT_UNIT_TEST( 6, "unsigned_integer_cast<>" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 20, "xor" )
-	ENSURE_NOT( "xor failed", meta::boolean_xor<false, false>::value );
-	ENSURE( "xor failed", meta::boolean_xor<false, true>::value );
-	ENSURE( "xor failed", meta::boolean_xor<true, false>::value );
-	ENSURE_NOT( "xor failed", meta::boolean_xor<true, true>::value );
+	ENSURE_NOT( "xor failed", meta::logical_xor<false, false>::value );
+	ENSURE( "xor failed", meta::logical_xor<false, true>::value );
+	ENSURE( "xor failed", meta::logical_xor<true, false>::value );
+	ENSURE_NOT( "xor failed", meta::logical_xor<true, true>::value );
 TUT_TEARDOWN()
 
 }

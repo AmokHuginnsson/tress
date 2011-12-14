@@ -206,6 +206,7 @@ TUT_UNIT_TEST( 24, "combined lambda plus operations" )
 	ENSURE_EQUALS( "combined + const + lambda failed", ( _1 + _2 + 3 )( 1, 2 ), 6 );
 	ENSURE_EQUALS( "combined const + const + lambda failed", ( 1 + ( 2 + _1  ) )( 3 ), 6 );
 	ENSURE_EQUALS( "combined + const + const lambda failed", ( ( _1 + 2 ) + 3 )( 1 ), 6 );
+	ENSURE_EQUALS( "combined + const + lambda failed", ( ( _1 + 3 ) + ( _2 + 4 ) )( 1, 2 ), 10 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 25, "combined lambda minus operations" )
@@ -434,6 +435,42 @@ TUT_UNIT_TEST( 40, "greater-or-equal" )
 	ENSURE( "greater-or-equal failed", ( ( _1 * 2 ) >= ( _2 * 3 ) )( 4, 2 ) );
 	ENSURE( "greater-or-equal failed", ( ( _1 * 2 ) >= ( _2 * 3 ) )( 3, 2 ) );
 	ENSURE_NOT( "greater-or-equal failed", ( ( _1 * 2 ) >= ( _2 * 3 ) )( 2, 2 ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 41, "logical not" )
+	ENSURE( "lambda not failed", ( !_1 )( false ) );
+	ENSURE_NOT( "lambda not failed", ( !_1 )( true ) );
+	ENSURE( "lambda not failed", ( !( _1 == _2 ) )( 1, 2 ) );
+	ENSURE_NOT( "lambda not failed", ( !( _1 == _2 ) )( 1, 1 ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 42, "logical and" )
+	ENSURE( "lambda and failed", ( _1 && true )( true ) );
+	ENSURE( "lambda and failed", ( true && _1 )( true ) );
+	ENSURE_NOT( "lambda and failed", ( _1 && false )( false ) );
+	ENSURE_NOT( "lambda and failed", ( _1 && false )( true ) );
+	ENSURE_NOT( "lambda and failed", ( _1 && true )( false ) );
+	ENSURE( "lambda and failed", ( ( !_1 ) && true )( false ) );
+	ENSURE( "lambda and failed", ( true && ( !_1 ) )( false ) );
+	ENSURE( "lambda and failed", ( _1 && _2 )( true, true ) );
+	ENSURE_NOT( "lambda and failed", ( _1 && _2 )( true, false ) );
+	ENSURE( "lambda and failed", ( _1 && ( !_2 ) )( true, false ) );
+	ENSURE( "lambda and failed", ( ( !_1 ) && _2 )( false, true ) );
+	ENSURE( "lambda and failed", ( ( !_1 ) && ( !_2 ) )( false, false ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 43, "logical or" )
+	ENSURE( "lambda or failed", ( _1 || true )( false ) );
+	ENSURE( "lambda or failed", ( _1 || false )( true ) );
+	ENSURE( "lambda or failed", ( false || _1 )( true ) );
+	ENSURE( "lambda or failed", ( true || _1 )( false ) );
+	ENSURE( "lambda or failed", ( ( !_1 ) || false )( false ) );
+	ENSURE( "lambda or failed", ( false || ( !_1 ) )( false ) );
+	ENSURE( "lambda or failed", ( _1 || _2 )( false, true ) );
+	ENSURE( "lambda or failed", ( _1 || _2 )( true, false ) );
+	ENSURE( "lambda or failed", ( _1 || ( !_2 ) )( false, false ) );
+	ENSURE( "lambda or failed", ( ( !_1 ) || _2 )( false, false ) );
+	ENSURE( "lambda or failed", ( ( !_1 ) || ( !_2 ) )( true, false ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 47, "mixed lambda operations" )
