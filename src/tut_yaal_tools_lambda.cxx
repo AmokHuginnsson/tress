@@ -94,21 +94,17 @@ TUT_UNIT_TEST( 6, "plus" )
 	ss.clear();
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 + 1 );
 	ENSURE_EQUALS( "plus lambda failed", ss.string(), "3 4 6 8 12 14 18 20 24 " );
+	ENSURE_EQUALS( "plus both args are free failed", ( _1 + _2 )( 3, 4 ), 7 );
+	ENSURE_EQUALS( "plus both args are free, one integral, one floating point failed", ( _1 + _2 )( 3.14, 4 ), 3.14 + 4 );
+	ENSURE_EQUALS( "plus both args are free, at least one floating point, but we force return type", ret<int>( _1 + _2 )( 3.14, 4 ), 7 );
+	ENSURE_EQUALS( "combined + const + lambda failed", ( _1 + 2 + _2 )( 1, 3 ), 6 );
+	ENSURE_EQUALS( "combined + const + lambda failed", ( _1 + _2 + 3 )( 1, 2 ), 6 );
+	ENSURE_EQUALS( "combined const + const + lambda failed", ( 1 + ( 2 + _1  ) )( 3 ), 6 );
+	ENSURE_EQUALS( "combined + const + const lambda failed", ( ( _1 + 2 ) + 3 )( 1 ), 6 );
+	ENSURE_EQUALS( "combined + const + lambda failed", ( ( _1 + 3 ) + ( _2 + 4 ) )( 1, 2 ), 10 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "plus both args are free" )
-	ENSURE_EQUALS( "plus failed", ( _1 + _2 )( 3, 4 ), 7 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 8, "plus both args are free, one integral, one floating point" )
-	ENSURE_EQUALS( "plus failed", ( _1 + _2 )( 3.14, 4 ), 3.14 + 4 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 9, "plus both args are free, at least one floating point, but we force return type" )
-	ENSURE_EQUALS( "forcing return type failed", ret<int>( _1 + _2 )( 3.14, 4 ), 7 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 10, "minus" )
+TUT_UNIT_TEST( 7, "minus" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 1 - _1 );
@@ -116,23 +112,18 @@ TUT_UNIT_TEST( 10, "minus" )
 	ss.clear();
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 - 1 );
 	ENSURE_EQUALS( "minus lambda failed", ss.string(), "1 2 4 6 10 12 16 18 22 " );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 11, "minus both args are free" )
-	ENSURE_EQUALS( "minus failed", ( _1 - _2 )( 3, 4 ), -1 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 12, "minus both args are free, one integral, one floating point" )
-	ENSURE_EQUALS( "minus failed", ( _1 - _2 )( 3.14, 4 ), 3.14 - 4 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 13, "minus both args are free, at least one floating point, but we force return type" )
-	ENSURE_EQUALS( "forcing return type failed", ret<int>( _1 - _2 )( 3.14, 4 ), 0 );
+	ENSURE_EQUALS( "minus both args are free failed", ( _1 - _2 )( 3, 4 ), -1 );
+	ENSURE_EQUALS( "minus both args are free, one integral, one floating point failed", ( _1 - _2 )( 3.14, 4 ), 3.14 - 4 );
+	ENSURE_EQUALS( "minus both args are free, at least one floating point, but we force return type", ret<int>( _1 - _2 )( 3.14, 4 ), 0 );
+	ENSURE_EQUALS( "combined - const - lambda failed", ( _1 - 2 - _2 )( 1, 3 ), -4 );
+	ENSURE_EQUALS( "combined - const - lambda failed", ( _1 - _2 - 3 )( 1, 2 ), -4 );
+	ENSURE_EQUALS( "combined const - const - lambda failed", ( 1 - ( 2 - _1  ) )( 3 ), 2 );
+	ENSURE_EQUALS( "combined - const - const lambda failed", ( ( _1 - 2 ) - 3 )( 1 ), -4 );
 TUT_TEARDOWN()
 
 	/* 2 3 5 7 11 13 17 19 23 */
 
-TUT_UNIT_TEST( 14, "multiplies" )
+TUT_UNIT_TEST( 8, "multiplies" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 2 * _1 );
@@ -140,21 +131,16 @@ TUT_UNIT_TEST( 14, "multiplies" )
 	ss.clear();
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 * 2 );
 	ENSURE_EQUALS( "multiplies lambda failed", ss.string(), "4 6 10 14 22 26 34 38 46 " );
+	ENSURE_EQUALS( "multiplies both args are free failed", ( _1 * _2 )( 3, 4 ), 12 );
+	ENSURE_EQUALS( "multiplies both args are free, one integral, one floating point failed", ( _1 * _2 )( 3.14, 4 ), 3.14 * 4 );
+	ENSURE_EQUALS( "multiplies both args are free, at least one floating point, but we force return type", ret<int>( _1 * _2 )( 3.14, 4 ), 12 );
+	ENSURE_EQUALS( "combined * const * lambda failed", ( _1 * 3 * _2 )( 2, 5 ), 30 );
+	ENSURE_EQUALS( "combined * const * lambda failed", ( _1 * _2 * 5 )( 2, 3 ), 30 );
+	ENSURE_EQUALS( "combined const * const * lambda failed", ( 2 * ( 3 * _1  ) )( 5 ), 30 );
+	ENSURE_EQUALS( "combined * const * const lambda failed", ( ( _1 * 3 ) * 5 )( 2 ), 30 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "multiplies both args are free" )
-	ENSURE_EQUALS( "multiplies failed", ( _1 * _2 )( 3, 4 ), 12 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 16, "multiplies both args are free, one integral, one floating point" )
-	ENSURE_EQUALS( "multiplies failed", ( _1 * _2 )( 3.14, 4 ), 3.14 * 4 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 17, "multiplies both args are free, at least one floating point, but we force return type" )
-	ENSURE_EQUALS( "forcing return type failed", ret<int>( _1 * _2 )( 3.14, 4 ), 12 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 18, "divides" )
+TUT_UNIT_TEST( 9, "divides" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 223092870 / _1 );
@@ -166,25 +152,20 @@ TUT_UNIT_TEST( 18, "divides" )
 	ss.clear();
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 / 2 );
 	ENSURE_EQUALS( "divides lambda failed", ss.string(), "2 3 5 7 11 13 17 19 23 " );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 19, "divides both args are free" )
-	ENSURE_EQUALS( "divides failed", ( _1 / _2 )( 3, 4 ), 0 );
-	ENSURE_EQUALS( "divides failed", ( _1 / _2 )( 4, 3 ), 1 );
-	ENSURE_EQUALS( "divides failed", ( _1 / _2 )( 12, 3 ), 4 );
-	ENSURE_EQUALS( "divides failed", ( _1 / _2 )( 12, 4 ), 3 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 20, "divides both args are free, one integral, one floating point" )
-	ENSURE_EQUALS( "divides failed", ( _1 / _2 )( 3.14, 4 ), 3.14 / 4 );
+	ENSURE_EQUALS( "divides both args are free failed", ( _1 / _2 )( 3, 4 ), 0 );
+	ENSURE_EQUALS( "divides both args are free failed", ( _1 / _2 )( 4, 3 ), 1 );
+	ENSURE_EQUALS( "divides both args are free failed", ( _1 / _2 )( 12, 3 ), 4 );
+	ENSURE_EQUALS( "divides both args are free failed", ( _1 / _2 )( 12, 4 ), 3 );
+	ENSURE_EQUALS( "divides both args are free, one integral, one floating point failed", ( _1 / _2 )( 3.14, 4 ), 3.14 / 4 );
 	TUT_EVAL(( ( _1 / _2 )( 3.14, 4 ) ));
+	ENSURE_EQUALS( "divides both args are free, at least one floating point, but we force return type", ret<int>( _1 / _2 )( 3.14, 4 ), 0 );
+	ENSURE_EQUALS( "combined / const / lambda failed", ( _1 / 24 / _2 )( 96, 2 ), 2 );
+	ENSURE_EQUALS( "combined / const / lambda failed", ( _1 / _2 / 2 )( 96, 24 ), 2 );
+	ENSURE_EQUALS( "combined const / const / lambda failed", ( 96 / ( 24 / _1  ) )( 2 ), 8 );
+	ENSURE_EQUALS( "combined / const / const lambda failed", ( ( _1 / 24 ) / 2 )( 96 ), 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "divides both args are free, at least one floating point, but we force return type" )
-	ENSURE_EQUALS( "forcing return type failed", ret<int>( _1 / _2 )( 3.14, 4 ), 0 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 22, "modulo" )
+TUT_UNIT_TEST( 10, "modulo" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 1000 % _1 );
@@ -192,52 +173,22 @@ TUT_UNIT_TEST( 22, "modulo" )
 	ss.clear();
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 % 10 );
 	ENSURE_EQUALS( "modulo lambda failed", ss.string(), "2 3 5 7 1 3 7 9 3 " );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 23, "modulo both args are free" )
-	ENSURE_EQUALS( "modulo failed", ( _1 % _2 )( 3, 4 ), 3 );
-	ENSURE_EQUALS( "modulo failed", ( _1 % _2 )( 4, 3 ), 1 );
-	ENSURE_EQUALS( "modulo failed", ( _1 % _2 )( 12, 3 ), 0 );
-	ENSURE_EQUALS( "modulo failed", ( _1 % _2 )( 12, 4 ), 0 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 24, "combined lambda plus operations" )
-	ENSURE_EQUALS( "combined + const + lambda failed", ( _1 + 2 + _2 )( 1, 3 ), 6 );
-	ENSURE_EQUALS( "combined + const + lambda failed", ( _1 + _2 + 3 )( 1, 2 ), 6 );
-	ENSURE_EQUALS( "combined const + const + lambda failed", ( 1 + ( 2 + _1  ) )( 3 ), 6 );
-	ENSURE_EQUALS( "combined + const + const lambda failed", ( ( _1 + 2 ) + 3 )( 1 ), 6 );
-	ENSURE_EQUALS( "combined + const + lambda failed", ( ( _1 + 3 ) + ( _2 + 4 ) )( 1, 2 ), 10 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 25, "combined lambda minus operations" )
-	ENSURE_EQUALS( "combined - const - lambda failed", ( _1 - 2 - _2 )( 1, 3 ), -4 );
-	ENSURE_EQUALS( "combined - const - lambda failed", ( _1 - _2 - 3 )( 1, 2 ), -4 );
-	ENSURE_EQUALS( "combined const - const - lambda failed", ( 1 - ( 2 - _1  ) )( 3 ), 2 );
-	ENSURE_EQUALS( "combined - const - const lambda failed", ( ( _1 - 2 ) - 3 )( 1 ), -4 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 26, "combined lambda multiplies operations" )
-	ENSURE_EQUALS( "combined * const * lambda failed", ( _1 * 3 * _2 )( 2, 5 ), 30 );
-	ENSURE_EQUALS( "combined * const * lambda failed", ( _1 * _2 * 5 )( 2, 3 ), 30 );
-	ENSURE_EQUALS( "combined const * const * lambda failed", ( 2 * ( 3 * _1  ) )( 5 ), 30 );
-	ENSURE_EQUALS( "combined * const * const lambda failed", ( ( _1 * 3 ) * 5 )( 2 ), 30 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 27, "combined lambda divides operations" )
-	ENSURE_EQUALS( "combined / const / lambda failed", ( _1 / 24 / _2 )( 96, 2 ), 2 );
-	ENSURE_EQUALS( "combined / const / lambda failed", ( _1 / _2 / 2 )( 96, 24 ), 2 );
-	ENSURE_EQUALS( "combined const / const / lambda failed", ( 96 / ( 24 / _1  ) )( 2 ), 8 );
-	ENSURE_EQUALS( "combined / const / const lambda failed", ( ( _1 / 24 ) / 2 )( 96 ), 2 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 28, "combined lambda modulo operations" )
+	ENSURE_EQUALS( "modulo both args are free failed", ( _1 % _2 )( 3, 4 ), 3 );
+	ENSURE_EQUALS( "modulo both args are free failed", ( _1 % _2 )( 4, 3 ), 1 );
+	ENSURE_EQUALS( "modulo both args are free failed", ( _1 % _2 )( 12, 3 ), 0 );
+	ENSURE_EQUALS( "modulo both args are free failed", ( _1 % _2 )( 12, 4 ), 0 );
 	ENSURE_EQUALS( "combined % const % lambda failed", ( _1 % 29 % _2 )( 97, 13 ), 10 );
 	ENSURE_EQUALS( "combined % const % lambda failed", ( _1 % _2 % 13 )( 97, 29 ), 10 );
 	ENSURE_EQUALS( "combined const % const % lambda failed", ( 97 % ( 29 % _1  ) )( 13 ), 1 );
 	ENSURE_EQUALS( "combined % const % const lambda failed", ( ( _1 % 29 ) % 13 )( 97 ), 10 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 29, "assign" )
+TUT_UNIT_TEST( 11, "negate" )
+	ENSURE_EQUALS( "lambda negate failed", ( -_1 )( 1 ), -1 );
+	ENSURE_EQUALS( "lambda negate failed", ( -( _1 + 1 ) )( 1 ), -2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 12, "assign" )
 	int a( 0 );
 	( _::_1 = 7 )( a );
 	ENSURE_EQUALS( "assign const failed", a, 7 );
@@ -247,7 +198,7 @@ TUT_UNIT_TEST( 29, "assign" )
 	ENSURE_EQUALS( "assign lambda expr failed", a, 14 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 30, "plus assign" )
+TUT_UNIT_TEST( 13, "plus assign" )
 	int a( 3 );
 	( _1 += 7 )( a );
 	ENSURE_EQUALS( "plus assign const failed", a, 10 );
@@ -259,7 +210,7 @@ TUT_UNIT_TEST( 30, "plus assign" )
 	ENSURE_EQUALS( "plus assign lambda expr failed", a, 17 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 31, "minus assign" )
+TUT_UNIT_TEST( 14, "minus assign" )
 	int a( 3 );
 	( _1 -= 7 )( a );
 	ENSURE_EQUALS( "minus assign const failed", a, -4 );
@@ -271,7 +222,7 @@ TUT_UNIT_TEST( 31, "minus assign" )
 	ENSURE_EQUALS( "minus assign lambda expr failed", a, -11 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 32, "multiplies assign" )
+TUT_UNIT_TEST( 15, "multiplies assign" )
 	int a( 3 );
 	( _1 *= 7 )( a );
 	ENSURE_EQUALS( "multiplies assign const failed", a, 21 );
@@ -283,7 +234,7 @@ TUT_UNIT_TEST( 32, "multiplies assign" )
 	ENSURE_EQUALS( "multiplies assign lambda expr failed", a, 42 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 33, "divides assign" )
+TUT_UNIT_TEST( 16, "divides assign" )
 	int a( 3 * 7 );
 	( _1 /= 7 )( a );
 	ENSURE_EQUALS( "divides assign const failed", a, 3 );
@@ -295,7 +246,7 @@ TUT_UNIT_TEST( 33, "divides assign" )
 	ENSURE_EQUALS( "divides assign lambda expr failed", a, 3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 34, "modulo assign" )
+TUT_UNIT_TEST( 17, "modulo assign" )
 	int a( 19 );
 	( _1 %= 7 )( a );
 	ENSURE_EQUALS( "modulo assign const failed", a, 5 );
@@ -307,7 +258,7 @@ TUT_UNIT_TEST( 34, "modulo assign" )
 	ENSURE_EQUALS( "modulo assign lambda expr failed", a, 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 35, "equality" )
+TUT_UNIT_TEST( 18, "equality" )
 	ENSURE( "equality failed", ( _1 == 1 )( 1 ) );
 	ENSURE_NOT( "equality failed", ( _1 == 1 )( 2 ) );
 	ENSURE( "equality failed", ( _1 == _2 )( 1, 1 ) );
@@ -326,7 +277,7 @@ TUT_UNIT_TEST( 35, "equality" )
 	ENSURE_NOT( "equality failed", ( ( _1 * 2 ) == ( _2 * 3 ) )( 3, 3 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 36, "non-equality" )
+TUT_UNIT_TEST( 19, "non-equality" )
 	ENSURE_NOT( "non-equality failed", ( _1 != 1 )( 1 ) );
 	ENSURE( "non-equality failed", ( _1 != 1 )( 2 ) );
 	ENSURE_NOT( "non-equality failed", ( _1 != _2 )( 1, 1 ) );
@@ -345,7 +296,7 @@ TUT_UNIT_TEST( 36, "non-equality" )
 	ENSURE( "non-equality failed", ( ( _1 * 2 ) != ( _2 * 3 ) )( 3, 3 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 37, "less" )
+TUT_UNIT_TEST( 20, "less" )
 	ENSURE( "less failed", ( _1 < 1 )( 0 ) );
 	ENSURE_NOT( "less failed", ( _1 < 1 )( 1 ) );
 	ENSURE( "less failed", ( _1 < _2 )( 0, 1 ) );
@@ -364,7 +315,7 @@ TUT_UNIT_TEST( 37, "less" )
 	ENSURE_NOT( "less failed", ( ( _1 * 2 ) < ( _2 * 3 ) )( 3, 2 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 38, "greater" )
+TUT_UNIT_TEST( 21, "greater" )
 	ENSURE( "greater failed", ( _1 > 1 )( 2 ) );
 	ENSURE_NOT( "greater failed", ( _1 > 1 )( 1 ) );
 	ENSURE( "greater failed", ( _1 > _2 )( 2, 1 ) );
@@ -383,7 +334,7 @@ TUT_UNIT_TEST( 38, "greater" )
 	ENSURE_NOT( "greater failed", ( ( _1 * 2 ) > ( _2 * 3 ) )( 3, 2 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 39, "less-or-equal" )
+TUT_UNIT_TEST( 22, "less-or-equal" )
 	ENSURE( "less-or-equal failed", ( _1 <= 1 )( 0 ) );
 	ENSURE( "less-or-equal failed", ( _1 <= 1 )( 1 ) );
 	ENSURE_NOT( "less-or-equal failed", ( _1 <= 1 )( 2 ) );
@@ -410,7 +361,7 @@ TUT_UNIT_TEST( 39, "less-or-equal" )
 	ENSURE_NOT( "less-or-equal failed", ( ( _1 * 2 ) <= ( _2 * 3 ) )( 4, 2 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 40, "greater-or-equal" )
+TUT_UNIT_TEST( 23, "greater-or-equal" )
 	ENSURE( "greater-or-equal failed", ( _1 >= 1 )( 2 ) );
 	ENSURE( "greater-or-equal failed", ( _1 >= 1 )( 1 ) );
 	ENSURE_NOT( "greater-or-equal failed", ( _1 >= 1 )( 0 ) );
@@ -437,14 +388,14 @@ TUT_UNIT_TEST( 40, "greater-or-equal" )
 	ENSURE_NOT( "greater-or-equal failed", ( ( _1 * 2 ) >= ( _2 * 3 ) )( 2, 2 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 41, "logical not" )
+TUT_UNIT_TEST( 24, "logical not" )
 	ENSURE( "lambda not failed", ( !_1 )( false ) );
 	ENSURE_NOT( "lambda not failed", ( !_1 )( true ) );
 	ENSURE( "lambda not failed", ( !( _1 == _2 ) )( 1, 2 ) );
 	ENSURE_NOT( "lambda not failed", ( !( _1 == _2 ) )( 1, 1 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 42, "logical and" )
+TUT_UNIT_TEST( 25, "logical and" )
 	ENSURE( "lambda and failed", ( _1 && true )( true ) );
 	ENSURE( "lambda and failed", ( true && _1 )( true ) );
 	ENSURE_NOT( "lambda and failed", ( _1 && false )( false ) );
@@ -459,7 +410,7 @@ TUT_UNIT_TEST( 42, "logical and" )
 	ENSURE( "lambda and failed", ( ( !_1 ) && ( !_2 ) )( false, false ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 43, "logical or" )
+TUT_UNIT_TEST( 26, "logical or" )
 	ENSURE( "lambda or failed", ( _1 || true )( false ) );
 	ENSURE( "lambda or failed", ( _1 || false )( true ) );
 	ENSURE( "lambda or failed", ( false || _1 )( true ) );
@@ -471,6 +422,28 @@ TUT_UNIT_TEST( 43, "logical or" )
 	ENSURE( "lambda or failed", ( _1 || ( !_2 ) )( false, false ) );
 	ENSURE( "lambda or failed", ( ( !_1 ) || _2 )( false, false ) );
 	ENSURE( "lambda or failed", ( ( !_1 ) || ( !_2 ) )( true, false ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 27, "bit and" )
+	ENSURE_EQUALS( "lambda bit and failed", ( _1 & 4 )( 5 ), 4 );
+	ENSURE_EQUALS( "lambda bit and failed", ( 4 & _1 )( 5 ), 4 );
+	ENSURE_EQUALS( "lambda bit and failed", ( _1 & _2 )( 4, 5 ), 4 );
+	ENSURE_EQUALS( "lambda bit and failed", ( 4 & ( _1 + 1 ) )( 4 ), 4 );
+	ENSURE_EQUALS( "lambda bit and failed", ( ( _1 + 1 ) & 4 )( 4 ), 4 );
+	ENSURE_EQUALS( "lambda bit and failed", ( _1 & ( _2 + 1 ) )( 4, 4 ), 4 );
+	ENSURE_EQUALS( "lambda bit and failed", ( ( _1 + 1 ) & _2 )( 4, 4 ), 4 );
+	ENSURE_EQUALS( "lambda bit and failed", ( ( _1 + 1 ) & ( _2 + 1 ) )( 4, 3 ), 4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 28, "bit or" )
+	ENSURE_EQUALS( "lambda bit or failed", ( _1 | 4 )( 1 ), 5 );
+	ENSURE_EQUALS( "lambda bit or failed", ( 4 | _1 )( 1 ), 5 );
+	ENSURE_EQUALS( "lambda bit or failed", ( _1 | _2 )( 4, 1 ), 5 );
+	ENSURE_EQUALS( "lambda bit or failed", ( 1 | ( _1 + 1 ) )( 3 ), 5 );
+	ENSURE_EQUALS( "lambda bit or failed", ( ( _1 + 1 ) | 1 )( 3 ), 5 );
+	ENSURE_EQUALS( "lambda bit or failed", ( _1 | ( _2 + 1 ) )( 1, 3 ), 5 );
+	ENSURE_EQUALS( "lambda bit or failed", ( ( _1 + 1 ) | _2 )( 3, 1 ), 5 );
+	ENSURE_EQUALS( "lambda bit or failed", ( ( _1 + 1 ) | ( _2 - 1 ) )( 3, 2 ), 5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 47, "mixed lambda operations" )
