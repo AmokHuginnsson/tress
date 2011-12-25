@@ -96,7 +96,8 @@ TUT_UNIT_TEST( 1, "tls in main thread" )
 	tls->foo();
 	external_lock_t l( tls.acquire() );
 	tls_t::iterator it( tls.begin() );
-	ENSURE( "inconsitient state", tls.operator->() == it->first );
+	ENSURE( "inconsitient state", tls.operator->() == (*it)->operator->() );
+	(**it)->foo();
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "multiple instances" )
