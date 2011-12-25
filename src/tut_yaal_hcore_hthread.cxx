@@ -85,7 +85,7 @@ HCool::~HCool( void ) {
 
 void* simple( HThread const* const caller_ ) {
 	M_PROLOG
-	HThread::set_name( "tut_yaal_hcore_hthread::simple" );
+	HThread::set_name( "tut::HThread(simple)" );
 	cout << "Thread [simple] started." << endl;
 	int ctr = 50;
 	while ( caller_->is_alive() && ctr -- ) {
@@ -102,7 +102,7 @@ void* a_fast_one( HThread const* const ) {
 }
 
 void busy_wait( void ) {
-	HThread::set_name( "tut_yaal_hcore_hthread::busy_wait" );
+	HThread::set_name( "tut::HThread(busy_wait)" );
 /* cppcheck-suppress unreadVariable */
 	long q = 3;
 	for ( int i= 0; i < 1000; ++ i ) {
@@ -115,7 +115,7 @@ void busy_wait( void ) {
 
 void* HCool::run( HThread const* caller_ ) {
 	M_PROLOG
-	HThread::set_name( "tut_yaal_hcore_hthread::cool" );
+	HThread::set_name( "tut::HThread(cool)" );
 	int ctr = _lifeLength;
 	_wasStarted = true;
 	cout << "Thread [" << _name << "] started ... ";
