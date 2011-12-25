@@ -161,9 +161,15 @@ void* CVTest::run( void ) {
 	_loop = true;
 	int ctr = 0;
 	while ( _loop ) {
-		_cV.signal();
+		/**/ {
+			HLock l( _mutex );
+			_cV.signal();
+		}
 		cout << "+" << flush;
-		_cV.signal();
+		/**/ {
+			HLock l( _mutex );
+			_cV.signal();
+		}
 		cout << "+" << flush;
 		ctr += 2;
 	}
