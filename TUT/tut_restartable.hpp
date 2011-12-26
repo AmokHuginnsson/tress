@@ -38,8 +38,8 @@ std::string escape( const std::string& orig ) {
 			rc += *i;
 		} else {
 			rc += '\\';
-			rc += static_cast<char>( 'a' + ( ( ( unsigned int ) *i ) >> 4 ) );
-			rc += static_cast<char>( 'a' + ( ( ( unsigned int ) *i ) & 0xF ) );
+			rc += static_cast<char>( 'a' + ( static_cast<unsigned int>( *i ) >> 4 ) );
+			rc += static_cast<char>( 'a' + ( static_cast<unsigned int>( *i ) & 0xF ) );
 		}
 
 		++ i;
