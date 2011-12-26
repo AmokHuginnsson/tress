@@ -24,6 +24,7 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <ctime>
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/hscheduledasynccaller.hxx>
@@ -46,13 +47,14 @@ struct tut_yaal_tools_hscheduledasynccaller : public simple_mock<tut_yaal_tools_
 	tut_yaal_tools_hscheduledasynccaller( void )
 		: _sac( HScheduledAsyncCaller::get_instance() ), _mutex(), _val( 0 )
 		{}
-	virtual ~tut_yaal_tools_hscheduledasynccaller( void ) {}
+	virtual ~tut_yaal_tools_hscheduledasynccaller( void ) {
+		_sac.stop();
+	}
 	void action( int val_ ) {
 		_val = val_;
 	}
 };
 
-//TUT_SIMPLE_MOCK( tut_yaal_tools_hscheduledasynccaller );
 TUT_TEST_GROUP( tut_yaal_tools_hscheduledasynccaller, "yaal::tools::HScheduledAsyncCaller" );
 
 TUT_UNIT_TEST( 1, "functional test" )
