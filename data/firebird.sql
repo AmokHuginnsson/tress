@@ -21,12 +21,11 @@ COMMIT;
 CONNECT 'tress' USER 'tress' PASSWORD 'tr3ss';
 
 DROP TABLE config;
-CREATE TABLE config
-	(
+CREATE TABLE config (
 	id INTEGER PRIMARY KEY,
 	name VARCHAR(16) UNIQUE NOT NULL,
 	data VARCHAR( 255 )
-	);
+);
 CREATE GENERATOR gen_config_id;
 SET GENERATOR gen_config_id TO 0;
 

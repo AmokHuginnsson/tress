@@ -63,14 +63,14 @@ void dump_query_result( HDataBase::ptr_t db, char const* const query ) {
 static char const* const QUERY = "SELECT * FROM config;";
 
 TUT_UNIT_TEST( 1, "simple query on default engine" )
-	HDataBase::ptr_t db = HDataBase::get_connector();
+	HDataBase::ptr_t db( HDataBase::get_connector() );
 	db->connect( "./out/tress", "", "" );
 	dump_query_result( db, QUERY );
 TUT_TEARDOWN()
 
 #if defined( HAVE_SQLITE3_H )
 TUT_UNIT_TEST( 2, "SQLite engine" )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	db->connect( "./out/tress", "", "" );
 	dump_query_result( db, QUERY );
 TUT_TEARDOWN()
@@ -78,7 +78,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
 TUT_UNIT_TEST( 3, "PostgreSQL engine" )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( db, QUERY );
 TUT_TEARDOWN()
@@ -86,7 +86,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_MYSQL_MYSQL_H )
 TUT_UNIT_TEST( 4, "MySQL engine" )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( db, QUERY );
 TUT_TEARDOWN()
@@ -94,7 +94,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_IBASE_H )
 TUT_UNIT_TEST( 5, "Firebird engine" )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( db, QUERY );
 TUT_TEARDOWN()
@@ -102,7 +102,7 @@ TUT_TEARDOWN()
 
 #if 0 && defined( HAVE_OCI_H )
 TUT_UNIT_TEST( 6, "Oracle engine" )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::ORACLE );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( db, QUERY );
 TUT_TEARDOWN()
@@ -111,27 +111,27 @@ TUT_TEARDOWN()
 #if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || defined( HAVE_OCI_H )
 TUT_UNIT_TEST( 7, "different engines all in one" )
 #if defined( HAVE_SQLITE3_H )
-	HDataBase::ptr_t dbSQLite = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
+	HDataBase::ptr_t dbSQLite( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	dbSQLite->connect( "./out/tress", "", "" );
 	dump_query_result( dbSQLite, QUERY );
 #endif /* defined( HAVE_SQLITE3_H ) */
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
-	HDataBase::ptr_t dbPostgreSQL = HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL );
+	HDataBase::ptr_t dbPostgreSQL( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	dbPostgreSQL->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( dbPostgreSQL, QUERY );
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
 #if defined( HAVE_MYSQL_MYSQL_H )
-	HDataBase::ptr_t dbMySQL = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
+	HDataBase::ptr_t dbMySQL( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	dbMySQL->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( dbMySQL, QUERY );
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 #if defined( HAVE_IBASE_H )
-	HDataBase::ptr_t dbFirebird = HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD );
+	HDataBase::ptr_t dbFirebird( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	dbFirebird->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( dbFirebird, QUERY );
 #endif /* defined( HAVE_IBASE_H ) */
 #if 0 && defined( HAVE_OCI_H )
-	HDataBase::ptr_t dbOracle = HDataBase::get_connector( ODBConnector::DRIVER::ORACLE );
+	HDataBase::ptr_t dbOracle( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	dbOracle->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( dbOracle, QUERY );
 #endif /* defined( HAVE_OCI_H ) */
@@ -171,7 +171,7 @@ void test_dml( HDataBase::ptr_t db ) {
 
 #if defined( HAVE_SQLITE3_H )
 TUT_UNIT_TEST( 8, "dml on SQLite" )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	db->connect( "./out/tress", "", "" );
 	test_dml( db );
 TUT_TEARDOWN()
@@ -179,7 +179,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
 TUT_UNIT_TEST( 9, "PostgreSQL engine" )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml( db );
 TUT_TEARDOWN()
@@ -187,7 +187,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_MYSQL_MYSQL_H )
 TUT_UNIT_TEST( 10, "MySQL engine" )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml( db );
 TUT_TEARDOWN()
@@ -195,7 +195,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_IBASE_H )
 TUT_UNIT_TEST( 11, "Firebird engine" )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml( db );
 TUT_TEARDOWN()
@@ -203,7 +203,7 @@ TUT_TEARDOWN()
 
 #if 0 && defined( HAVE_OCI_H )
 TUT_UNIT_TEST( 12, "Oracle engine" )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::ORACLE );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml( db );
 TUT_TEARDOWN()
@@ -229,34 +229,42 @@ void test_schema( HDataBase::ptr_t db_ ) {
 
 #if defined( HAVE_SQLITE3_H )
 TUT_UNIT_TEST( 13, "sqlite3 schema" )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	db->connect( "./out/tress", "", "" );
 	test_schema( db );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_SQLITE3_H ) */
 
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL );
+TUT_UNIT_TEST( 14, "PostgreSQL schema" )
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_schema( db );
+TUT_TEARDOWN()
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
 
 #if defined( HAVE_MYSQL_MYSQL_H )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::MYSQL );
+TUT_UNIT_TEST( 15, "MySQL schema" )
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_schema( db );
+TUT_TEARDOWN()
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 
 #if defined( HAVE_IBASE_H )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD );
+TUT_UNIT_TEST( 16, "Firebird schema" )
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_schema( db );
+TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) */
 
 #if 0 && defined( HAVE_OCI_H )
-	HDataBase::ptr_t db = HDataBase::get_connector( ODBConnector::DRIVER::ORACLE );
+TUT_UNIT_TEST( 17, "Oracle schema" )
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_schema( db );
+TUT_TEARDOWN()
 #endif /* defined( HAVE_OCI_H ) */
 
 }
