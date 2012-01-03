@@ -175,6 +175,11 @@ std::ostream& operator << ( std::ostream& out, yaal::hcore::HSet<tType> const& s
 	return ( container_dump( out, s, "set" ) );
 }
 
+template<typename key_t, typename value_t>
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HMap<key_t, value_t> const& m ) {
+	return ( container_dump( out, m, "map" ) );
+}
+
 template<typename tType>
 std::ostream& operator << ( std::ostream& out, yaal::tools::HRing<tType> const& r ) {
 	return ( container_dump( out, r, "ring" ) );
