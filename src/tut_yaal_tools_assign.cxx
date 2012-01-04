@@ -77,5 +77,29 @@ TUT_UNIT_TEST( 2, "build HMap<>" )
 	ENSURE_EQUALS( "construction to HMap failed", bar( sequence( 1, 2 )( 3, -4 )( -5, 6 ) ), "map(pair<-5,6> pair<1,2> pair<3,-4>)" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 3, "fast build HArray<>" )
+	int_array_t expected;
+	expected.push_back( 1 );
+	ENSURE_EQUALS( "assign to HArray failed", array( 1 ), expected );
+	expected.push_back( 2 );
+	ENSURE_EQUALS( "assign to HArray failed", array( 1, 2 ), expected );
+	expected.push_back( 3 );
+	ENSURE_EQUALS( "assign to HArray failed", array( 1, 2, 3 ), expected );
+	expected.push_back( 4 );
+	ENSURE_EQUALS( "assign to HArray failed", array( 1, 2, 3, 4 ), expected );
+	expected.push_back( 5 );
+	ENSURE_EQUALS( "assign to HArray failed", array( 1, 2, 3, 4, 5 ), expected );
+	expected.push_back( 6 );
+	ENSURE_EQUALS( "assign to HArray failed", array( 1, 2, 3, 4, 5, 6 ), expected );
+	expected.push_back( 7 );
+	ENSURE_EQUALS( "assign to HArray failed", array( 1, 2, 3, 4, 5, 6, 7 ), expected );
+	expected.push_back( 8 );
+	ENSURE_EQUALS( "assign to HArray failed", array( 1, 2, 3, 4, 5, 6, 7, 8 ), expected );
+	expected.push_back( 9 );
+	ENSURE_EQUALS( "assign to HArray failed", array( 1, 2, 3, 4, 5, 6, 7, 8, 9 ), expected );
+	expected.push_back( 10 );
+	ENSURE_EQUALS( "assign to HArray failed", array( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ), expected );
+TUT_TEARDOWN()
+
 }
 
