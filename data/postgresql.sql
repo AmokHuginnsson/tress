@@ -13,11 +13,10 @@ CREATE TABLE config
 	data VARCHAR( 255 )
 	) WITH OIDS;
 
-INSERT INTO config ( id, name, data ) VALUES( 1, 'one', '1' );
-INSERT INTO config ( id, name, data ) VALUES( 2, 'two', '22' );
-INSERT INTO config ( id, name, data ) VALUES( 3, 'three', '333' );
-INSERT INTO config ( id, name, data ) VALUES( 4, 'four', '4444' );
-SELECT setval( 'config_id_seq', 4 );
+INSERT INTO config ( id, name, data ) VALUES( 1, 'one', 'PostgreSQL' );
+INSERT INTO config ( id, name, data ) VALUES( 2, 'two', NULL );
+INSERT INTO config ( id, name, data ) VALUES( 3, 'three', 'Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!' );
+SELECT setval( 'config_id_seq', 3 );
 
 GRANT SELECT,INSERT,UPDATE,DELETE ON config TO tress;
 GRANT SELECT,UPDATE ON config_id_seq TO tress;

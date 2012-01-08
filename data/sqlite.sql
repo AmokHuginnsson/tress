@@ -6,8 +6,7 @@ CREATE TABLE config
 	data VARCHAR( 255 )
 	);
 
-INSERT INTO config ( id, name, data ) VALUES( 1, 'one', '1' );
-INSERT INTO config ( id, name, data ) VALUES( 2, 'two', '22' );
-INSERT INTO config ( id, name, data ) VALUES( 3, 'three', '333' );
-INSERT INTO config ( id, name, data ) VALUES( 4, 'four', '4444' );
+INSERT INTO config ( id, name, data ) VALUES( 1, 'one', 'sqlite3' );
+INSERT INTO config ( id, name, data ) VALUES( 2, 'two', NULL );
+INSERT INTO config ( id, name, data ) VALUES( 3, 'three', 'Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!' );
 

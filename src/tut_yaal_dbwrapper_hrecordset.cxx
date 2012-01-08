@@ -26,7 +26,7 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
-#include <yaal/dbwrapper/hdatabase.hxx>
+#include <yaal/dbwrapper/dbwrapper.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
@@ -42,18 +42,40 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_dbwrapper_hrecordset );
 TUT_TEST_GROUP( tut_yaal_dbwrapper_hrecordset, "yaal::dbwrapper::HRecordSet" );
 
-void dump_query_result( HDataBase::ptr_t db, char const* const query ) {
+void dump_query_result( HDataBase::ptr_t db, char const* const query, char const* dbType_ ) {
 	M_PROLOG
 	HRecordSet::ptr_t rs = db->query( query );
+	char const* const COLUMN_NAMES[] = { "id", "name", "data" };
+	char const* const DATA[][3] = {
+		{ "1", "one", NULL },
+		{ "2", "two", NULL },
+		{ "3", "three", "Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!" }
+	};
 	cout << "|";
-	for ( int i( 0 ), COUNT( rs->get_field_count() ); i < COUNT; ++ i )
-		cout << rs->get_column_name( i ) << "|";
+	for ( int i( 0 ), COUNT( rs->get_field_count() ); i < COUNT; ++ i ) {
+		HString cn( rs->get_column_name( i ) );
+		cn.lower();
+		ENSURE_EQUALS( "bad column name", cn, COLUMN_NAMES[i] );
+		cout << cn << "|";
+	}
 	cout << endl;
-	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); ++ it ) {
+	int row( 0 );
+	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); ++ it, ++ row ) {
 		cout << "|";
 		int fc = rs->get_field_count();
-		for ( int i = 0; i < fc; ++ i )
-			cout << *it[ i ] << "|";
+		for ( int i = 0; i < fc; ++ i ) {
+			HRecordSet::value_t v( it[i] );
+			if ( ( row == 0 ) && ( i == 2 ) ) {
+				if ( dbType_ )
+					ENSURE_EQUALS( "wrong database accessed", *v, dbType_ );
+			} else {
+				if ( !!v )
+					ENSURE_EQUALS( "wrong value", *v, DATA[row][i] );
+				else
+					ENSURE_EQUALS( "wrong value", static_cast<char const*>( NULL ), DATA[row][i] );
+			}
+			cout << ( !v ? HString( "(NULL)" ) : *v ) << "|";
+		}
 		cout << endl;
 	}
 	return;
@@ -65,14 +87,14 @@ static char const* const QUERY = "SELECT * FROM config;";
 TUT_UNIT_TEST( 1, "simple query on default engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector() );
 	db->connect( "./out/tress", "", "" );
-	dump_query_result( db, QUERY );
+	dump_query_result( db, QUERY, NULL );
 TUT_TEARDOWN()
 
 #if defined( HAVE_SQLITE3_H )
 TUT_UNIT_TEST( 2, "SQLite engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	db->connect( "./out/tress", "", "" );
-	dump_query_result( db, QUERY );
+	dump_query_result( db, QUERY, "sqlite3" );
 TUT_TEARDOWN()
 #endif /* not defined( HAVE_SQLITE3_H ) */
 
@@ -80,7 +102,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 3, "PostgreSQL engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
-	dump_query_result( db, QUERY );
+	dump_query_result( db, QUERY, "PostgreSQL" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
 
@@ -88,7 +110,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 4, "MySQL engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
-	dump_query_result( db, QUERY );
+	dump_query_result( db, QUERY, "MySQL" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 
@@ -96,7 +118,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 5, "Firebird engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	db->connect( "tress", "tress", "tr3ss" );
-	dump_query_result( db, QUERY );
+	dump_query_result( db, QUERY, "Firebird" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) */
 
@@ -104,7 +126,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 6, "Oracle engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
-	dump_query_result( db, QUERY );
+	dump_query_result( db, QUERY, "Oracle" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_OCI_H ) */
 
@@ -113,27 +135,27 @@ TUT_UNIT_TEST( 7, "different engines all in one" )
 #if defined( HAVE_SQLITE3_H )
 	HDataBase::ptr_t dbSQLite( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	dbSQLite->connect( "./out/tress", "", "" );
-	dump_query_result( dbSQLite, QUERY );
+	dump_query_result( dbSQLite, QUERY, "sqlite3" );
 #endif /* defined( HAVE_SQLITE3_H ) */
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
 	HDataBase::ptr_t dbPostgreSQL( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	dbPostgreSQL->connect( "tress", "tress", "tr3ss" );
-	dump_query_result( dbPostgreSQL, QUERY );
+	dump_query_result( dbPostgreSQL, QUERY, "PostgreSQL" );
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
 #if defined( HAVE_MYSQL_MYSQL_H )
 	HDataBase::ptr_t dbMySQL( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	dbMySQL->connect( "tress", "tress", "tr3ss" );
-	dump_query_result( dbMySQL, QUERY );
+	dump_query_result( dbMySQL, QUERY, "MySQL" );
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 #if defined( HAVE_IBASE_H )
 	HDataBase::ptr_t dbFirebird( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	dbFirebird->connect( "tress", "tress", "tr3ss" );
-	dump_query_result( dbFirebird, QUERY );
+	dump_query_result( dbFirebird, QUERY, "Firebird" );
 #endif /* defined( HAVE_IBASE_H ) */
 #if 0 && defined( HAVE_OCI_H )
 	HDataBase::ptr_t dbOracle( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	dbOracle->connect( "tress", "tress", "tr3ss" );
-	dump_query_result( dbOracle, QUERY );
+	dump_query_result( dbOracle, QUERY, "Oracle" );
 #endif /* defined( HAVE_OCI_H ) */
 TUT_TEARDOWN()
 #endif /* #if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || defined( HAVE_OCI_H ) */
@@ -151,7 +173,7 @@ void test_dml( HDataBase::ptr_t db ) {
 	TUT_INVOKE( rs = db->query( SPECIAL_INSERT ); );
 	int long lastInsertId( rs->get_insert_id() );
 	clog << "lastInsertId: " << lastInsertId << endl;
-	ENSURE_EQUALS( "bad last insert id", lastInsertId > 4, true );
+	ENSURE_EQUALS( "bad last insert id", lastInsertId > 3, true );
 	TUT_INVOKE( rs = db->query( SPECIAL_QUERY ); );
 	ENSURE_EQUALS( "bad COUNT(*) after SELECT", rs->get_size(), 1 );
 	ENSURE( "INSERT failed?", !! rs && ( rs->begin() != rs->end() ) && rs->begin()[1] && ( *(rs->begin()[1]) == "special" ) && rs->begin()[2] && ( *(rs->begin()[2]) == "first" ) );
@@ -266,6 +288,31 @@ TUT_UNIT_TEST( 17, "Oracle schema" )
 	test_schema( db );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_OCI_H ) */
+
+#if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || defined( HAVE_OCI_H )
+TUT_UNIT_TEST( 18, "different engines all in one by DSN" )
+#if defined( HAVE_SQLITE3_H )
+	HDataBase::ptr_t dbSQLite( util::connect( "sqlite3:///out/tress.sqlite" ) );
+	dump_query_result( dbSQLite, QUERY, "sqlite3" );
+#endif /* defined( HAVE_SQLITE3_H ) */
+#if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
+	HDataBase::ptr_t dbPostgreSQL( util::connect( "postgresql://tress:tr3ss@/tress" ) );
+	dump_query_result( dbPostgreSQL, QUERY, "PostgreSQL" );
+#endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
+#if defined( HAVE_MYSQL_MYSQL_H )
+	HDataBase::ptr_t dbMySQL( util::connect( "mysql://tress:tr3ss@/tress" ) );
+	dump_query_result( dbMySQL, QUERY, "MySQL" );
+#endif /* defined( HAVE_MYSQL_MYSQL_H ) */
+#if defined( HAVE_IBASE_H )
+	HDataBase::ptr_t dbFirebird( util::connect( "firebird://tress:tr3ss@/tress" ) );
+	dump_query_result( dbFirebird, QUERY, "Firebird" );
+#endif /* defined( HAVE_IBASE_H ) */
+#if 0 && defined( HAVE_OCI_H )
+	HDataBase::ptr_t dbOracle( util::connect( "oracle://tress:tr3ss@/tress" ) );
+	dump_query_result( dbOracle, QUERY, "Oracle" );
+#endif /* defined( HAVE_OCI_H ) */
+TUT_TEARDOWN()
+#endif /* #if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || defined( HAVE_OCI_H ) */
 
 }
 
