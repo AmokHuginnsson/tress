@@ -43,6 +43,7 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 struct tut_yaal_hcore_hsocket {
+	static int const OBSCURE_PORT = 61928;
 	tut_yaal_hcore_hsocket( void ) {
 		::unlink( "/tmp/TUT_socket" );
 		errno = 0;
@@ -238,12 +239,11 @@ TUT_UNIT_TEST( 4, "Listening on reserved port." )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "Listening on port in use." )
-	int const obscurePort( 61928 );
 	HSocket block( HSocket::TYPE::NETWORK, 1 );
-	block.listen( "0.0.0.0", obscurePort );
+	block.listen( "0.0.0.0", OBSCURE_PORT );
 	HSocket socket( HSocket::TYPE::NETWORK, 1 );
 	try {
-		socket.listen( "0.0.0.0", obscurePort );
+		socket.listen( "0.0.0.0", OBSCURE_PORT );
 		FAIL( "listening on port in use possible" );
 	} catch ( HSocketException & e ) {
 		cout << e.what() << endl;
@@ -362,35 +362,35 @@ TUT_UNIT_TEST( 18, "Transfering data through file with SSL (non-blocking server,
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 19, "Transfering data through network (blocking)." )
-	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, false, false, false );
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, false, false, false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 20, "Transfering data through network (non-blocking)." )
-	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, false, true, true );
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, false, true, true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 21, "Transfering data through network (blocking server, nonblocking client)." )
-	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, false, false, true );
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, false, false, true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 22, "Transfering data through network (non-blocking server, blocking client)." )
-	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, false, true, false );
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, false, true, false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 23, "Transfering data through network with SSL. (blocking)" )
-	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, true, false, false );
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, true, false, false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 24, "Transfering data through network wiht SSL (non-blocking)." )
-	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, true, true, true );
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, true, true, true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 25, "Transfering data through network with SSL. (blocking server, nonblocking client)" )
-	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, true, false, true );
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, true, false, true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 26, "Transfering data through network wiht SSL (non-blocking server, blocking client)." )
-	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", 5555, true, true, false );
+	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, true, true, false );
 TUT_TEARDOWN()
 
 }
