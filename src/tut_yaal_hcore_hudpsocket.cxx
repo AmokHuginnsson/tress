@@ -44,6 +44,7 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 struct tut_yaal_hcore_hudpsocket {
+	static int const OBSCURE_PORT = 61928;
 	tut_yaal_hcore_hudpsocket( void ) {
 		errno = 0;
 	}
@@ -234,37 +235,37 @@ void play_scenario( int port_, ip_t ip_, bool withSsl_, bool nonBlockingServer_,
 }
 
 TUT_UNIT_TEST( 19, "Transfering data through network (blocking)." )
-	play_scenario( 5555, ip_t( 127, 0, 0, 1 ), false, false, false );
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, false, false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 20, "Transfering data through network (non-blocking)." )
-	play_scenario( 5555, ip_t( 127, 0, 0, 1 ), false, true, true );
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, true, true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 21, "Transfering data through network (blocking server, nonblocking client)." )
-	play_scenario( 5555, ip_t( 127, 0, 0, 1 ), false, false, true );
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, false, true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 22, "Transfering data through network (non-blocking server, blocking client)." )
-	play_scenario( 5555, ip_t( 127, 0, 0, 1 ), false, true, false );
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, true, false );
 TUT_TEARDOWN()
 
 #if 0
 
 TUT_UNIT_TEST( 23, "Transfering data through network with SSL. (blocking)" )
-	play_scenario( 5555, ip_t( 127, 0, 0, 1 ), true, false, false );
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), true, false, false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 24, "Transfering data through network wiht SSL (non-blocking)." )
-	play_scenario( 5555, ip_t( 127, 0, 0, 1 ), true, true, true );
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), true, true, true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 25, "Transfering data through network with SSL. (blocking server, nonblocking client)" )
-	play_scenario( 5555, ip_t( 127, 0, 0, 1 ), true, false, true );
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), true, false, true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 26, "Transfering data through network wiht SSL (non-blocking server, blocking client)." )
-	play_scenario( 5555, ip_t( 127, 0, 0, 1 ), true, true, false );
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), true, true, false );
 TUT_TEARDOWN()
 
 #endif
