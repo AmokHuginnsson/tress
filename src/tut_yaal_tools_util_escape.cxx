@@ -59,10 +59,10 @@ TUT_UNIT_TEST( 1, "EscapeTable constrctor" )
 		/* ok */
 	}
 	EscapeTable et( "\n", 1, "n", 1 );
-	ENSURE_EQUALS( "escape table preparaton failed", et._rawToSafe[ 'a' ], 'a' );
-	ENSURE_EQUALS( "escape table preparaton failed", et._safeToRaw[ 'a' ], 'a' );
-	ENSURE_EQUALS( "escape table preparaton failed", et._rawToSafe[ '\n' ], 'n' );
-	ENSURE_EQUALS( "escape table preparaton failed", et._safeToRaw[ 'n' ], '\n' );
+	ENSURE_EQUALS( "escape table preparaton failed", et._rawToSafe[ static_cast<int>( 'a' ) ], 'a' );
+	ENSURE_EQUALS( "escape table preparaton failed", et._safeToRaw[ static_cast<int>( 'a' ) ], 'a' );
+	ENSURE_EQUALS( "escape table preparaton failed", et._rawToSafe[ static_cast<int>( '\n' ) ], 'n' );
+	ENSURE_EQUALS( "escape table preparaton failed", et._safeToRaw[ static_cast<int>( 'n' ) ], '\n' );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "escape" )
