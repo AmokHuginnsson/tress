@@ -76,7 +76,7 @@ template<typename T>
 T const& stream_escape( T const& val_ ) {
 	return ( val_ );
 }
-char const* const stream_escape( char const* const val_ ) {
+char const* stream_escape( char const* val_ ) {
 	return ( val_ ? val_ : "(null)" );
 }
 /**
