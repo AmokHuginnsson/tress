@@ -72,6 +72,13 @@ void ensure_not( T const& msg, bool cond ) {
 	ensure_not_real( NULL, 0, NULL, msg, cond );
 }
 
+template<typename T>
+T const& stream_escape( T const& val_ ) {
+	return ( val_ );
+}
+char const* const stream_escape( char const* const val_ ) {
+	return ( val_ ? val_ : "(null)" );
+}
 /**
  * Tests two objects for being equal.
  * Throws if false.
@@ -86,7 +93,7 @@ void ensure_equals_real( char const* const file, int const& line, char const* co
 		std::stringstream ss;
 		ss << ( msg ? msg : "" )
 		<< ( msg ? ":" : "" )
-		<< " expected [" << expected << "] actual [" << actual << "]";
+		<< " expected [" << stream_escape( expected ) << "] actual [" << stream_escape( actual ) << "]";
 		throw failure( file, line, ss.str().c_str() );
 	}
 }
