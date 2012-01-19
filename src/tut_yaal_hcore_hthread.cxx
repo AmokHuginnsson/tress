@@ -83,6 +83,8 @@ HCool::~HCool( void ) {
 	M_EPILOG
 }
 
+namespace {
+
 void* simple( HThread const* const caller_ ) {
 	M_PROLOG
 	HThread::set_name( "tut::HThread(simple)" );
@@ -111,6 +113,8 @@ void busy_wait( void ) {
 				q *= 3;
 		}
 	}
+}
+
 }
 
 void* HCool::run( HThread const* caller_ ) {
@@ -187,6 +191,8 @@ void CVTest::eat( void ) {
 	_loop = false;
 }
 
+namespace {
+
 void* unstable( HThread* caller_ ) {
 	M_PROLOG
 	try {
@@ -197,6 +203,8 @@ void* unstable( HThread* caller_ ) {
 	}
 	return ( NULL );
 	M_EPILOG
+}
+
 }
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hthread );

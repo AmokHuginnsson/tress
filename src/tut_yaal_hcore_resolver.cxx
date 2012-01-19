@@ -36,7 +36,7 @@ using namespace yaal;
 using namespace yaal::hcore;
 using namespace tress::tut_helpers;
 
-std::ostream& operator << ( std::ostream& stream, ip_t const& ip_ ) {
+inline std::ostream& operator << ( std::ostream& stream, ip_t const& ip_ ) {
 	stream << resolver::ip_to_string( ip_ );
 	return ( stream );
 }

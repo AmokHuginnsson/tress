@@ -48,6 +48,8 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_hdes );
 TUT_TEST_GROUP( tut_yaal_tools_hdes, "yaal::tools::HDes" );
 
+namespace {
+
 void do_des( HString src_, HString dst_, HDes::action_t const& action_ ) {
 	HFile in;
 	HFile out;
@@ -88,6 +90,8 @@ void crypt_decrypt_test( int onSize_ ) {
 	HString check( ss.string() );
 	ENSURE_EQUALS( "decrypted lenght is incorrect", check.get_length(), onSize_ );
 	ENSURE_EQUALS( "decrypted data is incorrect", check, m.raw() );
+}
+
 }
 
 TUT_UNIT_TEST( 1, "crypt file" )

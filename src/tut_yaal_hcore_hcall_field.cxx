@@ -45,7 +45,7 @@ struct tut_yaal_hcore_hcall_field {
 	virtual ~tut_yaal_hcore_hcall_field( void ) {}
 };
 
-HString full_name( tut_yaal_hcore_hcall_field::person_t const& p_ ) {
+inline HString full_name( tut_yaal_hcore_hcall_field::person_t const& p_ ) {
 	return ( p_.first + " " + p_.second );
 }
 

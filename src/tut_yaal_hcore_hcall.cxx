@@ -331,7 +331,7 @@ int cf( a0_t = trait::no_type(), a1_t = trait::no_type(),
 	return ( call_calculator<void(*)(void), int, a0_t, a1_t, a2_t, a3_t, a4_t, a5_t>::free_standing_args::value );
 }
 
-void show_rectangle( int a, int b ) {
+inline void show_rectangle( int a, int b ) {
 	cout << "a: " << a << ", b: " << b << endl;
 }
 

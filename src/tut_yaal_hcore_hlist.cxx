@@ -601,6 +601,8 @@ TUT_UNIT_TEST( 17, "add_orderly" )
 	ENSURE_EQUALS( "add_orderly failed", to_string( l ), "abcdefgh" );
 TUT_TEARDOWN()
 
+namespace {
+
 void erase_test_0( tut_yaal_hcore_hlist::list_t& l ) {
 	char const* const full = "123456";
 	char const* ptr = full;
@@ -638,6 +640,8 @@ void erase_test_3( tut_yaal_hcore_hlist::list_t& l ) {
 	tut_yaal_hcore_hlist::check_consistency( l );
 	ENSURE( "open list erase for last element leaves bogus iterator", it == l.hook() );
 	tut_yaal_hcore_hlist::check_consistency( l );
+}
+
 }
 
 TUT_UNIT_TEST( 18, "erase" )
@@ -893,6 +897,8 @@ TUT_UNIT_TEST( 24, "swap" )
 	ENSURE_EQUALS( "exchange failed", to_string( l1 ), "ab" );
 TUT_TEARDOWN()
 
+namespace {
+
 void check_sorted( tut_yaal_hcore_hlist::list_t const& l, OListBits::sort_order_t order ) {
 	if ( order == OListBits::ASCENDING ) {
 		int val = 0;
@@ -907,6 +913,8 @@ void check_sorted( tut_yaal_hcore_hlist::list_t const& l, OListBits::sort_order_
 			val = *it;
 		}
 	}
+}
+
 }
 
 TUT_UNIT_TEST( 25, "sort serious" )

@@ -42,6 +42,8 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_assign );
 TUT_TEST_GROUP( tut_yaal_tools_assign, "yaal::tools::assign" );
 
+namespace {
+
 HString foo( tut_yaal_tools_assign::int_array_t const& arr_ ) {
 	HStringStream ss;
 	ss << arr_;
@@ -54,6 +56,8 @@ HString bar( int2int_t const& arr_ ) {
 	HStringStream ss;
 	ss << arr_;
 	return ( ss.string() );
+}
+
 }
 
 TUT_UNIT_TEST( 1, "build HArray<>" )

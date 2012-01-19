@@ -45,6 +45,8 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_hzipstream );
 TUT_TEST_GROUP( tut_yaal_tools_hzipstream, "yaal::tools::HZipStream" );
 
+namespace {
+
 bool test_zipstream( int long zipBufSize_, int long clientBufSize_ ) {
 	HScopedValueReplacement<int long> t( _zBufferSize_, zipBufSize_ );
 	static char const* const INPUT( "./data/karatsuba.bc" );
@@ -107,6 +109,8 @@ void zpipe_decompress( HString const& src_, HString const& dst_ ) {
 		out.write( buf.raw(), nRead );
 	return;
 	M_EPILOG
+}
+
 }
 
 TUT_UNIT_TEST( 1, "default zipstream buffer, client buffer 128 octets" )

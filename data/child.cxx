@@ -10,12 +10,16 @@
 
 using namespace std;
 
+namespace {
+
 string now( void ) {
 	char buf[256];
 	time_t t( time( NULL ) );
 	tm* b( localtime( &t ) );
 	::strftime( buf, sizeof ( buf ) - 1, "%a, %d %b %Y %H:%M:%S %z", b );
 	return ( buf );
+}
+
 }
 
 int main( int, char** ) {

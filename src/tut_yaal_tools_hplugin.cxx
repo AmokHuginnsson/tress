@@ -43,6 +43,8 @@ using namespace tress::tut_helpers;
 
 #define SELF_SUMATOR self_sumator
 extern "C"
+M_EXPORT_SYMBOL int SELF_SUMATOR( int, int );
+extern "C"
 M_EXPORT_SYMBOL int SELF_SUMATOR( int a, int b ) {
 	return ( a + b );
 }

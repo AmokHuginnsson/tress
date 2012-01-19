@@ -62,7 +62,7 @@ TUT_TEST_GROUP( tut_boost, "boost" );
 typedef pair<int, int> pair_t;
 typedef pair<string, string> person_t;
 
-pair_t make_multi( void ) {
+inline pair_t make_multi( void ) {
 	static pair_t res[] = { make_pair( 1, 3 ), make_pair( 4, 1 ), make_pair( 2, 4 ), make_pair( 3, 2 ) };
 	static int idx = 0;
 	int i = idx;
@@ -85,6 +85,8 @@ TUT_UNIT_TEST( 1, "binding" )
 	cout << "}" << endl;
 TUT_TEARDOWN()
 
+namespace {
+
 void dump_dir( path const& dir ) {
 	cout << "dir: " << dir.string() << endl;
 	directory_iterator end;
@@ -95,6 +97,8 @@ void dump_dir( path const& dir ) {
 			cout << "file: " << (*it).path() << endl;
 	}
 	return;
+}
+
 }
 
 TUT_UNIT_TEST( 2, "filesystem" )
@@ -183,7 +187,7 @@ struct generator {
 
 typedef pair<int const, test4helper> t4h_t;
 
-ostream& operator << ( ostream& os, t4h_t const& p ) {
+inline ostream& operator << ( ostream& os, t4h_t const& p ) {
 	os << "(" << p.first << "," << p.second.get_val() << ")";
 	return ( os );
 }
@@ -209,7 +213,7 @@ TUT_UNIT_TEST( 4, "boost::bind, accumulate, plus" )
 	cout << "}" << endl;
 TUT_TEARDOWN()
 
-pair_t foo( int first, int second ) {
+inline pair_t foo( int first, int second ) {
 	return ( make_pair( first, second ) );
 }
 

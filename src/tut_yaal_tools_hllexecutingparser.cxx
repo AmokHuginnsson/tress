@@ -342,6 +342,8 @@ protected:
 		{ return ( true ); }
 };
 
+namespace {
+
 typedef HExceptionT<HOptional, HRuleException> HOptionalException;
 
 HFollows operator >> ( HRule const& predecessor_, HRule const& successor_ ) {
@@ -378,6 +380,8 @@ HKleenePlus operator+ ( HRule const& rule_ ) {
 	M_PROLOG
 	return ( HKleenePlus( rule_ ) );
 	M_EPILOG
+}
+
 }
 
 class HReal : public HRule {
@@ -669,10 +673,14 @@ protected:
 
 typedef HExceptionT<HCharacter, HRuleException> HCharacterException;
 
+namespace {
+
 HFollows operator >> ( char character_, HRule const& successor_ ) {
 	M_PROLOG
 	return ( HFollows( HCharacter( character_ ), successor_  ) );
 	M_EPILOG
+}
+
 }
 
 class HString : public HRule {
@@ -719,6 +727,8 @@ protected:
 
 typedef HExceptionT<HString, HRuleException> HStringException;
 
+namespace {
+
 HFollows operator >> ( char const* string_, HRule const& successor_ ) {
 	M_PROLOG
 	return ( HFollows( HString( string_ ), successor_  ) );
@@ -729,6 +739,8 @@ HFollows operator >> ( hcore::HString const& string_, HRule const& successor_ ) 
 	M_PROLOG
 	return ( HFollows( HString( string_ ), successor_  ) );
 	M_EPILOG
+}
+
 }
 
 template<typename container_t>

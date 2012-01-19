@@ -569,6 +569,8 @@ TUT_UNIT_TEST( 37, "find_last_other_than" )
 	ENSURE_EQUALS( HString().format( failed, 14 ), str.find_last_other_than( "abcdefg", 8 ), 7 );
 TUT_TEARDOWN()
 
+namespace {
+
 int confirm( char const* const str, int size, char const* const pat, int len ) {
 	static HString fastpat;
 	fastpat = pat;
@@ -576,6 +578,8 @@ int confirm( char const* const str, int size, char const* const pat, int len ) {
 		fastpat.set_at( len, 0 );
 	char const* p = ( len <= size ) ? strstr( str, fastpat.raw() ) : NULL;
 	return ( p ? static_cast<int>( p - str ) : -1 );
+}
+
 }
 
 struct gen_char {

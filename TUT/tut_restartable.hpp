@@ -24,6 +24,7 @@ namespace util {
 /**
  * Escapes non-alphabetical characters in string.
  */
+std::string escape( const std::string& );
 std::string escape( const std::string& orig ) {
 	std::string rc;
 	std::string::const_iterator i, e;
@@ -51,6 +52,7 @@ std::string escape( const std::string& orig ) {
 /**
  * Un-escapes string.
  */
+std::string unescape( const std::string& );
 std::string unescape( const std::string& orig ) {
 	std::string rc;
 	std::string::const_iterator i, e;
@@ -86,6 +88,7 @@ std::string unescape( const std::string& orig ) {
 /**
  * Serialize test_result avoiding interfering with operator <<.
  */
+void serialize( std::ostream&, const tut::test_result& );
 void serialize( std::ostream& os, const tut::test_result& tr ) {
 	os << escape( tr._group->get_name() ) << std::endl;
 	os << tr._testNo << ' ';
@@ -117,6 +120,7 @@ void serialize( std::ostream& os, const tut::test_result& tr ) {
 /**
  * deserialization for test_result
  */
+void deserialize( std::istream&, tut::test_result& );
 void deserialize( std::istream& is, tut::test_result& tr ) {
 	std::string name;
 	std::getline( is, name );

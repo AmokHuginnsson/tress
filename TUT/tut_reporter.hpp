@@ -90,6 +90,7 @@ std::ostream& cute_result( std::ostream& os_, tut::test_result const& tr_ ) {
 
 namespace tut {
 
+std::string console_error_line( tut::test_result const& );
 std::string console_error_line( tut::test_result const& tr_ ) {
 	std::stringstream ss;
 	if ( tr_._result == test_result::fail )
@@ -105,6 +106,7 @@ std::string console_error_line( tut::test_result const& tr_ ) {
 	return ( ss.str() );
 }
 
+std::string vim_error_line( tut::test_result const& );
 std::string vim_error_line( tut::test_result const& tr_ ) {
 	std::stringstream ss;
 	if ( tr_._result == test_result::fail )
@@ -120,6 +122,7 @@ std::string vim_error_line( tut::test_result const& tr_ ) {
 	return ( ss.str() );
 }
 
+std::string visual_studio_error_line( tut::test_result const& );
 std::string visual_studio_error_line( tut::test_result const& tr_ ) {
 	std::stringstream ss;
 	if ( tr_._result == test_result::fail )
@@ -138,6 +141,7 @@ std::string visual_studio_error_line( tut::test_result const& tr_ ) {
 	return ( ss.str() );
 }
 
+std::string cute_error_line( tut::test_result const& );
 std::string cute_error_line( tut::test_result const& ) {
 	return ( std::string() );
 }

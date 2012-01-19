@@ -42,6 +42,8 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_dbwrapper_hrecordset );
 TUT_TEST_GROUP( tut_yaal_dbwrapper_hrecordset, "yaal::dbwrapper::HRecordSet" );
 
+namespace {
+
 void dump_query_result( HDataBase::ptr_t db, char const* const query, char const* dbType_ ) {
 	M_PROLOG
 	HRecordSet::ptr_t rs = db->query( query );
@@ -80,6 +82,8 @@ void dump_query_result( HDataBase::ptr_t db, char const* const query, char const
 	}
 	return;
 	M_EPILOG
+}
+
 }
 
 static char const* const QUERY = "SELECT * FROM config;";
@@ -165,6 +169,8 @@ static char const* const SPECIAL_INSERT = "INSERT INTO config ( name, data ) VAL
 static char const* const SPECIAL_UPDATE = "UPDATE config SET data = 'second' WHERE name = 'special';";
 static char const* const SPECIAL_DELETE = "DELETE FROM config WHERE name = 'special';";
 
+namespace {
+
 void test_dml( HDataBase::ptr_t db ) {
 	M_PROLOG
 	TUT_DECLARE( HRecordSet::ptr_t rs( db->query( SPECIAL_QUERY ) ); );
@@ -189,6 +195,8 @@ void test_dml( HDataBase::ptr_t db ) {
 	ENSURE( "DELETE failed?", ! rs || ( rs->begin() == rs->end() ) );
 	return;
 	M_EPILOG
+}
+
 }
 
 #if defined( HAVE_SQLITE3_H )
@@ -231,6 +239,8 @@ TUT_UNIT_TEST( 12, "Oracle engine" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_OCI_H ) */
 
+namespace {
+
 void test_schema( HDataBase::ptr_t db_ ) {
 	M_PROLOG
 	HDataBase::table_list_t tl( db_->get_tables() );
@@ -247,6 +257,8 @@ void test_schema( HDataBase::ptr_t db_ ) {
 	ENSURE_EQUALS( "bad column list contents", cl, clExpect );
 	return;
 	M_EPILOG
+}
+
 }
 
 #if defined( HAVE_SQLITE3_H )

@@ -82,11 +82,13 @@ HString tut_yaal_tools_hxml::_varTmpBuffer;
 
 TUT_TEST_GROUP( tut_yaal_tools_hxml, "yaal::tools::HXml" );
 
-std::ostream& operator << ( std::ostream& out, HXml const& xml ) {
+inline std::ostream& operator << ( std::ostream& out, HXml const& xml ) {
 	for ( HXml::const_entity_iterator it( xml.entity_begin() ), end( xml.entity_end() ); it != end; ++ it )
 		out << "@: " << it->first << "=>" << it->second << std::endl;
 	return ( tut_yaal_tools_hxml::dump( out, xml.get_root() ) );
 }
+
+namespace {
 
 bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const& right ) {
 	HXml::HNode::TYPE::type_t type = left.get_type();
@@ -123,11 +125,13 @@ bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const
 	return ( equals );
 }
 
-bool operator == ( HXml const& left, HXml const& right ) {
+}
+
+inline bool operator == ( HXml const& left, HXml const& right ) {
 	return ( deep_equals( left.get_root(), right.get_root() ) );
 }
 
-bool operator != ( HXml const& left, HXml const& right ) {
+inline bool operator != ( HXml const& left, HXml const& right ) {
 	return ( ! ( left == right ) );
 }
 

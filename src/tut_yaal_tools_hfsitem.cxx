@@ -44,6 +44,8 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_hfsitem );
 TUT_TEST_GROUP( tut_yaal_tools_hfsitem, "yaal::tools::HFSItem" );
 
+namespace {
+
 void recurse( HString const& path_ ) {
 	HFSItem dir( path_ );
 	cout << "dir: " << blue << bold << dir.get_path() << reset << endl;
@@ -60,6 +62,8 @@ void recurse( HString const& path_ ) {
 			cout << "back at: " << blue << bold << dir.get_path() << reset << endl;
 		}
 	}
+}
+
 }
 
 struct PathTest {

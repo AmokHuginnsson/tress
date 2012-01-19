@@ -206,6 +206,7 @@ TUT_UNIT_TEST( 4, "bind on port in use." )
 	}
 TUT_TEARDOWN()
 
+namespace {
 
 void play_scenario( int port_, ip_t ip_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_ ) {
 	char test_data[] = "Ala ma kota.";
@@ -232,6 +233,8 @@ void play_scenario( int port_, ip_t ip_, bool withSsl_, bool nonBlockingServer_,
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
 	cout << serv.buffer() << endl;
 	return;
+}
+
 }
 
 TUT_UNIT_TEST( 19, "Transfering data through network (blocking)." )

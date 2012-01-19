@@ -301,6 +301,8 @@ TUT_UNIT_TEST( 10, "Accept on socket that is not listening." )
 	}
 TUT_TEARDOWN()
 
+namespace {
+
 void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_ ) {
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
@@ -327,6 +329,8 @@ void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
 	cout << serv.buffer() << endl;
 	return;
+}
+
 }
 
 TUT_UNIT_TEST( 11, "Transfering data through file (blocking)." )
