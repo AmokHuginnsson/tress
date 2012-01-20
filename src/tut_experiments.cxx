@@ -55,7 +55,6 @@ public:
 class HVisitorInterface {
 public:
 	virtual ~HVisitorInterface( void ) { }
-	virtual void accept( Visitor& ) { }
 	virtual void accept( Visitor const& ) const { }
 };
 
@@ -83,6 +82,7 @@ struct FunkyDerived : public Base {
 		{ call.visit( *this ); }
 };
 
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
 class FunkyDerivedBarCall : public Visitor {
 public:
 	void visit( FunkyDerived const& obj ) const
@@ -94,6 +94,7 @@ public:
 	void visit( Derived const& obj ) const
 		{ obj.baz(); }
 };
+#pragma GCC diagnostic error "-Woverloaded-virtual"
 
 TUT_UNIT_TEST( 1, "visitor pattern" )
 	typedef HPointer<Base> base_ptr_t;
