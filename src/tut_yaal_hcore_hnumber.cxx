@@ -63,8 +63,11 @@ tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void )
 	char const WIN_BC_PATH_ALT[] = "..\\..\\..\\usr\\windows\\bin\\bc.exe";
 #endif /* #ifdef __MSVCXX__ */
 	char const SOLARIS_BC_PATH[] = "/opt/csw/bin/bc";
+	char const FREEBSD_GNUBC_PATH[] = "/usr/local/bin/bc";
 	if ( !! HFSItem( SOLARIS_BC_PATH ) )
 		BC_PATH = SOLARIS_BC_PATH;
+	else if ( !! HFSItem( FREEBSD_GNUBC_PATH ) )
+		BC_PATH = FREEBSD_GNUBC_PATH;
 #ifdef __MSVCXX__
 	else if ( !! HFSItem( WIN_BC_PATH ) )
 		BC_PATH = WIN_BC_PATH;
