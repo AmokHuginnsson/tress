@@ -47,6 +47,7 @@ namespace {
 void dump_query_result( HDataBase::ptr_t db, char const* const query, char const* dbType_ ) {
 	M_PROLOG
 	HRecordSet::ptr_t rs = db->query( query );
+	ENSURE_EQUALS( "bad column count", rs->get_field_count(), 3 );
 	char const* const COLUMN_NAMES[] = { "id", "name", "data" };
 	char const* const DATA[][3] = {
 		{ "1", "one", NULL },
@@ -231,7 +232,7 @@ TUT_UNIT_TEST( 11, "Firebird engine" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) */
 
-#if 0 && defined( HAVE_OCI_H )
+#if defined( HAVE_OCI_H )
 TUT_UNIT_TEST( 12, "Oracle engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
@@ -293,7 +294,7 @@ TUT_UNIT_TEST( 16, "Firebird schema" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) */
 
-#if 0 && defined( HAVE_OCI_H )
+#if defined( HAVE_OCI_H )
 TUT_UNIT_TEST( 17, "Oracle schema" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
@@ -319,7 +320,7 @@ TUT_UNIT_TEST( 18, "different engines all in one by DSN" )
 	HDataBase::ptr_t dbFirebird( util::connect( "firebird://tress:tr3ss@/tress" ) );
 	dump_query_result( dbFirebird, QUERY, "Firebird" );
 #endif /* defined( HAVE_IBASE_H ) */
-#if 0 && defined( HAVE_OCI_H )
+#if defined( HAVE_OCI_H )
 	HDataBase::ptr_t dbOracle( util::connect( "oracle://tress:tr3ss@/tress" ) );
 	dump_query_result( dbOracle, QUERY, "Oracle" );
 #endif /* defined( HAVE_OCI_H ) */
