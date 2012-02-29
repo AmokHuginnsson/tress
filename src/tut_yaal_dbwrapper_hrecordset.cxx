@@ -157,7 +157,7 @@ TUT_UNIT_TEST( 7, "different engines all in one" )
 	dbFirebird->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( dbFirebird, QUERY, "Firebird" );
 #endif /* defined( HAVE_IBASE_H ) */
-#if 0 && defined( HAVE_OCI_H )
+#if defined( HAVE_OCI_H )
 	HDataBase::ptr_t dbOracle( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	dbOracle->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( dbOracle, QUERY, "Oracle" );
