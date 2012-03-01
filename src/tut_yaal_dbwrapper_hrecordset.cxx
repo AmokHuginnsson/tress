@@ -48,6 +48,7 @@ void dump_query_result( HDataBase::ptr_t db, char const* const query, char const
 	M_PROLOG
 	HRecordSet::ptr_t rs = db->query( query );
 	ENSURE_EQUALS( "bad column count", rs->get_field_count(), 3 );
+	ENSURE_EQUALS( "bad result size", rs->get_size(), 3 );
 	char const* const COLUMN_NAMES[] = { "id", "name", "data" };
 	char const* const DATA[][3] = {
 		{ "1", "one", NULL },
@@ -65,7 +66,7 @@ void dump_query_result( HDataBase::ptr_t db, char const* const query, char const
 	int row( 0 );
 	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); ++ it, ++ row ) {
 		cout << "|";
-		int fc = rs->get_field_count();
+		int fc( rs->get_field_count() );
 		for ( int i = 0; i < fc; ++ i ) {
 			HRecordSet::value_t v( it[i] );
 			if ( ( row == 0 ) && ( i == 2 ) ) {
