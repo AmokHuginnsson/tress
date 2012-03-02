@@ -47,7 +47,11 @@ TUT_UNIT_TEST( 1, "alarm wake" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int const ALARM_TIME( 500 );
 	HAlarm alarm( ALARM_TIME );
-	ENSURE_EQUALS( "alarm failed to interrupt sleep", util::sleep::second( 4 ), true );
+	HClock c;
+	bool interrupted( util::sleep::second( 8 ) );
+	if ( ! interrupted )
+		cerr << "sleep ended after: " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << " miliseconds" << endl;
+	ENSURE_EQUALS( "alarm failed to interrupt sleep", interrupted, true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "alarm deregistered" )
