@@ -47,7 +47,7 @@ TUT_UNIT_TEST( 1, "alarm wake" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int const ALARM_TIME( 500 );
 	HAlarm alarm( ALARM_TIME );
-	ENSURE_EQUALS( "alarm failed to interrupt sleep", util::sleep::second( 1 ), true );
+	ENSURE_EQUALS( "alarm failed to interrupt sleep", util::sleep::second( 4 ), true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "alarm deregistered" )
