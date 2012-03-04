@@ -36,18 +36,16 @@ int main( int, char** )
 	}
 ]])], [AC_DEFINE([HAVE_SGI_STL_EXTENSIONS],[],[Do you have SGI STL extensions?])] RESULT=["yes"])
 AC_MSG_RESULT([$RESULT])
+AC_CHECK_PROG(HAS_TNSPING,[tnsping],["yes"],["no"])
 AC_MSG_CHECKING([Oracle DB instance availability])
-AC_CHECK_PROG(HAS_TNSPING,[tnsping],["true"],["false"])
-if test ["$HAS_TNSPING"] = ["true"] ; then
+if test ["$HAS_TNSPING"] = ["yes"] ; then
 	ORACLE_INSTANCE=`tnsping spoon | grep '^OK\>' 2> /dev/null`
 	if test ["x${ORACLE_INSTANCE}"] != ["x"] ; then
 		AC_DEFINE([HAVE_ORACLE_INSTANCE],[],[Do we have Oracle DB instance available?])
-		AC_MSG_RESULT([ok])
+		AC_MSG_RESULT([yes])
 	else
-		AC_MSG_WARN([Oracle DB instance not present.])
+		AC_MSG_RESULT([no])
 	fi
-else
-	AC_MSG_WARN([Oracle not installed.])
 fi
 AX_BOOST_BASE([1.35])
 AX_BOOST_SYSTEM
