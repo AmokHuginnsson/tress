@@ -128,15 +128,15 @@ TUT_UNIT_TEST( 5, "Firebird engine" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) */
 
-#if defined( HAVE_OCI_H )
+#if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 TUT_UNIT_TEST( 6, "Oracle engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( db, QUERY, "Oracle" );
 TUT_TEARDOWN()
-#endif /* defined( HAVE_OCI_H ) */
+#endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
 
-#if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || defined( HAVE_OCI_H )
+#if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || ( defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) )
 TUT_UNIT_TEST( 7, "different engines all in one" )
 #if defined( HAVE_SQLITE3_H )
 	HDataBase::ptr_t dbSQLite( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
@@ -158,13 +158,13 @@ TUT_UNIT_TEST( 7, "different engines all in one" )
 	dbFirebird->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( dbFirebird, QUERY, "Firebird" );
 #endif /* defined( HAVE_IBASE_H ) */
-#if defined( HAVE_OCI_H )
+#if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 	HDataBase::ptr_t dbOracle( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	dbOracle->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( dbOracle, QUERY, "Oracle" );
-#endif /* defined( HAVE_OCI_H ) */
+#endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
 TUT_TEARDOWN()
-#endif /* #if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || defined( HAVE_OCI_H ) */
+#endif /* #if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || ( defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) ) */
 
 static char const* const SPECIAL_QUERY = "SELECT * FROM config WHERE name = 'special';";
 static char const* const SPECIAL_INSERT = "INSERT INTO config ( name, data ) VALUES( 'special', 'first' );";
@@ -233,13 +233,13 @@ TUT_UNIT_TEST( 11, "Firebird engine" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) */
 
-#if defined( HAVE_OCI_H )
+#if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 TUT_UNIT_TEST( 12, "Oracle engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml( db );
 TUT_TEARDOWN()
-#endif /* defined( HAVE_OCI_H ) */
+#endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
 
 namespace {
 
@@ -295,15 +295,15 @@ TUT_UNIT_TEST( 16, "Firebird schema" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) */
 
-#if defined( HAVE_OCI_H )
+#if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 TUT_UNIT_TEST( 17, "Oracle schema" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_schema( db );
 TUT_TEARDOWN()
-#endif /* defined( HAVE_OCI_H ) */
+#endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
 
-#if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || defined( HAVE_OCI_H )
+#if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || ( defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) )
 TUT_UNIT_TEST( 18, "different engines all in one by DSN" )
 #if defined( HAVE_SQLITE3_H )
 	HDataBase::ptr_t dbSQLite( util::connect( "sqlite3:///out/tress.sqlite" ) );
@@ -321,12 +321,12 @@ TUT_UNIT_TEST( 18, "different engines all in one by DSN" )
 	HDataBase::ptr_t dbFirebird( util::connect( "firebird://tress:tr3ss@/tress" ) );
 	dump_query_result( dbFirebird, QUERY, "Firebird" );
 #endif /* defined( HAVE_IBASE_H ) */
-#if defined( HAVE_OCI_H )
+#if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 	HDataBase::ptr_t dbOracle( util::connect( "oracle://tress:tr3ss@/tress" ) );
 	dump_query_result( dbOracle, QUERY, "Oracle" );
-#endif /* defined( HAVE_OCI_H ) */
+#endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
 TUT_TEARDOWN()
-#endif /* #if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || defined( HAVE_OCI_H ) */
+#endif /* #if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || ( defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) ) */
 
 }
 
