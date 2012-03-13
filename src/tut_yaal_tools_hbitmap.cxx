@@ -27,6 +27,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/hbitmap.hxx>
+#include <yaal/tools/streamtools.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
@@ -111,14 +112,35 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "reverse iteration" )
 	static char const BUFF[] = "ala ma kota";
-	static int const BUFF_BIT_SIZE = ( sizeof ( BUFF ) - 1 ) * 8;
+	static int const BUFF_BIT_SIZE( ( sizeof ( BUFF ) - 1 ) * 8 );
 	HBitmap bmp;
 	bmp.copy( BUFF, BUFF_BIT_SIZE );
-	cout << endl;
-	yaal::copy( bmp.begin(), bmp.end(), stream_iterator( cout ) );
-	cout << endl;
-	yaal::copy( bmp.rbegin(), bmp.rend(), stream_iterator( cout ) );
-	cout << endl;
+	HStringStream ss;
+	ss << bmp;
+	HString s( ss.string() );
+	ss.clear();
+	yaal::copy( bmp.rbegin(), bmp.rend(), stream_iterator( ss ) );
+	reverse( s.begin(), s.end() );
+	ENSURE_EQUALS( "bad reverse iterator", ss.string(), s );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 9, "operator[]" )
+	HBitmap bmp( 7 );
+	HStringStream ss;
+	ss << bmp;
+	ENSURE_EQUALS( "bad constructor", ss.string(), "0000000" );
+	bmp[1] = true;
+	ss.clear();
+	ss << bmp;
+	ENSURE_EQUALS( "bad operator[] or HBit ref", ss.string(), "0100000" );
+	bmp[5] = true;
+	ss.clear();
+	ss << bmp;
+	ENSURE_EQUALS( "bad operator[] or HBit ref", ss.string(), "0100010" );
+	bmp[0] = bmp[6] = bmp[1] && bmp[5];
+	ss.clear();
+	ss << bmp;
+	ENSURE_EQUALS( "bad operator[] or HBit ref", ss.string(), "1100011" );
 TUT_TEARDOWN()
 
 }
