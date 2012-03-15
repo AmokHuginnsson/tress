@@ -73,7 +73,7 @@ void crypt_decrypt_test( int onSize_ ) {
 	HChunk m( onSize_ + 1 );
 	clog << "+" << endl;
 	for ( int i( 0 ); i < onSize_; ++ i )
-		m.raw()[ i ] = static_cast<char>( ( i % 26 ) + 'a' );
+		m.get<char>()[ i ] = static_cast<char>( ( i % 26 ) + 'a' );
 	HStringStream ss;
  {
 		HFile out( "./out/crypted", HFile::OPEN::WRITING );

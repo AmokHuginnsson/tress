@@ -125,8 +125,8 @@ void HUDPServer::handler_message( int ) {
 	cout << "reading data ..." << endl;
 	int long nRead( _socket.receive( datagram ) );
 	if ( nRead > 0 ) {
-		_buffer += datagram._data.raw();
-		cout << "<-" << datagram._data.raw() << endl;
+		_buffer += datagram._data.get<char>();
+		cout << "<-" << datagram._data.get<char>() << endl;
 		_event.signal();
 		_signaled = true;
 	} /* else nRead < 0 => REPEAT */
