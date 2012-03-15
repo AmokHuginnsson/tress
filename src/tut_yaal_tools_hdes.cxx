@@ -89,7 +89,7 @@ void crypt_decrypt_test( int onSize_ ) {
 	}
 	HString check( ss.string() );
 	ENSURE_EQUALS( "decrypted lenght is incorrect", check.get_length(), onSize_ );
-	ENSURE_EQUALS( "decrypted data is incorrect", check, m.raw() );
+	ENSURE_EQUALS( "decrypted data is incorrect", check, m.get<char>() );
 }
 
 }
