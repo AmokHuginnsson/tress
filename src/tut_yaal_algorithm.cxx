@@ -1083,72 +1083,155 @@ TUT_UNIT_TEST( 31, "find_first_not_of(cond)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 32, "lower_bound() on list" )
-	int_list_t list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	for ( int i( _testData_[0][0] - 1 ); i <= _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
-		int_list_t::const_iterator it( lower_bound( list.begin(), list.end(), i ) );
-		int const* p( std::lower_bound( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
-		ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
+	/* distinct */ {
+		int_list_t list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		for ( int i( _testData_[0][0] - 1 ); i <= _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
+			int_list_t::const_iterator it( lower_bound( list.begin(), list.end(), i ) );
+			int const* p( std::lower_bound( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+			ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_list_t::const_iterator>( list.begin(), it ), std::distance( _testData_[0], p ) );
+		}
+		int_list_t::const_iterator first( lower_bound( list.begin(), list.end(), _testData_[0][0] - 1 ) );
+		ENSURE( "lower_bound before range failed", first == list.begin() );
+		int_list_t::const_iterator last( lower_bound( list.begin(), list.end(), _testData_[0][countof ( _testData_[0] ) - 1] + 1 ) );
+		ENSURE( "lower_bound after range failed", last == list.end() );
 	}
-	int_list_t::const_iterator first( lower_bound( list.begin(), list.end(), _testData_[0][0] - 1 ) );
-	ENSURE( "lower_bound before range failed", first == list.begin() );
-	int_list_t::const_iterator last( lower_bound( list.begin(), list.end(), _testData_[0][countof ( _testData_[0] ) - 1] + 1 ) );
-	ENSURE( "lower_bound after range failed", last == list.end() );
+	/* repeating */ {
+		int_list_t list( _testData_[2], _testData_[2] + countof ( _testData_[2] ) );
+		for ( int i( _testData_[2][0] - 1 ); i <= _testData_[2][countof ( _testData_[2] ) - 1]; ++ i ) {
+			int_list_t::const_iterator it( lower_bound( list.begin(), list.end(), i ) );
+			int const* p( std::lower_bound( _testData_[2], _testData_[2] + countof ( _testData_[2] ), i ) );
+			ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_list_t::const_iterator>( list.begin(), it ), std::distance( _testData_[2], p ) );
+		}
+		int_list_t::const_iterator first( lower_bound( list.begin(), list.end(), _testData_[2][0] - 1 ) );
+		ENSURE( "lower_bound before range failed", first == list.begin() );
+		int_list_t::const_iterator last( lower_bound( list.begin(), list.end(), _testData_[2][countof ( _testData_[2] ) - 1] + 1 ) );
+		ENSURE( "lower_bound after range failed", last == list.end() );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 33, "lower_bound() on array" )
-	int_array_t array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	for ( int i( _testData_[0][0] - 1 ); i <= _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
-		int_array_t::const_iterator it( lower_bound( array.begin(), array.end(), i ) );
-		int const* p( std::lower_bound( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
-		ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
+	/* distinct */ {
+		int_array_t array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		for ( int i( _testData_[0][0] - 1 ); i <= _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
+			int_array_t::const_iterator it( lower_bound( array.begin(), array.end(), i ) );
+			int const* p( std::lower_bound( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+			ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_array_t::const_iterator>( array.begin(), it ), std::distance( _testData_[0], p ) );
+		}
+		int_array_t::const_iterator first( lower_bound( array.begin(), array.end(), _testData_[0][0] - 1 ) );
+		ENSURE( "lower_bound before range failed", first == array.begin() );
+		int_array_t::const_iterator last( lower_bound( array.begin(), array.end(), _testData_[0][countof ( _testData_[0] ) - 1] + 1 ) );
+		ENSURE( "lower_bound after range failed", last == array.end() );
 	}
-	int_array_t::const_iterator first( lower_bound( array.begin(), array.end(), _testData_[0][0] - 1 ) );
-	ENSURE( "lower_bound before range failed", first == array.begin() );
-	int_array_t::const_iterator last( lower_bound( array.begin(), array.end(), _testData_[0][countof ( _testData_[0] ) - 1] + 1 ) );
-	ENSURE( "lower_bound after range failed", last == array.end() );
+	/* repeating */ {
+		int_array_t array( _testData_[2], _testData_[2] + countof ( _testData_[2] ) );
+		for ( int i( _testData_[2][0] - 1 ); i <= _testData_[2][countof ( _testData_[2] ) - 1]; ++ i ) {
+			int_array_t::const_iterator it( lower_bound( array.begin(), array.end(), i ) );
+			int const* p( std::lower_bound( _testData_[2], _testData_[2] + countof ( _testData_[2] ), i ) );
+			ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_array_t::const_iterator>( array.begin(), it ), std::distance( _testData_[2], p ) );
+		}
+		int_array_t::const_iterator first( lower_bound( array.begin(), array.end(), _testData_[2][0] - 1 ) );
+		ENSURE( "lower_bound before range failed", first == array.begin() );
+		int_array_t::const_iterator last( lower_bound( array.begin(), array.end(), _testData_[2][countof ( _testData_[2] ) - 1] + 1 ) );
+		ENSURE( "lower_bound after range failed", last == array.end() );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 34, "upper_bound() on list" )
-	int_list_t list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
-		int_list_t::const_iterator it( upper_bound( list.begin(), list.end(), i ) );
-		int const* p( std::upper_bound( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
-		ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
+	/* distinct */ {
+		int_list_t list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
+			int_list_t::const_iterator it( upper_bound( list.begin(), list.end(), i ) );
+			int const* p( std::upper_bound( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+			ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_list_t::const_iterator>( list.begin(), it ), std::distance( _testData_[0], p ) );
+		}
+		int_list_t::const_iterator first( upper_bound( list.begin(), list.end(), _testData_[0][0] - 1 ) );
+		ENSURE( "upper_bound before range failed", first == list.begin() );
+		int_list_t::const_iterator last( upper_bound( list.begin(), list.end(), _testData_[0][countof ( _testData_[0] ) - 1] ) );
+		ENSURE( "lower_bound after range failed", last == list.end() );
 	}
-	int_list_t::const_iterator first( upper_bound( list.begin(), list.end(), _testData_[0][0] - 1 ) );
-	ENSURE( "upper_bound before range failed", first == list.begin() );
-	int_list_t::const_iterator last( upper_bound( list.begin(), list.end(), _testData_[0][countof ( _testData_[0] ) - 1] ) );
-	ENSURE( "lower_bound after range failed", last == list.end() );
+	/* repeating */ {
+		int_list_t list( _testData_[2], _testData_[2] + countof ( _testData_[2] ) );
+		for ( int i( _testData_[2][0] - 1 ); i < _testData_[2][countof ( _testData_[2] ) - 1]; ++ i ) {
+			int_list_t::const_iterator it( upper_bound( list.begin(), list.end(), i ) );
+			int const* p( std::upper_bound( _testData_[2], _testData_[2] + countof ( _testData_[2] ), i ) );
+			ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_list_t::const_iterator>( list.begin(), it ), std::distance( _testData_[2], p ) );
+		}
+		int_list_t::const_iterator first( upper_bound( list.begin(), list.end(), _testData_[2][0] - 1 ) );
+		ENSURE( "upper_bound before range failed", first == list.begin() );
+		int_list_t::const_iterator last( upper_bound( list.begin(), list.end(), _testData_[2][countof ( _testData_[2] ) - 1] ) );
+		ENSURE( "lower_bound after range failed", last == list.end() );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 35, "upper_bound() on array" )
-	int_array_t array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
-		int_array_t::const_iterator it( upper_bound( array.begin(), array.end(), i ) );
-		int const* p( std::upper_bound( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
-		ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
+	/* distinct */ {
+		int_array_t array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
+			int_array_t::const_iterator it( upper_bound( array.begin(), array.end(), i ) );
+			int const* p( std::upper_bound( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+			ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
+		}
+		int_array_t::const_iterator first( upper_bound( array.begin(), array.end(), _testData_[0][0] - 1 ) );
+		ENSURE( "upper_bound before range failed", first == array.begin() );
+		int_array_t::const_iterator last( upper_bound( array.begin(), array.end(), _testData_[0][countof ( _testData_[0] ) - 1] ) );
+		ENSURE( "upper_bound after range failed", last == array.end() );
 	}
-	int_array_t::const_iterator first( upper_bound( array.begin(), array.end(), _testData_[0][0] - 1 ) );
-	ENSURE( "upper_bound before range failed", first == array.begin() );
-	int_array_t::const_iterator last( upper_bound( array.begin(), array.end(), _testData_[0][countof ( _testData_[0] ) - 1] ) );
-	ENSURE( "upper_bound after range failed", last == array.end() );
+	/* repeating */ {
+		int_array_t array( _testData_[2], _testData_[2] + countof ( _testData_[2] ) );
+		for ( int i( _testData_[2][0] - 1 ); i < _testData_[2][countof ( _testData_[2] ) - 1]; ++ i ) {
+			int_array_t::const_iterator it( upper_bound( array.begin(), array.end(), i ) );
+			int const* p( std::upper_bound( _testData_[2], _testData_[2] + countof ( _testData_[2] ), i ) );
+			ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_array_t::const_iterator>( array.begin(), it ), std::distance( _testData_[2], p ) );
+		}
+		int_array_t::const_iterator first( upper_bound( array.begin(), array.end(), _testData_[2][0] - 1 ) );
+		ENSURE( "upper_bound before range failed", first == array.begin() );
+		int_array_t::const_iterator last( upper_bound( array.begin(), array.end(), _testData_[2][countof ( _testData_[2] ) - 1] ) );
+		ENSURE( "lower_bound after range failed", last == array.end() );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 36, "binary_search() on list" )
-	int_list_t list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1] + 1; ++ i ) {
-		ENSURE_EQUALS( "binary_search on range failed",
-				binary_search( list.begin(), list.end(), i ),
-				std::binary_search( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+	/* distinct */ {
+		int_list_t list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1] + 1; ++ i ) {
+			ENSURE_EQUALS( "binary_search on range failed",
+					binary_search( list.begin(), list.end(), i ),
+					std::binary_search( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+		}
+	}
+	/* repeating */ {
+		int_list_t list( _testData_[2], _testData_[2] + countof ( _testData_[2] ) );
+		for ( int i( _testData_[2][0] - 1 ); i < _testData_[2][countof ( _testData_[2] ) - 1] + 1; ++ i ) {
+			ENSURE_EQUALS( "binary_search on range failed",
+					binary_search( list.begin(), list.end(), i ),
+					std::binary_search( _testData_[2], _testData_[2] + countof ( _testData_[2] ), i ) );
+		}
 	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 37, "binary_search() on array" )
-	int_array_t array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1] + 1; ++ i ) {
-		ENSURE_EQUALS( "binary_search on range failed",
-				binary_search( array.begin(), array.end(), i ),
-				std::binary_search( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+	/* distinct */ {
+		int_array_t array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1] + 1; ++ i ) {
+			ENSURE_EQUALS( "binary_search on range failed",
+					binary_search( array.begin(), array.end(), i ),
+					std::binary_search( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+		}
+	}
+	/* repeating */ {
+		int_array_t array( _testData_[2], _testData_[2] + countof ( _testData_[2] ) );
+		for ( int i( _testData_[2][0] - 1 ); i < _testData_[2][countof ( _testData_[2] ) - 1] + 1; ++ i ) {
+			ENSURE_EQUALS( "binary_search on range failed",
+					binary_search( array.begin(), array.end(), i ),
+					std::binary_search( _testData_[2], _testData_[2] + countof ( _testData_[2] ), i ) );
+		}
 	}
 TUT_TEARDOWN()
 
