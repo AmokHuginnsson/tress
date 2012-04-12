@@ -37,6 +37,7 @@ Copyright:
 #include <yaal/hcore/hlist.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
+#include <yaal/hconsole/hlistcontrol.hxx>
 
 using namespace tut;
 using namespace yaal;
@@ -853,7 +854,7 @@ TUT_UNIT_TEST( 22, "Sorting." )
 	l.sort();
 	check_consistency( l );
 	ENSURE_EQUALS( "sort failed", to_string( l ), "123" );
-	l.sort( OListBits::DESCENDING );
+	l.sort( greater<int>() );
 	check_consistency( l );
 	ENSURE_EQUALS( "sort failed", to_string( l ), "321" );
 TUT_TEARDOWN()
@@ -899,8 +900,8 @@ TUT_TEARDOWN()
 
 namespace {
 
-void check_sorted( tut_yaal_hcore_hlist::list_t const& l, OListBits::sort_order_t order ) {
-	if ( order == OListBits::ASCENDING ) {
+void check_sorted( tut_yaal_hcore_hlist::list_t const& l, list_control_helper::OSortHelper::sort_order_t order ) {
+	if ( order == list_control_helper::OSortHelper::ASCENDING ) {
 		int val = 0;
 		for ( tut_yaal_hcore_hlist::list_t::const_iterator it = l.begin(); it != l.end(); ++ it ) {
 			ENSURE( "not sorted", val <= *it );
@@ -932,10 +933,10 @@ TUT_UNIT_TEST( 25, "sort serious" )
 		try {
 			l.sort();
 			check_consistency( l );
-			check_sorted( l, OListBits::ASCENDING );
-			l.sort( OListBits::DESCENDING );
+			check_sorted( l, list_control_helper::OSortHelper::ASCENDING );
+			l.sort( greater<int>() );
 			check_consistency( l );
-			check_sorted( l, OListBits::DESCENDING );
+			check_sorted( l, list_control_helper::OSortHelper::DESCENDING );
 		} catch ( ... ) {
 			std::cout << "(" << std::setw( 8 ) << std::setfill( '0' ) << std::oct << i << ")[" << to_string( l ) << "]" << std::endl;
 			throw;
