@@ -58,6 +58,9 @@ struct tut_yaal_hcore_hlist {
 	void check_consistency( T const& );
 	template<typename T>
 	void to_list( char const* const, int, T& );
+	tut_yaal_hcore_hlist( void )
+		: _stringifier()
+		{}
 	virtual ~tut_yaal_hcore_hlist( void )
 		{}
 	void erase_test_0( list_t& l );

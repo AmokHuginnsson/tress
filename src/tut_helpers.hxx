@@ -362,6 +362,9 @@ struct simple_mock {
 class Stringifier {
 	yaal::hcore::HString _cache;
 public:
+	Stringifier( void )
+		: _cache()
+		{}
 	template<typename collection_t>
 	yaal::hcore::HString& to_string( collection_t const& coll_ ) {
 		_cache.clear();
