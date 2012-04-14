@@ -1109,6 +1109,9 @@ TUT_UNIT_TEST( 32, "lower_bound() on list" )
 		int_list_t::const_iterator last( lower_bound( list.begin(), list.end(), _testData_[2][countof ( _testData_[2] ) - 1] + 1 ) );
 		ENSURE( "lower_bound after range failed", last == list.end() );
 	}
+	int_list_t empty;
+	int_list_t::const_iterator it( lower_bound( empty.begin(), empty.end(), 0 ) );
+	ENSURE( "lower_bound on empty failed", it == empty.begin() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 33, "lower_bound() on array" )
@@ -1167,6 +1170,9 @@ TUT_UNIT_TEST( 34, "upper_bound() on list" )
 		int_list_t::const_iterator last( upper_bound( list.begin(), list.end(), _testData_[2][countof ( _testData_[2] ) - 1] ) );
 		ENSURE( "lower_bound after range failed", last == list.end() );
 	}
+	int_list_t empty;
+	int_list_t::const_iterator it( upper_bound( empty.begin(), empty.end(), 0 ) );
+	ENSURE( "lower_bound on empty failed", it == empty.begin() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 35, "upper_bound() on array" )

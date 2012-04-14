@@ -359,6 +359,25 @@ struct simple_mock {
 	virtual void time_constraint_exempt( void ) = 0;
 };
 
+class Stringifier {
+	yaal::hcore::HString _cache;
+public:
+	template<typename collection_t>
+	yaal::hcore::HString& to_string( collection_t const& coll_ ) {
+		_cache.clear();
+		for ( typename collection_t::const_iterator it( coll_.begin() ), end( coll_.end() ); it != end; ++ it )
+			_cache += *it;
+		return ( _cache );
+	}
+	template<typename T, typename collection_t>
+	yaal::hcore::HString& to_string( collection_t const& coll_ ) {
+		_cache.clear();
+		for ( typename collection_t::const_iterator it( coll_.begin() ), end( coll_.end() ); it != end; ++ it )
+			_cache += static_cast<T>( *it );
+		return ( _cache );
+	}
+};
+
 template<typename owner_t, int const forced_size>
 int HInstanceTracker<owner_t, forced_size>::_instances = 0;
 template<typename owner_t, int const forced_size>

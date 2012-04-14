@@ -37,6 +37,7 @@ Copyright:
 #include <yaal/hcore/hlist.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
+#include <yaal/tools/collections.hxx>
 #include <yaal/hconsole/hlistcontrol.hxx>
 
 using namespace tut;
@@ -44,26 +45,27 @@ using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::hconsole;
 using namespace yaal::tools;
+using namespace yaal::tools::collections;
 using namespace tress::tut_helpers;
 
 namespace tut {
 
 struct tut_yaal_hcore_hlist {
-	static HString _cache;
+	Stringifier _stringifier;
 	typedef HList<int> list_t;
-	template<typename T>
-	static HString& to_string( T const& );
 	void dump( list_t& );
 	template<typename T>
-	static void check_consistency( T const& );
+	void check_consistency( T const& );
 	template<typename T>
 	void to_list( char const* const, int, T& );
 	virtual ~tut_yaal_hcore_hlist( void )
 		{}
+	void erase_test_0( list_t& l );
+	void erase_test_1( list_t& l );
+	void erase_test_2( list_t& l );
+	void erase_test_3( list_t& l );
 private:
 };
-
-HString tut_yaal_hcore_hlist::_cache;
 
 void tut_yaal_hcore_hlist::dump( list_t& l ) {
 	int long s = l.size();
@@ -71,14 +73,6 @@ void tut_yaal_hcore_hlist::dump( list_t& l ) {
 	for ( list_t::iterator it = l.begin(); it != l.end(); ++ it )
 		cout << *it << ( s -- > 1 ? "," : "" );
 	cout << "]" << endl;
-}
-
-template<typename T>
-HString& tut_yaal_hcore_hlist::to_string( T const& list ) {
-	_cache.clear();
-	for ( typename T::const_iterator it = list.begin(); it != list.end(); ++ it )
-		_cache += static_cast<char>( *it );
-	return ( _cache );
 }
 
 template<typename T>
@@ -93,45 +87,29 @@ template<typename T>
 void tut_yaal_hcore_hlist::check_consistency( T const& list ) {
 	int ctr = 0;
 	bool hook_valid = false;
-	bool index_valid = false;
 	for ( typename T::const_iterator it = list.begin(); it != list.end(); ++ it, ++ ctr ) {
 		if ( it._current == list._hook )
 			hook_valid = true;
-		if ( list._indexElement == it._current ) {
-			ENSURE_EQUALS( "bad forward index", list._index, ctr );
-			index_valid = true;
-		}
 		ENSURE_EQUALS( "links broken", it._current->_next->_previous, it._current );
 		ENSURE_EQUALS( "links broken", it._current->_previous->_next, it._current );
 	}
-	if ( ! list._indexElement )
-		index_valid = true;
 	if ( ! ctr && ( list._hook == NULL ) )
 		hook_valid = true;
 	ENSURE_EQUALS( "forward cycle", ctr, list._size );
 	ENSURE( "no hook", hook_valid );
-	ENSURE( "invalid index", index_valid );
 	
 	ctr = 0;
 	hook_valid = false;
-	index_valid = false;
 	for ( typename T::const_reverse_iterator it = list.rbegin(); it != list.rend(); ++ it, ++ ctr ) {
 		if ( it.base()._current == list._hook )
 			hook_valid = true;
-		if ( list._indexElement == it.base()._current ) {
-			ENSURE_EQUALS( "bad backward index", list._index, ( list._size - ctr ) - 1 );
-			index_valid = true;
-		}
 		ENSURE_EQUALS( "links broken", it.base()._current->_next->_previous, it.base()._current );
 		ENSURE_EQUALS( "links broken", it.base()._current->_previous->_next, it.base()._current );
 	}
-	if ( ! list._indexElement )
-		index_valid = true;
 	if ( ! ctr && ( list._hook == NULL ) )
 		hook_valid = true;
 	ENSURE_EQUALS( "backward cycle", ctr, list._size );
 	ENSURE( "no hook", hook_valid );
-	ENSURE( "invalid index", index_valid );
 	return;
 }
 
@@ -311,7 +289,7 @@ TUT_UNIT_TEST( 8, ".hook(), cyclic_iterator" )
 	check_consistency( l );
 	l.push_back( 'c' );
 	check_consistency( l );
-	ENSURE_EQUALS( "push_back failed", to_string( l ), "abc" );
+	ENSURE_EQUALS( "push_back failed", _stringifier.to_string<char>( l ), "abc" );
 	list_t::cyclic_iterator it = l.hook();
 	check_consistency( l );
 	char const* const vec = "abcabc";
@@ -414,24 +392,24 @@ TUT_UNIT_TEST( 12, "insert" )
 	l.push_back( '3' );
 	check_consistency( l );
 	list_t::iterator it;
-	ENSURE_EQUALS( "push_back failed", to_string( l ), "123" );
+	ENSURE_EQUALS( "push_back failed", _stringifier.to_string<char>( l ), "123" );
 	ENSURE_EQUALS( "list malformed", l.size(), 3 );
 	check_consistency( l );
 	it = l.insert( l.begin(), 'a' );
 	check_consistency( l );
-	ENSURE_EQUALS( "insert failed", to_string( l ), "a123" );
+	ENSURE_EQUALS( "insert failed", _stringifier.to_string<char>( l ), "a123" );
 	ENSURE_EQUALS( "list malformed", l.size(), 4 );
 	check_consistency( l );
 	ENSURE_EQUALS( "bad iterator", *it, 'a' );
 	it = l.insert( l.rbegin().base(), 'b' );
 	check_consistency( l );
-	ENSURE_EQUALS( "insert failed", to_string( l ), "a12b3" );
+	ENSURE_EQUALS( "insert failed", _stringifier.to_string<char>( l ), "a12b3" );
 	ENSURE_EQUALS( "list malformed", l.size(), 5 );
 	check_consistency( l );
 	ENSURE_EQUALS( "bad iterator", *it, 'b' );
 	it = l.insert( l.hook(), 'x' );
 	check_consistency( l );
-	ENSURE_EQUALS( "insert failed", to_string( l ), "a12b3x" );
+	ENSURE_EQUALS( "insert failed", _stringifier.to_string<char>( l ), "a12b3x" );
 	ENSURE_EQUALS( "list malformed", l.size(), 6 );
 	check_consistency( l );
 	ENSURE_EQUALS( "bad iterator", *it, 'x' );
@@ -445,22 +423,22 @@ TUT_UNIT_TEST( 13, "add_tail, push_back" )
 	check_consistency( l );
 	ENSURE_EQUALS( "push_back failed", l.size(), 1 );
 	check_consistency( l );
-	ENSURE_EQUALS( "push_back failed", to_string( l ), "a" );
+	ENSURE_EQUALS( "push_back failed", _stringifier.to_string<char>( l ), "a" );
 	l.add_tail() = 'b';
 	check_consistency( l );
 	ENSURE_EQUALS( "add_tail failed", l.size(), 2 );
 	check_consistency( l );
-	ENSURE_EQUALS( "add_tail failed", to_string( l ), "ab" );
+	ENSURE_EQUALS( "add_tail failed", _stringifier.to_string<char>( l ), "ab" );
 	l.add_tail() = 'c';
 	check_consistency( l );
 	ENSURE_EQUALS( "add_tail failed", l.size(), 3 );
 	check_consistency( l );
-	ENSURE_EQUALS( "add_tail failed", to_string( l ), "abc" );
+	ENSURE_EQUALS( "add_tail failed", _stringifier.to_string<char>( l ), "abc" );
 	l.push_back( 'd' );
 	check_consistency( l );
 	ENSURE_EQUALS( "push_back failed", l.size(), 4 );
 	check_consistency( l );
-	ENSURE_EQUALS( "push_back failed", to_string( l ), "abcd" );
+	ENSURE_EQUALS( "push_back failed", _stringifier.to_string<char>( l ), "abcd" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 14, "pop_back, remove_tail" )
@@ -476,22 +454,22 @@ TUT_UNIT_TEST( 14, "pop_back, remove_tail" )
 	check_consistency( l );
 	ENSURE_EQUALS( "add_tail failed", l.size(), 3 );
 	check_consistency( l );
-	ENSURE_EQUALS( "add_tail failed", to_string( l ), "abc" );
+	ENSURE_EQUALS( "add_tail failed", _stringifier.to_string<char>( l ), "abc" );
 	l.pop_back();
 	check_consistency( l );
 	ENSURE_EQUALS( "pop_back failed", l.size(), 2 );
 	check_consistency( l );
-	ENSURE_EQUALS( "pop_back failed", to_string( l ), "ab" );
+	ENSURE_EQUALS( "pop_back failed", _stringifier.to_string<char>( l ), "ab" );
 	l.pop_back();
 	check_consistency( l );
 	ENSURE_EQUALS( "pop_back failed", l.size(), 1 );
 	check_consistency( l );
-	ENSURE_EQUALS( "pop_back failed", to_string( l ), "a" );
+	ENSURE_EQUALS( "pop_back failed", _stringifier.to_string<char>( l ), "a" );
 	l.pop_back();
 	check_consistency( l );
 	ENSURE_EQUALS( "pop_back failed", l.size(), 0 );
 	check_consistency( l );
-	ENSURE_EQUALS( "pop_back failed", to_string( l ), "" );
+	ENSURE_EQUALS( "pop_back failed", _stringifier.to_string<char>( l ), "" );
 	try {
 		l.pop_back();
 		FAIL( "poping back empty list did not FAIL" );
@@ -509,22 +487,22 @@ TUT_UNIT_TEST( 15, "add_head, push_front" )
 	check_consistency( l );
 	ENSURE_EQUALS( "push_front failed", l.size(), 1 );
 	check_consistency( l );
-	ENSURE_EQUALS( "push_front failed", to_string( l ), "a" );
+	ENSURE_EQUALS( "push_front failed", _stringifier.to_string<char>( l ), "a" );
 	l.add_head() = 'b';
 	check_consistency( l );
 	ENSURE_EQUALS( "add_head failed", l.size(), 2 );
 	check_consistency( l );
-	ENSURE_EQUALS( "add_head failed", to_string( l ), "ba" );
+	ENSURE_EQUALS( "add_head failed", _stringifier.to_string<char>( l ), "ba" );
 	l.add_head() = 'c';
 	check_consistency( l );
 	ENSURE_EQUALS( "add_head failed", l.size(), 3 );
 	check_consistency( l );
-	ENSURE_EQUALS( "add_head failed", to_string( l ), "cba" );
+	ENSURE_EQUALS( "add_head failed", _stringifier.to_string<char>( l ), "cba" );
 	l.push_front( 'd' );
 	check_consistency( l );
 	ENSURE_EQUALS( "push_front failed", l.size(), 4 );
 	check_consistency( l );
-	ENSURE_EQUALS( "push_front failed", to_string( l ), "dcba" );
+	ENSURE_EQUALS( "push_front failed", _stringifier.to_string<char>( l ), "dcba" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 16, "pop_front, remove_head" )
@@ -540,22 +518,22 @@ TUT_UNIT_TEST( 16, "pop_front, remove_head" )
 	check_consistency( l );
 	ENSURE_EQUALS( "add_tail failed", l.size(), 3 );
 	check_consistency( l );
-	ENSURE_EQUALS( "add_tail failed", to_string( l ), "abc" );
+	ENSURE_EQUALS( "add_tail failed", _stringifier.to_string<char>( l ), "abc" );
 	l.pop_front();
 	check_consistency( l );
 	ENSURE_EQUALS( "pop_front failed", l.size(), 2 );
 	check_consistency( l );
-	ENSURE_EQUALS( "pop_front failed", to_string( l ), "bc" );
+	ENSURE_EQUALS( "pop_front failed", _stringifier.to_string<char>( l ), "bc" );
 	l.pop_front();
 	check_consistency( l );
 	ENSURE_EQUALS( "pop_front failed", l.size(), 1 );
 	check_consistency( l );
-	ENSURE_EQUALS( "pop_front failed", to_string( l ), "c" );
+	ENSURE_EQUALS( "pop_front failed", _stringifier.to_string<char>( l ), "c" );
 	l.pop_front();
 	check_consistency( l );
 	ENSURE_EQUALS( "pop_front failed", l.size(), 0 );
 	check_consistency( l );
-	ENSURE_EQUALS( "pop_front failed", to_string( l ), "" );
+	ENSURE_EQUALS( "pop_front failed", _stringifier.to_string<char>( l ), "" );
 	try {
 		l.pop_front();
 		FAIL( "poping front empty list did not FAIL" );
@@ -564,91 +542,63 @@ TUT_UNIT_TEST( 16, "pop_front, remove_head" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "add_orderly" )
-	HList<char> l;
-	check_consistency( l );
-	ENSURE_EQUALS( "constructor malfunction", l.size(), 0 );
-	check_consistency( l );
-	l.add_orderly( 'd', yaal::less<char>() );
-	check_consistency( l );
-	ENSURE_EQUALS( "add_orderly failed", l.size(), 1 );
-	check_consistency( l );
-	ENSURE_EQUALS( "add_orderly failed", to_string( l ), "d" );
-	l.add_orderly( 'g', yaal::less<char>() );
-	check_consistency( l );
-	ENSURE_EQUALS( "add_orderly failed", l.size(), 2 );
-	check_consistency( l );
-	ENSURE_EQUALS( "add_orderly failed", to_string( l ), "dg" );
-	l.add_orderly( 'b', yaal::less<char>() );
-	check_consistency( l );
-	ENSURE_EQUALS( "add_orderly failed", l.size(), 3 );
-	check_consistency( l );
-	ENSURE_EQUALS( "add_orderly failed", to_string( l ), "bdg" );
-	l.add_orderly( 'e', yaal::less<char>() );
-	check_consistency( l );
-	ENSURE_EQUALS( "add_orderly failed", l.size(), 4 );
-	check_consistency( l );
-	ENSURE_EQUALS( "add_orderly failed", to_string( l ), "bdeg" );
-	l.add_orderly( 'c', yaal::less<char>() );
-	check_consistency( l );
-	l.add_orderly( 'a', yaal::less<char>() );
-	check_consistency( l );
-	l.add_orderly( 'h', yaal::less<char>() );
-	check_consistency( l );
-	l.add_orderly( 'f', yaal::less<char>() );
-	check_consistency( l );
-	ENSURE_EQUALS( "add_orderly failed", l.size(), 8 );
-	check_consistency( l );
-	ENSURE_EQUALS( "add_orderly failed", to_string( l ), "abcdefgh" );
-TUT_TEARDOWN()
-
-namespace {
-
-void erase_test_0( tut_yaal_hcore_hlist::list_t& l ) {
+void tut_yaal_hcore_hlist::erase_test_0( tut_yaal_hcore_hlist::list_t& l ) {
 	char const* const full = "123456";
 	char const* ptr = full;
 	for ( tut_yaal_hcore_hlist::list_t::iterator it = l.begin(); it != l.end(); ) {
 		it = l.erase( it );
 		tut_yaal_hcore_hlist::check_consistency( l );
-		ENSURE_EQUALS( "erase failed", tut_yaal_hcore_hlist::to_string( l ), ++ ptr );
+		ENSURE_EQUALS( "erase failed", tut_yaal_hcore_hlist::_stringifier.to_string<char>( l ), ++ ptr );
 		ENSURE_EQUALS( "erase failed", l.size(), 6 - ( ptr - full ) );
 	}
 }
 
-void erase_test_1( tut_yaal_hcore_hlist::list_t& l ) {
+void tut_yaal_hcore_hlist::erase_test_1( tut_yaal_hcore_hlist::list_t& l ) {
 	l.erase( l.begin() );
 	tut_yaal_hcore_hlist::check_consistency( l );
-	ENSURE_EQUALS( "erase1 failed", tut_yaal_hcore_hlist::to_string( l ), "23456" );
+	ENSURE_EQUALS( "erase1 failed", tut_yaal_hcore_hlist::_stringifier.to_string<char>( l ), "23456" );
 	ENSURE_EQUALS( "erase1 failed", l.size(), 5 );
 	tut_yaal_hcore_hlist::check_consistency( l );
 }
 
-void erase_test_2( tut_yaal_hcore_hlist::list_t& l ) {
+void tut_yaal_hcore_hlist::erase_test_2( tut_yaal_hcore_hlist::list_t& l ) {
 	tut_yaal_hcore_hlist::list_t::iterator it = l.erase( l.rbegin().base() );
 	tut_yaal_hcore_hlist::check_consistency( l );
-	ENSURE_EQUALS( "erase2 failed", tut_yaal_hcore_hlist::to_string( l ), "12345" );
+	ENSURE_EQUALS( "erase2 failed", tut_yaal_hcore_hlist::_stringifier.to_string<char>( l ), "12345" );
 	ENSURE_EQUALS( "erase2 failed", l.size(), 5 );
 	tut_yaal_hcore_hlist::check_consistency( l );
 	ENSURE( "open list erase for last element leaves bogus iterator", it == l.end() );
 	tut_yaal_hcore_hlist::check_consistency( l );
 }
 
-void erase_test_3( tut_yaal_hcore_hlist::list_t& l ) {
+void tut_yaal_hcore_hlist::erase_test_3( tut_yaal_hcore_hlist::list_t& l ) {
 	tut_yaal_hcore_hlist::list_t::cyclic_iterator it = l.erase( -- l.hook() );
 	tut_yaal_hcore_hlist::check_consistency( l );
-	ENSURE_EQUALS( "erase2 failed", tut_yaal_hcore_hlist::to_string( l ), "12345" );
+	ENSURE_EQUALS( "erase2 failed", tut_yaal_hcore_hlist::_stringifier.to_string<char>( l ), "12345" );
 	ENSURE_EQUALS( "erase2 failed", l.size(), 5 );
 	tut_yaal_hcore_hlist::check_consistency( l );
 	ENSURE( "open list erase for last element leaves bogus iterator", it == l.hook() );
 	tut_yaal_hcore_hlist::check_consistency( l );
 }
 
-}
+TUT_UNIT_TEST( 17, "resize" )
+	list_t l;
+	ENSURE_EQUALS( "constructor of empty failed", l.size(), 0 );
+	l.resize( 5 );
+	ENSURE_EQUALS( "resize up failed", l.size(), 5 );
+	l.resize( 3 );
+	ENSURE_EQUALS( "resize down failed", l.size(), 3 );
+TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 18, "erase" )
 	list_t l;
-	typedef void (*erase_test_t)( list_t& );
-	erase_test_t erase_tests[] = { erase_test_0, erase_test_1, erase_test_2, erase_test_3 };
+	typedef void (tut_yaal_hcore_hlist::*erase_test_t)( list_t& );
+	erase_test_t erase_tests[] = {
+		&tut_yaal_hcore_hlist::erase_test_0,
+		&tut_yaal_hcore_hlist::erase_test_1,
+		&tut_yaal_hcore_hlist::erase_test_2,
+		&tut_yaal_hcore_hlist::erase_test_3
+	};
 	for ( size_t i = 0; i < sizeof ( erase_tests ) / sizeof ( erase_test_t ); ++ i ) {
 		l.clear();
 		check_consistency( l );
@@ -657,84 +607,99 @@ TUT_UNIT_TEST( 18, "erase" )
 		l.push_back( '5' ); l.push_back( '6' );
 		check_consistency( l );
 		ENSURE_EQUALS( "construction failed", l.size(), 6 );
-		ENSURE_EQUALS( "construction failed", to_string( l ), "123456" );
-		erase_tests[ i ]( l );
+		ENSURE_EQUALS( "construction failed", _stringifier.to_string<char>( l ), "123456" );
+		(this->*erase_tests[ i ])( l );
 		check_consistency( l );
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 19, "n_th" )
+TUT_UNIT_TEST( 19, "assign( iter, iter )" )
 	list_t l;
 	check_consistency( l );
-	l.push_back( '1' );
+	l.add_tail() = 1;
 	check_consistency( l );
-	l.push_back( '2' );
+	l.add_tail() = 2;
 	check_consistency( l );
-	l.push_back( '3' );
+	l.add_tail() = 3;
 	check_consistency( l );
-	l.push_back( '4' );
+	l.add_tail() = 4;
 	check_consistency( l );
-	l.push_back( '5' );
+	l.add_tail() = 5;
 	check_consistency( l );
-	l.push_back( '6' );
-	check_consistency( l );
-	for ( int i = 0; i < 6; ++ i ) {
-		ENSURE_EQUALS( "n_th( n ) gives bogus result", *l.n_th( i ), i + '1' );
-		check_consistency( l );
+	list_t o;
+	o.assign( l.begin(), l.end() );
+	check_consistency( o );
+	int ctr = 0;
+	for ( list_t::iterator it = o.begin();
+			it != o.end(); ++ it ) {
+		check_consistency( o );
+		ctr ++;
+		ENSURE_EQUALS( "assign operation failed, wrong value", *it, ctr );
 	}
-	for ( int i = -1; i > -7; -- i ) {
-		ENSURE_EQUALS( "n_th( -n ) gives bogus result", *l.n_th( i ), ( 6 + i ) + '1' );
-		check_consistency( l );
+	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
+	o.clear();
+	o.push_back( -1 );
+	o.push_back( -2 );
+	o.assign( l.begin(), l.end() );
+	check_consistency( o );
+	ctr = 0;
+	for ( list_t::iterator it = o.begin();
+			it != o.end(); ++ it ) {
+		check_consistency( o );
+		ctr ++;
+		ENSURE_EQUALS( "assign operation failed, wrong value", *it, ctr );
 	}
-	try {
-		l.n_th( 6 );
-		FAIL( "index too big and ok ??" );
-	} catch ( HException& ) {
-		// ok
+	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
+	o.clear();
+	o.push_back( -1 );
+	o.push_back( -2 );
+	o.push_back( -3 );
+	o.push_back( -4 );
+	o.push_back( -5 );
+	o.push_back( -6 );
+	o.push_back( -7 );
+	o.assign( l.begin(), l.end() );
+	check_consistency( o );
+	ctr = 0;
+	for ( list_t::iterator it = o.begin();
+			it != o.end(); ++ it ) {
+		check_consistency( o );
+		ctr ++;
+		ENSURE_EQUALS( "assign operation failed, wrong value", *it, ctr );
 	}
-	try {
-		l.n_th( -7 );
-		FAIL( "index out of range and ok ??" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "operator[]" )
+TUT_UNIT_TEST( 20, "assign( count, val )" )
 	list_t l;
-	check_consistency( l );
-	l.push_back( '1' );
-	check_consistency( l );
-	l.push_back( '2' );
-	check_consistency( l );
-	l.push_back( '3' );
-	check_consistency( l );
-	l.push_back( '4' );
-	check_consistency( l );
-	l.push_back( '5' );
-	check_consistency( l );
-	l.push_back( '6' );
-	check_consistency( l );
-	for ( int i = 0; i < 6; ++ i ) {
-		ENSURE_EQUALS( "operator[] malfunction", l[ i ], i + 1 + '0' );
-		check_consistency( l );
+	l.assign( 5, 7 );
+	for ( list_t::iterator it( l.begin() ), end( l.end() ); it != end; ++ it ) {
+		ENSURE_EQUALS( "assign operation failed, wrong value", *it, 7 );
 	}
-	for ( int i = -1; i > -7; -- i ) {
-		ENSURE_EQUALS( "operator[ -n ] malfunction", l[ i ], i + 6 + '1' );
-		check_consistency( l );
+	ENSURE_EQUALS( "assign operation failed, wrong size", l.size(), 5 );
+
+	l.clear();
+	l.push_back( -1 );
+	l.push_back( -2 );
+	l.assign( 5, 7 );
+	for ( list_t::iterator it( l.begin() ), end( l.end() ); it != end; ++ it ) {
+		ENSURE_EQUALS( "assign operation failed, wrong value", *it, 7 );
 	}
-	try {
-		l[ 6 ];
-		FAIL( "index too big and ok ??" );
-	} catch ( HException& ) {
-		// ok
+	ENSURE_EQUALS( "assign operation failed, wrong size", l.size(), 5 );
+
+	l.clear();
+	l.push_back( -1 );
+	l.push_back( -2 );
+	l.push_back( -3 );
+	l.push_back( -4 );
+	l.push_back( -5 );
+	l.push_back( -6 );
+	l.push_back( -7 );
+	l.assign( 5, 7 );
+	for ( list_t::iterator it( l.begin() ), end( l.end() ); it != end; ++ it ) {
+		ENSURE_EQUALS( "assign operation failed, wrong value", *it, 7 );
 	}
-	try {
-		l[ -7 ];
-		FAIL( "index out of range and ok ??" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_EQUALS( "assign operation failed, wrong size", l.size(), 5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 21, "exchange" )
@@ -752,13 +717,13 @@ TUT_UNIT_TEST( 21, "exchange" )
 	check_consistency( l );
 	l.push_back( '6' );
 	check_consistency( l );
-	ENSURE_EQUALS( "construct error", to_string( l ), "123456" );
+	ENSURE_EQUALS( "construct error", _stringifier.to_string<char>( l ), "123456" );
 	l.exchange( l.begin(), l.rbegin().base() );
 	check_consistency( l );
-	ENSURE_EQUALS( "ends exchange error", to_string( l ), "623451" );
-	l.exchange( l.n_th( 1 ), l.n_th( 3 ) );
+	ENSURE_EQUALS( "ends exchange error", _stringifier.to_string<char>( l ), "623451" );
+	l.exchange( n_th( l, 1 ), n_th( l, 3 ) );
 	check_consistency( l );
-	ENSURE_EQUALS( "midde items exchange error", to_string( l ), "643251" );
+	ENSURE_EQUALS( "midde items exchange error", _stringifier.to_string<char>( l ), "643251" );
 	l.push_back( '0' );
 	check_consistency( l );
 	l.push_back( '8' );
@@ -767,66 +732,66 @@ TUT_UNIT_TEST( 21, "exchange" )
 	check_consistency( l );
 	l.sort();
 	check_consistency( l );
-	ENSURE_EQUALS( "sort error", to_string( l ), "012345678" );
-	l.exchange( l.n_th( 0 ), l.n_th( 1 ) );
+	ENSURE_EQUALS( "sort error", _stringifier.to_string<char>( l ), "012345678" );
+	l.exchange( n_th( l, 0 ), n_th( l, 1 ) );
 	check_consistency( l );
-	ENSURE_EQUALS( "0-1 exchange error", to_string( l ), "102345678" );
-	l.exchange( l.n_th( 1 ), l.n_th( 0 ) );
+	ENSURE_EQUALS( "0-1 exchange error", _stringifier.to_string<char>( l ), "102345678" );
+	l.exchange( n_th( l, 1 ), n_th( l, 0 ) );
 	check_consistency( l );
-	ENSURE_EQUALS( "1-0 exchange error", to_string( l ), "012345678" );
-	l.exchange( l.n_th( 7 ), l.n_th( 8 ) );
+	ENSURE_EQUALS( "1-0 exchange error", _stringifier.to_string<char>( l ), "012345678" );
+	l.exchange( n_th( l, 7 ), n_th( l, 8 ) );
 	check_consistency( l );
-	ENSURE_EQUALS( "7-8 exchange error", to_string( l ), "012345687" );
-	l.exchange( l.n_th( 8 ), l.n_th( 7 ) );
+	ENSURE_EQUALS( "7-8 exchange error", _stringifier.to_string<char>( l ), "012345687" );
+	l.exchange( n_th( l, 8 ), n_th( l, 7 ) );
 	check_consistency( l );
-	ENSURE_EQUALS( "8-7 exchange error", to_string( l ), "012345678" );
+	ENSURE_EQUALS( "8-7 exchange error", _stringifier.to_string<char>( l ), "012345678" );
 	l.clear();
 	check_consistency( l );
 	l.sort();
 	check_consistency( l );
-	ENSURE_EQUALS( "sort error", to_string( l ), "" );
+	ENSURE_EQUALS( "sort error", _stringifier.to_string<char>( l ), "" );
 	l.push_back( '0' );
 	l.push_back( '1' );
 	check_consistency( l );
-	ENSURE_EQUALS( "push_back error", to_string( l ), "01" );
-	l.exchange( l.n_th( 0 ), l.n_th( 1 ) );
+	ENSURE_EQUALS( "push_back error", _stringifier.to_string<char>( l ), "01" );
+	l.exchange( n_th( l, 0 ), n_th( l, 1 ) );
 	check_consistency( l );
-	ENSURE_EQUALS( "0-1 exchange error", to_string( l ), "10" );
-	l.exchange( l.n_th( 1 ), l.n_th( 0 ) );
+	ENSURE_EQUALS( "0-1 exchange error", _stringifier.to_string<char>( l ), "10" );
+	l.exchange( n_th( l, 1 ), n_th( l, 0 ) );
 	check_consistency( l );
-	ENSURE_EQUALS( "1-0 exchange error", to_string( l ), "01" );
+	ENSURE_EQUALS( "1-0 exchange error", _stringifier.to_string<char>( l ), "01" );
 	l.push_back( '2' );
 	check_consistency( l );
-	ENSURE_EQUALS( "push_back error", to_string( l ), "012" );
-	l.exchange( l.n_th( 0 ), l.n_th( 1 ) );
+	ENSURE_EQUALS( "push_back error", _stringifier.to_string<char>( l ), "012" );
+	l.exchange( n_th( l, 0 ), n_th( l, 1 ) );
 	check_consistency( l );
-	ENSURE_EQUALS( "0-1 exchange error", to_string( l ), "102" );
-	l.exchange( l.n_th( 1 ), l.n_th( 0 ) );
+	ENSURE_EQUALS( "0-1 exchange error", _stringifier.to_string<char>( l ), "102" );
+	l.exchange( n_th( l, 1 ), n_th( l, 0 ) );
 	check_consistency( l );
-	ENSURE_EQUALS( "1-0 exchange error", to_string( l ), "012" );
-	l.exchange( l.n_th( 1 ), l.n_th( 2 ) );
+	ENSURE_EQUALS( "1-0 exchange error", _stringifier.to_string<char>( l ), "012" );
+	l.exchange( n_th( l, 1 ), n_th( l, 2 ) );
 	check_consistency( l );
-	ENSURE_EQUALS( "1-2 exchange error", to_string( l ), "021" );
-	l.exchange( l.n_th( 2 ), l.n_th( 1 ) );
+	ENSURE_EQUALS( "1-2 exchange error", _stringifier.to_string<char>( l ), "021" );
+	l.exchange( n_th( l, 2 ), n_th( l, 1 ) );
 	check_consistency( l );
-	ENSURE_EQUALS( "2-1 exchange error", to_string( l ), "012" );
-	l.exchange( l.n_th( 0 ), l.n_th( 2 ) );
+	ENSURE_EQUALS( "2-1 exchange error", _stringifier.to_string<char>( l ), "012" );
+	l.exchange( n_th( l, 0 ), n_th( l, 2 ) );
 	check_consistency( l );
-	ENSURE_EQUALS( "0-2 exchange error", to_string( l ), "210" );
-	l.exchange( l.n_th( 2 ), l.n_th( 0 ) );
+	ENSURE_EQUALS( "0-2 exchange error", _stringifier.to_string<char>( l ), "210" );
+	l.exchange( n_th( l, 2 ), n_th( l, 0 ) );
 	check_consistency( l );
-	ENSURE_EQUALS( "2-2 exchange error", to_string( l ), "012" );
+	ENSURE_EQUALS( "2-2 exchange error", _stringifier.to_string<char>( l ), "012" );
 	l.clear();
 	l.push_back( '1' );
 	check_consistency( l );
 	l.sort();
 	check_consistency( l );
-	ENSURE_EQUALS( "sort error", to_string( l ), "1" );
+	ENSURE_EQUALS( "sort error", _stringifier.to_string<char>( l ), "1" );
 	char buf[] = "00000110";
 	to_list( buf, 8, l );
-	ENSURE_EQUALS( "to_list failed", to_string( l ), buf );
+	ENSURE_EQUALS( "to_list failed", _stringifier.to_string<char>( l ), buf );
 	l.sort();
-	ENSURE_EQUALS( "sort failed", to_string( l ), "00000011" );
+	ENSURE_EQUALS( "sort failed", _stringifier.to_string<char>( l ), "00000011" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 22, "Sorting." )
@@ -838,25 +803,25 @@ TUT_UNIT_TEST( 22, "Sorting." )
 	check_consistency( l );
 	l.add_tail() = '2';
 	check_consistency( l );
-	ENSURE_EQUALS( "operator[] or add_tail failed", l [ 0 ], '3' );
+	ENSURE_EQUALS( "operator[] or add_tail failed", *n_th( l, 0 ), '3' );
 	check_consistency( l );
-	ENSURE_EQUALS( "operator[] or add_tail failed", l [ 1 ], '1' );
+	ENSURE_EQUALS( "operator[] or add_tail failed", *n_th( l, 1 ), '1' );
 	check_consistency( l );
-	ENSURE_EQUALS( "operator[] or add_tail failed", l [ 2 ], '2' );
+	ENSURE_EQUALS( "operator[] or add_tail failed", *n_th( l, 2 ), '2' );
 	check_consistency( l );
 	l.sort();
 	check_consistency( l );
-	ENSURE_EQUALS( "sort failed", to_string( l ), "123" );
+	ENSURE_EQUALS( "sort failed", _stringifier.to_string<char>( l ), "123" );
 	l.clear();
 	l.push_back( '3' );
 	l.push_back( '2' );
 	l.push_back( '1' );
 	l.sort();
 	check_consistency( l );
-	ENSURE_EQUALS( "sort failed", to_string( l ), "123" );
+	ENSURE_EQUALS( "sort failed", _stringifier.to_string<char>( l ), "123" );
 	l.sort( greater<int>() );
 	check_consistency( l );
-	ENSURE_EQUALS( "sort failed", to_string( l ), "321" );
+	ENSURE_EQUALS( "sort failed", _stringifier.to_string<char>( l ), "321" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 23, "empty, is_empty" )
@@ -889,13 +854,13 @@ TUT_UNIT_TEST( 24, "swap" )
 	check_consistency( l2 );
 	l2.push_back( 'b' );
 	check_consistency( l2 );
-	ENSURE_EQUALS( "build failed", to_string( l1 ), "12" );
-	ENSURE_EQUALS( "build failed", to_string( l2 ), "ab" );
+	ENSURE_EQUALS( "build failed", _stringifier.to_string<char>( l1 ), "12" );
+	ENSURE_EQUALS( "build failed", _stringifier.to_string<char>( l2 ), "ab" );
 	swap( l1, l2 );
 	check_consistency( l1 );
 	check_consistency( l2 );
-	ENSURE_EQUALS( "exchange failed", to_string( l2 ), "12" );
-	ENSURE_EQUALS( "exchange failed", to_string( l1 ), "ab" );
+	ENSURE_EQUALS( "exchange failed", _stringifier.to_string<char>( l2 ), "12" );
+	ENSURE_EQUALS( "exchange failed", _stringifier.to_string<char>( l1 ), "ab" );
 TUT_TEARDOWN()
 
 namespace {
@@ -938,7 +903,7 @@ TUT_UNIT_TEST( 25, "sort serious" )
 			check_consistency( l );
 			check_sorted( l, list_control_helper::OSortHelper::DESCENDING );
 		} catch ( ... ) {
-			std::cout << "(" << std::setw( 8 ) << std::setfill( '0' ) << std::oct << i << ")[" << to_string( l ) << "]" << std::endl;
+			std::cout << "(" << std::setw( 8 ) << std::setfill( '0' ) << std::oct << i << ")[" << _stringifier.to_string<char>( l ) << "]" << std::endl;
 			throw;
 		}
 		check_consistency( l );
