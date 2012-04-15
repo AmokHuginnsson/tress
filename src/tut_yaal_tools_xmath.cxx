@@ -85,15 +85,23 @@ TUT_UNIT_TEST( 3, "binomial_coefficient" )
 	ENSURE_EQUALS( "binomial_coefficient( 5, 5 )", binomial_coefficient( 5, 5 ), 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "number set stats: count" )
+TUT_UNIT_TEST( 4, "number set stats: minimum" )
+	ENSURE_EQUALS( "number_set_stats().minimum() failed", number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).minimum(), _testData_[0][0] );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 5, "number set stats: maximum" )
+	ENSURE_EQUALS( "number_set_stats().maximum() failed", number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).maximum(), _testData_[0][countof ( _testData_[0] ) - 1] );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 6, "number set stats: count" )
 	ENSURE_EQUALS( "number_set_stats().count() failed", number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).count(), 100 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "number set stats: sum" )
+TUT_UNIT_TEST( 7, "number set stats: sum" )
 	ENSURE_EQUALS( "number_set_stats().sum() failed", number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).sum(), 24133 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "number set stats: average" )
+TUT_UNIT_TEST( 8, "number set stats: average" )
 #ifdef __HOST_OS_TYPE_CYGWIN__
 	double expected( 24133 / 100. );
 #else /* #ifdef __HOST_OS_TYPE_CYGWIN__ */
