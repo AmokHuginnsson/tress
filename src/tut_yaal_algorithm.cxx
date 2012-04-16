@@ -1241,6 +1241,18 @@ TUT_UNIT_TEST( 37, "binary_search() on array" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 38, "is_sorted" )
+	ENSURE( "is_sorted on empty failed", is_sorted( _testData_[0], _testData_[0] ) );
+	ENSURE( "is_sorted on large failed", is_sorted( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ) );
+	int left[] = { 2, 1, 3, 4, 5, 6, 7 };
+	int mid[] = { 1, 2, 3, 5, 4, 6, 7 };
+	int right[] = { 1, 2, 3, 4, 5, 7, 6 };
+	ENSURE_NOT( "is_sorted false positive on left", is_sorted( left, left + countof ( left ) ) );
+	ENSURE_NOT( "is_sorted false positive on mid", is_sorted( mid, mid + countof ( mid ) ) );
+	ENSURE_NOT( "is_sorted false positive on right", is_sorted( right, right + countof ( right ) ) );
+	ENSURE( "is_sorted on one elem failed", is_sorted( _testData_[0], _testData_[0] + 1 ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "sort speed" )
 	TIME_CONSTRAINT_EXEMPT();
 	double long st( 0 );

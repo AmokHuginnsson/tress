@@ -35,6 +35,7 @@ Copyright:
 #include <vector>
 #include <deque>
 #include <set>
+#include <stdexcept>
 
 #include <yaal/hcore/hstreaminterface.hxx>
 #include <yaal/hcore/hfile.hxx>
@@ -295,6 +296,7 @@ protected:
 	static int _instances;
 	static int _autoIncrement;
 	static int _integrityFailures;
+	static volatile bool _stopCopying;
 	int long _id;
 	std::string _origin;
 	this_type* _self;
@@ -331,6 +333,12 @@ public:
 	bool is_self( void ) const;
 	yaal::hcore::HString to_string( void ) const;
 	void swap( HInstanceTracker& );
+	static void stop_copying( void ) {
+		_stopCopying = true;
+	}
+	static void allow_copying( void ) {
+		_stopCopying = false;
+	}
 };
 #ifndef __sun__
 #pragma pack( pop )
@@ -387,6 +395,8 @@ template<typename owner_t, int const forced_size>
 int HInstanceTracker<owner_t, forced_size>::_autoIncrement = 0;
 template<typename owner_t, int const forced_size>
 int HInstanceTracker<owner_t, forced_size>::_integrityFailures = 0;
+template<typename owner_t, int const forced_size>
+volatile bool HInstanceTracker<owner_t, forced_size>::_stopCopying = false;
 
 template<typename owner_t, int const forced_size>
 HInstanceTracker<owner_t, forced_size>::HInstanceTracker( int long id_ )
@@ -400,6 +410,8 @@ template<typename owner_t, int const forced_size>
 HInstanceTracker<owner_t, forced_size>::HInstanceTracker( HInstanceTracker const& itrck )
 	: _id( itrck._id ),
 	_origin( itrck._origin + ":" + yaal::hcore::HString( itrck._id ).c_str() ), _self( this ), _forcedSize() {
+	if ( _stopCopying )
+		throw std::runtime_error( "Copy constructor invoked!" );
 	++ _instances;
 	++ _autoIncrement;
 }
@@ -413,6 +425,8 @@ HInstanceTracker<owner_t, forced_size>::~HInstanceTracker( void ) {
 
 template<typename owner_t, int const forced_size>
 HInstanceTracker<owner_t, forced_size>& HInstanceTracker<owner_t, forced_size>::operator = ( HInstanceTracker const& itrck ) {
+	if ( _stopCopying )
+		throw std::runtime_error( "Assignment operator invoked!" );
 	if ( &itrck != this ) {
 		HInstanceTracker<owner_t, forced_size> tmp( itrck );
 		swap( tmp );
