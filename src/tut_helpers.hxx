@@ -289,6 +289,10 @@ struct HSTDGlobalScopeExceptionHandlingPolicy {
 #else /* #ifndef __sun__ */
 #pragma pack( 1 )
 #endif /* #else #ifndef __sun__ */
+template<int const size>
+struct Sizer {
+	char _buf[size];
+};
 template<typename owner_t, int const forced_size = 1>
 class HInstanceTracker {
 protected:
@@ -310,7 +314,7 @@ protected:
 					+ static_cast<int>( sizeof ( static_cast<this_type*>( NULL )->_origin ) )
 					+ static_cast<int>( sizeof ( static_cast<this_type*>( NULL )->_self ) ) );
 #endif /* #else #ifdef __MSVCXX__ */
-	char _forcedSize[ forced_size_calc > 0 ? forced_size_calc : 1 ];
+	Sizer<(forced_size_calc > 0 ? forced_size_calc : 1)> _forcedSize;
 public:
 	HInstanceTracker( int long = yaal::meta::max_signed<int long>::value );
 	HInstanceTracker( HInstanceTracker const& );
