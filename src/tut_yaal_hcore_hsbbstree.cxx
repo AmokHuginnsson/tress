@@ -187,11 +187,13 @@ bool red_black_tree_stress_test::definition_test( HSet<T>& ob ) {
 	return ( false );
 }
 
-struct tut_yaal_hcore_hsbbstree {
+struct tut_yaal_hcore_hsbbstree : public simple_mock<tut_yaal_hcore_hsbbstree> {
+	typedef simple_mock<tut_yaal_hcore_hsbbstree> base_type;
 	static int const NUMBER_OF_TEST_NODES = 1000;
 	static int const KEY_POOL_SIZE = 30000;
 	red_black_tree_stress_test stress;
-	tut_yaal_hcore_hsbbstree( void ) : stress()
+	tut_yaal_hcore_hsbbstree( void )
+		: base_type(), stress()
 		{}
 	virtual ~tut_yaal_hcore_hsbbstree( void )
 		{}

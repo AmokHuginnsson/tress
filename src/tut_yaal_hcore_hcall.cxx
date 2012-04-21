@@ -42,7 +42,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hcall {
+struct tut_yaal_hcore_hcall : public simple_mock<tut_yaal_hcore_hcall> {
+	typedef simple_mock<tut_yaal_hcore_hcall> base_type;
 	int _callNo;
 	int _fileNo;
 	int _suitUt;
@@ -57,7 +58,8 @@ struct tut_yaal_hcore_hcall {
 
 TUT_TEST_GROUP( tut_yaal_hcore_hcall, "yaal::hcore::HCall" );
 
-tut_yaal_hcore_hcall::tut_yaal_hcore_hcall( void ) : _callNo( 0 ), _fileNo( 0 ), _suitUt( 0 ), _out() {
+tut_yaal_hcore_hcall::tut_yaal_hcore_hcall( void )
+	: base_type(), _callNo( 0 ), _fileNo( 0 ), _suitUt( 0 ), _out() {
 	if ( getenv( "GEN_YAAL_HCORE_HCALL" ) )
 		generate_yaal_hcore_hcall_tests();
 }

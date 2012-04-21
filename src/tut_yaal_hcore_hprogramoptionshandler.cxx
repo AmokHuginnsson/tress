@@ -38,7 +38,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hprogram_options_handler {
+struct tut_yaal_hcore_hprogram_options_handler : simple_mock<tut_yaal_hcore_hprogram_options_handler> {
+	typedef simple_mock<tut_yaal_hcore_hprogram_options_handler> base_type;
 	bool _restartable;
 	int _jobs;
 	int _testNumber;
@@ -46,7 +47,9 @@ struct tut_yaal_hcore_hprogram_options_handler {
 	HString _testGroup;
 	HString _testGroupPattern;
 	tut_yaal_hcore_hprogram_options_handler( void )
-		: _restartable( false ), _jobs( 0 ), _testNumber( 0 ), _logPath(), _testGroup(), _testGroupPattern()
+		: base_type(),
+		_restartable( false ), _jobs( 0 ), _testNumber( 0 ),
+		_logPath(), _testGroup(), _testGroupPattern()
 		{}
 	virtual ~tut_yaal_hcore_hprogram_options_handler( void ) {}
 };

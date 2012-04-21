@@ -43,7 +43,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hnumber {
+struct tut_yaal_hcore_hnumber : public simple_mock<tut_yaal_hcore_hnumber> {
+	typedef simple_mock<tut_yaal_hcore_hnumber> base_type;
 	static HString BC_PATH;
 	HRandomizer _rnd;
 	HPipedChild _bc;

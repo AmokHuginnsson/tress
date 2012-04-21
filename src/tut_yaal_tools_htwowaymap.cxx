@@ -40,6 +40,7 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 struct tut_yaal_tools_htwowaymap : public simple_mock<tut_yaal_tools_htwowaymap> {
+	typedef simple_mock<tut_yaal_tools_htwowaymap> base_type;
 	typedef HTwoWayMap<int, int> int2int_t;
 	virtual ~tut_yaal_tools_htwowaymap( void ) {}
 };

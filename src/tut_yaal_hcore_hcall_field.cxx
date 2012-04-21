@@ -39,7 +39,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hcall_field {
+struct tut_yaal_hcore_hcall_field : public simple_mock<tut_yaal_hcore_hcall_field> {
+	typedef simple_mock<tut_yaal_hcore_hcall_field> base_type;
 	typedef HInstanceTracker<tut_yaal_hcore_hcall_field> item_t;
 	typedef HPair<HString, HString> person_t;
 	virtual ~tut_yaal_hcore_hcall_field( void ) {}

@@ -39,6 +39,7 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 struct tut_yaal_hcore_huniquemovable : public simple_mock<tut_yaal_hcore_huniquemovable> {
+	typedef simple_mock<tut_yaal_hcore_huniquemovable> base_type;
 	virtual ~tut_yaal_hcore_huniquemovable( void ) {}
 	typedef HUniqueMovable<item_t> um_t;
 };

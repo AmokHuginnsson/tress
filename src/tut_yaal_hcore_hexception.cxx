@@ -38,7 +38,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hexception {
+struct tut_yaal_hcore_hexception : public simple_mock<tut_yaal_hcore_hexception> {
+	typedef simple_mock<tut_yaal_hcore_hexception> base_type;
 
 class A {
 	typedef A this_type;

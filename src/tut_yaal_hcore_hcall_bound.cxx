@@ -38,7 +38,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hcall_bound {
+struct tut_yaal_hcore_hcall_bound : public simple_mock<tut_yaal_hcore_hcall_bound> {
+	typedef simple_mock<tut_yaal_hcore_hcall_bound> base_type;
 	typedef HInstanceTracker<tut_yaal_hcore_hcall_bound> item_t;
 	virtual ~tut_yaal_hcore_hcall_bound( void ) {}
 /* cppcheck-suppress functionConst */

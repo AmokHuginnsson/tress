@@ -38,7 +38,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hmultimap {
+struct tut_yaal_hcore_hmultimap : public simple_mock<tut_yaal_hcore_hmultimap> {
+	typedef simple_mock<tut_yaal_hcore_hmultimap> base_type;
 	virtual ~tut_yaal_hcore_hmultimap( void ) {}
 	typedef HMultiMap<int, int, HMultiContainerStorage::HPacked> mmp_t;
 	typedef HMultiMap<int, int, HMultiContainerStorage::HTransparent> mmt_t;

@@ -38,7 +38,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hmap {
+struct tut_yaal_hcore_hmap : public simple_mock<tut_yaal_hcore_hmap> {
+	typedef simple_mock<tut_yaal_hcore_hmap> base_type;
 	struct Crazy {
 		Crazy() { throw 0; }
 	};

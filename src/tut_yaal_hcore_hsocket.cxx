@@ -42,7 +42,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hsocket {
+struct tut_yaal_hcore_hsocket : public simple_mock<tut_yaal_hcore_hsocket> {
+	typedef simple_mock<tut_yaal_hcore_hsocket> base_type;
 	static int const OBSCURE_PORT = 61928;
 	tut_yaal_hcore_hsocket( void ) {
 		::unlink( "/tmp/TUT_socket" );

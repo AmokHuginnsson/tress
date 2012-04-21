@@ -50,7 +50,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hlist {
+struct tut_yaal_hcore_hlist : public simple_mock<tut_yaal_hcore_hlist> {
+	typedef simple_mock<tut_yaal_hcore_hlist> base_type;
 	Stringifier _stringifier;
 	typedef HList<int> list_t;
 	void dump( list_t& );
@@ -59,7 +60,7 @@ struct tut_yaal_hcore_hlist {
 	template<typename T>
 	void to_list( char const* const, int, T& );
 	tut_yaal_hcore_hlist( void )
-		: _stringifier()
+		: base_type(), _stringifier()
 		{}
 	virtual ~tut_yaal_hcore_hlist( void )
 		{}

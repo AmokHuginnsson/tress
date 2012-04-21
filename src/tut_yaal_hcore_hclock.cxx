@@ -42,11 +42,7 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hclock {
-	virtual ~tut_yaal_hcore_hclock( void )
-		{}
-};
-
+TUT_SIMPLE_MOCK( tut_yaal_hcore_hclock );
 TUT_TEST_GROUP( tut_yaal_hcore_hclock, "yaal::hcore::HClock" );
 
 TUT_UNIT_TEST( 1, "1 second accuracy" )

@@ -42,6 +42,7 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 struct tut_yaal_hcore_hset : simple_mock<tut_yaal_hcore_hset> {
+	typedef simple_mock<tut_yaal_hcore_hset> base_type;
 	virtual ~tut_yaal_hcore_hset( void ) {}
 	void lower_bound_test( int );
 	void upper_bound_test( int );

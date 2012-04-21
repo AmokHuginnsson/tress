@@ -40,7 +40,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_tools_util_sleep {
+struct tut_yaal_tools_util_sleep : public simple_mock<tut_yaal_tools_util_sleep> {
+	typedef simple_mock<tut_yaal_tools_util_sleep> base_type;
 	virtual ~tut_yaal_tools_util_sleep( void )
 		{}
 	int long get_speed( HClock::UNIT::unit_t const& );

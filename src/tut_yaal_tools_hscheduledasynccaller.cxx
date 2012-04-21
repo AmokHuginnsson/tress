@@ -41,11 +41,13 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 struct tut_yaal_tools_hscheduledasynccaller : public simple_mock<tut_yaal_tools_hscheduledasynccaller> {
+	typedef simple_mock<tut_yaal_tools_hscheduledasynccaller> base_type;
 	HScheduledAsyncCaller& _sac;
 	HMutex _mutex;
 	int _val;
 	tut_yaal_tools_hscheduledasynccaller( void )
-		: _sac( HScheduledAsyncCaller::get_instance() ), _mutex(), _val( 0 )
+		: base_type(),
+		_sac( HScheduledAsyncCaller::get_instance() ), _mutex(), _val( 0 )
 		{}
 	virtual ~tut_yaal_tools_hscheduledasynccaller( void ) {
 		_sac.stop();

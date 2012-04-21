@@ -51,13 +51,14 @@ public:
 };
 
 struct tut_yaal_hcore_htls : public simple_mock<tut_yaal_hcore_htls> {
+	typedef simple_mock<tut_yaal_hcore_htls> base_type;
 	typedef HTLS<TLSTest> tls_t;
 	HMutex _mutex;
 	HCondition _cond;
 	HEvent _allOn;
 	int _instances;
 	tut_yaal_hcore_htls( void )
-		: _mutex( HMutex::TYPE::RECURSIVE ), _cond( _mutex ), _allOn(), _instances( 0 )
+		: base_type(), _mutex( HMutex::TYPE::RECURSIVE ), _cond( _mutex ), _allOn(), _instances( 0 )
 		{}
 	virtual ~tut_yaal_hcore_htls( void ) { }
 	void* run( tls_t& tls_ ) {

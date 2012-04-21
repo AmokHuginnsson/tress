@@ -45,6 +45,7 @@ namespace tress {
 
 template<int const pack>
 struct tut_yaal_hcore_hdeque_base : public tut_helpers::simple_mock<tut_yaal_hcore_hdeque_base<pack> > {
+	typedef tut_helpers::simple_mock<tut_yaal_hcore_hdeque_base<pack> > base_type;
 	struct StatePreserver {
 		int long _size;
 		int long _usedChunks;
@@ -57,7 +58,7 @@ struct tut_yaal_hcore_hdeque_base : public tut_helpers::simple_mock<tut_yaal_hco
 	StatePreserver _statePreserver;
 	typedef std::deque<int> proto_t;
 	tut_yaal_hcore_hdeque_base( void )
-		: _statePreserver() {}
+		: base_type(), _statePreserver() {}
 	virtual ~tut_yaal_hcore_hdeque_base( void ) {}
 	template<typename deque_type>
 	void check_consistency( deque_type const&, int long = 0 );

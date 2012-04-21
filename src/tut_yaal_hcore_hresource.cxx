@@ -38,9 +38,11 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hresource {
+struct tut_yaal_hcore_hresource : public simple_mock<tut_yaal_hcore_hresource> {
+	typedef simple_mock<tut_yaal_hcore_hresource> base_type;
 	typedef HInstanceTracker<tut_yaal_hcore_hresource> counter_t;
-	tut_yaal_hcore_hresource( void ) {
+	tut_yaal_hcore_hresource( void )
+		: base_type() {
 		counter_t::set_instance_count( 0 );
 	}
 	virtual ~tut_yaal_hcore_hresource( void )

@@ -39,7 +39,8 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 
-struct tut_yaal_tools_hpipedchild {
+struct tut_yaal_tools_hpipedchild : public simple_mock<tut_yaal_tools_hpipedchild> {
+	typedef simple_mock<tut_yaal_tools_hpipedchild> base_type;
 	static HString CHILD;
 	static HString CHILD_FAKE;
 	static HString MSG_OUT;

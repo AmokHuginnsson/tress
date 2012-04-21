@@ -38,7 +38,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_htokenizer {
+struct tut_yaal_hcore_htokenizer : public simple_mock<tut_yaal_hcore_htokenizer> {
+	typedef simple_mock<tut_yaal_hcore_htokenizer> base_type;
 	static char const* const split_inc_any_failed;
 	static char const* const split_inc_whole_sc_failed;
 	static char const* const split_inc_whole_mc_failed;

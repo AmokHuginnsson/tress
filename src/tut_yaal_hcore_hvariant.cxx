@@ -38,7 +38,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hvariant {
+struct tut_yaal_hcore_hvariant : public simple_mock<tut_yaal_hcore_hvariant> {
+	typedef simple_mock<tut_yaal_hcore_hvariant> base_type;
 	typedef HInstanceTracker<tut_yaal_hcore_hvariant> instance_tracker_t;
 	typedef HVariant<int, HString, double long> small_variant_t;
 	typedef HVariant<bool, char, int short, int, int long, void*, double, double long, HString, HNumber, instance_tracker_t> variant_t;

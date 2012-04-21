@@ -39,9 +39,12 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hcall_this {
+struct tut_yaal_hcore_hcall_this : public simple_mock<tut_yaal_hcore_hcall_this> {
+	typedef simple_mock<tut_yaal_hcore_hcall_this> base_type;
 	YaalHCoreHCallClass _callable;
-	tut_yaal_hcore_hcall_this( void ) : _callable() {}
+	tut_yaal_hcore_hcall_this( void )
+		: base_type(), _callable()
+		{}
 	virtual ~tut_yaal_hcore_hcall_this( void ) {}
 };
 

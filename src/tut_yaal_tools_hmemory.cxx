@@ -40,14 +40,16 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_tools_hmemory {
+struct tut_yaal_tools_hmemory : public simple_mock<tut_yaal_tools_hmemory> {
+	typedef simple_mock<tut_yaal_tools_hmemory> base_type;
 	static int const SIZE = 256;
 	char _buf[SIZE];
 	tut_yaal_tools_hmemory( void );
 	virtual ~tut_yaal_tools_hmemory( void ) {}
 };
 
-tut_yaal_tools_hmemory::tut_yaal_tools_hmemory( void ) : _buf() {
+tut_yaal_tools_hmemory::tut_yaal_tools_hmemory( void )
+	: base_type(), _buf() {
 	fill_n( _buf, SIZE, 0 );
 }
 

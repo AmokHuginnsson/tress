@@ -24,6 +24,9 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#define private public
+#define protected public
+
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hpool.hxx>

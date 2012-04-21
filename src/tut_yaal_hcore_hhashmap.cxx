@@ -43,7 +43,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hhashmap {
+struct tut_yaal_hcore_hhashmap : public simple_mock<tut_yaal_hcore_hhashmap> {
+	typedef simple_mock<tut_yaal_hcore_hhashmap> base_type;
 	typedef HInstanceTracker<tut_yaal_hcore_hhashmap> item_t;
 	typedef HHashMap<int long, item_t> hash_map_t;
 	static int long const TEST_PRIME = 17;

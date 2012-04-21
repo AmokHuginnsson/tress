@@ -38,7 +38,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hformat {
+struct tut_yaal_hcore_hformat : public simple_mock<tut_yaal_hcore_hformat> {
+	typedef simple_mock<tut_yaal_hcore_hformat> base_type;
 	static double long PI;
 	static double long E;
 	static char const* const STR;

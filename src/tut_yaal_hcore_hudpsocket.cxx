@@ -43,7 +43,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hudpsocket {
+struct tut_yaal_hcore_hudpsocket : simple_mock<tut_yaal_hcore_hudpsocket> {
+	typedef simple_mock<tut_yaal_hcore_hudpsocket> base_type;
 	static int const OBSCURE_PORT = 61928;
 	tut_yaal_hcore_hudpsocket( void ) {
 		errno = 0;

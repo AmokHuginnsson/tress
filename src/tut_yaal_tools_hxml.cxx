@@ -42,10 +42,12 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_tools_hxml {
+struct tut_yaal_tools_hxml : public simple_mock<tut_yaal_tools_hxml> {
+	typedef simple_mock<tut_yaal_tools_hxml> base_type;
 	static HString _varTmpBuffer;
 	HXml _xml;
-	tut_yaal_tools_hxml( void ) : _xml()
+	tut_yaal_tools_hxml( void )
+		: base_type(), _xml()
 		{}
 	virtual ~tut_yaal_tools_hxml( void )
 		{}

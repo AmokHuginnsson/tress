@@ -40,7 +40,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_tools_hworkflow {
+struct tut_yaal_tools_hworkflow : public simple_mock<tut_yaal_tools_hworkflow> {
+	typedef simple_mock<tut_yaal_tools_hworkflow> base_type;
 	typedef HInstanceTracker<tut_yaal_tools_hworkflow> counter_t;
 	virtual ~tut_yaal_tools_hworkflow( void )
 		{}

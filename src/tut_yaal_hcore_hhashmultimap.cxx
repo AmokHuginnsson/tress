@@ -38,7 +38,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hhashmultimap {
+struct tut_yaal_hcore_hhashmultimap : public simple_mock<tut_yaal_hcore_hhashmultimap> {
+	typedef simple_mock<tut_yaal_hcore_hhashmultimap> base_type;
 	virtual ~tut_yaal_hcore_hhashmultimap( void ) {}
 	typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_function_type, HMultiContainerStorage::HPacked> mmp_t;
 	typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_function_type, HMultiContainerStorage::HTransparent> mmt_t;

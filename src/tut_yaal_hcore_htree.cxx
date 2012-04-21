@@ -43,7 +43,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_htree {
+struct tut_yaal_hcore_htree : public simple_mock<tut_yaal_hcore_htree> {
+	typedef simple_mock<tut_yaal_hcore_htree> base_type;
 	static HString _cache;
 	tut_yaal_hcore_htree( void );
 	virtual ~tut_yaal_hcore_htree( void )
@@ -61,7 +62,8 @@ struct tut_yaal_hcore_htree {
 
 HString tut_yaal_hcore_htree::_cache;
 
-tut_yaal_hcore_htree::tut_yaal_hcore_htree( void ) {
+tut_yaal_hcore_htree::tut_yaal_hcore_htree( void )
+	: base_type() {
 	item_t::set_start_id( -1 );
 }
 
