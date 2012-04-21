@@ -42,7 +42,31 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-TUT_SIMPLE_MOCK( tut_yaal_hcore_hpool );
+struct tut_yaal_hcore_hpool : public simple_mock<tut_yaal_hcore_hpool> {
+	typedef simple_mock<tut_yaal_hcore_hpool> base_type;
+	virtual ~tut_yaal_hcore_hpool( void ) {}
+	template <typename T>
+	void check_consistency( HPool<T>& );
+};
+
+template <typename T>
+void tut_yaal_hcore_hpool::check_consistency( HPool<T>& pool_ ) {
+	typedef HPool<T> pool_t;
+	ENSURE( "inconsistent blocks-count - blocks-capacity relation", pool_._poolBlockCount <= pool_._poolBlockCapacity );
+	ENSURE( "inconsistent free - blocks-count relation", pool_._free < pool_._poolBlockCount );
+	ENSURE( "inconsistent buffer state", ( ( pool_._poolBlocks == NULL ) && ( pool_._poolBlockCapacity == 0 ) ) || ( ( pool_._poolBlockCapacity > 0 ) && ( pool_._poolBlocks != NULL ) ) );
+	bool freeFound( false );
+	for ( int i( 0 ); i < pool_._poolBlockCount; ++ i ) {
+		typename pool_t::HPoolBlock* pb( pool_._poolBlocks[i] );
+		if ( freeFound )
+			ENSURE_NOT( "pool blocks out of order", pb->_used == pool_t::OBJECTS_PER_BLOCK );
+		if ( ! freeFound && ( pb->_used < pool_t::OBJECTS_PER_BLOCK ) ) {
+			freeFound = true;
+			ENSURE_EQUALS( "inconsistent free index", pool_._free, i );
+		}
+	}
+}
+
 TUT_TEST_GROUP( tut_yaal_hcore_hpool, "yaal::hcore::HPool" );
 
 TUT_UNIT_TEST( 1, "object space size" )
@@ -118,6 +142,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "allocate one, deallocate, and allocate again" )
 	HPool<int> p;
+	check_consistency( p );
 	/*
 	 * Deallocation of last used object frees internal buffer.
 	 * Newly allocated internal buffer may have different address
@@ -125,8 +150,11 @@ TUT_UNIT_TEST( 2, "allocate one, deallocate, and allocate again" )
 	 * make internal buffer unused.
 	 */
 	p.alloc();
+	check_consistency( p );
 	int* p0( p.alloc() );
+	check_consistency( p );
 	p.free( p0 );
+	check_consistency( p );
 	ENSURE_EQUALS( "allocation after deallocation failed", p.alloc(), p0 );
 TUT_TEARDOWN()
 
