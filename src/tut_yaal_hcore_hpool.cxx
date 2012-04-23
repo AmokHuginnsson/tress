@@ -32,6 +32,7 @@ Copyright:
 #include <yaal/hcore/hpool.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
+#include <yaal/hcore/hrandomizer.hxx>
 
 using namespace tut;
 using namespace yaal;
@@ -45,6 +46,7 @@ namespace tut {
 struct tut_yaal_hcore_hpool : public simple_mock<tut_yaal_hcore_hpool> {
 	typedef simple_mock<tut_yaal_hcore_hpool> base_type;
 	typedef HPool<int> pool_t;
+	typedef HArray<int*> log_t;
 	virtual ~tut_yaal_hcore_hpool( void ) {}
 	template <typename T>
 	void check_consistency( HPool<T>& );
@@ -161,28 +163,36 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 3, "allocate one, deallocate, and allocate again" )
 	pool_t p;
 	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
 	int* p0( p.alloc() );
 	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 	p.free( p0 );
 	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 	/*
 	 * Make sure that we do not free the only free block we have.
 	 */
 	ENSURE_EQUALS( "allocation after deallocation failed", p.alloc(), p0 );
 	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "allocate second pool block" )
 	pool_t p;
 	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 		p.alloc();
 		check_consistency( p );
 	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 	int* p0( p.alloc() );
 	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	p.free( p0 );
 	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	/*
 	 * Make sure that we do not free the only free block we have.
 	 */
@@ -192,25 +202,81 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "allocate second pool block, free first" )
 	pool_t p;
-	HArray<int*> allocated( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocated( pool_t::OBJECTS_PER_BLOCK );
 	check_consistency( p );
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 		allocated[i] = p.alloc();
 		check_consistency( p );
 	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 	int* p0( p.alloc() );
 	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	p.free( p0 );
 	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	/*
 	 * Make sure that we do not free the only free block we have.
 	 */
 	ENSURE_EQUALS( "allocation after deallocation failed", p.alloc(), p0 );
 	check_consistency( p );
-	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+	p.free( allocated[0] );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	check_consistency( p );
+	for ( int i( 1 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 		p.free( allocated[i] );
 		check_consistency( p );
 	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 6, "allocate full block, free in random order, reallocate full block" )
+	pool_t p;
+	log_t allocated( pool_t::OBJECTS_PER_BLOCK );
+	log_t freeOrder( pool_t::OBJECTS_PER_BLOCK );
+	check_consistency( p );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocated[i] = p.alloc();
+		check_consistency( p );
+	}
+	HRandomizer r( randomizer_helper::make_randomizer() );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
+		int toFreeIdx( toFreeCount > 0 ? r( toFreeCount ) : 0 );
+		int* toFree( allocated[ toFreeIdx ] );
+		freeOrder[i] = toFree;
+		allocated.erase( allocated.begin() + toFreeIdx );
+		p.free( toFree );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocated.push_back( p.alloc() );
+		check_consistency( p );
+	}
+	reverse( allocated.begin(), allocated.end() );
+	ENSURE_EQUALS( "bad free list", allocated, freeOrder );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 7, "allocate 16 blocks, free odd elements in all of them, than free rest" )
+	pool_t p;
+	check_consistency( p );
+	int workWith( pool_t::OBJECTS_PER_BLOCK * 16 );
+	log_t allocated( workWith );
+	for ( int i( 0 ); i < workWith; ++ i ) {
+		allocated[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 16 );
+	for ( int i( 0 ); i < workWith; i += 2 ) {
+		p.free( allocated[i] );
+		check_consistency( p );
+	}
+	for ( int i( 1 ); i < workWith; i += 2 ) {
+		p.free( allocated[i] );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
 }
