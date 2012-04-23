@@ -44,6 +44,7 @@ namespace tut {
 
 struct tut_yaal_hcore_hpool : public simple_mock<tut_yaal_hcore_hpool> {
 	typedef simple_mock<tut_yaal_hcore_hpool> base_type;
+	typedef HPool<int> pool_t;
 	virtual ~tut_yaal_hcore_hpool( void ) {}
 	template <typename T>
 	void check_consistency( HPool<T>& );
@@ -58,11 +59,22 @@ void tut_yaal_hcore_hpool::check_consistency( HPool<T>& pool_ ) {
 	bool freeFound( false );
 	for ( int i( 0 ); i < pool_._poolBlockCount; ++ i ) {
 		typename pool_t::HPoolBlock* pb( pool_._poolBlocks[i] );
+		ENSURE( "null pool block", pb != NULL );
 		if ( freeFound )
 			ENSURE_NOT( "pool blocks out of order", pb->_used == pool_t::OBJECTS_PER_BLOCK );
 		if ( ! freeFound && ( pb->_used < pool_t::OBJECTS_PER_BLOCK ) ) {
 			freeFound = true;
 			ENSURE_EQUALS( "inconsistent free index", pool_._free, i );
+		}
+		ENSURE( "invalid used", ( pb->_used >= 0 ) && ( pb->_used <= pool_t::OBJECTS_PER_BLOCK ) );
+		if ( pb->_used < pool_t::OBJECTS_PER_BLOCK ) {
+			int free( 1 );
+			int idx( pb->_free );
+			while ( *( reinterpret_cast<char unsigned*>( pb->_mem ) + ( idx * pool_t::OBJECT_SPACE ) ) != idx ) {
+				++ free;
+				idx = *( reinterpret_cast<char unsigned*>( pb->_mem ) + ( idx * pool_t::OBJECT_SPACE ) );
+			}
+			ENSURE_EQUALS( "bad free list", free + pb->_used, pool_t::OBJECTS_PER_BLOCK );
 		}
 	}
 }
@@ -140,22 +152,65 @@ TUT_UNIT_TEST( 1, "object space size" )
 #endif /* #else #elif TARGET_CPU_BITS == 32 #if TARGET_CPU_BITS == 64 */
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "allocate one, deallocate, and allocate again" )
-	HPool<int> p;
+TUT_UNIT_TEST( 2, "constructor" )
+	pool_t p;
 	check_consistency( p );
-	/*
-	 * Deallocation of last used object frees internal buffer.
-	 * Newly allocated internal buffer may have different address
-	 * than old one, so we need to make sure that deallocation will not
-	 * make internal buffer unused.
-	 */
-	p.alloc();
+	ENSURE_EQUALS( "bad pool block count after construction", p._poolBlockCount, 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 3, "allocate one, deallocate, and allocate again" )
+	pool_t p;
 	check_consistency( p );
 	int* p0( p.alloc() );
 	check_consistency( p );
 	p.free( p0 );
 	check_consistency( p );
+	/*
+	 * Make sure that we do not free the only free block we have.
+	 */
 	ENSURE_EQUALS( "allocation after deallocation failed", p.alloc(), p0 );
+	check_consistency( p );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "allocate second pool block" )
+	pool_t p;
+	check_consistency( p );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		p.alloc();
+		check_consistency( p );
+	}
+	int* p0( p.alloc() );
+	check_consistency( p );
+	p.free( p0 );
+	check_consistency( p );
+	/*
+	 * Make sure that we do not free the only free block we have.
+	 */
+	ENSURE_EQUALS( "allocation after deallocation failed", p.alloc(), p0 );
+	check_consistency( p );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 5, "allocate second pool block, free first" )
+	pool_t p;
+	HArray<int*> allocated( pool_t::OBJECTS_PER_BLOCK );
+	check_consistency( p );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocated[i] = p.alloc();
+		check_consistency( p );
+	}
+	int* p0( p.alloc() );
+	check_consistency( p );
+	p.free( p0 );
+	check_consistency( p );
+	/*
+	 * Make sure that we do not free the only free block we have.
+	 */
+	ENSURE_EQUALS( "allocation after deallocation failed", p.alloc(), p0 );
+	check_consistency( p );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		p.free( allocated[i] );
+		check_consistency( p );
+	}
 TUT_TEARDOWN()
 
 }
