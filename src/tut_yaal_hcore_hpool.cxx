@@ -239,6 +239,7 @@ TUT_UNIT_TEST( 6, "allocate full block, free in random order, reallocate full bl
 		allocated[i] = p.alloc();
 		check_consistency( p );
 	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 	HRandomizer r( randomizer_helper::make_randomizer() );
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
@@ -637,6 +638,101 @@ TUT_UNIT_TEST( 19, "alloc 3 blocks, free first, make room in second, free third"
 	p.free( p0 );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 20, "allocate two full blocks, free second in random order, reallocate full block" )
+	pool_t p;
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	log_t freeOrder( pool_t::OBJECTS_PER_BLOCK );
+	check_consistency( p );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	HRandomizer r( randomizer_helper::make_randomizer() );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
+		int toFreeIdx( toFreeCount > 0 ? r( toFreeCount ) : 0 );
+		int* toFree( allocatedB1[ toFreeIdx ] );
+		freeOrder[i] = toFree;
+		allocatedB1.erase( allocatedB1.begin() + toFreeIdx );
+		p.free( toFree );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1.push_back( p.alloc() );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	reverse( allocatedB1.begin(), allocatedB1.end() );
+	ENSURE_EQUALS( "bad free list", allocatedB1, freeOrder );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 21, "allocate 3 blocks, free all but one in first and second in random order, reallocate to full blocks" )
+	pool_t p;
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	log_t freeOrderB0( pool_t::OBJECTS_PER_BLOCK - 1 );
+	log_t freeOrderB1( pool_t::OBJECTS_PER_BLOCK - 1 );
+	check_consistency( p );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	int* p0( p.alloc() );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	HRandomizer r( randomizer_helper::make_randomizer() );
+	for ( int i( 0 ); i < ( pool_t::OBJECTS_PER_BLOCK - 1 ); ++ i ) {
+		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
+		int toFreeIdx( toFreeCount > 0 ? r( toFreeCount ) : 0 );
+		int* toFree( allocatedB0[ toFreeIdx ] );
+		freeOrderB0[i] = toFree;
+		allocatedB0.erase( allocatedB0.begin() + toFreeIdx );
+		p.free( toFree );
+		check_consistency( p );
+		toFreeIdx = ( toFreeCount > 0 ? r( toFreeCount ) : 0 );
+		toFree = allocatedB1[ toFreeIdx ];
+		freeOrderB1[i] = toFree;
+		allocatedB1.erase( allocatedB1.begin() + toFreeIdx );
+		p.free( toFree );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	allocatedB0.clear();
+	allocatedB1.clear();
+	for ( int i( 0 ); i < ( pool_t::OBJECTS_PER_BLOCK - 1 ); ++ i ) {
+		allocatedB0.push_back( p.alloc() );
+		check_consistency( p );
+	}
+	for ( int i( 0 ); i < ( pool_t::OBJECTS_PER_BLOCK - 1 ); ++ i ) {
+		allocatedB1.push_back( p.alloc() );
+		check_consistency( p );
+	}
+	reverse( allocatedB0.begin(), allocatedB0.end() );
+	reverse( allocatedB1.begin(), allocatedB1.end() );
+	ENSURE_EQUALS( "bad free list b0", allocatedB0, freeOrderB0 );
+	ENSURE_EQUALS( "bad free list b1", allocatedB1, freeOrderB1 );
+	p.free( allocatedB0[0] );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( p0 );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 TUT_TEARDOWN()
 
 }
