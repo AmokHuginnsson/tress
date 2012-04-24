@@ -735,5 +735,37 @@ TUT_UNIT_TEST( 21, "allocate 3 blocks, free all but one in first and second in r
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 22, "make N full blocks, make room in all of them in random order" )
+	static int const N( 16 );
+	log_t representants( N );
+	pool_t p;
+	for ( int b( 0 ); b < N; ++ b ) {
+		representants[b] = p.alloc();
+		check_consistency( p );
+		ENSURE_EQUALS( "bad block count", p._poolBlockCount, b + 1 );
+		for ( int i( 0 ); i < ( pool_t::OBJECTS_PER_BLOCK - 1 ); ++ i ) {
+			p.alloc();
+			check_consistency( p );
+		}
+		ENSURE_EQUALS( "bad block count", p._poolBlockCount, b + 1 );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, N );
+	HRandomizer r( randomizer_helper::make_randomizer() );
+	for ( int b( 0 ); b < N; ++ b ) {
+		int toFreeCount( ( N - 1 ) - b );
+		int toFreeIdx( toFreeCount > 0 ? r( toFreeCount ) : 0 );
+		p.free( representants[toFreeIdx] );
+		representants.erase( representants.begin() + toFreeIdx );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, N );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 23, "make N full blocks, free them in random order" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 24, "make N full blocks, make room in them in random order, free them in random order" )
+TUT_TEARDOWN()
+
 }
 
