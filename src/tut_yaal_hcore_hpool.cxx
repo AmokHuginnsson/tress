@@ -272,10 +272,370 @@ TUT_UNIT_TEST( 7, "allocate 16 blocks, free odd elements in all of them, than fr
 		p.free( allocated[i] );
 		check_consistency( p );
 	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 16 );
 	for ( int i( 1 ); i < workWith; i += 2 ) {
+		ENSURE_EQUALS( "bad block count", p._poolBlockCount, 16 - i / pool_t::OBJECTS_PER_BLOCK );
 		p.free( allocated[i] );
 		check_consistency( p );
 	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 8, "alloc 3 blocks, free third, make room in second" )
+	pool_t p;
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	int* p0( p.alloc() );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( p0 );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( allocatedB1[0] );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 9, "alloc 3 blocks, make room in second, free third" )
+	pool_t p;
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	int* p0( p.alloc() );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( allocatedB1[0] );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( p0 );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 10, "alloc 3 blocks, make room in first, free third" )
+	pool_t p;
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	int* p0( p.alloc() );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( allocatedB0[0] );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( p0 );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 11, "alloc 3 blocks, make room in first, free second" )
+	pool_t p;
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	p.alloc();
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( allocatedB0[0] );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		p.free( allocatedB1[i] );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 12, "alloc 3 blocks, make room in second, free first" )
+	pool_t p;
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	p.alloc();
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( allocatedB1[0] );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		p.free( allocatedB0[i] );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 13, "alloc 3 blocks, free first, free second" )
+	pool_t p;
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	p.alloc();
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		p.free( allocatedB0[i] );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		p.free( allocatedB1[i] );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 14, "alloc 3 blocks, free second, free first" )
+	pool_t p;
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	p.alloc();
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		p.free( allocatedB1[i] );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		p.free( allocatedB0[i] );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 15, "alloc 3 blocks, free third, free first" )
+	pool_t p;
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	int* p0( p.alloc() );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( p0 );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		p.free( allocatedB0[i] );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 16, "alloc 3 blocks, free third, make room in second, free first" )
+	pool_t p;
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	int* p0( p.alloc() );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( p0 );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( allocatedB1[0] );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		p.free( allocatedB0[i] );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 17, "alloc 3 blocks, free third, make room in first, free second" )
+	pool_t p;
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	int* p0( p.alloc() );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( p0 );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	p.free( allocatedB0[0] );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		p.free( allocatedB1[i] );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 18, "alloc 3 blocks, free second, make room in first, free third" )
+	pool_t p;
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	int* p0( p.alloc() );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		p.free( allocatedB1[i] );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	p.free( allocatedB0[0] );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	p.free( p0 );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 19, "alloc 3 blocks, free first, make room in second, free third" )
+	pool_t p;
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
+	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
+	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB0[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		allocatedB1[i] = p.alloc();
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	int* p0( p.alloc() );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
+	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+		p.free( allocatedB0[i] );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	p.free( allocatedB1[0] );
+	check_consistency( p );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
+	p.free( p0 );
+	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
