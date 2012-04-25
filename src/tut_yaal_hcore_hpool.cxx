@@ -47,6 +47,7 @@ struct tut_yaal_hcore_hpool : public simple_mock<tut_yaal_hcore_hpool> {
 	typedef simple_mock<tut_yaal_hcore_hpool> base_type;
 	typedef HPool<int> pool_t;
 	typedef HArray<int*> log_t;
+	typedef HArray<log_t> logs_t;
 	virtual ~tut_yaal_hcore_hpool( void ) {}
 	template <typename T>
 	void check_consistency( HPool<T>& );
@@ -762,9 +763,66 @@ TUT_UNIT_TEST( 22, "make N full blocks, make room in all of them in random order
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 23, "make N full blocks, free them in random order" )
+	static int const N( 16 );
+	logs_t allocated( N );
+	pool_t p;
+	for ( int b( 0 ); b < N; ++ b ) {
+		allocated[b].resize( pool_t::OBJECTS_PER_BLOCK );
+		for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+			allocated[b][i] = p.alloc();
+			check_consistency( p );
+		}
+		ENSURE_EQUALS( "bad block count", p._poolBlockCount, b + 1 );
+	}
+	HRandomizer r( randomizer_helper::make_randomizer() );
+	for ( int b( 0 ); b < N; ++ b ) {
+		int toFreeCount( ( N - 1 ) - b );
+		int toFreeIdx( toFreeCount > 0 ? r( toFreeCount ) : 0 );
+		for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+			p.free( allocated[toFreeIdx][i] );
+			check_consistency( p );
+		}
+		allocated.erase( allocated.begin() + toFreeIdx );
+		ENSURE_EQUALS( "bad block count", p._poolBlockCount, N - b );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 24, "make N full blocks, make room in them in random order, free them in random order" )
+	static int const N( 16 );
+	logs_t allocated( N );
+	log_t representants( N );
+	pool_t p;
+	for ( int b( 0 ); b < N; ++ b ) {
+		allocated[b].resize( pool_t::OBJECTS_PER_BLOCK );
+		for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+			allocated[b][i] = p.alloc();
+			check_consistency( p );
+		}
+		ENSURE_EQUALS( "bad block count", p._poolBlockCount, b + 1 );
+	}
+	HRandomizer r( randomizer_helper::make_randomizer() );
+	for ( int b( 0 ); b < N; ++ b )
+		representants[b] = allocated[b][0];
+	for ( int b( 0 ); b < N; ++ b ) {
+		int toFreeCount( ( N - 1 ) - b );
+		int toFreeIdx( toFreeCount > 0 ? r( toFreeCount ) : 0 );
+		p.free( representants[toFreeIdx] );
+		representants.erase( representants.begin() + toFreeIdx );
+		check_consistency( p );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, N );
+	for ( int b( 0 ); b < N; ++ b ) {
+		int toFreeCount( ( N - 1 ) - b );
+		int toFreeIdx( toFreeCount > 0 ? r( toFreeCount ) : 0 );
+		for ( int i( 1 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
+			p.free( allocated[toFreeIdx][i] );
+			check_consistency( p );
+		}
+		allocated.erase( allocated.begin() + toFreeIdx );
+		ENSURE_EQUALS( "bad block count", p._poolBlockCount, N - b );
+	}
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
 }
