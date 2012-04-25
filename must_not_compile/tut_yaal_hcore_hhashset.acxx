@@ -31,15 +31,15 @@ using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
 
+#ifndef MAKE_DEP
+
 #if defined ( BUG_0 )
 
-namespace must_not_compile
-{
+namespace must_not_compile {
 
 typedef HHashSet<int> int_set_t;
 
-int sum( int_set_t const& l )
-	{
+int sum( int_set_t const& l ) {
 	int l_iSum = 0;
 	
 	for ( int_set_t::iterator it = l.begin(); it != l.end(); ++ it )
@@ -49,16 +49,18 @@ int sum( int_set_t const& l )
 
 }
 
-int main( int, char** )
-	{
+int main( int, char** ) {
 	must_not_compile::int_set_t l;
 	l.insert( 1 );
 	l.insert( 3 );
 	l.insert( 5 );
 	return ( must_not_compile::sum( l ) );
-	}
+}
 
 #else
 #	error NO_SUCH_BUG
 #endif
+
+#endif /* #ifndef MAKE_DEP */
+
 /* vim: set ft=cpp: */

@@ -31,8 +31,9 @@ using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
 
-namespace must_not_compile
-{
+#ifndef MAKE_DEP
+
+namespace must_not_compile {
 
 typedef HMultiMap<int, int, HMultiContainerStorage::HPacked> mapp_t;
 typedef HMultiMap<int, int, HMultiContainerStorage::HTransparent> mapt_t;
@@ -40,71 +41,64 @@ typedef HMultiMap<int, int, HMultiContainerStorage::HTransparent> mapt_t;
 #if defined ( BUG_0 )
 
 template<typename mm_t>
-int sum( mm_t const& m )
-	{
+int sum( mm_t const& m ) {
 	int l_iSum = 0;
 
 	for ( typename mm_t::iterator it = m.begin(); it != m.end(); ++ it ) /* MUST_FAIL_HERE */
 		l_iSum += (*it).second;
 	return ( l_iSum );
-	}
+}
 
 #elif defined ( BUG_1 )
 
 template<typename mm_t>
-int sum( mm_t const& m )
-	{
+int sum( mm_t const& m ) {
 	int l_iSum = 0;
 
 	for ( typename mm_t::const_iterator it = m.begin(); it != m.end(); ++ it )
 		(*it).second = 0; /* MUST_FAIL_HERE */
 	return ( l_iSum );
-	}
+}
 
 #elif defined ( BUG_2 )
 
 template<typename mm_t>
-int sum( mm_t const& m )
-	{
+int sum( mm_t const& m ) {
 	int l_iSum = 0;
 
 	for ( typename mm_t::const_iterator it = m.begin(); it != m.end(); ++ it )
 		it->second = 0; /* MUST_FAIL_HERE */
 	return ( l_iSum );
-	}
+}
 
 #elif defined ( BUG_3 )
 
 template<typename mm_t>
-int sum( mm_t const& l )
-	{
+int sum( mm_t const& l ) {
 	mm_t::reverse_iterator rit( l.begin() ); /* MUST_FAIL_HERE */
 	return ( 0 );
-	}
+}
 
 #elif defined ( BUG_4 )
 
 template<typename mm_t>
-int sum( mm_t const& l )
-	{
+int sum( mm_t const& l ) {
 	mm_t::const_reverse_iterator rit( l.begin() );
 	*rit = 0; /* MUST_FAIL_HERE */
 	return ( 0 );
-	}
+}
 
 #else
 #	error NO_SUCH_BUG
 template<typename mm_t>
-int sum( mm_t const& m )
-	{
+int sum( mm_t const& m ) {
 	return ( 0 );
-	}
+}
 #endif
 
 }
 
-int main( int, char** )
-	{
+int main( int, char** ) {
 	must_not_compile::mapp_t mp;
 	mp.insert( make_pair( 1, 7 ) );
 	mp.insert( make_pair( 3, 11 ) );
@@ -114,6 +108,8 @@ int main( int, char** )
 	mt.insert( make_pair( 3, 11 ) );
 	mt.insert( make_pair( 5, 13 ) );
 	return ( must_not_compile::sum( mp ) + must_not_compile::sum( mt ) );
-	}
+}
+
+#endif /* #ifndef MAKE_DEP */
 
 /* vim: set ft=cpp: */

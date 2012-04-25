@@ -31,14 +31,18 @@ M_VCSID ( "$Id$" )
 using namespace yaal;
 using namespace yaal::hcore;
 
+#ifndef MAKE_DEP
+
 #if defined ( BUG_0 )
 
-int main( int, char** )
-	{
+int main( int, char** ) {
 	return ( meta::integer_cast<char, 128>::value ); /* MUST_FAIL_HERE */
-	}
+}
 
 #else
 #	error NO_SUCH_BUG
 #endif
+
+#endif /* #ifndef MAKE_DEP */
+
 /* vim: set ft=cpp: */

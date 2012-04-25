@@ -30,6 +30,10 @@ M_VCSID ( "$Id$" )
 using namespace yaal;
 using namespace yaal::hcore;
 
+#ifndef MAKE_DEP
+
+#ifndef NDEBUG
+
 #if defined ( BUG_0 )
 
 class RCAttrLoad {
@@ -38,15 +42,21 @@ public:
 	}
 };
 
-int main( int, char** )
-	{
+int main( int, char** ) {
 	RCAttrLoad rcal;
 	void* p( NULL );
 	HBoundCall<void( int& )> f( call( &RCAttrLoad::SavePackThread, &rcal, p ) ); /* MUST_FAIL_HERE */
 	return ( 0 );
-	}
+}
 
-#else
+#else /* #if defined ( BUG_0 ) */
 #	error NO_SUCH_BUG
-#endif
+#endif /* #else #if defined ( BUG_0 ) */
+
+#else /* #ifndef NDEBUG */
+#	error NO_SUCH_BUG
+#endif /* #else #ifndef NDEBUG */
+
+#endif /* #ifndef MAKE_DEP */
+
 /* vim: set ft=cpp: */

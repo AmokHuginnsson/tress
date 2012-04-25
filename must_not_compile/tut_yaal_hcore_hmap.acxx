@@ -31,77 +31,73 @@ using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
 
-namespace must_not_compile
-{
+#ifndef MAKE_DEP
+
+namespace must_not_compile {
 
 typedef HMap<int, int> map_t;
 
 #if defined ( BUG_0 )
 
 
-int sum( map_t const& l )
-	{
+int sum( map_t const& l ) {
 	int l_iSum = 0;
 
 	for ( map_t::iterator it = l.begin(); it != l.end(); ++ it ) /* MUST_FAIL_HERE */
 		l_iSum += it->second;
 	return ( l_iSum );
-	}
+}
 
 #elif defined ( BUG_1 )
 
-int sum( map_t const& l )
-	{
+int sum( map_t const& l ) {
 	int l_iSum = 0;
 	
 	for ( map_t::const_iterator it = l.begin(); it != l.end(); ++ it )
 		it->second = -it->second; /* MUST_FAIL_HERE */
 	return ( l_iSum );
-	}
+}
 
 #elif defined ( BUG_2 )
 
-int sum( map_t& l )
-	{
+int sum( map_t& l ) {
 	map_t::iterator it( l.begin() );
 	it->first = 0; /* MUST_FAIL_HERE */
 	return ( 0 );
-	}
+}
 
 #elif defined ( BUG_3 )
 
-int sum( map_t const& l )
-	{
+int sum( map_t const& l ) {
 	map_t::reverse_iterator rit( l.begin() ); /* MUST_FAIL_HERE */
 	return ( 0 );
-	}
+}
 
 #elif defined ( BUG_4 )
 
-int sum( map_t const& l )
-	{
+int sum( map_t const& l ) {
 	map_t::const_reverse_iterator rit( l.begin() );
 	*rit = 0; /* MUST_FAIL_HERE */
 	return ( 0 );
-	}
+}
 
 #else
 #	error NO_SUCH_BUG
-int sum( map_t& l )
-	{
+int sum( map_t& l ) {
 	return ( 0 );
-	}
+}
 #endif
 
 }
 
-int main( int, char** )
-	{
+int main( int, char** ) {
 	must_not_compile::map_t l;
 	l.insert( make_pair( 1, 7 ) );
 	l.insert( make_pair( 3, 11 ) );
 	l.insert( make_pair( 5, 13 ) );
 	return ( must_not_compile::sum( l ) );
-	}
+}
+
+#endif /* #ifndef MAKE_DEP */
 
 /* vim: set ft=cpp: */

@@ -31,29 +31,32 @@ using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
 
+#ifndef MAKE_DEP
+
 #if defined ( BUG_0 )
 
-int main( int, char** )
-	{
+int main( int, char** ) {
 	HString ala( "ala" );
 	HString const kot( "kot" );
 	HOptional<HString&> optAla( ala );
 	HOptional<HString const&> optKot( kot );
 	optAla = optKot; /* MUST_FAIL_HERE */
 	return ( 0 );
-	}
+}
 
 #elif defined( BUG_1 )
 
-int main( int, char** )
-	{
+int main( int, char** ) {
 	HOptional<HString> optAla( "ala" );
 	HOptional<HString> const optKot( "kot" );
 	optKot = optAla; /* MUST_FAIL_HERE */
 	return ( 0 );
-	}
+}
 
 #else
 #	error NO_SUCH_BUG
 #endif
+
+#endif /* #ifndef MAKE_DEP */
+
 /* vim: set ft=cpp: */
