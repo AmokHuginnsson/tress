@@ -63,6 +63,7 @@ void tut_yaal_hcore_hpool::check_consistency( HPool<T>& pool_ ) {
 	for ( int i( 0 ); i < pool_._poolBlockCount; ++ i ) {
 		typename pool_t::HPoolBlock* pb( pool_._poolBlocks[i] );
 		ENSURE( "null pool block", pb != NULL );
+		ENSURE_EQUALS( "bad block index", pb->_index, i );
 		if ( freeFound )
 			ENSURE_NOT( "pool blocks out of order", pb->_used == pool_t::OBJECTS_PER_BLOCK );
 		if ( ! freeFound && ( pb->_used < pool_t::OBJECTS_PER_BLOCK ) ) {
@@ -193,10 +194,10 @@ TUT_UNIT_TEST( 4, "allocate second pool block" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	p.free( p0 );
 	check_consistency( p );
-	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	/*
 	 * Make sure that we do not free the only free block we have.
 	 */
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	ENSURE_EQUALS( "allocation after deallocation failed", p.alloc(), p0 );
 	check_consistency( p );
 TUT_TEARDOWN()
@@ -215,14 +216,14 @@ TUT_UNIT_TEST( 5, "allocate second pool block, free first" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	p.free( p0 );
 	check_consistency( p );
-	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	/*
 	 * Make sure that we do not free the only free block we have.
 	 */
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	ENSURE_EQUALS( "allocation after deallocation failed", p.alloc(), p0 );
 	check_consistency( p );
 	p.free( allocated[0] );
-	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	check_consistency( p );
 	for ( int i( 1 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 		p.free( allocated[i] );
@@ -717,11 +718,11 @@ TUT_UNIT_TEST( 21, "allocate 3 blocks, free all but one in first and second in r
 	allocatedB0.clear();
 	allocatedB1.clear();
 	for ( int i( 0 ); i < ( pool_t::OBJECTS_PER_BLOCK - 1 ); ++ i ) {
-		allocatedB0.push_back( p.alloc() );
+		allocatedB1.push_back( p.alloc() );
 		check_consistency( p );
 	}
 	for ( int i( 0 ); i < ( pool_t::OBJECTS_PER_BLOCK - 1 ); ++ i ) {
-		allocatedB1.push_back( p.alloc() );
+		allocatedB0.push_back( p.alloc() );
 		check_consistency( p );
 	}
 	reverse( allocatedB0.begin(), allocatedB0.end() );
@@ -820,7 +821,7 @@ TUT_UNIT_TEST( 24, "make N full blocks, make room in them in random order, free 
 			check_consistency( p );
 		}
 		allocated.erase( allocated.begin() + toFreeIdx );
-		ENSURE_EQUALS( "bad block count", p._poolBlockCount, N - b );
+		ENSURE_EQUALS( "bad block count", p._poolBlockCount, b < ( N - 1 ) ? ( N - b ) - 1 : 1 );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
