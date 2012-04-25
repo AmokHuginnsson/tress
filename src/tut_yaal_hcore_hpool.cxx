@@ -60,6 +60,7 @@ void tut_yaal_hcore_hpool::check_consistency( HPool<T>& pool_ ) {
 	ENSURE( "inconsistent free - blocks-count relation", pool_._free < pool_._poolBlockCount );
 	ENSURE( "inconsistent buffer state", ( ( pool_._poolBlocks == NULL ) && ( pool_._poolBlockCapacity == 0 ) ) || ( ( pool_._poolBlockCapacity > 0 ) && ( pool_._poolBlocks != NULL ) ) );
 	bool freeFound( false );
+	HArray<bool> exists( pool_t::OBJECTS_PER_BLOCK );
 	for ( int i( 0 ); i < pool_._poolBlockCount; ++ i ) {
 		typename pool_t::HPoolBlock* pb( pool_._poolBlocks[i] );
 		ENSURE( "null pool block", pb != NULL );
@@ -72,13 +73,14 @@ void tut_yaal_hcore_hpool::check_consistency( HPool<T>& pool_ ) {
 		}
 		ENSURE( "invalid used", ( pb->_used >= 0 ) && ( pb->_used <= pool_t::OBJECTS_PER_BLOCK ) );
 		if ( pb->_used < pool_t::OBJECTS_PER_BLOCK ) {
-			int free( 1 );
 			int idx( pb->_free );
-			while ( *( reinterpret_cast<char unsigned*>( pb->_mem ) + ( idx * pool_t::OBJECT_SPACE ) ) != idx ) {
-				++ free;
+			fill( exists.begin(), exists.end(), false );
+			int free( pool_t::OBJECTS_PER_BLOCK - pb->_used );
+			for ( int k( 0 ); k < ( free - 1 ); ++ k ) {
 				idx = *( reinterpret_cast<char unsigned*>( pb->_mem ) + ( idx * pool_t::OBJECT_SPACE ) );
+				ENSURE( "bad free list", ! exists[idx] );
+				exists[idx] = true;
 			}
-			ENSURE_EQUALS( "bad free list", free + pb->_used, pool_t::OBJECTS_PER_BLOCK );
 		}
 	}
 }
