@@ -959,7 +959,7 @@ TUT_UNIT_TEST( 50, "speed test" )
 		clog << "*speed* yaal::hcore::HList<>::pop_back() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 	}
 	clog << "*speed* HList<>::pop_back() result = " << ( ( stPop > yt ) ? green : red ) << ( yt / stPop ) << lightgray << endl;
-	typedef HList<int, allocator::pool> list_on_pool_type;
+	typedef HList<int, allocator::pool<int> > list_on_pool_type;
 	list_on_pool_type listOnPool; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
