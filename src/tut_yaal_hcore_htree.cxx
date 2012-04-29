@@ -45,12 +45,12 @@ namespace tut {
 
 struct tut_yaal_hcore_htree : public simple_mock<tut_yaal_hcore_htree> {
 	typedef simple_mock<tut_yaal_hcore_htree> base_type;
+	typedef HTree<item_t> tree_t;
 	static HString _cache;
 	tut_yaal_hcore_htree( void );
 	virtual ~tut_yaal_hcore_htree( void )
 		{}
 	typedef HInstanceTracker<tut_yaal_hcore_htree> item_t;
-	typedef HTree<item_t> tree_t;
 	static HString& to_string( tree_t const& );
 	static void to_string( tree_t::HNode const& );
 	static void draw_tree( tree_t const& );
@@ -828,6 +828,84 @@ TUT_UNIT_TEST( 27, "get_parent" ) {
 			forward += static_cast<char>( tit->id() );
 		HString backward;
 		for ( tree_t::const_reverse_iterator tit( t.rbegin() ), end( t.rend() ); tit != end; ++ tit )
+			backward += static_cast<char>( tit->id() );
+		cout << forward << endl;
+		cout << backward << endl;
+		reverse( backward.begin(), backward.end() );
+		ENSURE_EQUALS( "forward/backward iteration failed", backward, forward );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 28, "tree with explicit system allocator" ) {
+		typedef HTree<item_t, allocator::system<item_t> > sys_tree_t;
+		sys_tree_t t;
+		sys_tree_t::node_t n = t.create_new_root();
+		(**n) = '@';
+		sys_tree_t::HNode::iterator it = n->add_node( '0' );
+		sys_tree_t::HNode::iterator q = it->add_node( 'q' );
+		sys_tree_t::HNode::iterator w = it->add_node( 'w' );
+		q->add_node( '!' );
+		it = q->add_node( '#' );
+		q->add_node( '$' );
+		w->add_node( '%' );
+		w->add_node( '^' );
+		w->add_node( '&' );
+		sys_tree_t::HNode::iterator a = it = it->add_node( 'a' );
+		it->add_node( 'A' );
+		it->add_node( 'B' );
+		it->add_node( 'C' );
+		it = n->add_node( '1' );
+		it->add_node( 'd' );
+		sys_tree_t::HNode::iterator e = it->add_node( 'e' );
+		it->add_node( 'f' );
+		it = n->add_node( '2' );
+		it->add_node( 'g' );
+		it->add_node( 'h' );
+		it->add_node( 'i' );
+		HString forward;
+		for ( sys_tree_t::const_iterator tit( t.begin() ), end( t.end() ); tit != end; ++ tit )
+			forward += static_cast<char>( tit->id() );
+		HString backward;
+		for ( sys_tree_t::const_reverse_iterator tit( t.rbegin() ), end( t.rend() ); tit != end; ++ tit )
+			backward += static_cast<char>( tit->id() );
+		cout << forward << endl;
+		cout << backward << endl;
+		reverse( backward.begin(), backward.end() );
+		ENSURE_EQUALS( "forward/backward iteration failed", backward, forward );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 29, "tree with explicit pool allocator" ) {
+		typedef HTree<item_t, allocator::pool<item_t> > pool_tree_t;
+		pool_tree_t t;
+		pool_tree_t::node_t n = t.create_new_root();
+		(**n) = '@';
+		pool_tree_t::HNode::iterator it = n->add_node( '0' );
+		pool_tree_t::HNode::iterator q = it->add_node( 'q' );
+		pool_tree_t::HNode::iterator w = it->add_node( 'w' );
+		q->add_node( '!' );
+		it = q->add_node( '#' );
+		q->add_node( '$' );
+		w->add_node( '%' );
+		w->add_node( '^' );
+		w->add_node( '&' );
+		pool_tree_t::HNode::iterator a = it = it->add_node( 'a' );
+		it->add_node( 'A' );
+		it->add_node( 'B' );
+		it->add_node( 'C' );
+		it = n->add_node( '1' );
+		it->add_node( 'd' );
+		pool_tree_t::HNode::iterator e = it->add_node( 'e' );
+		it->add_node( 'f' );
+		it = n->add_node( '2' );
+		it->add_node( 'g' );
+		it->add_node( 'h' );
+		it->add_node( 'i' );
+		HString forward;
+		for ( pool_tree_t::const_iterator tit( t.begin() ), end( t.end() ); tit != end; ++ tit )
+			forward += static_cast<char>( tit->id() );
+		HString backward;
+		for ( pool_tree_t::const_reverse_iterator tit( t.rbegin() ), end( t.rend() ); tit != end; ++ tit )
 			backward += static_cast<char>( tit->id() );
 		cout << forward << endl;
 		cout << backward << endl;
