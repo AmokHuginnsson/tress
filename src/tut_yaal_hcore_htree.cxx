@@ -68,6 +68,7 @@ struct tut_yaal_hcore_htree : public simple_mock<tut_yaal_hcore_htree> {
 tut_yaal_hcore_htree::tut_yaal_hcore_htree( void )
 	: base_type(), _cache() {
 	item_t::set_start_id( -1 );
+	item_t::allow_copying();
 }
 
 template<typename T>
@@ -364,7 +365,9 @@ TUT_UNIT_TEST( 14, "graft ( replace_node )" ) {
 	it->add_node( 'i' );
 	check_consistency( t );
 	ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{a{ABC}}1{def}2{ghi}}" );
+	item_t::stop_copying();
 	n->replace_node( n->begin(), b );
+	item_t::allow_copying();
 	check_consistency( t );
 	ENSURE( "bad parent", b->get_parent() == &*n );
 	**b = '0';
@@ -421,7 +424,9 @@ TUT_UNIT_TEST( 15, "graft upwards ( replace_node )" ) {
 		check_consistency( t );
 		ENSURE_EQUALS( "incorrect level value", B->get_level(), 5 );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		item_t::stop_copying();
 		n->replace_node( n->begin(), b );
+		item_t::allow_copying();
 		check_consistency( t );
 		ENSURE_EQUALS( "incorrect level value", B->get_level(), 2 );
 		ENSURE( "bad parent", b->get_parent() == &*n );
@@ -459,9 +464,12 @@ TUT_UNIT_TEST( 16, "graft downwards (replace_node)" ) {
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
 		try {
 			check_consistency( t );
+			item_t::allow_copying();
 			a->replace_node( B, &*it0 );
+			item_t::allow_copying();
 			FAIL( "graft downwards succeded, eek!" );
 		} catch ( HFailedAssertion& ) {
+			item_t::allow_copying();
 			check_consistency( t );
 			// ok
 		}
@@ -496,7 +504,9 @@ TUT_UNIT_TEST( 17, "graft sideways (replace_node)" ) {
 		it->add_node( 'i' );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
 		check_consistency( t );
+		item_t::stop_copying();
 		e->get_parent()->replace_node( e, &*a );
+		item_t::allow_copying();
 		check_consistency( t );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{da{ABC}f}2{ghi}}" );
 	}
@@ -567,7 +577,9 @@ TUT_UNIT_TEST( 19, "across two trees (replace_node)" ) {
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
+		item_t::stop_copying();
 		it->replace_node( it->rbegin().base(), &*a );
+		item_t::allow_copying();
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{3{80}5}" );
@@ -606,7 +618,9 @@ TUT_UNIT_TEST( 20, "across two trees from root (replace_node)" ) {
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
+		item_t::stop_copying();
 		it->replace_node( it->rbegin().base(), t1.get_root() );
+		item_t::allow_copying();
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "" );
@@ -646,9 +660,12 @@ TUT_UNIT_TEST( 21, "graft with bad iteroator (replace_node)" ) {
 		try {
 			check_consistency( t1 );
 			check_consistency( t2 );
+			item_t::stop_copying();
 			it->replace_node( it, t1.get_root() );
+			item_t::allow_copying();
 			FAIL( "grafintg with no coherency" );
 		} catch ( HFailedAssertion& ) {
+			item_t::allow_copying();
 			check_consistency( t1 );
 			check_consistency( t2 );
 			// ok
@@ -684,7 +701,9 @@ TUT_UNIT_TEST( 22, "move_node(it,node)" ) {
 		it->add_node( 'i' );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
 		check_consistency( t );
+		item_t::stop_copying();
 		e->get_parent()->move_node( e, &*a );
+		item_t::allow_copying();
 		check_consistency( t );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{da{ABC}ef}2{ghi}}" );
 	}
@@ -718,7 +737,9 @@ TUT_UNIT_TEST( 23, "move_node(node)" ) {
 		it->add_node( 'i' );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
 		check_consistency( t );
+		item_t::stop_copying();
 		e->get_parent()->move_node( &*a );
+		item_t::allow_copying();
 		check_consistency( t );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#$}w{%^&}}1{defa{ABC}}2{ghi}}" );
 	}
@@ -755,7 +776,9 @@ TUT_UNIT_TEST( 24, "across two trees (move_node)" ) {
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
+		item_t::stop_copying();
 		it->move_node( it->rbegin().base(), &*a );
+		item_t::allow_copying();
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{3{80}5}" );
@@ -794,7 +817,9 @@ TUT_UNIT_TEST( 25, "across two trees from root (move_node)" ) {
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
+		item_t::stop_copying();
 		it->move_node( it->rbegin().base(), t1.get_root() );
+		item_t::allow_copying();
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "" );
@@ -871,7 +896,7 @@ TUT_UNIT_TEST( 27, "copy_node(node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 28, "across two trees (copy_noda)" ) {
+TUT_UNIT_TEST( 28, "across two trees (copy_node)" ) {
 		tree_t::node_t n = NULL;
 		tree_t::HNode::iterator it;
 		tree_t t1;
@@ -1308,7 +1333,7 @@ TUT_UNIT_TEST( 37, "across two trees from root (move_node) on booking allocator"
 	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 38, "across two trees (copy_noda) on booking allocator" )
+TUT_UNIT_TEST( 38, "across two trees (copy_node) on booking allocator" )
 	typedef booking_allocator<item_t> allocator_type;
 	typedef typename HTree<item_t, allocator_type>::allocator_type true_node_allocator_type;
 	typedef typename allocator::ref<typename true_node_allocator_type::value_type, true_node_allocator_type> ref_node_allocator_type;
