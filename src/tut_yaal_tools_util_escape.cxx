@@ -91,5 +91,10 @@ TUT_UNIT_TEST( 5, "unescape_copy" )
 	ENSURE_EQUALS( "unescaping (copy) failed", unescape_copy( "Ala\\nma\\nkota.", EscapeTable( "\n", 1, "n", 1 ) ), "Ala\nma\nkota." );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 6, "unescape_copy with escaper as literal" )
+	ENSURE_EQUALS( "unescaping (copy) with escaper as literal failed",
+			unescape_copy( "Alan\\nna\\nkontach.", EscapeTable( "\n", 1, "n", 1 ) ), "Alan\nna\nkontach." );
+TUT_TEARDOWN()
+
 }
 
