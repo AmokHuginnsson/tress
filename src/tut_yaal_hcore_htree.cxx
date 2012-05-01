@@ -34,6 +34,7 @@ Copyright:
 #include <yaal/hcore/htree.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
+#include "tut_yaal_allocator.hxx"
 
 using namespace tut;
 using namespace yaal;
@@ -46,40 +47,44 @@ namespace tut {
 struct tut_yaal_hcore_htree : public simple_mock<tut_yaal_hcore_htree> {
 	typedef simple_mock<tut_yaal_hcore_htree> base_type;
 	typedef HTree<item_t> tree_t;
-	static HString _cache;
+	HString _cache;
 	tut_yaal_hcore_htree( void );
 	virtual ~tut_yaal_hcore_htree( void )
 		{}
 	typedef HInstanceTracker<tut_yaal_hcore_htree> item_t;
-	static HString& to_string( tree_t const& );
-	static void to_string( tree_t::HNode const& );
-	static void draw_tree( tree_t const& );
-	static void draw_node( tree_t::HNode const& );
 	template<typename T>
-	static void check_consistency( T const& );
-	static void check_node( tree_t::const_node_t, bool );
+	HString& to_string( T const& );
+	template<typename T>
+	void to_string_node( T const& );
+	void draw_tree( tree_t const& );
+	void draw_node( tree_t::HNode const& );
+	template<typename T>
+	void check_consistency( T const& );
+	template<typename T>
+	void check_node( T*, bool );
 };
 
-HString tut_yaal_hcore_htree::_cache;
 
 tut_yaal_hcore_htree::tut_yaal_hcore_htree( void )
-	: base_type() {
+	: base_type(), _cache() {
 	item_t::set_start_id( -1 );
 }
 
-HString& tut_yaal_hcore_htree::to_string( tree_t const& t ) {
+template<typename T>
+HString& tut_yaal_hcore_htree::to_string( T const& t ) {
 	_cache.clear();
 	if ( t.get_root() )
-		to_string( *t.get_root() );
+		to_string_node( *t.get_root() );
 	return ( _cache );
 }
 
-void tut_yaal_hcore_htree::to_string( tree_t::HNode const& n ) {
+template<typename T>
+void tut_yaal_hcore_htree::to_string_node( T const& n ) {
 	_cache += static_cast<char>( n->id() );
 	if ( n.has_childs() )
 		_cache += '{';
-	for ( tree_t::HNode::const_iterator it = n.begin(); it != n.end(); ++ it )
-		to_string( *it );
+	for ( typename T::const_iterator it = n.begin(); it != n.end(); ++ it )
+		to_string_node( *it );
 	if ( n.has_childs() )
 		_cache += '}';
 }
@@ -107,10 +112,11 @@ void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n ) {
 	_cache.set_at( len, 0 );
 }
 
-void tut_yaal_hcore_htree::check_node( tree_t::const_node_t node, bool root ) {
+template<typename T>
+void tut_yaal_hcore_htree::check_node( T* node, bool root ) {
 	if ( ! root )
-		ENSURE_EQUALS( "bad root", node->_tree, static_cast<tree_t*>( NULL ) );
-	for ( tree_t::HNode::const_iterator it = node->begin(); it != node->end(); ++ it ) {
+		ENSURE_EQUALS( "bad root", node->_tree, static_cast<typename T::tree_t*>( NULL ) );
+	for ( typename T::const_iterator it = node->begin(); it != node->end(); ++ it ) {
 		ENSURE_EQUALS( "bad parent", it->_trunk, node );
 		check_node( &*it, false );
 	}
@@ -719,7 +725,85 @@ TUT_UNIT_TEST( 23, "move_node(node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "copy_node(it,node)" ) {
+TUT_UNIT_TEST( 24, "across two trees (move_node)" ) {
+		tree_t::node_t n = NULL;
+		tree_t::HNode::iterator it;
+		tree_t t1;
+		n = t1.create_new_root();
+		**n = '@';
+		tree_t::HNode::iterator a = it = n->add_node( '1' );
+		it->add_node( '2' );
+		it->add_node( '4' );
+		it->add_node( '6' );
+		it = n->add_node( '3' );
+		it->add_node( '8' );
+		it->add_node( '0' );
+		n->add_node( '5' );
+
+		tree_t t2;
+		n = t2.create_new_root();
+		**n = '%';
+		it = n->add_node( 'a' );
+		it->add_node( 'D' );
+		it->add_node( 'E' );
+		it->add_node( 'F' );
+		it = n->add_node( 'b' );
+		it->add_node( 'G' );
+		it->add_node( 'H' );
+		n->add_node( 'c' );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		it->move_node( it->rbegin().base(), &*a );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G1{246}H}c}" );
+	}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 25, "across two trees from root (move_node)" ) {
+		tree_t::node_t n = NULL;
+		tree_t::HNode::iterator it;
+		tree_t t1;
+		n = t1.create_new_root();
+		**n = '@';
+		it = n->add_node( '1' );
+		it->add_node( '2' );
+		it->add_node( '4' );
+		it->add_node( '6' );
+		it = n->add_node( '3' );
+		it->add_node( '8' );
+		it->add_node( '0' );
+		n->add_node( '5' );
+
+		tree_t t2;
+		n = t2.create_new_root();
+		**n = '%';
+		it = n->add_node( 'a' );
+		it->add_node( 'D' );
+		it->add_node( 'E' );
+		it->add_node( 'F' );
+		it = n->add_node( 'b' );
+		it->add_node( 'G' );
+		it->add_node( 'H' );
+		n->add_node( 'c' );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		it->move_node( it->rbegin().base(), t1.get_root() );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G@{1{246}3{80}5}H}c}" );
+	}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 26, "copy_node(it,node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -753,7 +837,7 @@ TUT_UNIT_TEST( 24, "copy_node(it,node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 25, "copy_node(node)" ) {
+TUT_UNIT_TEST( 27, "copy_node(node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -787,7 +871,85 @@ TUT_UNIT_TEST( 25, "copy_node(node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 26, "get_parent" ) {
+TUT_UNIT_TEST( 28, "across two trees (copy_noda)" ) {
+		tree_t::node_t n = NULL;
+		tree_t::HNode::iterator it;
+		tree_t t1;
+		n = t1.create_new_root();
+		**n = '@';
+		tree_t::HNode::iterator a = it = n->add_node( '1' );
+		it->add_node( '2' );
+		it->add_node( '4' );
+		it->add_node( '6' );
+		it = n->add_node( '3' );
+		it->add_node( '8' );
+		it->add_node( '0' );
+		n->add_node( '5' );
+
+		tree_t t2;
+		n = t2.create_new_root();
+		**n = '%';
+		it = n->add_node( 'a' );
+		it->add_node( 'D' );
+		it->add_node( 'E' );
+		it->add_node( 'F' );
+		it = n->add_node( 'b' );
+		it->add_node( 'G' );
+		it->add_node( 'H' );
+		n->add_node( 'c' );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		it->copy_node( it->rbegin().base(), &*a );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G1{246}H}c}" );
+	}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 29, "across two trees from root (copy_node)" ) {
+		tree_t::node_t n = NULL;
+		tree_t::HNode::iterator it;
+		tree_t t1;
+		n = t1.create_new_root();
+		**n = '@';
+		it = n->add_node( '1' );
+		it->add_node( '2' );
+		it->add_node( '4' );
+		it->add_node( '6' );
+		it = n->add_node( '3' );
+		it->add_node( '8' );
+		it->add_node( '0' );
+		n->add_node( '5' );
+
+		tree_t t2;
+		n = t2.create_new_root();
+		**n = '%';
+		it = n->add_node( 'a' );
+		it->add_node( 'D' );
+		it->add_node( 'E' );
+		it->add_node( 'F' );
+		it = n->add_node( 'b' );
+		it->add_node( 'G' );
+		it->add_node( 'H' );
+		n->add_node( 'c' );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		it->copy_node( it->rbegin().base(), t1.get_root() );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G@{1{246}3{80}5}H}c}" );
+	}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 30, "get_parent" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -798,7 +960,7 @@ TUT_UNIT_TEST( 26, "get_parent" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 27, "get_parent" ) {
+TUT_UNIT_TEST( 31, "get_parent" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -836,7 +998,7 @@ TUT_UNIT_TEST( 27, "get_parent" ) {
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 28, "tree with explicit system allocator" ) {
+TUT_UNIT_TEST( 32, "tree with explicit system allocator" ) {
 		typedef HTree<item_t, allocator::system<item_t> > sys_tree_t;
 		sys_tree_t t;
 		sys_tree_t::node_t n = t.create_new_root();
@@ -875,7 +1037,7 @@ TUT_UNIT_TEST( 28, "tree with explicit system allocator" ) {
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 29, "tree with explicit pool allocator" ) {
+TUT_UNIT_TEST( 33, "tree with explicit pool allocator" ) {
 		typedef HTree<item_t, allocator::pool<item_t> > pool_tree_t;
 		pool_tree_t t;
 		pool_tree_t::node_t n = t.create_new_root();
@@ -912,6 +1074,318 @@ TUT_UNIT_TEST( 29, "tree with explicit pool allocator" ) {
 		reverse( backward.begin(), backward.end() );
 		ENSURE_EQUALS( "forward/backward iteration failed", backward, forward );
 	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 34, "across two trees (replace_node) on booking allocator" )
+	typedef booking_allocator<item_t> booking_allocator_t;
+	typedef HTree<item_t, booking_allocator_t> booking_tree_t;
+	typedef typename booking_tree_t::allocator_type tree_node_allocator;
+	typedef typename booking_tree_t::branch_allocator_type tree_branch_allocator;
+	tree_node_allocator bna1( 1 );
+	tree_node_allocator bna2( 2 );
+	tree_branch_allocator bba1( 1 );
+	tree_branch_allocator bba2( 2 );
+	/* scope for tree destructors */ {
+		booking_tree_t::node_t n = NULL;
+		booking_tree_t::HNode::iterator it;
+		booking_tree_t t1( bna1, bba1 );
+		n = t1.create_new_root();
+		**n = '@';
+		booking_tree_t::HNode::iterator a = it = n->add_node( '1' );
+		it->add_node( '2' );
+		it->add_node( '4' );
+		it->add_node( '6' );
+		it = n->add_node( '3' );
+		it->add_node( '8' );
+		it->add_node( '0' );
+		n->add_node( '5' );
+
+		booking_tree_t t2( bna2, bba2 );
+		n = t2.create_new_root();
+		**n = '%';
+		it = n->add_node( 'a' );
+		it->add_node( 'D' );
+		it->add_node( 'E' );
+		it->add_node( 'F' );
+		it = n->add_node( 'b' );
+		it->add_node( 'G' );
+		it->add_node( 'H' );
+		n->add_node( 'c' );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		it->replace_node( it->rbegin().base(), &*a );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G1{246}}c}" );
+	}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+	ENSURE( "deallocation failed on tree1 (nodes)", bna1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (nodes)", bna2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (branches)", bba1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (branches)", bba2.is_valid() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 35, "across two trees from root (replace_node) on booking allocator" )
+	typedef booking_allocator<item_t> booking_allocator_t;
+	typedef HTree<item_t, booking_allocator_t> booking_tree_t;
+	typedef typename booking_tree_t::allocator_type tree_node_allocator;
+	typedef typename booking_tree_t::branch_allocator_type tree_branch_allocator;
+	tree_node_allocator bna1( 1 );
+	tree_node_allocator bna2( 2 );
+	tree_branch_allocator bba1( 1 );
+	tree_branch_allocator bba2( 2 );
+	/* scope for tree destructors */ {
+		booking_tree_t::node_t n = NULL;
+		booking_tree_t::HNode::iterator it;
+		booking_tree_t t1( bna1, bba1 );
+		n = t1.create_new_root();
+		**n = '@';
+		it = n->add_node( '1' );
+		it->add_node( '2' );
+		it->add_node( '4' );
+		it->add_node( '6' );
+		it = n->add_node( '3' );
+		it->add_node( '8' );
+		it->add_node( '0' );
+		n->add_node( '5' );
+
+		booking_tree_t t2( bna2, bba2 );
+		n = t2.create_new_root();
+		**n = '%';
+		it = n->add_node( 'a' );
+		it->add_node( 'D' );
+		it->add_node( 'E' );
+		it->add_node( 'F' );
+		it = n->add_node( 'b' );
+		it->add_node( 'G' );
+		it->add_node( 'H' );
+		n->add_node( 'c' );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		it->replace_node( it->rbegin().base(), t1.get_root() );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G@{1{246}3{80}5}}c}" );
+	}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+	ENSURE( "deallocation failed on tree1 (nodes)", bna1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (nodes)", bna2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (branches)", bba1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (branches)", bba2.is_valid() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 36, "across two trees (move_node) on booking allocator" )
+	typedef booking_allocator<item_t> booking_allocator_t;
+	typedef HTree<item_t, booking_allocator_t> booking_tree_t;
+	typedef typename booking_tree_t::allocator_type tree_node_allocator;
+	typedef typename booking_tree_t::branch_allocator_type tree_branch_allocator;
+	tree_node_allocator bna1( 1 );
+	tree_node_allocator bna2( 2 );
+	tree_branch_allocator bba1( 1 );
+	tree_branch_allocator bba2( 2 );
+	/* scope for tree destructors */ {
+		booking_tree_t::node_t n = NULL;
+		booking_tree_t::HNode::iterator it;
+		booking_tree_t t1( bna1, bba1 );
+		n = t1.create_new_root();
+		**n = '@';
+		booking_tree_t::HNode::iterator a = it = n->add_node( '1' );
+		it->add_node( '2' );
+		it->add_node( '4' );
+		it->add_node( '6' );
+		it = n->add_node( '3' );
+		it->add_node( '8' );
+		it->add_node( '0' );
+		n->add_node( '5' );
+
+		booking_tree_t t2( bna2, bba2 );
+		n = t2.create_new_root();
+		**n = '%';
+		it = n->add_node( 'a' );
+		it->add_node( 'D' );
+		it->add_node( 'E' );
+		it->add_node( 'F' );
+		it = n->add_node( 'b' );
+		it->add_node( 'G' );
+		it->add_node( 'H' );
+		n->add_node( 'c' );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		it->move_node( it->rbegin().base(), &*a );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G1{246}H}c}" );
+	}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+	ENSURE( "deallocation failed on tree1 (nodes)", bna1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (nodes)", bna2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (branches)", bba1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (branches)", bba2.is_valid() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 37, "across two trees from root (move_node) on booking allocator" )
+	typedef booking_allocator<item_t> booking_allocator_t;
+	typedef HTree<item_t, booking_allocator_t> booking_tree_t;
+	typedef typename booking_tree_t::allocator_type tree_node_allocator;
+	typedef typename booking_tree_t::branch_allocator_type tree_branch_allocator;
+	tree_node_allocator bna1( 1 );
+	tree_node_allocator bna2( 2 );
+	tree_branch_allocator bba1( 1 );
+	tree_branch_allocator bba2( 2 );
+	/* scope for tree destructors */ {
+		booking_tree_t::node_t n = NULL;
+		booking_tree_t::HNode::iterator it;
+		booking_tree_t t1( bna1, bba1 );
+		n = t1.create_new_root();
+		**n = '@';
+		it = n->add_node( '1' );
+		it->add_node( '2' );
+		it->add_node( '4' );
+		it->add_node( '6' );
+		it = n->add_node( '3' );
+		it->add_node( '8' );
+		it->add_node( '0' );
+		n->add_node( '5' );
+
+		booking_tree_t t2( bna2, bba2 );
+		n = t2.create_new_root();
+		**n = '%';
+		it = n->add_node( 'a' );
+		it->add_node( 'D' );
+		it->add_node( 'E' );
+		it->add_node( 'F' );
+		it = n->add_node( 'b' );
+		it->add_node( 'G' );
+		it->add_node( 'H' );
+		n->add_node( 'c' );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		it->move_node( it->rbegin().base(), t1.get_root() );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G@{1{246}3{80}5}H}c}" );
+	}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+	ENSURE( "deallocation failed on tree1 (nodes)", bna1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (nodes)", bna2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (branches)", bba1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (branches)", bba2.is_valid() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 38, "across two trees (copy_noda) on booking allocator" )
+	typedef booking_allocator<item_t> booking_allocator_t;
+	typedef HTree<item_t, booking_allocator_t> booking_tree_t;
+	typedef typename booking_tree_t::allocator_type tree_node_allocator;
+	typedef typename booking_tree_t::branch_allocator_type tree_branch_allocator;
+	tree_node_allocator bna1( 1 );
+	tree_node_allocator bna2( 2 );
+	tree_branch_allocator bba1( 1 );
+	tree_branch_allocator bba2( 2 );
+	/* scope for tree destructors */ {
+		booking_tree_t::node_t n = NULL;
+		booking_tree_t::HNode::iterator it;
+		booking_tree_t t1( bna1, bba1 );
+		n = t1.create_new_root();
+		**n = '@';
+		booking_tree_t::HNode::iterator a = it = n->add_node( '1' );
+		it->add_node( '2' );
+		it->add_node( '4' );
+		it->add_node( '6' );
+		it = n->add_node( '3' );
+		it->add_node( '8' );
+		it->add_node( '0' );
+		n->add_node( '5' );
+
+		booking_tree_t t2( bna2, bba2 );
+		n = t2.create_new_root();
+		**n = '%';
+		it = n->add_node( 'a' );
+		it->add_node( 'D' );
+		it->add_node( 'E' );
+		it->add_node( 'F' );
+		it = n->add_node( 'b' );
+		it->add_node( 'G' );
+		it->add_node( 'H' );
+		n->add_node( 'c' );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		it->copy_node( it->rbegin().base(), &*a );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G1{246}H}c}" );
+	}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+	ENSURE( "deallocation failed on tree1 (nodes)", bna1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (nodes)", bna2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (branches)", bba1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (branches)", bba2.is_valid() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 39, "across two trees from root (copy_node) on booking allocator" )
+	typedef booking_allocator<item_t> booking_allocator_t;
+	typedef HTree<item_t, booking_allocator_t> booking_tree_t;
+	typedef typename booking_tree_t::allocator_type tree_node_allocator;
+	typedef typename booking_tree_t::branch_allocator_type tree_branch_allocator;
+	tree_node_allocator bna1( 1 );
+	tree_node_allocator bna2( 2 );
+	tree_branch_allocator bba1( 1 );
+	tree_branch_allocator bba2( 2 );
+	/* scope for tree destructors */ {
+		booking_tree_t::node_t n = NULL;
+		booking_tree_t::HNode::iterator it;
+		booking_tree_t t1( bna1, bba1 );
+		n = t1.create_new_root();
+		**n = '@';
+		it = n->add_node( '1' );
+		it->add_node( '2' );
+		it->add_node( '4' );
+		it->add_node( '6' );
+		it = n->add_node( '3' );
+		it->add_node( '8' );
+		it->add_node( '0' );
+		n->add_node( '5' );
+
+		booking_tree_t t2( bna2, bba2 );
+		n = t2.create_new_root();
+		**n = '%';
+		it = n->add_node( 'a' );
+		it->add_node( 'D' );
+		it->add_node( 'E' );
+		it->add_node( 'F' );
+		it = n->add_node( 'b' );
+		it->add_node( 'G' );
+		it->add_node( 'H' );
+		n->add_node( 'c' );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		it->copy_node( it->rbegin().base(), t1.get_root() );
+		check_consistency( t1 );
+		check_consistency( t2 );
+		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
+		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G@{1{246}3{80}5}H}c}" );
+	}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+	ENSURE( "deallocation failed on tree1 (nodes)", bna1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (nodes)", bna2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (branches)", bba1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (branches)", bba2.is_valid() );
 TUT_TEARDOWN()
 
 }
