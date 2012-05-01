@@ -1077,18 +1077,22 @@ TUT_UNIT_TEST( 33, "tree with explicit pool allocator" ) {
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 34, "across two trees (replace_node) on booking allocator" )
-	typedef booking_allocator<item_t> booking_allocator_t;
-	typedef HTree<item_t, booking_allocator_t> booking_tree_t;
-	typedef typename booking_tree_t::allocator_type tree_node_allocator;
-	typedef typename booking_tree_t::branch_allocator_type tree_branch_allocator;
-	tree_node_allocator bna1( 1 );
-	tree_node_allocator bna2( 2 );
-	tree_branch_allocator bba1( 1 );
-	tree_branch_allocator bba2( 2 );
+	typedef booking_allocator<item_t> allocator_type;
+	typedef typename HTree<item_t, allocator_type>::allocator_type true_node_allocator_type;
+	typedef typename allocator::ref<typename true_node_allocator_type::value_type, true_node_allocator_type> ref_node_allocator_type;
+	typedef HTree<item_t, ref_node_allocator_type> booking_tree_t;
+	typedef typename booking_tree_t::branch_allocator_type ref_branch_allocator_type;
+	typedef typename ref_branch_allocator_type::allocator_type true_branch_allocator_type;
+	true_node_allocator_type na1( 1 );
+	true_node_allocator_type na2( 2 );
+	true_branch_allocator_type ba1( 1 );
+	true_branch_allocator_type ba2( 2 );
 	/* scope for tree destructors */ {
 		booking_tree_t::node_t n = NULL;
 		booking_tree_t::HNode::iterator it;
-		booking_tree_t t1( bna1, bba1 );
+		ref_node_allocator_type rna1( &na1 );
+		ref_branch_allocator_type rba1( &ba1 );
+		booking_tree_t t1( rna1, rba1 );
 		n = t1.create_new_root();
 		**n = '@';
 		booking_tree_t::HNode::iterator a = it = n->add_node( '1' );
@@ -1100,7 +1104,9 @@ TUT_UNIT_TEST( 34, "across two trees (replace_node) on booking allocator" )
 		it->add_node( '0' );
 		n->add_node( '5' );
 
-		booking_tree_t t2( bna2, bba2 );
+		ref_node_allocator_type rna2( &na2 );
+		ref_branch_allocator_type rba2( &ba2 );
+		booking_tree_t t2( rna2, rba2 );
 		n = t2.create_new_root();
 		**n = '%';
 		it = n->add_node( 'a' );
@@ -1122,25 +1128,29 @@ TUT_UNIT_TEST( 34, "across two trees (replace_node) on booking allocator" )
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G1{246}}c}" );
 	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
-	ENSURE( "deallocation failed on tree1 (nodes)", bna1.is_valid() );
-	ENSURE( "deallocation failed on tree2 (nodes)", bna2.is_valid() );
-	ENSURE( "deallocation failed on tree1 (branches)", bba1.is_valid() );
-	ENSURE( "deallocation failed on tree2 (branches)", bba2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (nodes)", na1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (nodes)", na2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (branches)", ba1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 35, "across two trees from root (replace_node) on booking allocator" )
-	typedef booking_allocator<item_t> booking_allocator_t;
-	typedef HTree<item_t, booking_allocator_t> booking_tree_t;
-	typedef typename booking_tree_t::allocator_type tree_node_allocator;
-	typedef typename booking_tree_t::branch_allocator_type tree_branch_allocator;
-	tree_node_allocator bna1( 1 );
-	tree_node_allocator bna2( 2 );
-	tree_branch_allocator bba1( 1 );
-	tree_branch_allocator bba2( 2 );
+	typedef booking_allocator<item_t> allocator_type;
+	typedef typename HTree<item_t, allocator_type>::allocator_type true_node_allocator_type;
+	typedef typename allocator::ref<typename true_node_allocator_type::value_type, true_node_allocator_type> ref_node_allocator_type;
+	typedef HTree<item_t, ref_node_allocator_type> booking_tree_t;
+	typedef typename booking_tree_t::branch_allocator_type ref_branch_allocator_type;
+	typedef typename ref_branch_allocator_type::allocator_type true_branch_allocator_type;
+	true_node_allocator_type na1( 1 );
+	true_node_allocator_type na2( 2 );
+	true_branch_allocator_type ba1( 1 );
+	true_branch_allocator_type ba2( 2 );
 	/* scope for tree destructors */ {
 		booking_tree_t::node_t n = NULL;
 		booking_tree_t::HNode::iterator it;
-		booking_tree_t t1( bna1, bba1 );
+		ref_node_allocator_type rna1( &na1 );
+		ref_branch_allocator_type rba1( &ba1 );
+		booking_tree_t t1( rna1, rba1 );
 		n = t1.create_new_root();
 		**n = '@';
 		it = n->add_node( '1' );
@@ -1152,7 +1162,9 @@ TUT_UNIT_TEST( 35, "across two trees from root (replace_node) on booking allocat
 		it->add_node( '0' );
 		n->add_node( '5' );
 
-		booking_tree_t t2( bna2, bba2 );
+		ref_node_allocator_type rna2( &na2 );
+		ref_branch_allocator_type rba2( &ba2 );
+		booking_tree_t t2( rna2, rba2 );
 		n = t2.create_new_root();
 		**n = '%';
 		it = n->add_node( 'a' );
@@ -1174,25 +1186,29 @@ TUT_UNIT_TEST( 35, "across two trees from root (replace_node) on booking allocat
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G@{1{246}3{80}5}}c}" );
 	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
-	ENSURE( "deallocation failed on tree1 (nodes)", bna1.is_valid() );
-	ENSURE( "deallocation failed on tree2 (nodes)", bna2.is_valid() );
-	ENSURE( "deallocation failed on tree1 (branches)", bba1.is_valid() );
-	ENSURE( "deallocation failed on tree2 (branches)", bba2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (nodes)", na1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (nodes)", na2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (branches)", ba1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 36, "across two trees (move_node) on booking allocator" )
-	typedef booking_allocator<item_t> booking_allocator_t;
-	typedef HTree<item_t, booking_allocator_t> booking_tree_t;
-	typedef typename booking_tree_t::allocator_type tree_node_allocator;
-	typedef typename booking_tree_t::branch_allocator_type tree_branch_allocator;
-	tree_node_allocator bna1( 1 );
-	tree_node_allocator bna2( 2 );
-	tree_branch_allocator bba1( 1 );
-	tree_branch_allocator bba2( 2 );
+	typedef booking_allocator<item_t> allocator_type;
+	typedef typename HTree<item_t, allocator_type>::allocator_type true_node_allocator_type;
+	typedef typename allocator::ref<typename true_node_allocator_type::value_type, true_node_allocator_type> ref_node_allocator_type;
+	typedef HTree<item_t, ref_node_allocator_type> booking_tree_t;
+	typedef typename booking_tree_t::branch_allocator_type ref_branch_allocator_type;
+	typedef typename ref_branch_allocator_type::allocator_type true_branch_allocator_type;
+	true_node_allocator_type na1( 1 );
+	true_node_allocator_type na2( 2 );
+	true_branch_allocator_type ba1( 1 );
+	true_branch_allocator_type ba2( 2 );
 	/* scope for tree destructors */ {
 		booking_tree_t::node_t n = NULL;
 		booking_tree_t::HNode::iterator it;
-		booking_tree_t t1( bna1, bba1 );
+		ref_node_allocator_type rna1( &na1 );
+		ref_branch_allocator_type rba1( &ba1 );
+		booking_tree_t t1( rna1, rba1 );
 		n = t1.create_new_root();
 		**n = '@';
 		booking_tree_t::HNode::iterator a = it = n->add_node( '1' );
@@ -1204,7 +1220,9 @@ TUT_UNIT_TEST( 36, "across two trees (move_node) on booking allocator" )
 		it->add_node( '0' );
 		n->add_node( '5' );
 
-		booking_tree_t t2( bna2, bba2 );
+		ref_node_allocator_type rna2( &na2 );
+		ref_branch_allocator_type rba2( &ba2 );
+		booking_tree_t t2( rna2, rba2 );
 		n = t2.create_new_root();
 		**n = '%';
 		it = n->add_node( 'a' );
@@ -1226,25 +1244,29 @@ TUT_UNIT_TEST( 36, "across two trees (move_node) on booking allocator" )
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G1{246}H}c}" );
 	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
-	ENSURE( "deallocation failed on tree1 (nodes)", bna1.is_valid() );
-	ENSURE( "deallocation failed on tree2 (nodes)", bna2.is_valid() );
-	ENSURE( "deallocation failed on tree1 (branches)", bba1.is_valid() );
-	ENSURE( "deallocation failed on tree2 (branches)", bba2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (nodes)", na1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (nodes)", na2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (branches)", ba1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 37, "across two trees from root (move_node) on booking allocator" )
-	typedef booking_allocator<item_t> booking_allocator_t;
-	typedef HTree<item_t, booking_allocator_t> booking_tree_t;
-	typedef typename booking_tree_t::allocator_type tree_node_allocator;
-	typedef typename booking_tree_t::branch_allocator_type tree_branch_allocator;
-	tree_node_allocator bna1( 1 );
-	tree_node_allocator bna2( 2 );
-	tree_branch_allocator bba1( 1 );
-	tree_branch_allocator bba2( 2 );
+	typedef booking_allocator<item_t> allocator_type;
+	typedef typename HTree<item_t, allocator_type>::allocator_type true_node_allocator_type;
+	typedef typename allocator::ref<typename true_node_allocator_type::value_type, true_node_allocator_type> ref_node_allocator_type;
+	typedef HTree<item_t, ref_node_allocator_type> booking_tree_t;
+	typedef typename booking_tree_t::branch_allocator_type ref_branch_allocator_type;
+	typedef typename ref_branch_allocator_type::allocator_type true_branch_allocator_type;
+	true_node_allocator_type na1( 1 );
+	true_node_allocator_type na2( 2 );
+	true_branch_allocator_type ba1( 1 );
+	true_branch_allocator_type ba2( 2 );
 	/* scope for tree destructors */ {
 		booking_tree_t::node_t n = NULL;
 		booking_tree_t::HNode::iterator it;
-		booking_tree_t t1( bna1, bba1 );
+		ref_node_allocator_type rna1( &na1 );
+		ref_branch_allocator_type rba1( &ba1 );
+		booking_tree_t t1( rna1, rba1 );
 		n = t1.create_new_root();
 		**n = '@';
 		it = n->add_node( '1' );
@@ -1256,7 +1278,9 @@ TUT_UNIT_TEST( 37, "across two trees from root (move_node) on booking allocator"
 		it->add_node( '0' );
 		n->add_node( '5' );
 
-		booking_tree_t t2( bna2, bba2 );
+		ref_node_allocator_type rna2( &na2 );
+		ref_branch_allocator_type rba2( &ba2 );
+		booking_tree_t t2( rna2, rba2 );
 		n = t2.create_new_root();
 		**n = '%';
 		it = n->add_node( 'a' );
@@ -1278,25 +1302,29 @@ TUT_UNIT_TEST( 37, "across two trees from root (move_node) on booking allocator"
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G@{1{246}3{80}5}H}c}" );
 	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
-	ENSURE( "deallocation failed on tree1 (nodes)", bna1.is_valid() );
-	ENSURE( "deallocation failed on tree2 (nodes)", bna2.is_valid() );
-	ENSURE( "deallocation failed on tree1 (branches)", bba1.is_valid() );
-	ENSURE( "deallocation failed on tree2 (branches)", bba2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (nodes)", na1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (nodes)", na2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (branches)", ba1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 38, "across two trees (copy_noda) on booking allocator" )
-	typedef booking_allocator<item_t> booking_allocator_t;
-	typedef HTree<item_t, booking_allocator_t> booking_tree_t;
-	typedef typename booking_tree_t::allocator_type tree_node_allocator;
-	typedef typename booking_tree_t::branch_allocator_type tree_branch_allocator;
-	tree_node_allocator bna1( 1 );
-	tree_node_allocator bna2( 2 );
-	tree_branch_allocator bba1( 1 );
-	tree_branch_allocator bba2( 2 );
+	typedef booking_allocator<item_t> allocator_type;
+	typedef typename HTree<item_t, allocator_type>::allocator_type true_node_allocator_type;
+	typedef typename allocator::ref<typename true_node_allocator_type::value_type, true_node_allocator_type> ref_node_allocator_type;
+	typedef HTree<item_t, ref_node_allocator_type> booking_tree_t;
+	typedef typename booking_tree_t::branch_allocator_type ref_branch_allocator_type;
+	typedef typename ref_branch_allocator_type::allocator_type true_branch_allocator_type;
+	true_node_allocator_type na1( 1 );
+	true_node_allocator_type na2( 2 );
+	true_branch_allocator_type ba1( 1 );
+	true_branch_allocator_type ba2( 2 );
 	/* scope for tree destructors */ {
 		booking_tree_t::node_t n = NULL;
 		booking_tree_t::HNode::iterator it;
-		booking_tree_t t1( bna1, bba1 );
+		ref_node_allocator_type rna1( &na1 );
+		ref_branch_allocator_type rba1( &ba1 );
+		booking_tree_t t1( rna1, rba1 );
 		n = t1.create_new_root();
 		**n = '@';
 		booking_tree_t::HNode::iterator a = it = n->add_node( '1' );
@@ -1308,7 +1336,9 @@ TUT_UNIT_TEST( 38, "across two trees (copy_noda) on booking allocator" )
 		it->add_node( '0' );
 		n->add_node( '5' );
 
-		booking_tree_t t2( bna2, bba2 );
+		ref_node_allocator_type rna2( &na2 );
+		ref_branch_allocator_type rba2( &ba2 );
+		booking_tree_t t2( rna2, rba2 );
 		n = t2.create_new_root();
 		**n = '%';
 		it = n->add_node( 'a' );
@@ -1330,25 +1360,29 @@ TUT_UNIT_TEST( 38, "across two trees (copy_noda) on booking allocator" )
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G1{246}H}c}" );
 	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
-	ENSURE( "deallocation failed on tree1 (nodes)", bna1.is_valid() );
-	ENSURE( "deallocation failed on tree2 (nodes)", bna2.is_valid() );
-	ENSURE( "deallocation failed on tree1 (branches)", bba1.is_valid() );
-	ENSURE( "deallocation failed on tree2 (branches)", bba2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (nodes)", na1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (nodes)", na2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (branches)", ba1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 39, "across two trees from root (copy_node) on booking allocator" )
-	typedef booking_allocator<item_t> booking_allocator_t;
-	typedef HTree<item_t, booking_allocator_t> booking_tree_t;
-	typedef typename booking_tree_t::allocator_type tree_node_allocator;
-	typedef typename booking_tree_t::branch_allocator_type tree_branch_allocator;
-	tree_node_allocator bna1( 1 );
-	tree_node_allocator bna2( 2 );
-	tree_branch_allocator bba1( 1 );
-	tree_branch_allocator bba2( 2 );
+	typedef booking_allocator<item_t> allocator_type;
+	typedef typename HTree<item_t, allocator_type>::allocator_type true_node_allocator_type;
+	typedef typename allocator::ref<typename true_node_allocator_type::value_type, true_node_allocator_type> ref_node_allocator_type;
+	typedef HTree<item_t, ref_node_allocator_type> booking_tree_t;
+	typedef typename booking_tree_t::branch_allocator_type ref_branch_allocator_type;
+	typedef typename ref_branch_allocator_type::allocator_type true_branch_allocator_type;
+	true_node_allocator_type na1( 1 );
+	true_node_allocator_type na2( 2 );
+	true_branch_allocator_type ba1( 1 );
+	true_branch_allocator_type ba2( 2 );
 	/* scope for tree destructors */ {
 		booking_tree_t::node_t n = NULL;
 		booking_tree_t::HNode::iterator it;
-		booking_tree_t t1( bna1, bba1 );
+		ref_node_allocator_type rna1( &na1 );
+		ref_branch_allocator_type rba1( &ba1 );
+		booking_tree_t t1( rna1, rba1 );
 		n = t1.create_new_root();
 		**n = '@';
 		it = n->add_node( '1' );
@@ -1360,7 +1394,9 @@ TUT_UNIT_TEST( 39, "across two trees from root (copy_node) on booking allocator"
 		it->add_node( '0' );
 		n->add_node( '5' );
 
-		booking_tree_t t2( bna2, bba2 );
+		ref_node_allocator_type rna2( &na2 );
+		ref_branch_allocator_type rba2( &ba2 );
+		booking_tree_t t2( rna2, rba2 );
 		n = t2.create_new_root();
 		**n = '%';
 		it = n->add_node( 'a' );
@@ -1382,10 +1418,10 @@ TUT_UNIT_TEST( 39, "across two trees from root (copy_node) on booking allocator"
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{G@{1{246}3{80}5}H}c}" );
 	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
-	ENSURE( "deallocation failed on tree1 (nodes)", bna1.is_valid() );
-	ENSURE( "deallocation failed on tree2 (nodes)", bna2.is_valid() );
-	ENSURE( "deallocation failed on tree1 (branches)", bba1.is_valid() );
-	ENSURE( "deallocation failed on tree2 (branches)", bba2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (nodes)", na1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (nodes)", na2.is_valid() );
+	ENSURE( "deallocation failed on tree1 (branches)", ba1.is_valid() );
+	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
 }

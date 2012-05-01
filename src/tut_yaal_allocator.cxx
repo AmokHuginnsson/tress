@@ -55,9 +55,10 @@ TUT_UNIT_TEST( 2, "allocator::pool" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "allocator::ref<allocator::system>" )
-	typedef allocator::system<int> true_allocator;
+	typedef allocator::system<int> allocator_type;
+	typedef typename HList<int, allocator_type>::allocator_type true_allocator;
 	true_allocator ta;
-	typedef allocator::ref<HList<int, true_allocator>::allocator_type, true_allocator> ref_allocator;
+	typedef allocator::ref<typename true_allocator::value_type, true_allocator> ref_allocator;
 	ref_allocator ra( &ta );
 	HList<int, ref_allocator> l( ra );
 	l.push_back( 1 );
