@@ -29,14 +29,13 @@ M_VCSID ( "$Id$" )
 
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::tools;
 
 #ifndef MAKE_DEP
 
 namespace must_not_compile {
 
-typedef HMultiMap<int, int, HMultiContainerStorage::HPacked> mapp_t;
-typedef HMultiMap<int, int, HMultiContainerStorage::HTransparent> mapt_t;
+typedef HMultiMap<int, int, less<int>, HMultiContainerStorage::HPacked> mapp_t;
+typedef HMultiMap<int, int, less<int>, HMultiContainerStorage::HTransparent> mapt_t;
 
 #if defined ( BUG_0 )
 

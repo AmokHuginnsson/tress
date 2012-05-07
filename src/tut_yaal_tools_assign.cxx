@@ -71,7 +71,7 @@ TUT_UNIT_TEST( 1, "build HArray<>" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "build HMap<>" )
-	int2int_t m( sequence( 1, 2 )( 3, 4 )( 5, -6 )( -7, 8 ) );
+	int2int_t m = sequence( 1, 2 )( 3, 4 )( 5, -6 )( -7, 8 );
 	int2int_t expected;
 	expected.insert( make_pair( 1, 2 ) );
 	expected.insert( make_pair( 3, 4 ) );
