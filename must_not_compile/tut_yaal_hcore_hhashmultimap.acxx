@@ -29,7 +29,6 @@ M_VCSID ( "$Id$" )
 
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::tools;
 
 #ifndef MAKE_DEP
 

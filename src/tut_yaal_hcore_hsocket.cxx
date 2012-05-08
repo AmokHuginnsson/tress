@@ -26,6 +26,9 @@ Copyright:
 
 #include <cstdio>
 #include <cstdlib>
+#ifdef __GNUC__
+#include <unistd.h>
+#endif /* #ifdef __GNUC__ */
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hsocket.hxx>
