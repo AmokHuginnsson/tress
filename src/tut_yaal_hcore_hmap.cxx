@@ -172,6 +172,12 @@ TUT_UNIT_TEST( 5, "exception during map[key] = val;" )
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 6, "find() on one elem map" )
+	i2i_t m;
+	m.insert( make_pair( 0, 0 ) );
+	ENSURE( "find on one elem map failed", m.find( 0 ) != m.end() );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "sample data" )
 	typedef HMap<HString, int> string_to_int_map_t;
 	string_to_int_map_t map;
