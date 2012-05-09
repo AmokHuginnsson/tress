@@ -26,6 +26,9 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
+#define private public
+#define protected public
+
 #include <yaal/hcore/hmap.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
@@ -53,7 +56,36 @@ struct tut_yaal_hcore_hmap : public simple_mock<tut_yaal_hcore_hmap> {
 
 TUT_TEST_GROUP( tut_yaal_hcore_hmap, "yaal::hcore::HMap" );
 
-TUT_UNIT_TEST( 1, "find()" )
+TUT_UNIT_TEST( 1, "Default constructor (size(), empty())." )
+	i2i_t m;
+	ENSURE_EQUALS( "bad size on new map", m.get_size(), 0 );
+	ENSURE( "bad empty status on new map", m.is_empty() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "One elem inserted (size(), empty())" )
+	i2i_t m;
+	ENSURE_EQUALS( "bad size on new map", m.get_size(), 0 );
+	ENSURE( "bad empty status on new map", m.is_empty() );
+	m.insert( make_pair( 1, 1 ) );
+	ENSURE_EQUALS( "bad size on map with one elem", m.get_size(), 1 );
+	ENSURE_NOT( "bad empty status on map with one elem", m.is_empty() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 3, "find() on one elem map" )
+	i2i_t m;
+	if ( m._engine._root )
+		clog << "root" << endl;
+	else
+		clog << "no root" << endl;
+	m.insert( make_pair( 0, 0 ) );
+	if ( m._engine._root )
+		clog << "root" << endl;
+	else
+		clog << "no root" << endl;
+	ENSURE( "find on one elem map failed", m.find( 0 ) != m.end() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "find()" )
 	i2i_t map;
 	map.insert( make_pair( 1, 1 ) );
 	map.insert( make_pair( 2, 2 ) );
@@ -109,7 +141,7 @@ void tut_yaal_hcore_hmap::upper_bound_test( int size_ ) {
 	ENSURE( "upper_bound found", !( end2 != map.end() ) );
 }
 
-TUT_UNIT_TEST( 2, "lower_bound()" )
+TUT_UNIT_TEST( 5, "lower_bound()" )
 	i2i_t map;
 	map.insert( make_pair( 1, 1 ) );
 	map.insert( make_pair( 2, 2 ) );
@@ -129,7 +161,7 @@ TUT_UNIT_TEST( 2, "lower_bound()" )
 		lower_bound_test( i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "upper_bound()" )
+TUT_UNIT_TEST( 6, "upper_bound()" )
 	i2i_t map;
 	map.insert( make_pair( 1, 1 ) );
 	map.insert( make_pair( 2, 2 ) );
@@ -149,7 +181,7 @@ TUT_UNIT_TEST( 3, "upper_bound()" )
 		upper_bound_test( i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "HMap insert of already existing key")
+TUT_UNIT_TEST( 7, "HMap insert of already existing key")
 	i2i_t m;
 	static int const KEY = 1;
 	static int const ORIGINAL_VAL = 2;
@@ -161,7 +193,7 @@ TUT_UNIT_TEST( 4, "HMap insert of already existing key")
 	ENSURE_EQUALS( "element with already existing key inserted", ir.first->second, ORIGINAL_VAL );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "exception during map[key] = val;" )
+TUT_UNIT_TEST( 8, "exception during map[key] = val;" )
 	i2c_t m;
 	try {
 		m[ 0 ] = Crazy();
@@ -170,12 +202,6 @@ TUT_UNIT_TEST( 5, "exception during map[key] = val;" )
 		// ok
 	}
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 6, "find() on one elem map" )
-	i2i_t m;
-	m.insert( make_pair( 0, 0 ) );
-	ENSURE( "find on one elem map failed", m.find( 0 ) != m.end() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "sample data" )
