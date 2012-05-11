@@ -63,7 +63,7 @@ int long const tut_yaal_hcore_hhashmap::HUGE_TABLE = sizeof ( int long ) > 4 ? 2
 int long const tut_yaal_hcore_hhashmap::FEW_ELEMENTS = 4;
 
 void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ ) {
-	typedef HHashContainer::HAtom<hash_map_t::value_type> atom_t;
+	typedef hash_map_t::engine_t::HAtom atom_t;
 	atom_t* const* buckets = map_._engine._buckets.get<atom_t*>();
 	int long bucketCount( map_._engine._buckets.get_size() / sizeof ( atom_t* ) );
 	ENSURE( "wrong bucket count/prime", bucketCount >= map_._engine._prime );
@@ -76,7 +76,8 @@ void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ ) {
 		atom_t* a( buckets[ i ] );
 		int long localCollisions( 0 );
 		while ( a ) {
-			ENSURE_EQUALS( "atom in wrong bucket", i, abs( map_._hasher( a->_value.first ) ) % map_._engine._prime );
+			ENSURE_EQUALS( "atom in wrong bucket", i,
+					abs( map_._engine._hasher( a->_value.first ) ) % map_._engine._prime );
 			a = static_cast<atom_t*>( a->_next );
 			if ( a ) {
 				++ collisions;
