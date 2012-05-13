@@ -41,8 +41,8 @@ namespace tut {
 struct tut_yaal_hcore_hhashmultimap : public simple_mock<tut_yaal_hcore_hhashmultimap> {
 	typedef simple_mock<tut_yaal_hcore_hhashmultimap> base_type;
 	virtual ~tut_yaal_hcore_hhashmultimap( void ) {}
-	typedef HHashMultiMap<int, int, hash<int>, HMultiContainerStorage::HPacked> mmp_t;
-	typedef HHashMultiMap<int, int, hash<int>, HMultiContainerStorage::HTransparent> mmt_t;
+	typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_type, HHashMultiMap<int, int>::allocator_type, HMultiContainerStorage::HPacked> mmp_t;
+	typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_type, HHashMultiMap<int, int>::allocator_type, HMultiContainerStorage::HTransparent> mmt_t;
 };
 
 TUT_TEST_GROUP( tut_yaal_hcore_hhashmultimap, "yaal::hcore::HHashMultiMap" );
