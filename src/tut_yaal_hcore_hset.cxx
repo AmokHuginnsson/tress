@@ -50,7 +50,37 @@ struct tut_yaal_hcore_hset : simple_mock<tut_yaal_hcore_hset> {
 
 TUT_TEST_GROUP( tut_yaal_hcore_hset, "yaal::hcore::HSet" );
 
-TUT_UNIT_TEST( 1, "find()" )
+TUT_UNIT_TEST( 1, "default constructor" )
+	int_set_t set;
+	ENSURE_EQUALS( "bad size on fresh HSet<>", set.size(), 0 );
+	ENSURE( "bad emptinass status on fresh HSet<>", set.is_empty() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "insert (unique)" )
+	int_set_t set;
+	ENSURE_EQUALS( "bad size on fresh HSet<>", set.size(), 0 );
+	ENSURE( "bad emptinass status on fresh HSet<>", set.is_empty() );
+	set.insert( 1 );
+	ENSURE_EQUALS( "bad size on HSet<> after insert", set.size(), 1 );
+	ENSURE_NOT( "bad emptinass status on HSet<> after insert", set.is_empty() );
+	ENSURE_EQUALS( "inserted element not found", set.count( 1 ), 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 3, "insert (non-unique)" )
+	int_set_t set;
+	ENSURE_EQUALS( "bad size on fresh HSet<>", set.size(), 0 );
+	ENSURE( "bad emptinass status on fresh HSet<>", set.is_empty() );
+	set.insert( 1 );
+	ENSURE_EQUALS( "bad size on HSet<> after insert", set.size(), 1 );
+	ENSURE_NOT( "bad emptinass status on HSet<> after insert", set.is_empty() );
+	ENSURE_EQUALS( "inserted element not found", set.count( 1 ), 1 );
+	ENSURE_NOT( "non-unique insertion succeeded", set.insert( 1 ).second );
+	ENSURE_EQUALS( "bad size on HSet<> after insert", set.size(), 1 );
+	ENSURE_NOT( "bad emptinass status on HSet<> after insert", set.is_empty() );
+	ENSURE_EQUALS( "inserted element not found", set.count( 1 ), 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "find()" )
 	int_set_t set;
 	set.insert( 1 );
 	set.insert( 2 );
@@ -106,7 +136,7 @@ void tut_yaal_hcore_hset::upper_bound_test( int size_ ) {
 	ENSURE( "upper_bound found", !( end2 != set.end() ) );
 }
 
-TUT_UNIT_TEST( 2, "lower_bound()" )
+TUT_UNIT_TEST( 5, "lower_bound()" )
 	int_set_t set;
 	set.insert( 1 );
 	set.insert( 2 );
@@ -126,7 +156,7 @@ TUT_UNIT_TEST( 2, "lower_bound()" )
 		lower_bound_test( i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "upper_bound()" )
+TUT_UNIT_TEST( 6, "upper_bound()" )
 	int_set_t set;
 	set.insert( 1 );
 	set.insert( 2 );
@@ -144,6 +174,38 @@ TUT_UNIT_TEST( 3, "upper_bound()" )
 	static int const RANGE( 1024 );
 	for ( int i( 2 ); i < RANGE; i += 2 )
 		upper_bound_test( i );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 7, "forward iteration" )
+	int_set_t set;
+	set.insert( 1 );
+	set.insert( 2 );
+	set.insert( 3 );
+	set.insert( 1 );
+	set.insert( 2 );
+	set.insert( 3 );
+	set.insert( 2 );
+	set.insert( 3 );
+	set.insert( 3 );
+	HStringStream ss;
+	copy( set.begin(), set.end(), stream_iterator( ss ) );
+	ENSURE_EQUALS( "bad forward teration", ss.string(), "123" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 8, "backward iteration" )
+	int_set_t set;
+	set.insert( 1 );
+	set.insert( 2 );
+	set.insert( 3 );
+	set.insert( 1 );
+	set.insert( 2 );
+	set.insert( 3 );
+	set.insert( 2 );
+	set.insert( 3 );
+	set.insert( 3 );
+	HStringStream ss;
+	copy( set.rbegin(), set.rend(), stream_iterator( ss ) );
+	ENSURE_EQUALS( "bad forward teration", ss.string(), "321" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 49, "sample data" )

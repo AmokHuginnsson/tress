@@ -41,6 +41,88 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hhashmultiset );
 TUT_TEST_GROUP( tut_yaal_hcore_hhashmultiset, "yaal::hcore::HHashMultiSet" );
 
+TUT_UNIT_TEST( 1, "default constructor" )
+	typedef HHashMultiSet<int> mset_t;
+	mset_t ms;
+	ENSURE_EQUALS( "bad size on fresh HHashMultiSet<>", ms.size(), 0 );
+	ENSURE( "bad emptinass status on fresh HHashMultiSet<>", ms.is_empty() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "unique items" )
+	typedef HHashMultiSet<int> mset_t;
+	mset_t ms;
+	ENSURE_EQUALS( "bad size on fresh HHashMultiSet<>", ms.size(), 0 );
+	ENSURE( "bad emptinass status on fresh HHashMultiSet<>", ms.is_empty() );
+	ms.insert( 1 );
+	ENSURE_EQUALS( "bad size after 1 insert", ms.size(), 1 );
+	ENSURE_NOT( "bad emptinass status insert", ms.is_empty() );
+	ms.insert( 2 );
+	ENSURE_EQUALS( "bad size after 2 inserts", ms.size(), 2 );
+	ms.insert( 3 );
+	ENSURE_EQUALS( "bad size after 3 inserts", ms.size(), 3 );
+	ENSURE_EQUALS( "bad count of unique items 1", ms.count( 1 ), 1 );
+	ENSURE_EQUALS( "bad count of unique items 2", ms.count( 2 ), 1 );
+	ENSURE_EQUALS( "bad count of unique items 3", ms.count( 3 ), 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 3, "non-unique items" )
+	typedef HHashMultiSet<int> mset_t;
+	mset_t ms;
+	ENSURE_EQUALS( "bad size on fresh HHashMultiSet<>", ms.size(), 0 );
+	ENSURE( "bad emptinass status on fresh HHashMultiSet<>", ms.is_empty() );
+	ms.insert( 1 );
+	ENSURE_EQUALS( "bad size after 1 insert", ms.size(), 1 );
+	ENSURE_NOT( "bad emptinass status insert", ms.is_empty() );
+	ms.insert( 2 );
+	ENSURE_EQUALS( "bad size after 2 inserts", ms.size(), 2 );
+	ms.insert( 3 );
+	ENSURE_EQUALS( "bad size after 3 inserts", ms.size(), 3 );
+	ENSURE_EQUALS( "bad count of unique items 1", ms.count( 1 ), 1 );
+	ENSURE_EQUALS( "bad count of unique items 2", ms.count( 2 ), 1 );
+	ENSURE_EQUALS( "bad count of unique items 3", ms.count( 3 ), 1 );
+
+	ms.insert( 1 );
+	ENSURE_EQUALS( "bad size after 4 insert (1st non unique)", ms.size(), 4 );
+	ENSURE_NOT( "bad emptinass status insert", ms.is_empty() );
+	ms.insert( 2 );
+	ENSURE_EQUALS( "bad size after 5 inserts", ms.size(), 5 );
+	ms.insert( 3 );
+	ENSURE_EQUALS( "bad size after 6 inserts", ms.size(), 6 );
+	ENSURE_EQUALS( "bad count of unique items 1", ms.count( 1 ), 2 );
+	ENSURE_EQUALS( "bad count of unique items 2", ms.count( 2 ), 2 );
+	ENSURE_EQUALS( "bad count of unique items 3", ms.count( 3 ), 2 );
+	ms.insert( 2 );
+	ENSURE_EQUALS( "bad size after 5 inserts", ms.size(), 7 );
+	ms.insert( 3 );
+	ENSURE_EQUALS( "bad size after 6 inserts", ms.size(), 8 );
+	ENSURE_EQUALS( "bad count of unique items 1", ms.count( 1 ), 2 );
+	ENSURE_EQUALS( "bad count of unique items 2", ms.count( 2 ), 3 );
+	ENSURE_EQUALS( "bad count of unique items 3", ms.count( 3 ), 3 );
+	ms.insert( 3 );
+	ENSURE_EQUALS( "bad size after 6 inserts", ms.size(), 9 );
+	ENSURE_EQUALS( "bad count of unique items 1", ms.count( 1 ), 2 );
+	ENSURE_EQUALS( "bad count of unique items 2", ms.count( 2 ), 3 );
+	ENSURE_EQUALS( "bad count of unique items 3", ms.count( 3 ), 4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "iteration" )
+	typedef HHashMultiSet<int> mset_t;
+	mset_t ms;
+	ms.insert( 1 );
+	ms.insert( 2 );
+	ms.insert( 3 );
+	ms.insert( 1 );
+	ms.insert( 2 );
+	ms.insert( 3 );
+	ms.insert( 2 );
+	ms.insert( 3 );
+	ms.insert( 3 );
+	HArray<typename mset_t::value_type> forward( ms.begin(), ms.end() );
+	HArray<typename mset_t::value_type> backward( ms.rbegin(), ms.rend() );
+	reverse( backward.begin(), backward.end() );
+	ENSURE_EQUALS( "bad teration", backward, forward );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "sample data" )
 	typedef HHashMultiSet<HString> string_hash_multi_set_t;
 	string_hash_multi_set_t set;

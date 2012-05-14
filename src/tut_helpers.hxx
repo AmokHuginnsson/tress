@@ -140,6 +140,8 @@ std::ostream& container_dump( std::ostream& out,
 	char sep( '(' );
 	for ( typename container::const_iterator it( container_.begin() ), end( container_.end() ); it != end; ++ it, sep = sep_ )
 		out << sep << *it;
+	if ( container_.empty() )
+		out << sep;
 	out << ")" << std::flush;
 	return ( out );
 }

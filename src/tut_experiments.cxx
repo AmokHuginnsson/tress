@@ -141,11 +141,19 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HSet<int> emptySet;
 	HSet<int> set( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HMap<int, int> map;
+	for ( int i( 0 ); i < 10; ++ i )
+		map[i] = i * i;
+	HMap<int, int> emptyMap;
 	HHashSet<int> emptyHashSet;
 	HHashSet<int> hashSet( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HRing<int> emptyRing;
 	HRing<int> ring( ring::capacity( countof ( _testData_[0] ) * 2 ),
 		_testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HHashMap<int, int> hashMap;
+	HHashMap<int, int> emptyHashMap;
+	for ( int i( 0 ); i < 10; ++ i )
+		hashMap[i] = i * i;
 	HString result( ( pi * e ).to_string() );
 	cout << shortStr << endl;
 	cout << str << endl;
@@ -153,11 +161,21 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	cout << e << endl;
 	cout << p << endl;
 	cout << array << endl;
+	cout << emptyArray << endl;
 	cout << deque << endl;
+	cout << emptyDeque << endl;
 	cout << list << endl;
+	cout << emptyList << endl;
 	cout << set << endl;
+	cout << emptySet << endl;
+	cout << map << endl;
+	cout << emptyMap << endl;
 	cout << hashSet << endl;
+	cout << emptyHashSet << endl;
+	cout << hashMap << endl;
+	cout << emptyHashMap << endl;
 	cout << ring << endl;
+	cout << emptyRing << endl;
 	cout << result << endl;
 TUT_TEARDOWN()
 

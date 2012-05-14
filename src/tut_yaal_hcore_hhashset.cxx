@@ -49,6 +49,57 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hhashset );
 TUT_TEST_GROUP( tut_yaal_hcore_hhashset, "yaal::hcore::HHashSet" );
 
+TUT_UNIT_TEST( 1, "default constructor" )
+	typedef HHashSet<int> hashset_t;
+	hashset_t set;
+	ENSURE_EQUALS( "bad size on fresh HSet<>", set.size(), 0 );
+	ENSURE( "bad emptinass status on fresh HSet<>", set.is_empty() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "insert (unique)" )
+	typedef HHashSet<int> hashset_t;
+	hashset_t set;
+	ENSURE_EQUALS( "bad size on fresh HSet<>", set.size(), 0 );
+	ENSURE( "bad emptinass status on fresh HSet<>", set.is_empty() );
+	set.insert( 1 );
+	ENSURE_EQUALS( "bad size on HSet<> after insert", set.size(), 1 );
+	ENSURE_NOT( "bad emptinass status on HSet<> after insert", set.is_empty() );
+	ENSURE_EQUALS( "inserted element not found", set.count( 1 ), 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 3, "insert (non-unique)" )
+	typedef HHashSet<int> hashset_t;
+	hashset_t set;
+	ENSURE_EQUALS( "bad size on fresh HSet<>", set.size(), 0 );
+	ENSURE( "bad emptinass status on fresh HSet<>", set.is_empty() );
+	set.insert( 1 );
+	ENSURE_EQUALS( "bad size on HSet<> after insert", set.size(), 1 );
+	ENSURE_NOT( "bad emptinass status on HSet<> after insert", set.is_empty() );
+	ENSURE_EQUALS( "inserted element not found", set.count( 1 ), 1 );
+	ENSURE_NOT( "non-unique insertion succeeded", set.insert( 1 ).second );
+	ENSURE_EQUALS( "bad size on HSet<> after insert", set.size(), 1 );
+	ENSURE_NOT( "bad emptinass status on HSet<> after insert", set.is_empty() );
+	ENSURE_EQUALS( "inserted element not found", set.count( 1 ), 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "iteration" )
+	typedef HHashSet<int> hashset_t;
+	hashset_t set;
+	set.insert( 1 );
+	set.insert( 2 );
+	set.insert( 3 );
+	set.insert( 1 );
+	set.insert( 2 );
+	set.insert( 3 );
+	set.insert( 2 );
+	set.insert( 3 );
+	set.insert( 3 );
+	HArray<typename hashset_t::value_type> forward( set.begin(), set.end() );
+	HArray<typename hashset_t::value_type> backward( set.rbegin(), set.rend() );
+	reverse( backward.begin(), backward.end() );
+	ENSURE_EQUALS( "bad teration", backward, forward );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 49, "sample data" )
 	typedef HHashSet<HString> string_hash_set_t;
 	string_hash_set_t set;
