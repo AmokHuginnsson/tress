@@ -34,8 +34,8 @@ using namespace yaal::hcore;
 
 namespace must_not_compile {
 
-typedef HMultiMap<int, int, less<int>, HMultiContainerStorage::HPacked> mapp_t;
-typedef HMultiMap<int, int, less<int>, HMultiContainerStorage::HTransparent> mapt_t;
+typedef HMultiMap<int, int, HMultiMap<int, int>::compare_type, HMultiMap<int, int>::allocator_type, HMultiContainerStorage::HPacked> mapp_t;
+typedef HMultiMap<int, int, HMultiMap<int, int>::compare_type, HMultiMap<int, int>::allocator_type, HMultiContainerStorage::HTransparent> mapt_t;
 
 #if defined ( BUG_0 )
 

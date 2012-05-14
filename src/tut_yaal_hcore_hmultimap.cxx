@@ -41,8 +41,8 @@ namespace tut {
 struct tut_yaal_hcore_hmultimap : public simple_mock<tut_yaal_hcore_hmultimap> {
 	typedef simple_mock<tut_yaal_hcore_hmultimap> base_type;
 	virtual ~tut_yaal_hcore_hmultimap( void ) {}
-	typedef HMultiMap<int, int, less<int>, HMultiContainerStorage::HPacked> mmp_t;
-	typedef HMultiMap<int, int, less<int>, HMultiContainerStorage::HTransparent> mmt_t;
+	typedef HMultiMap<int, int, HMultiMap<int, int>::compare_type, HMultiMap<int, int>::allocator_type, HMultiContainerStorage::HPacked> mmp_t;
+	typedef HMultiMap<int, int, HMultiMap<int, int>::compare_type, HMultiMap<int, int>::allocator_type, HMultiContainerStorage::HTransparent> mmt_t;
 };
 
 template<typename first, typename second>
