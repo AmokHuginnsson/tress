@@ -47,7 +47,86 @@ struct tut_yaal_hcore_hhashmultimap : public simple_mock<tut_yaal_hcore_hhashmul
 
 TUT_TEST_GROUP( tut_yaal_hcore_hhashmultimap, "yaal::hcore::HHashMultiMap" );
 
-TUT_UNIT_TEST( 1, "find/upper_bound on non existing" )
+TUT_UNIT_TEST( 1, "default constructor" )
+	mmp_t mm;
+	ENSURE_EQUALS( "bad size on fresh HMultiMap<>", mm.size(), 0 );
+	ENSURE( "bad emptinass status on fresh HMultiMap<>", mm.is_empty() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "unique items" )
+	mmp_t mm;
+	ENSURE_EQUALS( "bad size on fresh HMultiMap<>", mm.size(), 0 );
+	ENSURE( "bad emptinass status on fresh HMultiMap<>", mm.is_empty() );
+	mm.insert( make_pair( 1, 1 ) );
+	ENSURE_EQUALS( "bad size after 1 insert", mm.size(), 1 );
+	ENSURE_NOT( "bad emptinass status insert", mm.is_empty() );
+	mm.insert( make_pair( 2, 2 ) );
+	ENSURE_EQUALS( "bad size after 2 inserts", mm.size(), 2 );
+	mm.insert( make_pair( 3, 3 ) );
+	ENSURE_EQUALS( "bad size after 3 inserts", mm.size(), 3 );
+	ENSURE_EQUALS( "bad count of unique items 1", mm.count( 1 ), 1 );
+	ENSURE_EQUALS( "bad count of unique items 2", mm.count( 2 ), 1 );
+	ENSURE_EQUALS( "bad count of unique items 3", mm.count( 3 ), 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 3, "non-unique items" )
+	mmp_t mm;
+	ENSURE_EQUALS( "bad size on fresh HMultiMap<>", mm.size(), 0 );
+	ENSURE( "bad emptinass status on fresh HMultiMap<>", mm.is_empty() );
+	mm.insert( make_pair( 1, 1 ) );
+	ENSURE_EQUALS( "bad size after 1 insert", mm.size(), 1 );
+	ENSURE_NOT( "bad emptinass status insert", mm.is_empty() );
+	mm.insert( make_pair( 2, 2 ) );
+	ENSURE_EQUALS( "bad size after 2 inserts", mm.size(), 2 );
+	mm.insert( make_pair( 3, 3 ) );
+	ENSURE_EQUALS( "bad size after 3 inserts", mm.size(), 3 );
+	ENSURE_EQUALS( "bad count of unique items 1", mm.count( 1 ), 1 );
+	ENSURE_EQUALS( "bad count of unique items 2", mm.count( 2 ), 1 );
+	ENSURE_EQUALS( "bad count of unique items 3", mm.count( 3 ), 1 );
+
+	mm.insert( make_pair( 1, 4 ) );
+	ENSURE_EQUALS( "bad size after 4 insert (1st non unique)", mm.size(), 4 );
+	ENSURE_NOT( "bad emptinass status insert", mm.is_empty() );
+	mm.insert( make_pair( 2, 5 ) );
+	ENSURE_EQUALS( "bad size after 5 inserts", mm.size(), 5 );
+	mm.insert( make_pair( 3, 6 ) );
+	ENSURE_EQUALS( "bad size after 6 inserts", mm.size(), 6 );
+	ENSURE_EQUALS( "bad count of unique items 1", mm.count( 1 ), 2 );
+	ENSURE_EQUALS( "bad count of unique items 2", mm.count( 2 ), 2 );
+	ENSURE_EQUALS( "bad count of unique items 3", mm.count( 3 ), 2 );
+	mm.insert( make_pair( 2, 7 ) );
+	ENSURE_EQUALS( "bad size after 5 inserts", mm.size(), 7 );
+	mm.insert( make_pair( 3, 8 ) );
+	ENSURE_EQUALS( "bad size after 6 inserts", mm.size(), 8 );
+	ENSURE_EQUALS( "bad count of unique items 1", mm.count( 1 ), 2 );
+	ENSURE_EQUALS( "bad count of unique items 2", mm.count( 2 ), 3 );
+	ENSURE_EQUALS( "bad count of unique items 3", mm.count( 3 ), 3 );
+	mm.insert( make_pair( 3, 9 ) );
+	ENSURE_EQUALS( "bad size after 6 inserts", mm.size(), 9 );
+	ENSURE_EQUALS( "bad count of unique items 1", mm.count( 1 ), 2 );
+	ENSURE_EQUALS( "bad count of unique items 2", mm.count( 2 ), 3 );
+	ENSURE_EQUALS( "bad count of unique items 3", mm.count( 3 ), 4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "iteration" )
+	mmt_t mm;
+	mm.insert( make_pair( 1, 1 ) );
+	mm.insert( make_pair( 2, 2 ) );
+	mm.insert( make_pair( 3, 3 ) );
+	mm.insert( make_pair( 1, 4 ) );
+	mm.insert( make_pair( 2, 5 ) );
+	mm.insert( make_pair( 3, 6 ) );
+	mm.insert( make_pair( 2, 7 ) );
+	mm.insert( make_pair( 3, 8 ) );
+	mm.insert( make_pair( 3, 9 ) );
+	typedef HPair<typename mmp_t::key_type, typename mmt_t::data_type> value_type;
+	HArray<value_type> forward( mm.begin(), mm.end() );
+	HArray<value_type> backward( mm.rbegin(), mm.rend() );
+	reverse( backward.begin(), backward.end() );
+	ENSURE_EQUALS( "bad teration", backward, forward );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 5, "find/upper_bound on non existing" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
@@ -58,7 +137,7 @@ TUT_UNIT_TEST( 1, "find/upper_bound on non existing" )
 		FAIL( "find/upper_bound ranges skewed" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "find/upper_bound on existing" )
+TUT_UNIT_TEST( 6, "find/upper_bound on existing" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
@@ -72,7 +151,7 @@ TUT_UNIT_TEST( 2, "find/upper_bound on existing" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", acc, 15 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "modify packed by iterator" )
+TUT_UNIT_TEST( 7, "modify packed by iterator" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mmp_t::iterator it = mm.begin();
