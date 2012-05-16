@@ -1103,11 +1103,17 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 34, "across two trees (replace_node) on booking allocator" )
 	typedef booking_allocator<item_t> allocator_type;
-	typedef typename HTree<item_t, allocator_type>::allocator_type true_node_allocator_type;
-	typedef typename allocator::ref<typename true_node_allocator_type::value_type, true_node_allocator_type> ref_node_allocator_type;
-	typedef HTree<item_t, ref_node_allocator_type> booking_tree_t;
+	typedef HTree<item_t, allocator::ref<item_t, allocator_type> > booking_tree_t;
+	typedef typename booking_tree_t::allocator_type ref_node_allocator_type;
+	typedef typename ref_node_allocator_type::allocator_type true_node_allocator_type;
 	typedef typename booking_tree_t::branch_allocator_type ref_branch_allocator_type;
 	typedef typename ref_branch_allocator_type::allocator_type true_branch_allocator_type;
+
+	clog << "sizeof ( item_t ) = " << sizeof ( item_t ) << endl;
+	clog << "sizeof ( typename true_node_allocator_type::value_type ) = " << sizeof ( typename true_node_allocator_type::value_type ) << endl;
+	clog << "sizeof ( typename ref_node_allocator_type::value_type ) = " << sizeof ( typename ref_node_allocator_type::value_type ) << endl;
+	clog << "sizeof ( true_branch_allocator_type::value_type ) = " << sizeof ( typename true_branch_allocator_type::value_type ) << endl;
+	clog << "sizeof ( ref_branch_allocator_type::value_type ) = " << sizeof ( typename ref_branch_allocator_type::value_type ) << endl;
 	true_node_allocator_type na1( 1 );
 	true_node_allocator_type na2( 2 );
 	true_branch_allocator_type ba1( 1 );
@@ -1161,9 +1167,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 35, "across two trees from root (replace_node) on booking allocator" )
 	typedef booking_allocator<item_t> allocator_type;
-	typedef typename HTree<item_t, allocator_type>::allocator_type true_node_allocator_type;
-	typedef typename allocator::ref<typename true_node_allocator_type::value_type, true_node_allocator_type> ref_node_allocator_type;
-	typedef HTree<item_t, ref_node_allocator_type> booking_tree_t;
+	typedef HTree<item_t, allocator::ref<item_t, allocator_type> > booking_tree_t;
+	typedef typename booking_tree_t::allocator_type ref_node_allocator_type;
+	typedef typename ref_node_allocator_type::allocator_type true_node_allocator_type;
 	typedef typename booking_tree_t::branch_allocator_type ref_branch_allocator_type;
 	typedef typename ref_branch_allocator_type::allocator_type true_branch_allocator_type;
 	true_node_allocator_type na1( 1 );
@@ -1219,9 +1225,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 36, "across two trees (move_node) on booking allocator" )
 	typedef booking_allocator<item_t> allocator_type;
-	typedef typename HTree<item_t, allocator_type>::allocator_type true_node_allocator_type;
-	typedef typename allocator::ref<typename true_node_allocator_type::value_type, true_node_allocator_type> ref_node_allocator_type;
-	typedef HTree<item_t, ref_node_allocator_type> booking_tree_t;
+	typedef HTree<item_t, allocator::ref<item_t, allocator_type> > booking_tree_t;
+	typedef typename booking_tree_t::allocator_type ref_node_allocator_type;
+	typedef typename ref_node_allocator_type::allocator_type true_node_allocator_type;
 	typedef typename booking_tree_t::branch_allocator_type ref_branch_allocator_type;
 	typedef typename ref_branch_allocator_type::allocator_type true_branch_allocator_type;
 	true_node_allocator_type na1( 1 );
@@ -1277,9 +1283,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 37, "across two trees from root (move_node) on booking allocator" )
 	typedef booking_allocator<item_t> allocator_type;
-	typedef typename HTree<item_t, allocator_type>::allocator_type true_node_allocator_type;
-	typedef typename allocator::ref<typename true_node_allocator_type::value_type, true_node_allocator_type> ref_node_allocator_type;
-	typedef HTree<item_t, ref_node_allocator_type> booking_tree_t;
+	typedef HTree<item_t, allocator::ref<item_t, allocator_type> > booking_tree_t;
+	typedef typename booking_tree_t::allocator_type ref_node_allocator_type;
+	typedef typename ref_node_allocator_type::allocator_type true_node_allocator_type;
 	typedef typename booking_tree_t::branch_allocator_type ref_branch_allocator_type;
 	typedef typename ref_branch_allocator_type::allocator_type true_branch_allocator_type;
 	true_node_allocator_type na1( 1 );
@@ -1335,9 +1341,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 38, "across two trees (copy_node) on booking allocator" )
 	typedef booking_allocator<item_t> allocator_type;
-	typedef typename HTree<item_t, allocator_type>::allocator_type true_node_allocator_type;
-	typedef typename allocator::ref<typename true_node_allocator_type::value_type, true_node_allocator_type> ref_node_allocator_type;
-	typedef HTree<item_t, ref_node_allocator_type> booking_tree_t;
+	typedef HTree<item_t, allocator::ref<item_t, allocator_type> > booking_tree_t;
+	typedef typename booking_tree_t::allocator_type ref_node_allocator_type;
+	typedef typename ref_node_allocator_type::allocator_type true_node_allocator_type;
 	typedef typename booking_tree_t::branch_allocator_type ref_branch_allocator_type;
 	typedef typename ref_branch_allocator_type::allocator_type true_branch_allocator_type;
 	true_node_allocator_type na1( 1 );
@@ -1393,9 +1399,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 39, "across two trees from root (copy_node) on booking allocator" )
 	typedef booking_allocator<item_t> allocator_type;
-	typedef typename HTree<item_t, allocator_type>::allocator_type true_node_allocator_type;
-	typedef typename allocator::ref<typename true_node_allocator_type::value_type, true_node_allocator_type> ref_node_allocator_type;
-	typedef HTree<item_t, ref_node_allocator_type> booking_tree_t;
+	typedef HTree<item_t, allocator::ref<item_t, allocator_type> > booking_tree_t;
+	typedef typename booking_tree_t::allocator_type ref_node_allocator_type;
+	typedef typename ref_node_allocator_type::allocator_type true_node_allocator_type;
 	typedef typename booking_tree_t::branch_allocator_type ref_branch_allocator_type;
 	typedef typename ref_branch_allocator_type::allocator_type true_branch_allocator_type;
 	true_node_allocator_type na1( 1 );
