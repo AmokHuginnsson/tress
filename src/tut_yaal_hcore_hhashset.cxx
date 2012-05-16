@@ -143,6 +143,14 @@ TUT_UNIT_TEST( 50, "speed test" )
 		clog << "*speed* yaal::hcore::HHashSet<>::insert() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 	}
 	clog << "*speed* HHashSet<>::insert() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
+	typedef HHashSet<int, typename HHashSet<int>::hasher_type, allocator::pool<int> > hashset_on_pool_type;
+	hashset_on_pool_type hashSetOnPool; {
+		HClock c;
+		for ( int long i( 0 ); i < LOOPS; ++ i )
+			hashSetOnPool.insert( static_cast<int>( i ) );
+		clog << "*speed* yaal::hcore::HHashSet<on_pool>::insert() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+	}
+	clog << "*speed* HHashSet<on_pool>::insert() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()
 
 }
