@@ -78,7 +78,8 @@ void crypt_decrypt_test( int onSize_ ) {
  {
 		HFile out( "./out/crypted", HFile::OPEN::WRITING );
 		if ( onSize_ > 0 ) {
-			HMemory protype( m.raw(), onSize_, HMemory::INITIAL_STATE::VALID );
+			HMemoryObserver mo( m.raw(), onSize_ );
+			HMemory protype( mo, HMemory::INITIAL_STATE::VALID );
 			crypto::crypt_3des( protype, out, "kalafior" );
 		} else
 			crypto::crypt_3des( ss, out, "kalafior" );
@@ -117,8 +118,10 @@ TUT_UNIT_TEST( 2, "decrypt file" )
 		char prototype[] = "test1234";
 		char buf[ sizeof ( prototype ) ];
 		char buf2[ sizeof ( prototype ) ];
-		HMemory src( prototype, sizeof ( prototype ) - 1, HMemory::INITIAL_STATE::VALID );
-		HMemory dst( buf, sizeof ( buf ) );
+		HMemoryObserver srcMo( prototype, sizeof ( prototype ) - 1 );
+		HMemory src( srcMo, HMemory::INITIAL_STATE::VALID );
+		HMemoryObserver dstMo( buf, sizeof ( buf ) );
+		HMemory dst( dstMo );
 		strncpy( buf, prototype, sizeof ( prototype ) );
 		strncpy( buf2, prototype, sizeof ( prototype ) );
 		crypto::crypt_3des( src, dst, "kotek" );

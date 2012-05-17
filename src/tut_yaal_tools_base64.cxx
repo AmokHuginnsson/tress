@@ -370,7 +370,8 @@ TUT_UNIT_TEST( 16, "full encode tests" )
 	for ( int len = 1; len < MAX_TEST_LEN; ++ len ) {
 		for ( int val = 0; val < 256; ++ val ) {
 			fill_n( input, MAX_TEST_LEN, val );
-			HMemory m( input, len );
+			HMemoryObserver mo( input, len );
+			HMemory m( mo );
 			ss.clear();
 			base64::encode( m, ss, true );
 			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << input;
@@ -389,7 +390,8 @@ TUT_UNIT_TEST( 17, "full decode test" )
 	for ( int len = 1; len < MAX_TEST_LEN; ++ len ) {
 		for ( int val = 0; val < 256; ++ val ) {
 			fill_n( input, MAX_TEST_LEN, val );
-			HMemory m( input, len );
+			HMemoryObserver mo( input, len );
+			HMemory m( mo );
 			ss.clear();
 			ss << cases[ ( len - 1 ) * 256 + val ] << flush;
 			base64::decode( ss, m, true );
