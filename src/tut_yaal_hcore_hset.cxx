@@ -251,7 +251,7 @@ TUT_UNIT_TEST( 50, "speed test" )
 		clog << "*speed* yaal::hcore::HSet<>::insert() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 	}
 	clog << "*speed* HSet<>::insert() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-	typedef HSet<int, typename HSet<int>::compare_type, allocator::pool<int> > set_on_pool_type;
+	typedef HSet<int, HSet<int>::compare_type, allocator::pool<int> > set_on_pool_type;
 	set_on_pool_type setOnPool; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
