@@ -40,7 +40,6 @@ namespace tut {
 
 struct tut_yaal_hcore_hcall_bound : public simple_mock<tut_yaal_hcore_hcall_bound> {
 	typedef simple_mock<tut_yaal_hcore_hcall_bound> base_type;
-	typedef HInstanceTracker<tut_yaal_hcore_hcall_bound> item_t;
 	virtual ~tut_yaal_hcore_hcall_bound( void ) {}
 /* cppcheck-suppress functionConst */
 	void foo( void ) {}
@@ -55,7 +54,6 @@ TUT_UNIT_TEST( 1, "Constructor." )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "compare with constant less." )
-	typedef HList<item_t> list_t;
 	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ), call( &item_t::id, _1 ) < 50 );
@@ -64,7 +62,6 @@ TUT_UNIT_TEST( 2, "compare with constant less." )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "compare with constant greater." )
-	typedef HList<item_t> list_t;
 	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ), call( &item_t::id, _1 ) > 50 );
