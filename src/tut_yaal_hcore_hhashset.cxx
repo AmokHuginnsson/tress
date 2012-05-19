@@ -94,8 +94,8 @@ TUT_UNIT_TEST( 4, "iteration" )
 	set.insert( 2 );
 	set.insert( 3 );
 	set.insert( 3 );
-	HArray<typename hashset_t::value_type> forward( set.begin(), set.end() );
-	HArray<typename hashset_t::value_type> backward( set.rbegin(), set.rend() );
+	HArray<hashset_t::value_type> forward( set.begin(), set.end() );
+	HArray<hashset_t::value_type> backward( set.rbegin(), set.rend() );
 	reverse( backward.begin(), backward.end() );
 	ENSURE_EQUALS( "bad teration", backward, forward );
 TUT_TEARDOWN()
@@ -143,7 +143,7 @@ TUT_UNIT_TEST( 50, "speed test" )
 		clog << "*speed* yaal::hcore::HHashSet<>::insert() = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 	}
 	clog << "*speed* HHashSet<>::insert() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-	typedef HHashSet<int, typename HHashSet<int>::hasher_type, allocator::pool<int> > hashset_on_pool_type;
+	typedef HHashSet<int, HHashSet<int>::hasher_type, allocator::pool<int> > hashset_on_pool_type;
 	hashset_on_pool_type hashSetOnPool; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )

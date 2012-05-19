@@ -55,7 +55,6 @@ struct tut_yaal_hcore_hpool : public simple_mock<tut_yaal_hcore_hpool> {
 
 template <typename T>
 void tut_yaal_hcore_hpool::check_consistency( HPool<T>& pool_ ) {
-	typedef HPool<T> pool_t;
 	ENSURE( "inconsistent blocks-count - blocks-capacity relation", pool_._poolBlockCount <= pool_._poolBlockCapacity );
 	ENSURE( "inconsistent free - blocks-count relation", pool_._free < pool_._poolBlockCount );
 	ENSURE( "inconsistent buffer state", ( ( pool_._poolBlocks == NULL ) && ( pool_._poolBlockCapacity == 0 ) ) || ( ( pool_._poolBlockCapacity > 0 ) && ( pool_._poolBlocks != NULL ) ) );

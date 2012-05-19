@@ -117,8 +117,8 @@ TUT_UNIT_TEST( 4, "iteration" )
 	ms.insert( 2 );
 	ms.insert( 3 );
 	ms.insert( 3 );
-	HArray<typename mset_t::value_type> forward( ms.begin(), ms.end() );
-	HArray<typename mset_t::value_type> backward( ms.rbegin(), ms.rend() );
+	HArray<mset_t::value_type> forward( ms.begin(), ms.end() );
+	HArray<mset_t::value_type> backward( ms.rbegin(), ms.rend() );
 	reverse( backward.begin(), backward.end() );
 	ENSURE_EQUALS( "bad teration", backward, forward );
 TUT_TEARDOWN()

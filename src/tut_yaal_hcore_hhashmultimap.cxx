@@ -119,7 +119,7 @@ TUT_UNIT_TEST( 4, "iteration" )
 	mm.insert( make_pair( 2, 7 ) );
 	mm.insert( make_pair( 3, 8 ) );
 	mm.insert( make_pair( 3, 9 ) );
-	typedef HPair<typename mmp_t::key_type, typename mmt_t::data_type> value_type;
+	typedef HPair<mmp_t::key_type, mmt_t::data_type> value_type;
 	HArray<value_type> forward( mm.begin(), mm.end() );
 	HArray<value_type> backward( mm.rbegin(), mm.rend() );
 	reverse( backward.begin(), backward.end() );

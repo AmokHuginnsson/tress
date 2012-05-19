@@ -200,7 +200,7 @@ struct tut_yaal_hcore_hsbbstree : public simple_mock<tut_yaal_hcore_hsbbstree> {
 	template<typename object, typename subject, typename key>
 	void helper_stress_test( object&, subject, key );
 	typedef HSet<int> set_t;
-	typedef typename set_t::engine_t engine_t;
+	typedef set_t::engine_t engine_t;
 	typedef set_t::insert_result (set_t::*set_insert_t)( int const& );
 };
 
