@@ -29,6 +29,7 @@ Copyright:
 
 #include <yaal/tools/hzipstream.hxx>
 #include <yaal/tools/tools.hxx>
+#include <yaal/tools/hmemory.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 #include "setup.hxx"
@@ -137,6 +138,20 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "auto 128, 128" )
 	ENSURE_NOT( "(de)compression failed", test_zipstream( 128, 128 ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 6, "compress big buffer all at once" )
+	static int const SIZE( 5 * 1024 * 16 );
+	HChunk c( SIZE );
+	int* p( c.get<int>() );
+	for ( int i( 0 ); i < ( SIZE / static_cast<int>( sizeof ( int ) ) ); ++ i )
+		p[i] = i;
+	HChunk out;
+	HMemoryProvider mp( out );
+	HMemory m( mp );
+	HZipStream z( m, HZipStream::MODE::DEFLATE );
+	int long compressedSize( z.write( p, SIZE ) );
+	clog << "buffer of size " << SIZE << " compressed to size " << compressedSize << endl;
 TUT_TEARDOWN()
 
 }
