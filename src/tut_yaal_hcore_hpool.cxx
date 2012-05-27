@@ -25,7 +25,6 @@ Copyright:
 */
 
 #define private public
-#define protected public
 
 #include <TUT/tut.hpp>
 
