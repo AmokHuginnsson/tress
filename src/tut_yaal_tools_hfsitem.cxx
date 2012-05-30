@@ -56,7 +56,7 @@ void recurse( HString const& path_ ) {
 			<< white << setw( 8 ) << it->get_user() << " " << setw( 8 ) << it->get_group()
 			<< " " << brightmagenta << oct << setw( 4 ) << ( it->get_permissions() & 0777 ) << dec
 			<< reset << " " << it->get_path() << " " << it->modified().string() << endl;
-		if ( it->is_directory() && ( it->get_name() != "." ) && ( it->get_name() != ".." ) ) {
+		if ( it->is_directory() ) {
 			cout << "descending into ";
 			recurse( it->get_path() );
 			cout << "back at: " << blue << bold << dir.get_path() << reset << endl;
