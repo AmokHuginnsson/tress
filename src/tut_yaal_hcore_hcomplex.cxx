@@ -39,8 +39,6 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-static double long const epsilon = 0.0001;
-
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hcomplex );
 TUT_TEST_GROUP( tut_yaal_hcore_hcomplex, "yaal::hcore::HComplex" );
 
@@ -104,13 +102,13 @@ TUT_UNIT_TEST( 8, "argument()" )
 	HComplex a( 1, 0 );
 	ENSURE_DISTANCE( "bad argument value calculted", a.argument(), 0.L, epsilon );
 	HComplex b( 1, 1 );
-	ENSURE_DISTANCE( "bad argument value calculted", b.argument(), PI / 4.L, epsilon );
+	ENSURE_DISTANCE( "bad argument value calculted", b.argument(), math::PI / 4.L, epsilon );
 	HComplex c( -1, 1 );
-	ENSURE_DISTANCE( "bad argument value calculted", c.argument(), PI - PI / 4.L, epsilon );
+	ENSURE_DISTANCE( "bad argument value calculted", c.argument(), math::PI - math::PI / 4.L, epsilon );
 	HComplex d( -1, -1 );
-	ENSURE_DISTANCE( "bad argument value calculted", d.argument(), - ( PI - PI / 4.L ), epsilon );
+	ENSURE_DISTANCE( "bad argument value calculted", d.argument(), - ( math::PI - math::PI / 4.L ), epsilon );
 	HComplex e( 1, -1 );
-	ENSURE_DISTANCE( "bad argument value calculted", e.argument(), - PI / 4.L, epsilon );
+	ENSURE_DISTANCE( "bad argument value calculted", e.argument(), - math::PI / 4.L, epsilon );
 	try {
 		HComplex z;
 		z.argument();

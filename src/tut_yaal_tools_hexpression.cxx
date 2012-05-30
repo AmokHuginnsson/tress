@@ -143,7 +143,7 @@ TUT_UNIT_TEST( 47, "complex and valid expression" )
 	x2 *= x2;
 	x2 *= x2;
 	x2 *= x2;
-	ENSURE_DISTANCE( "wrong computation", x1, x2, static_cast<double long>( 0.00001 ) );
+	ENSURE_DISTANCE( "wrong computation", x1, x2, epsilon );
 	std::cout << eq << "=" << std::setprecision( 20 ) << x1 << std::endl;
 	eq = "Y";
 	x.compile( eq );

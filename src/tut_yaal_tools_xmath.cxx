@@ -110,5 +110,40 @@ TUT_UNIT_TEST( 8, "number set stats: average" )
 	ENSURE_EQUALS( "number_set_stats().average() failed", number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).average(), expected );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 9, "number set stats: variance" )
+	ENSURE_DISTANCE( "number_set_stats().variance() failed",
+			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).variance(), 25865.7586868687L, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 10, "number set stats: standard_deviation" )
+	ENSURE_DISTANCE( "number_set_stats().standard_deviation() failed",
+			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).standard_deviation(), 160.828351626412L, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 11, "number set stats: population_variance" )
+	ENSURE_DISTANCE( "number_set_stats().population_variance() failed",
+			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).population_variance(), 25607.1011L, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 12, "number set stats: population_standard_deviation" )
+	ENSURE_DISTANCE( "number_set_stats().population_standard_deviation() failed",
+			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).population_standard_deviation(), 160.022189398846L, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 13, "stats on dice" )
+	double long dice[] = { 1, 2, 3, 4, 5, 6 };
+	HNumberSetStats<double long> diceStats( dice, dice + countof ( dice ) );
+	clog << "dice stats: " << endl
+		<< "minimum                       = " << diceStats.minimum() << endl
+		<< "maximum                       = " << diceStats.maximum() << endl
+		<< "sum                           = " << diceStats.sum() << endl
+		<< "count                         = " << diceStats.count() << endl
+		<< "average                       = " << diceStats.average() << endl
+		<< "variance                      = " << diceStats.variance() << endl
+		<< "standard deviation            = " << diceStats.standard_deviation() << endl
+		<< "population variance           = " << diceStats.population_variance() << endl
+		<< "population standard deviation = " << diceStats.population_standard_deviation() << endl;
+TUT_TEARDOWN()
+
 }
 

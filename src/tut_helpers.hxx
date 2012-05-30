@@ -275,8 +275,7 @@ namespace tress {
 
 namespace tut_helpers {
 
-extern double long PI;
-extern double long E;
+static double long const epsilon = 0.000001L;
 extern int const _testData_[3][ 100 ];
 struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ ); } };
 bool file_compare( yaal::hcore::HString const&, yaal::hcore::HString const& );
