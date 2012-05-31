@@ -1253,6 +1253,40 @@ TUT_UNIT_TEST( 38, "is_sorted" )
 	ENSURE( "is_sorted on one elem failed", is_sorted( _testData_[0], _testData_[0] + 1 ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 39, "partition" )
+	static int const range = 100;
+	int_array_t a( range );
+	HRandomizer r( randomizer_helper::make_randomizer( range ) );
+	for ( int_array_t::iterator it( a.begin() ), end( a.end() ); it != end; ++ it )
+		*it = r() - range / 2;
+	clog << a << endl;
+	int_array_t::iterator m( partition( a.begin(), a.end(), bind1st( less<int>(), 0 ) ) );
+	clog << a << endl;
+	for ( int_array_t::iterator it( a.begin() ); it != m; ++ it )
+		ENSURE( "partition failed (*it > 0)", *it > 0 );
+	for ( int_array_t::iterator it( m ), end( a.end() ); it != end; ++ it )
+		ENSURE( "partition failed (*it <= 0)", *it <= 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 40, "stable_partition" )
+	static int const range = 100;
+	int_array_t a( range );
+	HRandomizer r( randomizer_helper::make_randomizer( range ) );
+	for ( int_array_t::iterator it( a.begin() ), end( a.end() ); it != end; ++ it )
+		*it = r() - range / 2;
+	clog << a << endl;
+	sort( a.begin(), a.end() );
+	clog << a << endl;
+	int_array_t::iterator m( stable_partition( a.begin(), a.end(), bind1st( less<int>(), 0 ) ) );
+	clog << a << endl;
+	for ( int_array_t::iterator it( a.begin() ); it != m; ++ it )
+		ENSURE( "stable_partition failed (*it > 0)", *it > 0 );
+	for ( int_array_t::iterator it( m ), end( a.end() ); it != end; ++ it )
+		ENSURE( "stable_partition failed (*it <= 0)", *it <= 0 );
+	ENSURE( "stable_partition failed (left is_sorted)", is_sorted( a.begin(), m ) );
+	ENSURE( "stable_partition failed (right is_sorted)", is_sorted( m, a.end() ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "sort speed" )
 	TIME_CONSTRAINT_EXEMPT();
 	double long st( 0 );
