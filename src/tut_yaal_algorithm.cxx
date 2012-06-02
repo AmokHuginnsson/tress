@@ -1266,6 +1266,18 @@ TUT_UNIT_TEST( 39, "partition" )
 		ENSURE( "partition failed (*it > 0)", *it > 0 );
 	for ( int_array_t::iterator it( m ), end( a.end() ); it != end; ++ it )
 		ENSURE( "partition failed (*it <= 0)", *it <= 0 );
+	generate( a.begin(), a.end(), inc( -50 ) );
+	clog << a << endl;
+	for ( int i( 0 ); i < ( range / 2 ); i += 20 ) {
+		swap_ranges( a.begin() + i, a.begin() + i + 10, a.begin() + i + 50 );
+	}
+	clog << a << endl;
+	m = partition( a.begin(), a.end(), bind1st( less<int>(), 0 ) );
+	clog << a << endl;
+	for ( int_array_t::iterator it( a.begin() ); it != m; ++ it )
+		ENSURE( "partition failed (*it > 0)", *it > 0 );
+	for ( int_array_t::iterator it( m ), end( a.end() ); it != end; ++ it )
+		ENSURE( "partition failed (*it <= 0)", *it <= 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 40, "stable_partition" )
@@ -1278,6 +1290,19 @@ TUT_UNIT_TEST( 40, "stable_partition" )
 	sort( a.begin(), a.end() );
 	clog << a << endl;
 	int_array_t::iterator m( stable_partition( a.begin(), a.end(), bind1st( less<int>(), 0 ) ) );
+	clog << a << endl;
+	for ( int_array_t::iterator it( a.begin() ); it != m; ++ it )
+		ENSURE( "stable_partition failed (*it > 0)", *it > 0 );
+	for ( int_array_t::iterator it( m ), end( a.end() ); it != end; ++ it )
+		ENSURE( "stable_partition failed (*it <= 0)", *it <= 0 );
+	ENSURE( "stable_partition failed (left is_sorted)", is_sorted( a.begin(), m ) );
+	ENSURE( "stable_partition failed (right is_sorted)", is_sorted( m, a.end() ) );
+	for ( int i( 0 ); i < ( range / 20 ); ++ i ) {
+		generate( a.begin() + i * 20, a.begin() + i * 20 + 10, inc( -49 + i * 10 ) );
+		generate( a.begin() + i * 20 + 10, a.begin() + i * 20 + 20, inc( i * 10 + 1 ) );
+	}
+	clog << a << endl;
+	m = stable_partition( a.begin(), a.end(), bind1st( less<int>(), 0 ) );
 	clog << a << endl;
 	for ( int_array_t::iterator it( a.begin() ); it != m; ++ it )
 		ENSURE( "stable_partition failed (*it > 0)", *it > 0 );
