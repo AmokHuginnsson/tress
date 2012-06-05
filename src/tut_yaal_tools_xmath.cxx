@@ -132,7 +132,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 13, "number set stats: median" )
 	ENSURE_EQUALS( "number_set_stats().median() failed",
-			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ), static_cast<AGGREGATE_TYPE::type_t>( AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ) ).median(), 231 );
+			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ), static_cast<AGGREGATE_TYPE::type_t>( AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ) ).median(), 229 );
+	ENSURE_EQUALS( "number_set_stats().median() failed",
+			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) - 1, static_cast<AGGREGATE_TYPE::type_t>( AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ) ).median(), 229 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 20, "stats on dice" )
