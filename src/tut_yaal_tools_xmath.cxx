@@ -130,9 +130,14 @@ TUT_UNIT_TEST( 12, "number set stats: population_standard_deviation" )
 			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).population_standard_deviation(), 160.022189398846L, epsilon );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "stats on dice" )
+TUT_UNIT_TEST( 13, "number set stats: median" )
+	ENSURE_EQUALS( "number_set_stats().median() failed",
+			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ), static_cast<AGGREGATE_TYPE::type_t>( AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ) ).median(), 231 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 20, "stats on dice" )
 	double long dice[] = { 1, 2, 3, 4, 5, 6 };
-	HNumberSetStats<double long> diceStats( dice, dice + countof ( dice ) );
+	HNumberSetStats<double long> diceStats( dice, dice + countof ( dice ), static_cast<AGGREGATE_TYPE::type_t>( AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ) );
 	clog << "dice stats: " << endl
 		<< "minimum                       = " << diceStats.minimum() << endl
 		<< "maximum                       = " << diceStats.maximum() << endl
@@ -142,7 +147,8 @@ TUT_UNIT_TEST( 13, "stats on dice" )
 		<< "variance                      = " << diceStats.variance() << endl
 		<< "standard deviation            = " << diceStats.standard_deviation() << endl
 		<< "population variance           = " << diceStats.population_variance() << endl
-		<< "population standard deviation = " << diceStats.population_standard_deviation() << endl;
+		<< "population standard deviation = " << diceStats.population_standard_deviation() << endl
+		<< "median                        = " << diceStats.median() << endl;
 TUT_TEARDOWN()
 
 }
