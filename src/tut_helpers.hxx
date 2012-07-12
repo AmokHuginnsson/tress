@@ -275,7 +275,11 @@ namespace tress {
 
 namespace tut_helpers {
 
+#ifndef _MSC_VER
 static double long const epsilon = 0.000001L;
+#else /* #ifndef _MSC_VER */
+static double long const epsilon = 0.00001L;
+#endif /* #else #ifndef _MSC_VER */
 extern int const _testData_[3][ 100 ];
 struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ ); } };
 bool file_compare( yaal::hcore::HString const&, yaal::hcore::HString const& );
