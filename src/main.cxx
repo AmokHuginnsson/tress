@@ -36,6 +36,7 @@ Copyright:
 #include <yaal/hcore/hformat.hxx>
 #include <yaal/hcore/htokenizer.hxx>
 #include <yaal/tools/util.hxx>
+#include <yaal/tools/streamtools.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 
 #include "setup.hxx"
@@ -104,7 +105,7 @@ int main( int argc_, char* argv_[] ) {
 /* *BOOM* */
 		try {
 			if ( ! setup._listGroups )
-				cout << "TUT: " << HTime().string() << endl;
+				cout << "TUT: " << now_local() << endl;
 			errno = 0;
 			if ( setup._exit )
 				;
@@ -137,7 +138,7 @@ int main( int argc_, char* argv_[] ) {
 					runner.get().run_tests();
 			}
 			if ( ! setup._listGroups )
-				cout << "TUT: " << HTime().string() << endl;
+				cout << "TUT: " << now_local() << endl;
 		} catch ( const std::exception& e ) {
 			std::cerr << "tut raised ex: " << e.what() << std::endl;
 		}

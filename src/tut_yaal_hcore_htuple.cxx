@@ -44,7 +44,7 @@ TUT_SIMPLE_MOCK( tut_yaal_hcore_htuple );
 TUT_TEST_GROUP( tut_yaal_hcore_htuple, "yaal::hcore::HTuple" );
 
 TUT_UNIT_TEST( 1, "constructor" )
-	HTuple<int, HString, HNumber, void*, HTime> t( 7, "Ala ma kota", 3.141592653589793, NULL );
+	HTuple<int, HString, HNumber, void*, HTime> t( 7, "Ala ma kota", 3.141592653589793, NULL, HTime::LOCAL );
 	cout << t << endl;
 TUT_TEARDOWN()
 

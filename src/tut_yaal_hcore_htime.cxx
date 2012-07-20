@@ -44,8 +44,8 @@ TUT_SIMPLE_MOCK( tut_yaal_hcore_htime );
 TUT_TEST_GROUP( tut_yaal_hcore_htime, "yaal::hcore::HTime" );
 
 TUT_UNIT_TEST( 1, "get current time" )
-	HTime t;
-	cout << t << endl;
+	cout << now_local() << endl;
+	cout << now_utc() << endl;
 TUT_TEARDOWN()
 
 }

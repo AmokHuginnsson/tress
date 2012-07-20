@@ -228,17 +228,17 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "Starting new thread and finishing it prematurely (sleeping body)" )
 	TIME_CONSTRAINT_EXEMPT();
-	HTime start, stop;
+	HTime start( now_local() ), stop( now_local() );
 	HCool ca( "sleeping" );
 	HThread a;
 	ca.set( 40 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 8 );
-	start.set_now();
+	start.set_now( HTime::LOCAL );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	a.finish();
-	stop.set_now();
+	stop.set_now( HTime::LOCAL );
 	stop -= start;
 	ENSURE_EQUALS( "thread failed to stop", a.is_alive(), false );
 	ENSURE_DISTANCE( "thread failed to interrupt",
@@ -247,17 +247,17 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 33, "Starting new thread and finishing it prematurely (busy body)" )
 	TIME_CONSTRAINT_EXEMPT();
-	HTime start, stop;
+	HTime start( now_local() ), stop( now_local() );
 	HCool ca( "busy" );
 	HThread a;
 	ca.set( 40 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 5 );
-	start.set_now();
+	start.set_now( HTime::LOCAL );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	a.finish();
-	stop.set_now();
+	stop.set_now( HTime::LOCAL );
 	stop -= start;
 	ENSURE_EQUALS( "thread failed to stop", a.is_alive(), false );
 	ENSURE_DISTANCE( "thread failed to interrupt",
@@ -265,15 +265,15 @@ TUT_UNIT_TEST( 33, "Starting new thread and finishing it prematurely (busy body)
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "Starting new thread and finishing it prematurely by destructor" )
-	HTime start, stop; {
+	HTime start( now_local() ), stop( now_local() ); {
 		HCool ca( "a" );
 		HThread a;
 		ca.set( 50 );
 		a.spawn( call( &HCool::run, &ca, &a ) );
 		ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
-		start.set_now();
+		start.set_now( HTime::LOCAL );
 	}
-	stop.set_now();
+	stop.set_now( HTime::LOCAL );
 	stop -= start;
 	ENSURE_DISTANCE( "thread failed to interrupt from destructor",
 			stop.get_second(), 0, 2 );
@@ -314,14 +314,14 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "Simple thread (plain function)" )
 	TIME_CONSTRAINT_EXEMPT();
-	HTime start, stop;
+	HTime start( now_local() ), stop( now_local() );
 	HThread a;
 	a.spawn( call( &simple, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
-	start.set_now();
+	start.set_now( HTime::LOCAL );
 	a.finish();
-	stop.set_now();
+	stop.set_now( HTime::LOCAL );
 	stop -= start;
 	ENSURE_EQUALS( "thread failed to stop", a.is_alive(), false );
 	ENSURE_DISTANCE( "thread failed to interrupt",
@@ -341,7 +341,7 @@ TUT_UNIT_TEST( 9, "Starting new thread and allowing it to finish, the finish is 
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 10, "Very short living thread." )
-	HTime start, stop;
+	HTime start( now_local() ), stop( now_local() );
 	HThread a;
 	a.spawn( call( a_fast_one, &a ) );
 	cout << __PRETTY_FUNCTION__ << endl;
@@ -350,7 +350,7 @@ TUT_UNIT_TEST( 10, "Very short living thread." )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 11, "Very short living thread, spawned delayed." )
-	HTime start, stop;
+	HTime start( now_local() ), stop( now_local() );
 	HThread a;
 	a.spawn( call( a_fast_one, &a ) );
 	M_DSLEEP( 1 );
