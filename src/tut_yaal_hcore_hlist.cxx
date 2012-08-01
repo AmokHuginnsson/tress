@@ -68,6 +68,7 @@ struct tut_yaal_hcore_hlist : public simple_mock<tut_yaal_hcore_hlist> {
 	void erase_test_1( list_t& l );
 	void erase_test_2( list_t& l );
 	void erase_test_3( list_t& l );
+	list_t from_string( char const* );
 private:
 };
 
@@ -115,6 +116,14 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list ) {
 	ENSURE_EQUALS( "backward cycle", ctr, list._size );
 	ENSURE( "no hook", hook_valid );
 	return;
+}
+
+tut_yaal_hcore_hlist::list_t tut_yaal_hcore_hlist::from_string( char const* data_ ) {
+	int const LEN( static_cast<int>( ::strlen( data_ ) ) );
+	list_t l;
+	for ( int i( 0 ); i < LEN; ++ i )
+		l.push_back( data_[i] );
+	return ( l );
 }
 
 TUT_TEST_GROUP( tut_yaal_hcore_hlist, "yaal::hcore::HList" );
@@ -925,6 +934,120 @@ TUT_UNIT_TEST( 26, "reverse iterator" )
 	list_t r( l.rbegin(), l.rend() );
 	list_t proto( ra, ra + countof ( ra ) );
 	ENSURE_EQUALS( "reverse iterarion failed", r, proto );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 27, "splice( pos, list )" )
+	/* from empty to empty */ {
+		list_t l;
+		list_t r;
+		l.splice( l.begin(), r );
+		check_consistency( l );
+		check_consistency( r );
+		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
+		ENSURE( "splice(pos, list) failed", l.is_empty() );
+	}
+	/* from empty */ {
+		list_t l( from_string( "123" ) );
+		list_t r;
+		l.splice( l.begin(), r );
+		check_consistency( l );
+		check_consistency( r );
+		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
+		ENSURE_EQUALS( "splice(pos, list) at the begining failed", _stringifier.to_string<char>( l ), "123" );
+	}
+	/* to empty */ {
+		list_t l;
+		list_t r( from_string( "456" ) );
+		l.splice( l.begin(), r );
+		check_consistency( l );
+		check_consistency( r );
+		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
+		ENSURE_EQUALS( "splice(pos, list) at the begining failed", _stringifier.to_string<char>( l ), "456" );
+	}
+	/* at the begining */ {
+		list_t l( from_string( "123" ) );
+		list_t r( from_string( "456" ) );
+		l.splice( l.begin(), r );
+		check_consistency( l );
+		check_consistency( r );
+		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
+		ENSURE_EQUALS( "splice(pos, list) at the begining failed", _stringifier.to_string<char>( l ), "456123" );
+	}
+	/* small dst begin */ {
+		list_t l( from_string( "1" ) );
+		list_t r( from_string( "456" ) );
+		l.splice( l.begin(), r );
+		check_consistency( l );
+		check_consistency( r );
+		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
+		ENSURE_EQUALS( "splice(pos, list) at the begining failed", _stringifier.to_string<char>( l ), "4561" );
+	}
+	/* small dst end */ {
+		list_t l( from_string( "1" ) );
+		list_t r( from_string( "456" ) );
+		l.splice( l.end(), r );
+		check_consistency( l );
+		check_consistency( r );
+		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
+		ENSURE_EQUALS( "splice(pos, list) at the begining failed", _stringifier.to_string<char>( l ), "1456" );
+	}
+	/* at end */ {
+		list_t l( from_string( "123" ) );
+		list_t r( from_string( "456" ) );
+		l.splice( l.end(), r );
+		check_consistency( l );
+		check_consistency( r );
+		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
+		ENSURE_EQUALS( "splice(pos, list) at end failed", _stringifier.to_string<char>( l ), "123456" );
+	}
+	/* small src begin */ {
+		list_t l( from_string( "123" ) );
+		list_t r( from_string( "4" ) );
+		l.splice( l.begin(), r );
+		check_consistency( l );
+		check_consistency( r );
+		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
+		ENSURE_EQUALS( "splice(pos, list) at end failed", _stringifier.to_string<char>( l ), "4123" );
+	}
+	/* small src end */ {
+		list_t l( from_string( "123" ) );
+		list_t r( from_string( "4" ) );
+		l.splice( l.end(), r );
+		check_consistency( l );
+		check_consistency( r );
+		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
+		ENSURE_EQUALS( "splice(pos, list) at end failed", _stringifier.to_string<char>( l ), "1234" );
+	}
+	/* in the middle */ {
+		list_t l( from_string( "0123" ) );
+		list_t r( from_string( "456" ) );
+		list_t::iterator mid( l.begin() );
+		++ mid;
+		++ mid;
+		l.splice( mid, r );
+		check_consistency( l );
+		check_consistency( r );
+		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
+		ENSURE_EQUALS( "splice(pos, list) in the middle failed", _stringifier.to_string<char>( l ), "0145623" );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 28, "splice( pos, list, elem )" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 29, "splice( pos, list, fist, last )" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 30, "remove( elem )" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 31, "remove_if( cond )" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 32, "unique()" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 33, "reverse()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "speed test" )
