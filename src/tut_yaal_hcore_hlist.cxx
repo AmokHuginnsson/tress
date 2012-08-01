@@ -953,7 +953,7 @@ TUT_UNIT_TEST( 27, "splice( pos, list )" )
 		check_consistency( l );
 		check_consistency( r );
 		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
-		ENSURE_EQUALS( "splice(pos, list) at the begining failed", _stringifier.to_string<char>( l ), "123" );
+		ENSURE_EQUALS( "splice(pos, list) from empty failed", _stringifier.to_string<char>( l ), "123" );
 	}
 	/* to empty */ {
 		list_t l;
@@ -962,7 +962,7 @@ TUT_UNIT_TEST( 27, "splice( pos, list )" )
 		check_consistency( l );
 		check_consistency( r );
 		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
-		ENSURE_EQUALS( "splice(pos, list) at the begining failed", _stringifier.to_string<char>( l ), "456" );
+		ENSURE_EQUALS( "splice(pos, list) to empty failed", _stringifier.to_string<char>( l ), "456" );
 	}
 	/* at the begining */ {
 		list_t l( from_string( "123" ) );
@@ -980,7 +980,7 @@ TUT_UNIT_TEST( 27, "splice( pos, list )" )
 		check_consistency( l );
 		check_consistency( r );
 		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
-		ENSURE_EQUALS( "splice(pos, list) at the begining failed", _stringifier.to_string<char>( l ), "4561" );
+		ENSURE_EQUALS( "splice(pos, list) (small) at the begining failed", _stringifier.to_string<char>( l ), "4561" );
 	}
 	/* small dst end */ {
 		list_t l( from_string( "1" ) );
@@ -989,7 +989,7 @@ TUT_UNIT_TEST( 27, "splice( pos, list )" )
 		check_consistency( l );
 		check_consistency( r );
 		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
-		ENSURE_EQUALS( "splice(pos, list) at the begining failed", _stringifier.to_string<char>( l ), "1456" );
+		ENSURE_EQUALS( "splice(pos, list) (small) at end failed", _stringifier.to_string<char>( l ), "1456" );
 	}
 	/* at end */ {
 		list_t l( from_string( "123" ) );
@@ -1007,7 +1007,7 @@ TUT_UNIT_TEST( 27, "splice( pos, list )" )
 		check_consistency( l );
 		check_consistency( r );
 		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
-		ENSURE_EQUALS( "splice(pos, list) at end failed", _stringifier.to_string<char>( l ), "4123" );
+		ENSURE_EQUALS( "splice(pos, list) (small src) at the begining failed", _stringifier.to_string<char>( l ), "4123" );
 	}
 	/* small src end */ {
 		list_t l( from_string( "123" ) );
@@ -1016,7 +1016,7 @@ TUT_UNIT_TEST( 27, "splice( pos, list )" )
 		check_consistency( l );
 		check_consistency( r );
 		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
-		ENSURE_EQUALS( "splice(pos, list) at end failed", _stringifier.to_string<char>( l ), "1234" );
+		ENSURE_EQUALS( "splice(pos, list) (small src) at end failed", _stringifier.to_string<char>( l ), "1234" );
 	}
 	/* in the middle */ {
 		list_t l( from_string( "0123" ) );
