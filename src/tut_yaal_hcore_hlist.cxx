@@ -1030,6 +1030,25 @@ TUT_UNIT_TEST( 27, "splice( pos, list )" )
 		ENSURE( "splice(pos, list) failed to clean", r.is_empty() );
 		ENSURE_EQUALS( "splice(pos, list) in the middle failed", _stringifier.to_string<char>( l ), "0145623" );
 	}
+	/* bad iterator */ {
+		list_t l;
+		list_t r;
+		try {
+			l.splice( r.begin(), r );
+			FAIL( "out of the blue iterator accepted" );
+		} catch ( HFailedAssertion const& ) {
+			/* ok */
+		}
+	}
+	/* self splice */ {
+		list_t l;
+		try {
+			l.splice( l.begin(), l );
+			FAIL( "self splice accepted" );
+		} catch ( HException const& ) {
+			/* ok */
+		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 28, "splice( pos, list, elem )" )
