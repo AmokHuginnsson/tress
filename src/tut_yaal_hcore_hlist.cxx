@@ -1052,6 +1052,275 @@ TUT_UNIT_TEST( 27, "splice( pos, list )" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 28, "splice( pos, list, elem )" )
+	/* to empty */ {
+		/* long middle */ {
+			list_t l;
+			list_t r( from_string( "123456789" ) );
+			list_t::iterator it( r.begin() );
+			advance( it, 2 );
+			l.splice( l.begin(), r, it );
+			check_consistency( l );
+			check_consistency( r );
+			ENSURE_EQUALS( "splice(pos, list, f, l) empty-dst-middle failed to remove elem", _stringifier.to_string<char>( r ), "12456789" );
+			ENSURE_EQUALS( "splice(pos, list, f, l) empty-dst-middle failed", _stringifier.to_string<char>( l ), "3" );
+		}
+		/* long beginning */ {
+			list_t l;
+			list_t r( from_string( "123456789" ) );
+			l.splice( l.begin(), r, r.begin() );
+			check_consistency( l );
+			check_consistency( r );
+			ENSURE_EQUALS( "splice(pos, list, f, l) empty-dst-beginning failed to remove elem", _stringifier.to_string<char>( r ), "23456789" );
+			ENSURE_EQUALS( "splice(pos, list, f, l) empty-dst-beginning failed", _stringifier.to_string<char>( l ), "1" );
+		}
+		/* long end */ {
+			list_t l;
+			list_t r( from_string( "123456789" ) );
+			list_t::iterator it( r.begin() );
+			advance( it, r.size() - 1 );
+			l.splice( l.begin(), r, it );
+			check_consistency( l );
+			check_consistency( r );
+			ENSURE_EQUALS( "splice(pos, list, f, l) empty-dst-end failed to remove elem", _stringifier.to_string<char>( r ), "12345678" );
+			ENSURE_EQUALS( "splice(pos, list, f, l) empty-dst-end failed", _stringifier.to_string<char>( l ), "9" );
+		}
+	}
+	/* to small (size == 1) */ {
+		/* long middle */ {
+			/* to beg */ {
+				list_t l( from_string( "0" ) );
+				list_t r( from_string( "123456789" ) );
+				list_t::iterator it( r.begin() );
+				advance( it, 2 );
+				l.splice( l.begin(), r, it );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-middle failed to remove elem", _stringifier.to_string<char>( r ), "12456789" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-middle failed", _stringifier.to_string<char>( l ), "30" );
+			}
+			/* to end */ {
+				list_t l( from_string( "0" ) );
+				list_t r( from_string( "123456789" ) );
+				list_t::iterator it( r.begin() );
+				advance( it, 2 );
+				l.splice( l.end(), r, it );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-middle failed to remove elem", _stringifier.to_string<char>( r ), "12456789" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-middle failed", _stringifier.to_string<char>( l ), "03" );
+			}
+		}
+		/* long beginning */ {
+			/* to beg */ {
+				list_t l( from_string( "0" ) );
+				list_t r( from_string( "123456789" ) );
+				l.splice( l.begin(), r, r.begin() );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-beginning failed to remove elem", _stringifier.to_string<char>( r ), "23456789" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-beginning failed", _stringifier.to_string<char>( l ), "10" );
+			}
+			/* to end */ {
+				list_t l( from_string( "0" ) );
+				list_t r( from_string( "123456789" ) );
+				l.splice( l.begin(), r, r.end() );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-beginning failed to remove elem", _stringifier.to_string<char>( r ), "23456789" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-beginning failed", _stringifier.to_string<char>( l ), "01" );
+			}
+		}
+		/* long end */ {
+			/* to beg */ {
+				list_t l( from_string( "0" ) );
+				list_t r( from_string( "123456789" ) );
+				list_t::iterator it( r.begin() );
+				advance( it, r.size() - 1 );
+				l.splice( l.begin(), r, it );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-end failed to remove elem", _stringifier.to_string<char>( r ), "12345678" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-end failed", _stringifier.to_string<char>( l ), "90" );
+			}
+			/* to end */ {
+				list_t l( from_string( "0" ) );
+				list_t r( from_string( "123456789" ) );
+				list_t::iterator it( r.begin() );
+				advance( it, r.size() - 1 );
+				l.splice( l.begin(), r, it );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-end failed to remove elem", _stringifier.to_string<char>( r ), "12345678" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-end failed", _stringifier.to_string<char>( l ), "09" );
+			}
+		}
+	}
+	/* normal to normal */ {
+		/* long middle */ {
+			/* to beg */ {
+				list_t l( from_string( "abcdefghi" ) );
+				list_t r( from_string( "123456789" ) );
+				list_t::iterator it( r.begin() );
+				advance( it, 2 );
+				l.splice( l.begin(), r, it );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-middle failed to remove elem", _stringifier.to_string<char>( r ), "12456789" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-middle failed", _stringifier.to_string<char>( l ), "3abcdefghi" );
+			}
+			/* to end */ {
+				list_t l( from_string( "abcdefghi" ) );
+				list_t r( from_string( "123456789" ) );
+				list_t::iterator it( r.begin() );
+				advance( it, 2 );
+				l.splice( l.end(), r, it );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-middle failed to remove elem", _stringifier.to_string<char>( r ), "12456789" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-middle failed", _stringifier.to_string<char>( l ), "abcdefghi3" );
+			}
+			/* to middle */ {
+				list_t l( from_string( "abcdefghi" ) );
+				list_t r( from_string( "123456789" ) );
+				list_t::iterator it( r.begin() );
+				advance( it, 2 );
+				list_t::iterator to( l.begin() );
+				advance( to, 4 );
+				l.splice( to, r, it );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-middle failed to remove elem", _stringifier.to_string<char>( r ), "12456789" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-middle failed", _stringifier.to_string<char>( l ), "abcd3efghi" );
+			}
+		}
+		/* long beginning */ {
+			/* to beg */ {
+				list_t l( from_string( "abcdefghi" ) );
+				list_t r( from_string( "123456789" ) );
+				l.splice( l.begin(), r, r.begin() );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-beginning failed to remove elem", _stringifier.to_string<char>( r ), "23456789" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-beginning failed", _stringifier.to_string<char>( l ), "1abcdefghi" );
+			}
+			/* to end */ {
+				list_t l( from_string( "abcdefghi" ) );
+				list_t r( from_string( "123456789" ) );
+				l.splice( l.begin(), r, r.end() );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-beginning failed to remove elem", _stringifier.to_string<char>( r ), "23456789" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-beginning failed", _stringifier.to_string<char>( l ), "abcdefghi1" );
+			}
+			/* to middle */ {
+				list_t l( from_string( "abcdefghi" ) );
+				list_t r( from_string( "123456789" ) );
+				list_t::iterator to( l.begin() );
+				advance( to, 4 );
+				l.splice( to, r, r.begin() );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-beginning failed to remove elem", _stringifier.to_string<char>( r ), "23456789" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-beginning failed", _stringifier.to_string<char>( l ), "abcd1efghi" );
+			}
+		}
+		/* long end */ {
+			/* to beg */ {
+				list_t l( from_string( "abcdefghi" ) );
+				list_t r( from_string( "123456789" ) );
+				list_t::iterator it( r.begin() );
+				advance( it, r.size() - 1 );
+				l.splice( l.begin(), r, it );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-end failed to remove elem", _stringifier.to_string<char>( r ), "12345678" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-end failed", _stringifier.to_string<char>( l ), "9abcdefghi" );
+			}
+			/* to end */ {
+				list_t l( from_string( "abcdefghi" ) );
+				list_t r( from_string( "123456789" ) );
+				list_t::iterator it( r.begin() );
+				advance( it, r.size() - 1 );
+				l.splice( l.begin(), r, it );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-end failed to remove elem", _stringifier.to_string<char>( r ), "12345678" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-end failed", _stringifier.to_string<char>( l ), "abcdefghi9" );
+			}
+			/* to middle */ {
+				list_t l( from_string( "abcdefghi" ) );
+				list_t r( from_string( "123456789" ) );
+				list_t::iterator it( r.begin() );
+				advance( it, r.size() - 1 );
+				list_t::iterator to( l.begin() );
+				advance( to, 4 );
+				l.splice( to, r, it );
+				check_consistency( l );
+				check_consistency( r );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-end failed to remove elem", _stringifier.to_string<char>( r ), "12345678" );
+				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-end failed", _stringifier.to_string<char>( l ), "abcd9efghi" );
+			}
+		}
+	}
+	/* from small (size == 1) to normal */ {
+		list_t l( from_string( "abcdefghi" ) );
+		list_t r( from_string( "1" ) );
+		l.splice( l.begin(), r, r.begin() );
+		check_consistency( l );
+		check_consistency( r );
+		ENSURE( "splice(pos, list, elem) small-dst-beg src-middle failed to remove elem", r.is_empty() );
+		ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-middle failed", _stringifier.to_string<char>( l ), "1abcdefghi" );
+	}
+	/* self splice */ {
+		/* to same point */ {
+			list_t l( from_string( "123456789" ) );
+			list_t::iterator from( l.begin() );
+			list_t::iterator to( l.begin() );
+			advance( from, 2 );
+			advance( to, 2 );
+			l.splice( to, l, from );
+			check_consistency( l );
+			ENSURE_EQUALS( "splice(pos, list, elem) self same point failed", _stringifier.to_string<char>( l ), "123456789" );
+		}
+		/* to next point */ {
+			list_t l( from_string( "123456789" ) );
+			list_t::iterator from( l.begin() );
+			list_t::iterator to( l.begin() );
+			advance( from, 2 );
+			advance( to, 3 );
+			l.splice( to, l, from );
+			check_consistency( l );
+			ENSURE_EQUALS( "splice(pos, list, elem) self next point failed", _stringifier.to_string<char>( l ), "123456789" );
+		}
+		/* to previous point */ {
+			list_t l( from_string( "123456789" ) );
+			list_t::iterator from( l.begin() );
+			list_t::iterator to( l.begin() );
+			advance( from, 3 );
+			advance( to, 2 );
+			l.splice( to, l, from );
+			check_consistency( l );
+			ENSURE_EQUALS( "splice(pos, list, elem) self previous point failed", _stringifier.to_string<char>( l ), "124356789" );
+		}
+		/* to head */ {
+			list_t l( from_string( "123456789" ) );
+			list_t::iterator from( l.begin() );
+			list_t::iterator to( l.begin() );
+			advance( from, 3 );
+			l.splice( to, l, from );
+			check_consistency( l );
+			ENSURE_EQUALS( "splice(pos, list, elem) self to head failed", _stringifier.to_string<char>( l ), "412356789" );
+		}
+		/* from head */ {
+			list_t l( from_string( "123456789" ) );
+			list_t::iterator from( l.begin() );
+			list_t::iterator to( l.begin() );
+			advance( to, 3 );
+			l.splice( to, l, from );
+			check_consistency( l );
+			ENSURE_EQUALS( "splice(pos, list, elem) self from head failed", _stringifier.to_string<char>( l ), "231456789" );
+		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 29, "splice( pos, list, fist, last )" )
