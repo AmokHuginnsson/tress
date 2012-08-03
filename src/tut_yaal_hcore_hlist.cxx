@@ -1061,8 +1061,8 @@ TUT_UNIT_TEST( 28, "splice( pos, list, elem )" )
 			l.splice( l.begin(), r, it );
 			check_consistency( l );
 			check_consistency( r );
-			ENSURE_EQUALS( "splice(pos, list, f, l) empty-dst-middle failed to remove elem", _stringifier.to_string<char>( r ), "12456789" );
-			ENSURE_EQUALS( "splice(pos, list, f, l) empty-dst-middle failed", _stringifier.to_string<char>( l ), "3" );
+			ENSURE_EQUALS( "splice(pos, list, elem) empty-dst-middle failed to remove elem", _stringifier.to_string<char>( r ), "12456789" );
+			ENSURE_EQUALS( "splice(pos, list, elem) empty-dst-middle failed", _stringifier.to_string<char>( l ), "3" );
 		}
 		/* long beginning */ {
 			list_t l;
@@ -1070,8 +1070,8 @@ TUT_UNIT_TEST( 28, "splice( pos, list, elem )" )
 			l.splice( l.begin(), r, r.begin() );
 			check_consistency( l );
 			check_consistency( r );
-			ENSURE_EQUALS( "splice(pos, list, f, l) empty-dst-beginning failed to remove elem", _stringifier.to_string<char>( r ), "23456789" );
-			ENSURE_EQUALS( "splice(pos, list, f, l) empty-dst-beginning failed", _stringifier.to_string<char>( l ), "1" );
+			ENSURE_EQUALS( "splice(pos, list, elem) empty-dst-beginning failed to remove elem", _stringifier.to_string<char>( r ), "23456789" );
+			ENSURE_EQUALS( "splice(pos, list, elem) empty-dst-beginning failed", _stringifier.to_string<char>( l ), "1" );
 		}
 		/* long end */ {
 			list_t l;
@@ -1081,8 +1081,8 @@ TUT_UNIT_TEST( 28, "splice( pos, list, elem )" )
 			l.splice( l.begin(), r, it );
 			check_consistency( l );
 			check_consistency( r );
-			ENSURE_EQUALS( "splice(pos, list, f, l) empty-dst-end failed to remove elem", _stringifier.to_string<char>( r ), "12345678" );
-			ENSURE_EQUALS( "splice(pos, list, f, l) empty-dst-end failed", _stringifier.to_string<char>( l ), "9" );
+			ENSURE_EQUALS( "splice(pos, list, elem) empty-dst-end failed to remove elem", _stringifier.to_string<char>( r ), "12345678" );
+			ENSURE_EQUALS( "splice(pos, list, elem) empty-dst-end failed", _stringifier.to_string<char>( l ), "9" );
 		}
 	}
 	/* to small (size == 1) */ {
@@ -1776,43 +1776,43 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 30, "remove( elem )" )
 	/* random */ {
 		list_t l( from_string( "5165377774891237589347583475891347591347907787123456789" ) );
-		l.remove( 7 );
+		l.remove( '7' );
 		check_consistency( l );
 		ENSURE_EQUALS( "random remove failed", _stringifier.to_string<char>( l ), "516534891235893458345891345913490812345689" );
 	}
 	/* from begining */ {
 		list_t l( from_string( "7777489123" ) );
-		l.remove( 7 );
+		l.remove( '7' );
 		check_consistency( l );
 		ENSURE_EQUALS( "remove from begining failed", _stringifier.to_string<char>( l ), "489123" );
 	}
 	/* from begining (1) */ {
 		list_t l( from_string( "7489123" ) );
-		l.remove( 7 );
+		l.remove( '7' );
 		check_consistency( l );
 		ENSURE_EQUALS( "remove from begining failed", _stringifier.to_string<char>( l ), "489123" );
 	}
 	/* from end */ {
 		list_t l( from_string( "4891237777" ) );
-		l.remove( 7 );
+		l.remove( '7' );
 		check_consistency( l );
 		ENSURE_EQUALS( "remove from end failed", _stringifier.to_string<char>( l ), "489123" );
 	}
 	/* from end (1) */ {
 		list_t l( from_string( "4891237" ) );
-		l.remove( 7 );
+		l.remove( '7' );
 		check_consistency( l );
 		ENSURE_EQUALS( "remove from end failed", _stringifier.to_string<char>( l ), "489123" );
 	}
 	/* all */ {
 		list_t l( from_string( "777" ) );
-		l.remove( 7 );
+		l.remove( '7' );
 		check_consistency( l );
 		ENSURE( "remove from end failed", l.is_empty() );
 	}
 	/* none */ {
 		list_t l( from_string( "489123" ) );
-		l.remove( 7 );
+		l.remove( '7' );
 		check_consistency( l );
 		ENSURE_EQUALS( "remove from end failed", _stringifier.to_string<char>( l ), "489123" );
 	}
@@ -1821,43 +1821,43 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 31, "remove_if( cond )" )
 	/* random */ {
 		list_t l( from_string( "5165377774891237589347583475891347591347907787123456789" ) );
-		l.remove_if( bind1st( equal_to<int>(), 7 ) );
+		l.remove_if( bind1st( equal_to<int>(), '7' ) );
 		check_consistency( l );
 		ENSURE_EQUALS( "random remove failed", _stringifier.to_string<char>( l ), "516534891235893458345891345913490812345689" );
 	}
 	/* from begining */ {
 		list_t l( from_string( "7777489123" ) );
-		l.remove_if( bind1st( equal_to<int>(), 7 ) );
+		l.remove_if( bind1st( equal_to<int>(), '7' ) );
 		check_consistency( l );
 		ENSURE_EQUALS( "remove from begining failed", _stringifier.to_string<char>( l ), "489123" );
 	}
 	/* from begining (1) */ {
 		list_t l( from_string( "7489123" ) );
-		l.remove_if( bind1st( equal_to<int>(), 7 ) );
+		l.remove_if( bind1st( equal_to<int>(), '7' ) );
 		check_consistency( l );
 		ENSURE_EQUALS( "remove from begining failed", _stringifier.to_string<char>( l ), "489123" );
 	}
 	/* from end */ {
 		list_t l( from_string( "4891237777" ) );
-		l.remove_if( bind1st( equal_to<int>(), 7 ) );
+		l.remove_if( bind1st( equal_to<int>(), '7' ) );
 		check_consistency( l );
 		ENSURE_EQUALS( "remove from end failed", _stringifier.to_string<char>( l ), "489123" );
 	}
 	/* from end (1) */ {
 		list_t l( from_string( "4891237" ) );
-		l.remove_if( bind1st( equal_to<int>(), 7 ) );
+		l.remove_if( bind1st( equal_to<int>(), '7' ) );
 		check_consistency( l );
 		ENSURE_EQUALS( "remove from end failed", _stringifier.to_string<char>( l ), "489123" );
 	}
 	/* all */ {
 		list_t l( from_string( "777" ) );
-		l.remove_if( bind1st( equal_to<int>(), 7 ) );
+		l.remove_if( bind1st( equal_to<int>(), '7' ) );
 		check_consistency( l );
 		ENSURE( "remove from end failed", l.is_empty() );
 	}
 	/* none */ {
 		list_t l( from_string( "489123" ) );
-		l.remove_if( bind1st( equal_to<int>(), 7 ) );
+		l.remove_if( bind1st( equal_to<int>(), '7' ) );
 		check_consistency( l );
 		ENSURE_EQUALS( "remove from end failed", _stringifier.to_string<char>( l ), "489123" );
 	}
@@ -1894,7 +1894,7 @@ TUT_UNIT_TEST( 33, "reverse()" )
 	int const val( *it );
 	l.reverse();
 	check_consistency( l );
-	reverse( data, data + countof ( data ) );
+	reverse( data, data + ( countof ( data ) - 1 ) );
 	ENSURE_EQUALS( "reverse failed", _stringifier.to_string<char>( l ), data );
 	ENSURE_EQUALS( "reverse preserving iterators failed", *it, val );
 TUT_TEARDOWN()
