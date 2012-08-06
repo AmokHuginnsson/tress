@@ -1761,57 +1761,63 @@ TUT_UNIT_TEST( 29, "splice( pos, list, fist, last )" )
 		}
 #else
 		/* when allowed */ {
-			/* disjoined */ {
-				list_t l( from_string( "123456789" ) );
-				list_t::iterator i1( l.begin() );
-				list_t::iterator i2( l.begin() );
-				list_t::iterator i3( l.begin() );
-				advance( i1, 2 );
-				advance( i2, 5 );
-				advance( i3, r.size() - 2 );
-				l.splice( i1, l, i2, i3 );
-				check_consistency( l );
-				ENSURE_EQUALS( "self splice(pos, list, f, l) disjoined failed", _stringifier.to_string<char>( l ), "126734589" );
+			/* long */ {
+				/* disjoined */ {
+					list_t l( from_string( "123456789" ) );
+					list_t::iterator i1( l.begin() );
+					list_t::iterator i2( l.begin() );
+					list_t::iterator i3( l.begin() );
+					advance( i1, 2 );
+					advance( i2, 5 );
+					advance( i3, l.get_size() - 2 );
+					l.splice( i1, l, i2, i3 );
+					check_consistency( l );
+					ENSURE_EQUALS( "self splice(pos, list, f, l) disjoined failed", _stringifier.to_string<char>( l ), "126734589" );
+				}
+				/* no op (to end) */ {
+					list_t l( from_string( "123456789" ) );
+					list_t::iterator i1( l.begin() );
+					list_t::iterator i2( l.begin() );
+					list_t::iterator i3( l.begin() );
+					advance( i1, l.get_size() - 2 );
+					advance( i2, 5 );
+					advance( i3, l.get_size() - 2 );
+					l.splice( i1, l, i2, i3 );
+					check_consistency( l );
+					ENSURE_EQUALS( "self splice(pos, list, f, l) no op to end failed", _stringifier.to_string<char>( l ), "123456789" );
+				}
+				/* by one forward */ {
+					list_t l( from_string( "123456789" ) );
+					list_t::iterator i1( l.begin() );
+					list_t::iterator i2( l.begin() );
+					list_t::iterator i3( l.begin() );
+					advance( i1, l.get_size() - 1 );
+					advance( i2, 5 );
+					advance( i3, l.get_size() - 2 );
+					l.splice( i1, l, i2, i3 );
+					check_consistency( l );
+					ENSURE_EQUALS( "self splice(pos, list, f, l) no op to one past the end failed", _stringifier.to_string<char>( l ), "123458679" );
+				}
+				/* by one to back */ {
+					list_t l( from_string( "123456789" ) );
+					list_t::iterator i1( l.begin() );
+					list_t::iterator i2( l.begin() );
+					list_t::iterator i3( l.begin() );
+					advance( i1, 4 );
+					advance( i2, 5 );
+					advance( i3, l.get_size() - 2 );
+					l.splice( i1, l, i2, i3 );
+					check_consistency( l );
+					ENSURE_EQUALS( "self splice(pos, list, f, l) disjoined failed", _stringifier.to_string<char>( l ), "123467589" );
+				}
+				/* to head */ {
+				}
+				/* from head */ {
+				}
+				/* rotate */ {
+				}
 			}
-			/* no op (to end) */ {
-				list_t l( from_string( "123456789" ) );
-				list_t::iterator i1( l.begin() );
-				list_t::iterator i2( l.begin() );
-				list_t::iterator i3( l.begin() );
-				advance( i1, r.get_size() - 2 );
-				advance( i2, 5 );
-				advance( i3, r.size() - 2 );
-				l.splice( i1, l, i2, i3 );
-				check_consistency( l );
-				ENSURE_EQUALS( "self splice(pos, list, f, l) no op to end failed", _stringifier.to_string<char>( l ), "123456789" );
-			}
-			/* no op (to one past end) */ {
-				list_t l( from_string( "123456789" ) );
-				list_t::iterator i1( l.begin() );
-				list_t::iterator i2( l.begin() );
-				list_t::iterator i3( l.begin() );
-				advance( i1, r.get_size() - 1 );
-				advance( i2, 5 );
-				advance( i3, r.size() - 2 );
-				l.splice( i1, l, i2, i3 );
-				check_consistency( l );
-				ENSURE_EQUALS( "self splice(pos, list, f, l) no op to one past the end failed", _stringifier.to_string<char>( l ), "123456789" );
-			}
-			/* by one */ {
-				list_t l( from_string( "123456789" ) );
-				list_t::iterator i1( l.begin() );
-				list_t::iterator i2( l.begin() );
-				list_t::iterator i3( l.begin() );
-				advance( i1, 4 );
-				advance( i2, 5 );
-				advance( i3, r.size() - 2 );
-				l.splice( i1, l, i2, i3 );
-				check_consistency( l );
-				ENSURE_EQUALS( "self splice(pos, list, f, l) disjoined failed", _stringifier.to_string<char>( l ), "123467589" );
-			}
-			/* to head */ {
-			}
-			/* from head */ {
+			/* short */ {
 			}
 		}
 #endif
