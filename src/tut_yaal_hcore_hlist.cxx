@@ -1123,7 +1123,7 @@ TUT_UNIT_TEST( 28, "splice( pos, list, elem )" )
 			/* to end */ {
 				list_t l( from_string( "0" ) );
 				list_t r( from_string( "123456789" ) );
-				l.splice( l.begin(), r, r.end() );
+				l.splice( l.end(), r, r.begin() );
 				check_consistency( l );
 				check_consistency( r );
 				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-beginning failed to remove elem", _stringifier.to_string<char>( r ), "23456789" );
@@ -1147,7 +1147,7 @@ TUT_UNIT_TEST( 28, "splice( pos, list, elem )" )
 				list_t r( from_string( "123456789" ) );
 				list_t::iterator it( r.begin() );
 				advance( it, r.size() - 1 );
-				l.splice( l.begin(), r, it );
+				l.splice( l.end(), r, it );
 				check_consistency( l );
 				check_consistency( r );
 				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-end failed to remove elem", _stringifier.to_string<char>( r ), "12345678" );
@@ -1206,7 +1206,7 @@ TUT_UNIT_TEST( 28, "splice( pos, list, elem )" )
 			/* to end */ {
 				list_t l( from_string( "abcdefghi" ) );
 				list_t r( from_string( "123456789" ) );
-				l.splice( l.begin(), r, r.end() );
+				l.splice( l.end(), r, r.begin() );
 				check_consistency( l );
 				check_consistency( r );
 				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-end src-beginning failed to remove elem", _stringifier.to_string<char>( r ), "23456789" );
@@ -1241,7 +1241,7 @@ TUT_UNIT_TEST( 28, "splice( pos, list, elem )" )
 				list_t r( from_string( "123456789" ) );
 				list_t::iterator it( r.begin() );
 				advance( it, r.size() - 1 );
-				l.splice( l.begin(), r, it );
+				l.splice( l.end(), r, it );
 				check_consistency( l );
 				check_consistency( r );
 				ENSURE_EQUALS( "splice(pos, list, elem) small-dst-beg src-end failed to remove elem", _stringifier.to_string<char>( r ), "12345678" );
