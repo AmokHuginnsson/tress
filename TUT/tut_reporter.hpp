@@ -123,6 +123,9 @@ std::string visual_studio_error_line( tut::test_result const& tr_ ) {
 template<typename stream_t = std::ostream>
 class reporter : public tut::callback {
 	typedef stream_t stream_type;
+	typedef std::string ( *error_line_t )( tut::test_result const& );
+	typedef error_line_t error_line_type;
+
 	std::string _currentGroup;
 	typedef std::list<tut::test_result> not_passed_list_t;
 	not_passed_list_t _notPassed;
@@ -173,7 +176,7 @@ public:
 		clear();
 	}
 
-	virtual void set_error_line( error_line_type errorLine_ ) {
+	void set_error_line( error_line_type errorLine_ ) {
 		_errorLine = errorLine_;
 	}
 

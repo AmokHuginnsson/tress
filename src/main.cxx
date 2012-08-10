@@ -30,6 +30,8 @@ Copyright:
 #include <TUT/tut.hpp>
 #include <TUT/tut_reporter.hpp>
 #include <TUT/tut_reporter_cute.hpp>
+#include <TUT/tut_reporter_cppunit.hpp>
+#include <TUT/tut_reporter_xml.hpp>
 #include <TUT/tut_restartable.hpp>
 
 #include <yaal/hcore/hcore.hxx>
@@ -93,22 +95,28 @@ int main( int argc_, char* argv_[] ) {
 		hcore::log.rehash( setup._logPath, setup._programName );
 		setup.test_setup();
 		if ( setup._reporter == "tut" ) {
-			visitor = reporter_ptr( new tut::reporter<HLog>( std::cerr, hcore::log ) );
+			typedef tut::reporter<HLog> reporter_console;
+			reporter_console* rep( NULL );
+			visitor = reporter_ptr( rep = new reporter_console( std::cerr, hcore::log ) );
 			if ( setup._errorLine == "vim" )
-				visitor->set_error_line( &vim_error_line );
+				rep->set_error_line( &vim_error_line );
 			else if ( setup._errorLine == "eclipse" )
-				visitor->set_error_line( &vim_error_line );
+				rep->set_error_line( &vim_error_line );
 			else if ( setup._errorLine == "visualstudio" )
-				visitor->set_error_line( &visual_studio_error_line );
+				rep->set_error_line( &visual_studio_error_line );
 			else
-				visitor->set_error_line( &console_error_line );
-		} else if ( setup._reporter == "cute" ) {
-			visitor = reporter_ptr( new tut::reporter_cute<HLog>( std::cerr, hcore::log ) );
+				rep->set_error_line( &console_error_line );
+		} else {
 			setup._fancy = false;
 			setup._color = false;
 			if ( setup._jobs > 1 )
 				setup._jobs = 1;
-		} else {
+			if ( setup._reporter == "cute" )
+				visitor = reporter_ptr( new tut::reporter_cute<HLog>( std::cerr, hcore::log ) );
+			else if ( setup._reporter == "cppunit" )
+				visitor = reporter_ptr( new tut::reporter_cppunit( std::cerr ) );
+			else if ( setup._reporter == "xml" )
+				visitor = reporter_ptr( new tut::reporter_xml( std::cerr ) );
 		}
 		if ( setup._selftest )
 			register_selftest();

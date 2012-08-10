@@ -52,9 +52,6 @@ public:
 		clear();
 	}
 
-	virtual void set_error_line( error_line_type ) {
-	}
-
 	virtual void group_started( std::string const& name, int count_ ) {
 		yaal::hcore::HLock l( _mutex );
 		using std::operator <<;
