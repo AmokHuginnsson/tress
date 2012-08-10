@@ -57,7 +57,7 @@ namespace tress {
 
 void OSetup::test_setup( void ) {
 	M_PROLOG
-	if ( _errorLine == "cute" ) {
+	if ( _reporter == "cute" ) {
 		_quiet = true;
 		_verbose = false;
 	}
@@ -113,7 +113,13 @@ void OSetup::test_setup( void ) {
 		M_THROW( _( "bad job count" ), _jobs );
 	if ( _timeConstraint < 0 )
 		M_THROW( _( "bad time constraint" ), _timeConstraint );
-	char const* IDE[] = { "console", "vim", "eclipse", "visualstudio", "cute" };
+	char const* FRAMEWORK[] = { "tut", "cute" };
+	_reporter.lower();
+	if ( ! count( FRAMEWORK, FRAMEWORK + countof ( FRAMEWORK ), _reporter ) )
+		M_THROW( _( "invalid framework specified: " ) + _reporter, 0 );
+	char const* IDE[] = { "console", "vim", "eclipse", "visualstudio" };
+	if ( ( _reporter != FRAMEWORK[0] ) && ( _errorLine != IDE[0] ) )
+		M_THROW( _( "specifing IDE for reporter `" ) + _reporter + _( "' is illegal" ), 0 );
 	if ( ! count( IDE, IDE + countof ( IDE ), _errorLine ) )
 		M_THROW( _( "invalid IDE specified: " ) + _errorLine, 0 );
 	if ( ! _fancy || ( _errorLine != IDE[0] ) || ! ::getenv( "TERM" ) )

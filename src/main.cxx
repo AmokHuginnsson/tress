@@ -24,10 +24,12 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <memory>
 #include <cstdio>
 #include <libintl.h>
 #include <TUT/tut.hpp>
 #include <TUT/tut_reporter.hpp>
+#include <TUT/tut_reporter_cute.hpp>
 #include <TUT/tut_restartable.hpp>
 
 #include <yaal/hcore/hcore.hxx>
@@ -77,9 +79,11 @@ int main( int argc_, char* argv_[] ) {
 	init_locale( PACKAGE_NAME );
 	HClock clk;
 /*	variables declarations for main loop:                                 */
-	tut::reporter<HLog> visitor( std::cerr, hcore::log );
+	typedef std::auto_ptr<tut::callback> reporter_ptr;
+	reporter_ptr visitor;
 	HException::set_error_stream( stdout );
 	tut::restartable_wrapper restartable;
+	int err( 0 );
 /*	end.                                                                  */
 	try {
 /*	TO-DO:				enter main loop code here                               */
@@ -88,20 +92,24 @@ int main( int argc_, char* argv_[] ) {
 		handle_program_options( argc_, argv_ );
 		hcore::log.rehash( setup._logPath, setup._programName );
 		setup.test_setup();
-		if ( setup._errorLine == "vim" )
-			visitor.set_error_line( &vim_error_line );
-		else if ( setup._errorLine == "eclipse" )
-			visitor.set_error_line( &vim_error_line );
-		else if ( setup._errorLine == "visualstudio" )
-			visitor.set_error_line( &visual_studio_error_line );
-		else if ( setup._errorLine == "cute" ) {
+		if ( setup._reporter == "tut" ) {
+			visitor = reporter_ptr( new tut::reporter<HLog>( std::cerr, hcore::log ) );
+			if ( setup._errorLine == "vim" )
+				visitor->set_error_line( &vim_error_line );
+			else if ( setup._errorLine == "eclipse" )
+				visitor->set_error_line( &vim_error_line );
+			else if ( setup._errorLine == "visualstudio" )
+				visitor->set_error_line( &visual_studio_error_line );
+			else
+				visitor->set_error_line( &console_error_line );
+		} else if ( setup._reporter == "cute" ) {
+			visitor = reporter_ptr( new tut::reporter_cute<HLog>( std::cerr, hcore::log ) );
 			setup._fancy = false;
 			setup._color = false;
 			if ( setup._jobs > 1 )
 				setup._jobs = 1;
-			visitor.set_error_line( &cute_error_line );
-		} else
-			visitor.set_error_line( &console_error_line );
+		} else {
+		}
 		if ( setup._selftest )
 			register_selftest();
 		tut::runner.get().set_time_constraint( setup._timeConstraint );
@@ -115,10 +123,10 @@ int main( int argc_, char* argv_[] ) {
 			else if ( setup._listGroups )
 				list_groups();
 			else if ( setup._restartable ) {
-				restartable.set_callback( &visitor );
+				restartable.set_callback( visitor.get() );
 				restartable.run_tests();
 			} else {
-				runner.get().set_callback( &visitor );
+				runner.get().set_callback( visitor.get() );
 				if ( ! setup._testGroupListFilePath.is_empty() ) {
 					OSetup::set_definitions_t sets;
 					gather_groups_from_file( sets );
@@ -148,7 +156,7 @@ int main( int argc_, char* argv_[] ) {
 		M_ENSURE( ! errno );
 /*	... there is the place main loop ends. :OD-OT                         */
 	} catch ( int e ) {
-		visitor._exceptionsCount += e;
+		err = e;
 		/* escape from main loop */
 	} catch ( ... ) {
 /* ending ncurses sesion        */
@@ -159,12 +167,7 @@ int main( int argc_, char* argv_[] ) {
 	cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % clk.get_time_elapsed( HClock::UNIT::MILISECOND ) ).string() << endl;
 	if ( yaal::_isKilled_ )
 		cerr << "Killed" << endl;
-	return ( ( yaal::_isKilled_ ? 1 : 0 )
-			+ visitor._exceptionsCount
-			+ visitor._failuresCount
-			+ visitor._terminationsCount
-			+ visitor._warningsCount
-			+ visitor._setupCount );
+	return ( ( yaal::_isKilled_ ? 1 : 0 ) + err + ( visitor.get() ? visitor->fail_count() : 0 ) );
 	M_FINAL
 }
 

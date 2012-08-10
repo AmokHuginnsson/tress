@@ -47,6 +47,9 @@ struct group_base {
  * in default implementation.
  */
 struct callback {
+	typedef std::string ( *error_line_t )( tut::test_result const& );
+	typedef error_line_t error_line_type;
+
 	/**
 	* Virtual destructor is a must for subclassed types.
 	*/
@@ -87,6 +90,12 @@ struct callback {
 	virtual void run_completed() = 0;
 
 	virtual void test_count( int ) = 0;
+
+	virtual bool all_ok( void ) const = 0;
+
+	virtual void set_error_line( error_line_type ) = 0;
+
+	virtual int fail_count( void ) const = 0;
 };
 
 /**

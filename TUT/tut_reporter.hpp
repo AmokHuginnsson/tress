@@ -62,30 +62,6 @@ std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 	return ( os_ );
 }
 
-std::ostream& cute_result( std::ostream& os_, tut::test_result const& tr_ ) {
-	if ( tr_._result == tut::test_result::ok )
-		os_ << "\n#success " << tr_._name << " OK" << std::endl;
-	else {
-		std::string file( tr_._file );
-		size_t prjRootIdx( file.find( PACKAGE_NAME ) );
-		if ( prjRootIdx != std::string::npos ) {
-			file.erase( 0, prjRootIdx + sizeof ( PACKAGE_NAME ) );
-			file.insert( 0, "./" );
-		}
-		std::stringstream ss;
-		if ( tr_._result == tut::test_result::fail )
-			ss << "#failure " << tr_._name << ( ! tr_._name.empty() ? " " : "" ) << file << ":" << tr_._line << " ";
-		else if ( tr_._result == tut::test_result::ex ) {
-			if ( tr_._line >= 0 )
-				ss <<  "#exception " << tr_._name << ( ! tr_._name.empty() ? " " : "" ) << file << ":" << tr_._line << " ";
-		} else if ( tr_._result == tut::test_result::term )
-			ss << "#segv " << file << ":" << tr_._line << " ";
-		ss << tr_._message << std::endl;
-		os_ << ss.str();
-	}
-	return ( os_ );
-}
-
 }         // end of namespace
 
 namespace tut {
@@ -141,19 +117,12 @@ std::string visual_studio_error_line( tut::test_result const& tr_ ) {
 	return ( ss.str() );
 }
 
-std::string cute_error_line( tut::test_result const& );
-std::string cute_error_line( tut::test_result const& ) {
-	return ( std::string() );
-}
-
 /**
  * Default TUT callback handler.
  */
 template<typename stream_t = std::ostream>
 class reporter : public tut::callback {
-	typedef std::string ( *error_line_t )( tut::test_result const& );
 	typedef stream_t stream_type;
-	typedef error_line_t error_line_type;
 	std::string _currentGroup;
 	typedef std::list<tut::test_result> not_passed_list_t;
 	not_passed_list_t _notPassed;
@@ -163,7 +132,7 @@ class reporter : public tut::callback {
 	error_line_type _errorLine;
 	std::stringstream _groupTestLog;
 
-	public:
+public:
 
 	int _okCount;
 	int _exceptionsCount;
@@ -200,27 +169,23 @@ class reporter : public tut::callback {
 		_currentGroupTestCount( 0 ) {
 	}
 
-	void run_started() {
+	virtual void run_started() {
 		clear();
 	}
 
-	void set_error_line( error_line_type errorLine_ ) {
+	virtual void set_error_line( error_line_type errorLine_ ) {
 		_errorLine = errorLine_;
 	}
 
-	virtual void group_started( std::string const& name, int count_ ) {
+	virtual void group_started( std::string const& name, int ) {
 		yaal::hcore::HLock l( _mutex );
 		using std::operator <<;
 		_ls << "TUT: group: [" << name << "]" << std::endl;
-		if ( _errorLine == cute_error_line )
-			_os << "\n#beginning " << name << " " << count_ << std::endl;
 	}
 
-	void group_completed( std::string const& name_ ) {
+	virtual void group_completed( std::string const& ) {
 		if ( tress::setup._verbose )
 			_os << "------------------------------------------------------------------------" << std::endl;
-		if ( _errorLine == cute_error_line )
-			_os << "\n#ending " << name_ << std::endl;
 	}
 
 	virtual void test_started( char const* const groupName_, int n, char const* const title_ ) {
@@ -232,8 +197,6 @@ class reporter : public tut::callback {
 				_os << "------------------------------------------------------------------------" << std::endl;
 				_os << "TUT: " << groupName_ << "::<" << n << "> " << title_ << std::endl;
 			}
-			if ( _errorLine == cute_error_line )
-				_os << "\n#starting " << title_ << std::endl;
 		}
 	}
 
@@ -241,7 +204,7 @@ class reporter : public tut::callback {
 		_totalTestCount = totalTestCount_;
 	}
 
-	void test_completed( const tut::test_result& tr ) {
+	virtual void test_completed( const tut::test_result& tr ) {
 		yaal::hcore::HLock l( _mutex );
 
 		std::string const& name( tr._group ? tr._group->get_name() : tr._message );
@@ -250,14 +213,12 @@ class reporter : public tut::callback {
 		static int const maxWidth( yaal::tools::xmath::clip( 80, columns, 128 ) );
 
 		if ( name != _currentGroup ) {
-			if ( _errorLine != cute_error_line ) {
-				if ( ! _currentGroup.empty() )
-					_os << "\n";
-				if ( ( _errorLine == console_error_line ) && tress::setup._fancy )
-					_os << "\r" << std::string( maxWidth - 1, ' ' ) << "\r" << name << std::flush;
-				else
-					_os << name << ": " << std::flush;
-			}
+			if ( ! _currentGroup.empty() )
+				_os << "\n";
+			if ( ( _errorLine == console_error_line ) && tress::setup._fancy )
+				_os << "\r" << std::string( maxWidth - 1, ' ' ) << "\r" << name << std::flush;
+			else
+				_os << name << ": " << std::flush;
 			_currentGroup = name;
 			_currentGroupTestCount = 0;
 			_groupTestLog.str( std::string() );
@@ -291,10 +252,7 @@ class reporter : public tut::callback {
 				<< " " << ( ( 100 * total ) / _totalTestCount ) << "%"
 				<< "\r\b\r" << _currentGroup << ": " << _groupTestLog.str() << std::flush;
 		} else {
-			if ( _errorLine == cute_error_line )
-				cute_result( _os, tr );
-			else
-				_os << tr << std::flush;
+			_os << tr << std::flush;
 		}
 
 		if ( tr._result == tut::test_result::ok )
@@ -318,10 +276,10 @@ class reporter : public tut::callback {
 		}
 	}
 
-	void run_completed() {
+	virtual void run_completed() {
 		_os << std::endl;
 
-		if ( ( _notPassed.size() > 0 ) && ( _errorLine != cute_error_line ) ) {
+		if ( _notPassed.size() > 0 ) {
 			not_passed_list_t::const_iterator i = _notPassed.begin();
 			while ( i != _notPassed.end() ) {
 				tut::test_result tr = *i;
@@ -340,7 +298,6 @@ class reporter : public tut::callback {
 				if ( tr.pid != getpid() ) {
 					_os << "     child pid: " << tr.pid << std::endl;
 				}
-
 #endif
 				_os << "     problem: " << std::flush;
 				switch ( tr._result ) {
@@ -405,11 +362,15 @@ class reporter : public tut::callback {
 		_os << std::endl;
 	}
 
-	bool all_ok() const {
+	virtual bool all_ok() const {
 		return ( _notPassed.empty() ) ;
 	}
 
-	private:
+	virtual int fail_count( void ) const {
+		return ( _exceptionsCount + _failuresCount + _terminationsCount + _warningsCount + _setupCount );
+	}
+
+private:
 
 	void clear() {
 		_okCount = 0;
@@ -422,6 +383,7 @@ class reporter : public tut::callback {
 		_notPassed.clear();
 	}
 };
+
 }
 
 #endif
