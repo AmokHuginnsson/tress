@@ -83,6 +83,7 @@ int handle_program_options( int argc_, char** argv_ ) {
 		( "restartable", program_options_helper::option_value( setup._restartable ), 'R', HProgramOptionsHandler::OOption::TYPE::NONE, "run tests in restartable mode" )
 		( "list", program_options_helper::option_value( setup._listGroups ), 'L', HProgramOptionsHandler::OOption::TYPE::NONE, "list known test groups" )
 		( "file", program_options_helper::option_value( setup._testGroupListFilePath ), 'F', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "read test group names from given file", "path" )
+		( "selftest", program_options_helper::option_value( setup._selftest ), HProgramOptionsHandler::OOption::TYPE::NONE, "perform framework tests" )
 		( "option", program_options_helper::option_value( dummyValue ), 'O', HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "this is not a real option, it was added here to test automated help generation capabilities, this description must be long enought to trigger description wrap, more over it must look good", "param" )
 		( "absolute", program_options_helper::option_value( dummyValue ), 'O', HProgramOptionsHandler::OOption::TYPE::OPTIONAL, NULL, "param" )
 		( "exit", program_options_helper::option_value( setup._exit ), 'E', HProgramOptionsHandler::OOption::TYPE::NONE, "exit program gracefuly and do not perform any test" )

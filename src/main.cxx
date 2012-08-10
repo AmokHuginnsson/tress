@@ -42,6 +42,7 @@ M_VCSID( "$Id: "__ID__" $" )
 #include "setup.hxx"
 #include "tut_helpers.hxx"
 #include "options.hxx"
+#include "tut_selftest.hxx"
 
 using namespace tut;
 using namespace yaal;
@@ -101,6 +102,8 @@ int main( int argc_, char* argv_[] ) {
 			visitor.set_error_line( &cute_error_line );
 		} else
 			visitor.set_error_line( &console_error_line );
+		if ( setup._selftest )
+			register_selftest();
 		tut::runner.get().set_time_constraint( setup._timeConstraint );
 /* *BOOM* */
 		try {

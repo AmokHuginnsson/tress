@@ -38,6 +38,7 @@ struct OSetup {
 	OSetup( void )
 		: _quiet( false ), _verbose( false ), _debug( false ),
 		_listGroups( false ), _restartable( false ), _exit( false ), _fancy( false ), _color( false ),
+		_selftest( false ),
 		_testNumber( 0 ), _jobs( DEFAULT_JOB_COUNT ), _timeConstraint( DEFAULT_TIME_CONSTRAINT ),
 		_argc( 0 ), _argv( NULL ),
 		_programName( NULL ), _logPath(), _testGroups(), _testSets(),
@@ -53,6 +54,7 @@ struct OSetup {
 	bool _exit;
 	bool _fancy;
 	bool _color;
+	bool _selftest;
 	int _testNumber;
 	int _jobs;
 	int long _timeConstraint;
