@@ -115,9 +115,15 @@ TUT_SIMPLE_MOCK( tut_selftest_one );
 TUT_TEST_GROUP( tut_selftest_one, "::selftest::one" );
 
 TUT_UNIT_TEST( tut_selftest_one, 1, "first test" )
+	ENSURE_EQUALS( "life, universe and everything else", 42, 42 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( tut_selftest_one, 2, "second test" )
+TUT_UNIT_TEST( tut_selftest_one, 2, "equality test" )
+	ENSURE_EQUALS( "days in a week", 6, 7 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( tut_selftest_one, 3, "safe test" )
+	throw std::runtime_error( "severe problem" );
 TUT_TEARDOWN()
 
 TUT_SIMPLE_MOCK( tut_selftest_two );

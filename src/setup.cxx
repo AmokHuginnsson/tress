@@ -114,7 +114,7 @@ void OSetup::test_setup( void ) {
 		M_THROW( _( "bad job count" ), _jobs );
 	if ( _timeConstraint < 0 )
 		M_THROW( _( "bad time constraint" ), _timeConstraint );
-	char const* FRAMEWORK[] = { "tut", "cute", "cppunit", "xml" };
+	char const* FRAMEWORK[] = { "tut", "cute", "cppunit", "xml", "boost" };
 	if ( ! count( FRAMEWORK, FRAMEWORK + countof ( FRAMEWORK ), _reporter ) )
 		M_THROW( _( "invalid framework specified: " ) + _reporter, 0 );
 	char const* IDE[] = { "console", "vim", "eclipse", "visualstudio" };

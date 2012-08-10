@@ -127,8 +127,8 @@ public:
 				         << "      <Name>" << encode( failed_tests_[ i ]._group->get_name() ) + "::" + encode( failed_tests_[ i ]._name ) << "</Name>" << std::endl
 				         << "      <FailureType>" << failure_type << "</FailureType>" << std::endl
 				         << "      <Location>" << std::endl
-				         << "        <File>Unknown</File>" << std::endl
-				         << "        <Line>Unknown</Line>" << std::endl
+				         << "        <File>" << failed_tests_[ i ]._file << "</File>" << std::endl
+				         << "        <Line>" << failed_tests_[ i ]._line << "</Line>" << std::endl
 				         << "      </Location>" << std::endl
 				         << "      <Message>" << encode( failure_msg + failed_tests_[ i ]._message ) << "</Message>" << std::endl
 				         << "    </FailedTest>" << std::endl;
