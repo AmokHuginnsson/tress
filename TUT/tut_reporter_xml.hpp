@@ -135,7 +135,7 @@ public:
 	 * \brief Callback function
 	 * This function is called before the first test is executed. It initializes counters.
 	 */
-	virtual void run_started() {
+	virtual void run_started( int, int ) {
 		ok_count = 0;
 		exceptions_count = 0;
 		failures_count = 0;
@@ -149,8 +149,6 @@ public:
 	virtual void group_completed( const std::string& /*name */ ) {
 	}
 	virtual void test_started( char const* const, int /*n */, char const* const ) {
-	}
-	virtual void test_count( int ) {
 	}
 	virtual int fail_count( void ) const {
 		return ( exceptions_count + failures_count + terminations_count + warnings_count );

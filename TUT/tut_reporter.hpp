@@ -172,8 +172,9 @@ public:
 		_currentGroupTestCount( 0 ) {
 	}
 
-	virtual void run_started() {
+	virtual void run_started( int, int testCount_ ) {
 		clear();
+		_totalTestCount = testCount_;
 	}
 
 	void set_error_line( error_line_type errorLine_ ) {
@@ -201,10 +202,6 @@ public:
 				_os << "TUT: " << groupName_ << "::<" << n << "> " << title_ << std::endl;
 			}
 		}
-	}
-
-	virtual void test_count( int totalTestCount_ ) {
-		_totalTestCount = totalTestCount_;
 	}
 
 	virtual void test_completed( const tut::test_result& tr ) {

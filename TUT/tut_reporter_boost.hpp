@@ -6,9 +6,6 @@
 #include <iostream>
 
 #include "tut.hpp"
-#include <yaal/hcore/hthread.hxx>
-#include <yaal/tools/xmath.hxx>
-#include <yaal/hconsole/console.hxx>
 
 #ifdef __MSVCXX__
 #include <windows.h>
@@ -48,7 +45,7 @@ public:
 		: _os( out ), _mutex(), _ls( logger ), _failed( 0 ) {
 	}
 
-	virtual void run_started() {
+	virtual void run_started( int, int ) {
 		clear();
 		_os << "<TestLog>" << std::endl;
 	}
@@ -71,9 +68,6 @@ public:
 			_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
 			_os << "\t\t<TestCase name=\"" << n << "\">" << std::endl;
 		}
-	}
-
-	virtual void test_count( int ) {
 	}
 
 	virtual void test_completed( const tut::test_result& tr_ ) {

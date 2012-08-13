@@ -126,7 +126,7 @@ TUT_UNIT_TEST( 4, "iteration" )
 	ENSURE_EQUALS( "bad teration", backward, forward );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "find/upper_bound on non existing" )
+TUT_UNIT_TEST( 5, "find/upper_bound on non existing (packed)" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
@@ -137,7 +137,7 @@ TUT_UNIT_TEST( 5, "find/upper_bound on non existing" )
 		FAIL( "find/upper_bound ranges skewed" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "find/upper_bound on existing" )
+TUT_UNIT_TEST( 6, "find/upper_bound on existing (packed)" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
@@ -151,7 +151,7 @@ TUT_UNIT_TEST( 6, "find/upper_bound on existing" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", acc, 15 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "modify packed by iterator" )
+TUT_UNIT_TEST( 7, "modify packed by iterator (packed)" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mmp_t::iterator it = mm.begin();

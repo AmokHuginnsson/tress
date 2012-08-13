@@ -146,7 +146,7 @@ TUT_UNIT_TEST( 5, "backward iteration" )
 	ENSURE_EQUALS( "bad forward teration", ss.string(), "(3,9)(3,8)(3,6)(3,3)(2,7)(2,5)(2,2)(1,4)(1,1)" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "find/upper_bound on non existing" )
+TUT_UNIT_TEST( 6, "find/upper_bound on non existing (packed)" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
@@ -157,7 +157,7 @@ TUT_UNIT_TEST( 6, "find/upper_bound on non existing" )
 	ENSURE( "upper_bound() failed", m.upper_bound( 2 ) == m.find( 3 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "find/upper_bound on existing" )
+TUT_UNIT_TEST( 7, "find/upper_bound on existing (packed)" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );

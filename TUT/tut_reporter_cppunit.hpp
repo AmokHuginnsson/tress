@@ -46,7 +46,7 @@ public:
 		}
 	}
 
-	void run_started() {
+	void run_started( int, int ) {
 		failed_tests_.clear();
 		passed_tests_.clear();
 	}
@@ -64,8 +64,6 @@ public:
 	virtual void group_completed( const std::string& /*name */ ) {
 	}
 	virtual void test_started( char const* const, int /*n */, char const* const ) {
-	}
-	virtual void test_count( int ) {
 	}
 	virtual int fail_count( void ) const {
 		return ( static_cast<int>( failed_tests_.size() ) );

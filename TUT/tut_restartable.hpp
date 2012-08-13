@@ -288,7 +288,7 @@ private:
 	 */
 	void invoke_callback() const {
 		_runner.set_callback( _callback );
-		_runner.get_callback().run_started();
+		_runner.get_callback().run_started( 0, 0 );
 
 		std::string current_group;
 		std::ifstream ijournal( _journal.c_str() );

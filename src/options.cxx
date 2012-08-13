@@ -69,15 +69,22 @@ int handle_program_options( int argc_, char** argv_ ) {
 	bool stop( false );
 	bool noColor( false );
 	int dummyValue( 0 );
+	HString ignore;
 	po( "log_path", program_options_helper::option_value( setup._logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
 		( "jobs", program_options_helper::option_value( setup._jobs ), 'j', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number of concurrent jobs", "count" )
-		( "reporter", program_options_helper::option_value( setup._reporter ), 'r', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "generator for reporting test results =(TUT|cute|cppunit|xml|boost)", "framework" )
+		( "reporter", program_options_helper::option_value( setup._reporter ), 'r', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "generator for reporting test results =(TUT|cute|cppunit|xml|boost|google)", "framework" )
 		( "error-line", program_options_helper::option_value( setup._errorLine ), 'I', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "line format for error reporting =(console|vim|eclipse|visualstudio)", "IDE" )
 		( "color", program_options_helper::option_value( setup._color ), 'C', HProgramOptionsHandler::OOption::TYPE::NONE, "colorize output" )
 		( "fancy", program_options_helper::option_value( setup._fancy ), HProgramOptionsHandler::OOption::TYPE::NONE, "provide fancy test run output" )
 		( "no-color", program_options_helper::option_value( noColor ), HProgramOptionsHandler::OOption::TYPE::NONE, "disable output colorizing" )
 		( "time-constraint", program_options_helper::option_value( setup._timeConstraint ), 'T', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "constrain time for execution of single unit test", "miliseconds" )
 		( "group", program_options_helper::option_value( setup._testGroups ), 'G', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test group", "name" )
+		( "output_format", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "boost reporter option (ignored)" )
+		( "log_level", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "boost reporter option (ignored)" )
+		( "report_level", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "boost reporter option (ignored)" )
+		( "gtest_repeat", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "google reporter option (ignored)" )
+		( "gtest_print_time", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "google reporter option (ignored)" )
+		( "gtest_color", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "google reporter option (ignored)" )
 		( "set", program_options_helper::option_value( setup._testSets ), 'S', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test group and particular tests within it", "name@no1,no2,..." )
 		( "pattern", program_options_helper::option_value( setup._testGroupPattern ), 'P', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test groups that are matching pattern", "pattern" )
 		( "number", program_options_helper::option_value( setup._testNumber ), 'N', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test number for a given group", "number" )
