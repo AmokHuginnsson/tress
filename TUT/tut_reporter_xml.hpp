@@ -40,7 +40,7 @@ class reporter_xml : public tut::callback {
 		std::ostringstream out;
 
 		if ( tr._result == test_result::ok ) {
-			out << "    <testcase classname=\"" << reporter_cppunit::encode( tr._group->get_name() ) << "\" name=\"" << reporter_cppunit::encode( tr._name ) << "\"/>";
+			out << "\t\t<testcase classname=\"" << reporter_cppunit::encode( tr._group->get_name() ) << "\" name=\"" << reporter_cppunit::encode( tr._name ) << "\" status=\"run\" time=\"0\" />";
 		} else {
 			string err_msg = reporter_cppunit::encode( failure_msg + tr._message );
 
@@ -52,8 +52,8 @@ class reporter_xml : public tut::callback {
 				tag = "error";
 			}
 
-			out << "    <testcase classname=\"" << reporter_cppunit::encode( tr._group->get_name() ) << "\" name=\"" << reporter_cppunit::encode( tr._name ) << "\">" << endl;
-			out << "      <" << tag << " message=\"" << err_msg << "\"" << " type=\"" << failure_type << "\"";
+			out << "\t\t<testcase classname=\"" << reporter_cppunit::encode( tr._group->get_name() ) << "\" name=\"" << reporter_cppunit::encode( tr._name ) << "\" time=\"0\">" << endl;
+			out << "\t\t\t<" << tag << " message=\"" << err_msg << "\"" << " type=\"" << failure_type << "\"";
 #if defined(TUT_USE_POSIX)
 			if ( pid != getpid() ) {
 				out << " child=\"" << pid << "\"";
@@ -61,8 +61,8 @@ class reporter_xml : public tut::callback {
 #else
 			(void)pid;
 #endif
-			out << ">" << err_msg << "</" << tag << ">" << endl;
-			out << "    </testcase>";
+			out << ">\n\t\t\t\t<![CDATA[" << tr._file << ":" << tr._line << "\n" << err_msg << "]]>\n\t\t\t</" << tag << ">" << endl;
+			out << "\t\t</testcase>";
 		}
 
 		return ( out.str() ) ;
@@ -82,9 +82,9 @@ class reporter_xml : public tut::callback {
 		const std::string& name, const std::string& testcases ) {
 		std::ostringstream out;
 
-		out << "  <testsuite errors=\"" << errors << "\" failures=\"" << failures << "\" tests=\"" << total << "\" name=\"" << reporter_cppunit::encode( name ) << "\">" << std::endl;
+		out << "\t<testsuite name=\"" << reporter_cppunit::encode( name ) << "\" tests=\"" << total << "\" failures=\"" << failures << "\" disabled=\"0\" errors=\"" << errors << "\" time=\"0\">" << std::endl;
 		out << testcases;
-		out << "  </testsuite>";
+		out << "\t</testsuite>";
 
 		return ( out.str() ) ;
 	}
@@ -197,17 +197,61 @@ public:
 	virtual void run_completed() {
 		/* *********************** header ***************************** */
 		*stream_ << "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" << std::endl;
-		*stream_ << "<testsuites>" << std::endl;
 
 		// iterate over all test groups
+		int passed = 0;               // passed in single group
+		int exceptions = 0;           // exceptions in single group
+		int failures = 0;             // failures in single group
+		int terminations = 0;         // terminations in single group
+		int warnings = 0;             // warnings in single group
+		int errors = 0;               // errors in single group
+		for ( TestGroups::const_iterator tgi = all_tests_.begin(); tgi != all_tests_.end(); ++ tgi ) {
+			const TestResults&results = tgi->second;
+			for ( TestResults::const_iterator tri = results.begin(); tri != results.end(); ++ tri ) {
+				std::string failure_type;            // string describing the failure type
+				std::string failure_msg;             // a string with failure message
+
+				switch ( tri->_result ) {
+					case test_result::ok:
+						passed ++;
+						break;
+					case test_result::fail:
+						failures ++;
+						break;
+					case test_result::ex:
+						exceptions ++;
+						break;
+					case test_result::warn:
+						warnings ++;
+						break;
+					case test_result::term:
+						terminations ++;
+						break;
+					case test_result::ex_ctor:
+						exceptions ++;
+						break;
+					case test_result::rethrown:
+						failures ++;
+						break;
+					default:
+						errors ++;
+						break;
+				}       // switch
+			}
+		}
+		int total( passed + failures + exceptions + warnings + terminations + errors );
+		int totalFail( failures + exceptions + warnings );
+		int totalError( errors + terminations );
+		
+		*stream_ << "<testsuites tests=\"" << total << "\" failures=\"" << totalFail << "\" disabled=\"0\" errors=\"" << totalError << "\" time=\"0\" name=\"AllTests\">" << std::endl;
 		for ( TestGroups::const_iterator tgi = all_tests_.begin(); tgi != all_tests_.end(); ++ tgi ) {
 			/* per-group statistics */
-			int passed = 0;               // passed in single group
-			int exceptions = 0;           // exceptions in single group
-			int failures = 0;             // failures in single group
-			int terminations = 0;         // terminations in single group
-			int warnings = 0;             // warnings in single group
-			int errors = 0;               // errors in single group
+			passed = 0;               // passed in single group
+			exceptions = 0;           // exceptions in single group
+			failures = 0;             // failures in single group
+			terminations = 0;         // terminations in single group
+			warnings = 0;             // warnings in single group
+			errors = 0;               // errors in single group
 
 			// output is written to string stream buffer, because JUnit format <testsuite> tag
 			// contains statistics, which aren't known yet

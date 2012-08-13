@@ -313,9 +313,8 @@ public:
 					case test_result::ex:
 					case test_result::ex_ctor: {
 						_os << "unexpected exception" << std::endl;
-						if ( tr._exceptionTypeId != "" ) {
-							std::string symbol( yaal::hcore::demangle( tr._exceptionTypeId.c_str() ).raw() );
-							_os << "     exception typeid: " << ( symbol.empty() ? std::string( "(nil)" ) : symbol ) << std::endl;
+						if ( ! tr._exceptionTypeId.empty() ) {
+							_os << "     exception typeid: " << tr._exceptionTypeId << std::endl;
 						}
 					}
 					break;

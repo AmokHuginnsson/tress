@@ -175,7 +175,8 @@ int main( int argc_, char* argv_[] ) {
 			HConsole::get_instance().leave_curses();
 		throw;
 	}
-	cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % clk.get_time_elapsed( HClock::UNIT::MILISECOND ) ).string() << endl;
+	if ( setup._reporter == "tut" )
+		cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % clk.get_time_elapsed( HClock::UNIT::MILISECOND ) ).string() << endl;
 	if ( yaal::_isKilled_ )
 		cerr << "Killed" << endl;
 	return ( ( yaal::_isKilled_ ? 1 : 0 ) + err + ( visitor.get() ? visitor->fail_count() : 0 ) );

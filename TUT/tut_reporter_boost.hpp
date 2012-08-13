@@ -92,11 +92,8 @@ public:
 				ss << "\t\t\t\t<![CDATA[critical check " << tr_._message << "]]>\n\t\t\t</FatalError>" << std::endl;
 			} else if ( tr_._result == tut::test_result::ex ) {
 				if ( tr_._line >= 0 ) {
-					std::string symbol;
-					if ( tr_._exceptionTypeId != "" )
-						symbol = yaal::hcore::demangle( tr_._exceptionTypeId.c_str() ).raw();
 					ss << "\t\t\t<Exception file=\"" << file << "\" line=\"" << tr_._line << "\">\n"
-						<< "\t\t\t\t<![CDATA[" << ( symbol.empty() ? std::string( "(nil)" ) : symbol ) << ": " << tr_._message << "]]>\n"
+						<< "\t\t\t\t<![CDATA[" << tr_._exceptionTypeId << ": " << tr_._message << "]]>\n"
 						<< "\t\t\t\t<LastCheckpoint file=\"" << file << "\" line=\"" << tr_._line << "\">\n"
 						<< "\t\t\t\t\t<![CDATA[]]>\n"
 						<< "\t\t\t\t</LastCheckpoint>\n"

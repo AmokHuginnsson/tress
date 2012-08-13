@@ -423,15 +423,12 @@ public:
 			tr.set_meta( ex.result(), typeid( ex ).name(), ex.what() );
 		} catch ( const std::exception& ex ) {
 			// test failed with std::exception
-
-			tr.set_meta( test_result::ex, typeid( ex ).name(), ex.what() );
+			tr.set_meta( test_result::ex, yaal::hcore::demangle( typeid( ex ).name() ).raw(), ex.what() );
 		} catch ( const yaal::hcore::HException& ex ) {
 			// test failed with yaal::hcore::HException
-
-			tr.set_meta( test_result::ex, typeid( ex ).name(), ex.what() );
+			tr.set_meta( test_result::ex, yaal::hcore::demangle( typeid( ex ).name() ).raw(), ex.what() );
 		} catch ( ... ) {
 			// test failed with unknown exception
-
 			tr.set_meta( test_result::ex );
 		}
 
