@@ -97,7 +97,7 @@ public:
 				ss << "#segv " << file << ":" << tr_._line << " ";
 			_os << ss.str();
 		}
-		_os << "\t\t\t<TestingTime>0</TestingTime>" << std::endl;
+		_os << "\t\t\t<TestingTime>" << tr_._time << "</TestingTime>" << std::endl;
 		_os << "\t\t</TestCase>" << std::endl;
 	}
 

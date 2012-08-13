@@ -92,7 +92,7 @@ public:
 		yaal::hcore::HLock l( _mutex );
 		++ _run;
 		if ( tr_._result == tut::test_result::ok )
-			_os << "[       OK ] " << tr_._group->get_name() << "." << tr_._name << " (0 ms)" << std::endl;
+			_os << "[       OK ] " << tr_._group->get_name() << "." << tr_._name << " (" << tr_._time << " ms)" << std::endl;
 		else {
 			_notPassed.push_back( tr_ );
 			std::string file( tr_._file );

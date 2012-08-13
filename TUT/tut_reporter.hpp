@@ -27,38 +27,51 @@ namespace {
 std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
 		os_ << yaal::hconsole::red;
+	char const* tags[][2] = {
+			{ ".", "[OK" },
+			{ ",", "[OK'" },
+			{ "=F]", " assertion failed" },
+			{ "=C]", " unexpected excepion from mock constructor" },
+			{ "=X]", " unexpected excepion" },
+			{ "=W]", " warning" },
+			{ "=T]", " execution terminated" },
+			{ "=P]", " rethrown exception" },
+			{ "=S]", " setup error" }
+	};
+	int tag( tress::setup._verbose ? 1 : 0 );
 	switch ( tr._result ) {
 		case tut::test_result::ok:
-			os_ << ( errno == 0 ? '.' : ',' ) << std::flush;
+			os_ << ( errno == 0 ? tags[0][tag] : tags[1][tag] ) << std::flush;
 		break;
 		case tut::test_result::fail:
-			os_ << '[' << tr._testNo << "=F]" << std::flush;
+			os_ << '[' << tr._testNo << tags[2][tag] << std::flush;
 		break;
 		case tut::test_result::ex_ctor:
-			os_ << '[' << tr._testNo << "=C]" << std::flush;
+			os_ << '[' << tr._testNo << tags[3][tag] << std::flush;
 		break;
 		case tut::test_result::ex:
-			os_ << '[' << tr._testNo << "=X]" << std::flush;
+			os_ << '[' << tr._testNo << tags[4][tag] << std::flush;
 		break;
 		case tut::test_result::warn:
-			os_ << '[' << tr._testNo << "=W]" << std::flush;
+			os_ << '[' << tr._testNo << tags[5][tag] << std::flush;
 		break;
 		case tut::test_result::term:
-			os_ << '[' << tr._testNo << "=T]" << std::flush;
+			os_ << '[' << tr._testNo << tags[6][tag] << std::flush;
 		break;
 		case tut::test_result::rethrown:
-			os_ << '[' << tr._testNo << "=P]" << std::flush;
+			os_ << '[' << tr._testNo << tags[7][tag] << std::flush;
 		break;
 		case tut::test_result::setup:
 			os_ << "no such group: `" << tr._message << "'\n" << std::flush;
 		break;
 		case tut::test_result::setup_test_number:
-			os_ << '[' << tr._testNo << "=S]" << std::flush;
+			os_ << '[' << tr._testNo << tags[8][tag] << std::flush;
 		break;
 	}
 	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
 		os_ << yaal::hconsole::reset << std::flush;
-
+	if ( tress::setup._verbose )
+		os_ << " in " << tr._time << " ms]" << std::endl;
 	return ( os_ );
 }
 
@@ -212,7 +225,7 @@ public:
 		static int const columns( COLUMNS ? static_cast<int>( ::strtol( COLUMNS, NULL, 10 ) ) : 80 );
 		static int const maxWidth( yaal::tools::xmath::clip( 80, columns, 128 ) );
 
-		if ( name != _currentGroup ) {
+		if ( ! tress::setup._verbose && ( name != _currentGroup ) ) {
 			if ( ! _currentGroup.empty() )
 				_os << "\n";
 			if ( ( _errorLine == console_error_line ) && tress::setup._fancy )
@@ -241,7 +254,7 @@ public:
 		else
 			_terminationsCount ++;
 
-		if ( ( _errorLine == console_error_line ) && tress::setup._fancy ) {
+		if ( tress::setup._fancy ) {
 			_groupTestLog << tr << std::flush;
 			int progressMax( maxWidth - 12 );
 			int total( _terminationsCount + _exceptionsCount + _failuresCount + _warningsCount + _setupCount + _okCount );

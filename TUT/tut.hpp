@@ -401,6 +401,7 @@ public:
 
 		char const* file = NULL;
 		int line = -1;
+		yaal::hcore::HClock clock;
 		try {
 			errno = 0;
 			char const* title( get_test_title( ti->first ) );
@@ -434,7 +435,7 @@ public:
 
 		if ( obj.get() )
 			tr.set_meta( obj->get_test_name(), file ? file : obj->get_test_file(), line > 0 ? line : obj->get_test_line() );
-
+		tr.set_time( clock.get_time_elapsed( yaal::hcore::HClock::UNIT::MILISECOND ) );
 		// test passed
 
 		return ( tr );

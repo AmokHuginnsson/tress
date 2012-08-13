@@ -64,13 +64,14 @@ struct test_result : public test_result_posix {
 	std::string _exceptionTypeId;
 	std::string _file;
 	int _line;
+	int long _time;
 
 	/**
 	 * Default constructor.
 	 */
 	test_result()
 		: test_result_posix(),
-		_group( NULL ), _testNo( 0 ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 )
+		_group( NULL ), _testNo( 0 ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 ), _time( 0 )
 		{}
 
 	/**
@@ -78,7 +79,7 @@ struct test_result : public test_result_posix {
 	 */
 	test_result( group_base* grp, int pos )
 		: test_result_posix(),
-		_group( grp ), _testNo( pos ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 )
+		_group( grp ), _testNo( pos ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 ), _time( 0 )
 		{}
 
 	test_result( test_result const& tr_ )
@@ -86,7 +87,7 @@ struct test_result : public test_result_posix {
 		_group( tr_._group ), _testNo( tr_._testNo ),
 		_name( tr_._name ), _result( tr_._result ), _message( tr_._message ),
 		_exceptionTypeId( tr_._exceptionTypeId ), _file( tr_._file ),
-		_line( tr_._line )
+		_line( tr_._line ), _time( tr_._time )
 		{}
 
 	/**
@@ -106,6 +107,10 @@ struct test_result : public test_result_posix {
 		_result = res;
 		_exceptionTypeId = ex_typeid;
 		_message = msg;
+	}
+
+	void set_time( int long time_ ) {
+		_time = time_;
 	}
 
 	test_result& operator = ( test_result const& tr_ ) {

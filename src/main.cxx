@@ -85,6 +85,7 @@ int main( int argc_, char* argv_[] ) {
 /*	variables declarations for main loop:                                 */
 	typedef std::auto_ptr<tut::callback> reporter_ptr;
 	reporter_ptr visitor;
+	HResource<FILE, int (*)( FILE* )> errorDump( ::fopen( "./out/error.dump", "wb" ), fclose );
 	HException::set_error_stream( stdout );
 	tut::restartable_wrapper restartable;
 	int err( 0 );
@@ -96,6 +97,8 @@ int main( int argc_, char* argv_[] ) {
 		handle_program_options( argc_, argv_ );
 		hcore::log.rehash( setup._logPath, setup._programName );
 		setup.test_setup();
+		if ( setup._quiet && !! errorDump )
+			HException::set_error_stream( errorDump.raw() );
 		if ( setup._reporter == "tut" ) {
 			typedef tut::reporter<HLog> reporter_console;
 			reporter_console* rep( NULL );

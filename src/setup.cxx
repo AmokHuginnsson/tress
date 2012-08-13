@@ -65,7 +65,7 @@ void OSetup::test_setup( void ) {
 	}
 	if ( _quiet && _verbose )
 		yaal::tools::util::failure( 1,
-				_( "quiet and verbose options are exclusive\n" ) );
+				_( "quiet and verbose options are mutually exclusive\n" ) );
 	if ( _verbose )
 		clog.reset( make_pointer<HFile>( stdout ) );
 	else
@@ -74,6 +74,9 @@ void OSetup::test_setup( void ) {
 		cout.reset();
 		std::cout.rdbuf( &cnull_obj );
 	}
+	if ( _fancy && _verbose )
+		yaal::tools::util::failure( 1,
+				_( "fancy and verbose options are mutually exclusive\n" ) );
 	if ( _listGroups
 			&& ( _restartable
 				|| ! _testGroupListFilePath.is_empty()

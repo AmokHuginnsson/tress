@@ -40,7 +40,7 @@ class reporter_xml : public tut::callback {
 		std::ostringstream out;
 
 		if ( tr._result == test_result::ok ) {
-			out << "\t\t<testcase classname=\"" << reporter_cppunit::encode( tr._group->get_name() ) << "\" name=\"" << reporter_cppunit::encode( tr._name ) << "\" status=\"run\" time=\"0\" />";
+			out << "\t\t<testcase classname=\"" << reporter_cppunit::encode( tr._group->get_name() ) << "\" name=\"" << reporter_cppunit::encode( tr._name ) << "\" status=\"run\" time=\"" << tr._time << "\" />";
 		} else {
 			string err_msg = reporter_cppunit::encode( failure_msg + tr._message );
 
@@ -52,7 +52,7 @@ class reporter_xml : public tut::callback {
 				tag = "error";
 			}
 
-			out << "\t\t<testcase classname=\"" << reporter_cppunit::encode( tr._group->get_name() ) << "\" name=\"" << reporter_cppunit::encode( tr._name ) << "\" time=\"0\">" << endl;
+			out << "\t\t<testcase classname=\"" << reporter_cppunit::encode( tr._group->get_name() ) << "\" name=\"" << reporter_cppunit::encode( tr._name ) << "\" time=\"" << tr._time <<  "\">" << endl;
 			out << "\t\t\t<" << tag << " message=\"" << err_msg << "\"" << " type=\"" << failure_type << "\"";
 #if defined(TUT_USE_POSIX)
 			if ( pid != getpid() ) {
