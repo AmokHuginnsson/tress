@@ -30,6 +30,7 @@ Copyright:
 #include <libintl.h>
 
 #include <yaal/hcore/hprogramoptionshandler.hxx>
+#include <yaal/hcore/hlog.hxx>
 #include <yaal/tools/util.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 
@@ -70,6 +71,7 @@ int handle_program_options( int argc_, char** argv_ ) {
 	bool noColor( false );
 	int dummyValue( 0 );
 	HString ignore;
+	HString testFilter;
 	po( "log_path", program_options_helper::option_value( setup._logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
 		( "jobs", program_options_helper::option_value( setup._jobs ), 'j', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number of concurrent jobs", "count" )
 		( "reporter", program_options_helper::option_value( setup._reporter ), 'r', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "generator for reporting test results =(TUT|cute|cppunit|xml|boost|google)", "framework" )
@@ -82,9 +84,11 @@ int handle_program_options( int argc_, char** argv_ ) {
 		( "output_format", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "boost reporter option (ignored)" )
 		( "log_level", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "boost reporter option (ignored)" )
 		( "report_level", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "boost reporter option (ignored)" )
+		( "run_test", program_options_helper::option_value( testFilter ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "boost runner option (converted to -G)" )
 		( "gtest_repeat", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "google reporter option (ignored)" )
 		( "gtest_print_time", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "google reporter option (ignored)" )
 		( "gtest_color", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::TYPE::OPTIONAL, "google reporter option (ignored)" )
+		( "gtest_filter", program_options_helper::option_value( testFilter ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "google runner option (converted to -G)" )
 		( "set", program_options_helper::option_value( setup._testSets ), 'S', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test group and particular tests within it", "name@no1,no2,..." )
 		( "pattern", program_options_helper::option_value( setup._testGroupPattern ), 'P', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test groups that are matching pattern", "pattern" )
 		( "number", program_options_helper::option_value( setup._testNumber ), 'N', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "select test number for a given group", "number" )
@@ -115,6 +119,22 @@ int handle_program_options( int argc_, char** argv_ ) {
 		throw 0;
 	if ( noColor )
 		setup._color = false;
+	if ( !testFilter.is_empty() ) {
+		int long dot( testFilter.find_one_of( "./" ) );
+		if ( dot != HString::npos ) {
+			setup._testGroups.push_back( testFilter.left( dot ) );
+			HString no( testFilter.mid( dot + 2 ) );
+			if ( ! no.is_empty() && ( testFilter[dot + 1] == '<' ) )
+				setup._testNumber = lexical_cast<int>( no );
+		} else
+			setup._testGroups.push_back( testFilter );
+	}
+	if ( setup._debug ) {
+		log << "arguments:";
+		for ( int i( 0 ); i < argc_; ++ i )
+			log << " " << argv_[i];
+		log << endl;
+	}
 	setup._argc = ( argc_ - nonOption ) + 1;
 	setup._argv = argv_ + nonOption - 1;
 	argv_[ nonOption - 1 ] = argv_[ 0 ];

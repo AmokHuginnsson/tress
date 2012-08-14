@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "tut.hpp"
+#include "tut_reporter_cppunit.hpp"
 
 #ifdef __MSVCXX__
 #include <windows.h>
@@ -47,7 +48,7 @@ public:
 
 	virtual void run_started( int, int ) {
 		clear();
-		_os << "<TestLog>" << std::endl;
+		_os << "<TestLog>\n<TestSuite name=\"Master Suite\">" << std::endl;
 	}
 
 	virtual void group_started( std::string const& name, int ) {
@@ -66,7 +67,7 @@ public:
 			yaal::hcore::HLock l( _mutex );
 			using std::operator <<;
 			_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
-			_os << "\t\t<TestCase name=\"" << n << "\">" << std::endl;
+			_os << "\t\t<TestCase name=\"&lt;" << n << "&gt; " << reporter_cppunit::encode( title_ ) << "\">" << std::endl;
 		}
 	}
 
@@ -97,12 +98,12 @@ public:
 				ss << "#segv " << file << ":" << tr_._line << " ";
 			_os << ss.str();
 		}
-		_os << "\t\t\t<TestingTime>" << tr_._time << "</TestingTime>" << std::endl;
+		_os << "\t\t\t<TestingTime>" << ( tr_._time * 1000 ) << "</TestingTime>" << std::endl;
 		_os << "\t\t</TestCase>" << std::endl;
 	}
 
 	virtual void run_completed( void ) {
-		_os << "</TestLog>" << std::endl;
+		_os << "</TestSuite>\n</TestLog>" << std::endl;
 	}
 
 	virtual bool all_ok( void ) const {

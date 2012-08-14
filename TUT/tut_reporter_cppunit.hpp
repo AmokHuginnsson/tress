@@ -121,14 +121,15 @@ public:
 						break;
 				}
 
-				*stream_ << "    <FailedTest id=\"" << failed_tests_[ i ]._testNo << "\">" << std::endl
-				         << "      <Name>" << encode( failed_tests_[ i ]._group->get_name() ) + "::" + encode( failed_tests_[ i ]._name ) << "</Name>" << std::endl
+				test_result& tr( failed_tests_[ i ] );
+				*stream_ << "    <FailedTest id=\"" << tr._testNo << "\">" << std::endl
+				         << "      <Name>" << ( tr._group ? encode( tr._group->get_name() ) : "no such group" ) + "::" + encode( tr._name ) << "</Name>" << std::endl
 				         << "      <FailureType>" << failure_type << "</FailureType>" << std::endl
 				         << "      <Location>" << std::endl
-				         << "        <File>" << failed_tests_[ i ]._file << "</File>" << std::endl
-				         << "        <Line>" << failed_tests_[ i ]._line << "</Line>" << std::endl
+				         << "        <File>" << tr._file << "</File>" << std::endl
+				         << "        <Line>" << tr._line << "</Line>" << std::endl
 				         << "      </Location>" << std::endl
-				         << "      <Message>" << encode( failure_msg + failed_tests_[ i ]._message ) << "</Message>" << std::endl
+				         << "      <Message>" << encode( failure_msg + tr._message ) << "</Message>" << std::endl
 				         << "    </FailedTest>" << std::endl;
 			}
 
@@ -140,8 +141,9 @@ public:
 			*stream_ << "  <SuccessfulTests>" << std::endl;
 
 			for ( unsigned int i = 0; i < passed_tests_.size(); i ++ ) {
-				*stream_ << "    <Test id=\"" << passed_tests_[ i ]._testNo << "\">" << std::endl
-				         << "      <Name>" << encode( passed_tests_[ i ]._group->get_name() ) + "::" + encode( passed_tests_[ i ]._name ) << "</Name>" << std::endl
+				test_result& tr( passed_tests_[ i ] );
+				*stream_ << "    <Test id=\"" << tr._testNo << "\">" << std::endl
+				         << "      <Name>" << encode( tr._group->get_name() ) + "::" + encode( tr._name ) << "</Name>" << std::endl
 				         << "    </Test>" << std::endl;
 			}
 

@@ -210,7 +210,7 @@ TUT_UNIT_TEST( 12, "assign operator (=)" )
 	ENSURE_EQUALS( "assgin failed", array, big );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "push_back" ) {
+TUT_UNIT_TEST( 13, "push_back on resized" ) {
 		array_t array( 2048 );
 		proto_t proto( 2048 );
 		/* Bug in GCC 4.2.1 enforces namespace prefix here. */

@@ -98,7 +98,7 @@ TUT_UNIT_TEST( 3, "next_permutation, len = 2 (even)" )
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "12" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "next_permutation (odd)" )
+TUT_UNIT_TEST( 4, "next_permutation, len = 3 (odd)" )
 	int const LEN = 3;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -118,7 +118,7 @@ TUT_UNIT_TEST( 4, "next_permutation (odd)" )
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "123" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "next_permutation (even)" )
+TUT_UNIT_TEST( 5, "next_permutation len = 4 (even)" )
 	int const LEN = 4;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -174,7 +174,7 @@ TUT_UNIT_TEST( 5, "next_permutation (even)" )
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "1234" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "next_permutation (odd)" )
+TUT_UNIT_TEST( 6, "next_permutation len = 5 (odd)" )
 	int const LEN = 5;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -444,7 +444,7 @@ TUT_UNIT_TEST( 8, "prev_permutation, len = 2 (even)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "21" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "prev_permutation (odd)" )
+TUT_UNIT_TEST( 9, "prev_permutation len = 3 (odd)" )
 	int const LEN = 3;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -464,7 +464,7 @@ TUT_UNIT_TEST( 9, "prev_permutation (odd)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "321" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "prev_permutation (even)" )
+TUT_UNIT_TEST( 10, "prev_permutation len = 4 (even)" )
 	int const LEN = 4;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -520,7 +520,7 @@ TUT_UNIT_TEST( 10, "prev_permutation (even)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "4321" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "prev_permutation (odd)" )
+TUT_UNIT_TEST( 11, "prev_permutation len = 5 (odd)" )
 	int const LEN = 5;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );

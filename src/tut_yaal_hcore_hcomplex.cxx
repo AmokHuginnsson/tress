@@ -80,7 +80,7 @@ TUT_UNIT_TEST( 5, "set_imaginary()" )
 	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.im(), math::E, epsilon );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "set_real()" )
+TUT_UNIT_TEST( 6, "set both real and imaginary" )
 	HComplex a;
 	ENSURE_DISTANCE( "non zero new complex number (re)", a.re(), 0.L, epsilon );
 	ENSURE_DISTANCE( "non zero new complex number (im)", a.im(), 0.L, epsilon );

@@ -210,7 +210,7 @@ TUT_TEARDOWN()
 #endif /* defined( HAVE_SQLITE3_H ) */
 
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
-TUT_UNIT_TEST( 9, "PostgreSQL engine" )
+TUT_UNIT_TEST( 9, "dml on PostgreSQL engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml( db );
@@ -218,7 +218,7 @@ TUT_TEARDOWN()
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
 
 #if defined( HAVE_MYSQL_MYSQL_H )
-TUT_UNIT_TEST( 10, "MySQL engine" )
+TUT_UNIT_TEST( 10, "dml on MySQL engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml( db );
@@ -226,7 +226,7 @@ TUT_TEARDOWN()
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 
 #if defined( HAVE_IBASE_H )
-TUT_UNIT_TEST( 11, "Firebird engine" )
+TUT_UNIT_TEST( 11, "dml on Firebird engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml( db );
@@ -234,7 +234,7 @@ TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) */
 
 #if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
-TUT_UNIT_TEST( 12, "Oracle engine" )
+TUT_UNIT_TEST( 12, "dml on Oracle engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml( db );

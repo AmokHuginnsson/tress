@@ -69,12 +69,12 @@ public:
 		yaal::hcore::HLock l( _mutex );
 		using std::operator <<;
 		_ls << "TUT: group: [" << name << "]" << std::endl;
-		_os << "[----------] " << count_ << " tests from " << name << std::endl;
+		_os << "[----------] " << count_ << " tests from " << escape( name ) << std::endl;
 	}
 
 	void group_completed( std::string const& name_ ) {
 		group_base* g( _testRunner->get_group( name_ ) );
-		_os << "[----------] " << ( g ? g->get_real_test_count() : 0 ) << " tests from " << name_ << " (0 ms total)\n" << std::endl;
+		_os << "[----------] " << ( g ? g->get_real_test_count() : 0 ) << " tests from " << escape( name_ ) << " (0 ms total)\n" << std::endl;
 	}
 
 	virtual void test_started( char const* const group_, int n, char const* const title_ ) {
@@ -84,7 +84,7 @@ public:
 			yaal::hcore::HLock l( _mutex );
 			using std::operator <<;
 			_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
-			_os << "[ RUN      ] " << group_ << "." << title_ << std::endl;
+			_os << "[ RUN      ] " << escape( group_ ) << ".<" << n << "> " << escape( title_ ) << std::endl;
 		}
 	}
 
@@ -92,7 +92,9 @@ public:
 		yaal::hcore::HLock l( _mutex );
 		++ _run;
 		if ( tr_._result == tut::test_result::ok )
-			_os << "[       OK ] " << tr_._group->get_name() << "." << tr_._name << " (" << tr_._time << " ms)" << std::endl;
+			_os << "[       OK ] " << escape( tr_._group->get_name() )
+				<< ".<" << tr_._testNo << "> " << escape( tr_._name )
+				<< " (" << tr_._time << " ms)" << std::endl;
 		else {
 			_notPassed.push_back( tr_ );
 			std::string file( tr_._file );
@@ -110,7 +112,9 @@ public:
 				ss << "Segvfault: ";
 			ss << tr_._message << std::endl;
 			_os << ss.str();
-			_os << "[  FAILED  ] " << tr_._group->get_name() << "." << tr_._name << " (0 ms)" << std::endl;
+			_os << "[  FAILED  ] " << ( tr_._group ? escape( tr_._group->get_name() ) : "no such group" )
+				<< ".<" << tr_._testNo << "> " << escape( tr_._name )
+				<< " (" << tr_._time << " ms)" << std::endl;
 		}
 	}
 
@@ -121,7 +125,7 @@ public:
 		if ( !_notPassed.empty() ) {
 			_os << "[  FAILED  ] " << _notPassed.size() << " test" << ( _notPassed.size() > 1 ? "s" : "" ) << ", listed below:\n";
 			for ( not_passed_list_t::const_iterator it( _notPassed.begin() ), end( _notPassed.end() ); it != end; ++ it )
-				_os << "[  FAILED  ] " << it->_group->get_name() << "." << it->_name << std::endl;
+				_os << "[  FAILED  ] " << ( it->_group ? it->_group->get_name() : "no such group" ) << "." << it->_name << std::endl;
 			_os << "\n " << _notPassed.size() << " FAILED TESTS" << std::endl;
 		}
 	}
@@ -139,6 +143,26 @@ private:
 	reporter_google& operator = ( reporter_google const& );
 	void clear() {
 		_notPassed.clear();
+	}
+	static std::string escape( const std::string& text ) {
+		std::string out;
+
+		for ( unsigned int i = 0; i < text.length(); ++ i ) {
+			char c = text[ i ];
+			switch ( c ) {
+				case '[':
+				case ']':
+				case '.':
+				case ',':
+				case '(':
+				case ')':
+					out += "_";
+				break;
+				default:
+					out += c;
+			}
+		}
+		return ( out );
 	}
 };
 

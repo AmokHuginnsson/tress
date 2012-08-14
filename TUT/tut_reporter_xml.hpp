@@ -52,7 +52,7 @@ class reporter_xml : public tut::callback {
 				tag = "error";
 			}
 
-			out << "\t\t<testcase classname=\"" << reporter_cppunit::encode( tr._group->get_name() ) << "\" name=\"" << reporter_cppunit::encode( tr._name ) << "\" time=\"" << tr._time <<  "\">" << endl;
+			out << "\t\t<testcase classname=\"" << ( tr._group ? reporter_cppunit::encode( tr._group->get_name() ) : "no such group" ) << "\" name=\"" << reporter_cppunit::encode( tr._name ) << "\" time=\"" << tr._time <<  "\">" << endl;
 			out << "\t\t\t<" << tag << " message=\"" << err_msg << "\"" << " type=\"" << failure_type << "\"";
 #if defined(TUT_USE_POSIX)
 			if ( pid != getpid() ) {
@@ -184,7 +184,7 @@ public:
 		}   // switch
 
 		// add test result to results table
-		all_tests_[ tr._group->get_name() ].push_back( tr );
+		all_tests_[ tr._group ? tr._group->get_name() : "no such group" ].push_back( tr );
 	}
 
 	/**
@@ -294,6 +294,11 @@ public:
 						failure_type = "Assertion";
 						failure_msg  = "Child failed.\n";
 						failures ++;
+						break;
+					case test_result::setup:
+						failure_type = "Error";
+						failure_msg  = "Invalid runtime configuration.\n";
+						errors ++;
 						break;
 					default:
 						failure_type = "Error";
