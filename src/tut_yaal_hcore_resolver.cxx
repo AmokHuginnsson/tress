@@ -47,12 +47,10 @@ TUT_SIMPLE_MOCK( tut_yaal_hcore_resolver );
 TUT_TEST_GROUP( tut_yaal_hcore_resolver, "yaal::hcore::resolver" );
 
 TUT_UNIT_TEST( 1, "get_ip" )
-#ifndef _MSC_VER
-	HIP ip( 127, 0, 0, 1 );
-#else /* #ifndef _MSC_VER */
-	HIP ip( 0, 0, 0, 0 );
-#endif /* #else #ifndef _MSC_VER */
-	ENSURE_EQUALS( "get_ip filed", resolver::get_ip( "localhost" ), ip );
+	HIP ipA( 127, 0, 0, 1 );
+	HIP ipB( 0, 0, 0, 0 );
+	HIP ip( resolver::get_ip( "localhost" ) );
+	ENSURE( "get_ip filed", ( ip == ipA ) || ( ip == ipB ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "ip_to_string" )
