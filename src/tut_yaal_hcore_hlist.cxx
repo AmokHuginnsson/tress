@@ -26,6 +26,7 @@ Copyright:
 
 #include <cstring>
 #include <cstdio>
+#include <algorithm>
 
 #include <yaal/hcore/hexception.hxx>
 
@@ -37,7 +38,9 @@ Copyright:
 #include <yaal/hcore/hlist.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
+#include <yaal/hcore/hrandomizer.hxx>
 #include <yaal/tools/collections.hxx>
+#include <yaal/tools/streamtools.hxx>
 #include <yaal/hconsole/hlistcontrol.hxx>
 
 using namespace tut;
@@ -2058,6 +2061,20 @@ TUT_UNIT_TEST( 33, "reverse()" )
 	reverse( data, data + ( countof ( data ) - 1 ) );
 	ENSURE_EQUALS( "reverse failed", _stringifier.to_string<char>( l ), data );
 	ENSURE_EQUALS( "reverse preserving iterators failed", *it, val );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 34, "sort on large set" )
+	static int long const SIZE = 100000;
+	int_list_t l;
+	yaal::generate_n( back_insert_iterator( l ), SIZE, HRandomizer( 0, SIZE / 16 ) );
+	*l.rbegin() = -1;
+	std_vector_t v( SIZE );
+	yaal::copy( l.begin(), l.end(), v.begin() );
+	clog << l << endl;
+	std::sort( v.begin(), v.end() );
+	l.sort();
+	ENSURE_EQUALS( "yaal::sort wrong", l, v );
+	clog << l << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "speed test" )
