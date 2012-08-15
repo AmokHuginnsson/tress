@@ -119,6 +119,11 @@ bool operator == ( yaal::hcore::HList<T1> const& l, std::list<T2> const& sl ) {
 	return ( yaal::safe_equal( l.begin(), l.end(), sl.begin(), sl.end() ) );
 }
 
+template<typename T1, typename T2>
+bool operator == ( yaal::hcore::HList<T1> const& l, std::vector<T2> const& sl ) {
+	return ( yaal::safe_equal( l.begin(), l.end(), sl.begin(), sl.end() ) );
+}
+
 namespace std {
 
 yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface&, std::string const& );
