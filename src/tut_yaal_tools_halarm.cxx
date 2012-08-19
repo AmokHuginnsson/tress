@@ -45,7 +45,7 @@ TUT_TEST_GROUP( tut_yaal_tools_halarm, "yaal::tools::HAlarm" );
 
 TUT_UNIT_TEST( 1, "alarm wake" )
 	TIME_CONSTRAINT_EXEMPT();
-	static int const ALARM_TIME( 500 );
+	static int const ALARM_TIME( 1000 );
 	HAlarm alarm( ALARM_TIME );
 	HClock c;
 	bool interrupted( util::sleep::second( 8 ) );
