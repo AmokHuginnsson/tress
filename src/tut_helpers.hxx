@@ -44,6 +44,7 @@ Copyright:
 #include <yaal/hcore/hdeque.hxx>
 #include <yaal/hcore/hset.hxx>
 #include <yaal/hcore/hlist.hxx>
+#include <yaal/hcore/hstaticarray.hxx>
 #include <yaal/hcore/hcomplex.hxx>
 #include <yaal/hcore/hnumber.hxx>
 #include <yaal/hcore/hvector.hxx>
@@ -166,6 +167,11 @@ std::ostream& container_dump( std::ostream& out,
 template<typename tType>
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HArray<tType> const& a ) {
 	return ( container_dump( out, a, "array" ) );
+}
+
+template<typename tType, int const N>
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HStaticArray<tType, N> const& sa ) {
+	return ( container_dump( out, sa, "staticarray" ) );
 }
 
 template<typename tType>
