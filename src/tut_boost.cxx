@@ -102,7 +102,7 @@ void dump_dir( path const& dir ) {
 }
 
 TUT_UNIT_TEST( 2, "filesystem" )
-	dump_dir( path( "." ) );
+	dump_dir( path( "./build" ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "date_time" )
