@@ -39,6 +39,8 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
+#include <yaal/hcore/hcore.hxx>
+
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
@@ -102,6 +104,9 @@ void dump_dir( path const& dir ) {
 }
 
 TUT_UNIT_TEST( 2, "filesystem" )
+	char const* locale( setlocale( LC_ALL, "C" ) );
+	yaal::hcore::set_env( "LC_ALL", "C" );
+	cout << ( locale ? locale : "(NULL)" ) << endl;
 	dump_dir( path( "./build" ) );
 TUT_TEARDOWN()
 

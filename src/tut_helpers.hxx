@@ -286,11 +286,11 @@ namespace tress {
 
 namespace tut_helpers {
 
-#ifndef _MSC_VER
-static double long const epsilon = 0.000001L;
-#else /* #ifndef _MSC_VER */
+#if defined( _MSC_VER ) || defined( __HOST_OS_TYPE_CYGWIN__ )
 static double long const epsilon = 0.00001L;
-#endif /* #else #ifndef _MSC_VER */
+#else /* #if defined( _MSC_VER ) || defined( __HOST_OS_TYPE_CYGWIN__ ) */
+static double long const epsilon = 0.000001L;
+#endif /* #else #if defined( _MSC_VER ) || defined( __HOST_OS_TYPE_CYGWIN__ ) */
 extern int const _testData_[3][ 100 ];
 struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ ); } };
 bool file_compare( yaal::hcore::HString const&, yaal::hcore::HString const& );
