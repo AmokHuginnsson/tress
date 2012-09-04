@@ -62,8 +62,8 @@ TUT_TEST_GROUP( tut_yaal_tools_hscheduledasynccaller, "yaal::tools::HScheduledAs
 TUT_UNIT_TEST( 1, "functional test" )
 	int const expect( 7 );
 	_sac.register_call( time( NULL ) + 1, call( &tut_yaal_tools_hscheduledasynccaller::action, this, expect ) );
-	util::sleep::second( 2 );
-	ENSURE_EQUALS( "scheduled call mifired", _val, expect );
+	util::sleep::second( 4 );
+	ENSURE_EQUALS( "scheduled call misfired", _val, expect );
 TUT_TEARDOWN()
 
 }
