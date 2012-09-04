@@ -112,7 +112,7 @@ TUT_UNIT_TEST( 2, "filesystem" )
 	yaal::hcore::set_env( "LC_ALL", "C" );
 	cout << ( locale ? locale : "(NULL)" ) << endl;
 	dump_dir( path( "./build" ) );
-	unsetenv( "LC_ALL" );
+	yaal::hcore::unset_env( "LC_ALL" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "date_time" )
