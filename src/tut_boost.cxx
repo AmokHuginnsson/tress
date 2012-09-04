@@ -40,6 +40,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hcore.hxx>
+#include <yaal/tools/hmonitor.hxx>
 
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
@@ -104,10 +105,14 @@ void dump_dir( path const& dir ) {
 }
 
 TUT_UNIT_TEST( 2, "filesystem" )
+	yaal::tools::HMonitor& monitor( yaal::tools::HMonitor::get_instance() );
+	yaal::hcore::HMutex& m( monitor.acquire( "locale" ) );
+	yaal::hcore::HLock l( m );
 	char const* locale( setlocale( LC_ALL, "C" ) );
 	yaal::hcore::set_env( "LC_ALL", "C" );
 	cout << ( locale ? locale : "(NULL)" ) << endl;
 	dump_dir( path( "./build" ) );
+	unsetenv( "LC_ALL" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "date_time" )
