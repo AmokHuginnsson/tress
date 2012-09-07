@@ -46,10 +46,8 @@ struct FunkyDerived;
 class Visitor {
 public:
 	virtual ~Visitor( void ) { }
-	virtual void visit( Derived& ) { };
-	virtual void visit( Derived const& ) const { };
-	virtual void visit( FunkyDerived& ) { };
-	virtual void visit( FunkyDerived const& ) const { };
+	virtual void visitDerived( Derived const& ) const { };
+	virtual void visitFunkyDerived( FunkyDerived const& ) const { };
 };
 
 class HVisitorInterface {
@@ -70,7 +68,7 @@ struct Derived : public Base {
 	void baz( void ) const
 		{ cout << __PRETTY_FUNCTION__ << endl; }
 	virtual void accept( Visitor const& call ) const
-		{ call.visit( *this ); }
+		{ call.visitDerived( *this ); }
 };
 
 struct FunkyDerived : public Base {
@@ -79,19 +77,19 @@ struct FunkyDerived : public Base {
 	void bar( void ) const
 		{ cout << __PRETTY_FUNCTION__ << endl; }
 	virtual void accept( Visitor const& call ) const
-		{ call.visit( *this ); }
+		{ call.visitFunkyDerived( *this ); }
 };
 
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 class FunkyDerivedBarCall : public Visitor {
 public:
-	void visit( FunkyDerived const& obj ) const
+	void visitFunkyDerived( FunkyDerived const& obj ) const
 		{ obj.bar(); }
 };
 
 class DerivedBazCall : public Visitor {
 public:
-	void visit( Derived const& obj ) const
+	void visitDerived( Derived const& obj ) const
 		{ obj.baz(); }
 };
 #pragma GCC diagnostic error "-Woverloaded-virtual"
