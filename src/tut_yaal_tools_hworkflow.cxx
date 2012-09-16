@@ -78,7 +78,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 2, "Cleanup of finished tasks." ) {
 	HWorkFlow w( 3 );
 	w.push_task( call( tut_yaal_tools_hworkflow::bar, counter_t() ) );
-	util::sleep::milisecond( 100 );
+	util::sleep::second( 1 );
 	ENSURE_EQUALS( "HWorkFlow did not cleaned its task list.", counter_t::get_instance_count(), 0 );
 }
 TUT_TEARDOWN()
