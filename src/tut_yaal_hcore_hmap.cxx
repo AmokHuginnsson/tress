@@ -203,6 +203,18 @@ TUT_UNIT_TEST( 8, "exception during map[key] = val;" )
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 9, "dereferencing non existing key with const map[key]" )
+	i2c_t m;
+	try {
+		i2c_t const& cm( m );
+		cm[ 0 ];
+		FAIL( "FATAL: dereferencing non-existing key succeeded!" );
+	} catch ( HInvalidKeyException const& ) {
+		// ok
+	}
+	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "sample data" )
 	typedef HMap<HString, int> string_to_int_map_t;
 	string_to_int_map_t map;

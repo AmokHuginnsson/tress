@@ -294,6 +294,18 @@ TUT_UNIT_TEST( 13, "find on empty map" )
 	ENSURE( "find on empty returned bogus iterator", it == map.end() );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 14, "dereferencing non existing key with const map[key]" )
+	hash_map_t m;
+	try {
+		hash_map_t const& cm( m );
+		cm[ 0 ];
+		FAIL( "FATAL: dereferencing non-existing key succeeded!" );
+	} catch ( HInvalidKeyException const& ) {
+		// ok
+	}
+	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "sample data" )
 	typedef HHashMap<HString, int> string_to_int_hashmap_t;
 	string_to_int_hashmap_t map;
