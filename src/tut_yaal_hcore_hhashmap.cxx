@@ -306,6 +306,24 @@ TUT_UNIT_TEST( 14, "dereferencing non existing key with const map[key]" )
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 15, "const pointer as a key" )
+	char const a[] = "a";
+	char const b[] = "a";
+	char const c[] = "a";
+	char const d[] = "a";
+	typedef HHashMap<char const*, int> map_t;
+	map_t map;
+	map[a] = 1;
+	map[b] = 2;
+	map[c] = 3;
+	map[d] = 4;
+	char const msg[] = "hashing const pointer failed";
+	ENSURE_EQUALS( msg, map.find( a )->second, 1 );
+	ENSURE_EQUALS( msg, map.find( b )->second, 2 );
+	ENSURE_EQUALS( msg, map.find( c )->second, 3 );
+	ENSURE_EQUALS( msg, map.find( d )->second, 4 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "sample data" )
 	typedef HHashMap<HString, int> string_to_int_hashmap_t;
 	string_to_int_hashmap_t map;
