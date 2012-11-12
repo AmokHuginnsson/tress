@@ -8,7 +8,7 @@
 #include "tut.hpp"
 #include <yaal/hcore/hthread.hxx>
 #include <yaal/tools/xmath.hxx>
-#include <yaal/hconsole/console.hxx>
+#include <yaal/hconsole/ansi.hxx>
 
 #ifdef __MSVCXX__
 #include <windows.h>
@@ -26,7 +26,7 @@ namespace {
 
 std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
-		os_ << yaal::hconsole::red;
+		os_ << yaal::ansi::red;
 	char const* tags[][2] = {
 			{ ".", "[OK" },
 			{ ",", "[OK'" },
@@ -69,7 +69,7 @@ std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 		break;
 	}
 	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
-		os_ << yaal::hconsole::reset << std::flush;
+		os_ << yaal::ansi::reset << std::flush;
 	if ( tress::setup._verbose )
 		os_ << " in " << tr._time << " ms]" << std::endl;
 	return ( os_ );
@@ -283,9 +283,9 @@ public:
 				_os << space;
 			}
 			if ( status.first == status.second )
-				_os << " [" << ( tress::setup._color ? yaal::hconsole::green : "" ) << "Pass" << ( tress::setup._color ? yaal::hconsole::reset : "" ) << "]" << std::flush;
+				_os << " [" << ( tress::setup._color ? yaal::ansi::green : "" ) << "Pass" << ( tress::setup._color ? yaal::ansi::reset : "" ) << "]" << std::flush;
 			else
-				_os << " [" << ( tress::setup._color ? yaal::hconsole::red : "" ) << "Fail" << ( tress::setup._color ? yaal::hconsole::reset : "" ) << "]" << std::flush;
+				_os << " [" << ( tress::setup._color ? yaal::ansi::red : "" ) << "Fail" << ( tress::setup._color ? yaal::ansi::reset : "" ) << "]" << std::flush;
 		}
 	}
 

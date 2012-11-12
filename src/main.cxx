@@ -43,6 +43,7 @@ Copyright:
 #include <yaal/hcore/htokenizer.hxx>
 #include <yaal/tools/util.hxx>
 #include <yaal/tools/streamtools.hxx>
+#include <yaal/hconsole/console.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 
 #include "setup.hxx"

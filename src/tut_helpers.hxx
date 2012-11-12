@@ -53,7 +53,7 @@ Copyright:
 #include <yaal/tools/hstringstream.hxx>
 #include <yaal/tools/hring.hxx>
 #include <yaal/tools/htwowaymap.hxx>
-#include <yaal/hconsole/console.hxx>
+#include <yaal/hconsole/ansi.hxx>
 
 #if defined( __GNUC__ ) && ! defined( stdext )
 #define stdext __gnu_cxx
@@ -101,9 +101,9 @@ typedef void void_type
 }
 #define TIME_CONSTRAINT_EXEMPT time_constraint_exempt
 
-#define TUT_DECLARE( statement ) clog << hconsole::brightgreen << ">> " << #statement << hconsole::reset << endl; statement clog << hconsole::green << ">> end" << hconsole::reset << endl;
-#define TUT_INVOKE( statement ) do { clog << hconsole::brightcyan << ">> " << #statement << hconsole::reset << endl; do { statement } while ( 0 ); clog << hconsole::cyan << ">> end" << hconsole::reset << endl; } while ( 0 )
-#define TUT_EVAL( statement ) do { clog << hconsole::brightcyan << ">> " << #statement << hconsole::reset << " = " << hconsole::yellow << ( statement ) << hconsole::reset << endl; } while ( 0 )
+#define TUT_DECLARE( statement ) clog << ansi::brightgreen << ">> " << #statement << ansi::reset << endl; statement clog << ansi::green << ">> end" << ansi::reset << endl;
+#define TUT_INVOKE( statement ) do { clog << ansi::brightcyan << ">> " << #statement << ansi::reset << endl; do { statement } while ( 0 ); clog << ansi::cyan << ">> end" << ansi::reset << endl; } while ( 0 )
+#define TUT_EVAL( statement ) do { clog << ansi::brightcyan << ">> " << #statement << ansi::reset << " = " << ansi::yellow << ( statement ) << ansi::reset << endl; } while ( 0 )
 
 template<typename T1, typename T2>
 bool operator == ( yaal::hcore::HArray<T1> const& a, std::vector<T2> const& v ) {
