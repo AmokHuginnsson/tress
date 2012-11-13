@@ -9,6 +9,7 @@
 #include <yaal/hcore/hthread.hxx>
 #include <yaal/tools/xmath.hxx>
 #include <yaal/hconsole/ansi.hxx>
+#include <yaal/hconsole/hterminal.hxx>
 
 #ifdef __MSVCXX__
 #include <windows.h>
@@ -221,9 +222,7 @@ public:
 		yaal::hcore::HLock l( _mutex );
 
 		std::string const& name( tr._group ? tr._group->get_name() : tr._message );
-		static char const* COLUMNS( ::getenv( "COLUMNS" ) );
-		static int const columns( COLUMNS ? static_cast<int>( ::strtol( COLUMNS, NULL, 10 ) ) : 80 );
-		static int const maxWidth( yaal::tools::xmath::clip( 80, columns, 128 ) );
+		static int const maxWidth( yaal::tools::xmath::clip( 80, yaal::hconsole::_terminal_.size().second, 128 ) );
 
 		if ( ! tress::setup._verbose && ( name != _currentGroup ) ) {
 			if ( ! _currentGroup.empty() )
