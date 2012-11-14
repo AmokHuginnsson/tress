@@ -30,10 +30,14 @@ Copyright:
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
+#include <yaal/hconsole/hterminal.hxx>
+
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
+using namespace yaal::ansi;
+using namespace yaal::hconsole;
 using namespace tress::tut_helpers;
 
 namespace tut {
@@ -121,6 +125,24 @@ TUT_UNIT_TEST( 1, "visitor pattern" )
 	b->accept( FunkyDerivedBarCall() );
 	a->accept( DerivedBazCall() );
 	b->accept( DerivedBazCall() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "terminal size" )
+	if ( _terminal_.exists() ) {
+		HTerminal::coord_t c( _terminal_.size() );
+		clog << "Terminal size: " << c.second << "x" << c.first << "." << endl;
+	} else
+		clog << "Terminal is not available." << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 3, "terminal colors" )
+	clog << endl;
+	clog << red << "    red    " << green << "    green    " << blue << "    blue    "
+		<< cyan << "    cyan    " << magenta << "    magenta    " << brown << " brown "
+		<< lightgray << " lightgray" << endl;
+	clog << brightred << " brightred " << brightgreen << " brightgreen " << brightblue << " brightblue "
+		<< brightcyan << " brightcyan " << brightmagenta << " brightmagenta " << yellow << " yellow "
+		<< white << "  white" << ansi::reset << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and MSVC++ [Visualisers] testing." )
