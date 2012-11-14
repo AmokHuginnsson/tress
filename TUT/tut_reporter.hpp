@@ -222,7 +222,7 @@ public:
 		yaal::hcore::HLock l( _mutex );
 
 		std::string const& name( tr._group ? tr._group->get_name() : tr._message );
-		static int const maxWidth( yaal::tools::xmath::clip( 80, yaal::hconsole::_terminal_.size().second, 128 ) );
+		static int const maxWidth( yaal::hconsole::_terminal_.exists() ? yaal::tools::xmath::clip( 80, yaal::hconsole::_terminal_.size().second, 128 ) : 0x10000 );
 
 		if ( ! tress::setup._verbose && ( name != _currentGroup ) ) {
 			if ( ! _currentGroup.empty() )
