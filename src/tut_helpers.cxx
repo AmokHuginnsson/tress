@@ -27,16 +27,19 @@ Copyright:
 #include <cstring>
 #include <cstdlib>
 #include <iostream>
+#include <cstdio>
 
 #include <yaal/hcore/macro.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
+#include <yaal/hconsole/hterminal.hxx>
 
 #include "setup.hxx"
 
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
+using namespace yaal::hconsole;
 using namespace tress::tut_helpers;
 
 namespace std {
@@ -77,6 +80,32 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& os, 
 	else
 		M_ASSERT( !"unsupported stream modifier" );
 	return ( os );
+}
+
+}
+
+namespace yaal {
+
+namespace hconsole {
+
+template<>
+bool is_a_tty( std::ostream const& stream_ ) {
+	bool isTty( false );
+	if ( ( &stream_ == &std::cout ) || ( &stream_ == &std::clog ) )
+		isTty = yaal::hconsole::is_a_tty( yaal::hcore::cout ) ? true : false;
+	else if ( &stream_ == &std::cerr )
+		isTty = yaal::hconsole::is_a_tty( yaal::hcore::cerr ) ? true : false;
+	return ( isTty );
+}
+
+template<>
+bool is_a_tty( std::istream const& stream_ ) {
+	bool isTty( false );
+	if ( &stream_ == &std::cin )
+		isTty = yaal::hconsole::is_a_tty( yaal::hcore::cin ) ? true : false;
+	return ( isTty );
+}
+
 }
 
 }

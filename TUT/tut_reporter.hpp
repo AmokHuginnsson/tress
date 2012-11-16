@@ -16,7 +16,6 @@
 #include <yaal/cleanup.hxx>
 #endif /* __MSVCXX__ */
 
-
 /**
  * Template Unit Tests Framework for C++.
  * http://tut.dozen.ru
@@ -24,6 +23,12 @@
  * @author Vladimir Dyuzhev, Vladimir.Dyuzhev@gmail.com
  */
 namespace {
+
+inline std::ostream& operator << ( std::ostream& os_, yaal::ansi::HSequence const& seq_ ) {
+	if ( yaal::hconsole::is_a_tty( os_ ) )
+		os_ << *seq_;
+	return ( os_ );
+}
 
 std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
