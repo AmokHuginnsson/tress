@@ -1281,7 +1281,7 @@ TUT_UNIT_TEST( 39, "partition" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 40, "stable_partition" )
-	static int const range = 100;
+	static int const range( 100 );
 	int_array_t a( range );
 	HRandomizer r( randomizer_helper::make_randomizer( range ) );
 	for ( int_array_t::iterator it( a.begin() ), end( a.end() ); it != end; ++ it )
@@ -1310,6 +1310,53 @@ TUT_UNIT_TEST( 40, "stable_partition" )
 		ENSURE( "stable_partition failed (*it <= 0)", *it <= 0 );
 	ENSURE( "stable_partition failed (left is_sorted)", is_sorted( a.begin(), m ) );
 	ENSURE( "stable_partition failed (right is_sorted)", is_sorted( m, a.end() ) );
+TUT_TEARDOWN()
+
+struct incUnary {
+	int _n;
+	incUnary( int n )
+		: _n( n )
+		{}
+	template<typename T>
+	int operator()( T const& lim_ ) {
+		int lim( static_cast<int>( lim_ - 1 ) );
+		int val( _n < lim ? _n : lim );
+		++ _n;
+		return ( val );
+	}
+};
+
+TUT_UNIT_TEST( 41, "random_shuffle" )
+	static int const range( 100 );
+	int_array_t a( range );
+	yaal::generate( a.begin(), a.end(), inc( 1 ) );
+	int_array_t b( a );
+	random_shuffle( a.begin(), a.end() );
+	ENSURE_NOT( "Probability of every element staying in its original position after random shuffle is N! which for this test is 100!, go play a lottery",  a == b );
+	clog << a << endl;
+	sort( a.begin(), a.end() );
+	ENSURE_EQUALS( "random_shuffle lost some elements!", a, b );
+	random_shuffle( a.begin(), a.end(), incUnary( 0 ) );
+	clog << a << endl;
+	reverse( a.begin(), a.end() );
+	ENSURE_EQUALS( "random_shuffle did not use given randomizer properly", a, b );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 42, "random_sample" )
+	static int const range( 1024 );
+	int_array_t a( range );
+	yaal::generate( a.begin(), a.end(), inc( 1 ) );
+	int_array_t b( range / 2, -1 );
+	int loTotal( 0 );
+	static int const tries( 256 );
+	for ( int t( 0 ); t < tries; ++ t ) {
+		random_sample( a.begin(), a.end(), b.begin(), b.end() );
+		int lo( static_cast<int>( count_if( b.begin(), b.end(), bind1st( less<int>(), range / 2 ) ) ) );
+		loTotal += lo;
+	}
+	int loAverage( loTotal / tries );
+	clog << loAverage << endl;
+	ENSURE_DISTANCE( "random sample not uniformly random", loAverage, tries, 3 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "sort speed" )
