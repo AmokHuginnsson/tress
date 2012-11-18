@@ -1350,7 +1350,7 @@ TUT_UNIT_TEST( 42, "random_sample" )
 	int loTotal( 0 );
 	static int const tries( 256 );
 	for ( int t( 0 ); t < tries; ++ t ) {
-		random_sample( a.begin(), a.end(), b.begin(), b.end() );
+		random_sample( a.begin(), a.end(), b.begin(), b.end(), HRandomizer( t ) );
 		int lo( static_cast<int>( count_if( b.begin(), b.end(), bind1st( less<int>(), range / 2 ) ) ) );
 		loTotal += lo;
 	}
