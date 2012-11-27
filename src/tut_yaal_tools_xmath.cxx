@@ -153,5 +153,29 @@ TUT_UNIT_TEST( 20, "stats on dice" )
 		<< "median                        = " << diceStats.median() << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 21, "central_moving_average" )
+	/* first lest prepare periodic triangle signal series */
+	int const dataCount( 1024 );
+	typedef HArray<double> data_t;
+	data_t data( dataCount );
+	int const triangleCount( 8 );
+	int idx( 0 );
+	for ( int i( 0 ); i < triangleCount; ++ i ) {
+		int const triangleWidth( dataCount / triangleCount );
+		for ( int j( 0 ); j < ( triangleWidth / 2 ); ++ j )
+			data[idx ++] = j;
+		for ( int j( 0 ); j < ( triangleWidth / 2 ); ++ j )
+			data[idx ++] = ( triangleWidth  / 2 ) - j;
+	}
+	data_t cma( dataCount );
+	central_moving_average( data.begin(), data.end(), cma.begin(), 16 );
+	data_t cma2( dataCount );
+	central_moving_average( data.begin(), data.end(), cma2.begin(), 32 );
+	data_t cma3( dataCount );
+	central_moving_average( data.begin(), data.end(), cma3.begin(), 48 );
+	for ( int i( 0 ); i < dataCount; ++ i )
+		clog << data[i] << " " << cma[i] << " " << cma2[i] << " " << cma3[i] << endl;
+TUT_TEARDOWN()
+
 }
 
