@@ -153,12 +153,29 @@ TUT_UNIT_TEST( 20, "stats on dice" )
 		<< "median                        = " << diceStats.median() << endl;
 TUT_TEARDOWN()
 
+template<typename T>
+T average_on_range( HArray<T> const& src_, int long pos_, int long range_ ) {
+	T val = T();
+	int long preRange( ( range_ - 1 ) / 2 );
+	int long size( src_.get_size() );
+	int long valuesInRange( 0 );
+	for ( int long i( 0 ); i < range_; ++ i ) {
+		int long idx( pos_ + i - preRange );
+		if ( ( idx >= 0 ) && ( idx < size ) ) {
+			val += src_[idx];
+			++ valuesInRange;
+		}
+	}
+	return ( val / static_cast<T>( valuesInRange ) );
+}
+
 TUT_UNIT_TEST( 21, "central_moving_average" )
 	/* first lest prepare periodic triangle signal series */
 	int const dataCount( 1024 );
 	typedef HArray<double> data_t;
 	data_t data( dataCount );
 	int const triangleCount( 8 );
+	int long testRanges[] = { 33, 65, 97 };
 	int idx( 0 );
 	for ( int i( 0 ); i < triangleCount; ++ i ) {
 		int const triangleWidth( dataCount / triangleCount );
@@ -168,13 +185,32 @@ TUT_UNIT_TEST( 21, "central_moving_average" )
 			data[idx ++] = ( triangleWidth  / 2 ) - j;
 	}
 	data_t cma( dataCount );
-	central_moving_average( data.begin(), data.end(), cma.begin(), 16 );
-	data_t cma2( dataCount );
-	central_moving_average( data.begin(), data.end(), cma2.begin(), 32 );
-	data_t cma3( dataCount );
-	central_moving_average( data.begin(), data.end(), cma3.begin(), 48 );
-	for ( int i( 0 ); i < dataCount; ++ i )
-		clog << data[i] << " " << cma[i] << " " << cma2[i] << " " << cma3[i] << endl;
+	data_t expect( dataCount );
+	for ( int t( 0 ); t < countof ( testRanges ); ++ t ) {
+		central_moving_average( data.begin(), data.end(), cma.begin(), testRanges[t] );
+		for ( int i( 0 ); i < dataCount; ++ i )
+			expect[i] = average_on_range( data, i, testRanges[t] );
+		for ( int i( 0 ); i < dataCount; ++ i )
+			ENSURE_DISTANCE( "calculating central moving average failed", cma[i], expect[i], static_cast<double>( epsilon * dataCount ) );
+	}
+	try {
+		central_moving_average( data.begin(), data.end(), cma.begin(), -1 );
+		FAIL( "calculating CMA with negative range succeeded" );
+	} catch ( HException const& ) {
+		/* ok */
+	}
+	try {
+		central_moving_average( data.begin(), data.end(), cma.begin(), 0 );
+		FAIL( "calculating CMA with empty range succeeded" );
+	} catch ( HException const& ) {
+		/* ok */
+	}
+	try {
+		central_moving_average( data.begin(), data.end(), cma.begin(), 8 );
+		FAIL( "calculating CMA with even range succeeded" );
+	} catch ( HException const& ) {
+		/* ok */
+	}
 TUT_TEARDOWN()
 
 }
