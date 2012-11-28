@@ -154,7 +154,7 @@ TUT_UNIT_TEST( 20, "stats on dice" )
 TUT_TEARDOWN()
 
 template<typename T>
-T average_on_range( HArray<T> const& src_, int long pos_, int long range_ ) {
+T central_average_on_range( HArray<T> const& src_, int long pos_, int long range_ ) {
 	T val = T();
 	int long preRange( ( range_ - 1 ) / 2 );
 	int long size( src_.get_size() );
@@ -175,7 +175,7 @@ TUT_UNIT_TEST( 21, "central_moving_average" )
 	typedef HArray<double> data_t;
 	data_t data( dataCount );
 	int const triangleCount( 8 );
-	int long testRanges[] = { 33, 65, 97 };
+	int long testRanges[] = { 33, 65, 97, 163 };
 	int idx( 0 );
 	for ( int i( 0 ); i < triangleCount; ++ i ) {
 		int const triangleWidth( dataCount / triangleCount );
@@ -184,32 +184,96 @@ TUT_UNIT_TEST( 21, "central_moving_average" )
 		for ( int j( 0 ); j < ( triangleWidth / 2 ); ++ j )
 			data[idx ++] = ( triangleWidth  / 2 ) - j;
 	}
-	data_t cma( dataCount );
 	data_t expect( dataCount );
+	data_t cma[countof ( testRanges )];
+	HFile o;
+	if ( tress::setup._debug )
+		o.open( "./out/data.txt", HFile::OPEN::WRITING );
 	for ( int t( 0 ); t < countof ( testRanges ); ++ t ) {
-		central_moving_average( data.begin(), data.end(), cma.begin(), testRanges[t] );
+		cma[t].resize( dataCount );
+		central_moving_average( data.begin(), data.end(), cma[t].begin(), testRanges[t] );
 		for ( int i( 0 ); i < dataCount; ++ i )
-			expect[i] = average_on_range( data, i, testRanges[t] );
+			expect[i] = central_average_on_range( data, i, testRanges[t] );
 		for ( int i( 0 ); i < dataCount; ++ i )
-			ENSURE_DISTANCE( "calculating central moving average failed", cma[i], expect[i], static_cast<double>( epsilon * dataCount ) );
+			ENSURE_DISTANCE( "calculating central moving average failed", cma[t][i], expect[i], static_cast<double>( epsilon * dataCount ) );
+	}
+	if ( tress::setup._debug ) {
+		for ( int i( 0 ); i < dataCount; ++ i ) {
+			o << data[i];
+			for ( int t( 0 ); t < countof ( testRanges ); ++ t )
+				o << " " << cma[t][i];
+			o << endl;
+		}
 	}
 	try {
-		central_moving_average( data.begin(), data.end(), cma.begin(), -1 );
+		central_moving_average( data.begin(), data.end(), cma[0].begin(), -1 );
 		FAIL( "calculating CMA with negative range succeeded" );
 	} catch ( HException const& ) {
 		/* ok */
 	}
 	try {
-		central_moving_average( data.begin(), data.end(), cma.begin(), 0 );
+		central_moving_average( data.begin(), data.end(), cma[0].begin(), 0 );
 		FAIL( "calculating CMA with empty range succeeded" );
 	} catch ( HException const& ) {
 		/* ok */
 	}
 	try {
-		central_moving_average( data.begin(), data.end(), cma.begin(), 8 );
+		central_moving_average( data.begin(), data.end(), cma[0].begin(), 8 );
 		FAIL( "calculating CMA with even range succeeded" );
 	} catch ( HException const& ) {
 		/* ok */
+	}
+TUT_TEARDOWN()
+
+template<typename T>
+T average_on_range( HArray<T> const& src_, int long pos_, int long range_ ) {
+	T val = T();
+	int long valuesInRange( 0 );
+	for ( int long i( 0 ); i < range_; ++ i ) {
+		int long idx( pos_ - i );
+		if ( idx >= 0 ) {
+			val += src_[idx];
+			++ valuesInRange;
+		}
+	}
+	return ( val / static_cast<T>( valuesInRange ) );
+}
+
+TUT_UNIT_TEST( 22, "moving_average" )
+	/* first lest prepare periodic triangle signal series */
+	int const dataCount( 1024 );
+	typedef HArray<double> data_t;
+	data_t data( dataCount );
+	int const triangleCount( 8 );
+	int long testRanges[] = { 16, 33, 65, 97, 160 };
+	int idx( 0 );
+	for ( int i( 0 ); i < triangleCount; ++ i ) {
+		int const triangleWidth( dataCount / triangleCount );
+		for ( int j( 0 ); j < ( triangleWidth / 2 ); ++ j )
+			data[idx ++] = j;
+		for ( int j( 0 ); j < ( triangleWidth / 2 ); ++ j )
+			data[idx ++] = ( triangleWidth  / 2 ) - j;
+	}
+	data_t expect( dataCount );
+	data_t ma[countof ( testRanges )];
+	HFile o;
+	if ( tress::setup._debug )
+		o.open( "./out/data.txt", HFile::OPEN::WRITING );
+	for ( int t( 0 ); t < countof ( testRanges ); ++ t ) {
+		ma[t].resize( dataCount );
+		moving_average( data.begin(), data.end(), ma[t].begin(), testRanges[t] );
+		for ( int i( 0 ); i < dataCount; ++ i )
+			expect[i] = average_on_range( data, i, testRanges[t] );
+		for ( int i( 0 ); i < dataCount; ++ i )
+			ENSURE_DISTANCE( "calculating moving average failed", ma[t][i], expect[i], static_cast<double>( epsilon * dataCount ) );
+	}
+	if ( tress::setup._debug ) {
+		for ( int i( 0 ); i < dataCount; ++ i ) {
+			o << data[i];
+			for ( int t( 0 ); t < countof ( testRanges ); ++ t )
+				o << " " << ma[t][i];
+			o << endl;
+		}
 	}
 TUT_TEARDOWN()
 
