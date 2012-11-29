@@ -309,31 +309,34 @@ public:
 	* Runs all tests in all groups that are matching pattern.
 	* @param callback Callback object if exists; null otherwise
 	*/
-	void run_pattern_tests( char const* pattern ) const {
- 		/* scope for workflow */ {
-			yaal::tools::HWorkFlow::ptr_t w( tress::setup._jobs > 0
-					? yaal::hcore::make_pointer<yaal::tools::HWorkFlow>( tress::setup._jobs )
-					: yaal::tools::HWorkFlow::ptr_t() );
-			int groupCount( 0 );
-			int total( 0 );
-			for ( const_iterator i( _groups.begin() ), e( _groups.end() ); ! yaal::_isKilled_ && ( i != e ); ++ i ) {
-				if ( i->first.find( pattern ) != std::string::npos ) {
-					++ groupCount;
-					total += i->second->get_real_test_count();
+	void run_pattern_tests( std::string const& pattern ) const {
+		size_t at( pattern.find( "@" ) );
+		if ( at != std::string::npos ) {
+			std::string groupNamePattern( pattern.substr( 0, at ) );
+			std::string testNamePattern( pattern.substr( at + 1 ) );
+			test_sets_t ts;
+			for ( const_iterator i = _groups.begin(), e( _groups.end() ); i != e; ++ i ) {
+				if ( groupNamePattern.empty() || ( i->first.find( groupNamePattern ) != std::string::npos ) ) {
+					test_numbers_t tn;
+					group_base::titles_t const& tt( i->second->get_test_titles() );
+					for ( group_base::titles_t::const_iterator t( tt.begin() ), te( tt.end() ); t != te; ++ t ) {
+						if ( testNamePattern.empty() || ( std::string( t->second ).find( testNamePattern ) != std::string::npos ) )
+							tn.push_back( t->first );
+					}
+					if ( ! tn.empty() )
+						ts.push_back( make_pair( i->first, tn ) );
 				}
 			}
-			_callback->run_started( groupCount, total );
-			for ( const_iterator i = _groups.begin(), e( _groups.end() ); ! yaal::_isKilled_ && ( i != e ); ++ i ) {
+			run_tests( ts );
+		} else {
+			groupnames gn;
+			for ( const_iterator i = _groups.begin(), e( _groups.end() ); i != e; ++ i ) {
 				if ( i->first.find( pattern ) != std::string::npos ) {
-					if ( !! w )
-						w->push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
-					else
-						run_group( i );
+					gn.push_back( i->first );
 				}
 			}
+			run_tests( gn );
 		}
-
-		_callback->run_completed();
 	}
 
 	/**
