@@ -167,7 +167,6 @@ class test_group : public group_base, public test_group_posix {
 	typedef typename tests_t::const_reverse_iterator
 	tests_const_reverse_iterator;
 	typedef typename tests_t::size_type size_type;
-	typedef std::map<int, char const*> titles_t;
 	typedef typename titles_t::const_iterator titles_iterator;
 
 	std::string _name;
@@ -297,7 +296,11 @@ public:
 		return ( 0 );
 	}
 
-	char const* get_test_title( int no_ ) const {
+	virtual titles_t const& get_test_titles( void ) const {
+		return ( _titles );
+	}
+
+	virtual char const* get_test_title( int no_ ) const {
 		titles_t::const_iterator it( _titles.find( no_ ) );
 		return ( ( it != _titles.end() ) ? it->second : NULL );
 	}

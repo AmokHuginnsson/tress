@@ -20,6 +20,7 @@ namespace tut {
  */
 struct group_base {
 	typedef std::pair<int, int> run_stat_t;
+	typedef std::map<int, char const*> titles_t;
 	virtual ~group_base()
 		{}
 
@@ -33,6 +34,7 @@ struct group_base {
 	virtual test_result run_test( int n ) = 0;
 	virtual int get_real_test_count( void ) const = 0;
 	virtual char const* get_test_title( int ) const = 0;
+	virtual titles_t const& get_test_titles( void ) const = 0;
 	virtual void set_time_constraint( int long ) = 0;
 	virtual std::string const& get_name() const = 0;
 	virtual void set_name( std::string const& ) = 0;
@@ -118,7 +120,7 @@ protected:
 class test_runner {
 public:
 
-	typedef std::map<std::string, group_base*>groups;
+	typedef std::map<std::string, group_base*> groups;
 	typedef groups::iterator iterator;
 	typedef groups::const_iterator const_iterator;
 

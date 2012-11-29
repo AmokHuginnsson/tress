@@ -226,6 +226,12 @@ void list_groups( void ) {
 		std::cout << "  " << std::setw( 36 ) << std::left << i->first;
 		if ( setup._verbose && realTestCount )
 			std::cout << " " << std::right << std::setw( 2 ) << realTestCount;
+		if ( setup._debug ) {
+			tut::group_base::titles_t const& titles( i->second->get_test_titles() );
+			for ( tut::group_base::titles_t::const_iterator t( titles.begin() ), te( titles.end() ); t != te; ++ t ) {
+				std::cout << "\n\t<" << t->first << ">::" << t->second;
+			}
+		}
 		std::cout << std::endl;
 		++ i;
 	}
