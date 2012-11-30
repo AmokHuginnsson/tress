@@ -27,7 +27,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/halarm.hxx>
-#include <yaal/tools/util.hxx>
+#include <yaal/tools/sleep.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
@@ -35,7 +35,6 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
 namespace tut {
@@ -48,7 +47,7 @@ TUT_UNIT_TEST( 1, "alarm wake" )
 	static int const ALARM_TIME( 1000 );
 	HAlarm alarm( ALARM_TIME );
 	HClock c;
-	bool interrupted( util::sleep::second( 8 ) );
+	bool interrupted( tools::sleep::second( 8 ) );
 	if ( ! interrupted )
 		cout << "sleep ended after: " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << " miliseconds" << endl;
 	ENSURE_EQUALS( "alarm failed to interrupt sleep", interrupted, true );
@@ -58,9 +57,9 @@ TUT_UNIT_TEST( 2, "alarm deregistered" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int const ALARM_TIME( 500 ); {
 		HAlarm alarm( ALARM_TIME );
-		ENSURE_EQUALS( "alarm interrupted sleep prematurely", util::sleep::milisecond( 100 ), false );
+		ENSURE_EQUALS( "alarm interrupted sleep prematurely", tools::sleep::milisecond( 100 ), false );
 	}
-	ENSURE_EQUALS( "alaram did not deregister!", util::sleep::second( 1 ), false );
+	ENSURE_EQUALS( "alaram did not deregister!", tools::sleep::second( 1 ), false );
 TUT_TEARDOWN()
 
 }

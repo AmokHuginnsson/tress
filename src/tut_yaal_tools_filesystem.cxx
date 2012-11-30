@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_yaal_tools_util_filesystem.cxx - this file is integral part of `tress' project.
+	tut_yaal_tools_filesystem.cxx - this file is integral part of `tress' project.
 
   i.  You may not make any changes in Copyright information.
   ii. You must attach Copyright information to any part of every copy
@@ -26,7 +26,7 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
-#include <yaal/tools/util.hxx>
+#include <yaal/tools/filesystem.hxx>
 #include <yaal/tools/assign.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
@@ -35,13 +35,12 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
 namespace tut {
 
-TUT_SIMPLE_MOCK( tut_yaal_tools_util_filesystem );
-TUT_TEST_GROUP( tut_yaal_tools_util_filesystem, "yaal::tools::utils::filesystem" );
+TUT_SIMPLE_MOCK( tut_yaal_tools_filesystem );
+TUT_TEST_GROUP( tut_yaal_tools_filesystem, "yaal::tools::filesystem" );
 
 TUT_UNIT_TEST( 1, "find" )
 	filesystem::find_result fr( filesystem::find( "./data", ".*\\.sql" ) );

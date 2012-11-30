@@ -28,7 +28,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/hscheduledasynccaller.hxx>
-#include <yaal/tools/util.hxx>
+#include <yaal/tools/sleep.hxx>
 #include <yaal/hcore/hlog.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
@@ -69,7 +69,7 @@ TUT_UNIT_TEST( 1, "functional test" )
 #else /* #ifdef _MSC_VER */
 	static int const WAIT( 4 );
 #endif /* #else #ifdef _MSC_VER */
-	if ( util::sleep::second( WAIT ) )
+	if ( tools::sleep::second( WAIT ) )
 		log_trace << "sleep interrupted!" << endl;
 	ENSURE_EQUALS( "scheduled call misfired", _val, expect );
 TUT_TEARDOWN()

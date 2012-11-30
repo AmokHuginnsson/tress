@@ -29,7 +29,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/hdes.hxx>
-#include <yaal/tools/util.hxx>
+#include <yaal/tools/crypto.hxx>
 #include <yaal/tools/hmemory.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
@@ -39,7 +39,7 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
+using namespace yaal::tools::crypto;
 using namespace tress;
 using namespace tress::tut_helpers;
 

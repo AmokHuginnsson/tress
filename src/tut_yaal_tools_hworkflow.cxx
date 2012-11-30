@@ -27,7 +27,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/hworkflow.hxx>
-#include <yaal/tools/util.hxx>
+#include <yaal/tools/sleep.hxx>
 #include <yaal/hcore/hlog.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
@@ -36,7 +36,6 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
 namespace tut {
@@ -56,7 +55,7 @@ void tut_yaal_tools_hworkflow::foo( int id, char symbol, int waitTime ) {
 	cout << "foo" << id << flush;
 	HClock c;
 	for ( int i = 0; i < 3; ++ i ) {
-		util::sleep::milisecond( waitTime );
+		tools::sleep::milisecond( waitTime );
 		cout << symbol << flush;
 	}
 	cout << "[" << id << "]" << endl;
@@ -79,7 +78,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 2, "Cleanup of finished tasks." ) {
 	HWorkFlow w( 3 );
 	w.push_task( call( tut_yaal_tools_hworkflow::bar, counter_t() ) );
-	if ( util::sleep::second( 1 ) )
+	if ( tools::sleep::second( 1 ) )
 		log_trace << "sleep interrupted!" << endl;
 	ENSURE_EQUALS( "HWorkFlow did not cleaned its task list.", counter_t::get_instance_count(), 0 );
 }

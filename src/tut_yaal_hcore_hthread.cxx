@@ -29,7 +29,7 @@ Copyright:
 
 #include <yaal/hcore/hthread.hxx>
 #include <yaal/hcore/htime.hxx>
-#include <yaal/tools/util.hxx>
+#include <yaal/tools/sleep.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
@@ -37,7 +37,6 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace tress::tut_helpers;
 
 namespace tut {
@@ -50,7 +49,7 @@ static int const FINISH_DELAY = 10;
 static int const TOLERANCE = 2;
 #endif /* #else #ifdef __HOST_OS_TYPE_CYGWIN__ */
 
-#define M_DSLEEP( count ) util::sleep::milisecond( ( count ) * 100 );
+#define M_DSLEEP( count ) tools::sleep::milisecond( ( count ) * 100 );
 
 class HCool {
 protected:
