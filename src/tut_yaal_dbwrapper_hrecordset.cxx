@@ -347,5 +347,101 @@ TUT_UNIT_TEST( 18, "different engines all in one by DSN" )
 TUT_TEARDOWN()
 #endif /* #if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || ( defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) ) */
 
+namespace {
+
+void row_by_row_test( HDataBase::ptr_t db, char const* const query, char const* dbType_ ) {
+	M_PROLOG
+	HRecordSet::ptr_t rs = db->query( query, HRecordSet::CURSOR::FORWARD );
+	ENSURE_EQUALS( "bad column count", rs->get_field_count(), 3 );
+	try {
+		ENSURE_EQUALS( "bad result size", rs->get_size(), 3 );
+		FAIL( "recieved record count in row-by-row mode" );
+	} catch ( HRecordSetException const& ) {
+		/* ok */
+	}
+	char const* const COLUMN_NAMES[] = { "id", "name", "data" };
+	char const* const DATA[][3] = {
+		{ "1", "one", NULL },
+		{ "2", "two", NULL },
+		{ "3", "three", "Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!" }
+	};
+	cout << "|";
+	for ( int i( 0 ), COUNT( rs->get_field_count() ); i < COUNT; ++ i ) {
+		HString cn( rs->get_column_name( i ) );
+		cn.lower();
+		ENSURE_EQUALS( "bad column name", cn, COLUMN_NAMES[i] );
+		cout << cn << "|";
+	}
+	cout << endl;
+	int row( 0 );
+	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); ++ it, ++ row ) {
+		cout << "|";
+		int fc( rs->get_field_count() );
+		for ( int i = 0; i < fc; ++ i ) {
+			HRecordSet::value_t v( it[i] );
+			if ( ( row == 0 ) && ( i == 2 ) ) {
+				if ( dbType_ )
+					ENSURE_EQUALS( "wrong database accessed", *v, dbType_ );
+			} else {
+				if ( !!v )
+					ENSURE_EQUALS( "wrong value", *v, DATA[row][i] );
+				else
+					ENSURE_EQUALS( "wrong value", static_cast<char const*>( NULL ), DATA[row][i] );
+			}
+			cout << ( !v ? HString( "(NULL)" ) : *v ) << "|";
+		}
+		cout << endl;
+	}
+	return;
+	M_EPILOG
+}
+
+}
+
+#if defined( HAVE_SQLITE3_H )
+TUT_UNIT_TEST( 19, "SQLite engine" )
+	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
+	db->connect( "./out/tress", "", "" );
+	row_by_row_test( db, QUERY, "sqlite3" );
+TUT_TEARDOWN()
+#endif /* not defined( HAVE_SQLITE3_H ) */
+
+#if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
+TUT_UNIT_TEST( 20, "PostgreSQL engine" )
+	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
+	db->connect( "tress", "tress", "tr3ss" );
+	row_by_row_test( db, QUERY, "PostgreSQL" );
+TUT_TEARDOWN()
+#endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
+
+#if defined( HAVE_MYSQL_MYSQL_H )
+TUT_UNIT_TEST( 21, "MySQL engine" )
+	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
+	db->connect( "tress", "tress", "tr3ss" );
+	row_by_row_test( db, QUERY, "MySQL" );
+TUT_TEARDOWN()
+#endif /* defined( HAVE_MYSQL_MYSQL_H ) */
+
+#if defined( HAVE_IBASE_H )
+TUT_UNIT_TEST( 22, "Firebird engine" )
+	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
+	db->connect( "tress", "tress", "tr3ss" );
+	row_by_row_test( db, QUERY, "Firebird" );
+TUT_TEARDOWN()
+#endif /* defined( HAVE_IBASE_H ) */
+
+#if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
+TUT_UNIT_TEST( 23, "Oracle engine" )
+	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
+	db->connect( "tress", "tress", "tr3ss" );
+	row_by_row_test( db, QUERY, "Oracle" );
+TUT_TEARDOWN()
+#endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
+
 }
 
