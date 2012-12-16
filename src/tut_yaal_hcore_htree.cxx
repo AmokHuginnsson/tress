@@ -1455,5 +1455,53 @@ TUT_UNIT_TEST( 39, "across two trees from root (copy_node) on booking allocator"
 	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 40, "get_child_at()" ) {
+		tree_t t;
+		tree_t::node_t n = t.create_new_root();
+		(**n) = '@';
+		tree_t::HNode::iterator it = n->add_node( '0' );
+		tree_t::HNode::iterator q = it->add_node( 'q' );
+		tree_t::HNode::iterator w = it->add_node( 'w' );
+		q->add_node( '!' );
+		it = q->add_node( '#' );
+		q->add_node( '$' );
+		w->add_node( '%' );
+		w->add_node( '^' );
+		w->add_node( '&' );
+		tree_t::HNode::iterator a = it = it->add_node( 'a' );
+		it->add_node( 'A' );
+		it->add_node( 'B' );
+		it->add_node( 'C' );
+		it = n->add_node( '1' );
+		it->add_node( 'd' );
+		tree_t::HNode::iterator e = it->add_node( 'e' );
+		it->add_node( 'f' );
+		it = n->add_node( '2' );
+		it->add_node( 'g' );
+		it->add_node( 'h' );
+		it->add_node( 'i' );
+		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
+		tree_t::node_t root( t.get_root() );
+		try {
+			root->get_child_at( -1 );
+			FAIL( "Obtained child with negative index." );
+		} catch ( HException const& ) {
+			/* ok */
+		}
+		for ( int i( 0 ); i < 3; ++ i )
+			ENSURE_EQUALS( "get_child_at() from root failed", **root->get_child_at( i ), i + '0' );
+		try {
+			root->get_child_at( 3 );
+			FAIL( "Obtained child with out of range index." );
+		} catch ( HException const& ) {
+			/* ok */
+		}
+		tree_t::node_t child( root->get_child_at( 0 ) );
+		ENSURE_EQUALS( "get_child_at() from child failed", **child->get_child_at( 0 ), 'q' );
+		ENSURE_EQUALS( "get_child_at() from child failed", **child->get_child_at( 1 ), 'w' );
+	}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
 }
 
