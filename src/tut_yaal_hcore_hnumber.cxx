@@ -39,6 +39,7 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
+using namespace yaal::ansi;
 using namespace tress::tut_helpers;
 
 namespace tut {
@@ -58,7 +59,7 @@ HString tut_yaal_hcore_hnumber::BC_PATH = ::getenv( "BC_PATH" ) ? ::getenv( "BC_
 
 tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void )
 	: _rnd( randomizer_helper::make_randomizer() ), _bc() {
-	set_env( "BC_LINE_LENGTH", "40000" );
+	set_env( "BC_LINE_LENGTH", "100000" );
 #ifdef __MSVCXX__
 	char const WIN_BC_PATH[] = "..\\..\\..\\..\\usr\\windows\\bin\\bc.exe";
 	char const WIN_BC_PATH_ALT[] = "..\\..\\..\\usr\\windows\\bin\\bc.exe";
@@ -1138,18 +1139,6 @@ TUT_UNIT_TEST( 22, "opposite" )
 	ENSURE_EQUALS( "opposite failed e", - HNumber( "-.01" ), HNumber( ".01" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 23, "bc" )
-	TIME_CONSTRAINT_EXEMPT();
-	HNumber n = 3;
-	n ^= 33333;
-	HString myRes = n.to_string();
-	_bc.spawn( BC_PATH );
-	_bc << "3^33333" << endl;
-	HString res;
-	do _bc.read_until( res ); while ( res.is_empty() );
-	ENSURE_EQUALS( "karatsuba failed", myRes, res );
-TUT_TEARDOWN()
-
 TUT_UNIT_TEST( 24, "preincrementation" )
 	HNumber n;
 	HNumber k = ++ n;
@@ -1180,6 +1169,27 @@ TUT_UNIT_TEST( 27, "postdecrementation" )
 	ENSURE_EQUALS( "postdecrementation failed orig", n, HNumber( "-1" ) );
 	ENSURE_EQUALS( "postdecrementation failed copy", k, HNumber( "0" ) );
 	ENSURE_EQUALS( "postdecrementation failed", n --, HNumber( "-1" ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 50, "speed" )
+	double long y( 0 );
+	HNumber n( 3 );
+	TIME_CONSTRAINT_EXEMPT(); {
+		HClock c;
+		n ^= 133333;
+		clog << "*speed* HNumber multiplication = " << static_cast<int long>( y = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+	}
+	HString myRes = n.to_string();
+	_bc.spawn( BC_PATH );
+	double long bc( 0 );
+	HString res; {
+		HClock c;
+		_bc << "3^133333" << endl;
+		do _bc.read_until( res ); while ( res.is_empty() );
+		clog << "*speed* bc multiplication = " << static_cast<int long>( bc = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+	}
+	ENSURE_EQUALS( "karatsuba failed", myRes, res );
+	clog << "*speed* HNumber multiplication result = " << ( ( bc > y ) ? green : red ) << ( y / bc ) << lightgray << endl;
 TUT_TEARDOWN()
 
 }
