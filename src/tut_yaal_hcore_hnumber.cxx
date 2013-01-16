@@ -49,8 +49,9 @@ struct tut_yaal_hcore_hnumber : public simple_mock<tut_yaal_hcore_hnumber> {
 	static HString BC_PATH;
 	HRandomizer _rnd;
 	HPipedChild _bc;
+	HString _cache;
 	tut_yaal_hcore_hnumber( void );
-	double long random_real( void );
+	HString const& random_real( void );
 	virtual ~tut_yaal_hcore_hnumber( void )
 		{}
 };
@@ -58,8 +59,8 @@ struct tut_yaal_hcore_hnumber : public simple_mock<tut_yaal_hcore_hnumber> {
 HString tut_yaal_hcore_hnumber::BC_PATH = ::getenv( "BC_PATH" ) ? ::getenv( "BC_PATH" ) : "/usr/bin/bc";
 
 tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void )
-	: _rnd( randomizer_helper::make_randomizer() ), _bc() {
-	set_env( "BC_LINE_LENGTH", "100000" );
+	: _rnd( randomizer_helper::make_randomizer() ), _bc(), _cache() {
+	set_env( "BC_LINE_LENGTH", "10000000" );
 #ifdef __MSVCXX__
 	char const WIN_BC_PATH[] = "..\\..\\..\\..\\usr\\windows\\bin\\bc.exe";
 	char const WIN_BC_PATH_ALT[] = "..\\..\\..\\usr\\windows\\bin\\bc.exe";
@@ -80,13 +81,25 @@ tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void )
 }
 
 
-double long tut_yaal_hcore_hnumber::random_real( void ) {
-	double long n = _rnd();
-	double long d = 0;
-	while ( d == 0 )
-		d = _rnd();
-	( _rnd() % 2 ) && ( n = -n );
-	return ( n / d );
+HString const& tut_yaal_hcore_hnumber::random_real( void ) {
+	int integralPart( _rnd() % 40 );
+	int decimalPart( _rnd() % 40 );
+	_cache = "0";
+	if ( integralPart || decimalPart ) {
+		_cache.clear();
+		if ( _rnd() % 2 )
+			_cache += '-';
+		for ( int i( 0 ); i < integralPart; ++ i )
+			_cache += ( _rnd() % 10 );
+		if ( decimalPart > 0 ) {
+			_cache += '.';
+			for ( int i( 0 ); i < decimalPart; ++ i )
+				_cache += ( _rnd() % 10 );
+		}
+		if ( _cache.find_other_than( "-.0" ) == HString::npos )
+			_cache = "0";
+	}
+	return ( _cache );
 }
 
 TUT_TEST_GROUP( tut_yaal_hcore_hnumber, "yaal::hcore::HNumber" );
@@ -258,6 +271,69 @@ TUT_UNIT_TEST( 4, "construct from string" )
 	ENSURE_EQUALS( "number 1 10 not created correctly", HNumber( "-.0001" ).to_string(), "-.0001" );
 	ENSURE_EQUALS( "number 1 11 not created correctly", HNumber( "-000.001" ).to_string(), "-.001" );
 	ENSURE_EQUALS( "number 1 12 not created correctly", HNumber( "-0001." ).to_string(), "-1" );
+	/* long numbers */
+	char const* const lns0 = "12345678901234567890";
+	HNumber ln0( lns0 );
+	ENSURE_EQUALS( "number ln0 not created correctly", ln0.to_string(), lns0 );
+
+	char const* const lns1 = "-12345678901234567890";
+	HNumber ln1( lns1 );
+	ENSURE_EQUALS( "number ln1 not created correctly", ln1.to_string(), lns1 );
+
+	char const* const lns2 = "1234567890123456789000000";
+	HNumber ln2( lns2 );
+	ENSURE_EQUALS( "number ln2 not created correctly", ln2.to_string(), lns2 );
+
+	char const* const lns3 = "-1234567890123456789000000";
+	HNumber ln3( lns3 );
+	ENSURE_EQUALS( "number ln3 not created correctly", ln3.to_string(), lns3 );
+
+	char const* const lns4 = "1000000000000000000000000";
+	HNumber ln4( lns4 );
+	ENSURE_EQUALS( "number ln4 not created correctly", ln4.to_string(), lns4 );
+
+	char const* const lns5 = "-1000000000000000000000000";
+	HNumber ln5( lns5 );
+	ENSURE_EQUALS( "number ln5 not created correctly", ln5.to_string(), lns5 );
+
+
+	char const* const lns10 = "12345678901234567890.12345678901234567890";
+	char const* const lns10r = "12345678901234567890.1234567890123456789";
+	HNumber ln10( lns10 );
+	ENSURE_EQUALS( "number ln10 not created correctly", ln10.to_string(), lns10r );
+
+	char const* const lns11 = "-12345678901234567890.12345678901234567890";
+	char const* const lns11r = "-12345678901234567890.1234567890123456789";
+	HNumber ln11( lns11 );
+	ENSURE_EQUALS( "number ln11 not created correctly", ln11.to_string(), lns11r );
+
+	char const* const lns12 = "1234567890123456789000000.12345678901234567890";
+	char const* const lns12r = "1234567890123456789000000.1234567890123456789";
+	HNumber ln12( lns12 );
+	ENSURE_EQUALS( "number ln12 not created correctly", ln12.to_string(), lns12r );
+
+	char const* const lns13 = "-1234567890123456789000000.12345678901234567890";
+	char const* const lns13r = "-1234567890123456789000000.1234567890123456789";
+	HNumber ln13( lns13 );
+	ENSURE_EQUALS( "number ln13 not created correctly", ln13.to_string(), lns13r );
+
+	char const* const lns14 = "1000000000000000000000000.12345678901234567890";
+	char const* const lns14r = "1000000000000000000000000.1234567890123456789";
+	HNumber ln14( lns14 );
+	ENSURE_EQUALS( "number ln14 not created correctly", ln14.to_string(), lns14r );
+
+	char const* const lns15 = "-1000000000000000000000000.12345678901234567890";
+	char const* const lns15r = "-1000000000000000000000000.1234567890123456789";
+	HNumber ln15( lns15 );
+	ENSURE_EQUALS( "number ln15 not created correctly", ln15.to_string(), lns15r );
+
+	char const* const lns16 = "12345678901234567890.000000000001234";
+	HNumber ln16( lns16 );
+	ENSURE_EQUALS( "number ln16 not created correctly", ln16.to_string(), lns16 );
+
+	char const* const lns17 = "12345678901234567890.00000000000123456789";
+	HNumber ln17( lns17 );
+	ENSURE_EQUALS( "number ln17 not created correctly", ln17.to_string(), lns17 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "construct from string (prefixes)" )
@@ -631,7 +707,8 @@ TUT_UNIT_TEST( 10, "set/get precision" )
 	ENSURE_EQUALS( "bad modified 3 precision M", n.get_precision(), M );
 	n.set_precision( S );
 	ENSURE_EQUALS( "bad modified 3 precision SM", n.get_precision(), M );
-	n = "10.1212121212121212121212";
+	n = "10.121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212"
+		"12121212121212121212121212121212121212121212121212121212121212121";
 	ENSURE_EQUALS( "bad precision from string", n.get_precision(), 22 + 1 ); /* numbers from strings are always is_exact() */
 	n.set_precision( 100 );
 	ENSURE_EQUALS( "bad modified 4 precision", n.get_precision(), 100 ); /* number was exact */
@@ -876,13 +953,14 @@ TUT_UNIT_TEST( 19, "multiplication" )
 	HString bs;
 	_bc << "scale=100" << endl;
 	for ( int long i = 0; i < 1000; ++ i ) {
-		HNumber a( random_real() );
-		HNumber b( random_real() );
-		as = a.to_string();
-		bs = b.to_string();
+		as = random_real();
+		bs = random_real();
+		HNumber a( as );
+		HNumber b( bs );
 		_bc << as << "* " << bs << endl;
 		do _bc.read_until( res ); while ( res.is_empty() );
 		msg = "multiplication of random a = " + as + " and b = " + bs + " failed";
+		
 		ENSURE_EQUALS( msg, ( a * b ).to_string(), HNumber( res ).to_string() );
 		msg += "(R)";
 		ENSURE_EQUALS( msg, ( b * a ).to_string(), HNumber( res ).to_string() );
@@ -1111,9 +1189,8 @@ TUT_UNIT_TEST( 21, "division" )
 	_bc << "scale=" << M + M << endl;
 	for ( int long i = 0; i < 1000; ++ i ) {
 		HNumber a( random_real() );
-		double long den = random_real();
-		den || ++ den;
-		HNumber b( den );
+		HString const& den( random_real() );
+		HNumber b( den != "0" ? den : "1" );
 		a.set_precision( M );
 		b.set_precision( M );
 		as = a.to_string();
