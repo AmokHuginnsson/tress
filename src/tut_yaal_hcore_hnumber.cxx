@@ -32,6 +32,7 @@ Copyright:
 #include <yaal/hcore/hcore.hxx>
 #include <yaal/tools/hpipedchild.hxx>
 #include <yaal/tools/hfsitem.hxx>
+#include <yaal/tools/xmath.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
@@ -51,6 +52,7 @@ struct tut_yaal_hcore_hnumber : public simple_mock<tut_yaal_hcore_hnumber> {
 	HPipedChild _bc;
 	HString _cache;
 	tut_yaal_hcore_hnumber( void );
+	HString const& expand_leafs( HString const& );
 	HString const& random_real( void );
 	virtual ~tut_yaal_hcore_hnumber( void )
 		{}
@@ -98,6 +100,18 @@ HString const& tut_yaal_hcore_hnumber::random_real( void ) {
 		}
 		if ( _cache.find_other_than( "-.0" ) == HString::npos )
 			_cache = "0";
+	}
+	return ( _cache );
+}
+
+HString const& tut_yaal_hcore_hnumber::expand_leafs( HString const& template_ ) {
+	_cache.clear();
+	static HString zeros( "00000000", HNumber::DECIMAL_DIGITS_IN_LEAF - 1 );
+	_cache.hs_realloc( template_.get_length() * HNumber::DECIMAL_DIGITS_IN_LEAF + 1 );
+	for ( HString::const_iterator it( template_.begin() ), end( template_.end() ); it != end; ++ it ) {
+		_cache += *it;
+		if ( ( *it != '-' ) && ( *it != '.' ) )
+			_cache += zeros;
 	}
 	return ( _cache );
 }
@@ -1178,6 +1192,28 @@ TUT_UNIT_TEST( 21, "division" )
 		HString d( "-3.6" );
 		HString r( "-.3279525950141666666666666666" );
 		ENSURE_EQUALS( "padding front zeros failed q 1 ", ( HNumber( n ) / HNumber( d ) ).to_string().left( 30 ), HNumber( r ).to_string() );
+	}
+
+	char const pdividend[] = "0001201440012000144000012000";
+	char const pdivisor[] = "00012000";
+	char const pquotient[] = "0000000010012000100001200000100000000";
+	HString dividend;
+	HString divisor;
+	HString quotient;
+	int const dividendLen( sizeof ( pdividend ) - 1 );
+	int const divisorLen( sizeof ( pdivisor ) - 1 );
+
+	for ( int dividendPos( 0 ); dividendPos <= dividendLen; ++ dividendPos ) {
+		for ( int divisorPos( 0 ); divisorPos <= divisorLen; ++ divisorPos ) {
+			dividend = pdividend;
+			dividend.insert( dividendPos, "." );
+			divisor = pdivisor;
+			divisor.insert( divisorPos, "." );
+			quotient = pquotient;
+			quotient.insert( xmath::clip( 0, dividendPos - divisorPos + 9, static_cast<int>( sizeof ( pquotient ) ) ), "." );
+			ENSURE_EQUALS( "division failed leaf", ( HNumber( expand_leafs( dividend ) ) / HNumber( expand_leafs( divisor ) ) ).to_string(),
+					HNumber( expand_leafs( quotient ) ).to_string() );
+		}
 	}
 
 	_bc.spawn( BC_PATH );
