@@ -960,6 +960,7 @@ TUT_UNIT_TEST( 19, "multiplication" )
 	ENSURE_EQUALS( "multiplication failed g", ( HNumber( "123.4567" ) * HNumber( "100" ) ).to_string(), HNumber( "12345.67" ).to_string() );
 	ENSURE_EQUALS( "multiplication failed h", ( HNumber( "12.345" ) * HNumber( "100000" ) ).to_string(), HNumber( "1234500" ).to_string() );
 	ENSURE_EQUALS( "multiplication failed i", ( HNumber( "1234" ) * HNumber( "0.001" ) ).to_string(), HNumber( "1.234" ).to_string() );
+	ENSURE_EQUALS( "multiplication failed j", ( HNumber( "584833018983741997878722386503334636.78288384371198912247950986" ) * HNumber( "-9495561202762179256808404731.0288638" ) ).to_string(), HNumber( "-5553317725156297579601206726057421373895864032769682350068288883.613387831060572493018571736697068" ).to_string() );
 	_bc.spawn( BC_PATH );
 	HString msg;
 	HString res;
