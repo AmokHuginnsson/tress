@@ -960,8 +960,11 @@ TUT_UNIT_TEST( 19, "multiplication" )
 	ENSURE_EQUALS( "multiplication failed h", ( HNumber( "12.345" ) * HNumber( "100000" ) ).to_string(), HNumber( "1234500" ).to_string() );
 	ENSURE_EQUALS( "multiplication failed i", ( HNumber( "1234" ) * HNumber( "0.001" ) ).to_string(), HNumber( "1.234" ).to_string() );
 	ENSURE_EQUALS( "multiplication failed j", ( HNumber( "584833018983741997878722386503334636.78288384371198912247950986" ) * HNumber( "-9495561202762179256808404731.0288638" ) ).to_string(), HNumber( "-5553317725156297579601206726057421373895864032769682350068288883.613387831060572493018571736697068" ).to_string() );
+	ENSURE_EQUALS( "multiplication failed j2", ( HNumber( expand_leafs( "584833018983741997878722386503334636.78288384371198912247950986" ) ) * HNumber( expand_leafs( "-9495561202762179256808404731.0288638" ) ) ).to_string(), HNumber( expand_leafs( "-5553317725156297579601206726057421373895864032769682350068288883.613387831060572493018571736697068" ) ).to_string() );
 	ENSURE_EQUALS( "multiplication failed k", ( HNumber( "930000000096000000000" ) * HNumber( "95" ) ).to_string(), HNumber( "88350000009120000000000" ).to_string() );
+	ENSURE_EQUALS( "multiplication failed k2", ( HNumber( expand_leafs( "930000000096000000000" ) ) * HNumber( expand_leafs( "95" ) ) ).to_string(), HNumber( expand_leafs( "88350000009120000000000" ) ).to_string() );
 	ENSURE_EQUALS( "multiplication failed x", ( HNumber( ".011931709189" ) * HNumber( "-154.734375" ) ).to_string(), HNumber( "-1.846245564041671875" ).to_string() );
+	ENSURE_EQUALS( "multiplication failed x2", ( HNumber( expand_leafs( ".011931709189" ) ) * HNumber( expand_leafs( "-154.734375" ) ) ).to_string(), HNumber( expand_leafs( "-1.846245564041671875" ) ).to_string() );
 	_bc.spawn( BC_PATH );
 	HString msg;
 	HString res;
