@@ -952,6 +952,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 19, "multiplication" )
 	ENSURE_EQUALS( "multiplication failed a", ( HNumber( "0" ) * HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
 	ENSURE_EQUALS( "multiplication failed b", ( HNumber( "0" ) * HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
+	ENSURE_EQUALS( "multiplication failed b", ( HNumber( "1" ) * HNumber( "1" ) ).to_string(), HNumber( "1" ).to_string() );
 	ENSURE_EQUALS( "multiplication failed c", ( HNumber( "2" ) * HNumber( "3" ) ).to_string(), HNumber( "6" ).to_string() );
 	ENSURE_EQUALS( "multiplication failed d", ( HNumber( "-2" ) * HNumber( "3" ) ).to_string(), HNumber( "-6" ).to_string() );
 	ENSURE_EQUALS( "multiplication failed e", ( HNumber( "-2" ) * HNumber( "-3" ) ).to_string(), HNumber( "6" ).to_string() );
@@ -1021,7 +1022,21 @@ TUT_UNIT_TEST( 21, "division" )
 	ENSURE_EQUALS( "division failed c x   ", ( HNumber( "1" ) / HNumber( "10" ) ).to_string(), HNumber( ".1" ).to_string() );
 	ENSURE_EQUALS( "division failed c y   ", ( HNumber( "1" ) / HNumber( "100" ) ).to_string(), HNumber( ".01" ).to_string() );
 	ENSURE_EQUALS( "division failed c z   ", ( HNumber( "1" ) / HNumber( "1000" ) ).to_string(), HNumber( ".001" ).to_string() );
+	ENSURE_EQUALS( "division failed c D 00", ( HNumber( ".1" ) / HNumber( "1" ) ).to_string(), HNumber( ".1" ).to_string() );
+	ENSURE_EQUALS( "division failed c D 01", ( HNumber( ".1" ) / HNumber( "10" ) ).to_string(), HNumber( ".01" ).to_string() );
+	ENSURE_EQUALS( "division failed c D 02", ( HNumber( ".1" ) / HNumber( "100" ) ).to_string(), HNumber( ".001" ).to_string() );
+	ENSURE_EQUALS( "division failed c D 03", ( HNumber( ".1" ) / HNumber( "1000" ) ).to_string(), HNumber( ".0001" ).to_string() );
+	ENSURE_EQUALS( "division failed c D 10", ( HNumber( ".01" ) / HNumber( "1" ) ).to_string(), HNumber( ".01" ).to_string() );
+	ENSURE_EQUALS( "division failed c D 11", ( HNumber( ".01" ) / HNumber( "10" ) ).to_string(), HNumber( ".001" ).to_string() );
+	ENSURE_EQUALS( "division failed c D 12", ( HNumber( ".01" ) / HNumber( "100" ) ).to_string(), HNumber( ".0001" ).to_string() );
+	ENSURE_EQUALS( "division failed c D 13", ( HNumber( ".01" ) / HNumber( "1000" ) ).to_string(), HNumber( ".00001" ).to_string() );
+	ENSURE_EQUALS( "division failed c D 20", ( HNumber( ".001" ) / HNumber( "1" ) ).to_string(), HNumber( ".001" ).to_string() );
+	ENSURE_EQUALS( "division failed c D 21", ( HNumber( ".001" ) / HNumber( "10" ) ).to_string(), HNumber( ".0001" ).to_string() );
+	ENSURE_EQUALS( "division failed c D 22", ( HNumber( ".001" ) / HNumber( "100" ) ).to_string(), HNumber( ".00001" ).to_string() );
+	ENSURE_EQUALS( "division failed c D 23", ( HNumber( ".001" ) / HNumber( "1000" ) ).to_string(), HNumber( ".000001" ).to_string() );
 	ENSURE_EQUALS( "division failed c 0   ", ( HNumber( "10.01" ) / HNumber( "1" ) ).to_string(), HNumber( "10.01" ).to_string() );
+	ENSURE_EQUALS( "division failed c 0 0 ", ( HNumber( "100.01" ) / HNumber( "1" ) ).to_string(), HNumber( "100.01" ).to_string() );
+	ENSURE_EQUALS( "division failed c 0 1 ", ( HNumber( "10.001" ) / HNumber( "1" ) ).to_string(), HNumber( "10.001" ).to_string() );
 	ENSURE_EQUALS( "division failed c 0 2 ", ( HNumber( "10.01" ) / HNumber( "2" ) ).to_string(), HNumber( "5.005" ).to_string() );
 	ENSURE_EQUALS( "division failed c 1   ", ( HNumber( "10.01" ) / HNumber( "10" ) ).to_string(), HNumber( "1.001" ).to_string() );
 	ENSURE_EQUALS( "division failed c 1,0 ", ( HNumber( "10.001" ) / HNumber( "10" ) ).to_string(), HNumber( "1.0001" ).to_string() );
