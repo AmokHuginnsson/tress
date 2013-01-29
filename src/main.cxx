@@ -172,7 +172,8 @@ int main( int argc_, char* argv_[] ) {
 		} catch ( const std::exception& e ) {
 			std::cerr << "tut raised ex: " << e.what() << std::endl;
 		}
-		M_ENSURE( ! errno );
+		if ( setup._reporter == "tut" )
+			M_ENSURE( ! errno );
 /*	... there is the place main loop ends. :OD-OT                         */
 	} catch ( int e ) {
 		err = e;
