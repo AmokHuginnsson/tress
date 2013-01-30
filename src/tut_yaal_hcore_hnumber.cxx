@@ -898,38 +898,40 @@ TUT_TEARDOWN()
  *
  */
 
-TUT_UNIT_TEST( 18, "addition" )
-	ENSURE_EQUALS( "addition failed a", ( HNumber( "0" ) + HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
-	ENSURE_EQUALS( "addition failed a1", ( HNumber( "6" ) + HNumber( "7" ) ).to_string(), HNumber( "13" ).to_string() );
-	ENSURE_EQUALS( "addition failed b", ( HNumber( "1" ) + HNumber( "0" ) ).to_string(), HNumber( "1" ).to_string() );
-	ENSURE_EQUALS( "addition failed c", ( HNumber( "0" ) + HNumber( "1" ) ).to_string(), HNumber( "1" ).to_string() );
-	ENSURE_EQUALS( "addition failed d", ( HNumber( "-1" ) + HNumber( "0" ) ).to_string(), HNumber( "-1" ).to_string() );
-	ENSURE_EQUALS( "addition failed e", ( HNumber( "0" ) + HNumber( "-1" ) ).to_string(), HNumber( "-1" ).to_string() );
-	ENSURE_EQUALS( "addition failed f", ( HNumber( "-1" ) + HNumber( "-1" ) ).to_string(), HNumber( "-2" ).to_string() );
-	ENSURE_EQUALS( "addition failed g", ( HNumber( "1" ) + HNumber( "1" ) ).to_string(), HNumber( "2" ).to_string() );
-	ENSURE_EQUALS( "addition failed h", ( HNumber( "-1" ) + HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
-	ENSURE_EQUALS( "addition failed i", ( HNumber( "1" ) + HNumber( "-1" ) ).to_string(), HNumber( "0" ).to_string() );
-	ENSURE_EQUALS( "addition failed j", ( HNumber( "1.234" ) + HNumber( "2.345" ) ).to_string(), HNumber( "3.579" ).to_string() );
-	ENSURE_EQUALS( "addition failed k", ( HNumber( "2.345" ) + HNumber( "3.455" ) ).to_string(), HNumber( "5.8" ).to_string() );
-	ENSURE_EQUALS( "addition failed l", ( HNumber( "12.34" ) + HNumber( "4.323" ) ).to_string(), HNumber( "16.663" ).to_string() );
-	ENSURE_EQUALS( "addition failed m", ( HNumber( "-1.234" ) + HNumber( "4.2356" ) ).to_string(), HNumber( "3.0016" ).to_string() );
+#define ADD_TEST( augend, addend, sum ) \
+	ENSURE_EQUALS( "addition failed: `" #augend " + " #addend " = " #sum "'", ( HNumber( #augend ) + HNumber( #addend ) ).to_string(), HNumber( #sum ).to_string() )
 
-	ENSURE_EQUALS( "addition failed 0", ( HNumber( "123.1" ) + HNumber( "1.1234" ) ).to_string(), HNumber( "124.2234" ).to_string() );
-	ENSURE_EQUALS( "addition failed 1", ( HNumber( "123.1234" ) + HNumber( "1.12" ) ).to_string(), HNumber( "124.2434" ).to_string() );
-	ENSURE_EQUALS( "addition failed 2", ( HNumber( "1.1234" ) + HNumber( "123.1" ) ).to_string(), HNumber( "124.2234" ).to_string() );
-	ENSURE_EQUALS( "addition failed 3", ( HNumber( "1.12" ) + HNumber( "123.1234" ) ).to_string(), HNumber( "124.2434" ).to_string() );
-	ENSURE_EQUALS( "addition failed 4", ( HNumber( "-123.1" ) + HNumber( "1.1234" ) ).to_string(), HNumber( "-121.9766" ).to_string() );
-	ENSURE_EQUALS( "addition failed 5", ( HNumber( "-123.1234" ) + HNumber( "1.12" ) ).to_string(), HNumber( "-122.0034" ).to_string() );
-	ENSURE_EQUALS( "addition failed 6", ( HNumber( "-1.1234" ) + HNumber( "123.1" ) ).to_string(), HNumber( "121.9766" ).to_string() );
-	ENSURE_EQUALS( "addition failed 7", ( HNumber( "-1.12" ) + HNumber( "123.1234" ) ).to_string(), HNumber( "122.0034" ).to_string() );
-	ENSURE_EQUALS( "addition failed 8", ( HNumber( "123.1" ) + HNumber( "-1.1234" ) ).to_string(), HNumber( "121.9766" ).to_string() );
-	ENSURE_EQUALS( "addition failed 9", ( HNumber( "123.1234" ) + HNumber( "-1.12" ) ).to_string(), HNumber( "122.0034" ).to_string() );
-	ENSURE_EQUALS( "addition failed 10", ( HNumber( "1.1234" ) + HNumber( "-123.1" ) ).to_string(), HNumber( "-121.9766" ).to_string() );
-	ENSURE_EQUALS( "addition failed 11", ( HNumber( "1.12" ) + HNumber( "-123.1234" ) ).to_string(), HNumber( "-122.0034" ).to_string() );
-	ENSURE_EQUALS( "addition failed 12", ( HNumber( "-123.1" ) + HNumber( "-1.1234" ) ).to_string(), HNumber( "-124.2234" ).to_string() );
-	ENSURE_EQUALS( "addition failed 13", ( HNumber( "-123.1234" ) + HNumber( "-1.12" ) ).to_string(), HNumber( "-124.2434" ).to_string() );
-	ENSURE_EQUALS( "addition failed 14", ( HNumber( "-1.1234" ) + HNumber( "-123.1" ) ).to_string(), HNumber( "-124.2234" ).to_string() );
-	ENSURE_EQUALS( "addition failed 15", ( HNumber( "-1.12" ) + HNumber( "-123.1234" ) ).to_string(), HNumber( "-124.2434" ).to_string() );
+TUT_UNIT_TEST( 18, "addition" )
+	ADD_TEST( 0, 0, 0 );
+	ADD_TEST( 6, 7, 13 );
+	ADD_TEST( 1, 0, 1 );
+	ADD_TEST( 0, 1, 1 );
+	ADD_TEST( -1, 0, -1 );
+	ADD_TEST( 0, -1, -1 );
+	ADD_TEST( -1, -1, -2 );
+	ADD_TEST( 1, 1, 2 );
+	ADD_TEST( -1, 1, 0 );
+	ADD_TEST( 1, -1, 0 );
+	ADD_TEST( 1.234, 2.345, 3.579 );
+	ADD_TEST( 2.345, 3.455, 5.8 );
+	ADD_TEST( 12.34, 4.323, 16.663 );
+	ADD_TEST( -1.234, 4.2356, 3.0016 );
+	ADD_TEST( 123.1, 1.1234, 124.2234 );
+	ADD_TEST( 123.1234, 1.12, 124.2434 );
+	ADD_TEST( 1.1234, 123.1, 124.2234 );
+	ADD_TEST( 1.12, 123.1234, 124.2434 );
+	ADD_TEST( -123.1, 1.1234, -121.9766 );
+	ADD_TEST( -123.1234, 1.12, -122.0034 );
+	ADD_TEST( -1.1234, 123.1, 121.9766 );
+	ADD_TEST( -1.12, 123.1234, 122.0034 );
+	ADD_TEST( 123.1, -1.1234, 121.9766 );
+	ADD_TEST( 123.1234, -1.12, 122.0034 );
+	ADD_TEST( 1.1234, -123.1, -121.9766 );
+	ADD_TEST( 1.12, -123.1234, -122.0034 );
+	ADD_TEST( -123.1, -1.1234, -124.2234 );
+	ADD_TEST( -123.1234, -1.12, -124.2434 );
+	ADD_TEST( -1.1234, -123.1, -124.2234 );
+	ADD_TEST( -1.12, -123.1234, -124.2434 );
 	_bc.spawn( BC_PATH );
 	HString msg;
 	HString res;
@@ -949,18 +951,23 @@ TUT_UNIT_TEST( 18, "addition" )
 	}
 TUT_TEARDOWN()
 
+#undef ADD_TEST
+
+#define MUL_TEST( multiplicand, factor, product ) \
+	ENSURE_EQUALS( "multiplication failed: `" #multiplicand " * " #factor " = " #product "'", ( HNumber( #multiplicand ) * HNumber( #factor ) ).to_string(), HNumber( #product ).to_string() )
+
 TUT_UNIT_TEST( 19, "multiplication" )
-	ENSURE_EQUALS( "multiplication failed a", ( HNumber( "0" ) * HNumber( "0" ) ).to_string(), HNumber( "0" ).to_string() );
-	ENSURE_EQUALS( "multiplication failed b", ( HNumber( "0" ) * HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
-	ENSURE_EQUALS( "multiplication failed b", ( HNumber( "1" ) * HNumber( "1" ) ).to_string(), HNumber( "1" ).to_string() );
-	ENSURE_EQUALS( "multiplication failed c", ( HNumber( "2" ) * HNumber( "3" ) ).to_string(), HNumber( "6" ).to_string() );
-	ENSURE_EQUALS( "multiplication failed d", ( HNumber( "-2" ) * HNumber( "3" ) ).to_string(), HNumber( "-6" ).to_string() );
-	ENSURE_EQUALS( "multiplication failed e", ( HNumber( "-2" ) * HNumber( "-3" ) ).to_string(), HNumber( "6" ).to_string() );
-	ENSURE_EQUALS( "multiplication failed f", ( HNumber( "12.34" ) * HNumber( "-7.321" ) ).to_string(), HNumber( "-90.34114" ).to_string() );
-	ENSURE_EQUALS( "multiplication failed g", ( HNumber( "123.4567" ) * HNumber( "100" ) ).to_string(), HNumber( "12345.67" ).to_string() );
-	ENSURE_EQUALS( "multiplication failed h", ( HNumber( "12.345" ) * HNumber( "100000" ) ).to_string(), HNumber( "1234500" ).to_string() );
-	ENSURE_EQUALS( "multiplication failed i", ( HNumber( "1234" ) * HNumber( "0.001" ) ).to_string(), HNumber( "1.234" ).to_string() );
-	ENSURE_EQUALS( "multiplication failed j", ( HNumber( "584833018983741997878722386503334636.78288384371198912247950986" ) * HNumber( "-9495561202762179256808404731.0288638" ) ).to_string(), HNumber( "-5553317725156297579601206726057421373895864032769682350068288883.613387831060572493018571736697068" ).to_string() );
+	MUL_TEST( 0, 0, 0 );
+	MUL_TEST( 0, 1, 0 );
+	MUL_TEST( 1, 1, 1 );
+	MUL_TEST( 2, 3, 6 );
+	MUL_TEST( -2, 3, -6 );
+	MUL_TEST( -2, -3, 6 );
+	MUL_TEST( 12.34, -7.321, -90.34114 );
+	MUL_TEST( 123.4567, 100, 12345.67 );
+	MUL_TEST( 12.345, 100000, 1234500 );
+	MUL_TEST( 1234, 0.001, 1.234 );
+	MUL_TEST( 584833018983741997878722386503334636.78288384371198912247950986, -9495561202762179256808404731.0288638, -5553317725156297579601206726057421373895864032769682350068288883.613387831060572493018571736697068 );
 	ENSURE_EQUALS( "multiplication failed j2", ( HNumber( expand_leafs( "584833018983741997878722386503334636.78288384371198912247950986" ) ) * HNumber( expand_leafs( "-9495561202762179256808404731.0288638" ) ) ).to_string(), HNumber( expand_leafs( "-5553317725156297579601206726057421373895864032769682350068288883.613387831060572493018571736697068" ) ).to_string() );
 	ENSURE_EQUALS( "multiplication failed k", ( HNumber( "930000000096000000000" ) * HNumber( "95" ) ).to_string(), HNumber( "88350000009120000000000" ).to_string() );
 	ENSURE_EQUALS( "multiplication failed k2", ( HNumber( expand_leafs( "930000000096000000000" ) ) * HNumber( expand_leafs( "95" ) ) ).to_string(), HNumber( expand_leafs( "88350000009120000000000" ) ).to_string() );
@@ -987,6 +994,8 @@ TUT_UNIT_TEST( 19, "multiplication" )
 	}
 TUT_TEARDOWN()
 
+#undef MUL_TEST
+
 TUT_UNIT_TEST( 20, "substraction" )
 	_bc.spawn( BC_PATH );
 	HString msg;
@@ -1007,6 +1016,9 @@ TUT_UNIT_TEST( 20, "substraction" )
 	}
 TUT_TEARDOWN()
 
+#define DIV_TEST( dividend, divisor, quotient ) \
+	ENSURE_EQUALS( "division failed: `" #dividend " / " #divisor " = " #quotient "'", ( HNumber( #dividend ) / HNumber( #divisor ) ).to_string(), HNumber( #quotient ).to_string() )
+
 TUT_UNIT_TEST( 21, "division" )
 	try {
 		HNumber n( "1" );
@@ -1016,63 +1028,64 @@ TUT_UNIT_TEST( 21, "division" )
 	} catch ( HException& ) {
 		// ok
 	}
-	ENSURE_EQUALS( "division failed a     ", ( HNumber( "0" ) / HNumber( "1" ) ).to_string(), HNumber( "0" ).to_string() );
-	ENSURE_EQUALS( "division failed b     ", ( HNumber( "0" ) / HNumber( "-1" ) ).to_string(), HNumber( "0" ).to_string() );
-	ENSURE_EQUALS( "division failed c     ", ( HNumber( "1" ) / HNumber( "1" ) ).to_string(), HNumber( "1" ).to_string() );
-	ENSURE_EQUALS( "division failed c x   ", ( HNumber( "1" ) / HNumber( "10" ) ).to_string(), HNumber( ".1" ).to_string() );
-	ENSURE_EQUALS( "division failed c y   ", ( HNumber( "1" ) / HNumber( "100" ) ).to_string(), HNumber( ".01" ).to_string() );
-	ENSURE_EQUALS( "division failed c z   ", ( HNumber( "1" ) / HNumber( "1000" ) ).to_string(), HNumber( ".001" ).to_string() );
-	ENSURE_EQUALS( "division failed c D 00", ( HNumber( ".1" ) / HNumber( "1" ) ).to_string(), HNumber( ".1" ).to_string() );
-	ENSURE_EQUALS( "division failed c D 01", ( HNumber( ".1" ) / HNumber( "10" ) ).to_string(), HNumber( ".01" ).to_string() );
-	ENSURE_EQUALS( "division failed c D 02", ( HNumber( ".1" ) / HNumber( "100" ) ).to_string(), HNumber( ".001" ).to_string() );
-	ENSURE_EQUALS( "division failed c D 03", ( HNumber( ".1" ) / HNumber( "1000" ) ).to_string(), HNumber( ".0001" ).to_string() );
-	ENSURE_EQUALS( "division failed c D 10", ( HNumber( ".01" ) / HNumber( "1" ) ).to_string(), HNumber( ".01" ).to_string() );
-	ENSURE_EQUALS( "division failed c D 11", ( HNumber( ".01" ) / HNumber( "10" ) ).to_string(), HNumber( ".001" ).to_string() );
-	ENSURE_EQUALS( "division failed c D 12", ( HNumber( ".01" ) / HNumber( "100" ) ).to_string(), HNumber( ".0001" ).to_string() );
-	ENSURE_EQUALS( "division failed c D 13", ( HNumber( ".01" ) / HNumber( "1000" ) ).to_string(), HNumber( ".00001" ).to_string() );
-	ENSURE_EQUALS( "division failed c D 20", ( HNumber( ".001" ) / HNumber( "1" ) ).to_string(), HNumber( ".001" ).to_string() );
-	ENSURE_EQUALS( "division failed c D 21", ( HNumber( ".001" ) / HNumber( "10" ) ).to_string(), HNumber( ".0001" ).to_string() );
-	ENSURE_EQUALS( "division failed c D 22", ( HNumber( ".001" ) / HNumber( "100" ) ).to_string(), HNumber( ".00001" ).to_string() );
-	ENSURE_EQUALS( "division failed c D 23", ( HNumber( ".001" ) / HNumber( "1000" ) ).to_string(), HNumber( ".000001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 0   ", ( HNumber( "10.01" ) / HNumber( "1" ) ).to_string(), HNumber( "10.01" ).to_string() );
-	ENSURE_EQUALS( "division failed c 0 0 ", ( HNumber( "100.01" ) / HNumber( "1" ) ).to_string(), HNumber( "100.01" ).to_string() );
-	ENSURE_EQUALS( "division failed c 0 1 ", ( HNumber( "10.001" ) / HNumber( "1" ) ).to_string(), HNumber( "10.001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 0 2 ", ( HNumber( "10.01" ) / HNumber( "2" ) ).to_string(), HNumber( "5.005" ).to_string() );
-	ENSURE_EQUALS( "division failed c 1   ", ( HNumber( "10.01" ) / HNumber( "10" ) ).to_string(), HNumber( "1.001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 1,0 ", ( HNumber( "10.001" ) / HNumber( "10" ) ).to_string(), HNumber( "1.0001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 1,1 ", ( HNumber( "10.001" ) / HNumber( "100" ) ).to_string(), HNumber( ".10001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 1,2 ", ( HNumber( "10.001" ) / HNumber( "1000" ) ).to_string(), HNumber( ".010001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 1,3 ", ( HNumber( "100.01" ) / HNumber( "10" ) ).to_string(), HNumber( "10.001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 1,4 ", ( HNumber( "100.01" ) / HNumber( "100" ) ).to_string(), HNumber( "1.0001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 1,5 ", ( HNumber( "100.01" ) / HNumber( "1000" ) ).to_string(), HNumber( ".10001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 1 2 ", ( HNumber( "10.01" ) / HNumber( "20" ) ).to_string(), HNumber( ".5005" ).to_string() );
-	ENSURE_EQUALS( "division failed c 2   ", ( HNumber( "10.01" ) / HNumber( "100" ) ).to_string(), HNumber( ".1001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 2 2 ", ( HNumber( "10.01" ) / HNumber( "200" ) ).to_string(), HNumber( ".05005" ).to_string() );
-	ENSURE_EQUALS( "division failed c 3   ", ( HNumber( "10.01" ) / HNumber( "1000" ) ).to_string(), HNumber( ".01001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 3 2 ", ( HNumber( "10.01" ) / HNumber( "2000" ) ).to_string(), HNumber( ".005005" ).to_string() );
-	ENSURE_EQUALS( "division failed c 4   ", ( HNumber( "10.01" ) / HNumber( "10000" ) ).to_string(), HNumber( ".001001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 4 2 ", ( HNumber( "10.01" ) / HNumber( "20000" ) ).to_string(), HNumber( ".0005005" ).to_string() );
-	ENSURE_EQUALS( "division failed c 5   ", ( HNumber( "10.01" ) / HNumber( "100000" ) ).to_string(), HNumber( ".0001001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 5 2 ", ( HNumber( "10.01" ) / HNumber( "200000" ) ).to_string(), HNumber( ".00005005" ).to_string() );
-	ENSURE_EQUALS( "division failed c 6   ", ( HNumber( "10.01" ) / HNumber( ".1" ) ).to_string(), HNumber( "100.1" ).to_string() );
-	ENSURE_EQUALS( "division failed c 6 2 ", ( HNumber( "10.01" ) / HNumber( ".2" ) ).to_string(), HNumber( "50.05" ).to_string() );
-	ENSURE_EQUALS( "division failed c 7   ", ( HNumber( "10.01" ) / HNumber( ".01" ) ).to_string(), HNumber( "1001" ).to_string() );
-	ENSURE_EQUALS( "division failed c 7 2 ", ( HNumber( "10.01" ) / HNumber( ".02" ) ).to_string(), HNumber( "500.5" ).to_string() );
-	ENSURE_EQUALS( "division failed c 8   ", ( HNumber( "10.01" ) / HNumber( ".001" ) ).to_string(), HNumber( "10010" ).to_string() );
-	ENSURE_EQUALS( "division failed c 8 2 ", ( HNumber( "10.01" ) / HNumber( ".002" ) ).to_string(), HNumber( "5005" ).to_string() );
-	ENSURE_EQUALS( "division failed c 9   ", ( HNumber( "10.01" ) / HNumber( ".0001" ) ).to_string(), HNumber( "100100" ).to_string() );
-	ENSURE_EQUALS( "division failed c 9 2 ", ( HNumber( "10.01" ) / HNumber( ".0002" ) ).to_string(), HNumber( "50050" ).to_string() );
-	ENSURE_EQUALS( "division failed d     ", ( HNumber( "1" ) / HNumber( "-1" ) ).to_string(), HNumber( "-1" ).to_string() );
-	ENSURE_EQUALS( "division failed e     ", ( HNumber( "-1" ) / HNumber( "1" ) ).to_string(), HNumber( "-1" ).to_string() );
-	ENSURE_EQUALS( "division failed f     ", ( HNumber( "-1" ) / HNumber( "-1" ) ).to_string(), HNumber( "1" ).to_string() );
-	ENSURE_EQUALS( "division failed g     ", ( HNumber( "2" ) / HNumber( "4" ) ).to_string(), HNumber( ".5" ).to_string() );
-	ENSURE_EQUALS( "division failed h     ", ( HNumber( "4" ) / HNumber( "2" ) ).to_string(), HNumber( "2" ).to_string() );
-	ENSURE_EQUALS( "division failed x     ", ( HNumber( "2468" ) / HNumber( "2" ) ).to_string(), HNumber( "1234" ).to_string() );
-	ENSURE_EQUALS( "division failed i     ", ( HNumber( "100" ) / HNumber( "5" ) ).to_string(), HNumber( "20" ).to_string() );
-	ENSURE_EQUALS( "division failed j     ", ( HNumber( "5" ) / HNumber( "100" ) ).to_string(), HNumber( ".05" ).to_string() );
-	ENSURE_EQUALS( "division failed k     ", ( HNumber( "3.144" ) / HNumber( ".03" ) ).to_string(), HNumber( "104.8" ).to_string() );
-	ENSURE_EQUALS( "division failed k 1   ", ( HNumber( "3.15" ) / HNumber( ".03" ) ).to_string(), HNumber( "105" ).to_string() );
-	ENSURE_EQUALS( "division failed k 2   ", ( HNumber( "31.44" ) / HNumber( ".03" ) ).to_string(), HNumber( "1048" ).to_string() );
+	DIV_TEST( 0, 1, 0 );
+	DIV_TEST( 0, -1, 0 );
+	DIV_TEST( 1, 1, 1 );
+	DIV_TEST( 1, 10, .1 );
+	DIV_TEST( 1, 100, .01 );
+	DIV_TEST( 1, 1000, .001 );
+	DIV_TEST( .1, 1, .1 );
+	DIV_TEST( .1, 10, .01 );
+	DIV_TEST( .1, 100, .001 );
+	DIV_TEST( .1, 1000, .0001 );
+	DIV_TEST( .01, 1, .01 );
+	DIV_TEST( .01, 10, .001 );
+	DIV_TEST( .01, 100, .0001 );
+	DIV_TEST( .01, 1000, .00001 );
+	DIV_TEST( .001, 1, .001 );
+	DIV_TEST( .001, 10, .0001 );
+	DIV_TEST( .001, 100, .00001 );
+	DIV_TEST( .001, 1000, .000001 );
+	DIV_TEST( 10.01, 1, 10.01 );
+	DIV_TEST( 100.01, 1, 100.01 );
+	DIV_TEST( 10.001, 1, 10.001 );
+	DIV_TEST( 10.01, 2, 5.005 );
+	DIV_TEST( 10.01, 10, 1.001 );
+	DIV_TEST( 10.001, 10, 1.0001 );
+	DIV_TEST( 10.001, 100, .10001 );
+	DIV_TEST( 10.001, 1000, .010001 );
+	DIV_TEST( 100.01, 10, 10.001 );
+	DIV_TEST( 100.01, 100, 1.0001 );
+	DIV_TEST( 100.01, 1000, .10001 );
+	DIV_TEST( 10.01, 20, .5005 );
+	DIV_TEST( 10.01, 100, .1001 );
+	DIV_TEST( 10.01, 200, .05005 );
+	DIV_TEST( 10.01, 1000, .01001 );
+	DIV_TEST( 10.01, 2000, .005005 );
+	DIV_TEST( 10.01, 10000, .001001 );
+	DIV_TEST( 10.01, 20000, .0005005 );
+	DIV_TEST( 10.01, 100000, .0001001 );
+	DIV_TEST( 10.01, 200000, .00005005 );
+	DIV_TEST( 10.01, .1, 100.1 );
+	DIV_TEST( 10.01, .2, 50.05 );
+	DIV_TEST( 10.01, .01, 1001 );
+	DIV_TEST( 10.01, .02, 500.5 );
+	DIV_TEST( 10.01, .001, 10010 );
+	DIV_TEST( 10.01, .002, 5005 );
+	DIV_TEST( 10.01, .0001, 100100 );
+	DIV_TEST( 10.01, .0002, 50050 );
+	DIV_TEST( 12351235.57, 1234, 10009.105 );
+	DIV_TEST( 1, -1, -1 );
+	DIV_TEST( -1, 1, -1 );
+	DIV_TEST( -1, -1, 1 );
+	DIV_TEST( 2, 4, .5 );
+	DIV_TEST( 4, 2, 2 );
+	DIV_TEST( 2468, 2, 1234 );
+	DIV_TEST( 100, 5, 20 );
+	DIV_TEST( 5, 100, .05 );
+	DIV_TEST( 3.144, .03, 104.8 );
+	DIV_TEST( 3.15, .03, 105 );
+	DIV_TEST( 31.44, .03, 1048 );
 	HNumber numerator( "1" );
 	HNumber denominator( "3" );
 	int const MIN = 16;
@@ -1263,6 +1276,8 @@ TUT_UNIT_TEST( 21, "division" )
 			ENSURE_EQUALS( msg, div.to_string().left( len - z ), res.left( len - z ) );
 	}
 TUT_TEARDOWN()
+
+#undef DIV_TEST
 
 TUT_UNIT_TEST( 22, "opposite" )
 	ENSURE_EQUALS( "opposite failed a", - HNumber( "0" ), HNumber( "0" ) );
