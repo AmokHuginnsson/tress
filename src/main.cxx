@@ -172,8 +172,6 @@ int main( int argc_, char* argv_[] ) {
 		} catch ( const std::exception& e ) {
 			std::cerr << "tut raised ex: " << e.what() << std::endl;
 		}
-		if ( setup._reporter == "tut" )
-			M_ENSURE( ! errno );
 /*	... there is the place main loop ends. :OD-OT                         */
 	} catch ( int e ) {
 		err = e;
@@ -184,8 +182,10 @@ int main( int argc_, char* argv_[] ) {
 			HConsole::get_instance().leave_curses();
 		throw;
 	}
-	if ( setup._reporter == "tut" )
+	if ( setup._reporter == "tut" ) {
 		cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % clk.get_time_elapsed( HClock::UNIT::MILISECOND ) ).string() << endl;
+		M_ENSURE( ! errno );
+	}
 	if ( yaal::_isKilled_ )
 		cerr << "Killed" << endl;
 	return ( ( yaal::_isKilled_ ? 1 : 0 ) + err + ( visitor.get() ? visitor->fail_count() : 0 ) );

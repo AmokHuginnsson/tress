@@ -749,6 +749,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 11, "assignment operator" )
 	char const* const p0 = "3.14159265";
+	int const SAVED = HNumber::DEFAULT_PRECISION;
 	HNumber::DEFAULT_PRECISION = 20;
 	HNumber n( p0 );
 	ENSURE_EQUALS( "number not created correctly", n.to_string(), p0 );
@@ -768,6 +769,7 @@ TUT_UNIT_TEST( 11, "assignment operator" )
 	another = next;
 	ENSURE_EQUALS( "number not created correctly", another.to_string(), p1 );
 	ENSURE_EQUALS( "bad dafault precision", another.get_precision(), HNumber::DEFAULT_PRECISION + 5 );
+	HNumber::DEFAULT_PRECISION = SAVED;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 12, "equality operator" )
@@ -972,11 +974,14 @@ TUT_UNIT_TEST( 19, "multiplication" )
 	MUL_TEST( 12.345, 100000, 1234500 );
 	MUL_TEST( 1234, 0.001, 1.234 );
 	MUL_TEST( 584833018983741997878722386503334636.78288384371198912247950986, -9495561202762179256808404731.0288638, -5553317725156297579601206726057421373895864032769682350068288883.613387831060572493018571736697068 );
-	ENSURE_EQUALS( "multiplication failed j2", ( HNumber( expand_leafs( "584833018983741997878722386503334636.78288384371198912247950986" ) ) * HNumber( expand_leafs( "-9495561202762179256808404731.0288638" ) ) ).to_string(), HNumber( expand_leafs( "-5553317725156297579601206726057421373895864032769682350068288883.613387831060572493018571736697068" ) ).to_string() );
-	ENSURE_EQUALS( "multiplication failed k", ( HNumber( "930000000096000000000" ) * HNumber( "95" ) ).to_string(), HNumber( "88350000009120000000000" ).to_string() );
-	ENSURE_EQUALS( "multiplication failed k2", ( HNumber( expand_leafs( "930000000096000000000" ) ) * HNumber( expand_leafs( "95" ) ) ).to_string(), HNumber( expand_leafs( "88350000009120000000000" ) ).to_string() );
-	ENSURE_EQUALS( "multiplication failed x", ( HNumber( ".011931709189" ) * HNumber( "-154.734375" ) ).to_string(), HNumber( "-1.846245564041671875" ).to_string() );
-	ENSURE_EQUALS( "multiplication failed x2", ( HNumber( expand_leafs( ".011931709189" ) ) * HNumber( expand_leafs( "-154.734375" ) ) ).to_string(), HNumber( expand_leafs( "-1.846245564041671875" ) ).to_string() );
+	MUL_TEST( 930000000096000000000, 95, 88350000009120000000000 );
+	MUL_TEST( .011931709189, -154.734375, -1.846245564041671875 );
+
+	if ( HNumber::DECIMAL_DIGITS_IN_LEAF != 1 ) {
+		ENSURE_EQUALS( "multiplication failed j2", ( HNumber( expand_leafs( "584833018983741997878722386503334636.78288384371198912247950986" ) ) * HNumber( expand_leafs( "-9495561202762179256808404731.0288638" ) ) ).to_string(), HNumber( "-450000000920000001130000001850000001600000002010000001520000001330000001740000001810000002730000002880000003460000003320000003330000004040000003690000004310000005220000005730000006090000005550000006080000005660000005400000006000000006500000006950000005840000006380000007140000007250000006850000007680000008630000008560000007890000008190000007130000008310000008830000008350000009030000007850000007980000007600000007910000007760000007460000008030000009560000008740000008170000006950000007660000007640000007430000007680000007570000008300000008020000007960000006450000007070000007.20000000639000000671000000670000000517000000633000000683000000647000000480000000539000000613000000528000000437000000357000000410000000403000000422000000375000000327000000221000000249000000239000000259000000208000000171000000201000000235000000206000000123000000132000000082000000048" ).to_string() );
+		ENSURE_EQUALS( "multiplication failed k2", ( HNumber( expand_leafs( "930000000096000000000" ) ) * HNumber( expand_leafs( "95" ) ) ).to_string(), HNumber( "810000000720000000150000000000000000000000000000000000000000000000000000000000000000000000810000000990000000300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" ).to_string() );
+		ENSURE_EQUALS( "multiplication failed x2", ( HNumber( expand_leafs( ".011931709189" ) ) * HNumber( expand_leafs( "-154.734375" ) ) ).to_string(), HNumber( "-10000000060000000.18000000059000000062000000094000000094000000099000000149000000151000000213000000154000000185000000153000000125000000112000000088000000103000000045" ).to_string() );
+	}
 	_bc.spawn( BC_PATH );
 	HString msg;
 	HString res;
@@ -1169,6 +1174,14 @@ TUT_UNIT_TEST( 21, "division" )
 	int const dividendLen( sizeof ( pdividend ) - 1 );
 	int const divisorLen( sizeof ( pdivisor ) - 1 );
 
+	_bc.spawn( BC_PATH );
+	HString msg;
+	HString res;
+	HString as;
+	HString bs;
+	int const M = 16;
+	_bc << "scale=" << M + M << endl;
+
 	for ( int dividendPos( 0 ); dividendPos <= dividendLen; ++ dividendPos ) {
 		for ( int divisorPos( 0 ); divisorPos <= divisorLen; ++ divisorPos ) {
 			dividend = pdividend;
@@ -1177,36 +1190,44 @@ TUT_UNIT_TEST( 21, "division" )
 			divisor.insert( divisorPos, "." );
 			quotient = pquotient;
 			quotient.insert( xmath::clip( 0, dividendPos - divisorPos + 9, static_cast<int>( sizeof ( pquotient ) ) ), "." );
-			ENSURE_EQUALS( "division failed leaf", ( HNumber( expand_leafs( dividend ) ) / HNumber( expand_leafs( divisor ) ) ).to_string(),
-					HNumber( expand_leafs( quotient ) ).to_string() );
+
+			HNumber a( expand_leafs( dividend ) );
+			HString const& den( expand_leafs( divisor ) );
+			HNumber b( den != "0" ? den : "1" );
+			a.set_precision( M * 2 );
+			b.set_precision( M * 2 );
+			as = a.to_string();
+			bs = b.to_string();
+			_bc << as << "/ " << bs << endl;
+			do _bc.read_until( res ); while ( res.is_empty() );
+			msg = "division of large leaf a = " + as + " and b = " + bs + " failed";
+			HNumber div = a / b;
+			int len = static_cast<int>( res.get_length() );
+			( len >= ( M + M ) ) && ( len = M + M );
+			res = res.left( len );
+			int z( static_cast<int>( res.find( '.' ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
+			ENSURE_EQUALS( msg, div.to_string().left( len - z ), res.left( len - z ) );
 		}
 	}
 
-	_bc.spawn( BC_PATH );
-	HString msg;
-	HString res;
-	HString as;
-	HString bs;
-	int const M = 16;
-	_bc << "scale=" << M + M << endl;
 	for ( int long i = 0; i < 1000; ++ i ) {
 		HNumber a( random_real() );
-		HString const& den( random_real() );
-		HNumber b( den != "0" ? den : "1" );
+		HNumber b( random_real() );
 		a.set_precision( M * 2 );
 		b.set_precision( M * 2 );
+		if ( b == "0" )
+			++ b;
 		as = a.to_string();
 		bs = b.to_string();
 		_bc << as << "/ " << bs << endl;
 		do _bc.read_until( res ); while ( res.is_empty() );
 		msg = "division of random a = " + as + " and b = " + bs + " failed";
-		HNumber div = a / b;
+		HNumber div( a / b );
 		int len = static_cast<int>( res.get_length() );
-		( len >= ( M + M - 2 ) ) && ( len = M + M - 2 );
+		( len >= ( M + M + 1 ) ) && ( len = M + M + 1 );
 		res = res.left( len );
-		int z = static_cast<int>( res.reverse_find_other_than( "0." ) );
-		if ( z >= 0 )
-			ENSURE_EQUALS( msg, div.to_string().left( len - z ), res.left( len - z ) );
+		int z( static_cast<int>( res.find( '.' ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
+		ENSURE_EQUALS( msg, div.to_string().left( len - z ), res.left( len - z ) );
 	}
 TUT_TEARDOWN()
 
