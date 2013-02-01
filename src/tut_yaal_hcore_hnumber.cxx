@@ -1023,6 +1023,9 @@ TUT_TEARDOWN()
 #define DIV_TEST_MSG( msg, dividend, divisor, quotient ) \
 	ENSURE_EQUALS( msg ": `" #dividend " / " #divisor " = " #quotient "'", ( HNumber( #dividend ) / HNumber( #divisor ) ).to_string(), HNumber( #quotient ).to_string() )
 
+#define DIV_TEST_MSG_LIM( msg, dividend, divisor, quotient, lim ) \
+	ENSURE_EQUALS( msg ": `" #dividend " / " #divisor " = " #quotient "'", ( HNumber( #dividend ) / HNumber( #divisor ) ).to_string().left( lim ), HNumber( #quotient ).to_string() )
+
 #define DIV_TEST( dividend, divisor, quotient ) \
 	DIV_TEST_MSG( "division failed", dividend, divisor, quotient )
 
@@ -1043,6 +1046,14 @@ TUT_UNIT_TEST( 21, "division" )
 	DIV_TEST( 1, 1000, .001 );
 	DIV_TEST( .1, 1, .1 );
 	DIV_TEST( .1, 10, .01 );
+	DIV_TEST( .11, 11, .01 );
+	DIV_TEST( .011, 1.1, .01 );
+	DIV_TEST( .0011, .11, .01 );
+	DIV_TEST( .00011, .011, .01 );
+	DIV_TEST( .00011, .011, .01 );
+	DIV_TEST( .9801, .99, .99 );
+	DIV_TEST( .998001, .999, .999 );
+	DIV_TEST( .99980001, .9999, .9999 );
 	DIV_TEST( .1, 100, .001 );
 	DIV_TEST( .1, 1000, .0001 );
 	DIV_TEST( .01, 1, .01 );
@@ -1145,9 +1156,9 @@ TUT_UNIT_TEST( 21, "division" )
 	DIV_TEST_MSG( "padding front zeros failed", .0077, .77, .01 );
 	DIV_TEST_MSG( "padding front zeros failed", .777, 777, .001 );
 	DIV_TEST_MSG( "padding front zeros failed", .000777, .777, .001 );
-	DIV_TEST_MSG( "padding front zeros failed", .160963010792, 100.264285714286, .001605387 );
-	DIV_TEST_MSG( "padding front zeros failed", .160963010792, 100264.285714286, .000001605 );
-	DIV_TEST_MSG( "padding front zeros failed", 1.180629342051, -3.6, -.3279525950141666666666666666 );
+	DIV_TEST_MSG_LIM( "padding front zeros failed", .160963010792, 100.264285714286, .00160538729863, 15 );
+	DIV_TEST_MSG_LIM( "padding front zeros failed", .160963010792, 100264.285714286, .000001605387298, 16 );
+	DIV_TEST_MSG_LIM( "padding front zeros failed", 1.180629342051, -3.6, -.327952595014166666666666666666, 32 );
 
 	char const pdividend[] = "0001201440012000144000012000";
 	char const pdivisor[] = "00012000";
@@ -1182,8 +1193,8 @@ TUT_UNIT_TEST( 21, "division" )
 		HNumber a( random_real() );
 		HString const& den( random_real() );
 		HNumber b( den != "0" ? den : "1" );
-		a.set_precision( M );
-		b.set_precision( M );
+		a.set_precision( M * 2 );
+		b.set_precision( M * 2 );
 		as = a.to_string();
 		bs = b.to_string();
 		_bc << as << "/ " << bs << endl;
@@ -1193,7 +1204,7 @@ TUT_UNIT_TEST( 21, "division" )
 		int len = static_cast<int>( res.get_length() );
 		( len >= ( M + M - 2 ) ) && ( len = M + M - 2 );
 		res = res.left( len );
-		int z = static_cast<int>( res.reverse_find_other_than( "0" ) );
+		int z = static_cast<int>( res.reverse_find_other_than( "0." ) );
 		if ( z >= 0 )
 			ENSURE_EQUALS( msg, div.to_string().left( len - z ), res.left( len - z ) );
 	}
