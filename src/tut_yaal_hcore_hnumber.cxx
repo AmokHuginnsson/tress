@@ -721,9 +721,13 @@ TUT_UNIT_TEST( 10, "set/get precision" )
 	ENSURE_EQUALS( "bad modified 3 precision M", n.get_precision(), M );
 	n.set_precision( S );
 	ENSURE_EQUALS( "bad modified 3 precision SM", n.get_precision(), M );
-	n = "10.121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212121212"
-		"12121212121212121212121212121212121212121212121212121212121212121";
-	ENSURE_EQUALS( "bad precision from string", n.get_precision(), 22 + 1 ); /* numbers from strings are always is_exact() */
+	n = "10."
+	"1212121212" "1212121212" "1212121212" "1212121212"
+	"1212121212" "1212121212" "1212121212" "1212121212"
+	"1212121212" "1212121212" "1212121212" "1212121212"
+	"1212121212" "1212121212" "1212121212" "1212121212"
+	"1212121212" "1212121212" "1212121212" "1212121";
+	ENSURE_EQUALS( "bad precision from string", n.get_precision(), 197 + 1 ); /* numbers from strings are always is_exact() */
 	n.set_precision( 100 );
 	ENSURE_EQUALS( "bad modified 4 precision", n.get_precision(), 100 ); /* number was exact */
 	HNumber numerator( "1" );
@@ -1016,8 +1020,11 @@ TUT_UNIT_TEST( 20, "substraction" )
 	}
 TUT_TEARDOWN()
 
+#define DIV_TEST_MSG( msg, dividend, divisor, quotient ) \
+	ENSURE_EQUALS( msg ": `" #dividend " / " #divisor " = " #quotient "'", ( HNumber( #dividend ) / HNumber( #divisor ) ).to_string(), HNumber( #quotient ).to_string() )
+
 #define DIV_TEST( dividend, divisor, quotient ) \
-	ENSURE_EQUALS( "division failed: `" #dividend " / " #divisor " = " #quotient "'", ( HNumber( #dividend ) / HNumber( #divisor ) ).to_string(), HNumber( #quotient ).to_string() )
+	DIV_TEST_MSG( "division failed", dividend, divisor, quotient )
 
 TUT_UNIT_TEST( 21, "division" )
 	try {
@@ -1074,7 +1081,7 @@ TUT_UNIT_TEST( 21, "division" )
 	DIV_TEST( 10.01, .002, 5005 );
 	DIV_TEST( 10.01, .0001, 100100 );
 	DIV_TEST( 10.01, .0002, 50050 );
-	DIV_TEST( 12351235.57, 1234, 10009.105 );
+	DIV_TEST( 1, 4, .25 );
 	DIV_TEST( 1, -1, -1 );
 	DIV_TEST( -1, 1, -1 );
 	DIV_TEST( -1, -1, 1 );
@@ -1086,6 +1093,7 @@ TUT_UNIT_TEST( 21, "division" )
 	DIV_TEST( 3.144, .03, 104.8 );
 	DIV_TEST( 3.15, .03, 105 );
 	DIV_TEST( 31.44, .03, 1048 );
+	DIV_TEST( 12351235.57, 1234, 10009.105 );
 	HNumber numerator( "1" );
 	HNumber denominator( "3" );
 	int const MIN = 16;
@@ -1114,118 +1122,32 @@ TUT_UNIT_TEST( 21, "division" )
 	denominator = "4";
 	division = numerator / denominator;
 	ENSURE_EQUALS( "bad calculus 5", division.to_string(), ".5" );
-	ENSURE( "number shall be exact", division.is_exact() ); {
-		HString n( ".491401" );
-		HString d( "7.01" );
-		HString r( ".0701" );
-		ENSURE_EQUALS( "padding front zeros failed 0 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
+	ENSURE( "number shall be exact", division.is_exact() );
+	DIV_TEST_MSG( "padding front zeros failed", .491401, 7.01, .0701 );
 		//.59247871334 and b = 3.404513888889 failed: expected .1740274038163329231239957953559 actual .01740274038163329231239957953559
-		HString n( ".606" );
-		HString d( "3.03" );
-		HString r( ".2" );
-		ENSURE_EQUALS( "padding front zeros failed 0 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n( ".49" );
-		HString d( "7" );
-		HString r( ".07" );
-		ENSURE_EQUALS( "padding front zeros failed 0 1 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n( "4.91401" );
-		HString d( "70.1" );
-		HString r( ".0701" );
-		ENSURE_EQUALS( "padding front zeros failed 0 2 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n( ".491401" );
-		HString d( "70.1" );
-		HString r( ".00701" );
-		ENSURE_EQUALS( "padding front zeros failed 0 3 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n( ".0491401" );
-		HString d( "70.1" );
-		HString r( ".000701" );
-		ENSURE_EQUALS( "padding front zeros failed 0 4 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n( ".00491401" );
-		HString d( "70.1" );
-		HString r( ".0000701" );
-		ENSURE_EQUALS( "padding front zeros failed 0 5 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	}
- {
-		HString n( "4.91401" );
-		HString d( "7.01" );
-		HString r( ".701" );
-		ENSURE_EQUALS( "padding front zeros failed 0 6 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n( ".491401" );
-		HString d( "7.01" );
-		HString r( ".0701" );
-		ENSURE_EQUALS( "padding front zeros failed 0 7 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n( ".0491401" );
-		HString d( "7.01" );
-		HString r( ".00701" );
-		ENSURE_EQUALS( "padding front zeros failed 0 8 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n( ".00491401" );
-		HString d( "7.01" );
-		HString r( ".000701" );
-		ENSURE_EQUALS( "padding front zeros failed 0 9 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	}
- {
-		HString n( ".491401" );
-		HString d( "701" );
-		HString r( ".000701" );
-		ENSURE_EQUALS( "padding front zeros failed 1 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n( "491.401" );
-		HString d( "701" );
-		HString r( ".701" );
-		ENSURE_EQUALS( "padding front zeros failed 1 1 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n( "49.1401" );
-		HString d( "701" );
-		HString r( ".0701" );
-		ENSURE_EQUALS( "padding front zeros failed 1 2 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n( "4.91401" );
-		HString d( "701" );
-		HString r( ".00701" );
-		ENSURE_EQUALS( "padding front zeros failed 1 3 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n( ".4961122700545761418014255" );
-		HString d( "-7.059190031153" );
-		HString r( "-.0702789226335" );
-		ENSURE_EQUALS( "padding front zeros failed a 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n( ".4961122700545761418014255" );
-		HString d( "7.059190031153" );
-		HString r( ".0702789226335" );
-		ENSURE_EQUALS( "padding front zeros failed b 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	}
-
-	ENSURE_EQUALS( "division failed uber  ", ( HNumber( ".4961122700545761418014255" ) / HNumber( "-7.059190031153" ) ).to_string(), HNumber( "-.0702789226335" ).to_string() );
- {
-		HString n( ".0077" );
-		HString d( ".77" );
-		HString r( ".01" );
-		ENSURE_EQUALS( "padding front zeros failed 0 0 ", ( HNumber( n ) / HNumber( d ) ).to_string(), HNumber( r ).to_string() );
-	} {
-		HString n(    ".160963010792" );
-		HString d( "100.264285714286" );
-		HString r( ".001605387" );
-		ENSURE_EQUALS( "padding front zeros failed 0 0 ", ( HNumber( n ) / HNumber( d ) ).to_string().left( 10 ), HNumber( r ).to_string() );
-	} {
-		HString n(    ".160963010792" );
-		HString d( "100264.285714286" );
-		HString r( ".000001605" );
-		ENSURE_EQUALS( "padding front zeros failed q 0 ", ( HNumber( n ) / HNumber( d ) ).to_string().left( 10 ), HNumber( r ).to_string() );
-	} {
-		HString n( "1.180629342051" );
-		HString d( "-3.6" );
-		HString r( "-.3279525950141666666666666666" );
-		ENSURE_EQUALS( "padding front zeros failed q 1 ", ( HNumber( n ) / HNumber( d ) ).to_string().left( 30 ), HNumber( r ).to_string() );
-	}
+	DIV_TEST_MSG( "padding front zeros failed", .606, 3.03, .2 );
+	DIV_TEST_MSG( "padding front zeros failed", .49, 7, .07 );
+	DIV_TEST_MSG( "padding front zeros failed", 4.91401, 70.1, .0701 );
+	DIV_TEST_MSG( "padding front zeros failed", .491401, 70.1, .00701 );
+	DIV_TEST_MSG( "padding front zeros failed", .0491401, 70.1, .000701 );
+	DIV_TEST_MSG( "padding front zeros failed", .00491401, 70.1, .0000701 );
+	DIV_TEST_MSG( "padding front zeros failed", 4.91401, 7.01, .701 );
+	DIV_TEST_MSG( "padding front zeros failed", .491401, 7.01, .0701 );
+	DIV_TEST_MSG( "padding front zeros failed", .0491401, 7.01, .00701 );
+	DIV_TEST_MSG( "padding front zeros failed", .00491401, 7.01, .000701 );
+	DIV_TEST_MSG( "padding front zeros failed", .491401, 701, .000701 );
+	DIV_TEST_MSG( "padding front zeros failed", 491.401, 701, .701 );
+	DIV_TEST_MSG( "padding front zeros failed", 49.1401, 701, .0701 );
+	DIV_TEST_MSG( "padding front zeros failed", 4.91401, 701, .00701 );
+	DIV_TEST_MSG( "padding front zeros failed", .4961122700545761418014255, -7.059190031153, -.0702789226335 );
+	DIV_TEST_MSG( "padding front zeros failed", .4961122700545761418014255, 7.059190031153, .0702789226335 );
+	DIV_TEST( .4961122700545761418014255, -7.059190031153, -.0702789226335 );
+	DIV_TEST_MSG( "padding front zeros failed", .0077, .77, .01 );
+	DIV_TEST_MSG( "padding front zeros failed", .777, 777, .001 );
+	DIV_TEST_MSG( "padding front zeros failed", .000777, .777, .001 );
+	DIV_TEST_MSG( "padding front zeros failed", .160963010792, 100.264285714286, .001605387 );
+	DIV_TEST_MSG( "padding front zeros failed", .160963010792, 100264.285714286, .000001605 );
+	DIV_TEST_MSG( "padding front zeros failed", 1.180629342051, -3.6, -.3279525950141666666666666666 );
 
 	char const pdividend[] = "0001201440012000144000012000";
 	char const pdivisor[] = "00012000";
