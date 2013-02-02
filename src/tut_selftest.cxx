@@ -26,12 +26,13 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
+#include <yaal/hcore/htime.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 #include "tut_selftest.hxx"
 
+using namespace yaal::hcore;
 using namespace tut;
-using namespace std;
 using namespace tress::tut_helpers;
 
 namespace tut {
@@ -111,37 +112,118 @@ typedef void void_type
 namespace { static int const M_CONCAT( dropIt, __LINE__ ) __attribute__(( __used__ )) = selfTestManager.register_test( &register_test_##suite, no, title ); } \
 template<> template<> void suite##_module::test<(no)>( void ) { do { set_test_meta( title, __FILE__, __LINE__ ); } while ( 0 );
 
-TUT_SIMPLE_MOCK( tut_selftest_one );
-TUT_TEST_GROUP( tut_selftest_one, "::selftest::one" );
+namespace {
+int id_mock( int a_ ) {
+	return ( a_ );
+}
+int sum_mock( int a_, int b_ ) {
+	int sum( a_ + b_ );
+	if ( sum > 9 )
+		throw HRuntimeException( "digit overflow" );
+	return ( sum );
+}
+int sub_mock( int a_, int b_ ) {
+	return ( a_ - b_ );
+}
+}
 
-TUT_UNIT_TEST( tut_selftest_one, 1, "first test" )
-	ENSURE_EQUALS( "life, universe and everything else", 42, 42 );
+TUT_SIMPLE_MOCK( tut_selftest_math );
+TUT_TEST_GROUP( tut_selftest_math, "::selftest::a_math" );
+
+TUT_UNIT_TEST( tut_selftest_math, 1, "id_mock test" )
+	ENSURE_EQUALS( "neutral id", id_mock( 0 ), 0 );
+	ENSURE_EQUALS( "positive id", id_mock( 1 ), 1 );
+	ENSURE_EQUALS( "negative id", id_mock( -1 ), -1 );
+	ENSURE_EQUALS( "life, universe and everything else", id_mock( 42 ), 42 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( tut_selftest_one, 2, "equality test" )
-	ENSURE_EQUALS( "days in a week", 6, 7 );
+TUT_UNIT_TEST( tut_selftest_math, 2, "equality test" )
+	ENSURE_EQUALS( "sum2", sum_mock( 1, 1 ), 2 );
+	ENSURE_EQUALS( "sum4", sum_mock( 2, 2 ), 4 );
+	ENSURE_EQUALS( "sum8", sum_mock( 4, 4 ), 8 );
+	ENSURE_EQUALS( "sum16", sum_mock( 8, 8 ), 16 );
+	ENSURE_EQUALS( "sum6", sum_mock( 3, 3 ), 6 );
+	ENSURE_EQUALS( "sum10", sum_mock( 5, 5 ), 10 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( tut_selftest_one, 3, "safe test" )
-	throw std::runtime_error( "severe problem" );
+TUT_UNIT_TEST( tut_selftest_math, 3, "safe test" )
+	ENSURE_EQUALS( "sub1", sub_mock( 0, 0 ), 0 );
+	ENSURE_EQUALS( "sub2", sub_mock( 1, 1 ), 0 );
+	int a( 7 );
+	int b( 6 );
+	ENSURE_EQUALS( "sub3", sub_mock( a, b ), b - a );
+	ENSURE_EQUALS( "sub4", sub_mock( a, a ), 0 );
 TUT_TEARDOWN()
 
-TUT_SIMPLE_MOCK( tut_selftest_two );
-TUT_TEST_GROUP( tut_selftest_two, "::selftest::two" );
+TUT_SIMPLE_MOCK( tut_selftest_text );
+TUT_TEST_GROUP( tut_selftest_text, "::selftest::text" );
 
-TUT_UNIT_TEST( tut_selftest_two, 1, "first test" )
+TUT_UNIT_TEST( tut_selftest_text, 1, "concat" )
+	HString a( "aa" );
+	ENSURE_EQUALS( "same", a + a, "aaaa" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( tut_selftest_two, 2, "second test" )
+TUT_UNIT_TEST( tut_selftest_text, 2, "trim" )
+	HString a( "  aa " );
+	ENSURE_EQUALS( "both sides", a.trim(), "aa" );
 TUT_TEARDOWN()
 
-TUT_SIMPLE_MOCK( tut_selftest_three );
-TUT_TEST_GROUP( tut_selftest_three, "::selftest::three" );
+TUT_SIMPLE_MOCK( tut_selftest_time );
+TUT_TEST_GROUP( tut_selftest_time, "::selftest::time" );
 
-TUT_UNIT_TEST( tut_selftest_three, 1, "first test" )
+TUT_UNIT_TEST( tut_selftest_time, 1, "now" )
+	HTime now( HTime::LOCAL );
+	ENSURE_EQUALS( "seconds", now.raw(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( tut_selftest_three, 2, "second test" )
+TUT_UNIT_TEST( tut_selftest_time, 2, "preset" )
+	HTime t( 1978, 5, 24 );
+	ENSURE_EQUALS( "seconds", t.get_second(), 0 );
+TUT_TEARDOWN()
+
+TUT_SIMPLE_MOCK( tut_selftest_mixed );
+TUT_TEST_GROUP( tut_selftest_mixed, "::selftest::mixed" );
+
+TUT_UNIT_TEST( tut_selftest_mixed, 1, "mixed one" )
+	ENSURE_EQUALS( "neutral id", id_mock( 0 ), 0 );
+	HString a( "aa" );
+	ENSURE_EQUALS( "same", a + a, "aaaa" );
+	HTime t( 1978, 5, 24 );
+	ENSURE_EQUALS( "seconds", t.get_second(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( tut_selftest_mixed, 2, "mixed two" )
+	ENSURE_EQUALS( "sum2", sum_mock( 1, 1 ), 2 );
+	HString a( "  aa " );
+	ENSURE_EQUALS( "both sides", a.trim(), "aa" );
+	ENSURE_EQUALS( "sum16", sum_mock( 8, 8 ), 16 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( tut_selftest_mixed, 3, "mixed three" )
+	ENSURE_EQUALS( "sub1", sub_mock( 0, 0 ), 0 );
+	ENSURE_EQUALS( "sub2", sub_mock( 1, 1 ), 0 );
+	int a( 7 );
+	int b( 6 );
+	ENSURE_EQUALS( "sub3", sub_mock( a, b ), a - b );
+	ENSURE_EQUALS( "sub4", sub_mock( a, a ), 0 );
+TUT_TEARDOWN()
+
+TUT_SIMPLE_MOCK( tut_selftest_stub );
+TUT_TEST_GROUP( tut_selftest_stub, "::selftest::b_stub" );
+
+TUT_UNIT_TEST( tut_selftest_stub, 1, "one" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( tut_selftest_stub, 2, "two" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( tut_selftest_stub, 3, "three" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( tut_selftest_stub, 4, "four" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( tut_selftest_stub, 5, "five" )
 TUT_TEARDOWN()
 
 }

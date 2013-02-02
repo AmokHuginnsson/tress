@@ -175,6 +175,12 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	for ( int i( 0 ); i < 10; ++ i )
 		hashMap[i] = i * i;
 	HString result( ( pi * e ).to_string() );
+	HPointer<HString> pr( new HString( result ) );
+	HPointer<HArray<int> > pa;
+	pa = HPointer<HArray<int> >( new HArray<int>( _testData_[0], _testData_[0] + 7 ) );
+	HResource<HString> ppr( new HString( result ) );
+	HResource<HArray<int> > ppa;
+	ppa = HResource<HArray<int> >( new HArray<int>( _testData_[0], _testData_[0] + 7 ) );
 	cout << shortStr << endl;
 	cout << str << endl;
 	cout << pi << endl;
