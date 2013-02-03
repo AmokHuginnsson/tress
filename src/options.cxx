@@ -74,7 +74,7 @@ int handle_program_options( int argc_, char** argv_ ) {
 	HString testFilter;
 	po( "log_path", program_options_helper::option_value( setup._logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
 		( "jobs", program_options_helper::option_value( setup._jobs ), 'j', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number of concurrent jobs", "count" )
-		( "reporter", program_options_helper::option_value( setup._reporter ), 'r', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "generator for reporting test results =(TUT|cute|cppunit|xml|boost|google)", "framework" )
+		( "reporter", program_options_helper::option_value( setup._reporter ), 'r', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "generator for reporting test results =(TUT|boost|google|cppunit|xml|QT|cute)", "framework" )
 		( "error-line", program_options_helper::option_value( setup._errorLine ), 'I', HProgramOptionsHandler::OOption::TYPE::REQUIRED, "line format for error reporting =(console|vim|eclipse|visualstudio)", "IDE" )
 		( "color", program_options_helper::option_value( setup._color ), 'C', HProgramOptionsHandler::OOption::TYPE::NONE, "colorize output" )
 		( "fancy", program_options_helper::option_value( setup._fancy ), HProgramOptionsHandler::OOption::TYPE::NONE, "provide fancy test run output" )
@@ -112,6 +112,8 @@ int handle_program_options( int argc_, char** argv_ ) {
 	int unknown = 0, nonOption = 0;
 	nonOption = po.process_command_line( argc_, argv_, &unknown );
 	if ( unknown > 0 ) {
+		if ( setup._reporter == "qt" )
+			cerr << "NOTICE: Remember to add options terminator `--' as last argument while using QT reporter." << endl;
 		util::show_help( &info );
 		throw unknown;
 	}

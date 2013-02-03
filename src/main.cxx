@@ -29,11 +29,12 @@ Copyright:
 #include <libintl.h>
 #include <TUT/tut.hpp>
 #include <TUT/tut_reporter.hpp>
-#include <TUT/tut_reporter_cute.hpp>
-#include <TUT/tut_reporter_cppunit.hpp>
-#include <TUT/tut_reporter_xml.hpp>
 #include <TUT/tut_reporter_boost.hpp>
 #include <TUT/tut_reporter_google.hpp>
+#include <TUT/tut_reporter_cppunit.hpp>
+#include <TUT/tut_reporter_xml.hpp>
+#include <TUT/tut_reporter_qt.hpp>
+#include <TUT/tut_reporter_cute.hpp>
 #include <TUT/tut_restartable.hpp>
 
 #include <yaal/hcore/hcore.hxx>
@@ -118,16 +119,18 @@ int main( int argc_, char* argv_[] ) {
 			setup._color = false;
 			if ( setup._jobs > 1 )
 				setup._jobs = 1;
-			if ( setup._reporter == "cute" )
-				visitor = reporter_ptr( new tut::reporter_cute<HLog>( std::cerr, hcore::log ) );
+			if ( setup._reporter == "boost" )
+				visitor = reporter_ptr( new tut::reporter_boost<HLog>( std::cerr, hcore::log ) );
+			else if ( setup._reporter == "google" )
+				visitor = reporter_ptr( new tut::reporter_google<HLog>( std::cerr, hcore::log ) );
 			else if ( setup._reporter == "cppunit" )
 				visitor = reporter_ptr( new tut::reporter_cppunit( std::cerr ) );
 			else if ( setup._reporter == "xml" )
 				visitor = reporter_ptr( new tut::reporter_xml( std::cerr ) );
-			else if ( setup._reporter == "boost" )
-				visitor = reporter_ptr( new tut::reporter_boost<HLog>( std::cerr, hcore::log ) );
-			else if ( setup._reporter == "google" )
-				visitor = reporter_ptr( new tut::reporter_google<HLog>( std::cerr, hcore::log ) );
+			else if ( setup._reporter == "qt" )
+				visitor = reporter_ptr( new tut::reporter_qt<HLog>( std::cerr, hcore::log ) );
+			else if ( setup._reporter == "cute" )
+				visitor = reporter_ptr( new tut::reporter_cute<HLog>( std::cerr, hcore::log ) );
 		}
 		if ( setup._selftest )
 			register_selftest();
