@@ -367,7 +367,7 @@ private:
 			// test was terminated...
 			tut::test_result tr( _runner.get_group( fail_group ), fail_test );
 			tr.set_meta( tut::test_result::term );
-			tr.set_meta( failName, failFile.c_str(), failLine );
+			tr.set_location( failName, failFile.c_str(), failLine );
 			register_test( tr );
 		}
 	}

@@ -23,11 +23,11 @@
 #	error Tress redefines TIME_CONSTRAINT macro.
 #endif /* #ifdef TIME_CONSTRAINT */
 
-#define ENSURE( ... ) tut::ensure_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define ENSURE_NOT( ... ) tut::ensure_not_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define ENSURE_EQUALS( ... ) tut::ensure_equals_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define ENSURE_DISTANCE( ... ) tut::ensure_distance_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
-#define ENSURE_ERRNO( ... ) tut::ensure_errno_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ )
+#define ENSURE( ... ) do { this->set_current_line( __LINE__ ); tut::ensure_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
+#define ENSURE_NOT( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_not_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
+#define ENSURE_EQUALS( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_equals_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
+#define ENSURE_DISTANCE( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_distance_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
+#define ENSURE_ERRNO( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_errno_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ) }; while ( false )
 #define FAIL( msg ) tut::fail_real( __FILE__, __LINE__, ( msg ) )
 #define TIME_CONSTRAINT( ms ) tut::time_constraint M_CONCAT( time_constraint_at_, __LINE__ )( ( ms ), __FILE__, __LINE__ )
 

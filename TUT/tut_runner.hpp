@@ -253,7 +253,7 @@ public:
 				if ( i == _groups.end() ) {
 					test_result tr;
 					tr.set_meta( test_result::setup, "", *k );
-					tr.set_meta( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( group_names.begin(), k ) ) );
+					tr.set_location( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( group_names.begin(), k ) ) );
 					_callback->test_completed( tr );
 				} else {
 					if ( !! w )
@@ -292,7 +292,7 @@ public:
 				if ( i == _groups.end() ) {
 					test_result tr;
 					tr.set_meta( test_result::setup, "", k->first );
-					tr.set_meta( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( testSets_.begin(), k ) ) );
+					tr.set_location( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( testSets_.begin(), k ) ) );
 					_callback->test_completed( tr );
 				} else {
 					if ( !! w )
@@ -412,7 +412,7 @@ private:
 				} catch ( const no_such_test& ) {
 					test_result tr( i->second, *no );
 					tr.set_meta( test_result::setup_test_number, "", "no such test number" );
-					tr.set_meta( "no such test" );
+					tr.set_location( "no such test" );
 					_callback->test_completed( tr );
 				}
 			}

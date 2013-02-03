@@ -24,6 +24,11 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <yaal/hcore/hexception.hxx>
+
+#define private public
+#define protected public
+
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hset.hxx>
@@ -39,179 +44,147 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct red_black_tree_stress_test {
-	red_black_tree_stress_test( void )
-		: root( NULL ), quantity( 0 ), tested_nodes( 0 ), black_height( 0 )
+struct tut_yaal_hcore_hsbbstree : public simple_mock<tut_yaal_hcore_hsbbstree> {
+	typedef simple_mock<tut_yaal_hcore_hsbbstree> base_type;
+	static int const NUMBER_OF_TEST_NODES = 1000;
+	static int const KEY_POOL_SIZE = 30000;
+	tut_yaal_hcore_hsbbstree( void )
+		: base_type(), _testedNodes( 0 ), _blackHeight( 0 ), _redNodeExists( false ), _blackNodeExists( false ), _root( NULL )
 		{}
-	virtual ~red_black_tree_stress_test( void ) {}
-	struct node {
-		typedef enum { red, black } color_t;
-		void* nil;
-		color_t color;
-		node* parent;
-		node* left;
-		node* right;
-	};
-	node* root;
-	int long quantity;
-	template<typename T>
-	bool self_test( HSet<T>& );
-	template<typename T>
-	bool integrity_test( HSet<T>& );
-	template<typename T>
-	bool definition_test( HSet<T>& );
+	virtual ~tut_yaal_hcore_hsbbstree( void )
+		{}
+	typedef HSet<int> set_t;
+	typedef set_t::engine_t engine_t;
+	template<typename subject>
+	void helper_stress_test( set_t&, subject, int );
+	bool self_test( set_t& );
+	bool integrity_test( set_t& );
+	bool definition_test( set_t& );
 
-	static bool red_node_exists;
-	static bool black_node_exists;
-private:
-	int long tested_nodes;
-	int black_height;
-	template<typename T>
-	void init( HSet<T>& );
+	int long _testedNodes;
+	int _blackHeight;
+	bool _redNodeExists;
+	bool _blackNodeExists;
+	engine_t::HAbstractNode* _root;
+	void init( set_t& );
 
-	void helper_test_node_integrity( node* );
-	void helper_test_node_definition( node* );
-	int helper_count_exemplar_black_height( node* );
-	int helper_check_black_height( node* );
+	void helper_test_node_integrity( engine_t::HAbstractNode* );
+	void helper_test_node_definition( engine_t::HAbstractNode* );
+	int helper_count_exemplar_black_height( engine_t::HAbstractNode* );
+	int helper_check_black_height( engine_t::HAbstractNode* );
+
+	typedef set_t::insert_result (set_t::*set_insert_t)( int const& );
 private:
-	red_black_tree_stress_test( red_black_tree_stress_test const& );
-	red_black_tree_stress_test& operator = ( red_black_tree_stress_test const& );
+	tut_yaal_hcore_hsbbstree( tut_yaal_hcore_hsbbstree const& );
+	tut_yaal_hcore_hsbbstree& operator = ( tut_yaal_hcore_hsbbstree const& );
 };
 
-bool red_black_tree_stress_test::red_node_exists = false;
-bool red_black_tree_stress_test::black_node_exists = false;
-
-template<typename T>
-void red_black_tree_stress_test::init( HSet<T>& ob ) {
-	red_black_tree_stress_test* hack = reinterpret_cast<red_black_tree_stress_test*> ( &ob );
-	tested_nodes = 0;
-	black_height = 0;
-	red_node_exists = false;
-	black_node_exists = false;
-	root = hack->root;
-	quantity = hack->quantity;
+void tut_yaal_hcore_hsbbstree::init( set_t& ob ) {
+	_testedNodes = 0;
+	_blackHeight = 0;
+	_redNodeExists = false;
+	_blackNodeExists = false;
+	_root = ob._engine._root;
 }
 
-void red_black_tree_stress_test::helper_test_node_integrity( node* n ) {
-	if ( ! n->parent && ( n != root ) )
+void tut_yaal_hcore_hsbbstree::helper_test_node_integrity( engine_t::HAbstractNode* n ) {
+	if ( ! n->_parent && ( n != _root ) )
 		FAIL( "node with null parent is not root" );
-	if ( n->parent && ( n->parent->left != n ) && ( n->parent->right != n ) )
+	if ( n->_parent && ( n->_parent->_left != n ) && ( n->_parent->_right != n ) )
 		FAIL( "parent node does not know about this node" );
-	if ( n->left ) {
-		if ( n->left->parent != n )
+	if ( n->_left ) {
+		if ( n->_left->_parent != n )
 			FAIL( "child node does not know about its parent (this node)" );
-		helper_test_node_integrity ( n->left );
+		helper_test_node_integrity( n->_left );
 	}
-	if ( n->right ) {
-		if ( n->right->parent != n )
+	if ( n->_right ) {
+		if ( n->_right->_parent != n )
 			FAIL( "child node does not know about its parent (this node)" );
-		helper_test_node_integrity ( n->right );
+		helper_test_node_integrity( n->_right );
 	}
-	++ tested_nodes;
+	++ _testedNodes;
 }
 
-void red_black_tree_stress_test::helper_test_node_definition( node* n ) {
-	if ( n->color == node::red ) {
-		red_node_exists = true;
-		if ( ( n->left && ( n->left->color == node::red ) )
-				|| ( n->right && ( n->right->color == node::red ) ) )
+void tut_yaal_hcore_hsbbstree::helper_test_node_definition( engine_t::HAbstractNode* n ) {
+	if ( n->_color == engine_t::HAbstractNode::RED ) {
+		_redNodeExists = true;
+		if ( ( n->_left && ( n->_left->_color == engine_t::HAbstractNode::RED ) )
+				|| ( n->_right && ( n->_right->_color == engine_t::HAbstractNode::RED ) ) )
 			FAIL( "subsequent red nodes" );
 	} else
-		black_node_exists = true;
-	if ( n->left )
-		helper_test_node_definition( n->left );
-	if ( n->right )
-		helper_test_node_definition( n->right );
-	if ( ! ( n->left || n->right ) ) {
-		if ( helper_check_black_height( n ) != black_height )
+		_blackNodeExists = true;
+	if ( n->_left )
+		helper_test_node_definition( n->_left );
+	if ( n->_right )
+		helper_test_node_definition( n->_right );
+	if ( ! ( n->_left || n->_right ) ) {
+		if ( helper_check_black_height( n ) != _blackHeight )
 			FAIL( "black height is not the same for all the nodes" );
 	}
 }
 
-int red_black_tree_stress_test::helper_count_exemplar_black_height( node* n ) {
+int tut_yaal_hcore_hsbbstree::helper_count_exemplar_black_height( engine_t::HAbstractNode* n ) {
 	int bh = 0;
 	while ( n ) {
-		if ( n->color == node::black )
+		if ( n->_color == engine_t::HAbstractNode::BLACK )
 			++ bh;
-		n = n->left;
+		n = n->_left;
 	}
 //	cout << bh << " ";
 	return ( bh );
 }
 
-int red_black_tree_stress_test::helper_check_black_height( node* n ) {
+int tut_yaal_hcore_hsbbstree::helper_check_black_height( engine_t::HAbstractNode* n ) {
 	int bh = 0;
 	while ( n ) {
-		if ( n->color == node::black )
+		if ( n->_color == engine_t::HAbstractNode::BLACK )
 			++ bh;
-		n = n->parent;
+		n = n->_parent;
 	}
 	return ( bh );
 }
 
-template<typename T>
-bool red_black_tree_stress_test::self_test( HSet<T>& ob ) {
+bool tut_yaal_hcore_hsbbstree::self_test( set_t& ob ) {
 	init( ob );
-	if ( ob.size() != quantity )
+	if ( _root == _root->_left )
 		return ( true );
-	if ( root == root->left )
+	if ( _root == _root->_right )
 		return ( true );
-	if ( root == root->right )
+	if ( _root == _root->_parent )
 		return ( true );
-	if ( root == root->parent )
+	if ( _root->_left && ( _root->_left->_parent != _root ) )
 		return ( true );
-	if ( root->left && ( root->left->parent != root ) )
-		return ( true );
-	if ( root->right && ( root->right->parent != root ) )
+	if ( _root->_right && ( _root->_right->_parent != _root ) )
 		return ( true );
 	return ( false );
 }
 
-template<typename T>
-bool red_black_tree_stress_test::integrity_test( HSet<T>& ob ) {
+bool tut_yaal_hcore_hsbbstree::integrity_test( set_t& ob ) {
 	init( ob );
-	helper_test_node_integrity ( root );
-	ENSURE_EQUALS( "quantity inconsistency", quantity, tested_nodes );
+	helper_test_node_integrity( _root );
+	ENSURE_EQUALS( "quantity inconsistency", ob._engine._size, _testedNodes );
 	return ( false );
 }
 
-template<typename T>
-bool red_black_tree_stress_test::definition_test( HSet<T>& ob ) {
+bool tut_yaal_hcore_hsbbstree::definition_test( set_t& ob ) {
 	init( ob );
-	if ( root->color != node::black )
+	if ( _root->_color != engine_t::HAbstractNode::BLACK )
 		FAIL ( "root is not black" );
-	black_height = helper_count_exemplar_black_height( root );
-	helper_test_node_definition( root );
-//	if ( red_node_exists )
+	_blackHeight = helper_count_exemplar_black_height( _root );
+	helper_test_node_definition( _root );
+//	if ( _redNodeExists )
 //		cout << "R";
 	return ( false );
 }
 
-struct tut_yaal_hcore_hsbbstree : public simple_mock<tut_yaal_hcore_hsbbstree> {
-	typedef simple_mock<tut_yaal_hcore_hsbbstree> base_type;
-	static int const NUMBER_OF_TEST_NODES = 1000;
-	static int const KEY_POOL_SIZE = 30000;
-	red_black_tree_stress_test stress;
-	tut_yaal_hcore_hsbbstree( void )
-		: base_type(), stress()
-		{}
-	virtual ~tut_yaal_hcore_hsbbstree( void )
-		{}
-	template<typename object, typename subject, typename key>
-	void helper_stress_test( object&, subject, key );
-	typedef HSet<int> set_t;
-	typedef set_t::engine_t engine_t;
-	typedef set_t::insert_result (set_t::*set_insert_t)( int const& );
-};
-
-template<typename object, typename subject, typename key>
-void tut_yaal_hcore_hsbbstree::helper_stress_test( object& ob, subject member, key val ) {
+template<typename subject>
+void tut_yaal_hcore_hsbbstree::helper_stress_test( set_t& ob, subject member, int val ) {
 	( ob.*member )( val );
-	ENSURE( "self test failed", ! stress.self_test<key>( ob ) );
-	ENSURE( "integrity test failed", ! stress.integrity_test<key>( ob ) );
-	ENSURE( "definition test failed", ! stress.definition_test<key>( ob ) );
-	key biggest = - 1;
-	for ( typename object::HIterator it = ob.begin(); it != ob.end(); ++ it ) {
+	ENSURE( "self test failed", ! self_test( ob ) );
+	ENSURE( "integrity test failed", ! integrity_test( ob ) );
+	ENSURE( "definition test failed", ! definition_test( ob ) );
+	int biggest = - 1;
+	for ( typename set_t::HIterator it = ob.begin(); it != ob.end(); ++ it ) {
 		ENSURE( "elements not in order", *it > biggest );
 		biggest = *it;
 	}
@@ -225,7 +198,7 @@ TUT_UNIT_TEST( 1, "Adding keys in ascending order." )
 	set_insert_t insert = &set_t::insert;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_test( s, insert, i );
-	ENSURE ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
+	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "Adding keys in descending order." )
@@ -233,7 +206,7 @@ TUT_UNIT_TEST( 2, "Adding keys in descending order." )
 	set_insert_t insert = &set_t::insert;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		helper_stress_test( s, insert, i );
-	ENSURE ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
+	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "Adding keys in random order." )
@@ -242,7 +215,7 @@ TUT_UNIT_TEST( 3, "Adding keys in random order." )
 	set_insert_t insert = &set_t::insert;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_test( s, insert, r( KEY_POOL_SIZE ) );
-	ENSURE ( "no red nodes were generated during the test", red_black_tree_stress_test::red_node_exists );
+	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "Removing keys in ascending order from lower half of the tree that was created by adding keys in ascending order." )

@@ -66,7 +66,7 @@ public:
 	*/
 	test_object()
 		: _group(), _testNo( 0 ), _file( "" ), _line( 0 ), _slow( false ),
-		called_method_was_a_dummy_test_( false ), _currentTestName()
+		called_method_was_a_dummy_test_( false ), _currentTestName(), _currentLine( -1 )
 		{}
 
 	void set_test_tut( std::string const& groupName, int const& testNo ) {
@@ -95,8 +95,16 @@ public:
 		return ( _file );
 	}
 
-	int get_test_line( void ) {
+	int get_test_line( void ) const {
 		return ( _line );
+	}
+
+	int get_current_line( void ) const {
+		return ( _currentLine );
+	}
+
+	virtual void set_current_line( int line_ ) {
+		_currentLine = line_;
 	}
 
 	virtual void time_constraint_exempt( void ) {
@@ -129,6 +137,7 @@ public:
 
 private:
 	std::string _currentTestName;
+	int _currentLine;
 private:
 	test_object( test_object const& );
 	test_object& operator = ( test_object const& );
@@ -409,7 +418,7 @@ public:
 			errno = 0;
 			char const* title( get_test_title( ti->first ) );
 			if ( title )
-				tr.set_meta( title );
+				tr.set_location( title );
 			run_test( ti->second, obj );
 			++ _passed;
 		} catch ( const no_such_test& ) {
@@ -428,16 +437,22 @@ public:
 		} catch ( const std::exception& ex ) {
 			// test failed with std::exception
 			tr.set_meta( test_result::ex, yaal::hcore::demangle( typeid( ex ).name() ).raw(), ex.what() );
+			if ( obj.get() )
+				line = obj->get_current_line();
 		} catch ( const yaal::hcore::HException& ex ) {
 			// test failed with yaal::hcore::HException
 			tr.set_meta( test_result::ex, yaal::hcore::demangle( typeid( ex ).name() ).raw(), ex.what() );
+			if ( obj.get() )
+				line = obj->get_current_line();
 		} catch ( ... ) {
 			// test failed with unknown exception
 			tr.set_meta( test_result::ex );
+			if ( obj.get() )
+				line = obj->get_current_line();
 		}
 
 		if ( obj.get() )
-			tr.set_meta( obj->get_test_name(), file ? file : obj->get_test_file(), line > 0 ? line : obj->get_test_line() );
+			tr.set_location( obj->get_test_name(), file ? file : obj->get_test_file(), line > 0 ? line : obj->get_test_line() );
 		tr.set_time( clock.get_time_elapsed( yaal::hcore::HClock::UNIT::MILISECOND ) );
 		// test passed
 

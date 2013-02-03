@@ -93,7 +93,7 @@ struct test_result : public test_result_posix {
 	/**
 	 * Set addtional per-exception information (that is always available/meaningful.
 	 */
-	void set_meta( std::string const& testName_, char const* const file = NULL, int const& line = -1 ) {
+	void set_location( std::string const& testName_, char const* const file = NULL, int const& line = -1 ) {
 		_name = testName_;
 		if ( file )
 			_file = file;

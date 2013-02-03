@@ -45,12 +45,15 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-TUT_SIMPLE_MOCK( tut_yaal_tools_hdes );
+struct tut_yaal_tools_hdes : public simple_mock<tut_yaal_tools_hdes> {
+	virtual ~tut_yaal_tools_hdes( void ) {}
+	void do_des( HString, HString, HDes::action_t const& );
+	void crypt_decrypt_test( int );
+};
+
 TUT_TEST_GROUP( tut_yaal_tools_hdes, "yaal::tools::HDes" );
 
-namespace {
-
-void do_des( HString src_, HString dst_, HDes::action_t const& action_ ) {
+void tut_yaal_tools_hdes::do_des( HString src_, HString dst_, HDes::action_t const& action_ ) {
 	HFile in;
 	HFile out;
 	HString passwd;
@@ -69,7 +72,7 @@ void do_des( HString src_, HString dst_, HDes::action_t const& action_ ) {
 		crypto::decrypt_3des( in, out, passwd );
 }
 
-void crypt_decrypt_test( int onSize_ ) {
+void tut_yaal_tools_hdes::crypt_decrypt_test( int onSize_ ) {
 	HChunk m( onSize_ + 1 );
 	clog << "+" << endl;
 	for ( int i( 0 ); i < onSize_; ++ i )
@@ -91,8 +94,6 @@ void crypt_decrypt_test( int onSize_ ) {
 	HString check( ss.string() );
 	ENSURE_EQUALS( "decrypted lenght is incorrect", check.get_length(), onSize_ );
 	ENSURE_EQUALS( "decrypted data is incorrect", check, m.get<char>() );
-}
-
 }
 
 TUT_UNIT_TEST( 1, "crypt file" )

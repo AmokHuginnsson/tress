@@ -54,6 +54,7 @@ struct tut_yaal_hcore_hsocket : public simple_mock<tut_yaal_hcore_hsocket> {
 	}
 	virtual ~tut_yaal_hcore_hsocket( void )
 		{}
+	void play_scenario( HSocket::socket_type_t, HString const&, int, bool, bool, bool );
 };
 
 TUT_TEST_GROUP( tut_yaal_hcore_hsocket, "yaal::hcore::HSocket" );
@@ -305,9 +306,7 @@ TUT_UNIT_TEST( 10, "Accept on socket that is not listening." )
 	}
 TUT_TEARDOWN()
 
-namespace {
-
-void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_ ) {
+void tut_yaal_hcore_hsocket::play_scenario( HSocket::socket_type_t type_, HString const& path_, int port_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_ ) {
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
 	TUT_DECLARE( HServer serv( type_ | ( withSsl_ ? HSocket::TYPE::SSL_SERVER : HSocket::TYPE::DEFAULT ) | ( nonBlockingServer_ ? HSocket::TYPE::NONBLOCKING : HSocket::TYPE::DEFAULT ), 1 ); );
@@ -333,8 +332,6 @@ void play_scenario( HSocket::socket_type_t type_, HString const& path_, int port
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
 	cout << serv.buffer() << endl;
 	return;
-}
-
 }
 
 TUT_UNIT_TEST( 11, "Transfering data through file (blocking)." )

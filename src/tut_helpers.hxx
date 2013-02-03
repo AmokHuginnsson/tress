@@ -385,6 +385,7 @@ struct simple_mock {
 	typedef std::set<int> std_set_t;
 	virtual ~simple_mock( void ) {}
 	virtual void time_constraint_exempt( void ) = 0;
+	virtual void set_current_line( int ) = 0;
 };
 
 class Stringifier {

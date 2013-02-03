@@ -52,6 +52,7 @@ struct tut_yaal_hcore_hudpsocket : simple_mock<tut_yaal_hcore_hudpsocket> {
 	}
 	virtual ~tut_yaal_hcore_hudpsocket( void )
 		{}
+	void play_scenario( int, ip_t, bool, bool, bool );
 };
 
 TUT_TEST_GROUP( tut_yaal_hcore_hudpsocket, "yaal::hcore::HUDPSocket" );
@@ -208,9 +209,7 @@ TUT_UNIT_TEST( 4, "bind on port in use." )
 	}
 TUT_TEARDOWN()
 
-namespace {
-
-void play_scenario( int port_, ip_t ip_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_ ) {
+void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_ ) {
 	char test_data[] = "Ala ma kota.";
 	const int size = sizeof ( test_data );
 	TUT_DECLARE( HUDPServer serv( HUDPSocket::socket_type_t( withSsl_ ? HUDPSocket::TYPE::SSL : HUDPSocket::TYPE::DEFAULT ) | ( nonBlockingServer_ ? HUDPSocket::TYPE::NONBLOCKING : HUDPSocket::TYPE::DEFAULT ) ); );
@@ -235,8 +234,6 @@ void play_scenario( int port_, ip_t ip_, bool withSsl_, bool nonBlockingServer_,
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
 	cout << serv.buffer() << endl;
 	return;
-}
-
 }
 
 TUT_UNIT_TEST( 19, "Transfering data through network (blocking)." )

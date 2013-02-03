@@ -73,6 +73,7 @@ struct tut_yaal_hcore_hlist : public simple_mock<tut_yaal_hcore_hlist> {
 	void erase_test_2( list_t& l );
 	void erase_test_3( list_t& l );
 	list_t from_string( char const* );
+	void check_sorted( list_t const&, list_control_helper::OSortHelper::sort_order_t );
 private:
 };
 
@@ -880,9 +881,7 @@ TUT_UNIT_TEST( 24, "swap" )
 	ENSURE_EQUALS( "exchange failed", _stringifier.to_string<char>( l1 ), "ab" );
 TUT_TEARDOWN()
 
-namespace {
-
-void check_sorted( tut_yaal_hcore_hlist::list_t const& l, list_control_helper::OSortHelper::sort_order_t order ) {
+void tut_yaal_hcore_hlist::check_sorted( tut_yaal_hcore_hlist::list_t const& l, list_control_helper::OSortHelper::sort_order_t order ) {
 	if ( order == list_control_helper::OSortHelper::ASCENDING ) {
 		int val = 0;
 		for ( tut_yaal_hcore_hlist::list_t::const_iterator it = l.begin(); it != l.end(); ++ it ) {
@@ -896,8 +895,6 @@ void check_sorted( tut_yaal_hcore_hlist::list_t const& l, list_control_helper::O
 			val = *it;
 		}
 	}
-}
-
 }
 
 TUT_UNIT_TEST( 25, "sort serious" )
