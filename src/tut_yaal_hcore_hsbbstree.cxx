@@ -35,6 +35,7 @@ Copyright:
 #include <yaal/hcore/hrandomizer.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
+#include "tut_yaal_hcore_hsbbstree.hxx"
 
 using namespace tut;
 using namespace yaal;
@@ -44,8 +45,8 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hsbbstree : public simple_mock<tut_yaal_hcore_hsbbstree> {
-	typedef simple_mock<tut_yaal_hcore_hsbbstree> base_type;
+struct tut_yaal_hcore_hsbbstree : public tress::tut_helpers::simple_mock<tut_yaal_hcore_hsbbstree> {
+	typedef tress::tut_helpers::simple_mock<tut_yaal_hcore_hsbbstree> base_type;
 	static int const NUMBER_OF_TEST_NODES = 1000;
 	static int const KEY_POOL_SIZE = 30000;
 	tut_yaal_hcore_hsbbstree( void )
@@ -53,10 +54,11 @@ struct tut_yaal_hcore_hsbbstree : public simple_mock<tut_yaal_hcore_hsbbstree> {
 		{}
 	virtual ~tut_yaal_hcore_hsbbstree( void )
 		{}
-	typedef HSet<int> set_t;
+	typedef yaal::hcore::HSet<int> set_t;
 	typedef set_t::engine_t engine_t;
-	template<typename subject>
-	void helper_stress_test( set_t&, subject, int );
+	void helper_stress_test_insert( set_t&, int );
+	void helper_stress_test_erase( set_t&, int );
+	void verify( set_t& );
 	bool self_test( set_t& );
 	bool integrity_test( set_t& );
 	bool definition_test( set_t& );
@@ -177,14 +179,22 @@ bool tut_yaal_hcore_hsbbstree::definition_test( set_t& ob ) {
 	return ( false );
 }
 
-template<typename subject>
-void tut_yaal_hcore_hsbbstree::helper_stress_test( set_t& ob, subject member, int val ) {
-	( ob.*member )( val );
+void tut_yaal_hcore_hsbbstree::helper_stress_test_insert( set_t& ob, int val ) {
+	helper_stress_just_insert( ob, val );
+	verify( ob );
+}
+
+void tut_yaal_hcore_hsbbstree::helper_stress_test_erase( set_t& ob, int val ) {
+	helper_stress_just_erase( ob, val );
+	verify( ob );
+}
+
+void tut_yaal_hcore_hsbbstree::verify( set_t& ob ) {
 	ENSURE( "self test failed", ! self_test( ob ) );
 	ENSURE( "integrity test failed", ! integrity_test( ob ) );
 	ENSURE( "definition test failed", ! definition_test( ob ) );
 	int biggest = - 1;
-	for ( typename set_t::HIterator it = ob.begin(); it != ob.end(); ++ it ) {
+	for ( set_t::HIterator it = ob.begin(); it != ob.end(); ++ it ) {
 		ENSURE( "elements not in order", *it > biggest );
 		biggest = *it;
 	}
@@ -195,101 +205,98 @@ TUT_TEST_GROUP( tut_yaal_hcore_hsbbstree, "yaal::hcore::HSBBSTree" );
 
 TUT_UNIT_TEST( 1, "Adding keys in ascending order." )
 	set_t s;
-	set_insert_t insert = &set_t::insert;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test( s, insert, i );
+		helper_stress_test_insert( s, i );
 	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "Adding keys in descending order." )
 	set_t s;
-	set_insert_t insert = &set_t::insert;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
-		helper_stress_test( s, insert, i );
+		helper_stress_test_insert( s, i );
 	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "Adding keys in random order." )
 	HRandomizer r;
 	set_t s;
-	set_insert_t insert = &set_t::insert;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test( s, insert, r( KEY_POOL_SIZE ) );
+		helper_stress_test_insert( s, r( KEY_POOL_SIZE ) );
 	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "Removing keys in ascending order from lower half of the tree that was created by adding keys in ascending order." )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		s.insert ( i );
+		helper_stress_just_insert( s, i );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
-		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
+		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "Removing keys in ascending order from upper half of the tree that was created by adding keys in ascending order." )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		s.insert ( i );
+		helper_stress_just_insert( s, i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
+		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "Removing keys in descending order from lower half of the tree that was created by adding keys in ascending order." )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		s.insert ( i );
+		helper_stress_just_insert( s, i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
-		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
+		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 7, "Removing keys in descending order from upper half of the tree that was created by adding keys in ascending order." )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		s.insert ( i );
+		helper_stress_just_insert( s, i );
 	for ( int i = NUMBER_OF_TEST_NODES - 1; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
-		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( & set_t::erase ), i );
+		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "Removing keys in ascending order from lower half of the tree that was created by adding keys in descending order." )
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
-		s.insert ( i );
+		helper_stress_just_insert( s, i );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i )
-		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
+		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 9, "Removing keys in ascending order from upper half of the tree that was created by adding keys in descending order." )
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
-		s.insert ( i );
+		helper_stress_just_insert( s, i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
+		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 10, "Removing keys in descending order from lower half of the tree that was created by adding keys in descending order." )
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
-		s.insert ( i );
+		helper_stress_just_insert( s, i );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i )
-		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
+		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 11, "Removing keys in descending order from upper half of the tree that was created by adding keys in descending order." )
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
-		s.insert ( i );
+		helper_stress_just_insert( s, i );
 	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i )
-		helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
+		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 12, "Removing keys in ascending order from lower half of the tree that was created by adding keys in random order." )
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
-		s.insert ( r( KEY_POOL_SIZE ) );
+		helper_stress_just_insert( s, r( KEY_POOL_SIZE ) );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i ) {
 		try {
-			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
+			helper_stress_test_erase( s, i );
 		} catch ( HException const& e ) {
 			if ( e.code() != static_cast<int>( engine_t::ERROR::NON_EXISTING_KEY ) )
 				throw;
@@ -301,10 +308,10 @@ TUT_UNIT_TEST( 13, "Removing keys in ascending order from upper half of the tree
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
-		s.insert ( r( KEY_POOL_SIZE ) );
+		helper_stress_just_insert( s, r( KEY_POOL_SIZE ) );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i ) {
 		try {
-			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
+			helper_stress_test_erase( s, i );
 		} catch ( HException const& e ) {
 			if ( e.code() != static_cast<int>( engine_t::ERROR::NON_EXISTING_KEY ) )
 				throw;
@@ -316,10 +323,10 @@ TUT_UNIT_TEST( 14, "Removing keys in descending order from lower half of the tre
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
-		s.insert ( r( KEY_POOL_SIZE ) );
+		helper_stress_just_insert( s, r( KEY_POOL_SIZE ) );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i ) {
 		try {
-			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
+			helper_stress_test_erase( s, i );
 		} catch ( HException const& e ) {
 			if ( e.code() != static_cast<int>( engine_t::ERROR::NON_EXISTING_KEY ) )
 				throw;
@@ -331,10 +338,10 @@ TUT_UNIT_TEST( 15, "Removing keys in descending order from upper half of the tre
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
-		s.insert ( r( KEY_POOL_SIZE ) );
+		helper_stress_just_insert( s, r( KEY_POOL_SIZE ) );
 	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i ) {
 		try {
-			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), i );
+			helper_stress_test_erase( s, i );
 		} catch ( HException const& e ) {
 			if ( e.code() != static_cast<int>( engine_t::ERROR::NON_EXISTING_KEY ) )
 				throw;
@@ -347,10 +354,10 @@ TUT_UNIT_TEST( 16, "Removing keys in random order from upper half of the tree th
 	HRandomizer r;
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		s.insert ( r( KEY_POOL_SIZE ) );
+		helper_stress_just_insert( s, r( KEY_POOL_SIZE ) );
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i ) {
 		try {
-			helper_stress_test( s, static_cast<int long ( set_t::* )( int const& )>( &set_t::erase ), r( KEY_POOL_SIZE ) );
+			helper_stress_test_erase( s, r( KEY_POOL_SIZE ) );
 		} catch ( HException const& e ) {
 			if ( e.code() != static_cast<int>( engine_t::ERROR::NON_EXISTING_KEY ) )
 				throw;
