@@ -53,12 +53,11 @@ bool set_variables( HString& option_, HString& value_ ) {
 	return ( false );
 }
 
-}
-
-void version( void* ) __attribute__(( __noreturn__ ));
 void version( void* ) {
 	cout << PACKAGE_STRING << endl;
-	throw ( 0 );
+	return;
+}
+
 }
 
 /* Set all the option flags according to the switches specified.
@@ -105,20 +104,21 @@ int handle_program_options( int argc_, char** argv_ ) {
 		( "debug", program_options_helper::option_value( setup._debug ), 'd', HProgramOptionsHandler::OOption::TYPE::NONE, "print debugging information about tress internals" )
 		( "help", program_options_helper::option_value( stop ), 'h', HProgramOptionsHandler::OOption::TYPE::NONE, "display this help and stop", program_options_helper::callback( util::show_help, &info ) )
 		( "dump-configuration", program_options_helper::option_value( stop ), 'W', HProgramOptionsHandler::OOption::TYPE::NONE, "dump current configuration", program_options_helper::callback( util::dump_configuration, &info ) )
-		( "version", program_options_helper::no_value, 'V', HProgramOptionsHandler::OOption::TYPE::NONE, "output version information and stop", program_options_helper::callback( version, NULL ) );
+		( "version", program_options_helper::option_value( stop ), 'V', HProgramOptionsHandler::OOption::TYPE::NONE, "output version information and stop", program_options_helper::callback( version, NULL ) );
 	po.process_rc_file( "tress", "", NULL );
 	if ( setup._logPath.is_empty() )
 		setup._logPath = "tress.log";
-	int unknown = 0, nonOption = 0;
-	nonOption = po.process_command_line( argc_, argv_, &unknown );
-	if ( unknown > 0 ) {
-		if ( setup._reporter == "qt" )
-			cerr << "NOTICE: Remember to add options terminator `--' as last argument while using QT reporter." << endl;
-		util::show_help( &info );
+	int unknown( 0 );
+	int nonOption( po.process_command_line( argc_, argv_, &unknown ) );
+	if ( stop || ( unknown > 0 ) ) {
+		if ( unknown > 0 ) {
+			if ( setup._reporter == "qt" )
+				cerr << "NOTICE: Remember to add options terminator `--' as last argument while using QT reporter." << endl;
+			util::show_help( &info );
+		}
+		HLog::disable_auto_rehash();
 		throw unknown;
 	}
-	if ( stop )
-		throw 0;
 	if ( noColor )
 		setup._color = false;
 	if ( !testFilter.is_empty() ) {
