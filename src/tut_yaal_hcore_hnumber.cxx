@@ -63,6 +63,7 @@ HString tut_yaal_hcore_hnumber::BC_PATH = ::getenv( "BC_PATH" ) ? ::getenv( "BC_
 tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void )
 	: _rnd( randomizer_helper::make_randomizer() ), _bc(), _cache() {
 	set_env( "BC_LINE_LENGTH", "10000000" );
+	HScopedValueReplacement<int> saveErrno( errno, 0 );
 #ifdef __MSVCXX__
 	char const WIN_BC_PATH[] = "..\\..\\..\\..\\usr\\windows\\bin\\bc.exe";
 	char const WIN_BC_PATH_ALT[] = "..\\..\\..\\usr\\windows\\bin\\bc.exe";
@@ -803,6 +804,7 @@ TUT_UNIT_TEST( 14, "lower then operator" )
 	ENSURE( "lower failed f", HNumber( ".2" ) < HNumber( "1" ) );
 	ENSURE( "lower failed f1", HNumber( ".123" ) < HNumber( ".1231" ) );
 	ENSURE( "lower failed g", HNumber( "2.734543" ) < HNumber( "3.145" ) );
+	ENSURE( "lower failed g1", HNumber( "0" ) < HNumber( "0.01" ) );
 
 	ENSURE( "lower failed h", ! ( HNumber( "1" ) < HNumber( "-1" ) ) );
 	ENSURE( "lower failed i", ! ( HNumber( "0" ) < HNumber( "-1" ) ) );
@@ -817,6 +819,7 @@ TUT_UNIT_TEST( 14, "lower then operator" )
 	ENSURE( "lower failed q", ! ( HNumber( ".1" ) < HNumber( ".1" ) ) );
 	ENSURE( "lower failed r", ! ( HNumber( "-.1" ) < HNumber( "-.1" ) ) );
 	ENSURE( "lower failed s", ! ( HNumber( "0" ) < HNumber( "0" ) ) );
+	ENSURE( "lower failed t", ! ( HNumber( "0.01" ) < HNumber( "0" ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 15, "lower or equal then operator" )
@@ -1271,6 +1274,10 @@ TUT_UNIT_TEST( 27, "postdecrementation" )
 	ENSURE_EQUALS( "postdecrementation failed orig", n, HNumber( "-1" ) );
 	ENSURE_EQUALS( "postdecrementation failed copy", k, HNumber( "0" ) );
 	ENSURE_EQUALS( "postdecrementation failed", n --, HNumber( "-1" ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 28, "construct from int" )
+	ENSURE_EQUALS( "construction from int failed", HNumber( 0 ), HNumber( "0" ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "speed" )
