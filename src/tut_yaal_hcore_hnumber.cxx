@@ -1290,6 +1290,19 @@ TUT_UNIT_TEST( 28, "construct from int" )
 	ENSURE_EQUALS( "construction from int failed", HNumber( 0 ), HNumber( "0" ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 29, "is_exact()" )
+	HString sn( "0.1234567891234567891234567891" );
+	HNumber n( sn );
+	ENSURE( "not exact from string", n.is_exact() );
+	ENSURE_EQUALS( "bad precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
+	static int const HARDCODED_MINIMUM_PRECISION( 16 );
+	for ( int long i( sn.get_length() - 3 ); i >= HARDCODED_MINIMUM_PRECISION; -- i ) {
+		n.set_precision( i );
+		ENSURE_EQUALS( "failed to set precision", n.get_precision(), i );
+		ENSURE_NOT( "exact after trimming precision below fractional length", n.is_exact() );
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "speed" )
 	double long y( 0 );
 	HNumber n( 3 );
