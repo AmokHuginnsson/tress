@@ -192,7 +192,7 @@ TUT_UNIT_TEST( 13, "clear" )
 	ENSURE_EQUALS( "clear failed (is_empty)", str.empty(), true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "replace" )
+TUT_UNIT_TEST( 14, "replace(patter, str)" )
 	static char const INIT[] = "aarererererebb";
 	static char const PAT1[] = "rere";
 	static char const PAT2[] = "OKOK";
@@ -708,6 +708,34 @@ TUT_UNIT_TEST( 42, "assign( HString ... )" )
 	} catch ( HStringException const& ) {
 		// ok
 	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 43, "fill()" )
+	HString s;
+	s.fill( '0', 0, 16 );
+	ENSURE_EQUALS( "bad lenght", s.get_length(), 16 );
+	ENSURE_EQUALS( "bad content", s, "0000000000000000" );
+	s.fill( 'x', 4, 8 );
+	ENSURE_EQUALS( "bad lenght", s.get_length(), 16 );
+	ENSURE_EQUALS( "bad content", s, "0000xxxxxxxx0000" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 44, "fillz()" )
+	HString s;
+	s.fillz( '0', 0, 16 );
+	ENSURE_EQUALS( "bad lenght", s.get_length(), 16 );
+	ENSURE_EQUALS( "bad content", s, "0000000000000000" );
+	s.fillz( 'x', 4, 8 );
+	ENSURE_EQUALS( "bad lenght", s.get_length(), 12 );
+	ENSURE_EQUALS( "bad content", s, "0000xxxxxxxx" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 45, "replace(pos, len, str)" )
+	HString s( "Ala ma kota." );
+	int long origLen( s.get_length() );
+	s.replace( 7, 4, "psa" );
+	ENSURE_EQUALS( "bad lenght", s.get_length(), origLen - 1 );
+	ENSURE_EQUALS( "bad content", s, "Ala ma psa." );
 TUT_TEARDOWN()
 
 }
