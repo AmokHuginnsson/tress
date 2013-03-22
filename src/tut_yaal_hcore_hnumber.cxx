@@ -195,14 +195,16 @@ TUT_UNIT_TEST( 4, "construct from string" )
 	cout << "| n1 =" << n1.to_string() << " |" << endl;
 
 	char const* const pn2 = ".5";
+	char const* const pn2e = "0.5";
 	HNumber n2( pn2 );
-	ENSURE_EQUALS( "number not created correctly", n2.to_string(), pn2 );
+	ENSURE_EQUALS( "number not created correctly", n2.to_string(), pn2e );
 	ENSURE_EQUALS( "bad dafault precision", n2.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n2 =" << n2.to_string() << " |" << endl;
 
 	char const* const pn3 = "-.7";
+	char const* const pn3e = "-0.7";
 	HNumber n3( pn3 );
-	ENSURE_EQUALS( "number not created correctly", n3.to_string(), pn3 );
+	ENSURE_EQUALS( "number not created correctly", n3.to_string(), pn3e );
 	ENSURE_EQUALS( "bad dafault precision", n3.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n3 =" << n3.to_string() << " |" << endl;
 
@@ -238,7 +240,7 @@ TUT_UNIT_TEST( 4, "construct from string" )
 
 	char const* const pn5 = ".2.7";
 	HNumber n5( pn5 );
-	ENSURE_EQUALS( "number not created correctly", n5.to_string(), ".2" );
+	ENSURE_EQUALS( "number not created correctly", n5.to_string(), "0.2" );
 	ENSURE_EQUALS( "bad dafault precision", n5.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n5 =" << n5.to_string() << " |" << endl;
 
@@ -266,7 +268,7 @@ TUT_UNIT_TEST( 4, "construct from string" )
 	ENSURE_EQUALS( "bad dafault precision", n9.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n9 =" << n9.to_string() << " |" << endl;
 	ENSURE_EQUALS( "number 0 not created correctly", HNumber( "0001200" ).to_string(), "1200" );
-	ENSURE_EQUALS( "number 1 not created correctly", HNumber( "-00.200" ).to_string(), "-.2" );
+	ENSURE_EQUALS( "number 1 not created correctly", HNumber( "-00.200" ).to_string(), "-0.2" );
 	ENSURE_EQUALS( "number 2 not created correctly", HNumber( "-00100" ).to_string(), "-100" );
 	ENSURE_EQUALS( "number 3 not created correctly", HNumber( "00012.3200" ).to_string(), "12.32" );
 	ENSURE_EQUALS( "number 4 not created correctly", HNumber( "-000034.212000" ).to_string(), "-34.212" );
@@ -280,11 +282,11 @@ TUT_UNIT_TEST( 4, "construct from string" )
 	ENSURE_EQUALS( "number 12 not created correctly", HNumber( "-000." ).to_string(), "0" );
 	ENSURE_EQUALS( "number 1 5 not created correctly", HNumber( "-0001" ).to_string(), "-1" );
 	ENSURE_EQUALS( "number 1 6 not created correctly", HNumber( "0001" ).to_string(), "1" );
-	ENSURE_EQUALS( "number 1 7 not created correctly", HNumber( ".0001" ).to_string(), ".0001" );
-	ENSURE_EQUALS( "number 1 8 not created correctly", HNumber( "000.1" ).to_string(), ".1" );
-	ENSURE_EQUALS( "number 1 9 not created correctly", HNumber( "00.0001" ).to_string(), ".0001" );
-	ENSURE_EQUALS( "number 1 10 not created correctly", HNumber( "-.0001" ).to_string(), "-.0001" );
-	ENSURE_EQUALS( "number 1 11 not created correctly", HNumber( "-000.001" ).to_string(), "-.001" );
+	ENSURE_EQUALS( "number 1 7 not created correctly", HNumber( ".0001" ).to_string(), "0.0001" );
+	ENSURE_EQUALS( "number 1 8 not created correctly", HNumber( "000.1" ).to_string(), "0.1" );
+	ENSURE_EQUALS( "number 1 9 not created correctly", HNumber( "00.0001" ).to_string(), "0.0001" );
+	ENSURE_EQUALS( "number 1 10 not created correctly", HNumber( "-.0001" ).to_string(), "-0.0001" );
+	ENSURE_EQUALS( "number 1 11 not created correctly", HNumber( "-000.001" ).to_string(), "-0.001" );
 	ENSURE_EQUALS( "number 1 12 not created correctly", HNumber( "-0001." ).to_string(), "-1" );
 	/* long numbers */
 	char const* const lns0 = "12345678901234567890";
@@ -390,13 +392,13 @@ TUT_UNIT_TEST( 5, "construct from string (prefixes)" )
 
 	char const* const pn2 = "???.5";
 	HNumber n2( pn2 );
-	ENSURE_EQUALS( "number not created correctly", n2.to_string(), pn2 + 3 );
+	ENSURE_EQUALS( "number not created correctly", n2.to_string(), "0.5" );
 	ENSURE_EQUALS( "bad dafault precision", n2.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n2 =" << n2.to_string() << " |" << endl;
 
 	char const* const pn3 = "$$$-.7";
 	HNumber n3( pn3 );
-	ENSURE_EQUALS( "number not created correctly", n3.to_string(), pn3 + 3 );
+	ENSURE_EQUALS( "number not created correctly", n3.to_string(), "-0.7" );
 	ENSURE_EQUALS( "bad dafault precision", n3.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n3 =" << n3.to_string() << " |" << endl;
 
@@ -432,7 +434,7 @@ TUT_UNIT_TEST( 5, "construct from string (prefixes)" )
 
 	char const* const pn5 = "???.2.7";
 	HNumber n5( pn5 );
-	ENSURE_EQUALS( "number not created correctly", n5.to_string(), ".2" );
+	ENSURE_EQUALS( "number not created correctly", n5.to_string(), "0.2" );
 	ENSURE_EQUALS( "bad dafault precision", n5.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n5 =" << n5.to_string() << " |" << endl;
 
@@ -494,14 +496,14 @@ TUT_UNIT_TEST( 6, "construct from string (postfixes)" )
 	ENSURE_EQUALS( "bad dafault precision", n1.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n1 =" << n1.to_string() << " |" << endl;
 
-	char const* const pn2ok = ".5";
+	char const* const pn2ok = "0.5";
 	char const* const pn2 = ".5???";
 	HNumber n2( pn2 );
 	ENSURE_EQUALS( "number not created correctly", n2.to_string(), pn2ok );
 	ENSURE_EQUALS( "bad dafault precision", n2.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n2 =" << n2.to_string() << " |" << endl;
 
-	char const* const pn3ok = "-.7";
+	char const* const pn3ok = "-0.7";
 	char const* const pn3 = "-.7???";
 	HNumber n3( pn3 );
 	ENSURE_EQUALS( "number not created correctly", n3.to_string(), pn3ok );
@@ -541,7 +543,7 @@ TUT_UNIT_TEST( 6, "construct from string (postfixes)" )
 
 	char const* const pn5 = ".2.7???";
 	HNumber n5( pn5 );
-	ENSURE_EQUALS( "number not created correctly", n5.to_string(), ".2" );
+	ENSURE_EQUALS( "number not created correctly", n5.to_string(), "0.2" );
 	ENSURE_EQUALS( "bad dafault precision", n5.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n5 =" << n5.to_string() << " |" << endl;
 
@@ -603,14 +605,14 @@ TUT_UNIT_TEST( 7, "construct from string (prepostfixes)" )
 	ENSURE_EQUALS( "bad dafault precision", n1.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n1 =" << n1.to_string() << " |" << endl;
 
-	char const* const pn2ok = ".5";
+	char const* const pn2ok = "0.5";
 	char const* const pn2 = "$$$.5???";
 	HNumber n2( pn2 );
 	ENSURE_EQUALS( "number not created correctly", n2.to_string(), pn2ok );
 	ENSURE_EQUALS( "bad dafault precision", n2.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n2 =" << n2.to_string() << " |" << endl;
 
-	char const* const pn3ok = "-.7";
+	char const* const pn3ok = "-0.7";
 	char const* const pn3 = "$$$-.7???";
 	HNumber n3( pn3 );
 	ENSURE_EQUALS( "number not created correctly", n3.to_string(), pn3ok );
@@ -650,7 +652,7 @@ TUT_UNIT_TEST( 7, "construct from string (prepostfixes)" )
 
 	char const* const pn5 = "???.2.7???";
 	HNumber n5( pn5 );
-	ENSURE_EQUALS( "number not created correctly", n5.to_string(), ".2" );
+	ENSURE_EQUALS( "number not created correctly", n5.to_string(), "0.2" );
 	ENSURE_EQUALS( "bad dafault precision", n5.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n5 =" << n5.to_string() << " |" << endl;
 
@@ -1120,12 +1122,12 @@ TUT_UNIT_TEST( 21, "division" )
 	denominator.set_precision( MIN );
 	HNumber division;
 	division = numerator / denominator;
-	ENSURE_EQUALS( "bad calculus 1", division.to_string(), ".33333333333333333333333333333333" );
+	ENSURE_EQUALS( "bad calculus 1", division.to_string(), "0.33333333333333333333333333333333" );
 	ENSURE( "number shall not be exact", ! division.is_exact() );
 	numerator = "2";
 	numerator.set_precision( MIN );
 	division = numerator / denominator;
-	ENSURE_EQUALS( "bad calculus 2", division.to_string(), ".66666666666666666666666666666666" );
+	ENSURE_EQUALS( "bad calculus 2", division.to_string(), "0.66666666666666666666666666666666" );
 	ENSURE( "number shall not be exact", ! division.is_exact() );
 	numerator = "2000";
 	numerator.set_precision( MIN );
@@ -1135,38 +1137,38 @@ TUT_UNIT_TEST( 21, "division" )
 	denominator = "3000000000000";
 	denominator.set_precision( MIN );
 	division = numerator / denominator;
-	ENSURE_EQUALS( "bad calculus 4", division.to_string(), ".00000000066666666666666666666666" );
+	ENSURE_EQUALS( "bad calculus 4", division.to_string(), "0.00000000066666666666666666666666" );
 	ENSURE( "number shall not be exact", ! division.is_exact() );
 	numerator = "2";
 	denominator = "4";
 	division = numerator / denominator;
-	ENSURE_EQUALS( "bad calculus 5", division.to_string(), ".5" );
+	ENSURE_EQUALS( "bad calculus 5", division.to_string(), "0.5" );
 	ENSURE( "number shall be exact", division.is_exact() );
-	DIV_TEST_MSG( "padding front zeros failed", .491401, 7.01, .0701 );
+	DIV_TEST_MSG( "padding front zeros failed", .491401, 7.01, 0.0701 );
 		//.59247871334 and b = 3.404513888889 failed: expected .1740274038163329231239957953559 actual .01740274038163329231239957953559
-	DIV_TEST_MSG( "padding front zeros failed", .606, 3.03, .2 );
-	DIV_TEST_MSG( "padding front zeros failed", .49, 7, .07 );
-	DIV_TEST_MSG( "padding front zeros failed", 4.91401, 70.1, .0701 );
-	DIV_TEST_MSG( "padding front zeros failed", .491401, 70.1, .00701 );
-	DIV_TEST_MSG( "padding front zeros failed", .0491401, 70.1, .000701 );
-	DIV_TEST_MSG( "padding front zeros failed", .00491401, 70.1, .0000701 );
-	DIV_TEST_MSG( "padding front zeros failed", 4.91401, 7.01, .701 );
-	DIV_TEST_MSG( "padding front zeros failed", .491401, 7.01, .0701 );
-	DIV_TEST_MSG( "padding front zeros failed", .0491401, 7.01, .00701 );
-	DIV_TEST_MSG( "padding front zeros failed", .00491401, 7.01, .000701 );
-	DIV_TEST_MSG( "padding front zeros failed", .491401, 701, .000701 );
-	DIV_TEST_MSG( "padding front zeros failed", 491.401, 701, .701 );
-	DIV_TEST_MSG( "padding front zeros failed", 49.1401, 701, .0701 );
-	DIV_TEST_MSG( "padding front zeros failed", 4.91401, 701, .00701 );
-	DIV_TEST_MSG( "padding front zeros failed", .4961122700545761418014255, -7.059190031153, -.0702789226335 );
-	DIV_TEST_MSG( "padding front zeros failed", .4961122700545761418014255, 7.059190031153, .0702789226335 );
-	DIV_TEST( .4961122700545761418014255, -7.059190031153, -.0702789226335 );
-	DIV_TEST_MSG( "padding front zeros failed", .0077, .77, .01 );
-	DIV_TEST_MSG( "padding front zeros failed", .777, 777, .001 );
-	DIV_TEST_MSG( "padding front zeros failed", .000777, .777, .001 );
-	DIV_TEST_MSG_LIM( "padding front zeros failed", .160963010792, 100.264285714286, .00160538729863, 15 );
-	DIV_TEST_MSG_LIM( "padding front zeros failed", .160963010792, 100264.285714286, .000001605387298, 16 );
-	DIV_TEST_MSG_LIM( "padding front zeros failed", 1.180629342051, -3.6, -.327952595014166666666666666666, 32 );
+	DIV_TEST_MSG( "padding front zeros failed", .606, 3.03, 0.2 );
+	DIV_TEST_MSG( "padding front zeros failed", .49, 7, 0.07 );
+	DIV_TEST_MSG( "padding front zeros failed", 4.91401, 70.1, 0.0701 );
+	DIV_TEST_MSG( "padding front zeros failed", .491401, 70.1, 0.00701 );
+	DIV_TEST_MSG( "padding front zeros failed", .0491401, 70.1, 0.000701 );
+	DIV_TEST_MSG( "padding front zeros failed", .00491401, 70.1, 0.0000701 );
+	DIV_TEST_MSG( "padding front zeros failed", 4.91401, 7.01, 0.701 );
+	DIV_TEST_MSG( "padding front zeros failed", .491401, 7.01, 0.0701 );
+	DIV_TEST_MSG( "padding front zeros failed", .0491401, 7.01, 0.00701 );
+	DIV_TEST_MSG( "padding front zeros failed", .00491401, 7.01, 0.000701 );
+	DIV_TEST_MSG( "padding front zeros failed", .491401, 701, 0.000701 );
+	DIV_TEST_MSG( "padding front zeros failed", 491.401, 701, 0.701 );
+	DIV_TEST_MSG( "padding front zeros failed", 49.1401, 701, 0.0701 );
+	DIV_TEST_MSG( "padding front zeros failed", 4.91401, 701, 0.00701 );
+	DIV_TEST_MSG( "padding front zeros failed", .4961122700545761418014255, -7.059190031153, -0.0702789226335 );
+	DIV_TEST_MSG( "padding front zeros failed", .4961122700545761418014255, 7.059190031153, 0.0702789226335 );
+	DIV_TEST( .4961122700545761418014255, -7.059190031153, -0.0702789226335 );
+	DIV_TEST_MSG( "padding front zeros failed", .0077, .77, 0.01 );
+	DIV_TEST_MSG( "padding front zeros failed", .777, 777, 0.001 );
+	DIV_TEST_MSG( "padding front zeros failed", .000777, .777, 0.001 );
+	DIV_TEST_MSG_LIM( "padding front zeros failed", .160963010792, 100.264285714286, 0.00160538729863, 16 );
+	DIV_TEST_MSG_LIM( "padding front zeros failed", .160963010792, 100264.285714286, 0.000001605387298, 17 );
+	DIV_TEST_MSG_LIM( "padding front zeros failed", 1.180629342051, -3.6, -0.327952595014166666666666666666, 33 );
 
 	char const pdividend[] = "0001201440012000144000012000";
 	char const pdivisor[] = "00012000";
@@ -1208,6 +1210,10 @@ TUT_UNIT_TEST( 21, "division" )
 			int len = static_cast<int>( res.get_length() );
 			( len >= ( M + M ) ) && ( len = M + M );
 			res = res.left( len );
+			if ( res[0] == '.' )
+				res.insert( 0, 1, '0' );
+			else if ( ( res[0] == '-' ) && ( res[1] == '.' ) )
+				res.insert( 1, 1, '0' );
 			int z( static_cast<int>( res.find( '.' ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
 			ENSURE_EQUALS( msg, div.to_string().left( len - z ), res.left( len - z ) );
 		}
@@ -1229,6 +1235,10 @@ TUT_UNIT_TEST( 21, "division" )
 		int len = static_cast<int>( res.get_length() );
 		( len >= ( M + M + 1 ) ) && ( len = M + M + 1 );
 		res = res.left( len );
+		if ( res[0] == '.' )
+			res.insert( 0, 1, '0' );
+		else if ( ( res[0] == '-' ) && ( res[1] == '.' ) )
+			res.insert( 1, 1, '0' );
 		int z( static_cast<int>( res.find( '.' ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
 		ENSURE_EQUALS( msg, div.to_string().left( len - z ), res.left( len - z ) );
 	}
