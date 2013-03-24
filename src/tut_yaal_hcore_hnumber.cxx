@@ -33,6 +33,7 @@ Copyright:
 #include <yaal/tools/hpipedchild.hxx>
 #include <yaal/tools/hfsitem.hxx>
 #include <yaal/tools/xmath.hxx>
+#include <yaal/tools/streamtools.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 
@@ -739,9 +740,9 @@ TUT_UNIT_TEST( 10, "set/get precision" )
 	numerator.set_precision( M );
 	denominator.set_precision( M );
 	division = numerator / denominator;
-	ENSURE_EQUALS( "bad calculated 4 precision ( 1/3 )", division.get_precision(), M + M ); /* number was exact */
+	ENSURE_EQUALS( "bad calculated 4 precision ( 1/3 )", division.get_precision(), M ); /* number was exact */
 	division.set_precision( 100 );
-	ENSURE_EQUALS( "bad modified 4 precision ( 1/3 )", division.get_precision(), M + M ); /* number was exact */
+	ENSURE_EQUALS( "bad modified 4 precision ( 1/3 )", division.get_precision(), M ); /* number was exact */
 
 	HNumber s;
 	ENSURE_EQUALS( "bad default minimum precision", s.get_precision(), M );
@@ -1122,22 +1123,22 @@ TUT_UNIT_TEST( 21, "division" )
 	denominator.set_precision( MIN );
 	HNumber division;
 	division = numerator / denominator;
-	ENSURE_EQUALS( "bad calculus 1", division.to_string(), "0.33333333333333333333333333333333" );
+	ENSURE_EQUALS( "bad calculus 1", division.to_string(), "0.3333333333333333" );
 	ENSURE( "number shall not be exact", ! division.is_exact() );
 	numerator = "2";
 	numerator.set_precision( MIN );
 	division = numerator / denominator;
-	ENSURE_EQUALS( "bad calculus 2", division.to_string(), "0.66666666666666666666666666666666" );
+	ENSURE_EQUALS( "bad calculus 2", division.to_string(), "0.6666666666666666" );
 	ENSURE( "number shall not be exact", ! division.is_exact() );
 	numerator = "2000";
 	numerator.set_precision( MIN );
 	division = numerator / denominator;
-	ENSURE_EQUALS( "bad calculus 3", division.to_string(), "666.66666666666666666666666666666666" );
+	ENSURE_EQUALS( "bad calculus 3", division.to_string(), "666.6666666666666666" );
 	ENSURE( "number shall not be exact", ! division.is_exact() );
 	denominator = "3000000000000";
 	denominator.set_precision( MIN );
 	division = numerator / denominator;
-	ENSURE_EQUALS( "bad calculus 4", division.to_string(), "0.00000000066666666666666666666666" );
+	ENSURE_EQUALS( "bad calculus 4", division.to_string(), "0.0000000006666666" );
 	ENSURE( "number shall not be exact", ! division.is_exact() );
 	numerator = "2";
 	denominator = "4";
@@ -1296,11 +1297,45 @@ TUT_UNIT_TEST( 29, "is_exact()" )
 	ENSURE( "not exact from string", n.is_exact() );
 	ENSURE_EQUALS( "bad precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
 	static int const HARDCODED_MINIMUM_PRECISION( 16 );
-	for ( int long i( sn.get_length() - 3 ); i >= HARDCODED_MINIMUM_PRECISION; -- i ) {
+	for ( HNumber::size_t i( static_cast<HNumber::size_t>( sn.get_length() ) - 3 ); i >= HARDCODED_MINIMUM_PRECISION; -- i ) {
 		n.set_precision( i );
 		ENSURE_EQUALS( "failed to set precision", n.get_precision(), i );
 		ENSURE_NOT( "exact after trimming precision below fractional length", n.is_exact() );
 	}
+TUT_TEARDOWN()
+
+#define SQRT_TEST_MSG( msg, value, root ) \
+	ENSURE_EQUALS( msg ": `sqrt(" #value ") = " #root "'", square_root( HNumber( #value ) ).to_string(), HNumber( #root ).to_string() )
+
+#define SQRT_TEST_MSG_LIM( msg, value, root, lim ) \
+	ENSURE_EQUALS( msg ": `sqrt(" #value ") = " #root "'", square_root( HNumber( #value ) ).to_string().left( lim ), HNumber( #root ).to_string().left( lim ) )
+
+#define SQRT_TEST( value, root ) \
+	SQRT_TEST_MSG( "square root failed", value, root )
+
+TUT_UNIT_TEST( 30, "square_root<HNumber>()" )
+	SQRT_TEST( 0, 0 );
+	SQRT_TEST( 0.01, 0.1 );
+	SQRT_TEST( 0.04, 0.2 );
+	SQRT_TEST( 0.09, 0.3 );
+	SQRT_TEST( 0.16, 0.4 );
+	SQRT_TEST( 0.25, 0.5 );
+	SQRT_TEST( 0.36, 0.6 );
+	SQRT_TEST( 0.49, 0.7 );
+	SQRT_TEST( 0.64, 0.8 );
+	SQRT_TEST( 0.81, 0.9 );
+	SQRT_TEST( 1, 1 );
+	SQRT_TEST( 4, 2 );
+	SQRT_TEST( 9, 3 );
+	SQRT_TEST( 16, 4 );
+	SQRT_TEST( 25, 5 );
+	SQRT_TEST( 36, 6 );
+	SQRT_TEST( 49, 7 );
+	SQRT_TEST( 64, 8 );
+	SQRT_TEST( 81, 9 );
+	SQRT_TEST( 100, 10 );
+	for ( int i( 1 ); i <= 100; ++ i )
+		clog << "square_root of " << i << " = " << square_root( HNumber( i ) ) << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "speed" )
@@ -1322,6 +1357,21 @@ TUT_UNIT_TEST( 50, "speed" )
 	}
 	ENSURE_EQUALS( "karatsuba failed", myRes, res );
 	clog << "*speed* HNumber multiplication result = " << ( ( bc > y ) ? green : red ) << ( y / bc ) << lightgray << endl;
+	/**/ {
+		HClock c;
+		n = square_root( HNumber( 91, 1000 ) );
+		clog << "*speed* HNumber square root = " << static_cast<int long>( y = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+	}
+	myRes = n.to_string();
+	/**/ {
+		HClock c;
+		_bc << "scale=1000" << endl;
+		_bc << "sqrt(91)" << endl;
+		do _bc.read_until( res ); while ( res.is_empty() );
+		clog << "*speed* bc square root = " << static_cast<int long>( bc = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+	}
+	ENSURE_EQUALS( "square root failed", myRes, res );
+	clog << "*speed* HNumber square root result = " << ( ( bc > y ) ? green : red ) << ( y / bc ) << lightgray << endl;
 TUT_TEARDOWN()
 
 }
