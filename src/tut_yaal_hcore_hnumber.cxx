@@ -1334,8 +1334,30 @@ TUT_UNIT_TEST( 30, "square_root<HNumber>()" )
 	SQRT_TEST( 64, 8 );
 	SQRT_TEST( 81, 9 );
 	SQRT_TEST( 100, 10 );
-	for ( int i( 1 ); i <= 100; ++ i )
-		clog << "square_root of " << i << " = " << square_root( HNumber( i ) ) << endl;
+	HString s;
+	HString msg;
+	HString res;
+	_bc.spawn( BC_PATH );
+	static int const naturalScale = 100;
+	_bc << "scale=" << naturalScale << endl;
+	for ( int long i = 0; i < 100; ++ i ) {
+		HNumber val( random_real() );
+		if ( val < 0 )
+			val = -val;
+		s = val.to_string();
+		_bc << "sqrt(" << s << ")" << endl;
+		do _bc.read_until( res ); while ( res.is_empty() );
+		msg = "square root of random val = " + s + " failed";
+		HNumber root( square_root( val ) );
+		clog << ansi::brightcyan << ">> " << "square_root(" << s << ")" << ansi::reset << " = " << ansi::yellow << root.to_string() << ansi::reset << endl;
+		int len = static_cast<int>( res.get_length() );
+		( len >= ( naturalScale + 1 ) ) && ( len = naturalScale + 1 );
+		res = res.left( len );
+		if ( res[0] == '.' )
+			res.insert( 0, 1, '0' );
+		int z( static_cast<int>( res.find( '.' ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
+		ENSURE_EQUALS( msg, root.to_string().left( len - z ), res.left( len - z ) );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "speed" )
