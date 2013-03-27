@@ -310,6 +310,10 @@ TUT_UNIT_TEST( 4, "construct from string" )
 	HNumber ln4( lns4 );
 	ENSURE_EQUALS( "number ln4 not created correctly", ln4.to_string(), lns4 );
 
+	char const* const lns4b = "0.0000000000000000000000001";
+	HNumber ln4b( lns4b );
+	ENSURE_EQUALS( "number ln4b not created correctly", ln4b.to_string(), lns4b );
+
 	char const* const lns5 = "-1000000000000000000000000";
 	HNumber ln5( lns5 );
 	ENSURE_EQUALS( "number ln5 not created correctly", ln5.to_string(), lns5 );
@@ -1032,7 +1036,14 @@ TUT_UNIT_TEST( 20, "substraction" )
 TUT_TEARDOWN()
 
 #define DIV_TEST_MSG( msg, dividend, divisor, quotient ) \
-	ENSURE_EQUALS( msg ": `" #dividend " / " #divisor " = " #quotient "'", ( HNumber( #dividend ) / HNumber( #divisor ) ).to_string(), HNumber( #quotient ).to_string() )
+	do { \
+		HNumber quot( #dividend ); \
+		HNumber div( #divisor ); \
+		clog << ansi::brightcyan << ">> " << #dividend << " / " << #divisor << ansi::reset << " = " << flush; \
+		quot /= div; \
+		clog << ansi::yellow << quot.to_string() << ansi::reset << endl; \
+		ENSURE_EQUALS( msg ": `" #dividend " / " #divisor " = " #quotient "'", quot.to_string(), HNumber( #quotient ).to_string() ); \
+	} while ( false )
 
 #define DIV_TEST_MSG_LIM( msg, dividend, divisor, quotient, lim ) \
 	ENSURE_EQUALS( msg ": `" #dividend " / " #divisor " = " #quotient "'", ( HNumber( #dividend ) / HNumber( #divisor ) ).to_string().left( lim ), HNumber( #quotient ).to_string() )
@@ -1049,12 +1060,18 @@ TUT_UNIT_TEST( 21, "division" )
 	} catch ( HException& ) {
 		// ok
 	}
+	DIV_TEST( 2, 2, 1 );
 	DIV_TEST( 0, 1, 0 );
 	DIV_TEST( 0, -1, 0 );
 	DIV_TEST( 1, 1, 1 );
 	DIV_TEST( 1, 10, .1 );
 	DIV_TEST( 1, 100, .01 );
 	DIV_TEST( 1, 1000, .001 );
+	DIV_TEST( 1, 1000000000, .000000001 );
+	DIV_TEST( 1, .1, 10 );
+	DIV_TEST( 1, .01, 100 );
+	DIV_TEST( 1, .001, 1000 );
+	DIV_TEST( 1, .0000000001, 10000000000 );
 	DIV_TEST( .1, 1, .1 );
 	DIV_TEST( .1, 10, .01 );
 	DIV_TEST( .11, 11, .01 );
@@ -1067,6 +1084,7 @@ TUT_UNIT_TEST( 21, "division" )
 	DIV_TEST( .99980001, .9999, .9999 );
 	DIV_TEST( .1, 100, .001 );
 	DIV_TEST( .1, 1000, .0001 );
+	DIV_TEST( .1, 1000000000, .0000000001 );
 	DIV_TEST( .01, 1, .01 );
 	DIV_TEST( .01, 10, .001 );
 	DIV_TEST( .01, 100, .0001 );
@@ -1102,6 +1120,7 @@ TUT_UNIT_TEST( 21, "division" )
 	DIV_TEST( 10.01, .001, 10010 );
 	DIV_TEST( 10.01, .002, 5005 );
 	DIV_TEST( 10.01, .0001, 100100 );
+	DIV_TEST( 10.01, .0000000001, 100100000000 );
 	DIV_TEST( 10.01, .0002, 50050 );
 	DIV_TEST( 1, 4, .25 );
 	DIV_TEST( 1, -1, -1 );
@@ -1220,11 +1239,11 @@ TUT_UNIT_TEST( 21, "division" )
 		}
 	}
 
+	static int const scale( 1000 );
+	_bc << "scale=" << scale << endl;
 	for ( int long i = 0; i < 1000; ++ i ) {
-		HNumber a( random_real() );
-		HNumber b( random_real() );
-		a.set_precision( M * 2 );
-		b.set_precision( M * 2 );
+		HNumber a( random_real(), scale );
+		HNumber b( random_real(), scale );
 		if ( b == "0" )
 			++ b;
 		as = a.to_string();
@@ -1234,7 +1253,7 @@ TUT_UNIT_TEST( 21, "division" )
 		msg = "division of random a = " + as + " and b = " + bs + " failed";
 		HNumber div( a / b );
 		int len = static_cast<int>( res.get_length() );
-		( len >= ( M + M + 1 ) ) && ( len = M + M + 1 );
+		( len >= ( scale + 1 ) ) && ( len = scale + 1 );
 		res = res.left( len );
 		if ( res[0] == '.' )
 			res.insert( 0, 1, '0' );
@@ -1381,13 +1400,13 @@ TUT_UNIT_TEST( 50, "speed" )
 	clog << "*speed* HNumber multiplication result = " << ( ( bc > y ) ? green : red ) << ( y / bc ) << lightgray << endl;
 	/**/ {
 		HClock c;
-		n = square_root( HNumber( 91, 1000 ) );
+		n = square_root( HNumber( 91, 10000 ) );
 		clog << "*speed* HNumber square root = " << static_cast<int long>( y = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
 	}
 	myRes = n.to_string();
 	/**/ {
 		HClock c;
-		_bc << "scale=1000" << endl;
+		_bc << "scale=10000" << endl;
 		_bc << "sqrt(91)" << endl;
 		do _bc.read_until( res ); while ( res.is_empty() );
 		clog << "*speed* bc square root = " << static_cast<int long>( bc = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
