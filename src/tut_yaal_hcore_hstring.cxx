@@ -711,7 +711,7 @@ TUT_UNIT_TEST( 42, "assign( HString ... )" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 43, "fill()" )
-	HString s;
+	HString s( 16, 0 );
 	s.fill( '0', 0, 16 );
 	ENSURE_EQUALS( "bad lenght", s.get_length(), 16 );
 	ENSURE_EQUALS( "bad content", s, "0000000000000000" );
@@ -721,7 +721,7 @@ TUT_UNIT_TEST( 43, "fill()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 44, "fillz()" )
-	HString s;
+	HString s( 16, 0 );
 	s.fillz( '0', 0, 16 );
 	ENSURE_EQUALS( "bad lenght", s.get_length(), 16 );
 	ENSURE_EQUALS( "bad content", s, "0000000000000000" );
