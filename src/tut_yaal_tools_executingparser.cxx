@@ -26,6 +26,7 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
+#include <yaal/hcore/hstack.hxx>
 #include <yaal/tools/executingparser.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
@@ -35,10 +36,16 @@ using namespace yaal::hcore;
 
 namespace ll {
 
+
 template<typename container_t>
-HBoundCall<void ( typename container_t::value_type const& )> push_back( container_t& container ) {
+void pushbacker( container_t* container, yaal::hcore::HString const& value ) {
+	container->push_back( lexical_cast<typename container_t::value_type>( value ) );
+}
+
+template<typename container_t>
+HBoundCall<void ( yaal::hcore::HString const& )> push_back( container_t& container ) {
 	M_PROLOG
-	return ( call( &container_t::push_back, &container, _1 ) );
+	return ( call( &pushbacker<container_t>, &container, _1 ) );
 	M_EPILOG
 }
 
@@ -69,6 +76,33 @@ TUT_UNIT_TEST( 1, "empty parser" )
 	} catch ( HRuleException const& ) {
 		// ok
 	}
+TUT_TEARDOWN()
+
+struct calc {
+	typedef HStack<double long> vars_t;
+	vars_t _vars;
+	calc( void )
+		: _vars()
+		{}
+	void sum( void ) {
+		double long v1( _vars.top() );
+		_vars.pop();
+		double long v2( _vars.top() );
+		_vars.pop();
+		_vars.push( v1 + v2 );
+	}
+	void val( double long v_ ) {
+		_vars.push( v_ );
+	}
+};
+
+TUT_UNIT_TEST( 2, "calc" )
+	calc c;
+	HRule r( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] >> '+' >> real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
+	r[HBoundCall<void ( void )>( call( &calc::sum, &c ) )];
+	r( "1.7+2.4" );
+	r();
+	cout << c._vars.top() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "the test" )
