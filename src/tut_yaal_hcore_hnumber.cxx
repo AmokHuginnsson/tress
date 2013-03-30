@@ -1379,6 +1379,48 @@ TUT_UNIT_TEST( 30, "square_root<HNumber>()" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 32, "abs<HNumber>()" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 33, "ln<HNumber>()" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 34, "exp<HNumber>()" )
+TUT_TEARDOWN()
+	
+TUT_UNIT_TEST( 35, "pow<HNumber>()" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 36, "sin<HNumber>()" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 37, "tan<HNumber>()" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 38, "ceil<HNumber>()" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 39, "roof<HNumber>()" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 40, "round<HNumber>()" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 41, "log10<HNumber>()" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 42, "asin<HNumber>()" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 42, "atan<HNumber>()" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 43, "sinh<HNumber>()" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 44, "tanh<HNumber>()" )
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "speed" )
 	double long y( 0 );
 	HNumber n( 3 );
