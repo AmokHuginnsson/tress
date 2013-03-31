@@ -1412,13 +1412,13 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 42, "asin<HNumber>()" )
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 42, "atan<HNumber>()" )
+TUT_UNIT_TEST( 43, "atan<HNumber>()" )
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 43, "sinh<HNumber>()" )
+TUT_UNIT_TEST( 44, "sinh<HNumber>()" )
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 44, "tanh<HNumber>()" )
+TUT_UNIT_TEST( 45, "tanh<HNumber>()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "speed" )

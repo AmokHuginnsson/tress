@@ -98,8 +98,7 @@ struct calc {
 
 TUT_UNIT_TEST( 2, "calc" )
 	calc c;
-	HRule r( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] >> '+' >> real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
-	r[HBoundCall<void ( void )>( call( &calc::sum, &c ) )];
+	HRule r( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] >> *( '+' >> real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] )[HBoundCall<void ( void )>( call( &calc::sum, &c ) )] );
 	r( "1.7+2.4" );
 	r();
 	cout << c._vars.top() << endl;
