@@ -32,10 +32,12 @@ Copyright:
 
 #define private public
 #define protected public
+#include <yaal/hcore/hlist.hxx>
+#undef protected
+#undef private
 
 #include <TUT/tut.hpp>
 
-#include <yaal/hcore/hlist.hxx>
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 #include <yaal/hcore/hrandomizer.hxx>

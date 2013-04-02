@@ -26,12 +26,14 @@ Copyright:
 
 #include <yaal/hcore/hexception.hxx>
 
-#define private public
-#define protected public
-
 #include <TUT/tut.hpp>
 
+#define private public
+#define protected public
 #include <yaal/hcore/htree.hxx>
+#undef protected
+#undef private
+
 M_VCSID( "$Id: "__ID__" $" )
 #include "tut_helpers.hxx"
 #include "tut_yaal_allocator.hxx"

@@ -37,6 +37,9 @@ Copyright:
 
 #include <yaal/hcore/hdeque.hxx>
 
+#undef protected
+#undef private
+
 #include <TUT/tut.hpp>
 
 #include "tut_helpers.hxx"
