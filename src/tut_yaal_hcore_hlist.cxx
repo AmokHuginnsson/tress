@@ -29,6 +29,7 @@ Copyright:
 #include <algorithm>
 
 #include <yaal/hcore/hexception.hxx>
+#include <yaal/hcore/algorithm.hxx>
 
 #define private public
 #define protected public
