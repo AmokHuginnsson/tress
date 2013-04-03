@@ -66,16 +66,32 @@ if ( CMAKE_HOST_WIN32 )
 	include_external_msproject( mkheaders ${mkheaders_PROJ} )
 	file( GLOB msvcxx_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/msvcxx.vc*proj )
 	include_external_msproject( msvcxx ${msvcxx_PROJ} )
+
 	file( GLOB hcore_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/hcore.vc*proj )
 	include_external_msproject( hcore ${hcore_PROJ} msvcxx makedef )
+	file( GLOB hcore_static_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/hcore-static.vc*proj )
+	include_external_msproject( hcore-static ${hcore_static_PROJ} msvcxx makedef )
+
 	file( GLOB tools_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/tools.vc*proj )
 	include_external_msproject( tools ${tools_PROJ} hcore )
+	file( GLOB tools_static_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/tools-static.vc*proj )
+	include_external_msproject( tools-static ${tools_static_PROJ} hcore )
+
 	file( GLOB dbwrapper_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/dbwrapper.vc*proj )
 	include_external_msproject( dbwrapper ${dbwrapper_PROJ} tools )
+	file( GLOB dbwrapper_static_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/dbwrapper-static.vc*proj )
+	include_external_msproject( dbwrapper-static ${dbwrapper_static_PROJ} tools )
+
 	file( GLOB hconsole_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/hconsole.vc*proj )
 	include_external_msproject( hconsole ${hconsole_PROJ} tools )
+	file( GLOB hconsole_static_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/hconsole-static.vc*proj )
+	include_external_msproject( hconsole-static ${hconsole_static_PROJ} tools )
+
 	file( GLOB hdata_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/hdata.vc*proj )
 	include_external_msproject( hdata ${hdata_PROJ} dbwrapper hconsole )
+	file( GLOB hdata_static_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/hdata-static.vc*proj )
+	include_external_msproject( hdata-static ${hdata_static_PROJ} dbwrapper hconsole )
+
 	file( GLOB INSTALL_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/INSTALL.vc*proj )
 	include_external_msproject( INSTALL ${INSTALL_PROJ} hdata mkheaders )
 	add_dependencies( tress INSTALL )
