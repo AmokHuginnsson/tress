@@ -96,6 +96,7 @@ struct calc {
 	}
 };
 
+#if 0
 TUT_UNIT_TEST( 2, "calc" )
 	calc c;
 	HRule r( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] >> *( '+' >> real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] )[HBoundCall<void ( void )>( call( &calc::sum, &c ) )] );
@@ -103,6 +104,7 @@ TUT_UNIT_TEST( 2, "calc" )
 	r();
 	cout << c._vars.top() << endl;
 TUT_TEARDOWN()
+#endif
 
 TUT_UNIT_TEST( 50, "the test" )
 	HArray<double> v;
