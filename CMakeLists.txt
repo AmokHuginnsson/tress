@@ -100,6 +100,23 @@ if ( CMAKE_HOST_WIN32 )
 	
 	file( GLOB mkheaders_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/mkheaders.vc*proj )
 	include_external_msproject( mkheaders ${mkheaders_PROJ} )
+
+	file( RELATIVE_PATH TARGET_PATH_RELATIVE ${CMAKE_HOME_DIRECTORY} ${TARGET_PATH} )
+	set( INSTALLED_HEADER "${CMAKE_INSTALL_PREFIX}/include/yaal/yaal.hxx" )
+	set( YAAL_TARGET_PATH "${CMAKE_HOME_DIRECTORY}/../yaal/${TARGET_PATH_RELATIVE}" )
+	set( GENERATED_HEADERS "${YAAL_TARGET_PATH}/include/yaal" )
+
+	add_custom_command( OUTPUT ${INSTALLED_HEADER}
+		COMMAND cmd /c "( robocopy /e /np /njh /ndl /njs ${GENERATED_HEADERS} ${CMAKE_INSTALL_PREFIX}/include/yaal ) ^& IF %ERRORLEVEL% LEQ 1 exit /b 0"
+		COMMAND cmd /c "( robocopy /e /xx /np /njh /ndl /njs ${YAAL_TARGET_PATH} ${CMAKE_INSTALL_PREFIX}/lib *.lib ) ^& IF %ERRORLEVEL% LEQ 1 exit /b 0"
+		COMMAND cmd /c "( robocopy /e /xx /np /njh /ndl /njs ${YAAL_TARGET_PATH} ${CMAKE_INSTALL_PREFIX}/bin *.dll ) ^& IF %ERRORLEVEL% LEQ 1 exit /b 0"
+		DEPENDS ${GENERATED_HEADERS}/yaal.hxx headers hdata hconsole dbwrapper tools hcore msvcxx
+		VERBATIM )
+	add_custom_target( install_yaal ALL DEPENDS ${INSTALLED_HEADER} )
+
+	add_dependencies( tress install_yaal )
+	add_dependencies( tressplugin install_yaal )
+
 else()
 	set_target_properties( ${PROJECT_NAME} PROPERTIES COMPILE_FLAGS -Wno-variadic-macros )
 	set_target_properties( tressplugin PROPERTIES OUTPUT_NAME 1exec PREFIX "" SUFFIX "" LIBRARY_OUTPUT_DIRECTORY ${TARGET_PATH}/tressplugin LIBRARY_OUTPUT_DIRECTORY_DEBUG ${TARGET_PATH}/tressplugin LIBRARY_OUTPUT_DIRECTORY_RELEASE ${TARGET_PATH}/tressplugin LIBRARY_OUTPUT_DIRECTORY_COV ${TARGET_PATH}/tressplugin LIBRARY_OUTPUT_DIRECTORY_PROF ${TARGET_PATH}/tressplugin )
