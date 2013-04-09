@@ -105,11 +105,19 @@ if ( CMAKE_HOST_WIN32 )
 	set( INSTALLED_HEADER "${CMAKE_INSTALL_PREFIX}/include/yaal/yaal.hxx" )
 	set( YAAL_TARGET_PATH "${CMAKE_HOME_DIRECTORY}/../yaal/${TARGET_PATH_RELATIVE}" )
 	set( GENERATED_HEADERS "${YAAL_TARGET_PATH}/include/yaal" )
+#	message( "Info:\n"
+#		"\tCMAKE_HOME_DIRECTORY=${CMAKE_HOME_DIRECTORY}\n"
+#		"\tCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}\n"
+#		"\tTARGET_PATH=${TARGET_PATH}\n"
+#		"\tTARGET_PATH_RELATIVE=${TARGET_PATH_RELATIVE}\n"
+#		"\tINSTALLED_HEADER=${INSTALLED_HEADER}\n"
+#		"\tYAAL_TARGET_PATH=${YAAL_TARGET_PATH}\n"
+#		"\tGENERATED_HEADERS=${GENERATED_HEADERS}" )
 
 	add_custom_command( OUTPUT ${INSTALLED_HEADER}
 		COMMAND cmd /c "( robocopy /e /np /njh /ndl /njs ${GENERATED_HEADERS} ${CMAKE_INSTALL_PREFIX}/include/yaal ) ^& IF %ERRORLEVEL% LEQ 1 exit /b 0"
-		COMMAND cmd /c "( robocopy /e /xx /np /njh /ndl /njs ${YAAL_TARGET_PATH} ${CMAKE_INSTALL_PREFIX}/lib *.lib ) ^& IF %ERRORLEVEL% LEQ 1 exit /b 0"
-		COMMAND cmd /c "( robocopy /e /xx /np /njh /ndl /njs ${YAAL_TARGET_PATH} ${CMAKE_INSTALL_PREFIX}/bin *.dll ) ^& IF %ERRORLEVEL% LEQ 1 exit /b 0"
+		COMMAND cmd /c "( robocopy /xx /np /njh /ndl /njs ${YAAL_TARGET_PATH} ${CMAKE_INSTALL_PREFIX}/lib *.lib ) ^& IF %ERRORLEVEL% LEQ 1 exit /b 0"
+		COMMAND cmd /c "( robocopy /xx /np /njh /ndl /njs ${YAAL_TARGET_PATH} ${CMAKE_INSTALL_PREFIX}/bin *.dll ) ^& IF %ERRORLEVEL% LEQ 1 exit /b 0"
 		DEPENDS ${GENERATED_HEADERS}/yaal.hxx headers hdata hconsole dbwrapper tools hcore msvcxx
 		VERBATIM )
 	add_custom_target( install_yaal ALL DEPENDS ${INSTALLED_HEADER} )
