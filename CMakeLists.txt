@@ -9,7 +9,7 @@ elseif ( NOT ( "${BOOST_INSTALL_PATH}" STREQUAL "" ) )
 endif()
 
 if ( CMAKE_HOST_WIN32 )
-	add_definitions( /D_HAS_ITERATOR_DEBUGGING=0 /D_ALLOW_KEYWORD_MACROS=1 )
+	add_definitions( /D_ALLOW_KEYWORD_MACROS=1 )
 	include_directories( ${BOOST_ROOT}/include )
 	link_directories( ${BOOST_ROOT}/lib )
 endif()
@@ -57,7 +57,7 @@ if ( CMAKE_HOST_WIN32 )
 	set_target_properties( child-simple PROPERTIES LINKER_LANGUAGE CXX OUTPUT_NAME child RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_HOME_DIRECTORY}/data )
 	set_target_properties( tressplugin PROPERTIES OUTPUT_NAME tressplugin${LIB_INFIX} LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_HOME_DIRECTORY}/data )
 	set_target_properties( child PROPERTIES COMPILE_DEFINITIONS "_SIGNAL_H=1" )
-	set_source_files_properties( ${CHILD_SRCS} COMPILE_FLAGS "/FIglibc/bits/signum.h /FIyaal/fix.hxx" )
+	set_source_files_properties( ${CHILD_SRCS} PROPERTIES COMPILE_FLAGS "/FIglibc/bits/signum.h /FIyaal/fix.hxx" )
 	target_link_libraries( ${PROJECT_NAME} ${yaal_LIBRARIES} libintl )
 	target_link_libraries( child ${yaal_LIBRARIES} libintl )
 
@@ -118,9 +118,9 @@ if ( CMAKE_HOST_WIN32 )
 		COMMAND cmd /c "( robocopy /e /np /njh /ndl /njs ${GENERATED_HEADERS} ${CMAKE_INSTALL_PREFIX}/include/yaal ) ^& IF %ERRORLEVEL% LEQ 1 exit /b 0"
 		COMMAND cmd /c "( robocopy /xx /np /njh /ndl /njs ${YAAL_TARGET_PATH} ${CMAKE_INSTALL_PREFIX}/lib *.lib ) ^& IF %ERRORLEVEL% LEQ 1 exit /b 0"
 		COMMAND cmd /c "( robocopy /xx /np /njh /ndl /njs ${YAAL_TARGET_PATH} ${CMAKE_INSTALL_PREFIX}/bin *.dll ) ^& IF %ERRORLEVEL% LEQ 1 exit /b 0"
-		DEPENDS ${GENERATED_HEADERS}/yaal.hxx headers hdata hconsole dbwrapper tools hcore msvcxx
+		DEPENDS ${GENERATED_HEADERS}/yaal.hxx headers hdata hdata-static hconsole hconsole-static dbwrapper dbwrapper-static tools tools-static hcore hcore-static msvcxx
 		VERBATIM )
-	add_custom_target( install_yaal ALL DEPENDS ${INSTALLED_HEADER} )
+	add_custom_target( install_yaal DEPENDS ${INSTALLED_HEADER} )
 
 	add_dependencies( tress install_yaal )
 	add_dependencies( tressplugin install_yaal )

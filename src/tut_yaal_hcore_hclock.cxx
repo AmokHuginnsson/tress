@@ -58,7 +58,11 @@ TUT_UNIT_TEST( 2, "1 mili-second accuracy" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,3>::value;
+#if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ )
+	static int long const QUALITY = PASSED / 10;
+#else /* #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 	static int long const QUALITY = get_speed( HClock::UNIT::MILISECOND ) + 2;
+#endif /* #else #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 	HClock clk;
 	TUT_EVAL( tools::sleep::second( SLEEP ) );
 	int long elapsed( 0 );
@@ -70,7 +74,11 @@ TUT_UNIT_TEST( 3, "1 micro-second accuracy" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,6>::value;
+#if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ )
+	static int long const QUALITY = PASSED / 10;
+#else /* #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 	static int long const QUALITY = get_speed( HClock::UNIT::MICROSECOND ) + 2 * power<10,3>::value;
+#endif /* #else #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 	HClock clk;
 	TUT_EVAL( tools::sleep::second( SLEEP ) );
 	int long elapsed( 0 );
@@ -82,7 +90,11 @@ TUT_UNIT_TEST( 4, "1 nano-second accuracy" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int long const SLEEP = 1;
 	static int long const PASSED = power<10,9>::value;
+#if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ )
+	static int long const QUALITY = PASSED / 10;
+#else /* #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 	static int long const QUALITY = get_speed( HClock::UNIT::NANOSECOND ) + 2 * power<10,6>::value;
+#endif /* #else #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 	HClock clk;
 	TUT_EVAL( tools::sleep::second( SLEEP ) );
 	int long elapsed( 0 );
