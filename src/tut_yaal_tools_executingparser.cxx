@@ -85,6 +85,7 @@ struct calc {
 		: _vars()
 		{}
 	void sum( void ) {
+		clog << __PRETTY_FUNCTION__ << endl;
 		double long v1( _vars.top() );
 		_vars.pop();
 		double long v2( _vars.top() );
@@ -92,19 +93,19 @@ struct calc {
 		_vars.push( v1 + v2 );
 	}
 	void val( double long v_ ) {
+		clog << __PRETTY_FUNCTION__ << endl;
 		_vars.push( v_ );
 	}
 };
 
-#if 0
 TUT_UNIT_TEST( 2, "calc" )
 	calc c;
-	HRule r( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] >> *( '+' >> real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] )[HBoundCall<void ( void )>( call( &calc::sum, &c ) )] );
+	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
+	HRule r( realVal >> *( ( '+' >> realVal )[HBoundCall<void ( void )>( call( &calc::sum, &c ) )] ) );
 	r( "1.7+2.4" );
 	r();
 	cout << c._vars.top() << endl;
 TUT_TEARDOWN()
-#endif
 
 TUT_UNIT_TEST( 50, "the test" )
 	HArray<double> v;
