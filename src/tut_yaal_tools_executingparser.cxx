@@ -73,7 +73,7 @@ TUT_UNIT_TEST( 1, "empty parser" )
 	try {
 		r();
 		FAIL( "execution of empty parser succeeded" );
-	} catch ( HRuleException const& ) {
+	} catch ( HRuleBaseException const& ) {
 		// ok
 	}
 TUT_TEARDOWN()
