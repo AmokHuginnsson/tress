@@ -41,7 +41,7 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-static int const MIN_CAPACITY = sizeof ( HString ) - 2;
+static int const MIN_CAPACITY( static_cast<int>( sizeof ( HString ) ) - 2 );
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hstring );
 TUT_TEST_GROUP( tut_yaal_hcore_hstring, "yaal::hcore::HString" );

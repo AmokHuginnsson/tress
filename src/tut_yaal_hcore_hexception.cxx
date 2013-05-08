@@ -60,9 +60,9 @@ typedef HExceptionT<A> AE;
 class B : public A {
 public:
 	virtual ~B( void ) { }
-protected:
 	typedef B this_type;
 	typedef A base_type;
+protected:
 	virtual void do_foo( int a ) const {
 		if ( ! a )
 			M_THROW( "bad arg B", a );
@@ -75,9 +75,9 @@ typedef HExceptionT<B,AE> BE;
 class C : public B {
 public:
 	virtual ~C( void ) { }
-protected:
 	typedef C this_type;
 	typedef B base_type;
+protected:
 	virtual void do_foo( int a ) const {
 		if ( ! a )
 			M_THROW( "bad arg C", a );
@@ -88,8 +88,8 @@ protected:
 typedef HExceptionT<C,BE> CE;
 
 class P {
-	typedef P this_type;
 public:
+	typedef P this_type;
 	virtual ~P( void ) { }
 	virtual void foo( int a ) const
 		{ do_foo( a ); }
@@ -106,8 +106,8 @@ typedef HExceptionT<P> PE;
 class Q : public P {
 public:
 	virtual ~Q( void ) { }
-private:
 	typedef Q this_type;
+private:
 	virtual void do_foo( int a ) const {
 		if ( ! a )
 			M_THROW( "bad arg Q", a );
@@ -120,9 +120,9 @@ typedef HExceptionT<Q,PE> QE;
 class R : public Q {
 public:
 	virtual ~R( void ) { }
-protected:
 	typedef R this_type;
 	typedef Q base_type;
+protected:
 	virtual void do_foo( int a ) const {
 		if ( ! a )
 			M_THROW( "bad arg R", a );

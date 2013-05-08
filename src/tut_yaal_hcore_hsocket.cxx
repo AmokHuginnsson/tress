@@ -308,7 +308,7 @@ TUT_TEARDOWN()
 
 void tut_yaal_hcore_hsocket::play_scenario( HSocket::socket_type_t type_, HString const& path_, int port_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_ ) {
 	char test_data[] = "Ala ma kota.";
-	const int size = sizeof ( test_data );
+	const int size( static_cast<int>( sizeof ( test_data ) ) );
 	TUT_DECLARE( HServer serv( type_ | ( withSsl_ ? HSocket::TYPE::SSL_SERVER : HSocket::TYPE::DEFAULT ) | ( nonBlockingServer_ ? HSocket::TYPE::NONBLOCKING : HSocket::TYPE::DEFAULT ), 1 ); );
 	TUT_INVOKE( cout << sizeof ( serv ) << endl; );
 	TUT_DECLARE( HSocket client( type_ | ( withSsl_ ? HSocket::TYPE::SSL_CLIENT : HSocket::TYPE::DEFAULT ) | ( nonBlockingClient_ ? HSocket::TYPE::NONBLOCKING : HSocket::TYPE::DEFAULT ) ); );

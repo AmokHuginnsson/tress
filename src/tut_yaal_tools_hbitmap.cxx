@@ -44,7 +44,7 @@ TUT_TEST_GROUP( tut_yaal_tools_hbitmap, "yaal::tools::HBitmap" );
 
 TUT_UNIT_TEST( 1, "simple use" )
 	static char const BUFF[] = "ala ma kota";
-	static int const BUFF_BIT_SIZE = ( sizeof ( BUFF ) - 1 ) * 8;
+	static int const BUFF_BIT_SIZE( ( static_cast<int>( sizeof ( BUFF ) ) - 1 ) * 8 );
 	HBitmap bmp;
 	bmp.copy( BUFF, BUFF_BIT_SIZE );
 	HBitmap const x( bmp );
@@ -112,7 +112,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "reverse iteration" )
 	static char const BUFF[] = "ala ma kota";
-	static int const BUFF_BIT_SIZE( ( sizeof ( BUFF ) - 1 ) * 8 );
+	static int const BUFF_BIT_SIZE( ( static_cast<int>( sizeof ( BUFF ) ) - 1 ) * 8 );
 	HBitmap bmp;
 	bmp.copy( BUFF, BUFF_BIT_SIZE );
 	HStringStream ss;

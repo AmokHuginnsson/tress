@@ -77,12 +77,12 @@ TUT_UNIT_TEST( 4, "ref vs const" )
 	cout << trait::is_reference<trait::strip_reference<int* const&>::type>::value << endl;
 	cout << trait::is_reference<trait::strip_reference<int* const*&>::type>::value << endl;
 
-	typedef trait::make_const_ref_ptr<trait::strip_reference<int&>::type>::type T1;
-	typedef trait::make_const_ref_ptr<trait::strip_reference<int*&>::type>::type T2;
-	typedef trait::make_const_ref_ptr<trait::strip_reference<int const&>::type>::type T3;
-	typedef trait::make_const_ref_ptr<trait::strip_reference<int const*&>::type>::type T4;
-	typedef trait::make_const_ref_ptr<trait::strip_reference<int* const&>::type>::type T5;
-	typedef trait::make_const_ref_ptr<trait::strip_reference<int* const*&>::type>::type T6;
+	typedef trait::make_const_ref_ptr<trait::strip_reference<int&>::type>::type T1 __attribute__((unused));
+	typedef trait::make_const_ref_ptr<trait::strip_reference<int*&>::type>::type T2 __attribute__((unused));
+	typedef trait::make_const_ref_ptr<trait::strip_reference<int const&>::type>::type T3 __attribute__((unused));
+	typedef trait::make_const_ref_ptr<trait::strip_reference<int const*&>::type>::type T4 __attribute__((unused));
+	typedef trait::make_const_ref_ptr<trait::strip_reference<int* const&>::type>::type T5 __attribute__((unused));
+	typedef trait::make_const_ref_ptr<trait::strip_reference<int* const*&>::type>::type T6 __attribute__((unused));
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "arg type deduction on functional functors :)" )

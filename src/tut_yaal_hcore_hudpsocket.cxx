@@ -211,7 +211,7 @@ TUT_TEARDOWN()
 
 void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_ ) {
 	char test_data[] = "Ala ma kota.";
-	const int size = sizeof ( test_data );
+	const int size( static_cast<int>( sizeof ( test_data ) ) );
 	TUT_DECLARE( HUDPServer serv( HUDPSocket::socket_type_t( withSsl_ ? HUDPSocket::TYPE::SSL : HUDPSocket::TYPE::DEFAULT ) | ( nonBlockingServer_ ? HUDPSocket::TYPE::NONBLOCKING : HUDPSocket::TYPE::DEFAULT ) ); );
 	TUT_INVOKE( cout << sizeof ( serv ) << endl; );
 	TUT_DECLARE( HUDPSocket client( HUDPSocket::socket_type_t( withSsl_ ? HUDPSocket::TYPE::SSL : HUDPSocket::TYPE::DEFAULT ) | ( nonBlockingClient_ ? HUDPSocket::TYPE::NONBLOCKING : HUDPSocket::TYPE::DEFAULT ) ); );

@@ -224,7 +224,6 @@ TUT_UNIT_TEST( 12, "erase() ranged" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 13, "copy constructor" )
-	typedef HPair<int, int> int_pair_t;
 	int2int_t twmsrc;
 	twmsrc.insert( make_pair( 1, 2) );
 	twmsrc.insert( make_pair( 2, 3) );
@@ -235,7 +234,6 @@ TUT_UNIT_TEST( 13, "copy constructor" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 14, "operator = ()" )
-	typedef HPair<int, int> int_pair_t;
 	int2int_t twmsrc;
 	twmsrc.insert( make_pair( 1, 2) );
 	twmsrc.insert( make_pair( 2, 3) );

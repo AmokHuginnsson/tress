@@ -1196,8 +1196,8 @@ TUT_UNIT_TEST( 21, "division" )
 	HString dividend;
 	HString divisor;
 	HString quotient;
-	int const dividendLen( sizeof ( pdividend ) - 1 );
-	int const divisorLen( sizeof ( pdivisor ) - 1 );
+	int const dividendLen( static_cast<int>( sizeof ( pdividend ) - 1 ) );
+	int const divisorLen( static_cast<int>( sizeof ( pdivisor ) - 1 ) );
 
 	_bc.spawn( BC_PATH );
 	HString msg;
