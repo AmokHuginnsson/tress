@@ -120,7 +120,7 @@ TUT_UNIT_TEST( 3, "calc (sum, mul)" )
 	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
 	HRule multiply( realVal >> *( ( '*' >> realVal )[HBoundCall<void ( void )>( call( &calc::mul, &c ) )] ) );
 	HRule r( multiply >> *( ( '+' >> multiply )[HBoundCall<void ( void )>( call( &calc::sum, &c ) )] ) );
-	r( "1.7+2.4+-7" );
+	r( "1.7*2+2.4+-7" );
 	r();
 	cout << c._vars.top() << endl;
 TUT_TEARDOWN()
