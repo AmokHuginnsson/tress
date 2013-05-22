@@ -68,11 +68,9 @@ TUT_TEST_GROUP( tut_yaal_tools_hllexecutingparser, "yaal::tools::executing_parse
 TUT_UNIT_TEST( 1, "empty parser" )
 	HRule r;
 	hcore::HString text( "1+2" );
-	ENSURE( "empty parser consumed input", r.parse( text.begin(), text.end() ) == text.begin() );
-	ENSURE( "empty parser succeeded on non empty input", r( text ) );
 	try {
-		r();
-		FAIL( "execution of empty parser succeeded" );
+		HExecutingParser ep( r );
+		FAIL( "empty parser constructed" );
 	} catch ( HRuleBaseException const& ) {
 		// ok
 	}
@@ -110,8 +108,9 @@ TUT_UNIT_TEST( 2, "calc (sum)" )
 	calc c;
 	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
 	HRule r( realVal >> *( ( '+' >> realVal )[HBoundCall<void ( void )>( call( &calc::sum, &c ) )] ) );
-	r( "1.7+2.4+-7" );
-	r();
+	HExecutingParser ep( r );
+	ep( "1.7+2.4+-7" );
+	ep();
 	cout << c._vars.top() << endl;
 TUT_TEARDOWN()
 
@@ -120,19 +119,22 @@ TUT_UNIT_TEST( 3, "calc (sum, mul)" )
 	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
 	HRule multiply( realVal >> *( ( '*' >> realVal )[HBoundCall<void ( void )>( call( &calc::mul, &c ) )] ) );
 	HRule r( multiply >> *( ( '+' >> multiply )[HBoundCall<void ( void )>( call( &calc::sum, &c ) )] ) );
-	r( "1.7*2+2.4+-7" );
-	r();
+	HExecutingParser ep( r );
+
+	ep( "1.7*2+2.4+-7" );
+	ep();
 	cout << c._vars.top() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "the test" )
 	HArray<double> v;
-	if ( real[push_back(v)]( "3.141592653589793" ) )
+	if ( HExecutingParser( real[push_back(v)] )( "3.141592653589793" ) )
 		cout << "1: failed to consume input" << endl;
 	HRule r( real[push_back(v)] >> *( ',' >> real[push_back(v)] ) );
-	r( "3.141592653589793, -2.718281828459045, 17" );
-	r();
-	if ( r( "3.141592653589793, -2.718281828459045, 17, kupa" ) )
+	HExecutingParser ep( r );
+	ep( "3.141592653589793, -2.718281828459045, 17" );
+	ep();
+	if ( ep( "3.141592653589793, -2.718281828459045, 17, kupa" ) )
 		cout << "2: failed to consume input" << endl;
 	copy( v.begin(), v.end(), stream_iterator( cout, endl ) );
 TUT_TEARDOWN()
