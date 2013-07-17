@@ -126,6 +126,22 @@ TUT_UNIT_TEST( 3, "calc (sum, mul)" )
 	cout << c._vars.top() << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 4, "calc, (sum, mul, recursion)" )
+	calc c;
+	HRule expr;
+	HRule paren( '(' >> expr >> ')' );
+	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
+	HRule atom( realVal | paren );
+	HRule multiply( atom >> *( ( '*' >> atom )[HBoundCall<void ( void )>( call( &calc::mul, &c ) )] ) );
+	HRule r( multiply >> *( ( '+' >> multiply )[HBoundCall<void ( void )>( call( &calc::sum, &c ) )] ) );
+	expr %= r;
+	HExecutingParser ep( r );
+
+	ep( "1.7*(2+2.4)+-7" );
+	ep();
+	cout << c._vars.top() << endl;
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "the test" )
 	HArray<double> v;
 	if ( HExecutingParser( real[push_back(v)] )( "3.141592653589793" ) )
