@@ -48,6 +48,10 @@ TUT_TEST_GROUP( tut_yaal_tools_hhuginn, "yaal::tools::HHuginn" );
 
 TUT_UNIT_TEST( 1, "grammar test" )
 	HRule hg( huginn_grammar() );
+	grammar_description_t gd;
+	hg.describe( gd );
+	for ( grammar_description_t::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it )
+		cout << *it << endl;
 TUT_TEARDOWN()
 
 }

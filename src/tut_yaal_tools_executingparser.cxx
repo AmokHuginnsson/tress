@@ -71,7 +71,7 @@ TUT_UNIT_TEST( 1, "empty parser" )
 	try {
 		HExecutingParser ep( r );
 		FAIL( "empty parser constructed" );
-	} catch ( HRuleBaseException const& ) {
+	} catch ( HExecutingParserException const& ) {
 		// ok
 	}
 TUT_TEARDOWN()
