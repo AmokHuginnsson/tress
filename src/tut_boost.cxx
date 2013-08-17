@@ -42,7 +42,7 @@ Copyright:
 #include <yaal/hcore/hcore.hxx>
 #include <yaal/tools/hmonitor.hxx>
 
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;

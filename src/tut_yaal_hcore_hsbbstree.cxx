@@ -35,7 +35,7 @@ Copyright:
 #undef private
 
 #include <yaal/hcore/hrandomizer.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 #include "tut_yaal_hcore_hsbbstree.hxx"
 

@@ -27,7 +27,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/streamtools.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 #include <yaal/hconsole/hterminal.hxx>

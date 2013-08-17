@@ -29,7 +29,7 @@ Copyright:
 #include <yaal/hcore/macro.hxx>
 #include <yaal/hcore/static_assert.hxx>
 #include <yaal/tools/lambda.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;

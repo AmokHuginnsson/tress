@@ -29,7 +29,7 @@ Copyright:
 #define private public
 
 #include <yaal/hcore/hmap.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;

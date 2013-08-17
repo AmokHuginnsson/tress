@@ -31,7 +31,7 @@ Copyright:
 #include <yaal/hcore/hfile.hxx>
 #include <yaal/hcore/htokenizer.hxx>
 #include <yaal/hcore/hlog.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 
 #include "setup.hxx"
 #include "options.hxx"

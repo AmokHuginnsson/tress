@@ -39,7 +39,7 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 #include <yaal/hcore/hrandomizer.hxx>
 #include <yaal/tools/collections.hxx>

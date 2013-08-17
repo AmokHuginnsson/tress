@@ -30,7 +30,7 @@ Copyright:
 #include <libintl.h>
 
 #include <yaal/tools/util.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "setup.hxx"
 #ifdef __TRESS__
 #include "tut_helpers.hxx"

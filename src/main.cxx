@@ -46,7 +46,7 @@ Copyright:
 #include <yaal/tools/streamtools.hxx>
 #include <yaal/hconsole/console.hxx>
 #include <yaal/hconsole/hterminal.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 
 #include "setup.hxx"
 #include "tut_helpers.hxx"

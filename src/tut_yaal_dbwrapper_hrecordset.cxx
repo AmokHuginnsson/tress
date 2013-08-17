@@ -28,7 +28,7 @@ Copyright:
 
 #include <yaal/dbwrapper/dbwrapper.hxx>
 #include <yaal/tools/hmonitor.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;

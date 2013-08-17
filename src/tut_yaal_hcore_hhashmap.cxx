@@ -36,7 +36,7 @@ Copyright:
 #undef protected
 #undef private
 
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;

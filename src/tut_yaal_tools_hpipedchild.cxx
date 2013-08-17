@@ -27,7 +27,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/hpipedchild.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
@@ -51,7 +51,7 @@ struct tut_yaal_tools_hpipedchild : public simple_mock<tut_yaal_tools_hpipedchil
 		{}
 };
 
-HString tut_yaal_tools_hpipedchild::CHILD( "./data/child"EXE_SUFFIX );
+HString tut_yaal_tools_hpipedchild::CHILD( "./data/child" EXE_SUFFIX );
 HString tut_yaal_tools_hpipedchild::CHILD_FAKE( "./data/child_fake" );
 HString tut_yaal_tools_hpipedchild::MSG_OUT( "out" );
 HString tut_yaal_tools_hpipedchild::MSG_ERR( "err" );

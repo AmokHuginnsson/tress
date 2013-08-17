@@ -30,7 +30,7 @@ Copyright:
 #include <yaal/tools/hzipstream.hxx>
 #include <yaal/tools/tools.hxx>
 #include <yaal/tools/hmemory.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 #include "setup.hxx"
 

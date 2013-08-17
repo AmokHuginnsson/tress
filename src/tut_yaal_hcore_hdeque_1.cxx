@@ -29,7 +29,7 @@ Copyright:
 #include "tut_yaal_hcore_hdeque.hxx"
 
 #include <yaal/hcore/hdeque.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 
 using namespace tut;
 using namespace yaal;

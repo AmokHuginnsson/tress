@@ -33,7 +33,7 @@ Copyright:
 
 #include <yaal/hcore/hsocket.hxx>
 #include <yaal/tools/hiodispatcher.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;

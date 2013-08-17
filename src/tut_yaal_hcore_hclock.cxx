@@ -28,7 +28,7 @@ Copyright:
 
 #include <yaal/hcore/hclock.hxx>
 #include <yaal/tools/sleep.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;

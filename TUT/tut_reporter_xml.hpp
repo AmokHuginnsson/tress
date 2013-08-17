@@ -22,7 +22,12 @@ class reporter_xml : public tut::callback {
 
 	TestGroups all_tests_;   /// holds all test results
 	const std::string filename_;   /// filename base
-	std::auto_ptr<std::ostream> stream_;
+#if __cplusplus >= 201103L
+	typedef std::unique_ptr<std::ostream> stream_t;
+#else /* #if __cplusplus >= 201103L */
+	typedef std::auto_ptr<std::ostream> stream_t;
+#endif /* #else #if __cplusplus >= 201103L */
+	stream_t stream_;
 
 	/**
 	 * \brief Builds "testcase" XML entity with given parameters

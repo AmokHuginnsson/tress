@@ -27,7 +27,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/allocator.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include <yaal/hcore/hlist.hxx>
 #include "tut_helpers.hxx"
 

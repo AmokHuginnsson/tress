@@ -31,7 +31,7 @@ Copyright:
 #include <yaal/tools/base64.hxx>
 #include <yaal/tools/hmemory.hxx>
 #include <yaal/tools/streamtools.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;

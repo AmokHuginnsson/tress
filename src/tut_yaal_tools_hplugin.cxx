@@ -28,7 +28,7 @@ Copyright:
 
 #include <yaal/hcore/hlog.hxx>
 #include <yaal/tools/hplugin.hxx>
-M_VCSID( "$Id: "__ID__" $" )
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 using namespace tut;
@@ -55,7 +55,7 @@ TUT_SIMPLE_MOCK( tut_yaal_tools_hplugin );
 TUT_TEST_GROUP( tut_yaal_tools_hplugin, "yaal::tools::HPlugin" );
 
 typedef int ( * sumator_t )( int, int );
-static char const* const TRESS_PLUGIN = "./data/"LIB_PREFIX"tressplugin"LIB_INFIX"."LIB_EXT;
+static char const* const TRESS_PLUGIN = "./data/" LIB_PREFIX "tressplugin" LIB_INFIX "." LIB_EXT;
 
 TUT_UNIT_TEST( 1, "load external library and resolve symbol" )
 	int const T1 = 7;
