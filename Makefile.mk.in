@@ -46,6 +46,7 @@ ifdef NODEBUG
 endif
 CTAGS        = @CTAGS@
 GITID        = @GITID@
+override CXX_STANDARD=@CXX_STANDARD@
 include $(DIR_ROOT)/_aux/mk/2_term.mk
 include $(DIR_ROOT)/_aux/mk/3_suffix.mk
 include $(DIR_ROOT)/_aux/mk/4_wrapper.mk
