@@ -22,11 +22,11 @@ class reporter_xml : public tut::callback {
 
 	TestGroups all_tests_;   /// holds all test results
 	const std::string filename_;   /// filename base
-#if __cplusplus >= 201103L
+#if CXX_STANDARD >= 2011
 	typedef std::unique_ptr<std::ostream> stream_t;
-#else /* #if __cplusplus >= 201103L */
+#else /* #if CXX_STANDARD >= 2011 */
 	typedef std::auto_ptr<std::ostream> stream_t;
-#endif /* #else #if __cplusplus >= 201103L */
+#endif /* #else #if CXX_STANDARD >= 2011 */
 	stream_t stream_;
 
 	/**
