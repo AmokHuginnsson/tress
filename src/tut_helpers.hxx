@@ -332,27 +332,92 @@ protected:
 #endif /* #else #ifdef __MSVCXX__ */
 	Sizer<(forced_size_calc > 0 ? forced_size_calc : 1)> _forcedSize;
 public:
-	HInstanceTracker( int long = yaal::meta::max_signed<int long>::value );
-	HInstanceTracker( HInstanceTracker const& );
-	HInstanceTracker& operator = ( HInstanceTracker const& );
-	~HInstanceTracker( void );
-	bool operator == ( HInstanceTracker const& ) const;
-	bool operator != ( HInstanceTracker const& ) const;
-	bool operator == ( int long ) const;
-	bool operator != ( int long ) const;
-	bool operator < ( HInstanceTracker const& ) const;
-	bool operator < ( int long ) const;
-	bool operator > ( HInstanceTracker const& ) const;
-	bool operator > ( int long ) const;
-	static int get_instance_count( void );
-	static int get_integrity_failures( void );
-	static void set_instance_count( int = 0 );
-	static void set_start_id( int = 0 );
-	int long get_id( void ) const;
-	int long id( void ) const;
-	bool is_self( void ) const;
-	yaal::hcore::HString to_string( void ) const;
-	void swap( HInstanceTracker& );
+	HInstanceTracker( int long id_ = yaal::meta::max_signed<int long>::value )
+		: _id( id_ != yaal::meta::max_signed<int long>::value ? id_ : _autoIncrement ),
+		_origin(), _self( this ), _forcedSize() {
+		++ _instances;
+		++ _autoIncrement;
+	}
+	HInstanceTracker( HInstanceTracker const& itrck )
+		: _id( itrck._id ),
+		_origin( itrck._origin + ":" + yaal::hcore::HString( itrck._id ).c_str() ), _self( this ), _forcedSize() {
+		if ( _stopCopying )
+			throw std::runtime_error( "Copy constructor invoked!" );
+		++ _instances;
+		++ _autoIncrement;
+	}
+	HInstanceTracker& operator = ( HInstanceTracker const& itrck ) {
+		if ( _stopCopying )
+			throw std::runtime_error( "Assignment operator invoked!" );
+		if ( &itrck != this ) {
+			HInstanceTracker<owner_t, forced_size> tmp( itrck );
+			swap( tmp );
+		}
+		return ( *this );
+	}
+	~HInstanceTracker( void ) {
+		-- _instances;
+		if ( this != _self )
+			++ _integrityFailures;
+	}
+	bool operator == ( HInstanceTracker const& val ) const {
+		return ( val._id == _id );
+	}
+	bool operator == ( int long val ) const {
+		return ( val == _id );
+	}
+	bool operator != ( HInstanceTracker const& val ) const {
+		return ( val._id != _id );
+	}
+	bool operator != ( int long val ) const {
+		return ( val != _id );
+	}
+	bool operator < ( HInstanceTracker const& val ) const {
+		return ( _id < val._id );
+	}
+	bool operator < ( int long val ) const {
+		return ( _id < val );
+	}
+	bool operator > ( HInstanceTracker const& val ) const {
+		return ( _id > val._id );
+	}
+	bool operator > ( int long val ) const {
+		return ( _id > val );
+	}
+	static int get_instance_count( void ) {
+		return ( _instances );
+	}
+	static int get_integrity_failures( void ) {
+		return ( _integrityFailures );
+	}
+	static void set_instance_count( int count_ ) {
+		_instances = count_;
+	}
+	static void set_start_id( int startId_ ) {
+		_autoIncrement = startId_;
+	}
+	int long get_id( void ) const {
+		return ( _id );
+	}
+	int long id( void ) const {
+		return ( _id );
+	}
+	bool is_self( void ) const {
+		return ( _self == this );
+	}
+	yaal::hcore::HString to_string( void ) const {
+		yaal::tools::HStringStream ss;
+		ss << "HInstanceTracker<" << yaal::hcore::demangle( typeid( owner_t ).name() ) << ">(" << _origin << ":" << _id << ")";
+		return ( ss.string() );
+	}
+	void swap( HInstanceTracker& itrck ) {
+		if ( &itrck != this ) {
+			using yaal::swap;
+			swap( _id, itrck._id );
+			swap( _origin, itrck._origin );
+		}
+		return;
+	}
 	static void stop_copying( void ) {
 		_stopCopying = true;
 	}
@@ -388,6 +453,15 @@ struct simple_mock {
 	virtual void set_current_line( int ) = 0;
 };
 
+template<typename owner_t, int const forced_size>
+int HInstanceTracker<owner_t, forced_size>::_instances = 0;
+template<typename owner_t, int const forced_size>
+int HInstanceTracker<owner_t, forced_size>::_autoIncrement = 0;
+template<typename owner_t, int const forced_size>
+int HInstanceTracker<owner_t, forced_size>::_integrityFailures = 0;
+template<typename owner_t, int const forced_size>
+volatile bool HInstanceTracker<owner_t, forced_size>::_stopCopying = false;
+
 class Stringifier {
 	yaal::hcore::HString _cache;
 public:
@@ -411,123 +485,6 @@ public:
 };
 
 template<typename owner_t, int const forced_size>
-int HInstanceTracker<owner_t, forced_size>::_instances = 0;
-template<typename owner_t, int const forced_size>
-int HInstanceTracker<owner_t, forced_size>::_autoIncrement = 0;
-template<typename owner_t, int const forced_size>
-int HInstanceTracker<owner_t, forced_size>::_integrityFailures = 0;
-template<typename owner_t, int const forced_size>
-volatile bool HInstanceTracker<owner_t, forced_size>::_stopCopying = false;
-
-template<typename owner_t, int const forced_size>
-HInstanceTracker<owner_t, forced_size>::HInstanceTracker( int long id_ )
-	: _id( id_ != yaal::meta::max_signed<int long>::value ? id_ : _autoIncrement ),
-	_origin(), _self( this ), _forcedSize() {
-	++ _instances;
-	++ _autoIncrement;
-}
-
-template<typename owner_t, int const forced_size>
-HInstanceTracker<owner_t, forced_size>::HInstanceTracker( HInstanceTracker const& itrck )
-	: _id( itrck._id ),
-	_origin( itrck._origin + ":" + yaal::hcore::HString( itrck._id ).c_str() ), _self( this ), _forcedSize() {
-	if ( _stopCopying )
-		throw std::runtime_error( "Copy constructor invoked!" );
-	++ _instances;
-	++ _autoIncrement;
-}
-
-template<typename owner_t, int const forced_size>
-HInstanceTracker<owner_t, forced_size>::~HInstanceTracker( void ) {
-	-- _instances;
-	if ( this != _self )
-		++ _integrityFailures;
-}
-
-template<typename owner_t, int const forced_size>
-HInstanceTracker<owner_t, forced_size>& HInstanceTracker<owner_t, forced_size>::operator = ( HInstanceTracker const& itrck ) {
-	if ( _stopCopying )
-		throw std::runtime_error( "Assignment operator invoked!" );
-	if ( &itrck != this ) {
-		HInstanceTracker<owner_t, forced_size> tmp( itrck );
-		swap( tmp );
-	}
-	return ( *this );
-}
-
-template<typename owner_t, int const forced_size>
-void HInstanceTracker<owner_t, forced_size>::swap( HInstanceTracker& itrck ) {
-	if ( &itrck != this ) {
-		using yaal::swap;
-		swap( _id, itrck._id );
-		swap( _origin, itrck._origin );
-	}
-	return;
-}
-
-template<typename owner_t, int const forced_size>
-void HInstanceTracker<owner_t, forced_size>::set_instance_count( int count_ ) {
-	_instances = count_;
-}
-
-template<typename owner_t, int const forced_size>
-void HInstanceTracker<owner_t, forced_size>::set_start_id( int startId_ ) {
-	_autoIncrement = startId_;
-}
-
-template<typename owner_t, int const forced_size>
-yaal::hcore::HString HInstanceTracker<owner_t, forced_size>::to_string( void ) const {
-	yaal::tools::HStringStream ss;
-	ss << "HInstanceTracker<" << yaal::hcore::demangle( typeid( owner_t ).name() ) << ">(" << _origin << ":" << _id << ")";
-	return ( ss.string() );
-}
-
-template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator == ( int long val ) const {
-	return ( val == _id );
-}
-
-template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator != ( int long val ) const {
-	return ( val != _id );
-}
-
-template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator == ( HInstanceTracker const& val ) const {
-	return ( val._id == _id );
-}
-
-template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator != ( HInstanceTracker const& val ) const {
-	return ( val._id != _id );
-}
-
-template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator < ( HInstanceTracker const& val ) const {
-	return ( _id < val._id );
-}
-
-template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator < ( int long val ) const {
-	return ( _id < val );
-}
-
-template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator > ( HInstanceTracker const& val ) const {
-	return ( _id > val._id );
-}
-
-template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::operator > ( int long val ) const {
-	return ( _id > val );
-}
-
-template<typename owner_t, int const forced_size>
-bool HInstanceTracker<owner_t, forced_size>::is_self( void ) const {
-	return ( _self == this );
-}
-
-template<typename owner_t, int const forced_size>
 bool operator == ( int long left, HInstanceTracker<owner_t, forced_size> const& right ) {
 	return ( left == right.get_id() );
 }
@@ -535,26 +492,6 @@ bool operator == ( int long left, HInstanceTracker<owner_t, forced_size> const& 
 template<typename owner_t, int const forced_size>
 bool operator != ( int long left, HInstanceTracker<owner_t, forced_size> const& right ) {
 	return ( left != right.get_id() );
-}
-
-template<typename owner_t, int const forced_size>
-int HInstanceTracker<owner_t, forced_size>::get_instance_count( void ) {
-	return ( _instances );
-}
-
-template<typename owner_t, int const forced_size>
-int HInstanceTracker<owner_t, forced_size>::get_integrity_failures( void ) {
-	return ( _integrityFailures );
-}
-
-template<typename owner_t, int const forced_size>
-int long HInstanceTracker<owner_t, forced_size>::get_id( void ) const {
-	return ( _id );
-}
-
-template<typename owner_t, int const forced_size>
-int long HInstanceTracker<owner_t, forced_size>::id( void ) const {
-	return ( _id );
 }
 
 template<typename owner_t, int const forced_size>
@@ -574,6 +511,45 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& stre
 	stream << itrck.to_string();
 	return ( stream );
 }
+
+#if CXX_STANDARD >= 2011
+template<typename owner_t>
+class HCopyCounter {
+	static int _copyCount;
+	static int _instanceCount;
+	int _id;
+public:
+	HCopyCounter( void )
+		: _id( _instanceCount ++ )
+		{}
+	HCopyCounter( HCopyCounter const& cc_ )
+		: _id( cc_._id ) {
+		++ _copyCount;
+	}
+	HCopyCounter( HCopyCounter&& cc_ )
+		: _id( cc_._id ) {
+		cc_._id = -1;
+	}
+	HCopyCounter& operator = ( HCopyCounter const& cc_ ) {
+		if ( &cc_ != this ) {
+			_id = cc_._id;
+			++ _copyCount;
+		}
+		return ( *this );
+	}
+	HCopyCounter& operator = ( HCopyCounter&& cc_ ) {
+		if ( &cc_ != this ) {
+			_id = cc_._id;
+			++ _copyCount;
+		}
+		return ( *this );
+	}
+};
+template<typename owner_t>
+int HCopyCounter<owner_t>::_copyCount = 0;
+template<typename owner_t>
+int HCopyCounter<owner_t>::_instanceCount = 0;
+#endif /* #if CXX_STANDARD >= 2011 */
 
 }
 
