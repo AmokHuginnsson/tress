@@ -86,8 +86,8 @@ tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void )
 
 
 HString const& tut_yaal_hcore_hnumber::random_real( void ) {
-	int integralPart( _rnd() % 40 );
-	int decimalPart( _rnd() % 40 );
+	int integralPart( static_cast<int>( _rnd( 40 ) ) );
+	int decimalPart( static_cast<int>( _rnd( 40 ) ) );
 	_cache = "0";
 	if ( integralPart || decimalPart ) {
 		_cache.clear();

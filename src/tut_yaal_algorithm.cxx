@@ -1258,7 +1258,7 @@ TUT_UNIT_TEST( 39, "partition" )
 	int_array_t a( range );
 	HRandomizer r( randomizer_helper::make_randomizer( range ) );
 	for ( int_array_t::iterator it( a.begin() ), end( a.end() ); it != end; ++ it )
-		*it = r() - range / 2;
+		*it = static_cast<int>( r() ) - range / 2;
 	clog << a << endl;
 	int_array_t::iterator m( partition( a.begin(), a.end(), bind1st( less<int>(), 0 ) ) );
 	clog << a << endl;
@@ -1285,7 +1285,7 @@ TUT_UNIT_TEST( 40, "stable_partition" )
 	int_array_t a( range );
 	HRandomizer r( randomizer_helper::make_randomizer( range ) );
 	for ( int_array_t::iterator it( a.begin() ), end( a.end() ); it != end; ++ it )
-		*it = r() - range / 2;
+		*it = static_cast<int>( r() ) - range / 2;
 	clog << a << endl;
 	sort( a.begin(), a.end() );
 	clog << a << endl;

@@ -223,7 +223,7 @@ TUT_UNIT_TEST( 3, "Adding keys in random order." )
 	HRandomizer r;
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_test_insert( s, r( KEY_POOL_SIZE ) );
+		helper_stress_test_insert( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );
 	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
 TUT_TEARDOWN()
 
@@ -295,7 +295,7 @@ TUT_UNIT_TEST( 12, "Removing keys in ascending order from lower half of the tree
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
-		helper_stress_just_insert( s, r( KEY_POOL_SIZE ) );
+		helper_stress_just_insert( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );
 	for ( int i = 0; i < ( NUMBER_OF_TEST_NODES / 2 ); ++ i ) {
 		try {
 			helper_stress_test_erase( s, i );
@@ -310,7 +310,7 @@ TUT_UNIT_TEST( 13, "Removing keys in ascending order from upper half of the tree
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
-		helper_stress_just_insert( s, r( KEY_POOL_SIZE ) );
+		helper_stress_just_insert( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i < NUMBER_OF_TEST_NODES; ++ i ) {
 		try {
 			helper_stress_test_erase( s, i );
@@ -325,7 +325,7 @@ TUT_UNIT_TEST( 14, "Removing keys in descending order from lower half of the tre
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
-		helper_stress_just_insert( s, r( KEY_POOL_SIZE ) );
+		helper_stress_just_insert( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );
 	for ( int i = ( NUMBER_OF_TEST_NODES / 2 ); i > 0; -- i ) {
 		try {
 			helper_stress_test_erase( s, i );
@@ -340,7 +340,7 @@ TUT_UNIT_TEST( 15, "Removing keys in descending order from upper half of the tre
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
-		helper_stress_just_insert( s, r( KEY_POOL_SIZE ) );
+		helper_stress_just_insert( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );
 	for ( int i = NUMBER_OF_TEST_NODES; i > ( NUMBER_OF_TEST_NODES / 2 ); -- i ) {
 		try {
 			helper_stress_test_erase( s, i );
@@ -356,10 +356,10 @@ TUT_UNIT_TEST( 16, "Removing keys in random order from upper half of the tree th
 	HRandomizer r;
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
-		helper_stress_just_insert( s, r( KEY_POOL_SIZE ) );
+		helper_stress_just_insert( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i ) {
 		try {
-			helper_stress_test_erase( s, r( KEY_POOL_SIZE ) );
+			helper_stress_test_erase( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );
 		} catch ( HException const& e ) {
 			if ( e.code() != static_cast<int>( engine_t::ERROR::NON_EXISTING_KEY ) )
 				throw;
