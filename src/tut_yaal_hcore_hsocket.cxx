@@ -74,7 +74,7 @@ public:
 	void stop( void );
   void listen( yaal::hcore::HString const&, int const = 0 );
 	HString const& buffer( void ) const;
-	void* run( void );
+	void run( void );
 	void wait( void );
 	void do_not_signal( void );
 private:
@@ -175,7 +175,7 @@ HString const& HServer::buffer( void ) const {
 	M_EPILOG
 }
 
-void* HServer::run( void ) {
+void HServer::run( void ) {
 	HThread::set_name( "tut::HSocket(serv)" );
 	try {
 		try {
@@ -196,7 +196,7 @@ void* HServer::run( void ) {
 		_event.signal();
 		_signaled = true;
 	}
-	return ( NULL );
+	return;
 }
 
 void HServer::do_not_signal( void ) {

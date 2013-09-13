@@ -61,7 +61,7 @@ struct tut_yaal_hcore_htls : public simple_mock<tut_yaal_hcore_htls> {
 		: base_type(), _mutex( HMutex::TYPE::RECURSIVE ), _cond( _mutex ), _allOn(), _instances( 0 )
 		{}
 	virtual ~tut_yaal_hcore_htls( void ) { }
-	void* run( tls_t& tls_ ) {
+	void run( tls_t& tls_ ) {
 		M_PROLOG
 		HThread::set_name( "tut::HThread" );
 		HLock l( _mutex );
@@ -73,7 +73,7 @@ struct tut_yaal_hcore_htls : public simple_mock<tut_yaal_hcore_htls> {
 		}
 		_cond.wait( 10, 0 );
 		clog << "leaving ..." << endl;
-		return ( NULL );
+		return;
 		M_EPILOG
 	}
 	void schedule_stop( void ) {

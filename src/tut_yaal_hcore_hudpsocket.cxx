@@ -72,7 +72,7 @@ public:
 	void stop( void );
   void bind( int, ip_t );
 	HString const& buffer( void ) const;
-	void* run( void );
+	void run( void );
 	void wait( void );
 	void do_not_signal( void );
 private:
@@ -143,7 +143,7 @@ HString const& HUDPServer::buffer( void ) const {
 	M_EPILOG
 }
 
-void* HUDPServer::run( void ) {
+void HUDPServer::run( void ) {
 	HThread::set_name( "tut::HUDPocket(serv)" );
 	try {
 		try {
@@ -162,7 +162,7 @@ void* HUDPServer::run( void ) {
 		_event.signal();
 		_signaled = true;
 	}
-	return ( NULL );
+	return;
 }
 
 void HUDPServer::do_not_signal( void ) {

@@ -63,7 +63,7 @@ public:
 	HCool( char const* );
 	virtual ~HCool( void );
 	void set( int );
-	void* run( HThread const* );
+	void run( HThread const* );
 	/*}*/
 };
 
@@ -84,7 +84,7 @@ HCool::~HCool( void ) {
 
 namespace {
 
-void* simple( HThread const* const caller_ ) {
+void simple( HThread const* const caller_ ) {
 	M_PROLOG
 	HThread::set_name( "tut::HThread(simple)" );
 	cout << "Thread [simple] started." << endl;
@@ -94,12 +94,12 @@ void* simple( HThread const* const caller_ ) {
 		M_DSLEEP( 1 );
 	}
 	cout << "Thread [simple] finished." << endl;
-	return ( 0 );
+	return;
 	M_EPILOG
 }
 
-void* a_fast_one( HThread const* const ) {
-	return ( 0 );
+void a_fast_one( HThread const* const ) {
+	return;
 }
 
 void busy_wait( void ) {
@@ -116,7 +116,7 @@ void busy_wait( void ) {
 
 }
 
-void* HCool::run( HThread const* caller_ ) {
+void HCool::run( HThread const* caller_ ) {
 	M_PROLOG
 	HThread::set_name( "tut::HThread(cool)" );
 	int ctr = _lifeLength;
@@ -130,7 +130,7 @@ void* HCool::run( HThread const* caller_ ) {
 			M_DSLEEP( 1 );
 	}
 	cout << " ... and finished" << endl;
-	return ( 0 );
+	return;
 	M_EPILOG
 }
 
@@ -149,7 +149,7 @@ class CVTest {
 public:
 	CVTest( void );
 	~CVTest( void );
-	void* run( void );
+	void run( void );
 	void eat( void );
 };
 
@@ -160,7 +160,7 @@ CVTest::~CVTest( void ) {
 	_thread.finish();
 }
 
-void* CVTest::run( void ) {
+void CVTest::run( void ) {
 	_loop = true;
 	int ctr = 0;
 	while ( _loop ) {
@@ -176,7 +176,7 @@ void* CVTest::run( void ) {
 		cout << "+" << flush;
 		ctr += 2;
 	}
-	return ( reinterpret_cast<void*>( ctr ) );
+	return;
 }
 
 void CVTest::eat( void ) {
@@ -192,7 +192,7 @@ void CVTest::eat( void ) {
 
 namespace {
 
-void* unstable( HThread* caller_ ) {
+void unstable( HThread* caller_ ) {
 	M_PROLOG
 	try {
 		throw HFileException( "testing hthread exception propagation" );
@@ -200,7 +200,7 @@ void* unstable( HThread* caller_ ) {
 		e.log( __FILE__, __LINE__, __PRETTY_FUNCTION__ );
 		caller_->stack_exception( e.what(), e.code() );
 	}
-	return ( NULL );
+	return;
 	M_EPILOG
 }
 
