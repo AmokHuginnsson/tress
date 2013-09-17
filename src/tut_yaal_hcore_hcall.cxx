@@ -477,6 +477,56 @@ TUT_UNIT_TEST( 22, "call(arg) ref" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
+struct ArgumentReturnValueType {
+	int _data;
+	ArgumentReturnValueType( int data_ )
+		: _data( data_ )
+		{}
+	void set_value( int data_ ) {
+		_data = data_;
+	}
+	void set_value_ref( int& data_ ) {
+		_data = data_;
+	}
+	void set_value_const_ref( int const& data_ ) {
+		_data = data_;
+	}
+	void value_ref( int& data_ ) {
+		data_ = _data;
+	}
+	int get_value( void ) {
+		return ( _data );
+	}
+	int& get_value_ref( void ) {
+		return ( _data );
+	}
+	int const& get_value_const_ref( void ) {
+		return ( _data );
+	}
+};
+
+TUT_UNIT_TEST( 23, "argument value types" )
+	ArgumentReturnValueType arvt( 0 );
+	call( &ArgumentReturnValueType::set_value, &arvt, _1 )( 1 );
+	ENSURE_EQUALS( "set_value failed", arvt._data, 1 );
+	call( &ArgumentReturnValueType::set_value_const_ref, &arvt, _1 )( 2 );
+	ENSURE_EQUALS( "set_value_const_ref failed", arvt._data, 2 );
+	int three( 3 );
+	call( &ArgumentReturnValueType::set_value_ref, &arvt, _1 )( three );
+	ENSURE_EQUALS( "set_value_ref failed", arvt._data, 3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 24, "return value types" )
+	ArgumentReturnValueType arvt( 7 );
+	ENSURE_EQUALS( "get_value failed", call( &ArgumentReturnValueType::get_value, &arvt )(), 7 );
+	int const& crVal( call( &ArgumentReturnValueType::get_value_const_ref, &arvt )() );
+	ENSURE_EQUALS( "get_value_const_ref failed", crVal, 7 );
+	arvt._data = 13;
+	ENSURE_EQUALS( "get_value_const_ref failed", crVal, 13 );
+	call( &ArgumentReturnValueType::get_value_ref, &arvt )() = 42;
+	ENSURE_EQUALS( "get_value_ref failed", arvt._data, 42 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 30, "use call as a functor in an algorithm" )
 	HArray<int> tab( 10 );
 	generate_n( tab.begin(), tab.size(), inc( 1 ) );
