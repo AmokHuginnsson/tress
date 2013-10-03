@@ -24,11 +24,14 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#define private public
+#define protected public
+#include <yaal/hcore/hmap.hxx>
+#undef protected
+#undef private
+
 #include <TUT/tut.hpp>
 
-#define private public
-
-#include <yaal/hcore/hmap.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 

@@ -26,13 +26,13 @@ Copyright:
 
 #include <yaal/hcore/hexception.hxx>
 
-#include <TUT/tut.hpp>
-
 #define private public
 #define protected public
 #include <yaal/hcore/hset.hxx>
 #undef protected
 #undef private
+
+#include <TUT/tut.hpp>
 
 #include <yaal/hcore/hrandomizer.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
