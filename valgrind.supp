@@ -3134,3 +3134,34 @@
 	 ...
    fun:OCILogon
 }
+{
+   Ubuntu 12.04, a
+   Memcheck:Leak
+   fun:realloc
+	 ...
+   fun:getpwuid_r@@GLIBC_2.2.5
+}
+{
+   Ubuntu 12.04, b
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+	 ...
+   fun:getpwuid_r@@GLIBC_2.2.5
+}
+{
+   Ubuntu 12.04, c
+   Memcheck:Leak
+   fun:calloc
+	 ...
+   fun:getpwuid_r@@GLIBC_2.2.5
+}
+{
+   Ubuntu 12.04, d
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/bin/bc
+	 ...
+   obj:/usr/bin/bc
+   fun:(below main)
+}

@@ -374,5 +374,37 @@ TUT_UNIT_TEST( 13, "Exception propagation." )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 14, "rwlock test" )
+	HReadWriteLock rwlock;
+	/* read lock */ {
+		HReadWriteLockReadLock rl( rwlock );
+	}
+	/* write lock */ {
+		HReadWriteLockWriteLock wl( rwlock );
+	}
+	/* two read locks */ {
+		HReadWriteLockReadLock rl( rwlock );
+		HReadWriteLockReadLock rl2( rwlock );
+	}
+	/* two write locks */ {
+		HReadWriteLockWriteLock wl( rwlock );
+		HReadWriteLockWriteLock wl2( rwlock );
+	}
+	/* three read locks */ {
+		HReadWriteLockReadLock rl( rwlock );
+		HReadWriteLockReadLock rl2( rwlock );
+		HReadWriteLockReadLock rl3( rwlock );
+	}
+	/* three write locks */ {
+		HReadWriteLockWriteLock wl( rwlock );
+		HReadWriteLockWriteLock wl2( rwlock );
+		HReadWriteLockWriteLock wl3( rwlock );
+	}
+	/* read lock after write lock */ {
+		HReadWriteLockWriteLock wl( rwlock );
+		HReadWriteLockReadLock rwl( rwlock );
+	}
+TUT_TEARDOWN()
+
 }
 
