@@ -50,8 +50,6 @@ TUT_UNIT_TEST( 1, "grammar test" )
 	HRule hg( huginn_grammar() );
 	HGrammarDescription gd;
 	hg.describe( gd );
-	yaal::hcore::HString s;
-	s.find_last_one_of( "aa" );
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it )
 		cout << *it << endl;
 TUT_TEARDOWN()
