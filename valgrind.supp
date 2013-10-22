@@ -3165,3 +3165,54 @@
    obj:/usr/bin/bc
    fun:(below main)
 }
+{
+   Ubuntu 14.04, a
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+	 ...
+   fun:getgrgid_r@@GLIBC_2.2.5
+}
+{
+   Ubuntu 14.04, b
+   Memcheck:Leak
+   fun:realloc
+   ...
+   fun:getgrgid_r@@GLIBC_2.2.5
+}
+{
+   Ubuntu 14.04, c
+   Memcheck:Leak
+   fun:calloc
+   ...
+   fun:getgrgid_r@@GLIBC_2.2.5
+}
+{
+   Ubuntu 14.04, d
+   Memcheck:Leak
+   fun:malloc
+   obj:/bin/dash
+	 ...
+   obj:/bin/dash
+   fun:(below main)
+}
+{
+   Ubuntu 14.04, e
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/bin/dash
+	 ...
+   obj:/bin/dash
+   fun:(below main)
+}
+{
+   Ubuntu 14.04, f
+   Memcheck:Leak
+   fun:malloc
+   fun:realloc
+   obj:/bin/dash
+	 ...
+   obj:/bin/dash
+   fun:(below main)
+}
