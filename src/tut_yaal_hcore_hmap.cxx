@@ -24,14 +24,9 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#define private public
-#define protected public
-#include <yaal/hcore/hmap.hxx>
-#undef protected
-#undef private
-
 #include <TUT/tut.hpp>
 
+#include <yaal/hcore/hmap.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -75,15 +70,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "find() on one elem map" )
 	i2i_t m;
-	if ( m._engine._root )
-		clog << "root" << endl;
-	else
-		clog << "no root" << endl;
 	m.insert( make_pair( 0, 0 ) );
-	if ( m._engine._root )
-		clog << "root" << endl;
-	else
-		clog << "no root" << endl;
 	ENSURE( "find on one elem map failed", m.find( 0 ) != m.end() );
 TUT_TEARDOWN()
 
