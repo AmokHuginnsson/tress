@@ -363,7 +363,17 @@ TUT_UNIT_TEST( 12, "Conditional variable test." )
 	cvTest.eat();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "Exception propagation." )
+TUT_UNIT_TEST( 13, "Conditional variable timeout." )
+	/*
+	 * Test for msvcxx port problem in timeout reporting.
+	 */
+	HMutex m;
+	HLock l( m );
+	HCondition c( m );
+	ENSURE_EQUALS( "bad wait status", static_cast<int>( c.wait( 0, 100 ) ), static_cast<int>( HCondition::TIMEOUT ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 14, "Exception propagation." )
 	HThread a;
 	a.spawn( call( unstable, &a ) );
 	try {
@@ -374,7 +384,7 @@ TUT_UNIT_TEST( 13, "Exception propagation." )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "rwlock test" )
+TUT_UNIT_TEST( 15, "rwlock test" )
 	HReadWriteLock rwlock;
 	/* read lock */ {
 		HReadWriteLockReadLock rl( rwlock );
