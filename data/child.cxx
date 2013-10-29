@@ -6,6 +6,10 @@
 
 #ifdef __MSVCXX__
 #include <windows.h>
+inline struct tm *localtime_r( const time_t *timep, struct tm *result ) {
+	localtime_s( result, timep );
+	return ( result );
+}
 #endif
 
 using namespace std;
@@ -15,8 +19,9 @@ namespace {
 string now( void ) {
 	char buf[256];
 	time_t t( time( NULL ) );
-	tm* b( localtime( &t ) );
-	::strftime( buf, sizeof ( buf ) - 1, "%a, %d %b %Y %H:%M:%S %z", b );
+	tm b;
+	localtime_r( &t, &b );
+	::strftime( buf, sizeof ( buf ) - 1, "%a, %d %b %Y %H:%M:%S %z", &b );
 	return ( buf );
 }
 
