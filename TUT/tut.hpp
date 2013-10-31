@@ -453,7 +453,7 @@ public:
 
 		if ( obj.get() )
 			tr.set_location( obj->get_test_name(), file ? file : obj->get_test_file(), line > 0 ? line : obj->get_test_line() );
-		tr.set_time( clock.get_time_elapsed( yaal::hcore::HClock::UNIT::MILISECOND ) );
+		tr.set_time( static_cast<int long>( clock.get_time_elapsed( yaal::hcore::HClock::UNIT::MILISECOND ) ) );
 		// test passed
 
 		return ( tr );

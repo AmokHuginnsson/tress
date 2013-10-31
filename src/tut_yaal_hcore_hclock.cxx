@@ -66,38 +66,38 @@ TUT_UNIT_TEST( 2, "1 mili-second accuracy" )
 	HClock clk;
 	TUT_EVAL( tools::sleep::second( SLEEP ) );
 	int long elapsed( 0 );
-	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( HClock::UNIT::MILISECOND ), PASSED, QUALITY );
+	ENSURE_DISTANCE( "time measured incorrectly", elapsed = static_cast<int long>( clk.get_time_elapsed( HClock::UNIT::MILISECOND ) ), PASSED, QUALITY );
 	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "1 micro-second accuracy" )
 	TIME_CONSTRAINT_EXEMPT();
-	static int long const SLEEP = 1;
-	static int long const PASSED = power<10,6>::value;
+	static i64_t const SLEEP = 1;
+	static i64_t const PASSED = power<10,6>::value;
 #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ )
-	static int long const QUALITY = PASSED / 10;
+	static i64_t const QUALITY = PASSED / 10;
 #else /* #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
-	static int long const QUALITY = get_speed( HClock::UNIT::MICROSECOND ) + 2 * power<10,3>::value;
+	static i64_t const QUALITY = get_speed( HClock::UNIT::MICROSECOND ) + 2 * power<10,3>::value;
 #endif /* #else #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 	HClock clk;
 	TUT_EVAL( tools::sleep::second( SLEEP ) );
-	int long elapsed( 0 );
+	i64_t elapsed( 0 );
 	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( HClock::UNIT::MICROSECOND ), PASSED, QUALITY );
 	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "1 nano-second accuracy" )
 	TIME_CONSTRAINT_EXEMPT();
-	static int long const SLEEP = 1;
-	static int long const PASSED = power<10,9>::value;
+	static i64_t const SLEEP = 1;
+	static i64_t const PASSED = power<10,9>::value;
 #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ )
-	static int long const QUALITY = PASSED / 10;
+	static i64_t const QUALITY = PASSED / 10;
 #else /* #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
-	static int long const QUALITY = get_speed( HClock::UNIT::NANOSECOND ) + 2 * power<10,6>::value;
+	static i64_t const QUALITY = get_speed( HClock::UNIT::NANOSECOND ) + 2 * power<10,6>::value;
 #endif /* #else #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 	HClock clk;
 	TUT_EVAL( tools::sleep::second( SLEEP ) );
-	int long elapsed( 0 );
+	i64_t elapsed( 0 );
 	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( HClock::UNIT::NANOSECOND ), PASSED, QUALITY );
 	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()

@@ -1369,21 +1369,21 @@ TUT_UNIT_TEST( 50, "sort speed" )
 		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() ); {
 			HClock c;
 			std::stable_sort( v.begin(), v.end() );
-			clog << "*speed* std::stable_sort = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+			clog << "*speed* std::stable_sort = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 		} {
 			HClock c;
 			stable_sort( a.begin(), a.end() );
-			clog << "*speed* yaal::stable_sort = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+			clog << "*speed* yaal::stable_sort = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 		}
 		ENSURE_EQUALS( "yaal::stable_sort wrong", a, v );
 		clog << "*speed* stable_sort result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 			HClock c;
 			std::stable_sort( v.begin(), v.end() );
-			clog << "*speed* std::stable_sort (on sorted) = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+			clog << "*speed* std::stable_sort (on sorted) = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 		} {
 			HClock c;
 			stable_sort( a.begin(), a.end() );
-			clog << "*speed* yaal::stable_sort (on sorted) = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+			clog << "*speed* yaal::stable_sort (on sorted) = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 		}
 		ENSURE_EQUALS( "yaal::stable_sort (on sorted) wrong", a, v );
 		clog << "*speed* stable_sort (on sorted) result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
@@ -1393,21 +1393,21 @@ TUT_UNIT_TEST( 50, "sort speed" )
 		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() ); {
 			HClock c;
 			std::sort( v.begin(), v.end() );
-			clog << "*speed* std::sort = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+			clog << "*speed* std::sort = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 		} {
 			HClock c;
 			sort( a.begin(), a.end() );
-			clog << "*speed* yaal::sort = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+			clog << "*speed* yaal::sort = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 		}
 		ENSURE_EQUALS( "yaal::sort wrong", a, v );
 		clog << "*speed* sort result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 			HClock c;
 			std::sort( v.begin(), v.end() );
-			clog << "*speed* std::sort (on sorted) = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+			clog << "*speed* std::sort (on sorted) = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 		} {
 			HClock c;
 			sort( a.begin(), a.end() );
-			clog << "*speed* yaal::sort (on sorted) = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+			clog << "*speed* yaal::sort (on sorted) = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 		}
 		ENSURE_EQUALS( "yaal::sort (on sorted) wrong", a, v );
 		clog << "*speed* sort (on sorted) result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
@@ -1418,22 +1418,22 @@ TUT_UNIT_TEST( 50, "sort speed" )
 			HClock c;
 			std::make_heap( v.begin(), v.end() );
 			std::sort_heap( v.begin(), v.end() );
-			clog << "*speed* std::heap_sort = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+			clog << "*speed* std::heap_sort = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 		} {
 			HClock c;
 			heap_sort( a.begin(), a.end() );
-			clog << "*speed* yaal::heap_sort = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+			clog << "*speed* yaal::heap_sort = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 		}
 		ENSURE_EQUALS( "yaal::heap_sort wrong", a, v );
 		clog << "*speed* heap_sort result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 			HClock c;
 			std::make_heap( v.begin(), v.end() );
 			std::sort_heap( v.begin(), v.end() );
-			clog << "*speed* std::heap_sort (on sorted) = " << static_cast<int long>( st = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+			clog << "*speed* std::heap_sort (on sorted) = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 		} {
 			HClock c;
 			heap_sort( a.begin(), a.end() );
-			clog << "*speed* yaal::heap_sort (on sorted) = " << static_cast<int long>( yt = c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) << endl;
+			clog << "*speed* yaal::heap_sort (on sorted) = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 		}
 		ENSURE_EQUALS( "yaal::heap_sort (on sorted) wrong", a, v );
 		clog << "*speed* heap_sort (on sorted) result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;

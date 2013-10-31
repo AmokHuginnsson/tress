@@ -197,7 +197,7 @@ public:
 	time_constraint( int long ms_, char const* path_ = NULL, int line_ = 0 )
 		: _constraint( ms_ ), _path( path_ ), _line( line_ ), _timer() {}
 	~time_constraint( void ) {
-		int long elapsed( _timer.get_time_elapsed( yaal::hcore::HClock::UNIT::MILISECOND ) );
+		int long elapsed( static_cast<int long>( _timer.get_time_elapsed( yaal::hcore::HClock::UNIT::MILISECOND ) ) );
 		if ( _constraint && ( elapsed > _constraint ) ) {
 			std::stringstream ss;
 			ss << "time constraint exceeded: expected [" << _constraint
