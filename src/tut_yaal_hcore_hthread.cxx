@@ -370,7 +370,7 @@ TUT_UNIT_TEST( 13, "Conditional variable timeout." )
 	HMutex m;
 	HLock l( m );
 	HCondition c( m );
-	ENSURE_EQUALS( "bad wait status", static_cast<int>( c.wait( 20, 100 ) ), static_cast<int>( HCondition::TIMEOUT ) );
+	ENSURE_EQUALS( "bad wait status", static_cast<int>( c.wait( 0, 100 ) ), static_cast<int>( HCondition::TIMEOUT ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 14, "Exception propagation." )

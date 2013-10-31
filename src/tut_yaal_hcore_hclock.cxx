@@ -109,7 +109,7 @@ TUT_UNIT_TEST( 5, "measured twice without reset" )
 	HClock clk;
 	TUT_EVAL( tools::sleep::second( SLEEP ) );
 	get_speed( HClock::UNIT::MILISECOND ); /* Additional sleep. */
-	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::SECOND, false ), PASSED );
+	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::SECOND ), PASSED );
 	TUT_EVAL( tools::sleep::second( SLEEP ) );
 	get_speed( HClock::UNIT::MILISECOND ); /* Additional sleep. */
 	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed(), PASSED + PASSED );
@@ -122,7 +122,8 @@ TUT_UNIT_TEST( 6, "measured twice with reset" )
 	HClock clk;
 	TUT_EVAL( tools::sleep::second( SLEEP ) );
 	get_speed( HClock::UNIT::MILISECOND ); /* Additional sleep. */
-	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::SECOND, true ), PASSED );
+	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed( HClock::UNIT::SECOND ), PASSED );
+	clk.reset();
 	TUT_EVAL( tools::sleep::second( SLEEP ) );
 	get_speed( HClock::UNIT::MILISECOND ); /* Additional sleep. */
 	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed(), PASSED );

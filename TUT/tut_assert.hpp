@@ -206,7 +206,7 @@ public:
 		}
 	}
 	void reset( void ) {
-		_timer.get_time_elapsed( yaal::hcore::HClock::UNIT::SECOND, true );
+		_timer.reset();
 	}
 	void disable( void ) {
 		_constraint = 0;

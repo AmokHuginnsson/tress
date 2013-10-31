@@ -55,8 +55,8 @@ TUT_UNIT_TEST( 1, "the 1 second granularity sleep" )
 	int long SKEW( 2 );
 	HClock clk;
 	cout << "E" << tools::sleep::second( SLEEP, true ) << "E" << endl;
-	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ) << "$" << endl;
-	ENSURE_DISTANCE( "under slept by miliseconds", yaal::max( SHOULD_SLEEP_MS - clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ), 0l ), SKEW, SKEW + 1 );
+	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND ) << "$" << endl;
+	ENSURE_DISTANCE( "under slept by miliseconds", yaal::max( SHOULD_SLEEP_MS - clk.get_time_elapsed( HClock::UNIT::MILISECOND ), 0l ), SKEW, SKEW + 1 );
 	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND ) << "$" << endl;
 TUT_TEARDOWN()
 
@@ -66,9 +66,9 @@ TUT_UNIT_TEST( 2, "the 1 milisecond granularity sleep" )
 	int long SKEW( 3 );
 	HClock clk;
 	cout << "E" << tools::sleep::milisecond( SLEEP, true ) << "E" << endl;
-	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ) << "$" << endl;
-	ENSURE_DISTANCE( "under slept by miliseconds", yaal::max( SHOULD_SLEEP_MS - clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ), 0l ), SKEW, SKEW + 1 );
-	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND, false ) << "$" << endl;
+	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND ) << "$" << endl;
+	ENSURE_DISTANCE( "under slept by miliseconds", yaal::max( SHOULD_SLEEP_MS - clk.get_time_elapsed( HClock::UNIT::MILISECOND ), 0l ), SKEW, SKEW + 1 );
+	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND ) << "$" << endl;
 TUT_TEARDOWN()
 
 }
