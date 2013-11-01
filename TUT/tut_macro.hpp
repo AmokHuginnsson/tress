@@ -28,7 +28,10 @@
 #define ENSURE_EQUALS( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_equals_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
 #define ENSURE_DISTANCE( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_distance_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
 #define ENSURE_ERRNO( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_errno_real( __FILE__, __LINE__, # __VA_ARGS__, __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ) }; while ( false )
+#define ENSURE_THROW( msg, code, type ) do { try { this->set_current_line( __LINE__ ); code; throw failure( __FILE__, __LINE__, msg ); } catch ( type const& ) { this->set_current_line( __LINE__ + 1 ); } } while ( false )
+#define ENSURE_THROW_AUTO( code, type ) do { try { this->set_current_line( __LINE__ ); code; throw failure( __FILE__, __LINE__, "Expected exception `" ##type "' not thrown from: `" ##code "'." ); } catch ( type const& ) { this->set_current_line( __LINE__ + 1 ); } } while ( false )
 #define FAIL( msg ) tut::fail_real( __FILE__, __LINE__, ( msg ) )
 #define TIME_CONSTRAINT( ms ) tut::time_constraint M_CONCAT( time_constraint_at_, __LINE__ )( ( ms ), __FILE__, __LINE__ )
 
 #endif /* TUT_MACRO_H_GUARD */
+

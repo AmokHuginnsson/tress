@@ -491,12 +491,7 @@ TUT_UNIT_TEST( 14, "pop_back, remove_tail" )
 	ENSURE_EQUALS( "pop_back failed", l.size(), 0 );
 	check_consistency( l );
 	ENSURE_EQUALS( "pop_back failed", _stringifier.to_string<char>( l ), "" );
-	try {
-		l.pop_back();
-		FAIL( "poping back empty list did not FAIL" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_THROW( "poping back empty list did not FAIL", l.pop_back(), HException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 15, "add_head, push_front" )
@@ -555,12 +550,7 @@ TUT_UNIT_TEST( 16, "pop_front, remove_head" )
 	ENSURE_EQUALS( "pop_front failed", l.size(), 0 );
 	check_consistency( l );
 	ENSURE_EQUALS( "pop_front failed", _stringifier.to_string<char>( l ), "" );
-	try {
-		l.pop_front();
-		FAIL( "poping front empty list did not FAIL" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_THROW( "poping front empty list did not FAIL", l.pop_front(), HException );
 TUT_TEARDOWN()
 
 void tut_yaal_hcore_hlist::erase_test_0( tut_yaal_hcore_hlist::list_t& l ) {
@@ -1037,21 +1027,11 @@ TUT_UNIT_TEST( 27, "splice( pos, list )" )
 	/* bad iterator */ {
 		list_t l;
 		list_t r;
-		try {
-			l.splice( r.begin(), r );
-			FAIL( "out of the blue iterator accepted" );
-		} catch ( HFailedAssertion const& ) {
-			/* ok */
-		}
+		ENSURE_THROW( "out of the blue iterator accepted", l.splice( r.begin(), r ), HFailedAssertion );
 	}
 	/* self splice */ {
 		list_t l;
-		try {
-			l.splice( l.begin(), l );
-			FAIL( "self splice accepted" );
-		} catch ( HException const& ) {
-			/* ok */
-		}
+		ENSURE_THROW( "self splice accepted", l.splice( l.begin(), l ), HException );
 	}
 TUT_TEARDOWN()
 
@@ -1724,44 +1704,24 @@ TUT_UNIT_TEST( 29, "splice( pos, list, fist, last )" )
 	/* bad iterator on destination */ {
 		list_t l;
 		list_t r;
-		try {
-			l.splice( r.begin(), r, r.begin(), r.end() );
-			FAIL( "out of the blue destination iterator accepted" );
-		} catch ( HFailedAssertion const& ) {
-			/* ok */
-		}
+		ENSURE_THROW( "out of the blue destination iterator accepted", l.splice( r.begin(), r, r.begin(), r.end() ), HFailedAssertion );
 	}
 	/* bad iterator on source (f) */ {
 		list_t l;
 		list_t r;
-		try {
-			l.splice( l.begin(), r, l.begin(), r.end() );
-			FAIL( "out of the blue source (f) iterator accepted" );
-		} catch ( HFailedAssertion const& ) {
-			/* ok */
-		}
+		ENSURE_THROW( "out of the blue source (f) iterator accepted", l.splice( l.begin(), r, l.begin(), r.end() ), HFailedAssertion );
 	}
 	/* bad iterator on source (l) */ {
 		list_t l;
 		list_t r;
-		try {
-			l.splice( l.begin(), r, r.begin(), l.end() );
-			FAIL( "out of the blue source (l) iterator accepted" );
-		} catch ( HFailedAssertion const& ) {
-			/* ok */
-		}
+		ENSURE_THROW( "out of the blue source (l) iterator accepted", l.splice( l.begin(), r, r.begin(), l.end() ), HFailedAssertion );
 	}
 	/* self splice */ {
 #if 0
 		/* when dissallowed */ {
 			list_t l;
 			list_t r;
-			try {
-				l.splice( l.begin(), l, r.begin(), r.end() );
-				FAIL( "self splice accepted" );
-			} catch ( HException const& ) {
-				/* ok */
-			}
+			ENSURE_THROW( "self splice accepted", l.splice( l.begin(), l, r.begin(), r.end() ), HException );
 		}
 #else
 		/* when allowed */ {
