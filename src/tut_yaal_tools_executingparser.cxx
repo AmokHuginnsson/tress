@@ -67,13 +67,26 @@ TUT_TEST_GROUP( tut_yaal_tools_hllexecutingparser, "yaal::tools::executing_parse
 
 TUT_UNIT_TEST( 1, "empty parser" )
 	HRule r;
-	hcore::HString text( "1+2" );
 	try {
 		HExecutingParser ep( r );
 		FAIL( "empty parser constructed" );
 	} catch ( HExecutingParserException const& ) {
 		// ok
 	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "cycle on unnamed rules" )
+	/*
+	 * If *::describe() is incorrectly implemented this test will overflow stack.
+	 */
+	HRule elem;
+	HRule mul( elem >> *( '*' >> elem ) );
+	HRule sum( mul >> *( '+' >> mul ) );
+	elem %= ( real | ( character( '(' ) >> sum >> ')' ) );
+	HExecutingParser ep1( elem );
+	HRule name( regex( "\\<a-z\\>" ) );
+	HRule eq( name >> '=' >> elem );
+	HExecutingParser ep2( eq );
 TUT_TEARDOWN()
 
 struct calc {
@@ -104,7 +117,7 @@ struct calc {
 	}
 };
 
-TUT_UNIT_TEST( 2, "calc (sum)" )
+TUT_UNIT_TEST( 40, "calc (sum)" )
 	calc c;
 	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
 	HRule r( realVal >> *( ( '+' >> realVal )[HBoundCall<void ( void )>( call( &calc::sum, &c ) )] ) );
@@ -114,7 +127,7 @@ TUT_UNIT_TEST( 2, "calc (sum)" )
 	cout << c._vars.top() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "calc (sum, mul)" )
+TUT_UNIT_TEST( 41, "calc (sum, mul)" )
 	calc c;
 	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
 	HRule multiply( realVal >> *( ( '*' >> realVal )[HBoundCall<void ( void )>( call( &calc::mul, &c ) )] ) );
@@ -126,7 +139,7 @@ TUT_UNIT_TEST( 3, "calc (sum, mul)" )
 	cout << c._vars.top() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "calc, (sum, mul, recursion)" )
+TUT_UNIT_TEST( 42, "calc, (sum, mul, recursion)" )
 	calc c;
 	HRule expr;
 	HRule paren( '(' >> expr >> ')' );
