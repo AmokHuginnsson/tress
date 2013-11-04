@@ -87,6 +87,14 @@ TUT_UNIT_TEST( 2, "cycle on unnamed rules" )
 	HRule name( regex( "\\<a-z\\>" ) );
 	HRule eq( name >> '=' >> elem );
 	HExecutingParser ep2( eq );
+	cout << "elem:" << endl;
+	HGrammarDescription gd1( elem );
+	for ( HGrammarDescription::const_iterator it( gd1.begin() ), end( gd1.end() ); it != end; ++ it )
+		cout << *it << endl;
+	cout << "eq:" << endl;
+	HGrammarDescription gd2( eq );
+	for ( HGrammarDescription::const_iterator it( gd2.begin() ), end( gd2.end() ); it != end; ++ it )
+		cout << *it << endl;
 TUT_TEARDOWN()
 
 struct calc {
