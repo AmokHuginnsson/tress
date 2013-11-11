@@ -76,25 +76,59 @@ TUT_UNIT_TEST( 1, "empty parser" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "cycle on unnamed rules" )
-	/*
-	 * If *::describe() is incorrectly implemented this test will overflow stack.
-	 */
-	HRule elem;
-	HRule mul( elem >> *( '*' >> elem ) );
-	HRule sum( mul >> *( '+' >> mul ) );
-	elem %= ( real | ( character( '(' ) >> sum >> ')' ) );
-	HExecutingParser ep1( elem );
-	HRule name( regex( "\\<a-z\\>" ) );
-	HRule eq( name >> '=' >> elem );
-	HExecutingParser ep2( eq );
-	cout << "elem:" << endl;
-	HGrammarDescription gd1( elem );
-	for ( HGrammarDescription::const_iterator it( gd1.begin() ), end( gd1.end() ); it != end; ++ it )
-		cout << *it << endl;
-	cout << "eq:" << endl;
-	HGrammarDescription gd2( eq );
-	for ( HGrammarDescription::const_iterator it( gd2.begin() ), end( gd2.end() ); it != end; ++ it )
-		cout << *it << endl;
+	/* simple grammars */ {
+		/*
+		 * If *::describe() is incorrectly implemented this test will overflow stack.
+		 */
+		HRule elem;
+		HRule mul( elem >> *( '*' >> elem ) );
+		HRule sum( mul >> *( '+' >> mul ) );
+		elem %= ( real | ( character( '(' ) >> sum >> ')' ) );
+		HExecutingParser ep1( elem );
+		HRule name( regex( "\\<a-z\\>" ) );
+		HRule eq( name >> '=' >> elem );
+		HExecutingParser ep2( eq );
+		cout << "elem:" << endl;
+		HGrammarDescription gd1( elem );
+		for ( HGrammarDescription::const_iterator it( gd1.begin() ), end( gd1.end() ); it != end; ++ it )
+			cout << *it << endl;
+		cout << "eq:" << endl;
+		HGrammarDescription gd2( eq );
+		for ( HGrammarDescription::const_iterator it( gd2.begin() ), end( gd2.end() ); it != end; ++ it )
+			cout << *it << endl;
+	}
+	/* complicated grammar */ {
+		HRule name( regex( "\\<[a-zA-Z_][a-zA-Z0-9_]*\\>" ) );
+		HRule expression;
+		HRule absoluteValue( '|' >> expression >> '|' );
+		HRule parenthesis( '(' >> expression >> ')' );
+		HRule argList( expression >> ( * ( ',' >> expression ) ) );
+		HRule functionCall( name >> '(' >> -argList >> ')' );
+		HRule atom( absoluteValue | parenthesis | functionCall | real | name );
+		HRule power( atom >> ( * ( '^' >> atom ) ) );
+		HRule multiplication( power >> ( * ( '*' >> power ) ) );
+		HRule sum( multiplication >> ( * ( '+' >> multiplication ) ) );
+		HRule value( sum );
+		HRule assignment( *( name >> '=' ) >> value );
+		expression %= assignment;
+		HRule expressionList( + ( expression >> ';' ) );
+		HRule statementList;
+		HRule ifStatement( executing_parser::constant( "if" ) >> '(' >> expression >> ')' >> '{' >> statementList >> '}' >> -( executing_parser::constant( "else" ) >> '{' >> statementList >> '}' ) );
+		HRule whileStatement( executing_parser::constant( "while" ) >> '(' >> expression >> ')' >> '{' >> statementList >> '}' );
+		HRule caseStatement( executing_parser::constant( "case" ) >> '(' >> integer >> ')' >> ':' >> '{' >> statementList >> '}' );
+		HRule switchStatement( executing_parser::constant( "switch" ) >> '(' >> expression >> ')' >> '{' >> +caseStatement >> '}' );
+		HRule returnStatement( executing_parser::constant( "return" ) >> '(' >> expression >> ')' );
+		HRule statement( ifStatement | whileStatement | switchStatement | returnStatement | expressionList );
+		statementList %= *statement;
+		HRule scope( '{' >> statementList >> '}' );
+		HRule nameList( name >> ( * ( ',' >> name ) ) );
+		HRule functionDefinition( name >> '(' >> -nameList >> ')' >> scope );
+		HRule hg( * functionDefinition );
+		cout << "hg:" << endl;
+		HGrammarDescription gd( hg );
+		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it )
+			cout << *it << endl;
+	}
 TUT_TEARDOWN()
 
 struct calc {
