@@ -1276,10 +1276,14 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 24, "preincrementation" )
 	HNumber n;
+	ENSURE_EQUALS( n, "0" );
 	HNumber k = ++ n;
 	ENSURE_EQUALS( "preincrementation failed orig", n, HNumber( "1" ) );
 	ENSURE_EQUALS( "preincrementation failed copy", k, HNumber( "1" ) );
 	ENSURE_EQUALS( "preincrementation failed", ++ n, HNumber( "2" ) );
+	HNumber x0( "-0.12345" );
+	++ x0;
+	ENSURE_EQUALS( "preincrementation sign change failed", x0, "0.87655" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 25, "predecrementation" )
@@ -1288,6 +1292,9 @@ TUT_UNIT_TEST( 25, "predecrementation" )
 	ENSURE_EQUALS( "predecrementation failed orig", n, HNumber( "-1" ) );
 	ENSURE_EQUALS( "predecrementation failed copy", k, HNumber( "-1" ) );
 	ENSURE_EQUALS( "predecrementation failed", -- n, HNumber( "-2" ) );
+	HNumber x0( "0.12345" );
+	-- x0;
+	ENSURE_EQUALS( "preincrementation sign change failed", x0, "-0.87655" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 26, "postincrementation" )
@@ -1380,6 +1387,27 @@ TUT_UNIT_TEST( 30, "square_root<HNumber>()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 32, "abs<HNumber>()" )
+	HNumber n0( "0" );
+	ENSURE_EQUALS( "abs(0) failed", n0.abs(), "0" );
+	HNumber n1( "1" );
+	ENSURE_EQUALS( "abs(1) failed", n1.abs(), "1" );
+	HNumber n2( "1000000000000000000000000000" );
+	ENSURE_EQUALS( "abs(1000000000000000000000000000) failed", n2.abs(), "1000000000000000000000000000" );
+	HNumber n3( "-1" );
+	ENSURE_EQUALS( "abs(-1) failed", n3.abs(), "1" );
+	HNumber n4( "-1000000000000000000000000000" );
+	ENSURE_EQUALS( "abs(-1000000000000000000000000000) failed", n4.abs(), "1000000000000000000000000000" );
+
+	HNumber n5( "0.123" );
+	ENSURE_EQUALS( "abs(0.123) failed", n5.abs(), "0.123" );
+	HNumber n6( "1.123" );
+	ENSURE_EQUALS( "abs(1,123) failed", n6.abs(), "1.123" );
+	HNumber n7( "1000000000000000000000000000.123" );
+	ENSURE_EQUALS( "abs(1000000000000000000000000000.123) failed", n7.abs(), "1000000000000000000000000000.123" );
+	HNumber n8( "-1.123" );
+	ENSURE_EQUALS( "abs(-1.123) failed", n8.abs(), "1.123" );
+	HNumber n9( "-1000000000000000000000000000.123" );
+	ENSURE_EQUALS( "abs(-1000000000000000000000000000.123) failed", n9.abs(), "1000000000000000000000000000.123" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 33, "ln<HNumber>()" )
@@ -1397,13 +1425,118 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 37, "tan<HNumber>()" )
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 38, "ceil<HNumber>()" )
+TUT_UNIT_TEST( 38, "floor<HNumber>()" )
+	HNumber n0( "0" );
+	ENSURE_EQUALS( "floor(0) failed", n0.floor(), "0" );
+	HNumber n1( "1" );
+	ENSURE_EQUALS( "floor(1) failed", n1.floor(), "1" );
+	HNumber n2( "1000000000000000000000000000" );
+	ENSURE_EQUALS( "floor(1000000000000000000000000000) failed", n2.floor(), "1000000000000000000000000000" );
+	HNumber n3( "-1" );
+	ENSURE_EQUALS( "floor(-1) failed", n3.floor(), "-1" );
+	HNumber n4( "-1000000000000000000000000000" );
+	ENSURE_EQUALS( "floor(-1000000000000000000000000000) failed", n4.floor(), "-1000000000000000000000000000" );
+
+	HNumber n5( "0.123" );
+	ENSURE_EQUALS( "floor(0.123) failed", n5.floor(), "0" );
+	HNumber n6( "1.123" );
+	ENSURE_EQUALS( "floor(1,123) failed", n6.floor(), "1" );
+	HNumber n7( "1000000000000000000000000000.123" );
+	ENSURE_EQUALS( "floor(1000000000000000000000000000.123) failed", n7.floor(), "1000000000000000000000000000" );
+	HNumber n8( "-1.123" );
+	ENSURE_EQUALS( "floor(-1.123) failed", n8.floor(), "-2" );
+	HNumber n9( "-1000000000000000000000000000.123" );
+	ENSURE_EQUALS( "floor(-1000000000000000000000000000.123) failed", n9.floor(), "-1000000000000000000000000001" );
+
+	HNumber n10( "0.123456789123456789" );
+	ENSURE_EQUALS( "floor(0.123456789123456789) failed", n10.floor(), "0" );
+	HNumber n11( "1.123456789123456789" );
+	ENSURE_EQUALS( "floor(1.123456789123456789) failed", n11.floor(), "1" );
+	HNumber n12( "1000000000000000000000000000.123456789123456789" );
+	ENSURE_EQUALS( "floor(1000000000000000000000000000.123456789123456789) failed", n12.floor(), "1000000000000000000000000000" );
+	HNumber n13( "-1.123456789123456789" );
+	ENSURE_EQUALS( "floor(-1.123456789123456789) failed", n13.floor(), "-2" );
+	HNumber n14( "-1000000000000000000000000000.123456789123456789" );
+	ENSURE_EQUALS( "floor(-1000000000000000000000000000.123456789123456789) failed", n14.floor(), "-1000000000000000000000000001" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 39, "roof<HNumber>()" )
+TUT_UNIT_TEST( 39, "ceil<HNumber>()" )
+	HNumber n0( "0" );
+	ENSURE_EQUALS( "ceil(0) failed", n0.ceil(), "0" );
+	HNumber n1( "1" );
+	ENSURE_EQUALS( "ceil(1) failed", n1.ceil(), "1" );
+	HNumber n2( "1000000000000000000000000000" );
+	ENSURE_EQUALS( "ceil(1000000000000000000000000000) failed", n2.ceil(), "1000000000000000000000000000" );
+	HNumber n3( "-1" );
+	ENSURE_EQUALS( "ceil(-1) failed", n3.ceil(), "-1" );
+	HNumber n4( "-1000000000000000000000000000" );
+	ENSURE_EQUALS( "ceil(-1000000000000000000000000000) failed", n4.ceil(), "-1000000000000000000000000000" );
+
+	HNumber n5( "0.123" );
+	ENSURE_EQUALS( "ceil(0.123) failed", n5.ceil(), "1" );
+	HNumber n6( "1.123" );
+	ENSURE_EQUALS( "ceil(1,123) failed", n6.ceil(), "2" );
+	HNumber n7( "1000000000000000000000000000.123" );
+	ENSURE_EQUALS( "ceil(1000000000000000000000000000.123) failed", n7.ceil(), "1000000000000000000000000001" );
+	HNumber n8( "-1.123" );
+	ENSURE_EQUALS( "ceil(-1.123) failed", n8.ceil(), "-1" );
+	HNumber n9( "-1000000000000000000000000000.123" );
+	ENSURE_EQUALS( "ceil(-1000000000000000000000000000.123) failed", n9.ceil(), "-100000000000000000000000000" );
+
+	HNumber n10( "0.123456789123456789" );
+	ENSURE_EQUALS( "ceil(0.123456789123456789) failed", n10.ceil(), "1" );
+	HNumber n11( "1.123456789123456789" );
+	ENSURE_EQUALS( "ceil(1.123456789123456789) failed", n11.ceil(), "2" );
+	HNumber n12( "1000000000000000000000000000.123456789123456789" );
+	ENSURE_EQUALS( "ceil(1000000000000000000000000000.123456789123456789) failed", n12.ceil(), "1000000000000000000000000001" );
+	HNumber n13( "-1.123456789123456789" );
+	ENSURE_EQUALS( "ceil(-1.123456789123456789) failed", n13.ceil(), "-2" );
+	HNumber n14( "-1000000000000000000000000000.123456789123456789" );
+	ENSURE_EQUALS( "ceil(-1000000000000000000000000000.123456789123456789) failed", n14.ceil(), "-1000000000000000000000000000" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 40, "round<HNumber>()" )
+	HNumber n0( "0" );
+	ENSURE_EQUALS( "round( 0, 10 ) failed", n0.round( 10 ), "0" );
+	ENSURE_EQUALS( "round( 0, 1 ) failed", n0.round( 1 ), "0" );
+	ENSURE_EQUALS( "round( 0, 0 ) failed", n0.round( 0 ), "0" );
+
+	HNumber n1( "1" );
+	ENSURE_EQUALS( "round( 1, 10 ) failed", n1.round( 10 ), "1" );
+	ENSURE_EQUALS( "round( 1, 1 ) failed", n1.round( 1 ), "1" );
+	ENSURE_EQUALS( "round( 1, 0 ) failed", n1.round( 0 ), "1" );
+
+	HNumber n2( "-1" );
+	ENSURE_EQUALS( "round( -1, 10 ) failed", n2.round( 10 ), "-1" );
+	ENSURE_EQUALS( "round( -1, 1 ) failed", n2.round( 1 ), "-1" );
+	ENSURE_EQUALS( "round( -1, 0 ) failed", n2.round( 0 ), "-1" );
+
+	HNumber n3( "1.123" );
+	ENSURE_EQUALS( "round( 1.123, 15 ) failed", n3.round( 10 ), "1.123" );
+	ENSURE_EQUALS( "round( 1.123, 10 ) failed", n3.round( 10 ), "1.123" );
+	ENSURE_EQUALS( "round( 1.123, 5 ) failed", n3.round( 10 ), "1.123" );
+	ENSURE_EQUALS( "round( 1.123, 1 ) failed", n3.round( 1 ), "1.1" );
+	ENSURE_EQUALS( "round( 1.123, 0 ) failed", n3.round( 0 ), "1" );
+
+	HNumber n4( "1.444455" );
+	ENSURE_EQUALS( "round( 1.444455, 15 ) failed", n4.round( 10 ), "1.444455" );
+	ENSURE_EQUALS( "round( 1.444455, 10 ) failed", n3.round( 10 ), "1.444455" );
+	ENSURE_EQUALS( "round( 1.444455, 5 ) failed", n3.round( 10 ), "1.44446" );
+	ENSURE_EQUALS( "round( 1.444455, 1 ) failed", n4.round( 1 ), "1.4" );
+	ENSURE_EQUALS( "round( 1.444455, 0 ) failed", n4.round( 0 ), "1" );
+
+	HNumber n5( "1.999999999999999999999" );
+	ENSURE_EQUALS( "round( 1.999999999999999999999, 15 ) failed", n5.round( 10 ), "2" );
+	ENSURE_EQUALS( "round( 1.999999999999999999999, 10 ) failed", n5.round( 10 ), "2" );
+	ENSURE_EQUALS( "round( 1.999999999999999999999, 5 ) failed", n5.round( 10 ), "2" );
+	ENSURE_EQUALS( "round( 1.999999999999999999999, 1 ) failed", n5.round( 1 ), "2" );
+	ENSURE_EQUALS( "round( 1.999999999999999999999, 0 ) failed", n5.round( 0 ), "2" );
+
+	HNumber n6( "0.5" );
+	ENSURE_EQUALS( "round( 0.5, 0 ) failed", n6.round( 0 ), "1" );
+
+	HNumber n7( "-0.5" );
+	ENSURE_EQUALS( "round( 0.5, 0 ) failed", n7.round( 0 ), "-1" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 41, "log10<HNumber>()" )
