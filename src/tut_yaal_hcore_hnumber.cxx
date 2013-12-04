@@ -1382,6 +1382,8 @@ TUT_UNIT_TEST( 30, "square_root<HNumber>()" )
 		if ( res[0] == '.' )
 			res.insert( 0, 1, '0' );
 		int z( static_cast<int>( res.find( '.' ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
+		/* We need to take rounding in to account here. */
+		++ z;
 		ENSURE_EQUALS( msg, root.to_string().left( len - z ), res.left( len - z ) );
 	}
 TUT_TEARDOWN()
@@ -1564,6 +1566,62 @@ TUT_UNIT_TEST( 39, "ceil<HNumber>()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 40, "round<HNumber>()" )
+	char const numsU[][21] = {
+		"0.123456789123456789",
+		"0.12345678912345679",
+		"0.1234567891234568",
+		"0.123456789123457",
+		"0.12345678912346",
+		"0.1234567891235",
+		"0.123456789123",
+		"0.12345678912",
+		"0.1234567891",
+		"0.123456789",
+		"0.12345679",
+		"0.1234568",
+		"0.123457",
+		"0.12346",
+		"0.1235",
+		"0.123",
+		"0.12",
+		"0.1",
+		"0"
+	};
+	char const numsD[][21] = {
+		"0.987654321987654321",
+		"0.98765432198765432",
+		"0.9876543219876543",
+		"0.987654321987654",
+		"0.98765432198765",
+		"0.9876543219877",
+		"0.987654321988",
+		"0.98765432199",
+		"0.987654322",
+		"0.987654322",
+		"0.98765432",
+		"0.9876543",
+		"0.987654",
+		"0.98765",
+		"0.9877",
+		"0.988",
+		"0.99",
+		"1",
+		"1"
+	};
+	HString msg;
+	for ( int i( 0 ); i < countof ( numsU ); ++ i ) {
+		HNumber U( "0.123456789123456789" );
+		int round( ( countof ( numsU ) ) - i - 1 );
+		msg.format( "round( U, %d ) failed", round );
+		ENSURE_EQUALS( msg, U.round( round ), numsU[i] );
+	}
+	for ( int i( 0 ); i < countof ( numsD ); ++ i ) {
+		HNumber D( "0.987654321987654321" );
+		int round( ( countof ( numsD ) ) - i - 1 );
+		msg.format( "round( D, %d ) failed", round );
+		ENSURE_EQUALS( msg, D.round( round ), numsD[i] );
+	}
+
 	HNumber n0( "0" );
 	ENSURE_EQUALS( "round( 0, 10 ) failed", n0.round( 10 ), "0" );
 	ENSURE_EQUALS( "round( 0, 1 ) failed", n0.round( 1 ), "0" );
@@ -1605,6 +1663,11 @@ TUT_UNIT_TEST( 40, "round<HNumber>()" )
 
 	HNumber n7( "-0.5" );
 	ENSURE_EQUALS( "round( 0.5, 0 ) failed", n7.round( 0 ), "-1" );
+
+	HNumber x0( "999.9999999998" );
+	ENSURE_EQUALS( "round( 999.9999999998, 0 ) failed", x0.round( 0 ), "1000" );
+	HNumber x1( "999.9999999998" );
+	ENSURE_EQUALS( "round( 999.9999999998, 0 ) failed", x1.round( 9 ), "1000" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 41, "log10<HNumber>()" )
