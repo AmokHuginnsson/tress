@@ -1580,23 +1580,23 @@ TUT_UNIT_TEST( 40, "round<HNumber>()" )
 	ENSURE_EQUALS( "round( -1, 0 ) failed", n2.round( 0 ), "-1" );
 
 	HNumber n3( "1.123" );
-	ENSURE_EQUALS( "round( 1.123, 15 ) failed", n3.round( 10 ), "1.123" );
+	ENSURE_EQUALS( "round( 1.123, 15 ) failed", n3.round( 15 ), "1.123" );
 	ENSURE_EQUALS( "round( 1.123, 10 ) failed", n3.round( 10 ), "1.123" );
-	ENSURE_EQUALS( "round( 1.123, 5 ) failed", n3.round( 10 ), "1.123" );
+	ENSURE_EQUALS( "round( 1.123, 5 ) failed", n3.round( 5 ), "1.123" );
 	ENSURE_EQUALS( "round( 1.123, 1 ) failed", n3.round( 1 ), "1.1" );
 	ENSURE_EQUALS( "round( 1.123, 0 ) failed", n3.round( 0 ), "1" );
 
 	HNumber n4( "1.444455" );
-	ENSURE_EQUALS( "round( 1.444455, 15 ) failed", n4.round( 10 ), "1.444455" );
-	ENSURE_EQUALS( "round( 1.444455, 10 ) failed", n3.round( 10 ), "1.444455" );
-	ENSURE_EQUALS( "round( 1.444455, 5 ) failed", n3.round( 10 ), "1.44446" );
+	ENSURE_EQUALS( "round( 1.444455, 15 ) failed", n4.round( 15 ), "1.444455" );
+	ENSURE_EQUALS( "round( 1.444455, 10 ) failed", n4.round( 10 ), "1.444455" );
+	ENSURE_EQUALS( "round( 1.444455, 5 ) failed", n4.round( 5 ), "1.44446" );
 	ENSURE_EQUALS( "round( 1.444455, 1 ) failed", n4.round( 1 ), "1.4" );
 	ENSURE_EQUALS( "round( 1.444455, 0 ) failed", n4.round( 0 ), "1" );
 
 	HNumber n5( "1.999999999999999999999" );
-	ENSURE_EQUALS( "round( 1.999999999999999999999, 15 ) failed", n5.round( 10 ), "2" );
+	ENSURE_EQUALS( "round( 1.999999999999999999999, 15 ) failed", n5.round( 15 ), "2" );
 	ENSURE_EQUALS( "round( 1.999999999999999999999, 10 ) failed", n5.round( 10 ), "2" );
-	ENSURE_EQUALS( "round( 1.999999999999999999999, 5 ) failed", n5.round( 10 ), "2" );
+	ENSURE_EQUALS( "round( 1.999999999999999999999, 5 ) failed", n5.round( 5 ), "2" );
 	ENSURE_EQUALS( "round( 1.999999999999999999999, 1 ) failed", n5.round( 1 ), "2" );
 	ENSURE_EQUALS( "round( 1.999999999999999999999, 0 ) failed", n5.round( 0 ), "2" );
 
