@@ -330,6 +330,9 @@ public:
 						if ( ! tr._exceptionTypeId.empty() ) {
 							_os << "     exception typeid: " << tr._exceptionTypeId << std::endl;
 						}
+						if ( tr._line > 0 ) {
+							_os << "     last good location: " << tr._file << ":" << tr._line << std::endl;
+						}
 					}
 					break;
 					case test_result::term:
