@@ -93,7 +93,10 @@ if test "x$want_boost" = "xyes"; then
     ax_arch=`uname -m`
     case $ax_arch in
       x86_64|ppc64|s390x|sparc64|aarch64)
-        libsubdirs="lib/x86_64-linux-gnu lib/i386-linux-gnu lib64 lib lib32"
+        libsubdirs="lib/x86_64-linux-gnu lib64 lib lib32"
+        ;;
+      i686|i586|i386)
+        libsubdirs="lib/i686-linux-gnu lib/i386-linux-gnu lib lib32"
         ;;
     esac
 
