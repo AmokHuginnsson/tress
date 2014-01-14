@@ -48,9 +48,9 @@ TUT_UNIT_TEST( 1, "is_signed" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "max_signed" )
-	ENSURE_EQUALS( "bad max signed value", max_signed<char>::value, 127 );
+	ENSURE_EQUALS( "bad max signed value", max_signed<char signed>::value, 127 );
 	ENSURE_EQUALS( "bad max signed value", max_signed<short>::value, 32767 );
-	cout << "char = " << hex << static_cast<int>( max_signed<char>::value ) << endl;
+	cout << "char = " << hex << static_cast<int>( max_signed<char signed>::value ) << endl;
 	cout << "short = " << hex << max_signed<short>::value << endl;
 	cout << "int = " << hex << max_signed<int>::value << endl;
 	cout << "long = " << hex << max_signed<long>::value << endl;
@@ -67,7 +67,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "integer_cast<>" )
 	cout << integer_cast<int, 4>::value << endl;
-	cout << integer_cast<char, 127>::value << endl;
+	cout << integer_cast<char signed, 127>::value << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "unsigned_integer_cast<>" )
