@@ -74,7 +74,7 @@ int sum( mm_t const& m ) {
 
 template<typename mm_t>
 int sum( mm_t const& l ) {
-	mm_t::reverse_iterator rit( l.begin() ); /* MUST_FAIL_HERE */
+	typename mm_t::reverse_iterator rit( l.begin() ); /* MUST_FAIL_HERE */
 	return ( 0 );
 }
 
@@ -82,7 +82,7 @@ int sum( mm_t const& l ) {
 
 template<typename mm_t>
 int sum( mm_t const& l ) {
-	mm_t::const_reverse_iterator rit( l.begin() );
+	typename mm_t::const_reverse_iterator rit( l.begin() );
 	*rit = 0; /* MUST_FAIL_HERE */
 	return ( 0 );
 }

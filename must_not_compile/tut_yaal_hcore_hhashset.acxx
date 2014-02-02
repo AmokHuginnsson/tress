@@ -29,13 +29,12 @@ M_VCSID ( "$Id$" )
 
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::tools;
 
 #ifndef MAKE_DEP
 
 #if defined ( BUG_0 )
 
-namespace must_not_compile {
+namespace {
 
 typedef HHashSet<int> int_set_t;
 
@@ -45,7 +44,7 @@ int sum( int_set_t const& l ) {
 	for ( int_set_t::iterator it = l.begin(); it != l.end(); ++ it )
 		*it = -*it; /* MUST_FAIL_HERE */
 	return ( l_iSum );
-	}
+}
 
 }
 

@@ -29,7 +29,6 @@ M_VCSID ( "$Id$" )
 
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::tools;
 
 #ifndef MAKE_DEP
 
@@ -39,7 +38,7 @@ typedef HHashMap<int, int> map_t;
 
 #if defined ( BUG_0 )
 
-
+namespace {
 int sum( map_t const& l ) {
 	int l_iSum = 0;
 
@@ -47,9 +46,11 @@ int sum( map_t const& l ) {
 		l_iSum += it->second;
 	return ( l_iSum );
 }
+}
 
 #elif defined ( BUG_1 )
 
+namespace {
 int sum( map_t const& l ) {
 	int l_iSum = 0;
 	
@@ -57,28 +58,35 @@ int sum( map_t const& l ) {
 		it->second = -it->second; /* MUST_FAIL_HERE */
 	return ( l_iSum );
 }
+}
 
 #elif defined ( BUG_2 )
 
+namespace {
 int sum( map_t& l ) {
 	map_t::iterator it( l.begin() );
 	it->first = 0; /* MUST_FAIL_HERE */
 	return ( 0 );
 }
+}
 
 #elif defined ( BUG_3 )
 
+namespace {
 int sum( map_t const& l ) {
 	map_t::reverse_iterator rit( l.begin() ); /* MUST_FAIL_HERE */
 	return ( 0 );
 }
+}
 
 #elif defined ( BUG_4 )
 
+namespace {
 int sum( map_t const& l ) {
 	map_t::const_reverse_iterator rit( l.begin() );
 	*rit = 0; /* MUST_FAIL_HERE */
 	return ( 0 );
+}
 }
 
 #else

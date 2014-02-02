@@ -29,7 +29,6 @@ Copyright:
 M_VCSID ( "$Id$" )
 
 using namespace yaal;
-using namespace yaal::hcore;
 
 #ifndef MAKE_DEP
 

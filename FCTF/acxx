@@ -7,6 +7,9 @@ import re
 import linecache
 
 COMPILER = "g++"
+OK_STATUS = 0
+NO_MORE_BUGS_STATUS = 1
+WRONG_STATUS = 2
 verbose = 0
 
 class Uber( object ):
@@ -107,24 +110,30 @@ def verify_bug( input_path, line_no ):
 	line = linecache.getline( input_path, int( line_no ) )
 	fail_here_match = re.compile( "\\bMUST_FAIL_HERE\\b" )
 	match = fail_here_match.search( line )
+	status = WRONG_STATUS
 	if ( match ):
-		return 0
-	return 2
+		status = OK_STATUS
+	return status
 
-def check_bug( out, input_path ):
+def check_bug( lines, input_path ):
 	no_more_bugs_match = re.compile( "^" + input_path + "(:[0-9]+)+: error: #error NO_SUCH_BUG$" )
 	line_number_match = re.compile( "^" + input_path + ":([0-9]+):([0-9]+:)* +(error|required from |instantiated from)" )
-	ret = 2
-	for line in out.readlines():
+	required_from_here = re.compile( "^" + input_path + ":([0-9]+):([0-9]+:)* +required from " )
+	ret = WRONG_STATUS
+	for line in lines:
 		msg( line, 1 )
-		if ( ret == 2 ):
+		if ( ret == WRONG_STATUS ):
 			match = no_more_bugs_match.match( line )
 			if ( match ):
-				ret = 1
+				ret = NO_MORE_BUGS_STATUS
+				break
 			else:
 				match = line_number_match.match( line )
 				if ( match ):
 					ret = verify_bug( input_path, match.group( 1 ) )
+					if ( ret == WRONG_STATUS ) and required_from_here.match( line ):
+						continue
+					break
 	return ret
 
 def acxx( argv ):
@@ -148,18 +157,22 @@ def acxx( argv ):
 		if ( access( output_path, F_OK ) ):
 			unlink( output_path )
 		BUG_TEMPLATE = "BUG_"
-		bug_status = 0
+		bug_status = OK_STATUS
 		bug_no = 0
-		while ( bug_status == 0 ):
+		lines = 0
+		while ( bug_status == OK_STATUS ):
 			msg( "################ processing bug no: " + str( bug_no ) + " ################" )
+			msg( COMPILER + " -xc++" + " -D" + BUG_TEMPLATE + str( bug_no ) + " " + " ".join( argv ) )
 			out = Popen( [ COMPILER, "-xc++", "-D" + BUG_TEMPLATE + str( bug_no ) ] + argv, stderr = PIPE ).stderr;
-			bug_status = check_bug( out, input_path )
+			lines = out.readlines()
+			bug_status = check_bug( lines, input_path )
 			out.close()
 			bug_no += 1
 		if ( access( output_path, F_OK ) ):
 			unlink( output_path )
-		if ( bug_status == 2 ):
+		if ( bug_status == WRONG_STATUS ):
 			print >> sys.stderr, "Anti-compilation of BUG number " + str( bug_no - 1 ) + " failed!"
+			print "\n".join( lines )
 		else:
 			f = open( output_path, 'w' )
 			f.close()

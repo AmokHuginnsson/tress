@@ -29,11 +29,10 @@ M_VCSID ( "$Id$" )
 
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::tools;
 
 #ifndef MAKE_DEP
 
-namespace must_not_compile {
+namespace {
 
 typedef HMap<int, int> map_t;
 
@@ -91,11 +90,11 @@ int sum( map_t& l ) {
 }
 
 int main( int, char** ) {
-	must_not_compile::map_t l;
+	map_t l;
 	l.insert( make_pair( 1, 7 ) );
 	l.insert( make_pair( 3, 11 ) );
 	l.insert( make_pair( 5, 13 ) );
-	return ( must_not_compile::sum( l ) );
+	return ( sum( l ) );
 }
 
 #endif /* #ifndef MAKE_DEP */
