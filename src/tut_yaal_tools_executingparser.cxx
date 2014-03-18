@@ -75,7 +75,49 @@ TUT_UNIT_TEST( 1, "empty parser" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "cycle on unnamed rules" )
+template<typename T, typename RT = T>
+struct setter {
+	static void set( T& lval_, RT rval_ ) {
+		lval_ = rval_;
+	}
+};
+
+TUT_UNIT_TEST( 2, "HReal" )
+	/* double */ {
+		double val( 0 );
+		HExecutingParser ep( real[HBoundCall<void ( double )>( call( &setter<double>::set, ref( val ), _1 ) )] );
+		ENSURE( "HReal failed to parse correct input (double).", !ep( "7" ) );
+		ep();
+		ENSURE_DISTANCE( "double value not ser by ExecutingParser.", static_cast<double long>( val ), 7.l, epsilon );
+	}
+	/* double long */ {
+		double long val( 0 );
+		HExecutingParser ep( real[HBoundCall<void ( double long )>( call( &setter<double long>::set, ref( val ), _1 ) )] );
+		ENSURE( "HReal failed to parse correct input (double long).", !ep( "7" ) );
+		ep();
+		ENSURE_DISTANCE( "double long value not ser by ExecutingParser.", val, 7.l, epsilon );
+	}
+	/* HNumber */ {
+		HNumber val( 0 );
+		HExecutingParser ep( real[HBoundCall<void ( HNumber const& )>( call( &setter<HNumber, HNumber const&>::set, ref( val ), _1 ) )] );
+		ENSURE( "HReal failed to parse correct input (HNumber).", !ep( "7" ) );
+		ep();
+		ENSURE_EQUALS( "HNumber value not ser by ExecutingParser.", val, 7 );
+	}
+	/* HString */ {
+		hcore::HString val( 0 );
+		HExecutingParser ep( real[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		ENSURE( "HReal failed to parse correct input (HString).", !ep( "7" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not ser by ExecutingParser.", val, "7" );
+	}
+	/* bad real */ {
+		HExecutingParser ep( real );
+		ENSURE_NOT( "Invalid input parsed by HReal", !ep( "bad" ) );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 30, "cycle on unnamed rules" )
 	/* simple grammars */ {
 		/*
 		 * If *::describe() is incorrectly implemented this test will overflow stack.
@@ -178,7 +220,7 @@ TUT_UNIT_TEST( 40, "calc (sum)" )
 	HExecutingParser ep( r );
 	ep( "1.7+2.4+-7" );
 	ep();
-	cout << c._vars.top() << endl;
+	ENSURE_DISTANCE( "bad value calculated from +", c._vars.top(), -2.9l, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 41, "calc (sum, mul)" )
@@ -190,7 +232,7 @@ TUT_UNIT_TEST( 41, "calc (sum, mul)" )
 
 	ep( "1.7*2+2.4+-7" );
 	ep();
-	cout << c._vars.top() << endl;
+	ENSURE_DISTANCE( "bad value calculated from +*", c._vars.top(), -1.2l, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 42, "calc, (sum, mul, recursion)" )
@@ -204,18 +246,17 @@ TUT_UNIT_TEST( 42, "calc, (sum, mul, recursion)" )
 	expr %= r;
 	HExecutingParser ep( r );
 
-	ep( "1.7*(2+2.4)+-7" );
+	ep( "1.7*(2+2.4)+-7+2*3" );
 	ep();
-	cout << c._vars.top() << endl;
+	ENSURE_DISTANCE( "bad value calculated from +*()", c._vars.top(), 6.48l, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "the test" )
 	HArray<double> v;
-	if ( HExecutingParser( real[push_back(v)] )( "3.141592653589793" ) )
-		cout << "1: failed to consume input" << endl;
+	ENSURE( "parsing correct input (single real) failed", !HExecutingParser( real[push_back(v)] )( "3.141592653589793" ) );
 	HRule r( real[push_back(v)] >> *( ',' >> real[push_back(v)] ) );
 	HExecutingParser ep( r );
-	ep( "3.141592653589793, -2.718281828459045, 17" );
+	ENSURE( "parsing correct input (coma separated set of reals) failed", !ep( "3.141592653589793, -2.718281828459045, 17" ) );
 	ep();
 	if ( ep( "3.141592653589793, -2.718281828459045, 17, kupa" ) )
 		cout << "2: failed to consume input" << endl;
