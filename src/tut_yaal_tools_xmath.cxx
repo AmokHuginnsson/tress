@@ -86,19 +86,19 @@ TUT_UNIT_TEST( 3, "binomial_coefficient" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "number set stats: minimum" )
-	ENSURE_EQUALS( "number_set_stats().minimum() failed", number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).minimum(), _testData_[0][0] );
+	ENSURE_EQUALS( "number_set_stats().minimum() failed", number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).minimum(), _testData_[0][0] );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "number set stats: maximum" )
-	ENSURE_EQUALS( "number_set_stats().maximum() failed", number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).maximum(), _testData_[0][countof ( _testData_[0] ) - 1] );
+	ENSURE_EQUALS( "number_set_stats().maximum() failed", number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).maximum(), _testData_[0][countof ( _testData_[0] ) - 1] );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "number set stats: count" )
-	ENSURE_EQUALS( "number_set_stats().count() failed", number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).count(), 100 );
+	ENSURE_EQUALS( "number_set_stats().count() failed", number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).count(), 100 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 7, "number set stats: sum" )
-	ENSURE_EQUALS( "number_set_stats().sum() failed", number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).sum(), 24133 );
+	ENSURE_EQUALS( "number_set_stats().sum() failed", number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).sum(), 24133 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "number set stats: average" )
@@ -107,34 +107,34 @@ TUT_UNIT_TEST( 8, "number set stats: average" )
 #else /* #ifdef __HOST_OS_TYPE_CYGWIN__ */
 	double long expected( 24133 / 100.l );
 #endif /* #else #ifdef __HOST_OS_TYPE_CYGWIN__ */
-	ENSURE_EQUALS( "number_set_stats().average() failed", number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).average(), expected );
+	ENSURE_EQUALS( "number_set_stats().average() failed", number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).average(), expected );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 9, "number set stats: variance" )
 	ENSURE_DISTANCE( "number_set_stats().variance() failed",
-			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).variance(), 25865.7586868687L, epsilon );
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).variance(), 25865.7586868687L, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 10, "number set stats: standard_deviation" )
 	ENSURE_DISTANCE( "number_set_stats().standard_deviation() failed",
-			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).standard_deviation(), 160.828351626412L, epsilon );
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).standard_deviation(), 160.828351626412L, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 11, "number set stats: population_variance" )
 	ENSURE_DISTANCE( "number_set_stats().population_variance() failed",
-			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).population_variance(), 25607.1011L, epsilon );
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).population_variance(), 25607.1011L, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 12, "number set stats: population_standard_deviation" )
 	ENSURE_DISTANCE( "number_set_stats().population_standard_deviation() failed",
-			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ).population_standard_deviation(), 160.022189398846L, epsilon );
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).population_standard_deviation(), 160.022189398846L, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 13, "number set stats: median" )
 	ENSURE_EQUALS( "number_set_stats().median() failed",
-			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ), static_cast<AGGREGATE_TYPE::type_t>( AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ) ).median(), 229 );
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ), static_cast<AGGREGATE_TYPE::type_t>( AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ) ).median(), 229 );
 	ENSURE_EQUALS( "number_set_stats().median() failed",
-			number_set_stats( _testData_[0], _testData_[0] + countof ( _testData_[0] ) - 1, static_cast<AGGREGATE_TYPE::type_t>( AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ) ).median(), 229 );
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) - 1, static_cast<AGGREGATE_TYPE::type_t>( AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ) ).median(), 229 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 20, "stats on dice" )

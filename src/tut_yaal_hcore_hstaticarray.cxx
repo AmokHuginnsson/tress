@@ -73,8 +73,8 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 3, "Constructor with range initialization." )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 ); {
-		HStaticArray<item_t, countof ( a )> array( a, a + countof ( a ) );
-		ENSURE( "range initialization failed", safe_equal( array.begin(), array.end(), a, a + countof ( a ) ) );
+		HStaticArray<item_t, countof ( a )> array( begin( a ), end( a ) );
+		ENSURE( "range initialization failed", safe_equal( array.begin(), array.end(), begin( a ), end( a ) ) );
 	}
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -121,7 +121,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 7, "assign operator (=)" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
-	HStaticArray<item_t, countof ( a0 )> array( a0, a0 + countof ( a0 ) );
+	HStaticArray<item_t, countof ( a0 )> array( begin( a0 ), end( a0 ) );
 	HStaticArray<item_t, countof ( a0 )> other( -1 );
 	other = array;
 	ENSURE_EQUALS( "assgin failed", array, other );

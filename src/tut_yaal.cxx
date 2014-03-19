@@ -86,10 +86,10 @@ TUT_UNIT_TEST( 6, "back_insert_iterator" )
 	int d3[] = { 3, 14, 15, 9265, 35, 89, 79, 3 };
 	int d4[] = { 1, 2, 4, 2, 3, 5, 7, 3, 14, 15, 9265, 35, 89, 79, 3 };
 
-	int_list_t l1( d1, d1 + countof ( d1 ) );
-	int_list_t l2( d2, d2 + countof ( d2 ) );
-	int_list_t l3( d3, d3 + countof ( d3 ) );
-	int_list_t l4( d4, d4 + sizeof ( d4 ) / sizeof ( int ) );
+	int_list_t l1( begin( d1 ), end( d1 ) );
+	int_list_t l2( begin( d2 ), end( d2 ) );
+	int_list_t l3( begin( d3 ), end( d3 ) );
+	int_list_t l4( begin( d4 ), end( d4 ) );
 	int_list_t l;
 	copy( l1.begin(), l1.end(), back_insert_iterator( l ) );
 	copy( l2.begin(), l2.end(), back_insert_iterator( l ) );
@@ -100,9 +100,9 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 7, "equal" )
 	int d1[] = { 1, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
-	int_list_t l1( d1, d1 + countof ( d1 ) );
-	int_list_t l2( d2, d2 + countof ( d2 ) );
-	ENSURE( "positive test for equality failed", safe_equal( l1.begin(), l1.end(), d1, d1 + countof ( d1 ) ) );
+	int_list_t l1( begin( d1 ), end( d1 ) );
+	int_list_t l2( begin( d2 ), end( d2 ) );
+	ENSURE( "positive test for equality failed", safe_equal( l1.begin(), l1.end(), begin( d1 ), end( d1 ) ) );
 	ENSURE( "positive test for equality failed", equal( l1.begin(), l1.end(), d1 ) );
 	ENSURE_NOT( "negative test for equality failed", safe_equal( l1.begin(), l1.end(), l2.begin(), l2.end() ) );
 	ENSURE_NOT( "negative test for equality failed", equal( l1.begin(), l1.end(), l2.begin() ) );
@@ -112,9 +112,9 @@ TUT_UNIT_TEST( 8, "set_union uniqe" )
 	int d1[] = { 1, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 1, 2, 3, 4, 5, 7 };
-	int_list_t l1( d1, d1 + countof ( d1 ) );
-	int_list_t l2( d2, d2 + countof ( d2 ) );
-	int_list_t l3( d3, d3 + countof ( d3 ) );
+	int_list_t l1( begin( d1 ), end( d1 ) );
+	int_list_t l2( begin( d2 ), end( d2 ) );
+	int_list_t l3( begin( d3 ), end( d3 ) );
 	int_list_t l;
 	set_union( l1.begin(), l1.end(), l2.begin(), l2.end(), back_insert_iterator( l ) );
 	ENSURE_EQUALS( "set_union failed l1 + l2", l, l3 );
@@ -127,9 +127,9 @@ TUT_UNIT_TEST( 9, "set_union duplicates" )
 	int d1[] = { 1, 2, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 1, 2, 2, 3, 4, 5, 7 };
-	int_list_t l1( d1, d1 + countof ( d1 ) );
-	int_list_t l2( d2, d2 + countof ( d2 ) );
-	int_list_t l3( d3, d3 + countof ( d3 ) );
+	int_list_t l1( begin( d1 ), end( d1 ) );
+	int_list_t l2( begin( d2 ), end( d2 ) );
+	int_list_t l3( begin( d3 ), end( d3 ) );
 	int_list_t l;
 	set_union( l1.begin(), l1.end(), l2.begin(), l2.end(), back_insert_iterator( l ) );
 	ENSURE_EQUALS( "set_union failed l1 + l2", l, l3 );
@@ -142,9 +142,9 @@ TUT_UNIT_TEST( 10, "set_intersection unique" )
 	int d1[] = { 1, 2, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 2 };
-	int_list_t l1( d1, d1 + countof ( d1 ) );
-	int_list_t l2( d2, d2 + countof ( d2 ) );
-	int_list_t l3( d3, d3 + countof ( d3 ) );
+	int_list_t l1( begin( d1 ), end( d1 ) );
+	int_list_t l2( begin( d2 ), end( d2 ) );
+	int_list_t l3( begin( d3 ), end( d3 ) );
 	int_list_t l;
 	set_intersection( l1.begin(), l1.end(), l2.begin(), l2.end(), back_insert_iterator( l ) );
 	ENSURE_EQUALS( "set_intersection failed l1 * l2", l, l3 );
@@ -157,9 +157,9 @@ TUT_UNIT_TEST( 11, "set_intersection duplicates" )
 	int d1[] = { 1, 2, 2, 4 };
 	int d2[] = { 2, 2, 3, 5, 7 };
 	int d3[] = { 2, 2 };
-	int_list_t l1( d1, d1 + countof ( d1 ) );
-	int_list_t l2( d2, d2 + countof ( d2 ) );
-	int_list_t l3( d3, d3 + countof ( d3 ) );
+	int_list_t l1( begin( d1 ), end( d1 ) );
+	int_list_t l2( begin( d2 ), end( d2 ) );
+	int_list_t l3( begin( d3 ), end( d3 ) );
 	int_list_t l;
 	set_intersection( l1.begin(), l1.end(), l2.begin(), l2.end(), back_insert_iterator( l ) );
 	ENSURE_EQUALS( "set_intersection failed l1 * l2", l, l3 );
@@ -170,7 +170,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 12, "remove_if algorithm" )
 	int a[] = { 1, -2, 3, -4, 9, -8, 7, -6, 5 };
-	int_list_t l( a, a + countof( a ) );
+	int_list_t l( begin( a ), end( a ) );
 	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
 	cout << endl;
 	int_list_t::iterator end( remove_if( l.begin(), l.end(), bind2nd( less<int>(), 0 ) ) );
@@ -180,13 +180,13 @@ TUT_UNIT_TEST( 12, "remove_if algorithm" )
 	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
 	cout << endl;
 	int b[] = { 1, 3, 9, 7, 5 };
-	ENSURE( "remove_if failed", safe_equal( l.begin(), l.end(), b, b + countof( b ) ) );
+	ENSURE( "remove_if failed", safe_equal( l.begin(), l.end(), begin( b ), yaal::end( b ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 13, "transform" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
-	transform( a, a + countof( a ), back_insert_iterator( l ), compose1( bound_cast<int, double>(), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ) );
+	transform( begin( a ), end( a ), back_insert_iterator( l ), compose1( bound_cast<int, double>(), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ) );
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "transform failed", ss.string(), "1 2 3 4 5 6 7 8 9 10 " );
@@ -196,7 +196,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 14, "negate" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
-	transform( a, a + countof( a ), back_insert_iterator( l ), negate<int>() );
+	transform( begin( a ), end( a ), back_insert_iterator( l ), negate<int>() );
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "negate failed", ss.string(), "-1 -4 -9 -16 -25 -36 -49 -64 -81 -100 " );
@@ -206,7 +206,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 15, "compose1" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
-	transform( a, a + countof( a ), back_insert_iterator( l ), compose1( negate<int>(), bind1st( plus<int>(), 1 ) ) );
+	transform( begin( a ), end( a ), back_insert_iterator( l ), compose1( negate<int>(), bind1st( plus<int>(), 1 ) ) );
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "compose1 failed", ss.string(), "-2 -5 -10 -17 -26 -37 -50 -65 -82 -101 " );
@@ -216,7 +216,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 16, "remove_copy_if" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
+	remove_copy_if( begin( a ), end( a ), back_insert_iterator( l ),
 				bind1st( less<int>(), 30 ) );
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
@@ -227,7 +227,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 17, "compose2" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
+	remove_copy_if( begin( a ), end( a ), back_insert_iterator( l ),
 			compose2(
 				logical_and<bool>(),
 				bind1st( less<int>(), 30 ),
@@ -240,26 +240,26 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 18, "count" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 16, 49, 64, 81, 100, 16 };
-	ENSURE_EQUALS( "misscounted 16", count( a, a + countof( a ), 16 ), 3 );
-	ENSURE_EQUALS( "misscounted 16", count( a, a + countof( a ), 17 ), 0 );
+	ENSURE_EQUALS( "misscounted 16", count( begin( a ), end( a ), 16 ), 3 );
+	ENSURE_EQUALS( "misscounted 16", count( begin( a ), end( a ), 17 ), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 19, "count_if" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), bind2nd( less<int>(), 50 ) ), 7 );
-	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), bind2nd( less<int>(), 1 ) ), 0 );
+	ENSURE_EQUALS( "misscounted 16", count_if( begin( a ), end( a ), bind2nd( less<int>(), 50 ) ), 7 );
+	ENSURE_EQUALS( "misscounted 16", count_if( begin( a ), end( a ), bind2nd( less<int>(), 1 ) ), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 20, "not1" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), not1( bind2nd( less<int>(), 50 ) ) ), countof( a ) - 7 );
-	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), not1( bind2nd( less<int>(), 1 ) ) ), countof( a ) - 0 );
+	ENSURE_EQUALS( "misscounted 16", count_if( begin( a ), end( a ), not1( bind2nd( less<int>(), 50 ) ) ), countof( a ) - 7 );
+	ENSURE_EQUALS( "misscounted 16", count_if( begin( a ), end( a ), not1( bind2nd( less<int>(), 1 ) ) ), countof( a ) - 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 21, "not2" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
+	remove_copy_if( begin( a ), end( a ), back_insert_iterator( l ),
 			compose2(
 				not2(	logical_and<bool>() ),
 				bind1st( less<int>(), 30 ),
@@ -273,7 +273,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 22, "identity" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
+	remove_copy_if( begin( a ), end( a ), back_insert_iterator( l ),
 			compose2(
 				not2(	logical_and<bool>() ),
 				compose1( bind1st( less<int>(), 30 ), identity<int>() ),
@@ -287,7 +287,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 23, "ptr_fun" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
+	remove_copy_if( begin( a ), end( a ), back_insert_iterator( l ),
 			compose2(
 				not2(	logical_and<bool>() ),
 				compose1( bind1st( less<int>(), 5 ), compose1( compose1( bound_cast<int, double>(), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ), bound_cast<int, int>() ) ),
@@ -312,7 +312,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 25, "call in superposition" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ),
+	remove_copy_if( begin( a ), end( a ), back_insert_iterator( l ),
 			compose2(
 				logical_and<bool>(),
 				call( less<int>(), 30, _1 ),
@@ -412,16 +412,16 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 29, "replace" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
-	replace( a, a + countof ( a ), 36, 7 );
+	replace( begin( a ), end( a ), 36, 7 );
 	HStringStream ss;
-	copy( a, a + countof ( a ), stream_iterator( ss, " " ) );
+	copy( begin( a ), end( a ), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "replace failed", ss.string(), "7 1 4 9 16 25 7 49 64 81 100 7 " );
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 30, "for_each of for_each" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
-	int_array_t a0( a, a + countof ( a ) );
+	int_array_t a0( begin( a ), end( a ) );
 	typedef HArray<int_array_t> matrix_t;
 	matrix_t m;
 	m.push_back( a0 );

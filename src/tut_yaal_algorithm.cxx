@@ -769,7 +769,7 @@ TUT_UNIT_TEST( 11, "prev_permutation len = 5 (odd)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 12, "is_heap" )
-	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	std_vector_t v( begin( _testData_[0] ), end( _testData_[0] ) );
 	for ( int i( 2 ); i < countof ( _testData_[0] ); ++ i ) {
 #ifndef _MSC_VER
 		ENSURE_EQUALS( "stdext::is_heap false positive: " + lexical_cast<HString>( i ), stdext::is_heap( v.begin(), v.begin() + i ), false );
@@ -781,8 +781,8 @@ TUT_UNIT_TEST( 12, "is_heap" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 13, "push_heap" )
-	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	int_array_t a( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	std_vector_t v( begin( _testData_[0] ), end( _testData_[0] ) );
+	int_array_t a( begin( _testData_[0] ), end( _testData_[0] ) );
 	for ( int i( 2 ); i <= countof ( _testData_[0] ); ++ i ) {
 		ENSURE_EQUALS( "yaal::is_heap false positive: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), false );
 		std::push_heap( v.begin(), v.begin() + i );
@@ -793,8 +793,8 @@ TUT_UNIT_TEST( 13, "push_heap" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 14, "pop_heap" )
-	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	int_array_t a( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	std_vector_t v( begin( _testData_[0] ), end( _testData_[0] ) );
+	int_array_t a( begin( _testData_[0] ), end( _testData_[0] ) );
 	for ( int i( 2 ); i <= countof ( _testData_[0] ); ++ i ) {
 		ENSURE_EQUALS( "yaal::is_heap false positive: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), false );
 		std::push_heap( v.begin(), v.begin() + i );
@@ -812,8 +812,8 @@ TUT_UNIT_TEST( 14, "pop_heap" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 15, "make_heap" )
-	std_vector_t v( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	int_array_t a( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	std_vector_t v( begin( _testData_[0] ), end( _testData_[0] ) );
+	int_array_t a( begin( _testData_[0] ), end( _testData_[0] ) );
 	ENSURE_EQUALS( "yaal::is_heap false positive", yaal::is_heap( a.begin(), a.end() ), false );
 	std::make_heap( v.begin(), v.end() );
 	make_heap( a.begin(), a.end() );
@@ -994,13 +994,13 @@ TUT_UNIT_TEST( 24, "stable_sort" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 25, "distance" )
-	HArray<int> array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	HDeque<int> deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	HSet<int> set( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	HHashSet<int> hashSet( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HArray<int> array( begin( _testData_[0] ), end( _testData_[0] ) );
+	HDeque<int> deque( begin( _testData_[0] ), end( _testData_[0] ) );
+	HList<int> list( begin( _testData_[0] ), end( _testData_[0] ) );
+	HSet<int> set( begin( _testData_[0] ), end( _testData_[0] ) );
+	HHashSet<int> hashSet( begin( _testData_[0] ), end( _testData_[0] ) );
 	HRing<int> ring( ring::capacity( countof ( _testData_[0] ) * 2 ),
-		_testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		begin( _testData_[0] ), end( _testData_[0] ) );
 	using yaal::distance;
 	ENSURE_EQUALS( "distance on HArray<> failed", distance( array.begin(), array.end() ), countof ( _testData_[0] ) );
 	ENSURE_EQUALS( "distance on HDeque<> failed", distance( deque.begin(), deque.end() ), countof ( _testData_[0] ) );
@@ -1011,13 +1011,13 @@ TUT_UNIT_TEST( 25, "distance" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 26, "swap" )
-	HArray<int> array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	HDeque<int> deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	HSet<int> set( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	HHashSet<int> hashSet( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HArray<int> array( begin( _testData_[0] ), end( _testData_[0] ) );
+	HDeque<int> deque( begin( _testData_[0] ), end( _testData_[0] ) );
+	HList<int> list( begin( _testData_[0] ), end( _testData_[0] ) );
+	HSet<int> set( begin( _testData_[0] ), end( _testData_[0] ) );
+	HHashSet<int> hashSet( begin( _testData_[0] ), end( _testData_[0] ) );
 	HRing<int> ring( ring::capacity( countof ( _testData_[0] ) * 2 ),
-		_testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		begin( _testData_[0] ), end( _testData_[0] ) );
 	using yaal::distance;
 	HArray<int> array2;
 	HDeque<int> deque2;
@@ -1084,10 +1084,10 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 32, "lower_bound() on list" )
 	/* distinct */ {
-		int_list_t list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		int_list_t list( begin( _testData_[0] ), end( _testData_[0] ) );
 		for ( int i( _testData_[0][0] - 1 ); i <= _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
 			int_list_t::const_iterator it( lower_bound( list.begin(), list.end(), i ) );
-			int const* p( std::lower_bound( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+			int const* p( std::lower_bound( begin( _testData_[0] ), end( _testData_[0] ), i ) );
 			ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
 			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_list_t::const_iterator>( list.begin(), it ), std::distance( _testData_[0], p ) );
 		}
@@ -1097,10 +1097,10 @@ TUT_UNIT_TEST( 32, "lower_bound() on list" )
 		ENSURE( "lower_bound after range failed", last == list.end() );
 	}
 	/* repeating */ {
-		int_list_t list( _testData_[2], _testData_[2] + countof ( _testData_[2] ) );
+		int_list_t list( begin( _testData_[2] ), end( _testData_[2] ) );
 		for ( int i( _testData_[2][0] - 1 ); i <= _testData_[2][countof ( _testData_[2] ) - 1]; ++ i ) {
 			int_list_t::const_iterator it( lower_bound( list.begin(), list.end(), i ) );
-			int const* p( std::lower_bound( _testData_[2], _testData_[2] + countof ( _testData_[2] ), i ) );
+			int const* p( std::lower_bound( begin( _testData_[2] ), end( _testData_[2] ), i ) );
 			ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
 			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_list_t::const_iterator>( list.begin(), it ), std::distance( _testData_[2], p ) );
 		}
@@ -1116,10 +1116,10 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 33, "lower_bound() on array" )
 	/* distinct */ {
-		int_array_t array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		int_array_t array( begin( _testData_[0] ), end( _testData_[0] ) );
 		for ( int i( _testData_[0][0] - 1 ); i <= _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
 			int_array_t::const_iterator it( lower_bound( array.begin(), array.end(), i ) );
-			int const* p( std::lower_bound( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+			int const* p( std::lower_bound( begin( _testData_[0] ), end( _testData_[0] ), i ) );
 			ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
 			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_array_t::const_iterator>( array.begin(), it ), std::distance( _testData_[0], p ) );
 		}
@@ -1129,10 +1129,10 @@ TUT_UNIT_TEST( 33, "lower_bound() on array" )
 		ENSURE( "lower_bound after range failed", last == array.end() );
 	}
 	/* repeating */ {
-		int_array_t array( _testData_[2], _testData_[2] + countof ( _testData_[2] ) );
+		int_array_t array( begin( _testData_[2] ), end( _testData_[2] ) );
 		for ( int i( _testData_[2][0] - 1 ); i <= _testData_[2][countof ( _testData_[2] ) - 1]; ++ i ) {
 			int_array_t::const_iterator it( lower_bound( array.begin(), array.end(), i ) );
-			int const* p( std::lower_bound( _testData_[2], _testData_[2] + countof ( _testData_[2] ), i ) );
+			int const* p( std::lower_bound( begin( _testData_[2] ), end( _testData_[2] ), i ) );
 			ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
 			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_array_t::const_iterator>( array.begin(), it ), std::distance( _testData_[2], p ) );
 		}
@@ -1145,10 +1145,10 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 34, "upper_bound() on list" )
 	/* distinct */ {
-		int_list_t list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		int_list_t list( begin( _testData_[0] ), end( _testData_[0] ) );
 		for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
 			int_list_t::const_iterator it( upper_bound( list.begin(), list.end(), i ) );
-			int const* p( std::upper_bound( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+			int const* p( std::upper_bound( begin( _testData_[0] ), end( _testData_[0] ), i ) );
 			ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
 			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_list_t::const_iterator>( list.begin(), it ), std::distance( _testData_[0], p ) );
 		}
@@ -1158,10 +1158,10 @@ TUT_UNIT_TEST( 34, "upper_bound() on list" )
 		ENSURE( "lower_bound after range failed", last == list.end() );
 	}
 	/* repeating */ {
-		int_list_t list( _testData_[2], _testData_[2] + countof ( _testData_[2] ) );
+		int_list_t list( begin( _testData_[2] ), end( _testData_[2] ) );
 		for ( int i( _testData_[2][0] - 1 ); i < _testData_[2][countof ( _testData_[2] ) - 1]; ++ i ) {
 			int_list_t::const_iterator it( upper_bound( list.begin(), list.end(), i ) );
-			int const* p( std::upper_bound( _testData_[2], _testData_[2] + countof ( _testData_[2] ), i ) );
+			int const* p( std::upper_bound( begin( _testData_[2] ), end( _testData_[2] ), i ) );
 			ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
 			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_list_t::const_iterator>( list.begin(), it ), std::distance( _testData_[2], p ) );
 		}
@@ -1177,10 +1177,10 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 35, "upper_bound() on array" )
 	/* distinct */ {
-		int_array_t array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		int_array_t array( begin( _testData_[0] ), end( _testData_[0] ) );
 		for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
 			int_array_t::const_iterator it( upper_bound( array.begin(), array.end(), i ) );
-			int const* p( std::upper_bound( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+			int const* p( std::upper_bound( begin( _testData_[0] ), end( _testData_[0] ), i ) );
 			ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
 		}
 		int_array_t::const_iterator first( upper_bound( array.begin(), array.end(), _testData_[0][0] - 1 ) );
@@ -1189,10 +1189,10 @@ TUT_UNIT_TEST( 35, "upper_bound() on array" )
 		ENSURE( "upper_bound after range failed", last == array.end() );
 	}
 	/* repeating */ {
-		int_array_t array( _testData_[2], _testData_[2] + countof ( _testData_[2] ) );
+		int_array_t array( begin( _testData_[2] ), end( _testData_[2] ) );
 		for ( int i( _testData_[2][0] - 1 ); i < _testData_[2][countof ( _testData_[2] ) - 1]; ++ i ) {
 			int_array_t::const_iterator it( upper_bound( array.begin(), array.end(), i ) );
-			int const* p( std::upper_bound( _testData_[2], _testData_[2] + countof ( _testData_[2] ), i ) );
+			int const* p( std::upper_bound( begin( _testData_[2] ), end( _testData_[2] ), i ) );
 			ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
 			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_array_t::const_iterator>( array.begin(), it ), std::distance( _testData_[2], p ) );
 		}
@@ -1205,45 +1205,45 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 36, "binary_search() on list" )
 	/* distinct */ {
-		int_list_t list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		int_list_t list( begin( _testData_[0] ), end( _testData_[0] ) );
 		for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1] + 1; ++ i ) {
 			ENSURE_EQUALS( "binary_search on range failed",
 					binary_search( list.begin(), list.end(), i ),
-					std::binary_search( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+					std::binary_search( begin( _testData_[0] ), end( _testData_[0] ), i ) );
 		}
 	}
 	/* repeating */ {
-		int_list_t list( _testData_[2], _testData_[2] + countof ( _testData_[2] ) );
+		int_list_t list( begin( _testData_[2] ), end( _testData_[2] ) );
 		for ( int i( _testData_[2][0] - 1 ); i < _testData_[2][countof ( _testData_[2] ) - 1] + 1; ++ i ) {
 			ENSURE_EQUALS( "binary_search on range failed",
 					binary_search( list.begin(), list.end(), i ),
-					std::binary_search( _testData_[2], _testData_[2] + countof ( _testData_[2] ), i ) );
+					std::binary_search( begin( _testData_[2] ), end( _testData_[2] ), i ) );
 		}
 	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 37, "binary_search() on array" )
 	/* distinct */ {
-		int_array_t array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		int_array_t array( begin( _testData_[0] ), end( _testData_[0] ) );
 		for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1] + 1; ++ i ) {
 			ENSURE_EQUALS( "binary_search on range failed",
 					binary_search( array.begin(), array.end(), i ),
-					std::binary_search( _testData_[0], _testData_[0] + countof ( _testData_[0] ), i ) );
+					std::binary_search( begin( _testData_[0] ), end( _testData_[0] ), i ) );
 		}
 	}
 	/* repeating */ {
-		int_array_t array( _testData_[2], _testData_[2] + countof ( _testData_[2] ) );
+		int_array_t array( begin( _testData_[2] ), end( _testData_[2] ) );
 		for ( int i( _testData_[2][0] - 1 ); i < _testData_[2][countof ( _testData_[2] ) - 1] + 1; ++ i ) {
 			ENSURE_EQUALS( "binary_search on range failed",
 					binary_search( array.begin(), array.end(), i ),
-					std::binary_search( _testData_[2], _testData_[2] + countof ( _testData_[2] ), i ) );
+					std::binary_search( begin( _testData_[2] ), end( _testData_[2] ), i ) );
 		}
 	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 38, "is_sorted" )
 	ENSURE( "is_sorted on empty failed", is_sorted( _testData_[0], _testData_[0] ) );
-	ENSURE( "is_sorted on large failed", is_sorted( _testData_[0], _testData_[0] + countof ( _testData_[0] ) ) );
+	ENSURE( "is_sorted on large failed", is_sorted( begin( _testData_[0] ), end( _testData_[0] ) ) );
 	int left[] = { 2, 1, 3, 4, 5, 6, 7 };
 	int mid[] = { 1, 2, 3, 5, 4, 6, 7 };
 	int right[] = { 1, 2, 3, 4, 5, 7, 6 };

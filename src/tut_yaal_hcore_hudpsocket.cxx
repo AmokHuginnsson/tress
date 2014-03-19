@@ -199,7 +199,7 @@ TUT_UNIT_TEST( 3, "bind on reserved port." )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "bind on port in use." )
-	int const obscurePort( 61928 );
+	int const obscurePort( OBSCURE_PORT );
 	HUDPSocket block( obscurePort );
 	try {
 		HUDPSocket socket( obscurePort );
