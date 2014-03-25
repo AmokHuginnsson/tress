@@ -118,70 +118,98 @@ TUT_UNIT_TEST( 2, "HReal" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 30, "cycle on unnamed rules" )
-	/* simple grammars */ {
-		/*
-		 * If *::describe() is incorrectly implemented this test will overflow stack.
-		 */
-		HRule elem;
-		HRule mul( elem >> *( '*' >> elem ) );
-		HRule sum( mul >> *( '+' >> mul ) );
-		elem %= ( real | ( character( '(' ) >> sum >> ')' ) );
-		HExecutingParser ep1( elem );
-		HRule name( regex( "\\<a-z\\>" ) );
-		HRule eq( name >> '=' >> elem );
-		HExecutingParser ep2( eq );
-		cout << "elem:" << endl;
-		HGrammarDescription gd1( elem );
-		for ( HGrammarDescription::const_iterator it( gd1.begin() ), end( gd1.end() ); it != end; ++ it )
-			cout << *it << endl;
-		cout << "eq:" << endl;
-		HGrammarDescription gd2( eq );
-		for ( HGrammarDescription::const_iterator it( gd2.begin() ), end( gd2.end() ); it != end; ++ it )
-			cout << *it << endl;
+	/*
+	 * If *::describe() is incorrectly implemented this test will overflow stack.
+	 */
+	HRule elem;
+	HRule mul( elem >> *( '*' >> elem ) );
+	HRule sum( mul >> *( '+' >> mul ) );
+	elem %= ( real | ( character( '(' ) >> sum >> ')' ) );
+	HExecutingParser ep1( elem );
+	static char ep1desc[][50] = {
+		"A_ = real | '(' >> B_ >> *( '+' >> B_ ) >> ')'",
+		"B_ = A_ >> *( '*' >> A_ )"
+	};
+	cout << "elem:" << endl;
+	HGrammarDescription gd1( elem );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd1.begin() ), end( gd1.end() ); it != end; ++ it, ++ i ) {
+		ENSURE_EQUALS( "wrong desctiption", *it, ep1desc[i] );
+		cout << *it << endl;
 	}
-	/* complicated grammar */ {
-		HRule name( regex( "\\<[a-zA-Z_][a-zA-Z0-9_]*\\>" ) );
-		HRule expression;
-		HRule absoluteValue( '|' >> expression >> '|' );
-		HRule parenthesis( '(' >> expression >> ')' );
-		HRule argList( expression >> ( * ( ',' >> expression ) ) );
-		HRule functionCall( name >> '(' >> -argList >> ')' );
-		HRule atom( absoluteValue | parenthesis | functionCall | real | name );
-		HRule power( atom >> ( * ( '^' >> atom ) ) );
-		HRule multiplication( power >> ( * ( '*' >> power ) ) );
-		HRule sum( multiplication >> ( * ( '+' >> multiplication ) ) );
-		HRule value( sum );
-		HRule assignment( *( name >> '=' ) >> value );
-		expression %= assignment;
-		HRule booleanExpression;
-		HRule booleanValue( executing_parser::constant( "true" ) | executing_parser::constant( "false" ) | executing_parser::constant( '(' ) >> booleanExpression >> ')' );
-		HRule booleanEquals( expression >> "==" >> expression );
-		HRule booleanNotEquals( expression >> "!=" >> expression );
-		HRule booleanLess( expression >> "<" >> expression );
-		HRule booleanGreater( expression >> ">" >> expression );
-		HRule booleanLessEq( expression >> "<=" >> expression );
-		HRule booleanGreaterEq( expression >> ">=" >> expression );
-		HRule booleanAnd( booleanValue >> "&&" >> booleanValue );
-		HRule booleanOr( booleanValue >> "||" >> booleanValue );
-		HRule booleanXor( booleanValue >> "^^" >> booleanValue );
-		HRule booleanNot( executing_parser::constant( '!' ) >> booleanValue );
-		booleanExpression %= ( booleanEquals | booleanNotEquals | booleanLess | booleanGreater | booleanLessEq | booleanGreaterEq | booleanAnd | booleanOr | booleanXor | booleanNot );
-		HRule expressionList( + ( expression >> ';' ) );
-		HRule scope;
-		HRule ifStatement( executing_parser::constant( "if" ) >> '(' >> booleanExpression >> ')' >> scope >> -( executing_parser::constant( "else" ) >> scope ) );
-		HRule whileStatement( executing_parser::constant( "while" ) >> '(' >> booleanExpression >> ')' >> scope );
-		HRule caseStatement( executing_parser::constant( "case" ) >> '(' >> integer >> ')' >> ':' >> scope );
-		HRule switchStatement( executing_parser::constant( "switch" ) >> '(' >> expression >> ')' >> '{' >> +caseStatement >> '}' );
-		HRule returnStatement( executing_parser::constant( "return" ) >> '(' >> expression >> ')' );
-		HRule statement( ifStatement | whileStatement | switchStatement | returnStatement | expressionList );
-		scope %= ( '{' >> *statement >> '}' );
-		HRule nameList( name >> ( * ( ',' >> name ) ) );
-		HRule functionDefinition( name >> '(' >> -nameList >> ')' >> scope );
-		HRule hg( * functionDefinition );
-		cout << "hg:" << endl;
-		HGrammarDescription gd( hg );
-		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it )
-			cout << *it << endl;
+	HRule name( regex( "\\<a-z\\>" ) );
+	HRule eq( name >> '=' >> elem );
+	HExecutingParser ep2( eq );
+	char ep2desc[][80] = {
+		"A_ = regex( \"\\<a-z\\>\" ) >> '=' >> real | '(' >> B_ >> *( '+' >> B_ ) >> ')'",
+		"B_ = A_ >> *( '*' >> A_ )"
+	};
+	cout << "eq:" << endl;
+	HGrammarDescription gd2( eq );
+	i = 0;
+	for ( HGrammarDescription::const_iterator it( gd2.begin() ), end( gd2.end() ); it != end; ++ it, ++ i ) {
+		ENSURE_EQUALS( "wrong desctiption", *it, ep2desc[i] );
+		cout << *it << endl;
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 31, "unnamed HHuginn grammar" )
+	HRule name( regex( "\\<[a-zA-Z_][a-zA-Z0-9_]*\\>" ) );
+	HRule expression;
+	HRule absoluteValue( '|' >> expression >> '|' );
+	HRule parenthesis( '(' >> expression >> ')' );
+	HRule argList( expression >> ( * ( ',' >> expression ) ) );
+	HRule functionCall( name >> '(' >> -argList >> ')' );
+	HRule atom( absoluteValue | parenthesis | functionCall | real | name );
+	HRule power( atom >> ( * ( '^' >> atom ) ) );
+	HRule multiplication( power >> ( * ( '*' >> power ) ) );
+	HRule sum( multiplication >> ( * ( '+' >> multiplication ) ) );
+	HRule value( sum );
+	HRule assignment( *( name >> '=' ) >> value );
+	expression %= assignment;
+	HRule booleanExpression;
+	HRule booleanValue( executing_parser::constant( "true" ) | executing_parser::constant( "false" ) | executing_parser::constant( '(' ) >> booleanExpression >> ')' );
+	HRule booleanEquals( expression >> "==" >> expression );
+	HRule booleanNotEquals( expression >> "!=" >> expression );
+	HRule booleanLess( expression >> "<" >> expression );
+	HRule booleanGreater( expression >> ">" >> expression );
+	HRule booleanLessEq( expression >> "<=" >> expression );
+	HRule booleanGreaterEq( expression >> ">=" >> expression );
+	HRule booleanAnd( booleanValue >> "&&" >> booleanValue );
+	HRule booleanOr( booleanValue >> "||" >> booleanValue );
+	HRule booleanXor( booleanValue >> "^^" >> booleanValue );
+	HRule booleanNot( executing_parser::constant( '!' ) >> booleanValue );
+	booleanExpression %= ( booleanEquals | booleanNotEquals | booleanLess | booleanGreater | booleanLessEq | booleanGreaterEq | booleanAnd | booleanOr | booleanXor | booleanNot );
+	HRule expressionList( + ( expression >> ';' ) );
+	HRule scope;
+	HRule ifStatement( executing_parser::constant( "if" ) >> '(' >> booleanExpression >> ')' >> scope >> -( executing_parser::constant( "else" ) >> scope ) );
+	HRule whileStatement( executing_parser::constant( "while" ) >> '(' >> booleanExpression >> ')' >> scope );
+	HRule caseStatement( executing_parser::constant( "case" ) >> '(' >> integer >> ')' >> ':' >> scope );
+	HRule switchStatement( executing_parser::constant( "switch" ) >> '(' >> expression >> ')' >> '{' >> +caseStatement >> '}' );
+	HRule returnStatement( executing_parser::constant( "return" ) >> '(' >> expression >> ')' );
+	HRule statement( ifStatement | whileStatement | switchStatement | returnStatement | expressionList );
+	scope %= ( '{' >> *statement >> '}' );
+	HRule nameList( name >> ( * ( ',' >> name ) ) );
+	HRule functionDefinition( name >> '(' >> -nameList >> ')' >> scope );
+	HRule hg( * functionDefinition );
+	char const huginnDesc[][320] = {
+		"A_ = *( B_ >> '(' >> -( B_ >> *( ',' >> B_ ) ) >> ')' >> '{' >> *( \"if\" >> '(' >> C_ >> ')' >> D_ >> -( \"else\" >> D_ ) | \"while\" >> '(' >> C_ >> ')' >> D_ | \"switch\" >> '(' >> E_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> D_ ) >> '}' | \"return\" >> '(' >> E_ >> ')' | +( E_ >> ';' ) ) >> '}' )",
+		"B_ = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
+		"C_ = E_ >> \"==\" >> E_ | E_ >> \"!=\" >> E_ | E_ >> \"<\" >> E_ | E_ >> \">\" >> E_ | E_ >> \"<=\" >> E_ | E_ >> \">=\" >> E_ | F_ >> \"&&\" >> F_ | F_ >> \"||\" >> F_ | F_ >> \"^^\" >> F_ | '!' >> F_",
+		"E_ = *( B_ >> '=' ) >> G_ >> *( '+' >> G_ )",
+		"F_ = \"true\" | \"false\" | '(' >> H_ >> ')'",
+		"G_ = I_ >> *( '*' >> I_ )",
+		"I_ = J_ >> *( '^' >> J_ )",
+		"J_ = '|' >> K_ >> '|' | '(' >> K_ >> ')' | B_ >> '(' >> -( K_ >> *( ',' >> K_ ) ) >> ')' | real | B_"
+	};
+	cout << "hg:" << endl;
+	HGrammarDescription gd( hg );
+	static int const COUNT( static_cast<int>( end( huginnDesc ) - begin( huginnDesc ) ) );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		if ( i < COUNT )
+			ENSURE_EQUALS( "wrong grammar description", *it, huginnDesc[i] );
+		cout << *it << endl;
 	}
 TUT_TEARDOWN()
 
