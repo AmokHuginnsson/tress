@@ -88,28 +88,28 @@ TUT_UNIT_TEST( 2, "HReal" )
 		HExecutingParser ep( real[HBoundCall<void ( double )>( call( &setter<double>::set, ref( val ), _1 ) )] );
 		ENSURE( "HReal failed to parse correct input (double).", !ep( "7" ) );
 		ep();
-		ENSURE_DISTANCE( "double value not ser by ExecutingParser.", static_cast<double long>( val ), 7.l, epsilon );
+		ENSURE_DISTANCE( "double value not set by ExecutingParser.", static_cast<double long>( val ), 7.l, epsilon );
 	}
 	/* double long */ {
 		double long val( 0 );
 		HExecutingParser ep( real[HBoundCall<void ( double long )>( call( &setter<double long>::set, ref( val ), _1 ) )] );
 		ENSURE( "HReal failed to parse correct input (double long).", !ep( "7" ) );
 		ep();
-		ENSURE_DISTANCE( "double long value not ser by ExecutingParser.", val, 7.l, epsilon );
+		ENSURE_DISTANCE( "double long value not set by ExecutingParser.", val, 7.l, epsilon );
 	}
 	/* HNumber */ {
 		HNumber val( 0 );
 		HExecutingParser ep( real[HBoundCall<void ( HNumber const& )>( call( &setter<HNumber, HNumber const&>::set, ref( val ), _1 ) )] );
 		ENSURE( "HReal failed to parse correct input (HNumber).", !ep( "7" ) );
 		ep();
-		ENSURE_EQUALS( "HNumber value not ser by ExecutingParser.", val, 7 );
+		ENSURE_EQUALS( "HNumber value not set by ExecutingParser.", val, 7 );
 	}
 	/* HString */ {
 		hcore::HString val( 0 );
 		HExecutingParser ep( real[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
 		ENSURE( "HReal failed to parse correct input (HString).", !ep( "7" ) );
 		ep();
-		ENSURE_EQUALS( "HString value not ser by ExecutingParser.", val, "7" );
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "7" );
 	}
 	/* bad real */ {
 		HExecutingParser ep( real );
@@ -117,7 +117,7 @@ TUT_UNIT_TEST( 2, "HReal" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 30, "cycle on unnamed rules" )
+TUT_UNIT_TEST( 30, "simple recursive rule" )
 	/*
 	 * If *::describe() is incorrectly implemented this test will overflow stack.
 	 */
@@ -126,34 +126,42 @@ TUT_UNIT_TEST( 30, "cycle on unnamed rules" )
 	HRule sum( mul >> *( '+' >> mul ) );
 	elem %= ( real | ( character( '(' ) >> sum >> ')' ) );
 	HExecutingParser ep1( elem );
-	static char ep1desc[][50] = {
+	static char epDesc[][50] = {
 		"A_ = real | '(' >> B_ >> *( '+' >> B_ ) >> ')'",
 		"B_ = A_ >> *( '*' >> A_ )"
 	};
 	cout << "elem:" << endl;
-	HGrammarDescription gd1( elem );
+	HGrammarDescription gd( elem );
 	int i( 0 );
-	for ( HGrammarDescription::const_iterator it( gd1.begin() ), end( gd1.end() ); it != end; ++ it, ++ i ) {
-		ENSURE_EQUALS( "wrong desctiption", *it, ep1desc[i] );
-		cout << *it << endl;
-	}
-	HRule name( regex( "\\<a-z\\>" ) );
-	HRule eq( name >> '=' >> elem );
-	HExecutingParser ep2( eq );
-	char ep2desc[][80] = {
-		"A_ = regex( \"\\<a-z\\>\" ) >> '=' >> real | '(' >> B_ >> *( '+' >> B_ ) >> ')'",
-		"B_ = A_ >> *( '*' >> A_ )"
-	};
-	cout << "eq:" << endl;
-	HGrammarDescription gd2( eq );
-	i = 0;
-	for ( HGrammarDescription::const_iterator it( gd2.begin() ), end( gd2.end() ); it != end; ++ it, ++ i ) {
-		ENSURE_EQUALS( "wrong desctiption", *it, ep2desc[i] );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE_EQUALS( "wrong description", *it, epDesc[i] );
 		cout << *it << endl;
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 31, "unnamed HHuginn grammar" )
+TUT_UNIT_TEST( 31, "non-trivial recursive rule" )
+	HRule elem;
+	HRule mul( elem >> *( '*' >> elem ) );
+	HRule sum( mul >> *( '+' >> mul ) );
+	elem %= ( real | ( character( '(' ) >> sum >> ')' ) );
+	HRule name( regex( "\\<a-z\\>" ) );
+	HRule eq( name >> '=' >> elem );
+	HExecutingParser ep2( eq );
+	char epDesc[][80] = {
+		"A_ = regex( \"\\<a-z\\>\" ) >> '=' >> B_",
+		"B_ = real | '(' >> C_ >> *( '+' >> C_ ) >> ')'",
+		"C_ = B_ >> *( '*' >> B_ )"
+	};
+	cout << "eq:" << endl;
+	HGrammarDescription gd( eq );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE_EQUALS( "wrong description", *it, epDesc[i] );
+		cout << *it << endl;
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 32, "unnamed HHuginn grammar" )
 	HRule name( regex( "\\<[a-zA-Z_][a-zA-Z0-9_]*\\>" ) );
 	HRule expression;
 	HRule absoluteValue( '|' >> expression >> '|' );
@@ -193,11 +201,12 @@ TUT_UNIT_TEST( 31, "unnamed HHuginn grammar" )
 	HRule functionDefinition( name >> '(' >> -nameList >> ')' >> scope );
 	HRule hg( * functionDefinition );
 	char const huginnDesc[][320] = {
-		"A_ = *( B_ >> '(' >> -( B_ >> *( ',' >> B_ ) ) >> ')' >> '{' >> *( \"if\" >> '(' >> C_ >> ')' >> D_ >> -( \"else\" >> D_ ) | \"while\" >> '(' >> C_ >> ')' >> D_ | \"switch\" >> '(' >> E_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> D_ ) >> '}' | \"return\" >> '(' >> E_ >> ')' | +( E_ >> ';' ) ) >> '}' )",
+		"A_ = *( B_ >> '(' >> -( B_ >> *( ',' >> B_ ) ) >> ')' >> C_ )",
 		"B_ = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"C_ = E_ >> \"==\" >> E_ | E_ >> \"!=\" >> E_ | E_ >> \"<\" >> E_ | E_ >> \">\" >> E_ | E_ >> \"<=\" >> E_ | E_ >> \">=\" >> E_ | F_ >> \"&&\" >> F_ | F_ >> \"||\" >> F_ | F_ >> \"^^\" >> F_ | '!' >> F_",
+		"C_ = '{' >> *( \"if\" >> '(' >> D_ >> ')' >> C_ >> -( \"else\" >> C_ ) | \"while\" >> '(' >> D_ >> ')' >> C_ | \"switch\" >> '(' >> E_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> C_ ) >> '}' | \"return\" >> '(' >> E_ >> ')' | +( E_ >> ';' ) ) >> '}'",
+		"D_ = E_ >> \"==\" >> E_ | E_ >> \"!=\" >> E_ | E_ >> \"<\" >> E_ | E_ >> \">\" >> E_ | E_ >> \"<=\" >> E_ | E_ >> \">=\" >> E_ | F_ >> \"&&\" >> F_ | F_ >> \"||\" >> F_ | F_ >> \"^^\" >> F_ | '!' >> F_",
 		"E_ = *( B_ >> '=' ) >> G_ >> *( '+' >> G_ )",
-		"F_ = \"true\" | \"false\" | '(' >> C_ >> ')'",
+		"F_ = \"true\" | \"false\" | '(' >> D_ >> ')'",
 		"G_ = H_ >> *( '*' >> H_ )",
 		"H_ = I_ >> *( '^' >> I_ )",
 		"I_ = '|' >> E_ >> '|' | '(' >> E_ >> ')' | B_ >> '(' >> -( E_ >> *( ',' >> E_ ) ) >> ')' | real | B_"
