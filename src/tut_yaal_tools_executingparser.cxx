@@ -75,6 +75,15 @@ TUT_UNIT_TEST( 1, "empty parser" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 2, "Named rule name ends with underscore" )
+	try {
+		HRule r( "A_" );
+		FAIL( "explicit rule name with underscore at the end created" );
+	} catch ( HNamedRuleException const& ) {
+		/* ok */
+	}
+TUT_TEARDOWN()
+
 template<typename T, typename RT = T>
 struct setter {
 	static void set( T& lval_, RT rval_ ) {
@@ -82,7 +91,7 @@ struct setter {
 	}
 };
 
-TUT_UNIT_TEST( 2, "HReal" )
+TUT_UNIT_TEST( 3, "HReal" )
 	/* double */ {
 		double val( 0 );
 		HExecutingParser ep( real[HBoundCall<void ( double )>( call( &setter<double>::set, ref( val ), _1 ) )] );
