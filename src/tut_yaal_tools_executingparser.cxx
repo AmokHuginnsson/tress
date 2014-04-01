@@ -95,34 +95,69 @@ TUT_UNIT_TEST( 3, "HReal" )
 	/* double */ {
 		double val( 0 );
 		HExecutingParser ep( real[HBoundCall<void ( double )>( call( &setter<double>::set, ref( val ), _1 ) )] );
-		ENSURE( "HReal failed to parse correct input (double).", !ep( "7" ) );
+		ENSURE( "HReal failed to parse correct input (double).", !ep( "3.14" ) );
 		ep();
-		ENSURE_DISTANCE( "double value not set by ExecutingParser.", static_cast<double long>( val ), 7.l, epsilon );
+		ENSURE_DISTANCE( "double value not set by ExecutingParser.", static_cast<double long>( val ), 3.14l, epsilon );
 	}
 	/* double long */ {
 		double long val( 0 );
 		HExecutingParser ep( real[HBoundCall<void ( double long )>( call( &setter<double long>::set, ref( val ), _1 ) )] );
-		ENSURE( "HReal failed to parse correct input (double long).", !ep( "7" ) );
+		ENSURE( "HReal failed to parse correct input (double long).", !ep( "3.14" ) );
 		ep();
-		ENSURE_DISTANCE( "double long value not set by ExecutingParser.", val, 7.l, epsilon );
+		ENSURE_DISTANCE( "double long value not set by ExecutingParser.", val, 3.14l, epsilon );
 	}
 	/* HNumber */ {
 		HNumber val( 0 );
 		HExecutingParser ep( real[HBoundCall<void ( HNumber const& )>( call( &setter<HNumber, HNumber const&>::set, ref( val ), _1 ) )] );
-		ENSURE( "HReal failed to parse correct input (HNumber).", !ep( "7" ) );
+		ENSURE( "HReal failed to parse correct input (HNumber).", !ep( "3.141592653589793" ) );
+		ep();
+		ENSURE_EQUALS( "HNumber value not set by ExecutingParser.", val, "3.141592653589793" );
+	}
+	/* HString */ {
+		hcore::HString val( 0 );
+		HExecutingParser ep( real[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		ENSURE( "HReal failed to parse correct input (HString).", !ep( "3.141592653589793" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "3.141592653589793" );
+	}
+	/* bad real */ {
+		HExecutingParser ep( real );
+		ENSURE_NOT( "Invalid input parsed by HReal", !ep( "bad" ) );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "HInteger" )
+	/* double */ {
+		int val( 0 );
+		HExecutingParser ep( integer[HBoundCall<void ( int )>( call( &setter<int>::set, ref( val ), _1 ) )] );
+		ENSURE( "HInteger failed to parse correct input (int).", !ep( "7" ) );
+		ep();
+		ENSURE_EQUALS( "int value not set by ExecutingParser.", val, 7 );
+	}
+	/* double long */ {
+		int long val( 0 );
+		HExecutingParser ep( integer[HBoundCall<void ( int long )>( call( &setter<int long>::set, ref( val ), _1 ) )] );
+		ENSURE( "HInteger failed to parse correct input (int long).", !ep( "7" ) );
+		ep();
+		ENSURE_EQUALS( "int long value not set by ExecutingParser.", val, 7l );
+	}
+	/* HNumber */ {
+		HNumber val( 0 );
+		HExecutingParser ep( integer[HBoundCall<void ( HNumber const& )>( call( &setter<HNumber, HNumber const&>::set, ref( val ), _1 ) )] );
+		ENSURE( "HInteger failed to parse correct input (HNumber).", !ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "HNumber value not set by ExecutingParser.", val, 7 );
 	}
 	/* HString */ {
 		hcore::HString val( 0 );
-		HExecutingParser ep( real[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
-		ENSURE( "HReal failed to parse correct input (HString).", !ep( "7" ) );
+		HExecutingParser ep( integer[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		ENSURE( "HInteger failed to parse correct input (HString).", !ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "7" );
 	}
-	/* bad real */ {
-		HExecutingParser ep( real );
-		ENSURE_NOT( "Invalid input parsed by HReal", !ep( "bad" ) );
+	/* bad integer */ {
+		HExecutingParser ep( integer );
+		ENSURE_NOT( "Invalid input parsed by HInteger", !ep( "bad" ) );
 	}
 TUT_TEARDOWN()
 
