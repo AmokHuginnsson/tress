@@ -127,14 +127,14 @@ TUT_UNIT_TEST( 3, "HReal" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "HInteger" )
-	/* double */ {
+	/* int */ {
 		int val( 0 );
 		HExecutingParser ep( integer[HBoundCall<void ( int )>( call( &setter<int>::set, ref( val ), _1 ) )] );
 		ENSURE( "HInteger failed to parse correct input (int).", !ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "int value not set by ExecutingParser.", val, 7 );
 	}
-	/* double long */ {
+	/* int long */ {
 		int long val( 0 );
 		HExecutingParser ep( integer[HBoundCall<void ( int long )>( call( &setter<int long>::set, ref( val ), _1 ) )] );
 		ENSURE( "HInteger failed to parse correct input (int long).", !ep( "7" ) );
@@ -159,6 +159,20 @@ TUT_UNIT_TEST( 4, "HInteger" )
 		HExecutingParser ep( integer );
 		ENSURE_NOT( "Invalid input parsed by HInteger", !ep( "bad" ) );
 	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 5, "HCharacter" )
+	/* int */ {
+		char val( 0 );
+		HExecutingParser ep( character[HBoundCall<void ( char )>( call( &setter<char>::set, ref( val ), _1 ) )] );
+		ENSURE( "HCharacter failed to parse correct input (char).", !ep( "a" ) );
+		ep();
+		ENSURE_EQUALS( "int value not set by ExecutingParser.", val, 'a' );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 6, "HString" )
+
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 30, "simple recursive rule" )
