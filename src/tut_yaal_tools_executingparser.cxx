@@ -162,17 +162,38 @@ TUT_UNIT_TEST( 4, "HInteger" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "HCharacter" )
-	/* int */ {
+	/* char (any) */ {
 		char val( 0 );
 		HExecutingParser ep( character[HBoundCall<void ( char )>( call( &setter<char>::set, ref( val ), _1 ) )] );
-		ENSURE( "HCharacter failed to parse correct input (char).", !ep( "a" ) );
+		ENSURE( "HCharacter failed to parse correct input.", !ep( "a" ) );
 		ep();
-		ENSURE_EQUALS( "int value not set by ExecutingParser.", val, 'a' );
+		ENSURE_EQUALS( "char value not set by ExecutingParser.", val, 'a' );
+	}
+	/* char (specific ok) */ {
+		char val( 0 );
+		HExecutingParser ep( character( 'a' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( val ), _1 ) )] );
+		ENSURE( "HCharacter failed to parse correct input.", !ep( "a" ) );
+	}
+	/* char (specific fail) */ {
+		char val( 0 );
+		HExecutingParser ep( character( 'X' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( val ), _1 ) )] );
+		ENSURE_NOT( "HCharacter parsed invalid input.", !ep( "a" ) );
 	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "HString" )
-
+	/* ok */ {
+		hcore::HString val;
+		HExecutingParser ep( string( "ala" )[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		ENSURE( "HString failed to parse correct input.", !ep( "ala" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
+	}
+	/* fail */ {
+		hcore::HString val;
+		HExecutingParser ep( string( "XXX" )[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		ENSURE_NOT( "HString parsed invalid input.", !ep( "ala" ) );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 30, "simple recursive rule" )
