@@ -196,6 +196,28 @@ TUT_UNIT_TEST( 6, "HString" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 7, "HRegex" )
+	/* ok */ {
+		hcore::HString val;
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		ENSURE( "HRegex failed to parse correct input.", !ep( "12.345" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "12.34" );
+	}
+	/* ok full */ {
+		hcore::HString val;
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		ENSURE( "HRegex failed to parse correct input.", !ep( "12.34" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "12.34" );
+	}
+	/* fail */ {
+		hcore::HString val;
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		ENSURE_NOT( "HRegex parsed invalid input.", !ep( "12.3a" ) );
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 30, "simple recursive rule" )
 	/*
 	 * If *::describe() is incorrectly implemented this test will overflow stack.
