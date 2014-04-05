@@ -43,8 +43,29 @@ TUT_SIMPLE_MOCK( tut_yaal_hcore_htime );
 TUT_TEST_GROUP( tut_yaal_hcore_htime, "yaal::hcore::HTime" );
 
 TUT_UNIT_TEST( 1, "get current time" )
-	cout << now_local() << endl;
-	cout << now_utc() << endl;
+	HTime nowLocal( now_local() );
+	HTime nowUTC( now_utc() );
+	int long now( time( NULL ) );
+	int long nowLocalRaw( nowLocal.raw() );
+	int long nowUTCRaw( nowUTC.raw() );
+	nowLocalRaw -= ( nowLocalRaw % 100 );
+	nowUTCRaw -= ( nowUTCRaw % 100 );
+	now -= ( now % 100 );
+	ENSURE_EQUALS( "raw local differs from raw UTC", nowLocalRaw, nowUTCRaw );
+	ENSURE_EQUALS( "current time is not real", nowLocalRaw, now );
+	clog << nowLocal << endl;
+	clog << nowUTC << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "time from string" )
+	HTime bday( "1978-05-24 23:30:00" );
+	ENSURE_EQUALS( "bad year from string", bday.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from string", bday.get_month(), 5 );
+	ENSURE_EQUALS( "bad day from string", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from string", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from string", bday.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from string", bday.get_second(), 0 );
+	clog << bday << endl;
 TUT_TEARDOWN()
 
 }
