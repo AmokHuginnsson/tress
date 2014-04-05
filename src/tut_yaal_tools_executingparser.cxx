@@ -298,9 +298,9 @@ TUT_UNIT_TEST( 32, "unnamed HHuginn grammar" )
 	scope %= ( '{' >> *statement >> '}' );
 	HRule nameList( name >> ( * ( ',' >> name ) ) );
 	HRule functionDefinition( name >> '(' >> -nameList >> ')' >> scope );
-	HRule hg( * functionDefinition );
+	HRule hg( + functionDefinition );
 	char const huginnDesc[][320] = {
-		"A_ = *( B_ >> '(' >> -( B_ >> *( ',' >> B_ ) ) >> ')' >> C_ )",
+		"A_ = +( B_ >> '(' >> -( B_ >> *( ',' >> B_ ) ) >> ')' >> C_ )",
 		"B_ = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"C_ = '{' >> *( \"if\" >> '(' >> D_ >> ')' >> C_ >> -( \"else\" >> C_ ) | \"while\" >> '(' >> D_ >> ')' >> C_ | \"switch\" >> '(' >> E_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> C_ ) >> '}' | \"return\" >> '(' >> E_ >> ')' | +( E_ >> ';' ) ) >> '}'",
 		"D_ = E_ >> \"==\" >> E_ | E_ >> \"!=\" >> E_ | E_ >> \"<\" >> E_ | E_ >> \">\" >> E_ | E_ >> \"<=\" >> E_ | E_ >> \">=\" >> E_ | F_ >> \"&&\" >> F_ | F_ >> \"||\" >> F_ | F_ >> \"^^\" >> F_ | '!' >> F_",
