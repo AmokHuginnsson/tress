@@ -27,10 +27,12 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/htuple.hxx>
-#include <yaal/hcore/htime.hxx>
-#include <yaal/tools/streamtools.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
+
+#include <yaal/hcore/hnumber.hxx>
+#include <yaal/hcore/htime.hxx>
+#include <yaal/tools/streamtools.hxx>
 
 using namespace tut;
 using namespace yaal;

@@ -68,5 +68,76 @@ TUT_UNIT_TEST( 2, "time from string" )
 	clog << bday << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 3, "time explicit, each part separetely" )
+	HTime bday( 1978, 5, 24, 23, 30, 0 );
+	ENSURE_EQUALS( "bad year from set", bday.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from set", bday.get_month(), 5 );
+	ENSURE_EQUALS( "bad day from set", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from set", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from set", bday.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from set", bday.get_second(), 0 );
+	clog << bday << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "time from raw" )
+	HTime bday( 1978, 5, 24, 23, 30, 0 );
+	HTime t( now_local() );
+	t.set( bday.raw() );
+	ENSURE_EQUALS( "bad year from raw", t.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from raw", t.get_month(), 5 );
+	ENSURE_EQUALS( "bad day from raw", t.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from raw", t.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from raw", t.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from raw", t.get_second(), 0 );
+	clog << t << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 5, "swap" )
+	HTime now( now_local() );
+	HTime bday( 1978, 5, 24, 23, 30, 0 );
+	HTime nowCopy( now );
+	HTime bdayCopy( bday );
+	bday.swap( now );
+	ENSURE_EQUALS( "swap failed", bday, nowCopy );
+	ENSURE_EQUALS( "swap failed2", now, bdayCopy );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 6, "assignment" )
+	HTime now( now_local() );
+	HTime bday( 1978, 5, 24, 23, 30, 0 );
+	now = bday;
+	ENSURE_EQUALS( "bad year from assignment", now.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from assignment", now.get_month(), 5 );
+	ENSURE_EQUALS( "bad day from assignment", now.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from assignment", now.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from assignment", now.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from assignment", now.get_second(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 7, "time diff" )
+	HTime bday( 1978, 5, 24, 23, 30, 0 );
+	HTime consciousness( 1989, 8, 24, 14, 30, 0 );
+	HTime idle( consciousness - bday );
+	clog << idle << endl;
+	/*
+	 * Read comment in htime.hxx header.
+	 */
+	ENSURE_EQUALS( "bad year from diff", idle.get_year() - 1970, 11 );
+	ENSURE_EQUALS( "bad month from diff", idle.get_month() - 1, 3 );
+	ENSURE_EQUALS( "bad day from diff", idle.get_day(), 2 );
+	ENSURE_EQUALS( "bad hour from diff", idle.get_hour(), 15 );
+	ENSURE_EQUALS( "bad minute from diff", idle.get_minute(), 0 );
+	ENSURE_EQUALS( "bad seconds from diff", idle.get_second(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 8, "set_format" )
+	HTime bday( 1978, 5, 24, 23, 30, 0 );
+	HString bdayBadFromat( bday.string() );
+	bday.set_format( _iso8601TimeFormat_ );
+	HString bdayString( bday.string() );
+	ENSURE( "test setup fail", bdayString != bdayBadFromat );
+	ENSURE_EQUALS( "set_format fail", bdayString, "1978-05-24 23:30:00" );
+TUT_TEARDOWN()
+
 }
 

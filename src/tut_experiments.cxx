@@ -31,6 +31,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 #include <yaal/hconsole/hterminal.hxx>
+#include <yaal/hcore/hnumber.hxx>
 
 using namespace tut;
 using namespace yaal;

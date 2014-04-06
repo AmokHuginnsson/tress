@@ -45,8 +45,6 @@ Copyright:
 #include <yaal/hcore/hset.hxx>
 #include <yaal/hcore/hlist.hxx>
 #include <yaal/hcore/hstaticarray.hxx>
-#include <yaal/hcore/hcomplex.hxx>
-#include <yaal/hcore/hnumber.hxx>
 #include <yaal/hcore/hvector.hxx>
 #include <yaal/hcore/hmatrix.hxx>
 #include <yaal/hcore/hclock.hxx>
@@ -120,6 +118,14 @@ bool operator == ( yaal::hcore::HList<T1> const& l, std::list<T2> const& sl ) {
 	return ( yaal::safe_equal( l.begin(), l.end(), sl.begin(), sl.end() ) );
 }
 
+namespace yaal {
+namespace hcore {
+class HComplex;
+class HNumber;
+class HTime;
+}
+}
+
 template<typename T1, typename T2>
 bool operator == ( yaal::hcore::HList<T1> const& l, std::vector<T2> const& sl ) {
 	return ( yaal::safe_equal( l.begin(), l.end(), sl.begin(), sl.end() ) );
@@ -133,6 +139,7 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface&, str
 std::ostream& operator << ( std::ostream&, yaal::hcore::HComplex const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HNumber const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HString const& );
+std::ostream& operator << ( std::ostream&, yaal::hcore::HTime const& );
 template<typename first_t, typename second_t>
 std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second_t> const& p ) {
 	os << "pair(" << p.first << "," << p.second << ")";

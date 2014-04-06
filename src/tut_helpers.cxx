@@ -32,6 +32,9 @@ Copyright:
 #include <yaal/hcore/macro.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
+#include <yaal/hcore/hcomplex.hxx>
+#include <yaal/hcore/hnumber.hxx>
+#include <yaal/hcore/htime.hxx>
 #include <yaal/hconsole/hterminal.hxx>
 
 #include "setup.hxx"
@@ -64,6 +67,11 @@ std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s ) {
 
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HNumber const& n ) {
 	out << n.to_string();
+	return ( out );
+}
+
+std::ostream& operator << ( std::ostream& out, yaal::hcore::HTime const& t ) {
+	out << t.string().raw();
 	return ( out );
 }
 
