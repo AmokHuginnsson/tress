@@ -216,6 +216,22 @@ TUT_UNIT_TEST( 7, "HRegex" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 8, "HFollows" )
+	/* parsed */ {
+		char fcData( 0 );
+		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( fcData ), _1 ) )] );
+		char scData( 0 );
+		HRule sc( character( 'b' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( scData ), _1 ) )] );
+		bool followsCalled( false );
+		HExecutingParser ep( ( fc >> sc )[HBoundCall<void ( void )>( call( &setter<bool>::set, ref( followsCalled ), true ) ) ] );
+		ENSURE( "parse on correct failed", !ep( "ab" ) );
+		ep();
+		ENSURE_EQUALS( "predecessor in follows not called", fcData, 'a' );
+		ENSURE_EQUALS( "successor in follows not called", scData, 'b' );
+		ENSURE( "follows not called", followsCalled );
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 30, "simple recursive rule" )
 	/*
 	 * If *::describe() is incorrectly implemented this test will overflow stack.
