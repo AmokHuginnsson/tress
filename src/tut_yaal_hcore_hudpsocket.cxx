@@ -52,7 +52,7 @@ struct tut_yaal_hcore_hudpsocket : simple_mock<tut_yaal_hcore_hudpsocket> {
 	}
 	virtual ~tut_yaal_hcore_hudpsocket( void )
 		{}
-	void play_scenario( int, ip_t, bool, bool, bool );
+	void play_scenario( int, ip_t, bool, bool, bool, bool );
 };
 
 TUT_TEST_GROUP( tut_yaal_hcore_hudpsocket, "yaal::hcore::HUDPSocket" );
@@ -209,7 +209,7 @@ TUT_UNIT_TEST( 4, "bind on port in use." )
 	}
 TUT_TEARDOWN()
 
-void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_ ) {
+void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_, bool serverAssociacion_ ) {
 	char test_data[] = "Ala ma kota.";
 	const int size( static_cast<int>( sizeof ( test_data ) ) );
 	TUT_DECLARE( HUDPServer serv( HUDPSocket::socket_type_t( withSsl_ ? HUDPSocket::TYPE::SSL : HUDPSocket::TYPE::DEFAULT ) | ( nonBlockingServer_ ? HUDPSocket::TYPE::NONBLOCKING : HUDPSocket::TYPE::DEFAULT ) ); );
@@ -218,7 +218,12 @@ void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool withSsl
 	TUT_INVOKE( serv.bind( port_, ip_ ); );
 	try {
 		TUT_INVOKE( serv.start(); );
-		TUT_INVOKE( client.send_to( ip_, port_, test_data, size ); );
+		if ( serverAssociacion_ ) {
+			TUT_INVOKE( client.connect( ip_, port_ ); );
+			TUT_INVOKE( client.send( test_data, size ); );
+		} else {
+			TUT_INVOKE( client.send_to( ip_, port_, test_data, size ); );
+		}
 		TUT_INVOKE( serv.wait(); );
 	} catch ( HUDPSocketException const& e ) {
 		cout << e.what() << endl;
@@ -237,19 +242,35 @@ void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool withSsl
 }
 
 TUT_UNIT_TEST( 19, "Transfering data through network (blocking)." )
-	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, false, false );
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, false, false, false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 20, "Transfering data through network (non-blocking)." )
-	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, true, true );
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, true, true, false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 21, "Transfering data through network (blocking server, nonblocking client)." )
-	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, false, true );
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, false, true, false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 22, "Transfering data through network (non-blocking server, blocking client)." )
-	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, true, false );
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, true, false, false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 23, "Transfering data through network (blocking)." )
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, false, false, true );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 24, "Transfering data through network (non-blocking)." )
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, true, true, true );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 25, "Transfering data through network (blocking server, nonblocking client)." )
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, false, true, true );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 26, "Transfering data through network (non-blocking server, blocking client)." )
+	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, true, false, true );
 TUT_TEARDOWN()
 
 #if 0
