@@ -209,7 +209,7 @@ TUT_UNIT_TEST( 4, "bind on port in use." )
 	}
 TUT_TEARDOWN()
 
-void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_, bool serverAssociacion_ ) {
+void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_, bool serverAssociation_ ) {
 	char test_data[] = "Ala ma kota.";
 	const int size( static_cast<int>( sizeof ( test_data ) ) );
 	TUT_DECLARE( HUDPServer serv( HUDPSocket::socket_type_t( withSsl_ ? HUDPSocket::TYPE::SSL : HUDPSocket::TYPE::DEFAULT ) | ( nonBlockingServer_ ? HUDPSocket::TYPE::NONBLOCKING : HUDPSocket::TYPE::DEFAULT ) ); );
@@ -218,7 +218,7 @@ void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool withSsl
 	TUT_INVOKE( serv.bind( port_, ip_ ); );
 	try {
 		TUT_INVOKE( serv.start(); );
-		if ( serverAssociacion_ ) {
+		if ( serverAssociation_ ) {
 			TUT_INVOKE( client.connect( ip_, port_ ); );
 			TUT_INVOKE( client.send( test_data, size ); );
 		} else {
