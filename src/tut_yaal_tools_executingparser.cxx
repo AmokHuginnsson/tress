@@ -357,10 +357,19 @@ TUT_UNIT_TEST( 32, "unnamed HHuginn grammar" )
 TUT_TEARDOWN()
 
 struct calc {
+	typedef enum {
+		PLUS,
+		MINUS,
+		MULTIPLY,
+		DIVIDE,
+		NONE
+	} oper_t;
 	typedef HStack<double long> vars_t;
+	typedef HStack<oper_t> opers_t;
 	vars_t _vars;
+	opers_t _opers;
 	calc( void )
-		: _vars()
+		: _vars(), _opers()
 		{}
 	void sum( void ) {
 		clog << __PRETTY_FUNCTION__ << endl;
@@ -370,6 +379,16 @@ struct calc {
 		_vars.pop();
 		_vars.push( v1 + v2 );
 	}
+	void plus_minus( void ) {
+		clog << __PRETTY_FUNCTION__ << endl;
+		double long v1( _vars.top() );
+		_vars.pop();
+		double long v2( _vars.top() );
+		_vars.pop();
+		oper_t o( _opers.top() );
+		_opers.pop();
+		_vars.push( o == PLUS ? v1 + v2 : v2 - v1 );
+	}
 	void mul( void ) {
 		clog << __PRETTY_FUNCTION__ << endl;
 		double long v1( _vars.top() );
@@ -377,6 +396,28 @@ struct calc {
 		double long v2( _vars.top() );
 		_vars.pop();
 		_vars.push( v1 * v2 );
+	}
+	void mul_div( void ) {
+		clog << __PRETTY_FUNCTION__ << endl;
+		double long v1( _vars.top() );
+		_vars.pop();
+		double long v2( _vars.top() );
+		_vars.pop();
+		oper_t o( _opers.top() );
+		_opers.pop();
+		_vars.push( o == MULTIPLY ? v1 * v2 : v2 / v1 );
+	}
+	void oper( char op_ ) {
+		clog << __PRETTY_FUNCTION__ << endl;
+		oper_t o( NONE );
+		switch ( op_ ) {
+			case ( '+' ): o = PLUS; break;
+			case ( '-' ): o = MINUS; break;
+			case ( '*' ): o = MULTIPLY; break;
+			case ( '/' ): o = DIVIDE; break;
+			default: M_ASSERT( !"bad oper" );
+		}
+		_opers.push( o );
 	}
 	void val( double long v_ ) {
 		clog << __PRETTY_FUNCTION__ << endl;
@@ -420,6 +461,22 @@ TUT_UNIT_TEST( 42, "calc, (sum, mul, recursion)" )
 	ep( "1.7*(2+2.4)+-7+2*3" );
 	ep();
 	ENSURE_DISTANCE( "bad value calculated from +*()", c._vars.top(), 6.48l, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 43, "calc, (plus, minus, mul, div, recursion)" )
+	calc c;
+	HRule expr;
+	HRule paren( '(' >> expr >> ')' );
+	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
+	HRule atom( realVal | paren );
+	HRule multiply( atom >> *( ( character( "*/" )[HBoundCall<void ( char )>( call( &calc::oper, &c, _1 ) )] >> atom )[HBoundCall<void ( void )>( call( &calc::mul_div, &c ) )] ) );
+	HRule r( multiply >> *( ( character( "+-" )[HBoundCall<void ( char )>( call( &calc::oper, &c, _1 ) )] >> multiply )[HBoundCall<void ( void )>( call( &calc::plus_minus, &c ) )] ) );
+	expr %= r;
+	HExecutingParser ep( r );
+
+	ep( "(1.7*(2+2.4)+-7+2*3-5)/2" );
+	ep();
+	ENSURE_DISTANCE( "bad value calculated from +*()", c._vars.top(), 0.74l, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "the test" )
