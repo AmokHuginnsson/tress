@@ -251,6 +251,18 @@ TUT_UNIT_TEST( 8, "HFollows" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 9, "HKleeneStar" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 10, "HKleenePlus" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 11, "HOptional" )
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 12, "HAlternative" )
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 30, "simple recursive rule" )
 	/*
 	 * If *::describe() is incorrectly implemented this test will overflow stack.
