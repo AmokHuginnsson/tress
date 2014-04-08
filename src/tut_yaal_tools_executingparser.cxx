@@ -174,10 +174,20 @@ TUT_UNIT_TEST( 5, "HCharacter" )
 		HExecutingParser ep( character( 'a' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( val ), _1 ) )] );
 		ENSURE( "HCharacter failed to parse correct input.", !ep( "a" ) );
 	}
+	/* char (specific, any of ok) */ {
+		char val( 0 );
+		HExecutingParser ep( character( "ab" )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( val ), _1 ) )] );
+		ENSURE( "HCharacter failed to parse correct input.", !ep( "b" ) );
+	}
 	/* char (specific fail) */ {
 		char val( 0 );
 		HExecutingParser ep( character( 'X' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "HCharacter parsed invalid input.", !ep( "a" ) );
+	}
+	/* char (specific any of fail) */ {
+		char val( 0 );
+		HExecutingParser ep( character( "ab" )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( val ), _1 ) )] );
+		ENSURE_NOT( "HCharacter parsed invalid input.", !ep( "c" ) );
 	}
 TUT_TEARDOWN()
 
@@ -229,6 +239,15 @@ TUT_UNIT_TEST( 8, "HFollows" )
 		ENSURE_EQUALS( "predecessor in follows not called", fcData, 'a' );
 		ENSURE_EQUALS( "successor in follows not called", scData, 'b' );
 		ENSURE( "follows not called", followsCalled );
+	}
+	/* failed on successor */ {
+		char fcData( 0 );
+		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( fcData ), _1 ) )] );
+		char scData( 0 );
+		HRule sc( character( 'b' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( scData ), _1 ) )] );
+		bool followsCalled( false );
+		HExecutingParser ep( ( fc >> sc )[HBoundCall<void ( void )>( call( &setter<bool>::set, ref( followsCalled ), true ) ) ] );
+		ENSURE_NOT( "parse on invalid succeeded", !ep( "aa" ) );
 	}
 TUT_TEARDOWN()
 
