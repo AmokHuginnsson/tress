@@ -251,7 +251,30 @@ TUT_UNIT_TEST( 8, "HFollows" )
 	}
 TUT_TEARDOWN()
 
+template<typename T>
+void sum( T& sum_, T val_ ) {
+	sum_ += val_;
+}
+
 TUT_UNIT_TEST( 9, "HKleeneStar" )
+	/* parsed (non empty) */ {
+		int val( 0 );
+		HRule i( integer[HBoundCall<void ( int )>( call( &sum<int>, ref( val ), _1 ) )] );
+		HRule nums( *( ',' >> i ) );
+		HExecutingParser ep( nums );
+		ENSURE( "parse on valid failed", !ep( ", 1, 2, 3" ) );
+		ep();
+		ENSURE_EQUALS( "execution of KleeneStar failed", val, 6 );
+	}
+	/* parsed (empty) */ {
+		int val( 0 );
+		HRule i( integer[HBoundCall<void ( int )>( call( &sum<int>, ref( val ), _1 ) )] );
+		HRule nums( *( ',' >> i ) );
+		HExecutingParser ep( string( "nums{" ) >> nums >> "}" );
+		ENSURE( "parse on valid (but empty) failed", !ep( "nums{}" ) );
+		ep();
+		ENSURE_EQUALS( "execution of KleeneStar failed", val, 0 );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 10, "HKleenePlus" )
