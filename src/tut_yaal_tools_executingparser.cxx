@@ -278,6 +278,31 @@ TUT_UNIT_TEST( 9, "HKleeneStar" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 10, "HKleenePlus" )
+	/* parsed (non empty) */ {
+		int val( 0 );
+		HRule i( integer[HBoundCall<void ( int )>( call( &sum<int>, ref( val ), _1 ) )] );
+		HRule nums( +( ',' >> i ) );
+		HExecutingParser ep( nums );
+		ENSURE( "parse on valid failed", !ep( ", 1, 2, 3" ) );
+		ep();
+		ENSURE_EQUALS( "execution of KleeneStar failed", val, 6 );
+	}
+	/* parsed (exactly) */ {
+		int val( 0 );
+		HRule i( integer[HBoundCall<void ( int )>( call( &sum<int>, ref( val ), _1 ) )] );
+		HRule nums( +( ',' >> i ) );
+		HExecutingParser ep( nums );
+		ENSURE( "parse on valid failed", !ep( ", 1" ) );
+		ep();
+		ENSURE_EQUALS( "execution of KleeneStar failed", val, 1 );
+	}
+	/* not-parsed (empty) */ {
+		int val( 0 );
+		HRule i( integer[HBoundCall<void ( int )>( call( &sum<int>, ref( val ), _1 ) )] );
+		HRule nums( +( ',' >> i ) );
+		HExecutingParser ep( string( "nums{" ) >> nums >> "}" );
+		ENSURE_NOT( "parse on invalid (empty) succeeded", !ep( "nums{}" ) );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 11, "HOptional" )
