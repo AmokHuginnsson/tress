@@ -267,7 +267,7 @@ public:
 				_os << "\n";
 			_os << "tress: " << std::string( progressCur, '=' ) << std::string( progressMax - progressCur, ' ' )
 				<< " " << ( ( 100 * total ) / _totalTestCount ) << "%"
-				<< "\r\b\r" << _currentGroup << ": " << _groupTestLog.str() << std::flush;
+				<< "\033[F" << _currentGroup << ": " << _groupTestLog.str() << std::flush;
 		} else {
 			_os << tr << std::flush;
 		}
