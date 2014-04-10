@@ -306,6 +306,28 @@ TUT_UNIT_TEST( 10, "HKleenePlus" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 11, "HOptional" )
+	/* not-parsed (empty) configuration test */ {
+		int val( 0 );
+		HRule i( integer[HBoundCall<void ( int )>( call( &setter<int>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( string( "nums{" ) >> i >> "}" );
+		ENSURE_NOT( "parse on invalid (empty) succeeded", !ep( "nums{}" ) );
+	}
+	/* parsed (empty) */ {
+		int val( 0 );
+		HRule i( integer[HBoundCall<void ( int )>( call( &setter<int>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( string( "nums{" ) >> (-i) >> "}" );
+		ENSURE( "parse on valid (but empty) failed", !ep( "nums{}" ) );
+		ep();
+		ENSURE_EQUALS( "execution of optional failed", val, 0 );
+	}
+	/* parsed (non-empty) */ {
+		int val( 0 );
+		HRule i( integer[HBoundCall<void ( int )>( call( &setter<int>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( string( "nums{" ) >> (-i) >> "}" );
+		ENSURE( "parse on valid failed", !ep( "nums{7}" ) );
+		ep();
+		ENSURE_EQUALS( "execution of optional failed", val, 7 );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 12, "HAlternative" )
