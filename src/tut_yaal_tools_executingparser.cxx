@@ -333,15 +333,24 @@ TUT_UNIT_TEST( 11, "HOptional" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "HAlternative" )
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( 13, "canceling execution steps" )
+TUT_UNIT_TEST( 12, "canceling execution steps" )
 	int val( 0 );
 	int val_alt( 0 );
 	HRule i( integer[HBoundCall<void ( int )>( call( &setter<int>::set, ref( val ), _1 ) )] );
 	HRule ia( integer[HBoundCall<void ( int )>( call( &setter<int>::set_alt, ref( val_alt ), _1 ) )] );
 	HExecutingParser ep( string( "nums{" ) >> ( -( i >> ":pos" ) ) >> ( -( ia >> ":neg" ) ) >> "}" );
+	ENSURE( "parse on valid failed", !ep( "nums{7:neg}" ) );
+	ep();
+	ENSURE_EQUALS( "execution failed sub-step not removed", val, 0 );
+	ENSURE_EQUALS( "execution proper execution sub-step not applied", val_alt, -7 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 13, "HAlternative" )
+	int val( 0 );
+	int val_alt( 0 );
+	HRule i( integer[HBoundCall<void ( int )>( call( &setter<int>::set, ref( val ), _1 ) )] );
+	HRule ia( integer[HBoundCall<void ( int )>( call( &setter<int>::set_alt, ref( val_alt ), _1 ) )] );
+	HExecutingParser ep( string( "nums{" ) >> ( ( i >> ":pos" ) | ( ia >> ":neg" ) ) >> "}" );
 	ENSURE( "parse on valid failed", !ep( "nums{7:neg}" ) );
 	ep();
 	ENSURE_EQUALS( "execution failed sub-step not removed", val, 0 );
