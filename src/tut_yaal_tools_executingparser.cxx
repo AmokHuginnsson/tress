@@ -357,6 +357,24 @@ TUT_UNIT_TEST( 13, "HAlternative" )
 	ENSURE_EQUALS( "execution proper execution sub-step not applied", val_alt, -7 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 14, "left recursion" )
+	HRule S;
+	S %= ( S >> '$' >> integer );
+	HGrammarDescription gd( S );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE( "bad ruie count", i < 1 );
+		ENSURE_EQUALS( "wrong description", *it, "A_ = A_ >> '$' >> integer" );
+		cout << *it << endl;
+	}
+	try {
+		HExecutingParser ep( S );
+		FAIL( "Grammar with left recursion accepted." );
+	} catch ( HExecutingParserException const& ) {
+		/* ok */
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 30, "simple recursive rule" )
 	/*
 	 * If *::describe() is incorrectly implemented this test will overflow stack.
@@ -365,7 +383,7 @@ TUT_UNIT_TEST( 30, "simple recursive rule" )
 	HRule mul( elem >> *( '*' >> elem ) );
 	HRule sum( mul >> *( '+' >> mul ) );
 	elem %= ( real | ( character( '(' ) >> sum >> ')' ) );
-	HExecutingParser ep1( elem );
+	HExecutingParser ep( elem );
 	static char epDesc[][50] = {
 		"A_ = real | '(' >> B_ >> *( '+' >> B_ ) >> ')'",
 		"B_ = A_ >> *( '*' >> A_ )"
