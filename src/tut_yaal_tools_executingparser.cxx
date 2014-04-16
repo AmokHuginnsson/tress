@@ -367,12 +367,7 @@ TUT_UNIT_TEST( 14, "left recursion" )
 		ENSURE_EQUALS( "wrong description", *it, "A_ = A_ >> '$' >> integer" );
 		cout << *it << endl;
 	}
-	try {
-		HExecutingParser ep( S );
-		FAIL( "Grammar with left recursion accepted." );
-	} catch ( HExecutingParserException const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "Grammar with left recursion accepted.", HExecutingParser ep( S ), HExecutingParserException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 30, "simple recursive rule" )
