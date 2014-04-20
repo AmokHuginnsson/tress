@@ -207,24 +207,9 @@ TUT_UNIT_TEST( 21, "central_moving_average" )
 			o << endl;
 		}
 	}
-	try {
-		central_moving_average( data.begin(), data.end(), cma[0].begin(), -1 );
-		FAIL( "calculating CMA with negative range succeeded" );
-	} catch ( HException const& ) {
-		/* ok */
-	}
-	try {
-		central_moving_average( data.begin(), data.end(), cma[0].begin(), 0 );
-		FAIL( "calculating CMA with empty range succeeded" );
-	} catch ( HException const& ) {
-		/* ok */
-	}
-	try {
-		central_moving_average( data.begin(), data.end(), cma[0].begin(), 8 );
-		FAIL( "calculating CMA with even range succeeded" );
-	} catch ( HException const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "calculating CMA with negative range succeeded", central_moving_average( data.begin(), data.end(), cma[0].begin(), -1 ), HException );
+	ENSURE_THROW( "calculating CMA with empty range succeeded", central_moving_average( data.begin(), data.end(), cma[0].begin(), 0 ), HException );
+	ENSURE_THROW( "calculating CMA with even range succeeded", central_moving_average( data.begin(), data.end(), cma[0].begin(), 8 ), HException );
 TUT_TEARDOWN()
 
 template<typename T>

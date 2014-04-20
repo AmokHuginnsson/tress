@@ -152,42 +152,12 @@ TUT_UNIT_TEST( 4, "construct from string" )
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0 );
 	ENSURE_EQUALS( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n0 = " << n0.to_string() << " |" << endl;
-	try {
-		HNumber n( "" );
-		FAIL( "empty number created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( "-" );
-		FAIL( "number that is a minus created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( "." );
-		FAIL( "number that is a dot created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( "-." );
-		FAIL( "number that is a minus-dot created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( "-..1" );
-		FAIL( "number that is a minus-dot created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( "..1" );
-		FAIL( "number that is a minus-dot created" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_THROW( "empty number created", HNumber n( "" ), HNumberException );
+	ENSURE_THROW( "number that is a minus created", HNumber n( "-" ), HNumberException );
+	ENSURE_THROW( "number that is a dot created", HNumber n( "." ), HNumberException );
+	ENSURE_THROW( "number that is a minus-dot and nothing created", HNumber n( "-." ), HNumberException );
+	ENSURE_THROW( "number that is a minus-dot-dot created", HNumber n( "-..1" ), HNumberException );
+	ENSURE_THROW( "number that is a dot-dot created", HNumber n( "..1" ), HNumberException );
 
 	char const* const pn1 = "-1";
 	HNumber n1( pn1 );
@@ -215,29 +185,9 @@ TUT_UNIT_TEST( 4, "construct from string" )
 	ENSURE_EQUALS( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n4 =" << n4.to_string() << " |" << endl;
 
-	try {
-		HNumber nx( "--2.7" );
-		cout << "| nx =" << nx.to_string() << " |" << endl;
-		FAIL( "phony number created" );
-	} catch ( HException& ) {
-		// ok
-	}
-
-	try {
-		HNumber nx( "..27" );
-		cout << "| nx =" << nx.to_string() << " |" << endl;
-		FAIL( "phony number created" );
-	} catch ( HException& ) {
-		// ok
-	}
-
-	try {
-		HNumber nx( "-.-2.7" );
-		cout << "| nx =" << nx.to_string() << " |" << endl;
-		FAIL( "phony number created" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_THROW( "phony number created", HNumber nx( "--2.7" ), HNumberException );
+	ENSURE_THROW( "phony number created", HNumber nx( "..27" ), HNumberException );
+	ENSURE_THROW( "phony number created", HNumber nx( "-.-2.7" ), HNumberException );
 
 	char const* const pn5 = ".2.7";
 	HNumber n5( pn5 );
@@ -364,30 +314,10 @@ TUT_UNIT_TEST( 5, "construct from string (prefixes)" )
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0 + 3 );
 	ENSURE_EQUALS( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n0 = " << n0.to_string() << " |" << endl;
-	try {
-		HNumber n( "???" );
-		FAIL( "empty number created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( "$$$-" );
-		FAIL( "number that is a minus created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( "???." );
-		FAIL( "number that is a dot created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( "$$$-." );
-		FAIL( "number that is a minus-dot created" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_THROW( "empty number created", HNumber n( "???" ), HNumberException );
+	ENSURE_THROW( "number that is a minus created", HNumber n( "$$$-" ), HNumberException );
+	ENSURE_THROW( "number that is a dot created", HNumber n( "???." ), HNumberException );
+	ENSURE_THROW( "number that is a minus-dot created", HNumber n( "$$$-." ), HNumberException );
 
 	char const* const pn1 = "$$$-1";
 	HNumber n1( pn1 );
@@ -413,29 +343,9 @@ TUT_UNIT_TEST( 5, "construct from string (prefixes)" )
 	ENSURE_EQUALS( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n4 =" << n4.to_string() << " |" << endl;
 
-	try {
-		HNumber nx( "$$$--2.7" );
-		cout << "| nx =" << nx.to_string() << " |" << endl;
-		FAIL( "phony number created" );
-	} catch ( HException& ) {
-		// ok
-	}
-
-	try {
-		HNumber nx( "???..27" );
-		cout << "| nx =" << nx.to_string() << " |" << endl;
-		FAIL( "phony number created" );
-	} catch ( HException& ) {
-		// ok
-	}
-
-	try {
-		HNumber nx( "$$$-.-2.7" );
-		cout << "| nx =" << nx.to_string() << " |" << endl;
-		FAIL( "phony number created" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_THROW( "phony number created", HNumber nx( "$$$--2.7" ), HNumberException );
+	ENSURE_THROW( "phony number created", HNumber nx( "???..27" ), HNumberException );
+	ENSURE_THROW( "phony number created", HNumber nx( "$$$-.-2.7" ), HNumberException );
 
 	char const* const pn5 = "???.2.7";
 	HNumber n5( pn5 );
@@ -469,30 +379,10 @@ TUT_UNIT_TEST( 6, "construct from string (postfixes)" )
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0ok );
 	ENSURE_EQUALS( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n0 = " << n0.to_string() << " |" << endl;
-	try {
-		HNumber n( "???" );
-		FAIL( "empty number created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( "-???" );
-		FAIL( "number that is a minus created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( ".???" );
-		FAIL( "number that is a dot created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( "-.???" );
-		FAIL( "number that is a minus-dot created" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_THROW( "empty number created", HNumber n( "???" ), HNumberException );
+	ENSURE_THROW( "number that is a minus created", HNumber n( "-???" ), HNumberException );
+	ENSURE_THROW( "number that is a dot created", HNumber n( ".???" ), HNumberException );
+	ENSURE_THROW( "number that is a minus-dot created", HNumber n( "-.???" ), HNumberException );
 
 	char const* const pn1ok = "-1";
 	char const* const pn1 = "-1???";
@@ -521,30 +411,9 @@ TUT_UNIT_TEST( 6, "construct from string (postfixes)" )
 	ENSURE_EQUALS( "number not created correctly", n4.to_string(), pn4ok );
 	ENSURE_EQUALS( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n4 =" << n4.to_string() << " |" << endl;
-
-	try {
-		HNumber nx( "--2.7???" );
-		cout << "| nx =" << nx.to_string() << " |" << endl;
-		FAIL( "phony number created" );
-	} catch ( HException& ) {
-		// ok
-	}
-
-	try {
-		HNumber nx( "..27???" );
-		cout << "| nx =" << nx.to_string() << " |" << endl;
-		FAIL( "phony number created" );
-	} catch ( HException& ) {
-		// ok
-	}
-
-	try {
-		HNumber nx( "-.-2.7???" );
-		cout << "| nx =" << nx.to_string() << " |" << endl;
-		FAIL( "phony number created" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_THROW( "phony number created", HNumber nx( "--2.7???" ), HNumberException );
+	ENSURE_THROW( "phony number created", HNumber nx( "..27???" ), HNumberException );
+	ENSURE_THROW( "phony number created", HNumber nx( "-.-2.7???" ), HNumberException );
 
 	char const* const pn5 = ".2.7???";
 	HNumber n5( pn5 );
@@ -578,30 +447,10 @@ TUT_UNIT_TEST( 7, "construct from string (prepostfixes)" )
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0ok );
 	ENSURE_EQUALS( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n0 = " << n0.to_string() << " |" << endl;
-	try {
-		HNumber n( "???" );
-		FAIL( "empty number created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( "$$$-???" );
-		FAIL( "number that is a minus created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( "???.???" );
-		FAIL( "number that is a dot created" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		HNumber n( "$$$-.???" );
-		FAIL( "number that is a minus-dot created" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_THROW( "empty number created", HNumber n( "???" ), HNumberException );
+	ENSURE_THROW( "number that is a minus created", HNumber n( "$$$-???" ), HNumberException );
+	ENSURE_THROW( "number that is a dot created", HNumber n( "???.???" ), HNumberException );
+	ENSURE_THROW( "number that is a minus-dot created", HNumber n( "$$$-.???" ), HNumberException );
 
 	char const* const pn1ok = "-1";
 	char const* const pn1 = "$$$-1???";
@@ -631,29 +480,9 @@ TUT_UNIT_TEST( 7, "construct from string (prepostfixes)" )
 	ENSURE_EQUALS( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
 	cout << "| n4 =" << n4.to_string() << " |" << endl;
 
-	try {
-		HNumber nx( "$$$--2.7???" );
-		cout << "| nx =" << nx.to_string() << " |" << endl;
-		FAIL( "phony number created" );
-	} catch ( HException& ) {
-		// ok
-	}
-
-	try {
-		HNumber nx( "???..27???" );
-		cout << "| nx =" << nx.to_string() << " |" << endl;
-		FAIL( "phony number created" );
-	} catch ( HException& ) {
-		// ok
-	}
-
-	try {
-		HNumber nx( "$$$-.-2.7???" );
-		cout << "| nx =" << nx.to_string() << " |" << endl;
-		FAIL( "phony number created" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_THROW( "phony number created", HNumber nx( "$$$--2.7???" ), HNumberException );
+	ENSURE_THROW( "phony number created", HNumber nx( "???..27???" ), HNumberException );
+	ENSURE_THROW( "phony number created", HNumber nx( "$$$-.-2.7???" ), HNumberException );
 
 	char const* const pn5 = "???.2.7???";
 	HNumber n5( pn5 );
@@ -985,7 +814,7 @@ TUT_UNIT_TEST( 19, "multiplication" )
 	MUL_TEST( 1234, 0.001, 1.234 );
 	MUL_TEST( 584833018983741997878722386503334636.78288384371198912247950986, -9495561202762179256808404731.0288638, -5553317725156297579601206726057421373895864032769682350068288883.613387831060572493018571736697068 );
 	MUL_TEST( 930000000096000000000, 95, 88350000009120000000000 );
-	MUL_TEST( .011931709189, -154.734375, -1.846245564041671875 );
+	MUL_TEST( 0.011931709189, -154.734375, -1.846245564041671875 );
 
 	if ( HNumber::DECIMAL_DIGITS_IN_LEAF != 1 ) {
 		ENSURE_EQUALS( "multiplication failed j2", ( HNumber( expand_leafs( "584833018983741997878722386503334636.78288384371198912247950986" ) ) * HNumber( expand_leafs( "-9495561202762179256808404731.0288638" ) ) ).to_string(), HNumber( "-450000000920000001130000001850000001600000002010000001520000001330000001740000001810000002730000002880000003460000003320000003330000004040000003690000004310000005220000005730000006090000005550000006080000005660000005400000006000000006500000006950000005840000006380000007140000007250000006850000007680000008630000008560000007890000008190000007130000008310000008830000008350000009030000007850000007980000007600000007910000007760000007460000008030000009560000008740000008170000006950000007660000007640000007430000007680000007570000008300000008020000007960000006450000007070000007.20000000639000000671000000670000000517000000633000000683000000647000000480000000539000000613000000528000000437000000357000000410000000403000000422000000375000000327000000221000000249000000239000000259000000208000000171000000201000000235000000206000000123000000132000000082000000048" ).to_string() );
@@ -1052,14 +881,7 @@ TUT_TEARDOWN()
 	DIV_TEST_MSG( "division failed", dividend, divisor, quotient )
 
 TUT_UNIT_TEST( 21, "division" )
-	try {
-		HNumber n( "1" );
-		HNumber x;
-		n /= x;
-		FAIL( "division by zero performed" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_THROW( "division by zero performed", do { HNumber n( "1" ); HNumber x; n /= x; } while ( false ), HNumberException );
 	DIV_TEST( 2, 2, 1 );
 	DIV_TEST( 0, 1, 0 );
 	DIV_TEST( 0, -1, 0 );
@@ -1170,12 +992,12 @@ TUT_UNIT_TEST( 21, "division" )
 	DIV_TEST_MSG( "padding front zeros failed", .49, 7, 0.07 );
 	DIV_TEST_MSG( "padding front zeros failed", 4.91401, 70.1, 0.0701 );
 	DIV_TEST_MSG( "padding front zeros failed", .491401, 70.1, 0.00701 );
-	DIV_TEST_MSG( "padding front zeros failed", .0491401, 70.1, 0.000701 );
-	DIV_TEST_MSG( "padding front zeros failed", .00491401, 70.1, 0.0000701 );
+	DIV_TEST_MSG( "padding front zeros failed", 0.0491401, 70.1, 0.000701 );
+	DIV_TEST_MSG( "padding front zeros failed", 0.00491401, 70.1, 0.0000701 );
 	DIV_TEST_MSG( "padding front zeros failed", 4.91401, 7.01, 0.701 );
 	DIV_TEST_MSG( "padding front zeros failed", .491401, 7.01, 0.0701 );
-	DIV_TEST_MSG( "padding front zeros failed", .0491401, 7.01, 0.00701 );
-	DIV_TEST_MSG( "padding front zeros failed", .00491401, 7.01, 0.000701 );
+	DIV_TEST_MSG( "padding front zeros failed", 0.0491401, 7.01, 0.00701 );
+	DIV_TEST_MSG( "padding front zeros failed", 0.00491401, 7.01, 0.000701 );
 	DIV_TEST_MSG( "padding front zeros failed", .491401, 701, 0.000701 );
 	DIV_TEST_MSG( "padding front zeros failed", 491.401, 701, 0.701 );
 	DIV_TEST_MSG( "padding front zeros failed", 49.1401, 701, 0.0701 );
