@@ -270,34 +270,19 @@ TUT_UNIT_TEST( 9, "direct split skip empty set[c]*/" )
 		HTokenizer t( "aa,bb,", ",", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_whole_sc_failed, t[ 0 ], "aa" );
 		ENSURE_EQUALS( split_skip_whole_sc_failed, t[ 1 ], "bb" );
-		try {
-			t[ 2 ];
-			FAIL( split_skip_whole_sc_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
+		ENSURE_THROW( split_skip_whole_sc_invalid_success, t[ 2 ], HTokenizerException );
 	}
 	/* delim by whole multi character */ {
 		HTokenizer t( "aa://bb://", "://", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_whole_mc_failed, t[ 0 ], "aa" );
 		ENSURE_EQUALS( split_skip_whole_mc_failed, t[ 1 ], "bb" );
-		try {
-			t[ 2 ];
-			FAIL( split_skip_whole_mc_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
+		ENSURE_THROW( split_skip_whole_mc_invalid_success, t[ 2 ], HTokenizerException );
 	}
 	/* delim by any */ {
 		HTokenizer t( "aa,bb,", ",", HTokenizer::behavior_t( HTokenizer::SKIP_EMPTY ) | HTokenizer::DELIMITED_BY_ANY_OF );
 		ENSURE_EQUALS( split_skip_any_failed, t[ 0 ], "aa" );
 		ENSURE_EQUALS( split_skip_any_failed, t[ 1 ], "bb" );
-		try {
-			t[ 2 ];
-			FAIL( split_skip_any_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
+		ENSURE_THROW( split_skip_any_invalid_success, t[ 2 ], HTokenizerException );
 	}
 TUT_TEARDOWN()
 
@@ -305,32 +290,17 @@ TUT_UNIT_TEST( 10, "direct split skip empty set[d]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t( ",aa,", ",", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_whole_sc_failed, t[ 0 ], "aa" );
-		try {
-			t[ 1 ];
-			FAIL( split_skip_whole_sc_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
+		ENSURE_THROW( split_skip_whole_sc_invalid_success, t[ 1 ], HTokenizerException );
 	}
 	/* delim by whole multi character */ {
 		HTokenizer t( "://aa://", "://", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_whole_mc_failed, t[ 0 ], "aa" );
-		try {
-			t[ 1 ];
-			FAIL( split_skip_whole_mc_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
+		ENSURE_THROW( split_skip_whole_mc_invalid_success, t[ 1 ], HTokenizerException );
 	}
 	/* delim by any */ {
 		HTokenizer t( ";aa,", ",:;", HTokenizer::behavior_t( HTokenizer::SKIP_EMPTY ) | HTokenizer::DELIMITED_BY_ANY_OF );
 		ENSURE_EQUALS( split_skip_any_failed, t[ 0 ], "aa" );
-		try {
-			t[ 1 ];
-			FAIL( split_skip_any_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
+		ENSURE_THROW( split_skip_any_invalid_success, t[ 1 ], HTokenizerException );
 	}
 TUT_TEARDOWN()
 
@@ -338,32 +308,17 @@ TUT_UNIT_TEST( 11, "direct split skip empty set[e]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t( ",,,aa,,", ",", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_whole_sc_failed, t[ 0 ], "aa" );
-		try {
-			t[ 1 ];
-			FAIL( split_skip_whole_sc_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
+		ENSURE_THROW( split_skip_whole_sc_invalid_success, t[ 1 ], HTokenizerException );
 	}
 	/* delim by whole multi character */ {
 		HTokenizer t( "://://://aa://://", "://", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_whole_mc_failed, t[ 0 ], "aa" );
-		try {
-			t[ 1 ];
-			FAIL( split_skip_whole_mc_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
+		ENSURE_THROW( split_skip_whole_mc_invalid_success, t[ 1 ], HTokenizerException );
 	}
 	/* delim by any */ {
 		HTokenizer t( ",;,aa;,", ",:;", HTokenizer::behavior_t( HTokenizer::SKIP_EMPTY ) | HTokenizer::DELIMITED_BY_ANY_OF );
 		ENSURE_EQUALS( split_skip_any_failed, t[ 0 ], "aa" );
-		try {
-			t[ 1 ];
-			FAIL( split_skip_any_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
+		ENSURE_THROW( split_skip_any_invalid_success, t[ 1 ], HTokenizerException );
 	}
 TUT_TEARDOWN()
 
@@ -372,52 +327,22 @@ TUT_UNIT_TEST( 12, "direct split skip empty set[f]*/" )
 		HTokenizer t1( "a", ";", HTokenizer::SKIP_EMPTY );
 		HTokenizer t2( "a", "a", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_whole_sc_failed, t1[ 0 ], "a" );
-		try {
-			t1[ 1 ];
-			FAIL( split_skip_whole_sc_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
-		try {
-			t2[ 0 ];
-			FAIL( split_skip_whole_sc_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
+		ENSURE_THROW( split_skip_whole_sc_invalid_success, t1[ 1 ], HTokenizerException );
+		ENSURE_THROW( split_skip_whole_sc_invalid_success, t2[ 0 ], HTokenizerException );
 	}
 	/* delim by whole multi character */ {
 		HTokenizer t1( "a", "://", HTokenizer::SKIP_EMPTY );
 		HTokenizer t2( "a", "a", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_whole_mc_failed, t1[ 0 ], "a" );
-		try {
-			t1[ 1 ];
-			FAIL( split_skip_whole_mc_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
-		try {
-			t2[ 0 ];
-			FAIL( split_skip_whole_mc_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
+		ENSURE_THROW( split_skip_whole_mc_invalid_success, t1[ 1 ], HTokenizerException );
+		ENSURE_THROW( split_skip_whole_mc_invalid_success, t2[ 0 ], HTokenizerException );
 	}
 	/* delim by any */ {
 		HTokenizer t1( "a", ";:,", HTokenizer::SKIP_EMPTY );
 		HTokenizer t2( "a", "a", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_any_failed, t1[ 0 ], "a" );
-		try {
-			t1[ 1 ];
-			FAIL( split_skip_any_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
-		try {
-			t2[ 0 ];
-			FAIL( split_skip_any_invalid_success );
-		} catch ( HTokenizerException const& ) {
-			// ok
-		}
+		ENSURE_THROW( split_skip_any_invalid_success, t1[ 1 ], HTokenizerException );
+		ENSURE_THROW( split_skip_any_invalid_success, t2[ 0 ], HTokenizerException );
 	}
 TUT_TEARDOWN()
 
