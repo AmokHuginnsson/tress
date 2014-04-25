@@ -86,7 +86,7 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& os, 
 	else if ( mod == static_cast<stream_mod_t const&>( std::flush ) )
 		os << hcore::flush;
 	else
-		M_ASSERT( !"unsupported stream modifier" );
+		M_ASSERT( !"unsupported stream modifier"[0] );
 	return ( os );
 }
 
@@ -185,7 +185,7 @@ bool file_compare( yaal::hcore::HString const& path1_, yaal::hcore::HString cons
 	do {
 		nRead1 = f1.read( buf1, BUF_SIZE );
 		int long nRead2( f2.read( buf2, BUF_SIZE ) );
-		different = ( nRead1 != nRead2 ) || ( memcmp( buf1, buf2, nRead1 ) != 0 );
+		different = ( nRead1 != nRead2 ) || ( ::memcmp( buf1, buf2, static_cast<size_t>( nRead1 ) ) != 0 );
 	} while ( ! different && ( nRead1 == BUF_SIZE ) );
 	return ( different );
 }

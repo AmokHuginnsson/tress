@@ -84,12 +84,6 @@ HString tut_yaal_tools_hxml::_varTmpBuffer;
 
 TUT_TEST_GROUP( tut_yaal_tools_hxml, "yaal::tools::HXml" );
 
-inline std::ostream& operator << ( std::ostream& out, HXml const& xml ) {
-	for ( HXml::const_entity_iterator it( xml.entity_begin() ), end( xml.entity_end() ); it != end; ++ it )
-		out << "@: " << it->first << "=>" << it->second << std::endl;
-	return ( tut_yaal_tools_hxml::dump( out, xml.get_root() ) );
-}
-
 namespace {
 
 bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const& right ) {
@@ -129,6 +123,10 @@ bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const
 
 }
 
+}
+
+namespace yaal {
+namespace tools {
 inline bool operator == ( HXml const& left, HXml const& right ) {
 	return ( deep_equals( left.get_root(), right.get_root() ) );
 }
@@ -137,6 +135,15 @@ inline bool operator != ( HXml const& left, HXml const& right ) {
 	return ( ! ( left == right ) );
 }
 
+inline std::ostream& operator << ( std::ostream& out, HXml const& xml ) {
+	for ( HXml::const_entity_iterator it( xml.entity_begin() ), end( xml.entity_end() ); it != end; ++ it )
+		out << "@: " << it->first << "=>" << it->second << std::endl;
+	return ( tut_yaal_tools_hxml::dump( out, xml.get_root() ) );
+}
+}
+}
+
+namespace tut {
 
 TUT_UNIT_TEST( 1, "Empty DOM." )
 	HXml x;

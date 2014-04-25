@@ -29,6 +29,7 @@ Copyright:
 #include <ext/algorithm>
 #endif /* #ifdef __GNUC__ */
 
+#include "tut_helpers.hxx"
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/algorithm.hxx>
@@ -36,7 +37,6 @@ Copyright:
 #include <yaal/hcore/hrandomizer.hxx>
 #include <yaal/tools/streamtools.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
-#include "tut_helpers.hxx"
 
 using namespace tut;
 using namespace yaal;
@@ -1350,7 +1350,7 @@ TUT_UNIT_TEST( 42, "random_sample" )
 	int loTotal( 0 );
 	static int const tries( 256 );
 	for ( int t( 0 ); t < tries; ++ t ) {
-		random_sample( a.begin(), a.end(), b.begin(), b.end(), HRandomizer( t ) );
+		random_sample( a.begin(), a.end(), b.begin(), b.end(), HRandomizer( static_cast<u64_t>( t ) ) );
 		int lo( static_cast<int>( count_if( b.begin(), b.end(), bind1st( less<int>(), range / 2 ) ) ) );
 		loTotal += lo;
 	}

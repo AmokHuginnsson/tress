@@ -26,11 +26,11 @@ Copyright:
 
 #include <vector>
 
+#include "tut_helpers.hxx"
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/harray.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
-#include "tut_helpers.hxx"
 
 using namespace tut;
 using namespace yaal;

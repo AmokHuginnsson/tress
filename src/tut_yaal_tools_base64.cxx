@@ -398,7 +398,7 @@ TUT_UNIT_TEST( 17, "full decode test" )
 			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << input;
 			int nRead = static_cast<int>( m.read( output, 100 ) );
 			ENSURE_EQUALS( msg.string(), nRead, len );
-			ENSURE( msg.string(), ! ::memcmp( output, input, nRead ) );
+			ENSURE( msg.string(), ! ::memcmp( output, input, static_cast<size_t>( nRead ) ) );
 			msg.clear();
 		}
 	}

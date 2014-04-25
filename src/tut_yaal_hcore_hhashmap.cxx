@@ -69,7 +69,7 @@ int long const tut_yaal_hcore_hhashmap::FEW_ELEMENTS = 4;
 void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ ) {
 	typedef hash_map_t::engine_t::HAtom atom_t;
 	atom_t* const* buckets = map_._engine._buckets.get<atom_t*>();
-	int long bucketCount( map_._engine._buckets.get_size() / sizeof ( atom_t* ) );
+	int long bucketCount( map_._engine._buckets.get_size() / static_cast<int>( sizeof ( atom_t* ) ) );
 	ENSURE( "wrong bucket count/prime", bucketCount >= map_._engine._prime );
 	ENSURE( "wrong bucket prime/size", map_._engine._prime >= map_._engine._size );
 	ENSURE( "wrong prime / alloc status", xnor( buckets != NULL, map_._engine._prime != 0 ) );

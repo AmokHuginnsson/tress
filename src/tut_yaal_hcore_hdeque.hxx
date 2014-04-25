@@ -40,9 +40,8 @@ Copyright:
 #undef protected
 #undef private
 
-#include <TUT/tut.hpp>
-
 #include "tut_helpers.hxx"
+#include <TUT/tut.hpp>
 
 namespace tress {
 

@@ -77,7 +77,7 @@ TUT_UNIT_TEST( 3, "1 micro-second accuracy" )
 #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ )
 	static i64_t const QUALITY = PASSED / 10;
 #else /* #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
-	static i64_t const QUALITY = get_speed( HClock::UNIT::MICROSECOND ) + 2 * power<10,3>::value;
+	static i64_t const QUALITY = get_speed( HClock::UNIT::MICROSECOND ) + 2 * static_cast<i64_t>( power<10,3>::value );
 #endif /* #else #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 	HClock clk;
 	TUT_EVAL( tools::sleep::second( SLEEP ) );
@@ -93,7 +93,7 @@ TUT_UNIT_TEST( 4, "1 nano-second accuracy" )
 #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ )
 	static i64_t const QUALITY = PASSED / 10;
 #else /* #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
-	static i64_t const QUALITY = get_speed( HClock::UNIT::NANOSECOND ) + 2 * power<10,6>::value;
+	static i64_t const QUALITY = get_speed( HClock::UNIT::NANOSECOND ) + 2 * static_cast<i64_t>( power<10,6>::value );
 #endif /* #else #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 	HClock clk;
 	TUT_EVAL( tools::sleep::second( SLEEP ) );

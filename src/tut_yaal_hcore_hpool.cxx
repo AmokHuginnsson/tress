@@ -245,7 +245,7 @@ TUT_UNIT_TEST( 6, "allocate full block, free in random order, reallocate full bl
 	HRandomizer r( randomizer_helper::make_randomizer() );
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( toFreeCount ) ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
 		int* toFree( allocated[ toFreeIdx ] );
 		freeOrder[i] = toFree;
 		allocated.erase( allocated.begin() + toFreeIdx );
@@ -661,7 +661,7 @@ TUT_UNIT_TEST( 20, "allocate two full blocks, free second in random order, reall
 	HRandomizer r( randomizer_helper::make_randomizer() );
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( toFreeCount ) ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
 		int* toFree( allocatedB1[ toFreeIdx ] );
 		freeOrder[i] = toFree;
 		allocatedB1.erase( allocatedB1.begin() + toFreeIdx );
@@ -701,13 +701,13 @@ TUT_UNIT_TEST( 21, "allocate 3 blocks, free all but one in first and second in r
 	HRandomizer r( randomizer_helper::make_randomizer() );
 	for ( int i( 0 ); i < ( pool_t::OBJECTS_PER_BLOCK - 1 ); ++ i ) {
 		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( toFreeCount ) ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
 		int* toFree( allocatedB0[ toFreeIdx ] );
 		freeOrderB0[i] = toFree;
 		allocatedB0.erase( allocatedB0.begin() + toFreeIdx );
 		p.free( toFree );
 		check_consistency( p );
-		toFreeIdx = ( toFreeCount > 0 ? static_cast<int>( r( toFreeCount ) ) : 0 );
+		toFreeIdx = ( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
 		toFree = allocatedB1[ toFreeIdx ];
 		freeOrderB1[i] = toFree;
 		allocatedB1.erase( allocatedB1.begin() + toFreeIdx );
@@ -755,7 +755,7 @@ TUT_UNIT_TEST( 22, "make N full blocks, make room in all of them in random order
 	HRandomizer r( randomizer_helper::make_randomizer() );
 	for ( int b( 0 ); b < N; ++ b ) {
 		int toFreeCount( ( N - 1 ) - b );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( toFreeCount ) ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
 		p.free( representants[toFreeIdx] );
 		representants.erase( representants.begin() + toFreeIdx );
 		check_consistency( p );
@@ -778,7 +778,7 @@ TUT_UNIT_TEST( 23, "make N full blocks, free them in random order" )
 	HRandomizer r( randomizer_helper::make_randomizer() );
 	for ( int b( 0 ); b < N; ++ b ) {
 		int toFreeCount( ( N - 1 ) - b );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( toFreeCount )  ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
 		for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 			p.free( allocated[toFreeIdx][i] );
 			check_consistency( p );
@@ -807,7 +807,7 @@ TUT_UNIT_TEST( 24, "make N full blocks, make room in them in random order, free 
 		representants[b] = allocated[b][0];
 	for ( int b( 0 ); b < N; ++ b ) {
 		int toFreeCount( ( N - 1 ) - b );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( toFreeCount ) ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
 		p.free( representants[toFreeIdx] );
 		representants.erase( representants.begin() + toFreeIdx );
 		check_consistency( p );
@@ -815,7 +815,7 @@ TUT_UNIT_TEST( 24, "make N full blocks, make room in them in random order, free 
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, N );
 	for ( int b( 0 ); b < N; ++ b ) {
 		int toFreeCount( ( N - 1 ) - b );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( toFreeCount ) ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
 		for ( int i( 1 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 			p.free( allocated[toFreeIdx][i] );
 			check_consistency( p );

@@ -534,7 +534,7 @@ struct calc {
 			case ( '-' ): o = MINUS; break;
 			case ( '*' ): o = MULTIPLY; break;
 			case ( '/' ): o = DIVIDE; break;
-			default: M_ASSERT( !"bad oper" );
+			default: M_ASSERT( !"bad oper"[0] );
 		}
 		_opers.push( o );
 	}

@@ -24,11 +24,12 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include "tut_helpers.hxx"
+#include <yaal/tools/streamtools.hxx>
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hmultimap.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
-#include "tut_helpers.hxx"
 
 using namespace tut;
 using namespace yaal;
@@ -44,12 +45,6 @@ struct tut_yaal_hcore_hmultimap : public simple_mock<tut_yaal_hcore_hmultimap> {
 	typedef HMultiMap<int, int, HMultiMap<int, int>::compare_type, HMultiMap<int, int>::allocator_type, HMultiContainerStorage::HPacked> mmp_t;
 	typedef HMultiMap<int, int, HMultiMap<int, int>::compare_type, HMultiMap<int, int>::allocator_type, HMultiContainerStorage::HTransparent> mmt_t;
 };
-
-template<typename first, typename second>
-HStreamInterface& operator << ( HStreamInterface& stream_, HPair<first, second> const& value_ ) {
-	stream_ << "(" << value_.first << "," << value_.second << ")";
-	return ( stream_ );
-}
 
 TUT_TEST_GROUP( tut_yaal_hcore_hmultimap, "yaal::hcore::HMultiMap" );
 
@@ -127,7 +122,7 @@ TUT_UNIT_TEST( 4, "forward iteration" )
 	mm.insert( make_pair( 3, 9 ) );
 	HStringStream ss;
 	copy( mm.begin(), mm.end(), stream_iterator( ss ) );
-	ENSURE_EQUALS( "bad forward teration", ss.string(), "(1,1)(1,4)(2,2)(2,5)(2,7)(3,3)(3,6)(3,8)(3,9)" );
+	ENSURE_EQUALS( "bad forward teration", ss.string(), "pair<1,1>pair<1,4>pair<2,2>pair<2,5>pair<2,7>pair<3,3>pair<3,6>pair<3,8>pair<3,9>" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "backward iteration" )
@@ -143,7 +138,7 @@ TUT_UNIT_TEST( 5, "backward iteration" )
 	mm.insert( make_pair( 3, 9 ) );
 	HStringStream ss;
 	copy( mm.rbegin(), mm.rend(), stream_iterator( ss ) );
-	ENSURE_EQUALS( "bad forward teration", ss.string(), "(3,9)(3,8)(3,6)(3,3)(2,7)(2,5)(2,2)(1,4)(1,1)" );
+	ENSURE_EQUALS( "bad forward teration", ss.string(), "pair<3,9>pair<3,8>pair<3,6>pair<3,3>pair<2,7>pair<2,5>pair<2,2>pair<1,4>pair<1,1>" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "find/upper_bound on non existing (packed)" )
