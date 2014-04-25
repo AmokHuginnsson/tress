@@ -18,13 +18,14 @@ namespace {
  * Tests provided condition.
  * Throws if false.
  */
-void ensure_real( char const* const file, int const& line, char const* const msg, bool cond ) {
+void ensure_real( char const* file, int line, char const* msg, bool cond ) {
 	if ( !cond ) {
 		// TODO: default ctor?
 		throw failure( file, line, msg );
 	}
 }
-void ensure( char const* const msg, bool cond ) {
+void ensure( char const*, bool ) __attribute__((used));
+void ensure( char const* msg, bool cond ) {
 	ensure_real( NULL, 0, msg, cond );
 }
 
@@ -32,11 +33,13 @@ void ensure( char const* const msg, bool cond ) {
  * Tests provided condition.
  * Throws if false.
  */
-void ensure_real( char const* const file, int const& line, char const* const, char const* const& msg, bool cond ) {
+void ensure_real( char const*, int, char const*, char const*, bool ) __attribute__((used));
+void ensure_real( char const* file, int line, char const*, char const* msg, bool cond ) {
 	if ( !cond )
 		throw failure( file, line, msg );
 }
-void ensure_real( char const* const file, int const& line, char const* const, yaal::hcore::HString const& msg, bool cond ) {
+void ensure_real( char const*, int, char const*, yaal::hcore::HString const&, bool ) __attribute__((used));
+void ensure_real( char const* file, int line, char const*, yaal::hcore::HString const& msg, bool cond ) {
 	ensure_real( file, line, msg.raw(), cond );
 }
 template<typename T>
@@ -48,13 +51,14 @@ void ensure( T const& msg, bool cond ) {
  * Tests provided condition.
  * Throws if true.
  */
-void ensure_not_real( char const* const file, int const& line, char const* const msg, bool cond ) {
+void ensure_not_real( char const* file, int const& line, char const* msg, bool cond ) {
 	if ( cond ) {
 		// TODO: default ctor?
 		throw failure( file, line, msg );
 	}
 }
-void ensure_not( char const* const msg, bool cond ) {
+void ensure_not( char const*, bool ) __attribute__((used));
+void ensure_not( char const* msg, bool cond ) {
 	ensure_not_real( NULL, 0, msg, cond );
 }
 
@@ -63,7 +67,7 @@ void ensure_not( char const* const msg, bool cond ) {
  * Throws if true.
  */
 template<typename T>
-void ensure_not_real( char const* const file, int const& line, char const* const, T const& msg, bool cond ) {
+void ensure_not_real( char const* file, int line, char const*, T const& msg, bool cond ) {
 	if ( cond )
 		throw failure( file, line, msg );
 }
@@ -76,6 +80,7 @@ template<typename T>
 T const& stream_escape( T const& val_ ) {
 	return ( val_ );
 }
+char const* stream_escape( char const* ) __attribute__((used));
 char const* stream_escape( char const* val_ ) {
 	return ( val_ ? val_ : "(null)" );
 }
@@ -87,7 +92,7 @@ char const* stream_escape( char const* val_ ) {
  * client code will not compile at all!
  */
 template<class T, class Q>
-void ensure_equals_real( char const* const file, int const& line, char const* const, const char* msg, const Q& actual,
+void ensure_equals_real( char const* file, int line, char const*, const char* msg, const Q& actual,
 	const T& expected ) {
 	if ( ! ( actual == expected ) ) {
 		std::stringstream ss;
@@ -103,9 +108,9 @@ void ensure_equals( const char* msg, const Q& actual, const T& expected ) {
 }
 
 template<class T, class Q>
-void ensure_equals_real( char const* const file,
+void ensure_equals_real( char const* file,
 	int const& line,
-	char const* const,
+	char const*,
 	yaal::hcore::HString const& msg,
 	const Q& actual,
 	const T& expected ) {
@@ -117,7 +122,7 @@ void ensure_equals( yaal::hcore::HString const& msg, const Q& actual, const T& e
 }
 
 template<class T, class Q>
-void ensure_equals_real( char const* const file, int const& line, char const* const msg, const Q& actual,
+void ensure_equals_real( char const* file, int const& line, char const* msg, const Q& actual,
 	const T& expected ) {
 	ensure_equals_real<>( file, line, NULL, msg, actual, expected );
 }
@@ -132,7 +137,7 @@ void ensure_equals_real( char const* const file, int const& line, char const* co
  * operators + and -, and be comparable.
  */
 template<class T>
-void ensure_distance_real( char const* const file, int const& line, char const* const, const char* msg, const T& actual,
+void ensure_distance_real( char const* file, int const& line, char const*, const char* msg, const T& actual,
 	const T& expected, const T& distance ) {
 	if ( ( ( expected - distance ) >= actual ) || ( ( expected + distance ) <= actual ) ) {
 		std::stringstream ss;
@@ -150,12 +155,12 @@ void ensure_distance( const char* msg, const T& actual, const T& expected, const
 }
 
 template<class T>
-void ensure_distance_real( char const* const file, int const& line, const char* msg, const T& actual,
+void ensure_distance_real( char const* file, int line, const char* msg, const T& actual,
 	const T& expected, const T& distance ) {
 	ensure_distance_real<>( file, line, NULL, msg, actual, expected, distance );
 }
 
-void ensure_errno_real( char const* const file, int const& line, char const* const, char const* msg, bool cond ) {
+void ensure_errno_real( char const* file, int const& line, char const*, char const* msg, bool cond ) {
 	if( ! cond ) {
 #if defined(TUT_USE_POSIX)
 		char e[512];
@@ -169,6 +174,7 @@ void ensure_errno_real( char const* const file, int const& line, char const* con
 #endif
 	}
 }
+void ensure_errno( char const*, bool ) __attribute__((used));
 void ensure_errno( char const* msg, bool cond ) {
 	ensure_errno_real( NULL, 0, NULL, msg, cond );
 }
@@ -176,15 +182,16 @@ void ensure_errno( char const* msg, bool cond ) {
 /**
  * Unconditionally fails with message.
  */
-void fail_real( char const* const, int const&, const char* = "" ) __attribute__( ( __noreturn__ ) );
-void fail_real( char const* const file, int const& line, const char* msg ) {
+void fail_real( char const*, int, const char* = "" ) __attribute__( ( __noreturn__ ) );
+void fail_real( char const* file, int line, const char* msg ) {
 	throw failure( file, line, msg );
 }
+void fail( const char* ) __attribute__((used));
 void fail( const char* msg ) {
 	fail_real( NULL, 0, msg );
 }
 
-void fail_real( char const* const file, int const& line, std::string const& msg ) {
+void fail_real( char const* file, int line, std::string const& msg ) {
 	throw failure( file, line, msg );
 }
 
@@ -215,7 +222,6 @@ private:
 	time_constraint( time_constraint const& );
 	time_constraint& operator = ( time_constraint const& );
 };
-
 
 }       // end of namespace
 

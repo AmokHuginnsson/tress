@@ -121,7 +121,7 @@ public:
 	virtual void run_completed( void ) {
 		_os << "[----------] Global test environment tear-down\n"
 			<< "[==========] " << _run << " tests from " << _groupNames.size() << " test cases ran. (0 ms total)\n"
-			<< "[  PASSED  ] " << ( _run - _notPassed.size() ) << " tests." << std::endl;
+			<< "[  PASSED  ] " << ( _run - static_cast<int>( _notPassed.size() ) ) << " tests." << std::endl;
 		if ( !_notPassed.empty() ) {
 			_os << "[  FAILED  ] " << _notPassed.size() << " test" << ( _notPassed.size() > 1 ? "s" : "" ) << ", listed below:\n";
 			for ( not_passed_list_t::const_iterator it( _notPassed.begin() ), end( _notPassed.end() ); it != end; ++ it )

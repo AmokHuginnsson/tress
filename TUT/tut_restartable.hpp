@@ -69,13 +69,13 @@ std::string unescape( const std::string& orig ) {
 				throw std::invalid_argument( "unexpected end of string" );
 			}
 
-			unsigned int c1 = *i;
+			unsigned int c1 = static_cast<int unsigned>( *i );
 			++ i;
 			if ( i == e ) {
 				throw std::invalid_argument( "unexpected end of string" );
 			}
 
-			unsigned int c2 = *i;
+			unsigned int c2 = static_cast<int unsigned>( *i );
 			rc += static_cast<char>( ( ( c1 - 'a' ) << 4 ) + ( c2 - 'a' ) );
 		}
 

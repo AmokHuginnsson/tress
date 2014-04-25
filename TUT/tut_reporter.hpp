@@ -233,7 +233,7 @@ public:
 			if ( ! _currentGroup.empty() )
 				_os << "\n";
 			if ( ( _errorLine == console_error_line ) && tress::setup._fancy )
-				_os << "\r" << std::string( maxWidth - 1, ' ' ) << "\r" << name << std::flush;
+				_os << "\r" << std::string( static_cast<size_t>( maxWidth - 1 ), ' ' ) << "\r" << name << std::flush;
 			else
 				_os << name << ": " << std::flush;
 			_currentGroup = name;
@@ -265,7 +265,8 @@ public:
 			int progressCur( ( progressMax * total ) / _totalTestCount );
 			if ( total )
 				_os << "\n";
-			_os << "tress: " << std::string( progressCur, '=' ) << std::string( progressMax - progressCur, ' ' )
+			_os << "tress: " << std::string( static_cast<size_t>( progressCur ), '=' )
+				<< std::string( static_cast<size_t>( progressMax - progressCur ), ' ' )
 				<< " " << ( ( 100 * total ) / _totalTestCount ) << "%"
 				<< "\033[F" << _currentGroup << ": " << _groupTestLog.str() << std::flush;
 		} else {
@@ -283,7 +284,7 @@ public:
 		if ( tress::setup._fancy && tr._group && ( status.second == tr._group->get_real_test_count() ) ) {
 			int spaceCount( ( maxWidth - 9 ) - ( static_cast<int>( name.length() ) + _currentGroupTestCount ) );
 			if ( spaceCount > 0 ) {
-				std::string space( spaceCount, ' ' );
+				std::string space( static_cast<size_t>( spaceCount ), ' ' );
 				_os << space;
 			}
 			if ( status.first == status.second )

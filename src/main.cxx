@@ -28,6 +28,7 @@ Copyright:
 #include <cstdio>
 #include <libintl.h>
 #include <TUT/tut.hpp>
+#include "tut_helpers.hxx"
 #include <TUT/tut_reporter.hpp>
 #include <TUT/tut_reporter_boost.hpp>
 #include <TUT/tut_reporter_google.hpp>
@@ -49,7 +50,6 @@ Copyright:
 M_VCSID( "$Id: " __ID__ " $" )
 
 #include "setup.hxx"
-#include "tut_helpers.hxx"
 #include "options.hxx"
 #include "tut_selftest.hxx"
 
