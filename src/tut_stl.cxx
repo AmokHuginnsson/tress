@@ -34,6 +34,7 @@ Copyright:
 #include <algorithm>
 #include <numeric>
 #include <functional>
+#include "config.hxx"
 #ifdef __GNUC__
 #ifdef HAVE_SGI_STL_EXTENSIONS
 #include <ext/functional>

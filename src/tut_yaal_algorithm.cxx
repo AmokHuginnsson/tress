@@ -25,6 +25,7 @@ Copyright:
 */
 
 #include <algorithm>
+#include "config.hxx"
 #ifdef __GNUC__
 #ifdef HAVE_SGI_STL_EXTENSIONS
 #include <ext/algorithm>
