@@ -35,7 +35,9 @@ Copyright:
 #include <numeric>
 #include <functional>
 #ifdef __GNUC__
+#ifdef HAVE_SGI_STL_EXTENSIONS
 #include <ext/functional>
+#endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 #endif /* __GNUC__ */
 
 #include <TUT/tut.hpp>
@@ -45,7 +47,9 @@ M_VCSID( "$Id: " __ID__ " $" )
 
 using namespace tut;
 using namespace std;
+#ifdef HAVE_SGI_STL_EXTENSIONS
 using namespace stdext;
+#endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 using namespace tress::tut_helpers;
 
 namespace tut {
@@ -382,6 +386,7 @@ TUT_UNIT_TEST( 26, "mem_fun, mem_fun_ref" )
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
 
+#ifdef HAVE_SGI_STL_EXTENSIONS
 TUT_UNIT_TEST( 27, "mem_fun1" )
 	int a[] = { 1, 4, 9, 16 };
 	typedef list<MemFunTest> list_t;
@@ -416,6 +421,7 @@ TUT_UNIT_TEST( 28, "mem_fun1_ref" )
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.str(), "1 5 12 23 " );
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
+#endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 
 TUT_UNIT_TEST( 29, "replace" )
 	typedef list<int> list_t;

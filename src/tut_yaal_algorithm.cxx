@@ -26,7 +26,9 @@ Copyright:
 
 #include <algorithm>
 #ifdef __GNUC__
+#ifdef HAVE_SGI_STL_EXTENSIONS
 #include <ext/algorithm>
+#endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 #endif /* #ifdef __GNUC__ */
 
 #include "tut_helpers.hxx"
@@ -772,7 +774,9 @@ TUT_UNIT_TEST( 12, "is_heap" )
 	std_vector_t v( begin( _testData_[0] ), end( _testData_[0] ) );
 	for ( int i( 2 ); i < countof ( _testData_[0] ); ++ i ) {
 #ifndef _MSC_VER
+#ifdef HAVE_SGI_STL_EXTENSIONS
 		ENSURE_EQUALS( "stdext::is_heap false positive: " + lexical_cast<HString>( i ), stdext::is_heap( v.begin(), v.begin() + i ), false );
+#endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 #endif /* #ifndef _MSC_VER */
 		ENSURE_EQUALS( "yaal::is_heap false positive: " + lexical_cast<HString>( i ), yaal::is_heap( v.begin(), v.begin() + i ), false );
 		std::push_heap( v.begin(), v.begin() + i );
