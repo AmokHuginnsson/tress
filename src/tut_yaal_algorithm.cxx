@@ -822,7 +822,12 @@ TUT_UNIT_TEST( 15, "make_heap" )
 	std::make_heap( v.begin(), v.end() );
 	make_heap( a.begin(), a.end() );
 	ENSURE_EQUALS( "yaal::make_heap failed", yaal::is_heap( a.begin(), a.end() ), true );
-	ENSURE_EQUALS( "yaal::make_heap wrong", a, v );
+	for ( int i( countof ( _testData_[0] ) ); i > 0; -- i ) {
+		std::pop_heap( v.begin(), v.begin() + i );
+		pop_heap( a.begin(), a.begin() + i );
+		ENSURE_EQUALS( "yaal::pop_heap wrong: " + lexical_cast<HString>( i ), a.front(), v.front() );
+		ENSURE_EQUALS( "yaal::pop_heap failed: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i - 1 ), true );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 16, "sort_heap" )
