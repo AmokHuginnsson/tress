@@ -55,6 +55,7 @@ struct tut_yaal_hcore_hnumber : public simple_mock<tut_yaal_hcore_hnumber> {
 	tut_yaal_hcore_hnumber( void );
 	HString const& expand_leafs( HString const& );
 	HString const& random_real( void );
+	void run_square_test( HString const&, int );
 	virtual ~tut_yaal_hcore_hnumber( void )
 		{}
 };
@@ -1161,6 +1162,31 @@ TUT_TEARDOWN()
 #define SQRT_TEST( value, root ) \
 	SQRT_TEST_MSG( "square root failed", value, root )
 
+void tut_yaal_hcore_hnumber::run_square_test( HString const& random_, int naturalScale_ ) {
+	HString s;
+	HString msg;
+	HString res;
+	HNumber val( random_ );
+	if ( val < 0 )
+		val = -val;
+	s = val.to_string();
+	_bc << "sqrt(" << s << ")" << endl;
+	do _bc.read_until( res ); while ( res.is_empty() );
+	msg = "square root of random val = " + s + " failed";
+	HNumber root( square_root( val ) );
+	clog << ansi::brightcyan << ">> " << "square_root(" << s << ")" << ansi::reset << " = " << ansi::yellow << root.to_string() << ansi::reset << endl;
+	int len = static_cast<int>( res.get_length() );
+	( len >= ( naturalScale_ + 1 ) ) && ( len = naturalScale_ + 1 );
+	res = res.left( len );
+	if ( res[0] == '.' )
+		res.insert( 0, 1, '0' );
+	int z( static_cast<int>( res.find( '.' ) != HString::npos ? res.reverse_find_other_than( "0." ) : res.get_length() ) );
+	/* We need to take rounding in to account here. */
+	++ z;
+	z = static_cast<int>( res.find( '.' ) != HString::npos ? res.reverse_find_other_than( "0.", z ) : z );
+	ENSURE_EQUALS( msg, root.to_string().left( len - z ), res.left( len - z ) );
+}
+
 TUT_UNIT_TEST( 30, "square_root<HNumber>()" )
 	SQRT_TEST( 0, 0 );
 	SQRT_TEST( 0.01, 0.1 );
@@ -1182,31 +1208,12 @@ TUT_UNIT_TEST( 30, "square_root<HNumber>()" )
 	SQRT_TEST( 64, 8 );
 	SQRT_TEST( 81, 9 );
 	SQRT_TEST( 100, 10 );
-	HString s;
-	HString msg;
-	HString res;
 	_bc.spawn( BC_PATH );
 	static int const naturalScale = 100;
 	_bc << "scale=" << naturalScale << endl;
+	run_square_test( "1.25201235616650170145176377062932385805", naturalScale );
 	for ( int long i = 0; i < 100; ++ i ) {
-		HNumber val( random_real() );
-		if ( val < 0 )
-			val = -val;
-		s = val.to_string();
-		_bc << "sqrt(" << s << ")" << endl;
-		do _bc.read_until( res ); while ( res.is_empty() );
-		msg = "square root of random val = " + s + " failed";
-		HNumber root( square_root( val ) );
-		clog << ansi::brightcyan << ">> " << "square_root(" << s << ")" << ansi::reset << " = " << ansi::yellow << root.to_string() << ansi::reset << endl;
-		int len = static_cast<int>( res.get_length() );
-		( len >= ( naturalScale + 1 ) ) && ( len = naturalScale + 1 );
-		res = res.left( len );
-		if ( res[0] == '.' )
-			res.insert( 0, 1, '0' );
-		int z( static_cast<int>( res.find( '.' ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
-		/* We need to take rounding in to account here. */
-		++ z;
-		ENSURE_EQUALS( msg, root.to_string().left( len - z ), res.left( len - z ) );
+		run_square_test( random_real(), naturalScale );
 	}
 TUT_TEARDOWN()
 
