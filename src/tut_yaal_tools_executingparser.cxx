@@ -358,16 +358,30 @@ TUT_UNIT_TEST( 13, "HAlternative" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 14, "left recursion" )
-	HRule S;
-	S %= ( S >> '$' >> integer );
-	HGrammarDescription gd( S );
-	int i( 0 );
-	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
-		ENSURE( "bad ruie count", i < 1 );
-		ENSURE_EQUALS( "wrong description", *it, "A_ = A_ >> '$' >> integer" );
-		cout << *it << endl;
+	/* follows */ {
+		HRule S;
+		S %= ( S >> '$' >> integer );
+		HGrammarDescription gd( S );
+		int i( 0 );
+		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+			ENSURE( "bad ruie count", i < 1 );
+			ENSURE_EQUALS( "wrong description", *it, "A_ = A_ >> '$' >> integer" );
+			cout << *it << endl;
+		}
+		ENSURE_THROW( "Grammar with left recursion accepted (follows).", HExecutingParser ep( S ), HExecutingParserException );
 	}
-	ENSURE_THROW( "Grammar with left recursion accepted.", HExecutingParser ep( S ), HExecutingParserException );
+	/* alternative */ {
+		HRule S;
+		S %= ( integer | S );
+		HGrammarDescription gd( S );
+		int i( 0 );
+		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+			ENSURE( "bad ruie count", i < 1 );
+			ENSURE_EQUALS( "wrong description", *it, "A_ = integer | A_" );
+			cout << *it << endl;
+		}
+		ENSURE_THROW( "Grammar with left recursion accepted (alternative).", HExecutingParser ep( S ), HExecutingParserException );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 30, "simple recursive rule" )
