@@ -382,6 +382,30 @@ TUT_UNIT_TEST( 14, "left recursion" )
 		}
 		ENSURE_THROW( "Grammar with left recursion accepted (alternative).", HExecutingParser ep( S ), HExecutingParserException );
 	}
+	/* optional */ {
+		HRule S;
+		S %= ( -integer >> S );
+		HGrammarDescription gd( S );
+		int i( 0 );
+		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+			ENSURE( "bad ruie count", i < 1 );
+			ENSURE_EQUALS( "wrong description", *it, "A_ = -( integer ) >> A_" );
+			cout << *it << endl;
+		}
+		ENSURE_THROW( "Grammar with left recursion accepted (optional).", HExecutingParser ep( S ), HExecutingParserException );
+	}
+	/* kleene star */ {
+		HRule S;
+		S %= ( *integer >> S );
+		HGrammarDescription gd( S );
+		int i( 0 );
+		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+			ENSURE( "bad ruie count", i < 1 );
+			ENSURE_EQUALS( "wrong description", *it, "A_ = *( integer ) >> A_" );
+			cout << *it << endl;
+		}
+		ENSURE_THROW( "Grammar with left recursion accepted (kleene star).", HExecutingParser ep( S ), HExecutingParserException );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 30, "simple recursive rule" )
