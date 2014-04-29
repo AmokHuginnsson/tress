@@ -53,5 +53,31 @@ TUT_UNIT_TEST( 1, "grammar test" )
 		cout << *it << endl;
 TUT_TEARDOWN()
 
+hcore::HString prog1(
+	"sum( a, b ) {\n"
+	"	return ( a + b );\n"
+	"}\n"
+	"\n"
+	"main( args ) {\n"
+	"	a = integer( args[0] );\n"
+	"	b = integer( args[1] );\n"
+	"	return ( sum( 3 + a, sum( 4, ( b + 1 ) * 2 ) ) );\n"
+	"}\n"
+);
+
+TUT_UNIT_TEST( 2, "simple program" )
+	HRule hg( huginn_grammar() );
+	HGrammarDescription gd( hg );
+	HExecutingParser ep( hg );
+	ep( prog1 );
+	if ( ep.error_position() != NULL ) {
+		cout << "error at: \n" << ep.error_position() << endl;
+		for ( HExecutingParser::messages_t::const_iterator it( ep.error_messages().begin() ), end( ep.error_messages().end() ); it != end; ++ it ) {
+			cout << *it << endl;
+		}
+	}
+TUT_TEARDOWN()
+
+
 }
 

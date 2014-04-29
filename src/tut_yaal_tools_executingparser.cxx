@@ -643,8 +643,11 @@ TUT_UNIT_TEST( 50, "the test" )
 	HExecutingParser ep( r );
 	ENSURE( "parsing correct input (coma separated set of reals) failed", !ep( "3.141592653589793, -2.718281828459045, 17" ) );
 	ep();
-	if ( ep( "3.141592653589793, -2.718281828459045, 17, kupa" ) )
-		cout << "2: failed to consume input" << endl;
+	char const data[] = "3.141592653589793, -2.718281828459045, 17, kupa";
+	char const* bad( strstr( data, "kupa" ) );
+	ENSURE_NOT( "parsing incorrect input (coma separated set of reals plus trash) succeeded", !ep( data ) );
+	ENSURE_EQUALS( "error position given incorrectly", hcore::HString( ep.error_position() ), hcore::HString( bad ) );
+	ENSURE_EQUALS( "bad error message", ep.error_messages()[0], "expected real number" );
 	copy( v.begin(), v.end(), stream_iterator( cout, endl ) );
 TUT_TEARDOWN()
 
