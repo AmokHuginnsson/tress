@@ -464,7 +464,8 @@ TUT_UNIT_TEST( 32, "unnamed HHuginn grammar" )
 	HRule multiplication( power >> ( * ( '*' >> power ) ) );
 	HRule sum( multiplication >> ( * ( '+' >> multiplication ) ) );
 	HRule value( sum );
-	HRule assignment( *( name >> '=' ) >> value );
+	HRule ref( value >> *( '[' >> value >> ']' ) );
+	HRule assignment( *( name >> '=' ) >> ref );
 	expression %= assignment;
 	HRule booleanExpression;
 	HRule booleanValue( executing_parser::constant( "true" ) | executing_parser::constant( "false" ) | executing_parser::constant( '(' ) >> booleanExpression >> ')' );
@@ -496,11 +497,12 @@ TUT_UNIT_TEST( 32, "unnamed HHuginn grammar" )
 		"B_ = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"C_ = '{' >> *( \"if\" >> '(' >> D_ >> ')' >> C_ >> -( \"else\" >> C_ ) | \"while\" >> '(' >> D_ >> ')' >> C_ | \"switch\" >> '(' >> E_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> C_ ) >> '}' | \"return\" >> '(' >> E_ >> ')' | +( E_ >> ';' ) ) >> '}'",
 		"D_ = E_ >> \"==\" >> E_ | E_ >> \"!=\" >> E_ | E_ >> \"<\" >> E_ | E_ >> \">\" >> E_ | E_ >> \"<=\" >> E_ | E_ >> \">=\" >> E_ | F_ >> \"&&\" >> F_ | F_ >> \"||\" >> F_ | F_ >> \"^^\" >> F_ | '!' >> F_",
-		"E_ = *( B_ >> '=' ) >> G_ >> *( '+' >> G_ )",
+		"E_ = *( B_ >> '=' ) >> G_ >> *( '[' >> G_ >> ']' )",
 		"F_ = \"true\" | \"false\" | '(' >> D_ >> ')'",
-		"G_ = H_ >> *( '*' >> H_ )",
-		"H_ = I_ >> *( '^' >> I_ )",
-		"I_ = '|' >> E_ >> '|' | '(' >> E_ >> ')' | B_ >> '(' >> -( E_ >> *( ',' >> E_ ) ) >> ')' | real | B_"
+		"G_ = H_ >> *( '+' >> H_ )",
+		"H_ = I_ >> *( '*' >> I_ )",
+		"I_ = J_ >> *( '^' >> J_ )",
+		"J_ = '|' >> E_ >> '|' | '(' >> E_ >> ')' | B_ >> '(' >> -( E_ >> *( ',' >> E_ ) ) >> ')' | real | B_"
 	};
 	cout << "hg:" << endl;
 	HGrammarDescription gd( hg );
