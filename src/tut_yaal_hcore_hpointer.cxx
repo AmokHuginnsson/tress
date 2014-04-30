@@ -281,7 +281,6 @@ TUT_UNIT_TEST( 15, "accessing nullified weak" ) {
 		weak_t w; {
 			ptr_t p( new counter_t() );
 			w = p;
-			ENSURE( "weak could not pass ownership", w == p );
 			ptr_t o( w );
 			ENSURE( "weak could not pass ownership", o == p );
 		}
