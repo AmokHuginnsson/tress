@@ -61,7 +61,7 @@ TUT_UNIT_TEST( 2, "1 mili-second accuracy" )
 #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ )
 	static int long const QUALITY = PASSED / 10;
 #else /* #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
-	static int long const QUALITY = get_speed( HClock::UNIT::MILISECOND ) + 2;
+	static int long const QUALITY = ( get_speed( HClock::UNIT::MILISECOND ) + 2) * 2;
 #endif /* #else #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 	HClock clk;
 	TUT_EVAL( tools::sleep::second( SLEEP ) );
