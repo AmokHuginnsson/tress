@@ -61,33 +61,18 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "param given for an empty format" )
 	HFormat f;
-	try {
-		int i = 0;
-		f % i;
-		FAIL( "parameter for empty format swallowed" );
-	} catch ( HFormatException& ) {
-		// ok
-	}
+	int i = 0;
+	ENSURE_THROW( "parameter for empty format swallowed", f % i, HFormatException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "no params for non empty format" )
 	HFormat f( "%d" );
-	try {
-		f.string();
-		FAIL( "non empty format generated string based on zero args" );
-	} catch ( HFormatException& ) {
-		// ok
-	}
+	ENSURE_THROW( "non empty format generated string based on zero args", f.string(), HFormatException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "bad order of params" )
 	HFormat f( "[%1$*2$.*3$Lf]" );
-	try {
-		f % 8 % PI % 3;
-		FAIL( "incorrect arg type accepted" );
-	} catch ( HFormatException& ) {
-		// ok
-	}
+	ENSURE_THROW( "incorrect arg type accepted", f % 8 % PI % 3, HFormatException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "reuse of format" )
