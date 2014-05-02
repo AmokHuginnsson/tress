@@ -408,7 +408,7 @@ TUT_UNIT_TEST( 14, "left recursion" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 30, "simple recursive rule" )
+TUT_UNIT_TEST( 15, "simple recursive rule" )
 	/*
 	 * If *::describe() is incorrectly implemented this test will overflow stack.
 	 */
@@ -430,7 +430,7 @@ TUT_UNIT_TEST( 30, "simple recursive rule" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 31, "non-trivial recursive rule" )
+TUT_UNIT_TEST( 16, "non-trivial recursive rule" )
 	HRule elem;
 	HRule mul( elem >> *( '*' >> elem ) );
 	HRule sum( mul >> *( '+' >> mul ) );
@@ -442,6 +442,51 @@ TUT_UNIT_TEST( 31, "non-trivial recursive rule" )
 		"A_ = regex( \"\\<a-z\\>\" ) >> '=' >> B_",
 		"B_ = real | '(' >> C_ >> *( '+' >> C_ ) >> ')'",
 		"C_ = B_ >> *( '*' >> B_ )"
+	};
+	cout << "eq:" << endl;
+	HGrammarDescription gd( eq );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE_EQUALS( "wrong description", *it, epDesc[i] );
+		cout << *it << endl;
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 17, "ad-hoc root rule name" )
+	HRule elem;
+	HRule mul( elem >> *( '*' >> elem ) );
+	HRule extra( integer >> '%' >> elem );
+	HRule sum( mul >> *( '+' >> mul ) );
+	elem %= ( real | ( character( '(' ) >> sum >> ')' ) );
+	HExecutingParser ep( elem >> extra );
+	static char epDesc[][50] = {
+		"A_ = B_ >> integer >> '%' >> B_",
+		"B_ = real | '(' >> C_ >> *( '+' >> C_ ) >> ')'",
+		"C_ = B_ >> *( '*' >> B_ )"
+	};
+	cout << "ad-hoc:" << endl;
+	HGrammarDescription gd( elem >> extra );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE_EQUALS( "wrong description", *it, epDesc[i] );
+		cout << *it << endl;
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 18, "two inter-locking recursion loops" )
+	HRule elem;
+	HRule other;
+	HRule mul( elem >> *( '*' >> elem ) >> other );
+	HRule sum( other >> *( '+' >> other ) >> elem );
+	elem %= ( real | ( character( '(' ) >> sum >> ')' ) );
+	other %= ( integer | ( character( '(' ) >> mul >> ')' ) );
+	HRule name( regex( "\\<a-z\\>" ) );
+	HRule eq( name >> '=' >> elem >> other );
+	HExecutingParser ep2( eq );
+	char epDesc[][80] = {
+		"A_ = regex( \"\\<a-z\\>\" ) >> '=' >> B_ >> C_",
+		"B_ = real | '(' >> C_ >> *( '+' >> C_ ) >> B_ >> ')'",
+		"C_ = integer | '(' >> B_ >> *( '*' >> B_ ) >> C_ >> ')'"
 	};
 	cout << "eq:" << endl;
 	HGrammarDescription gd( eq );
@@ -482,27 +527,43 @@ TUT_UNIT_TEST( 32, "unnamed HHuginn grammar" )
 	booleanExpression %= ( booleanEquals | booleanNotEquals | booleanLess | booleanGreater | booleanLessEq | booleanGreaterEq | booleanAnd | booleanOr | booleanXor | booleanNot );
 	HRule expressionList( + ( expression >> ';' ) );
 	HRule scope;
+	HRule loopScope;
 	HRule ifStatement( executing_parser::constant( "if" ) >> '(' >> booleanExpression >> ')' >> scope >> -( executing_parser::constant( "else" ) >> scope ) );
-	HRule whileStatement( executing_parser::constant( "while" ) >> '(' >> booleanExpression >> ')' >> scope );
+	HRule continueStatement( executing_parser::constant( "continue" ) >> ';' );
+	HRule breakStatement( executing_parser::constant( "break" ) >> ';' );
+	HRule whileStatement( executing_parser::constant( "while" ) >> '(' >> booleanExpression >> ')' >> loopScope );
+	HRule foreachStatement( executing_parser::constant( "foreach" ) >> '(' >> name >> ':' >> expression >> ')' >> loopScope );
 	HRule caseStatement( executing_parser::constant( "case" ) >> '(' >> integer >> ')' >> ':' >> scope );
+	HRule defaultStatement( executing_parser::constant( "default" ) >> ':' >> scope );
 	HRule switchStatement( executing_parser::constant( "switch" ) >> '(' >> expression >> ')' >> '{' >> +caseStatement >> '}' );
-	HRule returnStatement( executing_parser::constant( "return" ) >> '(' >> expression >> ')' );
-	HRule statement( ifStatement | whileStatement | switchStatement | returnStatement | expressionList );
+	HRule returnStatement( executing_parser::constant( "return" ) >> '(' >> expression >> ')' >> ';' );
+	HRule statement( ifStatement | whileStatement | foreachStatement | switchStatement | returnStatement | expressionList );
+	HRule loopStatement( ifStatement | whileStatement | foreachStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionList );
 	scope %= ( '{' >> *statement >> '}' );
+	loopScope %= ( '{' >> *loopStatement >> '}' );
 	HRule nameList( name >> ( * ( ',' >> name ) ) );
 	HRule functionDefinition( name >> '(' >> -nameList >> ')' >> scope );
 	HRule hg( + functionDefinition );
 	char const huginnDesc[][320] = {
 		"A_ = +( B_ >> '(' >> -( B_ >> *( ',' >> B_ ) ) >> ')' >> C_ )",
 		"B_ = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"C_ = '{' >> *( \"if\" >> '(' >> D_ >> ')' >> C_ >> -( \"else\" >> C_ ) | \"while\" >> '(' >> D_ >> ')' >> C_ | \"switch\" >> '(' >> E_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> C_ ) >> '}' | \"return\" >> '(' >> E_ >> ')' | +( E_ >> ';' ) ) >> '}'",
-		"D_ = E_ >> \"==\" >> E_ | E_ >> \"!=\" >> E_ | E_ >> \"<\" >> E_ | E_ >> \">\" >> E_ | E_ >> \"<=\" >> E_ | E_ >> \">=\" >> E_ | F_ >> \"&&\" >> F_ | F_ >> \"||\" >> F_ | F_ >> \"^^\" >> F_ | '!' >> F_",
-		"E_ = *( B_ >> '=' ) >> G_ >> *( '[' >> G_ >> ']' )",
-		"F_ = \"true\" | \"false\" | '(' >> D_ >> ')'",
-		"G_ = H_ >> *( '+' >> H_ )",
-		"H_ = I_ >> *( '*' >> I_ )",
-		"I_ = J_ >> *( '^' >> J_ )",
-		"J_ = '|' >> E_ >> '|' | '(' >> E_ >> ')' | B_ >> '(' >> -( E_ >> *( ',' >> E_ ) ) >> ')' | real | B_"
+		"C_ = '{' >> *( D_ | E_ | F_ | G_ | H_ | I_ ) >> '}'",
+		"D_ = \"if\" >> '(' >> J_ >> ')' >> C_ >> -( \"else\" >> C_ )",
+		"E_ = \"while\" >> '(' >> J_ >> ')' >> K_",
+		"F_ = \"foreach\" >> '(' >> B_ >> ':' >> L_ >> ')' >> K_",
+		"G_ = \"switch\" >> '(' >> L_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> C_ ) >> '}'",
+		"H_ = \"return\" >> '(' >> L_ >> ')' >> ';'",
+		"I_ = +( L_ >> ';' )",
+		"J_ = L_ >> \"==\" >> L_ | L_ >> \"!=\" >> L_ | L_ >> \"<\" >> L_ | L_ >> \">\" >> L_ | L_ >> \"<=\" >> L_ | L_ >> \">=\" >> L_ | M_ >> \"&&\" >> M_ | M_ >> \"||\" >> M_ | M_ >> \"^^\" >> M_ | '!' >> M_",
+		"K_ = '{' >> *( D_ | E_ | F_ | G_ | R_ | S_ | H_ | I_ ) >> '}'",
+		"L_ = *( B_ >> '=' ) >> N_ >> *( '[' >> N_ >> ']' )",
+		"M_ = \"true\" | \"false\" | '(' >> J_ >> ')'",
+		"N_ = O_ >> *( '+' >> O_ )",
+		"O_ = P_ >> *( '*' >> P_ )",
+		"P_ = Q_ >> *( '^' >> Q_ )",
+		"Q_ = '|' >> L_ >> '|' | '(' >> L_ >> ')' | B_ >> '(' >> -( L_ >> *( ',' >> L_ ) ) >> ')' | real | B_",
+		"R_ = \"break\" >> ';'",
+		"S_ = \"continue\" >> ';'"
 	};
 	cout << "hg:" << endl;
 	HGrammarDescription gd( hg );
