@@ -464,17 +464,14 @@ TUT_UNIT_TEST( 16, "graft downwards (replace_node)" ) {
 		it->add_node( 'h' );
 		it->add_node( 'i' );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
-		try {
+		ENSURE_THROW( "graft downwards succeded, eek!", {
 			check_consistency( t );
 			item_t::allow_copying();
 			a->replace_node( B, &*it0 );
 			item_t::allow_copying();
-			FAIL( "graft downwards succeded, eek!" );
-		} catch ( HFailedAssertion& ) {
-			item_t::allow_copying();
-			check_consistency( t );
-			// ok
-		}
+		}, HFailedAssertion );
+		item_t::allow_copying();
+		check_consistency( t );
 	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -659,19 +656,16 @@ TUT_UNIT_TEST( 21, "graft with bad iteroator (replace_node)" ) {
 		n->add_node( 'c' );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
-		try {
+		ENSURE_THROW( "grafintg with no coherency", {
 			check_consistency( t1 );
 			check_consistency( t2 );
 			item_t::stop_copying();
 			it->replace_node( it, t1.get_root() );
 			item_t::allow_copying();
-			FAIL( "grafintg with no coherency" );
-		} catch ( HFailedAssertion& ) {
-			item_t::allow_copying();
-			check_consistency( t1 );
-			check_consistency( t2 );
-			// ok
-		}
+		}, HFailedAssertion );
+		item_t::allow_copying();
+		check_consistency( t1 );
+		check_consistency( t2 );
 	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -1484,20 +1478,10 @@ TUT_UNIT_TEST( 40, "get_child_at()" ) {
 		it->add_node( 'i' );
 		ENSURE_EQUALS( "bad shape", to_string( t ), "@{0{q{!#{a{ABC}}$}w{%^&}}1{def}2{ghi}}" );
 		tree_t::node_t root( t.get_root() );
-		try {
-			root->get_child_at( -1 );
-			FAIL( "Obtained child with negative index." );
-		} catch ( HException const& ) {
-			/* ok */
-		}
+		ENSURE_THROW( "Obtained child with negative index.", root->get_child_at( -1 ), HException );
 		for ( int i( 0 ); i < 3; ++ i )
 			ENSURE_EQUALS( "get_child_at() from root failed", **root->get_child_at( i ), i + '0' );
-		try {
-			root->get_child_at( 3 );
-			FAIL( "Obtained child with out of range index." );
-		} catch ( HException const& ) {
-			/* ok */
-		}
+		ENSURE_THROW( "Obtained child with out of range index.", root->get_child_at( 3 ), HException );
 		tree_t::node_t child( root->get_child_at( 0 ) );
 		ENSURE_EQUALS( "get_child_at() from child failed", **child->get_child_at( 0 ), 'q' );
 		ENSURE_EQUALS( "get_child_at() from child failed", **child->get_child_at( 1 ), 'w' );
