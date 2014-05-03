@@ -540,7 +540,7 @@ TUT_UNIT_TEST( 32, "unnamed HHuginn grammar" )
 	HRule statement( ifStatement | whileStatement | foreachStatement | switchStatement | returnStatement | expressionList );
 	HRule loopStatement( ifStatement | whileStatement | foreachStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionList );
 	scope %= ( '{' >> *statement >> '}' );
-	loopScope %= ( '{' >> *loopStatement >> '}' );
+	loopScope.define( '{' >> *loopStatement >> '}', false );
 	HRule nameList( name >> ( * ( ',' >> name ) ) );
 	HRule functionDefinition( name >> '(' >> -nameList >> ')' >> scope );
 	HRule hg( + functionDefinition );
@@ -555,15 +555,13 @@ TUT_UNIT_TEST( 32, "unnamed HHuginn grammar" )
 		"H_ = \"return\" >> '(' >> L_ >> ')' >> ';'",
 		"I_ = +( L_ >> ';' )",
 		"J_ = L_ >> \"==\" >> L_ | L_ >> \"!=\" >> L_ | L_ >> \"<\" >> L_ | L_ >> \">\" >> L_ | L_ >> \"<=\" >> L_ | L_ >> \">=\" >> L_ | M_ >> \"&&\" >> M_ | M_ >> \"||\" >> M_ | M_ >> \"^^\" >> M_ | '!' >> M_",
-		"K_ = '{' >> *( D_ | E_ | F_ | G_ | R_ | S_ | H_ | I_ ) >> '}'",
+		"K_ = '{' >> *( D_ | E_ | F_ | G_ | \"break\" >> ';' | \"continue\" >> ';' | H_ | I_ ) >> '}'",
 		"L_ = *( B_ >> '=' ) >> N_ >> *( '[' >> N_ >> ']' )",
 		"M_ = \"true\" | \"false\" | '(' >> J_ >> ')'",
 		"N_ = O_ >> *( '+' >> O_ )",
 		"O_ = P_ >> *( '*' >> P_ )",
 		"P_ = Q_ >> *( '^' >> Q_ )",
-		"Q_ = '|' >> L_ >> '|' | '(' >> L_ >> ')' | B_ >> '(' >> -( L_ >> *( ',' >> L_ ) ) >> ')' | real | B_",
-		"R_ = \"break\" >> ';'",
-		"S_ = \"continue\" >> ';'"
+		"Q_ = '|' >> L_ >> '|' | '(' >> L_ >> ')' | B_ >> '(' >> -( L_ >> *( ',' >> L_ ) ) >> ')' | real | B_"
 	};
 	cout << "hg:" << endl;
 	HGrammarDescription gd( hg );
