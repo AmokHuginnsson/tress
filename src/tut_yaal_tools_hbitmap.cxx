@@ -72,42 +72,22 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "set" )
 	HBitmap bmp;
-	try {
-		bmp.set( 0, true );
-		FAIL( "default constructor set" );
-	} catch ( HFailedAssertion& ) {
-		// ok
-	}
+	ENSURE_THROW( "default constructor set", bmp.set( 0, true ), HFailedAssertion );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "get" )
 	HBitmap bmp;
-	try {
-		bmp.get( 0 );
-		FAIL( "default constructor set" );
-	} catch ( HFailedAssertion& ) {
-		// ok
-	}
+	ENSURE_THROW( "default constructor set", bmp.get( 0 ), HFailedAssertion );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "rotate_left" )
 	HBitmap bmp;
-	try {
-		bmp.rotate_left( 0, 0, 0 );
-		FAIL( "default constructor set" );
-	} catch ( HFailedAssertion& ) {
-		// ok
-	}
+	ENSURE_THROW( "default constructor set", bmp.rotate_left( 0, 0, 0 ), HFailedAssertion );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 7, "rotate_right" )
 	HBitmap bmp;
-	try {
-		bmp.rotate_right( 0, 0, 0 );
-		FAIL( "default constructor set" );
-	} catch ( HFailedAssertion& ) {
-		// ok
-	}
+	ENSURE_THROW( "default constructor set", bmp.rotate_right( 0, 0, 0 ), HFailedAssertion );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "reverse iteration" )
