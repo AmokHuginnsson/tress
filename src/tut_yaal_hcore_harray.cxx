@@ -52,12 +52,7 @@ TUT_TEST_GROUP( tut_yaal_hcore_harray, "yaal::hcore::HArray" );
 TUT_UNIT_TEST( 1, "Constructor." )
 	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
-	try {
-		array_t array( BAD_SIZE );
-		FAIL( "array with negative size created" );
-	} catch ( HException const& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "array with negative size created", array_t array( BAD_SIZE ), HException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "Constructor and get_size()." )
@@ -77,12 +72,7 @@ TUT_UNIT_TEST( 3, "Constructor with filling." )
 	int const BAD_SIZE = - 1;
 	int const SIZE_FOR_ARRAY = 7;
 	int const FILLER_FOR_ARRAY = 13;
-	try {
-		array_t badArray( BAD_SIZE, FILLER_FOR_ARRAY );
-		FAIL( "array with negative size created" );
-	} catch ( HException const& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "array with negative size created", array_t badArray( BAD_SIZE, FILLER_FOR_ARRAY ), HException );
 	array_t array( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
 	for ( int i = 0; i < SIZE_FOR_ARRAY; ++ i )
 		ENSURE_EQUALS( "array element not filled with default value", array[ i ], FILLER_FOR_ARRAY );
@@ -113,18 +103,8 @@ TUT_UNIT_TEST( 6, "Operator [ ]." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	array_t array ( SIZE );
-	try {
-		array [ SIZE ] = 0;
-		FAIL( "access beyond size succed" );
-	} catch ( HException const& e ) {
-		cout << e.what() << endl;
-	}
-	try {
-		array[ - SIZE - 1 ] = 0;
-		FAIL( "access with negative index succed" );
-	} catch ( HException const& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "access beyond size succed", array [ SIZE ] = 0, HException );
+	ENSURE_THROW( "access with negative index succed", array[ - SIZE - 1 ] = 0, HException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 7, "Operator bool." )
