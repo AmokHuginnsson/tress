@@ -80,32 +80,18 @@ TUT_UNIT_TEST( 2, "resolve symbol from self" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "load non-existing plugin" )
-	try {
-		HPlugin p;
-		p.load( "/non/existing/plugin" );
-		FAIL( "non-existing plugin loaded" );
-	} catch ( HPluginException const& e ) {
-		hcore::log << "expected: " << e.what() << endl;
-	} catch ( HException const& e ) {
-		FAIL( std::string( "unexpected: " ) + e.what() );
-	} catch ( ... ) {
-		FAIL( "unexpected unknown exception!" );
-	}
+	HPlugin p;
+	ENSURE_THROW( "non-existing plugin loaded", p.load( "/non/existing/plugin" ), HPluginException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "resolve non-existing symbol" )
 	bool loaded( false );
-	try {
-		HPlugin p;
-		p.load( TRESS_PLUGIN );
-		loaded = p.is_loaded();
-		void (*sym)(void) = NULL;
-		p.resolve( "non_existing_symbol", sym );
-		FAIL( "non-existing plugin loaded" );
-	} catch ( HPluginException const& e ) {
-		ENSURE( "failed to load plugin", loaded );
-		hcore::log << "expected: " << e.what() << endl;
-	}
+	HPlugin p;
+	p.load( TRESS_PLUGIN );
+	loaded = p.is_loaded();
+	void (*sym)(void) = NULL;
+	ENSURE_THROW( "non-existing plugin loaded", p.resolve( "non_existing_symbol", sym ), HPluginException );
+	ENSURE( "failed to load plugin", loaded );
 TUT_TEARDOWN()
 
 }
