@@ -540,7 +540,7 @@ TUT_UNIT_TEST( 32, "unnamed HHuginn grammar" )
 	HRule statement( ifStatement | whileStatement | foreachStatement | switchStatement | returnStatement | expressionList );
 	HRule loopStatement( ifStatement | whileStatement | foreachStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionList );
 	scope %= ( '{' >> *statement >> '}' );
-	loopScope.define( '{' >> *loopStatement >> '}', false );
+	loopScope %= ( '{' >> *loopStatement >> '}' );
 	HRule nameList( name >> ( * ( ',' >> name ) ) );
 	HRule functionDefinition( name >> '(' >> -nameList >> ')' >> scope );
 	HRule hg( + functionDefinition );
@@ -705,9 +705,9 @@ TUT_UNIT_TEST( 50, "the test" )
 	ENSURE( "parsing correct input (coma separated set of reals) failed", !ep( "3.141592653589793, -2.718281828459045, 17" ) );
 	ep();
 	char const data[] = "3.141592653589793, -2.718281828459045, 17, kupa";
-	char const* bad( strstr( data, "kupa" ) );
+	int long bad( strstr( data, "kupa" ) - data );
 	ENSURE_NOT( "parsing incorrect input (coma separated set of reals plus trash) succeeded", !ep( data ) );
-	ENSURE_EQUALS( "error position given incorrectly", hcore::HString( ep.error_position() ), hcore::HString( bad ) );
+	ENSURE_EQUALS( "error position given incorrectly", ep.error_position(), bad );
 	ENSURE_EQUALS( "bad error message", ep.error_messages()[0], "expected real number" );
 	copy( v.begin(), v.end(), stream_iterator( cout, endl ) );
 TUT_TEARDOWN()

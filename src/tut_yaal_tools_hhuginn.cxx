@@ -70,8 +70,8 @@ TUT_UNIT_TEST( 2, "simple program" )
 	HGrammarDescription gd( hg );
 	HExecutingParser ep( hg );
 	ep( prog1 );
-	if ( ep.error_position() != NULL ) {
-		cout << "error at: \n" << ep.error_position() << endl;
+	if ( ep.error_position() != hcore::HString::npos ) {
+		cout << "error at: \n" << ( prog1.raw() + ep.error_position() ) << endl;
 		for ( HExecutingParser::messages_t::const_iterator it( ep.error_messages().begin() ), end( ep.error_messages().end() ); it != end; ++ it ) {
 			cout << *it << endl;
 		}
