@@ -148,12 +148,7 @@ namespace tut {
 TUT_UNIT_TEST( 1, "Empty DOM." )
 	HXml x;
 	ENSURE( "fresh DOM not empty", ! x.get_root() );
-	try {
-		x.get_root().get_type();
-		FAIL( "accessing null node-proxy" );
-	} catch ( HFailedAssertion& ) {
-		// ok
-	}
+	ENSURE_THROW( "accessing null node-proxy", x.get_root().get_type(), HFailedAssertion );
 TUT_TEARDOWN()
 
 
@@ -177,12 +172,7 @@ TUT_UNIT_TEST( 3, "clear" )
 	HXml::HNodeProxy n = x.get_root();
 	x.clear();
 	ENSURE( "cleared DOM not empty", ! x.get_root() );
-	try {
-		x.get_root().get_type();
-		FAIL( "accessing null node-proxy" );
-	} catch ( HFailedAssertion& ) {
-		// ok
-	}
+	ENSURE_THROW( "accessing null node-proxy", x.get_root().get_type(), HFailedAssertion );
 TUT_TEARDOWN()
 
 
@@ -205,12 +195,7 @@ TUT_UNIT_TEST( 4, "build, save, load" )
 	HXml y;
 	y.load( HStreamInterface::ptr_t( new HFile( OUT_PATH, HFile::OPEN::READING ) ) );
 	ENSURE_EQUALS( "DOMs differ", x, y );
-	try {
-		(*it).copy_node( n );
-		FAIL( "copying from parent node" );
-	} catch ( HFailedAssertion& ) {
-		// ok
-	}
+	ENSURE_THROW( "copying from parent node", (*it).copy_node( n ), HFailedAssertion );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "load, save" )
