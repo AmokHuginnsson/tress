@@ -293,22 +293,12 @@ TUT_UNIT_TEST( 6, "Starting already started thread" )
 	HThread a;
 	ca.set( 5 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
-	try {
-		a.spawn( call( &HCool::run, &ca, &a ) );
-		FAIL( "Started already started thread." );
-	} catch ( HException& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "Started already started thread.", a.spawn( call( &HCool::run, &ca, &a ) ), HThreadException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 7, "Finishing thread that was not started" )
 	HThread a;
-	try {
-		a.finish();
-		FAIL( "Finishing not started thread successful." );
-	} catch ( HException& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "Finishing not started thread successful.", a.finish(), HThreadException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "Simple thread (plain function)" )
@@ -376,12 +366,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 14, "Exception propagation." )
 	HThread a;
 	a.spawn( call( unstable, &a ) );
-	try {
-		a.finish();
-		FAIL( "Exception not propagated!" );
-	} catch ( HThreadException& e ) {
-		e.log( __FILE__, __LINE__, __PRETTY_FUNCTION__ );
-	}
+	ENSURE_THROW( "Exception not propagated!", a.finish(), HThreadException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 15, "rwlock test" )
