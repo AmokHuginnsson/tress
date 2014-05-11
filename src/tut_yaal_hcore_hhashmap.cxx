@@ -102,12 +102,7 @@ void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ ) {
 TUT_TEST_GROUP( tut_yaal_hcore_hhashmap, "yaal::hcore::HHashMap" );
 
 TUT_UNIT_TEST( 1, "Simple constructor." )
-	try {
-		hash_map_t map( 0 );
-		FAIL ( "Created map with bad hash table size." );
-	} catch ( HException const& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "Created map with bad hash table size.", hash_map_t map( 0 ), HException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "Quantity test." ) {
@@ -300,13 +295,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 14, "dereferencing non existing key with const map[key]" )
 	hash_map_t m;
-	try {
-		hash_map_t const& cm( m );
-		cm[ 0 ];
-		FAIL( "FATAL: dereferencing non-existing key succeeded!" );
-	} catch ( HInvalidKeyException const& ) {
-		// ok
-	}
+	hash_map_t const& cm( m );
+	ENSURE_THROW( "FATAL: dereferencing non-existing key succeeded!", cm[ 0 ], HInvalidKeyException );
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 
