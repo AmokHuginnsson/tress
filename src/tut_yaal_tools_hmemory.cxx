@@ -56,19 +56,9 @@ tut_yaal_tools_hmemory::tut_yaal_tools_hmemory( void )
 TUT_TEST_GROUP( tut_yaal_tools_hmemory, "yaal::tools::HMemory" );
 
 TUT_UNIT_TEST( 1, "constructor" )
-	try {
-		HMemoryObserver m( NULL, 10 );
-		FAIL( "construction of null block succeeded" );
-	} catch ( HFailedAssertion const& ) {
-		// ok
-	}
-	try {
-		char b[10];
-		HMemoryObserver m( b, 0 );
-		FAIL( "zero length block construction succeeded" );
-	} catch ( HFailedAssertion const& ) {
-		// ok
-	}
+	ENSURE_THROW( "construction of null block succeeded", HMemoryObserver m( NULL, 10 ), HFailedAssertion );
+	char b[10];
+	ENSURE_THROW( "zero length block construction succeeded", HMemoryObserver m( b, 0 ), HFailedAssertion );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "simple write" )
