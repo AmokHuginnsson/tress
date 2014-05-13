@@ -201,7 +201,7 @@ void gather_groups_from_file( OSetup::set_definitions_t& lst ) {
 	M_PROLOG
 	HFile file;
 	if ( setup._testGroupListFilePath == "-" )
-		file.open( stdin );
+		file.open( stdin, false );
 	if ( ! file && file.open( setup._testGroupListFilePath, HFile::OPEN::READING ) ) {
 		cout << file.get_error() << ": " << file.get_path() << endl;
 		throw 0;

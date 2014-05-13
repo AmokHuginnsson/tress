@@ -76,11 +76,11 @@ void zpipe_compress( HString const& src_, HString const& dst_ ) {
 	HFile in;
 	HFile out;
 	if ( src_ == "-" )
-		in.open( stdin );
+		in.open( stdin, false );
 	else
 		in.open( src_, HFile::OPEN::READING );
 	if ( dst_ == "-" )
-		out.open( stdout );
+		out.open( stdout, false );
 	else
 		out.open( dst_, HFile::OPEN::WRITING );
 	HZipStream z( out, HZipStream::MODE::DEFLATE );
@@ -97,11 +97,11 @@ void zpipe_decompress( HString const& src_, HString const& dst_ ) {
 	HFile in;
 	HFile out;
 	if ( src_ == "-" )
-		in.open( stdin );
+		in.open( stdin, false );
 	else
 		in.open( src_, HFile::OPEN::READING );
 	if ( dst_ == "-" )
-		out.open( stdout );
+		out.open( stdout, false );
 	else
 		out.open( dst_, HFile::OPEN::WRITING );
 	HZipStream z( in, HZipStream::MODE::INFLATE );
