@@ -42,20 +42,11 @@ TUT_TEST_GROUP( tut_yaal_hcore_hregex, "yaal::hcore::HRegex" );
 
 TUT_UNIT_TEST( 1, "empty pattern" )
 	HRegex r;
-	try {
-		r.matches( "a" );
-		FAIL( "match on unitialized regex succeeded" );
-	} catch ( HRegexException const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "match on unitialized regex succeeded", r.matches( "a" ), HRegexException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "buggy pattern (NULL) in constructor" )
-	try {
-		HRegex r( NULL );
-	} catch ( HFailedAssertion const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "creation of regex from NULL succeeded", HRegex r( NULL ), HFailedAssertion );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "simple match" )
@@ -75,22 +66,12 @@ TUT_UNIT_TEST( 4, "ignorecase match" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "bad regex constructor" )
-	try {
-		HRegex r( "[a-z" );
-		FAIL( "bad regex constucted" );
-	} catch ( HRegexException const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "bad regex constucted", HRegex r( "[a-z" ), HRegexException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "bad regex constructor no exception" )
 	HRegex r( "[a-z", HRegex::COMPILE::NO_EXCEPTION );
-	try {
-		r.matches( "a" );
-		FAIL( "match on unitialized regex succeeded" );
-	} catch ( HRegexException const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "match on unitialized regex succeeded", r.matches( "a" ), HRegexException );
 TUT_TEARDOWN()
 
 }
