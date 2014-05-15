@@ -128,7 +128,7 @@ void OSetup::test_setup( void ) {
 		M_THROW( _( "specifing IDE for reporter `" ) + _reporter + _( "' is illegal" ), 0 );
 	if ( ! count( IDE, IDE + countof ( IDE ), _errorLine ) )
 		M_THROW( _( "invalid IDE specified: " ) + _errorLine, 0 );
-	if ( ! _fancy || ( _errorLine != IDE[0] ) || ! ::getenv( "TERM" ) )
+	if ( ( _errorLine != IDE[0] ) || ! ::getenv( "TERM" ) )
 		_color = false;
 	if ( _verbose ) {
 		cout << "setup._argc = " << setup._argc << endl;

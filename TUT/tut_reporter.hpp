@@ -31,53 +31,66 @@ inline std::ostream& operator << ( std::ostream& os_, yaal::ansi::HSequence cons
 }
 
 std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
-	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
-		os_ << yaal::ansi::red;
 	char const* tags[][2] = {
-			{ ".", "[OK" },
-			{ ",", "[OK'" },
-			{ "=F]", " assertion failed" },
-			{ "=C]", " unexpected excepion from mock constructor" },
-			{ "=X]", " unexpected excepion" },
-			{ "=W]", " warning" },
-			{ "=T]", " execution terminated" },
-			{ "=P]", " rethrown exception" },
-			{ "=S]", " setup error" }
+			{ ".", "OK" },
+			{ ",", "OK'" },
+			{ "=F", " assertion failed" },
+			{ "=C", " unexpected excepion from mock constructor" },
+			{ "=X", " unexpected excepion" },
+			{ "=W", " warning" },
+			{ "=T", " execution terminated" },
+			{ "=P", " rethrown exception" },
+			{ "=S", " setup error" }
 	};
 	int tag( tress::setup._verbose ? 1 : 0 );
+	if ( tress::setup._verbose || ( ( tr._result != tut::test_result::ok ) && ( tr._result != tut::test_result::setup ) ) )
+		os_ << "[" << std::flush;
+	if ( tress::setup._color ) {
+		if ( tr._result != tut::test_result::ok )
+			os_ << yaal::ansi::red;
+		else if ( tress::setup._verbose )
+			os_ << yaal::ansi::green;
+	}
 	switch ( tr._result ) {
 		case tut::test_result::ok:
 			os_ << ( errno == 0 ? tags[0][tag] : tags[1][tag] ) << std::flush;
 		break;
 		case tut::test_result::fail:
-			os_ << '[' << tr._testNo << tags[2][tag] << std::flush;
+			os_ << tr._testNo << tags[2][tag] << std::flush;
 		break;
 		case tut::test_result::ex_ctor:
-			os_ << '[' << tr._testNo << tags[3][tag] << std::flush;
+			os_ << tr._testNo << tags[3][tag] << std::flush;
 		break;
 		case tut::test_result::ex:
-			os_ << '[' << tr._testNo << tags[4][tag] << std::flush;
+			os_ << tr._testNo << tags[4][tag] << std::flush;
 		break;
 		case tut::test_result::warn:
-			os_ << '[' << tr._testNo << tags[5][tag] << std::flush;
+			os_ << tr._testNo << tags[5][tag] << std::flush;
 		break;
 		case tut::test_result::term:
-			os_ << '[' << tr._testNo << tags[6][tag] << std::flush;
+			os_ << tr._testNo << tags[6][tag] << std::flush;
 		break;
 		case tut::test_result::rethrown:
-			os_ << '[' << tr._testNo << tags[7][tag] << std::flush;
+			os_ << tr._testNo << tags[7][tag] << std::flush;
 		break;
 		case tut::test_result::setup:
-			os_ << "no such group: `" << tr._message << "'\n" << std::flush;
+			os_ << "no such group: `" << tr._message << "'" << std::flush;
 		break;
 		case tut::test_result::setup_test_number:
-			os_ << '[' << tr._testNo << tags[8][tag] << std::flush;
+			os_ << tr._testNo << tags[8][tag] << std::flush;
 		break;
 	}
-	if ( tress::setup._color && ( tr._result != tut::test_result::ok ) )
-		os_ << yaal::ansi::reset << std::flush;
 	if ( tress::setup._verbose )
-		os_ << " in " << tr._time << " ms]" << std::endl;
+		os_ << " in " << tr._time << " ms";
+	if ( tress::setup._color ) {
+		if ( tress::setup._verbose || ( tr._result != tut::test_result::ok ) )
+			os_ << yaal::ansi::reset << std::flush;
+	}
+	if ( tress::setup._verbose || ( ( tr._result != tut::test_result::ok ) && ( tr._result != tut::test_result::setup ) ) ) {
+		os_ << "]" << std::flush;
+	}
+	if ( tress::setup._verbose )
+		os_ << std::endl;
 	return ( os_ );
 }
 
