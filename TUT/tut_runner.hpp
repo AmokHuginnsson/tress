@@ -79,12 +79,12 @@ struct callback {
 	* Called when a group is completed
 	* @param name Name of the group
 	*/
-	virtual void group_completed( const std::string& /*name */ ) = 0;
+	virtual void group_completed( group_base const* ) = 0;
 
 	/**
 	* Called when a test is about to start.
 	*/
-	virtual void test_started( char const* const, int /*n */, char const* const ) = 0;
+	virtual void test_started( char const*, int /*n */, char const*, bool ) = 0;
 
 	/**
 	* Called when all tests in run completed.
@@ -354,20 +354,20 @@ public:
 
 		_callback->run_started( 1, 1 );
 		_callback->group_started( group_name, 1 );
-		_callback->test_started( group_name.c_str(), n, i->second->get_test_title( n ) );
+		_callback->test_started( group_name.c_str(), n, i->second->get_test_title( n ), true );
 
 		try {
 			test_result tr = i->second->run_test( n );
 			_callback->test_completed( tr );
-			_callback->group_completed( group_name );
+			_callback->group_completed( i->second );
 			_callback->run_completed();
 			return ( tr );
 		} catch ( const beyond_last_test& ) {
-			_callback->group_completed( group_name );
+			_callback->group_completed( i->second );
 			_callback->run_completed();
 			throw;
 		} catch ( const no_such_test& ) {
-			_callback->group_completed( group_name );
+			_callback->group_completed( i->second );
 			_callback->run_completed();
 			throw;
 		}
@@ -387,7 +387,7 @@ private:
 		try {
 			run_all_tests_in_group_( i );
 		} catch ( const no_more_tests& ) {
-			_callback->group_completed( i->first );
+			_callback->group_completed( i->second );
 		}
 	}
 
@@ -399,11 +399,13 @@ private:
 			try {
 				run_all_tests_in_group_( i );
 			} catch ( const no_more_tests& ) {
-				_callback->group_completed( i->first );
+				_callback->group_completed( i->second );
 			}
 		} else {
+			bool first( false );
 			for ( test_numbers_t::const_iterator no( testNumbers_.begin() ), noEnd( testNumbers_.end() ); no != noEnd; ++ no ) {
-				_callback->test_started( i->first.c_str(), *no, i->second->get_test_title( *no ) );
+				_callback->test_started( i->first.c_str(), *no, i->second->get_test_title( *no ), first );
+				first = false;
 
 				try {
 					test_result tr = i->second->run_test( *no );
@@ -417,7 +419,7 @@ private:
 					_callback->test_completed( tr );
 				}
 			}
-			_callback->group_completed( i->first );
+			_callback->group_completed( i->second );
 		}
 	}
 
@@ -426,10 +428,12 @@ private:
 		if ( i != i )
 			return;
 
+		bool first( true );
 		for ( ; ! yaal::_isKilled_ ; ) {
 			if ( i->second->has_next() ) {
 				int no( i->second->next() );
-				_callback->test_started( i->first.c_str(), no, i->second->get_test_title( no ) );
+				_callback->test_started( i->first.c_str(), no, i->second->get_test_title( no ), first );
+				first = false;
 			}
 
 			test_result tr = i->second->run_next();

@@ -61,9 +61,9 @@ public:
 
 	virtual void group_started( const std::string& /*name */, int /* total test count for group */ ) {
 	}
-	virtual void group_completed( const std::string& /*name */ ) {
+	virtual void group_completed( group_base const* ) {
 	}
-	virtual void test_started( char const* const, int /*n */, char const* const ) {
+	virtual void test_started( char const*, int /*n */, char const*, bool ) {
 	}
 	virtual int fail_count( void ) const {
 		return ( static_cast<int>( failed_tests_.size() ) );

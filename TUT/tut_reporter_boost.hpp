@@ -58,11 +58,11 @@ public:
 		_os << "\t<TestSuite name=\"" << name << "\">" << std::endl;
 	}
 
-	void group_completed( std::string const& ) {
+	void group_completed( group_base const* ) {
 		_os << "\t</TestSuite>" << std::endl;
 	}
 
-	virtual void test_started( char const* const, int n, char const* const title_ ) {
+	virtual void test_started( char const*, int n, char const* title_, bool ) {
 		if ( title_ ) {
 			yaal::hcore::HLock l( _mutex );
 			using std::operator <<;

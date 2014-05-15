@@ -158,12 +158,12 @@ TUT_TEARDOWN()
 TUT_SIMPLE_MOCK( tut_selftest_text );
 TUT_TEST_GROUP( tut_selftest_text, "::selftest::text" );
 
-TUT_UNIT_TEST( tut_selftest_text, 1, "concat" )
+TUT_UNIT_TEST( tut_selftest_text, 2, "concat" )
 	HString a( "aa" );
 	ENSURE_EQUALS( "same", a + a, "aaaa" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( tut_selftest_text, 2, "trim" )
+TUT_UNIT_TEST( tut_selftest_text, 3, "trim" )
 	HString a( "  aa " );
 	ENSURE_EQUALS( "both sides", a.trim(), "aa" );
 TUT_TEARDOWN()

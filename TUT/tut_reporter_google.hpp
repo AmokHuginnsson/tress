@@ -72,12 +72,11 @@ public:
 		_os << "[----------] " << count_ << " tests from " << escape( name ) << std::endl;
 	}
 
-	void group_completed( std::string const& name_ ) {
-		group_base* g( _testRunner->get_group( name_ ) );
-		_os << "[----------] " << ( g ? g->get_real_test_count() : 0 ) << " tests from " << escape( name_ ) << " (0 ms total)\n" << std::endl;
+	void group_completed( group_base const* group_ ) {
+		_os << "[----------] " << group_->get_real_test_count() << " tests from " << escape( group_->get_name() ) << " (0 ms total)\n" << std::endl;
 	}
 
-	virtual void test_started( char const* const group_, int n, char const* const title_ ) {
+	virtual void test_started( char const* group_, int n, char const* title_, bool ) {
 		if ( group_ )
 			_groupNames.insert( group_ );
 		if ( title_ ) {

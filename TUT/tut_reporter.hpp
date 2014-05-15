@@ -166,6 +166,7 @@ class reporter : public tut::callback {
 	stream_type& _ls;
 	error_line_type _errorLine;
 	std::stringstream _groupTestLog;
+	static int const MAX_SEPARATOR_LEN = 72;
 
 public:
 
@@ -215,22 +216,45 @@ public:
 
 	virtual void group_started( std::string const& name, int ) {
 		yaal::hcore::HLock l( _mutex );
-		using std::operator <<;
 		_ls << "TUT: group: [" << name << "]" << std::endl;
+		if ( tress::setup._verbose ) {
+			std::string sep( ( MAX_SEPARATOR_LEN - name.length() ) / 2 - ( sizeof ( "[ " ) - 1 ), '=' );
+			_os << ( tress::setup._color ? yaal::ansi::yellow : "" ) << sep << "[ "
+				<< ( tress::setup._color ? yaal::ansi::brightcyan : "" ) << name
+				<< ( tress::setup._color ? yaal::ansi::yellow : "" ) << " ]" << sep
+				<< ( name.length() % 2 ? "=" : "" )
+				<< ( tress::setup._color ? yaal::ansi::reset : "" ) 
+				<< std::endl;
+		}
 	}
 
-	virtual void group_completed( std::string const& ) {
-		if ( tress::setup._verbose )
-			_os << "------------------------------------------------------------------------" << std::endl;
+	virtual void group_completed( group_base const* group_ ) {
+		if ( tress::setup._verbose ) {
+			std::stringstream ss;
+			group_base::run_stat_t stats( group_->get_stat() );
+			ss << stats.first << '/' << group_->get_real_test_count() << " in " << group_->get_time_elapsed() << " ms";
+			std::string status( ss.str() );
+			static std::string const sepIntro( 8, '=' );
+			std::string const sep( MAX_SEPARATOR_LEN - ( status.length() + 10 ), '=' );
+			_os << ( tress::setup._color ? yaal::ansi::yellow : "" ) << sepIntro << '[';
+			if ( tress::setup._color ) {
+				if ( stats.first == group_->get_real_test_count() )
+					_os << yaal::ansi::green;
+				else
+					_os << yaal::ansi::red;
+			}
+			_os << status << ( tress::setup._color ? yaal::ansi::yellow : "" ) << ']' << sep
+				<< ( tress::setup._color ? yaal::ansi::reset : "" ) << std::endl;
+		}
 	}
 
-	virtual void test_started( char const* const groupName_, int n, char const* const title_ ) {
+	virtual void test_started( char const* const groupName_, int n, char const* const title_, bool first_ ) {
 		if ( title_ ) {
 			yaal::hcore::HLock l( _mutex );
-			using std::operator <<;
 			_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
-			if ( tress::setup._verbose ) {
-				_os << "------------------------------------------------------------------------" << std::endl;
+			if ( tress::setup._verbose && ! first_ ) {
+				static std::string const sep( MAX_SEPARATOR_LEN, '-' );
+				_os << ( tress::setup._color ? yaal::ansi::brightcyan : "" ) << sep << ( tress::setup._color ? yaal::ansi::reset : "" ) << std::endl;
 				_os << "TUT: " << groupName_ << "::<" << n << "> " << title_ << std::endl;
 			}
 		}
@@ -281,7 +305,7 @@ public:
 			_os << "tress: " << std::string( static_cast<size_t>( progressCur ), '=' )
 				<< std::string( static_cast<size_t>( progressMax - progressCur ), ' ' )
 				<< " " << ( ( 100 * total ) / _totalTestCount ) << "%"
-				<< "\033[F" << _currentGroup << ": " << _groupTestLog.str() << std::flush;
+				<< yaal::ansi::up_bol << _currentGroup << ": " << _groupTestLog.str() << std::flush;
 		} else {
 			_os << tr << std::flush;
 		}
@@ -312,7 +336,8 @@ public:
 	}
 
 	virtual void run_completed() {
-		_os << std::endl;
+		if ( ! tress::setup._verbose )
+			_os << std::endl;
 
 		if ( _notPassed.size() > 0 ) {
 			not_passed_list_t::const_iterator i = _notPassed.begin();

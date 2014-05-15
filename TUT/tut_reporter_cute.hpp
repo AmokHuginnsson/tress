@@ -56,11 +56,11 @@ public:
 		_os << "#beginning " << name << " " << count_ << std::endl;
 	}
 
-	void group_completed( std::string const& name_ ) {
-		_os << "#ending " << name_ << std::endl;
+	void group_completed( group_base const* group_ ) {
+		_os << "#ending " << group_->get_name() << std::endl;
 	}
 
-	virtual void test_started( char const* const, int n, char const* const title_ ) {
+	virtual void test_started( char const*, int n, char const* title_, bool ) {
 		if ( title_ ) {
 			yaal::hcore::HLock l( _mutex );
 			using std::operator <<;
