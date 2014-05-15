@@ -180,6 +180,7 @@ class test_group : public group_base, public test_group_posix {
 
 	std::string _name;
 	titles_t _titles;
+	int long _time;
 	int long _timeConstraint;
 	tests_t _tests;
 	tests_iterator _currentTest;
@@ -273,7 +274,8 @@ public:
 	* Creates and registers test group with specified name.
 	*/
 	test_group( const char* name )
-		: _name( name ), _titles(), _timeConstraint( 0 ), _tests(), _currentTest(), _currentTitle(), _passed( 0 ), _runned( 0 ) {
+		: _name( name ), _titles(), _time( 0 ), _timeConstraint( 0 ),
+		_tests(), _currentTest(), _currentTitle(), _passed( 0 ), _runned( 0 ) {
 		// register itself
 		runner.get().register_group( _name, this );
 
@@ -285,7 +287,8 @@ public:
 	* This constructor is used in self-test run only.
 	*/
 	test_group( const char* name, test_runner& another_runner )
-		: _name( name ), _titles(), _timeConstraint( 0 ), _tests(), _currentTest(), _currentTitle(), _passed( 0 ), _runned( 0 ) {
+		: _name( name ), _titles(), _time( 0 ), _timeConstraint( 0 ),
+		_tests(), _currentTest(), _currentTitle(), _passed( 0 ), _runned( 0 ) {
 		// register itself
 		another_runner.register_group( _name, this );
 
@@ -324,6 +327,10 @@ public:
 
 	virtual std::string const& get_name() const {
 		return ( _name );
+	}
+
+	virtual int long get_time_elapsed( void ) const {
+		return ( _time );
 	}
 
 	virtual void set_name( std::string const& name_ ) {
@@ -413,7 +420,7 @@ public:
 
 		char const* file = NULL;
 		int line = -1;
-		yaal::hcore::HClock clock;
+		yaal::hcore::HClock clock( yaal::hcore::HClock::TYPE::CPU );
 		try {
 			errno = 0;
 			char const* title( get_test_title( ti->first ) );
@@ -453,7 +460,9 @@ public:
 
 		if ( obj.get() )
 			tr.set_location( obj->get_test_name(), file ? file : obj->get_test_file(), line > 0 ? line : obj->get_test_line() );
-		tr.set_time( static_cast<int long>( clock.get_time_elapsed( yaal::hcore::HClock::UNIT::MILISECOND ) ) );
+		int long timeElapsed( static_cast<int long>( clock.get_time_elapsed( yaal::hcore::HClock::UNIT::MILISECOND ) ) );
+		_time += timeElapsed;
+		tr.set_time( timeElapsed );
 		// test passed
 
 		return ( tr );

@@ -37,6 +37,7 @@ struct group_base {
 	virtual titles_t const& get_test_titles( void ) const = 0;
 	virtual void set_time_constraint( int long ) = 0;
 	virtual std::string const& get_name() const = 0;
+	virtual int long get_time_elapsed( void ) const = 0;
 	virtual void set_name( std::string const& ) = 0;
 	virtual run_stat_t get_stat() const = 0;
 };
