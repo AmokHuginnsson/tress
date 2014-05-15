@@ -679,7 +679,6 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 42, "assign( HString ... )" )
 	static char const ss[] = "Ala ma kota.";
-	static char const sl[] = "Ala ma kota, a kot ma mleczko.";
 	HString source( ss );
 	HString dest( "dummy" );
 	char const err[] = "assign failed";
@@ -695,7 +694,7 @@ TUT_UNIT_TEST( 42, "assign( HString ... )" )
 	ENSURE_EQUALS( err, dest.assign( source, sizeof ( ss ) - 2, 5 ), "." );
 	ENSURE_EQUALS( err, dest.assign( source, sizeof ( ss ) - 1, 5 ), "" );
 	ENSURE_EQUALS( err, dest.assign( source, sizeof ( ss ), 5 ), "" );
-	source.assign( sl, sizeof ( sl ) - 1 );
+	ENSURE_EQUALS( err, dest.assign( ss + 3, ss + sizeof ( ss ) - 4 ), " ma ko" );
 	try {
 		dest.assign( source, -1, 2 );
 		FAIL( "assign with negative offset succeeded" );
@@ -736,6 +735,36 @@ TUT_UNIT_TEST( 45, "replace(pos, len, str)" )
 	s.replace( 7, 4, "psa" );
 	ENSURE_EQUALS( "bad lenght", s.get_length(), origLen - 1 );
 	ENSURE_EQUALS( "bad content", s, "Ala ma psa." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 46, "append( HString ... )" )
+	static char const ss[] = "Ala ma kota.";
+	HString source( ss );
+	HString dest( "dummy" );
+	char const err[] = "append failed";
+	ENSURE_EQUALS( err, dest.append( source, 0, 0 ), "dummy" );
+	ENSURE_EQUALS( err, dest.append( source, source.get_length() * 2, source.get_length() ), "dummy" );
+	ENSURE_EQUALS( err, dest.append( source, 0, HString::MAX_STRING_LENGTH ), "dummy" + source );
+	ENSURE_EQUALS( err, dest.append( source, 0, 5 ), "dummy" + source + "Ala m" );
+	ENSURE_EQUALS( err, dest.append( source, 4, 5 ), "dummy" + source + "Ala mma ko" );
+	ENSURE_EQUALS( err, dest.append( source, 7, 5 ), "dummy" + source + "Ala mma kokota." );
+	ENSURE_EQUALS( err, dest.append( source, 8, 5 ), "dummy" + source + "Ala mma kokota.ota." );
+	ENSURE_EQUALS( err, dest.append( source, sizeof ( ss ) - 2, 5 ), "dummy" + source + "Ala mma kokota.ota.." );
+	ENSURE_EQUALS( err, dest.append( source, sizeof ( ss ) - 1, 5 ), "dummy" + source + "Ala mma kokota.ota.." );
+	ENSURE_EQUALS( err, dest.append( source, sizeof ( ss ), 5 ), "dummy" + source + "Ala mma kokota.ota.." );
+	ENSURE_EQUALS( err, dest.append( ss + 3, ss + sizeof ( ss ) - 4 ), "dummy" + source + "Ala mma kokota.ota.. ma ko" );
+	try {
+		dest.append( source, -1, 2 );
+		FAIL( "append with negative offset succeeded" );
+	} catch ( HStringException const& ) {
+		// ok
+	}
+	try {
+		dest.append( source, 0, -1 );
+		FAIL( "append with negative lenght succeeded" );
+	} catch ( HStringException const& ) {
+		// ok
+	}
 TUT_TEARDOWN()
 
 }
