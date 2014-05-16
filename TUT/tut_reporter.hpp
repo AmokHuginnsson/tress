@@ -232,13 +232,13 @@ public:
 		if ( tress::setup._verbose ) {
 			std::stringstream ss;
 			group_base::run_stat_t stats( group_->get_stat() );
-			ss << stats.first << '/' << group_->get_real_test_count() << " in " << group_->get_time_elapsed() << " ms";
+			ss << stats.first << '/' << stats.second << " in " << group_->get_time_elapsed() << " ms";
 			std::string status( ss.str() );
 			static std::string const sepIntro( 8, '=' );
 			std::string const sep( MAX_SEPARATOR_LEN - ( status.length() + 10 ), '=' );
 			_os << ( tress::setup._color ? yaal::ansi::yellow : "" ) << sepIntro << '[';
 			if ( tress::setup._color ) {
-				if ( stats.first == group_->get_real_test_count() )
+				if ( stats.first == stats.second )
 					_os << yaal::ansi::green;
 				else
 					_os << yaal::ansi::red;
@@ -449,3 +449,4 @@ private:
 }
 
 #endif
+

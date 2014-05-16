@@ -1178,11 +1178,15 @@ void tut_yaal_hcore_hnumber::run_square_test( HString const& random_, int natura
 	int len = static_cast<int>( res.get_length() );
 	( len >= ( naturalScale_ + 1 ) ) && ( len = naturalScale_ + 1 );
 	res = res.left( len );
+	res.trim_right( "0." );
 	if ( res[0] == '.' )
 		res.insert( 0, 1, '0' );
-	int z( static_cast<int>( res.find( '.' ) != HString::npos ? res.reverse_find_other_than( "0." ) : res.get_length() ) );
+	len = static_cast<int>( res.get_length() );
+	int long dot( res.find( '.' ) );
+	int z( static_cast<int>( dot != HString::npos ? res.reverse_find_other_than( "0." ) : res.get_length() ) );
 	/* We need to take rounding in to account here. */
-	++ z;
+	if ( ( dot != HString::npos ) && ( ( res.get_length() - dot ) > ( naturalScale_ - 4 ) ) )
+		z += 4;
 	z = static_cast<int>( res.find( '.' ) != HString::npos ? res.reverse_find_other_than( "0.", z ) : z );
 	ENSURE_EQUALS( msg, root.to_string().left( len - z ), res.left( len - z ) );
 }
@@ -1212,7 +1216,13 @@ TUT_UNIT_TEST( 30, "square_root<HNumber>()" )
 	static int const naturalScale = 100;
 	_bc << "scale=" << naturalScale << endl;
 	run_square_test( "1.25201235616650170145176377062932385805", naturalScale );
-	for ( int long i = 0; i < 100; ++ i ) {
+	run_square_test( "36", naturalScale );
+	run_square_test( "32248562581.422101455262531", naturalScale );
+	run_square_test( "0.51180329773313577802432196", naturalScale );
+	run_square_test( "0.4844068973230442667214", naturalScale );
+	run_square_test( "416269.494031375939", naturalScale );
+	run_square_test( "10046148.0689563684120471", naturalScale );
+	for ( int long i = 0; i < 256; ++ i ) {
 		run_square_test( random_real(), naturalScale );
 	}
 TUT_TEARDOWN()
