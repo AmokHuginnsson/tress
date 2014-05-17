@@ -611,7 +611,7 @@ TUT_UNIT_TEST( 32, "unnamed HHuginn grammar" )
 	HRule parenthesis( '(' >> expression >> ')' );
 	HRule argList( expression >> ( * ( ',' >> expression ) ) );
 	HRule functionCall( name >> '(' >> -argList >> ')' );
-	HRule atom( absoluteValue | parenthesis | functionCall | real | name );
+	HRule atom( absoluteValue | parenthesis | functionCall | real | integer | string_literal | character_literal | name );
 	HRule power( atom >> ( * ( '^' >> atom ) ) );
 	HRule multiplication( power >> ( * ( '*' >> power ) ) );
 	HRule sum( multiplication >> ( * ( '+' >> multiplication ) ) );
@@ -668,7 +668,7 @@ TUT_UNIT_TEST( 32, "unnamed HHuginn grammar" )
 		"N_ = O_ >> *( '+' >> O_ )",
 		"O_ = P_ >> *( '*' >> P_ )",
 		"P_ = Q_ >> *( '^' >> Q_ )",
-		"Q_ = '|' >> L_ >> '|' | '(' >> L_ >> ')' | B_ >> '(' >> -( L_ >> *( ',' >> L_ ) ) >> ')' | real | B_"
+		"Q_ = '|' >> L_ >> '|' | '(' >> L_ >> ')' | B_ >> '(' >> -( L_ >> *( ',' >> L_ ) ) >> ')' | real | integer | string_literal | character_literal | B_"
 	};
 	cout << "hg:" << endl;
 	HGrammarDescription gd( hg );
