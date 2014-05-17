@@ -37,15 +37,27 @@ using namespace yaal::hcore;
 namespace ll {
 
 
-template<typename container_t>
-void pushbacker( container_t* container, yaal::hcore::HString const& value ) {
-	container->push_back( lexical_cast<typename container_t::value_type>( value ) );
+template<typename container_t, typename value_type>
+void pushbacker( container_t* container, value_type value ) {
+	container->push_back( value );
 }
 
 template<typename container_t>
-HBoundCall<void ( yaal::hcore::HString const& )> push_back( container_t& container ) {
+void pushbacker( container_t* container, yaal::hcore::HString const& value ) {
+	container->push_back( lexical_cast<typename trait::strip_reference<typename container_t::value_type>::type >( value ) );
+}
+
+template<typename value_type, typename container_t>
+HBoundCall<void ( value_type )> push_back( container_t& container ) {
 	M_PROLOG
-	return ( call( &pushbacker<container_t>, &container, _1 ) );
+	return ( call( &pushbacker<container_t, value_type>, &container, _1 ) );
+	M_EPILOG
+}
+
+template<typename container_t>
+HBoundCall<void ( typename container_t::value_type const& )> push_back( container_t& container ) {
+	M_PROLOG
+	return ( call( &pushbacker<container_t, typename container_t::value_type const&>, &container, _1 ) );
 	M_EPILOG
 }
 
@@ -191,6 +203,7 @@ TUT_UNIT_TEST( 5, "HStringLiteral" )
 					"\"m\\ra\","
 					"\"\\ekota.\","
 					"\"\\\"\","
+					"\"\\\\\","
 					"\"\","
 					"\"x\\\"\","
 					"\"\\\"x\","
@@ -202,6 +215,7 @@ TUT_UNIT_TEST( 5, "HStringLiteral" )
 			"m\ra",
 			"\033kota.",
 			"\"",
+			"\\",
 			"",
 			"x\"",
 			"\"x",
@@ -220,6 +234,41 @@ TUT_UNIT_TEST( 5, "HStringLiteral" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "HCharacterLiteral" )
+	typedef HArray<char> characters_t;
+	characters_t c;
+	HRule cl( character_literal[push_back<char>( c )] );
+	HRule r( cl >> *( ',' >> cl ) );
+	HExecutingParser ep( r );
+	/* simple */ {
+		ENSURE( "HCharacterLiteral failed to parse correct input", !ep( "'A','\\t'" ) );
+		ep();
+		char const expected[] = {
+			'A',
+			'\t'
+		};
+		int i( 0 );
+		for ( characters_t::const_iterator it( c.begin() ), end( c.end() ); it != end; ++ it, ++ i ) {
+			ENSURE( "too many elements acquired", i < countof ( expected ) );
+			ENSURE_EQUALS( "Failed to acquire character from character literal", *it, expected[i] );
+		}
+		ENSURE_EQUALS( "not all elemets acquired", i, countof ( expected ) );
+	}
+	/* special */ {
+		ENSURE( "HCharacterLiteral failed to parse correct input", !ep(
+					"'\\n',' ','	','\\t','\\b','\\e','\\\\','\\'','x'" ) );
+		c.clear();
+		ep();
+		char const expected[] = "\n \t\t\b\033\\'x";
+		int i( 0 );
+		for ( characters_t::const_iterator it( c.begin() ), end( c.end() ); it != end; ++ it, ++ i ) {
+			ENSURE( "too many elements acquired", i < ( countof ( expected ) - 1 ) );
+			ENSURE_EQUALS( "Failed to acquire character from character literal", *it, expected[i] );
+		}
+		ENSURE_EQUALS( "not all elemets acquired", i, countof ( expected ) - 1 );
+	}
+	ENSURE_NOT( "non-character literal parsed", !ep( "Ala" ) );
+	ENSURE_NOT( "unfinished character literal parsed", !ep( "'A" ) );
+	ENSURE_NOT( "character literal with invalid character parsed", !ep( "'\b'" ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 7, "HCharacter" )
@@ -757,8 +806,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "the test" )
 	HArray<double> v;
-	ENSURE( "parsing correct input (single real) failed", !HExecutingParser( real[push_back(v)] )( "3.141592653589793" ) );
-	HRule r( real[push_back(v)] >> *( ',' >> real[push_back(v)] ) );
+	HRule realNo( real[push_back<double>( v )] );
+	ENSURE( "parsing correct input (single real) failed", !HExecutingParser( realNo )( "3.141592653589793" ) );
+	HRule r( realNo >> *( ',' >> realNo ) );
 	HExecutingParser ep( r );
 	ENSURE( "parsing correct input (coma separated set of reals) failed", !ep( "3.141592653589793, -2.718281828459045, 17" ) );
 	ep();
