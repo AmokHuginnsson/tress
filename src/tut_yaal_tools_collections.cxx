@@ -77,18 +77,8 @@ TUT_UNIT_TEST( 2, "n_th" )
 	for ( int i = 0; i < 6; ++ i ) {
 		ENSURE_EQUALS( "n_th( n ) gives bogus result", *n_th( l, i ), i + '1' );
 	}
-	try {
-		n_th( l, 6 );
-		FAIL( "index too big and ok ??" );
-	} catch ( HException& ) {
-		// ok
-	}
-	try {
-		n_th( l, -7 );
-		FAIL( "index out of range and ok ??" );
-	} catch ( HException& ) {
-		// ok
-	}
+	ENSURE_THROW( "index too big and ok ??", n_th( l, 6 ), HException );
+	ENSURE_THROW( "index out of range and ok ??", n_th( l, -7 ), HException );
 TUT_TEARDOWN()
 
 
