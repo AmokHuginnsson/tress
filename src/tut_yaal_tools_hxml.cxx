@@ -200,7 +200,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 5, "load, save" )
 	HXml xml;
-	xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ) );
+	xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.parse( "/my_root/my_set/my_item" );
 	xml.parse( "/my_root/my_set/my_item" ); /* mem-leak test */
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/set.xml", HFile::OPEN::WRITING ) ) ) );
@@ -208,13 +208,13 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "load, save" )
 	HXml xml;
-	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ) );
+	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 7, "load, save, clear, handmade, save" )
 	HXml xml;
-	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ) );
+	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ) );
 	xml.clear();
 	xml.create_root( "xml" );
@@ -268,7 +268,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 11, "load -> console dump" )
 	char const* doc = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/xml.xml";
-	_xml.load( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ) );
+	_xml.load( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	if ( cout.is_valid() )
 		_xml.save( cout );
 	std::clog << _xml;
@@ -276,7 +276,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 12, "parse bofere apply_style and after apply_style" )
 	HXml xml;
-	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ) );
+	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.parse();
 	std::clog << xml;
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/raw.xml", HFile::OPEN::WRITING ) ) ), true );
@@ -290,7 +290,7 @@ TUT_UNIT_TEST( 13, "HXml copy." )
 	HXml copy; {
 		HXml intermediate; {
 			HXml xml;
-			xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ) );
+			xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 			xml.parse();
 			intermediate = xml;
 			std::clog << xml;
