@@ -30,6 +30,8 @@ Copyright:
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
+#include <yaal/tools/hstringstream.hxx>
+
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
@@ -43,39 +45,141 @@ HRule huginn_grammar( void );
 
 namespace tut {
 
-TUT_SIMPLE_MOCK( tut_yaal_tools_hhuginn );
+struct tut_yaal_tools_hhuginn : public simple_mock<tut_yaal_tools_hhuginn> {
+	typedef char const* prog_src_t;
+	virtual ~tut_yaal_tools_hhuginn( void ) {}
+	void test_preprocessing( prog_src_t, prog_src_t );
+};
+
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn, "yaal::tools::HHuginn" );
 
 TUT_UNIT_TEST( 1, "grammar test" )
 	HRule hg( huginn_grammar() );
 	HGrammarDescription gd( hg );
-	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it )
+
+	char const expected[][200] = {
+		"huginnGrammar = +( functionDefinition )",
+		"functionDefinition = name >> '(' >> -( nameList ) >> ')' >> scope",
+		"name = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
+		"nameList = name >> *( ',' >> name )",
+		"scope = '{' >> *( statement ) >> '}'",
+		"statement = ifStatement | whileStatement | foreachStatement | switchStatement | returnStatement | expressionList",
+		"ifStatement = \"if\" >> '(' >> booleanExpression >> ')' >> scope >> -( \"else\" >> scope )",
+		"whileStatement = \"while\" >> '(' >> booleanExpression >> ')' >> loopScope",
+		"booleanExpression = booleanEquals | booleanNotEquals | booleanLess | booleanGreater | booleanLessEq | booleanGreaterEq | booleanAnd | booleanOr | booleanXor | booleanNot",
+		"loopScope = '{' >> *( loopStatement ) >> '}'",
+		"booleanEquals = expression >> \"==\" >> expression",
+		"booleanNotEquals = expression >> \"!=\" >> expression",
+		"booleanLess = expression >> \"<\" >> expression",
+		"booleanGreater = expression >> \">\" >> expression",
+		"booleanLessEq = expression >> \"<=\" >> expression",
+		"booleanGreaterEq = expression >> \">=\" >> expression",
+		"booleanAnd = booleanValue >> \"&&\" >> booleanValue",
+		"booleanOr = booleanValue >> \"||\" >> booleanValue",
+		"booleanXor = booleanValue >> \"^^\" >> booleanValue",
+		"booleanNot = '!' >> booleanValue",
+		"loopStatement = ifStatement | whileStatement | foreachStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionList",
+		"expression = *( name >> '=' ) >> ref",
+		"booleanValue = \"true\" | \"false\" | '(' >> booleanExpression >> ')'",
+		"foreachStatement = \"foreach\" >> '(' >> name >> ':' >> expression >> ')' >> loopScope",
+		"switchStatement = \"switch\" >> '(' >> expression >> ')' >> '{' >> +( caseStatement ) >> -( defaultStatement ) >> '}'",
+		"continueStatement = \"continue\" >> ';'",
+		"returnStatement = \"return\" >> '(' >> expression >> ')' >> ';'",
+		"expressionList = +( expression >> ';' )",
+		"ref = value >> *( '[' >> value >> ']' )",
+		"caseStatement = \"case\" >> '(' >> integer >> ')' >> ':' >> scope >> -( breakStatement )",
+		"defaultStatement = \"default\" >> ':' >> scope",
+		"value = multiplication >> *( '+' >> multiplication )",
+		"breakStatement = \"break\" >> ';'",
+		"multiplication = power >> *( '*' >> power )",
+		"power = atom >> *( '^' >> atom )",
+		"atom = absoluteValue | parenthesis | functionCall | real | integer | string_literal | character_literal | name",
+		"absoluteValue = '|' >> expression >> '|'",
+		"parenthesis = '(' >> expression >> ')'",
+		"functionCall = name >> '(' >> -( argList ) >> ')'",
+		"argList = expression >> *( ',' >> expression )"
+	};
+
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE( "too many rules in Huginn grammar", i < countof ( expected ) );
+		ENSURE_EQUALS( "bad rule in Huginn grammar", *it, expected[i] );
 		cout << *it << endl;
+	}
+	ENSURE_EQUALS( "not all rules found for Huginn grammar", i, countof ( expected ) );
 TUT_TEARDOWN()
 
-hcore::HString prog1(
+char const prog0[] =
+	"/*\n"
+	" * Sample code in huginn.\n"
+	" */\n"
+	"\n"
 	"sum( a, b ) {\n"
-	"	return ( a + b );\n"
+	"\treturn ( a + b );\n"
 	"}\n"
 	"\n"
 	"main( args ) {\n"
-	"	a = integer( args[0] );\n"
-	"	b = integer( args[1] );\n"
-	"	return ( sum( 3 + a, sum( 4, ( b + 1 ) * 2 ) ) );\n"
+	"\ta = integer( args[0] );\n"
+	"\tb = integer( args[1] );\n"
+	"\treturn ( sum( 3 + a, sum( 4, ( b + 1 ) * 2 ) ) );\n"
 	"}\n"
-);
+	"\n"
+;
 
-TUT_UNIT_TEST( 2, "simple program" )
-	HRule hg( huginn_grammar() );
-	HGrammarDescription gd( hg );
-	HExecutingParser ep( hg );
-	ep( prog1 );
-	if ( ep.error_position() != hcore::HString::npos ) {
-		cout << "error at: \n" << ( prog1.raw() + ep.error_position() ) << endl;
-		for ( HExecutingParser::messages_t::const_iterator it( ep.error_messages().begin() ), end( ep.error_messages().end() ); it != end; ++ it ) {
-			cout << *it << endl;
-		}
+char const prog0post[] =
+	"\n"
+	"\n"
+	"sum( a, b ) {\n"
+	"\treturn ( a + b );\n"
+	"}\n"
+	"\n"
+	"main( args ) {\n"
+	"\ta = integer( args[0] );\n"
+	"\tb = integer( args[1] );\n"
+	"\treturn ( sum( 3 + a, sum( 4, ( b + 1 ) * 2 ) ) );\n"
+	"}\n"
+	"\n"
+;
+
+char const prog1[] =
+	"main(/* no arg */) {\n"
+	"\rreturn ( 0 );\n"
+	"}\n"
+;
+
+char const prog1post[] =
+	"main() {\n"
+	"\rreturn ( 0 );\n"
+	"}\n"
+;
+
+void tut_yaal_tools_hhuginn::test_preprocessing( prog_src_t pre_, prog_src_t post_ ) {
+	HStringStream pre( pre_ );
+	HStringStream post;
+	HHuginn h;
+	h.load( pre );
+	h.preprocess();
+	h.dump_preprocessed_source( post );
+	ENSURE_EQUALS( "prepocessing failed", post.string(), post_ );
+	return;
+}
+
+TUT_UNIT_TEST( 2, "preprocessor" )
+	prog_src_t progpre[] = { prog0, prog1 };
+	prog_src_t progpost[] = { prog0post, prog1post };
+	for ( prog_src_t* pre( begin( progpre ) ), * preEnd( end( progpre ) ), * post( begin( progpost ) ); pre != preEnd; ++ pre, ++ post ) {
+		test_preprocessing( *pre, *post );
 	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 50, "simple program" )
+	HHuginn h;
+	HStringStream src( prog0 );
+	h.load( src );
+	h.preprocess();
+	h.parse();
+	h.compile();
+	h.execute();
 TUT_TEARDOWN()
 
 
