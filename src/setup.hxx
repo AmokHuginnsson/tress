@@ -35,15 +35,7 @@ Copyright:
 namespace tress {
 
 struct OSetup {
-	OSetup( void )
-		: _quiet( false ), _verbose( false ), _debug( false ),
-		_listGroups( false ), _restartable( false ), _exit( false ), _fancy( false ), _color( false ),
-		_selftest( false ),
-		_testNumber( 0 ), _jobs( DEFAULT_JOB_COUNT ), _timeConstraint( DEFAULT_TIME_CONSTRAINT ),
-		_argc( 0 ), _argv( NULL ),
-		_programName( NULL ), _logPath(), _testGroups(), _testSets(),
-		_testGroupPattern(), _testGroupListFilePath(),
-		_reporter( "tut" ), _errorLine( "console" ) {}
+	OSetup( void );
 	typedef yaal::hcore::HDeque<yaal::hcore::HString> group_names_t;
 	typedef yaal::hcore::HDeque<yaal::hcore::HString> set_definitions_t;
 	bool _quiet;			/* --quiet, --silent */
@@ -68,8 +60,10 @@ struct OSetup {
 	yaal::hcore::HString _testGroupListFilePath;
 	yaal::hcore::HString _reporter;
 	yaal::hcore::HString _errorLine;
+	int _clockQualityMultiplier;
 	static int const DEFAULT_JOB_COUNT = 1;
 	static int long const DEFAULT_TIME_CONSTRAINT = 0;
+	static int const DEFAULT_CLOCK_QUALITY_MULTIPLIER = 1;
 	void test_setup( void );
 private:
 	OSetup( OSetup const& );

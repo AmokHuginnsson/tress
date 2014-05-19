@@ -54,6 +54,16 @@ typedef basic_nullbuf<char> nullbuf;
 nullbuf cnull_obj;
 
 namespace tress {
+OSetup::OSetup( void )
+	: _quiet( false ), _verbose( false ), _debug( false ),
+		_listGroups( false ), _restartable( false ), _exit( false ), _fancy( false ), _color( false ),
+		_selftest( false ),
+		_testNumber( 0 ), _jobs( DEFAULT_JOB_COUNT ), _timeConstraint( DEFAULT_TIME_CONSTRAINT ),
+		_argc( 0 ), _argv( NULL ),
+		_programName( NULL ), _logPath(), _testGroups(), _testSets(),
+		_testGroupPattern(), _testGroupListFilePath(),
+		_reporter( "tut" ), _errorLine( "console" ), _clockQualityMultiplier( DEFAULT_CLOCK_QUALITY_MULTIPLIER ) {
+}
 
 void OSetup::test_setup( void ) {
 	M_PROLOG
@@ -141,6 +151,12 @@ void OSetup::test_setup( void ) {
 			clog << endl;
 		}
 #endif /* #ifdef __TRESS__ */
+	}
+	char const* CLOCK_QUALITY_MULTIPLIER( ::getenv( "TRESS_CLOCK_QUALITY_MULTIPLIER" ) );
+	if ( CLOCK_QUALITY_MULTIPLIER ) {
+		_clockQualityMultiplier = lexical_cast<int>( CLOCK_QUALITY_MULTIPLIER );
+		if ( ( _clockQualityMultiplier < 1 ) || ( _clockQualityMultiplier > 100 ) )
+			M_THROW( _( "bad clock quality multiplier" ), _clockQualityMultiplier );
 	}
 	return;
 	M_EPILOG
