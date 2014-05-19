@@ -143,13 +143,53 @@ char const prog0post[] =
 
 char const prog1[] =
 	"main(/* no arg */) {\n"
-	"\rreturn ( 0 );\n"
+	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const prog1post[] =
 	"main() {\n"
-	"\rreturn ( 0 );\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const prog2[] =
+	"main(/* no arg */) {\n"
+	"\treturn ( 0 ); // We shall return 0.\n"
+	"}\n"
+;
+
+char const prog2post[] =
+	"main() {\n"
+	"\treturn ( 0 ); \n"
+	"}\n"
+;
+
+char const prog3[] =
+	"main(/* no arg */) {\n"
+	"\tprint( \"/* keep this */\" );\n"
+	"\treturn ( 0 ); // We shall return 0.\n"
+	"}\n"
+;
+
+char const prog3post[] =
+	"main() {\n"
+	"\tprint( \"/* keep this */\" );\n"
+	"\treturn ( 0 ); \n"
+	"}\n"
+;
+
+char const prog4[] =
+	"main(/* no arg */) {\n"
+	"\tprint( \"keep // this too\" );\n"
+	"\treturn ( 0 ); // We shall return 0.\n"
+	"}\n"
+;
+
+char const prog4post[] =
+	"main() {\n"
+	"\tprint( \"keep // this too\" );\n"
+	"\treturn ( 0 ); \n"
 	"}\n"
 ;
 
@@ -165,8 +205,8 @@ void tut_yaal_tools_hhuginn::test_preprocessing( prog_src_t pre_, prog_src_t pos
 }
 
 TUT_UNIT_TEST( 2, "preprocessor" )
-	prog_src_t progpre[] = { prog0, prog1 };
-	prog_src_t progpost[] = { prog0post, prog1post };
+	prog_src_t progpre[] = { prog0, prog1, prog2, prog3, prog4 };
+	prog_src_t progpost[] = { prog0post, prog1post, prog2post, prog3post, prog4post };
 	for ( prog_src_t* pre( begin( progpre ) ), * preEnd( end( progpre ) ), * post( begin( progpost ) ); pre != preEnd; ++ pre, ++ post ) {
 		test_preprocessing( *pre, *post );
 	}
