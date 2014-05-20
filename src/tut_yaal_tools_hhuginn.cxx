@@ -193,6 +193,20 @@ char const prog4post[] =
 	"}\n"
 ;
 
+char const prog5[] =
+	"main(/* no arg */) {\n"
+	"\tprint( \"keep \\\" // this too\" );\n"
+	"\treturn ( 0 ); // We shall return 0.\n"
+	"}\n"
+;
+
+char const prog5post[] =
+	"main() {\n"
+	"\tprint( \"keep \\\" // this too\" );\n"
+	"\treturn ( 0 ); \n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn::test_preprocessing( prog_src_t pre_, prog_src_t post_ ) {
 	HStringStream pre( pre_ );
 	HStringStream post;
@@ -205,10 +219,28 @@ void tut_yaal_tools_hhuginn::test_preprocessing( prog_src_t pre_, prog_src_t pos
 }
 
 TUT_UNIT_TEST( 2, "preprocessor" )
-	prog_src_t progpre[] = { prog0, prog1, prog2, prog3, prog4 };
-	prog_src_t progpost[] = { prog0post, prog1post, prog2post, prog3post, prog4post };
+	prog_src_t progpre[] = {
+		prog0,
+		prog1,
+		prog2,
+		prog3,
+		prog4,
+		prog5,
+		NULL
+	};
+	prog_src_t progpost[] = {
+		prog0post,
+		prog1post,
+		prog2post,
+		prog3post,
+		prog4post,
+		prog5post,
+		NULL
+	};
 	for ( prog_src_t* pre( begin( progpre ) ), * preEnd( end( progpre ) ), * post( begin( progpost ) ); pre != preEnd; ++ pre, ++ post ) {
-		test_preprocessing( *pre, *post );
+		if ( *pre ) {
+			test_preprocessing( *pre, *post );
+		}
 	}
 TUT_TEARDOWN()
 
