@@ -250,6 +250,7 @@ TUT_UNIT_TEST( 2, "preprocessor" )
 		prog2post,
 		prog3post,
 		prog4post,
+		prog5post,
 		prog6post,
 		NULL
 	};
