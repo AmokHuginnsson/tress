@@ -207,6 +207,21 @@ char const prog5post[] =
 	"}\n"
 ;
 
+char const prog6[] =
+	"main(/* no arg */) {\n"
+	"\tprint( \"keep \\\"\"\n"
+	"\t\t\" // this too\" );\n"
+	"\treturn ( 0 ); // We shall return 0.\n"
+	"}\n"
+;
+
+char const prog6post[] =
+	"main() {\n"
+	"\tprint( \"keep \\\" // this too\" );\n"
+	"\treturn ( 0 ); \n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn::test_preprocessing( prog_src_t pre_, prog_src_t post_ ) {
 	HStringStream pre( pre_ );
 	HStringStream post;
@@ -226,6 +241,7 @@ TUT_UNIT_TEST( 2, "preprocessor" )
 		prog3,
 		prog4,
 		prog5,
+		prog6,
 		NULL
 	};
 	prog_src_t progpost[] = {
@@ -234,7 +250,7 @@ TUT_UNIT_TEST( 2, "preprocessor" )
 		prog2post,
 		prog3post,
 		prog4post,
-		prog5post,
+		prog6post,
 		NULL
 	};
 	for ( prog_src_t* pre( begin( progpre ) ), * preEnd( end( progpre ) ), * post( begin( progpost ) ); pre != preEnd; ++ pre, ++ post ) {
