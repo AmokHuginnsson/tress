@@ -48,16 +48,16 @@ TUT_UNIT_TEST( 2, "equals (==)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 47, "data test" )
-	HRing<int> ring( ring::capacity( 3 ) );
+	HRing<int> ring( ring::capacity_type( 3 ) );
 
 	// Insert some elements into the buffer.
-	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 0 );
+	ENSURE_EQUALS( "inconsistent size", ring.get_size().get(), 0 );
 	ring.push_back( 1 );
-	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 1 );
+	ENSURE_EQUALS( "inconsistent size", ring.get_size().get(), 1 );
 	ring.push_back( 2 );
-	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 2 );
+	ENSURE_EQUALS( "inconsistent size", ring.get_size().get(), 2 );
 	ring.push_back( 3 );
-	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 3 );
+	ENSURE_EQUALS( "inconsistent size", ring.get_size().get(), 3 );
 
 	ENSURE_EQUALS( "push_back failed", ring[0], 1 );
 	ENSURE_EQUALS( "push_back failed", ring[1], 2 );
@@ -74,14 +74,14 @@ TUT_UNIT_TEST( 47, "data test" )
 	}
 
 	ring.pop_front();
-	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 2 );
+	ENSURE_EQUALS( "inconsistent size", ring.get_size().get(), 2 );
 	ring.pop_front();
-	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 1 );
+	ENSURE_EQUALS( "inconsistent size", ring.get_size().get(), 1 );
 
 	ring.push_back( 4 ); // Overwrite 1 with 4
-	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 2 );
+	ENSURE_EQUALS( "inconsistent size", ring.get_size().get(), 2 );
 	ring.push_back( 5 ); // Overwrite 2 with 5.
-	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 3 );
+	ENSURE_EQUALS( "inconsistent size", ring.get_size().get(), 3 );
 
 	// The buffer now contains 3, 4 and 5.
 
@@ -92,20 +92,20 @@ TUT_UNIT_TEST( 47, "data test" )
 	// Elements can be popped from either the front or the back.
 
 	ring.pop_back();  // 5 is removed.
-	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 2 );
+	ENSURE_EQUALS( "inconsistent size", ring.get_size().get(), 2 );
 	ring.pop_front(); // 3 is removed.
-	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 1 );
+	ENSURE_EQUALS( "inconsistent size", ring.get_size().get(), 1 );
 
 	ENSURE_EQUALS( "pop_back and/or pop_front failed", ring[0], 4 );
 
 	ring.clear();
-	ENSURE_EQUALS( "inconsistent size", ring.get_size(), 0 );
+	ENSURE_EQUALS( "inconsistent size", ring.get_size().get(), 0 );
 	ENSURE_EQUALS( "clear failed", ring.is_empty(), true );
 
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 48, "iterator" )
-	HRing<int> ring( ring::capacity( 3 ) );
+	HRing<int> ring( ring::capacity_type( 3 ) );
 	ring.push_back( 1 );
 	ring.push_back( 2 );
 	ring.push_back( 3 );
@@ -119,7 +119,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 49, "more data tests" )
 	// create a circular container of capacity 3
-	HRing<int> ring( ring::capacity( 3 ) );
+	HRing<int> ring( ring::capacity_type( 3 ) );
 
 	// insert some elements into the circular buffer
 	ring.push_back( 1 );
@@ -129,8 +129,8 @@ TUT_UNIT_TEST( 49, "more data tests" )
 	ENSURE_EQUALS( "push_back failed", ring[0], 1 );
 	ENSURE_EQUALS( "push_back failed", ring[1], 2 );
 	ENSURE_EQUALS( "reserve/full failed", ring.full(), false );
-	ENSURE_EQUALS( "size falsed", ring.size(), 2 );
-	ENSURE_EQUALS( "reserve/capacity falsed", ring.capacity(), 3 );
+	ENSURE_EQUALS( "size falsed", ring.size().get(), 2 );
+	ENSURE_EQUALS( "reserve/capacity falsed", ring.capacity().get(), 3 );
 
 	// insert some other elements
 	ring.push_back( 3 );
@@ -158,8 +158,8 @@ TUT_UNIT_TEST( 49, "more data tests" )
 	ENSURE_EQUALS( "back failed", ring.back(), 4 );
 	ENSURE_EQUALS( "bad contents", sum, 9 );
 	ENSURE_EQUALS( "full failed", ring.full(), false );
-	ENSURE_EQUALS( "size failed", ring.size(), 3 );
-	ENSURE_EQUALS( "capacity failed", ring.capacity(), 6 );
+	ENSURE_EQUALS( "size failed", ring.size().get(), 3 );
+	ENSURE_EQUALS( "capacity failed", ring.capacity().get(), 6 );
 TUT_TEARDOWN()
 
 }

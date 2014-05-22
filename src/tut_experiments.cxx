@@ -170,7 +170,7 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	HHashSet<int> emptyHashSet;
 	HHashSet<int> hashSet( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HRing<int> emptyRing;
-	HRing<int> ring( ring::capacity( countof ( _testData_[0] ) * 2 ),
+	HRing<int> ring( ring::capacity_type( countof ( _testData_[0] ) * 2 ),
 		_testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HHashMap<int, int> hashMap;
 	HHashMap<int, int> emptyHashMap;

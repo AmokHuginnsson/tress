@@ -1009,7 +1009,7 @@ TUT_UNIT_TEST( 25, "distance" )
 	HList<int> list( begin( _testData_[0] ), end( _testData_[0] ) );
 	HSet<int> set( begin( _testData_[0] ), end( _testData_[0] ) );
 	HHashSet<int> hashSet( begin( _testData_[0] ), end( _testData_[0] ) );
-	HRing<int> ring( ring::capacity( countof ( _testData_[0] ) * 2 ),
+	HRing<int> ring( ring::capacity_type( countof ( _testData_[0] ) * 2 ),
 		begin( _testData_[0] ), end( _testData_[0] ) );
 	using yaal::distance;
 	ENSURE_EQUALS( "distance on HArray<> failed", distance( array.begin(), array.end() ), countof ( _testData_[0] ) );
@@ -1026,7 +1026,7 @@ TUT_UNIT_TEST( 26, "swap" )
 	HList<int> list( begin( _testData_[0] ), end( _testData_[0] ) );
 	HSet<int> set( begin( _testData_[0] ), end( _testData_[0] ) );
 	HHashSet<int> hashSet( begin( _testData_[0] ), end( _testData_[0] ) );
-	HRing<int> ring( ring::capacity( countof ( _testData_[0] ) * 2 ),
+	HRing<int> ring( ring::capacity_type( countof ( _testData_[0] ) * 2 ),
 		begin( _testData_[0] ), end( _testData_[0] ) );
 	using yaal::distance;
 	HArray<int> array2;
