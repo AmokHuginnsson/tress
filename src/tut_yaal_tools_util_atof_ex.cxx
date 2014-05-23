@@ -50,11 +50,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "simple but invalid number" )
 	HString formula = "4/e";
-	try {
-		atof_ex( formula, true );
-	} catch ( HExpressionException& ) {
-		// ok
-	}
+	ENSURE_THROW( "invalid formula accepted", atof_ex( formula, true ), HExpressionException );
 TUT_TEARDOWN()
 
 }
