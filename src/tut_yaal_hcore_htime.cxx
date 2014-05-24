@@ -46,8 +46,8 @@ TUT_UNIT_TEST( 1, "get current time" )
 	HTime nowLocal( now_local() );
 	HTime nowUTC( now_utc() );
 	int long now( time( NULL ) );
-	int long nowLocalRaw( nowLocal.raw() );
-	int long nowUTCRaw( nowUTC.raw() );
+	i64_t nowLocalRaw( nowLocal.raw() );
+	i64_t nowUTCRaw( nowUTC.raw() );
 	nowLocalRaw -= ( nowLocalRaw % 100 );
 	nowUTCRaw -= ( nowUTCRaw % 100 );
 	now -= ( now % 100 );
