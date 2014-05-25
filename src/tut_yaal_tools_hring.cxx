@@ -66,12 +66,7 @@ TUT_UNIT_TEST( 47, "data test" )
 	// The buffer is full now, pushing subsequent
 	// elements will throw.
 
-	try {
-		ring.push_back( 4 );  // Overwrite 1 with 4.
-		FAIL( "pushing into full ring succeeded" );
-	} catch ( HException const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "pushing into full ring succeeded", ring.push_back( 4 ) /* Overwrite 1 with 4. */, HException );
 
 	ring.pop_front();
 	ENSURE_EQUALS( "inconsistent size", ring.get_size().get(), 2 );
@@ -134,12 +129,7 @@ TUT_UNIT_TEST( 49, "more data tests" )
 
 	// insert some other elements
 	ring.push_back( 3 );
-	try {
-		ring.push_back( 4 );
-		fail( "pushing to full ring succeeded" );
-	} catch ( HException const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "pushing to full ring succeeded", ring.push_back( 4 ), HException );
 
 	ENSURE_EQUALS( "full failed", ring.full(), true );
 	ring.reserve( 5 );
