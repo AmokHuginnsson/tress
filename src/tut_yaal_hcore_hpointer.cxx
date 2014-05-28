@@ -239,13 +239,8 @@ TUT_UNIT_TEST( 10, "Checks passing ownership via assignment." ) {
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 11, "Checks operator->() throws instead of returning null." ) {
-		try {
-			ptr_t sp;
-			sp->get_id();
-			FAIL( "failed assertion expected" );
-		} catch ( HFailedAssertion& ) {
-			// ok
-		}
+		ptr_t sp;
+		ENSURE_THROW( "failed assertion expected", sp->get_id(), HFailedAssertion );
 	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
