@@ -85,8 +85,9 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& os, 
 		os << hcore::endl;
 	else if ( mod == static_cast<stream_mod_t const&>( std::flush ) )
 		os << hcore::flush;
-	else
+	else {
 		M_ASSERT( !"unsupported stream modifier"[0] );
+	}
 	return ( os );
 }
 
