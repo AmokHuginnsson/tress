@@ -105,7 +105,7 @@ void a_fast_one( HThread const* const ) {
 void busy_wait( void ) {
 	HThread::set_name( "tut::HThread(busy_wait)" );
 /* cppcheck-suppress unreadVariable */
-	long q = 3;
+	volatile long q = 3;
 	for ( int i= 0; i < 1000; ++ i ) {
 		for ( int j= 0; j < 1000; ++ j ) {
 			for ( int k= 0; k < 20; ++ k )
