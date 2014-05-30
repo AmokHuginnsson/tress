@@ -767,5 +767,36 @@ TUT_UNIT_TEST( 46, "append( HString ... )" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 47, "swap()" )
+	/* Short must be shorter than 10 bytes. */
+	static int const SHORT_LIMIT( 10 );
+	char const ALA[] = "Ala";
+	char const PIES[] = "pies";
+	HString a( ALA );
+	ENSURE( "bad test setup ALA", a.get_length() < SHORT_LIMIT );
+	HString b( PIES );
+	ENSURE( "bad test setup PIES", b.get_length() < SHORT_LIMIT );
+	/* Long must be longer than 24 bytes. */
+	static int const LONG_LIMIT( 24 );
+	char const YAAL[] = "Yet Another Abstraction Layer";
+	char const PI_E[] = "3.141592653589793+2.718281828459045";
+	HString c( YAAL );
+	ENSURE( "bad test setup YAAL", c.get_length() > LONG_LIMIT );
+	HString d( PI_E );
+	ENSURE( "bad test setup PI_E", d.get_length() > LONG_LIMIT );
+
+	a.swap( b );
+	ENSURE_EQUALS( "swap 1 failed", a, PIES );
+	ENSURE_EQUALS( "swap 1 failed", b, ALA );
+
+	c.swap( d );
+	ENSURE_EQUALS( "swap 2 failed", c, PI_E );
+	ENSURE_EQUALS( "swap 2 failed", d, YAAL );
+
+	a.swap( c );
+	ENSURE_EQUALS( "swap 3 failed", a, PI_E );
+	ENSURE_EQUALS( "swap 3 failed", c, PIES );
+TUT_TEARDOWN()
+
 }
 
