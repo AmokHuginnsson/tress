@@ -109,14 +109,8 @@ TUT_UNIT_TEST( 8, "argument()" )
 	ENSURE_DISTANCE( "bad argument value calculted", d.argument(), - ( math::PI - math::PI / 4.L ), epsilon );
 	HComplex e( 1, -1 );
 	ENSURE_DISTANCE( "bad argument value calculted", e.argument(), - math::PI / 4.L, epsilon );
-	try {
-		HComplex z;
-		z.argument();
-		FAIL( "getting argument from 0 + 0i succeeded" );
-	} catch ( HComplexException const& ex ) {
-		// ok
-		cout << ex.what() << endl;
-	}
+	HComplex z;
+	ENSURE_THROW( "getting argument from 0 + 0i succeeded", z.argument(), HComplexException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 9, "asignment operator" )
