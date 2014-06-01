@@ -40,24 +40,12 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_util_escape );
-TUT_TEST_GROUP( tut_yaal_tools_util_escape, "yaal::tools::utils::escape" );
+TUT_TEST_GROUP( tut_yaal_tools_util_escape, "yaal::tools::util::escape" );
 
 TUT_UNIT_TEST( 1, "EscapeTable constrctor" )
-	try {
-		EscapeTable et( NULL, 1, "n", 1 );
-	} catch ( HFailedAssertion const& ) {
-		/* ok */
-	}
-	try {
-		EscapeTable et( "\n", 1, NULL, 1 );
-	} catch ( HFailedAssertion const& ) {
-		/* ok */
-	}
-	try {
-		EscapeTable et( "\n", 1, "nm", 2 );
-	} catch ( HFailedAssertion const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "bad 1 parameter accepted", EscapeTable et( NULL, 1, "n", 1 ), HFailedAssertion );
+	ENSURE_THROW( "bad 3 parameter accepted", EscapeTable et( "\n", 1, NULL, 1 ), HFailedAssertion );
+	ENSURE_THROW( "size mismatch accepted", EscapeTable et( "\n", 1, "nm", 2 ), HFailedAssertion );
 	EscapeTable et( "\n", 1, "n", 1 );
 	ENSURE_EQUALS( "escape table preparaton failed", et._rawToSafe[ static_cast<int>( 'a' ) ], 'a' );
 	ENSURE_EQUALS( "escape table preparaton failed", et._safeToRaw[ static_cast<int>( 'a' ) ], 'a' );
