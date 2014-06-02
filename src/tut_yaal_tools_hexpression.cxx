@@ -63,18 +63,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "variable index range" )
 	HExpression e;
-	try {
-		e[ -1 ];
-		FAIL( "bad variable index accepted" );
-	} catch ( HExpressionException const& ) {
-		// ok
-	}
-	try {
-		e[ HExpression::MAX_VARIABLE_COUNT ];
-		FAIL( "bad variable index accepted" );
-	} catch ( HExpressionException const& ) {
-		// ok
-	}
+	ENSURE_THROW( "bad variable index accepted", e[ -1 ],	HExpressionException );
+	ENSURE_THROW( "bad variable index accepted", e[ HExpression::MAX_VARIABLE_COUNT ], HExpressionException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "addition" )
@@ -154,14 +144,9 @@ TUT_UNIT_TEST( 47, "complex and valid expression" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 48, "invalid expression" )
-	try {
-		HString eq( "7+10+(4*)" );
-		HExpression x;
-		x.compile( eq );
-		FAIL( "parsing invalid expression succeded" );
-	} catch ( HExpressionException& ) {
-		// ok
-	}
+	HString eq( "7+10+(4*)" );
+	HExpression x;
+	ENSURE_THROW( "parsing invalid expression succeded", x.compile( eq ), HExpressionException );
 TUT_TEARDOWN()
 
 }
