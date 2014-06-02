@@ -71,12 +71,7 @@ TUT_UNIT_TEST( 3, "copy constructor" ) {
 		um_t copy( um );
 		ENSURE_EQUALS( "bad constructor called", copy->id(), 7 );
 		ENSURE_EQUALS( "inconsistent instance count", item_t::get_instance_count(), 1 );
-		try {
-			um->id();
-			FAIL( "accessing invalidated HUniqueMovable<> succeeded" );
-		} catch ( HFailedAssertion const& ) {
-			// ok
-		}
+		ENSURE_THROW( "accessing invalidated HUniqueMovable<> succeeded", um->id(), HFailedAssertion );
 	}
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -91,12 +86,7 @@ TUT_UNIT_TEST( 4, "assignment operator" ) {
 		copy = um;
 		ENSURE_EQUALS( "inconsistent instance count", item_t::get_instance_count(), 1 );
 		ENSURE_EQUALS( "bad constructor called", copy->id(), 7 );
-		try {
-			um->id();
-			FAIL( "accessing invalidated HUniqueMovable<> succeeded" );
-		} catch ( HFailedAssertion const& ) {
-			// ok
-		}
+		ENSURE_THROW( "accessing invalidated HUniqueMovable<> succeeded", um->id(), HFailedAssertion );
 	}
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
