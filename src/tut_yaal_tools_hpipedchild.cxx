@@ -38,7 +38,6 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-
 struct tut_yaal_tools_hpipedchild : public simple_mock<tut_yaal_tools_hpipedchild> {
 	typedef simple_mock<tut_yaal_tools_hpipedchild> base_type;
 	static HString CHILD;
@@ -77,12 +76,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 3, "spawn on non-execuable" )
 	HPipedChild pc;
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
-	try {
-		pc.spawn( CHILD_FAKE );
-		FAIL( "spawning non-executable" );
-	} catch ( HPipedChildException& ) {
-		// ok
-	}
+	ENSURE_THROW( "spawning non-executable", pc.spawn( CHILD_FAKE ), HPipedChildException );
 	ENSURE_EQUALS( "running after failed spawn", pc.is_running(), false );
 TUT_TEARDOWN()
 
