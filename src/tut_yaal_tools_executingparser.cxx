@@ -79,21 +79,11 @@ TUT_TEST_GROUP( tut_yaal_tools_hllexecutingparser, "yaal::tools::executing_parse
 
 TUT_UNIT_TEST( 1, "empty parser" )
 	HRule r;
-	try {
-		HExecutingParser ep( r );
-		FAIL( "empty parser constructed" );
-	} catch ( HExecutingParserException const& ) {
-		// ok
-	}
+	ENSURE_THROW( "empty parser constructed", HExecutingParser ep( r ), HExecutingParserException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "Named rule name ends with underscore" )
-	try {
-		HRule r( "A_" );
-		FAIL( "explicit rule name with underscore at the end created" );
-	} catch ( HNamedRuleException const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "explicit rule name with underscore at the end created", HRule r( "A_" ), HNamedRuleException );
 TUT_TEARDOWN()
 
 template<typename T, typename RT = T>
