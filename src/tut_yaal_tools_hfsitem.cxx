@@ -102,25 +102,14 @@ TUT_UNIT_TEST( 2, "is_directory" )
 	ENSURE( err, dit1.is_directory() );
 	HFSItem dit2( "./data/" );
 	ENSURE( err, dit2.is_directory() );
-	try {
-		HFSItem dit3( "./data/non-existing" );
-		ENSURE( err, ! dit3.is_directory() );
-		FAIL( err2 );
-	} catch ( HFSItemException const& ) {
-	}
-	try {
-		HFSItem dit4( "./data/non-existing/" );
-		ENSURE( err, ! dit4.is_directory() );
-		FAIL( err2 );
-	} catch ( HFSItemException const& ) {
-	}
+	HFSItem dit3( "./data/non-existing" );
+	ENSURE_THROW( err2, dit3.is_directory(), HFSItemException );
+	HFSItem dit4( "./data/non-existing/" );
+	ENSURE_THROW( err2, dit4.is_directory(), HFSItemException );
 	HFSItem dit5( "./data/xml.xml" );
 	ENSURE( err, ! dit5.is_directory() );
-	try {
-		HFSItem dit6( "./data/xml.xml/" );
-		ENSURE( err, ! dit6.is_directory() );
-	} catch ( HFSItemException const& ) {
-	}
+	HFSItem dit6( "./data/xml.xml/" );
+	ENSURE_THROW( err2, dit6.is_directory(), HFSItemException );
 	HFSItem dit7( "." );
 	ENSURE( err, dit7.is_directory() );
 	HFSItem dit8( "./" );
