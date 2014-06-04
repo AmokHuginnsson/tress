@@ -345,12 +345,7 @@ void tut_yaal_dbwrapper_hrecordset::row_by_row_test( HDataBase::ptr_t db, char c
 	M_PROLOG
 	HRecordSet::ptr_t rs = db->query( query, HRecordSet::CURSOR::FORWARD );
 	ENSURE_EQUALS( "bad column count", rs->get_field_count(), 3 );
-	try {
-		ENSURE_EQUALS( "bad result size", rs->get_size(), 3 );
-		FAIL( "recieved record count in row-by-row mode" );
-	} catch ( HRecordSetException const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "recieved record count in row-by-row mode", rs->get_size(), HRecordSetException );
 	char const* const COLUMN_NAMES[] = { "id", "name", "data" };
 	char const* const DATA[][3] = {
 		{ "1", "one", NULL },
