@@ -44,12 +44,7 @@ TUT_TEST_GROUP( tut_yaal_tools_find_primes, "yaal::tools::find_primes" );
 
 TUT_UNIT_TEST( 1, "input sanity check" )
 	primes_t p;
-	try {
-		find_primes( p, 10, 1 );
-		FAIL( "invalid range accepted in find_primes()" );
-	} catch ( HException const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "invalid range accepted in find_primes()", find_primes( p, 10, 1 ), HException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "find_primes( 0, 20 )" )
