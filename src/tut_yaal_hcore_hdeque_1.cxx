@@ -88,18 +88,8 @@ TUT_UNIT_TEST( 7, "Operator [ ]." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	deque_t deque ( SIZE );
-	try {
-		deque [ SIZE ] = 0;
-		FAIL( "access beyond size succed" );
-	} catch ( HException const& e ) {
-		cout << e.what() << endl;
-	}
-	try {
-		deque[ - SIZE - 1 ] = 0;
-		FAIL( "access with negative index succed" );
-	} catch ( HException const& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "access beyond size succed", deque[ SIZE ] = 0, HException );
+	ENSURE_THROW( "access with negative index succed", deque[ - SIZE - 1 ] = 0, HException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "Operator bool." )
