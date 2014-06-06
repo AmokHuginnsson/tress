@@ -50,12 +50,7 @@ TUT_UNIT_TEST( 2, "construction with custom initialization" )
 	HInterval<int> i( -1, 1 );
 	ENSURE_EQUALS( "custom initialization set bad infimum", i.inf(), -1 );
 	ENSURE_EQUALS( "custom initialization set bad supremum", i.sup(), 1 );
-	try {
-		HInterval<int> bad( 1, -1 );
-		FAIL( "creation in invalid interval succeeded" );
-	} catch ( HExceptionT<HInterval<int> > const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "creation in invalid interval succeeded", HInterval<int> bad( 1, -1 ), HExceptionT<HInterval<int> > );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "addition" )
