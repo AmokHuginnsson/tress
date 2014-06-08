@@ -16,6 +16,16 @@
 #include <yaal/cleanup.hxx>
 #endif /* __MSVCXX__ */
 
+namespace yaal {
+namespace ansi {
+inline std::ostream& operator << ( std::ostream& os_, yaal::ansi::HSequence const& seq_ ) {
+	if ( yaal::hconsole::is_a_tty( os_ ) )
+		os_ << *seq_;
+	return ( os_ );
+}
+}
+}
+
 /**
  * Template Unit Tests Framework for C++.
  * http://tut.dozen.ru
@@ -23,12 +33,6 @@
  * @author Vladimir Dyuzhev, Vladimir.Dyuzhev@gmail.com
  */
 namespace {
-
-inline std::ostream& operator << ( std::ostream& os_, yaal::ansi::HSequence const& seq_ ) {
-	if ( yaal::hconsole::is_a_tty( os_ ) )
-		os_ << *seq_;
-	return ( os_ );
-}
 
 std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 	char const* tags[][2] = {
@@ -216,6 +220,7 @@ public:
 
 	virtual void group_started( std::string const& name, int ) {
 		yaal::hcore::HLock l( _mutex );
+		using std::operator <<;
 		_ls << "TUT: group: [" << name << "]" << std::endl;
 		if ( tress::setup._verbose ) {
 			std::string sep( ( MAX_SEPARATOR_LEN - name.length() ) / 2 - ( sizeof ( "[ " ) - 1 ), '=' );
@@ -251,6 +256,7 @@ public:
 	virtual void test_started( char const* const groupName_, int n, char const* const title_, bool first_ ) {
 		if ( title_ ) {
 			yaal::hcore::HLock l( _mutex );
+			using std::operator <<;
 			_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
 			if ( tress::setup._verbose && ! first_ ) {
 				static std::string const sep( MAX_SEPARATOR_LEN, '-' );
