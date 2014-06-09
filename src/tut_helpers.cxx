@@ -29,6 +29,7 @@ Copyright:
 #include <iostream>
 #include <cstdio>
 
+#include "config.hxx"
 #include <yaal/hcore/macro.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
