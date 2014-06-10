@@ -158,12 +158,7 @@ TUT_UNIT_TEST( 1, "CHUNK_SIZE, VALUES_PER_CHUNK and Constructor." )
 	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<769> >::VALUES_PER_CHUNK, 1 );
 	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
-	try {
-		deque_t deque( BAD_SIZE );
-		FAIL( "deque with negative size created" );
-	} catch ( HException const& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "deque with negative size created", deque_t deque( BAD_SIZE ), HException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "Constructor and get_size()." ) {
@@ -187,12 +182,7 @@ TUT_UNIT_TEST( 3, "Constructor with filling." )
 	int const BAD_SIZE = - 1;
 	int const SIZE_FOR_ARRAY = 7;
 	int const FILLER_FOR_ARRAY = 13;
-	try {
-		deque_t badDeque( BAD_SIZE, FILLER_FOR_ARRAY );
-		FAIL( "deque with negative size created" );
-	} catch ( HException const& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "deque with negative size created", deque_t badDeque( BAD_SIZE, FILLER_FOR_ARRAY ), HException );
 	deque_t deque( SIZE_FOR_ARRAY, FILLER_FOR_ARRAY );
 	check_consistency( deque );
 	for ( int i = 0; i < SIZE_FOR_ARRAY; ++ i )
