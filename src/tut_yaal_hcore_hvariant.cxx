@@ -63,17 +63,17 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "uninitialized HVariant<>" )
 	variant_t v;
-	try { v.get<bool>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
-	try { v.get<char>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
-	try { v.get<int short>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
-	try { v.get<int>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
-	try { v.get<int long>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
-	try { v.get<void*>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
-	try { v.get<double>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
-	try { v.get<double long>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
-	try { v.get<HString>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
-	try { v.get<HNumber>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
-	try { v.get<instance_tracker_t>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<bool>(),               HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<char>(),               HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<int short>(),          HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<int>(),                HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<int long>(),           HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<void*>(),              HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<double>(),             HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<double long>(),        HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<HString>(),            HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<HNumber>(),            HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<instance_tracker_t>(), HFailedAssertion );
 	ENSURE_EQUALS( "bad type id on uninitialized", v.type(), variant_t::INVALID );
 TUT_TEARDOWN()
 
@@ -109,21 +109,20 @@ TUT_UNIT_TEST( 6, "identity switches" )
 	v = true;
 	ENSURE_EQUALS( "bad value (bool)", v.get<bool>(), true );
 	v = 1;
-	try { v.get<bool>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	ENSURE_THROW( "getting data from varaiant ny wrong type", v.get<bool>(), HFailedAssertion );
 	ENSURE_EQUALS( "bad value (int)", v.get<int>(), 1 );
 	v = 3.141592653589793L;
-	try { v.get<int>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	ENSURE_THROW( "getting data from varaiant ny wrong type", v.get<int>(), HFailedAssertion );
 	ENSURE_EQUALS( "bad value (double long)", v.get<double long>(), 3.141592653589793L );
 	v = HString( "Ala ma kota." );
-	try { v.get<double long>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	ENSURE_THROW( "getting data from varaiant ny wrong type", v.get<double long>(), HFailedAssertion );
 	ENSURE_EQUALS( "bad value (HString)", v.get<HString>(), HString( "Ala ma kota." ) );
 	v = HNumber( "2.1718281828459045" );
-	try { v.get<HString>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	ENSURE_THROW( "getting data from varaiant ny wrong type", v.get<HString>(), HFailedAssertion );
 	ENSURE_EQUALS( "bad value (HNumber)", v.get<HNumber>(), HNumber( "2.1718281828459045" ) );
 	v = false;
-	try { v.get<HNumber>(); fail( "getting data from uninitialized varaiant" ); } catch ( HFailedAssertion const& ) { /* ok */ }
+	ENSURE_THROW( "getting data from varaiant ny wrong type", v.get<HNumber>(), HFailedAssertion );
 	ENSURE_EQUALS( "bad value (bool)", v.get<bool>(), false );
-
 TUT_TEARDOWN()
 
 }
