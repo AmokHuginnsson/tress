@@ -184,6 +184,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "exception during map[key] = val;" )
 	i2c_t m;
+	/*
+	 * Should stay in explicit try/catch form.
+	 */
 	try {
 		m[ 0 ] = Crazy();
 		FAIL( "FATAL: bad exec path!" );
@@ -195,13 +198,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 9, "dereferencing non existing key with const map[key]" )
 	i2c_t m;
-	try {
-		i2c_t const& cm( m );
-		cm[ 0 ];
-		FAIL( "FATAL: dereferencing non-existing key succeeded!" );
-	} catch ( HInvalidKeyException const& ) {
-		// ok
-	}
+	i2c_t const& cm( m );
+	ENSURE_THROW( "FATAL: dereferencing non-existing key succeeded!", cm[ 0 ], HInvalidKeyException );
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 
