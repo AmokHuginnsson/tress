@@ -319,12 +319,7 @@ TUT_UNIT_TEST( 22, "shift_left" )
 	HString str( CORRECT );
 	str.shift_left( SHIFT );
 	ENSURE_EQUALS( "left_shift failed", str, CORRECT + SHIFT );
-	try {
-		str.shift_left( -1 );
-		FAIL ( "no check for negative shift" );
-	} catch ( HException& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "no check for negative shift", str.shift_left( -1 ), HStringException);
 	str.shift_left( 100000 );
 	ENSURE_EQUALS( "left_shift failed", str, "" );
 TUT_TEARDOWN()
@@ -335,12 +330,7 @@ TUT_UNIT_TEST( 23, "shift_right" )
 	HString str( CORRECT + SHIFT );
 	str.shift_right( SHIFT );
 	ENSURE_EQUALS( "right_shift failed", str, CORRECT );
-	try {
-		str.shift_right( -1 );
-		FAIL( "no check for negative shift" );
-	} catch ( HException& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "no check for negative shift", str.shift_right( -1 ), HStringException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 24, "mid" )
@@ -387,27 +377,28 @@ TUT_UNIT_TEST( 28, "insert" )
 	char s[] = "abcdef";
 	char insert_failed[] = "insert failed";
 	char overflow[] = "overflow passed";
-	str = s;ENSURE_EQUALS( insert_failed, str.insert( 0, 3, "ABCD" ), "ABCabcdef" );
-	str = s;ENSURE_EQUALS( insert_failed, str.insert( 2, 3, "ABCD" ), "abABCcdef" );
-	str = s;ENSURE_EQUALS( insert_failed, str.insert( -2, 2, "ABCD" ), "abcdef" );
-	str = s;ENSURE_EQUALS( insert_failed, str.insert( -2, 4, "ABCD" ), "CDabcdef" );
-	try {
-		str = s;ENSURE_EQUALS( insert_failed, str.insert( -5, 3, "ABCD" ), "any" );
-		FAIL( overflow );
-	} catch ( HException& e ) {
-		cout << e.what() << endl;
-	}
-	try {
-		str = s;ENSURE_EQUALS( insert_failed, str.insert( 0, 5, "ABCD" ), "any" );
-		FAIL( overflow );
-	} catch ( HException& e ) {
-		cout << e.what() << endl;
-	}
-	str = s;ENSURE_EQUALS( insert_failed, str.insert( 20, 3, "ABCD" ), "abcdef" );
-	str = s;ENSURE_EQUALS( insert_failed, str.insert( 2, -5, "ABCD" ), "abcdef" );
-	str = s;ENSURE_EQUALS( insert_failed, str.insert( 5, 3, "ABCD" ), "abcdeABCf" );
-	str = s;ENSURE_EQUALS( insert_failed, str.insert( 6, 3, "ABCD" ), "abcdefABC" );
-	str = s;ENSURE_EQUALS( insert_failed, str.insert( 7, 3, "ABCD" ), "abcdef" );
+	str = s;
+	ENSURE_EQUALS( insert_failed, str.insert( 0, 3, "ABCD" ), "ABCabcdef" );
+	str = s;
+	ENSURE_EQUALS( insert_failed, str.insert( 2, 3, "ABCD" ), "abABCcdef" );
+	str = s;
+	ENSURE_EQUALS( insert_failed, str.insert( -2, 2, "ABCD" ), "abcdef" );
+	str = s;
+	ENSURE_EQUALS( insert_failed, str.insert( -2, 4, "ABCD" ), "CDabcdef" );
+	str = s;
+	ENSURE_THROW( overflow, str.insert( -5, 3, "ABCD" ), HStringException );
+	str = s;
+	ENSURE_THROW( overflow, str.insert( 0, 5, "ABCD" ), HStringException );
+	str = s;
+	ENSURE_EQUALS( insert_failed, str.insert( 20, 3, "ABCD" ), "abcdef" );
+	str = s;
+	ENSURE_EQUALS( insert_failed, str.insert( 2, -5, "ABCD" ), "abcdef" );
+	str = s;
+	ENSURE_EQUALS( insert_failed, str.insert( 5, 3, "ABCD" ), "abcdeABCf" );
+	str = s;
+	ENSURE_EQUALS( insert_failed, str.insert( 6, 3, "ABCD" ), "abcdefABC" );
+	str = s;
+	ENSURE_EQUALS( insert_failed, str.insert( 7, 3, "ABCD" ), "abcdef" );
 	HString str2( "|==--|[]" );
 	ENSURE_EQUALS( insert_failed, str2.insert( 7, 4, "done" ), "|==--|[done]" );
 TUT_TEARDOWN()
@@ -663,18 +654,8 @@ TUT_UNIT_TEST( 41, "hs_realloc( size )" )
 	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), MIN_CAPACITY );
 	str.hs_realloc( MIN_CAPACITY + 2 );
 	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), ( MIN_CAPACITY < 16 ? 15 : 31 ) );
-	try {
-		str.hs_realloc( -1 );
-		FAIL( "absurd reallocation size allowed" );
-	} catch ( HStringException const& ) {
-		/* ok */
-	}
-	try {
-		str.hs_realloc( str.get_max_size() + 2 );
-		FAIL( "huge (too big) reallocation size allowed" );
-	} catch ( HStringException const& ) {
-		/* ok */
-	}
+	ENSURE_THROW( "absurd reallocation size allowed", str.hs_realloc( -1 ), HStringException );
+	ENSURE_THROW( "huge (too big) reallocation size allowed", str.hs_realloc( str.get_max_size() + 2 ), HStringException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 42, "assign( HString ... )" )
@@ -695,18 +676,8 @@ TUT_UNIT_TEST( 42, "assign( HString ... )" )
 	ENSURE_EQUALS( err, dest.assign( source, sizeof ( ss ) - 1, 5 ), "" );
 	ENSURE_EQUALS( err, dest.assign( source, sizeof ( ss ), 5 ), "" );
 	ENSURE_EQUALS( err, dest.assign( ss + 3, ss + sizeof ( ss ) - 4 ), " ma ko" );
-	try {
-		dest.assign( source, -1, 2 );
-		FAIL( "assign with negative offset succeeded" );
-	} catch ( HStringException const& ) {
-		// ok
-	}
-	try {
-		dest.assign( source, 0, -1 );
-		FAIL( "assign with negative lenght succeeded" );
-	} catch ( HStringException const& ) {
-		// ok
-	}
+	ENSURE_THROW( "assign with negative offset succeeded", dest.assign( source, -1, 2 ), HStringException );
+	ENSURE_THROW( "assign with negative lenght succeeded", dest.assign( source, 0, -1 ), HStringException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 43, "fill()" )
@@ -753,18 +724,8 @@ TUT_UNIT_TEST( 46, "append( HString ... )" )
 	ENSURE_EQUALS( err, dest.append( source, sizeof ( ss ) - 1, 5 ), "dummy" + source + "Ala mma kokota.ota.." );
 	ENSURE_EQUALS( err, dest.append( source, sizeof ( ss ), 5 ), "dummy" + source + "Ala mma kokota.ota.." );
 	ENSURE_EQUALS( err, dest.append( ss + 3, ss + sizeof ( ss ) - 4 ), "dummy" + source + "Ala mma kokota.ota.. ma ko" );
-	try {
-		dest.append( source, -1, 2 );
-		FAIL( "append with negative offset succeeded" );
-	} catch ( HStringException const& ) {
-		// ok
-	}
-	try {
-		dest.append( source, 0, -1 );
-		FAIL( "append with negative lenght succeeded" );
-	} catch ( HStringException const& ) {
-		// ok
-	}
+	ENSURE_THROW( "append with negative offset succeeded", dest.append( source, -1, 2 ), HStringException );
+	ENSURE_THROW( "append with negative lenght succeeded", dest.append( source, 0, -1 ), HStringException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 47, "swap()" )
