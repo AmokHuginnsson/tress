@@ -253,6 +253,40 @@ char const prog8post[] =
 	"}\n"
 ;
 
+char const prog9[] =
+	"main(/* no arg */) {\n"
+	"\tprint( \"keep \\\"\" /* but remove this */ \n"
+	"\t/* and \"this\" too */\n"
+	"\t\t\" // this too\" );\n"
+	"\treturn ( 0 ); // We shall return 0.\n"
+	"}\n"
+	"/* and this is unfinished comment"
+;
+
+char const prog9post[] =
+	"main() {\n"
+	"\tprint( \"keep \\\" // this too\" );\n"
+	"\treturn ( 0 ); \n"
+	"}\n"
+;
+
+char const prog10[] =
+	"main(/* no arg */) {\n"
+	"\tprint( \"keep \\\"\" /* but remove this */ \n"
+	"\t/* and \"this\" too */\n"
+	"\t\t\" // this too\" );\n"
+	"\treturn ( 0 ); // We shall return 0.\n"
+	"}\n"
+	"/* and this is unfinished comment *"
+;
+
+char const prog10post[] =
+	"main() {\n"
+	"\tprint( \"keep \\\" // this too\" );\n"
+	"\treturn ( 0 ); \n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn::test_preprocessing( prog_src_t pre_, prog_src_t post_ ) {
 	HStringStream pre( pre_ );
 	HStringStream post;
@@ -275,6 +309,8 @@ TUT_UNIT_TEST( 2, "preprocessor" )
 		prog6,
 		prog7,
 		prog8,
+		prog9,
+		prog10,
 		NULL
 	};
 	prog_src_t progpost[] = {
@@ -287,6 +323,8 @@ TUT_UNIT_TEST( 2, "preprocessor" )
 		prog6post,
 		prog7post,
 		prog8post,
+		prog9post,
+		prog10post,
 		NULL
 	};
 	for ( prog_src_t* pre( begin( progpre ) ), * preEnd( end( progpre ) ), * post( begin( progpost ) ); pre != preEnd; ++ pre, ++ post ) {
