@@ -313,6 +313,30 @@ TUT_UNIT_TEST( 18, "construction from float" )
 	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 19, "construction from int long long" )
+	static int long long const INIT = -3141592653589793ll;
+	static char const CORRECT[] = "-3141592653589793";
+	HString str( INIT );
+	ENSURE_EQUALS ( "construction from int long long does not work", str, CORRECT );
+	ENSURE_EQUALS( "construction from int long long failed (size)",
+			str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+
+	ENSURE_EQUALS( "construction from int long long failed (capacity)", str.capacity(), SIZEOF_INT_LONG == 4 ? 32 : MIN_CAPACITY );
+	ENSURE_EQUALS( "construction from int long long failed (is_empty)", str.empty(), false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 20, "construction from int long long unsigned" )
+	static int long long unsigned const INIT = 2718281828459045ll;
+	static char const CORRECT[] = "2718281828459045";
+	HString str( INIT );
+	ENSURE_EQUALS ( "construction from int long unsigned does not work", str, CORRECT );
+	ENSURE_EQUALS( "construction from int long unsigned failed (size)",
+			str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+
+	ENSURE_EQUALS( "construction from int long long unsigned failed (capacity)", str.capacity(), SIZEOF_INT_LONG == 4 ? 32 : MIN_CAPACITY );
+	ENSURE_EQUALS( "construction from int long long unsigned failed (is_empty)", str.empty(), false );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 22, "shift_left" )
 	static char const CORRECT[] = "Ala ma kota";
 	static int const SHIFT = 4;
