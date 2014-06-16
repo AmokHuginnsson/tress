@@ -70,7 +70,7 @@ struct HUDPServer {
 public:
 	void start( void );
 	void stop( void );
-  void bind( int, ip_t );
+	void bind( int, ip_t );
 	HString const& buffer( void ) const;
 	void run( void );
 	void wait( void );
@@ -175,38 +175,24 @@ TUT_UNIT_TEST( 1, "Simple construction and destruction." )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "Constructions with wrong parameters." )
-	try {
-		HUDPSocket socket( HUDPSocket::socket_type_t( HUDPSocket::TYPE::BLOCKING ) | HUDPSocket::TYPE::NONBLOCKING );
-		FAIL( "creation of bad socket possible (TYPE::BLOCKING|TYPE::NONBLOCKING)" );
-	} catch ( HUDPSocketException const& e ) {
-		cout << e.what() << endl;
-	}
-	try {
-		HUDPSocket socket( HUDPSocket::socket_type_t( HUDPSocket::TYPE::SSL ) | HUDPSocket::TYPE::PLAIN );
-		FAIL( "creation of bad socket possible (TYPE::BLOCKING|TYPE::NONBLOCKING)" );
-	} catch ( HUDPSocketException const& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "creation of bad socket possible (TYPE::BLOCKING|TYPE::NONBLOCKING)",
+			HUDPSocket socket( HUDPSocket::socket_type_t( HUDPSocket::TYPE::BLOCKING ) | HUDPSocket::TYPE::NONBLOCKING ),
+			HUDPSocketException );
+	ENSURE_THROW( "creation of bad socket possible (TYPE::BLOCKING|TYPE::NONBLOCKING)",
+			HUDPSocket socket( HUDPSocket::socket_type_t( HUDPSocket::TYPE::SSL ) | HUDPSocket::TYPE::PLAIN ),
+			HUDPSocketException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "bind on reserved port." )
-	try {
-		HUDPSocket socket( ( ::getenv( "windir" ) || ::getenv( "WINDIR" ) ? 137 : 22 ) );
-		FAIL( "bind on reserved port possible" );
-	} catch ( HUDPSocketException const& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "bind on reserved port possible",
+			HUDPSocket socket( ( ::getenv( "windir" ) || ::getenv( "WINDIR" ) ? 137 : 22 ) ),
+			HUDPSocketException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 4, "bind on port in use." )
 	int const obscurePort( OBSCURE_PORT );
 	HUDPSocket block( obscurePort );
-	try {
-		HUDPSocket socket( obscurePort );
-		FAIL( "bind on port in use possible" );
-	} catch ( HUDPSocketException const& e ) {
-		cout << e.what() << endl;
-	}
+	ENSURE_THROW( "bind on port in use possible", HUDPSocket socket( obscurePort ), HUDPSocketException );
 TUT_TEARDOWN()
 
 void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool withSsl_, bool nonBlockingServer_, bool nonBlockingClient_, bool serverAssociation_ ) {
