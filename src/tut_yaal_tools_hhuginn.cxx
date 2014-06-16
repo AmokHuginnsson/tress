@@ -48,7 +48,7 @@ namespace tut {
 struct tut_yaal_tools_hhuginn : public simple_mock<tut_yaal_tools_hhuginn> {
 	typedef char const* prog_src_t;
 	virtual ~tut_yaal_tools_hhuginn( void ) {}
-	void test_preprocessing( prog_src_t, prog_src_t );
+	void test_preprocessing( prog_src_t, prog_src_t, int );
 };
 
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn, "yaal::tools::HHuginn" );
@@ -287,14 +287,86 @@ char const prog10post[] =
 	"}\n"
 ;
 
-void tut_yaal_tools_hhuginn::test_preprocessing( prog_src_t pre_, prog_src_t post_ ) {
+char const prog11[] =
+	"main(/* no arg */) {\n"
+	"\tprint( \"keep \\\"\" /* but remove this\n"
+	"\t* and \"this\" too\n"
+	"\t* and 'this' also */\n"
+	"\t\t\" // this too\" );\n"
+	"\treturn ( 0 ); // We shall return 0.\n"
+	"}\n"
+;
+
+char const prog11post[] =
+	"main() {\n"
+	"\tprint( \"keep \\\" // this too\" );\n"
+	"\treturn ( 0 ); \n"
+	"}\n"
+;
+
+char const prog12[] =
+	"main(/* no arg */) {\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+	"\n"
+	"foo() {\n"
+	"\tx = 33 /* hi there */ /\n"
+;
+
+char const prog12post[] =
+	"main() {\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+	"\n"
+	"foo() {\n"
+	"\tx = 33  /\n"
+;
+
+char const prog13[] =
+	"main(/* no arg */) {\n"
+	"\treturn /* first *//* second */ ( 0 );\n"
+	"}\n"
+;
+
+char const prog13post[] =
+	"main() {\n"
+	"\treturn  ( 0 );\n"
+	"}\n"
+;
+
+char const prog14[] =
+	"main(/* no arg */) {\n"
+	"\treturn /* first */ /* second */ ( 0 );\n"
+	"}\n"
+;
+
+char const prog14post[] =
+	"main() {\n"
+	"\treturn   ( 0 );\n"
+	"}\n"
+;
+
+char const prog15[] =
+	"main(/* no arg */) { /* first */// second\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const prog15post[] =
+	"main() { \n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+void tut_yaal_tools_hhuginn::test_preprocessing( prog_src_t pre_, prog_src_t post_, int index_ ) {
 	HStringStream pre( pre_ );
 	HStringStream post;
 	HHuginn h;
 	h.load( pre );
+	clog << "preprocessing: " << index_ << endl;
 	h.preprocess();
 	h.dump_preprocessed_source( post );
-	ENSURE_EQUALS( "prepocessing failed", post.string(), post_ );
+	ENSURE_EQUALS( "prepocessing failed " + to_string( index_ ), post.string(), post_ );
 	return;
 }
 
@@ -311,6 +383,11 @@ TUT_UNIT_TEST( 2, "preprocessor" )
 		prog8,
 		prog9,
 		prog10,
+		prog11,
+		prog12,
+		prog13,
+		prog14,
+		prog15,
 		NULL
 	};
 	prog_src_t progpost[] = {
@@ -325,11 +402,16 @@ TUT_UNIT_TEST( 2, "preprocessor" )
 		prog8post,
 		prog9post,
 		prog10post,
+		prog11post,
+		prog12post,
+		prog13post,
+		prog14post,
+		prog15post,
 		NULL
 	};
 	for ( prog_src_t* pre( begin( progpre ) ), * preEnd( end( progpre ) ), * post( begin( progpost ) ); pre != preEnd; ++ pre, ++ post ) {
 		if ( *pre ) {
-			test_preprocessing( *pre, *post );
+			test_preprocessing( *pre, *post, static_cast<int>( pre - begin( progpre ) ) );
 		}
 	}
 TUT_TEARDOWN()
