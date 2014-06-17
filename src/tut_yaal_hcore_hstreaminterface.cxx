@@ -208,5 +208,16 @@ TUT_UNIT_TEST( 7, "read_until_n (delim not stripped, by size)" )
 	ENSURE_EQUALS( "bad data read", line, "kota." );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 8, "input float" )
+	static char data[] = "3.1415 -2.7182";
+	HMemoryObserver mo( data, sizeof( data ) - 1 );
+	HMemory m( mo );
+	float val( 0 );
+	m >> val;
+	ENSURE_DISTANCE( "float value read fail", val, static_cast<float>( 3.1415 ), static_cast<float>( epsilon ) );
+	m >> val;
+	ENSURE_DISTANCE( "float negative value read fail", val, static_cast<float>( -2.7182 ), static_cast<float>( epsilon ) );
+TUT_TEARDOWN()
+
 }
 
