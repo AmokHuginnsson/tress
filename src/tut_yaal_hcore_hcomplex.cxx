@@ -30,6 +30,7 @@ Copyright:
 #include <yaal/hcore/math.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
+#include <yaal/tools/streamtools.hxx>
 
 using namespace tut;
 using namespace yaal;
@@ -119,14 +120,21 @@ TUT_UNIT_TEST( 8, "argument()" )
 	ENSURE_THROW( "getting argument from 0 + 0i succeeded", z.argument(), HComplexException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "asignment operator" )
+TUT_UNIT_TEST( 9, "assignment operator" )
 	HComplex a( math::PI, math::E );
 	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), math::PI, epsilon );
 	ENSURE_DISTANCE( "im incrorrectly set by constructor", a.im(), math::E, epsilon );
 	HComplex b;
 	b = a;
-	ENSURE_DISTANCE( "re incrorrectly set by copy constructor", b.re(), math::PI, epsilon );
-	ENSURE_DISTANCE( "im incrorrectly set by copy constructor", b.im(), math::E, epsilon );
+	ENSURE_DISTANCE( "re incrorrectly set by assignment operator", b.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by assignment operator", b.im(), math::E, epsilon );
+	HComplex c( math::PI, math::E );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", c.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by constructor", c.im(), math::E, epsilon );
+	double long val( 7 );
+	c = val;
+	ENSURE_DISTANCE( "re incrorrectly set by assignment operator", c.re(), val, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by assignment operator", c.im(), 0.l, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 10, "equality test" )
@@ -143,6 +151,58 @@ TUT_UNIT_TEST( 11, "differentiness test" )
 	ENSURE_EQUALS( "not equal as equal", a != b, true );
 	b = a;
 	ENSURE_EQUALS( "differentiness test failed", a != b, false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 12, "operator +=" )
+	HComplex a( math::PI, math::E );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by constructor", a.im(), math::E, epsilon );
+	double long valR( 7 );
+	double long valI( 3 );
+	a += valR;
+	ENSURE_DISTANCE( "re incrorrectly set by operator +=", a.re(), math::PI + valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator +=", a.im(), math::E, epsilon );
+	a += HComplex( 0, valI );
+	ENSURE_DISTANCE( "re incrorrectly set by operator +=", a.re(), math::PI + valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator +=", a.im(), math::E + valI, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 13, "operator -=" )
+	HComplex a( math::PI, math::E );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by constructor", a.im(), math::E, epsilon );
+	double long valR( 7 );
+	double long valI( 3 );
+	a -= valR;
+	ENSURE_DISTANCE( "re incrorrectly set by operator -=", a.re(), math::PI - valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator -=", a.im(), math::E, epsilon );
+	a -= HComplex( 0, valI );
+	ENSURE_DISTANCE( "re incrorrectly set by operator -=", a.re(), math::PI - valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator -=", a.im(), math::E - valI, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 14, "operator *=" )
+	HComplex aOrig( math::PI, math::E );
+	HComplex a( aOrig );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by constructor", a.im(), math::E, epsilon );
+	double long valR( 7 );
+	double long valI( 3 );
+	a *= valR;
+	ENSURE_DISTANCE( "re incrorrectly set by operator *=", a.re(), math::PI * valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator *=", a.im(), math::E * valR, epsilon );
+	a = aOrig;
+	a *= HComplex( valR, 0 );
+	ENSURE_DISTANCE( "re incrorrectly set by operator *=", a.re(), math::PI * valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator *=", a.im(), math::E * valR, epsilon );
+	a = aOrig;
+	TUT_EVAL( a *= HComplex( 0, valI ) );
+	ENSURE_DISTANCE( "re incrorrectly set by operator *=", a.re(), -( math::E * valI ), epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator *=", a.im(), math::PI * valI, epsilon );
+	a = aOrig;
+	TUT_EVAL( a *= HComplex( valR, valI ) );
+	ENSURE_DISTANCE( "re incrorrectly set by operator *=", a.re(), ( math::PI * valR ) - ( math::E * valI ), epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator *=", a.im(), math::E * valR + math::PI * valI, epsilon );
 TUT_TEARDOWN()
 
 }
