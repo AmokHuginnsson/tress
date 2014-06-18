@@ -100,15 +100,21 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 8, "argument()" )
 	HComplex a( 1, 0 );
-	ENSURE_DISTANCE( "bad argument value calculted", a.argument(), 0.L, epsilon );
+	ENSURE_DISTANCE( "bad argument of a value calculted", a.argument(), 0.L, epsilon );
 	HComplex b( 1, 1 );
-	ENSURE_DISTANCE( "bad argument value calculted", b.argument(), math::PI / 4.L, epsilon );
+	ENSURE_DISTANCE( "bad argument of b value calculted", b.argument(), math::PI / 4.L, epsilon );
 	HComplex c( -1, 1 );
-	ENSURE_DISTANCE( "bad argument value calculted", c.argument(), math::PI - math::PI / 4.L, epsilon );
+	ENSURE_DISTANCE( "bad argument of c value calculted", c.argument(), math::PI - math::PI / 4.L, epsilon );
 	HComplex d( -1, -1 );
-	ENSURE_DISTANCE( "bad argument value calculted", d.argument(), - ( math::PI - math::PI / 4.L ), epsilon );
+	ENSURE_DISTANCE( "bad argument of d value calculted", d.argument(), - ( math::PI - math::PI / 4.L ), epsilon );
 	HComplex e( 1, -1 );
-	ENSURE_DISTANCE( "bad argument value calculted", e.argument(), - math::PI / 4.L, epsilon );
+	ENSURE_DISTANCE( "bad argument of e value calculted", e.argument(), - math::PI / 4.L, epsilon );
+	HComplex f( 0, 1 );
+	ENSURE_DISTANCE( "bad argument of f value calculted", f.argument(), math::PI / 2.L, epsilon );
+	HComplex g( 0, -1 );
+	ENSURE_DISTANCE( "bad argument of g value calculted", g.argument(), - math::PI / 2.L, epsilon );
+	HComplex h( -1, 0 );
+	ENSURE_DISTANCE( "bad argument of h value calculted", h.argument(), math::PI, epsilon );
 	HComplex z;
 	ENSURE_THROW( "getting argument from 0 + 0i succeeded", z.argument(), HComplexException );
 TUT_TEARDOWN()
