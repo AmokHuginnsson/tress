@@ -49,6 +49,7 @@ struct tut_yaal_tools_hhuginn : public simple_mock<tut_yaal_tools_hhuginn> {
 	typedef char const* prog_src_t;
 	virtual ~tut_yaal_tools_hhuginn( void ) {}
 	void test_preprocessing( prog_src_t, prog_src_t, int );
+	void test_parse( prog_src_t, int, int );
 };
 
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn, "yaal::tools::HHuginn" );
@@ -109,7 +110,7 @@ TUT_UNIT_TEST( 1, "grammar test" )
 	ENSURE_EQUALS( "not all rules found for Huginn grammar", i, countof ( expected ) );
 TUT_TEARDOWN()
 
-char const prog0[] =
+char const simpleProg[] =
 	"/*\n"
 	" * Sample code in huginn.\n"
 	" */\n"
@@ -126,7 +127,7 @@ char const prog0[] =
 	"\n"
 ;
 
-char const prog0post[] =
+char const progPost0[] =
 	"\n"
 	"\n"
 	"sum( a, b ) {\n"
@@ -141,73 +142,73 @@ char const prog0post[] =
 	"\n"
 ;
 
-char const prog1[] =
+char const progPre1[] =
 	"main(/* no arg */) {\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
-char const prog1post[] =
+char const progPost1[] =
 	"main() {\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
-char const prog2[] =
+char const progPre2[] =
 	"main(/* no arg */) {\n"
 	"\treturn ( 0 ); // We shall return 0.\n"
 	"}\n"
 ;
 
-char const prog2post[] =
+char const progPost2[] =
 	"main() {\n"
 	"\treturn ( 0 ); \n"
 	"}\n"
 ;
 
-char const prog3[] =
+char const progPre3[] =
 	"main(/* no arg */) {\n"
 	"\tprint( \"/* keep this */\" );\n"
 	"\treturn ( 0 ); // We shall return 0.\n"
 	"}\n"
 ;
 
-char const prog3post[] =
+char const progPost3[] =
 	"main() {\n"
 	"\tprint( \"/* keep this */\" );\n"
 	"\treturn ( 0 ); \n"
 	"}\n"
 ;
 
-char const prog4[] =
+char const progPre4[] =
 	"main(/* no arg */) {\n"
 	"\tprint( \"keep // this too\" );\n"
 	"\treturn ( 0 ); // We shall return 0.\n"
 	"}\n"
 ;
 
-char const prog4post[] =
+char const progPost4[] =
 	"main() {\n"
 	"\tprint( \"keep // this too\" );\n"
 	"\treturn ( 0 ); \n"
 	"}\n"
 ;
 
-char const prog5[] =
+char const progPre5[] =
 	"main(/* no arg */) {\n"
 	"\tprint( \"keep \\\" // this too\" );\n"
 	"\treturn ( 0 ); // We shall return 0.\n"
 	"}\n"
 ;
 
-char const prog5post[] =
+char const progPost5[] =
 	"main() {\n"
 	"\tprint( \"keep \\\" // this too\" );\n"
 	"\treturn ( 0 ); \n"
 	"}\n"
 ;
 
-char const prog6[] =
+char const progPre6[] =
 	"main(/* no arg */) {\n"
 	"\tprint( \"keep \\\"\"\n"
 	"\t\t\" // this too\" );\n"
@@ -215,14 +216,14 @@ char const prog6[] =
 	"}\n"
 ;
 
-char const prog6post[] =
+char const progPost6[] =
 	"main() {\n"
 	"\tprint( \"keep \\\" // this too\" );\n"
 	"\treturn ( 0 ); \n"
 	"}\n"
 ;
 
-char const prog7[] =
+char const progPre7[] =
 	"main(/* no arg */) {\n"
 	"\tprint( \"keep \\\"\" // but remove this \n"
 	"\t\t\" // this too\" );\n"
@@ -230,14 +231,14 @@ char const prog7[] =
 	"}\n"
 ;
 
-char const prog7post[] =
+char const progPost7[] =
 	"main() {\n"
 	"\tprint( \"keep \\\" // this too\" );\n"
 	"\treturn ( 0 ); \n"
 	"}\n"
 ;
 
-char const prog8[] =
+char const progPre8[] =
 	"main(/* no arg */) {\n"
 	"\tprint( \"keep \\\"\" // but remove this \n"
 	"\t/* and \"this\" too */\n"
@@ -246,14 +247,14 @@ char const prog8[] =
 	"}\n"
 ;
 
-char const prog8post[] =
+char const progPost8[] =
 	"main() {\n"
 	"\tprint( \"keep \\\" // this too\" );\n"
 	"\treturn ( 0 ); \n"
 	"}\n"
 ;
 
-char const prog9[] =
+char const progPre9[] =
 	"main(/* no arg */) {\n"
 	"\tprint( \"keep \\\"\" /* but remove this */ \n"
 	"\t/* and \"this\" too */\n"
@@ -263,14 +264,14 @@ char const prog9[] =
 	"/* and this is unfinished comment"
 ;
 
-char const prog9post[] =
+char const progPost9[] =
 	"main() {\n"
 	"\tprint( \"keep \\\" // this too\" );\n"
 	"\treturn ( 0 ); \n"
 	"}\n"
 ;
 
-char const prog10[] =
+char const progPre10[] =
 	"main(/* no arg */) {\n"
 	"\tprint( \"keep \\\"\" /* but remove this */ \n"
 	"\t/* and \"this\" too */\n"
@@ -280,14 +281,14 @@ char const prog10[] =
 	"/* and this is unfinished comment *"
 ;
 
-char const prog10post[] =
+char const progPost10[] =
 	"main() {\n"
 	"\tprint( \"keep \\\" // this too\" );\n"
 	"\treturn ( 0 ); \n"
 	"}\n"
 ;
 
-char const prog11[] =
+char const progPre11[] =
 	"main(/* no arg */) {\n"
 	"\tprint( \"keep \\\"\" /* but remove this\n"
 	"\t* and \"this\" too\n"
@@ -297,14 +298,14 @@ char const prog11[] =
 	"}\n"
 ;
 
-char const prog11post[] =
+char const progPost11[] =
 	"main() {\n"
 	"\tprint( \"keep \\\" // this too\" );\n"
 	"\treturn ( 0 ); \n"
 	"}\n"
 ;
 
-char const prog12[] =
+char const progPre12[] =
 	"main(/* no arg */) {\n"
 	"\treturn ( 0 );\n"
 	"}\n"
@@ -313,7 +314,7 @@ char const prog12[] =
 	"\tx = 33 /* hi there */ /\n"
 ;
 
-char const prog12post[] =
+char const progPost12[] =
 	"main() {\n"
 	"\treturn ( 0 );\n"
 	"}\n"
@@ -322,37 +323,37 @@ char const prog12post[] =
 	"\tx = 33  /\n"
 ;
 
-char const prog13[] =
+char const progPre13[] =
 	"main(/* no arg */) {\n"
 	"\treturn /* first *//* second */ ( 0 );\n"
 	"}\n"
 ;
 
-char const prog13post[] =
+char const progPost13[] =
 	"main() {\n"
 	"\treturn  ( 0 );\n"
 	"}\n"
 ;
 
-char const prog14[] =
+char const progPre14[] =
 	"main(/* no arg */) {\n"
 	"\treturn /* first */ /* second */ ( 0 );\n"
 	"}\n"
 ;
 
-char const prog14post[] =
+char const progPost14[] =
 	"main() {\n"
 	"\treturn   ( 0 );\n"
 	"}\n"
 ;
 
-char const prog15[] =
+char const progPre15[] =
 	"main(/* no arg */) { /* first */// second\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
-char const prog15post[] =
+char const progPost15[] =
 	"main() { \n"
 	"\treturn ( 0 );\n"
 	"}\n"
@@ -371,54 +372,88 @@ void tut_yaal_tools_hhuginn::test_preprocessing( prog_src_t pre_, prog_src_t pos
 }
 
 TUT_UNIT_TEST( 2, "preprocessor" )
-	prog_src_t progpre[] = {
-		prog0,
-		prog1,
-		prog2,
-		prog3,
-		prog4,
-		prog5,
-		prog6,
-		prog7,
-		prog8,
-		prog9,
-		prog10,
-		prog11,
-		prog12,
-		prog13,
-		prog14,
-		prog15,
+	prog_src_t progPre[] = {
+		simpleProg,
+		progPre1,
+		progPre2,
+		progPre3,
+		progPre4,
+		progPre5,
+		progPre6,
+		progPre7,
+		progPre8,
+		progPre9,
+		progPre10,
+		progPre11,
+		progPre12,
+		progPre13,
+		progPre14,
+		progPre15,
 		NULL
 	};
-	prog_src_t progpost[] = {
-		prog0post,
-		prog1post,
-		prog2post,
-		prog3post,
-		prog4post,
-		prog5post,
-		prog6post,
-		prog7post,
-		prog8post,
-		prog9post,
-		prog10post,
-		prog11post,
-		prog12post,
-		prog13post,
-		prog14post,
-		prog15post,
+	prog_src_t progPost[] = {
+		progPost0,
+		progPost1,
+		progPost2,
+		progPost3,
+		progPost4,
+		progPost5,
+		progPost6,
+		progPost7,
+		progPost8,
+		progPost9,
+		progPost10,
+		progPost11,
+		progPost12,
+		progPost13,
+		progPost14,
+		progPost15,
 		NULL
 	};
-	for ( prog_src_t* pre( begin( progpre ) ), * preEnd( end( progpre ) ), * post( begin( progpost ) ); pre != preEnd; ++ pre, ++ post ) {
+	for ( prog_src_t* pre( begin( progPre ) ), * preEnd( end( progPre ) ), * post( begin( progPost ) ); pre != preEnd; ++ pre, ++ post ) {
 		if ( *pre ) {
-			test_preprocessing( *pre, *post, static_cast<int>( pre - begin( progpre ) ) );
+			test_preprocessing( *pre, *post, static_cast<int>( pre - begin( progPre ) ) );
+		}
+	}
+TUT_TEARDOWN()
+
+char const progParse0[] =
+	"main() {\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+void tut_yaal_tools_hhuginn::test_parse( prog_src_t prog_, int err_, int index_ ) {
+	HStringStream prog( prog_ );
+	HHuginn h;
+	h.load( prog );
+	clog << "preprocessing: " << index_ << endl;
+	h.preprocess();
+	h.parse();
+	int err( 0 );
+	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), err, err_ );
+}
+
+TUT_UNIT_TEST( 3, "report parsing error" )
+	prog_src_t progParse[] = {
+		progParse0,
+		NULL
+	};
+	int const err[] = {
+		0,
+		0
+	};
+	int const* e( err );
+	for ( prog_src_t* prog( begin( progParse ) ), * progEnd( end( progParse ) ); prog != progEnd; ++ prog, ++ e ) {
+		if ( *prog ) {
+			test_parse( *prog, *err, static_cast<int>( prog - begin( progParse ) ) );
 		}
 	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "simple program" )
 	HHuginn h;
-	HStringStream src( prog0 );
+	HStringStream src( simpleProg );
 	h.load( src );
 	h.preprocess();
 	h.parse();
