@@ -28,3 +28,8 @@ tress.cbp
 tress.layout
 .svn
 Debug/
+.ecut
+.ecut-sources/
+local.mk.off
+tress.suites
+
