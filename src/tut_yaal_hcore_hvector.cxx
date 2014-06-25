@@ -59,5 +59,13 @@ TUT_UNIT_TEST( 1, "basic vector operations" )
 	std::cout << "  - v = " << - v << std::endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 2, "norm()" )
+	HVector<double> v( 2 );
+	v[0] = 3.;
+	v[1] = 4.;
+	ENSURE_DISTANCE( "bad norm calculated", v.norm(), 5., static_cast<double>( epsilon ) );
+TUT_TEARDOWN()
+
+
 }
 
