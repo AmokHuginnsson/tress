@@ -47,16 +47,16 @@ TUT_TEST_GROUP( tut_yaal_tools_util_verify_iban, "yaal::tools::util::verify_IBAN
 
 TUT_UNIT_TEST( 1, "verifing good IBANs" )
 	ENSURE_EQUALS ( "failed to verify IBAN: PL 12 1470 0002 2201 0010 7060 0001",
-			verify_IBAN ( "PL 12 1470 0002 2201 0010 7060 0001" ), false );
+			verify_IBAN ( "PL 12 1470 0002 2201 0010 7060 0001" ), true );
 	ENSURE_EQUALS ( "failed to verify IBAN: PL 12 1140 2004 0000 3402 3659 1487",
-			verify_IBAN ( "PL 12 1140 2004 0000 3402 3659 1487" ), false );
+			verify_IBAN ( "PL 12 1140 2004 0000 3402 3659 1487" ), true );
 	ENSURE_EQUALS ( "failed to verify IBAN: PL 65 1060 0076 0000 3200 0005 7153",
-			verify_IBAN ( "PL 65 1060 0076 0000 3200 0005 7153" ), false );
+			verify_IBAN ( "PL 65 1060 0076 0000 3200 0005 7153" ), true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "verifing bad IBANs" )
 	ENSURE_EQUALS ( "failed to verify IBAN: PL 76 1140 2004 0080 3602 3659 1498",
-			verify_IBAN ( "PL 76 1140 2004 0080 3602 3659 1498" ), true );
+			verify_IBAN ( "PL 76 1140 2004 0080 3602 3659 1498" ), false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 3, "verifing ad-hoc IBANs" )
