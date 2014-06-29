@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_yaal_hconsole_hconsole.cxx - this file is integral part of `tress' project.
+  fake_console_subsystem.hxx - this file is integral part of `tress' project.
 
   i.  You may not make any changes in Copyright information.
   ii. You must attach Copyright information to any part of every copy
@@ -24,43 +24,14 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#include <TUT/tut.hpp>
+#ifndef HAVE_TRESS_FAKE_CONSOLE_SUBSYSTEM_HXX_INCLUDED
+#define HAVE_TRESS_FAKE_CONSOLE_SUBSYSTEM_HXX_INCLUDED 1
 
-#include <yaal/hconsole/hconsole.hxx>
-M_VCSID( "$Id: " __ID__ " $" )
-#include "tut_helpers.hxx"
-#include "fake_console_subsystem.hxx"
-
-using namespace tut;
-using namespace yaal;
-using namespace yaal::hcore;
-using namespace yaal::tools;
-using namespace yaal::hconsole;
-using namespace tress::tut_helpers;
-
-namespace tut {
-
-
-struct tut_yaal_hconsole_hconsole : public simple_mock<tut_yaal_hconsole_hconsole> {
-	tut_yaal_hconsole_hconsole( void )
-		: _fakeConoleGuard() {
-	}
-	virtual ~tut_yaal_hconsole_hconsole( void ) {}
-	HFakeConsoleGuard _fakeConoleGuard;
+class HFakeConsoleGuard {
+public:
+	HFakeConsoleGuard( void );
+	virtual ~HFakeConsoleGuard( void );
 };
 
-TUT_TEST_GROUP( tut_yaal_hconsole_hconsole, "yaal::hconsole::HConsole" );
-
-TUT_UNIT_TEST( 1, "Enter and leave" )
-	HConsole& cons( HConsole::get_instance() );
-	int width( 0 );
-	int height( 0 );
-	cons.enter_curses();
-	width = cons.get_width();
-	height = cons.get_height();
-	clog << width << "," << height << endl;
-	cons.leave_curses();
-TUT_TEARDOWN()
-
-}
+#endif /* #ifndef HAVE_TRESS_FAKE_CONSOLE_SUBSYSTEM_HXX_INCLUDED */
 

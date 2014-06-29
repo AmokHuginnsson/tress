@@ -49,7 +49,7 @@ include $(DIR_ROOT)/_aux/mk/1_basic.mk
 LIBS           = hcore$(LIB_INFIX) tools$(LIB_INFIX) dbwrapper$(LIB_INFIX) \
 								 hconsole$(LIB_INFIX) hdata$(LIB_INFIX) hconsole$(LIB_INFIX) \
 								 dbwrapper$(LIB_INFIX) tools$(LIB_INFIX) hcore$(LIB_INFIX) \
-                 @BOOST_FILESYSTEM_LIB@ @BOOST_SYSTEM_LIB@ @BOOST_DATE_TIME_LIB@
+                 @BOOST_FILESYSTEM_LIB@ @BOOST_SYSTEM_LIB@ @BOOST_DATE_TIME_LIB@ dl
 $(eval $(call NEW_TARGET,tress,src,-D__TRESS__ -Wno-variadic-macros,@RDYNAMIC@))
 $(eval $(call NEW_TARGET,child,child,-D__CHILD__))
 NAME = tressplugin
