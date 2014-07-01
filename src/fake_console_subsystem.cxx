@@ -59,27 +59,28 @@ HFakeConsoleGuard::~HFakeConsoleGuard( void ) {
 
 extern "C" {
 
-bool _haveTerm_ = ::getenv( "TERM" ) != NULL;
-
 int tcgetattr( int, struct termios* );
 int tcgetattr( int a0, struct termios* a1 ) {
 	typedef int (*tcgetattr_t)( int, struct termios* );
 	static tcgetattr_t orig_tcgetattr = yaal::bit_cast<tcgetattr_t>( dlsym( RTLD_NEXT, "tcgetattr" ) );
-	return ( _haveTerm_ ? orig_tcgetattr( a0, a1 ) : 0 );
+	int ret( orig_tcgetattr( a0, a1 ) );
+	return ( ! _fakeConsole_.is_active() ? ret : 0 );
 }
 
 int tcsetattr( int, int, const struct termios* );
 int tcsetattr( int a0, int a1, const struct termios* a2 ) {
 	typedef int (*tcsetattr_t)( int, int, const struct termios* );
 	static tcsetattr_t orig_tcsetattr = yaal::bit_cast<tcsetattr_t>( dlsym( RTLD_NEXT, "tcsetattr" ) );
-	return ( _haveTerm_ ? orig_tcsetattr( a0, a1, a2 ) : 0 );
+	int ret( orig_tcsetattr( a0, a1, a2 ) );
+	return ( ! _fakeConsole_.is_active() ? ret : 0 );
 }
 
 int isatty( int );
 int isatty( int fd_ ) {
 	typedef int (*isatty_t)( int );
 	static isatty_t orig_isatty = yaal::bit_cast<isatty_t>( dlsym( RTLD_NEXT, "isatty" ) );
-	return ( _haveTerm_ ? orig_isatty( fd_ ) : ( _fakeConsole_.is_active() ? 1 : 0 ) );
+	int ret( orig_isatty( fd_ ) );
+	return ( ! _fakeConsole_.is_active() ? ret : 1 );
 }
 
 struct WINDOW {
