@@ -40,6 +40,7 @@ namespace tut {
 
 struct tut_yaal_hcore_hmap : public simple_mock<tut_yaal_hcore_hmap> {
 	typedef simple_mock<tut_yaal_hcore_hmap> base_type;
+	static int long const ELEM_COUNT;
 	struct Crazy {
 		Crazy() { throw 0; }
 	};
@@ -51,6 +52,8 @@ struct tut_yaal_hcore_hmap : public simple_mock<tut_yaal_hcore_hmap> {
 	void upper_bound_test( int );
 };
 
+int long const tut_yaal_hcore_hmap::ELEM_COUNT = 32;
+
 TUT_TEST_GROUP( tut_yaal_hcore_hmap, "yaal::hcore::HMap" );
 
 TUT_UNIT_TEST( 1, "Default constructor (size(), empty())." )
@@ -59,7 +62,31 @@ TUT_UNIT_TEST( 1, "Default constructor (size(), empty())." )
 	ENSURE( "bad empty status on new map", m.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "One elem inserted (size(), empty())" )
+TUT_UNIT_TEST( 2, "copy contructor" ) {
+	i2i_t map;
+	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
+		map[ i ] = i;
+		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
+	}
+	i2i_t map2( map );
+	ENSURE_EQUALS( "wrong size after addition", map2.size(), ELEM_COUNT );
+}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 3, "contructor from sequence" ) {
+	i2i_t map;
+	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
+		map[ i ] = i;
+		ENSURE_EQUALS( "wrong size after addition", map.size(), i + 1 );
+	}
+	i2i_t map2( map.begin(), map.end() );
+	ENSURE_EQUALS( "wrong size after addition", map2.size(), ELEM_COUNT );
+}
+	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "One elem inserted (size(), empty())" )
 	i2i_t m;
 	ENSURE_EQUALS( "bad size on new map", m.get_size(), 0 );
 	ENSURE( "bad empty status on new map", m.is_empty() );
@@ -68,13 +95,13 @@ TUT_UNIT_TEST( 2, "One elem inserted (size(), empty())" )
 	ENSURE_NOT( "bad empty status on map with one elem", m.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "find() on one elem map" )
+TUT_UNIT_TEST( 5, "find() on one elem map" )
 	i2i_t m;
 	m.insert( make_pair( 0, 0 ) );
 	ENSURE( "find on one elem map failed", m.find( 0 ) != m.end() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "find()" )
+TUT_UNIT_TEST( 6, "find()" )
 	i2i_t map;
 	map.insert( make_pair( 1, 1 ) );
 	map.insert( make_pair( 2, 2 ) );
@@ -130,7 +157,7 @@ void tut_yaal_hcore_hmap::upper_bound_test( int size_ ) {
 	ENSURE( "upper_bound found", !( end2 != map.end() ) );
 }
 
-TUT_UNIT_TEST( 5, "lower_bound()" )
+TUT_UNIT_TEST( 7, "lower_bound()" )
 	i2i_t map;
 	map.insert( make_pair( 1, 1 ) );
 	map.insert( make_pair( 2, 2 ) );
@@ -150,7 +177,7 @@ TUT_UNIT_TEST( 5, "lower_bound()" )
 		lower_bound_test( i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "upper_bound()" )
+TUT_UNIT_TEST( 8, "upper_bound()" )
 	i2i_t map;
 	map.insert( make_pair( 1, 1 ) );
 	map.insert( make_pair( 2, 2 ) );
@@ -170,7 +197,7 @@ TUT_UNIT_TEST( 6, "upper_bound()" )
 		upper_bound_test( i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "HMap insert of already existing key")
+TUT_UNIT_TEST( 9, "HMap insert of already existing key")
 	i2i_t m;
 	static int const KEY = 1;
 	static int const ORIGINAL_VAL = 2;
@@ -182,7 +209,7 @@ TUT_UNIT_TEST( 7, "HMap insert of already existing key")
 	ENSURE_EQUALS( "element with already existing key inserted", ir.first->second, ORIGINAL_VAL );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "exception during map[key] = val;" )
+TUT_UNIT_TEST( 10, "exception during map[key] = val;" )
 	i2c_t m;
 	/*
 	 * Should stay in explicit try/catch form.
@@ -196,11 +223,22 @@ TUT_UNIT_TEST( 8, "exception during map[key] = val;" )
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "dereferencing non existing key with const map[key]" )
+TUT_UNIT_TEST( 11, "dereferencing non existing key with const map[key]" )
 	i2c_t m;
 	i2c_t const& cm( m );
 	ENSURE_THROW( "FATAL: dereferencing non-existing key succeeded!", cm[ 0 ], HInvalidKeyException );
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 12, "at()" )
+	i2i_t m;
+	i2i_t const& cm( m );
+	ENSURE_THROW( "FATAL: dereferencing non-existing key succeeded!", cm.at( 0 ), HInvalidKeyException );
+	ENSURE_THROW( "FATAL: dereferencing non-existing key succeeded!", m.at( 0 ), HInvalidKeyException );
+	ENSURE_EQUALS( "map extended during m.at(key)", m.is_empty(), true );
+	m[0] = 7;
+	ENSURE_EQUALS( "at() was unable to return value", m.at( 0 ), 7 );
+	ENSURE_EQUALS( "at() was unable to return value", cm.at( 0 ), 7 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "sample data" )

@@ -300,7 +300,18 @@ TUT_UNIT_TEST( 14, "dereferencing non existing key with const map[key]" )
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "const pointer as a key" )
+TUT_UNIT_TEST( 15, "at()" )
+	hash_map_t m;
+	hash_map_t const& cm( m );
+	ENSURE_THROW( "FATAL: dereferencing non-existing key succeeded!", cm.at( 0 ), HInvalidKeyException );
+	ENSURE_THROW( "FATAL: dereferencing non-existing key succeeded!", m.at( 0 ), HInvalidKeyException );
+	ENSURE_EQUALS( "map extended during m.at(key)", m.is_empty(), true );
+	m[0] = 7;
+	ENSURE_EQUALS( "at() was unable to return value", m.at( 0 ), 7 );
+	ENSURE_EQUALS( "at() was unable to return value", cm.at( 0 ), 7 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 16, "const pointer as a key" )
 	char const a[] = "a";
 	char const b[] = "a";
 	char const c[] = "a";
