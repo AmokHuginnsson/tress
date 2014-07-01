@@ -110,7 +110,7 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list ) {
 		hook_valid = true;
 	ENSURE_EQUALS( "forward cycle", ctr, list._size );
 	ENSURE( "no hook", hook_valid );
-	
+
 	ctr = 0;
 	hook_valid = false;
 	for ( typename T::const_reverse_iterator it = list.rbegin(); it != list.rend(); ++ it, ++ ctr ) {

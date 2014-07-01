@@ -89,7 +89,7 @@ void tut_yaal_tools_hdes::crypt_decrypt_test( int onSize_ ) {
 	}
  {
 		HFile in( "./out/crypted", HFile::OPEN::READING );
-		crypto::decrypt_3des( in, ss, "kalafior" );		
+		crypto::decrypt_3des( in, ss, "kalafior" );
 	}
 	HString check( ss.string() );
 	ENSURE_EQUALS( "decrypted lenght is incorrect", check.get_length(), onSize_ );

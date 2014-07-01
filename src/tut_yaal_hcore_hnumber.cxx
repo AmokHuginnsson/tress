@@ -836,7 +836,7 @@ TUT_UNIT_TEST( 19, "multiplication" )
 		_bc << as << "* " << bs << endl;
 		do _bc.read_until( res ); while ( res.is_empty() );
 		msg = "multiplication of random a = " + as + " and b = " + bs + " failed";
-		
+
 		ENSURE_EQUALS( msg, ( a * b ).to_string(), HNumber( res ).to_string() );
 		msg += "(R)";
 		ENSURE_EQUALS( msg, ( b * a ).to_string(), HNumber( res ).to_string() );
@@ -1256,7 +1256,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 34, "exp<HNumber>()" )
 TUT_TEARDOWN()
-	
+
 TUT_UNIT_TEST( 35, "pow<HNumber>()" )
 TUT_TEARDOWN()
 

@@ -367,7 +367,7 @@ TUT_UNIT_TEST( 16, "swap" )
 
 	array_t::const_iterator a1it( a1.begin() );
 	array_t::const_iterator a2it( a2.begin() );
-	
+
 	ENSURE( "inconsistent iterator from begin() a1", &*a1it == &a1.front() );
 	ENSURE( "inconsistent iterator from begin() a2", &*a2it == &a2.front() );
 	ENSURE( "ambiguous iterator ownership from begin() a1", &*a2it != &a1.front() );

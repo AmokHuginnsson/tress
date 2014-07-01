@@ -239,7 +239,7 @@ TUT_UNIT_TEST( 14, "replace(patter, str)" )
 	static char const PATA[] = "${NEST}";
 	static char const PATB[] = "";
 	static char const CORRECT_AB[] = ".//app/";
-	
+
 	str = INIT0;
 	str.replace( PATA, PATB );
 	ENSURE_EQUALS ( "replace A->B does not work", str, CORRECT_AB );
