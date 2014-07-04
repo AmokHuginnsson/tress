@@ -17,5 +17,6 @@ Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag.
 		<my_item>two</my_item>
 		<my_fake>three</my_fake>
 		<my_item>four</my_item>
+		<!--my_item>hidden</my_item-->
 	</my_set>
 </my_root>
