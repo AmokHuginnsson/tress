@@ -80,5 +80,13 @@ TUT_UNIT_TEST( 3, "or" )
 	ENSURE_EQUALS( "bs or failed", bs1 | bs2, HBitset<5>( obinary<01010>::value ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 4, "op[]" )
+	HBitset<5> bs1;
+	HBitset<5> bs2;
+	bs1[ 1 ] = true;
+	bs2[ 3 ] = true;
+	ENSURE_EQUALS( "bs or failed", bs1 | bs2, HBitset<5>( obinary<01010>::value ) );
+TUT_TEARDOWN()
+
 }
 
