@@ -44,7 +44,6 @@ inline std::ostream& operator << ( std::ostream& stream, HBitset<SIZE> const& bs
 	return ( stream );
 }
 
-
 namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hbitset );
@@ -52,7 +51,7 @@ TUT_TEST_GROUP( tut_yaal_hcore_hbitset, "yaal::hcore::HBitset" );
 
 TUT_UNIT_TEST( 1, "empty" )
 	HBitset<3> bs;
-	ENSURE_EQUALS( "bs not empty", bs.to_integer(), 0 );
+	ENSURE_EQUALS( "bs not empty", bs.to_integer(), 0u );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "count" )
