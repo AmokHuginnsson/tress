@@ -46,10 +46,13 @@ struct A1 {};
 TUT_UNIT_TEST( 1, "new flag" )
 	typedef HBitFlag<A1> a_flag_t;
 	a_flag_t const f1 = a_flag_t::new_flag();
+	ENSURE_EQUALS( "bad flag index", f1.index(), 0 );
 	ENSURE_NOT( "default flag have non zero value", f1 );
 	a_flag_t const f2 = a_flag_t::new_flag();
+	ENSURE_EQUALS( "bad flag index", f2.index(), 1 );
 	ENSURE( "next flag has no value", f2 );
 	a_flag_t const f3 = a_flag_t::new_flag();
+	ENSURE_EQUALS( "bad flag index", f3.index(), 2 );
 	ENSURE( "next flag has no value", f3 );
 	ENSURE( "new_flag failed", f2 != f3 );
 	a_flag_t::new_flag(); /* Can fail assertion if buggy. */
@@ -113,6 +116,7 @@ TUT_UNIT_TEST( 4, "xor" )
 	a_flag_t const f1 = a_flag_t::new_flag();
 	a_flag_t const f2 = a_flag_t::new_flag();
 	a_flag_t const fx12 = f1 ^ f2;
+	ENSURE_THROW( "composite flag returned index", fx12.index(), HFailedAssertion );
 	ENSURE( "xor failed", ( fx12 & f1 ) == f1 );
 	ENSURE( "xor failed", ( fx12 & f2 ) == f2 );
 	a_flag_t const fx121 = fx12 ^ f1;
