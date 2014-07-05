@@ -88,5 +88,37 @@ TUT_UNIT_TEST( 4, "op[]" )
 	ENSURE_EQUALS( "bs or failed", bs1 | bs2, HBitset<5>( obinary<01010>::value ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 5, "size" )
+	HBitset<5> bs1;
+	ENSURE_EQUALS( "size failed", bs1.size(), 5 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 6, "copy constructor" )
+	typedef HBitset<128> bs128_t;
+	bs128_t bs1;
+	bs1.set( 50 );
+	bs1.set( 100 );
+	bs128_t bs1copy( bs1 );
+	ENSURE_EQUALS( "copy construction failed", bs1, bs1copy );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 7, "swap" )
+	typedef HBitset<128> bs128_t;
+	bs128_t bs1;
+	bs128_t bs2;
+	bs1.set( 50 );
+	bs1.set( 100 );
+	bs2.set( 55 );
+	bs2.set( 105 );
+	ENSURE_NOT( "construction failed", bs1 == bs2 );
+	bs128_t bs1copy( bs1 );
+	bs128_t bs2copy( bs2 );
+	ENSURE_EQUALS( "copy construction failed", bs1, bs1copy );
+	ENSURE_EQUALS( "copy construction failed", bs2, bs2copy );
+	bs1.swap( bs2 );
+	ENSURE_EQUALS( "swap failed", bs1, bs2copy );
+	ENSURE_EQUALS( "swap failed", bs2, bs1copy );
+TUT_TEARDOWN()
+
 }
 
