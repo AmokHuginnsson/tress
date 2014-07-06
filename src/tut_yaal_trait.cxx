@@ -62,21 +62,22 @@ TUT_UNIT_TEST( 3, "count types" )
 	ENSURE_EQUALS( "type count is wrong", count_type<int, char, double, int, float, int, void*>::value, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "ref vs const" )
-	cout << trait::is_reference<int&>::value << endl;
-	cout << trait::is_reference<int*&>::value << endl;
-	cout << trait::is_reference<int const&>::value << endl;
-	cout << trait::is_reference<int const*&>::value << endl;
-	cout << trait::is_reference<int* const&>::value << endl;
-	cout << trait::is_reference<int* const*&>::value << endl << endl;
+TUT_UNIT_TEST( 4, "is_reference" )
+	ENSURE( trait::is_reference<int&>::value == true );
+	ENSURE( trait::is_reference<int*&>::value == true );
+	ENSURE( trait::is_reference<int const&>::value == true );
+	ENSURE( trait::is_reference<int const*&>::value == true );
+	ENSURE( trait::is_reference<int* const&>::value == true );
+	ENSURE( trait::is_reference<int* const*&>::value == true );
 
-	cout << trait::is_reference<trait::strip_reference<int&>::type>::value << endl;
-	cout << trait::is_reference<trait::strip_reference<int*&>::type>::value << endl;
-	cout << trait::is_reference<trait::strip_reference<int const&>::type>::value << endl;
-	cout << trait::is_reference<trait::strip_reference<int const*&>::type>::value << endl;
-	cout << trait::is_reference<trait::strip_reference<int* const&>::type>::value << endl;
-	cout << trait::is_reference<trait::strip_reference<int* const*&>::type>::value << endl;
+	ENSURE( trait::is_reference<trait::strip_reference<int&>::type>::value == false );
+	ENSURE( trait::is_reference<trait::strip_reference<int*&>::type>::value == false );
+	ENSURE( trait::is_reference<trait::strip_reference<int const&>::type>::value == false );
+	ENSURE( trait::is_reference<trait::strip_reference<int const*&>::type>::value == false );
+	ENSURE( trait::is_reference<trait::strip_reference<int* const&>::type>::value == false );
+	ENSURE( trait::is_reference<trait::strip_reference<int* const*&>::type>::value == false );
 
+	/* rest is just compilability test */
 	typedef trait::make_const_ref_ptr<trait::strip_reference<int&>::type>::type T1 __attribute__((unused));
 	typedef trait::make_const_ref_ptr<trait::strip_reference<int*&>::type>::type T2 __attribute__((unused));
 	typedef trait::make_const_ref_ptr<trait::strip_reference<int const&>::type>::type T3 __attribute__((unused));
@@ -85,17 +86,52 @@ TUT_UNIT_TEST( 4, "ref vs const" )
 	typedef trait::make_const_ref_ptr<trait::strip_reference<int* const*&>::type>::type T6 __attribute__((unused));
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "arg type deduction on functional functors :)" )
-	cout << trait::same_type<trait::argument_type<less<int>, 0>::type, int>::value << endl;
-	cout << trait::same_type<trait::argument_type<less<int>, 1>::type, int>::value << endl;
-	cout << trait::same_type<trait::argument_type<less<int>, 0>::type, double>::value << endl;
-	cout << trait::same_type<trait::argument_type<less<int>, 1>::type, double>::value << endl;
-	cout << "neg " << trait::same_type<trait::argument_type<negate<int>, 0>::type, int>::value << endl;
-	cout << "neg " << trait::same_type<trait::argument_type<negate<int>, 3>::type, int>::value << endl;
-	cout << "binary " << trait::same_type<trait::argument_type<binary_function<bool, int, double>, 0>::type, int>::value << endl;
-	cout << "binary " << trait::same_type<trait::argument_type<binary_function<bool, int, double>, 1>::type, double>::value << endl;
-	cout << "binary composition " << trait::same_type<trait::argument_type<binary_composition<plus<int>, negate<int>, negate<int> >, 0>::type, int >::value << endl;
-	cout << "binary composition " << trait::same_type<trait::argument_type<binary_composition<plus<int>, negate<int>, negate<int> >, 1>::type, int >::value << endl;
+TUT_UNIT_TEST( 5, "is_pointer" )
+	ENSURE( trait::is_pointer<int*>::value == true );
+	ENSURE( trait::is_pointer<int const*>::value == true );
+	ENSURE( trait::is_pointer<int* const*>::value == true );
+
+	ENSURE( trait::is_pointer<int&>::value == false );
+	ENSURE( trait::is_pointer<int const&>::value == false );
+	ENSURE( trait::is_pointer<int* const&>::value == false );
+
+	ENSURE( trait::is_pointer<trait::strip_pointer<int*>::type>::value == false );
+	ENSURE( trait::is_pointer<trait::strip_pointer<int const*>::type>::value == false );
+	ENSURE( trait::is_pointer<trait::strip_pointer<int* const*>::type>::value == false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 6, "is_const" )
+	ENSURE( trait::is_const<int const>::value == true );
+	ENSURE( trait::is_const<int const&>::value == true );
+	ENSURE( trait::is_const<int const* const>::value == true );
+	ENSURE( trait::is_const<int>::value == false );
+	ENSURE( trait::is_const<int const*>::value == false );
+	ENSURE( trait::is_const<int*>::value == false );
+	ENSURE( trait::is_const<int&>::value == false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 7, "is_array" )
+	typedef int arr_t[3];
+	typedef int const arr_const_t[3];
+	typedef int* int_ptr_t;
+	ENSURE( trait::is_array<arr_t>::value == true );
+	ENSURE( trait::is_array<arr_const_t>::value == true );
+	ENSURE( trait::is_array<int_ptr_t>::value == false );
+	ENSURE( trait::is_array<int>::value == false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 8, "arg type deduction on functional functors :)" )
+	ENSURE( trait::same_type<trait::argument_type<less<int>, 0>::type, int>::value == true );
+	ENSURE( trait::same_type<trait::argument_type<less<int>, 1>::type, int>::value == true );
+	ENSURE( trait::same_type<trait::argument_type<less<int>, 0>::type, double>::value == false );
+	ENSURE( trait::same_type<trait::argument_type<less<int>, 1>::type, double>::value == false );
+	ENSURE( trait::same_type<trait::argument_type<negate<int>, 0>::type, int>::value == true );
+	ENSURE( trait::same_type<trait::argument_type<negate<int>, 3>::type, int>::value == false );
+	ENSURE( trait::same_type<trait::argument_type<negate<int>, 3>::type, trait::no_type>::value == true );
+	ENSURE( trait::same_type<trait::argument_type<binary_function<bool, int, double>, 0>::type, int>::value == true );
+	ENSURE( trait::same_type<trait::argument_type<binary_function<bool, int, double>, 1>::type, double>::value == true );
+	ENSURE( trait::same_type<trait::argument_type<binary_composition<plus<int>, negate<int>, negate<int> >, 0>::type, int>::value == true );
+	ENSURE( trait::same_type<trait::argument_type<binary_composition<plus<int>, negate<int>, negate<int> >, 1>::type, int>::value == true );
 TUT_TEARDOWN()
 
 }
