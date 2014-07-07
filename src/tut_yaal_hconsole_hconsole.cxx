@@ -42,23 +42,41 @@ namespace tut {
 
 
 struct tut_yaal_hconsole_hconsole : public simple_mock<tut_yaal_hconsole_hconsole> {
+	static int const CONSOLE_WIDTH;
+	static int const CONSOLE_HEIGHT;
 	tut_yaal_hconsole_hconsole( void )
 		: _fakeConoleGuard() {
 	}
 	virtual ~tut_yaal_hconsole_hconsole( void ) {}
 	HFakeConsoleGuard _fakeConoleGuard;
 };
+int const tut_yaal_hconsole_hconsole::CONSOLE_WIDTH = 80;
+int const tut_yaal_hconsole_hconsole::CONSOLE_HEIGHT = 25;
 
 TUT_TEST_GROUP( tut_yaal_hconsole_hconsole, "yaal::hconsole::HConsole" );
 
 TUT_UNIT_TEST( 1, "Enter and leave" )
 	HConsole& cons( HConsole::get_instance() );
-	int width( 0 );
-	int height( 0 );
 	cons.enter_curses();
-	width = cons.get_width();
-	height = cons.get_height();
-	clog << width << "," << height << endl;
+	ENSURE_EQUALS( "bad width", cons.get_width(), CONSOLE_WIDTH );
+	ENSURE_EQUALS( "bad height", cons.get_height(), CONSOLE_HEIGHT );
+	cons.leave_curses();
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "cursor position" )
+	HConsole& cons( HConsole::get_instance() );
+	cons.enter_curses();
+	int row( -1 );
+	int col( -1 );
+	cons.getyx( row, col );
+	ENSURE_EQUALS( "bad pos row", row, 0 );
+	ENSURE_EQUALS( "bad pos col", col, 0 );
+	static int const newRow( 10 );
+	static int const newCol( 15 );
+	cons.move( newRow, newCol );
+	cons.getyx( row, col );
+	ENSURE_EQUALS( "bad pos row", row, newRow );
+	ENSURE_EQUALS( "bad pos col", col, newCol );
 	cons.leave_curses();
 TUT_TEARDOWN()
 
