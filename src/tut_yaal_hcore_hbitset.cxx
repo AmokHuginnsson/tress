@@ -38,10 +38,12 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
+namespace std {
 template<int const SIZE>
 inline std::ostream& operator << ( std::ostream& stream, HBitset<SIZE> const& bs_ ) {
 	stream << bs_.to_string();
 	return ( stream );
+}
 }
 
 namespace tut {
