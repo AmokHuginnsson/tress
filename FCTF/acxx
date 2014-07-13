@@ -7,6 +7,7 @@ import re
 import linecache
 
 COMPILER = "g++"
+COMPILER_ALT = "clang++"
 OK_STATUS = 0
 NO_MORE_BUGS_STATUS = 1
 WRONG_STATUS = 2
@@ -162,8 +163,12 @@ def acxx( argv ):
 		lines = 0
 		while ( bug_status == OK_STATUS ):
 			msg( "################ processing bug no: " + str( bug_no ) + " ################" )
-			msg( COMPILER + " -xc++" + " -D" + BUG_TEMPLATE + str( bug_no ) + " " + " ".join( argv ) )
-			out = Popen( [ COMPILER, "-xc++", "-D" + BUG_TEMPLATE + str( bug_no ) ] + argv, stderr = PIPE ).stderr;
+			try:
+				msg( COMPILER + " -xc++" + " -D" + BUG_TEMPLATE + str( bug_no ) + " " + " ".join( argv ) )
+				out = Popen( [ COMPILER, "-xc++", "-D" + BUG_TEMPLATE + str( bug_no ) ] + argv, stderr = PIPE ).stderr;
+			except:
+				msg( COMPILER_ALT + " -xc++" + " -D" + BUG_TEMPLATE + str( bug_no ) + " " + " ".join( argv ) )
+				out = Popen( [ COMPILER_ALT, "-xc++", "-D" + BUG_TEMPLATE + str( bug_no ) ] + argv, stderr = PIPE ).stderr;
 			lines = out.readlines()
 			bug_status = check_bug( lines, input_path )
 			out.close()
