@@ -116,6 +116,11 @@ int nonl( void ) {
 	return ( 0 );
 }
 
+int nl( void );
+int nl( void ) {
+	return ( 0 );
+}
+
 int keypad( WINDOW*, bool );
 int keypad( WINDOW*, bool ) {
 	return ( 0 );

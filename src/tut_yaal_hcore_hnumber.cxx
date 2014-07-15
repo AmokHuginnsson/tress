@@ -55,6 +55,7 @@ struct tut_yaal_hcore_hnumber : public simple_mock<tut_yaal_hcore_hnumber> {
 	tut_yaal_hcore_hnumber( void );
 	HString const& expand_leafs( HString const& );
 	HString const& random_real( void );
+	HString read_result( void );
 	void run_square_test( HString const&, int );
 	virtual ~tut_yaal_hcore_hnumber( void )
 		{}
@@ -105,6 +106,21 @@ HString const& tut_yaal_hcore_hnumber::random_real( void ) {
 			_cache = "0";
 	}
 	return ( _cache );
+}
+
+HString tut_yaal_hcore_hnumber::read_result( void ) {
+	HString line;
+	HString result;
+	do {
+		line.clear();
+		_bc.read_until( line );
+		result += line;
+		result.trim( "\\" );
+	} while ( ! line.is_empty() && ( line[line.get_length() - 1] == '\\' ) );
+	if ( result.find_other_than( "0." ) == HString::npos ) {
+		result = "0";
+	}
+	return ( result );
 }
 
 HString const& tut_yaal_hcore_hnumber::expand_leafs( HString const& template_ ) {
@@ -789,7 +805,7 @@ TUT_UNIT_TEST( 18, "addition" )
 		as = a.to_string();
 		bs = b.to_string();
 		_bc << as << '+' << bs << endl;
-		do _bc.read_until( res ); while ( res.is_empty() );
+		res = read_result();
 		msg = "addition of random a = " + as + " and b = " + bs + " failed";
 		ENSURE_EQUALS( msg, ( a + b ).to_string(), HNumber( res ).to_string() );
 		msg += "(R)";
@@ -834,7 +850,7 @@ TUT_UNIT_TEST( 19, "multiplication" )
 		HNumber a( as );
 		HNumber b( bs );
 		_bc << as << "* " << bs << endl;
-		do _bc.read_until( res ); while ( res.is_empty() );
+		res = read_result();
 		msg = "multiplication of random a = " + as + " and b = " + bs + " failed";
 
 		ENSURE_EQUALS( msg, ( a * b ).to_string(), HNumber( res ).to_string() );
@@ -858,7 +874,7 @@ TUT_UNIT_TEST( 20, "substraction" )
 		bs = b.to_string();
 		msg = "substraction of random a = " + as + " and b = " + bs + " failed";
 		_bc << as << "- " << bs << endl;
-		do _bc.read_until( res ); while ( res.is_empty() );
+		res = read_result();
 		ENSURE_EQUALS( msg, ( a - b ).to_string(), HNumber( res ).to_string() );
 		msg += "(R)";
 		ENSURE_EQUALS( msg, ( b - a ).to_string(), ( -HNumber( res ) ).to_string() );
@@ -1047,7 +1063,7 @@ TUT_UNIT_TEST( 21, "division" )
 			as = a.to_string();
 			bs = b.to_string();
 			_bc << as << "/ " << bs << endl;
-			do _bc.read_until( res ); while ( res.is_empty() );
+			res = read_result();
 			msg = "division of large leaf a = " + as + " and b = " + bs + " failed";
 			HNumber div = a / b;
 			int len = static_cast<int>( res.get_length() );
@@ -1072,7 +1088,7 @@ TUT_UNIT_TEST( 21, "division" )
 		as = a.to_string();
 		bs = b.to_string();
 		_bc << as << "/ " << bs << endl;
-		do _bc.read_until( res ); while ( res.is_empty() );
+		res = read_result();
 		msg = "division of random a = " + as + " and b = " + bs + " failed";
 		HNumber div( a / b );
 		int len = static_cast<int>( res.get_length() );
@@ -1171,7 +1187,7 @@ void tut_yaal_hcore_hnumber::run_square_test( HString const& random_, int natura
 		val = -val;
 	s = val.to_string();
 	_bc << "sqrt(" << s << ")" << endl;
-	do _bc.read_until( res ); while ( res.is_empty() );
+	res = read_result();
 	msg = "square root of random val = " + s + " failed";
 	HNumber root( square_root( val ) );
 	clog << ansi::brightcyan << ">> " << "square_root(" << s << ")" << ansi::reset << " = " << ansi::yellow << root.to_string() << ansi::reset << endl;
@@ -1538,7 +1554,7 @@ TUT_UNIT_TEST( 50, "speed" )
 	HString res; {
 		HClock c;
 		_bc << "3^133333" << endl;
-		do _bc.read_until( res ); while ( res.is_empty() );
+		res = read_result();
 		clog << "*speed* bc multiplication = " << static_cast<int long>( bc = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 	}
 	ENSURE_EQUALS( "karatsuba failed", myRes, res );
@@ -1553,7 +1569,7 @@ TUT_UNIT_TEST( 50, "speed" )
 		HClock c;
 		_bc << "scale=10000" << endl;
 		_bc << "sqrt(91)" << endl;
-		do _bc.read_until( res ); while ( res.is_empty() );
+		res = read_result();
 		clog << "*speed* bc square root = " << static_cast<int long>( bc = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
 	}
 	ENSURE_EQUALS( "square root failed", myRes, res );
