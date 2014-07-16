@@ -96,10 +96,14 @@ TUT_UNIT_TEST( 1, "all tests" )
 
 	// ... it can also be mixed with all integer plan types
 	u1 = 1;
+	ENSURE_EQUALS( u1, Uid( 1 ) );
 	u1 = u1 + u2;
+	ENSURE_EQUALS( u1, Uid( 21 ) );
 	u1 = u2 + 1;
+	ENSURE_EQUALS( u1, Uid( 21 ) );
 	u1 = 1 + u2;
-	1 == u1;
+	ENSURE_EQUALS( u1, Uid( 21 ) );
+	ENSURE_NOT( 1 == u1 );
 
 	Uid64 u64_1 = u32_t(50);
 	u64_1 = i8_t(1);
