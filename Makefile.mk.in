@@ -67,6 +67,7 @@ include $(DIR_ROOT)/_aux/mk/4_wrapper.mk
 include $(DIR_ROOT)/_aux/mk/5_flags.mk
 -include $(DIR_ROOT)/local.mk
 
+EXTRA_COMPILER_OPTIMIZATION_FLAGS=@EXTRA_COMPILER_OPTIMIZATION_FLAGS@
 override CXXFLAGS += @EXTRA_CXXFLAGS@ @DEFS@ -Wno-missing-noreturn
 override LXXFLAGS += @EXTRA_LXXFLAGS@ @BOOST_LDFLAGS@
 START_GROUP  = @START_GROUP@
