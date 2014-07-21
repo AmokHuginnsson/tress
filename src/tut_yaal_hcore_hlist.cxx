@@ -44,7 +44,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 #include <yaal/hcore/hrandomizer.hxx>
 #include <yaal/tools/collections.hxx>
 #include <yaal/tools/streamtools.hxx>
-#include <yaal/hconsole/hlistcontrol.hxx>
+#include <yaal/hconsole/hlistwidget.hxx>
 
 using namespace tut;
 using namespace yaal;
@@ -76,7 +76,7 @@ struct tut_yaal_hcore_hlist : public simple_mock<tut_yaal_hcore_hlist> {
 	void erase_test_2( list_t& l );
 	void erase_test_3( list_t& l );
 	list_t from_string( char const* );
-	void check_sorted( list_t const&, list_control_helper::OSortHelper::sort_order_t );
+	void check_sorted( list_t const&, list_widget_helper::OSortHelper::sort_order_t );
 private:
 };
 
@@ -874,8 +874,8 @@ TUT_UNIT_TEST( 24, "swap" )
 	ENSURE_EQUALS( "exchange failed", _stringifier.to_string<char>( l1 ), "ab" );
 TUT_TEARDOWN()
 
-void tut_yaal_hcore_hlist::check_sorted( tut_yaal_hcore_hlist::list_t const& l, list_control_helper::OSortHelper::sort_order_t order ) {
-	if ( order == list_control_helper::OSortHelper::ASCENDING ) {
+void tut_yaal_hcore_hlist::check_sorted( tut_yaal_hcore_hlist::list_t const& l, list_widget_helper::OSortHelper::sort_order_t order ) {
+	if ( order == list_widget_helper::OSortHelper::ASCENDING ) {
 		int val = 0;
 		for ( tut_yaal_hcore_hlist::list_t::const_iterator it = l.begin(); it != l.end(); ++ it ) {
 			ENSURE( "not sorted", val <= *it );
@@ -905,10 +905,10 @@ TUT_UNIT_TEST( 25, "sort serious" )
 		try {
 			l.sort();
 			check_consistency( l );
-			check_sorted( l, list_control_helper::OSortHelper::ASCENDING );
+			check_sorted( l, list_widget_helper::OSortHelper::ASCENDING );
 			l.sort( greater<int>() );
 			check_consistency( l );
-			check_sorted( l, list_control_helper::OSortHelper::DESCENDING );
+			check_sorted( l, list_widget_helper::OSortHelper::DESCENDING );
 		} catch ( ... ) {
 			std::cout << "(" << std::setw( 8 ) << std::setfill( '0' ) << std::oct << i << ")[" << _stringifier.to_string<char>( l ) << "]" << std::endl;
 			throw;
