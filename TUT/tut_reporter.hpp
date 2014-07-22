@@ -209,9 +209,10 @@ public:
 		_currentGroupTestCount( 0 ) {
 	}
 
-	virtual void run_started( int, int testCount_ ) {
+	virtual void run_started( int groupCount_, int testCount_ ) {
 		clear();
 		_totalTestCount = testCount_;
+		_os << "tests plan: groups: " << groupCount_ << ", total: " << _totalTestCount << "\n" << std::endl;
 	}
 
 	void set_error_line( error_line_type errorLine_ ) {
@@ -228,7 +229,7 @@ public:
 				<< ( tress::setup._color ? yaal::ansi::brightcyan : "" ) << name
 				<< ( tress::setup._color ? yaal::ansi::yellow : "" ) << " ]" << sep
 				<< ( name.length() % 2 ? "=" : "" )
-				<< ( tress::setup._color ? yaal::ansi::reset : "" ) 
+				<< ( tress::setup._color ? yaal::ansi::reset : "" )
 				<< std::endl;
 		}
 	}
@@ -283,7 +284,7 @@ public:
 			_currentGroupTestCount = 0;
 			_groupTestLog.str( std::string() );
 		}
-		
+
 		if ( tr._result == tut::test_result::ok )
 			_okCount ++;
 		else if ( tr._result == tut::test_result::ex )
