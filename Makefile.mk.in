@@ -86,12 +86,7 @@ include $(DIR_ROOT)/_aux/mk/e_deps.mk
 
 .PHONY: test
 
-KEYS=$(DIR_LOCALSTATE)/db/keys/yaal.key $(DIR_LOCALSTATE)/db/keys/yaal.pem
-
-$(KEYS):
-	@cd $(DIR_ROOT) && ./_aux/gen-keys $(DIR_LOCALSTATE)/db/keys
-
-test: $(KEYS)
+test:
 	@cd $(DIR_ROOT) && mkdir -p out && sqlite3 out/tress.sqlite < data/sqlite.sql && \
 	. _aux/set-limits.sh && $(TRESS_ENV) ./build/$(TARGET)/tress/1exec $(TRESS_ARG) > /dev/null
 
