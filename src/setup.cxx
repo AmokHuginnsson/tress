@@ -29,6 +29,7 @@ Copyright:
 #include <cstdlib>
 #include <libintl.h>
 
+#include <yaal/hcore/hlog.hxx>
 #include <yaal/tools/util.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "setup.hxx"
@@ -158,6 +159,7 @@ void OSetup::test_setup( void ) {
 		if ( ( _clockQualityMultiplier < 1 ) || ( _clockQualityMultiplier > 100 ) )
 			M_THROW( _( "bad clock quality multiplier" ), _clockQualityMultiplier );
 	}
+	hcore::log << "clock quality multiplier = " << _clockQualityMultiplier << endl;
 	return;
 	M_EPILOG
 }
