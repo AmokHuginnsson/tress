@@ -55,15 +55,16 @@ struct tut_yaal_tools_hxml : public simple_mock<tut_yaal_tools_hxml> {
 		_varTmpBuffer.hs_realloc( node_.get_level() * 2 + 3 );
 		_varTmpBuffer.fillz( ' ', 0, node_.get_level() * 2 + 1 );
 		if ( node_.get_type() == HXml::HNode::TYPE::NODE ) {
-			if ( ! node_.get_name().is_empty() )
-				out << _varTmpBuffer << "[" << node_.get_name() << "]<" << node_.get_level() << ">:" << std::endl;
+			if ( ! node_.get_name().is_empty() ) {
+				out << _varTmpBuffer << "[" << node_.get_name() << "]<" << node_.get_level() << ">: - " << node_.get_line() << std::endl;
+			}
 			for ( HXml::HNode::properties_t::const_iterator it = node_.properties().begin(); it != node_.properties().end(); ++ it ) {
 				out << _varTmpBuffer << "(" << it->first << ")->(";
-				out << it->second << ")" << std::endl;
+				out << it->second << ") - " << node_.get_line() << std::endl;
 			}
 			if ( node_.has_childs() ) {
 				_varTmpBuffer.fillz( ' ', 0, node_.get_level() * 2 + 2 );
-				out << _varTmpBuffer << "{" << std::endl;
+				out << _varTmpBuffer << "{ - " << node_.get_line() << std::endl;
 				for ( HXml::const_iterator it = node_.begin(); it != node_.end(); ++ it ) {
 					dump( out, *it );
 					_varTmpBuffer.set_at( node_.get_level() * 2 + 2, 0 );
