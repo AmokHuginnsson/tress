@@ -57,6 +57,23 @@ HFakeConsoleGuard::~HFakeConsoleGuard( void ) {
 	_fakeConsole_.deactivate();
 }
 
+namespace fake_console_subsystem {
+
+struct WINDOW {
+	int short _y;
+	int short _x;
+	int short _my;
+	int short _mx;
+	char _buf[2048];
+	WINDOW( void )
+		: _y( 0 ), _x( 0 ),
+		_my( 24 ), _mx( 79 ),
+		_buf() {
+	}
+} stdscr;
+
+}
+
 extern "C" {
 
 int tcgetattr( int, struct termios* );
@@ -75,7 +92,9 @@ int tcsetattr( int a0, int a1, const struct termios* a2 ) {
 	return ( ! _fakeConsole_.is_active() ? ret : 0 );
 }
 
+#ifndef __HOST_OS_TYPE_SOLARIS__
 int isatty( int );
+#endif /* #ifndef __HOST_OS_TYPE_SOLARIS__ */
 int isatty( int fd_ ) {
 	typedef int (*isatty_t)( int );
 	static isatty_t orig_isatty = yaal::bit_cast<isatty_t>( dlsym( RTLD_NEXT, "isatty" ) );
@@ -83,18 +102,7 @@ int isatty( int fd_ ) {
 	return ( ! _fakeConsole_.is_active() ? ret : 1 );
 }
 
-struct WINDOW {
-	int short _y;
-	int short _x;
-	int short _my;
-	int short _mx;
-	char _buf[2048];
-	WINDOW( void )
-		: _y( 0 ), _x( 0 ),
-		_my( 24 ), _mx( 79 ),
-		_buf() {
-	}
-} stdscr;
+using namespace fake_console_subsystem;
 
 WINDOW* initscr( void );
 WINDOW* initscr( void ) {
