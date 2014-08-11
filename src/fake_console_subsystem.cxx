@@ -26,7 +26,7 @@ Copyright:
 
 #include "config.hxx"
 
-#ifdef HAVE_DECL_RTLD_NEXT
+#if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
 
 #include <cstdlib>
 #include <dlfcn.h>
@@ -200,5 +200,5 @@ int wbkgd( WINDOW*, int long unsigned ) {
 
 }
 
-#endif /* #ifdef HAVE_DECL_RTLD_NEXT */
+#endif /* #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 ) */
 

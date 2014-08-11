@@ -170,12 +170,6 @@ TUT_UNIT_TEST( 1, "Simple construction and destruction." )
 	ENSURE( "udp socket without fd created", socket.get_file_descriptor() >= 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Constructions with wrong parameters." )
-	ENSURE_THROW( "creation of bad socket possible (MODE::BLOCKING|MODE::NONBLOCKING)",
-			HUDPSocket socket( HUDPSocket::MODE::BLOCKING | HUDPSocket::MODE::NONBLOCKING ),
-			HUDPSocketException );
-TUT_TEARDOWN()
-
 TUT_UNIT_TEST( 3, "bind on reserved port." )
 	ENSURE_THROW( "bind on reserved port possible",
 			HUDPSocket socket( ( ::getenv( "windir" ) || ::getenv( "WINDIR" ) ? 137 : 22 ) ),

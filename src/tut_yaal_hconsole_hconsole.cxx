@@ -26,7 +26,7 @@ Copyright:
 
 #include "config.hxx"
 
-#ifdef HAVE_DECL_RTLD_NEXT
+#if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
 
 #include <TUT/tut.hpp>
 
@@ -86,5 +86,5 @@ TUT_TEARDOWN()
 
 }
 
-#endif /* #ifdef HAVE_DECL_RTLD_NEXT */
+#endif /* defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 ) */
 

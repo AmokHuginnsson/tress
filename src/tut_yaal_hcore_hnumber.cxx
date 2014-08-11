@@ -126,7 +126,7 @@ HString tut_yaal_hcore_hnumber::read_result( void ) {
 HString const& tut_yaal_hcore_hnumber::expand_leafs( HString const& template_ ) {
 	_cache.clear();
 	static HString zeros( "00000000", HNumber::DECIMAL_DIGITS_IN_LEAF - 1 );
-	_cache.hs_realloc( template_.get_length() * HNumber::DECIMAL_DIGITS_IN_LEAF + 1 );
+	_cache.reserve( template_.get_length() * HNumber::DECIMAL_DIGITS_IN_LEAF );
 	for ( HString::const_iterator it( template_.begin() ), end( template_.end() ); it != end; ++ it ) {
 		_cache += *it;
 		if ( ( *it != '-' ) && ( *it != '.' ) )

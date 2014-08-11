@@ -52,7 +52,7 @@ struct tut_yaal_tools_hxml : public simple_mock<tut_yaal_tools_hxml> {
 	virtual ~tut_yaal_tools_hxml( void )
 		{}
 	static std::ostream& dump( std::ostream& out, HXml::HConstNodeProxy const& node_ ) {
-		_varTmpBuffer.hs_realloc( node_.get_level() * 2 + 3 );
+		_varTmpBuffer.reserve( node_.get_level() * 2 + 2 );
 		_varTmpBuffer.fillz( ' ', 0, node_.get_level() * 2 + 1 );
 		if ( node_.get_type() == HXml::HNode::TYPE::NODE ) {
 			if ( ! node_.get_name().is_empty() ) {
