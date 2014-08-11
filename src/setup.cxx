@@ -78,7 +78,7 @@ void OSetup::test_setup( void ) {
 		yaal::tools::util::failure( 1,
 				_( "quiet and verbose options are mutually exclusive\n" ) );
 	if ( _verbose )
-		clog.reset( make_pointer<HFile>( stdout, false ) );
+		clog.reset( make_pointer<HFile>( stdout, HFile::OWNERSHIP::EXTERNAL ) );
 	else
 		std::clog.rdbuf( &cnull_obj );
 	if ( _quiet ) {

@@ -59,11 +59,11 @@ void tut_yaal_tools_hdes::do_des( HString src_, HString dst_, HDes::action_t con
 	HString passwd;
 	cin >> passwd;
 	if ( src_ == "-" )
-		in.open( stdin, false );
+		in.open( stdin, HFile::OWNERSHIP::EXTERNAL );
 	else
 		in.open( src_, HFile::OPEN::READING );
 	if ( dst_ == "-" )
-		out.open( stdout, false );
+		out.open( stdout, HFile::OWNERSHIP::EXTERNAL );
 	else
 		out.open( dst_, HFile::OPEN::WRITING );
 	if ( action_ == HDes::CRYPT )

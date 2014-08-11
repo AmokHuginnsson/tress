@@ -254,7 +254,7 @@ public:
 		}
 	}
 
-	virtual void test_started( char const* const groupName_, int n, char const* const title_, bool first_ ) {
+	virtual void test_started( char const* groupName_, int n, char const* title_, bool first_ ) {
 		if ( title_ ) {
 			yaal::hcore::HLock l( _mutex );
 			using std::operator <<;
