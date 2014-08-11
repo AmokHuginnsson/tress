@@ -24,6 +24,10 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include "config.hxx"
+
+#ifdef HAVE_DECL_RTLD_NEXT
+
 #include <cstdlib>
 #include <dlfcn.h>
 
@@ -195,4 +199,6 @@ int wbkgd( WINDOW*, int long unsigned ) {
 }
 
 }
+
+#endif /* #ifdef HAVE_DECL_RTLD_NEXT */
 

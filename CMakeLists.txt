@@ -36,6 +36,8 @@ int main( int, char** )
 	}
 " HAVE_SGI_STL_EXTENSIONS )
 
+check_symbol_exists( RTLD_NEXT dlfcn.h HAVE_DECL_RTLD_NEXT )
+
 include_directories( . )
 configure_file( ../yaal/_aux/cmake-client-config.hxx ${TARGET_PATH}/config.hxx )
 
@@ -97,7 +99,7 @@ if ( CMAKE_HOST_WIN32 )
 
 	file( GLOB headers_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/headers.vc*proj )
 	include_external_msproject( headers ${headers_PROJ} )
-	
+
 	file( GLOB mkheaders_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/mkheaders.vc*proj )
 	include_external_msproject( mkheaders ${mkheaders_PROJ} )
 
@@ -128,7 +130,7 @@ if ( CMAKE_HOST_WIN32 )
 else()
 	set_target_properties( ${PROJECT_NAME} PROPERTIES COMPILE_FLAGS -Wno-variadic-macros )
 	set_target_properties( tressplugin PROPERTIES OUTPUT_NAME 1exec PREFIX "" SUFFIX "" LIBRARY_OUTPUT_DIRECTORY ${TARGET_PATH}/tressplugin LIBRARY_OUTPUT_DIRECTORY_DEBUG ${TARGET_PATH}/tressplugin LIBRARY_OUTPUT_DIRECTORY_RELEASE ${TARGET_PATH}/tressplugin LIBRARY_OUTPUT_DIRECTORY_COV ${TARGET_PATH}/tressplugin LIBRARY_OUTPUT_DIRECTORY_PROF ${TARGET_PATH}/tressplugin )
-	target_link_libraries( ${PROJECT_NAME} ${yaal_LIBRARIES} ${Boost_LIBRARIES} )
+	target_link_libraries( ${PROJECT_NAME} ${yaal_LIBRARIES} ${Boost_LIBRARIES} dl )
 	target_link_libraries( child ${yaal_LIBRARIES} )
 endif()
 

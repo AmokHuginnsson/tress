@@ -24,6 +24,10 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include "config.hxx"
+
+#ifdef HAVE_DECL_RTLD_NEXT
+
 #include <TUT/tut.hpp>
 
 #include <yaal/hconsole/hconsole.hxx>
@@ -81,4 +85,6 @@ TUT_UNIT_TEST( 2, "cursor position" )
 TUT_TEARDOWN()
 
 }
+
+#endif /* #ifdef HAVE_DECL_RTLD_NEXT */
 
