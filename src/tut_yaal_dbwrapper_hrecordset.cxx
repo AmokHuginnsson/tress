@@ -51,7 +51,7 @@ TUT_TEST_GROUP( tut_yaal_dbwrapper_hrecordset, "yaal::dbwrapper::HRecordSet" );
 
 void tut_yaal_dbwrapper_hrecordset::dump_query_result( HDataBase::ptr_t db, char const* const query, char const* dbType_ ) {
 	M_PROLOG
-	HRecordSet::ptr_t rs = db->query( query );
+	HRecordSet::ptr_t rs = db->execute_query( query );
 	ENSURE_EQUALS( "bad column count", rs->get_field_count(), 3 );
 	ENSURE_EQUALS( "bad result size", rs->get_size(), 3 );
 	char const* const COLUMN_NAMES[] = { "id", "name", "data" };
@@ -183,24 +183,24 @@ static char const* const SPECIAL_DELETE = "DELETE FROM config WHERE name = 'spec
 
 void tut_yaal_dbwrapper_hrecordset::test_dml( HDataBase::ptr_t db ) {
 	M_PROLOG
-	TUT_DECLARE( HRecordSet::ptr_t rs( db->query( SPECIAL_QUERY ) ); );
+	TUT_DECLARE( HRecordSet::ptr_t rs( db->execute_query( SPECIAL_QUERY ) ); );
 	ENSURE( "empty result not entirelly empty ???", ! rs || ( rs->begin() == rs->end() ) );
 	ENSURE_EQUALS( "bad COUNT(*)", rs->get_size(), 0 );
-	TUT_INVOKE( rs = db->query( SPECIAL_INSERT ); );
+	TUT_INVOKE( rs = db->execute_query( SPECIAL_INSERT ); );
 	int long lastInsertId( rs->get_insert_id() );
 	clog << "lastInsertId: " << lastInsertId << endl;
 	ENSURE_EQUALS( "bad last insert id", lastInsertId > 3, true );
-	TUT_INVOKE( rs = db->query( SPECIAL_QUERY ); );
+	TUT_INVOKE( rs = db->execute_query( SPECIAL_QUERY ); );
 	ENSURE_EQUALS( "bad COUNT(*) after SELECT", rs->get_size(), 1 );
 	ENSURE( "INSERT failed?", !! rs && ( rs->begin() != rs->end() ) && rs->begin()[1] && ( *(rs->begin()[1]) == "special" ) && rs->begin()[2] && ( *(rs->begin()[2]) == "first" ) );
-	TUT_INVOKE( rs = db->query( SPECIAL_UPDATE ); );
+	TUT_INVOKE( rs = db->execute_query( SPECIAL_UPDATE ); );
 	ENSURE_EQUALS( "bad COUNT(*) after UPDATE", rs->get_size(), 1 );
-	TUT_INVOKE( rs = db->query( SPECIAL_QUERY ); );
+	TUT_INVOKE( rs = db->execute_query( SPECIAL_QUERY ); );
 	ENSURE_EQUALS( "bad COUNT(*) after SELECT", rs->get_size(), 1 );
 	ENSURE( "UPDATE failed?", !! rs && ( rs->begin() != rs->end() ) && rs->begin()[1] && ( *(rs->begin()[1]) == "special" ) && rs->begin()[2] && ( *(rs->begin()[2]) == "second" ) );
-	TUT_INVOKE( rs = db->query( SPECIAL_DELETE ); );
+	TUT_INVOKE( rs = db->execute_query( SPECIAL_DELETE ); );
 	ENSURE_EQUALS( "bad COUNT(*) after DELETE", rs->get_size(), 1 );
-	TUT_INVOKE( rs = db->query( SPECIAL_QUERY ); );
+	TUT_INVOKE( rs = db->execute_query( SPECIAL_QUERY ); );
 	ENSURE_EQUALS( "bad COUNT(*) after SELECT", rs->get_size(), 0 );
 	ENSURE( "DELETE failed?", ! rs || ( rs->begin() == rs->end() ) );
 	return;
@@ -343,7 +343,7 @@ TUT_TEARDOWN()
 
 void tut_yaal_dbwrapper_hrecordset::row_by_row_test( HDataBase::ptr_t db, char const* const query, char const* dbType_ ) {
 	M_PROLOG
-	HRecordSet::ptr_t rs = db->query( query, HRecordSet::CURSOR::FORWARD );
+	HRecordSet::ptr_t rs = db->execute_query( query, HRecordSet::CURSOR::FORWARD );
 	ENSURE_EQUALS( "bad column count", rs->get_field_count(), 3 );
 	ENSURE_THROW( "recieved record count in row-by-row mode", rs->get_size(), HRecordSetException );
 	char const* const COLUMN_NAMES[] = { "id", "name", "data" };
