@@ -32,6 +32,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 
 #include <yaal/hconsole/hterminal.hxx>
 #include <yaal/hcore/hnumber.hxx>
+#include <yaal/tools/hmonitor.hxx>
 
 using namespace tut;
 using namespace yaal;
@@ -129,6 +130,7 @@ TUT_UNIT_TEST( 1, "visitor pattern" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 2, "terminal size" )
+	external_lock_t l( HMonitor::get_instance().acquire( "terminal" ) );
 	if ( _terminal_.exists() ) {
 		HTerminal::coord_t c( _terminal_.size() );
 		clog << "Terminal size: " << c.second << "x" << c.first << "." << endl;
