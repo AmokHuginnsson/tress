@@ -42,14 +42,15 @@ namespace tut {
 
 struct tut_yaal_dbwrapper_hrecordset : public simple_mock<tut_yaal_dbwrapper_hrecordset> {
 	virtual ~tut_yaal_dbwrapper_hrecordset( void ) {}
-	void dump_query_result( HDataBase::ptr_t, char const* const, char const* );
+	void dump_query_result( HDataBase::ptr_t, char const*, char const* );
 	void test_dml( HDataBase::ptr_t );
 	void test_schema( HDataBase::ptr_t );
-	void row_by_row_test( HDataBase::ptr_t, char const* const, char const* );
+	void row_by_row_test( HDataBase::ptr_t, char const*, char const* );
+	void bind_test( HDataBase::ptr_t, char const* );
 };
 TUT_TEST_GROUP( tut_yaal_dbwrapper_hrecordset, "yaal::dbwrapper::HRecordSet" );
 
-void tut_yaal_dbwrapper_hrecordset::dump_query_result( HDataBase::ptr_t db, char const* const query, char const* dbType_ ) {
+void tut_yaal_dbwrapper_hrecordset::dump_query_result( HDataBase::ptr_t db, char const* query, char const* dbType_ ) {
 	M_PROLOG
 	HRecordSet::ptr_t rs = db->execute_query( query );
 	ENSURE_EQUALS( "bad column count", rs->get_field_count(), 3 );
@@ -341,7 +342,7 @@ TUT_UNIT_TEST( 18, "different engines all in one by DSN" )
 TUT_TEARDOWN()
 #endif /* #if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || ( defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) ) */
 
-void tut_yaal_dbwrapper_hrecordset::row_by_row_test( HDataBase::ptr_t db, char const* const query, char const* dbType_ ) {
+void tut_yaal_dbwrapper_hrecordset::row_by_row_test( HDataBase::ptr_t db, char const* query, char const* dbType_ ) {
 	M_PROLOG
 	HRecordSet::ptr_t rs = db->execute_query( query, HRecordSet::CURSOR::FORWARD );
 	ENSURE_EQUALS( "bad column count", rs->get_field_count(), 3 );
@@ -427,6 +428,29 @@ TUT_UNIT_TEST( 23, "Oracle engine" )
 	row_by_row_test( db, QUERY, "Oracle" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
+
+void tut_yaal_dbwrapper_hrecordset::bind_test( HDataBase::ptr_t db, char const* dbType_ ) {
+	HQuery::ptr_t q( db->prepare_query( "SELECT data FROM config WHERE id = ?" ) );
+	q->bind( 1, "1" );
+	HRecordSet::ptr_t r( q->execute() );
+	ENSURE_EQUALS( "bad field count", r->get_field_count(), 1 );
+	HRecordSet::HIterator it( r->begin() );
+	HRecordSet::HIterator end( r->end() );
+	ENSURE( "empty set", it != end );
+	HRecordSet::value_t v( it[0] );
+	ENSURE( "empty value", !!v );
+	ENSURE_EQUALS( "bad value", *v, dbType_ );
+	++ it;
+	ENSURE( "set too large", ! ( it != end ) );
+}
+
+#if defined( HAVE_SQLITE3_H )
+TUT_UNIT_TEST( 24, "Bind SQLite engine" )
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
+	db->connect( "./out/tress", "", "" );
+	bind_test( db, "sqlite3" );
+TUT_TEARDOWN()
+#endif /* not defined( HAVE_SQLITE3_H ) */
 
 }
 
