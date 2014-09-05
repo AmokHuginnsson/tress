@@ -430,7 +430,7 @@ TUT_TEARDOWN()
 #endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
 
 void tut_yaal_dbwrapper_hrecordset::bind_test( HDataBase::ptr_t db, char const* dbType_ ) {
-	HQuery::ptr_t q( db->prepare_query( "SELECT data FROM config WHERE id = ?" ) );
+	HQuery::ptr_t q( db->prepare_query( "SELECT data FROM config WHERE id = $1;" ) );
 	q->bind( 1, "1" );
 	HRecordSet::ptr_t r( q->execute() );
 	ENSURE_EQUALS( "bad field count", r->get_field_count(), 1 );
@@ -451,6 +451,14 @@ TUT_UNIT_TEST( 24, "Bind SQLite engine" )
 	bind_test( db, "sqlite3" );
 TUT_TEARDOWN()
 #endif /* not defined( HAVE_SQLITE3_H ) */
+
+#if defined( HAVE_POSTGRESQL_LIBPQ_FE_H )
+TUT_UNIT_TEST( 25, "Bind PostgreSQL engine" )
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
+	db->connect( "tress", "tress", "tr3ss" );
+	bind_test( db, "PostgreSQL" );
+TUT_TEARDOWN()
+#endif /* not defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) */
 
 }
 
