@@ -391,6 +391,12 @@ TUT_UNIT_TEST( 16, "swap" )
 
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 17, "data" )
+	array_t a;
+	a.push_back( 1 );
+	ENSURE_EQUALS( "bad data", *a.data(), 1 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "speed test" )
 	TIME_CONSTRAINT_EXEMPT();
 	typedef HArray<int> array_type;
