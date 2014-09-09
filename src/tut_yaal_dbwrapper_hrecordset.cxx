@@ -46,7 +46,7 @@ struct tut_yaal_dbwrapper_hrecordset : public simple_mock<tut_yaal_dbwrapper_hre
 	void test_dml( HDataBase::ptr_t );
 	void test_schema( HDataBase::ptr_t );
 	void row_by_row_test( HDataBase::ptr_t, char const*, char const* );
-	void bind_test( HDataBase::ptr_t, char const* );
+	void bind_test( HDataBase::ptr_t, char const*, char const* );
 };
 TUT_TEST_GROUP( tut_yaal_dbwrapper_hrecordset, "yaal::dbwrapper::HRecordSet" );
 
@@ -429,8 +429,8 @@ TUT_UNIT_TEST( 23, "Oracle engine" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
 
-void tut_yaal_dbwrapper_hrecordset::bind_test( HDataBase::ptr_t db, char const* dbType_ ) {
-	HQuery::ptr_t q( db->prepare_query( "SELECT data FROM config WHERE id = $1;" ) );
+void tut_yaal_dbwrapper_hrecordset::bind_test( HDataBase::ptr_t db, char const* query_, char const* dbType_ ) {
+	HQuery::ptr_t q( db->prepare_query( query_ ) );
 	q->bind( 1, "1" );
 	HRecordSet::ptr_t r( q->execute() );
 	ENSURE_EQUALS( "bad field count", r->get_field_count(), 1 );
@@ -448,7 +448,7 @@ void tut_yaal_dbwrapper_hrecordset::bind_test( HDataBase::ptr_t db, char const* 
 TUT_UNIT_TEST( 24, "Bind SQLite engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	db->connect( "./out/tress", "", "" );
-	bind_test( db, "sqlite3" );
+	bind_test( db, "SELECT data FROM config WHERE id = ?;", "sqlite3" );
 TUT_TEARDOWN()
 #endif /* not defined( HAVE_SQLITE3_H ) */
 
@@ -456,9 +456,17 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 25, "Bind PostgreSQL engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
-	bind_test( db, "PostgreSQL" );
+	bind_test( db, "SELECT data FROM config WHERE id = $1;", "PostgreSQL" );
 TUT_TEARDOWN()
 #endif /* not defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) */
+
+#if defined( HAVE_MYSQL_MYSQL_H )
+TUT_UNIT_TEST( 26, "Bind MySQL engine" )
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
+	db->connect( "tress", "tress", "tr3ss" );
+	bind_test( db, "SELECT data FROM config WHERE id = ?;", "MySQL" );
+TUT_TEARDOWN()
+#endif /* not defined( HAVE_MYSQL_MYSQL_H ) */
 
 }
 
