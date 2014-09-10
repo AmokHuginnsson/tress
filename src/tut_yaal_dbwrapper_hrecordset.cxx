@@ -468,5 +468,13 @@ TUT_UNIT_TEST( 26, "Bind MySQL engine" )
 TUT_TEARDOWN()
 #endif /* not defined( HAVE_MYSQL_MYSQL_H ) */
 
+#if defined( HAVE_IBASE_H )
+TUT_UNIT_TEST( 27, "Bind Firebird engine" )
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
+	db->connect( "tress", "tress", "tr3ss" );
+	bind_test( db, "SELECT data FROM config WHERE id = ?;", "Firebird" );
+TUT_TEARDOWN()
+#endif /* not defined( HAVE_IBASE_H ) */
+
 }
 
