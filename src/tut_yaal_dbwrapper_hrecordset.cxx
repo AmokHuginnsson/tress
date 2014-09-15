@@ -452,13 +452,13 @@ TUT_UNIT_TEST( 24, "Bind SQLite engine" )
 TUT_TEARDOWN()
 #endif /* not defined( HAVE_SQLITE3_H ) */
 
-#if defined( HAVE_POSTGRESQL_LIBPQ_FE_H )
+#if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
 TUT_UNIT_TEST( 25, "Bind PostgreSQL engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	bind_test( db, "SELECT data FROM config WHERE id = $1;", "PostgreSQL" );
 TUT_TEARDOWN()
-#endif /* not defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) */
+#endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
 
 #if defined( HAVE_MYSQL_MYSQL_H )
 TUT_UNIT_TEST( 26, "Bind MySQL engine" )
