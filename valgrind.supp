@@ -3280,3 +3280,59 @@
    fun:exit
    fun:(below main)
 }
+{
+   Centos7: OCILogon
+   Memcheck:Param
+   write(buf)
+   obj:/usr/lib64/libc-2.17.so
+   fun:snttwrite
+   fun:nttfpwr
+   fun:nsbasic_bsd
+   fun:nsbsend
+   fun:nioqrc
+   fun:ttcdrv
+   fun:nioqwa
+   fun:upirtrc
+   fun:upirtr
+   fun:kpurcs
+   fun:kpugskey
+   fun:kpu8lgn
+   fun:kpuauthxa
+   fun:kpuauth
+   fun:kpulon
+   fun:OCILogon
+}
+{
+   Centos7: openaux
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:cache_rpath.part.5
+   fun:_dl_map_object
+   fun:openaux
+   fun:_dl_catch_error
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.2.5
+}
+{
+   Centos7: do_lookup_x
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:do_lookup_x
+   fun:_dl_lookup_symbol_x
+   fun:_dl_relocate_object
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.2.5
+}
