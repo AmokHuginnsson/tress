@@ -476,5 +476,13 @@ TUT_UNIT_TEST( 27, "Bind Firebird engine" )
 TUT_TEARDOWN()
 #endif /* not defined( HAVE_IBASE_H ) */
 
+#if defined( HAVE_OCI_H )
+TUT_UNIT_TEST( 28, "Bind  Oracle engine" )
+	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
+	db->connect( "tress", "tress", "tr3ss" );
+	bind_test( db, "SELECT data FROM config WHERE id = :1;", "Oracle" );
+TUT_TEARDOWN()
+#endif /* not defined( HAVE_OCI_H ) */
+
 }
 
