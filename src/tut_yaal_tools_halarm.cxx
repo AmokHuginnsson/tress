@@ -47,9 +47,10 @@ TUT_UNIT_TEST( 1, "alarm wake" )
 	static int const ALARM_TIME( 2000 );
 	HAlarm alarm( ALARM_TIME );
 	HClock c;
-	bool interrupted( tools::sleep::second( 32 ) );
-	if ( ! interrupted )
-		cout << "sleep ended after: " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << " miliseconds" << endl;
+	bool interrupted( tools::sleep::second( 64 ) );
+	if ( ! interrupted ) {
+		cerr << "sleep ended after: " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << " miliseconds" << endl;
+	}
 	ENSURE_EQUALS( "alarm failed to interrupt sleep", interrupted, true );
 TUT_TEARDOWN()
 
