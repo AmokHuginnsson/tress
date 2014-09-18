@@ -45,7 +45,7 @@ namespace tut {
 static int const FINISH_DELAY = 160;
 static int const TOLERANCE = 16;
 #else /* #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
-static int const FINISH_DELAY = 10;
+static int const FINISH_DELAY = 20;
 static int const TOLERANCE = 2;
 #endif /* #else #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 
