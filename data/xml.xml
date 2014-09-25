@@ -19,4 +19,13 @@ Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag.
 		<my_item>four</my_item>
 		<!--my_item>hidden</my_item-->
 	</my_set>
+	<my_special>
+		<my_sub>
+			<my_element>
+				<my_sub>
+					data
+				</my_sub>
+			</my_element>
+		</my_sub>
+	</my_special>
 </my_root>

@@ -355,5 +355,20 @@ TUT_UNIT_TEST( 17, "get_element_by_name == 0" )
 	ENSURE( "bad emptiness status", nodeSet.is_empty() );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 18, "get_element_by_name == many" )
+	HXml xml;
+	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
+	xml.apply_style( "./data/style.xml" );
+	xml.parse();
+	HXml::HConstNodeSet nodeSet = xml.get_elements_by_name( "my_sub" );
+	ENSURE_EQUALS( "bad number of elements", nodeSet.get_size(), 3 );
+	ENSURE_NOT( "bad emptiness status", nodeSet.is_empty() );
+	int i( 0 );
+	for ( HXml::HConstNodeSet::HConstIterator it( nodeSet.begin() ), end( nodeSet.end() ); it != end; ++ it, ++ i ) {
+		dump( std::clog, *it );
+		ENSURE_EQUALS( "bad node name", (*it).get_name(), "my_sub" );
+	}
+TUT_TEARDOWN()
+
 }
 
