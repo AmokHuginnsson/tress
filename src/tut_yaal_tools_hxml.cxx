@@ -305,5 +305,55 @@ TUT_UNIT_TEST( 13, "HXml copy." )
 	copy.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 14, "get_element_by_path == 1" )
+	HXml xml;
+	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
+	xml.apply_style( "./data/style.xml" );
+	xml.parse();
+	HXml::HConstNodeSet nodeSet = xml.get_elements_by_path( "/my_root/my_node/my_sub/" );
+	ENSURE_EQUALS( "bad number of elements", nodeSet.get_size(), 1 );
+	ENSURE_NOT( "bad emptiness status", nodeSet.is_empty() );
+	dump( std::clog, nodeSet[0] );
+	ENSURE_EQUALS( "bad node name", nodeSet[0].get_name(), "my_sub" );
+	ENSURE_EQUALS( "bad node value", (*nodeSet[0].begin()).get_value(), "node" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 15, "get_element_by_path == 0" )
+	HXml xml;
+	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
+	xml.apply_style( "./data/style.xml" );
+	xml.parse();
+	HXml::HConstNodeSet nodeSet = xml.get_elements_by_path( "/my_root/my_node/my_none/" );
+	ENSURE_EQUALS( "bad number of elements", nodeSet.get_size(), 0 );
+	ENSURE( "bad emptiness status", nodeSet.is_empty() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 16, "get_element_by_path == many" )
+	HXml xml;
+	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
+	xml.apply_style( "./data/style.xml" );
+	xml.parse();
+	HXml::HConstNodeSet nodeSet = xml.get_elements_by_path( "/my_root/my_set/uber_item/line_no" );
+	ENSURE_EQUALS( "bad number of elements", nodeSet.get_size(), 3 );
+	ENSURE_NOT( "bad emptiness status", nodeSet.is_empty() );
+	char const values[][3] = { "16", "17", "19" };
+	int i( 0 );
+	for ( HXml::HConstNodeSet::HConstIterator it( nodeSet.begin() ), end( nodeSet.end() ); it != end; ++ it, ++ i ) {
+		dump( std::clog, *it );
+		ENSURE_EQUALS( "bad node name", (*it).get_name(), "line_no" );
+		ENSURE_EQUALS( "bad node value", (*(*it).begin()).get_value(), values[i] );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 17, "get_element_by_name == 0" )
+	HXml xml;
+	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
+	xml.apply_style( "./data/style.xml" );
+	xml.parse();
+	HXml::HConstNodeSet nodeSet = xml.get_elements_by_name( "my_none" );
+	ENSURE_EQUALS( "bad number of elements", nodeSet.get_size(), 0 );
+	ENSURE( "bad emptiness status", nodeSet.is_empty() );
+TUT_TEARDOWN()
+
 }
 
