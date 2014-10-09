@@ -133,7 +133,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 8, "set_format" )
 	HTime bday( 1978, 5, 24, 23, 30, 0 );
 	HString bdayBadFromat( bday.string() );
-	bday.set_format( _iso8601TimeFormat_ );
+	bday.set_format( _iso8601DateTimeFormat_ );
 	HString bdayString( bday.string() );
 	ENSURE( "test setup fail", bdayString != bdayBadFromat );
 	ENSURE_EQUALS( "set_format fail", bdayString, "1978-05-24 23:30:00" );
