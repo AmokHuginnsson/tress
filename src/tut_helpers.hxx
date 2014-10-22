@@ -513,7 +513,6 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& stre
 	return ( stream );
 }
 
-#if CXX_STANDARD >= 2011
 template<typename owner_t>
 class HCopyCounter {
 	static int _copyCount;
@@ -550,7 +549,6 @@ template<typename owner_t>
 int HCopyCounter<owner_t>::_copyCount = 0;
 template<typename owner_t>
 int HCopyCounter<owner_t>::_instanceCount = 0;
-#endif /* #if CXX_STANDARD >= 2011 */
 
 }
 
