@@ -29,6 +29,12 @@ Copyright:
 #include <iterator>
 #include <algorithm>
 #include <numeric>
+#include <math.h>
+
+#include <yaal/config.hxx>
+#ifdef __HOST_OS_TYPE_SOLARIS__
+#define BOOST_MATH_DISABLE_STD_FPCLASSIFY 1
+#endif /* #ifdef __HOST_OS_TYPE_SOLARIS__ */
 #define BOOST_ALL_DYN_LINK 1
 #include <boost/config/user.hpp>
 #include <boost/bind.hpp>
