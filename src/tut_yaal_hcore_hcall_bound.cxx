@@ -43,7 +43,7 @@ struct tut_yaal_hcore_hcall_bound : public simple_mock<tut_yaal_hcore_hcall_boun
 	virtual ~tut_yaal_hcore_hcall_bound( void ) {}
 /* cppcheck-suppress functionConst */
 	void foo( void ) {}
-	void foo_const( void ) {}
+	void foo_const( void ) const {}
 };
 
 TUT_TEST_GROUP( tut_yaal_hcore_hcall_bound, "yaal::hcore::HCall,bound" );

@@ -97,7 +97,7 @@ TUT_UNIT_TEST( 5, "is_pointer" )
 
 	ENSURE( trait::is_pointer<trait::strip_pointer<int*>::type>::value == false );
 	ENSURE( trait::is_pointer<trait::strip_pointer<int const*>::type>::value == false );
-	ENSURE( trait::is_pointer<trait::strip_pointer<int* const*>::type>::value == false );
+	ENSURE( trait::is_pointer<trait::strip_pointer<int* const*>::type>::value == true );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "is_const" )
