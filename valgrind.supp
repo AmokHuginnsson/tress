@@ -3336,3 +3336,26 @@
    fun:_dlerror_run
    fun:dlopen@@GLIBC_2.2.5
 }
+{
+   Use of uninitialized value in OpenSSL
+   Memcheck:Value8
+	 ...
+   obj:/lib/x86_64-linux-gnu/libcrypto.so.1.0.0
+}
+{
+   Conditional jump based on uninitialized value in OpenSSL
+   Memcheck:Cond
+	 ...
+   obj:/lib/x86_64-linux-gnu/libssl.so.1.0.0
+}
+{
+   Use of uninitialized value in OpenSSL 2
+   Memcheck:Param
+   write(buf)
+   obj:/lib/x86_64-linux-gnu/libc-2.19.so
+	 ...
+   fun:BIO_write
+   obj:/lib/x86_64-linux-gnu/libcrypto.so.1.0.0
+   obj:/lib/x86_64-linux-gnu/libssl.so.1.0.0
+   obj:/lib/x86_64-linux-gnu/libssl.so.1.0.0
+}
