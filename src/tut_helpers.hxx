@@ -320,6 +320,8 @@ template<typename owner_t, int const forced_size = 1>
 class HInstanceTracker {
 protected:
 	typedef HInstanceTracker<owner_t, forced_size> this_type;
+	static int _copyCount;
+	static int _moveCount;
 	static int _instances;
 	static int _autoIncrement;
 	static int _integrityFailures;
@@ -342,24 +344,42 @@ public:
 	HInstanceTracker( HInstanceTracker const& itrck )
 		: _id( itrck._id ),
 		_origin( itrck._origin + ":" + yaal::hcore::HString( itrck._id ).c_str() ), _self( this ), _forcedSize() {
-		if ( _stopCopying )
+		if ( _stopCopying ) {
 			throw std::runtime_error( "Copy constructor invoked!" );
+		}
 		++ _instances;
 		++ _autoIncrement;
+		++ _copyCount;
+	}
+	HInstanceTracker( HInstanceTracker&& itrck )
+		: _id( itrck._id ), _origin( itrck._origin + ":" + yaal::hcore::HString( itrck._id ).c_str() ), _self( this ), _forcedSize() {
+		++ _instances;
+		++ _autoIncrement;
+		++ _moveCount;
 	}
 	HInstanceTracker& operator = ( HInstanceTracker const& itrck ) {
-		if ( _stopCopying )
+		if ( _stopCopying ) {
 			throw std::runtime_error( "Assignment operator invoked!" );
+		}
 		if ( &itrck != this ) {
 			HInstanceTracker<owner_t, forced_size> tmp( itrck );
 			swap( tmp );
+			++ _copyCount;
+		}
+		return ( *this );
+	}
+	HInstanceTracker& operator = ( HInstanceTracker&& itrck ) {
+		if ( &itrck != this ) {
+			swap( itrck );
+			++ _moveCount;
 		}
 		return ( *this );
 	}
 	~HInstanceTracker( void ) {
 		-- _instances;
-		if ( this != _self )
+		if ( this != _self ) {
 			++ _integrityFailures;
+		}
 	}
 	bool operator == ( HInstanceTracker const& val ) const {
 		return ( val._id == _id );
@@ -388,6 +408,12 @@ public:
 	static int get_instance_count( void ) {
 		return ( _instances );
 	}
+	static int get_copy_count( void ) {
+		return ( _copyCount );
+	}
+	static int get_move_count( void ) {
+		return ( _moveCount );
+	}
 	static int get_integrity_failures( void ) {
 		return ( _integrityFailures );
 	}
@@ -396,6 +422,12 @@ public:
 	}
 	static void set_start_id( int startId_ ) {
 		_autoIncrement = startId_;
+	}
+	static void reset( void ) {
+		set_instance_count( 0 );
+		set_start_id( 0 );
+		_copyCount = 0;
+		_moveCount = 0;
 	}
 	int long get_id( void ) const {
 		return ( _id );
@@ -455,6 +487,10 @@ struct simple_mock {
 };
 
 template<typename owner_t, int const forced_size>
+int HInstanceTracker<owner_t, forced_size>::_copyCount = 0;
+template<typename owner_t, int const forced_size>
+int HInstanceTracker<owner_t, forced_size>::_moveCount = 0;
+template<typename owner_t, int const forced_size>
 int HInstanceTracker<owner_t, forced_size>::_instances = 0;
 template<typename owner_t, int const forced_size>
 int HInstanceTracker<owner_t, forced_size>::_autoIncrement = 0;
@@ -512,43 +548,6 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& stre
 	stream << itrck.to_string();
 	return ( stream );
 }
-
-template<typename owner_t>
-class HCopyCounter {
-	static int _copyCount;
-	static int _instanceCount;
-	int _id;
-public:
-	HCopyCounter( void )
-		: _id( _instanceCount ++ )
-		{}
-	HCopyCounter( HCopyCounter const& cc_ )
-		: _id( cc_._id ) {
-		++ _copyCount;
-	}
-	HCopyCounter( HCopyCounter&& cc_ )
-		: _id( cc_._id ) {
-		cc_._id = -1;
-	}
-	HCopyCounter& operator = ( HCopyCounter const& cc_ ) {
-		if ( &cc_ != this ) {
-			_id = cc_._id;
-			++ _copyCount;
-		}
-		return ( *this );
-	}
-	HCopyCounter& operator = ( HCopyCounter&& cc_ ) {
-		if ( &cc_ != this ) {
-			_id = cc_._id;
-			++ _copyCount;
-		}
-		return ( *this );
-	}
-};
-template<typename owner_t>
-int HCopyCounter<owner_t>::_copyCount = 0;
-template<typename owner_t>
-int HCopyCounter<owner_t>::_instanceCount = 0;
 
 }
 
