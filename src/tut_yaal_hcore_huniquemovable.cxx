@@ -64,11 +64,11 @@ TUT_UNIT_TEST( 2, "constructor with parameters" ) {
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "copy constructor" ) {
+TUT_UNIT_TEST( 3, "move constructor" ) {
 		um_t um( 7 );
 		ENSURE_EQUALS( "bad constructor called", um->id(), 7 );
 		ENSURE_EQUALS( "inconsistent instance count", item_t::get_instance_count(), 1 );
-		um_t copy( um );
+		um_t copy( yaal::move( um ) );
 		ENSURE_EQUALS( "bad constructor called", copy->id(), 7 );
 		ENSURE_EQUALS( "inconsistent instance count", item_t::get_instance_count(), 1 );
 		ENSURE_THROW( "accessing invalidated HUniqueMovable<> succeeded", um->id(), HFailedAssertion );
@@ -76,14 +76,14 @@ TUT_UNIT_TEST( 3, "copy constructor" ) {
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "assignment operator" ) {
+TUT_UNIT_TEST( 4, "move assignment operator" ) {
 		um_t um( 7 );
 		ENSURE_EQUALS( "bad constructor called", um->id(), 7 );
 		ENSURE_EQUALS( "inconsistent instance count", item_t::get_instance_count(), 1 );
 		um_t copy( 13 );
 		ENSURE_EQUALS( "bad constructor called", copy->id(), 13 );
 		ENSURE_EQUALS( "inconsistent instance count", item_t::get_instance_count(), 2 );
-		copy = um;
+		copy = yaal::move( um );
 		ENSURE_EQUALS( "inconsistent instance count", item_t::get_instance_count(), 1 );
 		ENSURE_EQUALS( "bad constructor called", copy->id(), 7 );
 		ENSURE_THROW( "accessing invalidated HUniqueMovable<> succeeded", um->id(), HFailedAssertion );
