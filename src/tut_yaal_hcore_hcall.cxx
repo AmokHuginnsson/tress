@@ -389,6 +389,34 @@ TUT_UNIT_TEST( 10, "const, volatile qualifiers" )
 TUT_TEARDOWN()
 
 namespace {
+void foo( tut_yaal_hcore_hcall::item_t const& ) {
+	return;
+}
+}
+
+TUT_UNIT_TEST( 11, "pass argument by value" )
+	item_t::reset();
+	item_t item;
+	typedef call_calculator<void (*)( item_t const& ), item_t>::type::type func_by_val_t;
+	ENSURE_EQUALS( "environment dirty", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "environment dirty", item_t::get_move_count(), 0 );
+	func_by_val_t f( call( &foo, item ) );
+	ENSURE_EQUALS( "argument not copied", item_t::get_copy_count(), 1 );
+	ENSURE_EQUALS( "argument was moved", item_t::get_move_count(), 3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 12, "move argument by rvalue" )
+	item_t::reset();
+	item_t item;
+	typedef call_calculator<void (*)( item_t const& ), item_t>::type::type func_by_val_t;
+	ENSURE_EQUALS( "environment dirty", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "environment dirty", item_t::get_move_count(), 0 );
+	func_by_val_t f( call( &foo, yaal::move( item ) ) );
+	ENSURE_EQUALS( "argument copied", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "argument was moved", item_t::get_move_count(), 4 );
+TUT_TEARDOWN()
+
+namespace {
 
 class MemFunTest {
 	int _base;
