@@ -181,5 +181,20 @@ TUT_UNIT_TEST( 9, "nested bound call ( 10 args ) -> ( 9 args ) -> ( 8 args ) -> 
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
+namespace {
+
+int sum( int a_, int b_ ) {
+	return ( a_ + b_ );
+}
+
+}
+
+TUT_UNIT_TEST( 10, "bound call as free arg in nested bound call" )
+	HBoundCall<int ( int )> partialSum( call( &sum, 7, _1 ) );
+	ENSURE_EQUALS( "bound call failed", partialSum( 13 ), 20 );
+	HBoundCall<int ( HBoundCall<int ( int )>& )> totalSum( call( static_cast<int ( HBoundCall<int ( int )>::* )( int&& )>( &HBoundCall<int ( int )>::operator() ), _1, 13 ) );
+	ENSURE_EQUALS( "bound call failed", totalSum( partialSum ), 20 );
+TUT_TEARDOWN()
+
 }
 
