@@ -521,6 +521,16 @@ public:
 	}
 };
 
+template<typename T, typename RT = T>
+struct setter {
+	static void set( T& lval_, RT rval_ ) {
+		lval_ = rval_;
+	}
+	static void set_alt( T& lval_, RT rval_ ) {
+		lval_ = -rval_;
+	}
+};
+
 template<typename owner_t, int const forced_size>
 bool operator == ( int long left, HInstanceTracker<owner_t, forced_size> const& right ) {
 	return ( left == right.get_id() );

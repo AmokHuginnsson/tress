@@ -86,16 +86,6 @@ TUT_UNIT_TEST( 2, "Named rule name ends with underscore" )
 	ENSURE_THROW( "explicit rule name with underscore at the end created", HRule r( "A_" ), HNamedRuleException );
 TUT_TEARDOWN()
 
-template<typename T, typename RT = T>
-struct setter {
-	static void set( T& lval_, RT rval_ ) {
-		lval_ = rval_;
-	}
-	static void set_alt( T& lval_, RT rval_ ) {
-		lval_ = -rval_;
-	}
-};
-
 TUT_UNIT_TEST( 3, "HReal" )
 	/* double */ {
 		double val( 0 );

@@ -42,16 +42,20 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_hsignal );
 TUT_TEST_GROUP( tut_yaal_tools_hsignal, "yaal::tools::HSignal" );
 
-namespace {
-void foo( void ) {
-	cout << __PRETTY_FUNCTION__ << endl;
-}
-}
-
-TUT_UNIT_TEST( 1, "single slot" )
+TUT_UNIT_TEST( 1, "single slot (no arg)" )
+	int var( 0 );
 	HSignal<void ()> sig;
-	sig.connect( call( &foo ) );
+	sig.connect( call( &setter<int>::set, ref( var ), 7 ) );
 	sig();
+	ENSURE_EQUALS( "signal not dispatched", var, 7 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 2, "single slot (with arg)" )
+	int var( 0 );
+	HSignal<void ( int )> sig;
+	sig.connect( call( &setter<int>::set, ref( var ), _1 ) );
+	sig( 7 );
+	ENSURE_EQUALS( "signal not dispatched", var, 7 );
 TUT_TEARDOWN()
 
 }
