@@ -38,14 +38,13 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-
 TUT_SIMPLE_MOCK( tut_yaal_tools_hsignal );
 TUT_TEST_GROUP( tut_yaal_tools_hsignal, "yaal::tools::HSignal" );
 
 TUT_UNIT_TEST( 1, "single slot (no arg)" )
 	int var( 0 );
 	HSignal<void ()> sig;
-	sig.connect( call( &setter<int>::set, ref( var ), 7 ) );
+	sig.connect( call( &defer<int>::set, ref( var ), 7 ) );
 	sig();
 	ENSURE_EQUALS( "signal not dispatched", var, 7 );
 TUT_TEARDOWN()
@@ -53,7 +52,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 2, "single slot (with arg)" )
 	int var( 0 );
 	HSignal<void ( int )> sig;
-	sig.connect( call( &setter<int>::set, ref( var ), _1 ) );
+	sig.connect( call( &defer<int>::set, ref( var ), _1 ) );
 	sig( 7 );
 	ENSURE_EQUALS( "signal not dispatched", var, 7 );
 TUT_TEARDOWN()
@@ -63,12 +62,81 @@ TUT_UNIT_TEST( 3, "multiple slots" )
 	int var2( 0 );
 	int var3( 0 );
 	HSignal<void ()> sig;
-	sig.connect( call( &setter<int>::set, ref( var1 ), 7 ) );
-	sig.connect( call( &setter<int>::set, ref( var2 ), 13 ) );
-	sig.connect( call( &setter<int>::set, ref( var3 ), 42 ) );
+	sig.connect( call( &defer<int>::set, ref( var1 ), 7 ) );
+	sig.connect( call( &defer<int>::set, ref( var2 ), 13 ) );
+	sig.connect( call( &defer<int>::set, ref( var3 ), 42 ) );
 	sig();
 	ENSURE_EQUALS( "signal not dispatched", var1, 7 );
 	ENSURE_EQUALS( "signal not dispatched", var2, 13 );
+	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "disable slot" )
+	int var1( 0 );
+	int var2( 0 );
+	int var3( 0 );
+	typedef HSignal<void ()> sig_t;
+	sig_t sig;
+	sig.connect( call( &defer<int>::set, ref( var1 ), 7 ) );
+	sig_t::HConnection c( sig.connect( call( &defer<int>::set, ref( var2 ), 13 ) ) );
+	sig.connect( call( &defer<int>::set, ref( var3 ), 42 ) );
+	sig();
+	ENSURE_EQUALS( "signal not dispatched", var1, 7 );
+	ENSURE_EQUALS( "signal not dispatched", var2, 13 );
+	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
+	c.disable();
+	var1 = var2 = var3 = 0;
+	sig();
+	ENSURE_EQUALS( "signal not dispatched", var1, 7 );
+	ENSURE_EQUALS( "slot not disabled", var2, 0 );
+	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 5, "enable slot" )
+	int var1( 0 );
+	int var2( 0 );
+	int var3( 0 );
+	typedef HSignal<void ()> sig_t;
+	sig_t sig;
+	sig.connect( call( &defer<int>::set, ref( var1 ), 7 ) );
+	sig_t::HConnection c( sig.connect( call( &defer<int>::set, ref( var2 ), 13 ) ) );
+	sig.connect( call( &defer<int>::set, ref( var3 ), 42 ) );
+	c.disable();
+	sig();
+	ENSURE_EQUALS( "signal not dispatched", var1, 7 );
+	ENSURE_EQUALS( "slot not disabled", var2, 0 );
+	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
+	c.enable();
+	sig();
+	ENSURE_EQUALS( "signal not dispatched", var1, 7 );
+	ENSURE_EQUALS( "slot not enabled", var2, 13 );
+	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 6, "disconnect slot" )
+	int var1( 0 );
+	int var2( 0 );
+	int var3( 0 );
+	typedef HSignal<void ()> sig_t;
+	sig_t sig;
+	sig.connect( call( &defer<int>::set, ref( var1 ), 7 ) );
+	sig_t::HConnection c( sig.connect( call( &defer<int>::set, ref( var2 ), 13 ) ) );
+	sig.connect( call( &defer<int>::set, ref( var3 ), 42 ) );
+	sig();
+	ENSURE_EQUALS( "signal not dispatched", var1, 7 );
+	ENSURE_EQUALS( "signal not dispatched", var2, 13 );
+	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
+	c.disconnect();
+	var1 = var2 = var3 = 0;
+	sig();
+	ENSURE_EQUALS( "signal not dispatched", var1, 7 );
+	ENSURE_EQUALS( "slot not disconnected", var2, 0 );
+	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
+	var1 = var2 = var3 = 0;
+	c.enable();
+	sig();
+	ENSURE_EQUALS( "signal not dispatched", var1, 7 );
+	ENSURE_EQUALS( "slot not disconnected", var2, 0 );
 	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
 TUT_TEARDOWN()
 

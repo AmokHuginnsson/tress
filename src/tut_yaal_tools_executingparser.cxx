@@ -89,28 +89,28 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 3, "HReal" )
 	/* double */ {
 		double val( 0 );
-		HExecutingParser ep( real[HBoundCall<void ( double )>( call( &setter<double>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( real[HBoundCall<void ( double )>( call( &defer<double>::set, ref( val ), _1 ) )] );
 		ENSURE( "HReal failed to parse correct input (double).", ep( "3.14" ) );
 		ep();
 		ENSURE_DISTANCE( "double value not set by ExecutingParser.", static_cast<double long>( val ), 3.14l, epsilon );
 	}
 	/* double long */ {
 		double long val( 0 );
-		HExecutingParser ep( real[HBoundCall<void ( double long )>( call( &setter<double long>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( real[HBoundCall<void ( double long )>( call( &defer<double long>::set, ref( val ), _1 ) )] );
 		ENSURE( "HReal failed to parse correct input (double long).", ep( "3.14" ) );
 		ep();
 		ENSURE_DISTANCE( "double long value not set by ExecutingParser.", val, 3.14l, epsilon );
 	}
 	/* HNumber */ {
 		HNumber val( 0 );
-		HExecutingParser ep( real[HBoundCall<void ( HNumber const& )>( call( &setter<HNumber, HNumber const&>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( real[HBoundCall<void ( HNumber const& )>( call( &defer<HNumber, HNumber const&>::set, ref( val ), _1 ) )] );
 		ENSURE( "HReal failed to parse correct input (HNumber).", ep( "3.141592653589793" ) );
 		ep();
 		ENSURE_EQUALS( "HNumber value not set by ExecutingParser.", val, "3.141592653589793" );
 	}
 	/* HString */ {
 		hcore::HString val( 0 );
-		HExecutingParser ep( real[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( real[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
 		ENSURE( "HReal failed to parse correct input (HString).", ep( "3.141592653589793" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "3.141592653589793" );
@@ -124,28 +124,28 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 4, "HInteger" )
 	/* int */ {
 		int val( 0 );
-		HExecutingParser ep( integer[HBoundCall<void ( int )>( call( &setter<int>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
 		ENSURE( "HInteger failed to parse correct input (int).", ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "int value not set by ExecutingParser.", val, 7 );
 	}
 	/* int long */ {
 		int long val( 0 );
-		HExecutingParser ep( integer[HBoundCall<void ( int long )>( call( &setter<int long>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( integer[HBoundCall<void ( int long )>( call( &defer<int long>::set, ref( val ), _1 ) )] );
 		ENSURE( "HInteger failed to parse correct input (int long).", ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "int long value not set by ExecutingParser.", val, 7l );
 	}
 	/* HNumber */ {
 		HNumber val( 0 );
-		HExecutingParser ep( integer[HBoundCall<void ( HNumber const& )>( call( &setter<HNumber, HNumber const&>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( integer[HBoundCall<void ( HNumber const& )>( call( &defer<HNumber, HNumber const&>::set, ref( val ), _1 ) )] );
 		ENSURE( "HInteger failed to parse correct input (HNumber).", ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "HNumber value not set by ExecutingParser.", val, 7 );
 	}
 	/* HString */ {
 		hcore::HString val( 0 );
-		HExecutingParser ep( integer[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( integer[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
 		ENSURE( "HInteger failed to parse correct input (HString).", ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "7" );
@@ -254,29 +254,29 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 7, "HCharacter" )
 	/* char (any) */ {
 		char val( 0 );
-		HExecutingParser ep( character[HBoundCall<void ( char )>( call( &setter<char>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( character[HBoundCall<void ( char )>( call( &defer<char>::set, ref( val ), _1 ) )] );
 		ENSURE( "HCharacter failed to parse correct input.", ep( "a" ) );
 		ep();
 		ENSURE_EQUALS( "char value not set by ExecutingParser.", val, 'a' );
 	}
 	/* char (specific ok) */ {
 		char val( 0 );
-		HExecutingParser ep( character( 'a' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( val ), _1 ) )] );
 		ENSURE( "HCharacter failed to parse correct input.", ep( "a" ) );
 	}
 	/* char (specific, any of ok) */ {
 		char val( 0 );
-		HExecutingParser ep( character( "ab" )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( character( "ab" )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( val ), _1 ) )] );
 		ENSURE( "HCharacter failed to parse correct input.", ep( "b" ) );
 	}
 	/* char (specific fail) */ {
 		char val( 0 );
-		HExecutingParser ep( character( 'X' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( character( 'X' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "HCharacter parsed invalid input.", ep( "a" ) );
 	}
 	/* char (specific any of fail) */ {
 		char val( 0 );
-		HExecutingParser ep( character( "ab" )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( character( "ab" )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "HCharacter parsed invalid input.", ep( "c" ) );
 	}
 TUT_TEARDOWN()
@@ -284,14 +284,14 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 8, "HString" )
 	/* ok */ {
 		hcore::HString val;
-		HExecutingParser ep( string( "ala" )[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( string( "ala" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
 		ENSURE( "HString failed to parse correct input.", ep( "ala" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
 	}
 	/* fail */ {
 		hcore::HString val;
-		HExecutingParser ep( string( "XXX" )[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( string( "XXX" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "HString parsed invalid input.", ep( "ala" ) );
 	}
 TUT_TEARDOWN()
@@ -299,19 +299,19 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 9, "HRegex" )
 	/* ok */ {
 		hcore::HString val;
-		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
 		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "12.34" );
 	}
 	/* fail not fully consumed input */ {
 		hcore::HString val;
-		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "HExecutingParser accepted parse on partial input.", ep( "12.345" ) );
 	}
 	/* fail */ {
 		hcore::HString val;
-		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &setter<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "HRegex parsed invalid input.", ep( "12.3a" ) );
 	}
 TUT_TEARDOWN()
@@ -319,11 +319,11 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 10, "HFollows" )
 	/* parsed */ {
 		char fcData( 0 );
-		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( fcData ), _1 ) )] );
+		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( fcData ), _1 ) )] );
 		char scData( 0 );
-		HRule sc( character( 'b' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( scData ), _1 ) )] );
+		HRule sc( character( 'b' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( scData ), _1 ) )] );
 		bool followsCalled( false );
-		HExecutingParser ep( ( fc >> sc )[HBoundCall<void ( void )>( call( &setter<bool>::set, ref( followsCalled ), true ) ) ] );
+		HExecutingParser ep( ( fc >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( followsCalled ), true ) ) ] );
 		ENSURE( "parse on correct failed", ep( "ab" ) );
 		ep();
 		ENSURE_EQUALS( "predecessor in follows not called", fcData, 'a' );
@@ -332,11 +332,11 @@ TUT_UNIT_TEST( 10, "HFollows" )
 	}
 	/* failed on successor */ {
 		char fcData( 0 );
-		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( fcData ), _1 ) )] );
+		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( fcData ), _1 ) )] );
 		char scData( 0 );
-		HRule sc( character( 'b' )[HBoundCall<void ( char )>( call( &setter<char>::set, ref( scData ), _1 ) )] );
+		HRule sc( character( 'b' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( scData ), _1 ) )] );
 		bool followsCalled( false );
-		HExecutingParser ep( ( fc >> sc )[HBoundCall<void ( void )>( call( &setter<bool>::set, ref( followsCalled ), true ) ) ] );
+		HExecutingParser ep( ( fc >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( followsCalled ), true ) ) ] );
 		ENSURE_NOT( "parse on invalid succeeded", ep( "aa" ) );
 	}
 TUT_TEARDOWN()
@@ -398,13 +398,13 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 13, "HOptional" )
 	/* not-parsed (empty) configuration test */ {
 		int val( 0 );
-		HRule i( integer[HBoundCall<void ( int )>( call( &setter<int>::set, ref( val ), _1 ) )] );
+		HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
 		HExecutingParser ep( string( "nums{" ) >> i >> "}" );
 		ENSURE_NOT( "parse on invalid (empty) succeeded", ep( "nums{}" ) );
 	}
 	/* parsed (empty) */ {
 		int val( 0 );
-		HRule i( integer[HBoundCall<void ( int )>( call( &setter<int>::set, ref( val ), _1 ) )] );
+		HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
 		HExecutingParser ep( string( "nums{" ) >> (-i) >> "}" );
 		ENSURE( "parse on valid (but empty) failed", ep( "nums{}" ) );
 		ep();
@@ -412,7 +412,7 @@ TUT_UNIT_TEST( 13, "HOptional" )
 	}
 	/* parsed (non-empty) */ {
 		int val( 0 );
-		HRule i( integer[HBoundCall<void ( int )>( call( &setter<int>::set, ref( val ), _1 ) )] );
+		HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
 		HExecutingParser ep( string( "nums{" ) >> (-i) >> "}" );
 		ENSURE( "parse on valid failed", ep( "nums{7}" ) );
 		ep();
@@ -423,8 +423,8 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 14, "canceling execution steps" )
 	int val( 0 );
 	int val_alt( 0 );
-	HRule i( integer[HBoundCall<void ( int )>( call( &setter<int>::set, ref( val ), _1 ) )] );
-	HRule ia( integer[HBoundCall<void ( int )>( call( &setter<int>::set_alt, ref( val_alt ), _1 ) )] );
+	HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
+	HRule ia( integer[HBoundCall<void ( int )>( call( &defer<int>::set_alt, ref( val_alt ), _1 ) )] );
 	HExecutingParser ep( string( "nums{" ) >> ( -( i >> ":pos" ) ) >> ( -( ia >> ":neg" ) ) >> "}" );
 	ENSURE( "parse on valid failed", ep( "nums{7:neg}" ) );
 	ep();
@@ -435,8 +435,8 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 15, "HAlternative" )
 	int val( 0 );
 	int val_alt( 0 );
-	HRule i( integer[HBoundCall<void ( int )>( call( &setter<int>::set, ref( val ), _1 ) )] );
-	HRule ia( integer[HBoundCall<void ( int )>( call( &setter<int>::set_alt, ref( val_alt ), _1 ) )] );
+	HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
+	HRule ia( integer[HBoundCall<void ( int )>( call( &defer<int>::set_alt, ref( val_alt ), _1 ) )] );
 	HExecutingParser ep( string( "nums{" ) >> ( ( i >> ":pos" ) | ( ia >> ":neg" ) ) >> "}" );
 	ENSURE( "parse on valid failed", ep( "nums{7:neg}" ) );
 	ep();
