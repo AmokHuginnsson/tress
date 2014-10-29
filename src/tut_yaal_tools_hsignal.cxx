@@ -58,5 +58,19 @@ TUT_UNIT_TEST( 2, "single slot (with arg)" )
 	ENSURE_EQUALS( "signal not dispatched", var, 7 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 3, "multiple slots" )
+	int var1( 0 );
+	int var2( 0 );
+	int var3( 0 );
+	HSignal<void ()> sig;
+	sig.connect( call( &setter<int>::set, ref( var1 ), 7 ) );
+	sig.connect( call( &setter<int>::set, ref( var2 ), 13 ) );
+	sig.connect( call( &setter<int>::set, ref( var3 ), 42 ) );
+	sig();
+	ENSURE_EQUALS( "signal not dispatched", var1, 7 );
+	ENSURE_EQUALS( "signal not dispatched", var2, 13 );
+	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
+TUT_TEARDOWN()
+
 }
 
