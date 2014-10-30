@@ -83,7 +83,7 @@ TUT_UNIT_TEST( 4, "Assign operator." ) {
 		ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 2 );
 		cout << sp1->to_string() << endl;
 		cout << sp2->to_string() << endl;
-		sp1 = sp2;
+		sp1 = yaal::move( sp2 );
 		ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 1 );
 		ENSURE_EQUALS( "failed to pass pointer", sp2.get(), static_cast<counter_t*>( NULL ) );
 		ENSURE_EQUALS( "failed to assign pointer", sp1.get(), p );
@@ -95,7 +95,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 5, "Checks constructor with another ptr_t with no module." ) {
 		ptr_t sp1;
 		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
-		ptr_t sp2( sp1 );
+		ptr_t sp2( yaal::move( sp1 ) );
 		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
 		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
 		ENSURE( sp2.get() == 0 );
@@ -105,9 +105,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 6, "Checks constructor with another ptr_t with module." ) {
 		counter_t* p = new counter_t();
-		ptr_t sp1(p);
+		ptr_t sp1( p );
 		ENSURE_EQUALS( "get", sp1.get(), p );
-		ptr_t sp2(sp1);
+		ptr_t sp2( yaal::move( sp1 ) );
 		ENSURE_EQUALS( "get", sp1.get(), static_cast<counter_t*>( NULL ) );
 		ENSURE_EQUALS( "get", sp2.get(), p );
 		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
@@ -134,7 +134,7 @@ TUT_UNIT_TEST( 8, "Checks assignment with ptr_t with non-null module." ) {
 		ptr_t sp1( p = new counter_t() );
 		ENSURE_EQUALS( "get", sp1.get(), p );
 		ptr_t sp2;
-		sp2 = sp1;
+		sp2 = yaal::move( sp1 );
 		ENSURE_EQUALS( "get", sp1.get(), static_cast<counter_t*>( NULL ) );
 		ENSURE_EQUALS( "get", sp2.get(), p );
 		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
@@ -144,7 +144,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 9, "Checks assignment with itself." ) {
 		ptr_t sp1( new counter_t() );
-		sp1 = sp1;
+		sp1 = yaal::move( sp1 );
 		ENSURE( "get", sp1.get() != 0 );
 		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
 		ENSURE_EQUALS( "not destructed", counter_t::get_instance_count(), 1 );
@@ -165,7 +165,7 @@ TUT_UNIT_TEST( 10, "Checks passing ownership via assignment." ) {
 		ENSURE_EQUALS( "create 2", sp2->get_id(), p2->get_id() );
 		ENSURE_EQUALS( "leak !!!=2", counter_t::get_instance_count(), 2 );
 
-		sp1 = sp2;
+		sp1 = yaal::move( sp2 );
 		ENSURE_EQUALS( "create 2", sp1->get_id(), p2->get_id() );
 		ENSURE_EQUALS( "leak !!!=1", counter_t::get_instance_count(), 1 );
 	}
@@ -181,8 +181,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 12, "assign smart pointers pointing to the same memory." ) {
 		ptr_t sp1( new counter_t() );
-		ptr_t sp2 = sp1;
-		sp2 = sp1;
+		ptr_t sp2 = yaal::move( sp1 );
+		sp2 = yaal::move( sp1 );
 	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
