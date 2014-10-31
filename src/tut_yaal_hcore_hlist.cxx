@@ -74,7 +74,6 @@ struct tut_yaal_hcore_hlist : public simple_mock<tut_yaal_hcore_hlist> {
 	void erase_test_0( list_t& l );
 	void erase_test_1( list_t& l );
 	void erase_test_2( list_t& l );
-	void erase_test_3( list_t& l );
 	list_t from_string( char const* );
 	void check_sorted( list_t const&, list_widget_helper::OSortHelper::sort_order_t );
 private:
@@ -301,7 +300,7 @@ TUT_UNIT_TEST( 7, "assignation operator (full to big)" )
 	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, ".hook(), cyclic_iterator" )
+TUT_UNIT_TEST( 8, "cyclic_iterator on list" )
 	list_t l;
 	check_consistency( l );
 	l.push_back( 'a' );
@@ -311,7 +310,7 @@ TUT_UNIT_TEST( 8, ".hook(), cyclic_iterator" )
 	l.push_back( 'c' );
 	check_consistency( l );
 	ENSURE_EQUALS( "push_back failed", _stringifier.to_string<char>( l ), "abc" );
-	list_t::cyclic_iterator it = l.hook();
+	HCyclicIterator<list_t> it( cyclic_iterator( l ) );
 	check_consistency( l );
 	char const* const vec = "abcabc";
 	for ( size_t i = 0; i < strlen( vec ); ++ i ) {
@@ -320,7 +319,7 @@ TUT_UNIT_TEST( 8, ".hook(), cyclic_iterator" )
 		++ it;
 	}
 	char const* const vec2 = "acbacb";
-	it = l.hook();
+	it = cyclic_iterator( l );
 	check_consistency( l );
 	for ( size_t i = 0; i < strlen( vec ); ++ i ) {
 		cout << i;
@@ -328,7 +327,7 @@ TUT_UNIT_TEST( 8, ".hook(), cyclic_iterator" )
 		-- it;
 	}
 	cout << endl;
-	it = l.hook();
+	it = cyclic_iterator( l );
 	check_consistency( l );
 	ENSURE_EQUALS( "hook is not head", *it, l.head() );
 	check_consistency( l );
@@ -428,7 +427,7 @@ TUT_UNIT_TEST( 12, "insert" )
 	ENSURE_EQUALS( "list malformed", l.size(), 5 );
 	check_consistency( l );
 	ENSURE_EQUALS( "bad iterator", *it, 'b' );
-	it = l.insert( l.hook(), 'x' );
+	it = l.insert( l.end(), 'x' );
 	check_consistency( l );
 	ENSURE_EQUALS( "insert failed", _stringifier.to_string<char>( l ), "a12b3x" );
 	ENSURE_EQUALS( "list malformed", l.size(), 6 );
@@ -582,16 +581,6 @@ void tut_yaal_hcore_hlist::erase_test_2( tut_yaal_hcore_hlist::list_t& l ) {
 	tut_yaal_hcore_hlist::check_consistency( l );
 }
 
-void tut_yaal_hcore_hlist::erase_test_3( tut_yaal_hcore_hlist::list_t& l ) {
-	tut_yaal_hcore_hlist::list_t::cyclic_iterator it = l.erase( -- l.hook() );
-	tut_yaal_hcore_hlist::check_consistency( l );
-	ENSURE_EQUALS( "erase2 failed", tut_yaal_hcore_hlist::_stringifier.to_string<char>( l ), "12345" );
-	ENSURE_EQUALS( "erase2 failed", l.size(), 5 );
-	tut_yaal_hcore_hlist::check_consistency( l );
-	ENSURE( "open list erase for last element leaves bogus iterator", it == l.hook() );
-	tut_yaal_hcore_hlist::check_consistency( l );
-}
-
 TUT_UNIT_TEST( 17, "resize" )
 	list_t l;
 	ENSURE_EQUALS( "constructor of empty failed", l.size(), 0 );
@@ -607,8 +596,7 @@ TUT_UNIT_TEST( 18, "erase" )
 	erase_test_t erase_tests[] = {
 		&tut_yaal_hcore_hlist::erase_test_0,
 		&tut_yaal_hcore_hlist::erase_test_1,
-		&tut_yaal_hcore_hlist::erase_test_2,
-		&tut_yaal_hcore_hlist::erase_test_3
+		&tut_yaal_hcore_hlist::erase_test_2
 	};
 	for ( size_t i = 0; i < sizeof ( erase_tests ) / sizeof ( erase_test_t ); ++ i ) {
 		l.clear();
