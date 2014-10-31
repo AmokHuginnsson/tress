@@ -140,5 +140,26 @@ TUT_UNIT_TEST( 6, "disconnect slot" )
 	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 7, "early slots and late slots" )
+	/* automatic order */ {
+		int var( 1 );
+		typedef HSignal<void ()> sig_t;
+		sig_t sig;
+		sig.connect( call( &defer<int>::add, ref( var ), 1 ) );
+		sig.connect( call( &defer<int>::mul, ref( var ), 2 ) );
+		sig();
+		ENSURE_EQUALS( "signal not dispatched", var, 4 );
+	}
+	/* manual order */ {
+		int var( 1 );
+		typedef HSignal<void ()> sig_t;
+		sig_t sig;
+		sig.connect( call( &defer<int>::add, ref( var ), 1 ) );
+		sig.connect( call( &defer<int>::mul, ref( var ), 2 ), signal::POSITION::AT_FRONT );
+		sig();
+		ENSURE_EQUALS( "signal not dispatched in correct order", var, 3 );
+	}
+TUT_TEARDOWN()
+
 }
 
