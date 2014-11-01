@@ -161,5 +161,26 @@ TUT_UNIT_TEST( 7, "early slots and late slots" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( 8, "prio slots" )
+	int var( 1 );
+	typedef HSignal<void ()> sig_t;
+	sig_t sig;
+	sig.connect( 3, call( &defer<int>::add, ref( var ), 1 ) );
+	sig.connect( 2, call( &defer<int>::mul, ref( var ), 2 ), signal::POSITION::AT_FRONT );
+	sig.connect( 1, call( &defer<int>::add, ref( var ), 1 ) );
+	sig();
+	ENSURE_EQUALS( "signal not dispatched in correct order", var, 5 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 9, "prio slots - late/early" )
+	int var( 1 );
+	typedef HSignal<void ()> sig_t;
+	sig_t sig;
+	sig.connect( 0, call( &defer<int>::add, ref( var ), 1 ) );
+	sig.connect( 0, call( &defer<int>::mul, ref( var ), 2 ), signal::POSITION::AT_FRONT );
+	sig();
+	ENSURE_EQUALS( "signal not dispatched in correct order", var, 3 );
+TUT_TEARDOWN()
+
 }
 
