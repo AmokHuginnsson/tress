@@ -44,7 +44,7 @@ struct tut_yaal_dbwrapper_hrecordset : public simple_mock<tut_yaal_dbwrapper_hre
 	virtual ~tut_yaal_dbwrapper_hrecordset( void ) {}
 	void dump_query_result( HDataBase::ptr_t, char const*, char const* );
 	void test_dml( HDataBase::ptr_t );
-	void test_dml_bind( HDataBase::ptr_t );
+	void test_dml_bind( HDataBase::ptr_t, bool = false );
 	void test_schema( HDataBase::ptr_t );
 	void row_by_row_test( HDataBase::ptr_t, char const*, char const* );
 	void bind_test( HDataBase::ptr_t, char const* );
@@ -485,9 +485,10 @@ TUT_UNIT_TEST( 28, "Bind  Oracle engine" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
 
-void tut_yaal_dbwrapper_hrecordset::test_dml_bind( HDataBase::ptr_t db ) {
+void tut_yaal_dbwrapper_hrecordset::test_dml_bind( HDataBase::ptr_t db, bool reset_ ) {
 	M_PROLOG
-	TUT_DECLARE( HQuery::ptr_t query( db->prepare_query( "SELECT * FROM config WHERE name = ?;" ) ); );
+	char const QUERY_BIND[] = "SELECT * FROM config WHERE name = ?;";
+	TUT_DECLARE( HQuery::ptr_t query( db->prepare_query( QUERY_BIND ) ); );
 	TUT_INVOKE( query->bind( 1, "special" ); );
 	TUT_DECLARE( HRecordSet::ptr_t rs( query->execute() ); );
 	ENSURE( "empty result not entirelly empty ???", ! rs || ( rs->begin() == rs->end() ) );
@@ -500,6 +501,13 @@ void tut_yaal_dbwrapper_hrecordset::test_dml_bind( HDataBase::ptr_t db ) {
 	int long lastInsertId( rs->get_insert_id() );
 	clog << "lastInsertId: " << lastInsertId << endl;
 	ENSURE_EQUALS( "bad last insert id", lastInsertId > 3, true );
+
+	if ( reset_ ) {
+		queryInsert.reset();
+		rs.reset();
+		TUT_INVOKE( query = db->prepare_query( QUERY_BIND ); );
+		TUT_INVOKE( query->bind( 1, "special" ); );
+	}
 
 	TUT_INVOKE( rs = query->execute(); );
 	TUT_DECLARE( HRecordSet::HIterator it( rs->begin() ); );
@@ -514,6 +522,13 @@ void tut_yaal_dbwrapper_hrecordset::test_dml_bind( HDataBase::ptr_t db ) {
 	TUT_INVOKE( queryUpdate->bind( 2, "special" ); );
 	TUT_INVOKE( rs = queryUpdate->execute(); );
 	ENSURE_EQUALS( "bad number of rows affected by UPDATE", rs->get_dml_size(), 1 );
+
+	if ( reset_ ) {
+		queryUpdate.reset();
+		rs.reset();
+		TUT_INVOKE( query = db->prepare_query( QUERY_BIND ); );
+		TUT_INVOKE( query->bind( 1, "special" ); );
+	}
 
 	TUT_INVOKE( rs = query->execute(); );
 	TUT_INVOKE( it = rs->begin(); );
@@ -562,16 +577,16 @@ TUT_UNIT_TEST( 31, "dml bind on MySQL engine" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 
-#if 0
-
 #if defined( HAVE_IBASE_H )
 TUT_UNIT_TEST( 32, "dml bind on Firebird engine" )
 	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	db->connect( "tress", "tress", "tr3ss" );
-	test_dml_bind( db );
+	test_dml_bind( db, true );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) */
+
+#if 0
 
 #if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 TUT_UNIT_TEST( 33, "dml bind on Oracle engine" )
