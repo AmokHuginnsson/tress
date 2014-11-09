@@ -586,8 +586,6 @@ TUT_UNIT_TEST( 32, "dml bind on Firebird engine" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) */
 
-#if 0
-
 #if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 TUT_UNIT_TEST( 33, "dml bind on Oracle engine" )
 	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
@@ -596,8 +594,6 @@ TUT_UNIT_TEST( 33, "dml bind on Oracle engine" )
 	test_dml_bind( db );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
-
-#endif
 
 namespace {
 HString gen( int no ) {
