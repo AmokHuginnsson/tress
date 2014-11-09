@@ -47,7 +47,7 @@ struct tut_yaal_dbwrapper_hrecordset : public simple_mock<tut_yaal_dbwrapper_hre
 	void test_dml_bind( HDataBase::ptr_t );
 	void test_schema( HDataBase::ptr_t );
 	void row_by_row_test( HDataBase::ptr_t, char const*, char const* );
-	void bind_test( HDataBase::ptr_t, char const*, char const* );
+	void bind_test( HDataBase::ptr_t, char const* );
 };
 TUT_TEST_GROUP( tut_yaal_dbwrapper_hrecordset, "yaal::dbwrapper::HRecordSet" );
 
@@ -430,8 +430,8 @@ TUT_UNIT_TEST( 23, "Oracle engine" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
 
-void tut_yaal_dbwrapper_hrecordset::bind_test( HDataBase::ptr_t db, char const* query_, char const* dbType_ ) {
-	HQuery::ptr_t q( db->prepare_query( query_ ) );
+void tut_yaal_dbwrapper_hrecordset::bind_test( HDataBase::ptr_t db, char const* dbType_ ) {
+	HQuery::ptr_t q( db->prepare_query( "SELECT data FROM config WHERE id = ?;" ) );
 	q->bind( 1, "1" );
 	HRecordSet::ptr_t r( q->execute() );
 	ENSURE_EQUALS( "bad field count", r->get_field_count(), 1 );
@@ -449,7 +449,7 @@ void tut_yaal_dbwrapper_hrecordset::bind_test( HDataBase::ptr_t db, char const* 
 TUT_UNIT_TEST( 24, "Bind SQLite engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	db->connect( "./out/tress", "", "" );
-	bind_test( db, "SELECT data FROM config WHERE id = ?;", "sqlite3" );
+	bind_test( db, "sqlite3" );
 TUT_TEARDOWN()
 #endif /* not defined( HAVE_SQLITE3_H ) */
 
@@ -457,7 +457,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 25, "Bind PostgreSQL engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
-	bind_test( db, "SELECT data FROM config WHERE id = $1;", "PostgreSQL" );
+	bind_test( db, "PostgreSQL" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
 
@@ -465,7 +465,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 26, "Bind MySQL engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
-	bind_test( db, "SELECT data FROM config WHERE id = ?;", "MySQL" );
+	bind_test( db, "MySQL" );
 TUT_TEARDOWN()
 #endif /* not defined( HAVE_MYSQL_MYSQL_H ) */
 
@@ -473,7 +473,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 27, "Bind Firebird engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	db->connect( "tress", "tress", "tr3ss" );
-	bind_test( db, "SELECT data FROM config WHERE id = ?;", "Firebird" );
+	bind_test( db, "Firebird" );
 TUT_TEARDOWN()
 #endif /* not defined( HAVE_IBASE_H ) */
 
@@ -481,7 +481,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( 28, "Bind  Oracle engine" )
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
-	bind_test( db, "SELECT data FROM config WHERE id = :1;", "Oracle" );
+	bind_test( db, "Oracle" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
 
@@ -579,6 +579,18 @@ TUT_TEARDOWN()
 #endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
 
 #endif
+
+namespace {
+HString gen( int no ) {
+	return ( to_string( '$' ) + no );
+}
+}
+
+TUT_UNIT_TEST( 34, "transform_sql" )
+	ENSURE_EQUALS( "transform_sql failed",
+			transform_sql( "SELECT * FROM t WHERE a = ? AND b = '?' OR c = ? AND d = \"?\" OR f = ?;", &gen ),
+			"SELECT * FROM t WHERE a = $1 AND b = '?' OR c = $2 AND d = \"?\" OR f = $3;" );
+TUT_TEARDOWN()
 
 }
 
