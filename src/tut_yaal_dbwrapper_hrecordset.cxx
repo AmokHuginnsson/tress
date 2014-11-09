@@ -507,6 +507,8 @@ void tut_yaal_dbwrapper_hrecordset::test_dml_bind( HDataBase::ptr_t db ) {
 	ENSURE_THROW( "recieved record count in prepared query mode", rs->get_size(), HRecordSetException );
 	ENSURE( "INSERT failed?", it[1] && (*it[1] == "special" ) && it[2] && ( *it[2] == "first" ) );
 
+	queryInsert.reset();
+
 	TUT_DECLARE( HQuery::ptr_t queryUpdate( db->prepare_query( "UPDATE config SET data = ? WHERE name = ?;" ) ); );
 	TUT_INVOKE( queryUpdate->bind( 1, "second" ); );
 	TUT_INVOKE( queryUpdate->bind( 2, "special" ); );
@@ -518,6 +520,8 @@ void tut_yaal_dbwrapper_hrecordset::test_dml_bind( HDataBase::ptr_t db ) {
 	ENSURE( "special record lost", !! rs && ( it != rs->end() ) );
 	ENSURE_THROW( "recieved record count in prepared query mode", rs->get_size(), HRecordSetException );
 	ENSURE( "UPDATE failed?", it[1] && ( *(it[1]) == "special" ) && it[2] && ( *(it[2]) == "second" ) );
+
+	queryUpdate.reset();
 
 	TUT_DECLARE( HQuery::ptr_t queryDelete( db->prepare_query( "DELETE FROM config WHERE name = ?;" ) ); );
 	TUT_INVOKE( queryDelete->bind( 1, "special" ); );
@@ -540,8 +544,6 @@ TUT_UNIT_TEST( 29, "dml bind on SQLite" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_SQLITE3_H ) */
 
-#if 0
-
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
 TUT_UNIT_TEST( 30, "dml bind on PostgreSQL engine" )
 	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
@@ -559,6 +561,8 @@ TUT_UNIT_TEST( 31, "dml bind on MySQL engine" )
 	test_dml_bind( db );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
+
+#if 0
 
 #if defined( HAVE_IBASE_H )
 TUT_UNIT_TEST( 32, "dml bind on Firebird engine" )
