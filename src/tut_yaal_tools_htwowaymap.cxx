@@ -42,6 +42,7 @@ namespace tut {
 struct tut_yaal_tools_htwowaymap : public simple_mock<tut_yaal_tools_htwowaymap> {
 	typedef simple_mock<tut_yaal_tools_htwowaymap> base_type;
 	typedef HTwoWayMap<int, int> int2int_t;
+	typedef HTwoWayMap<int, HString> int2str_t;
 	virtual ~tut_yaal_tools_htwowaymap( void ) {}
 };
 
@@ -277,6 +278,27 @@ TUT_UNIT_TEST( 16, "view methods" )
 	ENSURE_EQUALS( "count failed", twm.right().count( 3 ), 1 );
 	ENSURE_EQUALS( "count failed", twm.right().count( 4 ), 1 );
 	ENSURE_EQUALS( "count failed", twm.right().count( 5 ), 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 17, "view().at()" )
+	int2str_t twm;
+	twm.insert( make_pair<int, HString>( 1, "one" ) );
+	twm.insert( make_pair<int, HString>( -1, "minus-one" ) );
+	twm.insert( make_pair<int, HString>( 0, "zero" ) );
+	twm.insert( make_pair<int, HString>( -13, "bigneg" ) );
+	twm.insert( make_pair<int, HString>( 42, "life" ) );
+	ENSURE_EQUALS( "at failed", twm.left().at( -13 ), "bigneg" );
+	ENSURE_EQUALS( "at failed", twm.left().at( -1 ), "minus-one" );
+	ENSURE_EQUALS( "at failed", twm.left().at( 0 ), "zero" );
+	ENSURE_EQUALS( "at failed", twm.left().at( 1 ), "one" );
+	ENSURE_EQUALS( "at failed", twm.left().at( 42 ), "life" );
+	ENSURE_THROW( "at did not throw", twm.left().at( 7 ), HInvalidKeyException );
+	ENSURE_EQUALS( "at failed", twm.right().at( "bigneg" ), -13 );
+	ENSURE_EQUALS( "at failed", twm.right().at( "life" ), 42 );
+	ENSURE_EQUALS( "at failed", twm.right().at( "minus-one" ), -1 );
+	ENSURE_EQUALS( "at failed", twm.right().at( "one" ), 1 );
+	ENSURE_EQUALS( "at failed", twm.right().at( "zero" ), 0 );
+	ENSURE_THROW( "at did not throw", twm.right().at( "invalid" ), HInvalidKeyException );
 TUT_TEARDOWN()
 
 }
