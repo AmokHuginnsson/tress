@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_yaal_tools_util_distance.cxx - this file is integral part of `tress' project.
+	tut_yaal_tools_string.cxx - this file is integral part of `tress' project.
 
   i.  You may not make any changes in Copyright information.
   ii. You must attach Copyright information to any part of every copy
@@ -26,7 +26,7 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
-#include <yaal/tools/util.hxx>
+#include <yaal/tools/stringalgo.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -34,30 +34,48 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
+using namespace yaal::tools::string;
 using namespace tress::tut_helpers;
 
 namespace tut {
 
-char const* const failMsg = "failed to calculate levenshtein distance";
+char const* const msgLevFail = "failed to calculate levenshtein distance";
 
-TUT_SIMPLE_MOCK( tut_yaal_tools_util_distance );
-TUT_TEST_GROUP( tut_yaal_tools_util_distance, "yaal::tools::util::distance" );
+TUT_SIMPLE_MOCK( tut_yaal_tools_string );
+TUT_TEST_GROUP( tut_yaal_tools_string, "yaal::tools::string" );
 
-TUT_UNIT_TEST( 1, "same strings" )
-	ENSURE_EQUALS( failMsg,
-			distance::levenshtein_damerau( "tut_yaal_tools_util_distance", "tut_yaal_tools_util_distance", true ), 0 );
-	ENSURE_EQUALS( failMsg,
-			distance::levenshtein_damerau( "tut_yaal_tools_util_distance", "tut_yaal_tools_util_distance", false ), 0 );
+TUT_UNIT_TEST( 1, "levenshtein distance same strings" )
+	ENSURE_EQUALS( msgLevFail,
+			distance::levenshtein_damerau( "tut_yaal_tools_string", "tut_yaal_tools_string", true ), 0 );
+	ENSURE_EQUALS( msgLevFail,
+			distance::levenshtein_damerau( "tut_yaal_tools_string", "tut_yaal_tools_string", false ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "different strings" )
-	ENSURE_EQUALS( failMsg,
+TUT_UNIT_TEST( 2, "levenshtein distance different strings" )
+	ENSURE_EQUALS( msgLevFail,
 			distance::levenshtein_damerau( "ala", "ola" ), 1 );
-	ENSURE_EQUALS( failMsg,
+	ENSURE_EQUALS( msgLevFail,
 			distance::levenshtein_damerau( "ala", "Cola" ), 2 );
-	ENSURE_EQUALS( failMsg,
+	ENSURE_EQUALS( msgLevFail,
 			distance::levenshtein_damerau( "Sunday", "Saturday" ), 3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 3, "split" )
+	typedef HArray<HString> str_arr_t;
+	str_arr_t sa( split<str_arr_t>( "Ala ma kota.", " " ) );
+	ENSURE_EQUALS( "bad number of words", sa.get_size(), 3 );
+	ENSURE_EQUALS( "bad word", sa[0], "Ala" );
+	ENSURE_EQUALS( "bad word", sa[1], "ma" );
+	ENSURE_EQUALS( "bad word", sa[2], "kota." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( 4, "join" )
+	typedef HArray<HString> str_arr_t;
+	str_arr_t sa;
+	sa.push_back( "Ala" );
+	sa.push_back( "ma" );
+	sa.push_back( "kota." );
+	ENSURE_EQUALS( "join failed", join( sa, " " ), "Ala ma kota." );
 TUT_TEARDOWN()
 
 }

@@ -338,8 +338,8 @@ TUT_UNIT_TEST( 12, "direct split skip empty set[f]*/" )
 		ENSURE_THROW( split_skip_whole_mc_invalid_success, t2[ 0 ], HTokenizerException );
 	}
 	/* delim by any */ {
-		HTokenizer t1( "a", ";:,", HTokenizer::SKIP_EMPTY );
-		HTokenizer t2( "a", "a", HTokenizer::SKIP_EMPTY );
+		HTokenizer t1( "a", ";:,", HTokenizer::SKIP_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF );
+		HTokenizer t2( "a", "a", HTokenizer::SKIP_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF );
 		ENSURE_EQUALS( split_skip_any_failed, t1[ 0 ], "a" );
 		ENSURE_THROW( split_skip_any_invalid_success, t1[ 1 ], HTokenizerException );
 		ENSURE_THROW( split_skip_any_invalid_success, t2[ 0 ], HTokenizerException );
@@ -401,14 +401,14 @@ TUT_UNIT_TEST( 14, "tokenize on empty (skip empty)" )
 	}
 	/* delim by any */ {
 		/* scope */ {
-			HTokenizer tokenizer( "", ".:;", HTokenizer::SKIP_EMPTY );
+			HTokenizer tokenizer( "", ".:;", HTokenizer::SKIP_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF );
 			ENSURE( "bogus tokens on empty", ! ( tokenizer.begin() != tokenizer.end() ) );
 		} {
-			HTokenizer tokenizer( ",:;", HTokenizer::SKIP_EMPTY );
+			HTokenizer tokenizer( ",:;", HTokenizer::SKIP_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF );
 			tokenizer.assign( "" );
 			ENSURE( "bogus tokens on empty", ! ( tokenizer.begin() != tokenizer.end() ) );
 		} {
-			HTokenizer tokenizer( "Ala;ma,kota.", ",:;", HTokenizer::SKIP_EMPTY );
+			HTokenizer tokenizer( "Ala;ma,kota.", ",:;", HTokenizer::SKIP_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF );
 			tokenizer.assign( "" );
 			ENSURE( "bogus tokens on empty", ! ( tokenizer.begin() != tokenizer.end() ) );
 		}
@@ -419,43 +419,43 @@ TUT_UNIT_TEST( 15, "tokenize on empty (include empty)" )
 	/* delim by whole single character */ {
 		/* scope */ {
 			HTokenizer tokenizer( "", "@", HTokenizer::INCLUDE_EMPTY );
-			ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
+			ENSURE( "no tokens on sep-only", tokenizer.begin() != tokenizer.end() );
 		} {
 			HTokenizer tokenizer( "@", HTokenizer::INCLUDE_EMPTY );
 			tokenizer.assign( "" );
-			ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
+			ENSURE( "no tokens on sep-only", tokenizer.begin() != tokenizer.end() );
 		} {
 			HTokenizer tokenizer( "Ala@ma@kota.", "@", HTokenizer::INCLUDE_EMPTY );
 			tokenizer.assign( "" );
-			ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
+			ENSURE( "no tokens on sep-only", tokenizer.begin() != tokenizer.end() );
 		}
 	}
 	/* delim by whole multi character */ {
 		/* scope */ {
 			HTokenizer tokenizer( "", "://", HTokenizer::INCLUDE_EMPTY );
-			ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
+			ENSURE( "no tokens on sep-only", tokenizer.begin() != tokenizer.end() );
 		} {
 			HTokenizer tokenizer( "://", HTokenizer::INCLUDE_EMPTY );
 			tokenizer.assign( "" );
-			ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
+			ENSURE( "no tokens on sep-only", tokenizer.begin() != tokenizer.end() );
 		} {
 			HTokenizer tokenizer( "Ala://ma://kota.", "://", HTokenizer::INCLUDE_EMPTY );
 			tokenizer.assign( "" );
-			ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
+			ENSURE( "no tokens on non-empty", tokenizer.begin() != tokenizer.end() );
 		}
 	}
 	/* delim by any */ {
 		/* scope */ {
-			HTokenizer tokenizer( "", ",:;", HTokenizer::INCLUDE_EMPTY );
-			ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
+			HTokenizer tokenizer( "", ",:;", HTokenizer::INCLUDE_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF );
+			ENSURE( "no tokens on sep-only", tokenizer.begin() != tokenizer.end() );
 		} {
-			HTokenizer tokenizer( ",:;", HTokenizer::INCLUDE_EMPTY );
+			HTokenizer tokenizer( ",:;", HTokenizer::INCLUDE_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF );
 			tokenizer.assign( "" );
-			ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
+			ENSURE( "no tokens on sep-only", tokenizer.begin() != tokenizer.end() );
 		} {
-			HTokenizer tokenizer( "Ala;ma,kota.", ",:;", HTokenizer::INCLUDE_EMPTY );
+			HTokenizer tokenizer( "Ala;ma,kota.", ",:;", HTokenizer::INCLUDE_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF );
 			tokenizer.assign( "" );
-			ENSURE( "bogus tokens on empty", tokenizer.begin() != tokenizer.end() );
+			ENSURE( "no tokens on non-empty", tokenizer.begin() != tokenizer.end() );
 		}
 	}
 TUT_TEARDOWN()
