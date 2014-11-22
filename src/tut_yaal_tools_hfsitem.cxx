@@ -29,6 +29,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/hfsitem.hxx>
+#include <yaal/tools/filesystem.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -36,6 +37,7 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
+using namespace yaal::tools::filesystem;
 using namespace yaal::ansi;
 using namespace tress::tut_helpers;
 
@@ -103,13 +105,13 @@ TUT_UNIT_TEST( 2, "is_directory" )
 	HFSItem dit2( "./data/" );
 	ENSURE( err, dit2.is_directory() );
 	HFSItem dit3( "./data/non-existing" );
-	ENSURE_THROW( err2, dit3.is_directory(), HFSItemException );
+	ENSURE_THROW( err2, dit3.is_directory(), HFileSystemException );
 	HFSItem dit4( "./data/non-existing/" );
-	ENSURE_THROW( err2, dit4.is_directory(), HFSItemException );
+	ENSURE_THROW( err2, dit4.is_directory(), HFileSystemException );
 	HFSItem dit5( "./data/xml.xml" );
 	ENSURE( err, ! dit5.is_directory() );
 	HFSItem dit6( "./data/xml.xml/" );
-	ENSURE_THROW( err2, dit6.is_directory(), HFSItemException );
+	ENSURE_THROW( err2, dit6.is_directory(), HFileSystemException );
 	HFSItem dit7( "." );
 	ENSURE( err, dit7.is_directory() );
 	HFSItem dit8( "./" );
