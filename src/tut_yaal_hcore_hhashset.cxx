@@ -49,14 +49,14 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hhashset );
 TUT_TEST_GROUP( tut_yaal_hcore_hhashset, "yaal::hcore::HHashSet" );
 
-TUT_UNIT_TEST( 1, "default constructor" )
+TUT_UNIT_TEST( "default constructor" )
 	typedef HHashSet<int> hashset_t;
 	hashset_t set;
 	ENSURE_EQUALS( "bad size on fresh HSet<>", set.size(), 0 );
 	ENSURE( "bad emptinass status on fresh HSet<>", set.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "insert (unique)" )
+TUT_UNIT_TEST( "insert (unique)" )
 	typedef HHashSet<int> hashset_t;
 	hashset_t set;
 	ENSURE_EQUALS( "bad size on fresh HSet<>", set.size(), 0 );
@@ -67,7 +67,7 @@ TUT_UNIT_TEST( 2, "insert (unique)" )
 	ENSURE_EQUALS( "inserted element not found", set.count( 1 ), 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "insert (non-unique)" )
+TUT_UNIT_TEST( "insert (non-unique)" )
 	typedef HHashSet<int> hashset_t;
 	hashset_t set;
 	ENSURE_EQUALS( "bad size on fresh HSet<>", set.size(), 0 );
@@ -82,7 +82,7 @@ TUT_UNIT_TEST( 3, "insert (non-unique)" )
 	ENSURE_EQUALS( "inserted element not found", set.count( 1 ), 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "iteration" )
+TUT_UNIT_TEST( "iteration" )
 	typedef HHashSet<int> hashset_t;
 	hashset_t set;
 	set.insert( 1 );
@@ -100,7 +100,7 @@ TUT_UNIT_TEST( 4, "iteration" )
 	ENSURE_EQUALS( "bad teration", backward, forward );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 49, "sample data" )
+TUT_UNIT_TEST( "sample data" )
 	typedef HHashSet<HString> string_hash_set_t;
 	string_hash_set_t set;
 	set.insert( "one" );

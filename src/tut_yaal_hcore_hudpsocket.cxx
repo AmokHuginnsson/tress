@@ -165,18 +165,18 @@ void HUDPServer::do_not_signal( void ) {
 	_signaled = true;
 }
 
-TUT_UNIT_TEST( 1, "Simple construction and destruction." )
+TUT_UNIT_TEST( "Simple construction and destruction." )
 	HUDPSocket socket;
 	ENSURE( "udp socket without fd created", socket.get_file_descriptor() >= 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "bind on reserved port." )
+TUT_UNIT_TEST( "bind on reserved port." )
 	ENSURE_THROW( "bind on reserved port possible",
 			HUDPSocket socket( ( ::getenv( "windir" ) || ::getenv( "WINDIR" ) ? 137 : 22 ) ),
 			HUDPSocketException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "bind on port in use." )
+TUT_UNIT_TEST( "bind on port in use." )
 	int const obscurePort( OBSCURE_PORT );
 	HUDPSocket block( obscurePort );
 	ENSURE_THROW( "bind on port in use possible", HUDPSocket socket( obscurePort ), HUDPSocketException );
@@ -214,53 +214,53 @@ void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool nonBloc
 	return;
 }
 
-TUT_UNIT_TEST( 19, "Transfering data through network (blocking)." )
+TUT_UNIT_TEST( "Transfering data through network (blocking)." )
 	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, false, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "Transfering data through network (non-blocking)." )
+TUT_UNIT_TEST( "Transfering data through network (non-blocking)." )
 	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), true, true, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "Transfering data through network (blocking server, nonblocking client)." )
+TUT_UNIT_TEST( "Transfering data through network (blocking server, nonblocking client)." )
 	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, true, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 22, "Transfering data through network (non-blocking server, blocking client)." )
+TUT_UNIT_TEST( "Transfering data through network (non-blocking server, blocking client)." )
 	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), true, false, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 23, "Transfering data through network (blocking)." )
+TUT_UNIT_TEST( "Transfering data through network (blocking)." )
 	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, false, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "Transfering data through network (non-blocking)." )
+TUT_UNIT_TEST( "Transfering data through network (non-blocking)." )
 	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), true, true, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 25, "Transfering data through network (blocking server, nonblocking client)." )
+TUT_UNIT_TEST( "Transfering data through network (blocking server, nonblocking client)." )
 	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), false, true, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 26, "Transfering data through network (non-blocking server, blocking client)." )
+TUT_UNIT_TEST( "Transfering data through network (non-blocking server, blocking client)." )
 	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), true, false, true );
 TUT_TEARDOWN()
 
 #if 0
 
-TUT_UNIT_TEST( 23, "Transfering data through network with SSL. (blocking)" )
+TUT_UNIT_TEST( "Transfering data through network with SSL. (blocking)" )
 	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), true, false, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "Transfering data through network wiht SSL (non-blocking)." )
+TUT_UNIT_TEST( "Transfering data through network wiht SSL (non-blocking)." )
 	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), true, true, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 25, "Transfering data through network with SSL. (blocking server, nonblocking client)" )
+TUT_UNIT_TEST( "Transfering data through network with SSL. (blocking server, nonblocking client)" )
 	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), true, false, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 26, "Transfering data through network wiht SSL (non-blocking server, blocking client)." )
+TUT_UNIT_TEST( "Transfering data through network wiht SSL (non-blocking server, blocking client)." )
 	play_scenario( OBSCURE_PORT, ip_t( 127, 0, 0, 1 ), true, true, false );
 TUT_TEARDOWN()
 

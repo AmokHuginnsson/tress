@@ -48,12 +48,12 @@ struct tut_yaal_hcore_hcall_bound : public simple_mock<tut_yaal_hcore_hcall_boun
 
 TUT_TEST_GROUP( tut_yaal_hcore_hcall_bound, "yaal::hcore::HCall,bound" );
 
-TUT_UNIT_TEST( 1, "Constructor." )
+TUT_UNIT_TEST( "Constructor." )
 	HBoundCall<> c( call( &tut_yaal_hcore_hcall_bound::foo, this ) );
 	HBoundCall<> cc( call( &tut_yaal_hcore_hcall_bound::foo_const, this ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "compare with constant less." )
+TUT_UNIT_TEST( "compare with constant less." )
 	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ), call( &item_t::id, _1 ) < 50 );
@@ -61,7 +61,7 @@ TUT_UNIT_TEST( 2, "compare with constant less." )
 	cout << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "compare with constant greater." )
+TUT_UNIT_TEST( "compare with constant greater." )
 	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ), call( &item_t::id, _1 ) > 50 );

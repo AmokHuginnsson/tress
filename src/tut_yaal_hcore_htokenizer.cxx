@@ -64,7 +64,7 @@ char const* const tut_yaal_hcore_htokenizer::split_skip_any_invalid_success = "s
 
 TUT_TEST_GROUP( tut_yaal_hcore_htokenizer, "yaal::hcore::HTokenizer" );
 
-TUT_UNIT_TEST( 1, "direct split include empty set[a]*/" )
+TUT_UNIT_TEST( "direct split include empty set[a]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t( ",aa,bb", "," );
 		ENSURE_EQUALS( split_inc_whole_sc_failed, t[ 0 ], "" );
@@ -88,7 +88,7 @@ TUT_UNIT_TEST( 1, "direct split include empty set[a]*/" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "direct split include empty set[b]*/" )
+TUT_UNIT_TEST( "direct split include empty set[b]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t( "aa,bb", "," );
 		ENSURE_EQUALS( split_inc_whole_sc_failed, t[ 0 ], "aa" );
@@ -112,7 +112,7 @@ TUT_UNIT_TEST( 2, "direct split include empty set[b]*/" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "direct split include empty set[c]*/" )
+TUT_UNIT_TEST( "direct split include empty set[c]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t( "aa,bb,", "," );
 		ENSURE_EQUALS( split_inc_whole_sc_failed, t[ 0 ], "aa" );
@@ -136,7 +136,7 @@ TUT_UNIT_TEST( 3, "direct split include empty set[c]*/" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "direct split include empty set[d]*/" )
+TUT_UNIT_TEST( "direct split include empty set[d]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t( ",aa,", "," );
 		ENSURE_EQUALS( split_inc_whole_sc_failed, t[ 0 ], "" );
@@ -160,7 +160,7 @@ TUT_UNIT_TEST( 4, "direct split include empty set[d]*/" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "direct split include empty set[e]*/" )
+TUT_UNIT_TEST( "direct split include empty set[e]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t( ",,,aa,,", "," );
 		ENSURE_EQUALS( split_inc_whole_sc_failed, t[ 0 ], "" );
@@ -190,7 +190,7 @@ TUT_UNIT_TEST( 5, "direct split include empty set[e]*/" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "direct split include empty set[f]*/" )
+TUT_UNIT_TEST( "direct split include empty set[f]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t1( "a", ";" );
 		HTokenizer t2( "a", "a" );
@@ -223,7 +223,7 @@ TUT_UNIT_TEST( 6, "direct split include empty set[f]*/" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "direct split skip empty set[a]*/" )
+TUT_UNIT_TEST( "direct split skip empty set[a]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t( ",aa,bb", ",", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_whole_sc_failed, t[ 0 ], "aa" );
@@ -244,7 +244,7 @@ TUT_UNIT_TEST( 7, "direct split skip empty set[a]*/" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "direct split skip empty set[b]*/" )
+TUT_UNIT_TEST( "direct split skip empty set[b]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t( "aa,bb", ",", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_whole_sc_failed, t[ 0 ], "aa" );
@@ -265,7 +265,7 @@ TUT_UNIT_TEST( 8, "direct split skip empty set[b]*/" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "direct split skip empty set[c]*/" )
+TUT_UNIT_TEST( "direct split skip empty set[c]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t( "aa,bb,", ",", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_whole_sc_failed, t[ 0 ], "aa" );
@@ -286,7 +286,7 @@ TUT_UNIT_TEST( 9, "direct split skip empty set[c]*/" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "direct split skip empty set[d]*/" )
+TUT_UNIT_TEST( "direct split skip empty set[d]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t( ",aa,", ",", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_whole_sc_failed, t[ 0 ], "aa" );
@@ -304,7 +304,7 @@ TUT_UNIT_TEST( 10, "direct split skip empty set[d]*/" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "direct split skip empty set[e]*/" )
+TUT_UNIT_TEST( "direct split skip empty set[e]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t( ",,,aa,,", ",", HTokenizer::SKIP_EMPTY );
 		ENSURE_EQUALS( split_skip_whole_sc_failed, t[ 0 ], "aa" );
@@ -322,7 +322,7 @@ TUT_UNIT_TEST( 11, "direct split skip empty set[e]*/" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "direct split skip empty set[f]*/" )
+TUT_UNIT_TEST( "direct split skip empty set[f]*/" )
 	/* delim by whole single character */ {
 		HTokenizer t1( "a", ";", HTokenizer::SKIP_EMPTY );
 		HTokenizer t2( "a", "a", HTokenizer::SKIP_EMPTY );
@@ -346,7 +346,7 @@ TUT_UNIT_TEST( 12, "direct split skip empty set[f]*/" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "dereference iterator for single token" )
+TUT_UNIT_TEST( "dereference iterator for single token" )
 	/* delim by whole single character */ {
 		HString text( "list_commands" );
 		HTokenizer tokenizer( text, "," );
@@ -370,7 +370,7 @@ TUT_UNIT_TEST( 13, "dereference iterator for single token" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "tokenize on empty (skip empty)" )
+TUT_UNIT_TEST( "tokenize on empty (skip empty)" )
 	/* delim by whole single character */ {
 		/* scope */ {
 			HTokenizer tokenizer( "", "@", HTokenizer::SKIP_EMPTY );
@@ -415,7 +415,7 @@ TUT_UNIT_TEST( 14, "tokenize on empty (skip empty)" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "tokenize on empty (include empty)" )
+TUT_UNIT_TEST( "tokenize on empty (include empty)" )
 	/* delim by whole single character */ {
 		/* scope */ {
 			HTokenizer tokenizer( "", "@", HTokenizer::INCLUDE_EMPTY );

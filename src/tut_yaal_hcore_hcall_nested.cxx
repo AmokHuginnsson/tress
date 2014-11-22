@@ -45,7 +45,7 @@ namespace {
 	char const err[] = "function bind failed";
 }
 
-TUT_UNIT_TEST( 1, "nested call (x, y) -> (y) -> ()" )
+TUT_UNIT_TEST( "nested call (x, y) -> (y) -> ()" )
 	typedef call_calculator<HString (*)( int, int ), higher_order::placeholder<1>, int>::type::type func1_t;
 	func1_t f( call( &foo2, _1, 2 ) );
 	char const expected[] = "foo2: a1 = 1, a2 = 2";
@@ -53,7 +53,7 @@ TUT_UNIT_TEST( 1, "nested call (x, y) -> (y) -> ()" )
 	ENSURE_EQUALS( err, call( f, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "nested call ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested call ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int ), higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
 	typedef call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
 	func2_t f2( call( &foo3, _1, _2, 3 ) );
@@ -64,7 +64,7 @@ TUT_UNIT_TEST( 2, "nested call ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "nested call ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested call ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int, int ), higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
 	typedef call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
 	typedef call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
@@ -78,7 +78,7 @@ TUT_UNIT_TEST( 3, "nested call ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z 
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "nested call ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested call ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int, int, int ), higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, higher_order::placeholder<4>, int>::type::type func4_t;
 	typedef call_calculator<func4_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
 	typedef call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
@@ -95,7 +95,7 @@ TUT_UNIT_TEST( 4, "nested call ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z 
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "nested call ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested call ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int, int, int, int ),
 					higher_order::placeholder<1>, higher_order::placeholder<2>,
 					higher_order::placeholder<3>, higher_order::placeholder<4>,
@@ -118,7 +118,7 @@ TUT_UNIT_TEST( 5, "nested call ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w,
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "nested call ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested call ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int, int, int, int, int ),
 					higher_order::placeholder<1>, higher_order::placeholder<2>,
 					higher_order::placeholder<3>, higher_order::placeholder<4>,
@@ -149,7 +149,7 @@ TUT_TEARDOWN()
 
 #ifndef __sun__
 
-TUT_UNIT_TEST( 7, "nested call ( 8 args ) -> ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested call ( 8 args ) -> ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int, int, int, int, int, int ),
 					higher_order::placeholder<1>, higher_order::placeholder<2>,
 					higher_order::placeholder<3>, higher_order::placeholder<4>,
@@ -185,7 +185,7 @@ TUT_UNIT_TEST( 7, "nested call ( 8 args ) -> ( t, u, v, w, x, y, z ) -> ( u, v, 
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "nested call ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested call ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int, int, int, int, int, int, int ),
 					higher_order::placeholder<1>, higher_order::placeholder<2>,
 					higher_order::placeholder<3>, higher_order::placeholder<4>,
@@ -228,7 +228,7 @@ TUT_UNIT_TEST( 8, "nested call ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 arg
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "nested call ( 10 args ) -> ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( 5 args ) -> ( 4 args ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested call ( 10 args ) -> ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( 5 args ) -> ( 4 args ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int, int, int, int, int, int, int, int ),
 					higher_order::placeholder<1>, higher_order::placeholder<2>,
 					higher_order::placeholder<3>, higher_order::placeholder<4>,

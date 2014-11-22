@@ -59,12 +59,12 @@ HString tut_yaal_tools_hpipedchild::ACK_ERR( "hello-ERR" );
 
 TUT_TEST_GROUP( tut_yaal_tools_hpipedchild, "yaal::tools::HPipedChild" );
 
-TUT_UNIT_TEST( 1, "simple constructor" )
+TUT_UNIT_TEST( "simple constructor" )
 	HPipedChild pc;
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "spawn and finish" )
+TUT_UNIT_TEST( "spawn and finish" )
 	HPipedChild pc;
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
 	pc.spawn( CHILD );
@@ -73,14 +73,14 @@ TUT_UNIT_TEST( 2, "spawn and finish" )
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "spawn on non-execuable" )
+TUT_UNIT_TEST( "spawn on non-execuable" )
 	HPipedChild pc;
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
 	ENSURE_THROW( "spawning non-executable", pc.spawn( CHILD_FAKE ), HPipedChildException );
 	ENSURE_EQUALS( "running after failed spawn", pc.is_running(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "spawn, write and read (stdout)" )
+TUT_UNIT_TEST( "spawn, write and read (stdout)" )
 	HPipedChild pc;
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
 	pc.spawn( CHILD );
@@ -93,7 +93,7 @@ TUT_UNIT_TEST( 4, "spawn, write and read (stdout)" )
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "spawn, write and read (stderr)" )
+TUT_UNIT_TEST( "spawn, write and read (stderr)" )
 	HPipedChild pc;
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
 	pc.spawn( CHILD );

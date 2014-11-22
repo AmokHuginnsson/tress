@@ -63,18 +63,18 @@ struct tut_yaal_tool_hfuture : public simple_mock<tut_yaal_tool_hfuture> {
 
 TUT_TEST_GROUP( tut_yaal_tool_hfuture, "yaal::tools::HFuture" );
 
-TUT_UNIT_TEST( 1, "slow operation" )
+TUT_UNIT_TEST( "slow operation" )
 	HFuture<int long long> f( call( &tut_yaal_tool_hfuture::power_of_three, this, 7 ) );
 	cout << "3 ^ 7 = " << f.get() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "reference returned" )
+TUT_UNIT_TEST( "reference returned" )
 	HFuture<int&> f( call( &tut_yaal_tool_hfuture::give_val, this ) );
 	int& rval( f.get() );
 	ENSURE_EQUALS( "returning reference failed", &rval, &_data );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "const reference returned" )
+TUT_UNIT_TEST( "const reference returned" )
 	HFuture<int const&> f( call( &tut_yaal_tool_hfuture::give_val_const, this ) );
 	int const& rcVal( f.get() );
 	ENSURE_EQUALS( "returning const reference failed", &rcVal, &_data );

@@ -44,14 +44,14 @@ char const* const msgLevFail = "failed to calculate levenshtein distance";
 TUT_SIMPLE_MOCK( tut_yaal_tools_string );
 TUT_TEST_GROUP( tut_yaal_tools_string, "yaal::tools::string" );
 
-TUT_UNIT_TEST( 1, "levenshtein distance same strings" )
+TUT_UNIT_TEST( "levenshtein distance same strings" )
 	ENSURE_EQUALS( msgLevFail,
 			distance::levenshtein_damerau( "tut_yaal_tools_string", "tut_yaal_tools_string", true ), 0 );
 	ENSURE_EQUALS( msgLevFail,
 			distance::levenshtein_damerau( "tut_yaal_tools_string", "tut_yaal_tools_string", false ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "levenshtein distance different strings" )
+TUT_UNIT_TEST( "levenshtein distance different strings" )
 	ENSURE_EQUALS( msgLevFail,
 			distance::levenshtein_damerau( "ala", "ola" ), 1 );
 	ENSURE_EQUALS( msgLevFail,
@@ -60,7 +60,7 @@ TUT_UNIT_TEST( 2, "levenshtein distance different strings" )
 			distance::levenshtein_damerau( "Sunday", "Saturday" ), 3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "split" )
+TUT_UNIT_TEST( "split" )
 	typedef HArray<HString> str_arr_t;
 	str_arr_t sa( split<str_arr_t>( "Ala ma kota.", " " ) );
 	ENSURE_EQUALS( "bad number of words", sa.get_size(), 3 );
@@ -69,7 +69,7 @@ TUT_UNIT_TEST( 3, "split" )
 	ENSURE_EQUALS( "bad word", sa[2], "kota." );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "join" )
+TUT_UNIT_TEST( "join" )
 	typedef HArray<HString> str_arr_t;
 	str_arr_t sa;
 	sa.push_back( "Ala" );

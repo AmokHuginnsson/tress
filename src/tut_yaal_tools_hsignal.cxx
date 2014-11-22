@@ -41,7 +41,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_hsignal );
 TUT_TEST_GROUP( tut_yaal_tools_hsignal, "yaal::tools::HSignal" );
 
-TUT_UNIT_TEST( 1, "single slot (no arg)" )
+TUT_UNIT_TEST( "single slot (no arg)" )
 	int var( 0 );
 	HSignal<void ()> sig;
 	sig.connect( call( &defer<int>::set, ref( var ), 7 ) );
@@ -49,7 +49,7 @@ TUT_UNIT_TEST( 1, "single slot (no arg)" )
 	ENSURE_EQUALS( "signal not dispatched", var, 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "single slot (with arg)" )
+TUT_UNIT_TEST( "single slot (with arg)" )
 	int var( 0 );
 	HSignal<void ( int )> sig;
 	sig.connect( call( &defer<int>::set, ref( var ), _1 ) );
@@ -57,7 +57,7 @@ TUT_UNIT_TEST( 2, "single slot (with arg)" )
 	ENSURE_EQUALS( "signal not dispatched", var, 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "multiple slots" )
+TUT_UNIT_TEST( "multiple slots" )
 	int var1( 0 );
 	int var2( 0 );
 	int var3( 0 );
@@ -71,7 +71,7 @@ TUT_UNIT_TEST( 3, "multiple slots" )
 	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "disable slot" )
+TUT_UNIT_TEST( "disable slot" )
 	int var1( 0 );
 	int var2( 0 );
 	int var3( 0 );
@@ -92,7 +92,7 @@ TUT_UNIT_TEST( 4, "disable slot" )
 	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "enable slot" )
+TUT_UNIT_TEST( "enable slot" )
 	int var1( 0 );
 	int var2( 0 );
 	int var3( 0 );
@@ -113,7 +113,7 @@ TUT_UNIT_TEST( 5, "enable slot" )
 	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "disconnect slot" )
+TUT_UNIT_TEST( "disconnect slot" )
 	int var1( 0 );
 	int var2( 0 );
 	int var3( 0 );
@@ -140,7 +140,7 @@ TUT_UNIT_TEST( 6, "disconnect slot" )
 	ENSURE_EQUALS( "signal not dispatched", var3, 42 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "early slots and late slots" )
+TUT_UNIT_TEST( "early slots and late slots" )
 	/* automatic order */ {
 		int var( 1 );
 		typedef HSignal<void ()> sig_t;
@@ -161,7 +161,7 @@ TUT_UNIT_TEST( 7, "early slots and late slots" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "prio slots" )
+TUT_UNIT_TEST( "prio slots" )
 	int var( 1 );
 	typedef HSignal<void ()> sig_t;
 	sig_t sig;
@@ -172,7 +172,7 @@ TUT_UNIT_TEST( 8, "prio slots" )
 	ENSURE_EQUALS( "signal not dispatched in correct order", var, 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "prio slots - late/early" )
+TUT_UNIT_TEST( "prio slots - late/early" )
 	int var( 1 );
 	typedef HSignal<void ()> sig_t;
 	sig_t sig;

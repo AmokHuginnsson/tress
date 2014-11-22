@@ -337,50 +337,50 @@ inline void show_rectangle( int a, int b ) {
 	cout << "a: " << a << ", b: " << b << endl;
 }
 
-TUT_UNIT_TEST( 1, "(hand written) no arg" )
+TUT_UNIT_TEST( "(hand written) no arg" )
 	ENSURE_EQUALS( "function bind failed", call( foo0 )(), "foo0" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "(hand written) 1 (free) arg" )
+TUT_UNIT_TEST( "(hand written) 1 (free) arg" )
 	ENSURE_EQUALS( "function bind failed", call( foo1, _1 )( -2 ), "foo1: a1 = -2" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "(hand written) 2 (1 free) args" )
+TUT_UNIT_TEST( "(hand written) 2 (1 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo2, _1, 2 )( -3 ), "foo2: a1 = -3, a2 = 2" );
 	ENSURE_EQUALS( "function bind failed", call( foo2, 2, _1 )( -3 ), "foo2: a1 = 2, a2 = -3" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "(hand written) 2 (2 free) args" )
+TUT_UNIT_TEST( "(hand written) 2 (2 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo2, _1, _2 )( -1, -2 ), "foo2: a1 = -1, a2 = -2" );
 	ENSURE_EQUALS( "function bind failed", call( foo2, _2, _1 )( -1, -2 ), "foo2: a1 = -2, a2 = -1" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "(hand written) 3 (0 free) args" )
+TUT_UNIT_TEST( "(hand written) 3 (0 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo3, 0, 1, 2 )(), "foo3: a1 = 0, a2 = 1, a3 = 2" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "(hand written) 3 (1 free) args" )
+TUT_UNIT_TEST( "(hand written) 3 (1 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo3, _1, 1, 2 )( -3 ), "foo3: a1 = -3, a2 = 1, a3 = 2" );
 	ENSURE_EQUALS( "function bind failed", call( foo3, 0, _1, 2 )( -4 ), "foo3: a1 = 0, a2 = -4, a3 = 2" );
 	ENSURE_EQUALS( "function bind failed", call( foo3, 0, 1, _1 )( -5 ), "foo3: a1 = 0, a2 = 1, a3 = -5" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "(hand written) 3 (2 free) args" )
+TUT_UNIT_TEST( "(hand written) 3 (2 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo3, _1, _2, 2 )( -3, -4 ), "foo3: a1 = -3, a2 = -4, a3 = 2" );
 	ENSURE_EQUALS( "function bind failed", call( foo3, _2, _1, 2 )( -3, -4 ), "foo3: a1 = -4, a2 = -3, a3 = 2" );
 	ENSURE_EQUALS( "function bind failed", call( foo3, 0, _1, _2 )( -4, -5 ), "foo3: a1 = 0, a2 = -4, a3 = -5" );
 	ENSURE_EQUALS( "function bind failed", call( foo3, _2, 1, _1 )( -5, -6 ), "foo3: a1 = -6, a2 = 1, a3 = -5" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "(hand written) 6 (2 free) args" )
+TUT_UNIT_TEST( "(hand written) 6 (2 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo6, 2, _1, 4, 8, _2, 16 )( -100, -2000 ), "foo6: a1 = 2, a2 = -100, a3 = 4, a4 = 8, a5 = -2000, a6 = 16" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "(hand written) 10 (4 free) args" )
+TUT_UNIT_TEST( "(hand written) 10 (4 free) args" )
 	ENSURE_EQUALS( "function bind failed", call( foo10, 7, 1, 2, _3, 4, _2, 6, _1, 8, _4 )( -1, -2, -3, -4 ), "foo10: a1 = 7, a2 = 1, a3 = 2, a4 = -3, a5 = 4, a6 = -2, a7 = 6, a8 = -1, a9 = 8, a10 = -4" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "const, volatile qualifiers" )
+TUT_UNIT_TEST( "const, volatile qualifiers" )
 	Sumator s( 1 );
 	ENSURE_EQUALS( "no qualifiers failed", call( static_cast<int (Sumator::*)( int )>( &Sumator::calculate ), &s, _1 )( 3 ), 4 );
 	ENSURE_EQUALS( "const qualifier failed", call( &Sumator::calculate_const, &s, _1 )( 3 ), 4 );
@@ -394,7 +394,7 @@ void foo( tut_yaal_hcore_hcall::item_t const& ) {
 }
 }
 
-TUT_UNIT_TEST( 11, "pass argument by value" )
+TUT_UNIT_TEST( "pass argument by value" )
 	item_t::reset();
 	item_t item;
 	typedef call_calculator<void (*)( item_t const& ), item_t>::type::type func_by_val_t;
@@ -405,7 +405,7 @@ TUT_UNIT_TEST( 11, "pass argument by value" )
 	ENSURE_EQUALS( "argument was moved", item_t::get_move_count(), 3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "move argument by rvalue" )
+TUT_UNIT_TEST( "move argument by rvalue" )
 	item_t::reset();
 	item_t item;
 	typedef call_calculator<void (*)( item_t const& ), item_t>::type::type func_by_val_t;
@@ -436,7 +436,7 @@ public:
 
 }
 
-TUT_UNIT_TEST( 20, "call() and const call on ptr and on ref" )
+TUT_UNIT_TEST( "call() and const call on ptr and on ref" )
 	typedef HPointer<MemFunTest> mem_fun_test_ptr_t;
 	typedef HList<mem_fun_test_ptr_t> mem_fun_ptr_list_t;
 	typedef HList<MemFunTest*> naked_list_t;
@@ -462,7 +462,7 @@ TUT_UNIT_TEST( 20, "call() and const call on ptr and on ref" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "call(arg) const and non-const ref and ptr." )
+TUT_UNIT_TEST( "call(arg) const and non-const ref and ptr." )
 	int a[] = { 1, 4, 9, 16 };
 	typedef HPointer<MemFunTest> mem_fun_test_ptr_t;
 	typedef HList<mem_fun_test_ptr_t> mem_fun_ptr_list_t;
@@ -489,7 +489,7 @@ TUT_UNIT_TEST( 21, "call(arg) const and non-const ref and ptr." )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 22, "call(arg) ref" )
+TUT_UNIT_TEST( "call(arg) ref" )
 	int a[] = { 1, 4, 9, 16 };
 	typedef HList<MemFunTest> mem_fun_list_t;
 
@@ -533,7 +533,7 @@ struct ArgumentReturnValueType {
 	}
 };
 
-TUT_UNIT_TEST( 23, "argument value types" )
+TUT_UNIT_TEST( "argument value types" )
 	ArgumentReturnValueType arvt( 0 );
 	call( &ArgumentReturnValueType::set_value, &arvt, _1 )( 1 );
 	ENSURE_EQUALS( "set_value failed", arvt._data, 1 );
@@ -544,7 +544,7 @@ TUT_UNIT_TEST( 23, "argument value types" )
 	ENSURE_EQUALS( "set_value_ref failed", arvt._data, 3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "return value types" )
+TUT_UNIT_TEST( "return value types" )
 	ArgumentReturnValueType arvt( 7 );
 	ENSURE_EQUALS( "get_value failed", call( &ArgumentReturnValueType::get_value, &arvt )(), 7 );
 	int const& crVal( call( &ArgumentReturnValueType::get_value_const_ref, &arvt )() );
@@ -555,14 +555,14 @@ TUT_UNIT_TEST( 24, "return value types" )
 	ENSURE_EQUALS( "get_value_ref failed", arvt._data, 42 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 30, "use call as a functor in an algorithm" )
+TUT_UNIT_TEST( "use call as a functor in an algorithm" )
 	HArray<int> tab( 10 );
 	generate_n( tab.begin(), tab.size(), inc( 1 ) );
 	for_each( tab.begin(), tab.end(), call( show_rectangle, _1, 2 ) );
 	for_each( tab.begin(), tab.end(), call( show_rectangle, 2, _1 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 31, "random free standing args" )
+TUT_UNIT_TEST( "random free standing args" )
 	Sumator s( 1 );
 	call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), &s );
 	ENSURE_EQUALS( "this as free standing", call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), _1 )( s ), 1 );

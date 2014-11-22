@@ -42,7 +42,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_util_escape );
 TUT_TEST_GROUP( tut_yaal_tools_util_escape, "yaal::tools::util::escape" );
 
-TUT_UNIT_TEST( 1, "EscapeTable constrctor" )
+TUT_UNIT_TEST( "EscapeTable constrctor" )
 	ENSURE_THROW( "bad 1 parameter accepted", EscapeTable et( NULL, 1, "n", 1 ), HFailedAssertion );
 	ENSURE_THROW( "bad 3 parameter accepted", EscapeTable et( "\n", 1, NULL, 1 ), HFailedAssertion );
 	ENSURE_THROW( "size mismatch accepted", EscapeTable et( "\n", 1, "nm", 2 ), HFailedAssertion );
@@ -53,7 +53,7 @@ TUT_UNIT_TEST( 1, "EscapeTable constrctor" )
 	ENSURE_EQUALS( "escape table preparaton failed", et._safeToRaw[ static_cast<int>( 'n' ) ], '\n' );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "escape" )
+TUT_UNIT_TEST( "escape" )
 	EscapeTable et( "\n", 1, "n", 1 );
 	HString s( "Ala\nma\nkota." );
 	HString es( s );
@@ -61,7 +61,7 @@ TUT_UNIT_TEST( 2, "escape" )
 	ENSURE_EQUALS( "escaping failed", es, "Ala\\nma\\nkota." );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "unescape" )
+TUT_UNIT_TEST( "unescape" )
 	EscapeTable et( "\n", 1, "n", 1 );
 	HString s( "Ala\nma\nkota." );
 	HString es( s );
@@ -71,15 +71,15 @@ TUT_UNIT_TEST( 3, "unescape" )
 	ENSURE_EQUALS( "unescaping failed", es, s );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "escape_copy" )
+TUT_UNIT_TEST( "escape_copy" )
 	ENSURE_EQUALS( "escaping (copy) failed", escape_copy( "Ala\nma\nkota.", EscapeTable( "\n", 1, "n", 1 ) ), "Ala\\nma\\nkota." );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "unescape_copy" )
+TUT_UNIT_TEST( "unescape_copy" )
 	ENSURE_EQUALS( "unescaping (copy) failed", unescape_copy( "Ala\\nma\\nkota.", EscapeTable( "\n", 1, "n", 1 ) ), "Ala\nma\nkota." );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "unescape_copy with escaper as literal" )
+TUT_UNIT_TEST( "unescape_copy with escaper as literal" )
 	ENSURE_EQUALS( "unescaping (copy) with escaper as literal failed",
 			unescape_copy( "Alan\\nna\\nkontach.", EscapeTable( "\n", 1, "n", 1 ) ), "Alan\nna\nkontach." );
 TUT_TEARDOWN()

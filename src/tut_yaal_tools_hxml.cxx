@@ -146,14 +146,14 @@ inline std::ostream& operator << ( std::ostream& out, HXml const& xml ) {
 
 namespace tut {
 
-TUT_UNIT_TEST( 1, "Empty DOM." )
+TUT_UNIT_TEST( "Empty DOM." )
 	HXml x;
 	ENSURE( "fresh DOM not empty", ! x.get_root() );
 	ENSURE_THROW( "accessing null node-proxy", x.get_root().get_type(), HFailedAssertion );
 TUT_TEARDOWN()
 
 
-TUT_UNIT_TEST( 2, "Root node." )
+TUT_UNIT_TEST( "Root node." )
 	HXml x;
 	static char const* const ROOT = "root";
 	x.create_root( ROOT );
@@ -166,7 +166,7 @@ TUT_UNIT_TEST( 2, "Root node." )
 TUT_TEARDOWN()
 
 
-TUT_UNIT_TEST( 3, "clear" )
+TUT_UNIT_TEST( "clear" )
 	HXml x;
 	static char const* const ROOT = "root";
 	x.create_root( ROOT );
@@ -177,7 +177,7 @@ TUT_UNIT_TEST( 3, "clear" )
 TUT_TEARDOWN()
 
 
-TUT_UNIT_TEST( 4, "build, save, load" )
+TUT_UNIT_TEST( "build, save, load" )
 	HXml x;
 	static char const* const ROOT = "root";
 	static char const* const NODE = "node";
@@ -199,7 +199,7 @@ TUT_UNIT_TEST( 4, "build, save, load" )
 	ENSURE_THROW( "copying from parent node", (*it).copy_node( n ), HFailedAssertion );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "load, save" )
+TUT_UNIT_TEST( "load, save" )
 	HXml xml;
 	xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.parse( "/my_root/my_set/my_item" );
@@ -207,13 +207,13 @@ TUT_UNIT_TEST( 5, "load, save" )
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/set.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "load, save" )
+TUT_UNIT_TEST( "load, save" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "load, save, clear, handmade, save" )
+TUT_UNIT_TEST( "load, save, clear, handmade, save" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ) );
@@ -224,7 +224,7 @@ TUT_UNIT_TEST( 7, "load, save, clear, handmade, save" )
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/hello.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "init, apply_style, parse, save, clear, handmade, save" )
+TUT_UNIT_TEST( "init, apply_style, parse, save, clear, handmade, save" )
 	HXml xml;
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.apply_style( "./data/style.xml" );
@@ -237,14 +237,14 @@ TUT_UNIT_TEST( 8, "init, apply_style, parse, save, clear, handmade, save" )
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/hello.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "apply stylesheet" )
+TUT_UNIT_TEST( "apply stylesheet" )
 	_xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	_xml.apply_style( "data/style.xml" );
 	_xml.parse();
 	std::cout << _xml;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "init, parse, apply, save" )
+TUT_UNIT_TEST( "init, parse, apply, save" )
 	HString string;
 	HFile file;
 	char const* doc = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/xml.xml";
@@ -267,7 +267,7 @@ TUT_UNIT_TEST( 10, "init, parse, apply, save" )
 	return;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "load -> console dump" )
+TUT_UNIT_TEST( "load -> console dump" )
 	char const* doc = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/xml.xml";
 	_xml.load( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	if ( cout.is_valid() )
@@ -275,7 +275,7 @@ TUT_UNIT_TEST( 11, "load -> console dump" )
 	std::clog << _xml;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "parse bofere apply_style and after apply_style" )
+TUT_UNIT_TEST( "parse bofere apply_style and after apply_style" )
 	HXml xml;
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.parse();
@@ -287,7 +287,7 @@ TUT_UNIT_TEST( 12, "parse bofere apply_style and after apply_style" )
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "HXml copy." )
+TUT_UNIT_TEST( "HXml copy." )
 	HXml copy; {
 		HXml intermediate; {
 			HXml xml;
@@ -305,7 +305,7 @@ TUT_UNIT_TEST( 13, "HXml copy." )
 	copy.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "get_element_by_path == 1" )
+TUT_UNIT_TEST( "get_element_by_path == 1" )
 	HXml xml;
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.apply_style( "./data/style.xml" );
@@ -318,7 +318,7 @@ TUT_UNIT_TEST( 14, "get_element_by_path == 1" )
 	ENSURE_EQUALS( "bad node value", (*nodeSet[0].begin()).get_value(), "node" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "get_element_by_path == 0" )
+TUT_UNIT_TEST( "get_element_by_path == 0" )
 	HXml xml;
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.apply_style( "./data/style.xml" );
@@ -328,7 +328,7 @@ TUT_UNIT_TEST( 15, "get_element_by_path == 0" )
 	ENSURE( "bad emptiness status", nodeSet.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "get_element_by_path == many" )
+TUT_UNIT_TEST( "get_element_by_path == many" )
 	HXml xml;
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.apply_style( "./data/style.xml" );
@@ -345,7 +345,7 @@ TUT_UNIT_TEST( 16, "get_element_by_path == many" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "get_element_by_name == 0" )
+TUT_UNIT_TEST( "get_element_by_name == 0" )
 	HXml xml;
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.apply_style( "./data/style.xml" );
@@ -355,7 +355,7 @@ TUT_UNIT_TEST( 17, "get_element_by_name == 0" )
 	ENSURE( "bad emptiness status", nodeSet.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 18, "get_element_by_name == many" )
+TUT_UNIT_TEST( "get_element_by_name == many" )
 	HXml xml;
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.apply_style( "./data/style.xml" );

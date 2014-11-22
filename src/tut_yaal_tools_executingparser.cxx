@@ -77,16 +77,16 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_hllexecutingparser );
 TUT_TEST_GROUP( tut_yaal_tools_hllexecutingparser, "yaal::tools::executing_parser" );
 
-TUT_UNIT_TEST( 1, "empty parser" )
+TUT_UNIT_TEST( "empty parser" )
 	HRule r;
 	ENSURE_THROW( "empty parser constructed", HExecutingParser ep( r ), HExecutingParserException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Named rule name ends with underscore" )
+TUT_UNIT_TEST( "Named rule name ends with underscore" )
 	ENSURE_THROW( "explicit rule name with underscore at the end created", HRule r( "A_" ), HNamedRuleException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "HReal" )
+TUT_UNIT_TEST( "HReal" )
 	/* double */ {
 		double val( 0 );
 		HExecutingParser ep( real[HBoundCall<void ( double )>( call( &defer<double>::set, ref( val ), _1 ) )] );
@@ -121,7 +121,7 @@ TUT_UNIT_TEST( 3, "HReal" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "HInteger" )
+TUT_UNIT_TEST( "HInteger" )
 	/* int */ {
 		int val( 0 );
 		HExecutingParser ep( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
@@ -156,7 +156,7 @@ TUT_UNIT_TEST( 4, "HInteger" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "HStringLiteral" )
+TUT_UNIT_TEST( "HStringLiteral" )
 	typedef HArray<hcore::HString> strings_t;
 	strings_t s;
 	HRule sl( string_literal[push_back( s )] );
@@ -213,7 +213,7 @@ TUT_UNIT_TEST( 5, "HStringLiteral" )
 	ENSURE_NOT( "string literal with invalid character parsed", ep( "\"Al\ba\"" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "HCharacterLiteral" )
+TUT_UNIT_TEST( "HCharacterLiteral" )
 	typedef HArray<char> characters_t;
 	characters_t c;
 	HRule cl( character_literal[push_back<char>( c )] );
@@ -251,7 +251,7 @@ TUT_UNIT_TEST( 6, "HCharacterLiteral" )
 	ENSURE_NOT( "character literal with invalid character parsed", ep( "'\b'" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "HCharacter" )
+TUT_UNIT_TEST( "HCharacter" )
 	/* char (any) */ {
 		char val( 0 );
 		HExecutingParser ep( character[HBoundCall<void ( char )>( call( &defer<char>::set, ref( val ), _1 ) )] );
@@ -281,7 +281,7 @@ TUT_UNIT_TEST( 7, "HCharacter" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "HString" )
+TUT_UNIT_TEST( "HString" )
 	/* ok */ {
 		hcore::HString val;
 		HExecutingParser ep( string( "ala" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
@@ -296,7 +296,7 @@ TUT_UNIT_TEST( 8, "HString" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "HRegex" )
+TUT_UNIT_TEST( "HRegex" )
 	/* ok */ {
 		hcore::HString val;
 		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
@@ -316,7 +316,7 @@ TUT_UNIT_TEST( 9, "HRegex" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "HFollows" )
+TUT_UNIT_TEST( "HFollows" )
 	/* parsed */ {
 		char fcData( 0 );
 		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( fcData ), _1 ) )] );
@@ -346,7 +346,7 @@ void sum( T& sum_, T val_ ) {
 	sum_ += val_;
 }
 
-TUT_UNIT_TEST( 11, "HKleeneStar" )
+TUT_UNIT_TEST( "HKleeneStar" )
 	/* parsed (non empty) */ {
 		int val( 0 );
 		HRule i( integer[HBoundCall<void ( int )>( call( &sum<int>, ref( val ), _1 ) )] );
@@ -367,7 +367,7 @@ TUT_UNIT_TEST( 11, "HKleeneStar" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "HKleenePlus" )
+TUT_UNIT_TEST( "HKleenePlus" )
 	/* parsed (non empty) */ {
 		int val( 0 );
 		HRule i( integer[HBoundCall<void ( int )>( call( &sum<int>, ref( val ), _1 ) )] );
@@ -395,7 +395,7 @@ TUT_UNIT_TEST( 12, "HKleenePlus" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "HOptional" )
+TUT_UNIT_TEST( "HOptional" )
 	/* not-parsed (empty) configuration test */ {
 		int val( 0 );
 		HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
@@ -420,7 +420,7 @@ TUT_UNIT_TEST( 13, "HOptional" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "canceling execution steps" )
+TUT_UNIT_TEST( "canceling execution steps" )
 	int val( 0 );
 	int val_alt( 0 );
 	HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
@@ -432,7 +432,7 @@ TUT_UNIT_TEST( 14, "canceling execution steps" )
 	ENSURE_EQUALS( "execution proper execution sub-step not applied", val_alt, -7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "HAlternative" )
+TUT_UNIT_TEST( "HAlternative" )
 	int val( 0 );
 	int val_alt( 0 );
 	HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
@@ -444,7 +444,7 @@ TUT_UNIT_TEST( 15, "HAlternative" )
 	ENSURE_EQUALS( "execution proper execution sub-step not applied", val_alt, -7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "left recursion" )
+TUT_UNIT_TEST( "left recursion" )
 	/* follows */ {
 		HRule S;
 		S %= ( S >> '$' >> integer );
@@ -495,7 +495,7 @@ TUT_UNIT_TEST( 16, "left recursion" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "simple recursive rule" )
+TUT_UNIT_TEST( "simple recursive rule" )
 	/*
 	 * If *::describe() is incorrectly implemented this test will overflow stack.
 	 */
@@ -517,7 +517,7 @@ TUT_UNIT_TEST( 17, "simple recursive rule" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 18, "non-trivial recursive rule" )
+TUT_UNIT_TEST( "non-trivial recursive rule" )
 	HRule elem;
 	HRule mul( elem >> *( '*' >> elem ) );
 	HRule sum( mul >> *( '+' >> mul ) );
@@ -539,7 +539,7 @@ TUT_UNIT_TEST( 18, "non-trivial recursive rule" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 19, "ad-hoc root rule name" )
+TUT_UNIT_TEST( "ad-hoc root rule name" )
 	HRule elem;
 	HRule mul( elem >> *( '*' >> elem ) );
 	HRule extra( integer >> '%' >> elem );
@@ -560,7 +560,7 @@ TUT_UNIT_TEST( 19, "ad-hoc root rule name" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "two inter-locking recursion loops" )
+TUT_UNIT_TEST( "two inter-locking recursion loops" )
 	HRule elem;
 	HRule other;
 	HRule mul( elem >> *( '*' >> elem ) >> other );
@@ -584,7 +584,7 @@ TUT_UNIT_TEST( 20, "two inter-locking recursion loops" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 32, "unnamed HHuginn grammar" )
+TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule name( regex( "\\<[a-zA-Z_][a-zA-Z0-9_]*\\>" ) );
 	HRule expression;
 	HRule absoluteValue( '|' >> expression >> '|' );
@@ -730,7 +730,7 @@ struct calc {
 	}
 };
 
-TUT_UNIT_TEST( 40, "calc (sum)" )
+TUT_UNIT_TEST( "calc (sum)" )
 	calc c;
 	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
 	HRule r( realVal >> *( ( '+' >> realVal )[HBoundCall<void ( void )>( call( &calc::sum, &c ) )] ) );
@@ -740,7 +740,7 @@ TUT_UNIT_TEST( 40, "calc (sum)" )
 	ENSURE_DISTANCE( "bad value calculated from +", c._vars.top(), -2.9l, epsilon );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 41, "calc (sum, mul)" )
+TUT_UNIT_TEST( "calc (sum, mul)" )
 	calc c;
 	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
 	HRule multiply( realVal >> *( ( '*' >> realVal )[HBoundCall<void ( void )>( call( &calc::mul, &c ) )] ) );
@@ -752,7 +752,7 @@ TUT_UNIT_TEST( 41, "calc (sum, mul)" )
 	ENSURE_DISTANCE( "bad value calculated from +*", c._vars.top(), -1.2l, epsilon );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 42, "calc, (sum, mul, recursion)" )
+TUT_UNIT_TEST( "calc, (sum, mul, recursion)" )
 	calc c;
 	HRule expr;
 	HRule paren( '(' >> expr >> ')' );
@@ -768,7 +768,7 @@ TUT_UNIT_TEST( 42, "calc, (sum, mul, recursion)" )
 	ENSURE_DISTANCE( "bad value calculated from +*()", c._vars.top(), 6.48l, epsilon );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 43, "calc, (plus, minus, mul, div, recursion)" )
+TUT_UNIT_TEST( "calc, (plus, minus, mul, div, recursion)" )
 	calc c;
 	HRule expr;
 	HRule paren( '(' >> expr >> ')' );

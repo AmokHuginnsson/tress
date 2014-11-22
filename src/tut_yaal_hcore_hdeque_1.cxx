@@ -56,7 +56,7 @@ struct tut_yaal_hcore_hdeque_1 : public tut_yaal_hcore_hdeque_base<1> {
 
 TUT_TEST_GROUP( tut_yaal_hcore_hdeque_1, "yaal::hcore::HDeque,1" );
 
-TUT_UNIT_TEST( 5, "Constructor with range initialization." )
+TUT_UNIT_TEST( "Constructor with range initialization." )
 	item_t::set_start_id( 0 );
 	deque_t deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	proto_t proto( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
@@ -70,7 +70,7 @@ TUT_UNIT_TEST( 5, "Constructor with range initialization." )
 	ENSURE_EQUALS( "range initialization failed", big_deque, proto );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "Copy constructor." )
+TUT_UNIT_TEST( "Copy constructor." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	deque_t deque( SIZE );
@@ -84,7 +84,7 @@ TUT_UNIT_TEST( 6, "Copy constructor." )
 		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "Operator [ ]." )
+TUT_UNIT_TEST( "Operator [ ]." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	deque_t deque ( SIZE );
@@ -92,7 +92,7 @@ TUT_UNIT_TEST( 7, "Operator [ ]." )
 	ENSURE_THROW( "access with negative index succed", deque[ - SIZE - 1 ] = 0, HException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "Operator bool." )
+TUT_UNIT_TEST( "Operator bool." )
 	item_t::set_start_id( 0 );
 	int const EMPTY = 0;
 	int const SIZE = 7;
@@ -137,7 +137,7 @@ void tut_yaal_hcore_hdeque_1::test_erase( void ) {
 	test_erase<item_size>( countof ( _testData_[0] ) / 4, countof( _testData_[0] ) - 3 );
 }
 
-TUT_UNIT_TEST( 9, "range erase" )
+TUT_UNIT_TEST( "range erase" )
 	test_erase<1>();
 	test_erase<2>();
 	test_erase<3>();
@@ -228,7 +228,7 @@ void tut_yaal_hcore_hdeque_1::test_roll_forward_greedy_insert_erase( int shift_,
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 }
 
-TUT_UNIT_TEST( 18, "roll forward (push_back/pop_front) insert erase" )
+TUT_UNIT_TEST( "roll forward (push_back/pop_front) insert erase" )
 	int shift[] = { 1, 2, 3, 4, 5, 6, 7, 8, 16, 32 };
 	int pack[] = { 1, 2, 3, 4, 5, 7, 8 };
 	int distance( 1024 );

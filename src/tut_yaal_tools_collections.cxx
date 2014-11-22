@@ -43,7 +43,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_collections );
 TUT_TEST_GROUP( tut_yaal_tools_collections, "yaal::tools::collections" );
 
-TUT_UNIT_TEST( 1, "add_orderly" )
+TUT_UNIT_TEST( "add_orderly" )
 	Stringifier stringifier;
 	HList<char> l;
 	add_orderly( l, 'd' );
@@ -66,7 +66,7 @@ TUT_UNIT_TEST( 1, "add_orderly" )
 	ENSURE_EQUALS( "add_orderly failed", stringifier.to_string<char>( l ), "abcdefgh" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "n_th" )
+TUT_UNIT_TEST( "n_th" )
 	list_t l;
 	l.push_back( '1' );
 	l.push_back( '2' );

@@ -60,7 +60,7 @@ HString bar( int2int_t const& arr_ ) {
 
 }
 
-TUT_UNIT_TEST( 1, "build HArray<>" )
+TUT_UNIT_TEST( "build HArray<>" )
 	int_array_t a = sequence( 1 )( 2 )( 3 );
 	int_array_t expected;
 	expected.push_back( 1 );
@@ -70,7 +70,7 @@ TUT_UNIT_TEST( 1, "build HArray<>" )
 	ENSURE_EQUALS( "construction to HArray failed", foo( sequence( -1 )( 3 )( -5 ) ), "array(-1 3 -5)" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "build HMap<>" )
+TUT_UNIT_TEST( "build HMap<>" )
 	int2int_t m = sequence( 1, 2 )( 3, 4 )( 5, -6 )( -7, 8 );
 	int2int_t expected;
 	expected.insert( make_pair( 1, 2 ) );
@@ -81,7 +81,7 @@ TUT_UNIT_TEST( 2, "build HMap<>" )
 	ENSURE_EQUALS( "construction to HMap failed", bar( sequence( 1, 2 )( 3, -4 )( -5, 6 ) ), "map(pair<-5,6> pair<1,2> pair<3,-4>)" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "fast build HArray<>" )
+TUT_UNIT_TEST( "fast build HArray<>" )
 	int_array_t expected;
 	expected.push_back( 1 );
 	ENSURE_EQUALS( "assign to HArray failed", array( 1 ), expected );

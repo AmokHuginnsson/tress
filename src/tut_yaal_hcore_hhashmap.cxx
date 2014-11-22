@@ -101,11 +101,11 @@ void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ ) {
 
 TUT_TEST_GROUP( tut_yaal_hcore_hhashmap, "yaal::hcore::HHashMap" );
 
-TUT_UNIT_TEST( 1, "Simple constructor." )
+TUT_UNIT_TEST( "Simple constructor." )
 	ENSURE_THROW( "Created map with bad hash table size.", hash_map_t map( 0 ), HException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Quantity test." ) {
+TUT_UNIT_TEST( "Quantity test." ) {
 	hash_map_t map( 17 );
 	check_consitency( map );
 	ENSURE_EQUALS( "newly created map is not empty", map.size(), 0 );
@@ -116,7 +116,7 @@ TUT_UNIT_TEST( 2, "Quantity test." ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "element insertion" ) {
+TUT_UNIT_TEST( "element insertion" ) {
 	hash_map_t map( TEST_PRIME );
 	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
 		map[ i ] = i;
@@ -126,7 +126,7 @@ TUT_UNIT_TEST( 3, "element insertion" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "iterate" ) {
+TUT_UNIT_TEST( "iterate" ) {
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
 	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
@@ -141,7 +141,7 @@ TUT_UNIT_TEST( 4, "iterate" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "key, value access" ) {
+TUT_UNIT_TEST( "key, value access" ) {
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
 	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
@@ -157,7 +157,7 @@ TUT_UNIT_TEST( 5, "key, value access" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "key removal" ) {
+TUT_UNIT_TEST( "key removal" ) {
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
 	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
@@ -176,7 +176,7 @@ TUT_UNIT_TEST( 6, "key removal" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "iteration on large table with few elements" ) {
+TUT_UNIT_TEST( "iteration on large table with few elements" ) {
 	hash_map_t map( LARGE_TABLE );
 	check_consitency( map );
 	for ( int i = 0; i < FEW_ELEMENTS; ++ i ) {
@@ -191,7 +191,7 @@ TUT_UNIT_TEST( 7, "iteration on large table with few elements" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "copy contructor" ) {
+TUT_UNIT_TEST( "copy contructor" ) {
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
 	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
@@ -207,7 +207,7 @@ TUT_UNIT_TEST( 8, "copy contructor" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "contructor from sequence" ) {
+TUT_UNIT_TEST( "contructor from sequence" ) {
 	hash_map_t map( TEST_PRIME );
 	check_consitency( map );
 	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
@@ -223,7 +223,7 @@ TUT_UNIT_TEST( 9, "contructor from sequence" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "auto grow" ) {
+TUT_UNIT_TEST( "auto grow" ) {
 	hash_map_t map;
 	check_consitency( map );
 	for ( int i = 0; i < ELEM_COUNT; ++ i ) {
@@ -244,7 +244,7 @@ TUT_UNIT_TEST( 10, "auto grow" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "auto grow large table" ) {
+TUT_UNIT_TEST( "auto grow large table" ) {
 	hash_map_t map;
 	check_consitency( map );
 	for ( int i = 0; i < LARGE_TABLE; ++ i ) {
@@ -265,7 +265,7 @@ TUT_UNIT_TEST( 11, "auto grow large table" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "auto grow huge table" )
+TUT_UNIT_TEST( "auto grow huge table" )
 	TIME_CONSTRAINT_EXEMPT(); {
 	hash_map_t map;
 	check_consitency( map );
@@ -287,20 +287,20 @@ TUT_UNIT_TEST( 12, "auto grow huge table" )
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "find on empty map" )
+TUT_UNIT_TEST( "find on empty map" )
 	hash_map_t map;
 	hash_map_t::iterator it( map.find( 0 ) );
 	ENSURE( "find on empty returned bogus iterator", it == map.end() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "dereferencing non existing key with const map[key]" )
+TUT_UNIT_TEST( "dereferencing non existing key with const map[key]" )
 	hash_map_t m;
 	hash_map_t const& cm( m );
 	ENSURE_THROW( "FATAL: dereferencing non-existing key succeeded!", cm[ 0 ], HInvalidKeyException );
 	ENSURE_EQUALS( "map extended during m[key] = val; although val evaluation throws.", m.is_empty(), true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "at()" )
+TUT_UNIT_TEST( "at()" )
 	hash_map_t m;
 	hash_map_t const& cm( m );
 	ENSURE_THROW( "FATAL: dereferencing non-existing key succeeded!", cm.at( 0 ), HInvalidKeyException );
@@ -311,7 +311,7 @@ TUT_UNIT_TEST( 15, "at()" )
 	ENSURE_EQUALS( "at() was unable to return value", cm.at( 0 ), 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "const pointer as a key" )
+TUT_UNIT_TEST( "const pointer as a key" )
 	char const a[] = "a";
 	char const b[] = "a";
 	char const c[] = "a";
@@ -329,7 +329,7 @@ TUT_UNIT_TEST( 16, "const pointer as a key" )
 	ENSURE_EQUALS( msg, map.find( d )->second, 4 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 50, "sample data" )
+TUT_UNIT_TEST( "sample data" )
 	typedef HHashMap<HString, int> string_to_int_hashmap_t;
 	string_to_int_hashmap_t map;
 	map["one"] = 1;

@@ -43,18 +43,18 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_allocator );
 TUT_TEST_GROUP( tut_yaal_allocator, "yaal::allocator" );
 
-TUT_UNIT_TEST( 1, "allocator::system" )
+TUT_UNIT_TEST( "allocator::system" )
 	HList<int, allocator::system<int> > l;
 	l.push_back( 1 );
 TUT_TEARDOWN()
 
 
-TUT_UNIT_TEST( 2, "allocator::pool" )
+TUT_UNIT_TEST( "allocator::pool" )
 	HList<int, allocator::pool<int> > l;
 	l.push_back( 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "allocator::ref<allocator::system>" )
+TUT_UNIT_TEST( "allocator::ref<allocator::system>" )
 	typedef allocator::system<int> allocator_type;
 	typedef HList<int, allocator::ref<int, allocator_type> > list_on_ref_t;
 	typedef list_on_ref_t::allocator_type ref_allocator;

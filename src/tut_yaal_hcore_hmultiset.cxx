@@ -41,14 +41,14 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hmultiset );
 TUT_TEST_GROUP( tut_yaal_hcore_hmultiset, "yaal::hcore::HMultiSet" );
 
-TUT_UNIT_TEST( 1, "default constructor" )
+TUT_UNIT_TEST( "default constructor" )
 	typedef HMultiSet<int> mset_t;
 	mset_t ms;
 	ENSURE_EQUALS( "bad size on fresh HMultiSet<>", ms.size(), 0 );
 	ENSURE( "bad emptinass status on fresh HMultiSet<>", ms.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "unique items" )
+TUT_UNIT_TEST( "unique items" )
 	typedef HMultiSet<int> mset_t;
 	mset_t ms;
 	ENSURE_EQUALS( "bad size on fresh HMultiSet<>", ms.size(), 0 );
@@ -65,7 +65,7 @@ TUT_UNIT_TEST( 2, "unique items" )
 	ENSURE_EQUALS( "bad count of unique items 3", ms.count( 3 ), 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "non-unique items" )
+TUT_UNIT_TEST( "non-unique items" )
 	typedef HMultiSet<int> mset_t;
 	mset_t ms;
 	ENSURE_EQUALS( "bad size on fresh HMultiSet<>", ms.size(), 0 );
@@ -105,7 +105,7 @@ TUT_UNIT_TEST( 3, "non-unique items" )
 	ENSURE_EQUALS( "bad count of unique items 3", ms.count( 3 ), 4 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "forward iteration" )
+TUT_UNIT_TEST( "forward iteration" )
 	typedef HMultiSet<int> mset_t;
 	mset_t ms;
 	ms.insert( 1 );
@@ -122,7 +122,7 @@ TUT_UNIT_TEST( 4, "forward iteration" )
 	ENSURE_EQUALS( "bad forward teration", ss.string(), "112223333" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "backward iteration" )
+TUT_UNIT_TEST( "backward iteration" )
 	typedef HMultiSet<int> mset_t;
 	mset_t ms;
 	ms.insert( 1 );
@@ -139,7 +139,7 @@ TUT_UNIT_TEST( 5, "backward iteration" )
 	ENSURE_EQUALS( "bad forward teration", ss.string(), "333322211" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 50, "sample data" )
+TUT_UNIT_TEST( "sample data" )
 	typedef HMultiSet<HString> string_multi_set_t;
 	string_multi_set_t set;
 	set.insert( "one" );

@@ -42,7 +42,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_filesystem );
 TUT_TEST_GROUP( tut_yaal_tools_filesystem, "yaal::tools::filesystem" );
 
-TUT_UNIT_TEST( 1, "find" )
+TUT_UNIT_TEST( "find" )
 	filesystem::find_result fr( filesystem::find( "./data", ".*\\.sql" ) );
 	sort( fr.begin(), fr.end() );
 	filesystem::find_result expected = array<HString>( "./data/firebird.sql", "./data/mysql.sql", "./data/oracle.sql", "./data/postgresql.sql", "./data/sqlite.sql" );

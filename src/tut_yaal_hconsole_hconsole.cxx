@@ -61,7 +61,7 @@ int const tut_yaal_hconsole_hconsole::CONSOLE_HEIGHT = 25;
 
 TUT_TEST_GROUP( tut_yaal_hconsole_hconsole, "yaal::hconsole::HConsole" );
 
-TUT_UNIT_TEST( 1, "Enter and leave" )
+TUT_UNIT_TEST( "Enter and leave" )
 	external_lock_t l( HMonitor::get_instance().acquire( "terminal" ) );
 	HConsole& cons( HConsole::get_instance() );
 	cons.enter_curses();
@@ -70,7 +70,7 @@ TUT_UNIT_TEST( 1, "Enter and leave" )
 	cons.leave_curses();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "cursor position" )
+TUT_UNIT_TEST( "cursor position" )
 	external_lock_t l( HMonitor::get_instance().acquire( "terminal" ) );
 	HConsole& cons( HConsole::get_instance() );
 	cons.enter_curses();

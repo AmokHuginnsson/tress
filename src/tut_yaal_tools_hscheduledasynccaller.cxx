@@ -60,7 +60,7 @@ struct tut_yaal_tools_hscheduledasynccaller : public simple_mock<tut_yaal_tools_
 
 TUT_TEST_GROUP( tut_yaal_tools_hscheduledasynccaller, "yaal::tools::HScheduledAsyncCaller" );
 
-TUT_UNIT_TEST( 1, "functional test" )
+TUT_UNIT_TEST( "functional test" )
 	int const expect( 7 );
 	_sac.register_call( static_cast<HAbstractAsyncCaller::priority_t>( time( NULL ) + 1 ), call( &tut_yaal_tools_hscheduledasynccaller::action, this, expect ) );
 	ENSURE_EQUALS( "scheduled call did not wait", _val, 0 );

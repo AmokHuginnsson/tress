@@ -54,7 +54,7 @@ struct tut_yaal_hcore_hdeque_2 : public tut_yaal_hcore_hdeque_base<2> {
 
 TUT_TEST_GROUP( tut_yaal_hcore_hdeque_2, "yaal::hcore::HDeque,2" );
 
-TUT_UNIT_TEST( 14, "copy constructor (of empty)" )
+TUT_UNIT_TEST( "copy constructor (of empty)" )
 	deque_t a1;
 	check_consistency( a1 );
 	ENSURE( "construction of empty deque", a1.is_empty() );
@@ -93,7 +93,7 @@ void tut_yaal_hcore_hdeque_2::test_insert_pos( void ) {
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 }
 
-TUT_UNIT_TEST( 15, "insert( pos, value )" )
+TUT_UNIT_TEST( "insert( pos, value )" )
 	test_insert_pos<1>();
 	test_insert_pos<2>();
 	test_insert_pos<3>();
@@ -110,7 +110,7 @@ TUT_UNIT_TEST( 15, "insert( pos, value )" )
 	test_insert_pos<640>();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "assign operator (=)" )
+TUT_UNIT_TEST( "assign operator (=)" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { -36, -1, -4, -9 };
 	item_t::set_start_id( 0 ); {
@@ -285,7 +285,7 @@ void tut_yaal_hcore_hdeque_2::test_insert( void ) {
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 }
 
-TUT_UNIT_TEST( 17, "insert range" )
+TUT_UNIT_TEST( "insert range" )
 	test_insert<1>();
 	test_insert<2>();
 	test_insert<3>();
@@ -376,7 +376,7 @@ void tut_yaal_hcore_hdeque_2::test_roll_backward_insert_erase( int shift_, int p
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 }
 
-TUT_UNIT_TEST( 19, "roll backward (push_front/pop_back) insert erase" )
+TUT_UNIT_TEST( "roll backward (push_front/pop_back) insert erase" )
 	int shift[] = { 1, 2, 3, 4, 5, 6, 7, 8, 16, 32 };
 	int pack[] = { 1, 2, 3, 4, 5, 7, 8 };
 	int distance( 1024 );

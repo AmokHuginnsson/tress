@@ -85,7 +85,7 @@ void tut_yaal_hcore_hpool::check_consistency( HPool<T>& pool_ ) {
 
 TUT_TEST_GROUP( tut_yaal_hcore_hpool, "yaal::hcore::HPool" );
 
-TUT_UNIT_TEST( 1, "object space size" )
+TUT_UNIT_TEST( "object space size" )
 /* First test if tut_helpers::Sizer works as intentded. */
 	STATIC_ASSERT( sizeof ( Sizer<1> ) == 1 );
 	STATIC_ASSERT( sizeof ( Sizer<2> ) == 2 );
@@ -156,13 +156,13 @@ TUT_UNIT_TEST( 1, "object space size" )
 #endif /* #else #elif TARGET_CPU_BITS == 32 #if TARGET_CPU_BITS == 64 */
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "constructor" )
+TUT_UNIT_TEST( "constructor" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad pool block count after construction", p._poolBlockCount, 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "allocate one, deallocate, and allocate again" )
+TUT_UNIT_TEST( "allocate one, deallocate, and allocate again" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -180,7 +180,7 @@ TUT_UNIT_TEST( 3, "allocate one, deallocate, and allocate again" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "allocate second pool block" )
+TUT_UNIT_TEST( "allocate second pool block" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -202,7 +202,7 @@ TUT_UNIT_TEST( 4, "allocate second pool block" )
 	check_consistency( p );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "allocate second pool block, free first" )
+TUT_UNIT_TEST( "allocate second pool block, free first" )
 	pool_t p;
 	log_t allocated( pool_t::OBJECTS_PER_BLOCK );
 	check_consistency( p );
@@ -232,7 +232,7 @@ TUT_UNIT_TEST( 5, "allocate second pool block, free first" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "allocate full block, free in random order, reallocate full block" )
+TUT_UNIT_TEST( "allocate full block, free in random order, reallocate full block" )
 	pool_t p;
 	log_t allocated( pool_t::OBJECTS_PER_BLOCK );
 	log_t freeOrder( pool_t::OBJECTS_PER_BLOCK );
@@ -261,7 +261,7 @@ TUT_UNIT_TEST( 6, "allocate full block, free in random order, reallocate full bl
 	ENSURE_EQUALS( "bad free list", allocated, freeOrder );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "allocate 16 blocks, free odd elements in all of them, than free rest" )
+TUT_UNIT_TEST( "allocate 16 blocks, free odd elements in all of them, than free rest" )
 	pool_t p;
 	check_consistency( p );
 	int workWith( pool_t::OBJECTS_PER_BLOCK * 16 );
@@ -284,7 +284,7 @@ TUT_UNIT_TEST( 7, "allocate 16 blocks, free odd elements in all of them, than fr
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "alloc 3 blocks, free third, make room in second" )
+TUT_UNIT_TEST( "alloc 3 blocks, free third, make room in second" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -311,7 +311,7 @@ TUT_UNIT_TEST( 8, "alloc 3 blocks, free third, make room in second" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "alloc 3 blocks, make room in second, free third" )
+TUT_UNIT_TEST( "alloc 3 blocks, make room in second, free third" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -338,7 +338,7 @@ TUT_UNIT_TEST( 9, "alloc 3 blocks, make room in second, free third" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "alloc 3 blocks, make room in first, free third" )
+TUT_UNIT_TEST( "alloc 3 blocks, make room in first, free third" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -365,7 +365,7 @@ TUT_UNIT_TEST( 10, "alloc 3 blocks, make room in first, free third" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "alloc 3 blocks, make room in first, free second" )
+TUT_UNIT_TEST( "alloc 3 blocks, make room in first, free second" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -394,7 +394,7 @@ TUT_UNIT_TEST( 11, "alloc 3 blocks, make room in first, free second" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "alloc 3 blocks, make room in second, free first" )
+TUT_UNIT_TEST( "alloc 3 blocks, make room in second, free first" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -423,7 +423,7 @@ TUT_UNIT_TEST( 12, "alloc 3 blocks, make room in second, free first" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "alloc 3 blocks, free first, free second" )
+TUT_UNIT_TEST( "alloc 3 blocks, free first, free second" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -454,7 +454,7 @@ TUT_UNIT_TEST( 13, "alloc 3 blocks, free first, free second" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "alloc 3 blocks, free second, free first" )
+TUT_UNIT_TEST( "alloc 3 blocks, free second, free first" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -485,7 +485,7 @@ TUT_UNIT_TEST( 14, "alloc 3 blocks, free second, free first" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "alloc 3 blocks, free third, free first" )
+TUT_UNIT_TEST( "alloc 3 blocks, free third, free first" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -514,7 +514,7 @@ TUT_UNIT_TEST( 15, "alloc 3 blocks, free third, free first" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "alloc 3 blocks, free third, make room in second, free first" )
+TUT_UNIT_TEST( "alloc 3 blocks, free third, make room in second, free first" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -546,7 +546,7 @@ TUT_UNIT_TEST( 16, "alloc 3 blocks, free third, make room in second, free first"
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "alloc 3 blocks, free third, make room in first, free second" )
+TUT_UNIT_TEST( "alloc 3 blocks, free third, make room in first, free second" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -578,7 +578,7 @@ TUT_UNIT_TEST( 17, "alloc 3 blocks, free third, make room in first, free second"
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 18, "alloc 3 blocks, free second, make room in first, free third" )
+TUT_UNIT_TEST( "alloc 3 blocks, free second, make room in first, free third" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -610,7 +610,7 @@ TUT_UNIT_TEST( 18, "alloc 3 blocks, free second, make room in first, free third"
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 19, "alloc 3 blocks, free first, make room in second, free third" )
+TUT_UNIT_TEST( "alloc 3 blocks, free first, make room in second, free third" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
@@ -642,7 +642,7 @@ TUT_UNIT_TEST( 19, "alloc 3 blocks, free first, make room in second, free third"
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "allocate two full blocks, free second in random order, reallocate full block" )
+TUT_UNIT_TEST( "allocate two full blocks, free second in random order, reallocate full block" )
 	pool_t p;
 	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
 	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
@@ -678,7 +678,7 @@ TUT_UNIT_TEST( 20, "allocate two full blocks, free second in random order, reall
 	ENSURE_EQUALS( "bad free list", allocatedB1, freeOrder );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "allocate 3 blocks, free all but one in first and second in random order, reallocate to full blocks" )
+TUT_UNIT_TEST( "allocate 3 blocks, free all but one in first and second in random order, reallocate to full blocks" )
 	pool_t p;
 	log_t allocatedB0( pool_t::OBJECTS_PER_BLOCK );
 	log_t allocatedB1( pool_t::OBJECTS_PER_BLOCK );
@@ -737,7 +737,7 @@ TUT_UNIT_TEST( 21, "allocate 3 blocks, free all but one in first and second in r
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 22, "make N full blocks, make room in all of them in random order" )
+TUT_UNIT_TEST( "make N full blocks, make room in all of them in random order" )
 	static int const N( 16 );
 	log_t representants( N );
 	pool_t p;
@@ -763,7 +763,7 @@ TUT_UNIT_TEST( 22, "make N full blocks, make room in all of them in random order
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, N );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 23, "make N full blocks, free them in random order" )
+TUT_UNIT_TEST( "make N full blocks, free them in random order" )
 	static int const N( 16 );
 	logs_t allocated( N );
 	pool_t p;
@@ -789,7 +789,7 @@ TUT_UNIT_TEST( 23, "make N full blocks, free them in random order" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "make N full blocks, make room in them in random order, free them in random order" )
+TUT_UNIT_TEST( "make N full blocks, make room in them in random order, free them in random order" )
 	static int const N( 16 );
 	logs_t allocated( N );
 	log_t representants( N );

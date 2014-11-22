@@ -65,7 +65,7 @@ void tut_yaal_tools_hworkflow::bar( counter_t c ) {
 	cout << c.to_string() << endl;
 }
 
-TUT_UNIT_TEST( 1, "Pushing tasks." )
+TUT_UNIT_TEST( "Pushing tasks." )
 	TIME_CONSTRAINT_EXEMPT();
 	HWorkFlow w( 3 );
 	for ( int i = 0; i < 3; ++ i ) {
@@ -75,7 +75,7 @@ TUT_UNIT_TEST( 1, "Pushing tasks." )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Cleanup of finished tasks." ) {
+TUT_UNIT_TEST( "Cleanup of finished tasks." ) {
 	HWorkFlow w( 3 );
 	w.push_task( call( tut_yaal_tools_hworkflow::bar, counter_t() ) );
 	if ( tools::sleep::second( 1 ) )

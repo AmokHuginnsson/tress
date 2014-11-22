@@ -41,7 +41,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_trait );
 TUT_TEST_GROUP( tut_yaal_trait, "yaal::trait" );
 
-TUT_UNIT_TEST( 1, "same stype" )
+TUT_UNIT_TEST( "same stype" )
 	ENSURE( "int, int", same_type<int, int>::value );
 	ENSURE_NOT( "int, int const", same_type<int, int const>::value );
 	ENSURE_NOT( "int, int*", same_type<int, int*>::value );
@@ -51,18 +51,18 @@ TUT_UNIT_TEST( 1, "same stype" )
 	ENSURE_NOT( "int (char, double), int (char, double long)", same_type<int (*)(char, double), int (*)(char, double long)>::value );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "return type" )
+TUT_UNIT_TEST( "return type" )
 	ENSURE( "int, int (char, double)", same_type<int, return_type<int (*)(char, double)>::type>::value );
 	ENSURE( "int*, int* (char, double)", same_type<int*, return_type<int* (*)(char, double)>::type>::value );
 	ENSURE_NOT( "int*, int (char, double)", same_type<int*, return_type<int (*)(char, double)>::type>::value );
 	ENSURE_NOT( "int, int* (char, double)", same_type<int, return_type<int* (*)(char, double)>::type>::value );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "count types" )
+TUT_UNIT_TEST( "count types" )
 	ENSURE_EQUALS( "type count is wrong", count_type<int, char, double, int, float, int, void*>::value, 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "is_reference" )
+TUT_UNIT_TEST( "is_reference" )
 	ENSURE( trait::is_reference<int&>::value == true );
 	ENSURE( trait::is_reference<int*&>::value == true );
 	ENSURE( trait::is_reference<int const&>::value == true );
@@ -86,7 +86,7 @@ TUT_UNIT_TEST( 4, "is_reference" )
 	typedef trait::make_const_ref_ptr<trait::strip_reference<int* const*&>::type>::type T6 __attribute__((unused));
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "is_pointer" )
+TUT_UNIT_TEST( "is_pointer" )
 	ENSURE( trait::is_pointer<int*>::value == true );
 	ENSURE( trait::is_pointer<int const*>::value == true );
 	ENSURE( trait::is_pointer<int* const*>::value == true );
@@ -100,7 +100,7 @@ TUT_UNIT_TEST( 5, "is_pointer" )
 	ENSURE( trait::is_pointer<trait::strip_pointer<int* const*>::type>::value == true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "is_const" )
+TUT_UNIT_TEST( "is_const" )
 	ENSURE( trait::is_const<int const>::value == true );
 	ENSURE( trait::is_const<int const&>::value == true );
 	ENSURE( trait::is_const<int const* const>::value == true );
@@ -110,7 +110,7 @@ TUT_UNIT_TEST( 6, "is_const" )
 	ENSURE( trait::is_const<int&>::value == false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "is_array" )
+TUT_UNIT_TEST( "is_array" )
 	typedef int arr_t[3];
 	typedef int const arr_const_t[3];
 	typedef int* int_ptr_t;
@@ -120,7 +120,7 @@ TUT_UNIT_TEST( 7, "is_array" )
 	ENSURE( trait::is_array<int>::value == false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "arg type deduction on functional functors :)" )
+TUT_UNIT_TEST( "arg type deduction on functional functors :)" )
 	ENSURE( trait::same_type<trait::argument_type<less<int>, 0>::type, int>::value == true );
 	ENSURE( trait::same_type<trait::argument_type<less<int>, 1>::type, int>::value == true );
 	ENSURE( trait::same_type<trait::argument_type<less<int>, 0>::type, double>::value == false );

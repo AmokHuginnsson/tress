@@ -52,12 +52,12 @@ typedef HResource<tut_yaal_hcore_hresource::item_t> ptr_t;
 
 TUT_TEST_GROUP( tut_yaal_hcore_hresource, "yaal::hcore::HResource" );
 
-TUT_UNIT_TEST( 1, "default constructor" )
+TUT_UNIT_TEST( "default constructor" )
 	ptr_t c;
 	ENSURE_EQUALS( "dirty default initialized resurce holder", c.get(), static_cast<item_t*>( NULL ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "freeing the new allocated object" ) {
+TUT_UNIT_TEST( "freeing the new allocated object" ) {
 		item_t* p = new item_t();
 		ptr_t ptr( p );
 		ENSURE_EQUALS( "smart pointer does not hold proper get pointer", ptr.get(), p );
@@ -66,7 +66,7 @@ TUT_UNIT_TEST( 2, "freeing the new allocated object" ) {
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "Copy constructor." ) {
+TUT_UNIT_TEST( "Copy constructor." ) {
 		item_t* p = NULL;
 		ptr_t ptr = ptr_t( p = new item_t() );
 		ENSURE_EQUALS( "smart pointer does not hold proper get pointer", ptr.get(), p );
@@ -75,7 +75,7 @@ TUT_UNIT_TEST( 3, "Copy constructor." ) {
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "Assign operator." ) {
+TUT_UNIT_TEST( "Assign operator." ) {
 		item_t* p = NULL;
 		ptr_t sp1 = ptr_t( new item_t() );
 		ptr_t sp2 = ptr_t( p = new item_t() );
@@ -91,7 +91,7 @@ TUT_UNIT_TEST( 4, "Assign operator." ) {
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "Checks constructor with another ptr_t with no module." ) {
+TUT_UNIT_TEST( "Checks constructor with another ptr_t with no module." ) {
 		ptr_t sp1;
 		ENSURE_EQUALS( "item_t::get_instance_count: 0", item_t::get_instance_count(), 0 );
 		ptr_t sp2( yaal::move( sp1 ) );
@@ -102,7 +102,7 @@ TUT_UNIT_TEST( 5, "Checks constructor with another ptr_t with no module." ) {
 	ENSURE_EQUALS( "leak !!!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "Checks constructor with another ptr_t with module." ) {
+TUT_UNIT_TEST( "Checks constructor with another ptr_t with module." ) {
 		item_t* p = new item_t();
 		ptr_t sp1( p );
 		ENSURE_EQUALS( "get", sp1.get(), p );
@@ -119,7 +119,7 @@ TUT_TEARDOWN()
 // Assignment operators
 // =================================================
 
-TUT_UNIT_TEST( 7, "Checks assignment with non-null module." ) {
+TUT_UNIT_TEST( "Checks assignment with non-null module." ) {
 		item_t* p = new item_t();
 		ptr_t sp( p );
 		ENSURE("get", sp.get() == p);
@@ -128,7 +128,7 @@ TUT_UNIT_TEST( 7, "Checks assignment with non-null module." ) {
 	ENSURE_EQUALS( "leak !!!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "Checks assignment with ptr_t with non-null module." ) {
+TUT_UNIT_TEST( "Checks assignment with ptr_t with non-null module." ) {
 		item_t* p = NULL;
 		ptr_t sp1( p = new item_t() );
 		ENSURE_EQUALS( "get", sp1.get(), p );
@@ -141,7 +141,7 @@ TUT_UNIT_TEST( 8, "Checks assignment with ptr_t with non-null module." ) {
 	ENSURE_EQUALS( "destructed", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "Checks assignment with itself." ) {
+TUT_UNIT_TEST( "Checks assignment with itself." ) {
 		ptr_t sp1( new item_t() );
 		sp1 = yaal::move( sp1 );
 		ENSURE( "get", sp1.get() != 0 );
@@ -156,7 +156,7 @@ TUT_TEARDOWN()
 // Passing ownership
 // =================================================
 
-TUT_UNIT_TEST( 10, "Checks passing ownership via assignment." ) {
+TUT_UNIT_TEST( "Checks passing ownership via assignment." ) {
 		item_t *p1 = NULL, *p2 = NULL;
 		ptr_t sp1( p1 = new item_t( 1 ));
 		ptr_t sp2( p2 = new item_t( 2 ));
@@ -171,14 +171,14 @@ TUT_UNIT_TEST( 10, "Checks passing ownership via assignment." ) {
 	ENSURE_EQUALS( "leak !!!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "Checks operator -> throws instead of returning null." ) {
+TUT_UNIT_TEST( "Checks operator -> throws instead of returning null." ) {
 		ptr_t sp;
 		ENSURE_THROW( "failed assertion expected", sp->get_id(), HFailedAssertion );
 	}
 	ENSURE_EQUALS( "leak !!!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "assign smart pointers pointing to the same memory." ) {
+TUT_UNIT_TEST( "assign smart pointers pointing to the same memory." ) {
 		ptr_t sp1( new item_t() );
 		ptr_t sp2 = yaal::move( sp1 );
 		sp2 = yaal::move( sp1 );
@@ -186,11 +186,11 @@ TUT_UNIT_TEST( 12, "assign smart pointers pointing to the same memory." ) {
 	ENSURE_EQUALS( "leak !!!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "sizeof ( HResource<> )" )
+TUT_UNIT_TEST( "sizeof ( HResource<> )" )
 	ENSURE_EQUALS( "sizeof ( HResource<> ) != sizeof ( auto_ptr<> )", sizeof ( HResource<item_t> ), sizeof ( void* ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "array" ) {
+TUT_UNIT_TEST( "array" ) {
 		typedef HResource<item_t[]> arr_t;
 		arr_t arr( new item_t[5] );
 		ENSURE_EQUALS( "construction failed???", item_t::get_instance_count(), 5 );

@@ -40,20 +40,20 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hinterval );
 TUT_TEST_GROUP( tut_yaal_hcore_hinterval, "yaal::hcore::HInterval" );
 
-TUT_UNIT_TEST( 1, "default constructor" )
+TUT_UNIT_TEST( "default constructor" )
 	HInterval<int> i;
 	ENSURE_EQUALS( "default constructor set bad infimum", i.inf(), 0 );
 	ENSURE_EQUALS( "default constructor set bad supremum", i.sup(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "construction with custom initialization" )
+TUT_UNIT_TEST( "construction with custom initialization" )
 	HInterval<int> i( -1, 1 );
 	ENSURE_EQUALS( "custom initialization set bad infimum", i.inf(), -1 );
 	ENSURE_EQUALS( "custom initialization set bad supremum", i.sup(), 1 );
 	ENSURE_THROW( "creation in invalid interval succeeded", HInterval<int> bad( 1, -1 ), HExceptionT<HInterval<int> > );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "addition" )
+TUT_UNIT_TEST( "addition" )
 	HInterval<int> i1( 1, 2 );
 	HInterval<int> i2( 3, 4 );
 	i1 += i2;

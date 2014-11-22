@@ -70,7 +70,7 @@ DEFINE_TAGGED_TYPE(i32_t, Uid)
 DEFINE_TAGGED_TYPE(i64_t, Uid64)
 DEFINE_TAGGED_TYPE(i32_t, Gid)
 
-TUT_UNIT_TEST( 1, "all tests" )
+TUT_UNIT_TEST( "all tests" )
 	Uid u1 = 10;
 	Uid u2 = 20;
 

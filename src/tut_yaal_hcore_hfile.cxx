@@ -41,7 +41,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hfile );
 TUT_TEST_GROUP( tut_yaal_hcore_hfile, "yaal::hcore::HFile" );
 
-TUT_UNIT_TEST( 1, "HFile::READ::UNBUFFERED_READS (nl)" )
+TUT_UNIT_TEST( "HFile::READ::UNBUFFERED_READS (nl)" )
 	HFile in( "./data/nl.txt", HFile::OPEN::READING );
 	HString line;
 	while ( in.read_line( line,	HFile::READ::UNBUFFERED_READS ) >= 0 ) {
@@ -49,7 +49,7 @@ TUT_UNIT_TEST( 1, "HFile::READ::UNBUFFERED_READS (nl)" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "HFile::READ::UNBUFFERED_READS (crnl)" )
+TUT_UNIT_TEST( "HFile::READ::UNBUFFERED_READS (crnl)" )
 	HFile in( "./data/crnl.txt", HFile::OPEN::READING );
 	HString line;
 	while ( in.read_line( line,	HFile::READ::UNBUFFERED_READS ) >= 0 ) {
@@ -57,7 +57,7 @@ TUT_UNIT_TEST( 2, "HFile::READ::UNBUFFERED_READS (crnl)" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "HFile::READ::BUFFERED_READS (nl)" )
+TUT_UNIT_TEST( "HFile::READ::BUFFERED_READS (nl)" )
 	HFile in( "./data/nl.txt", HFile::OPEN::READING );
 	HString line;
 	while ( in.read_line( line,	HFile::READ::BUFFERED_READS ) >= 0 ) {
@@ -65,7 +65,7 @@ TUT_UNIT_TEST( 3, "HFile::READ::BUFFERED_READS (nl)" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "HFile::READ::BUFFERED_READS (crnl)" )
+TUT_UNIT_TEST( "HFile::READ::BUFFERED_READS (crnl)" )
 	HFile in( "./data/crnl.txt", HFile::OPEN::READING );
 	HString line;
 	while ( in.read_line( line,	HFile::READ::BUFFERED_READS ) >= 0 ) {

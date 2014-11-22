@@ -73,7 +73,7 @@ struct PathTest {
 	bool _exists;
 };
 
-TUT_UNIT_TEST( 1, "exists" )
+TUT_UNIT_TEST( "exists" )
 	HString err( "failed to recognize onhological status of given file: " );
 	PathTest pathTest[] = {
 			{ "./data", true },
@@ -97,7 +97,7 @@ TUT_UNIT_TEST( 1, "exists" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "is_directory" )
+TUT_UNIT_TEST( "is_directory" )
 	char const err[] = "failed to recognize directoriesness of given file";
 	char const err2[] = "spurious status on non-existing item acquired";
 	HFSItem dit1( "./data" );
@@ -124,7 +124,7 @@ TUT_UNIT_TEST( 2, "is_directory" )
 	ENSURE( err, dit11.is_directory() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 49, "recurively scan directories" )
+TUT_UNIT_TEST( "recurively scan directories" )
 	recurse( "./build/" );
 TUT_TEARDOWN()
 

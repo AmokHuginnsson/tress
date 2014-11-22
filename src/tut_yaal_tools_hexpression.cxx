@@ -41,13 +41,13 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_hexpression );
 TUT_TEST_GROUP( tut_yaal_tools_hexpression, "yaal::tools::HExpression" );
 
-TUT_UNIT_TEST( 1, "empty expression variables" )
+TUT_UNIT_TEST( "empty expression variables" )
 	HExpression e;
 	for ( int i( 0 ); i < HExpression::MAX_VARIABLE_COUNT; ++ i )
 		ENSURE_EQUALS( "variables not initialized", e[ i ], 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "copy semantics" )
+TUT_UNIT_TEST( "copy semantics" )
 	static int const MAGIC = 7;
 	static int const SPOOKY = 13;
 	HExpression e( "1" );
@@ -61,70 +61,70 @@ TUT_UNIT_TEST( 2, "copy semantics" )
 	ENSURE_EQUALS( "variables not copied", v[ 0 ], SPOOKY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "variable index range" )
+TUT_UNIT_TEST( "variable index range" )
 	HExpression e;
 	ENSURE_THROW( "bad variable index accepted", e[ -1 ],	HExpressionException );
 	ENSURE_THROW( "bad variable index accepted", e[ HExpression::MAX_VARIABLE_COUNT ], HExpressionException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "addition" )
+TUT_UNIT_TEST( "addition" )
 	HExpression e( "2+3" );
 	ENSURE_EQUALS( "addition failed", e.evaluate(), 5l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "substraction" )
+TUT_UNIT_TEST( "substraction" )
 	HExpression e( "2-3" );
 	ENSURE_EQUALS( "substraction failed", e.evaluate(), -1l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "multiplication" )
+TUT_UNIT_TEST( "multiplication" )
 	HExpression e( "2*3" );
 	ENSURE_EQUALS( "multiplication failed", e.evaluate(), 6l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "division" )
+TUT_UNIT_TEST( "division" )
 	HExpression e( "3/2" );
 	ENSURE_EQUALS( "division failed", e.evaluate(), 1.5l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "modulo" )
+TUT_UNIT_TEST( "modulo" )
 	HExpression e( "3%2" );
 	ENSURE_EQUALS( "modulo failed", e.evaluate(), 1l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "power" )
+TUT_UNIT_TEST( "power" )
 	HExpression e( "2^3" );
 	ENSURE_EQUALS( "power failed", e.evaluate(), 8l );
 	HExpression e2( "4^3^2" );
 	ENSURE_EQUALS( "power failed", e2.evaluate(), 262144l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "negate" )
+TUT_UNIT_TEST( "negate" )
 	HExpression e( "-(2)" );
 	ENSURE_EQUALS( "negate failed", e.evaluate(), -2l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "factorial" )
+TUT_UNIT_TEST( "factorial" )
 	HExpression e( "6!" );
 	ENSURE_EQUALS( "factorial failed", e.evaluate(), 720l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "parenthesis" )
+TUT_UNIT_TEST( "parenthesis" )
 	HExpression e( "2*(3+1)" );
 	ENSURE_EQUALS( "parenthesis failed", e.evaluate(), 8l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "absolute value" )
+TUT_UNIT_TEST( "absolute value" )
 	HExpression e( "2*|1-3|" );
 	ENSURE_EQUALS( "absolute value failed", e.evaluate(), 4l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "order of addition and multiplication" )
+TUT_UNIT_TEST( "order of addition and multiplication" )
 	HExpression e( "2+2*2" );
 	ENSURE_EQUALS( "order of addition and multiplication failed", e.evaluate(), 6l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 47, "complex and valid expression" )
+TUT_UNIT_TEST( "complex and valid expression" )
 	HExpression x;
 	HString eq( "(((2+3+5)*4*6*8)/123)^2^3" );
 	x.compile( eq );
@@ -143,7 +143,7 @@ TUT_UNIT_TEST( 47, "complex and valid expression" )
 	cout << eq << "=" << x.evaluate() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 48, "invalid expression" )
+TUT_UNIT_TEST( "invalid expression" )
 	HString eq( "7+10+(4*)" );
 	HExpression x;
 	ENSURE_THROW( "parsing invalid expression succeded", x.compile( eq ), HExpressionException );

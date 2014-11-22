@@ -43,7 +43,7 @@ TUT_TEST_GROUP( tut_yaal_hcore_hbitflag, "yaal::hcore::HBitFlag" );
 
 struct A1 {};
 
-TUT_UNIT_TEST( 1, "new flag" )
+TUT_UNIT_TEST( "new flag" )
 	typedef HBitFlag<A1> a_flag_t;
 	a_flag_t const f1 = a_flag_t::new_flag();
 	ENSURE_EQUALS( "bad flag index", f1.index(), 0 );
@@ -80,7 +80,7 @@ TUT_TEARDOWN()
 
 struct A2 {};
 
-TUT_UNIT_TEST( 2, "or" )
+TUT_UNIT_TEST( "or" )
 	typedef HBitFlag<A2> a_flag_t;
 	a_flag_t::new_flag();
 	a_flag_t const f1 = a_flag_t::new_flag();
@@ -92,7 +92,7 @@ TUT_TEARDOWN()
 
 struct A3 {};
 
-TUT_UNIT_TEST( 3, "and" )
+TUT_UNIT_TEST( "and" )
 	typedef HBitFlag<A3> a_flag_t;
 	a_flag_t::new_flag();
 	a_flag_t const f1 = a_flag_t::new_flag();
@@ -110,7 +110,7 @@ TUT_TEARDOWN()
 
 struct A4 {};
 
-TUT_UNIT_TEST( 4, "xor" )
+TUT_UNIT_TEST( "xor" )
 	typedef HBitFlag<A4> a_flag_t;
 	a_flag_t::new_flag();
 	a_flag_t const f1 = a_flag_t::new_flag();
@@ -127,7 +127,7 @@ TUT_TEARDOWN()
 
 struct A5 {};
 
-TUT_UNIT_TEST( 5, "not" )
+TUT_UNIT_TEST( "not" )
 	typedef HBitFlag<A5> a_flag_t;
 	a_flag_t const def = a_flag_t::new_flag();
 	a_flag_t const f1 = a_flag_t::new_flag();

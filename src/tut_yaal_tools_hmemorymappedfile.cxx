@@ -41,7 +41,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_hmemorymappedfile );
 TUT_TEST_GROUP( tut_yaal_tools_hmemorymappedfile, "yaal::tools::HMemoryMappedFile" );
 
-TUT_UNIT_TEST( 1, "the test" )
+TUT_UNIT_TEST( "the test" )
 	HMemoryMappedFile mmf( "./data/karatsuba.bc" );
 	cout.write( mmf.map(), mmf.get_size() );
 	cout << endl;

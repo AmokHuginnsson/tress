@@ -203,12 +203,12 @@ void HServer::do_not_signal( void ) {
 	_signaled = true;
 }
 
-TUT_UNIT_TEST( 1, "Simple construction and destruction." )
+TUT_UNIT_TEST( "Simple construction and destruction." )
 	HSocket socket;
 	ENSURE_EQUALS ( "uninitialized socket has port", socket.get_port(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Constructions with wrong parameters." )
+TUT_UNIT_TEST( "Constructions with wrong parameters." )
 	ENSURE_THROW( "creation of bad socket possible (TYPE::FILE|TYPE::NETWORK)",
 			HSocket socket( HSocket::socket_type_t( HSocket::TYPE::FILE ) | HSocket::TYPE::NETWORK ),
 			HSocketException );
@@ -217,47 +217,47 @@ TUT_UNIT_TEST( 2, "Constructions with wrong parameters." )
 			HSocketException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "Getting port on file socket." )
+TUT_UNIT_TEST( "Getting port on file socket." )
 	HSocket socket( HSocket::TYPE::FILE );
 	ENSURE_THROW( "getting port number on file socket possible", socket.get_port(), HSocketException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "Listening on reserved port." )
+TUT_UNIT_TEST( "Listening on reserved port." )
 	HSocket socket( HSocket::TYPE::NETWORK, 1 );
 	ENSURE_THROW( "listening on reserved port possible",
 			socket.listen( "0.0.0.0", ( ::getenv( "windir" ) || ::getenv( "WINDIR" ) ? 135 : 22 ) ),
 			HSocketException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "Listening on port in use." )
+TUT_UNIT_TEST( "Listening on port in use." )
 	HSocket block( HSocket::TYPE::NETWORK, 1 );
 	block.listen( "0.0.0.0", OBSCURE_PORT );
 	HSocket socket( HSocket::TYPE::NETWORK, 1 );
 	ENSURE_THROW( "listening on port in use possible", socket.listen( "0.0.0.0", OBSCURE_PORT ), HSocketException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "Listening on existing file." )
+TUT_UNIT_TEST( "Listening on existing file." )
 	HSocket socket( HSocket::TYPE::FILE, 1 );
 	ENSURE_THROW( "listening on existing file possible", socket.listen( "/etc/shadow" ), HSocketException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "Listening on protected file." )
+TUT_UNIT_TEST( "Listening on protected file." )
 	HSocket socket( HSocket::TYPE::FILE, 1 );
 	ENSURE_THROW( "listening on protected file possible", socket.listen( "/etc/TUT_socket" ), HSocketException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "Listening on already listening socket." )
+TUT_UNIT_TEST( "Listening on already listening socket." )
 	HSocket socket( HSocket::TYPE::FILE, 1 );
 	socket.listen( "/tmp/TUT_socket" );
 	ENSURE_THROW( "listening on already listening socket possible", socket.listen( "/tmp/TUT_socket" ), HSocketException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "Listening with bad maximum number of clients." )
+TUT_UNIT_TEST( "Listening with bad maximum number of clients." )
 	HSocket socket( HSocket::TYPE::FILE );
 	ENSURE_THROW( "listening with bad maximum number of clients possible", socket.listen( "/tmp/TUT_socket" ), HSocketException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "Accept on socket that is not listening." )
+TUT_UNIT_TEST( "Accept on socket that is not listening." )
 	HSocket socket;
 	ENSURE_THROW( "accept on socket that is not listening possible", socket.accept(), HSocketException );
 TUT_TEARDOWN()
@@ -292,67 +292,67 @@ void tut_yaal_hcore_hsocket::play_scenario( HSocket::socket_type_t type_,
 	return;
 }
 
-TUT_UNIT_TEST( 11, "Transfering data through file (blocking)." )
+TUT_UNIT_TEST( "Transfering data through file (blocking)." )
 	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, false, false, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "Transfering data through file (non-blocking)." )
+TUT_UNIT_TEST( "Transfering data through file (non-blocking)." )
 	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, false, true, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "Transfering data through file (blocking server, nonblocking client)." )
+TUT_UNIT_TEST( "Transfering data through file (blocking server, nonblocking client)." )
 	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, false, false, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "Transfering data through file (non-blocking server, blocking client)." )
+TUT_UNIT_TEST( "Transfering data through file (non-blocking server, blocking client)." )
 	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, false, true, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "Transfering data through file with SSL. (blocking)" )
+TUT_UNIT_TEST( "Transfering data through file with SSL. (blocking)" )
 	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, true, false, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "Transfering data through file with SSL (non-blocking)." )
+TUT_UNIT_TEST( "Transfering data through file with SSL (non-blocking)." )
 	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, true, false, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "Transfering data through file with SSL. (blocking server, nonblocking client)" )
+TUT_UNIT_TEST( "Transfering data through file with SSL. (blocking server, nonblocking client)" )
 	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, true, false, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 18, "Transfering data through file with SSL (non-blocking server, blocking client)." )
+TUT_UNIT_TEST( "Transfering data through file with SSL (non-blocking server, blocking client)." )
 	play_scenario( HSocket::TYPE::FILE, "/tmp/TUT_socket", 0, true, true, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 19, "Transfering data through network (blocking)." )
+TUT_UNIT_TEST( "Transfering data through network (blocking)." )
 	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, false, false, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "Transfering data through network (non-blocking)." )
+TUT_UNIT_TEST( "Transfering data through network (non-blocking)." )
 	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, false, true, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "Transfering data through network (blocking server, nonblocking client)." )
+TUT_UNIT_TEST( "Transfering data through network (blocking server, nonblocking client)." )
 	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, false, false, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 22, "Transfering data through network (non-blocking server, blocking client)." )
+TUT_UNIT_TEST( "Transfering data through network (non-blocking server, blocking client)." )
 	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, false, true, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 23, "Transfering data through network with SSL. (blocking)" )
+TUT_UNIT_TEST( "Transfering data through network with SSL. (blocking)" )
 	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, true, false, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "Transfering data through network wiht SSL (non-blocking)." )
+TUT_UNIT_TEST( "Transfering data through network wiht SSL (non-blocking)." )
 	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, true, true, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 25, "Transfering data through network with SSL. (blocking server, nonblocking client)" )
+TUT_UNIT_TEST( "Transfering data through network with SSL. (blocking server, nonblocking client)" )
 	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, true, false, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 26, "Transfering data through network wiht SSL (non-blocking server, blocking client)." )
+TUT_UNIT_TEST( "Transfering data through network wiht SSL (non-blocking server, blocking client)." )
 	play_scenario( HSocket::TYPE::NETWORK, "127.0.0.1", OBSCURE_PORT, true, true, false );
 TUT_TEARDOWN()
 

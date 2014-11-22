@@ -43,12 +43,12 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_util_atof_ex );
 TUT_TEST_GROUP( tut_yaal_tools_util_atof_ex, "yaal::tools::util::atof_ex" );
 
-TUT_UNIT_TEST( 1, "complex and valid number" )
+TUT_UNIT_TEST( "complex and valid number" )
 	HString formula = "2*(3+5)/sin(3.1415926535/2)";
 	ENSURE_DISTANCE ( "Wrong counting.", atof_ex ( formula, true ), 16.L, epsilon );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "simple but invalid number" )
+TUT_UNIT_TEST( "simple but invalid number" )
 	HString formula = "4/e";
 	ENSURE_THROW( "invalid formula accepted", atof_ex( formula, true ), HExpressionException );
 TUT_TEARDOWN()

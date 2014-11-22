@@ -61,7 +61,7 @@ struct tut_stl {
 
 TUT_TEST_GROUP( tut_stl, yaal::hcore::_debugLevel_ <= yaal::hcore::DEBUG_LEVEL::ABORT_ON_ASSERT ? "stl" : "yaal" );
 
-TUT_UNIT_TEST( 1, "swap" )
+TUT_UNIT_TEST( "swap" )
 	int a( 7 );
 	int b( 13 );
 	ENSURE_EQUALS( "init failed", a, 7 );
@@ -71,21 +71,21 @@ TUT_UNIT_TEST( 1, "swap" )
 	ENSURE_EQUALS( "swap failed", b, 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "bind1st" )
+TUT_UNIT_TEST( "bind1st" )
 	bool p = bind1st( less<int>(), 4 )( 3 );
 	ENSURE_NOT( "greater functor binded incorrectly", p );
 	bool q = bind1st( less<int>(), 1 )( 3 );
 	ENSURE( "greater functor binded incorrectly", q );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "bind2nd" )
+TUT_UNIT_TEST( "bind2nd" )
 	bool p = bind2nd( greater<int>(), 4 )( 3 );
 	ENSURE_NOT( "greater functor binded incorrectly", p );
 	bool q = bind2nd( greater<int>(), 1 )( 3 );
 	ENSURE( "greater functor binded incorrectly", q );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "copy algorithm" )
+TUT_UNIT_TEST( "copy algorithm" )
 	int tab1[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
 	int tab2[] = { 0, -1, -2, -3, -4, -5, -6, -7 };
 	copy( tab2 + 2, tab2 + 5, tab1 + 2 );
@@ -95,7 +95,7 @@ TUT_UNIT_TEST( 4, "copy algorithm" )
 	ENSURE_EQUALS( "copy finished too late", tab1[ 5 ], 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "back_insert_iterator" )
+TUT_UNIT_TEST( "back_insert_iterator" )
 	int d1[] = { 1, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 3, 14, 15, 9265, 35, 89, 79, 3 };
@@ -113,7 +113,7 @@ TUT_UNIT_TEST( 6, "back_insert_iterator" )
 	ENSURE_EQUALS( "back_insert_iterator<list_t> failed", l, l4 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "equal" )
+TUT_UNIT_TEST( "equal" )
 	typedef list<int> list_t;
 	int d1[] = { 1, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
@@ -123,7 +123,7 @@ TUT_UNIT_TEST( 7, "equal" )
 	ENSURE_NOT( "negative test for equality failed", equal( l1.begin(), l1.end(), l2.begin() ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "set_union uniqe" )
+TUT_UNIT_TEST( "set_union uniqe" )
 	typedef list<int> list_t;
 	int d1[] = { 1, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
@@ -139,7 +139,7 @@ TUT_UNIT_TEST( 8, "set_union uniqe" )
 	ENSURE_EQUALS( "set_union failed l2 + l1", l, l3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "set_union duplicates" )
+TUT_UNIT_TEST( "set_union duplicates" )
 	typedef list<int> list_t;
 	int d1[] = { 1, 2, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
@@ -155,7 +155,7 @@ TUT_UNIT_TEST( 9, "set_union duplicates" )
 	ENSURE_EQUALS( "set_union failed l2 + l1", l, l3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "set_intersection unique" )
+TUT_UNIT_TEST( "set_intersection unique" )
 	typedef list<int> list_t;
 	int d1[] = { 1, 2, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
@@ -171,7 +171,7 @@ TUT_UNIT_TEST( 10, "set_intersection unique" )
 	ENSURE_EQUALS( "set_intersection failed l2 * l1", l, l3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "set_intersection duplicates" )
+TUT_UNIT_TEST( "set_intersection duplicates" )
 	typedef list<int> list_t;
 	int d1[] = { 1, 2, 2, 4 };
 	int d2[] = { 2, 2, 3, 5, 7 };
@@ -187,7 +187,7 @@ TUT_UNIT_TEST( 11, "set_intersection duplicates" )
 	ENSURE_EQUALS( "set_intersection failed l2 * l1", l, l3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "remove_if algorithm" )
+TUT_UNIT_TEST( "remove_if algorithm" )
 	typedef list<int> list_t;
 	int a[] = { 1, -2, 3, -4, 9, -8, 7, -6, 5 };
 	list_t l( a, a + countof( a ) );
@@ -213,7 +213,7 @@ struct cast : public std::unary_function<from_t, to_t> {
 
 #ifdef HAVE_SGI_STL_EXTENSIONS
 
-TUT_UNIT_TEST( 13, "transform" )
+TUT_UNIT_TEST( "transform" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
@@ -226,7 +226,7 @@ TUT_TEARDOWN()
 
 #endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 
-TUT_UNIT_TEST( 14, "negate" )
+TUT_UNIT_TEST( "negate" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
@@ -239,7 +239,7 @@ TUT_TEARDOWN()
 
 #ifdef HAVE_SGI_STL_EXTENSIONS
 
-TUT_UNIT_TEST( 15, "compose1" )
+TUT_UNIT_TEST( "compose1" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
@@ -252,7 +252,7 @@ TUT_TEARDOWN()
 
 #endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 
-TUT_UNIT_TEST( 16, "remove_copy_if" )
+TUT_UNIT_TEST( "remove_copy_if" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
@@ -266,7 +266,7 @@ TUT_TEARDOWN()
 
 #ifdef HAVE_SGI_STL_EXTENSIONS
 
-TUT_UNIT_TEST( 17, "compose2" )
+TUT_UNIT_TEST( "compose2" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
@@ -283,19 +283,19 @@ TUT_TEARDOWN()
 
 #endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 
-TUT_UNIT_TEST( 18, "count" )
+TUT_UNIT_TEST( "count" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 16, 49, 64, 81, 100, 16 };
 	ENSURE_EQUALS( "misscounted 16", count( a, a + countof( a ), 16 ), 3 );
 	ENSURE_EQUALS( "misscounted 16", count( a, a + countof( a ), 17 ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 19, "count_if" )
+TUT_UNIT_TEST( "count_if" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), bind2nd( less<int>(), 50 ) ), 7 );
 	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), bind2nd( less<int>(), 1 ) ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "not1" )
+TUT_UNIT_TEST( "not1" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), not1( bind2nd( less<int>(), 50 ) ) ), countof( a ) - 7 );
 	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), not1( bind2nd( less<int>(), 1 ) ) ), countof( a ) - 0 );
@@ -303,7 +303,7 @@ TUT_TEARDOWN()
 
 #ifdef HAVE_SGI_STL_EXTENSIONS
 
-TUT_UNIT_TEST( 21, "not2" )
+TUT_UNIT_TEST( "not2" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
@@ -318,7 +318,7 @@ TUT_UNIT_TEST( 21, "not2" )
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 22, "identity" )
+TUT_UNIT_TEST( "identity" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
@@ -333,7 +333,7 @@ TUT_UNIT_TEST( 22, "identity" )
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 23, "ptr_fun" )
+TUT_UNIT_TEST( "ptr_fun" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
@@ -367,7 +367,7 @@ template<typename T>
 T* get_pointer( T& x )
 	{ return ( &x ); }
 
-TUT_UNIT_TEST( 26, "mem_fun, mem_fun_ref" )
+TUT_UNIT_TEST( "mem_fun, mem_fun_ref" )
 	typedef list<MemFunTest> list_t;
 	typedef list<MemFunTest*> naked_list_t;
 
@@ -388,7 +388,7 @@ TUT_UNIT_TEST( 26, "mem_fun, mem_fun_ref" )
 TUT_TEARDOWN()
 
 #ifdef HAVE_SGI_STL_EXTENSIONS
-TUT_UNIT_TEST( 27, "mem_fun1" )
+TUT_UNIT_TEST( "mem_fun1" )
 	int a[] = { 1, 4, 9, 16 };
 	typedef list<MemFunTest> list_t;
 	typedef list<MemFunTest*> naked_list_t;
@@ -407,7 +407,7 @@ TUT_UNIT_TEST( 27, "mem_fun1" )
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 28, "mem_fun1_ref" )
+TUT_UNIT_TEST( "mem_fun1_ref" )
 	int a[] = { 1, 4, 9, 16 };
 	typedef list<MemFunTest> list_t;
 
@@ -424,7 +424,7 @@ TUT_UNIT_TEST( 28, "mem_fun1_ref" )
 TUT_TEARDOWN()
 #endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 
-TUT_UNIT_TEST( 29, "replace" )
+TUT_UNIT_TEST( "replace" )
 	typedef list<int> list_t;
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	list_t l;
@@ -435,7 +435,7 @@ TUT_UNIT_TEST( 29, "replace" )
 	cout << ss.str() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 42, "transform (negate) container content automatically" )
+TUT_UNIT_TEST( "transform (negate) container content automatically" )
 	cout << "negate container content ..." << endl;
 	cout << "{" << endl;
 	typedef list<int> T;
@@ -452,12 +452,12 @@ TUT_UNIT_TEST( 42, "transform (negate) container content automatically" )
 	vector<string> vs;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 43, "max_size of string" )
+TUT_UNIT_TEST( "max_size of string" )
 	string str;
 	cout << str.max_size() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 44, "map insert of already existing key")
+TUT_UNIT_TEST( "map insert of already existing key")
 	typedef map<int, int> i2i_t;
 	i2i_t m;
 	m.insert( std::make_pair( 1, 2 ) );
@@ -468,7 +468,7 @@ TUT_UNIT_TEST( 44, "map insert of already existing key")
 	cout << (*ir.first).second << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 45, "manipulators" )
+TUT_UNIT_TEST( "manipulators" )
 	string str;
 	int i( 7 );
 	cout << "[O] i = '" << i << "'" << endl;
@@ -489,7 +489,7 @@ TUT_UNIT_TEST( 45, "manipulators" )
 	cout << dec << flush;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 46, "display automatically" )
+TUT_UNIT_TEST( "display automatically" )
 	cout << "display container contents automatically ..." << endl;
 	cout << "{" << endl;
 	typedef set<int> T;
@@ -502,7 +502,7 @@ TUT_UNIT_TEST( 46, "display automatically" )
 	cout << "}" << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 47, "create contents automatically" )
+TUT_UNIT_TEST( "create contents automatically" )
 	cout << "create container contents automatically ..." << endl;
 	cout << "{" << endl;
 	typedef set<int> T;
@@ -513,7 +513,7 @@ TUT_UNIT_TEST( 47, "create contents automatically" )
 	cout << "}" << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 48, "reverse container content automatically" )
+TUT_UNIT_TEST( "reverse container content automatically" )
 	cout << "reverse container content ..." << endl;
 	cout << "{" << endl;
 	typedef list<int> T;
@@ -529,7 +529,7 @@ TUT_UNIT_TEST( 48, "reverse container content automatically" )
 	cout << "}" << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 49, "create by_hand" )
+TUT_UNIT_TEST( "create by_hand" )
 	cout << "lets do everything by hand ..." << endl;
 	cout << "{" << endl;
 	typedef set<int> T;

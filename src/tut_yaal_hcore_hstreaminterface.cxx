@@ -42,7 +42,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hstreaminterface );
 TUT_TEST_GROUP( tut_yaal_hcore_hstreaminterface, "yaal::hcore::HStreamInterface" );
 
-TUT_UNIT_TEST( 1, "manipulators" )
+TUT_UNIT_TEST( "manipulators" )
 	int i( 7 );
 	cout << "[O] i = '" << i << "'" << endl;
 	cout << "[M] i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
@@ -62,7 +62,7 @@ TUT_UNIT_TEST( 1, "manipulators" )
 	cout << dec;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "read_until (delims stripped)" )
+TUT_UNIT_TEST( "read_until (delims stripped)" )
 	static char data[] = "Ala\nma\nkota.";
 	HMemoryObserver mo( data, sizeof( data ) - 1 );
 	HMemory m( mo );
@@ -82,7 +82,7 @@ TUT_UNIT_TEST( 2, "read_until (delims stripped)" )
 	ENSURE_EQUALS( "bad data read", line, "kota." );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "read_until (delims not stripped)" )
+TUT_UNIT_TEST( "read_until (delims not stripped)" )
 	static char data[] = "Ala\nma\nkota.";
 	HMemoryObserver mo( data, sizeof( data ) - 1 );
 	HMemory m( mo );
@@ -109,7 +109,7 @@ TUT_UNIT_TEST( 3, "read_until (delims not stripped)" )
 	ENSURE_EQUALS( "bad data read", line, "kota." );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "read_until_n (delim stripped, by delim)" )
+TUT_UNIT_TEST( "read_until_n (delim stripped, by delim)" )
 	static char data[] = "Ala\nma\nkota.";
 	HMemoryObserver mo( data, sizeof( data ) - 1 );
 	HMemory m( mo );
@@ -129,7 +129,7 @@ TUT_UNIT_TEST( 4, "read_until_n (delim stripped, by delim)" )
 	ENSURE_EQUALS( "bad data read", line, "kota." );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "read_until_n (delim stripped, by size)" )
+TUT_UNIT_TEST( "read_until_n (delim stripped, by size)" )
 	static char data[] = "Ala\nma\nkota.";
 	HMemoryObserver mo( data, sizeof( data ) - 1 );
 	HMemory m( mo );
@@ -155,7 +155,7 @@ TUT_UNIT_TEST( 5, "read_until_n (delim stripped, by size)" )
 	ENSURE_EQUALS( "bad data read", line, "kota." );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "read_until_n (delim not stripped, by delim)" )
+TUT_UNIT_TEST( "read_until_n (delim not stripped, by delim)" )
 	static char data[] = "Ala\nma\nkota.";
 	HMemoryObserver mo( data, sizeof( data ) - 1 );
 	HMemory m( mo );
@@ -182,7 +182,7 @@ TUT_UNIT_TEST( 6, "read_until_n (delim not stripped, by delim)" )
 	ENSURE_EQUALS( "bad data read", line, "kota." );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "read_until_n (delim not stripped, by size)" )
+TUT_UNIT_TEST( "read_until_n (delim not stripped, by size)" )
 	static char data[] = "Ala\nma\nkota.";
 	HMemoryObserver mo( data, sizeof( data ) - 1 );
 	HMemory m( mo );
@@ -208,7 +208,7 @@ TUT_UNIT_TEST( 7, "read_until_n (delim not stripped, by size)" )
 	ENSURE_EQUALS( "bad data read", line, "kota." );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "input float" )
+TUT_UNIT_TEST( "input float" )
 	static char data[] = "3.1415 -2.7182";
 	HMemoryObserver mo( data, sizeof( data ) - 1 );
 	HMemory m( mo );

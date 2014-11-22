@@ -47,13 +47,13 @@ struct tut_yaal_hcore_hhashmultimap : public simple_mock<tut_yaal_hcore_hhashmul
 
 TUT_TEST_GROUP( tut_yaal_hcore_hhashmultimap, "yaal::hcore::HHashMultiMap" );
 
-TUT_UNIT_TEST( 1, "default constructor" )
+TUT_UNIT_TEST( "default constructor" )
 	mmp_t mm;
 	ENSURE_EQUALS( "bad size on fresh HMultiMap<>", mm.size(), 0 );
 	ENSURE( "bad emptinass status on fresh HMultiMap<>", mm.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "unique items" )
+TUT_UNIT_TEST( "unique items" )
 	mmp_t mm;
 	ENSURE_EQUALS( "bad size on fresh HMultiMap<>", mm.size(), 0 );
 	ENSURE( "bad emptinass status on fresh HMultiMap<>", mm.is_empty() );
@@ -69,7 +69,7 @@ TUT_UNIT_TEST( 2, "unique items" )
 	ENSURE_EQUALS( "bad count of unique items 3", mm.count( 3 ), 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "non-unique items" )
+TUT_UNIT_TEST( "non-unique items" )
 	mmp_t mm;
 	ENSURE_EQUALS( "bad size on fresh HMultiMap<>", mm.size(), 0 );
 	ENSURE( "bad emptinass status on fresh HMultiMap<>", mm.is_empty() );
@@ -108,7 +108,7 @@ TUT_UNIT_TEST( 3, "non-unique items" )
 	ENSURE_EQUALS( "bad count of unique items 3", mm.count( 3 ), 4 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "iteration" )
+TUT_UNIT_TEST( "iteration" )
 	mmt_t mm;
 	mm.insert( make_pair( 1, 1 ) );
 	mm.insert( make_pair( 2, 2 ) );
@@ -126,7 +126,7 @@ TUT_UNIT_TEST( 4, "iteration" )
 	ENSURE_EQUALS( "bad teration", backward, forward );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "find/upper_bound on non existing (packed)" )
+TUT_UNIT_TEST( "find/upper_bound on non existing (packed)" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
@@ -137,7 +137,7 @@ TUT_UNIT_TEST( 5, "find/upper_bound on non existing (packed)" )
 		FAIL( "find/upper_bound ranges skewed" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "find/upper_bound on existing (packed)" )
+TUT_UNIT_TEST( "find/upper_bound on existing (packed)" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
@@ -151,7 +151,7 @@ TUT_UNIT_TEST( 6, "find/upper_bound on existing (packed)" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", acc, 15 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "modify packed by iterator (packed)" )
+TUT_UNIT_TEST( "modify packed by iterator (packed)" )
 	mmp_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mmp_t::iterator it = mm.begin();
@@ -161,7 +161,7 @@ TUT_UNIT_TEST( 7, "modify packed by iterator (packed)" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 31, "find/upper_bound on non existing" )
+TUT_UNIT_TEST( "find/upper_bound on non existing" )
 	mmt_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
@@ -171,7 +171,7 @@ TUT_UNIT_TEST( 31, "find/upper_bound on non existing" )
 		FAIL( "find/upper_bound ranges skewed" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 32, "find/upper_bound on existing" )
+TUT_UNIT_TEST( "find/upper_bound on existing" )
 	mmt_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mm.insert( make_pair( 1, 3 ) );
@@ -185,7 +185,7 @@ TUT_UNIT_TEST( 32, "find/upper_bound on existing" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", acc, 15 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 33, "modify transparent by iterator and operator*" )
+TUT_UNIT_TEST( "modify transparent by iterator and operator*" )
 	mmt_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mmt_t::iterator it = mm.begin();
@@ -195,7 +195,7 @@ TUT_UNIT_TEST( 33, "modify transparent by iterator and operator*" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 34, "modify transparent by iterator and operator->" )
+TUT_UNIT_TEST( "modify transparent by iterator and operator->" )
 	mmt_t mm;
 	mm.insert( make_pair( 1, 2 ) );
 	mmt_t::iterator it = mm.begin();
@@ -205,7 +205,7 @@ TUT_UNIT_TEST( 34, "modify transparent by iterator and operator->" )
 	ENSURE_EQUALS( "bad elements selected throu find/upper_bound", (*it_ver).second, VERIFY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 50, "sample data" )
+TUT_UNIT_TEST( "sample data" )
 	typedef HHashMultiMap<HString, int> string_to_int_hashmultimap_t;
 	string_to_int_hashmultimap_t map;
 	map.insert( make_pair<HString>( "one", 1 ) );

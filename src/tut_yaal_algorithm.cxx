@@ -53,7 +53,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_algorithm );
 TUT_TEST_GROUP( tut_yaal_algorithm, "yaal::algorithm" );
 
-TUT_UNIT_TEST( 1, "reverse" )
+TUT_UNIT_TEST( "reverse" )
 	int const LENE = 4;
 	HPointer<char, HPointerArray> spe( new char[ LENE + 1 ] );
 	char* se( spe.raw() );
@@ -79,7 +79,7 @@ TUT_UNIT_TEST( 1, "reverse" )
 	ENSURE_EQUALS( "reverse on HString failed", s2, s1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "next_permutation, len = 1 (even)" )
+TUT_UNIT_TEST( "next_permutation, len = 1 (even)" )
 	int const LEN = 1;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -89,7 +89,7 @@ TUT_UNIT_TEST( 2, "next_permutation, len = 1 (even)" )
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "1" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "next_permutation, len = 2 (even)" )
+TUT_UNIT_TEST( "next_permutation, len = 2 (even)" )
 	int const LEN = 2;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -101,7 +101,7 @@ TUT_UNIT_TEST( 3, "next_permutation, len = 2 (even)" )
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "12" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "next_permutation, len = 3 (odd)" )
+TUT_UNIT_TEST( "next_permutation, len = 3 (odd)" )
 	int const LEN = 3;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -121,7 +121,7 @@ TUT_UNIT_TEST( 4, "next_permutation, len = 3 (odd)" )
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "123" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "next_permutation len = 4 (even)" )
+TUT_UNIT_TEST( "next_permutation len = 4 (even)" )
 	int const LEN = 4;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -177,7 +177,7 @@ TUT_UNIT_TEST( 5, "next_permutation len = 4 (even)" )
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "1234" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "next_permutation len = 5 (odd)" )
+TUT_UNIT_TEST( "next_permutation len = 5 (odd)" )
 	int const LEN = 5;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -425,7 +425,7 @@ TUT_UNIT_TEST( 6, "next_permutation len = 5 (odd)" )
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "12345" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "prev_permutation, len = 1 (even)" )
+TUT_UNIT_TEST( "prev_permutation, len = 1 (even)" )
 	int const LEN = 1;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -435,7 +435,7 @@ TUT_UNIT_TEST( 7, "prev_permutation, len = 1 (even)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "1" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "prev_permutation, len = 2 (even)" )
+TUT_UNIT_TEST( "prev_permutation, len = 2 (even)" )
 	int const LEN = 2;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -447,7 +447,7 @@ TUT_UNIT_TEST( 8, "prev_permutation, len = 2 (even)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "21" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "prev_permutation len = 3 (odd)" )
+TUT_UNIT_TEST( "prev_permutation len = 3 (odd)" )
 	int const LEN = 3;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -467,7 +467,7 @@ TUT_UNIT_TEST( 9, "prev_permutation len = 3 (odd)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "321" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "prev_permutation len = 4 (even)" )
+TUT_UNIT_TEST( "prev_permutation len = 4 (even)" )
 	int const LEN = 4;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -523,7 +523,7 @@ TUT_UNIT_TEST( 10, "prev_permutation len = 4 (even)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "4321" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "prev_permutation len = 5 (odd)" )
+TUT_UNIT_TEST( "prev_permutation len = 5 (odd)" )
 	int const LEN = 5;
 	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
@@ -771,7 +771,7 @@ TUT_UNIT_TEST( 11, "prev_permutation len = 5 (odd)" )
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "54321" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "is_heap" )
+TUT_UNIT_TEST( "is_heap" )
 	std_vector_t v( begin( _testData_[0] ), end( _testData_[0] ) );
 	for ( int i( 2 ); i < countof ( _testData_[0] ); ++ i ) {
 #ifndef _MSC_VER
@@ -785,7 +785,7 @@ TUT_UNIT_TEST( 12, "is_heap" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "push_heap" )
+TUT_UNIT_TEST( "push_heap" )
 	std_vector_t v( begin( _testData_[0] ), end( _testData_[0] ) );
 	int_array_t a( begin( _testData_[0] ), end( _testData_[0] ) );
 	for ( int i( 2 ); i <= countof ( _testData_[0] ); ++ i ) {
@@ -797,7 +797,7 @@ TUT_UNIT_TEST( 13, "push_heap" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "pop_heap" )
+TUT_UNIT_TEST( "pop_heap" )
 	std_vector_t v( begin( _testData_[0] ), end( _testData_[0] ) );
 	int_array_t a( begin( _testData_[0] ), end( _testData_[0] ) );
 	for ( int i( 2 ); i <= countof ( _testData_[0] ); ++ i ) {
@@ -816,7 +816,7 @@ TUT_UNIT_TEST( 14, "pop_heap" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "make_heap" )
+TUT_UNIT_TEST( "make_heap" )
 	std_vector_t v( begin( _testData_[0] ), end( _testData_[0] ) );
 	int_array_t a( begin( _testData_[0] ), end( _testData_[0] ) );
 	ENSURE_EQUALS( "yaal::is_heap false positive", yaal::is_heap( a.begin(), a.end() ), false );
@@ -831,7 +831,7 @@ TUT_UNIT_TEST( 15, "make_heap" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "sort_heap" )
+TUT_UNIT_TEST( "sort_heap" )
 	std_vector_t v( 100 );
 	int_array_t a( 100 );
 	std::generate( v.begin(), v.end(), HRandomizer( 0, 255 ) );
@@ -850,7 +850,7 @@ TUT_UNIT_TEST( 16, "sort_heap" )
 	ENSURE_EQUALS( "yaal::sort_heap wrong", a, v );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "sort" )
+TUT_UNIT_TEST( "sort" )
 	int_array_t a( 100 );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
 	*a.rbegin() = -1;
@@ -862,7 +862,7 @@ TUT_UNIT_TEST( 17, "sort" )
 	clog << a << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 18, "unique" )
+TUT_UNIT_TEST( "unique" )
 	int_array_t a( 100 );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
 	*a.rbegin() = -1;
@@ -878,7 +878,7 @@ TUT_UNIT_TEST( 18, "unique" )
 	clog << a << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 19, "rotate" )
+TUT_UNIT_TEST( "rotate" )
 	int_array_t a( 100 );
 	yaal::generate( a.begin(), a.end(), inc( 1 ) );
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
@@ -893,7 +893,7 @@ TUT_UNIT_TEST( 19, "rotate" )
 	clog << "(" << *it2 << ") " << a << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "inplace_merge" )
+TUT_UNIT_TEST( "inplace_merge" )
 	int_array_t a( 100 );
 	yaal::generate( a.begin(), a.end(), inc( 1 ) );
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
@@ -930,7 +930,7 @@ TUT_UNIT_TEST( 20, "inplace_merge" )
 	ENSURE_EQUALS( "yaal::inplace_merge wrong", arr, varr );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "insert_sort" )
+TUT_UNIT_TEST( "insert_sort" )
 	TIME_CONSTRAINT_EXEMPT(); {
 	int_array_t a( 8000 );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
@@ -966,7 +966,7 @@ TUT_UNIT_TEST( 21, "insert_sort" )
 }
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 22, "selection_sort" )
+TUT_UNIT_TEST( "selection_sort" )
 	TIME_CONSTRAINT_EXEMPT();
 	int_array_t a( 8000 );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
@@ -979,7 +979,7 @@ TUT_UNIT_TEST( 22, "selection_sort" )
 	ENSURE_EQUALS( "yaal::selection_sort wrong", a, v );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 23, "heap_sort" )
+TUT_UNIT_TEST( "heap_sort" )
 	int_array_t a( 8000 );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
 	*a.rbegin() = -1;
@@ -991,7 +991,7 @@ TUT_UNIT_TEST( 23, "heap_sort" )
 	ENSURE_EQUALS( "yaal::stable_sort wrong", a, v );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "stable_sort" )
+TUT_UNIT_TEST( "stable_sort" )
 	int_array_t a( 100 );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
 	*a.rbegin() = -1;
@@ -1003,7 +1003,7 @@ TUT_UNIT_TEST( 24, "stable_sort" )
 	clog << a << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 25, "distance" )
+TUT_UNIT_TEST( "distance" )
 	HArray<int> array( begin( _testData_[0] ), end( _testData_[0] ) );
 	HDeque<int> deque( begin( _testData_[0] ), end( _testData_[0] ) );
 	HList<int> list( begin( _testData_[0] ), end( _testData_[0] ) );
@@ -1020,7 +1020,7 @@ TUT_UNIT_TEST( 25, "distance" )
 	ENSURE_EQUALS( "distance on HRing<> failed", distance( ring.begin(), ring.end() ), countof ( _testData_[0] ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 26, "swap" )
+TUT_UNIT_TEST( "swap" )
 	HArray<int> array( begin( _testData_[0] ), end( _testData_[0] ) );
 	HDeque<int> deque( begin( _testData_[0] ), end( _testData_[0] ) );
 	HList<int> list( begin( _testData_[0] ), end( _testData_[0] ) );
@@ -1049,14 +1049,14 @@ TUT_UNIT_TEST( 26, "swap" )
 	ENSURE_EQUALS( "swap on HRing<> failed", distance( ring2.begin(), ring2.end() ), countof ( _testData_[0] ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 27, "search" )
+TUT_UNIT_TEST( "search" )
 	char const S1[] = "Hello, world!";
 	char const S2[] = "world";
 	char const* p( search( S1, ( S1 + countof ( S1 ) - 1 ), S2, ( S2 + countof( S2 ) ) - 1 ) );
 	ENSURE_EQUALS( "search failed", p, S1 + 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 28, "find_first_of" )
+TUT_UNIT_TEST( "find_first_of" )
 	char const S1[] = "Hello, world!";
 	char const S2[] = "world";
 	char const S3[] = "word";
@@ -1066,7 +1066,7 @@ TUT_UNIT_TEST( 28, "find_first_of" )
 	ENSURE_EQUALS( "find_first_of failed (word)", p2, S1 + 4 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 29, "find_first_of(cond)" )
+TUT_UNIT_TEST( "find_first_of(cond)" )
 	typedef HPair<HString, HString> person_t;
 	person_t a[] = { person_t( "Ala", "Kowalska" ), person_t( "Diana", "B³aszczyk" ), person_t( "Marcin", "Konarski" ), person_t( "Magdalena", "Rêbowska" ), person_t( "Wojciech", "Peisert" ) };
 	HString n[] = { "Marcin", "Wojciech", "Magdalena" };
@@ -1074,7 +1074,7 @@ TUT_UNIT_TEST( 29, "find_first_of(cond)" )
 	ENSURE_EQUALS( "find_first_of failed (word)", p, a + 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 30, "find_first_not_of" )
+TUT_UNIT_TEST( "find_first_not_of" )
 	char const S1[] = "Hello, world!";
 	char const S2[] = "worldH";
 	char const S3[] = "worldHe";
@@ -1084,7 +1084,7 @@ TUT_UNIT_TEST( 30, "find_first_not_of" )
 	ENSURE_EQUALS( "find_first_not_of failed (worldHe)", p2, S1 + 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 31, "find_first_not_of(cond)" )
+TUT_UNIT_TEST( "find_first_not_of(cond)" )
 	typedef HPair<HString, HString> person_t;
 	person_t a[] = { person_t( "Ala", "Kowalska" ), person_t( "Diana", "B³aszczyk" ), person_t( "Marcin", "Konarski" ), person_t( "Magdalena", "Rêbowska" ), person_t( "Wojciech", "Peisert" ) };
 	HString n[] = { "Ala", "Diana", "Magdalena" };
@@ -1092,7 +1092,7 @@ TUT_UNIT_TEST( 31, "find_first_not_of(cond)" )
 	ENSURE_EQUALS( "find_first_not_of failed (word)", p, a + 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 32, "lower_bound() on list" )
+TUT_UNIT_TEST( "lower_bound() on list" )
 	/* distinct */ {
 		int_list_t list( begin( _testData_[0] ), end( _testData_[0] ) );
 		for ( int i( _testData_[0][0] - 1 ); i <= _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
@@ -1124,7 +1124,7 @@ TUT_UNIT_TEST( 32, "lower_bound() on list" )
 	ENSURE( "lower_bound on empty failed", it == empty.begin() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 33, "lower_bound() on array" )
+TUT_UNIT_TEST( "lower_bound() on array" )
 	/* distinct */ {
 		int_array_t array( begin( _testData_[0] ), end( _testData_[0] ) );
 		for ( int i( _testData_[0][0] - 1 ); i <= _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
@@ -1153,7 +1153,7 @@ TUT_UNIT_TEST( 33, "lower_bound() on array" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 34, "upper_bound() on list" )
+TUT_UNIT_TEST( "upper_bound() on list" )
 	/* distinct */ {
 		int_list_t list( begin( _testData_[0] ), end( _testData_[0] ) );
 		for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
@@ -1185,7 +1185,7 @@ TUT_UNIT_TEST( 34, "upper_bound() on list" )
 	ENSURE( "lower_bound on empty failed", it == empty.begin() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 35, "upper_bound() on array" )
+TUT_UNIT_TEST( "upper_bound() on array" )
 	/* distinct */ {
 		int_array_t array( begin( _testData_[0] ), end( _testData_[0] ) );
 		for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1]; ++ i ) {
@@ -1213,7 +1213,7 @@ TUT_UNIT_TEST( 35, "upper_bound() on array" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 36, "binary_search() on list" )
+TUT_UNIT_TEST( "binary_search() on list" )
 	/* distinct */ {
 		int_list_t list( begin( _testData_[0] ), end( _testData_[0] ) );
 		for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1] + 1; ++ i ) {
@@ -1232,7 +1232,7 @@ TUT_UNIT_TEST( 36, "binary_search() on list" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 37, "binary_search() on array" )
+TUT_UNIT_TEST( "binary_search() on array" )
 	/* distinct */ {
 		int_array_t array( begin( _testData_[0] ), end( _testData_[0] ) );
 		for ( int i( _testData_[0][0] - 1 ); i < _testData_[0][countof ( _testData_[0] ) - 1] + 1; ++ i ) {
@@ -1251,7 +1251,7 @@ TUT_UNIT_TEST( 37, "binary_search() on array" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 38, "is_sorted" )
+TUT_UNIT_TEST( "is_sorted" )
 	ENSURE( "is_sorted on empty failed", is_sorted( _testData_[0], _testData_[0] ) );
 	ENSURE( "is_sorted on large failed", is_sorted( begin( _testData_[0] ), end( _testData_[0] ) ) );
 	int left[] = { 2, 1, 3, 4, 5, 6, 7 };
@@ -1263,7 +1263,7 @@ TUT_UNIT_TEST( 38, "is_sorted" )
 	ENSURE( "is_sorted on one elem failed", is_sorted( _testData_[0], _testData_[0] + 1 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 39, "partition" )
+TUT_UNIT_TEST( "partition" )
 	static int const range = 100;
 	int_array_t a( range );
 	HRandomizer r( randomizer_helper::make_randomizer( range ) );
@@ -1290,7 +1290,7 @@ TUT_UNIT_TEST( 39, "partition" )
 		ENSURE( "partition failed (*it <= 0)", *it <= 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 40, "stable_partition" )
+TUT_UNIT_TEST( "stable_partition" )
 	static int const range( 100 );
 	int_array_t a( range );
 	HRandomizer r( randomizer_helper::make_randomizer( range ) );
@@ -1336,7 +1336,7 @@ struct incUnary {
 	}
 };
 
-TUT_UNIT_TEST( 41, "random_shuffle" )
+TUT_UNIT_TEST( "random_shuffle" )
 	static int const range( 100 );
 	int_array_t a( range );
 	yaal::generate( a.begin(), a.end(), inc( 1 ) );
@@ -1352,7 +1352,7 @@ TUT_UNIT_TEST( 41, "random_shuffle" )
 	ENSURE_EQUALS( "random_shuffle did not use given randomizer properly", a, b );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 42, "random_sample" )
+TUT_UNIT_TEST( "random_sample" )
 	static int const range( 1024 );
 	int_array_t a( range );
 	yaal::generate( a.begin(), a.end(), inc( 1 ) );

@@ -80,7 +80,7 @@ inline pair_t make_multi( void ) {
 	return ( res[ i ] );
 }
 
-TUT_UNIT_TEST( 1, "binding" )
+TUT_UNIT_TEST( "binding" )
 	cout << "sort by field using binding" << endl;
 	cout << "{" << endl;
 	typedef vector<pair_t> T;
@@ -110,7 +110,7 @@ void dump_dir( path const& dir ) {
 
 }
 
-TUT_UNIT_TEST( 2, "filesystem" )
+TUT_UNIT_TEST( "filesystem" )
 	yaal::hcore::external_lock_t l( yaal::tools::HMonitor::get_instance().acquire( "locale" ) );
 	char const* locale( setlocale( LC_ALL, "C" ) );
 	yaal::hcore::set_env( "LC_ALL", "C" );
@@ -119,7 +119,7 @@ TUT_UNIT_TEST( 2, "filesystem" )
 	yaal::hcore::unset_env( "LC_ALL" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "date_time" )
+TUT_UNIT_TEST( "date_time" )
 	try {
 		string birthday_s( "1978-05-24" );
 		date birthday( from_simple_string( birthday_s ) );
@@ -210,7 +210,7 @@ template<typename result_t, typename el1_t, typename el2_t>
 result_t plus( el1_t const& el1, el2_t const& el2 )
 	{ return ( el1 + el2 ); }
 
-TUT_UNIT_TEST( 4, "boost::bind, accumulate, plus" )
+TUT_UNIT_TEST( "boost::bind, accumulate, plus" )
 	cout << "accumulate all values returned by some\n"
 		"method of class that represent values in map" << endl;
 	cout << "{" << endl;
@@ -231,14 +231,14 @@ inline pair_t foo( int first, int second ) {
 	return ( make_pair( first, second ) );
 }
 
-TUT_UNIT_TEST( 5, "boost::bind features" )
+TUT_UNIT_TEST( "boost::bind features" )
 	ENSURE_EQUALS( "no args bind", boost::bind( &foo, _1, _2 )( 1, 2 ), make_pair( 1, 2 ) );
 	ENSURE_EQUALS( "no args bind", boost::bind( &foo, _2, _1 )( 1, 2 ), make_pair( 2, 1 ) );
 	ENSURE_EQUALS( "one arg bind _1, 4", boost::bind( &foo, _1, 4 )( 3 ), make_pair( 3, 4 ) );
 	ENSURE_EQUALS( "one arg bind 4, _1", boost::bind( &foo, 4, _1 )( 3 ), make_pair( 4, 3 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "boost::bind filed assign" )
+TUT_UNIT_TEST( "boost::bind filed assign" )
 	person_t p( "Ala", "Nowak" );
 	cout << p << endl;
 	string const s( "Kowalska" );
@@ -246,7 +246,7 @@ TUT_UNIT_TEST( 6, "boost::bind filed assign" )
 	cout << ( boost::bind( &person_t::second, &p )() > s ) << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "compare with constant." )
+TUT_UNIT_TEST( "compare with constant." )
 	typedef list<item_t> list_t;
 	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
@@ -255,7 +255,7 @@ TUT_UNIT_TEST( 7, "compare with constant." )
 	cout << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "lambda test." )
+TUT_UNIT_TEST( "lambda test." )
 	using boost::lambda::_1;
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };

@@ -52,7 +52,7 @@ struct tut_yaal_hcore_hdeque : public tut_yaal_hcore_hdeque_base<0> {
 
 TUT_TEST_GROUP( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
 
-TUT_UNIT_TEST( 1, "CHUNK_SIZE, VALUES_PER_CHUNK and Constructor." )
+TUT_UNIT_TEST( "CHUNK_SIZE, VALUES_PER_CHUNK and Constructor." )
 	STATIC_ASSERT( sizeof ( FixedArray<1> ) == 1 );
 	ENSURE_EQUALS( "2CHUNK_SIZE not optimal", HDeque<FixedArray<1> >::CHUNK_SIZE, 512 );
 	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<1> >::VALUES_PER_CHUNK, 512 );
@@ -161,7 +161,7 @@ TUT_UNIT_TEST( 1, "CHUNK_SIZE, VALUES_PER_CHUNK and Constructor." )
 	ENSURE_THROW( "deque with negative size created", deque_t deque( BAD_SIZE ), HException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Constructor and get_size()." ) {
+TUT_UNIT_TEST( "Constructor and get_size()." ) {
 	item_t::set_start_id( 0 );
 	int const SIZE_FOR_ONE = 0;
 	int const SIZE_FOR_TWO = 7;
@@ -177,7 +177,7 @@ TUT_UNIT_TEST( 2, "Constructor and get_size()." ) {
 	ENSURE_EQUALS( "object leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "Constructor with filling." )
+TUT_UNIT_TEST( "Constructor with filling." )
 	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
 	int const SIZE_FOR_ARRAY = 7;
@@ -299,7 +299,7 @@ void tut_yaal_hcore_hdeque::test_resize( void ) {
 	return;
 }
 
-TUT_UNIT_TEST( 4, "resize" )
+TUT_UNIT_TEST( "resize" )
 	TIME_CONSTRAINT_EXEMPT();
 	test_resize<1>();
 	test_resize<2>();
@@ -381,7 +381,7 @@ void tut_yaal_hcore_hdeque::test_pop_back( void ) {
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 }
 
-TUT_UNIT_TEST( 12, "pop_back" )
+TUT_UNIT_TEST( "pop_back" )
 	TIME_CONSTRAINT_EXEMPT();
 	test_pop_back<1>();
 	test_pop_back<2>();
@@ -421,7 +421,7 @@ void tut_yaal_hcore_hdeque::test_pop_front( void ) {
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 }
 
-TUT_UNIT_TEST( 13, "pop_front" )
+TUT_UNIT_TEST( "pop_front" )
 	TIME_CONSTRAINT_EXEMPT();
 	test_pop_front<1>();
 	test_pop_front<2>();

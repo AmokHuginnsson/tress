@@ -42,7 +42,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_util_kwota_slownie );
 TUT_TEST_GROUP( tut_yaal_tools_util_kwota_slownie, "yaal::tools::util::kwota_slownie" );
 
-TUT_UNIT_TEST( 1, "jednosci" )
+TUT_UNIT_TEST( "jednosci" )
 	cout << kwota_slownie( "1.00" ) << endl;
 TUT_TEARDOWN()
 

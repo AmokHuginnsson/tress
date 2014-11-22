@@ -40,16 +40,16 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hregex );
 TUT_TEST_GROUP( tut_yaal_hcore_hregex, "yaal::hcore::HRegex" );
 
-TUT_UNIT_TEST( 1, "empty pattern" )
+TUT_UNIT_TEST( "empty pattern" )
 	HRegex r;
 	ENSURE_THROW( "match on unitialized regex succeeded", r.matches( "a" ), HRegexException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "buggy pattern (NULL) in constructor" )
+TUT_UNIT_TEST( "buggy pattern (NULL) in constructor" )
 	ENSURE_THROW( "creation of regex from NULL succeeded", HRegex r( NULL ), HFailedAssertion );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "simple match" )
+TUT_UNIT_TEST( "simple match" )
 	HRegex r( "ala" );
 	HRegex::HMatchIterator it( r.find( "xxxalayyy" ) );
 	HString m( it->raw(), it->size() );
@@ -58,18 +58,18 @@ TUT_UNIT_TEST( 3, "simple match" )
 	clog << r.error() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "ignorecase match" )
+TUT_UNIT_TEST( "ignorecase match" )
 	HRegex r( "ala", HRegex::COMPILE::IGNORE_CASE );
 	HRegex::HMatchIterator it( r.find( "xxxAlayyy" ) );
 	HString m( it->raw(), it->size() );
 	ENSURE_EQUALS( "bad match", m, "Ala" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "bad regex constructor" )
+TUT_UNIT_TEST( "bad regex constructor" )
 	ENSURE_THROW( "bad regex constucted", HRegex r( "[a-z" ), HRegexException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "bad regex constructor no exception" )
+TUT_UNIT_TEST( "bad regex constructor no exception" )
 	HRegex r( "[a-z", HRegex::COMPILE::NO_EXCEPTION );
 	ENSURE_THROW( "match on unitialized regex succeeded", r.matches( "a" ), HRegexException );
 TUT_TEARDOWN()

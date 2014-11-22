@@ -56,7 +56,7 @@ struct tut_yaal_hcore_hprogram_options_handler : simple_mock<tut_yaal_hcore_hpro
 
 TUT_TEST_GROUP( tut_yaal_hcore_hprogram_options_handler, "yaal::hcore::HProgramOptionsHandler" );
 
-TUT_UNIT_TEST( 1, "duplicated long option" )
+TUT_UNIT_TEST( "duplicated long option" )
 	HProgramOptionsHandler po;
 	try {
 		int otherValue( 0 );
@@ -73,7 +73,7 @@ TUT_UNIT_TEST( 1, "duplicated long option" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "duplicated short option" )
+TUT_UNIT_TEST( "duplicated short option" )
 	HProgramOptionsHandler po;
 	try {
 		int otherValue( 0 );
@@ -90,7 +90,7 @@ TUT_UNIT_TEST( 2, "duplicated short option" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "duplicated long option, duplication is legeal due to usage of the same physical value destination" )
+TUT_UNIT_TEST( "duplicated long option, duplication is legeal due to usage of the same physical value destination" )
 	HProgramOptionsHandler po;
 	po( "log_path", program_options_helper::option_value( _logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path", "path pointing to file for application logs" )
 		( "_jobs", program_options_helper::option_value( _jobs ), "j", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "count", "number of concurrent _jobs" )
@@ -101,7 +101,7 @@ TUT_UNIT_TEST( 3, "duplicated long option, duplication is legeal due to usage of
 		( "_restartable", program_options_helper::option_value( _restartable ), "R", HProgramOptionsHandler::OOption::TYPE::NONE, "run tests in _restartable mode" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "duplicated short option, duplication is legeal due to usage of the same physical value destination" )
+TUT_UNIT_TEST( "duplicated short option, duplication is legeal due to usage of the same physical value destination" )
 	HProgramOptionsHandler po;
 	po( "log_path", program_options_helper::option_value( _logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
 		( "_jobs", program_options_helper::option_value( _jobs ), "j", HProgramOptionsHandler::OOption::TYPE::REQUIRED, "number of concurrent _jobs", "count" )

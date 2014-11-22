@@ -44,7 +44,7 @@ TUT_TEST_GROUP( tut_yaal_hcore_bit, "yaal::hcore::bit" );
 #define BIT_COUNT_TEST( pattern, cnt ) \
 	ENSURE_EQUALS( "bit count failed on pattern " M_STRINGIFY( pattern ), bit::count( meta::obinary<pattern>::value ), cnt );
 
-TUT_UNIT_TEST( 1, "bit count" )
+TUT_UNIT_TEST( "bit count" )
 	BIT_COUNT_TEST( 0, 0 );
 	BIT_COUNT_TEST( 01, 1 );
 	BIT_COUNT_TEST( 0101, 2 );
@@ -67,7 +67,7 @@ TUT_TEARDOWN()
 
 #undef BIT_COUNT_TEST
 
-TUT_UNIT_TEST( 2, "least_significant" )
+TUT_UNIT_TEST( "least_significant" )
 	ENSURE_EQUALS( "least_significant failed on 0", bit::least_significant( 0 ), -1 );
 	for ( int i( 0 ); i < 63; ++ i ) {
 		ENSURE_EQUALS( "least_significant failed on value 2^" + to_string( i ), bit::least_significant( 1ull << i ), i );

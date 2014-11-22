@@ -114,33 +114,33 @@ void zpipe_decompress( HString const& src_, HString const& dst_ ) {
 
 }
 
-TUT_UNIT_TEST( 1, "default zipstream buffer, client buffer 128 octets" )
+TUT_UNIT_TEST( "default zipstream buffer, client buffer 128 octets" )
 	if ( setup._argc > 2 )
 		zpipe_compress( setup._argv[ 1 ], setup._argv[ 2 ] );
 	else
 		ENSURE_NOT( "(de)compression failed", test_zipstream( _zBufferSize_, 128 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "default zipstream buffer, client buffer same size" )
+TUT_UNIT_TEST( "default zipstream buffer, client buffer same size" )
 	if ( setup._argc > 2 )
 		zpipe_decompress( setup._argv[ 1 ], setup._argv[ 2 ] );
 	else
 		ENSURE_NOT( "(de)compression failed", test_zipstream( _zBufferSize_, _zBufferSize_ ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "zpipe: compress file, or auto 192, 128" )
+TUT_UNIT_TEST( "zpipe: compress file, or auto 192, 128" )
 	ENSURE_NOT( "(de)compression failed", test_zipstream( 192, 128 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "zpipe: decompress file, or auto 128, 192" )
+TUT_UNIT_TEST( "zpipe: decompress file, or auto 128, 192" )
 	ENSURE_NOT( "(de)compression failed", test_zipstream( 128, 192 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "auto 128, 128" )
+TUT_UNIT_TEST( "auto 128, 128" )
 	ENSURE_NOT( "(de)compression failed", test_zipstream( 128, 128 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "compress big buffer all at once" )
+TUT_UNIT_TEST( "compress big buffer all at once" )
 	static int const SIZE( 5 * 1024 * 16 );
 	HChunk c( SIZE );
 	int* p( c.get<int>() );

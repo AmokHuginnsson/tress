@@ -136,14 +136,14 @@ void tut_yaal_hcore_htree::check_consistency( T const& tree ) {
 
 TUT_TEST_GROUP( tut_yaal_hcore_htree, "yaal::hcore::HTree" );
 
-TUT_UNIT_TEST( 1, "trivial constructor" ) {
+TUT_UNIT_TEST( "trivial constructor" ) {
 	tree_t t;
 	ENSURE_EQUALS( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
 	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "copy constructor of empty trees (both are empty)" ) {
+TUT_UNIT_TEST( "copy constructor of empty trees (both are empty)" ) {
 	tree_t t1;
 	tree_t t2( t1 );
 	ENSURE_EQUALS( "new tree not clear", t1.get_root(), static_cast<tree_t::node_t>( NULL ) );
@@ -152,7 +152,7 @@ TUT_UNIT_TEST( 2, "copy constructor of empty trees (both are empty)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "swap empty trees (both are empty)" ) {
+TUT_UNIT_TEST( "swap empty trees (both are empty)" ) {
 	tree_t t1;
 	tree_t t2;
 	t1.swap( t2 );
@@ -162,7 +162,7 @@ TUT_UNIT_TEST( 3, "swap empty trees (both are empty)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "create_new_root/get_root" ) {
+TUT_UNIT_TEST( "create_new_root/get_root" ) {
 	tree_t t;
 	ENSURE_EQUALS( "new tree not clear", t.get_root(), static_cast<tree_t::node_t>( NULL ) );
 	tree_t::node_t n = t.create_new_root();
@@ -173,7 +173,7 @@ TUT_UNIT_TEST( 4, "create_new_root/get_root" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "setting getting values" ) {
+TUT_UNIT_TEST( "setting getting values" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	(**n) = 'x';
@@ -183,7 +183,7 @@ TUT_UNIT_TEST( 5, "setting getting values" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "get_parent" ) {
+TUT_UNIT_TEST( "get_parent" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -192,7 +192,7 @@ TUT_UNIT_TEST( 6, "get_parent" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "add_node" ) {
+TUT_UNIT_TEST( "add_node" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -205,7 +205,7 @@ TUT_UNIT_TEST( 7, "add_node" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "has_childs" ) {
+TUT_UNIT_TEST( "has_childs" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -220,7 +220,7 @@ TUT_UNIT_TEST( 8, "has_childs" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "child_count" ) {
+TUT_UNIT_TEST( "child_count" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -235,7 +235,7 @@ TUT_UNIT_TEST( 9, "child_count" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "clear" ) {
+TUT_UNIT_TEST( "clear" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -253,7 +253,7 @@ TUT_UNIT_TEST( 10, "clear" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "get_level()" )
+TUT_UNIT_TEST( "get_level()" )
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -267,7 +267,7 @@ TUT_UNIT_TEST( 11, "get_level()" )
 	ENSURE_EQUALS( "incorrect level value", n->get_level(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "swap()" ) {
+TUT_UNIT_TEST( "swap()" ) {
 		char const* const bad_shape = "bad shape";
 		char const* const swap_failed = "swap failed";
 		tree_t t1;
@@ -297,7 +297,7 @@ TUT_UNIT_TEST( 12, "swap()" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "basic shape tests" ) {
+TUT_UNIT_TEST( "basic shape tests" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -335,7 +335,7 @@ TUT_UNIT_TEST( 13, "basic shape tests" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "graft ( replace_node )" ) {
+TUT_UNIT_TEST( "graft ( replace_node )" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -378,7 +378,7 @@ TUT_UNIT_TEST( 14, "graft ( replace_node )" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "graft upwards ( replace_node )" ) {
+TUT_UNIT_TEST( "graft upwards ( replace_node )" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		check_consistency( t );
@@ -437,7 +437,7 @@ TUT_UNIT_TEST( 15, "graft upwards ( replace_node )" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "graft downwards (replace_node)" ) {
+TUT_UNIT_TEST( "graft downwards (replace_node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -476,7 +476,7 @@ TUT_UNIT_TEST( 16, "graft downwards (replace_node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "graft sideways (replace_node)" ) {
+TUT_UNIT_TEST( "graft sideways (replace_node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -512,7 +512,7 @@ TUT_UNIT_TEST( 17, "graft sideways (replace_node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 18, "graft to root (replace_node)" ) {
+TUT_UNIT_TEST( "graft to root (replace_node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -546,7 +546,7 @@ TUT_UNIT_TEST( 18, "graft to root (replace_node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 19, "across two trees (replace_node)" ) {
+TUT_UNIT_TEST( "across two trees (replace_node)" ) {
 		tree_t::node_t n = NULL;
 		tree_t::HNode::iterator it;
 		tree_t t1;
@@ -587,7 +587,7 @@ TUT_UNIT_TEST( 19, "across two trees (replace_node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "across two trees from root (replace_node)" ) {
+TUT_UNIT_TEST( "across two trees from root (replace_node)" ) {
 		tree_t::node_t n = NULL;
 		tree_t::HNode::iterator it;
 		tree_t t1;
@@ -628,7 +628,7 @@ TUT_UNIT_TEST( 20, "across two trees from root (replace_node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "graft with bad iteroator (replace_node)" ) {
+TUT_UNIT_TEST( "graft with bad iteroator (replace_node)" ) {
 		tree_t::node_t n = NULL;
 		tree_t::HNode::iterator it;
 		tree_t t1;
@@ -670,7 +670,7 @@ TUT_UNIT_TEST( 21, "graft with bad iteroator (replace_node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 22, "move_node(it,node)" ) {
+TUT_UNIT_TEST( "move_node(it,node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -706,7 +706,7 @@ TUT_UNIT_TEST( 22, "move_node(it,node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 23, "move_node(node)" ) {
+TUT_UNIT_TEST( "move_node(node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -742,7 +742,7 @@ TUT_UNIT_TEST( 23, "move_node(node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "across two trees (move_node)" ) {
+TUT_UNIT_TEST( "across two trees (move_node)" ) {
 		tree_t::node_t n = NULL;
 		tree_t::HNode::iterator it;
 		tree_t t1;
@@ -783,7 +783,7 @@ TUT_UNIT_TEST( 24, "across two trees (move_node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 25, "across two trees from root (move_node)" ) {
+TUT_UNIT_TEST( "across two trees from root (move_node)" ) {
 		tree_t::node_t n = NULL;
 		tree_t::HNode::iterator it;
 		tree_t t1;
@@ -824,7 +824,7 @@ TUT_UNIT_TEST( 25, "across two trees from root (move_node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 26, "copy_node(it,node)" ) {
+TUT_UNIT_TEST( "copy_node(it,node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -858,7 +858,7 @@ TUT_UNIT_TEST( 26, "copy_node(it,node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 27, "copy_node(node)" ) {
+TUT_UNIT_TEST( "copy_node(node)" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -892,7 +892,7 @@ TUT_UNIT_TEST( 27, "copy_node(node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 28, "across two trees (copy_node)" ) {
+TUT_UNIT_TEST( "across two trees (copy_node)" ) {
 		tree_t::node_t n = NULL;
 		tree_t::HNode::iterator it;
 		tree_t t1;
@@ -931,7 +931,7 @@ TUT_UNIT_TEST( 28, "across two trees (copy_node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 29, "across two trees from root (copy_node)" ) {
+TUT_UNIT_TEST( "across two trees from root (copy_node)" ) {
 		tree_t::node_t n = NULL;
 		tree_t::HNode::iterator it;
 		tree_t t1;
@@ -970,7 +970,7 @@ TUT_UNIT_TEST( 29, "across two trees from root (copy_node)" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 30, "get_parent" ) {
+TUT_UNIT_TEST( "get_parent" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
@@ -981,7 +981,7 @@ TUT_UNIT_TEST( 30, "get_parent" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 31, "get_parent" ) {
+TUT_UNIT_TEST( "get_parent" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';
@@ -1019,7 +1019,7 @@ TUT_UNIT_TEST( 31, "get_parent" ) {
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 32, "tree with explicit system allocator" ) {
+TUT_UNIT_TEST( "tree with explicit system allocator" ) {
 		typedef HTree<item_t, allocator::system<item_t> > sys_tree_t;
 		sys_tree_t t;
 		sys_tree_t::node_t n = t.create_new_root();
@@ -1058,7 +1058,7 @@ TUT_UNIT_TEST( 32, "tree with explicit system allocator" ) {
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 33, "tree with explicit pool allocator" ) {
+TUT_UNIT_TEST( "tree with explicit pool allocator" ) {
 		typedef HTree<item_t, allocator::pool<item_t> > pool_tree_t;
 		pool_tree_t t;
 		pool_tree_t::node_t n = t.create_new_root();
@@ -1097,7 +1097,7 @@ TUT_UNIT_TEST( 33, "tree with explicit pool allocator" ) {
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 34, "across two trees (replace_node) on booking allocator" )
+TUT_UNIT_TEST( "across two trees (replace_node) on booking allocator" )
 	typedef booking_allocator<item_t> allocator_type;
 	typedef HTree<item_t, allocator::ref<item_t, allocator_type> > booking_tree_t;
 	typedef booking_tree_t::allocator_type ref_node_allocator_type;
@@ -1161,7 +1161,7 @@ TUT_UNIT_TEST( 34, "across two trees (replace_node) on booking allocator" )
 	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 35, "across two trees from root (replace_node) on booking allocator" )
+TUT_UNIT_TEST( "across two trees from root (replace_node) on booking allocator" )
 	typedef booking_allocator<item_t> allocator_type;
 	typedef HTree<item_t, allocator::ref<item_t, allocator_type> > booking_tree_t;
 	typedef booking_tree_t::allocator_type ref_node_allocator_type;
@@ -1219,7 +1219,7 @@ TUT_UNIT_TEST( 35, "across two trees from root (replace_node) on booking allocat
 	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 36, "across two trees (move_node) on booking allocator" )
+TUT_UNIT_TEST( "across two trees (move_node) on booking allocator" )
 	typedef booking_allocator<item_t> allocator_type;
 	typedef HTree<item_t, allocator::ref<item_t, allocator_type> > booking_tree_t;
 	typedef booking_tree_t::allocator_type ref_node_allocator_type;
@@ -1277,7 +1277,7 @@ TUT_UNIT_TEST( 36, "across two trees (move_node) on booking allocator" )
 	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 37, "across two trees from root (move_node) on booking allocator" )
+TUT_UNIT_TEST( "across two trees from root (move_node) on booking allocator" )
 	typedef booking_allocator<item_t> allocator_type;
 	typedef HTree<item_t, allocator::ref<item_t, allocator_type> > booking_tree_t;
 	typedef booking_tree_t::allocator_type ref_node_allocator_type;
@@ -1335,7 +1335,7 @@ TUT_UNIT_TEST( 37, "across two trees from root (move_node) on booking allocator"
 	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 38, "across two trees (copy_node) on booking allocator" )
+TUT_UNIT_TEST( "across two trees (copy_node) on booking allocator" )
 	typedef booking_allocator<item_t> allocator_type;
 	typedef HTree<item_t, allocator::ref<item_t, allocator_type> > booking_tree_t;
 	typedef booking_tree_t::allocator_type ref_node_allocator_type;
@@ -1393,7 +1393,7 @@ TUT_UNIT_TEST( 38, "across two trees (copy_node) on booking allocator" )
 	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 39, "across two trees from root (copy_node) on booking allocator" )
+TUT_UNIT_TEST( "across two trees from root (copy_node) on booking allocator" )
 	typedef booking_allocator<item_t> allocator_type;
 	typedef HTree<item_t, allocator::ref<item_t, allocator_type> > booking_tree_t;
 	typedef booking_tree_t::allocator_type ref_node_allocator_type;
@@ -1451,7 +1451,7 @@ TUT_UNIT_TEST( 39, "across two trees from root (copy_node) on booking allocator"
 	ENSURE( "deallocation failed on tree2 (branches)", ba2.is_valid() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 40, "get_child_at()" ) {
+TUT_UNIT_TEST( "get_child_at()" ) {
 		tree_t t;
 		tree_t::node_t n = t.create_new_root();
 		(**n) = '@';

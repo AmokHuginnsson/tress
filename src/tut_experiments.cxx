@@ -100,7 +100,7 @@ public:
 };
 #pragma GCC diagnostic error "-Woverloaded-virtual"
 
-TUT_UNIT_TEST( 1, "visitor pattern" )
+TUT_UNIT_TEST( "visitor pattern" )
 	typedef HPointer<Base> base_ptr_t;
 	base_ptr_t a = base_ptr_t( new Derived );
 	base_ptr_t b = base_ptr_t( new FunkyDerived );
@@ -129,7 +129,7 @@ TUT_UNIT_TEST( 1, "visitor pattern" )
 	b->accept( DerivedBazCall() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "terminal size" )
+TUT_UNIT_TEST( "terminal size" )
 	external_lock_t l( HMonitor::get_instance().acquire( "terminal" ) );
 	if ( _terminal_.exists() ) {
 		HTerminal::coord_t c( _terminal_.size() );
@@ -138,7 +138,7 @@ TUT_UNIT_TEST( 2, "terminal size" )
 		clog << "Terminal is not available." << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "terminal colors" )
+TUT_UNIT_TEST( "terminal colors" )
 	clog << endl;
 	clog << red << "    red    " << green << "    green    " << blue << "    blue    "
 		<< cyan << "    cyan    " << magenta << "    magenta    " << brown << " brown "

@@ -41,7 +41,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hmatrix );
 TUT_TEST_GROUP( tut_yaal_hcore_hmatrix, "yaal::hcore::HMatrix" );
 
-TUT_UNIT_TEST( 1, "basic matrix operations" )
+TUT_UNIT_TEST( "basic matrix operations" )
 	HMatrix < double > V ( 3, 3 );
 	HMatrix < double > W ( 3, 3 );
 	HMatrix < double > X ( 2, 2 );

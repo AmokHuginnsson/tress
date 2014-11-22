@@ -42,12 +42,12 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_meta );
 TUT_TEST_GROUP( tut_yaal_meta, "yaal::meta" );
 
-TUT_UNIT_TEST( 1, "is_signed" )
+TUT_UNIT_TEST( "is_signed" )
 	ENSURE_EQUALS( "signedness detection false negative", is_signed<int>::value, true );
 	ENSURE_EQUALS( "signedness detection false positive", is_signed<int unsigned>::value, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "max_signed" )
+TUT_UNIT_TEST( "max_signed" )
 	ENSURE_EQUALS( "bad max signed value", max_signed<char signed>::value, 127 );
 	ENSURE_EQUALS( "bad max signed value", max_signed<short>::value, 32767 );
 	cout << "char = " << hex << static_cast<int>( max_signed<char signed>::value ) << endl;
@@ -57,24 +57,24 @@ TUT_UNIT_TEST( 2, "max_signed" )
 	cout << dec;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "max" )
+TUT_UNIT_TEST( "max" )
 	ENSURE_EQUALS( "bad max", meta::max<4, 5, -1, 9, 0, 2>::value, 9 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "min" )
+TUT_UNIT_TEST( "min" )
 	ENSURE_EQUALS( "bad min", meta::min<4, 5, -1, 9, 0, 2>::value, -1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "integer_cast<>" )
+TUT_UNIT_TEST( "integer_cast<>" )
 	cout << integer_cast<int, 4>::value << endl;
 	cout << integer_cast<char signed, 127>::value << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "unsigned_integer_cast<>" )
+TUT_UNIT_TEST( "unsigned_integer_cast<>" )
 	cout << unsigned_integer_cast<int unsigned, static_cast<int unsigned>( 4 )>::value << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "xor" )
+TUT_UNIT_TEST( "xor" )
 	ENSURE_NOT( "xor failed", meta::logical_xor<false, false>::value );
 	ENSURE( "xor failed", meta::logical_xor<false, true>::value );
 	ENSURE( "xor failed", meta::logical_xor<true, false>::value );

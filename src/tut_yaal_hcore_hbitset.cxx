@@ -51,12 +51,12 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hbitset );
 TUT_TEST_GROUP( tut_yaal_hcore_hbitset, "yaal::hcore::HBitset" );
 
-TUT_UNIT_TEST( 1, "empty" )
+TUT_UNIT_TEST( "empty" )
 	HBitset<3> bs;
 	ENSURE_EQUALS( "bs not empty", bs.to_integer(), 0u );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "count" )
+TUT_UNIT_TEST( "count" )
 	typedef HBitset<64> bs64;
 	ENSURE_EQUALS( "count failed", bs64().count(), 0 );
 	ENSURE_EQUALS( "count failed", bs64( 1 ).count(), 1 );
@@ -74,7 +74,7 @@ TUT_UNIT_TEST( 2, "count" )
 	ENSURE_EQUALS( "count failed", bs64( obinary<011010110101010010>::value ).count(), 9 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "or" )
+TUT_UNIT_TEST( "or" )
 	HBitset<5> bs1;
 	HBitset<5> bs2;
 	bs1.set( 1 );
@@ -82,7 +82,7 @@ TUT_UNIT_TEST( 3, "or" )
 	ENSURE_EQUALS( "bs or failed", bs1 | bs2, HBitset<5>( obinary<01010>::value ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "op[]" )
+TUT_UNIT_TEST( "op[]" )
 	HBitset<5> bs1;
 	HBitset<5> bs2;
 	bs1[ 1 ] = true;
@@ -90,12 +90,12 @@ TUT_UNIT_TEST( 4, "op[]" )
 	ENSURE_EQUALS( "bs or failed", bs1 | bs2, HBitset<5>( obinary<01010>::value ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "size" )
+TUT_UNIT_TEST( "size" )
 	HBitset<5> bs1;
 	ENSURE_EQUALS( "size failed", bs1.size(), 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "copy constructor" )
+TUT_UNIT_TEST( "copy constructor" )
 	typedef HBitset<128> bs128_t;
 	bs128_t bs1;
 	bs1.set( 50 );
@@ -104,7 +104,7 @@ TUT_UNIT_TEST( 6, "copy constructor" )
 	ENSURE_EQUALS( "copy construction failed", bs1, bs1copy );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "swap" )
+TUT_UNIT_TEST( "swap" )
 	typedef HBitset<128> bs128_t;
 	bs128_t bs1;
 	bs128_t bs2;

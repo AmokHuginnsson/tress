@@ -82,7 +82,9 @@ Copyright:
 #	error Tress redefines TUT_EVAL macro.
 #endif /* #ifdef TUT_EVAL */
 
-#define TUT_UNIT_TEST( no, title ) \
+#define TUT_UNIT_TEST( ... ) M_MACRO_ARGC( TUT_UNIT_TEST_, __VA_ARGS__ )
+#define TUT_UNIT_TEST_1( title ) TUT_UNIT_TEST_2( ( __COUNTER__ + 1 ), title )
+#define TUT_UNIT_TEST_2( no, title ) \
 namespace { static int const M_CONCAT( dropIt, __LINE__ ) __attribute__(( __used__ )) = group.register_test( no, title ); } \
 template<> template<> void module::test<(no)>( void ) { do { set_test_meta( title, __FILE__, __LINE__ ); } while ( 0 );
 #define TUT_TEARDOWN() }

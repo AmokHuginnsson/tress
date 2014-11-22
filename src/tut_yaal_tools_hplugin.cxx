@@ -57,7 +57,7 @@ TUT_TEST_GROUP( tut_yaal_tools_hplugin, "yaal::tools::HPlugin" );
 typedef int ( * sumator_t )( int, int );
 static char const* const TRESS_PLUGIN = "./data/" LIB_PREFIX "tressplugin" LIB_INFIX "." LIB_EXT;
 
-TUT_UNIT_TEST( 1, "load external library and resolve symbol" )
+TUT_UNIT_TEST( "load external library and resolve symbol" )
 	int const T1 = 7;
 	int const T2 = 13;
 	HPlugin p;
@@ -69,7 +69,7 @@ TUT_UNIT_TEST( 1, "load external library and resolve symbol" )
 	ENSURE_EQUALS( "cound not utilize plugin", my_sum( T1, T2 ), T1 + T2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "resolve symbol from self" )
+TUT_UNIT_TEST( "resolve symbol from self" )
 	int const T1 = 7;
 	int const T2 = 13;
 	HPlugin p;
@@ -79,12 +79,12 @@ TUT_UNIT_TEST( 2, "resolve symbol from self" )
 	ENSURE_EQUALS( "cound not utilise self-contained symbols", my_sum( T1, T2 ), T1 + T2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "load non-existing plugin" )
+TUT_UNIT_TEST( "load non-existing plugin" )
 	HPlugin p;
 	ENSURE_THROW( "non-existing plugin loaded", p.load( "/non/existing/plugin" ), HPluginException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "resolve non-existing symbol" )
+TUT_UNIT_TEST( "resolve non-existing symbol" )
 	bool loaded( false );
 	HPlugin p;
 	p.load( TRESS_PLUGIN );

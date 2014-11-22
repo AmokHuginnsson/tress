@@ -42,7 +42,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_hbitmap );
 TUT_TEST_GROUP( tut_yaal_tools_hbitmap, "yaal::tools::HBitmap" );
 
-TUT_UNIT_TEST( 1, "simple use" )
+TUT_UNIT_TEST( "simple use" )
 	static char const BUFF[] = "ala ma kota";
 	static int const BUFF_BIT_SIZE( ( static_cast<int>( sizeof ( BUFF ) ) - 1 ) * 8 );
 	HBitmap bmp;
@@ -56,13 +56,13 @@ TUT_UNIT_TEST( 1, "simple use" )
 	yaal::copy( y.begin(), y.end(), stream_iterator( cout ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Default constructor" )
+TUT_UNIT_TEST( "Default constructor" )
 	HBitmap bmp;
 	ENSURE_EQUALS( "size", bmp.get_size(), 0 );
 	ENSURE_EQUALS( "raw", bmp.raw(), static_cast<void*>( NULL ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "constructor from size" )
+TUT_UNIT_TEST( "constructor from size" )
 	static int const SIZE = 7;
 	HBitmap bmp( SIZE );
 	ENSURE_EQUALS( "constructor from size size", bmp.get_size(), SIZE );
@@ -70,27 +70,27 @@ TUT_UNIT_TEST( 3, "constructor from size" )
 	ENSURE( "default constructor ", bmp.raw() != static_cast<void*>( NULL ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "set" )
+TUT_UNIT_TEST( "set" )
 	HBitmap bmp;
 	ENSURE_THROW( "default constructor set", bmp.set( 0, true ), HFailedAssertion );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "get" )
+TUT_UNIT_TEST( "get" )
 	HBitmap bmp;
 	ENSURE_THROW( "default constructor set", bmp.get( 0 ), HFailedAssertion );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "rotate_left" )
+TUT_UNIT_TEST( "rotate_left" )
 	HBitmap bmp;
 	ENSURE_THROW( "default constructor set", bmp.rotate_left( 0, 0, 0 ), HFailedAssertion );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "rotate_right" )
+TUT_UNIT_TEST( "rotate_right" )
 	HBitmap bmp;
 	ENSURE_THROW( "default constructor set", bmp.rotate_right( 0, 0, 0 ), HFailedAssertion );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "reverse iteration" )
+TUT_UNIT_TEST( "reverse iteration" )
 	static char const BUFF[] = "ala ma kota";
 	static int const BUFF_BIT_SIZE( ( static_cast<int>( sizeof ( BUFF ) ) - 1 ) * 8 );
 	HBitmap bmp;
@@ -104,7 +104,7 @@ TUT_UNIT_TEST( 8, "reverse iteration" )
 	ENSURE_EQUALS( "bad reverse iterator", ss.string(), s );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "operator[]" )
+TUT_UNIT_TEST( "operator[]" )
 	HBitmap bmp( 7 );
 	HStringStream ss;
 	ss << bmp;

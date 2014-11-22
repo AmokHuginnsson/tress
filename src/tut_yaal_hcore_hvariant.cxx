@@ -51,7 +51,7 @@ struct tut_yaal_hcore_hvariant : public simple_mock<tut_yaal_hcore_hvariant> {
 
 TUT_TEST_GROUP( tut_yaal_hcore_hvariant, "yaal::hcore::HVariant" );
 
-TUT_UNIT_TEST( 1, "PoC of HVariant<>" )
+TUT_UNIT_TEST( "PoC of HVariant<>" )
 	variant_t v = HString( "ala ma kota" );
 	cout << "\"" << v.get<HString>() << "\" of type: " << v.type() << endl;
 	cout << "sizeof ( variant_t ): " << sizeof ( v ) << endl;
@@ -61,7 +61,7 @@ TUT_UNIT_TEST( 1, "PoC of HVariant<>" )
 	cout << "sizeof ( instance_tracker_t ): " << sizeof ( instance_tracker_t ) << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "uninitialized HVariant<>" )
+TUT_UNIT_TEST( "uninitialized HVariant<>" )
 	variant_t v;
 	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<bool>(),               HFailedAssertion );
 	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<char>(),               HFailedAssertion );
@@ -77,7 +77,7 @@ TUT_UNIT_TEST( 2, "uninitialized HVariant<>" )
 	ENSURE_EQUALS( "bad type id on uninitialized", v.type(), variant_t::INVALID );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "copy of uninitialized HVariant<>" )
+TUT_UNIT_TEST( "copy of uninitialized HVariant<>" )
 	variant_t v;
 	variant_t w = v;
 	variant_t x;
@@ -90,21 +90,21 @@ TUT_UNIT_TEST( 3, "copy of uninitialized HVariant<>" )
 	variant_t tmp( rz );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "consistency on assign (same types)" )
+TUT_UNIT_TEST( "consistency on assign (same types)" )
 	variant_t v = instance_tracker_t( 1 );
 	variant_t w = instance_tracker_t( 2 );
 	w = v;
 	ENSURE( "inconsistent bits after assign", w.get<instance_tracker_t>().is_self() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "consistency on assign (different types)" )
+TUT_UNIT_TEST( "consistency on assign (different types)" )
 	variant_t v = instance_tracker_t( 1 );
 	variant_t w = 1;
 	w = v;
 	ENSURE( "inconsistent bits after assign", w.get<instance_tracker_t>().is_self() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "identity switches" )
+TUT_UNIT_TEST( "identity switches" )
 	variant_t v;
 	v = true;
 	ENSURE_EQUALS( "bad value (bool)", v.get<bool>(), true );

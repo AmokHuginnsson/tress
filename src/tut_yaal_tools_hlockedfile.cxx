@@ -41,7 +41,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_hlockedfile );
 TUT_TEST_GROUP( tut_yaal_tools_hlockedfile, "yaal::tools::HLockedFile" );
 
-TUT_UNIT_TEST( 1, "open file first time" )
+TUT_UNIT_TEST( "open file first time" )
 	HLockedFile lf( "out/locked.txt", HFile::OPEN::WRITING );
 TUT_TEARDOWN()
 

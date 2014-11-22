@@ -48,20 +48,20 @@ struct tut_yaal_tools_htwowaymap : public simple_mock<tut_yaal_tools_htwowaymap>
 
 TUT_TEST_GROUP( tut_yaal_tools_htwowaymap, "yaal::tools::HTwoWayMap" );
 
-TUT_UNIT_TEST( 1, "Default constructor." )
+TUT_UNIT_TEST( "Default constructor." )
 	int2int_t twm;
 	ENSURE_EQUALS( "should be empty", twm.is_empty(), true );
 	ENSURE_EQUALS( "should have 0 elements", twm.get_size(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "is_empty()" )
+TUT_UNIT_TEST( "is_empty()" )
 	int2int_t twm;
 	ENSURE_EQUALS( "should be empty", twm.is_empty(), true );
 	twm.insert( make_pair( 1, 2 ) );
 	ENSURE_EQUALS( "should be empty", twm.is_empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "get_size()" )
+TUT_UNIT_TEST( "get_size()" )
 	int2int_t twm;
 	ENSURE_EQUALS( "should have 0 elements", twm.get_size(), 0 );
 	twm.insert( make_pair( 1, 2 ) );
@@ -72,7 +72,7 @@ TUT_UNIT_TEST( 3, "get_size()" )
 	ENSURE_EQUALS( "bad number of elements", twm.get_size(), 3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "clear()" )
+TUT_UNIT_TEST( "clear()" )
 	int2int_t twm;
 	ENSURE_EQUALS( "should be empty", twm.is_empty(), true );
 	ENSURE_EQUALS( "should have 0 elements", twm.get_size(), 0 );
@@ -84,7 +84,7 @@ TUT_UNIT_TEST( 4, "clear()" )
 	ENSURE_EQUALS( "should have 0 elements", twm.get_size(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "insert()" )
+TUT_UNIT_TEST( "insert()" )
 	int2int_t twm;
 	ENSURE_EQUALS( "should be empty", twm.is_empty(), true );
 	ENSURE_EQUALS( "should have 0 elements", twm.get_size(), 0 );
@@ -113,7 +113,7 @@ TUT_UNIT_TEST( 5, "insert()" )
 	ENSURE( "insert result iterator", ir.first == it );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "count()" )
+TUT_UNIT_TEST( "count()" )
 	int2int_t twm;
 	ENSURE_EQUALS( "bad count", twm.count( make_pair( 1, 2 ) ), 0 );
 	twm.insert( make_pair( 1, 2 ) );
@@ -122,7 +122,7 @@ TUT_UNIT_TEST( 6, "count()" )
 	ENSURE_EQUALS( "bad count", twm.count( make_pair( 1, 3 ) ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "erase() by val" )
+TUT_UNIT_TEST( "erase() by val" )
 	int2int_t twm;
 	ENSURE_EQUALS( "should have 0 elements", twm.get_size(), 0 );
 	ENSURE_EQUALS( "bad count", twm.count( make_pair( 1, 2 ) ), 0 );
@@ -135,7 +135,7 @@ TUT_UNIT_TEST( 7, "erase() by val" )
 	ENSURE_EQUALS( "should have 0 elements", twm.get_size(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "erase() by position" )
+TUT_UNIT_TEST( "erase() by position" )
 	int2int_t twm;
 	ENSURE_EQUALS( "should have 0 elements", twm.get_size(), 0 );
 	ENSURE_EQUALS( "bad count", twm.count( make_pair( 1, 2 ) ), 0 );
@@ -147,7 +147,7 @@ TUT_UNIT_TEST( 8, "erase() by position" )
 	ENSURE_EQUALS( "should have 0 elements", twm.get_size(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "equals (==)" )
+TUT_UNIT_TEST( "equals (==)" )
 	int2int_t twm1;
 	int2int_t twm2;
 	ENSURE_EQUALS( "empty twowaymaps not equal", twm1, twm2 );
@@ -161,7 +161,7 @@ TUT_UNIT_TEST( 9, "equals (==)" )
 	ENSURE_EQUALS( "equality test failed (false negative)", twm1, twm2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "constructor with range initialization" )
+TUT_UNIT_TEST( "constructor with range initialization" )
 	typedef HPair<int, int> int_pair_t;
 	typedef HArray<int_pair_t> int_pair_array_t;
 	int_pair_array_t arr;
@@ -180,7 +180,7 @@ TUT_UNIT_TEST( 10, "constructor with range initialization" )
 	ENSURE_EQUALS( "range constructor failed", twm, twmref );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "assign" )
+TUT_UNIT_TEST( "assign" )
 	typedef HPair<int, int> int_pair_t;
 	typedef HArray<int_pair_t> int_pair_array_t;
 	int_pair_array_t arr;
@@ -201,7 +201,7 @@ TUT_UNIT_TEST( 11, "assign" )
 	ENSURE_EQUALS( "assign failed", twm, twmref );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "erase() ranged" )
+TUT_UNIT_TEST( "erase() ranged" )
 	int2int_t twmref;
 	twmref.insert( make_pair( 4, 5 ) );
 	twmref.insert( make_pair( 5, 6 ) );
@@ -224,7 +224,7 @@ TUT_UNIT_TEST( 12, "erase() ranged" )
 	ENSURE_EQUALS( "assign failed", twm, twmref_erased );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "copy constructor" )
+TUT_UNIT_TEST( "copy constructor" )
 	int2int_t twmsrc;
 	twmsrc.insert( make_pair( 1, 2) );
 	twmsrc.insert( make_pair( 2, 3) );
@@ -234,7 +234,7 @@ TUT_UNIT_TEST( 13, "copy constructor" )
 	ENSURE_EQUALS( "copy constructor failed", twmdst, twmsrc );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "operator = ()" )
+TUT_UNIT_TEST( "operator = ()" )
 	int2int_t twmsrc;
 	twmsrc.insert( make_pair( 1, 2) );
 	twmsrc.insert( make_pair( 2, 3) );
@@ -248,7 +248,7 @@ TUT_UNIT_TEST( 14, "operator = ()" )
 	ENSURE_EQUALS( "assign failed", twmdst, twmsrc );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "left()" )
+TUT_UNIT_TEST( "left()" )
 	int2int_t twm;
 	ENSURE( "empty left view iterators", twm.left().begin() == twm.left().end() );
 	twm.insert( make_pair( 4, 5) );
@@ -262,7 +262,7 @@ TUT_UNIT_TEST( 15, "left()" )
 	cout << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "view methods" )
+TUT_UNIT_TEST( "view methods" )
 	int2int_t twm;
 	twm.insert( make_pair( 4, 5) );
 	twm.insert( make_pair( 1, 2) );
@@ -280,7 +280,7 @@ TUT_UNIT_TEST( 16, "view methods" )
 	ENSURE_EQUALS( "count failed", twm.right().count( 5 ), 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "view().at()" )
+TUT_UNIT_TEST( "view().at()" )
 	int2str_t twm;
 	twm.insert( make_pair<int, HString>( 1, "one" ) );
 	twm.insert( make_pair<int, HString>( -1, "minus-one" ) );

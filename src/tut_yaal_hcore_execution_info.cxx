@@ -42,7 +42,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_execution_info );
 TUT_TEST_GROUP( tut_yaal_hcore_execution_info, "yaal::hcore::execution_info" );
 
-TUT_UNIT_TEST( 1, "dump call stack" )
+TUT_UNIT_TEST( "dump call stack" )
 	dump_call_stack( hcore::log, 10 );
 	dump_call_stack( hcore::log, 20 );
 TUT_TEARDOWN()

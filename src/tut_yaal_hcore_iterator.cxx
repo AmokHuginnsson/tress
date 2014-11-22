@@ -43,7 +43,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_iterator );
 TUT_TEST_GROUP( tut_yaal_hcore_iterator, "yaal::hcore::iterators" );
 
-TUT_UNIT_TEST( 1, "unordered sequence back_insert_iterator, continuous" )
+TUT_UNIT_TEST( "unordered sequence back_insert_iterator, continuous" )
 	int_array_t ui;
 	HBackInsertIterator<int_array_t> iui( back_insert_iterator<int_array_t>( ui ) );
 	ENSURE_EQUALS( "back_insert_iterator constructor failed", ui, int_array_t() );
@@ -55,7 +55,7 @@ TUT_UNIT_TEST( 1, "unordered sequence back_insert_iterator, continuous" )
 	ENSURE_EQUALS( "back_insert_iterator failed", ui, array( 5, 3, 7, 1, 9 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "ordered sequence insert_iterator, continuous" )
+TUT_UNIT_TEST( "ordered sequence insert_iterator, continuous" )
 	int_set_t oi;
 	HInsertIterator<int_set_t> ioi( insert_iterator( oi ) );
 	ENSURE_EQUALS( "insert_iterator constructor failed", oi, int_set_t() );
@@ -67,7 +67,7 @@ TUT_UNIT_TEST( 2, "ordered sequence insert_iterator, continuous" )
 	ENSURE_EQUALS( "insert_iterator failed", oi, static_cast<int_set_t const&>( sequence( 5 )( 3 )( 7 )( 1 )( 9 ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "unordered sequence, back_insert_iterator, intermittent" )
+TUT_UNIT_TEST( "unordered sequence, back_insert_iterator, intermittent" )
 	int_array_t ui;
 	HBackInsertIterator<int_array_t> iui( back_insert_iterator<int_array_t>( ui ) );
 	ENSURE_EQUALS( "back_insert_iterator constructor failed", ui, int_array_t() );
@@ -82,7 +82,7 @@ TUT_UNIT_TEST( 3, "unordered sequence, back_insert_iterator, intermittent" )
 	ENSURE_EQUALS( "back_insert_iterator failed", ui, array( 5, 3, 7, 1, 9 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "ordered sequence insert_iterator, intermittent" )
+TUT_UNIT_TEST( "ordered sequence insert_iterator, intermittent" )
 	int_set_t oi;
 	HInsertIterator<int_set_t> ioi( insert_iterator( oi ) );
 	ENSURE_EQUALS( "insert_iterator constructor failed", oi, int_set_t() );
@@ -97,7 +97,7 @@ TUT_UNIT_TEST( 4, "ordered sequence insert_iterator, intermittent" )
 	ENSURE_EQUALS( "insert_iterator failed", oi, static_cast<int_set_t const&>( sequence( 5 )( 3 )( 7 )( 1 )( 9 ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "ostream_iterator, continuous" )
+TUT_UNIT_TEST( "ostream_iterator, continuous" )
 	HStringStream ss;
 	HStreamIterator<int> oi( ss, " " );
 	*oi = 5;
@@ -108,7 +108,7 @@ TUT_UNIT_TEST( 5, "ostream_iterator, continuous" )
 	ENSURE_EQUALS( "ostream_iterator failed", ss.string(), "5 3 7 1 9 " );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "ostream_iterator, intermittent" )
+TUT_UNIT_TEST( "ostream_iterator, intermittent" )
 	HStringStream ss;
 	HStreamIterator<int> oi( ss, " " );
 	*oi = 5;
@@ -122,7 +122,7 @@ TUT_UNIT_TEST( 6, "ostream_iterator, intermittent" )
 	ENSURE_EQUALS( "ostream_iterator failed", ss.string(), "5 3 7 1 9 " );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "istream_iterator, continuous" )
+TUT_UNIT_TEST( "istream_iterator, continuous" )
 	HStringStream ss( "5 3 7 1 9" );
 	HStreamIterator<int> ii( ss );
 	int_array_t arr;
@@ -134,7 +134,7 @@ TUT_UNIT_TEST( 7, "istream_iterator, continuous" )
 	ENSURE_EQUALS( "back_insert_iterator failed", arr, array( 5, 5, 5, 5, 5 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "istream_iterator, intermittent" )
+TUT_UNIT_TEST( "istream_iterator, intermittent" )
 	HStringStream ss( "5 3 7 1 9" );
 	HStreamIterator<int> ii( ss );
 	int_array_t arr;

@@ -46,18 +46,18 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_resolver );
 TUT_TEST_GROUP( tut_yaal_hcore_resolver, "yaal::hcore::resolver" );
 
-TUT_UNIT_TEST( 1, "get_ip" )
+TUT_UNIT_TEST( "get_ip" )
 	HIP ipA( 127, 0, 0, 1 );
 	HIP ipB( 0, 0, 0, 0 );
 	HIP ip( resolver::get_ip( "localhost" ) );
 	ENSURE( "get_ip filed", ( ip == ipA ) || ( ip == ipB ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "ip_to_string" )
+TUT_UNIT_TEST( "ip_to_string" )
 	ENSURE_EQUALS( "ip_to_string failure", resolver::ip_to_string( HIP( 127, 0, 0, 1 ) ), "127.0.0.1" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "get_name" )
+TUT_UNIT_TEST( "get_name" )
 	HTokenizer t( hcore::system::get_host_name(), "." );
 	HString localhost( t[0] );
 	HString resolved( resolver::get_name( HIP( 127, 0, 0, 1 ) ) );

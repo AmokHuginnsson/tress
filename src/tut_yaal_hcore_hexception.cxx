@@ -138,7 +138,7 @@ typedef HExceptionT<R,QE> RE;
 
 TUT_TEST_GROUP( tut_yaal_hcore_hexception, "yaal::hcore::HException" );
 
-TUT_UNIT_TEST( 1, "valid ex hier construct for full hier" )
+TUT_UNIT_TEST( "valid ex hier construct for full hier" )
 	try {
 		A x;
 		x.foo( 0 );
@@ -201,7 +201,7 @@ TUT_UNIT_TEST( 1, "valid ex hier construct for full hier" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "degenerated hier" )
+TUT_UNIT_TEST( "degenerated hier" )
 	try {
 		P x;
 		x.foo( 0 );
@@ -255,7 +255,7 @@ char const HEXCEPTIONSAFEGLOBAL_TEST_VAR[] = "ala";
 HExceptionSafeGlobal<HString> globalVarHolder( HEXCEPTIONSAFEGLOBAL_TEST_VAR );
 HString& globalVar = globalVarHolder.instance();
 
-TUT_UNIT_TEST( 3, "safe initialization of global variables" )
+TUT_UNIT_TEST( "safe initialization of global variables" )
 	ENSURE_EQUALS( "global variable not initialized correctly", globalVar, HEXCEPTIONSAFEGLOBAL_TEST_VAR );
 TUT_TEARDOWN()
 

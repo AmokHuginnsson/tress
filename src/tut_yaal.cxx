@@ -41,7 +41,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal );
 TUT_TEST_GROUP( tut_yaal, "yaal" );
 
-TUT_UNIT_TEST( 1, "swap" )
+TUT_UNIT_TEST( "swap" )
 	int a( 7 );
 	int b( 13 );
 	ENSURE_EQUALS( "init failed", a, 7 );
@@ -51,21 +51,21 @@ TUT_UNIT_TEST( 1, "swap" )
 	ENSURE_EQUALS( "swap failed", b, 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "bind1st" )
+TUT_UNIT_TEST( "bind1st" )
 	bool p = bind1st( less<int>(), 4 )( 3 );
 	ENSURE_NOT( "greater functor binded incorrectly", p );
 	bool q = bind1st( less<int>(), 1 )( 3 );
 	ENSURE( "greater functor binded incorrectly", q );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "bind2nd" )
+TUT_UNIT_TEST( "bind2nd" )
 	bool p = bind2nd( greater<int>(), 4 )( 3 );
 	ENSURE_NOT( "greater functor binded incorrectly", p );
 	bool q = bind2nd( greater<int>(), 1 )( 3 );
 	ENSURE( "greater functor binded incorrectly", q );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "copy algorithm" )
+TUT_UNIT_TEST( "copy algorithm" )
 	int tab1[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
 	int tab2[] = { 0, -1, -2, -3, -4, -5, -6, -7 };
 	copy( tab2 + 2, tab2 + 5, tab1 + 2 );
@@ -75,12 +75,12 @@ TUT_UNIT_TEST( 4, "copy algorithm" )
 	ENSURE_EQUALS( "copy finished too late", tab1[ 5 ], 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "meta::max" )
+TUT_UNIT_TEST( "meta::max" )
 	int long unsigned q = meta::max<sizeof ( int ), sizeof ( char ), sizeof ( double long ), sizeof ( void* ), sizeof ( int long ), sizeof ( int short )>::value;
 	ENSURE_EQUALS( "meta::max failed", q, sizeof ( double long ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "back_insert_iterator" )
+TUT_UNIT_TEST( "back_insert_iterator" )
 	int d1[] = { 1, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 3, 14, 15, 9265, 35, 89, 79, 3 };
@@ -97,7 +97,7 @@ TUT_UNIT_TEST( 6, "back_insert_iterator" )
 	ENSURE_EQUALS( "back_insert_iterator failed", l, l4 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "equal" )
+TUT_UNIT_TEST( "equal" )
 	int d1[] = { 1, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int_list_t l1( begin( d1 ), end( d1 ) );
@@ -108,7 +108,7 @@ TUT_UNIT_TEST( 7, "equal" )
 	ENSURE_NOT( "negative test for equality failed", equal( l1.begin(), l1.end(), l2.begin() ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "set_union uniqe" )
+TUT_UNIT_TEST( "set_union uniqe" )
 	int d1[] = { 1, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 1, 2, 3, 4, 5, 7 };
@@ -123,7 +123,7 @@ TUT_UNIT_TEST( 8, "set_union uniqe" )
 	ENSURE_EQUALS( "set_union failed l2 + l1", l, l3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "set_union duplicates" )
+TUT_UNIT_TEST( "set_union duplicates" )
 	int d1[] = { 1, 2, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 1, 2, 2, 3, 4, 5, 7 };
@@ -138,7 +138,7 @@ TUT_UNIT_TEST( 9, "set_union duplicates" )
 	ENSURE_EQUALS( "set_union failed l2 + l1", l, l3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "set_intersection unique" )
+TUT_UNIT_TEST( "set_intersection unique" )
 	int d1[] = { 1, 2, 2, 4 };
 	int d2[] = { 2, 3, 5, 7 };
 	int d3[] = { 2 };
@@ -153,7 +153,7 @@ TUT_UNIT_TEST( 10, "set_intersection unique" )
 	ENSURE_EQUALS( "set_intersection failed l2 * l1", l, l3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "set_intersection duplicates" )
+TUT_UNIT_TEST( "set_intersection duplicates" )
 	int d1[] = { 1, 2, 2, 4 };
 	int d2[] = { 2, 2, 3, 5, 7 };
 	int d3[] = { 2, 2 };
@@ -168,7 +168,7 @@ TUT_UNIT_TEST( 11, "set_intersection duplicates" )
 	ENSURE_EQUALS( "set_intersection failed l2 * l1", l, l3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "remove_if algorithm" )
+TUT_UNIT_TEST( "remove_if algorithm" )
 	int a[] = { 1, -2, 3, -4, 9, -8, 7, -6, 5 };
 	int_list_t l( begin( a ), end( a ) );
 	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
@@ -183,7 +183,7 @@ TUT_UNIT_TEST( 12, "remove_if algorithm" )
 	ENSURE( "remove_if failed", safe_equal( l.begin(), l.end(), begin( b ), yaal::end( b ) ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "transform" )
+TUT_UNIT_TEST( "transform" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
 	transform( begin( a ), end( a ), back_insert_iterator( l ), compose1( bound_cast<int, double>(), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ) );
@@ -193,7 +193,7 @@ TUT_UNIT_TEST( 13, "transform" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "negate" )
+TUT_UNIT_TEST( "negate" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
 	transform( begin( a ), end( a ), back_insert_iterator( l ), negate<int>() );
@@ -203,7 +203,7 @@ TUT_UNIT_TEST( 14, "negate" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "compose1" )
+TUT_UNIT_TEST( "compose1" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
 	transform( begin( a ), end( a ), back_insert_iterator( l ), compose1( negate<int>(), bind1st( plus<int>(), 1 ) ) );
@@ -213,7 +213,7 @@ TUT_UNIT_TEST( 15, "compose1" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "remove_copy_if" )
+TUT_UNIT_TEST( "remove_copy_if" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
 	remove_copy_if( begin( a ), end( a ), back_insert_iterator( l ),
@@ -224,7 +224,7 @@ TUT_UNIT_TEST( 16, "remove_copy_if" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "compose2" )
+TUT_UNIT_TEST( "compose2" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
 	remove_copy_if( begin( a ), end( a ), back_insert_iterator( l ),
@@ -238,25 +238,25 @@ TUT_UNIT_TEST( 17, "compose2" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 18, "count" )
+TUT_UNIT_TEST( "count" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 16, 49, 64, 81, 100, 16 };
 	ENSURE_EQUALS( "misscounted 16", count( begin( a ), end( a ), 16 ), 3 );
 	ENSURE_EQUALS( "misscounted 16", count( begin( a ), end( a ), 17 ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 19, "count_if" )
+TUT_UNIT_TEST( "count_if" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	ENSURE_EQUALS( "misscounted 16", count_if( begin( a ), end( a ), bind2nd( less<int>(), 50 ) ), 7 );
 	ENSURE_EQUALS( "misscounted 16", count_if( begin( a ), end( a ), bind2nd( less<int>(), 1 ) ), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "not1" )
+TUT_UNIT_TEST( "not1" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	ENSURE_EQUALS( "misscounted 16", count_if( begin( a ), end( a ), not1( bind2nd( less<int>(), 50 ) ) ), countof( a ) - 7 );
 	ENSURE_EQUALS( "misscounted 16", count_if( begin( a ), end( a ), not1( bind2nd( less<int>(), 1 ) ) ), countof( a ) - 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "not2" )
+TUT_UNIT_TEST( "not2" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
 	remove_copy_if( begin( a ), end( a ), back_insert_iterator( l ),
@@ -270,7 +270,7 @@ TUT_UNIT_TEST( 21, "not2" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 22, "identity" )
+TUT_UNIT_TEST( "identity" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
 	remove_copy_if( begin( a ), end( a ), back_insert_iterator( l ),
@@ -284,7 +284,7 @@ TUT_UNIT_TEST( 22, "identity" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 23, "ptr_fun" )
+TUT_UNIT_TEST( "ptr_fun" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
 	remove_copy_if( begin( a ), end( a ), back_insert_iterator( l ),
@@ -298,7 +298,7 @@ TUT_UNIT_TEST( 23, "ptr_fun" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "call as bind1st/bind2nd" )
+TUT_UNIT_TEST( "call as bind1st/bind2nd" )
 	bool p = call( less<int>(), 4, _1 )( 3 );
 	ENSURE_NOT( "greater functor binded incorrectly", p );
 	bool q = call( less<int>(), 1, _1 )( 3 );
@@ -309,7 +309,7 @@ TUT_UNIT_TEST( 24, "call as bind1st/bind2nd" )
 	ENSURE( "greater functor binded incorrectly", s );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 25, "call in superposition" )
+TUT_UNIT_TEST( "call in superposition" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	int_list_t l;
 	remove_copy_if( begin( a ), end( a ), back_insert_iterator( l ),
@@ -341,7 +341,7 @@ public:
 
 }
 
-TUT_UNIT_TEST( 26, "mem_fun, mem_fun_ref" )
+TUT_UNIT_TEST( "mem_fun, mem_fun_ref" )
 	typedef HPointer<MemFunTest> mem_fun_test_ptr_t;
 	typedef HList<mem_fun_test_ptr_t> mem_fun_ptr_list_t;
 	typedef HList<MemFunTest*> naked_list_t;
@@ -367,7 +367,7 @@ TUT_UNIT_TEST( 26, "mem_fun, mem_fun_ref" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 27, "mem_fun1" )
+TUT_UNIT_TEST( "mem_fun1" )
 	int a[] = { 1, 4, 9, 16 };
 	typedef HPointer<MemFunTest> mem_fun_test_ptr_t;
 	typedef HList<mem_fun_test_ptr_t> mem_fun_ptr_list_t;
@@ -394,7 +394,7 @@ TUT_UNIT_TEST( 27, "mem_fun1" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 28, "mem_fun1_ref" )
+TUT_UNIT_TEST( "mem_fun1_ref" )
 	int a[] = { 1, 4, 9, 16 };
 	typedef HList<MemFunTest> mem_fun_list_t;
 
@@ -410,7 +410,7 @@ TUT_UNIT_TEST( 28, "mem_fun1_ref" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 29, "replace" )
+TUT_UNIT_TEST( "replace" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	replace( begin( a ), end( a ), 36, 7 );
 	HStringStream ss;
@@ -419,7 +419,7 @@ TUT_UNIT_TEST( 29, "replace" )
 	cout << ss.string() << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 30, "for_each of for_each" )
+TUT_UNIT_TEST( "for_each of for_each" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int_array_t a0( begin( a ), end( a ) );
 	typedef HArray<int_array_t> matrix_t;

@@ -49,7 +49,7 @@ struct tut_yaal_hcore_hstaticarray : public simple_mock<tut_yaal_hcore_hstaticar
 
 TUT_TEST_GROUP( tut_yaal_hcore_hstaticarray, "yaal::hcore::HStaticArray" );
 
-TUT_UNIT_TEST( 1, "Constructor and get_size()." )
+TUT_UNIT_TEST( "Constructor and get_size()." )
 	item_t::set_start_id( 0 );
 	int const SIZE_FOR_ONE = 0;
 	int const SIZE_FOR_TWO = 7;
@@ -61,7 +61,7 @@ TUT_UNIT_TEST( 1, "Constructor and get_size()." )
 	ENSURE_EQUALS( "inconsistient size with respect to constructor", two.get_size(), SIZE_FOR_TWO );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Constructor with filling." )
+TUT_UNIT_TEST( "Constructor with filling." )
 	item_t::set_start_id( 0 );
 	int const SIZE_FOR_ARRAY = 7;
 	int const FILLER_FOR_ARRAY = 13;
@@ -70,7 +70,7 @@ TUT_UNIT_TEST( 2, "Constructor with filling." )
 		ENSURE_EQUALS( "array element not filled with default value", array[ i ], FILLER_FOR_ARRAY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "Constructor with range initialization." )
+TUT_UNIT_TEST( "Constructor with range initialization." )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 ); {
 		HStaticArray<item_t, countof ( a )> array( begin( a ), end( a ) );
@@ -79,7 +79,7 @@ TUT_UNIT_TEST( 3, "Constructor with range initialization." )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "Copy constructor." )
+TUT_UNIT_TEST( "Copy constructor." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	HStaticArray<item_t, SIZE> array;
@@ -91,7 +91,7 @@ TUT_UNIT_TEST( 4, "Copy constructor." )
 		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "Operator [ ]." )
+TUT_UNIT_TEST( "Operator [ ]." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	HStaticArray<item_t, SIZE> array;
@@ -99,7 +99,7 @@ TUT_UNIT_TEST( 5, "Operator [ ]." )
 	ENSURE_THROW( "access with negative index succed", array[ - SIZE - 1 ] = 0, HException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "is_empty()" )
+TUT_UNIT_TEST( "is_empty()" )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	HStaticArray<item_t, 0> empty;
@@ -108,7 +108,7 @@ TUT_UNIT_TEST( 6, "is_empty()" )
 	ENSURE_EQUALS( "test for array fullness failed", normal.is_empty(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "assign operator (=)" )
+TUT_UNIT_TEST( "assign operator (=)" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
 	HStaticArray<item_t, countof ( a0 )> array( begin( a0 ), end( a0 ) );
@@ -117,7 +117,7 @@ TUT_UNIT_TEST( 7, "assign operator (=)" )
 	ENSURE_EQUALS( "assgin failed", array, other );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "swap" )
+TUT_UNIT_TEST( "swap" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { 37, 12, 234, 29, 6, 5, 326, 149, 654, 12, 10, 306 };
 	item_t::set_start_id( 0 );

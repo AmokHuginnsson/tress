@@ -42,7 +42,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_halarm );
 TUT_TEST_GROUP( tut_yaal_tools_halarm, "yaal::tools::HAlarm" );
 
-TUT_UNIT_TEST( 1, "alarm wake" )
+TUT_UNIT_TEST( "alarm wake" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int const ALARM_TIME( 2000 );
 	HAlarm alarm( ALARM_TIME );
@@ -54,7 +54,7 @@ TUT_UNIT_TEST( 1, "alarm wake" )
 	ENSURE_EQUALS( "alarm failed to interrupt sleep", interrupted, true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "alarm deregistered" )
+TUT_UNIT_TEST( "alarm deregistered" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int const ALARM_TIME( 500 ); {
 		HAlarm alarm( ALARM_TIME );

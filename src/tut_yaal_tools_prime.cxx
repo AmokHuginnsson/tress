@@ -42,19 +42,19 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_find_primes );
 TUT_TEST_GROUP( tut_yaal_tools_find_primes, "yaal::tools::find_primes" );
 
-TUT_UNIT_TEST( 1, "input sanity check" )
+TUT_UNIT_TEST( "input sanity check" )
 	primes_t p;
 	ENSURE_THROW( "invalid range accepted in find_primes()", find_primes( p, 10, 1 ), HException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "find_primes( 0, 20 )" )
+TUT_UNIT_TEST( "find_primes( 0, 20 )" )
 	primes_t p;
 	find_primes( p, 0, 20 );
 	primes_t expect = array<primes_t::value_type>( 2, 3, 5, 7, 11, 13, 17, 19 );
 	ENSURE_EQUALS( "find_primes failed", p, expect );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "find_primes( huge, huge + 3 )" )
+TUT_UNIT_TEST( "find_primes( huge, huge + 3 )" )
 	int long unsigned primeToFind( 1073741789 );
 	primes_t p;
 	find_primes( p, primeToFind - 1, primeToFind + 1 );

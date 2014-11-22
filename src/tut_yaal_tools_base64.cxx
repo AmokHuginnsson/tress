@@ -125,84 +125,84 @@ char const cases[][5] = {
 "7u7u", "7+/v", "8PDw", "8fHx", "8vLy", "8/Pz", "9PT0", "9fX1", "9vb2", "9/f3",
 "+Pj4", "+fn5", "+vr6", "+/v7", "/Pz8", "/f39", "/v7+", "////" };
 
-TUT_UNIT_TEST( 1, "original suite <0> (empty)" )
+TUT_UNIT_TEST( "original suite <0> (empty)" )
 	static char const INPUT[] = "";
 	static char const BASE64ENC[] = "";
 	ENSURE_EQUALS( "bad encode", base64::encode( INPUT ), BASE64ENC );
 	ENSURE_EQUALS( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "original suite <1>" )
+TUT_UNIT_TEST( "original suite <1>" )
 	static char const INPUT[] = "a";
 	static char const BASE64ENC[] = "YQ==";
 	ENSURE_EQUALS( "bad encode", base64::encode( INPUT ), BASE64ENC );
 	ENSURE_EQUALS( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "original suite <2>" )
+TUT_UNIT_TEST( "original suite <2>" )
 	static char const INPUT[] = "abc";
 	static char const BASE64ENC[] = "YWJj";
 	ENSURE_EQUALS( "bad encode", base64::encode( INPUT ), BASE64ENC );
 	ENSURE_EQUALS( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "original suite <3>" )
+TUT_UNIT_TEST( "original suite <3>" )
 	static char const INPUT[] = "message digest";
 	static char const BASE64ENC[] = "bWVzc2FnZSBkaWdlc3Q=";
 	ENSURE_EQUALS( "bad encode", base64::encode( INPUT ), BASE64ENC );
 	ENSURE_EQUALS( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "original suite <4>" )
+TUT_UNIT_TEST( "original suite <4>" )
 	static char const INPUT[] = "abcdefghijklmnopqrstuvwxyz";
 	static char const BASE64ENC[] = "YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXo=";
 	ENSURE_EQUALS( "bad encode", base64::encode( INPUT ), BASE64ENC );
 	ENSURE_EQUALS( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "original suite <5>" )
+TUT_UNIT_TEST( "original suite <5>" )
 	static char const INPUT[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 	static char const BASE64ENC[] = "QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVphYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ejAxMjM0NTY3ODk=";
 	ENSURE_EQUALS( "bad encode", base64::encode( INPUT ), BASE64ENC );
 	ENSURE_EQUALS( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "original suite <6>" )
+TUT_UNIT_TEST( "original suite <6>" )
 	static char const INPUT[] = "12345678901234567890123456789012345678901234567890123456789012345678901234567890";
 	static char const BASE64ENC[] = "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTA=";
 	ENSURE_EQUALS( "bad encode", base64::encode( INPUT ), BASE64ENC );
 	ENSURE_EQUALS( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "special A for o.s.<6>" )
+TUT_UNIT_TEST( "special A for o.s.<6>" )
 	static char const INPUT[] = "1234567890123456789012345678901234567890123456789012345678901234";
 	static char const BASE64ENC[] = "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNA==";
 	ENSURE_EQUALS( "bad encode", base64::encode( INPUT ), BASE64ENC );
 	ENSURE_EQUALS( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "special B for o.s.<6>" )
+TUT_UNIT_TEST( "special B for o.s.<6>" )
 	static char const INPUT[] = "123456789012345678901234567890123456789012345678901234567890123";
 	static char const BASE64ENC[] = "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIz";
 	ENSURE_EQUALS( "bad encode", base64::encode( INPUT ), BASE64ENC );
 	ENSURE_EQUALS( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "from string" )
+TUT_UNIT_TEST( "from string" )
 	static char const INPUT[] = "Ala ma kota";
 	static char const BASE64ENC[] = "QWxhIG1hIGtvdGE=";
 	ENSURE_EQUALS( "bad encode", base64::encode( INPUT ), BASE64ENC );
 	ENSURE_EQUALS( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "from string (small alternation)" )
+TUT_UNIT_TEST( "from string (small alternation)" )
 	static char const INPUT[] = "Ala ma koty";
 	static char const BASE64ENC[] = "QWxhIG1hIGtvdHk=";
 	ENSURE_EQUALS( "bad encode", base64::encode( INPUT ), BASE64ENC );
 	ENSURE_EQUALS( "bad decode", base64::decode( BASE64ENC ), INPUT );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "encode from file (no newlines)" )
+TUT_UNIT_TEST( "encode from file (no newlines)" )
 	static char const* const INPUT = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/karatsuba.bc";
 	static char const BASE64ENC[] =
 "eD1yZWFkKCk7Cnk9cmVhZCgpOwoKc2NhbGUgPSAwCgpkZWZpbmUgZGlnaXRfY291bnQoIG4gKSB7"
@@ -241,7 +241,7 @@ TUT_UNIT_TEST( 12, "encode from file (no newlines)" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "encode from file (with newlines)" )
+TUT_UNIT_TEST( "encode from file (with newlines)" )
 	static char const* const INPUT = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/karatsuba.bc";
 	static char const BASE64ENC[] =
 "eD1yZWFkKCk7Cnk9cmVhZCgpOwoKc2NhbGUgPSAwCgpkZWZpbmUgZGlnaXRfY291bnQoIG4gKSB7\n"
@@ -280,7 +280,7 @@ TUT_UNIT_TEST( 13, "encode from file (with newlines)" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "decode from file (newlines)" )
+TUT_UNIT_TEST( "decode from file (newlines)" )
 	static char const* const OUTPUT = "./out/decoded.txt";
 	static char const BASE64ENC[] =
 "eD1yZWFkKCk7Cnk9cmVhZCgpOwoKc2NhbGUgPSAwCgpkZWZpbmUgZGlnaXRfY291bnQoIG4gKSB7"
@@ -321,7 +321,7 @@ TUT_UNIT_TEST( 14, "decode from file (newlines)" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "decode from file (with newlines)" )
+TUT_UNIT_TEST( "decode from file (with newlines)" )
 	static char const* const OUTPUT = "./out/decoded.txt";
 	static char const BASE64ENC[] =
 "eD1yZWFkKCk7Cnk9cmVhZCgpOwoKc2NhbGUgPSAwCgpkZWZpbmUgZGlnaXRfY291bnQoIG4gKSB7\n"
@@ -362,7 +362,7 @@ TUT_UNIT_TEST( 15, "decode from file (with newlines)" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "full encode tests" )
+TUT_UNIT_TEST( "full encode tests" )
 	static int const MAX_TEST_LEN = 4;
 	char input[ MAX_TEST_LEN ];
 	HStringStream ss;
@@ -381,7 +381,7 @@ TUT_UNIT_TEST( 16, "full encode tests" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "full decode test" )
+TUT_UNIT_TEST( "full decode test" )
 	static int const MAX_TEST_LEN = 4;
 	char input[ MAX_TEST_LEN ];
 	char output[ MAX_TEST_LEN ];

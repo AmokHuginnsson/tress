@@ -135,21 +135,21 @@ tut_yaal_hcore_hlist::list_t tut_yaal_hcore_hlist::from_string( char const* data
 
 TUT_TEST_GROUP( tut_yaal_hcore_hlist, "yaal::hcore::HList" );
 
-TUT_UNIT_TEST( 1, "Simple constructor." )
+TUT_UNIT_TEST( "Simple constructor." )
 	list_t l;
 	check_consistency( l );
 	ENSURE_EQUALS( "list not empty", l.size(), 0 );
 	check_consistency( l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Parametrized constructor." )
+TUT_UNIT_TEST( "Parametrized constructor." )
 	list_t l ( 3 );
 	check_consistency( l );
 	ENSURE_EQUALS( "list not empty", l.size(), 3 );
 	check_consistency( l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "copy constructor" )
+TUT_UNIT_TEST( "copy constructor" )
 	int ctr = 0;
 	list_t l;
 	check_consistency( l );
@@ -174,7 +174,7 @@ TUT_UNIT_TEST( 3, "copy constructor" )
 	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "assignation operator (full to empty)" )
+TUT_UNIT_TEST( "assignation operator (full to empty)" )
 	int ctr = 0;
 	list_t l;
 	check_consistency( l );
@@ -203,7 +203,7 @@ TUT_UNIT_TEST( 4, "assignation operator (full to empty)" )
 	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "assignation operator (empty to full)" )
+TUT_UNIT_TEST( "assignation operator (empty to full)" )
 	list_t l;
 	check_consistency( l );
 	list_t o;
@@ -224,7 +224,7 @@ TUT_UNIT_TEST( 5, "assignation operator (empty to full)" )
 	ENSURE_EQUALS( "assign operation failed, wrong size", l.size(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "assignation operator (full to small)" )
+TUT_UNIT_TEST( "assignation operator (full to small)" )
 	int ctr = 0;
 	list_t l;
 	check_consistency( l );
@@ -258,7 +258,7 @@ TUT_UNIT_TEST( 6, "assignation operator (full to small)" )
 	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "assignation operator (full to big)" )
+TUT_UNIT_TEST( "assignation operator (full to big)" )
 	int ctr = 0;
 	list_t l;
 	check_consistency( l );
@@ -300,7 +300,7 @@ TUT_UNIT_TEST( 7, "assignation operator (full to big)" )
 	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "cyclic_iterator on list" )
+TUT_UNIT_TEST( "cyclic_iterator on list" )
 	list_t l;
 	check_consistency( l );
 	l.push_back( 'a' );
@@ -333,7 +333,7 @@ TUT_UNIT_TEST( 8, "cyclic_iterator on list" )
 	check_consistency( l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "forward iterator" )
+TUT_UNIT_TEST( "forward iterator" )
 	int ctr = 0;
 	list_t l;
 	check_consistency( l );
@@ -360,7 +360,7 @@ TUT_UNIT_TEST( 9, "forward iterator" )
 	check_consistency( l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "backward iterator" )
+TUT_UNIT_TEST( "backward iterator" )
 	int ctr = 5;
 	list_t l;
 	check_consistency( l );
@@ -385,7 +385,7 @@ TUT_UNIT_TEST( 10, "backward iterator" )
 	check_consistency( l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "clear, size" )
+TUT_UNIT_TEST( "clear, size" )
 	list_t l;
 	check_consistency( l );
 	l.push_back( 'a' );
@@ -402,7 +402,7 @@ TUT_UNIT_TEST( 11, "clear, size" )
 	check_consistency( l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "insert" )
+TUT_UNIT_TEST( "insert" )
 	list_t l;
 	check_consistency( l );
 	l.push_back( '1' );
@@ -435,7 +435,7 @@ TUT_UNIT_TEST( 12, "insert" )
 	ENSURE_EQUALS( "bad iterator", *it, 'x' );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "add_tail, push_back" )
+TUT_UNIT_TEST( "add_tail, push_back" )
 	list_t l;
 	check_consistency( l );
 	ENSURE_EQUALS( "constructor malfunction", l.size(), 0 );
@@ -461,7 +461,7 @@ TUT_UNIT_TEST( 13, "add_tail, push_back" )
 	ENSURE_EQUALS( "push_back failed", _stringifier.to_string<char>( l ), "abcd" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "pop_back, remove_tail" )
+TUT_UNIT_TEST( "pop_back, remove_tail" )
 	list_t l;
 	check_consistency( l );
 	ENSURE_EQUALS( "constructor malfunction", l.size(), 0 );
@@ -493,7 +493,7 @@ TUT_UNIT_TEST( 14, "pop_back, remove_tail" )
 	ENSURE_THROW( "poping back empty list did not FAIL", l.pop_back(), HException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "add_head, push_front" )
+TUT_UNIT_TEST( "add_head, push_front" )
 	list_t l;
 	check_consistency( l );
 	ENSURE_EQUALS( "constructor malfunction", l.size(), 0 );
@@ -520,7 +520,7 @@ TUT_UNIT_TEST( 15, "add_head, push_front" )
 	ENSURE_EQUALS( "push_front failed", _stringifier.to_string<char>( l ), "dcba" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "pop_front, remove_head" )
+TUT_UNIT_TEST( "pop_front, remove_head" )
 	list_t l;
 	check_consistency( l );
 	ENSURE_EQUALS( "constructor malfunction", l.size(), 0 );
@@ -581,7 +581,7 @@ void tut_yaal_hcore_hlist::erase_test_2( tut_yaal_hcore_hlist::list_t& l ) {
 	tut_yaal_hcore_hlist::check_consistency( l );
 }
 
-TUT_UNIT_TEST( 17, "resize" )
+TUT_UNIT_TEST( "resize" )
 	list_t l;
 	ENSURE_EQUALS( "constructor of empty failed", l.size(), 0 );
 	l.resize( 5 );
@@ -590,7 +590,7 @@ TUT_UNIT_TEST( 17, "resize" )
 	ENSURE_EQUALS( "resize down failed", l.size(), 3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 18, "erase" )
+TUT_UNIT_TEST( "erase" )
 	list_t l;
 	typedef void (tut_yaal_hcore_hlist::*erase_test_t)( list_t& );
 	erase_test_t erase_tests[] = {
@@ -612,7 +612,7 @@ TUT_UNIT_TEST( 18, "erase" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 19, "assign( iter, iter )" )
+TUT_UNIT_TEST( "assign( iter, iter )" )
 	list_t l;
 	check_consistency( l );
 	l.add_tail() = 1;
@@ -669,7 +669,7 @@ TUT_UNIT_TEST( 19, "assign( iter, iter )" )
 	ENSURE_EQUALS( "assign operation failed, wrong size", ctr, 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "assign( count, val )" )
+TUT_UNIT_TEST( "assign( count, val )" )
 	list_t l;
 	l.assign( 5, 7 );
 	for ( list_t::iterator it( l.begin() ), end( l.end() ); it != end; ++ it ) {
@@ -701,7 +701,7 @@ TUT_UNIT_TEST( 20, "assign( count, val )" )
 	ENSURE_EQUALS( "assign operation failed, wrong size", l.size(), 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "exchange" )
+TUT_UNIT_TEST( "exchange" )
 	list_t l;
 	check_consistency( l );
 	l.push_back( '1' );
@@ -793,7 +793,7 @@ TUT_UNIT_TEST( 21, "exchange" )
 	ENSURE_EQUALS( "sort failed", _stringifier.to_string<char>( l ), "00000011" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 22, "Sorting." )
+TUT_UNIT_TEST( "Sorting." )
 	list_t l;
 	check_consistency( l );
 	l.add_tail() = '3';
@@ -823,7 +823,7 @@ TUT_UNIT_TEST( 22, "Sorting." )
 	ENSURE_EQUALS( "sort failed", _stringifier.to_string<char>( l ), "321" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 23, "empty, is_empty" )
+TUT_UNIT_TEST( "empty, is_empty" )
 	list_t l;
 	check_consistency( l );
 	ENSURE( "new list not empty", l.empty() );
@@ -840,7 +840,7 @@ TUT_UNIT_TEST( 23, "empty, is_empty" )
 	check_consistency( l );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "swap" )
+TUT_UNIT_TEST( "swap" )
 	list_t l1;
 	check_consistency( l1 );
 	l1.push_back( '1' );
@@ -878,7 +878,7 @@ void tut_yaal_hcore_hlist::check_sorted( tut_yaal_hcore_hlist::list_t const& l, 
 	}
 }
 
-TUT_UNIT_TEST( 25, "sort serious" )
+TUT_UNIT_TEST( "sort serious" )
 	TIME_CONSTRAINT_EXEMPT();
 	//int long unsigned count = 0100000000;
 	int long unsigned count = 01000000;
@@ -909,7 +909,7 @@ TUT_UNIT_TEST( 25, "sort serious" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 26, "reverse iterator" )
+TUT_UNIT_TEST( "reverse iterator" )
 	int a[] = { 2, 3, 5, 7 };
 	int ra[] = { 7, 5, 3, 2 };
 	list_t l( a, a + countof ( a ) );
@@ -918,7 +918,7 @@ TUT_UNIT_TEST( 26, "reverse iterator" )
 	ENSURE_EQUALS( "reverse iterarion failed", r, proto );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 27, "splice( pos, list )" )
+TUT_UNIT_TEST( "splice( pos, list )" )
 	/* from empty to empty */ {
 		list_t l;
 		list_t r;
@@ -1023,7 +1023,7 @@ TUT_UNIT_TEST( 27, "splice( pos, list )" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 28, "splice( pos, list, elem )" )
+TUT_UNIT_TEST( "splice( pos, list, elem )" )
 	/* to empty */ {
 		/* long middle */ {
 			list_t l;
@@ -1295,7 +1295,7 @@ TUT_UNIT_TEST( 28, "splice( pos, list, elem )" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 29, "splice( pos, list, fist, last )" )
+TUT_UNIT_TEST( "splice( pos, list, fist, last )" )
 	/* from empty to empty */ {
 		list_t l;
 		list_t r;
@@ -1886,7 +1886,7 @@ TUT_UNIT_TEST( 29, "splice( pos, list, fist, last )" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 30, "remove( elem )" )
+TUT_UNIT_TEST( "remove( elem )" )
 	/* random */ {
 		list_t l( from_string( "5165377774891237589347583475891347591347907787123456789" ) );
 		l.remove( '7' );
@@ -1931,7 +1931,7 @@ TUT_UNIT_TEST( 30, "remove( elem )" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 31, "remove_if( cond )" )
+TUT_UNIT_TEST( "remove_if( cond )" )
 	/* random */ {
 		list_t l( from_string( "5165377774891237589347583475891347591347907787123456789" ) );
 		l.remove_if( bind1st( equal_to<int>(), '7' ) );
@@ -1976,7 +1976,7 @@ TUT_UNIT_TEST( 31, "remove_if( cond )" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 32, "unique()" )
+TUT_UNIT_TEST( "unique()" )
 	/* on sorted */ {
 		char data[] = "5165377774891237589347583475891347591347907787123456789";
 		list_t l( from_string( data ) );
@@ -2000,7 +2000,7 @@ TUT_UNIT_TEST( 32, "unique()" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 33, "reverse()" )
+TUT_UNIT_TEST( "reverse()" )
 	char data[] = "5165377774891237589347583475891347591347907787123456789";
 	list_t l( from_string( data ) );
 	list_t::iterator it( l.begin() );
@@ -2012,7 +2012,7 @@ TUT_UNIT_TEST( 33, "reverse()" )
 	ENSURE_EQUALS( "reverse preserving iterators failed", *it, val );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 34, "sort on large set" )
+TUT_UNIT_TEST( "sort on large set" )
 	static int long const SIZE = 100000;
 	int_list_t l;
 	yaal::generate_n( back_insert_iterator( l ), SIZE, HRandomizer( 0, SIZE / 16 ) );

@@ -41,7 +41,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hvector );
 TUT_TEST_GROUP( tut_yaal_hcore_hvector, "yaal::hcore::HVector" );
 
-TUT_UNIT_TEST( 1, "basic vector operations" )
+TUT_UNIT_TEST( "basic vector operations" )
 	HVector<double> v( 3 );
 	HVector<double> w( 3 );
 	std::cout << "<<< vector >>>" << std::endl;
@@ -59,7 +59,7 @@ TUT_UNIT_TEST( 1, "basic vector operations" )
 	std::cout << "  - v = " << - v << std::endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "norm()" )
+TUT_UNIT_TEST( "norm()" )
 	HVector<double> v( 2 );
 	v[0] = 3.;
 	v[1] = 4.;

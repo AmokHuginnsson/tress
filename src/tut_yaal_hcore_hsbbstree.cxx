@@ -205,21 +205,21 @@ void tut_yaal_hcore_hsbbstree::verify( set_t& ob ) {
 
 TUT_TEST_GROUP( tut_yaal_hcore_hsbbstree, "yaal::hcore::HSBBSTree" );
 
-TUT_UNIT_TEST( 1, "Adding keys in ascending order." )
+TUT_UNIT_TEST( "Adding keys in ascending order." )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_test_insert( s, i );
 	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Adding keys in descending order." )
+TUT_UNIT_TEST( "Adding keys in descending order." )
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		helper_stress_test_insert( s, i );
 	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "Adding keys in random order." )
+TUT_UNIT_TEST( "Adding keys in random order." )
 	HRandomizer r;
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
@@ -227,7 +227,7 @@ TUT_UNIT_TEST( 3, "Adding keys in random order." )
 	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "Removing keys in ascending order from lower half of the tree that was created by adding keys in ascending order." )
+TUT_UNIT_TEST( "Removing keys in ascending order from lower half of the tree that was created by adding keys in ascending order." )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_just_insert( s, i );
@@ -235,7 +235,7 @@ TUT_UNIT_TEST( 4, "Removing keys in ascending order from lower half of the tree 
 		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "Removing keys in ascending order from upper half of the tree that was created by adding keys in ascending order." )
+TUT_UNIT_TEST( "Removing keys in ascending order from upper half of the tree that was created by adding keys in ascending order." )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_just_insert( s, i );
@@ -243,7 +243,7 @@ TUT_UNIT_TEST( 5, "Removing keys in ascending order from upper half of the tree 
 		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "Removing keys in descending order from lower half of the tree that was created by adding keys in ascending order." )
+TUT_UNIT_TEST( "Removing keys in descending order from lower half of the tree that was created by adding keys in ascending order." )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_just_insert( s, i );
@@ -251,7 +251,7 @@ TUT_UNIT_TEST( 6, "Removing keys in descending order from lower half of the tree
 		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "Removing keys in descending order from upper half of the tree that was created by adding keys in ascending order." )
+TUT_UNIT_TEST( "Removing keys in descending order from upper half of the tree that was created by adding keys in ascending order." )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_just_insert( s, i );
@@ -259,7 +259,7 @@ TUT_UNIT_TEST( 7, "Removing keys in descending order from upper half of the tree
 		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "Removing keys in ascending order from lower half of the tree that was created by adding keys in descending order." )
+TUT_UNIT_TEST( "Removing keys in ascending order from lower half of the tree that was created by adding keys in descending order." )
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		helper_stress_just_insert( s, i );
@@ -267,7 +267,7 @@ TUT_UNIT_TEST( 8, "Removing keys in ascending order from lower half of the tree 
 		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "Removing keys in ascending order from upper half of the tree that was created by adding keys in descending order." )
+TUT_UNIT_TEST( "Removing keys in ascending order from upper half of the tree that was created by adding keys in descending order." )
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		helper_stress_just_insert( s, i );
@@ -275,7 +275,7 @@ TUT_UNIT_TEST( 9, "Removing keys in ascending order from upper half of the tree 
 		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "Removing keys in descending order from lower half of the tree that was created by adding keys in descending order." )
+TUT_UNIT_TEST( "Removing keys in descending order from lower half of the tree that was created by adding keys in descending order." )
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		helper_stress_just_insert( s, i );
@@ -283,7 +283,7 @@ TUT_UNIT_TEST( 10, "Removing keys in descending order from lower half of the tre
 		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "Removing keys in descending order from upper half of the tree that was created by adding keys in descending order." )
+TUT_UNIT_TEST( "Removing keys in descending order from upper half of the tree that was created by adding keys in descending order." )
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		helper_stress_just_insert( s, i );
@@ -291,7 +291,7 @@ TUT_UNIT_TEST( 11, "Removing keys in descending order from upper half of the tre
 		helper_stress_test_erase( s, i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "Removing keys in ascending order from lower half of the tree that was created by adding keys in random order." )
+TUT_UNIT_TEST( "Removing keys in ascending order from lower half of the tree that was created by adding keys in random order." )
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
@@ -306,7 +306,7 @@ TUT_UNIT_TEST( 12, "Removing keys in ascending order from lower half of the tree
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "Removing keys in ascending order from upper half of the tree that was created by adding keys in random order." )
+TUT_UNIT_TEST( "Removing keys in ascending order from upper half of the tree that was created by adding keys in random order." )
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
@@ -321,7 +321,7 @@ TUT_UNIT_TEST( 13, "Removing keys in ascending order from upper half of the tree
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "Removing keys in descending order from lower half of the tree that was created by adding keys in random order." )
+TUT_UNIT_TEST( "Removing keys in descending order from lower half of the tree that was created by adding keys in random order." )
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
@@ -336,7 +336,7 @@ TUT_UNIT_TEST( 14, "Removing keys in descending order from lower half of the tre
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "Removing keys in descending order from upper half of the tree that was created by adding keys in random order." )
+TUT_UNIT_TEST( "Removing keys in descending order from upper half of the tree that was created by adding keys in random order." )
 	HRandomizer r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
@@ -351,7 +351,7 @@ TUT_UNIT_TEST( 15, "Removing keys in descending order from upper half of the tre
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "Removing keys in random order from upper half of the tree that was created by adding keys in random order." )
+TUT_UNIT_TEST( "Removing keys in random order from upper half of the tree that was created by adding keys in random order." )
 	TIME_CONSTRAINT_EXEMPT();
 	HRandomizer r;
 	set_t s;

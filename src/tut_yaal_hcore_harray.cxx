@@ -49,13 +49,13 @@ struct tut_yaal_hcore_harray : public simple_mock<tut_yaal_hcore_harray> {
 
 TUT_TEST_GROUP( tut_yaal_hcore_harray, "yaal::hcore::HArray" );
 
-TUT_UNIT_TEST( 1, "Constructor." )
+TUT_UNIT_TEST( "Constructor." )
 	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
 	ENSURE_THROW( "array with negative size created", array_t array( BAD_SIZE ), HException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Constructor and get_size()." )
+TUT_UNIT_TEST( "Constructor and get_size()." )
 	item_t::set_start_id( 0 );
 	int const SIZE_FOR_ONE = 0;
 	int const SIZE_FOR_TWO = 7;
@@ -67,7 +67,7 @@ TUT_UNIT_TEST( 2, "Constructor and get_size()." )
 	ENSURE_EQUALS( "inconsistient size with respect to constructor", two.get_size(), SIZE_FOR_TWO );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "Constructor with filling." )
+TUT_UNIT_TEST( "Constructor with filling." )
 	item_t::set_start_id( 0 );
 	int const BAD_SIZE = - 1;
 	int const SIZE_FOR_ARRAY = 7;
@@ -78,7 +78,7 @@ TUT_UNIT_TEST( 3, "Constructor with filling." )
 		ENSURE_EQUALS( "array element not filled with default value", array[ i ], FILLER_FOR_ARRAY );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "Constructor with range initialization." )
+TUT_UNIT_TEST( "Constructor with range initialization." )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 ); {
 		array_t array( begin( a ), end( a ) );
@@ -87,7 +87,7 @@ TUT_UNIT_TEST( 4, "Constructor with range initialization." )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "Copy constructor." )
+TUT_UNIT_TEST( "Copy constructor." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	array_t array( SIZE );
@@ -99,7 +99,7 @@ TUT_UNIT_TEST( 5, "Copy constructor." )
 		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "Operator [ ]." )
+TUT_UNIT_TEST( "Operator [ ]." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
 	array_t array ( SIZE );
@@ -107,7 +107,7 @@ TUT_UNIT_TEST( 6, "Operator [ ]." )
 	ENSURE_THROW( "access with negative index succed", array[ - SIZE - 1 ] = 0, HException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "Operator bool." )
+TUT_UNIT_TEST( "Operator bool." )
 	item_t::set_start_id( 0 );
 	int const EMPTY = 0;
 	int const SIZE = 7;
@@ -117,7 +117,7 @@ TUT_UNIT_TEST( 7, "Operator bool." )
 	ENSURE_EQUALS( "test for array fullness failed", ! normal, false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "push_back" )
+TUT_UNIT_TEST( "push_back" )
 	proto_t proto; {
 		array_t array;
 		for ( int long i( 0 ); i < 2048; ++ i ) {
@@ -129,14 +129,14 @@ TUT_UNIT_TEST( 8, "push_back" )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "copy constructor (of empty)" )
+TUT_UNIT_TEST( "copy constructor (of empty)" )
 	array_t a1;
 	ENSURE( "construction of empty array", a1.is_empty() );
 	array_t a2( a1 );
 	ENSURE( "construction of empty array", a2.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "resize vs capacity" )
+TUT_UNIT_TEST( "resize vs capacity" )
 	array_t a;
 	a.resize( 1 );
 	ENSURE_EQUALS( "resize( 1 ) failed (resize)", a.size(), 1 );
@@ -157,7 +157,7 @@ TUT_UNIT_TEST( 10, "resize vs capacity" )
 	ENSURE_EQUALS( "resize( 13 ) failed (capacity)", large.capacity(), 14 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "insert( pos, value )" )
+TUT_UNIT_TEST( "insert( pos, value )" )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
 	proto_t proto( begin( a ), end( a ) );
@@ -177,7 +177,7 @@ TUT_UNIT_TEST( 11, "insert( pos, value )" )
 	ENSURE_EQUALS( "insertion failed", array, proto );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "assign operator (=)" )
+TUT_UNIT_TEST( "assign operator (=)" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { -36, -1, -4, -9 };
 	item_t::set_start_id( 0 );
@@ -190,7 +190,7 @@ TUT_UNIT_TEST( 12, "assign operator (=)" )
 	ENSURE_EQUALS( "assgin failed", array, big );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "push_back on resized" ) {
+TUT_UNIT_TEST( "push_back on resized" ) {
 		array_t array( 2048 );
 		proto_t proto( 2048 );
 		/* Bug in GCC 4.2.1 enforces namespace prefix here. */
@@ -219,7 +219,7 @@ void tut_yaal_hcore_harray::test_erase( int first_, int last_ ) { {
 	ENSURE_EQUALS( "object leak", item_t::get_instance_count(), 0 );
 }
 
-TUT_UNIT_TEST( 14, "ranged erase" )
+TUT_UNIT_TEST( "ranged erase" )
 	test_erase( 0, countof( _testData_[0] ) / 2 );
 	test_erase( countof( _testData_[0] ) / 2, countof( _testData_[0] ) );
 	test_erase( 0, countof( _testData_[0] ) );
@@ -235,7 +235,7 @@ TUT_UNIT_TEST( 14, "ranged erase" )
 	test_erase( countof ( _testData_[0] ) / 4, countof( _testData_[0] ) - 3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "ranged insert" )
+TUT_UNIT_TEST( "ranged insert" )
 	item_t::set_start_id( 0 ); {
 		int const len1( countof ( _testData_[1] ) );
 		proto_t proto( begin( _testData_[0] ), end( _testData_[0] ) );
@@ -347,7 +347,7 @@ TUT_UNIT_TEST( 15, "ranged insert" )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "swap" )
+TUT_UNIT_TEST( "swap" )
 	int const A1INIT( 10 );
 	int const A2INIT( 100 );
 	int const A1D( 11 );
@@ -391,7 +391,7 @@ TUT_UNIT_TEST( 16, "swap" )
 
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "data" )
+TUT_UNIT_TEST( "data" )
 	array_t a;
 	a.push_back( 1 );
 	ENSURE_EQUALS( "bad data", *a.data(), 1 );

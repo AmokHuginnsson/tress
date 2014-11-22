@@ -122,12 +122,12 @@ typedef HPointer<tut_yaal_hcore_hpointer::counter_t> ptr_t;
 
 TUT_TEST_GROUP( tut_yaal_hcore_hpointer, "yaal::hcore::HPointer" );
 
-TUT_UNIT_TEST( 1, "Default constructor." )
+TUT_UNIT_TEST( "Default constructor." )
 	ptr_t ptr;
 	ENSURE_EQUALS( "failed to invoke destructor", ptr.raw(), static_cast<counter_t*>( NULL ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "Constructor." ) {
+TUT_UNIT_TEST( "Constructor." ) {
 		counter_t* p = NULL;
 		ptr_t ptr( p = new counter_t() );
 		ENSURE_EQUALS( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
@@ -136,7 +136,7 @@ TUT_UNIT_TEST( 2, "Constructor." ) {
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "Copy constructor." ) {
+TUT_UNIT_TEST( "Copy constructor." ) {
 		counter_t* p = NULL;
 		ptr_t ptr = ptr_t( p = new counter_t() );
 		ENSURE_EQUALS( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
@@ -145,7 +145,7 @@ TUT_UNIT_TEST( 3, "Copy constructor." ) {
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "Assign operator." ) {
+TUT_UNIT_TEST( "Assign operator." ) {
 		counter_t* p = NULL;
 		ptr_t sp1 = ptr_t( new counter_t() );
 		ptr_t sp2 = ptr_t( p = new counter_t() );
@@ -160,7 +160,7 @@ TUT_UNIT_TEST( 4, "Assign operator." ) {
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "Checks constructor with another ptr_t with no module." ) {
+TUT_UNIT_TEST( "Checks constructor with another ptr_t with no module." ) {
 		ptr_t sp1;
 		ENSURE_EQUALS( "counter_t::get_instance_count: 0", counter_t::get_instance_count(), 0 );
 		ptr_t sp2( sp1 );
@@ -171,7 +171,7 @@ TUT_UNIT_TEST( 5, "Checks constructor with another ptr_t with no module." ) {
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "Checks constructor with another ptr_t with module." ) {
+TUT_UNIT_TEST( "Checks constructor with another ptr_t with module." ) {
 		counter_t* p = new counter_t();
 		ptr_t sp1(p);
 		ptr_t sp2(sp1);
@@ -187,7 +187,7 @@ TUT_TEARDOWN()
 // Assignment operators
 // =================================================
 
-TUT_UNIT_TEST( 7, "Checks assignment with non-null module." ) {
+TUT_UNIT_TEST( "Checks assignment with non-null module." ) {
 		counter_t* p = new counter_t();
 		ptr_t sp( p );
 		ENSURE("get", sp.raw() == p);
@@ -196,7 +196,7 @@ TUT_UNIT_TEST( 7, "Checks assignment with non-null module." ) {
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "Checks assignment with ptr_t with non-null module." ) {
+TUT_UNIT_TEST( "Checks assignment with ptr_t with non-null module." ) {
 		counter_t* p = NULL;
 		ptr_t sp1( p = new counter_t() );
 		ptr_t sp2;
@@ -208,7 +208,7 @@ TUT_UNIT_TEST( 8, "Checks assignment with ptr_t with non-null module." ) {
 	ENSURE_EQUALS( "destructed", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "Checks assignment with itself." ) {
+TUT_UNIT_TEST( "Checks assignment with itself." ) {
 		ptr_t sp1( new counter_t() );
 		sp1 = sp1;
 		ENSURE( "get", sp1.raw() != 0 );
@@ -223,7 +223,7 @@ TUT_TEARDOWN()
 // Passing ownership
 // =================================================
 
-TUT_UNIT_TEST( 10, "Checks passing ownership via assignment." ) {
+TUT_UNIT_TEST( "Checks passing ownership via assignment." ) {
 		counter_t *p1 = NULL, *p2 = NULL;
 		ptr_t sp1( p1 = new counter_t());
 		ptr_t sp2( p2 = new counter_t());
@@ -238,14 +238,14 @@ TUT_UNIT_TEST( 10, "Checks passing ownership via assignment." ) {
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "Checks operator->() throws instead of returning null." ) {
+TUT_UNIT_TEST( "Checks operator->() throws instead of returning null." ) {
 		ptr_t sp;
 		ENSURE_THROW( "failed assertion expected", sp->get_id(), HFailedAssertion );
 	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "assign smart pointers pointing to the same memory." ) {
+TUT_UNIT_TEST( "assign smart pointers pointing to the same memory." ) {
 		ptr_t sp1( new counter_t() );
 		ptr_t sp2 = sp1;
 		sp2 = sp1;
@@ -256,7 +256,7 @@ TUT_TEARDOWN()
 /* Weak pointer related tests. */
 typedef HPointer<tut_yaal_hcore_hpointer::counter_t, HPointerScalar, HPointerWeak> weak_t;
 
-TUT_UNIT_TEST( 13, "default constructor" ) {
+TUT_UNIT_TEST( "default constructor" ) {
 		weak_t w;
 		ptr_t p( w );
 		ENSURE( "bad default constructor", p.raw() == NULL );
@@ -264,7 +264,7 @@ TUT_UNIT_TEST( 13, "default constructor" ) {
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "copy constructor" ) {
+TUT_UNIT_TEST( "copy constructor" ) {
 		ptr_t p( new counter_t() );
 		weak_t w( p );
 		ENSURE( "bad copy constructor", p.raw() != NULL );
@@ -272,7 +272,7 @@ TUT_UNIT_TEST( 14, "copy constructor" ) {
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "accessing nullified weak" ) {
+TUT_UNIT_TEST( "accessing nullified weak" ) {
 		weak_t w; {
 			ptr_t p( new counter_t() );
 			w = p;
@@ -290,14 +290,14 @@ struct ODummy : public HPointerFromThisInterface<ODummy> {
 
 typedef HPointer<ODummy> ftp_t;
 
-TUT_UNIT_TEST( 16, "from this" )
+TUT_UNIT_TEST( "from this" )
 	ODummy* raw = NULL;
 	ftp_t p( raw = new ODummy );
 	ftp_t o( raw->get_pointer() );
 	ENSURE( "from this failed", p == o );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "hierarchy issues" ) {
+TUT_UNIT_TEST( "hierarchy issues" ) {
 		static int const MY_VAL = 2;
 		A* rpa = NULL;
 		E* rpe = NULL;
@@ -350,7 +350,7 @@ struct NVDDerive : public non_virt_dtor {
 	~NVDDerive( void ) {};
 };
 
-TUT_UNIT_TEST( 18, "non virtual destructor" )
+TUT_UNIT_TEST( "non virtual destructor" )
 	typedef HPointer<non_virt_dtor> p_t; {
 		p_t p( new NVDDerive );
 	}
@@ -359,14 +359,14 @@ TUT_TEARDOWN()
 
 #pragma GCC diagnostic warning "-Weffc++"
 
-TUT_UNIT_TEST( 19, "generic pointer" ) {
+TUT_UNIT_TEST( "generic pointer" ) {
 		typedef HPointer<void> void_t;
 		void_t p( new counter_t() );
 	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "pointer_static_cast<>" ) {
+TUT_UNIT_TEST( "pointer_static_cast<>" ) {
 		typedef HPointer<void> void_t;
 		void_t v( new counter_t( 7 ) );
 		ptr_t p( pointer_static_cast<counter_t>( v ) );
@@ -375,7 +375,7 @@ TUT_UNIT_TEST( 20, "pointer_static_cast<>" ) {
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "make_pointer" ) {
+TUT_UNIT_TEST( "make_pointer" ) {
 		ptr_t p( make_pointer<counter_t>( 7 ) );
 		ENSURE_EQUALS( "cast failed", p->get_id(), 7 );
 	}

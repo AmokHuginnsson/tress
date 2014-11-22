@@ -96,7 +96,7 @@ void tut_yaal_tools_hdes::crypt_decrypt_test( int onSize_ ) {
 	ENSURE_EQUALS( "decrypted data is incorrect", check, m.get<char>() );
 }
 
-TUT_UNIT_TEST( 1, "crypt file" )
+TUT_UNIT_TEST( "crypt file" )
 	if ( setup._argc > 2 )
 		do_des( setup._argv[ 1 ], setup._argv[ 2 ], HDes::CRYPT );
 	else {
@@ -112,7 +112,7 @@ TUT_UNIT_TEST( 1, "crypt file" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "decrypt file" )
+TUT_UNIT_TEST( "decrypt file" )
 	if ( setup._argc > 2 )
 		do_des( setup._argv[ 1 ], setup._argv[ 2 ], HDes::DECRYPT );
 	else {
@@ -136,7 +136,7 @@ TUT_UNIT_TEST( 2, "decrypt file" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "en/de cryption of various lengths" )
+TUT_UNIT_TEST( "en/de cryption of various lengths" )
 	TIME_CONSTRAINT_EXEMPT();
 	for ( int i( 0 ); i < 300; ++ i )
 		crypt_decrypt_test( i );

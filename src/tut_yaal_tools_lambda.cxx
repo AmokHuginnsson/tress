@@ -46,20 +46,20 @@ STATIC_ASSERT(( MAX_DATA <= countof ( _testData_[0] ) ));
 TUT_SIMPLE_MOCK( tut_yaal_tools_lambda );
 TUT_TEST_GROUP( tut_yaal_tools_lambda, "yaal::tools::lambda" );
 
-TUT_UNIT_TEST( 1, "lambda value" )
+TUT_UNIT_TEST( "lambda value" )
 	ENSURE_EQUALS( "_1 value failed", _1( 1 ), 1 );
 	ENSURE_EQUALS( "_2 value failed", _2( 1, 2 ), 2 );
 	ENSURE_EQUALS( "_3 value failed", _3( 1, 2, 3 ), 3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "preincrement" )
+TUT_UNIT_TEST( "preincrement" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), ++ _1 );
 	ENSURE_EQUALS( "preincrement lambda failed", ss.string(), "3 4 6 8 12 14 18 20 24 " );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "postincrement" )
+TUT_UNIT_TEST( "postincrement" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 ++ );
@@ -69,14 +69,14 @@ TUT_UNIT_TEST( 3, "postincrement" )
 	ENSURE_EQUALS( "postincrement lambda failed", ss.string(), "3 4 6 8 12 14 18 20 24 " );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "predecrement" )
+TUT_UNIT_TEST( "predecrement" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), -- _1 );
 	ENSURE_EQUALS( "predecrement lambda failed", ss.string(), "1 2 4 6 10 12 16 18 22 " );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "postdecrement" )
+TUT_UNIT_TEST( "postdecrement" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 -- );
@@ -86,7 +86,7 @@ TUT_UNIT_TEST( 5, "postdecrement" )
 	ENSURE_EQUALS( "postdecrement lambda failed", ss.string(), "1 2 4 6 10 12 16 18 22 " );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "plus" )
+TUT_UNIT_TEST( "plus" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 1 + _1 );
@@ -104,7 +104,7 @@ TUT_UNIT_TEST( 6, "plus" )
 	ENSURE_EQUALS( "combined + const + lambda failed", ( ( _1 + 3 ) + ( _2 + 4 ) )( 1, 2 ), 10 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "minus" )
+TUT_UNIT_TEST( "minus" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 1 - _1 );
@@ -123,7 +123,7 @@ TUT_TEARDOWN()
 
 	/* 2 3 5 7 11 13 17 19 23 */
 
-TUT_UNIT_TEST( 8, "multiplies" )
+TUT_UNIT_TEST( "multiplies" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 2 * _1 );
@@ -140,7 +140,7 @@ TUT_UNIT_TEST( 8, "multiplies" )
 	ENSURE_EQUALS( "combined * const * const lambda failed", ( ( _1 * 3 ) * 5 )( 2 ), 30 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "divides" )
+TUT_UNIT_TEST( "divides" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 223092870 / _1 );
@@ -165,7 +165,7 @@ TUT_UNIT_TEST( 9, "divides" )
 	ENSURE_EQUALS( "combined / const / const lambda failed", ( ( _1 / 24 ) / 2 )( 96 ), 2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 10, "modulo" )
+TUT_UNIT_TEST( "modulo" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 1000 % _1 );
@@ -183,12 +183,12 @@ TUT_UNIT_TEST( 10, "modulo" )
 	ENSURE_EQUALS( "combined % const % const lambda failed", ( ( _1 % 29 ) % 13 )( 97 ), 10 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 11, "negate" )
+TUT_UNIT_TEST( "negate" )
 	ENSURE_EQUALS( "lambda negate failed", ( -_1 )( 1 ), -1 );
 	ENSURE_EQUALS( "lambda negate failed", ( -( _1 + 1 ) )( 1 ), -2 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 12, "assign" )
+TUT_UNIT_TEST( "assign" )
 	int a( 0 );
 	( _::_1 = 7 )( a );
 	ENSURE_EQUALS( "assign const failed", a, 7 );
@@ -198,7 +198,7 @@ TUT_UNIT_TEST( 12, "assign" )
 	ENSURE_EQUALS( "assign lambda expr failed", a, 14 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 13, "plus assign" )
+TUT_UNIT_TEST( "plus assign" )
 	int a( 3 );
 	( _1 += 7 )( a );
 	ENSURE_EQUALS( "plus assign const failed", a, 10 );
@@ -210,7 +210,7 @@ TUT_UNIT_TEST( 13, "plus assign" )
 	ENSURE_EQUALS( "plus assign lambda expr failed", a, 17 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 14, "minus assign" )
+TUT_UNIT_TEST( "minus assign" )
 	int a( 3 );
 	( _1 -= 7 )( a );
 	ENSURE_EQUALS( "minus assign const failed", a, -4 );
@@ -222,7 +222,7 @@ TUT_UNIT_TEST( 14, "minus assign" )
 	ENSURE_EQUALS( "minus assign lambda expr failed", a, -11 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 15, "multiplies assign" )
+TUT_UNIT_TEST( "multiplies assign" )
 	int a( 3 );
 	( _1 *= 7 )( a );
 	ENSURE_EQUALS( "multiplies assign const failed", a, 21 );
@@ -234,7 +234,7 @@ TUT_UNIT_TEST( 15, "multiplies assign" )
 	ENSURE_EQUALS( "multiplies assign lambda expr failed", a, 42 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 16, "divides assign" )
+TUT_UNIT_TEST( "divides assign" )
 	int a( 3 * 7 );
 	( _1 /= 7 )( a );
 	ENSURE_EQUALS( "divides assign const failed", a, 3 );
@@ -246,7 +246,7 @@ TUT_UNIT_TEST( 16, "divides assign" )
 	ENSURE_EQUALS( "divides assign lambda expr failed", a, 3 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 17, "modulo assign" )
+TUT_UNIT_TEST( "modulo assign" )
 	int a( 19 );
 	( _1 %= 7 )( a );
 	ENSURE_EQUALS( "modulo assign const failed", a, 5 );
@@ -258,7 +258,7 @@ TUT_UNIT_TEST( 17, "modulo assign" )
 	ENSURE_EQUALS( "modulo assign lambda expr failed", a, 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 18, "equality" )
+TUT_UNIT_TEST( "equality" )
 	ENSURE( "equality failed", ( _1 == 1 )( 1 ) );
 	ENSURE_NOT( "equality failed", ( _1 == 1 )( 2 ) );
 	ENSURE( "equality failed", ( _1 == _2 )( 1, 1 ) );
@@ -277,7 +277,7 @@ TUT_UNIT_TEST( 18, "equality" )
 	ENSURE_NOT( "equality failed", ( ( _1 * 2 ) == ( _2 * 3 ) )( 3, 3 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 19, "non-equality" )
+TUT_UNIT_TEST( "non-equality" )
 	ENSURE_NOT( "non-equality failed", ( _1 != 1 )( 1 ) );
 	ENSURE( "non-equality failed", ( _1 != 1 )( 2 ) );
 	ENSURE_NOT( "non-equality failed", ( _1 != _2 )( 1, 1 ) );
@@ -296,7 +296,7 @@ TUT_UNIT_TEST( 19, "non-equality" )
 	ENSURE( "non-equality failed", ( ( _1 * 2 ) != ( _2 * 3 ) )( 3, 3 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 20, "less" )
+TUT_UNIT_TEST( "less" )
 	ENSURE( "less failed", ( _1 < 1 )( 0 ) );
 	ENSURE_NOT( "less failed", ( _1 < 1 )( 1 ) );
 	ENSURE( "less failed", ( _1 < _2 )( 0, 1 ) );
@@ -315,7 +315,7 @@ TUT_UNIT_TEST( 20, "less" )
 	ENSURE_NOT( "less failed", ( ( _1 * 2 ) < ( _2 * 3 ) )( 3, 2 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 21, "greater" )
+TUT_UNIT_TEST( "greater" )
 	ENSURE( "greater failed", ( _1 > 1 )( 2 ) );
 	ENSURE_NOT( "greater failed", ( _1 > 1 )( 1 ) );
 	ENSURE( "greater failed", ( _1 > _2 )( 2, 1 ) );
@@ -334,7 +334,7 @@ TUT_UNIT_TEST( 21, "greater" )
 	ENSURE_NOT( "greater failed", ( ( _1 * 2 ) > ( _2 * 3 ) )( 3, 2 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 22, "less-or-equal" )
+TUT_UNIT_TEST( "less-or-equal" )
 	ENSURE( "less-or-equal failed", ( _1 <= 1 )( 0 ) );
 	ENSURE( "less-or-equal failed", ( _1 <= 1 )( 1 ) );
 	ENSURE_NOT( "less-or-equal failed", ( _1 <= 1 )( 2 ) );
@@ -361,7 +361,7 @@ TUT_UNIT_TEST( 22, "less-or-equal" )
 	ENSURE_NOT( "less-or-equal failed", ( ( _1 * 2 ) <= ( _2 * 3 ) )( 4, 2 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 23, "greater-or-equal" )
+TUT_UNIT_TEST( "greater-or-equal" )
 	ENSURE( "greater-or-equal failed", ( _1 >= 1 )( 2 ) );
 	ENSURE( "greater-or-equal failed", ( _1 >= 1 )( 1 ) );
 	ENSURE_NOT( "greater-or-equal failed", ( _1 >= 1 )( 0 ) );
@@ -388,14 +388,14 @@ TUT_UNIT_TEST( 23, "greater-or-equal" )
 	ENSURE_NOT( "greater-or-equal failed", ( ( _1 * 2 ) >= ( _2 * 3 ) )( 2, 2 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 24, "logical not" )
+TUT_UNIT_TEST( "logical not" )
 	ENSURE( "lambda not failed", ( !_1 )( false ) );
 	ENSURE_NOT( "lambda not failed", ( !_1 )( true ) );
 	ENSURE( "lambda not failed", ( !( _1 == _2 ) )( 1, 2 ) );
 	ENSURE_NOT( "lambda not failed", ( !( _1 == _2 ) )( 1, 1 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 25, "logical and" )
+TUT_UNIT_TEST( "logical and" )
 	ENSURE( "lambda and failed", ( _1 && true )( true ) );
 	ENSURE( "lambda and failed", ( true && _1 )( true ) );
 	ENSURE_NOT( "lambda and failed", ( _1 && false )( false ) );
@@ -410,7 +410,7 @@ TUT_UNIT_TEST( 25, "logical and" )
 	ENSURE( "lambda and failed", ( ( !_1 ) && ( !_2 ) )( false, false ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 26, "logical or" )
+TUT_UNIT_TEST( "logical or" )
 	ENSURE( "lambda or failed", ( _1 || true )( false ) );
 	ENSURE( "lambda or failed", ( _1 || false )( true ) );
 	ENSURE( "lambda or failed", ( false || _1 )( true ) );
@@ -424,7 +424,7 @@ TUT_UNIT_TEST( 26, "logical or" )
 	ENSURE( "lambda or failed", ( ( !_1 ) || ( !_2 ) )( true, false ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 27, "bit and" )
+TUT_UNIT_TEST( "bit and" )
 	ENSURE_EQUALS( "lambda bit and failed", ( _1 & 4 )( 5 ), 4 );
 	ENSURE_EQUALS( "lambda bit and failed", ( 4 & _1 )( 5 ), 4 );
 	ENSURE_EQUALS( "lambda bit and failed", ( _1 & _2 )( 4, 5 ), 4 );
@@ -435,7 +435,7 @@ TUT_UNIT_TEST( 27, "bit and" )
 	ENSURE_EQUALS( "lambda bit and failed", ( ( _1 + 1 ) & ( _2 + 1 ) )( 4, 3 ), 4 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 28, "bit or" )
+TUT_UNIT_TEST( "bit or" )
 	ENSURE_EQUALS( "lambda bit or failed", ( _1 | 4 )( 1 ), 5 );
 	ENSURE_EQUALS( "lambda bit or failed", ( 4 | _1 )( 1 ), 5 );
 	ENSURE_EQUALS( "lambda bit or failed", ( _1 | _2 )( 4, 1 ), 5 );
@@ -446,12 +446,12 @@ TUT_UNIT_TEST( 28, "bit or" )
 	ENSURE_EQUALS( "lambda bit or failed", ( ( _1 + 1 ) | ( _2 - 1 ) )( 3, 2 ), 5 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 47, "mixed lambda operations" )
+TUT_UNIT_TEST( "mixed lambda operations" )
 	ENSURE_EQUALS( "combined + * lambda failed", ( _1 + _2 * _3 )( 1, 2, 3 ), 7 );
 	ENSURE_EQUALS( "combined ( + ) * lambda failed", ( ( _1 + _2 ) * _3 )( 1, 2, 3 ), 9 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 48, "streams" )
+TUT_UNIT_TEST( "streams" )
 	int_list_t l( _testData_[0], _testData_[0] + MAX_DATA );
 	HStringStream ss;
 	for_each( l.begin(), l.end(), ss << _1 << ", " );
@@ -461,7 +461,7 @@ TUT_UNIT_TEST( 48, "streams" )
 	ENSURE_EQUALS( "stream lambda failed", ss.string(), "4, 6, 10, 14, 22, 26, 34, 38, 46, " );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 49, "experiment" )
+TUT_UNIT_TEST( "experiment" )
 	int i( 0 );
 	( ++ _1, ++ _1 )( i );
 	ENSURE_EQUALS( "coma filed", i, 2 );

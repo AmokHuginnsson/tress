@@ -46,7 +46,7 @@ struct tut_ : public simple_mock<tut_> {
 TUT_SIMPLE_MOCK( tut_ );
 TUT_TEST_GROUP( tut_, "yaal::" );
 
-TUT_UNIT_TEST( 1, "first test" )
+TUT_UNIT_TEST( "first test" )
 TUT_TEARDOWN()
 
 #endif

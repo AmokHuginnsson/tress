@@ -68,7 +68,7 @@ void tut_yaal_hcore_hdeque_4::test_push_front( void ) {
 	ENSURE_EQUALS( "object leak", item_type::get_instance_count(), 0 );
 }
 
-TUT_UNIT_TEST( 11, "push_front" )
+TUT_UNIT_TEST( "push_front" )
 	TIME_CONSTRAINT_EXEMPT();
 	test_push_front<1>();
 	test_push_front<2>();
@@ -160,7 +160,7 @@ void tut_yaal_hcore_hdeque_4::test_roll_backward_greedy( int shift_, int distanc
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 }
 
-TUT_UNIT_TEST( 21, "roll backward (push_front/pop_back)" )
+TUT_UNIT_TEST( "roll backward (push_front/pop_back)" )
 	int shift[] = { 1, 2, 3, 4, 5, 6, 7, 8, 16, 32 };
 	int pack[] = { 1, 2, 3, 4, 5, 7, 8 };
 	int distance( 1024 );

@@ -92,7 +92,7 @@ struct tut_yaal_hcore_htls : public simple_mock<tut_yaal_hcore_htls> {
 };
 TUT_TEST_GROUP( tut_yaal_hcore_htls, "yaal::hcore::HTLS" );
 
-TUT_UNIT_TEST( 1, "tls in main thread" )
+TUT_UNIT_TEST( "tls in main thread" )
 	tls_t tls;
 	tls->foo();
 	external_lock_t l( tls.acquire() );
@@ -101,7 +101,7 @@ TUT_UNIT_TEST( 1, "tls in main thread" )
 	(**it)->foo();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "multiple instances" )
+TUT_UNIT_TEST( "multiple instances" )
 	tls_t tls;
 	tls->foo();
 	HThread t1;

@@ -50,13 +50,13 @@ struct tut_yaal_hcore_hset : simple_mock<tut_yaal_hcore_hset> {
 
 TUT_TEST_GROUP( tut_yaal_hcore_hset, "yaal::hcore::HSet" );
 
-TUT_UNIT_TEST( 1, "default constructor" )
+TUT_UNIT_TEST( "default constructor" )
 	int_set_t set;
 	ENSURE_EQUALS( "bad size on fresh HSet<>", set.size(), 0 );
 	ENSURE( "bad emptinass status on fresh HSet<>", set.is_empty() );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "insert (unique)" )
+TUT_UNIT_TEST( "insert (unique)" )
 	int_set_t set;
 	ENSURE_EQUALS( "bad size on fresh HSet<>", set.size(), 0 );
 	ENSURE( "bad emptinass status on fresh HSet<>", set.is_empty() );
@@ -66,7 +66,7 @@ TUT_UNIT_TEST( 2, "insert (unique)" )
 	ENSURE_EQUALS( "inserted element not found", set.count( 1 ), 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "insert (non-unique)" )
+TUT_UNIT_TEST( "insert (non-unique)" )
 	int_set_t set;
 	ENSURE_EQUALS( "bad size on fresh HSet<>", set.size(), 0 );
 	ENSURE( "bad emptinass status on fresh HSet<>", set.is_empty() );
@@ -80,7 +80,7 @@ TUT_UNIT_TEST( 3, "insert (non-unique)" )
 	ENSURE_EQUALS( "inserted element not found", set.count( 1 ), 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "find()" )
+TUT_UNIT_TEST( "find()" )
 	int_set_t set;
 	set.insert( 1 );
 	set.insert( 2 );
@@ -136,7 +136,7 @@ void tut_yaal_hcore_hset::upper_bound_test( int size_ ) {
 	ENSURE( "upper_bound found", !( end2 != set.end() ) );
 }
 
-TUT_UNIT_TEST( 5, "lower_bound()" )
+TUT_UNIT_TEST( "lower_bound()" )
 	int_set_t set;
 	set.insert( 1 );
 	set.insert( 2 );
@@ -156,7 +156,7 @@ TUT_UNIT_TEST( 5, "lower_bound()" )
 		lower_bound_test( i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "upper_bound()" )
+TUT_UNIT_TEST( "upper_bound()" )
 	int_set_t set;
 	set.insert( 1 );
 	set.insert( 2 );
@@ -176,7 +176,7 @@ TUT_UNIT_TEST( 6, "upper_bound()" )
 		upper_bound_test( i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "forward iteration" )
+TUT_UNIT_TEST( "forward iteration" )
 	int_set_t set;
 	set.insert( 1 );
 	set.insert( 2 );
@@ -192,7 +192,7 @@ TUT_UNIT_TEST( 7, "forward iteration" )
 	ENSURE_EQUALS( "bad forward teration", ss.string(), "123" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "backward iteration" )
+TUT_UNIT_TEST( "backward iteration" )
 	int_set_t set;
 	set.insert( 1 );
 	set.insert( 2 );
@@ -208,7 +208,7 @@ TUT_UNIT_TEST( 8, "backward iteration" )
 	ENSURE_EQUALS( "bad forward teration", ss.string(), "321" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 49, "sample data" )
+TUT_UNIT_TEST( "sample data" )
 	typedef HSet<HString> string_set_t;
 	string_set_t set;
 	set.insert( "one" );

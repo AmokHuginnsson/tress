@@ -54,7 +54,7 @@ struct tut_yaal_tools_hhuginn : public simple_mock<tut_yaal_tools_hhuginn> {
 
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn, "yaal::tools::HHuginn" );
 
-TUT_UNIT_TEST( 1, "grammar test" )
+TUT_UNIT_TEST( "grammar test" )
 	HRule hg( huginn_grammar() );
 	HGrammarDescription gd( hg );
 
@@ -371,7 +371,7 @@ void tut_yaal_tools_hhuginn::test_preprocessing( prog_src_t pre_, prog_src_t pos
 	return;
 }
 
-TUT_UNIT_TEST( 2, "preprocessor" )
+TUT_UNIT_TEST( "preprocessor" )
 	prog_src_t progPre[] = {
 		simpleProg,
 		progPre1,
@@ -434,7 +434,7 @@ void tut_yaal_tools_hhuginn::test_parse( prog_src_t prog_, int err_, int index_ 
 	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), err, err_ );
 }
 
-TUT_UNIT_TEST( 3, "report parsing error" )
+TUT_UNIT_TEST( "report parsing error" )
 	prog_src_t progParse[] = {
 		progParse0,
 		NULL

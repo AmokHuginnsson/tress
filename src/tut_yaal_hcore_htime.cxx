@@ -42,7 +42,7 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_htime );
 TUT_TEST_GROUP( tut_yaal_hcore_htime, "yaal::hcore::HTime" );
 
-TUT_UNIT_TEST( 1, "get current time" )
+TUT_UNIT_TEST( "get current time" )
 	HTime nowLocal( now_local() );
 	HTime nowUTC( now_utc() );
 	int long now( time( NULL ) );
@@ -57,7 +57,7 @@ TUT_UNIT_TEST( 1, "get current time" )
 	clog << nowUTC << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "time from string" )
+TUT_UNIT_TEST( "time from string" )
 	HTime bday( "1978-05-24 23:30:00" );
 	ENSURE_EQUALS( "bad year from string", bday.get_year(), 1978 );
 	ENSURE_EQUALS( "bad month from string", bday.get_month(), 5 );
@@ -68,7 +68,7 @@ TUT_UNIT_TEST( 2, "time from string" )
 	clog << bday << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "time explicit, each part separetely" )
+TUT_UNIT_TEST( "time explicit, each part separetely" )
 	HTime bday( 1978, 5, 24, 23, 30, 0 );
 	ENSURE_EQUALS( "bad year from set", bday.get_year(), 1978 );
 	ENSURE_EQUALS( "bad month from set", bday.get_month(), 5 );
@@ -79,7 +79,7 @@ TUT_UNIT_TEST( 3, "time explicit, each part separetely" )
 	clog << bday << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "time from raw" )
+TUT_UNIT_TEST( "time from raw" )
 	HTime bday( 1978, 5, 24, 23, 30, 0 );
 	HTime t( now_local() );
 	t.set( bday.raw() );
@@ -92,7 +92,7 @@ TUT_UNIT_TEST( 4, "time from raw" )
 	clog << t << endl;
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "swap" )
+TUT_UNIT_TEST( "swap" )
 	HTime now( now_local() );
 	HTime bday( 1978, 5, 24, 23, 30, 0 );
 	HTime nowCopy( now );
@@ -102,7 +102,7 @@ TUT_UNIT_TEST( 5, "swap" )
 	ENSURE_EQUALS( "swap failed2", now, bdayCopy );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "assignment" )
+TUT_UNIT_TEST( "assignment" )
 	HTime now( now_local() );
 	HTime bday( 1978, 5, 24, 23, 30, 0 );
 	now = bday;
@@ -114,7 +114,7 @@ TUT_UNIT_TEST( 6, "assignment" )
 	ENSURE_EQUALS( "bad seconds from assignment", now.get_second(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "time diff" )
+TUT_UNIT_TEST( "time diff" )
 	HTime bday( 1978, 5, 24, 23, 30, 0 );
 	HTime consciousness( 1989, 8, 24, 14, 30, 0 );
 	HTime idle( consciousness - bday );
@@ -130,7 +130,7 @@ TUT_UNIT_TEST( 7, "time diff" )
 	ENSURE_EQUALS( "bad seconds from diff", idle.get_second(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "set_format" )
+TUT_UNIT_TEST( "set_format" )
 	HTime bday( 1978, 5, 24, 23, 30, 0 );
 	HString bdayBadFromat( bday.string() );
 	bday.set_format( _iso8601DateTimeFormat_ );

@@ -46,14 +46,14 @@ namespace {
 	char const err[] = "function bind failed";
 }
 
-TUT_UNIT_TEST( 1, "nested bound call (x, y) -> (y) -> ()" )
+TUT_UNIT_TEST( "nested bound call (x, y) -> (y) -> ()" )
 	HBoundCall<HString ( int )> f( call( &foo2, _1, 2 ) );
 	char const expected[] = "foo2: a1 = 1, a2 = 2";
 	ENSURE_EQUALS( err, f( 1 ), expected );
 	ENSURE_EQUALS( err, call( f, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 2, "nested bound call ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested bound call ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	HBoundCall<HString ( int, int )> f2( call( &foo3, _1, _2, 3 ) );
 	HBoundCall<HString ( int )> f1( call( f2, _1, 2 ) );
 	char const expected[] = "foo3: a1 = 1, a2 = 2, a3 = 3";
@@ -62,7 +62,7 @@ TUT_UNIT_TEST( 2, "nested bound call ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 3, "nested bound call ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested bound call ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	HBoundCall<HString ( int, int, int )> f3( call( &foo4, _1, _2, _3, 4 ) );
 	HBoundCall<HString ( int, int )> f2( call( f3, _1, _2, 3 ) );
 	HBoundCall<HString ( int )> f1( call( f2, _1, 2 ) );
@@ -73,7 +73,7 @@ TUT_UNIT_TEST( 3, "nested bound call ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 4, "nested bound call ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested bound call ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	HBoundCall<HString ( int, int, int, int )> f4( call( &foo5, _1, _2, _3, _4, 5 ) );
 	HBoundCall<HString ( int, int, int )> f3( call( f4, _1, _2, _3, 4 ) );
 	HBoundCall<HString ( int, int )> f2( call( f3, _1, _2, 3 ) );
@@ -86,7 +86,7 @@ TUT_UNIT_TEST( 4, "nested bound call ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x,
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 5, "nested bound call ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested bound call ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	HBoundCall<HString ( int, int, int, int, int )> f5( call( &foo6, _1, _2, _3, _4, _5, 6 ) );
 	HBoundCall<HString ( int, int, int, int )> f4( call( f5, _1, _2, _3, _4, 5 ) );
 	HBoundCall<HString ( int, int, int )> f3( call( f4, _1, _2, _3, 4 ) );
@@ -101,7 +101,7 @@ TUT_UNIT_TEST( 5, "nested bound call ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 6, "nested bound call ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested bound call ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	HBoundCall<HString ( int, int, int, int, int, int )> f6( call( &foo7, _1, _2, _3, _4, _5, _6, 7 ) );
 	HBoundCall<HString ( int, int, int, int, int )> f5( call( f6, _1, _2, _3, _4, _5, 6 ) );
 	HBoundCall<HString ( int, int, int, int )> f4( call( f5, _1, _2, _3, _4, 5 ) );
@@ -118,7 +118,7 @@ TUT_UNIT_TEST( 6, "nested bound call ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y,
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 7, "nested bound call ( 8 args ) -> ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested bound call ( 8 args ) -> ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	HBoundCall<HString ( int, int, int, int, int, int, int )> f7( call( &foo8, _1, _2, _3, _4, _5, _6, _7, 8 ) );
 	HBoundCall<HString ( int, int, int, int, int, int )> f6( call( f7, _1, _2, _3, _4, _5, _6, 7 ) );
 	HBoundCall<HString ( int, int, int, int, int )> f5( call( f6, _1, _2, _3, _4, _5, 6 ) );
@@ -137,7 +137,7 @@ TUT_UNIT_TEST( 7, "nested bound call ( 8 args ) -> ( t, u, v, w, x, y, z ) -> ( 
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 8, "nested bound call ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested bound call ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	HBoundCall<HString ( int, int, int, int, int, int, int, int )> f8( call( &foo9, _1, _2, _3, _4, _5, _6, _7, _8, 9 ) );
 	HBoundCall<HString ( int, int, int, int, int, int, int )> f7( call( f8, _1, _2, _3, _4, _5, _6, _7, 8 ) );
 	HBoundCall<HString ( int, int, int, int, int, int )> f6( call( f7, _1, _2, _3, _4, _5, _6, 7 ) );
@@ -158,7 +158,7 @@ TUT_UNIT_TEST( 8, "nested bound call ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> (
 	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 9, "nested bound call ( 10 args ) -> ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( 5 args ) -> ( 4 args ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
+TUT_UNIT_TEST( "nested bound call ( 10 args ) -> ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( 5 args ) -> ( 4 args ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	HBoundCall<HString ( int, int, int, int, int, int, int, int, int )> f9( call( &foo10, _1, _2, _3, _4, _5, _6, _7, _8, _9, 10 ) );
 	HBoundCall<HString ( int, int, int, int, int, int, int, int )> f8( call( f9, _1, _2, _3, _4, _5, _6, _7, _8, 9 ) );
 	HBoundCall<HString ( int, int, int, int, int, int, int )> f7( call( f8, _1, _2, _3, _4, _5, _6, _7, 8 ) );
@@ -189,7 +189,7 @@ int sum( int a_, int b_ ) {
 
 }
 
-TUT_UNIT_TEST( 10, "bound call as free arg in nested bound call" )
+TUT_UNIT_TEST( "bound call as free arg in nested bound call" )
 	HBoundCall<int ( int )> partialSum( call( &sum, 7, _1 ) );
 	ENSURE_EQUALS( "bound call failed", partialSum( 13 ), 20 );
 	HBoundCall<int ( HBoundCall<int ( int )>& )> totalSum( call( static_cast<int ( HBoundCall<int ( int )>::* )( int&& )>( &HBoundCall<int ( int )>::operator() ), _1, 13 ) );
