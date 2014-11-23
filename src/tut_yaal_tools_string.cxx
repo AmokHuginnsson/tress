@@ -71,11 +71,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "join" )
 	typedef HArray<HString> str_arr_t;
-	str_arr_t sa;
-	sa.push_back( "Ala" );
-	sa.push_back( "ma" );
-	sa.push_back( "kota." );
+	str_arr_t sa( { "Ala", "ma", "kota." } );
 	ENSURE_EQUALS( "join failed", join( sa, " " ), "Ala ma kota." );
 TUT_TEARDOWN()
 
 }
+
