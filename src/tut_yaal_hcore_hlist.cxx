@@ -145,10 +145,25 @@ TUT_UNIT_TEST( "Simple constructor." )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Parametrized constructor." )
-	list_t l ( 3 );
+	list_t l( 3 );
 	check_consistency( l );
 	ENSURE_EQUALS( "list not empty", l.size(), 3 );
 	check_consistency( l );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Constructor with range initialization." )
+	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	item_t::set_start_id( 0 ); {
+		item_list_t list( begin( a ), end( a ) );
+		ENSURE( "range initialization failed", safe_equal( list.begin(), list.end(), begin( a ), end( a ) ) );
+	}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Constructor with curly braces initializer" )
+	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	item_list_t list( { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 } );
+	ENSURE( "range initialization failed", safe_equal( list.begin(), list.end(), begin( a ), end( a ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "copy constructor" )

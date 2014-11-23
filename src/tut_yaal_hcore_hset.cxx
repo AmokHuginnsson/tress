@@ -56,6 +56,22 @@ TUT_UNIT_TEST( "default constructor" )
 	ENSURE( "bad emptinass status on fresh HSet<>", set.is_empty() );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Constructor with range initialization." )
+	int t[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	item_t::set_start_id( 0 ); {
+		set_t set( begin( a ), end( a ) );
+		ENSURE( "range initialization failed", safe_equal( set.begin(), set.end(), begin( t ), end( t ) ) );
+	}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Constructor with curly braces initializer" )
+	int t[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+	set_t set( { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 } );
+	ENSURE( "range initialization failed", safe_equal( set.begin(), set.end(), begin( t ), end( t ) ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "insert (unique)" )
 	int_set_t set;
 	ENSURE_EQUALS( "bad size on fresh HSet<>", set.size(), 0 );

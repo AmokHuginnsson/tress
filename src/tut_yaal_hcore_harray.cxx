@@ -87,6 +87,12 @@ TUT_UNIT_TEST( "Constructor with range initialization." )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Constructor with curly braces initializer" )
+	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	array_t array( { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 } );
+	ENSURE( "range initialization failed", safe_equal( array.begin(), array.end(), begin( a ), end( a ) ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "Copy constructor." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;

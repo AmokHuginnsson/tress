@@ -70,6 +70,12 @@ TUT_UNIT_TEST( "Constructor with range initialization." )
 	ENSURE_EQUALS( "range initialization failed", big_deque, proto );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Constructor with curly braces initializer" )
+	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	deque_t deque( { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 } );
+	ENSURE( "range initialization failed", safe_equal( deque.begin(), deque.end(), begin( a ), end( a ) ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "Copy constructor." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
