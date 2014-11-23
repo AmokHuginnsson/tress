@@ -60,7 +60,9 @@ namespace tut {
 struct tut_yaal_hcore_hlist : public simple_mock<tut_yaal_hcore_hlist> {
 	typedef simple_mock<tut_yaal_hcore_hlist> base_type;
 	Stringifier _stringifier;
+	typedef char to_string_type;
 	typedef HList<int> list_t;
+	typedef HList<item_t> item_list_t;
 	void dump( list_t& );
 	template<typename T>
 	void check_consistency( T const& );
@@ -461,6 +463,35 @@ TUT_UNIT_TEST( "add_tail, push_back" )
 	ENSURE_EQUALS( "push_back failed", _stringifier.to_string<char>( l ), "abcd" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "emplace_back" )
+	item_t::reset();
+	item_list_t l;
+	check_consistency( l );
+	ENSURE_EQUALS( "constructor malfunction", l.size(), 0 );
+	l.emplace_back( 'a' );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_back failed", l.size(), 1 );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_back failed", _stringifier.to_string( l ), "a" );
+	l.emplace_back( 'b' );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_back failed", l.size(), 2 );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_back failed", _stringifier.to_string( l ), "ab" );
+	l.emplace_back( 'c' );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_back failed", l.size(), 3 );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_back failed", _stringifier.to_string( l ), "abc" );
+	l.emplace_back( 'd' );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_back failed", l.size(), 4 );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_back failed", _stringifier.to_string( l ), "abcd" );
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "unnecessary move", item_t::get_move_count(), 0 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "pop_back, remove_tail" )
 	list_t l;
 	check_consistency( l );
@@ -518,6 +549,36 @@ TUT_UNIT_TEST( "add_head, push_front" )
 	ENSURE_EQUALS( "push_front failed", l.size(), 4 );
 	check_consistency( l );
 	ENSURE_EQUALS( "push_front failed", _stringifier.to_string<char>( l ), "dcba" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "emplace_front" )
+	item_list_t l;
+	item_t::reset();
+	check_consistency( l );
+	ENSURE_EQUALS( "constructor malfunction", l.size(), 0 );
+	check_consistency( l );
+	l.emplace_front( 'a' );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_front failed", l.size(), 1 );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_front failed", _stringifier.to_string( l ), "a" );
+	l.emplace_front( 'b' );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_front failed", l.size(), 2 );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_front failed", _stringifier.to_string( l ), "ba" );
+	l.emplace_front( 'c' );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_front failed", l.size(), 3 );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_front failed", _stringifier.to_string( l ), "cba" );
+	l.emplace_front( 'd' );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_front failed", l.size(), 4 );
+	check_consistency( l );
+	ENSURE_EQUALS( "emplace_front failed", _stringifier.to_string( l ), "dcba" );
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "unnecessary move", item_t::get_move_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "pop_front, remove_head" )

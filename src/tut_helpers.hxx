@@ -322,6 +322,7 @@ template<typename owner_t, int const forced_size = 1>
 class HInstanceTracker {
 protected:
 	typedef HInstanceTracker<owner_t, forced_size> this_type;
+	typedef owner_t owner_type;
 	static int _copyCount;
 	static int _moveCount;
 	static int _instances;
@@ -501,6 +502,25 @@ int HInstanceTracker<owner_t, forced_size>::_integrityFailures = 0;
 template<typename owner_t, int const forced_size>
 volatile bool HInstanceTracker<owner_t, forced_size>::_stopCopying = false;
 
+}
+
+}
+
+namespace yaal {
+namespace hcore {
+
+template<typename T>
+typename T::to_string_type to_string( tress::tut_helpers::HInstanceTracker<T> const& it_ ) {
+	return ( static_cast<typename T::to_string_type>( it_.get_id() ) );
+}
+
+}
+}
+
+namespace tress {
+
+namespace tut_helpers {
+
 class Stringifier {
 	yaal::hcore::HString _cache;
 public:
@@ -511,14 +531,14 @@ public:
 	yaal::hcore::HString& to_string( collection_t const& coll_ ) {
 		_cache.clear();
 		for ( typename collection_t::const_iterator it( coll_.begin() ), end( coll_.end() ); it != end; ++ it )
-			_cache += *it;
+			_cache += yaal::hcore::to_string( *it );
 		return ( _cache );
 	}
 	template<typename T, typename collection_t>
 	yaal::hcore::HString& to_string( collection_t const& coll_ ) {
 		_cache.clear();
 		for ( typename collection_t::const_iterator it( coll_.begin() ), end( coll_.end() ); it != end; ++ it )
-			_cache += static_cast<T>( *it );
+			_cache += yaal::hcore::to_string( static_cast<T>( *it ) );
 		return ( _cache );
 	}
 };
@@ -573,11 +593,11 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& stre
 	return ( stream );
 }
 
-}
-
 template<typename owner_t, int const forced_size>
 inline void swap( tress::tut_helpers::HInstanceTracker<owner_t, forced_size>& a, tress::tut_helpers::HInstanceTracker<owner_t, forced_size>& b ) {
 	a.swap( b );
+}
+
 }
 
 }

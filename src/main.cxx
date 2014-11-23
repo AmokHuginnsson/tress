@@ -137,14 +137,15 @@ int main( int argc_, char* argv_[] ) {
 		tut::runner.get().set_time_constraint( setup._timeConstraint );
 /* *BOOM* */
 		try {
-			if ( ! setup._listGroups )
+			if ( ! setup._listGroups ) {
 				cout << "TUT: " << now_local() << endl;
+			}
 			errno = 0;
-			if ( setup._exit )
+			if ( setup._exit ) {
 				;
-			else if ( setup._listGroups )
+			} else if ( setup._listGroups ) {
 				list_groups();
-			else if ( setup._restartable ) {
+			} else if ( setup._restartable ) {
 				restartable.set_callback( visitor.get() );
 				restartable.run_tests();
 			} else {
@@ -225,22 +226,25 @@ void list_groups( void ) {
 	tut::test_runner::const_iterator e = groups.end();
 	int totalTestsCount( 0 );
 	while ( i != e ) {
-		int realTestCount( i->second->get_real_test_count() );
-		totalTestsCount += realTestCount;
-		std::cout << "  " << std::setw( 36 ) << std::left << i->first;
-		if ( setup._verbose && realTestCount )
-			std::cout << " " << std::right << std::setw( 2 ) << realTestCount;
-		if ( setup._debug ) {
-			tut::group_base::titles_t const& titles( i->second->get_test_titles() );
-			for ( tut::group_base::titles_t::const_iterator t( titles.begin() ), te( titles.end() ); t != te; ++ t ) {
-				std::cout << "\n\t<" << t->first << ">::" << t->second;
+		if ( setup._testGroups.is_empty() || ( setup._testGroups[0] == i->second->get_name().c_str() ) ) {
+			int realTestCount( i->second->get_real_test_count() );
+			totalTestsCount += realTestCount;
+			std::cout << "  " << std::setw( 36 ) << std::left << i->first;
+			if ( setup._verbose && realTestCount )
+				std::cout << " " << std::right << std::setw( 2 ) << realTestCount;
+			if ( setup._debug ) {
+				tut::group_base::titles_t const& titles( i->second->get_test_titles() );
+				for ( tut::group_base::titles_t::const_iterator t( titles.begin() ), te( titles.end() ); t != te; ++ t ) {
+					std::cout << "\n\t<" << t->first << ">::" << t->second;
+				}
 			}
+			std::cout << std::endl;
 		}
-		std::cout << std::endl;
 		++ i;
 	}
-	if ( setup._verbose )
+	if ( setup._verbose ) {
 		std::cout << "total test count: " << totalTestsCount << std::endl;
+	}
 	errno = 0;
 	return;
 	M_EPILOG

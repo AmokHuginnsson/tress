@@ -129,6 +129,54 @@ TUT_UNIT_TEST( "push_back" )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "push_back( && )" )
+	item_t::reset();
+	int const C( 2048 );
+	proto_t proto; {
+		array_t array;
+		array.reserve( C );
+		for ( int long i( 0 ); i < C; ++ i ) {
+			item_t a( static_cast<int>( i ) );
+			proto.push_back( static_cast<int>( i ) );
+			array.push_back( yaal::move( a ) );
+			ENSURE_EQUALS( "push_back failed", array, proto );
+		}
+	}
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "invalid pass", item_t::get_move_count(), C );
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "emplace_back" )
+	item_t::reset();
+	ENSURE_EQUALS( "unnecessary move", item_t::get_move_count(), 0 );
+	int const C( 2048 );
+	proto_t proto; {
+		array_t array;
+		for ( int long i( 0 ); i < C; ++ i ) {
+			proto.emplace_back( static_cast<int>( i ) );
+			array.emplace_back( static_cast<int>( i ) );
+			ENSURE_EQUALS( "emplace_back failed", array, proto );
+		}
+	}
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+	item_t::reset();
+	/* move test */ {
+		array_t array;
+		array.reserve( C );
+		proto.clear();
+		for ( int long i( 0 ); i < C; ++ i ) {
+			proto.emplace_back( static_cast<int>( i ) );
+			array.emplace_back( static_cast<int>( i ) );
+			ENSURE_EQUALS( "emplace_back failed", array, proto );
+		}
+	}
+	ENSURE_EQUALS( "unnecessary move", item_t::get_move_count(), 0 );
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "copy constructor (of empty)" )
 	array_t a1;
 	ENSURE( "construction of empty array", a1.is_empty() );
@@ -158,23 +206,75 @@ TUT_UNIT_TEST( "resize vs capacity" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "insert( pos, value )" )
+	item_t::reset();
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
 	proto_t proto( begin( a ), end( a ) );
 	array_t array( begin( a ), end( a ) );
 	ENSURE_EQUALS( "insertion failed", array, proto );
-	array.insert( array.begin(), -7 );
-	proto.insert( proto.begin(), -7 );
+	item_t a1( -7 );
+	array.insert( array.begin(), a1 );
+	proto.emplace( proto.begin(), -7 );
 	ENSURE_EQUALS( "insertion failed", array, proto );
-	array.insert( array.begin() + 5, -7 );
-	proto.insert( proto.begin() + 5, -7 );
+	array.insert( array.begin() + 5, a1 );
+	proto.emplace( proto.begin() + 5, -7 );
 	ENSURE_EQUALS( "insertion failed", array, proto );
-	array.insert( array.end() - 1, -7 );
-	proto.insert( proto.end() - 1, -7 );
+	array.insert( array.end() - 1, a1 );
+	proto.emplace( proto.end() - 1, -7 );
 	ENSURE_EQUALS( "insertion failed", array, proto );
-	array.insert( array.end(), -99 );
-	proto.insert( proto.end(), -99 );
+	item_t a2( -99 );
+	array.insert( array.end(), a2 );
+	proto.emplace( proto.end(), -99 );
 	ENSURE_EQUALS( "insertion failed", array, proto );
+	ENSURE_EQUALS( "invalid pass", item_t::get_copy_count(), 4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "insert( pos, && )" )
+	item_t::reset();
+	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	item_t::set_start_id( 0 );
+	proto_t proto( begin( a ), end( a ) );
+	array_t array( begin( a ), end( a ) );
+	ENSURE_EQUALS( "insertion failed", array, proto );
+	item_t a1( -7 );
+	array.insert( array.begin(), yaal::move( a1 ) );
+	proto.emplace( proto.begin(), -7 );
+	ENSURE_EQUALS( "insertion failed", array, proto );
+	item_t a2( -7 );
+	array.insert( array.begin() + 5, yaal::move( a2 ) );
+	proto.emplace( proto.begin() + 5, -7 );
+	ENSURE_EQUALS( "insertion failed", array, proto );
+	item_t a3( -7 );
+	array.insert( array.end() - 1, yaal::move( a3 ) );
+	proto.emplace( proto.end() - 1, -7 );
+	ENSURE_EQUALS( "insertion failed", array, proto );
+	item_t a4( -99 );
+	array.insert( array.end(), yaal::move( a4 ) );
+	proto.emplace( proto.end(), -99 );
+	ENSURE_EQUALS( "insertion failed", array, proto );
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "emplace( pos, value )" )
+	item_t::reset();
+	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	item_t::set_start_id( 0 );
+	proto_t proto( begin( a ), end( a ) );
+	array_t array( begin( a ), end( a ) );
+	ENSURE_EQUALS( "insertion (emplace) failed", array, proto );
+	array.emplace( array.begin(), -7 );
+	proto.emplace( proto.begin(), -7 );
+	ENSURE_EQUALS( "insertion (emplace) failed", array, proto );
+	array.emplace( array.begin() + 5, -7 );
+	proto.emplace( proto.begin() + 5, -7 );
+	ENSURE_EQUALS( "insertion (emplace) failed", array, proto );
+	array.emplace( array.end() - 1, -7 );
+	proto.emplace( proto.end() - 1, -7 );
+	ENSURE_EQUALS( "insertion (emplace) failed", array, proto );
+	array.emplace( array.end(), -99 );
+	proto.emplace( proto.end(), -99 );
+	ENSURE_EQUALS( "insertion (emplace) failed", array, proto );
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "assign operator (=)" )

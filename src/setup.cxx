@@ -91,7 +91,6 @@ void OSetup::test_setup( void ) {
 	if ( _listGroups
 			&& ( _restartable
 				|| ! _testGroupListFilePath.is_empty()
-				|| ! _testGroups.is_empty()
 				|| ! _testSets.is_empty()
 				|| ! _testGroupPattern.is_empty() || _testNumber ) )
 		M_THROW( _( "group listing conflicts with other switches" ),
