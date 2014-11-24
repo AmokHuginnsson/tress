@@ -148,6 +148,38 @@ TUT_UNIT_TEST( "normalize_path" )
 	ENSURE_EQUALS( normalize_path( "a/../../b/../../c" ),                "../../c" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "create_directory" )
+	char const dirA[] = "../tress/out/a";
+	char const dirAB[] = "../tress/out/a/b";
+	ENSURE_THROW( "nested dir created", create_directory( dirAB, 0700, DIRECTORY_MODIFICATION::EXACT ), HFileSystemException );
+	create_directory( dirA, 0700, DIRECTORY_MODIFICATION::EXACT );
+	ENSURE( "failed to create directory a", is_directory( dirA ) );
+	create_directory( dirAB, 0700, DIRECTORY_MODIFICATION::EXACT );
+	ENSURE( "failed to create directory a/b", is_directory( dirAB ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "remove_directory" )
+	char const dirA[] = "../tress/out/a";
+	char const dirAB[] = "../tress/out/a/b";
+	ENSURE_THROW( "removed nested dir", remove_directory( dirA, DIRECTORY_MODIFICATION::EXACT ), HFileSystemException );
+	remove_directory( dirAB, DIRECTORY_MODIFICATION::EXACT );
+	ENSURE_NOT( "failed to remove directory", is_directory( dirAB ) );
+	remove_directory( dirA, DIRECTORY_MODIFICATION::EXACT );
+	ENSURE_NOT( "failed to remove directory", is_directory( dirA ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "create_directory (recursive)" )
+	char const dir[] = "../tress/out/a/b";
+	create_directory( dir, 0700, DIRECTORY_MODIFICATION::RECURSIVE );
+	ENSURE( "failed to create directory", is_directory( dir ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "remove_directory (recursive)" )
+	char const dir[] = "../tress/out/a";
+	remove_directory( dir, DIRECTORY_MODIFICATION::RECURSIVE );
+	ENSURE_NOT( "failed to remove directory", is_directory( dir ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "find" )
 	filesystem::find_result fr( filesystem::find( "./data", ".*\\.sql" ) );
 	sort( fr.begin(), fr.end() );

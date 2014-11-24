@@ -94,7 +94,7 @@ class GTress:
 		self._listSuiteNameColumn.set_sizing( gtk.TREE_VIEW_COLUMN_AUTOSIZE )
 		self._listSuiteNameColumn.set_resizable( True )
 		self._listSuiteNameColumn.set_expand( True )
-	
+
 		self._listTestCountColumn = gtk.TreeViewColumn( "test count" )
 		self._listTestCountCellRenderer = gtk.CellRendererText()
 		self._listTestCountCellRenderer.set_property( "xalign", 1 )
@@ -119,7 +119,7 @@ class GTress:
 		self._listSuiteEnabledColumn.set_fixed_width( 64 )
 		self._listSuiteEnabledColumn.set_resizable( False )
 		self._listSuiteEnabledColumn.set_expand( False )
-	
+
 		self._listPassedColumn = gtk.TreeViewColumn( "passed" )
 		self._listPassedCellRenderer = gtk.CellRendererText()
 		self._listPassedCellRenderer.set_property( "xalign", 1 )
