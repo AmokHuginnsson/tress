@@ -538,6 +538,7 @@ TUT_UNIT_TEST( "find_last" )
 	ENSURE_EQUALS( HString().format( failed, 6 ), str.find_last( 'Y', 3 ), 2 );
 	ENSURE_EQUALS( HString().format( failed, 7 ), str.find_last( 'X', 5 ), 1 );
 	ENSURE_EQUALS( HString().format( failed, 8 ), str.find_last( 'Y', 5 ), 5 );
+	ENSURE_EQUALS( HString().format( failed, 9 ), str.find_last( 'X', 6 ), 6 );
 	ENSURE_EQUALS( HString().format( failed, 9 ), str.find_last( 'X', 9 ), 6 );
 	ENSURE_EQUALS( HString().format( failed, 10 ), str.find_last( 'Y', 9 ), 5 );
 	ENSURE_EQUALS( HString().format( failed, 11 ), str.find_last( 'X', 90 ), 6 );
