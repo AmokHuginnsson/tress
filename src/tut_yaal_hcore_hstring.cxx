@@ -157,6 +157,11 @@ TUT_UNIT_TEST( "construction from void*" )
 	ENSURE_EQUALS( "construction from void* failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "user defined literal" )
+	ENSURE_EQUALS( "udf failed", "Ala ma kota"_ys, "Ala ma kota" );
+	ENSURE_EQUALS( "udf failed", "Ala ma kota"_ys.get_length(), 11 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "operator +=" )
 	static char const INIT[] = "1024";
 	static char const* const TEST = "0xdeadbeef";

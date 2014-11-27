@@ -172,7 +172,7 @@ TUT_SIMPLE_MOCK( tut_selftest_time );
 TUT_TEST_GROUP( tut_selftest_time, "::selftest::time" );
 
 TUT_UNIT_TEST( tut_selftest_time, 1, "now" )
-	HTime now( HTime::LOCAL );
+	HTime now( HTime::TZ::LOCAL );
 	ENSURE_EQUALS( "seconds", now.raw(), 0 );
 TUT_TEARDOWN()
 

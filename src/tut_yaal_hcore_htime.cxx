@@ -42,10 +42,31 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_htime );
 TUT_TEST_GROUP( tut_yaal_hcore_htime, "yaal::hcore::HTime" );
 
+TUT_UNIT_TEST( "mkgmtime" )
+	struct tm b;
+	int years( -1 );
+	for ( i64_t i( 0 ); years < 4000; i += 7193 ) {
+		time_t t( i - HTime::SECONDS_TO_UNIX_EPOCH );
+		gmtime_r( &t, &b );
+		if ( years != ( b.tm_year + 1900 ) ) {
+			years = b.tm_year + 1900;
+			if ( years )
+				clog << ",";
+			clog << years << flush;
+		}
+		i64_t res( mkgmtime( &b ) + HTime::SECONDS_TO_UNIX_EPOCH );
+		if ( res != i ) {
+			cout << endl << "ex: " << HTime( i ).to_string() << "\nac: " << HTime( res ).to_string() << endl;
+		}
+		ENSURE_EQUALS( "mkgmtime failed", res, i );
+	}
+	clog << "years: " << years << endl;
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "get current time" )
 	HTime nowLocal( now_local() );
 	HTime nowUTC( now_utc() );
-	int long now( time( NULL ) );
+	i64_t now( time( NULL ) + HTime::SECONDS_TO_UNIX_EPOCH );
 	i64_t nowLocalRaw( nowLocal.raw() );
 	i64_t nowUTCRaw( nowUTC.raw() );
 	nowLocalRaw -= ( nowLocalRaw % 100 );
@@ -118,11 +139,12 @@ TUT_UNIT_TEST( "time diff" )
 	HTime bday( 1978, 5, 24, 23, 30, 0 );
 	HTime consciousness( 1989, 8, 24, 14, 30, 0 );
 	HTime idle( consciousness - bday );
+	idle.set_tz( HTime::TZ::UTC );
 	clog << idle << endl;
 	/*
 	 * Read comment in htime.hxx header.
 	 */
-	ENSURE_EQUALS( "bad year from diff", idle.get_year() - 1970, 11 );
+	ENSURE_EQUALS( "bad year from diff", idle.get_year(), 11 );
 	ENSURE_EQUALS( "bad month from diff", idle.get_month() - 1, 3 );
 	ENSURE_EQUALS( "bad day from diff", idle.get_day(), 2 );
 	ENSURE_EQUALS( "bad hour from diff", idle.get_hour(), 15 );
@@ -131,12 +153,27 @@ TUT_UNIT_TEST( "time diff" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set_format" )
-	HTime bday( 1978, 5, 24, 23, 30, 0 );
+	HTime bday( 1978, 5, 24, 23, 30, 0, _rfc2822DateTimeFormat_ );
 	HString bdayBadFromat( bday.string() );
 	bday.set_format( _iso8601DateTimeFormat_ );
 	HString bdayString( bday.string() );
 	ENSURE( "test setup fail", bdayString != bdayBadFromat );
 	ENSURE_EQUALS( "set_format fail", bdayString, "1978-05-24 23:30:00" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "epoch" )
+	HTime epoch( HTime::TZ::UTC, 0, 1, 1, 0, 0, 0 );
+	HTime epochRaw( HTime::TZ::UTC, 0LL, _iso8601DateTimeFormat_ );
+	ENSURE_EQUALS( "bad epoch", epoch, epochRaw );
+	HTime now( HTime::TZ::LOCAL );
+	now -= now;
+	ENSURE_EQUALS( "bad zero duration", now, epochRaw );
+	HTime unix( 1970_yY );
+	ENSURE_EQUALS( "bad diff from unix", unix.raw(), static_cast<i64_t>( HTime::SECONDS_TO_UNIX_EPOCH ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "user defined literal" )
+	ENSURE_EQUALS( "udl failed", ( 1978_yY + ( 4_yM ).set_time( 0, 0, 0 ) + 23_yD + 23_yh + 30_ym - 1_yD - 2_yh ).set_tz( HTime::TZ::LOCAL ), HTime( 1978, 5, 24, 23, 30, 0 ) );
 TUT_TEARDOWN()
 
 }

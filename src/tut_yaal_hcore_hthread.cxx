@@ -234,10 +234,10 @@ TUT_UNIT_TEST( "Starting new thread and finishing it prematurely (sleeping body)
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 8 );
-	start.set_now( HTime::LOCAL );
+	start.set_now();
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	a.finish();
-	stop.set_now( HTime::LOCAL );
+	stop.set_now();
 	stop -= start;
 	ENSURE_EQUALS( "thread failed to stop", a.is_alive(), false );
 	ENSURE_DISTANCE( "thread failed to interrupt",
@@ -253,10 +253,10 @@ TUT_UNIT_TEST( "Starting new thread and finishing it prematurely (busy body)" )
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 5 );
-	start.set_now( HTime::LOCAL );
+	start.set_now();
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	a.finish();
-	stop.set_now( HTime::LOCAL );
+	stop.set_now();
 	stop -= start;
 	ENSURE_EQUALS( "thread failed to stop", a.is_alive(), false );
 	ENSURE_DISTANCE( "thread failed to interrupt",
@@ -270,9 +270,9 @@ TUT_UNIT_TEST( "Starting new thread and finishing it prematurely by destructor" 
 		ca.set( 50 );
 		a.spawn( call( &HCool::run, &ca, &a ) );
 		ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
-		start.set_now( HTime::LOCAL );
+		start.set_now();
 	}
-	stop.set_now( HTime::LOCAL );
+	stop.set_now();
 	stop -= start;
 	ENSURE_DISTANCE( "thread failed to interrupt from destructor",
 			stop.get_second(), 0, 2 );
@@ -308,9 +308,9 @@ TUT_UNIT_TEST( "Simple thread (plain function)" )
 	a.spawn( call( &simple, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	M_DSLEEP( 10 );
-	start.set_now( HTime::LOCAL );
+	start.set_now();
 	a.finish();
-	stop.set_now( HTime::LOCAL );
+	stop.set_now();
 	stop -= start;
 	ENSURE_EQUALS( "thread failed to stop", a.is_alive(), false );
 	ENSURE_DISTANCE( "thread failed to interrupt",

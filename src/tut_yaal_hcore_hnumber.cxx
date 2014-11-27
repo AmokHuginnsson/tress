@@ -556,6 +556,13 @@ TUT_UNIT_TEST( "copy constructor" )
 	ENSURE_EQUALS( "bad dafault precision", copy0.get_precision(), P1 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "user defined literal" )
+	ENSURE_EQUALS( "udl failed", "7"_yn, HNumber( 7 ) );
+	ENSURE_EQUALS( "udl failed", "-7"_yn, HNumber( -7 ) );
+	ENSURE_EQUALS( "udl failed", 7_yn, HNumber( "7" ) );
+	ENSURE_EQUALS( "udl failed", -7_yn, HNumber( "-7" ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "set/get precision" )
 	HNumber n;
 	int const M = 16;
