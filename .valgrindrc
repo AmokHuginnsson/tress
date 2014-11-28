@@ -1,0 +1,8 @@
+--num-callers=50
+--memcheck:leak-check=full
+--leak-check=full
+--show-reachable=yes
+--trace-children=no
+--track-fds=yes
+--suppressions=valgrind.supp
+--log-file=valgrind.log
