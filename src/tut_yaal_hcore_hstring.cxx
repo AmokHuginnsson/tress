@@ -260,7 +260,7 @@ TUT_UNIT_TEST( "replace(patter, str)" )
 		str.replace( PAT1A, PAT1B );
 		ENSURE_EQUALS ( "replace A1->B1 does not work", str, CORRECT_1AB );
 		ENSURE_EQUALS( "replace A1->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT_1AB ) - 1 ) );
-		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), MIN_CAPACITY );
 		ENSURE_EQUALS( "replace A1->B1 failed (is_empty)", str.empty(), false );
 		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
 	} {

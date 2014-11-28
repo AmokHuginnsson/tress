@@ -58,8 +58,14 @@ TUT_UNIT_TEST( "mkgmtime" )
 #else /* #ifdef __HOST_OS_TYPE_SOLARIS__ */
 	i64_t start( 0 );
 #endif /* #else #ifdef __HOST_OS_TYPE_SOLARIS__ */
-	for ( i64_t i( start ); years < 4000; i += 7193 ) {
-		time_t t( i - HTime::SECONDS_TO_UNIX_EPOCH );
+#if SIZEOF_TIME_T == 8
+	int end( 4000 );
+#else /* #if SIZEOF_TIME_T == 8 */
+	int end( 2038 );
+	start = HTime::SECONDS_TO_UNIX_EPOCH;
+#endif /* #else #if SIZEOF_TIME_T == 8 */
+	for ( i64_t i( start ); years < end; i += 7193 ) {
+		time_t t( static_cast<time_t>( i - HTime::SECONDS_TO_UNIX_EPOCH ) );
 		gmtime_r( &t, &b );
 		if ( years != ( b.tm_year + 1900 ) ) {
 			years = b.tm_year + 1900;
@@ -151,13 +157,19 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "time diff" )
 	HTime bday( 1978, 5, 24, 23, 30, 0 );
 	HTime consciousness( 1989, 8, 24, 14, 30, 0 );
-	HTime idle( consciousness - bday );
+	HTime idle( consciousness );
 	idle.set_tz( HTime::TZ::UTC );
+	idle -= bday;
 	clog << idle << endl;
 	/*
 	 * Read comment in htime.hxx header.
 	 */
-	ENSURE_EQUALS( "bad year from diff", idle.get_year(), 11 );
+#if SIZEOF_TIME_T == 8
+	int compensate( 0 );
+#else /* #if SIZEOF_TIME_T == 8 */
+	int compensate( 1970 );
+#endif /* #else #if SIZEOF_TIME_T == 8 */
+	ENSURE_EQUALS( "bad year from diff", idle.get_year() - compensate, 11 );
 	ENSURE_EQUALS( "bad month from diff", idle.get_month() - 1, 3 );
 	ENSURE_EQUALS( "bad day from diff", idle.get_day(), 2 );
 	ENSURE_EQUALS( "bad hour from diff", idle.get_hour(), 15 );
@@ -186,9 +198,11 @@ TUT_UNIT_TEST( "epoch" )
 TUT_TEARDOWN()
 
 #ifndef __HOST_OS_TYPE_SOLARIS__
+#if SIZEOF_TIME_T == 8
 TUT_UNIT_TEST( "user defined literal" )
 	ENSURE_EQUALS( "udl failed", ( 1978_yY + ( 4_yM ).set_time( 0, 0, 0 ) + 23_yD + 23_yh + 30_ym - 1_yD - 2_yh ).set_tz( HTime::TZ::LOCAL ), HTime( 1978, 5, 24, 23, 30, 0 ) );
 TUT_TEARDOWN()
+#endif /* #if SIZEOF_TIME_T == 8 */
 #endif /* #ifndef __HOST_OS_TYPE_SOLARIS__ */
 
 }
