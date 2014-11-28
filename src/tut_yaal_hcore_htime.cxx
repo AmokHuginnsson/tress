@@ -42,10 +42,23 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_htime );
 TUT_TEST_GROUP( tut_yaal_hcore_htime, "yaal::hcore::HTime" );
 
+/*
+ * On Solaris all time functions:
+ * mktime(), gmtime(_r)(), localtime(_r)(),
+ * are broken.
+ * They are unable to handle dates in year 0.
+ * Where year 0 is equivalent of year 1 BCE.
+ */
+
 TUT_UNIT_TEST( "mkgmtime" )
 	struct tm b;
 	int years( -1 );
-	for ( i64_t i( 0 ); years < 4000; i += 7193 ) {
+#ifdef __HOST_OS_TYPE_SOLARIS__
+	i64_t start( 31622400 );
+#else /* #ifdef __HOST_OS_TYPE_SOLARIS__ */
+	i64_t start( 0 );
+#endif /* #else #ifdef __HOST_OS_TYPE_SOLARIS__ */
+	for ( i64_t i( start ); years < 4000; i += 7193 ) {
 		time_t t( i - HTime::SECONDS_TO_UNIX_EPOCH );
 		gmtime_r( &t, &b );
 		if ( years != ( b.tm_year + 1900 ) ) {
@@ -172,9 +185,11 @@ TUT_UNIT_TEST( "epoch" )
 	ENSURE_EQUALS( "bad diff from unix", unix.raw(), static_cast<i64_t>( HTime::SECONDS_TO_UNIX_EPOCH ) );
 TUT_TEARDOWN()
 
+#ifndef __HOST_OS_TYPE_SOLARIS__
 TUT_UNIT_TEST( "user defined literal" )
 	ENSURE_EQUALS( "udl failed", ( 1978_yY + ( 4_yM ).set_time( 0, 0, 0 ) + 23_yD + 23_yh + 30_ym - 1_yD - 2_yh ).set_tz( HTime::TZ::LOCAL ), HTime( 1978, 5, 24, 23, 30, 0 ) );
 TUT_TEARDOWN()
+#endif /* #ifndef __HOST_OS_TYPE_SOLARIS__ */
 
 }
 
