@@ -4,5 +4,6 @@
 --show-reachable=yes
 --trace-children=no
 --track-fds=yes
+--error-exitcode=255
 --suppressions=valgrind.supp
 --log-file=valgrind.log

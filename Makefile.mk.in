@@ -91,4 +91,5 @@ test: debug
 
 memcheck: debug
 	@cd $(DIR_ROOT) && mkdir -p out && sqlite3 out/tress.sqlite < data/sqlite.sql && \
-	. _aux/set-limits.sh && $(TRESS_ENV) valgrind ./build/$(TARGET)/tress/1exec $(TRESS_ARG) > /dev/null
+	. _aux/set-limits.sh && $(TRESS_ENV) valgrind ./build/$(TARGET)/tress/1exec $(TRESS_ARG) > /dev/null; \
+	test $$? -ne 255
