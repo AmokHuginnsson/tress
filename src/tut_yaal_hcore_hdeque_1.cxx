@@ -274,5 +274,54 @@ TUT_UNIT_TEST( "roll forward (push_back/pop_front) insert erase" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "emplace_back" )
+	deque_t deque;
+	item_t::reset();
+	deque.emplace_back( 7 );
+	check_consistency( deque );
+	ENSURE_EQUALS( "emplace_back failed", deque[0], 7 );
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "unnecessary move", item_t::get_move_count(), 0 );
+	deque.emplace_back( 13 );
+	ENSURE_EQUALS( "emplace_back failed", deque[0], 7 );
+	ENSURE_EQUALS( "emplace_back failed", deque[1], 13 );
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "unnecessary move", item_t::get_move_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "emplace_front" )
+	deque_t deque;
+	item_t::reset();
+	deque.emplace_front( 7 );
+	check_consistency( deque );
+	ENSURE_EQUALS( "emplace_front failed", deque[0], 7 );
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "unnecessary move", item_t::get_move_count(), 0 );
+	deque.emplace_front( 13 );
+	ENSURE_EQUALS( "emplace_front failed", deque[0], 13 );
+	ENSURE_EQUALS( "emplace_front failed", deque[1], 7 );
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "unnecessary move", item_t::get_move_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "emplace" )
+	deque_t deque;
+	item_t::reset();
+	deque.emplace( deque.end(), 7 );
+	check_consistency( deque );
+	ENSURE_EQUALS( "emplace failed", deque[0], 7 );
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "unnecessary move", item_t::get_move_count(), 0 );
+	deque.emplace( deque.end(), 13 );
+	ENSURE_EQUALS( "emplace failed", deque[0], 7 );
+	ENSURE_EQUALS( "emplace failed", deque[1], 13 );
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
+	deque.emplace( deque.begin() + 1, 42 );
+	ENSURE_EQUALS( "emplace failed", deque[0], 7 );
+	ENSURE_EQUALS( "emplace failed", deque[1], 42 );
+	ENSURE_EQUALS( "emplace failed", deque[2], 13 );
+	ENSURE_EQUALS( "unnecessary copy", item_t::get_copy_count(), 0 );
+TUT_TEARDOWN()
+
 }
 
