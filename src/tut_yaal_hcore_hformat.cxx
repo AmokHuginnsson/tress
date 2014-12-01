@@ -83,6 +83,12 @@ TUT_UNIT_TEST( "reuse of format" )
 	ENSURE_EQUALS( "bad format output", f.string(), "[2.718281828459045]" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "int long long" )
+	HFormat f( "[%lld]" );
+	f % 718281828459045ll;
+	ENSURE_EQUALS( "bad int long long format output", f.string(), "[718281828459045]" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "format and streams interaction" )
 	typedef HFormat format;
 	cout << "PI: " << format( "[%2$*1$.*3$Lf]" ) % 30 % PI % 15 << endl;
