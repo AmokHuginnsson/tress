@@ -186,6 +186,30 @@ TUT_UNIT_TEST( "set_format" )
 	ENSURE_EQUALS( "set_format fail", bdayString, "1978-05-24 23:30:00" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "set_format" )
+	HTime bday( 1978, 5, 24, 23, 30, 0 );
+	ENSURE_EQUALS( "bad year from set", bday.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from set", bday.get_month(), 5 );
+	ENSURE_EQUALS( "bad day from set", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from set", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from set", bday.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from set", bday.get_second(), 0 );
+	bday.mod_year( 1 );
+	ENSURE_EQUALS( "bad year from mod_year", bday.get_year(), 1979 );
+	ENSURE_EQUALS( "bad month from mod_year", bday.get_month(), 5 );
+	ENSURE_EQUALS( "bad day from mod_year", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from mod_year", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from mod_year", bday.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from mod_year", bday.get_second(), 0 );
+	bday.mod_year( -99 );
+	ENSURE_EQUALS( "bad year from mod_year", bday.get_year(), 1880 );
+	ENSURE_EQUALS( "bad month from mod_year", bday.get_month(), 5 );
+	ENSURE_EQUALS( "bad day from mod_year", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from mod_year", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from mod_year", bday.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from mod_year", bday.get_second(), 0 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "epoch" )
 	HTime epoch( HTime::TZ::UTC, 0, 1, 1, 0, 0, 0 );
 	HTime epochRaw( HTime::TZ::UTC, 0LL, _iso8601DateTimeFormat_ );
