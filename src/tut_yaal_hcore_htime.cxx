@@ -186,7 +186,7 @@ TUT_UNIT_TEST( "set_format" )
 	ENSURE_EQUALS( "set_format fail", bdayString, "1978-05-24 23:30:00" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "set_format" )
+TUT_UNIT_TEST( "mod_year" )
 	HTime bday( 1978, 5, 24, 23, 30, 0 );
 	ENSURE_EQUALS( "bad year from set", bday.get_year(), 1978 );
 	ENSURE_EQUALS( "bad month from set", bday.get_month(), 5 );
