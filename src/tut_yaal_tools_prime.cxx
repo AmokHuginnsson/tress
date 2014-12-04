@@ -62,5 +62,11 @@ TUT_UNIT_TEST( "find_primes( huge, huge + 3 )" )
 	ENSURE_EQUALS( "find_primes on huge failed", p[0], primeToFind );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "find_primes() - no primes" )
+	primes_t p;
+	find_primes( p, 524, 540 );
+	ENSURE( "find_primes found bogus prime", p.is_empty() );
+TUT_TEARDOWN()
+
 }
 
