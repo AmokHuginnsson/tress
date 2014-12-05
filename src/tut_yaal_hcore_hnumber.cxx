@@ -1169,7 +1169,7 @@ TUT_UNIT_TEST( "is_exact()" )
 	ENSURE( "not exact from string", n.is_exact() );
 	ENSURE_EQUALS( "bad precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
 	static int const HARDCODED_MINIMUM_PRECISION( 16 );
-	for ( HNumber::size_t i( static_cast<HNumber::size_t>( sn.get_length() ) - 3 ); i >= HARDCODED_MINIMUM_PRECISION; -- i ) {
+	for ( HNumber::integer_t i( static_cast<HNumber::integer_t>( sn.get_length() ) - 3 ); i >= HARDCODED_MINIMUM_PRECISION; -- i ) {
 		n.set_precision( i );
 		ENSURE_EQUALS( "failed to set precision", n.get_precision(), i );
 		ENSURE_NOT( "exact after trimming precision below fractional length", n.is_exact() );
