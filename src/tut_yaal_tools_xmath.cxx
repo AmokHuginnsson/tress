@@ -105,14 +105,15 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "number set stats: average" )
 #ifdef __HOST_OS_TYPE_CYGWIN__
-	double expected( 24133 / 100. );
+	double long e( epsilon * 100 );
 #else /* #ifdef __HOST_OS_TYPE_CYGWIN__ */
-	double long expected( 24133 / 100.l );
+	double long e( epsilon );
 #endif /* #else #ifdef __HOST_OS_TYPE_CYGWIN__ */
+	double long expected( 24133 / 100.l );
 	ENSURE_DISTANCE( "number_set_stats().average() failed",
 			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).average(),
 			expected,
-			epsilon );
+			e );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "number set stats: variance" )

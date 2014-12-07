@@ -241,6 +241,7 @@ TUT_UNIT_TEST( "epoch" )
 	HTime now( HTime::TZ::LOCAL );
 	now -= now;
 	ENSURE_EQUALS( "bad zero duration", now, epochRaw );
+#undef unix
 	HTime unix( 1970_yY );
 	ENSURE_EQUALS( "bad diff from unix", unix.raw(), static_cast<i64_t>( HTime::SECONDS_TO_UNIX_EPOCH ) );
 TUT_TEARDOWN()
