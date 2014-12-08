@@ -234,6 +234,32 @@ TUT_UNIT_TEST( "mod_month" )
 	ENSURE_EQUALS( "bad seconds from mod_month", bday.get_second(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "mod_day" )
+	HTime bday( 1978, 5, 24, 23, 30, 0 );
+	ENSURE_EQUALS( "bad year from set", bday.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from set", bday.get_month(), 5 );
+	ENSURE_EQUALS( "bad day from set", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from set", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from set", bday.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from set", bday.get_second(), 0 );
+	bday.mod_day( 1 );
+	ENSURE_EQUALS( "bad year from mod_day", bday.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from mod_day", bday.get_month(), 5 );
+	ENSURE_EQUALS( "bad day from mod_day", bday.get_day(), 25 );
+	ENSURE_EQUALS( "bad hour from mod_day", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from mod_day", bday.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from mod_day", bday.get_second(), 0 );
+	bday.mod_day( -99 );
+	ENSURE_EQUALS( "bad year from mod_day", bday.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from mod_day", bday.get_month(), 2 );
+	ENSURE_EQUALS( "bad day from mod_day", bday.get_day(), 15 );
+	/* DST change happend 30 of March */
+	ENSURE_EQUALS( "bad hour from mod_day", bday.get_hour(), 22 );
+	ENSURE_EQUALS( "bad minute from mod_day", bday.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from mod_day", bday.get_second(), 0 );
+TUT_TEARDOWN()
+
+
 TUT_UNIT_TEST( "epoch" )
 	HTime epoch( HTime::TZ::UTC, 0, 1, 1, 0, 0, 0 );
 	HTime epochRaw( HTime::TZ::UTC, 0LL, _iso8601DateTimeFormat_ );
