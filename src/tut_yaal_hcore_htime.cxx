@@ -37,9 +37,11 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
-namespace tut {
+namespace yaal {
 
-namespace {
+namespace hcore {
+
+std::ostream& operator << ( std::ostream&, HTime::DAY_OF_WEEK );
 std::ostream& operator << ( std::ostream& out, HTime::DAY_OF_WEEK wd ) {
 	std::string name;
 	switch ( wd ) {
@@ -54,9 +56,10 @@ std::ostream& operator << ( std::ostream& out, HTime::DAY_OF_WEEK wd ) {
 	out << name;
 	return ( out );
 }
-std::ostream& operator << ( std::ostream& out, HTime::MONTH::month_t wd ) {
+std::ostream& operator << ( std::ostream&, HTime::MONTH::month_t );
+std::ostream& operator << ( std::ostream& out, HTime::MONTH::month_t mon ) {
 	std::string name;
-	switch ( wd ) {
+	switch ( mon ) {
 		case ( HTime::MONTH::JANUARY ): name = "january"; break;
 		case ( HTime::MONTH::FEBRUARY ): name = "february"; break;
 		case ( HTime::MONTH::MARCH ): name = "march"; break;
@@ -73,7 +76,12 @@ std::ostream& operator << ( std::ostream& out, HTime::MONTH::month_t wd ) {
 	out << name;
 	return ( out );
 }
+
 }
+
+}
+
+namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_htime );
 TUT_TEST_GROUP( tut_yaal_hcore_htime, "yaal::hcore::HTime" );
