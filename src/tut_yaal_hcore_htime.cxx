@@ -353,6 +353,7 @@ TUT_UNIT_TEST( "epoch" )
 #undef unix
 	HTime unix( 1970_yY );
 	ENSURE_EQUALS( "bad diff from unix", unix.raw(), static_cast<i64_t>( HTime::SECONDS_TO_UNIX_EPOCH ) );
+	ENSURE_EQUALS( "bad week day", epoch.get_day_of_week(), HTime::DAY_OF_WEEK::SATURDAY );
 TUT_TEARDOWN()
 
 #ifndef __HOST_OS_TYPE_SOLARIS__
