@@ -343,6 +343,60 @@ TUT_UNIT_TEST( "mod_hour" )
 	ENSURE_EQUALS( "bad week day", bday.get_day_of_week(), HTime::DAY_OF_WEEK::SATURDAY );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "mod_minute" )
+	HTime bday( 1978, HTime::MONTH::MAY, 24, 23, 30, 0 );
+	ENSURE_EQUALS( "bad year from set", bday.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from set", bday.get_month(), HTime::MONTH::MAY );
+	ENSURE_EQUALS( "bad day from set", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from set", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from set", bday.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from set", bday.get_second(), 0 );
+	ENSURE_EQUALS( "bad week day", bday.get_day_of_week(), HTime::DAY_OF_WEEK::WEDNESDAY );
+	bday.mod_minute( 1 );
+	ENSURE_EQUALS( "bad year from mod_minute", bday.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from mod_minute", bday.get_month(), HTime::MONTH::MAY );
+	ENSURE_EQUALS( "bad day from mod_minute", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from mod_minute", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from mod_minute", bday.get_minute(), 31 );
+	ENSURE_EQUALS( "bad seconds from mod_minute", bday.get_second(), 0 );
+	ENSURE_EQUALS( "bad week day", bday.get_day_of_week(), HTime::DAY_OF_WEEK::WEDNESDAY );
+	bday.mod_minute( -99 );
+	ENSURE_EQUALS( "bad year from mod_minute", bday.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from mod_minute", bday.get_month(), HTime::MONTH::MAY );
+	ENSURE_EQUALS( "bad day from mod_minute", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from mod_minute", bday.get_hour(), 21 );
+	ENSURE_EQUALS( "bad minute from mod_minute", bday.get_minute(), 52 );
+	ENSURE_EQUALS( "bad seconds from mod_minute", bday.get_second(), 0 );
+	ENSURE_EQUALS( "bad week day", bday.get_day_of_week(), HTime::DAY_OF_WEEK::WEDNESDAY );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "mod_second" )
+	HTime bday( 1978, HTime::MONTH::MAY, 24, 23, 30, 0 );
+	ENSURE_EQUALS( "bad year from set", bday.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from set", bday.get_month(), HTime::MONTH::MAY );
+	ENSURE_EQUALS( "bad day from set", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from set", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from set", bday.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from set", bday.get_second(), 0 );
+	ENSURE_EQUALS( "bad week day", bday.get_day_of_week(), HTime::DAY_OF_WEEK::WEDNESDAY );
+	bday.mod_second( 1 );
+	ENSURE_EQUALS( "bad year from mod_second", bday.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from mod_second", bday.get_month(), HTime::MONTH::MAY );
+	ENSURE_EQUALS( "bad day from mod_second", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from mod_second", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from mod_second", bday.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from mod_second", bday.get_second(), 1 );
+	ENSURE_EQUALS( "bad week day", bday.get_day_of_week(), HTime::DAY_OF_WEEK::WEDNESDAY );
+	bday.mod_second( -99 );
+	ENSURE_EQUALS( "bad year from mod_second", bday.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month from mod_second", bday.get_month(), HTime::MONTH::MAY );
+	ENSURE_EQUALS( "bad day from mod_second", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from mod_second", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from mod_second", bday.get_minute(), 28 );
+	ENSURE_EQUALS( "bad seconds from mod_second", bday.get_second(), 22 );
+	ENSURE_EQUALS( "bad week day", bday.get_day_of_week(), HTime::DAY_OF_WEEK::WEDNESDAY );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "epoch" )
 	HTime epoch( HTime::TZ::UTC, 0, 1, 1, 0, 0, 0 );
 	HTime epochRaw( HTime::TZ::UTC, 0LL, _iso8601DateTimeFormat_ );
