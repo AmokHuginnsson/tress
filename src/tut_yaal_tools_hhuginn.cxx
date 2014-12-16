@@ -419,7 +419,7 @@ TUT_TEARDOWN()
 
 char const progParse0[] =
 	"main() {\n"
-	"\treturn ( 0 );\n"
+	"\treturn #( 0 );\n"
 	"}\n"
 ;
 
@@ -430,8 +430,7 @@ void tut_yaal_tools_hhuginn::test_parse( prog_src_t prog_, int err_, int index_ 
 	clog << "preprocessing: " << index_ << endl;
 	h.preprocess();
 	h.parse();
-	int err( 0 );
-	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), err, err_ );
+	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_ );
 }
 
 TUT_UNIT_TEST( "report parsing error" )
@@ -440,7 +439,7 @@ TUT_UNIT_TEST( "report parsing error" )
 		NULL
 	};
 	int const err[] = {
-		0,
+		17,
 		0
 	};
 	int const* e( err );
