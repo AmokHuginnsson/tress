@@ -49,7 +49,7 @@ struct tut_yaal_tools_hhuginn : public simple_mock<tut_yaal_tools_hhuginn> {
 	typedef char const* prog_src_t;
 	virtual ~tut_yaal_tools_hhuginn( void ) {}
 	void test_preprocessing( prog_src_t, prog_src_t, int );
-	void test_parse( prog_src_t, int, int );
+	void test_parse( prog_src_t, int const[3], int );
 };
 
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn, "yaal::tools::HHuginn" );
@@ -423,14 +423,14 @@ char const progParse0[] =
 	"}\n"
 ;
 
-void tut_yaal_tools_hhuginn::test_parse( prog_src_t prog_, int err_, int index_ ) {
+void tut_yaal_tools_hhuginn::test_parse( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
 	h.load( prog );
 	clog << "preprocessing: " << index_ << endl;
 	h.preprocess();
 	h.parse();
-	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_ );
+	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_[0] );
 }
 
 TUT_UNIT_TEST( "report parsing error" )
@@ -438,14 +438,14 @@ TUT_UNIT_TEST( "report parsing error" )
 		progParse0,
 		NULL
 	};
-	int const err[] = {
-		17,
-		0
+	int const err[][3] = {
+		{ 17, 2, 9 },
+		{ 0, 0, 0 }
 	};
-	int const* e( err );
+	int const (*e)[3]( err );
 	for ( prog_src_t* prog( begin( progParse ) ), * progEnd( end( progParse ) ); prog != progEnd; ++ prog, ++ e ) {
 		if ( *prog ) {
-			test_parse( *prog, *err, static_cast<int>( prog - begin( progParse ) ) );
+			test_parse( *prog, *e, static_cast<int>( prog - begin( progParse ) ) );
 		}
 	}
 TUT_TEARDOWN()
