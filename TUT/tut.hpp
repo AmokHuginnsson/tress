@@ -314,7 +314,7 @@ public:
 
 	virtual char const* get_test_title( int no_ ) const {
 		titles_t::const_iterator it( _titles.find( no_ ) );
-		return ( ( it != _titles.end() ) ? it->second : NULL );
+		return ( ( it != _titles.end() ) ? it->second : "" );
 	}
 
 	virtual int get_real_test_count( void ) const {
