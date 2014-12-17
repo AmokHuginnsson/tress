@@ -60,13 +60,11 @@ public:
 		_os << "#ending " << group_->get_name() << std::endl;
 	}
 
-	virtual void test_started( char const*, int n, char const* title_, bool ) {
-		if ( title_ ) {
-			yaal::hcore::HLock l( _mutex );
-			using std::operator <<;
-			_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
-			_os << "#starting " << title_ << std::endl;
-		}
+	virtual void test_started( std::string const&, int n, std::string const& title_ ) {
+		yaal::hcore::HLock l( _mutex );
+		using std::operator <<;
+		_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
+		_os << "#starting " << title_ << std::endl;
 	}
 
 	virtual void test_completed( const tut::test_result& tr_ ) {

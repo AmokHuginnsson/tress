@@ -144,12 +144,12 @@ public:
 		warnings_count = 0;
 		all_tests_.clear();
 	}
-	
+
 	virtual void group_started( const std::string& /*name */, int /* total test count for group */ ) {
 	}
 	virtual void group_completed( group_base const* ) {
 	}
-	virtual void test_started( char const*, int /*n */, char const*, bool ) {
+	virtual void test_started( std::string const&, int /*n */, std::string const& ) {
 	}
 	virtual int fail_count( void ) const {
 		return ( exceptions_count + failures_count + terminations_count + warnings_count );

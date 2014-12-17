@@ -84,7 +84,7 @@ struct callback {
 	/**
 	* Called when a test is about to start.
 	*/
-	virtual void test_started( char const*, int /*n */, char const*, bool ) = 0;
+	virtual void test_started( std::string const&, int /*n */, std::string const& ) = 0;
 
 	/**
 	* Called when all tests in run completed.
@@ -354,7 +354,7 @@ public:
 
 		_callback->run_started( 1, 1 );
 		_callback->group_started( group_name, 1 );
-		_callback->test_started( group_name.c_str(), n, i->second->get_test_title( n ), true );
+		_callback->test_started( group_name.c_str(), n, i->second->get_test_title( n ) );
 
 		try {
 			test_result tr = i->second->run_test( n );
@@ -402,10 +402,8 @@ private:
 				_callback->group_completed( i->second );
 			}
 		} else {
-			bool first( false );
 			for ( test_numbers_t::const_iterator no( testNumbers_.begin() ), noEnd( testNumbers_.end() ); no != noEnd; ++ no ) {
-				_callback->test_started( i->first.c_str(), *no, i->second->get_test_title( *no ), first );
-				first = false;
+				_callback->test_started( i->first.c_str(), *no, i->second->get_test_title( *no ) );
 
 				try {
 					test_result tr = i->second->run_test( *no );
@@ -428,12 +426,10 @@ private:
 		if ( i != i )
 			return;
 
-		bool first( true );
 		for ( ; ! yaal::_isKilled_ ; ) {
 			if ( i->second->has_next() ) {
 				int no( i->second->next() );
-				_callback->test_started( i->first.c_str(), no, i->second->get_test_title( no ), first );
-				first = false;
+				_callback->test_started( i->first.c_str(), no, i->second->get_test_title( no ) );
 			}
 
 			test_result tr = i->second->run_next();

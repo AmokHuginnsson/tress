@@ -254,16 +254,18 @@ public:
 		}
 	}
 
-	virtual void test_started( char const* groupName_, int n, char const* title_, bool first_ ) {
-		if ( title_ ) {
-			yaal::hcore::HLock l( _mutex );
-			using std::operator <<;
-			_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
-			if ( tress::setup._verbose && ! first_ ) {
-				static std::string const sep( MAX_SEPARATOR_LEN, '-' );
-				_os << ( tress::setup._color ? yaal::ansi::brightcyan : "" ) << sep << ( tress::setup._color ? yaal::ansi::reset : "" ) << std::endl;
-				_os << "TUT: " << groupName_ << "::<" << n << "> " << title_ << std::endl;
-			}
+	virtual void test_started( std::string const& groupName_, int n, std::string const& title_ ) {
+		yaal::hcore::HLock l( _mutex );
+		using std::operator <<;
+		_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
+		if ( tress::setup._verbose ) {
+			std::string sep( ( MAX_SEPARATOR_LEN - ( groupName_.length() + title_.length() + 14 ) ) / 2, '-' );
+			_os << ( tress::setup._color ? yaal::ansi::brightcyan : "" ) << sep
+				<< ( tress::setup._color ? yaal::ansi::reset : "" )
+				<< " TUT: " << groupName_ << "::<" << n << "> " << title_ << " "
+				<< ( tress::setup._color ? yaal::ansi::brightcyan : "" ) << sep
+				<< ( tress::setup._color ? yaal::ansi::reset : "" )
+				<< std::endl;
 		}
 	}
 

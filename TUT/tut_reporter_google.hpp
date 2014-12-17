@@ -76,15 +76,14 @@ public:
 		_os << "[----------] " << group_->get_real_test_count() << " tests from " << escape( group_->get_name() ) << " (0 ms total)\n" << std::endl;
 	}
 
-	virtual void test_started( char const* group_, int n, char const* title_, bool ) {
-		if ( group_ )
+	virtual void test_started( std::string const& group_, int n, std::string const& title_ ) {
+		yaal::hcore::HLock l( _mutex );
+		if ( ! group_.empty() ) {
 			_groupNames.insert( group_ );
-		if ( title_ ) {
-			yaal::hcore::HLock l( _mutex );
-			using std::operator <<;
-			_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
-			_os << "[ RUN      ] " << escape( group_ ) << ".<" << n << "> " << escape( title_ ) << std::endl;
 		}
+		using std::operator <<;
+		_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
+		_os << "[ RUN      ] " << escape( group_ ) << ".<" << n << "> " << escape( title_ ) << std::endl;
 	}
 
 	virtual void test_completed( const tut::test_result& tr_ ) {
