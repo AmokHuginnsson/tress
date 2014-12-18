@@ -423,6 +423,22 @@ char const progParse0[] =
 	"}\n"
 ;
 
+char const progParse1[] =
+	"main(/* no arg */) {\n"
+	"\treturn #( 0 );\n"
+	"}\n"
+;
+
+char const progParse2[] =
+	"/*\n"
+	" * Sample code in huginn.\n"
+	" */\n"
+	"\n"
+	"main(/* no arg */) {\n"
+	"\treturn #( 0 );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn::test_parse( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -436,10 +452,14 @@ void tut_yaal_tools_hhuginn::test_parse( prog_src_t prog_, int const err_[3], in
 TUT_UNIT_TEST( "report parsing error" )
 	prog_src_t progParse[] = {
 		progParse0,
+		progParse1,
+		progParse2,
 		NULL
 	};
 	int const err[][3] = {
 		{ 17, 2, 9 },
+		{ 29, 2, 9 },
+		{ 63, 6, 9 },
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
