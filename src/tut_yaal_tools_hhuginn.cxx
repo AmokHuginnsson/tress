@@ -439,12 +439,48 @@ char const progParse2[] =
 	"}\n"
 ;
 
+char const progParse3[] =
+	"#main() {\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progParse4[] =
+	"main() {\n"
+	"\treturn /* before */#( 0 );\n"
+	"}\n"
+;
+
+char const progParse5[] =
+	"main() {\n"
+	"\treturn #/* after */( 0 );\n"
+	"}\n"
+;
+
+char const progParse6[] =
+	"main() {\n"
+	"\treturn /* before */#/* after */( 0 );\n"
+	"}\n"
+;
+
+char const progParse7[] =
+	"main() {#\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progParse8[] =
+	"main() {\n"
+	"#\treturn ( 0 );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn::test_parse( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
 	h.load( prog );
-	clog << "preprocessing: " << index_ << endl;
 	h.preprocess();
+	clog << "parsing: " << index_ << endl;
 	h.parse();
 	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_[0] );
 	ENSURE_EQUALS( "reporting error line failed " + to_string( index_ ), h.error_coordinate().line(), err_[1] );
@@ -456,12 +492,24 @@ TUT_UNIT_TEST( "report parsing error" )
 		progParse0,
 		progParse1,
 		progParse2,
+		progParse3,
+		progParse4,
+		progParse5,
+		progParse6,
+		progParse7,
+		progParse8,
 		NULL
 	};
 	int const err[][3] = {
-		{ 17, 2, 9 },
-		{ 29, 2, 9 },
-		{ 63, 6, 9 },
+		{ 17, 2, 9 },  // 0
+		{ 29, 2, 9 },  // 1
+		{ 63, 6, 9 },  // 2
+		{ 0, 1, 1 },   // 3
+		{ 29, 2, 21 }, // 4
+		{ 17, 2, 9 },  // 5
+		{ 29, 2, 21 }, // 6
+		{ 8, 1, 9 },   // 7
+		{ 9, 2, 1 },   // 8
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
