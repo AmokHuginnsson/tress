@@ -39,10 +39,6 @@ using namespace yaal::tools;
 using namespace yaal::tools::executing_parser;
 using namespace tress::tut_helpers;
 
-namespace yaal { namespace tools { namespace executing_parser {
-HRule huginn_grammar( void );
-} } }
-
 namespace tut {
 
 struct tut_yaal_tools_hhuginn : public simple_mock<tut_yaal_tools_hhuginn> {
@@ -55,7 +51,8 @@ struct tut_yaal_tools_hhuginn : public simple_mock<tut_yaal_tools_hhuginn> {
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn, "yaal::tools::HHuginn" );
 
 TUT_UNIT_TEST( "grammar test" )
-	HRule hg( huginn_grammar() );
+	HHuginn h;
+	HRule hg( h.make_engine() );
 	HGrammarDescription gd( hg );
 
 	char const expected[][200] = {
@@ -518,6 +515,22 @@ TUT_UNIT_TEST( "report parsing error" )
 			test_parse( *prog, *e, static_cast<int>( prog - begin( progParse ) ) );
 		}
 	}
+TUT_TEARDOWN()
+
+char const progCompile0[] =
+	"main() {\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+TUT_UNIT_TEST( "compile" )
+	HStringStream prog( progCompile0 );
+	HHuginn h;
+	h.load( prog );
+	h.preprocess();
+	h.parse();
+	h.compile();
+	h.dump_vm_state( clog );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "simple program" )
