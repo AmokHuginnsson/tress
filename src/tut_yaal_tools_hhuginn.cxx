@@ -482,6 +482,7 @@ void tut_yaal_tools_hhuginn::test_parse( prog_src_t prog_, int const err_[3], in
 	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_[0] );
 	ENSURE_EQUALS( "reporting error line failed " + to_string( index_ ), h.error_coordinate().line(), err_[1] );
 	ENSURE_EQUALS( "reporting error column failed " + to_string( index_ ), h.error_coordinate().column(), err_[2] );
+	clog << h.error_message() << endl;
 }
 
 TUT_UNIT_TEST( "report parsing error" )
