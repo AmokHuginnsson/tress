@@ -96,6 +96,38 @@ TUT_UNIT_TEST( "insert (non-unique)" )
 	ENSURE_EQUALS( "inserted element not found", set.count( 1 ), 1 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "insert - copy count" )
+	/* from lvalue */ {
+		item_t::reset();
+		set_t s;
+		item_t i( 1 );
+		s.insert( i );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 0 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "insert - move count" )
+	/* from lvalue */ {
+		item_t::reset();
+		set_t s;
+		item_t i( 1 );
+		s.insert( yaal::move( i ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+	/* from rvalue */ {
+		item_t::reset();
+		set_t s;
+		s.insert( 1 );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "find()" )
 	int_set_t set;
 	set.insert( 1 );
