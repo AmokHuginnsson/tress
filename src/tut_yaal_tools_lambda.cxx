@@ -464,7 +464,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "experiment" )
 	int i( 0 );
 	( ++ _1, ++ _1 )( i );
-	ENSURE_EQUALS( "coma filed", i, 2 );
+	ENSURE_EQUALS( "comma failed", i, 2 );
 TUT_TEARDOWN()
 
 }

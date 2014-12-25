@@ -57,10 +57,11 @@ TUT_UNIT_TEST( "grammar test" )
 
 	char const expected[][200] = {
 		"huginnGrammar = +( functionDefinition )",
-		"functionDefinition = name >> '(' >> -( nameList ) >> ')' >> scope",
-		"name = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"nameList = name >> *( ',' >> name )",
+		"functionDefinition = functionDefinitionIdentifier >> '(' >> -( nameList ) >> ')' >> scope",
+		"functionDefinitionIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
+		"nameList = variableIdentifier >> *( ',' >> variableIdentifier )",
 		"scope = '{' >> *( statement ) >> '}'",
+		"variableIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"statement = ifStatement | whileStatement | foreachStatement | switchStatement | returnStatement | expressionList",
 		"ifStatement = \"if\" >> '(' >> booleanExpression >> ')' >> scope >> -( \"else\" >> scope )",
 		"whileStatement = \"while\" >> '(' >> booleanExpression >> ')' >> loopScope",
@@ -77,9 +78,9 @@ TUT_UNIT_TEST( "grammar test" )
 		"booleanXor = booleanValue >> \"^^\" >> booleanValue",
 		"booleanNot = '!' >> booleanValue",
 		"loopStatement = ifStatement | whileStatement | foreachStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionList",
-		"expression = *( name >> '=' ) >> ref",
+		"expression = *( variableIdentifier >> '=' ) >> ref",
 		"booleanValue = \"true\" | \"false\" | '(' >> booleanExpression >> ')'",
-		"foreachStatement = \"foreach\" >> '(' >> name >> ':' >> expression >> ')' >> loopScope",
+		"foreachStatement = \"foreach\" >> '(' >> variableIdentifier >> ':' >> expression >> ')' >> loopScope",
 		"switchStatement = \"switch\" >> '(' >> expression >> ')' >> '{' >> +( caseStatement ) >> -( defaultStatement ) >> '}'",
 		"continueStatement = \"continue\" >> ';'",
 		"returnStatement = \"return\" >> '(' >> expression >> ')' >> ';'",
@@ -91,10 +92,11 @@ TUT_UNIT_TEST( "grammar test" )
 		"breakStatement = \"break\" >> ';'",
 		"multiplication = power >> *( '*' >> power )",
 		"power = atom >> *( '^' >> atom )",
-		"atom = absoluteValue | parenthesis | functionCall | real | integer | string_literal | character_literal | name",
+		"atom = absoluteValue | parenthesis | functionCall | real | integer | string_literal | character_literal | variableIdentifier",
 		"absoluteValue = '|' >> expression >> '|'",
 		"parenthesis = '(' >> expression >> ')'",
-		"functionCall = name >> '(' >> -( argList ) >> ')'",
+		"functionCall = functionCallIdentifier >> '(' >> -( argList ) >> ')'",
+		"functionCallIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"argList = expression >> *( ',' >> expression )"
 	};
 
