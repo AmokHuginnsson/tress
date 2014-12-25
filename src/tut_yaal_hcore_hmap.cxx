@@ -45,6 +45,7 @@ struct tut_yaal_hcore_hmap : public simple_mock<tut_yaal_hcore_hmap> {
 		Crazy() { throw 0; }
 	};
 	typedef HMap<int, int> i2i_t;
+	typedef HMap<int, item_t> map_t;
 	typedef HMap<int, Crazy> i2c_t;
 	virtual ~tut_yaal_hcore_hmap( void )
 		{}
@@ -93,6 +94,38 @@ TUT_UNIT_TEST( "One elem inserted (size(), empty())" )
 	m.insert( make_pair( 1, 1 ) );
 	ENSURE_EQUALS( "bad size on map with one elem", m.get_size(), 1 );
 	ENSURE_NOT( "bad empty status on map with one elem", m.is_empty() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "insert - copy count" )
+	/* from lvalue */ {
+		item_t::reset();
+		map_t m;
+		item_t i( 1 );
+		m.insert( make_pair<int const, item_t>( 1, i ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "insert - move count" )
+	/* from lvalue */ {
+		item_t::reset();
+		map_t m;
+		item_t i( 1 );
+		m.insert( make_pair<int const, item_t>( 1, yaal::move( i ) ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+	}
+	/* from rvalue */ {
+		item_t::reset();
+		map_t m;
+		m.insert( make_pair( 1, 1 ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "find() on one elem map" )
