@@ -48,6 +48,40 @@ TUT_UNIT_TEST( "default constructor" )
 	ENSURE( "bad emptinass status on fresh HMultiSet<>", ms.is_empty() );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "insert - copy count" )
+	typedef HMultiSet<item_t> mset_t;
+	/* from lvalue */ {
+		item_t::reset();
+		mset_t s;
+		item_t i( 1 );
+		s.insert( i );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "insert - move count" )
+	typedef HMultiSet<item_t> mset_t;
+	/* from lvalue */ {
+		item_t::reset();
+		mset_t s;
+		item_t i( 1 );
+		s.insert( yaal::move( i ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+	}
+	/* from rvalue */ {
+		item_t::reset();
+		set_t s;
+		s.insert( 1 );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "unique items" )
 	typedef HMultiSet<int> mset_t;
 	mset_t ms;
