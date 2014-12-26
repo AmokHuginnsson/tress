@@ -49,6 +49,19 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hhashset );
 TUT_TEST_GROUP( tut_yaal_hcore_hhashset, "yaal::hcore::HHashSet" );
 
+}
+
+namespace yaal {
+namespace hcore {
+template<>
+int long hash<tress::tut_helpers::HInstanceTracker<tut_yaal_hcore_hhashset>>::operator () ( tress::tut_helpers::HInstanceTracker<tut_yaal_hcore_hhashset> const& key_ ) const {
+	return ( key_.id() );
+}
+}
+}
+
+namespace tut {
+
 TUT_UNIT_TEST( "default constructor" )
 	typedef HHashSet<int> hashset_t;
 	hashset_t set;
@@ -81,6 +94,41 @@ TUT_UNIT_TEST( "insert (non-unique)" )
 	ENSURE_NOT( "bad emptinass status on HSet<> after insert", set.is_empty() );
 	ENSURE_EQUALS( "inserted element not found", set.count( 1 ), 1 );
 TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "insert - copy count" )
+	typedef HHashSet<item_t> hashset_t;
+	/* from lvalue */ {
+		item_t::reset();
+		hashset_t s;
+		item_t i( 1 );
+		s.insert( i );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 0 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "insert - move count" )
+	typedef HHashSet<item_t> hashset_t;
+	/* from lvalue */ {
+		item_t::reset();
+		hashset_t s;
+		item_t i( 1 );
+		s.insert( yaal::move( i ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+	/* from rvalue */ {
+		item_t::reset();
+		hashset_t s;
+		s.insert( 1 );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
 
 TUT_UNIT_TEST( "iteration" )
 	typedef HHashSet<int> hashset_t;
