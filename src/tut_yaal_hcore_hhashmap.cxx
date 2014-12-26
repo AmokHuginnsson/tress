@@ -49,7 +49,6 @@ namespace tut {
 
 struct tut_yaal_hcore_hhashmap : public simple_mock<tut_yaal_hcore_hhashmap> {
 	typedef simple_mock<tut_yaal_hcore_hhashmap> base_type;
-	typedef HInstanceTracker<tut_yaal_hcore_hhashmap> item_t;
 	typedef HHashMap<int long, item_t> hash_map_t;
 	static int long const TEST_PRIME = 17;
 	static int long const ELEM_COUNT;
@@ -124,6 +123,38 @@ TUT_UNIT_TEST( "element insertion" ) {
 	}
 }
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "insert - copy count" )
+	/* from lvalue */ {
+		item_t::reset();
+		hash_map_t m;
+		item_t i( 1 );
+		m.insert( make_pair<int long const, item_t>( 1, i ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "insert - move count" )
+	/* from lvalue */ {
+		item_t::reset();
+		hash_map_t m;
+		item_t i( 1 );
+		m.insert( make_pair<int long const, item_t>( 1, yaal::move( i ) ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+	}
+	/* from rvalue */ {
+		item_t::reset();
+		hash_map_t m;
+		m.insert( make_pair( 1, 1 ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "iterate" ) {
