@@ -531,7 +531,7 @@ TUT_UNIT_TEST( "compile" )
 	HHuginn h;
 	h.load( prog );
 	h.preprocess();
-	h.parse();
+	TUT_EVAL( h.parse() );
 	h.compile();
 	h.dump_vm_state( clog );
 TUT_TEARDOWN()

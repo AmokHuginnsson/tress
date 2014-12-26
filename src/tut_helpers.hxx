@@ -467,6 +467,19 @@ public:
 #pragma pack()
 #endif /* #else #ifndef __sun__ */
 
+template<typename owner_t, int const forced_size>
+int HInstanceTracker<owner_t, forced_size>::_copyCount = 0;
+template<typename owner_t, int const forced_size>
+int HInstanceTracker<owner_t, forced_size>::_moveCount = 0;
+template<typename owner_t, int const forced_size>
+int HInstanceTracker<owner_t, forced_size>::_instances = 0;
+template<typename owner_t, int const forced_size>
+int HInstanceTracker<owner_t, forced_size>::_autoIncrement = 0;
+template<typename owner_t, int const forced_size>
+int HInstanceTracker<owner_t, forced_size>::_integrityFailures = 0;
+template<typename owner_t, int const forced_size>
+volatile bool HInstanceTracker<owner_t, forced_size>::_stopCopying = false;
+
 template<typename T>
 struct simple_mock {
 	typedef HInstanceTracker<T> item_t;
@@ -488,19 +501,6 @@ struct simple_mock {
 	virtual void time_constraint_exempt( void ) = 0;
 	virtual void set_current_line( int ) = 0;
 };
-
-template<typename owner_t, int const forced_size>
-int HInstanceTracker<owner_t, forced_size>::_copyCount = 0;
-template<typename owner_t, int const forced_size>
-int HInstanceTracker<owner_t, forced_size>::_moveCount = 0;
-template<typename owner_t, int const forced_size>
-int HInstanceTracker<owner_t, forced_size>::_instances = 0;
-template<typename owner_t, int const forced_size>
-int HInstanceTracker<owner_t, forced_size>::_autoIncrement = 0;
-template<typename owner_t, int const forced_size>
-int HInstanceTracker<owner_t, forced_size>::_integrityFailures = 0;
-template<typename owner_t, int const forced_size>
-volatile bool HInstanceTracker<owner_t, forced_size>::_stopCopying = false;
 
 }
 
