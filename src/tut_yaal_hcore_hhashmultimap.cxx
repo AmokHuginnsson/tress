@@ -43,6 +43,8 @@ struct tut_yaal_hcore_hhashmultimap : public simple_mock<tut_yaal_hcore_hhashmul
 	virtual ~tut_yaal_hcore_hhashmultimap( void ) {}
 	typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_type, HHashMultiMap<int, int>::allocator_type, HMultiContainerStorage::HPacked> mmp_t;
 	typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_type, HHashMultiMap<int, int>::allocator_type, HMultiContainerStorage::HTransparent> mmt_t;
+	typedef HHashMultiMap<int, item_t, HHashMultiMap<int, item_t>::hasher_type, HHashMultiMap<int, item_t>::allocator_type, HMultiContainerStorage::HPacked> mmp_item_t;
+	typedef HHashMultiMap<int, item_t, HHashMultiMap<int, item_t>::hasher_type, HHashMultiMap<int, item_t>::allocator_type, HMultiContainerStorage::HTransparent> mmt_item_t;
 };
 
 TUT_TEST_GROUP( tut_yaal_hcore_hhashmultimap, "yaal::hcore::HHashMultiMap" );
@@ -51,6 +53,198 @@ TUT_UNIT_TEST( "default constructor" )
 	mmp_t mm;
 	ENSURE_EQUALS( "bad size on fresh HMultiMap<>", mm.size(), 0 );
 	ENSURE( "bad emptinass status on fresh HMultiMap<>", mm.is_empty() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(transparent) insert - copy count" )
+	/* from lvalue */ {
+		item_t::reset();
+		mmt_item_t m;
+		item_t i( 1 );
+		m.insert( make_pair<int const, item_t>( 1, i ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(transparent) insert - move count" )
+	/* from lvalue */ {
+		item_t::reset();
+		mmt_item_t m;
+		item_t i( 1 );
+		m.insert( make_pair<int const, item_t>( 1, yaal::move( i ) ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+	}
+	/* from rvalue */ {
+		item_t::reset();
+		mmt_item_t m;
+		m.insert( make_pair( 1, 1 ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(packed) insert - copy count" )
+	/* from lvalue */ {
+		item_t::reset();
+		mmp_item_t m;
+		item_t i( 1 );
+		m.insert( make_pair<int const, item_t>( 1, i ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(packed) insert - move count" )
+	/* from lvalue */ {
+		item_t::reset();
+		mmp_item_t m;
+		item_t i( 1 );
+		m.insert( make_pair<int const, item_t>( 1, yaal::move( i ) ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+	}
+	/* from rvalue */ {
+		item_t::reset();
+		mmp_item_t m;
+		m.insert( make_pair( 1, 1 ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(transparent) push_back - copy count" )
+	/* from lvalue */ {
+		item_t::reset();
+		mmt_item_t m;
+		item_t i( 1 );
+		m.push_back( make_pair<int const, item_t>( 1, i ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(transparent) push_back - move count" )
+	/* from lvalue */ {
+		item_t::reset();
+		mmt_item_t m;
+		item_t i( 1 );
+		m.push_back( make_pair<int const, item_t>( 1, yaal::move( i ) ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+	}
+	/* from rvalue */ {
+		item_t::reset();
+		mmt_item_t m;
+		m.push_back( make_pair( 1, 1 ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(packed) push_back - copy count" )
+	/* from lvalue */ {
+		item_t::reset();
+		mmp_item_t m;
+		item_t i( 1 );
+		m.push_back( make_pair<int const, item_t>( 1, i ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(packed) push_back - move count" )
+	/* from lvalue */ {
+		item_t::reset();
+		mmp_item_t m;
+		item_t i( 1 );
+		m.push_back( make_pair<int const, item_t>( 1, yaal::move( i ) ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+	}
+	/* from rvalue */ {
+		item_t::reset();
+		mmp_item_t m;
+		m.push_back( make_pair( 1, 1 ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(transparent) push_front - copy count" )
+	/* from lvalue */ {
+		item_t::reset();
+		mmt_item_t m;
+		item_t i( 1 );
+		m.push_front( make_pair<int const, item_t>( 1, i ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(transparent) push_front - move count" )
+	/* from lvalue */ {
+		item_t::reset();
+		mmt_item_t m;
+		item_t i( 1 );
+		m.push_front( make_pair<int const, item_t>( 1, yaal::move( i ) ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+	}
+	/* from rvalue */ {
+		item_t::reset();
+		mmt_item_t m;
+		m.push_front( make_pair( 1, 1 ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(packed) push_front - copy count" )
+	/* from lvalue */ {
+		item_t::reset();
+		mmp_item_t m;
+		item_t i( 1 );
+		m.push_front( make_pair<int const, item_t>( 1, i ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(packed) push_front - move count" )
+	/* from lvalue */ {
+		item_t::reset();
+		mmp_item_t m;
+		item_t i( 1 );
+		m.push_front( make_pair<int const, item_t>( 1, yaal::move( i ) ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+	}
+	/* from rvalue */ {
+		item_t::reset();
+		mmp_item_t m;
+		m.push_front( make_pair( 1, 1 ) );
+		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
+		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "unique items" )
