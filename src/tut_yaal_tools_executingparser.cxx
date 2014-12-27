@@ -671,11 +671,15 @@ struct calc {
 	} oper_t;
 	typedef HStack<double long> vars_t;
 	typedef HStack<oper_t> opers_t;
+	typedef HBoundCall<> execution_step_t;
+	typedef void ( calc::*action_t )( void );
+	typedef HList<execution_step_t> execution_steps_t;
+	execution_steps_t _deferred;
 	vars_t _vars;
 	opers_t _opers;
 	calc( void )
-		: _vars(), _opers()
-		{}
+		: _deferred(), _vars(), _opers() {
+	}
 	void sum( void ) {
 		clog << __PRETTY_FUNCTION__ << endl;
 		double long v1( _vars.top() );
@@ -712,6 +716,9 @@ struct calc {
 		_opers.pop();
 		_vars.push( o == MULTIPLY ? v1 * v2 : v2 / v1 );
 	}
+	void deferred_action( action_t action_ ) {
+		_deferred.push_back( call( action_, this ) );
+	}
 	void oper( char op_ ) {
 		clog << __PRETTY_FUNCTION__ << endl;
 		oper_t o( NONE );
@@ -724,9 +731,21 @@ struct calc {
 		}
 		_opers.push( o );
 	}
+	void deferred_oper( char op_ ) {
+		_deferred.push_back( call( &calc::oper, this, op_ ) );
+	}
 	void val( double long v_ ) {
 		clog << __PRETTY_FUNCTION__ << endl;
 		_vars.push( v_ );
+	}
+	void deferred_val( double long v_ ) {
+		_deferred.push_back( call( &calc::val, this, v_ ) );
+	}
+	void execute( void ) {
+		for ( execution_step_t& e : _deferred ) {
+			e();
+		}
+		return;
 	}
 };
 
@@ -781,6 +800,24 @@ TUT_UNIT_TEST( "calc, (plus, minus, mul, div, recursion)" )
 
 	ep( "(1.7*(2+2.4)+-7+2*3-5)/2" );
 	ep();
+	ENSURE_DISTANCE( "bad value calculated from +*()", c._vars.top(), 0.74l, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "calc(deferred), (plus, minus, mul, div, recursion)" )
+	calc c;
+	HRule expr;
+	HRule paren( '(' >> expr >> ')' );
+	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::deferred_val, &c, _1 ) )] );
+	HRule atom( realVal | paren );
+	HRule multiply( atom >> *( ( character( "*/" )[HBoundCall<void ( char )>( call( &calc::deferred_oper, &c, _1 ) )] >> atom )[HBoundCall<void ( void )>( call( &calc::deferred_action, &c, &calc::mul_div ) )] ) );
+	HRule r( multiply >> *( ( character( "+-" )[HBoundCall<void ( char )>( call( &calc::deferred_oper, &c, _1 ) )] >> multiply )[HBoundCall<void ( void )>( call( &calc::deferred_action,  &c, &calc::plus_minus ) )] ) );
+	expr %= r;
+	HExecutingParser ep( r );
+
+	ep( "(1.7*(2+2.4)+-7+2*3-5)/2" );
+	ep();
+	ENSURE( "non empty stack on deferred executor", c._vars.is_empty() );
+	c.execute();
 	ENSURE_DISTANCE( "bad value calculated from +*()", c._vars.top(), 0.74l, epsilon );
 TUT_TEARDOWN()
 
