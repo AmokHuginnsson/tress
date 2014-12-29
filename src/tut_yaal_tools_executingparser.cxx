@@ -136,6 +136,13 @@ TUT_UNIT_TEST( "HInteger" )
 		ep();
 		ENSURE_EQUALS( "int long value not set by ExecutingParser.", val, 7l );
 	}
+	/* int long long */ {
+		int long long val( 0 );
+		HExecutingParser ep( integer[HBoundCall<void ( int long long )>( call( &defer<int long long>::set, ref( val ), _1 ) )] );
+		ENSURE( "HInteger failed to parse correct input (int long).", ep( "7" ) );
+		ep();
+		ENSURE_EQUALS( "int long value not set by ExecutingParser.", val, 7ll );
+	}
 	/* HNumber */ {
 		HNumber val( 0 );
 		HExecutingParser ep( integer[HBoundCall<void ( HNumber const& )>( call( &defer<HNumber, HNumber const&>::set, ref( val ), _1 ) )] );
