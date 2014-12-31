@@ -61,6 +61,12 @@ HBoundCall<void ( typename container_t::value_type const& )> push_back( containe
 	M_EPILOG
 }
 
+namespace {
+void noop( void ) {
+	return;
+}
+}
+
 }
 
 using namespace tut;
@@ -567,6 +573,27 @@ TUT_UNIT_TEST( "ad-hoc root rule name" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "ad-hoc root rule name with action" )
+	HRule elem;
+	HRule mul( elem >> *( '*' >> elem ) );
+	HRule extra( integer >> '%' >> elem );
+	HRule sum( mul >> *( '+' >> mul ) );
+	elem %= ( real | ( character( '(' ) >> sum >> ')' ) );
+	HExecutingParser ep( (elem >> extra)[HRuleBase::action_t( call( &noop ) )] );
+	static char epDesc[][50] = {
+		"A_ = B_ >> integer >> '%' >> B_",
+		"B_ = real | '(' >> C_ >> *( '+' >> C_ ) >> ')'",
+		"C_ = B_ >> *( '*' >> B_ )"
+	};
+	cout << "ad-hoc:" << endl;
+	HGrammarDescription gd( elem >> extra );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE_EQUALS( "wrong description", *it, epDesc[i] );
+		cout << *it << endl;
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "two inter-locking recursion loops" )
 	HRule elem;
 	HRule other;
@@ -665,6 +692,85 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		if ( i < COUNT )
 			ENSURE_EQUALS( "wrong grammar description", *it, huginnDesc[i] );
 		cout << *it << endl;
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "forwarding rules: A = B, C = B, C = regex() >> '=' >> real" )
+	/* no names, no actions */ {
+		char const desc[][64] = {
+			"A_ = regex( \"[a-z]*\" ) >> '=' >> real"
+		};
+
+		HRule C( regex( "[a-z]*" ) >> '=' >> real );
+		HRule B( C );
+		HRule A( B );
+
+		HGrammarDescription gd( A );
+		static int const COUNT( static_cast<int>( end( desc ) - begin( desc ) ) );
+		int i( 0 );
+		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+			if ( i < COUNT )
+				ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
+			cout << *it << endl;
+		}
+	}
+	/* all names, no actions */ {
+		char const desc[][64] = {
+			"AA = regex( \"[a-z]*\" ) >> '=' >> real"
+		};
+
+		HRule C( "CC", regex( "[a-z]*" ) >> '=' >> real );
+		HRule B( "BB", C );
+		HRule A( "AA", B );
+
+		HGrammarDescription gd( A );
+		static int const COUNT( static_cast<int>( end( desc ) - begin( desc ) ) );
+		int i( 0 );
+		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+			if ( i < COUNT )
+				ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
+			cout << *it << endl;
+		}
+	}
+	/* no names, all actions */ {
+		char const desc[][64] = {
+			"A_ = B_",
+			"B_ = C_",
+			"C_ = regex( \"[a-z]*\" ) >> '=' >> real"
+		};
+
+		HRule C( regex( "[a-z]*" ) >> '=' >> real, HRuleBase::action_t( call( &noop ) ) );
+		HRule B( C, HRuleBase::action_t( call( &noop ) ) );
+		HRule A( B, HRuleBase::action_t( call( &noop ) ) );
+
+		HGrammarDescription gd( A );
+		static int const COUNT( static_cast<int>( end( desc ) - begin( desc ) ) );
+		int i( 0 );
+		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+			if ( i < COUNT )
+				ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
+			cout << *it << endl;
+		}
+	}
+	/* all names, all actions */ {
+		char const desc[][64] = {
+			"AA = BB",
+			"BB = CC",
+			"CC = regex( \"[a-z]*\" ) >> '=' >> real"
+		};
+
+		HRule C( "CC", regex( "[a-z]*" ) >> '=' >> real, HRuleBase::action_t( call( &noop ) ) );
+		HRule B( "BB", C, HRuleBase::action_t( call( &noop ) ) );
+		HRule A( "AA", B, HRuleBase::action_t( call( &noop ) ) );
+
+		HGrammarDescription gd( A );
+		static int const COUNT( static_cast<int>( end( desc ) - begin( desc ) ) );
+		int i( 0 );
+		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+			if ( i < COUNT )
+				ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
+			cout << *it << endl;
+		}
 	}
 TUT_TEARDOWN()
 
