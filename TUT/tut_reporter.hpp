@@ -170,7 +170,7 @@ class reporter : public tut::callback {
 	stream_type& _ls;
 	error_line_type _errorLine;
 	std::stringstream _groupTestLog;
-	static int const MAX_SEPARATOR_LEN = 72;
+	static int const MAX_SEPARATOR_LEN = 79;
 
 public:
 
@@ -224,11 +224,17 @@ public:
 		using std::operator <<;
 		_ls << "TUT: group: [" << name << "]" << std::endl;
 		if ( tress::setup._verbose ) {
-			std::string sep( ( MAX_SEPARATOR_LEN - name.length() ) / 2 - ( sizeof ( "[ " ) - 1 ), '=' );
+			int const textLen( static_cast<int>( name.length() + ( sizeof ( "[ " " ]" ) - 1 ) ) );
+			int sepLen( ( MAX_SEPARATOR_LEN - textLen ) / 2 );
+			if ( sepLen <= 0 ) {
+				sepLen = 1;
+			}
+			int const sepLenExtra( MAX_SEPARATOR_LEN > ( sepLen * 2 + textLen ) ? MAX_SEPARATOR_LEN - ( sepLen * 2 + textLen ) : 0 );
+			std::string sep( static_cast<size_t>( sepLen ), '=' );
 			_os << ( tress::setup._color ? yaal::ansi::yellow : "" ) << sep << "[ "
 				<< ( tress::setup._color ? yaal::ansi::brightcyan : "" ) << name
 				<< ( tress::setup._color ? yaal::ansi::yellow : "" ) << " ]" << sep
-				<< ( name.length() % 2 ? "=" : "" )
+				<< ( sepLenExtra > 0 ? "=" : "" )
 				<< ( tress::setup._color ? yaal::ansi::reset : "" )
 				<< std::endl;
 		}
@@ -241,7 +247,8 @@ public:
 			ss << stats.first << '/' << stats.second << " in " << group_->get_time_elapsed() << " ms";
 			std::string status( ss.str() );
 			static std::string const sepIntro( 8, '=' );
-			std::string const sep( MAX_SEPARATOR_LEN - ( status.length() + 10 ), '=' );
+			int const sepLen( MAX_SEPARATOR_LEN - ( static_cast<int>( status.length() ) + 10 ) );
+			std::string const sep( static_cast<size_t>( sepLen > 0 ? sepLen : 1 ), '=' );
 			_os << ( tress::setup._color ? yaal::ansi::yellow : "" ) << sepIntro << '[';
 			if ( tress::setup._color ) {
 				if ( stats.first == stats.second )
@@ -259,11 +266,19 @@ public:
 		using std::operator <<;
 		_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
 		if ( tress::setup._verbose ) {
-			std::string sep( ( MAX_SEPARATOR_LEN - ( groupName_.length() + title_.length() + 14 ) ) / 2, '-' );
+			std::string no( std::to_string( n ) );
+			int const textLen( static_cast<int>( groupName_.length() + title_.length() + no.length() + ( sizeof ( " TUT: " "::<" "> " " " ) - 1 ) ) );
+			int sepLen( ( MAX_SEPARATOR_LEN - textLen ) / 2 );
+			if ( sepLen <= 0 ) {
+				sepLen = 1;
+			}
+			int const sepLenExtra( MAX_SEPARATOR_LEN > ( sepLen * 2 + textLen ) ? MAX_SEPARATOR_LEN - ( sepLen * 2 + textLen ) : 0 );
+			std::string sep( static_cast<size_t>( sepLen ), '-' );
 			_os << ( tress::setup._color ? yaal::ansi::brightcyan : "" ) << sep
 				<< ( tress::setup._color ? yaal::ansi::reset : "" )
-				<< " TUT: " << groupName_ << "::<" << n << "> " << title_ << " "
-				<< ( tress::setup._color ? yaal::ansi::brightcyan : "" ) << sep
+				<< " TUT: " << groupName_ << "::<" << no << "> " << title_ << " "
+				<< ( tress::setup._color ? yaal::ansi::brightcyan : "" )
+				<< sep << ( sepLenExtra > 0 ? "-" : "" )
 				<< ( tress::setup._color ? yaal::ansi::reset : "" )
 				<< std::endl;
 		}
