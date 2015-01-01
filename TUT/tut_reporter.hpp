@@ -266,8 +266,8 @@ public:
 		using std::operator <<;
 		_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
 		if ( tress::setup._verbose ) {
-			int noLen( n > 99 ? 3 : ( n > 9 ? 2 : 1 ) );
-			int const textLen( static_cast<int>( groupName_.length() + title_.length() + noLen + ( sizeof ( " TUT: " "::<" "> " " " ) - 1 ) ) );
+			int const noLen( n > 99 ? 3 : ( n > 9 ? 2 : 1 ) );
+			int const textLen( static_cast<int>( groupName_.length() + title_.length() + ( sizeof ( " TUT: " "::<" "> " " " ) - 1 ) ) + noLen );
 			int sepLen( ( MAX_SEPARATOR_LEN - textLen ) / 2 );
 			if ( sepLen <= 0 ) {
 				sepLen = 1;
