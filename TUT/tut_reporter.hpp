@@ -266,8 +266,8 @@ public:
 		using std::operator <<;
 		_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
 		if ( tress::setup._verbose ) {
-			std::string no( std::to_string( n ) );
-			int const textLen( static_cast<int>( groupName_.length() + title_.length() + no.length() + ( sizeof ( " TUT: " "::<" "> " " " ) - 1 ) ) );
+			int noLen( n > 99 ? 3 : ( n > 9 ? 2 : 1 ) );
+			int const textLen( static_cast<int>( groupName_.length() + title_.length() + noLen + ( sizeof ( " TUT: " "::<" "> " " " ) - 1 ) ) );
 			int sepLen( ( MAX_SEPARATOR_LEN - textLen ) / 2 );
 			if ( sepLen <= 0 ) {
 				sepLen = 1;
@@ -276,7 +276,7 @@ public:
 			std::string sep( static_cast<size_t>( sepLen ), '-' );
 			_os << ( tress::setup._color ? yaal::ansi::brightcyan : "" ) << sep
 				<< ( tress::setup._color ? yaal::ansi::reset : "" )
-				<< " TUT: " << groupName_ << "::<" << no << "> " << title_ << " "
+				<< " TUT: " << groupName_ << "::<" << n << "> " << title_ << " "
 				<< ( tress::setup._color ? yaal::ansi::brightcyan : "" )
 				<< sep << ( sepLenExtra > 0 ? "-" : "" )
 				<< ( tress::setup._color ? yaal::ansi::reset : "" )
