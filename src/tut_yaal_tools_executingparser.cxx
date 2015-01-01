@@ -789,6 +789,8 @@ struct calc {
 		MINUS,
 		MULTIPLY,
 		DIVIDE,
+		POWER,
+		PAREN,
 		NONE
 	} oper_t;
 	typedef HStack<double long> vars_t;
@@ -818,6 +820,7 @@ struct calc {
 		_vars.pop();
 		oper_t o( _opers.top() );
 		_opers.pop();
+		clog << v1 << ( o == PLUS ? '+' : '-' ) << v2 << '=' << ( v1 + v2 ) << endl;
 		_vars.push( o == PLUS ? v1 + v2 : v2 - v1 );
 	}
 	void mul( void ) {
@@ -838,20 +841,37 @@ struct calc {
 		_opers.pop();
 		_vars.push( o == MULTIPLY ? v1 * v2 : v2 / v1 );
 	}
+	void power( void ) {
+		clog << __PRETTY_FUNCTION__ << endl;
+		while ( ! _opers.is_empty() && ( _opers.top() == POWER ) ) {
+			double long v1( _vars.top() );
+			_vars.pop();
+			double long v2( _vars.top() );
+			_vars.pop();
+			_vars.push( powl( v2, v1 ) );
+			_opers.pop();
+		}
+	}
 	void deferred_action( action_t action_ ) {
 		_deferred.push_back( call( action_, this ) );
 	}
 	void oper( char op_ ) {
-		clog << __PRETTY_FUNCTION__ << endl;
+		clog << __PRETTY_FUNCTION__ << ": " << op_ << endl;
 		oper_t o( NONE );
 		switch ( op_ ) {
 			case ( '+' ): o = PLUS; break;
 			case ( '-' ): o = MINUS; break;
 			case ( '*' ): o = MULTIPLY; break;
 			case ( '/' ): o = DIVIDE; break;
+			case ( '^' ): o = POWER; break;
+			case ( '(' ): o = PAREN; break;
 			default: M_ASSERT( !"bad oper"[0] );
 		}
 		_opers.push( o );
+	}
+	void close_paren( void ) {
+		M_ENSURE( _opers.top() == PAREN );
+		_opers.pop();
 	}
 	void deferred_oper( char op_ ) {
 		_deferred.push_back( call( &calc::oper, this, op_ ) );
@@ -868,6 +888,9 @@ struct calc {
 			e();
 		}
 		return;
+	}
+	void reset( void ) {
+		_deferred.clear();
 	}
 };
 
@@ -941,6 +964,42 @@ TUT_UNIT_TEST( "calc(deferred), (plus, minus, mul, div, recursion)" )
 	ENSURE( "non empty stack on deferred executor", c._vars.is_empty() );
 	c.execute();
 	ENSURE_DISTANCE( "bad value calculated from +*()", c._vars.top(), 0.74l, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "associativity: calc(deferred), (plus, minus, mul, div, power, recursion)" )
+	calc c;
+	HRule expr;
+	HRule paren( character( '(' )[HCharacterLiteral::action_character_t( call( &calc::deferred_oper, &c, _1 ) )] >> expr >> character( ')' )[HRuleBase::action_t( call( &calc::deferred_action, &c, &calc::close_paren ) )] );
+	HRule realVal( real[HReal::action_double_long_t( call( &calc::deferred_val, &c, _1 ) )] );
+	HRule atom( realVal | paren );
+	HRule power( atom >> *( ( character( "^" )[HCharacterLiteral::action_character_t( call( &calc::deferred_oper, &c, _1 ) )] >> atom ) ), HBoundCall<void ( void )>( call( &calc::deferred_action, &c, &calc::power ) ) );
+	HRule multiply( power >> *( ( character( "*/" )[HBoundCall<void ( char )>( call( &calc::deferred_oper, &c, _1 ) )] >> power )[HBoundCall<void ( void )>( call( &calc::deferred_action, &c, &calc::mul_div ) )] ) );
+	HRule r( multiply >> *( ( character( "+-" )[HBoundCall<void ( char )>( call( &calc::deferred_oper, &c, _1 ) )] >> multiply )[HBoundCall<void ( void )>( call( &calc::deferred_action,  &c, &calc::plus_minus ) )] ) );
+	expr %= r;
+	HExecutingParser ep( r );
+	ep( "(1.7*(2+2.4)+-7+2*3-5)/2" );
+	ep();
+	ENSURE( "non empty stack on deferred executor", c._vars.is_empty() );
+	c.execute();
+	ENSURE_DISTANCE( "bad value calculated from +*()", c._vars.top(), 0.74L, epsilon );
+	c._vars.pop();
+	c.reset();
+	ep( "4^3^2" );
+	ep();
+	ENSURE( "non empty stack on deferred executor", c._vars.is_empty() );
+	c.execute();
+	clog << "res = " << c._vars.top() << endl;
+	ENSURE_DISTANCE( "bad value calculated from +*()", c._vars.top(), 262144.L, epsilon );
+	c._vars.pop();
+	c.reset();
+	ep( "(1+1+1+1)^(1+1+1)^(1+1)" );
+	ep();
+	ENSURE( "non empty stack on deferred executor", c._vars.is_empty() );
+	c.execute();
+	clog << "res = " << c._vars.top() << endl;
+	ENSURE_DISTANCE( "bad value calculated from +*()", c._vars.top(), 262144.L, epsilon );
+	c._vars.pop();
+	c.reset();
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "the test" )
