@@ -693,6 +693,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 			ENSURE_EQUALS( "wrong grammar description", *it, huginnDesc[i] );
 		cout << *it << endl;
 	}
+	ENSURE_EQUALS( "wrong grammar description", i, COUNT );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "forwarding rules: A = B, C = B, C = regex() >> '=' >> real" )
@@ -709,10 +710,12 @@ TUT_UNIT_TEST( "forwarding rules: A = B, C = B, C = regex() >> '=' >> real" )
 		static int const COUNT( static_cast<int>( end( desc ) - begin( desc ) ) );
 		int i( 0 );
 		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
-			if ( i < COUNT )
+			if ( i < COUNT ) {
 				ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
+			}
 			cout << *it << endl;
 		}
+		ENSURE_EQUALS( "wrong grammar description", i, COUNT );
 	}
 	/* all names, no actions */ {
 		char const desc[][64] = {
@@ -727,10 +730,12 @@ TUT_UNIT_TEST( "forwarding rules: A = B, C = B, C = regex() >> '=' >> real" )
 		static int const COUNT( static_cast<int>( end( desc ) - begin( desc ) ) );
 		int i( 0 );
 		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
-			if ( i < COUNT )
+			if ( i < COUNT ) {
 				ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
+			}
 			cout << *it << endl;
 		}
+		ENSURE_EQUALS( "wrong grammar description", i, COUNT );
 	}
 	/* no names, all actions */ {
 		char const desc[][64] = {
@@ -747,10 +752,12 @@ TUT_UNIT_TEST( "forwarding rules: A = B, C = B, C = regex() >> '=' >> real" )
 		static int const COUNT( static_cast<int>( end( desc ) - begin( desc ) ) );
 		int i( 0 );
 		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
-			if ( i < COUNT )
+			if ( i < COUNT ) {
 				ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
+			}
 			cout << *it << endl;
 		}
+		ENSURE_EQUALS( "wrong grammar description", i, COUNT );
 	}
 	/* all names, all actions */ {
 		char const desc[][64] = {
@@ -767,10 +774,12 @@ TUT_UNIT_TEST( "forwarding rules: A = B, C = B, C = regex() >> '=' >> real" )
 		static int const COUNT( static_cast<int>( end( desc ) - begin( desc ) ) );
 		int i( 0 );
 		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
-			if ( i < COUNT )
+			if ( i < COUNT ) {
 				ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
+			}
 			cout << *it << endl;
 		}
+		ENSURE_EQUALS( "wrong grammar description", i, COUNT );
 	}
 TUT_TEARDOWN()
 
