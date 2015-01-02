@@ -89,7 +89,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"ref = value >> *( '[' >> value >> ']' )",
 		"value = sum",
 		"sum = multiplication >> *( '+-' >> multiplication )",
-		"multiplication = power >> *( '*/' >> power )",
+		"multiplication = power >> *( '*/%' >> power )",
 		"power = atom >> *( '^' >> atom )",
 		"atom = absoluteValue | parenthesis | functionCall | real | integer | string_literal | character_literal | variableIdentifier",
 		"absoluteValue = '|' >> expression >> '|'",
