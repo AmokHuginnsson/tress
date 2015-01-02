@@ -848,7 +848,7 @@ struct calc {
 			_vars.pop();
 			double long v2( _vars.top() );
 			_vars.pop();
-			_vars.push( powl( v2, v1 ) );
+			_vars.push( pow( static_cast<double>( v2 ), static_cast<double>( v1 ) ) );
 			_opers.pop();
 		}
 	}
