@@ -542,7 +542,7 @@ TUT_UNIT_TEST( 50, "simple program" )
 	h.preprocess();
 	h.parse();
 	h.compile();
-	h.execute();
+	//h.execute();
 TUT_TEARDOWN()
 
 
