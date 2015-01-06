@@ -67,10 +67,12 @@ TUT_UNIT_TEST( "grammar test" )
 		"whileStatement = \"while\" >> '(' >> booleanExpression >> ')' >> scope",
 		"forStatement = \"for\" >> '(' >> variableIdentifier >> ':' >> expression >> ')' >> scope",
 		"switchStatement = \"switch\" >> '(' >> expression >> ')' >> '{' >> +( caseStatement ) >> -( defaultStatement ) >> '}'",
+		"breakStatement = \"break\" >> ';'",
 		"continueStatement = \"continue\" >> ';'",
 		"returnStatement = \"return\" >> '(' >> expression >> ')' >> ';'",
 		"expressionList = +( expression >> ';' )",
 		"booleanExpression = booleanEquals | booleanNotEquals | booleanLess | booleanGreater | booleanLessEq | booleanGreaterEq | booleanAnd | booleanOr | booleanXor | booleanNot",
+		"expression = *( variableIdentifier >> '=' ) >> ref",
 		"caseStatement = \"case\" >> '(' >> integer >> ')' >> ':' >> scope >> -( breakStatement )",
 		"defaultStatement = \"default\" >> ':' >> scope",
 		"booleanEquals = expression >> \"==\" >> expression",
@@ -83,10 +85,8 @@ TUT_UNIT_TEST( "grammar test" )
 		"booleanOr = booleanValue >> \"||\" >> booleanValue",
 		"booleanXor = booleanValue >> \"^^\" >> booleanValue",
 		"booleanNot = '!' >> booleanValue",
-		"breakStatement = \"break\" >> ';'",
-		"expression = *( variableIdentifier >> '=' ) >> ref",
-		"booleanValue = \"true\" | \"false\" | '(' >> booleanExpression >> ')'",
 		"ref = value >> *( '[' >> value >> ']' )",
+		"booleanValue = \"true\" | \"false\" | '(' >> booleanExpression >> ')'",
 		"value = sum",
 		"sum = multiplication >> *( '+-' >> multiplication )",
 		"multiplication = power >> *( '*/%' >> power )",
@@ -97,7 +97,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"functionCall = functionCallIdentifier >> '(' >> -( argList ) >> ')'",
 		"functionCallIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"argList = argument >> *( ',' >> argument )",
-		"argument = expression"
+		"argument = *( variableIdentifier >> '=' ) >> ref"
 	};
 
 	int i( 0 );
