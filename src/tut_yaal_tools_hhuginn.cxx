@@ -96,7 +96,8 @@ TUT_UNIT_TEST( "grammar test" )
 		"parenthesis = '(' >> expression >> ')'",
 		"functionCall = functionCallIdentifier >> '(' >> -( argList ) >> ')'",
 		"functionCallIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"argList = expression >> *( ',' >> expression )"
+		"argList = argument >> *( ',' >> argument )",
+		"argument = expression"
 	};
 
 	int i( 0 );

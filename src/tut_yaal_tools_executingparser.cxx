@@ -783,6 +783,49 @@ TUT_UNIT_TEST( "forwarding rules: A = B, C = B, C = regex() >> '=' >> real" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "two names for one rule" )
+	char const desc[][64] = {
+		"AA = '[' >> CC >> ']' | BB",
+		"CC = regex( \"[a-z]*\" ) >> '=' >> real",
+		"BB = CC"
+	};
+	HRule C( "CC", regex( "[a-z]*" ) >> '=' >> real, HRuleBase::action_t( call( &noop ) ) );
+	HRule B( "BB", C );
+	HRule A( "AA", ( '[' >> C >> ']' ) | B );
+	HGrammarDescription gd( A );
+	static int const COUNT( static_cast<int>( end( desc ) - begin( desc ) ) );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		if ( i < COUNT ) {
+			ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
+		}
+		cout << *it << endl;
+	}
+	ENSURE_EQUALS( "wrong grammar description", i, COUNT );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "two names for one rule with recursion" )
+	char const desc[][64] = {
+		"AA = '[' >> CC >> ']' | BB",
+		"CC = regex( \"[a-z]*\" ) >> '=' >> real >> -( '(' >> AA >> ')' )",
+		"BB = CC"
+	};
+	HRule A( "AA" );
+	HRule C( "CC", regex( "[a-z]*" ) >> '=' >> real >> - ( '(' >> A >> ')' ), HRuleBase::action_t( call( &noop ) ) );
+	HRule B( "BB", C );
+	A %= ( ( '[' >> C >> ']' ) | B );
+	HGrammarDescription gd( A );
+	static int const COUNT( static_cast<int>( end( desc ) - begin( desc ) ) );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		if ( i < COUNT ) {
+			ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
+		}
+		cout << *it << endl;
+	}
+	ENSURE_EQUALS( "wrong grammar description", i, COUNT );
+TUT_TEARDOWN()
+
 struct calc {
 	typedef enum {
 		PLUS,
