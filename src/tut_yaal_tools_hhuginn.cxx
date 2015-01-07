@@ -572,7 +572,7 @@ TUT_UNIT_TEST( "simplest program (return real)" )
 	ENSURE_DISTANCE( "bad value returned", dynamic_cast<HHuginn::HReal*>( r.raw() )->value(), 3.14L, epsilon );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "simplest program" )
+TUT_UNIT_TEST( "simplest program (return string)" )
 	HHuginn h;
 	HStringStream src( "main(){return(\"hello world\");}" );
 	h.load( src );
@@ -584,6 +584,34 @@ TUT_UNIT_TEST( "simplest program" )
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::STRING );
 	ENSURE_EQUALS( "bad value returned", dynamic_cast<HHuginn::HString*>( r.raw() )->value(), "hello world" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "simplest program (return character)" )
+	HHuginn h;
+	HStringStream src( "main(){return('X');}" );
+	h.load( src );
+	h.preprocess();
+	h.parse();
+	h.compile();
+	h.execute();
+	HHuginn::value_t r( h.result() );
+	ENSURE( "nothing returned", !! r );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::CHARACTER );
+	ENSURE_EQUALS( "bad value returned", dynamic_cast<HHuginn::HCharacter*>( r.raw() )->value(), 'X' );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "call function" )
+	HHuginn h;
+	HStringStream src( "f(){return(7);}main(){return(f());}" );
+	h.load( src );
+	h.preprocess();
+	h.parse();
+	h.compile();
+	h.execute();
+	HHuginn::value_t r( h.result() );
+	ENSURE( "nothing returned", !! r );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::INTEGER );
+	ENSURE_EQUALS( "bad value returned", dynamic_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "simple program" )
