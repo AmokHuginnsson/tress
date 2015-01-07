@@ -39,6 +39,11 @@ using namespace yaal::tools;
 using namespace yaal::tools::executing_parser;
 using namespace tress::tut_helpers;
 
+inline std::ostream& operator << ( std::ostream& out, HHuginn::HValue::TYPE t_ ) {
+	out << HHuginn::HValue::type_name( t_ );
+	return ( out );
+}
+
 namespace tut {
 
 struct tut_yaal_tools_hhuginn : public simple_mock<tut_yaal_tools_hhuginn> {
@@ -69,7 +74,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"switchStatement = \"switch\" >> '(' >> expression >> ')' >> '{' >> +( caseStatement ) >> -( defaultStatement ) >> '}'",
 		"breakStatement = \"break\" >> ';'",
 		"continueStatement = \"continue\" >> ';'",
-		"returnStatement = \"return\" >> '(' >> expression >> ')' >> ';'",
+		"returnStatement = \"return\" >> -( '(' >> expression >> ')' ) >> ';'",
 		"expressionList = +( expression >> ';' )",
 		"booleanExpression = booleanEquals | booleanNotEquals | booleanLess | booleanGreater | booleanLessEq | booleanGreaterEq | booleanAnd | booleanOr | booleanXor | booleanNot",
 		"expression = *( variableIdentifier >> '=' ) >> ref",
@@ -87,8 +92,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"booleanNot = '!' >> booleanValue",
 		"ref = value >> *( '[' >> value >> ']' )",
 		"booleanValue = \"true\" | \"false\" | '(' >> booleanExpression >> ')'",
-		"value = sum",
-		"sum = multiplication >> *( '+-' >> multiplication )",
+		"value = multiplication >> *( '+-' >> multiplication )",
 		"multiplication = power >> *( '*/%' >> power )",
 		"power = atom >> *( '^' >> atom )",
 		"atom = absoluteValue | parenthesis | functionCall | real | integer | string_literal | character_literal | variableIdentifier",
@@ -534,6 +538,48 @@ TUT_UNIT_TEST( "compile" )
 	TUT_EVAL( h.parse() );
 	h.compile();
 	h.dump_vm_state( clog );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "simplest program" )
+	HHuginn h;
+	HStringStream src( "main(){return(0);}" );
+	h.load( src );
+	h.preprocess();
+	h.parse();
+	h.compile();
+	h.execute();
+	HHuginn::value_t r( h.result() );
+	ENSURE( "nothing returned", !! r );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::INTEGER );
+	ENSURE_EQUALS( "bad value returned", dynamic_cast<HHuginn::HInteger*>( r.raw() )->value(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "simplest program (return real)" )
+	HHuginn h;
+	HStringStream src( "main(){return(3.14);}" );
+	h.load( src );
+	h.preprocess();
+	h.parse();
+	h.compile();
+	h.execute();
+	HHuginn::value_t r( h.result() );
+	ENSURE( "nothing returned", !! r );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::REAL );
+	ENSURE_DISTANCE( "bad value returned", dynamic_cast<HHuginn::HReal*>( r.raw() )->value(), 3.14L, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "simplest program" )
+	HHuginn h;
+	HStringStream src( "main(){return(\"hello world\");}" );
+	h.load( src );
+	h.preprocess();
+	h.parse();
+	h.compile();
+	h.execute();
+	HHuginn::value_t r( h.result() );
+	ENSURE( "nothing returned", !! r );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::STRING );
+	ENSURE_EQUALS( "bad value returned", dynamic_cast<HHuginn::HString*>( r.raw() )->value(), "hello world" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "simple program" )
