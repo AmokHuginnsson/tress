@@ -39,9 +39,13 @@ using namespace yaal::tools;
 using namespace yaal::tools::executing_parser;
 using namespace tress::tut_helpers;
 
+namespace yaal {
+namespace tools {
 inline std::ostream& operator << ( std::ostream& out, HHuginn::HValue::TYPE t_ ) {
 	out << HHuginn::HValue::type_name( t_ );
 	return ( out );
+}
+}
 }
 
 namespace tut {
