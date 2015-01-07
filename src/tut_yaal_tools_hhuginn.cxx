@@ -555,7 +555,7 @@ TUT_UNIT_TEST( "simplest program" )
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::INTEGER );
-	ENSURE_EQUALS( "bad value returned", dynamic_cast<HHuginn::HInteger*>( r.raw() )->value(), 0 );
+	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "simplest program (return real)" )
@@ -569,7 +569,7 @@ TUT_UNIT_TEST( "simplest program (return real)" )
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::REAL );
-	ENSURE_DISTANCE( "bad value returned", dynamic_cast<HHuginn::HReal*>( r.raw() )->value(), 3.14L, epsilon );
+	ENSURE_DISTANCE( "bad value returned", static_cast<HHuginn::HReal*>( r.raw() )->value(), 3.14L, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "simplest program (return string)" )
@@ -583,7 +583,7 @@ TUT_UNIT_TEST( "simplest program (return string)" )
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::STRING );
-	ENSURE_EQUALS( "bad value returned", dynamic_cast<HHuginn::HString*>( r.raw() )->value(), "hello world" );
+	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HString*>( r.raw() )->value(), "hello world" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "simplest program (return character)" )
@@ -597,7 +597,7 @@ TUT_UNIT_TEST( "simplest program (return character)" )
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::CHARACTER );
-	ENSURE_EQUALS( "bad value returned", dynamic_cast<HHuginn::HCharacter*>( r.raw() )->value(), 'X' );
+	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HCharacter*>( r.raw() )->value(), 'X' );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "call function" )
@@ -611,7 +611,7 @@ TUT_UNIT_TEST( "call function" )
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::INTEGER );
-	ENSURE_EQUALS( "bad value returned", dynamic_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
+	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "simple program" )
