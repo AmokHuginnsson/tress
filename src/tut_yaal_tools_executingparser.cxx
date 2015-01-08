@@ -630,15 +630,16 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule multiplication( power >> ( * ( '*' >> power ) ) );
 	HRule sum( multiplication >> ( * ( '+' >> multiplication ) ) );
 	HRule value( sum );
-	HRule subscript( ( functionCall | name ) >> +( '[' >> value >> ']' ) );
+	HRule subscript;
+	subscript %= ( ( functionCall | name ) >> +( '[' >> ( subscript | value ) >> ']' ) );
 	HRule assignment( *( ( subscript | name ) >> '=' ) >> ( subscript | value ) );
 	expression %= assignment;
 	HRule booleanExpression;
 	HRule booleanValue( executing_parser::constant( "true" ) | executing_parser::constant( "false" ) | executing_parser::constant( '(' ) >> booleanExpression >> ')' );
 	HRule booleanEquals( expression >> "==" >> expression );
 	HRule booleanNotEquals( expression >> "!=" >> expression );
-	HRule booleanLess( expression >> "<" >> expression );
-	HRule booleanGreater( expression >> ">" >> expression );
+	HRule booleanLess( expression >> '<' >> expression );
+	HRule booleanGreater( expression >> '>' >> expression );
 	HRule booleanLessEq( expression >> "<=" >> expression );
 	HRule booleanGreaterEq( expression >> ">=" >> expression );
 	HRule booleanAnd( booleanValue >> "&&" >> booleanValue );
@@ -675,11 +676,11 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"G_ = ( \"switch\" >> '(' >> L_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> C_ ) >> '}' )",
 		"H_ = ( \"return\" >> '(' >> L_ >> ')' >> ';' )",
 		"I_ = +( L_ >> ';' )",
-		"J_ = ( ( L_ >> \"==\" >> L_ ) | ( L_ >> \"!=\" >> L_ ) | ( L_ >> \"<\" >> L_ ) | ( L_ >> \">\" >> L_ ) | ( L_ >> \"<=\" >> L_ ) | ( L_ >> \">=\" >> L_ ) | ( M_ >> \"&&\" >> M_ ) | ( M_ >> \"||\" >> M_ ) | ( M_ >> \"^^\" >> M_ ) | ( '!' >> M_ ) )",
+		"J_ = ( ( L_ >> \"==\" >> L_ ) | ( L_ >> \"!=\" >> L_ ) | ( L_ >> '<' >> L_ ) | ( L_ >> '>' >> L_ ) | ( L_ >> \"<=\" >> L_ ) | ( L_ >> \">=\" >> L_ ) | ( M_ >> \"&&\" >> M_ ) | ( M_ >> \"||\" >> M_ ) | ( M_ >> \"^^\" >> M_ ) | ( '!' >> M_ ) )",
 		"K_ = ( '{' >> *( D_ | E_ | F_ | G_ | ( \"break\" >> ';' ) | ( \"continue\" >> ';' ) | H_ | I_ ) >> '}' )",
 		"L_ = ( *( ( N_ | B_ ) >> '=' ) >> ( N_ | O_ ) )",
 		"M_ = ( \"true\" | \"false\" | ( '(' >> J_ >> ')' ) )",
-		"N_ = ( ( P_ | B_ ) >> +( '[' >> O_ >> ']' ) )",
+		"N_ = ( ( P_ | B_ ) >> +( '[' >> ( N_ | O_ ) >> ']' ) )",
 		"O_ = ( Q_ >> *( '+' >> Q_ ) )",
 		"P_ = ( B_ >> '(' >> -( L_ >> *( ',' >> L_ ) ) >> ')' )",
 		"Q_ = ( R_ >> *( '*' >> R_ ) )",
