@@ -65,54 +65,55 @@ TUT_UNIT_TEST( "grammar test" )
 	HGrammarDescription gd( hg );
 
 	char const expected[][200] = {
-		"huginnGrammar = +( functionDefinition )",
-		"functionDefinition = functionDefinitionIdentifier >> '(' >> -( nameList ) >> ')' >> scope",
+		"huginnGrammar = +functionDefinition",
+		"functionDefinition = ( functionDefinitionIdentifier >> '(' >> -nameList >> ')' >> scope )",
 		"functionDefinitionIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"nameList = variableIdentifier >> *( ',' >> variableIdentifier )",
-		"scope = '{' >> *( statement ) >> '}'",
+		"nameList = ( variableIdentifier >> *( ',' >> variableIdentifier ) )",
+		"scope = ( '{' >> *statement >> '}' )",
 		"variableIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"statement = ifStatement | whileStatement | forStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionList",
-		"ifStatement = \"if\" >> '(' >> booleanExpression >> ')' >> scope >> -( \"else\" >> scope )",
-		"whileStatement = \"while\" >> '(' >> booleanExpression >> ')' >> scope",
-		"forStatement = \"for\" >> '(' >> variableIdentifier >> ':' >> expression >> ')' >> scope",
-		"switchStatement = \"switch\" >> '(' >> expression >> ')' >> '{' >> +( caseStatement ) >> -( defaultStatement ) >> '}'",
-		"breakStatement = \"break\" >> ';'",
-		"continueStatement = \"continue\" >> ';'",
-		"returnStatement = \"return\" >> -( '(' >> expression >> ')' ) >> ';'",
+		"statement = ( ifStatement | whileStatement | forStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionList )",
+		"ifStatement = ( \"if\" >> '(' >> booleanExpression >> ')' >> scope >> -( \"else\" >> scope ) )",
+		"whileStatement = ( \"while\" >> '(' >> booleanExpression >> ')' >> scope )",
+		"forStatement = ( \"for\" >> '(' >> variableIdentifier >> ':' >> expression >> ')' >> scope )",
+		"switchStatement = ( \"switch\" >> '(' >> expression >> ')' >> '{' >> +caseStatement >> -defaultStatement >> '}' )",
+		"breakStatement = ( \"break\" >> ';' )",
+		"continueStatement = ( \"continue\" >> ';' )",
+		"returnStatement = ( \"return\" >> -( '(' >> expression >> ')' ) >> ';' )",
 		"expressionList = +( expression >> ';' )",
-		"booleanExpression = booleanEquals | booleanNotEquals | booleanLess | booleanGreater | booleanLessEq | booleanGreaterEq | booleanAnd | booleanOr | booleanXor | booleanNot",
-		"expression = *( variableIdentifier >> '=' ) >> ref",
-		"caseStatement = \"case\" >> '(' >> integer >> ')' >> ':' >> scope >> -( breakStatement )",
-		"defaultStatement = \"default\" >> ':' >> scope",
-		"booleanEquals = expression >> \"==\" >> expression",
-		"booleanNotEquals = expression >> \"!=\" >> expression",
-		"booleanLess = expression >> \"<\" >> expression",
-		"booleanGreater = expression >> \">\" >> expression",
-		"booleanLessEq = expression >> \"<=\" >> expression",
-		"booleanGreaterEq = expression >> \">=\" >> expression",
-		"booleanAnd = booleanValue >> \"&&\" >> booleanValue",
-		"booleanOr = booleanValue >> \"||\" >> booleanValue",
-		"booleanXor = booleanValue >> \"^^\" >> booleanValue",
-		"booleanNot = '!' >> booleanValue",
-		"ref = value >> *( '[' >> value >> ']' )",
-		"booleanValue = \"true\" | \"false\" | '(' >> booleanExpression >> ')'",
-		"value = multiplication >> *( '+-' >> multiplication )",
-		"multiplication = power >> *( '*/%' >> power )",
-		"power = atom >> *( '^' >> atom )",
-		"atom = absoluteValue | parenthesis | functionCall | real | integer | string_literal | character_literal | variableIdentifier",
-		"absoluteValue = '|' >> expression >> '|'",
-		"parenthesis = '(' >> expression >> ')'",
-		"functionCall = functionCallIdentifier >> '(' >> -( argList ) >> ')'",
+		"booleanExpression = ( booleanEquals | booleanNotEquals | booleanLess | booleanGreater | booleanLessEq | booleanGreaterEq | booleanAnd | booleanOr | booleanXor | booleanNot )",
+		"expression = ( *( ( subscript | variableIdentifier ) >> '=' ) >> ( subscript | value ) )",
+		"caseStatement = ( \"case\" >> '(' >> integer >> ')' >> ':' >> scope >> -breakStatement )",
+		"defaultStatement = ( \"default\" >> ':' >> scope )",
+		"booleanEquals = ( expression >> \"==\" >> expression )",
+		"booleanNotEquals = ( expression >> \"!=\" >> expression )",
+		"booleanLess = ( expression >> \"<\" >> expression )",
+		"booleanGreater = ( expression >> \">\" >> expression )",
+		"booleanLessEq = ( expression >> \"<=\" >> expression )",
+		"booleanGreaterEq = ( expression >> \">=\" >> expression )",
+		"booleanAnd = ( booleanValue >> \"&&\" >> booleanValue )",
+		"booleanOr = ( booleanValue >> \"||\" >> booleanValue )",
+		"booleanXor = ( booleanValue >> \"^^\" >> booleanValue )",
+		"booleanNot = ( '!' >> booleanValue )",
+		"subscript = ( ( functionCall | variableIdentifier ) >> +( '[' >> value >> ']' ) )",
+		"value = ( multiplication >> *( '+-' >> multiplication ) )",
+		"booleanValue = ( \"true\" | \"false\" | ( '(' >> booleanExpression >> ')' ) )",
+		"functionCall = ( functionCallIdentifier >> '(' >> -argList >> ')' )",
+		"multiplication = ( power >> *( '*/%' >> power ) )",
 		"functionCallIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"argList = argument >> *( ',' >> argument )",
-		"argument = *( variableIdentifier >> '=' ) >> ref"
+		"argList = ( argument >> *( ',' >> argument ) )",
+		"power = ( atom >> *( '^' >> atom ) )",
+		"argument = ( *( ( subscript | variableIdentifier ) >> '=' ) >> ( subscript | value ) )",
+		"atom = ( absoluteValue | parenthesis | functionCall | real | integer | string_literal | character_literal | variableIdentifier )",
+		"absoluteValue = ( '|' >> expression >> '|' )",
+		"parenthesis = ( '(' >> expression >> ')' )",
+		"variableIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )"
 	};
 
 	int i( 0 );
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		cout << *it << endl;
 		ENSURE( "too many rules in Huginn grammar", i < countof ( expected ) );
 		ENSURE_EQUALS( "bad rule in Huginn grammar", *it, expected[i] );
-		cout << *it << endl;
 	}
 	ENSURE_EQUALS( "not all rules found for Huginn grammar", i, countof ( expected ) );
 TUT_TEARDOWN()
@@ -619,7 +620,9 @@ TUT_UNIT_TEST( 50, "simple program" )
 	HStringStream src( simpleProg );
 	h.load( src );
 	h.preprocess();
-	h.parse();
+	if ( ! h.parse() ) {
+		clog << h.error_message() << endl;
+	}
 	h.compile();
 	//h.execute();
 TUT_TEARDOWN()
