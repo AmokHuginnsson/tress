@@ -94,7 +94,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"booleanOr = ( booleanValue >> \"||\" >> booleanValue )",
 		"booleanXor = ( booleanValue >> \"^^\" >> booleanValue )",
 		"booleanNot = ( '!' >> booleanValue )",
-		"subscript = ( ( functionCall | variableIdentifier ) >> +( '[' >> value >> ']' ) )",
+		"subscript = ( ( functionCall | variableIdentifier ) >> +( '[' >> ( value | subscript ) >> ']' ) )",
 		"value = ( multiplication >> *( '+-' >> multiplication ) )",
 		"booleanValue = ( \"true\" | \"false\" | ( '(' >> booleanExpression >> ')' ) )",
 		"functionCall = ( functionCallIdentifier >> '(' >> -argList >> ')' )",
