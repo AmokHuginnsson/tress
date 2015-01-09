@@ -68,10 +68,10 @@ TUT_UNIT_TEST( "grammar test" )
 		"huginnGrammar = +functionDefinition",
 		"functionDefinition = ( functionDefinitionIdentifier >> '(' >> -nameList >> ')' >> scope )",
 		"functionDefinitionIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"nameList = ( variableIdentifier >> *( ',' >> variableIdentifier ) )",
+		"nameList = ( parameter >> *( ',' >> parameter ) )",
 		"scope = ( '{' >> *statement >> '}' )",
-		"variableIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"statement = ( ifStatement | whileStatement | forStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionList )",
+		"parameter = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
+		"statement = ( ifStatement | whileStatement | forStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionStatement )",
 		"ifStatement = ( \"if\" >> '(' >> booleanExpression >> ')' >> scope >> -( \"else\" >> scope ) )",
 		"whileStatement = ( \"while\" >> '(' >> booleanExpression >> ')' >> scope )",
 		"forStatement = ( \"for\" >> '(' >> variableIdentifier >> ':' >> expression >> ')' >> scope )",
@@ -79,9 +79,10 @@ TUT_UNIT_TEST( "grammar test" )
 		"breakStatement = ( \"break\" >> ';' )",
 		"continueStatement = ( \"continue\" >> ';' )",
 		"returnStatement = ( \"return\" >> -( '(' >> expression >> ')' ) >> ';' )",
-		"expressionList = +( expression >> ';' )",
+		"expressionStatement = ( expression >> ';' )",
 		"booleanExpression = ( booleanEquals | booleanNotEquals | booleanLess | booleanGreater | booleanLessEq | booleanGreaterEq | booleanAnd | booleanOr | booleanXor | booleanNot )",
-		"expression = ( *( ( subscript | variableIdentifier ) >> '=' ) >> ( subscript | value ) )",
+		"variableIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
+		"expression = assignment",
 		"caseStatement = ( \"case\" >> '(' >> integer >> ')' >> ':' >> scope >> -breakStatement )",
 		"defaultStatement = ( \"default\" >> ':' >> scope )",
 		"booleanEquals = ( expression >> \"==\" >> expression )",
@@ -94,19 +95,21 @@ TUT_UNIT_TEST( "grammar test" )
 		"booleanOr = ( booleanValue >> \"||\" >> booleanValue )",
 		"booleanXor = ( booleanValue >> \"^^\" >> booleanValue )",
 		"booleanNot = ( '!' >> booleanValue )",
-		"subscript = ( ( functionCall | variableIdentifier ) >> +( '[' >> ( value | subscript ) >> ']' ) )",
-		"value = ( multiplication >> *( '+-' >> multiplication ) )",
+		"assignment = ( *( ( subscript | variableSetter ) >> '=' ) >> ( subscript | value ) )",
 		"booleanValue = ( \"true\" | \"false\" | ( '(' >> booleanExpression >> ')' ) )",
+		"subscript = ( ( functionCall | variableGetter ) >> +( '[' >> ( value | subscript ) >> ']' ) )",
+		"variableSetter = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
+		"value = ( multiplication >> *( '+-' >> multiplication ) )",
 		"functionCall = ( functionCallIdentifier >> '(' >> -argList >> ')' )",
+		"variableGetter = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"multiplication = ( power >> *( '*/%' >> power ) )",
 		"functionCallIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"argList = ( argument >> *( ',' >> argument ) )",
 		"power = ( atom >> *( '^' >> atom ) )",
-		"argument = ( *( ( subscript | variableIdentifier ) >> '=' ) >> ( subscript | value ) )",
-		"atom = ( absoluteValue | parenthesis | functionCall | real | integer | string_literal | character_literal | variableIdentifier )",
+		"argument = assignment",
+		"atom = ( absoluteValue | parenthesis | functionCall | real | integer | string_literal | character_literal | variableGetter )",
 		"absoluteValue = ( '|' >> expression >> '|' )",
-		"parenthesis = ( '(' >> expression >> ')' )",
-		"variableIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )"
+		"parenthesis = ( '(' >> expression >> ')' )"
 	};
 
 	int i( 0 );
@@ -615,7 +618,22 @@ TUT_UNIT_TEST( "call function" )
 	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "set variable" )
+	HHuginn h;
+	HStringStream src( "main(){a=7;return(a);}" );
+	h.load( src );
+	h.preprocess();
+	h.parse();
+	h.compile();
+	h.execute();
+	HHuginn::value_t r( h.result() );
+	ENSURE( "nothing returned", !! r );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::INTEGER );
+	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
+	clog << simpleProg << endl;
 	HHuginn h;
 	HStringStream src( simpleProg );
 	h.load( src );
@@ -624,7 +642,13 @@ TUT_UNIT_TEST( 50, "simple program" )
 		clog << h.error_message() << endl;
 	}
 	h.compile();
-	//h.execute();
+	h.add_argument( "7" );
+	h.add_argument( "13" );
+	h.execute();
+	HHuginn::value_t r( h.result() );
+	ENSURE( "nothing returned", !! r );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::INTEGER );
+	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 42 );
 TUT_TEARDOWN()
 
 

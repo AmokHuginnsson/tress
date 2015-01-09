@@ -742,9 +742,7 @@ TUT_UNIT_TEST( "forwarding rules: A = B, C = B, C = regex() >> '=' >> real" )
 	}
 	/* no names, all actions */ {
 		char const desc[][64] = {
-			"A_ = B_",
-			"B_ = C_",
-			"C_ = ( regex( \"[a-z]*\" ) >> '=' >> real )"
+			"A_ = ( regex( \"[a-z]*\" ) >> '=' >> real )"
 		};
 
 		HRule C( regex( "[a-z]*" ) >> '=' >> real, HRuleBase::action_t( call( &noop ) ) );
