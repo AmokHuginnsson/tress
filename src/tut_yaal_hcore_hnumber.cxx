@@ -1113,6 +1113,18 @@ TUT_UNIT_TEST( "division" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "power" )
+	ENSURE_EQUALS( "power failed 0^7", HNumber( "0" ) ^ 7, HNumber( 0 ) );
+	ENSURE_EQUALS( "power failed 7^0", HNumber( "7" ) ^ 0, HNumber( 1 ) );
+	ENSURE_EQUALS( "power failed 7^7", HNumber( "7" ) ^ 7, HNumber( "823543" ) );
+	ENSURE_EQUALS( "power failed 7^-7", HNumber( "7" ) ^ -7, HNumber( "0.0000012142656789020124025096443051546792335069328498936910398121288141602806410837078331064680289918" ) );
+	ENSURE_EQUALS( "power failed -7^7", HNumber( "-7" ) ^ 7, HNumber( "-823543" ) );
+	ENSURE_EQUALS( "power failed -7^8", HNumber( "-7" ) ^ 8, HNumber( "5764801" ) );
+	ENSURE_EQUALS( "power failed -7^77", HNumber( "-7" ) ^ 77, HNumber( "-118181386580595879976868414312001964434038548836769923458287039207" ) );
+	ENSURE_EQUALS( "power failed -7^88", HNumber( "-7" ) ^ 88, HNumber( "233683216210633558353880137011125430143959282107856711392134007594290612801" ) );
+	ENSURE_THROW( "power failed 0^0", HNumber( 0 ) ^ 0, HNumberException );
+TUT_TEARDOWN()
+
 #undef DIV_TEST
 
 TUT_UNIT_TEST( "opposite" )
