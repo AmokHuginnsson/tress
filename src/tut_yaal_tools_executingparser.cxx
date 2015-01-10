@@ -625,14 +625,14 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule parenthesis( '(' >> expression >> ')' );
 	HRule argList( expression >> ( * ( ',' >> expression ) ) );
 	HRule functionCall( name >> '(' >> -argList >> ')' );
-	HRule atom( absoluteValue | parenthesis | functionCall | real | integer | string_literal | character_literal | name );
+	HRule subscript;
+	HRule atom( absoluteValue | parenthesis | real | integer | character_literal | subscript | functionCall | string_literal | name );
 	HRule power( atom >> ( * ( '^' >> atom ) ) );
 	HRule multiplication( power >> ( * ( '*' >> power ) ) );
 	HRule sum( multiplication >> ( * ( '+' >> multiplication ) ) );
 	HRule value( sum );
-	HRule subscript;
-	subscript %= ( ( functionCall | name ) >> +( '[' >> ( subscript | value ) >> ']' ) );
-	HRule assignment( *( ( subscript | name ) >> '=' ) >> ( subscript | value ) );
+	subscript %= ( ( functionCall | name | string_literal ) >> +( '[' >> ( subscript | value ) >> ']' ) );
+	HRule assignment( *( ( subscript | name ) >> '=' ) >> value );
 	expression %= assignment;
 	HRule booleanExpression;
 	HRule booleanValue( executing_parser::constant( "true" ) | executing_parser::constant( "false" ) | executing_parser::constant( '(' ) >> booleanExpression >> ')' );
@@ -647,7 +647,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule booleanXor( booleanValue >> "^^" >> booleanValue );
 	HRule booleanNot( executing_parser::constant( '!' ) >> booleanValue );
 	booleanExpression %= ( booleanEquals | booleanNotEquals | booleanLess | booleanGreater | booleanLessEq | booleanGreaterEq | booleanAnd | booleanOr | booleanXor | booleanNot );
-	HRule expressionList( + ( expression >> ';' ) );
+	HRule expressionStatement( expression >> ';' );
 	HRule scope;
 	HRule loopScope;
 	HRule ifStatement( executing_parser::constant( "if" ) >> '(' >> booleanExpression >> ')' >> scope >> -( executing_parser::constant( "else" ) >> scope ) );
@@ -659,8 +659,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule defaultStatement( executing_parser::constant( "default" ) >> ':' >> scope );
 	HRule switchStatement( executing_parser::constant( "switch" ) >> '(' >> expression >> ')' >> '{' >> +caseStatement >> '}' );
 	HRule returnStatement( executing_parser::constant( "return" ) >> '(' >> expression >> ')' >> ';' );
-	HRule statement( ifStatement | whileStatement | foreachStatement | switchStatement | returnStatement | expressionList );
-	HRule loopStatement( ifStatement | whileStatement | foreachStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionList );
+	HRule statement( ifStatement | whileStatement | foreachStatement | switchStatement | returnStatement | expressionStatement );
+	HRule loopStatement( ifStatement | whileStatement | foreachStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionStatement );
 	scope %= ( '{' >> *statement >> '}' );
 	loopScope %= ( '{' >> *loopStatement >> '}' );
 	HRule nameList( name >> ( * ( ',' >> name ) ) );
@@ -675,17 +675,17 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"F_ = ( \"foreach\" >> '(' >> B_ >> ':' >> L_ >> ')' >> K_ )",
 		"G_ = ( \"switch\" >> '(' >> L_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> C_ ) >> '}' )",
 		"H_ = ( \"return\" >> '(' >> L_ >> ')' >> ';' )",
-		"I_ = +( L_ >> ';' )",
+		"I_ = ( L_ >> ';' )",
 		"J_ = ( ( L_ >> \"==\" >> L_ ) | ( L_ >> \"!=\" >> L_ ) | ( L_ >> '<' >> L_ ) | ( L_ >> '>' >> L_ ) | ( L_ >> \"<=\" >> L_ ) | ( L_ >> \">=\" >> L_ ) | ( M_ >> \"&&\" >> M_ ) | ( M_ >> \"||\" >> M_ ) | ( M_ >> \"^^\" >> M_ ) | ( '!' >> M_ ) )",
 		"K_ = ( '{' >> *( D_ | E_ | F_ | G_ | ( \"break\" >> ';' ) | ( \"continue\" >> ';' ) | H_ | I_ ) >> '}' )",
-		"L_ = ( *( ( N_ | B_ ) >> '=' ) >> ( N_ | O_ ) )",
+		"L_ = ( *( ( N_ | B_ ) >> '=' ) >> O_ )",
 		"M_ = ( \"true\" | \"false\" | ( '(' >> J_ >> ')' ) )",
-		"N_ = ( ( P_ | B_ ) >> +( '[' >> ( N_ | O_ ) >> ']' ) )",
+		"N_ = ( ( P_ | B_ | string_literal ) >> +( '[' >> ( N_ | O_ ) >> ']' ) )",
 		"O_ = ( Q_ >> *( '+' >> Q_ ) )",
 		"P_ = ( B_ >> '(' >> -( L_ >> *( ',' >> L_ ) ) >> ')' )",
 		"Q_ = ( R_ >> *( '*' >> R_ ) )",
 		"R_ = ( S_ >> *( '^' >> S_ ) )",
-		"S_ = ( ( '|' >> L_ >> '|' ) | ( '(' >> L_ >> ')' ) | P_ | real | integer | string_literal | character_literal | B_ )"
+		"S_ = ( ( '|' >> L_ >> '|' ) | ( '(' >> L_ >> ')' ) | real | integer | character_literal | N_ | P_ | string_literal | B_ )"
 	};
 	cout << "hg:" << endl;
 	HGrammarDescription gd( hg );

@@ -95,19 +95,20 @@ TUT_UNIT_TEST( "grammar test" )
 		"booleanOr = ( booleanValue >> \"||\" >> booleanValue )",
 		"booleanXor = ( booleanValue >> \"^^\" >> booleanValue )",
 		"booleanNot = ( '!' >> booleanValue )",
-		"assignment = ( *( ( subscript | variableSetter ) >> '=' ) >> ( subscript | value ) )",
+		"assignment = ( *( ( subscript | variableSetter ) >> '=' ) >> value )",
 		"booleanValue = ( \"true\" | \"false\" | ( '(' >> booleanExpression >> ')' ) )",
-		"subscript = ( ( functionCall | variableGetter ) >> +( '[' >> ( value | subscript ) >> ']' ) )",
+		"subscript = ( ( functionCall | variableGetter | stringLiteral ) >> +( '[' >> ( value | subscript ) >> ']' ) )",
 		"variableSetter = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"value = ( multiplication >> *( '+-' >> multiplication ) )",
 		"functionCall = ( functionCallIdentifier >> '(' >> -argList >> ')' )",
 		"variableGetter = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
+		"stringLiteral = string_literal",
 		"multiplication = ( power >> *( '*/%' >> power ) )",
 		"functionCallIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"argList = ( argument >> *( ',' >> argument ) )",
 		"power = ( atom >> *( '^' >> atom ) )",
 		"argument = assignment",
-		"atom = ( absoluteValue | parenthesis | functionCall | real | integer | string_literal | character_literal | variableGetter )",
+		"atom = ( absoluteValue | parenthesis | real | integer | character_literal | subscript | stringLiteral | functionCall | variableGetter )",
 		"absoluteValue = ( '|' >> expression >> '|' )",
 		"parenthesis = ( '(' >> expression >> ')' )"
 	};
@@ -370,6 +371,20 @@ char const progPost15[] =
 	"}\n"
 ;
 
+char const progPre16[] =
+	"#! /usr/bin/env huginn\n"
+	"main(/* no arg */) {\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progPost16[] =
+	"main() {\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+
 void tut_yaal_tools_hhuginn::test_preprocessing( prog_src_t pre_, prog_src_t post_, int index_ ) {
 	HStringStream pre( pre_ );
 	HStringStream post;
@@ -400,6 +415,7 @@ TUT_UNIT_TEST( "preprocessor" )
 		progPre13,
 		progPre14,
 		progPre15,
+		progPre16,
 		NULL
 	};
 	prog_src_t progPost[] = {
@@ -419,6 +435,7 @@ TUT_UNIT_TEST( "preprocessor" )
 		progPost13,
 		progPost14,
 		progPost15,
+		progPost16,
 		NULL
 	};
 	for ( prog_src_t* pre( begin( progPre ) ), * preEnd( end( progPre ) ), * post( begin( progPost ) ); pre != preEnd; ++ pre, ++ post ) {
