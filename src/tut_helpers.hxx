@@ -88,8 +88,14 @@ Copyright:
 namespace { static int const M_CONCAT( dropIt, __LINE__ ) __attribute__(( __used__ )) = group.register_test( no, title ); } \
 template<> template<> void module::test<(no)>( void ) { do { set_test_meta( title, __FILE__, __LINE__ ); } while ( 0 );
 #define TUT_TEARDOWN() }
-#define TUT_TEST_GROUP( mock, name ) \
+#define TUT_TEST_GROUP( ... ) M_MACRO_ARGC( TUT_TEST_GROUP_, __VA_ARGS__ )
+#define TUT_TEST_GROUP_2( mock, name ) \
 typedef test_group<mock> tut_group; \
+TUT_TEST_GROUP_BODY( mock, name )
+#define TUT_TEST_GROUP_3( mock, name, number ) \
+typedef test_group<mock, number> tut_group; \
+TUT_TEST_GROUP_BODY( mock, name )
+#define TUT_TEST_GROUP_BODY( mock, name ) \
 typedef tut_group::object module; \
 typedef yaal::hcore::HExceptionSafeGlobal<tut_group, tress::tut_helpers::HSTDGlobalScopeExceptionHandlingPolicy> tut_group_holder; \
 tut_group_holder mock##_group( ( name ) ); \

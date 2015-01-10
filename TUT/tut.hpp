@@ -300,10 +300,12 @@ public:
 	 * Registers test method under given number.
 	 */
 	void register_test_method( int n, testmethod tm ) {
+		M_ASSERT( n <= MaxTestsInGroup );
 		_tests[ n ] = tm;
 	}
 
 	int register_test( int no_, char const* const title_ ) {
+		M_ASSERT( _titles.size() < MaxTestsInGroup );
 		_titles[ no_ ] = title_;
 		return ( 0 );
 	}
