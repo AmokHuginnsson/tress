@@ -1125,6 +1125,30 @@ TUT_UNIT_TEST( "power" )
 	ENSURE_THROW( "power failed 0^0", HNumber( 0 ) ^ 0, HNumberException );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "to_integer" )
+	ENSURE_EQUALS( "to_integer failed 0", HNumber( "0" ).to_integer(), 0LL );
+	ENSURE_EQUALS( "to_integer failed 1", HNumber( "1" ).to_integer(), 1LL );
+	ENSURE_EQUALS( "to_integer failed -1", HNumber( "-1" ).to_integer(), -1LL );
+	ENSURE_EQUALS( "to_integer failed 3.14", HNumber( "3.14" ).to_integer(), 3LL );
+	ENSURE_EQUALS( "to_integer failed -3.14", HNumber( "-3.14" ).to_integer(), -3LL );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "to_floating_point" )
+	ENSURE_DISTANCE( "to_floating_point failed 0", HNumber( "0" ).to_floating_point(), 0.l, epsilon );
+	ENSURE_DISTANCE( "to_floating_point failed 1", HNumber( "1" ).to_floating_point(), 1.l, epsilon );
+	ENSURE_DISTANCE( "to_floating_point failed -1", HNumber( "-1" ).to_floating_point(), -1.l, epsilon );
+	ENSURE_DISTANCE( "to_floating_point failed 3.14", HNumber( "3.14" ).to_floating_point(), 3.14l, epsilon );
+	ENSURE_DISTANCE( "to_floating_point failed -3.14", HNumber( "-3.14" ).to_floating_point(), -3.14l, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "to_string" )
+	ENSURE_EQUALS( "to_string failed 0", HNumber( "0" ).to_string(), "0" );
+	ENSURE_EQUALS( "to_string failed 1", HNumber( "1" ).to_string(), "1" );
+	ENSURE_EQUALS( "to_string failed -1", HNumber( "-1" ).to_string(), "-1" );
+	ENSURE_EQUALS( "to_string failed 3.14", HNumber( "3.14" ).to_string(), "3.14" );
+	ENSURE_EQUALS( "to_string failed -3.14", HNumber( "-3.14" ).to_string(), "-3.14" );
+TUT_TEARDOWN()
+
 #undef DIV_TEST
 
 TUT_UNIT_TEST( "opposite" )
