@@ -71,7 +71,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"nameList = ( parameter >> *( ',' >> parameter ) )",
 		"scope = ( '{' >> *statement >> '}' )",
 		"parameter = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"statement = ( ifStatement | whileStatement | forStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionStatement )",
+		"statement = ( ifStatement | whileStatement | forStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionStatement | scope )",
 		"ifStatement = ( \"if\" >> '(' >> booleanExpression >> ')' >> scope >> -( \"else\" >> scope ) )",
 		"whileStatement = ( \"while\" >> '(' >> booleanExpression >> ')' >> scope )",
 		"forStatement = ( \"for\" >> '(' >> variableIdentifier >> ':' >> expression >> ')' >> scope )",

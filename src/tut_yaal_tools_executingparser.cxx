@@ -660,7 +660,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule switchStatement( executing_parser::constant( "switch" ) >> '(' >> expression >> ')' >> '{' >> +caseStatement >> '}' );
 	HRule returnStatement( executing_parser::constant( "return" ) >> '(' >> expression >> ')' >> ';' );
 	HRule statement( ifStatement | whileStatement | foreachStatement | switchStatement | returnStatement | expressionStatement );
-	HRule loopStatement( ifStatement | whileStatement | foreachStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionStatement );
+	HRule loopStatement( ifStatement | whileStatement | foreachStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionStatement | scope );
 	scope %= ( '{' >> *statement >> '}' );
 	loopScope %= ( '{' >> *loopStatement >> '}' );
 	HRule nameList( name >> ( * ( ',' >> name ) ) );
@@ -677,7 +677,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"H_ = ( \"return\" >> '(' >> L_ >> ')' >> ';' )",
 		"I_ = ( L_ >> ';' )",
 		"J_ = ( ( L_ >> \"==\" >> L_ ) | ( L_ >> \"!=\" >> L_ ) | ( L_ >> '<' >> L_ ) | ( L_ >> '>' >> L_ ) | ( L_ >> \"<=\" >> L_ ) | ( L_ >> \">=\" >> L_ ) | ( M_ >> \"&&\" >> M_ ) | ( M_ >> \"||\" >> M_ ) | ( M_ >> \"^^\" >> M_ ) | ( '!' >> M_ ) )",
-		"K_ = ( '{' >> *( D_ | E_ | F_ | G_ | ( \"break\" >> ';' ) | ( \"continue\" >> ';' ) | H_ | I_ ) >> '}' )",
+		"K_ = ( '{' >> *( D_ | E_ | F_ | G_ | ( \"break\" >> ';' ) | ( \"continue\" >> ';' ) | H_ | I_ | C_ ) >> '}' )",
 		"L_ = ( *( ( N_ | B_ ) >> '=' ) >> O_ )",
 		"M_ = ( \"true\" | \"false\" | ( '(' >> J_ >> ')' ) )",
 		"N_ = ( ( P_ | B_ | string_literal ) >> +( '[' >> ( N_ | O_ ) >> ']' ) )",
