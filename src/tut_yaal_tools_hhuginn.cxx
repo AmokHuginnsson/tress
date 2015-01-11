@@ -106,8 +106,9 @@ TUT_UNIT_TEST( "grammar test" )
 		"multiplication = ( power >> *( '*/%' >> power ) )",
 		"functionCallIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"argList = ( argument >> *( ',' >> argument ) )",
-		"power = ( atom >> *( '^' >> atom ) )",
+		"power = ( negation >> *( '^' >> negation ) )",
 		"argument = assignment",
+		"negation = ( ( '-' >> atom ) | atom )",
 		"atom = ( absoluteValue | parenthesis | real | integer | character_literal | subscript | stringLiteral | functionCall | variableGetter )",
 		"absoluteValue = ( '|' >> expression >> '|' )",
 		"parenthesis = ( '(' >> expression >> ')' )"
