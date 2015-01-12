@@ -618,7 +618,23 @@ TUT_UNIT_TEST( "two inter-locking recursion loops" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "infinite recursion bug" )
+	HRule A;
+	HRule B( A | integer );
+	HRule C;
+	C %= ( real >> B );
+	A %= ( -C >> B );
+	try {
+		HExecutingParser ep( A );
+		ep( "m(){return(0);}" );
+		FAIL( "Failed to detect ifinite recursion in grammar." );
+	} catch ( HExecutingParserException const& ) {
+		// ok
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "unnamed HHuginn grammar" )
+	namespace e_p = executing_parser;
 	HRule name( regex( "\\<[a-zA-Z_][a-zA-Z0-9_]*\\>" ) );
 	HRule expression;
 	HRule absoluteValue( '|' >> expression >> '|' );
@@ -636,7 +652,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule assignment( *( ( subscript | name ) >> '=' ) >> value );
 	expression %= assignment;
 	HRule booleanExpression;
-	HRule booleanValue( executing_parser::constant( "true" ) | executing_parser::constant( "false" ) | executing_parser::constant( '(' ) >> booleanExpression >> ')' );
+	HRule booleanValue( e_p::constant( "true" ) | e_p::constant( "false" ) | e_p::constant( '(' ) >> booleanExpression >> ')' );
 	HRule booleanEquals( expression >> "==" >> expression );
 	HRule booleanNotEquals( expression >> "!=" >> expression );
 	HRule booleanLess( expression >> '<' >> expression );
@@ -646,22 +662,26 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule booleanAnd( booleanValue >> "&&" >> booleanValue );
 	HRule booleanOr( booleanValue >> "||" >> booleanValue );
 	HRule booleanXor( booleanValue >> "^^" >> booleanValue );
-	HRule booleanNot( executing_parser::constant( '!' ) >> booleanValue );
+	HRule booleanNot( e_p::constant( '!' ) >> booleanValue );
 	booleanExpression %= ( booleanEquals | booleanNotEquals | booleanLess | booleanGreater | booleanLessEq | booleanGreaterEq | booleanAnd | booleanOr | booleanXor | booleanNot );
 	HRule expressionStatement( expression >> ';' );
 	HRule scope;
 	HRule loopScope;
-	HRule ifStatement( executing_parser::constant( "if" ) >> '(' >> booleanExpression >> ')' >> scope >> -( executing_parser::constant( "else" ) >> scope ) );
-	HRule continueStatement( executing_parser::constant( "continue" ) >> ';' );
-	HRule breakStatement( executing_parser::constant( "break" ) >> ';' );
-	HRule whileStatement( executing_parser::constant( "while" ) >> '(' >> booleanExpression >> ')' >> loopScope );
-	HRule foreachStatement( executing_parser::constant( "foreach" ) >> '(' >> name >> ':' >> expression >> ')' >> loopScope );
-	HRule caseStatement( executing_parser::constant( "case" ) >> '(' >> integer >> ')' >> ':' >> scope );
-	HRule defaultStatement( executing_parser::constant( "default" ) >> ':' >> scope );
-	HRule switchStatement( executing_parser::constant( "switch" ) >> '(' >> expression >> ')' >> '{' >> +caseStatement >> '}' );
-	HRule returnStatement( executing_parser::constant( "return" ) >> '(' >> expression >> ')' >> ';' );
-	HRule statement( ifStatement | whileStatement | foreachStatement | switchStatement | returnStatement | expressionStatement );
-	HRule loopStatement( ifStatement | whileStatement | foreachStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionStatement | scope );
+	HRule ifStatement(
+		e_p::constant( "if" ) >> '(' >> booleanExpression >> ')' >> scope >>
+		*( e_p::constant( "else" )>> e_p::constant( "if" ) >> '(' >> booleanExpression >> ')' >> scope ) >>
+		-( e_p::constant( "else" ) >> scope )
+	);
+	HRule continueStatement( e_p::constant( "continue" ) >> ';' );
+	HRule breakStatement( e_p::constant( "break" ) >> ';' );
+	HRule whileStatement( e_p::constant( "while" ) >> '(' >> booleanExpression >> ')' >> loopScope );
+	HRule forStatement( e_p::constant( "for" ) >> '(' >> name >> ':' >> expression >> ')' >> loopScope );
+	HRule caseStatement( e_p::constant( "case" ) >> '(' >> integer >> ')' >> ':' >> scope );
+	HRule defaultStatement( e_p::constant( "default" ) >> ':' >> scope );
+	HRule switchStatement( e_p::constant( "switch" ) >> '(' >> expression >> ')' >> '{' >> +caseStatement >> '}' );
+	HRule returnStatement( e_p::constant( "return" ) >> '(' >> expression >> ')' >> ';' );
+	HRule statement( ifStatement | whileStatement | forStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionStatement | scope );
+	HRule loopStatement( ifStatement | whileStatement | forStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionStatement | scope );
 	scope %= ( '{' >> *statement >> '}' );
 	loopScope %= ( '{' >> *loopStatement >> '}' );
 	HRule nameList( name >> ( * ( ',' >> name ) ) );
@@ -670,32 +690,35 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	char const huginnDesc[][320] = {
 		"A_ = +( B_ >> '(' >> -( B_ >> *( ',' >> B_ ) ) >> ')' >> C_ )",
 		"B_ = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"C_ = ( '{' >> *( D_ | E_ | F_ | G_ | H_ | I_ ) >> '}' )",
-		"D_ = ( \"if\" >> '(' >> J_ >> ')' >> C_ >> -( \"else\" >> C_ ) )",
-		"E_ = ( \"while\" >> '(' >> J_ >> ')' >> K_ )",
-		"F_ = ( \"foreach\" >> '(' >> B_ >> ':' >> L_ >> ')' >> K_ )",
-		"G_ = ( \"switch\" >> '(' >> L_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> C_ ) >> '}' )",
-		"H_ = ( \"return\" >> '(' >> L_ >> ')' >> ';' )",
-		"I_ = ( L_ >> ';' )",
-		"J_ = ( ( L_ >> \"==\" >> L_ ) | ( L_ >> \"!=\" >> L_ ) | ( L_ >> '<' >> L_ ) | ( L_ >> '>' >> L_ ) | ( L_ >> \"<=\" >> L_ ) | ( L_ >> \">=\" >> L_ ) | ( M_ >> \"&&\" >> M_ ) | ( M_ >> \"||\" >> M_ ) | ( M_ >> \"^^\" >> M_ ) | ( '!' >> M_ ) )",
-		"K_ = ( '{' >> *( D_ | E_ | F_ | G_ | ( \"break\" >> ';' ) | ( \"continue\" >> ';' ) | H_ | I_ | C_ ) >> '}' )",
-		"L_ = ( *( ( N_ | B_ ) >> '=' ) >> O_ )",
-		"M_ = ( \"true\" | \"false\" | ( '(' >> J_ >> ')' ) )",
-		"N_ = ( ( P_ | B_ | string_literal ) >> +( '[' >> ( N_ | O_ ) >> ']' ) )",
-		"O_ = ( Q_ >> *( '+' >> Q_ ) )",
-		"P_ = ( B_ >> '(' >> -( L_ >> *( ',' >> L_ ) ) >> ')' )",
-		"Q_ = ( R_ >> *( '*' >> R_ ) )",
-		"R_ = ( S_ >> *( '^' >> S_ ) )",
-		"S_ = ( ( '-' >> T_ ) | T_ )",
-		"T_ = ( ( '|' >> L_ >> '|' ) | ( '(' >> L_ >> ')' ) | real | integer | character_literal | N_ | P_ | string_literal | B_ )"
+		"C_ = ( '{' >> *( D_ | E_ | F_ | G_ | H_ | I_ | J_ | K_ | C_ ) >> '}' )",
+		"D_ = ( \"if\" >> '(' >> L_ >> ')' >> C_ >> *( \"else\" >> \"if\" >> '(' >> L_ >> ')' >> C_ ) >> -( \"else\" >> C_ ) )",
+		"E_ = ( \"while\" >> '(' >> L_ >> ')' >> M_ )",
+		"F_ = ( \"for\" >> '(' >> B_ >> ':' >> N_ >> ')' >> M_ )",
+		"G_ = ( \"switch\" >> '(' >> N_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> C_ ) >> '}' )",
+		"H_ = ( \"break\" >> ';' )",
+		"I_ = ( \"continue\" >> ';' )",
+		"J_ = ( \"return\" >> '(' >> N_ >> ')' >> ';' )",
+		"K_ = ( N_ >> ';' )",
+		"L_ = ( ( N_ >> \"==\" >> N_ ) | ( N_ >> \"!=\" >> N_ ) | ( N_ >> '<' >> N_ ) | ( N_ >> '>' >> N_ ) | ( N_ >> \"<=\" >> N_ ) | ( N_ >> \">=\" >> N_ ) | ( O_ >> \"&&\" >> O_ ) | ( O_ >> \"||\" >> O_ ) | ( O_ >> \"^^\" >> O_ ) | ( '!' >> O_ ) )",
+		"M_ = ( '{' >> *( D_ | E_ | F_ | G_ | H_ | I_ | J_ | K_ | C_ ) >> '}' )",
+		"N_ = ( *( ( P_ | B_ ) >> '=' ) >> Q_ )",
+		"O_ = ( \"true\" | \"false\" | ( '(' >> L_ >> ')' ) )",
+		"P_ = ( ( R_ | B_ | string_literal ) >> +( '[' >> ( P_ | Q_ ) >> ']' ) )",
+		"Q_ = ( S_ >> *( '+' >> S_ ) )",
+		"R_ = ( B_ >> '(' >> -( N_ >> *( ',' >> N_ ) ) >> ')' )",
+		"S_ = ( T_ >> *( '*' >> T_ ) )",
+		"T_ = ( U_ >> *( '^' >> U_ ) )",
+		"U_ = ( ( '-' >> V_ ) | V_ )",
+		"V_ = ( ( '|' >> N_ >> '|' ) | ( '(' >> N_ >> ')' ) | real | integer | character_literal | P_ | R_ | string_literal | B_ )"
 	};
 	cout << "hg:" << endl;
 	HGrammarDescription gd( hg );
 	static int const COUNT( static_cast<int>( end( huginnDesc ) - begin( huginnDesc ) ) );
 	int i( 0 );
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
-		if ( i < COUNT )
+		if ( i < COUNT ) {
 			ENSURE_EQUALS( "wrong grammar description", *it, huginnDesc[i] );
+		}
 		cout << *it << endl;
 	}
 	ENSURE_EQUALS( "wrong grammar description", i, COUNT );
