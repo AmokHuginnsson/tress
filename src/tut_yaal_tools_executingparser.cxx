@@ -655,9 +655,9 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule assignment( *( ( subscript | name ) >> '=' ) >> value );
 	expression %= assignment;
 	HRule booleanExpression;
-	HRule anyExpression( expression | ( '(' >> booleanExpression >> ')' ) );
-	HRule testEquals( expression >> "==" >> expression );
-	HRule testNotEquals( expression >> "!=" >> expression );
+	HRule anyExpression( ( '(' >> booleanExpression >> ')' ) | expression );
+	HRule testEquals( anyExpression >> "==" >> anyExpression );
+	HRule testNotEquals( anyExpression >> "!=" >> anyExpression );
 	HRule testLess( expression >> '<' >> expression );
 	HRule testGreater( expression >> '>' >> expression );
 	HRule testLessEq( expression >> "<=" >> expression );
@@ -674,9 +674,10 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule expressionStatement( expression >> ';' );
 	HRule scope;
 	HRule loopScope;
+	HRule ifClause( e_p::constant( "if" ) >> '(' >> booleanExpression >> ')' >> scope );
 	HRule ifStatement(
-		e_p::constant( "if" ) >> '(' >> booleanExpression >> ')' >> scope >>
-		*( e_p::constant( "else" )>> e_p::constant( "if" ) >> '(' >> booleanExpression >> ')' >> scope ) >>
+		ifClause >>
+		*( e_p::constant( "else" ) >> ifClause ) >>
 		-( e_p::constant( "else" ) >> scope )
 	);
 	HRule continueStatement( e_p::constant( "continue" ) >> ';' );
@@ -698,37 +699,39 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"A_ = +( B_ >> '(' >> -( B_ >> *( ',' >> B_ ) ) >> ')' >> C_ )",
 		"B_ = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"C_ = ( '{' >> *( D_ | E_ | F_ | G_ | H_ | I_ | J_ | K_ | C_ ) >> '}' )",
-		"D_ = ( \"if\" >> '(' >> L_ >> ')' >> C_ >> *( \"else\" >> \"if\" >> '(' >> L_ >> ')' >> C_ ) >> -( \"else\" >> C_ ) )",
-		"E_ = ( \"while\" >> '(' >> L_ >> ')' >> M_ )",
-		"F_ = ( \"for\" >> '(' >> B_ >> ':' >> N_ >> ')' >> M_ )",
-		"G_ = ( \"switch\" >> '(' >> N_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> C_ ) >> '}' )",
+		"D_ = ( L_ >> *( \"else\" >> L_ ) >> -( \"else\" >> C_ ) )",
+		"E_ = ( \"while\" >> '(' >> M_ >> ')' >> N_ )",
+		"F_ = ( \"for\" >> '(' >> B_ >> ':' >> O_ >> ')' >> N_ )",
+		"G_ = ( \"switch\" >> '(' >> O_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> C_ ) >> '}' )",
 		"H_ = ( \"break\" >> ';' )",
 		"I_ = ( \"continue\" >> ';' )",
-		"J_ = ( \"return\" >> '(' >> N_ >> ')' >> ';' )",
-		"K_ = ( N_ >> ';' )",
-		"L_ = ( *( ( O_ | B_ ) >> '=' ) >> ( ( P_ >> \"&&\" >> P_ ) | ( P_ >> \"||\" >> P_ ) | ( P_ >> \"^^\" >> P_ ) | ( '!' >> P_ ) | ( ( N_ >> \"==\" >> N_ ) | ( N_ >> \"!=\" >> N_ ) | ( N_ >> '<' >> N_ ) | ( N_ >> '>' >> N_ ) | ( N_ >> \"<=\" >> N_ ) | ( N_ >> \">=\" >> N_ ) ) ) )",
-		"M_ = ( '{' >> *( D_ | E_ | F_ | G_ | H_ | I_ | J_ | K_ | C_ ) >> '}' )",
-		"N_ = ( *( ( O_ | B_ ) >> '=' ) >> Q_ )",
-		"O_ = ( ( R_ | B_ | string_literal ) >> +( '[' >> ( O_ | Q_ ) >> ']' ) )",
-		"P_ = ( S_ | T_ | ( '(' >> L_ >> ')' ) | ( \"boolean\" >> '(' >> N_ >> ')' ) )",
-		"Q_ = ( U_ >> *( '+' >> U_ ) )",
-		"R_ = ( B_ >> '(' >> -( N_ >> *( ',' >> N_ ) ) >> ')' )",
-		"S_ = \"true\"",
-		"T_ = \"false\"",
-		"U_ = ( V_ >> *( '*' >> V_ ) )",
-		"V_ = ( W_ >> *( '^' >> W_ ) )",
-		"W_ = ( ( '-' >> X_ ) | X_ )",
-		"X_ = ( ( '|' >> N_ >> '|' ) | ( '(' >> N_ >> ')' ) | real | integer | character_literal | O_ | string_literal | R_ | \"none\" | S_ | T_ | B_ )"
+		"J_ = ( \"return\" >> '(' >> O_ >> ')' >> ';' )",
+		"K_ = ( O_ >> ';' )",
+		"L_ = ( \"if\" >> '(' >> M_ >> ')' >> C_ )",
+		"M_ = ( *( ( P_ | B_ ) >> '=' ) >> ( ( Q_ >> \"&&\" >> Q_ ) | ( Q_ >> \"||\" >> Q_ ) | ( Q_ >> \"^^\" >> Q_ ) | ( '!' >> Q_ ) | ( ( R_ >> \"==\" >> R_ ) | ( R_ >> \"!=\" >> R_ ) | ( O_ >> '<' >> O_ ) | ( O_ >> '>' >> O_ ) | ( O_ >> \"<=\" >> O_ ) | ( O_ >> \">=\" >> O_ ) ) ) )",
+		"N_ = ( '{' >> *( D_ | E_ | F_ | G_ | H_ | I_ | J_ | K_ | C_ ) >> '}' )",
+		"O_ = ( *( ( P_ | B_ ) >> '=' ) >> S_ )",
+		"P_ = ( ( T_ | B_ | string_literal ) >> +( '[' >> ( P_ | S_ ) >> ']' ) )",
+		"Q_ = ( U_ | V_ | ( '(' >> M_ >> ')' ) | ( \"boolean\" >> '(' >> O_ >> ')' ) )",
+		"R_ = ( ( '(' >> M_ >> ')' ) | O_ )",
+		"S_ = ( W_ >> *( '+' >> W_ ) )",
+		"T_ = ( B_ >> '(' >> -( O_ >> *( ',' >> O_ ) ) >> ')' )",
+		"U_ = \"true\"",
+		"V_ = \"false\"",
+		"W_ = ( X_ >> *( '*' >> X_ ) )",
+		"X_ = ( Y_ >> *( '^' >> Y_ ) )",
+		"Y_ = ( ( '-' >> Z_ ) | Z_ )",
+		"Z_ = ( ( '|' >> O_ >> '|' ) | ( '(' >> O_ >> ')' ) | real | integer | character_literal | P_ | string_literal | T_ | \"none\" | U_ | V_ | B_ )"
 	};
 	cout << "hg:" << endl;
 	HGrammarDescription gd( hg );
 	static int const COUNT( static_cast<int>( end( huginnDesc ) - begin( huginnDesc ) ) );
 	int i( 0 );
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		cout << *it << endl;
 		if ( i < COUNT ) {
 			ENSURE_EQUALS( "wrong grammar description", *it, huginnDesc[i] );
 		}
-		cout << *it << endl;
 	}
 	ENSURE_EQUALS( "wrong grammar description", i, COUNT );
 TUT_TEARDOWN()
