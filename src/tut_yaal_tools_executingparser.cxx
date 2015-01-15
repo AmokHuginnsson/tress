@@ -408,6 +408,18 @@ TUT_UNIT_TEST( "HKleenePlus" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "HAlternative" )
+	int val( 0 );
+	int val_alt( 0 );
+	HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
+	HRule ia( integer[HBoundCall<void ( int )>( call( &defer<int>::set_alt, ref( val_alt ), _1 ) )] );
+	HExecutingParser ep( string( "nums{" ) >> ( ( i >> ":pos" ) | ( ia >> ":neg" ) ) >> "}" );
+	ENSURE( "parse on valid failed", ep( "nums{7:neg}" ) );
+	ep();
+	ENSURE_EQUALS( "execution failed sub-step not removed", val, 0 );
+	ENSURE_EQUALS( "execution proper execution sub-step not applied", val_alt, -7 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "HOptional" )
 	/* not-parsed (empty) configuration test */ {
 		int val( 0 );
@@ -433,6 +445,66 @@ TUT_UNIT_TEST( "HOptional" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "HAnd" )
+	/* parsed */ {
+		char fcData( '_' );
+		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( fcData ), _1 ) )] );
+		char scData( '_' );
+		char data( '_' );
+		char trailerChar( 'b' );
+		HRule trailer( character( trailerChar )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( scData ), _1 ) )] );
+		HRule sc( character( trailerChar )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( data ), _1 ) )] );
+		bool andCalled( false );
+		HExecutingParser ep( ( ( fc & trailer ) >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
+		ENSURE( "parse on correct failed", ep( "ab" ) );
+		ep();
+		ENSURE_EQUALS( "predecessor in AND not called", fcData, 'a' );
+		ENSURE_EQUALS( "successor in AND called", scData, '_' );
+		ENSURE_EQUALS( "following rule of AND not called", data, 'b' );
+		ENSURE( "follows not called", andCalled );
+		HExecutingParser ep2( fc & sc );
+		ENSURE_NOT( "parse on dangling succeeded", ep2( " ab" ) );
+		ENSURE_EQUALS( "bad error position", ep2.error_position(), 2 );
+	}
+	/* failed on successor */ {
+		HRule fc( character( 'a' ) );
+		HRule sc( character( 'b' ) );
+		HExecutingParser ep( ( fc & sc ) >> character );
+		ENSURE_NOT( "parse on invalid succeeded", ep( " aa" ) );
+		ENSURE_EQUALS( "bad error position", ep.error_position(), 2 );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "HNot" )
+	/* parsed */ {
+		char fcData( '_' );
+		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( fcData ), _1 ) )] );
+		char scData( '_' );
+		char data( '_' );
+		char trailerChar( 'b' );
+		HRule trailer( character( trailerChar )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( scData ), _1 ) )] );
+		HRule sc( character( 'c' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( data ), _1 ) )] );
+		bool notCalled( false );
+		HExecutingParser ep( ( ( fc ^ trailer ) >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
+		ENSURE( "parse on correct failed", ep( "ac" ) );
+		ep();
+		ENSURE_EQUALS( "predecessor in NOT not called", fcData, 'a' );
+		ENSURE_EQUALS( "successor in NOT called", scData, '_' );
+		ENSURE_EQUALS( "following rule of NOT not called", data, 'c' );
+		ENSURE( "follows not called", notCalled );
+		HExecutingParser ep2( fc ^ sc );
+		ENSURE_NOT( "parse on dangling succeeded", ep2( " ac" ) );
+		ENSURE_EQUALS( "bad error position", ep2.error_position(), 2 );
+	}
+	/* failed on successor */ {
+		HRule fc( character( 'a' ) );
+		HRule sc( character( 'b' ) );
+		HExecutingParser ep( ( fc ^ sc ) >> character );
+		ENSURE_NOT( "parse on invalid succeeded", ep( " ab" ) );
+		ENSURE_EQUALS( "bad error position", ep.error_position(), 2 );
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "canceling execution steps" )
 	int val( 0 );
 	int val_alt( 0 );
@@ -445,67 +517,95 @@ TUT_UNIT_TEST( "canceling execution steps" )
 	ENSURE_EQUALS( "execution proper execution sub-step not applied", val_alt, -7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "HAlternative" )
-	int val( 0 );
-	int val_alt( 0 );
-	HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
-	HRule ia( integer[HBoundCall<void ( int )>( call( &defer<int>::set_alt, ref( val_alt ), _1 ) )] );
-	HExecutingParser ep( string( "nums{" ) >> ( ( i >> ":pos" ) | ( ia >> ":neg" ) ) >> "}" );
-	ENSURE( "parse on valid failed", ep( "nums{7:neg}" ) );
-	ep();
-	ENSURE_EQUALS( "execution failed sub-step not removed", val, 0 );
-	ENSURE_EQUALS( "execution proper execution sub-step not applied", val_alt, -7 );
+TUT_UNIT_TEST( "left recursion (follows)" )
+	HRule S;
+	S %= ( S >> '$' >> integer );
+	HGrammarDescription gd( S );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE( "bad ruie count", i < 1 );
+		ENSURE_EQUALS( "wrong description", *it, "A_ = ( A_ >> '$' >> integer )" );
+		cout << *it << endl;
+	}
+	ENSURE_THROW( "Grammar with left recursion accepted (follows).", HExecutingParser ep( S ), HExecutingParserException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "left recursion" )
-	/* follows */ {
-		HRule S;
-		S %= ( S >> '$' >> integer );
-		HGrammarDescription gd( S );
-		int i( 0 );
-		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
-			ENSURE( "bad ruie count", i < 1 );
-			ENSURE_EQUALS( "wrong description", *it, "A_ = ( A_ >> '$' >> integer )" );
-			cout << *it << endl;
-		}
-		ENSURE_THROW( "Grammar with left recursion accepted (follows).", HExecutingParser ep( S ), HExecutingParserException );
+TUT_UNIT_TEST( "left recursion (alternative)" )
+	HRule S;
+	S %= ( integer | S );
+	HGrammarDescription gd( S );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE( "bad ruie count", i < 1 );
+		ENSURE_EQUALS( "wrong description", *it, "A_ = ( integer | A_ )" );
+		cout << *it << endl;
 	}
-	/* alternative */ {
-		HRule S;
-		S %= ( integer | S );
-		HGrammarDescription gd( S );
-		int i( 0 );
-		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
-			ENSURE( "bad ruie count", i < 1 );
-			ENSURE_EQUALS( "wrong description", *it, "A_ = ( integer | A_ )" );
-			cout << *it << endl;
-		}
-		ENSURE_THROW( "Grammar with left recursion accepted (alternative).", HExecutingParser ep( S ), HExecutingParserException );
+	ENSURE_THROW( "Grammar with left recursion accepted (alternative).", HExecutingParser ep( S ), HExecutingParserException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "left recursion (optional)" )
+	HRule S;
+	S %= ( -integer >> S );
+	HGrammarDescription gd( S );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE( "bad ruie count", i < 1 );
+		ENSURE_EQUALS( "wrong description", *it, "A_ = ( -integer >> A_ )" );
+		cout << *it << endl;
 	}
-	/* optional */ {
-		HRule S;
-		S %= ( -integer >> S );
-		HGrammarDescription gd( S );
-		int i( 0 );
-		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
-			ENSURE( "bad ruie count", i < 1 );
-			ENSURE_EQUALS( "wrong description", *it, "A_ = ( -integer >> A_ )" );
-			cout << *it << endl;
-		}
-		ENSURE_THROW( "Grammar with left recursion accepted (optional).", HExecutingParser ep( S ), HExecutingParserException );
+	ENSURE_THROW( "Grammar with left recursion accepted (optional).", HExecutingParser ep( S ), HExecutingParserException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "left recursion (kleene star)" )
+	HRule S;
+	S %= ( *integer >> S );
+	HGrammarDescription gd( S );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE( "bad ruie count", i < 1 );
+		ENSURE_EQUALS( "wrong description", *it, "A_ = ( *integer >> A_ )" );
+		cout << *it << endl;
 	}
-	/* kleene star */ {
-		HRule S;
-		S %= ( *integer >> S );
-		HGrammarDescription gd( S );
-		int i( 0 );
-		for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
-			ENSURE( "bad ruie count", i < 1 );
-			ENSURE_EQUALS( "wrong description", *it, "A_ = ( *integer >> A_ )" );
-			cout << *it << endl;
-		}
-		ENSURE_THROW( "Grammar with left recursion accepted (kleene star).", HExecutingParser ep( S ), HExecutingParserException );
+	ENSURE_THROW( "Grammar with left recursion accepted (kleene star).", HExecutingParser ep( S ), HExecutingParserException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "left recursion (kleene plus)" )
+	HRule S;
+	S %= (  +S >> integer );
+	HGrammarDescription gd( S );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE( "bad ruie count", i < 1 );
+		ENSURE_EQUALS( "wrong description", *it, "A_ = ( +A_ >> integer )" );
+		cout << *it << endl;
 	}
+	ENSURE_THROW( "Grammar with left recursion accepted (kleene plus).", HExecutingParser ep( S ), HExecutingParserException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "left recursion (and)" )
+	HRule S;
+	S %= ( ( S & '$' ) >> integer );
+	HGrammarDescription gd( S );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE( "bad ruie count", i < 1 );
+		ENSURE_EQUALS( "wrong description", *it, "A_ = ( ( A_ & '$' ) >> integer )" );
+		cout << *it << endl;
+	}
+	ENSURE_THROW( "Grammar with left recursion accepted (and).", HExecutingParser ep( S ), HExecutingParserException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "left recursion (not)" )
+	HRule S;
+	S %= ( ( S ^ '$' ) >> integer );
+	HGrammarDescription gd( S );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		ENSURE( "bad ruie count", i < 1 );
+		ENSURE_EQUALS( "wrong description", *it, "A_ = ( ( A_ ^ '$' ) >> integer )" );
+		cout << *it << endl;
+	}
+	ENSURE_THROW( "Grammar with left recursion accepted (not).", HExecutingParser ep( S ), HExecutingParserException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "simple recursive rule" )
