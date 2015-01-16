@@ -787,19 +787,13 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	expression %= assignment;
 	HRule booleanExpression;
 	HRule anyExpression( ( '(' >> booleanExpression >> ')' ) | expression );
-	HRule testEquals( anyExpression >> "==" >> anyExpression );
-	HRule testNotEquals( anyExpression >> "!=" >> anyExpression );
-	HRule testLess( expression >> '<' >> expression );
-	HRule testGreater( expression >> '>' >> expression );
-	HRule testLessEq( expression >> "<=" >> expression );
-	HRule testGreaterEq( expression >> ">=" >> expression );
-	HRule booleanTest( testEquals | testNotEquals | testLess | testGreater | testLessEq | testGreaterEq );
+	HRule testEqualsNotEquals( anyExpression >> ( string( "==" ) | "!=" ) >> anyExpression );
+	HRule testCompare( expression >> ( string( "<=" ) | ">=" | "<" | ">" ) >> expression );
+	HRule booleanTest( testEqualsNotEquals | testCompare );
 	HRule booleanAtom( booleanLiteralTrue | booleanLiteralFalse | ( '(' >> booleanExpression >>  ')' ) | ( e_p::constant( "boolean" ) >> '(' >> expression >> ')' ) );
-	HRule booleanAnd( booleanAtom >> "&&" >> booleanAtom );
-	HRule booleanOr( booleanAtom >> "||" >> booleanAtom );
-	HRule booleanXor( booleanAtom >> "^^" >> booleanAtom );
+	HRule booleanAndOrXor( booleanAtom >> ( string( "&&" ) | "||" | "^^" ) >> booleanAtom );
 	HRule booleanNot( e_p::constant( '!' ) >> booleanAtom );
-	HRule booleanValue( booleanAnd | booleanOr | booleanXor | booleanNot | booleanTest );
+	HRule booleanValue( booleanAndOrXor | booleanNot | booleanTest );
 	HRule booleanAssignment( *( ( subscript | name ) >> '=' ) >> booleanValue );
 	booleanExpression %= ( booleanAssignment );
 	HRule expressionStatement( expression >> ';' );
@@ -839,7 +833,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"J_ = ( \"return\" >> '(' >> O_ >> ')' >> ';' )",
 		"K_ = ( O_ >> ';' )",
 		"L_ = ( \"if\" >> '(' >> M_ >> ')' >> C_ )",
-		"M_ = ( *( ( P_ | B_ ) >> '=' ) >> ( ( Q_ >> \"&&\" >> Q_ ) | ( Q_ >> \"||\" >> Q_ ) | ( Q_ >> \"^^\" >> Q_ ) | ( '!' >> Q_ ) | ( ( R_ >> \"==\" >> R_ ) | ( R_ >> \"!=\" >> R_ ) | ( O_ >> '<' >> O_ ) | ( O_ >> '>' >> O_ ) | ( O_ >> \"<=\" >> O_ ) | ( O_ >> \">=\" >> O_ ) ) ) )",
+		"M_ = ( *( ( P_ | B_ ) >> '=' ) >> ( ( Q_ >> ( \"&&\" | \"||\" | \"^^\" ) >> Q_ ) | ( '!' >> Q_ ) | ( ( R_ >> ( \"==\" | \"!=\" ) >> R_ ) | ( O_ >> ( \"<=\" | \">=\" | \"<\" | \">\" ) >> O_ ) ) ) )",
 		"N_ = ( '{' >> *( D_ | E_ | F_ | G_ | H_ | I_ | J_ | K_ | C_ ) >> '}' )",
 		"O_ = ( *( ( P_ | B_ ) >> '=' ) >> S_ )",
 		"P_ = ( ( T_ | B_ | string_literal ) >> +( '[' >> ( P_ | S_ ) >> ']' ) )",
