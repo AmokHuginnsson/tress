@@ -30,6 +30,7 @@ Copyright:
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
+#include <yaal/tools/filesystem.hxx>
 #include <yaal/tools/hstringstream.hxx>
 
 using namespace tut;
@@ -52,10 +53,50 @@ namespace tut {
 
 struct tut_yaal_tools_hhuginn : public simple_mock<tut_yaal_tools_hhuginn> {
 	typedef char const* prog_src_t;
+	hcore::HString _resultCache;
+	HStringStream _sourceCache;
+	tut_yaal_tools_hhuginn( void )
+		: _resultCache(), _sourceCache() {
+		return;
+	}
 	virtual ~tut_yaal_tools_hhuginn( void ) {}
 	void test_preprocessing( prog_src_t, prog_src_t, int );
 	void test_parse( prog_src_t, int const[3], int );
+	void test_file( hcore::HString const& );
+	hcore::HString const& execute( hcore::HString const& );
 };
+
+void tut_yaal_tools_hhuginn::test_file( hcore::HString const& name_ ) {
+	filesystem::path_t p( "./data/" );
+	p.append( name_ );
+	HFile s( p, HFile::OPEN::READING );
+	HHuginn h;
+	s.read_until( _resultCache );
+	_resultCache.shift_left( 2 );
+	h.load( s );
+	h.preprocess();
+	h.parse();
+	h.compile();
+	h.execute();
+	HHuginn::value_t res( h.result() );
+	ENSURE_EQUALS( "bad result type", res->type(), HHuginn::HValue::TYPE::STRING );
+	ENSURE_EQUALS( "bad result value", static_cast<HHuginn::HString*>( res.raw() )->value(), _resultCache );
+	return;
+}
+
+hcore::HString const& tut_yaal_tools_hhuginn::execute( hcore::HString const& source_ ) {
+	HHuginn h;
+	_sourceCache.set_buffer( source_ );
+	h.load( _sourceCache );
+	h.preprocess();
+	h.parse();
+	h.compile();
+	h.execute();
+	HHuginn::value_t res( h.result() );
+	ENSURE_EQUALS( "bad result type", res->type(), HHuginn::HValue::TYPE::STRING );
+	_resultCache.assign( static_cast<HHuginn::HString*>( res.raw() )->value() );
+	return ( _resultCache );
+}
 
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn, "yaal::tools::HHuginn" );
 
