@@ -549,7 +549,7 @@ void tut_yaal_tools_hhuginn::test_parse( prog_src_t prog_, int const err_[3], in
 	h.load( prog );
 	h.preprocess();
 	clog << "parsing: " << index_ << endl;
-	h.parse();
+	ENSURE_NOT( "parser invalid", h.parse() );
 	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_[0] );
 	ENSURE_EQUALS( "reporting error line failed " + to_string( index_ ), h.error_coordinate().line(), err_[1] );
 	ENSURE_EQUALS( "reporting error column failed " + to_string( index_ ), h.error_coordinate().column(), err_[2] );
