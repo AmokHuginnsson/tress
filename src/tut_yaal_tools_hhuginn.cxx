@@ -42,7 +42,7 @@ using namespace tress::tut_helpers;
 
 namespace yaal {
 namespace tools {
-inline std::ostream& operator << ( std::ostream& out, HHuginn::HValue::TYPE t_ ) {
+inline std::ostream& operator << ( std::ostream& out, HHuginn::TYPE t_ ) {
 	out << HHuginn::HValue::type_name( t_ );
 	return ( out );
 }
@@ -79,7 +79,7 @@ void tut_yaal_tools_hhuginn::test_file( hcore::HString const& name_ ) {
 	h.compile();
 	h.execute();
 	HHuginn::value_t res( h.result() );
-	ENSURE_EQUALS( "bad result type", res->type(), HHuginn::HValue::TYPE::STRING );
+	ENSURE_EQUALS( "bad result type", res->type(), HHuginn::TYPE::STRING );
 	ENSURE_EQUALS( "bad result value", static_cast<HHuginn::HString*>( res.raw() )->value(), _resultCache );
 	return;
 }
@@ -93,7 +93,7 @@ hcore::HString const& tut_yaal_tools_hhuginn::execute( hcore::HString const& sou
 	h.compile();
 	h.execute();
 	HHuginn::value_t res( h.result() );
-	ENSURE_EQUALS( "bad result type", res->type(), HHuginn::HValue::TYPE::STRING );
+	ENSURE_EQUALS( "bad result type", res->type(), HHuginn::TYPE::STRING );
 	_resultCache.assign( static_cast<HHuginn::HString*>( res.raw() )->value() );
 	return ( _resultCache );
 }
@@ -114,48 +114,43 @@ TUT_UNIT_TEST( "grammar test" )
 		"parameter = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"statement = ( ifStatement | whileStatement | forStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionStatement | scope )",
 		"ifStatement = ( ifClause >> *( \"else\" >> ifClause ) >> -( \"else\" >> scope ) )",
-		"whileStatement = ( \"while\" >> '(' >> booleanExpression >> ')' >> scope )",
+		"whileStatement = ( \"while\" >> '(' >> expression >> ')' >> scope )",
 		"forStatement = ( \"for\" >> '(' >> variableIdentifier >> ':' >> expression >> ')' >> scope )",
 		"switchStatement = ( \"switch\" >> '(' >> expression >> ')' >> '{' >> +caseStatement >> -defaultStatement >> '}' )",
 		"breakStatement = ( \"break\" >> ';' )",
 		"continueStatement = ( \"continue\" >> ';' )",
 		"returnStatement = ( \"return\" >> -( '(' >> expression >> ')' ) >> ';' )",
 		"expressionStatement = ( expression >> ';' )",
-		"ifClause = ( \"if\" >> '(' >> booleanExpression >> ')' >> scope )",
-		"booleanExpression = ( booleanValue | ( '(' >> booleanAssignment >> ')' ) )",
-		"variableIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
+		"ifClause = ( \"if\" >> '(' >> expression >> ')' >> scope )",
 		"expression = assignment",
+		"variableIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"caseStatement = ( \"case\" >> '(' >> integer >> ')' >> ':' >> scope >> -breakStatement )",
 		"defaultStatement = ( \"default\" >> ':' >> scope )",
-		"booleanValue = ( booleanAndOrXor | booleanNot | booleanTest | booleanAtom )",
-		"booleanAssignment = ( *( ( subscript | variableSetter ) >> '=' ) >> booleanValue )",
-		"assignment = ( *( ( subscript | variableSetter ) >> '=' ) >> value )",
-		"booleanAndOrXor = ( booleanAtom >> ( \"&&\" | \"||\" | \"^^\" ) >> booleanAtom )",
-		"booleanNot = ( '!' >> booleanAtom )",
-		"booleanTest = ( testEqualsNotEquals | testCompare )",
-		"booleanAtom = ( true | false | ( '(' >> booleanTest >> ')' ) | ( \"boolean\" >> '(' >> expression >> ')' ) )",
+		"assignment = ( *( ( ( subscript | variableSetter ) >> '=' ) ^ '=' ) >> value )",
 		"subscript = ( ( functionCall | variableGetter | stringLiteral ) >> +( '[' >> ( value | subscript ) >> ']' ) )",
 		"variableSetter = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"variableSetter = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"value = ( multiplication >> *( '+-' >> multiplication ) )",
-		"testEqualsNotEquals = ( anyExpression >> ( \"==\" | \"!=\" ) >> anyExpression )",
-		"testCompare = ( expression >> ( \"<=\" | \">=\" | \"<\" | \">\" ) >> expression )",
-		"true = \"true\"",
-		"false = \"false\"",
+		"value = ( booleanOr >> -( \"^^\" >> booleanOr ) )",
 		"functionCall = ( functionCallIdentifier >> '(' >> -argList >> ')' )",
 		"variableGetter = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"stringLiteral = string_literal",
-		"multiplication = ( power >> *( '*/%' >> power ) )",
-		"anyExpression = ( ( '(' >> booleanExpression >> ')' ) | ( '(' >> expression >> ')' ) | value )",
+		"booleanOr = ( booleanAnd >> -( \"||\" >> booleanAnd ) )",
 		"functionCallIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"argList = ( argument >> *( ',' >> argument ) )",
-		"power = ( negation >> *( '^' >> negation ) )",
+		"booleanAnd = ( equality >> -( \"&&\" >> equality ) )",
 		"argument = assignment",
+		"equality = ( compare >> -( ( \"==\" | \"!=\" ) >> compare ) )",
+		"compare = ( sum >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> sum ) )",
+		"sum = ( multiplication >> *( '+-' >> multiplication ) )",
+		"multiplication = ( power >> *( '*/%' >> power ) )",
+		"power = ( booleanNot >> *( '^' >> booleanNot ) )",
+		"booleanNot = ( ( '!' >> negation ) | negation )",
 		"negation = ( ( '-' >> atom ) | atom )",
 		"atom = ( absoluteValue | parenthesis | real | integer | character_literal | subscript | stringLiteral | functionCall | none | true | false | variableGetter )",
 		"absoluteValue = ( '|' >> expression >> '|' )",
 		"parenthesis = ( '(' >> expression >> ')' )",
-		"none = \"none\""
+		"none = \"none\"",
+		"true = \"true\"",
+		"false = \"false\""
 	};
 
 	int i( 0 );
@@ -620,7 +615,7 @@ TUT_UNIT_TEST( "simplest program" )
 	h.execute();
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::INTEGER );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::TYPE::INTEGER );
 	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 0 );
 TUT_TEARDOWN()
 
@@ -634,7 +629,7 @@ TUT_UNIT_TEST( "simplest program (return real)" )
 	h.execute();
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::REAL );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::TYPE::REAL );
 	ENSURE_DISTANCE( "bad value returned", static_cast<HHuginn::HReal*>( r.raw() )->value(), 3.14L, epsilon );
 TUT_TEARDOWN()
 
@@ -648,7 +643,7 @@ TUT_UNIT_TEST( "simplest program (return string)" )
 	h.execute();
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::STRING );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::TYPE::STRING );
 	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HString*>( r.raw() )->value(), "hello world" );
 TUT_TEARDOWN()
 
@@ -662,7 +657,7 @@ TUT_UNIT_TEST( "simplest program (return character)" )
 	h.execute();
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::CHARACTER );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::TYPE::CHARACTER );
 	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HCharacter*>( r.raw() )->value(), 'X' );
 TUT_TEARDOWN()
 
@@ -676,7 +671,7 @@ TUT_UNIT_TEST( "call function" )
 	h.execute();
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::INTEGER );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::TYPE::INTEGER );
 	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
 TUT_TEARDOWN()
 
@@ -690,7 +685,7 @@ TUT_UNIT_TEST( "set variable" )
 	h.execute();
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::INTEGER );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::TYPE::INTEGER );
 	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
 TUT_TEARDOWN()
 
@@ -709,7 +704,7 @@ TUT_UNIT_TEST( 50, "simple program" )
 	h.execute();
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::HValue::TYPE::INTEGER );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::TYPE::INTEGER );
 	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 42 );
 TUT_TEARDOWN()
 
