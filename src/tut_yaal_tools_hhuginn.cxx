@@ -62,6 +62,7 @@ struct tut_yaal_tools_hhuginn : public simple_mock<tut_yaal_tools_hhuginn> {
 	virtual ~tut_yaal_tools_hhuginn( void ) {}
 	void test_preprocessing( prog_src_t, prog_src_t, int );
 	void test_parse( prog_src_t, int const[3], int );
+	void test_compile( prog_src_t, int const[3], int );
 	void test_file( hcore::HString const& );
 	hcore::HString const& execute( hcore::HString const& );
 };
@@ -585,6 +586,98 @@ TUT_UNIT_TEST( "report parsing error" )
 	for ( prog_src_t* prog( begin( progParse ) ), * progEnd( end( progParse ) ); prog != progEnd; ++ prog, ++ e ) {
 		if ( *prog ) {
 			test_parse( *prog, *e, static_cast<int>( prog - begin( progParse ) ) );
+		}
+	}
+TUT_TEARDOWN()
+
+char const progCompileErr0[] =
+	"main() {\n"
+	"\tx = 1 + 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr1[] =
+	"main() {\n"
+	"\tx = 1 * 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr2[] =
+	"main() {\n"
+	"\tx = 1 ^ 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr3[] =
+	"main() {\n"
+	"\tx = 2 ^ 2 ^ 2.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr4[] =
+	"main() {\n"
+	"\tx = 2 ^ 2.5 ^ 2;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr5[] =
+	"main() {\n"
+	"\tx = 2.5 ^ 2 ^ 2;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr6[] =
+	"main() {\n"
+	"\tx = 1 == 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+void tut_yaal_tools_hhuginn::test_compile( prog_src_t prog_, int const err_[3], int index_ ) {
+	HStringStream prog( prog_ );
+	HHuginn h;
+	h.load( prog );
+	h.preprocess();
+	ENSURE( "failed to parse valid", h.parse() );
+	clog << "compiling: " << index_ << endl;
+	ENSURE_NOT( "compiled invalid", h.compile() );
+	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_[0] );
+	ENSURE_EQUALS( "reporting error line failed " + to_string( index_ ), h.error_coordinate().line(), err_[1] );
+	ENSURE_EQUALS( "reporting error column failed " + to_string( index_ ), h.error_coordinate().column(), err_[2] );
+	clog << h.error_message() << endl;
+}
+
+TUT_UNIT_TEST( "report compilation error" )
+	prog_src_t progCompileErr[] = {
+		progCompileErr0,
+		progCompileErr1,
+		progCompileErr2,
+		progCompileErr3,
+		progCompileErr4,
+		progCompileErr5,
+		progCompileErr6,
+		NULL
+	};
+	int const err[][3] = {
+		{ 16, 2, 8 },   // 0
+		{ 16, 2, 8 },   // 1
+		{ 16, 2, 8 },   // 2
+		{ 20, 2, 12 },  // 3
+		{ 22, 2, 14 },  // 4
+		{ 18, 2, 10 },  // 5
+		{ 16, 2, 8 },   // 6
+		{ 0, 0, 0 }
+	};
+	int const (*e)[3]( err );
+	for ( prog_src_t* prog( begin( progCompileErr ) ), * progEnd( end( progCompileErr ) ); prog != progEnd; ++ prog, ++ e ) {
+		if ( *prog ) {
+			test_compile( *prog, *e, static_cast<int>( prog - begin( progCompileErr ) ) );
 		}
 	}
 TUT_TEARDOWN()
