@@ -784,8 +784,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule sum( multiplication >> ( * ( '+' >> multiplication ) ) );
 	HRule compare( sum >> -( ( string( "<=" ) | ">=" | "<" | ">" ) >> sum ) );
 	HRule equals( compare >> -( ( string( "==" ) | "!=" ) >> compare ) );
-	HRule booleanAnd( equals >> "&&" >> equals );
-	HRule booleanOr( booleanAnd >> -( string( "||" ) >> booleanAnd ) );
+	HRule booleanAnd( equals >> *( "&&" >> equals ) );
+	HRule booleanOr( booleanAnd >> *( string( "||" ) >> booleanAnd ) );
 	HRule booleanXor( booleanOr >> -( string( "^^" ) >> booleanOr ) );
 	HRule value( booleanXor );
 	subscript %= ( ( functionCall | name | string_literal ) >> +( '[' >> ( subscript | value ) >> ']' ) );
@@ -833,8 +833,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"O_ = ( ( Q_ | B_ | string_literal ) >> +( '[' >> ( O_ | P_ ) >> ']' ) )",
 		"P_ = ( R_ >> -( \"^^\" >> R_ ) )",
 		"Q_ = ( B_ >> '(' >> -( M_ >> *( ',' >> M_ ) ) >> ')' )",
-		"R_ = ( S_ >> -( \"||\" >> S_ ) )",
-		"S_ = ( T_ >> \"&&\" >> T_ )",
+		"R_ = ( S_ >> *( \"||\" >> S_ ) )",
+		"S_ = ( T_ >> *( \"&&\" >> T_ ) )",
 		"T_ = ( U_ >> -( ( \"==\" | \"!=\" ) >> U_ ) )",
 		"U_ = ( V_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> V_ ) )",
 		"V_ = ( W_ >> *( '+' >> W_ ) )",
