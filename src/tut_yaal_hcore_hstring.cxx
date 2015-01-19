@@ -790,5 +790,63 @@ TUT_UNIT_TEST( "swap()" )
 	ENSURE_EQUALS( "swap 3 failed", c, PIES );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "push_back" )
+	HString s;
+	ENSURE_EQUALS( "bad empty", s, "" );
+	s.push_back( 'A' );
+	ENSURE_EQUALS( "push_back failed", s, "A" );
+	s.push_back( 'l' );
+	ENSURE_EQUALS( "push_back failed", s, "Al" );
+	s.push_back( 'a' );
+	ENSURE_EQUALS( "push_back failed", s, "Ala" );
+	s.push_back( ' ' );
+	ENSURE_EQUALS( "push_back failed", s, "Ala " );
+	s.push_back( 'm' );
+	ENSURE_EQUALS( "push_back failed", s, "Ala m" );
+	s.push_back( 'a' );
+	ENSURE_EQUALS( "push_back failed", s, "Ala ma" );
+	s.push_back( ' ' );
+	ENSURE_EQUALS( "push_back failed", s, "Ala ma " );
+	s.push_back( 'k' );
+	ENSURE_EQUALS( "push_back failed", s, "Ala ma k" );
+	s.push_back( 'o' );
+	ENSURE_EQUALS( "push_back failed", s, "Ala ma ko" );
+	s.push_back( 't' );
+	ENSURE_EQUALS( "push_back failed", s, "Ala ma kot" );
+	s.push_back( 'a' );
+	ENSURE_EQUALS( "push_back failed", s, "Ala ma kota" );
+	s.push_back( '.' );
+	ENSURE_EQUALS( "push_back failed", s, "Ala ma kota." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "pop_back" )
+	HString s( "Ala ma kota." );
+	ENSURE_EQUALS( "initialization failed", s, "Ala ma kota." );
+	s.pop_back();
+	ENSURE_EQUALS( "pop_back failed", s, "Ala ma kota" );
+	s.pop_back();
+	ENSURE_EQUALS( "pop_back failed", s, "Ala ma kot" );
+	s.pop_back();
+	ENSURE_EQUALS( "pop_back failed", s, "Ala ma ko" );
+	s.pop_back();
+	ENSURE_EQUALS( "pop_back failed", s, "Ala ma k" );
+	s.pop_back();
+	ENSURE_EQUALS( "pop_back failed", s, "Ala ma " );
+	s.pop_back();
+	ENSURE_EQUALS( "pop_back failed", s, "Ala ma" );
+	s.pop_back();
+	ENSURE_EQUALS( "pop_back failed", s, "Ala m" );
+	s.pop_back();
+	ENSURE_EQUALS( "pop_back failed", s, "Ala " );
+	s.pop_back();
+	ENSURE_EQUALS( "pop_back failed", s, "Ala" );
+	s.pop_back();
+	ENSURE_EQUALS( "pop_back failed", s, "Al" );
+	s.pop_back();
+	ENSURE_EQUALS( "pop_back failed", s, "A" );
+	s.pop_back();
+	ENSURE_EQUALS( "pop_back failed", s, "" );
+TUT_TEARDOWN()
+
 }
 
