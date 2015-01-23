@@ -789,9 +789,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule booleanOr( booleanAnd >> *( string( "||" ) >> booleanAnd ) );
 	HRule booleanXor( booleanOr >> -( string( "^^" ) >> booleanOr ) );
 	HRule value( booleanXor );
-	subscript %= ( ( functionCall | name | string_literal ) >> +( '[' >> ( subscript | value ) >> ']' ) );
-	HRule assignment( *( ( subscript | name ) >> '=' ) >> value );
-	expression %= assignment;
+	subscript %= ( ( functionCall | name | string_literal ) >> +( '[' >> expression >> ']' ) );
+	expression %= ( *( ( subscript | name ) >> '=' ) >> value );
 	HRule expressionStatement( expression >> ';' );
 	HRule scope;
 	HRule loopScope;
@@ -829,21 +828,20 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"J_ = ( \"return\" >> '(' >> M_ >> ')' >> ';' )",
 		"K_ = ( M_ >> ';' )",
 		"L_ = ( \"if\" >> '(' >> M_ >> ')' >> C_ )",
-		"M_ = ( *( ( O_ | B_ ) >> '=' ) >> P_ )",
+		"M_ = ( *( ( O_ | B_ ) >> '=' ) >> ( P_ >> -( \"^^\" >> P_ ) ) )",
 		"N_ = ( '{' >> *( D_ | E_ | F_ | G_ | H_ | I_ | J_ | K_ | C_ ) >> '}' )",
-		"O_ = ( ( Q_ | B_ | string_literal ) >> +( '[' >> ( O_ | P_ ) >> ']' ) )",
-		"P_ = ( R_ >> -( \"^^\" >> R_ ) )",
+		"O_ = ( ( Q_ | B_ | string_literal ) >> +( '[' >> M_ >> ']' ) )",
+		"P_ = ( R_ >> *( \"||\" >> R_ ) )",
 		"Q_ = ( B_ >> '(' >> -( M_ >> *( ',' >> M_ ) ) >> ')' )",
-		"R_ = ( S_ >> *( \"||\" >> S_ ) )",
-		"S_ = ( T_ >> *( \"&&\" >> T_ ) )",
-		"T_ = ( U_ >> -( ( \"==\" | \"!=\" ) >> U_ ) )",
-		"U_ = ( V_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> V_ ) )",
-		"V_ = ( W_ >> *( '+' >> W_ ) )",
-		"W_ = ( X_ >> *( '*' >> X_ ) )",
-		"X_ = ( Y_ >> *( '^' >> Y_ ) )",
+		"R_ = ( S_ >> *( \"&&\" >> S_ ) )",
+		"S_ = ( T_ >> -( ( \"==\" | \"!=\" ) >> T_ ) )",
+		"T_ = ( U_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> U_ ) )",
+		"U_ = ( V_ >> *( '+' >> V_ ) )",
+		"V_ = ( W_ >> *( '*' >> W_ ) )",
+		"W_ = ( X_ >> *( '^' >> X_ ) )",
+		"X_ = ( ( '-' >> Y_ ) | Y_ )",
 		"Y_ = ( ( '-' >> Z_ ) | Z_ )",
-		"Z_ = ( ( '-' >> AA_ ) | AA_ )",
-		"AA_ = ( ( '|' >> M_ >> '|' ) | ( '(' >> M_ >> ')' ) | real | ( '$' >> real ) | integer | character_literal | O_ | string_literal | Q_ | \"none\" | \"true\" | \"false\" | B_ )"
+		"Z_ = ( ( '|' >> M_ >> '|' ) | ( '(' >> M_ >> ')' ) | real | ( '$' >> real ) | integer | character_literal | O_ | string_literal | Q_ | \"none\" | \"true\" | \"false\" | B_ )"
 	};
 	cout << "hg:" << endl;
 	HGrammarDescription gd( hg );
