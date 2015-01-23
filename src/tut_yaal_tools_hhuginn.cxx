@@ -146,9 +146,10 @@ TUT_UNIT_TEST( "grammar test" )
 		"power = ( booleanNot >> *( '^' >> booleanNot ) )",
 		"booleanNot = ( ( '!' >> negation ) | negation )",
 		"negation = ( ( '-' >> atom ) | atom )",
-		"atom = ( absoluteValue | parenthesis | real | integer | character_literal | subscript | stringLiteral | functionCall | none | true | false | variableGetter )",
+		"atom = ( absoluteValue | parenthesis | real | numberLiteral | integer | character_literal | subscript | stringLiteral | functionCall | none | true | false | variableGetter )",
 		"absoluteValue = ( '|' >> expression >> '|' )",
 		"parenthesis = ( '(' >> expression >> ')' )",
+		"numberLiteral = ( '$' >> real )",
 		"none = \"none\"",
 		"true = \"true\"",
 		"false = \"false\""

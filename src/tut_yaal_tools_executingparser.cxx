@@ -776,7 +776,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule literalNone( e_p::constant( "none" ) );
 	HRule booleanLiteralTrue( e_p::constant( "true" ) );
 	HRule booleanLiteralFalse( e_p::constant( "false" ) );
-	HRule atom( absoluteValue | parenthesis | real | integer | character_literal | subscript | string_literal | functionCall | literalNone | booleanLiteralTrue | booleanLiteralFalse | name );
+	HRule number( '$' >> real );
+	HRule atom( absoluteValue | parenthesis | real | number | integer | character_literal | subscript | string_literal | functionCall | literalNone | booleanLiteralTrue | booleanLiteralFalse | name );
 	HRule negation( ( '-' >> atom ) | atom );
 	HRule booleanNot( ( '-' >> negation ) | negation );
 	HRule power( booleanNot >> ( * ( '^' >> booleanNot ) ) );
@@ -842,7 +843,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"X_ = ( Y_ >> *( '^' >> Y_ ) )",
 		"Y_ = ( ( '-' >> Z_ ) | Z_ )",
 		"Z_ = ( ( '-' >> AA_ ) | AA_ )",
-		"AA_ = ( ( '|' >> M_ >> '|' ) | ( '(' >> M_ >> ')' ) | real | integer | character_literal | O_ | string_literal | Q_ | \"none\" | \"true\" | \"false\" | B_ )"
+		"AA_ = ( ( '|' >> M_ >> '|' ) | ( '(' >> M_ >> ')' ) | real | ( '$' >> real ) | integer | character_literal | O_ | string_literal | Q_ | \"none\" | \"true\" | \"false\" | B_ )"
 	};
 	cout << "hg:" << endl;
 	HGrammarDescription gd( hg );
