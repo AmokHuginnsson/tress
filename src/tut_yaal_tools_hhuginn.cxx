@@ -597,9 +597,30 @@ char const progCompileErr0[] =
 	"}\n"
 ;
 
+char const progCompileErr00[] =
+	"main() {\n"
+	"\tx = 1 - 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
 char const progCompileErr1[] =
 	"main() {\n"
 	"\tx = 1 * 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr10[] =
+	"main() {\n"
+	"\tx = 1 / 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr11[] =
+	"main() {\n"
+	"\tx = 1 % 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
@@ -639,6 +660,27 @@ char const progCompileErr6[] =
 	"}\n"
 ;
 
+char const progCompileErr7[] =
+	"main() {\n"
+	"\tx = 1 != 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr8[] =
+	"main() {\n"
+	"\tx = 1 < 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr9[] =
+	"main() {\n"
+	"\tx = 1 > 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn::test_compile( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -656,22 +698,32 @@ void tut_yaal_tools_hhuginn::test_compile( prog_src_t prog_, int const err_[3], 
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
+		progCompileErr00,
 		progCompileErr1,
+		progCompileErr10,
+		progCompileErr11,
 		progCompileErr2,
 		progCompileErr3,
 		progCompileErr4,
 		progCompileErr5,
 		progCompileErr6,
+		progCompileErr7,
 		NULL
 	};
 	int const err[][3] = {
 		{ 16, 2, 8 },   // 0
+		{ 16, 2, 8 },   // 00
 		{ 16, 2, 8 },   // 1
+		{ 16, 2, 8 },   // 10
+		{ 16, 2, 8 },   // 11
 		{ 16, 2, 8 },   // 2
 		{ 20, 2, 12 },  // 3
 		{ 22, 2, 14 },  // 4
 		{ 18, 2, 10 },  // 5
 		{ 16, 2, 8 },   // 6
+		{ 16, 2, 8 },   // 7
+		{ 16, 2, 8 },   // 8
+		{ 16, 2, 8 },   // 9
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
