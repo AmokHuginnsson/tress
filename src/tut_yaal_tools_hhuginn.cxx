@@ -108,13 +108,24 @@ TUT_UNIT_TEST( "grammar test" )
 	HGrammarDescription gd( hg );
 
 	char const expected[][200] = {
-		"huginnGrammar = +functionDefinition",
+		"huginnGrammar = +( classDefinition | functionDefinition )",
+		"classDefinition = ( \"class\" >> classIdentifier >> -( ':' >> baseIdentifier ) >> '{' >> +( field | functionDefinition ) >> '}' )",
 		"functionDefinition = ( functionDefinitionIdentifier >> '(' >> -nameList >> ')' >> scope )",
+		"classIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
+		"baseIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
+		"field = ( fieldIdentifier >> '=' >> literal >> ';' )",
 		"functionDefinitionIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"nameList = ( parameter >> *( ',' >> parameter ) )",
 		"scope = ( '{' >> *statement >> '}' )",
+		"fieldIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
+		"literal = ( real | numberLiteral | integer | character_literal | stringLiteral | none | true | false )",
 		"parameter = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"statement = ( ifStatement | whileStatement | forStatement | switchStatement | breakStatement | continueStatement | returnStatement | expressionStatement | scope )",
+		"numberLiteral = ( '$' >> real )",
+		"stringLiteral = string_literal",
+		"none = \"none\"",
+		"true = \"true\"",
+		"false = \"false\"",
 		"ifStatement = ( ifClause >> *( \"else\" >> ifClause ) >> -( \"else\" >> scope ) )",
 		"whileStatement = ( \"while\" >> '(' >> expression >> ')' >> scope )",
 		"forStatement = ( \"for\" >> '(' >> forIdentifier >> ':' >> expression >> ')' >> scope )",
@@ -133,7 +144,6 @@ TUT_UNIT_TEST( "grammar test" )
 		"value = ( booleanOr >> -( \"^^\" >> booleanOr ) )",
 		"functionCall = ( functionCallIdentifier >> '(' >> -argList >> ')' )",
 		"variableGetter = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"stringLiteral = string_literal",
 		"booleanOr = ( booleanAnd >> *( \"||\" >> booleanAnd ) )",
 		"functionCallIdentifier = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"argList = ( argument >> *( ',' >> argument ) )",
@@ -148,11 +158,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"negation = ( ( '-' >> atom ) | atom )",
 		"atom = ( absoluteValue | parenthesis | real | numberLiteral | integer | character_literal | subscript | stringLiteral | functionCall | none | true | false | variableGetter )",
 		"absoluteValue = ( '|' >> expression >> '|' )",
-		"parenthesis = ( '(' >> expression >> ')' )",
-		"numberLiteral = ( '$' >> real )",
-		"none = \"none\"",
-		"true = \"true\"",
-		"false = \"false\""
+		"parenthesis = ( '(' >> expression >> ')' )"
 	};
 
 	int i( 0 );

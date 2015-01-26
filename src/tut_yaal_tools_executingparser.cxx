@@ -814,34 +814,42 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	loopScope %= ( '{' >> *loopStatement >> '}' );
 	HRule nameList( name >> ( * ( ',' >> name ) ) );
 	HRule functionDefinition( name >> '(' >> -nameList >> ')' >> scope );
-	HRule hg( + functionDefinition );
+	HRule literal( real | number | integer | character_literal | string_literal | literalNone | booleanLiteralTrue | booleanLiteralFalse );
+	HRule field( name >> '=' >> ( literal ) >> ';' );
+	HRule classDefinition( e_p::constant( "class" ) >> name >> -( ':' >> name ) >> '{' >> +( field | functionDefinition ) >> '}' );
+	HRule hg( + ( classDefinition | functionDefinition ) );
 	char const huginnDesc[][320] = {
-		"A_ = +( B_ >> '(' >> -( B_ >> *( ',' >> B_ ) ) >> ')' >> C_ )",
+		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> ( real | C_ | integer | character_literal | string_literal | D_ | E_ | F_ ) >> ';' ) | G_ ) >> '}' ) | G_ )",
 		"B_ = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"C_ = ( '{' >> *( D_ | E_ | F_ | G_ | H_ | I_ | J_ | K_ | C_ ) >> '}' )",
-		"D_ = ( L_ >> *( \"else\" >> L_ ) >> -( \"else\" >> C_ ) )",
-		"E_ = ( \"while\" >> '(' >> M_ >> ')' >> N_ )",
-		"F_ = ( \"for\" >> '(' >> B_ >> ':' >> M_ >> ')' >> N_ )",
-		"G_ = ( \"switch\" >> '(' >> M_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> C_ ) >> '}' )",
-		"H_ = ( \"break\" >> ';' )",
-		"I_ = ( \"continue\" >> ';' )",
-		"J_ = ( \"return\" >> '(' >> M_ >> ')' >> ';' )",
-		"K_ = ( M_ >> ';' )",
-		"L_ = ( \"if\" >> '(' >> M_ >> ')' >> C_ )",
-		"M_ = ( *( ( O_ | B_ ) >> '=' ) >> ( P_ >> -( \"^^\" >> P_ ) ) )",
-		"N_ = ( '{' >> *( D_ | E_ | F_ | G_ | H_ | I_ | J_ | K_ | C_ ) >> '}' )",
-		"O_ = ( ( Q_ | B_ | string_literal ) >> +( '[' >> M_ >> ']' ) )",
-		"P_ = ( R_ >> *( \"||\" >> R_ ) )",
-		"Q_ = ( B_ >> '(' >> -( M_ >> *( ',' >> M_ ) ) >> ')' )",
-		"R_ = ( S_ >> *( \"&&\" >> S_ ) )",
-		"S_ = ( T_ >> -( ( \"==\" | \"!=\" ) >> T_ ) )",
-		"T_ = ( U_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> U_ ) )",
-		"U_ = ( V_ >> *( '+' >> V_ ) )",
-		"V_ = ( W_ >> *( '*' >> W_ ) )",
-		"W_ = ( X_ >> *( '^' >> X_ ) )",
-		"X_ = ( ( '-' >> Y_ ) | Y_ )",
-		"Y_ = ( ( '-' >> Z_ ) | Z_ )",
-		"Z_ = ( ( '|' >> M_ >> '|' ) | ( '(' >> M_ >> ')' ) | real | ( '$' >> real ) | integer | character_literal | O_ | string_literal | Q_ | \"none\" | \"true\" | \"false\" | B_ )"
+		"C_ = ( '$' >> real )",
+		"D_ = \"none\"",
+		"E_ = \"true\"",
+		"F_ = \"false\"",
+		"G_ = ( B_ >> '(' >> -( B_ >> *( ',' >> B_ ) ) >> ')' >> H_ )",
+		"H_ = ( '{' >> *( I_ | J_ | K_ | L_ | M_ | N_ | O_ | P_ | H_ ) >> '}' )",
+		"I_ = ( Q_ >> *( \"else\" >> Q_ ) >> -( \"else\" >> H_ ) )",
+		"J_ = ( \"while\" >> '(' >> R_ >> ')' >> S_ )",
+		"K_ = ( \"for\" >> '(' >> B_ >> ':' >> R_ >> ')' >> S_ )",
+		"L_ = ( \"switch\" >> '(' >> R_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> H_ ) >> '}' )",
+		"M_ = ( \"break\" >> ';' )",
+		"N_ = ( \"continue\" >> ';' )",
+		"O_ = ( \"return\" >> '(' >> R_ >> ')' >> ';' )",
+		"P_ = ( R_ >> ';' )",
+		"Q_ = ( \"if\" >> '(' >> R_ >> ')' >> H_ )",
+		"R_ = ( *( ( T_ | B_ ) >> '=' ) >> ( U_ >> -( \"^^\" >> U_ ) ) )",
+		"S_ = ( '{' >> *( I_ | J_ | K_ | L_ | M_ | N_ | O_ | P_ | H_ ) >> '}' )",
+		"T_ = ( ( V_ | B_ | string_literal ) >> +( '[' >> R_ >> ']' ) )",
+		"U_ = ( W_ >> *( \"||\" >> W_ ) )",
+		"V_ = ( B_ >> '(' >> -( R_ >> *( ',' >> R_ ) ) >> ')' )",
+		"W_ = ( X_ >> *( \"&&\" >> X_ ) )",
+		"X_ = ( Y_ >> -( ( \"==\" | \"!=\" ) >> Y_ ) )",
+		"Y_ = ( Z_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> Z_ ) )",
+		"Z_ = ( AA_ >> *( '+' >> AA_ ) )",
+		"AA_ = ( AB_ >> *( '*' >> AB_ ) )",
+		"AB_ = ( AC_ >> *( '^' >> AC_ ) )",
+		"AC_ = ( ( '-' >> AD_ ) | AD_ )",
+		"AD_ = ( ( '-' >> AE_ ) | AE_ )",
+		"AE_ = ( ( '|' >> R_ >> '|' ) | ( '(' >> R_ >> ')' ) | real | C_ | integer | character_literal | T_ | string_literal | V_ | D_ | E_ | F_ | B_ )"
 	};
 	cout << "hg:" << endl;
 	HGrammarDescription gd( hg );
