@@ -983,6 +983,19 @@ TUT_UNIT_TEST( "set variable" )
 	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "if" )
+	ENSURE_EQUALS( "if (true) failed", execute( "main(){x=2;if(x>0){x=x*x;}return(string(x));}" ), "4" );
+	ENSURE_EQUALS( "if (false) failed", execute( "main(){x=2;if(x>2){x=x*x;}return(string(x));}" ), "2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "while" )
+	ENSURE_EQUALS( "while failed", execute( "main(){x=2;while(x<100){x=x*x;}return(string(x));}" ), "256" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "for" )
+	ENSURE_EQUALS( "while failed", execute( "main(){x=list(1,2,3);s=0;for(e:x){s=s+e;}return(string(s));}" ), "6" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
