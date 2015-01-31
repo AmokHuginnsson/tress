@@ -771,13 +771,14 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule absoluteValue( '|' >> expression >> '|' );
 	HRule parenthesis( '(' >> expression >> ')' );
 	HRule argList( expression >> ( * ( ',' >> expression ) ) );
-	HRule functionCall( name >> '(' >> -argList >> ')' );
-	HRule subscript;
+	HRule functionCallOperator( '(' >> -argList >> ')' );
+	HRule subscriptOperator( '[' >> expression >> ']' );
 	HRule literalNone( e_p::constant( "none" ) );
 	HRule booleanLiteralTrue( e_p::constant( "true" ) );
 	HRule booleanLiteralFalse( e_p::constant( "false" ) );
 	HRule number( '$' >> real );
-	HRule atom( absoluteValue | parenthesis | real | number | integer | character_literal | subscript | string_literal | functionCall | literalNone | booleanLiteralTrue | booleanLiteralFalse | name );
+	HRule dereference( name >> *( subscriptOperator | functionCallOperator ) );
+	HRule atom( absoluteValue | parenthesis | real | number | integer | character_literal | literalNone | booleanLiteralTrue | booleanLiteralFalse | dereference | ( string_literal >> -subscriptOperator ) );
 	HRule negation( ( '-' >> atom ) | atom );
 	HRule booleanNot( ( '-' >> negation ) | negation );
 	HRule power( booleanNot >> ( * ( '^' >> booleanNot ) ) );
@@ -789,8 +790,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule booleanOr( booleanAnd >> *( string( "||" ) >> booleanAnd ) );
 	HRule booleanXor( booleanOr >> -( string( "^^" ) >> booleanOr ) );
 	HRule value( booleanXor );
-	subscript %= ( ( functionCall | name | string_literal ) >> +( '[' >> expression >> ']' ) );
-	expression %= ( *( ( subscript | name ) >> '=' ) >> value );
+	HRule subscript( name >> +( subscriptOperator | functionCallOperator ) );
+	expression %= ( *( ( ( subscript | name ) >> '=' ) ^ '=' ) >> value );
 	HRule expressionStatement( expression >> ';' );
 	HRule scope;
 	HRule loopScope;
@@ -836,11 +837,11 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"O_ = ( \"return\" >> '(' >> R_ >> ')' >> ';' )",
 		"P_ = ( R_ >> ';' )",
 		"Q_ = ( \"if\" >> '(' >> R_ >> ')' >> H_ )",
-		"R_ = ( *( ( T_ | B_ ) >> '=' ) >> ( U_ >> -( \"^^\" >> U_ ) ) )",
+		"R_ = ( *( ( ( ( B_ >> +( T_ | U_ ) ) | B_ ) >> '=' ) ^ '=' ) >> ( V_ >> -( \"^^\" >> V_ ) ) )",
 		"S_ = ( '{' >> *( I_ | J_ | K_ | L_ | M_ | N_ | O_ | P_ | H_ ) >> '}' )",
-		"T_ = ( ( V_ | B_ | string_literal ) >> +( '[' >> R_ >> ']' ) )",
-		"U_ = ( W_ >> *( \"||\" >> W_ ) )",
-		"V_ = ( B_ >> '(' >> -( R_ >> *( ',' >> R_ ) ) >> ')' )",
+		"T_ = ( '[' >> R_ >> ']' )",
+		"U_ = ( '(' >> -( R_ >> *( ',' >> R_ ) ) >> ')' )",
+		"V_ = ( W_ >> *( \"||\" >> W_ ) )",
 		"W_ = ( X_ >> *( \"&&\" >> X_ ) )",
 		"X_ = ( Y_ >> -( ( \"==\" | \"!=\" ) >> Y_ ) )",
 		"Y_ = ( Z_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> Z_ ) )",
@@ -849,7 +850,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AB_ = ( AC_ >> *( '^' >> AC_ ) )",
 		"AC_ = ( ( '-' >> AD_ ) | AD_ )",
 		"AD_ = ( ( '-' >> AE_ ) | AE_ )",
-		"AE_ = ( ( '|' >> R_ >> '|' ) | ( '(' >> R_ >> ')' ) | real | C_ | integer | character_literal | T_ | string_literal | V_ | D_ | E_ | F_ | B_ )"
+		"AE_ = ( ( '|' >> R_ >> '|' ) | ( '(' >> R_ >> ')' ) | real | C_ | integer | character_literal | D_ | E_ | F_ | ( B_ >> *( T_ | U_ ) ) | ( string_literal >> -T_ ) )"
 	};
 	cout << "hg:" << endl;
 	HGrammarDescription gd( hg );
