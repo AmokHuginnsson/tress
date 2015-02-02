@@ -91,9 +91,9 @@ hcore::HString const& tut_yaal_tools_hhuginn::execute( hcore::HString const& sou
 	_sourceCache.set_buffer( source_ );
 	h.load( _sourceCache );
 	h.preprocess();
-	h.parse();
-	h.compile();
-	h.execute();
+	ENSURE( "parse failed", h.parse() );
+	ENSURE( "compilation failed", h.compile() );
+	ENSURE( "execution failed", h.execute() );
 	HHuginn::value_t res( h.result() );
 	ENSURE_EQUALS( "bad result type", res->type(), HHuginn::TYPE::STRING );
 	_resultCache.assign( static_cast<HHuginn::HString*>( res.raw() )->value() );
@@ -832,6 +832,12 @@ char const progExecuteErr10[] =
 	"}\n"
 ;
 
+char const progExecuteErr11[] =
+	"foo() {\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -860,6 +866,7 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr8,
 		progExecuteErr9,
 		progExecuteErr10,
+		progExecuteErr11,
 		NULL
 	};
 	int const err[][3] = {
@@ -870,10 +877,11 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 24, 3, 8 },   // 4
 		{ 24, 3, 8 },   // 5
 		{ 24, 3, 8 },   // 6
-		{ 24, 3, 8 },  // 7
-		{ 24, 3, 8 },  // 8
+		{ 24, 3, 8 },   // 7
+		{ 24, 3, 8 },   // 8
 		{ 24, 3, 8 },   // 9
 		{ 24, 3, 8 },   // 10
+		{ 0, 1, 1 },    // 11
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
@@ -995,6 +1003,14 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "for" )
 	ENSURE_EQUALS( "while failed", execute( "main(){x=list(1,2,3);s=0;for(e:x){s=s+e;}return(string(s));}" ), "6" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "subscript" )
+	ENSURE_EQUALS( "subscript failed", execute( "main(){x=list(1,2,3);return(string(x[1]));}" ), "2" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "subscript repeat" )
+	ENSURE_EQUALS( "subscript repeat failed", execute( "main(){x=list(list(11,12,13),list(21,22,23),list(31,32,33));return(string(x[1][1]));}" ), "22" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "simple program" )
