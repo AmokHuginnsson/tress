@@ -176,7 +176,6 @@ TUT_UNIT_TEST( "clear" )
 	ENSURE_THROW( "accessing null node-proxy", x.get_root().get_type(), HFailedAssertion );
 TUT_TEARDOWN()
 
-
 TUT_UNIT_TEST( "build, save, load" )
 	HXml x;
 	static char const* const ROOT = "root";
@@ -242,6 +241,31 @@ TUT_UNIT_TEST( "apply stylesheet" )
 	_xml.apply_style( "data/style.xml" );
 	_xml.parse();
 	std::cout << _xml;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "build, apply stylesheet" )
+	HXml x;
+	static char const* const ROOT = "root";
+	static char const* const NODE = "node";
+	static char const* const CHILD = "my_item";
+	static char const* const PROP = "prop";
+	static char const* const PROP_VALUE = "prop_value";
+	static char const* const OUT_PRE_PATH = "out/pre_style.xml";
+	static char const* const OUT_POST_PATH = "out/post_style.xml";
+	x.create_root( ROOT );
+	HXml::HNodeProxy n = x.get_root();
+	n.add_node( HXml::HNode::TYPE::NODE, NODE );
+	HXml::HIterator it = n.add_node( HXml::HNode::TYPE::NODE, NODE );
+	HXml::HIterator child = (*it).add_node( HXml::HNode::TYPE::NODE, CHILD );
+	(*child).properties().insert( yaal::hcore::make_pair( PROP, PROP_VALUE ) );
+	n.copy_node( *it );
+	x.save( tools::ensure( HStreamInterface::ptr_t( new HFile( OUT_PRE_PATH, HFile::OPEN::WRITING ) ) ) );
+	x.apply_style( "data/style.xml" );
+	x.parse();
+	x.save( tools::ensure( HStreamInterface::ptr_t( new HFile( OUT_POST_PATH, HFile::OPEN::WRITING ) ) ) );
+	HXml y;
+	y.load( HStreamInterface::ptr_t( new HFile( OUT_POST_PATH, HFile::OPEN::READING ) ) );
+	ENSURE_EQUALS( "DOMs differ", x, y );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "init, parse, apply, save" )
