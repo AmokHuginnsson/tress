@@ -1005,6 +1005,27 @@ TUT_UNIT_TEST( "for" )
 	ENSURE_EQUALS( "while failed", execute( "main(){x=list(1,2,3);s=0;for(e:x){s=s+e;}return(string(s));}" ), "6" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "switch" )
+	ENSURE_EQUALS( "switch (no match, no default) failed", execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}}return(x);}" ), "x" );
+	ENSURE_EQUALS( "switch (no match, with default) failed", execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}default:{x=\"y\";}}return(x);}" ), "y" );
+	ENSURE_EQUALS( "switch (match, fallthrough, no default) failed", execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}case(1):{x=x+\"y\";}case(2):{x=x+\"z\";}}return(x);}" ), "xyz" );
+	ENSURE_EQUALS(
+		"switch (match, fallthrough, default) failed",
+		execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}case(1):{x=x+\"y\";}case(2):{x=x+\"z\";}default:{x=x+\"!\";}}return(x);}" ),
+		"xyz!"
+	);
+	ENSURE_EQUALS(
+		"switch (match, no fallthrough, no default) failed",
+		execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}break;case(1):{x=x+\"y\";}break;case(2):{x=x+\"z\";}break;}return(x);}" ),
+		"xy"
+	);
+	ENSURE_EQUALS(
+		"switch (match, no fallthrough, default) failed",
+		execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}break;case(1):{x=x+\"y\";}break;case(2):{x=x+\"z\";}break;default:{x=x+\"!\";}}return(x);}" ),
+		"xy"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "subscript" )
 	ENSURE_EQUALS( "subscript failed", execute( "main(){x=list(1,2,3);return(string(x[1]));}" ), "2" );
 TUT_TEARDOWN()
