@@ -1026,6 +1026,10 @@ TUT_UNIT_TEST( "switch" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "map()" )
+	ENSURE_EQUALS( "map() failed", execute( "main(){x=map();x[\"Ala\"]=0;x[\"ma\"]=1;x[\"kota.\"]=2;v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ), "Ala0kota.2ma1" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "subscript" )
 	ENSURE_EQUALS( "subscript failed", execute( "main(){x=list(1,2,3);return(string(x[1]));}" ), "2" );
 TUT_TEARDOWN()
