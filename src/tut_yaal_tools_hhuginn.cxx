@@ -107,7 +107,7 @@ TUT_UNIT_TEST( "grammar test" )
 	HRule hg( h.make_engine() );
 	HGrammarDescription gd( hg );
 
-	char const expected[][200] = {
+	char const expected[][280] = {
 		"huginnGrammar = +( classDefinition | functionDefinition )",
 		"classDefinition = ( \"class\" >> classIdentifier >> -( ':' >> baseIdentifier ) >> '{' >> +( field | functionDefinition ) >> '}' )",
 		"functionDefinition = ( functionDefinitionIdentifier >> '(' >> -nameList >> ')' >> scope )",
@@ -151,10 +151,11 @@ TUT_UNIT_TEST( "grammar test" )
 		"power = ( booleanNot >> *( '^' >> booleanNot ) )",
 		"booleanNot = ( ( '!' >> negation ) | negation )",
 		"negation = ( ( '-' >> atom ) | atom )",
-		"atom = ( absoluteValue | parenthesis | real | numberLiteral | integer | character_literal | none | true | false | dereference | ( stringLiteral >> -subscriptOperator ) )",
+		"atom = ( absoluteValue | parenthesis | real | numberLiteral | integer | character_literal | ( listLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) ) | none | true | false | dereference | ( stringLiteral >> -subscriptOperator ) )",
 		"absoluteValue = ( '|' >> expression >> '|' )",
 		"parenthesis = ( '(' >> expression >> ')' )",
 		"numberLiteral = ( '$' >> real )",
+		"listLiteral = ( '[' >> -argList >> ']' )",
 		"none = \"none\"",
 		"true = \"true\"",
 		"false = \"false\"",
@@ -1024,6 +1025,12 @@ TUT_UNIT_TEST( "switch" )
 		execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}break;case(1):{x=x+\"y\";}break;case(2):{x=x+\"z\";}break;default:{x=x+\"!\";}}return(x);}" ),
 		"xy"
 	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "list()" )
+	ENSURE_EQUALS( "list failed (explicit)", execute( "main(){x=list(\"a\",\"b\",\"c\");v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ), "3abc" );
+	ENSURE_EQUALS( "list failed (literal)", execute( "main(){x=[\"a\",\"b\",\"c\"];v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ), "3abc" );
+	ENSURE_EQUALS( "list failed (crazy)", execute( "f(a){return(\"X\"+a+\"X\");}main(){return([f][0](\"hi\"));}" ), "XhiX" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "map()" )
