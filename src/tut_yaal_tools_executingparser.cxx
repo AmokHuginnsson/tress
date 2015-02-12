@@ -790,7 +790,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule booleanAnd( equals >> *( "&&" >> equals ) );
 	HRule booleanOr( booleanAnd >> *( string( "||" ) >> booleanAnd ) );
 	HRule booleanXor( booleanOr >> -( string( "^^" ) >> booleanOr ) );
-	HRule value( booleanXor );
+	HRule ternary( booleanXor >> -( '?' >> expression >> ':' >> expression ) );
+	HRule value( ternary );
 	HRule subscript( name >> +( subscriptOperator | functionCallOperator ) );
 	expression %= ( *( ( ( subscript | name ) >> '=' ) ^ '=' ) >> value );
 	HRule expressionStatement( expression >> ';' );
@@ -823,7 +824,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	char const huginnDesc[][320] = {
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ )",
 		"B_ = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"C_ = ( *( ( ( ( B_ >> +( E_ | F_ ) ) | B_ ) >> '=' ) ^ '=' ) >> ( G_ >> -( \"^^\" >> G_ ) ) )",
+		"C_ = ( *( ( ( ( B_ >> +( E_ | F_ ) ) | B_ ) >> '=' ) ^ '=' ) >> ( ( G_ >> -( \"^^\" >> G_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
 		"D_ = ( B_ >> '(' >> -( H_ >> *( ',' >> H_ ) ) >> ')' >> I_ )",
 		"E_ = ( '[' >> C_ >> ']' )",
 		"F_ = ( '(' >> -J_ >> ')' )",
