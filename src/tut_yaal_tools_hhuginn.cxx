@@ -107,7 +107,7 @@ TUT_UNIT_TEST( "grammar test" )
 	HRule hg( h.make_engine() );
 	HGrammarDescription gd( hg );
 
-	char const expected[][360] = {
+	char const expected[][370] = {
 		"huginnGrammar = +( classDefinition | functionDefinition )",
 		"classDefinition = ( \"class\" >> classIdentifier >> -( ':' >> baseIdentifier ) >> '{' >> +( field | functionDefinition ) >> '}' )",
 		"functionDefinition = ( functionDefinitionIdentifier >> '(' >> -nameList >> ')' >> scope )",
@@ -152,7 +152,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"power = ( booleanNot >> *( '^' >> booleanNot ) )",
 		"booleanNot = ( ( '!' >> negation ) | negation )",
 		"negation = ( ( '-' >> atom ) | atom )",
-		"atom = ( absoluteValue | parenthesis | real | numberLiteral | integer | character_literal | ( listLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) ) | ( mapLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) ) | none | true | false | dereference | ( stringLiteral >> -subscriptOperator ) )",
+		"atom = ( absoluteValue | parenthesis | real | numberLiteral | integer | character_literal | ( listLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) ) | ( mapLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) ) | none | true | false | dereference | ( stringLiteral >> -subscriptOperator ) | lambda )",
 		"absoluteValue = ( '|' >> expression >> '|' )",
 		"parenthesis = ( '(' >> expression >> ')' )",
 		"numberLiteral = ( '$' >> real )",
@@ -163,6 +163,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"false = \"false\"",
 		"dereference = ( reference >> *( subscriptOperator | functionCallOperator ) )",
 		"stringLiteral = string_literal",
+		"lambda = ( '@' >> '(' >> -nameList >> ')' >> scope )",
 		"mapLiteralElement = ( argument >> ':' >> argument )"
 	};
 
