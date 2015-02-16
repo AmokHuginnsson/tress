@@ -107,7 +107,7 @@ TUT_UNIT_TEST( "grammar test" )
 	HRule hg( h.make_engine() );
 	HGrammarDescription gd( hg );
 
-	char const expected[][280] = {
+	char const expected[][360] = {
 		"huginnGrammar = +( classDefinition | functionDefinition )",
 		"classDefinition = ( \"class\" >> classIdentifier >> -( ':' >> baseIdentifier ) >> '{' >> +( field | functionDefinition ) >> '}' )",
 		"functionDefinition = ( functionDefinitionIdentifier >> '(' >> -nameList >> ')' >> scope )",
@@ -152,16 +152,18 @@ TUT_UNIT_TEST( "grammar test" )
 		"power = ( booleanNot >> *( '^' >> booleanNot ) )",
 		"booleanNot = ( ( '!' >> negation ) | negation )",
 		"negation = ( ( '-' >> atom ) | atom )",
-		"atom = ( absoluteValue | parenthesis | real | numberLiteral | integer | character_literal | ( listLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) ) | none | true | false | dereference | ( stringLiteral >> -subscriptOperator ) )",
+		"atom = ( absoluteValue | parenthesis | real | numberLiteral | integer | character_literal | ( listLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) ) | ( mapLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) ) | none | true | false | dereference | ( stringLiteral >> -subscriptOperator ) )",
 		"absoluteValue = ( '|' >> expression >> '|' )",
 		"parenthesis = ( '(' >> expression >> ')' )",
 		"numberLiteral = ( '$' >> real )",
 		"listLiteral = ( '[' >> -argList >> ']' )",
+		"mapLiteral = ( '{' >> -( mapLiteralElement >> *( ',' >> mapLiteralElement ) ) >> '}' )",
 		"none = \"none\"",
 		"true = \"true\"",
 		"false = \"false\"",
 		"dereference = ( reference >> *( subscriptOperator | functionCallOperator ) )",
-		"stringLiteral = string_literal"
+		"stringLiteral = string_literal",
+		"mapLiteralElement = ( argument >> ':' >> argument )"
 	};
 
 	int i( 0 );
@@ -1035,7 +1037,8 @@ TUT_UNIT_TEST( "list()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "map()" )
-	ENSURE_EQUALS( "map() failed", execute( "main(){x=map();x[\"Ala\"]=0;x[\"ma\"]=1;x[\"kota.\"]=2;v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ), "Ala0kota.2ma1" );
+	ENSURE_EQUALS( "map() failed (explicit)", execute( "main(){x=map();x[\"Ala\"]=0;x[\"ma\"]=1;x[\"kota.\"]=2;v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ), "Ala0kota.2ma1" );
+	ENSURE_EQUALS( "map() failed (literal)", execute( "main(){x=map();x={\"Ala\":0,\"ma\":1,\"kota.\":2};v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ), "Ala0kota.2ma1" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "subscript" )
