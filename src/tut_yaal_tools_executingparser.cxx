@@ -785,7 +785,22 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule booleanLiteralFalse( e_p::constant( "false" ) );
 	HRule number( '$' >> real );
 	HRule dereference( name >> *( subscriptOperator | functionCallOperator ) );
-	HRule atom( absoluteValue | parenthesis | real | number | integer | character_literal | ( listLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) ) | ( mapLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) ) | literalNone | booleanLiteralTrue | booleanLiteralFalse | dereference | ( string_literal >> -subscriptOperator ) | lambda );
+	HRule atom(
+	 	absoluteValue
+	 	| parenthesis
+	 	| real
+	 	| number
+	 	| integer
+	 	| character_literal
+	 	| ( listLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) )
+	 	| ( mapLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) )
+	 	| literalNone
+	 	| booleanLiteralTrue
+	 	| booleanLiteralFalse
+	 	| dereference
+	 	| ( string_literal >> -subscriptOperator )
+	 	| ( lambda >> -( functionCallOperator >> * ( subscriptOperator | functionCallOperator ) ) )
+ 	);
 	HRule negation( ( '-' >> atom ) | atom );
 	HRule booleanNot( ( '-' >> negation ) | negation );
 	HRule power( booleanNot >> ( * ( '^' >> booleanNot ) ) );
@@ -824,7 +839,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule field( name >> '=' >> ( expression ) >> ';' );
 	HRule classDefinition( e_p::constant( "class" ) >> name >> -( ':' >> name ) >> '{' >> +( field | functionDefinition ) >> '}' );
 	HRule hg( + ( classDefinition | functionDefinition ) );
-	char const huginnDesc[][370] = {
+	char const huginnDesc[][400] = {
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ )",
 		"B_ = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"C_ = ( *( ( ( ( B_ >> +( E_ | F_ ) ) | B_ ) >> '=' ) ^ '=' ) >> ( ( G_ >> -( \"^^\" >> G_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
@@ -854,7 +869,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AA_ = ( AB_ >> *( '^' >> AB_ ) )",
 		"AB_ = ( ( '-' >> AC_ ) | AC_ )",
 		"AC_ = ( ( '-' >> AD_ ) | AD_ )",
-		"AD_ = ( ( '|' >> C_ >> '|' ) | ( '(' >> C_ >> ')' ) | real | ( '$' >> real ) | integer | character_literal | ( ( '[' >> -J_ >> ']' ) >> -( E_ >> *( E_ | F_ ) ) ) | ( ( '{' >> -( AE_ >> *( ',' >> AE_ ) ) >> '}' ) >> -( E_ >> *( E_ | F_ ) ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> *( E_ | F_ ) ) | ( string_literal >> -E_ ) | ( '@' >> '(' >> -H_ >> ')' >> I_ ) )",
+		"AD_ = ( ( '|' >> C_ >> '|' ) | ( '(' >> C_ >> ')' ) | real | ( '$' >> real ) | integer | character_literal | ( ( '[' >> -J_ >> ']' ) >> -( E_ >> *( E_ | F_ ) ) ) | ( ( '{' >> -( AE_ >> *( ',' >> AE_ ) ) >> '}' ) >> -( E_ >> *( E_ | F_ ) ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> *( E_ | F_ ) ) | ( string_literal >> -E_ ) | ( ( '@' >> '(' >> -H_ >> ')' >> I_ ) >> -( F_ >> *( E_ | F_ ) ) ) )",
 		"AE_ = ( C_ >> ':' >> C_ )"
 	};
 	cout << "hg:" << endl;
