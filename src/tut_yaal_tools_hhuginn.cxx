@@ -134,7 +134,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"returnStatement = ( \"return\" >> -( '(' >> expression >> ')' ) >> ';' )",
 		"expressionStatement = ( expression >> ';' )",
 		"reference = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
-		"subscriptOperator = ( '[' >> expression >> ']' )",
+		"subscriptOperator = ( '[' >> ( ( ':' >> -expression ) | ( expression >> -( ':' >> -expression ) >> ']' ) ) )",
 		"functionCallOperator = ( '(' >> -argList >> ')' )",
 		"ternary = ( ( booleanOr >> -( \"^^\" >> booleanOr ) ) >> -( '?' >> expression >> ':' >> expression ) )",
 		"ifClause = ( \"if\" >> '(' >> expression >> ')' >> scope )",

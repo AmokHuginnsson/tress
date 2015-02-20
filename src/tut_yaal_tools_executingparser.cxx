@@ -779,7 +779,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule nameList( parameter >> ( * ( ',' >> parameter ) ) );
 	HRule scope;
 	HRule lambda( e_p::constant( '@' ) >> '(' >> -nameList >> ')' >> scope );
-	HRule subscriptOperator( '[' >> expression >> ']' );
+	HRule subscriptOperator( '[' >> ( ( ':' >> -expression ) | ( expression >> -( ':' >> -expression ) ) ) >> ']' );
 	HRule literalNone( e_p::constant( "none" ) );
 	HRule booleanLiteralTrue( e_p::constant( "true" ) );
 	HRule booleanLiteralFalse( e_p::constant( "false" ) );
@@ -844,7 +844,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"B_ = regex( \"\\<[a-zA-Z_][a-zA-Z0-9_]*\\>\" )",
 		"C_ = ( *( ( ( ( B_ >> +( E_ | F_ ) ) | B_ ) >> '=' ) ^ '=' ) >> ( ( G_ >> -( \"^^\" >> G_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
 		"D_ = ( B_ >> '(' >> -H_ >> ')' >> I_ )",
-		"E_ = ( '[' >> C_ >> ']' )",
+		"E_ = ( '[' >> ( ( ':' >> -C_ ) | ( C_ >> -( ':' >> -C_ ) ) ) >> ']' )",
 		"F_ = ( '(' >> -J_ >> ')' )",
 		"G_ = ( K_ >> *( \"||\" >> K_ ) )",
 		"H_ = ( L_ >> *( ',' >> L_ ) )",
