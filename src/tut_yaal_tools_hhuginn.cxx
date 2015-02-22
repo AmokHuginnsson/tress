@@ -1031,6 +1031,11 @@ TUT_UNIT_TEST( "switch" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "break;" )
+	ENSURE_EQUALS( "break; failed (while)", execute( "main(){x=0;y=0;while(y<100){y=y+1;if(x>100){break;}x=x+y*y;}return(string(x));}" ), "140" );
+	ENSURE_EQUALS( "break; failed (for)", execute( "main(){x=[\"A\",\"a\",\"B\",\"b\",\"C\",\"c\"];v=\"\";for(e:x){if(size(v)>2){break;}v=v+e;}return(v);}" ), "AaB" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "list()" )
 	ENSURE_EQUALS( "list failed (explicit)", execute( "main(){x=list(\"a\",\"b\",\"c\");v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ), "3abc" );
 	ENSURE_EQUALS( "list failed (literal)", execute( "main(){x=[\"a\",\"b\",\"c\"];v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ), "3abc" );
