@@ -1050,6 +1050,14 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "subscript" )
 	ENSURE_EQUALS( "subscript failed", execute( "main(){x=list(1,2,3);return(string(x[1]));}" ), "2" );
+	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[0]));}" ), "a" );
+	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[25]));}" ), "z" );
+	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[-26]));}" ), "a" );
+	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[-1]));}" ), "z" );
+	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[13]));}" ), "n" );
+	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[-13]));}" ), "n" );
+	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[12]));}" ), "m" );
+	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[-12]));}" ), "o" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "subscript repeat" )
@@ -1058,6 +1066,47 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "function ref" )
 	ENSURE_EQUALS( "function ref failed", execute( "f(){return(\"x\");}g(){return(f);}main(){return(g()());}" ), "x" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "range(slice)" )
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:]);}" ), "abcdefghijklmnopqrstuvwxyz" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:0]);}" ), "" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:1]);}" ), "a" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:2]);}" ), "ab" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:24]);}" ), "abcdefghijklmnopqrstuvwx" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:25]);}" ), "abcdefghijklmnopqrstuvwxy" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:26]);}" ), "abcdefghijklmnopqrstuvwxyz" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[0:]);}" ), "abcdefghijklmnopqrstuvwxyz" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[1:]);}" ), "bcdefghijklmnopqrstuvwxyz" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[2:]);}" ), "cdefghijklmnopqrstuvwxyz" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[24:]);}" ), "yz" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[25:]);}" ), "z" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[26:]);}" ), "" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[1:25]);}" ), "bcdefghijklmnopqrstuvwxy" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[2:24]);}" ), "cdefghijklmnopqrstuvwx" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[4:8]);}" ), "efgh" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:-1]);}" ), "abcdefghijklmnopqrstuvwxy" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:-10]);}" ), "abcdefghijklmnop" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:-100]);}" ), "" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-1:]);}" ), "z" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-10:]);}" ), "qrstuvwxyz" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-100:]);}" ), "abcdefghijklmnopqrstuvwxyz" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-8:-4]);}" ), "stuv" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:100]);}" ), "abcdefghijklmnopqrstuvwxyz" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::]);}" ), "abcdefghijklmnopqrstuvwxyz" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::2]);}" ), "acegikmoqsuwy" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::13]);}" ), "an" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::25]);}" ), "az" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::26]);}" ), "a" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::100]);}" ), "a" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::-1]);}" ), "zyxwvutsrqponmlkjihgfedcba" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::-2]);}" ), "zxvtrpnljhfdb" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::-3]);}" ), "zwtqnkheb" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:20:-1]);}" ), "zyxwv" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-15:-3:2]);}" ), "lnprtv" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-3:-15:-2]);}" ), "xvtrpn" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-4::-1]);}" ), "wvutsrqponmlkjihgfedcba" );
+	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-4::]);}" ), "wxyz" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "simple program" )
