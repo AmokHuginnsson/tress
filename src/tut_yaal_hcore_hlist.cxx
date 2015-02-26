@@ -115,11 +115,12 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list ) {
 	ctr = 0;
 	hook_valid = false;
 	for ( typename T::const_reverse_iterator it = list.rbegin(); it != list.rend(); ++ it, ++ ctr ) {
-		if ( prev( it.base() )._current == list._hook ) {
+		typename T::const_iterator i( prev( it.base() ) );
+		if ( i._current == list._hook ) {
 			hook_valid = true;
 		}
-		ENSURE_EQUALS( "links broken", prev( it.base() )._current->_next->_previous, prev( it.base() )._current );
-		ENSURE_EQUALS( "links broken", prev( it.base() )._current->_previous->_next, prev( it.base() )._current );
+		ENSURE_EQUALS( "links broken", i._current->_next->_previous, i._current );
+		ENSURE_EQUALS( "links broken", i._current->_previous->_next, i._current );
 	}
 	if ( ! ctr && ( list._hook == NULL ) ) {
 		hook_valid = true;
