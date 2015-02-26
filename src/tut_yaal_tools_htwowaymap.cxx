@@ -220,7 +220,7 @@ TUT_UNIT_TEST( "erase() ranged" )
 	ENSURE_EQUALS( "assign failed", twm, twmref );
 	int2int_t::iterator it( twm.begin() );
 	++ it;
-	twm.erase( it, twm.rbegin().base() );
+	twm.erase( it, prev( twm.end() ) );
 	ENSURE_EQUALS( "assign failed", twm, twmref_erased );
 TUT_TEARDOWN()
 

@@ -115,13 +115,15 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list ) {
 	ctr = 0;
 	hook_valid = false;
 	for ( typename T::const_reverse_iterator it = list.rbegin(); it != list.rend(); ++ it, ++ ctr ) {
-		if ( it.base()._current == list._hook )
+		if ( prev( it.base() )._current == list._hook ) {
 			hook_valid = true;
-		ENSURE_EQUALS( "links broken", it.base()._current->_next->_previous, it.base()._current );
-		ENSURE_EQUALS( "links broken", it.base()._current->_previous->_next, it.base()._current );
+		}
+		ENSURE_EQUALS( "links broken", prev( it.base() )._current->_next->_previous, prev( it.base() )._current );
+		ENSURE_EQUALS( "links broken", prev( it.base() )._current->_previous->_next, prev( it.base() )._current );
 	}
-	if ( ! ctr && ( list._hook == NULL ) )
+	if ( ! ctr && ( list._hook == NULL ) ) {
 		hook_valid = true;
+	}
 	ENSURE_EQUALS( "backward cycle", ctr, list._size );
 	ENSURE( "no hook", hook_valid );
 	return;
@@ -440,14 +442,20 @@ TUT_UNIT_TEST( "insert" )
 	ENSURE_EQUALS( "bad iterator", *it, 'a' );
 	it = l.insert( l.rbegin().base(), 'b' );
 	check_consistency( l );
-	ENSURE_EQUALS( "insert failed", _stringifier.to_string<char>( l ), "a12b3" );
+	ENSURE_EQUALS( "insert failed", _stringifier.to_string<char>( l ), "a123b" );
 	ENSURE_EQUALS( "list malformed", l.size(), 5 );
 	check_consistency( l );
 	ENSURE_EQUALS( "bad iterator", *it, 'b' );
+	it = l.insert( prev( l.end() ), 'Q' );
+	check_consistency( l );
+	ENSURE_EQUALS( "insert failed", _stringifier.to_string<char>( l ), "a123Qb" );
+	ENSURE_EQUALS( "list malformed", l.size(), 6 );
+	check_consistency( l );
+	ENSURE_EQUALS( "bad iterator", *it, 'Q' );
 	it = l.insert( l.end(), 'x' );
 	check_consistency( l );
-	ENSURE_EQUALS( "insert failed", _stringifier.to_string<char>( l ), "a12b3x" );
-	ENSURE_EQUALS( "list malformed", l.size(), 6 );
+	ENSURE_EQUALS( "insert failed", _stringifier.to_string<char>( l ), "a123Qbx" );
+	ENSURE_EQUALS( "list malformed", l.size(), 7 );
 	check_consistency( l );
 	ENSURE_EQUALS( "bad iterator", *it, 'x' );
 TUT_TEARDOWN()
@@ -648,7 +656,7 @@ void tut_yaal_hcore_hlist::erase_test_1( tut_yaal_hcore_hlist::list_t& l ) {
 }
 
 void tut_yaal_hcore_hlist::erase_test_2( tut_yaal_hcore_hlist::list_t& l ) {
-	tut_yaal_hcore_hlist::list_t::iterator it = l.erase( l.rbegin().base() );
+	tut_yaal_hcore_hlist::list_t::iterator it = l.erase( prev( l.end() ) );
 	tut_yaal_hcore_hlist::check_consistency( l );
 	ENSURE_EQUALS( "erase2 failed", tut_yaal_hcore_hlist::_stringifier.to_string<char>( l ), "12345" );
 	ENSURE_EQUALS( "erase2 failed", l.size(), 5 );
@@ -793,7 +801,7 @@ TUT_UNIT_TEST( "exchange" )
 	l.push_back( '6' );
 	check_consistency( l );
 	ENSURE_EQUALS( "construct error", _stringifier.to_string<char>( l ), "123456" );
-	l.exchange( l.begin(), l.rbegin().base() );
+	l.exchange( l.begin(), prev( l.end() ) );
 	check_consistency( l );
 	ENSURE_EQUALS( "ends exchange error", _stringifier.to_string<char>( l ), "623451" );
 	l.exchange( n_th( l, 1 ), n_th( l, 3 ) );

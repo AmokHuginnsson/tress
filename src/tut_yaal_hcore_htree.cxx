@@ -577,7 +577,7 @@ TUT_UNIT_TEST( "across two trees (replace_node)" ) {
 		check_consistency( t1 );
 		check_consistency( t2 );
 		item_t::stop_copying();
-		it->replace_node( it->rbegin().base(), &*a );
+		it->replace_node( prev( it->end() ), &*a );
 		item_t::allow_copying();
 		check_consistency( t1 );
 		check_consistency( t2 );
@@ -618,7 +618,7 @@ TUT_UNIT_TEST( "across two trees from root (replace_node)" ) {
 		check_consistency( t1 );
 		check_consistency( t2 );
 		item_t::stop_copying();
-		it->replace_node( it->rbegin().base(), t1.get_root() );
+		it->replace_node( prev( it->end() ), t1.get_root() );
 		item_t::allow_copying();
 		check_consistency( t1 );
 		check_consistency( t2 );
@@ -773,7 +773,7 @@ TUT_UNIT_TEST( "across two trees (move_node)" ) {
 		check_consistency( t1 );
 		check_consistency( t2 );
 		item_t::stop_copying();
-		it->move_node( it->rbegin().base(), &*a );
+		it->move_node( prev( it->end() ), &*a );
 		item_t::allow_copying();
 		check_consistency( t1 );
 		check_consistency( t2 );
@@ -814,7 +814,7 @@ TUT_UNIT_TEST( "across two trees from root (move_node)" ) {
 		check_consistency( t1 );
 		check_consistency( t2 );
 		item_t::stop_copying();
-		it->move_node( it->rbegin().base(), t1.get_root() );
+		it->move_node( prev( it->end() ), t1.get_root() );
 		item_t::allow_copying();
 		check_consistency( t1 );
 		check_consistency( t2 );
@@ -922,7 +922,7 @@ TUT_UNIT_TEST( "across two trees (copy_node)" ) {
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
-		it->copy_node( it->rbegin().base(), &*a );
+		it->copy_node( prev( it->end() ), &*a );
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
@@ -961,7 +961,7 @@ TUT_UNIT_TEST( "across two trees from root (copy_node)" ) {
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
-		it->copy_node( it->rbegin().base(), t1.get_root() );
+		it->copy_node( prev( it->end() ), t1.get_root() );
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
@@ -1148,7 +1148,7 @@ TUT_UNIT_TEST( "across two trees (replace_node) on booking allocator" )
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
-		it->replace_node( it->rbegin().base(), &*a );
+		it->replace_node( prev( it->end() ), &*a );
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{3{80}5}" );
@@ -1206,7 +1206,7 @@ TUT_UNIT_TEST( "across two trees from root (replace_node) on booking allocator" 
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
-		it->replace_node( it->rbegin().base(), t1.get_root() );
+		it->replace_node( prev( it->end() ), t1.get_root() );
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "" );
@@ -1264,7 +1264,7 @@ TUT_UNIT_TEST( "across two trees (move_node) on booking allocator" )
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
-		it->move_node( it->rbegin().base(), &*a );
+		it->move_node( prev( it->end() ), &*a );
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{3{80}5}" );
@@ -1322,7 +1322,7 @@ TUT_UNIT_TEST( "across two trees from root (move_node) on booking allocator" )
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
-		it->move_node( it->rbegin().base(), t1.get_root() );
+		it->move_node( prev( it->end() ), t1.get_root() );
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "" );
@@ -1380,7 +1380,7 @@ TUT_UNIT_TEST( "across two trees (copy_node) on booking allocator" )
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
-		it->copy_node( it->rbegin().base(), &*a );
+		it->copy_node( prev( it->end() ), &*a );
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
@@ -1438,7 +1438,7 @@ TUT_UNIT_TEST( "across two trees from root (copy_node) on booking allocator" )
 		ENSURE_EQUALS( "bad shape", to_string( t2 ), "%{a{DEF}b{GH}c}" );
 		check_consistency( t1 );
 		check_consistency( t2 );
-		it->copy_node( it->rbegin().base(), t1.get_root() );
+		it->copy_node( prev( it->end() ), t1.get_root() );
 		check_consistency( t1 );
 		check_consistency( t2 );
 		ENSURE_EQUALS( "bad shape", to_string( t1 ), "@{1{246}3{80}5}" );
