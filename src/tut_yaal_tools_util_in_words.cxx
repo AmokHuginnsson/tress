@@ -42,6 +42,12 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_util_in_words );
 TUT_TEST_GROUP( tut_yaal_tools_util_in_words, "yaal::tools::util::in_words" );
 
+TUT_UNIT_TEST( "en < 20" )
+	for ( int i( 0 ); i < 20; ++ i ) {
+		cout << in_words_en( i ) << endl;
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "jednosci" )
 	cout << in_words_pl( "1.00" ) << endl;
 TUT_TEARDOWN()
