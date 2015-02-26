@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_yaal_tools_util_kwota_slownie.cxx - this file is integral part of `tress' project.
+	tut_yaal_tools_util_in_words.cxx - this file is integral part of `tress' project.
 
   i.  You may not make any changes in Copyright information.
   ii. You must attach Copyright information to any part of every copy
@@ -39,11 +39,11 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-TUT_SIMPLE_MOCK( tut_yaal_tools_util_kwota_slownie );
-TUT_TEST_GROUP( tut_yaal_tools_util_kwota_slownie, "yaal::tools::util::kwota_slownie" );
+TUT_SIMPLE_MOCK( tut_yaal_tools_util_in_words );
+TUT_TEST_GROUP( tut_yaal_tools_util_in_words, "yaal::tools::util::in_words" );
 
 TUT_UNIT_TEST( "jednosci" )
-	cout << kwota_slownie( "1.00" ) << endl;
+	cout << in_words_pl( "1.00" ) << endl;
 TUT_TEARDOWN()
 
 }
