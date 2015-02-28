@@ -44,13 +44,13 @@ TUT_TEST_GROUP( tut_yaal_tools_money_in_words, "yaal::tools::money::in_words" );
 
 TUT_UNIT_TEST( "en < 20" )
 	for ( int i( 0 ); i < 20; ++ i ) {
-		cout << "[" << in_words_en( i ) << "]" << endl;
+		cout << "[" << in_words_en( i, CURRENCY::PLN ) << "]" << endl;
 	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "pl < 20" )
 	for ( int i( 0 ); i < 20; ++ i ) {
-		cout << "[" << in_words_pl( i ) << "]" << endl;
+		cout << "[" << in_words_pl( i, CURRENCY::PLN ) << "]" << endl;
 	}
 TUT_TEARDOWN()
 
