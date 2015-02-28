@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-  tut_yaal_tools_util_verify_iban.cxx - this file is integral part of `tress' project.
+  tut_yaal_tools_money_verify_iban.cxx - this file is integral part of `tress' project.
 
   i.  You may not make any changes in Copyright information.
   ii. You must attach Copyright information to any part of every copy
@@ -26,7 +26,7 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
-#include <yaal/tools/util.hxx>
+#include <yaal/tools/money.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -36,14 +36,14 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
+using namespace yaal::tools::money;
 using namespace tress;
 using namespace tress::tut_helpers;
 
 namespace tut {
 
-TUT_SIMPLE_MOCK( tut_yaal_tools_util_verify_iban );
-TUT_TEST_GROUP( tut_yaal_tools_util_verify_iban, "yaal::tools::util::verify_IBAN" );
+TUT_SIMPLE_MOCK( tut_yaal_tools_money_verify_iban );
+TUT_TEST_GROUP( tut_yaal_tools_money_verify_iban, "yaal::tools::money::verify_IBAN" );
 
 TUT_UNIT_TEST( "verifing good IBANs" )
 	ENSURE_EQUALS ( "failed to verify IBAN: PL 12 1470 0002 2201 0010 7060 0001",

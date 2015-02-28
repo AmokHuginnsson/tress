@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_yaal_tools_util_in_words.cxx - this file is integral part of `tress' project.
+	tut_yaal_tools_money_in_words.cxx - this file is integral part of `tress' project.
 
   i.  You may not make any changes in Copyright information.
   ii. You must attach Copyright information to any part of every copy
@@ -26,7 +26,7 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
-#include <yaal/tools/util.hxx>
+#include <yaal/tools/money.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -34,22 +34,24 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
+using namespace yaal::tools::money;
 using namespace tress::tut_helpers;
 
 namespace tut {
 
-TUT_SIMPLE_MOCK( tut_yaal_tools_util_in_words );
-TUT_TEST_GROUP( tut_yaal_tools_util_in_words, "yaal::tools::util::in_words" );
+TUT_SIMPLE_MOCK( tut_yaal_tools_money_in_words );
+TUT_TEST_GROUP( tut_yaal_tools_money_in_words, "yaal::tools::money::in_words" );
 
 TUT_UNIT_TEST( "en < 20" )
 	for ( int i( 0 ); i < 20; ++ i ) {
-		cout << in_words_en( i ) << endl;
+		cout << "[" << in_words_en( i ) << "]" << endl;
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "jednosci" )
-	cout << in_words_pl( "1.00" ) << endl;
+TUT_UNIT_TEST( "pl < 20" )
+	for ( int i( 0 ); i < 20; ++ i ) {
+		cout << "[" << in_words_pl( i ) << "]" << endl;
+	}
 TUT_TEARDOWN()
 
 }
