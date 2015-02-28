@@ -44,14 +44,108 @@ TUT_TEST_GROUP( tut_yaal_tools_money_in_words, "yaal::tools::money::in_words" );
 
 TUT_UNIT_TEST( "en < 20" )
 	for ( int i( 0 ); i < 20; ++ i ) {
-		cout << "[" << in_words_en( i, CURRENCY::PLN ) << "]" << endl;
+		cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
 	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "tenths en" )
+	for ( int i( 10 ); i < 100; i += 10 ) {
+		cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "en 18 < x < 32" )
+	for ( int i( 19 ); i < 32; ++ i ) {
+		cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "en 85 < x < 257" )
+	for ( int i( 84 ); i < 257; i += 13 ) {
+		cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "big en" )
+	int long long step( 1 );
+	for ( int long long i( 0 ); i < 100000000000000LL; i += step ) {
+		cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+		if ( i > 11111111111111LL ) {
+			step = 11111111111111LL;
+		} else if ( i > 1111111111111LL ) {
+			step = 1111111111111LL;
+		} else if ( i > 111111111111LL ) {
+			step = 111111111111LL;
+		} else if ( i > 11111111111LL ) {
+			step = 11111111111LL;
+		} else if ( i > 1111111111LL ) {
+			step = 1111111111LL;
+		} else if ( i > 111111111LL ) {
+			step = 111111111LL;
+		} else if ( i > 11111111LL ) {
+			step = 11111111LL;
+		} else if ( i > 1111111LL ) {
+			step = 1111111LL;
+		} else if ( i > 111111LL ) {
+			step = 111111LL;
+		} else if ( i > 11111LL ) {
+			step = 11111LL;
+		} else if ( i > 1111LL ) {
+			step = 1111LL;
+		} else if ( i > 111LL ) {
+			step = 111LL;
+		} else if ( i > 11LL ) {
+			step = 11LL;
+		}
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "mostly zeros en" )
+	int long long i( 0 );
+	i = 0LL;           cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 1LL;           cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 10LL;          cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 11LL;          cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 100LL;         cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 101LL;         cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 1000LL;        cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 1001LL;        cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 1100LL;        cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 10000LL;       cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 10001LL;       cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 10100LL;       cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 11000LL;       cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 100000LL;      cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 100001LL;      cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 100100LL;      cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 101000LL;      cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 1000000LL;     cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 1000001LL;     cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 1000100LL;     cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 1001000LL;     cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 1100000LL;     cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 10000000LL;    cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 10000001LL;    cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 10000100LL;    cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 10001000LL;    cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 10100000LL;    cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 100000000LL;   cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 1000000000LL;  cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	i = 10000000000LL; cout << i << " = [" << in_words_en( i, CURRENCY::DOLLAR ) << "]" << endl;
+	HNumber n;
+	n = "10000100.01"; cout << n.to_string() << " = [" << in_words_en( n, CURRENCY::DOLLAR ) << "]" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "pl < 20" )
 	for ( int i( 0 ); i < 20; ++ i ) {
-		cout << "[" << in_words_pl( i, CURRENCY::PLN ) << "]" << endl;
+		cout << i << " = [" << in_words_pl( i, CURRENCY::PLN ) << "]" << endl;
 	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Iwona" )
+	HNumber n;
+	n = "854925.10"; cout << n.to_string() << " = [" << in_words_pl( n, CURRENCY::DOLLAR ) << "]" << endl;
+	n = "3423854923.02"; cout << n.to_string() << " = [" << in_words_pl( n, CURRENCY::DOLLAR ) << "]" << endl;
 TUT_TEARDOWN()
 
 }
