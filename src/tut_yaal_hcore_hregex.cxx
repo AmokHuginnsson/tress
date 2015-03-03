@@ -74,5 +74,11 @@ TUT_UNIT_TEST( "bad regex constructor no exception" )
 	ENSURE_THROW( "match on unitialized regex succeeded", r.matches( "a" ), HRegexException );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "match of empty" )
+	HRegex r;
+	ENSURE( "compilation of loose failed", r.compile( ".*" ) );
+	ENSURE( "match of empty failed", r.matches( "" ) );
+TUT_TEARDOWN()
+
 }
 
