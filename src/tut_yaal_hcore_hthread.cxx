@@ -227,7 +227,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Starting new thread and finishing it prematurely (sleeping body)" )
 	TIME_CONSTRAINT_EXEMPT();
-	HTime start( now_local() ), stop( now_local() );
+	HTime start( now_utc() ), stop( now_utc() );
 	HCool ca( "sleeping" );
 	HThread a;
 	ca.set( 40 );
@@ -246,7 +246,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Starting new thread and finishing it prematurely (busy body)" )
 	TIME_CONSTRAINT_EXEMPT();
-	HTime start( now_local() ), stop( now_local() );
+	HTime start( now_utc() ), stop( now_utc() );
 	HCool ca( "busy" );
 	HThread a;
 	ca.set( 40 );
@@ -264,7 +264,7 @@ TUT_UNIT_TEST( "Starting new thread and finishing it prematurely (busy body)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Starting new thread and finishing it prematurely by destructor" )
-	HTime start( now_local() ), stop( now_local() ); {
+	HTime start( now_utc() ), stop( now_utc() ); {
 		HCool ca( "a" );
 		HThread a;
 		ca.set( 50 );
@@ -303,7 +303,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Simple thread (plain function)" )
 	TIME_CONSTRAINT_EXEMPT();
-	HTime start( now_local() ), stop( now_local() );
+	HTime start( now_utc() ), stop( now_utc() );
 	HThread a;
 	a.spawn( call( &simple, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
@@ -330,7 +330,7 @@ TUT_UNIT_TEST( "Starting new thread and allowing it to finish, the finish is act
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Very short living thread." )
-	HTime start( now_local() ), stop( now_local() );
+	HTime start( now_utc() ), stop( now_utc() );
 	HThread a;
 	a.spawn( call( a_fast_one, &a ) );
 	cout << __PRETTY_FUNCTION__ << endl;
@@ -339,7 +339,7 @@ TUT_UNIT_TEST( "Very short living thread." )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Very short living thread, spawned delayed." )
-	HTime start( now_local() ), stop( now_local() );
+	HTime start( now_utc() ), stop( now_utc() );
 	HThread a;
 	a.spawn( call( a_fast_one, &a ) );
 	M_DSLEEP( 1 );
