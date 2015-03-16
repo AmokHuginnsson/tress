@@ -1,24 +1,24 @@
-CONNECT 'firebird_context';
+CONNECT 'localhost:firebird_context';
 DROP DATABASE;
-CREATE DATABASE 'firebird_context';
+CREATE DATABASE 'localhost:firebird_context';
 COMMIT;
-CONNECT 'firebird_context';
+CONNECT 'localhost:firebird_context';
 
 DROP USER tress;
 DROP DATABASE;
 
-CONNECT 'tress';
+CONNECT 'localhost:tress';
 DROP DATABASE;
 
-CREATE DATABASE 'tress';
+CREATE DATABASE 'localhost:tress';
 COMMIT;
 
-CONNECT 'tress';
+CONNECT 'localhost:tress';
 
 CREATE USER tress PASSWORD 'tr3ss';
 COMMIT;
 
-CONNECT 'tress' USER 'tress' PASSWORD 'tr3ss';
+CONNECT 'localhost:tress' USER 'tress' PASSWORD 'tr3ss';
 
 DROP TABLE config;
 CREATE TABLE config (
