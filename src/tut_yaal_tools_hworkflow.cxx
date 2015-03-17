@@ -24,6 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <cstdlib>
+
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/hworkflow.hxx>
@@ -31,6 +33,7 @@ Copyright:
 #include <yaal/hcore/hlog.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
+#include <yaal/hcore/hhashmap.hxx>
 
 using namespace tut;
 using namespace yaal;
@@ -40,48 +43,176 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_tools_hworkflow : public simple_mock<tut_yaal_tools_hworkflow> {
-	typedef simple_mock<tut_yaal_tools_hworkflow> base_type;
-	typedef HInstanceTracker<tut_yaal_tools_hworkflow> counter_t;
-	virtual ~tut_yaal_tools_hworkflow( void )
-		{}
-	static void foo( int, char, int );
-	static void bar( counter_t );
-};
-
+TUT_SIMPLE_MOCK( tut_yaal_tools_hworkflow );
 TUT_TEST_GROUP( tut_yaal_tools_hworkflow, "yaal::tools::HWorkFlow" );
 
-void tut_yaal_tools_hworkflow::foo( int id, char symbol, int waitTime ) {
-	cout << "foo" << id << flush;
-	HClock c;
-	for ( int i = 0; i < 3; ++ i ) {
-		tools::sleep::milisecond( waitTime );
-		cout << symbol << flush;
+namespace {
+
+static int n( 0 );
+
+class Task {
+public:
+	struct Fiber {
+		bool _loop;
+		int _journal;
+		Fiber()
+			: _loop( true )
+			, _journal( 0 ) {
+		}
+	};
+	typedef HHashMap<HThread::id_t, Fiber> fibers_t;
+private:
+	mutable HMutex _mutex;
+	int _workUnits;
+	int _sleep;
+	fibers_t _fibers;
+public:
+	typedef HInstanceTracker<Task> counter_t;
+	Task( int sleep_ = 0 )
+		: _mutex( HMutex::TYPE::RECURSIVE )
+		, _workUnits( 0 )
+		, _sleep( sleep_ )
+		, _fibers() {
 	}
-	cout << "[" << id << "]" << endl;
+	void foo( int id, char symbol, int waitTime ) {
+		cout << "foo" << id << flush;
+		register_runner();
+		HClock c;
+		for ( int i = 0; i < 3; ++ i ) {
+			tools::sleep::milisecond( waitTime );
+			cout << symbol << flush;
+		}
+		cout << "[" << id << "]" << endl;
+	}
+	void bar( counter_t c ) {
+		do_work();
+		cout << c.to_string() << endl;
+	}
+	void do_work( void ) {
+		HLock l( _mutex );
+		++ _workUnits;
+	}
+	Fiber* register_runner() {
+		HLock l( _mutex );
+		return ( &( _fibers.insert( make_pair( HThread::get_current_thread_id(), Fiber() ) ).first->second ) );
+	}
+	int get_runner_count( void ) const {
+		HLock l( _mutex );
+		return ( static_cast<int>( _fibers.get_size() ) );
+	}
+	int get_performed_work_units( void ) const {
+		HLock l( _mutex );
+		return ( _workUnits );
+	}
+	void async_stop( Fiber** f_ ) {
+		HLock l( _mutex );
+		clog << "async_stop" << endl;
+		if ( *f_ ) {
+			(*f_)->_loop = false;
+		}
+	}
+	void worker( Fiber** fiber_, int target_ ) {
+		clog << "worker start" << endl;
+		++ n;
+		if ( n > 30 ) {
+			_Exit( 0 );
+		}
+		*fiber_ = register_runner();
+		while ( true ) {
+			bool loop( false );
+			/* Get loop */ {
+				HLock l( _mutex );
+				if ( _workUnits >= target_ ) {
+					break;
+				}
+				(*fiber_)->_journal = _workUnits;
+				loop = (*fiber_)->_loop;
+			}
+			if ( ! loop ) {
+				break;
+			}
+			do_work();
+			tools::sleep::milisecond( _sleep );
+		}
+		clog << "worker finish" << endl;
+	}
+	bool want_restart( int target_ ) const {
+		HLock l( _mutex );
+		return ( _workUnits < target_ );
+	}
+	void reset_runner_count( void ) {
+		_fibers.clear();
+	}
+};
+
 }
 
-void tut_yaal_tools_hworkflow::bar( counter_t c ) {
-	cout << c.to_string() << endl;
-}
-
-TUT_UNIT_TEST( "Pushing tasks." )
+TUT_UNIT_TEST( "Pushing tasks (functional test)." )
 	TIME_CONSTRAINT_EXEMPT();
-	HWorkFlow w( 3 );
+	static int const WORKER_COUNT( 3 );
+	/* Order of Task and HWorkFlow matters. */
+	Task t;
+	HWorkFlow w( WORKER_COUNT );
 	for ( int i = 0; i < 3; ++ i ) {
-		w.push_task( call( tut_yaal_tools_hworkflow::foo, 0, '+', 100 ) );
-		w.push_task( call( tut_yaal_tools_hworkflow::foo, 1, '*', 200 ) );
-		w.push_task( call( tut_yaal_tools_hworkflow::foo, 2, '@', 300 ) );
+		w.push_task( call( &Task::foo, &t, 0, '+', 100 ) );
+		w.push_task( call( &Task::foo, &t, 1, '*', 200 ) );
+		w.push_task( call( &Task::foo, &t, 2, '@', 300 ) );
 	}
+	tools::sleep::milisecond( 500 );
+	ENSURE_EQUALS( "bad number of threads used for performing work", t.get_runner_count(), WORKER_COUNT );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Cleanup of finished tasks." ) {
+	/* Order of Task and HWorkFlow matters. */
+	Task t;
 	HWorkFlow w( 3 );
-	w.push_task( call( tut_yaal_tools_hworkflow::bar, counter_t() ) );
-	if ( tools::sleep::second( 1 ) )
+	w.push_task( call( &Task::bar, &t, Task::counter_t() ) );
+	if ( tools::sleep::second( 1 ) ) {
 		log_trace << "sleep interrupted!" << endl;
-	ENSURE_EQUALS( "HWorkFlow did not cleaned its task list.", counter_t::get_instance_count(), 0 );
+	}
+	tools::sleep::milisecond( 300 );
+	ENSURE_EQUALS( "work was not performed", t.get_performed_work_units(), 1 );
+	ENSURE_EQUALS( "HWorkFlow did not cleaned its task list.", Task::counter_t::get_instance_count(), 0 );
 }
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "interrupt and continue" )
+	static int const SLEEP( 50 );
+	Task t( SLEEP );
+	static int const WORKER_COUNT( 15 );
+	Task::Fiber* fibers[WORKER_COUNT] = {};
+	static int const TARGET( 150 );
+	HClock c;
+	/* HWorkFlow scope */ {
+		HWorkFlow w( WORKER_COUNT );
+		for ( Task::Fiber*& f : fibers ) {
+			w.push_task( call( &Task::worker, &t, &f, TARGET ), call( &Task::async_stop, &t, &f ), call( &Task::want_restart, &t, TARGET ) );
+		}
+		tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
+		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
+		clog << "runner count = " << t.get_runner_count() << endl;
+		int i( 0 );
+		for ( Task::Fiber*& f : fibers ) {
+			clog << "fiber" << i << " = " << ( f ? f->_journal : -1 ) << endl;
+			++ i;
+		}
+		clog << "time elapsed = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+		int wu( t.get_performed_work_units() );
+		ENSURE( "work was not performed", wu > 0 );
+		ENSURE( "work was not interrupted", wu < TARGET );
+		t.reset_runner_count();
+		fill( begin( fibers ), end( fibers ), nullptr );
+		c.reset();
+		w.start();
+	}
+	clog << "runner count = " << t.get_runner_count() << endl;
+	int i( 0 );
+	for ( Task::Fiber*& f : fibers ) {
+		clog << "fiber" << i << " = " << ( f ? f->_journal : -1 ) << endl;
+		++ i;
+	}
+	clog << "time elapsed = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
+	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
 TUT_TEARDOWN()
 
 }
