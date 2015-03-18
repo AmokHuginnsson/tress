@@ -24,7 +24,7 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#include <cstdlib>
+#include <functional>
 
 #include <TUT/tut.hpp>
 
@@ -61,18 +61,21 @@ public:
 		}
 	};
 	typedef HHashMap<HThread::id_t, Fiber> fibers_t;
+	typedef HArray<bool> slots_t;
 private:
 	mutable HMutex _mutex;
 	int _workUnits;
 	int _sleep;
 	fibers_t _fibers;
+	slots_t _slots;
 public:
 	typedef HInstanceTracker<Task> counter_t;
-	Task( int sleep_ = 0 )
+	Task( int sleep_ = 0, int slots_ = 0 )
 		: _mutex( HMutex::TYPE::RECURSIVE )
 		, _workUnits( 0 )
 		, _sleep( sleep_ )
-		, _fibers() {
+		, _fibers()
+		, _slots( slots_ ) {
 	}
 	void foo( int id, char symbol, int waitTime ) {
 		cout << "foo" << id << flush;
@@ -89,8 +92,20 @@ public:
 		cout << c.to_string() << endl;
 	}
 	void do_work( void ) {
+		/* lock scope */ {
+			HLock l( _mutex );
+			++ _workUnits;
+		}
+		tools::sleep::milisecond( _sleep );
+	}
+	void do_slot_work( int idx_ ) {
 		HLock l( _mutex );
-		++ _workUnits;
+		M_ASSERT( idx_ < _slots.get_size() );
+		_slots[idx_] = true;
+		tools::sleep::milisecond( _sleep );
+	}
+	int get_slot_fill( void ) const {
+		return ( static_cast<int>( count( _slots.begin(), _slots.end(), true ) ) );
 	}
 	Fiber* register_runner() {
 		HLock l( _mutex );
@@ -133,7 +148,6 @@ public:
 				}
 			}
 			do_work();
-			tools::sleep::milisecond( _sleep );
 		}
 	}
 	bool want_restart( int target_ ) const {
@@ -163,7 +177,7 @@ TUT_UNIT_TEST( "Pushing tasks (functional test)." )
 		slp += 50;
 	}
 	tools::sleep::milisecond( SLEEP );
-	ENSURE( "work not parallelized properly", t.get_runner_count() >= ( WORKER_COUNT / 2 ) );
+	ENSURE( "work not parallelized properly", t.get_runner_count() >= ( WORKER_COUNT / 4 ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Cleanup of finished tasks." ) {
@@ -171,17 +185,17 @@ TUT_UNIT_TEST( "Cleanup of finished tasks." ) {
 	Task t;
 	HWorkFlow w( 3 );
 	w.push_task( call( &Task::bar, &t, Task::counter_t() ) );
-	if ( tools::sleep::second( 1 ) ) {
+	if ( tools::sleep::milisecond( 500 ) ) {
 		log_trace << "sleep interrupted!" << endl;
 	}
-	tools::sleep::milisecond( 300 );
+	tools::sleep::milisecond( 200 );
 	ENSURE_EQUALS( "work was not performed", t.get_performed_work_units(), 1 );
 	ENSURE_EQUALS( "HWorkFlow did not cleaned its task list.", Task::counter_t::get_instance_count(), 0 );
 }
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "interrupt and explicit continue" )
-	static int const SLEEP( 50 );
+	static int const SLEEP( 40 );
 	Task t( SLEEP );
 	static int const WORKER_COUNT( 16 );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
@@ -208,7 +222,7 @@ TUT_UNIT_TEST( "interrupt and explicit continue" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "interrupt and implicit continue" )
-	static int const SLEEP( 50 );
+	static int const SLEEP( 40 );
 	Task t( SLEEP );
 	static int const WORKER_COUNT( 16 );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
@@ -229,14 +243,12 @@ TUT_UNIT_TEST( "interrupt and implicit continue" )
 		}
 		t.clear_fibers();
 		fill( begin( fibers ), end( fibers ), nullptr );
-		clog << "wu = " << t.get_performed_work_units() << endl;
 	}
-	clog << "wu = " << t.get_performed_work_units() << endl;
 	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "abort" )
-	static int const SLEEP( 50 );
+	static int const SLEEP( 40 );
 	Task t( SLEEP );
 	static int const WORKER_COUNT( 16 );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
@@ -264,7 +276,7 @@ TUT_UNIT_TEST( "abort" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "schedule_windup" )
-	static int const SLEEP( 50 );
+	static int const SLEEP( 40 );
 	Task t( SLEEP );
 	static int const WORKER_COUNT( 16 );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
@@ -294,6 +306,70 @@ TUT_UNIT_TEST( "schedule_windup" )
 		w.start();
 	}
 	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "add task during interrupt (implicit restart)" )
+	static int const SLEEP( 40 );
+	static int const WORKER_COUNT( 16 );
+	static int const TARGET( 150 );
+	Task t( SLEEP );
+	Task::Fiber* fibers[WORKER_COUNT] = {};
+	int done( 0 );
+	/* HWorkFlow scope */ {
+		HWorkFlow w( WORKER_COUNT );
+		for ( Task::Fiber*& f : fibers ) {
+			w.push_task( call( &Task::worker, &t, &f, TARGET ), call( &Task::async_stop, &t, &f ), call( &Task::want_restart, &t, TARGET ) );
+		}
+		tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
+		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
+		int wu( t.get_performed_work_units() );
+		ENSURE( "work not parallelized", t.get_runner_count() >= ( WORKER_COUNT / 4 ) );
+		ENSURE( "work was not performed", wu > 0 );
+		ENSURE( "work was not interrupted", wu < TARGET );
+		for ( Task::Fiber const* f : fibers ) {
+			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
+		}
+		t.clear_fibers();
+		fill( begin( fibers ), end( fibers ), nullptr );
+		w.push_task( call( &std::function<void()>::operator(), make_pointer<std::function<void()>>( [&done](){ done = 1; } ) ) );
+	}
+	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
+	ENSURE_EQUALS( "additional task not executed", done, 1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "many tasks" )
+	static int const SLEEP( 5 );
+	static int const SLOTS( 320 );
+	Task t( SLEEP, SLOTS );
+	static int const WORKER_COUNT( 16 );
+	/* HWorkFlow scope */ {
+		HWorkFlow w( WORKER_COUNT );
+		for ( int i( 0 ); i < SLOTS; ++ i ) {
+			w.push_task( call( &Task::do_slot_work, &t, i ) );
+		}
+		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
+	}
+	ENSURE_EQUALS( "work not done", t.get_slot_fill(), SLOTS );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "suspend" )
+	static int const SLEEP( 5 );
+	static int const SLOTS( 320 );
+	Task t( SLEEP, SLOTS );
+	static int const WORKER_COUNT( 16 );
+	/* HWorkFlow scope */ {
+		HWorkFlow w( WORKER_COUNT );
+		int halve( SLOTS / 2 );
+		for ( int i( 0 ); i < halve; ++ i ) {
+			w.push_task( call( &Task::do_slot_work, &t, i ) );
+		}
+		w.windup( HWorkFlow::WINDUP_MODE::SUSPEND );
+		ENSURE_EQUALS( "work not done", t.get_slot_fill(), halve );
+		for ( int i( halve ); i < SLOTS; ++ i ) {
+			w.push_task( call( &Task::do_slot_work, &t, i ) );
+		}
+	}
+	ENSURE_EQUALS( "work not done", t.get_slot_fill(), SLOTS );
 TUT_TEARDOWN()
 
 }
