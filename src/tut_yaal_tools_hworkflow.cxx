@@ -183,7 +183,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "interrupt and explicit continue" )
 	static int const SLEEP( 50 );
 	Task t( SLEEP );
-	static int const WORKER_COUNT( 15 );
+	static int const WORKER_COUNT( 16 );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	static int const TARGET( 150 );
 	/* HWorkFlow scope */ {
@@ -194,7 +194,7 @@ TUT_UNIT_TEST( "interrupt and explicit continue" )
 		tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
 		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
 		int wu( t.get_performed_work_units() );
-		ENSURE( "work not parallelized", t.get_runner_count() > ( WORKER_COUNT / 3 ) );
+		ENSURE( "work not parallelized", t.get_runner_count() >= ( WORKER_COUNT / 4 ) );
 		ENSURE( "work was not performed", wu > 0 );
 		ENSURE( "work was not interrupted", wu < TARGET );
 		for ( Task::Fiber const* f : fibers ) {
@@ -210,7 +210,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "interrupt and implicit continue" )
 	static int const SLEEP( 50 );
 	Task t( SLEEP );
-	static int const WORKER_COUNT( 15 );
+	static int const WORKER_COUNT( 16 );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	static int const TARGET( 150 );
 	/* HWorkFlow scope */ {
@@ -221,7 +221,7 @@ TUT_UNIT_TEST( "interrupt and implicit continue" )
 		tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
 		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
 		int wu( t.get_performed_work_units() );
-		ENSURE( "work not parallelized", t.get_runner_count() > ( WORKER_COUNT / 3 ) );
+		ENSURE( "work not parallelized", t.get_runner_count() >= ( WORKER_COUNT / 4 ) );
 		ENSURE( "work was not performed", wu > 0 );
 		ENSURE( "work was not interrupted", wu < TARGET );
 		for ( Task::Fiber const* f : fibers ) {
@@ -238,7 +238,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "abort" )
 	static int const SLEEP( 50 );
 	Task t( SLEEP );
-	static int const WORKER_COUNT( 15 );
+	static int const WORKER_COUNT( 16 );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	static int const TARGET( 150 );
 	int workUnitsInFirstShot( 0 );
@@ -251,7 +251,7 @@ TUT_UNIT_TEST( "abort" )
 		/* ABORT will crash if incorrectly implemented. */
 		w.windup( HWorkFlow::WINDUP_MODE::ABORT );
 		workUnitsInFirstShot = t.get_performed_work_units();
-		ENSURE( "work not parallelized", t.get_runner_count() > ( WORKER_COUNT / 3 ) );
+		ENSURE( "work not parallelized", t.get_runner_count() >= ( WORKER_COUNT / 4 ) );
 		ENSURE( "work was not performed", workUnitsInFirstShot > 0 );
 		ENSURE( "work was not interrupted", workUnitsInFirstShot < TARGET );
 		for ( Task::Fiber const* f : fibers ) {
@@ -261,6 +261,39 @@ TUT_UNIT_TEST( "abort" )
 		fill( begin( fibers ), end( fibers ), nullptr );
 	}
 	ENSURE_EQUALS( "additional work after abort performed", t.get_performed_work_units(), workUnitsInFirstShot );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "schedule_windup" )
+	static int const SLEEP( 50 );
+	Task t( SLEEP );
+	static int const WORKER_COUNT( 16 );
+	Task::Fiber* fibers[WORKER_COUNT] = {};
+	static int const TARGET( 150 );
+	/* HWorkFlow scope */ {
+		HWorkFlow w( WORKER_COUNT );
+		for ( Task::Fiber*& f : fibers ) {
+			w.push_task( call( &Task::worker, &t, &f, TARGET ), call( &Task::async_stop, &t, &f ), call( &Task::want_restart, &t, TARGET ) );
+		}
+		tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
+		w.schedule_windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
+		while ( ! w.can_join() ) {
+			tools::sleep::milisecond( 1 );
+		}
+		HClock c;
+		w.join();
+		ENSURE( "join blocked", c.get_time_elapsed( HClock::UNIT::MILISECOND ) < 10 );
+		int wu( t.get_performed_work_units() );
+		ENSURE( "work not parallelized", t.get_runner_count() >= ( WORKER_COUNT / 4 ) );
+		ENSURE( "work was not performed", wu > 0 );
+		ENSURE( "work was not interrupted", wu < TARGET );
+		for ( Task::Fiber const* f : fibers ) {
+			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
+		}
+		t.clear_fibers();
+		fill( begin( fibers ), end( fibers ), nullptr );
+		w.start();
+	}
+	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
 TUT_TEARDOWN()
 
 }
