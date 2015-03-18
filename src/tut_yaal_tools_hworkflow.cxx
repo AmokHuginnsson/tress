@@ -48,16 +48,16 @@ TUT_TEST_GROUP( tut_yaal_tools_hworkflow, "yaal::tools::HWorkFlow" );
 
 namespace {
 
-static int n( 0 );
-
 class Task {
 public:
 	struct Fiber {
 		bool _loop;
-		int _journal;
+		int _emptyRun;
+		bool _fail;
 		Fiber()
 			: _loop( true )
-			, _journal( 0 ) {
+			, _emptyRun( false )
+			, _fail( false ) {
 		}
 	};
 	typedef HHashMap<HThread::id_t, Fiber> fibers_t;
@@ -78,7 +78,7 @@ public:
 		cout << "foo" << id << flush;
 		register_runner();
 		HClock c;
-		for ( int i = 0; i < 3; ++ i ) {
+		for ( int i = 0; i < ( _sleep / waitTime ); ++ i ) {
 			tools::sleep::milisecond( waitTime );
 			cout << symbol << flush;
 		}
@@ -106,41 +106,41 @@ public:
 	}
 	void async_stop( Fiber** f_ ) {
 		HLock l( _mutex );
-		clog << "async_stop" << endl;
 		if ( *f_ ) {
 			(*f_)->_loop = false;
 		}
 	}
 	void worker( Fiber** fiber_, int target_ ) {
-		clog << "worker start" << endl;
-		++ n;
-		if ( n > 30 ) {
-			_Exit( 0 );
-		}
 		*fiber_ = register_runner();
+		/* empty run check */ {
+			HLock l( _mutex );
+			if ( (*fiber_)->_emptyRun ) {
+				(*fiber_)->_fail = true;
+				return;
+			}
+			if ( ! (*fiber_)->_loop ) {
+				(*fiber_)->_emptyRun = true;
+			}
+		}
 		while ( true ) {
-			bool loop( false );
 			/* Get loop */ {
 				HLock l( _mutex );
 				if ( _workUnits >= target_ ) {
 					break;
 				}
-				(*fiber_)->_journal = _workUnits;
-				loop = (*fiber_)->_loop;
-			}
-			if ( ! loop ) {
-				break;
+				if ( ! (*fiber_)->_loop ) {
+					break;
+				}
 			}
 			do_work();
 			tools::sleep::milisecond( _sleep );
 		}
-		clog << "worker finish" << endl;
 	}
 	bool want_restart( int target_ ) const {
 		HLock l( _mutex );
 		return ( _workUnits < target_ );
 	}
-	void reset_runner_count( void ) {
+	void clear_fibers( void ) {
 		_fibers.clear();
 	}
 };
@@ -149,17 +149,21 @@ public:
 
 TUT_UNIT_TEST( "Pushing tasks (functional test)." )
 	TIME_CONSTRAINT_EXEMPT();
-	static int const WORKER_COUNT( 3 );
 	/* Order of Task and HWorkFlow matters. */
-	Task t;
+	static int const SLEEP( 1000 );
+	Task t( SLEEP );
+	char const mark[] = "!@#$%^&*+?";
+	static int const WORKER_COUNT( static_cast<int>( sizeof ( mark ) ) - 1 );
 	HWorkFlow w( WORKER_COUNT );
-	for ( int i = 0; i < 3; ++ i ) {
-		w.push_task( call( &Task::foo, &t, 0, '+', 100 ) );
-		w.push_task( call( &Task::foo, &t, 1, '*', 200 ) );
-		w.push_task( call( &Task::foo, &t, 2, '@', 300 ) );
+	int slp( 50 );
+	int id( 0 );
+	for ( char m : mark ) {
+		w.push_task( call( &Task::foo, &t, id, m, slp ) );
+		++ id;
+		slp += 50;
 	}
-	tools::sleep::milisecond( 500 );
-	ENSURE_EQUALS( "bad number of threads used for performing work", t.get_runner_count(), WORKER_COUNT );
+	tools::sleep::milisecond( SLEEP );
+	ENSURE( "work not parallelized properly", t.get_runner_count() >= ( WORKER_COUNT / 2 ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Cleanup of finished tasks." ) {
@@ -176,13 +180,12 @@ TUT_UNIT_TEST( "Cleanup of finished tasks." ) {
 }
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "interrupt and continue" )
+TUT_UNIT_TEST( "interrupt and explicit continue" )
 	static int const SLEEP( 50 );
 	Task t( SLEEP );
 	static int const WORKER_COUNT( 15 );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	static int const TARGET( 150 );
-	HClock c;
 	/* HWorkFlow scope */ {
 		HWorkFlow w( WORKER_COUNT );
 		for ( Task::Fiber*& f : fibers ) {
@@ -190,29 +193,74 @@ TUT_UNIT_TEST( "interrupt and continue" )
 		}
 		tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
 		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
-		clog << "runner count = " << t.get_runner_count() << endl;
-		int i( 0 );
-		for ( Task::Fiber*& f : fibers ) {
-			clog << "fiber" << i << " = " << ( f ? f->_journal : -1 ) << endl;
-			++ i;
-		}
-		clog << "time elapsed = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
 		int wu( t.get_performed_work_units() );
+		ENSURE( "work not parallelized", t.get_runner_count() > ( WORKER_COUNT / 3 ) );
 		ENSURE( "work was not performed", wu > 0 );
 		ENSURE( "work was not interrupted", wu < TARGET );
-		t.reset_runner_count();
+		for ( Task::Fiber const* f : fibers ) {
+			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
+		}
+		t.clear_fibers();
 		fill( begin( fibers ), end( fibers ), nullptr );
-		c.reset();
 		w.start();
 	}
-	clog << "runner count = " << t.get_runner_count() << endl;
-	int i( 0 );
-	for ( Task::Fiber*& f : fibers ) {
-		clog << "fiber" << i << " = " << ( f ? f->_journal : -1 ) << endl;
-		++ i;
-	}
-	clog << "time elapsed = " << c.get_time_elapsed( HClock::UNIT::MILISECOND ) << endl;
 	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "interrupt and implicit continue" )
+	static int const SLEEP( 50 );
+	Task t( SLEEP );
+	static int const WORKER_COUNT( 15 );
+	Task::Fiber* fibers[WORKER_COUNT] = {};
+	static int const TARGET( 150 );
+	/* HWorkFlow scope */ {
+		HWorkFlow w( WORKER_COUNT );
+		for ( Task::Fiber*& f : fibers ) {
+			w.push_task( call( &Task::worker, &t, &f, TARGET ), call( &Task::async_stop, &t, &f ), call( &Task::want_restart, &t, TARGET ) );
+		}
+		tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
+		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
+		int wu( t.get_performed_work_units() );
+		ENSURE( "work not parallelized", t.get_runner_count() > ( WORKER_COUNT / 3 ) );
+		ENSURE( "work was not performed", wu > 0 );
+		ENSURE( "work was not interrupted", wu < TARGET );
+		for ( Task::Fiber const* f : fibers ) {
+			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
+		}
+		t.clear_fibers();
+		fill( begin( fibers ), end( fibers ), nullptr );
+		clog << "wu = " << t.get_performed_work_units() << endl;
+	}
+	clog << "wu = " << t.get_performed_work_units() << endl;
+	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "abort" )
+	static int const SLEEP( 50 );
+	Task t( SLEEP );
+	static int const WORKER_COUNT( 15 );
+	Task::Fiber* fibers[WORKER_COUNT] = {};
+	static int const TARGET( 150 );
+	int workUnitsInFirstShot( 0 );
+	/* HWorkFlow scope */ {
+		HWorkFlow w( WORKER_COUNT );
+		for ( Task::Fiber*& f : fibers ) {
+			w.push_task( call( &Task::worker, &t, &f, TARGET ), call( &Task::async_stop, &t, &f ), call( &Task::want_restart, &t, TARGET ) );
+		}
+		tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
+		/* ABORT will crash if incorrectly implemented. */
+		w.windup( HWorkFlow::WINDUP_MODE::ABORT );
+		workUnitsInFirstShot = t.get_performed_work_units();
+		ENSURE( "work not parallelized", t.get_runner_count() > ( WORKER_COUNT / 3 ) );
+		ENSURE( "work was not performed", workUnitsInFirstShot > 0 );
+		ENSURE( "work was not interrupted", workUnitsInFirstShot < TARGET );
+		for ( Task::Fiber const* f : fibers ) {
+			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
+		}
+		t.clear_fibers();
+		fill( begin( fibers ), end( fibers ), nullptr );
+	}
+	ENSURE_EQUALS( "additional work after abort performed", t.get_performed_work_units(), workUnitsInFirstShot );
 TUT_TEARDOWN()
 
 }
