@@ -102,6 +102,7 @@ public:
 		HLock l( _mutex );
 		M_ASSERT( idx_ < _slots.get_size() );
 		_slots[idx_] = true;
+		register_runner();
 		tools::sleep::milisecond( _sleep );
 	}
 	int get_slot_fill( void ) const {
@@ -337,11 +338,73 @@ TUT_UNIT_TEST( "add task during interrupt (implicit restart)" )
 	ENSURE_EQUALS( "additional task not executed", done, 1 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
+	static int const SLEEP( 30 );
+	static int const WORKER_COUNT( 16 );
+	static int const TARGET( 150 );
+	Task t( SLEEP );
+	Task::Fiber* fibers[WORKER_COUNT] = {};
+	/* HWorkFlow scope */ {
+		HWorkFlow w( WORKER_COUNT );
+		for ( int i( 0 ); i < ( WORKER_COUNT / 4 ); ++ i ) {
+			w.push_task( call( &Task::worker, &t, &fibers[i], TARGET ), call( &Task::async_stop, &t, &fibers[i] ), call( &Task::want_restart, &t, &fibers[i], TARGET ) );
+		}
+		tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 3 );
+		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
+		int wu( t.get_performed_work_units() );
+		int runnerCount( t.get_runner_count() );
+		clog << "runnerCount = " << runnerCount << endl;
+		ENSURE( "work not parallelized", runnerCount > 1 );
+		ENSURE( "work was not performed", wu > 0 );
+		ENSURE( "work was not interrupted", wu < TARGET );
+		for ( Task::Fiber const* f : fibers ) {
+			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
+		}
+		t.clear_fibers();
+		fill( begin( fibers ), end( fibers ), nullptr );
+	}
+	clog << "runnerCount = " << t.get_runner_count() << endl;
+	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "spawn more task directly after resume" )
+	static int const SLEEP( 10 );
+	static int const WORKER_COUNT( 16 );
+	static int const TARGET( 80 );
+	static int const SLOTS( 80 );
+	Task t( SLEEP, SLOTS );
+	Task::Fiber* fibers[WORKER_COUNT] = {};
+	int runnerCount( 0 );
+	/* HWorkFlow scope */ {
+		HWorkFlow w( WORKER_COUNT );
+		for ( int i( 0 ); i < ( WORKER_COUNT / 2 ); ++ i ) {
+			w.push_task( call( &Task::worker, &t, &fibers[i], TARGET ), call( &Task::async_stop, &t, &fibers[i] ), call( &Task::want_restart, &t, &fibers[i], TARGET ) );
+		}
+		tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
+		w.windup( HWorkFlow::WINDUP_MODE::SUSPEND );
+		runnerCount = t.get_runner_count();
+		clog << "runnerCount = " << runnerCount << endl;
+		ENSURE( "work not parallelized", runnerCount > 1 );
+		ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
+		for ( Task::Fiber const* f : fibers ) {
+			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
+		}
+		t.clear_fibers();
+		fill( begin( fibers ), end( fibers ), nullptr );
+		for ( int i( 0 ); i < SLOTS; ++ i ) {
+			w.push_task( call( &Task::do_slot_work, &t, i ) );
+		}
+	}
+	clog << "runnerCount = " << t.get_runner_count() << endl;
+	ENSURE_EQUALS( "work not done", t.get_slot_fill(), SLOTS );
+	ENSURE( "extra runners not spawned", t.get_runner_count() > runnerCount );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "many tasks" )
 	static int const SLEEP( 4 );
-	static int const SLOTS( 320 );
-	Task t( SLEEP, SLOTS );
 	static int const WORKER_COUNT( 16 );
+	static int const SLOTS( WORKER_COUNT * 10 );
+	Task t( SLEEP, SLOTS );
 	/* HWorkFlow scope */ {
 		HWorkFlow w( WORKER_COUNT );
 		for ( int i( 0 ); i < SLOTS; ++ i ) {
@@ -354,9 +417,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "suspend" )
 	static int const SLEEP( 4 );
-	static int const SLOTS( 320 );
-	Task t( SLEEP, SLOTS );
 	static int const WORKER_COUNT( 16 );
+	static int const SLOTS( WORKER_COUNT * 10 );
+	Task t( SLEEP, SLOTS );
 	/* HWorkFlow scope */ {
 		HWorkFlow w( WORKER_COUNT );
 		int halve( SLOTS / 2 );
@@ -370,6 +433,28 @@ TUT_UNIT_TEST( "suspend" )
 		}
 	}
 	ENSURE_EQUALS( "work not done", t.get_slot_fill(), SLOTS );
+TUT_TEARDOWN()
+
+namespace {
+void dummy() {}
+}
+
+TUT_UNIT_TEST( "push after close" )
+	HWorkFlow w;
+	w.windup( HWorkFlow::WINDUP_MODE::CLOSE );
+	ENSURE_THROW( "push after close acceptrd", w.push_task( call( &dummy ) ), HWorkFlowException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "parallel start" )
+	HWorkFlow w;
+	ENSURE_THROW( "parallel start accepted", w.start(), HWorkFlowException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "parallel stop" )
+	HWorkFlow w;
+	w.schedule_windup( HWorkFlow::WINDUP_MODE::SUSPEND );
+	ENSURE_THROW( "parallel stop accepted", w.windup( HWorkFlow::WINDUP_MODE::CLOSE ), HWorkFlowException );
+	w.join();
 TUT_TEARDOWN()
 
 }
