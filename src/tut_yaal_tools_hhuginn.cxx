@@ -1109,6 +1109,10 @@ TUT_UNIT_TEST( "range(slice)" )
 	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-4::]);}" ), "wxyz" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "lambda" )
+	ENSURE_EQUALS( "lambda failed", execute( "main(){s=[\"fail\"];l=@(x){x[0]=\"ok\";};l(s);return(s[0]);}" ), "ok" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
