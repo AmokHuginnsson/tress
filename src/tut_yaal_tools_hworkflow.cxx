@@ -341,7 +341,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
 	static int const SLEEP( 30 );
 	static int const WORKER_COUNT( 16 );
-	static int const TARGET( 150 );
+	static int const TARGET( 120 );
 	Task t( SLEEP );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	/* HWorkFlow scope */ {
@@ -349,7 +349,7 @@ TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
 		for ( int i( 0 ); i < ( WORKER_COUNT / 4 ); ++ i ) {
 			w.push_task( call( &Task::worker, &t, &fibers[i], TARGET ), call( &Task::async_stop, &t, &fibers[i] ), call( &Task::want_restart, &t, &fibers[i], TARGET ) );
 		}
-		tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 3 );
+		tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
 		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
 		int wu( t.get_performed_work_units() );
 		int runnerCount( t.get_runner_count() );
@@ -368,7 +368,7 @@ TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "spawn more task directly after resume" )
-	static int const SLEEP( 10 );
+	static int const SLEEP( 20 );
 	static int const WORKER_COUNT( 16 );
 	static int const TARGET( 80 );
 	static int const SLOTS( 80 );

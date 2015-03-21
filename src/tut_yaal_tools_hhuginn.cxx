@@ -92,8 +92,16 @@ hcore::HString const& tut_yaal_tools_hhuginn::execute( hcore::HString const& sou
 	h.load( _sourceCache );
 	h.preprocess();
 	ENSURE( "parse failed", h.parse() );
-	ENSURE( "compilation failed", h.compile() );
-	ENSURE( "execution failed", h.execute() );
+	bool c( h.compile() );
+	if ( !c ) {
+		clog << h.error_message() << endl;
+	}
+	ENSURE( "compilation failed", c );
+	bool e( h.execute() );
+	if ( !e ) {
+		clog << h.error_message() << endl;
+	}
+	ENSURE( "execution failed", e );
 	HHuginn::value_t res( h.result() );
 	ENSURE_EQUALS( "bad result type", res->type(), HHuginn::TYPE::STRING );
 	_resultCache.assign( static_cast<HHuginn::HString*>( res.raw() )->value() );
@@ -1111,6 +1119,11 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "lambda" )
 	ENSURE_EQUALS( "lambda failed", execute( "main(){s=[\"fail\"];l=@(x){x[0]=\"ok\";};l(s);return(s[0]);}" ), "ok" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "ternary" )
+	ENSURE_EQUALS( "ternary failed", execute( "main(){a=[\"A\"];b=[\"B\"];q=7;x=q>5?(a[0]=\"1\"):(b[0]=\"2\");return(a[0]+b[0]+x);}" ), "1B1" );
+	ENSURE_EQUALS( "ternary failed", execute( "main(){a=[\"A\"];b=[\"B\"];q=7;x=q<5?(a[0]=\"1\"):(b[0]=\"2\");return(a[0]+b[0]+x);}" ), "A22" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "simple program" )
