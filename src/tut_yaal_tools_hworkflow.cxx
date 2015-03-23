@@ -160,6 +160,10 @@ public:
 	}
 };
 
+static int const SLEEP( 40 );
+static int const WORKER_COUNT( 12 );
+static int const TARGET( 120 );
+
 }
 
 TUT_UNIT_TEST( "Pushing tasks (functional test)." )
@@ -196,11 +200,8 @@ TUT_UNIT_TEST( "Cleanup of finished tasks." ) {
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "interrupt and explicit continue" )
-	static int const SLEEP( 30 );
 	Task t( SLEEP );
-	static int const WORKER_COUNT( 16 );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
-	static int const TARGET( 150 );
 	/* HWorkFlow scope */ {
 		HWorkFlow w( WORKER_COUNT );
 		for ( Task::Fiber*& f : fibers ) {
@@ -223,11 +224,8 @@ TUT_UNIT_TEST( "interrupt and explicit continue" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "interrupt and implicit continue" )
-	static int const SLEEP( 30 );
 	Task t( SLEEP );
-	static int const WORKER_COUNT( 16 );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
-	static int const TARGET( 150 );
 	/* HWorkFlow scope */ {
 		HWorkFlow w( WORKER_COUNT );
 		for ( Task::Fiber*& f : fibers ) {
@@ -249,11 +247,8 @@ TUT_UNIT_TEST( "interrupt and implicit continue" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "abort" )
-	static int const SLEEP( 30 );
 	Task t( SLEEP );
-	static int const WORKER_COUNT( 16 );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
-	static int const TARGET( 150 );
 	int workUnitsInFirstShot( 0 );
 	/* HWorkFlow scope */ {
 		HWorkFlow w( WORKER_COUNT );
@@ -277,11 +272,8 @@ TUT_UNIT_TEST( "abort" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "schedule_windup" )
-	static int const SLEEP( 30 );
 	Task t( SLEEP );
-	static int const WORKER_COUNT( 16 );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
-	static int const TARGET( 150 );
 	/* HWorkFlow scope */ {
 		HWorkFlow w( WORKER_COUNT );
 		for ( Task::Fiber*& f : fibers ) {
@@ -310,9 +302,6 @@ TUT_UNIT_TEST( "schedule_windup" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "add task during interrupt (implicit restart)" )
-	static int const SLEEP( 30 );
-	static int const WORKER_COUNT( 16 );
-	static int const TARGET( 150 );
 	Task t( SLEEP );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	int done( 0 );
@@ -339,9 +328,6 @@ TUT_UNIT_TEST( "add task during interrupt (implicit restart)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
-	static int const SLEEP( 30 );
-	static int const WORKER_COUNT( 16 );
-	static int const TARGET( 120 );
 	Task t( SLEEP );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	/* HWorkFlow scope */ {
@@ -368,8 +354,6 @@ TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "spawn more task directly after resume" )
-	static int const SLEEP( 20 );
-	static int const WORKER_COUNT( 16 );
 	static int const TARGET( 80 );
 	static int const SLOTS( 80 );
 	Task t( SLEEP, SLOTS );
@@ -402,7 +386,6 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "many tasks" )
 	static int const SLEEP( 4 );
-	static int const WORKER_COUNT( 16 );
 	static int const SLOTS( WORKER_COUNT * 10 );
 	Task t( SLEEP, SLOTS );
 	/* HWorkFlow scope */ {
@@ -417,7 +400,6 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "suspend" )
 	static int const SLEEP( 4 );
-	static int const WORKER_COUNT( 16 );
 	static int const SLOTS( WORKER_COUNT * 10 );
 	Task t( SLEEP, SLOTS );
 	/* HWorkFlow scope */ {
