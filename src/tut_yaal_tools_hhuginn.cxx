@@ -1122,8 +1122,77 @@ TUT_UNIT_TEST( "lambda" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ternary" )
-	ENSURE_EQUALS( "ternary failed", execute( "main(){a=[\"A\"];b=[\"B\"];q=7;x=q>5?(a[0]=\"1\"):(b[0]=\"2\");return(a[0]+b[0]+x);}" ), "1B1" );
-	ENSURE_EQUALS( "ternary failed", execute( "main(){a=[\"A\"];b=[\"B\"];q=7;x=q<5?(a[0]=\"1\"):(b[0]=\"2\");return(a[0]+b[0]+x);}" ), "A22" );
+	ENSURE_EQUALS( "ternary failed", execute( "main(){a=\"A\";b=\"B\";q=7;x=q>5?(a=\"1\"):(b=\"2\");return(a+b+x);}" ), "1B1" );
+	ENSURE_EQUALS( "ternary failed", execute( "main(){a=\"A\";b=\"B\";q=7;x=q<5?(a=\"1\"):(b=\"2\");return(a+b+x);}" ), "A22" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "short circuit in boolean `and'" )
+	char const p0[] =
+		"main() {"
+		" a = 0;"
+		" b = 0;"
+		" x = ( ( a = 1 ) > 0 ) && ( ( b = 2 ) > 0 );"
+		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
+		"}"
+	;
+	ENSURE_EQUALS( "ternary failed (T && T)", execute( p0 ), "12T" );
+	char const p1[] =
+		"main() {"
+		" a = 0;"
+		" b = 0;"
+		" x = ( ( a = 1 ) > 0 ) && ( ( b = 2 ) > 3 );"
+		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
+		"}"
+	;
+	ENSURE_EQUALS( "ternary failed (T && F)", execute( p1 ), "12F" );
+	char const p2[] =
+		"main() {"
+		" a = 0;"
+		" b = 0;"
+		" x = ( ( a = 1 ) > 2 ) && ( ( b = 2 ) > 0 );"
+		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
+		"}"
+	;
+	ENSURE_EQUALS( "ternary failed (F && T)", execute( p2 ), "10F" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "short circuit in boolean `or'" )
+	char const p0[] =
+		"main() {"
+		" a = 0;"
+		" b = 0;"
+		" x = ( ( a = 1 ) > 2 ) || ( ( b = 2 ) > 0 );"
+		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
+		"}"
+	;
+	ENSURE_EQUALS( "ternary failed (F || T)", execute( p0 ), "12T" );
+	char const p1[] =
+		"main() {"
+		" a = 0;"
+		" b = 0;"
+		" x = ( ( a = 1 ) > 0 ) || ( ( b = 2 ) > 3 );"
+		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
+		"}"
+	;
+	ENSURE_EQUALS( "ternary failed (T || F)", execute( p1 ), "10T" );
+	char const p2[] =
+		"main() {"
+		" a = 0;"
+		" b = 0;"
+		" x = ( ( a = 1 ) > 0 ) || ( ( b = 2 ) > 0 );"
+		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
+		"}"
+	;
+	ENSURE_EQUALS( "ternary failed (T || T)", execute( p2 ), "10T" );
+	char const p3[] =
+		"main() {"
+		" a = 0;"
+		" b = 0;"
+		" x = ( ( a = 1 ) > 2 ) || ( ( b = 2 ) > 3 );"
+		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
+		"}"
+	;
+	ENSURE_EQUALS( "ternary failed (F || F)", execute( p3 ), "12F" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "simple program" )
