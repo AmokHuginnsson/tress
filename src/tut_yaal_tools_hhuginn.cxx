@@ -1195,6 +1195,23 @@ TUT_UNIT_TEST( "short circuit in boolean `or'" )
 	ENSURE_EQUALS( "ternary failed (F || F)", execute( p3 ), "12F" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "print" )
+	HHuginn h;
+	HStringStream in( "main(){print(\"Hello World!\\n\");print(13);print(3.14);print($2.71);print('X');return(7);}" );
+	HStringStream out;
+	h.set_output_stream( out );
+	h.load( in );
+	h.preprocess();
+	ENSURE( "parse failed", h.parse() );
+	ENSURE( "compile", h.compile() );
+	ENSURE( "execute", h.execute() );
+	HHuginn::value_t r( h.result() );
+	ENSURE( "nothing returned", !! r );
+	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::TYPE::INTEGER );
+	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
+	ENSURE_EQUALS( "print failed", out.string(), "Hello World!\n133.142.71X" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
