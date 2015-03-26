@@ -27,7 +27,10 @@ Copyright:
 #ifndef HAVE_TRESS_FAKE_CONSOLE_SUBSYSTEM_HXX_INCLUDED
 #define HAVE_TRESS_FAKE_CONSOLE_SUBSYSTEM_HXX_INCLUDED 1
 
+#include <yaal/hcore/hthread.hxx>
+
 class HFakeConsoleGuard {
+	yaal::hcore::external_lock_t _exclusiveAccess;
 public:
 	HFakeConsoleGuard( void );
 	virtual ~HFakeConsoleGuard( void );

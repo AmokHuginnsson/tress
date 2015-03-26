@@ -35,8 +35,6 @@ M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 #include "fake_console_subsystem.hxx"
 
-#include <yaal/tools/hmonitor.hxx>
-
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
@@ -62,7 +60,6 @@ int const tut_yaal_hconsole_hconsole::CONSOLE_HEIGHT = 25;
 TUT_TEST_GROUP( tut_yaal_hconsole_hconsole, "yaal::hconsole::HConsole" );
 
 TUT_UNIT_TEST( "Enter and leave" )
-	external_lock_t l( HMonitor::get_instance().acquire( "terminal" ) );
 	HConsole& cons( HConsole::get_instance() );
 	cons.enter_curses();
 	ENSURE_EQUALS( "bad width", cons.get_width(), CONSOLE_WIDTH );
@@ -71,7 +68,6 @@ TUT_UNIT_TEST( "Enter and leave" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "cursor position" )
-	external_lock_t l( HMonitor::get_instance().acquire( "terminal" ) );
 	HConsole& cons( HConsole::get_instance() );
 	cons.enter_curses();
 	int row( -1 );

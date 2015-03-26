@@ -32,6 +32,7 @@ Copyright:
 #include <dlfcn.h>
 
 #include <yaal/hcore/base.hxx>
+#include <yaal/tools/hmonitor.hxx>
 
 #include "fake_console_subsystem.hxx"
 
@@ -53,7 +54,8 @@ public:
 	}
 } _fakeConsole_;
 
-HFakeConsoleGuard::HFakeConsoleGuard( void ) {
+HFakeConsoleGuard::HFakeConsoleGuard( void )
+	: _exclusiveAccess( yaal::tools::HMonitor::get_instance().acquire( "terminal" ) ) {
 	_fakeConsole_.activate();
 }
 
