@@ -42,8 +42,8 @@ using namespace tress::tut_helpers;
 
 namespace yaal {
 namespace tools {
-inline std::ostream& operator << ( std::ostream& out, HHuginn::TYPE t_ ) {
-	out << HHuginn::HValue::type_name( t_ );
+inline std::ostream& operator << ( std::ostream& out, HHuginn::type_t t_ ) {
+	out << t_->name();
 	return ( out );
 }
 }
