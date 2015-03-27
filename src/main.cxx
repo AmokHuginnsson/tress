@@ -45,8 +45,8 @@ Copyright:
 #include <yaal/hcore/htokenizer.hxx>
 #include <yaal/tools/util.hxx>
 #include <yaal/tools/streamtools.hxx>
-#include <yaal/hconsole/console.hxx>
-#include <yaal/hconsole/hterminal.hxx>
+#include <yaal/tools/hterminal.hxx>
+#include <yaal/tools/signals.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 
 #include "setup.hxx"
@@ -56,7 +56,6 @@ M_VCSID( "$Id: " __ID__ " $" )
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
-using namespace yaal::hconsole;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace tress;
@@ -180,10 +179,6 @@ int main( int argc_, char* argv_[] ) {
 	} catch ( int e ) {
 		err = e;
 		/* escape from main loop */
-	} catch ( ... ) {
-/* ending ncurses sesion        */
-		if ( HConsole::get_instance().is_enabled() )
-			HConsole::get_instance().leave_curses();
 		throw;
 	}
 	if ( setup._reporter == "tut" ) {

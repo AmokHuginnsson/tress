@@ -8,8 +8,8 @@
 #include "tut.hpp"
 #include <yaal/hcore/hthread.hxx>
 #include <yaal/tools/xmath.hxx>
-#include <yaal/hconsole/ansi.hxx>
-#include <yaal/hconsole/hterminal.hxx>
+#include <yaal/tools/ansi.hxx>
+#include <yaal/tools/hterminal.hxx>
 
 #ifdef __MSVCXX__
 #include <windows.h>
@@ -19,7 +19,7 @@
 namespace yaal {
 namespace ansi {
 inline std::ostream& operator << ( std::ostream& os_, yaal::ansi::HSequence const& seq_ ) {
-	if ( yaal::hconsole::is_a_tty( os_ ) )
+	if ( yaal::tools::is_a_tty( os_ ) )
 		os_ << *seq_;
 	return ( os_ );
 }
@@ -288,7 +288,7 @@ public:
 		yaal::hcore::HLock l( _mutex );
 
 		std::string const& name( tr._group ? tr._group->get_name() : tr._message );
-		static int const maxWidth( yaal::hconsole::_terminal_.exists() ? yaal::tools::xmath::clip( 80, yaal::hconsole::_terminal_.size().second, 128 ) : 0x10000 );
+		static int const maxWidth( yaal::tools::_terminal_.exists() ? yaal::tools::xmath::clip( 80, yaal::tools::_terminal_.size().second, 128 ) : 0x10000 );
 
 		if ( ! tress::setup._verbose && ( name != _currentGroup ) ) {
 			if ( ! _currentGroup.empty() )

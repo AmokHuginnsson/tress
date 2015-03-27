@@ -51,7 +51,11 @@ struct tut_yaal_hconsole_hconsole : public simple_mock<tut_yaal_hconsole_hconsol
 	tut_yaal_hconsole_hconsole( void )
 		: _fakeConoleGuard() {
 	}
-	virtual ~tut_yaal_hconsole_hconsole( void ) {}
+	virtual ~tut_yaal_hconsole_hconsole( void ) {
+		if ( HConsole::get_instance().is_enabled() ) {
+			HConsole::get_instance().leave_curses();
+		}
+	}
 	HFakeConsoleGuard _fakeConoleGuard;
 };
 int const tut_yaal_hconsole_hconsole::CONSOLE_WIDTH = 80;

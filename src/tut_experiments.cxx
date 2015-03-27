@@ -30,7 +30,7 @@ Copyright:
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
-#include <yaal/hconsole/hterminal.hxx>
+#include <yaal/tools/hterminal.hxx>
 #include <yaal/hcore/hnumber.hxx>
 #include <yaal/tools/hmonitor.hxx>
 
@@ -39,7 +39,7 @@ using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace yaal::ansi;
-using namespace yaal::hconsole;
+using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
 namespace tut {

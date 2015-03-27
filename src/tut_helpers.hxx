@@ -51,7 +51,7 @@ Copyright:
 #include <yaal/tools/hstringstream.hxx>
 #include <yaal/tools/hring.hxx>
 #include <yaal/tools/htwowaymap.hxx>
-#include <yaal/hconsole/ansi.hxx>
+#include <yaal/tools/ansi.hxx>
 
 #if defined( __GNUC__ ) && ! defined( stdext )
 #define stdext __gnu_cxx
