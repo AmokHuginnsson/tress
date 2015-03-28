@@ -222,7 +222,7 @@ public:
 			_callback->run_started( static_cast<int>( _groups.size() ), total );
 			for ( const_iterator i( _groups.begin() ), e( _groups.end() ); ! yaal::_isKilled_ && ( i != e ); ++ i ) {
 				if ( !! w )
-					w->push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
+					w->schedule_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
 				else
 					run_group( i );
 			}
@@ -258,7 +258,7 @@ public:
 					_callback->test_completed( tr );
 				} else {
 					if ( !! w )
-						w->push_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
+						w->schedule_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
 					else
 						run_group( i );
 				}
@@ -297,7 +297,7 @@ public:
 					_callback->test_completed( tr );
 				} else {
 					if ( !! w )
-						w->push_task( yaal::hcore::call( &test_runner::run_in_group, this, i, yaal::move( k->second ) ) );
+						w->schedule_task( yaal::hcore::call( &test_runner::run_in_group, this, i, yaal::move( k->second ) ) );
 					else
 						run_in_group( i, k->second );
 				}
