@@ -81,8 +81,8 @@ TUT_UNIT_TEST( "match of empty" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "huginn identifier from huginn program" )
-	hcore::HString identifier( "\\<[a-zA-Z_][a-zA-Z0-9_]*\\>" );
-	HRegex r( identifier );
+	hcore::HString identifier( "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b" );
+	HRegex r( identifier, HRegex::COMPILE::EXTENDED );
 	HRegex::HMatchIterator it( r.find( "main() {\n\treturn( 0 );\n}\n" ) );
 	HString m( it->raw(), it->size() );
 	ENSURE_EQUALS( "bad match", m, "main" );
