@@ -766,7 +766,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	namespace e_p = executing_parser;
-	HRule name( regex( "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b" ) );
+	HRule name( regex( YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END ) );
 	HRule expression;
 	HRule absoluteValue( '|' >> expression >> '|' );
 	HRule parenthesis( '(' >> expression >> ')' );
@@ -841,7 +841,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule hg( + ( classDefinition | functionDefinition ) );
 	char const huginnDesc[][400] = {
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ )",
-		"B_ = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
+		"B_ = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
 		"C_ = ( *( ( ( ( B_ >> +( E_ | F_ ) ) | B_ ) >> '=' ) ^ '=' ) >> ( ( G_ >> -( \"^^\" >> G_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
 		"D_ = ( B_ >> '(' >> -H_ >> ')' >> I_ )",
 		"E_ = ( '[' >> ( ( ( ':' >> -C_ ) | ( C_ >> -( ':' >> -C_ ) ) ) >> -( ':' >> -C_ ) ) >> ']' )",
