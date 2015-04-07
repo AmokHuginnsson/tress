@@ -160,7 +160,7 @@ public:
 	}
 };
 
-static int const SLEEP( 40 );
+static int const SLEEP( 80 );
 static int const WORKER_COUNT( 12 );
 static int const TARGET( 120 );
 
