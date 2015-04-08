@@ -75,7 +75,7 @@ void OSetup::test_setup( void ) {
 		_verbose = false;
 	}
 	if ( _quiet && _verbose )
-		yaal::tools::util::failure( 1,
+		yaal::tools::util::failure( 1, "%s",
 				_( "quiet and verbose options are mutually exclusive\n" ) );
 	if ( _verbose )
 		clog.reset( make_pointer<HFile>( stdout, HFile::OWNERSHIP::EXTERNAL ) );
@@ -86,7 +86,7 @@ void OSetup::test_setup( void ) {
 		std::cout.rdbuf( &cnull_obj );
 	}
 	if ( _fancy && _verbose )
-		yaal::tools::util::failure( 1,
+		yaal::tools::util::failure( 1, "%s",
 				_( "fancy and verbose options are mutually exclusive\n" ) );
 	if ( _listGroups
 			&& ( _restartable
