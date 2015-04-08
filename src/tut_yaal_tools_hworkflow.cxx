@@ -174,18 +174,19 @@ TUT_UNIT_TEST( "Pushing tasks (functional test)." )
 	char const mark[] = "!@#$%^&*+?";
 	static int const WORKER_COUNT( static_cast<int>( sizeof ( mark ) ) - 1 );
 	HWorkFlow w( WORKER_COUNT );
-	int slp( 40 );
+	int slp( SLEEP / WORKER_COUNT );
 	int id( 0 );
 	for ( char m : mark ) {
 		w.schedule_task( call( &Task::foo, &t, id, m, slp ) );
 		++ id;
-		slp += 40;
+		slp += ( SLEEP / WORKER_COUNT );
 	}
 	tools::sleep::milisecond( SLEEP );
 	ENSURE( "work not parallelized properly", t.get_runner_count() > 1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Cleanup of finished tasks." ) {
+	TIME_CONSTRAINT_EXEMPT();
 	/* Order of Task and HWorkFlow matters. */
 	Task t;
 	HWorkFlow w( 3 );
@@ -200,6 +201,7 @@ TUT_UNIT_TEST( "Cleanup of finished tasks." ) {
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "interrupt and explicit continue" )
+	TIME_CONSTRAINT_EXEMPT();
 	Task t( SLEEP );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	/* HWorkFlow scope */ {
@@ -224,6 +226,7 @@ TUT_UNIT_TEST( "interrupt and explicit continue" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "interrupt and implicit continue" )
+	TIME_CONSTRAINT_EXEMPT();
 	Task t( SLEEP );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	/* HWorkFlow scope */ {
@@ -247,6 +250,7 @@ TUT_UNIT_TEST( "interrupt and implicit continue" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "abort" )
+	TIME_CONSTRAINT_EXEMPT();
 	Task t( SLEEP );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	int workUnitsInFirstShot( 0 );
@@ -272,6 +276,7 @@ TUT_UNIT_TEST( "abort" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "schedule_windup" )
+	TIME_CONSTRAINT_EXEMPT();
 	Task t( SLEEP );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	/* HWorkFlow scope */ {
@@ -302,6 +307,7 @@ TUT_UNIT_TEST( "schedule_windup" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "add task during interrupt (implicit restart)" )
+	TIME_CONSTRAINT_EXEMPT();
 	Task t( SLEEP );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	int done( 0 );
@@ -328,6 +334,7 @@ TUT_UNIT_TEST( "add task during interrupt (implicit restart)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
+	TIME_CONSTRAINT_EXEMPT();
 	Task t( SLEEP );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	/* HWorkFlow scope */ {
@@ -354,6 +361,7 @@ TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "spawn more task directly after resume" )
+	TIME_CONSTRAINT_EXEMPT();
 	static int const TARGET( 80 );
 	static int const SLOTS( 80 );
 	Task t( SLEEP, SLOTS );
@@ -385,6 +393,7 @@ TUT_UNIT_TEST( "spawn more task directly after resume" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "many tasks" )
+	TIME_CONSTRAINT_EXEMPT();
 	static int const SLEEP( 4 );
 	static int const SLOTS( WORKER_COUNT * 10 );
 	Task t( SLEEP, SLOTS );
@@ -399,6 +408,7 @@ TUT_UNIT_TEST( "many tasks" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "suspend" )
+	TIME_CONSTRAINT_EXEMPT();
 	static int const SLEEP( 4 );
 	static int const SLOTS( WORKER_COUNT * 10 );
 	Task t( SLEEP, SLOTS );
@@ -418,6 +428,7 @@ TUT_UNIT_TEST( "suspend" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "start_task" )
+	TIME_CONSTRAINT_EXEMPT();
 	static int const SLOTS( 16 );
 	Task t( SLEEP, SLOTS );
 	/* HWorkFlow scope */ {
