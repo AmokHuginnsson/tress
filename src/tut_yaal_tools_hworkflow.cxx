@@ -167,6 +167,7 @@ public:
 
 static int const SLEEP( 40 );
 static int const WORKER_COUNT( 12 );
+static int const MAX_RETRIES( 16 );
 static int const TARGET( 120 );
 
 }
@@ -181,7 +182,7 @@ TUT_UNIT_TEST( "Pushing tasks (functional test)." )
 	HWorkFlow w( WORKER_COUNT );
 	int slp( SLEEP / WORKER_COUNT );
 	int id( 0 );
-	HClock c;
+	int tries( 0 );
 	do {
 		for ( char m : mark ) {
 			w.schedule_task( call( &Task::foo, &t, id, m, slp ) );
@@ -189,7 +190,11 @@ TUT_UNIT_TEST( "Pushing tasks (functional test)." )
 			slp += ( SLEEP / WORKER_COUNT );
 		}
 		tools::sleep::milisecond( SLEEP );
-	} while ( ( t.get_runner_count() < 2 ) && ( c.get_time_elapsed( HClock::UNIT::MILISECOND ) < ( SLEEP * 10 ) ) );
+		++ tries;
+	} while ( ( t.get_runner_count() < 2 ) && ( tries < MAX_RETRIES ) );
+	if ( tries > 1 ) {
+		cerr << "test " << get_test_name() << " retried " << tries << " times" << endl;
+	}
 	ENSURE( "work not parallelized properly", t.get_runner_count() > 1 );
 TUT_TEARDOWN()
 
@@ -313,9 +318,9 @@ TUT_UNIT_TEST( "schedule_windup" )
 			t.reset_workunits( 0 );
 			tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
 			++ tries;
-		} while ( ( t.get_runner_count() < 2 ) && ( tries < 10 ) );
+		} while ( ( t.get_runner_count() < 2 ) && ( tries < MAX_RETRIES ) );
 		if ( tries > 1 ) {
-			clog << "test " << get_test_name() << " retried" << endl;
+			cerr << "test " << get_test_name() << " retried " << tries << " times" << endl;
 		}
 		w.schedule_windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
 		while ( ! w.can_join() ) {
@@ -387,9 +392,9 @@ TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
 			t.reset_workunits( 0 );
 			tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
 			++ tries;
-		} while ( ( t.get_runner_count() < 2 ) && ( tries < 10 ) );
+		} while ( ( t.get_runner_count() < 2 ) && ( tries < MAX_RETRIES ) );
 		if ( tries > 1 ) {
-			clog << "test " << get_test_name() << " retried" << endl;
+			cerr << "test " << get_test_name() << " retried " << tries << " times" << endl;
 		}
 		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
 		int wu( t.get_performed_work_units() );
@@ -408,13 +413,14 @@ TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
 	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "spawn more task directly after resume" )
+TUT_UNIT_TEST( "spawn more task directly during resume" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int const TARGET( 80 );
-	static int const SLOTS( 80 );
+	static int const SLOTS( 20 );
 	Task t( SLEEP, SLOTS );
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	int runnerCount( 0 );
+	int workUnits( 0 );
 	/* HWorkFlow scope */ {
 		HWorkFlow w( WORKER_COUNT );
 		for ( int i( 0 ); i < ( WORKER_COUNT / 2 ); ++ i ) {
@@ -424,12 +430,21 @@ TUT_UNIT_TEST( "spawn more task directly after resume" )
 				call( &Task::want_restart, &t, &fibers[i], TARGET )
 			);
 		}
-		tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
+		int tries( 0 );
+		do {
+			t.reset_workunits( 0 );
+			tools::sleep::milisecond( ( TARGET / WORKER_COUNT ) * SLEEP / 2 );
+			++ tries;
+		} while ( ( t.get_runner_count() < 2 ) && ( tries < MAX_RETRIES ) );
+		if ( tries > 1 ) {
+			cerr << "test " << get_test_name() << " retried " << tries << " times" << endl;
+		}
 		w.windup( HWorkFlow::WINDUP_MODE::SUSPEND );
 		runnerCount = t.get_runner_count();
 		clog << "runnerCount = " << runnerCount << endl;
 		ENSURE( "work not parallelized", runnerCount > 1 );
-		ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
+		workUnits = t.get_performed_work_units();
+		ENSURE( "work was not performed", workUnits >= TARGET );
 		for ( Task::Fiber const* f : fibers ) {
 			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
 		}
@@ -442,6 +457,7 @@ TUT_UNIT_TEST( "spawn more task directly after resume" )
 	clog << "runnerCount = " << t.get_runner_count() << endl;
 	ENSURE_EQUALS( "work not done", t.get_slot_fill(), SLOTS );
 	ENSURE( "extra runners not spawned", t.get_runner_count() > runnerCount );
+	ENSURE_EQUALS( "additional work units performed", t.get_performed_work_units(), workUnits );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "many tasks" )
