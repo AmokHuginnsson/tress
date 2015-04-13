@@ -54,6 +54,7 @@ struct tut_yaal_tools_hscheduledasynccaller : public simple_mock<tut_yaal_tools_
 		_sac.stop();
 	}
 	void action( int val_ ) {
+		HLock l( _mutex );
 		_val = val_;
 	}
 };
@@ -62,15 +63,23 @@ TUT_TEST_GROUP( tut_yaal_tools_hscheduledasynccaller, "yaal::tools::HScheduledAs
 
 TUT_UNIT_TEST( "functional test" )
 	int const expect( 7 );
-	_sac.register_call( static_cast<HAbstractAsyncCaller::priority_t>( time( NULL ) + 1 ), call( &tut_yaal_tools_hscheduledasynccaller::action, this, expect ) );
+	_sac.register_call( static_cast<HScheduledAsyncCaller::priority_t>( time( NULL ) + 1 ), call( &tut_yaal_tools_hscheduledasynccaller::action, this, expect ) );
 	ENSURE_EQUALS( "scheduled call did not wait", _val, 0 );
 #ifdef _MSC_VER
-	static int const WAIT( 8 );
+	static int const WAIT( 16 );
 #else /* #ifdef _MSC_VER */
-	static int const WAIT( 4 );
+	static int const WAIT( 8 );
 #endif /* #else #ifdef _MSC_VER */
-	if ( tools::sleep::second( WAIT ) )
-		log_trace << "sleep interrupted!" << endl;
+	for ( int i( 0 ); i < WAIT; ++ i ) {
+		if ( tools::sleep::milisecond( 500 ) ) {
+			log_trace << "sleep interrupted!" << endl;
+		}
+		HLock l( _mutex );
+		if ( _val == expect ) {
+			break;
+		}
+	}
+	HLock l( _mutex );
 	ENSURE_EQUALS( "scheduled call misfired", _val, expect );
 TUT_TEARDOWN()
 
