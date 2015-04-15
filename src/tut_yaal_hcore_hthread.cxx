@@ -184,7 +184,7 @@ void CVTest::eat( void ) {
 	HLock l( _mutex );
 	_thread.spawn( call( &CVTest::run, this ) );
 	while ( cnt -- ) {
-		_cV.wait( 1, 0 );
+		_cV.wait_for( duration( 1, time::UNIT::SECOND ) );
 		cout << "\b" << flush;
 	}
 	_loop = false;
@@ -360,7 +360,7 @@ TUT_UNIT_TEST( "Conditional variable timeout." )
 	HMutex m;
 	HLock l( m );
 	HCondition c( m );
-	ENSURE_EQUALS( "bad wait status", static_cast<int>( c.wait( 0, 100 ) ), static_cast<int>( HCondition::TIMEOUT ) );
+	ENSURE_EQUALS( "bad wait status", static_cast<int>( c.wait_for( duration( 100, time::UNIT::NANOSECOND ) ) ), static_cast<int>( HCondition::TIMEOUT ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Exception propagation." )

@@ -71,8 +71,8 @@ DEFINE_TAGGED_TYPE(i64_t, Uid64)
 DEFINE_TAGGED_TYPE(i32_t, Gid)
 
 TUT_UNIT_TEST( "all tests" )
-	Uid u1 = 10;
-	Uid u2 = 20;
+	Uid u1{ 10 };
+	Uid u2{ 20 };
 
 	// ... have all operators that a normal integer has
 	ENSURE(u1 < u2);
@@ -95,7 +95,7 @@ TUT_UNIT_TEST( "all tests" )
 	ENSURE_EQUALS( ( ~u1 ).get(), ~( u1.get() ) );
 
 	// ... it can also be mixed with all integer plan types
-	u1 = 1;
+	u1 = Uid( 1 );
 	ENSURE_EQUALS( u1, Uid( 1 ) );
 	u1 = u1 + u2;
 	ENSURE_EQUALS( u1, Uid( 21 ) );
@@ -105,9 +105,9 @@ TUT_UNIT_TEST( "all tests" )
 	ENSURE_EQUALS( u1, Uid( 21 ) );
 	ENSURE_NOT( 1 == u1 );
 
-	Uid64 u64_1 = u32_t(50);
-	u64_1 = i8_t(1);
-	u64_1 = u16_t(1);
+	Uid64 u64_1{ u32_t(50) };
+	u64_1 = Uid64( i8_t(1) );
+	u64_1 = Uid64( u16_t(1) );
 	u64_1 = u64_1 + i32_t(1);
 	u64_1 = u64_t(1) + u64_1;
 

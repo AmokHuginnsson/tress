@@ -71,7 +71,7 @@ struct tut_yaal_hcore_htls : public simple_mock<tut_yaal_hcore_htls> {
 			clog << "all on" << endl;
 			_allOn.signal();
 		}
-		_cond.wait( 10, 0 );
+		_cond.wait_for( duration( 10, time::UNIT::SECOND ) );
 		clog << "leaving ..." << endl;
 		return;
 		M_EPILOG

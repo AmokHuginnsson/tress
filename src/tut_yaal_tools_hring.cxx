@@ -132,7 +132,7 @@ TUT_UNIT_TEST( "more data tests" )
 	ENSURE_THROW( "pushing to full ring succeeded", ring.push_back( 4 ), HException );
 
 	ENSURE_EQUALS( "full failed", ring.full(), true );
-	ring.reserve( 5 );
+	ring.reserve( ring::capacity_type( 5 ) );
 	ring.push_back( 4 );
 	ring.pop_front();
 
