@@ -64,7 +64,7 @@ TUT_TEST_GROUP( tut_yaal_tools_hscheduledasynccaller, "yaal::tools::HScheduledAs
 TUT_UNIT_TEST( "functional test" )
 	int const expect( 7 );
 	_sac.call_at(
-		static_cast<HScheduledAsyncCaller::priority_t>( ::time( NULL ) + 1 ),
+		now_local().mod_second( 1 ),
 		call( &tut_yaal_tools_hscheduledasynccaller::action, this, expect )
 	);
 	ENSURE_EQUALS( "scheduled call did not wait", _val, 0 );
