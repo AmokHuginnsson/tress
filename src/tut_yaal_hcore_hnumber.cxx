@@ -1592,7 +1592,7 @@ TUT_UNIT_TEST( 50, "speed" )
 	TIME_CONSTRAINT_EXEMPT(); {
 		HClock c;
 		n ^= 133333;
-		clog << "*speed* HNumber multiplication = " << static_cast<int long>( y = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* HNumber multiplication = " << static_cast<int long>( y = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
 	HString myRes = n.to_string();
 	_bc.spawn( BC_PATH );
@@ -1601,14 +1601,14 @@ TUT_UNIT_TEST( 50, "speed" )
 		HClock c;
 		_bc << "3^133333" << endl;
 		res = read_result();
-		clog << "*speed* bc multiplication = " << static_cast<int long>( bc = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* bc multiplication = " << static_cast<int long>( bc = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
 	ENSURE_EQUALS( "karatsuba failed", myRes, res );
 	clog << "*speed* HNumber multiplication result = " << ( ( bc > y ) ? green : red ) << ( y / bc ) << lightgray << endl;
 	/**/ {
 		HClock c;
 		n = square_root( HNumber( 91, 10000 ) );
-		clog << "*speed* HNumber square root = " << static_cast<int long>( y = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* HNumber square root = " << static_cast<int long>( y = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
 	myRes = n.to_string();
 	/**/ {
@@ -1616,7 +1616,7 @@ TUT_UNIT_TEST( 50, "speed" )
 		_bc << "scale=10000" << endl;
 		_bc << "sqrt(91)" << endl;
 		res = read_result();
-		clog << "*speed* bc square root = " << static_cast<int long>( bc = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* bc square root = " << static_cast<int long>( bc = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
 	ENSURE_EQUALS( "square root failed", myRes, res );
 	clog << "*speed* HNumber square root result = " << ( ( bc > y ) ? green : red ) << ( y / bc ) << lightgray << endl;

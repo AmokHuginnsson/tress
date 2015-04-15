@@ -192,7 +192,7 @@ bool file_compare( yaal::hcore::HString const& path1_, yaal::hcore::HString cons
 	return ( different );
 }
 
-int long get_speed( HClock::UNIT::unit_t u ) {
+int long get_speed( time::UNIT u ) {
 	static int long const LOOPS = 320000L;
 	volatile double long x = PI;
 	HClock c;

@@ -309,7 +309,7 @@ static double long const epsilon = 0.000001L;
 extern int const _testData_[3][ 100 ];
 struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ ); } };
 bool file_compare( yaal::hcore::HString const&, yaal::hcore::HString const& );
-int long get_speed( yaal::hcore::HClock::UNIT::unit_t );
+int long get_speed( yaal::hcore::time::UNIT );
 
 struct HSTDGlobalScopeExceptionHandlingPolicy {
 	static void handle_exception( void ) __attribute__(( __noreturn__ ));

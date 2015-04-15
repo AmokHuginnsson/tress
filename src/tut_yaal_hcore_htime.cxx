@@ -129,7 +129,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "get current time" )
 	HTime nowLocal( now_local() );
 	HTime nowUTC( now_utc() );
-	i64_t now( time( NULL ) + HTime::SECONDS_TO_UNIX_EPOCH );
+	i64_t now( ::time( NULL ) + HTime::SECONDS_TO_UNIX_EPOCH );
 	i64_t nowLocalRaw( nowLocal.raw() );
 	i64_t nowUTCRaw( nowUTC.raw() );
 	nowLocalRaw -= ( nowLocalRaw % 100 );

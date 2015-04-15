@@ -43,7 +43,6 @@ struct tut_yaal_tools_sleep : public simple_mock<tut_yaal_tools_sleep> {
 	typedef simple_mock<tut_yaal_tools_sleep> base_type;
 	virtual ~tut_yaal_tools_sleep( void )
 		{}
-	int long get_speed( HClock::UNIT::unit_t const& );
 };
 
 TUT_TEST_GROUP( tut_yaal_tools_sleep, "yaal::tools::sleep" );
@@ -55,9 +54,9 @@ TUT_UNIT_TEST( "the 1 second granularity sleep" )
 	int long SKEW( 2 );
 	HClock clk;
 	cout << "E" << tools::sleep::second( SLEEP, true ) << "E" << endl;
-	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND ) << "$" << endl;
-	ENSURE_DISTANCE( "under slept by miliseconds", yaal::max( SHOULD_SLEEP_MS - static_cast<int long>( clk.get_time_elapsed( HClock::UNIT::MILISECOND ) ), 0l ), SKEW, SKEW + 1 );
-	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND ) << "$" << endl;
+	cout << "$" << clk.get_time_elapsed( time::UNIT::MILISECOND ) << "$" << endl;
+	ENSURE_DISTANCE( "under slept by miliseconds", yaal::max( SHOULD_SLEEP_MS - static_cast<int long>( clk.get_time_elapsed( time::UNIT::MILISECOND ) ), 0l ), SKEW, SKEW + 1 );
+	cout << "$" << clk.get_time_elapsed( time::UNIT::MILISECOND ) << "$" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "the 1 milisecond granularity sleep" )
@@ -66,9 +65,9 @@ TUT_UNIT_TEST( "the 1 milisecond granularity sleep" )
 	int long SKEW( 3 );
 	HClock clk;
 	cout << "E" << tools::sleep::milisecond( SLEEP, true ) << "E" << endl;
-	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND ) << "$" << endl;
-	ENSURE_DISTANCE( "under slept by miliseconds", yaal::max( SHOULD_SLEEP_MS - static_cast<int long>( clk.get_time_elapsed( HClock::UNIT::MILISECOND ) ), 0l ), SKEW, SKEW + 1 );
-	cout << "$" << clk.get_time_elapsed( HClock::UNIT::MILISECOND ) << "$" << endl;
+	cout << "$" << clk.get_time_elapsed( time::UNIT::MILISECOND ) << "$" << endl;
+	ENSURE_DISTANCE( "under slept by miliseconds", yaal::max( SHOULD_SLEEP_MS - static_cast<int long>( clk.get_time_elapsed( time::UNIT::MILISECOND ) ), 0l ), SKEW, SKEW + 1 );
+	cout << "$" << clk.get_time_elapsed( time::UNIT::MILISECOND ) << "$" << endl;
 TUT_TEARDOWN()
 
 }

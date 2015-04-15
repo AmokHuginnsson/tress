@@ -514,23 +514,23 @@ TUT_UNIT_TEST( 50, "speed test" )
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.push_back( static_cast<int>( i ) );
-		clog << "*speed* std::vector<>::push_back() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* std::vector<>::push_back() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			array.push_back( static_cast<int>( i ) );
-		clog << "*speed* yaal::hcore::HArray<>::push_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HArray<>::push_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HArray<>::push_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.pop_back();
-		clog << "*speed* std::vector<>::pop_back() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* std::vector<>::pop_back() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			array.pop_back();
-		clog << "*speed* yaal::hcore::HArray<>::pop_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HArray<>::pop_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HArray<>::pop_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()

@@ -291,12 +291,12 @@ TUT_UNIT_TEST( 50, "speed test" )
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.insert( static_cast<int>( i ) );
-		clog << "*speed* std::set<>::insert() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* std::set<>::insert() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			set.insert( static_cast<int>( i ) );
-		clog << "*speed* yaal::hcore::HSet<>::insert() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HSet<>::insert() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HSet<>::insert() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 	typedef HSet<int, HSet<int>::compare_type, allocator::pool<int> > set_on_pool_type;
@@ -304,7 +304,7 @@ TUT_UNIT_TEST( 50, "speed test" )
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			setOnPool.insert( static_cast<int>( i ) );
-		clog << "*speed* yaal::hcore::HSet<on_pool>::insert() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HSet<on_pool>::insert() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HSet<on_pool>::insert() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()

@@ -328,7 +328,7 @@ TUT_UNIT_TEST( "schedule_windup" )
 		}
 		HClock c;
 		w.join();
-		ENSURE( "join blocked", c.get_time_elapsed( HClock::UNIT::MILISECOND ) < 20 );
+		ENSURE( "join blocked", c.get_time_elapsed( time::UNIT::MILISECOND ) < 20 );
 		int wu( t.get_performed_work_units() );
 		ENSURE( "work not parallelized", t.get_runner_count() > 1 );
 		ENSURE( "work was not performed", wu > 0 );

@@ -2124,23 +2124,23 @@ TUT_UNIT_TEST( 50, "speed test" )
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.push_back( static_cast<int>( i ) );
-		clog << "*speed* std::list<>::push_back() = " << static_cast<int long>( stPush = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* std::list<>::push_back() = " << static_cast<int long>( stPush = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			list.push_back( static_cast<int>( i ) );
-		clog << "*speed* yaal::hcore::HList<>::push_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HList<>::push_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HList<>::push_back() result = " << ( ( stPush > yt ) ? green : red ) << ( yt / stPush ) << lightgray << endl; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.pop_back();
-		clog << "*speed* std::list<>::pop_back() = " << static_cast<int long>( stPop = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* std::list<>::pop_back() = " << static_cast<int long>( stPop = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			list.pop_back();
-		clog << "*speed* yaal::hcore::HList<>::pop_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HList<>::pop_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HList<>::pop_back() result = " << ( ( stPop > yt ) ? green : red ) << ( yt / stPop ) << lightgray << endl;
 	typedef HList<int, allocator::pool<int> > list_on_pool_type;
@@ -2148,13 +2148,13 @@ TUT_UNIT_TEST( 50, "speed test" )
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			listOnPool.push_back( static_cast<int>( i ) );
-		clog << "*speed* yaal::hcore::HList<on_pool>::push_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HList<on_pool>::push_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HList<on_pool>::push_back() result = " << ( ( stPush > yt ) ? green : red ) << ( yt / stPush ) << lightgray << endl; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			listOnPool.pop_back();
-		clog << "*speed* yaal::hcore::HList<on_pool>::pop_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( HClock::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HList<on_pool>::pop_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HList<on_pool>::pop_back() result = " << ( ( stPop > yt ) ? green : red ) << ( yt / stPop ) << lightgray << endl;
 TUT_TEARDOWN()
