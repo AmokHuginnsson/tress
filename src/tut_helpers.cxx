@@ -179,7 +179,7 @@ void HEventDetector::signal( void ) {
 
 bool HEventDetector::wait( yaal::hcore::time::duration_t duration_ ) {
 	HLock l( _mutex );
-	HClock c;
+	HClock c( HClock::TYPE::REAL );
 	while ( ! _detected ) {
 		time::duration_t waited( c.get_time_elapsed( time::UNIT::NANOSECOND ) );
 		if ( waited > duration_ ) {

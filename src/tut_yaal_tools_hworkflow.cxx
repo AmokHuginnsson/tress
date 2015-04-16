@@ -234,8 +234,12 @@ TUT_UNIT_TEST( "interrupt and explicit continue" )
 				call( &Task::want_restart, &t, &f, TARGET )
 			);
 		}
+		HClock c( HClock::TYPE::REAL );
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
+		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
+		c.reset();
 		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
+		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		int wu( t.get_performed_work_units() );
 		ENSURE( "work not parallelized", t.get_runner_count() > 1 );
 		ENSURE( "work was not performed", wu > 0 );
@@ -263,8 +267,12 @@ TUT_UNIT_TEST( "interrupt and implicit continue" )
 				call( &Task::want_restart, &t, &f, TARGET )
 			);
 		}
+		HClock c( HClock::TYPE::REAL );
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
+		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
+		c.reset();
 		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
+		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		int wu( t.get_performed_work_units() );
 		ENSURE( "work not parallelized", t.get_runner_count() > 1 );
 		ENSURE( "work was not performed", wu > 0 );
@@ -292,9 +300,13 @@ TUT_UNIT_TEST( "abort" )
 				call( &Task::want_restart, &t, &f, TARGET )
 			);
 		}
+		HClock c( HClock::TYPE::REAL );
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
+		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
+		c.reset();
 		/* ABORT will crash if incorrectly implemented. */
 		w.windup( HWorkFlow::WINDUP_MODE::ABORT );
+		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		workUnitsInFirstShot = t.get_performed_work_units();
 		ENSURE( "work not parallelized", t.get_runner_count() > 1 );
 		ENSURE( "work was not performed", workUnitsInFirstShot > 0 );
@@ -321,13 +333,20 @@ TUT_UNIT_TEST( "schedule_windup" )
 				call( &Task::want_restart, &t, &f, TARGET )
 			);
 		}
+		HClock c( HClock::TYPE::REAL );
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
+		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
+		c.reset();
 		w.schedule_windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
+		clog << "schedule_windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
+		c.reset();
 		while ( ! w.can_join() ) {
 			tools::sleep::milisecond( 0 );
 		}
-		HClock c;
+		clog << "can_join: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
+		c.reset();
 		w.join();
+		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		ENSURE( "join blocked", c.get_time_elapsed( time::UNIT::MILISECOND ) < 40 );
 		int wu( t.get_performed_work_units() );
 		ENSURE( "work not parallelized", t.get_runner_count() > 1 );
@@ -357,8 +376,12 @@ TUT_UNIT_TEST( "add task during interrupt (implicit restart)" )
 				call( &Task::want_restart, &t, &f, TARGET )
 			);
 		}
+		HClock c( HClock::TYPE::REAL );
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
+		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
+		c.reset();
 		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
+		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		int wu( t.get_performed_work_units() );
 		ENSURE( "work not parallelized", t.get_runner_count() > 1 );
 		ENSURE( "work was not performed", wu > 0 );
@@ -387,8 +410,12 @@ TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
 				call( &Task::want_restart, &t, &fibers[i], TARGET )
 			);
 		}
+		HClock c( HClock::TYPE::REAL );
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
+		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
+		c.reset();
 		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
+		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		int wu( t.get_performed_work_units() );
 		int runnerCount( t.get_runner_count() );
 		clog << "runnerCount = " << runnerCount << endl;
@@ -422,8 +449,12 @@ TUT_UNIT_TEST( "spawn more task directly during resume" )
 				call( &Task::want_restart, &t, &fibers[i], TARGET )
 			);
 		}
+		HClock c( HClock::TYPE::REAL );
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
+		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
+		c.reset();
 		w.windup( HWorkFlow::WINDUP_MODE::SUSPEND );
+		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		runnerCount = t.get_runner_count();
 		clog << "runnerCount = " << runnerCount << endl;
 		ENSURE( "work not parallelized", runnerCount > 1 );
