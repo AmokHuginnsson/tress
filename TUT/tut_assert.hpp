@@ -128,6 +128,178 @@ void ensure_equals_real( char const* file, int const& line, char const* msg, con
 }
 
 /**
+ * Tests two objects for first being less then second.
+ * Throws if false.
+ *
+ * NB: both T and Q must have operator << defined somewhere, or
+ * client code will not compile at all!
+ */
+template<class T, class Q>
+void ensure_less_real( char const* file, int line, char const*, const char* msg, const Q& actual,
+	const T& expected ) {
+	if ( ! ( actual < expected ) ) {
+		std::stringstream ss;
+		ss << ( msg ? msg : "" )
+		<< ( msg ? ":" : "" )
+		<< " expected [" << stream_escape( actual ) << "] being less than [" << stream_escape( expected ) << "]";
+		throw failure( file, line, ss.str().c_str() );
+	}
+}
+template<class T, class Q>
+void ensure_less( const char* msg, const Q& actual, const T& expected ) {
+	ensure_less_real( NULL, 0, NULL, msg, actual, expected );
+}
+
+template<class T, class Q>
+void ensure_less_real( char const* file,
+	int const& line,
+	char const*,
+	yaal::hcore::HString const& msg,
+	const Q& actual,
+	const T& expected ) {
+	ensure_less_real<>( file, line, NULL, msg.raw(), actual, expected );
+}
+template<class T, class Q>
+void ensure_less( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
+	ensure_less_real( NULL, 0, NULL, msg, actual, expected );
+}
+
+template<class T, class Q>
+void ensure_less_real( char const* file, int const& line, char const* msg, const Q& actual,
+	const T& expected ) {
+	ensure_less_real<>( file, line, NULL, msg, actual, expected );
+}
+
+/**
+ * Tests two objects for first being greater then second.
+ * Throws if false.
+ *
+ * NB: both T and Q must have operator << defined somewhere, or
+ * client code will not compile at all!
+ */
+template<class T, class Q>
+void ensure_greater_real( char const* file, int line, char const*, const char* msg, const Q& actual,
+	const T& expected ) {
+	if ( ! ( actual > expected ) ) {
+		std::stringstream ss;
+		ss << ( msg ? msg : "" )
+		<< ( msg ? ":" : "" )
+		<< " expected [" << stream_escape( actual ) << "] being greater than [" << stream_escape( expected ) << "]";
+		throw failure( file, line, ss.str().c_str() );
+	}
+}
+template<class T, class Q>
+void ensure_greater( const char* msg, const Q& actual, const T& expected ) {
+	ensure_greater_real( NULL, 0, NULL, msg, actual, expected );
+}
+
+template<class T, class Q>
+void ensure_greater_real( char const* file,
+	int const& line,
+	char const*,
+	yaal::hcore::HString const& msg,
+	const Q& actual,
+	const T& expected ) {
+	ensure_greater_real<>( file, line, NULL, msg.raw(), actual, expected );
+}
+template<class T, class Q>
+void ensure_greater( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
+	ensure_greater_real( NULL, 0, NULL, msg, actual, expected );
+}
+
+template<class T, class Q>
+void ensure_greater_real( char const* file, int const& line, char const* msg, const Q& actual,
+	const T& expected ) {
+	ensure_greater_real<>( file, line, NULL, msg, actual, expected );
+}
+
+/**
+ * Tests two objects for first being less_or_equal then second.
+ * Throws if false.
+ *
+ * NB: both T and Q must have operator << defined somewhere, or
+ * client code will not compile at all!
+ */
+template<class T, class Q>
+void ensure_less_or_equal_real( char const* file, int line, char const*, const char* msg, const Q& actual,
+	const T& expected ) {
+	if ( ! ( actual <= expected ) ) {
+		std::stringstream ss;
+		ss << ( msg ? msg : "" )
+		<< ( msg ? ":" : "" )
+		<< " expected [" << stream_escape( actual ) << "] being less or equal than [" << stream_escape( expected ) << "]";
+		throw failure( file, line, ss.str().c_str() );
+	}
+}
+template<class T, class Q>
+void ensure_less_or_equal( const char* msg, const Q& actual, const T& expected ) {
+	ensure_less_or_equal_real( NULL, 0, NULL, msg, actual, expected );
+}
+
+template<class T, class Q>
+void ensure_less_or_equal_real( char const* file,
+	int const& line,
+	char const*,
+	yaal::hcore::HString const& msg,
+	const Q& actual,
+	const T& expected ) {
+	ensure_less_or_equal_real<>( file, line, NULL, msg.raw(), actual, expected );
+}
+template<class T, class Q>
+void ensure_less_or_equal( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
+	ensure_less_or_equal_real( NULL, 0, NULL, msg, actual, expected );
+}
+
+template<class T, class Q>
+void ensure_less_or_equal_real( char const* file, int const& line, char const* msg, const Q& actual,
+	const T& expected ) {
+	ensure_less_or_equal_real<>( file, line, NULL, msg, actual, expected );
+}
+
+/**
+ * Tests two objects for first being greater_or_equal then second.
+ * Throws if false.
+ *
+ * NB: both T and Q must have operator << defined somewhere, or
+ * client code will not compile at all!
+ */
+template<class T, class Q>
+void ensure_greater_or_equal_real( char const* file, int line, char const*, const char* msg, const Q& actual,
+	const T& expected ) {
+	if ( ! ( actual >= expected ) ) {
+		std::stringstream ss;
+		ss << ( msg ? msg : "" )
+		<< ( msg ? ":" : "" )
+		<< " expected [" << stream_escape( actual ) << "] being greater or equal than [" << stream_escape( expected ) << "]";
+		throw failure( file, line, ss.str().c_str() );
+	}
+}
+template<class T, class Q>
+void ensure_greater_or_equal( const char* msg, const Q& actual, const T& expected ) {
+	ensure_greater_or_equal_real( NULL, 0, NULL, msg, actual, expected );
+}
+
+template<class T, class Q>
+void ensure_greater_or_equal_real( char const* file,
+	int const& line,
+	char const*,
+	yaal::hcore::HString const& msg,
+	const Q& actual,
+	const T& expected ) {
+	ensure_greater_or_equal_real<>( file, line, NULL, msg.raw(), actual, expected );
+}
+template<class T, class Q>
+void ensure_greater_or_equal( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
+	ensure_greater_or_equal_real( NULL, 0, NULL, msg, actual, expected );
+}
+
+template<class T, class Q>
+void ensure_greater_or_equal_real( char const* file, int const& line, char const* msg, const Q& actual,
+	const T& expected ) {
+	ensure_greater_or_equal_real<>( file, line, NULL, msg, actual, expected );
+}
+
+/**
  * Tests two objects for being at most in given distance one from another.
  * Borders are excluded.
  * Throws if false.
