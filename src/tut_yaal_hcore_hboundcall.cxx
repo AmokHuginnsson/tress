@@ -170,5 +170,10 @@ TUT_UNIT_TEST( "free standing arg in method" )
 	ENSURE_EQUALS( "bad call: call( &Boom::bar_const, _1, 2, static_cast<int>( 3. )( Boom( 4 ) )", c3c( b1c ), 4 * 2 + 3 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "C++ builtin lambda" )
+	HBoundCall<int ( int )> pow( []( int x ){ return ( x * x ); } );
+	ENSURE_EQUALS( "bounding C++ builtin lambda failed", pow( 7 ), 7 * 7 );
+TUT_TEARDOWN()
+
 }
 
