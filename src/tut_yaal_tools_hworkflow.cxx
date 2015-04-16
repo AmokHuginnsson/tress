@@ -176,7 +176,7 @@ public:
 static int const SLEEP( 16 );
 static int const WORKER_COUNT( 8 );
 static int const MAX_RETRIES( 16 );
-static int const TARGET( 160 );
+static int const TARGET( 240 );
 
 }
 
