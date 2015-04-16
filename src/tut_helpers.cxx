@@ -175,6 +175,7 @@ void HEventDetector::signal( void ) {
 	HLock l( _mutex );
 	_detected = true;
 	_condition.broadcast();
+	return;
 }
 
 bool HEventDetector::wait( yaal::hcore::time::duration_t duration_ ) {
@@ -188,6 +189,12 @@ bool HEventDetector::wait( yaal::hcore::time::duration_t duration_ ) {
 		_condition.wait_for( duration_ - waited );
 	}
 	return ( _detected );
+}
+
+void HEventDetector::reset( void ) {
+	HLock l( _mutex );
+	_detected = false;
+	return;
 }
 
 void HSTDGlobalScopeExceptionHandlingPolicy::handle_exception( void ) {

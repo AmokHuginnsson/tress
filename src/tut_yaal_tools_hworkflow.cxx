@@ -54,10 +54,13 @@ public:
 		bool _loop;
 		bool _emptyRun;
 		bool _fail;
+		typedef yaal::hcore::HPointer<HEventDetector> detector_t;
+		detector_t _waiter;
 		Fiber()
 			: _loop( true )
 			, _emptyRun( false )
-			, _fail( false ) {
+			, _fail( false )
+			, _waiter( new HEventDetector ) {
 		}
 	};
 	typedef HHashMap<HThread::id_t, Fiber> fibers_t;
@@ -67,6 +70,7 @@ private:
 	HEventDetector _eventDetector;
 	int _workUnits;
 	int _sleep;
+	int _stopRequests;
 	fibers_t _fibers;
 	slots_t _slots;
 public:
@@ -76,6 +80,7 @@ public:
 		, _eventDetector()
 		, _workUnits( 0 )
 		, _sleep( sleep_ )
+		, _stopRequests( 0 )
 		, _fibers()
 		, _slots( slots_ ) {
 	}
@@ -94,18 +99,26 @@ public:
 		cout << c.to_string() << endl;
 	}
 	void do_work( void ) {
-		/* lock scope */ {
+		/* scope */ {
 			HLock l( _mutex );
 			++ _workUnits;
 		}
-		tools::sleep::milisecond( _sleep );
+		Fiber* f( register_runner() );
+		if ( f->_waiter->wait( duration( _sleep, time::UNIT::MILISECOND ) ) ) {
+			f->_waiter->reset();
+		}
 	}
 	void do_slot_work( int idx_ ) {
-		HLock l( _mutex );
-		M_ASSERT( idx_ < _slots.get_size() );
-		_slots[idx_] = true;
-		register_runner();
-		tools::sleep::milisecond( _sleep );
+		Fiber* f( nullptr );
+		/* scope */ {
+			HLock l( _mutex );
+			M_ASSERT( idx_ < _slots.get_size() );
+			_slots[idx_] = true;
+			f = register_runner();
+		}
+		if ( f->_waiter->wait( duration( _sleep, time::UNIT::MILISECOND ) ) ) {
+			f->_waiter->reset();
+		}
 	}
 	int get_slot_fill( void ) const {
 		return ( static_cast<int>( count( _slots.begin(), _slots.end(), true ) ) );
@@ -124,8 +137,10 @@ public:
 	}
 	void async_stop( Fiber** f_ ) {
 		HLock l( _mutex );
+		++ _stopRequests;
 		if ( *f_ ) {
 			(*f_)->_loop = false;
+			(*f_)->_waiter->signal();
 		}
 	}
 	void worker( Fiber** fiber_, int target_ ) {
@@ -143,6 +158,10 @@ public:
 		while ( true ) {
 			/* Get loop */ {
 				HLock l( _mutex );
+				if ( _stopRequests > 0 ) {
+					-- _stopRequests;
+					break;
+				}
 				if ( _workUnits >= target_ ) {
 					break;
 				}
@@ -174,9 +193,8 @@ public:
 };
 
 static int const SLEEP( 16 );
-static int const WORKER_COUNT( 8 );
-static int const MAX_RETRIES( 16 );
-static int const TARGET( 240 );
+static int const WORKER_COUNT( 4 );
+static int const TARGET( 80 );
 
 }
 
@@ -191,6 +209,7 @@ TUT_UNIT_TEST( "Pushing tasks (functional test)." )
 	int slp( SLEEP / WORKER_COUNT );
 	int id( 0 );
 	int tries( 0 );
+	static int const MAX_RETRIES( 16 );
 	do {
 		for ( char m : mark ) {
 			w.schedule_task( call( &Task::foo, &t, id, m, slp ) );
@@ -203,7 +222,7 @@ TUT_UNIT_TEST( "Pushing tasks (functional test)." )
 	if ( tries > 1 ) {
 		cerr << "test " << get_test_name() << " retried " << tries << " times" << endl;
 	}
-	ENSURE( "work not parallelized properly", t.get_runner_count() > 1 );
+	ENSURE_GREATER( "work not parallelized properly", t.get_runner_count(), 1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Cleanup of finished tasks." ) {
@@ -241,9 +260,9 @@ TUT_UNIT_TEST( "interrupt and explicit continue" )
 		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
 		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		int wu( t.get_performed_work_units() );
-		ENSURE( "work not parallelized", t.get_runner_count() > 1 );
-		ENSURE( "work was not performed", wu > 0 );
-		ENSURE( "work was not interrupted", wu < TARGET );
+		ENSURE_GREATER( "work not parallelized", t.get_runner_count(), 1 );
+		ENSURE_GREATER( "work was not performed", wu, 0 );
+		ENSURE_LESS( "work was not interrupted", wu, TARGET );
 		for ( Task::Fiber const* f : fibers ) {
 			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
 		}
@@ -251,7 +270,7 @@ TUT_UNIT_TEST( "interrupt and explicit continue" )
 		fill( begin( fibers ), end( fibers ), nullptr );
 		w.start();
 	}
-	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
+	ENSURE_GREATER_OR_EQUAL( "work was not performed", t.get_performed_work_units(), TARGET );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "interrupt and implicit continue" )
@@ -274,16 +293,16 @@ TUT_UNIT_TEST( "interrupt and implicit continue" )
 		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
 		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		int wu( t.get_performed_work_units() );
-		ENSURE( "work not parallelized", t.get_runner_count() > 1 );
-		ENSURE( "work was not performed", wu > 0 );
-		ENSURE( "work was not interrupted", wu < TARGET );
+		ENSURE_GREATER( "work not parallelized", t.get_runner_count(), 1 );
+		ENSURE_GREATER( "work was not performed", wu, 0 );
+		ENSURE_LESS( "work was not interrupted", wu, TARGET );
 		for ( Task::Fiber const* f : fibers ) {
 			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
 		}
 		t.clear_fibers();
 		fill( begin( fibers ), end( fibers ), nullptr );
 	}
-	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
+	ENSURE_GREATER_OR_EQUAL( "work was not performed", t.get_performed_work_units(), TARGET );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "abort" )
@@ -308,9 +327,9 @@ TUT_UNIT_TEST( "abort" )
 		w.windup( HWorkFlow::WINDUP_MODE::ABORT );
 		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		workUnitsInFirstShot = t.get_performed_work_units();
-		ENSURE( "work not parallelized", t.get_runner_count() > 1 );
-		ENSURE( "work was not performed", workUnitsInFirstShot > 0 );
-		ENSURE( "work was not interrupted", workUnitsInFirstShot < TARGET );
+		ENSURE_GREATER( "work not parallelized", t.get_runner_count(), 1 );
+		ENSURE_GREATER( "work was not performed", workUnitsInFirstShot, 0 );
+		ENSURE_LESS( "work was not interrupted", workUnitsInFirstShot, TARGET );
 		for ( Task::Fiber const* f : fibers ) {
 			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
 		}
@@ -341,17 +360,17 @@ TUT_UNIT_TEST( "schedule_windup" )
 		clog << "schedule_windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		c.reset();
 		while ( ! w.can_join() ) {
-			tools::sleep::milisecond( 0 );
+			/* busy wait */
 		}
 		clog << "can_join: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		c.reset();
 		w.join();
 		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
-		ENSURE( "join blocked", c.get_time_elapsed( time::UNIT::MILISECOND ) < 40 );
+		ENSURE_LESS( "join blocked", c.get_time_elapsed( time::UNIT::MILISECOND ), 40 );
 		int wu( t.get_performed_work_units() );
-		ENSURE( "work not parallelized", t.get_runner_count() > 1 );
-		ENSURE( "work was not performed", wu > 0 );
-		ENSURE( "work was not interrupted", wu < TARGET );
+		ENSURE_GREATER( "work not parallelized", t.get_runner_count(), 1 );
+		ENSURE_GREATER( "work was not performed", wu, 0 );
+		ENSURE_LESS( "work was not interrupted", wu, TARGET );
 		for ( Task::Fiber const* f : fibers ) {
 			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
 		}
@@ -359,7 +378,7 @@ TUT_UNIT_TEST( "schedule_windup" )
 		fill( begin( fibers ), end( fibers ), nullptr );
 		w.start();
 	}
-	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
+	ENSURE_GREATER_OR_EQUAL( "work was not performed", t.get_performed_work_units(), TARGET );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "add task during interrupt (implicit restart)" )
@@ -383,9 +402,9 @@ TUT_UNIT_TEST( "add task during interrupt (implicit restart)" )
 		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
 		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		int wu( t.get_performed_work_units() );
-		ENSURE( "work not parallelized", t.get_runner_count() > 1 );
-		ENSURE( "work was not performed", wu > 0 );
-		ENSURE( "work was not interrupted", wu < TARGET );
+		ENSURE_GREATER( "work not parallelized", t.get_runner_count(), 1 );
+		ENSURE_GREATER( "work was not performed", wu, 0 );
+		ENSURE_LESS( "work was not interrupted", wu, TARGET );
 		for ( Task::Fiber const* f : fibers ) {
 			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
 		}
@@ -393,7 +412,7 @@ TUT_UNIT_TEST( "add task during interrupt (implicit restart)" )
 		fill( begin( fibers ), end( fibers ), nullptr );
 		w.schedule_task( call( &std::function<void()>::operator(), make_pointer<std::function<void()>>( [&done](){ done = 1; } ) ) );
 	}
-	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
+	ENSURE_GREATER_OR_EQUAL( "work was not performed", t.get_performed_work_units(), TARGET );
 	ENSURE_EQUALS( "additional task not executed", done, 1 );
 TUT_TEARDOWN()
 
@@ -403,7 +422,7 @@ TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
 	Task::Fiber* fibers[WORKER_COUNT] = {};
 	/* HWorkFlow scope */ {
 		HWorkFlow w( WORKER_COUNT );
-		for ( int i( 0 ); i < ( WORKER_COUNT / 4 ); ++ i ) {
+		for ( int i( 0 ); i < ( WORKER_COUNT / 2 ); ++ i ) {
 			w.schedule_task(
 				call( &Task::worker, &t, &fibers[i], TARGET ),
 				call( &Task::async_stop, &t, &fibers[i] ),
@@ -419,9 +438,9 @@ TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
 		int wu( t.get_performed_work_units() );
 		int runnerCount( t.get_runner_count() );
 		clog << "runnerCount = " << runnerCount << endl;
-		ENSURE( "work not parallelized", runnerCount > 1 );
-		ENSURE( "work was not performed", wu > 0 );
-		ENSURE( "work was not interrupted", wu < TARGET );
+		ENSURE_GREATER( "work not parallelized", runnerCount, 1 );
+		ENSURE_GREATER( "work was not performed", wu, 0 );
+		ENSURE_LESS( "work was not interrupted", wu, TARGET );
 		for ( Task::Fiber const* f : fibers ) {
 			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
 		}
@@ -429,7 +448,7 @@ TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
 		fill( begin( fibers ), end( fibers ), nullptr );
 	}
 	clog << "runnerCount = " << t.get_runner_count() << endl;
-	ENSURE( "work was not performed", t.get_performed_work_units() >= TARGET );
+	ENSURE_GREATER_OR_EQUAL( "work was not performed", t.get_performed_work_units(), TARGET );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "spawn more task directly during resume" )
@@ -457,9 +476,9 @@ TUT_UNIT_TEST( "spawn more task directly during resume" )
 		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		runnerCount = t.get_runner_count();
 		clog << "runnerCount = " << runnerCount << endl;
-		ENSURE( "work not parallelized", runnerCount > 1 );
+		ENSURE_GREATER( "work not parallelized", runnerCount, 1 );
 		workUnits = t.get_performed_work_units();
-		ENSURE( "work was not performed", workUnits >= TARGET );
+		ENSURE_GREATER_OR_EQUAL( "work was not performed", workUnits, TARGET );
 		for ( Task::Fiber const* f : fibers ) {
 			ENSURE_NOT( "muliple empty runs", ( f ? f->_fail : false ) );
 		}
@@ -471,7 +490,7 @@ TUT_UNIT_TEST( "spawn more task directly during resume" )
 	}
 	clog << "runnerCount = " << t.get_runner_count() << endl;
 	ENSURE_EQUALS( "work not done", t.get_slot_fill(), SLOTS );
-	ENSURE( "extra runners not spawned", t.get_runner_count() > runnerCount );
+	ENSURE_GREATER( "extra runners not spawned", t.get_runner_count(), runnerCount );
 	ENSURE_EQUALS( "additional work units performed", t.get_performed_work_units(), workUnits );
 TUT_TEARDOWN()
 

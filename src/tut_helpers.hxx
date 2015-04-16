@@ -516,6 +516,7 @@ public:
 	HEventDetector( void );
 	void signal( void );
 	bool wait( yaal::hcore::time::duration_t );
+	void reset( void );
 };
 
 }
