@@ -163,6 +163,33 @@ int const _testData_[3][ 100 ] = { {
 }
 };
 
+
+HEventDetector::HEventDetector( void )
+	: _mutex()
+	, _condition( _mutex )
+	, _detected{ false } {
+	return;
+}
+
+void HEventDetector::signal( void ) {
+	HLock l( _mutex );
+	_detected = true;
+	_condition.broadcast();
+}
+
+bool HEventDetector::wait( yaal::hcore::time::duration_t duration_ ) {
+	HLock l( _mutex );
+	HClock c;
+	while ( ! _detected ) {
+		time::duration_t waited( c.get_time_elapsed( time::UNIT::NANOSECOND ) );
+		if ( waited > duration_ ) {
+			break;
+		}
+		_condition.wait_for( duration_ - waited );
+	}
+	return ( _detected );
+}
+
 void HSTDGlobalScopeExceptionHandlingPolicy::handle_exception( void ) {
 	try {
 		throw;

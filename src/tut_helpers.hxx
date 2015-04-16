@@ -508,6 +508,16 @@ struct simple_mock {
 	virtual void set_current_line( int ) = 0;
 };
 
+class HEventDetector {
+	yaal::hcore::HMutex _mutex;
+	yaal::hcore::HCondition _condition;
+	bool _detected;
+public:
+	HEventDetector( void );
+	void signal( void );
+	bool wait( yaal::hcore::time::duration_t );
+};
+
 }
 
 }
