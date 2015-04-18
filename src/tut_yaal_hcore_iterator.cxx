@@ -149,5 +149,21 @@ TUT_UNIT_TEST( "istream_iterator, intermittent" )
 	ENSURE_EQUALS( "back_insert_iterator failed", arr, array( 5, 5, 1, 1, 1 ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "HMoveIterator" )
+	item_t::reset();
+	array_t a;
+	a.emplace_back( 1 );
+	a.emplace_back( 2 );
+	a.emplace_back( 3 );
+	a.emplace_back( 4 );
+	a.emplace_back( 5 );
+	a.emplace_back( 6 );
+	a.emplace_back( 7 );
+	ENSURE_EQUALS( "preparation failed", item_t::get_copy_count(), 0 );
+	item_t::reset();
+	array_t n( make_move_iterator( a.begin() ), make_move_iterator( a.begin() + 5 ) );
+	ENSURE_EQUALS( "preparation failed", item_t::get_copy_count(), 0 );
+TUT_TEARDOWN()
+
 }
 

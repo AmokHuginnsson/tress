@@ -345,14 +345,18 @@ protected:
 	Sizer<(forced_size_calc > 0 ? forced_size_calc : 1)> _forcedSize;
 public:
 	HInstanceTracker( int long id_ = yaal::meta::max_signed<int long>::value )
-		: _id( id_ != yaal::meta::max_signed<int long>::value ? id_ : _autoIncrement ),
-		_origin(), _self( this ), _forcedSize() {
+		: _id( id_ != yaal::meta::max_signed<int long>::value ? id_ : _autoIncrement )
+		, _origin()
+		, _self( this )
+		, _forcedSize() {
 		++ _instances;
 		++ _autoIncrement;
 	}
 	HInstanceTracker( HInstanceTracker const& itrck )
-		: _id( itrck._id ),
-		_origin( itrck._origin + ":" + yaal::hcore::HString( itrck._id ).c_str() ), _self( this ), _forcedSize() {
+		: _id( itrck._id )
+		, _origin( itrck._origin + ":" + yaal::hcore::HString( itrck._id ).c_str() )
+		, _self( this )
+		, _forcedSize() {
 		if ( _stopCopying ) {
 			throw std::runtime_error( "Copy constructor invoked!" );
 		}
@@ -361,10 +365,15 @@ public:
 		++ _copyCount;
 	}
 	HInstanceTracker( HInstanceTracker&& itrck )
-		: _id( itrck._id ), _origin( itrck._origin + ":" + yaal::hcore::HString( itrck._id ).c_str() ), _self( this ), _forcedSize() {
+		: _id( itrck._id )
+		, _origin( itrck._origin + "'" )
+		, _self( this )
+		, _forcedSize() {
 		++ _instances;
 		++ _autoIncrement;
 		++ _moveCount;
+		itrck._id = -1;
+		itrck._origin = "INVALID";
 	}
 	HInstanceTracker& operator = ( HInstanceTracker const& itrck ) {
 		if ( _stopCopying ) {
@@ -380,6 +389,8 @@ public:
 	HInstanceTracker& operator = ( HInstanceTracker&& itrck ) {
 		if ( &itrck != this ) {
 			swap( itrck );
+			itrck._id = -1;
+			itrck._origin = "INVALID";
 			++ _moveCount;
 		}
 		return ( *this );
