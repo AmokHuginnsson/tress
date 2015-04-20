@@ -89,7 +89,7 @@ public:
 		register_runner();
 		HClock c;
 		for ( int i = 0; i < ( _sleep / waitTime ); ++ i ) {
-			tools::sleep::milisecond( waitTime );
+			sleep_for( duration( waitTime, time::UNIT::MILISECOND ) );
 			cout << symbol << flush;
 		}
 		cout << "[" << id << "]" << endl;
@@ -216,7 +216,7 @@ TUT_UNIT_TEST( "Pushing tasks (functional test)." )
 			++ id;
 			slp += ( SLEEP / WORKER_COUNT );
 		}
-		tools::sleep::milisecond( SLEEP );
+		sleep_for( duration( SLEEP, time::UNIT::MILISECOND ) );
 		++ tries;
 	} while ( ( t.get_runner_count() < 2 ) && ( tries < MAX_RETRIES ) );
 	if ( tries > 1 ) {
@@ -231,10 +231,10 @@ TUT_UNIT_TEST( "Cleanup of finished tasks." ) {
 	Task t;
 	HWorkFlow w( 3 );
 	w.schedule_task( call( &Task::bar, &t, Task::counter_t() ) );
-	if ( tools::sleep::milisecond( 400 ) ) {
+	if ( ! sleep_for( duration( 400, time::UNIT::MILISECOND ) ) ) {
 		log_trace << "sleep interrupted!" << endl;
 	}
-	tools::sleep::milisecond( 100 );
+	sleep_for( duration( 100, time::UNIT::MILISECOND ) );
 	ENSURE_EQUALS( "work was not performed", t.get_performed_work_units(), 1 );
 	ENSURE_EQUALS( "HWorkFlow did not cleaned its task list.", Task::counter_t::get_instance_count(), 0 );
 }
@@ -253,7 +253,7 @@ TUT_UNIT_TEST( "interrupt and explicit continue" )
 				call( &Task::want_restart, &t, &f, TARGET )
 			);
 		}
-		HClock c( HClock::TYPE::REAL );
+		HClock c;
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
 		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		c.reset();
@@ -286,7 +286,7 @@ TUT_UNIT_TEST( "interrupt and implicit continue" )
 				call( &Task::want_restart, &t, &f, TARGET )
 			);
 		}
-		HClock c( HClock::TYPE::REAL );
+		HClock c;
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
 		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		c.reset();
@@ -319,7 +319,7 @@ TUT_UNIT_TEST( "abort" )
 				call( &Task::want_restart, &t, &f, TARGET )
 			);
 		}
-		HClock c( HClock::TYPE::REAL );
+		HClock c;
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
 		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		c.reset();
@@ -352,7 +352,7 @@ TUT_UNIT_TEST( "schedule_windup" )
 				call( &Task::want_restart, &t, &f, TARGET )
 			);
 		}
-		HClock c( HClock::TYPE::REAL );
+		HClock c;
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
 		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		c.reset();
@@ -395,7 +395,7 @@ TUT_UNIT_TEST( "add task during interrupt (implicit restart)" )
 				call( &Task::want_restart, &t, &f, TARGET )
 			);
 		}
-		HClock c( HClock::TYPE::REAL );
+		HClock c;
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
 		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		c.reset();
@@ -429,7 +429,7 @@ TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
 				call( &Task::want_restart, &t, &fibers[i], TARGET )
 			);
 		}
-		HClock c( HClock::TYPE::REAL );
+		HClock c;
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
 		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		c.reset();
@@ -468,7 +468,7 @@ TUT_UNIT_TEST( "spawn more task directly during resume" )
 				call( &Task::want_restart, &t, &fibers[i], TARGET )
 			);
 		}
-		HClock c( HClock::TYPE::REAL );
+		HClock c;
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILISECOND ) );
 		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 		c.reset();

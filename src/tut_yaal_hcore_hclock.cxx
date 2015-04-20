@@ -50,7 +50,7 @@ TUT_UNIT_TEST( "1 second accuracy" )
 	static int long const SLEEP = 1;
 	static int long const PASSED = 1;
 	HClock clk;
-	TUT_EVAL( tools::sleep::second( SLEEP ) );
+	TUT_EVAL( sleep_for( duration( SLEEP, time::UNIT::SECOND ) ) );
 	get_speed( time::UNIT::MILISECOND ); /* Additional sleep. */
 	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed(), PASSED );
 TUT_TEARDOWN()
@@ -61,7 +61,7 @@ TUT_UNIT_TEST( "1 mili-second accuracy" )
 	static int long const PASSED = power<10,3>::value;
 	static int long const QUALITY = ( get_speed( time::UNIT::MILISECOND ) + 2 ) * setup._clockQualityMultiplier;
 	HClock clk;
-	TUT_EVAL( tools::sleep::second( SLEEP ) );
+	TUT_EVAL( sleep_for( duration( SLEEP, time::UNIT::SECOND ) ) );
 	int long elapsed( 0 );
 	ENSURE_DISTANCE( "time measured incorrectly", elapsed = static_cast<int long>( clk.get_time_elapsed( time::UNIT::MILISECOND ) ), PASSED, QUALITY );
 	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
@@ -73,7 +73,7 @@ TUT_UNIT_TEST( "1 micro-second accuracy" )
 	static i64_t const PASSED = power<10,6>::value;
 	static i64_t const QUALITY = ( get_speed( time::UNIT::MICROSECOND ) + 2 * static_cast<i64_t>( power<10,3>::value ) ) * setup._clockQualityMultiplier;
 	HClock clk;
-	TUT_EVAL( tools::sleep::second( SLEEP ) );
+	TUT_EVAL( sleep_for( duration( SLEEP, time::UNIT::SECOND ) ) );
 	i64_t elapsed( 0 );
 	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( time::UNIT::MICROSECOND ), PASSED, QUALITY );
 	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
@@ -85,7 +85,7 @@ TUT_UNIT_TEST( "1 nano-second accuracy" )
 	static i64_t const PASSED = power<10,9>::value;
 	static i64_t const QUALITY = ( get_speed( time::UNIT::NANOSECOND ) + 2 * static_cast<i64_t>( power<10,6>::value ) ) * setup._clockQualityMultiplier;
 	HClock clk;
-	TUT_EVAL( tools::sleep::second( SLEEP ) );
+	TUT_EVAL( sleep_for( duration( SLEEP, time::UNIT::SECOND ) ) );
 	i64_t elapsed( 0 );
 	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( time::UNIT::NANOSECOND ), PASSED, QUALITY );
 	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
@@ -96,10 +96,10 @@ TUT_UNIT_TEST( "measured twice without reset" )
 	static int long const SLEEP = 1;
 	static int long const PASSED = 1;
 	HClock clk;
-	TUT_EVAL( tools::sleep::second( SLEEP ) );
+	TUT_EVAL( sleep_for( duration( SLEEP, time::UNIT::SECOND ) ) );
 	get_speed( time::UNIT::MILISECOND ); /* Additional sleep. */
 	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed( time::UNIT::SECOND ), PASSED );
-	TUT_EVAL( tools::sleep::second( SLEEP ) );
+	TUT_EVAL( sleep_for( duration( SLEEP, time::UNIT::SECOND ) ) );
 	get_speed( time::UNIT::MILISECOND ); /* Additional sleep. */
 	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed(), PASSED + PASSED );
 TUT_TEARDOWN()
@@ -109,11 +109,11 @@ TUT_UNIT_TEST( "measured twice with reset" )
 	static int long const SLEEP = 1;
 	static int long const PASSED = 1;
 	HClock clk;
-	TUT_EVAL( tools::sleep::second( SLEEP ) );
+	TUT_EVAL( sleep_for( duration( SLEEP, time::UNIT::SECOND ) ) );
 	get_speed( time::UNIT::MILISECOND ); /* Additional sleep. */
 	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed( time::UNIT::SECOND ), PASSED );
 	clk.reset();
-	TUT_EVAL( tools::sleep::second( SLEEP ) );
+	TUT_EVAL( sleep_for( duration( SLEEP, time::UNIT::SECOND ) ) );
 	get_speed( time::UNIT::MILISECOND ); /* Additional sleep. */
 	ENSURE_EQUALS( "time measured incorrectly", clk.get_time_elapsed(), PASSED );
 TUT_TEARDOWN()

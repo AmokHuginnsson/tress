@@ -48,7 +48,7 @@ struct tut_yaal_tool_hfuture : public simple_mock<tut_yaal_tool_hfuture> {
 	int long long power_of_three( int power_ ) {
 		int long long val( 1 );
 		for ( int i = 0; i  < power_; ++ i ) {
-			tools::sleep::milisecond( 50 );
+			sleep_for( duration( 50, time::UNIT::MILISECOND ) );
 			val *= 3;
 		}
 		return ( val );
