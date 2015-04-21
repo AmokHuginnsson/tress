@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 2.8 )
 project( tress CXX )
-include( ../yaal/_aux/cmakelib.cmake )
+include( ../yaal/_aux/cmake/common.cmake )
 
 if ( NOT ( "$ENV{BOOST_INSTALL_PATH}" STREQUAL "" ) )
 	set( BOOST_ROOT "$ENV{BOOST_INSTALL_PATH}" )
@@ -16,7 +16,7 @@ endif()
 
 use_cxx_compiler_flag( -Wno-missing-noreturn )
 find_package( Boost COMPONENTS filesystem date_time system REQUIRED )
-find_package( yaal COMPONENTS hcore tools dbwrapper hconsole REQUIRED )
+find_package( Yaal COMPONENTS hcore tools dbwrapper hconsole REQUIRED )
 
 check_cxx_source_compiles( "
 #ifdef __GNUC__
@@ -39,19 +39,37 @@ int main( int, char** )
 check_symbol_exists( RTLD_NEXT dlfcn.h HAVE_DECL_RTLD_NEXT )
 
 include_directories( . )
-configure_file( ../yaal/_aux/cmake-client-config.hxx ${TARGET_PATH}/config.hxx )
+configure_file( ../yaal/_aux/cmake/client-config.hxx ${TARGET_PATH}/config.hxx )
 
 file( GLOB SRCS ./src/*.cxx )
 file( GLOB HDRS ./src/*.hxx )
 file( GLOB CHILD_SRCS ./child/*.cxx )
 file( GLOB CHILD_HDRS ./child/*.hxx )
 file( GLOB TUT ./TUT/*.hpp )
-add_executable( ${PROJECT_NAME} ${SRCS} ${HDRS} ../yaal/_aux/cmake-client-config.hxx )
+add_executable( ${PROJECT_NAME} ${SRCS} ${HDRS} ../yaal/_aux/cmake/client-config.hxx )
 add_executable( child ${CHILD_SRCS} ${CHILD_HDRS} )
 add_library( tressplugin MODULE data/plugin.cxx )
 add_library( TUT ${TUT} )
-set_target_properties( ${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX OUTPUT_NAME 1exec RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TARGET_PATH}/tress RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TARGET_PATH}/tress RUNTIME_OUTPUT_DIRECTORY_RELEASE ${TARGET_PATH}/tress RUNTIME_OUTPUT_DIRECTORY_COV ${TARGET_PATH}/tress RUNTIME_OUTPUT_DIRECTORY_PROF ${TARGET_PATH}/tress )
-set_target_properties( child PROPERTIES LINKER_LANGUAGE CXX OUTPUT_NAME 1exec RUNTIME_OUTPUT_DIRECTORY ${TARGET_PATH}/child RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TARGET_PATH}/child RUNTIME_OUTPUT_DIRECTORY_RELEASE ${TARGET_PATH}/child RUNTIME_OUTPUT_DIRECTORY_COV ${TARGET_PATH}/child RUNTIME_OUTPUT_DIRECTORY_PROF ${TARGET_PATH}/child )
+set_target_properties(
+	${PROJECT_NAME} PROPERTIES
+	LINKER_LANGUAGE CXX
+	OUTPUT_NAME 1exec
+	RUNTIME_OUTPUT_DIRECTORY ${TARGET_PATH}/tress
+	RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TARGET_PATH}/tress
+	RUNTIME_OUTPUT_DIRECTORY_RELEASE ${TARGET_PATH}/tress
+	RUNTIME_OUTPUT_DIRECTORY_COV ${TARGET_PATH}/tress
+	RUNTIME_OUTPUT_DIRECTORY_PROF ${TARGET_PATH}/tress
+)
+set_target_properties(
+	child PROPERTIES
+	LINKER_LANGUAGE CXX
+	OUTPUT_NAME 1exec
+	RUNTIME_OUTPUT_DIRECTORY ${TARGET_PATH}/child
+	RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TARGET_PATH}/child
+	RUNTIME_OUTPUT_DIRECTORY_RELEASE ${TARGET_PATH}/child
+	RUNTIME_OUTPUT_DIRECTORY_COV ${TARGET_PATH}/child
+	RUNTIME_OUTPUT_DIRECTORY_PROF ${TARGET_PATH}/child
+)
 set_target_properties( TUT PROPERTIES LINKER_LANGUAGE CXX )
 set_target_properties( tressplugin PROPERTIES LINKER_LANGUAGE CXX )
 if ( CMAKE_HOST_WIN32 )
@@ -60,8 +78,8 @@ if ( CMAKE_HOST_WIN32 )
 	set_target_properties( tressplugin PROPERTIES OUTPUT_NAME tressplugin${LIB_INFIX} LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_HOME_DIRECTORY}/data )
 	set_target_properties( child PROPERTIES COMPILE_DEFINITIONS "_SIGNAL_H=1" )
 	set_source_files_properties( ${CHILD_SRCS} PROPERTIES COMPILE_FLAGS "/FIglibc/bits/signum.h /FIyaal/fix.hxx" )
-	target_link_libraries( ${PROJECT_NAME} ${yaal_LIBRARIES} libintl )
-	target_link_libraries( child ${yaal_LIBRARIES} libintl )
+	target_link_libraries( ${PROJECT_NAME} ${Yaal_LIBRARIES} libintl )
+	target_link_libraries( child ${Yaal_LIBRARIES} libintl )
 
 	file( GLOB makedef_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/makedef.vc*proj )
 	include_external_msproject( makedef ${makedef_PROJ} )
@@ -129,8 +147,18 @@ if ( CMAKE_HOST_WIN32 )
 
 else()
 	set_target_properties( ${PROJECT_NAME} PROPERTIES COMPILE_FLAGS -Wno-variadic-macros )
-	set_target_properties( tressplugin PROPERTIES OUTPUT_NAME 1exec PREFIX "" SUFFIX "" LIBRARY_OUTPUT_DIRECTORY ${TARGET_PATH}/tressplugin LIBRARY_OUTPUT_DIRECTORY_DEBUG ${TARGET_PATH}/tressplugin LIBRARY_OUTPUT_DIRECTORY_RELEASE ${TARGET_PATH}/tressplugin LIBRARY_OUTPUT_DIRECTORY_COV ${TARGET_PATH}/tressplugin LIBRARY_OUTPUT_DIRECTORY_PROF ${TARGET_PATH}/tressplugin )
-	target_link_libraries( ${PROJECT_NAME} ${yaal_LIBRARIES} ${Boost_LIBRARIES} dl )
-	target_link_libraries( child ${yaal_LIBRARIES} )
+	set_target_properties(
+		tressplugin PROPERTIES
+		OUTPUT_NAME 1exec
+		PREFIX ""
+		SUFFIX ""
+		LIBRARY_OUTPUT_DIRECTORY ${TARGET_PATH}/tressplugin
+		LIBRARY_OUTPUT_DIRECTORY_DEBUG ${TARGET_PATH}/tressplugin
+		LIBRARY_OUTPUT_DIRECTORY_RELEASE ${TARGET_PATH}/tressplugin
+		LIBRARY_OUTPUT_DIRECTORY_COV ${TARGET_PATH}/tressplugin
+		LIBRARY_OUTPUT_DIRECTORY_PROF ${TARGET_PATH}/tressplugin
+	)
+	target_link_libraries( ${PROJECT_NAME} ${Yaal_LIBRARIES} ${Boost_LIBRARIES} dl )
+	target_link_libraries( child ${Yaal_LIBRARIES} )
 endif()
 
