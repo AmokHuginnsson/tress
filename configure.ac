@@ -4,7 +4,7 @@ dnl It is expected that client applications have link to yaal's _aux.
 dnl This macro has to be here due to primitivism of libtoolize.
 AC_CONFIG_AUX_DIR([_aux])
 m4_include([_aux/client-configure.m4])
-YAAL_CONFIGURE_CLIENT_INIT(tress,MY_PACKAGE_VERSION)
+YAAL_CONFIGURE_CLIENT_INIT(tress, MY_PACKAGE_VERSION)
 YAAL_DETECT_FLAGS(SONAME_FLAG, [-Wl,-soname,foo], [C++])
 YAAL_DETECT_FLAGS(EXTRA_LXXFLAGS, [-Wl,--export-all-symbols], [C++])
 if test ["x${SONAME_FLAG}"] != ["x"] ; then
@@ -29,11 +29,10 @@ using namespace __gnu_cxx;
 
 using namespace std;
 
-int main( int, char** )
-	{
+int main( int, char** ) {
 	compose1( negate<int>(), negate<int>() )( 7 );
 	return ( 0 );
-	}
+}
 ]])], [AC_DEFINE([HAVE_SGI_STL_EXTENSIONS],[],[Do you have SGI STL extensions?])] RESULT=["yes"])
 AC_MSG_RESULT([$RESULT])
 AC_CHECK_DECLS([RTLD_NEXT],[],[],[#include <dlfcn.h>])
