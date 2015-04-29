@@ -3360,7 +3360,7 @@
    obj:/lib/x86_64-linux-gnu/libssl.so.1.0.0
 }
 {
-   Memory leak in dlopen (Vidid).
+   Memory leak in dlopen(malloc) (Vidid).
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:malloc
@@ -3376,4 +3376,31 @@
    fun:_dl_catch_error
    fun:_dlerror_run
    fun:dlopen@@GLIBC_2.2.5
+}
+{
+   Memory leak in dlopen(strdup) (Vidid).
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:strdup
+   fun:_dl_load_cache_lookup
+   fun:_dl_map_object
+   fun:openaux
+   fun:_dl_catch_error
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.2.5
+}
+{
+   Memory leak in dlsym(calloc) (Vidid).
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:_dlerror_run
+   fun:dlsym
 }
