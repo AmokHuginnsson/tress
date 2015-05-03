@@ -11,7 +11,6 @@
 
 #include "src/setup.hxx"
 
-
 namespace tut {
 
 /**

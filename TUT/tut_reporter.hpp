@@ -6,27 +6,14 @@
 #include <iostream>
 
 #include "tut.hpp"
+#include "tut_terminal.hpp"
 #include <yaal/hcore/hthread.hxx>
 #include <yaal/tools/xmath.hxx>
-#include <yaal/tools/ansi.hxx>
-#include <yaal/tools/hterminal.hxx>
 
 #ifdef __MSVCXX__
 #include <windows.h>
 #include <yaal/cleanup.hxx>
 #endif /* __MSVCXX__ */
-
-namespace yaal {
-namespace ansi {
-inline std::ostream& operator << ( std::ostream& os_, yaal::ansi::HSequence const& seq_ ) {
-	if ( ( ( &os_ != &std::cerr ) && ( &os_ != &std::cout ) && ( &os_ != &std::clog ) )
-		|| yaal::tools::is_a_tty( os_ ) ) {
-		os_ << *seq_;
-	}
-	return ( os_ );
-}
-}
-}
 
 /**
  * Template Unit Tests Framework for C++.
@@ -49,14 +36,13 @@ std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 			{ "=S", " setup error" }
 	};
 	int tag( tress::setup._verbose ? 1 : 0 );
-	if ( tress::setup._verbose || ( ( tr._result != tut::test_result::ok ) && ( tr._result != tut::test_result::setup ) ) )
+	if ( tress::setup._verbose || ( ( tr._result != tut::test_result::ok ) && ( tr._result != tut::test_result::setup ) ) ) {
 		os_ << "[" << std::flush;
-	if ( tress::setup._color ) {
-		if ( tr._result != tut::test_result::ok ) {
-			os_ << yaal::ansi::red << std::flush;
-		} else if ( tress::setup._verbose ) {
-			os_ << yaal::ansi::green << std::flush;
-		}
+	}
+	if ( tr._result != tut::test_result::ok ) {
+		os_ << yaal::ansi::red << std::flush;
+	} else if ( tress::setup._verbose ) {
+		os_ << yaal::ansi::green << std::flush;
 	}
 	switch ( tr._result ) {
 		case tut::test_result::ok:
@@ -89,10 +75,8 @@ std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 	}
 	if ( tress::setup._verbose )
 		os_ << " in " << tr._time << " ms";
-	if ( tress::setup._color ) {
-		if ( tress::setup._verbose || ( tr._result != tut::test_result::ok ) ) {
-			os_ << yaal::ansi::reset << std::flush;
-		}
+	if ( tress::setup._verbose || ( tr._result != tut::test_result::ok ) ) {
+		os_ << yaal::ansi::reset << std::flush;
 	}
 	if ( tress::setup._verbose || ( ( tr._result != tut::test_result::ok ) && ( tr._result != tut::test_result::setup ) ) ) {
 		os_ << "]" << std::flush;
@@ -235,11 +219,11 @@ public:
 			}
 			int const sepLenExtra( MAX_SEPARATOR_LEN > ( sepLen * 2 + textLen ) ? MAX_SEPARATOR_LEN - ( sepLen * 2 + textLen ) : 0 );
 			std::string sep( static_cast<size_t>( sepLen ), '=' );
-			_os << ( tress::setup._color ? yaal::ansi::yellow : "" ) << sep << "[ "
-				<< ( tress::setup._color ? yaal::ansi::brightcyan : "" ) << name
-				<< ( tress::setup._color ? yaal::ansi::yellow : "" ) << " ]" << sep
+			_os << yaal::ansi::yellow << sep << "[ "
+				<< yaal::ansi::brightcyan << name
+				<< yaal::ansi::yellow << " ]" << sep
 				<< ( sepLenExtra > 0 ? "=" : "" )
-				<< ( tress::setup._color ? yaal::ansi::reset : "" )
+				<< yaal::ansi::reset
 				<< std::endl;
 		}
 	}
@@ -253,15 +237,13 @@ public:
 			static std::string const sepIntro( 8, '=' );
 			int const sepLen( MAX_SEPARATOR_LEN - ( static_cast<int>( status.length() ) + 10 ) );
 			std::string const sep( static_cast<size_t>( sepLen > 0 ? sepLen : 1 ), '=' );
-			_os << ( tress::setup._color ? yaal::ansi::yellow : "" ) << sepIntro << '[';
-			if ( tress::setup._color ) {
-				if ( stats.first == stats.second )
-					_os << yaal::ansi::green;
-				else
-					_os << yaal::ansi::red;
+			_os << yaal::ansi::yellow << sepIntro << '[';
+			if ( stats.first == stats.second ) {
+				_os << yaal::ansi::green;
+			} else {
+				_os << yaal::ansi::red;
 			}
-			_os << status << ( tress::setup._color ? yaal::ansi::yellow : "" ) << ']' << sep
-				<< ( tress::setup._color ? yaal::ansi::reset : "" ) << std::endl;
+			_os << status << yaal::ansi::yellow << ']' << sep << yaal::ansi::reset << std::endl;
 		}
 	}
 
@@ -278,12 +260,12 @@ public:
 			}
 			int const sepLenExtra( MAX_SEPARATOR_LEN > ( sepLen * 2 + textLen ) ? MAX_SEPARATOR_LEN - ( sepLen * 2 + textLen ) : 0 );
 			std::string sep( static_cast<size_t>( sepLen ), '-' );
-			_os << ( tress::setup._color ? yaal::ansi::brightcyan : "" ) << sep
-				<< ( tress::setup._color ? yaal::ansi::reset : "" )
+			_os << yaal::ansi::brightcyan << sep
+				<< yaal::ansi::reset
 				<< " TUT: " << groupName_ << "::<" << n << "> " << title_ << " "
-				<< ( tress::setup._color ? yaal::ansi::brightcyan : "" )
+				<< yaal::ansi::brightcyan
 				<< sep << ( sepLenExtra > 0 ? "-" : "" )
-				<< ( tress::setup._color ? yaal::ansi::reset : "" )
+				<< yaal::ansi::reset
 				<< std::endl;
 		}
 	}
@@ -333,7 +315,7 @@ public:
 			_os << "tress: " << std::string( static_cast<size_t>( progressCur ), '=' )
 				<< std::string( static_cast<size_t>( progressMax - progressCur ), ' ' )
 				<< " " << ( ( 100 * total ) / _totalTestCount ) << "%"
-				<< yaal::ansi::up_bol << _currentGroup << ": " << _groupTestLog.str() << std::flush;
+				<< *yaal::ansi::up_bol << _currentGroup << ": " << _groupTestLog.str() << std::flush;
 		} else {
 			_os << tr << std::flush;
 		}
@@ -357,9 +339,9 @@ public:
 			}
 			_os << timeElapsed;
 			if ( status.first == status.second )
-				_os << " [" << ( tress::setup._color ? yaal::ansi::green : "" ) << "Pass" << ( tress::setup._color ? yaal::ansi::reset : "" ) << "]" << std::flush;
+				_os << " [" << yaal::ansi::green << "Pass" << yaal::ansi::reset << "]" << std::flush;
 			else
-				_os << " [" << ( tress::setup._color ? yaal::ansi::red : "" ) << "Fail" << ( tress::setup._color ? yaal::ansi::reset : "" ) << "]" << std::flush;
+				_os << " [" << yaal::ansi::red << "Fail" << yaal::ansi::reset << "]" << std::flush;
 		}
 	}
 

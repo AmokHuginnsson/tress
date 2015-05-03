@@ -115,7 +115,6 @@ int main( int argc_, char* argv_[] ) {
 				rep->set_error_line( &console_error_line );
 		} else {
 			setup._fancy = false;
-			setup._color = false;
 			if ( setup._jobs > 1 )
 				setup._jobs = 1;
 			if ( setup._reporter == "boost" )

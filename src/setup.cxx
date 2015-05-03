@@ -70,80 +70,98 @@ void OSetup::test_setup( void ) {
 	M_PROLOG
 	_reporter.lower();
 	if ( _reporter != "tut" ) {
-		std::cerr.rdbuf( std::cout.rdbuf() );
 		_quiet = true;
 		_verbose = false;
 	}
 	if ( _quiet && _verbose )
 		yaal::tools::util::failure( 1, "%s",
 				_( "quiet and verbose options are mutually exclusive\n" ) );
-	if ( _verbose )
+	if ( _verbose ) {
 		clog.reset( make_pointer<HFile>( stdout, HFile::OWNERSHIP::EXTERNAL ) );
-	else
+	} else {
 		std::clog.rdbuf( &cnull_obj );
+	}
 	if ( _quiet ) {
 		cout.reset();
 		std::cout.rdbuf( &cnull_obj );
 	}
-	if ( _fancy && _verbose )
+	if ( _fancy && _verbose ) {
 		yaal::tools::util::failure( 1, "%s",
 				_( "fancy and verbose options are mutually exclusive\n" ) );
+	}
 	if ( _listGroups
 			&& ( _restartable
 				|| ! _testGroupListFilePath.is_empty()
 				|| ! _testSets.is_empty()
-				|| ! _testGroupPattern.is_empty() || _testNumber ) )
+				|| ! _testGroupPattern.is_empty() || _testNumber ) ) {
 		M_THROW( _( "group listing conflicts with other switches" ),
 				_testNumber );
+	}
 	if ( _restartable
 			&& ( ! _testGroupListFilePath.is_empty()
 				|| ! _testGroups.is_empty()
 				|| ! _testSets.is_empty()
 				|| ! _testGroupPattern.is_empty()
-				|| _testNumber ) )
+				|| _testNumber ) ) {
 		M_THROW( _( "restartable conflicts with other switches" ),
 				_testNumber );
+	}
 	if ( ! _testGroupListFilePath.is_empty()
 			&& ( ! _testGroups.is_empty()
 				|| ! _testSets.is_empty()
 				|| ! _testGroupPattern.is_empty()
-				|| _testNumber ) )
+				|| _testNumber ) ) {
 		M_THROW( _( "group names file is an exclusive switch" ),
 				_testNumber );
-	if ( ! _testGroups.is_empty() && ! _testGroupPattern.is_empty() )
+	}
+	if ( ! _testGroups.is_empty() && ! _testGroupPattern.is_empty() ) {
 		M_THROW( _( "pattern and group switches are exclusive" ), errno );
-	if ( ! _testSets.is_empty() && ! _testGroupPattern.is_empty() )
+	}
+	if ( ! _testSets.is_empty() && ! _testGroupPattern.is_empty() ) {
 		M_THROW( _( "pattern and set switches are exclusive" ), errno );
-	if ( ! _testSets.is_empty() && ! _testGroups.is_empty() )
+	}
+	if ( ! _testSets.is_empty() && ! _testGroups.is_empty() ) {
 		M_THROW( _( "group and set switches are exclusive" ), errno );
-	if ( ! _testGroupPattern.is_empty() && _testNumber )
+	}
+	if ( ! _testGroupPattern.is_empty() && _testNumber ) {
 		M_THROW( _( "setting test number for pattern makes no sense" ),
 				_testNumber );
-	if ( _testNumber && _testGroups.is_empty() )
+	}
+	if ( _testNumber && _testGroups.is_empty() ) {
 		M_THROW( _( "must specify test group for test number" ),
 				_testNumber );
-	if ( ( _testGroups.size() > 1 ) && ( _testNumber ) )
+	}
+	if ( ( _testGroups.size() > 1 ) && ( _testNumber ) ) {
 		M_THROW( _( "test number not supported while running multiple groups" ), _testNumber );
-	if ( _jobs < 0 )
+	}
+	if ( _jobs < 0 ) {
 		M_THROW( _( "bad job count" ), _jobs );
-	if ( _timeConstraint < 0 )
+	}
+	if ( _timeConstraint < 0 ) {
 		M_THROW( _( "bad time constraint" ), _timeConstraint );
+	}
 	char const* FRAMEWORK[] = { "tut", "boost", "google", "cppunit", "xml", "qt", "cute" };
-	if ( ! count( FRAMEWORK, FRAMEWORK + countof ( FRAMEWORK ), _reporter ) )
+	if ( ! count( FRAMEWORK, FRAMEWORK + countof ( FRAMEWORK ), _reporter ) ) {
 		M_THROW( _( "invalid framework specified: " ) + _reporter, 0 );
-	if ( ( _reporter == "qt" ) && ( _argc > 1 ) )
+	}
+	if ( ( _reporter == "qt" ) && ( _argc > 1 ) ) {
 		_argc = 1;
+	}
 	char const* IDE[] = { "console", "vim", "eclipse", "visualstudio" };
-	if ( ( _reporter != FRAMEWORK[0] ) && ( _errorLine != IDE[0] ) )
+	if ( ( _reporter != FRAMEWORK[0] ) && ( _errorLine != IDE[0] ) ) {
 		M_THROW( _( "specifing IDE for reporter `" ) + _reporter + _( "' is illegal" ), 0 );
-	if ( ! count( IDE, IDE + countof ( IDE ), _errorLine ) )
+	}
+	if ( ! count( IDE, IDE + countof ( IDE ), _errorLine ) ) {
 		M_THROW( _( "invalid IDE specified: " ) + _errorLine, 0 );
-	if ( ( _errorLine != IDE[0] ) || ! ::getenv( "TERM" ) )
+	}
+	if ( ( _errorLine != IDE[0] ) || ! ::getenv( "TERM" ) ) {
 		_color = false;
+	}
 	if ( _verbose ) {
 		cout << "setup._argc = " << setup._argc << endl;
-		for ( int i = 0; i < _argc; ++ i )
+		for ( int i = 0; i < _argc; ++ i ) {
 			cout << "setup._argv[" << i << "] = " << _argv[i] << endl;
+		}
 #ifdef __TRESS__
 		if ( _debug ) {
 			clog << "test data: ";
@@ -155,8 +173,9 @@ void OSetup::test_setup( void ) {
 	char const* CLOCK_QUALITY_MULTIPLIER( ::getenv( "TRESS_CLOCK_QUALITY_MULTIPLIER" ) );
 	if ( CLOCK_QUALITY_MULTIPLIER ) {
 		_clockQualityMultiplier = lexical_cast<int>( CLOCK_QUALITY_MULTIPLIER );
-		if ( ( _clockQualityMultiplier < 1 ) || ( _clockQualityMultiplier > 100 ) )
+		if ( ( _clockQualityMultiplier < 1 ) || ( _clockQualityMultiplier > 100 ) ) {
 			M_THROW( _( "bad clock quality multiplier" ), _clockQualityMultiplier );
+		}
 	}
 	hcore::log << "clock quality multiplier = " << _clockQualityMultiplier << endl;
 	return;

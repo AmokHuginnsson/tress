@@ -7,6 +7,7 @@
 #include <cstdlib>
 
 #include "tut.hpp"
+#include "tut_terminal.hpp"
 
 #ifdef __MSVCXX__
 #include <windows.h>
@@ -61,19 +62,22 @@ public:
 	virtual void run_started( int groupCount_, int testCount_ ) {
 		clear();
 		_os << "Running main() from gtest_main.cc\n"
-			<< "[==========] Running " << testCount_ << " tests from " << groupCount_ << " test cases.\n"
-			<< "[----------] Global test environment set-up.\n";
+			<< yaal::ansi::green << "[==========]"
+			<< yaal::ansi::reset << " Running " << testCount_ << " tests from " << groupCount_ << " test cases.\n"
+			<< yaal::ansi::green << "[----------]"
+			<< yaal::ansi::reset << " Global test environment set-up.\n";
 	}
 
 	virtual void group_started( std::string const& name, int count_ ) {
 		yaal::hcore::HLock l( _mutex );
 		using std::operator <<;
 		_ls << "TUT: group: [" << name << "]" << std::endl;
-		_os << "[----------] " << count_ << " tests from " << escape( name ) << std::endl;
+		_os << yaal::ansi::green << "[----------] " << yaal::ansi::reset << count_ << " tests from " << escape( name ) << std::endl;
 	}
 
 	void group_completed( group_base const* group_ ) {
-		_os << "[----------] " << group_->get_real_test_count() << " tests from " << escape( group_->get_name() ) << " (0 ms total)\n" << std::endl;
+		_os << yaal::ansi::green << "[----------] "
+			<< yaal::ansi::reset << group_->get_real_test_count() << " tests from " << escape( group_->get_name() ) << " (0 ms total)\n" << std::endl;
 	}
 
 	virtual void test_started( std::string const& group_, int n, std::string const& title_ ) {
@@ -83,17 +87,18 @@ public:
 		}
 		using std::operator <<;
 		_ls << "TUT: module::test<" << n << "> " << title_ << std::endl;
-		_os << "[ RUN      ] " << escape( group_ ) << ".<" << n << "> " << escape( title_ ) << std::endl;
+		_os << yaal::ansi::green << "[ RUN      ] " << yaal::ansi::reset << escape( group_ ) << ".<" << n << "> " << escape( title_ ) << std::endl;
 	}
 
 	virtual void test_completed( const tut::test_result& tr_ ) {
 		yaal::hcore::HLock l( _mutex );
 		++ _run;
-		if ( tr_._result == tut::test_result::ok )
-			_os << "[       OK ] " << escape( tr_._group->get_name() )
+		if ( tr_._result == tut::test_result::ok ) {
+			_os << yaal::ansi::green
+				<< "[       OK ] " << yaal::ansi::reset << escape( tr_._group->get_name() )
 				<< ".<" << tr_._testNo << "> " << escape( tr_._name )
 				<< " (" << tr_._time << " ms)" << std::endl;
-		else {
+		} else {
 			_notPassed.push_back( tr_ );
 			std::string file( tr_._file );
 			size_t prjRootIdx( file.find( PACKAGE_NAME ) );
@@ -117,13 +122,20 @@ public:
 	}
 
 	virtual void run_completed( void ) {
-		_os << "[----------] Global test environment tear-down\n"
-			<< "[==========] " << _run << " tests from " << _groupNames.size() << " test cases ran. (0 ms total)\n"
-			<< "[  PASSED  ] " << ( _run - static_cast<int>( _notPassed.size() ) ) << " tests." << std::endl;
+		_os << yaal::ansi::green << "[----------]"
+			<< yaal::ansi::reset << " Global test environment tear-down\n"
+			<< yaal::ansi::green << "[==========] "
+			<< yaal::ansi::reset << _run << " tests from " << _groupNames.size() << " test cases ran. (0 ms total)\n"
+			<< yaal::ansi::green << "[  PASSED  ] "
+			<< yaal::ansi::reset << ( _run - static_cast<int>( _notPassed.size() ) ) << " tests." << std::endl;
 		if ( !_notPassed.empty() ) {
-			_os << "[  FAILED  ] " << _notPassed.size() << " test" << ( _notPassed.size() > 1 ? "s" : "" ) << ", listed below:\n";
-			for ( not_passed_list_t::const_iterator it( _notPassed.begin() ), end( _notPassed.end() ); it != end; ++ it )
-				_os << "[  FAILED  ] " << ( it->_group ? it->_group->get_name() : "no such group" ) << "." << it->_name << std::endl;
+			_os << yaal::ansi::red << "[  FAILED  ] "
+				<< yaal::ansi::reset << _notPassed.size()
+				<< " test" << ( _notPassed.size() > 1 ? "s" : "" ) << ", listed below:\n";
+			for ( not_passed_list_t::const_iterator it( _notPassed.begin() ), end( _notPassed.end() ); it != end; ++ it ) {
+				_os << yaal::ansi::red << "[  FAILED  ] "
+					<< yaal::ansi::reset << ( it->_group ? it->_group->get_name() : "no such group" ) << "." << it->_name << std::endl;
+			}
 			_os << "\n " << _notPassed.size() << " FAILED TESTS" << std::endl;
 		}
 	}
