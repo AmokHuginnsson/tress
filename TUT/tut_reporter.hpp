@@ -19,8 +19,10 @@
 namespace yaal {
 namespace ansi {
 inline std::ostream& operator << ( std::ostream& os_, yaal::ansi::HSequence const& seq_ ) {
-	if ( yaal::tools::is_a_tty( os_ ) )
+	if ( ( ( &os_ != &std::cerr ) && ( &os_ != &std::cout ) && ( &os_ != &std::clog ) )
+		|| yaal::tools::is_a_tty( os_ ) ) {
 		os_ << *seq_;
+	}
 	return ( os_ );
 }
 }
@@ -50,10 +52,11 @@ std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 	if ( tress::setup._verbose || ( ( tr._result != tut::test_result::ok ) && ( tr._result != tut::test_result::setup ) ) )
 		os_ << "[" << std::flush;
 	if ( tress::setup._color ) {
-		if ( tr._result != tut::test_result::ok )
-			os_ << yaal::ansi::red;
-		else if ( tress::setup._verbose )
-			os_ << yaal::ansi::green;
+		if ( tr._result != tut::test_result::ok ) {
+			os_ << yaal::ansi::red << std::flush;
+		} else if ( tress::setup._verbose ) {
+			os_ << yaal::ansi::green << std::flush;
+		}
 	}
 	switch ( tr._result ) {
 		case tut::test_result::ok:
@@ -87,8 +90,9 @@ std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 	if ( tress::setup._verbose )
 		os_ << " in " << tr._time << " ms";
 	if ( tress::setup._color ) {
-		if ( tress::setup._verbose || ( tr._result != tut::test_result::ok ) )
+		if ( tress::setup._verbose || ( tr._result != tut::test_result::ok ) ) {
 			os_ << yaal::ansi::reset << std::flush;
+		}
 	}
 	if ( tress::setup._verbose || ( ( tr._result != tut::test_result::ok ) && ( tr._result != tut::test_result::setup ) ) ) {
 		os_ << "]" << std::flush;
