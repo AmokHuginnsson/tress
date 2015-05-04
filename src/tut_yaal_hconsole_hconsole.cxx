@@ -27,6 +27,7 @@ Copyright:
 #include "config.hxx"
 
 #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
+#ifndef __HOST_OS_TYPE_DARWIN__
 
 #include <TUT/tut.hpp>
 
@@ -90,5 +91,6 @@ TUT_TEARDOWN()
 
 }
 
+#endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
 #endif /* defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 ) */
 
