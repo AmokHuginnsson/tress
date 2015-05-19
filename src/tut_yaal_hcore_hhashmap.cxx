@@ -361,15 +361,16 @@ TUT_UNIT_TEST( "const pointer as a key" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "sample data" )
-	typedef HHashMap<HString, int> string_to_int_hashmap_t;
+	typedef HTaggedPOD<int, tut_yaal_hcore_hhashmap> tut_int_t;
+	typedef HHashMap<HString, tut_int_t> string_to_int_hashmap_t;
 	string_to_int_hashmap_t map;
-	map["one"] = 1;
-	map["two"] = 2;
-	map["three"] = 3;
-	map["four"] = 4;
-	map["five"] = 5;
-	map["six"] = 6;
-	map["seven"] = 7;
+	map["one"] = tut_int_t( 1 );
+	map["two"] = tut_int_t( 2 );
+	map["three"] = tut_int_t( 3 );
+	map["four"] = tut_int_t( 4 );
+	map["five"] = tut_int_t( 5 );
+	map["six"] = tut_int_t( 6 );
+	map["seven"] = tut_int_t( 7 );
 	ENSURE_EQUALS( "failed to insert [] (data)", map["one"], 1 );
 	ENSURE_EQUALS( "failed to insert [] (data)", map["two"], 2 );
 	ENSURE_EQUALS( "failed to insert [] (data)", map["three"], 3 );

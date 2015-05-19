@@ -174,59 +174,65 @@ std::ostream& container_dump( std::ostream& out,
 }
 
 template<typename container>
-std::ostream& container_dump( std::ostream& out,
+inline std::ostream& container_dump( std::ostream& out,
 		container const& container_, char const* const name_  ) {
 	return ( container_dump( out, container_, ' ', name_ ) );
 }
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HArray<tType> const& a ) {
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HArray<tType> const& a ) {
 	return ( container_dump( out, a, "array" ) );
 }
 
 template<typename tType, int const N>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HStaticArray<tType, N> const& sa ) {
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HStaticArray<tType, N> const& sa ) {
 	return ( container_dump( out, sa, "staticarray" ) );
 }
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HDeque<tType> const& d ) {
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HDeque<tType> const& d ) {
 	return ( container_dump( out, d, "deque" ) );
 }
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HList<tType> const& l ) {
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HList<tType> const& l ) {
 	return ( container_dump( out, l, "list" ) );
 }
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HSet<tType> const& s ) {
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HSet<tType> const& s ) {
 	return ( container_dump( out, s, "set" ) );
 }
 
 template<typename key_t, typename value_t>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HMap<key_t, value_t> const& m ) {
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HMap<key_t, value_t> const& m ) {
 	return ( container_dump( out, m, "map" ) );
 }
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, yaal::tools::HRing<tType> const& r ) {
+inline std::ostream& operator << ( std::ostream& out, yaal::tools::HRing<tType> const& r ) {
 	return ( container_dump( out, r, "ring" ) );
 }
 
 template<typename left, typename right>
-std::ostream& operator << ( std::ostream& out, yaal::tools::HTwoWayMap<left, right> const& twm ) {
+inline std::ostream& operator << ( std::ostream& out, yaal::tools::HTwoWayMap<left, right> const& twm ) {
 	return ( container_dump( out, twm, "twowaymap" ) );
 }
 
+template<typename type, typename tag>
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HTaggedPOD<type, tag> const& tp_ ) {
+	out << tp_.get();
+	return ( out );
+}
+
 template<typename first_t, typename second_t>
-std::ostream& operator << ( std::ostream& os, std::pair<first_t, second_t> const& p ) {
+inline std::ostream& operator << ( std::ostream& os, std::pair<first_t, second_t> const& p ) {
 	os << "pair(" << p.first << "," << p.second << ")";
 	return ( os );
 }
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, std::list<tType> const& l ) {
+inline std::ostream& operator << ( std::ostream& out, std::list<tType> const& l ) {
 	out << "list(";
 	yaal::copy( l.begin(), l.end(), std::ostream_iterator<tType>( out, " " ) );
 	out << ( ( l.begin() != l.end() ) ? "\b)" : ")" ) << std::flush;
@@ -234,7 +240,7 @@ std::ostream& operator << ( std::ostream& out, std::list<tType> const& l ) {
 }
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, std::vector<tType> const& v ) {
+inline std::ostream& operator << ( std::ostream& out, std::vector<tType> const& v ) {
 	out << "vector(";
 	yaal::copy( v.begin(), v.end(), std::ostream_iterator<tType>( out, " " ) );
 	out << ( ( v.begin() != v.end() ) ? "\b)" : ")" ) << std::flush;
@@ -242,7 +248,7 @@ std::ostream& operator << ( std::ostream& out, std::vector<tType> const& v ) {
 }
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out, std::deque<tType> const& v ) {
+inline std::ostream& operator << ( std::ostream& out, std::deque<tType> const& v ) {
 	out << "deque(";
 	yaal::copy( v.begin(), v.end(), std::ostream_iterator<tType>( out, " " ) );
 	out << ( ( v.begin() != v.end() ) ? "\b)" : ")" ) << std::flush;
@@ -250,7 +256,7 @@ std::ostream& operator << ( std::ostream& out, std::deque<tType> const& v ) {
 }
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out,
+inline std::ostream& operator << ( std::ostream& out,
 		yaal::hcore::HVector<tType> const& vector_ ) {
 	M_PROLOG
 	int long ctr = 0, size = vector_.dim();
@@ -266,7 +272,7 @@ std::ostream& operator << ( std::ostream& out,
 }
 
 template<typename tType>
-std::ostream& operator << ( std::ostream& out,
+inline std::ostream& operator << ( std::ostream& out,
 		yaal::hcore::HMatrix<tType> const& matrix_ ) {
 	M_PROLOG
 	int ctr = 0, ctrLoc = 0;

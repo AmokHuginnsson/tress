@@ -36,16 +36,6 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
-namespace std {
-
-template<typename type, typename tag>
-std::ostream& operator << ( std::ostream& out, yaal::hcore::HTaggedPOD<type, tag> const& tp_ ) {
-	out << tp_.get();
-	return ( out );
-}
-
-}
-
 namespace tut {
 
 #define DEFINE_TAGGED_TYPE( type, tagged_name ) \
