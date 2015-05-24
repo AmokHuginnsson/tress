@@ -784,7 +784,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule booleanLiteralTrue( e_p::constant( "true" ) );
 	HRule booleanLiteralFalse( e_p::constant( "false" ) );
 	HRule number( '$' >> real );
-	HRule dereference( name >> *( subscriptOperator | functionCallOperator ) );
+	HRule memberAccess( '.' >> name );
+	HRule dereference( *( subscriptOperator | functionCallOperator | memberAccess ) );
 	HRule atom(
 	 	absoluteValue
 	 	| parenthesis
@@ -792,15 +793,15 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	 	| number
 	 	| integer
 	 	| character_literal
-	 	| ( listLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) )
-	 	| ( mapLiteral >> -( subscriptOperator >> *( subscriptOperator | functionCallOperator ) ) )
+	 	| ( listLiteral >> -( subscriptOperator >> dereference ) )
+	 	| ( mapLiteral >> -( subscriptOperator >> dereference ) )
 	 	| literalNone
 	 	| booleanLiteralTrue
 	 	| booleanLiteralFalse
-	 	| dereference
+	 	| ( name >> dereference )
 	 	| ( string_literal >> -subscriptOperator )
-	 	| ( lambda >> -( functionCallOperator >> * ( subscriptOperator | functionCallOperator ) ) )
- 	);
+	 	| ( lambda >> -( functionCallOperator >> dereference ) )
+	);
 	HRule negation( ( '-' >> atom ) | atom );
 	HRule booleanNot( ( '-' >> negation ) | negation );
 	HRule power( booleanNot >> ( * ( '^' >> booleanNot ) ) );
@@ -813,7 +814,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule booleanXor( booleanOr >> -( string( "^^" ) >> booleanOr ) );
 	HRule ternary( booleanXor >> -( '?' >> expression >> ':' >> expression ) );
 	HRule value( ternary );
-	HRule subscript( name >> +( subscriptOperator | functionCallOperator ) );
+	HRule subscript( name >> +( subscriptOperator | functionCallOperator | memberAccess ) );
 	expression %= ( *( ( ( subscript | name ) >> '=' ) ^ '=' ) >> value );
 	HRule expressionStatement( expression >> ';' );
 	HRule loopScope;
@@ -842,35 +843,37 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	char const huginnDesc[][400] = {
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ )",
 		"B_ = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
-		"C_ = ( *( ( ( ( B_ >> +( E_ | F_ ) ) | B_ ) >> '=' ) ^ '=' ) >> ( ( G_ >> -( \"^^\" >> G_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
-		"D_ = ( B_ >> '(' >> -H_ >> ')' >> I_ )",
+		"C_ = ( *( ( ( ( B_ >> +( E_ | F_ | G_ ) ) | B_ ) >> '=' ) ^ '=' ) >> ( ( H_ >> -( \"^^\" >> H_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
+		"D_ = ( B_ >> '(' >> -I_ >> ')' >> J_ )",
 		"E_ = ( '[' >> ( ( ( ':' >> -C_ ) | ( C_ >> -( ':' >> -C_ ) ) ) >> -( ':' >> -C_ ) ) >> ']' )",
-		"F_ = ( '(' >> -J_ >> ')' )",
-		"G_ = ( K_ >> *( \"||\" >> K_ ) )",
-		"H_ = ( L_ >> *( ',' >> L_ ) )",
-		"I_ = ( '{' >> *( M_ | N_ | O_ | P_ | Q_ | R_ | S_ | T_ | I_ ) >> '}' )",
-		"J_ = ( C_ >> *( ',' >> C_ ) )",
-		"K_ = ( U_ >> *( \"&&\" >> U_ ) )",
-		"L_ = ( B_ >> -( '=' >> C_ ) )",
-		"M_ = ( V_ >> *( \"else\" >> V_ ) >> -( \"else\" >> I_ ) )",
-		"N_ = ( \"while\" >> '(' >> C_ >> ')' >> W_ )",
-		"O_ = ( \"for\" >> '(' >> B_ >> ':' >> C_ >> ')' >> W_ )",
-		"P_ = ( \"switch\" >> '(' >> C_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> I_ ) >> '}' )",
-		"Q_ = ( \"break\" >> ';' )",
-		"R_ = ( \"continue\" >> ';' )",
-		"S_ = ( \"return\" >> '(' >> C_ >> ')' >> ';' )",
-		"T_ = ( C_ >> ';' )",
-		"U_ = ( X_ >> -( ( \"==\" | \"!=\" ) >> X_ ) )",
-		"V_ = ( \"if\" >> '(' >> C_ >> ')' >> I_ )",
-		"W_ = ( '{' >> *( M_ | N_ | O_ | P_ | Q_ | R_ | S_ | T_ | I_ ) >> '}' )",
-		"X_ = ( Y_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> Y_ ) )",
-		"Y_ = ( Z_ >> *( '+' >> Z_ ) )",
-		"Z_ = ( AA_ >> *( '*' >> AA_ ) )",
-		"AA_ = ( AB_ >> *( '^' >> AB_ ) )",
-		"AB_ = ( ( '-' >> AC_ ) | AC_ )",
+		"F_ = ( '(' >> -K_ >> ')' )",
+		"G_ = ( '.' >> B_ )",
+		"H_ = ( L_ >> *( \"||\" >> L_ ) )",
+		"I_ = ( M_ >> *( ',' >> M_ ) )",
+		"J_ = ( '{' >> *( N_ | O_ | P_ | Q_ | R_ | S_ | T_ | U_ | J_ ) >> '}' )",
+		"K_ = ( C_ >> *( ',' >> C_ ) )",
+		"L_ = ( V_ >> *( \"&&\" >> V_ ) )",
+		"M_ = ( B_ >> -( '=' >> C_ ) )",
+		"N_ = ( W_ >> *( \"else\" >> W_ ) >> -( \"else\" >> J_ ) )",
+		"O_ = ( \"while\" >> '(' >> C_ >> ')' >> X_ )",
+		"P_ = ( \"for\" >> '(' >> B_ >> ':' >> C_ >> ')' >> X_ )",
+		"Q_ = ( \"switch\" >> '(' >> C_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> J_ ) >> '}' )",
+		"R_ = ( \"break\" >> ';' )",
+		"S_ = ( \"continue\" >> ';' )",
+		"T_ = ( \"return\" >> '(' >> C_ >> ')' >> ';' )",
+		"U_ = ( C_ >> ';' )",
+		"V_ = ( Y_ >> -( ( \"==\" | \"!=\" ) >> Y_ ) )",
+		"W_ = ( \"if\" >> '(' >> C_ >> ')' >> J_ )",
+		"X_ = ( '{' >> *( N_ | O_ | P_ | Q_ | R_ | S_ | T_ | U_ | J_ ) >> '}' )",
+		"Y_ = ( Z_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> Z_ ) )",
+		"Z_ = ( AA_ >> *( '+' >> AA_ ) )",
+		"AA_ = ( AB_ >> *( '*' >> AB_ ) )",
+		"AB_ = ( AC_ >> *( '^' >> AC_ ) )",
 		"AC_ = ( ( '-' >> AD_ ) | AD_ )",
-		"AD_ = ( ( '|' >> C_ >> '|' ) | ( '(' >> C_ >> ')' ) | real | ( '$' >> real ) | integer | character_literal | ( ( '[' >> -J_ >> ']' ) >> -( E_ >> *( E_ | F_ ) ) ) | ( ( '{' >> -( AE_ >> *( ',' >> AE_ ) ) >> '}' ) >> -( E_ >> *( E_ | F_ ) ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> *( E_ | F_ ) ) | ( string_literal >> -E_ ) | ( ( '@' >> '(' >> -H_ >> ')' >> I_ ) >> -( F_ >> *( E_ | F_ ) ) ) )",
-		"AE_ = ( C_ >> ':' >> C_ )"
+		"AD_ = ( ( '-' >> AE_ ) | AE_ )",
+		"AE_ = ( ( '|' >> C_ >> '|' ) | ( '(' >> C_ >> ')' ) | real | ( '$' >> real ) | integer | character_literal | ( ( '[' >> -K_ >> ']' ) >> -( E_ >> AF_ ) ) | ( ( '{' >> -( AG_ >> *( ',' >> AG_ ) ) >> '}' ) >> -( E_ >> AF_ ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> AF_ ) | ( string_literal >> -E_ ) | ( ( '@' >> '(' >> -I_ >> ')' >> J_ ) >> -( F_ >> AF_ ) ) )",
+		"AF_ = *( E_ | F_ | G_ )",
+		"AG_ = ( C_ >> ':' >> C_ )"
 	};
 	cout << "hg:" << endl;
 	HGrammarDescription gd( hg );
