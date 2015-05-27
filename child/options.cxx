@@ -56,16 +56,16 @@ int handle_program_options( int argc_, char** argv_ ) {
 	HProgramOptionsHandler po;
 	OOptionInfo info( po, setup._programName, "does very much usefull things ... really", NULL );
 	bool stop = false;
-	po( "log_path", program_options_helper::option_value( setup._logPath ), HProgramOptionsHandler::OOption::TYPE::REQUIRED, "path pointing to file for application logs", "path" )
-		( "exit_status", program_options_helper::option_value( setup._exitStatus ), 'E' ,HProgramOptionsHandler::OOption::TYPE::REQUIRED, "set exit status for child", "status" )
-		( "terminate", program_options_helper::option_value( setup._terminate ), 'T' ,HProgramOptionsHandler::OOption::TYPE::REQUIRED, "terminate process abruptly", "signal" )
-		( "script", program_options_helper::option_value( setup._script ), 'S' ,HProgramOptionsHandler::OOption::TYPE::REQUIRED, "run this script in child session", "code" )
-		( "quiet", program_options_helper::option_value( setup._quiet ), 'q', HProgramOptionsHandler::OOption::TYPE::NONE, "inhibit usual output" )
-		( "silent", program_options_helper::option_value( setup._quiet ), 'q', HProgramOptionsHandler::OOption::TYPE::NONE, "inhibit usual output" )
-		( "verbose", program_options_helper::option_value( setup._verbose ), 'v', HProgramOptionsHandler::OOption::TYPE::NONE, "print more information" )
-		( "help", program_options_helper::option_value( stop ), 'h', HProgramOptionsHandler::OOption::TYPE::NONE, "display this help and stop", program_options_helper::callback( util::show_help, &info ) )
-		( "dump-configuration", program_options_helper::option_value( stop ), 'W', HProgramOptionsHandler::OOption::TYPE::NONE, "dump current configuration", program_options_helper::callback( util::dump_configuration, &info ) )
-		( "version", program_options_helper::no_value, 'V', HProgramOptionsHandler::OOption::TYPE::NONE, "output version information and stop", program_options_helper::callback( version, NULL ) );
+	po( "log_path", program_options_helper::option_value( setup._logPath ), HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "path pointing to file for application logs", "path" )
+		( "exit_status", program_options_helper::option_value( setup._exitStatus ), 'E' ,HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "set exit status for child", "status" )
+		( "terminate", program_options_helper::option_value( setup._terminate ), 'T' ,HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "terminate process abruptly", "signal" )
+		( "script", program_options_helper::option_value( setup._script ), 'S' ,HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "run this script in child session", "code" )
+		( "quiet", program_options_helper::option_value( setup._quiet ), 'q', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "inhibit usual output" )
+		( "silent", program_options_helper::option_value( setup._quiet ), 'q', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "inhibit usual output" )
+		( "verbose", program_options_helper::option_value( setup._verbose ), 'v', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "print more information" )
+		( "help", program_options_helper::option_value( stop ), 'h', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "display this help and stop", program_options_helper::callback( util::show_help, &info ) )
+		( "dump-configuration", program_options_helper::option_value( stop ), 'W', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "dump current configuration", program_options_helper::callback( util::dump_configuration, &info ) )
+		( "version", program_options_helper::no_value, 'V', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "output version information and stop", program_options_helper::callback( version, NULL ) );
 	po.process_rc_file( "child", "", NULL );
 	if ( setup._logPath.is_empty() )
 		setup._logPath = "child.log";
