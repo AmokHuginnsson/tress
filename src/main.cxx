@@ -178,9 +178,8 @@ int main( int argc_, char* argv_[] ) {
 	} catch ( int e ) {
 		err = e;
 		/* escape from main loop */
-		throw;
 	}
-	if ( setup._reporter == "tut" ) {
+	if ( visitor.get() && ( setup._reporter == "tut" ) ) {
 		cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % static_cast<int long>( clk.get_time_elapsed( time::UNIT::MILISECOND ) ) ).string() << endl;
 		M_ENSURE( ! errno );
 	}
