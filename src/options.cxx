@@ -55,7 +55,7 @@ bool set_variables( HString& option_, HString& value_ ) {
 	return ( true );
 }
 
-void version( void* ) {
+void version( void ) {
 	cout << PACKAGE_STRING << endl;
 	return;
 }
@@ -73,41 +73,227 @@ int handle_program_options( int argc_, char** argv_ ) {
 	int dummyValue( 0 );
 	HString ignore;
 	HString testFilter;
-	po( "log_path", program_options_helper::option_value( setup._logPath ), HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "path pointing to file for application logs", "path" )
-		( "jobs", program_options_helper::option_value( setup._jobs ), 'j', HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "number of concurrent jobs", "count" )
-		( "reporter", program_options_helper::option_value( setup._reporter ), 'r', HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "generator for reporting test results =(TUT|boost|google|cppunit|xml|QT|cute)", "framework" )
-		( "error-line", program_options_helper::option_value( setup._errorLine ), 'I', HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "line format for error reporting =(console|vim|eclipse|visualstudio)", "IDE" )
-		( "color", program_options_helper::option_value( setup._color ), 'C', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "colorize output" )
-		( "fancy", program_options_helper::option_value( setup._fancy ), HProgramOptionsHandler::OOption::ARGUMENT::NONE, "provide fancy test run output" )
-		( "no-color", program_options_helper::option_value( noColor ), HProgramOptionsHandler::OOption::ARGUMENT::NONE, "disable output colorizing" )
-		( "time-constraint", program_options_helper::option_value( setup._timeConstraint ), 'T', HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "constrain time for execution of single unit test", "miliseconds" )
-		( "group", program_options_helper::option_value( setup._testGroups ), 'G', HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "select test group", "name" )
-		( "output_format", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::ARGUMENT::OPTIONAL, "boost reporter option (ignored)" )
-		( "log_level", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::ARGUMENT::OPTIONAL, "boost reporter option (ignored)" )
-		( "report_level", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::ARGUMENT::OPTIONAL, "boost reporter option (ignored)" )
-		( "run_test", program_options_helper::option_value( testFilter ), HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "boost runner option (converted to -G)" )
-		( "gtest_repeat", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::ARGUMENT::OPTIONAL, "google reporter option (ignored)" )
-		( "gtest_print_time", program_options_helper::option_value( ignore ), HProgramOptionsHandler::OOption::ARGUMENT::OPTIONAL, "google reporter option (ignored)" )
-		( "gtest_color", program_options_helper::option_value( setup._color ), HProgramOptionsHandler::OOption::ARGUMENT::OPTIONAL, "google reporter option (converted to -C)" )
-		( "gtest_filter", program_options_helper::option_value( testFilter ), HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "google runner option (converted to -G)" )
-		( "gtest_list_tests", program_options_helper::option_value( setup._listGroups ), HProgramOptionsHandler::OOption::ARGUMENT::NONE, "google runner option (converted to -L)" )
-		( "set", program_options_helper::option_value( setup._testSets ), 'S', HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "select test group and particular tests within it", "name@no1,no2,..." )
-		( "pattern", program_options_helper::option_value( setup._testGroupPattern ), 'P', HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "select test groups that are matching pattern", "pattern" )
-		( "number", program_options_helper::option_value( setup._testNumber ), 'N', HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "select test number for a given group", "number" )
-		( "restartable", program_options_helper::option_value( setup._restartable ), 'R', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "run tests in restartable mode" )
-		( "list", program_options_helper::option_value( setup._listGroups ), 'L', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "list known test groups" )
-		( "file", program_options_helper::option_value( setup._testGroupListFilePath ), 'F', HProgramOptionsHandler::OOption::ARGUMENT::REQUIRED, "read test group names from given file", "path" )
-		( "selftest", program_options_helper::option_value( setup._selftest ), HProgramOptionsHandler::OOption::ARGUMENT::NONE, "perform framework tests" )
-		( "option", program_options_helper::option_value( dummyValue ), 'O', HProgramOptionsHandler::OOption::ARGUMENT::OPTIONAL, "this is not a real option, it was added here to test automated help generation capabilities, this description must be long enought to trigger description wrap, more over it must look good", "param" )
-		( "absolute", program_options_helper::option_value( dummyValue ), 'O', HProgramOptionsHandler::OOption::ARGUMENT::OPTIONAL, NULL, "param" )
-		( "exit", program_options_helper::option_value( setup._exit ), 'E', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "exit program gracefuly and do not perform any test" )
-		( "quiet", program_options_helper::option_value( setup._quiet ), 'q', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "inhibit usual output" )
-		( "silent", program_options_helper::option_value( setup._quiet ), 'q', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "inhibit usual output" )
-		( "verbose", program_options_helper::option_value( setup._verbose ), 'v', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "print more information" )
-		( "debug", program_options_helper::option_value( setup._debug ), 'd', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "print debugging information about tress internals" )
-		( "help", program_options_helper::option_value( stop ), 'h', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "display this help and stop", program_options_helper::callback( util::show_help, &info ) )
-		( "dump-configuration", program_options_helper::option_value( stop ), 'W', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "dump current configuration", program_options_helper::callback( util::dump_configuration, &info ) )
-		( "version", program_options_helper::option_value( stop ), 'V', HProgramOptionsHandler::OOption::ARGUMENT::NONE, "output version information and stop", program_options_helper::callback( version, NULL ) );
+	namespace poh = program_options_helper;
+	po(
+		"log_path",
+		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
+		"path pointing to file for application logs",
+		poh::option_value( setup._logPath ),
+		"path"
+	)(
+		'j',
+		"jobs",
+		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
+		"number of concurrent jobs",
+		poh::option_value( setup._jobs ),
+		"count"
+	)(
+		'r',
+		"reporter",
+		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
+		"generator for reporting test results =(TUT|boost|google|cppunit|xml|QT|cute)",
+		poh::option_value( setup._reporter ),
+		"framework"
+	)(
+		'I',
+		"error-line",
+		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
+		"line format for error reporting =(console|vim|eclipse|visualstudio)",
+		poh::option_value( setup._errorLine ),
+		"IDE"
+	)(
+		'C',
+		"color",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"colorize output",
+		poh::option_value( setup._color )
+	)(
+		"fancy",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"provide fancy test run output",
+		poh::option_value( setup._fancy )
+	)(
+		"no-color",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"disable output colorizing",
+		poh::option_value( noColor )
+	)(
+		'T',
+		"time-constraint",
+		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
+		"constrain time for execution of single unit test",
+		poh::option_value( setup._timeConstraint ),
+		"miliseconds"
+	)(
+		'G',
+		"group",
+		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
+		"select test group",
+		poh::option_value( setup._testGroups ),
+		"name"
+	)(
+		"output_format",
+		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
+		"boost reporter option (ignored)",
+		poh::option_value( ignore )
+	)(
+		"log_level",
+		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
+		"boost reporter option (ignored)",
+		poh::option_value( ignore )
+	)(
+		"report_level",
+		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
+		"boost reporter option (ignored)",
+		poh::option_value( ignore )
+	)(
+		"run_test",
+		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
+		"boost runner option (converted to -G)",
+		poh::option_value( testFilter )
+	)(
+		"gtest_repeat",
+		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
+		"google reporter option (ignored)",
+		poh::option_value( ignore )
+	)(
+		"gtest_print_time",
+		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
+		"google reporter option (ignored)",
+		poh::option_value( ignore )
+	)(
+		"gtest_color",
+		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
+		"google reporter option (converted to -C)",
+		poh::option_value( setup._color )
+	)(
+		"gtest_filter",
+		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
+		"google runner option (converted to -G)",
+		poh::option_value( testFilter )
+	)(
+		"gtest_list_tests",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"google runner option (converted to -L)",
+		poh::option_value( setup._listGroups )
+	)(
+		'S',
+		"set",
+		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
+		"select test group and particular tests within it",
+		poh::option_value( setup._testSets ),
+		"name@no1,no2,..."
+	)(
+		'P',
+		"pattern",
+		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
+		"select test groups that are matching pattern",
+		poh::option_value( setup._testGroupPattern ),
+		"pattern"
+	)(
+		'N',
+		"number",
+		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
+		"select test number for a given group",
+		poh::option_value( setup._testNumber ),
+		"number"
+	)(
+		'R',
+		"restartable",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"run tests in restartable mode",
+		poh::option_value( setup._restartable )
+	)(
+		'L',
+		"list",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"list known test groups",
+		poh::option_value( setup._listGroups )
+	)(
+		'F',
+		"file",
+		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
+		"read test group names from given file",
+		poh::option_value( setup._testGroupListFilePath ),
+		"path"
+	)(
+		"selftest",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"perform framework tests",
+		poh::option_value( setup._selftest )
+	)(
+		'O',
+		"option",
+		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
+		"this is not a real option, it was added here to test automated help generation capabilities,"
+		" this description must be long enought to trigger description wrap, more over it must look good",
+		poh::option_value( dummyValue ),
+		"param"
+	)(
+		'O',
+		"absolute",
+		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
+		"",
+		poh::option_value( dummyValue ),
+		"param"
+	)(
+		'E',
+		"exit",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"exit program gracefuly and do not perform any test",
+		poh::option_value( setup._exit )
+	)(
+		'q',
+		"quiet",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"inhibit usual output",
+		poh::option_value( setup._quiet )
+	)(
+		'q',
+		"silent",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"inhibit usual output",
+		poh::option_value( setup._quiet )
+	)(
+		'v',
+		"verbose",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"print more information",
+		poh::option_value( setup._verbose )
+	)(
+		'd',
+		"debug",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"print debugging information about tress internals",
+		poh::option_value( setup._debug )
+	)(
+		'h',
+		"help",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"display this help and stop",
+		poh::option_value( stop ),
+		"",
+		"",
+		call( &util::show_help, &info )
+	)(
+		'W',
+		"dump-configuration",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"dump current configuration",
+		poh::option_value( stop ),
+		"",
+		"",
+		call( &util::dump_configuration, &info )
+	)(
+		'V',
+		"version",
+		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
+		"output version information and stop",
+		poh::option_value( stop ),
+		"",
+		"",
+		call( &version )
+	);
 	po.process_rc_file( "tress", "", set_variables );
 	if ( setup._logPath.is_empty() )
 		setup._logPath = "tress.log";
