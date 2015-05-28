@@ -43,7 +43,9 @@ using namespace yaal::tools::util;
 
 namespace child {
 
+#ifndef __clang__
 void version( void ) __attribute__(( __noreturn__ ));
+#endif /* #ifndef __clang__ */
 void version( void ) {
 	cout << PACKAGE_STRING << endl;
 	throw ( 0 );
