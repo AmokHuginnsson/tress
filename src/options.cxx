@@ -73,226 +73,254 @@ int handle_program_options( int argc_, char** argv_ ) {
 	int dummyValue( 0 );
 	HString ignore;
 	HString testFilter;
-	namespace poh = program_options_helper;
 	po(
-		"log_path",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"path pointing to file for application logs",
-		poh::option_value( setup._logPath ),
-		"path"
+		HProgramOptionsHandler::HOption()
+		.long_form( "log_path" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "path pointing to file for application logs" )
+		.recipient( setup._logPath )
+		.argument_name( "path" )
 	)(
-		'j',
-		"jobs",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"number of concurrent jobs",
-		poh::option_value( setup._jobs ),
-		"count"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'j' )
+		.long_form( "jobs" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "number of concurrent jobs" )
+		.recipient( setup._jobs )
+		.argument_name( "count" )
 	)(
-		'r',
-		"reporter",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"generator for reporting test results =(TUT|boost|google|cppunit|xml|QT|cute)",
-		poh::option_value( setup._reporter ),
-		"framework"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'r' )
+		.long_form( "reporter" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "generator for reporting test results =(TUT|boost|google|cppunit|xml|QT|cute)" )
+		.recipient( setup._reporter )
+		.argument_name( "framework" )
 	)(
-		'I',
-		"error-line",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"line format for error reporting =(console|vim|eclipse|visualstudio)",
-		poh::option_value( setup._errorLine ),
-		"IDE"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'I' )
+		.long_form( "error-line" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "line format for error reporting =(console|vim|eclipse|visualstudio)" )
+		.recipient( setup._errorLine )
+		.argument_name( "IDE" )
 	)(
-		'C',
-		"color",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"colorize output",
-		poh::option_value( setup._color )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'C' )
+		.long_form( "color" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "colorize output" )
+		.recipient( setup._color )
 	)(
-		"fancy",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"provide fancy test run output",
-		poh::option_value( setup._fancy )
+		HProgramOptionsHandler::HOption()
+		.long_form( "fancy" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "provide fancy test run output" )
+		.recipient( setup._fancy )
 	)(
-		"no-color",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"disable output colorizing",
-		poh::option_value( noColor )
+		HProgramOptionsHandler::HOption()
+		.long_form( "no-color" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "disable output colorizing" )
+		.recipient( noColor )
 	)(
-		'T',
-		"time-constraint",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"constrain time for execution of single unit test",
-		poh::option_value( setup._timeConstraint ),
-		"miliseconds"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'T' )
+		.long_form( "time-constraint" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "constrain time for execution of single unit test" )
+		.recipient( setup._timeConstraint )
+		.argument_name( "miliseconds" )
 	)(
-		'G',
-		"group",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"select test group",
-		poh::option_value( setup._testGroups ),
-		"name"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'G' )
+		.long_form( "group" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "select test group" )
+		.recipient( setup._testGroups )
+		.argument_name( "name" )
 	)(
-		"output_format",
-		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
-		"boost reporter option (ignored)",
-		poh::option_value( ignore )
+		HProgramOptionsHandler::HOption()
+		.long_form( "output_format" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL )
+		.description( "boost reporter option (ignored)" )
+		.recipient( ignore )
 	)(
-		"log_level",
-		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
-		"boost reporter option (ignored)",
-		poh::option_value( ignore )
+		HProgramOptionsHandler::HOption()
+		.long_form( "log_level" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL )
+		.description( "boost reporter option (ignored)" )
+		.recipient( ignore )
 	)(
-		"report_level",
-		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
-		"boost reporter option (ignored)",
-		poh::option_value( ignore )
+		HProgramOptionsHandler::HOption()
+		.long_form( "report_level" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL )
+		.description( "boost reporter option (ignored)" )
+		.recipient( ignore )
 	)(
-		"run_test",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"boost runner option (converted to -G)",
-		poh::option_value( testFilter )
+		HProgramOptionsHandler::HOption()
+		.long_form( "run_test" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "boost runner option (converted to -G)" )
+		.recipient( testFilter )
 	)(
-		"gtest_repeat",
-		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
-		"google reporter option (ignored)",
-		poh::option_value( ignore )
+		HProgramOptionsHandler::HOption()
+		.long_form( "gtest_repeat" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL )
+		.description( "google reporter option (ignored)" )
+		.recipient( ignore )
 	)(
-		"gtest_print_time",
-		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
-		"google reporter option (ignored)",
-		poh::option_value( ignore )
+		HProgramOptionsHandler::HOption()
+		.long_form( "gtest_print_time" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL )
+		.description( "google reporter option (ignored)" )
+		.recipient( ignore )
 	)(
-		"gtest_color",
-		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
-		"google reporter option (converted to -C)",
-		poh::option_value( setup._color )
+		HProgramOptionsHandler::HOption()
+		.long_form( "gtest_color" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL )
+		.description( "google reporter option (converted to -C)" )
+		.recipient( setup._color )
 	)(
-		"gtest_filter",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"google runner option (converted to -G)",
-		poh::option_value( testFilter )
+		HProgramOptionsHandler::HOption()
+		.long_form( "gtest_filter" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "google runner option (converted to -G)" )
+		.recipient( testFilter )
 	)(
-		"gtest_list_tests",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"google runner option (converted to -L)",
-		poh::option_value( setup._listGroups )
+		HProgramOptionsHandler::HOption()
+		.long_form( "gtest_list_tests" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "google runner option (converted to -L)" )
+		.recipient( setup._listGroups )
 	)(
-		'S',
-		"set",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"select test group and particular tests within it",
-		poh::option_value( setup._testSets ),
-		"name@no1,no2,..."
+		HProgramOptionsHandler::HOption()
+		.short_form( 'S' )
+		.long_form( "set" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "select test group and particular tests within it" )
+		.recipient( setup._testSets )
+		.argument_name( "name@no1,no2,..." )
 	)(
-		'P',
-		"pattern",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"select test groups that are matching pattern",
-		poh::option_value( setup._testGroupPattern ),
-		"pattern"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'P' )
+		.long_form( "pattern" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "select test groups that are matching pattern" )
+		.recipient( setup._testGroupPattern )
+		.argument_name( "pattern" )
 	)(
-		'N',
-		"number",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"select test number for a given group",
-		poh::option_value( setup._testNumber ),
-		"number"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'N' )
+		.long_form( "number" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "select test number for a given group" )
+		.recipient( setup._testNumber )
+		.argument_name( "number" )
 	)(
-		'R',
-		"restartable",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"run tests in restartable mode",
-		poh::option_value( setup._restartable )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'R' )
+		.long_form( "restartable" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "run tests in restartable mode" )
+		.recipient( setup._restartable )
 	)(
-		'L',
-		"list",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"list known test groups",
-		poh::option_value( setup._listGroups )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'L' )
+		.long_form( "list" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "list known test groups" )
+		.recipient( setup._listGroups )
 	)(
-		'F',
-		"file",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"read test group names from given file",
-		poh::option_value( setup._testGroupListFilePath ),
-		"path"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'F' )
+		.long_form( "file" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "read test group names from given file" )
+		.recipient( setup._testGroupListFilePath )
+		.argument_name( "path" )
 	)(
-		"selftest",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"perform framework tests",
-		poh::option_value( setup._selftest )
+		HProgramOptionsHandler::HOption()
+		.long_form( "selftest" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "perform framework tests" )
+		.recipient( setup._selftest )
 	)(
-		'O',
-		"option",
-		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
-		"this is not a real option, it was added here to test automated help generation capabilities,"
-		" this description must be long enought to trigger description wrap, more over it must look good",
-		poh::option_value( dummyValue ),
-		"param"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'O' )
+		.long_form( "option" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL )
+		.description( "this is not a real option, it was added here to test automated help generation capabilities,"
+			" this description must be long enought to trigger description wrap, more over it must look good" )
+		.recipient( dummyValue )
+		.argument_name( "param" )
 	)(
-		'O',
-		"absolute",
-		HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL,
-		"",
-		poh::option_value( dummyValue ),
-		"param"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'O' )
+		.long_form( "absolute" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL )
+		.description( "" )
+		.recipient( dummyValue )
+		.argument_name( "param" )
 	)(
-		'E',
-		"exit",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"exit program gracefuly and do not perform any test",
-		poh::option_value( setup._exit )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'E' )
+		.long_form( "exit" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "exit program gracefuly and do not perform any test" )
+		.recipient( setup._exit )
 	)(
-		'q',
-		"quiet",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"inhibit usual output",
-		poh::option_value( setup._quiet )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'q' )
+		.long_form( "quiet" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "inhibit usual output" )
+		.recipient( setup._quiet )
 	)(
-		'q',
-		"silent",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"inhibit usual output",
-		poh::option_value( setup._quiet )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'q' )
+		.long_form( "silent" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "inhibit usual output" )
+		.recipient( setup._quiet )
 	)(
-		'v',
-		"verbose",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"print more information",
-		poh::option_value( setup._verbose )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'v' )
+		.long_form( "verbose" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "print more information" )
+		.recipient( setup._verbose )
 	)(
-		'd',
-		"debug",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"print debugging information about tress internals",
-		poh::option_value( setup._debug )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'd' )
+		.long_form( "debug" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "print debugging information about tress internals" )
+		.recipient( setup._debug )
 	)(
-		'h',
-		"help",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"display this help and stop",
-		poh::option_value( stop ),
-		"",
-		"",
-		call( &util::show_help, &info )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'h' )
+		.long_form( "help" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "display this help and stop" )
+		.recipient( stop )
+		.callback( call( &util::show_help, &info ) )
 	)(
-		'W',
-		"dump-configuration",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"dump current configuration",
-		poh::option_value( stop ),
-		"",
-		"",
-		call( &util::dump_configuration, &info )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'W' )
+		.long_form( "dump-configuration" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "dump current configuration" )
+		.recipient( stop )
+		.callback( call( &util::dump_configuration, &info ) )
 	)(
-		'V',
-		"version",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"output version information and stop",
-		poh::option_value( stop ),
-		"",
-		"",
-		call( &version )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'V' )
+		.long_form( "version" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "output version information and stop" )
+		.recipient( stop )
+		.callback( call( &version ) )
 	);
 	po.process_rc_file( "tress", "", set_variables );
 	if ( setup._logPath.is_empty() )
