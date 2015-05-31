@@ -80,6 +80,7 @@ int handle_program_options( int argc_, char** argv_ ) {
 		.description( "path pointing to file for application logs" )
 		.recipient( setup._logPath )
 		.argument_name( "path" )
+		.default_value( "tress.log" )
 	)(
 		HProgramOptionsHandler::HOption()
 		.short_form( 'j' )
@@ -88,6 +89,7 @@ int handle_program_options( int argc_, char** argv_ ) {
 		.description( "number of concurrent jobs" )
 		.recipient( setup._jobs )
 		.argument_name( "count" )
+		.default_value( OSetup::DEFAULT_JOB_COUNT )
 	)(
 		HProgramOptionsHandler::HOption()
 		.short_form( 'r' )
@@ -96,6 +98,7 @@ int handle_program_options( int argc_, char** argv_ ) {
 		.description( "generator for reporting test results =(TUT|boost|google|cppunit|xml|QT|cute)" )
 		.recipient( setup._reporter )
 		.argument_name( "framework" )
+		.default_value( "tut" )
 	)(
 		HProgramOptionsHandler::HOption()
 		.short_form( 'I' )
@@ -104,6 +107,7 @@ int handle_program_options( int argc_, char** argv_ ) {
 		.description( "line format for error reporting =(console|vim|eclipse|visualstudio)" )
 		.recipient( setup._errorLine )
 		.argument_name( "IDE" )
+		.default_value( "console" )
 	)(
 		HProgramOptionsHandler::HOption()
 		.short_form( 'C' )
@@ -131,6 +135,7 @@ int handle_program_options( int argc_, char** argv_ ) {
 		.description( "constrain time for execution of single unit test" )
 		.recipient( setup._timeConstraint )
 		.argument_name( "miliseconds" )
+		.default_value( OSetup::DEFAULT_TIME_CONSTRAINT )
 	)(
 		HProgramOptionsHandler::HOption()
 		.short_form( 'G' )
@@ -323,8 +328,6 @@ int handle_program_options( int argc_, char** argv_ ) {
 		.callback( call( &version ) )
 	);
 	po.process_rc_file( "tress", "", set_variables );
-	if ( setup._logPath.is_empty() )
-		setup._logPath = "tress.log";
 	int unknown( 0 );
 	int nonOption( po.process_command_line( argc_, argv_, &unknown ) );
 	if ( stop || ( unknown > 0 ) ) {
