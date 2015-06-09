@@ -752,6 +752,14 @@ char const progCompileErr17[] =
 	"}\n"
 ;
 
+char const progCompileErr18[] =
+	"main() {\n"
+	"\tv = true;\n"
+	"\tx = v < false;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn::test_compile( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -786,6 +794,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr15,
 		progCompileErr16,
 		progCompileErr17,
+		progCompileErr18,
 		NULL
 	};
 	int const err[][3] = {
@@ -807,6 +816,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 10, 2, 2 },   // 15
 		{ 10, 2, 2 },   // 16
 		{ 51, 5, 4 },   // 17
+		{ 27, 3, 8 },   // 18
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
@@ -1272,6 +1282,26 @@ TUT_UNIT_TEST( "short circuit in boolean `or'" )
 		"}"
 	;
 	ENSURE_EQUALS( "ternary failed (F || F)", execute( p3 ), "12F" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "boolean xor" )
+	char const p[] =
+		"main() {"
+		" a = 1;"
+		" b = 2;"
+		" w = ( a == 1 ) ^^ ( b == 2 );"
+		" x = ( a == 1 ) ^^ ( b == 0 );"
+		" y = ( a == 0 ) ^^ ( b == 2 );"
+		" z = ( a == 0 ) ^^ ( b == 0 );"
+		" s = \"\";"
+		" s = s + ( w ? \"T\" : \"F\" );"
+		" s = s + ( x ? \"T\" : \"F\" );"
+		" s = s + ( y ? \"T\" : \"F\" );"
+		" s = s + ( z ? \"T\" : \"F\" );"
+		" return ( s );"
+		"}"
+	;
+	ENSURE_EQUALS( "boolean xor fqailed", execute( p ), "FTTF" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "print" )
