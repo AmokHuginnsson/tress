@@ -760,6 +760,48 @@ char const progCompileErr18[] =
 	"}\n"
 ;
 
+char const progCompileErr19[] =
+	"main() {\n"
+	"\tx = 'a' + 'b';\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr20[] =
+	"main() {\n"
+	"\tx = 'a' - 'b';\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr21[] =
+	"main() {\n"
+	"\tx = 'a' * 'b';\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr22[] =
+	"main() {\n"
+	"\tx = 'a' / 'b';\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr23[] =
+	"main() {\n"
+	"\tx = 'a' % 'b';\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr24[] =
+	"main() {\n"
+	"\tx = 'a' ^ 'b';\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn::test_compile( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -795,6 +837,12 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr16,
 		progCompileErr17,
 		progCompileErr18,
+		progCompileErr19,
+		progCompileErr20,
+		progCompileErr21,
+		progCompileErr22,
+		progCompileErr23,
+		progCompileErr24,
 		NULL
 	};
 	int const err[][3] = {
@@ -817,6 +865,12 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 10, 2, 2 },   // 16
 		{ 51, 5, 4 },   // 17
 		{ 27, 3, 8 },   // 18
+		{ 18, 2, 10 },  // 19
+		{ 18, 2, 10 },  // 20
+		{ 18, 2, 10 },  // 21
+		{ 18, 2, 10 },  // 22
+		{ 18, 2, 10 },  // 23
+		{ 18, 2, 10 },  // 24
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
