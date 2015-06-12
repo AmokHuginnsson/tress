@@ -818,7 +818,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	expression %= ( *( ( ( subscript | name ) >> '=' ) ^ '=' ) >> value );
 	HRule expressionStatement( expression >> ';' );
 	HRule loopScope;
-	HRule tryCatchStatement( e_p::constant( "try" ) >> scope >> "catch" >> '(' >> name >> name >> ')' >> scope );
+	HRule catchStatement( e_p::constant( "catch" ) >> '(' >> name >> name >> ')' >> scope );
+	HRule tryCatchStatement( e_p::constant( "try" ) >> scope >> +catchStatement );
 	HRule ifClause( e_p::constant( "if" ) >> '(' >> expression >> ')' >> scope );
 	HRule ifStatement(
 		ifClause >>
@@ -861,7 +862,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"O_ = ( \"while\" >> '(' >> C_ >> ')' >> Z_ )",
 		"P_ = ( \"for\" >> '(' >> B_ >> ':' >> C_ >> ')' >> Z_ )",
 		"Q_ = ( \"switch\" >> '(' >> C_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> J_ ) >> '}' )",
-		"R_ = ( \"try\" >> J_ >> \"catch\" >> '(' >> B_ >> B_ >> ')' >> J_ )",
+		"R_ = ( \"try\" >> J_ >> +( \"catch\" >> '(' >> B_ >> B_ >> ')' >> J_ ) )",
 		"S_ = ( \"throw\" >> C_ >> ';' )",
 		"T_ = ( \"break\" >> ';' )",
 		"U_ = ( \"continue\" >> ';' )",
