@@ -64,7 +64,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until (delims stripped)" )
 	static char data[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( data, sizeof( data ) - 1 );
+	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
 	HMemory m( mo );
 	HString line;
 	int long nRead( 0 );
@@ -84,7 +84,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until (delims not stripped)" )
 	static char data[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( data, sizeof( data ) - 1 );
+	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
 	HMemory m( mo );
 	HString line;
 	int long nRead( 0 );
@@ -111,7 +111,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until_n (delim stripped, by delim)" )
 	static char data[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( data, sizeof( data ) - 1 );
+	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
 	HMemory m( mo );
 	HString line;
 	int long nRead( 0 );
@@ -131,7 +131,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until_n (delim stripped, by size)" )
 	static char data[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( data, sizeof( data ) - 1 );
+	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
 	HMemory m( mo );
 	HString line;
 	int long nRead( 0 );
@@ -157,7 +157,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until_n (delim not stripped, by delim)" )
 	static char data[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( data, sizeof( data ) - 1 );
+	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
 	HMemory m( mo );
 	HString line;
 	int long nRead( 0 );
@@ -184,7 +184,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until_n (delim not stripped, by size)" )
 	static char data[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( data, sizeof( data ) - 1 );
+	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
 	HMemory m( mo );
 	HString line;
 	int long nRead( 0 );
@@ -210,7 +210,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "input float" )
 	static char data[] = "3.1415 -2.7182";
-	HMemoryObserver mo( data, sizeof( data ) - 1 );
+	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
 	HMemory m( mo );
 	float val( 0 );
 	m >> val;

@@ -703,10 +703,10 @@ TUT_UNIT_TEST( "assign( HString ... )" )
 	ENSURE_EQUALS( err, dest.assign( source, 4, 5 ), "ma ko" );
 	ENSURE_EQUALS( err, dest.assign( source, 7, 5 ), "kota." );
 	ENSURE_EQUALS( err, dest.assign( source, 8, 5 ), "ota." );
-	ENSURE_EQUALS( err, dest.assign( source, sizeof ( ss ) - 2, 5 ), "." );
-	ENSURE_EQUALS( err, dest.assign( source, sizeof ( ss ) - 1, 5 ), "" );
-	ENSURE_EQUALS( err, dest.assign( source, sizeof ( ss ), 5 ), "" );
-	ENSURE_EQUALS( err, dest.assign( ss + 3, ss + sizeof ( ss ) - 4 ), " ma ko" );
+	ENSURE_EQUALS( err, dest.assign( source, static_cast<int>( sizeof ( ss ) ) - 2, 5 ), "." );
+	ENSURE_EQUALS( err, dest.assign( source, static_cast<int>( sizeof ( ss ) ) - 1, 5 ), "" );
+	ENSURE_EQUALS( err, dest.assign( source, static_cast<int>( sizeof ( ss ) ), 5 ), "" );
+	ENSURE_EQUALS( err, dest.assign( ss + 3, ss + static_cast<int>( sizeof ( ss ) ) - 4 ), " ma ko" );
 	ENSURE_THROW( "assign with negative offset succeeded", dest.assign( source, -1, 2 ), HStringException );
 	ENSURE_THROW( "assign with negative lenght succeeded", dest.assign( source, 0, -1 ), HStringException );
 TUT_TEARDOWN()
@@ -751,10 +751,10 @@ TUT_UNIT_TEST( "append( HString ... )" )
 	ENSURE_EQUALS( err, dest.append( source, 4, 5 ), "dummy" + source + "Ala mma ko" );
 	ENSURE_EQUALS( err, dest.append( source, 7, 5 ), "dummy" + source + "Ala mma kokota." );
 	ENSURE_EQUALS( err, dest.append( source, 8, 5 ), "dummy" + source + "Ala mma kokota.ota." );
-	ENSURE_EQUALS( err, dest.append( source, sizeof ( ss ) - 2, 5 ), "dummy" + source + "Ala mma kokota.ota.." );
-	ENSURE_EQUALS( err, dest.append( source, sizeof ( ss ) - 1, 5 ), "dummy" + source + "Ala mma kokota.ota.." );
-	ENSURE_EQUALS( err, dest.append( source, sizeof ( ss ), 5 ), "dummy" + source + "Ala mma kokota.ota.." );
-	ENSURE_EQUALS( err, dest.append( ss + 3, ss + sizeof ( ss ) - 4 ), "dummy" + source + "Ala mma kokota.ota.. ma ko" );
+	ENSURE_EQUALS( err, dest.append( source, static_cast<int>( sizeof ( ss ) ) - 2, 5 ), "dummy" + source + "Ala mma kokota.ota.." );
+	ENSURE_EQUALS( err, dest.append( source, static_cast<int>( sizeof ( ss ) ) - 1, 5 ), "dummy" + source + "Ala mma kokota.ota.." );
+	ENSURE_EQUALS( err, dest.append( source, static_cast<int>( sizeof ( ss ) ), 5 ), "dummy" + source + "Ala mma kokota.ota.." );
+	ENSURE_EQUALS( err, dest.append( ss + 3, ss + static_cast<int>( sizeof ( ss ) ) - 4 ), "dummy" + source + "Ala mma kokota.ota.. ma ko" );
 	ENSURE_THROW( "append with negative offset succeeded", dest.append( source, -1, 2 ), HStringException );
 	ENSURE_THROW( "append with negative lenght succeeded", dest.append( source, 0, -1 ), HStringException );
 TUT_TEARDOWN()

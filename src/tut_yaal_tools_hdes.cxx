@@ -119,7 +119,7 @@ TUT_UNIT_TEST( "decrypt file" )
 		char prototype[] = "test1234";
 		char buf[ sizeof ( prototype ) ];
 		char buf2[ sizeof ( prototype ) ];
-		HMemoryObserver srcMo( prototype, sizeof ( prototype ) - 1 );
+		HMemoryObserver srcMo( prototype, static_cast<int>( sizeof ( prototype ) ) - 1 );
 		HMemory src( srcMo, HMemory::INITIAL_STATE::VALID );
 		HMemoryObserver dstMo( buf, sizeof ( buf ) );
 		HMemory dst( dstMo );
