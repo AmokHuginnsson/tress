@@ -191,7 +191,7 @@ TUT_UNIT_TEST( 50, "speed test" )
 		clog << "*speed* yaal::hcore::HHashSet<>::insert() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HHashSet<>::insert() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
-	typedef HHashSet<int, HHashSet<int>::hasher_type, allocator::pool<int> > hashset_on_pool_type;
+	typedef HHashSet<int, HHashSet<int>::hasher_type, HHashSet<int>::equal_key_type, allocator::pool<int> > hashset_on_pool_type;
 	hashset_on_pool_type hashSetOnPool; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )

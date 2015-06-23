@@ -34,8 +34,22 @@ using namespace yaal::hcore;
 
 namespace must_not_compile {
 
-typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_type, HHashMultiMap<int, int>::allocator_type, HMultiContainerStorage::HPacked> mapp_t;
-typedef HHashMultiMap<int, int, HHashMultiMap<int, int>::hasher_type, HHashMultiMap<int, int>::allocator_type, HMultiContainerStorage::HTransparent> mapt_t;
+typedef HHashMultiMap<
+	int,
+	int,
+	HHashMultiMap<int, int>::hasher_type,
+	HHashMultiMap<int, int>::equal_key_type,
+	HHashMultiMap<int, int>::allocator_type,
+	HMultiContainerStorage::HPacked
+> mapp_t;
+typedef HHashMultiMap<
+	int,
+	int,
+	HHashMultiMap<int, int>::hasher_type,
+	HHashMultiMap<int, int>::equal_key_type,
+	HHashMultiMap<int, int>::allocator_type,
+	HMultiContainerStorage::HTransparent
+> mapt_t;
 
 #if defined ( BUG_0 )
 
