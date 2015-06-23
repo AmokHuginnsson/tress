@@ -773,8 +773,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule argList( expression >> ( * ( ',' >> expression ) ) );
 	HRule functionCallOperator( '(' >> -argList >> ')' );
 	HRule listLiteral( '[' >> -argList >> ']' );
-	HRule mapLiteralElement( expression >> ':' >> expression );
-	HRule mapLiteral( '{' >> -( mapLiteralElement >> *( ',' >> mapLiteralElement ) ) >> '}' );
+	HRule dictLiteralElement( expression >> ':' >> expression );
+	HRule dictLiteral( '{' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> '}' );
 	HRule parameter( name >> -( '=' >> expression ) );
 	HRule nameList( parameter >> ( * ( ',' >> parameter ) ) );
 	HRule scope;
@@ -794,7 +794,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	 	| integer
 	 	| character_literal
 	 	| ( listLiteral >> -( subscriptOperator >> dereference ) )
-	 	| ( mapLiteral >> -( subscriptOperator >> dereference ) )
+	 	| ( dictLiteral >> -( subscriptOperator >> dereference ) )
 	 	| literalNone
 	 	| booleanLiteralTrue
 	 	| booleanLiteralFalse
