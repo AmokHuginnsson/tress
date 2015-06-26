@@ -846,6 +846,7 @@ TUT_UNIT_TEST( "sort_heap" )
 	ENSURE_EQUALS( "yaal::make_heap failed", yaal::is_heap( a.begin(), a.end() ), true );
 	/* ENSURE_EQUALS( "yaal::make_heap wrong", a, v ); */
 	std::sort_heap( v.begin(), v.end() );
+	sort_heap( a.begin(), a.begin() ); /* Will crash if badly implemented. */
 	sort_heap( a.begin(), a.end() );
 	ENSURE_EQUALS( "yaal::sort_heap wrong", a, v );
 TUT_TEARDOWN()
@@ -857,6 +858,7 @@ TUT_UNIT_TEST( "sort" )
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	clog << a << endl;
 	std::sort( v.begin(), v.end() );
+	sort( a.begin(), a.begin() ); /* Will crash if badly implemented. */
 	sort( a.begin(), a.end() );
 	ENSURE_EQUALS( "yaal::sort wrong", a, v );
 	clog << a << endl;
@@ -986,6 +988,7 @@ TUT_UNIT_TEST( "heap_sort" )
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	std::sort( v.begin(), v.end() );
 	HClock c;
+	heap_sort( a.begin(), a.begin() ); /* Will crash if badly implemented. */
 	heap_sort( a.begin(), a.end() );
 	clog << "*speed* yaal::heap_sort = " << c.get_time_elapsed( time::UNIT::MILISECOND ) << endl;
 	ENSURE_EQUALS( "yaal::stable_sort wrong", a, v );
@@ -998,6 +1001,7 @@ TUT_UNIT_TEST( "stable_sort" )
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	clog << a << endl;
 	std::stable_sort( v.begin(), v.end() );
+	stable_sort( a.begin(), a.begin() ); /* Will crash if badly implemented. */
 	stable_sort( a.begin(), a.end() );
 	ENSURE_EQUALS( "yaal::stable_sort wrong", a, v );
 	clog << a << endl;
