@@ -33,6 +33,7 @@ Copyright:
 
 #include <yaal/hcore/hprogramoptionshandler.hxx>
 #include <yaal/hcore/hlog.hxx>
+#include <yaal/hcore/base.hxx>
 #include <yaal/tools/util.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 
@@ -44,6 +45,15 @@ using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
+
+namespace yaal {
+
+template<>
+yaal::hcore::HString lexical_cast( yaal::hcore::HDeque<yaal::hcore::HString> const& ) {
+	return ( "" );
+}
+
+}
 
 namespace tress {
 
@@ -58,7 +68,7 @@ bool set_variables( HString& option_, HString& value_ ) {
 }
 
 void version( void ) {
-	cout << PACKAGE_STRING << ( setup._verbose ? "-" COMMIT_ID : "" ) << endl;
+	cout << PACKAGE_STRING << ( setup._verbose ? " " COMMIT_ID : "" ) << endl;
 	return;
 }
 
@@ -70,7 +80,9 @@ int handle_program_options( int argc_, char** argv_ ) {
 	M_PROLOG
 	HProgramOptionsHandler po;
 	OOptionInfo info( po, setup._programName, "yaal stress testing suite", NULL );
-	bool stop( false );
+	bool help( false );
+	bool dumpConf( false );
+	bool vers( false );
 	bool noColor( false );
 	int dummyValue( 0 );
 	HString ignore;
@@ -310,33 +322,36 @@ int handle_program_options( int argc_, char** argv_ ) {
 		.long_form( "help" )
 		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
 		.description( "display this help and stop" )
-		.recipient( stop )
-		.callback( call( &util::show_help, &info ) )
+		.recipient( help )
 	)(
 		HProgramOptionsHandler::HOption()
 		.short_form( 'W' )
 		.long_form( "dump-configuration" )
 		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
 		.description( "dump current configuration" )
-		.recipient( stop )
-		.callback( call( &util::dump_configuration, &info ) )
+		.recipient( dumpConf )
 	)(
 		HProgramOptionsHandler::HOption()
 		.short_form( 'V' )
 		.long_form( "version" )
 		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
 		.description( "output version information and stop" )
-		.recipient( stop )
-		.callback( call( &version ) )
+		.recipient( vers )
 	);
 	po.process_rc_file( "tress", "", set_variables );
 	int unknown( 0 );
 	int nonOption( po.process_command_line( argc_, argv_, &unknown ) );
-	if ( stop || ( unknown > 0 ) ) {
+	if ( help || dumpConf || vers || ( unknown > 0 ) ) {
 		if ( unknown > 0 ) {
 			if ( setup._reporter == "qt" )
 				cerr << "NOTICE: Remember to add options terminator `--' as last argument while using QT reporter." << endl;
-			util::show_help( &info );
+			util::show_help( info );
+		} else if ( help ) {
+			util::show_help( info );
+		} else if ( dumpConf ) {
+			util::dump_configuration( info );
+		} else if ( vers ) {
+			version();
 		}
 		HLog::disable_auto_rehash();
 		throw unknown;

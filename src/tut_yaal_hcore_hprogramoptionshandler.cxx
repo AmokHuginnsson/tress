@@ -61,52 +61,59 @@ TUT_UNIT_TEST( "duplicated long option" )
 	try {
 		int otherValue( 0 );
 		po(
-			"log_path",
-			HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-			"path pointing to file for application logs",
-			program_options_helper::option_value( _logPath ),
-			"path"
+			HProgramOptionsHandler::HOption()
+			.long_form( "log_path" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+			.description( "path pointing to file for application logs" )
+			.recipient( _logPath )
+			.argument_name( "path" )
 		)(
-			'j',
-			"_jobs",
-			HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-			"number of concurrent _jobs",
-			program_options_helper::option_value( _jobs ),
-			"count"
+			HProgramOptionsHandler::HOption()
+			.short_form( 'j' )
+			.long_form( "jobs" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+			.description( "number of concurrent jobs" )
+			.recipient( _jobs )
+			.argument_name( "count" )
 		)(
-			'G',
-			"group",
-			HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-			"select test group",
-			program_options_helper::option_value( _testGroup ),
-			"name"
+			HProgramOptionsHandler::HOption()
+			.short_form( 'G' )
+			.long_form( "group" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+			.description( "select test group" )
+			.recipient( _testGroup )
+			.argument_name( "name" )
 		)(
-			'P',
-			"pattern",
-			HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-			"select test groups that are matching pattern",
-			program_options_helper::option_value( _testGroupPattern ),
-			"pattern"
+			HProgramOptionsHandler::HOption()
+			.short_form( 'P' )
+			.long_form( "pattern" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+			.description( "select test groups that are matching pattern" )
+			.recipient( _testGroupPattern )
+			.argument_name( "pattern" )
 		)(
-			'N',
-			"number",
-			HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-			"select test number for a given group",
-			program_options_helper::option_value( _testNumber ),
-			"number"
+			HProgramOptionsHandler::HOption()
+			.short_form( 'N' )
+			.long_form( "number" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+			.description( "select test number for a given group" )
+			.recipient( _testNumber )
+			.argument_name( "number" )
 		)(
-			'X',
-			"number",
-			HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-			"select test number for a given group",
-			program_options_helper::option_value( otherValue ),
-			"number"
+			HProgramOptionsHandler::HOption()
+			.short_form( 'X' )
+			.long_form( "number" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+			.description( "select test number for a given group" )
+			.recipient( otherValue )
+			.argument_name( "number" )
 		)(
-			'R',
-			"_restartable",
-			HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-			"run tests in _restartable mode",
-			program_options_helper::option_value( _restartable )
+			HProgramOptionsHandler::HOption()
+			.short_form( 'R' )
+			.long_form( "restartable" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+			.description( "run tests in restartable mode" )
+			.recipient( _restartable )
 		);
 		FAIL( "program options handler with duplicated long option created" );
 	} catch ( HProgramOptionsHandlerException const& ) {
@@ -119,52 +126,59 @@ TUT_UNIT_TEST( "duplicated short option" )
 	try {
 		int otherValue( 0 );
 		po(
-			"log_path",
-			HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-			"path pointing to file for application logs",
-			program_options_helper::option_value( _logPath ),
-			"path"
+			HProgramOptionsHandler::HOption()
+			.long_form( "log_path" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+			.description( "path pointing to file for application logs" )
+			.recipient( _logPath )
+			.argument_name( "path" )
 		)(
-			'j',
-			"_jobs",
-			HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-			"number of concurrent _jobs",
-			program_options_helper::option_value( _jobs ),
-			"count"
+			HProgramOptionsHandler::HOption()
+			.short_form( 'j' )
+			.long_form( "jobs" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+			.description( "number of concurrent jobs" )
+			.recipient( _jobs )
+			.argument_name( "count" )
 		)(
-			'G',
-			"group",
-			HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-			"select test group",
-			program_options_helper::option_value( _testGroup ),
-			"name"
+			HProgramOptionsHandler::HOption()
+			.short_form( 'G' )
+			.long_form( "group" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+			.description( "select test group" )
+			.recipient( _testGroup )
+			.argument_name( "name" )
 		)(
-			'P',
-			"pattern",
-			HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-			"select test groups that are matching pattern",
-			program_options_helper::option_value( _testGroupPattern ),
-			"pattern"
+			HProgramOptionsHandler::HOption()
+			.short_form( 'P' )
+			.long_form( "pattern" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+			.description( "select test groups that are matching pattern" )
+			.recipient( _testGroupPattern )
+			.argument_name( "pattern" )
 		)(
-			'N',
-			"number",
-			HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-			"select test number for a given group",
-			program_options_helper::option_value( _testNumber ),
-			"number"
+			HProgramOptionsHandler::HOption()
+			.short_form( 'N' )
+			.long_form( "number" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+			.description( "select test number for a given group" )
+			.recipient( _testNumber )
+			.argument_name( "number" )
 		)(
-			'N',
-			"other",
-			HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-			"select test number for a given group",
-			program_options_helper::option_value( otherValue ),
-			"number"
+			HProgramOptionsHandler::HOption()
+			.short_form( 'N' )
+			.long_form( "other" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+			.description( "select test number for a given group" )
+			.recipient( otherValue )
+			.argument_name( "number" )
 		)(
-			'R',
-			"_restartable",
-			HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-			"run tests in _restartable mode",
-			program_options_helper::option_value( _restartable )
+			HProgramOptionsHandler::HOption()
+			.short_form( 'R' )
+			.long_form( "restartable" )
+			.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+			.description( "run tests in restartable mode" )
+			.recipient( _restartable )
 		);
 		FAIL( "program options handler with duplicated short option created" );
 	} catch ( HProgramOptionsHandlerException const& ) {
@@ -175,104 +189,118 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "duplicated long option, duplication is legeal due to usage of the same physical value destination" )
 	HProgramOptionsHandler po;
 	po(
-		"log_path",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"path pointing to file for application logs",
-		program_options_helper::option_value( _logPath ),
-		"path"
+		HProgramOptionsHandler::HOption()
+		.long_form( "log_path" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "path pointing to file for application logs" )
+		.recipient( _logPath )
+		.argument_name( "path" )
 	)(
-		'j',
-		"_jobs",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"number of concurrent _jobs",
-		program_options_helper::option_value( _jobs ),
-		"count"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'j' )
+		.long_form( "jobs" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "number of concurrent jobs" )
+		.recipient( _jobs )
+		.argument_name( "count" )
 	)(
-		'G',
-		"group",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"select test group",
-		program_options_helper::option_value( _testGroup ),
-		"name"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'G' )
+		.long_form( "group" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "select test group" )
+		.recipient( _testGroup )
+		.argument_name( "name" )
 	)(
-		'P',
-		"pattern",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"select test groups that are matching pattern",
-		program_options_helper::option_value( _testGroupPattern ),
-		"pattern"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'P' )
+		.long_form( "pattern" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "select test groups that are matching pattern" )
+		.recipient( _testGroupPattern )
+		.argument_name( "pattern" )
 	)(
-		'N',
-		"number",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"select test number for a given group",
-		program_options_helper::option_value( _testNumber ),
-		"number"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'N' )
+		.long_form( "number" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "select test number for a given group" )
+		.recipient( _testNumber )
+		.argument_name( "number" )
 	)(
-		'X',
-		"number",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"select test number for a given group",
-		program_options_helper::option_value( _testNumber ),
-		"number"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'X' )
+		.long_form( "number" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "select test number for a given group" )
+		.recipient( _testNumber )
+		.argument_name( "number" )
 	)(
-		'R',
-		"_restartable",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"run tests in _restartable mode",
-		program_options_helper::option_value( _restartable )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'R' )
+		.long_form( "restartable" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "run tests in restartable mode" )
+		.recipient( _restartable )
 	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "duplicated short option, duplication is legeal due to usage of the same physical value destination" )
 	HProgramOptionsHandler po;
 	po(
-		"log_path",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"path pointing to file for application logs",
-		program_options_helper::option_value( _logPath ),
-		"path"
+		HProgramOptionsHandler::HOption()
+		.long_form( "log_path" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "path pointing to file for application logs" )
+		.recipient( _logPath )
+		.argument_name( "path" )
 	)(
-		'j',
-		"_jobs",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"number of concurrent _jobs",
-		program_options_helper::option_value( _jobs ),
-		"count"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'j' )
+		.long_form( "jobs" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "number of concurrent jobs" )
+		.recipient( _jobs )
+		.argument_name( "count" )
 	)(
-		'G',
-		"group",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"select test group",
-		program_options_helper::option_value( _testGroup ),
-		"name"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'G' )
+		.long_form( "group" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "select test group" )
+		.recipient( _testGroup )
+		.argument_name( "name" )
 	)(
-		'P',
-		"pattern",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"select test groups that are matching pattern",
-		program_options_helper::option_value( _testGroupPattern ),
-		"pattern"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'P' )
+		.long_form( "pattern" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "select test groups that are matching pattern" )
+		.recipient( _testGroupPattern )
+		.argument_name( "pattern" )
 	)(
-		'N',
-		"number",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"select test number for a given group",
-		program_options_helper::option_value( _testNumber ),
-		"number"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'N' )
+		.long_form( "number" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "select test number for a given group" )
+		.recipient( _testNumber )
+		.argument_name( "number" )
 	)(
-		'N',
-		"other",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"select test number for a given group",
-		program_options_helper::option_value( _testNumber ),
-		"number"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'N' )
+		.long_form( "other" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "select test number for a given group" )
+		.recipient( _testNumber )
+		.argument_name( "number" )
 	)(
-		'R',
-		"_restartable",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"run tests in _restartable mode",
-		program_options_helper::option_value( _restartable )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'R' )
+		.long_form( "restartable" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "run tests in restartable mode" )
+		.recipient( _restartable )
 	);
 TUT_TEARDOWN()
 

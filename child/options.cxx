@@ -31,6 +31,7 @@ Copyright:
 #include "config.hxx"
 
 #include <yaal/hcore/hprogramoptionshandler.hxx>
+#include <yaal/hcore/hlog.hxx>
 #include <yaal/tools/util.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 
@@ -58,91 +59,99 @@ int handle_program_options( int argc_, char** argv_ ) {
 	M_PROLOG
 	HProgramOptionsHandler po;
 	OOptionInfo info( po, setup._programName, "does very much usefull things ... really", NULL );
-	bool stop = false;
+	bool help( false );
+	bool conf( false );
+	bool vers( false );
 	po(
-		"log_path",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"path pointing to file for application logs",
-		program_options_helper::option_value( setup._logPath ),
-		"path"
+		HProgramOptionsHandler::HOption()
+		.long_form( "log_path" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "path pointing to file for application logs" )
+		.recipient( setup._logPath )
+		.argument_name( "path" )
 	)(
-		'E',
-		"exit_status",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"set exit status for child",
-		program_options_helper::option_value( setup._exitStatus ),
-		"status"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'E' )
+		.long_form( "exit_status" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "set exit status for child" )
+		.recipient( setup._exitStatus )
+		.argument_name( "status" )
 	)(
-		'T',
-		"terminate",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"terminate process abruptly",
-		program_options_helper::option_value( setup._terminate ),
-		"signal"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'T' )
+		.long_form( "terminate" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "terminate process abruptly" )
+		.recipient( setup._terminate )
+		.argument_name( "signal" )
 	)(
-		'S',
-		"script",
-		HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED,
-		"run this script in child session",
-		program_options_helper::option_value( setup._script ),
-		"code"
+		HProgramOptionsHandler::HOption()
+		.short_form( 'S' )
+		.long_form( "script" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "run this script in child session" )
+		.recipient( setup._script )
+		.argument_name( "code" )
 	)(
-		'q',
-		"quiet",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"inhibit usual output",
-		program_options_helper::option_value( setup._quiet )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'q' )
+		.long_form( "quiet" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "inhibit usual output" )
+		.recipient( setup._quiet )
 	)(
-		'q',
-		"silent",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"inhibit usual output",
-		program_options_helper::option_value( setup._quiet )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'q' )
+		.long_form( "silent" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "inhibit usual output" )
+		.recipient( setup._quiet )
 	)(
-		'v',
-		"verbose",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"print more information",
-		program_options_helper::option_value( setup._verbose )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'v' )
+		.long_form( "verbose" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "print more information" )
+		.recipient( setup._verbose )
 	)(
-		'h',
-		"help",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"display this help and stop",
-		program_options_helper::option_value( stop ),
-		"",
-		"",
-		call( &util::show_help, &info )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'h' )
+		.long_form( "help" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "display this help and stop" )
+		.recipient( help )
 	)(
-		'W',
-		"dump-configuration",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"dump current configuration",
-		program_options_helper::option_value( stop ),
-		"",
-		"",
-		call( &util::dump_configuration, &info )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'W' )
+		.long_form( "dump-configuration" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "dump current configuration" )
+		.recipient( conf )
 	)(
-		'V',
-		"version",
-		HProgramOptionsHandler::HOption::ARGUMENT::NONE,
-		"output version information and stop",
-		program_options_helper::no_value,
-		"",
-		"",
-		call( &version )
+		HProgramOptionsHandler::HOption()
+		.short_form( 'V' )
+		.long_form( "version" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "output version information and stop" )
+		.recipient( vers )
 	);
 	po.process_rc_file( "child", "", NULL );
 	if ( setup._logPath.is_empty() )
 		setup._logPath = "child.log";
 	int unknown = 0, nonOption = 0;
 	nonOption = po.process_command_line( argc_, argv_, &unknown );
-	if ( unknown > 0 ) {
-		util::show_help( &info );
+	if ( help || conf || vers || ( unknown > 0 ) ) {
+		if ( help || ( unknown > 0 ) ) {
+			util::show_help( info );
+		} else if ( conf ) {
+			util::dump_configuration( info );
+		} else if ( vers ) {
+			version();
+		}
+		HLog::disable_auto_rehash();
 		throw unknown;
 	}
-	if ( stop )
-		throw 0;
 	return ( nonOption );
 	M_EPILOG
 }
