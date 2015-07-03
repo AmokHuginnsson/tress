@@ -1189,6 +1189,46 @@ TUT_UNIT_TEST( "break;" )
 	ENSURE_EQUALS( "break; failed (for)", execute( "main(){x=[\"A\",\"a\",\"B\",\"b\",\"C\",\"c\"];v=\"\";for(e:x){if(size(v)>2){break;}v=v+e;}return(v);}" ), "AaB" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "continue;" )
+	ENSURE_EQUALS(
+		"continue; failed (while)",
+		execute(
+			"main(){\n"
+			"x=\"ALAMAKOTA\";\n"
+			"y=\"alamakota\";\n"
+			"i=0;\n"
+			"c=size(x);\n"
+			"z=\"\";\n"
+			"while(i<c){\n"
+			"idx=i;\n"
+			"i=i+1;\n"
+			"z=z+string(x[idx]);\n"
+			"if(i>(c/2)){continue;}\n"
+			"z=z+string(y[idx]);\n"
+			"}\n"
+			"return(z);}"
+		),
+		"AaLlAaMmAKOTA"
+	);
+	ENSURE_EQUALS(
+		"continue; failed (for)",
+		execute(
+			"main(){\n"
+			"i=0;\n"
+			"x=\"Ala ma kota.\";\n"
+			"z=\"\";\n"
+			"for(e:x){\n"
+			"z=z+string(e);\n"
+			"if(i>4){continue;}\n"
+			"z=z+\"+\";\n"
+			"i=i+1;\n"
+			"}\n"
+			"return(z);}"
+		),
+		"A+l+a+ +m+a kota."
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "list()" )
 	ENSURE_EQUALS( "list failed (explicit)", execute( "main(){x=list(\"a\",\"b\",\"c\");v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ), "3abc" );
 	ENSURE_EQUALS( "list failed (literal)", execute( "main(){x=[\"a\",\"b\",\"c\"];v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ), "3abc" );
