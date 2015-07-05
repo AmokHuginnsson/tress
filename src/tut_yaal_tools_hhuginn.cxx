@@ -901,9 +901,9 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 18, 2, 10 },  // 22
 		{ 18, 2, 10 },  // 23
 		{ 18, 2, 10 },  // 24
-		{ 10, 2, 2 },  // 25
-		{ 10, 2, 2 },  // 26
-		{ 52, 5, 4 },  // 27
+		{ 10, 2, 2 },   // 25
+		{ 10, 2, 2 },   // 26
+		{ 52, 5, 4 },   // 27
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
@@ -1465,6 +1465,14 @@ TUT_UNIT_TEST( "input" )
 	ENSURE_EQUALS( "bad result type", r->type(), HHuginn::TYPE::INTEGER );
 	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 13 );
 	ENSURE_EQUALS( "print failed", out.string(), "[Amok]" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "simple class" )
+	ENSURE_EQUALS( "class failed", execute( "class A{_d=none;}main(){o=A();o._d=\"ok\";return(o._d);}" ), "ok" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "class constructor" )
+	ENSURE_EQUALS( "class failed", execute( "class A{_d=none;constructor(d_){_d=d_;}}main(){o=A(\"ok\");return(o._d);}" ), "ok" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "simple program" )
