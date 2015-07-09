@@ -1,7 +1,6 @@
 --num-callers=50
 --memcheck:leak-check=full
---leak-check=full
---show-reachable=yes
+--memcheck:show-reachable=yes
 --trace-children=no
 --track-fds=yes
 --error-exitcode=255
