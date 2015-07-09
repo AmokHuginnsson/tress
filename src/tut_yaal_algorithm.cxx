@@ -1373,6 +1373,16 @@ TUT_UNIT_TEST( "random_sample" )
 	ENSURE_DISTANCE( "random sample not uniformly random", loAverage, tries, 3 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "min" )
+	ENSURE_EQUALS( "min failed", yaal::min( 31, 13, 2, 7, 5 ), 2 );
+	ENSURE_EQUALS( "min failed", yaal::min({ 31, 13, 2, 7, 5 }), 2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "max" )
+	ENSURE_EQUALS( "max failed", yaal::max( 2, 13, 2, 31, 7, 5 ), 31 );
+	ENSURE_EQUALS( "max failed", yaal::max({ 2, 13, 2, 31, 7, 5 }), 31 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "sort speed" )
 	TIME_CONSTRAINT_EXEMPT();
 	double long st( 0 );
