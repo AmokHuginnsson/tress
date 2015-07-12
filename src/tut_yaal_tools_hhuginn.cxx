@@ -1472,7 +1472,11 @@ TUT_UNIT_TEST( "simple class" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "class constructor" )
-	ENSURE_EQUALS( "class failed", execute( "class A{_d=none;constructor(d_){_d=d_;}}main(){o=A(\"ok\");return(o._d);}" ), "ok" );
+	ENSURE_EQUALS( "constructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}}main(){o=A(\"ok\");return(o._d);}" ), "ok" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "class destructor" )
+	ENSURE_EQUALS( "destructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"ok\");}}main(){l=list();{o=A(l);}return(l[0]);}" ), "ok" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "simple program" )
