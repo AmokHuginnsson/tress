@@ -1479,6 +1479,30 @@ TUT_UNIT_TEST( "class destructor" )
 	ENSURE_EQUALS( "destructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"ok\");}}main(){l=list();{o=A(l);}return(l[0]);}" ), "ok" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "class super" )
+	ENSURE_EQUALS(
+		"super failed",
+		execute(
+			"class B{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"ok\");}}"
+			"class D:B{_n=none;constructor(l_,n_){super.constructor(l_);_n=n_;}}"
+			"main(){s=none;l=list();{o=D(l,\"arg\");s=o._n;}return(l[0]+s);}"
+		),
+		"okarg"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "destructor chain" )
+	ENSURE_EQUALS(
+		"destructor chain failed",
+		execute(
+			"class B{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"base\");}}"
+			"class D:B{constructor(l_){super.constructor(l_);}destructor(){_d.add(\"derived\");}}"
+			"main(){l=list();{o=D(l);}return(l[0]+l[1]);}"
+		),
+		"derivedbase"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
