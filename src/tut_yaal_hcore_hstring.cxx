@@ -371,7 +371,7 @@ TUT_UNIT_TEST( "mid" )
 	char mid_failed[] = "mid failed";
 	ENSURE_EQUALS( mid_failed, str.mid( -10, 100 ), source );
 	ENSURE_EQUALS( mid_failed, str.mid( 3, 100 ), "cadlo" );
-	ENSURE_EQUALS( mid_failed, str.mid( 3, -1 ), "" );
+	ENSURE_EQUALS( mid_failed, str.mid( 3, -2 ), "" );
 	ENSURE_EQUALS( mid_failed, str.mid( 35, 5 ), "" );
 	ENSURE_EQUALS( mid_failed, str.mid( -15, 3 ), "" );
 	ENSURE_EQUALS( mid_failed, str.mid( -15, 18 ), "abe" );
@@ -708,7 +708,7 @@ TUT_UNIT_TEST( "assign( HString ... )" )
 	ENSURE_EQUALS( err, dest.assign( source, static_cast<int>( sizeof ( ss ) ), 5 ), "" );
 	ENSURE_EQUALS( err, dest.assign( ss + 3, ss + static_cast<int>( sizeof ( ss ) ) - 4 ), " ma ko" );
 	ENSURE_THROW( "assign with negative offset succeeded", dest.assign( source, -1, 2 ), HStringException );
-	ENSURE_THROW( "assign with negative lenght succeeded", dest.assign( source, 0, -1 ), HStringException );
+	ENSURE_THROW( "assign with negative lenght succeeded", dest.assign( source, 0, -2 ), HStringException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "fill()" )
@@ -756,7 +756,7 @@ TUT_UNIT_TEST( "append( HString ... )" )
 	ENSURE_EQUALS( err, dest.append( source, static_cast<int>( sizeof ( ss ) ), 5 ), "dummy" + source + "Ala mma kokota.ota.." );
 	ENSURE_EQUALS( err, dest.append( ss + 3, ss + static_cast<int>( sizeof ( ss ) ) - 4 ), "dummy" + source + "Ala mma kokota.ota.. ma ko" );
 	ENSURE_THROW( "append with negative offset succeeded", dest.append( source, -1, 2 ), HStringException );
-	ENSURE_THROW( "append with negative lenght succeeded", dest.append( source, 0, -1 ), HStringException );
+	ENSURE_THROW( "append with negative lenght succeeded", dest.append( source, 0, -2 ), HStringException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "swap()" )
