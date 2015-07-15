@@ -1503,6 +1503,17 @@ TUT_UNIT_TEST( "destructor chain" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "class this" )
+	ENSURE_EQUALS(
+		"class this failed",
+		execute(
+			"class A{_d=\"\";f(s_){_d=_d+s_;return(this);}}"
+			"main(){a=A();a.f(\"this\").f(\"ok\");return(a._d);}"
+		),
+		"thisok"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
