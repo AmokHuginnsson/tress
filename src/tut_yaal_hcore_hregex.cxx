@@ -45,14 +45,11 @@ TUT_UNIT_TEST( "empty pattern" )
 	ENSURE_THROW( "match on unitialized regex succeeded", r.matches( "a" ), HRegexException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "buggy pattern (NULL) in constructor" )
-	ENSURE_THROW( "creation of regex from NULL succeeded", HRegex r( NULL ), HFailedAssertion );
-TUT_TEARDOWN()
-
 TUT_UNIT_TEST( "simple match" )
 	HRegex r( "ala" );
-	HRegex::HMatchIterator it( r.find( "xxxalayyy" ) );
-	HString m( it->raw(), it->size() );
+	char const str[] = "xxxalayyy";
+	HRegex::HMatchIterator it( r.find( str ) );
+	HString m( str + it->start(), it->size() );
 	ENSURE_EQUALS( "bad match", m, "ala" );
 	ENSURE_NOT( "invalid match", r.matches( "Ala" ) );
 	clog << r.error() << endl;
@@ -60,8 +57,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ignorecase match" )
 	HRegex r( "ala", HRegex::COMPILE::IGNORE_CASE );
-	HRegex::HMatchIterator it( r.find( "xxxAlayyy" ) );
-	HString m( it->raw(), it->size() );
+	char const str[] = "xxxAlayyy";
+	HRegex::HMatchIterator it( r.find( str ) );
+	HString m( str + it->start(), it->size() );
 	ENSURE_EQUALS( "bad match", m, "Ala" );
 TUT_TEARDOWN()
 
@@ -83,8 +81,9 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "huginn identifier from huginn program" )
 	hcore::HString identifier( YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END );
 	HRegex r( identifier, HRegex::COMPILE::EXTENDED );
-	HRegex::HMatchIterator it( r.find( "main() {\n\treturn( 0 );\n}\n" ) );
-	HString m( it->raw(), it->size() );
+	char const str[] = "main() {\n\treturn( 0 );\n}\n";
+	HRegex::HMatchIterator it( r.find( str ) );
+	HString m( str + it->start(), it->size() );
 	ENSURE_EQUALS( "bad match", m, "main" );
 	clog << r.error() << endl;
 TUT_TEARDOWN()
