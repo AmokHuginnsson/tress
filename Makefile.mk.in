@@ -32,10 +32,7 @@ EXTRAVERSION   = 0
 include $(DIR_ROOT)/_aux/mk/00_sanity.mk
 include $(DIR_ROOT)/_aux/mk/10_basic.mk
 include $(DIR_BUILD)/configure.mk
-LIBS          += yaal_hcore$(LIB_INFIX) yaal_tools$(LIB_INFIX) yaal_dbwrapper$(LIB_INFIX) \
-								 yaal_hconsole$(LIB_INFIX) yaal_hdata$(LIB_INFIX) yaal_hconsole$(LIB_INFIX) \
-								 yaal_dbwrapper$(LIB_INFIX) yaal_tools$(LIB_INFIX) yaal_hcore$(LIB_INFIX) \
-                 @BOOST_FILESYSTEM_LIB@ @BOOST_SYSTEM_LIB@ @BOOST_DATE_TIME_LIB@
+LIBS           = @BOOST_FILESYSTEM_LIB@ @BOOST_SYSTEM_LIB@ @BOOST_DATE_TIME_LIB@
 $(eval $(call NEW_TARGET,tress,src,-D__TRESS__ -Wno-variadic-macros,@RDYNAMIC@))
 $(eval $(call NEW_TARGET,child,child,-D__CHILD__))
 NAME = tressplugin
