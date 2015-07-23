@@ -134,5 +134,38 @@ TUT_UNIT_TEST( "arg type deduction on functional functors :)" )
 	ENSURE( trait::same_type<trait::argument_type<binary_composition<plus<int>, negate<int>, negate<int> >, 1>::type, int>::value == true );
 TUT_TEARDOWN()
 
+namespace {
+
+struct A {};
+struct B : public A {};
+typedef yaal::hcore::HResource<int> int_unique_t;
+typedef yaal::hcore::HPointer<int> int_shared_t;
+
+}
+
+TUT_UNIT_TEST( "trait::is_convertible" )
+	ENSURE( trait::is_convertible<int short, int>::value );
+	ENSURE_NOT( trait::is_convertible<int*, int>::value );
+	ENSURE( trait::is_convertible<B&, A&>::value );
+	ENSURE_NOT( trait::is_convertible<A&, B&>::value );
+	ENSURE( trait::is_convertible<int_unique_t, int_unique_t&&>::value );
+	ENSURE_NOT( trait::is_convertible<int_unique_t const&, int_unique_t>::value );
+	ENSURE( trait::is_convertible<int_shared_t, int_shared_t&&>::value );
+	ENSURE( trait::is_convertible<int_shared_t const&, int_shared_t>::value );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "trait::and_op" )
+	ENSURE( trait::and_op<trait::is_convertible<int short, int>::type, trait::is_convertible<B&, A&>::type>::value );
+	ENSURE_NOT( trait::and_op<trait::is_convertible<int short, int>::type, trait::is_convertible<A&, B&>::type>::value );
+	ENSURE_NOT( trait::and_op<trait::is_convertible<A&, B&>::type, trait::is_convertible<int short, int>::type>::value );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "trait::or_op" )
+	ENSURE( trait::or_op<trait::is_convertible<int short, int>::type, trait::is_convertible<B&, A&>::type>::value );
+	ENSURE( trait::or_op<trait::is_convertible<int short, int>::type, trait::is_convertible<A&, B&>::type>::value );
+	ENSURE( trait::or_op<trait::is_convertible<A&, B&>::type, trait::is_convertible<int short, int>::type>::value );
+	ENSURE_NOT( trait::or_op<trait::is_convertible<A&, B&>::type, trait::is_convertible<int_unique_t const&, int_unique_t>::type>::value );
+TUT_TEARDOWN()
+
 }
 
