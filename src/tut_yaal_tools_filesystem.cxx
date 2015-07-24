@@ -148,6 +148,35 @@ TUT_UNIT_TEST( "normalize_path" )
 	ENSURE_EQUALS( normalize_path( "a/../../b/../../c" ),                "../../c" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "dirname" )
+	ENSURE_EQUALS( dirname( "/usr/lib" ), "/usr" );
+	ENSURE_EQUALS( dirname( "/usr/" ),    "/" );
+	ENSURE_EQUALS( dirname( "usr" ),      "." );
+	ENSURE_EQUALS( dirname( "/" ),        "/" );
+	ENSURE_EQUALS( dirname( "." ),        "." );
+	ENSURE_EQUALS( dirname( ".." ),       "." );
+
+	ENSURE_EQUALS( dirname( "/home/amok/Makefile" ), "/home/amok" );
+	ENSURE_EQUALS( dirname( "src/yaal/_aux/" ),      "src/yaal" );
+	ENSURE_EQUALS( dirname( "src/yaal/_aux" ),       "src/yaal" );
+	ENSURE_EQUALS( dirname( "/some/path/../../" ),   "/some/path/.." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "basename" )
+	ENSURE_EQUALS( filesystem::basename( "/usr/lib" ), "lib" );
+	ENSURE_EQUALS( filesystem::basename( "/usr/" ),    "usr" );
+	ENSURE_EQUALS( filesystem::basename( "usr" ),      "usr" );
+	ENSURE_EQUALS( filesystem::basename( "/" ),        "/" );
+	ENSURE_EQUALS( filesystem::basename( "." ),        "." );
+	ENSURE_EQUALS( filesystem::basename( ".." ),       ".." );
+	ENSURE_EQUALS( filesystem::basename( "/../" ),     ".." );
+
+	ENSURE_EQUALS( filesystem::basename( "/home/amok/Makefile" ), "Makefile" );
+	ENSURE_EQUALS( filesystem::basename( "src/yaal/_aux/" ),      "_aux" );
+	ENSURE_EQUALS( filesystem::basename( "src/yaal/_aux" ),       "_aux" );
+	ENSURE_EQUALS( filesystem::basename( "/some/path/../../" ),   ".." );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "create_directory" )
 	char const dirA[] = "../tress/out/a";
 	char const dirAB[] = "../tress/out/a/b";
