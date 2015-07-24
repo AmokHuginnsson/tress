@@ -136,7 +136,9 @@ TUT_TEARDOWN()
 
 namespace {
 
-struct A {};
+struct A {
+	virtual ~A(){}
+};
 struct B : public A {};
 typedef yaal::hcore::HResource<int> int_unique_t;
 typedef yaal::hcore::HPointer<int> int_shared_t;
