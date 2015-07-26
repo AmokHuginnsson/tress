@@ -805,19 +805,123 @@ char const progCompileErr24[] =
 
 char const progCompileErr25[] =
 	"main() {\n"
-	"\tbreak;\n"
+	"\tv = 1;\n"
+	"\tx = v + 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progCompileErr26[] =
 	"main() {\n"
-	"\tcontinue;\n"
+	"\tv = 1;\n"
+	"\tx = v - 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progCompileErr27[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tx = v * 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr28[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tx = v / 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr29[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tx = v % 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr30[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tx = v ^ 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr31[] =
+	"main() {\n"
+	"\tv = 2;\n"
+	"\tx = v ^ 2.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr32[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tx = v == 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr33[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tx = v != 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr34[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tx = v < 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr35[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tx = v > 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr36[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tx = v <= 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr37[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tx = v >= 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr38[] =
+	"main() {\n"
+	"\tbreak;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr39[] =
+	"main() {\n"
+	"\tcontinue;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr40[] =
 	"main() {\n" //9
 	"\tx = 0;\n" //8
 	"\tswitch ( x ) {\n" //16
@@ -873,6 +977,19 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr25,
 		progCompileErr26,
 		progCompileErr27,
+		progCompileErr28,
+		progCompileErr29,
+		progCompileErr30,
+		progCompileErr31,
+		progCompileErr32,
+		progCompileErr33,
+		progCompileErr34,
+		progCompileErr35,
+		progCompileErr36,
+		progCompileErr37,
+		progCompileErr38,
+		progCompileErr39,
+		progCompileErr40,
 		NULL
 	};
 	int const err[][3] = {
@@ -901,9 +1018,22 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 18, 2, 10 },  // 22
 		{ 18, 2, 10 },  // 23
 		{ 18, 2, 10 },  // 24
-		{ 10, 2, 2 },   // 25
-		{ 10, 2, 2 },   // 26
-		{ 52, 5, 4 },   // 27
+		{ 24, 3, 8 },   // 25
+		{ 24, 3, 8 },   // 26
+		{ 24, 3, 8 },   // 27
+		{ 24, 3, 8 },   // 28
+		{ 24, 3, 8 },   // 29
+		{ 24, 3, 8 },   // 30
+		{ 24, 3, 8 },   // 31
+		{ 24, 3, 8 },   // 32
+		{ 24, 3, 8 },   // 33
+		{ 24, 3, 8 },   // 34
+		{ 24, 3, 8 },   // 35
+		{ 24, 3, 8 },   // 36
+		{ 24, 3, 8 },   // 37
+		{ 10, 2, 2 },   // 38
+		{ 10, 2, 2 },   // 39
+		{ 52, 5, 4 },   // 40
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
@@ -916,104 +1046,104 @@ TUT_TEARDOWN()
 
 char const progExecuteErr0[] =
 	"main() {\n"
-	"\tv = 1;\n"
-	"\tx = v + 1.5;\n"
+	"\tv = @(){ return( 1 ); };\n"
+	"\tx = v() + 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progExecuteErr1[] =
 	"main() {\n"
-	"\tv = 1;\n"
-	"\tx = v - 1.5;\n"
+	"\tv = @(){ return( 1 ); };\n"
+	"\tx = v() - 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progExecuteErr2[] =
 	"main() {\n"
-	"\tv = 1;\n"
-	"\tx = v * 1.5;\n"
+	"\tv = @(){ return( 1 ); };\n"
+	"\tx = v() * 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progExecuteErr3[] =
 	"main() {\n"
-	"\tv = 1;\n"
-	"\tx = v / 1.5;\n"
+	"\tv = @(){ return( 1 ); };\n"
+	"\tx = v() / 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progExecuteErr4[] =
 	"main() {\n"
-	"\tv = 1;\n"
-	"\tx = v % 1.5;\n"
+	"\tv = @(){ return( 1 ); };\n"
+	"\tx = v() % 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progExecuteErr5[] =
 	"main() {\n"
-	"\tv = 1;\n"
-	"\tx = v ^ 1.5;\n"
+	"\tv = @(){ return( 1 ); };\n"
+	"\tx = v() ^ 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progExecuteErr6[] =
 	"main() {\n"
-	"\tv = 2;\n"
-	"\tx = v ^ 2.5;\n"
+	"\tv = @(){ return( 2 ); };\n"
+	"\tx = v() ^ 2.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progExecuteErr7[] =
 	"main() {\n"
-	"\tv = 1;\n"
-	"\tx = v == 1.5;\n"
+	"\tv = @(){ return( 1 ); };\n"
+	"\tx = v() == 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progExecuteErr8[] =
 	"main() {\n"
-	"\tv = 1;\n"
-	"\tx = v != 1.5;\n"
+	"\tv = @(){ return( 1 ); };\n"
+	"\tx = v() != 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progExecuteErr9[] =
 	"main() {\n"
-	"\tv = 1;\n"
-	"\tx = v < 1.5;\n"
+	"\tv = @(){ return( 1 ); };\n"
+	"\tx = v() < 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progExecuteErr10[] =
 	"main() {\n"
-	"\tv = 1;\n"
-	"\tx = v > 1.5;\n"
+	"\tv = @(){ return( 1 ); };\n"
+	"\tx = v() > 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progExecuteErr11[] =
 	"main() {\n"
-	"\tv = 1;\n"
-	"\tx = v <= 1.5;\n"
+	"\tv = @(){ return( 1 ); };\n"
+	"\tx = v() <= 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
 
 char const progExecuteErr12[] =
 	"main() {\n"
-	"\tv = 1;\n"
-	"\tx = v >= 1.5;\n"
+	"\tv = @(){ return( 1 ); };\n"
+	"\tx = v() >= 1.5;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
@@ -1058,20 +1188,20 @@ TUT_UNIT_TEST( "report execution error" )
 		NULL
 	};
 	int const err[][3] = {
-		{ 24, 3, 8 },   // 0
-		{ 24, 3, 8 },   // 1
-		{ 24, 3, 8 },   // 2
-		{ 24, 3, 8 },   // 3
-		{ 24, 3, 8 },   // 4
-		{ 24, 3, 8 },   // 5
-		{ 24, 3, 8 },   // 6
-		{ 24, 3, 8 },   // 7
-		{ 24, 3, 8 },   // 8
-		{ 24, 3, 8 },   // 9
-		{ 24, 3, 8 },   // 10
-		{ 24, 3, 8 },   // 11
-		{ 24, 3, 8 },   // 12
-		{ 0, 1, 1 },    // 13
+		{ 44, 3, 10 },   // 0
+		{ 44, 3, 10 },   // 1
+		{ 44, 3, 10 },   // 2
+		{ 44, 3, 10 },   // 3
+		{ 44, 3, 10 },   // 4
+		{ 44, 3, 10 },   // 5
+		{ 44, 3, 10 },   // 6
+		{ 44, 3, 10 },   // 7
+		{ 44, 3, 10 },   // 8
+		{ 44, 3, 10 },   // 9
+		{ 44, 3, 10 },   // 10
+		{ 44, 3, 10 },   // 11
+		{ 44, 3, 10 },   // 12
+		{ 0, 1, 1 },     // 13
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
@@ -1483,9 +1613,17 @@ TUT_UNIT_TEST( "class super" )
 	ENSURE_EQUALS(
 		"super failed",
 		execute(
-			"class B{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"ok\");}}"
-			"class D:B{_n=none;constructor(l_,n_){super.constructor(l_);_n=n_;}}"
-			"main(){s=none;l=list();{o=D(l,\"arg\");s=o._n;}return(l[0]+s);}"
+			"class B{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"ok\");}}\n"
+			"class D:B{_n=none;constructor(l_,n_){super.constructor(l_);_n=n_;}}\n"
+			"main(){\n"
+			"s=none;\n"
+			"l=list();\n"
+			"{\n"
+			"o=D(l,\"arg\");\n"
+			"s=o._n;\n"
+			"}\n"
+			"return(l[0]+s);\n"
+			"}"
 		),
 		"okarg"
 	);
