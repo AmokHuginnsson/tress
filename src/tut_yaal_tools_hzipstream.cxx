@@ -147,7 +147,7 @@ TUT_UNIT_TEST( "compress big buffer all at once" )
 	for ( int i( 0 ); i < ( SIZE / static_cast<int>( sizeof ( int ) ) ); ++ i )
 		p[i] = i;
 	HChunk out;
-	HMemoryProvider mp( out );
+	HMemoryProvider mp( out, 0 );
 	HMemory m( mp );
 	HZipStream z( m, HZipStream::MODE::DEFLATE );
 	int long compressedSize( z.write( p, SIZE ) );
