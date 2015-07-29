@@ -55,7 +55,7 @@ TUT_TEST_GROUP( tut_yaal_algorithm, "yaal::algorithm" );
 
 TUT_UNIT_TEST( "reverse" )
 	int const LENE = 4;
-	HPointer<char, HPointerArray> spe( new char[ LENE + 1 ] );
+	HPointer<char[]> spe( new char[ LENE + 1 ] );
 	char* se( spe.raw() );
 	char const* datae = "1234\0";
 	char const* revdatae = "4321\0";
@@ -65,7 +65,7 @@ TUT_UNIT_TEST( "reverse" )
 	ENSURE_EQUALS( "reverse of even number of elements failed", HString( se ), HString( revdatae ) );
 
 	int const LENO = 5;
-	HPointer<char, HPointerArray> spo( new char[ LENO + 1 ] );
+	HPointer<char[]> spo( new char[ LENO + 1 ] );
 	char* so( spo.raw() );
 	char const* datao = "12345\0";
 	char const* revdatao = "54321\0";
@@ -81,7 +81,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "next_permutation, len = 1 (even)" )
 	int const LEN = 1;
-	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
+	HPointer<char[]> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
 	copy_n( "1\0", LEN + 1, s );
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "1" ) );
@@ -91,7 +91,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "next_permutation, len = 2 (even)" )
 	int const LEN = 2;
-	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
+	HPointer<char[]> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
 	copy_n( "12\0", LEN + 1, s );
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "12" ) );
@@ -103,7 +103,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "next_permutation, len = 3 (odd)" )
 	int const LEN = 3;
-	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
+	HPointer<char[]> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
 	copy_n( "123\0", LEN + 1, s );
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "123" ) );
@@ -123,7 +123,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "next_permutation len = 4 (even)" )
 	int const LEN = 4;
-	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
+	HPointer<char[]> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
 	copy_n( "1234\0", LEN + 1, s );
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "1234" ) );
@@ -179,7 +179,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "next_permutation len = 5 (odd)" )
 	int const LEN = 5;
-	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
+	HPointer<char[]> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
 	copy_n( "12345\0", LEN + 1, s );
 	ENSURE_EQUALS( "next_permutation failed", HString( s ), HString( "12345" ) );
@@ -427,7 +427,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "prev_permutation, len = 1 (even)" )
 	int const LEN = 1;
-	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
+	HPointer<char[]> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
 	copy_n( "1\0", LEN + 1, s );
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "1" ) );
@@ -437,7 +437,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "prev_permutation, len = 2 (even)" )
 	int const LEN = 2;
-	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
+	HPointer<char[]> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
 	copy_n( "21\0", LEN + 1, s );
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "21" ) );
@@ -449,7 +449,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "prev_permutation len = 3 (odd)" )
 	int const LEN = 3;
-	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
+	HPointer<char[]> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
 	copy_n( "321\0", LEN + 1, s );
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "321" ) );
@@ -469,7 +469,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "prev_permutation len = 4 (even)" )
 	int const LEN = 4;
-	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
+	HPointer<char[]> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
 	copy_n( "4321\0", LEN + 1, s );
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "4321" ) );
@@ -525,7 +525,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "prev_permutation len = 5 (odd)" )
 	int const LEN = 5;
-	HPointer<char, HPointerArray> sp( new char[ LEN + 1 ] );
+	HPointer<char[]> sp( new char[ LEN + 1 ] );
 	char* s( sp.raw() );
 	copy_n( "54321\0", LEN + 1, s );
 	ENSURE_EQUALS( "prev_permutation failed", HString( s ), HString( "54321" ) );

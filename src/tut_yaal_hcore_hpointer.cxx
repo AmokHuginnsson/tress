@@ -254,7 +254,7 @@ TUT_UNIT_TEST( "assign smart pointers pointing to the same memory." ) {
 TUT_TEARDOWN()
 
 /* Weak pointer related tests. */
-typedef HPointer<tut_yaal_hcore_hpointer::counter_t, HPointerScalar, HPointerWeak> weak_t;
+typedef HPointerObserver<tut_yaal_hcore_hpointer::counter_t> weak_t;
 
 TUT_UNIT_TEST( "default constructor" ) {
 		weak_t w;
