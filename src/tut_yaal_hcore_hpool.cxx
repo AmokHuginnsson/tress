@@ -44,16 +44,16 @@ namespace tut {
 
 struct tut_yaal_hcore_hpool : public simple_mock<tut_yaal_hcore_hpool> {
 	typedef simple_mock<tut_yaal_hcore_hpool> base_type;
-	typedef HPool<int> pool_t;
-	typedef HArray<int*> log_t;
+	typedef HPool<sizeof ( int )> pool_t;
+	typedef HArray<void*> log_t;
 	typedef HArray<log_t> logs_t;
 	virtual ~tut_yaal_hcore_hpool( void ) {}
-	template <typename T>
-	void check_consistency( HPool<T>& );
+	template <int const size>
+	void check_consistency( HPool<size>& );
 };
 
-template <typename T>
-void tut_yaal_hcore_hpool::check_consistency( HPool<T>& pool_ ) {
+template <int const size>
+void tut_yaal_hcore_hpool::check_consistency( HPool<size>& pool_ ) {
 	ENSURE( "inconsistent blocks-count - blocks-capacity relation", pool_._poolBlockCount <= pool_._poolBlockCapacity );
 	ENSURE( "inconsistent free - blocks-count relation", pool_._free < pool_._poolBlockCount );
 	ENSURE( "inconsistent buffer state", ( ( pool_._poolBlocks == NULL ) && ( pool_._poolBlockCapacity == 0 ) ) || ( ( pool_._poolBlockCapacity > 0 ) && ( pool_._poolBlocks != NULL ) ) );
@@ -108,49 +108,49 @@ TUT_UNIT_TEST( "object space size" )
 	STATIC_ASSERT( sizeof ( Sizer<19> ) == 19 );
 	STATIC_ASSERT( sizeof ( Sizer<20> ) == 20 );
 /* tut_helpers::Sizer works as intentded. */
-	ENSURE_EQUALS( "bad object space size of char", HPool<char>::OBJECT_SPACE, 2 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<short>::OBJECT_SPACE, 4 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<3> >::OBJECT_SPACE, 4 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<int>::OBJECT_SPACE, 8 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<5> >::OBJECT_SPACE, 8 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<6> >::OBJECT_SPACE, 8 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<7> >::OBJECT_SPACE, 8 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( char )>::OBJECT_SPACE + 0, 2 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( short )>::OBJECT_SPACE + 0, 4 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<3> )>::OBJECT_SPACE + 0, 4 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( int )>::OBJECT_SPACE + 0, 8 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<5> )>::OBJECT_SPACE + 0, 8 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<6> )>::OBJECT_SPACE + 0, 8 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<7> )>::OBJECT_SPACE + 0, 8 );
 #if TARGET_CPU_BITS == 64
-	ENSURE_EQUALS( "bad object space size of char", HPool<int long long>::OBJECT_SPACE, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<9> >::OBJECT_SPACE, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<10> >::OBJECT_SPACE, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<11> >::OBJECT_SPACE, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<12> >::OBJECT_SPACE, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<13> >::OBJECT_SPACE, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<14> >::OBJECT_SPACE, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<15> >::OBJECT_SPACE, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<16> >::OBJECT_SPACE, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<18> >::OBJECT_SPACE, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<19> >::OBJECT_SPACE, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<20> >::OBJECT_SPACE, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<21> >::OBJECT_SPACE, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<22> >::OBJECT_SPACE, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<23> >::OBJECT_SPACE, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<24> >::OBJECT_SPACE, 32 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<25> >::OBJECT_SPACE, 32 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( int long long )>::OBJECT_SPACE + 0, 16 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<9> )>::OBJECT_SPACE + 0, 16 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<10> )>::OBJECT_SPACE + 0, 16 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<11> )>::OBJECT_SPACE + 0, 16 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<12> )>::OBJECT_SPACE + 0, 16 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<13> )>::OBJECT_SPACE + 0, 16 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<14> )>::OBJECT_SPACE + 0, 16 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<15> )>::OBJECT_SPACE + 0, 16 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<16> )>::OBJECT_SPACE + 0, 24 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<18> )>::OBJECT_SPACE + 0, 24 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<19> )>::OBJECT_SPACE + 0, 24 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<20> )>::OBJECT_SPACE + 0, 24 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<21> )>::OBJECT_SPACE + 0, 24 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<22> )>::OBJECT_SPACE + 0, 24 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<23> )>::OBJECT_SPACE + 0, 24 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<24> )>::OBJECT_SPACE + 0, 32 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<25> )>::OBJECT_SPACE + 0, 32 );
 #elif TARGET_CPU_BITS == 32 /* #if TARGET_CPU_BITS == 64 */
-	ENSURE_EQUALS( "bad object space size of char", HPool<int long long>::OBJECT_SPACE, 12 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<9> >::OBJECT_SPACE, 12 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<10> >::OBJECT_SPACE, 12 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<11> >::OBJECT_SPACE, 12 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<12> >::OBJECT_SPACE, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<13> >::OBJECT_SPACE, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<14> >::OBJECT_SPACE, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<15> >::OBJECT_SPACE, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<16> >::OBJECT_SPACE, 20 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<18> >::OBJECT_SPACE, 20 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<19> >::OBJECT_SPACE, 20 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<20> >::OBJECT_SPACE, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<21> >::OBJECT_SPACE, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<22> >::OBJECT_SPACE, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<23> >::OBJECT_SPACE, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<24> >::OBJECT_SPACE, 28 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<Sizer<25> >::OBJECT_SPACE, 28 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<int long long>::OBJECT_SPACE + 0, 12 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<9> )>::OBJECT_SPACE + 0, 12 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<10> )>::OBJECT_SPACE + 0, 12 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<11> )>::OBJECT_SPACE + 0, 12 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<12> )>::OBJECT_SPACE + 0, 16 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<13> )>::OBJECT_SPACE + 0, 16 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<14> )>::OBJECT_SPACE + 0, 16 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<15> )>::OBJECT_SPACE + 0, 16 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<16> )>::OBJECT_SPACE + 0, 20 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<18> )>::OBJECT_SPACE + 0, 20 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<19> )>::OBJECT_SPACE + 0, 20 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<20> )>::OBJECT_SPACE + 0, 24 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<21> )>::OBJECT_SPACE + 0, 24 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<22> )>::OBJECT_SPACE + 0, 24 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<23> )>::OBJECT_SPACE + 0, 24 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<24> )>::OBJECT_SPACE + 0, 28 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<25> )>::OBJECT_SPACE + 0, 28 );
 #else /* #elif TARGET_CPU_BITS == 32 #if TARGET_CPU_BITS == 64 */
 #error Unsupported CPU bitness.
 #endif /* #else #elif TARGET_CPU_BITS == 32 #if TARGET_CPU_BITS == 64 */
@@ -166,7 +166,7 @@ TUT_UNIT_TEST( "allocate one, deallocate, and allocate again" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
-	int* p0( p.alloc() );
+	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 	p.free( p0 );
@@ -189,7 +189,7 @@ TUT_UNIT_TEST( "allocate second pool block" )
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
-	int* p0( p.alloc() );
+	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	p.free( p0 );
@@ -211,7 +211,7 @@ TUT_UNIT_TEST( "allocate second pool block, free first" )
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
-	int* p0( p.alloc() );
+	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	p.free( p0 );
@@ -246,7 +246,7 @@ TUT_UNIT_TEST( "allocate full block, free in random order, reallocate full block
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
 		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
-		int* toFree( allocated[ toFreeIdx ] );
+		void* toFree( allocated[ toFreeIdx ] );
 		freeOrder[i] = toFree;
 		allocated.erase( allocated.begin() + toFreeIdx );
 		p.free( toFree );
@@ -300,7 +300,7 @@ TUT_UNIT_TEST( "alloc 3 blocks, free third, make room in second" )
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
-	int* p0( p.alloc() );
+	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
 	p.free( p0 );
@@ -327,7 +327,7 @@ TUT_UNIT_TEST( "alloc 3 blocks, make room in second, free third" )
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
-	int* p0( p.alloc() );
+	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
 	p.free( allocatedB1[0] );
@@ -354,7 +354,7 @@ TUT_UNIT_TEST( "alloc 3 blocks, make room in first, free third" )
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
-	int* p0( p.alloc() );
+	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
 	p.free( allocatedB0[0] );
@@ -501,7 +501,7 @@ TUT_UNIT_TEST( "alloc 3 blocks, free third, free first" )
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
-	int* p0( p.alloc() );
+	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
 	p.free( p0 );
@@ -530,7 +530,7 @@ TUT_UNIT_TEST( "alloc 3 blocks, free third, make room in second, free first" )
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
-	int* p0( p.alloc() );
+	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
 	p.free( p0 );
@@ -562,7 +562,7 @@ TUT_UNIT_TEST( "alloc 3 blocks, free third, make room in first, free second" )
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
-	int* p0( p.alloc() );
+	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
 	p.free( p0 );
@@ -594,7 +594,7 @@ TUT_UNIT_TEST( "alloc 3 blocks, free second, make room in first, free third" )
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
-	int* p0( p.alloc() );
+	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
@@ -626,7 +626,7 @@ TUT_UNIT_TEST( "alloc 3 blocks, free first, make room in second, free third" )
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
-	int* p0( p.alloc() );
+	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
@@ -662,7 +662,7 @@ TUT_UNIT_TEST( "allocate two full blocks, free second in random order, reallocat
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
 		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
-		int* toFree( allocatedB1[ toFreeIdx ] );
+		void* toFree( allocatedB1[ toFreeIdx ] );
 		freeOrder[i] = toFree;
 		allocatedB1.erase( allocatedB1.begin() + toFreeIdx );
 		p.free( toFree );
@@ -695,14 +695,14 @@ TUT_UNIT_TEST( "allocate 3 blocks, free all but one in first and second in rando
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
-	int* p0( p.alloc() );
+	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
 	HRandomizer r( randomizer_helper::make_randomizer() );
 	for ( int i( 0 ); i < ( pool_t::OBJECTS_PER_BLOCK - 1 ); ++ i ) {
 		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
 		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
-		int* toFree( allocatedB0[ toFreeIdx ] );
+		void* toFree( allocatedB0[ toFreeIdx ] );
 		freeOrderB0[i] = toFree;
 		allocatedB0.erase( allocatedB0.begin() + toFreeIdx );
 		p.free( toFree );

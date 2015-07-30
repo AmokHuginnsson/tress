@@ -382,5 +382,12 @@ TUT_UNIT_TEST( "make_pointer" ) {
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "constructor with allocator" ) {
+		ptr_t p( new counter_t( 7 ), []( counter_t* ptr_ ){ delete ptr_; } );
+		ENSURE_EQUALS( "cast failed", p->get_id(), 7 );
+	}
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
 }
 
