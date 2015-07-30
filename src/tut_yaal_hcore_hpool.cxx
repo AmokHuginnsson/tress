@@ -134,7 +134,7 @@ TUT_UNIT_TEST( "object space size" )
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<24> )>::OBJECT_SPACE + 0, 32 );
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<25> )>::OBJECT_SPACE + 0, 32 );
 #elif TARGET_CPU_BITS == 32 /* #if TARGET_CPU_BITS == 64 */
-	ENSURE_EQUALS( "bad object space size of char", HPool<int long long>::OBJECT_SPACE + 0, 12 );
+	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( int long long )>::OBJECT_SPACE + 0, 12 );
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<9> )>::OBJECT_SPACE + 0, 12 );
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<10> )>::OBJECT_SPACE + 0, 12 );
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<11> )>::OBJECT_SPACE + 0, 12 );
