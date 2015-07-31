@@ -383,7 +383,14 @@ TUT_UNIT_TEST( "make_pointer" ) {
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "constructor with allocator" ) {
-		ptr_t p( new counter_t( 7 ), []( counter_t* ptr_ ){ delete ptr_; } );
+		typedef allocator::shared_pool<int> t1;
+		auto deleter = []( counter_t* ptr_ ){ delete ptr_; };
+		typedef HSharedDeleterAllocator<counter_t, decltype ( deleter ), t1> t2;
+		typedef HPool<sizeof(t2)> t3;
+		typedef allocator::shared_pool<t2> t4;
+		t3 pool;
+		t4 alloc( pool );
+		ptr_t p( new counter_t( 7 ), deleter, alloc );
 		ENSURE_EQUALS( "cast failed", p->get_id(), 7 );
 	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );

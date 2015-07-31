@@ -178,14 +178,16 @@ TUT_UNIT_TEST( "allocate one, deallocate, and allocate again" )
 	ENSURE_EQUALS( "allocation after deallocation failed", p.alloc(), p0 );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	p.free( p0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "allocate second pool block" )
 	pool_t p;
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 0 );
+	log_t log;
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
-		p.alloc();
+		log.push_back( p.alloc() );
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
@@ -200,6 +202,10 @@ TUT_UNIT_TEST( "allocate second pool block" )
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
 	ENSURE_EQUALS( "allocation after deallocation failed", p.alloc(), p0 );
 	check_consistency( p );
+	p.free( p0 );
+	for ( void* v : log ) {
+		p.free( v );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "allocate second pool block, free first" )
@@ -230,8 +236,11 @@ TUT_UNIT_TEST( "allocate second pool block, free first" )
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
+	p.free( p0 );
 TUT_TEARDOWN()
 
+
+#if 0
 TUT_UNIT_TEST( "allocate full block, free in random order, reallocate full block" )
 	pool_t p;
 	log_t allocated( pool_t::OBJECTS_PER_BLOCK );
@@ -825,6 +834,8 @@ TUT_UNIT_TEST( "make N full blocks, make room in them in random order, free them
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
+
+#endif
 
 }
 
