@@ -396,5 +396,17 @@ TUT_UNIT_TEST( "constructor with allocator" ) {
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "allocate_pointer" ) {
+		typedef ptr_t::allocated_shared<allocator::shared_pool<int>> shared_t;
+		typedef HPool<shared_t::size> pool_t;
+		typedef allocator::shared_pool<shared_t::type> allocator_t;
+		pool_t pool;
+		allocator_t alloc( pool );
+		ptr_t p( allocate_pointer<allocator_t, counter_t>( alloc, 7 ) );
+		ENSURE_EQUALS( "cast failed", p->get_id(), 7 );
+	}
+	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
 }
 
