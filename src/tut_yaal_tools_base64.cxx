@@ -369,7 +369,7 @@ TUT_UNIT_TEST( "full encode tests" )
 	HStringStream msg;
 	for ( int len = 1; len < MAX_TEST_LEN; ++ len ) {
 		for ( int val = 0; val < 256; ++ val ) {
-			fill_n( input, MAX_TEST_LEN, val );
+			fill_n( input, len, val );
 			HMemoryObserver mo( input, len );
 			HMemory m( mo );
 			ss.clear();
@@ -382,23 +382,23 @@ TUT_UNIT_TEST( "full encode tests" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "full decode test" )
-	static int const MAX_TEST_LEN = 4;
-	char input[ MAX_TEST_LEN ];
+	static int const MAX_TEST_LEN = 3;
+	char buffer[ MAX_TEST_LEN ];
 	char output[ MAX_TEST_LEN ];
 	HStringStream ss;
 	HStringStream msg;
-	for ( int len = 1; len < MAX_TEST_LEN; ++ len ) {
+	for ( int len = 1; len <= MAX_TEST_LEN; ++ len ) {
 		for ( int val = 0; val < 256; ++ val ) {
-			fill_n( input, MAX_TEST_LEN, val );
-			HMemoryObserver mo( input, len );
+			HMemoryObserver mo( buffer, len );
 			HMemory m( mo );
 			ss.clear();
 			ss << cases[ ( len - 1 ) * 256 + val ] << flush;
 			base64::decode( ss, m, true );
-			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << input;
+			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << buffer;
 			int nRead = static_cast<int>( m.read( output, 100 ) );
+			fill_n( buffer, len, val );
 			ENSURE_EQUALS( msg.string(), nRead, len );
-			ENSURE( msg.string(), ! ::memcmp( output, input, static_cast<size_t>( nRead ) ) );
+			ENSURE( msg.string(), ! ::memcmp( output, buffer, static_cast<size_t>( nRead ) ) );
 			msg.clear();
 		}
 	}
