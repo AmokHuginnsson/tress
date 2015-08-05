@@ -88,7 +88,7 @@ TUT_TEST_GROUP( tut_yaal_tools_hxml, "yaal::tools::HXml" );
 namespace {
 
 bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const& right ) {
-	HXml::HNode::TYPE::type_t type = left.get_type();
+	HXml::HNode::TYPE type = left.get_type();
 	bool equals = ( type == right.get_type() );
 
 	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
