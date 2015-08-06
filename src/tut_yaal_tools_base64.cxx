@@ -364,7 +364,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "full encode tests" )
 	static int const MAX_TEST_LEN = 4;
-	char input[ MAX_TEST_LEN ];
+	char input[ MAX_TEST_LEN ] = { 0 };
 	HStringStream ss;
 	HStringStream msg;
 	for ( int len = 1; len < MAX_TEST_LEN; ++ len ) {
@@ -383,7 +383,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "full decode test" )
 	static int const MAX_TEST_LEN = 3;
-	char buffer[ MAX_TEST_LEN ];
+	char buffer[ MAX_TEST_LEN ] = { 0 };
 	char output[ MAX_TEST_LEN ];
 	HStringStream ss;
 	HStringStream msg;
