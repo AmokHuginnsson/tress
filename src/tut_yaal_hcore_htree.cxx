@@ -662,7 +662,7 @@ TUT_UNIT_TEST( "graft with bad iteroator (replace_node)" ) {
 			item_t::stop_copying();
 			it->replace_node( it, t1.get_root() );
 			item_t::allow_copying();
-		}, HFailedAssertion );
+		}, tree_t::exception_type );
 		item_t::allow_copying();
 		check_consistency( t1 );
 		check_consistency( t2 );
