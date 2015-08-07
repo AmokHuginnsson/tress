@@ -280,7 +280,7 @@ TUT_UNIT_TEST( "encode from file (with newlines)" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "decode from file (newlines)" )
+TUT_UNIT_TEST( "decode from file (no newlines)" )
 	static char const* const OUTPUT = "./out/decoded.txt";
 	static char const BASE64ENC[] =
 "eD1yZWFkKCk7Cnk9cmVhZCgpOwoKc2NhbGUgPSAwCgpkZWZpbmUgZGlnaXRfY291bnQoIG4gKSB7"
@@ -317,7 +317,8 @@ TUT_UNIT_TEST( "decode from file (newlines)" )
 		ss << BASE64ENC;
 		HFile o( OUTPUT, HFile::OPEN::WRITING );
 		base64::decode( ss, o, true );
-//		ENSURE_EQUALS( "badly encoded", ss.string(), BASE64ENC );
+		o.close();
+		ENSURE( "badly encoded", file_compare( OUTPUT, "./data/karatsuba.bc" ) );
 	}
 TUT_TEARDOWN()
 
@@ -358,7 +359,8 @@ TUT_UNIT_TEST( "decode from file (with newlines)" )
 		ss << BASE64ENC;
 		HFile o( OUTPUT, HFile::OPEN::WRITING );
 		base64::decode( ss, o, true );
-//		ENSURE_EQUALS( "badly encoded", ss.string(), BASE64ENC );
+		o.close();
+		ENSURE( "badly encoded", file_compare( OUTPUT, "./data/karatsuba.bc" ) );
 	}
 TUT_TEARDOWN()
 

@@ -223,7 +223,7 @@ bool file_compare( yaal::hcore::HString const& path1_, yaal::hcore::HString cons
 		int long nRead2( f2.read( buf2, BUF_SIZE ) );
 		different = ( nRead1 != nRead2 ) || ( ::memcmp( buf1, buf2, static_cast<size_t>( nRead1 ) ) != 0 );
 	} while ( ! different && ( nRead1 == BUF_SIZE ) );
-	return ( different );
+	return ( ! different );
 }
 
 int long get_speed( time::UNIT u ) {
