@@ -17,7 +17,7 @@ class reporter_cppunit : public tut::callback {
 	std::vector<tut::test_result> failed_tests_;
 	std::vector<tut::test_result> passed_tests_;
 	const std::string filename_;
-	std::auto_ptr<std::ostream> stream_;
+	std::unique_ptr<std::ostream> stream_;
 
 	reporter_cppunit( const reporter_cppunit& );
 	reporter_cppunit&operator = ( const reporter_cppunit& );

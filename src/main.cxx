@@ -85,7 +85,7 @@ int main( int argc_, char* argv_[] ) {
 	init_locale( PACKAGE_NAME );
 	HClock clk;
 /*	variables declarations for main loop:                                 */
-	typedef std::auto_ptr<tut::callback> reporter_ptr;
+	typedef std::unique_ptr<tut::callback> reporter_ptr;
 	reporter_ptr visitor;
 	HResource<FILE, int (*)( FILE* )> errorDump( ::fopen( "./out/error.dump", "wb" ), fclose );
 	HException::set_error_stream( stdout );

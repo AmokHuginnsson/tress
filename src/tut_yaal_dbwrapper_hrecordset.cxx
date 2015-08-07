@@ -96,7 +96,7 @@ void tut_yaal_dbwrapper_hrecordset::dump_query_result( HDataBase::ptr_t db, char
 static char const* const QUERY = "SELECT * FROM config;";
 
 TUT_UNIT_TEST( "simple query on default engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector() );
 	db->connect( "./out/tress", "", "" );
 	dump_query_result( db, QUERY, NULL );
@@ -104,7 +104,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_SQLITE3_H )
 TUT_UNIT_TEST( "SQLite engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	db->connect( "./out/tress", "", "" );
 	dump_query_result( db, QUERY, "sqlite3" );
@@ -113,7 +113,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
 TUT_UNIT_TEST( "PostgreSQL engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( db, QUERY, "PostgreSQL" );
@@ -122,7 +122,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_MYSQL_MYSQL_H )
 TUT_UNIT_TEST( "MySQL engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( db, QUERY, "MySQL" );
@@ -131,7 +131,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_IBASE_H )
 TUT_UNIT_TEST( "Firebird engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( db, QUERY, "Firebird" );
@@ -140,7 +140,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 TUT_UNIT_TEST( "Oracle engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	dump_query_result( db, QUERY, "Oracle" );
@@ -149,7 +149,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || ( defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) )
 TUT_UNIT_TEST( "different engines all in one" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 #if defined( HAVE_SQLITE3_H )
 	HDataBase::ptr_t dbSQLite( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	dbSQLite->connect( "./out/tress", "", "" );
@@ -211,7 +211,7 @@ void tut_yaal_dbwrapper_hrecordset::test_dml( HDataBase::ptr_t db ) {
 
 #if defined( HAVE_SQLITE3_H )
 TUT_UNIT_TEST( "dml on SQLite" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	db->connect( "./out/tress", "", "" );
 	test_dml( db );
@@ -220,7 +220,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
 TUT_UNIT_TEST( "dml on PostgreSQL engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml( db );
@@ -229,7 +229,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_MYSQL_MYSQL_H )
 TUT_UNIT_TEST( "dml on MySQL engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml( db );
@@ -238,7 +238,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_IBASE_H )
 TUT_UNIT_TEST( "dml on Firebird engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml( db );
@@ -247,7 +247,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 TUT_UNIT_TEST( "dml on Oracle engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml( db );
@@ -274,7 +274,7 @@ void tut_yaal_dbwrapper_hrecordset::test_schema( HDataBase::ptr_t db_ ) {
 
 #if defined( HAVE_SQLITE3_H )
 TUT_UNIT_TEST( "sqlite3 schema" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	db->connect( "./out/tress", "", "" );
 	test_schema( db );
@@ -283,7 +283,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
 TUT_UNIT_TEST( "PostgreSQL schema" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_schema( db );
@@ -292,7 +292,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_MYSQL_MYSQL_H )
 TUT_UNIT_TEST( "MySQL schema" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_schema( db );
@@ -301,7 +301,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_IBASE_H )
 TUT_UNIT_TEST( "Firebird schema" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_schema( db );
@@ -310,7 +310,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 TUT_UNIT_TEST( "Oracle schema" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_schema( db );
@@ -319,7 +319,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_SQLITE3_H ) || defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) || defined( HAVE_MYSQL_MYSQL_H ) || defined( HAVE_IBASE_H ) || ( defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) )
 TUT_UNIT_TEST( "different engines all in one by DSN" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 #if defined( HAVE_SQLITE3_H )
 	HDataBase::ptr_t dbSQLite( util::connect( "sqlite3:///out/tress.sqlite" ) );
 	dump_query_result( dbSQLite, QUERY, "sqlite3" );
@@ -387,7 +387,7 @@ void tut_yaal_dbwrapper_hrecordset::row_by_row_test( HDataBase::ptr_t db, char c
 
 #if defined( HAVE_SQLITE3_H )
 TUT_UNIT_TEST( "SQLite engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	db->connect( "./out/tress", "", "" );
 	row_by_row_test( db, QUERY, "sqlite3" );
@@ -396,7 +396,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
 TUT_UNIT_TEST( "PostgreSQL engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	row_by_row_test( db, QUERY, "PostgreSQL" );
@@ -405,7 +405,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_MYSQL_MYSQL_H )
 TUT_UNIT_TEST( "MySQL engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	row_by_row_test( db, QUERY, "MySQL" );
@@ -414,7 +414,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_IBASE_H )
 TUT_UNIT_TEST( "Firebird engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	row_by_row_test( db, QUERY, "Firebird" );
@@ -423,7 +423,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 TUT_UNIT_TEST( "Oracle engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	row_by_row_test( db, QUERY, "Oracle" );
@@ -552,7 +552,7 @@ void tut_yaal_dbwrapper_hrecordset::test_dml_bind( HDataBase::ptr_t db, bool res
 
 #if defined( HAVE_SQLITE3_H )
 TUT_UNIT_TEST( "dml bind on SQLite" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	db->connect( "./out/tress", "", "" );
 	test_dml_bind( db );
@@ -561,7 +561,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
 TUT_UNIT_TEST( "dml bind on PostgreSQL engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml_bind( db );
@@ -570,7 +570,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_MYSQL_MYSQL_H )
 TUT_UNIT_TEST( "dml bind on MySQL engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml_bind( db );
@@ -579,7 +579,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_IBASE_H )
 TUT_UNIT_TEST( "dml bind on Firebird engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml_bind( db, true );
@@ -588,7 +588,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 TUT_UNIT_TEST( "dml bind on Oracle engine" )
-	external_lock_t l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	test_dml_bind( db );

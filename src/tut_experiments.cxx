@@ -130,7 +130,7 @@ TUT_UNIT_TEST( "visitor pattern" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "terminal size" )
-	external_lock_t l( HMonitor::get_instance().acquire( "terminal" ) );
+	HLock l( HMonitor::get_instance().acquire( "terminal" ) );
 	if ( _terminal_.exists() ) {
 		HTerminal::coord_t c( _terminal_.size() );
 		clog << "Terminal size: " << c.second << "x" << c.first << "." << endl;

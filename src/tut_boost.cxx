@@ -111,7 +111,7 @@ void dump_dir( path const& dir ) {
 }
 
 TUT_UNIT_TEST( "filesystem" )
-	yaal::hcore::external_lock_t l( yaal::tools::HMonitor::get_instance().acquire( "locale" ) );
+	yaal::hcore::HLock l( yaal::tools::HMonitor::get_instance().acquire( "locale" ) );
 	char const* locale( setlocale( LC_ALL, "C" ) );
 	yaal::hcore::set_env( "LC_ALL", "C" );
 	cout << ( locale ? locale : "(NULL)" ) << endl;

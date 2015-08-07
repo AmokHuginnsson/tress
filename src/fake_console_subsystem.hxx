@@ -30,7 +30,7 @@ Copyright:
 #include <yaal/hcore/hthread.hxx>
 
 class HFakeConsoleGuard {
-	yaal::hcore::external_lock_t _exclusiveAccess;
+	yaal::hcore::HLock _exclusiveAccess;
 public:
 	HFakeConsoleGuard( void );
 	virtual ~HFakeConsoleGuard( void );

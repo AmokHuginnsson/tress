@@ -95,7 +95,7 @@ TUT_TEST_GROUP( tut_yaal_hcore_htls, "yaal::hcore::HTLS" );
 TUT_UNIT_TEST( "tls in main thread" )
 	tls_t tls;
 	tls->foo();
-	external_lock_t l( tls.acquire() );
+	HLock l( tls.acquire() );
 	tls_t::iterator it( tls.begin() );
 	ENSURE( "inconsitient state", tls.operator->() == (*it)->operator->() );
 	(**it)->foo();
@@ -111,7 +111,7 @@ TUT_UNIT_TEST( "multiple instances" )
 	t2.spawn( call( &tut_yaal_hcore_htls::run, this, ref( tls ) ) );
 	t3.spawn( call( &tut_yaal_hcore_htls::run, this, ref( tls ) ) );
 	TUT_INVOKE( wait_for_all(); );
-	external_lock_t l( tls.acquire() );
+	HLock l( tls.acquire() );
 	tls_t::iterator it( tls.begin() );
 	ENSURE_EQUALS( "bad instance count", tls.get_instance_count(), 4 );
 	TUT_INVOKE( schedule_stop(); );

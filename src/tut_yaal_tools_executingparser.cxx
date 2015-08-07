@@ -25,6 +25,7 @@ Copyright:
 */
 
 #include <TUT/tut.hpp>
+#include <cstring>
 
 #include <yaal/hcore/hstack.hxx>
 #include <yaal/tools/executingparser.hxx>

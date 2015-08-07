@@ -24,6 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <sstream>
+
 #define private public
 
 #include <TUT/tut.hpp>
