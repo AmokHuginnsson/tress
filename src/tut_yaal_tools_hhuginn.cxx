@@ -1154,6 +1154,13 @@ char const progExecuteErr13[] =
 	"}\n"
 ;
 
+char const progExecuteErr14[] =
+	"main() {\n"
+	"\t{1:2,1.5:3};\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -1185,6 +1192,7 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr11,
 		progExecuteErr12,
 		progExecuteErr13,
+		progExecuteErr14,
 		NULL
 	};
 	int const err[][3] = {
@@ -1202,6 +1210,7 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 44, 3, 10 },   // 11
 		{ 44, 3, 10 },   // 12
 		{ 0, 1, 1 },     // 13
+		{ 15, 2, 7 },    // 14
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
@@ -1400,6 +1409,10 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "dict()" )
 	ENSURE_EQUALS( "dict() failed (explicit)", execute( "main(){x=dict();x[\"Ala\"]=0;x[\"ma\"]=1;x[\"kota.\"]=2;v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ), "Ala0kota.2ma1" );
 	ENSURE_EQUALS( "dict() failed (literal)", execute( "main(){x=dict();x={\"Ala\":0,\"ma\":1,\"kota.\":2};v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ), "Ala0kota.2ma1" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "lookup()" )
+	ENSURE_EQUALS( "lookup() failed (explicit)", execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;v=\"\";for(e:x){v=v+string(e);v=v+string(x[e]);}return(v);}" ), "Ala01makota.2" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "subscript" )
