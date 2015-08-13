@@ -1401,18 +1401,46 @@ TUT_UNIT_TEST( "continue;" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "list()" )
-	ENSURE_EQUALS( "list failed (explicit)", execute( "main(){x=list(\"a\",\"b\",\"c\");v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ), "3abc" );
-	ENSURE_EQUALS( "list failed (literal)", execute( "main(){x=[\"a\",\"b\",\"c\"];v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ), "3abc" );
+	ENSURE_EQUALS(
+		"list failed (explicit)",
+		execute( "main(){x=list(\"a\",\"b\",\"c\");v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ),
+		"3abc"
+	);
+	ENSURE_EQUALS(
+		"list failed (literal)",
+		execute( "main(){x=[\"a\",\"b\",\"c\"];v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ),
+		"3abc"
+	);
 	ENSURE_EQUALS( "list failed (crazy)", execute( "f(a){return(\"X\"+a+\"X\");}main(){return([f][0](\"hi\"));}" ), "XhiX" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "dict()" )
-	ENSURE_EQUALS( "dict() failed (explicit)", execute( "main(){x=dict();x[\"Ala\"]=0;x[\"ma\"]=1;x[\"kota.\"]=2;v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ), "Ala0kota.2ma1" );
-	ENSURE_EQUALS( "dict() failed (literal)", execute( "main(){x=dict();x={\"Ala\":0,\"ma\":1,\"kota.\":2};v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ), "Ala0kota.2ma1" );
+	ENSURE_EQUALS(
+		"dict() failed (explicit)",
+		execute( "main(){x=dict();x[\"Ala\"]=0;x[\"ma\"]=1;x[\"kota.\"]=2;v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ),
+		"Ala0kota.2ma1"
+	);
+	ENSURE_EQUALS(
+		"dict() failed (literal)",
+		execute( "main(){x=dict();x={\"Ala\":0,\"ma\":1,\"kota.\":2};v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ),
+		"Ala0kota.2ma1"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "lookup()" )
-	ENSURE_EQUALS( "lookup() failed (explicit)", execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;v=\"\";for(e:x){v=v+string(e);v=v+string(x[e]);}return(v);}" ), "Ala01makota.2" );
+	ENSURE_EQUALS(
+		"lookup() failed",
+		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;v=\"\";for(e:x){v=v+string(e);v=v+string(x[e]);}return(v);}" ),
+		"Ala01makota.2"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "order()" )
+	ENSURE_EQUALS(
+		"order() failed",
+		execute( "main(){x=order(2,3,1,4,7,5);x.add(10).add(0);v=\"\";for(e:x){v=v+string(e);}return(v);}" ),
+		"012345710"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "subscript" )
