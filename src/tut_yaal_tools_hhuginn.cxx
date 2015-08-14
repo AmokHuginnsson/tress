@@ -1443,6 +1443,14 @@ TUT_UNIT_TEST( "order()" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "set()" )
+	ENSURE_EQUALS(
+		"set() failed",
+		execute( "main(){x=set(2,\"ala\",3.14);x.add($7.34).add('Q');v=\"\";for(e:x){v=v+\"|\"+string(e);}return(v);}" ),
+		"|7.34|2|Q|3.140000000000|ala"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "subscript" )
 	ENSURE_EQUALS( "subscript failed", execute( "main(){x=list(1,2,3);return(string(x[1]));}" ), "2" );
 	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[0]));}" ), "a" );
