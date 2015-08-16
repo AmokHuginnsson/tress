@@ -1414,6 +1414,14 @@ TUT_UNIT_TEST( "list()" )
 	ENSURE_EQUALS( "list failed (crazy)", execute( "f(a){return(\"X\"+a+\"X\");}main(){return([f][0](\"hi\"));}" ), "XhiX" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "deque()" )
+	ENSURE_EQUALS(
+		"deque failed (explicit)",
+		execute( "main(){x=deque(\"a\",\"b\",\"c\");v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ),
+		"3abc"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "dict()" )
 	ENSURE_EQUALS(
 		"dict() failed (explicit)",
