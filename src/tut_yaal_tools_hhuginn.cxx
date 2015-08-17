@@ -1709,6 +1709,17 @@ TUT_UNIT_TEST( "class this" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "class to_string" )
+	ENSURE_EQUALS(
+		"class this failed",
+		execute(
+			"class A{_d=none;_x=none;constructor(d_,x_){_d=d_;_x=x_;}to_string(){return(string(_d)+\":\"+string(_x));}}"
+			"main(){a=A(7,'Q');return(string(a));}"
+		),
+		"7:Q"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
