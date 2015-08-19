@@ -91,7 +91,11 @@ hcore::HString const& tut_yaal_tools_hhuginn::execute( hcore::HString const& sou
 	_sourceCache.set_buffer( source_ );
 	h.load( _sourceCache );
 	h.preprocess();
-	ENSURE( "parse failed", h.parse() );
+	bool p( h.parse() );
+	if ( !p ) {
+		clog << h.error_message() << endl;
+	}
+	ENSURE( "parse failed", p );
 	bool c( h.compile() );
 	if ( !c ) {
 		clog << h.error_message() << endl;
@@ -1717,6 +1721,31 @@ TUT_UNIT_TEST( "class to_string" )
 			"main(){a=A(7,'Q');return(string(a));}"
 		),
 		"7:Q"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "throw,try,catch" )
+	ENSURE_EQUALS(
+		"throw,try,catch failed",
+		execute(
+			"f(x){\n"
+			"if(x<0){\n"
+			"throw Exception(\"neg arg\");\n"
+			"}\n"
+			"return(x*x);\n"
+			"}\n"
+			"main(){\n"
+			"v=\"\";\n"
+			"try{\n"
+			"v=string(f(2));v=v+string(f(-2));v=v+\"end\";\n"
+			"}\n"
+			"catch(Exception e){\n"
+			"v=v+e.what();\n"
+			"}\n"
+			"return(v);\n"
+			"}\n"
+		),
+		"4neg arg"
 	);
 TUT_TEARDOWN()
 
