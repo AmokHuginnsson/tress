@@ -580,6 +580,14 @@ char const progParse8[] =
 	"}\n"
 ;
 
+char const progParse9[] =
+	"class A {\n"
+	"}\n"
+	"main() {\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn::test_parse( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -604,6 +612,7 @@ TUT_UNIT_TEST( "report parsing error" )
 		progParse6,
 		progParse7,
 		progParse8,
+		progParse9,
 		NULL
 	};
 	int const err[][3] = {
@@ -616,6 +625,7 @@ TUT_UNIT_TEST( "report parsing error" )
 		{ 29, 2, 21 }, // 6
 		{ 8, 1, 9 },   // 7
 		{ 9, 2, 1 },   // 8
+		{ 10, 2, 1 },   // 9
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
@@ -960,6 +970,11 @@ char const progCompileErr44[] =
 	"main(){}"
 ;
 
+char const progCompileErr45[] =
+	"class integer { _value = 0; }\n"
+	"main(){}"
+;
+
 void tut_yaal_tools_hhuginn::test_compile( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -1021,6 +1036,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr42,
 		progCompileErr43,
 		progCompileErr44,
+		progCompileErr45,
 		NULL
 	};
 	int const err[][3] = {
@@ -1069,6 +1085,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 22, 2, 7 },   // 42
 		{ 10, 1, 11 },  // 43
 		{ 0, 1, 1 },    // 44
+		{ 6, 1, 7 },    // 45
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
