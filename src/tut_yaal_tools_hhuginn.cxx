@@ -985,6 +985,11 @@ char const progCompileErr47[] =
 	"main(){}"
 ;
 
+char const progCompileErr48[] =
+	"class A { integer=0;}\n"
+	"main(){}"
+;
+
 void tut_yaal_tools_hhuginn::test_compile( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -1049,6 +1054,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr45,
 		progCompileErr46,
 		progCompileErr47,
+		progCompileErr48,
 		NULL
 	};
 	int const err[][3] = {
@@ -1100,6 +1106,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 6, 1, 7 },    // 45
 		{ 7, 1, 8 },    // 46
 		{ 10, 1, 11 },  // 47
+		{ 10, 1, 11 },  // 48
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
