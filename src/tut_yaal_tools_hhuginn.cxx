@@ -1818,6 +1818,47 @@ TUT_UNIT_TEST( "throw,try,catch" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "assert" )
+	/* no message */ {
+		HHuginn h;
+		HStringStream src(
+			"main( argv_ ) {\n"
+			"\tassert( size( argv_ ) > 1 );\n"
+			"\treturn( 0 );\n"
+			"}"
+		);
+		h.add_argument( "assert" );
+		h.load( src );
+		h.preprocess();
+		ENSURE( "parse failed", h.parse() );
+		ENSURE( "compile", h.compile() );
+		ENSURE_NOT( "execute", h.execute() );
+		ENSURE_EQUALS( "reporting failed assertion failed", h.error_message(), "*anonymous stream*:2:8: size( argv_ ) > 1" );
+		ENSURE_EQUALS( "reporting error position for failed assert failed", h.error_position(), 23 );
+		ENSURE_EQUALS( "reporting error line for failed assert failed", h.error_coordinate().line(), 2 );
+		ENSURE_EQUALS( "reporting error column for failed assert failed", h.error_coordinate().column(), 8 );
+	}
+	/* with message */ {
+		HHuginn h;
+		HStringStream src(
+			"main( argv_ ) {\n"
+			"\tassert( size( argv_ ) > 1, \"bad number of arguments\" );\n"
+			"\treturn( 0 );\n"
+			"}"
+		);
+		h.add_argument( "assert" );
+		h.load( src );
+		h.preprocess();
+		ENSURE( "parse failed", h.parse() );
+		ENSURE( "compile", h.compile() );
+		ENSURE_NOT( "execute", h.execute() );
+		ENSURE_EQUALS( "reporting failed assertion failed", h.error_message(), "*anonymous stream*:2:8: size( argv_ ) > 1, bad number of arguments" );
+		ENSURE_EQUALS( "reporting error position for failed assert failed", h.error_position(), 23 );
+		ENSURE_EQUALS( "reporting error line for failed assert failed", h.error_coordinate().line(), 2 );
+		ENSURE_EQUALS( "reporting error column for failed assert failed", h.error_coordinate().column(), 8 );
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
