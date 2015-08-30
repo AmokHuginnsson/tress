@@ -1859,6 +1859,28 @@ TUT_UNIT_TEST( "assert" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "empty return" )
+	ENSURE_EQUALS(
+		"empty return failed",
+		execute(
+			"f(l_) {\n"
+			"l_.add(1);\n"
+			"return;\n"
+			"l_.add(2);\n"
+			"return(3);\n"
+			"}\n"
+			"main(){\n"
+			"l = list();\n"
+			"s = string(type(f(l)));\n"
+			"s = s + string(size(l));\n"
+			"s = s + string(l[0]);\n"
+			"return(s);\n"
+			"}"
+		),
+		"none11"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
