@@ -1010,7 +1010,7 @@ char const progCompileErr51[] =
 
 char const progCompileErr52[] =
 	"main(){\n"
-	"x = y.this;"
+	"x = y.constructor;"
 	"}"
 ;
 
