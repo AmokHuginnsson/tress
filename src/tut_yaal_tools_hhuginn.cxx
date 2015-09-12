@@ -1045,6 +1045,18 @@ char const progCompileErr57[] =
 	"}"
 ;
 
+char const progCompileErr58[] =
+	"main(){\n"
+	"return ( assert.field );\n"
+	"}"
+;
+
+char const progCompileErr59[] =
+	"main(){\n"
+	"return ( assert[0] );\n"
+	"}"
+;
+
 void tut_yaal_tools_hhuginn::test_compile( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -1119,6 +1131,8 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr55,
 		progCompileErr56,
 		progCompileErr57,
+		progCompileErr58,
+		progCompileErr59,
 		NULL
 	};
 	int const err[][3] = {
@@ -1180,6 +1194,8 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 13, 2, 6 },   // 55
 		{ 16, 2, 9 },   // 56
 		{ 16, 2, 9 },   // 57
+		{ 23, 2, 16 },   // 58
+		{ 23, 2, 16 },   // 59
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
