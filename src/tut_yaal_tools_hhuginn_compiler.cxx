@@ -497,6 +497,12 @@ char const progCompileErr59[] =
 	"}"
 ;
 
+char const progCompileErr60[] =
+	"main(){\n"
+	"return ( x[0:'q'] );\n"
+	"}"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -559,6 +565,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr57,
 		progCompileErr58,
 		progCompileErr59,
+		progCompileErr60,
 		NULL
 	};
 	int const err[][3] = {
@@ -620,8 +627,9 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 13, 2, 6 },   // 55
 		{ 16, 2, 9 },   // 56
 		{ 16, 2, 9 },   // 57
-		{ 23, 2, 16 },   // 58
-		{ 23, 2, 16 },   // 59
+		{ 23, 2, 16 },  // 58
+		{ 23, 2, 16 },  // 59
+		{ 21, 2, 14 },  // 60
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
@@ -631,7 +639,6 @@ TUT_UNIT_TEST( "report compilation error" )
 		}
 	}
 TUT_TEARDOWN()
-
 
 }
 
