@@ -503,6 +503,14 @@ char const progCompileErr60[] =
 	"}"
 ;
 
+char const progCompileErr61[] =
+	"class A {\n"
+	"_x=0;\n"
+	"_x=0;\n"
+	"}\n"
+	"main(){}"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -566,6 +574,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr58,
 		progCompileErr59,
 		progCompileErr60,
+		progCompileErr61,
 		NULL
 	};
 	int const err[][3] = {
@@ -630,6 +639,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 23, 2, 16 },  // 58
 		{ 23, 2, 16 },  // 59
 		{ 21, 2, 14 },  // 60
+		{ 16, 3, 1 },   // 61
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
