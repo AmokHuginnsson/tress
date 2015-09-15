@@ -46,13 +46,16 @@ void tut_yaal_tools_hhuginn_base::test_file( hcore::HString const& name_ ) {
 	p.append( name_ );
 	HFile s( p, HFile::OPEN::READING );
 	HHuginn h;
+	HLock l( _mutex );
 	s.read_until( _resultCache );
 	_resultCache.shift_left( 2 );
+	l.unlock();
 	h.load( s );
 	h.preprocess();
 	h.parse();
 	h.compile();
 	h.execute();
+	l.lock();
 	HHuginn::value_t res( h.result() );
 	ENSURE_EQUALS( "bad result type", res->type(), HHuginn::TYPE::STRING );
 	ENSURE_EQUALS( "bad result value", static_cast<HHuginn::HString*>( res.raw() )->value(), _resultCache );
@@ -61,8 +64,10 @@ void tut_yaal_tools_hhuginn_base::test_file( hcore::HString const& name_ ) {
 
 hcore::HString const& tut_yaal_tools_hhuginn_base::execute( hcore::HString const& source_ ) {
 	HHuginn h;
+	HLock l( _mutex );
 	_sourceCache.set_buffer( source_ );
 	h.load( _sourceCache );
+	l.unlock();
 	h.preprocess();
 	bool p( h.parse() );
 	if ( !p ) {
@@ -81,6 +86,7 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute( hcore::HString const
 	ENSURE( "execution failed", e );
 	HHuginn::value_t res( h.result() );
 	ENSURE_EQUALS( "bad result type", res->type(), HHuginn::TYPE::STRING );
+	l.lock();
 	_resultCache.assign( static_cast<HHuginn::HString*>( res.raw() )->value() );
 	return ( _resultCache );
 }

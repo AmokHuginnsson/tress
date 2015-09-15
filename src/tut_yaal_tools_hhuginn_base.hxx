@@ -38,8 +38,11 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 	typedef char const* prog_src_t;
 	yaal::hcore::HString _resultCache;
 	yaal::tools::HStringStream _sourceCache;
+	yaal::hcore::HMutex _mutex;
 	tut_yaal_tools_hhuginn_base( void )
-		: _resultCache(), _sourceCache() {
+		: _resultCache()
+		, _sourceCache()
+		, _mutex() {
 		return;
 	}
 	virtual ~tut_yaal_tools_hhuginn_base( void ) {}
