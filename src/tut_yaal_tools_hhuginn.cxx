@@ -730,6 +730,21 @@ TUT_UNIT_TEST( "empty return" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "boolean not" )
+	ENSURE_EQUALS(
+		"boolean not failed",
+		execute(
+			"main(){s=\"\";a=0;\n"
+			"if(!(a==1)) {\n"
+			"s=\"ok\";"
+			"}\n"
+			"return(s);\n"
+			"}"
+		),
+		"ok"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
