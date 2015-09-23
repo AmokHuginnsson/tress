@@ -50,7 +50,7 @@ TUT_TEST_GROUP( tut_yaal_tools_hhuginn_packages, "yaal::tools::HHuginn,packages"
 
 TUT_UNIT_TEST( "Algorithms.range" )
 	ENSURE_EQUALS(
-		"Algorithms.range",
+		"Algorithms.range failed",
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
@@ -62,6 +62,24 @@ TUT_UNIT_TEST( "Algorithms.range" )
 			"}"
 		),
 		":3:7:11:15"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Algorithms.sorted" )
+	ENSURE_EQUALS(
+		"Algorithms.sorted failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"s=\"\";\n"
+			"l=[2,7,3,9,0,-5];\n"
+			"for(x : algo.sorted(l)) {\n"
+			"s=s+\":\"+string(x);"
+			"}\n"
+			"return(s);\n"
+			"}"
+		),
+		":-5:0:2:3:7:9"
 	);
 TUT_TEARDOWN()
 
