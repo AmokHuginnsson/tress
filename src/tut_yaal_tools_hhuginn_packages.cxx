@@ -67,7 +67,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Algorithms.sorted" )
 	ENSURE_EQUALS(
-		"Algorithms.sorted failed",
+		"Algorithms.sorted (list) failed",
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
@@ -77,6 +77,51 @@ TUT_UNIT_TEST( "Algorithms.sorted" )
 			"s=s+\":\"+string(x);"
 			"}\n"
 			"return(s);\n"
+			"}"
+		),
+		":-5:0:2:3:7:9"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.sorted (deque) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"s=\"\";\n"
+			"d=deque(2,7,3,9,0,-5);\n"
+			"for(x : algo.sorted(d)) {\n"
+			"s=s+\":\"+string(x);"
+			"}\n"
+			"return(s);\n"
+			"}"
+		),
+		":-5:0:2:3:7:9"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.sorted (set) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"r=\"\";\n"
+			"s=set(2,7,3,9,0,-5);\n"
+			"for(x : algo.sorted(s)) {\n"
+			"r=r+\":\"+string(x);"
+			"}\n"
+			"return(r);\n"
+			"}"
+		),
+		":-5:0:2:3:7:9"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.sorted (order) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"r=\"\";\n"
+			"o=order(2,7,3,9,0,-5);\n"
+			"for(x : algo.sorted(o)) {\n"
+			"r=r+\":\"+string(x);"
+			"}\n"
+			"return(r);\n"
 			"}"
 		),
 		":-5:0:2:3:7:9"
