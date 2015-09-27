@@ -523,6 +523,29 @@ char const progCompileErr63[] =
 	"}"
 ;
 
+char const progCompileErr64[] =
+	"import return as pck;\n"
+	"main(){\n"
+	"return ( 0 );\n"
+	"}"
+;
+
+char const progCompileErr65[] =
+	"class Package {_x = none;}\n"
+	"import Package as pck;\n"
+	"main(){\n"
+	"return ( 0 );\n"
+	"}"
+;
+
+char const progCompileErr66[] =
+	"import Algorithms as pck;\n"
+	"import Algorithms as pckNew;\n"
+	"main(){\n"
+	"return ( 0 );\n"
+	"}"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -589,6 +612,9 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr61,
 		progCompileErr62,
 		progCompileErr63,
+		progCompileErr64,
+		progCompileErr65,
+		progCompileErr66,
 		NULL
 	};
 	int const err[][3] = {
@@ -656,6 +682,9 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 16, 3, 1 },   // 61
 		{ 21, 2, 14 },  // 62
 		{ 28, 2, 21 },  // 63
+		{ 7, 1, 8 },    // 64
+		{ 34, 2, 8 },   // 65
+		{ 26, 2, 1 },   // 66
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
