@@ -546,6 +546,22 @@ char const progCompileErr66[] =
 	"}"
 ;
 
+char const progCompileErr67[] =
+	"import Algorithms as pck;\n"
+	"class Algorithms {_x = none;}\n"
+	"main(){\n"
+	"return ( 0 );\n"
+	"}"
+;
+
+char const progCompileErr68[] =
+	"import Algorithms as pck;\n"
+	"class pck {_x = none;}\n"
+	"main(){\n"
+	"return ( 0 );\n"
+	"}"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -615,6 +631,8 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr64,
 		progCompileErr65,
 		progCompileErr66,
+		progCompileErr67,
+		progCompileErr68,
 		NULL
 	};
 	int const err[][3] = {
@@ -685,6 +703,8 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 7, 1, 8 },    // 64
 		{ 34, 2, 8 },   // 65
 		{ 26, 2, 1 },   // 66
+		{ 32, 2, 7 },   // 67
+		{ 32, 2, 7 },   // 68
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
