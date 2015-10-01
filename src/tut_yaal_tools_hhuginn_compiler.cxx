@@ -562,6 +562,13 @@ char const progCompileErr68[] =
 	"}"
 ;
 
+char const progCompileErr69[] =
+	"import NonExisting as nonExisting;\n"
+	"main(){\n"
+	"return ( 0 );\n"
+	"}"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -633,6 +640,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr66,
 		progCompileErr67,
 		progCompileErr68,
+		progCompileErr69,
 		NULL
 	};
 	int const err[][3] = {
@@ -705,6 +713,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 26, 2, 1 },   // 66
 		{ 32, 2, 7 },   // 67
 		{ 32, 2, 7 },   // 68
+		{ 7, 1, 8 },    // 69
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
