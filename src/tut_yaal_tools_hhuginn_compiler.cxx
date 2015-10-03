@@ -584,6 +584,14 @@ char const progCompileErr71[] =
 	"}"
 ;
 
+char const progCompileErr72[] =
+	"import Algorithms as pck;\n"
+	"import Cryptography as pck;\n"
+	"main(){\n"
+	"return ( 0 );\n"
+	"}"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -658,6 +666,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr69,
 		progCompileErr70,
 		progCompileErr71,
+		progCompileErr72,
 		NULL
 	};
 	int const err[][3] = {
@@ -733,6 +742,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 7, 1, 8 },    // 69
 		{ 21, 1, 22 },  // 70
 		{ 44, 2, 22 },  // 71
+		{ 26, 2, 1 },   // 72
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
