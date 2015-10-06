@@ -196,13 +196,63 @@ char const progExecuteErr18[] =
 	"}\n"
 ;
 
+char const progExecuteErr19[] =
+	"f(x){return (x);}\n"
+	"main() {\n"
+	"\ts=\"Ala ma kota.\";\n"
+	"\ti=f('0');\n"
+	"\tx=s[i:5];\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progExecuteErr20[] =
+	"f(x){return (x);}\n"
+	"main() {\n"
+	"\ts=\"Ala ma kota.\";\n"
+	"\ti=f('5');\n"
+	"\tx=s[0:i];\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progExecuteErr21[] =
+	"f(x){return (x);}\n"
+	"main() {\n"
+	"\ts=\"Ala ma kota.\";\n"
+	"\ti=f('2');\n"
+	"\tx=s[0:10:i];\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progExecuteErr22[] =
+	"main() {\n"
+	"\ts=\"Ala ma kota.\";\n"
+	"\tx=s[0:10:0];\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progExecuteErr23[] =
+	"main() {\n"
+	"\tv=0;\n"
+	"\tx=v[0:2];\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execution::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
 	h.load( prog );
 	h.preprocess();
 	ENSURE( "failed to parse valid", h.parse() );
-	ENSURE( "failed to compile valid", h.compile() );
+	bool compiled( h.compile() );
+	if ( ! compiled ) {
+		clog << "COMPILATION ERROR: " << h.error_message() << endl;
+	}
+	ENSURE( "failed to compile valid", compiled );
 	clog << "executing: " << index_ << endl;
 	ENSURE_NOT( "executed invalid", h.execute() );
 	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_[0] );
@@ -232,6 +282,11 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr16,
 		progExecuteErr17,
 		progExecuteErr18,
+		progExecuteErr19,
+		progExecuteErr20,
+		progExecuteErr21,
+		progExecuteErr22,
+		progExecuteErr23,
 		NULL
 	};
 	int const err[][3] = {
@@ -254,6 +309,11 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 23, 3, 5 },    // 16
 		{ 23, 3, 5 },    // 17
 		{ 19, 3, 5 },    // 18
+		{ 61, 5, 5 },    // 19
+		{ 61, 5, 5 },    // 20
+		{ 61, 5, 5 },    // 21
+		{ 32, 3, 5 },    // 22
+		{ 19, 3, 5 },    // 23
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
