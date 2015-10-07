@@ -205,5 +205,26 @@ TUT_UNIT_TEST( "input float" )
 	ENSURE_DISTANCE( "float negative value read fail", val, static_cast<float>( -2.7182 ), static_cast<float>( epsilon ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "outputs" )
+	HStringStream ss;
+	ss << 3.141592653589793L;
+	ENSURE_EQUALS( "double long output failed", ss.string(), "3.14159265359" );
+	ss.clear();
+	ss << 3.14159;
+	ENSURE_EQUALS( "double output failed", ss.string(), "3.14159" );
+	ss.clear();
+	ss << 3.14f;
+	ENSURE_EQUALS( "float output failed", ss.string(), "3.14" );
+	ss.clear();
+	ss << 18446744073709551615ULL;
+	ENSURE_EQUALS( "unsigned long long int output failed", ss.string(), "18446744073709551615" );
+	ss.clear();
+	ss << 4294967295UL;
+	ENSURE_EQUALS( "unsigned long int output failed", ss.string(), "4294967295" );
+	ss.clear();
+	ss << static_cast<char unsigned>( 'a' );
+	ENSURE_EQUALS( "char unsigned output failed", ss.string(), "a" );
+TUT_TEARDOWN()
+
 }
 
