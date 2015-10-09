@@ -23,12 +23,11 @@ CONNECT tress/tr3ss
 WHENEVER SQLERROR CONTINUE NONE
 DROP TABLE config;
 
-CREATE TABLE config
-	(
+CREATE TABLE config	(
 	id INTEGER PRIMARY KEY,
 	name VARCHAR(16) UNIQUE NOT NULL,
 	data VARCHAR( 255 )
-	);
+);
 
 WHENEVER SQLERROR CONTINUE NONE
 DROP SEQUENCE config_id_seq;
@@ -59,7 +58,49 @@ BEGIN
 END;
 /
 
+WHENEVER SQLERROR CONTINUE NONE
+DROP TABLE crud;
+
+CREATE TABLE crud	(
+	id INTEGER PRIMARY KEY,
+	name VARCHAR(16) UNIQUE NOT NULL,
+	data VARCHAR( 255 )
+);
+
+WHENEVER SQLERROR CONTINUE NONE
+DROP SEQUENCE crud_id_seq;
+
+CREATE SEQUENCE crud_id_seq START WITH 1 INCREMENT BY 1;
+
+WHENEVER SQLERROR CONTINUE NONE
+DROP TRIGGER tgg_crud_insert;
+
+CREATE TRIGGER tgg_crud_insert
+BEFORE INSERT ON crud
+FOR EACH ROW
+DECLARE
+	max_id number;
+	cur_seq number;
+BEGIN
+	IF :new.id IS NULL THEN
+		SELECT crud_id_seq.nextval INTO :new.id FROM dual;
+	ELSE
+		SELECT GREATEST( nvl( max( id ), 0 ), :new.id ) INTO max_id FROM crud;
+		SELECT crud_id_seq.nextval INTO cur_seq FROM dual;
+		WHILE cur_seq < max_id
+		LOOP
+			SELECT crud_id_seq.nextval INTO cur_seq FROM dual;
+		END LOOP;
+	END IF;
+	DBMS_SESSION.SET_CONTEXT( 'CLIENTCONTEXT', 'LAST_INSERT_ID', crud_id_seq.currval );
+END;
+/
+
 INSERT INTO config ( id, name, data ) VALUES( 1, 'one', 'Oracle' );
 INSERT INTO config ( id, name, data ) VALUES( 2, 'two', NULL );
 INSERT INTO config ( id, name, data ) VALUES( 3, 'three', 'Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!' );
+
+INSERT INTO crud ( id, name, data ) VALUES( 1, 'one', 'Oracle' );
+INSERT INTO crud ( id, name, data ) VALUES( 2, 'two', NULL );
+INSERT INTO crud ( id, name, data ) VALUES( 3, 'three', 'Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!' );
 
