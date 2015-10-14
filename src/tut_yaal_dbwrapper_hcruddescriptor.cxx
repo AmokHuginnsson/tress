@@ -47,7 +47,7 @@ TUT_TEST_GROUP( tut_yaal_dbwrapper_hcruddescriptor, "yaal::dbwrapper::HCRUDDescr
 TUT_UNIT_TEST( "read" )
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HCRUDDescriptor d( util::connect( "sqlite3:///out/tress.sqlite" ) );
-	d.set_table( "config" );
+	d.set_table( "crud" );
 	HRecordSet::ptr_t rs( d.execute( HCRUDDescriptor::MODE::SELECT ) );
 	HString res;
 	for ( HRecordSet::values_t values : *rs ) {
@@ -55,6 +55,20 @@ TUT_UNIT_TEST( "read" )
 		res.append( *(values[1]) );
 	}
 	ENSURE_EQUALS( "no filter read failed", res, "1one2two3three" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "read sort" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
+	HCRUDDescriptor d( util::connect( "sqlite3:///out/tress.sqlite" ) );
+	d.set_table( "crud" );
+	d.set_sort( "id DESC" );
+	HRecordSet::ptr_t rs( d.execute( HCRUDDescriptor::MODE::SELECT ) );
+	HString res;
+	for ( HRecordSet::values_t values : *rs ) {
+		res.append( *(values[0]) );
+		res.append( *(values[1]) );
+	}
+	ENSURE_EQUALS( "no filter read failed", res, "3three2two1one" );
 TUT_TEARDOWN()
 
 }
