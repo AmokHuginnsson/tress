@@ -71,5 +71,34 @@ TUT_UNIT_TEST( "read sort" )
 	ENSURE_EQUALS( "no filter read failed", res, "3three2two1one" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "read filter" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
+	HCRUDDescriptor d( util::connect( "sqlite3:///out/tress.sqlite" ) );
+	d.set_table( "crud" );
+	d.set_filter( "id=2" );
+	HRecordSet::ptr_t rs( d.execute( HCRUDDescriptor::MODE::SELECT ) );
+	HString res;
+	for ( HRecordSet::values_t values : *rs ) {
+		res.append( *(values[0]) );
+		res.append( *(values[1]) );
+	}
+	ENSURE_EQUALS( "no filter read failed", res, "2two" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "read filter and sort" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
+	HCRUDDescriptor d( util::connect( "sqlite3:///out/tress.sqlite" ) );
+	d.set_table( "crud" );
+	d.set_filter( "id<=2" );
+	d.set_sort( "id DESC" );
+	HRecordSet::ptr_t rs( d.execute( HCRUDDescriptor::MODE::SELECT ) );
+	HString res;
+	for ( HRecordSet::values_t values : *rs ) {
+		res.append( *(values[0]) );
+		res.append( *(values[1]) );
+	}
+	ENSURE_EQUALS( "no filter read failed", res, "2two1one" );
+TUT_TEARDOWN()
+
 }
 
