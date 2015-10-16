@@ -44,11 +44,25 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_dbwrapper_hcruddescriptor );
 TUT_TEST_GROUP( tut_yaal_dbwrapper_hcruddescriptor, "yaal::dbwrapper::HCRUDDescriptor" );
 
+TUT_UNIT_TEST( "getters" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
+	HCRUDDescriptor d( util::connect( "sqlite3:///out/tress.sqlite" ) );
+	d.set_table( "crud" );
+	ENSURE_EQUALS( "set/get_table failed", d.get_table(), "crud" );
+	d.set_sort( "id DESC" );
+	ENSURE_EQUALS( "set/get_sort failed", d.get_sort(), "id DESC" );
+	d.set_filter( "id=2" );
+	ENSURE_EQUALS( "set/get_filter failed", d.get_filter(), "id=2" );
+	d.set_columns( "name" );
+	ENSURE_EQUALS( "set/get_columns failed", d.get_columns(), "name" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "read" )
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HCRUDDescriptor d( util::connect( "sqlite3:///out/tress.sqlite" ) );
 	d.set_table( "crud" );
 	HRecordSet::ptr_t rs( d.execute( HCRUDDescriptor::MODE::SELECT ) );
+	ENSURE_EQUALS( "bad mode", static_cast<int>( d.get_mode() ), static_cast<int>( HCRUDDescriptor::MODE::SELECT ) );
 	HString res;
 	for ( HRecordSet::values_t values : *rs ) {
 		res.append( *(values[0]) );
@@ -63,6 +77,7 @@ TUT_UNIT_TEST( "read sort" )
 	d.set_table( "crud" );
 	d.set_sort( "id DESC" );
 	HRecordSet::ptr_t rs( d.execute( HCRUDDescriptor::MODE::SELECT ) );
+	ENSURE_EQUALS( "bad mode", static_cast<int>( d.get_mode() ), static_cast<int>( HCRUDDescriptor::MODE::SELECT ) );
 	HString res;
 	for ( HRecordSet::values_t values : *rs ) {
 		res.append( *(values[0]) );
@@ -77,6 +92,7 @@ TUT_UNIT_TEST( "read filter" )
 	d.set_table( "crud" );
 	d.set_filter( "id=2" );
 	HRecordSet::ptr_t rs( d.execute( HCRUDDescriptor::MODE::SELECT ) );
+	ENSURE_EQUALS( "bad mode", static_cast<int>( d.get_mode() ), static_cast<int>( HCRUDDescriptor::MODE::SELECT ) );
 	HString res;
 	for ( HRecordSet::values_t values : *rs ) {
 		res.append( *(values[0]) );
@@ -92,12 +108,28 @@ TUT_UNIT_TEST( "read filter and sort" )
 	d.set_filter( "id<=2" );
 	d.set_sort( "id DESC" );
 	HRecordSet::ptr_t rs( d.execute( HCRUDDescriptor::MODE::SELECT ) );
+	ENSURE_EQUALS( "bad mode", static_cast<int>( d.get_mode() ), static_cast<int>( HCRUDDescriptor::MODE::SELECT ) );
 	HString res;
 	for ( HRecordSet::values_t values : *rs ) {
 		res.append( *(values[0]) );
 		res.append( *(values[1]) );
 	}
 	ENSURE_EQUALS( "no filter read failed", res, "2two1one" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "read columns" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
+	HCRUDDescriptor d( util::connect( "sqlite3:///out/tress.sqlite" ) );
+	d.set_table( "crud" );
+	d.set_columns( "name" );
+	d.set_sort( "name ASC" );
+	HRecordSet::ptr_t rs( d.execute( HCRUDDescriptor::MODE::SELECT ) );
+	ENSURE_EQUALS( "bad mode", static_cast<int>( d.get_mode() ), static_cast<int>( HCRUDDescriptor::MODE::SELECT ) );
+	HString res;
+	for ( HRecordSet::values_t values : *rs ) {
+		res.append( *(values[0]) );
+	}
+	ENSURE_EQUALS( "no filter read failed", res, "onethreetwo" );
 TUT_TEARDOWN()
 
 }
