@@ -132,5 +132,13 @@ TUT_UNIT_TEST( "read columns" )
 	ENSURE_EQUALS( "no filter read failed", res, "onethreetwo" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "insert (malformed)" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
+	HCRUDDescriptor d( util::connect( "sqlite3:///out/tress.sqlite" ) );
+	ENSURE_THROW( "insert without fields succeeded", d.execute( HCRUDDescriptor::MODE::INSERT ), HCRUDDescriptorException );
+	d.set_table( "crud" );
+	ENSURE_THROW( "insert without fields succeeded", d.execute( HCRUDDescriptor::MODE::INSERT ), HCRUDDescriptorException );
+TUT_TEARDOWN()
+
 }
 
