@@ -140,5 +140,66 @@ TUT_UNIT_TEST( "insert (malformed)" )
 	ENSURE_THROW( "insert without fields succeeded", d.execute( HCRUDDescriptor::MODE::INSERT ), HCRUDDescriptorException );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "insert (auto fields)" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
+	HCRUDDescriptor d( util::connect( "sqlite3:///out/tress.sqlite" ) );
+	d.set_table( "crud" );
+	d.execute( HCRUDDescriptor::MODE::SELECT );
+	ENSURE_EQUALS( "bad mode", static_cast<int>( d.get_mode() ), static_cast<int>( HCRUDDescriptor::MODE::SELECT ) );
+	d[1] = "extra"_ys;
+	d.execute( HCRUDDescriptor::MODE::INSERT );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "update (malformed)" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
+	HCRUDDescriptor d( util::connect( "sqlite3:///out/tress.sqlite" ) );
+	ENSURE_THROW( "update without fields succeeded", d.execute( HCRUDDescriptor::MODE::UPDATE ), HCRUDDescriptorException );
+	d.set_table( "crud" );
+	ENSURE_THROW( "update without fields succeeded", d.execute( HCRUDDescriptor::MODE::UPDATE ), HCRUDDescriptorException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "update (auto fields)" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
+	HCRUDDescriptor d( util::connect( "sqlite3:///out/tress.sqlite" ) );
+	d.set_table( "crud" );
+	d.set_sort( "id ASC" );
+	HRecordSet::ptr_t rs( d.execute( HCRUDDescriptor::MODE::SELECT ) );
+	ENSURE_EQUALS( "bad mode", static_cast<int>( d.get_mode() ), static_cast<int>( HCRUDDescriptor::MODE::SELECT ) );
+	HString res;
+	for ( HRecordSet::values_t values : *rs ) {
+		res.append( *(values[1]) );
+	}
+	ENSURE_EQUALS( "no filter read failed", res, "onetwothreeextra" );
+	d[1] = "special"_ys;
+	d.set_filter( "name=\"extra\"" );
+	d.execute( HCRUDDescriptor::MODE::UPDATE );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "delete" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
+	HCRUDDescriptor d( util::connect( "sqlite3:///out/tress.sqlite" ) );
+	d.set_table( "crud" );
+	d.set_sort( "id ASC" );
+	HRecordSet::ptr_t rs( d.execute( HCRUDDescriptor::MODE::SELECT ) );
+	ENSURE_EQUALS( "bad mode", static_cast<int>( d.get_mode() ), static_cast<int>( HCRUDDescriptor::MODE::SELECT ) );
+	HString res;
+	for ( HRecordSet::values_t values : *rs ) {
+		res.append( *(values[1]) );
+	}
+	ENSURE_EQUALS( "no filter read failed", res, "onetwothreespecial" );
+	d.set_filter( "name=\"special\"" );
+	d.execute( HCRUDDescriptor::MODE::DELETE );
+	d.set_sort( "id ASC" );
+	d.set_filter( "" );
+	rs = d.execute( HCRUDDescriptor::MODE::SELECT );
+	ENSURE_EQUALS( "bad mode", static_cast<int>( d.get_mode() ), static_cast<int>( HCRUDDescriptor::MODE::SELECT ) );
+	res.clear();
+	for ( HRecordSet::values_t values : *rs ) {
+		res.append( *(values[0]) );
+		res.append( *(values[1]) );
+	}
+	ENSURE_EQUALS( "no filter read failed", res, "1one2two3three" );
+TUT_TEARDOWN()
+
 }
 
