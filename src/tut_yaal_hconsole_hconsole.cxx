@@ -89,6 +89,27 @@ TUT_UNIT_TEST( "cursor position" )
 	cons.leave_curses();
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "set/get_attr" )
+	HConsole& cons( HConsole::get_instance() );
+	cons.enter_curses();
+	int attr( COLORS::ATTR_NORMAL );
+	cons.set_attr( attr );
+	ENSURE_EQUALS( "ATTR_NORMAL failed", cons.get_attr(), attr );
+	attr = COLORS::BG_BLUE | COLORS::FG_CYAN;
+	cons.set_attr( attr );
+	ENSURE_EQUALS( "ATTR_NORMAL failed", cons.get_attr(), attr );
+	attr = COLORS::BG_BLUE | COLORS::FG_YELLOW;
+	cons.set_attr( attr );
+	ENSURE_EQUALS( "ATTR_NORMAL failed", cons.get_attr(), attr );
+	attr = COLORS::BG_BRIGHTGREEN | COLORS::FG_RED;
+	cons.set_attr( attr );
+	ENSURE_EQUALS( "ATTR_NORMAL failed", cons.get_attr(), attr );
+	attr = COLORS::BG_BRIGHTGREEN | COLORS::FG_BRIGHTCYAN;
+	cons.set_attr( attr );
+	ENSURE_EQUALS( "ATTR_NORMAL failed", cons.get_attr(), attr );
+	cons.leave_curses();
+TUT_TEARDOWN()
+
 }
 
 #endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
