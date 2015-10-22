@@ -128,5 +128,28 @@ TUT_UNIT_TEST( "Algorithms.sorted" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Cryptography" )
+	ENSURE_EQUALS(
+		"Cryptography.md5 failed",
+		execute(
+			"import Cryptography as crypto;\n"
+			"main(){\n"
+			"return(crypto.md5(\"\"));\n"
+			"}"
+		),
+		"d41d8cd98f00b204e9800998ecf8427e"
+	);
+	ENSURE_EQUALS(
+		"Cryptography.sha1 failed",
+		execute(
+			"import Cryptography as crypto;\n"
+			"main(){\n"
+			"return(crypto.sha1(\"\"));\n"
+			"}"
+		),
+		"da39a3ee5e6b4b0d3255bfef95601890afd80709"
+	);
+TUT_TEARDOWN()
+
 }
 
