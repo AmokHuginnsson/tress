@@ -151,5 +151,34 @@ TUT_UNIT_TEST( "Cryptography" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "RegularExpressions" )
+	ENSURE_EQUALS(
+		"RegularExpressions failed",
+		execute(
+			"import RegularExpressions as re;\n"
+			"main(){\n"
+			"rec = re.compile( \"[0-9]-[0-9]\" );\n"
+			"r = \"\";\n"
+			"m = rec.match(\"[123+123+3123]\");\n"
+			"if (m.matched()) {\n"
+			"r = r + \"fail match\";\n"
+			"} else {\n"
+			"r = r + \"ok\";\n"
+			"}\n"
+			"m = rec.match(\"[123-456-789]\");"
+			"if (m.matched()) {\n"
+			"for ( w : m ) {\n"
+			"r = r + w;\n"
+			"}\n"
+			"} else {\n"
+			"r = r + \"fail no match\";\n"
+			"}\n"
+			"return(r);\n"
+			"}"
+		),
+		"ok3-46-7"
+	);
+TUT_TEARDOWN()
+
 }
 
