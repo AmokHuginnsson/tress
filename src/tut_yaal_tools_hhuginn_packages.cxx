@@ -153,7 +153,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "RegularExpressions" )
 	ENSURE_EQUALS(
-		"RegularExpressions failed",
+		"RegularExpressions.match failed",
 		execute(
 			"import RegularExpressions as re;\n"
 			"main(){\n"
@@ -177,6 +177,32 @@ TUT_UNIT_TEST( "RegularExpressions" )
 			"}"
 		),
 		"ok3-46-7"
+	);
+	ENSURE_EQUALS(
+		"RegularExpressions.groups failed",
+		execute(
+			"import RegularExpressions as re;\n"
+			"main(){\n"
+			"rec = re.compile( \"^([a-z]*)@([a-z.]*)$\" );\n"
+			"r = \"\";\n"
+			"g = rec.groups(\"user@example2.com\");\n"
+			"if ( g != none ) {\n"
+			"r = r + \"fail groups\";\n"
+			"} else {\n"
+			"r = r + \"ok\";\n"
+			"}\n"
+			"g = rec.groups(\"user@example.com\");\n"
+			"if ( g != none ) {\n"
+			"for ( w : g ) {\n"
+			"r = r + \"|\" + w;\n"
+			"}\n"
+			"} else {\n"
+			"r = r + \"fail no groups\";\n"
+			"}\n"
+			"return(r);\n"
+			"}"
+		),
+		"ok|user@example.com|user|example.com"
 	);
 TUT_TEARDOWN()
 
