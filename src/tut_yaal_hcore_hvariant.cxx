@@ -52,7 +52,7 @@ struct tut_yaal_hcore_hvariant : public simple_mock<tut_yaal_hcore_hvariant> {
 TUT_TEST_GROUP( tut_yaal_hcore_hvariant, "yaal::hcore::HVariant" );
 
 TUT_UNIT_TEST( "PoC of HVariant<>" )
-	variant_t v = HString( "ala ma kota" );
+	variant_t v( "ala ma kota"_ys );
 	cout << "\"" << v.get<HString>() << "\" of type: " << v.type() << endl;
 	cout << "sizeof ( variant_t ): " << sizeof ( v ) << endl;
 	cout << "sizeof ( HString ): " << sizeof ( HString ) << endl;
@@ -63,18 +63,18 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "uninitialized HVariant<>" )
 	variant_t v;
-	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<bool>(),               HFailedAssertion );
-	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<char>(),               HFailedAssertion );
-	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<int short>(),          HFailedAssertion );
-	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<int>(),                HFailedAssertion );
-	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<int long>(),           HFailedAssertion );
-	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<void*>(),              HFailedAssertion );
-	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<double>(),             HFailedAssertion );
-	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<double long>(),        HFailedAssertion );
-	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<HString>(),            HFailedAssertion );
-	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<HNumber>(),            HFailedAssertion );
-	ENSURE_THROW( "getting data from uninitialized varaiant", v.get<instance_tracker_t>(), HFailedAssertion );
-	ENSURE_EQUALS( "bad type id on uninitialized", v.type(), variant_t::INVALID );
+	ENSURE_THROW( "getting data from uninitialized variant", v.get<bool>(),               HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized variant", v.get<char>(),               HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized variant", v.get<int short>(),          HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized variant", v.get<int>(),                HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized variant", v.get<int long>(),           HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized variant", v.get<void*>(),              HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized variant", v.get<double>(),             HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized variant", v.get<double long>(),        HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized variant", v.get<HString>(),            HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized variant", v.get<HNumber>(),            HFailedAssertion );
+	ENSURE_THROW( "getting data from uninitialized variant", v.get<instance_tracker_t>(), HFailedAssertion );
+	ENSURE_EQUALS( "bad type id on uninitialized", v.type(), variant_t::INVALID + 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "copy of uninitialized HVariant<>" )
@@ -84,44 +84,44 @@ TUT_UNIT_TEST( "copy of uninitialized HVariant<>" )
 	variant_t const z;
 	x = v;
 	x = z;
-	variant_t t( v );
+	variant_t t = v;
 	variant_t u( z );
 	variant_t const& rz = z;
 	variant_t tmp( rz );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "consistency on assign (same types)" )
-	variant_t v = instance_tracker_t( 1 );
-	variant_t w = instance_tracker_t( 2 );
+	variant_t v( instance_tracker_t( 1 ) );
+	variant_t w( instance_tracker_t( 2 ) );
 	w = v;
 	ENSURE( "inconsistent bits after assign", w.get<instance_tracker_t>().is_self() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "consistency on assign (different types)" )
-	variant_t v = instance_tracker_t( 1 );
-	variant_t w = 1;
+	variant_t v( instance_tracker_t( 1 ) );
+	variant_t w( 1 );
 	w = v;
 	ENSURE( "inconsistent bits after assign", w.get<instance_tracker_t>().is_self() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "identity switches" )
 	variant_t v;
-	v = true;
+	v = variant_t( true );
 	ENSURE_EQUALS( "bad value (bool)", v.get<bool>(), true );
-	v = 1;
-	ENSURE_THROW( "getting data from varaiant ny wrong type", v.get<bool>(), HFailedAssertion );
+	v = variant_t( 1 );
+	ENSURE_THROW( "getting data from variant ny wrong type", v.get<bool>(), HFailedAssertion );
 	ENSURE_EQUALS( "bad value (int)", v.get<int>(), 1 );
-	v = 3.141592653589793L;
-	ENSURE_THROW( "getting data from varaiant ny wrong type", v.get<int>(), HFailedAssertion );
+	v = variant_t( 3.141592653589793L );
+	ENSURE_THROW( "getting data from variant ny wrong type", v.get<int>(), HFailedAssertion );
 	ENSURE_EQUALS( "bad value (double long)", v.get<double long>(), 3.141592653589793L );
-	v = HString( "Ala ma kota." );
-	ENSURE_THROW( "getting data from varaiant ny wrong type", v.get<double long>(), HFailedAssertion );
+	v = variant_t( "Ala ma kota."_ys );
+	ENSURE_THROW( "getting data from variant ny wrong type", v.get<double long>(), HFailedAssertion );
 	ENSURE_EQUALS( "bad value (HString)", v.get<HString>(), HString( "Ala ma kota." ) );
-	v = HNumber( "2.1718281828459045" );
-	ENSURE_THROW( "getting data from varaiant ny wrong type", v.get<HString>(), HFailedAssertion );
+	v = variant_t( "2.1718281828459045"_yn );
+	ENSURE_THROW( "getting data from variant ny wrong type", v.get<HString>(), HFailedAssertion );
 	ENSURE_EQUALS( "bad value (HNumber)", v.get<HNumber>(), HNumber( "2.1718281828459045" ) );
-	v = false;
-	ENSURE_THROW( "getting data from varaiant ny wrong type", v.get<HNumber>(), HFailedAssertion );
+	v = variant_t( false );
+	ENSURE_THROW( "getting data from variant ny wrong type", v.get<HNumber>(), HFailedAssertion );
 	ENSURE_EQUALS( "bad value (bool)", v.get<bool>(), false );
 TUT_TEARDOWN()
 
