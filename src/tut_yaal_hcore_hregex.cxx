@@ -55,6 +55,18 @@ TUT_UNIT_TEST( "simple match" )
 	clog << r.error() << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "groups" )
+	HRegex r( "^([a-z]*)@([a-z.]*)$" );
+	char const str[] = "user@example.com";
+	typedef HArray<HString> strings_t;
+	strings_t s;
+	for ( HRegex::HMatch m : r.groups( str ) ) {
+		s.emplace_back( str + m.start(), m.size() );
+	}
+	ENSURE_EQUALS( "groups failed", s, strings_t{ str, "user", "example.com" } );
+	ENSURE( "groups on non-match failed", r.groups( "user@example2.com" ).is_empty() );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "ignorecase match" )
 	HRegex r( "ala", HRegex::COMPILE::IGNORE_CASE );
 	char const str[] = "xxxAlayyy";
