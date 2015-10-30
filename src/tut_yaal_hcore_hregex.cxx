@@ -56,7 +56,7 @@ TUT_UNIT_TEST( "simple match" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "groups" )
-	HRegex r( "^([a-z]*)@([a-z.]*)$" );
+	HRegex r( "^([a-z]*)@([a-z.]*)$", HRegex::COMPILE::EXTENDED );
 	char const str[] = "user@example.com";
 	typedef HArray<HString> strings_t;
 	strings_t s;
