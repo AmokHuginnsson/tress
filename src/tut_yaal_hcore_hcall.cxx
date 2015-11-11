@@ -568,5 +568,69 @@ TUT_UNIT_TEST( "random free standing args" )
 	ENSURE_EQUALS( "this as free standing", call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), _1 )( s ), 1 );
 TUT_TEARDOWN()
 
+namespace {
+void foobar( tut_yaal_hcore_hcall::item_t const& item_, HString const& name_ ) {
+	cout << name_ << " = " << item_.to_string() << endl;
+}
+}
+
+TUT_UNIT_TEST( "lvalue copy count on bound" )
+	item_t item;
+	cout << "new copy count = " << item_t::get_copy_count() << endl;
+	cout << "new move count = " << item_t::get_move_count() << endl;
+	call( &foobar, item, _1 )( "item" );
+	cout << "copy count = " << item_t::get_copy_count() << endl;
+	cout << "move count = " << item_t::get_move_count() << endl;
+	item_t::reset();
+	std::bind( &foobar, item, std::placeholders::_1 )( "item" );
+	cout << "std copy count = " << item_t::get_copy_count() << endl;
+	cout << "std move count = " << item_t::get_move_count() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "lvalue copy count on unbound" )
+	item_t item;
+	cout << "new copy count = " << item_t::get_copy_count() << endl;
+	cout << "new move count = " << item_t::get_move_count() << endl;
+	call( &foobar, _1, "item" )( item );
+	cout << "copy count = " << item_t::get_copy_count() << endl;
+	cout << "move count = " << item_t::get_move_count() << endl;
+	item_t::reset();
+	std::bind( &foobar, std::placeholders::_1, "item" )( item );
+	cout << "std copy count = " << item_t::get_copy_count() << endl;
+	cout << "std move count = " << item_t::get_move_count() << endl;
+TUT_TEARDOWN()
+
+namespace {
+tut_yaal_hcore_hcall::item_t make_item( void ) {
+	return ( tut_yaal_hcore_hcall::item_t() );
+}
+}
+
+TUT_UNIT_TEST( "rvalue copy count on bound" )
+	item_t item;
+	cout << "new copy count = " << item_t::get_copy_count() << endl;
+	cout << "new move count = " << item_t::get_move_count() << endl;
+	call( &foobar, make_item(), _1 )( "item" );
+	cout << "copy count = " << item_t::get_copy_count() << endl;
+	cout << "move count = " << item_t::get_move_count() << endl;
+	item_t::reset();
+	std::bind( &foobar, make_item(), std::placeholders::_1 )( "item" );
+	cout << "std copy count = " << item_t::get_copy_count() << endl;
+	cout << "std move count = " << item_t::get_move_count() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "rvalue copy count on unbound" )
+	item_t item;
+	cout << "new copy count = " << item_t::get_copy_count() << endl;
+	cout << "new move count = " << item_t::get_move_count() << endl;
+	call( &foobar, _1, "item" )( make_item() );
+	cout << "copy count = " << item_t::get_copy_count() << endl;
+	cout << "move count = " << item_t::get_move_count() << endl;
+	item_t::reset();
+	std::bind( &foobar, std::placeholders::_1, "item" )( make_item() );
+	cout << "std copy count = " << item_t::get_copy_count() << endl;
+	cout << "std move count = " << item_t::get_move_count() << endl;
+TUT_TEARDOWN()
+
 }
 
