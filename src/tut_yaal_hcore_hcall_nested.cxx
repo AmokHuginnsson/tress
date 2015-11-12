@@ -46,7 +46,7 @@ namespace {
 }
 
 TUT_UNIT_TEST( "nested call (x, y) -> (y) -> ()" )
-	typedef call_calculator<HString (*)( int, int ), higher_order::placeholder<1>, int>::type::type func1_t;
+	typedef call_calculator<HString (*)( int, int ), higher_order::placeholder<1> const&, int>::type::type func1_t;
 	func1_t f( call( &foo2, _1, 2 ) );
 	char const expected[] = "foo2: a1 = 1, a2 = 2";
 	ENSURE_EQUALS( err, f( 1 ), expected );
@@ -54,8 +54,8 @@ TUT_UNIT_TEST( "nested call (x, y) -> (y) -> ()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "nested call ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
-	typedef call_calculator<HString (*)( int, int, int ), higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
-	typedef call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+	typedef call_calculator<HString (*)( int, int, int ), higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, int>::type::type func2_t;
+	typedef call_calculator<func2_t&, higher_order::placeholder<1> const&, int>::type::type func1_t;
 	func2_t f2( call( &foo3, _1, _2, 3 ) );
 	func1_t f1( call( f2, _1, 2 ) );
 	char const expected[] = "foo3: a1 = 1, a2 = 2, a3 = 3";
@@ -65,9 +65,9 @@ TUT_UNIT_TEST( "nested call ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "nested call ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
-	typedef call_calculator<HString (*)( int, int, int, int ), higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
-	typedef call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
-	typedef call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+	typedef call_calculator<HString (*)( int, int, int, int ), higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, int>::type::type func3_t;
+	typedef call_calculator<func3_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, int>::type::type func2_t;
+	typedef call_calculator<func2_t&, higher_order::placeholder<1> const&, int>::type::type func1_t;
 	func3_t f3( call( &foo4, _1, _2, _3, 4 ) );
 	func2_t f2( call( f3, _1, _2, 3 ) );
 	func1_t f1( call( f2, _1, 2 ) );
@@ -79,10 +79,10 @@ TUT_UNIT_TEST( "nested call ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "nested call ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
-	typedef call_calculator<HString (*)( int, int, int, int, int ), higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, higher_order::placeholder<4>, int>::type::type func4_t;
-	typedef call_calculator<func4_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
-	typedef call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
-	typedef call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+	typedef call_calculator<HString (*)( int, int, int, int, int ), higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, higher_order::placeholder<4> const&, int>::type::type func4_t;
+	typedef call_calculator<func4_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, int>::type::type func3_t;
+	typedef call_calculator<func3_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, int>::type::type func2_t;
+	typedef call_calculator<func2_t&, higher_order::placeholder<1> const&, int>::type::type func1_t;
 	func4_t f4( call( &foo5, _1, _2, _3, _4, 5 ) );
 	func3_t f3( call( f4, _1, _2, _3, 4 ) );
 	func2_t f2( call( f3, _1, _2, 3 ) );
@@ -97,13 +97,13 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "nested call ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int, int, int, int ),
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, int>::type::type func5_t;
-	typedef call_calculator<func5_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, higher_order::placeholder<4>, int>::type::type func4_t;
-	typedef call_calculator<func4_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
-	typedef call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
-	typedef call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, int>::type::type func5_t;
+	typedef call_calculator<func5_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, higher_order::placeholder<4> const&, int>::type::type func4_t;
+	typedef call_calculator<func4_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, int>::type::type func3_t;
+	typedef call_calculator<func3_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, int>::type::type func2_t;
+	typedef call_calculator<func2_t&, higher_order::placeholder<1> const&, int>::type::type func1_t;
 	func5_t f5( call( &foo6, _1, _2, _3, _4, _5, 6 ) );
 	func4_t f4( call( f5, _1, _2, _3, _4, 5 ) );
 	func3_t f3( call( f4, _1, _2, _3, 4 ) );
@@ -120,17 +120,17 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "nested call ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int, int, int, int, int ),
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, higher_order::placeholder<6>, int>::type::type func6_t;
-	typedef call_calculator<func6_t,
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, int>::type::type func5_t;
-	typedef call_calculator<func5_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, higher_order::placeholder<4>, int>::type::type func4_t;
-	typedef call_calculator<func4_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
-	typedef call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
-	typedef call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, higher_order::placeholder<6> const&, int>::type::type func6_t;
+	typedef call_calculator<func6_t&,
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, int>::type::type func5_t;
+	typedef call_calculator<func5_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, higher_order::placeholder<4> const&, int>::type::type func4_t;
+	typedef call_calculator<func4_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, int>::type::type func3_t;
+	typedef call_calculator<func3_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, int>::type::type func2_t;
+	typedef call_calculator<func2_t&, higher_order::placeholder<1> const&, int>::type::type func1_t;
 	func6_t f6( call( &foo7, _1, _2, _3, _4, _5, _6, 7 ) );
 	func5_t f5( call( f6, _1, _2, _3, _4, _5, 6 ) );
 	func4_t f4( call( f5, _1, _2, _3, _4, 5 ) );
@@ -151,22 +151,22 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "nested call ( 8 args ) -> ( t, u, v, w, x, y, z ) -> ( u, v, w, x, y, z ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int, int, int, int, int, int ),
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, higher_order::placeholder<6>,
-					higher_order::placeholder<7>, int>::type::type func7_t;
-	typedef call_calculator<func7_t,
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, higher_order::placeholder<6>, int>::type::type func6_t;
-	typedef call_calculator<func6_t,
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, int>::type::type func5_t;
-	typedef call_calculator<func5_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, higher_order::placeholder<4>, int>::type::type func4_t;
-	typedef call_calculator<func4_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
-	typedef call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
-	typedef call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, higher_order::placeholder<6> const&,
+					higher_order::placeholder<7> const&, int>::type::type func7_t;
+	typedef call_calculator<func7_t&,
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, higher_order::placeholder<6> const&, int>::type::type func6_t;
+	typedef call_calculator<func6_t&,
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, int>::type::type func5_t;
+	typedef call_calculator<func5_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, higher_order::placeholder<4> const&, int>::type::type func4_t;
+	typedef call_calculator<func4_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, int>::type::type func3_t;
+	typedef call_calculator<func3_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, int>::type::type func2_t;
+	typedef call_calculator<func2_t&, higher_order::placeholder<1> const&, int>::type::type func1_t;
 	func7_t f7( call( &foo8, _1, _2, _3, _4, _5, _6, _7, 8 ) );
 	func6_t f6( call( f7, _1, _2, _3, _4, _5, _6, 7 ) );
 	func5_t f5( call( f6, _1, _2, _3, _4, _5, 6 ) );
@@ -187,27 +187,27 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "nested call ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( v, w, x, y, z ) -> ( w, x, y, z ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int, int, int, int, int, int, int ),
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, higher_order::placeholder<6>,
-					higher_order::placeholder<7>, higher_order::placeholder<8>, int>::type::type func8_t;
-	typedef call_calculator<func8_t,
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, higher_order::placeholder<6>,
-					higher_order::placeholder<7>, int>::type::type func7_t;
-	typedef call_calculator<func7_t,
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, higher_order::placeholder<6>, int>::type::type func6_t;
-	typedef call_calculator<func6_t,
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, int>::type::type func5_t;
-	typedef call_calculator<func5_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, higher_order::placeholder<4>, int>::type::type func4_t;
-	typedef call_calculator<func4_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
-	typedef call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
-	typedef call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, higher_order::placeholder<6> const&,
+					higher_order::placeholder<7> const&, higher_order::placeholder<8> const&, int>::type::type func8_t;
+	typedef call_calculator<func8_t&,
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, higher_order::placeholder<6> const&,
+					higher_order::placeholder<7> const&, int>::type::type func7_t;
+	typedef call_calculator<func7_t&,
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, higher_order::placeholder<6> const&, int>::type::type func6_t;
+	typedef call_calculator<func6_t&,
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, int>::type::type func5_t;
+	typedef call_calculator<func5_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, higher_order::placeholder<4> const&, int>::type::type func4_t;
+	typedef call_calculator<func4_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, int>::type::type func3_t;
+	typedef call_calculator<func3_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, int>::type::type func2_t;
+	typedef call_calculator<func2_t&, higher_order::placeholder<1> const&, int>::type::type func1_t;
 	func8_t f8( call( &foo9, _1, _2, _3, _4, _5, _6, _7, _8, 9 ) );
 	func7_t f7( call( f8, _1, _2, _3, _4, _5, _6, _7, 8 ) );
 	func6_t f6( call( f7, _1, _2, _3, _4, _5, _6, 7 ) );
@@ -230,33 +230,33 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "nested call ( 10 args ) -> ( 9 args ) -> ( 8 args ) -> ( 7 args ) -> ( 6 args ) -> ( 5 args ) -> ( 4 args ) -> ( x, y, z ) -> ( y, z ) -> ( z ) -> ()" )
 	typedef call_calculator<HString (*)( int, int, int, int, int, int, int, int, int, int ),
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, higher_order::placeholder<6>,
-					higher_order::placeholder<7>, higher_order::placeholder<8>,
-					higher_order::placeholder<9>, int>::type::type func9_t;
-	typedef call_calculator<func9_t,
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, higher_order::placeholder<6>,
-					higher_order::placeholder<7>, higher_order::placeholder<8>, int>::type::type func8_t;
-	typedef call_calculator<func8_t,
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, higher_order::placeholder<6>,
-					higher_order::placeholder<7>, int>::type::type func7_t;
-	typedef call_calculator<func7_t,
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, higher_order::placeholder<6>, int>::type::type func6_t;
-	typedef call_calculator<func6_t,
-					higher_order::placeholder<1>, higher_order::placeholder<2>,
-					higher_order::placeholder<3>, higher_order::placeholder<4>,
-					higher_order::placeholder<5>, int>::type::type func5_t;
-	typedef call_calculator<func5_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, higher_order::placeholder<4>, int>::type::type func4_t;
-	typedef call_calculator<func4_t, higher_order::placeholder<1>, higher_order::placeholder<2>, higher_order::placeholder<3>, int>::type::type func3_t;
-	typedef call_calculator<func3_t, higher_order::placeholder<1>, higher_order::placeholder<2>, int>::type::type func2_t;
-	typedef call_calculator<func2_t, higher_order::placeholder<1>, int>::type::type func1_t;
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, higher_order::placeholder<6> const&,
+					higher_order::placeholder<7> const&, higher_order::placeholder<8> const&,
+					higher_order::placeholder<9> const&, int>::type::type func9_t;
+	typedef call_calculator<func9_t&,
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, higher_order::placeholder<6> const&,
+					higher_order::placeholder<7> const&, higher_order::placeholder<8> const&, int>::type::type func8_t;
+	typedef call_calculator<func8_t&,
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, higher_order::placeholder<6> const&,
+					higher_order::placeholder<7> const&, int>::type::type func7_t;
+	typedef call_calculator<func7_t&,
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, higher_order::placeholder<6> const&, int>::type::type func6_t;
+	typedef call_calculator<func6_t&,
+					higher_order::placeholder<1> const&, higher_order::placeholder<2> const&,
+					higher_order::placeholder<3> const&, higher_order::placeholder<4> const&,
+					higher_order::placeholder<5> const&, int>::type::type func5_t;
+	typedef call_calculator<func5_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, higher_order::placeholder<4> const&, int>::type::type func4_t;
+	typedef call_calculator<func4_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, int>::type::type func3_t;
+	typedef call_calculator<func3_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, int>::type::type func2_t;
+	typedef call_calculator<func2_t&, higher_order::placeholder<1> const&, int>::type::type func1_t;
 	func9_t f9( call( &foo10, _1, _2, _3, _4, _5, _6, _7, _8, _9, 10 ) );
 	func8_t f8( call( f9, _1, _2, _3, _4, _5, _6, _7, _8, 9 ) );
 	func7_t f7( call( f8, _1, _2, _3, _4, _5, _6, _7, 8 ) );

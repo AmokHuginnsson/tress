@@ -25,6 +25,7 @@ Copyright:
 */
 
 #include <cstdlib>
+#include <memory>
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hcall.hxx>
@@ -397,23 +398,122 @@ void foo( tut_yaal_hcore_hcall::item_t const& ) {
 TUT_UNIT_TEST( "pass argument by value" )
 	item_t::reset();
 	item_t item;
-	typedef call_calculator<void (*)( item_t const& ), item_t>::type::type func_by_val_t;
+	typedef call_calculator<void (*)( item_t const& ), item_t&>::type::type func_by_val_t;
 	ENSURE_EQUALS( "environment dirty", item_t::get_copy_count(), 0 );
 	ENSURE_EQUALS( "environment dirty", item_t::get_move_count(), 0 );
 	func_by_val_t f( call( &foo, item ) );
 	ENSURE_EQUALS( "argument not copied", item_t::get_copy_count(), 1 );
-	ENSURE_EQUALS( "argument was moved", item_t::get_move_count(), 3 );
+	ENSURE_EQUALS( "argument was moved", item_t::get_move_count(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "move argument by rvalue" )
 	item_t::reset();
 	item_t item;
-	typedef call_calculator<void (*)( item_t const& ), item_t>::type::type func_by_val_t;
+	typedef call_calculator<void (*)( item_t const& ), item_t>::type::type func_by_rval_t;
 	ENSURE_EQUALS( "environment dirty", item_t::get_copy_count(), 0 );
 	ENSURE_EQUALS( "environment dirty", item_t::get_move_count(), 0 );
-	func_by_val_t f( call( &foo, yaal::move( item ) ) );
+	func_by_rval_t f( call( &foo, yaal::move( item ) ) );
+	ENSURE_EQUALS( "argument copied", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "argument was moved", item_t::get_move_count(), 1 );
+TUT_TEARDOWN()
+
+#if 0
+namespace {
+void rfoo( tut_yaal_hcore_hcall::item_t&& ) {
+	return;
+}
+}
+/*
+ * If function expects rvalue reference as an argument
+ * than current implementation of HCall<> fails cause it
+ * always passed bound arguments as lvalue references.
+ */
+TUT_UNIT_TEST( "move argument by rvalue to rvalue expecting function" )
+	item_t::reset();
+	item_t item;
+	typedef call_calculator<void (*)( item_t&& ), item_t>::type::type func_by_rval_t;
+	ENSURE_EQUALS( "environment dirty", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "environment dirty", item_t::get_move_count(), 0 );
+	func_by_rval_t f( call( &rfoo, yaal::move( item ) ) );
 	ENSURE_EQUALS( "argument copied", item_t::get_copy_count(), 0 );
 	ENSURE_EQUALS( "argument was moved", item_t::get_move_count(), 4 );
+TUT_TEARDOWN()
+#endif
+
+///////////////////////////////////////////////////////////////////////////
+
+namespace {
+void foobar( tut_yaal_hcore_hcall::item_t const& item_, HString const& name_ ) {
+	cout << name_ << " = " << item_.to_string() << endl;
+}
+}
+
+TUT_UNIT_TEST( "lvalue copy count on bound" )
+	item_t::reset();
+	item_t item;
+	ENSURE_EQUALS( "environment dirty", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "environment dirty", item_t::get_move_count(), 0 );
+	call( &foobar, item, _1 )( "item" );
+	cout << "copy count = " << item_t::get_copy_count() << endl;
+	cout << "move count = " << item_t::get_move_count() << endl;
+//	ENSURE_EQUALS( "environment dirty", item_t::get_copy_count(), 0 );
+//	ENSURE_EQUALS( "environment dirty", item_t::get_move_count(), 0 );
+	item_t::reset();
+	std::bind( &foobar, item, std::placeholders::_1 )( "item" );
+	cout << "std copy count = " << item_t::get_copy_count() << endl;
+	cout << "std move count = " << item_t::get_move_count() << endl;
+//	ENSURE_EQUALS( "argument not copied", item_t::get_copy_count(), 1 );
+//	ENSURE_EQUALS( "argument was moved", item_t::get_move_count(), 3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "lvalue copy count on unbound" )
+	item_t::reset();
+	item_t item;
+	ENSURE_EQUALS( "environment dirty", item_t::get_copy_count(), 0 );
+	ENSURE_EQUALS( "environment dirty", item_t::get_move_count(), 0 );
+	call( &foobar, _1, "item" )( item );
+	cout << "copy count = " << item_t::get_copy_count() << endl;
+	cout << "move count = " << item_t::get_move_count() << endl;
+//	ENSURE_EQUALS( "argument copied", item_t::get_copy_count(), 0 );
+//	ENSURE_EQUALS( "argument was moved", item_t::get_move_count(), 4 );
+	item_t::reset();
+	std::bind( &foobar, std::placeholders::_1, "item" )( item );
+	cout << "std copy count = " << item_t::get_copy_count() << endl;
+	cout << "std move count = " << item_t::get_move_count() << endl;
+TUT_TEARDOWN()
+
+namespace {
+tut_yaal_hcore_hcall::item_t make_item( void ) {
+	return ( tut_yaal_hcore_hcall::item_t() );
+}
+}
+
+TUT_UNIT_TEST( "rvalue copy count on bound" )
+	item_t::reset();
+	item_t item;
+	cout << "new copy count = " << item_t::get_copy_count() << endl;
+	cout << "new move count = " << item_t::get_move_count() << endl;
+	call( &foobar, make_item(), _1 )( "item" );
+	cout << "copy count = " << item_t::get_copy_count() << endl;
+	cout << "move count = " << item_t::get_move_count() << endl;
+	item_t::reset();
+	std::bind( &foobar, make_item(), std::placeholders::_1 )( "item" );
+	cout << "std copy count = " << item_t::get_copy_count() << endl;
+	cout << "std move count = " << item_t::get_move_count() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "rvalue copy count on unbound" )
+	item_t::reset();
+	item_t item;
+	cout << "new copy count = " << item_t::get_copy_count() << endl;
+	cout << "new move count = " << item_t::get_move_count() << endl;
+	call( &foobar, _1, "item" )( make_item() );
+	cout << "copy count = " << item_t::get_copy_count() << endl;
+	cout << "move count = " << item_t::get_move_count() << endl;
+	item_t::reset();
+	std::bind( &foobar, std::placeholders::_1, "item" )( make_item() );
+	cout << "std copy count = " << item_t::get_copy_count() << endl;
+	cout << "std move count = " << item_t::get_move_count() << endl;
 TUT_TEARDOWN()
 
 namespace {
@@ -566,70 +666,6 @@ TUT_UNIT_TEST( "random free standing args" )
 	Sumator s( 1 );
 	call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), &s );
 	ENSURE_EQUALS( "this as free standing", call( static_cast<int (Sumator::*)( void )>( &Sumator::calculate ), _1 )( s ), 1 );
-TUT_TEARDOWN()
-
-namespace {
-void foobar( tut_yaal_hcore_hcall::item_t const& item_, HString const& name_ ) {
-	cout << name_ << " = " << item_.to_string() << endl;
-}
-}
-
-TUT_UNIT_TEST( "lvalue copy count on bound" )
-	item_t item;
-	cout << "new copy count = " << item_t::get_copy_count() << endl;
-	cout << "new move count = " << item_t::get_move_count() << endl;
-	call( &foobar, item, _1 )( "item" );
-	cout << "copy count = " << item_t::get_copy_count() << endl;
-	cout << "move count = " << item_t::get_move_count() << endl;
-	item_t::reset();
-	std::bind( &foobar, item, std::placeholders::_1 )( "item" );
-	cout << "std copy count = " << item_t::get_copy_count() << endl;
-	cout << "std move count = " << item_t::get_move_count() << endl;
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "lvalue copy count on unbound" )
-	item_t item;
-	cout << "new copy count = " << item_t::get_copy_count() << endl;
-	cout << "new move count = " << item_t::get_move_count() << endl;
-	call( &foobar, _1, "item" )( item );
-	cout << "copy count = " << item_t::get_copy_count() << endl;
-	cout << "move count = " << item_t::get_move_count() << endl;
-	item_t::reset();
-	std::bind( &foobar, std::placeholders::_1, "item" )( item );
-	cout << "std copy count = " << item_t::get_copy_count() << endl;
-	cout << "std move count = " << item_t::get_move_count() << endl;
-TUT_TEARDOWN()
-
-namespace {
-tut_yaal_hcore_hcall::item_t make_item( void ) {
-	return ( tut_yaal_hcore_hcall::item_t() );
-}
-}
-
-TUT_UNIT_TEST( "rvalue copy count on bound" )
-	item_t item;
-	cout << "new copy count = " << item_t::get_copy_count() << endl;
-	cout << "new move count = " << item_t::get_move_count() << endl;
-	call( &foobar, make_item(), _1 )( "item" );
-	cout << "copy count = " << item_t::get_copy_count() << endl;
-	cout << "move count = " << item_t::get_move_count() << endl;
-	item_t::reset();
-	std::bind( &foobar, make_item(), std::placeholders::_1 )( "item" );
-	cout << "std copy count = " << item_t::get_copy_count() << endl;
-	cout << "std move count = " << item_t::get_move_count() << endl;
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "rvalue copy count on unbound" )
-	item_t item;
-	cout << "new copy count = " << item_t::get_copy_count() << endl;
-	cout << "new move count = " << item_t::get_move_count() << endl;
-	call( &foobar, _1, "item" )( make_item() );
-	cout << "copy count = " << item_t::get_copy_count() << endl;
-	cout << "move count = " << item_t::get_move_count() << endl;
-	item_t::reset();
-	std::bind( &foobar, std::placeholders::_1, "item" )( make_item() );
-	cout << "std copy count = " << item_t::get_copy_count() << endl;
-	cout << "std move count = " << item_t::get_move_count() << endl;
 TUT_TEARDOWN()
 
 }
