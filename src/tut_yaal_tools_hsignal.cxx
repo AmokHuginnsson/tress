@@ -53,7 +53,7 @@ TUT_UNIT_TEST( "single slot (with arg)" )
 	int var( 0 );
 	HSignal<void ( int )> sig;
 	sig.connect( call( &defer<int>::set, ref( var ), _1 ) );
-	sig( 7 );
+	sig( static_cast<int const&>( 7 ) );
 	ENSURE_EQUALS( "signal not dispatched", var, 7 );
 TUT_TEARDOWN()
 
