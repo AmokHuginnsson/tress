@@ -66,7 +66,7 @@ struct HUDPServer {
 	HThread _thread;
 	HEvent _event;
 	bool _signaled;
-	HUDPServer( HUDPSocket::MODE::socket_mode_t );
+	HUDPServer( HUDPSocket::MODE );
 public:
 	void start( void );
 	void stop( void );
@@ -81,7 +81,7 @@ private:
 	HUDPServer& operator = ( HUDPServer const& );
 };
 
-HUDPServer::HUDPServer( HUDPSocket::MODE::socket_mode_t type_ )
+HUDPServer::HUDPServer( HUDPSocket::MODE type_ )
 	: _buffer(),
 	_dispatcher( NO_FD, LATENCY ), _socket( type_ ),
 	_thread(), _event(), _signaled( false )
