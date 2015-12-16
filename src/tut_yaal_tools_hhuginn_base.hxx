@@ -31,6 +31,21 @@ Copyright:
 #include "tut_helpers.hxx"
 #include <TUT/tut.hpp>
 
+namespace yaal {
+namespace tools {
+namespace huginn {
+inline std::ostream& operator << ( std::ostream& out, HHuginn::type_id_t t_ ) {
+	out << type_name( t_ );
+	return ( out );
+}
+inline std::ostream& operator << ( std::ostream& out, HHuginn::TYPE t_ ) {
+	out << type_name( t_ );
+	return ( out );
+}
+}
+}
+}
+
 namespace tress {
 
 struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_tools_hhuginn_base> {

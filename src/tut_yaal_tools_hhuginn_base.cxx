@@ -37,6 +37,7 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
+using namespace yaal::tools::huginn;
 using namespace tress::tut_helpers;
 
 namespace tress {
@@ -57,7 +58,7 @@ void tut_yaal_tools_hhuginn_base::test_file( hcore::HString const& name_ ) {
 	h.execute();
 	l.lock();
 	HHuginn::value_t res( h.result() );
-	ENSURE_EQUALS( "bad result type", res->type(), HHuginn::TYPE::STRING );
+	ENSURE_EQUALS( "bad result type", res->type_id(), HHuginn::TYPE::STRING );
 	ENSURE_EQUALS( "bad result value", static_cast<HHuginn::HString*>( res.raw() )->value(), _resultCache );
 	return;
 }
@@ -85,7 +86,7 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute( hcore::HString const
 	}
 	ENSURE( "execution failed", e );
 	HHuginn::value_t res( h.result() );
-	ENSURE_EQUALS( "bad result type", res->type(), HHuginn::TYPE::STRING );
+	ENSURE_EQUALS( "bad result type", res->type_id(), HHuginn::TYPE::STRING );
 	l.lock();
 	_resultCache.assign( static_cast<HHuginn::HString*>( res.raw() )->value() );
 	return ( _resultCache );
