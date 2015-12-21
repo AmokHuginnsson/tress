@@ -33,15 +33,13 @@ Copyright:
 
 namespace yaal {
 namespace tools {
-namespace huginn {
 inline std::ostream& operator << ( std::ostream& out, HHuginn::type_id_t t_ ) {
-	out << type_name( t_ );
+	out << huginn::type_name( t_ );
 	return ( out );
 }
 inline std::ostream& operator << ( std::ostream& out, HHuginn::TYPE t_ ) {
-	out << type_name( t_ );
+	out << huginn::type_name( t_ );
 	return ( out );
-}
 }
 }
 }
