@@ -57,7 +57,7 @@ struct tut_yaal_hcore_hsbbstree : public tress::tut_helpers::simple_mock<tut_yaa
 	virtual ~tut_yaal_hcore_hsbbstree( void )
 		{}
 	typedef yaal::hcore::HSet<int> set_t;
-	typedef set_t::engine_t engine_t;
+	typedef set_t::engine_type engine_type;
 	void helper_stress_test_insert( set_t&, int );
 	void helper_stress_test_erase( set_t&, int );
 	void verify( set_t& );
@@ -69,13 +69,13 @@ struct tut_yaal_hcore_hsbbstree : public tress::tut_helpers::simple_mock<tut_yaa
 	int _blackHeight;
 	bool _redNodeExists;
 	bool _blackNodeExists;
-	engine_t::HAbstractNode* _root;
+	engine_type::HAbstractNode* _root;
 	void init( set_t& );
 
-	void helper_test_node_integrity( engine_t::HAbstractNode* );
-	void helper_test_node_definition( engine_t::HAbstractNode* );
-	int helper_count_exemplar_black_height( engine_t::HAbstractNode* );
-	int helper_check_black_height( engine_t::HAbstractNode* );
+	void helper_test_node_integrity( engine_type::HAbstractNode* );
+	void helper_test_node_definition( engine_type::HAbstractNode* );
+	int helper_count_exemplar_black_height( engine_type::HAbstractNode* );
+	int helper_check_black_height( engine_type::HAbstractNode* );
 
 	typedef set_t::insert_result (set_t::*set_insert_t)( int const& );
 private:
@@ -91,7 +91,7 @@ void tut_yaal_hcore_hsbbstree::init( set_t& ob ) {
 	_root = ob._engine._root;
 }
 
-void tut_yaal_hcore_hsbbstree::helper_test_node_integrity( engine_t::HAbstractNode* n ) {
+void tut_yaal_hcore_hsbbstree::helper_test_node_integrity( engine_type::HAbstractNode* n ) {
 	if ( ! n->_parent && ( n != _root ) )
 		FAIL( "node with null parent is not root" );
 	if ( n->_parent && ( n->_parent->_left != n ) && ( n->_parent->_right != n ) )
@@ -109,11 +109,11 @@ void tut_yaal_hcore_hsbbstree::helper_test_node_integrity( engine_t::HAbstractNo
 	++ _testedNodes;
 }
 
-void tut_yaal_hcore_hsbbstree::helper_test_node_definition( engine_t::HAbstractNode* n ) {
-	if ( n->_color == engine_t::HAbstractNode::RED ) {
+void tut_yaal_hcore_hsbbstree::helper_test_node_definition( engine_type::HAbstractNode* n ) {
+	if ( n->_color == engine_type::HAbstractNode::RED ) {
 		_redNodeExists = true;
-		if ( ( n->_left && ( n->_left->_color == engine_t::HAbstractNode::RED ) )
-				|| ( n->_right && ( n->_right->_color == engine_t::HAbstractNode::RED ) ) )
+		if ( ( n->_left && ( n->_left->_color == engine_type::HAbstractNode::RED ) )
+				|| ( n->_right && ( n->_right->_color == engine_type::HAbstractNode::RED ) ) )
 			FAIL( "subsequent red nodes" );
 	} else
 		_blackNodeExists = true;
@@ -127,10 +127,10 @@ void tut_yaal_hcore_hsbbstree::helper_test_node_definition( engine_t::HAbstractN
 	}
 }
 
-int tut_yaal_hcore_hsbbstree::helper_count_exemplar_black_height( engine_t::HAbstractNode* n ) {
+int tut_yaal_hcore_hsbbstree::helper_count_exemplar_black_height( engine_type::HAbstractNode* n ) {
 	int bh = 0;
 	while ( n ) {
-		if ( n->_color == engine_t::HAbstractNode::BLACK )
+		if ( n->_color == engine_type::HAbstractNode::BLACK )
 			++ bh;
 		n = n->_left;
 	}
@@ -138,10 +138,10 @@ int tut_yaal_hcore_hsbbstree::helper_count_exemplar_black_height( engine_t::HAbs
 	return ( bh );
 }
 
-int tut_yaal_hcore_hsbbstree::helper_check_black_height( engine_t::HAbstractNode* n ) {
+int tut_yaal_hcore_hsbbstree::helper_check_black_height( engine_type::HAbstractNode* n ) {
 	int bh = 0;
 	while ( n ) {
-		if ( n->_color == engine_t::HAbstractNode::BLACK )
+		if ( n->_color == engine_type::HAbstractNode::BLACK )
 			++ bh;
 		n = n->_parent;
 	}
@@ -172,7 +172,7 @@ bool tut_yaal_hcore_hsbbstree::integrity_test( set_t& ob ) {
 
 bool tut_yaal_hcore_hsbbstree::definition_test( set_t& ob ) {
 	init( ob );
-	if ( _root->_color != engine_t::HAbstractNode::BLACK )
+	if ( _root->_color != engine_type::HAbstractNode::BLACK )
 		FAIL ( "root is not black" );
 	_blackHeight = helper_count_exemplar_black_height( _root );
 	helper_test_node_definition( _root );
@@ -300,7 +300,7 @@ TUT_UNIT_TEST( "Removing keys in ascending order from lower half of the tree tha
 		try {
 			helper_stress_test_erase( s, i );
 		} catch ( HException const& e ) {
-			if ( e.code() != static_cast<int>( engine_t::ERROR::NON_EXISTING_KEY ) )
+			if ( e.code() != static_cast<int>( engine_type::ERROR::NON_EXISTING_KEY ) )
 				throw;
 		}
 	}
@@ -315,7 +315,7 @@ TUT_UNIT_TEST( "Removing keys in ascending order from upper half of the tree tha
 		try {
 			helper_stress_test_erase( s, i );
 		} catch ( HException const& e ) {
-			if ( e.code() != static_cast<int>( engine_t::ERROR::NON_EXISTING_KEY ) )
+			if ( e.code() != static_cast<int>( engine_type::ERROR::NON_EXISTING_KEY ) )
 				throw;
 		}
 	}
@@ -330,7 +330,7 @@ TUT_UNIT_TEST( "Removing keys in descending order from lower half of the tree th
 		try {
 			helper_stress_test_erase( s, i );
 		} catch ( HException const& e ) {
-			if ( e.code() != static_cast<int>( engine_t::ERROR::NON_EXISTING_KEY ) )
+			if ( e.code() != static_cast<int>( engine_type::ERROR::NON_EXISTING_KEY ) )
 				throw;
 		}
 	}
@@ -345,7 +345,7 @@ TUT_UNIT_TEST( "Removing keys in descending order from upper half of the tree th
 		try {
 			helper_stress_test_erase( s, i );
 		} catch ( HException const& e ) {
-			if ( e.code() != static_cast<int>( engine_t::ERROR::NON_EXISTING_KEY ) )
+			if ( e.code() != static_cast<int>( engine_type::ERROR::NON_EXISTING_KEY ) )
 				throw;
 		}
 	}
@@ -361,7 +361,7 @@ TUT_UNIT_TEST( "Removing keys in random order from upper half of the tree that w
 		try {
 			helper_stress_test_erase( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );
 		} catch ( HException const& e ) {
-			if ( e.code() != static_cast<int>( engine_t::ERROR::NON_EXISTING_KEY ) )
+			if ( e.code() != static_cast<int>( engine_type::ERROR::NON_EXISTING_KEY ) )
 				throw;
 		}
 	}
