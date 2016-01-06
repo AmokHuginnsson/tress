@@ -816,7 +816,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule ternary( booleanXor >> -( '?' >> expression >> ':' >> expression ) );
 	HRule value( ternary );
 	HRule subscript( name >> +( subscriptOperator | functionCallOperator | memberAccess ) );
-	expression %= ( *( ( ( subscript | name ) >> '=' ) ^ '=' ) >> value );
+	expression %= ( *( ( ( subscript | name ) >> ( string( "=" ) | "+=" | "-=" | "*=" | "/=" | "%=" | "^=" ) ) ^ '=' ) >> value );
 	HRule expressionStatement( expression >> ';' );
 	HRule loopScope;
 	HRule catchStatement( e_p::constant( "catch" ) >> '(' >> name >> name >> ')' >> scope );
@@ -848,7 +848,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	char const huginnDesc[][400] = {
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ | ( \"import\" >> B_ >> \"as\" >> B_ >> ';' ) )",
 		"B_ = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
-		"C_ = ( *( ( ( ( B_ >> +( E_ | F_ | G_ ) ) | B_ ) >> '=' ) ^ '=' ) >> ( ( H_ >> -( \"^^\" >> H_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
+		"C_ = ( *( ( ( ( B_ >> +( E_ | F_ | G_ ) ) | B_ ) >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> ( ( H_ >> -( \"^^\" >> H_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
 		"D_ = ( B_ >> '(' >> -I_ >> ')' >> J_ )",
 		"E_ = ( '[' >> ( ( ( ':' >> -C_ ) | ( C_ >> -( ':' >> -C_ ) ) ) >> -( ':' >> -C_ ) ) >> ']' )",
 		"F_ = ( '(' >> -K_ >> ')' )",

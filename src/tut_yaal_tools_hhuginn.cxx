@@ -68,7 +68,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"packageName = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
 		"importName = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
 		"fieldIdentifier = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
-		"expression = ( *( ( ( subscript | variableSetter ) >> '=' ) ^ '=' ) >> value )",
+		"expression = ( *( ( ( subscript | variableSetter ) >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> value )",
 		"parameter = ( parameterIdentifier >> -( '=' >> expression ) )",
 		"statement = ( ifStatement | whileStatement | forStatement | switchStatement | tryCatchStatement | throwStatement | breakStatement | continueStatement | returnStatement | expressionStatement | scope )",
 		"subscript = ( reference >> +( subscriptOperator | functionCallOperator | memberAccess ) )",
