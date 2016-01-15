@@ -35,6 +35,7 @@ namespace tut {
 
 typedef yaal::hcore::HSet<int> set_t;
 void helper_stress_just_insert( set_t&, int );
+void helper_stress_just_insert( set_t&, int, set_t::iterator, bool );
 void helper_stress_just_erase( set_t&, int );
 
 }

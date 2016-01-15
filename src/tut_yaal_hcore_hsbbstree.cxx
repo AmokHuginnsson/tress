@@ -227,6 +227,67 @@ TUT_UNIT_TEST( "Adding keys in random order." )
 	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Adding keys with hint in ascending order." )
+	set_t s;
+	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i ) {
+		helper_stress_just_insert( s, i, s.end(), true );
+		verify( s );
+	}
+	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Adding keys with hint in descending order." )
+	set_t s;
+	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i ) {
+		helper_stress_just_insert( s, i, s.begin(), true );
+		verify( s );
+	}
+	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Adding keys with hint in random order." )
+	int_array_t src( begin( _testData_[0] ), end( _testData_[0] ) );
+	random_shuffle( src.begin(), src.end() );
+	set_t s;
+	for ( int i : src ) {
+		helper_stress_just_insert( s, i );
+	}
+	for ( int i : _testData_[0] ) {
+		helper_stress_just_insert( s, i - 1, s.find( i ), true );
+		verify( s );
+	}
+	ENSURE( "no red nodes were generated during the test", tut_yaal_hcore_hsbbstree::_redNodeExists );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Adding keys with bad hint." )
+	int_array_t src( begin( _testData_[0] ), end( _testData_[0] ) );
+	random_shuffle( src.begin(), src.end() );
+	set_t s;
+	for ( int i : src ) {
+		helper_stress_just_insert( s, i );
+	}
+
+	typedef HExceptionT<set_t::engine_type, HExceptionT<HSBBSTreeBase>> HSBBSTreeException;
+	ENSURE_THROW( "bad hint on back did not throw", helper_stress_just_insert( s, *s.rbegin(), s.begin(), true ), HSBBSTreeException );
+	ENSURE_THROW( "bad hint on front did not throw", helper_stress_just_insert( s, *s.begin(), s.end(), true ), HSBBSTreeException );
+	int med( ( *s.begin() + *s.rbegin() ) / 2 );
+	set_t::iterator medIt( s.find( med ) );
+	set_t::iterator beforeMedIt( medIt );
+	-- beforeMedIt;
+	set_t::iterator afterMedIt( medIt );
+	++ afterMedIt;
+	ENSURE_THROW(
+		"bad hint in the middle (before) did not throw",
+		helper_stress_just_insert( s, *beforeMedIt - 1, medIt, true ),
+		HSBBSTreeException
+	);
+	ENSURE_THROW(
+		"bad hint in the middle (after) did not throw",
+		helper_stress_just_insert( s, *afterMedIt + 1, medIt, true ),
+		HSBBSTreeException
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "Removing keys in ascending order from lower half of the tree that was created by adding keys in ascending order." )
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
