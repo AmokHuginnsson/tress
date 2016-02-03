@@ -366,10 +366,15 @@ TUT_UNIT_TEST( "order()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set()" )
+#if ( TARGET_CPU_BITS == 64 )
+	char const expected[] = "|7.34|2|Q|3.140000000000|ala";
+#else
+	char const expected[] = "|7.34|2|Q|ala|3.140000000000";
+#endif
 	ENSURE_EQUALS(
 		"set() failed",
 		execute( "main(){x=set(2,\"ala\",3.14);x.add($7.34).add('Q');v=\"\";for(e:x){v=v+\"|\"+string(e);}return(v);}" ),
-		"|7.34|2|Q|3.140000000000|ala"
+		expected
 	);
 TUT_TEARDOWN()
 
