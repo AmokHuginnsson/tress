@@ -114,9 +114,9 @@ TUT_UNIT_TEST( "identity switches" )
 	v = variant_t( 3.141592653589793L );
 	ENSURE_THROW( "getting data from variant ny wrong type", v.get<int>(), HFailedAssertion );
 	ENSURE_EQUALS( "bad value (double long)", v.get<double long>(), 3.141592653589793L );
-	v = variant_t( "Ala ma kota."_ys );
+	v = variant_t( "Ala ma kota. A very long string."_ys );
 	ENSURE_THROW( "getting data from variant ny wrong type", v.get<double long>(), HFailedAssertion );
-	ENSURE_EQUALS( "bad value (HString)", v.get<HString>(), HString( "Ala ma kota." ) );
+	ENSURE_EQUALS( "bad value (HString)", v.get<HString>(), HString( "Ala ma kota. A very long string." ) );
 	v = variant_t( "2.1718281828459045"_yn );
 	ENSURE_THROW( "getting data from variant ny wrong type", v.get<HString>(), HFailedAssertion );
 	ENSURE_EQUALS( "bad value (HNumber)", v.get<HNumber>(), HNumber( "2.1718281828459045" ) );
