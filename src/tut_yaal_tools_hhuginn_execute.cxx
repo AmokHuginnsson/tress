@@ -50,7 +50,7 @@ char const progExecuteErr0[] =
 	"main() {\n"
 	"\tv = @(){ return( 1 ); };\n"
 	"\tx = v() + 1.5;\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -58,7 +58,7 @@ char const progExecuteErr1[] =
 	"main() {\n"
 	"\tv = @(){ return( 1 ); };\n"
 	"\tx = v() - 1.5;\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -66,7 +66,7 @@ char const progExecuteErr2[] =
 	"main() {\n"
 	"\tv = @(){ return( 1 ); };\n"
 	"\tx = v() * 1.5;\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -74,7 +74,7 @@ char const progExecuteErr3[] =
 	"main() {\n"
 	"\tv = @(){ return( 1 ); };\n"
 	"\tx = v() / 1.5;\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -82,7 +82,7 @@ char const progExecuteErr4[] =
 	"main() {\n"
 	"\tv = @(){ return( 1 ); };\n"
 	"\tx = v() % 1.5;\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -90,7 +90,7 @@ char const progExecuteErr5[] =
 	"main() {\n"
 	"\tv = @(){ return( 1 ); };\n"
 	"\tx = v() ^ 1.5;\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -98,7 +98,7 @@ char const progExecuteErr6[] =
 	"main() {\n"
 	"\tv = @(){ return( 2 ); };\n"
 	"\tx = v() ^ 2.5;\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -106,7 +106,7 @@ char const progExecuteErr7[] =
 	"main() {\n"
 	"\tv = @(){ return( 1 ); };\n"
 	"\tx = v() == 1.5;\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -114,7 +114,7 @@ char const progExecuteErr8[] =
 	"main() {\n"
 	"\tv = @(){ return( 1 ); };\n"
 	"\tx = v() != 1.5;\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -122,7 +122,7 @@ char const progExecuteErr9[] =
 	"main() {\n"
 	"\tv = @(){ return( 1 ); };\n"
 	"\tx = v() < 1.5;\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -130,7 +130,7 @@ char const progExecuteErr10[] =
 	"main() {\n"
 	"\tv = @(){ return( 1 ); };\n"
 	"\tx = v() > 1.5;\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -138,7 +138,7 @@ char const progExecuteErr11[] =
 	"main() {\n"
 	"\tv = @(){ return( 1 ); };\n"
 	"\tx = v() <= 1.5;\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -146,13 +146,13 @@ char const progExecuteErr12[] =
 	"main() {\n"
 	"\tv = @(){ return( 1 ); };\n"
 	"\tx = v() >= 1.5;\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
 char const progExecuteErr13[] =
 	"foo() {\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( foo() );\n"
 	"}\n"
 ;
 
@@ -168,7 +168,7 @@ char const progExecuteErr15[] =
 	"\tx='a';\n"
 	"\tl=[0,1];\n"
 	"\tx=l[x];\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -176,7 +176,7 @@ char const progExecuteErr16[] =
 	"main() {\n"
 	"\tl=[0,1];\n"
 	"\tx=l[2];\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -184,7 +184,7 @@ char const progExecuteErr17[] =
 	"main() {\n"
 	"\tl=[0,1];\n"
 	"\tx=l[-3];\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -192,7 +192,7 @@ char const progExecuteErr18[] =
 	"main() {\n"
 	"\tv=0;\n"
 	"\tx=v[0];\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -202,7 +202,7 @@ char const progExecuteErr19[] =
 	"\ts=\"Ala ma kota.\";\n"
 	"\ti=f('0');\n"
 	"\tx=s[i:5];\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -212,7 +212,7 @@ char const progExecuteErr20[] =
 	"\ts=\"Ala ma kota.\";\n"
 	"\ti=f('5');\n"
 	"\tx=s[0:i];\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -222,7 +222,7 @@ char const progExecuteErr21[] =
 	"\ts=\"Ala ma kota.\";\n"
 	"\ti=f('2');\n"
 	"\tx=s[0:10:i];\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -230,7 +230,7 @@ char const progExecuteErr22[] =
 	"main() {\n"
 	"\ts=\"Ala ma kota.\";\n"
 	"\tx=s[0:10:0];\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 
@@ -238,7 +238,7 @@ char const progExecuteErr23[] =
 	"main() {\n"
 	"\tv=0;\n"
 	"\tx=v[0:2];\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( x );\n"
 	"}\n"
 ;
 

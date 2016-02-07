@@ -582,7 +582,7 @@ TUT_UNIT_TEST( "class constructor" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "class destructor" )
-	ENSURE_EQUALS( "destructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"ok\");}}main(){l=list();{o=A(l);}return(l[0]);}" ), "ok" );
+	ENSURE_EQUALS( "destructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"ok\");}}main(){l=list();{o=A(l);type(o);}return(l[0]);}" ), "ok" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "class super" )
@@ -611,7 +611,7 @@ TUT_UNIT_TEST( "destructor chain" )
 		execute(
 			"class B{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"base\");}}"
 			"class D:B{constructor(l_){super.constructor(l_);}destructor(){_d.add(\"derived\");}}"
-			"main(){l=list();{o=D(l);}return(l[0]+l[1]);}"
+			"main(){l=list();{o=D(l);type(o);}return(l[0]+l[1]);}"
 		),
 		"derivedbase"
 	);
