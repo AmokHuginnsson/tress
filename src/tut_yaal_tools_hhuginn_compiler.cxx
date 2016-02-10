@@ -592,6 +592,55 @@ char const progCompileErr72[] =
 	"}"
 ;
 
+
+char const progCompileErr73[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tv += 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr74[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tv -= 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr75[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tv *= 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr76[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tv /= 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr77[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tv %= 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr78[] =
+	"main() {\n"
+	"\tv = 1;\n"
+	"\tv ^= 1.5;\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -667,6 +716,12 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr70,
 		progCompileErr71,
 		progCompileErr72,
+		progCompileErr73,
+		progCompileErr74,
+		progCompileErr75,
+		progCompileErr76,
+		progCompileErr77,
+		progCompileErr78,
 		NULL
 	};
 	int const err[][3] = {
@@ -743,6 +798,12 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 21, 1, 22 },  // 70
 		{ 44, 2, 22 },  // 71
 		{ 26, 2, 1 },   // 72
+		{ 20, 3, 4 },   // 73
+		{ 20, 3, 4 },   // 74
+		{ 20, 3, 4 },   // 75
+		{ 20, 3, 4 },   // 76
+		{ 20, 3, 4 },   // 77
+		{ 20, 3, 4 },   // 78
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
