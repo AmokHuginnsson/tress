@@ -33,11 +33,11 @@ Copyright:
 
 namespace yaal {
 namespace tools {
-inline std::ostream& operator << ( std::ostream& out, HHuginn::type_id_t t_ ) {
+inline std::ostream& operator << ( std::ostream& out, yaal::tools::HHuginn::type_id_t t_ ) {
 	out << huginn::type_name( t_ );
 	return ( out );
 }
-inline std::ostream& operator << ( std::ostream& out, HHuginn::TYPE t_ ) {
+inline std::ostream& operator << ( std::ostream& out, yaal::tools::HHuginn::TYPE t_ ) {
 	out << huginn::type_name( t_ );
 	return ( out );
 }
@@ -60,7 +60,10 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 	}
 	virtual ~tut_yaal_tools_hhuginn_base( void ) {}
 	void test_file( yaal::hcore::HString const& );
-	yaal::hcore::HString const& execute( yaal::hcore::HString const& );
+	yaal::hcore::HString const& execute(
+		yaal::hcore::HString const&,
+		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::DEFAULT
+	);
 };
 
 }

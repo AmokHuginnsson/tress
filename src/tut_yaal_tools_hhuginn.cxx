@@ -721,7 +721,8 @@ TUT_UNIT_TEST( "empty return" )
 			"s = s + string(size(l));\n"
 			"s = s + string(l[0]);\n"
 			"return(s);\n"
-			"}"
+			"}",
+			HHuginn::COMPILER::BE_SLOPPY
 		),
 		"none11"
 	);

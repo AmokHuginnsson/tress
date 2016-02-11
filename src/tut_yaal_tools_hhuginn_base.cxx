@@ -63,7 +63,10 @@ void tut_yaal_tools_hhuginn_base::test_file( hcore::HString const& name_ ) {
 	return;
 }
 
-hcore::HString const& tut_yaal_tools_hhuginn_base::execute( hcore::HString const& source_ ) {
+hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
+	hcore::HString const& source_,
+	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_
+) {
 	HHuginn h;
 	HLock l( _mutex );
 	_sourceCache.set_buffer( source_ );
@@ -75,7 +78,7 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute( hcore::HString const
 		clog << h.error_message() << endl;
 	}
 	ENSURE( "parse failed", p );
-	bool c( h.compile() );
+	bool c( h.compile( huginnCompilerSetup_ ) );
 	if ( !c ) {
 		clog << h.error_message() << endl;
 	}
