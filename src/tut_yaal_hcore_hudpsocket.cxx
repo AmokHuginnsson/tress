@@ -31,7 +31,7 @@ Copyright:
 #include <yaal/hcore/hudpsocket.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
-#include <yaal/hcore/hopenssl.hxx>
+#include <yaal/hcore/hrawfile.hxx>
 #include <yaal/tools/hiodispatcher.hxx>
 
 using namespace tut;
@@ -76,16 +76,20 @@ public:
 	void wait( void );
 	void do_not_signal( void );
 private:
-	void handler_message( int );
+	void handler_message( HIODispatcher::stream_t& );
 	HUDPServer( HUDPServer const& );
 	HUDPServer& operator = ( HUDPServer const& );
 };
 
 HUDPServer::HUDPServer( HUDPSocket::MODE type_ )
-	: _buffer(),
-	_dispatcher( NO_FD, LATENCY ), _socket( type_ ),
-	_thread(), _event(), _signaled( false )
-	{}
+	: _buffer()
+	, _dispatcher( NO_FD, LATENCY )
+	, _socket( type_ )
+	, _thread()
+	, _event()
+	, _signaled( false ) {
+	return;
+}
 
 void HUDPServer::bind( int port_, ip_t ip_ ) {
 	M_PROLOG
@@ -98,7 +102,8 @@ void HUDPServer::bind( int port_, ip_t ip_ ) {
 void HUDPServer::start( void ) {
 	M_PROLOG
 	cout << "starting server thread ..." << endl;
-	_dispatcher.register_file_descriptor_handler( _socket.get_file_descriptor(), call( &HUDPServer::handler_message, this, _1 ) );
+	HRawFile::ptr_t wakeable( make_pointer<HRawFile>( _socket.get_file_descriptor(), HRawFile::OWNERSHIP::EXTERNAL ) );
+	_dispatcher.register_file_descriptor_handler( wakeable, call( &HUDPServer::handler_message, this, _1 ) );
 	_thread.spawn( call( &HUDPServer::run, this ) );
 	return;
 	M_EPILOG
@@ -122,7 +127,7 @@ void HUDPServer::wait( void ) {
 	M_EPILOG
 }
 
-void HUDPServer::handler_message( int ) {
+void HUDPServer::handler_message( HIODispatcher::stream_t& ) {
 	M_PROLOG
 	ODatagram datagram( 100 );
 	cout << "reading data ..." << endl;

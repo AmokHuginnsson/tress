@@ -64,7 +64,7 @@ struct HServer {
 	static int const LATENCY = 1000; /* number of miliseconds */
 	HString _buffer;
 	HIODispatcher _dispatcher;
-	HSocket _socket;
+	HSocket::ptr_t _socket;
 	HThread _thread;
 	HEvent _event;
 	bool _signaled;
@@ -78,22 +78,26 @@ public:
 	void wait( void );
 	void do_not_signal( void );
 private:
-	void handler_connection( int );
-	void handler_message( int );
-	void disconnect_client( yaal::hcore::HSocket::ptr_t& );
+	void handler_connection( HIODispatcher::stream_t& );
+	void handler_message( HIODispatcher::stream_t& );
+	void disconnect_client( HIODispatcher::stream_t& );
 	HServer( HServer const& );
 	HServer& operator = ( HServer const& );
 };
 
 HServer::HServer( HSocket::socket_type_t type_, int maxConn_ )
-	: _buffer(),
-	_dispatcher( NO_FD, LATENCY ), _socket( type_, maxConn_ ),
-	_thread(), _event(), _signaled( false )
-	{}
+	: _buffer()
+	, _dispatcher( NO_FD, LATENCY )
+	, _socket( make_pointer<HSocket>( type_, maxConn_ ) )
+	, _thread()
+	, _event()
+	, _signaled( false ) {
+	return;
+}
 
 void HServer::listen( yaal::hcore::HString const& path_, int const port_ ) {
 	M_PROLOG
-	_socket.listen( path_, port_ );
+	_socket->listen( path_, port_ );
 	cout << "listening on: " << path_ << ( port_ ? ":" : "" ) << ( port_ ? HString( port_ ) : HString() ) << endl;
 	return;
 	M_EPILOG
@@ -102,7 +106,7 @@ void HServer::listen( yaal::hcore::HString const& path_, int const port_ ) {
 void HServer::start( void ) {
 	M_PROLOG
 	cout << "starting server thread ..." << endl;
-	_dispatcher.register_file_descriptor_handler( _socket.get_file_descriptor(), call( &HServer::handler_connection, this, _1 ) );
+	_dispatcher.register_file_descriptor_handler( _socket, call( &HServer::handler_connection, this, _1 ) );
 	_thread.spawn( call( &HServer::run, this ) );
 	return;
 	M_EPILOG
@@ -126,44 +130,41 @@ void HServer::wait( void ) {
 	M_EPILOG
 }
 
-void HServer::handler_connection( int ) {
+void HServer::handler_connection( HIODispatcher::stream_t& ) {
 	M_PROLOG
-	HSocket::ptr_t client = _socket.accept();
+	HSocket::ptr_t client = _socket->accept();
 	M_ASSERT( !! client );
-	int fd = client->get_file_descriptor();
-	_dispatcher.register_file_descriptor_handler( fd, call( &HServer::handler_message, this, _1 ) );
+	_dispatcher.register_file_descriptor_handler( client, call( &HServer::handler_message, this, _1 ) );
 	cout << green << "new connection" << lightgray << endl;
 	return;
 	M_EPILOG
 }
 
-void HServer::handler_message( int fileDescriptor_ ) {
+void HServer::handler_message( HIODispatcher::stream_t& stream_ ) {
 	M_PROLOG
 	HString message;
-	HSocket::ptr_t client = _socket.get_client( fileDescriptor_ );
-	if ( !! client ) {
+	if ( !! stream_ ) {
 		int long nRead( 0 );
 		cout << "reading data ..." << endl;
-		if ( ( nRead = client->read_until( message ) ) > 0 ) {
+		if ( ( nRead = stream_->read_until( message ) ) > 0 ) {
 			_buffer += message;
 			cout << "<-" << message << endl;
 			_event.signal();
 			_signaled = true;
 		} else if ( ! nRead )
-			disconnect_client( client );
+			disconnect_client( stream_ );
 		/* else nRead < 0 => REPEAT */
 	}
 	return;
 	M_EPILOG
 }
 
-void HServer::disconnect_client( yaal::hcore::HSocket::ptr_t& client_ ) {
+void HServer::disconnect_client( HIODispatcher::stream_t& client_ ) {
 	M_PROLOG
 	M_ASSERT( !! client_ );
 	cout << "closing client connection ..." << endl;
-	int fileDescriptor = client_->get_file_descriptor();
-	_dispatcher.unregister_file_descriptor_handler( fileDescriptor );
-	_socket.shutdown_client( fileDescriptor );
+	_dispatcher.unregister_file_descriptor_handler( client_ );
+	_socket->shutdown_client( static_cast<int>( reinterpret_cast<int_native_t>( client_->data() ) ) );
 	cout << "client closed connection ..." << endl;
 	return;
 	M_EPILOG
@@ -182,7 +183,7 @@ void HServer::run( void ) {
 			cout << "starting dispatcher ..." << endl;
 			_dispatcher.run();
 			cout << "dispatcher finished ..." << endl;
-			_socket.close();
+			_socket->close();
 			cout << "socket closed ..." << endl;
 		} catch ( HOpenSSLException& e ) {
 			cout << e.what() << endl;
