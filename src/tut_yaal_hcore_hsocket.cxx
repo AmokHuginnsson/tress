@@ -164,7 +164,6 @@ void HServer::disconnect_client( HIODispatcher::stream_t& client_ ) {
 	M_ASSERT( !! client_ );
 	cout << "closing client connection ..." << endl;
 	_dispatcher.unregister_file_descriptor_handler( client_ );
-	_socket->shutdown_client( static_cast<int>( reinterpret_cast<int_native_t>( client_->data() ) ) );
 	cout << "client closed connection ..." << endl;
 	return;
 	M_EPILOG
@@ -268,15 +267,20 @@ void tut_yaal_hcore_hsocket::play_scenario( HSocket::socket_type_t type_,
 		bool nonBlockingServer_, bool nonBlockingClient_ ) {
 	char test_data[] = "Ala ma kota.";
 	const int size( static_cast<int>( sizeof ( test_data ) ) );
-	TUT_DECLARE( HServer serv( type_ | ( withSsl_ ? HSocket::TYPE::SSL_SERVER : HSocket::TYPE::DEFAULT ) | ( nonBlockingServer_ ? HSocket::TYPE::NONBLOCKING : HSocket::TYPE::DEFAULT ), 1 ); );
+	TUT_DECLARE( HServer serv( type_ | HSocket::TYPE::SERVER | ( withSsl_ ? HSocket::TYPE::SSL : HSocket::TYPE::DEFAULT ) | ( nonBlockingServer_ ? HSocket::TYPE::NONBLOCKING : HSocket::TYPE::DEFAULT ), 1 ); );
 	TUT_INVOKE( cout << sizeof ( serv ) << endl; );
-	TUT_DECLARE( HSocket client( type_ | ( withSsl_ ? HSocket::TYPE::SSL_CLIENT : HSocket::TYPE::DEFAULT ) | ( nonBlockingClient_ ? HSocket::TYPE::NONBLOCKING : HSocket::TYPE::DEFAULT ) ); );
+	TUT_DECLARE( HSocket client( type_ | HSocket::TYPE::CLIENT | ( withSsl_ ? HSocket::TYPE::SSL : HSocket::TYPE::DEFAULT ) | ( nonBlockingClient_ ? HSocket::TYPE::NONBLOCKING : HSocket::TYPE::DEFAULT ) ); );
 	TUT_INVOKE( serv.listen( path_, port_ ); );
 	try {
 		TUT_INVOKE( serv.start(); );
 		TUT_INVOKE( client.connect( path_, port_ ); );
 		TUT_EVAL( client.write( test_data, size ) );
 		TUT_INVOKE( serv.wait(); );
+	} catch ( HOpenSSLException const& e ) {
+		cout << e.what() << endl;
+		serv.do_not_signal();
+		TUT_INVOKE( serv.stop(); );
+		throw;
 	} catch ( HSocketException const& e ) {
 		cout << e.what() << endl;
 		serv.do_not_signal();
