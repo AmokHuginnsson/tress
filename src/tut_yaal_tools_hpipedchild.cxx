@@ -85,9 +85,9 @@ TUT_UNIT_TEST( "spawn, write and read (stdout)" )
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
 	pc.spawn( CHILD );
 	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
-	pc << MSG_OUT << endl;
+	pc.in() << MSG_OUT << endl;
 	HString ack;
-	TUT_INVOKE( cout << pc.read_until( ack ) << endl; );
+	TUT_INVOKE( cout << pc.out().read_until( ack ) << endl; );
 	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
 	pc.finish();
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
@@ -98,10 +98,9 @@ TUT_UNIT_TEST( "spawn, write and read (stderr)" )
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
 	pc.spawn( CHILD );
 	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
-	pc << MSG_ERR << endl;
-	pc.set_csoi( HPipedChild::STREAM::ERR );
+	pc.in() << MSG_ERR << endl;
 	HString ack;
-	TUT_INVOKE( cout << pc.read_until( ack ) << endl; );
+	TUT_INVOKE( cout << pc.err().read_until( ack ) << endl; );
 	ENSURE_EQUALS( "bad ack ERR", ack, ACK_ERR );
 	pc.finish();
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );

@@ -113,7 +113,7 @@ HString tut_yaal_hcore_hnumber::read_result( void ) {
 	HString result;
 	do {
 		line.clear();
-		_bc.read_until( line );
+		_bc.out().read_until( line );
 		result += line;
 		result.trim( "\\" );
 	} while ( ! line.is_empty() && ( line[line.get_length() - 1] == '\\' ) );
@@ -811,7 +811,7 @@ TUT_UNIT_TEST( "addition" )
 		HNumber b( random_real() );
 		as = a.to_string();
 		bs = b.to_string();
-		_bc << as << '+' << bs << endl;
+		_bc.in() << as << '+' << bs << endl;
 		res = read_result();
 		msg = "addition of random a = " + as + " and b = " + bs + " failed";
 		ENSURE_EQUALS( msg, ( a + b ).to_string(), HNumber( res ).to_string() );
@@ -850,13 +850,13 @@ TUT_UNIT_TEST( "multiplication" )
 	HString res;
 	HString as;
 	HString bs;
-	_bc << "scale=100" << endl;
+	_bc.in() << "scale=100" << endl;
 	for ( int long i = 0; i < 1000; ++ i ) {
 		as = random_real();
 		bs = random_real();
 		HNumber a( as );
 		HNumber b( bs );
-		_bc << as << "* " << bs << endl;
+		_bc.in() << as << "* " << bs << endl;
 		res = read_result();
 		msg = "multiplication of random a = " + as + " and b = " + bs + " failed";
 
@@ -880,7 +880,7 @@ TUT_UNIT_TEST( "substraction" )
 		as = a.to_string();
 		bs = b.to_string();
 		msg = "substraction of random a = " + as + " and b = " + bs + " failed";
-		_bc << as << "- " << bs << endl;
+		_bc.in() << as << "- " << bs << endl;
 		res = read_result();
 		ENSURE_EQUALS( msg, ( a - b ).to_string(), HNumber( res ).to_string() );
 		msg += "(R)";
@@ -1051,7 +1051,7 @@ TUT_UNIT_TEST( "division" )
 	HString as;
 	HString bs;
 	int const M = 16;
-	_bc << "scale=" << M + M << endl;
+	_bc.in() << "scale=" << M + M << endl;
 
 	for ( int dividendPos( 0 ); dividendPos <= dividendLen; ++ dividendPos ) {
 		for ( int divisorPos( 0 ); divisorPos <= divisorLen; ++ divisorPos ) {
@@ -1069,7 +1069,7 @@ TUT_UNIT_TEST( "division" )
 			b.set_precision( M * 2 );
 			as = a.to_string();
 			bs = b.to_string();
-			_bc << as << "/ " << bs << endl;
+			_bc.in() << as << "/ " << bs << endl;
 			res = read_result();
 			msg = "division of large leaf a = " + as + " and b = " + bs + " failed";
 			HNumber div = a / b;
@@ -1086,7 +1086,7 @@ TUT_UNIT_TEST( "division" )
 	}
 
 	static int const scale( 1000 );
-	_bc << "scale=" << scale << endl;
+	_bc.in() << "scale=" << scale << endl;
 	for ( int long i = 0; i < 1000; ++ i ) {
 		HNumber a( random_real(), scale );
 		HNumber b( random_real(), scale );
@@ -1094,7 +1094,7 @@ TUT_UNIT_TEST( "division" )
 			++ b;
 		as = a.to_string();
 		bs = b.to_string();
-		_bc << as << "/ " << bs << endl;
+		_bc.in() << as << "/ " << bs << endl;
 		res = read_result();
 		msg = "division of random a = " + as + " and b = " + bs + " failed";
 		HNumber div( a / b );
@@ -1229,7 +1229,7 @@ void tut_yaal_hcore_hnumber::run_square_test( HString const& random_, int natura
 	if ( val < 0 )
 		val = -val;
 	s = val.to_string();
-	_bc << "sqrt(" << s << ")" << endl;
+	_bc.in() << "sqrt(" << s << ")" << endl;
 	res = read_result();
 	msg = "square root of random val = " + s + " failed";
 	HNumber root( square_root( val ) );
@@ -1273,7 +1273,7 @@ TUT_UNIT_TEST( "square_root<HNumber>()" )
 	SQRT_TEST( 100, 10 );
 	_bc.spawn( BC_PATH );
 	static int const naturalScale = 100;
-	_bc << "scale=" << naturalScale << endl;
+	_bc.in() << "scale=" << naturalScale << endl;
 	run_square_test( "1.25201235616650170145176377062932385805", naturalScale );
 	run_square_test( "36", naturalScale );
 	run_square_test( "32248562581.422101455262531", naturalScale );
@@ -1596,7 +1596,7 @@ TUT_UNIT_TEST( 50, "speed" )
 	double long bc( 0 );
 	HString res; {
 		HClock c;
-		_bc << "3^133333" << endl;
+		_bc.in() << "3^133333" << endl;
 		res = read_result();
 		clog << "*speed* bc multiplication = " << static_cast<int long>( bc = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
@@ -1610,8 +1610,8 @@ TUT_UNIT_TEST( 50, "speed" )
 	myRes = n.to_string();
 	/**/ {
 		HClock c;
-		_bc << "scale=10000" << endl;
-		_bc << "sqrt(91)" << endl;
+		_bc.in() << "scale=10000" << endl;
+		_bc.in() << "sqrt(91)" << endl;
 		res = read_result();
 		clog << "*speed* bc square root = " << static_cast<int long>( bc = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
 	}
