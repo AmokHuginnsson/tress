@@ -1290,6 +1290,11 @@ TUT_UNIT_TEST( "natural_expotential<HNumber>()" )
 	ENSURE_EQUALS( "natural_expotential(1) failed", natural_expotential( HNumber( number::_one_, number::E.get_precision() - 1 ) ), number::E );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "natural_logarithm<HNumber>()" )
+	ENSURE_EQUALS( "natural_logarithm(1) failed", natural_logarithm( HNumber( number::_one_ ) ), number::_zero_ );
+	ENSURE_EQUALS( "natural_logarithm(2.718281828459045) failed", natural_logarithm( HNumber( "2.718281828459045" ) ), HNumber( "0.9999999999999999134157889710887611625720332265832477611693629940633276151012361312251321179795949647" ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "abs<HNumber>()" )
 	HNumber n0( "0" );
 	ENSURE_EQUALS( "abs(0) failed", n0.abs(), "0" );
@@ -1570,9 +1575,6 @@ TUT_UNIT_TEST( "round<HNumber>()" )
 	ENSURE_EQUALS( "round( 999.9999999998, 0 ) failed", x0.round( 0 ), "1000" );
 	HNumber x1( "999.9999999998" );
 	ENSURE_EQUALS( "round( 999.9999999998, 0 ) failed", x1.round( 9 ), "1000" );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "log10<HNumber>()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "asin<HNumber>()" )
