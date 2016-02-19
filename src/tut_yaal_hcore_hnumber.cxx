@@ -1288,11 +1288,11 @@ TUT_UNIT_TEST( "square_root<HNumber>()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "natural_expotential<HNumber>()" )
-	ENSURE_EQUALS( "natural_expotential(1) failed", natural_expotential( HNumber( number::_one_, number::E.get_precision() - 1 ) ), number::E );
+	ENSURE_EQUALS( "natural_expotential(1) failed", natural_expotential( HNumber( number::N1, number::E.get_precision() - 1 ) ), number::E );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "natural_logarithm<HNumber>()" )
-	ENSURE_EQUALS( "natural_logarithm(1) failed", natural_logarithm( HNumber( number::_one_ ) ), number::_zero_ );
+	ENSURE_EQUALS( "natural_logarithm(1) failed", natural_logarithm( HNumber( number::N1 ) ), number::N0 );
 	ENSURE_EQUALS( "natural_logarithm(2.718281828459045) failed", natural_logarithm( HNumber( "2.718281828459045" ) ), HNumber( "0.9999999999999999134157889710887611625720332265832477611693629940633276151012361312251321179795949647" ) );
 TUT_TEARDOWN()
 
