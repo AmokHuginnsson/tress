@@ -1296,6 +1296,11 @@ TUT_UNIT_TEST( "natural_logarithm<HNumber>()" )
 	ENSURE_EQUALS( "natural_logarithm(2.718281828459045) failed", natural_logarithm( HNumber( "2.718281828459045" ) ), HNumber( "0.9999999999999999134157889710887611625720332265832477611693629940633276151012361312251321179795949647" ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "sinus<HNumber>()" )
+	ENSURE_EQUALS( "sinus( 0 ) failed", sinus( HNumber( number::N0 ) ), number::N0 );
+	ENSURE_EQUALS( "sinus( 1 ) failed", sinus( HNumber( number::N1 ) ), HNumber( "0.8414709848078965066525023216302989996225630607983710656727517099919104043912396689486397435430526959" ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "abs<HNumber>()" )
 	HNumber n0( "0" );
 	ENSURE_EQUALS( "abs(0) failed", n0.abs(), "0" );
@@ -1320,16 +1325,7 @@ TUT_UNIT_TEST( "abs<HNumber>()" )
 	ENSURE_EQUALS( "abs(-1000000000000000000000000000.123) failed", n9.abs(), "1000000000000000000000000000.123" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "ln<HNumber>()" )
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "exp<HNumber>()" )
-TUT_TEARDOWN()
-
 TUT_UNIT_TEST( "pow<HNumber>()" )
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "sin<HNumber>()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "tan<HNumber>()" )
@@ -1578,6 +1574,7 @@ TUT_UNIT_TEST( "round<HNumber>()" )
 	ENSURE_EQUALS( "round( 999.9999999998, 0 ) failed", x1.round( 9 ), "1000" );
 TUT_TEARDOWN()
 
+#if 0
 TUT_UNIT_TEST( "asin<HNumber>()" )
 TUT_TEARDOWN()
 
@@ -1589,6 +1586,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "tanh<HNumber>()" )
 TUT_TEARDOWN()
+#endif
 
 TUT_UNIT_TEST( 50, "speed" )
 	double long y( 0 );
