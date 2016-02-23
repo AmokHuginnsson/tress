@@ -1298,8 +1298,15 @@ TUT_UNIT_TEST( "natural_logarithm<HNumber>()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "sinus<HNumber>()" )
-	ENSURE_EQUALS( "sinus( 0 ) failed", sinus( HNumber( number::N0 ) ), number::N0 );
-	ENSURE_EQUALS( "sinus( 1 ) failed", sinus( HNumber( number::N1 ) ), HNumber( "0.8414709848078965066525023216302989996225630607983710656727517099919104043912396689486397435430526959" ) );
+	ENSURE_EQUALS( "sinus( 0 ) failed", sinus( number::N0 ), number::N0 );
+	ENSURE_EQUALS( "sinus( 1 ) failed", sinus( number::N1 ), HNumber( "0.8414709848078965066525023216302989996225630607983710656727517099919104043912396689486397435430526959" ) );
+	ENSURE_EQUALS( "sinus( PI / 2 ) failed", sinus( HNumber( number::PI() * number::N0_5, HNumber::DEFAULT_PRECISION ) ), number::N1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "cosinus<HNumber>()" )
+	ENSURE_EQUALS( "cosinus( PI / 2 ) failed", cosinus( HNumber( number::PI() * number::N0_5, HNumber::DEFAULT_PRECISION ) ), number::N0 );
+	ENSURE_EQUALS( "cosinus( 0 ) failed", cosinus( number::N0 ), number::N1 );
+	ENSURE_EQUALS( "cosinus( 1 ) failed", cosinus( number::N1 ), HNumber( "0.5403023058681397174009366074429766037323104206179222276700972553811003947744717645179518560871830893" ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "factorial<HNumber>()" )
