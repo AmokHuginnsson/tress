@@ -1111,6 +1111,13 @@ TUT_UNIT_TEST( "division" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "modulo" )
+	ENSURE_EQUALS( "modulo failed 18.5%4.2", ( "18.5"_yn % "4.2"_yn ).round( 2 ), "1.7"_yn );
+	ENSURE_EQUALS( "modulo failed -18.5%4.2", ( "-18.5"_yn % "4.2"_yn ).round( 2 ), "2.5"_yn );
+	ENSURE_EQUALS( "modulo failed 18.5%-4.2", ( "18.5"_yn % "-4.2"_yn ).round( 2 ), "-2.5"_yn );
+	ENSURE_EQUALS( "modulo failed -18.5%-4.2", ( "-18.5"_yn % "-4.2"_yn ).round( 2 ), "-1.7"_yn );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "power" )
 	ENSURE_EQUALS( "power failed 0^7", HNumber( "0" ) ^ 7, HNumber( 0 ) );
 	ENSURE_EQUALS( "power failed 7^0", HNumber( "7" ) ^ 0, HNumber( 1 ) );
