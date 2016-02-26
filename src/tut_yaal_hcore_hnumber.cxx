@@ -1327,7 +1327,11 @@ TUT_UNIT_TEST( "cotangens<HNumber>()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "factorial<HNumber>()" )
-	ENSURE_EQUALS( "bad 52! factorial", factorial( 52 ), HNumber( "80658175170943878571660636856403766975289505440883277824000000000000" ) );
+	ENSURE_EQUALS( "bad 52! factorial", number::factorial( 52 ), HNumber( "80658175170943878571660636856403766975289505440883277824000000000000" ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "binomial_coefficient<HNumber>()" )
+	ENSURE_EQUALS( "bad binomial(52, 1&)", number::binomial_coefficient( 52, 17 ), HNumber( "21945588357420" ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "PI" )
