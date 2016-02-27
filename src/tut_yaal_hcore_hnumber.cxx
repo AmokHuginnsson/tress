@@ -1309,6 +1309,11 @@ TUT_UNIT_TEST( "square_root<HNumber>()" )
 	run_square_test( "0.4844068973230442667214", naturalScale );
 	run_square_test( "416269.494031375939", naturalScale );
 	run_square_test( "10046148.0689563684120471", naturalScale );
+	run_square_test( "121522134611684948902622334252992445.452677482636796628982984168060226", naturalScale );
+	run_square_test( "804912282515517116.7410244038686512145649885329", naturalScale );
+	run_square_test( "927700166626441624218662313139377560.70925482348977996901803435644603472", naturalScale );
+	run_square_test( "610838454.769697747143872679677512124566762", naturalScale );
+	run_square_test( "0.9999999999999999999999999800000000000000000000000001", naturalScale );
 	for ( int long i = 0; i < 256; ++ i ) {
 		run_square_test( random_real(), naturalScale );
 	}
