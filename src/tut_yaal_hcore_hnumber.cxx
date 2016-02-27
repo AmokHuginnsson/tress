@@ -136,7 +136,7 @@ HString const& tut_yaal_hcore_hnumber::expand_leafs( HString const& template_ ) 
 	return ( _cache );
 }
 
-TUT_TEST_GROUP( tut_yaal_hcore_hnumber, "yaal::hcore::HNumber" );
+TUT_TEST_GROUP( tut_yaal_hcore_hnumber, "yaal::hcore::HNumber", 60 );
 
 TUT_UNIT_TEST( "default constructor / check default precision" )
 	HNumber n;
@@ -607,6 +607,25 @@ TUT_UNIT_TEST( "set/get precision" )
 	n.set_precision( F );
 	ENSURE_EQUALS( "bad modified precision", s.get_precision(), M );
 	HNumber::DEFAULT_PRECISION = SAVED;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "differs_at()" )
+	ENSURE_EQUALS( differs_at( "0"_yn, "0"_yn ), meta::max_signed<HNumber::integer_t>::value );
+	ENSURE_EQUALS( differs_at( "0.1"_yn, "0"_yn ), 0 );
+	ENSURE_EQUALS( differs_at( "0"_yn, "0.1"_yn ), 0 );
+	ENSURE_EQUALS( differs_at( "0"_yn, "0.000000000000000001"_yn ), 17 );
+	ENSURE_EQUALS( differs_at( "1"_yn, "0"_yn ), -1 );
+	ENSURE_EQUALS( differs_at( "1"_yn, ".9"_yn ), 0 );
+	ENSURE_EQUALS( differs_at( "10"_yn, "9.9"_yn ), 0 );
+	ENSURE_EQUALS( differs_at( "1"_yn, ".99"_yn ), 1 );
+	ENSURE_EQUALS( differs_at( "1"_yn, ".999"_yn ), 2 );
+	ENSURE_EQUALS( differs_at( "1"_yn, ".999999999999999999"_yn ), 17 );
+	ENSURE_EQUALS( differs_at( "10"_yn, "0"_yn ), -2 );
+	ENSURE_EQUALS( differs_at( "10"_yn, "-1"_yn ), -2 );
+	ENSURE_EQUALS( differs_at( "10"_yn, "-10"_yn ), -2 );
+	ENSURE_EQUALS( differs_at( "1000000000"_yn, "-100000000000000"_yn ), -15 );
+	ENSURE_EQUALS( differs_at( "500000000000001"_yn, "-500000000000001"_yn ), -16 );
+	ENSURE_EQUALS( differs_at( "0.999"_yn, "-0.999"_yn ), -1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "assignment operator" )
@@ -1642,7 +1661,7 @@ TUT_UNIT_TEST( "tanh<HNumber>()" )
 TUT_TEARDOWN()
 #endif
 
-TUT_UNIT_TEST( 50, "speed" )
+TUT_UNIT_TEST( "speed" )
 	double long y( 0 );
 	HNumber n( 3 );
 	TIME_CONSTRAINT_EXEMPT(); {
