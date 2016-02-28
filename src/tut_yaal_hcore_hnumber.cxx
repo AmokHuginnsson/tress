@@ -1353,7 +1353,18 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "arcus_sinus<HNumber>()" )
 	ENSURE_EQUALS( "arcus_sinus( 0 ) failed", arcus_sinus( number::N0 ), number::N0 );
 	ENSURE_EQUALS( "arcus_sinus( 1 ) failed", arcus_sinus( number::N1 ), HNumber( number::PI() * number::N0_5, number::N1.get_precision() ) );
+	ENSURE_EQUALS( "arcus_sinus( -1 ) failed", arcus_sinus( -number::N1 ), -HNumber( number::PI() * number::N0_5, number::N1.get_precision() ) );
 	ENSURE_EQUALS( "arcus_sinus( 0.99999999999999999999999999 ) failed", arcus_sinus( "0.99999999999999999999999999"_yn ), "1.5707963267947551978750843821348712732260458787494981853792011272859745619531463314215728063244969385" );
+	ENSURE_EQUALS( "arcus_sinus( 0.45678901234567890123456789 ) failed", arcus_sinus( "0.45678901234567890123456789"_yn ), "0.4743822645846968329306849218025262800833506446597578725948668998428366414475865862867318616900606472" );
+	ENSURE_EQUALS( "arcus_sinus( -0.45678901234567890123456789 ) failed", arcus_sinus( "-0.45678901234567890123456789"_yn ), "-0.4743822645846968329306849218025262800833506446597578725948668998428366414475865862867318616900606472" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "arcus_cosinus<HNumber>()" )
+	ENSURE_EQUALS( "arcus_cosinus( 0 ) failed", arcus_cosinus( number::N0 ), HNumber( number::PI() * number::N0_5, number::N1.get_precision() ) );
+	ENSURE_EQUALS( "arcus_cosinus( 1 ) failed", arcus_cosinus( number::N1 ), number::N0 );
+	ENSURE_EQUALS( "arcus_cosinus( -1 ) failed", arcus_cosinus( -number::N1 ), HNumber( number::PI(), number::N1.get_precision() ) );
+	ENSURE_EQUALS( "arcus_cosinus( 0.45678901234567890123456789 ) failed", arcus_cosinus( "0.45678901234567890123456789"_yn ), "1.0964140622101997863006367698372251620152340550277950378926053963110715616955179130272855509809978868" );
+	ENSURE_EQUALS( "arcus_cosinus( -0.45678901234567890123456789 ) failed", arcus_cosinus( "-0.45678901234567890123456789"_yn ), "2.0451785913795934521620066134422777221819353443473107830823391959967448445906910856007492743611191812" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "arcus_tangens<HNumber>()" )
