@@ -61,10 +61,10 @@ TUT_UNIT_TEST( "(transparent) insert - copy count" )
 		item_t::reset();
 		mmt_item_t m;
 		item_t i( 1 );
-		m.insert( make_pair<int const, item_t>( 1, i ) );
+		m.insert( make_pair( 1, i ) );
 		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
 		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
-		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
 	}
 TUT_TEARDOWN()
 
@@ -73,10 +73,10 @@ TUT_UNIT_TEST( "(transparent) insert - move count" )
 		item_t::reset();
 		mmt_item_t m;
 		item_t i( 1 );
-		m.insert( make_pair<int const, item_t>( 1, yaal::move( i ) ) );
+		m.insert( make_pair( 1, yaal::move( i ) ) );
 		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
 		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
-		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 3 );
 	}
 	/* from rvalue */ {
 		item_t::reset();
@@ -93,10 +93,10 @@ TUT_UNIT_TEST( "(packed) insert - copy count" )
 		item_t::reset();
 		mmp_item_t m;
 		item_t i( 1 );
-		m.insert( make_pair<int const, item_t>( 1, i ) );
+		m.insert( make_pair( 1, i ) );
 		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
 		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
-		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
 	}
 TUT_TEARDOWN()
 
@@ -105,10 +105,10 @@ TUT_UNIT_TEST( "(packed) insert - move count" )
 		item_t::reset();
 		mmp_item_t m;
 		item_t i( 1 );
-		m.insert( make_pair<int const, item_t>( 1, yaal::move( i ) ) );
+		m.insert( make_pair( 1, yaal::move( i ) ) );
 		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
 		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
-		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 3 );
 	}
 	/* from rvalue */ {
 		item_t::reset();
@@ -125,10 +125,10 @@ TUT_UNIT_TEST( "(transparent) push_back - copy count" )
 		item_t::reset();
 		mmt_item_t m;
 		item_t i( 1 );
-		m.push_back( make_pair<int const, item_t>( 1, i ) );
+		m.push_back( make_pair( 1, i ) );
 		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
 		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
-		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
 	}
 TUT_TEARDOWN()
 
@@ -137,10 +137,10 @@ TUT_UNIT_TEST( "(transparent) push_back - move count" )
 		item_t::reset();
 		mmt_item_t m;
 		item_t i( 1 );
-		m.push_back( make_pair<int const, item_t>( 1, yaal::move( i ) ) );
+		m.push_back( make_pair( 1, yaal::move( i ) ) );
 		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
 		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
-		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 3 );
 	}
 	/* from rvalue */ {
 		item_t::reset();
@@ -157,10 +157,10 @@ TUT_UNIT_TEST( "(packed) push_back - copy count" )
 		item_t::reset();
 		mmp_item_t m;
 		item_t i( 1 );
-		m.push_back( make_pair<int const, item_t>( 1, i ) );
+		m.push_back( make_pair( 1, i ) );
 		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
 		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
-		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
 	}
 TUT_TEARDOWN()
 
@@ -169,10 +169,10 @@ TUT_UNIT_TEST( "(packed) push_back - move count" )
 		item_t::reset();
 		mmp_item_t m;
 		item_t i( 1 );
-		m.push_back( make_pair<int const, item_t>( 1, yaal::move( i ) ) );
+		m.push_back( make_pair( 1, yaal::move( i ) ) );
 		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
 		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
-		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 3 );
 	}
 	/* from rvalue */ {
 		item_t::reset();
@@ -189,10 +189,10 @@ TUT_UNIT_TEST( "(transparent) push_front - copy count" )
 		item_t::reset();
 		mmt_item_t m;
 		item_t i( 1 );
-		m.push_front( make_pair<int const, item_t>( 1, i ) );
+		m.push_front( make_pair( 1, i ) );
 		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
 		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
-		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
 	}
 TUT_TEARDOWN()
 
@@ -201,10 +201,10 @@ TUT_UNIT_TEST( "(transparent) push_front - move count" )
 		item_t::reset();
 		mmt_item_t m;
 		item_t i( 1 );
-		m.push_front( make_pair<int const, item_t>( 1, yaal::move( i ) ) );
+		m.push_front( make_pair( 1, yaal::move( i ) ) );
 		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
 		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
-		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 3 );
 	}
 	/* from rvalue */ {
 		item_t::reset();
@@ -221,10 +221,10 @@ TUT_UNIT_TEST( "(packed) push_front - copy count" )
 		item_t::reset();
 		mmp_item_t m;
 		item_t i( 1 );
-		m.push_front( make_pair<int const, item_t>( 1, i ) );
+		m.push_front( make_pair( 1, i ) );
 		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 1 );
 		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
-		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 1 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
 	}
 TUT_TEARDOWN()
 
@@ -233,10 +233,10 @@ TUT_UNIT_TEST( "(packed) push_front - move count" )
 		item_t::reset();
 		mmp_item_t m;
 		item_t i( 1 );
-		m.push_front( make_pair<int const, item_t>( 1, yaal::move( i ) ) );
+		m.push_front( make_pair( 1, yaal::move( i ) ) );
 		ENSURE_EQUALS( "bad number of copies", item_t::get_copy_count(), 0 );
 		ENSURE_EQUALS( "bad instance count", item_t::get_instance_count(), 2 );
-		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 2 );
+		ENSURE_EQUALS( "bad move count", item_t::get_move_count(), 3 );
 	}
 	/* from rvalue */ {
 		item_t::reset();
