@@ -387,13 +387,6 @@ char const progCompileErr40[] =
 	"}\n"
 ;
 
-char const progCompileErr41[] =
-	"class A : B {_x=0;}\n"
-	"class B : C {_y=0;}\n"
-	"class C : A {_z=0;}\n"
-	"main(){}"
-;
-
 char const progCompileErr42[] =
 	"class A {_x=0;}\n"
 	"class A {_y=0;}\n"
@@ -684,7 +677,6 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr38,
 		progCompileErr39,
 		progCompileErr40,
-		progCompileErr41,
 		progCompileErr42,
 		progCompileErr43,
 		progCompileErr44,
@@ -766,7 +758,6 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 10, 2, 2 },   // 38
 		{ 10, 2, 2 },   // 39
 		{ 52, 5, 4 },   // 40
-		{ 10, 1, 11 },  // 41
 		{ 22, 2, 7 },   // 42
 		{ 10, 1, 11 },  // 43
 		{ 0, 1, 1 },    // 44
@@ -812,6 +803,26 @@ TUT_UNIT_TEST( "report compilation error" )
 			test_compile( *prog, *e, static_cast<int>( prog - begin( progCompileErr ) ) );
 		}
 	}
+TUT_TEARDOWN()
+
+
+TUT_UNIT_TEST( "detect derivation cycle" )
+	char const code[] =
+		"class A : B {_x=0;}\n"
+		"class B : C {_y=0;}\n"
+		"class C : A {_z=0;}\n"
+		"main(){}"
+	;
+	HStringStream prog( code );
+	HHuginn h;
+	h.load( prog );
+	h.preprocess();
+	ENSURE( "failed to parse valid", h.parse() );
+	ENSURE_NOT( "compiled invalid", h.compile() );
+	ENSURE( "reporting error position failed", ( h.error_position() == 10 ) || ( h.error_position() == 30 ) || ( h.error_position() == 50 ) );
+	ENSURE( "reporting error line failed", ( h.error_coordinate().line() == 1 ) || ( h.error_coordinate().line() == 2 ) || ( h.error_coordinate().line() == 3 ) );
+	ENSURE_EQUALS( "reporting error column failed", h.error_coordinate().column(), 11 );
+	clog << h.error_message() << endl;
 TUT_TEARDOWN()
 
 }
