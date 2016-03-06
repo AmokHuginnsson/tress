@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_yaal_tools_util_escape.cxx - this file is integral part of `tress' project.
+	tut_yaal_tools_util.cxx - this file is integral part of `tress' project.
 
   i.  You may not make any changes in Copyright information.
   ii. You must attach Copyright information to any part of every copy
@@ -26,7 +26,9 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
+#include <yaal/tools/util.hxx>
 #include <yaal/tools/escape.hxx>
+#include <yaal/tools/hexpression.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -39,10 +41,10 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-TUT_SIMPLE_MOCK( tut_yaal_tools_util_escape );
-TUT_TEST_GROUP( tut_yaal_tools_util_escape, "yaal::tools::util::escape" );
+TUT_SIMPLE_MOCK( tut_yaal_tools_util );
+TUT_TEST_GROUP( tut_yaal_tools_util, "yaal::tools::util" );
 
-TUT_UNIT_TEST( "EscapeTable constrctor" )
+TUT_UNIT_TEST( "(escape) EscapeTable constrctor" )
 	ENSURE_THROW( "bad 1 parameter accepted", EscapeTable et( NULL, 1, "n", 1 ), HFailedAssertion );
 	ENSURE_THROW( "bad 3 parameter accepted", EscapeTable et( "\n", 1, NULL, 1 ), HFailedAssertion );
 	ENSURE_THROW( "size mismatch accepted", EscapeTable et( "\n", 1, "nm", 2 ), HFailedAssertion );
@@ -82,6 +84,16 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "unescape_copy with escaper as literal" )
 	ENSURE_EQUALS( "unescaping (copy) with escaper as literal failed",
 			unescape_copy( "Alan\\nna\\nkontach.", EscapeTable( "\n", 1, "n", 1 ) ), "Alan\nna\nkontach." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(atof_ex) complex and valid number" )
+	HString formula = "2*(3+5)/sin(3.1415926535/2)";
+	ENSURE_DISTANCE ( "Wrong counting.", atof_ex ( formula, true ), 16.L, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "(atof_ex) simple but invalid number" )
+	HString formula = "4/e";
+	ENSURE_THROW( "invalid formula accepted", atof_ex( formula, true ), HExpressionException );
 TUT_TEARDOWN()
 
 }
