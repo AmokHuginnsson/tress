@@ -69,9 +69,11 @@ TUT_UNIT_TEST( "load external library and resolve symbol" )
 	ENSURE_EQUALS( "cound not utilize plugin", my_sum( T1, T2 ), T1 + T2 );
 TUT_TEARDOWN()
 
-#ifndef __HOST_OS_TYPE_CYGWIN__
-/* *FIXME TODO*: Try to enable on Cygwin eventually. */
 TUT_UNIT_TEST( "resolve symbol from self" )
+#ifdef __HOST_OS_TYPE_CYGWIN__
+/* *FIXME TODO*: Try to enable on Cygwin eventually. */
+	SKIP( "Cygwin platform error." );
+#endif /* #ifdef __HOST_OS_TYPE_CYGWIN__ */
 	int const T1 = 7;
 	int const T2 = 13;
 	HPlugin p;
@@ -80,7 +82,6 @@ TUT_UNIT_TEST( "resolve symbol from self" )
 	p.resolve( MAKE_C_STRING( SELF_SUMATOR ), my_sum );
 	ENSURE_EQUALS( "cound not utilise self-contained symbols", my_sum( T1, T2 ), T1 + T2 );
 TUT_TEARDOWN()
-#endif /* #ifndef __HOST_OS_TYPE_CYGWIN__ */
 
 TUT_UNIT_TEST( "load non-existing plugin" )
 	HPlugin p;

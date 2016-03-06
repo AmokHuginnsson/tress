@@ -40,19 +40,34 @@ class reporter_google : public tut::callback {
 	group_names_t _groupNames;
 public:
 	reporter_google()
-		: _os( std::cout ), _mutex(), _ls( std::cerr ),
-		_run( 0 ), _testRunner( NULL ), _notPassed(), _groupNames() {
+		: _os( std::cout )
+		, _mutex()
+		, _ls( std::cerr )
+		, _run( 0 )
+		, _testRunner( NULL )
+		, _notPassed()
+		, _groupNames() {
 		clear();
 	}
 
 	reporter_google( std::ostream& out )
-		: _os( out ), _mutex(), _ls( &out == &std::cout ? std::cerr : std::cout ),
-		_run( 0 ), _testRunner( NULL ), _notPassed(), _groupNames() {
+		: _os( out )
+		, _mutex()
+		, _ls( &out == &std::cout ? std::cerr : std::cout )
+		, _run( 0 )
+		, _testRunner( NULL )
+		, _notPassed()
+		, _groupNames() {
 	}
 
 	reporter_google( std::ostream& out, stream_type& logger )
-		: _os( out ), _mutex(), _ls( logger ),
-		_run( 0 ), _testRunner( NULL ), _notPassed(), _groupNames() {
+		: _os( out )
+		, _mutex()
+		, _ls( logger )
+		, _run( 0 )
+		, _testRunner( NULL )
+		, _notPassed()
+		, _groupNames() {
 	}
 
 	virtual void set_test_runner( test_runner* testRunner_ ) {

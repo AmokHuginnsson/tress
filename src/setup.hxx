@@ -46,6 +46,7 @@ struct OSetup {
 	bool _exit;
 	bool _fancy;
 	bool _color;
+	bool _forceRunAll;
 	bool _selftest;
 	int _testNumber;
 	int _jobs;

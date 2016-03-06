@@ -42,9 +42,11 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_tools_halarm );
 TUT_TEST_GROUP( tut_yaal_tools_halarm, "yaal::tools::HAlarm" );
 
-#ifndef __HOST_OS_TYPE_CYGWIN__
-/* *FIXME TODO*: Try to enable on Cygwin eventually. */
 TUT_UNIT_TEST( "alarm wake" )
+#ifdef __HOST_OS_TYPE_CYGWIN__
+/* *FIXME TODO*: Try to enable on Cygwin eventually. */
+	SKIP( "Cygwin platform error." );
+#endif /* #ifdef __HOST_OS_TYPE_CYGWIN__ */
 	TIME_CONSTRAINT_EXEMPT();
 	static int const ALARM_TIME( 2000 );
 	HAlarm alarm( ALARM_TIME );
@@ -55,7 +57,6 @@ TUT_UNIT_TEST( "alarm wake" )
 	}
 	ENSURE_EQUALS( "alarm failed to interrupt sleep", interrupted, true );
 TUT_TEARDOWN()
-#endif /* #ifndef __HOST_OS_TYPE_CYGWIN__ */
 
 TUT_UNIT_TEST( "alarm deregistered" )
 	TIME_CONSTRAINT_EXEMPT();

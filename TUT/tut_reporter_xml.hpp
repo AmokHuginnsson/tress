@@ -20,10 +20,10 @@ class reporter_xml : public tut::callback {
 	typedef std::vector<tut::test_result> TestResults;
 	typedef std::map<std::string, TestResults> TestGroups;
 
-	TestGroups all_tests_;   /// holds all test results
-	const std::string filename_;   /// filename base
+	TestGroups _allTests;   /// holds all test results
+	const std::string _filename;   /// filename base
 	typedef std::unique_ptr<std::ostream> stream_t;
-	stream_t stream_;
+	stream_t _stream;
 
 	/**
 	 * \brief Builds "testcase" XML entity with given parameters
@@ -91,44 +91,47 @@ class reporter_xml : public tut::callback {
 	}
 
 public:
-	int ok_count;             /// number of passed tests
-	int exceptions_count;     /// number of tests that threw exceptions
-	int failures_count;       /// number of tests that failed
-	int terminations_count;   /// number of tests that would terminate
-	int warnings_count;       /// number of tests where destructors threw an exception
+	int _okCount;             /// number of passed tests
+	int _exceptionsCount;     /// number of tests that threw exceptions
+	int _failuresCount;       /// number of tests that failed
+	int _skippedCount;        /// number of tests that were skipped
+	int _terminationsCount;   /// number of tests that would terminate
+	int _warningsCount;       /// number of tests where destructors threw an exception
 
 	/**
 	 * \brief Default constructor
 	 * @param filename base filename
 	 */
 	reporter_xml( const std::string& filename )
-		: all_tests_(),
-		filename_( filename ),
-		stream_( new std::ofstream( filename_.c_str() ) ),
-		ok_count( 0 ),
-		exceptions_count( 0 ),
-		failures_count( 0 ),
-		terminations_count( 0 ),
-		warnings_count( 0 ) {
-		if ( !stream_->good() ) {
-			throw tut_error( "Cannot open output file `" + filename_ + "`" );
+		: _allTests()
+		, _filename( filename )
+		, _stream( new std::ofstream( _filename.c_str() ) )
+		, _okCount( 0 )
+		, _exceptionsCount( 0 )
+		, _failuresCount( 0 )
+		, _skippedCount( 0 )
+		, _terminationsCount( 0 )
+		, _warningsCount( 0 ) {
+		if ( !_stream->good() ) {
+			throw tut_error( "Cannot open output file `" + _filename + "`" );
 		}
 	}
 
 	reporter_xml( std::ostream& stream )
-		: all_tests_(),
-		filename_(),
-		stream_( &stream ),
-		ok_count( 0 ),
-		exceptions_count( 0 ),
-		failures_count( 0 ),
-		terminations_count( 0 ),
-		warnings_count( 0 )
-		  {}
+		: _allTests()
+		, _filename()
+		, _stream( &stream )
+		, _okCount( 0 )
+		, _exceptionsCount( 0 )
+		, _failuresCount( 0 )
+		, _skippedCount( 0 )
+		, _terminationsCount( 0 )
+		, _warningsCount( 0 ) {
+	}
 
 	~reporter_xml() {
-		if ( filename_.empty() ) {
-			stream_.release();
+		if ( _filename.empty() ) {
+			_stream.release();
 		}
 	}
 
@@ -137,12 +140,13 @@ public:
 	 * This function is called before the first test is executed. It initializes counters.
 	 */
 	virtual void run_started( int, int ) {
-		ok_count = 0;
-		exceptions_count = 0;
-		failures_count = 0;
-		terminations_count = 0;
-		warnings_count = 0;
-		all_tests_.clear();
+		_okCount = 0;
+		_exceptionsCount = 0;
+		_failuresCount = 0;
+		_skippedCount = 0;
+		_terminationsCount = 0;
+		_warningsCount = 0;
+		_allTests.clear();
 	}
 
 	virtual void group_started( const std::string& /*name */, int /* total test count for group */ ) {
@@ -152,7 +156,7 @@ public:
 	virtual void test_started( std::string const&, int /*n */, std::string const& ) {
 	}
 	virtual int fail_count( void ) const {
-		return ( exceptions_count + failures_count + terminations_count + warnings_count );
+		return ( _exceptionsCount + _failuresCount + _terminationsCount + _warningsCount );
 	}
 
 	/**
@@ -163,21 +167,24 @@ public:
 		// update global statistics
 		switch ( tr._result ) {
 			case test_result::ok:
-				ok_count ++;
+				_okCount ++;
 				break;
 			case test_result::fail:
 			case test_result::rethrown:
-				failures_count ++;
+				_failuresCount ++;
+				break;
+			case test_result::skipped:
+				_skippedCount ++;
 				break;
 			case test_result::ex:
 			case test_result::ex_ctor:
-				exceptions_count ++;
+				_exceptionsCount ++;
 				break;
 			case test_result::warn:
-				warnings_count ++;
+				_warningsCount ++;
 				break;
 			case test_result::term:
-				terminations_count ++;
+				_terminationsCount ++;
 				break;
 			case test_result::setup:
 			case test_result::setup_test_number:
@@ -185,7 +192,7 @@ public:
 		}   // switch
 
 		// add test result to results table
-		all_tests_[ tr._group ? tr._group->get_name() : "no such group" ].push_back( tr );
+		_allTests[ tr._group ? tr._group->get_name() : "no such group" ].push_back( tr );
 	}
 
 	/**
@@ -195,16 +202,17 @@ public:
 	 */
 	virtual void run_completed() {
 		/* *********************** header ***************************** */
-		*stream_ << "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" << std::endl;
+		*_stream << "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" << std::endl;
 
 		// iterate over all test groups
 		int passed = 0;               // passed in single group
 		int exceptions = 0;           // exceptions in single group
 		int failures = 0;             // failures in single group
+		int skipped = 0;              // skipped tests
 		int terminations = 0;         // terminations in single group
 		int warnings = 0;             // warnings in single group
 		int errors = 0;               // errors in single group
-		for ( TestGroups::const_iterator tgi = all_tests_.begin(); tgi != all_tests_.end(); ++ tgi ) {
+		for ( TestGroups::const_iterator tgi = _allTests.begin(); tgi != _allTests.end(); ++ tgi ) {
 			const TestResults&results = tgi->second;
 			for ( TestResults::const_iterator tri = results.begin(); tri != results.end(); ++ tri ) {
 				std::string failure_type;            // string describing the failure type
@@ -216,6 +224,9 @@ public:
 						break;
 					case test_result::fail:
 						failures ++;
+						break;
+					case test_result::skipped:
+						skipped ++;
 						break;
 					case test_result::ex:
 						exceptions ++;
@@ -238,16 +249,17 @@ public:
 				}       // switch
 			}
 		}
-		int total( passed + failures + exceptions + warnings + terminations + errors );
+		int total( passed + failures + skipped + exceptions + warnings + terminations + errors );
 		int totalFail( failures + exceptions + warnings );
 		int totalError( errors + terminations );
-		
-		*stream_ << "<testsuites tests=\"" << total << "\" failures=\"" << totalFail << "\" disabled=\"0\" errors=\"" << totalError << "\" time=\"0\" name=\"AllTests\">" << std::endl;
-		for ( TestGroups::const_iterator tgi = all_tests_.begin(); tgi != all_tests_.end(); ++ tgi ) {
+
+		*_stream << "<testsuites tests=\"" << total << "\" failures=\"" << totalFail << "\" disabled=\"0\" errors=\"" << totalError << "\" time=\"0\" name=\"AllTests\">" << std::endl;
+		for ( TestGroups::const_iterator tgi = _allTests.begin(); tgi != _allTests.end(); ++ tgi ) {
 			/* per-group statistics */
 			passed = 0;               // passed in single group
 			exceptions = 0;           // exceptions in single group
 			failures = 0;             // failures in single group
+			skipped = 0;              // skipped in single group
 			terminations = 0;         // terminations in single group
 			warnings = 0;             // warnings in single group
 			errors = 0;               // errors in single group
@@ -270,6 +282,11 @@ public:
 						failure_type = "Assertion";
 						failure_msg  = "";
 						failures ++;
+						break;
+					case test_result::skipped:
+						failure_type = "Skipped";
+						failure_msg  = "";
+						skipped ++;
 						break;
 					case test_result::ex:
 						failure_type = "Assertion";
@@ -319,19 +336,19 @@ public:
 			// calculate per-group statistics
 			int stat_errors = terminations + errors;
 			int stat_failures = failures + warnings + exceptions;
-			int stat_all = stat_errors + stat_failures + passed;
+			int stat_all = stat_errors + stat_failures + passed + skipped;
 
-			*stream_ << xml_build_testsuite( stat_errors, stat_failures, stat_all, (*tgi).first /* name */, out.str() /* testcases */ ) << std::endl;
+			*_stream << xml_build_testsuite( stat_errors, stat_failures, stat_all, (*tgi).first /* name */, out.str() /* testcases */ ) << std::endl;
 		}   // iterate over all test groups
 
-		*stream_ << "</testsuites>" << std::endl;
+		*_stream << "</testsuites>" << std::endl;
 	}
 
 	/**
 	 * \brief Returns true, if all tests passed
 	 */
 	virtual bool all_ok() const {
-		return ( (terminations_count + failures_count + warnings_count + exceptions_count) == 0);
+		return ( (_terminationsCount + _failuresCount + _skippedCount + _warningsCount + _exceptionsCount) == 0);
 	}
 };
 

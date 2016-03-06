@@ -53,7 +53,7 @@ struct test_result : public test_result_posix {
 	* setup - bad test setup no such group
 	* setup_test_number - bad test setup no such test number
 	*/
-	typedef enum { ok, fail, ex, warn, term, ex_ctor, setup, setup_test_number, rethrown } result_type_t;
+	typedef enum { ok, fail, ex, skipped, warn, term, ex_ctor, setup, setup_test_number, rethrown } result_type_t;
 
 	result_type_t _result;
 
@@ -70,25 +70,46 @@ struct test_result : public test_result_posix {
 	 * Default constructor.
 	 */
 	test_result()
-		: test_result_posix(),
-		_group( NULL ), _testNo( 0 ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 ), _time( 0 )
-		{}
+		: test_result_posix()
+		, _group( NULL )
+		, _testNo( 0 )
+		, _name()
+		, _result( ok )
+		, _message()
+		, _exceptionTypeId()
+		, _file( "" )
+		, _line( -1 )
+		, _time( 0 ) {
+	}
 
 	/**
 	 * Constructor.
 	 */
 	test_result( group_base* grp, int pos )
-		: test_result_posix(),
-		_group( grp ), _testNo( pos ), _name(), _result( ok ), _message(), _exceptionTypeId(), _file( "" ), _line( -1 ), _time( 0 )
-		{}
+		: test_result_posix()
+		, _group( grp )
+		, _testNo( pos )
+		, _name()
+		, _result( ok )
+		, _message()
+		, _exceptionTypeId()
+		, _file( "" )
+		, _line( -1 )
+		, _time( 0 ) {
+	}
 
 	test_result( test_result const& tr_ )
-		: test_result_posix(),
-		_group( tr_._group ), _testNo( tr_._testNo ),
-		_name( tr_._name ), _result( tr_._result ), _message( tr_._message ),
-		_exceptionTypeId( tr_._exceptionTypeId ), _file( tr_._file ),
-		_line( tr_._line ), _time( tr_._time )
-		{}
+		: test_result_posix()
+		, _group( tr_._group )
+		, _testNo( tr_._testNo )
+		, _name( tr_._name )
+		, _result( tr_._result )
+		, _message( tr_._message )
+		, _exceptionTypeId( tr_._exceptionTypeId )
+		, _file( tr_._file )
+		, _line( tr_._line )
+		, _time( tr_._time ) {
+	}
 
 	/**
 	 * Set addtional per-exception information (that is always available/meaningful.

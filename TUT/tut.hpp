@@ -65,9 +65,15 @@ public:
 	* Default constructor
 	*/
 	test_object()
-		: _group(), _testNo( 0 ), _file( "" ), _line( 0 ), _slow( false ),
-		called_method_was_a_dummy_test_( false ), _currentTestName(), _currentLine( -1 )
-		{}
+		: _group()
+		, _testNo( 0 )
+		, _file( "" )
+		, _line( 0 )
+		, _slow( false )
+		, called_method_was_a_dummy_test_( false )
+		, _currentTestName()
+		, _currentLine( -1 ) {
+	}
 
 	void set_test_tut( std::string const& groupName, int const& testNo ) {
 		_group = groupName;
@@ -188,6 +194,7 @@ class test_group : public group_base, public test_group_posix {
 
 	int _passed;
 	int _runned;
+	int _skipped;
 
 	/**
 	* Exception-in-destructor-safe smart-pointer class.
@@ -274,8 +281,16 @@ public:
 	* Creates and registers test group with specified name.
 	*/
 	test_group( const char* name )
-		: _name( name ), _titles(), _time( 0 ), _timeConstraint( 0 ),
-		_tests(), _currentTest(), _currentTitle(), _passed( 0 ), _runned( 0 ) {
+		: _name( name )
+		, _titles()
+		, _time( 0 )
+		, _timeConstraint( 0 )
+		, _tests()
+		, _currentTest()
+		, _currentTitle()
+		, _passed( 0 )
+		, _runned( 0 )
+		, _skipped( 0 ) {
 		// register itself
 		runner.get().register_group( _name, this );
 
@@ -287,8 +302,16 @@ public:
 	* This constructor is used in self-test run only.
 	*/
 	test_group( const char* name, test_runner& another_runner )
-		: _name( name ), _titles(), _time( 0 ), _timeConstraint( 0 ),
-		_tests(), _currentTest(), _currentTitle(), _passed( 0 ), _runned( 0 ) {
+		: _name( name )
+		, _titles()
+		, _time( 0 )
+		, _timeConstraint( 0 )
+		, _tests()
+		, _currentTest()
+		, _currentTitle()
+		, _passed( 0 )
+		, _runned( 0 )
+		, _skipped( 0 ) {
 		// register itself
 		another_runner.register_group( _name, this );
 
@@ -310,37 +333,41 @@ public:
 		return ( 0 );
 	}
 
-	virtual titles_t const& get_test_titles( void ) const {
+	virtual titles_t const& get_test_titles( void ) const override {
 		return ( _titles );
 	}
 
-	virtual char const* get_test_title( int no_ ) const {
+	virtual char const* get_test_title( int no_ ) const override {
 		titles_t::const_iterator it( _titles.find( no_ ) );
 		return ( ( it != _titles.end() ) ? it->second : "" );
 	}
 
-	virtual int get_real_test_count( void ) const {
+	virtual int get_real_test_count( void ) const override {
 		return ( static_cast<int>( _titles.size() ) );
 	}
 
-	virtual void set_time_constraint( int long timeConstraint_ ) {
+	virtual void set_time_constraint( int long timeConstraint_ ) override {
 		_timeConstraint = timeConstraint_;
 	}
 
-	virtual std::string const& get_name() const {
+	virtual std::string const& get_name() const override {
 		return ( _name );
 	}
 
-	virtual int long get_time_elapsed( void ) const {
+	virtual int long get_time_elapsed( void ) const override {
 		return ( _time );
 	}
 
-	virtual void set_name( std::string const& name_ ) {
+	virtual void set_name( std::string const& name_ ) override {
 		_name = name_;
 	}
 
-	virtual run_stat_t get_stat() const {
-		return ( std::make_pair( _passed, _runned ) );
+	virtual run_stat_t get_stat() const override {
+		return ( std::make_pair( _passed, _runned - _skipped ) );
+	}
+
+	virtual int skipped() const override {
+		return ( _skipped );
 	}
 
 	/**
@@ -351,11 +378,11 @@ public:
 		_currentTitle = _titles.begin();
 	}
 
-	virtual bool has_next( void ) {
+	virtual bool has_next( void ) override {
 		return ( _currentTitle != _titles.end() );
 	}
 
-	virtual int next( void ) {
+	virtual int next( void ) override {
 		int n( _currentTitle != _titles.end() ? _currentTitle->first : -1 );
 		if ( _currentTitle != _titles.end() )
 			++ _currentTitle;
@@ -441,23 +468,31 @@ public:
 			line = ex._line;
 			file = ex._file;
 			tr.set_meta( ex.result(), typeid( ex ).name(), ex.what() );
+		} catch ( const skipper& ex ) {
+			++ _skipped;
+			line = ex._line;
+			file = ex._file;
+			tr.set_meta( ex.result(), typeid( ex ).name(), ex.what() );
 		} catch ( const tut_error& ex ) {
 			tr.set_meta( ex.result(), typeid( ex ).name(), ex.what() );
 		} catch ( const std::exception& ex ) {
 			// test failed with std::exception
 			tr.set_meta( test_result::ex, yaal::hcore::demangle( typeid( ex ).name() ).raw(), ex.what() );
-			if ( obj.get() )
+			if ( obj.get() ) {
 				line = obj->get_current_line();
+			}
 		} catch ( const yaal::hcore::HException& ex ) {
 			// test failed with yaal::hcore::HException
 			tr.set_meta( test_result::ex, yaal::hcore::demangle( typeid( ex ).name() ).raw(), ex.what() );
-			if ( obj.get() )
+			if ( obj.get() ) {
 				line = obj->get_current_line();
+			}
 		} catch ( ... ) {
 			// test failed with unknown exception
 			tr.set_meta( test_result::ex );
-			if ( obj.get() )
+			if ( obj.get() ) {
 				line = obj->get_current_line();
+			}
 		}
 
 		if ( obj.get() )

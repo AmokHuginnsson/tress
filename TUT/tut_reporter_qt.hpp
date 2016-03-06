@@ -34,16 +34,25 @@ class reporter_qt : public tut::callback {
 	int _failed;
 public:
 	reporter_qt()
-		: _os( std::cout ), _mutex(), _ls( std::cerr ), _failed( 0 ) {
+		: _os( std::cout )
+		, _mutex()
+		, _ls( std::cerr )
+		, _failed( 0 ) {
 		clear();
 	}
 
 	reporter_qt( std::ostream& out )
-		: _os( out ), _mutex(), _ls( &out == &std::cout ? std::cerr : std::cout ), _failed( 0 ) {
+		: _os( out )
+		, _mutex()
+		, _ls( &out == &std::cout ? std::cerr : std::cout )
+		, _failed( 0 ) {
 	}
 
 	reporter_qt( std::ostream& out, stream_type& logger )
-		: _os( out ), _mutex(), _ls( logger ), _failed( 0 ) {
+		: _os( out )
+		, _mutex()
+		, _ls( logger )
+		, _failed( 0 ) {
 	}
 
 	virtual void run_started( int, int ) {

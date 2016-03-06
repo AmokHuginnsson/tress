@@ -28,18 +28,21 @@ std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 			{ ".", "OK" },
 			{ ",", "OK'" },
 			{ "=F", " assertion failed" },
+			{ "=S", " test skipped" },
 			{ "=C", " unexpected excepion from mock constructor" },
 			{ "=X", " unexpected excepion" },
 			{ "=W", " warning" },
 			{ "=T", " execution terminated" },
 			{ "=P", " rethrown exception" },
-			{ "=S", " setup error" }
+			{ "=I", " setup error" }
 	};
 	int tag( tress::setup._verbose ? 1 : 0 );
 	if ( tress::setup._verbose || ( ( tr._result != tut::test_result::ok ) && ( tr._result != tut::test_result::setup ) ) ) {
 		os_ << "[" << std::flush;
 	}
-	if ( tr._result != tut::test_result::ok ) {
+	if ( tr._result == tut::test_result::skipped ) {
+		os_ << yaal::ansi::yellow << std::flush;
+	} else if ( tr._result != tut::test_result::ok ) {
 		os_ << yaal::ansi::red << std::flush;
 	} else if ( tress::setup._verbose ) {
 		os_ << yaal::ansi::green << std::flush;
@@ -51,26 +54,29 @@ std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 		case tut::test_result::fail:
 			os_ << tr._testNo << tags[2][tag] << std::flush;
 		break;
-		case tut::test_result::ex_ctor:
+		case tut::test_result::skipped:
 			os_ << tr._testNo << tags[3][tag] << std::flush;
 		break;
-		case tut::test_result::ex:
+		case tut::test_result::ex_ctor:
 			os_ << tr._testNo << tags[4][tag] << std::flush;
 		break;
-		case tut::test_result::warn:
+		case tut::test_result::ex:
 			os_ << tr._testNo << tags[5][tag] << std::flush;
 		break;
-		case tut::test_result::term:
+		case tut::test_result::warn:
 			os_ << tr._testNo << tags[6][tag] << std::flush;
 		break;
-		case tut::test_result::rethrown:
+		case tut::test_result::term:
 			os_ << tr._testNo << tags[7][tag] << std::flush;
+		break;
+		case tut::test_result::rethrown:
+			os_ << tr._testNo << tags[8][tag] << std::flush;
 		break;
 		case tut::test_result::setup:
 			os_ << "no such group: `" << tr._message << "'" << std::flush;
 		break;
 		case tut::test_result::setup_test_number:
-			os_ << tr._testNo << tags[8][tag] << std::flush;
+			os_ << tr._testNo << tags[9][tag] << std::flush;
 		break;
 	}
 	if ( tress::setup._verbose )
@@ -165,6 +171,7 @@ public:
 	int _okCount;
 	int _exceptionsCount;
 	int _failuresCount;
+	int _skippedCount;
 	int _terminationsCount;
 	int _warningsCount;
 	int _setupCount;
@@ -172,29 +179,61 @@ public:
 	int _currentGroupTestCount;
 
 	reporter()
-		: _currentGroup(), _notPassed(), _os( std::cout ), _mutex(), _ls( std::cerr ),
-		_errorLine( &console_error_line ), _groupTestLog(),
-		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
-		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 ),
-		_currentGroupTestCount( 0 ) {
+		: _currentGroup()
+		, _notPassed()
+		, _os( std::cout )
+		, _mutex()
+		, _ls( std::cerr )
+		, _errorLine( &console_error_line )
+		, _groupTestLog()
+		, _okCount( 0 )
+		, _exceptionsCount( 0 )
+		, _failuresCount( 0 )
+		, _skippedCount( 0 )
+		, _terminationsCount( 0 )
+		, _warningsCount( 0 )
+		, _setupCount( 0 )
+		, _totalTestCount( 0 )
+		, _currentGroupTestCount( 0 ) {
 		clear();
 	}
 
 	reporter( std::ostream& out )
-		: _currentGroup(), _notPassed(), _os( out ), _mutex(),
-		_ls( &out == &std::cout ? std::cerr : std::cout ),
-		_errorLine( &console_error_line ), _groupTestLog(),
-		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
-		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 ),
-		_currentGroupTestCount( 0 ) {
+		: _currentGroup()
+		, _notPassed()
+		, _os( out )
+		, _mutex()
+		, _ls( &out == &std::cout ? std::cerr : std::cout )
+		, _errorLine( &console_error_line )
+		, _groupTestLog()
+		, _okCount( 0 )
+		, _exceptionsCount( 0 )
+		, _failuresCount( 0 )
+		, _skippedCount( 0 )
+		, _terminationsCount( 0 )
+		, _warningsCount( 0 )
+		, _setupCount( 0 )
+		, _totalTestCount( 0 )
+		, _currentGroupTestCount( 0 ) {
 	}
 
 	reporter( std::ostream& out, stream_type& logger )
-		: _currentGroup(), _notPassed(), _os( out ), _mutex(), _ls( logger ),
-		_errorLine( &console_error_line ), _groupTestLog(),
-		_okCount( 0 ), _exceptionsCount( 0 ), _failuresCount( 0 ),
-		_terminationsCount( 0 ), _warningsCount( 0 ), _setupCount( 0 ), _totalTestCount( 0 ),
-		_currentGroupTestCount( 0 ) {
+		: _currentGroup()
+		, _notPassed()
+		, _os( out )
+		, _mutex()
+		, _ls( logger )
+		, _errorLine( &console_error_line )
+		, _groupTestLog()
+		, _okCount( 0 )
+		, _exceptionsCount( 0 )
+		, _failuresCount( 0 )
+		, _skippedCount( 0 )
+		, _terminationsCount( 0 )
+		, _warningsCount( 0 )
+		, _setupCount( 0 )
+		, _totalTestCount( 0 )
+		, _currentGroupTestCount( 0 ) {
 	}
 
 	virtual void run_started( int groupCount_, int testCount_ ) {
@@ -239,7 +278,7 @@ public:
 			std::string const sep( static_cast<size_t>( sepLen > 0 ? sepLen : 1 ), '=' );
 			_os << yaal::ansi::yellow << sepIntro << '[';
 			if ( stats.first == stats.second ) {
-				_os << yaal::ansi::green;
+				_os << ( group_->skipped() ? yaal::ansi::yellow : yaal::ansi::green );
 			} else {
 				_os << yaal::ansi::red;
 			}
@@ -296,6 +335,8 @@ public:
 			_exceptionsCount ++;
 		else if ( tr._result == tut::test_result::fail )
 			_failuresCount ++;
+		else if ( tr._result == tut::test_result::skipped )
+			_skippedCount ++;
 		else if ( tr._result == tut::test_result::rethrown )
 			_failuresCount ++;
 		else if ( tr._result == tut::test_result::warn )
@@ -308,7 +349,7 @@ public:
 		if ( tress::setup._fancy ) {
 			_groupTestLog << tr << std::flush;
 			int progressMax( maxWidth - 12 );
-			int total( _terminationsCount + _exceptionsCount + _failuresCount + _warningsCount + _setupCount + _okCount );
+			int total( _terminationsCount + _exceptionsCount + _failuresCount + _skippedCount + _warningsCount + _setupCount + _okCount );
 			int progressCur( ( progressMax * total ) / _totalTestCount );
 			if ( total )
 				_os << "\n";
@@ -328,7 +369,7 @@ public:
 		if ( tr._result != tut::test_result::ok )
 			_notPassed.push_back( tr );
 		group_base::run_stat_t status( tr._group ? tr._group->get_stat() : group_base::run_stat_t( 0, 0 ) );
-		if ( tress::setup._fancy && tr._group && ( status.second == tr._group->get_real_test_count() ) ) {
+		if ( tress::setup._fancy && tr._group && ( ( status.second + tr._group->skipped() ) == tr._group->get_real_test_count() ) ) {
 			std::stringstream ss;
 			ss << '(' << tr._group->get_time_elapsed() << ')';
 			std::string timeElapsed( ss.str() );
@@ -338,10 +379,11 @@ public:
 				_os << space;
 			}
 			_os << timeElapsed;
-			if ( status.first == status.second )
-				_os << " [" << yaal::ansi::green << "Pass" << yaal::ansi::reset << "]" << std::flush;
-			else
+			if ( status.first == status.second ) {
+				_os << " [" << ( tr._group->skipped() ? yaal::ansi::yellow : yaal::ansi::green ) << "Pass" << yaal::ansi::reset << "]" << std::flush;
+			} else {
 				_os << " [" << yaal::ansi::red << "Fail" << yaal::ansi::reset << "]" << std::flush;
+			}
 		}
 	}
 
@@ -354,8 +396,12 @@ public:
 			while ( i != _notPassed.end() ) {
 				tut::test_result tr = *i;
 				++ i;
-				if ( tr._result == test_result::setup )
+				if ( tr._result == test_result::setup ) {
 					continue;
+				}
+				if ( ( tr._result == test_result::skipped ) && ! tress::setup._verbose ) {
+					continue;
+				}
 
 				_os << std::endl;
 
@@ -422,6 +468,10 @@ public:
 			_os << ", failures:" << _failuresCount << " (" << ( ( 100. * _failuresCount ) / _totalTestCount ) <<  "%)" << std::flush;
 		}
 
+		if ( _skippedCount > 0 ) {
+			_os << ", skipped:" << _skippedCount << " (" << ( ( 100. * _skippedCount ) / _totalTestCount ) <<  "%)" << std::flush;
+		}
+
 		if ( _warningsCount > 0 ) {
 			_os << ", warnings:" << _warningsCount << " (" << ( ( 100. * _warningsCount ) / _totalTestCount ) <<  "%)" << std::flush;
 		}
@@ -448,6 +498,7 @@ private:
 		_okCount = 0;
 		_exceptionsCount = 0;
 		_failuresCount = 0;
+		_skippedCount = 0;
 		_terminationsCount = 0;
 		_warningsCount = 0;
 		_setupCount = 0;

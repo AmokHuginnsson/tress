@@ -374,7 +374,11 @@ class time_constraint {
 	yaal::hcore::HClock _timer;
 public:
 	time_constraint( int long ms_, char const* path_ = NULL, int line_ = 0 )
-		: _constraint( ms_ ), _path( path_ ), _line( line_ ), _timer() {}
+		: _constraint( ms_ )
+		, _path( path_ )
+		, _line( line_ )
+		, _timer() {
+	}
 	~time_constraint( void ) {
 		int long elapsed( static_cast<int long>( _timer.get_time_elapsed( yaal::hcore::time::UNIT::MILISECOND ) ) );
 		if ( _constraint && ( elapsed > _constraint ) ) {
@@ -394,6 +398,23 @@ private:
 	time_constraint( time_constraint const& );
 	time_constraint& operator = ( time_constraint const& );
 };
+
+/**
+ * Unconditionally skip with message.
+ */
+void skip_real( char const*, int, const char* = "" ) __attribute__((__noreturn__, __used__));
+void skip_real( char const* file, int line, const char* msg ) {
+	throw skipper( file, line, msg );
+}
+void skip( const char* ) __attribute__((used));
+void skip( const char* msg ) {
+	skip_real( NULL, 0, msg );
+}
+
+void skip_real( char const*, int, std::string const& ) __attribute__((__noreturn__, __used__));
+void skip_real( char const* file, int line, std::string const& msg ) {
+	throw skipper( file, line, msg );
+}
 
 }       // end of namespace
 

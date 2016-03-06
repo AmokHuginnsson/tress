@@ -56,14 +56,30 @@ nullbuf cnull_obj;
 
 namespace tress {
 OSetup::OSetup( void )
-	: _quiet( false ), _verbose( false ), _debug( false ),
-		_listGroups( false ), _restartable( false ), _exit( false ), _fancy( false ), _color( false ),
-		_selftest( false ),
-		_testNumber( 0 ), _jobs( DEFAULT_JOB_COUNT ), _timeConstraint( DEFAULT_TIME_CONSTRAINT ),
-		_argc( 0 ), _argv( NULL ),
-		_programName( NULL ), _logPath(), _testGroups(), _testSets(),
-		_testGroupPattern(), _testGroupListFilePath(),
-		_reporter( "tut" ), _errorLine( "console" ), _clockQualityMultiplier( DEFAULT_CLOCK_QUALITY_MULTIPLIER ) {
+	: _quiet( false )
+	, _verbose( false )
+	, _debug( false )
+	, _listGroups( false )
+	, _restartable( false )
+	, _exit( false )
+	, _fancy( false )
+	, _color( false )
+	, _forceRunAll( false )
+	, _selftest( false )
+	, _testNumber( 0 )
+	, _jobs( DEFAULT_JOB_COUNT )
+	, _timeConstraint( DEFAULT_TIME_CONSTRAINT )
+	, _argc( 0 )
+	, _argv( NULL )
+	, _programName( NULL )
+	, _logPath()
+	, _testGroups()
+	, _testSets()
+	, _testGroupPattern()
+	, _testGroupListFilePath()
+	, _reporter( "tut" )
+	, _errorLine( "console" )
+	, _clockQualityMultiplier( DEFAULT_CLOCK_QUALITY_MULTIPLIER ) {
 }
 
 void OSetup::test_setup( void ) {

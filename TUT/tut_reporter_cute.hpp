@@ -33,16 +33,25 @@ class reporter_cute : public tut::callback {
 	int _failed;
 public:
 	reporter_cute()
-		: _os( std::cout ), _mutex(), _ls( std::cerr ), _failed( 0 ) {
+		: _os( std::cout )
+		, _mutex()
+		, _ls( std::cerr )
+		, _failed( 0 ) {
 		clear();
 	}
 
 	reporter_cute( std::ostream& out )
-		: _os( out ), _mutex(), _ls( &out == &std::cout ? std::cerr : std::cout ), _failed( 0 ) {
+		: _os( out )
+		, _mutex()
+		, _ls( &out == &std::cout ? std::cerr : std::cout )
+		, _failed( 0 ) {
 	}
 
 	reporter_cute( std::ostream& out, stream_type& logger )
-		: _os( out ), _mutex(), _ls( logger ), _failed( 0 ) {
+		: _os( out )
+		, _mutex()
+		, _ls( logger )
+		, _failed( 0 ) {
 	}
 
 	virtual void run_started( int, int ) {

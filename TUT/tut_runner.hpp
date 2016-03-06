@@ -39,6 +39,7 @@ struct group_base {
 	virtual int long get_time_elapsed( void ) const = 0;
 	virtual void set_name( std::string const& ) = 0;
 	virtual run_stat_t get_stat() const = 0;
+	virtual int skipped() const = 0;
 };
 
 class test_runner;
@@ -132,8 +133,10 @@ public:
 	* Constructor
 	*/
 	test_runner( void )
-		: _groups(), _callback( NULL ), _tutListener( NULL )
-		{}
+		: _groups()
+		, _callback( NULL )
+		, _tutListener( NULL ) {
+	}
 
 	/**
 	* Stores another group for getting by name.

@@ -106,6 +106,12 @@ int handle_program_options( int argc_, char** argv_ ) {
 		.default_value( OSetup::DEFAULT_JOB_COUNT )
 	)(
 		HProgramOptionsHandler::HOption()
+		.long_form( "force-run-all" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "force all tests to be run, even explicitly marked as those to be skipped" )
+		.recipient( setup._forceRunAll )
+	)(
+		HProgramOptionsHandler::HOption()
 		.short_form( 'r' )
 		.long_form( "reporter" )
 		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
