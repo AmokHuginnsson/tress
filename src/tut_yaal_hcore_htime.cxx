@@ -251,6 +251,7 @@ TUT_UNIT_TEST( "mod_year" )
 	ENSURE_EQUALS( "bad minute from mod_year", bday.get_minute(), 30 );
 	ENSURE_EQUALS( "bad seconds from mod_year", bday.get_second(), 0 );
 	ENSURE_EQUALS( "bad week day", bday.get_day_of_week(), HTime::DAY_OF_WEEK::THURSDAY );
+#if SIZEOF_TIME_T == 8
 	bday.mod_year( -99 );
 	ENSURE_EQUALS( "bad year from mod_year", bday.get_year(), 1880 );
 	ENSURE_EQUALS( "bad month from mod_year", bday.get_month(), HTime::MONTH::MAY );
@@ -259,6 +260,7 @@ TUT_UNIT_TEST( "mod_year" )
 	ENSURE_EQUALS( "bad minute from mod_year", bday.get_minute(), 30 );
 	ENSURE_EQUALS( "bad seconds from mod_year", bday.get_second(), 0 );
 	ENSURE_EQUALS( "bad week day", bday.get_day_of_week(), HTime::DAY_OF_WEEK::MONDAY );
+#endif /* #if SIZEOF_TIME_T == 8 */
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mod_month" )
