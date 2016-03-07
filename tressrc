@@ -1,7 +1,7 @@
 # .tressrc is an `tress' 0.0.0 configuration file,
 # this file ought to be in /etc/ and/or your home dirctory.
 
-log_path x_tress.log
+log-path x_tress.log
 jobs 5
 color
 
