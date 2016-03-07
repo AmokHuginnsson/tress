@@ -29,12 +29,22 @@ Copyright:
 
 #include <yaal/hcore/hthread.hxx>
 
+namespace tress {
+
+namespace fake_console_subsystem {
+
 class HFakeConsoleGuard {
 	yaal::hcore::HLock _exclusiveAccess;
 public:
 	HFakeConsoleGuard( void );
 	virtual ~HFakeConsoleGuard( void );
 };
+
+yaal::hcore::HString dump( bool );
+
+}
+
+}
 
 #endif /* #ifndef HAVE_TRESS_FAKE_CONSOLE_SUBSYSTEM_HXX_INCLUDED */
 
