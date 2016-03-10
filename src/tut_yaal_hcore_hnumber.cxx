@@ -1157,6 +1157,8 @@ TUT_UNIT_TEST( "to_integer" )
 	ENSURE_EQUALS( "to_integer failed -1", HNumber( "-1" ).to_integer(), -1LL );
 	ENSURE_EQUALS( "to_integer failed 3.14", HNumber( "3.14" ).to_integer(), 3LL );
 	ENSURE_EQUALS( "to_integer failed -3.14", HNumber( "-3.14" ).to_integer(), -3LL );
+	ENSURE_EQUALS( "to_integer failed 9223372036854775807", HNumber( "9223372036854775807" ).to_integer(), 9223372036854775807LL );
+	ENSURE_THROW( "to_integer ignored integer overflow", HNumber( "9223372036854775808" ).to_integer(), HNumberException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "to_floating_point" )
