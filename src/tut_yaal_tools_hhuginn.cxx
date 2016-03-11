@@ -110,7 +110,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"power = ( booleanNot >> *( '^' >> booleanNot ) )",
 		"booleanNot = ( ( '!' >> negation ) | negation )",
 		"negation = ( ( '-' >> factorial ) | factorial )",
-		"factorial = ( atom >> -( '!' ^ '=' ) )",
+		"factorial = ( atom >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
 		"atom = ( absoluteValue | parenthesis | real | numberLiteral | integer | character_literal | ( listLiteral >> -( subscriptOperator >> dereference ) ) | ( dictLiteral >> -( subscriptOperator >> dereference ) ) | none | true | false | ( reference >> dereference ) | ( stringLiteral >> -subscriptOperator ) | ( lambda >> -( functionCallOperator >> dereference ) ) )",
 		"absoluteValue = ( '|' >> expression >> '|' )",
 		"parenthesis = ( '(' >> expression >> ')' )",

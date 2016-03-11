@@ -803,7 +803,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	 	| ( string_literal >> -subscriptOperator )
 	 	| ( lambda >> -( functionCallOperator >> dereference ) )
 	);
-	HRule factorial( atom >> -( character( '!' ) ^ '=' ) );
+	HRule factorial( atom >> -( ( character( '!' ) & "==" ) | ( character( '!' ) ^ '=' ) ) );
 	HRule negation( ( '-' >> factorial ) | factorial );
 	HRule booleanNot( ( '-' >> negation ) | negation );
 	HRule power( booleanNot >> ( * ( '^' >> booleanNot ) ) );
@@ -879,7 +879,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AD_ = ( AE_ >> *( '^' >> AE_ ) )",
 		"AE_ = ( ( '-' >> AF_ ) | AF_ )",
 		"AF_ = ( ( '-' >> AG_ ) | AG_ )",
-		"AG_ = ( ( ( '|' >> C_ >> '|' ) | ( '(' >> C_ >> ')' ) | real | ( '$' >> real ) | integer | character_literal | ( ( '[' >> -K_ >> ']' ) >> -( E_ >> AH_ ) ) | ( ( '{' >> -( AI_ >> *( ',' >> AI_ ) ) >> '}' ) >> -( E_ >> AH_ ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> AH_ ) | ( string_literal >> -E_ ) | ( ( '@' >> '(' >> -I_ >> ')' >> J_ ) >> -( F_ >> AH_ ) ) ) >> -( '!' ^ '=' ) )",
+		"AG_ = ( ( ( '|' >> C_ >> '|' ) | ( '(' >> C_ >> ')' ) | real | ( '$' >> real ) | integer | character_literal | ( ( '[' >> -K_ >> ']' ) >> -( E_ >> AH_ ) ) | ( ( '{' >> -( AI_ >> *( ',' >> AI_ ) ) >> '}' ) >> -( E_ >> AH_ ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> AH_ ) | ( string_literal >> -E_ ) | ( ( '@' >> '(' >> -I_ >> ')' >> J_ ) >> -( F_ >> AH_ ) ) ) >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
 		"AH_ = *( E_ | F_ | G_ )",
 		"AI_ = ( C_ >> ':' >> C_ )"
 	};
