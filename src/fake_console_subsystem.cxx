@@ -47,6 +47,12 @@ namespace tress {
 
 namespace fake_console_subsystem {
 
+#if SIZEOF_CHTYPE == 8
+typedef yaal::u64_t chtype_t;
+#else
+typedef yaal::u32_t chtype_t;
+#endif
+
 class HFakeConsole {
 private:
 	bool _active;
@@ -84,8 +90,8 @@ struct WINDOW {
 	int short _by;
 	int short _bx;
 	int short _flags;
-	int long unsigned _attr;
-	int long unsigned _background;
+	chtype_t _attr;
+	chtype_t _background;
 	char dummy[16];
 	char _buf[2 * ROWS * COLS];
 	WINDOW( void )
@@ -109,7 +115,7 @@ struct WINDOW {
 		memset( dummy, 0, sizeof ( dummy ) );
 		memset( _buf, 0, 2 * COLS * ROWS );
 	}
-	void wbkgd( int long unsigned bkgd_ ) {
+	void wbkgd( chtype_t bkgd_ ) {
 		_background = bkgd_;
 	}
 	char* at( int row_, int col_ ) {
@@ -160,10 +166,10 @@ char const* col( int attr_ ) {
 }
 }
 
-yaal::hcore::HString dump( bool toTerm_ ) {
+yaal::hcore::HString dump( char const* tag_ ) {
 	HStringStream ss;
 	HString line;
-	if ( toTerm_ ) {
+	if ( tag_ ) {
 		line.append( "+" );
 		for ( int c( 0 ); c <= stdscr._mx; ++ c ) {
 			line.append( "-" );
@@ -171,14 +177,14 @@ yaal::hcore::HString dump( bool toTerm_ ) {
 		line.append( "+\n" );
 	}
 	ss << line;
-	if ( toTerm_ ) {
-		ss << "rows = " << ( stdscr._my + 1 )
+	if ( tag_ ) {
+		ss << tag_ << ": rows = " << ( stdscr._my + 1 )
 			<< ", cols = " << ( stdscr._mx + 1 )
 			<< ", row = " << stdscr._y
 			<< ", col = " << stdscr._x
 			<< ", attr = " << stdscr._attr
 			<< ", bkgd = " << stdscr._background
-			<< ", raw = ";
+			<< ", raw = " << stdscr._by << ' ' << stdscr._bx << ' ';
 		ss << hex;
 		for ( int i( 0 ); i <= static_cast<int>( sizeof ( stdscr.dummy ) ); ++ i ) {
 			if ( i ) {
@@ -190,7 +196,7 @@ yaal::hcore::HString dump( bool toTerm_ ) {
 	}
 	ss << line;
 	for ( int r( 0 ); r <= stdscr._my; ++ r ) {
-		if ( toTerm_ ) {
+		if ( tag_ ) {
 			ss << '|';
 		}
 		for ( int c( 0 ); c <= stdscr._mx; ++ c ) {
@@ -198,7 +204,7 @@ yaal::hcore::HString dump( bool toTerm_ ) {
 			int ch( *p );
 			++ p;
 			int attr( *p );
-			if ( toTerm_ ) {
+			if ( tag_ ) {
 				ss << col( attr );
 			} else {
 				ss << "0123456789ABCDEF"[attr & 0xf];
@@ -209,7 +215,7 @@ yaal::hcore::HString dump( bool toTerm_ ) {
 				ss << ' ';
 			}
 		}
-		if ( toTerm_ ) {
+		if ( tag_ ) {
 			ss << *ansi::reset << '|';
 		}
 		ss << '\n';
@@ -344,8 +350,8 @@ int endwin( void ) {
 	return ( 0 );
 }
 
-int wbkgd( WINDOW*, int long unsigned );
-int wbkgd( WINDOW* win_, int long unsigned bkgd_ ) {
+int wbkgd( WINDOW*, chtype_t );
+int wbkgd( WINDOW* win_, chtype_t bkgd_ ) {
 	win_->wbkgd( bkgd_ );
 	return ( 0 );
 }

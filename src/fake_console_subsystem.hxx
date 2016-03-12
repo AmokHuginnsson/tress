@@ -40,7 +40,7 @@ public:
 	virtual ~HFakeConsoleGuard( void );
 };
 
-yaal::hcore::HString dump( bool );
+yaal::hcore::HString dump( char const* );
 
 }
 
