@@ -36,12 +36,14 @@ Copyright:
 #include <yaal/tools/hmonitor.hxx>
 #include <yaal/tools/ansi.hxx>
 #include <yaal/tools/hstringstream.hxx>
+#include <yaal/hconsole/console.hxx>
 
 #include "fake_console_subsystem.hxx"
 
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
+using namespace yaal::hconsole;
 
 namespace tress {
 
@@ -53,12 +55,19 @@ typedef yaal::u64_t chtype_t;
 typedef yaal::u32_t chtype_t;
 #endif
 
+struct WINDOW;
+
 class HFakeConsole {
 private:
+	typedef HHashMap<chtype_t, int> attribute_map_t;
 	bool _active;
+	attribute_map_t _background;
+	attribute_map_t _attributes;
 public:
 	HFakeConsole( void )
-		: _active( false ) {
+		: _active( false )
+		, _background()
+		, _attributes() {
 	}
 	void activate( void ) {
 		_active = true;
@@ -69,10 +78,22 @@ public:
 	bool is_active() const {
 		return ( _active );
 	}
+	void build_attribute_maps( WINDOW* );
+	int attr( chtype_t attr_ ) const {
+		int a( COLORS::ATTR_DEFAULT );
+		attribute_map_t::const_iterator it( _attributes.find( attr_ ) );
+		if ( it != _attributes.end() ) {
+			a = it->second;
+		}
+		return ( a );
+	}
 } _fakeConsole_;
 
 HFakeConsoleGuard::HFakeConsoleGuard( void )
 	: _exclusiveAccess( yaal::tools::HMonitor::get_instance().acquire( "terminal" ) ) {
+	unsetenv( "YAAL_HAS_BROKEN_BRIGHT_BACKGROUND" );
+	unsetenv( "MRXVT_TABTITLE" );
+	unsetenv( "TERMINATOR_UUID" );
 	_fakeConsole_.activate();
 }
 
@@ -93,7 +114,8 @@ struct WINDOW {
 	chtype_t _attr;
 	chtype_t _background;
 	char dummy[16];
-	char _buf[2 * ROWS * COLS];
+	static int const BUF_SIZE = 2 * ROWS * COLS;
+	char _buf[BUF_SIZE];
 	WINDOW( void )
 		: _y( 0 )
 		, _x( 0 )
@@ -113,22 +135,22 @@ struct WINDOW {
 		_mx = COLS - 1;
 		_my = ROWS - 1;
 		memset( dummy, 0, sizeof ( dummy ) );
-		memset( _buf, 0, 2 * COLS * ROWS );
+		memset( _buf, 0, BUF_SIZE );
 	}
 	void wbkgd( chtype_t bkgd_ ) {
 		_background = bkgd_;
 	}
 	char* at( int row_, int col_ ) {
-		return ( _buf + row_ * ( _mx + 1 ) + col_ );
+		return ( _buf + 2 * ( row_ * ( _mx + 1 ) + col_ ) );
 	}
 	char* cur( void ) {
-		return ( _buf + _y * ( _mx + 1 ) + _x );
+		return ( _buf + 2 * ( _y * ( _mx + 1 ) + _x ) );
 	}
 	void addch( int ch_ ) {
 		char* p( cur() );
 		*p = static_cast<char>( ch_ );
 		++p;
-		*p = static_cast<char>( _attr );
+		*p = static_cast<char>( _fakeConsole_.attr( _attr ) );
 		++ _x;
 		if ( _x > _mx ) {
 			_x = 0;
@@ -140,6 +162,22 @@ struct WINDOW {
 		}
 	}
 } stdscr;
+
+void HFakeConsole::build_attribute_maps( WINDOW* win_ ) {
+	HConsole& cons( HConsole::get_instance() );
+	HScopedValueReplacement<chtype_t> bg( win_->_background, 0 );
+	HScopedValueReplacement<chtype_t> attr( win_->_attr, 0 );
+	_background.clear();
+	for ( int col( COLORS::BG_BLACK ); col <= COLORS::BG_WHITE; col += 16 ) {
+		cons.set_background( col );
+		_background[win_->_background] = col;
+	}
+	_attributes.clear();
+	for ( int col( 0 ); col < 256; ++ col ) {
+		cons.set_attr( col );
+		_attributes[win_->_attr] = col;
+	}
+}
 
 namespace {
 char const* col( int attr_ ) {
@@ -164,6 +202,10 @@ char const* col( int attr_ ) {
 	}
 	return ( c );
 }
+}
+
+void build_attribute_maps( void ) {
+	_fakeConsole_.build_attribute_maps( &stdscr );
 }
 
 yaal::hcore::HString dump( char const* tag_ ) {

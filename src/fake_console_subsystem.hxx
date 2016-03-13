@@ -40,6 +40,7 @@ public:
 	virtual ~HFakeConsoleGuard( void );
 };
 
+void build_attribute_maps( void );
 yaal::hcore::HString dump( char const* );
 
 }
