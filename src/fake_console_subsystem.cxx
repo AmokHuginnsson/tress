@@ -87,6 +87,14 @@ public:
 		}
 		return ( a );
 	}
+	int bg( chtype_t bg_ ) const {
+		int b( COLORS::BG_BLACK );
+		attribute_map_t::const_iterator it( _background.find( bg_ ) );
+		if ( it != _background.end() ) {
+			b = it->second;
+		}
+		return ( b );
+	}
 } _fakeConsole_;
 
 HFakeConsoleGuard::HFakeConsoleGuard( void )
@@ -180,6 +188,7 @@ void HFakeConsole::build_attribute_maps( WINDOW* win_ ) {
 }
 
 namespace {
+
 char const* col( int attr_ ) {
 	char const* c( "" );
 	switch ( attr_ & 0xf ) {
@@ -202,64 +211,83 @@ char const* col( int attr_ ) {
 	}
 	return ( c );
 }
+
+HString attr_name( int attr_ ) {
+	HString an;
+	int nibble( attr_ & 0xf );
+	for ( int i( 0 ); i < 2; ++ i ) {
+		if ( i > 0 ) {
+			an.append( ":" );
+			nibble = ( attr_ >> 4 ) & 0xf;
+		}
+		switch ( nibble ) {
+			case ( 0 ):  an.append( "black" );         break;
+			case ( 1 ):  an.append( "red" );           break;
+			case ( 2 ):  an.append( "green" );         break;
+			case ( 3 ):  an.append( "brown" );         break;
+			case ( 4 ):  an.append( "blue" );          break;
+			case ( 5 ):  an.append( "magenta" );       break;
+			case ( 6 ):  an.append( "cyan" );          break;
+			case ( 7 ):  an.append( "lightgray" );     break;
+			case ( 8 ):  an.append( "gray" );          break;
+			case ( 9 ):  an.append( "brightred" );     break;
+			case ( 10 ): an.append( "brightgreen" );   break;
+			case ( 11 ): an.append( "yellow" );        break;
+			case ( 12 ): an.append( "brightblue" );    break;
+			case ( 13 ): an.append( "brightmagenta" ); break;
+			case ( 14 ): an.append( "brightcyan" );    break;
+			case ( 15 ): an.append( "white" );         break;
+		}
+	}
+
+	return ( an );
+}
 }
 
 void build_attribute_maps( void ) {
 	_fakeConsole_.build_attribute_maps( &stdscr );
 }
 
-yaal::hcore::HString dump( char const* tag_ ) {
+yaal::hcore::HString term_dump( void ) {
 	HStringStream ss;
 	HString line;
-	if ( tag_ ) {
-		line.append( "+" );
-		for ( int c( 0 ); c <= stdscr._mx; ++ c ) {
-			line.append( "-" );
-		}
-		line.append( "+\n" );
+	line.append( "+" );
+	for ( int c( 0 ); c <= stdscr._mx; ++ c ) {
+		line.append( "-" );
 	}
+	line.append( "+\n" );
 	ss << line;
-	if ( tag_ ) {
-		ss << tag_ << ": rows = " << ( stdscr._my + 1 )
-			<< ", cols = " << ( stdscr._mx + 1 )
-			<< ", row = " << stdscr._y
-			<< ", col = " << stdscr._x
-			<< ", attr = " << stdscr._attr
-			<< ", bkgd = " << stdscr._background
-			<< ", raw = " << stdscr._by << ' ' << stdscr._bx << ' ';
-		ss << hex;
-		for ( int i( 0 ); i <= static_cast<int>( sizeof ( stdscr.dummy ) ); ++ i ) {
-			if ( i ) {
-				ss << ' ';
-			}
-			ss << static_cast<int>( stdscr.dummy[i] );
+	ss << "rows = " << ( stdscr._my + 1 )
+		<< ", cols = " << ( stdscr._mx + 1 )
+		<< ", row = " << stdscr._y
+		<< ", col = " << stdscr._x
+		<< ", attr = " << attr_name( _fakeConsole_.attr( stdscr._attr ) )
+		<< ", bkgd = " << attr_name( _fakeConsole_.bg( stdscr._background ) )
+		<< ", raw = " << stdscr._by << ' ' << stdscr._bx << ' ';
+	ss << hex;
+	for ( int i( 0 ); i <= static_cast<int>( sizeof ( stdscr.dummy ) ); ++ i ) {
+		if ( i ) {
+			ss << ' ';
 		}
-		ss << dec << "\n";
+		ss << static_cast<int>( stdscr.dummy[i] );
 	}
+	ss << dec << "\n";
 	ss << line;
 	for ( int r( 0 ); r <= stdscr._my; ++ r ) {
-		if ( tag_ ) {
-			ss << '|';
-		}
+		ss << '|';
 		for ( int c( 0 ); c <= stdscr._mx; ++ c ) {
 			char* p( stdscr.at( r, c ) );
 			int ch( *p );
 			++ p;
 			int attr( *p );
-			if ( tag_ ) {
-				ss << col( attr );
-			} else {
-				ss << "0123456789ABCDEF"[attr & 0xf];
-			}
+			ss << col( attr );
 			if ( ch ) {
 				ss << static_cast<char>( ch );
 			} else {
 				ss << ' ';
 			}
 		}
-		if ( tag_ ) {
-			ss << *ansi::reset << '|';
-		}
+		ss << *ansi::reset << '|';
 		ss << '\n';
 	}
 	ss << line;

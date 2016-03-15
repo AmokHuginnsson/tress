@@ -41,7 +41,8 @@ public:
 };
 
 void build_attribute_maps( void );
-yaal::hcore::HString dump( char const* );
+yaal::hcore::HString term_dump( void );
+yaal::hcore::HString packed_dump( void );
 
 }
 
