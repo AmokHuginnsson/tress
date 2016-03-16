@@ -239,9 +239,18 @@ HString attr_name( int attr_ ) {
 			case ( 15 ): an.append( "white" );         break;
 		}
 	}
-
 	return ( an );
 }
+
+HString attr_name_short( int attr_ ) {
+	char colorSymbols[] = "krgnbmclKRGyBMCw";
+	HString ans( '{' );
+	ans.append( colorSymbols[attr_ & 0xf] );
+	ans.append( colorSymbols[( attr_ >> 4 ) & 0xf] );
+	ans.append( '}' );
+	return ( ans );
+}
+
 }
 
 void build_attribute_maps( void ) {
@@ -291,6 +300,44 @@ yaal::hcore::HString term_dump( void ) {
 		ss << '\n';
 	}
 	ss << line;
+	return ( ss.str() );
+}
+
+yaal::hcore::HString packed_dump( void ) {
+	int attr( -1 );
+	HStringStream ss;
+	char const* p( stdscr.at( 0, 0 ) );
+	char lastChar( static_cast<char>( 255 ) );
+	int repeat( 0 );
+	HString s;
+	auto f = [&repeat, &lastChar, &ss, &s]() {
+		if ( repeat > 0 ) {
+			if ( repeat < 6 ) {
+				s.assign( repeat, lastChar );
+			} else {
+				s.assign( '[' ).append( lastChar ).append( ',' ).append( repeat ).append( ']' );
+			}
+			ss << s;
+			repeat = 0;
+		}
+	};
+	for ( int i( 0 ); i < ( WINDOW::ROWS * WINDOW::COLS ); ++ i ) {
+		char ch( *p ? *p : ' ' );
+		++ p;
+		int a( *p );
+		++ p;
+		if ( a != attr ) {
+			attr = a;
+			f();
+			ss << attr_name_short( attr );
+		}
+		if ( ch != lastChar ) {
+			f();
+			lastChar = ch;
+		}
+		++ repeat;
+	}
+	f();
 	return ( ss.str() );
 }
 
