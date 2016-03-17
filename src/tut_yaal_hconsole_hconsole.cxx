@@ -110,6 +110,17 @@ TUT_UNIT_TEST( "set/get_attr" )
 	cons.leave_curses();
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "addch" )
+	HConsole& cons( HConsole::get_instance() );
+	cons.enter_curses();
+	tress::fake_console_subsystem::build_attribute_maps();
+	cons.set_attr( COLORS::FG_GREEN );
+	cons.move( 10, 15 );
+	cons.addch( 'a' );
+	ENSURE_EQUALS( "addch failed", tress::fake_console_subsystem::packed_dump(), "{kk}[ ,815]{gk}a{kk}[ ,1184]" );
+	cons.leave_curses();
+TUT_TEARDOWN()
+
 }
 
 #endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
