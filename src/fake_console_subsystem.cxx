@@ -173,8 +173,8 @@ struct WINDOW {
 
 void HFakeConsole::build_attribute_maps( WINDOW* win_ ) {
 	HConsole& cons( HConsole::get_instance() );
-	HScopedValueReplacement<chtype_t> bg( win_->_background, 0 );
-	HScopedValueReplacement<chtype_t> attr( win_->_attr, 0 );
+	HScopedValueReplacement<chtype_t> b( win_->_background, 0 );
+	HScopedValueReplacement<chtype_t> a( win_->_attr, 0 );
 	_background.clear();
 	for ( int col( COLORS::BG_BLACK ); col <= COLORS::BG_WHITE; col += 16 ) {
 		cons.set_background( col );
