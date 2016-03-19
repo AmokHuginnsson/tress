@@ -169,6 +169,13 @@ struct WINDOW {
 			_x = _mx;
 		}
 	}
+	void print( char const* format_, void* ap_ ) __attribute__(( format(printf, 2, 0) )) {
+		HString s;
+		s.vformat( format_, ap_ );
+		for ( char c : s ) {
+			addch( c );
+		}
+	}
 } stdscr;
 
 void HFakeConsole::build_attribute_maps( WINDOW* win_ ) {
@@ -452,8 +459,23 @@ int waddch( WINDOW* win_, int ch_ ) {
 	return ( 0 );
 }
 
-int wprintw( WINDOW*, char const*, ... );
-int wprintw( WINDOW*, char const*, ... ) {
+int wprintw( WINDOW*, char const*, ... ) __attribute__(( format(printf, 2, 3) ));
+int wprintw( WINDOW* win_, char const* format_, ... ) {
+	::std::va_list ap;
+	va_start( ap, format_ );
+	try {
+		win_->print( format_, &ap );
+	} catch ( ... ) {
+		va_end( ap );
+		throw;
+	}
+	va_end( ap );
+	return ( 0 );
+}
+
+int vwprintw( WINDOW*, char const*, void* ) __attribute__(( format(printf, 2, 0) ));
+int vwprintw( WINDOW* win_, char const* format_, void* ap_ ) {
+	win_->print( format_, ap_ );
 	return ( 0 );
 }
 
