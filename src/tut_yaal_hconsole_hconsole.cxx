@@ -121,6 +121,17 @@ TUT_UNIT_TEST( "addch" )
 	cons.leave_curses();
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "printf" )
+	HConsole& cons( HConsole::get_instance() );
+	cons.enter_curses();
+	tress::fake_console_subsystem::build_attribute_maps();
+	cons.set_attr( COLORS::FG_BLUE );
+	cons.move( 10, 15 );
+	cons.printf( "Ala ma kota %d", 13 );
+	ENSURE_EQUALS( "printf failed", tress::fake_console_subsystem::packed_dump(), "{kk}[ ,815]{bk}Ala ma kota 13{kk}[ ,1171]" );
+	cons.leave_curses();
+TUT_TEARDOWN()
+
 }
 
 #endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
