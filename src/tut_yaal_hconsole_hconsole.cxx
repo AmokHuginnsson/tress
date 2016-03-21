@@ -132,6 +132,25 @@ TUT_UNIT_TEST( "printf" )
 	cons.leave_curses();
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "mvprintf" )
+	HConsole& cons( HConsole::get_instance() );
+	cons.enter_curses();
+	tress::fake_console_subsystem::build_attribute_maps();
+	cons.set_attr( COLORS::FG_RED );
+	cons.mvprintf( 10, 15, "Ala ma kota %d", 13 );
+	ENSURE_EQUALS( "mvprintf failed", tress::fake_console_subsystem::packed_dump(), "{kk}[ ,815]{rk}Ala ma kota 13{kk}[ ,1171]" );
+	cons.leave_curses();
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "cmvprintf" )
+	HConsole& cons( HConsole::get_instance() );
+	cons.enter_curses();
+	tress::fake_console_subsystem::build_attribute_maps();
+	cons.cmvprintf( 10, 15, COLORS::FG_MAGENTA, "Ala ma kota %d", 13 );
+	ENSURE_EQUALS( "cmvprintf failed", tress::fake_console_subsystem::packed_dump(), "{kk}[ ,815]{mk}Ala ma kota 13{kk}[ ,1171]" );
+	cons.leave_curses();
+TUT_TEARDOWN()
+
 }
 
 #endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
