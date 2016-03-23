@@ -33,6 +33,7 @@ Copyright:
 #include <dlfcn.h>
 
 #include <yaal/hcore/base.hxx>
+#include <yaal/hcore/hstack.hxx>
 #include <yaal/tools/hmonitor.hxx>
 #include <yaal/tools/ansi.hxx>
 #include <yaal/tools/hstringstream.hxx>
@@ -59,15 +60,18 @@ struct WINDOW;
 
 class HFakeConsole {
 private:
+	typedef HStack<int> input_queue_t;
 	typedef HHashMap<chtype_t, int> attribute_map_t;
 	bool _active;
 	attribute_map_t _background;
 	attribute_map_t _attributes;
+	input_queue_t _inputQueue;
 public:
 	HFakeConsole( void )
 		: _active( false )
 		, _background()
-		, _attributes() {
+		, _attributes()
+		, _inputQueue() {
 	}
 	void activate( void ) {
 		_active = true;
@@ -94,6 +98,17 @@ public:
 			b = it->second;
 		}
 		return ( b );
+	}
+	void ungetch( int key_ ) {
+		_inputQueue.push( key_ );
+	}
+	int getch( void ) {
+		int key( -1 );
+		if ( !_inputQueue.is_empty() ) {
+			key = _inputQueue.top();
+			_inputQueue.pop();
+		}
+		return ( key );
 	}
 } _fakeConsole_;
 
@@ -176,12 +191,35 @@ struct WINDOW {
 			addch( c );
 		}
 	}
+	void addnstr( char const* str_, int len_ ) {
+		if ( len_ < 0 ) {
+			len_ = static_cast<int>( strlen( str_ ) );
+		}
+		for ( int i( 0 ); i < len_; ++ i ) {
+			addch( str_[i] );
+		}
+	}
+	void clrtoeol( void ) {
+		for ( int i( _x ); i <= _mx; ++ i ) {
+			char* p = at( _y, i );
+			*p = static_cast<char>( '\0' );
+			++p;
+			*p = static_cast<char>( _fakeConsole_.attr( _attr ) );
+		}
+	}
+	void clear() {
+		for ( int i( 0 ); i < BUF_SIZE; i += 2 ) {
+			_buf[i] = 0;
+			_buf[i + 1] = static_cast<char>( _fakeConsole_.bg( _background ) );
+		}
+	}
 } stdscr;
 
 void HFakeConsole::build_attribute_maps( WINDOW* win_ ) {
 	HConsole& cons( HConsole::get_instance() );
 	HScopedValueReplacement<chtype_t> b( win_->_background, 0 );
 	HScopedValueReplacement<chtype_t> a( win_->_attr, 0 );
+	_inputQueue.clear();
 	_background.clear();
 	for ( int col( COLORS::BG_BLACK ); col <= COLORS::BG_WHITE; col += 16 ) {
 		cons.set_background( col );
@@ -408,6 +446,16 @@ int nl( void ) {
 	return ( 0 );
 }
 
+int noecho( void );
+int noecho( void ) {
+	return ( 0 );
+}
+
+int echo( void );
+int echo( void ) {
+	return ( 0 );
+}
+
 int keypad( WINDOW*, bool );
 int keypad( WINDOW*, bool ) {
 	return ( 0 );
@@ -426,6 +474,17 @@ int scrollok( WINDOW*, bool ) {
 int leaveok( WINDOW*, bool );
 int leaveok( WINDOW*, bool ) {
 	return ( 0 );
+}
+
+int ungetch( int );
+int ungetch( int key_ ) {
+	_fakeConsole_.ungetch( key_ );
+	return ( 0 );
+}
+
+int wgetch( WINDOW* );
+int wgetch( WINDOW* ) {
+	return ( _fakeConsole_.getch() );
 }
 
 int use_default_colors( void );
@@ -476,6 +535,30 @@ int wprintw( WINDOW* win_, char const* format_, ... ) {
 int vwprintw( WINDOW*, char const*, void* ) __attribute__(( format(printf, 2, 0) ));
 int vwprintw( WINDOW* win_, char const* format_, void* ap_ ) {
 	win_->print( format_, ap_ );
+	return ( 0 );
+}
+
+int waddnstr( WINDOW*, char const*, int );
+int waddnstr( WINDOW* win_, char const* str_, int n_ ) {
+	win_->addnstr( str_, n_ );
+	return ( 0 );
+}
+
+int wclrtoeol( WINDOW* );
+int wclrtoeol( WINDOW* win_ ) {
+	win_->clrtoeol();
+	return ( 0 );
+}
+
+int wclear( WINDOW* );
+int wclear( WINDOW* win_ ) {
+	win_->clear();
+	return ( 0 );
+}
+
+int werase( WINDOW* );
+int werase( WINDOW* win_ ) {
+	win_->clear();
 	return ( 0 );
 }
 
