@@ -151,6 +151,28 @@ TUT_UNIT_TEST( "cmvprintf" )
 	cons.leave_curses();
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "addstr" )
+	HConsole& cons( HConsole::get_instance() );
+	cons.enter_curses();
+	tress::fake_console_subsystem::build_attribute_maps();
+	cons.clrscr();
+	cons.set_attr( COLORS::FG_CYAN );
+	cons.move( 10, 15 );
+	cons.addstr( "Ala ma kota" );
+	ENSURE_EQUALS( "addstr failed", tress::fake_console_subsystem::packed_dump(), "{kk}[ ,815]{ck}Ala ma kota{kk}[ ,1174]" );
+	cons.leave_curses();
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "ungetch/getch" )
+	HConsole& cons( HConsole::get_instance() );
+	cons.enter_curses();
+	tress::fake_console_subsystem::build_attribute_maps();
+	int key = KEY<'x'>::command;
+	cons.ungetch( key );
+	ENSURE_EQUALS( "ungetch/getch failed", cons.get_key(), key );
+	cons.leave_curses();
+TUT_TEARDOWN()
+
 }
 
 #endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
