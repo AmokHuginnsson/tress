@@ -140,12 +140,18 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "terminal colors" )
 	clog << endl;
-	clog << red << "    red    " << green << "    green    " << blue << "    blue    "
-		<< cyan << "    cyan    " << magenta << "    magenta    " << brown << " brown "
-		<< lightgray << " lightgray" << endl;
-	clog << brightred << " brightred " << brightgreen << " brightgreen " << brightblue << " brightblue "
-		<< brightcyan << " brightcyan " << brightmagenta << " brightmagenta " << yellow << " yellow "
-		<< white << "  white" << ansi::reset << endl;
+	HSequence const* bgs[] = {
+		&bgblack, &bgred, &bggreen, &bgblue, &bgcyan, &bgmagenta, &bgbrown, &bglightgray,
+		&bggray, &bgbrightred, &bgbrightgreen, &bgbrightblue, &bgbrightcyan, &bgbrightmagenta, &bgyellow, &bgwhite
+	};
+	for ( HSequence const* bg : bgs ) {
+		clog << *bg << black << "    black    " << red << "    red    " << green << "    green    " << blue << "    blue    "
+			<< cyan << "    cyan    " << magenta << "    magenta    " << brown << " brown "
+			<< lightgray << " lightgray" << ansi::reset << endl;
+		clog << *bg << gray << "    gray     " << brightred << " brightred " << brightgreen << " brightgreen " << brightblue << " brightblue "
+			<< brightcyan << " brightcyan " << brightmagenta << " brightmagenta " << yellow << " yellow "
+			<< white << "  white  " << ansi::reset << endl;
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and MSVC++ [Visualisers] testing." )
