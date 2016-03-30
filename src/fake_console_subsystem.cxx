@@ -212,7 +212,7 @@ struct WINDOW {
 			char* p = at( _y, i );
 			*p = static_cast<char>( '\0' );
 			++p;
-			*p = static_cast<char>( _fakeConsole_.attr( _attr ) );
+			*p = static_cast<char>( _fakeConsole_.bg( _background ) );
 		}
 	}
 	void clear() {
@@ -243,25 +243,43 @@ void HFakeConsole::build_attribute_maps( WINDOW* win_ ) {
 
 namespace {
 
-char const* col( int attr_ ) {
-	char const* c( "" );
+HString col( int attr_ ) {
+	HString c;
 	switch ( attr_ & 0xf ) {
-		case ( 0 ):  break;
-		case ( 1 ):  c = *ansi::red;           break;
-		case ( 2 ):  c = *ansi::green;         break;
-		case ( 3 ):  c = *ansi::brown;         break;
-		case ( 4 ):  c = *ansi::blue;          break;
-		case ( 5 ):  c = *ansi::magenta;       break;
-		case ( 6 ):  c = *ansi::cyan;          break;
-		case ( 7 ):  c = *ansi::lightgray;     break;
-		case ( 8 ):  c = *ansi::gray;          break;
-		case ( 9 ):  c = *ansi::brightred;     break;
-		case ( 10 ): c = *ansi::brightgreen;   break;
-		case ( 11 ): c = *ansi::yellow;        break;
-		case ( 12 ): c = *ansi::brightblue;    break;
-		case ( 13 ): c = *ansi::brightmagenta; break;
-		case ( 14 ): c = *ansi::brightcyan;    break;
-		case ( 15 ): c = *ansi::white;         break;
+		case ( 0 ):  c.append( *ansi::black );         break;
+		case ( 1 ):  c.append( *ansi::red );           break;
+		case ( 2 ):  c.append( *ansi::green );         break;
+		case ( 3 ):  c.append( *ansi::brown );         break;
+		case ( 4 ):  c.append( *ansi::blue );          break;
+		case ( 5 ):  c.append( *ansi::magenta );       break;
+		case ( 6 ):  c.append( *ansi::cyan );          break;
+		case ( 7 ):  c.append( *ansi::lightgray );     break;
+		case ( 8 ):  c.append( *ansi::gray );          break;
+		case ( 9 ):  c.append( *ansi::brightred );     break;
+		case ( 10 ): c.append( *ansi::brightgreen );   break;
+		case ( 11 ): c.append( *ansi::yellow );        break;
+		case ( 12 ): c.append( *ansi::brightblue );    break;
+		case ( 13 ): c.append( *ansi::brightmagenta ); break;
+		case ( 14 ): c.append( *ansi::brightcyan );    break;
+		case ( 15 ): c.append( *ansi::white );         break;
+	}
+	switch ( ( attr_ >> 4 ) & 0xf ) {
+		case ( 0 ):  c.append( *ansi::bgblack );         break;
+		case ( 1 ):  c.append( *ansi::bgred );           break;
+		case ( 2 ):  c.append( *ansi::bggreen );         break;
+		case ( 3 ):  c.append( *ansi::bgbrown );         break;
+		case ( 4 ):  c.append( *ansi::bgblue );          break;
+		case ( 5 ):  c.append( *ansi::bgmagenta );       break;
+		case ( 6 ):  c.append( *ansi::bgcyan );          break;
+		case ( 7 ):  c.append( *ansi::bglightgray );     break;
+		case ( 8 ):  c.append( *ansi::bggray );          break;
+		case ( 9 ):  c.append( *ansi::bgbrightred );     break;
+		case ( 10 ): c.append( *ansi::bgbrightgreen );   break;
+		case ( 11 ): c.append( *ansi::bgyellow );        break;
+		case ( 12 ): c.append( *ansi::bgbrightblue );    break;
+		case ( 13 ): c.append( *ansi::bgbrightmagenta ); break;
+		case ( 14 ): c.append( *ansi::bgbrightcyan );    break;
+		case ( 15 ): c.append( *ansi::bgwhite );         break;
 	}
 	return ( c );
 }
@@ -336,6 +354,7 @@ yaal::hcore::HString term_dump( void ) {
 	}
 	ss << dec << "\n";
 	ss << line;
+	int lastAttr( -1 );
 	for ( int r( 0 ); r <= stdscr._my; ++ r ) {
 		ss << '|';
 		for ( int c( 0 ); c <= stdscr._mx; ++ c ) {
@@ -343,13 +362,17 @@ yaal::hcore::HString term_dump( void ) {
 			int ch( *p );
 			++ p;
 			int attr( *p );
-			ss << col( attr );
+			if ( attr != lastAttr ) {
+				ss << col( attr );
+				lastAttr = attr;
+			}
 			if ( ch ) {
 				ss << static_cast<char>( ch );
 			} else {
 				ss << ' ';
 			}
 		}
+		lastAttr = -1;
 		ss << *ansi::reset << '|';
 		ss << '\n';
 	}
