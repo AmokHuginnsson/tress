@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="iso8859-2"?>
+<resource>
+	<menu>
+		<menu_item>
+			<label>System</label>
+			<menu>
+				<menu_item>
+					<label>Test</label>
+					<handler>run_test</handler>
+				</menu_item>
+			</menu>
+		</menu_item>
+		<menu_item>
+			<label>Koniec pracy</label>
+			<handler>run_quit</handler>
+		</menu_item>
+	</menu>
+</resource>
