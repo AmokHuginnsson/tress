@@ -32,6 +32,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/hconsole/hconsole.hxx>
+#include <yaal/hconsole/htuiprocess.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 #include "fake_console_subsystem.hxx"
@@ -170,6 +171,18 @@ TUT_UNIT_TEST( "ungetch/getch" )
 	int key = KEY<'x'>::command;
 	cons.ungetch( key );
 	ENSURE_EQUALS( "ungetch/getch failed", cons.get_key(), key );
+	cons.leave_curses();
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "notify_keyboard" )
+	HConsole& cons( HConsole::get_instance() );
+	cons.enter_curses();
+	tress::fake_console_subsystem::build_attribute_maps();
+	cons.ungetch( KEY<'x'>::command );
+	cons.notify_keyboard();
+	HTUIProcess tp;
+	tp.init_xrc( "tress", "data/tress.xrc" );
+	tp.run();
 	cons.leave_curses();
 TUT_TEARDOWN()
 
