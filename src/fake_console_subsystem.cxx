@@ -24,6 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <cstdarg>
+
 #include "config.hxx"
 
 #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
@@ -66,12 +68,14 @@ private:
 	attribute_map_t _background;
 	attribute_map_t _attributes;
 	input_queue_t _inputQueue;
+	mutable HMutex _mutex;
 public:
 	HFakeConsole( void )
 		: _active( false )
 		, _background()
 		, _attributes()
-		, _inputQueue() {
+		, _inputQueue()
+		, _mutex() {
 	}
 	void activate( void ) {
 		_active = true;
@@ -84,6 +88,7 @@ public:
 	}
 	void build_attribute_maps( WINDOW* );
 	int attr( chtype_t attr_ ) const {
+		HLock l( _mutex );
 		int a( COLORS::ATTR_DEFAULT );
 		attribute_map_t::const_iterator it( _attributes.find( attr_ ) );
 		if ( it != _attributes.end() ) {
@@ -92,6 +97,7 @@ public:
 		return ( a );
 	}
 	int bg( chtype_t bg_ ) const {
+		HLock l( _mutex );
 		int b( COLORS::BG_BLACK );
 		attribute_map_t::const_iterator it( _background.find( bg_ ) );
 		if ( it != _background.end() ) {
@@ -100,9 +106,11 @@ public:
 		return ( b );
 	}
 	void ungetch( int key_ ) {
+		HLock l( _mutex );
 		_inputQueue.push( key_ );
 	}
 	int getch( void ) {
+		HLock l( _mutex );
 		int key( -1 );
 		if ( !_inputQueue.is_empty() ) {
 			key = _inputQueue.top();
@@ -216,6 +224,7 @@ struct WINDOW {
 } stdscr;
 
 void HFakeConsole::build_attribute_maps( WINDOW* win_ ) {
+	HLock l( _mutex );
 	HConsole& cons( HConsole::get_instance() );
 	HScopedValueReplacement<chtype_t> b( win_->_background, 0 );
 	HScopedValueReplacement<chtype_t> a( win_->_attr, 0 );
