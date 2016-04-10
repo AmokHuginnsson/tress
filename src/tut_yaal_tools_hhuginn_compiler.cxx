@@ -387,6 +387,12 @@ char const progCompileErr40[] =
 	"}\n"
 ;
 
+char const progCompileErr41[] =
+	"main( a, b, a ) {\n"
+	"\treturn ( a + b );"
+	"}"
+;
+
 char const progCompileErr42[] =
 	"class A {_x=0;}\n"
 	"class A {_y=0;}\n"
@@ -677,6 +683,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr38,
 		progCompileErr39,
 		progCompileErr40,
+		progCompileErr41,
 		progCompileErr42,
 		progCompileErr43,
 		progCompileErr44,
@@ -758,6 +765,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 10, 2, 2 },   // 38
 		{ 10, 2, 2 },   // 39
 		{ 52, 5, 4 },   // 40
+		{ 12, 1, 13 },  // 41
 		{ 22, 2, 7 },   // 42
 		{ 10, 1, 11 },  // 43
 		{ 0, 1, 1 },    // 44
