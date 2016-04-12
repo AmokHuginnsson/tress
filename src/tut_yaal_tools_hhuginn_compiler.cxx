@@ -640,6 +640,14 @@ char const progCompileErr78[] =
 	"}\n"
 ;
 
+char const progCompileErr79[] =
+	"main() {\n"
+	"\tx = y;\n"
+	"\ty = 0;\n"
+	"\treturn ( x );\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -721,6 +729,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr76,
 		progCompileErr77,
 		progCompileErr78,
+		progCompileErr79,
 		NULL
 	};
 	int const err[][3] = {
@@ -803,6 +812,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 20, 3, 4 },   // 76
 		{ 20, 3, 4 },   // 77
 		{ 20, 3, 4 },   // 78
+		{ 14, 2, 6 },   // 79
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
