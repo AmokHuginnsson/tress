@@ -74,6 +74,15 @@ TUT_UNIT_TEST( "copy construction" )
 	ENSURE_EQUALS( "copy construction failed (is_empty)", copy.empty(), false );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "construction from (const) iterator" )
+	char const str[] = "Ala ma kota, a nie psa";
+	HString s1( str + 7, str + 10 );
+	ENSURE_EQUALS( "construction form const_iterator failed", s1, "kot" );
+	HString src( str );
+	HString s2( src.begin() + 7, src.begin() + 10 );
+	ENSURE_EQUALS( "construction form iterator failed", s2, "kot" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "construction from int" )
 	static int const INIT = 1024;
 	static char const CORRECT[] = "1024";
@@ -846,6 +855,21 @@ TUT_UNIT_TEST( "pop_back" )
 	ENSURE_EQUALS( "pop_back failed", s, "A" );
 	s.pop_back();
 	ENSURE_EQUALS( "pop_back failed", s, "" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "cmp opers (left literal)" )
+	ENSURE( "!= failed", "000" != "001"_ys );
+	ENSURE_NOT( "!= failed", "000" != "000"_ys );
+	ENSURE( ">= failed", "001" >= "000"_ys );
+	ENSURE( ">= failed", "001" >= "001"_ys );
+	ENSURE_NOT( ">= failed", "000" >= "001"_ys );
+	ENSURE( "<= failed", "000" <= "001"_ys );
+	ENSURE( "<= failed", "001" <= "001"_ys );
+	ENSURE_NOT( "<= failed", "001" <= "000"_ys );
+	ENSURE( "> failed", "001" > "000"_ys );
+	ENSURE_NOT( "> failed", "001" > "001"_ys );
+	ENSURE( "< failed", "000" < "001"_ys );
+	ENSURE_NOT( "< failed", "001" < "001"_ys );
 TUT_TEARDOWN()
 
 }
