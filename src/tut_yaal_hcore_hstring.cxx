@@ -83,47 +83,46 @@ TUT_UNIT_TEST( "construction from (const) iterator" )
 	ENSURE_EQUALS( "construction form iterator failed", s2, "kot" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "construction from int" )
-	static int const INIT = 1024;
-	static char const CORRECT[] = "1024";
-	HString str( INIT );
-	ENSURE_EQUALS ( "construction from int does not work", str, CORRECT );
-	ENSURE_EQUALS( "construction from int failed (size)",
-			str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
-	ENSURE_EQUALS( "construction from int failed (is_empty)", str.empty(), false );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "construction from int long" )
-	static int long const INIT = 1024;
-	static char const CORRECT[] = "1024";
-	HString str( INIT );
-	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
-	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
-	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "construction from int unsigned" )
-	static int unsigned const INIT = 1024;
-	static char const CORRECT[] = "1024";
-	HString str( INIT );
-	ENSURE_EQUALS ( "construction from int unsigned does not work", str, CORRECT );
-	ENSURE_EQUALS( "construction from int unsigned failed (size)",
-			str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int unsigned failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
-	ENSURE_EQUALS( "construction from int unsigned failed (is_empty)", str.empty(), false );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "construction from int long unsigned" )
-	static int long unsigned const INIT = 1024;
-	static char const CORRECT[] = "1024";
-	HString str( INIT );
-	ENSURE_EQUALS ( "construction from int long unsigned does not work", str, CORRECT );
-	ENSURE_EQUALS( "construction from int long unsigned failed (size)",
-			str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int long unsigned failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
-	ENSURE_EQUALS( "construction from int long unsigned failed (is_empty)", str.empty(), false );
+TUT_UNIT_TEST( "construction from integers" )
+	/* int */ {
+		static int const INIT = 1024;
+		static char const CORRECT[] = "1024";
+		HString str( INIT );
+		ENSURE_EQUALS ( "construction from int does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int failed (size)",
+				str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+		ENSURE_EQUALS( "construction from int failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int failed (is_empty)", str.empty(), false );
+	}
+	/* int long */ {
+		static int long const INIT = 1024;
+		static char const CORRECT[] = "1024";
+		HString str( INIT );
+		ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
+	}
+	/* int unsigned */ {
+		static int unsigned const INIT = 1024;
+		static char const CORRECT[] = "1024";
+		HString str( INIT );
+		ENSURE_EQUALS ( "construction from int unsigned does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int unsigned failed (size)",
+				str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+		ENSURE_EQUALS( "construction from int unsigned failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int unsigned failed (is_empty)", str.empty(), false );
+	}
+	/* int long unsigned */ {
+		static int long unsigned const INIT = 1024;
+		static char const CORRECT[] = "1024";
+		HString str( INIT );
+		ENSURE_EQUALS ( "construction from int long unsigned does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int long unsigned failed (size)",
+				str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+		ENSURE_EQUALS( "construction from int long unsigned failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int long unsigned failed (is_empty)", str.empty(), false );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "construction from char" )
