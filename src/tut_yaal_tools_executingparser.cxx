@@ -817,7 +817,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule ternary( booleanXor >> -( '?' >> expression >> ':' >> expression ) );
 	HRule value( ternary );
 	HRule subscript( name >> +( subscriptOperator | functionCallOperator | memberAccess ) );
-	expression %= ( *( ( ( subscript | name ) >> ( string( "=" ) | "+=" | "-=" | "*=" | "/=" | "%=" | "^=" ) ) ^ '=' ) >> value );
+	HRule assignable( subscript | name );
+	expression %= ( *( ( assignable >> ( string( "=" ) | "+=" | "-=" | "*=" | "/=" | "%=" | "^=" ) ) ^ '=' ) >> value );
 	HRule expressionStatement( expression >> ';' );
 	HRule loopScope;
 	HRule catchStatement( e_p::constant( "catch" ) >> '(' >> name >> name >> ')' >> scope );
