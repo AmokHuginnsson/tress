@@ -669,7 +669,7 @@ TUT_UNIT_TEST( "non-trivial recursive rule" )
 	elem %= ( real | ( character( '(' ) >> sum >> ')' ) );
 	HRule name( regex( "\\<a-z\\>" ) );
 	HRule eq( name >> '=' >> elem );
-	HExecutingParser ep2( eq );
+	HExecutingParser ep( eq );
 	char epDesc[][80] = {
 		"A_ = ( regex( \"\\<a-z\\>\" ) >> '=' >> B_ )",
 		"B_ = ( real | ( '(' >> ( C_ >> *( '+' >> C_ ) ) >> ')' ) )",
@@ -760,8 +760,8 @@ TUT_UNIT_TEST( "infinite recursion bug" )
 		HExecutingParser ep( A );
 		ep( "m(){return(0);}" );
 		FAIL( "Failed to detect ifinite recursion in grammar." );
-	} catch ( HExecutingParserException const& ) {
-		// ok
+	} catch ( HExecutingParserException const& e ) {
+		ENSURE_EQUALS( "bad message", e.what(), "Infinite recursion detected: B_ = ( -( real >> A_ ) >> A_ )"_ys );
 	}
 TUT_TEARDOWN()
 
