@@ -750,19 +750,91 @@ TUT_UNIT_TEST( "two inter-locking recursion loops" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "infinite recursion bug" )
-	HRule A;
-	HRule B( A | integer );
-	HRule C;
-	C %= ( real >> B );
-	A %= ( -C >> B );
-	try {
-		HExecutingParser ep( A );
-		ep( "m(){return(0);}" );
-		FAIL( "Failed to detect ifinite recursion in grammar." );
-	} catch ( HExecutingParserException const& e ) {
-		ENSURE_EQUALS( "bad message", e.what(), "Infinite recursion detected: B_ = ( -( real >> A_ ) >> A_ )"_ys );
+TUT_UNIT_TEST( "trivial infinite recursion bug (follows)" )
+	/* left recursion */ {
+		HRule A;
+		HRule B( A >> integer );
+		A %= ( B >> integer );
+		try {
+			HExecutingParser ep( A );
+			FAIL( "Failed to detect infinite recursion in grammar." );
+		} catch ( HExecutingParserException const& e ) {
+			ENSURE_EQUALS( "bad message", e.what(), "Infinite recursion detected: A_ = ( ( A_ >> integer ) >> integer )"_ys );
+		}
 	}
+	/* non recursion */ {
+		HRule A;
+		HRule B( integer >> A );
+		A %= ( integer >> B );
+		HExecutingParser ep( A ); /* <--- Must not throw! */
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "trivial infinite recursion bug (alternative)" )
+	/* left */ {
+		HRule A;
+		HRule B( A | integer );
+		A %= ( B | integer );
+		try {
+			HExecutingParser ep( A );
+			FAIL( "Failed to detect infinite recursion in grammar." );
+		} catch ( HExecutingParserException const& e ) {
+			ENSURE_EQUALS( "bad message", e.what(), "Infinite recursion detected: A_ = ( ( A_ | integer ) | integer )"_ys );
+		}
+	}
+	/* right */ {
+		HRule A;
+		HRule B( integer | A );
+		A %= ( integer | B );
+		try {
+			HExecutingParser ep( A );
+			FAIL( "Failed to detect infinite recursion in grammar." );
+		} catch ( HExecutingParserException const& e ) {
+			ENSURE_EQUALS( "bad message", e.what(), "Infinite recursion detected: A_ = ( integer | ( integer | A_ ) )"_ys );
+		}
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "trivial infinite recursion in terminal delimited follows" )
+	HRule A;
+	HRule B( A >> integer );
+	A %= ( B >> integer );
+	try {
+		HExecutingParser ep( character( '"' ) >> A >> '"' );
+		FAIL( "Failed to detect infinite recursion in grammar." );
+	} catch ( HExecutingParserException const& e ) {
+		ENSURE_EQUALS( "bad message", e.what(), "Infinite recursion detected: A_ = ( ( A_ >> integer ) >> integer )"_ys );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "infinite recursion bug (terminal is optional)" )
+	/* true left recursion */ {
+		HRule A;
+		HRule B( A | integer );
+		HRule C( real >> B );
+		A %= ( -C >> B );
+		try {
+			HExecutingParser ep( A );
+			FAIL( "Failed to detect infinite recursion in grammar." );
+		} catch ( HExecutingParserException const& e ) {
+			ENSURE_EQUALS( "bad message", e.what(), "Infinite recursion detected: B_ = ( -( real >> A_ ) >> A_ )"_ys );
+		}
+	}
+	/* non recursion */ {
+		HRule A;
+		HRule B( A | integer );
+		HRule C( real >> B );
+		A %= ( C >> B );
+		HExecutingParser ep( A ); /* <--- Must not throw! */
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "follows with recursion bug" )
+	HRule A;
+	HRule C( real >> A >> '@' );
+	HRule B( integer >> C );
+	A %= HRule( B >> "=" >> C >> C );
+	HExecutingParser ep( A ); /* <--- Must not throw! */
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "unnamed HHuginn grammar" )
