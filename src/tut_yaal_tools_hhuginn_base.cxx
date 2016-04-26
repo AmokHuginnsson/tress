@@ -67,6 +67,7 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 	hcore::HString const& source_,
 	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_
 ) {
+	clog << source_ << endl;
 	HHuginn h;
 	HLock l( _mutex );
 	_sourceCache.set_buffer( source_ );

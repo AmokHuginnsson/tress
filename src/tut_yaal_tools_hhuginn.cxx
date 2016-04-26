@@ -76,7 +76,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"parameterIdentifier = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
 		"ifStatement = ( ifClause >> *( \"else\" >> ifClause ) >> -( \"else\" >> scope ) )",
 		"whileStatement = ( \"while\" >> '(' >> expression >> ')' >> scope )",
-		"forStatement = ( \"for\" >> '(' >> forIdentifier >> ':' >> expression >> ')' >> scope )",
+		"forStatement = ( \"for\" >> '(' >> assignable >> ':' >> expression >> ')' >> scope )",
 		"switchStatement = ( \"switch\" >> '(' >> expression >> ')' >> '{' >> +caseStatement >> -defaultStatement >> '}' )",
 		"tryCatchStatement = ( \"try\" >> scope >> +catchStatement )",
 		"throwStatement = ( \"throw\" >> expression >> ';' )",
@@ -88,17 +88,15 @@ TUT_UNIT_TEST( "grammar test" )
 		"variableSetter = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
 		"ternary = ( ( booleanOr >> -( \"^^\" >> booleanOr ) ) >> -( '?' >> expression >> ':' >> expression ) )",
 		"ifClause = ( \"if\" >> '(' >> expression >> ')' >> scope )",
-		"forIdentifier = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
 		"caseStatement = ( \"case\" >> '(' >> expression >> ')' >> ':' >> scope >> -breakStatement )",
 		"defaultStatement = ( \"default\" >> ':' >> scope )",
-		"catchStatement = ( \"catch\" >> '(' >> exceptionType >> exceptionVariable >> ')' >> scope )",
+		"catchStatement = ( \"catch\" >> '(' >> exceptionType >> assignable >> ')' >> scope )",
 		"reference = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
 		"subscriptOperator = ( '[' >> ( ( ( rangeOper >> -argument ) | ( argument >> -( rangeOper >> -argument ) ) ) >> -( rangeOper >> -argument ) ) >> ']' )",
 		"functionCallOperator = ( '(' >> -argList >> ')' )",
 		"memberAccess = ( '.' >> member )",
 		"booleanOr = ( booleanAnd >> *( \"||\" >> booleanAnd ) )",
 		"exceptionType = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
-		"exceptionVariable = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
 		"rangeOper = ':'",
 		"argument = expression",
 		"argList = ( argument >> *( ',' >> argument ) )",
@@ -645,21 +643,23 @@ TUT_UNIT_TEST( "throw,try,catch" )
 	ENSURE_EQUALS(
 		"throw,try,catch failed",
 		execute(
-			"f(x){\n"
-			"if(x<0){\n"
-			"throw Exception(\"neg arg\");\n"
+			"f( x ) {\n"
+			"\tif ( x < 0 ) {\n"
+			"\t\tthrow Exception( \"neg arg\" );\n"
+			"\t}\n"
+			"\treturn( x * x );\n"
 			"}\n"
-			"return(x*x);\n"
-			"}\n"
-			"main(){\n"
-			"v=\"\";\n"
-			"try{\n"
-			"v=string(f(2));v=v+string(f(-2));v=v+\"end\";\n"
-			"}\n"
-			"catch(Exception e){\n"
-			"v=v+e.what();\n"
-			"}\n"
-			"return(v);\n"
+			"\n"
+			"main() {\n"
+			"\tv = \"\";\n"
+			"\ttry {\n"
+			"\t\tv = string( f( 2 ) );\n"
+			"\t\tv = v + string( f( -2 ) );\n"
+			"\t\tv = v + \"end\";\n"
+			"\t} catch( Exception e ) {\n"
+			"\t\tv = v + e.what();\n"
+			"\t}\n"
+			"\treturn ( v );\n"
 			"}\n"
 		),
 		"4neg arg"
