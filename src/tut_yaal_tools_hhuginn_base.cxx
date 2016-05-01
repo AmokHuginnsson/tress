@@ -24,6 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <cstring>
+
 #include <TUT/tut.hpp>
 
 M_VCSID( "$Id: " __ID__ " $" )
@@ -63,11 +65,116 @@ void tut_yaal_tools_hhuginn_base::test_file( hcore::HString const& name_ ) {
 	return;
 }
 
+namespace {
+bool is_op( char c ) {
+	char const ops[] = "+-*/%|&^!=:?<>";
+	return ( strchr( ops, c ) != nullptr );
+}
+hcore::HString prettify( yaal::hcore::HString const& src_ ) {
+	HString out;
+	int tabs( 0 );
+	HString nl;
+	for ( int i( 0 ); i < src_.get_length(); ++ i ) {
+		char curr( src_[i] );
+		if ( ( i + 1 ) < src_.get_length() ) {
+			char next( src_[i + 1] );
+			if ( curr == '{' ) {
+				++ tabs;
+			} else if ( next == '}' ) {
+				-- tabs;
+			}
+			nl.assign( "\n", 1 );
+			if ( tabs > 0 ) {
+				nl.append( tabs, '\t' );
+			}
+			if ( ( curr == '{' ) || ( curr == ';' ) ) {
+				out.push_back( curr );
+				if ( next != '\n' ) {
+					out.append( nl );
+				}
+			} else if ( ( curr == '}' ) && ( next != '\n' ) ) {
+				out.push_back( curr );
+				int n( i );
+				while ( n < src_.get_length() ) {
+					char next2( src_[n] );
+					if ( ( next2 != ' ' ) || ( next2 != '\t' ) ) {
+						break;
+					}
+					++ n;
+				}
+				bool keyword( false );
+				if ( n < src_.get_length() ) {
+					char const kws[][6] = {
+						"else",
+						"catch",
+						"break"
+					};
+					for ( char const* kw : kws ) {
+						int len( static_cast<int>( strlen( kw ) ) );
+						if ( ( strncmp( kw, src_.raw() + n, static_cast<size_t>( len ) ) == 0 ) && ! islower( src_.raw()[ n + len ] ) ) {
+							keyword = true;
+							break;
+						}
+					}
+				}
+				if ( ! keyword ) {
+					out.append( nl );
+				}
+			} else if ( ( curr == '(' ) && ( next != ' ' ) && ( next != ')' ) ) {
+				out.push_back( curr );
+				out.push_back( ' ' );
+			} else if ( ( curr != '(' ) && ( curr != ' ' ) && ( next == ')' ) ) {
+				out.push_back( curr );
+				out.push_back( ' ' );
+			} else if ( ( curr == ')' ) && ( next == '{' ) ) {
+				out.push_back( curr );
+				out.push_back( ' ' );
+			} else if ( ( curr != ' ' ) && ( next == '(' ) ) {
+				char const kws[][8] = {
+					"if", "for", "catch", "return", "switch", "case", "while"
+				};
+				bool keyword( false );
+				for ( char const* kw : kws ) {
+					int len( static_cast<int>( strlen( kw ) ) );
+					if ( ( i > ( len + 1 ) ) && ( ! islower( src_[i - len] ) ) && ( strncmp( kw, src_.raw() + i + 1 - len, static_cast<size_t>( len ) ) == 0 ) ) {
+						keyword = true;
+						break;
+					}
+				}
+				out.push_back( curr );
+				if ( keyword ) {
+					out.push_back( ' ' );
+				}
+			} else if ( curr == ',' ) {
+				out.push_back( curr );
+				out.push_back( ' ' );
+			} else if ( ( curr != ' ' ) && ( ! is_op( curr ) ) && is_op( next ) ) {
+				out.push_back( curr );
+				out.push_back( ' ' );
+			} else if ( is_op( curr ) && ( ! is_op( next ) ) && ( next != ' ' ) ) {
+				out.push_back( curr );
+				out.push_back( ' ' );
+			} else {
+				out.push_back( curr );
+				if ( curr == '\n' ) {
+					out.append( nl.raw() + 1 );
+				}
+			}
+		} else {
+			out.push_back( curr );
+		}
+	}
+	return ( out );
+}
+}
+
 hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 	hcore::HString const& source_,
 	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_
 ) {
-	clog << source_ << endl;
+	if ( setup._verbose ) {
+		clog << prettify( source_ ) << endl;
+	}
 	HHuginn h;
 	HLock l( _mutex );
 	_sourceCache.set_buffer( source_ );
