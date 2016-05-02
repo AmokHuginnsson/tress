@@ -245,7 +245,8 @@ TUT_UNIT_TEST( "while" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "for" )
-	ENSURE_EQUALS( "while failed", execute( "main(){x=list(1,2,3);s=0;for(e:x){s=s+e;}return(string(s));}" ), "6" );
+	ENSURE_EQUALS( "for failed", execute( "main(){x=list(1,2,3);s=0;for(e:x){s=s+e;}return(string(s));}" ), "6" );
+	ENSURE_EQUALS( "for(expr:) failed", execute( "main(){x=list(1,2,3);s=0;l=[0];for(l[0]:x){s=s+l[0];}return(string(s)+string(l[0]));}" ), "63" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "switch" )
