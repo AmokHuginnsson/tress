@@ -801,6 +801,50 @@ TUT_UNIT_TEST( "boolean not" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "operator precedence" )
+	ENSURE_EQUALS(
+		"boolean not failed",
+		execute(
+			"main(){"
+			"s=\"\";"
+			"s+=string(2-3+5);s+=\":\";"
+			"s+=string(2+3*5);s+=\":\";"
+			"s+=string($2+$3^$5);s+=\":\";"
+			"s+=string($2*$3^$5);s+=\":\";"
+			"s+=string($5^$3^$2);s+=\":\";"
+			"s+=string(7/2*5);s+=\":\";"
+			"s+=string(3%2*5);s+=\":\";"
+			"x=$3;"
+			"s+=string(-x!);s+=\":\";"
+			"s+=string(|-2|-|-3|);s+=\":\";"
+			"s+=string($2+$3!);s+=\":\";"
+			"return(s);"
+			"}"
+		),
+		"4:17:245:486:1953125:15:5:-6:-1:8:"
+	);
+	ENSURE_EQUALS(
+		"boolean not failed",
+		execute(
+			"main(){"
+			"s=\"\";"
+			"s+=string(2-(3+5));s+=\":\";"
+			"s+=string((2+3)*5);s+=\":\";"
+			"s+=string(($2+$3)^$5);s+=\":\";"
+			"s+=string(($2*$3)^$5);s+=\":\";"
+			"s+=string(($2^$3)^$5);s+=\":\";"
+			"s+=string(7/(2*3));s+=\":\";"
+			"s+=string(3%(2*5));s+=\":\";"
+			"x=$-3;"
+			"s+=string((-x)!);s+=\":\";"
+			"s+=string(($2+$3)!);s+=\":\";"
+			"return(s);"
+			"}"
+		),
+		"-6:25:3125:7776:32768:1:3:6:120:"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
