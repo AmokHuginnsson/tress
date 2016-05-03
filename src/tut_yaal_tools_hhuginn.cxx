@@ -665,6 +665,61 @@ TUT_UNIT_TEST( "throw,try,catch" )
 		),
 		"4neg arg"
 	);
+	ENSURE_EQUALS(
+		"throw,try,catch(Type expr) failed",
+		execute(
+			"f( x ) {\n"
+			"\tif ( x < 0 ) {\n"
+			"\t\tthrow Exception( \"neg arg\" );\n"
+			"\t}\n"
+			"\treturn( x * x );\n"
+			"}\n"
+			"\n"
+			"main() {\n"
+			"\tv = \"\";\n"
+			"\ttry {\n"
+			"\t\tl = [0];"
+			"\t\tv = string( f( 2 ) );\n"
+			"\t\tv = v + string( f( -2 ) );\n"
+			"\t\tv = v + \"end\";\n"
+			"\t} catch( Exception2 e ) {\n"
+			"\t\tl = e;\n"
+			"\t} catch( Exception l[0] ) {\n"
+			"\t\tv = v + l[0].what();\n"
+			"\t}\n"
+			"\treturn ( v );\n"
+			"}\n"
+		),
+		"4neg arg"
+	);
+	ENSURE_EQUALS(
+		"throw,try,catch(Type expr) failed",
+		execute(
+			"f( x ) {\n"
+			"\tif ( x < 0 ) {\n"
+			"\t\tthrow Exception( \"neg arg\" );\n"
+			"\t}\n"
+			"\treturn( x * x );\n"
+			"}\n"
+			"\n"
+			"main() {\n"
+			"\tv = \"\";\n"
+			"\tl = [\"x\"];"
+			"\ttry {\n"
+			"\t\tv = string( f( 2 ) );\n"
+			"\t\tv = v + string( f( -2 ) );\n"
+			"\t\tv = v + \"end\";\n"
+			"\t} catch( Exception2 e ) {\n"
+			"\t\tl = e;\n"
+			"\t} catch( Exception l[0] ) {\n"
+			"\t\tv = v + l[0].what();\n"
+			"\t}\n"
+			"\tv = v + l[0].what();\n"
+			"\treturn ( v );\n"
+			"}\n"
+		),
+		"4neg argneg arg"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "assert" )

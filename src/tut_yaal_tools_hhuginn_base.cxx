@@ -94,10 +94,10 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 				}
 			} else if ( ( curr == '}' ) && ( next != '\n' ) ) {
 				out.push_back( curr );
-				int n( i );
+				int n( i + 1 );
 				while ( n < src_.get_length() ) {
 					char next2( src_[n] );
-					if ( ( next2 != ' ' ) || ( next2 != '\t' ) ) {
+					if ( ( next2 != ' ' ) && ( next2 != '\t' ) ) {
 						break;
 					}
 					++ n;
@@ -154,6 +154,8 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 			} else if ( is_op( curr ) && ( ! is_op( next ) ) && ( next != ' ' ) ) {
 				out.push_back( curr );
 				out.push_back( ' ' );
+			} else if ( curr == '\t' ) {
+				/* skip */
 			} else {
 				out.push_back( curr );
 				if ( curr == '\n' ) {
