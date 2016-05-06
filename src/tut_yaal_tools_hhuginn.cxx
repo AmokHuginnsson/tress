@@ -845,6 +845,61 @@ TUT_UNIT_TEST( "operator precedence" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "are constants constant? (immutable)" )
+	ENSURE_EQUALS(
+		"constant in assignment was modified",
+		execute(
+			"main(){"
+			"s=\"\";"
+			"for(e:[1,1]) {"
+			"x=0;"
+			"x+=e;"
+			"s+=string(x);"
+			"}"
+			"return(s);"
+			"}"
+		),
+		"11"
+	);
+	ENSURE_EQUALS(
+		"constant in function call was modified",
+		execute(
+			"inc(x){"
+			"x+=1;"
+			"return(x);"
+			"}"
+			"main(){"
+			"s=\"\";"
+			"for(e:[0,0]) {"
+			"x=inc(0);"
+			"x+=e;"
+			"s+=string(x);"
+			"}"
+			"return(s);"
+			"}"
+		),
+		"11"
+	);
+	ENSURE_EQUALS(
+		"constant in function call (second arg) was modified",
+		execute(
+			"inc(x, y){"
+			"y+=x;"
+			"return(y);"
+			"}"
+			"main(){"
+			"s=\"\";"
+			"for(e:[1,1]) {"
+			"x=inc(e, 0);"
+			"s+=string(x);"
+			"}"
+			"return(s);"
+			"}"
+		),
+		"11"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
