@@ -900,6 +900,19 @@ TUT_UNIT_TEST( "are constants constant? (immutable)" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "many variables definition in one expression" )
+	ENSURE_EQUALS(
+		"definition of many variables failed",
+		execute(
+			"main(){"
+			"a=b=c=d=e=f=g=h=i=j=k=l=m=n=o=p=q=r=s=t=u=v=w=x=y=z=1;"
+			"return(string(a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+q+r+s+t+u+v+w+x+y+z));"
+			"}"
+		),
+		"26"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
