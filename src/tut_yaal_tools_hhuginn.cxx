@@ -45,6 +45,8 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 struct tut_yaal_tools_hhuginn : public tress::tut_yaal_tools_hhuginn_base {
+	void test_subscript( HHuginn::TYPE, char const*, char const* );
+	void test_range( HHuginn::TYPE, char const*, char const* );
 };
 
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn, "yaal::tools::HHuginn" );
@@ -379,16 +381,43 @@ TUT_UNIT_TEST( "set()" )
 	);
 TUT_TEARDOWN()
 
+void tut_yaal_tools_hhuginn::test_subscript( HHuginn::TYPE type_, char const* index_, char const* result_ ) {
+	hcore::HString src( "main(){x=" );
+	switch ( type_ ) {
+		case ( HHuginn::TYPE::STRING ): {
+			src.append( "\"abcdefghijklmnopqrstuvwxyz\"" );
+		} break;
+		case ( HHuginn::TYPE::LIST ): {
+			src.append( "list('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z')" );
+		} break;
+		case ( HHuginn::TYPE::DEQUE ): {
+			src.append( "deque('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z')" );
+		} break;
+		default: {
+			M_ASSERT( ! "bad path"[0] );
+		}
+	}
+	src.append( ";return(string(x[" ).append( index_ ).append( "]));}" );
+	ENSURE_EQUALS( "subscript failed", execute( src ), result_ );
+	return;
+}
+
 TUT_UNIT_TEST( "subscript" )
-	ENSURE_EQUALS( "subscript failed", execute( "main(){x=list(1,2,3);return(string(x[1]));}" ), "2" );
-	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[0]));}" ), "a" );
-	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[25]));}" ), "z" );
-	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[-26]));}" ), "a" );
-	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[-1]));}" ), "z" );
-	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[13]));}" ), "n" );
-	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[-13]));}" ), "n" );
-	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[12]));}" ), "m" );
-	ENSURE_EQUALS( "subscript failed", execute( "main(){return(string(\"abcdefghijklmnopqrstuvwxyz\"[-12]));}" ), "o" );
+	HHuginn::TYPE types[] = {
+		HHuginn::TYPE::STRING,
+		HHuginn::TYPE::LIST,
+		HHuginn::TYPE::DEQUE
+	};
+	for ( HHuginn::TYPE t : types ) {
+		test_subscript( t, "0", "a" );
+		test_subscript( t, "25", "z" );
+		test_subscript( t, "-26", "a" );
+		test_subscript( t, "-1", "z" );
+		test_subscript( t, "13", "n" );
+		test_subscript( t, "-13", "n" );
+		test_subscript( t, "12", "m" );
+		test_subscript( t, "-12", "o" );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "subscript repeat" )
@@ -399,45 +428,72 @@ TUT_UNIT_TEST( "function ref" )
 	ENSURE_EQUALS( "function ref failed", execute( "f(){return(\"x\");}g(){return(f);}main(){return(g()());}" ), "x" );
 TUT_TEARDOWN()
 
+void tut_yaal_tools_hhuginn::test_range( HHuginn::TYPE type_, char const* range_, char const* result_ ) {
+	hcore::HString src;
+	if ( type_ == HHuginn::TYPE::STRING ) {
+		src.append( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[" ).append( range_ ).append( "]);}" );
+	} else {
+		src.append( "import Text as t;apply(x,T){i=0;s=size(x);while(i<s){x[i]=T(x[i]);i+=1;}return(x);}main(){return(t.join(apply(" )
+			.append( type_ == HHuginn::TYPE::LIST ? "list" : "deque" )
+			.append( "('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z')[" )
+			.append( range_ )
+			.append( "],string),\"\"));}" );
+	}
+	ENSURE_EQUALS( "range failed", execute( src ), result_ );
+	return;
+}
+
 TUT_UNIT_TEST( "range(slice)" )
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:]);}" ), "abcdefghijklmnopqrstuvwxyz" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:0]);}" ), "" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:1]);}" ), "a" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:2]);}" ), "ab" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:24]);}" ), "abcdefghijklmnopqrstuvwx" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:25]);}" ), "abcdefghijklmnopqrstuvwxy" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:26]);}" ), "abcdefghijklmnopqrstuvwxyz" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[0:]);}" ), "abcdefghijklmnopqrstuvwxyz" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[1:]);}" ), "bcdefghijklmnopqrstuvwxyz" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[2:]);}" ), "cdefghijklmnopqrstuvwxyz" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[24:]);}" ), "yz" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[25:]);}" ), "z" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[26:]);}" ), "" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[1:25]);}" ), "bcdefghijklmnopqrstuvwxy" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[2:24]);}" ), "cdefghijklmnopqrstuvwx" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[4:8]);}" ), "efgh" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:-1]);}" ), "abcdefghijklmnopqrstuvwxy" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:-10]);}" ), "abcdefghijklmnop" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:-100]);}" ), "" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-1:]);}" ), "z" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-10:]);}" ), "qrstuvwxyz" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-100:]);}" ), "abcdefghijklmnopqrstuvwxyz" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-8:-4]);}" ), "stuv" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:100]);}" ), "abcdefghijklmnopqrstuvwxyz" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::]);}" ), "abcdefghijklmnopqrstuvwxyz" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::2]);}" ), "acegikmoqsuwy" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::13]);}" ), "an" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::25]);}" ), "az" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::26]);}" ), "a" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::100]);}" ), "a" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::-1]);}" ), "zyxwvutsrqponmlkjihgfedcba" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::-2]);}" ), "zxvtrpnljhfdb" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[::-3]);}" ), "zwtqnkheb" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[:20:-1]);}" ), "zyxwv" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-15:-3:2]);}" ), "lnprtv" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-3:-15:-2]);}" ), "xvtrpn" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-4::-1]);}" ), "wvutsrqponmlkjihgfedcba" );
-	ENSURE_EQUALS( "range failed", execute( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[-4::]);}" ), "wxyz" );
+	HHuginn::TYPE types[] = {
+		HHuginn::TYPE::STRING,
+		HHuginn::TYPE::LIST,
+		HHuginn::TYPE::DEQUE
+	};
+	for ( HHuginn::TYPE t : types ) {
+		test_range( t, ":", "abcdefghijklmnopqrstuvwxyz" );
+		test_range( t, ":0", "" );
+		test_range( t, "5:5", "" );
+		test_range( t, "5:4", "" );
+		test_range( t, ":1", "a" );
+		test_range( t, ":2", "ab" );
+		test_range( t, ":24", "abcdefghijklmnopqrstuvwx" );
+		test_range( t, ":25", "abcdefghijklmnopqrstuvwxy" );
+		test_range( t, ":26", "abcdefghijklmnopqrstuvwxyz" );
+		test_range( t, "0:", "abcdefghijklmnopqrstuvwxyz" );
+		test_range( t, "1:", "bcdefghijklmnopqrstuvwxyz" );
+		test_range( t, "2:", "cdefghijklmnopqrstuvwxyz" );
+		test_range( t, "24:", "yz" );
+		test_range( t, "25:", "z" );
+		test_range( t, "26:", "" );
+		test_range( t, "1:25", "bcdefghijklmnopqrstuvwxy" );
+		test_range( t, "2:24", "cdefghijklmnopqrstuvwx" );
+		test_range( t, "4:8", "efgh" );
+		test_range( t, ":-1", "abcdefghijklmnopqrstuvwxy" );
+		test_range( t, ":-10", "abcdefghijklmnop" );
+		test_range( t, ":-100", "" );
+		test_range( t, "-1:", "z" );
+		test_range( t, "-10:", "qrstuvwxyz" );
+		test_range( t, "-100:", "abcdefghijklmnopqrstuvwxyz" );
+		test_range( t, "-8:-4", "stuv" );
+		test_range( t, ":100", "abcdefghijklmnopqrstuvwxyz" );
+		test_range( t, "::", "abcdefghijklmnopqrstuvwxyz" );
+		test_range( t, "::2", "acegikmoqsuwy" );
+		test_range( t, "::13", "an" );
+		test_range( t, "::25", "az" );
+		test_range( t, "::26", "a" );
+		test_range( t, "::100", "a" );
+		test_range( t, "5:5:-1", "" );
+		test_range( t, "4:5:-1", "" );
+		test_range( t, "::-1", "zyxwvutsrqponmlkjihgfedcba" );
+		test_range( t, "::-2", "zxvtrpnljhfdb" );
+		test_range( t, "::-3", "zwtqnkheb" );
+		test_range( t, ":20:-1", "zyxwv" );
+		test_range( t, "-15:-3:2", "lnprtv" );
+		test_range( t, "-3:-15:-2", "xvtrpn" );
+		test_range( t, "10:-28:-1", "kjihgfedcba" );
+		test_range( t, "-4::-1", "wvutsrqponmlkjihgfedcba" );
+		test_range( t, "-4::", "wxyz" );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "lambda" )
