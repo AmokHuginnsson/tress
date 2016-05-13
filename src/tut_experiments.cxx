@@ -172,9 +172,13 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	HSet<int> emptySet;
 	HSet<int> set( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HMap<int, int> map;
-	for ( int i( 0 ); i < 10; ++ i )
+	HLookupMap<int, int> lookup;
+	for ( int i( 0 ); i < 10; ++ i ) {
 		map[i] = i * i;
+		lookup[i] = i * i;
+	}
 	HMap<int, int> emptyMap;
+	HLookupMap<int, int> emptyLookup;
 	HHashSet<int> emptyHashSet;
 	HHashSet<int> hashSet( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HRing<int> emptyRing;
@@ -205,7 +209,9 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	cout << set << endl;
 	cout << emptySet << endl;
 	cout << map << endl;
+	cout << lookup << endl;
 	cout << emptyMap << endl;
+	cout << emptyLookup << endl;
 	cout << hashSet << endl;
 	cout << emptyHashSet << endl;
 	cout << hashMap << endl;
