@@ -205,5 +205,23 @@ TUT_UNIT_TEST( "operator *=" )
 	ENSURE_DISTANCE( "im incrorrectly set by operator *=", a.im(), math::E * valR + math::PI * valI, epsilon );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "operator /=" )
+	HComplex c( -14, 23 );
+	HComplex divisor( 2, 5 );
+	TUT_EVAL( c /= divisor );
+	ENSURE_DISTANCE( "re incrorrectly set by operator /=", c.re(), 3.L, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator /=", c.im(), 4.L, epsilon );
+	c.set( -14, 8 );
+	TUT_EVAL( c /= 2 );
+	ENSURE_DISTANCE( "re incrorrectly set by operator /=", c.re(), -7.L, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator /=", c.im(), 4.L, epsilon );
+	c.set( -14, 8 );
+	TUT_EVAL( c /= 2_yi );
+	ENSURE_DISTANCE( "re incrorrectly set by operator /=", c.re(), 4.L, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator /=", c.im(), 7.L, epsilon );
+	ENSURE_THROW( "division by 0 ignored", c /= 0, HComplexException );
+	ENSURE_THROW( "division by 0 ignored", c /= 0_yi, HComplexException );
+TUT_TEARDOWN()
+
 }
 
