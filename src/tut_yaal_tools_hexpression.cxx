@@ -124,6 +124,37 @@ TUT_UNIT_TEST( "order of addition and multiplication" )
 	ENSURE_EQUALS( "order of addition and multiplication failed", e.evaluate(), 6l );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "order of power" )
+	HExpression e( "4^3^2" );
+	ENSURE_EQUALS( "order of power failed", e.evaluate(), 262144l );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "elementary func" )
+	HExpression e;
+	e.compile( "sqrt(7)" );
+	ENSURE_DISTANCE( "sqrt failed", e.evaluate(), 2.645751311065L, epsilon );
+	e.compile( "exp(7)" );
+	ENSURE_DISTANCE( "exp failed", e.evaluate(), 1096.633158428459L, epsilon );
+	e.compile( "ln(7)" );
+	ENSURE_DISTANCE( "ln failed", e.evaluate(), 1.945910149055L, epsilon );
+	e.compile( "sin(7)" );
+	ENSURE_DISTANCE( "sin failed", e.evaluate(), .656986598719L, epsilon );
+	e.compile( "cos(7)" );
+	ENSURE_DISTANCE( "cos failed", e.evaluate(), .753902254343L, epsilon );
+	e.compile( "tg(7)" );
+	ENSURE_DISTANCE( "tg failed", e.evaluate(), .871447982724L, epsilon );
+	e.compile( "ctg(7)" );
+	ENSURE_DISTANCE( "ctg failed", e.evaluate(), 1.147515422405L, epsilon );
+	e.compile( "arcsin(0.7)" );
+	ENSURE_DISTANCE( "arcsin failed", e.evaluate(), 0.775397496611L, epsilon );
+	e.compile( "arccos(0.7)" );
+	ENSURE_DISTANCE( "arccos failed", e.evaluate(), 0.795398830184L, epsilon );
+	e.compile( "arctg(7)" );
+	ENSURE_DISTANCE( "arctg failed", e.evaluate(), 1.428899272191L, epsilon );
+	e.compile( "arcctg(7)" );
+	ENSURE_DISTANCE( "arcctg failed", e.evaluate(), 0.141897054604L, epsilon );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "complex and valid expression" )
 	HExpression x;
 	HString eq( "(((2+3+5)*4*6*8)/123)^2^3" );
