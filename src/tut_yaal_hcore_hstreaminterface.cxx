@@ -39,27 +39,45 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-TUT_SIMPLE_MOCK( tut_yaal_hcore_hstreaminterface );
+struct tut_yaal_hcore_hstreaminterface : public tress::tut_helpers::simple_mock<tut_yaal_hcore_hstreaminterface> {
+	HSynchronizedStream _ss;
+	tut_yaal_hcore_hstreaminterface( void )
+		: _ss( make_pointer<HStringStream>() ) {
+	}
+	virtual ~tut_yaal_hcore_hstreaminterface( void ) {
+	}
+	yaal::hcore::HString data( void ) {
+		HString s;
+		_ss.read_until( s );
+		return ( s );
+	}
+};
 TUT_TEST_GROUP( tut_yaal_hcore_hstreaminterface, "yaal::hcore::HStreamInterface" );
 
 TUT_UNIT_TEST( "manipulators" )
 	int i( 7 );
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setfill( '0' ) << setw( 5 ) << i << "'" << " \tsetfill( '0' ), setw( 5 )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
+	_ss << "i = '" << i << "'" << endl;
+	ENSURE_EQUALS( "plain int", data(), "i = '7'" );
+	_ss << "i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
+	ENSURE_EQUALS( "setw() int", data(), "i = '    7' \tsetw( 5 )" );
+	_ss << "i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
+	ENSURE_EQUALS( "setfill() int", data(), "i = '7' \tsetfill( '0' )" );
+	_ss << "i = '" << setfill( '0' ) << setw( 5 ) << i << "'" << " \tsetfill( '0' ), setw( 5 )" << endl;
+	ENSURE_EQUALS( "setfill() setw() int", data(), "i = '00007' \tsetfill( '0' ), setw( 5 )" );
+	_ss << "i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
+	ENSURE_EQUALS( "setw() int", data(), "i = '00007' \tsetw( 5 )" );
+	_ss << "i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
+	ENSURE_EQUALS( "setfill() int", data(), "i = '7' \tsetfill( '0' )" );
 	int k( 103 );
-	cout << "[O] k = '" << k << "'" << endl;
-	cout << "[M] k = '" << hex << k << "' \thex" << endl;
-	cout << "[O] k = '" << k << "'" << endl;
-	cout << dec;
+	_ss << "k = '" << k << "'" << endl;
+	ENSURE_EQUALS( "dec int", data(), "k = '103'" );
+	_ss << "k = '" << hex << k << "' \thex" << endl;
+	ENSURE_EQUALS( "dec int hex", data(), "k = '67' \thex" );
+	_ss << "k = '" << k << "'" << endl;
+	ENSURE_EQUALS( "dec int", data(), "k = '67'" );
+	_ss << dec;
+	_ss << "k = '" << k << "'" << endl;
+	ENSURE_EQUALS( "dec int", data(), "k = '103'" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until (delims stripped)" )
