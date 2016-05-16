@@ -954,6 +954,29 @@ TUT_UNIT_TEST( "are constants constant? (immutable)" )
 		),
 		"11"
 	);
+	ENSURE_EQUALS(
+		"constant as map's key was modified",
+		execute(
+			"f(m){"
+			"m[0]=0;"
+			"}"
+			"main(){"
+			"m=lookup();"
+			"f(m);"
+			"for(k:m){"
+			"k+=1;"
+			"}"
+			"m2=dict();"
+			"f(m2);"
+			"s=\"\";"
+			"for(k:m2){"
+			"s=string(k);"
+			"}"
+			"return(s);"
+			"}"
+		),
+		"0"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "many variables definition in one expression" )
