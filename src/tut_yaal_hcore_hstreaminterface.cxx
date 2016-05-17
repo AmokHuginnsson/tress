@@ -81,8 +81,8 @@ TUT_UNIT_TEST( "manipulators" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until (delims stripped)" )
-	static char data[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
+	static char src[] = "Ala\nma\nkota.";
+	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
 	HMemory m( mo );
 	HString line;
 	int long nRead( 0 );
@@ -101,8 +101,8 @@ TUT_UNIT_TEST( "read_until (delims stripped)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until (delims not stripped)" )
-	static char data[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
+	static char src[] = "Ala\nma\nkota.";
+	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
 	HMemory m( mo );
 	HString line;
 	int long nRead( 0 );
@@ -121,8 +121,8 @@ TUT_UNIT_TEST( "read_until (delims not stripped)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until_n (delim stripped, by delim)" )
-	static char data[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
+	static char src[] = "Ala\nma\nkota.";
+	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
 	HMemory m( mo );
 	HString line;
 	int long nRead( 0 );
@@ -141,8 +141,8 @@ TUT_UNIT_TEST( "read_until_n (delim stripped, by delim)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until_n (delim stripped, by size)" )
-	static char data[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
+	static char src[] = "Ala\nma\nkota.";
+	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
 	HMemory m( mo );
 	HString line;
 	int long nRead( 0 );
@@ -167,8 +167,8 @@ TUT_UNIT_TEST( "read_until_n (delim stripped, by size)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until_n (delim not stripped, by delim)" )
-	static char data[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
+	static char src[] = "Ala\nma\nkota.";
+	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
 	HMemory m( mo );
 	HString line;
 	int long nRead( 0 );
@@ -187,8 +187,8 @@ TUT_UNIT_TEST( "read_until_n (delim not stripped, by delim)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until_n (delim not stripped, by size)" )
-	static char data[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
+	static char src[] = "Ala\nma\nkota.";
+	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
 	HMemory m( mo );
 	HString line;
 	int long nRead( 0 );
@@ -213,8 +213,8 @@ TUT_UNIT_TEST( "read_until_n (delim not stripped, by size)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "input float" )
-	static char data[] = "3.1415 -2.7182";
-	HMemoryObserver mo( data, static_cast<int>( sizeof( data ) ) - 1 );
+	static char src[] = "3.1415 -2.7182";
+	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
 	HMemory m( mo );
 	float val( 0 );
 	m >> val;
