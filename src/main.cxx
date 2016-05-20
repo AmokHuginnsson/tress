@@ -80,7 +80,7 @@ tut::test_runner::test_sets_t prepare_testsets( OSetup::set_definitions_t const&
 
 M_EXPORT_SYMBOL
 int main( int argc_, char* argv_[] ) {
-	M_AT_END_OF_SCOPE( HSignalService::get_instance().stop(); );
+	HScopeExitCall sec( call( &HSignalService::stop, &HSignalService::get_instance() ) );
 	M_PROLOG
 	init_locale( PACKAGE_NAME );
 	HClock clk;
