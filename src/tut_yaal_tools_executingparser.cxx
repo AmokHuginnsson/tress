@@ -108,6 +108,20 @@ TUT_UNIT_TEST( "HReal" )
 		ep();
 		ENSURE_DISTANCE( "double long value not set by ExecutingParser.", val, 3.14l, epsilon );
 	}
+	/* double long short front */ {
+		double long val( 0 );
+		HExecutingParser ep( real[HBoundCall<void ( double long )>( call( &defer<double long>::set, ref( val ), _1 ) )] );
+		ENSURE( "HReal failed to parse correct input (double long).", ep( ".14" ) );
+		ep();
+		ENSURE_DISTANCE( "double long value not set by ExecutingParser.", val, .14l, epsilon );
+	}
+	/* double long short back */ {
+		double long val( 0 );
+		HExecutingParser ep( real[HBoundCall<void ( double long )>( call( &defer<double long>::set, ref( val ), _1 ) )] );
+		ENSURE( "HReal failed to parse correct input (double long).", ep( "3." ) );
+		ep();
+		ENSURE_DISTANCE( "double long value not set by ExecutingParser.", val, 3.l, epsilon );
+	}
 	/* HNumber */ {
 		HNumber val( 0 );
 		HExecutingParser ep( real[HBoundCall<void ( HNumber const& )>( call( &defer<HNumber, HNumber const&>::set, ref( val ), _1 ) )] );
@@ -165,7 +179,8 @@ TUT_UNIT_TEST( "HInteger" )
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "7" );
 	}
 	/* bad integer */ {
-		HExecutingParser ep( integer );
+		int long long val( 0 );
+		HExecutingParser ep( integer[HBoundCall<void ( int long long )>( call( &defer<int long long>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "Invalid input parsed by HInteger", ep( "bad" ) );
 	}
 TUT_TEARDOWN()
