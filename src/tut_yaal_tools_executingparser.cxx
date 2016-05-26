@@ -876,18 +876,15 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule dereference( *( subscriptOperator | functionCallOperator | memberAccess ) );
 	HRule atom(
 	 	absoluteValue
-	 	| parenthesis
+	 	| ( parenthesis >> -( memberAccess >> dereference ) )
 	 	| real
-	 	| number
 	 	| integer
-	 	| character_literal
-	 	| ( listLiteral >> -( subscriptOperator >> dereference ) )
-	 	| ( dictLiteral >> -( subscriptOperator >> dereference ) )
+	 	| ( ( number | character_literal ) >> -( memberAccess >> functionCallOperator ) )
+	 	| ( ( listLiteral | dictLiteral | string_literal ) >> -( ( subscriptOperator | memberAccess ) >> dereference ) )
 	 	| literalNone
 	 	| booleanLiteralTrue
 	 	| booleanLiteralFalse
 	 	| ( name >> dereference )
-	 	| ( string_literal >> -subscriptOperator )
 	 	| ( lambda >> -( functionCallOperator >> dereference ) )
 	);
 	HRule factorial( atom >> -( ( character( '!' ) & "==" ) | ( character( '!' ) ^ '=' ) ) );
@@ -935,7 +932,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule importStatement( e_p::constant( "import" ) >> name >> "as" >> name >> ';' );
 	HRule hg( + ( classDefinition | functionDefinition | importStatement ) );
 	HExecutingParser ep( hg ); /* test for infinite recursion */
-	char const huginnDesc[][400] = {
+	char const huginnDesc[][440] = {
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ | ( \"import\" >> B_ >> \"as\" >> B_ >> ';' ) )",
 		"B_ = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
 		"C_ = ( *( ( E_ >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> ( ( F_ >> -( \"^^\" >> F_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
@@ -969,7 +966,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AE_ = ( AF_ >> *( '^' >> AF_ ) )",
 		"AF_ = ( ( '-' >> AG_ ) | AG_ )",
 		"AG_ = ( ( '-' >> AH_ ) | AH_ )",
-		"AH_ = ( ( ( '|' >> C_ >> '|' ) | ( '(' >> C_ >> ')' ) | real | ( '$' >> real ) | integer | character_literal | ( ( '[' >> -X_ >> ']' ) >> -( I_ >> AI_ ) ) | ( ( '{' >> -( AJ_ >> *( ',' >> AJ_ ) ) >> '}' ) >> -( I_ >> AI_ ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> AI_ ) | ( string_literal >> -I_ ) | ( ( '@' >> '(' >> -G_ >> ')' >> H_ ) >> -( J_ >> AI_ ) ) ) >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
+		"AH_ = ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( K_ >> AI_ ) ) | real | integer | ( ( ( '$' >> real ) | character_literal ) >> -( K_ >> J_ ) ) | ( ( ( '[' >> -X_ >> ']' ) | ( '{' >> -( AJ_ >> *( ',' >> AJ_ ) ) >> '}' ) | string_literal ) >> -( ( I_ | K_ ) >> AI_ ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> AI_ ) | ( ( '@' >> '(' >> -G_ >> ')' >> H_ ) >> -( J_ >> AI_ ) ) ) >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
 		"AI_ = *( I_ | J_ | K_ )",
 		"AJ_ = ( C_ >> ':' >> C_ )"
 	};
@@ -1398,16 +1395,13 @@ TUT_UNIT_TEST( "full Huginn grammar with semantic actions" )
 	HRule dereference( "dereference", *( subscriptOperator | functionCallOperator | memberAccess ) );
 	HRule atom( "atom",
 		absoluteValue
-		| parenthesis
+		| ( parenthesis >> -( memberAccess >> dereference ) )
 		| real( e_p::HReal::PARSE::STRICT )[cd]
-		| numberLiteral
 		| integer[ci]
-		| character_literal[cc]
-		| ( listLiteral >> -( subscriptOperator >> dereference ) )
-		| ( dictLiteral >> -( subscriptOperator >> dereference ) )
+		| ( ( numberLiteral | character_literal[cc] ) >> -( memberAccess >> functionCallOperator ) )
+		| ( ( listLiteral | dictLiteral | stringLiteral ) >> -( ( subscriptOperator | memberAccess ) >> dereference ) )
 		| literalNone | booleanLiteralTrue | booleanLiteralFalse
 		| ( reference >> dereference )
-		| ( stringLiteral >> -subscriptOperator )
 		| ( lambda >> -( functionCallOperator >> dereference ) )
 	);
 	HRule factorial( "factorial", atom >> -( ( ( e_p::constant( '!' ) & "==" ) | ( e_p::constant( '!' ) ^ '=' ) )[cv] ) );
