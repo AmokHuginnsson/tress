@@ -170,6 +170,19 @@ TUT_UNIT_TEST( "free standing arg in method" )
 	ENSURE_EQUALS( "bad call: call( &Boom::bar_const, _1, 2, static_cast<int>( 3. )( Boom( 4 ) )", c3c( b1c ), 4 * 2 + 3 );
 TUT_TEARDOWN()
 
+namespace {
+void id_test( int ) {
+}
+}
+
+TUT_UNIT_TEST( "id" )
+	HBoundCall<void(int)> bc( call( &id_test, _1 ) );
+	ENSURE( "id failed", bc.id() == reinterpret_cast<void*>( &id_test ) );
+	HBoundCall<void(int)> bc2( bc );
+	bc.reset();
+	ENSURE( "id failed", bc2.id() == reinterpret_cast<void*>( &id_test ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "C++ builtin lambda" )
 	HBoundCall<int ( int )> pow( []( int x ){ return ( x * x ); } );
 	ENSURE_EQUALS( "bounding C++ builtin lambda failed", pow( 7 ), 7 * 7 );
