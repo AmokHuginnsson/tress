@@ -178,10 +178,10 @@ int id_test( int ) {
 
 TUT_UNIT_TEST( "id" )
 	HBoundCall<int(int)> bc( call( &id_test, _1 ) );
-	ENSURE( "id failed", bc.id() == reinterpret_cast<void*>( &id_test ) );
+	ENSURE( "id failed", bc.id() == bit_cast<void*>( &id_test ) );
 	HBoundCall<int(int)> bc2( bc );
 	bc.reset();
-	ENSURE( "id failed", bc2.id() == reinterpret_cast<void*>( &id_test ) );
+	ENSURE( "id failed", bc2.id() == bit_cast<void*>( &id_test ) );
 	Boom b( 0 );
 	bc = call( &Boom::bar, &b, 0., _1 );
 	ENSURE( "id failed", bc.id() == &b );
