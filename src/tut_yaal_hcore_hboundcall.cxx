@@ -171,16 +171,20 @@ TUT_UNIT_TEST( "free standing arg in method" )
 TUT_TEARDOWN()
 
 namespace {
-void id_test( int ) {
+int id_test( int ) {
+	return ( 0 );
 }
 }
 
 TUT_UNIT_TEST( "id" )
-	HBoundCall<void(int)> bc( call( &id_test, _1 ) );
+	HBoundCall<int(int)> bc( call( &id_test, _1 ) );
 	ENSURE( "id failed", bc.id() == reinterpret_cast<void*>( &id_test ) );
-	HBoundCall<void(int)> bc2( bc );
+	HBoundCall<int(int)> bc2( bc );
 	bc.reset();
 	ENSURE( "id failed", bc2.id() == reinterpret_cast<void*>( &id_test ) );
+	Boom b( 0 );
+	bc = call( &Boom::bar, &b, 0., _1 );
+	ENSURE( "id failed", bc.id() == &b );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "C++ builtin lambda" )
