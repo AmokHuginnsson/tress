@@ -992,6 +992,18 @@ TUT_UNIT_TEST( "many variables definition in one expression" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "sum of pows" )
+	ENSURE_EQUALS(
+		"definition of many variables failed",
+		execute(
+			"main(){"
+			"return(string($-284650292555885^$3+$66229832190556^$3+$283450105697727^$3));"
+			"}"
+		),
+		"74"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
