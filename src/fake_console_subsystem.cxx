@@ -35,7 +35,7 @@ Copyright:
 #include <dlfcn.h>
 
 #include <yaal/hcore/base.hxx>
-#include <yaal/hcore/hstack.hxx>
+#include <yaal/hcore/hfile.hxx>
 #include <yaal/tools/hmonitor.hxx>
 #include <yaal/tools/ansi.hxx>
 #include <yaal/tools/hstringstream.hxx>
@@ -52,73 +52,73 @@ namespace tress {
 
 namespace fake_console_subsystem {
 
-#if SIZEOF_CHTYPE == 8
-typedef yaal::u64_t chtype_t;
-#else
-typedef yaal::u32_t chtype_t;
-#endif
+HFakeConsole::HFakeConsole( void )
+	: _active( false )
+	, _background()
+	, _attributes()
+	, _inputQueue()
+	, _mutex()
+	, _dump()
+	, _input() {
+}
 
-struct WINDOW;
+int HFakeConsole::attr( chtype_t attr_ ) const {
+	HLock l( _mutex );
+	int a( COLORS::ATTR_DEFAULT );
+	attribute_map_t::const_iterator it( _attributes.find( attr_ ) );
+	if ( it != _attributes.end() ) {
+		a = it->second;
+	}
+	return ( a );
+}
 
-class HFakeConsole {
-private:
-	typedef HStack<int> input_queue_t;
-	typedef HHashMap<chtype_t, int> attribute_map_t;
-	bool _active;
-	attribute_map_t _background;
-	attribute_map_t _attributes;
-	input_queue_t _inputQueue;
-	mutable HMutex _mutex;
-public:
-	HFakeConsole( void )
-		: _active( false )
-		, _background()
-		, _attributes()
-		, _inputQueue()
-		, _mutex() {
+int HFakeConsole::bg( chtype_t bg_ ) const {
+	HLock l( _mutex );
+	int b( COLORS::BG_BLACK );
+	attribute_map_t::const_iterator it( _background.find( bg_ ) );
+	if ( it != _background.end() ) {
+		b = it->second;
 	}
-	void activate( void ) {
-		_active = true;
+	return ( b );
+}
+
+void HFakeConsole::ungetch( int key_ ) {
+	HLock l( _mutex );
+	_inputQueue.push( key_ );
+}
+
+int HFakeConsole::getch( void ) {
+	_dump->signal();
+	/* dump happens here */
+	_input.wait();
+
+	HLock l( _mutex );
+	int key( -1 );
+	if ( ! _inputQueue.is_empty() ) {
+		key = _inputQueue.top();
+		_inputQueue.pop();
 	}
-	void deactivate( void ) {
-		_active = false;
-	}
-	bool is_active() const {
-		return ( _active );
-	}
-	void build_attribute_maps( WINDOW* );
-	int attr( chtype_t attr_ ) const {
-		HLock l( _mutex );
-		int a( COLORS::ATTR_DEFAULT );
-		attribute_map_t::const_iterator it( _attributes.find( attr_ ) );
-		if ( it != _attributes.end() ) {
-			a = it->second;
-		}
-		return ( a );
-	}
-	int bg( chtype_t bg_ ) const {
-		HLock l( _mutex );
-		int b( COLORS::BG_BLACK );
-		attribute_map_t::const_iterator it( _background.find( bg_ ) );
-		if ( it != _background.end() ) {
-			b = it->second;
-		}
-		return ( b );
-	}
-	void ungetch( int key_ ) {
-		HLock l( _mutex );
-		_inputQueue.push( key_ );
-	}
-	int getch( void ) {
-		HLock l( _mutex );
-		int key( -1 );
-		if ( !_inputQueue.is_empty() ) {
-			key = _inputQueue.top();
-			_inputQueue.pop();
-		}
-		return ( key );
-	}
-} _fakeConsole_;
+	return ( key );
+}
+
+void HFakeConsole::wait_io( void ) {
+	_dump->wait();
+}
+
+void HFakeConsole::wake_io( void ) {
+	_input.signal();
+}
+
+void HFakeConsole::init_dump( void ) {
+	HLock l( _mutex );
+	_dump = make_resource<HEvent>();
+}
+
+void HFakeConsole::destroy_dump( void ) {
+	_dump.reset();
+}
+
+HFakeConsole _fakeConsole_;
 
 HFakeConsoleGuard::HFakeConsoleGuard( void )
 	: _exclusiveAccess( yaal::tools::HMonitor::get_instance().acquire( "terminal" ) ) {

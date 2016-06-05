@@ -28,6 +28,8 @@ Copyright:
 #define HAVE_TRESS_FAKE_CONSOLE_SUBSYSTEM_HXX_INCLUDED 1
 
 #include <yaal/hcore/hthread.hxx>
+#include <yaal/hcore/hstack.hxx>
+#include <yaal/hcore/hhashmap.hxx>
 
 namespace tress {
 
@@ -39,6 +41,50 @@ public:
 	HFakeConsoleGuard( void );
 	virtual ~HFakeConsoleGuard( void );
 };
+
+#if SIZEOF_CHTYPE == 8
+typedef yaal::u64_t chtype_t;
+#else
+typedef yaal::u32_t chtype_t;
+#endif
+
+struct WINDOW;
+
+class HFakeConsole {
+private:
+	typedef yaal::hcore::HStack<int> input_queue_t;
+	typedef yaal::hcore::HHashMap<chtype_t, int> attribute_map_t;
+	typedef yaal::hcore::HResource<yaal::hcore::HEvent> event_t;
+	bool _active;
+	attribute_map_t _background;
+	attribute_map_t _attributes;
+	input_queue_t _inputQueue;
+	mutable yaal::hcore::HMutex _mutex;
+	mutable event_t _dump;
+	mutable yaal::hcore::HEvent _input;
+public:
+	HFakeConsole( void );
+	void activate( void ) {
+		_active = true;
+	}
+	void deactivate( void ) {
+		_active = false;
+	}
+	bool is_active() const {
+		return ( _active );
+	}
+	void build_attribute_maps( WINDOW* );
+	int attr( chtype_t attr_ ) const;
+	int bg( chtype_t bg_ ) const;
+	void ungetch( int key_ );
+	int getch( void );
+	void wait_io( void );
+	void wake_io( void );
+	void init_dump( void );
+	void destroy_dump( void );
+};
+
+extern HFakeConsole _fakeConsole_;
 
 void build_attribute_maps( void );
 yaal::hcore::HString term_dump( void );
