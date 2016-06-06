@@ -88,11 +88,15 @@ void HFakeConsole::ungetch( int key_ ) {
 }
 
 int HFakeConsole::getch( void ) {
-	_dump->signal();
-	/* dump happens here */
-	_input.wait();
-
 	HLock l( _mutex );
+	if ( !! _dump ) {
+		_dump->signal();
+		/* dump happens here */
+		l.unlock();
+		_input->wait();
+		l.lock();
+	}
+
 	int key( -1 );
 	if ( ! _inputQueue.is_empty() ) {
 		key = _inputQueue.top();
@@ -106,7 +110,7 @@ void HFakeConsole::wait_io( void ) {
 }
 
 void HFakeConsole::wake_io( void ) {
-	_input.signal();
+	_input->signal();
 }
 
 void HFakeConsole::init_dump( void ) {
@@ -115,7 +119,18 @@ void HFakeConsole::init_dump( void ) {
 }
 
 void HFakeConsole::destroy_dump( void ) {
+	HLock l( _mutex );
 	_dump.reset();
+}
+
+void HFakeConsole::init_input( void ) {
+	HLock l( _mutex );
+	_input = make_resource<HEvent>();
+}
+
+void HFakeConsole::destroy_input( void ) {
+	HLock l( _mutex );
+	_input.reset();
 }
 
 HFakeConsole _fakeConsole_;

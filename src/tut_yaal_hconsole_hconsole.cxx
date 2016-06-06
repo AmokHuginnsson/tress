@@ -80,6 +80,8 @@ void tut_yaal_hconsole_hconsole::play( int_array_t input_ ) {
 	HTUIProcess tp;
 	tp.init_xrc( "tress", "data/tress.xrc" );
 	tp.register_command_handler( "run_quit", call( &tut_yaal_hconsole_hconsole::quit, this, &tp, _1 ) );
+	tress::fake_console_subsystem::_fakeConsole_.init_input();
+	HScopeExitCall sec( call( &tress::fake_console_subsystem::HFakeConsole::destroy_input, &tress::fake_console_subsystem::_fakeConsole_ ) );
 	t.spawn( call( &tut_yaal_hconsole_hconsole::push_keys, this, static_cast<int>( input_.get_size() ) ) );
 	tp.run();
 	cons.leave_curses();

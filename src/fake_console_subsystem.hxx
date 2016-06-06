@@ -61,7 +61,7 @@ private:
 	input_queue_t _inputQueue;
 	mutable yaal::hcore::HMutex _mutex;
 	mutable event_t _dump;
-	mutable yaal::hcore::HEvent _input;
+	mutable event_t _input;
 public:
 	HFakeConsole( void );
 	void activate( void ) {
@@ -80,6 +80,8 @@ public:
 	int getch( void );
 	void wait_io( void );
 	void wake_io( void );
+	void init_input( void );
+	void destroy_input( void );
 	void init_dump( void );
 	void destroy_dump( void );
 };
