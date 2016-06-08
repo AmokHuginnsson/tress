@@ -401,6 +401,8 @@ void tut_yaal_dbwrapper_hrecordset::bind_test( HDataBase::ptr_t db, char const* 
 
 #if defined( HAVE_SQLITE3_H )
 TUT_UNIT_TEST( "Bind SQLite engine" )
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	db->connect( "./out/tress", "", "" );
 	bind_test( db, "sqlite3" );
@@ -409,6 +411,8 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H )
 TUT_UNIT_TEST( "Bind PostgreSQL engine" )
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	bind_test( db, "PostgreSQL" );
@@ -417,6 +421,8 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_MYSQL_MYSQL_H )
 TUT_UNIT_TEST( "Bind MySQL engine" )
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	bind_test( db, "MySQL" );
@@ -425,6 +431,8 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_IBASE_H )
 TUT_UNIT_TEST( "Bind Firebird engine" )
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	bind_test( db, "Firebird" );
@@ -433,6 +441,8 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 TUT_UNIT_TEST( "Bind  Oracle engine" )
+	HLock l( HMonitor::get_instance().acquire( "locale" ) );
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::ORACLE ) );
 	db->connect( "tress", "tress", "tr3ss" );
 	bind_test( db, "Oracle" );

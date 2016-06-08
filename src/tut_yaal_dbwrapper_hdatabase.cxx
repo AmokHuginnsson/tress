@@ -42,16 +42,20 @@ namespace tut {
 
 struct tut_yaal_dbwrapper_hdatabase : public simple_mock<tut_yaal_dbwrapper_hdatabase> {
 	virtual ~tut_yaal_dbwrapper_hdatabase( void ) {}
-	void test_schema( HDataBase::ptr_t );
+	void test_schema( HDataBase::ptr_t, bool = false );
 };
 TUT_TEST_GROUP( tut_yaal_dbwrapper_hdatabase, "yaal::dbwrapper::HDatabase" );
 
-void tut_yaal_dbwrapper_hdatabase::test_schema( HDataBase::ptr_t db_ ) {
+void tut_yaal_dbwrapper_hdatabase::test_schema( HDataBase::ptr_t db_, bool extra_ ) {
 	M_PROLOG
 	HDataBase::table_list_t tl( db_->get_tables() );
 	HDataBase::table_list_t tlExpect;
 	tlExpect.push_back( "config" );
 	tlExpect.push_back( "crud" );
+	if ( extra_ ) {
+		tlExpect.push_back( "test" );
+		tlExpect.push_back( "test_dict" );
+	}
 	sort( tl.begin(), tl.end() );
 	ENSURE_EQUALS( "bad table list size", tl.get_size(), tlExpect.get_size() );
 	ENSURE_EQUALS( "bad table list contents", tl, tlExpect );
@@ -72,7 +76,7 @@ TUT_UNIT_TEST( "sqlite3 schema" )
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::SQLITE3 ) );
 	db->connect( "./out/tress", "", "" );
-	test_schema( db );
+	test_schema( db, true );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_SQLITE3_H ) */
 

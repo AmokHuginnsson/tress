@@ -33,10 +33,13 @@ Copyright:
 
 #include <yaal/hconsole/hconsole.hxx>
 #include <yaal/hconsole/htuiprocess.hxx>
+#include <yaal/dbwrapper/dbwrapper.hxx>
 #include <yaal/tools/util.hxx>
+#include <yaal/tools/hmonitor.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 #include "fake_console_subsystem.hxx"
+#include "tut_yaal_hconsole_testwindow.hxx"
 
 using namespace tut;
 using namespace yaal;
@@ -47,7 +50,6 @@ using namespace yaal::hconsole;
 using namespace tress::tut_helpers;
 
 namespace tut {
-
 
 struct tut_yaal_hconsole_hconsole : public simple_mock<tut_yaal_hconsole_hconsole> {
 	static int const CONSOLE_WIDTH;
@@ -63,12 +65,14 @@ struct tut_yaal_hconsole_hconsole : public simple_mock<tut_yaal_hconsole_hconsol
 	void play( int_array_t );
 	void push_keys( int );
 	bool quit( HTUIProcess*, hconsole::HEvent const& );
+	bool test( HTUIProcess*, hconsole::HEvent const& );
 	tress::fake_console_subsystem::HFakeConsoleGuard _fakeConoleGuard;
 };
 int const tut_yaal_hconsole_hconsole::CONSOLE_WIDTH = 80;
 int const tut_yaal_hconsole_hconsole::CONSOLE_HEIGHT = 25;
 
 void tut_yaal_hconsole_hconsole::play( int_array_t input_ ) {
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HThread t;
 	HConsole& cons( HConsole::get_instance() );
 	cons.enter_curses();
@@ -80,6 +84,7 @@ void tut_yaal_hconsole_hconsole::play( int_array_t input_ ) {
 	HTUIProcess tp;
 	tp.init_xrc( "tress", "data/tress.xrc" );
 	tp.register_command_handler( "run_quit", call( &tut_yaal_hconsole_hconsole::quit, this, &tp, _1 ) );
+	tp.register_command_handler( "run_test", call( &tut_yaal_hconsole_hconsole::test, this, &tp, _1 ) );
 	tress::fake_console_subsystem::_fakeConsole_.init_input();
 	HScopeExitCall sec( call( &tress::fake_console_subsystem::HFakeConsole::destroy_input, &tress::fake_console_subsystem::_fakeConsole_ ) );
 	t.spawn( call( &tut_yaal_hconsole_hconsole::push_keys, this, static_cast<int>( input_.get_size() ) ) );
@@ -94,14 +99,19 @@ void tut_yaal_hconsole_hconsole::push_keys( int keyCount_ ) {
 	for ( int i( 0 ); i < keyCount_; ++ i ) {
 		cons.notify_keyboard();
 		tress::fake_console_subsystem::_fakeConsole_.wait_io();
-//		clog << tress::fake_console_subsystem::term_dump() << endl;
-		clog << tress::fake_console_subsystem::packed_dump() << endl;
+		clog << tress::fake_console_subsystem::term_dump() << endl;
+//		clog << tress::fake_console_subsystem::packed_dump() << endl;
 		tress::fake_console_subsystem::_fakeConsole_.wake_io();
 	}
 }
 
 bool tut_yaal_hconsole_hconsole::quit( yaal::hconsole::HTUIProcess* tp, yaal::hconsole::HEvent const& ) {
 	tp->quit();
+	return ( true );
+}
+
+bool tut_yaal_hconsole_hconsole::test( yaal::hconsole::HTUIProcess* tp, yaal::hconsole::HEvent const& ) {
+	tp->add_window( make_pointer<tress::HTestWindow>( "Test", dbwrapper::util::connect( "sqlite3:///out/tress.sqlite" ) ) );
 	return ( true );
 }
 
@@ -231,6 +241,11 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "tui quit" )
 	play( { KEY_CODES::RIGHT, KEY_CODES::DOWN, KEY_CODES::DOWN, '\r' } );
 	play( { ':', 'q', 'u', 'i', 't', '\r' } );
+	play( { KEY<'x'>::command } );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "tui window" )
+	play( { KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', KEY<'q'>::command, KEY<'x'>::command } );
 TUT_TEARDOWN()
 
 }
