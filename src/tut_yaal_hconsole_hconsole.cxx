@@ -31,89 +31,22 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
-#include <yaal/hconsole/hconsole.hxx>
-#include <yaal/hconsole/htuiprocess.hxx>
-#include <yaal/dbwrapper/dbwrapper.hxx>
-#include <yaal/tools/util.hxx>
-#include <yaal/tools/hmonitor.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
-#include "fake_console_subsystem.hxx"
-#include "tut_yaal_hconsole_testwindow.hxx"
+#include "tut_yaal_hconsole_base.hxx"
 
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
-using namespace yaal::tools::util;
 using namespace yaal::hconsole;
+using namespace tress;
 using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hconsole_hconsole : public simple_mock<tut_yaal_hconsole_hconsole> {
-	static int const CONSOLE_WIDTH;
-	static int const CONSOLE_HEIGHT;
-	tut_yaal_hconsole_hconsole( void )
-		: _fakeConoleGuard() {
-	}
-	virtual ~tut_yaal_hconsole_hconsole( void ) {
-		if ( HConsole::get_instance().is_enabled() ) {
-			HConsole::get_instance().leave_curses();
-		}
-	}
-	void play( int_array_t );
-	void push_keys( int );
-	bool quit( HTUIProcess*, hconsole::HEvent const& );
-	bool test( HTUIProcess*, hconsole::HEvent const& );
-	tress::fake_console_subsystem::HFakeConsoleGuard _fakeConoleGuard;
+struct tut_yaal_hconsole_hconsole : public tut_yaal_hconsole_base {
 };
-int const tut_yaal_hconsole_hconsole::CONSOLE_WIDTH = 80;
-int const tut_yaal_hconsole_hconsole::CONSOLE_HEIGHT = 25;
-
-void tut_yaal_hconsole_hconsole::play( int_array_t input_ ) {
-	HLock dl( HMonitor::get_instance().acquire( "database" ) );
-	HThread t;
-	HConsole& cons( HConsole::get_instance() );
-	cons.enter_curses();
-	tress::fake_console_subsystem::build_attribute_maps();
-	reverse( input_.begin(), input_.end() );
-	for ( int key : input_ ) {
-		cons.ungetch( key );
-	}
-	HTUIProcess tp;
-	tp.init_xrc( "tress", "data/tress.xrc" );
-	tp.register_command_handler( "run_quit", call( &tut_yaal_hconsole_hconsole::quit, this, &tp, _1 ) );
-	tp.register_command_handler( "run_test", call( &tut_yaal_hconsole_hconsole::test, this, &tp, _1 ) );
-	tress::fake_console_subsystem::_fakeConsole_.init_input();
-	HScopeExitCall sec( call( &tress::fake_console_subsystem::HFakeConsole::destroy_input, &tress::fake_console_subsystem::_fakeConsole_ ) );
-	t.spawn( call( &tut_yaal_hconsole_hconsole::push_keys, this, static_cast<int>( input_.get_size() ) ) );
-	tp.run();
-	cons.leave_curses();
-}
-
-void tut_yaal_hconsole_hconsole::push_keys( int keyCount_ ) {
-	HConsole& cons( HConsole::get_instance() );
-	tress::fake_console_subsystem::_fakeConsole_.init_dump();
-	HScopeExitCall sec( call( &tress::fake_console_subsystem::HFakeConsole::destroy_dump, &tress::fake_console_subsystem::_fakeConsole_ ) );
-	for ( int i( 0 ); i < keyCount_; ++ i ) {
-		cons.notify_keyboard();
-		tress::fake_console_subsystem::_fakeConsole_.wait_io();
-		clog << tress::fake_console_subsystem::term_dump() << endl;
-//		clog << tress::fake_console_subsystem::packed_dump() << endl;
-		tress::fake_console_subsystem::_fakeConsole_.wake_io();
-	}
-}
-
-bool tut_yaal_hconsole_hconsole::quit( yaal::hconsole::HTUIProcess* tp, yaal::hconsole::HEvent const& ) {
-	tp->quit();
-	return ( true );
-}
-
-bool tut_yaal_hconsole_hconsole::test( yaal::hconsole::HTUIProcess* tp, yaal::hconsole::HEvent const& ) {
-	tp->add_window( make_pointer<tress::HTestWindow>( "Test", dbwrapper::util::connect( "sqlite3:///out/tress.sqlite" ) ) );
-	return ( true );
-}
 
 TUT_TEST_GROUP( tut_yaal_hconsole_hconsole, "yaal::hconsole::HConsole" );
 
