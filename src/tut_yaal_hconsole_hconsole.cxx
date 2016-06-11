@@ -46,6 +46,9 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 struct tut_yaal_hconsole_hconsole : public tut_yaal_hconsole_base {
+	tui_t do_make_tui( void ) override {
+		return ( make_resource<HTUIProcess>() );
+	}
 };
 
 TUT_TEST_GROUP( tut_yaal_hconsole_hconsole, "yaal::hconsole::HConsole" );
@@ -172,13 +175,13 @@ TUT_UNIT_TEST( "notify_keyboard" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "tui quit" )
-	play( { KEY_CODES::RIGHT, KEY_CODES::DOWN, KEY_CODES::DOWN, '\r' } );
-	play( { ':', 'q', 'u', 'i', 't', '\r' } );
-	play( { KEY<'x'>::command } );
+	play( "quit by menu", { KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, KEY_CODES::DOWN, KEY_CODES::DOWN, '\r' } );
+	play( "quit by command line", { ':', 'q', 'u', 'i', 't', '\r' } );
+	play( "quit by keyboard shortcut", { KEY<'x'>::command } );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "tui window" )
-	play( { KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', KEY<'q'>::command, KEY<'x'>::command } );
+	play( "all widgets (no database)", { KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', KEY<'q'>::command, KEY<'x'>::command } );
 TUT_TEARDOWN()
 
 }

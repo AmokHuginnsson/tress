@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_yaal_hconsole_base.hxx - this file is integral part of `tress' project.
+	tut_yaal_hdata.cxx - this file is integral part of `tress' project.
 
   i.  You may not make any changes in Copyright information.
   ii. You must attach Copyright information to any part of every copy
@@ -24,36 +24,37 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#ifndef TUT_YAAL_HCONSOLE_BASE_HXX_INCLUDED
-#define TUT_YAAL_HCONSOLE_BASE_HXX_INCLUDED 1
+#include <TUT/tut.hpp>
 
-#include <yaal/hconsole/hconsole.hxx>
-#include <yaal/hconsole/htuiprocess.hxx>
+#include <yaal/hdata/hdataprocess.hxx>
 
-#include "config.hxx"
+M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
-#include "fake_console_subsystem.hxx"
+#include "tut_yaal_hconsole_base.hxx"
 
-namespace tress {
+using namespace tut;
+using namespace yaal;
+using namespace yaal::hcore;
+using namespace yaal::tools;
+using namespace yaal::hconsole;
+using namespace yaal::hdata;
+using namespace tress;
+using namespace tress::tut_helpers;
 
-struct tut_yaal_hconsole_base : public tut_helpers::simple_mock<tut_yaal_hconsole_base> {
-	typedef yaal::hcore::HResource<yaal::hconsole::HTUIProcess> tui_t;
-	static int const CONSOLE_WIDTH;
-	static int const CONSOLE_HEIGHT;
-	tut_yaal_hconsole_base( void )
-		: _fakeConoleGuard() {
+namespace tut {
+
+struct tut_yaal_hdata : public tut_yaal_hconsole_base {
+	tui_t do_make_tui( void ) override {
+		tui_t tui( new HDataProcess() );
+		return ( tui );
 	}
-	virtual ~tut_yaal_hconsole_base( void );
-	tui_t make_tui( void );
-	void play( char const*, int_array_t );
-	void push_keys( int );
-	bool quit( yaal::hconsole::HTUIProcess*, yaal::hconsole::HEvent const& );
-	bool test( yaal::hconsole::HTUIProcess*, yaal::hconsole::HEvent const& );
-	tress::fake_console_subsystem::HFakeConsoleGuard _fakeConoleGuard;
-	virtual tui_t do_make_tui( void ) = 0;
 };
 
-}
+TUT_TEST_GROUP( tut_yaal_hdata, "yaal::hdata" );
 
-#endif /* not TUT_YAAL_HCONSOLE_BASE_HXX_INCLUDED */
+TUT_UNIT_TEST( "load data" )
+	play( "load data", { '\r', KEY<'q'>::command, KEY<'x'>::command } );
+TUT_TEARDOWN()
+
+}
 

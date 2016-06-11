@@ -50,8 +50,13 @@ tut_yaal_hconsole_base::~tut_yaal_hconsole_base( void ) {
 	}
 }
 
-void tut_yaal_hconsole_base::play( int_array_t input_ ) {
+tut_yaal_hconsole_base::tui_t tut_yaal_hconsole_base::make_tui( void ) {
+	return ( do_make_tui() );
+}
+
+void tut_yaal_hconsole_base::play( char const* name_, int_array_t input_ ) {
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
+	clog << "### Starting scenario: " << name_ << endl;
 	HThread t;
 	HConsole& cons( HConsole::get_instance() );
 	cons.enter_curses();
@@ -60,14 +65,14 @@ void tut_yaal_hconsole_base::play( int_array_t input_ ) {
 	for ( int key : input_ ) {
 		cons.ungetch( key );
 	}
-	HTUIProcess tp;
-	tp.init_xrc( "tress", "data/tress.xrc" );
-	tp.register_command_handler( "run_quit", call( &tut_yaal_hconsole_base::quit, this, &tp, _1 ) );
-	tp.register_command_handler( "run_test", call( &tut_yaal_hconsole_base::test, this, &tp, _1 ) );
+	tui_t tp( make_tui() );
+	tp->init_xrc( "tress", "data/tress.xrc" );
+	tp->register_command_handler( "run_quit", call( &tut_yaal_hconsole_base::quit, this, tp.raw(), _1 ) );
+	tp->register_command_handler( "run_test", call( &tut_yaal_hconsole_base::test, this, tp.raw(), _1 ) );
 	tress::fake_console_subsystem::_fakeConsole_.init_input();
 	HScopeExitCall sec( call( &tress::fake_console_subsystem::HFakeConsole::destroy_input, &tress::fake_console_subsystem::_fakeConsole_ ) );
 	t.spawn( call( &tut_yaal_hconsole_base::push_keys, this, static_cast<int>( input_.get_size() ) ) );
-	tp.run();
+	tp->run();
 	cons.leave_curses();
 }
 

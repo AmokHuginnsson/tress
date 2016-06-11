@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS test_item;
 DROP TABLE IF EXISTS test;
 DROP TABLE IF EXISTS test_dict;
 DROP TABLE IF EXISTS crud;
@@ -5,13 +6,13 @@ DROP TABLE IF EXISTS config;
 
 CREATE TABLE config (
 	id INTEGER PRIMARY KEY,
-	name VARCHAR(16) UNIQUE NOT NULL,
+	name VARCHAR( 16 ) UNIQUE NOT NULL,
 	data VARCHAR( 255 )
 );
 
 CREATE TABLE crud (
 	id INTEGER PRIMARY KEY,
-	name VARCHAR(16) UNIQUE NOT NULL,
+	name VARCHAR( 16 ) UNIQUE NOT NULL,
 	data VARCHAR( 255 )
 );
 
@@ -23,12 +24,20 @@ CREATE TABLE test_dict (
 CREATE TABLE test (
 	id INTEGER PRIMARY KEY,
 	id_test_dict INTEGER,
-	v_text VARCHAR(255),
+	v_text VARCHAR( 255 ),
 	v_int INTEGER,
 	v_real FLOAT,
 	v_date DATE,
 	v_time TIME,
 	v_datetime DATETIME
+);
+
+CREATE TABLE test_item (
+	id INTEGER PRIMARY KEY,
+	id_test INTEGER NOT NULL,
+	name VARCHAR( 16 ),
+	data VARCHAR( 255 ),
+	value FLOAT
 );
 
 INSERT INTO config ( id, name, data ) VALUES( 1, 'one', 'sqlite3' );

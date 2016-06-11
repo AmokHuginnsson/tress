@@ -55,6 +55,7 @@ void tut_yaal_dbwrapper_hdatabase::test_schema( HDataBase::ptr_t db_, bool extra
 	if ( extra_ ) {
 		tlExpect.push_back( "test" );
 		tlExpect.push_back( "test_dict" );
+		tlExpect.push_back( "test_item" );
 	}
 	sort( tl.begin(), tl.end() );
 	ENSURE_EQUALS( "bad table list size", tl.get_size(), tlExpect.get_size() );
