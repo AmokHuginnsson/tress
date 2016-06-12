@@ -40,6 +40,7 @@ Copyright:
 #include <yaal/tools/ansi.hxx>
 #include <yaal/tools/hstringstream.hxx>
 #include <yaal/hconsole/console.hxx>
+#include <yaal/hconsole/hconsole.hxx>
 
 #include "fake_console_subsystem.hxx"
 
@@ -89,7 +90,12 @@ void HFakeConsole::ungetch( int key_ ) {
 
 int HFakeConsole::getch( void ) {
 	HLock l( _mutex );
-	if ( !! _dump ) {
+	int key( -1 );
+	if ( ! _inputQueue.is_empty() ) {
+		key = _inputQueue.top();
+		_inputQueue.pop();
+	}
+	if ( !! _dump && ( key != -1 ) && ( key != KEY<>::ctrl_r( _commandComposeCharacter_ ) ) ) {
 		_dump->signal();
 		/* dump happens here */
 		l.unlock();
@@ -97,11 +103,6 @@ int HFakeConsole::getch( void ) {
 		l.lock();
 	}
 
-	int key( -1 );
-	if ( ! _inputQueue.is_empty() ) {
-		key = _inputQueue.top();
-		_inputQueue.pop();
-	}
 	return ( key );
 }
 
@@ -115,7 +116,7 @@ void HFakeConsole::wake_io( void ) {
 
 void HFakeConsole::init_dump( void ) {
 	HLock l( _mutex );
-	_dump = make_resource<HEvent>();
+	_dump = make_resource<hcore::HEvent>();
 }
 
 void HFakeConsole::destroy_dump( void ) {
@@ -125,7 +126,7 @@ void HFakeConsole::destroy_dump( void ) {
 
 void HFakeConsole::init_input( void ) {
 	HLock l( _mutex );
-	_input = make_resource<HEvent>();
+	_input = make_resource<hcore::HEvent>();
 }
 
 void HFakeConsole::destroy_input( void ) {
