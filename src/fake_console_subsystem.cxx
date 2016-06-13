@@ -121,6 +121,7 @@ void HFakeConsole::init_dump( void ) {
 
 void HFakeConsole::destroy_dump( void ) {
 	HLock l( _mutex );
+	_inputQueue.clear();
 	_dump.reset();
 }
 
@@ -131,10 +132,14 @@ void HFakeConsole::init_input( void ) {
 
 void HFakeConsole::destroy_input( void ) {
 	HLock l( _mutex );
-	while ( ! _inputQueue.is_empty() ) {
-		_inputQueue.pop();
-		_dump->signal();
-		_input->wait();
+	if ( !! _dump ) {
+		while ( ! _inputQueue.is_empty() ) {
+			if ( _inputQueue.top() != KEY<>::ctrl_r( _commandComposeCharacter_ ) ) {
+				_dump->signal();
+				_input->wait();
+			}
+			_inputQueue.pop();
+		}
 	}
 	_input.reset();
 }
