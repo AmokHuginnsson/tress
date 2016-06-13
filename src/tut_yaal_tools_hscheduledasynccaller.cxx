@@ -47,11 +47,10 @@ struct tut_yaal_tools_hscheduledasynccaller : public simple_mock<tut_yaal_tools_
 	HMutex _mutex;
 	int _val;
 	tut_yaal_tools_hscheduledasynccaller( void )
-		: base_type(),
-		_sac( HScheduledAsyncCaller::get_instance() ), _mutex(), _val( 0 )
-		{}
-	virtual ~tut_yaal_tools_hscheduledasynccaller( void ) {
-		_sac.stop();
+		: base_type()
+		, _sac( HScheduledAsyncCaller::get_instance() )
+		, _mutex()
+		, _val( 0 ) {
 	}
 	void action( int val_ ) {
 		HLock l( _mutex );
