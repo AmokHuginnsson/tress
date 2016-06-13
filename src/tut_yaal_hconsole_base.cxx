@@ -70,9 +70,12 @@ void tut_yaal_hconsole_base::play( char const* name_, int_array_t input_ ) {
 	tp->register_command_handler( "run_quit", call( &tut_yaal_hconsole_base::quit, this, tp.raw(), _1 ) );
 	tp->register_command_handler( "run_test", call( &tut_yaal_hconsole_base::test, this, tp.raw(), _1 ) );
 	tress::fake_console_subsystem::_fakeConsole_.init_input();
-	HScopeExitCall sec( call( &tress::fake_console_subsystem::HFakeConsole::destroy_input, &tress::fake_console_subsystem::_fakeConsole_ ) );
-	t.spawn( call( &tut_yaal_hconsole_base::push_keys, this, static_cast<int>( input_.get_size() ) ) );
-	tp->run();
+	/* scope for input */ {
+		HScopeExitCall sec( call( &tress::fake_console_subsystem::HFakeConsole::destroy_input, &tress::fake_console_subsystem::_fakeConsole_ ) );
+		t.spawn( call( &tut_yaal_hconsole_base::push_keys, this, static_cast<int>( input_.get_size() ) ) );
+		tp->run();
+	}
+	t.finish();
 	cons.leave_curses();
 }
 
