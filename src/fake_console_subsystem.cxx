@@ -191,6 +191,11 @@ struct WINDOW {
 		_y = 0;
 		_mx = COLS - 1;
 		_my = ROWS - 1;
+		_by = 0;
+		_bx = 0;
+		_flags = 0;
+		_attr = 0;
+		_background = 0;
 		memset( dummy, 0, sizeof ( dummy ) );
 		memset( _buf, 0, BUF_SIZE );
 	}
@@ -491,6 +496,7 @@ int cbreak( void ) {
 
 int start_color( void );
 int start_color( void ) {
+	stdscr.init();
 	return ( 0 );
 }
 
