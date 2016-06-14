@@ -24,8 +24,10 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <yaal/hcore/hlog.hxx>
 #include <yaal/tools/util.hxx>
 #include <yaal/tools/hmonitor.hxx>
+#include <yaal/tools/streamtools.hxx>
 #include <yaal/dbwrapper/dbwrapper.hxx>
 
 M_VCSID( "$Id: " __ID__ " $" )
@@ -70,10 +72,12 @@ void tut_yaal_hconsole_base::play( char const* name_, int_array_t input_ ) {
 	tp->register_command_handler( "run_quit", call( &tut_yaal_hconsole_base::quit, this, tp.raw(), _1 ) );
 	tp->register_command_handler( "run_test", call( &tut_yaal_hconsole_base::test, this, tp.raw(), _1 ) );
 	tress::fake_console_subsystem::_fakeConsole_.init_input();
-	/* scope for input */ {
+	try {
 		HScopeExitCall sec( call( &tress::fake_console_subsystem::HFakeConsole::destroy_input, &tress::fake_console_subsystem::_fakeConsole_ ) );
 		t.spawn( call( &tut_yaal_hconsole_base::push_keys, this, static_cast<int>( input_.get_size() ) ) );
 		tp->run();
+	} catch ( HException const& e ) {
+		HTee( cerr, hcore::log ) << "Unexpected exception: " << e.what() << endl;
 	}
 	t.finish();
 	cons.leave_curses();
