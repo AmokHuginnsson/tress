@@ -105,8 +105,8 @@ int HFakeConsole::getch( void ) {
 	}
 	if ( !! _dump && ( key != -1 ) && ( key != KEY<>::ctrl_r( _commandComposeCharacter_ ) ) ) {
 		_dump->signal();
-		/* dump happens here */
 		l.unlock();
+		/* dump happens here */
 		_input->wait();
 		l.lock();
 	}
@@ -144,7 +144,9 @@ void HFakeConsole::destroy_input( void ) {
 		while ( ! _inputQueue.is_empty() ) {
 			if ( _inputQueue.top() != KEY<>::ctrl_r( _commandComposeCharacter_ ) ) {
 				_dump->signal();
+				l.unlock();
 				_input->wait();
+				l.lock();
 			}
 			_inputQueue.pop();
 		}
