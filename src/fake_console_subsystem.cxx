@@ -63,6 +63,14 @@ HFakeConsole::HFakeConsole( void )
 	, _input() {
 }
 
+void HFakeConsole::activate( void ) {
+	_active = true;
+	_background.clear();
+	_attributes.clear();
+	_inputQueue.clear();
+	return;
+}
+
 int HFakeConsole::attr( chtype_t attr_ ) const {
 	HLock l( _mutex );
 	int a( COLORS::ATTR_DEFAULT );

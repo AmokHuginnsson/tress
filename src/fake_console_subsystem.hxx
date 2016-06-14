@@ -64,9 +64,7 @@ private:
 	mutable event_t _input;
 public:
 	HFakeConsole( void );
-	void activate( void ) {
-		_active = true;
-	}
+	void activate( void );
 	void deactivate( void ) {
 		_active = false;
 	}
