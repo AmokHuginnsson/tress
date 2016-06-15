@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-	tut_yaal_hconsole_hconsole.cxx - this file is integral part of `tress' project.
+	tut_yaal_hconsole.cxx - this file is integral part of `tress' project.
 
   i.  You may not make any changes in Copyright information.
   ii. You must attach Copyright information to any part of every copy
@@ -45,13 +45,13 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hconsole_hconsole : public tut_yaal_hconsole_base {
+struct tut_yaal_hconsole : public tut_yaal_hconsole_base {
 	tui_t do_make_tui( void ) override {
 		return ( make_resource<HTUIProcess>() );
 	}
 };
 
-TUT_TEST_GROUP( tut_yaal_hconsole_hconsole, "yaal::hconsole::HConsole" );
+TUT_TEST_GROUP( tut_yaal_hconsole, "yaal::hconsole" );
 
 TUT_UNIT_TEST( "Enter and leave" )
 	HConsole& cons( HConsole::get_instance() );
@@ -182,6 +182,23 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "tui window" )
 	play( "all widgets (no database)", { KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', KEY<'q'>::command, KEY<'x'>::command } );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "listwidget search" )
+	play(
+		"search forward", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '/', 's', '\r',
+			KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+	play(
+		"search backward", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '/', 's', '\r',
+			KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
 TUT_TEARDOWN()
 
 }

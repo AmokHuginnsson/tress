@@ -97,7 +97,7 @@ void HTestWindow::do_init( void ) {
 				.mask( "^[a-zA-Z±¡æÆêÊ³£ñÑóÓ¶¦¼¬¿¯ !,-]*$" )
 				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
 	control->enable( true );
-	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Int", 16, HWidget::BITS::ALIGN::RIGHT, TYPE::HSTRING, "",
+	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Int", 8, HWidget::BITS::ALIGN::RIGHT, TYPE::HSTRING, "",
 			control = _edit = new HEditWidget( this, -13, 1, 1, 24, "&Int",
 				HEditWidgetAttributes()
 				.max_string_size( 32 )
