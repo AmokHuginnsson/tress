@@ -60,5 +60,23 @@ TUT_UNIT_TEST( "cancel add record" )
 	play( "load data", { '\r', KEY<'n'>::command, 'a', KEY<'q'>::command, KEY_CODES::LEFT, '\r', KEY<'x'>::command } );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "add record" )
+	play(
+		"load data", {
+			'\r',
+			KEY<'n'>::command,
+			't', 'e', 'x', 't', 'u', 'a', 'l', ' ', 'd', 'a', 't', 'a', '\t',
+			'7', '\t',
+			'3', '.', '1', '4', '\t',
+			KEY_CODES::DOWN, KEY_CODES::LEFT, '\r', '\t',
+			'1', '4', ':', '2', '3', ':', '5', '7', '\t',
+			'1', '9', '7', '8', '-', '0', '5', '-', '2', '4', ' ', '2', '3', ':', '3', '0', ':', '0', '0', '\t',
+			KEY_CODES::DOWN, KEY_CODES::DOWN, '\r', KEY<'w'>::command,
+			KEY_CODES::END, KEY<'d'>::command,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
 }
 

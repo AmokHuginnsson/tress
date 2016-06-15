@@ -21,7 +21,7 @@
 		</menu_item>
 	</menu>
 	<datawindow id="window_data_test" title="Data">
-		<db table="test" column="v_text, v_int, v_real, v_date, v_time, v_datetime, id_test_dict, id" id_column="id" sort="v_date ASC">
+		<db table="test" column="v_text, v_int, v_real, id_test_dict, v_date, v_time, v_datetime, id" id_column="id" sort="v_date ASC">
 SELECT t.v_text AS v_text,
 	t.v_int AS v_int,
 	t.v_real AS v_real,
@@ -82,12 +82,13 @@ GROUP BY t.id;
 			<position row="-14" column="69" height="1" width="10" />
 			<max_string_size>32</max_string_size>
 			<mask>^[0-9: ]*$</mask>
-			<valid>[0-2][09]:[0-5][09]:[0-5][0-9]</valid>
+			<valid>[0-2][0-9]:[0-5][0-9]:[0-5][0-9]</valid>
 		</dataedit>
 		<dataedit id="window_test_datetime" role="data">
 			<label position="stacked">DateT&amp;ime</label>
 			<position row="-11" column="1" height="1" width="20" />
-			<max_string_size>15</max_string_size>
+			<max_string_size>19</max_string_size>
+			<valid>[0-9]{4}-[01][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]</valid>
 		</dataedit>
 		<datacombobox id="window_test_dict" role="data">
 			<label position="stacked">&amp;Dict</label>
