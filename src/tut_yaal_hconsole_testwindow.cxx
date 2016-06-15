@@ -97,14 +97,14 @@ void HTestWindow::do_init( void ) {
 				.mask( "^[a-zA-Z±¡æÆêÊ³£ñÑóÓ¶¦¼¬¿¯ !,-]*$" )
 				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
 	control->enable( true );
-	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Int", 8, HWidget::BITS::ALIGN::RIGHT, TYPE::HSTRING, "",
+	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Int", 8, HWidget::BITS::ALIGN::RIGHT, TYPE::INT_LONG_LONG, "",
 			control = _edit = new HEditWidget( this, -13, 1, 1, 24, "&Int",
 				HEditWidgetAttributes()
 				.max_string_size( 32 )
 				.mask( "^[0-9]*$" )
 				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
 	control->enable( true );
-	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Real", 20, HWidget::BITS::ALIGN::RIGHT, TYPE::HSTRING, "",
+	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Real", 20, HWidget::BITS::ALIGN::RIGHT, TYPE::DOUBLE_LONG, "",
 			control = new HEditWidget( this, -13, 27, 1, 32, "&Real",
 				HEditWidgetAttributes()
 				.max_string_size( 32 )

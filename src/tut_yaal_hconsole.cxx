@@ -201,6 +201,10 @@ TUT_UNIT_TEST( "listwidget search" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "listwidget sort" )
+	play( "listwidget sort", { KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', 'n', 't', 'i', 'r', 'd', 'N', 'T', 'I', 'R', 'D', KEY<'q'>::command, KEY<'x'>::command } );
+TUT_TEARDOWN()
+
 }
 
 #endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
