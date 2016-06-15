@@ -77,6 +77,7 @@ public:
 	void ungetch( int key_ );
 	int getch( void );
 	void wait_io( void );
+	void wait_dump( void );
 	void wake_io( void );
 	void init_input( void );
 	void destroy_input( void );

@@ -75,6 +75,7 @@ void tut_yaal_hconsole_base::play( char const* name_, int_array_t input_ ) {
 	try {
 		HScopeExitCall sec( call( &tress::fake_console_subsystem::HFakeConsole::destroy_input, &tress::fake_console_subsystem::_fakeConsole_ ) );
 		t.spawn( call( &tut_yaal_hconsole_base::push_keys, this, static_cast<int>( input_.get_size() ) ) );
+		tress::fake_console_subsystem::_fakeConsole_.wait_dump();
 		tp->run();
 	} catch ( HException const& e ) {
 		HTee( cerr, hcore::log ) << "Unexpected exception: " << e.what() << endl;

@@ -122,9 +122,14 @@ void HFakeConsole::wake_io( void ) {
 	_input->signal();
 }
 
+void HFakeConsole::wait_dump( void ) {
+	_input->wait();
+}
+
 void HFakeConsole::init_dump( void ) {
 	HLock l( _mutex );
 	_dump = make_resource<hcore::HEvent>();
+	_input->signal();
 }
 
 void HFakeConsole::destroy_dump( void ) {
