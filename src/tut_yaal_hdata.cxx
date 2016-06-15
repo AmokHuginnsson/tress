@@ -56,5 +56,9 @@ TUT_UNIT_TEST( "load data" )
 	play( "load data", { '\r', KEY<'q'>::command, KEY<'x'>::command } );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "cancel add record" )
+	play( "load data", { '\r', KEY<'n'>::command, 'a', KEY<'q'>::command, KEY_CODES::LEFT, '\r', KEY<'x'>::command } );
+TUT_TEARDOWN()
+
 }
 
