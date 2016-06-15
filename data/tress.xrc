@@ -104,9 +104,9 @@ GROUP BY t.id;
 			<searchable>true</searchable>
 			<editable>true</editable>
 			<draw_header>true</draw_header>
-			<column placement="-1" name="name" width="6" align="left" type="string" />
-			<column placement="-1" name="data" width="1" align="right" type="string" format="%.2Lf" />
-			<column placement="-1" name="value" width="1" align="right" type="real" format="%.1Lf" />
+			<column placement="-1" name="name" width="3" align="left" type="string" />
+			<column placement="-1" name="data" width="3" align="center" type="string" />
+			<column placement="-1" name="value" width="2" align="right" type="real" format="%.1Lf" />
 		</datalist>
 	</datawindow>
 </resource>

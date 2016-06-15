@@ -153,6 +153,9 @@ void HFakeConsole::destroy_input( void ) {
 				_input->wait();
 				l.lock();
 			}
+			if ( _inputQueue.is_empty() ) {
+				break;
+			}
 			_inputQueue.pop();
 		}
 	}
