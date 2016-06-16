@@ -187,14 +187,16 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "listwidget search" )
 	play(
 		"search forward", {
-			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '/', 's', '\r',
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '/', 'u', '\r',
+			KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl,
 			KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
 	play(
 		"search backward", {
-			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '/', 's', '\r',
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '/', 'u', '\r',
+			KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl,
 			KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
@@ -203,6 +205,25 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "listwidget sort" )
 	play( "listwidget sort", { KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', 'n', 't', 'i', 'r', 'd', 'N', 'T', 'I', 'R', 'D', KEY<'q'>::command, KEY<'x'>::command } );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "listwidget movement" )
+	play(
+		"listwidget movement", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r',
+			KEY_CODES::DOWN, KEY_CODES::DOWN, KEY_CODES::DOWN, KEY_CODES::DOWN,
+			KEY_CODES::DOWN, KEY_CODES::DOWN, KEY_CODES::DOWN, KEY_CODES::DOWN,
+			KEY_CODES::DOWN, KEY_CODES::DOWN, KEY_CODES::DOWN, KEY_CODES::DOWN,
+			KEY_CODES::UP, KEY_CODES::UP, KEY_CODES::UP, KEY_CODES::UP,
+			KEY_CODES::UP, KEY_CODES::UP, KEY_CODES::UP, KEY_CODES::UP,
+			KEY_CODES::UP, KEY_CODES::UP, KEY_CODES::UP, KEY_CODES::UP,
+			KEY_CODES::PAGE_DOWN, KEY_CODES::PAGE_DOWN, KEY_CODES::PAGE_DOWN, KEY_CODES::PAGE_DOWN,
+			KEY_CODES::PAGE_UP, KEY_CODES::PAGE_UP, KEY_CODES::PAGE_UP, KEY_CODES::PAGE_UP,
+			KEY_CODES::DOWN, KEY_CODES::PAGE_DOWN, KEY_CODES::UP, KEY_CODES::PAGE_DOWN,
+			KEY_CODES::UP, KEY_CODES::PAGE_UP, KEY_CODES::END, KEY_CODES::HOME,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
 TUT_TEARDOWN()
 
 }

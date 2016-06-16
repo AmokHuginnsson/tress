@@ -24,6 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <yaal/tools/util.hxx>
+
 #include "tut_yaal_hconsole_testwindow.hxx"
 M_VCSID( "$Id: " __ID__ " $" )
 #include <yaal/hconsole/hdatewidget.hxx>
@@ -32,6 +34,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 
 using namespace yaal;
 using namespace yaal::hcore;
+using namespace yaal::tools;
 using namespace yaal::hconsole;
 using namespace yaal::hconsole::list_widget_helper;
 using namespace yaal::dbwrapper;
@@ -125,15 +128,18 @@ void HTestWindow::do_init( void ) {
 	HRecordSet::ptr_t r = rs.get_records();
 	HAsIsValueListModel<>::ptr_t mC = _list->get_model();
 	HInfoItem row( 5 );
-	for ( HRecordSet::iterator it = r->begin(); it != r->end(); ++ it ) {
-		rs.sync( it );
-		row[ 0 ].set_integer( _names[static_cast<int>( rs._idName )].first );
-		row[ 0 ].set_string( _names[static_cast<int>( rs._idName )].second );
-		row[ 1 ].set_string( rs._vText );
-		row[ 2 ].set_string( rs._vInt );
-		row[ 3 ].set_string( rs._vReal );
-		row[ 4 ].set_time( rs._vDate );
-		mC->add_tail( row );
+	for ( int i( 0 ), rn( 1 ); i < 3; ++ i ) {
+		for ( HRecordSet::iterator it = r->begin(); it != r->end(); ++ it ) {
+			rs.sync( it );
+			row[ 0 ].set_integer( _names[static_cast<int>( rs._idName )].first );
+			row[ 0 ].set_string( _names[static_cast<int>( rs._idName )].second + " " + util::ordinal( rn ) );
+			row[ 1 ].set_string( rs._vText );
+			row[ 2 ].set_string( rs._vInt + rn );
+			row[ 3 ].set_string( rs._vReal );
+			row[ 4 ].set_time( rs._vDate );
+			mC->add_tail( row );
+			++ rn;
+		}
 	}
 	_editableList = new HListWidget( this, -10, 1, -3, -1, "&Edit test",
 			HListWidgetAttributes()
