@@ -31,6 +31,7 @@ Copyright:
 #include <yaal/dbwrapper/hdatabase.hxx>
 #include <yaal/hconsole/hwindow.hxx>
 #include <yaal/hconsole/hevent.hxx>
+#include <yaal/hconsole/hlogpad.hxx>
 #include <yaal/hconsole/hcomboboxwidget.hxx>
 
 namespace tress {
@@ -45,6 +46,7 @@ protected:
 	yaal::hconsole::HListWidget* _editableList;
 	yaal::hconsole::HEditWidget* _edit;
 	yaal::hconsole::HComboboxWidget* _name;
+	yaal::hconsole::HLogPad* _logPad;
 	/*}*/
 public:
 	/*{*/

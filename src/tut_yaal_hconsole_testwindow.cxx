@@ -45,13 +45,14 @@ HTestWindow::HTestWindow( const char* title_, yaal::dbwrapper::HDataBase::ptr_t 
 	: HWindow( title_ )
 	, _db( db_ )
 	, _names()
-	, _list( NULL )
+	, _list( nullptr )
 	, _editableList( nullptr )
-	, _edit( NULL )
-	, _name( NULL ) {
+	, _edit( nullptr )
+	, _name( nullptr )
+	, _logPad( nullptr ) {
 	M_PROLOG
-	register_postprocess_handler( KEY_CODES::DELETE, NULL, call( &HTestWindow::handler_delete, this, _1 ) );
-	register_postprocess_handler( '\r', NULL, call( &HTestWindow::handler_enter, this, _1 ) );
+	register_postprocess_handler( KEY_CODES::DELETE, nullptr, call( &HTestWindow::handler_delete, this, _1 ) );
+	register_postprocess_handler( '\r', nullptr, call( &HTestWindow::handler_enter, this, _1 ) );
 	return;
 	M_EPILOG
 }
@@ -92,7 +93,7 @@ void HTestWindow::do_init( void ) {
 	_list->enable( true );
 	_list->set_focus();
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Name", 16, HWidget::BITS::ALIGN::LEFT, TYPE::HSTRING, "", _name ) );
-	HWidget* control( NULL );
+	HWidget* control( nullptr );
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Text", 32, HWidget::BITS::ALIGN::LEFT, TYPE::HSTRING, "",
 			control = new HEditWidget( this, -16, 27, 1, -1, "Te&xt",
 				HEditWidgetAttributes()
@@ -141,7 +142,7 @@ void HTestWindow::do_init( void ) {
 			++ rn;
 		}
 	}
-	_editableList = new HListWidget( this, -10, 1, -3, -1, "&Edit test",
+	_editableList = new HListWidget( this, -10, 1, -3, 50, "&Edit test",
 			HListWidgetAttributes()
 			.editable( true )
 			.searchable( true )
@@ -150,6 +151,24 @@ void HTestWindow::do_init( void ) {
 	_editableList->add_column( -1, make_resource<HListWidget::HColumnInfo>( "integer", 1, HWidget::BITS::ALIGN::RIGHT, TYPE::INT_LONG_LONG ) );
 	_editableList->add_column( -1, make_resource<HListWidget::HColumnInfo>( "real", 1, HWidget::BITS::ALIGN::RIGHT, TYPE::DOUBLE_LONG ) );
 	_editableList->enable( true );
+	_logPad = new HLogPad( this, -10, 52, -3, -1, "&Log pad", HWidgetAttributes().label_decoration( HWidget::LABEL::DECORATION::AUTO ).label_position( HWidget::LABEL::POSITION::STACKED ) );
+	_logPad->add( "Color test:\n" );
+	_logPad->add( COLORS::FG_RED, "red" );
+	_logPad->add( COLORS::FG_GREEN, " green" );
+	_logPad->add( COLORS::FG_BLUE, " blue\n" );
+	_logPad->add( COLORS::FG_BRIGHTRED, "brightred" );
+	_logPad->add( COLORS::FG_BRIGHTGREEN, " brightgreen" );
+	_logPad->add( COLORS::FG_BRIGHTBLUE, " brightblue\n" );
+	_logPad->add( COLORS::FG_CYAN, "cyan" );
+	_logPad->add( COLORS::FG_BRIGHTCYAN, " brigthcyan\n" );
+	_logPad->add( COLORS::FG_MAGENTA, "magenta" );
+	_logPad->add( COLORS::FG_BRIGHTMAGENTA, " brigthmagenta\n" );
+	_logPad->add( COLORS::FG_BROWN, "brown" );
+	_logPad->add( COLORS::FG_YELLOW, " yellow\n" );
+	_logPad->add( COLORS::FG_GRAY, "gray" );
+	_logPad->add( COLORS::FG_LIGHTGRAY, " lightgray" );
+	_logPad->add( COLORS::FG_WHITE, " white" );
+	_logPad->enable( true );
 	paint();
 	return;
 	M_EPILOG
