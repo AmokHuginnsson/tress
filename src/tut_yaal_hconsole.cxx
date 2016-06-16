@@ -201,6 +201,14 @@ TUT_UNIT_TEST( "listwidget search" )
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
+	play(
+		"search forward", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '/', '[', 'v', 'h', ']', '/', 'e', '\r',
+			KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl,
+			KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "listwidget sort" )
@@ -236,6 +244,7 @@ TUT_UNIT_TEST( "edit widget edit and motion" )
 			KEY<'w'>::ctrl, KEY_CODES::BACKSPACE, 's', 'e', 'l', 'f', ',', '\t',
 			KEY_CODES::ESCAPE, 'T', KEY_CODES::DOWN, KEY_CODES::ESCAPE, 'x',
 			KEY_CODES::UP,
+			KEY_CODES::END, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::DELETE, KEY_CODES::DELETE, KEY_CODES::HOME, KEY_CODES::DELETE, KEY_CODES::DELETE, KEY<'u'>::ctrl,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
