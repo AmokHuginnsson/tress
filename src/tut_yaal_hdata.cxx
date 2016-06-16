@@ -24,6 +24,11 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include "config.hxx"
+
+#if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
+#ifndef __HOST_OS_TYPE_DARWIN__
+
 #include <TUT/tut.hpp>
 
 #include <yaal/hdata/hdataprocess.hxx>
@@ -100,4 +105,7 @@ TUT_UNIT_TEST( "add record (with children)" )
 TUT_TEARDOWN()
 
 }
+
+#endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
+#endif /* defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 ) */
 

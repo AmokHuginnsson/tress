@@ -24,6 +24,11 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include "config.hxx"
+
+#if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
+#ifndef __HOST_OS_TYPE_DARWIN__
+
 #include <yaal/hcore/hlog.hxx>
 #include <yaal/tools/util.hxx>
 #include <yaal/tools/hmonitor.hxx>
@@ -108,4 +113,7 @@ bool tut_yaal_hconsole_base::test( yaal::hconsole::HTUIProcess* tp, yaal::hconso
 }
 
 }
+
+#endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
+#endif /* defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 ) */
 

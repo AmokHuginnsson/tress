@@ -226,6 +226,21 @@ TUT_UNIT_TEST( "listwidget movement" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "edit widget edit and motion" )
+	play(
+		"edit widget motion", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', KEY_CODES::ESCAPE, 'x',
+			KEY_CODES::HOME, KEY_CODES::ESCAPE, 'f', KEY_CODES::ESCAPE, 'f', KEY_CODES::ESCAPE, 'f', KEY_CODES::RIGHT, KEY_CODES::ESCAPE, 'd',
+			'c', 'r', 'e', 'a', 't', 'o', 'r',
+			KEY_CODES::END, KEY_CODES::ESCAPE, 'b', KEY_CODES::ESCAPE, 'b', KEY_CODES::ESCAPE, 'b', KEY_CODES::ESCAPE, 'b', KEY_CODES::ESCAPE, 'b', KEY_CODES::ESCAPE, 'b', KEY_CODES::ESCAPE, 'b', KEY_CODES::LEFT,
+			KEY<'w'>::ctrl, KEY_CODES::BACKSPACE, 's', 'e', 'l', 'f', ',', '\t',
+			KEY_CODES::ESCAPE, 'T', KEY_CODES::DOWN, KEY_CODES::ESCAPE, 'x',
+			KEY_CODES::UP,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
 }
 
 #endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
