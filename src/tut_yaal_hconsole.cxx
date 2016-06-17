@@ -42,6 +42,7 @@ using namespace yaal::tools;
 using namespace yaal::hconsole;
 using namespace tress;
 using namespace tress::tut_helpers;
+using namespace tress::fake_console_subsystem;
 
 namespace tut {
 
@@ -275,6 +276,31 @@ TUT_UNIT_TEST( "date motion" )
 		"date motion", {
 			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', KEY_CODES::ESCAPE, 'D',
 			'\r', KEY_CODES::PAGE_UP, KEY_CODES::UP, KEY_CODES::LEFT, KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::PAGE_DOWN, '\r',
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "mouse" )
+	play(
+		"mouse", {
+			KEY<'l'>::ctrl,
+			KEY_CODES::MOUSE, 2, 4,
+			KEY_CODES::MOUSE, 6, 5,
+			KEY_CODES::MOUSE, 6, 5,
+			KEY_CODES::MOUSE, 2, 5,
+			KEY_CODES::MOUSE, 15, 2,
+			KEY_CODES::MOUSE, 15, 2,
+			KEY_CODES::MOUSE, 30, 10,
+			KEY_CODES::MOUSE, 30, 10,
+			KEY_CODES::MOUSE, 70, 13,
+			KEY_CODES::MOUSE, 70, 13,
+			KEY_CODES::MOUSE, 62, 18,
+			KEY_CODES::MOUSE, 62, 18,
+			KEY_CODES::MOUSE, 24, 10,
+			KEY_CODES::MOUSE, 24, 10,
+			KEY_CODES::MOUSE, 2, 11,
+			KEY_CODES::MOUSE, 2, 11,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);

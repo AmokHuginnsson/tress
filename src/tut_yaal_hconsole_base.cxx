@@ -69,7 +69,13 @@ void tut_yaal_hconsole_base::play( char const* name_, int_array_t input_ ) {
 	cons.enter_curses();
 	tress::fake_console_subsystem::build_attribute_maps();
 	reverse( input_.begin(), input_.end() );
+	int skip( 0 );
 	for ( int key : input_ ) {
+		if ( key == KEY_CODES::MOUSE ) {
+			skip += 2;
+		} else if ( key == KEY<'l'>::ctrl ) {
+			cons.ungetch( -1 );
+		}
 		cons.ungetch( key );
 	}
 	tui_t tp( make_tui() );
@@ -79,7 +85,7 @@ void tut_yaal_hconsole_base::play( char const* name_, int_array_t input_ ) {
 	tress::fake_console_subsystem::_fakeConsole_.init_input();
 	try {
 		HScopeExitCall sec( call( &tress::fake_console_subsystem::HFakeConsole::destroy_input, &tress::fake_console_subsystem::_fakeConsole_ ) );
-		t.spawn( call( &tut_yaal_hconsole_base::push_keys, this, static_cast<int>( input_.get_size() ) ) );
+		t.spawn( call( &tut_yaal_hconsole_base::push_keys, this, static_cast<int>( input_.get_size() ) - skip ) );
 		tress::fake_console_subsystem::_fakeConsole_.wait_dump();
 		tp->run();
 	} catch ( HException const& e ) {

@@ -49,6 +49,7 @@ typedef yaal::u32_t chtype_t;
 #endif
 
 struct WINDOW;
+struct MEVENT;
 
 class HFakeConsole {
 private:
@@ -76,6 +77,7 @@ public:
 	int bg( chtype_t bg_ ) const;
 	void ungetch( int key_ );
 	int getch( void );
+	void getmouse( MEVENT* );
 	void wait_io( void );
 	void wait_dump( void );
 	void wake_io( void );

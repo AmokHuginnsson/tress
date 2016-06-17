@@ -42,6 +42,8 @@ Copyright:
 #include <yaal/hconsole/console.hxx>
 #include <yaal/hconsole/hconsole.hxx>
 
+#include <yaal/hcore/hlog.hxx>
+
 #include "fake_console_subsystem.hxx"
 
 using namespace yaal;
@@ -52,6 +54,14 @@ using namespace yaal::hconsole;
 namespace tress {
 
 namespace fake_console_subsystem {
+
+struct MEVENT {
+	int short _id;
+	int _x;
+	int _y;
+	int _z;
+	chtype_t _state;
+};
 
 HFakeConsole::HFakeConsole( void )
 	: _active( false )
@@ -114,6 +124,19 @@ int HFakeConsole::getch( void ) {
 	return ( key );
 }
 
+void HFakeConsole::getmouse( MEVENT* ev_ ) {
+	HLock l( _mutex );
+	M_ASSERT( ! _inputQueue.is_empty() );
+	::memset( ev_, 0, sizeof ( MEVENT ) );
+	ev_->_x = _inputQueue.top();
+	_inputQueue.pop();
+	M_ASSERT( ! _inputQueue.is_empty() );
+	ev_->_y = _inputQueue.top();
+	_inputQueue.pop();
+	ev_->_state = 4;
+	return;
+}
+
 void HFakeConsole::wait_io( void ) {
 	_dump->wait();
 }
@@ -169,6 +192,8 @@ HFakeConsoleGuard::HFakeConsoleGuard( void )
 	unsetenv( "YAAL_HAS_BROKEN_BRIGHT_BACKGROUND" );
 	unsetenv( "MRXVT_TABTITLE" );
 	unsetenv( "TERMINATOR_UUID" );
+	setenv( "DISPLAY", ":0.0", 1 );
+	_useMouse_ = USE_MOUSE::YES;
 	_fakeConsole_.activate();
 }
 
@@ -582,6 +607,12 @@ int assume_default_colors( int, int ) {
 int long unsigned mousemask( int long unsigned, int long unsigned* );
 int long unsigned mousemask( int long unsigned newmask, int long unsigned* ) {
 	return ( newmask );
+}
+
+int getmouse( MEVENT* );
+int getmouse( MEVENT* ev_ ) {
+	_fakeConsole_.getmouse( ev_ );
+	return ( 0 );
 }
 
 bool has_mouse( void );
