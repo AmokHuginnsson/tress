@@ -89,7 +89,7 @@ void simple( HThread const* const caller_ ) {
 	int ctr = 50;
 	while ( caller_->is_alive() && ctr -- ) {
 		cout << ctr << ' ' << flush;
-		sleep_for( duration( 1 * 100, time::UNIT::MILISECOND ) );
+		sleep_for( duration( 1 * 100, time::UNIT::MILLISECOND ) );
 	}
 	cout << "Thread [simple] finished." << endl;
 	return;
@@ -125,7 +125,7 @@ void HCool::run( HThread const* caller_ ) {
 		if ( _name == "busy" )
 			busy_wait();
 		else
-			sleep_for( duration( 1 * 100, time::UNIT::MILISECOND ) );
+			sleep_for( duration( 1 * 100, time::UNIT::MILLISECOND ) );
 	}
 	cout << " ... and finished" << endl;
 	return;
@@ -219,7 +219,7 @@ TUT_UNIT_TEST( "Starting new thread and allowing it to finish" )
 	ca.set( 5 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
-	sleep_for( duration( FINISH_DELAY * 100, time::UNIT::MILISECOND ) );
+	sleep_for( duration( FINISH_DELAY * 100, time::UNIT::MILLISECOND ) );
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
 TUT_TEARDOWN()
 
@@ -231,7 +231,7 @@ TUT_UNIT_TEST( "Starting new thread and finishing it prematurely (sleeping body)
 	ca.set( 40 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
-	sleep_for( duration( 8 * 100, time::UNIT::MILISECOND ) );
+	sleep_for( duration( 8 * 100, time::UNIT::MILLISECOND ) );
 	start.set_now();
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	a.finish();
@@ -250,7 +250,7 @@ TUT_UNIT_TEST( "Starting new thread and finishing it prematurely (busy body)" )
 	ca.set( 40 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
-	sleep_for( duration( 5 * 100, time::UNIT::MILISECOND ) );
+	sleep_for( duration( 5 * 100, time::UNIT::MILLISECOND ) );
 	start.set_now();
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	a.finish();
@@ -305,7 +305,7 @@ TUT_UNIT_TEST( "Simple thread (plain function)" )
 	HThread a;
 	a.spawn( call( &simple, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
-	sleep_for( duration( 10 * 100, time::UNIT::MILISECOND ) );
+	sleep_for( duration( 10 * 100, time::UNIT::MILLISECOND ) );
 	start.set_now();
 	a.finish();
 	stop.set_now();
@@ -322,7 +322,7 @@ TUT_UNIT_TEST( "Starting new thread and allowing it to finish, the finish is act
 	ca.set( 5 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
-	sleep_for( duration( FINISH_DELAY * 100, time::UNIT::MILISECOND ) );
+	sleep_for( duration( FINISH_DELAY * 100, time::UNIT::MILLISECOND ) );
 	ENSURE_EQUALS( "thread failed to finish", a.is_alive(), false );
 	a.finish();
 TUT_TEARDOWN()
@@ -340,7 +340,7 @@ TUT_UNIT_TEST( "Very short living thread, spawned delayed." )
 	HTime start( now_utc() ), stop( now_utc() );
 	HThread a;
 	a.spawn( call( a_fast_one, &a ) );
-	sleep_for( duration( 1 * 100, time::UNIT::MILISECOND ) );
+	sleep_for( duration( 1 * 100, time::UNIT::MILLISECOND ) );
 	cout << __PRETTY_FUNCTION__ << endl;
 	a.finish();
 	/* In case of wrong implementation this test case will hang foreveer. */

@@ -450,45 +450,45 @@ TUT_UNIT_TEST( 50, "speed test" )
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.push_back( static_cast<int>( i ) );
-		clog << "*speed* std::deque<>::push_back() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* std::deque<>::push_back() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
 	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.push_back( static_cast<int>( i ) );
-		clog << "*speed* yaal::hcore::HDeque<>::push_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HDeque<>::push_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HDeque<>::push_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.pop_back();
-		clog << "*speed* std::deque<>::pop_back() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* std::deque<>::pop_back() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
 	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.pop_back();
-		clog << "*speed* yaal::hcore::HDeque<>::pop_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HDeque<>::pop_back() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HDeque<>::pop_back() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.push_front( static_cast<int>( i ) );
-		clog << "*speed* std::deque<>::push_front() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* std::deque<>::push_front() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
 	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.push_front( static_cast<int>( i ) );
-		clog << "*speed* yaal::hcore::HDeque<>::push_front() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HDeque<>::push_front() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HDeque<>::push_front() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl; {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.pop_front();
-		clog << "*speed* std::deque<>::pop_front() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* std::deque<>::pop_front() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
 	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.pop_front();
-		clog << "*speed* yaal::hcore::HDeque<>::pop_front() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HDeque<>::pop_front() = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HDeque<>::pop_front() result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 /* erase */
@@ -499,12 +499,12 @@ TUT_UNIT_TEST( 50, "speed test" )
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.erase( proto.end() - 1 );
-		clog << "*speed* std::deque<>::erase() back = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* std::deque<>::erase() back = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
 	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.erase( deque.end() - 1 );
-		clog << "*speed* yaal::hcore::HDeque<>::erase() back = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HDeque<>::erase() back = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HDeque<>::erase() back result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 	for ( int long i( 0 ); i < LOOPS; ++ i )
@@ -514,12 +514,12 @@ TUT_UNIT_TEST( 50, "speed test" )
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.erase( proto.begin() );
-		clog << "*speed* std::deque<>::erase() front = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* std::deque<>::erase() front = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
 	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			deque.erase( deque.begin() );
-		clog << "*speed* yaal::hcore::HDeque<>::erase() front = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILISECOND ) ) ) << endl;
+		clog << "*speed* yaal::hcore::HDeque<>::erase() front = " << static_cast<int long>( yt = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
 	}
 	clog << "*speed* HDeque<>::erase() front = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 TUT_TEARDOWN()

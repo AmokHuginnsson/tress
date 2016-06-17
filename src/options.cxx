@@ -155,8 +155,8 @@ int handle_program_options( int argc_, char** argv_ ) {
 		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
 		.description( "constrain time for execution of single unit test" )
 		.recipient( setup._timeConstraint )
-		.argument_name( "miliseconds" )
-		.default_value( OSetup::DEFAULT_TIME_CONSTRAINT )
+		.argument_name( "duration" )
+		.default_value( to_string( OSetup::DEFAULT_TIME_CONSTRAINT ).append( "s" ) )
 	)(
 		HProgramOptionsHandler::HOption()
 		.short_form( 'G' )

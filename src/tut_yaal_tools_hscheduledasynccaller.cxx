@@ -73,7 +73,7 @@ TUT_UNIT_TEST( "functional test" )
 	static int const WAIT( 8 );
 #endif /* #else #ifdef _MSC_VER */
 	for ( int i( 0 ); i < WAIT; ++ i ) {
-		if ( ! sleep_for( duration( 500, time::UNIT::MILISECOND ) ) ) {
+		if ( ! sleep_for( duration( 500, time::UNIT::MILLISECOND ) ) ) {
 			log_trace << "sleep interrupted!" << endl;
 		}
 		HLock l( _mutex );

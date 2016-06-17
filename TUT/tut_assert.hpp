@@ -380,7 +380,7 @@ public:
 		, _timer() {
 	}
 	~time_constraint( void ) {
-		int long elapsed( static_cast<int long>( _timer.get_time_elapsed( yaal::hcore::time::UNIT::MILISECOND ) ) );
+		int long elapsed( static_cast<int long>( _timer.get_time_elapsed( yaal::hcore::time::UNIT::MILLISECOND ) ) );
 		if ( _constraint && ( elapsed > _constraint ) ) {
 			std::stringstream ss;
 			ss << "time constraint exceeded: expected [" << _constraint

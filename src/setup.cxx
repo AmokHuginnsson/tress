@@ -68,7 +68,7 @@ OSetup::OSetup( void )
 	, _selftest( false )
 	, _testNumber( 0 )
 	, _jobs( DEFAULT_JOB_COUNT )
-	, _timeConstraint( DEFAULT_TIME_CONSTRAINT )
+	, _timeConstraint( DEFAULT_TIME_CONSTRAINT + 0 )
 	, _argc( 0 )
 	, _argv( NULL )
 	, _programName( NULL )
@@ -154,7 +154,7 @@ void OSetup::test_setup( void ) {
 		M_THROW( _( "bad job count" ), _jobs );
 	}
 	if ( _timeConstraint < 0 ) {
-		M_THROW( _( "bad time constraint" ), _timeConstraint );
+		M_THROW( _( "bad time constraint" ), time::in_units<time::UNIT::MILLISECOND>( _timeConstraint ) );
 	}
 	char const* FRAMEWORK[] = { "tut", "boost", "google", "cppunit", "xml", "qt", "cute" };
 	if ( ! count( FRAMEWORK, FRAMEWORK + countof ( FRAMEWORK ), _reporter ) ) {

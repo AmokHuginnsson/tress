@@ -28,6 +28,7 @@ Copyright:
 #define TRESS_SETUP_HXX_INCLUDED
 
 #include <yaal/hcore/hstring.hxx>
+#include <yaal/hcore/duration.hxx>
 #include <yaal/hcore/hdeque.hxx>
 
 #include "config.hxx"
@@ -50,7 +51,7 @@ struct OSetup {
 	bool _selftest;
 	int _testNumber;
 	int _jobs;
-	int long _timeConstraint;
+	yaal::hcore::time::duration_t _timeConstraint;
 	int _argc;
 	char const* const* _argv;
 	char* _programName;

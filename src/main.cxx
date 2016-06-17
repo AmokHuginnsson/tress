@@ -132,7 +132,7 @@ int main( int argc_, char* argv_[] ) {
 		}
 		if ( setup._selftest )
 			register_selftest();
-		tut::runner.get().set_time_constraint( setup._timeConstraint );
+		tut::runner.get().set_time_constraint( time::in_units<time::UNIT::MILLISECOND>( setup._timeConstraint ) );
 /* *BOOM* */
 		try {
 			if ( ! setup._listGroups ) {
@@ -180,7 +180,7 @@ int main( int argc_, char* argv_[] ) {
 		/* escape from main loop */
 	}
 	if ( visitor.get() && ( setup._reporter == "tut" ) ) {
-		cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % static_cast<int long>( clk.get_time_elapsed( time::UNIT::MILISECOND ) ) ).string() << endl;
+		cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % static_cast<int long>( clk.get_time_elapsed( time::UNIT::MILLISECOND ) ) ).string() << endl;
 		M_ENSURE( ! errno );
 	}
 	if ( yaal::_isKilled_ )

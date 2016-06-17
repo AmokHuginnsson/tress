@@ -497,7 +497,7 @@ public:
 
 		if ( obj.get() )
 			tr.set_location( obj->get_test_name(), file ? file : obj->get_test_file(), line > 0 ? line : obj->get_test_line() );
-		int long timeElapsed( static_cast<int long>( clock.get_time_elapsed( yaal::hcore::time::UNIT::MILISECOND ) ) );
+		int long timeElapsed( static_cast<int long>( clock.get_time_elapsed( yaal::hcore::time::UNIT::MILLISECOND ) ) );
 		_time += timeElapsed;
 		tr.set_time( timeElapsed );
 		// test passed
