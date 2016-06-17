@@ -250,11 +250,31 @@ TUT_UNIT_TEST( "edit widget edit and motion" )
 	);
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "logpag motion" )
+TUT_UNIT_TEST( "logpad motion" )
 	play(
 		"logpad motion", {
 			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', KEY_CODES::ESCAPE, 'L',
 			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::UP, KEY_CODES::LEFT, KEY_CODES::LEFT,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "tree motion" )
+	play(
+		"tree motion", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::END, KEY_CODES::UP, KEY_CODES::UP, KEY_CODES::UP,
+			KEY_CODES::END, KEY_CODES::UP, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::HOME,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "date motion" )
+	play(
+		"date motion", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', KEY_CODES::ESCAPE, 'D',
+			'\r', KEY_CODES::PAGE_UP, KEY_CODES::UP, KEY_CODES::LEFT, KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::PAGE_DOWN, '\r',
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
