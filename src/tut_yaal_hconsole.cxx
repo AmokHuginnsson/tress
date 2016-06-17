@@ -157,10 +157,39 @@ TUT_UNIT_TEST( "ungetch/getch" )
 	HConsole& cons( HConsole::get_instance() );
 	cons.enter_curses();
 	tress::fake_console_subsystem::build_attribute_maps();
-	int key = KEY<'x'>::command;
-	cons.ungetch( key );
-	ENSURE_EQUALS( "ungetch/getch failed", cons.get_key(), key );
+	int keys[] = {
+		KEY_CODES::ESCAPE, KEY_CODES::PAGE_UP, KEY_CODES::PAGE_DOWN, KEY_CODES::DOWN, KEY_CODES::UP,
+		KEY_CODES::LEFT, KEY_CODES::RIGHT, KEY_CODES::HOME, KEY_CODES::END, KEY_CODES::DELETE, KEY_CODES::INSERT, KEY_CODES::BACKSPACE,
+		KEY_CODES::F1, KEY_CODES::F2, KEY_CODES::F3, KEY_CODES::F4, KEY_CODES::F5, KEY_CODES::F6,
+		KEY_CODES::F7, KEY_CODES::F8, KEY_CODES::F9, KEY_CODES::F10, KEY_CODES::F11, KEY_CODES::F12,
+		KEY_CODES::F13, KEY_CODES::F14, KEY_CODES::F15, KEY_CODES::F16, KEY_CODES::F17, KEY_CODES::F18,
+		KEY_CODES::F19, KEY_CODES::F20, KEY_CODES::F21, KEY_CODES::F22, KEY_CODES::F23, KEY_CODES::F24,
+		KEY<'c'>::ctrl, KEY<'x'>::command
+	};
+	for ( int key : keys ) {
+		cons.ungetch( key );
+		ENSURE_EQUALS( "ungetch/getch failed", cons.get_key(), key );
+	}
 	cons.leave_curses();
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "fg_to_bg" )
+	ENSURE_EQUALS( "red", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_RED ) ), static_cast<int>( COLORS::BG_RED ) );
+	ENSURE_EQUALS( "green", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_GREEN ) ), static_cast<int>( COLORS::BG_GREEN ) );
+	ENSURE_EQUALS( "blue", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_BLUE ) ), static_cast<int>( COLORS::BG_BLUE ) );
+	ENSURE_EQUALS( "brown", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_BROWN ) ), static_cast<int>( COLORS::BG_BROWN ) );
+	ENSURE_EQUALS( "black", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_BLACK ) ), static_cast<int>( COLORS::BG_BLACK ) );
+	ENSURE_EQUALS( "cyan", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_CYAN ) ), static_cast<int>( COLORS::BG_CYAN ) );
+	ENSURE_EQUALS( "magenta", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_MAGENTA ) ), static_cast<int>( COLORS::BG_MAGENTA ) );
+	ENSURE_EQUALS( "gray", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_GRAY ) ), static_cast<int>( COLORS::BG_GRAY ) );
+	ENSURE_EQUALS( "brightred", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_BRIGHTRED ) ), static_cast<int>( COLORS::BG_BRIGHTRED ) );
+	ENSURE_EQUALS( "brightgreen", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_BRIGHTGREEN ) ), static_cast<int>( COLORS::BG_BRIGHTGREEN ) );
+	ENSURE_EQUALS( "brightblue", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_BRIGHTBLUE ) ), static_cast<int>( COLORS::BG_BRIGHTBLUE ) );
+	ENSURE_EQUALS( "brightcyan", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_BRIGHTCYAN ) ), static_cast<int>( COLORS::BG_BRIGHTCYAN ) );
+	ENSURE_EQUALS( "brightmagenta", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_BRIGHTMAGENTA ) ), static_cast<int>( COLORS::BG_BRIGHTMAGENTA ) );
+	ENSURE_EQUALS( "yellow", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_YELLOW ) ), static_cast<int>( COLORS::BG_YELLOW ) );
+	ENSURE_EQUALS( "white", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_WHITE ) ), static_cast<int>( COLORS::BG_WHITE ) );
+	ENSURE_EQUALS( "lightgray", static_cast<int>( COLORS::fg_to_bg( COLORS::FG_LIGHTGRAY ) ), static_cast<int>( COLORS::BG_LIGHTGRAY ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "notify_keyboard" )
@@ -302,6 +331,17 @@ TUT_UNIT_TEST( "mouse" )
 			KEY_CODES::MOUSE, 2, 11,
 			KEY_CODES::MOUSE, 2, 11,
 			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "window list" )
+	play(
+		"window list", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r',
+			KEY_CODES::ESCAPE, '\t', '\t', KEY_CODES::DOWN, '\r',
+			KEY_CODES::ESCAPE, '0',
+			KEY<'x'>::command
 		}
 	);
 TUT_TEARDOWN()
