@@ -59,6 +59,12 @@ GROUP BY t.id;
 		<dataedit id="window_test_text" role="data">
 			<label position="stacked" decoration="auto">&amp;Text</label>
 			<position row="-14" column="1" height="1" width="25" />
+			<attribute
+				foreground_label_focused="brightblue" foreground_label_enabled="blue" foreground_label_disabled="gray"
+				background_label_focused="blue" background_label_enabled="gray" background_label_disabled="lightgray"
+				foreground_data_focused="brightgreen" foreground_data_enabled="green" foreground_data_disabled="black"
+				background_data_focused="green" background_data_enabled="gray" background_data_disabled="gray"
+			/>
 			<max_string_size>128</max_string_size>
 			<read_only>false</read_only>
 			<replace>false</replace>
@@ -70,12 +76,24 @@ GROUP BY t.id;
 		<dataedit id="window_test_integer" role="data">
 			<label position="stacked">&amp;Integer</label>
 			<position row="-14" column="27" height="1" width="10" />
+			<attribute
+				foreground_label_focused="brightred" foreground_label_enabled="red" foreground_label_disabled="brown"
+				background_label_focused="red" background_label_enabled="brown" background_label_disabled="yellow"
+				foreground_data_focused="brightcyan" foreground_data_enabled="cyan" foreground_data_disabled="black"
+				background_data_focused="cyan" background_data_enabled="brown" background_data_disabled="brown"
+			/>
 			<max_string_size>32</max_string_size>
 			<mask>^[0-9-]*$</mask>
 		</dataedit>
 		<dataedit id="window_test_real" role="data">
 			<label position="stacked">&amp;Real</label>
 			<position row="-14" column="38" height="1" width="17" />
+			<attribute
+				foreground_label_focused="brightmagenta" foreground_label_enabled="magenta" foreground_label_disabled="gray"
+				background_label_focused="magenta" background_label_enabled="gray" background_label_disabled="lightgray"
+				foreground_data_focused="white" foreground_data_enabled="green" foreground_data_disabled="black"
+				background_data_focused="green" background_data_enabled="gray" background_data_disabled="gray"
+			/>
 			<max_string_size>32</max_string_size>
 			<mask>^[0-9.-]*$</mask>
 		</dataedit>
