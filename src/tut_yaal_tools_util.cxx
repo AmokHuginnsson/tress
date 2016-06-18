@@ -26,6 +26,7 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
+#include <yaal/hcore/hprogramoptionshandler.hxx>
 #include <yaal/tools/util.hxx>
 #include <yaal/tools/escape.hxx>
 #include <yaal/tools/hexpression.hxx>
@@ -88,12 +89,192 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "(atof_ex) complex and valid number" )
 	HString formula = "2*(3+5)/sin(3.1415926535/2)";
-	ENSURE_DISTANCE ( "Wrong counting.", atof_ex ( formula, true ), 16.L, epsilon );
+	ENSURE_DISTANCE( "Wrong counting.", atof_ex( formula, true ), 16.L, epsilon );
+	ENSURE_DISTANCE( "no parse failed", atof_ex( "3.14", false ), 3.14L, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "(atof_ex) simple but invalid number" )
 	HString formula = "4/e";
 	ENSURE_THROW( "invalid formula accepted", atof_ex( formula, true ), HExpressionException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "usun_ogonki" )
+	HString s( "Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!" );
+	ENSURE_EQUALS( "usun_ogonki failed", usun_ogonki( s ), "Mezny badz, chron pulk twoj i szesc flag!" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "get_token" )
+	ENSURE_EQUALS( "get_token failed", get_token( "ala:ma:kota", ":", 1 ), "ma" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "cardinal" )
+	ENSURE_EQUALS( "cardinal( 0 ) failed", cardinal( 0 ), "zero" );
+	ENSURE_EQUALS( "cardinal( 1 ) failed", cardinal( 1 ), "one" );
+	ENSURE_EQUALS( "cardinal( 12 ) failed", cardinal( 12 ), "twelve" );
+	ENSURE_EQUALS( "cardinal( 19 ) failed", cardinal( 19 ), "nineteen" );
+	ENSURE_EQUALS( "cardinal( -7 ) failed", cardinal( -7 ), "minus seven" );
+	ENSURE_EQUALS( "cardinal( 100 ) failed", cardinal( 100 ), "100" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "ordinal" )
+	ENSURE_THROW( "ordinal( 0 ) failed", ordinal( 0 ), HRuntimeException );
+	ENSURE_EQUALS( "ordinal( 1 ) failed", ordinal( 1 ), "first" );
+	ENSURE_EQUALS( "ordinal( 12 ) failed", ordinal( 12 ), "twelfth" );
+	ENSURE_EQUALS( "ordinal( 19 ) failed", ordinal( 19 ), "nineteenth" );
+	ENSURE_THROW( "ordinal( -7 ) failed", ordinal( -7 ), HRuntimeException );
+	ENSURE_EQUALS( "ordinal( 100 ) failed", ordinal( 100 ), "100th" );
+	ENSURE_EQUALS( "ordinal( 101 ) failed", ordinal( 101 ), "101st" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "show help" )
+	HProgramOptionsHandler po;
+	OOptionInfo info( po, "tress", "yaal stress testing suite", "Footer..." );
+	int i( 0 );
+	double d( 0 );
+	HString s;
+	bool b( false );
+	po(
+		HProgramOptionsHandler::HOption()
+		.long_form( "log-path" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "path pointing to file for application logs" )
+		.recipient( s )
+		.default_value( "log.txt" )
+		.argument_name( "path" )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'j' )
+		.long_form( "jobs" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "number of concurrent jobs" )
+		.recipient( i )
+		.default_value( 7 )
+		.argument_name( "count" )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'r' )
+		.long_form( "ratio" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "expected pass/fail ratio" )
+		.recipient( d )
+		.default_value( .5 )
+		.argument_name( "value" )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'R' )
+		.long_form( "restartable" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "run tests in restartable mode" )
+		.recipient( b )
+	);
+	HStringStream ss;
+	show_help( info, ss );
+	char const exp[] =
+"Usage: tress [OPTION]... [FILE]...\n"
+"tress - yaal stress testing suite\n"
+"\n"
+"Mandatory arguments to long options are mandatory for short options too.\n"
+"Options:\n"
+"      --log-path=path  path pointing to file for application logs (default: log.txt)\n"
+"  -j, --jobs=count     number of concurrent jobs (default: 7)\n"
+"  -r, --ratio=value    expected pass/fail ratio (default: 0.500000)\n"
+"  -R, --restartable    run tests in restartable mode\n"
+"\n"
+"Footer...\n";
+	ENSURE_EQUALS( "show_help failed", ss.string(), exp );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "dump_configuration" )
+	HProgramOptionsHandler po;
+	OOptionInfo info( po, "tress", "yaal stress testing suite", "Footer..." );
+	int i( 0 );
+	double d( 0 );
+	HString s;
+	bool b( false );
+	po(
+		HProgramOptionsHandler::HOption()
+		.long_form( "log-path" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "path pointing to file for application logs" )
+		.recipient( s )
+		.default_value( "log.txt" )
+		.argument_name( "path" )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'j' )
+		.long_form( "jobs" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "number of concurrent jobs" )
+		.recipient( i )
+		.default_value( 7 )
+		.argument_name( "count" )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'r' )
+		.long_form( "ratio" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "expected pass/fail ratio" )
+		.recipient( d )
+		.default_value( .5 )
+		.argument_name( "value" )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'R' )
+		.long_form( "restartable" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "run tests in restartable mode" )
+		.recipient( b )
+	);
+	HStringStream ss;
+	dump_configuration( info, ss );
+	char const exp[] =
+"# this is configuration file for: `tress' program\n"
+"# yaal stress testing suite\n"
+"\n"
+"# comments begin with `#' char and continues until end of line\n"
+"# option names are case insensitive\n"
+"# in most cases option values are case insensitive also\n"
+"# syntax for settings is:\n"
+"# ^{option}{white}(['\"]){value1 value2 ... valuen}\\1{white}# comment$\n"
+"# value may be surrounded by apostrophes or quotation marks\n"
+"# one level of this surrounding is stripped\n"
+"# we currently distinguish between four kind of value types:\n"
+"# bool   - (true|yes|on|false|no|off)\n"
+"# char   - [a-z]\n"
+"# int    - [0-9]+\n"
+"# string - [^ ].*\n"
+"#\n"
+"# example:\n"
+"# log_path ${HOME}/var/log/program.log\n"
+"\n"
+"### log-path ###\n"
+"# type: character string, default: log.txt\n"
+"# path pointing to file for application logs\n"
+"log-path \"log.txt\"\n"
+"\n"
+"### jobs ###\n"
+"# type: integer, default: 7\n"
+"# number of concurrent jobs\n"
+"jobs 7\n"
+"\n"
+"### ratio ###\n"
+"# type: floating point, default: 0.500000\n"
+"# expected pass/fail ratio\n"
+"ratio 0.500000\n"
+"\n"
+"### restartable ###\n"
+"# type: boolean\n"
+"# run tests in restartable mode\n"
+"restartable false\n"
+"\n"
+"# Footer...\n"
+"\n"
+"# vim: set ft=conf:\n";
+	ENSURE_EQUALS( "dump_configuration failed", ss.string(), exp );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "failure" )
+	ENSURE_THROW( "failure failed :)", util::failure( 7, "doh!" ), int );
 TUT_TEARDOWN()
 
 }
