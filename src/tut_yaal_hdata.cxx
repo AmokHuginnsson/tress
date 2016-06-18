@@ -67,7 +67,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "add record (no children)" )
 	play(
-		"load data", {
+		"add record", {
 			'\r',
 			KEY<'n'>::command,
 			't', 'e', 'x', 't', 'u', 'a', 'l', ' ', 'd', 'a', 't', 'a', '\t',
@@ -85,7 +85,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "add record (with children)" )
 	play(
-		"load data", {
+		"add record and children", {
 			'\r',
 			KEY<'n'>::command,
 			't', 'e', 'x', 't', 'u', 'a', 'l', ' ', 'd', 'a', 't', 'a', '\t',
@@ -95,10 +95,42 @@ TUT_UNIT_TEST( "add record (with children)" )
 			'1', '4', ':', '2', '3', ':', '5', '7', '\t',
 			'1', '9', '7', '8', '-', '0', '5', '-', '2', '4', ' ', '2', '3', ':', '3', '0', ':', '0', '0', '\t',
 			KEY_CODES::DOWN, KEY_CODES::DOWN, '\r', '\t',
-			KEY_CODES::INSERT, KEY_CODES::F2, 'v', 'a', 'l', 'u', 'e', '1', '\t', 'd', 'a', 't', 'a', '1', '\t', '3', '7', '\t', '\r',
+			KEY_CODES::INSERT, KEY_CODES::F2, 'v', 'a', 'l', 'u', 'e', '1', '\t', 'd', 'a', 't', 'a', '1', '\t', '3', '7', '\r',
 			KEY_CODES::INSERT, KEY_CODES::F2, 'v', 'a', 'l', 'u', 'e', '2', '\t', 'd', 'a', 't', 'a', '2', '\t', '6', '1', '\r',
 			KEY<'w'>::command,
 			KEY_CODES::END, KEY<'d'>::command,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "edit record" )
+	play(
+		"edit record", {
+			'\r',
+			KEY<'n'>::command,
+			't', 'e', 'x', 't', 'u', 'a', 'l', ' ', 'd', 'a', 't', 'a', '\t',
+			'7', '\t',
+			'3', '.', '1', '4', '\t',
+			KEY_CODES::DOWN, KEY_CODES::LEFT, '\r', '\t',
+			'1', '4', ':', '2', '3', ':', '5', '7', '\t',
+			'1', '9', '7', '8', '-', '0', '5', '-', '2', '4', ' ', '2', '3', ':', '3', '0', ':', '0', '0', '\t',
+			KEY_CODES::DOWN, KEY_CODES::DOWN, '\r', '\t',
+			KEY_CODES::INSERT, KEY_CODES::F2, 'v', 'a', 'l', 'u', 'e', '1', '\t', 'd', 'a', 't', 'a', '1', '\t', '3', '7', '\r',
+			KEY_CODES::INSERT, KEY_CODES::F2, 'v', 'a', 'l', 'u', 'e', '2', '\t', 'd', 'a', 't', 'a', '2', '\t', '6', '1', '\r',
+			KEY<'w'>::command, KEY_CODES::END,
+			KEY<'e'>::command,
+			KEY_CODES::ESCAPE, 'I',
+			KEY_CODES::ESCAPE, 'I',
+			KEY_CODES::DOWN, KEY_CODES::DOWN,
+			KEY_CODES::INSERT, KEY_CODES::F2, 'v', 'a', 'l', 'u', 'e', '3', '\t', 'd', 'a', 't', 'a', '3', '\t', '2', '.', '7', '\r',
+			KEY<'w'>::command, KEY_CODES::END,
+			KEY<'e'>::command,
+			KEY_CODES::ESCAPE, 'I',
+			KEY_CODES::ESCAPE, 'I',
+			KEY_CODES::F2, '\t', KEY_CODES::END, KEY_CODES::BACKSPACE, 'X', '\r', KEY_CODES::DOWN, KEY_CODES::DELETE,
+			KEY<'w'>::command, KEY_CODES::END,
+			KEY<'d'>::command,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
