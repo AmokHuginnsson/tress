@@ -112,13 +112,22 @@ char const progParse9[] =
 	"}\n"
 ;
 
+char const progParse10[] =
+	"classA {\n"
+	"\t_data = none;\n"
+	"}\n"
+	"main() {\n"
+	"\treturn ( A() );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_parsing::test_parse( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
 	h.load( prog );
 	h.preprocess();
 	clog << "parsing: " << index_ << endl;
-	ENSURE_NOT( "parser invalid", h.parse() );
+	ENSURE_NOT( "parsed invalid", h.parse() );
 	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_[0] );
 	ENSURE_EQUALS( "reporting error line failed " + to_string( index_ ), h.error_coordinate().line(), err_[1] );
 	ENSURE_EQUALS( "reporting error column failed " + to_string( index_ ), h.error_coordinate().column(), err_[2] );
@@ -137,6 +146,7 @@ TUT_UNIT_TEST( "report parsing error" )
 		progParse7,
 		progParse8,
 		progParse9,
+		progParse10,
 		NULL
 	};
 	int const err[][3] = {
@@ -149,7 +159,8 @@ TUT_UNIT_TEST( "report parsing error" )
 		{ 29, 2, 21 }, // 6
 		{ 8, 1, 9 },   // 7
 		{ 9, 2, 1 },   // 8
-		{ 10, 2, 1 },   // 9
+		{ 10, 2, 1 },  // 9
+		{ 7, 1, 8 },   // 10
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
