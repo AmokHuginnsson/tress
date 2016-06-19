@@ -329,7 +329,7 @@ TUT_UNIT_TEST( "HString(multi)" )
 	/* multi ok */ {
 		hcore::HString val;
 		hcore::HString nick;
-		HRule animal( ( string( "pies" ) | "kot" | "lis" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ) ] );
+		HRule animal( ( string( "pies", executing_parser::HString::WORD_BOUNDARY::OPTIONAL ) | "kot" | "lis" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ) ] );
 		HRule name( regex( ".*", HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( nick ), _1 ) ) ) );
 		HExecutingParser ep( animal >> name );
 		ENSURE( "HString failed to parse correct input.", ep( "kotFilemon" ) );
@@ -348,7 +348,7 @@ TUT_UNIT_TEST( "HString(multi)" )
 	/* multi fail */ {
 		hcore::HString val;
 		hcore::HString nick;
-		HRule animal( ( string( "pies" ) | "kot" | "lis" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ) ] );
+		HRule animal( ( string( "pies", executing_parser::HString::WORD_BOUNDARY::OPTIONAL ) | "kot" | "lis" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ) ] );
 		HRule name( regex( ".*", HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ) ) );
 		HExecutingParser ep( animal >> name );
 		ENSURE_NOT( "HString parsed invalid input.", ep( "losDobry" ) );
