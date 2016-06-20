@@ -168,17 +168,17 @@ TUT_UNIT_TEST( "-0x10b" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "x10b" )
-	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), true );
+	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
-	ENSURE_EQUALS( "bad 16 based cast", lexical_cast<int>( get_test_name().c_str() ), 267 );
+	ENSURE_THROW( "lexical_cast to an int from a garbage succeeded", lexical_cast<int>( get_test_name().c_str() ), HLexicalCastException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "-x10b" )
-	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), true );
+	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
-	ENSURE_EQUALS( "bad 16 based cast", lexical_cast<int>( get_test_name().c_str() ), -267 );
+	ENSURE_THROW( "lexical_cast to an int from a garbage succeeded", lexical_cast<int>( get_test_name().c_str() ), HLexicalCastException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "xOla" )
@@ -196,17 +196,17 @@ TUT_UNIT_TEST( "-xOla" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "xAla" )
-	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), true );
+	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
-	ENSURE_EQUALS( "bad 16 based cast", lexical_cast<int>( get_test_name().c_str() ), 10 );
+	ENSURE_THROW( "lexical_cast to an int from a garbage succeeded", lexical_cast<int>( get_test_name().c_str() ), HLexicalCastException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "-xAla" )
-	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), true );
+	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
-	ENSURE_EQUALS( "bad 16 based cast", lexical_cast<int>( get_test_name().c_str() ), -10 );
+	ENSURE_THROW( "lexical_cast to an int from a garbage succeeded", lexical_cast<int>( get_test_name().c_str() ), HLexicalCastException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "0Ala" )
