@@ -199,9 +199,8 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 	}
 	ENSURE( "execution failed", e );
 	HHuginn::value_t res( h.result() );
-	ENSURE_EQUALS( "bad result type", res->type_id(), HHuginn::TYPE::STRING );
 	l.lock();
-	_resultCache.assign( static_cast<HHuginn::HString*>( res.raw() )->value() );
+	_resultCache.assign( to_string( res ) );
 	return ( _resultCache );
 }
 

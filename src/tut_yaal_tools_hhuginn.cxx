@@ -238,43 +238,43 @@ TUT_UNIT_TEST( "set variable" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "if" )
-	ENSURE_EQUALS( "if (true) failed", execute( "main(){x=2;if(x>0){x=x*x;}return(string(x));}" ), "4" );
-	ENSURE_EQUALS( "if (false) failed", execute( "main(){x=2;if(x>2){x=x*x;}return(string(x));}" ), "2" );
+	ENSURE_EQUALS( "if (true) failed", execute( "main(){x=2;if(x>0){x=x*x;}return(x);}" ), "4" );
+	ENSURE_EQUALS( "if (false) failed", execute( "main(){x=2;if(x>2){x=x*x;}return(x);}" ), "2" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "while" )
-	ENSURE_EQUALS( "while failed", execute( "main(){x=2;while(x<100){x=x*x;}return(string(x));}" ), "256" );
+	ENSURE_EQUALS( "while failed", execute( "main(){x=2;while(x<100){x=x*x;}return(x);}" ), "256" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "for" )
-	ENSURE_EQUALS( "for failed", execute( "main(){x=list(1,2,3);s=0;for(e:x){s=s+e;}return(string(s));}" ), "6" );
-	ENSURE_EQUALS( "for(expr:) failed", execute( "main(){x=list(1,2,3);s=0;l=[0];for(l[0]:x){s=s+l[0];}return(string(s)+string(l[0]));}" ), "63" );
+	ENSURE_EQUALS( "for failed", execute( "main(){x=list(1,2,3);s=0;for(e:x){s=s+e;}return(s);}" ), "6" );
+	ENSURE_EQUALS( "for(expr:) failed", execute( "main(){x=list(1,2,3);s=0;l=[0];for(l[0]:x){s=s+l[0];}return(string(s)+string(l[0]));}" ), "\"63\"" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "switch" )
-	ENSURE_EQUALS( "switch (no match, no default) failed", execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}}return(x);}" ), "x" );
-	ENSURE_EQUALS( "switch (no match, with default) failed", execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}default:{x=\"y\";}}return(x);}" ), "y" );
-	ENSURE_EQUALS( "switch (match, fallthrough, no default) failed", execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}case(1):{x=x+\"y\";}case(2):{x=x+\"z\";}}return(x);}" ), "xyz" );
+	ENSURE_EQUALS( "switch (no match, no default) failed", execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}}return(x);}" ), "\"x\"" );
+	ENSURE_EQUALS( "switch (no match, with default) failed", execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}default:{x=\"y\";}}return(x);}" ), "\"y\"" );
+	ENSURE_EQUALS( "switch (match, fallthrough, no default) failed", execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}case(1):{x=x+\"y\";}case(2):{x=x+\"z\";}}return(x);}" ), "\"xyz\"" );
 	ENSURE_EQUALS(
 		"switch (match, fallthrough, default) failed",
 		execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}case(1):{x=x+\"y\";}case(2):{x=x+\"z\";}default:{x=x+\"!\";}}return(x);}" ),
-		"xyz!"
+		"\"xyz!\""
 	);
 	ENSURE_EQUALS(
 		"switch (match, no fallthrough, no default) failed",
 		execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}break;case(1):{x=x+\"y\";}break;case(2):{x=x+\"z\";}break;}return(x);}" ),
-		"xy"
+		"\"xy\""
 	);
 	ENSURE_EQUALS(
 		"switch (match, no fallthrough, default) failed",
 		execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}break;case(1):{x=x+\"y\";}break;case(2):{x=x+\"z\";}break;default:{x=x+\"!\";}}return(x);}" ),
-		"xy"
+		"\"xy\""
 	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "break;" )
-	ENSURE_EQUALS( "break; failed (while)", execute( "main(){x=0;y=0;while(y<100){y=y+1;if(x>100){break;}x=x+y*y;}return(string(x));}" ), "140" );
-	ENSURE_EQUALS( "break; failed (for)", execute( "main(){x=[\"A\",\"a\",\"B\",\"b\",\"C\",\"c\"];v=\"\";for(e:x){if(size(v)>2){break;}v=v+e;}return(v);}" ), "AaB" );
+	ENSURE_EQUALS( "break; failed (while)", execute( "main(){x=0;y=0;while(y<100){y=y+1;if(x>100){break;}x=x+y*y;}return(x);}" ), "140" );
+	ENSURE_EQUALS( "break; failed (for)", execute( "main(){x=[\"A\",\"a\",\"B\",\"b\",\"C\",\"c\"];v=\"\";for(e:x){if(size(v)>2){break;}v=v+e;}return(v);}" ), "\"AaB\"" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "continue;" )
@@ -296,7 +296,7 @@ TUT_UNIT_TEST( "continue;" )
 			"}\n"
 			"return(z);}"
 		),
-		"AaLlAaMmAKOTA"
+		"\"AaLlAaMmAKOTA\""
 	);
 	ENSURE_EQUALS(
 		"continue; failed (for)",
@@ -313,7 +313,7 @@ TUT_UNIT_TEST( "continue;" )
 			"}\n"
 			"return(z);}"
 		),
-		"A+l+a+ +m+a kota."
+		"\"A+l+a+ +m+a kota.\""
 	);
 TUT_TEARDOWN()
 
@@ -321,21 +321,21 @@ TUT_UNIT_TEST( "list()" )
 	ENSURE_EQUALS(
 		"list failed (explicit)",
 		execute( "main(){x=list(\"a\",\"b\",\"c\");v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ),
-		"3abc"
+		"\"3abc\""
 	);
 	ENSURE_EQUALS(
 		"list failed (literal)",
 		execute( "main(){x=[\"a\",\"b\",\"c\"];v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ),
-		"3abc"
+		"\"3abc\""
 	);
-	ENSURE_EQUALS( "list failed (crazy)", execute( "f(a){return(\"X\"+a+\"X\");}main(){return([f][0](\"hi\"));}" ), "XhiX" );
+	ENSURE_EQUALS( "list failed (crazy)", execute( "f(a){return(\"X\"+a+\"X\");}main(){return([f][0](\"hi\"));}" ), "\"XhiX\"" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "deque()" )
 	ENSURE_EQUALS(
 		"deque failed (explicit)",
 		execute( "main(){x=deque(\"a\",\"b\",\"c\");v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ),
-		"3abc"
+		"\"3abc\""
 	);
 TUT_TEARDOWN()
 
@@ -343,12 +343,12 @@ TUT_UNIT_TEST( "dict()" )
 	ENSURE_EQUALS(
 		"dict() failed (explicit)",
 		execute( "main(){x=dict();x[\"Ala\"]=0;x[\"ma\"]=1;x[\"kota.\"]=2;v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ),
-		"Ala0kota.2ma1"
+		"\"Ala0kota.2ma1\""
 	);
 	ENSURE_EQUALS(
 		"dict() failed (literal)",
 		execute( "main(){x=dict();x={\"Ala\":0,\"ma\":1,\"kota.\":2};v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ),
-		"Ala0kota.2ma1"
+		"\"Ala0kota.2ma1\""
 	);
 TUT_TEARDOWN()
 
@@ -356,7 +356,7 @@ TUT_UNIT_TEST( "lookup()" )
 	ENSURE_EQUALS(
 		"lookup() failed",
 		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;v=\"\";for(e:x){v=v+string(e);v=v+string(x[e]);}return(v);}" ),
-		"Ala01makota.2"
+		"\"Ala01makota.2\""
 	);
 TUT_TEARDOWN()
 
@@ -364,15 +364,15 @@ TUT_UNIT_TEST( "order()" )
 	ENSURE_EQUALS(
 		"order() failed",
 		execute( "main(){x=order(2,3,1,4,7,5);x.add(10).add(0);v=\"\";for(e:x){v=v+string(e);}return(v);}" ),
-		"012345710"
+		"\"012345710\""
 	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set()" )
 #if ( TARGET_CPU_BITS == 64 )
-	char const expected[] = "|7.34|2|Q|3.140000000000|ala";
+	char const expected[] = "\"|7.34|2|Q|3.140000000000|ala\"";
 #else
-	char const expected[] = "|7.34|2|Q|ala|3.140000000000";
+	char const expected[] = "\"|7.34|2|Q|ala|3.140000000000\"";
 #endif
 	ENSURE_EQUALS(
 		"set() failed",
@@ -398,7 +398,7 @@ void tut_yaal_tools_hhuginn::test_subscript( HHuginn::TYPE type_, char const* in
 		}
 	}
 	src.append( ";return(string(x[" ).append( index_ ).append( "]));}" );
-	ENSURE_EQUALS( "subscript failed", execute( src ), result_ );
+	ENSURE_EQUALS( "subscript failed", execute( src ), to_string( '"' ).append( result_ ).append( '"' ) );
 	return;
 }
 
@@ -421,11 +421,11 @@ TUT_UNIT_TEST( "subscript" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "subscript repeat" )
-	ENSURE_EQUALS( "subscript repeat failed", execute( "main(){x=list(list(11,12,13),list(21,22,23),list(31,32,33));return(string(x[1][1]));}" ), "22" );
+	ENSURE_EQUALS( "subscript repeat failed", execute( "main(){x=list(list(11,12,13),list(21,22,23),list(31,32,33));return(x[1][1]);}" ), "22" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "function ref" )
-	ENSURE_EQUALS( "function ref failed", execute( "f(){return(\"x\");}g(){return(f);}main(){return(g()());}" ), "x" );
+	ENSURE_EQUALS( "function ref failed", execute( "f(){return(\"x\");}g(){return(f);}main(){return(g()());}" ), "\"x\"" );
 TUT_TEARDOWN()
 
 void tut_yaal_tools_hhuginn::test_range( HHuginn::TYPE type_, char const* range_, char const* result_ ) {
@@ -439,7 +439,7 @@ void tut_yaal_tools_hhuginn::test_range( HHuginn::TYPE type_, char const* range_
 			.append( range_ )
 			.append( "],string),\"\"));}" );
 	}
-	ENSURE_EQUALS( "range failed", execute( src ), result_ );
+	ENSURE_EQUALS( "range failed", execute( src ), to_string( '"' ).append( result_ ).append( '"' ) );
 	return;
 }
 
@@ -497,12 +497,12 @@ TUT_UNIT_TEST( "range(slice)" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "lambda" )
-	ENSURE_EQUALS( "lambda failed", execute( "main(){s=[\"fail\"];l=@(x){x[0]=\"ok\";};l(s);return(s[0]);}" ), "ok" );
+	ENSURE_EQUALS( "lambda failed", execute( "main(){s=[\"fail\"];l=@(x){x[0]=\"ok\";};l(s);return(s[0]);}" ), "\"ok\"" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ternary" )
-	ENSURE_EQUALS( "ternary failed", execute( "main(){a=\"A\";b=\"B\";q=7;x=q>5?(a=\"1\"):(b=\"2\");return(a+b+x);}" ), "1B1" );
-	ENSURE_EQUALS( "ternary failed", execute( "main(){a=\"A\";b=\"B\";q=7;x=q<5?(a=\"1\"):(b=\"2\");return(a+b+x);}" ), "A22" );
+	ENSURE_EQUALS( "ternary failed", execute( "main(){a=\"A\";b=\"B\";q=7;x=q>5?(a=\"1\"):(b=\"2\");return(a+b+x);}" ), "\"1B1\"" );
+	ENSURE_EQUALS( "ternary failed", execute( "main(){a=\"A\";b=\"B\";q=7;x=q<5?(a=\"1\"):(b=\"2\");return(a+b+x);}" ), "\"A22\"" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "short circuit in boolean `and'" )
@@ -514,7 +514,7 @@ TUT_UNIT_TEST( "short circuit in boolean `and'" )
 		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
 		"}"
 	;
-	ENSURE_EQUALS( "ternary failed (T && T)", execute( p0 ), "12T" );
+	ENSURE_EQUALS( "ternary failed (T && T)", execute( p0 ), "\"12T\"" );
 	char const p1[] =
 		"main() {"
 		" a = 0;"
@@ -523,7 +523,7 @@ TUT_UNIT_TEST( "short circuit in boolean `and'" )
 		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
 		"}"
 	;
-	ENSURE_EQUALS( "ternary failed (T && F)", execute( p1 ), "12F" );
+	ENSURE_EQUALS( "ternary failed (T && F)", execute( p1 ), "\"12F\"" );
 	char const p2[] =
 		"main() {"
 		" a = 0;"
@@ -532,7 +532,7 @@ TUT_UNIT_TEST( "short circuit in boolean `and'" )
 		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
 		"}"
 	;
-	ENSURE_EQUALS( "ternary failed (F && T)", execute( p2 ), "10F" );
+	ENSURE_EQUALS( "ternary failed (F && T)", execute( p2 ), "\"10F\"" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "short circuit in boolean `or'" )
@@ -544,7 +544,7 @@ TUT_UNIT_TEST( "short circuit in boolean `or'" )
 		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
 		"}"
 	;
-	ENSURE_EQUALS( "ternary failed (F || T)", execute( p0 ), "12T" );
+	ENSURE_EQUALS( "ternary failed (F || T)", execute( p0 ), "\"12T\"" );
 	char const p1[] =
 		"main() {"
 		" a = 0;"
@@ -553,7 +553,7 @@ TUT_UNIT_TEST( "short circuit in boolean `or'" )
 		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
 		"}"
 	;
-	ENSURE_EQUALS( "ternary failed (T || F)", execute( p1 ), "10T" );
+	ENSURE_EQUALS( "ternary failed (T || F)", execute( p1 ), "\"10T\"" );
 	char const p2[] =
 		"main() {"
 		" a = 0;"
@@ -562,7 +562,7 @@ TUT_UNIT_TEST( "short circuit in boolean `or'" )
 		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
 		"}"
 	;
-	ENSURE_EQUALS( "ternary failed (T || T)", execute( p2 ), "10T" );
+	ENSURE_EQUALS( "ternary failed (T || T)", execute( p2 ), "\"10T\"" );
 	char const p3[] =
 		"main() {"
 		" a = 0;"
@@ -571,7 +571,7 @@ TUT_UNIT_TEST( "short circuit in boolean `or'" )
 		" return ( string( a ) + string( b ) + ( x ? \"T\" : \"F\" ) );"
 		"}"
 	;
-	ENSURE_EQUALS( "ternary failed (F || F)", execute( p3 ), "12F" );
+	ENSURE_EQUALS( "ternary failed (F || F)", execute( p3 ), "\"12F\"" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "boolean xor" )
@@ -591,7 +591,7 @@ TUT_UNIT_TEST( "boolean xor" )
 		" return ( s );"
 		"}"
 	;
-	ENSURE_EQUALS( "boolean xor fqailed", execute( p ), "FTTF" );
+	ENSURE_EQUALS( "boolean xor fqailed", execute( p ), "\"FTTF\"" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "print" )
@@ -631,15 +631,15 @@ TUT_UNIT_TEST( "input" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "simple class" )
-	ENSURE_EQUALS( "class failed", execute( "class A{_d=none;}main(){o=A();o._d=\"ok\";return(o._d);}" ), "ok" );
+	ENSURE_EQUALS( "class failed", execute( "class A{_d=none;}main(){o=A();o._d=\"ok\";return(o._d);}" ), "\"ok\"" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "class constructor" )
-	ENSURE_EQUALS( "constructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}}main(){o=A(\"ok\");return(o._d);}" ), "ok" );
+	ENSURE_EQUALS( "constructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}}main(){o=A(\"ok\");return(o._d);}" ), "\"ok\"" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "class destructor" )
-	ENSURE_EQUALS( "destructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"ok\");}}main(){l=list();{o=A(l);type(o);}return(l[0]);}" ), "ok" );
+	ENSURE_EQUALS( "destructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"ok\");}}main(){l=list();{o=A(l);type(o);}return(l[0]);}" ), "\"ok\"" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "class super" )
@@ -658,7 +658,7 @@ TUT_UNIT_TEST( "class super" )
 			"return(l[0]+s);\n"
 			"}"
 		),
-		"okarg"
+		"\"okarg\""
 	);
 TUT_TEARDOWN()
 
@@ -670,7 +670,7 @@ TUT_UNIT_TEST( "destructor chain" )
 			"class D:B{constructor(l_){super.constructor(l_);}destructor(){_d.add(\"derived\");}}"
 			"main(){l=list();{o=D(l);type(o);}return(l[0]+l[1]);}"
 		),
-		"derivedbase"
+		"\"derivedbase\""
 	);
 TUT_TEARDOWN()
 
@@ -681,7 +681,7 @@ TUT_UNIT_TEST( "class this" )
 			"class A{_d=\"\";f(s_){_d=_d+s_;return(this);}}"
 			"main(){a=A();a.f(\"this\").f(\"ok\");return(a._d);}"
 		),
-		"thisok"
+		"\"thisok\""
 	);
 TUT_TEARDOWN()
 
@@ -692,7 +692,7 @@ TUT_UNIT_TEST( "class to_string" )
 			"class A{_d=none;_x=none;constructor(d_,x_){_d=d_;_x=x_;}to_string(){return(string(_d)+\":\"+string(_x));}}"
 			"main(){a=A(7,'Q');return(string(a));}"
 		),
-		"7:Q"
+		"\"7:Q\""
 	);
 TUT_TEARDOWN()
 
@@ -719,7 +719,7 @@ TUT_UNIT_TEST( "throw,try,catch" )
 			"\treturn ( v );\n"
 			"}\n"
 		),
-		"4neg arg"
+		"\"4neg arg\""
 	);
 	ENSURE_EQUALS(
 		"throw,try,catch(Type expr) failed",
@@ -746,7 +746,7 @@ TUT_UNIT_TEST( "throw,try,catch" )
 			"\treturn ( v );\n"
 			"}\n"
 		),
-		"4neg arg"
+		"\"4neg arg\""
 	);
 	ENSURE_EQUALS(
 		"throw,try,catch(Type expr) failed",
@@ -774,7 +774,7 @@ TUT_UNIT_TEST( "throw,try,catch" )
 			"\treturn ( v );\n"
 			"}\n"
 		),
-		"4neg argneg arg"
+		"\"4neg argneg arg\""
 	);
 TUT_TEARDOWN()
 
@@ -838,7 +838,7 @@ TUT_UNIT_TEST( "empty return" )
 			"}",
 			HHuginn::COMPILER::BE_SLOPPY
 		),
-		"none11"
+		"\"none11\""
 	);
 TUT_TEARDOWN()
 
@@ -853,7 +853,7 @@ TUT_UNIT_TEST( "boolean not" )
 			"return(s);\n"
 			"}"
 		),
-		"ok"
+		"\"ok\""
 	);
 TUT_TEARDOWN()
 
@@ -877,7 +877,7 @@ TUT_UNIT_TEST( "operator precedence" )
 			"return(s);"
 			"}"
 		),
-		"4:17:245:486:1953125:15:5:-6:-1:8:"
+		"\"4:17:245:486:1953125:15:5:-6:-1:8:\""
 	);
 	ENSURE_EQUALS(
 		"boolean not failed",
@@ -897,7 +897,7 @@ TUT_UNIT_TEST( "operator precedence" )
 			"return(s);"
 			"}"
 		),
-		"-6:25:3125:7776:32768:1:3:6:120:"
+		"\"-6:25:3125:7776:32768:1:3:6:120:\""
 	);
 TUT_TEARDOWN()
 
@@ -915,7 +915,7 @@ TUT_UNIT_TEST( "are constants constant? (immutable)" )
 			"return(s);"
 			"}"
 		),
-		"11"
+		"\"11\""
 	);
 	ENSURE_EQUALS(
 		"constant in function call was modified",
@@ -934,7 +934,7 @@ TUT_UNIT_TEST( "are constants constant? (immutable)" )
 			"return(s);"
 			"}"
 		),
-		"11"
+		"\"11\""
 	);
 	ENSURE_EQUALS(
 		"constant in function call (second arg) was modified",
@@ -952,7 +952,7 @@ TUT_UNIT_TEST( "are constants constant? (immutable)" )
 			"return(s);"
 			"}"
 		),
-		"11"
+		"\"11\""
 	);
 	ENSURE_EQUALS(
 		"constant as map's key was modified",
@@ -975,7 +975,7 @@ TUT_UNIT_TEST( "are constants constant? (immutable)" )
 			"return(s);"
 			"}"
 		),
-		"0"
+		"\"0\""
 	);
 TUT_TEARDOWN()
 
@@ -985,7 +985,7 @@ TUT_UNIT_TEST( "many variables definition in one expression" )
 		execute(
 			"main(){"
 			"a=b=c=d=e=f=g=h=i=j=k=l=m=n=o=p=q=r=s=t=u=v=w=x=y=z=1;"
-			"return(string(a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+q+r+s+t+u+v+w+x+y+z));"
+			"return(a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+q+r+s+t+u+v+w+x+y+z);"
 			"}"
 		),
 		"26"
@@ -997,10 +997,10 @@ TUT_UNIT_TEST( "sum of pows" )
 		"definition of many variables failed",
 		execute(
 			"main(){"
-			"return(string($-284650292555885^$3+$66229832190556^$3+$283450105697727^$3));"
+			"return($-284650292555885^$3+$66229832190556^$3+$283450105697727^$3);"
 			"}"
 		),
-		"74"
+		"$74"
 	);
 TUT_TEARDOWN()
 

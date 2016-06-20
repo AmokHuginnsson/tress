@@ -61,7 +61,7 @@ TUT_UNIT_TEST( "Algorithms.range" )
 			"return(s);\n"
 			"}"
 		),
-		":3:7:11:15"
+		"\":3:7:11:15\""
 	);
 TUT_TEARDOWN()
 
@@ -71,15 +71,11 @@ TUT_UNIT_TEST( "Algorithms.sorted" )
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
-			"s=\"\";\n"
 			"l=[2,7,3,9,0,-5];\n"
-			"for(x : algo.sorted(l)) {\n"
-			"s=s+\":\"+string(x);"
-			"}\n"
-			"return(s);\n"
+			"return(algo.sorted(l));\n"
 			"}"
 		),
-		":-5:0:2:3:7:9"
+		"[-5, 0, 2, 3, 7, 9]"
 	);
 	ENSURE_EQUALS(
 		"Algorithms.sorted (deque) failed",
@@ -94,7 +90,7 @@ TUT_UNIT_TEST( "Algorithms.sorted" )
 			"return(s);\n"
 			"}"
 		),
-		":-5:0:2:3:7:9"
+		"\":-5:0:2:3:7:9\""
 	);
 	ENSURE_EQUALS(
 		"Algorithms.sorted (set) failed",
@@ -109,7 +105,7 @@ TUT_UNIT_TEST( "Algorithms.sorted" )
 			"return(r);\n"
 			"}"
 		),
-		":-5:0:2:3:7:9"
+		"\":-5:0:2:3:7:9\""
 	);
 	ENSURE_EQUALS(
 		"Algorithms.sorted (order) failed",
@@ -124,7 +120,7 @@ TUT_UNIT_TEST( "Algorithms.sorted" )
 			"return(r);\n"
 			"}"
 		),
-		":-5:0:2:3:7:9"
+		"\":-5:0:2:3:7:9\""
 	);
 TUT_TEARDOWN()
 
@@ -137,7 +133,7 @@ TUT_UNIT_TEST( "Cryptography" )
 			"return(crypto.md5(\"\"));\n"
 			"}"
 		),
-		"d41d8cd98f00b204e9800998ecf8427e"
+		"\"d41d8cd98f00b204e9800998ecf8427e\""
 	);
 	ENSURE_EQUALS(
 		"Cryptography.sha1 failed",
@@ -147,7 +143,7 @@ TUT_UNIT_TEST( "Cryptography" )
 			"return(crypto.sha1(\"\"));\n"
 			"}"
 		),
-		"da39a3ee5e6b4b0d3255bfef95601890afd80709"
+		"\"da39a3ee5e6b4b0d3255bfef95601890afd80709\""
 	);
 TUT_TEARDOWN()
 
@@ -176,7 +172,7 @@ TUT_UNIT_TEST( "RegularExpressions" )
 			"return(r);\n"
 			"}"
 		),
-		"ok3-46-7"
+		"\"ok3-46-7\""
 	);
 	ENSURE_EQUALS(
 		"RegularExpressions.groups failed",
@@ -202,7 +198,7 @@ TUT_UNIT_TEST( "RegularExpressions" )
 			"return(r);\n"
 			"}"
 		),
-		"ok|user@example.com|user|example.com"
+		"\"ok|user@example.com|user|example.com\""
 	);
 TUT_TEARDOWN()
 
