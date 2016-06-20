@@ -363,11 +363,12 @@ TUT_UNIT_TEST( "1010c" )
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 1010 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "-1010c" )
+TUT_UNIT_TEST( "-101010c" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
-	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), -1010 );
+	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), -101010 );
+	ENSURE_THROW( "casting with overflow succeeded", lexical_cast<int short>( get_test_name().c_str() ), HOutOfRangeException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "1b010" )
