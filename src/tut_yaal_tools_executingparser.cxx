@@ -104,7 +104,8 @@ TUT_UNIT_TEST( "HReal" )
 	/* double long */ {
 		double long val( 0 );
 		HExecutingParser ep( real[HBoundCall<void ( double long )>( call( &defer<double long>::set, ref( val ), _1 ) )] );
-		ENSURE( "HReal failed to parse correct input (double long).", ep( "3.14" ) );
+		hcore::HString input( "3.14" );
+		ENSURE( "HReal failed to parse correct input (double long).", ep( input.begin(), input.end() ) );
 		ep();
 		ENSURE_DISTANCE( "double long value not set by ExecutingParser.", val, 3.14l, epsilon );
 	}
@@ -401,54 +402,83 @@ TUT_UNIT_TEST( "HFollows" )
 	}
 TUT_TEARDOWN()
 
-template<typename T>
-void sum( T& sum_, T val_ ) {
-	sum_ += val_;
-}
+struct Kleene {
+	int _count;
+	Kleene( void )
+		: _count( 0 ) {
+	}
+	template<typename T>
+	void sum( T& sum_, T val_ ) {
+		sum_ += val_;
+		++ _count;
+	}
+	void count( int& out_ ) {
+		out_ = _count;
+	}
+	void count_p( int& out_, executing_parser::position_t ) {
+		count( out_ );
+		out_ = -out_;
+	}
+};
 
 TUT_UNIT_TEST( "HKleeneStar" )
+	namespace e_p = executing_parser;
 	/* parsed (non empty) */ {
 		int val( 0 );
-		HRule i( integer[HBoundCall<void ( int )>( call( &sum<int>, ref( val ), _1 ) )] );
-		HRule nums( *( ',' >> i ) );
+		int count( 0 );
+		Kleene k;
+		HRule i( integer[HBoundCall<void ( int )>( call( &Kleene::sum<int>, &k, ref( val ), _1 ) )] );
+		HRule nums( ( *( ',' >> i ) )[e_p::HRule::action_t( call( &Kleene::count, &k, ref( count ) ) )] );
 		HExecutingParser ep( nums );
 		ENSURE( "parse on valid failed", ep( ", 1, 2, 3" ) );
 		ep();
 		ENSURE_EQUALS( "execution of KleeneStar failed", val, 6 );
+		ENSURE_EQUALS( "execution of KleeneStar failed (sem_act)", count, 3 );
 	}
 	/* parsed (empty) */ {
 		int val( 0 );
-		HRule i( integer[HBoundCall<void ( int )>( call( &sum<int>, ref( val ), _1 ) )] );
-		HRule nums( *( ',' >> i ) );
+		int count( 0 );
+		Kleene k;
+		HRule i( integer[HBoundCall<void ( int )>( call( &Kleene::sum<int>, &k, ref( val ), _1 ) )] );
+		HRule nums( ( *( ',' >> i ) )[e_p::HRule::action_position_t( call( &Kleene::count_p, &k, ref( count ), _1 ) )] );
 		HExecutingParser ep( string( "nums{" ) >> nums >> "}" );
 		ENSURE( "parse on valid (but empty) failed", ep( "nums{}" ) );
 		ep();
 		ENSURE_EQUALS( "execution of KleeneStar failed", val, 0 );
+		ENSURE_EQUALS( "execution of KleeneStar failed (sem_act)", count, 0 );
 	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HKleenePlus" )
+	namespace e_p = executing_parser;
 	/* parsed (non empty) */ {
 		int val( 0 );
-		HRule i( integer[HBoundCall<void ( int )>( call( &sum<int>, ref( val ), _1 ) )] );
-		HRule nums( +( ',' >> i ) );
+		int count( 0 );
+		Kleene k;
+		HRule i( integer[HBoundCall<void ( int )>( call( &Kleene::sum<int>, &k, ref( val ), _1 ) )] );
+		HRule nums( ( +( ',' >> i ) )[e_p::HRule::action_t( call( &Kleene::count, &k, ref( count ) ) )] );
 		HExecutingParser ep( nums );
 		ENSURE( "parse on valid failed", ep( ", 1, 2, 3" ) );
 		ep();
-		ENSURE_EQUALS( "execution of KleeneStar failed", val, 6 );
+		ENSURE_EQUALS( "execution of KleenePlus failed", val, 6 );
+		ENSURE_EQUALS( "execution of KleenePlus failed (sem_act)", count, 3 );
 	}
 	/* parsed (exactly) */ {
 		int val( 0 );
-		HRule i( integer[HBoundCall<void ( int )>( call( &sum<int>, ref( val ), _1 ) )] );
-		HRule nums( +( ',' >> i ) );
+		int count( 0 );
+		Kleene k;
+		HRule i( integer[HBoundCall<void ( int )>( call( &Kleene::sum<int>, &k, ref( val ), _1 ) )] );
+		HRule nums( ( +( ',' >> i ) )[e_p::HRule::action_position_t( call( &Kleene::count_p, &k, ref( count ), _1 ) )] );
 		HExecutingParser ep( nums );
 		ENSURE( "parse on valid failed", ep( ", 1" ) );
 		ep();
 		ENSURE_EQUALS( "execution of KleeneStar failed", val, 1 );
+		ENSURE_EQUALS( "execution of KleeneStar failed (sem_act)", count, -1 );
 	}
 	/* not-parsed (empty) */ {
 		int val( 0 );
-		HRule i( integer[HBoundCall<void ( int )>( call( &sum<int>, ref( val ), _1 ) )] );
+		Kleene k;
+		HRule i( integer[HBoundCall<void ( int )>( call( &Kleene::sum<int>, &k, ref( val ), _1 ) )] );
 		HRule nums( +( ',' >> i ) );
 		HExecutingParser ep( string( "nums{" ) >> nums >> "}" );
 		ENSURE_NOT( "parse on invalid (empty) succeeded", ep( "nums{}" ) );
@@ -1169,6 +1199,9 @@ struct calc {
 		_opers.pop();
 		_vars.push( o == MULTIPLY ? v1 * v2 : v2 / v1 );
 	}
+	void mul_div_p( executing_parser::position_t ) {
+		mul_div();
+	}
 	void power( void ) {
 		clog << __PRETTY_FUNCTION__ << endl;
 		while ( ! _opers.is_empty() && ( _opers.top() == POWER ) ) {
@@ -1250,8 +1283,11 @@ TUT_UNIT_TEST( "calc, (sum, mul, recursion)" )
 	HRule paren( '(' >> expr >> ')' );
 	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
 	HRule atom( realVal | paren );
-	HRule multiply( atom >> *( ( '*' >> atom )[HBoundCall<void ( void )>( call( &calc::mul, &c ) )] ) );
-	HRule r( multiply >> *( ( '+' >> multiply )[HBoundCall<void ( void )>( call( &calc::sum, &c ) )] ) );
+	HRule mulExec( '*' >> atom );
+	HRule multiply( atom >> *( mulExec[HBoundCall<void ( void )>( call( &calc::mul, &c ) )] ) );
+	HRule addExec( "sum", HBoundCall<void ( void )>( call( &calc::sum, &c ) ) );
+	addExec %= ( '+' >> multiply );
+	HRule r( multiply >> *( addExec ) );
 	expr %= r;
 	HExecutingParser ep( r );
 
@@ -1266,8 +1302,12 @@ TUT_UNIT_TEST( "calc, (plus, minus, mul, div, recursion)" )
 	HRule paren( '(' >> expr >> ')' );
 	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
 	HRule atom( realVal | paren );
-	HRule multiply( atom >> *( ( character( "*/" )[HBoundCall<void ( char )>( call( &calc::oper, &c, _1 ) )] >> atom )[HBoundCall<void ( void )>( call( &calc::mul_div, &c ) )] ) );
-	HRule r( multiply >> *( ( character( "+-" )[HBoundCall<void ( char )>( call( &calc::oper, &c, _1 ) )] >> multiply )[HBoundCall<void ( void )>( call( &calc::plus_minus, &c ) )] ) );
+	HRule mulExec( HBoundCall<void ( executing_parser::position_t )>( call( &calc::mul_div_p, &c, _1 ) ) );
+	mulExec %= ( character( "*/" )[HBoundCall<void ( char )>( call( &calc::oper, &c, _1 ) )] >> atom );
+	HRule multiply( atom >> *( mulExec ) );
+	HRule addExec( HBoundCall<void ( void )>( call( &calc::plus_minus, &c ) ) );
+	addExec %= ( character( "+-" )[HBoundCall<void ( char )>( call( &calc::oper, &c, _1 ) )] >> multiply );
+	HRule r( multiply >> *( addExec ) );
 	expr %= r;
 	HExecutingParser ep( r );
 
