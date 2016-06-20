@@ -244,11 +244,32 @@ TUT_UNIT_TEST( "07Ala" )
 	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), 7 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "0o7Ala" )
+	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
+	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), 7 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "-07Ala" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), -7 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "-0o7Ala" )
+	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
+	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), -7 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "0o8Ala" )
+	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "08Ala" )
@@ -293,18 +314,32 @@ TUT_UNIT_TEST( "-01" )
 	ENSURE_EQUALS( "bad 8 based cast", lexical_cast<int>( get_test_name().c_str() ), -1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "0110b" )
+TUT_UNIT_TEST( "0b110b" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad 2 based cast", lexical_cast<int>( get_test_name().c_str() ), 6 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "-0110b" )
+TUT_UNIT_TEST( "-0b110b" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), true );
 	ENSURE_EQUALS( "bad 2 based cast", lexical_cast<int>( get_test_name().c_str() ), -6 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "0b110c" )
+	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), true );
+	ENSURE_EQUALS( "bad 2 based cast", lexical_cast<int>( get_test_name().c_str() ), 6 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "-0b11001001010011101010101" )
+	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), true );
+	ENSURE_EQUALS( "bad 2 based cast", lexical_cast<int>( get_test_name().c_str() ), -6596437 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "0110c" )
@@ -335,18 +370,18 @@ TUT_UNIT_TEST( "-1010c" )
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), -1010 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "1010b" )
+TUT_UNIT_TEST( "1b010" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
-	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), true );
-	ENSURE_EQUALS( "bad 2 based cast", lexical_cast<int>( get_test_name().c_str() ), 10 );
+	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad 2 based cast", lexical_cast<int>( get_test_name().c_str() ), 1 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "-1010b" )
+TUT_UNIT_TEST( "-1b010" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
-	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), true );
-	ENSURE_EQUALS( "bad 2 based cast", lexical_cast<int>( get_test_name().c_str() ), -10 );
+	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad 2 based cast", lexical_cast<int>( get_test_name().c_str() ), -1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "string to bool" )
@@ -354,7 +389,16 @@ TUT_UNIT_TEST( "string to bool" )
 	ENSURE_EQUALS( "no to bool failed", lexical_cast<bool>( static_cast<char const*>( "no" ) ), false );
 	ENSURE_EQUALS( "true to bool failed", lexical_cast<bool>( static_cast<char const*>( "true" ) ), true );
 	ENSURE_EQUALS( "false to bool failed", lexical_cast<bool>( static_cast<char const*>( "false" ) ), false );
+	ENSURE_EQUALS( "true to bool failed", lexical_cast<bool>( static_cast<char const*>( "on" ) ), true );
+	ENSURE_EQUALS( "false to bool failed", lexical_cast<bool>( static_cast<char const*>( "off" ) ), false );
+	ENSURE_EQUALS( "true to bool failed", lexical_cast<bool>( static_cast<char const*>( "enable" ) ), true );
+	ENSURE_EQUALS( "false to bool failed", lexical_cast<bool>( static_cast<char const*>( "disable" ) ), false );
+	ENSURE_EQUALS( "true to bool failed", lexical_cast<bool>( static_cast<char const*>( "enabled" ) ), true );
+	ENSURE_EQUALS( "false to bool failed", lexical_cast<bool>( static_cast<char const*>( "disabled" ) ), false );
+	ENSURE_EQUALS( "true to bool failed", lexical_cast<bool>( static_cast<char const*>( "1" ) ), true );
+	ENSURE_EQUALS( "false to bool failed", lexical_cast<bool>( static_cast<char const*>( "0" ) ), false );
 	ENSURE_THROW( "casting garbage to bool did not throw", lexical_cast<bool>( static_cast<char const*>( "invalid" ) ), HLexicalCastException );
+	ENSURE_THROW( "casting garbage to bool did not throw", lexical_cast<bool>( static_cast<char const*>( "2" ) ), HLexicalCastException );
 TUT_TEARDOWN()
 
 }
