@@ -132,7 +132,7 @@ int main( int argc_, char* argv_[] ) {
 		}
 		if ( setup._selftest )
 			register_selftest();
-		tut::runner.get().set_time_constraint( time::in_units<time::UNIT::MILLISECOND>( setup._timeConstraint ) );
+		tut::runner.get().set_time_constraint( static_cast<int long>( time::in_units<time::UNIT::MILLISECOND>( setup._timeConstraint ) ) );
 /* *BOOM* */
 		try {
 			if ( ! setup._listGroups ) {
