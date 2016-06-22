@@ -95,6 +95,20 @@ TUT_UNIT_TEST( "Named rule name ends with underscore" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HReal" )
+	/* action_t */ {
+		bool actionCalled( false );
+		HExecutingParser ep( real[HReal::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] );
+		ENSURE( "HReal failed to parse correct input (double).", ep( "3.14" ) );
+		ep();
+		ENSURE( "action was not called by ExecutingParser.", actionCalled );
+	}
+	/* action_position_t */ {
+		executing_parser::position_t pos( -1 );
+		HExecutingParser ep( real[HReal::action_position_t( call( &match_position, ref( pos ), _1 ) )] );
+		ENSURE( "HReal failed to parse correct input (double).", ep( "3.14" ) );
+		ep();
+		ENSURE_EQUALS( "bad position from real's action", pos.get(), 0 );
+	}
 	/* double */ {
 		double val( 0 );
 		HExecutingParser ep( real[HBoundCall<void ( double )>( call( &defer<double>::set, ref( val ), _1 ) )] );
@@ -545,14 +559,16 @@ TUT_UNIT_TEST( "HAnd" )
 		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( fcData ), _1 ) )] );
 		char scData( '_' );
 		char data( '_' );
-		char trailerChar( 'b' );
+		char trailerChar[] = "b";
 		HRule trailer( character( trailerChar )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( scData ), _1 ) )] );
 		HRule sc( character( trailerChar )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( data ), _1 ) )] );
 		bool andCalled( false );
 		HExecutingParser ep( ( ( fc & trailer )[HAnd::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
-		HExecutingParser epp( ( ( fc & trailer )[HAnd::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
+		HExecutingParser epp( ( ( fc & trailerChar )[HAnd::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
+		HExecutingParser epS( ( ( fc & to_string( trailerChar ) )[HAnd::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
 		ENSURE( "parse on correct failed", ep( "ab" ) );
 		ENSURE( "parse on correct failed pos", epp( "ab" ) );
+		ENSURE( "parse on correct failed pos", epS( "ab" ) );
 		ep();
 		ENSURE_EQUALS( "predecessor in AND not called", fcData, 'a' );
 		ENSURE_EQUALS( "successor in AND called", scData, '_' );
@@ -561,6 +577,9 @@ TUT_UNIT_TEST( "HAnd" )
 		epp();
 		ENSURE_EQUALS( "bad position from and's action", pos.get(), 0 );
 		ENSURE( "follows not called", andCalled );
+		pos = executing_parser::position_t( -1 );
+		epS();
+		ENSURE_EQUALS( "bad position from and's action", pos.get(), 0 );
 		HExecutingParser ep2( fc & sc );
 		ENSURE_NOT( "parse on dangling succeeded", ep2( " ab" ) );
 		ENSURE_EQUALS( "bad error position", ep2.error_position(), 2 );
@@ -582,24 +601,30 @@ TUT_UNIT_TEST( "HNot" )
 		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( fcData ), _1 ) )] );
 		char scData( '_' );
 		char data( '_' );
-		char trailerChar( 'b' );
+		char trailerChar[] = "b";
 		HRule trailer( character( trailerChar )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( scData ), _1 ) )] );
 		HRule sc( character( 'c' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( data ), _1 ) )] );
 		bool notCalled( false );
 		HExecutingParser ep( ( ( fc ^ trailer )[HNot::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
-		HExecutingParser epp( ( ( fc ^ trailer )[HNot::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
+		HExecutingParser epp( ( ( fc ^ trailerChar )[HNot::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
+		HExecutingParser epS( ( ( fc ^ to_string( trailerChar ) )[HNot::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
 		ENSURE( "parse on correct failed", ep( "ac" ) );
 		ENSURE( "parse on correct failed pos", epp( "ac" ) );
+		ENSURE( "parse on correct failed pos", epS( "ac" ) );
 		ep();
 		ENSURE_EQUALS( "predecessor in NOT not called", fcData, 'a' );
 		ENSURE_EQUALS( "successor in NOT called", scData, '_' );
 		ENSURE_EQUALS( "following rule of NOT not called", data, 'c' );
 		epp();
-		ENSURE_EQUALS( "bad position from and's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad position from NOT's action", pos.get(), 0 );
 		ENSURE( "follows not called", notCalled );
 		ENSURE( "action on NOT was not called", actionCalled );
+		pos = executing_parser::position_t( -1 );
+		epS();
+		ENSURE_EQUALS( "bad position from NOT's action", pos.get(), 0 );
 		HExecutingParser ep2( fc ^ sc );
 		ENSURE_NOT( "parse on dangling succeeded", ep2( " ac" ) );
+		ENSURE_EQUALS( "bad error position", ep2.error_position(), 2 );
 		ENSURE_EQUALS( "bad error position", ep2.error_position(), 2 );
 	}
 	/* failed on successor */ {
