@@ -32,11 +32,14 @@ Copyright:
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
+using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
+using namespace yaal::tools;
+using namespace yaal::tools::executing_parser;
+using namespace tress::tut_helpers;
 
 namespace ll {
-
 
 template<typename container_t, typename value_type>
 void pushbacker( container_t* container, value_type value ) {
@@ -68,14 +71,12 @@ void noop( void ) {
 }
 }
 
+void match_position( executing_parser::position_t&, executing_parser::position_t );
+void match_position( executing_parser::position_t& out_, executing_parser::position_t in_ ) {
+	out_ = in_;
 }
 
-using namespace tut;
-using namespace yaal;
-using namespace yaal::hcore;
-using namespace yaal::tools;
-using namespace yaal::tools::executing_parser;
-using namespace tress::tut_helpers;
+}
 
 using namespace ll;
 
@@ -488,13 +489,15 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "HAlternative" )
 	int val( 0 );
 	int val_alt( 0 );
+	bool actionCalled( false );
 	HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
 	HRule ia( integer[HBoundCall<void ( int )>( call( &defer<int>::set_alt, ref( val_alt ), _1 ) )] );
-	HExecutingParser ep( string( "nums{" ) >> ( ( i >> ":pos" ) | ( ia >> ":neg" ) ) >> "}" );
+	HExecutingParser ep( string( "nums{" ) >> ( ( i >> ":pos" ) | ( ia >> ":neg" ) )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> "}" );
 	ENSURE( "parse on valid failed", ep( "nums{7:neg}" ) );
 	ep();
 	ENSURE_EQUALS( "execution failed sub-step not removed", val, 0 );
 	ENSURE_EQUALS( "execution proper execution sub-step not applied", val_alt, -7 );
+	ENSURE( "action on alternative was not called", actionCalled );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HOptional" )
@@ -512,18 +515,32 @@ TUT_UNIT_TEST( "HOptional" )
 		ep();
 		ENSURE_EQUALS( "execution of optional failed", val, 0 );
 	}
-	/* parsed (non-empty) */ {
+	/* parsed (non-empty) action_t */ {
 		int val( 0 );
+		bool actionCalled( false );
 		HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
-		HExecutingParser ep( string( "nums{" ) >> (-i) >> "}" );
+		HExecutingParser ep( string( "nums{" ) >> (-i)[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> "}" );
 		ENSURE( "parse on valid failed", ep( "nums{7}" ) );
 		ep();
 		ENSURE_EQUALS( "execution of optional failed", val, 7 );
+		ENSURE( "action on optional was not called", actionCalled );
+	}
+	/* parsed (non-empty) action_position_t */ {
+		int val( 0 );
+		executing_parser::position_t pos( 0 );
+		HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( string( "nums{" ) >> (-i)[HAlternative::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> "}" );
+		ENSURE( "parse on valid failed", ep( "nums{7}" ) );
+		ep();
+		ENSURE_EQUALS( "execution of optional failed", val, 7 );
+		ENSURE_EQUALS( "bad position from optional's action", pos.get(), 5 );
 	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HAnd" )
 	/* parsed */ {
+		bool actionCalled( false );
+		executing_parser::position_t pos( -1 );
 		char fcData( '_' );
 		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( fcData ), _1 ) )] );
 		char scData( '_' );
@@ -532,12 +549,17 @@ TUT_UNIT_TEST( "HAnd" )
 		HRule trailer( character( trailerChar )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( scData ), _1 ) )] );
 		HRule sc( character( trailerChar )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( data ), _1 ) )] );
 		bool andCalled( false );
-		HExecutingParser ep( ( ( fc & trailer ) >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
+		HExecutingParser ep( ( ( fc & trailer )[HAnd::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
+		HExecutingParser epp( ( ( fc & trailer )[HAnd::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
 		ENSURE( "parse on correct failed", ep( "ab" ) );
+		ENSURE( "parse on correct failed pos", epp( "ab" ) );
 		ep();
 		ENSURE_EQUALS( "predecessor in AND not called", fcData, 'a' );
 		ENSURE_EQUALS( "successor in AND called", scData, '_' );
 		ENSURE_EQUALS( "following rule of AND not called", data, 'b' );
+		ENSURE( "action on AND was not called", actionCalled );
+		epp();
+		ENSURE_EQUALS( "bad position from and's action", pos.get(), 0 );
 		ENSURE( "follows not called", andCalled );
 		HExecutingParser ep2( fc & sc );
 		ENSURE_NOT( "parse on dangling succeeded", ep2( " ab" ) );
@@ -554,6 +576,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HNot" )
 	/* parsed */ {
+		bool actionCalled( false );
+		executing_parser::position_t pos( -1 );
 		char fcData( '_' );
 		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( fcData ), _1 ) )] );
 		char scData( '_' );
@@ -562,13 +586,18 @@ TUT_UNIT_TEST( "HNot" )
 		HRule trailer( character( trailerChar )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( scData ), _1 ) )] );
 		HRule sc( character( 'c' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( data ), _1 ) )] );
 		bool notCalled( false );
-		HExecutingParser ep( ( ( fc ^ trailer ) >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
+		HExecutingParser ep( ( ( fc ^ trailer )[HNot::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
+		HExecutingParser epp( ( ( fc ^ trailer )[HNot::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
 		ENSURE( "parse on correct failed", ep( "ac" ) );
+		ENSURE( "parse on correct failed pos", epp( "ac" ) );
 		ep();
 		ENSURE_EQUALS( "predecessor in NOT not called", fcData, 'a' );
 		ENSURE_EQUALS( "successor in NOT called", scData, '_' );
 		ENSURE_EQUALS( "following rule of NOT not called", data, 'c' );
+		epp();
+		ENSURE_EQUALS( "bad position from and's action", pos.get(), 0 );
 		ENSURE( "follows not called", notCalled );
+		ENSURE( "action on NOT was not called", actionCalled );
 		HExecutingParser ep2( fc ^ sc );
 		ENSURE_NOT( "parse on dangling succeeded", ep2( " ac" ) );
 		ENSURE_EQUALS( "bad error position", ep2.error_position(), 2 );
