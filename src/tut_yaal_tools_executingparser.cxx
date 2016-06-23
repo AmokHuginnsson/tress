@@ -76,6 +76,24 @@ void match_position( executing_parser::position_t& out_, executing_parser::posit
 	out_ = in_;
 }
 
+template<typename T>
+void match_value_position_ref( T&, T const&, executing_parser::position_t&, executing_parser::position_t );
+template<typename T>
+void match_value_position_ref( T& valueOut_, T const& valueIn_, executing_parser::position_t& positionOut_, executing_parser::position_t positionIn_ ) {
+	valueOut_ = valueIn_;
+	positionOut_ = positionIn_;
+	return;
+}
+
+template<typename T>
+void match_value_position_val( T&, T, executing_parser::position_t&, executing_parser::position_t );
+template<typename T>
+void match_value_position_val( T& valueOut_, T valueIn_, executing_parser::position_t& positionOut_, executing_parser::position_t positionIn_ ) {
+	valueOut_ = valueIn_;
+	positionOut_ = positionIn_;
+	return;
+}
+
 }
 
 using namespace ll;
@@ -116,6 +134,15 @@ TUT_UNIT_TEST( "HReal" )
 		ep();
 		ENSURE_DISTANCE( "double value not set by ExecutingParser.", static_cast<double long>( val ), 3.14l, epsilon );
 	}
+	/* double_position_t */ {
+		double val( 0 );
+		executing_parser::position_t pos( -1 );
+		HExecutingParser ep( real[HReal::action_double_position_t( call( &match_value_position_val<double>, ref( val ), _1, ref( pos ), _2 ) )] );
+		ENSURE( "HReal failed to parse correct input (double).", ep( "3.14" ) );
+		ep();
+		ENSURE_DISTANCE( "double value not set by ExecutingParser.", static_cast<double long>( val ), 3.14l, epsilon );
+		ENSURE_EQUALS( "bad position from real's action", pos.get(), 0 );
+	}
 	/* double long */ {
 		double long val( 0 );
 		HExecutingParser ep( real[HBoundCall<void ( double long )>( call( &defer<double long>::set, ref( val ), _1 ) )] );
@@ -145,6 +172,15 @@ TUT_UNIT_TEST( "HReal" )
 		ep();
 		ENSURE_EQUALS( "HNumber value not set by ExecutingParser.", val, "3.141592653589793" );
 	}
+	/* HNumber position */ {
+		HNumber val( 0 );
+		executing_parser::position_t pos( -1 );
+		HExecutingParser ep( real[HReal::action_number_position_t( call( &match_value_position_ref<HNumber>, ref( val ), _1, ref( pos ), _2 ) )] );
+		ENSURE( "HReal failed to parse correct input (HNumber).", ep( "3.141592653589793" ) );
+		ep();
+		ENSURE_EQUALS( "HNumber value not set by ExecutingParser.", val, "3.141592653589793" );
+		ENSURE_EQUALS( "bad position from real's action", pos.get(), 0 );
+	}
 	/* HString */ {
 		hcore::HString val( 0 );
 		HExecutingParser ep( real[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
@@ -166,12 +202,44 @@ TUT_UNIT_TEST( "HInteger" )
 		ep();
 		ENSURE_EQUALS( "int value not set by ExecutingParser.", val, 7 );
 	}
+	/* int position */ {
+		int val( 0 );
+		executing_parser::position_t pos( -1 );
+		HExecutingParser ep( integer[HInteger::action_int_position_t( call( &match_value_position_val<int>, ref( val ), _1, ref( pos ), _2 ) )] );
+		ENSURE( "HInteger failed to parse correct input (int).", ep( "7" ) );
+		ep();
+		ENSURE_EQUALS( "int value not set by ExecutingParser.", val, 7 );
+		ENSURE_EQUALS( "bad position from int's action", pos.get(), 0 );
+	}
+	/* action_t */ {
+		bool actionCalled( false );
+		HExecutingParser ep( real[HInteger::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] );
+		ENSURE( "HReal failed to parse correct input (int).", ep( "7" ) );
+		ep();
+		ENSURE( "action was not called by ExecutingParser.", actionCalled );
+	}
+	/* action_position_t */ {
+		executing_parser::position_t pos( -1 );
+		HExecutingParser ep( real[HInteger::action_position_t( call( &match_position, ref( pos ), _1 ) )] );
+		ENSURE( "HReal failed to parse correct input (double).", ep( "7" ) );
+		ep();
+		ENSURE_EQUALS( "bad position from int's action", pos.get(), 0 );
+	}
 	/* int long */ {
 		int long val( 0 );
 		HExecutingParser ep( integer[HBoundCall<void ( int long )>( call( &defer<int long>::set, ref( val ), _1 ) )] );
 		ENSURE( "HInteger failed to parse correct input (int long).", ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "int long value not set by ExecutingParser.", val, 7l );
+	}
+	/* int long position */ {
+		int long val( 0 );
+		executing_parser::position_t pos( -1 );
+		HExecutingParser ep( integer[HInteger::action_int_long_position_t( call( &match_value_position_val<int long>, ref( val ), _1, ref( pos ), _2 ) )] );
+		ENSURE( "HInteger failed to parse correct input (int long).", ep( "7" ) );
+		ep();
+		ENSURE_EQUALS( "int long value not set by ExecutingParser.", val, 7l );
+		ENSURE_EQUALS( "bad position from int's action", pos.get(), 0 );
 	}
 	/* int long long */ {
 		int long long val( 0 );
@@ -187,6 +255,15 @@ TUT_UNIT_TEST( "HInteger" )
 		ep();
 		ENSURE_EQUALS( "HNumber value not set by ExecutingParser.", val, 7 );
 	}
+	/* HNumber position */ {
+		HNumber val( 0 );
+		executing_parser::position_t pos( -1 );
+		HExecutingParser ep( integer[HInteger::action_number_position_t( call( &match_value_position_ref<HNumber>, ref( val ), _1, ref( pos ), _2 ) )] );
+		ENSURE( "HInteger failed to parse correct input (HNumber).", ep( "7" ) );
+		ep();
+		ENSURE_EQUALS( "HNumber value not set by ExecutingParser.", val, 7 );
+		ENSURE_EQUALS( "bad position from int's action", pos.get(), 0 );
+	}
 	/* HString */ {
 		hcore::HString val( 0 );
 		HExecutingParser ep( integer[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
@@ -194,10 +271,41 @@ TUT_UNIT_TEST( "HInteger" )
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "7" );
 	}
+	/* HString position */ {
+		hcore::HString val( 0 );
+		executing_parser::position_t pos( -1 );
+		HExecutingParser ep( integer[HInteger::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) )] );
+		ENSURE( "HInteger failed to parse correct input (HString).", ep( "7" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "7" );
+		ENSURE_EQUALS( "bad position from int's action", pos.get(), 0 );
+	}
+	/* hex */ {
+		int val( 0 );
+		HExecutingParser ep( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
+		ENSURE( "HInteger failed to parse correct input (int).", ep( "0x77" ) );
+		ep();
+		ENSURE_EQUALS( "int value not set by ExecutingParser.", val, 119 );
+	}
+	/* oct */ {
+		int val( 0 );
+		HExecutingParser ep( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
+		ENSURE( "HInteger failed to parse correct input (int).", ep( "0o77" ) );
+		ep();
+		ENSURE_EQUALS( "int value not set by ExecutingParser.", val, 63 );
+	}
+	/* bin */ {
+		int val( 0 );
+		HExecutingParser ep( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
+		ENSURE( "HInteger failed to parse correct input (int).", ep( "0b110011" ) );
+		ep();
+		ENSURE_EQUALS( "int value not set by ExecutingParser.", val, 51 );
+	}
 	/* bad integer */ {
 		int long long val( 0 );
 		HExecutingParser ep( integer[HBoundCall<void ( int long long )>( call( &defer<int long long>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "Invalid input parsed by HInteger", ep( "bad" ) );
+		ENSURE_NOT( "Invalid input parsed by HInteger", ep( "7bad" ) );
 	}
 TUT_TEARDOWN()
 
