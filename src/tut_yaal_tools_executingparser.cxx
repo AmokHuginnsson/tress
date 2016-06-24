@@ -191,6 +191,9 @@ TUT_UNIT_TEST( "HReal" )
 	/* bad real */ {
 		HExecutingParser ep( real );
 		ENSURE_NOT( "Invalid input parsed by HReal", ep( "bad" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14bad" ) );
+		ENSURE_NOT( "whitespace only input parsed by HReal", ep( " " ) );
+		ENSURE_NOT( "empty input parsed by HReal", ep( "" ) );
 	}
 TUT_TEARDOWN()
 
@@ -213,14 +216,14 @@ TUT_UNIT_TEST( "HInteger" )
 	}
 	/* action_t */ {
 		bool actionCalled( false );
-		HExecutingParser ep( real[HInteger::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] );
+		HExecutingParser ep( integer[HInteger::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] );
 		ENSURE( "HReal failed to parse correct input (int).", ep( "7" ) );
 		ep();
 		ENSURE( "action was not called by ExecutingParser.", actionCalled );
 	}
 	/* action_position_t */ {
 		executing_parser::position_t pos( -1 );
-		HExecutingParser ep( real[HInteger::action_position_t( call( &match_position, ref( pos ), _1 ) )] );
+		HExecutingParser ep( integer[HInteger::action_position_t( call( &match_position, ref( pos ), _1 ) )] );
 		ENSURE( "HReal failed to parse correct input (double).", ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "bad position from int's action", pos.get(), 0 );
@@ -306,6 +309,8 @@ TUT_UNIT_TEST( "HInteger" )
 		HExecutingParser ep( integer[HBoundCall<void ( int long long )>( call( &defer<int long long>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "Invalid input parsed by HInteger", ep( "bad" ) );
 		ENSURE_NOT( "Invalid input parsed by HInteger", ep( "7bad" ) );
+		ENSURE_NOT( "whitespace only input parsed by HInteger", ep( " " ) );
+		ENSURE_NOT( "empty input parsed by HInteger", ep( "" ) );
 	}
 TUT_TEARDOWN()
 
@@ -364,6 +369,8 @@ TUT_UNIT_TEST( "HStringLiteral" )
 	ENSURE_NOT( "non-string literal parsed", ep( "Ala" ) );
 	ENSURE_NOT( "unfinished string literal parsed", ep( "\"Ala" ) );
 	ENSURE_NOT( "string literal with invalid character parsed", ep( "\"Al\ba\"" ) );
+	ENSURE_NOT( "whitespace only input parsed", ep( " " ) );
+	ENSURE_NOT( "empty input parsed", ep( "" ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HCharacterLiteral" )
@@ -402,6 +409,7 @@ TUT_UNIT_TEST( "HCharacterLiteral" )
 	ENSURE_NOT( "non-character literal parsed", ep( "Ala" ) );
 	ENSURE_NOT( "unfinished character literal parsed", ep( "'A" ) );
 	ENSURE_NOT( "character literal with invalid character parsed", ep( "'\b'" ) );
+	ENSURE_NOT( "whitespace only input parsed", ep( " " ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HCharacter" )
@@ -497,6 +505,7 @@ TUT_UNIT_TEST( "HRegex" )
 		hcore::HString val;
 		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "HRegex parsed invalid input.", ep( "12.3a" ) );
+		ENSURE_NOT( "whitespace only input parsed", ep( " " ) );
 	}
 TUT_TEARDOWN()
 
@@ -522,6 +531,10 @@ TUT_UNIT_TEST( "HFollows" )
 		bool followsCalled( false );
 		HExecutingParser ep( ( fc >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( followsCalled ), true ) ) ] );
 		ENSURE_NOT( "parse on invalid succeeded", ep( "aa" ) );
+	}
+	/* only optionals and empty input */ {
+		HExecutingParser ep( *integer >> -character( '!' ) );
+		ENSURE( "parse on empty input with optionals grammar failed", ep( "" ) );
 	}
 TUT_TEARDOWN()
 
@@ -609,17 +622,23 @@ TUT_UNIT_TEST( "HKleenePlus" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HAlternative" )
-	int val( 0 );
-	int val_alt( 0 );
-	bool actionCalled( false );
-	HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
-	HRule ia( integer[HBoundCall<void ( int )>( call( &defer<int>::set_alt, ref( val_alt ), _1 ) )] );
-	HExecutingParser ep( string( "nums{" ) >> ( ( i >> ":pos" ) | ( ia >> ":neg" ) )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> "}" );
-	ENSURE( "parse on valid failed", ep( "nums{7:neg}" ) );
-	ep();
-	ENSURE_EQUALS( "execution failed sub-step not removed", val, 0 );
-	ENSURE_EQUALS( "execution proper execution sub-step not applied", val_alt, -7 );
-	ENSURE( "action on alternative was not called", actionCalled );
+	/* alternative */ {
+		int val( 0 );
+		int val_alt( 0 );
+		bool actionCalled( false );
+		HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
+		HRule ia( integer[HBoundCall<void ( int )>( call( &defer<int>::set_alt, ref( val_alt ), _1 ) )] );
+		HExecutingParser ep( string( "nums{" ) >> ( ( i >> ":pos" ) | ( ia >> ":neg" ) )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> "}" );
+		ENSURE( "parse on valid failed", ep( "nums{7:neg}" ) );
+		ep();
+		ENSURE_EQUALS( "execution failed sub-step not removed", val, 0 );
+		ENSURE_EQUALS( "execution proper execution sub-step not applied", val_alt, -7 );
+		ENSURE( "action on alternative was not called", actionCalled );
+	}
+	/* one optional and empty input */ {
+		HExecutingParser ep( integer | -real | character( '!' ) );
+		ENSURE( "parse on empty input with optionals grammar failed", ep( "" ) );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HOptional" )
