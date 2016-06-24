@@ -479,16 +479,24 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "HString" )
 	/* action_string_t */ {
 		hcore::HString val;
-		HExecutingParser ep( string( "ala",e_p::HString::action_string_t( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ) ) );
+		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_t( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ) ) );
+		ENSURE_NOT( "HString parsed input with trailing garbage.", ep( "  alaX" ) );
 		ENSURE( "HString failed to parse correct input.", ep( "  ala" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
 	}
 	/* action_string_t no skip WS */ {
 		hcore::HString val;
-		HExecutingParser ep( string( "ala",e_p::HString::action_string_t( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ), e_p::HString::WHITE_SPACE::KEEP ) );
+		HExecutingParser ep( e_p::constant( "ala",e_p::HString::action_string_t( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ), e_p::HString::WHITE_SPACE::KEEP ) );
 		ENSURE_NOT( "HString parsed whitespace leading input (skip WS disabled).", ep( "  ala" ) );
 		ENSURE( "HString failed to parse correct input.", ep( "ala" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
+	}
+	/* action_string_t WB */ {
+		hcore::HString val;
+		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_t( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
+		ENSURE( "HString failed to parse correct input.", ep( "  alaX" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
 	}
@@ -496,6 +504,7 @@ TUT_UNIT_TEST( "HString" )
 		hcore::HString val;
 		e_p::position_t pos( -1 );
 		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ) ) );
+		ENSURE_NOT( "HString parsed input with trailing garbage.", ep( "  alaX" ) );
 		ENSURE( "HString failed to parse correct input.", ep( "  ala" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
@@ -510,6 +519,15 @@ TUT_UNIT_TEST( "HString" )
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
 		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+	}
+	/* action_string_position WB */ {
+		hcore::HString val;
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
+		ENSURE( "HString failed to parse correct input.", ep( "  alaX" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 2 );
 	}
 	/* action_position */ {
 		e_p::position_t pos( -1 );
