@@ -371,6 +371,20 @@ TUT_UNIT_TEST( "HStringLiteral" )
 	ENSURE_NOT( "string literal with invalid character parsed", ep( "\"Al\ba\"" ) );
 	ENSURE_NOT( "whitespace only input parsed", ep( " " ) );
 	ENSURE_NOT( "empty input parsed", ep( "" ) );
+	/* action_t */ {
+		bool actionCalled( false );
+		HExecutingParser epa( string_literal[HStringLiteral::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] );
+		ENSURE( "HReal failed to parse correct input (string_literal).", epa( "\"aaa\"" ) );
+		epa();
+		ENSURE( "action was not called by ExecutingParser.", actionCalled );
+	}
+	/* action_position_t */ {
+		executing_parser::position_t pos( -1 );
+		HExecutingParser epa( string_literal[HStringLiteral::action_position_t( call( &match_position, ref( pos ), _1 ) )] );
+		ENSURE( "HReal failed to parse correct input (string_literal).", epa( "\"aaa\"" ) );
+		epa();
+		ENSURE_EQUALS( "bad position from string_literal's action", pos.get(), 0 );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HCharacterLiteral" )
@@ -410,6 +424,20 @@ TUT_UNIT_TEST( "HCharacterLiteral" )
 	ENSURE_NOT( "unfinished character literal parsed", ep( "'A" ) );
 	ENSURE_NOT( "character literal with invalid character parsed", ep( "'\b'" ) );
 	ENSURE_NOT( "whitespace only input parsed", ep( " " ) );
+	/* action_t */ {
+		bool actionCalled( false );
+		HExecutingParser epa( character_literal[HCharacterLiteral::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] );
+		ENSURE( "HReal failed to parse correct input (character_literal).", epa( "'a'" ) );
+		epa();
+		ENSURE( "action was not called by ExecutingParser.", actionCalled );
+	}
+	/* action_position_t */ {
+		executing_parser::position_t pos( -1 );
+		HExecutingParser epa( character_literal[HCharacterLiteral::action_position_t( call( &match_position, ref( pos ), _1 ) )] );
+		ENSURE( "HReal failed to parse correct input (character_literal).", epa( "'a'" ) );
+		epa();
+		ENSURE_EQUALS( "bad position from character_literal's action", pos.get(), 0 );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HCharacter" )
