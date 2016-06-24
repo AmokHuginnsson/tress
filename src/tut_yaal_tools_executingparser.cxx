@@ -38,6 +38,7 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace yaal::tools::executing_parser;
 using namespace tress::tut_helpers;
+namespace e_p = executing_parser;
 
 namespace ll {
 
@@ -204,6 +205,11 @@ TUT_UNIT_TEST( "HInteger" )
 		ENSURE( "HInteger failed to parse correct input (int).", ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "int value not set by ExecutingParser.", val, 7 );
+	}
+	/* int too big */ {
+		int val( 0 );
+		HExecutingParser ep( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
+		ENSURE_NOT( "HInteger failed to parse correct input (int).", ep( to_string( static_cast<int long long>( meta::max_signed<int>::value ) + 1LL ) ) );
 	}
 	/* int position */ {
 		int val( 0 );
@@ -471,12 +477,65 @@ TUT_UNIT_TEST( "HCharacter" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HString" )
-	/* ok */ {
+	/* action_string_t */ {
 		hcore::HString val;
-		HExecutingParser ep( string( "ala" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( string( "ala",e_p::HString::action_string_t( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ) ) );
+		ENSURE( "HString failed to parse correct input.", ep( "  ala" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
+	}
+	/* action_string_t no skip WS */ {
+		hcore::HString val;
+		HExecutingParser ep( string( "ala",e_p::HString::action_string_t( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ), e_p::HString::WHITE_SPACE::KEEP ) );
+		ENSURE_NOT( "HString parsed whitespace leading input (skip WS disabled).", ep( "  ala" ) );
 		ENSURE( "HString failed to parse correct input.", ep( "ala" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
+	}
+	/* action_string_position */ {
+		hcore::HString val;
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ) ) );
+		ENSURE( "HString failed to parse correct input.", ep( "  ala" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 2 );
+	}
+	/* action_string_position no skip ws */ {
+		hcore::HString val;
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ), e_p::HString::WHITE_SPACE::KEEP ) );
+		ENSURE_NOT( "HString parsed whitespace leading input (skip WS disabled).", ep( "  ala" ) );
+		ENSURE( "HString failed to parse correct input.", ep( "ala" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+	}
+	/* action_position */ {
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_position_t( call( &match_position, ref( pos ), _1 ) ) ) );
+		ENSURE( "HString failed to parse correct input.", ep( "ala" ) );
+		ep();
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+	}
+	/* action */ {
+		bool actionCalled( false );
+		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) ) ) );
+		ENSURE( "HString failed to parse correct input.", ep( "  ala" ) );
+		ep();
+		ENSURE( "action was not called by ExecutingParser.", actionCalled );
+	}
+	/* action no skip WS */ {
+		bool actionCalled( false );
+		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) ), e_p::HString::WHITE_SPACE::KEEP ) );
+		ENSURE_NOT( "HString parsed whitespace leading input (skip WS disabled).", ep( "  ala" ) );
+		ENSURE( "HString failed to parse correct input.", ep( "ala" ) );
+		ep();
+		ENSURE( "action was not called by ExecutingParser.", actionCalled );
+	}
+	/* no action */ {
+		HExecutingParser ep( e_p::constant( "ala" ) );
+		ENSURE( "HString failed to parse correct input.", ep( "ala" ) );
 	}
 	/* fail */ {
 		hcore::HString val;
@@ -519,19 +578,68 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "HRegex" )
 	/* ok */ {
 		hcore::HString val;
-		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[e_p::HRegex::action_string_t( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
 		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "12.34" );
 	}
+	/* name, action_string */ {
+		hcore::HString val;
+		HExecutingParser ep( regex( "num", "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_string_t( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ) ) );
+		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "12.34" );
+	}
+	/* action_string_position */ {
+		hcore::HString val;
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( regex( "num", "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ) ) );
+		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "12.34" );
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+	}
+	/* name, action_position */ {
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( regex( "num", "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_position_t( call( &match_position, ref( pos ), _1 ) ) ) );
+		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
+		ep();
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+	}
+	/* action_position */ {
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_position_t( call( &match_position, ref( pos ), _1 ) ) ) );
+		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
+		ep();
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+	}
+	/* name, action */ {
+		bool actionCalled( false );
+		HExecutingParser ep( regex( "num", "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) ) ) );
+		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
+		ep();
+		ENSURE( "action was not called by ExecutingParser.", actionCalled );
+	}
+	/* action */ {
+		bool actionCalled( false );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) ) ) );
+		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
+		ep();
+		ENSURE( "action was not called by ExecutingParser.", actionCalled );
+	}
+	/* name, no action */ {
+		HExecutingParser ep( regex( "num", "[0-9]{2}\\.[0-9]{2}"_ys ) );
+		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
+		ENSURE_NOT( "HRegex parsed invalid input.", ep( "ala" ) );
+	}
 	/* fail not fully consumed input */ {
 		hcore::HString val;
-		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" ) );
 		ENSURE_NOT( "HExecutingParser accepted parse on partial input.", ep( "12.345" ) );
 	}
 	/* fail */ {
 		hcore::HString val;
-		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[HBoundCall<void ( hcore::HString const& )>( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) )] );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" ) );
 		ENSURE_NOT( "HRegex parsed invalid input.", ep( "12.3a" ) );
 		ENSURE_NOT( "whitespace only input parsed", ep( " " ) );
 	}
@@ -586,7 +694,6 @@ struct Kleene {
 };
 
 TUT_UNIT_TEST( "HKleeneStar" )
-	namespace e_p = executing_parser;
 	/* parsed (non empty) */ {
 		int val( 0 );
 		int count( 0 );
@@ -1092,7 +1199,6 @@ TUT_UNIT_TEST( "follows with recursion bug" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "unnamed HHuginn grammar" )
-	namespace e_p = executing_parser;
 	HRule name( regex( YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END ) );
 	HRule expression;
 	HRule absoluteValue( '|' >> expression >> '|' );
@@ -1616,8 +1722,6 @@ TUT_UNIT_TEST( "full Huginn grammar with semantic actions" )
 	HBoundCall<void ( double long )> cd( call( &dummy_call_d, _1 ) );
 	HBoundCall<void ( int long long )> ci( call( &dummy_call_i, _1 ) );
 	HBoundCall<void ( yaal::hcore::HString const& )> cs( call( &dummy_call_s, _1 ) );
-	using namespace executing_parser;
-	namespace e_p = executing_parser;
 	hcore::HString identifierPattern( YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END );
 	HRule expression( "expression", cv );
 	HRule absoluteValue( "absoluteValue", e_p::constant( '|', cc ) >> expression >> e_p::constant( '|', cv ) );
