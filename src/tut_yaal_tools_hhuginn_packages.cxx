@@ -257,7 +257,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "Database" )
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	ENSURE_EQUALS(
-		"Database.table_names",
+		"DatabaseConnection.table_names",
 		execute(
 			"import Database as db;"
 			"main(){"
@@ -268,7 +268,7 @@ TUT_UNIT_TEST( "Database" )
 		"[\"config\", \"crud\", \"test\", \"test_dict\", \"test_item\"]"
 	);
 	ENSURE_EQUALS(
-		"Database.column_names",
+		"DatabaseConnection.column_names",
 		execute(
 			"import Database as db;"
 			"main(){"
@@ -279,7 +279,7 @@ TUT_UNIT_TEST( "Database" )
 		"[\"id\", \"name\", \"data\"]"
 	);
 	ENSURE_EQUALS(
-		"Database.column_names",
+		"DatabaseConnection.query, Query, QueryResult",
 		execute(
 			"import Database as db;"
 			"main(){"
@@ -295,10 +295,12 @@ TUT_UNIT_TEST( "Database" )
 			"res+=\",\";"
 			"i+=1;"
 			"}"
-			"while(qr.has_next()){"
-			"for(v:qr.fetch_row()){"
+			"if(qr.has_next()){"
+			"for(r:qr){"
+			"for(v:r){"
 			"res+=v;"
 			"res+=\",\";"
+			"}"
 			"}"
 			"}"
 			"return(res);"
