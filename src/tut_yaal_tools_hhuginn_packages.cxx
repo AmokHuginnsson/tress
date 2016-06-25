@@ -27,6 +27,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/hhuginn.hxx>
+#include <yaal/tools/hmonitor.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -250,6 +251,60 @@ TUT_UNIT_TEST( "Mathematics" )
 			"}"
 		),
 		"$4.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Database" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
+	ENSURE_EQUALS(
+		"Database.table_names",
+		execute(
+			"import Database as db;"
+			"main(){"
+			"dbc=db.connect(\"sqlite3:///out/tress\");"
+			"return(dbc.table_names());"
+			"}"
+		),
+		"[\"config\", \"crud\", \"test\", \"test_dict\", \"test_item\"]"
+	);
+	ENSURE_EQUALS(
+		"Database.column_names",
+		execute(
+			"import Database as db;"
+			"main(){"
+			"dbc=db.connect(\"sqlite3:///out/tress\");"
+			"return(dbc.column_names(\"config\"));"
+			"}"
+		),
+		"[\"id\", \"name\", \"data\"]"
+	);
+	ENSURE_EQUALS(
+		"Database.column_names",
+		execute(
+			"import Database as db;"
+			"main(){"
+			"dbc=db.connect(\"sqlite3:///out/tress\");"
+			"q=dbc.query(\"SELECT name FROM config WHERE id != ?;\");"
+			"q.bind(1, \"2\");"
+			"qr=q.execute();"
+			"res=\"\";"
+			"i=0;"
+			"fc=qr.field_count();"
+			"while(i<fc){"
+			"res+=qr.column_name(i);"
+			"res+=\",\";"
+			"i+=1;"
+			"}"
+			"while(qr.has_next()){"
+			"for(v:qr.fetch_row()){"
+			"res+=v;"
+			"res+=\",\";"
+			"}"
+			"}"
+			"return(res);"
+			"}"
+		),
+		"\"name,one,three,\""
 	);
 TUT_TEARDOWN()
 
