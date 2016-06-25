@@ -202,5 +202,56 @@ TUT_UNIT_TEST( "RegularExpressions" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Mathematics" )
+	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){return(math.square_root(7.));}" ), "2.645751311065" );
+	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){return(math.square_root($7));}" ), "$2.6457513110645905905016157536392604257102591830824501803683344592010688232302836277603928864745436106" );
+	ENSURE_EQUALS( "Mathematics.natural_expotential failed", execute( "import Mathematics as math;main(){return(math.natural_expotential(7.));}" ), "1096.633158428459" );
+	ENSURE_EQUALS( "Mathematics.natural_expotential failed", execute( "import Mathematics as math;main(){return(math.natural_expotential($7));}" ), "$1096.6331584284585992637202382881214324422191348336131437827392407761217693312331290224785687872498437141" );
+	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){return(math.natural_logarithm(7.));}" ), "1.945910149055" );
+	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){return(math.natural_logarithm($7));}" ), "$1.945910149055313305105352743443179729637084729581861188459390149937579862752069267787658498587871527" );
+	ENSURE_EQUALS( "Mathematics.sinus failed", execute( "import Mathematics as math;main(){return(math.sinus(7.));}" ), "0.656986598719" );
+	ENSURE_EQUALS( "Mathematics.sinus failed", execute( "import Mathematics as math;main(){return(math.sinus($7));}" ), "$0.6569865987187890903969990915936351779368700104974900746578543341892928371312270315099351216010552127" );
+	ENSURE_EQUALS( "Mathematics.cosinus failed", execute( "import Mathematics as math;main(){return(math.cosinus(7.));}" ), "0.753902254343" );
+	ENSURE_EQUALS( "Mathematics.cosinus failed", execute( "import Mathematics as math;main(){return(math.cosinus($7));}" ), "$0.7539022543433046381411975217191820122183133914601268395436138808138760267207174056254283910893024825" );
+	ENSURE_EQUALS( "Mathematics.tangens failed", execute( "import Mathematics as math;main(){return(math.tangens(7.));}" ), "0.871447982724" );
+	ENSURE_EQUALS( "Mathematics.tangens failed", execute( "import Mathematics as math;main(){return(math.tangens($7));}" ), "$0.8714479827243187364564508896003135663222034245984200644480154523301674476556679351044748556811165168" );
+	ENSURE_EQUALS( "Mathematics.cotangens failed", execute( "import Mathematics as math;main(){return(math.cotangens(7.));}" ), "1.147515422405" );
+	ENSURE_EQUALS( "Mathematics.cotangens failed", execute( "import Mathematics as math;main(){return(math.cotangens($7));}" ), "$1.1475154224051356850571278335968690125843802678361633445170108981521966892555002012462107148960973854" );
+	ENSURE_EQUALS( "Mathematics.arcus_sinus failed", execute( "import Mathematics as math;main(){return(math.arcus_sinus(.7));}" ), "0.775397496611" );
+	ENSURE_EQUALS( "Mathematics.arcus_sinus failed", execute( "import Mathematics as math;main(){return(math.arcus_sinus($0.7));}" ), "$0.7753974966107530637403533527149871135557887386411619935977199637327202118807111988654109034943728765" );
+	ENSURE_EQUALS( "Mathematics.arcus_cosinus failed", execute( "import Mathematics as math;main(){return(math.arcus_cosinus(.7));}" ), "0.795398830184" );
+	ENSURE_EQUALS( "Mathematics.arcus_cosinus failed", execute( "import Mathematics as math;main(){return(math.arcus_cosinus($0.7));}" ), "$0.7953988301841435554909683389247643285427959610463909168897523324211879912623933004486065091766856575" );
+	ENSURE_EQUALS( "Mathematics.arcus_tangens failed", execute( "import Mathematics as math;main(){return(math.arcus_tangens(7.));}" ), "1.428899272191" );
+	ENSURE_EQUALS( "Mathematics.arcus_tangens failed", execute( "import Mathematics as math;main(){return(math.arcus_tangens($7));}" ), "$1.4288992721907326964184700745371983590908029409590888381093422667904665763831733383698255510368120159" );
+	ENSURE_EQUALS( "Mathematics.arcus_cotangens failed", execute( "import Mathematics as math;main(){return(math.arcus_cotangens(7.));}" ), "0.141897054604" );
+	ENSURE_EQUALS( "Mathematics.arcus_cotangens failed", execute( "import Mathematics as math;main(){return(math.arcus_cotangens($7));}" ), "$0.1418970546041639228128516171025530830077817587284640723781300293634416267599311609441918616342465181" );
+	ENSURE_EQUALS(
+		"Mathematics.matrix failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([1.,2.],[3.,4.]);"
+			"m2=math.matrix([9.,8.],[7.,6.]);"
+			"m1*=m2;"
+			"return(m1.det());"
+			"}"
+		),
+		"4.000000000000"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([$1,$2],[$3,$4]);"
+			"m2=math.matrix([$9,$8],[$7,$6]);"
+			"m1*=m2;"
+			"return(m1.det());"
+			"}"
+		),
+		"$4.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004"
+	);
+TUT_TEARDOWN()
+
 }
 
