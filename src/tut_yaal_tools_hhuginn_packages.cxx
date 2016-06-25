@@ -303,10 +303,19 @@ TUT_UNIT_TEST( "Database" )
 			"}"
 			"}"
 			"}"
+			"q=dbc.query(\"SELECT name, data FROM config WHERE id = ?;\");"
+			"q.bind(1, \"2\");"
+			"qr=q.execute();"
+			"while(qr.has_next()){"
+			"for(v:qr.fetch_row()){"
+			"res+=(v!=none ? v : \"none\");"
+			"res+=\",\";"
+			"}"
+			"}"
 			"return(res);"
 			"}"
 		),
-		"\"name,one,three,\""
+		"\"name,one,three,two,none,\""
 	);
 TUT_TEARDOWN()
 
