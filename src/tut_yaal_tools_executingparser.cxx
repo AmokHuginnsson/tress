@@ -458,10 +458,39 @@ TUT_UNIT_TEST( "HCharacter" )
 		char val( 0 );
 		HExecutingParser ep( e_p::constant( 'a', HCharacter::action_character_t( call( &defer<char>::set, ref( val ), _1 ) ) ) );
 		ENSURE( "HCharacter failed to parse correct input.", ep( "a" ) );
+		ep();
+		ENSURE_EQUALS( "char not captured", val, 'a' );
+	}
+	/* char (specific ok) action_t */ {
+		bool actionCalled( false );
+		HExecutingParser ep( e_p::constant( 'a', HCharacter::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) ) ) );
+		ENSURE( "HCharacter failed to parse correct input.", ep( "a" ) );
+		ep();
+		ENSURE( "action was not called by ExecutingParser.", actionCalled );
 	}
 	/* char (specific, any of ok) */ {
 		char val( 0 );
 		HExecutingParser ep( characters( "ab", HCharacter::action_character_t( call( &defer<char>::set, ref( val ), _1 ) ) ) );
+		ENSURE( "HCharacter failed to parse correct input.", ep( "b" ) );
+		ep();
+		ENSURE_EQUALS( "char not captured", val, 'b' );
+	}
+	/* char (specific, any of ok) action_position_t */ {
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( characters( "ab", e_p::HString::action_position_t( call( &match_position, ref( pos ), _1 ) ) ) );
+		ENSURE( "HCharacter failed to parse correct input.", ep( "b" ) );
+		ep();
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+	}
+	/* char (specific, any of ok) action_t */ {
+		bool actionCalled( false );
+		HExecutingParser ep( characters( "ab", HCharacter::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) ) ) );
+		ENSURE( "HCharacter failed to parse correct input.", ep( "b" ) );
+		ep();
+		ENSURE( "action was not called by ExecutingParser.", actionCalled );
+	}
+	/* char (specific, any of ok) no action */ {
+		HExecutingParser ep( characters( "ab" ) );
 		ENSURE( "HCharacter failed to parse correct input.", ep( "b" ) );
 	}
 	/* char (specific fail) */ {
@@ -619,6 +648,29 @@ TUT_UNIT_TEST( "HRegex" )
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "12.34" );
 	}
+	/* action_string_position_t attached */ {
+		hcore::HString val;
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[e_p::HRegex::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) )] );
+		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "12.34" );
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+	}
+	/* action_position_t attached */ {
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[e_p::HRegex::action_position_t( call( &match_position, ref( pos ), _1 ) )] );
+		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
+		ep();
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+	}
+	/* action_t attached */ {
+		bool actionCalled( false );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[e_p::HRegex::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] );
+		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
+		ep();
+		ENSURE( "action was not called by ExecutingParser.", actionCalled );
+	}
 	/* name, action_string */ {
 		hcore::HString val;
 		HExecutingParser ep( regex( "num", "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_string_t( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ) ) );
@@ -703,6 +755,12 @@ TUT_UNIT_TEST( "HFollows" )
 		ENSURE_EQUALS( "predecessor in follows not called", fcData, 'a' );
 		ENSURE_EQUALS( "successor in follows not called", scData, 'b' );
 		ENSURE( "follows not called", followsCalled );
+	}
+	/* From string. */ {
+		HExecutingParser ep( integer >> "num"_ys >> "val"_ys );
+		ENSURE( "parse on correct failed", ep( "123 num val" ) );
+		HExecutingParser ep2( "num"_ys >> integer );
+		ENSURE( "parse on correct failed", ep2( "num 123" ) );
 	}
 	/* failed on successor */ {
 		char fcData( 0 );
