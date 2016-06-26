@@ -206,10 +206,12 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){return(math.square_root(7.));}" ), "2.645751311065" );
 	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){return(math.square_root($7));}" ), "$2.6457513110645905905016157536392604257102591830824501803683344592010688232302836277603928864745436106" );
+	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){try{math.square_root(-1.);}catch(MathematicsException e){return(e.what());}}" ), "\"bad domain\"" );
 	ENSURE_EQUALS( "Mathematics.natural_expotential failed", execute( "import Mathematics as math;main(){return(math.natural_expotential(7.));}" ), "1096.633158428459" );
 	ENSURE_EQUALS( "Mathematics.natural_expotential failed", execute( "import Mathematics as math;main(){return(math.natural_expotential($7));}" ), "$1096.6331584284585992637202382881214324422191348336131437827392407761217693312331290224785687872498437141" );
 	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){return(math.natural_logarithm(7.));}" ), "1.945910149055" );
 	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){return(math.natural_logarithm($7));}" ), "$1.945910149055313305105352743443179729637084729581861188459390149937579862752069267787658498587871527" );
+	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){try{math.natural_logarithm(0.);}catch(MathematicsException e){return(e.what());}}" ), "\"bad domain\"" );
 	ENSURE_EQUALS( "Mathematics.sinus failed", execute( "import Mathematics as math;main(){return(math.sinus(7.));}" ), "0.656986598719" );
 	ENSURE_EQUALS( "Mathematics.sinus failed", execute( "import Mathematics as math;main(){return(math.sinus($7));}" ), "$0.6569865987187890903969990915936351779368700104974900746578543341892928371312270315099351216010552127" );
 	ENSURE_EQUALS( "Mathematics.cosinus failed", execute( "import Mathematics as math;main(){return(math.cosinus(7.));}" ), "0.753902254343" );
@@ -226,31 +228,198 @@ TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.arcus_tangens failed", execute( "import Mathematics as math;main(){return(math.arcus_tangens($7));}" ), "$1.4288992721907326964184700745371983590908029409590888381093422667904665763831733383698255510368120159" );
 	ENSURE_EQUALS( "Mathematics.arcus_cotangens failed", execute( "import Mathematics as math;main(){return(math.arcus_cotangens(7.));}" ), "0.141897054604" );
 	ENSURE_EQUALS( "Mathematics.arcus_cotangens failed", execute( "import Mathematics as math;main(){return(math.arcus_cotangens($7));}" ), "$0.1418970546041639228128516171025530830077817587284640723781300293634416267599311609441918616342465181" );
+	ENSURE_EQUALS( "Mathematics.round failed", execute( "import Mathematics as math;main(){return(math.round(7.1234));}" ), "7.000000000000" );
+	ENSURE_EQUALS( "Mathematics.round failed", execute( "import Mathematics as math;main(){return(math.round($7.123456,3));}" ), "$7.123" );
+	ENSURE_EQUALS( "Mathematics.round failed", execute( "import Mathematics as math;main(){try{math.round(7.1234, 3);}catch(MathematicsException e){return(e.what());}}" ), "\"rounding to nth place on real is not supported\"" );
+	ENSURE_EQUALS( "Mathematics.floor failed", execute( "import Mathematics as math;main(){return(math.floor(7.1234));}" ), "7.000000000000" );
+	ENSURE_EQUALS( "Mathematics.floor failed", execute( "import Mathematics as math;main(){return(math.floor($7.123456));}" ), "$7" );
+	ENSURE_EQUALS( "Mathematics.floor failed", execute( "import Mathematics as math;main(){return(math.floor(-7.1234));}" ), "-8.000000000000" );
+	ENSURE_EQUALS( "Mathematics.floor failed", execute( "import Mathematics as math;main(){return(math.floor($-7.123456));}" ), "$-8" );
+	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil(7.1234));}" ), "8.000000000000" );
+	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil($7.123456));}" ), "$8" );
+	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil(-7.1234));}" ), "-7.000000000000" );
+	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil($-7.123456));}" ), "$-7" );
+	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($7.1234567, $7.1235567));}" ), "3" );
+	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($2234.1234567, $1234.1234567));}" ), "-4" );
 	ENSURE_EQUALS(
-		"Mathematics.matrix failed",
+		"Mathematics.matrix (add) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([1.,2.],[3.,4.]);"
+			"m2=math.matrix([9.,8.],[7.,6.]);"
+			"m1+=m2;"
+			"return(string(m1));"
+			"}"
+		),
+		"\"Matrix([10.000000000000, 10.000000000000], [10.000000000000, 10.000000000000])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (add) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([$1.,$2.],[$3.,$4.]);"
+			"m2=math.matrix([$7.,$6.],[$9.,$8.]);"
+			"m1+=m2;"
+			"return(string(m1));"
+			"}"
+		),
+		"\"Matrix([$8, $8], [$12, $12])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (sub) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([1.,2.],[3.,4.]);"
+			"m2=math.matrix([9.,8.],[7.,6.]);"
+			"m1-=m2;"
+			"return(string(m1));"
+			"}"
+		),
+		"\"Matrix([-8.000000000000, -6.000000000000], [-4.000000000000, -2.000000000000])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (sub) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([$1.,$2.],[$3.,$4.]);"
+			"m2=math.matrix([$9.,$8.],[$7.,$6.]);"
+			"m1-=m2;"
+			"return(string(m1));"
+			"}"
+		),
+		"\"Matrix([$-8, $-6], [$-4, $-2])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (mul) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
 			"m1=math.matrix([1.,2.],[3.,4.]);"
 			"m2=math.matrix([9.,8.],[7.,6.]);"
 			"m1*=m2;"
+			"return(string(m1));"
+			"}"
+		),
+		"\"Matrix([23.000000000000, 20.000000000000], [55.000000000000, 48.000000000000])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (mul) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([$1.,$2.],[$3.,$4.]);"
+			"m2=math.matrix([$9.,$8.],[$7.,$6.]);"
+			"m1*=m2;"
+			"return(string(m1));"
+			"}"
+		),
+		"\"Matrix([$23, $20], [$55, $48])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (scale) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([1.,2.],[3.,4.]);"
+			"m1.scale(2.);"
+			"return(string(m1));"
+			"}"
+		),
+		"\"Matrix([2.000000000000, 4.000000000000], [6.000000000000, 8.000000000000])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (scale) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([$1.,$2.],[$3.,$4.]);"
+			"m1.scale($2);"
+			"return(string(m1));"
+			"}"
+		),
+		"\"Matrix([$2, $4], [$6, $8])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (scale_to) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([1.,2.],[3.,4.]);"
+			"m1.scale_to(12.);"
+			"return(string(m1));"
+			"}"
+		),
+		"\"Matrix([3.000000000000, 6.000000000000], [9.000000000000, 12.000000000000])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (scale_to) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([$1.,$2.],[$3.,$4.]);"
+			"m1.scale_to($12);"
+			"return(string(m1));"
+			"}"
+		),
+		"\"Matrix([$3, $6], [$9, $12])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (det) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([1.,2.],[3.,4.]);"
 			"return(m1.det());"
 			"}"
 		),
-		"4.000000000000"
+		"-2.000000000000"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix failed",
+		"Mathematics.matrix (det) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
 			"m1=math.matrix([$1,$2],[$3,$4]);"
-			"m2=math.matrix([$9,$8],[$7,$6]);"
-			"m1*=m2;"
 			"return(m1.det());"
 			"}"
 		),
-		"$4.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004"
+		"$-2"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (set/get) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix(real,2,2);"
+			"m1.set(0,0,1.);"
+			"m1.set(0,1,2.);"
+			"m1.set(1,0,3.);"
+			"m1.set(1,1,4.);"
+			"m1.scale(m1.get(0,1));"
+			"return(string(m1));"
+			"}"
+		),
+		"\"Matrix([2.000000000000, 4.000000000000], [6.000000000000, 8.000000000000])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (set/get) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix(number,2,2);"
+			"m1.set(0,0,$1.);"
+			"m1.set(0,1,$2.);"
+			"m1.set(1,0,$3.);"
+			"m1.set(1,1,$4.);"
+			"m1.scale(m1.get(0,1));"
+			"return(string(m1));"
+			"}"
+		),
+		"\"Matrix([$2, $4], [$6, $8])\""
 	);
 TUT_TEARDOWN()
 
