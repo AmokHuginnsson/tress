@@ -745,6 +745,13 @@ TUT_UNIT_TEST( "replace(pos, len, str)" )
 	s.replace( 7, 4, "psa" );
 	ENSURE_EQUALS( "bad lenght", s.get_length(), origLen - 1 );
 	ENSURE_EQUALS( "bad content", s, "Ala ma psa." );
+	HString uri( "%4f%6b" );
+	char c( 'O' );
+	uri.replace( 0, 3, &c, 1 );
+	c = 'k';
+	uri.replace( 1, 3, &c, 1 );
+	ENSURE_EQUALS( "replace( pos, len, to, to_len ) failed", uri, "Ok" );
+	ENSURE_THROW( "bad ren in replace accepted", uri.replace( 0, 3, &c, 1 ), HStringException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "append( HString ... )" )
