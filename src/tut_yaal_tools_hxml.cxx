@@ -137,8 +137,9 @@ inline bool operator != ( HXml const& left, HXml const& right ) {
 }
 
 inline std::ostream& operator << ( std::ostream& out, HXml const& xml ) {
-	for ( HXml::const_entity_iterator it( xml.entity_begin() ), end( xml.entity_end() ); it != end; ++ it )
-		out << "@: " << it->first << "=>" << it->second << std::endl;
+	for ( HXml::entities_t::value_type const& ent : xml.entities() ) {
+		out << "@: " << ent.first << "=>" << ent.second << std::endl;
+	}
 	return ( tut_yaal_tools_hxml::dump( out, xml.get_root() ) );
 }
 }
