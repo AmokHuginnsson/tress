@@ -244,24 +244,45 @@ TUT_UNIT_TEST( "input float" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "outputs" )
-	HStringStream ss;
-	ss << 3.141592653589793L;
-	ENSURE_EQUALS( "double long output failed", ss.string(), "3.14159265359" );
-	ss.clear();
-	ss << 3.14159;
-	ENSURE_EQUALS( "double output failed", ss.string(), "3.14159" );
-	ss.clear();
-	ss << 3.14f;
-	ENSURE_EQUALS( "float output failed", ss.string(), "3.14" );
-	ss.clear();
-	ss << 18446744073709551615ULL;
-	ENSURE_EQUALS( "unsigned long long int output failed", ss.string(), "18446744073709551615" );
-	ss.clear();
-	ss << 4294967295UL;
-	ENSURE_EQUALS( "unsigned long int output failed", ss.string(), "4294967295" );
-	ss.clear();
-	ss << static_cast<char unsigned>( 'a' );
-	ENSURE_EQUALS( "char unsigned output failed", ss.string(), "a" );
+	_ss << 'a';
+	ENSURE_EQUALS( "char output failed", data(), "a" );
+	_ss << static_cast<char unsigned>( 'a' );
+	ENSURE_EQUALS( "char unsigned output failed", data(), "a" );
+	_ss << static_cast<short int>( 12345 );
+	ENSURE_EQUALS( "short int output failed", data(), "12345" );
+	_ss << static_cast<short int unsigned>( 54321 );
+	ENSURE_EQUALS( "short int unsigned output failed", data(), "54321" );
+	_ss << static_cast<int>( 2147483647 );
+	ENSURE_EQUALS( "int output failed", data(), "2147483647" );
+	_ss << static_cast<int unsigned>( 4294967295 );
+	ENSURE_EQUALS( "int unsigned output failed", data(), "4294967295" );
+#if SIZEOF_INT_LONG == 8
+	_ss << static_cast<int long>( 9223372036854775807L );
+	ENSURE_EQUALS( "long int output failed", data(), "9223372036854775807" );
+	_ss << static_cast<int long unsigned>( 18446744073709551615LLU );
+	ENSURE_EQUALS( "long int unsigned output failed", data(), "18446744073709551615" );
+#else
+	_ss << static_cast<int>( 2147483647 );
+	ENSURE_EQUALS( "long int output failed", data(), "2147483647" );
+	_ss << static_cast<int unsigned>( 4294967295 );
+	ENSURE_EQUALS( "long int unsigned output failed", data(), "4294967295" );
+#endif
+	_ss << static_cast<int long long>( 9223372036854775807L );
+	ENSURE_EQUALS( "long long int output failed", data(), "9223372036854775807" );
+	_ss << static_cast<int long long unsigned>( 18446744073709551615LLU );
+	ENSURE_EQUALS( "unsigned long long int output failed", data(), "18446744073709551615" );
+	_ss << 3.141592653589793L;
+	ENSURE_EQUALS( "double long output failed", data(), "3.14159265359" );
+	_ss << 3.14159;
+	ENSURE_EQUALS( "double output failed", data(), "3.14159" );
+	_ss << 3.14f;
+	ENSURE_EQUALS( "float output failed", data(), "3.14" );
+	_ss << "Ala ma kota";
+	ENSURE_EQUALS( "char const* output failed", data(), "Ala ma kota" );
+	_ss << "Ala ma kota"_ys;
+	ENSURE_EQUALS( "HString output failed", data(), "Ala ma kota" );
+	_ss << static_cast<void*>( nullptr );
+	ENSURE_EQUALS( "HString output failed", data(), "0x0" );
 TUT_TEARDOWN()
 
 }
