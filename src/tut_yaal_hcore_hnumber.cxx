@@ -1395,6 +1395,26 @@ TUT_UNIT_TEST( "arcus_cotangens<HNumber>()" )
 	ENSURE_EQUALS( "arcus_cotangens( 1000000000000000000 ) failed", arcus_cotangens( "1000000000000000000"_yn ), HNumber( "0.0000000000000000009999999999999999999999999999999999996666666666666666666666666666666666668666666667" ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "hyperbolic_sinus<HNumber>()" )
+	ENSURE_EQUALS( "hyperbolic_sinus( 0 ) failed", hyperbolic_sinus( number::N0 ), number::N0 );
+	ENSURE_EQUALS( "hyperbolic_sinus( 1 ) failed", hyperbolic_sinus( number::N1 ), "1.1752011936438014568823818505956008151557179813340958702295654130133075673043238956071174520896233918" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "hyperbolic_cosinus<HNumber>()" )
+	ENSURE_EQUALS( "hyperbolic_cosinus( 0 ) failed", hyperbolic_cosinus( number::N0 ), number::N1 );
+	ENSURE_EQUALS( "hyperbolic_cosinus( 1 ) failed", hyperbolic_cosinus( number::N1 ), "1.5430806348152437784779056207570616826015291123658637047374022147107690630492236989642647264355430356" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "hyperbolic_tangens<HNumber>()" )
+	ENSURE_EQUALS( "hyperbolic_tangens( 0 ) failed", hyperbolic_tangens( number::N0 ), number::N0 );
+	ENSURE_EQUALS( "hyperbolic_tangens( 1 ) failed", hyperbolic_tangens( number::N1 ), "0.7615941559557648881194582826047935904127685972579365515968105001219532445766384834589475216736767144" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "hyperbolic_cotangens<HNumber>()" )
+	ENSURE_EQUALS( "hyperbolic_cotangens( 1 ) failed", hyperbolic_cotangens( number::N1 ), "1.3130352854993313036361612469308478329120139412404526555431529675670842704618743826746792414808563029" );
+	ENSURE_EQUALS( "hyperbolic_cotangens( 0.00001 ) failed", hyperbolic_cotangens( "0.00001"_yn ), "100000.0000033333333333111111111113227513227492063492063705841483617096992758390345691932771374207210050689" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "factorial<HNumber>()" )
 	ENSURE_EQUALS( "bad 52! factorial", number::factorial( 52 ), HNumber( "80658175170943878571660636856403766975289505440883277824000000000000" ) );
 TUT_TEARDOWN()
@@ -1692,12 +1712,6 @@ TUT_TEARDOWN()
 #if 0
 
 TUT_UNIT_TEST( "pow<HNumber>()" )
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "sinh<HNumber>()" )
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "tanh<HNumber>()" )
 TUT_TEARDOWN()
 #endif
 
