@@ -228,6 +228,14 @@ TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.arcus_tangens failed", execute( "import Mathematics as math;main(){return(math.arcus_tangens($7));}" ), "$1.4288992721907326964184700745371983590908029409590888381093422667904665763831733383698255510368120159" );
 	ENSURE_EQUALS( "Mathematics.arcus_cotangens failed", execute( "import Mathematics as math;main(){return(math.arcus_cotangens(7.));}" ), "0.141897054604" );
 	ENSURE_EQUALS( "Mathematics.arcus_cotangens failed", execute( "import Mathematics as math;main(){return(math.arcus_cotangens($7));}" ), "$0.1418970546041639228128516171025530830077817587284640723781300293634416267599311609441918616342465181" );
+	ENSURE_EQUALS( "Mathematics.hyperbolic_sinus failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_sinus(7.0));}" ), "548.316123273247" );
+	ENSURE_EQUALS( "Mathematics.hyperbolic_sinus failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_sinus($7));}" ), "$548.3161232732465223737561175760185115797963305545428538644492123213499399256719093579746212541216894908" );
+	ENSURE_EQUALS( "Mathematics.hyperbolic_cosinus failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_cosinus(7.0));}" ), "548.317035155212" );
+	ENSURE_EQUALS( "Mathematics.hyperbolic_cosinus failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_cosinus($7));}" ), "$548.3170351552120768899641207121029208624228042790702899182900284547718294055612196645039475331281543912" );
+	ENSURE_EQUALS( "Mathematics.hyperbolic_tangens failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_tangens(7.));}" ), "0.999998336944" );
+	ENSURE_EQUALS( "Mathematics.hyperbolic_tangens failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_tangens($7));}" ), "$0.9999983369439446717357164159506671128820569920922747109692404742809110481696115057511479211747076493" );
+	ENSURE_EQUALS( "Mathematics.hyperbolic_cotangens failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_cotangens(7.));}" ), "1.000001663059" );
+	ENSURE_EQUALS( "Mathematics.hyperbolic_cotangens failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_cotangens($7));}" ), "$1.0000016630588210883070615776102514764913523331922228239871821889401302787085050299163985440938683564" );
 	ENSURE_EQUALS( "Mathematics.round failed", execute( "import Mathematics as math;main(){return(math.round(7.1234));}" ), "7.000000000000" );
 	ENSURE_EQUALS( "Mathematics.round failed", execute( "import Mathematics as math;main(){return(math.round($7.123456,3));}" ), "$7.123" );
 	ENSURE_EQUALS( "Mathematics.round failed", execute( "import Mathematics as math;main(){try{math.round(7.1234, 3);}catch(MathematicsException e){return(e.what());}}" ), "\"rounding to nth place on real is not supported\"" );
