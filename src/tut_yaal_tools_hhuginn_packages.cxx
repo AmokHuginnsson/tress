@@ -431,6 +431,50 @@ TUT_UNIT_TEST( "Mathematics" )
 		),
 		"\"Matrix([$2, $4], [$6, $8])\""
 	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix rows failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m=math.matrix(real,3,2);"
+			"return(m.rows());"
+			"}"
+		),
+		"3"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix rows failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m=math.matrix(number,3,2);"
+			"return(m.rows());"
+			"}"
+		),
+		"3"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix columns failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m=math.matrix(real,3,2);"
+			"return(m.columns());"
+			"}"
+		),
+		"2"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix columns failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m=math.matrix(number,3,2);"
+			"return(m.columns());"
+			"}"
+		),
+		"2"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Database" )
