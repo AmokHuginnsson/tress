@@ -1415,6 +1415,12 @@ TUT_UNIT_TEST( "hyperbolic_cotangens<HNumber>()" )
 	ENSURE_EQUALS( "hyperbolic_cotangens( 0.00001 ) failed", hyperbolic_cotangens( "0.00001"_yn ), "100000.0000033333333333111111111113227513227492063492063705841483617096992758390345691932771374207210050689" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "sigmoid<HNumber>()" )
+	ENSURE_EQUALS( "sigmoid( 0 ) failed", sigmoid( number::N0 ), number::N0_5 );
+	ENSURE_EQUALS( "sigmoid( 1000 ) failed", sigmoid( 1000_yn ), "1" );
+	ENSURE_EQUALS( "sigmoid( -1000 ) failed", sigmoid( -1000_yn ), "0" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "factorial<HNumber>()" )
 	ENSURE_EQUALS( "bad 52! factorial", number::factorial( 52 ), HNumber( "80658175170943878571660636856403766975289505440883277824000000000000" ) );
 TUT_TEARDOWN()
