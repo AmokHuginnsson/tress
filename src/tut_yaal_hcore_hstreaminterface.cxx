@@ -244,6 +244,14 @@ TUT_UNIT_TEST( "input float" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "outputs" )
+	_ss << true;
+	ENSURE_EQUALS( "bool output failed", data(), "1" );
+	_ss << boolalpha << true;
+	ENSURE_EQUALS( "bool output failed", data(), "true" );
+	_ss << noboolalpha << false;
+	ENSURE_EQUALS( "bool output failed", data(), "0" );
+	_ss << boolalpha << false;
+	ENSURE_EQUALS( "bool output failed", data(), "false" );
 	_ss << 'a';
 	ENSURE_EQUALS( "char output failed", data(), "a" );
 	_ss << static_cast<char unsigned>( 'a' );
@@ -283,6 +291,85 @@ TUT_UNIT_TEST( "outputs" )
 	ENSURE_EQUALS( "HString output failed", data(), "Ala ma kota" );
 	_ss << static_cast<void*>( nullptr );
 	ENSURE_EQUALS( "HString output failed", data(), "0x0" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "inputs" )
+#if SIZEOF_INT_LONG == 8
+	_ss << "true false ol 32767 32768 32768 2147483647 2147483648 2147483648 9223372036854775807 9223372036854775808 9223372036854775808 9223372036854775807 9223372036854775808 9223372036854775808 3.1415 2.7182828 1.414213562373 Ala+ma|kota; 0x1234";
+#else
+	_ss << "true false ol 32767 32768 32768 2147483647 2147483648 2147483648 2147483647 2147483648 2147483648 9223372036854775807 9223372036854775808 9223372036854775808 3.1415 2.7182818 1.414213562373 Ala+ma|kota; 0x1234";
+#endif
+	bool b( false );
+	_ss >> b;
+	ENSURE( "bool input failed", b );
+	_ss >> b;
+	ENSURE_NOT( "bool input failed", b );
+	char c( 0 );
+	_ss >> c;
+	ENSURE_EQUALS( "char input failed", c, 'o' );
+	char unsigned cu( 0 );
+	_ss >> cu;
+	ENSURE_EQUALS( "char unsigned input failed", cu, 'l' );
+	int short is( 0 );
+	_ss >> is;
+	ENSURE_EQUALS( "int short input failed", is, 32767 );
+	ENSURE_THROW( "data clobbered", _ss >> is, HOutOfRangeException );
+	int short unsigned isu( 0 );
+	_ss >> isu;
+	ENSURE_EQUALS( "int short unsigned input failed", isu, 32768 );
+	int i( 0 );
+	_ss >> i;
+	ENSURE_EQUALS( "int input failed", i, 2147483647 );
+	ENSURE_THROW( "data clobbered", _ss >> i, HOutOfRangeException );
+	int unsigned iu( 0 );
+	_ss >> iu;
+	ENSURE_EQUALS( "int unsigned input failed", iu, 2147483648u );
+
+#if SIZEOF_INT_LONG == 8
+	int long il( 0 );
+	_ss >> il;
+	ENSURE_EQUALS( "int long input failed", il, 9223372036854775807LL );
+	ENSURE_THROW( "data clobbered", _ss >> il, HOutOfRangeException );
+	int long unsigned ilu( 0 );
+	_ss >> ilu;
+	ENSURE_EQUALS( "int long unsigned input failed", ilu, 9223372036854775808ULL );
+#else
+	int long il( 0 );
+	_ss >> il;
+	ENSURE_EQUALS( "int long input failed", il, 2147483647 );
+	ENSURE_THROW( "data clobbered", _ss >> il, HOutOfRangeException );
+	int long unsigned ilu( 0 );
+	_ss >> ilu;
+	ENSURE_EQUALS( "int long unsigned input failed", ilu, 2147483648u );
+#endif
+
+	int long long ill( 0 );
+	_ss >> ill;
+	ENSURE_EQUALS( "int long long input failed", ill, 9223372036854775807LL );
+	ENSURE_THROW( "data clobbered", _ss >> ill, HOutOfRangeException );
+	int long long unsigned illu( 0 );
+	_ss >> illu;
+	ENSURE_EQUALS( "int long long unsigned input failed", illu, 9223372036854775808ULL );
+
+	float f( 0 );
+	_ss >> f;
+	ENSURE_DISTANCE( "float input failed", f, 3.1415f, static_cast<float>( epsilon ) );
+
+	double d( 0 );
+	_ss >> d;
+	ENSURE_DISTANCE( "double input failed", d, 2.7182818, static_cast<double>( epsilon ) );
+
+	double long dl( 0 );
+	_ss >> dl;
+	ENSURE_DISTANCE( "double long input failed", dl, 1.414213562373L, epsilon );
+
+	HString s;
+	_ss >> s;
+	ENSURE_EQUALS( "HString input failed", s, "Ala+ma|kota;" );
+
+	void const* p( nullptr );
+	_ss >> hex >>  p;
+	ENSURE_EQUALS( "pointer input failed", p, reinterpret_cast<void*>( static_cast<size_t>( 0x1234 ) ) );
 TUT_TEARDOWN()
 
 }
