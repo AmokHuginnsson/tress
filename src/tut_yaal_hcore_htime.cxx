@@ -400,6 +400,19 @@ TUT_UNIT_TEST( "mod_second" )
 	ENSURE_EQUALS( "bad week day", bday.get_day_of_week(), HTime::DAY_OF_WEEK::WEDNESDAY );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "swap" )
+	HTime const ts1( HTime::TZ::LOCAL, 1978, 5, 24, 23, 30, 0, _iso8601DateTimeFormat_ );
+	HTime const ts2( HTime::TZ::UTC, 1989, 8, 25, 14, 17, 52, _rfc2822DateTimeFormat_ );
+	HTime t1( ts1 );
+	HTime t2( ts2 );
+	ENSURE_EQUALS( "copy ctor failed", t1, ts1 );
+	ENSURE_EQUALS( "copy ctor failed", t2, ts2 );
+	using yaal::swap;
+	swap( t1, t2 );
+	ENSURE_EQUALS( "swap failed", t1, ts2 );
+	ENSURE_EQUALS( "swap failed", t2, ts1 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "epoch" )
 	HTime epoch( HTime::TZ::UTC, 0, 1, 1, 0, 0, 0 );
 	HTime epochRaw( HTime::TZ::UTC, 0LL, _iso8601DateTimeFormat_ );
