@@ -75,12 +75,19 @@ TUT_UNIT_TEST( "bad order of params" )
 	ENSURE_THROW( "incorrect arg type accepted", f % 8 % PI % 3, HFormatException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "reuse of format" )
+TUT_UNIT_TEST( "rebind of format" )
 	HFormat f( "[%.15Lf]" );
 	f % PI;
 	ENSURE_EQUALS( "bad format output", f.string(), "[3.141592653589793]" );
 	f % E;
 	ENSURE_EQUALS( "bad format output", f.string(), "[2.718281828459045]" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "reuse of format" )
+	HFormat f( "[%.15Lf]" );
+	f % PI;
+	ENSURE_EQUALS( "bad format output", f.string(), "[3.141592653589793]" );
+	ENSURE_EQUALS( "bad format output", f.string(), "[3.141592653589793]" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "int long long" )
@@ -181,6 +188,21 @@ TUT_UNIT_TEST( "well-formed format tests [%2$*1$.*3$s]" )
 TUT_TEARDOWN()
 TUT_UNIT_TEST( "well-formed format tests [%2$*1$.*3$s]" )
 	ENSURE_EQUALS( "bad format output", ( HFormat( "[%2$*1$.*3$s]" ) % 8 % STR % 30 ).string(), "[     ala]" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "swap" )
+	HFormat f1( "%s ma kota, %d lat, %f wagi, %Lf d³ugi, ze z³otym '%c' na obró¿ce, wart %lld!" );
+	f1 % "Ala" % 5 % 3.1415 % 2.718281828459045L % 'K' % meta::max_signed<int long long>::value;
+	char const o1[] = "Ala ma kota, 5 lat, 3.141500 wagi, 2.718282 d³ugi, ze z³otym 'K' na obró¿ce, wart 9223372036854775807!";
+	ENSURE_EQUALS( "format failed", f1.string(), o1 );
+	HFormat f2( "num char %hhd, num uchar %hhu, int short %hi, int short unsigned %hu, int long long %qd" );
+	f2 % 'a' % 'ó' % static_cast<int short>( 32767 ) % static_cast<int short unsigned>( 54321 ) % 1234567890123456789LL;
+	char const o2[] = "num char 97, num uchar 243, int short 32767, int short unsigned 54321, int long long 1234567890123456789";
+	ENSURE_EQUALS( "format failed", f2.string(), o2 );
+	using yaal::swap;
+	swap( f1, f2 );
+	ENSURE_EQUALS( "format failed", f1.string(), o2 );
+	ENSURE_EQUALS( "format failed", f2.string(), o1 );
 TUT_TEARDOWN()
 
 }
