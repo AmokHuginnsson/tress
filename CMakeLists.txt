@@ -16,7 +16,7 @@ endif()
 
 use_cxx_compiler_flag( -Wno-missing-noreturn )
 find_package( Boost COMPONENTS filesystem date_time system REQUIRED )
-find_package( Yaal COMPONENTS hcore tools dbwrapper hconsole REQUIRED )
+find_package( Yaal COMPONENTS hcore tools dbwrapper hconsole hdata REQUIRED )
 
 check_cxx_source_compiles( "
 #ifdef __GNUC__
@@ -37,6 +37,13 @@ int main( int, char** )
 " HAVE_SGI_STL_EXTENSIONS )
 
 check_symbol_exists( RTLD_NEXT dlfcn.h HAVE_DECL_RTLD_NEXT )
+set( CMAKE_EXTRA_INCLUDE_FILES_ORIG "${CMAKE_EXTRA_INCLUDE_FILES}" )
+set( CMAKE_EXTRA_INCLUDE_FILES "ncurses.h" )
+check_type_size( "chtype" CHTYPE )
+set( CMAKE_EXTRA_INCLUDE_FILES "${CMAKE_EXTRA_INCLUDE_FILES_ORIG}" )
+if ( HAVE_CHTYPE )
+	set( SIZEOF_CHTYPE ${CHTYPE} )
+endif()
 
 include_directories( . )
 configure_file( ../yaal/_aux/cmake/client-config.hxx ${TARGET_PATH}/config.hxx )
