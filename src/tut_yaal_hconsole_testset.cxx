@@ -51,7 +51,7 @@ HTestSet::HTestSet( HDataBase::ptr_t dataBase_ )
 HTestSet::~HTestSet ( void ) {
 	M_PROLOG
 	return;
-	M_EPILOG
+	M_DESTRUCTOR_EPILOG
 }
 
 void HTestSet::sync( void ) {

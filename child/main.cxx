@@ -89,21 +89,21 @@ int main( int argc_, char* argv_[] ) {
 		if ( !! setup._terminate ) {
 			typedef HMap<HString, int> str2int_dict_t;
 			str2int_dict_t signalNames;
-			signalNames.insert( make_pair<char const* const>( "ALRM", SIGALRM ) );
-			signalNames.insert( make_pair<char const* const>( "HUP", SIGHUP ) );
-			signalNames.insert( make_pair<char const* const>( "INT", SIGINT ) );
-			signalNames.insert( make_pair<char const* const>( "KILL", SIGKILL ) );
-			signalNames.insert( make_pair<char const* const>( "PIPE", SIGPIPE ) );
-			signalNames.insert( make_pair<char const* const>( "TERM", SIGTERM ) );
-			signalNames.insert( make_pair<char const* const>( "TSTP", SIGTSTP ) );
-			signalNames.insert( make_pair<char const* const>( "CONT", SIGCONT ) );
-			signalNames.insert( make_pair<char const* const>( "CHLD", SIGCHLD ) );
-			signalNames.insert( make_pair<char const* const>( "ABRT", SIGABRT ) );
-			signalNames.insert( make_pair<char const* const>( "ILL", SIGILL ) );
-			signalNames.insert( make_pair<char const* const>( "FPE", SIGFPE ) );
-			signalNames.insert( make_pair<char const* const>( "QUIT", SIGQUIT ) );
-			signalNames.insert( make_pair<char const* const>( "TRAP", SIGTRAP ) );
-			signalNames.insert( make_pair<char const* const>( "SEGV", SIGSEGV ) );
+			signalNames.insert( make_pair( "ALRM", SIGALRM ) );
+			signalNames.insert( make_pair( "HUP", SIGHUP ) );
+			signalNames.insert( make_pair( "INT", SIGINT ) );
+			signalNames.insert( make_pair( "KILL", SIGKILL ) );
+			signalNames.insert( make_pair( "PIPE", SIGPIPE ) );
+			signalNames.insert( make_pair( "TERM", SIGTERM ) );
+			signalNames.insert( make_pair( "TSTP", SIGTSTP ) );
+			signalNames.insert( make_pair( "CONT", SIGCONT ) );
+			signalNames.insert( make_pair( "CHLD", SIGCHLD ) );
+			signalNames.insert( make_pair( "ABRT", SIGABRT ) );
+			signalNames.insert( make_pair( "ILL", SIGILL ) );
+			signalNames.insert( make_pair( "FPE", SIGFPE ) );
+			signalNames.insert( make_pair( "QUIT", SIGQUIT ) );
+			signalNames.insert( make_pair( "TRAP", SIGTRAP ) );
+			signalNames.insert( make_pair( "SEGV", SIGSEGV ) );
 			str2int_dict_t::const_iterator it = signalNames.find( setup._terminate );
 			if ( it != signalNames.end() )
 				hcore::system::kill( hcore::system::getpid(), it->second );

@@ -376,10 +376,11 @@ int handle_program_options( int argc_, char** argv_ ) {
 			setup._testGroups.push_back( testFilter );
 	}
 	if ( setup._debug ) {
-		log << "arguments:";
-		for ( int i( 0 ); i < argc_; ++ i )
-			log << " " << argv_[i];
-		log << endl;
+		hcore::log << "arguments:";
+		for ( int i( 0 ); i < argc_; ++ i ) {
+			hcore::log << " " << argv_[i];
+		}
+		hcore::log << endl;
 	}
 	setup._argc = ( argc_ - nonOption ) + 1;
 	setup._argv = argv_ + nonOption - 1;

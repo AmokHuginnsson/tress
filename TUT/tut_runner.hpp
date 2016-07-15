@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <map>
 
 #include <yaal/tools/hworkflow.hxx>

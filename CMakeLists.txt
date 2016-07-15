@@ -1,6 +1,8 @@
-cmake_minimum_required( VERSION 2.8 )
+cmake_minimum_required( VERSION 3.4 )
+set( CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../yaal/_aux/cmake ${CMAKE_MODULE_PATH} )
 project( tress CXX )
-include( ../yaal/_aux/cmake/common.cmake )
+include( lib )
+include( common )
 
 if ( NOT ( "$ENV{BOOST_INSTALL_PATH}" STREQUAL "" ) )
 	set( BOOST_ROOT "$ENV{BOOST_INSTALL_PATH}" )
@@ -12,9 +14,12 @@ if ( CMAKE_HOST_WIN32 )
 	add_definitions( /D_ALLOW_KEYWORD_MACROS=1 )
 	include_directories( ${BOOST_ROOT}/include )
 	link_directories( ${BOOST_ROOT}/lib )
+else()
+	use_cxx_compiler_flag( -Wno-missing-noreturn )
+	use_cxx_compiler_flag( -Wl,--export-dynamic )
+	use_cxx_compiler_flag( -rdynamic )
 endif()
 
-use_cxx_compiler_flag( -Wno-missing-noreturn )
 find_package( Boost COMPONENTS filesystem date_time system REQUIRED )
 find_package( Yaal COMPONENTS hcore tools dbwrapper hconsole hdata REQUIRED )
 
@@ -84,7 +89,7 @@ if ( CMAKE_HOST_WIN32 )
 	set_target_properties( child-simple PROPERTIES LINKER_LANGUAGE CXX OUTPUT_NAME child RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_HOME_DIRECTORY}/data )
 	set_target_properties( tressplugin PROPERTIES OUTPUT_NAME tressplugin${LIB_INFIX} LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_HOME_DIRECTORY}/data )
 	set_target_properties( child PROPERTIES COMPILE_DEFINITIONS "_SIGNAL_H=1" )
-	set_source_files_properties( ${CHILD_SRCS} PROPERTIES COMPILE_FLAGS "/FIglibc/bits/signum.h /FIyaal/fix.hxx" )
+	set_source_files_properties( ${CHILD_SRCS} PROPERTIES COMPILE_FLAGS "/FI../yaal/_aux/msvcxx/csignal /FIyaal/fix.hxx" )
 	target_link_libraries( ${PROJECT_NAME} ${Yaal_LIBRARIES} libintl )
 	target_link_libraries( child ${Yaal_LIBRARIES} libintl )
 
@@ -127,6 +132,9 @@ if ( CMAKE_HOST_WIN32 )
 
 	file( GLOB mkheaders_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/mkheaders.vc*proj )
 	include_external_msproject( mkheaders ${mkheaders_PROJ} )
+
+	file( GLOB update_commit_id_PROJ RELATIVE ${CMAKE_HOME_DIRECTORY} ../yaal/update-commit-id.vc*proj )
+	include_external_msproject( update-commit-id ${update_commit_id_PROJ} )
 
 	file( RELATIVE_PATH TARGET_PATH_RELATIVE ${CMAKE_HOME_DIRECTORY} ${TARGET_PATH} )
 	set( INSTALLED_HEADER "${CMAKE_INSTALL_PREFIX}/include/yaal/yaal.hxx" )

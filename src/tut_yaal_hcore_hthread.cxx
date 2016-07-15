@@ -77,7 +77,7 @@ HCool::~HCool( void ) {
 	M_PROLOG
 	cout << "Object [" << _name << "] destructed." << endl;
 	return;
-	M_EPILOG
+	M_DESTRUCTOR_EPILOG
 }
 
 namespace {

@@ -37,6 +37,13 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
+#ifdef __MSVCXX__
+inline struct tm *gmtime_r(const time_t *timep, struct tm *result) {
+	gmtime_s( result, timep );
+	return ( result );
+}
+#endif /* #ifdef __MSVCXX__ */
+
 namespace yaal {
 
 namespace hcore {

@@ -60,7 +60,7 @@ HTestWindow::HTestWindow( const char* title_, yaal::dbwrapper::HDataBase::ptr_t 
 HTestWindow::~HTestWindow ( void ) {
 	M_PROLOG
 	return;
-	M_EPILOG
+	M_DESTRUCTOR_EPILOG
 }
 
 void HTestWindow::do_init( void ) {

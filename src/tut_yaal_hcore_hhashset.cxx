@@ -24,12 +24,7 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#undef __DEPRECATED
-#if defined( __GNUC__ ) && ( ( __GNUC__ == 4 ) && ( __GNUC_MINOR__ <= 2 ) )
-#include <ext/hash_set>
-#else /* #if defined( __GNUC__ ) && ( ( __GNUC__ == 4 ) && ( __GNUC_MINOR__ <= 2 ) ) */
-#include <hash_set>
-#endif /* #else #if defined( __GNUC__ ) && ( ( __GNUC__ == 4 ) && ( __GNUC_MINOR__ <= 2 ) ) */
+#include <unordered_set>
 
 #include <TUT/tut.hpp>
 
@@ -173,7 +168,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "speed test" )
 	TIME_CONSTRAINT_EXEMPT();
-	typedef stdext::hash_set<int> proto_t;
+	typedef std::unordered_set<int> proto_t;
 	typedef HHashSet<int> hashset_type;
 	proto_t proto;
 	hashset_type hashset;
@@ -183,7 +178,7 @@ TUT_UNIT_TEST( 50, "speed test" )
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
 			proto.insert( static_cast<int>( i ) );
-		clog << "*speed* std::hash_set<>::insert() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
+		clog << "*speed* std::unordered_set<>::insert() = " << static_cast<int long>( st = static_cast<int long>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) ) << endl;
 	} {
 		HClock c;
 		for ( int long i( 0 ); i < LOOPS; ++ i )
