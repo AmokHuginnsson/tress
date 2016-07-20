@@ -47,6 +47,7 @@ Copyright:
 #include <yaal/tools/streamtools.hxx>
 #include <yaal/tools/hterminal.hxx>
 #include <yaal/tools/signals.hxx>
+#include <yaal/tools/hthreadpool.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 
 #include "setup.hxx"
@@ -80,7 +81,8 @@ tut::test_runner::test_sets_t prepare_testsets( OSetup::set_definitions_t const&
 
 M_EXPORT_SYMBOL
 int main( int argc_, char* argv_[] ) {
-	HScopeExitCall sec( call( &HSignalService::stop, &HSignalService::get_instance() ) );
+	HScopeExitCall secTP( call( &HThreadPool::stop, &HThreadPool::get_instance() ) );
+	HScopeExitCall secSS( call( &HSignalService::stop, &HSignalService::get_instance() ) );
 	M_PROLOG
 	init_locale( PACKAGE_NAME );
 	HClock clk;
