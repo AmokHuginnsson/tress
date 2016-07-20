@@ -186,6 +186,9 @@ void OSetup::test_setup( void ) {
 		}
 #endif /* #ifdef __TRESS__ */
 	}
+	if ( _debug ) {
+		HLog::_logLevel = LOG_LEVEL::DEBUG;
+	}
 	char const* CLOCK_QUALITY_MULTIPLIER( ::getenv( "TRESS_CLOCK_QUALITY_MULTIPLIER" ) );
 	if ( CLOCK_QUALITY_MULTIPLIER ) {
 		_clockQualityMultiplier = lexical_cast<int>( CLOCK_QUALITY_MULTIPLIER );
