@@ -115,7 +115,7 @@ HString tut_yaal_hcore_hnumber::read_result( void ) {
 	HString result;
 	do {
 		line.clear();
-		_bc.out().read_until( line );
+		getline( _bc.out(), line );
 		result += line;
 		result.trim( "\\" );
 	} while ( ! line.is_empty() && ( line[line.get_length() - 1] == '\\' ) );
