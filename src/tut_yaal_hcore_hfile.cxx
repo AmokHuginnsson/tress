@@ -44,33 +44,53 @@ TUT_TEST_GROUP( tut_yaal_hcore_hfile, "yaal::hcore::HFile" );
 TUT_UNIT_TEST( "HFile::READ::UNBUFFERED_READS (nl)" )
 	HFile in( "./data/nl.txt", HFile::OPEN::READING );
 	HString line;
+	HString res;
+	int lineCount( 0 );
 	while ( in.read_line( line,	HFile::READ::UNBUFFERED_READS ) >= 0 ) {
-		cout << line << endl;
+		res.append( line );
+		++ lineCount;
 	}
+	ENSURE_EQUALS( "unbuffered reads nl failed", res, "Alamakota." );
+	ENSURE_EQUALS( "bad line count for unbuffered reads nl", lineCount, 4 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HFile::READ::UNBUFFERED_READS (crnl)" )
 	HFile in( "./data/crnl.txt", HFile::OPEN::READING );
 	HString line;
+	HString res;
+	int lineCount( 0 );
 	while ( in.read_line( line,	HFile::READ::UNBUFFERED_READS ) >= 0 ) {
-		cout << line << endl;
+		res.append( line );
+		++ lineCount;
 	}
+	ENSURE_EQUALS( "unbuffered reads crnl failed", res, "Alamakota." );
+	ENSURE_EQUALS( "bad line count for unbuffered reads crnl", lineCount, 4 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HFile::READ::BUFFERED_READS (nl)" )
 	HFile in( "./data/nl.txt", HFile::OPEN::READING );
 	HString line;
+	HString res;
+	int lineCount( 0 );
 	while ( in.read_line( line,	HFile::READ::BUFFERED_READS ) >= 0 ) {
-		cout << line << endl;
+		res.append( line );
+		++ lineCount;
 	}
+	ENSURE_EQUALS( "buffered reads nl failed", res, "Alamakota." );
+	ENSURE_EQUALS( "bad line count for buffered reads nl", lineCount, 4 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HFile::READ::BUFFERED_READS (crnl)" )
 	HFile in( "./data/crnl.txt", HFile::OPEN::READING );
 	HString line;
+	HString res;
+	int lineCount( 0 );
 	while ( in.read_line( line,	HFile::READ::BUFFERED_READS ) >= 0 ) {
-		cout << line << endl;
+		res.append( line );
+		++ lineCount;
 	}
+	ENSURE_EQUALS( "buffered reads crnl failed", res, "Alamakota." );
+	ENSURE_EQUALS( "bad line count for buffered reads crnl", lineCount, 4 );
 TUT_TEARDOWN()
 
 }
