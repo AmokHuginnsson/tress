@@ -114,11 +114,7 @@ TUT_UNIT_TEST( "well-formed format tests [%.8Lf]" )
 	ENSURE_EQUALS( "bad format output", ( HFormat( "[%.8Lf]" ) % PI ).string(), "[3.14159265]" );
 TUT_TEARDOWN()
 TUT_UNIT_TEST( "well-formed format tests [%.20Lf]" )
-#ifdef __MSVCXX__
-	ENSURE_EQUALS( "bad format output", ( HFormat( "[%.20Lf]" ) % PI ).string(), "[3.14159265358979310000]" );
-#else
 	ENSURE_EQUALS( "bad format output", ( HFormat( "[%.20Lf]" ) % PI ).string(), "[3.14159265358979311600]" );
-#endif
 TUT_TEARDOWN()
 TUT_UNIT_TEST( "well-formed format tests [%15Lf]" )
 	ENSURE_EQUALS( "bad format output", ( HFormat( "[%15Lf]" ) % PI ).string(), "[       3.141593]" );
