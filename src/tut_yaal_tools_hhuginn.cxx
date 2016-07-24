@@ -778,6 +778,25 @@ TUT_UNIT_TEST( "throw,try,catch" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "catch by base" )
+	ENSURE_EQUALS(
+		"throw,try,catch failed",
+		execute(
+			"import FileSystem as fs;"
+			"main() {"
+			"v=\"\";"
+			"try {"
+			"fs.open( \"./out/non-existing\", fs.reading() );"
+			"} catch( Exception e ) {"
+			"v = e.what();"
+			"}"
+			"return ( v );"
+			"}"
+		),
+		"\"No such file or directory: ./out/non-existing\""
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "assert" )
 	/* no message */ {
 		HHuginn h;
