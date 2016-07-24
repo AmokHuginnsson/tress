@@ -173,6 +173,7 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	HSet<int> set( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
 	HMap<int, int> map;
 	HLookupMap<int, int> lookup;
+	HTime birth( 1978, 5, 24, 23, 30, 00 );
 	for ( int i( 0 ); i < 10; ++ i ) {
 		map[i] = i * i;
 		lookup[i] = i * i;
@@ -219,6 +220,7 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	cout << ring << endl;
 	cout << emptyRing << endl;
 	cout << result << endl;
+	cout << birth << endl;
 TUT_TEARDOWN()
 
 }
