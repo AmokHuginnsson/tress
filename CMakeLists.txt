@@ -183,6 +183,7 @@ else()
 		LIBRARY_OUTPUT_DIRECTORY_COV ${TARGET_PATH}/tressplugin
 		LIBRARY_OUTPUT_DIRECTORY_PROF ${TARGET_PATH}/tressplugin
 	)
+	add_dependencies( ${PROJECT_NAME} commit_id )
 	target_link_libraries( ${PROJECT_NAME} ${Yaal_LIBRARIES} ${Boost_LIBRARIES} dl )
 	target_link_libraries( child ${Yaal_LIBRARIES} )
 endif()
