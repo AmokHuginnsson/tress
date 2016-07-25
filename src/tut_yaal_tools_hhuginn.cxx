@@ -779,6 +779,11 @@ TUT_UNIT_TEST( "throw,try,catch" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "catch by base" )
+#ifdef __MSVCXX__
+	char const res[] = "\"The system cannot find the file specified.\r\n: ./out/non-existing\"";
+#else
+	char const res[] = "\"No such file or directory: ./out/non-existing\"";
+#endif
 	ENSURE_EQUALS(
 		"throw,try,catch failed",
 		execute(
@@ -793,7 +798,7 @@ TUT_UNIT_TEST( "catch by base" )
 			"return ( v );"
 			"}"
 		),
-		"\"No such file or directory: ./out/non-existing\""
+		res
 	);
 TUT_TEARDOWN()
 
