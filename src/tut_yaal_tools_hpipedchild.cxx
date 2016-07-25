@@ -28,6 +28,7 @@ Copyright:
 
 #include <yaal/tools/hpipedchild.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
+#include <yaal/tools/sleep.hxx>
 #include "tut_helpers.hxx"
 
 using namespace tut;
@@ -104,6 +105,17 @@ TUT_UNIT_TEST( "spawn, write and read (stderr)" )
 	ENSURE_EQUALS( "bad ack ERR", ack, ACK_ERR );
 	pc.finish();
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "finish after very short lived process ends" )
+	HPipedChild pc;
+	pc.spawn( CHILD );
+	pc.in() << MSG_OUT << endl;
+	HString ack;
+	while ( pc.out().read_until( ack ) > 0 ) {
+	}
+	/* Without proper fix on Cygwin this test throws exception from pc.finish() */
+	pc.finish();
 TUT_TEARDOWN()
 
 }
