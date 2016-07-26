@@ -444,14 +444,14 @@ TUT_TEARDOWN()
 #endif /* #ifndef __HOST_OS_TYPE_SOLARIS__ */
 
 TUT_UNIT_TEST( "duration" )
-#define EE( x, y ) ENSURE_EQUALS( x " failed", lexical_cast<HString>( lexical_cast<time::duration_t>( to_string( x ) ) ), y )
-#define ES( x, y, z ) ENSURE_EQUALS( x " failed for " #z, time::duration_to_string( lexical_cast<time::duration_t>( to_string( x ) ), time::UNIT::z ), y )
-	EE( "3s 4 m 5hour", "5 hours 4 minutes 3 seconds" );
-	ES( "3s 4 m 5hour", "5 hours 4 minutes", MINUTE );
-	EE( "1 sec 2 hour 3 milliseconds 4us 5min 6 nanosecond", "2 hours 5 minutes 1 second 3 milliseconds 4 microseconds 6 nanoseconds" );
-	ES( "1 sec 2 hour 3 milliseconds 4us 5min 6 nanosecond", "2 hours 5 minutes 1 second 3 milliseconds", MILLISECOND );
-#undef ES
-#undef EE
+#define ENSURE_DURATION( x, y ) ENSURE_EQUALS( x " failed", lexical_cast<HString>( lexical_cast<time::duration_t>( to_string( x ) ) ), y )
+#define ENSURE_DURATION_UNIT( x, y, z ) ENSURE_EQUALS( x " failed for " #z, time::duration_to_string( lexical_cast<time::duration_t>( to_string( x ) ), time::UNIT::z ), y )
+	ENSURE_DURATION( "3s 4 m 5hour", "5 hours 4 minutes 3 seconds" );
+	ENSURE_DURATION_UNIT( "3s 4 m 5hour", "5 hours 4 minutes", MINUTE );
+	ENSURE_DURATION( "1 sec 2 hour 3 milliseconds 4us 5min 8 nanosecond 6 days 7 week", "7 weeks 6 days 2 hours 5 minutes 1 second 3 milliseconds 4 microseconds 8 nanoseconds" );
+	ENSURE_DURATION_UNIT( "1 sec 2 hour 3 milliseconds 4us 5min 8 nanosecond 6 days 7 w", "7 weeks 6 days 2 hours 5 minutes 1 second 3 milliseconds", MILLISECOND );
+#undef ENSURE_DURATION_UNIT
+#undef ENSURE_DURATION
 TUT_TEARDOWN()
 
 }
