@@ -204,6 +204,35 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 	return ( _resultCache );
 }
 
+hcore::HString const& tut_yaal_tools_hhuginn_base::execute_except(
+	hcore::HString const& source_,
+	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_
+) {
+	if ( setup._verbose ) {
+		clog << prettify( source_ ) << endl;
+	}
+	HHuginn h;
+	HLock l( _mutex );
+	_sourceCache.set_buffer( source_ );
+	h.load( _sourceCache );
+	l.unlock();
+	h.preprocess();
+	bool p( h.parse() );
+	if ( !p ) {
+		clog << h.error_message() << endl;
+	}
+	ENSURE( "parse failed", p );
+	bool c( h.compile( huginnCompilerSetup_ ) );
+	if ( !c ) {
+		clog << h.error_message() << endl;
+	}
+	ENSURE( "compilation failed", c );
+	bool e( h.execute() );
+	ENSURE_NOT( "execution did not fail!", e );
+	_resultCache.assign( h.error_message() );
+	return ( _resultCache );
+}
+
 
 }
 

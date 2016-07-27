@@ -49,7 +49,7 @@ struct tut_yaal_tools_hhuginn : public tress::tut_yaal_tools_hhuginn_base {
 	void test_range( HHuginn::TYPE, char const*, char const* );
 };
 
-TUT_TEST_GROUP( tut_yaal_tools_hhuginn, "yaal::tools::HHuginn" );
+TUT_TEST_GROUP( tut_yaal_tools_hhuginn, "yaal::tools::HHuginn", 55 );
 
 TUT_UNIT_TEST( "grammar test" )
 	HHuginn h;
@@ -235,6 +235,48 @@ TUT_UNIT_TEST( "set variable" )
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::INTEGER );
 	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "add" )
+	ENSURE_EQUALS( "add int failed", execute( "main(){return(1+2);}" ), "3" );
+	ENSURE_EQUALS( "add real failed", execute( "main(){return(1.+2.);}" ), "3.000000000000" );
+	ENSURE_EQUALS( "add number failed", execute( "main(){return($1+$2);}" ), "$3" );
+	ENSURE_EQUALS( "add string failed", execute( "main(){return(\"1\"+\"2\");}" ), "\"12\"" );
+	ENSURE_EQUALS( "add char failed", execute_except( "class A{_x=none;}main(){return(A()+A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `add' method." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "sub" )
+	ENSURE_EQUALS( "sub int failed", execute( "main(){return(7-3);}" ), "4" );
+	ENSURE_EQUALS( "sub real failed", execute( "main(){return(7.-3.);}" ), "4.000000000000" );
+	ENSURE_EQUALS( "sub number failed", execute( "main(){return($7-$3);}" ), "$4" );
+	ENSURE_EQUALS( "sub char failed", execute_except( "class A{_x=none;}main(){return(A()-A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `substract' method." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "mul" )
+	ENSURE_EQUALS( "mul int failed", execute( "main(){return(2*3);}" ), "6" );
+	ENSURE_EQUALS( "mul real failed", execute( "main(){return(2.*3.);}" ), "6.000000000000" );
+	ENSURE_EQUALS( "mul number failed", execute( "main(){return($2*$3);}" ), "$6" );
+	ENSURE_EQUALS( "mul char failed", execute_except( "class A{_x=none;}main(){return(A()*A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `multiply' method." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "div" )
+	ENSURE_EQUALS( "div int failed", execute( "main(){return(7/2);}" ), "3" );
+	ENSURE_EQUALS( "div real failed", execute( "main(){return(7./2.);}" ), "3.500000000000" );
+	ENSURE_EQUALS( "div number failed", execute( "main(){return($7/$2);}" ), "$3.5" );
+	ENSURE_EQUALS( "div char failed", execute_except( "class A{_x=none;}main(){return(A()/A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `divide' method." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "mod" )
+	ENSURE_EQUALS( "mod int failed", execute( "main(){return(11%3);}" ), "2" );
+	ENSURE_EQUALS( "mod real failed", execute( "main(){return(11.%3.);}" ), "2.000000000000" );
+	ENSURE_EQUALS( "mod number failed", execute( "main(){return($11%$3);}" ), "$2" );
+	ENSURE_EQUALS( "mod char failed", execute_except( "class A{_x=none;}main(){return(A()%A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `modulo' method." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "pow" )
+	ENSURE_EQUALS( "pow real failed", execute( "main(){return(2.^3.);}" ), "8.000000000000" );
+	ENSURE_EQUALS( "pow number failed", execute( "main(){return($2^$3);}" ), "$8" );
+	ENSURE_EQUALS( "pow char failed", execute_except( "class A{_x=none;}main(){return(A()^A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `power' method." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "if" )
@@ -1028,7 +1070,7 @@ TUT_UNIT_TEST( "sum of pows" )
 	);
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 50, "simple program" )
+TUT_UNIT_TEST( "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
 	HStringStream src( simpleProg );
