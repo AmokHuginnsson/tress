@@ -402,6 +402,28 @@ TUT_UNIT_TEST( "Mathematics" )
 		"$-2"
 	);
 	ENSURE_EQUALS(
+		"Mathematics.matrix (invert) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([1.,2.],[3.,4.]);"
+			"return(string(m1*copy(m1).invert()));"
+			"}"
+		),
+		"\"Matrix([1.000000000000, 0.000000000000], [0.000000000000, 1.000000000000])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (invert) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m1=math.matrix([$1.,$2.],[$3.,$4.]);"
+			"return(string(m1*copy(m1).invert()));"
+			"}"
+		),
+		"\"Matrix([$1, $0], [$0, $1])\""
+	);
+	ENSURE_EQUALS(
 		"Mathematics.matrix (set/get) failed",
 		execute(
 			"import Mathematics as math;"
