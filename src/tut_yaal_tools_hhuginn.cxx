@@ -242,41 +242,66 @@ TUT_UNIT_TEST( "add" )
 	ENSURE_EQUALS( "add real failed", execute( "main(){return(1.+2.);}" ), "3.000000000000" );
 	ENSURE_EQUALS( "add number failed", execute( "main(){return($1+$2);}" ), "$3" );
 	ENSURE_EQUALS( "add string failed", execute( "main(){return(\"1\"+\"2\");}" ), "\"12\"" );
-	ENSURE_EQUALS( "add char failed", execute_except( "class A{_x=none;}main(){return(A()+A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `add' method." );
+	ENSURE_EQUALS( "add user succeeded", execute_except( "class A{_x=none;}main(){return(A()+A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `add' method." );
+	ENSURE_EQUALS( "add char succeeded", execute_except( "main(){return(character('1')+character('2'));}" ), "*anonymous stream*:1:29: There is no `+' operator for `character'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "sub" )
 	ENSURE_EQUALS( "sub int failed", execute( "main(){return(7-3);}" ), "4" );
 	ENSURE_EQUALS( "sub real failed", execute( "main(){return(7.-3.);}" ), "4.000000000000" );
 	ENSURE_EQUALS( "sub number failed", execute( "main(){return($7-$3);}" ), "$4" );
-	ENSURE_EQUALS( "sub char failed", execute_except( "class A{_x=none;}main(){return(A()-A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `substract' method." );
+	ENSURE_EQUALS( "sub user succeeded", execute_except( "class A{_x=none;}main(){return(A()-A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `substract' method." );
+	ENSURE_EQUALS( "sub char succeeded", execute_except( "main(){return(character('7')-character('3'));}" ), "*anonymous stream*:1:29: There is no `-' operator for `character'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mul" )
 	ENSURE_EQUALS( "mul int failed", execute( "main(){return(2*3);}" ), "6" );
 	ENSURE_EQUALS( "mul real failed", execute( "main(){return(2.*3.);}" ), "6.000000000000" );
 	ENSURE_EQUALS( "mul number failed", execute( "main(){return($2*$3);}" ), "$6" );
-	ENSURE_EQUALS( "mul char failed", execute_except( "class A{_x=none;}main(){return(A()*A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `multiply' method." );
+	ENSURE_EQUALS( "mul user succeeded", execute_except( "class A{_x=none;}main(){return(A()*A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `multiply' method." );
+	ENSURE_EQUALS( "mul char succeeded", execute_except( "main(){return(character('2')*character('3'));}" ), "*anonymous stream*:1:29: There is no `*' operator for `character'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "div" )
 	ENSURE_EQUALS( "div int failed", execute( "main(){return(7/2);}" ), "3" );
 	ENSURE_EQUALS( "div real failed", execute( "main(){return(7./2.);}" ), "3.500000000000" );
 	ENSURE_EQUALS( "div number failed", execute( "main(){return($7/$2);}" ), "$3.5" );
-	ENSURE_EQUALS( "div char failed", execute_except( "class A{_x=none;}main(){return(A()/A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `divide' method." );
+	ENSURE_EQUALS( "div user succeeded", execute_except( "class A{_x=none;}main(){return(A()/A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `divide' method." );
+	ENSURE_EQUALS( "div char succeeded", execute_except( "main(){return(character('7')/character('2'));}" ), "*anonymous stream*:1:29: There is no `/' operator for `character'." );
+	ENSURE_EQUALS( "div 0 int succeeded", execute_except( "main(){return(1/0);}" ), "*anonymous stream*:1:16: Uncaught exception Division by zero." );
+	ENSURE_EQUALS( "div 0 real succeeded", execute_except( "main(){return(1./0.);}" ), "*anonymous stream*:1:17: Uncaught exception Division by zero." );
+	ENSURE_EQUALS( "div 0 num succeeded", execute_except( "main(){return($1/$0);}" ), "*anonymous stream*:1:17: Uncaught exception Division by zero." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mod" )
 	ENSURE_EQUALS( "mod int failed", execute( "main(){return(11%3);}" ), "2" );
 	ENSURE_EQUALS( "mod real failed", execute( "main(){return(11.%3.);}" ), "2.000000000000" );
 	ENSURE_EQUALS( "mod number failed", execute( "main(){return($11%$3);}" ), "$2" );
-	ENSURE_EQUALS( "mod char failed", execute_except( "class A{_x=none;}main(){return(A()%A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `modulo' method." );
+	ENSURE_EQUALS( "mod user succeeded", execute_except( "class A{_x=none;}main(){return(A()%A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `modulo' method." );
+	ENSURE_EQUALS( "mod char succeeded", execute_except( "main(){return(character('8')%character('3'));}" ), "*anonymous stream*:1:29: There is no `%' operator for `character'." );
+	ENSURE_EQUALS( "mod 0 int succeeded", execute_except( "main(){return(1%0);}" ), "*anonymous stream*:1:16: Uncaught exception Division by zero." );
+	ENSURE_EQUALS( "mod 0 real succeeded", execute_except( "main(){return(1.%0.);}" ), "*anonymous stream*:1:17: Uncaught exception Division by zero." );
+	ENSURE_EQUALS( "mod 0 num succeeded", execute_except( "main(){return($1%$0);}" ), "*anonymous stream*:1:17: Uncaught exception Division by zero." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "pow" )
 	ENSURE_EQUALS( "pow real failed", execute( "main(){return(2.^3.);}" ), "8.000000000000" );
 	ENSURE_EQUALS( "pow number failed", execute( "main(){return($2^$3);}" ), "$8" );
-	ENSURE_EQUALS( "pow char failed", execute_except( "class A{_x=none;}main(){return(A()^A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `power' method." );
+	ENSURE_EQUALS( "pow user succeeded", execute_except( "class A{_x=none;}main(){return(A()^A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `power' method." );
+	ENSURE_EQUALS( "pow char succeeded", execute_except( "main(){return(character('2')^character('3'));}" ), "*anonymous stream*:1:29: There is no `^' operator for `character'." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "factorial" )
+	ENSURE_EQUALS( "neg factorial succeeded", execute_except( "main(){return($-1!);}" ), "*anonymous stream*:1:18: Uncaught exception Factorial from negative." );
+	ENSURE_EQUALS( "fractional factorial succeeded", execute_except( "main(){return($1.5!);}" ), "*anonymous stream*:1:19: Uncaught exception Factorial from fraction." );
+	ENSURE_EQUALS( "int factorial succeeded", execute_except( "main(){return(1!);}" ), "*anonymous stream*:1:16: There is no `!` operator for `integer'." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "absolute" )
+	ENSURE_EQUALS( "abs int failed", execute( "main(){return([|1|,|-1|]);}" ), "[1, 1]" );
+	ENSURE_EQUALS( "abs real failed", execute( "main(){return([|1.|,|-1.|]);}" ), "[1.000000000000, 1.000000000000]" );
+	ENSURE_EQUALS( "abs num failed", execute( "main(){return([|$1|,|$-1|]);}" ), "[$1, $1]" );
+	ENSURE_EQUALS( "abs char succeeded", execute_except( "main(){return(|character('1')|);}" ), "*anonymous stream*:1:30: There is no |.| operator for `character'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "if" )
