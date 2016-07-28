@@ -566,5 +566,43 @@ TUT_UNIT_TEST( "Database" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "OperatingSystem" )
+	ENSURE_EQUALS(
+		"OperatingSystem.env",
+		execute(
+			"import OperatingSystem as os;"
+			"main(){"
+			"return(os.env(\"DEFAULT_TARGET\"));"
+			"}"
+		),
+		"\"debug\""
+	);
+	ENSURE_EQUALS(
+		"OperatingSystem.exec",
+		execute_except(
+			"import OperatingSystem as os;"
+			"main(){"
+			"os.exec(\"/non/existing\",\"arg1\");"
+			"return(0);"
+			"}"
+		),
+		"*anonymous stream*:1:44: Uncaught exception No such file or directory"
+	);
+	/* It is impossible to test exit(). */
+	hcore::HString CHILD( "./data/child" EXE_SUFFIX );
+	ENSURE_EQUALS(
+		"OperatingSystem.spawn",
+		execute(
+			"import OperatingSystem as os;"
+			"main(){"
+			"c=os.spawn(\"" + CHILD + "\");"
+			"c.in().write(\"out\\n\");"
+			"return(c.out().read_line().strip());"
+			"}"
+		),
+		"\"hello-OUT\""
+	);
+TUT_TEARDOWN()
+
 }
 
