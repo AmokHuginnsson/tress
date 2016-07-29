@@ -374,6 +374,7 @@ TUT_UNIT_TEST( "HStringLiteral" )
 	}
 	ENSURE_NOT( "non-string literal parsed", ep( "Ala" ) );
 	ENSURE_NOT( "unfinished string literal parsed", ep( "\"Ala" ) );
+	ENSURE_NOT( "unfinished escape sequence string literal parsed", ep( "\"Ala\\" ) );
 	ENSURE_NOT( "string literal with invalid character parsed", ep( "\"Al\ba\"" ) );
 	ENSURE_NOT( "whitespace only input parsed", ep( " " ) );
 	ENSURE_NOT( "empty input parsed", ep( "" ) );
@@ -428,6 +429,9 @@ TUT_UNIT_TEST( "HCharacterLiteral" )
 	}
 	ENSURE_NOT( "non-character literal parsed", ep( "Ala" ) );
 	ENSURE_NOT( "unfinished character literal parsed", ep( "'A" ) );
+	ENSURE_NOT( "too long character literal parsed", ep( "'ab'" ) );
+	ENSURE_NOT( "empty character literal parsed", ep( "''" ) );
+	ENSURE_NOT( "unfinished escape sequence character literal parsed", ep( "'\\" ) );
 	ENSURE_NOT( "character literal with invalid character parsed", ep( "'\b'" ) );
 	ENSURE_NOT( "whitespace only input parsed", ep( " " ) );
 	/* action_t */ {
@@ -503,12 +507,26 @@ TUT_UNIT_TEST( "HCharacter" )
 		HExecutingParser ep( character( "ab" )[HCharacter::action_character_t( call( &defer<char>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "HCharacter parsed invalid input.", ep( "c" ) );
 	}
+	/* char WS */ {
+		char val( 0 );
+		HExecutingParser ep( character( "ab " )[HCharacter::action_character_t( call( &defer<char>::set, ref( val ), _1 ) )]( HCharacter::WHITE_SPACE::AUTO ) );
+		ENSURE_NOT( "HCharacter parsed invalid input.", ep( "c" ) );
+		ENSURE( "HCharacter parsed invalid input.", ep( " " ) );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HString" )
 	/* action_string_t */ {
 		hcore::HString val;
 		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_t( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ) ) );
+		ENSURE_NOT( "HString parsed input with trailing garbage.", ep( "  alaX" ) );
+		ENSURE( "HString failed to parse correct input.", ep( "  ala" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
+	}
+	/* string() action_string_t */ {
+		hcore::HString val;
+		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_string_t( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ) ) );
 		ENSURE_NOT( "HString parsed input with trailing garbage.", ep( "  alaX" ) );
 		ENSURE( "HString failed to parse correct input.", ep( "  ala" ) );
 		ep();
@@ -529,10 +547,27 @@ TUT_UNIT_TEST( "HString" )
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
 	}
+	/* string() action_string_t WB */ {
+		hcore::HString val;
+		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_string_t( call( &defer<hcore::HString, hcore::HString const&>::set, ref( val ), _1 ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
+		ENSURE( "HString failed to parse correct input.", ep( "  alaX" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
+	}
 	/* action_string_position */ {
 		hcore::HString val;
 		e_p::position_t pos( -1 );
 		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ) ) );
+		ENSURE_NOT( "HString parsed input with trailing garbage.", ep( "  alaX" ) );
+		ENSURE( "HString failed to parse correct input.", ep( "  ala" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 2 );
+	}
+	/* string() action_string_position */ {
+		hcore::HString val;
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ) ) );
 		ENSURE_NOT( "HString parsed input with trailing garbage.", ep( "  alaX" ) );
 		ENSURE( "HString failed to parse correct input.", ep( "  ala" ) );
 		ep();
@@ -558,9 +593,25 @@ TUT_UNIT_TEST( "HString" )
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
 		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 2 );
 	}
+	/* string() action_string_position WB */ {
+		hcore::HString val;
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
+		ENSURE( "HString failed to parse correct input.", ep( "  alaX" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 2 );
+	}
 	/* action_position */ {
 		e_p::position_t pos( -1 );
 		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_position_t( call( &match_position, ref( pos ), _1 ) ) ) );
+		ENSURE( "HString failed to parse correct input.", ep( "ala" ) );
+		ep();
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+	}
+	/* string() action_position */ {
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_position_t( call( &match_position, ref( pos ), _1 ) ) ) );
 		ENSURE( "HString failed to parse correct input.", ep( "ala" ) );
 		ep();
 		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
@@ -572,6 +623,13 @@ TUT_UNIT_TEST( "HString" )
 		ep();
 		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 2 );
 	}
+	/* string() action_position WB */ {
+		e_p::position_t pos( -1 );
+		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_position_t( call( &match_position, ref( pos ), _1 ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
+		ENSURE( "HString failed to parse correct input.", ep( "  alaX" ) );
+		ep();
+		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 2 );
+	}
 	/* action */ {
 		bool actionCalled( false );
 		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) ) ) );
@@ -579,9 +637,23 @@ TUT_UNIT_TEST( "HString" )
 		ep();
 		ENSURE( "action was not called by ExecutingParser.", actionCalled );
 	}
+	/* string() action */ {
+		bool actionCalled( false );
+		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) ) ) );
+		ENSURE( "HString failed to parse correct input.", ep( "  ala" ) );
+		ep();
+		ENSURE( "action was not called by ExecutingParser.", actionCalled );
+	}
 	/* action WB */ {
 		bool actionCalled( false );
 		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
+		ENSURE( "HString failed to parse correct input.", ep( "  alaX" ) );
+		ep();
+		ENSURE( "action was not called by ExecutingParser.", actionCalled );
+	}
+	/* string() action WB */ {
+		bool actionCalled( false );
+		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
 		ENSURE( "HString failed to parse correct input.", ep( "  alaX" ) );
 		ep();
 		ENSURE( "action was not called by ExecutingParser.", actionCalled );
