@@ -480,6 +480,9 @@ TUT_UNIT_TEST( "number()" )
 	ENSURE_EQUALS( "user to number failed", execute( "class A{_x=none;constructor(x){_x=x;}to_number(){return(_x);}}main(){return(number(A($7)));}" ), "$7" );
 	ENSURE_EQUALS( "bad user to number succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(number(A(7.)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:59: Class `A' does not have `to_number' method." );
 	ENSURE_EQUALS( "char to number succeeded", execute_except( "main(){return(number('7'));}" ), "*anonymous stream*:1:21: Conversion from `character' to `number' is not supported." );
+	ENSURE_EQUALS( "number.is_exact() failed", execute( "main(){return([($2/$5).is_exact(),($2/$3).is_exact()]);}" ), "[true, false]" );
+	ENSURE_EQUALS( "number.is_integral() failed", execute( "main(){return([($15/$5).is_integral(),($15/$6).is_integral()]);}" ), "[true, false]" );
+	ENSURE_EQUALS( "number.set_precision()/number.get_precision() failed", execute( "main(){a=$1;a.set_precision(200);b=$3;b.set_precision(300);return([a.get_precision(),b.get_precision()]);}" ), "[200, 300]" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "character()" )
@@ -513,14 +516,49 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "dict()" )
 	ENSURE_EQUALS(
-		"dict() failed (explicit)",
-		execute( "main(){x=dict();x[\"Ala\"]=0;x[\"ma\"]=1;x[\"kota.\"]=2;v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ),
+		"dict() iterator failed",
+		execute( "main(){x=dict();x={\"Ala\":0,\"ma\":1,\"kota.\":2};v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ),
 		"\"Ala0kota.2ma1\""
 	);
 	ENSURE_EQUALS(
+		"dict() failed (explicit)",
+		execute( "main(){x=dict();x[\"Ala\"]=0;x[\"ma\"]=1;x[\"kota.\"]=2;return(x);}" ),
+		"{\"Ala\": 0, \"kota.\": 2, \"ma\": 1}"
+	);
+	ENSURE_EQUALS(
 		"dict() failed (literal)",
-		execute( "main(){x=dict();x={\"Ala\":0,\"ma\":1,\"kota.\":2};v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ),
-		"\"Ala0kota.2ma1\""
+		execute( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};return(x);}" ),
+		"{\"Ala\": 0, \"kota.\": 2, \"ma\": 1}"
+	);
+	ENSURE_EQUALS(
+		"dict.kas_key() failed",
+		execute( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};return([x.has_key(\"kota.\"),x.has_key(\"psa.\")]);}" ),
+		"[true, false]"
+	);
+	ENSURE_EQUALS(
+		"dict.get()/dict.try_get() failed",
+		execute( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};return([x.get(\"ma\"),x.get(\"psa.\",3)]);}" ),
+		"[1, 3]"
+	);
+	ENSURE_EQUALS(
+		"dict.get() on non existing succeeded",
+		execute_except( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};return(x.get(\"psa\"));}" ),
+		"*anonymous stream*:1:49: Key does not exist in `dict'."
+	);
+	ENSURE_EQUALS(
+		"dict.erase() failed",
+		execute( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};x.erase(\"kota.\");return(x);}" ),
+		"{\"Ala\": 0, \"ma\": 1}"
+	);
+	ENSURE_EQUALS(
+		"dict.clear()/dict.clone() failed",
+		execute( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};y=copy(x);x.clear();return([x,y]);}" ),
+		"[{}, {\"Ala\": 0, \"kota.\": 2, \"ma\": 1}]"
+	);
+	ENSURE_EQUALS(
+		"dict on non-comparable succeeded",
+		execute_except( "class A{_x=none;}main(){x={A():0};return(x);}", HHuginn::COMPILER::BE_SLOPPY ),
+		"*anonymous stream*:1:28: Key type `A' is not a comparable."
 	);
 TUT_TEARDOWN()
 
