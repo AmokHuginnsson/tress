@@ -46,7 +46,7 @@ TUT_UNIT_TEST( "HFile::READ::UNBUFFERED_READS (nl)" )
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line,	HFile::READ::UNBUFFERED_READS ) >= 0 ) {
+	while ( in.read_line( line, HFile::READ::UNBUFFERED_READS ) >= 0 ) {
 		res.append( line );
 		++ lineCount;
 	}
@@ -59,7 +59,7 @@ TUT_UNIT_TEST( "HFile::READ::UNBUFFERED_READS (crnl)" )
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line,	HFile::READ::UNBUFFERED_READS ) >= 0 ) {
+	while ( in.read_line( line, HFile::READ::UNBUFFERED_READS ) >= 0 ) {
 		res.append( line );
 		++ lineCount;
 	}
@@ -72,7 +72,7 @@ TUT_UNIT_TEST( "HFile::READ::BUFFERED_READS (nl)" )
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line,	HFile::READ::BUFFERED_READS ) >= 0 ) {
+	while ( in.read_line( line, HFile::READ::BUFFERED_READS ) >= 0 ) {
 		res.append( line );
 		++ lineCount;
 	}
@@ -85,12 +85,99 @@ TUT_UNIT_TEST( "HFile::READ::BUFFERED_READS (crnl)" )
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line,	HFile::READ::BUFFERED_READS ) >= 0 ) {
+	while ( in.read_line( line, HFile::READ::BUFFERED_READS ) >= 0 ) {
 		res.append( line );
 		++ lineCount;
 	}
 	ENSURE_EQUALS( "buffered reads crnl failed", res, "Alamakota." );
 	ENSURE_EQUALS( "bad line count for buffered reads crnl", lineCount, 4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "HFile::write (overwrite)" )
+	for ( int l( 0 ); l < 2; ++ l ) {
+		char const data[][8] = {
+			"amok00",
+			"huginn",
+			"yaal00",
+			"tress0"
+		};
+		HFile out( "./out/file.dat", HFile::OPEN::WRITING );
+		for ( char const* w : data ) {
+			out << w << "\n";
+		}
+		out.flush();
+		out.close();
+		HFile in( "./out/file.dat", HFile::OPEN::READING );
+		int i( 0 );
+		HString line;
+		while ( getline( in, line ).good() ) {
+			ENSURE_EQUALS( "bad data written to file", line, data[i] );
+			++ i;
+		}
+		ENSURE_EQUALS( "bad line count", i, countof ( data ) );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "HFile::write (append)" )
+	char const data[][8] = {
+		"amok11",
+		"huginn",
+		"yaal11",
+		"tress1"
+	};
+	char const dataOut[][8] = {
+		"amok00",
+		"huginn",
+		"yaal00",
+		"tress0",
+		"amok11",
+		"huginn",
+		"yaal11",
+		"tress1"
+	};
+	HFile out( "./out/file.dat", HFile::OPEN::WRITING | HFile::OPEN::APPEND );
+	for ( char const* w : data ) {
+		out << w << "\n";
+	}
+	out.flush();
+	out.close();
+	HFile in( "./out/file.dat", HFile::OPEN::READING );
+	int i( 0 );
+	HString line;
+	while ( getline( in, line ).good() ) {
+		ENSURE_EQUALS( "bad data written to file", line, dataOut[i] );
+		++ i;
+	}
+	ENSURE_EQUALS( "bad line count", i, countof ( dataOut ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "HFile::tell()" )
+	HFile in( "./out/file.dat", HFile::OPEN::READING );
+	HString line;
+	while ( getline( in, line ).good() ) {
+	}
+	ENSURE_EQUALS( "bad tell() after full read", in.tell(), 56 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "HFile::seek()" )
+	HFile in( "./out/file.dat", HFile::OPEN::READING );
+	HString line;
+	while ( getline( in, line ).good() ) {
+	}
+	ENSURE_EQUALS( "bad tell() after full read", in.tell(), 56 );
+	in.seek( 28 );
+	char const data[][8] = {
+		"amok11",
+		"huginn",
+		"yaal11",
+		"tress1"
+	};
+	int i( 0 );
+	while ( getline( in, line ).good() ) {
+		ENSURE_EQUALS( "bad data written to file", line, data[i] );
+		++ i;
+	}
+	ENSURE_EQUALS( "bad line count", i, countof ( data ) );
 TUT_TEARDOWN()
 
 }
