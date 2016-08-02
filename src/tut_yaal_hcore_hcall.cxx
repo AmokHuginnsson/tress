@@ -532,7 +532,7 @@ TUT_UNIT_TEST( "call() and const call on ptr and on ref" )
 	transform( nl.begin(), nl.end(), stream_iterator( ss, " " ), call( &MemFunTest::value, _1 ) );
 	ENSURE_EQUALS( "call failed", ss.string(), "0 1 3 7 " );
 	cout << ss.string() << endl;
-	ss.clear();
+	ss.reset();
 	transform( cnl.begin(), cnl.end(), stream_iterator( ss, " " ), call( &MemFunTest::value_const, _1 ) );
 	ENSURE_EQUALS( "call failed", ss.string(), "0 1 3 7 " );
 	cout << ss.string() << endl;
@@ -559,7 +559,7 @@ TUT_UNIT_TEST( "call(arg) const and non-const ref and ptr." )
 	transform( nl.begin(), nl.end(), a, stream_iterator( ss, " " ), call( &MemFunTest::calc, _1, _2 ) );
 	ENSURE_EQUALS( "call failed", ss.string(), "1 5 12 23 " );
 	cout << ss.string() << endl;
-	ss.clear();
+	ss.reset();
 	transform( cnl.begin(), cnl.end(), a, stream_iterator( ss, " " ), call( &MemFunTest::calc_const, _1, _2 ) );
 	ENSURE_EQUALS( "call failed", ss.string(), "1 5 12 23 " );
 	cout << ss.string() << endl;

@@ -98,7 +98,7 @@ TUT_UNIT_TEST( "reverse iteration" )
 	HStringStream ss;
 	ss << bmp;
 	HString s( ss.string() );
-	ss.clear();
+	ss.reset();
 	yaal::copy( bmp.rbegin(), bmp.rend(), stream_iterator( ss ) );
 	reverse( s.begin(), s.end() );
 	ENSURE_EQUALS( "bad reverse iterator", ss.string(), s );
@@ -110,15 +110,15 @@ TUT_UNIT_TEST( "operator[]" )
 	ss << bmp;
 	ENSURE_EQUALS( "bad constructor", ss.string(), "0000000" );
 	bmp[1] = true;
-	ss.clear();
+	ss.reset();
 	ss << bmp;
 	ENSURE_EQUALS( "bad operator[] or HBit ref", ss.string(), "0100000" );
 	bmp[5] = true;
-	ss.clear();
+	ss.reset();
 	ss << bmp;
 	ENSURE_EQUALS( "bad operator[] or HBit ref", ss.string(), "0100010" );
 	bmp[0] = bmp[6] = bmp[1] && bmp[5];
-	ss.clear();
+	ss.reset();
 	ss << bmp;
 	ENSURE_EQUALS( "bad operator[] or HBit ref", ss.string(), "1100011" );
 TUT_TEARDOWN()

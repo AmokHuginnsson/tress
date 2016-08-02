@@ -374,11 +374,11 @@ TUT_UNIT_TEST( "full encode tests" )
 			fill_n( input, len, val );
 			HMemoryObserver mo( input, len );
 			HMemory m( mo );
-			ss.clear();
+			ss.reset();
 			base64::encode( m, ss, true );
 			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << input;
 			ENSURE_EQUALS( msg.string(), ss.string(), cases[ ( len - 1 ) * 256 + val ] );
-			msg.clear();
+			msg.reset();
 		}
 	}
 TUT_TEARDOWN()
@@ -393,7 +393,7 @@ TUT_UNIT_TEST( "full decode test" )
 		for ( int val = 0; val < 256; ++ val ) {
 			HMemoryObserver mo( buffer, len );
 			HMemory m( mo );
-			ss.clear();
+			ss.reset();
 			ss << cases[ ( len - 1 ) * 256 + val ] << flush;
 			base64::decode( ss, m, true );
 			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << buffer;
@@ -401,7 +401,7 @@ TUT_UNIT_TEST( "full decode test" )
 			fill_n( buffer, len, val );
 			ENSURE_EQUALS( msg.string(), nRead, len );
 			ENSURE( msg.string(), ! ::memcmp( output, buffer, static_cast<size_t>( nRead ) ) );
-			msg.clear();
+			msg.reset();
 		}
 	}
 TUT_TEARDOWN()

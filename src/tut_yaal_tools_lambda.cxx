@@ -64,7 +64,7 @@ TUT_UNIT_TEST( "postincrement" )
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 ++ );
 	ENSURE_EQUALS( "postincrement lambda failed", ss.string(), "2 3 5 7 11 13 17 19 23 " );
-	ss.clear();
+	ss.reset();
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "postincrement lambda failed", ss.string(), "3 4 6 8 12 14 18 20 24 " );
 TUT_TEARDOWN()
@@ -81,7 +81,7 @@ TUT_UNIT_TEST( "postdecrement" )
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 -- );
 	ENSURE_EQUALS( "postdecrement lambda failed", ss.string(), "2 3 5 7 11 13 17 19 23 " );
-	ss.clear();
+	ss.reset();
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "postdecrement lambda failed", ss.string(), "1 2 4 6 10 12 16 18 22 " );
 TUT_TEARDOWN()
@@ -91,7 +91,7 @@ TUT_UNIT_TEST( "plus" )
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 1 + _1 );
 	ENSURE_EQUALS( "plus lambda failed", ss.string(), "3 4 6 8 12 14 18 20 24 " );
-	ss.clear();
+	ss.reset();
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 + 1 );
 	ENSURE_EQUALS( "plus lambda failed", ss.string(), "3 4 6 8 12 14 18 20 24 " );
 	ENSURE_EQUALS( "plus both args are free failed", ( _1 + _2 )( 3, 4 ), 7 );
@@ -109,7 +109,7 @@ TUT_UNIT_TEST( "minus" )
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 1 - _1 );
 	ENSURE_EQUALS( "minus lambda failed", ss.string(), "-1 -2 -4 -6 -10 -12 -16 -18 -22 " );
-	ss.clear();
+	ss.reset();
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 - 1 );
 	ENSURE_EQUALS( "minus lambda failed", ss.string(), "1 2 4 6 10 12 16 18 22 " );
 	ENSURE_EQUALS( "minus both args are free failed", ( _1 - _2 )( 3, 4 ), -1 );
@@ -128,7 +128,7 @@ TUT_UNIT_TEST( "multiplies" )
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 2 * _1 );
 	ENSURE_EQUALS( "multiplies lambda failed", ss.string(), "4 6 10 14 22 26 34 38 46 " );
-	ss.clear();
+	ss.reset();
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 * 2 );
 	ENSURE_EQUALS( "multiplies lambda failed", ss.string(), "4 6 10 14 22 26 34 38 46 " );
 	ENSURE_EQUALS( "multiplies both args are free failed", ( _1 * _2 )( 3, 4 ), 12 );
@@ -145,11 +145,11 @@ TUT_UNIT_TEST( "divides" )
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 223092870 / _1 );
 	ENSURE_EQUALS( "divides lambda failed", ss.string(), "111546435 74364290 44618574 31870410 20281170 17160990 13123110 11741730 9699690 " );
-	ss.clear();
+	ss.reset();
 	transform( l.begin(), l.end(), l.begin(), _1 * 2 );
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "divides lambda failed", ss.string(), "4 6 10 14 22 26 34 38 46 " );
-	ss.clear();
+	ss.reset();
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 / 2 );
 	ENSURE_EQUALS( "divides lambda failed", ss.string(), "2 3 5 7 11 13 17 19 23 " );
 	ENSURE_EQUALS( "divides both args are free failed", ( _1 / _2 )( 3, 4 ), 0 );
@@ -170,7 +170,7 @@ TUT_UNIT_TEST( "modulo" )
 	HStringStream ss;
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), 1000 % _1 );
 	ENSURE_EQUALS( "modulo lambda failed", ss.string(), "0 1 0 6 10 12 14 12 11 " );
-	ss.clear();
+	ss.reset();
 	transform( l.begin(), l.end(), stream_iterator( ss, " " ), _1 % 10 );
 	ENSURE_EQUALS( "modulo lambda failed", ss.string(), "2 3 5 7 1 3 7 9 3 " );
 	ENSURE_EQUALS( "modulo both args are free failed", ( _1 % _2 )( 3, 4 ), 3 );
@@ -456,7 +456,7 @@ TUT_UNIT_TEST( "streams" )
 	HStringStream ss;
 	for_each( l.begin(), l.end(), ss << _1 << ", " );
 	ENSURE_EQUALS( "stream lambda failed", ss.string(), "2, 3, 5, 7, 11, 13, 17, 19, 23, " );
-	ss.clear();
+	ss.reset();
 	for_each( l.begin(), l.end(), ss << ( _1 * 2 ) << ", " );
 	ENSURE_EQUALS( "stream lambda failed", ss.string(), "4, 6, 10, 14, 22, 26, 34, 38, 46, " );
 TUT_TEARDOWN()

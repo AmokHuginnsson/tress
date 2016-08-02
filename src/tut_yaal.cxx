@@ -361,7 +361,7 @@ TUT_UNIT_TEST( "mem_fun, mem_fun_ref" )
 	transform( nl.begin(), nl.end(), stream_iterator( ss, " " ), mem_fun( &MemFunTest::value ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "0 1 3 7 " );
 	cout << ss.string() << endl;
-	ss.clear();
+	ss.reset();
 	transform( cnl.begin(), cnl.end(), stream_iterator( ss, " " ), mem_fun( &MemFunTest::value_const ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "0 1 3 7 " );
 	cout << ss.string() << endl;
@@ -388,7 +388,7 @@ TUT_UNIT_TEST( "mem_fun1" )
 	transform( nl.begin(), nl.end(), a, stream_iterator( ss, " " ), mem_fun1( &MemFunTest::calc ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "1 5 12 23 " );
 	cout << ss.string() << endl;
-	ss.clear();
+	ss.reset();
 	transform( cnl.begin(), cnl.end(), a, stream_iterator( ss, " " ), mem_fun1( &MemFunTest::calc_const ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "1 5 12 23 " );
 	cout << ss.string() << endl;
