@@ -223,5 +223,89 @@ TUT_UNIT_TEST( "operator /=" )
 	ENSURE_THROW( "division by 0 ignored", c /= 0_yi, HComplexException );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "operator +" )
+	HComplex a( math::PI, math::E );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by constructor", a.im(), math::E, epsilon );
+	double long valR( 7 );
+	double long valI( 3 );
+	a = a + valR;
+	ENSURE_DISTANCE( "re incrorrectly set by operator +", a.re(), math::PI + valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator +", a.im(), math::E, epsilon );
+	a = a + HComplex( 0, valI );
+	ENSURE_DISTANCE( "re incrorrectly set by operator +", a.re(), math::PI + valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator +", a.im(), math::E + valI, epsilon );
+	a = valR + a;
+	ENSURE_DISTANCE( "re incrorrectly set by operator +", a.re(), math::PI + 2. * valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator +", a.im(), math::E + valI, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "operator -" )
+	HComplex a( math::PI, math::E );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by constructor", a.im(), math::E, epsilon );
+	double long valR( 7 );
+	double long valI( 3 );
+	a = a - valR;
+	ENSURE_DISTANCE( "re incrorrectly set by operator -", a.re(), math::PI - valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator -", a.im(), math::E, epsilon );
+	a = a - HComplex( 0, valI );
+	ENSURE_DISTANCE( "re incrorrectly set by operator -", a.re(), math::PI - valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator -", a.im(), math::E - valI, epsilon );
+	a = valR - a;
+	ENSURE_DISTANCE( "re incrorrectly set by operator -", a.re(), -math::PI + 2 * valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator -", a.im(), -math::E + valI, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "operator *" )
+	HComplex aOrig( math::PI, math::E );
+	HComplex a( aOrig );
+	ENSURE_DISTANCE( "re incrorrectly set by constructor", a.re(), math::PI, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by constructor", a.im(), math::E, epsilon );
+	double long valR( 7 );
+	double long valI( 3 );
+	a = a * valR;
+	ENSURE_DISTANCE( "re incrorrectly set by operator *", a.re(), math::PI * valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator *", a.im(), math::E * valR, epsilon );
+	a = aOrig;
+	a = a * HComplex( valR, 0 );
+	ENSURE_DISTANCE( "re incrorrectly set by operator *", a.re(), math::PI * valR, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator *", a.im(), math::E * valR, epsilon );
+	a = aOrig;
+	TUT_EVAL( a = a * HComplex( 0, valI ) );
+	ENSURE_DISTANCE( "re incrorrectly set by operator *", a.re(), -( math::E * valI ), epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator *", a.im(), math::PI * valI, epsilon );
+	a = aOrig;
+	TUT_EVAL( a = a * HComplex( valR, valI ) );
+	ENSURE_DISTANCE( "re incrorrectly set by operator *", a.re(), ( math::PI * valR ) - ( math::E * valI ), epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator *", a.im(), math::E * valR + math::PI * valI, epsilon );
+	TUT_EVAL( a = 2. * a );
+	ENSURE_DISTANCE( "re incrorrectly set by operator *", a.re(), 2. * ( ( math::PI * valR ) - ( math::E * valI ) ), epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator *", a.im(), 2. * ( math::E * valR + math::PI * valI ), epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "operator /" )
+	HComplex c( -14, 23 );
+	HComplex divisor( 2, 5 );
+	TUT_EVAL( c = c / divisor );
+	ENSURE_DISTANCE( "re incrorrectly set by operator /", c.re(), 3.L, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator /", c.im(), 4.L, epsilon );
+	c.set( -14, 8 );
+	TUT_EVAL( c = c / 2 );
+	ENSURE_DISTANCE( "re incrorrectly set by operator /", c.re(), -7.L, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator /", c.im(), 4.L, epsilon );
+	c.set( -14, 8 );
+	TUT_EVAL( c = c / 2_yi );
+	ENSURE_DISTANCE( "re incrorrectly set by operator /", c.re(), 4.L, epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator /", c.im(), 7.L, epsilon );
+	ENSURE_THROW( "division by 0 ignored", c / 0, HComplexException );
+	ENSURE_THROW( "division by 0 ignored", c / 0.0_yi, HComplexException );
+	HComplex n( 2.L );
+	n /= c;
+	TUT_EVAL( c = 2.L / c );
+	ENSURE_DISTANCE( "re incrorrectly set by operator /", c.re(), n.re(), epsilon );
+	ENSURE_DISTANCE( "im incrorrectly set by operator /", c.im(), n.im(), epsilon );
+TUT_TEARDOWN()
+
 }
 
