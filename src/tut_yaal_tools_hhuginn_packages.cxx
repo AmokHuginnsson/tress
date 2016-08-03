@@ -49,7 +49,21 @@ struct tut_yaal_tools_hhuginn_packages : public tress::tut_yaal_tools_hhuginn_ba
 
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn_packages, "yaal::tools::HHuginn,packages" );
 
-TUT_UNIT_TEST( "Algorithms.range" )
+TUT_UNIT_TEST( "Algorithms" )
+	ENSURE_EQUALS(
+		"Algorithms.map failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"l=[];\n"
+			"for(x : algo.map([3, 17, 4],@(x){x*x;})) {\n"
+			"l.add(x);"
+			"}\n"
+			"return(l);\n"
+			"}"
+		),
+		"[9, 289, 16]"
+	);
 	ENSURE_EQUALS(
 		"Algorithms.range failed",
 		execute(
@@ -64,9 +78,6 @@ TUT_UNIT_TEST( "Algorithms.range" )
 		),
 		"\":3:7:11:15\""
 	);
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "Algorithms.sorted" )
 	ENSURE_EQUALS(
 		"Algorithms.sorted (list) failed",
 		execute(
