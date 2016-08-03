@@ -53,30 +53,42 @@ TUT_UNIT_TEST( "Algorithms" )
 	ENSURE_EQUALS(
 		"Algorithms.map failed",
 		execute(
-			"import Algorithms as algo;\n"
-			"main(){\n"
-			"l=[];\n"
-			"for(x : algo.map([3, 17, 4],@(x){x*x;})) {\n"
+			"import Algorithms as algo;"
+			"main(){"
+			"l=[];"
+			"m=algo.map([3, 17, 4],@(x){x*x;});"
+			"for(x : copy(m)) {"
 			"l.add(x);"
-			"}\n"
-			"return(l);\n"
+			"}"
+			"return([l,size(m)]);"
 			"}"
 		),
-		"[9, 289, 16]"
+		"[[9, 289, 16], 3]"
 	);
 	ENSURE_EQUALS(
 		"Algorithms.range failed",
 		execute(
-			"import Algorithms as algo;\n"
-			"main(){\n"
-			"s=\"\";\n"
-			"for(x : algo.range(3, 17, 4)) {\n"
+			"import Algorithms as algo;"
+			"main(){"
+			"s=\"\";"
+			"r = algo.range(3, 17, 4);"
+			"for(x : copy(r)) {"
 			"s=s+\":\"+string(x);"
-			"}\n"
-			"return(s);\n"
+			"}"
+			"return([s,size(r)]);"
 			"}"
 		),
-		"\":3:7:11:15\""
+		"[\":3:7:11:15\", 4]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.range(3, 17, 4),list));\n"
+			"}"
+		),
+		"[3, 7, 11, 15]"
 	);
 	ENSURE_EQUALS(
 		"Algorithms.sorted (list) failed",
