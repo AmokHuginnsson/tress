@@ -178,6 +178,35 @@ TUT_UNIT_TEST( "HFile::seek()" )
 		++ i;
 	}
 	ENSURE_EQUALS( "bad line count", i, countof ( data ) );
+	HFile f( "./out/file.dat", HFile::OPEN::READING | HFile::OPEN::WRITING );
+	ENSURE_EQUALS( "bad tell() after RW open", f.tell(), 0 );
+	f << "XXXXXX" << endl;
+	ENSURE_EQUALS( "bad tell() after line write", f.tell(), 7 );
+	f.seek( 7, HFile::SEEK::CUR );
+	ENSURE_EQUALS( "bad tell() after line write", f.tell(), 14 );
+	f << "YYYYYY" << endl;
+	ENSURE_EQUALS( "bad tell() after line write", f.tell(), 21 );
+	f.seek( -14, HFile::SEEK::END );
+	ENSURE_EQUALS( "bad tell() after line write", f.tell(), 56 - 14 );
+	f << "ZZZZZZ" << endl;
+	ENSURE_EQUALS( "bad tell() after line write", f.tell(), 56 - 7 );
+	f.seek( 0, HFile::SEEK::SET );
+	char const dataOut[][8] = {
+		"XXXXXX",
+		"huginn",
+		"YYYYYY",
+		"tress0",
+		"amok11",
+		"huginn",
+		"ZZZZZZ",
+		"tress1"
+	};
+	i = 0;
+	while ( getline( f, line ).good() ) {
+		ENSURE_EQUALS( "bad data written to file", line, dataOut[i] );
+		++ i;
+	}
+	ENSURE_EQUALS( "bad line count", i, countof ( dataOut ) );
 TUT_TEARDOWN()
 
 }
