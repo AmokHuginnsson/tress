@@ -531,6 +531,11 @@ TUT_UNIT_TEST( "dict()" )
 		"{\"Ala\": 0, \"kota.\": 2, \"ma\": 1}"
 	);
 	ENSURE_EQUALS(
+		"dict() size() failed",
+		execute( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};return(size(x));}" ),
+		"3"
+	);
+	ENSURE_EQUALS(
 		"dict.kas_key() failed",
 		execute( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};return([x.has_key(\"kota.\"),x.has_key(\"psa.\")]);}" ),
 		"[true, false]"
@@ -564,11 +569,41 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "lookup()" )
 	ENSURE_EQUALS(
-		"lookup() failed",
+		"lookup() iterator failed",
 		execute( "ts(x){return(type(x)==\"boolean\"?(x?\"true\":\"false\"):(x!=none?string(x):\"none\"));}main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;v=\"\";for(e:x){v=v+ts(e);v=v+ts(x[e]);}return(v);}" ),
 		"\"none7Ala0truefalse1makota.2\""
 	);
 	ENSURE_EQUALS( "hash on user succeeded", execute_except( "class A{_x=none;}main(){l=lookup();return(l[A()]=0);}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:1: There is no `hash' operator for `A'." );
+	ENSURE_EQUALS(
+		"lookup() iterator failed",
+		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;return([x.has_key(1),x.has_key(2)]);}" ),
+		"[true, false]"
+	);
+	ENSURE_EQUALS(
+		"lookup() size failed",
+		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;return(size(x));}" ),
+		"5"
+	);
+	ENSURE_EQUALS(
+		"lookup() clear failed",
+		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;s=size(x);x.clear();return([s,size(x)]);}" ),
+		"[5, 0]"
+	);
+	ENSURE_EQUALS(
+		"lookup() erase failed",
+		execute( "ts(x){return(type(x)==\"boolean\"?(x?\"true\":\"false\"):(x!=none?string(x):\"none\"));}d(x){v=\"\";for(e:x){v+=ts(e);v+=ts(x[e]);}return(v);}main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;v=d(x);v+=\"|\";x.erase(none);x.erase(true);v+=d(x);return(v);}" ),
+		"\"none7Ala0truefalse1makota.2|Ala01makota.2\""
+	);
+	ENSURE_EQUALS(
+		"lookup() get failed",
+		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;return([x.get(1),x.get(2,7)]);}" ),
+		"[\"ma\", 7]"
+	);
+	ENSURE_EQUALS(
+		"lookup() copy() failed",
+		execute( "ts(x){return(type(x)==\"boolean\"?(x?\"true\":\"false\"):(x!=none?string(x):\"none\"));}d(x){v=\"\";for(e:x){v+=ts(e);v+=ts(x[e]);}return(v);}main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;y=copy(x);x.erase(none);x.erase(true);return([d(x),d(y)]);}" ),
+		"[\"Ala01makota.2\", \"none7Ala01matruefalsekota.2\"]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "order()" )
