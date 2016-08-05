@@ -57,7 +57,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "construction from char*" )
 	static char const CORRECT[] = "1024";
 	HString str( CORRECT );
-	ENSURE_EQUALS ( "construction from c-string does not work", str, CORRECT );
+	ENSURE_EQUALS( "construction from c-string does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from char* failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
 	ENSURE_EQUALS( "construction from char* failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from char* failed (is_empty)", str.empty(), false );
@@ -67,9 +67,8 @@ TUT_UNIT_TEST( "copy construction" )
 	static char const CORRECT[] = "1024";
 	HString str( CORRECT );
 	HString copy( str );
-	ENSURE_EQUALS ( "copy construction does not work", copy, CORRECT );
-	ENSURE_EQUALS( "copy construction failed (size)",
-			copy.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+	ENSURE_EQUALS( "copy construction does not work", copy, CORRECT );
+	ENSURE_EQUALS( "copy construction failed (size)", copy.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
 	ENSURE_EQUALS( "copy construction failed (capacity)", copy.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "copy construction failed (is_empty)", copy.empty(), false );
 TUT_TEARDOWN()
@@ -84,74 +83,137 @@ TUT_UNIT_TEST( "construction from (const) iterator" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "construction from integers" )
+	/* from int short */ {
+		static int short const INIT = 1024;
+		static char const CORRECT[] = "1024";
+		HString str( INIT );
+		ENSURE_EQUALS( "construction from int long does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
+	}
+
+	/* int short unsigned */ {
+		static int short unsigned const INIT = 1024;
+		static char const CORRECT[] = "1024";
+		HString str( INIT );
+		ENSURE_EQUALS( "construction from int long does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
+	}
 	/* int */ {
 		static int const INIT = 1024;
 		static char const CORRECT[] = "1024";
 		HString str( INIT );
-		ENSURE_EQUALS ( "construction from int does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int does not work", str, CORRECT );
 		ENSURE_EQUALS( "construction from int failed (size)",
 				str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
 		ENSURE_EQUALS( "construction from int failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "construction from int failed (is_empty)", str.empty(), false );
 	}
-	/* int long */ {
-		static int long const INIT = 1024;
-		static char const CORRECT[] = "1024";
-		HString str( INIT );
-		ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
-		ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
-		ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
-	}
 	/* int unsigned */ {
 		static int unsigned const INIT = 1024;
 		static char const CORRECT[] = "1024";
 		HString str( INIT );
-		ENSURE_EQUALS ( "construction from int unsigned does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int unsigned does not work", str, CORRECT );
 		ENSURE_EQUALS( "construction from int unsigned failed (size)",
 				str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
 		ENSURE_EQUALS( "construction from int unsigned failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "construction from int unsigned failed (is_empty)", str.empty(), false );
 	}
+	/* int long */ {
+		static int long const INIT = 1024;
+		static char const CORRECT[] = "1024";
+		HString str( INIT );
+		ENSURE_EQUALS( "construction from int long does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
+	}
 	/* int long unsigned */ {
 		static int long unsigned const INIT = 1024;
 		static char const CORRECT[] = "1024";
 		HString str( INIT );
-		ENSURE_EQUALS ( "construction from int long unsigned does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int long unsigned does not work", str, CORRECT );
 		ENSURE_EQUALS( "construction from int long unsigned failed (size)",
 				str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
 		ENSURE_EQUALS( "construction from int long unsigned failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "construction from int long unsigned failed (is_empty)", str.empty(), false );
 	}
+
+	/* int long long */ {
+		static int long long const INIT = -3141592653589793ll;
+		static char const CORRECT[] = "-3141592653589793";
+		HString str( INIT );
+		ENSURE_EQUALS( "construction from int long long does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int long long failed (size)",
+				str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+
+		ENSURE_EQUALS( "construction from int long long failed (capacity)", str.capacity(), SIZEOF_INT_LONG == 4 ? 31 : MIN_CAPACITY );
+		ENSURE_EQUALS( "construction from int long long failed (is_empty)", str.empty(), false );
+	}
+	/* int long long unsigned */ {
+		static int long long unsigned const INIT = 2718281828459045ll;
+		static char const CORRECT[] = "2718281828459045";
+		HString str( INIT );
+		ENSURE_EQUALS( "construction from int long unsigned does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int long unsigned failed (size)",
+				str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+
+		ENSURE_EQUALS( "construction from int long long unsigned failed (capacity)", str.capacity(), SIZEOF_INT_LONG == 4 ? 31 : MIN_CAPACITY );
+		ENSURE_EQUALS( "construction from int long long unsigned failed (is_empty)", str.empty(), false );
+	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "construction from char" )
-	static char const CORRECT = '1';
-	HString str( CORRECT );
-	ENSURE_EQUALS ( "construction from char does not work", str, CORRECT );
-	ENSURE_EQUALS( "construction from char failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) ) );
-	ENSURE_EQUALS( "construction from char failed (capacity)", str.capacity(), max( 1, MIN_CAPACITY ) );
-	ENSURE_EQUALS( "construction from char failed (is_empty)", str.empty(), false );
+TUT_UNIT_TEST( "construction from characters" )
+	/* char */ {
+		static char const CORRECT = '1';
+		HString str( CORRECT );
+		ENSURE_EQUALS( "construction from char does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from char failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) ) );
+		ENSURE_EQUALS( "construction from char failed (capacity)", str.capacity(), max( 1, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from char failed (is_empty)", str.empty(), false );
+	}
+	/* char unsigned */ {
+		static char unsigned const INIT = static_cast<char unsigned>( '±' );
+		static char const CORRECT[] = "±";
+		HString str( INIT );
+		ENSURE_EQUALS( "construction from int long does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 1, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
+	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "construction from double" )
-	static double INIT = 3.141593;
-	static char const* const CORRECT = "3.141593";
-	HString str( INIT );
-	ENSURE_EQUALS ( "construction from double does not work", str, CORRECT );
-	ENSURE_EQUALS( "construction from double failed (size)", str.size(), static_cast<int long>( ::strlen( CORRECT ) ) );
-	ENSURE_EQUALS( "construction from double failed (capacity)", str.capacity(), MIN_CAPACITY );
-	ENSURE_EQUALS( "construction from double failed (is_empty)", str.empty(), false );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "construction from double long" )
-	static double long INIT = 3.141592653589;
-	static char const* const CORRECT = "3.141592653589";
-	HString str( INIT );
-	ENSURE_EQUALS ( "construction from double does not work", str, CORRECT );
-	ENSURE_EQUALS( "construction from double failed (size)", str.size(), static_cast<int long>( ::strlen( CORRECT ) ) );
-	ENSURE_EQUALS( "construction from double failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
-	ENSURE_EQUALS( "construction from double failed (is_empty)", str.empty(), false );
+TUT_UNIT_TEST( "construction from floating point" )
+	/* float */ {
+		static float const INIT = static_cast<float>( 2.718281828459045 );
+		static char const CORRECT[] = "2.718282";
+		HString str( INIT );
+		ENSURE_EQUALS( "construction from int long does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
+		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), MIN_CAPACITY );
+		ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
+	}
+	/* double */ {
+		static double INIT = 3.141593;
+		static char const* const CORRECT = "3.141593";
+		HString str( INIT );
+		ENSURE_EQUALS( "construction from double does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from double failed (size)", str.size(), static_cast<int long>( ::strlen( CORRECT ) ) );
+		ENSURE_EQUALS( "construction from double failed (capacity)", str.capacity(), MIN_CAPACITY );
+		ENSURE_EQUALS( "construction from double failed (is_empty)", str.empty(), false );
+	}
+	/* double long */ {
+		static double long INIT = 3.141592653589;
+		static char const* const CORRECT = "3.141592653589";
+		HString str( INIT );
+		ENSURE_EQUALS( "construction from double does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from double failed (size)", str.size(), static_cast<int long>( ::strlen( CORRECT ) ) );
+		ENSURE_EQUALS( "construction from double failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from double failed (is_empty)", str.empty(), false );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "construction from void*" )
@@ -159,7 +221,7 @@ TUT_UNIT_TEST( "construction from void*" )
 	static void* INIT = reinterpret_cast<void*>( tmp );
 	static char const* const CORRECT = "0xdeadbeef";
 	HString str( INIT );
-	ENSURE_EQUALS ( "construction from void* does not work", str, CORRECT );
+	ENSURE_EQUALS( "construction from void* does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from void* failed (size)", str.size(), static_cast<int long>( ::strlen( CORRECT ) ) );
 	ENSURE_EQUALS( "construction from void* failed (capacity)", str.capacity(), MIN_CAPACITY );
 	ENSURE_EQUALS( "construction from void* failed (is_empty)", str.empty(), false );
@@ -178,15 +240,57 @@ TUT_UNIT_TEST( "operator +=" )
 	static char const* const TEST = "0xdeadbeef";
 	static char const CORRECT[] = "10240xdeadbeef";
 	HString str( INIT );
-	ENSURE_EQUALS ( "char* constructor does not work", str, INIT );
+	ENSURE_EQUALS( "char* constructor does not work", str, INIT );
 	ENSURE_EQUALS( "char* constructor failed (size)", str.size(), static_cast<int long>( sizeof ( INIT ) - 1 ) );
 	ENSURE_EQUALS( "char* constructor failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "char* constructor failed (is_empty)", str.empty(), false );
 	str += TEST;
-	ENSURE_EQUALS ( "operator+= does not work", str, CORRECT );
+	ENSURE_EQUALS( "operator+= does not work", str, CORRECT );
 	ENSURE_EQUALS( "operator+= failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
 	ENSURE_EQUALS( "operator+= failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "operator+= failed (is_empty)", str.empty(), false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "subscript" )
+	char const data[] = "abecad³o";
+	HString s( data );
+	for ( int i( 0 ); i < static_cast<int>( sizeof ( data ) ); ++ i ) {
+		ENSURE_EQUALS( "bad value from subscript", s[i], data[i] );
+	}
+	ENSURE_THROW( "subscript on bad index succeeded", s[-1], HStringException );
+	ENSURE_THROW( "subscript on bad index succeeded", s[static_cast<int>( sizeof ( data ) )], HStringException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "front/back" )
+	HString s( "abesad³o" );
+	ENSURE_EQUALS( "front failed", s.front(), 'a' );
+	ENSURE_EQUALS( "back failed", s.back(), 'o' );
+	s.clear();
+	ENSURE_THROW( "front on empty succeeded", s.front(), HStringException );
+	ENSURE_THROW( "back on empty succeeded", s.back(), HStringException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "set_at" )
+	char const data[] = "abecad³o";
+	char const dataOut[][10] = {
+		"abec4d³o",
+		"abec4d³0",
+		"4bec4d³0",
+		"4be"
+	};
+	int repl[][3] = {
+		{ 4, '4' },
+		{ 7, '0' },
+		{ 0, '4' },
+		{ 3, 0 }
+	};
+	HString s( data );
+	for ( int i( 0 ); i < countof( dataOut ); ++ i ) {
+		s.set_at( repl[i][0], static_cast<char>( repl[i][1] ) );
+		ENSURE_EQUALS( "set_at failed", s, dataOut[i] );
+	}
+	ENSURE_THROW( "set_at on bad index succeeded", s.set_at( -1, 0 ), HStringException );
+	ENSURE_THROW( "set_at on bad index succeeded", s.set_at( static_cast<int>( sizeof ( data ) - 1 ), 0 ), HStringException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "clear" )
@@ -197,12 +301,12 @@ TUT_UNIT_TEST( "clear" )
 	ENSURE_EQUALS( "trivial construction failed (capacity)", str.capacity(), MIN_CAPACITY );
 	ENSURE_EQUALS( "trivial construction failed (is_empty)", str.empty(), true );
 	str += INIT;
-	ENSURE_EQUALS ( "operator+= does not work", str, INIT );
+	ENSURE_EQUALS( "operator+= does not work", str, INIT );
 	ENSURE_EQUALS( "operator+= failed (size)", str.size(), static_cast<int long>( sizeof ( INIT ) - 1 ) );
 	ENSURE_EQUALS( "operator+= failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "operator+= failed (is_empty)", str.empty(), false );
 	str.clear();
-	ENSURE_EQUALS ( "clear does not work", str, "" );
+	ENSURE_EQUALS( "clear does not work", str, "" );
 	ENSURE_EQUALS( "clear failed (size)", str.size(), 0 );
 	ENSURE_EQUALS( "clear failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "clear failed (is_empty)", str.empty(), true );
@@ -222,31 +326,31 @@ TUT_UNIT_TEST( "replace(patter, str)" )
 	static char const CORRECT56[] = "aarebb";
 
 	HString str( INIT );
-	ENSURE_EQUALS ( "char* constructor does not work", str, INIT );
+	ENSURE_EQUALS( "char* constructor does not work", str, INIT );
 	ENSURE_EQUALS( "char* constructor failed (size)", str.size(), static_cast<int long>( sizeof ( INIT ) - 1 ) );
 	ENSURE_EQUALS( "char* constructor failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "char* constructor failed (is_empty)", str.empty(), false );
 
 	str.replace( PAT1, PAT2 );
-	ENSURE_EQUALS ( "replace 1->2 does not work", str, CORRECT12 );
+	ENSURE_EQUALS( "replace 1->2 does not work", str, CORRECT12 );
 	ENSURE_EQUALS( "replace 1->2 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT12 ) - 1 ) );
 	ENSURE_EQUALS( "replace 1->2 failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "replace 1->2 failed (is_empty)", str.empty(), false );
 
 	str.replace( PAT2, PAT3 );
-	ENSURE_EQUALS ( "replace 2->3 does not work", str, CORRECT23 );
+	ENSURE_EQUALS( "replace 2->3 does not work", str, CORRECT23 );
 	ENSURE_EQUALS( "replace 2->3 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT23 ) - 1 ) );
 	ENSURE_EQUALS( "replace 2->3 failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "replace 2->3 failed (is_empty)", str.empty(), false );
 
 	str.replace( PAT3, PAT4 );
-	ENSURE_EQUALS ( "replace 3->4 does not work", str, CORRECT34 );
+	ENSURE_EQUALS( "replace 3->4 does not work", str, CORRECT34 );
 	ENSURE_EQUALS( "replace 3->4 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT34 ) - 1 ) );
 	ENSURE_EQUALS( "replace 3->4 failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "replace 3->4 failed (is_empty)", str.empty(), false );
 
 	str.replace( PAT5, PAT6 );
-	ENSURE_EQUALS ( "replace 5->6 does not work", str, CORRECT56 );
+	ENSURE_EQUALS( "replace 5->6 does not work", str, CORRECT56 );
 	ENSURE_EQUALS( "replace 5->6 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT56 ) - 1 ) );
 	ENSURE_EQUALS( "replace 5->6 failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "replace 5->6 failed (is_empty)", str.empty(), false );
@@ -258,7 +362,7 @@ TUT_UNIT_TEST( "replace(patter, str)" )
 
 	str = INIT0;
 	str.replace( PATA, PATB );
-	ENSURE_EQUALS ( "replace A->B does not work", str, CORRECT_AB );
+	ENSURE_EQUALS( "replace A->B does not work", str, CORRECT_AB );
 	ENSURE_EQUALS( "replace A->B failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT_AB ) - 1 ) );
 	ENSURE_EQUALS( "replace A->B failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "replace A->B failed (is_empty)", str.empty(), false );
@@ -269,7 +373,7 @@ TUT_UNIT_TEST( "replace(patter, str)" )
 		static char const CORRECT_1AB[] = "UUcUU";
 		str = INIT1;
 		str.replace( PAT1A, PAT1B );
-		ENSURE_EQUALS ( "replace A1->B1 does not work", str, CORRECT_1AB );
+		ENSURE_EQUALS( "replace A1->B1 does not work", str, CORRECT_1AB );
 		ENSURE_EQUALS( "replace A1->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT_1AB ) - 1 ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), MIN_CAPACITY );
 		ENSURE_EQUALS( "replace A1->B1 failed (is_empty)", str.empty(), false );
@@ -281,76 +385,12 @@ TUT_UNIT_TEST( "replace(patter, str)" )
 		static char const CORRECT_1AB[] = "c@@cc@@cc@@cc@@cc@@cc@@cc";
 		str = INIT1;
 		str.replace( PAT1A, PAT1B );
-		ENSURE_EQUALS ( "replace A1->B1 does not work", str, CORRECT_1AB );
+		ENSURE_EQUALS( "replace A1->B1 does not work", str, CORRECT_1AB );
 		ENSURE_EQUALS( "replace A1->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT_1AB ) - 1 ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), max( 31, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (is_empty)", str.empty(), false );
 		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
 	}
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "construction from int short" )
-	static int short const INIT = 1024;
-	static char const CORRECT[] = "1024";
-	HString str( INIT );
-	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
-	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
-	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "construction from int short unsigned" )
-	static int short unsigned const INIT = 1024;
-	static char const CORRECT[] = "1024";
-	HString str( INIT );
-	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
-	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
-	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "construction from char unsigned" )
-	static char unsigned const INIT = static_cast<char unsigned>( '±' );
-	static char const CORRECT[] = "±";
-	HString str( INIT );
-	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
-	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 1, MIN_CAPACITY ) );
-	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "construction from float" )
-	static float const INIT = static_cast<float>( 2.718281828459045 );
-	static char const CORRECT[] = "2.718282";
-	HString str( INIT );
-	ENSURE_EQUALS ( "construction from int long does not work", str, CORRECT );
-	ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), MIN_CAPACITY );
-	ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "construction from int long long" )
-	static int long long const INIT = -3141592653589793ll;
-	static char const CORRECT[] = "-3141592653589793";
-	HString str( INIT );
-	ENSURE_EQUALS ( "construction from int long long does not work", str, CORRECT );
-	ENSURE_EQUALS( "construction from int long long failed (size)",
-			str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-
-	ENSURE_EQUALS( "construction from int long long failed (capacity)", str.capacity(), SIZEOF_INT_LONG == 4 ? 31 : MIN_CAPACITY );
-	ENSURE_EQUALS( "construction from int long long failed (is_empty)", str.empty(), false );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "construction from int long long unsigned" )
-	static int long long unsigned const INIT = 2718281828459045ll;
-	static char const CORRECT[] = "2718281828459045";
-	HString str( INIT );
-	ENSURE_EQUALS ( "construction from int long unsigned does not work", str, CORRECT );
-	ENSURE_EQUALS( "construction from int long unsigned failed (size)",
-			str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-
-	ENSURE_EQUALS( "construction from int long long unsigned failed (capacity)", str.capacity(), SIZEOF_INT_LONG == 4 ? 31 : MIN_CAPACITY );
-	ENSURE_EQUALS( "construction from int long long unsigned failed (is_empty)", str.empty(), false );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "shift_left" )
@@ -693,8 +733,13 @@ TUT_UNIT_TEST( "reserve( size )" )
 	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), MIN_CAPACITY );
 	str.reserve( MIN_CAPACITY + 1 );
 	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), ( MIN_CAPACITY < 16 ? 15 : 31 ) );
+	str.reserve( 100 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 127 );
+	str.reserve( 50 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 127 );
 	ENSURE_THROW( "absurd reallocation size allowed", str.reserve( -1 ), HStringException );
 	ENSURE_THROW( "huge (too big) reallocation size allowed", str.reserve( str.get_max_size() + 2 ), HStringException );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_max_size(), str.max_size() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "assign( HString ... )" )
@@ -717,6 +762,9 @@ TUT_UNIT_TEST( "assign( HString ... )" )
 	ENSURE_EQUALS( err, dest.assign( ss + 3, ss + static_cast<int>( sizeof ( ss ) ) - 4 ), " ma ko" );
 	ENSURE_THROW( "assign with negative offset succeeded", dest.assign( source, -1, 2 ), HStringException );
 	ENSURE_THROW( "assign with negative lenght succeeded", dest.assign( source, 0, -2 ), HStringException );
+	ENSURE_THROW( "assign with negative lenght succeeded", dest.assign( source, -2 ), HStringException );
+	ENSURE_THROW( "assign with null data succeeded", dest.assign( static_cast<char const*>( nullptr), 0l ), HStringException );
+	ENSURE_THROW( "assign with negative lenght succeeded", dest.assign( -2, ' ' ), HStringException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "fill()" )
