@@ -304,5 +304,106 @@ TUT_UNIT_TEST( "duplicated short option, duplication is legeal due to usage of t
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "command line" )
+	HProgramOptionsHandler po;
+	int i( 0 );
+	double d( 0 );
+	HString s;
+	HString optO;
+	HString optP;
+	bool optS( false );
+	bool flag( false );
+	bool b( false );
+	po(
+		HProgramOptionsHandler::HOption()
+		.long_form( "log-path" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "path pointing to file for application logs" )
+		.recipient( s )
+		.default_value( "log.txt" )
+		.argument_name( "path" )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'j' )
+		.long_form( "jobs" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "number of concurrent jobs" )
+		.recipient( i )
+		.default_value( 7 )
+		.argument_name( "count" )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'r' )
+		.long_form( "ratio" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "expected pass/fail ratio" )
+		.recipient( d )
+		.default_value( .5 )
+		.argument_name( "value" )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'R' )
+		.long_form( "restartable" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "run tests in restartable mode" )
+		.recipient( b )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'O' )
+		.long_form( "option" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL )
+		.description( "argument is optional" )
+		.recipient(	optO )
+		.argument_name( "arg" )
+		.default_value( "defArg" )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'P' )
+		.long_form( "parameter" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "argument is required" )
+		.recipient(	optP )
+		.argument_name( "arg" )
+		.default_value( "defParam" )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'F' )
+		.long_form( "flag" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "flags argument is forbidden" )
+		.recipient(	flag )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'S' )
+		.long_form( "switch" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
+		.description( "switches argument is forbidden" )
+		.recipient(	optS )
+	);
+	char const cmdLineData[][20] = {
+		"prog",
+		"-FS",
+		"-r7",
+		"nonOpt",
+		"--parameter=XX",
+		"nonOpt2",
+		"--option"
+	};
+	char* cmdLine[countof ( cmdLineData )];
+	int n( 0 );
+	for ( char const* p : cmdLineData ) {
+		cmdLine[n] = const_cast<char*>( p );
+		++ n;
+	}
+	int nonOpt( po.process_command_line( countof ( cmdLine ), cmdLine ) );
+	ENSURE( "flag not set", flag );
+	ENSURE( "switch not set", optS );
+	ENSURE_NOT( "restartable set", b );
+	ENSURE_DISTANCE( "bad ratio", d, 7., static_cast<double>( epsilon ) );
+	ENSURE_EQUALS( "bad param", optP, "XX" );
+	ENSURE_EQUALS( "bad param", optO, "" );
+	ENSURE_EQUALS( "bad nonOpt score", nonOpt, countof ( cmdLineData ) - 2 );
+TUT_TEARDOWN()
+
 }
 
