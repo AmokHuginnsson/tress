@@ -799,7 +799,21 @@ TUT_UNIT_TEST( "replace(pos, len, str)" )
 	c = 'k';
 	uri.replace( 1, 3, &c, 1 );
 	ENSURE_EQUALS( "replace( pos, len, to, to_len ) failed", uri, "Ok" );
-	ENSURE_THROW( "bad ren in replace accepted", uri.replace( 0, 3, &c, 1 ), HStringException );
+	ENSURE_THROW( "bad size in replace accepted", uri.replace( 0, 3, &c, 1 ), HStringException );
+	s.replace( s.begin() + 7, s.begin() + 10, to_string( "kota" ) );
+	ENSURE_EQUALS( "bad content", s, "Ala ma kota." );
+	ENSURE_THROW( "bad cur size in replace accepted", uri.replace( 0, -1, &c, 1 ), HStringException );
+	ENSURE_THROW( "bad new size in replace accepted", uri.replace( 0, 1, &c, -1 ), HStringException );
+	ENSURE_THROW( "bad pos in replace accepted", uri.replace( -1, 1, &c, 1 ), HStringException );
+	HString pies( "psXXX" );
+	s.replace( 7, 3, pies, 0, 2 );
+	ENSURE_EQUALS( "bad content", s, "Ala ma psa." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "reverse" )
+	HString s( "aBeCaDlO" );
+	s.reverse();
+	ENSURE_EQUALS( "reverse failed", s, "AbEcAdLo" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "append( HString ... )" )
@@ -924,6 +938,18 @@ TUT_UNIT_TEST( "cmp opers (left literal)" )
 	ENSURE_NOT( "> failed", "001" > "001"_ys );
 	ENSURE( "< failed", "000" < "001"_ys );
 	ENSURE_NOT( "< failed", "001" < "001"_ys );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "conversions" )
+	ENSURE_EQUALS( "to_string void_p failed", to_string( static_cast<void*>( nullptr ) ), "0x0" );
+	ENSURE_EQUALS( "to_string double failed", to_string( 3.141592 ), "3.141592" );
+	ENSURE_EQUALS( "to_string float failed", to_string( 2.718281f ), "2.718281" );
+	ENSURE_EQUALS( "to_string int long long unsigned failed", to_string( 1234567890123456789ULL ), "1234567890123456789" );
+	ENSURE_EQUALS( "to_string int long unsigned failed", to_string( 4234567890UL ), "4234567890" );
+	ENSURE_EQUALS( "to_string int unsigned failed", to_string( 4234567890U ), "4234567890" );
+	ENSURE_EQUALS( "to_string int short failed", to_string( static_cast<int short>( 32145 ) ), "32145" );
+	ENSURE_EQUALS( "to_string int short unsigned failed", to_string( static_cast<int short unsigned>( 54321 ) ), "54321" );
+	ENSURE_EQUALS( "to_string char unsigned failed", to_string( static_cast<char unsigned>( '±' ) ), "±" );
 TUT_TEARDOWN()
 
 }
