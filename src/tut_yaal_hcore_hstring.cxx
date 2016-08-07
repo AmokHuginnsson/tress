@@ -391,6 +391,16 @@ TUT_UNIT_TEST( "replace(patter, str)" )
 		ENSURE_EQUALS( "replace A1->B1 failed (is_empty)", str.empty(), false );
 		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
 	}
+	/* noop */ {
+		static char const INIT1[] = "abecad³o";
+		str = INIT1;
+		str.replace( "", "z pieca" );
+		ENSURE_EQUALS( "replace ''->B1 does not work", str, INIT1 );
+		ENSURE_EQUALS( "replace ''->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( INIT1 ) - 1 ) );
+		ENSURE_EQUALS( "replace ''->B1 failed (capacity)", str.capacity(), max( 15, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "replace ''->B1 failed (is_empty)", str.empty(), false );
+		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "shift_left" )
@@ -430,6 +440,8 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "right" )
 	HString str( "ala/." );
 	ENSURE_EQUALS( "wrong right part extraction", str.right( 1 ), "." );
+	ENSURE_EQUALS( "bad right 0", str.right( 0 ), "" );
+	ENSURE_EQUALS( "bad right -1", str.right( -1 ), "" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "erase" )
@@ -481,6 +493,10 @@ TUT_UNIT_TEST( "insert" )
 	ENSURE_EQUALS( insert_failed, str.insert( 7, 3, "ABCD" ), "abcdef" );
 	HString str2( "|==--|[]" );
 	ENSURE_EQUALS( insert_failed, str2.insert( 7, 4, "done" ), "|==--|[done]" );
+	str = s;
+	ENSURE_EQUALS( insert_failed, str.insert( 2, "ABCD", 2 ), "abABcdef" );
+	str = s;
+	ENSURE_EQUALS( insert_failed, str.insert( 3, "ABCD"_ys ), "abcABCDdef" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "find" )
@@ -775,6 +791,9 @@ TUT_UNIT_TEST( "fill()" )
 	s.fill( 'x', 4, 8 );
 	ENSURE_EQUALS( "bad lenght", s.get_length(), 16 );
 	ENSURE_EQUALS( "bad content", s, "0000xxxxxxxx0000" );
+	ENSURE_THROW( "bad len succeeded", s.fill( 'x', 0, -2 ), HStringException );
+	ENSURE_THROW( "bad offset succeeded", s.fill( 'x', -1, 1 ), HStringException );
+	ENSURE_THROW( "bad bad len + offset succeeded", s.fill( 'x', 12, 32 ), HStringException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "fillz()" )
@@ -785,6 +804,9 @@ TUT_UNIT_TEST( "fillz()" )
 	s.fillz( 'x', 4, 8 );
 	ENSURE_EQUALS( "bad lenght", s.get_length(), 12 );
 	ENSURE_EQUALS( "bad content", s, "0000xxxxxxxx" );
+	s.fillz( 'y', 8 );
+	ENSURE_EQUALS( "bad lenght", s.get_length(), 12 );
+	ENSURE_EQUALS( "bad content", s, "0000xxxxyyyy" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "replace(pos, len, str)" )
@@ -805,6 +827,7 @@ TUT_UNIT_TEST( "replace(pos, len, str)" )
 	ENSURE_THROW( "bad cur size in replace accepted", uri.replace( 0, -1, &c, 1 ), HStringException );
 	ENSURE_THROW( "bad new size in replace accepted", uri.replace( 0, 1, &c, -1 ), HStringException );
 	ENSURE_THROW( "bad pos in replace accepted", uri.replace( -1, 1, &c, 1 ), HStringException );
+	ENSURE_THROW( "bad offset in replace accepted", uri.replace( 0, 1, "aaa"_ys, -1, 1 ), HStringException );
 	HString pies( "psXXX" );
 	s.replace( 7, 3, pies, 0, 2 );
 	ENSURE_EQUALS( "bad content", s, "Ala ma psa." );
@@ -832,6 +855,7 @@ TUT_UNIT_TEST( "append( HString ... )" )
 	ENSURE_EQUALS( err, dest.append( source, static_cast<int>( sizeof ( ss ) ) - 1, 5 ), "dummy" + source + "Ala mma kokota.ota.." );
 	ENSURE_EQUALS( err, dest.append( source, static_cast<int>( sizeof ( ss ) ), 5 ), "dummy" + source + "Ala mma kokota.ota.." );
 	ENSURE_EQUALS( err, dest.append( ss + 3, ss + static_cast<int>( sizeof ( ss ) ) - 4 ), "dummy" + source + "Ala mma kokota.ota.. ma ko" );
+	ENSURE_EQUALS( err, dest.append( source, 9 ), "dummy" + source + "Ala mma kokota.ota.. ma kota." );
 	ENSURE_THROW( "append with negative offset succeeded", dest.append( source, -1, 2 ), HStringException );
 	ENSURE_THROW( "append with negative lenght succeeded", dest.append( source, 0, -2 ), HStringException );
 TUT_TEARDOWN()
