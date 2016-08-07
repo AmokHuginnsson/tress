@@ -793,7 +793,10 @@ TUT_UNIT_TEST( "fill()" )
 	ENSURE_EQUALS( "bad content", s, "0000xxxxxxxx0000" );
 	ENSURE_THROW( "bad len succeeded", s.fill( 'x', 0, -2 ), HStringException );
 	ENSURE_THROW( "bad offset succeeded", s.fill( 'x', -1, 1 ), HStringException );
-	ENSURE_THROW( "bad bad len + offset succeeded", s.fill( 'x', 12, 32 ), HStringException );
+	ENSURE_THROW( "bad offset succeeded", s.fill( 'x', 17, 1 ), HStringException );
+	s.fill( 'y', 16, 4 );
+	ENSURE_EQUALS( "bad lenght", s.get_length(), 20 );
+	ENSURE_EQUALS( "bad content", s, "0000xxxxxxxx0000yyyy" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "fillz()" )
