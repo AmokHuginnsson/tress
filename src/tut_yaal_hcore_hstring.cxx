@@ -950,6 +950,54 @@ TUT_UNIT_TEST( "conversions" )
 	ENSURE_EQUALS( "to_string int short failed", to_string( static_cast<int short>( 32145 ) ), "32145" );
 	ENSURE_EQUALS( "to_string int short unsigned failed", to_string( static_cast<int short unsigned>( 54321 ) ), "54321" );
 	ENSURE_EQUALS( "to_string char unsigned failed", to_string( static_cast<char unsigned>( '±' ) ), "±" );
+	ENSURE_EQUALS( "stoi failed", stoi( "-2147483647"_ys ), -2147483647 );
+	ENSURE_EQUALS( "stoi failed", stoi( "-7FFFFFFF"_ys, nullptr, 16 ), -2147483647 );
+	ENSURE_THROW( "stoi overflow succeeded", stoi( "2147483648" ), HOutOfRangeException );
+#if SIZEOF_INT_LONG == 8
+	ENSURE_EQUALS( "stol failed", stol( "-9223372036854775807"_ys ), -9223372036854775807L );
+	ENSURE_EQUALS( "stol failed", stol( "-7FFFFFFFFFFFFFFF"_ys, nullptr, 16 ), -9223372036854775807L );
+	ENSURE_THROW( "stol overflow succeeded", stol( "9223372036854775808"_ys ), HOutOfRangeException );
+	/* unsigned */
+	ENSURE_EQUALS( "stoul failed", stoul( "18446744073709551615"_ys ), 18446744073709551615UL );
+	ENSURE_EQUALS( "stoul failed", stoul( "FFFFFFFFFFFFFFFF"_ys, nullptr, 16 ), 18446744073709551615UL );
+	ENSURE_THROW( "stoul overflow succeeded", stoul( "18446744073709551616"_ys ), HOutOfRangeException );
+#else
+	ENSURE_EQUALS( "stol failed", stol( "-2147483647"_ys ), -2147483647L );
+	ENSURE_EQUALS( "stol failed", stol( "-7FFFFFFF"_ys, nullptr, 16 ), -2147483647L );
+	ENSURE_THROW( "stol overflow succeeded", stol( "2147483648"_ys ), HOutOfRangeException );
+	/* unsigned */
+	ENSURE_EQUALS( "stoul failed", stoul( "4294967295"_ys ), 4294967295UL );
+	ENSURE_EQUALS( "stoul failed", stoul( "FFFFFFFF"_ys, nullptr, 16 ), 4294967295UL );
+	ENSURE_THROW( "stoul overflow succeeded", stoul( "4294967296"_ys ), HOutOfRangeException );
+#endif
+	ENSURE_EQUALS( "stoll failed", stoll( "-9223372036854775807"_ys ), -9223372036854775807LL );
+	ENSURE_EQUALS( "stoll failed", stoll( "-7FFFFFFFFFFFFFFF"_ys, nullptr, 16 ), -9223372036854775807LL );
+	ENSURE_THROW( "stoll overflow succeeded", stoll( "9223372036854775808"_ys ), HOutOfRangeException );
+	ENSURE_THROW( "stoll on invalid succeeded", stoll( " kotek"_ys ), HInvalidArgumentException );
+	int end( 0 );
+	ENSURE_EQUALS( "stoll failed", stoll( "-12345678abcdefgh"_ys, &end, 10 ), -12345678LL );
+	ENSURE_EQUALS( "stoll end failed", end, 9 );
+	ENSURE_EQUALS( "stoll failed", stoll( "-12345678abcdefgh"_ys, &end, 16 ), -0x12345678abcdefLL );
+	ENSURE_EQUALS( "stoll end failed", end, 15 );
+	/* unsigned */
+	ENSURE_EQUALS( "stoull failed", stoull( "18446744073709551615"_ys ), 18446744073709551615ULL );
+	ENSURE_EQUALS( "stoull failed", stoull( "FFFFFFFFFFFFFFFF"_ys, nullptr, 16 ), 18446744073709551615ULL );
+	ENSURE_EQUALS( "stoull failed", stoull( "12345678abcdefgh"_ys, &end, 10 ), 12345678ULL );
+	ENSURE_EQUALS( "stoull end failed", end, 8 );
+	ENSURE_EQUALS( "stoull failed", stoull( "12345678abcdefgh"_ys, &end, 16 ), 0x12345678abcdefULL );
+	ENSURE_EQUALS( "stoull end failed", end, 14 );
+	ENSURE_THROW( "stoull overflow succeeded", stoull( "18446744073709551616"_ys ), HOutOfRangeException );
+	ENSURE_THROW( "stoll on invalid succeeded", stoull( " kotek"_ys ), HInvalidArgumentException );
+	ENSURE_DISTANCE( "stof failed", stof( "3.141592"_ys ), 3.141592f, static_cast<float>( epsilon ) );
+	ENSURE_DISTANCE( "stod failed", stod( "3.1415926535"_ys ), 3.1415926535, static_cast<double>( epsilon ) );
+	ENSURE_DISTANCE( "stold failed", stold( "2.718281828459045"_ys ), 2.718281828459045L, epsilon );
+	ENSURE( "is_digit failed", is_digit( '0' ) );
+	ENSURE( "is_digit failed", is_digit( '9' ) );
+	ENSURE_NOT( "is_digit failed", is_digit( 'a' ) );
+	ENSURE( "is_letter failed", is_letter( 'a' ) && is_letter( 'z' ) && is_letter( 'A' ) && is_letter( 'Z' ) );
+	ENSURE_NOT( "is_letter failed", is_letter( '0' ) );
+	ENSURE( "is_alpha failed", is_alpha( 'a' ) && is_alpha( 'z' ) && is_alpha( 'A' ) && is_alpha( 'Z' ) && is_alpha( '0' ) && is_alpha( '9' ) && is_alpha( '_' ) );
+	ENSURE_NOT( "is_alpha failed", is_alpha( '\b' ) );
 TUT_TEARDOWN()
 
 }
