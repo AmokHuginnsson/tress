@@ -609,7 +609,7 @@ TUT_UNIT_TEST( "OperatingSystem" )
 			"return(0);"
 			"}"
 		),
-		"*anonymous stream*:1:44: Uncaught exception No such file or directory"
+		"*anonymous stream*:1:44: Uncaught exception: No such file or directory"
 	);
 	/* It is impossible to test exit(). */
 	hcore::HString CHILD( "./data/child" EXE_SUFFIX );

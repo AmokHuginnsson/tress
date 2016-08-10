@@ -655,6 +655,24 @@ char const progCompileErr80[] =
 	"}\n"
 ;
 
+char const progCompileErr81[] =
+	"class A {\n"
+	"\t_x = a;\n"
+	"}\n"
+	"main() {\n"
+	"\treturn ( A() );\n"
+	"}\n"
+;
+
+char const progCompileErr82[] =
+	"class A {\n"
+	"\t_x = ( a = 0 );\n"
+	"}\n"
+	"main() {\n"
+	"\treturn ( A() );\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -738,6 +756,8 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr78,
 		progCompileErr79,
 		progCompileErr80,
+		progCompileErr81,
+		progCompileErr82,
 		NULL
 	};
 	int const err[][3] = {
@@ -822,6 +842,8 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 20, 3, 4 },   // 78
 		{ 14, 2, 6 },   // 79
 		{ 10, 2, 2 },   // 80
+		{ 16, 2, 7 },   // 81
+		{ 18, 2, 9 },   // 82
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
