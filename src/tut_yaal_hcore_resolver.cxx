@@ -46,6 +46,10 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_resolver );
 TUT_TEST_GROUP( tut_yaal_hcore_resolver, "yaal::hcore::resolver" );
 
+TUT_UNIT_TEST( "ip_to_string" )
+	ENSURE_EQUALS( "ip_to_string failure", resolver::ip_to_string( HIP( 127, 0, 0, 1 ) ), "127.0.0.1" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "get_ip" )
 	HIP ipA( 127, 0, 0, 1 );
 	HIP ipB( 0, 0, 0, 0 );
@@ -53,8 +57,8 @@ TUT_UNIT_TEST( "get_ip" )
 	ENSURE( "get_ip filed", ( ip == ipA ) || ( ip == ipB ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "ip_to_string" )
-	ENSURE_EQUALS( "ip_to_string failure", resolver::ip_to_string( HIP( 127, 0, 0, 1 ) ), "127.0.0.1" );
+TUT_UNIT_TEST( "get_ip on invalid" )
+	ENSURE_THROW( "invalid resolved", resolver::get_ip( "nonexisting.invalid" ), HResolverException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "get_name" )
@@ -64,6 +68,11 @@ TUT_UNIT_TEST( "get_name" )
 	cout << localhost << endl;
 	cout << resolved << endl;
 	ENSURE( "get_name failure", ( resolved == "localhost" ) || ( resolved == localhost ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "get_name on invalid" )
+	HString resolved( resolver::get_name( HIP( 192, 0, 2, 0 ) ) );
+	ENSURE_EQUALS( "get_name failure", resolved, "192.0.2.0" );
 TUT_TEARDOWN()
 
 }
