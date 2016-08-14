@@ -186,6 +186,62 @@ TUT_UNIT_TEST( "time from raw" )
 	clog << t << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "set_time" )
+	HTime t( now_local() );
+	HTime orig( t );
+	int hour( t.get_hour() );
+	int minute( t.get_minute() );
+	int second( t.get_second() );
+	t.set_time( hour != 10 ? 10 : 20, minute != 10 ? 10 : 20, second != 10 ? 10 : 20 );
+	ENSURE( "time stayed same", t != orig );
+	ENSURE_EQUALS( "bad year", t.get_year(), orig.get_year() );
+	ENSURE_EQUALS( "bad month", t.get_month(), orig.get_month() );
+	ENSURE_EQUALS( "bad day", t.get_day(), orig.get_day() );
+	ENSURE_EQUALS( "bad hour", t.get_hour(), hour != 10 ? 10 : 20 );
+	ENSURE_EQUALS( "bad minute", t.get_minute(), minute != 10 ? 10 : 20 );
+	ENSURE_EQUALS( "bad second", t.get_second(), second != 10 ? 10 : 20 );
+	ENSURE_THROW( "bad hour accepted", t.set_time( -1, 0, 0 ), HTimeException );
+	ENSURE_THROW( "bad hour accepted", t.set_time( 24, 0, 0 ), HTimeException );
+	ENSURE_THROW( "bad minute accepted", t.set_time( 0, -1, 0 ), HTimeException );
+	ENSURE_THROW( "bad minute accepted", t.set_time( 0, 60, 0 ), HTimeException );
+	ENSURE_THROW( "bad second accepted", t.set_time( 0, 0, -1 ), HTimeException );
+	ENSURE_THROW( "bad second accepted", t.set_time( 0, 0, 60 ), HTimeException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "set_date" )
+	HTime t( now_local() );
+	HTime orig( t );
+	int month( t.get_month() );
+	int day( t.get_day() );
+	t.set_date( 1978, month != 5 ? 5 : 8, day != 24 ? 24 : 25 );
+	ENSURE( "date stayed same", t != orig );
+	ENSURE_EQUALS( "bad hour", t.get_hour(), orig.get_hour() );
+	ENSURE_EQUALS( "bad minute", t.get_minute(), orig.get_minute() );
+	ENSURE_EQUALS( "bad second", t.get_second(), orig.get_second() );
+	ENSURE_EQUALS( "bad year", t.get_year(), 1978 );
+	ENSURE_EQUALS( "bad month", t.get_month(), month != 5 ? 5 : 8 );
+	ENSURE_EQUALS( "bad day", t.get_day(), day != 24 ? 24 : 25 );
+	ENSURE_THROW( "bad month accepted", t.set_date( 1989, 0, 1 ), HTimeException );
+	ENSURE_THROW( "bad month accepted", t.set_date( 1989, 13, 1 ), HTimeException );
+	ENSURE_THROW( "bad day accepted", t.set_date( 1989, 8, 0 ), HTimeException );
+	ENSURE_THROW( "bad day accepted", t.set_date( 1989, 8, 32 ), HTimeException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "from_string" )
+	HTime t( now_local().raw(), "%Y/%m/%d %H/%M/%S" );
+	t.from_string( "1978-05-24 23:30:05" );
+	ENSURE_EQUALS( "bad date time from string", t, HTime( 1978, 5, 24, 23, 30, 5 ) );
+	t.set_now();
+	t.set_time();
+	t.from_string( "1978-05-24" );
+	ENSURE_EQUALS( "bad date from string", t, HTime( 1978, 5, 24, 0, 0, 0 ) );
+	t.set_now();
+	t.set_date( 0 );
+	t.from_string( "13:45:57" );
+	ENSURE_EQUALS( "bad time from string", t, HTime( 0, 1, 1, 13, 45, 57 ) );
+	ENSURE_THROW( "date time from bad string accepted", t.from_string( "1978+05+24 23+30+04" ), HTimeException );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "swap" )
 	HTime now( now_local() );
 	HTime bday( 1978, HTime::MONTH::MAY, 24, 23, 30, 0 );
@@ -289,6 +345,21 @@ TUT_UNIT_TEST( "mod_month" )
 	ENSURE_EQUALS( "bad seconds from mod_month", bday.get_second(), 0 );
 	ENSURE_EQUALS( "bad week day", bday.get_day_of_week(), HTime::DAY_OF_WEEK::SATURDAY );
 	bday.mod_month( -99 );
+	ENSURE_EQUALS( "bad year from mod_month", bday.get_year(), 1970 );
+	ENSURE_EQUALS( "bad month from mod_month", bday.get_month(), 3 );
+	ENSURE_EQUALS( "bad day from mod_month", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from mod_month", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from mod_month", bday.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from mod_month", bday.get_second(), 0 );
+	ENSURE_EQUALS( "bad week day", bday.get_day_of_week(), HTime::DAY_OF_WEEK::TUESDAY );
+	bday.mod_month( -4 );
+	ENSURE_EQUALS( "bad year from mod_month", bday.get_year(), 1969 );
+	ENSURE_EQUALS( "bad month from mod_month", bday.get_month(), 11 );
+	ENSURE_EQUALS( "bad day from mod_month", bday.get_day(), 24 );
+	ENSURE_EQUALS( "bad hour from mod_month", bday.get_hour(), 23 );
+	ENSURE_EQUALS( "bad minute from mod_month", bday.get_minute(), 30 );
+	ENSURE_EQUALS( "bad seconds from mod_month", bday.get_second(), 0 );
+	bday.mod_month( 4 );
 	ENSURE_EQUALS( "bad year from mod_month", bday.get_year(), 1970 );
 	ENSURE_EQUALS( "bad month from mod_month", bday.get_month(), 3 );
 	ENSURE_EQUALS( "bad day from mod_month", bday.get_day(), 24 );
@@ -420,6 +491,22 @@ TUT_UNIT_TEST( "swap" )
 	ENSURE_EQUALS( "swap failed", t2, ts1 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "comparison" )
+	ENSURE( "<= failed", HTime( 1978, 5, 24, 23, 30, 5 ) <= HTime( 1978, 5, 24, 23, 30, 5 ) );
+	ENSURE( "<= failed", HTime( 1978, 5, 24, 23, 30, 4 ) <= HTime( 1978, 5, 24, 23, 30, 5 ) );
+	ENSURE_NOT( "<= failed", HTime( 1978, 5, 24, 23, 30, 5 ) <= HTime( 1978, 5, 24, 23, 30, 4 ) );
+
+	ENSURE( ">= failed", HTime( 1978, 5, 24, 23, 30, 5 ) >= HTime( 1978, 5, 24, 23, 30, 5 ) );
+	ENSURE( ">= failed", HTime( 1978, 5, 24, 23, 30, 5 ) >= HTime( 1978, 5, 24, 23, 30, 4 ) );
+	ENSURE_NOT( ">= failed", HTime( 1978, 5, 24, 23, 30, 4 ) >= HTime( 1978, 5, 24, 23, 30, 5 ) );
+
+	ENSURE( "< failed", HTime( 1978, 5, 24, 23, 30, 4 ) < HTime( 1978, 5, 24, 23, 30, 5 ) );
+	ENSURE_NOT( "< failed", HTime( 1978, 5, 24, 23, 30, 5 ) < HTime( 1978, 5, 24, 23, 30, 5 ) );
+
+	ENSURE( "> failed", HTime( 1978, 5, 24, 23, 30, 5 ) > HTime( 1978, 5, 24, 23, 30, 4 ) );
+	ENSURE_NOT( "> failed", HTime( 1978, 5, 24, 23, 30, 5 ) > HTime( 1978, 5, 24, 23, 30, 5 ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "epoch" )
 	HTime epoch( HTime::TZ::UTC, 0, 1, 1, 0, 0, 0 );
 	HTime epochRaw( HTime::TZ::UTC, 0LL, _iso8601DateTimeFormat_ );
@@ -439,6 +526,8 @@ TUT_UNIT_TEST( "user defined literal" )
 	ENSURE_EQUALS( "udl failed",
 		( 1978_yY + ( 4_yM ).set_time( 0, 0, 0 ) + 23_yD + 23_yh + 30_ym - 1_yD - 2_yh ).set_tz( HTime::TZ::LOCAL ),
 		HTime( 1978, HTime::MONTH::MAY, 24, 23, 30, 0 ) );
+	ENSURE_EQUALS( "udl _yt failed", "1978-05-24 23:30:07"_yt, HTime( 1978, 5, 24, 23, 30, 7 ) );
+	ENSURE_EQUALS( "udl _ys failed", 62167219200_ys, HTime( HTime::TZ::UTC, 1970, 1, 1, 0, 0, 0 ) );
 TUT_TEARDOWN()
 #endif /* #if SIZEOF_TIME_T == 8 */
 #endif /* #ifndef __HOST_OS_TYPE_SOLARIS__ */
