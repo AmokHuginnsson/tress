@@ -145,7 +145,7 @@ TUT_UNIT_TEST( "addstr" )
 	HConsole& cons( HConsole::get_instance() );
 	cons.enter_curses();
 	tress::fake_console_subsystem::build_attribute_maps();
-	cons.clrscr();
+	cons.clear_terminal();
 	cons.set_attr( COLORS::FG_CYAN );
 	cons.move( 10, 15 );
 	cons.addstr( "Ala ma kota" );
