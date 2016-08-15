@@ -373,7 +373,7 @@ public:
 	/**
 	 * Reset test position before first test.
 	 */
-	void rewind() {
+	virtual void rewind() override {
 		_currentTest = _tests.begin();
 		_currentTitle = _titles.begin();
 	}
@@ -392,7 +392,7 @@ public:
 	/**
 	 * Runs next test.
 	 */
-	test_result run_next() {
+	virtual test_result run_next() override {
 		if ( _currentTest == _tests.end() ) {
 			throw no_more_tests();
 		}
@@ -417,7 +417,7 @@ public:
 	/**
 	* Runs one test by position.
 	*/
-	test_result run_test( int n ) {
+	virtual test_result run_test( int n ) override {
 		// beyond tests is special case to discover upper limit
 		if ( _tests.rbegin() == _tests.rend() ) {
 			throw beyond_last_test();
