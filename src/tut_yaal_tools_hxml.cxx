@@ -28,6 +28,7 @@ Copyright:
 
 #include <yaal/tools/hxml.hxx>
 #include <yaal/tools/streamtools.hxx>
+#include <yaal/hcore/bound.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -394,6 +395,43 @@ TUT_UNIT_TEST( "get_element_by_name == many" )
 		ENSURE_EQUALS( "bad node name", (*it).get_name(), "my_sub" );
 	}
 TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "reverse iteration" )
+	HXml xml;
+	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
+	xml.apply_style( "./data/style.xml" );
+	xml.parse();
+	HXml::HConstNodeSet nodeSetConst = xml.get_elements_by_path( "/my_root/my_set" );
+	ENSURE_NOT( "bad emptiness status", nodeSetConst.is_empty() );
+	int i( 0 );
+	char const res[][8] = {
+		"four",
+		"three",
+		"two",
+		"one"
+	};
+	for ( HXml::HConstNodeProxy::const_reverse_iterator it( nodeSetConst[0].rbegin() ), end( nodeSetConst[0].rend() ); it != end; ++ it ) {
+		if ( (*it).get_type() == HXml::HNode::TYPE::NODE ) {
+			ENSURE_EQUALS(
+				"bad rev it",
+				(*find_if( (*it).begin(), (*it).end(), call( &HXml::HConstNodeProxy::get_type, _1 ) == HXml::HNode::TYPE::CONTENT )).get_value(),
+				res[i++]
+			);
+		}
+	}
+	HXml::HNodeSet nodeSet = xml.get_elements_by_path( "/my_root/my_set" );
+	i = 0;
+	for ( HXml::HNodeProxy::reverse_iterator it( nodeSet[0].rbegin() ), end( nodeSet[0].rend() ); it != end; ++ it ) {
+		if ( (*it).get_type() == HXml::HNode::TYPE::NODE ) {
+			ENSURE_EQUALS(
+				"bad rev it",
+				(*find_if( (*it).begin(), (*it).end(), call( &HXml::HNodeProxy::get_type, _1 ) == HXml::HNode::TYPE::CONTENT )).get_value(),
+				res[i++]
+			);
+		}
+	}
+TUT_TEARDOWN()
+
 
 }
 
