@@ -154,10 +154,10 @@ TUT_UNIT_TEST( "Empty DOM." )
 	ENSURE_THROW( "accessing null node-proxy", x.get_root().get_type(), HFailedAssertion );
 TUT_TEARDOWN()
 
-
 TUT_UNIT_TEST( "Root node." )
 	HXml x;
 	static char const* const ROOT = "root";
+	ENSURE_THROW( "invalid encoding accepted", x.create_root( ROOT, "invalid" ), HXmlException );
 	x.create_root( ROOT );
 	HXml::HNodeProxy n = x.get_root();
 	ENSURE( "initialized DOM empty", !! n );
@@ -166,7 +166,6 @@ TUT_UNIT_TEST( "Root node." )
 	ENSURE_EQUALS( "bad level of root element", n.get_level(), 0 );
 	ENSURE( "fresh node not empty", n.begin() == n.end() );
 TUT_TEARDOWN()
-
 
 TUT_UNIT_TEST( "clear" )
 	HXml x;
@@ -202,6 +201,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "load, save" )
 	HXml xml;
+	HStringStream ss( "<xml></xml>" );
+	ENSURE_THROW( "no encoding file loaded", xml.load( ss ), HXmlException );
 	xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.parse( "/my_root/my_set/my_item" );
 	xml.parse( "/my_root/my_set/my_item" ); /* mem-leak test */
