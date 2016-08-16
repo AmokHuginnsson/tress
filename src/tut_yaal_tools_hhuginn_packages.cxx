@@ -425,26 +425,48 @@ TUT_UNIT_TEST( "Mathematics" )
 		"$-2"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (invert) failed",
+		"Mathematics.matrix (inverse) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([1.,2.],[3.,4.]);"
-			"return(string(m1*copy(m1).invert()));"
+			"m=math.matrix([1.,2.],[3.,4.]);"
+			"return(string(m*m.inverse()));"
 			"}"
 		),
 		"\"Matrix([1.000000000000, 0.000000000000], [0.000000000000, 1.000000000000])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (invert) failed",
+		"Mathematics.matrix (inverse) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([$1.,$2.],[$3.,$4.]);"
-			"return(string(m1*copy(m1).invert()));"
+			"m=math.matrix([$1.,$2.],[$3.,$4.]);"
+			"return(string(m*m.inverse()));"
 			"}"
 		),
 		"\"Matrix([$1, $0], [$0, $1])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (transpose) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m=math.matrix([1.,2.],[3.,4.],[5.,6.]);"
+			"return(string(m.transpose()));"
+			"}"
+		),
+		"\"Matrix([1.000000000000, 3.000000000000, 5.000000000000], [2.000000000000, 4.000000000000, 6.000000000000])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix (transpose) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m=math.matrix([$1.,$2.],[$3.,$4.],[$5,$6]);"
+			"return(string(m.transpose()));"
+			"}"
+		),
+		"\"Matrix([$1, $3, $5], [$2, $4, $6])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.matrix (set/get) failed",
