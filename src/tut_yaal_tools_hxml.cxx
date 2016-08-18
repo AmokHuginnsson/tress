@@ -141,7 +141,8 @@ inline std::ostream& operator << ( std::ostream& out, HXml const& xml ) {
 	for ( HXml::entities_t::value_type const& ent : xml.entities() ) {
 		out << "@: " << ent.first << "=>" << ent.second << std::endl;
 	}
-	return ( tut_yaal_tools_hxml::dump( out, xml.get_root() ) );
+	HXml::HConstNodeProxy root( xml.get_root() );
+	return ( !! root ? tut_yaal_tools_hxml::dump( out, root ) : out );
 }
 }
 }
@@ -315,8 +316,10 @@ TUT_UNIT_TEST( "parse bofere apply_style and after apply_style" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HXml copy." )
-	HXml copy; {
-		HXml intermediate; {
+	HXml copy;
+	/* scope for intermediate */ {
+		HXml intermediate;
+		/* scope for xml */ {
 			HXml xml;
 			xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 			xml.parse();
@@ -327,6 +330,26 @@ TUT_UNIT_TEST( "HXml copy." )
 		intermediate.apply_style( "./data/style.xml" );
 		intermediate.parse();
 		copy = intermediate;
+	}
+	std::clog << copy;
+	copy.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::WRITING ) ) ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "HXml move." )
+	HXml copy;
+	/* scope for intermediate */ {
+		HXml intermediate;
+		/* scope for xml */ {
+			HXml xml;
+			xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
+			xml.parse();
+			intermediate = yaal::move( xml );
+			std::clog << xml;
+			intermediate.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/raw.xml", HFile::OPEN::WRITING ) ) ), true );
+		}
+		intermediate.apply_style( "./data/style.xml" );
+		intermediate.parse();
+		copy = yaal::move( intermediate );
 	}
 	std::clog << copy;
 	copy.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::WRITING ) ) ) );
