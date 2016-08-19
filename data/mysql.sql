@@ -1,8 +1,7 @@
 use mysql;
 DELETE FROM user WHERE user='tress' AND host='localhost';
 DROP DATABASE IF EXISTS tress;
-INSERT INTO user (host, user, password, ssl_cipher, x509_issuer, x509_subject)
-	VALUES ('localhost', 'tress', PASSWORD('tr3ss'), "", "", "");
+CREATE USER 'tress'@'localhost' IDENTIFIED BY 'tr3ss';
 FLUSH PRIVILEGES;
 
 CREATE DATABASE tress;
