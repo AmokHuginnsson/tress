@@ -67,7 +67,9 @@ struct tut_yaal_tools_hxml : public simple_mock<tut_yaal_tools_hxml> {
 				_varTmpBuffer.fillz( ' ', 0, node_.get_level() * 2 + 2 );
 				out << _varTmpBuffer << "{ - " << node_.get_line() << std::endl;
 				for ( HXml::const_iterator it = node_.begin(); it != node_.end(); ++ it ) {
-					dump( out, *it );
+					HXml::HConstNodeProxy np;
+					np = *it;
+					dump( out, np );
 					_varTmpBuffer.set_at( node_.get_level() * 2 + 2, 0 );
 				}
 				out << _varTmpBuffer << "}" << std::endl;
@@ -235,7 +237,8 @@ TUT_UNIT_TEST( "init, apply_style, parse, save, clear, handmade, save" )
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::WRITING ) ) ) );
 	xml.clear();
 	xml.create_root( "xml" );
-	HXml::HNodeProxy root = xml.get_root();
+	HXml::HNodeProxy root;
+	root = xml.get_root();
 	root.add_node( HXml::HNode::TYPE::CONTENT, "Hello World!" );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/hello.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
@@ -343,8 +346,9 @@ TUT_UNIT_TEST( "HXml move." )
 			HXml xml;
 			xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 			xml.parse();
-			intermediate = yaal::move( xml );
+			HXml tmp( yaal::move( xml ) );
 			std::clog << xml;
+			intermediate = yaal::move( tmp );
 			intermediate.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/raw.xml", HFile::OPEN::WRITING ) ) ), true );
 		}
 		intermediate.apply_style( "./data/style.xml" );
