@@ -57,7 +57,7 @@ void version( void ) {
    Return the index of the first non-option argument.                    */
 int handle_program_options( int argc_, char** argv_ ) {
 	M_PROLOG
-	HProgramOptionsHandler po;
+	HProgramOptionsHandler po( "child" );
 	OOptionInfo info( po, setup._programName, "does very much usefull things ... really", NULL );
 	bool help( false );
 	bool conf( false );
@@ -136,7 +136,7 @@ int handle_program_options( int argc_, char** argv_ ) {
 		.description( "output version information and stop" )
 		.recipient( vers )
 	);
-	po.process_rc_file( "child", "", NULL );
+	po.process_rc_file( "", NULL );
 	if ( setup._logPath.is_empty() )
 		setup._logPath = "child.log";
 	int unknown = 0, nonOption = 0;
