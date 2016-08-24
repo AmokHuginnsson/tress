@@ -622,6 +622,11 @@ TUT_UNIT_TEST( "OperatingSystem" )
 		),
 		"\"debug\""
 	);
+#ifndef __MSVCXX__
+	char const expectedExec[] = "*anonymous stream*:1:44: Uncaught exception: No such file or directory";
+#else /* #ifndef __MSVCXX__ */
+	char const expectedExec[] = "*anonymous stream*:1:44: Uncaught exception: The system cannot find the file specified.\r\n";
+#endif /* #else #ifndef __MSVCXX__ */
 	ENSURE_EQUALS(
 		"OperatingSystem.exec",
 		execute_except(
@@ -631,7 +636,7 @@ TUT_UNIT_TEST( "OperatingSystem" )
 			"return(0);"
 			"}"
 		),
-		"*anonymous stream*:1:44: Uncaught exception: No such file or directory"
+		expectedExec
 	);
 	/* It is impossible to test exit(). */
 	hcore::HString CHILD( "./data/child" EXE_SUFFIX );

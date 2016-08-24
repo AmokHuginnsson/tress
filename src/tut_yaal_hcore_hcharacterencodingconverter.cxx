@@ -38,6 +38,14 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
+namespace {
+#ifndef __MSVCXX__
+	char const UTF8[] = "utf8";
+#else /* #ifndef __MSVCXX__ */
+	char const UTF8[] = "utf-8";
+#endif /* #else #ifndef __MSVCXX__ */
+}
+
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hcharacterencodingconverter );
 TUT_TEST_GROUP( tut_yaal_hcore_hcharacterencodingconverter, "yaal::hcore::HCharacterEncodingConverter" );
 
@@ -60,7 +68,7 @@ TUT_UNIT_TEST( "real conversion" )
 	char const pl[] = "Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!";
 	char const plUTF8[] = "MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!";
 	ENSURE_EQUALS( "latin2 -> utf8 failed", latin2ToUTF8.convert( pl ), plUTF8 );
-	HCharacterEncodingConverter utf8ToLatin2( "utf8", "iso8859-2" );
+	HCharacterEncodingConverter utf8ToLatin2( UTF8, "iso8859-2" );
 	ENSURE_EQUALS( "utf8 -> latin2 failed", utf8ToLatin2.convert( plUTF8 ), pl );
 TUT_TEARDOWN()
 
@@ -70,7 +78,7 @@ TUT_UNIT_TEST( "copy" )
 	char const pl[] = "Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!";
 	char const plUTF8[] = "MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!";
 	ENSURE_EQUALS( "latin2 -> utf8 failed", latin2ToUTF8.convert( to_string( pl ) ), plUTF8 );
-	HCharacterEncodingConverter init2( "utf8", "iso8859-2" );
+	HCharacterEncodingConverter init2( UTF8, "iso8859-2" );
 	HCharacterEncodingConverter utf8ToLatin2( "ascii", "ascii" );
 	utf8ToLatin2 = init2;
 	ENSURE_EQUALS( "utf8 -> latin2 failed", utf8ToLatin2.convert( plUTF8 ), pl );
@@ -82,7 +90,7 @@ TUT_UNIT_TEST( "move" )
 	char const pl[] = "Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!";
 	char const plUTF8[] = "MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!";
 	ENSURE_EQUALS( "latin2 -> utf8 failed", latin2ToUTF8.convert( pl ), plUTF8 );
-	HCharacterEncodingConverter init2( "utf8", "iso8859-2" );
+	HCharacterEncodingConverter init2( UTF8, "iso8859-2" );
 	HCharacterEncodingConverter utf8ToLatin2( "ascii", "ascii" );
 	utf8ToLatin2 = yaal::move( init2 );
 	ENSURE_EQUALS( "utf8 -> latin2 failed", utf8ToLatin2.convert( plUTF8 ), pl );
