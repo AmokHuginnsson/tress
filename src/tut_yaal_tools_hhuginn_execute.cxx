@@ -242,6 +242,18 @@ char const progExecuteErr23[] =
 	"}\n"
 ;
 
+/* would crash without fix for User-Defined-Destructor problem in case of low-level implementation exception. */
+char const progExecuteErr24[] =
+	"class A {\n"
+	"\tdestructor(){\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\ta=A();\n"
+	"\ta+0;\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execution::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -287,6 +299,7 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr21,
 		progExecuteErr22,
 		progExecuteErr23,
+		progExecuteErr24,
 		NULL
 	};
 	int const err[][3] = {
@@ -314,6 +327,7 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 61, 5, 5 },    // 21
 		{ 32, 3, 5 },    // 22
 		{ 19, 3, 5 },    // 23
+		{ 49, 7, 3 },    // 24
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
