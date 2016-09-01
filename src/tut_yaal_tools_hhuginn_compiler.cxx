@@ -673,6 +673,13 @@ char const progCompileErr82[] =
 	"}\n"
 ;
 
+char const progCompileErr83[] =
+	"import Algorithms as algo;\n"
+	"main() {\n"
+	"\treturn ( Algorithms() + algo );\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -758,6 +765,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr80,
 		progCompileErr81,
 		progCompileErr82,
+		progCompileErr83,
 		NULL
 	};
 	int const err[][3] = {
@@ -844,6 +852,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 10, 2, 2 },   // 80
 		{ 16, 2, 7 },   // 81
 		{ 18, 2, 9 },   // 82
+		{ 46, 3, 11 },   // 83
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
