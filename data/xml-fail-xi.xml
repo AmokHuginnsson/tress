@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!DOCTYPE my_root [
+<!ENTITY % entities SYSTEM "./entities.dtd">
+%entities;
+]>
+<my_root my_type="my_fancy" xmlns:yaal="http://codestation.org/yaal" xmlns:xi="http://www.w3.org/2003/XInclude">
+	<xi:include href="./bit-non-existing.xml" />
+</my_root>
