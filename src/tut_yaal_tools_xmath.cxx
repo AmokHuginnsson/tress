@@ -138,14 +138,14 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "number set stats: median" )
 	ENSURE_EQUALS( "number_set_stats().median() failed",
-			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ), static_cast<AGGREGATE_TYPE::type_t>( AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ) ).median(), 229 );
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ).median(), 229 );
 	ENSURE_EQUALS( "number_set_stats().median() failed",
-			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) - 1, static_cast<AGGREGATE_TYPE::type_t>( AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ) ).median(), 229 );
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) - 1, AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ).median(), 229 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "stats on dice" )
 	double long dice[] = { 1, 2, 3, 4, 5, 6 };
-	HNumberSetStats<double long> diceStats( dice, dice + countof ( dice ), static_cast<AGGREGATE_TYPE::type_t>( AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ) );
+	HNumberSetStats<double long> diceStats( dice, dice + countof ( dice ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN );
 	clog << "dice stats: " << endl
 		<< "minimum                       = " << diceStats.minimum() << endl
 		<< "maximum                       = " << diceStats.maximum() << endl
