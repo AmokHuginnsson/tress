@@ -52,6 +52,7 @@ include $(DIR_ROOT)/_aux/mk/60_flags.mk
 
 override CXXFLAGS += @DEFS@ -Wno-missing-noreturn
 override LXXFLAGS += @BOOST_LDFLAGS@
+override EXTRA_LIBRARY_PATHS=-L$(PREFIX)/lib
 
 include $(DIR_ROOT)/_aux/mk/70_int-libs.mk
 include $(DIR_ROOT)/FCTF/make.mk
