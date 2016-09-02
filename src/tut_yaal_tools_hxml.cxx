@@ -125,6 +125,33 @@ bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const
 	return ( equals );
 }
 
+void resort_entities( yaal::hcore::HString const& path_ ) {
+	typedef yaal::hcore::HArray<yaal::hcore::HString> lines_t;
+	lines_t lines;
+	HFile in( path_, HFile::OPEN::READING );
+	HString line;
+	int entitiesStart( -1 );
+	int entitiesEnd( -1 );
+	while ( getline( in, line ).good() ) {
+		if ( line.find( "<!ENTITY " ) == 0 ) {
+			if ( entitiesStart == -1 ) {
+				entitiesStart = static_cast<int>( lines.get_size() );
+			}
+		} else if ( ( entitiesStart != -1 ) && ( entitiesEnd == -1 ) ) {
+			entitiesEnd = static_cast<int>( lines.get_size() );
+		}
+		lines.push_back( line );
+	}
+	in.close();
+	if ( ( entitiesStart != -1 ) && ( entitiesEnd > entitiesStart ) ) {
+		sort( lines.begin() + entitiesStart, lines.begin() + entitiesEnd );
+	}
+	HFile out( path_, HFile::OPEN::WRITING );
+	for ( yaal::hcore::HString const& l : lines ) {
+		out << l << endl;
+	}
+}
+
 }
 
 }
@@ -216,6 +243,7 @@ TUT_UNIT_TEST( "load(file), save" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ) );
+	resort_entities( "out/tut.xml" );
 	ENSURE( "load xinclude failed", file_compare( "out/tut.xml", "data/xml-out.xml" ) );
 	ENSURE_THROW( "empty document loaded", xml.load( HStreamInterface::ptr_t( new HFile( "data/xml-empty.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE ), HXmlException );
 TUT_TEARDOWN()
@@ -224,6 +252,7 @@ TUT_UNIT_TEST( "load(XINCLUDE), save" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ) );
+	resort_entities( "out/tut-xi.xml" );
 	ENSURE( "load xinclude failed", file_compare( "out/tut-xi.xml", "data/xml-xi-out.xml" ) );
 	HXml fail;
 	ENSURE_THROW( "bad xinclude loaded", fail.load( HStreamInterface::ptr_t( new HFile( "data/xml-fail-xi.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE ), HXmlException );

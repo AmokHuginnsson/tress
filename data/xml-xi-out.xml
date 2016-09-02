@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!DOCTYPE my_root [
 <!ENTITY % entities SYSTEM "./entities.dtd">
-<!ENTITY v_data "my precious data">
-<!ENTITY trade "<xml:entity_reference>&amp;trade;</xml:entity_reference>">
-<!ENTITY my_local_data "(squared)">
 <!ENTITY copy "A">
+<!ENTITY my_local_data "(squared)">
+<!ENTITY trade "<xml:entity_reference>&amp;trade;</xml:entity_reference>">
+<!ENTITY v_data "my precious data">
 ]>
 <my_root xmlns:yaal="http://codestation.org/yaal" my_type="my_fancy"><my_node my_property="Żółwiątko"><my_sub>node</my_sub>
 		Zażółcić gęsią jaźń. my precious data
