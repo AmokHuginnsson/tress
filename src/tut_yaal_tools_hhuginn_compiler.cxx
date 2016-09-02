@@ -680,6 +680,26 @@ char const progCompileErr83[] =
 	"}\n"
 ;
 
+char const progCompileErr84[] =
+	"main() {\n"
+	"\tx = x;\n"
+	"}\n"
+;
+
+char const progCompileErr85[] =
+	"main() {\n"
+	"\tx = y = z = x;\n"
+	"\tx = y + z;\n"
+	"}\n"
+;
+
+char const progCompileErr86[] =
+	"main() {\n"
+	"\tx = y = z = ( x + 0 );\n"
+	"\tx = y + z;\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -766,6 +786,9 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr81,
 		progCompileErr82,
 		progCompileErr83,
+		progCompileErr84,
+		progCompileErr85,
+		progCompileErr86,
 		NULL
 	};
 	int const err[][3] = {
@@ -852,7 +875,10 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 10, 2, 2 },   // 80
 		{ 16, 2, 7 },   // 81
 		{ 18, 2, 9 },   // 82
-		{ 46, 3, 11 },   // 83
+		{ 46, 3, 11 },  // 83
+		{ 14, 2, 6 },   // 84
+		{ 22, 2, 14 },  // 85
+		{ 24, 2, 16 },  // 86
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
