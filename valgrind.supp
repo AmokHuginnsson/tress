@@ -4084,3 +4084,20 @@
    fun:_dl_init
    obj:/lib/x86_64-linux-gnu/ld-2.24.so
 }
+{
+   Ubuntu 16.10: dlopen_doit
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfbclient.so.2.5.6
+   fun:call_init.part.0
+   fun:call_init
+   fun:_dl_init
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.2.5
+}
