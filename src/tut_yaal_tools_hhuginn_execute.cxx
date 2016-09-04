@@ -266,6 +266,20 @@ char const progExecuteErr25[] =
 ;
 
 char const progExecuteErr26[] =
+	"class L {\n"
+	"\t_head = none;\n"
+	"\titerator() {\n"
+	"\t\treturn ( 0 );\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\tfor ( e : L() ) {\n"
+	"\t\te._head;\n"
+	"\t}\n"
+	"}\n"
+;
+
+char const progExecuteErr27[] =
 	"class LI {\n"
 	"\t_cur = none;\n"
 	"\tconstructor( cur_ ) {\n"
@@ -285,7 +299,7 @@ char const progExecuteErr26[] =
 	"}\n"
 ;
 
-char const progExecuteErr27[] =
+char const progExecuteErr28[] =
 	"class LI {\n"
 	"\t_cur = none;\n"
 	"\tconstructor( cur_ ) {\n"
@@ -306,7 +320,7 @@ char const progExecuteErr27[] =
 	"}\n"
 ;
 
-char const progExecuteErr28[] =
+char const progExecuteErr29[] =
 	"class LI {\n"
 	"\t_cur = none;\n"
 	"\tconstructor( cur_ ) {\n"
@@ -329,7 +343,7 @@ char const progExecuteErr28[] =
 	"}\n"
 ;
 
-char const progExecuteErr29[] =
+char const progExecuteErr30[] =
 	"class LN {\n"
 	"\t_data = none;\n"
 	"\t_next = none;\n"
@@ -366,7 +380,7 @@ char const progExecuteErr29[] =
 	"}\n"
 ;
 
-char const progExecuteErr30[] =
+char const progExecuteErr31[] =
 	"class LN {\n"
 	"\t_data = none;\n"
 	"\t_next = none;\n"
@@ -401,6 +415,14 @@ char const progExecuteErr30[] =
 	"}\n"
 	"main() {\n"
 	"\tfor ( e : L() ) {\n"
+	"\t\te;\n"
+	"\t}\n"
+	"}\n"
+;
+
+char const progExecuteErr32[] =
+	"main() {\n"
+	"\tfor ( e : 0 ) {\n"
 	"\t\te;\n"
 	"\t}\n"
 	"}\n"
@@ -458,6 +480,8 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr28,
 		progExecuteErr29,
 		progExecuteErr30,
+		progExecuteErr31,
+		progExecuteErr32,
 		NULL
 	};
 	int const err[][3] = {
@@ -487,11 +511,13 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 19, 3, 5 },    // 23
 		{ 49, 7, 3 },    // 24
 		{ 46, 5, 11 },   // 25
-		{ 157, 14, 11 }, // 26
-		{ 175, 15, 11 }, // 27
-		{ 190, 17, 11 }, // 28
-		{ 389, 31, 11 }, // 29
-		{ 423, 34, 11 }, // 30
+		{ 79, 8, 11 },   // 25
+		{ 157, 14, 11 }, // 27
+		{ 175, 15, 11 }, // 28
+		{ 190, 17, 11 }, // 29
+		{ 389, 31, 11 }, // 30
+		{ 423, 34, 11 }, // 31
+		{ 19, 2, 11 },   // 32
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
