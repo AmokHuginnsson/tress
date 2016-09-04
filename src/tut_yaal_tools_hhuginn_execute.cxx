@@ -254,6 +254,158 @@ char const progExecuteErr24[] =
 	"}\n"
 ;
 
+char const progExecuteErr25[] =
+	"class L {\n"
+	"\t_head = none;\n"
+	"}\n"
+	"main() {\n"
+	"\tfor ( e : L() ) {\n"
+	"\t\te._head;\n"
+	"\t}\n"
+	"}\n"
+;
+
+char const progExecuteErr26[] =
+	"class LI {\n"
+	"\t_cur = none;\n"
+	"\tconstructor( cur_ ) {\n"
+	"\t\t_cur = cur_;\n"
+	"\t}\n"
+	"}\n"
+	"class L {\n"
+	"\t_head = none;\n"
+	"\titerator() {\n"
+	"\t\treturn ( LI( _head ) );\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\tfor ( e : L() ) {\n"
+	"\t\te._cur;\n"
+	"\t}\n"
+	"}\n"
+;
+
+char const progExecuteErr27[] =
+	"class LI {\n"
+	"\t_cur = none;\n"
+	"\tconstructor( cur_ ) {\n"
+	"\t\t_cur = cur_;\n"
+	"\t}\n"
+	"\tis_valid = none;\n"
+	"}\n"
+	"class L {\n"
+	"\t_head = none;\n"
+	"\titerator() {\n"
+	"\t\treturn ( LI( _head ) );\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\tfor ( e : L() ) {\n"
+	"\t\te._cur;\n"
+	"\t}\n"
+	"}\n"
+;
+
+char const progExecuteErr28[] =
+	"class LI {\n"
+	"\t_cur = none;\n"
+	"\tconstructor( cur_ ) {\n"
+	"\t\t_cur = cur_;\n"
+	"\t}\n"
+	"\tis_valid() {\n"
+	"\t\treturn ( 0 );\n"
+	"\t}\n"
+	"}\n"
+	"class L {\n"
+	"\t_head = none;\n"
+	"\titerator() {\n"
+	"\t\treturn ( LI( _head ) );\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\tfor ( e : L() ) {\n"
+	"\t\te._cur;\n"
+	"\t}\n"
+	"}\n"
+;
+
+char const progExecuteErr29[] =
+	"class LN {\n"
+	"\t_data = none;\n"
+	"\t_next = none;\n"
+	"\tconstructor( data_, next_ ) {\n"
+	"\t\t_data = data_;\n"
+	"\t\t_next = next_;\n"
+	"\t}\n"
+	"}\n"
+	"class LI {\n"
+	"\t_cur = none;\n"
+	"\tconstructor( cur_ ) {\n"
+	"\t\t_cur = cur_;\n"
+	"\t}\n"
+	"\tis_valid() {\n"
+	"\t\treturn ( 0 );\n"
+	"\t}\n"
+	"\tvalue() {\n"
+	"\t\treturn ( _cur._data );\n"
+	"\t}\n"
+	"}\n"
+	"class L {\n"
+	"\t_head = none;\n"
+	"\tadd( data_ ) {\n"
+	"\t\t_head = LN( data_, _head );\n"
+	"\t}\n"
+	"\titerator() {\n"
+	"\t\treturn ( LI( _head ) );\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\tfor ( e : L() ) {\n"
+	"\t\te._next;\n"
+	"\t}\n"
+	"}\n"
+;
+
+char const progExecuteErr30[] =
+	"class LN {\n"
+	"\t_data = none;\n"
+	"\t_next = none;\n"
+	"\tconstructor( data_, next_ ) {\n"
+	"\t\t_data = data_;\n"
+	"\t\t_next = next_;\n"
+	"\t}\n"
+	"}\n"
+	"class LI {\n"
+	"\t_cur = none;\n"
+	"\tconstructor( cur_ ) {\n"
+	"\t\t_cur = cur_;\n"
+	"\t}\n"
+	"\tis_valid() {\n"
+	"\t\treturn ( 0 );\n"
+	"\t}\n"
+	"\tvalue() {\n"
+	"\t\treturn ( _cur._data );\n"
+	"\t}\n"
+	"\tnext() {\n"
+	"\t\t_cur = _cur._next;\n"
+	"\t}\n"
+	"}\n"
+	"class L {\n"
+	"\t_head = none;\n"
+	"\tadd( data_ ) {\n"
+	"\t\t_head = LN( data_, _head );\n"
+	"\t}\n"
+	"\titerator() {\n"
+	"\t\treturn ( LI( _head ) );\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\tfor ( e : L() ) {\n"
+	"\t\te;\n"
+	"\t}\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execution::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -300,6 +452,12 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr22,
 		progExecuteErr23,
 		progExecuteErr24,
+		progExecuteErr25,
+		progExecuteErr26,
+		progExecuteErr27,
+		progExecuteErr28,
+		progExecuteErr29,
+		progExecuteErr30,
 		NULL
 	};
 	int const err[][3] = {
@@ -328,6 +486,12 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 32, 3, 5 },    // 22
 		{ 19, 3, 5 },    // 23
 		{ 49, 7, 3 },    // 24
+		{ 46, 5, 11 },   // 25
+		{ 157, 14, 11 }, // 26
+		{ 175, 15, 11 }, // 27
+		{ 190, 17, 11 }, // 28
+		{ 389, 31, 11 }, // 29
+		{ 423, 34, 11 }, // 30
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );

@@ -373,6 +373,55 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "for" )
 	ENSURE_EQUALS( "for failed", execute( "main(){x=list(1,2,3);s=0;for(e:x){s=s+e;}return(s);}" ), "6" );
 	ENSURE_EQUALS( "for(expr:) failed", execute( "main(){x=list(1,2,3);s=0;l=[0];for(l[0]:x){s=s+l[0];}return(string(s)+string(l[0]));}" ), "\"63\"" );
+	ENSURE_EQUALS(
+		"for(user-def) failed",
+		execute(
+			"class LN {"
+			"_data = none;"
+			"_next = none;"
+			"constructor( data_, next_ ) {"
+			"_data = data_;"
+			"_next = next_;"
+			"}"
+			"}"
+			"class LI {"
+			"_cur = none;"
+			"constructor( cur_ ) {"
+			"_cur = cur_;"
+			"}"
+			"is_valid() {"
+			"return ( _cur != none );"
+			"}"
+			"value() {"
+			"return ( _cur._data );"
+			"}"
+			"next() {"
+			"_cur = _cur._next;"
+			"}"
+			"}"
+			"class L {"
+			"_head = none;"
+			"add( data_ ) {"
+			"_head = LN( data_, _head );"
+			"return(this);"
+			"}"
+			"iterator() {"
+			"return ( LI( _head ) );"
+			"}"
+			"}"
+			"main() {"
+			"s=\"\";"
+			"l=L();"
+			"l.add(\"one\").add(\"two\").add(\"three\");"
+			"for ( e : l ) {"
+			"s+=e;"
+			"s+=\"+\";"
+			"}"
+			"return(s);"
+			"}"
+		),
+		"\"three+two+one+\""
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "switch" )
