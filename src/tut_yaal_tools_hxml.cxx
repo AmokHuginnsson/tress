@@ -229,6 +229,18 @@ TUT_UNIT_TEST( "build, save, load" )
 	ENSURE_THROW( "copying from parent node", (*it).copy_node( n ), HFailedAssertion );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "node operations" )
+	HXml xml;
+	xml.create_root( "root" );
+	HXml::HNodeProxy root( xml.get_root() );
+	HXml::HIterator it( root.add_node( "child", "structured text" ) );
+	it = root.insert_node( it, HXml::HNode::TYPE::CONTENT, "free form text" );
+	root.insert_node( it, "quick", "data" );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ) );
+	resort_entities( "out/tut.xml" );
+	ENSURE( "load xinclude failed", file_compare( "out/tut.xml", "data/xml-node-opers.xml" ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "load, save" )
 	HXml xml;
 	HStringStream ss( "<xml></xml>" );
