@@ -260,7 +260,7 @@ TUT_UNIT_TEST( "load(file), save" )
 	ENSURE_THROW( "empty document loaded", xml.load( HStreamInterface::ptr_t( new HFile( "data/xml-empty.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE ), HXmlException );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "load(XINCLUDE), save" )
+TUT_UNIT_TEST( "load(XINCLUDE) (resolve entities), save" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ) );
@@ -268,6 +268,14 @@ TUT_UNIT_TEST( "load(XINCLUDE), save" )
 	ENSURE( "load xinclude failed", file_compare( "out/tut-xi.xml", "data/xml-xi-out.xml" ) );
 	HXml fail;
 	ENSURE_THROW( "bad xinclude loaded", fail.load( HStreamInterface::ptr_t( new HFile( "data/xml-fail-xi.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE ), HXmlException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "load(XINCLUDE) (no resolve entities), save" )
+	HXml xml;
+	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::AUTO_XINCLUDE );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ) );
+	resort_entities( "out/tut-xi.xml" );
+	ENSURE( "load xinclude failed", file_compare( "out/tut-xi.xml", "data/xml-xi-noent-out.xml" ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "load, save, clear, handmade, save" )
