@@ -2,6 +2,7 @@
 <!DOCTYPE my_root [
 <!ENTITY % entities SYSTEM "./entities.dtd">
 <!ENTITY copy "A">
+<!ENTITY fake "<xml:my_fake>three</xml:my_fake>">
 <!ENTITY my_local_data "(squared)">
 <!ENTITY trade "<xml:entity_reference>&amp;trade;</xml:entity_reference>">
 <!ENTITY v_data "my precious data">

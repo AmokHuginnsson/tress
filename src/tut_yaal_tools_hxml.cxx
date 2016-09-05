@@ -442,7 +442,7 @@ TUT_UNIT_TEST( "get_element_by_path == many" )
 	HXml::HConstNodeSet nodeSet = xml.get_elements_by_path( "/my_root/my_set/uber_item/line_no" );
 	ENSURE_EQUALS( "bad number of elements", nodeSet.get_size(), 3 );
 	ENSURE_NOT( "bad emptiness status", nodeSet.is_empty() );
-	char const values[][3] = { "16", "17", "19" };
+	char const values[][3] = { "17", "18", "20" };
 	int i( 0 );
 	for ( HXml::HConstNodeSet::HConstIterator it( nodeSet.begin() ), end( nodeSet.end() ); it != end; ++ it, ++ i ) {
 		dump( std::clog, *it );
