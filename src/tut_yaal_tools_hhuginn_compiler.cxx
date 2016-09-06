@@ -713,6 +713,21 @@ char const progCompileErr87[] =
 	"}\n"
 ;
 
+char const progCompileErr88[] =
+	"class A {\n"
+	"\tx = 0;\n"
+	"}\n"
+	"class B : A {\n"
+	"\tdo( x ) {\n"
+	"\t\tx;\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\ta = B();\n"
+	"\ta.do();\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -803,6 +818,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr85,
 		progCompileErr86,
 		progCompileErr87,
+		progCompileErr88,
 		NULL
 	};
 	int const err[][3] = {
@@ -894,6 +910,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 22, 2, 14 },  // 85
 		{ 24, 2, 16 },  // 86
 		{ 23, 3, 6 },   // 87
+		{ 39, 5, 6 },   // 88
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
