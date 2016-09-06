@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<root>
+	<quick>data</quick>
+
+free form text		<child>
+		<moved>data</moved>
+		<copiedId>modified value</copiedId>
+structured text</child>
+</root>

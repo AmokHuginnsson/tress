@@ -226,7 +226,7 @@ TUT_UNIT_TEST( "build, save, load" )
 	HXml y;
 	y.load( HStreamInterface::ptr_t( new HFile( OUT_PATH, HFile::OPEN::READING ) ) );
 	ENSURE_EQUALS( "DOMs differ", x, y );
-	ENSURE_THROW( "copying from parent node", (*it).copy_node( n ), HFailedAssertion );
+	ENSURE_THROW( "copying from parent node", (*it).copy_node( n ), HXmlException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "node operations" )
@@ -236,9 +236,38 @@ TUT_UNIT_TEST( "node operations" )
 	HXml::HIterator it( root.add_node( "child", "structured text" ) );
 	it = root.insert_node( it, HXml::HNode::TYPE::CONTENT, "free form text" );
 	root.insert_node( it, "quick", "data" );
-	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ) );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
 	resort_entities( "out/tut.xml" );
 	ENSURE( "load xinclude failed", file_compare( "out/tut.xml", "data/xml-node-opers.xml" ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "node operations (move,replace,copy)" )
+	HXml xml;
+	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml-node-opers.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
+	HXml::HNodeSet quick( xml.get_elements_by_path( "/root/quick" ) );
+	HXml::HNodeSet child( xml.get_elements_by_name( "child" ) );
+	HXml::HIterator copied;
+	copied = child[0].copy_node( quick[0] );
+	ENSURE_THROW( "cycle created by copy", (*copied).copy_node( child[0] ), HXmlException );
+	ENSURE_THROW( "cycle created by copy", (*copied).copy_node( (*copied).begin(), child[0] ), HXmlException );
+	(*copied).set_name( "copied" );
+	copied = child[0].copy_node( copied, quick[0] );
+	(*copied).set_name( "copiedId" );
+	(*(*copied).begin()).set_value( "modified value" );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
+	ENSURE( "copy_node failed", file_compare( "out/tut.xml", "data/xml-copy.xml" ) );
+	child[0].move_node( *child[0].begin() );
+	++ copied;
+	child[0].move_node( child[0].begin(), *copied );
+	ENSURE_THROW( "cycle created by move", (*copied).move_node( child[0] ), HXmlException );
+	ENSURE_THROW( "cycle created by move", (*copied).move_node( (*copied).begin(), child[0] ), HXmlException );
+	(*copied).set_name( "moved" );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
+	ENSURE( "move_node failed", file_compare( "out/tut.xml", "data/xml-move.xml" ) );
+	ENSURE_THROW( "cycle created by move", (*copied).replace_node( (*copied).begin(), child[0] ), HXmlException );
+	child[0].replace_node( copied, *child[0].rbegin() );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
+	ENSURE( "replace_node failed", file_compare( "out/tut.xml", "data/xml-replace.xml" ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "load, save" )
@@ -254,7 +283,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "load(file), save" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
-	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ) );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
 	resort_entities( "out/tut.xml" );
 	ENSURE( "load xinclude failed", file_compare( "out/tut.xml", "data/xml-out.xml" ) );
 	ENSURE_THROW( "empty document loaded", xml.load( HStreamInterface::ptr_t( new HFile( "data/xml-empty.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE ), HXmlException );
@@ -263,7 +292,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "load(XINCLUDE) (resolve entities), save" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE );
-	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ) );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ), true );
 	resort_entities( "out/tut-xi.xml" );
 	ENSURE( "load xinclude failed", file_compare( "out/tut-xi.xml", "data/xml-xi-out.xml" ) );
 	HXml fail;
@@ -273,7 +302,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "load(XINCLUDE) (no resolve entities), save" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::AUTO_XINCLUDE );
-	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ) );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ), true );
 	resort_entities( "out/tut-xi.xml" );
 	ENSURE( "load xinclude failed", file_compare( "out/tut-xi.xml", "data/xml-xi-noent-out.xml" ) );
 TUT_TEARDOWN()
