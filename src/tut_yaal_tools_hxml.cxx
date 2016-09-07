@@ -248,6 +248,8 @@ TUT_UNIT_TEST( "node operations (move,replace,copy)" )
 	HXml::HNodeSet child( xml.get_elements_by_name( "child" ) );
 	HXml::HIterator copied;
 	copied = child[0].copy_node( quick[0] );
+	HXml::HConstNodeProxy cnp( *copied );
+	ENSURE( "bad parent from copy_node", cnp.get_parent() == child[0] );
 	ENSURE_THROW( "cycle created by copy", (*copied).copy_node( child[0] ), HXmlException );
 	ENSURE_THROW( "cycle created by copy", (*copied).copy_node( (*copied).begin(), child[0] ), HXmlException );
 	(*copied).set_name( "copied" );
@@ -258,7 +260,9 @@ TUT_UNIT_TEST( "node operations (move,replace,copy)" )
 	ENSURE( "copy_node failed", file_compare( "out/tut.xml", "data/xml-copy.xml" ) );
 	child[0].move_node( *child[0].begin() );
 	++ copied;
-	child[0].move_node( child[0].begin(), *copied );
+	copied = child[0].move_node( child[0].begin(), *copied );
+	HXml::HConstIterator cni( child[0].begin() );
+	ENSURE( "bad iterator from move_node", cni == copied );
 	ENSURE_THROW( "cycle created by move", (*copied).move_node( child[0] ), HXmlException );
 	ENSURE_THROW( "cycle created by move", (*copied).move_node( (*copied).begin(), child[0] ), HXmlException );
 	(*copied).set_name( "moved" );
