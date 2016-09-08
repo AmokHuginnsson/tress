@@ -4101,3 +4101,22 @@
    fun:_dlerror_run
    fun:dlopen@@GLIBC_2.2.5
 }
+{
+   Ubuntu 16.10: xmlXIncludeProcessFlags
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmlStrdup
+   fun:__xmlRaiseError
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.4
+   fun:xmlXIncludeProcessFlags
+}
+{
+   Ubuntu 16.10: xmlXIncludeProcessFlags (2)
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:realloc
+   fun:__xmlRaiseError
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.4
+   fun:xmlXIncludeProcessFlags
+}
