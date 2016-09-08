@@ -728,6 +728,13 @@ char const progCompileErr88[] =
 	"}\n"
 ;
 
+char const progCompileErr89[] =
+	"main() {\n"
+	"}\n"
+	"main() {\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -819,6 +826,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr86,
 		progCompileErr87,
 		progCompileErr88,
+		progCompileErr89,
 		NULL
 	};
 	int const err[][3] = {
@@ -888,13 +896,13 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 28, 2, 21 },  // 63
 		{ 7, 1, 8 },    // 64
 		{ 34, 2, 8 },   // 65
-		{ 26, 2, 1 },   // 66
+		{ 33, 2, 8 },   // 66
 		{ 32, 2, 7 },   // 67
 		{ 32, 2, 7 },   // 68
 		{ 7, 1, 8 },    // 69
 		{ 21, 1, 22 },  // 70
 		{ 44, 2, 22 },  // 71
-		{ 26, 2, 1 },   // 72
+		{ 49, 2, 24 },  // 72
 		{ 20, 3, 4 },   // 73
 		{ 20, 3, 4 },   // 74
 		{ 20, 3, 4 },   // 75
@@ -911,6 +919,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 24, 2, 16 },  // 86
 		{ 23, 3, 6 },   // 87
 		{ 39, 5, 6 },   // 88
+		{ 11, 3, 1 },   // 89
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
