@@ -241,7 +241,7 @@ TUT_UNIT_TEST( "node operations" )
 	ENSURE( "load xinclude failed", file_compare( "out/tut.xml", "data/xml-node-opers.xml" ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "node operations (move,replace,copy)" )
+TUT_UNIT_TEST( "node operations (move,replace,copy,remove)" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml-node-opers.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	HXml::HNodeSet quick( xml.get_elements_by_path( "/root/quick" ) );
@@ -261,17 +261,27 @@ TUT_UNIT_TEST( "node operations (move,replace,copy)" )
 	child[0].move_node( *child[0].begin() );
 	++ copied;
 	copied = child[0].move_node( child[0].begin(), *copied );
+	ENSURE( "bad parent from move_node", (*copied).get_parent() == child[0] );
 	HXml::HConstIterator cni( child[0].begin() );
 	ENSURE( "bad iterator from move_node", cni == copied );
+	HXml::HConstIterator last;
+	last = child[0].rbegin().base();
+	ENSURE_NOT( "bad iterator from move_node", cni == last );
+	ENSURE_NOT( "bad iterator from move_node", cni != copied );
+	ENSURE( "bad iterator from move_node", cni != last );
 	ENSURE_THROW( "cycle created by move", (*copied).move_node( child[0] ), HXmlException );
 	ENSURE_THROW( "cycle created by move", (*copied).move_node( (*copied).begin(), child[0] ), HXmlException );
 	(*copied).set_name( "moved" );
+	ENSURE( "bad xml from node", (*copied).xml() == &xml );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
 	ENSURE( "move_node failed", file_compare( "out/tut.xml", "data/xml-move.xml" ) );
 	ENSURE_THROW( "cycle created by move", (*copied).replace_node( (*copied).begin(), child[0] ), HXmlException );
 	child[0].replace_node( copied, *child[0].rbegin() );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
 	ENSURE( "replace_node failed", file_compare( "out/tut.xml", "data/xml-replace.xml" ) );
+	child[0].remove_node( child[0].begin() );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
+	ENSURE( "replace_node failed", file_compare( "out/tut.xml", "data/xml-remove.xml" ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "load, save" )
