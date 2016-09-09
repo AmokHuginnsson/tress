@@ -553,6 +553,26 @@ TUT_UNIT_TEST( "list()" )
 		"\"3abc\""
 	);
 	ENSURE_EQUALS( "list failed (crazy)", execute( "f(a){return(\"X\"+a+\"X\");}main(){return([f][0](\"hi\"));}" ), "\"XhiX\"" );
+	ENSURE_EQUALS(
+		"list to_string failed",
+		execute( "main(){x=list(2,3,5,7);return(x);}" ),
+		"[2, 3, 5, 7]"
+	);
+	ENSURE_EQUALS(
+		"list add failed",
+		execute( "main(){x=list(2,3,5,7);x.add(0);return(x);}" ),
+		"[2, 3, 5, 7, 0]"
+	);
+	ENSURE_EQUALS(
+		"list pop failed",
+		execute( "main(){x=list(2,3,5,7);x.pop();return(x);}" ),
+		"[2, 3, 5]"
+	);
+	ENSURE_EQUALS(
+		"list clear failed",
+		execute( "main(){x=list(2,3,5,7);x.clear();return(x);}" ),
+		"[]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "deque()" )
@@ -560,6 +580,31 @@ TUT_UNIT_TEST( "deque()" )
 		"deque failed (explicit)",
 		execute( "main(){x=deque(\"a\",\"b\",\"c\");v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ),
 		"\"3abc\""
+	);
+	ENSURE_EQUALS(
+		"deque to_string failed",
+		execute( "main(){x=deque(2,3,5,7);return(x);}" ),
+		"deque(2, 3, 5, 7)"
+	);
+	ENSURE_EQUALS(
+		"deque add failed",
+		execute( "main(){x=deque(2,3,5,7);x.add(0);return(x);}" ),
+		"deque(2, 3, 5, 7, 0)"
+	);
+	ENSURE_EQUALS(
+		"deque add_front failed",
+		execute( "main(){x=deque(2,3,5,7);x.add_front(0);return(x);}" ),
+		"deque(0, 2, 3, 5, 7)"
+	);
+	ENSURE_EQUALS(
+		"deque pop failed",
+		execute( "main(){x=deque(2,3,5,7);x.pop();return(x);}" ),
+		"deque(2, 3, 5)"
+	);
+	ENSURE_EQUALS(
+		"deque pop_front failed",
+		execute( "main(){x=deque(2,3,5,7);x.pop_front();return(x);}" ),
+		"deque(3, 5, 7)"
 	);
 TUT_TEARDOWN()
 
@@ -1332,6 +1377,21 @@ TUT_UNIT_TEST( "sum of pows" )
 			"}"
 		),
 		"$74"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "bound call as field value" )
+	ENSURE_EQUALS(
+		"bound call as field value failed",
+		execute(
+			"class A{_val=none;constructor(val_){_val=val_;}do(val_){return(_val*val_);}}"
+			"class B{_call=none;constructor(call_){_call=call_;}do(val_){return(_call(val_));}}"
+			"main(){"
+			"a=A(7);"
+			"return (B(a.do).do(13));"
+			"}"
+		),
+		"91"
 	);
 TUT_TEARDOWN()
 
