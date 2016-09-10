@@ -250,6 +250,9 @@ TUT_UNIT_TEST( "node operations (move,replace,copy,remove)" )
 	copied = child[0].copy_node( quick[0] );
 	HXml::HConstNodeProxy cnp( *copied );
 	ENSURE( "bad parent from copy_node", cnp.get_parent() == child[0] );
+	ENSURE_NOT( "bad parent from copy_node", cnp.get_parent() == quick[0] );
+	ENSURE( "bad parent from copy_node", cnp.get_parent() != quick[0] );
+	ENSURE_NOT( "bad parent from copy_node", cnp.get_parent() != child[0] );
 	ENSURE_THROW( "cycle created by copy", (*copied).copy_node( child[0] ), HXmlException );
 	ENSURE_THROW( "cycle created by copy", (*copied).copy_node( (*copied).begin(), child[0] ), HXmlException );
 	(*copied).set_name( "copied" );
@@ -491,6 +494,7 @@ TUT_UNIT_TEST( "get_element_by_path == many" )
 	xml.apply_style( "./data/style.xml" );
 	xml.parse();
 	HXml::HConstNodeSet nodeSet = xml.get_elements_by_path( "/my_root/my_set/uber_item/line_no" );
+	HXml::HConstNodeSet constNodeSet = const_cast<HXml const&>( xml ).get_elements_by_path( "/my_root/my_set/uber_item/line_no" );
 	ENSURE_EQUALS( "bad number of elements", nodeSet.get_size(), 3 );
 	ENSURE_NOT( "bad emptiness status", nodeSet.is_empty() );
 	char const values[][3] = { "17", "18", "20" };
@@ -498,6 +502,7 @@ TUT_UNIT_TEST( "get_element_by_path == many" )
 	for ( HXml::HConstNodeSet::HConstIterator it( nodeSet.begin() ), end( nodeSet.end() ); it != end; ++ it, ++ i ) {
 		dump( std::clog, *it );
 		ENSURE_EQUALS( "bad node name", (*it).get_name(), "line_no" );
+		ENSURE( "bad node from const", (*it) == constNodeSet[i] );
 		ENSURE_EQUALS( "bad node value", (*(*it).begin()).get_value(), values[i] );
 	}
 TUT_TEARDOWN()
@@ -517,13 +522,23 @@ TUT_UNIT_TEST( "get_element_by_name == many" )
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.apply_style( "./data/style.xml" );
 	xml.parse();
-	HXml::HConstNodeSet nodeSet = xml.get_elements_by_name( "my_sub" );
+	HXml::HNodeSet nodeSet = xml.get_elements_by_name( "my_sub" );
+	HXml::HConstNodeSet constNodeSet = const_cast<HXml const&>( xml ).get_elements_by_name( "my_sub" );
+	HXml::HConstNodeProxy root( xml.get_root() );
+	HXml::HConstNodeSet constRootNodeSet = root.get_elements_by_name( "my_sub" );
 	ENSURE_EQUALS( "bad number of elements", nodeSet.get_size(), 3 );
+	ENSURE_EQUALS( "bad number of elements", constNodeSet.size(), 3 );
 	ENSURE_NOT( "bad emptiness status", nodeSet.is_empty() );
+	ENSURE_NOT( "bad emptiness status", nodeSet.empty() );
 	int i( 0 );
-	for ( HXml::HConstNodeSet::HConstIterator it( nodeSet.begin() ), end( nodeSet.end() ); it != end; ++ it, ++ i ) {
+	for ( HXml::HNodeSet::HIterator it( nodeSet.begin() ), end( nodeSet.end() ); it != end; ++ it, ++ i ) {
 		dump( std::clog, *it );
 		ENSURE_EQUALS( "bad node name", (*it).get_name(), "my_sub" );
+		ENSURE( "bad node from const", (*it) == constNodeSet[i] );
+		ENSURE( "bad node from const", (*it) == constRootNodeSet[i] );
+		HXml::HConstNodeSet::HConstIterator cit( it );
+		ENSURE( "bad copy iter", cit == it );
+		ENSURE_NOT( "bad copy iter", cit != it );
 	}
 TUT_TEARDOWN()
 
