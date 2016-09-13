@@ -29,6 +29,7 @@ Copyright:
 
 #include <yaal/hcore/hstack.hxx>
 #include <yaal/tools/executingparser.hxx>
+#include <yaal/tools/hhuginn.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -1629,6 +1630,16 @@ TUT_UNIT_TEST( "two names for one rule with recursion" )
 		cout << *it << endl;
 	}
 	ENSURE_EQUALS( "wrong grammar description", i, COUNT );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "find by name" )
+	HHuginn h;
+	HRule hg( h.make_engine() );
+	HRuleBase const* fun( hg.find( "functionDefinition" ) );
+	ENSURE( "find by name failed", fun );
+	HExecutingParser ep( *fun );
+	ENSURE( "invalid rule from find", ep( "foo( arg0, arg1 = 0 ) { return ( arg0 + arg1 ); }" ) );
+	ENSURE_NOT( "invalid rule from find", ep( "class A { foo( arg0, arg1 = 0 ) { return ( arg0 + arg1 ); } }" ) );
 TUT_TEARDOWN()
 
 struct calc {
