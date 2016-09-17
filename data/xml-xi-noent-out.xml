@@ -23,17 +23,18 @@ Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag.
 </bit>
 	<my_set>
 		<my_item>one&trade;</my_item>
-		<my_item>two</my_item>
+		<my_item attr="data">two</my_item>
 		<my_fake>three</my_fake>
 		<my_item>four</my_item>
 		<!--my_item>hidden</my_item-->
 </my_set>
 	<my_special>
 		<my_sub>
-			<my_element>
+			<my_element prop="value">
 				<my_sub>
 					data
 				</my_sub>
+				<my_sub>&v_data;</my_sub>
 			</my_element>
 		</my_sub>
 	</my_special>

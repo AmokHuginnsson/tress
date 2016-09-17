@@ -319,6 +319,11 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "load(XINCLUDE) (no resolve entities), save" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::AUTO_XINCLUDE );
+	HXml::HConstNodeSet ns( xml.get_elements_by_name( "my_sub" ) );
+	HXml::HConstNodeProxy elem( ns[2].get_parent() );
+	ENSURE_EQUALS( "try_node_val(it) get failed", xml::node_val( -- elem.end() ), "my precious data" );
+	HXml::HConstNodeProxy special( elem.get_parent() );
+	ENSURE_EQUALS( "try_attr_val(it) failed", xml::attr_val( special.begin(), "prop" ), "value" );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ), true );
 	resort_entities( "out/tut-xi.xml" );
 	ENSURE( "load xinclude failed", file_compare( "out/tut-xi.xml", "data/xml-xi-noent-out.xml" ) );
@@ -493,13 +498,13 @@ TUT_UNIT_TEST( "get_element_by_path == many" )
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.apply_style( "./data/style.xml" );
 	xml.parse();
-	HXml::HConstNodeSet nodeSet = xml.get_elements_by_path( "/my_root/my_set/uber_item/line_no" );
+	HXml::HNodeSet nodeSet( xml.get_elements_by_path( "/my_root/my_set/uber_item/line_no" ) );
 	HXml::HConstNodeSet constNodeSet = const_cast<HXml const&>( xml ).get_elements_by_path( "/my_root/my_set/uber_item/line_no" );
 	ENSURE_EQUALS( "bad number of elements", nodeSet.get_size(), 3 );
 	ENSURE_NOT( "bad emptiness status", nodeSet.is_empty() );
 	char const values[][3] = { "17", "18", "20" };
 	int i( 0 );
-	for ( HXml::HConstNodeSet::HConstIterator it( nodeSet.begin() ), end( nodeSet.end() ); it != end; ++ it, ++ i ) {
+	for ( HXml::HConstNodeSet::HConstIterator it( constNodeSet.begin() ), end( constNodeSet.end() ); it != end; ++ it, ++ i ) {
 		dump( std::clog, *it );
 		ENSURE_EQUALS( "bad node name", (*it).get_name(), "line_no" );
 		ENSURE( "bad node from const", (*it) == constNodeSet[i] );
@@ -522,21 +527,24 @@ TUT_UNIT_TEST( "get_element_by_name == many" )
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.apply_style( "./data/style.xml" );
 	xml.parse();
-	HXml::HNodeSet nodeSet = xml.get_elements_by_name( "my_sub" );
-	HXml::HConstNodeSet constNodeSet = const_cast<HXml const&>( xml ).get_elements_by_name( "my_sub" );
+	HXml::HNodeSet nodeSet( xml.get_elements_by_name( "my_sub" ) );
+	HXml::HConstNodeSet constNodeSet( const_cast<HXml const&>( xml ).get_elements_by_name( "my_sub" ) );
 	HXml::HConstNodeProxy root( xml.get_root() );
-	HXml::HConstNodeSet constRootNodeSet = root.get_elements_by_name( "my_sub" );
-	ENSURE_EQUALS( "bad number of elements", nodeSet.get_size(), 3 );
-	ENSURE_EQUALS( "bad number of elements", constNodeSet.size(), 3 );
+	HXml::HConstNodeSet constRootNodeSet( root.get_elements_by_name( "my_sub" ) );
+	ENSURE_EQUALS( "bad number of elements", nodeSet.get_size(), 4 );
+	ENSURE_EQUALS( "bad number of elements", constNodeSet.size(), 4 );
 	ENSURE_NOT( "bad emptiness status", nodeSet.is_empty() );
 	ENSURE_NOT( "bad emptiness status", nodeSet.empty() );
 	int i( 0 );
-	for ( HXml::HNodeSet::HIterator it( nodeSet.begin() ), end( nodeSet.end() ); it != end; ++ it, ++ i ) {
+	HXml::HNodeSet::HIterator end;
+	end = nodeSet.end();
+	for ( HXml::HNodeSet::HIterator it( nodeSet.begin() ); it != end; ++ it, ++ i ) {
 		dump( std::clog, *it );
 		ENSURE_EQUALS( "bad node name", (*it).get_name(), "my_sub" );
 		ENSURE( "bad node from const", (*it) == constNodeSet[i] );
 		ENSURE( "bad node from const", (*it) == constRootNodeSet[i] );
-		HXml::HConstNodeSet::HConstIterator cit( it );
+		HXml::HConstNodeSet::HConstIterator cit;
+		cit = it;
 		ENSURE( "bad copy iter", cit == it );
 		ENSURE_NOT( "bad copy iter", cit != it );
 	}
@@ -578,6 +586,21 @@ TUT_UNIT_TEST( "reverse iteration" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "try_node_val_by path" )
+	HXml xml;
+	xml.load( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
+	HXml::HConstNodeProxy root( xml.get_root() );
+	ENSURE_EQUALS( "try_node_val_by failed", *xml::try_node_val_by_path( root.begin(), "/my_node/my_sub" ), "node" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "try_attr_val_by path" )
+	HXml xml;
+	xml.load( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
+	HXml::HNodeSet ns( xml.get_elements_by_name( "my_special" ) );
+	HXml::HNodeSet::HIterator itX( ns.begin() );
+	HXml::HNodeSet::HIterator it( itX );
+	ENSURE_EQUALS( "try_attr_val_by failed", *xml::try_attr_val_by_path( (*it).begin(), "/my_sub/my_element/prop" ), "value" );
+TUT_TEARDOWN()
 
 }
 
