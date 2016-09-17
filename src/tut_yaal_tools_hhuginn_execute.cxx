@@ -428,10 +428,21 @@ char const progExecuteErr32[] =
 	"}\n"
 ;
 
+char const progExecuteErr33[] =
+	"class A {\n"
+	"\tdo() {\n"
+	"\t\treturn ( super );\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\treturn ( A().do() );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execution::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
-	h.load( prog );
+	h.load( prog, "*tress*" );
 	h.preprocess();
 	ENSURE( "failed to parse valid", h.parse() );
 	bool compiled( h.compile() );
@@ -482,6 +493,7 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr30,
 		progExecuteErr31,
 		progExecuteErr32,
+		progExecuteErr33,
 		NULL
 	};
 	int const err[][3] = {
@@ -518,6 +530,7 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 389, 31, 11 }, // 30
 		{ 423, 34, 11 }, // 31
 		{ 19, 2, 11 },   // 32
+		{ 29, 3, 12 },   // 33
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );

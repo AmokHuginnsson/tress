@@ -1395,6 +1395,57 @@ TUT_UNIT_TEST( "bound call as field value" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "standard streams" )
+	HHuginn h;
+	HStringStream src(
+		"import OperatingSystem as os;"
+		"main() {"
+		"os.stdout().write(\"stdout\");"
+		"os.stderr().write(\"stderr\");"
+		"os.stdlog().write(\"stdlog\");"
+		"return (integer(os.stdin().read_line()));"
+		"}"
+	);
+	HStreamInterface::ptr_t inS( make_pointer<HStringStream>() );
+	HStreamInterface::ptr_t outS( make_pointer<HStringStream>() );
+	HStreamInterface::ptr_t errS( make_pointer<HStringStream>() );
+	HStreamInterface::ptr_t logS( make_pointer<HStringStream>() );
+	h.set_input_stream( inS );
+	h.set_output_stream( outS );
+	h.set_error_stream( errS );
+	h.set_log_stream( logS );
+	ENSURE_EQUALS( "bad smart input", &h.input_stream(), inS.raw() );
+	ENSURE_EQUALS( "bad smart output", &h.output_stream(), outS.raw() );
+	ENSURE_EQUALS( "bad smart error", &h.error_stream(), errS.raw() );
+	ENSURE_EQUALS( "bad smart log", &h.log_stream(), logS.raw() );
+	HStringStream in;
+	HStringStream out;
+	HStringStream err;
+	HStringStream log;
+	h.set_input_stream( in );
+	h.set_output_stream( out );
+	h.set_error_stream( err );
+	h.set_log_stream( log );
+	ENSURE_EQUALS( "bad raw input", &h.input_stream(), &in );
+	ENSURE_EQUALS( "bad raw output", &h.output_stream(), &out );
+	ENSURE_EQUALS( "bad raw error", &h.error_stream(), &err );
+	ENSURE_EQUALS( "bad raw log", &h.log_stream(), &log );
+
+	h.load( src );
+	h.preprocess();
+	ENSURE( "parse failed", h.parse() );
+	ENSURE( "compile", h.compile() );
+	in << "123";
+	ENSURE( "execute", h.execute() );
+	HHuginn::value_t r( h.result() );
+	ENSURE( "nothing returned", !! r );
+	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::INTEGER );
+	ENSURE_EQUALS( "stdin", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 123 );
+	ENSURE_EQUALS( "stdout failed", out.string(), "stdout" );
+	ENSURE_EQUALS( "stderr failed", err.string(), "stderr" );
+	ENSURE_EQUALS( "stdlog failed", log.string(), "stdlog" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;

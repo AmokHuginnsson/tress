@@ -735,6 +735,15 @@ char const progCompileErr89[] =
 	"}\n"
 ;
 
+char const progCompileErr90[] =
+	"class main {\n"
+	"\t_x = none;\n"
+	"}\n"
+	"main() {\n"
+	"\treturn ( main()._x );\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -827,6 +836,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr87,
 		progCompileErr88,
 		progCompileErr89,
+		progCompileErr90,
 		NULL
 	};
 	int const err[][3] = {
@@ -920,6 +930,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 23, 3, 6 },   // 87
 		{ 39, 5, 6 },   // 88
 		{ 11, 3, 1 },   // 89
+		{ 6, 1, 7 },    // 90
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
