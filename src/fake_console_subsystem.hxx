@@ -51,6 +51,8 @@ typedef yaal::u32_t chtype_t;
 struct WINDOW;
 struct MEVENT;
 
+static int const COMMIT_ESCAPE = -2;
+
 class HFakeConsole {
 private:
 	typedef yaal::hcore::HStack<int> input_queue_t;

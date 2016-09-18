@@ -120,6 +120,9 @@ int HFakeConsole::getch( void ) {
 		_input->wait();
 		l.lock();
 	}
+	if ( key == COMMIT_ESCAPE ) {
+		key = -1;
+	}
 
 	return ( key );
 }

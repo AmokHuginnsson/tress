@@ -136,6 +136,50 @@ TUT_UNIT_TEST( "edit record" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "requery" )
+	play(
+		"requery", {
+			'\r',
+			KEY<'e'>::command,
+			KEY<'r'>::command,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+	play(
+		"requery", {
+			'\r',
+			KEY<'r'>::command,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "cancel" )
+	play(
+		"cancel view record", {
+			'\r',
+			KEY_CODES::ESCAPE, fake_console_subsystem::COMMIT_ESCAPE,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+	play(
+		"cancel add record", {
+			'\r',
+			KEY<'n'>::command,
+			KEY_CODES::ESCAPE, fake_console_subsystem::COMMIT_ESCAPE,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+	play(
+		"cancel edit record", {
+			'\r',
+			KEY<'e'>::command,
+			KEY_CODES::ESCAPE, fake_console_subsystem::COMMIT_ESCAPE,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
 }
 
 #endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
