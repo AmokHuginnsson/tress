@@ -123,12 +123,12 @@ TUT_UNIT_TEST( "edit record" )
 			KEY_CODES::ESCAPE, 'I',
 			KEY_CODES::ESCAPE, 'I',
 			KEY_CODES::DOWN, KEY_CODES::DOWN,
-			KEY_CODES::INSERT, KEY_CODES::F2, 'v', 'a', 'l', 'u', 'e', '3', '\t', 'd', 'a', 't', 'a', '3', '\t', '2', '.', '7', '\r',
+			KEY_CODES::INSERT, KEY_CODES::F2, KEY_CODES::DELETE, 'v', 'a', 'l', 'u', 'e', '3', '\t', 'd', 'a', 't', 'a', '3', '\t', '2', '.', '7', '\r',
 			KEY<'w'>::command, KEY_CODES::END,
 			KEY<'e'>::command,
 			KEY_CODES::ESCAPE, 'I',
 			KEY_CODES::ESCAPE, 'I',
-			KEY_CODES::F2, '\t', KEY_CODES::END, KEY_CODES::BACKSPACE, 'X', '\r', KEY_CODES::DOWN, KEY_CODES::DELETE,
+			KEY_CODES::F2, '\t', KEY_CODES::END, KEY_CODES::BACKSPACE, 'X', KEY_CODES::HOME, KEY_CODES::BACKSPACE, '\r', KEY_CODES::DOWN, KEY_CODES::DELETE,
 			KEY<'w'>::command, KEY_CODES::END,
 			KEY<'d'>::command,
 			KEY<'q'>::command, KEY<'x'>::command
@@ -136,19 +136,54 @@ TUT_UNIT_TEST( "edit record" )
 	);
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "requery" )
+TUT_UNIT_TEST( "requery (edit)" )
 	play(
-		"requery", {
+		"requery (edit)", {
 			'\r',
 			KEY<'e'>::command,
-			KEY<'r'>::command,
+			KEY<'r'>::ctrl,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "requery (view)" )
 	play(
-		"requery", {
+		"requery (view)", {
 			'\r',
-			KEY<'r'>::command,
+			KEY<'r'>::ctrl,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "save (view)" )
+	play(
+		"save (view)", {
+			'\r',
+			KEY<'w'>::command,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "edit (edit)" )
+	play(
+		"edit (edit)", {
+			'\r',
+			KEY<'e'>::command,
+			KEY<'e'>::command,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "delete (edit)" )
+	play(
+		"delete (edit)", {
+			'\r',
+			KEY<'e'>::command,
+			KEY<'d'>::command,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
@@ -176,6 +211,16 @@ TUT_UNIT_TEST( "cancel" )
 			KEY<'e'>::command,
 			KEY_CODES::ESCAPE, fake_console_subsystem::COMMIT_ESCAPE,
 			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "confim box" )
+	play(
+		"confirm box", {
+			'\r',
+			KEY<'e'>::command, KEY_CODES::DELETE,
+			KEY<'x'>::command, 0, KEY_CODES::LEFT, '\r'
 		}
 	);
 TUT_TEARDOWN()
