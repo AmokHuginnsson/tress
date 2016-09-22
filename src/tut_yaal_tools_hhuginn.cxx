@@ -56,7 +56,7 @@ TUT_UNIT_TEST( "grammar test" )
 	HRule hg( h.make_engine() );
 	HGrammarDescription gd( hg );
 
-	char const expected[][440] = {
+	char const expected[][460] = {
 		"huginnGrammar = +( classDefinition | functionDefinition | importStatement )",
 		"classDefinition = ( \"class\" >> classIdentifier >> -( ':' >> baseIdentifier ) >> '{' >> +( field | functionDefinition ) >> '}' )",
 		"functionDefinition = ( functionDefinitionIdentifier >> '(' >> -nameList >> ')' >> scope )",
@@ -112,7 +112,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"booleanNot = ( ( '!' >> negation ) | negation )",
 		"negation = ( ( '-' >> factorial ) | factorial )",
 		"factorial = ( atom >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
-		"atom = ( absoluteValue | ( parenthesis >> -( memberAccess >> dereference ) ) | real | integer | ( ( numberLiteral | character_literal ) >> -( memberAccess >> functionCallOperator ) ) | ( ( listLiteral | dictLiteral | stringLiteral ) >> -( ( subscriptOperator | memberAccess ) >> dereference ) ) | none | true | false | ( reference >> dereference ) | ( lambda >> -( functionCallOperator >> dereference ) ) )",
+		"atom = ( absoluteValue | ( parenthesis >> -( memberAccess >> dereference ) ) | real | integer | ( ( numberLiteral | character_literal ) >> -( memberAccess >> functionCallOperator ) ) | ( ( listLiteral | dictLiteral | stringLiteral ) >> -( ( subscriptOperator | memberAccess ) >> dereference ) ) | ( setLiteral >> -( memberAccess >> dereference ) ) | none | true | false | ( reference >> dereference ) | ( lambda >> -( functionCallOperator >> dereference ) ) )",
 		"absoluteValue = ( '|' >> expression >> '|' )",
 		"parenthesis = ( '(' >> expression >> ')' )",
 		"dereference = *( subscriptOperator | functionCallOperator | memberAccess )",
@@ -120,6 +120,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"listLiteral = ( '[' >> -argList >> ']' )",
 		"dictLiteral = ( '{' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> '}' )",
 		"stringLiteral = string_literal",
+		"setLiteral = ( '{' >> argument >> *( ',' >> argument ) >> '}' )",
 		"none = \"none\"",
 		"true = \"true\"",
 		"false = \"false\"",

@@ -1382,6 +1382,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule argList( expression >> ( * ( ',' >> expression ) ) );
 	HRule functionCallOperator( '(' >> -argList >> ')' );
 	HRule listLiteral( '[' >> -argList >> ']' );
+	HRule setLiteral( '{' >> expression >> *( ',' >> expression ) >> '}' );
 	HRule dictLiteralElement( expression >> ':' >> expression );
 	HRule dictLiteral( '{' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> '}' );
 	HRule parameter( name >> -( '=' >> expression ) );
@@ -1402,6 +1403,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	 	| integer
 	 	| ( ( number | character_literal ) >> -( memberAccess >> functionCallOperator ) )
 	 	| ( ( listLiteral | dictLiteral | string_literal ) >> -( ( subscriptOperator | memberAccess ) >> dereference ) )
+		| ( setLiteral >> -( memberAccess >> dereference ) )
 	 	| literalNone
 	 	| booleanLiteralTrue
 	 	| booleanLiteralFalse
@@ -1453,7 +1455,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule importStatement( e_p::constant( "import" ) >> name >> "as" >> name >> ';' );
 	HRule hg( + ( classDefinition | functionDefinition | importStatement ) );
 	HExecutingParser ep( hg ); /* test for infinite recursion */
-	char const huginnDesc[][440] = {
+	char const huginnDesc[][490] = {
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ | ( \"import\" >> B_ >> \"as\" >> B_ >> ';' ) )",
 		"B_ = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
 		"C_ = ( *( ( E_ >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> ( ( F_ >> -( \"^^\" >> F_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
@@ -1487,7 +1489,10 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AE_ = ( AF_ >> *( '^' >> AF_ ) )",
 		"AF_ = ( ( '-' >> AG_ ) | AG_ )",
 		"AG_ = ( ( '-' >> AH_ ) | AH_ )",
-		"AH_ = ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( K_ >> AI_ ) ) | real | integer | ( ( ( '$' >> real ) | character_literal ) >> -( K_ >> J_ ) ) | ( ( ( '[' >> -X_ >> ']' ) | ( '{' >> -( AJ_ >> *( ',' >> AJ_ ) ) >> '}' ) | string_literal ) >> -( ( I_ | K_ ) >> AI_ ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> AI_ ) | ( ( '@' >> '(' >> -G_ >> ')' >> H_ ) >> -( J_ >> AI_ ) ) ) >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
+		"AH_ = ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( K_ >> AI_ ) ) | real | integer | ( ( ( '$' >> real ) | character_literal ) >> -( K_ >> J_ ) ) "
+			"| ( ( ( '[' >> -X_ >> ']' ) | ( '{' >> -( AJ_ >> *( ',' >> AJ_ ) ) >> '}' ) | string_literal ) >> -( ( I_ | K_ ) >> AI_ ) ) "
+			"| ( ( '{' >> C_ >> *( ',' >> C_ ) >> '}' ) >> -( K_ >> AI_ ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> AI_ ) "
+			"| ( ( '@' >> '(' >> -G_ >> ')' >> H_ ) >> -( J_ >> AI_ ) ) ) >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
 		"AI_ = *( I_ | J_ | K_ )",
 		"AJ_ = ( C_ >> ':' >> C_ )"
 	};
