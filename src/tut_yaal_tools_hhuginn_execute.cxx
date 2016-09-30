@@ -1,7 +1,7 @@
 /*
 ---            `tress' 0.0.0 (c) 1978 by Marcin 'Amok' Konarski             ---
 
-  tut_yaal_tools_hhuginn_execution.cxx - this file is integral part of `tress' project.
+  tut_yaal_tools_hhuginn_execute.cxx - this file is integral part of `tress' project.
 
   i.  You may not make any changes in Copyright information.
   ii. You must attach Copyright information to any part of every copy
@@ -39,12 +39,12 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_tools_hhuginn_execution : public tress::tut_yaal_tools_hhuginn_base {
-	virtual ~tut_yaal_tools_hhuginn_execution( void ) {}
+struct tut_yaal_tools_hhuginn_execute : public tress::tut_yaal_tools_hhuginn_base {
+	virtual ~tut_yaal_tools_hhuginn_execute( void ) {}
 	void test_execute( prog_src_t, int const[3], int );
 };
 
-TUT_TEST_GROUP( tut_yaal_tools_hhuginn_execution, "yaal::tools::HHuginn,execution" );
+TUT_TEST_GROUP( tut_yaal_tools_hhuginn_execute, "yaal::tools::HHuginn,execution" );
 
 char const progExecuteErr0[] =
 	"main() {\n"
@@ -439,7 +439,7 @@ char const progExecuteErr33[] =
 	"}\n"
 ;
 
-void tut_yaal_tools_hhuginn_execution::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
+void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
 	h.load( prog, "*tress*" );
