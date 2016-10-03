@@ -368,5 +368,37 @@ TUT_UNIT_TEST( "preprocessor" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "comments" )
+	char const srcRaw[] =
+		"/*\n"
+		" * My class Foo,\n"
+		" * a nice doc."
+		" */\n"
+		"class Foo {\n"
+		"// Some uninitialized data...\n"
+		"_x = none;\n"
+		"}\n";
+	HHuginn h;
+	HStringStream src( srcRaw );
+	h.load( src );
+	h.preprocess();
+	ENSURE( "parsing docs filed", h.parse() );
+	ENSURE( "compilation of docs failed", h.compile( HHuginn::COMPILER::BE_SLOPPY ) );
+	HStringStream doc;
+	h.dump_docs( doc );
+	HString line;
+	char const expected[][48] = {
+		"Foo:My class Foo, a nice doc.",
+		"Foo._x:Some uninitialized data..."
+	};
+	int i( 0 );
+	while ( getline( doc, line ).good() ) {
+		if ( line.find( "Foo" ) != HString::npos ) {
+			ENSURE_EQUALS( "setting doc failed", line, expected[i] );
+			++ i;
+		}
+	}
+TUT_TEARDOWN()
+
 }
 
