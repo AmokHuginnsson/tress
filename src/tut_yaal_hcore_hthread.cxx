@@ -46,7 +46,7 @@ static int const FINISH_DELAY = 160;
 static int const TOLERANCE = 16;
 #else /* #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 static int const FINISH_DELAY = 20;
-static int const TOLERANCE = 2;
+static int const TOLERANCE = 4;
 #endif /* #else #if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ ) */
 
 class HCool {
@@ -228,7 +228,7 @@ TUT_UNIT_TEST( "Starting new thread and finishing it prematurely (sleeping body)
 	HTime start( now_utc() ), stop( now_utc() );
 	HCool ca( "sleeping" );
 	HThread a;
-	ca.set( 40 );
+	ca.set( 160 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	sleep_for( duration( 8 * 100, time::UNIT::MILLISECOND ) );
@@ -247,7 +247,7 @@ TUT_UNIT_TEST( "Starting new thread and finishing it prematurely (busy body)" )
 	HTime start( now_utc() ), stop( now_utc() );
 	HCool ca( "busy" );
 	HThread a;
-	ca.set( 40 );
+	ca.set( 160 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	sleep_for( duration( 5 * 100, time::UNIT::MILLISECOND ) );
@@ -265,7 +265,7 @@ TUT_UNIT_TEST( "Starting new thread and finishing it prematurely by destructor" 
 	HTime start( now_utc() ), stop( now_utc() ); {
 		HCool ca( "a" );
 		HThread a;
-		ca.set( 50 );
+		ca.set( 160 );
 		a.spawn( call( &HCool::run, &ca, &a ) );
 		ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 		start.set_now();
@@ -279,7 +279,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "Starting and immediatelly finishing thread" )
 	HCool ca( "a" );
 	HThread a;
-	ca.set( 50 );
+	ca.set( 160 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	a.finish();
