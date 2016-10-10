@@ -66,6 +66,6 @@ INSERT INTO crud ( id, name, data ) VALUES( 1, 'one', 'Firebird' );
 INSERT INTO crud ( id, name, data ) VALUES( 2, 'two', NULL );
 INSERT INTO crud ( id, name, data ) VALUES( 3, 'three', 'Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!' );
 
-SET GENERATOR gen_crud_id TO 3;
+SET GENERATOR gen_config_id TO 3;
 SET GENERATOR gen_crud_id TO 3;
 

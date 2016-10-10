@@ -469,8 +469,6 @@ void tut_yaal_dbwrapper_hrecordset::test_dml_bind( HDataBase::ptr_t db, bool res
 	if ( reset_ ) {
 		queryInsert.reset();
 		rs.reset();
-		TUT_INVOKE( query = db->prepare_query( QUERY_BIND ); );
-		TUT_INVOKE( query->bind( 1, "special" ); );
 	}
 
 	TUT_INVOKE( rs = query->execute(); );
@@ -490,8 +488,6 @@ void tut_yaal_dbwrapper_hrecordset::test_dml_bind( HDataBase::ptr_t db, bool res
 	if ( reset_ ) {
 		queryUpdate.reset();
 		rs.reset();
-		TUT_INVOKE( query = db->prepare_query( QUERY_BIND ); );
-		TUT_INVOKE( query->bind( 1, "special" ); );
 	}
 
 	TUT_INVOKE( rs = query->execute(); );
@@ -506,6 +502,11 @@ void tut_yaal_dbwrapper_hrecordset::test_dml_bind( HDataBase::ptr_t db, bool res
 	TUT_INVOKE( queryDelete->bind( 1, "special" ); );
 	TUT_INVOKE( rs = queryDelete->execute(); );
 	ENSURE_EQUALS( "bad number of rows affected by DELETE", rs->get_dml_size(), 1 );
+
+	if ( reset_ ) {
+		queryDelete.reset();
+		rs.reset();
+	}
 
 	TUT_INVOKE( rs = query->execute(); );
 	ENSURE( "empty result not entirelly empty ???", ! rs || ( rs->begin() == rs->end() ) );
