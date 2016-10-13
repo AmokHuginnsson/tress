@@ -60,19 +60,19 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "from real" )
 	HInfoMultiVal imv( 7.L );
-	ENSURE_EQUALS( "int as real failed", imv.get_real(), 7.L );
-	ENSURE_EQUALS( "int as str failed", imv.get_string(), "7.000000000000" );
-	ENSURE_EQUALS( "int as int failed", imv.get_integer(), 7LL );
-	ENSURE_EQUALS( "int as time failed", imv.get_time(), HTime( HTime::TZ::UTC, 7 ) );
+	ENSURE_EQUALS( "real as real failed", imv.get_real(), 7.L );
+	ENSURE_EQUALS( "real as str failed", imv.get_string(), "7.0" );
+	ENSURE_EQUALS( "real as int failed", imv.get_integer(), 7LL );
+	ENSURE_EQUALS( "real as time failed", imv.get_time(), HTime( HTime::TZ::UTC, 7 ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "from time" )
 	HTime bday( HTime::TZ::LOCAL, 1978, 5, 24, 23, 30, 7 );
 	HInfoMultiVal imv( bday );
-	ENSURE_EQUALS( "int as time failed", imv.get_time(), bday );
-	ENSURE_EQUALS( "int as int failed", imv.get_integer(), 62432112607LL );
-	ENSURE_EQUALS( "int as str failed", imv.get_string(), "1978-05-24 23:30:07" );
-	ENSURE_EQUALS( "int as real failed", imv.get_real(), 62432112607.L );
+	ENSURE_EQUALS( "time as time failed", imv.get_time(), bday );
+	ENSURE_EQUALS( "time as int failed", imv.get_integer(), 62432112607LL );
+	ENSURE_EQUALS( "time as str failed", imv.get_string(), "1978-05-24 23:30:07" );
+	ENSURE_EQUALS( "time as real failed", imv.get_real(), 62432112607.L );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set/get all types" )

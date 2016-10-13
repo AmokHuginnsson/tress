@@ -263,16 +263,16 @@ TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.hyperbolic_cotangens failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_cotangens($7));}" ), "$1.0000016630588210883070615776102514764913523331922228239871821889401302787085050299163985440938683564" );
 	ENSURE_EQUALS( "Mathematics.sigmoid failed", execute( "import Mathematics as math;main(){return(math.sigmoid(7.0));}" ), "0.999088948806" );
 	ENSURE_EQUALS( "Mathematics.sigmoid failed", execute( "import Mathematics as math;main(){return(math.sigmoid($7));}" ), "$0.9990889488055993546421366762253058586758519397386814335751812177406547366392254595319805404147834436" );
-	ENSURE_EQUALS( "Mathematics.round failed", execute( "import Mathematics as math;main(){return(math.round(7.1234));}" ), "7.000000000000" );
+	ENSURE_EQUALS( "Mathematics.round failed", execute( "import Mathematics as math;main(){return(math.round(7.1234));}" ), "7.0" );
 	ENSURE_EQUALS( "Mathematics.round failed", execute( "import Mathematics as math;main(){return(math.round($7.123456,3));}" ), "$7.123" );
 	ENSURE_EQUALS( "Mathematics.round failed", execute( "import Mathematics as math;main(){try{math.round(7.1234, 3);}catch(MathematicsException e){return(e.what());}}" ), "\"rounding to nth place on real is not supported\"" );
-	ENSURE_EQUALS( "Mathematics.floor failed", execute( "import Mathematics as math;main(){return(math.floor(7.1234));}" ), "7.000000000000" );
+	ENSURE_EQUALS( "Mathematics.floor failed", execute( "import Mathematics as math;main(){return(math.floor(7.1234));}" ), "7.0" );
 	ENSURE_EQUALS( "Mathematics.floor failed", execute( "import Mathematics as math;main(){return(math.floor($7.123456));}" ), "$7" );
-	ENSURE_EQUALS( "Mathematics.floor failed", execute( "import Mathematics as math;main(){return(math.floor(-7.1234));}" ), "-8.000000000000" );
+	ENSURE_EQUALS( "Mathematics.floor failed", execute( "import Mathematics as math;main(){return(math.floor(-7.1234));}" ), "-8.0" );
 	ENSURE_EQUALS( "Mathematics.floor failed", execute( "import Mathematics as math;main(){return(math.floor($-7.123456));}" ), "$-8" );
-	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil(7.1234));}" ), "8.000000000000" );
+	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil(7.1234));}" ), "8.0" );
 	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil($7.123456));}" ), "$8" );
-	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil(-7.1234));}" ), "-7.000000000000" );
+	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil(-7.1234));}" ), "-7.0" );
 	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil($-7.123456));}" ), "$-7" );
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($7.1234567, $7.1235567));}" ), "3" );
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($2234.1234567, $1234.1234567));}" ), "-4" );
@@ -287,7 +287,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([10.000000000000, 10.000000000000], [10.000000000000, 10.000000000000])\""
+		"\"Matrix([10.0, 10.0], [10.0, 10.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.matrix (add) failed",
@@ -313,7 +313,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([-8.000000000000, -6.000000000000], [-4.000000000000, -2.000000000000])\""
+		"\"Matrix([-8.0, -6.0], [-4.0, -2.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.matrix (sub) failed",
@@ -339,7 +339,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([23.000000000000, 20.000000000000], [55.000000000000, 48.000000000000])\""
+		"\"Matrix([23.0, 20.0], [55.0, 48.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.matrix (mul) failed",
@@ -364,7 +364,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([2.000000000000, 4.000000000000], [6.000000000000, 8.000000000000])\""
+		"\"Matrix([2.0, 4.0], [6.0, 8.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.matrix (scale) failed",
@@ -388,7 +388,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([3.000000000000, 6.000000000000], [9.000000000000, 12.000000000000])\""
+		"\"Matrix([3.0, 6.0], [9.0, 12.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.matrix (scale_to) failed",
@@ -411,7 +411,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"return(m1.det());"
 			"}"
 		),
-		"-2.000000000000"
+		"-2.0"
 	);
 	ENSURE_EQUALS(
 		"Mathematics.matrix (det) failed",
@@ -433,7 +433,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"return(string(m*m.inverse()));"
 			"}"
 		),
-		"\"Matrix([1.000000000000, 0.000000000000], [0.000000000000, 1.000000000000])\""
+		"\"Matrix([1.0, 0.0], [0.0, 1.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.matrix (inverse) failed",
@@ -455,7 +455,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"return(string(m.transpose()));"
 			"}"
 		),
-		"\"Matrix([1.000000000000, 3.000000000000, 5.000000000000], [2.000000000000, 4.000000000000, 6.000000000000])\""
+		"\"Matrix([1.0, 3.0, 5.0], [2.0, 4.0, 6.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.matrix (transpose) failed",
@@ -482,7 +482,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([2.000000000000, 4.000000000000], [6.000000000000, 8.000000000000])\""
+		"\"Matrix([2.0, 4.0], [6.0, 8.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.matrix (set/get) failed",

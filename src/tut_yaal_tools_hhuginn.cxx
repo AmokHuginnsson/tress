@@ -240,7 +240,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "add" )
 	ENSURE_EQUALS( "add int failed", execute( "main(){return(1+2);}" ), "3" );
-	ENSURE_EQUALS( "add real failed", execute( "main(){return(1.+2.);}" ), "3.000000000000" );
+	ENSURE_EQUALS( "add real failed", execute( "main(){return(1.+2.);}" ), "3.0" );
 	ENSURE_EQUALS( "add number failed", execute( "main(){return($1+$2);}" ), "$3" );
 	ENSURE_EQUALS( "add string failed", execute( "main(){return(\"1\"+\"2\");}" ), "\"12\"" );
 	ENSURE_EQUALS( "add user succeeded", execute_except( "class A{_x=none;}main(){return(A()+A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `add' method." );
@@ -249,7 +249,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "sub" )
 	ENSURE_EQUALS( "sub int failed", execute( "main(){return(7-3);}" ), "4" );
-	ENSURE_EQUALS( "sub real failed", execute( "main(){return(7.-3.);}" ), "4.000000000000" );
+	ENSURE_EQUALS( "sub real failed", execute( "main(){return(7.-3.);}" ), "4.0" );
 	ENSURE_EQUALS( "sub number failed", execute( "main(){return($7-$3);}" ), "$4" );
 	ENSURE_EQUALS( "sub user succeeded", execute_except( "class A{_x=none;}main(){return(A()-A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `subtract' method." );
 	ENSURE_EQUALS( "sub char succeeded", execute_except( "main(){c=character;return(c('7')-c('3'));}" ), "*anonymous stream*:1:33: There is no `-' operator for `character'." );
@@ -257,7 +257,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mul" )
 	ENSURE_EQUALS( "mul int failed", execute( "main(){return(2*3);}" ), "6" );
-	ENSURE_EQUALS( "mul real failed", execute( "main(){return(2.*3.);}" ), "6.000000000000" );
+	ENSURE_EQUALS( "mul real failed", execute( "main(){return(2.*3.);}" ), "6.0" );
 	ENSURE_EQUALS( "mul number failed", execute( "main(){return($2*$3);}" ), "$6" );
 	ENSURE_EQUALS( "mul user succeeded", execute_except( "class A{_x=none;}main(){return(A()*A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `multiply' method." );
 	ENSURE_EQUALS( "mul char succeeded", execute_except( "main(){c=character;return(c('2')*c('3'));}" ), "*anonymous stream*:1:33: There is no `*' operator for `character'." );
@@ -265,7 +265,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "div" )
 	ENSURE_EQUALS( "div int failed", execute( "main(){return(7/2);}" ), "3" );
-	ENSURE_EQUALS( "div real failed", execute( "main(){return(7./2.);}" ), "3.500000000000" );
+	ENSURE_EQUALS( "div real failed", execute( "main(){return(7./2.);}" ), "3.5" );
 	ENSURE_EQUALS( "div number failed", execute( "main(){return($7/$2);}" ), "$3.5" );
 	ENSURE_EQUALS( "div user succeeded", execute_except( "class A{_x=none;}main(){return(A()/A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `divide' method." );
 	ENSURE_EQUALS( "div char succeeded", execute_except( "main(){c=character;return(c('7')/c('2'));}" ), "*anonymous stream*:1:33: There is no `/' operator for `character'." );
@@ -276,7 +276,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mod" )
 	ENSURE_EQUALS( "mod int failed", execute( "main(){return(11%3);}" ), "2" );
-	ENSURE_EQUALS( "mod real failed", execute( "main(){return(11.%3.);}" ), "2.000000000000" );
+	ENSURE_EQUALS( "mod real failed", execute( "main(){return(11.%3.);}" ), "2.0" );
 	ENSURE_EQUALS( "mod number failed", execute( "main(){return($11%$3);}" ), "$2" );
 	ENSURE_EQUALS( "mod user succeeded", execute_except( "class A{_x=none;}main(){return(A()%A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `modulo' method." );
 	ENSURE_EQUALS( "mod char succeeded", execute_except( "main(){c=character;return(c('8')%c('3'));}" ), "*anonymous stream*:1:33: There is no `%' operator for `character'." );
@@ -286,7 +286,7 @@ TUT_UNIT_TEST( "mod" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "pow" )
-	ENSURE_EQUALS( "pow real failed", execute( "main(){return(2.^3.);}" ), "8.000000000000" );
+	ENSURE_EQUALS( "pow real failed", execute( "main(){return(2.^3.);}" ), "8.0" );
 	ENSURE_EQUALS( "pow number failed", execute( "main(){return($2^$3);}" ), "$8" );
 	ENSURE_EQUALS( "pow user succeeded", execute_except( "class A{_x=none;}main(){return(A()^A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `power' method." );
 	ENSURE_EQUALS( "pow char succeeded", execute_except( "main(){c=character;return(c('2')^c('3'));}" ), "*anonymous stream*:1:33: There is no `^' operator for `character'." );
@@ -300,7 +300,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "absolute" )
 	ENSURE_EQUALS( "abs int failed", execute( "main(){return([|1|,|-1|]);}" ), "[1, 1]" );
-	ENSURE_EQUALS( "abs real failed", execute( "main(){return([|1.|,|-1.|]);}" ), "[1.000000000000, 1.000000000000]" );
+	ENSURE_EQUALS( "abs real failed", execute( "main(){return([|1.|,|-1.|]);}" ), "[1.0, 1.0]" );
 	ENSURE_EQUALS( "abs num failed", execute( "main(){return([|$1|,|$-1|]);}" ), "[$1, $1]" );
 	ENSURE_EQUALS( "abs char succeeded", execute_except( "main(){c=character;return(|c('1')|);}" ), "*anonymous stream*:1:34: There is no |.| operator for `character'." );
 TUT_TEARDOWN()
@@ -510,12 +510,12 @@ TUT_UNIT_TEST( "boolean()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "real()" )
-	ENSURE_EQUALS( "real to real failed", execute( "main(){return(real(7));}" ), "7.000000000000" );
+	ENSURE_EQUALS( "real to real failed", execute( "main(){return(real(7));}" ), "7.0" );
 	ENSURE_EQUALS( "bad string to real succeeded", execute_except( "main(){return(real(\"bad\"));}" ), "*anonymous stream*:1:19: Uncaught exception: syntax error - unknown mnemonic for: bad, at: 0" );
-	ENSURE_EQUALS( "real to real failed", execute( "main(){return(real(7.));}" ), "7.000000000000" );
-	ENSURE_EQUALS( "num to real failed", execute( "main(){return(real($7));}" ), "7.000000000000" );
-	ENSURE_EQUALS( "string to real failed", execute( "main(){return(real(\"7\"));}" ), "7.000000000000" );
-	ENSURE_EQUALS( "user to real failed", execute( "class A{_x=none;constructor(x){_x=x;}to_real(){return(_x);}}main(){return(real(A(7.)));}" ), "7.000000000000" );
+	ENSURE_EQUALS( "real to real failed", execute( "main(){return(real(7.));}" ), "7.0" );
+	ENSURE_EQUALS( "num to real failed", execute( "main(){return(real($7));}" ), "7.0" );
+	ENSURE_EQUALS( "string to real failed", execute( "main(){return(real(\"7\"));}" ), "7.0" );
+	ENSURE_EQUALS( "user to real failed", execute( "class A{_x=none;constructor(x){_x=x;}to_real(){return(_x);}}main(){return(real(A(7.)));}" ), "7.0" );
 	ENSURE_EQUALS( "bad user to real succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(real(A(7.)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:57: Class `A' does not have `to_real' method." );
 	ENSURE_EQUALS( "char to real succeeded", execute_except( "main(){return(real('7'));}" ), "*anonymous stream*:1:19: Conversion from `character' to `real' is not supported." );
 TUT_TEARDOWN()
@@ -711,9 +711,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set()" )
 #if ( TARGET_CPU_BITS == 64 )
-	char const expected[] = "\"|7.34|2|Q|3.140000000000|ala\"";
+	char const expected[] = "\"|7.34|2|Q|3.14|ala\"";
 #else
-	char const expected[] = "\"|7.34|2|Q|ala|3.140000000000\"";
+	char const expected[] = "\"|7.34|2|Q|ala|3.14\"";
 #endif
 	ENSURE_EQUALS(
 		"set() failed",
