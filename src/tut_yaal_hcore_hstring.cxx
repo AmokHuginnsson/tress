@@ -401,6 +401,9 @@ TUT_UNIT_TEST( "replace(patter, str)" )
 		ENSURE_EQUALS( "replace ''->B1 failed (is_empty)", str.empty(), false );
 		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
 	}
+	/* front */
+	ENSURE_EQUALS( "front repalce to same length failed", "'main()'"_ys.replace( "'", "#" ), "#main()#" );
+	ENSURE_EQUALS( "front repalce to empty failed", "'main()'"_ys.replace( "'", "" ), "main()" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "shift_left" )
