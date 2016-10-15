@@ -1,10 +1,12 @@
+SET NAMES 'latin2';
 use mysql;
-DELETE FROM user WHERE user='tress' AND host='localhost';
+GRANT USAGE ON *.* TO 'tress'@'localhost';
+DROP USER 'tress'@'localhost';
 DROP DATABASE IF EXISTS tress;
 CREATE USER 'tress'@'localhost' IDENTIFIED BY 'tr3ss';
 FLUSH PRIVILEGES;
 
-CREATE DATABASE tress;
+CREATE DATABASE tress DEFAULT CHARACTER SET latin2;
 use tress;
 
 CREATE TABLE IF NOT EXISTS config (
