@@ -24,10 +24,12 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <yaal/config.hxx>
 #include "config.hxx"
 
 #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
 #ifndef __HOST_OS_TYPE_DARWIN__
+#if TARGET_CPU_BITS == 64
 
 #include <TUT/tut.hpp>
 
@@ -348,6 +350,7 @@ TUT_TEARDOWN()
 
 }
 
+#endif /* #ifdef TARGET_CPU_BITS == 64 */
 #endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
 #endif /* defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 ) */
 
