@@ -235,10 +235,12 @@ TUT_UNIT_TEST( "from_string" )
 	t.set_time();
 	t.from_string( "1978-05-24" );
 	ENSURE_EQUALS( "bad date from string", t, HTime( 1978, 5, 24, 0, 0, 0 ) );
+#ifndef __HOST_OS_TYPE_SOLARIS__
 	t.set_now();
 	t.set_date( 0 );
 	t.from_string( "13:45:57" );
 	ENSURE_EQUALS( "bad time from string", t, HTime( 0, 1, 1, 13, 45, 57 ) );
+#endif /* #ifndef __HOST_OS_TYPE_SOLARIS__ */
 	ENSURE_THROW( "date time from bad string accepted", t.from_string( "1978+05+24 23+30+04" ), HTimeException );
 TUT_TEARDOWN()
 
