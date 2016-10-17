@@ -1641,7 +1641,7 @@ TUT_UNIT_TEST( "find by name" )
 	HHuginn h;
 	HRule hg( h.make_engine() );
 	HRuleBase const* fun( hg.find( "functionDefinition" ) );
-	ENSURE( "find by name failed", fun );
+	ENSURE( "find by name failed", fun != nullptr );
 	HExecutingParser ep( *fun );
 	ENSURE( "invalid rule from find", ep( "foo( arg0, arg1 = 0 ) { return ( arg0 + arg1 ); }" ) );
 	ENSURE_NOT( "invalid rule from find", ep( "class A { foo( arg0, arg1 = 0 ) { return ( arg0 + arg1 ); } }" ) );

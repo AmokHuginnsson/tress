@@ -69,10 +69,17 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "from time" )
 	HTime bday( HTime::TZ::LOCAL, 1978, 5, 24, 23, 30, 7 );
 	HInfoMultiVal imv( bday );
+#ifdef __MSVCXX__
+	int long long expInt( 62432116207LL );
+	double long expReal( 62432116207.L );
+#else
+	int long long expInt( 62432112607LL );
+	double long expReal( 62432112607.L );
+#endif
 	ENSURE_EQUALS( "time as time failed", imv.get_time(), bday );
-	ENSURE_EQUALS( "time as int failed", imv.get_integer(), 62432112607LL );
+	ENSURE_EQUALS( "time as int failed", imv.get_integer(), expInt );
 	ENSURE_EQUALS( "time as str failed", imv.get_string(), "1978-05-24 23:30:07" );
-	ENSURE_EQUALS( "time as real failed", imv.get_real(), 62432112607.L );
+	ENSURE_EQUALS( "time as real failed", imv.get_real(), expReal );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set/get all types" )
