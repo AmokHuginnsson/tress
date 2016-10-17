@@ -4552,3 +4552,220 @@
    fun:add_history
    fun:read_history_range
 }
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:process_nlspath
+   fun:_real_gettext_u
+   fun:dgettext
+}
+{
+   Solaris 11.3 gettext/strerror
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:process_nlspath
+   fun:_real_gettext_u
+   fun:dgettext
+   fun:strerror
+}
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:process_nlspath
+   fun:_real_gettext_u
+   fun:dgettext
+}
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:process_nlspath
+   fun:_real_gettext_u
+   fun:dgettext
+}
+{
+   Solaris 11.3 setenv
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:setenv
+}
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:handle_mo
+   fun:_real_gettext_u
+   fun:dgettext
+}
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:handle_mo
+   fun:handle_lang
+   fun:_real_gettext_u
+   fun:dgettext
+}
+{
+   Solaris 11.3 gettext/strerror
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:handle_mo
+   fun:_real_gettext_u
+   fun:dgettext
+   fun:strerror
+}
+{
+   Solaris 11.3 gettext/strerror
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:handle_mo
+   fun:handle_lang
+   fun:_real_gettext_u
+   fun:dgettext
+   fun:strerror
+}
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:handle_mo
+   fun:_real_gettext_u
+   fun:dgettext
+}
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:handle_mo
+   fun:handle_lang
+   fun:_real_gettext_u
+   fun:dgettext
+}
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:strdup
+   fun:handle_mo
+   fun:handle_lang
+   fun:_real_gettext_u
+   fun:dgettext
+}
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:strdup
+   fun:handle_mo
+   fun:_real_gettext_u
+   fun:dgettext
+}
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:dgettext
+}
+{
+   Solaris 11.3 gettext/strerror
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:strdup
+   fun:handle_mo
+   fun:handle_lang
+   fun:_real_gettext_u
+   fun:dgettext
+   fun:strerror
+}
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:populate_templates
+   fun:process_nlspath
+   fun:_real_gettext_u
+   fun:dgettext
+}
+{
+   Solaris 11.3 gettext/strerror
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:populate_templates
+   fun:process_nlspath
+   fun:_real_gettext_u
+   fun:dgettext
+   fun:strerror
+}
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:populate_templates
+   fun:process_nlspath
+   fun:_real_gettext_u
+   fun:dgettext
+}
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:populate_templates
+   fun:process_nlspath
+   fun:_real_gettext_u
+   fun:dgettext
+}
+{
+   Solaris 11.3 gettext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:populate_templates
+   fun:process_nlspath
+   fun:_real_gettext_u
+   fun:dgettext
+}
+{
+   Solaris 11.3 boot/setup
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:solaris_locking_setup
+   fun:_init
+   fun:call_init
+   fun:setup
+   fun:_setup
+   fun:_rt_boot
+}
+{
+   Solaris 11.3 localtime
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:realloc
+   fun:ltzset_u
+   fun:localtime_int
+   fun:localtime
+}
