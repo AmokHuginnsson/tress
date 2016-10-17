@@ -26,8 +26,12 @@ Copyright:
 
 #include <yaal/hcore/hexception.hxx>
 
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wkeyword-macro"
 #define private public
 #define protected public
+#pragma GCC diagnostic error "-Wkeyword-macro"
+#pragma GCC diagnostic error "-Wpragmas"
 #include <yaal/hcore/hset.hxx>
 #undef protected
 #undef private

@@ -26,7 +26,11 @@ Copyright:
 
 #include <sstream>
 
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wkeyword-macro"
 #define private public
+#pragma GCC diagnostic error "-Wkeyword-macro"
+#pragma GCC diagnostic error "-Wpragmas"
 
 #include <TUT/tut.hpp>
 

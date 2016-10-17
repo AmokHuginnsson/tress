@@ -39,11 +39,7 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 namespace {
-#ifndef __MSVCXX__
-	char const UTF8[] = "utf8";
-#else /* #ifndef __MSVCXX__ */
 	char const UTF8[] = "utf-8";
-#endif /* #else #ifndef __MSVCXX__ */
 }
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hcharacterencodingconverter );
