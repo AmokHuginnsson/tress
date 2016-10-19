@@ -48,6 +48,7 @@ Copyright:
 #include <yaal/tools/hterminal.hxx>
 #include <yaal/tools/signals.hxx>
 #include <yaal/tools/hthreadpool.hxx>
+#include <yaal/tools/hmonitor.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 
 #include "setup.hxx"
@@ -84,6 +85,7 @@ int main( int argc_, char* argv_[] ) {
 	HScopeExitCall secTP( call( &HThreadPool::stop, &HThreadPool::get_instance() ) );
 	HScopeExitCall secSS( call( &HSignalService::stop, &HSignalService::get_instance() ) );
 	M_PROLOG
+	HMonitor::get_instance();
 	init_locale( PACKAGE_NAME );
 	HClock clk;
 /*	variables declarations for main loop:                                 */
