@@ -60,7 +60,7 @@ struct MEVENT {
 	int _x;
 	int _y;
 	int _z;
-	chtype_t _state;
+	mmask_t _state;
 };
 
 HFakeConsole::HFakeConsole( void )

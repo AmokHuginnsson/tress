@@ -48,6 +48,12 @@ typedef yaal::u64_t chtype_t;
 typedef yaal::u32_t chtype_t;
 #endif
 
+#if SIZEOF_MMASK_T == 8
+typedef yaal::u64_t mmask_t;
+#else
+typedef yaal::u32_t mmask_t;
+#endif
+
 struct WINDOW;
 struct MEVENT;
 

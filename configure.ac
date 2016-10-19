@@ -36,7 +36,11 @@ int main( int, char** ) {
 ]])], [AC_DEFINE([HAVE_SGI_STL_EXTENSIONS],[],[Do you have SGI STL extensions?])] RESULT=["yes"])
 AC_MSG_RESULT([$RESULT])
 AC_CHECK_DECLS([RTLD_NEXT],[],[],[#include <dlfcn.h>])
-AC_CHECK_SIZEOF([chtype],[],[#include <ncurses.h>])
+AC_CHECK_HEADERS([ncurses/curses.h],_NCURSES_HEADER=['ncurses/curses.h'],
+	[AC_CHECK_HEADERS([curses.h],_NCURSES_HEADER=['curses.h'],
+			[AC_MSG_ERROR([Cannot continue without ncurses devel!])])])
+AC_CHECK_SIZEOF([chtype],[],[#include <$_NCURSES_HEADER>])
+AC_CHECK_SIZEOF([mmask_t],[],[#include <$_NCURSES_HEADER>])
 AC_SEARCH_LIBS([dlopen],[dl],,[AC_MSG_ERROR([Cannot continue without dynamic dynamic linker library.])])
 AC_CHECK_PROG(HAS_TNSPING,[tnsping],["yes"],["no"])
 AC_MSG_CHECKING([Oracle DB instance availability])
