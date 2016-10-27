@@ -226,8 +226,8 @@ TUT_UNIT_TEST( "listwidget search" )
 		}
 	);
 	play(
-		"search backward", {
-			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '/', 'u', '\r',
+		"search backward (all flags + programmable)", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '/', 'u', '/', 'f', 'c', 'C', 'i', '\r',
 			KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl,
 			KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl, KEY<'p'>::ctrl,
 			KEY<'q'>::command, KEY<'x'>::command
