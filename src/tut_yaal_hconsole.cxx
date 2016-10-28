@@ -219,7 +219,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "listwidget search" )
 	play(
 		"search forward", {
-			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '/', 'u', '\r',
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '/', '\r', '?', '\\', '\r', '/', 'x', '/', 'x', '\r', '/', '\\', 'u', '\r',
 			KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl,
 			KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl, KEY<'n'>::ctrl,
 			KEY<'q'>::command, KEY<'x'>::command
