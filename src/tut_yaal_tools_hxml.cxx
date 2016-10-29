@@ -429,6 +429,14 @@ TUT_UNIT_TEST( "parse bofere apply_style and after apply_style" )
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/tut.xml", HFile::OPEN::WRITING ) ) ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "conversion errors" );
+	HStringStream src( "<?xml version=\"1.0\" encoding=\"ISO-8859-2\"?><pi>&#960;</pi>" );
+	HXml xml;
+	xml.load( src, HXml::PARSER::IGNORE_CONVERSION_ERRORS );
+	HXml::HConstNodeProxy root( xml.get_root() );
+	ENSURE_EQUALS( "ignoring conversion error failed", xml::node_val( root ), "π" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "HXml copy." )
 	HXml copy;
 	/* scope for intermediate */ {
