@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!DOCTYPE my_root [
-<!ENTITY % entities SYSTEM "./entities.dtd">
 <!ENTITY copy "A">
 <!ENTITY fake "<xml:my_fake>three</xml:my_fake>">
 <!ENTITY my_local_data "(squared)">
 <!ENTITY trade "<xml:entity_reference>&amp;trade;</xml:entity_reference>">
 <!ENTITY v_data "my precious data">
 ]>
-<my_root xmlns:yaal="http://codestation.org/yaal" my_type="my_fancy">
+<my_root xmlns:yaal="http://codestation.org/yaal" xmlns:xi="http://www.w3.org/2003/XInclude" my_type="my_fancy">
 	<my_node my_property="Żółwiątko">
 		<my_sub>node</my_sub>
 
@@ -22,7 +21,7 @@ Mężny bądź, chroń pułk twój i sześć flag.
 		<!--even_odd>true&trade;</even_odd-->
 </bit>
 	<my_set>
-		<my_item>one			<entity_reference>&trade;</entity_reference>
+		<my_item>one			<xml:entity_reference>&trade;</xml:entity_reference>
 		</my_item>
 		<my_item attr="data">two</my_item>
 		<my_fake>three</my_fake>

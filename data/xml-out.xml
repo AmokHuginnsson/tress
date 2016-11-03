@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!DOCTYPE my_root [
-<!ENTITY % entities SYSTEM "./entities.dtd">
 <!ENTITY fake "<xml:my_fake>three</xml:my_fake>">
 <!ENTITY trade "<xml:entity_reference>&amp;trade;</xml:entity_reference>">
 <!ENTITY v_data "my precious data">
 ]>
-<my_root xmlns:yaal="http://codestation.org/yaal" my_type="my_fancy">
+<my_root xmlns:yaal="http://codestation.org/yaal" xmlns:xi="http://www.w3.org/2003/XInclude" my_type="my_fancy">
 	<my_node my_property="Żółwiątko">
 		<my_sub>node</my_sub>
 
@@ -14,9 +13,9 @@ Filmuj rzeź żądań, pość, gnęb chłystków!
 Mężny bądź, chroń pułk twój i sześć flag.
 				<my_empty my_prop="my_p_val"/>
 	</my_node>
-	<include href="./bit.xml"/>
+	<xi:include href="./bit.xml"/>
 	<my_set>
-		<my_item>one			<entity_reference>&trade;</entity_reference>
+		<my_item>one			<xml:entity_reference>&trade;</xml:entity_reference>
 		</my_item>
 		<my_item attr="data">two</my_item>
 		<my_fake>three</my_fake>

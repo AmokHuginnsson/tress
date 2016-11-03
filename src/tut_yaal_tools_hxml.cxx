@@ -236,7 +236,7 @@ TUT_UNIT_TEST( "node operations" )
 	HXml::HIterator it( root.add_node( "child", "structured text" ) );
 	it = root.insert_node( it, HXml::HNode::TYPE::CONTENT, "free form text" );
 	root.insert_node( it, "quick", "data" );
-	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 	resort_entities( "out/tut.xml" );
 	ENSURE( "load xinclude failed", file_compare( "out/tut.xml", "data/xml-node-opers.xml" ) );
 TUT_TEARDOWN()
@@ -259,7 +259,7 @@ TUT_UNIT_TEST( "node operations (move,replace,copy,remove)" )
 	copied = child[0].copy_node( copied, quick[0] );
 	(*copied).set_name( "copiedId" );
 	(*(*copied).begin()).set_value( "modified value" );
-	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 	ENSURE( "copy_node failed", file_compare( "out/tut.xml", "data/xml-copy.xml" ) );
 	child[0].move_node( *child[0].begin() );
 	++ copied;
@@ -276,14 +276,14 @@ TUT_UNIT_TEST( "node operations (move,replace,copy,remove)" )
 	ENSURE_THROW( "cycle created by move", (*copied).move_node( (*copied).begin(), child[0] ), HXmlException );
 	(*copied).set_name( "moved" );
 	ENSURE( "bad xml from node", (*copied).xml() == &xml );
-	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 	ENSURE( "move_node failed", file_compare( "out/tut.xml", "data/xml-move.xml" ) );
 	ENSURE_THROW( "cycle created by move", (*copied).replace_node( (*copied).begin(), child[0] ), HXmlException );
 	child[0].replace_node( copied, *child[0].rbegin() );
-	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 	ENSURE( "replace_node failed", file_compare( "out/tut.xml", "data/xml-replace.xml" ) );
 	child[0].remove_node( child[0].begin() );
-	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 	ENSURE( "replace_node failed", file_compare( "out/tut.xml", "data/xml-remove.xml" ) );
 TUT_TEARDOWN()
 
@@ -300,7 +300,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "load(file), save" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
-	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), true );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 	resort_entities( "out/tut.xml" );
 	ENSURE( "load xinclude failed", file_compare( "out/tut.xml", "data/xml-out.xml" ) );
 	ENSURE_THROW( "empty document loaded", xml.load( HStreamInterface::ptr_t( new HFile( "data/xml-empty.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE ), HXmlException );
@@ -309,7 +309,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "load(XINCLUDE) (resolve entities), save" )
 	HXml xml;
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE );
-	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ), true );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 	resort_entities( "out/tut-xi.xml" );
 	ENSURE( "load xinclude failed", file_compare( "out/tut-xi.xml", "data/xml-xi-out.xml" ) );
 	HXml fail;
@@ -324,7 +324,7 @@ TUT_UNIT_TEST( "load(XINCLUDE) (no resolve entities), save" )
 	ENSURE_EQUALS( "try_node_val(it) get failed", xml::node_val( -- elem.end() ), "my precious data" );
 	HXml::HConstNodeProxy special( elem.get_parent() );
 	ENSURE_EQUALS( "try_attr_val(it) failed", xml::attr_val( special.begin(), "prop" ), "value" );
-	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ), true );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 	resort_entities( "out/tut-xi.xml" );
 	ENSURE( "load xinclude failed", file_compare( "out/tut-xi.xml", "data/xml-xi-noent-out.xml" ) );
 TUT_TEARDOWN()
@@ -422,7 +422,7 @@ TUT_UNIT_TEST( "parse bofere apply_style and after apply_style" )
 	xml.init( HStreamInterface::ptr_t( new HFile( "./data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.parse();
 	std::clog << xml;
-	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/raw.xml", HFile::OPEN::WRITING ) ) ), true );
+	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/raw.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 	xml.apply_style( "./data/style.xml" );
 	xml.parse();
 	std::clog << xml;
@@ -447,7 +447,7 @@ TUT_UNIT_TEST( "HXml copy." )
 			xml.parse();
 			intermediate = xml;
 			std::clog << xml;
-			xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/raw.xml", HFile::OPEN::WRITING ) ) ), true );
+			xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/raw.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 		}
 		intermediate.apply_style( "./data/style.xml" );
 		intermediate.parse();
@@ -468,7 +468,7 @@ TUT_UNIT_TEST( "HXml move." )
 			HXml tmp( yaal::move( xml ) );
 			std::clog << xml;
 			intermediate = yaal::move( tmp );
-			intermediate.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/raw.xml", HFile::OPEN::WRITING ) ) ), true );
+			intermediate.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "./out/raw.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 		}
 		intermediate.apply_style( "./data/style.xml" );
 		intermediate.parse();
