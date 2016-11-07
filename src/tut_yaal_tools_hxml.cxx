@@ -302,7 +302,12 @@ TUT_UNIT_TEST( "load(file), save" )
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 	resort_entities( "out/tut.xml" );
-	ENSURE( "load xinclude failed", file_compare( "out/tut.xml", "data/xml-out.xml" ) );
+#ifndef __MSVCXX__
+	char const expected[] = "data/xml-out.xml";
+#else
+	char const expected[] = "data/xml-out-278.xml";
+#endif
+	ENSURE( "load xinclude failed", file_compare( "out/tut.xml", expected ) );
 	ENSURE_THROW( "empty document loaded", xml.load( HStreamInterface::ptr_t( new HFile( "data/xml-empty.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE ), HXmlException );
 TUT_TEARDOWN()
 
