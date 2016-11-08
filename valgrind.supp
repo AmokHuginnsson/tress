@@ -4769,3 +4769,28 @@
    fun:localtime_int
    fun:localtime
 }
+{
+   Zesty fb_shutdown
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:memalign
+   fun:allocate_and_init
+   fun:tls_get_addr_tail
+   obj:/usr/lib/x86_64-linux-gnu/libfbclient.so.3.0.1
+   obj:/usr/lib/x86_64-linux-gnu/libfbclient.so.3.0.1
+   obj:/usr/lib/x86_64-linux-gnu/libfbclient.so.3.0.1
+   obj:/usr/lib/x86_64-linux-gnu/libfbclient.so.3.0.1
+   obj:/usr/lib/x86_64-linux-gnu/libfbclient.so.3.0.1
+   fun:fb_shutdown
+}
+{
+   Zesty xmlCleanupParser
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:xmlNewGlobalState
+   fun:xmlGetGlobalState
+   fun:__xmlLastError
+   fun:xmlResetLastError
+   fun:xmlCleanupParser
+}
