@@ -4794,3 +4794,21 @@
    fun:xmlResetLastError
    fun:xmlCleanupParser
 }
+{
+   Zesty xmlNsErr
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmlStrndup__internal_alias
+   fun:xmlStrdup
+   fun:xmlCopyError
+   fun:__xmlRaiseError
+   fun:xmlNsErr
+   fun:xmlParseStartTag2
+   fun:xmlParseTryOrFinish
+   fun:xmlParseChunk
+   fun:xmlTextWriterWriteDocCallback
+   fun:xmlOutputBufferFlush
+   fun:xmlTextWriterFlush__internal_alias
+   fun:xmlTextWriterEndDocument
+}
