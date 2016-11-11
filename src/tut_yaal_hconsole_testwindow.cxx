@@ -29,6 +29,7 @@ Copyright:
 #include "tut_yaal_hconsole_testwindow.hxx"
 M_VCSID( "$Id: " __ID__ " $" )
 #include <yaal/hconsole/hdatewidget.hxx>
+#include <yaal/hconsole/htimewidget.hxx>
 
 #include "tut_yaal_hconsole_testset.hxx"
 
@@ -102,21 +103,26 @@ void HTestWindow::do_init( void ) {
 				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
 	control->enable( true );
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Int", 8, HWidget::BITS::ALIGN::RIGHT, TYPE::INT_LONG_LONG, "",
-			control = _edit = new HEditWidget( this, -13, 1, 1, 24, "&Int",
+			control = _edit = new HEditWidget( this, -13, 1, 1, 18, "&Int",
 				HEditWidgetAttributes()
 				.max_string_size( 32 )
 				.mask( "^[0-9]*$" )
 				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
 	control->enable( true );
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Real", 20, HWidget::BITS::ALIGN::RIGHT, TYPE::DOUBLE_LONG, "",
-			control = new HEditWidget( this, -13, 27, 1, 32, "&Real",
+			control = new HEditWidget( this, -13, 21, 1, 24, "&Real",
 				HEditWidgetAttributes()
 				.max_string_size( 32 )
 				.mask( "^[0-9\\.-]*$" )
 				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
 	control->enable( true );
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Date", 11, HWidget::BITS::ALIGN::CENTER, TYPE::HTIME, "",
-			control = new HDateWidget( this, -13, 61, "&Date",
+			control = new HDateWidget( this, -13, 47, "&Date",
+				HWidgetAttributes()
+				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
+	control->enable( true );
+	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Time", 11, HWidget::BITS::ALIGN::CENTER, TYPE::HTIME, "",
+			control = new HTimeWidget( this, -13, 61, "T&ime",
 				HWidgetAttributes()
 				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
 	control->enable( true );
@@ -128,7 +134,7 @@ void HTestWindow::do_init( void ) {
 	HTestSet rs( _db );
 	HRecordSet::ptr_t r = rs.get_records();
 	HAsIsValueListModel<>::ptr_t mC = _list->get_model();
-	HInfoItem row( 5 );
+	HInfoItem row( 6 );
 	for ( int i( 0 ), rn( 1 ); i < 3; ++ i ) {
 		for ( HRecordSet::iterator it = r->begin(); it != r->end(); ++ it ) {
 			rs.sync( it );
@@ -138,6 +144,7 @@ void HTestWindow::do_init( void ) {
 			row[ 2 ].set_string( rs._vInt + rn );
 			row[ 3 ].set_string( rs._vReal );
 			row[ 4 ].set_time( rs._vDate );
+			row[ 5 ].set_time( rs._vTime );
 			mC->add_tail( row );
 			++ rn;
 		}
