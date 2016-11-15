@@ -41,6 +41,8 @@ Copyright:
 #include <yaal/tools/hstringstream.hxx>
 #include <yaal/hconsole/console.hxx>
 #include <yaal/hconsole/hconsole.hxx>
+#include <yaal/hconsole/hwindowfactory.hxx>
+#include <yaal/hconsole/hwidgetfactory.hxx>
 
 #include <yaal/hcore/hlog.hxx>
 
@@ -192,16 +194,26 @@ HFakeConsole _fakeConsole_;
 
 HFakeConsoleGuard::HFakeConsoleGuard( void )
 	: _exclusiveAccess( yaal::tools::HMonitor::get_instance().acquire( "terminal" ) ) {
+	M_PROLOG
 	unsetenv( "YAAL_HAS_BROKEN_BRIGHT_BACKGROUND" );
 	unsetenv( "MRXVT_TABTITLE" );
 	unsetenv( "TERMINATOR_UUID" );
 	setenv( "DISPLAY", ":0.0", 1 );
 	_useMouse_ = USE_MOUSE::YES;
 	_fakeConsole_.activate();
+	HWindowFactory::get_instance().initialize_globals();
+	HWidgetFactory::get_instance().initialize_globals();
+	return;
+	M_EPILOG
 }
 
 HFakeConsoleGuard::~HFakeConsoleGuard( void ) {
+	M_PROLOG
+	HWidgetFactory::get_instance().cleanup_globals();
+	HWindowFactory::get_instance().cleanup_globals();
 	_fakeConsole_.deactivate();
+	return;
+	M_DESTRUCTOR_EPILOG
 }
 
 struct WINDOW {
