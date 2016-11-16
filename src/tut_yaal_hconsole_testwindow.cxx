@@ -24,6 +24,7 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <TUT/tut.hpp>
 #include <yaal/tools/util.hxx>
 
 #include "tut_yaal_hconsole_testwindow.hxx"
@@ -90,7 +91,7 @@ void HTestWindow::do_init( void ) {
 		item[ 0 ].set_string( name );
 		controler->add_tail( item );
 	}
-	_list = new HListWidget( this, 1, 1, -17, -1, "&Test data", HListWidgetAttributes().searchable( true ) );
+	_list = new HListWidget( this, 1, 1, -17, -1, "&Test data", HListWidgetAttributes().checkable( true ).searchable( true ) );
 	_list->enable( true );
 	_list->set_focus();
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Name", 16, HWidget::BITS::ALIGN::LEFT, TYPE::HSTRING, "", _name ) );
@@ -176,6 +177,11 @@ void HTestWindow::do_init( void ) {
 	_logPad->add( COLORS::FG_LIGHTGRAY, " lightgray" );
 	_logPad->add( COLORS::FG_WHITE, " white" );
 	_logPad->enable( true );
+	M_ENSURE( _widgets.get_widget_by_no( 9 ) == _logPad, "get_widget_by_no(9) failed" );
+	M_ENSURE( _widgets.get_widget_by_no( 8 ) == _editableList, "get_widget_by_no(8) failed" );
+	M_ENSURE( _widgets.get_widget_by_no( 4 ) == _edit, "get_widget_by_no(4) failed" );
+	M_ENSURE( _widgets.get_widget_by_no( 2 ) == _list, "get_widget_by_no(2) failed" );
+	M_ENSURE( _widgets.get_widget_by_no( 1 ) == _name, "get_widget_by_no(1) failed" );
 	paint();
 	return;
 	M_EPILOG
