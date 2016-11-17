@@ -319,6 +319,16 @@ TUT_UNIT_TEST( "date motion" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "time motion" )
+	play(
+		"time motion", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', KEY_CODES::ESCAPE, 'i',
+			KEY_CODES::UP, KEY_CODES::RIGHT, KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::UP, KEY_CODES::RIGHT, KEY_CODES::LEFT,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "mouse" )
 	play(
 		"mouse", {
