@@ -70,9 +70,10 @@ void HTestWindow::do_init( void ) {
 	HWindow::do_init();
 	_name = new HComboboxWidget( this, -16, 1, 9, 24, "&Name",
 			HComboboxWidgetAttributes()
+				.none_text( "-?-" )
 				.dropped_width( 32 )
 				.max_string_size( 128 )
-				.mask( "^[a-zA-Z±°Ê∆Í ≥£Ò—Û”∂¶º¨øØ \\._@-]*$" )
+				.mask( "^[a-zA-Z±°Ê∆Í ≥£Ò—Û”∂¶º¨øØ \\._@?-]*$" )
 				.label_position( HWidget::LABEL::POSITION::STACKED )
 				.up<HComboboxWidgetAttributes>()
 				.searchable( true )

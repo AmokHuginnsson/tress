@@ -302,6 +302,7 @@ TUT_UNIT_TEST( "edit widget edit and motion" )
 			KEY_CODES::ESCAPE, 'T', KEY_CODES::DOWN, KEY_CODES::ESCAPE, 'x',
 			KEY_CODES::UP,
 			KEY_CODES::END, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::DELETE, KEY_CODES::DELETE, KEY_CODES::HOME, KEY_CODES::DELETE, KEY_CODES::DELETE, KEY<'u'>::ctrl,
+			KEY_CODES::PAGE_UP, KEY_CODES::PAGE_DOWN, KEY_CODES::UP, KEY_CODES::DOWN,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
@@ -343,6 +344,16 @@ TUT_UNIT_TEST( "time motion" )
 		"time motion", {
 			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', KEY_CODES::ESCAPE, 'i',
 			KEY_CODES::UP, KEY_CODES::RIGHT, KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::UP, KEY_CODES::RIGHT, KEY_CODES::LEFT,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "combobox motion" )
+	play(
+		"combobox motion", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', KEY_CODES::ESCAPE, 'N',
+			KEY_CODES::UP, KEY_CODES::ESCAPE, fake_console_subsystem::COMMIT_ESCAPE,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
