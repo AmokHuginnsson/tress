@@ -241,6 +241,24 @@ TUT_UNIT_TEST( "listwidget search" )
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
+	play(
+		"search cancel", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '/', KEY_CODES::BACKSPACE,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+	play(
+		"search bad forw", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '/', 'x', 'x', 'x', '\r',  KEY<'n'>::ctrl, KEY<'p'>::ctrl,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+	play(
+		"search bad back", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', '?', 'x', 'x', 'x', '\r',  KEY<'n'>::ctrl, KEY<'p'>::ctrl,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "listwidget sort" )
@@ -294,6 +312,7 @@ TUT_UNIT_TEST( "logpad motion" )
 		"logpad motion", {
 			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', KEY_CODES::ESCAPE, 'L',
 			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::UP, KEY_CODES::LEFT, KEY_CODES::LEFT,
+			KEY_CODES::END, KEY_CODES::HOME,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
@@ -349,6 +368,10 @@ TUT_UNIT_TEST( "mouse" )
 			KEY_CODES::MOUSE, 24, 10,
 			KEY_CODES::MOUSE, 2, 11,
 			KEY_CODES::MOUSE, 2, 11,
+			KEY_CODES::MOUSE, 50, 13,
+			KEY_CODES::MOUSE, 50, 13,
+			KEY_CODES::MOUSE, 48, 17,
+			KEY_CODES::MOUSE, 48, 17,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
