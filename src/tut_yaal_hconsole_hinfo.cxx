@@ -27,6 +27,9 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/hconsole/hinfo.hxx>
+#include <yaal/hconsole/hinfointeger.hxx>
+#include <yaal/hconsole/hinfotime.hxx>
+#include <yaal/hconsole/heditwidget.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -164,6 +167,52 @@ TUT_UNIT_TEST( "assign oper" )
 	ENSURE_EQUALS( "assign of str failed", imv2.get_string(), text );
 	ENSURE_EQUALS( "assign of real failed", imv2.get_real(), pi );
 	ENSURE_EQUALS( "assign of as time failed", imv2.get_time(), bday );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "HInfoInteger" )
+	HInfoInteger ii( 7 );
+	ENSURE_THROW( "get real on HInfoInteger succeeded", ii.get_real(), HFailedAssertion );
+	ENSURE_THROW( "get string on HInfoInteger succeeded", ii.get_string(), HFailedAssertion );
+	ENSURE_THROW( "get time on HInfoInteger succeeded", ii.get_time(), HFailedAssertion );
+	ENSURE_THROW( "set real on HInfoInteger succeeded", ii.set_real( 0.0L ), HFailedAssertion );
+	ENSURE_EQUALS( "bad HInfoInteger from constructor", ii.get_integer(), 7 );
+	ii.set_string( "19" );
+	ENSURE_EQUALS( "bad HInfoInteger from set_string", ii.get_integer(), 19 );
+	ii.set_time( HTime( HTime::TZ::UTC, 0, 1, 1, 1, 0, 0 ) );
+	ENSURE_EQUALS( "bad HInfoInteger from set_time", ii.get_integer(), 3600 );
+	ii.set_integer( 13 );
+	ENSURE_EQUALS( "bad HInfoInteger from set_integer", ii.get_integer(), 13 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "HInfoTime" )
+	HTime time( HTime::TZ::LOCAL, 1978, 5, 24, 23, 30, 17 );
+	HInfoTime it( time );
+	ENSURE_THROW( "get real on HInfoTime succeeded", it.get_real(), HFailedAssertion );
+	ENSURE_THROW( "get string on HInfoTime succeeded", it.get_string(), HFailedAssertion );
+	ENSURE_EQUALS( "bad time from constructor", it.get_time(), time );
+	it.set_integer( 3600 );
+	ENSURE_EQUALS( "bad time from set_integer", it.get_integer(), 3600 );
+	ENSURE_THROW( "set real on HInfoInteger succeeded", it.set_real( 0.0L ), HFailedAssertion );
+	it.set_string( "1978-05-24 23:30:29" );
+	ENSURE_EQUALS( "bad time from string", it.get_time(), HTime( HTime::TZ::LOCAL, 1978, 5, 24, 23, 30, 29 ) );
+	HTime consc( HTime::TZ::LOCAL, 1989, 8, 24, 14, 24, 56 );
+	it.set_time( consc );
+	ENSURE_EQUALS( "bad time from set_time", it.get_time(), consc );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "HInfoString" )
+	HString s( "ala" );
+	HInfoString is( s );
+	ENSURE_EQUALS( "bad string from ctor", is.get_string(), "ala" );
+	ENSURE_THROW( "get time on HInfoString succeeded", is.get_time(), HFailedAssertion );
+	is.set_integer( 7 );
+	ENSURE_EQUALS( "bad string from set_integer", is.get_string(), "7" );
+	is.set_real( 13.5 );
+	ENSURE_EQUALS( "bad string from set_real", is.get_string(), "13.5" );
+	is.set_string( "kot" );
+	ENSURE_EQUALS( "bad string from set_string", is.get_string(), "kot" );
+	is.set_time( HTime( HTime::TZ::LOCAL, 1978, 5, 24, 23, 30, 17 ) );
+	ENSURE_EQUALS( "bad string from set_time", is.get_string(), "1978-05-24 23:30:17" );
 TUT_TEARDOWN()
 
 }
