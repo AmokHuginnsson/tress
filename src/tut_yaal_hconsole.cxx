@@ -359,6 +359,26 @@ TUT_UNIT_TEST( "combobox motion" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "listwidget edit" )
+	play(
+		"listwidget edit numerical cells", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r',
+			KEY_CODES::ESCAPE, 'E',
+			KEY_CODES::INSERT, KEY_CODES::F2, '\t', 'x', '\t', KEY_CODES::BACKSPACE, '0', '\t', 'x', '\t', KEY_CODES::BACKSPACE, '0', '\r',
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+	play(
+		"listwidget edit remove row", {
+			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r',
+			KEY_CODES::ESCAPE, 'E',
+			KEY_CODES::INSERT, '0', '\r', KEY_CODES::INSERT, '1', '\r', KEY_CODES::INSERT, '2', '\r', KEY_CODES::INSERT, '3', '\r', KEY_CODES::INSERT, '4', '\r', KEY_CODES::INSERT, '5', '\r', KEY_CODES::INSERT, '6', '\r', KEY_CODES::INSERT, '7', '\r',
+			KEY_CODES::DELETE, KEY_CODES::UP, KEY_CODES::DELETE, KEY_CODES::UP, KEY_CODES::UP, KEY_CODES::UP, KEY_CODES::UP, KEY_CODES::DELETE, KEY_CODES::HOME, KEY_CODES::DELETE,
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "mouse" )
 	play(
 		"mouse", {
