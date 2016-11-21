@@ -138,7 +138,9 @@ void HFakeConsole::getmouse( MEVENT* ev_ ) {
 	M_ASSERT( ! _inputQueue.is_empty() );
 	ev_->_y = _inputQueue.top();
 	_inputQueue.pop();
-	ev_->_state = 4;
+	M_ASSERT( ! _inputQueue.is_empty() );
+	ev_->_state = static_cast<mmask_t>( _inputQueue.top() );
+	_inputQueue.pop();
 	return;
 }
 

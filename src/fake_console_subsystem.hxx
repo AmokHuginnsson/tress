@@ -58,6 +58,9 @@ struct WINDOW;
 struct MEVENT;
 
 static int const COMMIT_ESCAPE = -2;
+static int const MOUSE_BUTTON1 = 4;
+static int const MOUSE_WHEEL_UP = 524288;
+static int const MOUSE_WHEEL_DOWN = 8388608;
 
 class HFakeConsole {
 private:

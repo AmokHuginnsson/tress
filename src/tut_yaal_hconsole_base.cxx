@@ -45,6 +45,7 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace yaal::tools::util;
 using namespace yaal::hconsole;
+using namespace tress::fake_console_subsystem;
 
 namespace tress {
 
@@ -72,11 +73,15 @@ void tut_yaal_hconsole_base::play( char const* name_, int_array_t input_ ) {
 	int skip( 0 );
 	for ( int key : input_ ) {
 		if ( key == KEY_CODES::MOUSE ) {
-			skip += 2;
+			skip += 3;
 		} else if ( key == KEY<'l'>::ctrl ) {
 			cons.ungetch( -1 );
 		}
-		cons.ungetch( key );
+		if ( ( key == MOUSE_WHEEL_DOWN ) || ( key == MOUSE_WHEEL_UP ) ) {
+			tress::fake_console_subsystem::_fakeConsole_.ungetch( key );
+		} else {
+			cons.ungetch( key );
+		}
 	}
 	tui_t tp( make_tui() );
 	tp->init_xrc( "tress", "data/tress.xrc" );

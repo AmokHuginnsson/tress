@@ -13,6 +13,10 @@
 					<label>Test</label>
 					<handler>run_test</handler>
 				</menu_item>
+				<menu_item>
+					<label>XML Test</label>
+					<handler name="create_window" param="window_test" />
+				</menu_item>
 			</menu>
 		</menu_item>
 		<menu_item>
@@ -47,16 +51,16 @@ GROUP BY t.id;
 			<searchable>true</searchable>
 			<editable>false</editable>
 			<draw_header>true</draw_header>
-			<column placement="-1" name="Text" width="2" align="left" type="string" refid="window_test_text" />
-			<column placement="-1" name="Integer" width="1" align="right" type="integer" refid="window_test_integer" />
-			<column placement="-1" name="Real" width="1" align="right" type="real" format="%.2Lf" refid="window_test_real" />
-			<column placement="-1" name="Dict" width="4" align="left" type="string" refid="window_test_dict" dict="test_dict" />
-			<column placement="-1" name="Date" width="-10" align="center" type="date" refid="window_test_date" />
+			<column placement="-1" name="Text" width="2" align="left" type="string" refid="datawindow_test_text" />
+			<column placement="-1" name="Integer" width="1" align="right" type="integer" refid="datawindow_test_integer" />
+			<column placement="-1" name="Real" width="1" align="right" type="real" format="%.2Lf" refid="datawindow_test_real" />
+			<column placement="-1" name="Dict" width="4" align="left" type="string" refid="datawindow_test_dict" dict="test_dict" />
+			<column placement="-1" name="Date" width="-10" align="center" type="date" refid="datawindow_test_date" />
 			<column placement="-1" name="Time" width="-10" align="center" type="time" refid="window_test_time" />
 			<column placement="-1" name="Virtual" width="1" align="right" type="real" format="%.2Lf" />
 			<column placement="-1" name="DateTime" width="-10" align="center" type="time" refid="window_test_datetime" />
 		</datalist>
-		<dataedit id="window_test_text" role="data">
+		<dataedit id="datawindow_test_text" role="data">
 			<label position="stacked" decoration="auto">&amp;Text</label>
 			<position row="-14" column="1" height="1" width="25" />
 			<attribute
@@ -73,7 +77,7 @@ GROUP BY t.id;
 			<password>false</password>
 			<max_history_level>32</max_history_level>
 		</dataedit>
-		<dataedit id="window_test_integer" role="data">
+		<dataedit id="datawindow_test_integer" role="data">
 			<label position="stacked">&amp;Integer</label>
 			<position row="-14" column="27" height="1" width="10" />
 			<attribute
@@ -85,7 +89,7 @@ GROUP BY t.id;
 			<max_string_size>32</max_string_size>
 			<mask>^[0-9-]*$</mask>
 		</dataedit>
-		<dataedit id="window_test_real" role="data">
+		<dataedit id="datawindow_test_real" role="data">
 			<label position="stacked">&amp;Real</label>
 			<position row="-14" column="38" height="1" width="17" />
 			<attribute
@@ -97,7 +101,7 @@ GROUP BY t.id;
 			<max_string_size>32</max_string_size>
 			<mask>^[0-9.-]*$</mask>
 		</dataedit>
-		<datadate id="window_test_date" role="data">
+		<datadate id="datawindow_test_date" role="data">
 			<label position="stacked">D&amp;ate</label>
 			<position row="-14" column="56" />
 		</datadate>
@@ -114,7 +118,7 @@ GROUP BY t.id;
 			<max_string_size>19</max_string_size>
 			<valid>[0-9]{4}-[01][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]</valid>
 		</dataedit>
-		<datacombobox id="window_test_dict" role="data">
+		<datacombobox id="datawindow_test_dict" role="data">
 			<label position="stacked">&amp;Dict</label>
 			<position row="-11" column="22" width="20" height="4" />
 			<dict>test_dict</dict>
@@ -133,4 +137,63 @@ GROUP BY t.id;
 			<column placement="-1" name="value" width="2" align="right" type="real" format="%.1Lf" />
 		</datalist>
 	</datawindow>
+	<window id="window_test" title="Window">
+		<list role="main">
+			<label position="stacked">&amp;List</label>
+			<position row="1" column="1" height="-17" width="-1" />
+			<checkable>true</checkable>
+			<sortable>true</sortable>
+			<searchable>true</searchable>
+			<editable>false</editable>
+			<draw_header>true</draw_header>
+			<column placement="-1" name="Name" width="16" align="left" type="string" refid="window_test_dict" />
+			<column placement="-1" name="Text" width="32" align="left" type="string" refid="window_test_text" />
+			<column placement="-1" name="Integer" width="8" align="right" type="integer" refid="window_test_integer" />
+			<column placement="-1" name="Real" width="20" align="right" type="real" format="%.2Lf" refid="window_test_real" />
+			<column placement="-1" name="Date" width="11" align="center" type="date" refid="window_test_date" />
+		</list>
+		<combobox id="window_test_dict" role="data">
+			<label position="stacked">&amp;Name</label>
+			<position row="-16" column="1" width="9" height="24" />
+			<max_string_size>128</max_string_size>
+			<valid>^[a-zA-Z±°Ê∆Í ≥£Ò—Û”∂¶º¨øØ \\._@?-]*$</valid>
+			<searchable>true</searchable>
+			<dropped_width>32</dropped_width>
+			<none_text>-?-</none_text>
+		</combobox>
+		<edit id="window_test_text" role="data">
+			<label position="stacked">&amp;Text</label>
+			<position row="-16" column="27" height="1" width="-1" />
+			<max_string_size>64</max_string_size>
+			<valid>^[a-zA-Z±°Ê∆Í ≥£Ò—Û”∂¶º¨øØ !,-]*$</valid>
+		</edit>
+		<edit id="window_test_integer" role="data">
+			<label position="stacked">&amp;Int</label>
+			<position row="-13" column="1" height="1" width="18" />
+			<max_string_size>32</max_string_size>
+			<valid>^[0-9]*$</valid>
+		</edit>
+		<edit id="window_test_real" role="data">
+			<label position="stacked">&amp;Real</label>
+			<position row="-13" column="21" height="1" width="24" />
+			<max_string_size>32</max_string_size>
+			<valid>^[0-9\\.-]*$</valid>
+		</edit>
+		<date id="window_test_date" role="data">
+			<label position="stacked">&amp;Date</label>
+			<position row="-13" column="47" />
+		</date>
+		<list role="data">
+			<label position="stacked">&amp;Items</label>
+			<position row="-10" column="1" height="-3" width="50" />
+			<checkable>false</checkable>
+			<sortable>false</sortable>
+			<searchable>true</searchable>
+			<editable>true</editable>
+			<draw_header>true</draw_header>
+			<column placement="-1" name="text" width="3" align="left" type="string" />
+			<column placement="-1" name="integer" width="3" align="right" type="integer" />
+			<column placement="-1" name="real" width="2" align="right" type="real" format="%.1Lf" />
+		</list>
+	</window>
 </resource>
