@@ -58,6 +58,19 @@ TUT_TEST_GROUP( tut_yaal_hconsole, "yaal::hconsole" );
 
 TUT_UNIT_TEST( "Enter and leave" )
 	HConsole& cons( HConsole::get_instance() );
+	ENSURE_THROW( "leave_curses on non initialized succeeded", cons.leave_curses(), HConsoleException );
+	ENSURE_THROW( "set_attr on non initialized succeeded", cons.set_attr( 0 ), HConsoleException );
+	ENSURE_THROW( "set_background on non initialized succeeded", cons.set_background( 0 ), HConsoleException );
+	ENSURE_THROW( "addch on non initialized succeeded", cons.addch( 0 ), HConsoleException );
+	ENSURE_THROW( "addstr on non initialized succeeded", cons.addstr( "" ), HConsoleException );
+	ENSURE_THROW( "get_key on non initialized succeeded", cons.get_key(), HConsoleException );
+	ENSURE_THROW( "kbhit on non initialized succeeded", cons.kbhit(), HConsoleException );
+	ENSURE_THROW( "get_attr on non initialized succeeded", cons.get_attr(), HConsoleException );
+	ENSURE_THROW( "clear on non initialized succeeded", cons.clear(), HConsoleException );
+	ENSURE_THROW( "clear_terminal on non initialized succeeded", cons.clear_terminal(), HConsoleException );
+	ENSURE_THROW( "printf on non initialized succeeded", cons.printf( "" ), HConsoleException );
+	ENSURE_THROW( "mvprintf on non initialized succeeded", cons.mvprintf( 0, 0, "" ), HConsoleException );
+	ENSURE_THROW( "cmvprintf on non initialized succeeded", cons.cmvprintf( 0, 0, 0, "" ), HConsoleException );
 	cons.enter_curses();
 	ENSURE_EQUALS( "bad width", cons.get_width(), CONSOLE_WIDTH );
 	ENSURE_EQUALS( "bad height", cons.get_height(), CONSOLE_HEIGHT );
@@ -295,6 +308,20 @@ TUT_UNIT_TEST( "edit widget edit and motion" )
 	play(
 		"edit widget motion", {
 			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r', KEY_CODES::ESCAPE, 'x',
+			KEY_CODES::HOME, KEY_CODES::ESCAPE, 'f', KEY_CODES::ESCAPE, 'f', KEY_CODES::ESCAPE, 'f', KEY_CODES::RIGHT,
+			KEY_CODES::INSERT, KEY_CODES::INSERT,
+			KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT,
+			KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT,
+			KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT,
+			KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT,
+			KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT,
+			KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT,
+			KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT,
+			KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT,
+			KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT,
+			KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT,
+			KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT,
+			KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::LEFT,
 			KEY_CODES::HOME, KEY_CODES::ESCAPE, 'f', KEY_CODES::ESCAPE, 'f', KEY_CODES::ESCAPE, 'f', KEY_CODES::RIGHT, KEY_CODES::ESCAPE, 'd',
 			'c', 'r', 'e', 'a', 't', 'o', 'r',
 			KEY_CODES::END, KEY_CODES::ESCAPE, 'b', KEY_CODES::ESCAPE, 'b', KEY_CODES::ESCAPE, 'b', KEY_CODES::ESCAPE, 'b', KEY_CODES::ESCAPE, 'b', KEY_CODES::ESCAPE, 'b', KEY_CODES::ESCAPE, 'b', KEY_CODES::LEFT,
@@ -372,7 +399,13 @@ TUT_UNIT_TEST( "listwidget edit" )
 		"listwidget edit remove row", {
 			KEY_CODES::DOWN, KEY_CODES::RIGHT, KEY_CODES::DOWN, '\r',
 			KEY_CODES::ESCAPE, 'E',
-			KEY_CODES::INSERT, '0', '\r', KEY_CODES::INSERT, '1', '\r', KEY_CODES::INSERT, '2', '\r', KEY_CODES::INSERT, '3', '\r', KEY_CODES::INSERT, '4', '\r', KEY_CODES::INSERT, '5', '\r', KEY_CODES::INSERT, '6', '\r', KEY_CODES::INSERT, '7', '\r',
+			KEY_CODES::INSERT, '0', '\r', KEY_CODES::INSERT, '1', '\r', KEY_CODES::INSERT, '2', '\r',
+			KEY_CODES::UP,
+			KEY_CODES::PAGE_DOWN,
+			KEY_CODES::PAGE_DOWN,
+			KEY_CODES::INSERT, '3', '\r', KEY_CODES::INSERT, '4', '\r', KEY_CODES::INSERT, '5', '\r',
+			KEY_CODES::INSERT, '6', '\r', KEY_CODES::INSERT, '7', '\r',
+			KEY_CODES::F2, KEY_CODES::ESCAPE, COMMIT_ESCAPE,
 			KEY_CODES::DELETE, KEY_CODES::UP, KEY_CODES::DELETE, KEY_CODES::UP, KEY_CODES::UP, KEY_CODES::UP, KEY_CODES::UP, KEY_CODES::DELETE, KEY_CODES::HOME, KEY_CODES::DELETE,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
