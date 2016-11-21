@@ -154,7 +154,7 @@ GROUP BY t.id;
 		</list>
 		<combobox id="window_test_dict" role="data">
 			<label position="stacked">&amp;Name</label>
-			<position row="-16" column="1" width="9" height="24" />
+			<position row="-16" column="1" width="24" height="24" />
 			<max_string_size>128</max_string_size>
 			<valid>^[a-zA-Z±°Ê∆Í ≥£Ò—Û”∂¶º¨øØ \\._@?-]*$</valid>
 			<searchable>true</searchable>
@@ -164,8 +164,9 @@ GROUP BY t.id;
 		<edit id="window_test_text" role="data">
 			<label position="stacked">&amp;Text</label>
 			<position row="-16" column="27" height="1" width="-1" />
-			<max_string_size>64</max_string_size>
+			<max_string_size>128</max_string_size>
 			<valid>^[a-zA-Z±°Ê∆Í ≥£Ò—Û”∂¶º¨øØ !,-]*$</valid>
+			<value>A very long text string. A string so long will not fit in edit widget.</value>
 		</edit>
 		<edit id="window_test_integer" role="data">
 			<label position="stacked">&amp;Int</label>
@@ -195,5 +196,9 @@ GROUP BY t.id;
 			<column placement="-1" name="integer" width="3" align="right" type="integer" />
 			<column placement="-1" name="real" width="2" align="right" type="real" format="%.1Lf" />
 		</list>
+		<tree role="data">
+			<label position="stacked">T&amp;ree</label>
+			<position row="-10" column="53" height="-3" width="-1" />
+		</tree>
 	</window>
 </resource>

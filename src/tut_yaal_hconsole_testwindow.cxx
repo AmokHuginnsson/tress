@@ -68,7 +68,7 @@ HTestWindow::~HTestWindow ( void ) {
 void HTestWindow::do_init( void ) {
 	M_PROLOG
 	HWindow::do_init();
-	_name = new HComboboxWidget( this, -16, 1, 9, 24, "&Name",
+	_name = create_widget<HComboboxWidget>( this, -16, 1, 9, 24, "&Name",
 			HComboboxWidgetAttributes()
 				.none_text( "-?-" )
 				.dropped_width( 32 )
@@ -92,39 +92,39 @@ void HTestWindow::do_init( void ) {
 		item[ 0 ].set_string( name );
 		controler->add_tail( item );
 	}
-	_list = new HListWidget( this, 1, 1, -17, -1, "&Test data", HListWidgetAttributes().checkable( true ).searchable( true ) );
+	_list = create_widget<HListWidget>( this, 1, 1, -17, -1, "&Test data", HListWidgetAttributes().checkable( true ).searchable( true ) );
 	_list->enable( true );
 	_list->set_focus();
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Name", 16, HWidget::BITS::ALIGN::LEFT, TYPE::HSTRING, "", _name ) );
 	HWidget* control( nullptr );
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Text", 32, HWidget::BITS::ALIGN::LEFT, TYPE::HSTRING, "",
-			control = new HEditWidget( this, -16, 27, 1, -1, "Te&xt",
+			control = create_widget<HEditWidget>( this, -16, 27, 1, -1, "Te&xt",
 				HEditWidgetAttributes()
 				.max_string_size( 64 )
 				.mask( "^[a-zA-Z±¡æÆêÊ³£ñÑóÓ¶¦¼¬¿¯ !,-]*$" )
 				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
 	control->enable( true );
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Int", 8, HWidget::BITS::ALIGN::RIGHT, TYPE::INT_LONG_LONG, "",
-			control = _edit = new HEditWidget( this, -13, 1, 1, 18, "&Int",
+			control = _edit = create_widget<HEditWidget>( this, -13, 1, 1, 18, "&Int",
 				HEditWidgetAttributes()
 				.max_string_size( 32 )
 				.mask( "^[0-9]*$" )
 				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
 	control->enable( true );
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Real", 20, HWidget::BITS::ALIGN::RIGHT, TYPE::DOUBLE_LONG, "",
-			control = new HEditWidget( this, -13, 21, 1, 24, "&Real",
+			control = create_widget<HEditWidget>( this, -13, 21, 1, 24, "&Real",
 				HEditWidgetAttributes()
 				.max_string_size( 32 )
 				.mask( "^[0-9\\.-]*$" )
 				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
 	control->enable( true );
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Date", 11, HWidget::BITS::ALIGN::CENTER, TYPE::HTIME, "",
-			control = new HDateWidget( this, -13, 47, "&Date",
+			control = create_widget<HDateWidget>( this, -13, 47, "&Date",
 				HWidgetAttributes()
 				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
 	control->enable( true );
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Time", 11, HWidget::BITS::ALIGN::CENTER, TYPE::HTIME, "",
-			control = new HTimeWidget( this, -13, 61, "T&ime",
+			control = create_widget<HTimeWidget>( this, -13, 61, "T&ime",
 				HWidgetAttributes()
 				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
 	control->enable( true );
@@ -151,7 +151,7 @@ void HTestWindow::do_init( void ) {
 			++ rn;
 		}
 	}
-	_editableList = new HListWidget( this, -10, 1, -3, 50, "&Edit test",
+	_editableList = create_widget<HListWidget>( this, -10, 1, -3, 50, "&Edit test",
 			HListWidgetAttributes()
 			.editable( true )
 			.searchable( true )
@@ -160,7 +160,7 @@ void HTestWindow::do_init( void ) {
 	_editableList->add_column( -1, make_resource<HListWidget::HColumnInfo>( "integer", 1, HWidget::BITS::ALIGN::RIGHT, TYPE::INT_LONG_LONG ) );
 	_editableList->add_column( -1, make_resource<HListWidget::HColumnInfo>( "real", 1, HWidget::BITS::ALIGN::RIGHT, TYPE::DOUBLE_LONG ) );
 	_editableList->enable( true );
-	_logPad = new HLogPad( this, -10, 52, -3, -1, "&Log pad", HWidgetAttributes().label_decoration( HWidget::LABEL::DECORATION::AUTO ).label_position( HWidget::LABEL::POSITION::STACKED ) );
+	_logPad = create_widget<HLogPad>( this, -10, 52, -3, -1, "&Log pad", HWidgetAttributes().label_decoration( HWidget::LABEL::DECORATION::AUTO ).label_position( HWidget::LABEL::POSITION::STACKED ) );
 	_logPad->add( "Color test:\n" );
 	_logPad->add( COLORS::FG_RED, "red" );
 	_logPad->add( COLORS::FG_GREEN, " green" );
