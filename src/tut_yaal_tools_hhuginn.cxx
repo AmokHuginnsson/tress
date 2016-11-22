@@ -668,7 +668,7 @@ TUT_UNIT_TEST( "lookup()" )
 		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;v=\"\";for(e:x){v=v+string(e);v=v+string(x[e]);}return(v);}" ),
 		"\"none7Ala0truefalse1makota.2\""
 	);
-	ENSURE_EQUALS( "hash on user succeeded", execute_except( "class A{_x=none;}main(){l=lookup();return(l[A()]=0);}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:1: There is no `hash' operator for `A'." );
+	ENSURE_EQUALS( "hash on user succeeded", execute_except( "class A{_x=none;}main(){l=lookup();return(l[A()]=0);}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:43: There is no `hash' operator for `A'." );
 	ENSURE_EQUALS(
 		"lookup() iterator failed",
 		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;return([x.has_key(1),x.has_key(2)]);}" ),

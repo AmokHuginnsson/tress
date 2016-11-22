@@ -639,7 +639,7 @@ TUT_UNIT_TEST( "Database" )
 			"copy(dbc);"
 			"}"
 		),
-		"*anonymous stream*:1:1: Copy semantics is not supported on DatabaseConnection."
+		"*anonymous stream*:1:69: Copy semantics is not supported on DatabaseConnection."
 	);
 	ENSURE_EQUALS(
 		"DatabaseConnection.query exception",
