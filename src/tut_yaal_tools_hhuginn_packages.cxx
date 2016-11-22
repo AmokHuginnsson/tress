@@ -604,10 +604,53 @@ TUT_UNIT_TEST( "Database" )
 			"res+=\",\";"
 			"}"
 			"}"
+			"q=dbc.query(\"INSERT INTO config ( name, data ) VALUES ( ?, ? );\");"
+			"q.bind(1, \"special\");"
+			"q.bind(2, \"special_value\");"
+			"qr=q.execute();"
+			"res += string(qr.insert_id());"
+			"q=dbc.query(\"DELETE FROM config WHERE name = ?;\");"
+			"q.bind(1, \"special\");"
+			"qr = q.execute();"
+			"res += \",\";"
+			"res += string(size(qr));"
 			"return(res);"
 			"}"
 		),
-		"\"name,one,three,two,none,\""
+		"\"name,one,three,two,none,4,1\""
+	);
+	ENSURE_EQUALS(
+		"DatabaseConnection.connect exception",
+		execute_except(
+			"import Database as db;"
+			"main(){"
+			"dbc=db.connect(\"sqlite3:///out/tress-non-existing\");"
+			"type(dbc);"
+			"}"
+		),
+		"*anonymous stream*:1:44: Uncaught exception: Database file `out/tress-non-existing.sqlite' is not accessible."
+	);
+	ENSURE_EQUALS(
+		"DatabaseConnection.copy exception",
+		execute_except(
+			"import Database as db;"
+			"main(){"
+			"dbc=db.connect(\"sqlite3:///out/tress\");"
+			"copy(dbc);"
+			"}"
+		),
+		"*anonymous stream*:1:1: Copy semantics is not supported on DatabaseConnection."
+	);
+	ENSURE_EQUALS(
+		"DatabaseConnection.query exception",
+		execute_except(
+			"import Database as db;"
+			"main(){"
+			"dbc=db.connect(\"sqlite3:///out/tress\");"
+			"dbc.query(\"invalid;\");"
+			"}"
+		),
+		"*anonymous stream*:1:78: Uncaught exception: SQL error: near \"invalid\": syntax error"
 	);
 TUT_TEARDOWN()
 
