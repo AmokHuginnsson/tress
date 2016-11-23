@@ -70,23 +70,62 @@ void tut_yaal_dbwrapper_hrecordset::dump_query_result( HDataBase::ptr_t db, char
 	}
 	cout << endl;
 	int row( 0 );
-	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); ++ it, ++ row ) {
+	ENSURE_NOT( "is_empty() failed", rs->is_empty() );
+	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); it ++, ++ row ) {
 		cout << "|";
 		int fc( rs->get_field_count() );
 		for ( int i = 0; i < fc; ++ i ) {
 			HRecordSet::value_t v( it[i] );
 			if ( ( row == 0 ) && ( i == 2 ) ) {
-				if ( dbType_ )
+				if ( dbType_ ) {
 					ENSURE_EQUALS( "wrong database accessed", *v, dbType_ );
+				}
 			} else {
-				if ( !!v )
+				if ( !!v ) {
 					ENSURE_EQUALS( "wrong value", *v, DATA[row][i] );
-				else
+				} else {
 					ENSURE_EQUALS( "wrong value", static_cast<char const*>( NULL ), DATA[row][i] );
+				}
 			}
 			cout << ( !v ? HString( "(NULL)" ) : *v ) << "|";
 		}
 		cout << endl;
+	}
+	int fc( rs->get_field_count() );
+	for ( int r( 0 ), count( static_cast<int>( rs->get_size() ) ); r < count; ++ r ) {
+		for ( int i = 0; i < fc; ++ i ) {
+			HRecordSet::value_t v( rs->get( r, i ) );
+			if ( ( r == 0 ) && ( i == 2 ) ) {
+				if ( dbType_ ) {
+					ENSURE_EQUALS( "wrong database accessed", *v, dbType_ );
+				}
+			} else {
+				if ( !!v ) {
+					ENSURE_EQUALS( "wrong value", *v, DATA[r][i] );
+				} else {
+					ENSURE_EQUALS( "wrong value", static_cast<char const*>( NULL ), DATA[r][i] );
+				}
+			}
+		}
+	}
+	row = static_cast<int>( rs->get_size() - 1 );
+	for ( HRecordSet::iterator it = rs->rbegin(); it != rs->rend(); -- it, -- row ) {
+		HRecordSet::iterator copy( it );
+		copy = it;
+		for ( int i = 0; i < fc; ++ i ) {
+			HRecordSet::value_t v( copy[i] );
+			if ( ( row == 0 ) && ( i == 2 ) ) {
+				if ( dbType_ ) {
+					ENSURE_EQUALS( "wrong database accessed", *v, dbType_ );
+				}
+			} else {
+				if ( !!v ) {
+					ENSURE_EQUALS( "wrong value", *v, DATA[row][i] );
+				} else {
+					ENSURE_EQUALS( "wrong value", static_cast<char const*>( NULL ), DATA[row][i] );
+				}
+			}
+		}
 	}
 	return;
 	M_EPILOG

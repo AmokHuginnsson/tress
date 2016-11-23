@@ -67,6 +67,8 @@ void tut_yaal_dbwrapper_hdatabase::test_schema( HDataBase::ptr_t db_, bool extra
 	clExpect.push_back( "name" );
 	clExpect.push_back( "data" );
 	ENSURE_EQUALS( "bad column list contents", cl, clExpect );
+	ENSURE_THROW( "execute_query in invalid succeeded", db_->execute_query( "invalid;" ), HDataBaseException );
+	cout << db_->get_error() << endl;
 	return;
 	M_EPILOG
 }
