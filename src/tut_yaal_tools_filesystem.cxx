@@ -177,6 +177,14 @@ TUT_UNIT_TEST( "basename" )
 	ENSURE_EQUALS( filesystem::basename( "/some/path/../../" ),   ".." );
 TUT_TEARDOWN()
 
+#ifndef __MSVCXX__
+TUT_UNIT_TEST( "readlink" )
+	ENSURE_EQUALS( filesystem::readlink( "./data/libtressplugin-d.so" ), "../build/debug/tressplugin/1exec" );
+	ENSURE_EQUALS( filesystem::readlink( "./data/libtressplugin.so" ), "../build/release/tressplugin/1exec" );
+	ENSURE_THROW( "readlink on non-existing succeeded", filesystem::readlink( "./data/libtressplugin-x.so" ), HFileSystemException );
+TUT_TEARDOWN()
+#endif
+
 TUT_UNIT_TEST( "create_directory" )
 	char const dirA[] = "../tress/out/a";
 	char const dirAB[] = "../tress/out/a/b";
