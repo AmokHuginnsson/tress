@@ -24,6 +24,10 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#ifndef __MSVCXX__
+#include <unistd.h>
+#include <fcntl.h>
+#endif
 #include <memory>
 #include <cstdio>
 #include <libintl.h>
@@ -49,6 +53,7 @@ Copyright:
 #include <yaal/tools/signals.hxx>
 #include <yaal/tools/hthreadpool.hxx>
 #include <yaal/tools/hmonitor.hxx>
+#include <yaal/tools/filesystem.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 
 #include "setup.hxx"
@@ -77,6 +82,7 @@ typedef std::list<std::string> string_list_t;
 void gather_groups_from_file( OSetup::set_definitions_t& );
 void list_groups( void );
 tut::test_runner::test_sets_t prepare_testsets( OSetup::set_definitions_t const& );
+void cleanup( void );
 
 }
 
@@ -183,12 +189,14 @@ int main( int argc_, char* argv_[] ) {
 		err = e;
 		/* escape from main loop */
 	}
+	cleanup();
 	if ( visitor.get() && ( setup._reporter == "tut" ) ) {
 		cerr << ( HFormat( _( "Done in %ld miliseconds." ) ) % static_cast<int long>( clk.get_time_elapsed( time::UNIT::MILLISECOND ) ) ).string() << endl;
 		M_ENSURE( ! errno );
 	}
-	if ( yaal::_isKilled_ )
+	if ( yaal::_isKilled_ ) {
 		cerr << "Killed" << endl;
+	}
 	return ( ( yaal::_isKilled_ ? 1 : 0 ) + err + ( visitor.get() ? visitor->fail_count() : 0 ) );
 	M_FINAL
 }
@@ -272,6 +280,23 @@ tut::test_runner::test_sets_t prepare_testsets( OSetup::set_definitions_t const&
 		tss.push_back( ts );
 	}
 	return ( tss );
+	M_EPILOG
+}
+
+void cleanup( void ) {
+	M_PROLOG
+#ifndef __MSVCXX__
+	static int const MAX_FD( 1024 );
+	for ( int i( 0 ); i < MAX_FD; ++ i ) {
+		if ( fcntl( i, F_GETFD ) >= 0 ) {
+			HString p( filesystem::readlink( "/proc/self/fd/"_ys.append( i ) ) );
+			if ( p.find( "firebird.msg" ) != HString::npos ) {
+				close( i );
+			}
+		}
+	}
+#endif
+	return;
 	M_EPILOG
 }
 
