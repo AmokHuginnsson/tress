@@ -287,6 +287,7 @@ tut::test_runner::test_sets_t prepare_testsets( OSetup::set_definitions_t const&
 
 void cleanup( void ) {
 	M_PROLOG
+	HScopedValueReplacement<int> saveErrno( errno, 0 );
 #ifdef __HOST_OS_TYPE_LINUX__
 	static int const MAX_FD( 1024 );
 	for ( int i( 0 ); i < MAX_FD; ++ i ) {
