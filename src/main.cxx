@@ -24,10 +24,6 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
-#ifndef __MSVCXX__
-#include <unistd.h>
-#include <fcntl.h>
-#endif
 #include <memory>
 #include <cstdio>
 #include <libintl.h>
@@ -54,6 +50,12 @@ Copyright:
 #include <yaal/tools/hthreadpool.hxx>
 #include <yaal/tools/hmonitor.hxx>
 #include <yaal/tools/filesystem.hxx>
+
+#ifdef __HOST_OS_TYPE_LINUX__
+#include <unistd.h>
+#include <fcntl.h>
+#endif
+
 M_VCSID( "$Id: " __ID__ " $" )
 
 #include "setup.hxx"
@@ -285,7 +287,7 @@ tut::test_runner::test_sets_t prepare_testsets( OSetup::set_definitions_t const&
 
 void cleanup( void ) {
 	M_PROLOG
-#ifndef __MSVCXX__
+#ifdef __HOST_OS_TYPE_LINUX__
 	static int const MAX_FD( 1024 );
 	for ( int i( 0 ); i < MAX_FD; ++ i ) {
 		if ( fcntl( i, F_GETFD ) >= 0 ) {
