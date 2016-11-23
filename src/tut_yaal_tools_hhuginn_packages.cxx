@@ -650,7 +650,7 @@ TUT_UNIT_TEST( "Database" )
 			"dbc.query(\"invalid;\");"
 			"}"
 		),
-		"*anonymous stream*:1:78: Uncaught exception: SQL error: near \"invalid\": syntax error"
+		"*anonymous stream*:1:78: Uncaught exception: SQL prepare error: 'invalid;': near \"invalid\": syntax error"
 	);
 TUT_TEARDOWN()
 
