@@ -30,6 +30,7 @@ Copyright:
 
 #include <yaal/tools/hfsitem.hxx>
 #include <yaal/tools/filesystem.hxx>
+#include <yaal/tools/sleep.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -126,6 +127,105 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "recurively scan directories" )
 	recurse( "./build/" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "is_file()" )
+	HFSItem f( "./data/bit.xml" );
+	HFSItem d( "./data" );
+	ENSURE( "invalid is_file on file", f.is_file() );
+	ENSURE_NOT( "invalid is_file on directory", d.is_file() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "size()" )
+	HFSItem f( "./data/karatsuba.bc" );
+	ENSURE_EQUALS( "bad size", f.size(), 1137 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "get_name()" )
+	static char const PATH[] = "./data/karatsuba.bc";
+	HFSItem f( PATH );
+	ENSURE_EQUALS( "bad size", f.get_name(), PATH );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "created()" )
+	static char const PATH[] = "./out/file.txt";
+	filesystem::remove( PATH );
+	HFile f( PATH, HFile::OPEN::WRITING );
+	HTime now( now_local() );
+	HFSItem fi( PATH );
+	ENSURE_EQUALS( "bad created", fi.created(), now );
+	ENSURE_EQUALS( "bad modified", fi.modified(), now );
+	ENSURE_EQUALS( "bad accessed", fi.accessed(), now );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "modified()" )
+	sleep_for( time::duration( 2, time::UNIT::SECOND ) );
+	static char const PATH[] = "./out/file.txt";
+	HFile f( PATH, HFile::OPEN::WRITING | HFile::OPEN::APPEND );
+	f << "data" << endl;
+	f.close();
+	HTime now( now_local() );
+	HFSItem fi( PATH );
+	ENSURE_EQUALS( "bad modified", fi.modified(), now );
+	ENSURE_EQUALS( "bad created", fi.created(), now );
+/* this test will fail on file systems with noatime option enabled */
+	ENSURE( "bad accessed", fi.accessed() != now );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "accessed()" )
+	sleep_for( time::duration( 2, time::UNIT::SECOND ) );
+	static char const PATH[] = "./out/file.txt";
+	HFile f( PATH, HFile::OPEN::READING );
+	HString l;
+	getline( f, l );
+	f.close();
+	HTime now( now_local() );
+	HFSItem fi( PATH );
+	ENSURE( "bad created", fi.created() != now );
+	ENSURE( "bad modified", fi.modified() != now );
+/* this test will fail on file systems with noatime option enabled */
+	ENSURE_EQUALS( "bad accessed", fi.accessed(), now );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "get_permissions()" )
+	static char const PATH[] = "./out/file.txt";
+	filesystem::chmod( PATH, 0600 );
+	HFSItem f( PATH );
+	ENSURE_EQUALS( "bad permissions", f.get_permissions(), 0600 );
+	filesystem::chmod( PATH, 0640 );
+	HFSItem f2( PATH );
+	ENSURE_EQUALS( "bad permissions", f2.get_permissions(), 0640 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "swap" )
+	HFSItem f( "./data/karatsuba.bc" );
+	u64_t fid( f.id() );
+	HFSItem d( "./data" );
+	u64_t did( d.id() );
+	using yaal::swap;
+	swap( f, d );
+	ENSURE_EQUALS( "bad id after swap", f.id(), did );
+	ENSURE_EQUALS( "bad id after swap", d.id(), fid );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "iterator swap" )
+	HFSItem d( "./data" );
+	HFSItem::HIterator it( d.begin() );
+	HFSItem::HIterator it2( it );
+	u64_t id0( (*it).id() );
+	++ it;
+	u64_t id1( (*it).id() );
+	ENSURE( "++ failed", it->id() != id0 );
+	using yaal::swap;
+	swap( it, it2 );
+	ENSURE_EQUALS( "swap in iter failed", it->id(), id0 );
+	ENSURE_EQUALS( "swap in iter failed", it2->id(), id1 );
+	it2 = it;
+	ENSURE_EQUALS( "assign of iter failed", it2->id(), id0 );
+	++ it;
+	ENSURE_EQUALS( "++ on iter failed", it->id(), id1 );
+	++ it2;
+	ENSURE_EQUALS( "++ on iter failed", it2->id(), id1 );
 TUT_TEARDOWN()
 
 }
