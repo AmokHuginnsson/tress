@@ -88,5 +88,42 @@ TUT_UNIT_TEST( "read from empty" )
 	ENSURE_EQUALS( "read byte count from empty", m.read_until( line ), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "equality operator" )
+	static char buf1[] = "abcde";
+	static char buf2[] = "abcdf";
+	HMemoryObserver mo1( buf1, 4 );
+	HMemoryObserver mo2( buf2, 4 );
+	HMemoryObserver mo3( buf1, 5 );
+	HMemoryObserver mo4( buf2, 5 );
+	HMemory m1( mo1 );
+	HMemory m2( mo2 );
+	HMemory m3( mo3 );
+	HMemory m4( mo4 );
+	ENSURE( "equality failed on equal", m1 == m2 );
+	ENSURE_NOT( "equality failed on equal", m1 == m3 );
+	ENSURE_NOT( "equality failed on equal", m3 == m4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "cycle" )
+	char buf[] = "abcdefghijk";
+	int const dataSize( 4 );
+	char data[dataSize + 1];
+	::memset( data, 0, dataSize + 1 );
+	HMemoryObserver mo( buf, static_cast<int>( sizeof ( buf ) - 1 ) );
+	HMemory m( mo );
+	m.read( data, dataSize );
+	ENSURE_EQUALS( "read failed", data, "abcd"_ys );
+	m.read( data, dataSize );
+	ENSURE_EQUALS( "read failed", data, "efgh"_ys );
+	m.write( "012345", 6 );
+	ENSURE_EQUALS( "read failed", buf, "012345ghijk"_ys );
+	m.read( data, dataSize );
+	ENSURE_EQUALS( "read failed", data, "ijk0"_ys );
+	m.read( data, dataSize );
+	ENSURE_EQUALS( "read failed", data, "1234"_ys );
+	m.write( "678901", 6 );
+	ENSURE_EQUALS( "read failed", buf, "11234567890"_ys );
+TUT_TEARDOWN()
+
 }
 
