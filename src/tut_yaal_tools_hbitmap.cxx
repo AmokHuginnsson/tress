@@ -37,6 +37,23 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
+namespace {
+
+bool operator == ( HBitmap const& bmp_, HString const& pat_ ) {
+	HStringStream ss;
+	ss << bmp_;
+	return ( ss.str() == pat_ );
+}
+
+std::ostream& operator << ( std::ostream& stream_, HBitmap const& bmp_ ) {
+	HStringStream ss;
+	ss << bmp_;
+	stream_ << ss.string();
+	return ( stream_ );
+}
+
+}
+
 namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hbitmap );
@@ -102,26 +119,45 @@ TUT_UNIT_TEST( "reverse iteration" )
 	yaal::copy( bmp.rbegin(), bmp.rend(), stream_iterator( ss ) );
 	reverse( s.begin(), s.end() );
 	ENSURE_EQUALS( "bad reverse iterator", ss.string(), s );
+	ss.reset();
+	HBitmap const& cbmp( bmp );
+	yaal::copy( cbmp.rbegin(), cbmp.rend(), stream_iterator( ss ) );
+	ENSURE_EQUALS( "bad reverse iterator", ss.string(), s );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "operator[]" )
 	HBitmap bmp( 7 );
-	HStringStream ss;
-	ss << bmp;
-	ENSURE_EQUALS( "bad constructor", ss.string(), "0000000" );
+	ENSURE_EQUALS( "bad constructor", bmp, "0000000" );
 	bmp[1] = true;
-	ss.reset();
-	ss << bmp;
-	ENSURE_EQUALS( "bad operator[] or HBit ref", ss.string(), "0100000" );
+	ENSURE_EQUALS( "bad operator[] or HBit ref", bmp, "0100000" );
 	bmp[5] = true;
-	ss.reset();
-	ss << bmp;
-	ENSURE_EQUALS( "bad operator[] or HBit ref", ss.string(), "0100010" );
+	ENSURE_EQUALS( "bad operator[] or HBit ref", bmp, "0100010" );
 	bmp[0] = bmp[6] = bmp[1] && bmp[5];
-	ss.reset();
-	ss << bmp;
-	ENSURE_EQUALS( "bad operator[] or HBit ref", ss.string(), "1100011" );
+	ENSURE_EQUALS( "bad operator[] or HBit ref", bmp, "1100011" );
 TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "push_back, size" )
+	HBitmap bmp;
+	bmp.push_back( true );
+	bmp.push_back( false );
+	bmp.push_back( true );
+	bmp.push_back( true );
+	bmp.push_back( false );
+	bmp.push_back( true );
+	bmp.push_back( false );
+	ENSURE_EQUALS( "bad size", bmp.size(), 7 );
+	ENSURE_EQUALS( "bad data", bmp, "1011010" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "clear" )
+	HBitmap bmp;
+	bmp.copy( "abc", 22 );
+	ENSURE_EQUALS( "bad size", bmp.size(), 22 );
+	HBitmap empty;
+	bmp = empty;
+	ENSURE_EQUALS( "bad size", bmp.size(), 0 );
+TUT_TEARDOWN()
+
 
 }
 
