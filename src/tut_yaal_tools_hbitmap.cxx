@@ -37,19 +37,23 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
-namespace {
+namespace yaal {
 
-bool operator == ( HBitmap const& bmp_, HString const& pat_ ) {
+namespace tools {
+
+inline bool operator == ( HBitmap const& bmp_, HString const& pat_ ) {
 	HStringStream ss;
 	ss << bmp_;
 	return ( ss.str() == pat_ );
 }
 
-std::ostream& operator << ( std::ostream& stream_, HBitmap const& bmp_ ) {
+inline std::ostream& operator << ( std::ostream& stream_, HBitmap const& bmp_ ) {
 	HStringStream ss;
 	ss << bmp_;
 	stream_ << ss.string();
 	return ( stream_ );
+}
+
 }
 
 }
@@ -158,6 +162,92 @@ TUT_UNIT_TEST( "clear" )
 	ENSURE_EQUALS( "bad size", bmp.size(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "fill, reserve" )
+	HBitmap bmp( 7 );
+	ENSURE_EQUALS( "bad size", bmp.size(), 7 );
+	ENSURE_EQUALS( "bad ctor", bmp, "0000000" );
+	bmp.fill( true );
+	ENSURE_EQUALS( "fill true failed", bmp, "1111111" );
+	bmp.fill( false );
+	ENSURE_EQUALS( "false true failed", bmp, "0000000" );
+	bmp.fill( 0, 7, true );
+	ENSURE_EQUALS( "fill(range) true failed", bmp, "1111111" );
+	bmp.fill( 1, 5, false );
+	ENSURE_EQUALS( "fill(range) false failed", bmp, "1000001" );
+	bmp.fill( 2, 3, true );
+	ENSURE_EQUALS( "fill(range) true failed", bmp, "1011101" );
+	bmp.fill( 3, 1, false );
+	ENSURE_EQUALS( "fill(range) false failed", bmp, "1010101" );
+
+	bmp.reserve( 15 );
+	ENSURE_EQUALS( "bad size", bmp.size(), 15 );
+
+	bmp.fill( true );
+	ENSURE_EQUALS( "fill true failed", bmp, "111111111111111" );
+	bmp.fill( false );
+	ENSURE_EQUALS( "fill false failed", bmp, "000000000000000" );
+	bmp.fill( 0, 15, true );
+	ENSURE_EQUALS( "fill(range) true failed", bmp, "111111111111111" );
+	bmp.fill( 1, 13, false );
+	ENSURE_EQUALS( "fill(range) false failed", bmp, "100000000000001" );
+	bmp.fill( 2, 11, true );
+	ENSURE_EQUALS( "fill(range) true failed", bmp, "101111111111101" );
+	bmp.fill( 3, 9, false );
+	ENSURE_EQUALS( "fill(range) false failed", bmp, "101000000000101" );
+	bmp.fill( 4, 7, true );
+	ENSURE_EQUALS( "fill(range) true failed", bmp, "101011111110101" );
+	bmp.fill( 5, 5, false );
+	ENSURE_EQUALS( "fill(range) false failed", bmp, "101010000010101" );
+	bmp.fill( 6, 3, true );
+	ENSURE_EQUALS( "fill(range) true failed", bmp, "101010111010101" );
+	bmp.fill( 7, 1, false );
+	ENSURE_EQUALS( "fill(range) false failed", bmp, "101010101010101" );
+
+	bmp.reserve( 23 );
+	ENSURE_EQUALS( "bad size", bmp.size(), 23 );
+
+	bmp.fill( true );
+	ENSURE_EQUALS( "fill true failed", bmp, "11111111111111111111111" );
+	bmp.fill( false );
+	ENSURE_EQUALS( "fill false failed", bmp, "00000000000000000000000" );
+	bmp.fill( 0, 23, true );
+	ENSURE_EQUALS( "fill(range) true failed", bmp, "11111111111111111111111" );
+	bmp.fill( 1, 21, false );
+	ENSURE_EQUALS( "fill(range) false failed", bmp, "10000000000000000000001" );
+	bmp.fill( 2, 19, true );
+	ENSURE_EQUALS( "fill(range) true failed", bmp, "10111111111111111111101" );
+	bmp.fill( 3, 17, false );
+	ENSURE_EQUALS( "fill(range) false failed", bmp, "10100000000000000000101" );
+	bmp.fill( 4, 15, true );
+	ENSURE_EQUALS( "fill(range) true failed", bmp, "10101111111111111110101" );
+	bmp.fill( 5, 13, false );
+	ENSURE_EQUALS( "fill(range) false failed", bmp, "10101000000000000010101" );
+	bmp.fill( 6, 11, true );
+	ENSURE_EQUALS( "fill(range) true failed", bmp, "10101011111111111010101" );
+	bmp.fill( 7, 9, false );
+	ENSURE_EQUALS( "fill(range) false failed", bmp, "10101010000000001010101" );
+	bmp.fill( 8, 7, true );
+	ENSURE_EQUALS( "fill(range) true failed", bmp, "10101010111111101010101" );
+	bmp.fill( 9, 5, false );
+	ENSURE_EQUALS( "fill(range) false failed", bmp, "10101010100000101010101" );
+	bmp.fill( 10, 3, true );
+	ENSURE_EQUALS( "fill(range) true failed", bmp, "10101010101110101010101" );
+	bmp.fill( 11, 1, false );
+	ENSURE_EQUALS( "fill(range) false failed", bmp, "10101010101010101010101" );
+
+	bmp.reserve( 32 );
+	ENSURE_EQUALS( "bad size", bmp.size(), 32 );
+
+	bmp.fill( true );
+	ENSURE_EQUALS( "fill true failed", bmp, "11111111111111111111111111111111" );
+	bmp.fill( false );
+	ENSURE_EQUALS( "fill false failed", bmp, "00000000000000000000000000000000" );
+	bmp.fill( 8, 16, true );
+	ENSURE_EQUALS( "fill false failed", bmp, "00000000111111111111111100000000" );
+	bmp.fill( true );
+	bmp.fill( 8, 16, false );
+	ENSURE_EQUALS( "fill false failed", bmp, "11111111000000000000000011111111" );
+TUT_TEARDOWN()
 
 }
 
