@@ -346,5 +346,27 @@ TUT_UNIT_TEST( "concat +=" )
 	ENSURE_EQUALS( "concat failed", bmp, "011101001010" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "HBit::swap, HBit::==, find" )
+	HBitmap bmp( 7 );
+	bmp[1] = bmp[3] = bmp[5] = bmp[2] = true;
+	ENSURE_EQUALS( "ctor failed", bmp, "0111010" );
+	using yaal::swap;
+	swap( bmp[0], bmp[1] );
+	ENSURE_EQUALS( "ctor failed", bmp, "1011010" );
+	ENSURE( "HBit::== (on same) failed", bmp[0] == bmp[2] );
+	ENSURE_NOT( "HBit::== (on different) failed", bmp[0] == bmp[1] );
+	ENSURE( "HBit::!= (on different) failed", bmp[0] != bmp[1] );
+	ENSURE_NOT( "HBit::!= (on same) failed", bmp[0] != bmp[2] );
+	HBitmap::iterator it( bmp.find( 1 ) );
+	HBitmap const& constBmp( bmp );
+	HBitmap::const_iterator cit( constBmp.find( 2 ) );
+	ENSURE( "bad it from find", bmp[1] == *it );
+	ENSURE( "bad cit from find", bmp[2] == *cit );
+	HBitmap::HBit bit( *it );
+	ENSURE_EQUALS( "inconsistent test state", bmp[1], false );
+	bit = true;
+	ENSURE_EQUALS( "using bit failed", bmp[1], true );
+TUT_TEARDOWN()
+
 }
 
