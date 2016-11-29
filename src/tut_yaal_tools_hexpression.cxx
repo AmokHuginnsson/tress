@@ -85,11 +85,15 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "division" )
 	HExpression e( "3/2" );
 	ENSURE_EQUALS( "division failed", e.evaluate(), 1.5l );
+	e.compile( "1/0" );
+	ENSURE_THROW( "div by 0 succeded", e.evaluate(), HExpressionException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "modulo" )
 	HExpression e( "3%2" );
 	ENSURE_EQUALS( "modulo failed", e.evaluate(), 1l );
+	e.compile( "1%0" );
+	ENSURE_THROW( "mod by 0 succeded", e.evaluate(), HExpressionException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "power" )
@@ -137,6 +141,8 @@ TUT_UNIT_TEST( "elementary func" )
 	ENSURE_DISTANCE( "exp failed", e.evaluate(), 1096.633158428459L, epsilon );
 	e.compile( "ln(7)" );
 	ENSURE_DISTANCE( "ln failed", e.evaluate(), 1.945910149055L, epsilon );
+	e.compile( "log(100)" );
+	ENSURE_DISTANCE( "log failed", e.evaluate(), 2.0L, epsilon );
 	e.compile( "sin(7)" );
 	ENSURE_DISTANCE( "sin failed", e.evaluate(), .656986598719L, epsilon );
 	e.compile( "cos(7)" );
@@ -153,6 +159,36 @@ TUT_UNIT_TEST( "elementary func" )
 	ENSURE_DISTANCE( "arctg failed", e.evaluate(), 1.428899272191L, epsilon );
 	e.compile( "arcctg(7)" );
 	ENSURE_DISTANCE( "arcctg failed", e.evaluate(), 0.141897054604L, epsilon );
+	e.compile( "sinh(7)" );
+	ENSURE_DISTANCE( "sinh failed", e.evaluate(), 548.316123273247L, epsilon );
+	e.compile( "cosh(7)" );
+	ENSURE_DISTANCE( "cosh failed", e.evaluate(), 548.317035155212L, epsilon );
+	e.compile( "tgh(7)" );
+	ENSURE_DISTANCE( "tgh failed", e.evaluate(), 0.999998336944L, epsilon );
+	e.compile( "ctgh(7)" );
+	ENSURE_DISTANCE( "ctgh failed", e.evaluate(), 1.000001663059L, epsilon );
+	e.compile( "arcsin(-2)" );
+	ENSURE_THROW( "arcsin(x) on invalid succeded", e.evaluate(), HExpressionException );
+	e.compile( "arcsin(2)" );
+	ENSURE_THROW( "arcsin(x) on invalid succeded", e.evaluate(), HExpressionException );
+	e.compile( "arccos(-4)" );
+	ENSURE_THROW( "arccos(x) on invalid succeded", e.evaluate(), HExpressionException );
+	e.compile( "arccos(4)" );
+	ENSURE_THROW( "arccos(x) on invalid succeded", e.evaluate(), HExpressionException );
+	e.compile( "tg(1.570796326795)" );
+	ENSURE_THROW( "tg(x) on pi/2 succeded", e.evaluate(), HExpressionException );
+	e.compile( "ctg(0)" );
+	ENSURE_THROW( "ctg(x) on 0 succeded", e.evaluate(), HExpressionException );
+	e.compile( "sqrt(-1)" );
+	ENSURE_THROW( "sqrt(x) on negative succeded", e.evaluate(), HExpressionException );
+	e.compile( "ln(0)" );
+	ENSURE_THROW( "ln(x) on 0 succeded", e.evaluate(), HExpressionException );
+	e.compile( "ln(-1)" );
+	ENSURE_THROW( "ln(x) on negative succeded", e.evaluate(), HExpressionException );
+	e.compile( "log(0)" );
+	ENSURE_THROW( "log(x) on 0 succeded", e.evaluate(), HExpressionException );
+	e.compile( "log(-1)" );
+	ENSURE_THROW( "log(x) on negative succeded", e.evaluate(), HExpressionException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "complex and valid expression" )
@@ -178,6 +214,25 @@ TUT_UNIT_TEST( "invalid expression" )
 	HString eq( "7+10+(4*)" );
 	HExpression x;
 	ENSURE_THROW( "parsing invalid expression succeded", x.compile( eq ), HExpressionException );
+TUT_TEARDOWN()
+
+
+TUT_UNIT_TEST( "parser errors" )
+#define ENSURE_ERROR( expr, message ) \
+	try { \
+		e.compile( expr ); \
+	} catch ( HExpressionException const& ex ) { \
+		ENSURE_EQUALS( "bad error", e.get_error(), to_string( message ) ); \
+	}
+	HExpression e;
+	ENSURE_ERROR( "(|0)", "closing absolute bracket expected" );
+	ENSURE_ERROR( "|(0|", "closing bracket expected" );
+	ENSURE_ERROR( "(.)", "digit expected" );
+	ENSURE_ERROR( "(0+)", "unexpected token" );
+	ENSURE_ERROR( "sin|0|", "opening function bracket expected" );
+	ENSURE_ERROR( "|sin(0|", "closing function bracket expected" );
+	ENSURE_THROW( "eval on not compiled succeded", e.evaluate(), HExpressionException );
+#undef ENSURE_ERROR
 TUT_TEARDOWN()
 
 }
