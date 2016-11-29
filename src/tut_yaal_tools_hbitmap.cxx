@@ -83,6 +83,19 @@ TUT_UNIT_TEST( "Default constructor" )
 	ENSURE_EQUALS( "raw", bmp.raw(), static_cast<void*>( NULL ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "assign" )
+	HBitmap bmpOwn;
+	bmpOwn.copy( "a", 7 );
+	char data[] = "b";
+	HBitmap bmpUse;
+	bmpUse.use( data, 7 );
+	HBitmap bmp;
+	bmp = bmpOwn;
+	ENSURE_EQUALS( "own assign failed", bmpOwn, bmp );
+	bmp = bmpUse;
+	ENSURE_EQUALS( "use assign failed", bmpUse, bmp );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "constructor from size" )
 	static int const SIZE = 7;
 	HBitmap bmp( SIZE );
@@ -131,8 +144,13 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "operator[]" )
 	HBitmap bmp( 7 );
+	HBitmap const& constBmp( bmp );
 	ENSURE_EQUALS( "bad constructor", bmp, "0000000" );
+	ENSURE_EQUALS( "bad [] oper", constBmp[1], false );
 	bmp[1] = true;
+	ENSURE_EQUALS( "bad [] oper", constBmp[1], true );
+	ENSURE_EQUALS( "bad [] oper", constBmp[0], false );
+	ENSURE_EQUALS( "bad [] oper", constBmp[2], false );
 	ENSURE_EQUALS( "bad operator[] or HBit ref", bmp, "0100000" );
 	bmp[5] = true;
 	ENSURE_EQUALS( "bad operator[] or HBit ref", bmp, "0100010" );
@@ -178,6 +196,10 @@ TUT_UNIT_TEST( "fill, reserve" )
 	ENSURE_EQUALS( "fill(range) true failed", bmp, "1011101" );
 	bmp.fill( 3, 1, false );
 	ENSURE_EQUALS( "fill(range) false failed", bmp, "1010101" );
+	bmp.fill( 0, 0, false );
+	ENSURE_EQUALS( "fill(range) false failed", bmp, "1010101" );
+	ENSURE_THROW( "fill on neg offset succeeded", bmp.fill( -1, 0, false ), HBitmapException );
+	ENSURE_THROW( "fill on neg amount succeeded", bmp.fill( 0, -1, false ), HBitmapException );
 
 	bmp.reserve( 15 );
 	ENSURE_EQUALS( "bad size", bmp.size(), 15 );
@@ -247,6 +269,58 @@ TUT_UNIT_TEST( "fill, reserve" )
 	bmp.fill( true );
 	bmp.fill( 8, 16, false );
 	ENSURE_EQUALS( "fill false failed", bmp, "11111111000000000000000011111111" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "equality operator" )
+	HBitmap bmpOwn;
+	bmpOwn.copy( "a", 7 );
+	char data[] = "b";
+	HBitmap bmpUse;
+	bmpUse.use( data, 7 );
+	HBitmap bmp;
+	bmp.copy( "a", 7 );
+	ENSURE( "own equals on equal failed", bmpOwn == bmp );
+	ENSURE_NOT( "own not equals on equal size succeeded", bmpOwn != bmp );
+	bmp.copy( "a", 6 );
+	ENSURE( "own equals on diff size failed", bmpOwn != bmp );
+	ENSURE_NOT( "own not equals on diff size failed", bmpOwn == bmp );
+
+	bmp.use( data, 7 );
+	ENSURE( "use equals on equal failed", bmpUse == bmp );
+	ENSURE_NOT( "use not equals on equal size succeeded", bmpUse != bmp );
+	bmp.use( data, 6 );
+	ENSURE( "use equals on diff size failed", bmpUse != bmp );
+	ENSURE_NOT( "use not equals on diff size failed", bmpUse == bmp );
+
+	bmpOwn.copy( "b", 8 );
+	bmp.use( data, 8 );
+
+	ENSURE( "own equals on equal failed", bmpOwn == bmp );
+	ENSURE_NOT( "own not equals on equal succeeded", bmpOwn != bmp );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "or" )
+	HBitmap bmp1( 7 );
+	HBitmap bmp2( 7 );
+	bmp1[1] = bmp1[3] = true;
+	bmp2[1] = bmp2[4] = true;
+	ENSURE_EQUALS( "or failed", bmp1 | bmp2, "0101100" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "and" )
+	HBitmap bmp1( 7 );
+	HBitmap bmp2( 7 );
+	bmp1[1] = bmp1[3] = bmp1[5] = bmp1[2] = true;
+	bmp2[1] = bmp2[4] = bmp2[5] = bmp2[0] = true;
+	ENSURE_EQUALS( "and failed", bmp1 & bmp2, "0100010" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "xor" )
+	HBitmap bmp1( 7 );
+	HBitmap bmp2( 7 );
+	bmp1[1] = bmp1[3] = bmp1[5] = bmp1[2] = true;
+	bmp2[1] = bmp2[4] = bmp2[5] = bmp2[0] = true;
+	ENSURE_EQUALS( "xor failed", bmp1 ^ bmp2, "1011100" );
 TUT_TEARDOWN()
 
 }
