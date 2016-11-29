@@ -115,13 +115,27 @@ TUT_UNIT_TEST( "get" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "rotate_left" )
-	HBitmap bmp;
+	HBitmap bmp( 7 );
+	ENSURE_EQUALS( "bad ctor", bmp, "0000000" );
+	bmp[1] = bmp[3] = bmp[5] = bmp[2] = true;
+	ENSURE_EQUALS( "bad [] init", bmp, "0111010" );
+	ENSURE_THROW( "default constructor set", bmp.rotate_left( -1, 2, 1 ), HFailedAssertion );
 	ENSURE_THROW( "default constructor set", bmp.rotate_left( 0, 0, 0 ), HFailedAssertion );
+	ENSURE_THROW( "default constructor set", bmp.rotate_left( 0, 1, 1 ), HFailedAssertion );
+	bmp.rotate_left( 0, 7, 2 );
+	ENSURE_EQUALS( "bad rotate_left(2)", bmp, "1101001" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "rotate_right" )
-	HBitmap bmp;
+	HBitmap bmp( 7 );
+	ENSURE_EQUALS( "bad ctor", bmp, "0000000" );
+	bmp[1] = bmp[3] = bmp[5] = bmp[2] = true;
+	ENSURE_EQUALS( "bad [] init", bmp, "0111010" );
+	ENSURE_THROW( "default constructor set", bmp.rotate_right( -1, 2, 1 ), HFailedAssertion );
 	ENSURE_THROW( "default constructor set", bmp.rotate_right( 0, 0, 0 ), HFailedAssertion );
+	ENSURE_THROW( "default constructor set", bmp.rotate_right( 0, 1, 1 ), HFailedAssertion );
+	bmp.rotate_right( 0, 7, 2 );
+	ENSURE_EQUALS( "bad rotate_left(2)", bmp, "1001110" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "reverse iteration" )
@@ -321,6 +335,15 @@ TUT_UNIT_TEST( "xor" )
 	bmp1[1] = bmp1[3] = bmp1[5] = bmp1[2] = true;
 	bmp2[1] = bmp2[4] = bmp2[5] = bmp2[0] = true;
 	ENSURE_EQUALS( "xor failed", bmp1 ^ bmp2, "1011100" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "concat +=" )
+	HBitmap bmp( 7 );
+	bmp[1] = bmp[3] = bmp[5] = bmp[2] = true;
+	HBitmap bmp2( 5 );
+	bmp2[1] = bmp2[3] = true;
+	bmp += bmp2;
+	ENSURE_EQUALS( "concat failed", bmp, "011101001010" );
 TUT_TEARDOWN()
 
 }
