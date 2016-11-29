@@ -224,5 +224,38 @@ TUT_UNIT_TEST( "find" )
 	ENSURE_EQUALS( "filesystem::find failed", fr, expected );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "current_working_directory" )
+	ENSURE_EQUALS( "current_working_directory failed", basename( current_working_directory() ), "tress" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "exists" )
+	ENSURE( "exists (existing) failed", exists( "./data/karatsuba.bc" ) );
+	ENSURE_NOT( "exists (non-existing) failed", exists( "./data/non-existing" ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "is_symbolic_link" )
+	ENSURE( "is_symbolic_link (on symlink) failed", is_symbolic_link( "./data/libtressplugin-d.so" ) );
+	ENSURE_NOT( "is_symbolic_link (on non-symlink) failed", is_symbolic_link( "./data/karatsuba.bc" ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "file_size" )
+	ENSURE_EQUALS( "file_size failed", file_size( "./data/karatsuba.bc" ), 1137 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "rename" )
+	char const nf[] = "./out/name-from";
+	char const nt[] = "./out/name-to";
+	remove( nf );
+	remove( nt );
+	ENSURE_NOT( "incositent state, failed to remove name-from", exists( nf ) );
+	ENSURE_NOT( "incositent state, failed to remove name-to", exists( nt ) );
+	HFile f( nf, HFile::OPEN::WRITING );
+	f.close();
+	ENSURE( "incositent state, failed to create name-from", exists( nf ) );
+	filesystem::rename( nf, nt );
+	ENSURE_NOT( "rename failed", exists( nf ) );
+	ENSURE( "rename failed", exists( nt ) );
+TUT_TEARDOWN()
+
 }
 
