@@ -29,6 +29,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/streamtools.hxx>
+#include <yaal/hcore/hlog.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -49,7 +50,7 @@ TUT_UNIT_TEST( "binary manipulator for stream" )
 	u64_t pattern16( ( pattern8 << 8 ) | pattern8 );
 	u64_t pattern32( ( pattern16 << 16 ) | pattern16 );
 	u64_t pattern64( ( pattern32 << 32 ) | pattern32 );
-	ENSURE_EQUALS( "char failed", ( ss << bin << static_cast<char>( pattern8 ), ss.consume() ), "01011001" );
+	ENSURE_EQUALS( "char failed", ( ss << bin << static_cast<char>( pattern8 ) << flush, ss.consume() ), "01011001" );
 	ENSURE_EQUALS( "char unsigned failed", ( ss << bin << static_cast<char unsigned>( pattern8 ), ss.consume() ), "01011001" );
 	ENSURE_EQUALS( "short int failed", ( ss << bin << static_cast<short int>( pattern16 ), ss.consume() ), "0101100101011001" );
 	ENSURE_EQUALS( "short int unsigned failed", ( ss << bin << static_cast<short int unsigned>( pattern16 ), ss.consume() ), "0101100101011001" );
@@ -90,6 +91,21 @@ TUT_UNIT_TEST( "tee" )
 	tee( ss3, ss4 ) << "test" << 7;
 	ENSURE_EQUALS( "tee failed(3)", pointer_static_cast<HStringStream>( ss3 )->str(), "test7" );
 	ENSURE_EQUALS( "tee failed(4)", pointer_static_cast<HStringStream>( ss4 )->str(), "test7" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "get_stream_id" )
+	ENSURE_EQUALS( "bad is on stdin", get_stream_id( &yaal::hcore::cin ), "*standard input*" );
+	ENSURE_EQUALS( "bad is on stdout", get_stream_id( &yaal::hcore::cout ), "*standard output*" );
+	ENSURE_EQUALS( "bad is on stderr", get_stream_id( &yaal::hcore::cerr ), "*standard error*" );
+	ENSURE_EQUALS( "bad is on stdlog", get_stream_id( &yaal::hcore::clog ), "*standard log*" );
+	ENSURE_EQUALS( "bad is on log", get_stream_id( &yaal::hcore::log ), "*log*" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "ensure" )
+	HFile f( "./data/karatsuba.bc", HFile::OPEN::READING );
+tools::ensure( f );
+	f.close();
+	ENSURE_THROW( "ensure on closed succeeded", tools::ensure( f ), HException );
 TUT_TEARDOWN()
 
 }
