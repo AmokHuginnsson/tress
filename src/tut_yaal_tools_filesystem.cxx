@@ -234,6 +234,7 @@ TUT_UNIT_TEST( "exists" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "is_symbolic_link" )
+	ENSURE( "is_symbolic_link (on symlink) failed", is_symbolic_link( "./data/broken" ) );
 	ENSURE( "is_symbolic_link (on symlink) failed", is_symbolic_link( "./data/libtressplugin-d.so" ) );
 	ENSURE_NOT( "is_symbolic_link (on non-symlink) failed", is_symbolic_link( "./data/karatsuba.bc" ) );
 TUT_TEARDOWN()
