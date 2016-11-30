@@ -1466,6 +1466,39 @@ TUT_UNIT_TEST( "modules" )
 	ENSURE_EQUALS( "using module failed", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 6 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "incremental mode" )
+	HHuginn h;
+	hcore::HString head( "main(){" );
+	hcore::HString foot( "}" );
+	hcore::HString body;
+	HStringStream src;
+	HStringStream out;
+	h.set_output_stream( out );
+	char const lines[][12] = {
+		"x=0;",
+		"print(\"x\");",
+		"x+=1;",
+		"x;"
+	};
+	hcore::HString res;
+	for ( char const* line : lines ) {
+		body.append( line );
+		src.clear();
+		src << head << body << foot;
+		h.reset();
+		h.load( src );
+		h.preprocess();
+		ENSURE( "parse failed", h.parse() );
+		ENSURE( "compile", h.compile( HHuginn::COMPILER::BE_SLOPPY ) );
+		ENSURE( "execute", h.execute() );
+		HHuginn::value_t r( h.result() );
+		ENSURE( "nothing returned", !! r );
+		res.append( to_string( r ) );
+	}
+	ENSURE_EQUALS( "multi run", out.string(), "x" );
+	ENSURE_EQUALS( "mis executed", res, "0none11" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
