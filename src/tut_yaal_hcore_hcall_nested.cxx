@@ -257,27 +257,49 @@ TUT_UNIT_TEST( "nested call ( 10 args ) -> ( 9 args ) -> ( 8 args ) -> ( 7 args 
 	typedef call_calculator<func4_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, higher_order::placeholder<3> const&, int>::type::type func3_t;
 	typedef call_calculator<func3_t&, higher_order::placeholder<1> const&, higher_order::placeholder<2> const&, int>::type::type func2_t;
 	typedef call_calculator<func2_t&, higher_order::placeholder<1> const&, int>::type::type func1_t;
+	typedef call_calculator<func1_t&, int>::type::type func0_t;
 	func9_t f9( call( &foo10, _1, _2, _3, _4, _5, _6, _7, _8, _9, 10 ) );
+	func9_t const& fc9( f9 );
 	func8_t f8( call( f9, _1, _2, _3, _4, _5, _6, _7, _8, 9 ) );
+	func8_t const& fc8( f8 );
 	func7_t f7( call( f8, _1, _2, _3, _4, _5, _6, _7, 8 ) );
+	func7_t const& fc7( f7 );
 	func6_t f6( call( f7, _1, _2, _3, _4, _5, _6, 7 ) );
+	func6_t const& fc6( f6 );
 	func5_t f5( call( f6, _1, _2, _3, _4, _5, 6 ) );
+	func5_t const& fc5( f5 );
 	func4_t f4( call( f5, _1, _2, _3, _4, 5 ) );
+	func4_t const& fc4( f4 );
 	func3_t f3( call( f4, _1, _2, _3, 4 ) );
+	func3_t const& fc3( f3 );
 	func2_t f2( call( f3, _1, _2, 3 ) );
+	func2_t const& fc2( f2 );
 	func1_t f1( call( f2, _1, 2 ) );
+	func1_t const& fc1( f1 );
 	char const expected[] = "foo10: a1 = 1, a2 = 2, a3 = 3, a4 = 4, a5 = 5, a6 = 6, a7 = 7, a8 = 8, a9 = 9, a10 = 10";
 	ENSURE_EQUALS( err, f9( 1, 2, 3, 4, 5, 6, 7, 8, 9 ), expected );
+	ENSURE_EQUALS( err, fc9( 1, 2, 3, 4, 5, 6, 7, 8, 9 ), expected );
 	ENSURE_EQUALS( err, f8( 1, 2, 3, 4, 5, 6, 7, 8 ), expected );
+	ENSURE_EQUALS( err, fc8( 1, 2, 3, 4, 5, 6, 7, 8 ), expected );
 	ENSURE_EQUALS( err, f7( 1, 2, 3, 4, 5, 6, 7 ), expected );
+	ENSURE_EQUALS( err, fc7( 1, 2, 3, 4, 5, 6, 7 ), expected );
 	ENSURE_EQUALS( err, f6( 1, 2, 3, 4, 5, 6 ), expected );
+	ENSURE_EQUALS( err, fc6( 1, 2, 3, 4, 5, 6 ), expected );
 	ENSURE_EQUALS( err, f5( 1, 2, 3, 4, 5 ), expected );
+	ENSURE_EQUALS( err, fc5( 1, 2, 3, 4, 5 ), expected );
 	ENSURE_EQUALS( err, f4( 1, 2, 3, 4 ), expected );
+	ENSURE_EQUALS( err, fc4( 1, 2, 3, 4 ), expected );
 	ENSURE_EQUALS( err, f3( 1, 2, 3 ), expected );
+	ENSURE_EQUALS( err, fc3( 1, 2, 3 ), expected );
 	ENSURE_EQUALS( err, f2( 1, 2 ), expected );
+	ENSURE_EQUALS( err, fc2( 1, 2 ), expected );
 	ENSURE_EQUALS( err, f1( 1 ), expected );
+	ENSURE_EQUALS( err, fc1( 1 ), expected );
 #ifndef _MSC_VER
-	ENSURE_EQUALS( err, call( f1, 1 )(), expected );
+	func0_t f0( call( f1, 1 ) );
+	func0_t const& fc0( f0 );
+	ENSURE_EQUALS( err, f0(), expected );
+	ENSURE_EQUALS( err, fc0(), expected );
 #endif /* #ifndef _MSC_VER */
 TUT_TEARDOWN()
 
