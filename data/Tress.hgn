@@ -1,0 +1,28 @@
+/*
+ * Huginn module used in tress testing.
+ */
+
+import Mathematics as math;
+
+/*
+ * Data holder.
+ */
+class Object {
+	// Holder.
+	_data = none;
+	constructor( data_ ) {
+		_data = data_;
+	}
+	// Convert data from this holder to string representation.
+	to_string() {
+		return ( string( _data ) );
+	}
+}
+
+/*
+ * ( *a_*, *b_* ) - calculate area of rectangle given by *a_* and *b_* dimensions.
+ */
+rectangle( a_, b_ ) {
+	return ( a_ * b_ );
+}
+

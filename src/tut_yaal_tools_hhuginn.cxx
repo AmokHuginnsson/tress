@@ -1447,6 +1447,25 @@ TUT_UNIT_TEST( "standard streams" )
 	ENSURE_EQUALS( "stdlog failed", log.string(), "stdlog" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "modules" )
+	HHuginn h;
+	HStringStream src(
+		"import Tress as tress;"
+		"main() {"
+		"return (tress.rectangle(2,3));"
+		"}"
+	);
+	h.load( src );
+	h.preprocess();
+	ENSURE( "parse failed", h.parse() );
+	ENSURE( "compile", h.compile( { "./data/" } ) );
+	ENSURE( "execute", h.execute() );
+	HHuginn::value_t r( h.result() );
+	ENSURE( "nothing returned", !! r );
+	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::INTEGER );
+	ENSURE_EQUALS( "using module failed", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 6 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
