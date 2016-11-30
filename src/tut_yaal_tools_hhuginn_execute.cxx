@@ -439,6 +439,35 @@ char const progExecuteErr33[] =
 	"}\n"
 ;
 
+char const progExecuteErr34[] =
+	"main() {\n"
+	"l = @(){\n"
+	"x = 0;\n"
+	"y = observe( x );\n"
+	"y;\n"
+	"};\n"
+	"z = l();\n"
+	"z += 1;\n"
+	"}\n"
+;
+
+char const progExecuteErr35[] =
+	"main() {\n"
+	"x=0;\n"
+	"y=observe(x);\n"
+	"z=observe(y);\n"
+	"z;\n"
+	"}\n"
+;
+
+char const progExecuteErr36[] =
+	"main() {\n"
+	"x=0;\n"
+	"y=use(x);\n"
+	"y;\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -494,6 +523,9 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr31,
 		progExecuteErr32,
 		progExecuteErr33,
+		progExecuteErr34,
+		progExecuteErr35,
+		progExecuteErr36,
 		NULL
 	};
 	int const err[][3] = {
@@ -531,6 +563,9 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 423, 34, 11 }, // 31
 		{ 19, 2, 11 },   // 32
 		{ 29, 3, 12 },   // 33
+		{ 60, 8, 3 },    // 34
+		{ 37, 4, 10 },   // 35
+		{ 19, 3, 6 },    // 36
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );

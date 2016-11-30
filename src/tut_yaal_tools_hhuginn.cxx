@@ -49,7 +49,7 @@ struct tut_yaal_tools_hhuginn : public tress::tut_yaal_tools_hhuginn_base {
 	void test_range( HHuginn::TYPE, char const*, char const* );
 };
 
-TUT_TEST_GROUP( tut_yaal_tools_hhuginn, "yaal::tools::HHuginn", 70 );
+TUT_TEST_GROUP( tut_yaal_tools_hhuginn, "yaal::tools::HHuginn", 80 );
 
 TUT_UNIT_TEST( "grammar test" )
 	HHuginn h;
@@ -711,13 +711,13 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set()" )
 #if ( TARGET_CPU_BITS == 64 )
-	char const expected[] = "\"|7.34|2|Q|3.14|ala\"";
+	char const expected[] = "{$7.34, 2, 'Q', 3.14, \"ala\"}";
 #else
-	char const expected[] = "\"|7.34|2|Q|ala|3.14\"";
+	char const expected[] = "{$7.34, 2, 'Q', \"ala\", 3.14}";
 #endif
 	ENSURE_EQUALS(
 		"set() failed",
-		execute( "main(){x=set(2,\"ala\",3.14);x.add($7.34).add('Q');v=\"\";for(e:x){v=v+\"|\"+string(e);}return(v);}" ),
+		execute( "main(){x=set(2,\"ala\",3.14);x.add($7.34).add('Q');return(x);}" ),
 		expected
 	);
 TUT_TEARDOWN()
@@ -1497,6 +1497,48 @@ TUT_UNIT_TEST( "incremental mode" )
 	}
 	ENSURE_EQUALS( "multi run", out.string(), "x" );
 	ENSURE_EQUALS( "mis executed", res, "0none11" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "observe/use" )
+	ENSURE_EQUALS(
+		"obseve/use failed",
+		execute(
+			"class Node {"
+			"	_data = none;"
+			"	_ref = none;"
+			"	_next = none;"
+			"	_prev = none;"
+			"	constructor( data_, ref_ ) {"
+			"		_data = data_;"
+			"		_ref = ref_;"
+			"		_ref += 1;"
+			"	}"
+			"	prev_data() {"
+			"		x = use( _prev );"
+			"		return ( x._data );"
+			"	}"
+			"	destructor() {"
+			"		_ref -= 1;"
+			"	}"
+			"}"
+			""
+			"main() {"
+			"	ref = 0;"
+			"	res = \"\";"
+			"	/* scope */ {"
+			"		n1 = Node( \"a\", ref );"
+			"		n2 = Node( \"b\", ref );"
+			"		n1._next = n2;"
+			"		n2._prev = observe( n1 );"
+			"		res += string( ref );"
+			"		res += n2.prev_data();"
+			"	}"
+			"	res += string( ref );"
+			"	return ( res );"
+			"}"
+		),
+		"\"2a0\""
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "simple program" )
