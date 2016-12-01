@@ -49,6 +49,11 @@ struct tut_yaal_hcore_hcall : public simple_mock<tut_yaal_hcore_hcall> {
 	int _fileNo;
 	int _suitUt;
 	yaal::hcore::HFile _out;
+	YaalHCoreHCallClass _value;
+	typedef HPointer<YaalHCoreHCallClass> shared_value_t;
+	shared_value_t _sharedValue;
+	shared_value_t const& _constSharedValue;
+	YaalHCoreHCallClass const& _constValue;
 	tut_yaal_hcore_hcall( void );
 	virtual ~tut_yaal_hcore_hcall( void );
 	void generate_yaal_hcore_hcall_tests( void );
@@ -60,7 +65,15 @@ struct tut_yaal_hcore_hcall : public simple_mock<tut_yaal_hcore_hcall> {
 TUT_TEST_GROUP( tut_yaal_hcore_hcall, "yaal::hcore::HCall" );
 
 tut_yaal_hcore_hcall::tut_yaal_hcore_hcall( void )
-	: base_type(), _callNo( 0 ), _fileNo( 0 ), _suitUt( 0 ), _out() {
+	: base_type()
+	, _callNo( 0 )
+	, _fileNo( 0 )
+	, _suitUt( 0 )
+	, _out()
+	, _value()
+	, _sharedValue( make_pointer<YaalHCoreHCallClass>() )
+	, _constSharedValue( _sharedValue )
+	, _constValue( _value ) {
 	if ( getenv( "GEN_YAAL_HCORE_HCALL" ) )
 		generate_yaal_hcore_hcall_tests();
 }
@@ -261,47 +274,47 @@ YaalHCoreHCallClass::YaalHCoreHCallClass( YaalHCoreHCallClass const& ) {
 YaalHCoreHCallClass::~YaalHCoreHCallClass( void ) {
 }
 
-HString YaalHCoreHCallClass::foo0( void ) {
+HString YaalHCoreHCallClass::foo0( void ) const {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo0() );
 }
 
-HString YaalHCoreHCallClass::foo1( int a1 ) {
+HString YaalHCoreHCallClass::foo1( int a1 ) const {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo1( a1 ) );
 }
 
-HString YaalHCoreHCallClass::foo2( int a1, int a2 ) {
+HString YaalHCoreHCallClass::foo2( int a1, int a2 ) const {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo2( a1, a2 ) );
 }
 
-HString YaalHCoreHCallClass::foo3( int a1, int a2, int a3 ) {
+HString YaalHCoreHCallClass::foo3( int a1, int a2, int a3 ) const {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo3( a1, a2, a3 ) );
 }
 
-HString YaalHCoreHCallClass::foo4( int a1, int a2, int a3, int a4 ) {
+HString YaalHCoreHCallClass::foo4( int a1, int a2, int a3, int a4 ) const {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo4( a1, a2, a3, a4 ) );
 }
 
-HString YaalHCoreHCallClass::foo5( int a1, int a2, int a3, int a4, int a5 ) {
+HString YaalHCoreHCallClass::foo5( int a1, int a2, int a3, int a4, int a5 ) const {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo5( a1, a2, a3, a4, a5 ) );
 }
 
-HString YaalHCoreHCallClass::foo6( int a1, int a2, int a3, int a4, int a5, int a6 ) {
+HString YaalHCoreHCallClass::foo6( int a1, int a2, int a3, int a4, int a5, int a6 ) const {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo6( a1, a2, a3, a4, a5, a6 ) );
 }
 
-HString YaalHCoreHCallClass::foo7( int a1, int a2, int a3, int a4, int a5, int a6, int a7 ) {
+HString YaalHCoreHCallClass::foo7( int a1, int a2, int a3, int a4, int a5, int a6, int a7 ) const {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo7( a1, a2, a3, a4, a5, a6, a7 ) );
 }
 
-HString YaalHCoreHCallClass::foo8( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8 ) {
+HString YaalHCoreHCallClass::foo8( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8 ) const {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo8( a1, a2, a3, a4, a5, a6, a7, a8 ) );
 }
 
-HString YaalHCoreHCallClass::foo9( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9 ) {
+HString YaalHCoreHCallClass::foo9( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9 ) const {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo9( a1, a2, a3, a4, a5, a6, a7, a8, a9 ) );
 }
 
-HString YaalHCoreHCallClass::foo10( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10 ) {
+HString YaalHCoreHCallClass::foo10( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10 ) const {
 	return ( HString( "YaalHCoreHCallClass: " ) + tut::foo10( a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 ) );
 }
 
@@ -340,10 +353,26 @@ inline void show_rectangle( int a, int b ) {
 
 TUT_UNIT_TEST( "(hand written) no arg" )
 	ENSURE_EQUALS( "function bind failed", call( foo0 )(), "foo0" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo0, &_value )(), "YaalHCoreHCallClass: foo0" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo0, &_constValue )(), "YaalHCoreHCallClass: foo0" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo0, _sharedValue )(), "YaalHCoreHCallClass: foo0" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo0, _constSharedValue )(), "YaalHCoreHCallClass: foo0" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo0, make_resource<YaalHCoreHCallClass>() )(), "YaalHCoreHCallClass: foo0" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "(hand written) 1 (free) arg" )
 	ENSURE_EQUALS( "function bind failed", call( foo1, _1 )( -2 ), "foo1: a1 = -2" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo1, &_value, _1 )( -2 ), "YaalHCoreHCallClass: foo1: a1 = -2" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo1, &_constValue, _1 )( -2 ), "YaalHCoreHCallClass: foo1: a1 = -2" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo1, _sharedValue, _1 )( -2 ), "YaalHCoreHCallClass: foo1: a1 = -2" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo1, _constSharedValue, _1 )( -2 ), "YaalHCoreHCallClass: foo1: a1 = -2" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo1, make_resource<YaalHCoreHCallClass>(), _1 )( -2 ), "YaalHCoreHCallClass: foo1: a1 = -2" );
+	ENSURE_EQUALS( "function bind failed", call( foo1, 1 )(), "foo1: a1 = 1" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo1, &_value, 1 )(), "YaalHCoreHCallClass: foo1: a1 = 1" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo1, &_constValue, 1 )(), "YaalHCoreHCallClass: foo1: a1 = 1" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo1, _sharedValue, 1 )(), "YaalHCoreHCallClass: foo1: a1 = 1" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo1, _constSharedValue, 1 )(), "YaalHCoreHCallClass: foo1: a1 = 1" );
+	ENSURE_EQUALS( "function bind failed", call( &YaalHCoreHCallClass::foo1, make_resource<YaalHCoreHCallClass>(), 1 )(), "YaalHCoreHCallClass: foo1: a1 = 1" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "(hand written) 2 (1 free) args" )
