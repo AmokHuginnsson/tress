@@ -81,7 +81,7 @@ TUT_UNIT_TEST( "Algorithms" )
 		"[\":3:7:11:15\", 4]"
 	);
 	ENSURE_EQUALS(
-		"Algorithms.materialize failed",
+		"Algorithms.materialize (to list) failed",
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
@@ -89,6 +89,57 @@ TUT_UNIT_TEST( "Algorithms" )
 			"}"
 		),
 		"[3, 7, 11, 15]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize (to deque) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.range(3, 17, 4),deque));\n"
+			"}"
+		),
+		"deque(3, 7, 11, 15)"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize (to order) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"o=algo.materialize(algo.range(3, 17, 4),order);\n"
+			"return([o,algo.materialize(o,list)]);\n"
+			"}"
+		),
+		"[order, [3, 7, 11, 15]]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize (to set) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.range(3, 17, 4),set));\n"
+			"}"
+		),
+		"{15, 3, 7, 11}"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.reduce failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.reduce(algo.range(3, 17, 4),@(x,y){x+y;}));\n"
+			"}"
+		),
+		"36"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.filter failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.filter(algo.range(3, 44, 4),@(x){x%3==0;}),list));\n"
+			"}"
+		),
+		"[3, 15, 27, 39]"
 	);
 	ENSURE_EQUALS(
 		"Algorithms.sorted (list) failed",
@@ -106,45 +157,101 @@ TUT_UNIT_TEST( "Algorithms" )
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
-			"s=\"\";\n"
 			"d=deque(2,7,3,9,0,-5);\n"
-			"for(x : algo.sorted(d)) {\n"
-			"s=s+\":\"+string(x);"
-			"}\n"
-			"return(s);\n"
+			"return(algo.sorted(d));\n"
 			"}"
 		),
-		"\":-5:0:2:3:7:9\""
+		"[-5, 0, 2, 3, 7, 9]"
 	);
 	ENSURE_EQUALS(
 		"Algorithms.sorted (set) failed",
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
-			"r=\"\";\n"
 			"s=set(2,7,3,9,0,-5);\n"
-			"for(x : algo.sorted(s)) {\n"
-			"r=r+\":\"+string(x);"
-			"}\n"
-			"return(r);\n"
+			"return(algo.sorted(s));\n"
 			"}"
 		),
-		"\":-5:0:2:3:7:9\""
+		"[-5, 0, 2, 3, 7, 9]"
 	);
 	ENSURE_EQUALS(
 		"Algorithms.sorted (order) failed",
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
-			"r=\"\";\n"
 			"o=order(2,7,3,9,0,-5);\n"
-			"for(x : algo.sorted(o)) {\n"
-			"r=r+\":\"+string(x);"
-			"}\n"
-			"return(r);\n"
+			"return(algo.sorted(o));\n"
 			"}"
 		),
-		"\":-5:0:2:3:7:9\""
+		"[-5, 0, 2, 3, 7, 9]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.sorted (dict) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"d={2:0,7:0,3:0,9:0,0:0,-5:0};\n"
+			"return(algo.sorted(d));\n"
+			"}"
+		),
+		"[-5, 0, 2, 3, 7, 9]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.sorted (lookup) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"l=lookup();l[2]=l[7]=l[3]=l[9]=l[0]=l[-5]=0;\n"
+			"return(algo.sorted(l));\n"
+			"}"
+		),
+		"[-5, 0, 2, 3, 7, 9]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.sorted (key retr func) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"class Pair {\n"
+			"_first = none;\n"
+			"_second = none;\n"
+			"constructor( first_, second_ ) {\n"
+			"_first = first_;\n"
+			"_second = second_;\n"
+			"}\n"
+			"to_string() {\n"
+			"return(\"{{{},{}}}\".format(_first,_second));\n"
+			"}\n"
+			"}\n"
+			"main(){\n"
+			"l=[Pair(2,9),Pair(7,3),Pair(3,-1),Pair(9,4),Pair(0,2),Pair(-5,7)];\n"
+			"sf = algo.materialize(algo.map(algo.sorted(l, @(x){x._first;}),string),list);\n"
+			"ss = algo.materialize(algo.map(algo.sorted(l, @(x){x._second;}),string),list);\n"
+			"return([sf,ss]);\n"
+			"}"
+		),
+		"[[\"{-5,7}\", \"{0,2}\", \"{2,9}\", \"{3,-1}\", \"{7,3}\", \"{9,4}\"], [\"{3,-1}\", \"{0,2}\", \"{7,3}\", \"{9,4}\", \"{-5,7}\", \"{2,9}\"]]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.sorted (iterable) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"i=algo.map([2,7,3,9,0,-5],@(x){x;});\n"
+			"return(algo.sorted(i));\n"
+			"}"
+		),
+		"[-5, 0, 2, 3, 7, 9]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.sorted (string) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"s=\"502397\";"
+			"return(algo.sorted(s));\n"
+			"}"
+		),
+		"['0', '2', '3', '5', '7', '9']"
 	);
 TUT_TEARDOWN()
 
