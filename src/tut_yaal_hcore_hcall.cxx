@@ -74,8 +74,9 @@ tut_yaal_hcore_hcall::tut_yaal_hcore_hcall( void )
 	, _sharedValue( make_pointer<YaalHCoreHCallClass>() )
 	, _constSharedValue( _sharedValue )
 	, _constValue( _value ) {
-	if ( getenv( "GEN_YAAL_HCORE_HCALL" ) )
+	if ( getenv( "GEN_YAAL_HCORE_HCALL" ) ) {
 		generate_yaal_hcore_hcall_tests();
+	}
 }
 
 tut_yaal_hcore_hcall::~tut_yaal_hcore_hcall( void ) {

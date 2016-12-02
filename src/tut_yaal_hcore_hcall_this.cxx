@@ -42,9 +42,13 @@ namespace tut {
 struct tut_yaal_hcore_hcall_this : public simple_mock<tut_yaal_hcore_hcall_this> {
 	typedef simple_mock<tut_yaal_hcore_hcall_this> base_type;
 	YaalHCoreHCallClass _callable;
+	typedef HPointer<YaalHCoreHCallClass> shared_value_t;
+	shared_value_t _sharedValue;
 	tut_yaal_hcore_hcall_this( void )
-		: base_type(), _callable()
-		{}
+		: base_type()
+		, _callable()
+		, _sharedValue( make_pointer<YaalHCoreHCallClass>() ) {
+	}
 	virtual ~tut_yaal_hcore_hcall_this( void ) {}
 };
 
@@ -55,7 +59,14 @@ TUT_UNIT_TEST( "no-op bind of this" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "this and no args" )
-	ENSURE_EQUALS( "bind for free this failed", call( &YaalHCoreHCallClass::foo0, _1 )( _callable ), "YaalHCoreHCallClass: foo0" );
+	auto c( call( &YaalHCoreHCallClass::foo0, _1 ) );
+	auto const& cc( c );
+	ENSURE_EQUALS( "bind for free this failed", c( _callable ), "YaalHCoreHCallClass: foo0" );
+	ENSURE_EQUALS( "bind for free this failed", c( _sharedValue ), "YaalHCoreHCallClass: foo0" );
+	ENSURE_EQUALS( "bind for free this failed", c( make_resource<YaalHCoreHCallClass>() ), "YaalHCoreHCallClass: foo0" );
+	ENSURE_EQUALS( "bind for free this failed", cc( _callable ), "YaalHCoreHCallClass: foo0" );
+	ENSURE_EQUALS( "bind for free this failed", cc( _sharedValue ), "YaalHCoreHCallClass: foo0" );
+	ENSURE_EQUALS( "bind for free this failed", cc( make_resource<YaalHCoreHCallClass>() ), "YaalHCoreHCallClass: foo0" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "this and 1 arg, one free" )
