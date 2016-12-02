@@ -834,7 +834,9 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "sort_heap" )
 	std_vector_t v( 100 );
 	int_array_t a( 100 );
-	std::generate( v.begin(), v.end(), HRandomizer( 0, 255 ) );
+	HRandomizer r( 0, 255 );
+	ENSURE_EQUALS( "bad range on randomizer", r.range(), static_cast<u64_t>( 255 ) );
+	std::generate( v.begin(), v.end(), r );
 	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
 	*v.rbegin() = -1;
 	*a.rbegin() = -1;
