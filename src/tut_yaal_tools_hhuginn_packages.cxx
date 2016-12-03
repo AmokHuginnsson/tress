@@ -803,5 +803,35 @@ TUT_UNIT_TEST( "OperatingSystem" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "DateTime" )
+	ENSURE_EQUALS(
+		"DateTime.clock, DateTime.sleep falied",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"c = dt.clock();"
+			"dt.sleep(1000000000);"
+			"return(c.milliseconds()/100);"
+			"}"
+		),
+		"10"
+	);
+	ENSURE_EQUALS(
+		"Clock.reset, Clock.to_string falied",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"c = dt.clock();"
+			"dt.sleep(1000000000);"
+			"m = c.milliseconds()/100;"
+			"c.reset();"
+			"s=string(c);"
+			"return([m,s.find(\"second\")>0]);"
+			"}"
+		),
+		"[10, true]"
+	);
+TUT_TEARDOWN()
+
 }
 
