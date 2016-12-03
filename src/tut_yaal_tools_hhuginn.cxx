@@ -555,6 +555,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "character()" )
 	ENSURE_EQUALS( "character to character failed", execute( "main(){return(character('7'));}" ), "'7'" );
+	ENSURE_EQUALS( "copy( character ) failed", execute( "main(){x='a';y=x;z=copy(x);x.to_upper();return([x,y,z]);}" ), "['A', 'A', 'a']" );
 	ENSURE_EQUALS( "real to character succeeded", execute_except( "main(){return(character(7.));}" ), "*anonymous stream*:1:24: Conversion from `real' to `character' is not supported." );
 	ENSURE_EQUALS( "bad user to character succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(character(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:62: Class `A' does not have `to_character' method." );
 	ENSURE_EQUALS( "bad user to character (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_character(){return(this);}}main(){return(character(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:91: User conversion method returned invalid type `A' instead of `character'." );
@@ -592,6 +593,11 @@ TUT_UNIT_TEST( "list()" )
 		execute( "main(){x=list(2,3,5,7);x.clear();return(x);}" ),
 		"[]"
 	);
+	ENSURE_EQUALS(
+		"list() iterator failed",
+		execute( "main(){x=[2,3,5,7];v=\"\";for(e:x){v+=string(e);v+=\":\";}return(v);}" ),
+		"\"2:3:5:7:\""
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "deque()" )
@@ -624,6 +630,11 @@ TUT_UNIT_TEST( "deque()" )
 		"deque pop_front failed",
 		execute( "main(){x=deque(2,3,5,7);x.pop_front();return(x);}" ),
 		"deque(3, 5, 7)"
+	);
+	ENSURE_EQUALS(
+		"deque() iterator failed",
+		execute( "main(){x=deque(2,3,5,7);v=\"\";for(e:x){v+=string(e);v+=\":\";}return(v);}" ),
+		"\"2:3:5:7:\""
 	);
 TUT_TEARDOWN()
 
@@ -725,6 +736,11 @@ TUT_UNIT_TEST( "order()" )
 		execute( "main(){x=order(2,3,1,4,7,5);x.add(10).add(0);return(x);}" ),
 		"order(0, 1, 2, 3, 4, 5, 7, 10)"
 	);
+	ENSURE_EQUALS(
+		"order() iterator failed",
+		execute( "main(){x=order(2,3,5,7);v=\"\";for(e:x){v+=string(e);v+=\":\";}return(v);}" ),
+		"\"2:3:5:7:\""
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set()" )
@@ -737,6 +753,11 @@ TUT_UNIT_TEST( "set()" )
 		"set() failed",
 		execute( "main(){x=set(2,\"ala\",3.14);x.add($7.34).add('Q');return(x);}" ),
 		expected
+	);
+	ENSURE_EQUALS(
+		"set() iterator failed",
+		execute( "main(){x=set(2,3,5,7);v=\"\";for(e:x){v+=string(e);v+=\":\";}return(v);}" ),
+		"\"2:3:5:7:\""
 	);
 TUT_TEARDOWN()
 
