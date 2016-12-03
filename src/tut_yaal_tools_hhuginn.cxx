@@ -500,7 +500,15 @@ TUT_UNIT_TEST( "string()" )
 	ENSURE_EQUALS( "boolean (true) to str failed", execute( "main(){return(string(true));}" ), "\"true\"" );
 	ENSURE_EQUALS( "boolean (false) to str failed", execute( "main(){return(string(false));}" ), "\"false\"" );
 	ENSURE_EQUALS( "func ref to str failed", execute( "main(){return(string(type(\"\")));}" ), "\"string\"" );
+	ENSURE_EQUALS( "string.find() failed", execute( "main(){s=\"ala ma kota\";return([s.find(\"kot\"),s.find(\"pies\")]);}" ), "[7, -1]" );
+	ENSURE_EQUALS( "string.replace() failed", execute( "main(){s=\"ala ma kota i kotka\";return(s.replace(\"kot\",\"pies\"));}" ), "\"ala ma piesa i pieska\"" );
+	ENSURE_EQUALS( "string.to_upper(), string.to_lower() failed", execute( "main(){s=\"Huginn\";return([copy(s).to_upper(),s.to_lower()]);}" ), "[\"HUGINN\", \"huginn\"]" );
+	ENSURE_EQUALS( "string.find_last() failed", execute( "main(){s=\"ala ma kota i kotka\";return([s.find_last(\"kot\"),s.find_last(\"pies\")]);}" ), "[14, -1]" );
+	ENSURE_EQUALS( "string.find_one_of(), string.find_last_one_of() failed", execute( "main(){s=\"ala ma kota i kotka\";return([s.find_one_of(\"mk\"),s.find_last_one_of(\"mk\"),s.find_one_of(\"xyz\"),s.find_last_one_of(\"xyz\")]);}" ), "[4, 17, -1, -1]" );
+	ENSURE_EQUALS( "string.find_other_than(), string.find_last_other_than() failed", execute( "main(){s=\"ala ma kota i kotka\";return([s.find_other_than(\"akmil \"),s.find_last_other_than(\"akmil \"),s.find_other_than(\"akmotil \"),s.find_last_other_than(\"akmotil \")]);}" ), "[8, 16, -1, -1]" );
 	ENSURE_EQUALS( "copy( str ) failed", execute( "main(){x=\"a\";y=x;z=copy(x);x+=\"b\";return([x,y,z]);}" ), "[\"ab\", \"ab\", \"a\"]" );
+	ENSURE_EQUALS( "string.strip() failed", execute( "main(){s=\"~huginn~\";return(s.strip(\"~\"));}" ), "\"huginn\"" );
+	ENSURE_EQUALS( "string.clear() failed", execute( "main(){s=\"ala ma kota\";s.clear();return(s);}" ), "\"\"" );
 	ENSURE_EQUALS( "user to str failed", execute( "class A{_x=none;constructor(x){_x=x;}to_string(){return(\"~\"+string(_x)+\"~\");}}main(){return(string(A(7)));}" ), "\"~7~\"" );
 	ENSURE_EQUALS( "bad user to str succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:59: Class `A' does not have `to_string' method." );
 	ENSURE_EQUALS( "bad user to str (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_string(){return(this);}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:85: User conversion method returned invalid type `A' instead of `string'." );
