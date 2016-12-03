@@ -491,6 +491,21 @@ TUT_UNIT_TEST( "continue;" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "string()" )
+	ENSURE_EQUALS( "str to str failed", execute( "main(){return(string(\"7\"));}" ), "\"7\"" );
+	ENSURE_EQUALS( "int to str failed", execute( "main(){return(string(7));}" ), "\"7\"" );
+	ENSURE_EQUALS( "char to str failed", execute( "main(){return(string('7'));}" ), "\"7\"" );
+	ENSURE_EQUALS( "real to str failed", execute( "main(){return(string(7.));}" ), "\"7.0\"" );
+	ENSURE_EQUALS( "number to str failed", execute( "main(){return(string($7));}" ), "\"7\"" );
+	ENSURE_EQUALS( "boolean (true) to str failed", execute( "main(){return(string(true));}" ), "\"true\"" );
+	ENSURE_EQUALS( "boolean (false) to str failed", execute( "main(){return(string(false));}" ), "\"false\"" );
+	ENSURE_EQUALS( "func ref to str failed", execute( "main(){return(string(type(\"\")));}" ), "\"string\"" );
+	ENSURE_EQUALS( "copy( str ) failed", execute( "main(){x=\"a\";y=x;z=copy(x);x+=\"b\";return([x,y,z]);}" ), "[\"ab\", \"ab\", \"a\"]" );
+	ENSURE_EQUALS( "user to str failed", execute( "class A{_x=none;constructor(x){_x=x;}to_string(){return(\"~\"+string(_x)+\"~\");}}main(){return(string(A(7)));}" ), "\"~7~\"" );
+	ENSURE_EQUALS( "bad user to str succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:59: Class `A' does not have `to_string' method." );
+	ENSURE_EQUALS( "bad user to str (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_string(){return(this);}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:85: User conversion method returned invalid type `A' instead of `string'." );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "integer()" )
 	ENSURE_EQUALS( "int to int failed", execute( "main(){return(integer(7));}" ), "7" );
 	ENSURE_EQUALS( "bad string to int succeeded", execute_except( "main(){return(integer(\"bad\"));}" ), "*anonymous stream*:1:22: Uncaught exception: not a number: bad" );
@@ -498,6 +513,7 @@ TUT_UNIT_TEST( "integer()" )
 	ENSURE_EQUALS( "num to int failed", execute( "main(){return(integer($7));}" ), "7" );
 	ENSURE_EQUALS( "char to int failed", execute( "main(){return(integer('7'));}" ), "55" );
 	ENSURE_EQUALS( "string to int failed", execute( "main(){return(integer(\"7\"));}" ), "7" );
+	ENSURE_EQUALS( "copy( int ) failed", execute( "main(){x=0;y=x;z=copy(x);x+=1;return([x,y,z]);}" ), "[1, 1, 0]" );
 	ENSURE_EQUALS( "user to int failed", execute( "class A{_x=none;constructor(x){_x=x;}to_integer(){return(_x);}}main(){return(integer(A(7)));}" ), "7" );
 	ENSURE_EQUALS( "bad user to int succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(integer(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:60: Class `A' does not have `to_integer' method." );
 	ENSURE_EQUALS( "bad user to int (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_integer(){return(this);}}main(){return(integer(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:87: User conversion method returned invalid type `A' instead of `integer'." );
@@ -515,6 +531,7 @@ TUT_UNIT_TEST( "real()" )
 	ENSURE_EQUALS( "real to real failed", execute( "main(){return(real(7.));}" ), "7.0" );
 	ENSURE_EQUALS( "num to real failed", execute( "main(){return(real($7));}" ), "7.0" );
 	ENSURE_EQUALS( "string to real failed", execute( "main(){return(real(\"7\"));}" ), "7.0" );
+	ENSURE_EQUALS( "copy( real ) failed", execute( "main(){x=0.;y=x;z=copy(x);x+=1.;return([x,y,z]);}" ), "[1.0, 1.0, 0.0]" );
 	ENSURE_EQUALS( "user to real failed", execute( "class A{_x=none;constructor(x){_x=x;}to_real(){return(_x);}}main(){return(real(A(7.)));}" ), "7.0" );
 	ENSURE_EQUALS( "bad user to real succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(real(A(7.)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:57: Class `A' does not have `to_real' method." );
 	ENSURE_EQUALS( "char to real succeeded", execute_except( "main(){return(real('7'));}" ), "*anonymous stream*:1:19: Conversion from `character' to `real' is not supported." );
@@ -527,6 +544,7 @@ TUT_UNIT_TEST( "number()" )
 	ENSURE_EQUALS( "number to number failed", execute( "main(){return(number(7.));}" ), "$7" );
 	ENSURE_EQUALS( "num to number failed", execute( "main(){return(number($7));}" ), "$7" );
 	ENSURE_EQUALS( "string to number failed", execute( "main(){return(number(\"7\"));}" ), "$7" );
+	ENSURE_EQUALS( "copy( number ) failed", execute( "main(){x=$0;y=x;z=copy(x);x+=$1;return([x,y,z]);}" ), "[$1, $1, $0]" );
 	ENSURE_EQUALS( "user to number failed", execute( "class A{_x=none;constructor(x){_x=x;}to_number(){return(_x);}}main(){return(number(A($7)));}" ), "$7" );
 	ENSURE_EQUALS( "bad user to number succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(number(A(7.)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:59: Class `A' does not have `to_number' method." );
 	ENSURE_EQUALS( "char to number succeeded", execute_except( "main(){return(number('7'));}" ), "*anonymous stream*:1:21: Conversion from `character' to `number' is not supported." );
@@ -704,8 +722,8 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "order()" )
 	ENSURE_EQUALS(
 		"order() failed",
-		execute( "main(){x=order(2,3,1,4,7,5);x.add(10).add(0);v=\"\";for(e:x){v=v+string(e);}return(v);}" ),
-		"\"012345710\""
+		execute( "main(){x=order(2,3,1,4,7,5);x.add(10).add(0);return(x);}" ),
+		"order(0, 1, 2, 3, 4, 5, 7, 10)"
 	);
 TUT_TEARDOWN()
 

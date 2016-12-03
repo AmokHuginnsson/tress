@@ -105,11 +105,10 @@ TUT_UNIT_TEST( "Algorithms" )
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
-			"o=algo.materialize(algo.range(3, 17, 4),order);\n"
-			"return([o,algo.materialize(o,list)]);\n"
+			"return(algo.materialize(algo.range(3, 17, 4),order));\n"
 			"}"
 		),
-		"[order, [3, 7, 11, 15]]"
+		"order(3, 7, 11, 15)"
 	);
 	ENSURE_EQUALS(
 		"Algorithms.materialize (to set) failed",
