@@ -557,6 +557,33 @@ TUT_UNIT_TEST( "character()" )
 	ENSURE_EQUALS( "character to character failed", execute( "main(){return(character('7'));}" ), "'7'" );
 	ENSURE_EQUALS( "copy( character ) failed", execute( "main(){x='a';y=x;z=copy(x);x.to_upper();return([x,y,z]);}" ), "['A', 'A', 'a']" );
 	ENSURE_EQUALS( "real to character succeeded", execute_except( "main(){return(character(7.));}" ), "*anonymous stream*:1:24: Conversion from `real' to `character' is not supported." );
+	ENSURE_EQUALS( "character.to_upper() failed", execute( "main(){x='a';x.to_upper();return(x);}" ), "'A'" );
+	ENSURE_EQUALS( "character.to_lower() failed", execute( "main(){x='A';x.to_lower();return(x);}" ), "'a'" );
+	ENSURE_EQUALS(
+		"character.is_*() failed",
+		execute(
+			"main(){\n"
+			"return([\n"
+			"'a'.is_lower(),\n"  // 0
+			"'a'.is_upper(),\n"  // 1
+			"'A'.is_lower(),\n"  // 2
+			"'A'.is_upper(),\n"  // 3
+			"'a'.is_digit(),\n"  // 4
+			"'a'.is_xdigit(),\n" // 5
+			"'0'.is_digit(),\n"  // 6
+			"'0'.is_xdigit(),\n" // 7
+			"'a'.is_space(),\n"  // 8
+			"' '.is_space(),\n"  // 9
+			"'a'.is_alpha(),\n"  // 10
+			"'0'.is_alpha(),\n"  // 11
+			"'a'.is_alnum(),\n"  // 12
+			"'_'.is_alnum()\n"   // 13
+			"]);\n"
+			"}\n"
+		),
+		//0     1      2      3     4      5     6     7     8      9     10    11     12    13
+		"[true, false, false, true, false, true, true, true, false, true, true, false, true, false]"
+	);
 	ENSURE_EQUALS( "bad user to character succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(character(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:62: Class `A' does not have `to_character' method." );
 	ENSURE_EQUALS( "bad user to character (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_character(){return(this);}}main(){return(character(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:91: User conversion method returned invalid type `A' instead of `character'." );
 TUT_TEARDOWN()
