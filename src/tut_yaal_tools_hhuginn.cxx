@@ -154,60 +154,41 @@ char const simpleProg[] =
 	"\n"
 ;
 
-TUT_UNIT_TEST( "simplest program" )
-	HHuginn h;
-	HStringStream src( "main(){return(0);}" );
-	h.load( src );
-	h.preprocess();
-	h.parse();
-	h.compile();
-	h.execute();
-	HHuginn::value_t r( h.result() );
-	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::INTEGER );
-	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 0 );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "simplest program (return real)" )
-	HHuginn h;
-	HStringStream src( "main(){return(3.14);}" );
-	h.load( src );
-	h.preprocess();
-	h.parse();
-	h.compile();
-	h.execute();
-	HHuginn::value_t r( h.result() );
-	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::REAL );
-	ENSURE_DISTANCE( "bad value returned", static_cast<HHuginn::HReal*>( r.raw() )->value(), 3.14L, epsilon );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "simplest program (return string)" )
-	HHuginn h;
-	HStringStream src( "main(){return(\"hello world\");}" );
-	h.load( src );
-	h.preprocess();
-	h.parse();
-	h.compile();
-	h.execute();
-	HHuginn::value_t r( h.result() );
-	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::STRING );
-	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HString*>( r.raw() )->value(), "hello world" );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "simplest program (return character)" )
-	HHuginn h;
-	HStringStream src( "main(){return('X');}" );
-	h.load( src );
-	h.preprocess();
-	h.parse();
-	h.compile();
-	h.execute();
-	HHuginn::value_t r( h.result() );
-	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::CHARACTER );
-	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HCharacter*>( r.raw() )->value(), 'X' );
+TUT_UNIT_TEST( "program return types and values" )
+	/* none */ {
+		OHuginnResult hr( execute_result( "main(){return(none);}" ) );
+		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::NONE );
+	}
+	/* integer */ {
+		OHuginnResult hr( execute_result( "main(){return(0);}" ) );
+		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::INTEGER );
+		ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( hr._result.raw() )->value(), 0 );
+	}
+	/* real */ {
+		OHuginnResult hr( execute_result( "main(){return(3.14);}" ) );
+		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::REAL );
+		ENSURE_DISTANCE( "bad value returned", static_cast<HHuginn::HReal*>( hr._result.raw() )->value(), 3.14L, epsilon );
+	}
+	/* string */ {
+		OHuginnResult hr( execute_result( "main(){return(\"hello world\");}" ) );
+		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::STRING );
+		ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HString*>( hr._result.raw() )->value(), "hello world" );
+	}
+	/* character */ {
+		OHuginnResult hr( execute_result( "main(){return('X');}" ) );
+		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::CHARACTER );
+		ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HCharacter*>( hr._result.raw() )->value(), 'X' );
+	}
+	/* number */ {
+		OHuginnResult hr( execute_result( "main(){return($7);}" ) );
+		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::NUMBER );
+		ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HNumber*>( hr._result.raw() )->value(), 7_yn );
+	}
+	/* boolean */ {
+		OHuginnResult hr( execute_result( "main(){return(true);}" ) );
+		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::BOOLEAN );
+		ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HBoolean*>( hr._result.raw() )->value(), true );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "call function" )

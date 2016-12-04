@@ -49,6 +49,10 @@ namespace tress {
 struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_tools_hhuginn_base> {
 	typedef tut_helpers::simple_mock<tut_yaal_tools_hhuginn_base> base_type;
 	typedef char const* prog_src_t;
+	struct OHuginnResult {
+		yaal::tools::HHuginn::ptr_t _huginn;
+		yaal::tools::HHuginn::value_t _result;
+	};
 	yaal::hcore::HString _resultCache;
 	yaal::tools::HStringStream _sourceCache;
 	yaal::hcore::HMutex _mutex;
@@ -68,6 +72,7 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 		yaal::hcore::HString const&,
 		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::DEFAULT
 	);
+	OHuginnResult execute_result( yaal::hcore::HString const& );
 };
 
 }
