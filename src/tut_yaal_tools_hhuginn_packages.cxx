@@ -144,7 +144,22 @@ TUT_UNIT_TEST( "Algorithms" )
 		"{15, 3, 7, 11}"
 	);
 	ENSURE_EQUALS(
-		"Algorithms.reduce failed",
+		"Algorithms.reduce (function) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"class R {\n"
+			"do(x,y){\n"
+			"return(x+y);\n"
+			"}\n"
+			"}\n"
+			"main(){\n"
+			"return(algo.reduce(algo.range(3, 17, 4),R().do));\n"
+			"}"
+		),
+		"36"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.reduce (method) failed",
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
@@ -152,6 +167,17 @@ TUT_UNIT_TEST( "Algorithms" )
 			"}"
 		),
 		"36"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.filter (function) failed",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"f=algo.filter(algo.range(3, 44, 4),@(x){x%3==0;});\n"
+			"return(size(f));\n"
+			"}"
+		),
+		"*anonymous stream*:4:8: Getting size of `Filter' is an invalid operation."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.filter (function) failed",
