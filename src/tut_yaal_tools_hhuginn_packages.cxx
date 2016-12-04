@@ -54,12 +54,32 @@ TUT_TEST_GROUP( tut_yaal_tools_hhuginn_packages, "yaal::tools::HHuginn,packages"
 
 TUT_UNIT_TEST( "Algorithms" )
 	ENSURE_EQUALS(
-		"Algorithms.map failed",
+		"Algorithms.map (fun) failed",
 		execute(
 			"import Algorithms as algo;"
 			"main(){"
 			"l=[];"
 			"m=algo.map([3, 17, 4],@(x){x*x;});"
+			"for(x : copy(m)) {"
+			"l.add(x);"
+			"}"
+			"return([l,size(m)]);"
+			"}"
+		),
+		"[[9, 289, 16], 3]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.map (method) failed",
+		execute(
+			"import Algorithms as algo;"
+			"class M {\n"
+			"do(x){\n"
+			"return(x*x);\n"
+			"}\n"
+			"}\n"
+			"main(){"
+			"l=[];"
+			"m=algo.map([3, 17, 4],M().do);"
 			"for(x : copy(m)) {"
 			"l.add(x);"
 			"}"
@@ -134,11 +154,26 @@ TUT_UNIT_TEST( "Algorithms" )
 		"36"
 	);
 	ENSURE_EQUALS(
-		"Algorithms.filter failed",
+		"Algorithms.filter (function) failed",
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
 			"return(algo.materialize(algo.filter(algo.range(3, 44, 4),@(x){x%3==0;}),list));\n"
+			"}"
+		),
+		"[3, 15, 27, 39]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.filter (method) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"class F {\n"
+			"do(x){\n"
+			"return(x%3==0);\n"
+			"}\n"
+			"}\n"
+			"main(){\n"
+			"return(algo.materialize(algo.filter(algo.range(3, 44, 4),F().do),list));\n"
 			"}"
 		),
 		"[3, 15, 27, 39]"
