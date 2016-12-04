@@ -191,32 +191,26 @@ TUT_UNIT_TEST( "program return types and values" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "call function" )
-	HHuginn h;
-	HStringStream src( "f(){return(7);}main(){return(f());}" );
-	h.load( src );
-	h.preprocess();
-	h.parse();
-	h.compile();
-	h.execute();
-	HHuginn::value_t r( h.result() );
-	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::INTEGER );
-	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
+TUT_UNIT_TEST( "set variable" )
+	OHuginnResult hr( execute_result( "main(){a=7;return(a);}" ) );
+	ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::INTEGER );
+	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( hr._result.raw() )->value(), 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "set variable" )
-	HHuginn h;
-	HStringStream src( "main(){a=7;return(a);}" );
-	h.load( src );
-	h.preprocess();
-	h.parse();
-	h.compile();
-	h.execute();
-	HHuginn::value_t r( h.result() );
-	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::INTEGER );
-	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
+TUT_UNIT_TEST( "functions (definition)" )
+	ENSURE_EQUALS( "function result failed", execute( "f(){return(7);}main(){return(f());}" ), 7 );
+	ENSURE_EQUALS(
+		"dafult arguments failed",
+		execute(
+			"f(a1=-1,a2=-2,a3=-3,a4=-4){\n"
+			"return([a1,a2,a3,a4]);\n"
+			"}\n"
+			"main(){\n"
+			"return(f(1,2));\n"
+			"}\n"
+		),
+		"[1, 2, -3, -4]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "add" )
