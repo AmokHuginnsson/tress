@@ -596,6 +596,23 @@ TUT_UNIT_TEST( "character()" )
 	ENSURE_EQUALS( "bad user to character (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_character(){return(this);}}main(){return(character(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:91: User conversion method returned invalid type `A' instead of `character'." );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "exceptions()" )
+	ENSURE_EQUALS(
+		"exception failed",
+		execute(
+			"main(){\n"
+			"r=none;\n"
+			"try{\n"
+			"1/0;\n"
+			"}catch(ArithmeticException e) {\n"
+			"r=[e.message(),e.where(),e.what()];\n"
+			"}\n"
+			"return(r);\n"
+			"}\n" ),
+		"[\"*anonymous stream*:4:2: Division by zero.\", \"*anonymous stream*:4:2\", \"Division by zero.\"]"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "list()" )
 	ENSURE_EQUALS(
 		"list failed (explicit)",
@@ -633,6 +650,11 @@ TUT_UNIT_TEST( "list()" )
 		execute( "main(){x=[2,3,5,7];v=\"\";for(e:x){v+=string(e);v+=\":\";}return(v);}" ),
 		"\"2:3:5:7:\""
 	);
+	ENSURE_EQUALS(
+		"list copy failed",
+		execute( "main(){x=list(2,3,5);y=copy(x);x.add(7);return([x,y]);}" ),
+		"[[2, 3, 5, 7], [2, 3, 5]]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "deque()" )
@@ -667,9 +689,19 @@ TUT_UNIT_TEST( "deque()" )
 		"deque(3, 5, 7)"
 	);
 	ENSURE_EQUALS(
+		"deque clear failed",
+		execute( "main(){x=deque(2,3,5,7);x.clear();return(x);}" ),
+		"deque()"
+	);
+	ENSURE_EQUALS(
 		"deque() iterator failed",
 		execute( "main(){x=deque(2,3,5,7);v=\"\";for(e:x){v+=string(e);v+=\":\";}return(v);}" ),
 		"\"2:3:5:7:\""
+	);
+	ENSURE_EQUALS(
+		"deque copy failed",
+		execute( "main(){x=deque(2,3,5);y=copy(x);x.add_front(7);return([x,y]);}" ),
+		"[deque(7, 2, 3, 5), deque(2, 3, 5)]"
 	);
 TUT_TEARDOWN()
 
@@ -1194,26 +1226,20 @@ TUT_UNIT_TEST( "throw,try,catch" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "catch by base" )
-#ifdef __MSVCXX__
-	char const res[] = "\"The system cannot find the file specified.\r\n: ./out/non-existing\"";
-#else
-	char const res[] = "\"No such file or directory: ./out/non-existing\"";
-#endif
 	ENSURE_EQUALS(
 		"throw,try,catch failed",
 		execute(
-			"import FileSystem as fs;"
 			"main() {"
 			"v=\"\";"
 			"try {"
-			"fs.open( \"./out/non-existing\", fs.reading() );"
+			"1/0;"
 			"} catch( Exception e ) {"
 			"v = e.what();"
 			"}"
 			"return ( v );"
 			"}"
 		),
-		res
+		"\"Division by zero.\""
 	);
 TUT_TEARDOWN()
 

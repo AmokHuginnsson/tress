@@ -28,6 +28,8 @@ Copyright:
 
 #include <yaal/tools/hhuginn.hxx>
 #include <yaal/tools/hmonitor.hxx>
+#include <yaal/tools/filesystem.hxx>
+#include <yaal/tools/hfsitem.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -39,6 +41,7 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
+using namespace yaal::tools::filesystem;
 using namespace yaal::tools::executing_parser;
 using namespace tress::tut_helpers;
 
@@ -254,6 +257,92 @@ TUT_UNIT_TEST( "Algorithms" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "FileSystem" )
+#ifdef __MSVCXX__
+	char const res[] = "*anonymous stream*:1:40: Uncaught exception: The system cannot find the file specified.\r\n: ./out/non-existing";
+#else
+	char const res[] = "*anonymous stream*:1:40: Uncaught exception: No such file or directory: ./out/non-existing";
+#endif
+	ENSURE_EQUALS(
+		"open non-existing succeeded",
+		execute_except(
+			"import FileSystem as fs;"
+			"main() {"
+			"fs.open( \"./out/non-existing\", fs.reading() );"
+			"return ( 0 );"
+			"}"
+		),
+		res
+	);
+	hcore::HString filename( "./out/huginn-file.dat" );
+	hcore::HString filenameMoved( "./out/huginn-file.alt" );
+	hcore::HString data( "huginn-data" );
+	try {
+		filesystem::remove( filename );
+	} catch ( HFileSystemException const& ) {
+	}
+	execute(
+		"import FileSystem as fs;"
+		"main(){"
+		"f=fs.open(\""_ys.append( filename ).append( "\",fs.writing());"
+		"f.write(\"" ).append( data ).append( "\");"
+		"return(0);"
+		"}" )
+	);
+	HFile f( filename, HFile::OPEN::READING );
+	hcore::HString line;
+	getline( f, line );
+	ENSURE_EQUALS( "bad write from Huginn.FileSystem", line, data );
+	ENSURE_EQUALS(
+		"bad read from Huginn.FileSystem",
+		execute(
+			"import FileSystem as fs;"
+			"main(){"
+			"f=fs.open(\""_ys.append( filename ).append( "\",fs.reading());"
+			"return(f.read_line());"
+			"}" )
+		),
+		"\""_ys.append( data ).append( '"' )
+	);
+	execute(
+		"import FileSystem as fs;"
+		"main(){"
+		"fs.rename(\""_ys.append( filename ).append( "\",\"" ).append( filenameMoved ).append( "\");"
+		"return(0);"
+		"}" )
+	);
+	ENSURE_NOT( "Huginn.FileSystem.rename failed (src)", filesystem::exists( filename ) );
+	ENSURE( "Huginn.FileSystem.rename failed (dst)", filesystem::exists( filenameMoved ) );
+#ifndef __MSVCXX__
+	execute(
+		"import FileSystem as fs;"
+		"main(){"
+		"fs.chmod(\""_ys.append( filenameMoved ).append( "\",0660);"
+		"return(0);"
+		"}" )
+	);
+	ENSURE_EQUALS( "Huginn.FileSystem.chmod failed", HFSItem( filenameMoved ).get_permissions(), 0660 );
+#endif
+	execute(
+		"import FileSystem as fs;"
+		"main(){"
+		"fs.remove(\""_ys.append( filenameMoved ).append( "\");"
+		"return(0);"
+		"}" )
+	);
+	ENSURE_NOT( "Huginn.FileSystem.remove failed", filesystem::exists( filenameMoved ) );
+	ENSURE_EQUALS(
+		"FileSystem.dirname, FileSystem.basename, FileSystem.readlink, FileSystem.current_working_directory failed",
+		execute(
+			"import FileSystem as fs;"
+			"main(){"
+			"return([fs.basename(fs.current_working_directory()),fs.dirname(\""_ys.append( filename ).append( "\"),fs.readlink(\"./data/broken\")]);"
+			"}" )
+		),
+		"[\"tress\", \"./out\", \"non-existing\"]"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "Cryptography" )
 	ENSURE_EQUALS(
 		"Cryptography.md5 failed",
@@ -274,6 +363,46 @@ TUT_UNIT_TEST( "Cryptography" )
 			"}"
 		),
 		"\"da39a3ee5e6b4b0d3255bfef95601890afd80709\""
+	);
+	ENSURE_EQUALS(
+		"Cryptography.sha512 failed",
+		execute(
+			"import Cryptography as crypto;\n"
+			"main(){\n"
+			"return(crypto.sha512(\"\"));\n"
+			"}"
+		),
+		"\"cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e\""
+	);
+	ENSURE_EQUALS(
+		"Cryptography.hmac_md5 failed",
+		execute(
+			"import Cryptography as crypto;\n"
+			"main(){\n"
+			"return(crypto.hmac_md5(\"\",\"\"));\n"
+			"}"
+		),
+		"\"74e6f7298a9c2d168935f58c001bad88\""
+	);
+	ENSURE_EQUALS(
+		"Cryptography.hmac_sha1 failed",
+		execute(
+			"import Cryptography as crypto;\n"
+			"main(){\n"
+			"return(crypto.hmac_sha1(\"\",\"\"));\n"
+			"}"
+		),
+		"\"fbdb1d1b18aa6c08324b7d64b71fb76370690e1d\""
+	);
+	ENSURE_EQUALS(
+		"Cryptography.hmac_sha512 failed",
+		execute(
+			"import Cryptography as crypto;\n"
+			"main(){\n"
+			"return(crypto.hmac_sha512(\"\",\"\"));\n"
+			"}"
+		),
+		"\"b936cee86c9f87aa5d3c6f2e84cb5a4239a5fe50480a6ec66b70ab5b1f4ac6730c6c515421b327ec1d69402e53dfb49ad7381eb067b338fd7b0cb22247225d47\""
 	);
 TUT_TEARDOWN()
 
@@ -830,6 +959,16 @@ TUT_UNIT_TEST( "DateTime" )
 			"}"
 		),
 		"[10, true]"
+	);
+	ENSURE_EQUALS(
+		"DateTime.now falied",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"return(string(dt.now()));"
+			"}"
+		),
+		"\""_ys.append( now_local().string() ).append( '"' )
 	);
 TUT_TEARDOWN()
 
