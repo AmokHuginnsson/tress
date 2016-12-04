@@ -313,6 +313,17 @@ TUT_UNIT_TEST( "FileSystem" )
 	);
 	ENSURE_NOT( "Huginn.FileSystem.rename failed (src)", filesystem::exists( filename ) );
 	ENSURE( "Huginn.FileSystem.rename failed (dst)", filesystem::exists( filenameMoved ) );
+	ENSURE_EQUALS(
+		"invalig rename succeeded",
+		execute_except(
+			"import FileSystem as fs;"
+			"main(){"
+			"fs.rename(\"non-existing-a\",\"non-existing-b\");"
+			"return(0);"
+			"}"
+		),
+		"*anonymous stream*:1:41: Uncaught exception: Failed to rename: `non-existing-a' to `non-existing-b': No such file or directory"
+	);
 #ifndef __MSVCXX__
 	execute(
 		"import FileSystem as fs;"
@@ -323,6 +334,28 @@ TUT_UNIT_TEST( "FileSystem" )
 	);
 	ENSURE_EQUALS( "Huginn.FileSystem.chmod failed", HFSItem( filenameMoved ).get_permissions(), 0660 );
 #endif
+	ENSURE_EQUALS(
+		"invalig chmod succeeded",
+		execute_except(
+			"import FileSystem as fs;"
+			"main(){"
+			"fs.chmod(\""_ys.append( filenameMoved ).append( "\",017777);"
+			"return(0);"
+			"}" )
+		),
+		"*anonymous stream*:1:40: Bad mode: 8191"
+	);
+	ENSURE_EQUALS(
+		"invalig chmod succeeded",
+		execute_except(
+			"import FileSystem as fs;"
+			"main(){"
+			"fs.chmod(\"non-existing\",0700);"
+			"return(0);"
+			"}"
+		),
+		"*anonymous stream*:1:40: Uncaught exception: chmod failed: `non-existing': No such file or directory"
+	);
 	execute(
 		"import FileSystem as fs;"
 		"main(){"
@@ -332,6 +365,17 @@ TUT_UNIT_TEST( "FileSystem" )
 	);
 	ENSURE_NOT( "Huginn.FileSystem.remove failed", filesystem::exists( filenameMoved ) );
 	ENSURE_EQUALS(
+		"invalig remove succeeded",
+		execute_except(
+			"import FileSystem as fs;"
+			"main(){"
+			"fs.remove(\"./out\");"
+			"return(0);"
+			"}"
+		),
+		"*anonymous stream*:1:41: Uncaught exception: Failed to remove: `./out': Is a directory"
+	);
+	ENSURE_EQUALS(
 		"FileSystem.dirname, FileSystem.basename, FileSystem.readlink, FileSystem.current_working_directory failed",
 		execute(
 			"import FileSystem as fs;"
@@ -340,6 +384,17 @@ TUT_UNIT_TEST( "FileSystem" )
 			"}" )
 		),
 		"[\"tress\", \"./out\", \"non-existing\"]"
+	);
+	ENSURE_EQUALS(
+		"invalig chmod succeeded",
+		execute_except(
+			"import FileSystem as fs;"
+			"main(){"
+			"fs.readlink(\"non-existing\");"
+			"return(0);"
+			"}"
+		),
+		"*anonymous stream*:1:43: Uncaught exception: readlink failed: `non-existing': No such file or directory"
 	);
 TUT_TEARDOWN()
 
