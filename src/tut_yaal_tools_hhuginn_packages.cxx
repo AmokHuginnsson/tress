@@ -320,9 +320,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "FileSystem" )
 #ifdef __MSVCXX__
-	char const res[] = "*anonymous stream*:1:40: Uncaught exception: The system cannot find the file specified.\r\n: ./out/non-existing";
+	char const openRes[] = "*anonymous stream*:1:40: Uncaught exception: The system cannot find the file specified.\r\n: ./out/non-existing";
 #else
-	char const res[] = "*anonymous stream*:1:40: Uncaught exception: No such file or directory: ./out/non-existing";
+	char const openRes[] = "*anonymous stream*:1:40: Uncaught exception: No such file or directory: ./out/non-existing";
 #endif
 	ENSURE_EQUALS(
 		"open non-existing succeeded",
@@ -333,7 +333,7 @@ TUT_UNIT_TEST( "FileSystem" )
 			"return ( 0 );"
 			"}"
 		),
-		res
+		openRes
 	);
 	hcore::HString filename( "./out/huginn-file.dat" );
 	hcore::HString filenameMoved( "./out/huginn-file.alt" );
@@ -425,6 +425,11 @@ TUT_UNIT_TEST( "FileSystem" )
 		"}" )
 	);
 	ENSURE_NOT( "Huginn.FileSystem.remove failed", filesystem::exists( filenameMoved ) );
+#ifdef __HOST_OS_TYPE_FREEBSD__
+		char const removeRes[] = "*anonymous stream*:1:41: Uncaught exception: Failed to remove: `./out': Operation not permitted";
+#else
+		char const removeRes[] = "*anonymous stream*:1:41: Uncaught exception: Failed to remove: `./out': Is a directory";
+#endif
 	ENSURE_EQUALS(
 		"invalig remove succeeded",
 		execute_except(
@@ -434,7 +439,7 @@ TUT_UNIT_TEST( "FileSystem" )
 			"return(0);"
 			"}"
 		),
-		"*anonymous stream*:1:41: Uncaught exception: Failed to remove: `./out': Is a directory"
+		removeRes
 	);
 	ENSURE_EQUALS(
 		"FileSystem.dirname, FileSystem.basename, FileSystem.readlink, FileSystem.current_working_directory failed",
@@ -896,6 +901,18 @@ TUT_UNIT_TEST( "Mathematics" )
 		),
 		"2"
 	);
+	ENSURE_EQUALS(
+		"Mathematics.NumberSetStatistics failed",
+		execute(
+			"import Algorithms as algo;"
+			"import Mathematics as math;"
+			"main(){"
+			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), real),list));"
+			"return([nss.minimum(),nss.maximum(),nss.sum(),nss.average(),nss.median(),nss.variance(),nss.population_variance(),nss.standard_deviation(),nss.population_standard_deviation()]);"
+			"}"
+		),
+		"[1.0, 239.0, 1800.0, 120.0, 120.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Database" )
@@ -1077,16 +1094,35 @@ TUT_UNIT_TEST( "DateTime" )
 		),
 		"[10, true]"
 	);
-	ENSURE_EQUALS(
-		"DateTime.now falied",
+
+	hcore::HString res(
 		execute(
 			"import DateTime as dt;"
 			"main(){"
 			"return(string(dt.now()));"
 			"}"
-		),
-		"\""_ys.append( now_local().string() ).append( '"' )
+		)
 	);
+	res.trim( "\"" );
+	HTime now( now_local() );
+	hcore::HString nowS0( now.string() );
+	now.mod_second( -1 );
+	hcore::HString nowSP( now.string() );
+	now.mod_second( 2 );
+	hcore::HString nowSN( now.string() );
+	ENSURE( "DateTime.now falied", ( res == nowS0 ) || ( res == nowSP ) || ( res == nowSN ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Network" )
+	hcore::HString res(
+		execute(
+			"import Network as net;"
+			"main(){"
+			"return(net.resolve(\"localhost\"));"
+			"}"
+		)
+	);
+	ENSURE( "Network.resolve falied", ( res == "\"127.0.0.1\"" ) || ( res == "\"0.0.0.0\"" ) );
 TUT_TEARDOWN()
 
 }
