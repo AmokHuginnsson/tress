@@ -353,6 +353,7 @@ TUT_UNIT_TEST( "FileSystem" )
 	HFile f( filename, HFile::OPEN::READING );
 	hcore::HString line;
 	getline( f, line );
+	f.close();
 	ENSURE_EQUALS( "bad write from Huginn.FileSystem", line, data );
 	ENSURE_EQUALS(
 		"bad read from Huginn.FileSystem",
@@ -374,6 +375,11 @@ TUT_UNIT_TEST( "FileSystem" )
 	);
 	ENSURE_NOT( "Huginn.FileSystem.rename failed (src)", filesystem::exists( filename ) );
 	ENSURE( "Huginn.FileSystem.rename failed (dst)", filesystem::exists( filenameMoved ) );
+#ifdef __MSVCXX__
+	char const renameExpect[] = "*anonymous stream*:1:41: Uncaught exception: Failed to rename: `non-existing-a' to `non-existing-b': The system cannot find the file specified.\r\n";
+#else
+	char const renameExpect[] = "*anonymous stream*:1:41: Uncaught exception: Failed to rename: `non-existing-a' to `non-existing-b': No such file or directory";
+#endif
 	ENSURE_EQUALS(
 		"invalig rename succeeded",
 		execute_except(
@@ -383,7 +389,7 @@ TUT_UNIT_TEST( "FileSystem" )
 			"return(0);"
 			"}"
 		),
-		"*anonymous stream*:1:41: Uncaught exception: Failed to rename: `non-existing-a' to `non-existing-b': No such file or directory"
+		renameExpect
 	);
 #ifndef __MSVCXX__
 	execute(
@@ -406,6 +412,11 @@ TUT_UNIT_TEST( "FileSystem" )
 		),
 		"*anonymous stream*:1:40: Bad mode: 8191"
 	);
+#ifdef __MSVCXX__
+	char const chmodExpect[] = "*anonymous stream*:1:40: Uncaught exception: chmod failed: `non-existing': The system cannot find the file specified.\r\n";
+#else
+	char const chmodExpect[] = "*anonymous stream*:1:40: Uncaught exception: chmod failed: `non-existing': No such file or directory";
+#endif
 	ENSURE_EQUALS(
 		"invalig chmod succeeded",
 		execute_except(
@@ -415,7 +426,7 @@ TUT_UNIT_TEST( "FileSystem" )
 			"return(0);"
 			"}"
 		),
-		"*anonymous stream*:1:40: Uncaught exception: chmod failed: `non-existing': No such file or directory"
+		chmodExpect
 	);
 	execute(
 		"import FileSystem as fs;"
@@ -427,6 +438,8 @@ TUT_UNIT_TEST( "FileSystem" )
 	ENSURE_NOT( "Huginn.FileSystem.remove failed", filesystem::exists( filenameMoved ) );
 #ifdef __HOST_OS_TYPE_FREEBSD__
 		char const removeRes[] = "*anonymous stream*:1:41: Uncaught exception: Failed to remove: `./out': Operation not permitted";
+#elif defined( __MSVCXX__ )
+		char const removeRes[] = "*anonymous stream*:1:41: Uncaught exception: Failed to remove: `./out': The data is invalid.\r\n";
 #else
 		char const removeRes[] = "*anonymous stream*:1:41: Uncaught exception: Failed to remove: `./out': Is a directory";
 #endif
@@ -451,6 +464,11 @@ TUT_UNIT_TEST( "FileSystem" )
 		),
 		"[\"tress\", \"./out\", \"non-existing\"]"
 	);
+#ifdef __MSVCXX__
+	char const readlinkExpect[] = "*anonymous stream*:1:43: Uncaught exception: readlink failed: `non-existing': The data is invalid.\r\n";
+#else
+	char const readlinkExpect[] = "*anonymous stream*:1:43: Uncaught exception: readlink failed: `non-existing': No such file or directory";
+#endif
 	ENSURE_EQUALS(
 		"invalig chmod succeeded",
 		execute_except(
@@ -460,7 +478,7 @@ TUT_UNIT_TEST( "FileSystem" )
 			"return(0);"
 			"}"
 		),
-		"*anonymous stream*:1:43: Uncaught exception: readlink failed: `non-existing': No such file or directory"
+		readlinkExpect
 	);
 TUT_TEARDOWN()
 
@@ -901,6 +919,11 @@ TUT_UNIT_TEST( "Mathematics" )
 		),
 		"2"
 	);
+#if SIZEOF_DOUBLE_LONG == 16
+	char const numberSetStatisticsExpect[] = "[1.0, 239.0, 1800.0, 120.0, 120.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956]";
+#else /* #if SIZEOF_DOUBLE_LONG == 16 */
+	char const numberSetStatisticsExpect[] = "[1.0, 239.0, 1800.0, 120.0, 120.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956]";
+#endif /* #else #if SIZEOF_DOUBLE_LONG == 16 */
 	ENSURE_EQUALS(
 		"Mathematics.NumberSetStatistics failed",
 		execute(
@@ -911,7 +934,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"return([nss.minimum(),nss.maximum(),nss.sum(),nss.average(),nss.median(),nss.variance(),nss.population_variance(),nss.standard_deviation(),nss.population_standard_deviation()]);"
 			"}"
 		),
-		"[1.0, 239.0, 1800.0, 120.0, 120.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956]"
+		numberSetStatisticsExpect
 	);
 TUT_TEARDOWN()
 
@@ -1089,7 +1112,7 @@ TUT_UNIT_TEST( "DateTime" )
 			"m = c.milliseconds()/100;"
 			"c.reset();"
 			"s=string(c);"
-			"return([m,s.find(\"second\")>0]);"
+			"return([m,s.find(\"second\")>0 || s == \"0s\"]);"
 			"}"
 		),
 		"[10, true]"

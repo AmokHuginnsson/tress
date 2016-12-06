@@ -183,18 +183,30 @@ TUT_UNIT_TEST( "accessed()" )
 	HFSItem fi( PATH );
 	ENSURE( "bad created", fi.created() != now );
 	ENSURE( "bad modified", fi.modified() != now );
-/* this test will fail on file systems with noatime option enabled */
+/* Linux: This test will fail on file systems with noatime option enabled */
+/* Windows: To save system resources in Vista, Microsoft disabled the Last Access Time Stamp. */
+#ifndef __MSVCXX__
 	ENSURE_EQUALS( "bad accessed", fi.accessed(), now );
+#endif
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "get_permissions()" )
 	static char const PATH[] = "./out/file.txt";
 	filesystem::chmod( PATH, 0600 );
 	HFSItem f( PATH );
-	ENSURE_EQUALS( "bad permissions", f.get_permissions(), 0600 );
-	filesystem::chmod( PATH, 0640 );
+#ifdef __MSVCXX__
+	int rwExpect( 0666 );
+	int roExpect( 0444 );
+#else
+	int rwExpect( 0600 );
+	int roExpect( 0400 );
+#endif
+	ENSURE_EQUALS( "bad permissions", f.get_permissions(), rwExpect );
+	filesystem::chmod( PATH, 0400 );
 	HFSItem f2( PATH );
-	ENSURE_EQUALS( "bad permissions", f2.get_permissions(), 0640 );
+	ENSURE_EQUALS( "bad permissions", f2.get_permissions(), roExpect );
+	filesystem::chmod( PATH, 0666 );
+	filesystem::remove( PATH );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "swap" )

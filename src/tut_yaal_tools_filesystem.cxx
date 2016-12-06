@@ -233,11 +233,13 @@ TUT_UNIT_TEST( "exists" )
 	ENSURE_NOT( "exists (non-existing) failed", exists( "./data/non-existing" ) );
 TUT_TEARDOWN()
 
+#ifndef __MSVCXX__
 TUT_UNIT_TEST( "is_symbolic_link" )
 	ENSURE( "is_symbolic_link (on symlink) failed", is_symbolic_link( "./data/broken" ) );
 	ENSURE( "is_symbolic_link (on symlink) failed", is_symbolic_link( "./data/libtressplugin-d.so" ) );
 	ENSURE_NOT( "is_symbolic_link (on non-symlink) failed", is_symbolic_link( "./data/karatsuba.bc" ) );
 TUT_TEARDOWN()
+#endif /* #ifndef __MSVCXX__ */
 
 TUT_UNIT_TEST( "file_size" )
 	ENSURE_EQUALS( "file_size failed", file_size( "./data/karatsuba.bc" ), 1137 );
