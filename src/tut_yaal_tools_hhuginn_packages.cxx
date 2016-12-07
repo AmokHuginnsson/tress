@@ -436,7 +436,7 @@ TUT_UNIT_TEST( "FileSystem" )
 		"}" )
 	);
 	ENSURE_NOT( "Huginn.FileSystem.remove failed", filesystem::exists( filenameMoved ) );
-#ifdef __HOST_OS_TYPE_FREEBSD__
+#if defined( __HOST_OS_TYPE_FREEBSD__ ) || defined( __HOST_OS_TYPE_CYGWIN__ )
 		char const removeRes[] = "*anonymous stream*:1:41: Uncaught exception: Failed to remove: `./out': Operation not permitted";
 #elif defined( __MSVCXX__ )
 		char const removeRes[] = "*anonymous stream*:1:41: Uncaught exception: Failed to remove: `./out': The data is invalid.\r\n";

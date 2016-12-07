@@ -186,7 +186,9 @@ TUT_UNIT_TEST( "accessed()" )
 /* Linux: This test will fail on file systems with noatime option enabled */
 /* Windows: To save system resources in Vista, Microsoft disabled the Last Access Time Stamp. */
 #ifndef __MSVCXX__
+#ifndef __HOST_OS_TYPE_CYGWIN__
 	ENSURE_EQUALS( "bad accessed", fi.accessed(), now );
+#endif
 #endif
 TUT_TEARDOWN()
 

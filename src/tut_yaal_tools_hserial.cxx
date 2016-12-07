@@ -62,6 +62,8 @@ struct tut_yaal_tools_hserial : public simple_mock<tut_yaal_tools_hserial> {
 };
 TUT_TEST_GROUP( tut_yaal_tools_hserial, "yaal::tools::HSerial" );
 
+#ifndef __HOST_OS_TYPE_CYGWIN__
+
 TUT_UNIT_TEST( "default constructor" )
 	if ( ! _socat.is_running() ) {
 		SKIP( "failed to start sockat" );
@@ -71,6 +73,8 @@ TUT_UNIT_TEST( "default constructor" )
 	s.open();
 	ENSURE( "bad validity state after open", s.is_valid() );
 TUT_TEARDOWN()
+
+#endif
 
 }
 
