@@ -106,13 +106,13 @@ TUT_UNIT_TEST( "is_directory" )
 	HFSItem dit2( "./data/" );
 	ENSURE( err, dit2.is_directory() );
 	HFSItem dit3( "./data/non-existing" );
-	ENSURE( err2, ! dit3.is_directory() );
+	ENSURE_THROW( err2, dit3.is_directory(), HFSItemException );
 	HFSItem dit4( "./data/non-existing/" );
-	ENSURE( err2, ! dit4.is_directory() );
+	ENSURE_THROW( err2, dit4.is_directory(), HFSItemException );
 	HFSItem dit5( "./data/xml.xml" );
 	ENSURE( err, ! dit5.is_directory() );
 	HFSItem dit6( "./data/xml.xml/" );
-	ENSURE_THROW( err2, dit6.is_directory(), HFileSystemException );
+	ENSURE_THROW( err2, dit6.is_directory(), HFSItemException );
 	HFSItem dit7( "." );
 	ENSURE( err, dit7.is_directory() );
 	HFSItem dit8( "./" );
