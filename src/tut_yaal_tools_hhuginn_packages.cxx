@@ -480,6 +480,33 @@ TUT_UNIT_TEST( "FileSystem" )
 		),
 		readlinkExpect
 	);
+	ENSURE_EQUALS(
+		"FileSystem.dir failed",
+		execute(
+			"import FileSystem as fs;"
+			"import Algorithms as algo;"
+			"main(){"
+			"return(algo.sorted(fs.dir(\"./FCTF\")));"
+			"}"
+		),
+		"[\"acxx\", \"d0_target-default.mk\", \"make.mk\"]"
+	);
+#ifdef __MSVCXX__
+	char const dirExpect[] = "*anonymous stream*:1:38: Uncaught exception: non-existing: The data is invalid.\r\n";
+#else
+	char const dirExpect[] = "*anonymous stream*:1:38: Uncaught exception: non-existing: No such file or directory";
+#endif
+	ENSURE_EQUALS(
+		"invalig chmod succeeded",
+		execute_except(
+			"import FileSystem as fs;"
+			"main(){"
+			"fs.dir(\"non-existing\");"
+			"return(0);"
+			"}"
+		),
+		dirExpect
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Cryptography" )
