@@ -200,9 +200,9 @@ TUT_UNIT_TEST( "remove_directory" )
 	char const dirAB[] = "../tress/out/a/b";
 	ENSURE_THROW( "removed nested dir", remove_directory( dirA, DIRECTORY_MODIFICATION::EXACT ), HFileSystemException );
 	remove_directory( dirAB, DIRECTORY_MODIFICATION::EXACT );
-	ENSURE_NOT( "failed to remove directory", is_directory( dirAB ) );
+	ENSURE_NOT( "failed to remove directory", exists( dirAB ) );
 	remove_directory( dirA, DIRECTORY_MODIFICATION::EXACT );
-	ENSURE_NOT( "failed to remove directory", is_directory( dirA ) );
+	ENSURE_NOT( "failed to remove directory", exists( dirA ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "create_directory (recursive)" )
@@ -214,7 +214,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "remove_directory (recursive)" )
 	char const dir[] = "../tress/out/a";
 	remove_directory( dir, DIRECTORY_MODIFICATION::RECURSIVE );
-	ENSURE_NOT( "failed to remove directory", is_directory( dir ) );
+	ENSURE_NOT( "failed to remove directory", exists( dir ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "find" )

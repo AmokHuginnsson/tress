@@ -24,6 +24,7 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <cstring>
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/hhuginn.hxx>
@@ -497,7 +498,7 @@ TUT_UNIT_TEST( "FileSystem" )
 	char const dirExpect[] = "*anonymous stream*:1:38: Uncaught exception: non-existing: No such file or directory";
 #endif
 	ENSURE_EQUALS(
-		"invalig chmod succeeded",
+		"invalid dir succeeded",
 		execute_except(
 			"import FileSystem as fs;"
 			"main(){"
@@ -506,6 +507,57 @@ TUT_UNIT_TEST( "FileSystem" )
 			"}"
 		),
 		dirExpect
+	);
+	ENSURE_EQUALS(
+		"FileSystem.dir size succeeded",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main(){\n"
+			"ds = fs.dir(\"./FCTF\");\n"
+			"return(size(ds));\n"
+			"}"
+		),
+		"*anonymous stream*:4:8: Getting size of `DirectoryScan' is an invalid operation."
+	);
+	HFSItem fi( "./data/karatsuba.bc" );
+	ENSURE_EQUALS(
+		"FileSystem.stat failed",
+		execute(
+			"import FileSystem as fs;"
+			"main(){"
+			"s=fs.stat(\"./data/karatsuba.bc\");"
+			"return([s.id(),s.name(),s.size(),s.mode(),s.type(),s.user(),s.group(),string(s.modified())]);"
+			"}"
+		),
+		"["_ys.append( fi.id() ).append( ", \"./data/karatsuba.bc\", 1137, 384, \"regular\", \"" ).append( fi.get_user() ).append( "\", \"" ).append( fi.get_group() ).append( "\", \"" ).append( fi.modified().string() ).append( "\"]" )
+	);
+	char const methods[][16] = {
+		"id", "name", "size", "mode", "user", "group", "modified"
+	};
+	for ( char const* m : methods ) {
+		cout << "m = " << m << endl;
+		ENSURE_EQUALS(
+			"invalid stat succeeded",
+			execute_except(
+				"import FileSystem as fs;\n"
+				"main(){\n"
+				"fs.stat(\"non-existing\")."_ys.append( m ).append( "();\n"
+				"return(0);\n"
+				"}\n" )
+			),
+			"*anonymous stream*:3:"_ys.append( 25 + strlen( m ) ).append( ": Uncaught exception: non-existing: No such file or directory" )
+		);
+	}
+	ENSURE_EQUALS(
+		"invalid stat().type() succeeded",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main(){\n"
+			"fs.stat(\"non-existing\").type();\n"
+			"return(0);\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:29: Uncaught exception: Cannot acquire metadata for `non-existing': No such file or directory"
 	);
 TUT_TEARDOWN()
 
