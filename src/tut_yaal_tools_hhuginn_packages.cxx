@@ -321,17 +321,20 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "FileSystem" )
 #ifdef __MSVCXX__
-	char const openRes[] = "*anonymous stream*:1:40: Uncaught exception: The system cannot find the file specified.\r\n: ./out/non-existing";
+	char const openRes[] = "\"*anonymous stream*:1:44: The system cannot find the file specified.\r\n: ./out/non-existing\"";
 #else
-	char const openRes[] = "*anonymous stream*:1:40: Uncaught exception: No such file or directory: ./out/non-existing";
+	char const openRes[] = "\"*anonymous stream*:1:44: No such file or directory: ./out/non-existing\"";
 #endif
 	ENSURE_EQUALS(
 		"open non-existing succeeded",
-		execute_except(
+		execute(
 			"import FileSystem as fs;"
 			"main() {"
+			"try{"
 			"fs.open( \"./out/non-existing\", fs.reading() );"
-			"return ( 0 );"
+			"}catch(FileSystemException e){"
+			"return ( e.message() );"
+			"}"
 			"}"
 		),
 		openRes
@@ -377,17 +380,20 @@ TUT_UNIT_TEST( "FileSystem" )
 	ENSURE_NOT( "Huginn.FileSystem.rename failed (src)", filesystem::exists( filename ) );
 	ENSURE( "Huginn.FileSystem.rename failed (dst)", filesystem::exists( filenameMoved ) );
 #ifdef __MSVCXX__
-	char const renameExpect[] = "*anonymous stream*:1:41: Uncaught exception: Failed to rename: `non-existing-a' to `non-existing-b': The system cannot find the file specified.\r\n";
+	char const renameExpect[] = "\"*anonymous stream*:1:45: Failed to rename: `non-existing-a' to `non-existing-b': The system cannot find the file specified.\r\n\"";
 #else
-	char const renameExpect[] = "*anonymous stream*:1:41: Uncaught exception: Failed to rename: `non-existing-a' to `non-existing-b': No such file or directory";
+	char const renameExpect[] = "\"*anonymous stream*:1:45: Failed to rename: `non-existing-a' to `non-existing-b': No such file or directory\"";
 #endif
 	ENSURE_EQUALS(
 		"invalig rename succeeded",
-		execute_except(
+		execute(
 			"import FileSystem as fs;"
 			"main(){"
+			"try{"
 			"fs.rename(\"non-existing-a\",\"non-existing-b\");"
-			"return(0);"
+			"}catch(FileSystemException e){"
+			"return ( e.message() );"
+			"}"
 			"}"
 		),
 		renameExpect
@@ -414,17 +420,20 @@ TUT_UNIT_TEST( "FileSystem" )
 		"*anonymous stream*:1:40: Bad mode: 8191"
 	);
 #ifdef __MSVCXX__
-	char const chmodExpect[] = "*anonymous stream*:1:40: Uncaught exception: chmod failed: `non-existing': The system cannot find the file specified.\r\n";
+	char const chmodExpect[] = "\"*anonymous stream*:1:44: chmod failed: `non-existing': The system cannot find the file specified.\r\n\"";
 #else
-	char const chmodExpect[] = "*anonymous stream*:1:40: Uncaught exception: chmod failed: `non-existing': No such file or directory";
+	char const chmodExpect[] = "\"*anonymous stream*:1:44: chmod failed: `non-existing': No such file or directory\"";
 #endif
 	ENSURE_EQUALS(
 		"invalig chmod succeeded",
-		execute_except(
+		execute(
 			"import FileSystem as fs;"
 			"main(){"
+			"try{"
 			"fs.chmod(\"non-existing\",0700);"
-			"return(0);"
+			"}catch(FileSystemException e){"
+			"return ( e.message() );"
+			"}"
 			"}"
 		),
 		chmodExpect
@@ -438,19 +447,22 @@ TUT_UNIT_TEST( "FileSystem" )
 	);
 	ENSURE_NOT( "Huginn.FileSystem.remove failed", filesystem::exists( filenameMoved ) );
 #if defined( __HOST_OS_TYPE_FREEBSD__ ) || defined( __HOST_OS_TYPE_CYGWIN__ )
-		char const removeRes[] = "*anonymous stream*:1:41: Uncaught exception: Failed to remove: `./out': Operation not permitted";
+		char const removeRes[] = "\"*anonymous stream*:1:45: Failed to remove: `./out': Operation not permitted\"";
 #elif defined( __MSVCXX__ )
-		char const removeRes[] = "*anonymous stream*:1:41: Uncaught exception: Failed to remove: `./out': The data is invalid.\r\n";
+		char const removeRes[] = "\"*anonymous stream*:1:45: Failed to remove: `./out': The data is invalid.\r\n\"";
 #else
-		char const removeRes[] = "*anonymous stream*:1:41: Uncaught exception: Failed to remove: `./out': Is a directory";
+		char const removeRes[] = "\"*anonymous stream*:1:45: Failed to remove: `./out': Is a directory\"";
 #endif
 	ENSURE_EQUALS(
 		"invalig remove succeeded",
-		execute_except(
+		execute(
 			"import FileSystem as fs;"
 			"main(){"
+			"try{"
 			"fs.remove(\"./out\");"
-			"return(0);"
+			"}catch(FileSystemException e){"
+			"return ( e.message() );"
+			"}"
 			"}"
 		),
 		removeRes
@@ -466,17 +478,20 @@ TUT_UNIT_TEST( "FileSystem" )
 		"[\"tress\", \"./out\", \"non-existing\"]"
 	);
 #ifdef __MSVCXX__
-	char const readlinkExpect[] = "*anonymous stream*:1:43: Uncaught exception: readlink failed: `non-existing': The data is invalid.\r\n";
+	char const readlinkExpect[] = "\"*anonymous stream*:1:47: readlink failed: `non-existing': The data is invalid.\r\n\"";
 #else
-	char const readlinkExpect[] = "*anonymous stream*:1:43: Uncaught exception: readlink failed: `non-existing': No such file or directory";
+	char const readlinkExpect[] = "\"*anonymous stream*:1:47: readlink failed: `non-existing': No such file or directory\"";
 #endif
 	ENSURE_EQUALS(
 		"invalig chmod succeeded",
-		execute_except(
+		execute(
 			"import FileSystem as fs;"
 			"main(){"
+			"try{"
 			"fs.readlink(\"non-existing\");"
-			"return(0);"
+			"}catch(FileSystemException e){"
+			"return ( e.message() );"
+			"}"
 			"}"
 		),
 		readlinkExpect
@@ -493,17 +508,20 @@ TUT_UNIT_TEST( "FileSystem" )
 		"[\"acxx\", \"d0_target-default.mk\", \"make.mk\"]"
 	);
 #ifdef __MSVCXX__
-	char const dirExpect[] = "*anonymous stream*:1:38: Uncaught exception: non-existing: The data is invalid.\r\n";
+	char const dirExpect[] = "\"*anonymous stream*:1:42: non-existing: The data is invalid.\r\n\"";
 #else
-	char const dirExpect[] = "*anonymous stream*:1:38: Uncaught exception: non-existing: No such file or directory";
+	char const dirExpect[] = "\"*anonymous stream*:1:42: non-existing: No such file or directory\"";
 #endif
 	ENSURE_EQUALS(
 		"invalid dir succeeded",
-		execute_except(
+		execute(
 			"import FileSystem as fs;"
 			"main(){"
+			"try{"
 			"fs.dir(\"non-existing\");"
-			"return(0);"
+			"}catch(FileSystemException e){"
+			"return ( e.message() );"
+			"}"
 			"}"
 		),
 		dirExpect
@@ -538,26 +556,32 @@ TUT_UNIT_TEST( "FileSystem" )
 		cout << "m = " << m << endl;
 		ENSURE_EQUALS(
 			"invalid stat succeeded",
-			execute_except(
+			execute(
 				"import FileSystem as fs;\n"
 				"main(){\n"
+				"try{"
 				"fs.stat(\"non-existing\")."_ys.append( m ).append( "();\n"
-				"return(0);\n"
+				"}catch(FileSystemException e){"
+				"return ( e.message() );"
+				"}"
 				"}\n" )
 			),
-			"*anonymous stream*:3:"_ys.append( 25 + strlen( m ) ).append( ": Uncaught exception: non-existing: No such file or directory" )
+			"\"*anonymous stream*:3:"_ys.append( 29 + strlen( m ) ).append( ": non-existing: No such file or directory\"" )
 		);
 	}
 	ENSURE_EQUALS(
 		"invalid stat().type() succeeded",
-		execute_except(
+		execute(
 			"import FileSystem as fs;\n"
 			"main(){\n"
+			"try{"
 			"fs.stat(\"non-existing\").type();\n"
-			"return(0);\n"
+			"}catch(FileSystemException e){"
+			"return ( e.message() );"
+			"}"
 			"}\n"
 		),
-		"*anonymous stream*:3:29: Uncaught exception: Cannot acquire metadata for `non-existing': No such file or directory"
+		"\"*anonymous stream*:3:33: Cannot acquire metadata for `non-existing': No such file or directory\""
 	);
 TUT_TEARDOWN()
 
@@ -1092,14 +1116,17 @@ TUT_UNIT_TEST( "Database" )
 	);
 	ENSURE_EQUALS(
 		"DatabaseConnection.connect exception",
-		execute_except(
+		execute(
 			"import Database as db;"
 			"main(){"
-			"dbc=db.connect(\"sqlite3:///out/tress-non-existing\");"
-			"type(dbc);"
+			"try{"
+			"db.connect(\"sqlite3:///out/tress-non-existing\");"
+			"}catch(DatabaseException  e){"
+			"return ( e.message() );"
+			"}"
 			"}"
 		),
-		"*anonymous stream*:1:44: Uncaught exception: Database file `out/tress-non-existing.sqlite' is not accessible."
+		"\"*anonymous stream*:1:44: Database file `out/tress-non-existing.sqlite' is not accessible.\""
 	);
 	ENSURE_EQUALS(
 		"DatabaseConnection.copy exception",
@@ -1114,14 +1141,18 @@ TUT_UNIT_TEST( "Database" )
 	);
 	ENSURE_EQUALS(
 		"DatabaseConnection.query exception",
-		execute_except(
+		execute(
 			"import Database as db;"
 			"main(){"
+			"try{"
 			"dbc=db.connect(\"sqlite3:///out/tress\");"
 			"dbc.query(\"invalid;\");"
+			"}catch(DatabaseException  e){"
+			"return ( e.message() );"
+			"}"
 			"}"
 		),
-		"*anonymous stream*:1:78: Uncaught exception: SQL prepare error: 'invalid;': near \"invalid\": syntax error"
+		"\"*anonymous stream*:1:82: SQL prepare error: 'invalid;': near \"invalid\": syntax error\""
 	);
 TUT_TEARDOWN()
 
@@ -1137,17 +1168,20 @@ TUT_UNIT_TEST( "OperatingSystem" )
 		"\"debug\""
 	);
 #ifndef __MSVCXX__
-	char const expectedExec[] = "*anonymous stream*:1:44: Uncaught exception: No such file or directory";
+	char const expectedExec[] = "\"*anonymous stream*:1:48: No such file or directory\"";
 #else /* #ifndef __MSVCXX__ */
-	char const expectedExec[] = "*anonymous stream*:1:44: Uncaught exception: The system cannot find the file specified.\r\n";
+	char const expectedExec[] = "\"*anonymous stream*:1:48: The system cannot find the file specified.\r\n\"";
 #endif /* #else #ifndef __MSVCXX__ */
 	ENSURE_EQUALS(
 		"OperatingSystem.exec",
-		execute_except(
+		execute(
 			"import OperatingSystem as os;"
 			"main(){"
+			"try{"
 			"os.exec(\"/non/existing\",\"arg1\");"
-			"return(0);"
+			"}catch(OperatingSystemException  e){"
+			"return ( e.message() );"
+			"}"
 			"}"
 		),
 		expectedExec
@@ -1169,6 +1203,66 @@ TUT_UNIT_TEST( "OperatingSystem" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "DateTime" )
+	ENSURE_EQUALS(
+		"Time setters/getters failed",
+		execute(
+			"import DateTime as dt;"
+			"import Algorithms as algo;"
+			"main(){"
+			"t = dt.now();"
+			"t.set_datetime(1978,5,24,23,30,17);"
+			"s = copy(t).from_string(\"1989-08-24 14:25:31\");"
+			"r=[copy(t).mod_year(1),copy(t).set_time(1,2,3),copy(t).set_date(1,2,3),t.get_year(),t.get_month(),t.get_day(),t.get_hour(),t.get_minute(),t.get_second(),s-t];"
+			"return(algo.materialize(algo.map(r,@(x){type(x)==type(dt.now())?string(x):x;}),list));"
+			"}"
+		),
+		"[\"1979-05-24 23:30:17\", \"1978-05-24 01:02:03\", \"1-02-03 23:30:17\", 1978, 5, 24, 23, 30, 17, \"11-04-02 16:19:14\"]"
+	);
+	ENSURE_EQUALS(
+		"Time bad setter succeeded",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"try{"
+			"t = dt.now();"
+			"t.set_date(1,13,1);"
+			"}catch(DateTimeException e){"
+			"return ( e.message() );"
+			"}"
+			"}"
+		),
+		"\"*anonymous stream*:1:57: bad month in year\""
+	);
+	ENSURE_EQUALS(
+		"Time bad setter succeeded",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"try{"
+			"t = dt.now();"
+			"t.set_datetime(1,1,1,1,60,1);"
+			"}catch(DateTimeException e){"
+			"return ( e.message() );"
+			"}"
+			"}"
+		),
+		"\"*anonymous stream*:1:61: bad minute\""
+	);
+	ENSURE_EQUALS(
+		"Time bad from_string succeeded",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"try{"
+			"t = dt.now();"
+			"t.from_string(\"invalid\");"
+			"}catch(DateTimeException e){"
+			"return ( e.message() );"
+			"}"
+			"}"
+		),
+		"\"*anonymous stream*:1:60: Could not parse `invalid' as `%Y-%m-%d %T'.\""
+	);
 	ENSURE_EQUALS(
 		"DateTime.clock, DateTime.sleep falied",
 		execute(
