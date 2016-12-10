@@ -1203,6 +1203,11 @@ TUT_UNIT_TEST( "OperatingSystem" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "DateTime" )
+#ifdef __HOST_OS_TYPE_FREEBSD__
+	char const setterExpect[] = "[\"1979-05-24 23:30:17\", \"1978-05-24 01:02:03\", \"0001-02-03 23:30:17\", 1978, 5, 24, 23, 30, 17, \"0011-04-02 14:55:14\"]";
+#else
+	char const setterExpect[] = "[\"1979-05-24 23:30:17\", \"1978-05-24 01:02:03\", \"1-02-03 23:30:17\", 1978, 5, 24, 23, 30, 17, \"11-04-02 14:55:14\"]";
+#endif
 	ENSURE_EQUALS(
 		"Time setters/getters failed",
 		execute(
@@ -1216,7 +1221,7 @@ TUT_UNIT_TEST( "DateTime" )
 			"return(algo.materialize(algo.map(r,@(x){type(x)==type(dt.now())?string(x):x;}),list));"
 			"}"
 		),
-		"[\"1979-05-24 23:30:17\", \"1978-05-24 01:02:03\", \"1-02-03 23:30:17\", 1978, 5, 24, 23, 30, 17, \"11-04-02 14:55:14\"]"
+		setterExpect
 	);
 	ENSURE_EQUALS(
 		"Time bad setter succeeded",
