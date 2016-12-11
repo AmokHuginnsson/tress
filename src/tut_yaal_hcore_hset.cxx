@@ -256,6 +256,16 @@ TUT_UNIT_TEST( "backward iteration" )
 	ENSURE_EQUALS( "bad forward teration", ss.string(), "321" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "insert with hint" )
+	int_set_t src( { 0, 1, 2, 3, 4, 5, 6, 7 } );
+	int_set_t dst;
+	for ( int i : src ) {
+		dst.insert( dst.end(), i );
+	}
+	ENSURE_EQUALS( "insert with hint failed", dst, src );
+TUT_TEARDOWN()
+
+
 TUT_UNIT_TEST( "sample data" )
 	typedef HSet<HString> string_set_t;
 	string_set_t set;

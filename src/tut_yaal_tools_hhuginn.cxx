@@ -779,9 +779,24 @@ TUT_UNIT_TEST( "order()" )
 		"order(0, 1, 2, 3, 4, 5, 7, 10)"
 	);
 	ENSURE_EQUALS(
-		"order() iterator failed",
+		"order iterator failed",
 		execute( "main(){x=order(2,3,5,7);v=\"\";for(e:x){v+=string(e);v+=\":\";}return(v);}" ),
 		"\"2:3:5:7:\""
+	);
+	ENSURE_EQUALS(
+		"order has_key failed",
+		execute( "main(){x=order(2,3,1,4,7,5);return([x.has_key(3),x.has_key(0)]);}" ),
+		"[true, false]"
+	);
+	ENSURE_EQUALS(
+		"order erase failed",
+		execute( "main(){x=order(2,3,1,4,7,5);x.erase(3).erase(4);return(x);}" ),
+		"order(1, 2, 5, 7)"
+	);
+	ENSURE_EQUALS(
+		"order clear/copy failed",
+		execute( "main(){x=order(2,3,1,4,7,5);y=copy(x);x.clear();return([x,y]);}" ),
+		"[order(), order(1, 2, 3, 4, 5, 7)]"
 	);
 TUT_TEARDOWN()
 
@@ -800,6 +815,21 @@ TUT_UNIT_TEST( "set()" )
 		"set() iterator failed",
 		execute( "main(){x=set(2,3,5,7);v=\"\";for(e:x){v+=string(e);v+=\":\";}return(v);}" ),
 		"\"2:3:5:7:\""
+	);
+	ENSURE_EQUALS(
+		"set has_key failed",
+		execute( "main(){x=set(2,\"ala\",3.14);return([x.has_key(\"ala\"),x.has_key(3.145)]);}" ),
+		"[true, false]"
+	);
+	ENSURE_EQUALS(
+		"set erase failed",
+		execute( "main(){x=set(2,\"ala\",3.14,$7.34,'Q');x.erase($7.34).erase(\"ala\");return(x);}" ),
+		"{2, 'Q', 3.14}"
+	);
+	ENSURE_EQUALS(
+		"set erase failed",
+		execute( "main(){x=set(2,\"ala\",3.14,$7.34,'Q');y=copy(x);x.clear();return([x,y]);}" ),
+		"[{}, {$7.34, 2, 3.14, 'Q', \"ala\"}]"
 	);
 TUT_TEARDOWN()
 
