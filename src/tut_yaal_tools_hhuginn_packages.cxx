@@ -27,7 +27,9 @@ Copyright:
 #include <cstring>
 #include <TUT/tut.hpp>
 
+#include <yaal/hcore/hsocket.hxx>
 #include <yaal/tools/hhuginn.hxx>
+#include <yaal/tools/hiodispatcher.hxx>
 #include <yaal/tools/hmonitor.hxx>
 #include <yaal/tools/filesystem.hxx>
 #include <yaal/tools/hfsitem.hxx>
@@ -49,6 +51,7 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 struct tut_yaal_tools_hhuginn_packages : public tress::tut_yaal_tools_hhuginn_base {
+	static int const OBSCURE_PORT = 61930;
 };
 
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn_packages, "yaal::tools::HHuginn,packages" );
@@ -1635,6 +1638,66 @@ TUT_UNIT_TEST( "Network" )
 		)
 	);
 	ENSURE( "Network.resolve falied", ( res == "\"127.0.0.1\"" ) || ( res == "\"0.0.0.0\"" ) );
+	HThread serverRunner;
+	serverRunner.spawn(
+		HThread::call_t(
+			[this]() -> void {
+				try {
+					clog << "ENTER: server" << endl;
+					HSocket::ptr_t serv( make_pointer<HSocket>( HSocket::TYPE::NETWORK | HSocket::TYPE::BLOCKING, 1 ) );
+					serv->listen( "127.0.0.1", OBSCURE_PORT );
+					HIODispatcher iod( 11, 1000 );
+					iod.register_file_descriptor_handler(
+						serv,
+						HIODispatcher::callback_t(
+							[this, &iod, &serv]( HIODispatcher::stream_t& ) {
+								clog << "ENTER: acceptor" << endl;
+								HSocket::ptr_t client( serv->accept() );
+								iod.register_file_descriptor_handler(
+									client,
+									HIODispatcher::callback_t(
+										[]( HIODispatcher::stream_t& stream_ ) {
+											clog << "ENTER: message hangler" << endl;
+											hcore::HString line;
+											getline( *stream_, line );
+											clog << "serv got: [" << line << "]" << endl;
+											reverse( line.begin(), line.end() );
+											*stream_ << line << endl;
+											clog << "LEAVE: message hangler" << endl;
+										}
+									)
+								);
+								clog << "LEAVE: acceptor" << endl;
+							}
+						)
+					);
+					iod.run();
+					clog << "RUNNING: server" << endl;
+					iod.stop();
+					clog << "LEAVE: server" << endl;
+				} catch ( HException const& e ) {
+					cerr << e.what() << endl;
+				} catch ( std::exception const& e ) {
+					cerr << e.what() << endl;
+				} catch ( ... ) {
+					cerr << "unknown exception type" << endl;
+				}
+			}
+		)
+	);
+	ENSURE_EQUALS(
+		"Network.connect failed",
+		execute(
+			"import Network as net;\n"
+			"main() {\n"
+			"s = net.connect( \"127.0.0.1\", 61930 );\n"
+			"s.write( \"Huginn is best!\\n\" );\n"
+			"return ( s.read_line() );\n"
+			"}\n"
+		),
+		"\"!tseb si nniguH\n\""
+	);
+	serverRunner.finish();
 TUT_TEARDOWN()
 
 }
