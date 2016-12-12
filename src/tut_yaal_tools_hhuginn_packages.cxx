@@ -1514,6 +1514,20 @@ TUT_UNIT_TEST( "OperatingSystem" )
 		),
 		"\"hello-OUT\""
 	);
+	ENSURE_EQUALS(
+		"OperatingSystem.spawn",
+		execute(
+			"import OperatingSystem as os;"
+			"main(){"
+			"try{"
+			"os.spawn(\"non-existing\");"
+			"}catch(OperatingSystemException e){"
+			"return ( e.message() );"
+			"}"
+			"}"
+		),
+		"\"*anonymous stream*:1:49: No such file or directory: non-existing\""
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "DateTime" )
