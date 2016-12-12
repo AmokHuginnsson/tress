@@ -708,8 +708,8 @@ TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){return(math.square_root(7.));}" ), "2.645751311065" );
 	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){return(math.square_root($7));}" ), "$2.6457513110645905905016157536392604257102591830824501803683344592010688232302836277603928864745436106" );
 	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){try{math.square_root(-1.);}catch(MathematicsException e){return(e.what());}}" ), "\"bad domain\"" );
-	ENSURE_EQUALS( "Mathematics.natural_expotential failed", execute( "import Mathematics as math;main(){return(math.natural_expotential(7.));}" ), "1096.633158428459" );
-	ENSURE_EQUALS( "Mathematics.natural_expotential failed", execute( "import Mathematics as math;main(){return(math.natural_expotential($7));}" ), "$1096.6331584284585992637202382881214324422191348336131437827392407761217693312331290224785687872498437141" );
+	ENSURE_EQUALS( "Mathematics.natural_exponential failed", execute( "import Mathematics as math;main(){return(math.natural_exponential(7.));}" ), "1096.633158428459" );
+	ENSURE_EQUALS( "Mathematics.natural_exponential failed", execute( "import Mathematics as math;main(){return(math.natural_exponential($7));}" ), "$1096.6331584284585992637202382881214324422191348336131437827392407761217693312331290224785687872498437141" );
 	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){return(math.natural_logarithm(7.));}" ), "1.945910149055" );
 	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){return(math.natural_logarithm($7));}" ), "$1.945910149055313305105352743443179729637084729581861188459390149937579862752069267787658498587871527" );
 	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){try{math.natural_logarithm(0.);}catch(MathematicsException e){return(e.what());}}" ), "\"bad domain\"" );
@@ -979,48 +979,76 @@ TUT_UNIT_TEST( "Mathematics" )
 		"\"Matrix([$2, $4], [$6, $8])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix rows failed",
+		"Mathematics.matrix rows/columns (real) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
 			"m=math.matrix(real,3,2);"
-			"return(m.rows());"
+			"return([m.rows(),m.columns()]);"
 			"}"
 		),
-		"3"
+		"[3, 2]"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix rows failed",
+		"Mathematics.matrix rows/columns (number) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
 			"m=math.matrix(number,3,2);"
-			"return(m.rows());"
+			"return([m.rows(),m.columns()]);"
 			"}"
 		),
-		"3"
+		"[3, 2]"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix columns failed",
+		"Mathematics.matrix apply (real) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m=math.matrix(real,3,2);"
-			"return(m.columns());"
+			"return(string(math.matrix(real,2,2).apply(@(r,c,z){real(c+1+r*2)+z;})));"
 			"}"
 		),
-		"2"
+		"\"Matrix([1.0, 2.0], [3.0, 4.0])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix columns failed",
+		"Mathematics.matrix apply (real) (meth) failed",
+		execute(
+			"import Mathematics as math;"
+			"class Apply {"
+			"do(r,c,z) {"
+			"real(c+1+r*2)+z;"
+			"}"
+			"}"
+			"main(){"
+			"return(string(math.matrix(real,2,2).apply(Apply().do)));"
+			"}"
+		),
+		"\"Matrix([1.0, 2.0], [3.0, 4.0])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix apply (number) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m=math.matrix(number,3,2);"
-			"return(m.columns());"
+			"return(string(math.matrix(number,2,2).apply(@(r,c,z){number(c+1+r*2)+z;})));"
 			"}"
 		),
-		"2"
+		"\"Matrix([$1, $2], [$3, $4])\""
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix apply (number) (meth) failed",
+		execute(
+			"import Mathematics as math;"
+			"class Apply {"
+			"do(r,c,z) {"
+			"number(c+1+r*2)+z;"
+			"}"
+			"}"
+			"main(){"
+			"return(string(math.matrix(number,2,2).apply(Apply().do)));"
+			"}"
+		),
+		"\"Matrix([$1, $2], [$3, $4])\""
 	);
 #if SIZEOF_DOUBLE_LONG == 16
 	char const numberSetStatisticsExpect[] = "[1.0, 239.0, 1800.0, 120.0, 120.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956]";
@@ -1038,6 +1066,289 @@ TUT_UNIT_TEST( "Mathematics" )
 			"}"
 		),
 		numberSetStatisticsExpect
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "matrix err" )
+	ENSURE_EQUALS(
+		"Mathematics.matrix invalid rows succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix(real,0,1);"
+			"}"
+		),
+		"*anonymous stream*:1:46: Invalid number of rows in matrix specification: 0."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix invalid cols succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix(real,1,0);"
+			"}"
+		),
+		"*anonymous stream*:1:46: Invalid number of columns in matrix specification: 0."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad type succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix(integer,1,1);"
+			"}"
+		),
+		"*anonymous stream*:1:46: Bad matrix type: `integer'."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix invalid cols from list succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([]);"
+			"}"
+		),
+		"*anonymous stream*:1:46: Invalid number of columns in matrix specification: 0."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix invalid type from list succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([0]);"
+			"}"
+		),
+		"*anonymous stream*:1:46: Matrix must have numeric data, either `number' or `real'."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix col count mismatch from list succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([0.],[0.,0.]);"
+			"}"
+		),
+		"*anonymous stream*:1:46: Inconsistent number of columns across rows: 2 vs 1."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix non-uniform type from list succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([0.,$0]);"
+			"}"
+		),
+		"*anonymous stream*:1:46: Non uniformly typed data in matrix definition, in row: 0, column: 1."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad row in get succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([0.]).get(-1,0);"
+			"}"
+		),
+		"*anonymous stream*:1:56: Bad row: -1"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad row in get succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([$0]).get(-1,0);"
+			"}"
+		),
+		"*anonymous stream*:1:56: Bad row: -1"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad column in get succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([0.]).get(0,-1);"
+			"}"
+		),
+		"*anonymous stream*:1:56: Bad column: -1"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad column in get succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([$0]).get(0,-1);"
+			"}"
+		),
+		"*anonymous stream*:1:56: Bad column: -1"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad row in set succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([0.]).set(-1,0,0.);"
+			"}"
+		),
+		"*anonymous stream*:1:56: Bad row: -1"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad row in set succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([$0]).set(-1,0,$0);"
+			"}"
+		),
+		"*anonymous stream*:1:56: Bad row: -1"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad column in set succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([0.]).set(0,-1,0.);"
+			"}"
+		),
+		"*anonymous stream*:1:56: Bad column: -1"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad column in set succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([$0]).set(0,-1,$0);"
+			"}"
+		),
+		"*anonymous stream*:1:56: Bad column: -1"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad type in set succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([0.]).set(0,0,$0);"
+			"}"
+		),
+		"*anonymous stream*:1:56: Matrix.set() third argument must be a `real', not a `number'."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad type in set succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([$0]).set(0,0,0.);"
+			"}"
+		),
+		"*anonymous stream*:1:56: Matrix.set() third argument must be a `number', not a `real'."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad type in add succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([$0])+math.matrix([0.]);"
+			"}"
+		),
+		"*anonymous stream*:1:52: Non matching data types."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix dim mismatch in add succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([0.])+math.matrix([0.,0.]);"
+			"}"
+		),
+		"*anonymous stream*:1:52: columns dimensions do not match"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad type in sub succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([$0])-math.matrix([0.]);"
+			"}"
+		),
+		"*anonymous stream*:1:52: Non matching data types."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix dim mismatch in sub succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([0.])-math.matrix([0.,0.]);"
+			"}"
+		),
+		"*anonymous stream*:1:52: columns dimensions do not match"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad type in mul succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([$0])*math.matrix([0.]);"
+			"}"
+		),
+		"*anonymous stream*:1:52: Non matching data types."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix dim mismatch in mul succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([0.,0.])*math.matrix([0.]);"
+			"}"
+		),
+		"*anonymous stream*:1:55: columns does not match rows"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix det on non-square succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([0.,0.]).det();"
+			"}"
+		),
+		"*anonymous stream*:1:59: matrix is not square"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix scale on zero matrix succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([0.]).scale_to(1.);"
+			"}"
+		),
+		"*anonymous stream*:1:61: Zeroed matrix cannot be scaled."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix scale on zero matrix succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([$0]).scale_to($1);"
+			"}"
+		),
+		"*anonymous stream*:1:61: Zeroed matrix cannot be scaled."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix type mismatch on scale succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.matrix([1.]).scale_to($1);"
+			"}"
+		),
+		"*anonymous stream*:1:61: Matrix.scale_to() argument must be a `real', not a `number'."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.matrix bad apply return type succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"return(string(math.matrix(real,2,2).apply(@(r,c,z){number(c+1+r*2)+number(z);})));"
+			"}"
+		),
+		"*anonymous stream*:1:76: Applied transformation function shall return `real', but result was a `number' instead."
 	);
 TUT_TEARDOWN()
 
