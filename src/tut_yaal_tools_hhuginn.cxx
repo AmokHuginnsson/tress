@@ -795,8 +795,8 @@ TUT_UNIT_TEST( "order()" )
 	);
 	ENSURE_EQUALS(
 		"order clear/copy failed",
-		execute( "main(){x=order(2,3,1,4,7,5);y=copy(x);x.clear();return([x,y]);}" ),
-		"[order(), order(1, 2, 3, 4, 5, 7)]"
+		execute( "main(){x=order(2,3,1,4,7,5);y=copy(x);x.clear();return([x,y,size(y)]);}" ),
+		"[order(), order(1, 2, 3, 4, 5, 7), 6]"
 	);
 TUT_TEARDOWN()
 
@@ -828,8 +828,8 @@ TUT_UNIT_TEST( "set()" )
 	);
 	ENSURE_EQUALS(
 		"set erase failed",
-		execute( "main(){x=set(2,\"ala\",3.14,$7.34,'Q');y=copy(x);x.clear();return([x,y]);}" ),
-		"[{}, {$7.34, 2, 3.14, 'Q', \"ala\"}]"
+		execute( "main(){x=set(2,\"ala\",3.14,$7.34,'Q');y=copy(x);x.clear();return([x,y,size(y)]);}" ),
+		"[{}, {$7.34, 2, 3.14, 'Q', \"ala\"}, 5]"
 	);
 TUT_TEARDOWN()
 
@@ -1082,19 +1082,10 @@ TUT_UNIT_TEST( "input" )
 	ENSURE_EQUALS( "print failed", out.string(), "[Amok]" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "simple class" )
+TUT_UNIT_TEST( "class" )
 	ENSURE_EQUALS( "class failed", execute( "class A{_d=none;}main(){o=A();o._d=\"ok\";return(o._d);}" ), "\"ok\"" );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "class constructor" )
 	ENSURE_EQUALS( "constructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}}main(){o=A(\"ok\");return(o._d);}" ), "\"ok\"" );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "class destructor" )
 	ENSURE_EQUALS( "destructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"ok\");}}main(){l=list();{o=A(l);type(o);}return(l[0]);}" ), "\"ok\"" );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "class super" )
 	ENSURE_EQUALS(
 		"super failed",
 		execute(
@@ -1112,9 +1103,6 @@ TUT_UNIT_TEST( "class super" )
 		),
 		"\"okarg\""
 	);
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "destructor chain" )
 	ENSURE_EQUALS(
 		"destructor chain failed",
 		execute(
@@ -1124,9 +1112,6 @@ TUT_UNIT_TEST( "destructor chain" )
 		),
 		"\"derivedbase\""
 	);
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "class this" )
 	ENSURE_EQUALS(
 		"class this failed",
 		execute(
@@ -1135,16 +1120,29 @@ TUT_UNIT_TEST( "class this" )
 		),
 		"\"thisok\""
 	);
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "class to_string" )
 	ENSURE_EQUALS(
-		"class this failed",
+		"class to_string failed",
 		execute(
 			"class A{_d=none;_x=none;constructor(d_,x_){_d=d_;_x=x_;}to_string(){return(string(_d)+\":\"+string(_x));}}"
 			"main(){a=A(7,'Q');return(string(a));}"
 		),
 		"\"7:Q\""
+	);
+	ENSURE_EQUALS(
+		"class copy failed",
+		execute(
+			"class A{"
+			"_x=none;"
+			"constructor(x_){_x=x_;}"
+			"to_string(){return(string(_x));}"
+			"mod(x_){_x=x_;}"
+			"}"
+			"main(){"
+			"a=A(7);b=a;c=copy(a);a.mod(3);"
+			"return([string(a),string(b),string(c)]);"
+			"}"
+		),
+		"[\"3\", \"3\", \"7\"]"
 	);
 TUT_TEARDOWN()
 
@@ -1228,11 +1226,8 @@ TUT_UNIT_TEST( "throw,try,catch" )
 		),
 		"\"4neg argneg arg\""
 	);
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "catch by base" )
 	ENSURE_EQUALS(
-		"throw,try,catch failed",
+		"catch by base failed",
 		execute(
 			"main() {"
 			"v=\"\";"
