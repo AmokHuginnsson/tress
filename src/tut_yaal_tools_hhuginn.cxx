@@ -621,6 +621,17 @@ TUT_UNIT_TEST( "list()" )
 		"[]"
 	);
 	ENSURE_EQUALS(
+		"list equals failed",
+		execute(
+			"main(){"
+			"l1=[1,2,3];"
+			"l2=[1,2,3];"
+			"l3=[1,2,4];"
+			"return([l1==l2,l1==l3]);}"
+		),
+		"[true, false]"
+	);
+	ENSURE_EQUALS(
 		"list() iterator failed",
 		execute( "main(){x=[2,3,5,7];v=\"\";for(e:x){v+=string(e);v+=\":\";}return(v);}" ),
 		"\"2:3:5:7:\""
@@ -667,6 +678,17 @@ TUT_UNIT_TEST( "deque()" )
 		"deque clear failed",
 		execute( "main(){x=deque(2,3,5,7);x.clear();return(x);}" ),
 		"deque()"
+	);
+	ENSURE_EQUALS(
+		"deque equals failed",
+		execute(
+			"main(){"
+			"d1=deque(1,2,3);"
+			"d2=deque(1,2,3);"
+			"d3=deque(1,2,4);"
+			"return([d1==d2,d1==d3]);}"
+		),
+		"[true, false]"
 	);
 	ENSURE_EQUALS(
 		"deque() iterator failed",
