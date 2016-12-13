@@ -1070,6 +1070,47 @@ TUT_UNIT_TEST( "Mathematics" )
 		),
 		numberSetStatisticsExpect
 	);
+	ENSURE_EQUALS(
+		"Mathematics.randomizer failed",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"r=math.randomizer(100);\n"
+			"d=r.next(10);\n"
+			"f=r.next_real(.5);\n"
+			"return([d>=0,d<10,f>=0.,f<.5]);\n"
+			"}\n"
+		),
+		"[true, true, true, true]"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.randomizer copy failed",
+		execute(
+			"import Mathematics as math;\n"
+			"import Algorithms as algo;\n"
+			"class RndGen {_rnd=none;constructor(rnd_){_rnd=rnd_;}do(x){x;_rnd.next();}}"
+			"main(){\n"
+			"range1=algo.range(100);\n"
+			"range2=copy(range1);\n"
+			"rnd1=math.randomizer();\n"
+			"rnd2=copy(rnd1);\n"
+			"res1=algo.materialize(algo.map(range1,RndGen(rnd1).do),list);\n"
+			"res2=algo.materialize(algo.map(range2,RndGen(rnd2).do),list);\n"
+			"return(res1==res2);\n"
+			"}\n"
+		),
+		"true"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.randomizer invalid cap succeeded",
+		execute_except(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"math.randomizer().next_real(0.);\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:28: Invalid range specified: 0.0"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "matrix err" )
