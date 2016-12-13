@@ -1714,6 +1714,30 @@ TUT_UNIT_TEST( "Network" )
 	);
 	iod.stop();
 	serverRunner.finish();
+	ENSURE_EQUALS(
+		"Network.connect bad port ok",
+		execute_except(
+			"import Network as net;\n"
+			"main() {\n"
+			"net.connect( \"127.0.0.1\", -1 );\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:12: Uncaught exception: Bad port: -1"
+	);
+	ENSURE_EQUALS(
+		"Network.connect failed connect not signaled",
+		execute(
+			"import Network as net;\n"
+			"main() {\n"
+			"try{"
+			"net.connect( \"127.0.0.1\", 5 );\n"
+			"}catch(NetworkException e){\n"
+			"return(e.message());\n"
+			"}\n"
+			"}\n"
+		),
+		"\"*anonymous stream*:3:16: Connection refused: 127.0.0.1:5\""
+	);
 TUT_TEARDOWN()
 
 }
