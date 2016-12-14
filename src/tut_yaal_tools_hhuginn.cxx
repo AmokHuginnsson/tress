@@ -1564,6 +1564,53 @@ TUT_UNIT_TEST( "bound call as field value" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Stream" )
+	ENSURE_EQUALS(
+		"Stream.iterator failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"res=[];"
+			"for ( l : fs.open(\"./data/nl.txt\",fs.reading())) {\n"
+			"res.add(l.strip());"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[\"Ala\", \"ma\", \"kota.\", \"\"]"
+	);
+	ENSURE_EQUALS(
+		"Stream.read failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"return(fs.open(\"./data/nl.txt\",fs.reading()).read(100));\n"
+			"}\n"
+		),
+		"\"Ala\nma\nkota.\n\n\""
+	);
+	ENSURE_EQUALS(
+		"Stream copy succeeded",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"return(copy(fs.open(\"./data/nl.txt\",fs.reading())));\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:8: Copy semantics is not supported on Stream."
+	);
+	ENSURE_EQUALS(
+		"Stream size succeeded",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"return(size(fs.open(\"./data/nl.txt\",fs.reading())));\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:8: Getting size of `Stream' is an invalid operation."
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "standard streams" )
 	HHuginn h;
 	HStringStream src(
