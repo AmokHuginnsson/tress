@@ -749,6 +749,18 @@ TUT_UNIT_TEST( "dict()" )
 		"[{}, {\"Ala\": 0, \"kota.\": 2, \"ma\": 1}]"
 	);
 	ENSURE_EQUALS(
+		"dict equals failed",
+		execute(
+			"main(){"
+			"d1={1:1,2:2,3:3};"
+			"d2={1:1,2:2,3:3};"
+			"d3f={1:1,2:2,4:3};"
+			"d3s={1:1,2:2,3:4};"
+			"return([d1==d2,d1==d3f,d1==d3s]);}"
+		),
+		"[true, false, false]"
+	);
+	ENSURE_EQUALS(
 		"dict on non-comparable succeeded",
 		execute_except( "class A{_x=none;}main(){x={A():0};return(x);}", HHuginn::COMPILER::BE_SLOPPY ),
 		"*anonymous stream*:1:28: Key type `A' is not a comparable."
@@ -788,6 +800,18 @@ TUT_UNIT_TEST( "lookup()" )
 		"[\"ma\", 7]"
 	);
 	ENSURE_EQUALS(
+		"lookup equals failed",
+		execute(
+			"main(){"
+			"l1=lookup();l1[1]=1;l1[2]=2;l1[3]=3;"
+			"l2=lookup();l2[1]=1;l2[2]=2;l2[3]=3;"
+			"l3f=lookup();l3f[1]=1;l3f[2]=2;l3f[4]=3;"
+			"l3s=lookup();l3s[1]=1;l3s[2]=2;l3s[3]=4;"
+			"return([l1==l2,l1==l3f,l1==l3s]);}"
+		),
+		"[true, false, false]"
+	);
+	ENSURE_EQUALS(
 		"lookup() copy() failed",
 		execute( "d(x){v=\"\";for(e:x){v+=string(e);v+=string(x[e]);}return(v);}main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;y=copy(x);x.erase(none);x.erase(true);return([d(x),d(y)]);}" ),
 		"[\"Ala01makota.2\", \"none7Ala01matruefalsekota.2\"]"
@@ -814,6 +838,17 @@ TUT_UNIT_TEST( "order()" )
 		"order erase failed",
 		execute( "main(){x=order(2,3,1,4,7,5);x.erase(3).erase(4);return(x);}" ),
 		"order(1, 2, 5, 7)"
+	);
+	ENSURE_EQUALS(
+		"order equals failed",
+		execute(
+			"main(){"
+			"o1=order(1,2,3);"
+			"o2=order(1,2,3);"
+			"o3=order(1,2,4);"
+			"return([o1==o2,o1==o3]);}"
+		),
+		"[true, false]"
 	);
 	ENSURE_EQUALS(
 		"order clear/copy failed",
@@ -849,7 +884,18 @@ TUT_UNIT_TEST( "set()" )
 		"{2, 'Q', 3.14}"
 	);
 	ENSURE_EQUALS(
-		"set erase failed",
+		"set equals failed",
+		execute(
+			"main(){"
+			"s1=set(1,2,3);"
+			"s2=set(1,2,3);"
+			"s3=set(1,2,4);"
+			"return([s1==s2,s1==s3]);}"
+		),
+		"[true, false]"
+	);
+	ENSURE_EQUALS(
+		"set copy/clear failed",
 		execute( "main(){x=set(2,\"ala\",3.14,$7.34,'Q');y=copy(x);x.clear();return([x,y,size(y)]);}" ),
 		"[{}, {$7.34, 2, 3.14, 'Q', \"ala\"}, 5]"
 	);
