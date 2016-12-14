@@ -44,6 +44,28 @@ using namespace tress::tut_helpers;
 
 namespace tress {
 
+int tut_yaal_tools_hhuginn_base::_refCount = 0;
+yaal::hcore::HMutex tut_yaal_tools_hhuginn_base::_refCountMutex;
+
+tut_yaal_tools_hhuginn_base::tut_yaal_tools_hhuginn_base( void )
+	: _resultCache()
+	, _sourceCache()
+	, _mutex() {
+	HLock l( _refCountMutex );
+	if ( _refCount == 0 ) {
+		huginn::initialize_packages();
+	}
+	++ _refCount;
+	return;
+}
+
+tut_yaal_tools_hhuginn_base::~tut_yaal_tools_hhuginn_base( void ) {
+	HLock l( _refCountMutex );
+	if ( _refCount == 1 ) {
+		huginn::cleanup_packages();
+	}
+}
+
 void tut_yaal_tools_hhuginn_base::test_file( hcore::HString const& name_ ) {
 	filesystem::path_t p( "./data/" );
 	p.append( name_ );

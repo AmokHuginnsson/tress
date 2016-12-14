@@ -56,13 +56,10 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 	yaal::hcore::HString _resultCache;
 	yaal::tools::HStringStream _sourceCache;
 	yaal::hcore::HMutex _mutex;
-	tut_yaal_tools_hhuginn_base( void )
-		: _resultCache()
-		, _sourceCache()
-		, _mutex() {
-		return;
-	}
-	virtual ~tut_yaal_tools_hhuginn_base( void ) {}
+	static int _refCount;
+	static yaal::hcore::HMutex _refCountMutex;
+	tut_yaal_tools_hhuginn_base( void );
+	virtual ~tut_yaal_tools_hhuginn_base( void );
 	void test_file( yaal::hcore::HString const& );
 	yaal::hcore::HString const& execute(
 		yaal::hcore::HString const&,
