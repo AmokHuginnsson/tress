@@ -51,19 +51,24 @@ tut_yaal_tools_hhuginn_base::tut_yaal_tools_hhuginn_base( void )
 	: _resultCache()
 	, _sourceCache()
 	, _mutex() {
+	M_PROLOG
 	HLock l( _refCountMutex );
 	if ( _refCount == 0 ) {
 		huginn::initialize_packages();
 	}
 	++ _refCount;
 	return;
+	M_EPILOG
 }
 
 tut_yaal_tools_hhuginn_base::~tut_yaal_tools_hhuginn_base( void ) {
+	M_PROLOG
 	HLock l( _refCountMutex );
 	if ( _refCount == 1 ) {
 		huginn::cleanup_packages();
 	}
+	-- _refCount;
+	M_DESTRUCTOR_EPILOG
 }
 
 void tut_yaal_tools_hhuginn_base::test_file( hcore::HString const& name_ ) {
