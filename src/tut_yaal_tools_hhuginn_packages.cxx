@@ -25,6 +25,7 @@ Copyright:
 */
 
 #include <cstring>
+#include <csignal>
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hsocket.hxx>
@@ -1544,16 +1545,23 @@ TUT_UNIT_TEST( "OperatingSystem" )
 	/* It is impossible to test exit(). */
 	hcore::HString CHILD( "./data/child" EXE_SUFFIX );
 	ENSURE_EQUALS(
-		"OperatingSystem.spawn",
+		"OperatingSystem.spawn, is_alive, wait, in, out, err",
 		execute(
-			"import OperatingSystem as os;"
-			"main(){"
-			"c=os.spawn(\"" + CHILD + "\");"
-			"c.in().write(\"out\\n\");"
-			"return(c.out().read_line().strip());"
-			"}"
+			"import OperatingSystem as os;\n"
+			"main(){\n"
+			"c=os.spawn(\"" + CHILD + "\");\n"
+			"a0=c.is_alive();\n"
+			"c.in().write(\"out\\n\");\n"
+			"ro=c.out().read_line().strip();\n"
+			"s=c.wait(8);\n"
+			"a1=c.is_alive();\n"
+			"c=os.spawn(\"" + CHILD + "\");\n"
+			"c.in().write(\"err\\n\");\n"
+			"re=c.err().read_line().strip();\n"
+			"return([a0,ro,re,a1,s]);\n"
+			"}\n"
 		),
-		"\"hello-OUT\""
+		"[true, \"hello-OUT\", \"hello-ERR\", false, 0]"
 	);
 	ENSURE_EQUALS(
 		"OperatingSystem.spawn",
@@ -1569,6 +1577,59 @@ TUT_UNIT_TEST( "OperatingSystem" )
 		),
 		"\"*anonymous stream*:1:49: No such file or directory: non-existing\""
 	);
+	HClock c;
+	HHuginn h;
+	HPipe io;
+	h.set_output_stream( io.in() );
+	HStringStream source(
+		"import OperatingSystem as os;"
+		"main(){"
+		"c=os.spawn(\"/bin/sleep\", \"10\");"
+		"os.stdout().write( \"{}\\n\".format( c.get_pid() ) );\n"
+		"c.wait(5);\n"
+		"}"
+	);
+	h.load( source );
+	h.preprocess();
+	ENSURE( "parsing failed", h.parse() );
+	ENSURE( "compilation failed", h.compile() );
+	HThread t;
+	hcore::HString result;
+	t.spawn(
+		HThread::call_t(
+			[&h, &result]() {
+				try {
+					result = h.execute();
+				} catch ( HException const& e ) {
+					result = e.what();
+				} catch ( std::exception const& e ) {
+					result = e.what();
+				} catch ( ... ) {
+					result = "unknown exception type";
+				}
+			}
+		)
+	);
+	hcore::HString pid;
+	HStreamInterface::ptr_t out( io.out() );
+	getline( *out, pid );
+	system::kill( lexical_cast<int>( pid ), SIGKILL );
+	t.finish();
+	ENSURE_EQUALS( "Subprocess.wait() failed", result, "1" );
+	ENSURE_EQUALS( "Subprocess.get_pid() failed", c.get_time_elapsed( time::UNIT::SECOND ), 0 );
+	c.reset();
+	ENSURE_EQUALS(
+		"Subprocess.kill() failed",
+		execute(
+			"import OperatingSystem as os;"
+			"main(){"
+			"c=os.spawn(\"/bin/sleep\", \"10\");"
+			"c.kill();\n"
+			"}"
+		),
+		to_string( SIGKILL )
+	);
+	ENSURE( "Subprocess.kill() failed", c.get_time_elapsed( time::UNIT::SECOND ) <= 1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "DateTime" )
