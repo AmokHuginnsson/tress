@@ -1630,6 +1630,27 @@ TUT_UNIT_TEST( "OperatingSystem" )
 		to_string( SIGKILL )
 	);
 	ENSURE( "Subprocess.kill() failed", c.get_time_elapsed( time::UNIT::SECOND ) <= 1 );
+	ENSURE_EQUALS(
+		"Subprocess bad wait succeded",
+		execute_except(
+			"import OperatingSystem as os;\n"
+			"main(){\n"
+			"c=os.spawn(\"" + CHILD + "\");\n"
+			"c.wait(-1);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:7: invalid wait time: -1"
+	);
+	ENSURE_EQUALS(
+		"Subprocess bad wait succeded",
+		execute_except(
+			"import OperatingSystem as os;"
+			"main(){"
+			"copy(os.spawn(\"" + CHILD + "\"));\n"
+			"}"
+		),
+		"*anonymous stream*:1:37: Copy semantics is not supported on Subprocess."
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "DateTime" )
@@ -1839,6 +1860,79 @@ TUT_UNIT_TEST( "Network" )
 			"}\n"
 		),
 		"\"*anonymous stream*:3:16: Connection refused: 127.0.0.1:5\""
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Text" )
+	ENSURE_EQUALS(
+		"Text.repeat failed",
+		execute(
+			"import Text as text;\n"
+			"main() {\n"
+			"text.repeat(\"Huginn\",7);"
+			"}\n"
+		),
+		"\"HuginnHuginnHuginnHuginnHuginnHuginnHuginn\""
+	);
+	ENSURE_EQUALS(
+		"Text.join on non collection succeeded",
+		execute_except(
+			"import Text as text;\n"
+			"main() {\n"
+			"text.repeat(\"\",-1);"
+			"}\n"
+		),
+		"*anonymous stream*:3:12: Negative repeat count: -1"
+	);
+	ENSURE_EQUALS(
+		"Text.split failed",
+		execute(
+			"import Text as text;\n"
+			"main() {\n"
+			"text.split(\"Ala ma kota.\",\" \");"
+			"}\n"
+		),
+		"[\"Ala\", \"ma\", \"kota.\"]"
+	);
+	ENSURE_EQUALS(
+		"Text.join failed",
+		execute(
+			"import Text as text;\n"
+			"main() {\n"
+			"text.join([\"Ala\", \"ma\", \"kota.\"], \"+\");"
+			"}\n"
+		),
+		"\"Ala+ma+kota.\""
+	);
+	ENSURE_EQUALS(
+		"Text.join on non collection succeeded",
+		execute_except(
+			"import Text as text;\n"
+			"main() {\n"
+			"text.join(\"\",\"\");"
+			"}\n"
+		),
+		"*anonymous stream*:3:10: Text.join() first argument must be a flat uniform collection of strings, not a string'."
+	);
+	ENSURE_EQUALS(
+		"Text.join on non uniform succeeded",
+		execute_except(
+			"import Text as text;\n"
+			"main() {\n"
+			"text.join([\"\",'x'],\"\");"
+			"}\n"
+		),
+		"*anonymous stream*:3:10: Text.join() first argument must be a flat uniform collection of strings, but it contains a character'."
+	);
+	ENSURE_EQUALS(
+		"Text.distance failed",
+		execute(
+			"import Text as text;\n"
+			"main() {\n"
+			"text.distance(\"Ala ma kota.\",\"Ola ma psa.\");"
+			"}\n"
+		),
+		"4"
 	);
 TUT_TEARDOWN()
 
