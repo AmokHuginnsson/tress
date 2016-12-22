@@ -468,6 +468,102 @@ char const progExecuteErr36[] =
 	"}\n"
 ;
 
+char const progExecuteErr37[] =
+	"f(){}\n"
+	"main() {\n"
+	"f(0);\n"
+	"}\n"
+;
+
+char const progExecuteErr38[] =
+	"f(a=0){a;}\n"
+	"main() {\n"
+	"f(0,0);\n"
+	"}\n"
+;
+
+char const progExecuteErr39[] =
+	"f(a,b=0){a+b;}\n"
+	"main() {\n"
+	"f();\n"
+	"}\n"
+;
+
+char const progExecuteErr40[] =
+	"main() {\n"
+	"\"\".find(0);\n"
+	"}\n"
+;
+
+char const progExecuteErr41[] =
+	"main() {\n"
+	"($0).set_precision(0.);\n"
+	"}\n"
+;
+
+char const progExecuteErr42[] =
+	"import Mathematics as M;\n"
+	"main() {\n"
+	"M.square_root(0);\n"
+	"}\n"
+;
+
+char const progExecuteErr43[] =
+	"import Mathematics as M;\n"
+	"main() {\n"
+	"M.round(0);\n"
+	"}\n"
+;
+
+char const progExecuteErr44[] =
+	"import Mathematics as M;\n"
+	"main() {\n"
+	"M.statistics(0);\n"
+	"}\n"
+;
+
+char const progExecuteErr45[] =
+	"import Algorithms as A;\n"
+	"main() {\n"
+	"A.sorted(0);\n"
+	"}\n"
+;
+
+char const progExecuteErr46[] =
+	"import Mathematics as M;\n"
+	"main() {\n"
+	"M.statistics([0]);\n"
+	"}\n"
+;
+
+char const progExecuteErr47[] =
+	"import Mathematics as M;\n"
+	"main() {\n"
+	"M.statistics([0.,$0]);\n"
+	"}\n"
+;
+
+char const progExecuteErr48[] =
+	"import Mathematics as M;\n"
+	"main() {\n"
+	"M.statistics(deque(0));\n"
+	"}\n"
+;
+
+char const progExecuteErr49[] =
+	"import Mathematics as M;\n"
+	"main() {\n"
+	"M.statistics(set(0));\n"
+	"}\n"
+;
+
+char const progExecuteErr50[] =
+	"import Algorithms as A;\n"
+	"main() {\n"
+	"A.reduce([],0);\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -526,6 +622,20 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr34,
 		progExecuteErr35,
 		progExecuteErr36,
+		progExecuteErr37,
+		progExecuteErr38,
+		progExecuteErr39,
+		progExecuteErr40,
+		progExecuteErr41,
+		progExecuteErr42,
+		progExecuteErr43,
+		progExecuteErr44,
+		progExecuteErr45,
+		progExecuteErr46,
+		progExecuteErr47,
+		progExecuteErr48,
+		progExecuteErr49,
+		progExecuteErr50,
 		NULL
 	};
 	int const err[][3] = {
@@ -566,6 +676,20 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 60, 8, 3 },    // 34
 		{ 37, 4, 10 },   // 35
 		{ 19, 3, 6 },    // 36
+		{ 16, 3, 2 },    // 37
+		{ 21, 3, 2 },    // 38
+		{ 25, 3, 2 },    // 39
+		{ 16, 2, 8 },    // 40
+		{ 27, 2, 19 },   // 41
+		{ 47, 3, 14 },   // 42
+		{ 41, 3, 8 },    // 43
+		{ 46, 3, 13 },   // 44
+		{ 41, 3, 9 },    // 45
+		{ 46, 3, 13 },   // 46
+		{ 46, 3, 13 },   // 47
+		{ 46, 3, 13 },   // 48
+		{ 46, 3, 13 },   // 49
+		{ 41, 3, 9 },    // 50
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
