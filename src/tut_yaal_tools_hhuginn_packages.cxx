@@ -1912,7 +1912,7 @@ TUT_UNIT_TEST( "Text" )
 			"text.join(\"\",\"\");"
 			"}\n"
 		),
-		"*anonymous stream*:3:10: Text.join() first argument must be a flat uniform collection of strings, not a string'."
+		"*anonymous stream*:3:10: Text.join() first argument must be a flat uniform collection of strings, not a `string'."
 	);
 	ENSURE_EQUALS(
 		"Text.join on non uniform succeeded",
@@ -1922,7 +1922,7 @@ TUT_UNIT_TEST( "Text" )
 			"text.join([\"\",'x'],\"\");"
 			"}\n"
 		),
-		"*anonymous stream*:3:10: Text.join() first argument must be a flat uniform collection of strings, but it contains a character'."
+		"*anonymous stream*:3:10: Text.join() first argument must be a flat uniform collection of strings, but it contains a `character'."
 	);
 	ENSURE_EQUALS(
 		"Text.distance failed",
@@ -1933,6 +1933,16 @@ TUT_UNIT_TEST( "Text" )
 			"}\n"
 		),
 		"4"
+	);
+	ENSURE_EQUALS(
+		"Text.distance failed",
+		execute(
+			"import Text as text;\n"
+			"main() {\n"
+			"[text.hex(100),text.oct(100),text.bin(100)];"
+			"}\n"
+		),
+		"[\"0x64\", \"0o144\", \"0b1100100\"]"
 	);
 TUT_TEARDOWN()
 
