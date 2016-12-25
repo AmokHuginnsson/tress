@@ -848,6 +848,17 @@ TUT_UNIT_TEST( "HFollows" )
 		HExecutingParser ep( *integer >> -character( '!' ) );
 		ENSURE( "parse on empty input with optionals grammar failed", ep( "" ) );
 	}
+	/* follows concat */ {
+		bool followsCalled( false );
+		HExecutingParser ep(
+			( e_p::constant( '@' ) >> -( e_p::constant( '[' ) ) )[
+				HBoundCall<void ( void )>( call( &defer<bool>::set, ref( followsCalled ), true ) )
+			] >> '{'
+		);
+		ep( "@{" );
+		ep();
+		ENSURE( "follows not called", followsCalled );
+	}
 TUT_TEARDOWN()
 
 struct Kleene {
@@ -949,6 +960,17 @@ TUT_UNIT_TEST( "HAlternative" )
 	/* one optional and empty input */ {
 		HExecutingParser ep( integer | -real | character( '!' ) );
 		ENSURE( "parse on empty input with optionals grammar failed", ep( "" ) );
+	}
+	/* alternative concat */ {
+		bool alternativeCalled( false );
+		HExecutingParser ep(
+			( e_p::constant( '@' ) | -( e_p::constant( '[' ) ) )[
+				HBoundCall<void ( void )>( call( &defer<bool>::set, ref( alternativeCalled ), true ) )
+			] | e_p::constant( '{' )
+		);
+		ep( "@" );
+		ep();
+		ENSURE( "alternative not called", alternativeCalled );
 	}
 TUT_TEARDOWN()
 
