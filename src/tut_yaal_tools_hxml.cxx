@@ -63,7 +63,7 @@ struct tut_yaal_tools_hxml : public simple_mock<tut_yaal_tools_hxml> {
 				out << _varTmpBuffer << "(" << it->first << ")->(";
 				out << it->second << ") - " << node_.get_line() << std::endl;
 			}
-			if ( node_.has_childs() ) {
+			if ( node_.has_children() ) {
 				_varTmpBuffer.fillz( ' ', 0, node_.get_level() * 2 + 2 );
 				out << _varTmpBuffer << "{ - " << node_.get_line() << std::endl;
 				for ( HXml::const_iterator it = node_.begin(); it != node_.end(); ++ it ) {
@@ -99,7 +99,7 @@ bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const
 	if ( equals && ( type == HXml::HNode::TYPE::CONTENT ) )
 		equals = ( left.get_value() == right.get_value() );
 	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
-		equals = ( left.has_childs() == right.has_childs() );
+		equals = ( left.has_children() == right.has_children() );
 	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
 		equals = ( left.child_count() == right.child_count() );
 	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )

@@ -88,11 +88,11 @@ HString& tut_yaal_hcore_htree::to_string( T const& t ) {
 template<typename T>
 void tut_yaal_hcore_htree::to_string_node( T const& n ) {
 	_cache += static_cast<char>( n->id() );
-	if ( n.has_childs() )
+	if ( n.has_children() )
 		_cache += '{';
 	for ( typename T::const_iterator it = n.begin(); it != n.end(); ++ it )
 		to_string_node( *it );
-	if ( n.has_childs() )
+	if ( n.has_children() )
 		_cache += '}';
 }
 
@@ -209,17 +209,17 @@ TUT_UNIT_TEST( "add_node" ) {
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "has_childs" ) {
+TUT_UNIT_TEST( "has_children" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
-	ENSURE( "new node has some spurious childs", ! n->has_childs() );
+	ENSURE( "new node has some spurious childs", ! n->has_children() );
 	n->add_node( 'y' );
 	check_consistency( t );
-	ENSURE( "childless node reported after node addition", n->has_childs() );
+	ENSURE( "childless node reported after node addition", n->has_children() );
 	n->add_node( 'x' );
 	check_consistency( t );
-	ENSURE( "childless node reported after node addition", n->has_childs() );
+	ENSURE( "childless node reported after node addition", n->has_children() );
 	}
 	ENSURE_EQUALS( "leak", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -243,12 +243,12 @@ TUT_UNIT_TEST( "clear" ) {
 	tree_t t;
 	tree_t::node_t n = t.create_new_root();
 	check_consistency( t );
-	ENSURE( "new node has some spurious childs", ! n->has_childs() );
+	ENSURE( "new node has some spurious childs", ! n->has_children() );
 	ENSURE_EQUALS( "new node has some spurious childs", n->child_count(), 0 );
 	(**n) = '0';
 	n->add_node( 'x' );
 	check_consistency( t );
-	ENSURE( "childless node reported after node addition", n->has_childs() );
+	ENSURE( "childless node reported after node addition", n->has_children() );
 	ENSURE_EQUALS( "childless node reported after node addition", n->child_count(), 1 );
 	t.clear();
 	check_consistency( t );
