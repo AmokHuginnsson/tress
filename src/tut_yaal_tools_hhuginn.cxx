@@ -124,8 +124,10 @@ TUT_UNIT_TEST( "grammar test" )
 		"none = \"none\"",
 		"true = \"true\"",
 		"false = \"false\"",
-		"lambda = ( '@' >> '(' >> -nameList >> ')' >> scope )",
-		"dictLiteralElement = ( argument >> ':' >> argument )"
+		"lambda = ( ( '@' >> -( '[' >> captureList >> ']' ) ) >> '(' >> -nameList >> ')' >> scope )",
+		"dictLiteralElement = ( argument >> ':' >> argument )",
+		"captureList = ( capture >> *( ',' >> capture ) )",
+		"capture = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )"
 	};
 
 	int i( 0 );

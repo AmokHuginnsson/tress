@@ -1410,7 +1410,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule parameter( name >> -( '=' >> expression ) );
 	HRule nameList( parameter >> ( * ( ',' >> parameter ) ) );
 	HRule scope;
-	HRule lambda( e_p::constant( '@' ) >> '(' >> -nameList >> ')' >> scope );
+	HRule lambda( e_p::constant( '@' ) >> -( '[' >> name >> *( ',' >> name ) >> ']' ) >> '(' >> -nameList >> ')' >> scope );
 	HRule subscriptOperator( '[' >> ( ( ( ':' >> -expression ) | ( expression >> -( ':' >> -expression ) ) ) >> -( ':' >> -expression ) ) >> ']' );
 	HRule literalNone( e_p::constant( "none" ) );
 	HRule booleanLiteralTrue( e_p::constant( "true" ) );
@@ -1477,7 +1477,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule importStatement( e_p::constant( "import" ) >> name >> "as" >> name >> ';' );
 	HRule hg( + ( classDefinition | functionDefinition | importStatement ) );
 	HExecutingParser ep( hg ); /* test for infinite recursion */
-	char const huginnDesc[][490] = {
+	char const huginnDesc[][540] = {
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ | ( \"import\" >> B_ >> \"as\" >> B_ >> ';' ) )",
 		"B_ = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
 		"C_ = ( *( ( E_ >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> ( ( F_ >> -( \"^^\" >> F_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
@@ -1514,7 +1514,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AH_ = ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( K_ >> AI_ ) ) | real | integer | ( ( ( '$' >> real ) | character_literal ) >> -( K_ >> J_ ) ) "
 			"| ( ( ( '[' >> -X_ >> ']' ) | ( '{' >> -( AJ_ >> *( ',' >> AJ_ ) ) >> '}' ) | string_literal ) >> -( ( I_ | K_ ) >> AI_ ) ) "
 			"| ( ( '{' >> C_ >> *( ',' >> C_ ) >> '}' ) >> -( K_ >> AI_ ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> AI_ ) "
-			"| ( ( '@' >> '(' >> -G_ >> ')' >> H_ ) >> -( J_ >> AI_ ) ) ) >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
+			"| ( ( '@' >> -( '[' >> B_ >> *( ',' >> B_ ) >> ']' ) >> '(' >> -G_ >> ')' >> H_ ) >> -( J_ >> AI_ ) ) ) >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
 		"AI_ = *( I_ | J_ | K_ )",
 		"AJ_ = ( C_ >> ':' >> C_ )"
 	};
