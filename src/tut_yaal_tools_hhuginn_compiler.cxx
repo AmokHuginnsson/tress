@@ -744,6 +744,22 @@ char const progCompileErr90[] =
 	"}\n"
 ;
 
+char const progCompileErr91[] =
+	"main() {\n"
+	"\ta=0;\n"
+	"\tb=@[a,a](){a;};\n"
+	"\treturn ( b );\n"
+	"}\n"
+;
+
+char const progCompileErr92[] =
+	"main() {\n"
+	"\ta=0;\n"
+	"\tb=@[a](a){a;};\n"
+	"\treturn ( b );\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -837,6 +853,8 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr88,
 		progCompileErr89,
 		progCompileErr90,
+		progCompileErr91,
+		progCompileErr92,
 		NULL
 	};
 	int const err[][3] = {
@@ -931,6 +949,8 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 39, 5, 6 },   // 88
 		{ 11, 3, 1 },   // 89
 		{ 6, 1, 7 },    // 90
+		{ 22, 3, 8 },   // 91
+		{ 23, 3, 9 },   // 92
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );

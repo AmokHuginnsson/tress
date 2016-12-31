@@ -1018,8 +1018,20 @@ TUT_UNIT_TEST( "range(slice)" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "lambda" )
+TUT_UNIT_TEST( "lambda, closure" )
 	ENSURE_EQUALS( "lambda failed", execute( "main(){s=[\"fail\"];l=@(x){x[0]=\"ok\";};l(s);return(s[0]);}" ), "\"ok\"" );
+	ENSURE_EQUALS(
+		"lambda failed",
+		execute(
+			"main(){\n"
+			"a=2;\n"
+			"b=7;\n"
+			"x=@[a,b](c){(a-b)*c;};\n"
+			"return(x(4));\n"
+			"}\n"
+		),
+		"-20"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ternary" )
