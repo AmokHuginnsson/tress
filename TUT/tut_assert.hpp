@@ -8,6 +8,9 @@
 #include <cstring>
 #endif
 
+#include <algorithm>
+#include <vector>
+
 #include <yaal/hcore/hclock.hxx>
 
 namespace tut {
@@ -125,6 +128,49 @@ template<class T, class Q>
 void ensure_equals_real( char const* file, int const& line, char const* msg, const Q& actual,
 	const T& expected ) {
 	ensure_equals_real<>( file, line, NULL, msg, actual, expected );
+}
+
+/**
+ * Tests if object is in given set.
+ * Throws if false.
+ *
+ * NB: both T and Q must have operator << defined somewhere, or
+ * client code will not compile at all!
+ */
+template<class T, class Q>
+void ensure_in_real( char const* file, int line, char const*, const char* msg, const Q& actual,
+	const std::vector<T>& expected ) {
+	if ( ! ( std::find( expected.begin(), expected.end(), actual ) != expected.end() ) ) {
+		std::stringstream ss;
+		ss << ( msg ? msg : "" )
+		<< ( msg ? ":" : "" )
+		<< " expected [" << stream_escape( expected.front() ) << "] actual [" << stream_escape( actual ) << "]";
+		throw failure( file, line, ss.str().c_str() );
+	}
+}
+template<class T, class Q>
+void ensure_in( const char* msg, const Q& actual, const std::vector<T>& expected ) {
+	ensure_in_real( NULL, 0, NULL, msg, actual, expected );
+}
+
+template<class T, class Q>
+void ensure_in_real( char const* file,
+	int const& line,
+	char const*,
+	yaal::hcore::HString const& msg,
+	const Q& actual,
+	const std::vector<T>& expected ) {
+	ensure_in_real<>( file, line, NULL, msg.raw(), actual, expected );
+}
+template<class T, class Q>
+void ensure_in( yaal::hcore::HString const& msg, const Q& actual, const std::vector<T>& expected ) {
+	ensure_in_real( NULL, 0, NULL, msg, actual, expected );
+}
+
+template<class T, class Q>
+void ensure_in_real( char const* file, int const& line, char const* msg, const Q& actual,
+	const std::vector<T>& expected ) {
+	ensure_in_real<>( file, line, NULL, msg, actual, expected );
 }
 
 /**

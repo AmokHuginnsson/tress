@@ -36,6 +36,7 @@
 #define ENSURE( ... ) do { this->set_current_line( __LINE__ ); tut::ensure_real( __FILE__, __LINE__, UDL_STRINGIFY( # __VA_ARGS__ ), __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
 #define ENSURE_NOT( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_not_real( __FILE__, __LINE__, UDL_STRINGIFY( # __VA_ARGS__ ), __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
 #define ENSURE_EQUALS( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_equals_real( __FILE__, __LINE__, UDL_STRINGIFY( # __VA_ARGS__ ), __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
+#define ENSURE_IN( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_in_real( __FILE__, __LINE__, UDL_STRINGIFY( # __VA_ARGS__ ), __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
 #define ENSURE_LESS( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_less_real( __FILE__, __LINE__, UDL_STRINGIFY( # __VA_ARGS__ ), __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
 #define ENSURE_GREATER( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_greater_real( __FILE__, __LINE__, UDL_STRINGIFY( # __VA_ARGS__ ), __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
 #define ENSURE_LESS_OR_EQUAL( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_less_or_equal_real( __FILE__, __LINE__, UDL_STRINGIFY( # __VA_ARGS__ ), __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )

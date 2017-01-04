@@ -1054,12 +1054,7 @@ TUT_UNIT_TEST( "Mathematics" )
 		),
 		"\"Matrix([$1, $2], [$3, $4])\""
 	);
-#if SIZEOF_DOUBLE_LONG == 16
-	char const numberSetStatisticsExpect[] = "[1.0, 239.0, 1800.0, 120.0, 120.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956]";
-#else /* #if SIZEOF_DOUBLE_LONG == 16 */
-	char const numberSetStatisticsExpect[] = "[1.0, 239.0, 1800.0, 120.0, 120.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956]";
-#endif /* #else #if SIZEOF_DOUBLE_LONG == 16 */
-	ENSURE_EQUALS(
+	ENSURE_IN(
 		"Mathematics.NumberSetStatistics failed",
 		execute(
 			"import Algorithms as algo;"
@@ -1069,7 +1064,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"return([nss.minimum(),nss.maximum(),nss.sum(),nss.average(),nss.median(),nss.variance(),nss.population_variance(),nss.standard_deviation(),nss.population_standard_deviation()]);"
 			"}"
 		),
-		numberSetStatisticsExpect
+	  std::vector<hcore::HString>({ "[1.0, 239.0, 1800.0, 120.0, 120.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956]", "[1.0, 239.0, 1800.0, 120.0, 120.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956]" })
 	);
 	ENSURE_EQUALS(
 		"Mathematics.randomizer failed",
