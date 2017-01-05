@@ -1605,12 +1605,14 @@ TUT_UNIT_TEST( "OperatingSystem" )
 			}
 		)
 	);
-	hcore::HString pid;
 	HStreamInterface::ptr_t out( io.out() );
-	getline( *out, pid );
-	system::kill( lexical_cast<int>( pid ), SIGKILL );
+	hcore::HString line;
+	getline( *out, line );
+	int pid( lexical_cast<int>( line ) );
+	system::kill( pid, SIGKILL );
 	t.finish();
 	ENSURE_EQUALS( "Subprocess.wait() failed", result, "1" );
+#ifndef __HOST_OS_TYPE_CYGWIN__ /* Cygwin implementation of process handling is buggy as hell. */
 	ENSURE_EQUALS( "Subprocess.get_pid() failed", c.get_time_elapsed( time::UNIT::SECOND ), 0 );
 	c.reset();
 	ENSURE_EQUALS(
@@ -1625,6 +1627,7 @@ TUT_UNIT_TEST( "OperatingSystem" )
 		to_string( SIGKILL )
 	);
 	ENSURE( "Subprocess.kill() failed", c.get_time_elapsed( time::UNIT::SECOND ) <= 1 );
+#endif /* #ifndef __HOST_OS_TYPE_CYGWIN__ */
 	ENSURE_EQUALS(
 		"Subprocess bad wait succeded",
 		execute_except(
@@ -1636,6 +1639,7 @@ TUT_UNIT_TEST( "OperatingSystem" )
 		),
 		"*anonymous stream*:4:7: invalid wait time: -1"
 	);
+#ifndef __HOST_OS_TYPE_CYGWIN__ /* Cygwin implementation of process handling is buggy as hell. */
 	ENSURE_EQUALS(
 		"Subprocess bad wait succeded",
 		execute_except(
@@ -1646,6 +1650,7 @@ TUT_UNIT_TEST( "OperatingSystem" )
 		),
 		"*anonymous stream*:1:37: Copy semantics is not supported on Subprocess."
 	);
+#endif /* #ifndef __HOST_OS_TYPE_CYGWIN__ */
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "DateTime" )
