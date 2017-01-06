@@ -961,10 +961,10 @@ TUT_UNIT_TEST( "set()" )
 		),
 		"[true, false]"
 	);
-	ENSURE_EQUALS(
+	ENSURE_IN(
 		"set copy/clear failed",
 		execute( "main(){x=set(2,\"ala\",3.14,$7.34,'Q');y=copy(x);x.clear();return([x,y,size(y)]);}" ),
-		"[{}, {$7.34, 2, 3.14, 'Q', \"ala\"}, 5]"
+		std::vector<hcore::HString>({ "[{}, {$7.34, 2, 3.14, 'Q', \"ala\"}, 5]", "[{}, {$7.34, 2, 'Q', \"ala\", 3.14}, 5]" } )
 	);
 	ENSURE_EQUALS(
 		"set update failed",
