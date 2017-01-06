@@ -763,9 +763,31 @@ TUT_UNIT_TEST( "dict()" )
 		"[true, false, false]"
 	);
 	ENSURE_EQUALS(
+		"dict on non-uniform succeeded",
+		execute_except( "main(){{1:2,2.:3.};}" ),
+		"*anonymous stream*:1:13: Non-uniform key types, got a `real' instead of an `integer'."
+	);
+	ENSURE_EQUALS(
 		"dict on non-comparable succeeded",
 		execute_except( "class A{_x=none;}main(){x={A():0};return(x);}", HHuginn::COMPILER::BE_SLOPPY ),
 		"*anonymous stream*:1:28: Key type `A' is not a comparable."
+	);
+	ENSURE_EQUALS(
+		"dict update failed",
+		execute(
+			"main(){\n"
+			"d1={2:2,3:3,5:5};\n"
+			"d2={2:2,4:4,8:8};\n"
+			"d1.update(d2);\n"
+			"return(d1);\n"
+			"}\n"
+		),
+		"{2: 2, 3: 3, 4: 4, 5: 5, 8: 8}"
+	);
+	ENSURE_EQUALS(
+		"dict.update on non-uniform succeeded",
+		execute_except( "main(){{1:2}.update({2.:3.});}" ),
+		"*anonymous stream*:1:20: Non-uniform key types, got a `real' instead of an `integer'."
 	);
 TUT_TEARDOWN()
 
@@ -818,6 +840,22 @@ TUT_UNIT_TEST( "lookup()" )
 		execute( "d(x){v=\"\";for(e:x){v+=string(e);v+=string(x[e]);}return(v);}main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;y=copy(x);x.erase(none);x.erase(true);return([d(x),d(y)]);}" ),
 		"[\"Ala01makota.2\", \"none7Ala01matruefalsekota.2\"]"
 	);
+	ENSURE_EQUALS(
+		"lookup update failed",
+		execute(
+			"main(){\n"
+			"l1=lookup();l1[2]=2;l1[3]=3;l1[5]=5;"
+			"l2=lookup();l2[2]=2;l2[4]=4;l2[8]=8;"
+			"l1.update(l2);\n"
+			"r=\"\";\n"
+			"for(k:l1) {\n"
+			"r+=\"{} -> {}, \".format(k, l1[k]);\n"
+			"}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"\"2 -> 2, 3 -> 3, 4 -> 4, 5 -> 5, 8 -> 8, \""
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "order()" )
@@ -856,6 +894,33 @@ TUT_UNIT_TEST( "order()" )
 		"order clear/copy failed",
 		execute( "main(){x=order(2,3,1,4,7,5);y=copy(x);x.clear();return([x,y,size(y)]);}" ),
 		"[order(), order(1, 2, 3, 4, 5, 7), 6]"
+	);
+	ENSURE_EQUALS(
+		"order on non-uniform succeeded",
+		execute_except( "main(){order(1,2.);}" ),
+		"*anonymous stream*:1:13: Non-uniform key types, got a `real' instead of an `integer'."
+	);
+	ENSURE_EQUALS(
+		"order on non-comparable succeeded",
+		execute_except( "class A{_x=none;}main(){order(A());}", HHuginn::COMPILER::BE_SLOPPY ),
+		"*anonymous stream*:1:30: Key type `A' is not a comparable."
+	);
+	ENSURE_EQUALS(
+		"order update failed",
+		execute(
+			"main(){\n"
+			"o1=order(2,3,5);\n"
+			"o2=order(2,4,8);\n"
+			"o1.update(o2);\n"
+			"return(o1);\n"
+			"}\n"
+		),
+		"order(2, 3, 4, 5, 8)"
+	);
+	ENSURE_EQUALS(
+		"order.update on non-uniform succeeded",
+		execute_except( "main(){order(1).update(order(2.));}" ),
+		"*anonymous stream*:1:23: Non-uniform key types, got a `real' instead of an `integer'."
 	);
 TUT_TEARDOWN()
 
@@ -900,6 +965,18 @@ TUT_UNIT_TEST( "set()" )
 		"set copy/clear failed",
 		execute( "main(){x=set(2,\"ala\",3.14,$7.34,'Q');y=copy(x);x.clear();return([x,y,size(y)]);}" ),
 		"[{}, {$7.34, 2, 3.14, 'Q', \"ala\"}, 5]"
+	);
+	ENSURE_EQUALS(
+		"set update failed",
+		execute(
+			"main(){\n"
+			"s1={2,3,5};\n"
+			"s2={2,4,8};\n"
+			"s1.update(s2);\n"
+			"return(s1);\n"
+			"}\n"
+		),
+		"{2, 3, 4, 5, 8}"
 	);
 TUT_TEARDOWN()
 
