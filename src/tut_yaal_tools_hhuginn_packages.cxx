@@ -512,7 +512,7 @@ TUT_UNIT_TEST( "FileSystem" )
 		"[\"acxx\", \"d0_target-default.mk\", \"make.mk\"]"
 	);
 #ifdef __MSVCXX__
-	char const dirExpect[] = "\"*anonymous stream*:1:42: non-existing: The data is invalid.\r\n\"";
+	char const dirExpect[] = "\"*anonymous stream*:1:42: non-existing: The system cannot find the file specified.\r\n\"";
 #else
 	char const dirExpect[] = "\"*anonymous stream*:1:42: non-existing: No such file or directory\"";
 #endif
@@ -542,6 +542,13 @@ TUT_UNIT_TEST( "FileSystem" )
 		"*anonymous stream*:4:8: Getting size of `DirectoryScan' is an invalid operation."
 	);
 	HFSItem fi( "./data/karatsuba.bc" );
+#ifdef __MSVCXX__
+	int perm( 0666 );
+	char const nonExtErr[] = "The system cannot find the file specified.\r\n";
+#else
+	int perm( 0600 );
+	char const nonExtErr[] = "No such file or directory";
+#endif
 	ENSURE_EQUALS(
 		"FileSystem.stat failed",
 		execute(
@@ -551,7 +558,16 @@ TUT_UNIT_TEST( "FileSystem" )
 			"return([s.id(),s.name(),s.size(),s.mode(),s.type(),s.user(),s.group(),string(s.modified())]);"
 			"}"
 		),
-		"["_ys.append( fi.id() ).append( ", \"./data/karatsuba.bc\", 1137, 384, \"regular\", \"" ).append( fi.get_user() ).append( "\", \"" ).append( fi.get_group() ).append( "\", \"" ).append( fi.modified().string() ).append( "\"]" )
+		"["_ys.append( fi.id() )
+			.append( ", \"./data/karatsuba.bc\", 1137, " )
+			.append( perm )
+			.append( ", \"regular\", \"" )
+			.append( fi.get_user() )
+			.append( "\", \"" )
+			.append( fi.get_group() )
+			.append( "\", \"" )
+			.append( fi.modified().string() )
+			.append( "\"]" )
 	);
 	char const methods[][16] = {
 		"id", "name", "size", "mode", "user", "group", "modified"
@@ -570,7 +586,7 @@ TUT_UNIT_TEST( "FileSystem" )
 				"}"
 				"}\n" )
 			),
-			"\"*anonymous stream*:3:"_ys.append( 29 + strlen( m ) ).append( ": non-existing: No such file or directory\"" )
+			"\"*anonymous stream*:3:"_ys.append( 29 + strlen( m ) ).append( ": non-existing: " ).append( nonExtErr ).append( "\"" )
 		);
 	}
 	ENSURE_EQUALS(
@@ -585,7 +601,7 @@ TUT_UNIT_TEST( "FileSystem" )
 			"}"
 			"}\n"
 		),
-		"\"*anonymous stream*:3:33: Cannot acquire metadata for `non-existing': No such file or directory\""
+		"\"*anonymous stream*:3:33: Cannot acquire metadata for `non-existing': "_ys.append( nonExtErr ).append( "\"" )
 	);
 TUT_TEARDOWN()
 
@@ -1519,9 +1535,9 @@ TUT_UNIT_TEST( "OperatingSystem" )
 		"\"debug\""
 	);
 #ifndef __MSVCXX__
-	char const expectedExec[] = "\"*anonymous stream*:1:48: No such file or directory\"";
+	char const expectedExec[] = "No such file or directory";
 #else /* #ifndef __MSVCXX__ */
-	char const expectedExec[] = "\"*anonymous stream*:1:48: The system cannot find the file specified.\r\n\"";
+	char const expectedExec[] = "The system cannot find the file specified.\r\n";
 #endif /* #else #ifndef __MSVCXX__ */
 	ENSURE_EQUALS(
 		"OperatingSystem.exec",
@@ -1535,7 +1551,7 @@ TUT_UNIT_TEST( "OperatingSystem" )
 			"}"
 			"}"
 		),
-		expectedExec
+		"\"*anonymous stream*:1:48: "_ys.append( expectedExec ).append( "\"" )
 	);
 	/* It is impossible to test exit(). */
 	hcore::HString CHILD( "./data/child" EXE_SUFFIX );
@@ -1570,8 +1586,9 @@ TUT_UNIT_TEST( "OperatingSystem" )
 			"}"
 			"}"
 		),
-		"\"*anonymous stream*:1:49: No such file or directory: non-existing\""
+		"\"*anonymous stream*:1:49: "_ys.append( expectedExec ).append( ": non-existing\"" )
 	);
+#ifndef __MSVCXX__
 	HClock c;
 	HHuginn h;
 	HPipe io;
@@ -1632,6 +1649,7 @@ TUT_UNIT_TEST( "OperatingSystem" )
 	ENSURE( "Subprocess.kill() failed", c.get_time_elapsed( time::UNIT::SECOND ) <= 1 );
 #endif /* #ifndef __HOST_OS_TYPE_CYGWIN__ */
 #undef SIGKILL
+#endif /* #ifndef __MSVCXX__ */
 	ENSURE_EQUALS(
 		"Subprocess bad wait succeded",
 		execute_except(
@@ -1662,6 +1680,8 @@ TUT_UNIT_TEST( "DateTime" )
 	char const setterExpect[] = "[\"1979-05-24 23:30:17\", \"1978-05-24 01:02:03\", \"0001-02-03 23:30:17\", 1978, 5, 24, 23, 30, 17, \"0011-04-02 14:55:14\"]";
 #elif SIZEOF_TIME_T == 8
 	char const setterExpect[] = "[\"1979-05-24 23:30:17\", \"1978-05-24 01:02:03\", \"1-02-03 23:30:17\", 1978, 5, 24, 23, 30, 17, \"11-04-02 14:55:14\"]";
+#elif defined( __MSVCXX__ )
+	char const setterExpect[] = "[\"1979-05-24 23:30:17\", \"1978-05-24 01:02:03\", \"0001-02-03 23:30:17\", 1978, 5, 24, 23, 30, 17, \"1981-04-02 14:55:14\"]";
 #else
 	char const setterExpect[] = "[\"1979-05-24 23:30:17\", \"1978-05-24 01:02:03\", \"1901-12-13 22:30:17\", 1978, 5, 24, 23, 30, 17, \"1981-04-02 14:55:14\"]";
 #endif
@@ -1853,6 +1873,11 @@ TUT_UNIT_TEST( "Network" )
 		),
 		"*anonymous stream*:3:12: Uncaught exception: Bad port: -1"
 	);
+#ifdef __MSVCXX__
+	char const errExpect[] = "No connection could be made because the target machine actively refused it.\r\n";
+#else
+	char const errExpect[] = "Connection refused";
+#endif
 	ENSURE_EQUALS(
 		"Network.connect failed connect not signaled",
 		execute(
@@ -1865,7 +1890,7 @@ TUT_UNIT_TEST( "Network" )
 			"}\n"
 			"}\n"
 		),
-		"\"*anonymous stream*:3:16: Connection refused: 127.0.0.1:5\""
+		"\"*anonymous stream*:3:16: "_ys.append( errExpect ).append( ": 127.0.0.1:5\"" )
 	);
 TUT_TEARDOWN()
 

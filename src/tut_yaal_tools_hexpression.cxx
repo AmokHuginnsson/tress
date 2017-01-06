@@ -221,7 +221,7 @@ TUT_UNIT_TEST( "parser errors" )
 #define ENSURE_ERROR( expr, message ) \
 	try { \
 		e.compile( expr ); \
-	} catch ( HExpressionException const& ex ) { \
+	} catch ( HExpressionException const& ) { \
 		ENSURE_EQUALS( "bad error", e.get_error(), to_string( message ) ); \
 	}
 	HExpression e;
