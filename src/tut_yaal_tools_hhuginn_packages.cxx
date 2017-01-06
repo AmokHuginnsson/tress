@@ -1609,6 +1609,9 @@ TUT_UNIT_TEST( "OperatingSystem" )
 	hcore::HString line;
 	getline( *out, line );
 	int pid( lexical_cast<int>( line ) );
+#ifndef SIGKILL
+#define SIGKILL 9
+#endif
 	system::kill( pid, SIGKILL );
 	t.finish();
 	ENSURE_EQUALS( "Subprocess.wait() failed", result, "1" );
@@ -1628,6 +1631,7 @@ TUT_UNIT_TEST( "OperatingSystem" )
 	);
 	ENSURE( "Subprocess.kill() failed", c.get_time_elapsed( time::UNIT::SECOND ) <= 1 );
 #endif /* #ifndef __HOST_OS_TYPE_CYGWIN__ */
+#undef SIGKILL
 	ENSURE_EQUALS(
 		"Subprocess bad wait succeded",
 		execute_except(
