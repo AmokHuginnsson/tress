@@ -439,7 +439,7 @@ TUT_UNIT_TEST( "conversion errors" );
 	HXml xml;
 	xml.load( src, HXml::PARSER::IGNORE_CONVERSION_ERRORS );
 	HXml::HConstNodeProxy root( xml.get_root() );
-	ENSURE_EQUALS( "ignoring conversion error failed", xml::node_val( root ), "π" );
+	ENSURE_IN( "ignoring conversion error failed", xml::node_val( root ), std::vector<HString>({ "π", "?" }) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HXml copy." )

@@ -389,7 +389,7 @@ TUT_UNIT_TEST( "FileSystem" )
 	char const renameExpect[] = "\"*anonymous stream*:1:45: Failed to rename: `non-existing-a' to `non-existing-b': No such file or directory\"";
 #endif
 	ENSURE_EQUALS(
-		"invalig rename succeeded",
+		"invalid rename succeeded",
 		execute(
 			"import FileSystem as fs;"
 			"main(){"
@@ -413,7 +413,7 @@ TUT_UNIT_TEST( "FileSystem" )
 	ENSURE_EQUALS( "Huginn.FileSystem.chmod failed", HFSItem( filenameMoved ).get_permissions(), 0660 );
 #endif
 	ENSURE_EQUALS(
-		"invalig chmod succeeded",
+		"invalid chmod succeeded",
 		execute_except(
 			"import FileSystem as fs;"
 			"main(){"
@@ -429,7 +429,7 @@ TUT_UNIT_TEST( "FileSystem" )
 	char const chmodExpect[] = "\"*anonymous stream*:1:44: chmod failed: `non-existing': No such file or directory\"";
 #endif
 	ENSURE_EQUALS(
-		"invalig chmod succeeded",
+		"invalid chmod succeeded",
 		execute(
 			"import FileSystem as fs;"
 			"main(){"
@@ -454,11 +454,13 @@ TUT_UNIT_TEST( "FileSystem" )
 		char const removeRes[] = "\"*anonymous stream*:1:45: Failed to remove: `./out': Operation not permitted\"";
 #elif defined( __MSVCXX__ )
 		char const removeRes[] = "\"*anonymous stream*:1:45: Failed to remove: `./out': The data is invalid.\r\n\"";
+#elif defined( __HOST_OS_TYPE_SOLARIS__ )
+		char const removeRes[] = "\"*anonymous stream*:1:45: Failed to remove: `./out': Not owner\"";
 #else
 		char const removeRes[] = "\"*anonymous stream*:1:45: Failed to remove: `./out': Is a directory\"";
 #endif
 	ENSURE_EQUALS(
-		"invalig remove succeeded",
+		"invalid remove succeeded",
 		execute(
 			"import FileSystem as fs;"
 			"main(){"
@@ -487,7 +489,7 @@ TUT_UNIT_TEST( "FileSystem" )
 	char const readlinkExpect[] = "\"*anonymous stream*:1:47: readlink failed: `non-existing': No such file or directory\"";
 #endif
 	ENSURE_EQUALS(
-		"invalig chmod succeeded",
+		"invalid chmod succeeded",
 		execute(
 			"import FileSystem as fs;"
 			"main(){"
@@ -1676,7 +1678,7 @@ TUT_UNIT_TEST( "OperatingSystem" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "DateTime" )
-#ifdef __HOST_OS_TYPE_FREEBSD__
+#if defined( __HOST_OS_TYPE_FREEBSD__ ) || defined( __HOST_OS_TYPE_SOLARIS__ )
 	char const setterExpect[] = "[\"1979-05-24 23:30:17\", \"1978-05-24 01:02:03\", \"0001-02-03 23:30:17\", 1978, 5, 24, 23, 30, 17, \"0011-04-02 14:55:14\"]";
 #elif SIZEOF_TIME_T == 8
 	char const setterExpect[] = "[\"1979-05-24 23:30:17\", \"1978-05-24 01:02:03\", \"1-02-03 23:30:17\", 1978, 5, 24, 23, 30, 17, \"11-04-02 14:55:14\"]";
