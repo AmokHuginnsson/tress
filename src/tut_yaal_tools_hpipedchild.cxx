@@ -112,10 +112,32 @@ TUT_UNIT_TEST( "finish after very short lived process ends" )
 	pc.spawn( CHILD );
 	pc.in() << MSG_OUT << endl;
 	HString ack;
-	while ( pc.out().read_until( ack ) > 0 ) {
+	HString line;
+	while ( pc.out().read_until( line ) > 0 ) {
+		if ( ! line.is_empty() ) {
+			ack = line;
+		}
 	}
 	/* Without proper fix on Cygwin this test throws exception from pc.finish() */
 	pc.finish();
+	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "read after very short lived process ends" )
+	HPipedChild pc;
+	pc.spawn( CHILD );
+	pc.in() << MSG_OUT << endl;
+	HString ack;
+	HString line;
+	sleep_for( duration( 1, time::UNIT::SECOND ) );
+	/* Without proper fix on MSVCXX next line will hang indefinetly. */
+	while ( pc.out().read_until( line ) > 0 ) {
+		if ( ! line.is_empty() ) {
+			ack = line;
+		}
+	}
+	pc.finish();
+	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
 TUT_TEARDOWN()
 
 }
