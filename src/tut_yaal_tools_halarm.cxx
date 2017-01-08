@@ -30,6 +30,7 @@ Copyright:
 #include <yaal/tools/sleep.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
+#include "setup.hxx"
 
 using namespace tut;
 using namespace yaal;
@@ -55,16 +56,21 @@ TUT_UNIT_TEST( "alarm wake" )
 	if ( ! interrupted ) {
 		cerr << "sleep ended after: " << c.get_time_elapsed( time::UNIT::MILLISECOND ) << " miliseconds" << endl;
 	}
-	ENSURE_EQUALS( "alarm failed to interrupt sleep", interrupted, true );
+	ENSURE( "alarm failed to interrupt sleep", interrupted );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "alarm deregistered" )
+#ifdef __MSVCXX__
+	if ( tress::setup._jobs > 1 ) {
+		SKIP( "Alien signal can messup this test." );
+	}
+#endif
 	TIME_CONSTRAINT_EXEMPT();
 	static int const ALARM_TIME( 500 ); {
 		HAlarm alarm( ALARM_TIME );
-		ENSURE_EQUALS( "alarm interrupted sleep prematurely", ! sleep_for( duration( 100, time::UNIT::MILLISECOND ) ), false );
+		ENSURE( "alarm interrupted sleep prematurely", sleep_for( duration( 100, time::UNIT::MILLISECOND ) ) );
 	}
-	ENSURE_EQUALS( "alaram did not deregister!", ! sleep_for( duration( 1, time::UNIT::SECOND ) ), false );
+	ENSURE( "alaram did not deregister!", sleep_for( duration( 1, time::UNIT::SECOND ) ) );
 TUT_TEARDOWN()
 
 }

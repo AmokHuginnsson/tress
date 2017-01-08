@@ -356,17 +356,36 @@ TUT_UNIT_TEST( "schedule_windup" )
 		t.wait_for_event( duration( ( TARGET / WORKER_COUNT ) * SLEEP, time::UNIT::MILLISECOND ) );
 		clog << "waited: " << c.get_time_elapsed( time::UNIT::MILLISECOND ) << endl;
 		c.reset();
+		/*
+		 * .schedule_windup() should alway be immediate (never waits),
+		 * no matter waht WINDUP_MODE was used.
+		 */
 		w.schedule_windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
 		clog << "schedule_windup: " << c.get_time_elapsed( time::UNIT::MILLISECOND ) << endl;
 		c.reset();
+		/*
+		 * .can_join() loop can hang depending on WINDUP_MODE.
+		 */
 		while ( ! w.can_join() ) {
 			/* busy wait */
 		}
 		clog << "can_join: " << c.get_time_elapsed( time::UNIT::MILLISECOND ) << endl;
+		/*
+		 * If .schedule_windup() fails to work properly then .can_join() loop takes at least 320 ms.
+		 */
+#ifndef __MSVCXX__
+		int expectJoin( 40 );
+#else
+		int expectJoin( 160 );
+#endif
+		ENSURE_LESS( ".can_join() loop blocked", c.get_time_elapsed( time::UNIT::MILLISECOND ), expectJoin );
 		c.reset();
+		/*
+		 * .join() after .can_join() loop should never hang.
+		 */
 		w.join();
 		clog << "windup: " << c.get_time_elapsed( time::UNIT::MILLISECOND ) << endl;
-		ENSURE_LESS( "join blocked", c.get_time_elapsed( time::UNIT::MILLISECOND ), 40 );
+		ENSURE_LESS( "join blocked", c.get_time_elapsed( time::UNIT::MILLISECOND ), expectJoin );
 		int wu( t.get_performed_work_units() );
 		ENSURE_GREATER( "work not parallelized", t.get_runner_count(), 1 );
 		ENSURE_GREATER( "work was not performed", wu, 0 );

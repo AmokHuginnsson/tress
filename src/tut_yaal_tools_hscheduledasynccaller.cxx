@@ -117,7 +117,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "flush" )
 	_val = 0;
 	_sac.call_in(
-		duration( 1, time::UNIT::SECOND ),
+		duration( 2, time::UNIT::SECOND ),
 		call( &tut_yaal_tools_hscheduledasynccaller::action, this, 7 )
 	);
 	ENSURE_EQUALS( "scheduled call did not wait", _val, 0 );
