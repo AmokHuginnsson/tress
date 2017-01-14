@@ -221,7 +221,7 @@ TUT_UNIT_TEST( "add" )
 	ENSURE_EQUALS( "add number failed", execute( "main(){return($1+$2);}" ), "$3" );
 	ENSURE_EQUALS( "add string failed", execute( "main(){return(\"1\"+\"2\");}" ), "\"12\"" );
 	ENSURE_EQUALS( "add user succeeded", execute_except( "class A{_x=none;}main(){return(A()+A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `add' method." );
-	ENSURE_EQUALS( "add char succeeded", execute_except( "main(){c=character;return(c('1')+c('2'));}" ), "*anonymous stream*:1:33: There is no `+' operator for `character'." );
+	ENSURE_EQUALS( "add char succeeded", execute_except( "main(){c=character;return(c('1')+c('2'));}" ), "*anonymous stream*:1:33: There is no `+' operator for a `character'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "sub" )
@@ -229,7 +229,7 @@ TUT_UNIT_TEST( "sub" )
 	ENSURE_EQUALS( "sub real failed", execute( "main(){return(7.-3.);}" ), "4.0" );
 	ENSURE_EQUALS( "sub number failed", execute( "main(){return($7-$3);}" ), "$4" );
 	ENSURE_EQUALS( "sub user succeeded", execute_except( "class A{_x=none;}main(){return(A()-A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `subtract' method." );
-	ENSURE_EQUALS( "sub char succeeded", execute_except( "main(){c=character;return(c('7')-c('3'));}" ), "*anonymous stream*:1:33: There is no `-' operator for `character'." );
+	ENSURE_EQUALS( "sub char succeeded", execute_except( "main(){c=character;return(c('7')-c('3'));}" ), "*anonymous stream*:1:33: There is no `-' operator for a `character'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mul" )
@@ -237,7 +237,7 @@ TUT_UNIT_TEST( "mul" )
 	ENSURE_EQUALS( "mul real failed", execute( "main(){return(2.*3.);}" ), "6.0" );
 	ENSURE_EQUALS( "mul number failed", execute( "main(){return($2*$3);}" ), "$6" );
 	ENSURE_EQUALS( "mul user succeeded", execute_except( "class A{_x=none;}main(){return(A()*A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `multiply' method." );
-	ENSURE_EQUALS( "mul char succeeded", execute_except( "main(){c=character;return(c('2')*c('3'));}" ), "*anonymous stream*:1:33: There is no `*' operator for `character'." );
+	ENSURE_EQUALS( "mul char succeeded", execute_except( "main(){c=character;return(c('2')*c('3'));}" ), "*anonymous stream*:1:33: There is no `*' operator for a `character'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "div" )
@@ -245,7 +245,7 @@ TUT_UNIT_TEST( "div" )
 	ENSURE_EQUALS( "div real failed", execute( "main(){return(7./2.);}" ), "3.5" );
 	ENSURE_EQUALS( "div number failed", execute( "main(){return($7/$2);}" ), "$3.5" );
 	ENSURE_EQUALS( "div user succeeded", execute_except( "class A{_x=none;}main(){return(A()/A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `divide' method." );
-	ENSURE_EQUALS( "div char succeeded", execute_except( "main(){c=character;return(c('7')/c('2'));}" ), "*anonymous stream*:1:33: There is no `/' operator for `character'." );
+	ENSURE_EQUALS( "div char succeeded", execute_except( "main(){c=character;return(c('7')/c('2'));}" ), "*anonymous stream*:1:33: There is no `/' operator for a `character'." );
 	ENSURE_EQUALS( "div 0 int succeeded", execute_except( "main(){return(1/0);}" ), "*anonymous stream*:1:16: Uncaught exception: Division by zero." );
 	ENSURE_EQUALS( "div 0 real succeeded", execute_except( "main(){return(1./0.);}" ), "*anonymous stream*:1:17: Uncaught exception: Division by zero." );
 	ENSURE_EQUALS( "div 0 num succeeded", execute_except( "main(){return($1/$0);}" ), "*anonymous stream*:1:17: Uncaught exception: Division by zero." );
@@ -256,7 +256,7 @@ TUT_UNIT_TEST( "mod" )
 	ENSURE_EQUALS( "mod real failed", execute( "main(){return(11.%3.);}" ), "2.0" );
 	ENSURE_EQUALS( "mod number failed", execute( "main(){return($11%$3);}" ), "$2" );
 	ENSURE_EQUALS( "mod user succeeded", execute_except( "class A{_x=none;}main(){return(A()%A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `modulo' method." );
-	ENSURE_EQUALS( "mod char succeeded", execute_except( "main(){c=character;return(c('8')%c('3'));}" ), "*anonymous stream*:1:33: There is no `%' operator for `character'." );
+	ENSURE_EQUALS( "mod char succeeded", execute_except( "main(){c=character;return(c('8')%c('3'));}" ), "*anonymous stream*:1:33: There is no `%' operator for a `character'." );
 	ENSURE_EQUALS( "mod 0 int succeeded", execute_except( "main(){return(1%0);}" ), "*anonymous stream*:1:16: Uncaught exception: Division by zero." );
 	ENSURE_EQUALS( "mod 0 real succeeded", execute_except( "main(){return(1.%0.);}" ), "*anonymous stream*:1:17: Uncaught exception: Division by zero." );
 	ENSURE_EQUALS( "mod 0 num succeeded", execute_except( "main(){return($1%$0);}" ), "*anonymous stream*:1:17: Uncaught exception: Division by zero." );
@@ -266,7 +266,7 @@ TUT_UNIT_TEST( "pow" )
 	ENSURE_EQUALS( "pow real failed", execute( "main(){return(2.^3.);}" ), "8.0" );
 	ENSURE_EQUALS( "pow number failed", execute( "main(){return($2^$3);}" ), "$8" );
 	ENSURE_EQUALS( "pow user succeeded", execute_except( "class A{_x=none;}main(){return(A()^A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `power' method." );
-	ENSURE_EQUALS( "pow char succeeded", execute_except( "main(){c=character;return(c('2')^c('3'));}" ), "*anonymous stream*:1:33: There is no `^' operator for `character'." );
+	ENSURE_EQUALS( "pow char succeeded", execute_except( "main(){c=character;return(c('2')^c('3'));}" ), "*anonymous stream*:1:33: There is no `^' operator for a `character'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "factorial" )
@@ -797,7 +797,11 @@ TUT_UNIT_TEST( "lookup()" )
 		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;v=\"\";for(e:x){v=v+string(e);v=v+string(x[e]);}return(v);}" ),
 		"\"none7Ala0truefalse1makota.2\""
 	);
-	ENSURE_EQUALS( "hash on user succeeded", execute_except( "class A{_x=none;}main(){l=lookup();return(l[A()]=0);}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:43: There is no `hash' operator for `A'." );
+	ENSURE_EQUALS(
+		"hash on user succeeded",
+		execute_except( "class A{_x=none;}main(){l=lookup();return(l[A()]=0);}", HHuginn::COMPILER::BE_SLOPPY ),
+		"*anonymous stream*:1:44: Class `A' does not have `hash' method."
+	);
 	ENSURE_EQUALS(
 		"lookup() iterator failed",
 		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;return([x.has_key(1),x.has_key(2)]);}" ),
