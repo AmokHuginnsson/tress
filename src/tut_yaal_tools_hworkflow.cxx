@@ -373,12 +373,18 @@ TUT_UNIT_TEST( "schedule_windup" )
 		/*
 		 * If .schedule_windup() fails to work properly then .can_join() loop takes at least 320 ms.
 		 */
-#ifndef __MSVCXX__
-		int expectJoin( 40 );
-#else
+#ifdef __MSVCXX__
 		int expectJoin( 160 );
+#elif defined( __HOST_OS_TYPE_FREEBSD__ )
+		int expectJoin( 80 );
+#else
+		int expectJoin( 40 );
 #endif
-		ENSURE_LESS( ".can_join() loop blocked", c.get_time_elapsed( time::UNIT::MILLISECOND ), expectJoin );
+		int elapsed( static_cast<int>( c.get_time_elapsed( time::UNIT::MILLISECOND ) ) );
+		if ( elapsed >= expectJoin ) {
+			w.join();
+		}
+		ENSURE_LESS( ".can_join() loop blocked", elapsed, expectJoin );
 		c.reset();
 		/*
 		 * .join() after .can_join() loop should never hang.
