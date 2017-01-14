@@ -1344,7 +1344,7 @@ TUT_UNIT_TEST( "square_root<HNumber>()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "natural_exponential<HNumber>()" )
-	ENSURE_EQUALS( "natural_exponential(1) failed", natural_exponential( HNumber( number::N1, number::E().get_precision() - 1 ) ), number::E() );
+	ENSURE_EQUALS( "natural_exponential(1) failed", natural_exponential( HNumber( number::N1, number::E().get_precision() ) ), number::E() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "natural_logarithm<HNumber>()" )
