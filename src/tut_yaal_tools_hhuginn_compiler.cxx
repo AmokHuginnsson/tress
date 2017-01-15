@@ -760,6 +760,64 @@ char const progCompileErr92[] =
 	"}\n"
 ;
 
+char const progCompileErr93[] =
+	"main() {\n"
+	"x=0;\n"
+	"}\n"
+;
+
+char const progCompileErr94[] =
+	"class C{constructor(){}}\n"
+	"main() {\n"
+	"}\n"
+;
+
+char const progCompileErr95[] =
+	"class C{_x=none;}\n"
+	"main() {\n"
+	"C();\n"
+	"}\n"
+;
+
+char const progCompileErr96[] =
+	"f(){}\n"
+	"main() {\n"
+	"}\n"
+;
+
+char const progCompileErr97[] =
+	"import Algorithms as algo;\n"
+	"main() {\n"
+	"}\n"
+;
+
+char const progCompileErr98[] =
+	"main() {\n"
+	"return;\n"
+	"return;\n"
+	"}\n"
+;
+
+char const progCompileErr99[] =
+	"main() {\n"
+	"'a'!;\n"
+	"}\n"
+;
+
+char const progCompileErr100[] =
+	"main() {\n"
+	"x=0;\n"
+	"x+=0.;\n"
+	"}\n"
+;
+
+char const progCompileErr101[] =
+	"main() {\n"
+	"x=0;\n"
+	"x*=0.;\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -855,6 +913,15 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr90,
 		progCompileErr91,
 		progCompileErr92,
+		progCompileErr93,
+		progCompileErr94,
+		progCompileErr95,
+		progCompileErr96,
+		progCompileErr97,
+		progCompileErr98,
+		progCompileErr99,
+		progCompileErr100,
+		progCompileErr101,
 		NULL
 	};
 	int const err[][3] = {
@@ -951,6 +1018,15 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 6, 1, 7 },    // 90
 		{ 22, 3, 8 },   // 91
 		{ 23, 3, 9 },   // 92
+		{ 9, 2, 1 },    // 93
+		{ 6, 1, 7 },    // 94
+		{ 8, 1, 9 },    // 95
+		{ 0, 1, 1 },    // 96
+		{ 21, 1, 22 },  // 97
+		{ 17, 3, 1 },   // 98
+		{ 12, 2, 4 },   // 99
+		{ 15, 3, 2 },   // 100
+		{ 15, 3, 2 },   // 101
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );

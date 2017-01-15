@@ -109,6 +109,16 @@ TUT_UNIT_TEST( "Algorithms" )
 		"[\":3:7:11:15\", 4]"
 	);
 	ENSURE_EQUALS(
+		"Algorithms.range invalid succeeded",
+		execute_except(
+			"import Algorithms as algo;"
+			"main(){"
+			"algo.range(1,2,-1);"
+			"}"
+		),
+		"*anonymous stream*:1:44: Invalid range."
+	);
+	ENSURE_EQUALS(
 		"Algorithms.materialize (to list) failed",
 		execute(
 			"import Algorithms as algo;\n"
@@ -149,6 +159,16 @@ TUT_UNIT_TEST( "Algorithms" )
 		"{15, 3, 7, 11}"
 	);
 	ENSURE_EQUALS(
+		"Algorithms.materialize on invalid succeeded",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"algo.materialize([],integer);\n"
+			"}"
+		),
+		"*anonymous stream*:3:17: Invalid materialized type: `integer'."
+	);
+	ENSURE_EQUALS(
 		"Algorithms.reduce (function) failed",
 		execute(
 			"import Algorithms as algo;\n"
@@ -172,6 +192,16 @@ TUT_UNIT_TEST( "Algorithms" )
 			"}"
 		),
 		"36"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.reduce on empty succeeded",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"algo.reduce([],@(x,y){x+y;});\n"
+			"}"
+		),
+		"*anonymous stream*:3:12: reduce() on empty."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.filter (function) failed",
@@ -696,6 +726,34 @@ TUT_UNIT_TEST( "RegularExpressions" )
 			"}"
 		),
 		"\"ok3-46-7\""
+	);
+	ENSURE_EQUALS(
+		"RegularExpressions copy failed",
+		execute(
+			"import RegularExpressions as re;\n"
+			"main(){\n"
+			"rec = re.compile( \"[0-9]-[0-9]\" );\n"
+			"r = \"\";\n"
+			"for( rg : [rec,copy(rec)] ) {\n"
+			"m = rg.match(\"[123+123+3123]\");\n"
+			"if (m.matched()) {\n"
+			"r = r + \"fail match\";\n"
+			"} else {\n"
+			"r = r + \"ok\";\n"
+			"}\n"
+			"m = rg.match(\"[123-456-789]\");"
+			"if (m.matched()) {\n"
+			"for ( w : m ) {\n"
+			"r = r + w;\n"
+			"}\n"
+			"} else {\n"
+			"r = r + \"fail no match\";\n"
+			"}\n"
+			"}\n"
+			"return(r);\n"
+			"}"
+		),
+		"\"ok3-46-7ok3-46-7\""
 	);
 	ENSURE_EQUALS(
 		"RegularExpressions.groups failed",
