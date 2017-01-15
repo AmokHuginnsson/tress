@@ -806,15 +806,15 @@ char const progCompileErr99[] =
 
 char const progCompileErr100[] =
 	"main() {\n"
-	"x=0;\n"
-	"x+=0.;\n"
+	"x='a';\n"
+	"x+='a';\n"
 	"}\n"
 ;
 
 char const progCompileErr101[] =
 	"main() {\n"
-	"x=0;\n"
-	"x*=0.;\n"
+	"x='a';\n"
+	"x*='a';\n"
 	"}\n"
 ;
 
@@ -1025,8 +1025,8 @@ TUT_UNIT_TEST( "report compilation error" )
 		{ 21, 1, 22 },  // 97
 		{ 17, 3, 1 },   // 98
 		{ 12, 2, 4 },   // 99
-		{ 15, 3, 2 },   // 100
-		{ 15, 3, 2 },   // 101
+		{ 17, 3, 2 },   // 100
+		{ 17, 3, 2 },   // 101
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
