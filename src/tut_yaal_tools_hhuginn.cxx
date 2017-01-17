@@ -613,6 +613,16 @@ TUT_UNIT_TEST( "list()" )
 		"[2, 3, 5, 7, 0]"
 	);
 	ENSURE_EQUALS(
+		"list append failed",
+		execute( "main(){x=[2,3,5,7];x.append([4,8,16]);return(x);}" ),
+		"[2, 3, 5, 7, 4, 8, 16]"
+	);
+	ENSURE_EQUALS(
+		"list insert failed",
+		execute( "main(){x=[2,3,5,7];x.insert(2, 0);return(x);}" ),
+		"[2, 3, 0, 5, 7]"
+	);
+	ENSURE_EQUALS(
 		"list pop failed",
 		execute( "main(){x=list(2,3,5,7);x.pop();return(x);}" ),
 		"[2, 3, 5]"
