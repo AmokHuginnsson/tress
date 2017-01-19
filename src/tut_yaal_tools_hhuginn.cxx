@@ -614,8 +614,8 @@ TUT_UNIT_TEST( "list()" )
 	);
 	ENSURE_EQUALS(
 		"list append failed",
-		execute( "main(){x=[2,3,5,7];x.append([4,8,16]);return(x);}" ),
-		"[2, 3, 5, 7, 4, 8, 16]"
+		execute( "main(){x=[2,3,5,7];x.append([4,8,16]).append(deque(20)).append(order(30)).append({40});return(x);}" ),
+		"[2, 3, 5, 7, 4, 8, 16, 20, 30, 40]"
 	);
 	ENSURE_EQUALS(
 		"list insert failed",
@@ -680,6 +680,21 @@ TUT_UNIT_TEST( "deque()" )
 		"deque pop failed",
 		execute( "main(){x=deque(2,3,5,7);x.pop();return(x);}" ),
 		"deque(2, 3, 5)"
+	);
+	ENSURE_EQUALS(
+		"deque append failed",
+		execute( "main(){x=deque(2,3,5,7);x.append([4,8,16]).append(deque(20)).append(order(30)).append({40});return(x);}" ),
+		"deque(2, 3, 5, 7, 4, 8, 16, 20, 30, 40)"
+	);
+	ENSURE_EQUALS(
+		"deque prepend failed",
+		execute( "main(){x=deque(2,3,5,7);x.prepend([4,8,16]).prepend(deque(20)).prepend(order(30)).prepend({40});return(x);}" ),
+		"deque(40, 30, 20, 4, 8, 16, 2, 3, 5, 7)"
+	);
+	ENSURE_EQUALS(
+		"deque insert failed",
+		execute( "main(){x=deque(2,3,5,7);x.insert(2, 0);return(x);}" ),
+		"deque(2, 3, 0, 5, 7)"
 	);
 	ENSURE_EQUALS(
 		"deque pop_front failed",
