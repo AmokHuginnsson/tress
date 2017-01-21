@@ -2,12 +2,12 @@
 
 .PHONY: test memcheck
 
-test: debug
-	@cd $(DIR_ROOT) && mkdir -p out && sqlite3 out/tress.sqlite < data/sqlite.sql && \
-	. _aux/set-limits.sh && $(TRESS_ENV) ./build/debug/tress/1exec $(TRESS_ARG) > /dev/null
+test: $(TARGET)
+	@cd $(if $(DIR_ROOT),$(DIR_ROOT),.) && mkdir -p out && sqlite3 out/tress.sqlite < data/sqlite.sql && \
+	. _aux/set-limits.sh && $(TRESS_ENV) ./build/$(if $(TARGET),$(TARGET),debug)/tress/1exec $(TRESS_ARG) > /dev/null
 
-memcheck: debug
-	@cd $(DIR_ROOT) && mkdir -p out && sqlite3 out/tress.sqlite < data/sqlite.sql && \
-	. _aux/set-limits.sh && $(TRESS_ENV) valgrind ./build/debug/tress/1exec $(TRESS_ARG) > /dev/null; \
+memcheck: $(TARGET)
+	@cd $(if $(DIR_ROOT),$(DIR_ROOT),.) && mkdir -p out && sqlite3 out/tress.sqlite < data/sqlite.sql && \
+	. _aux/set-limits.sh && $(TRESS_ENV) valgrind ./build/$(if $(TARGET),$(TARGET),debug)/tress/1exec $(TRESS_ARG) > /dev/null; \
 	test $$? -ne 255
 
