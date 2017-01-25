@@ -1810,36 +1810,22 @@ TUT_UNIT_TEST( "modules" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "incremental mode" )
-	HHuginn h;
-	hcore::HString head( "main(){" );
-	hcore::HString foot( "}" );
-	hcore::HString body;
-	HStringStream src;
-	HStringStream out;
-	h.set_output_stream( out );
-	char const lines[][12] = {
-		"x=0;",
-		"print(\"x\");",
-		"x+=1;",
-		"x;"
+	lines_t l0{
+		{ "x=0;" },
+		{ "print(\"x\");" },
+		{ "x+=1;" },
+		{ "x;" }
 	};
-	hcore::HString res;
-	for ( char const* line : lines ) {
-		body.append( line );
-		src.clear();
-		src << head << body << foot;
-		h.reset();
-		h.load( src );
-		h.preprocess();
-		ENSURE( "parse failed", h.parse() );
-		ENSURE( "compile", h.compile( HHuginn::COMPILER::BE_SLOPPY ) );
-		ENSURE( "execute", h.execute() );
-		HHuginn::value_t r( h.result() );
-		ENSURE( "nothing returned", !! r );
-		res.append( to_string( r ) );
-	}
-	ENSURE_EQUALS( "multi run", out.string(), "x" );
-	ENSURE_EQUALS( "mis executed", res, "0none11" );
+	ENSURE_EQUALS( "incremental mode failed", execute_incremental( l0 ), "0xnone11" );
+	lines_t l1{
+		{ "class X{x=0;}", OLine::TYPE::DEFINITION },
+		{ "X(){}", OLine::TYPE::DEFINITION }
+	};
+	ENSURE_EQUALS( "creation of function of name that is used by class succeeded", execute_incremental( l1 ), "none*anonymous stream*:2:1: Class of the same name `X' is already defined." );
+	lines_t l2{
+		{ "x=0;x+=1;" }
+	};
+	ENSURE_EQUALS( "multiple statements in single input in incremental mode failed", execute_incremental( l2 ), "1" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "observe/use" )

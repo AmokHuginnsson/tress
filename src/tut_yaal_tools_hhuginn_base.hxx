@@ -47,6 +47,19 @@ inline std::ostream& operator << ( std::ostream& out, yaal::tools::HHuginn::TYPE
 namespace tress {
 
 struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_tools_hhuginn_base> {
+	struct OLine {
+		enum class TYPE {
+			CODE,
+			DEFINITION
+		};
+		yaal::hcore::HString _text;
+		TYPE _type;
+		OLine( yaal::hcore::HString const& text_, TYPE type_ = TYPE::CODE )
+			: _text( text_ )
+			, _type( type_ ) {
+		}
+	};
+	typedef yaal::hcore::HArray<OLine> lines_t;
 	typedef tut_helpers::simple_mock<tut_yaal_tools_hhuginn_base> base_type;
 	typedef char const* prog_src_t;
 	struct OHuginnResult {
@@ -70,6 +83,10 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::DEFAULT
 	);
 	OHuginnResult execute_result( yaal::hcore::HString const& );
+	yaal::hcore::HString execute_incremental(
+		lines_t const&,
+		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::BE_SLOPPY
+	);
 };
 
 }

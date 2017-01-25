@@ -290,5 +290,61 @@ tut_yaal_tools_hhuginn_base::OHuginnResult tut_yaal_tools_hhuginn_base::execute_
 	return ( OHuginnResult{ h, r } );
 }
 
+hcore::HString tut_yaal_tools_hhuginn_base::execute_incremental(
+	lines_t const& lines_,
+	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_
+) {
+	HHuginn h;
+	hcore::HString head( "main(){\n" );
+	hcore::HString foot( "}\n" );
+	hcore::HString okDefinitions;
+	hcore::HString okBody;
+	HStringStream src;
+	HStringStream out;
+	h.set_output_stream( out );
+	hcore::HString res;
+	h.reset();
+	for ( OLine const& line : lines_ ) {
+		hcore::HString definitions( okDefinitions );
+		hcore::HString body( okBody );
+		if ( line._type == OLine::TYPE::CODE ) {
+			body.append( line._text ).append( ! line._text.is_empty() && ( line._text.back() != '\n' ) ? "\n" : "" );
+		} else if ( line._type == OLine::TYPE::DEFINITION ) {
+			definitions.append( line._text ).append( ! line._text.is_empty() && ( line._text.back() != '\n' ) ? "\n" : "" );
+		}
+		src.clear();
+		src << definitions << head << body << foot;
+		h.reset();
+		h.load( src );
+		h.preprocess();
+		bool p( h.parse() );
+		if ( !p ) {
+			clog << h.error_message() << endl;
+		}
+		ENSURE( "parse failed", p );
+		bool c( h.compile( huginnCompilerSetup_ ) );
+		if ( !c ) {
+			res.append( h.error_message() );
+			continue;
+		}
+		ENSURE( "compilation failed", c );
+		bool e( h.execute() );
+		if ( !e ) {
+			res.append( h.error_message() );
+			continue;
+		}
+		ENSURE( "execution failed!", e );
+		HHuginn::value_t r( h.result() );
+		ENSURE( "nothing returned", !! r );
+		okDefinitions = definitions;
+		okBody = body;
+		res.append( out.string() );
+		res.trim_right();
+		out.reset();
+		res.append( to_string( r ) );
+	}
+	return ( res );
+}
+
 }
 
