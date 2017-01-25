@@ -1828,6 +1828,16 @@ TUT_UNIT_TEST( "incremental mode" )
 	ENSURE_EQUALS( "multiple statements in single input in incremental mode failed", execute_incremental( l2 ), "1" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "max call stack size" )
+	HHuginn h;
+	ENSURE_THROW( "invalid max call stack size accepted", h.set_max_call_stack_size( 100 ), HHuginnException );
+	ENSURE_EQUALS(
+		"max call stack size check failed",
+		execute_except( "main(){\nmain();\n}\n" ),
+		"*anonymous stream*:2:5: Call stack size limit exceeded: 129"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "observe/use" )
 	ENSURE_EQUALS(
 		"obseve/use failed",

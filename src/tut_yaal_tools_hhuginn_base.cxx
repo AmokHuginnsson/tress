@@ -239,6 +239,7 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute_except(
 		clog << prettify( source_ ) << endl;
 	}
 	HHuginn h;
+	h.set_max_call_stack_size( 128 );
 	HLock l( _mutex );
 	_sourceCache.set_buffer( source_ );
 	h.load( _sourceCache );
