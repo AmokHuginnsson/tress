@@ -619,8 +619,13 @@ TUT_UNIT_TEST( "list()" )
 	);
 	ENSURE_EQUALS(
 		"list insert failed",
-		execute( "main(){x=[2,3,5,7];x.insert(2, 0);return(x);}" ),
-		"[2, 3, 0, 5, 7]"
+		execute( "main(){x=[2,3,5,7];x.insert(2, 0).insert(5, -1);return(x);}" ),
+		"[2, 3, 0, 5, 7, -1]"
+	);
+	ENSURE_EQUALS(
+		"list insert on invalid position succeeded",
+		execute_except( "main(){x=[2,3,5,7];x.insert(5,-1);}" ),
+		"*anonymous stream*:1:28: invalid insertion position: 5"
 	);
 	ENSURE_EQUALS(
 		"list pop failed",
@@ -693,8 +698,13 @@ TUT_UNIT_TEST( "deque()" )
 	);
 	ENSURE_EQUALS(
 		"deque insert failed",
-		execute( "main(){x=deque(2,3,5,7);x.insert(2, 0);return(x);}" ),
-		"deque(2, 3, 0, 5, 7)"
+		execute( "main(){x=deque(2,3,5,7);x.insert(2, 0).insert(5,-1);return(x);}" ),
+		"deque(2, 3, 0, 5, 7, -1)"
+	);
+	ENSURE_EQUALS(
+		"deque insert on invalid position succeeded",
+		execute_except( "main(){x=deque(2,3,5,7);x.insert(5,-1);}" ),
+		"*anonymous stream*:1:33: invalid insertion position: 5"
 	);
 	ENSURE_EQUALS(
 		"deque pop_front failed",
