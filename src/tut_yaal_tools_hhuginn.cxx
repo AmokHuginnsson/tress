@@ -1826,6 +1826,11 @@ TUT_UNIT_TEST( "incremental mode" )
 		{ "x=0;x+=1;" }
 	};
 	ENSURE_EQUALS( "multiple statements in single input in incremental mode failed", execute_incremental( l2 ), "1" );
+	lines_t l3{
+		{ "@(x){x;};" },
+		{ "@(x){x;};" }
+	};
+	ENSURE_EQUALS( "bug in incremental mode management of statement counter resurfaced", execute_incremental( l3 ), "*function_reference**function_reference*" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "max call stack size" )
