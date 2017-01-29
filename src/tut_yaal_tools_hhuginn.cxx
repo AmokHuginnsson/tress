@@ -213,6 +213,16 @@ TUT_UNIT_TEST( "functions (definition)" )
 		),
 		"[1, 2, -3, -4]"
 	);
+	ENSURE_EQUALS(
+		"lambda as default argument failed",
+		execute(
+			"f(x,l=@(y){y;}){l(x);}\n"
+			"main(){\n"
+			"return([f(1),f(3),f(1,@(x){x*7;}),f(3,@(x){x*13;})]);"
+			"}\n"
+		),
+		"[1, 3, 7, 39]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "add" )
