@@ -352,6 +352,37 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "if" )
 	ENSURE_EQUALS( "if (true) failed", execute( "main(){x=2;if(x>0){x=x*x;}return(x);}" ), "4" );
 	ENSURE_EQUALS( "if (false) failed", execute( "main(){x=2;if(x>2){x=x*x;}return(x);}" ), "2" );
+	ENSURE_EQUALS(
+		"if else if else chain failed",
+		execute(
+			"foo(b,v) {\n"
+			"if(b) {\n"
+			"v+=\"foo\";\n"
+			"} else {\n"
+			"throw Exception(\"ex\");\n"
+			"}\n"
+			"}\n"
+			"main(){\n"
+			"r=\"\";\n"
+			"try{\n"
+			"v=0;\n"
+			"if(v>0){\n"
+			"r+=\"bad\";\n"
+			"} else if(foo(false, v) > 0){\n"
+			"r+=\"bad2\";\n"
+			"} else if(foo(true, v) > 0){\n"
+			"r+=\"bad3\";\n"
+			"} else {\n"
+			"r+=\"bad4\";\n"
+			"}\n"
+			"}catch(Exception e){\n"
+			"r+=e.what();"
+			"}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"\"ex\""
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "while" )
@@ -430,6 +461,42 @@ TUT_UNIT_TEST( "switch" )
 		"switch (match, no fallthrough, default) failed",
 		execute( "main(){x=\"x\";n=1;switch(n){case(0):{x=\"0\";}break;case(1):{x=x+\"y\";}break;case(2):{x=x+\"z\";}break;default:{x=x+\"!\";}}return(x);}" ),
 		"\"xy\""
+	);
+	ENSURE_EQUALS(
+		"switch, case expression failed",
+		execute(
+			"foo(b,v) {\n"
+			"if(b) {\n"
+			"v+=\"foo\";\n"
+			"} else {\n"
+			"throw Exception(\"ex\");\n"
+			"}\n"
+			"}\n"
+			"main(){\n"
+			"r=\"\";\n"
+			"try{\n"
+			"v=0;\n"
+			"switch(v){\n"
+			"case(7):{\n"
+			"r+=\"bad\";\n"
+			"}break;\n"
+			"case(foo(false, v)):{\n"
+			"r+=\"bad2\";\n"
+			"}break;\n"
+			"case(foo(true, v)):{\n"
+			"r+=\"bad3\";\n"
+			"} break;\n"
+			"default: {\n"
+			"r+=\"bad4\";\n"
+			"}\n"
+			"}\n"
+			"}catch(Exception e){\n"
+			"r+=e.what();"
+			"}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"\"ex\""
 	);
 TUT_TEARDOWN()
 

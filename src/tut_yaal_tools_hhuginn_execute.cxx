@@ -570,6 +570,94 @@ char const progExecuteErr51[] =
 	"}\n"
 ;
 
+char const progExecuteErr52[] =
+	"main() {\n"
+	"if(1){}\n"
+	"}\n"
+;
+
+char const progExecuteErr53[] =
+	"main() {\n"
+	"switch([]){case(0):{}}\n"
+	"}\n"
+;
+
+char const progExecuteErr54[] =
+	"main() {\n"
+	"switch(0){\n"
+	"case('0'):{}\n"
+	"}\n"
+	"}\n"
+;
+
+char const progExecuteErr55[] =
+	"main() {\n"
+	"v=$0;\n"
+	"v.clear();\n"
+	"}\n"
+;
+
+char const progExecuteErr56[] =
+	"class Base {\n"
+	"foo() {}\n"
+	"}\n"
+	"class Derived : Base {\n"
+	"bar() {\n"
+	"super.bar();\n"
+	"}\n"
+	"}\n"
+	"main() {\n"
+	"d=Derived();\n"
+	"d.bar();\n"
+	"d.foo();\n"
+	"}\n"
+;
+
+char const progExecuteErr57[] =
+	"class Base {\n"
+	"foo() {}\n"
+	"}\n"
+	"class Derived : Base {\n"
+	"foo() {\n"
+	"super.foo=0;\n"
+	"}\n"
+	"}\n"
+	"main() {\n"
+	"d=Derived();\n"
+	"d.foo();\n"
+	"}\n"
+;
+
+char const progExecuteErr58[] =
+	"main() {\n"
+	"v=0;\n"
+	"v.clear();\n"
+	"}\n"
+;
+
+char const progExecuteErr59[] =
+	"main() {\n"
+	"v=\"\";\n"
+	"v.clear = 0;\n"
+	"}\n"
+;
+
+char const progExecuteErr60[] =
+	"class A {\n"
+	"x=0;\n"
+	"}\n"
+	"main() {\n"
+	"A().x = 0;\n"
+	"}\n"
+;
+
+char const progExecuteErr61[] =
+	"main() {\n"
+	"v=\"ala\";\n"
+	"v[0] = 'A';\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -643,6 +731,16 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr49,
 		progExecuteErr50,
 		progExecuteErr51,
+		progExecuteErr52,
+		progExecuteErr53,
+		progExecuteErr54,
+		progExecuteErr55,
+		progExecuteErr56,
+		progExecuteErr57,
+		progExecuteErr58,
+		progExecuteErr59,
+		progExecuteErr60,
+		progExecuteErr61,
 		NULL
 	};
 	int const err[][3] = {
@@ -698,6 +796,16 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 46, 3, 13 },   // 49
 		{ 41, 3, 9 },    // 50
 		{ 14, 2, 6 },    // 51
+		{ 12, 2, 4 },    // 52
+		{ 16, 2, 8 },    // 53
+		{ 25, 3, 6 },    // 54
+		{ 16, 3, 2 },    // 55
+		{ 60, 6, 6 },    // 56
+		{ 60, 6, 6 },    // 57
+		{ 15, 3, 2 },    // 58
+		{ 15, 3, 1 },    // 59
+		{ 26, 5, 1 },    // 60
+		{ 23, 3, 6 },    // 61
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
