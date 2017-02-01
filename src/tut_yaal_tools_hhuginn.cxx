@@ -617,6 +617,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "character()" )
 	ENSURE_EQUALS( "character to character failed", execute( "main(){return(character('7'));}" ), "'7'" );
+	ENSURE_EQUALS( "integer to character failed", execute( "main(){return(character(97));}" ), "'a'" );
 	ENSURE_EQUALS( "copy( character ) failed", execute( "main(){x='a';y=x;z=copy(x);x.to_upper();return([x,y,z]);}" ), "['A', 'A', 'a']" );
 	ENSURE_EQUALS( "real to character succeeded", execute_except( "main(){return(character(7.));}" ), "*anonymous stream*:1:24: Conversion from `real' to `character' is not supported." );
 	ENSURE_EQUALS( "character.to_upper() failed", execute( "main(){x='a';x.to_upper();return(x);}" ), "'A'" );

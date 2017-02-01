@@ -658,6 +658,37 @@ char const progExecuteErr61[] =
 	"}\n"
 ;
 
+char const progExecuteErr62[] =
+	"class A{\n"
+	"add(x){x;0;}\n"
+	"}\n"
+	"main(){\n"
+	"A()+A();\n"
+	"}\n"
+;
+
+char const progExecuteErr63[] =
+	"class A{\n"
+	"hash(){0.;}\n"
+	"}\n"
+	"main(){\n"
+	"set(A());\n"
+	"}\n"
+;
+
+char const progExecuteErr64[] =
+	"f(x){x;}\n"
+	"main(){\n"
+	"f(size)<f(type);\n"
+	"}\n"
+;
+
+char const progExecuteErr65[] =
+	"main(){\n"
+	"set(\"\".clear);\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -741,6 +772,10 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr59,
 		progExecuteErr60,
 		progExecuteErr61,
+		progExecuteErr62,
+		progExecuteErr63,
+		progExecuteErr64,
+		progExecuteErr65,
 		NULL
 	};
 	int const err[][3] = {
@@ -803,9 +838,13 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 60, 6, 6 },    // 56
 		{ 60, 6, 6 },    // 57
 		{ 15, 3, 2 },    // 58
-		{ 15, 3, 1 },    // 59
-		{ 26, 5, 1 },    // 60
+		{ 16, 3, 2 },    // 59
+		{ 29, 5, 4 },    // 60
 		{ 23, 3, 6 },    // 61
+		{ 35, 5, 4 },    // 62
+		{ 34, 5, 4 },    // 63
+		{ 24, 3, 8 },    // 64
+		{ 11, 2, 4 },    // 65
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
