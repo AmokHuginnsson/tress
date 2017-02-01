@@ -227,6 +227,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "add" )
 	ENSURE_EQUALS( "add int failed", execute( "main(){return(1+2);}" ), "3" );
+	ENSURE_EQUALS( "add-assign int failed", execute( "main(){x=1;x+=2;return(x);}" ), "3" );
 	ENSURE_EQUALS( "add real failed", execute( "main(){return(1.+2.);}" ), "3.0" );
 	ENSURE_EQUALS( "add number failed", execute( "main(){return($1+$2);}" ), "$3" );
 	ENSURE_EQUALS( "add string failed", execute( "main(){return(\"1\"+\"2\");}" ), "\"12\"" );
@@ -236,6 +237,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "sub" )
 	ENSURE_EQUALS( "sub int failed", execute( "main(){return(7-3);}" ), "4" );
+	ENSURE_EQUALS( "sub-assign int failed", execute( "main(){x=7;x-=3;return(x);}" ), "4" );
 	ENSURE_EQUALS( "sub real failed", execute( "main(){return(7.-3.);}" ), "4.0" );
 	ENSURE_EQUALS( "sub number failed", execute( "main(){return($7-$3);}" ), "$4" );
 	ENSURE_EQUALS( "sub user succeeded", execute_except( "class A{_x=none;}main(){return(A()-A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `subtract' method." );
@@ -244,6 +246,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mul" )
 	ENSURE_EQUALS( "mul int failed", execute( "main(){return(2*3);}" ), "6" );
+	ENSURE_EQUALS( "mul-assign int failed", execute( "main(){x=2;x*=3;return(x);}" ), "6" );
 	ENSURE_EQUALS( "mul real failed", execute( "main(){return(2.*3.);}" ), "6.0" );
 	ENSURE_EQUALS( "mul number failed", execute( "main(){return($2*$3);}" ), "$6" );
 	ENSURE_EQUALS( "mul user succeeded", execute_except( "class A{_x=none;}main(){return(A()*A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `multiply' method." );
@@ -252,6 +255,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "div" )
 	ENSURE_EQUALS( "div int failed", execute( "main(){return(7/2);}" ), "3" );
+	ENSURE_EQUALS( "div-assign int failed", execute( "main(){x=7;x/=2;return(x);}" ), "3" );
 	ENSURE_EQUALS( "div real failed", execute( "main(){return(7./2.);}" ), "3.5" );
 	ENSURE_EQUALS( "div number failed", execute( "main(){return($7/$2);}" ), "$3.5" );
 	ENSURE_EQUALS( "div user succeeded", execute_except( "class A{_x=none;}main(){return(A()/A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `divide' method." );
@@ -263,6 +267,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mod" )
 	ENSURE_EQUALS( "mod int failed", execute( "main(){return(11%3);}" ), "2" );
+	ENSURE_EQUALS( "mod-assign int failed", execute( "main(){x=11;x%=3;return(x);}" ), "2" );
 	ENSURE_EQUALS( "mod real failed", execute( "main(){return(11.%3.);}" ), "2.0" );
 	ENSURE_EQUALS( "mod number failed", execute( "main(){return($11%$3);}" ), "$2" );
 	ENSURE_EQUALS( "mod user succeeded", execute_except( "class A{_x=none;}main(){return(A()%A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `modulo' method." );
@@ -275,6 +280,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "pow" )
 	ENSURE_EQUALS( "pow real failed", execute( "main(){return(2.^3.);}" ), "8.0" );
 	ENSURE_EQUALS( "pow number failed", execute( "main(){return($2^$3);}" ), "$8" );
+	ENSURE_EQUALS( "pow-assign number failed", execute( "main(){x=$2;x^=$3;return(x);}" ), "$8" );
 	ENSURE_EQUALS( "pow user succeeded", execute_except( "class A{_x=none;}main(){return(A()^A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `power' method." );
 	ENSURE_EQUALS( "pow char succeeded", execute_except( "main(){c=character;return(c('2')^c('3'));}" ), "*anonymous stream*:1:33: There is no `^' operator for a `character'." );
 TUT_TEARDOWN()
