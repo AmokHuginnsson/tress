@@ -61,8 +61,21 @@ void tut_yaal_tools_hhuginn_compiler::test_compile( prog_src_t prog_, int const 
 }
 
 char const progCompile0[] =
+	"import Algorithms as algo;\n"
+	"class Base {\n"
+	"\tfoo() {\n"
+	"\t}\n"
+	"\tbar() {\n"
+	"\t}\n"
+	"}\n"
+	"class Derived : Base {\n"
+	"\tfoo() {\n"
+	"\t}\n"
+	"\tbaz() {\n"
+	"\t}\n"
+	"}\n"
 	"main() {\n"
-	"\treturn ( 0 );\n"
+	"\treturn ( [ algo, Derived().foo().bar().baz() ] );\n"
 	"}\n"
 ;
 

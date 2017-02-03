@@ -225,6 +225,11 @@ TUT_UNIT_TEST( "functions (definition)" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "size" )
+	ENSURE_EQUALS( "size failed", execute( "class A{get_size(){7;}}main(){return([size(\"Ala\"),size([1,2,3,4]),size(A())]);}" ), "[3, 4, 7]" );
+	ENSURE_EQUALS( "invalid get_size succeeded (type)", execute_except( "class A{get_size(){0.;}}main(){size(A());}" ), "*anonymous stream*:1:36: User supplied `get_size' method returned an invalid type a `real' instead of an `integer'." );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "add" )
 	ENSURE_EQUALS( "add int failed", execute( "main(){return(1+2);}" ), "3" );
 	ENSURE_EQUALS( "add-assign int failed", execute( "main(){x=1;x+=2;return(x);}" ), "3" );
@@ -311,7 +316,7 @@ TUT_UNIT_TEST( "equals" )
 	ENSURE_EQUALS( "equals character failed", execute( "main(){return(['1'=='1','1'=='0']);}" ), "[true, false]" );
 	ENSURE_EQUALS( "equals string failed", execute( "main(){return([\"1\"==\"1\",\"1\"==\"0\"]);}" ), "[true, false]" );
 	ENSURE_EQUALS( "user failed", execute( "class A{_x=none;constructor(x){_x=x;}equals(x){return(_x==x._x);}}main(){return([A(1)==A(1),A(1)==A(0)]);}", HHuginn::COMPILER::BE_SLOPPY ), "[true, false]" );
-	ENSURE_EQUALS( "bad equals user succeeded", execute_except( "class A{equals(x){return(none);}}main(){return(A()==A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:51: Comparison method `equals' returned non-boolean result `*none*'." );
+	ENSURE_EQUALS( "bad equals user succeeded", execute_except( "class A{equals(x){return(none);}}main(){return(A()==A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:51: Comparison method `equals' returned non-boolean result of a `*none*' type." );
 	ENSURE_EQUALS( "missing equals user succeeded", execute_except( "class A{_x=none;}main(){return(A()==A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `equals' method." );
 TUT_TEARDOWN()
 
@@ -321,7 +326,7 @@ TUT_UNIT_TEST( "less" )
 	ENSURE_EQUALS( "less number failed", execute( "main(){return([$0<$1,$0<$0]);}" ), "[true, false]" );
 	ENSURE_EQUALS( "less character failed", execute( "main(){return(['0'<'1','0'<'0']);}" ), "[true, false]" );
 	ENSURE_EQUALS( "less string failed", execute( "main(){return([\"0\"<\"1\",\"0\"<\"0\"]);}" ), "[true, false]" );
-	ENSURE_EQUALS( "bad less user succeeded", execute_except( "class A{less(x){return(none);}}main(){return(A()<A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:49: Comparison method `less' returned non-boolean result `*none*'." );
+	ENSURE_EQUALS( "bad less user succeeded", execute_except( "class A{less(x){return(none);}}main(){return(A()<A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:49: Comparison method `less' returned non-boolean result of a `*none*' type." );
 	ENSURE_EQUALS( "missing less user succeeded", execute_except( "class A{_x=none;}main(){return(A()<A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `less' method." );
 TUT_TEARDOWN()
 
@@ -331,7 +336,7 @@ TUT_UNIT_TEST( "greater" )
 	ENSURE_EQUALS( "greater number failed", execute( "main(){return([$1>$0,$0>$0]);}" ), "[true, false]" );
 	ENSURE_EQUALS( "greater character failed", execute( "main(){return(['1'>'0','0'>'0']);}" ), "[true, false]" );
 	ENSURE_EQUALS( "greater string failed", execute( "main(){return([\"1\">\"0\",\"0\">\"0\"]);}" ), "[true, false]" );
-	ENSURE_EQUALS( "bad greater user succeeded", execute_except( "class A{greater(x){return(none);}}main(){return(A()>A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:52: Comparison method `greater' returned non-boolean result `*none*'." );
+	ENSURE_EQUALS( "bad greater user succeeded", execute_except( "class A{greater(x){return(none);}}main(){return(A()>A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:52: Comparison method `greater' returned non-boolean result of a `*none*' type." );
 	ENSURE_EQUALS( "missing greater user succeeded", execute_except( "class A{_x=none;}main(){return(A()>A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `greater' method." );
 TUT_TEARDOWN()
 
@@ -341,7 +346,7 @@ TUT_UNIT_TEST( "less_or_equal" )
 	ENSURE_EQUALS( "less_or_equal number failed", execute( "main(){return([$0<=$1,$0<=$0,$1<=$0]);}" ), "[true, true, false]" );
 	ENSURE_EQUALS( "less_or_equal character failed", execute( "main(){return(['0'<='1','0'<='0','1'<='0']);}" ), "[true, true, false]" );
 	ENSURE_EQUALS( "less_or_equal string failed", execute( "main(){return([\"0\"<=\"1\",\"0\"<=\"0\",\"1\"<=\"0\"]);}" ), "[true, true, false]" );
-	ENSURE_EQUALS( "bad less_or_equal user succeeded", execute_except( "class A{less_or_equal(x){return(none);}}main(){return(A()<=A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:58: Comparison method `less_or_equal' returned non-boolean result `*none*'." );
+	ENSURE_EQUALS( "bad less_or_equal user succeeded", execute_except( "class A{less_or_equal(x){return(none);}}main(){return(A()<=A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:58: Comparison method `less_or_equal' returned non-boolean result of a `*none*' type." );
 	ENSURE_EQUALS( "missing less_or_equal user succeeded", execute_except( "class A{_x=none;}main(){return(A()<=A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `less_or_equal' method." );
 TUT_TEARDOWN()
 
@@ -351,7 +356,7 @@ TUT_UNIT_TEST( "greater_or_equal" )
 	ENSURE_EQUALS( "greater_or_equal number failed", execute( "main(){return([$1>=$0,$0>=$0,$0>=$1]);}" ), "[true, true, false]" );
 	ENSURE_EQUALS( "greater_or_equal character failed", execute( "main(){return(['1'>='0','0'>='0','0'>='1']);}" ), "[true, true, false]" );
 	ENSURE_EQUALS( "greater_or_equal string failed", execute( "main(){return([\"1\">=\"0\",\"0\">=\"0\",\"0\">=\"1\"]);}" ), "[true, true, false]" );
-	ENSURE_EQUALS( "bad greater_or_equal user succeeded", execute_except( "class A{greater_or_equal(x){return(none);}}main(){return(A()>=A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:61: Comparison method `greater_or_equal' returned non-boolean result `*none*'." );
+	ENSURE_EQUALS( "bad greater_or_equal user succeeded", execute_except( "class A{greater_or_equal(x){return(none);}}main(){return(A()>=A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:61: Comparison method `greater_or_equal' returned non-boolean result of a `*none*' type." );
 	ENSURE_EQUALS( "missing greater_or_equal user succeeded", execute_except( "class A{_x=none;}main(){return(A()>=A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `greater_or_equal' method." );
 TUT_TEARDOWN()
 
@@ -571,7 +576,7 @@ TUT_UNIT_TEST( "string()" )
 	ENSURE_EQUALS( "string.clear() failed", execute( "main(){s=\"ala ma kota\";s.clear();return(s);}" ), "\"\"" );
 	ENSURE_EQUALS( "user to str failed", execute( "class A{_x=none;constructor(x){_x=x;}to_string(){return(\"~\"+string(_x)+\"~\");}}main(){return(string(A(7)));}" ), "\"~7~\"" );
 	ENSURE_EQUALS( "bad user to str succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:59: Class `A' does not have `to_string' method." );
-	ENSURE_EQUALS( "bad user to str (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_string(){return(this);}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:85: User conversion method returned invalid type `A' instead of `string'." );
+	ENSURE_EQUALS( "bad user to str (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_string(){return(this);}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:85: User conversion method returned invalid type an `A' instead of a `string'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "integer()" )
@@ -584,7 +589,7 @@ TUT_UNIT_TEST( "integer()" )
 	ENSURE_EQUALS( "copy( int ) failed", execute( "main(){x=0;y=x;z=copy(x);x+=1;return([x,y,z]);}" ), "[1, 1, 0]" );
 	ENSURE_EQUALS( "user to int failed", execute( "class A{_x=none;constructor(x){_x=x;}to_integer(){return(_x);}}main(){return(integer(A(7)));}" ), "7" );
 	ENSURE_EQUALS( "bad user to int succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(integer(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:60: Class `A' does not have `to_integer' method." );
-	ENSURE_EQUALS( "bad user to int (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_integer(){return(this);}}main(){return(integer(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:87: User conversion method returned invalid type `A' instead of `integer'." );
+	ENSURE_EQUALS( "bad user to int (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_integer(){return(this);}}main(){return(integer(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:87: User conversion method returned invalid type an `A' instead of an `integer'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "boolean()" )
@@ -654,7 +659,7 @@ TUT_UNIT_TEST( "character()" )
 		"[true, false, false, true, false, true, true, true, false, true, true, false, true, false]"
 	);
 	ENSURE_EQUALS( "bad user to character succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(character(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:62: Class `A' does not have `to_character' method." );
-	ENSURE_EQUALS( "bad user to character (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_character(){return(this);}}main(){return(character(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:91: User conversion method returned invalid type `A' instead of `character'." );
+	ENSURE_EQUALS( "bad user to character (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_character(){return(this);}}main(){return(character(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:91: User conversion method returned invalid type an `A' instead of a `character'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "exceptions()" )
@@ -1330,7 +1335,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "print" )
 	HHuginn h;
-	HStringStream src( "main(){print(\"Hello World!\\n\");print(13);print(3.14);print($2.71);print('X');return(7);}" );
+	HStringStream src( "main(){print(\"Hello World!\\n\");print(13);print(3.14);print($2.71);print('X');print(true);return(7);}" );
 	HStringStream out;
 	h.set_output_stream( out );
 	h.load( src );
@@ -1342,7 +1347,14 @@ TUT_UNIT_TEST( "print" )
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::INTEGER );
 	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
-	ENSURE_EQUALS( "print failed", out.string(), "Hello World!\n133.142.71X" );
+	ENSURE_EQUALS( "print failed", out.string(), "Hello World!\n133.142.71X1" );
+	ENSURE_EQUALS(
+		"print of bad type succeded",
+		execute_except(
+			"main(){print(size);}"
+		),
+		"*anonymous stream*:1:13: Printing `*function_reference*'s is not supported."
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "input" )
@@ -1530,6 +1542,7 @@ TUT_UNIT_TEST( "assert" )
 		HHuginn h;
 		HStringStream src(
 			"main( argv_ ) {\n"
+			"\tassert( type( argv_ ) == list );\n"
 			"\tassert( size( argv_ ) > 1 );\n"
 			"\treturn( 0 );\n"
 			"}"
@@ -1540,9 +1553,9 @@ TUT_UNIT_TEST( "assert" )
 		ENSURE( "parse failed", h.parse() );
 		ENSURE( "compile", h.compile() );
 		ENSURE_NOT( "execute", h.execute() );
-		ENSURE_EQUALS( "reporting failed assertion failed", h.error_message(), "*anonymous stream*:2:8: size( argv_ ) > 1" );
-		ENSURE_EQUALS( "reporting error position for failed assert failed", h.error_position(), 23 );
-		ENSURE_EQUALS( "reporting error line for failed assert failed", h.error_coordinate().line(), 2 );
+		ENSURE_EQUALS( "reporting failed assertion failed", h.error_message(), "*anonymous stream*:3:8: size( argv_ ) > 1" );
+		ENSURE_EQUALS( "reporting error position for failed assert failed", h.error_position(), 57 );
+		ENSURE_EQUALS( "reporting error line for failed assert failed", h.error_coordinate().line(), 3 );
 		ENSURE_EQUALS( "reporting error column for failed assert failed", h.error_coordinate().column(), 8 );
 	}
 	/* with message */ {
@@ -1887,9 +1900,10 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "modules" )
 	HHuginn h;
 	HStringStream src(
+		"import Mathematics as M;"
 		"import Tress as tress;"
 		"main() {"
-		"return (tress.rectangle(2,3));"
+		"return ([tress.rectangle(2,3), tress.math().floor(3.14), string(tress.Object($7)), type(M)]);"
 		"}"
 	);
 	h.load( src );
@@ -1899,8 +1913,8 @@ TUT_UNIT_TEST( "modules" )
 	ENSURE( "execute", h.execute() );
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::INTEGER );
-	ENSURE_EQUALS( "using module failed", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 6 );
+	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::LIST );
+	ENSURE_EQUALS( "using module failed", to_string( r, &h ), "[6, 3.0, \"7\", Mathematics]" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "incremental mode" )
@@ -1924,7 +1938,7 @@ TUT_UNIT_TEST( "incremental mode" )
 		{ "@(x){x;};" },
 		{ "@(x){x;};" }
 	};
-	ENSURE_EQUALS( "bug in incremental mode management of statement counter resurfaced", execute_incremental( l3 ), "*function_reference**function_reference*" );
+	ENSURE_EQUALS( "bug in incremental mode management of statement counter resurfaced", execute_incremental( l3 ), "@2:1@3:1" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "max call stack size" )
@@ -1939,7 +1953,28 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "observe/use" )
 	ENSURE_EQUALS(
-		"obseve/use failed",
+		"obseve/use basic failed",
+		execute(
+			"main(){"
+			"r=[];"
+			"x=none;"
+			"y=7;"
+			"x=observe(y);"
+			"r.add(type(x));"
+			"z=use(x);"
+			"r.add(type(z));"
+			"r.add(copy(z));"
+			"z=none;"
+			"y=none;"
+			"z=use(x);"
+			"r.add(type(z));"
+			"return(r);"
+			"}"
+		),
+		"[*observer*, integer, 7, *none*]"
+	);
+	ENSURE_EQUALS(
+		"obseve/use complex failed",
 		execute(
 			"class Node {"
 			"	_data = none;"

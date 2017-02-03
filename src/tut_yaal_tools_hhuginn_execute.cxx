@@ -715,6 +715,18 @@ char const progExecuteErr69[] =
 	"}\n"
 ;
 
+char const progExecuteErr70[] =
+	"main() {\n"
+	"while(1){}\n"
+	"}\n"
+;
+
+char const progExecuteErr71[] =
+	"main() {\n"
+	"type(type)();\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -806,6 +818,8 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr67,
 		progExecuteErr68,
 		progExecuteErr69,
+		progExecuteErr70,
+		progExecuteErr71,
 		NULL
 	};
 	int const err[][3] = {
@@ -879,6 +893,8 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 14, 3, 2 },    // 67
 		{ 14, 2, 6 },    // 68
 		{ 9, 2, 1 },     // 69
+		{ 15, 2, 7 },    // 70
+		{ 19, 2, 11 },   // 71
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );

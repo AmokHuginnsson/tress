@@ -227,7 +227,7 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 	ENSURE( "execution failed", e );
 	HHuginn::value_t res( h.result() );
 	l.lock();
-	_resultCache.assign( to_string( res ) );
+	_resultCache.assign( to_string( res, &h ) );
 	return ( _resultCache );
 }
 
@@ -342,7 +342,7 @@ hcore::HString tut_yaal_tools_hhuginn_base::execute_incremental(
 		res.append( out.string() );
 		res.trim_right();
 		out.reset();
-		res.append( to_string( r ) );
+		res.append( to_string( r, &h ) );
 	}
 	return ( res );
 }
