@@ -66,7 +66,7 @@ TUT_UNIT_TEST( "allocator::ref<allocator::system>" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "allocator::shared_pool" )
-	HPool<HList<int>::NODE_SIZE> pool;
+	HPool<HList<int>::node_size::value> pool;
 	allocator::shared_pool<HList<int>::node_type> alloc( pool );
 	HList<int, allocator::shared_pool<int> > l( alloc );
 	l.push_back( 1 );
