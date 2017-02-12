@@ -308,6 +308,32 @@ char const progPost16[] =
 	"}\n"
 ;
 
+char const progPre17[] =
+	"#! /usr/bin/env huginn\n"
+	"main() {\n"
+	"\treturn ( 0 );\n"
+	"} // single line"
+;
+
+char const progPost17[] =
+	"main() {\n"
+	"\treturn ( 0 );\n"
+	"} "
+;
+
+char const progPre18[] =
+	"#! /usr/bin/env huginn\n"
+	"main() {\n"
+	"\treturn ( 0 );\n"
+	"}  "
+;
+
+char const progPost18[] =
+	"main() {\n"
+	"\treturn ( 0 );\n"
+	"}  "
+;
+
 void tut_yaal_tools_hhuginn_preprocessor::test_preprocessing( prog_src_t pre_, prog_src_t post_, int index_ ) {
 	HStringStream pre( pre_ );
 	HStringStream post;
@@ -339,6 +365,8 @@ TUT_UNIT_TEST( "preprocessor" )
 		progPre14,
 		progPre15,
 		progPre16,
+		progPre17,
+		progPre18,
 		NULL
 	};
 	prog_src_t progPost[] = {
@@ -359,6 +387,8 @@ TUT_UNIT_TEST( "preprocessor" )
 		progPost14,
 		progPost15,
 		progPost16,
+		progPost17,
+		progPost18,
 		NULL
 	};
 	for ( prog_src_t* pre( begin( progPre ) ), * preEnd( end( progPre ) ), * post( begin( progPost ) ); pre != preEnd; ++ pre, ++ post ) {
