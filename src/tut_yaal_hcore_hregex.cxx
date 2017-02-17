@@ -55,6 +55,28 @@ TUT_UNIT_TEST( "simple match" )
 	clog << r.error() << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "multiple occurrences" )
+	HRegex r( "A.a" );
+	char const str[] = "xxxAlayyyAgazzz";
+	HString res;
+	for ( HRegex::HMatch const& m : r.matches( str ) ) {
+		res.append( str + m.start(), m.size() );
+	}
+	ENSURE_EQUALS( "bad match", res, "AlaAga" );
+	clog << r.error() << ": " << res << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "multiple occurrences overlapping" )
+	HRegex r( "([0-9]+)" );
+	char const str[] = "abc012def789ghi";
+	HString res;
+	for ( HRegex::HMatch const& m : r.matches( str ) ) {
+		res.append( str + m.start(), m.size() );
+	}
+	ENSURE_EQUALS( "bad match", res, "012789" );
+	clog << r.error() << ": " << res << endl;
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "groups" )
 	HRegex r( "^([a-z]*)@([a-z.]*)$", HRegex::COMPILE::EXTENDED );
 	char const str[] = "user@example.com";
@@ -98,6 +120,21 @@ TUT_UNIT_TEST( "huginn identifier from huginn program" )
 	HString m( str + it->start(), it->size() );
 	ENSURE_EQUALS( "bad match", m, "main" );
 	clog << r.error() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "replace(backref)" )
+	HRegex r( "([0-9]+)" );
+	ENSURE_EQUALS( "replace(backref) failed (matching)", r.replace( "abc012def789ghi", "$$$1}" ), "abc$012}def$789}ghi" );
+	ENSURE_EQUALS( "replace(backref) failed (non-matching)", r.replace( "abc!@#def&*(ghi", "{$1}" ), "abc!@#def&*(ghi" );
+	ENSURE_THROW( "invlid backref succeeded", r.replace( "abc012def789ghi", "{$" ), HRegexException );
+	ENSURE_THROW( "invlid backref succeeded", r.replace( "abc012def789ghi", "a$a" ), HRegexException );
+	ENSURE_THROW( "invlid backref succeeded", r.replace( "abc012def789ghi", "$2" ), HRegexException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "replace(fun)" )
+	HRegex r( "[0-9]+" );
+	ENSURE_EQUALS( "replace(fun) failed (matching)", r.replace( "abc012def789ghi", HRegex::replacer_t( []( yaal::hcore::HString const& s ){ return ( "{" + s + "}" ); } ) ), "abc{012}def{789}ghi" );
+	ENSURE_EQUALS( "replace(fun) failed (non-matching)", r.replace( "abc!@#def&*(ghi", HRegex::replacer_t( []( yaal::hcore::HString const& s ){ return ( "{" + s + "}" ); } ) ), "abc!@#def&*(ghi" );
 TUT_TEARDOWN()
 
 }
