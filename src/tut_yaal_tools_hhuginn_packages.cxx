@@ -781,6 +781,28 @@ TUT_UNIT_TEST( "RegularExpressions" )
 		),
 		"\"ok|user@example.com|user|example.com\""
 	);
+	ENSURE_EQUALS(
+		"RegularExpressions.replace failed",
+		execute(
+			"import RegularExpressions as re;\n"
+			"main(){\n"
+			"cre=re.compile(\"([0-9]+)\");\n"
+			"return(cre.replace(\"abc012def789ghj\",\"$$$1}\"));\n"
+			"}"
+		),
+		"\"abc$012}def$789}ghj\""
+	);
+	ENSURE_EQUALS(
+		"RegularExpressions.replace failed",
+		execute_except(
+			"import RegularExpressions as re;\n"
+			"main(){\n"
+			"cre=re.compile(\"([0-9]+)\");\n"
+			"cre.replace(\"abc012def789ghj\",\"{$2}\");\n"
+			"}"
+		),
+		"*anonymous stream*:4:12: Uncaught exception: Invalid back-reference number in replacement string: 2."
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Mathematics" )
