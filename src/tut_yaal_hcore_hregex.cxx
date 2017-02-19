@@ -78,7 +78,7 @@ TUT_UNIT_TEST( "multiple occurrences overlapping" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "groups" )
-	HRegex r( "^([a-z]*)@([a-z.]*)$", HRegex::COMPILE::EXTENDED );
+	HRegex r( "^([a-z]*)@([a-z.]*)$" );
 	char const str[] = "user@example.com";
 	typedef HArray<HString> strings_t;
 	strings_t s;
@@ -113,8 +113,8 @@ TUT_UNIT_TEST( "match of empty" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "huginn identifier from huginn program" )
-	hcore::HString identifier( YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END );
-	HRegex r( identifier, HRegex::COMPILE::EXTENDED );
+	hcore::HString identifier( "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b" );
+	HRegex r( identifier );
 	char const str[] = "main() {\n\treturn( 0 );\n}\n";
 	HRegex::HMatchIterator it( r.find( str ) );
 	HString m( str + it->start(), it->size() );

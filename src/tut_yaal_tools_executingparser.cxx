@@ -1397,7 +1397,7 @@ TUT_UNIT_TEST( "follows with recursion bug" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "unnamed HHuginn grammar" )
-	HRule name( regex( YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END ) );
+	HRule name( regex( "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b" ) );
 	HRule expression;
 	HRule absoluteValue( '|' >> expression >> '|' );
 	HRule parenthesis( '(' >> expression >> ')' );
@@ -1479,7 +1479,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HExecutingParser ep( hg ); /* test for infinite recursion */
 	char const huginnDesc[][550] = {
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ | ( \"import\" >> B_ >> \"as\" >> B_ >> ';' ) )",
-		"B_ = regex( \"" YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END "\" )",
+		"B_ = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
 		"C_ = ( *( ( E_ >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> ( ( F_ >> -( \"^^\" >> F_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
 		"D_ = ( B_ >> '(' >> -G_ >> ')' >> '{' >> *H_ >> '}' )",
 		"E_ = ( ( B_ >> +( I_ | J_ | K_ ) ) | B_ )",
@@ -1936,7 +1936,7 @@ TUT_UNIT_TEST( "full Huginn grammar with semantic actions" )
 	HBoundCall<void ( double long )> cd( call( &dummy_call_d, _1 ) );
 	HBoundCall<void ( int long long )> ci( call( &dummy_call_i, _1 ) );
 	HBoundCall<void ( yaal::hcore::HString const& )> cs( call( &dummy_call_s, _1 ) );
-	hcore::HString identifierPattern( YAAL_REGEX_WORD_START "[a-zA-Z_][a-zA-Z0-9_]*" YAAL_REGEX_WORD_END );
+	hcore::HString identifierPattern( "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b" );
 	HRule expression( "expression", cv );
 	HRule absoluteValue( "absoluteValue", e_p::constant( '|', cc ) >> expression >> e_p::constant( '|', cv ) );
 	HRule parenthesis( "parenthesis", e_p::constant( '(', cc ) >> expression >> e_p::constant( ')', cc ) );
