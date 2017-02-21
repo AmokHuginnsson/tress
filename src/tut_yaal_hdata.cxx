@@ -64,8 +64,8 @@ TUT_UNIT_TEST( "load data" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "cancel add record" )
-	play( "load data", { '\r', KEY<'n'>::command, 'a', KEY<'q'>::command, KEY_CODES::LEFT, '\r', KEY<'x'>::command } );
-	play( "load data", { '\r', KEY<'n'>::command, 'a', KEY<'q'>::command, KEY_CODES::LEFT, KEY_CODES::LEFT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, KEY_CODES::RIGHT, '\r', KEY<'x'>::command } );
+	play( "load data", { '\r', KEY<'n'>::command, 'a', KEY<'q'>::command, KEY_CODE::LEFT, '\r', KEY<'x'>::command } );
+	play( "load data", { '\r', KEY<'n'>::command, 'a', KEY<'q'>::command, KEY_CODE::LEFT, KEY_CODE::LEFT, KEY_CODE::RIGHT, KEY_CODE::RIGHT, KEY_CODE::RIGHT, '\r', KEY<'x'>::command } );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "add record (no children)" )
@@ -76,11 +76,11 @@ TUT_UNIT_TEST( "add record (no children)" )
 			't', 'e', 'x', 't', 'u', 'a', 'l', ' ', 'd', 'a', 't', 'a', '\t',
 			'7', '\t',
 			'3', '.', '1', '4', '\t',
-			KEY_CODES::DOWN, KEY_CODES::LEFT, '\r', '\t',
+			KEY_CODE::DOWN, KEY_CODE::LEFT, '\r', '\t',
 			'1', '4', ':', '2', '3', ':', '5', '7', '\t',
 			'1', '9', '7', '8', '-', '0', '5', '-', '2', '4', ' ', '2', '3', ':', '3', '0', ':', '0', '0', '\t',
-			KEY_CODES::DOWN, KEY_CODES::DOWN, '\r', KEY<'w'>::command,
-			KEY_CODES::END, KEY<'d'>::command,
+			KEY_CODE::DOWN, KEY_CODE::DOWN, '\r', KEY<'w'>::command,
+			KEY_CODE::END, KEY<'d'>::command,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
@@ -94,14 +94,14 @@ TUT_UNIT_TEST( "add record (with children)" )
 			't', 'e', 'x', 't', 'u', 'a', 'l', ' ', 'd', 'a', 't', 'a', '\t',
 			'7', '\t',
 			'3', '.', '1', '4', '\t',
-			KEY_CODES::DOWN, KEY_CODES::LEFT, '\r', '\t',
+			KEY_CODE::DOWN, KEY_CODE::LEFT, '\r', '\t',
 			'1', '4', ':', '2', '3', ':', '5', '7', '\t',
 			'1', '9', '7', '8', '-', '0', '5', '-', '2', '4', ' ', '2', '3', ':', '3', '0', ':', '0', '0', '\t',
-			KEY_CODES::DOWN, KEY_CODES::DOWN, '\r', '\t',
-			KEY_CODES::INSERT, KEY_CODES::F2, 'v', 'a', 'l', 'u', 'e', '1', '\t', 'd', 'a', 't', 'a', '1', '\t', '3', '7', '\r',
-			KEY_CODES::INSERT, KEY_CODES::F2, 'v', 'a', 'l', 'u', 'e', '2', '\t', 'd', 'a', 't', 'a', '2', '\t', '6', '1', '\r',
+			KEY_CODE::DOWN, KEY_CODE::DOWN, '\r', '\t',
+			KEY_CODE::INSERT, KEY_CODE::F2, 'v', 'a', 'l', 'u', 'e', '1', '\t', 'd', 'a', 't', 'a', '1', '\t', '3', '7', '\r',
+			KEY_CODE::INSERT, KEY_CODE::F2, 'v', 'a', 'l', 'u', 'e', '2', '\t', 'd', 'a', 't', 'a', '2', '\t', '6', '1', '\r',
 			KEY<'w'>::command,
-			KEY_CODES::END, KEY<'d'>::command,
+			KEY_CODE::END, KEY<'d'>::command,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
@@ -115,24 +115,24 @@ TUT_UNIT_TEST( "edit record" )
 			't', 'e', 'x', 't', 'u', 'a', 'l', ' ', 'd', 'a', 't', 'a', '\t',
 			'7', '\t',
 			'3', '.', '1', '4', '\t',
-			KEY_CODES::DOWN, KEY_CODES::LEFT, '\r', '\t',
+			KEY_CODE::DOWN, KEY_CODE::LEFT, '\r', '\t',
 			'1', '4', ':', '2', '3', ':', '5', '7', '\t',
 			'1', '9', '7', '8', '-', '0', '5', '-', '2', '4', ' ', '2', '3', ':', '3', '0', ':', '0', '0', '\t',
-			KEY_CODES::DOWN, KEY_CODES::DOWN, '\r', '\t',
-			KEY_CODES::INSERT, KEY_CODES::F2, 'v', 'a', 'l', 'u', 'e', '1', '\t', 'd', 'a', 't', 'a', '1', '\t', '3', '7', '\r',
-			KEY_CODES::INSERT, KEY_CODES::F2, 'v', 'a', 'l', 'u', 'e', '2', '\t', 'd', 'a', 't', 'a', '2', '\t', '6', '1', '\r',
-			KEY<'w'>::command, KEY_CODES::END,
+			KEY_CODE::DOWN, KEY_CODE::DOWN, '\r', '\t',
+			KEY_CODE::INSERT, KEY_CODE::F2, 'v', 'a', 'l', 'u', 'e', '1', '\t', 'd', 'a', 't', 'a', '1', '\t', '3', '7', '\r',
+			KEY_CODE::INSERT, KEY_CODE::F2, 'v', 'a', 'l', 'u', 'e', '2', '\t', 'd', 'a', 't', 'a', '2', '\t', '6', '1', '\r',
+			KEY<'w'>::command, KEY_CODE::END,
 			KEY<'e'>::command,
-			KEY_CODES::ESCAPE, 'I',
-			KEY_CODES::ESCAPE, 'I',
-			KEY_CODES::DOWN, KEY_CODES::DOWN,
-			KEY_CODES::INSERT, KEY_CODES::F2, KEY_CODES::DELETE, 'v', 'a', 'l', 'u', 'e', '3', '\t', 'd', 'a', 't', 'a', '3', '\t', '2', '.', '7', '\r',
-			KEY<'w'>::command, KEY_CODES::END,
+			KEY_CODE::ESCAPE, 'I',
+			KEY_CODE::ESCAPE, 'I',
+			KEY_CODE::DOWN, KEY_CODE::DOWN,
+			KEY_CODE::INSERT, KEY_CODE::F2, KEY_CODE::DELETE, 'v', 'a', 'l', 'u', 'e', '3', '\t', 'd', 'a', 't', 'a', '3', '\t', '2', '.', '7', '\r',
+			KEY<'w'>::command, KEY_CODE::END,
 			KEY<'e'>::command,
-			KEY_CODES::ESCAPE, 'I',
-			KEY_CODES::ESCAPE, 'I',
-			KEY_CODES::F2, '\t', KEY_CODES::END, KEY_CODES::BACKSPACE, 'X', KEY_CODES::HOME, KEY_CODES::BACKSPACE, '\r', KEY_CODES::DOWN, KEY_CODES::DELETE,
-			KEY<'w'>::command, KEY_CODES::END,
+			KEY_CODE::ESCAPE, 'I',
+			KEY_CODE::ESCAPE, 'I',
+			KEY_CODE::F2, '\t', KEY_CODE::END, KEY_CODE::BACKSPACE, 'X', KEY_CODE::HOME, KEY_CODE::BACKSPACE, '\r', KEY_CODE::DOWN, KEY_CODE::DELETE,
+			KEY<'w'>::command, KEY_CODE::END,
 			KEY<'d'>::command,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
@@ -196,7 +196,7 @@ TUT_UNIT_TEST( "cancel" )
 	play(
 		"cancel view record", {
 			'\r',
-			KEY_CODES::ESCAPE, fake_console_subsystem::COMMIT_ESCAPE,
+			KEY_CODE::ESCAPE, fake_console_subsystem::COMMIT_ESCAPE,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
@@ -204,7 +204,7 @@ TUT_UNIT_TEST( "cancel" )
 		"cancel add record", {
 			'\r',
 			KEY<'n'>::command,
-			KEY_CODES::ESCAPE, fake_console_subsystem::COMMIT_ESCAPE,
+			KEY_CODE::ESCAPE, fake_console_subsystem::COMMIT_ESCAPE,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
@@ -212,7 +212,7 @@ TUT_UNIT_TEST( "cancel" )
 		"cancel edit record", {
 			'\r',
 			KEY<'e'>::command,
-			KEY_CODES::ESCAPE, fake_console_subsystem::COMMIT_ESCAPE,
+			KEY_CODE::ESCAPE, fake_console_subsystem::COMMIT_ESCAPE,
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
@@ -222,8 +222,8 @@ TUT_UNIT_TEST( "confim box" )
 	play(
 		"confirm box", {
 			'\r',
-			KEY<'e'>::command, KEY_CODES::DELETE,
-			KEY<'x'>::command, 0, KEY_CODES::LEFT, '\r'
+			KEY<'e'>::command, KEY_CODE::DELETE,
+			KEY<'x'>::command, 0, KEY_CODE::LEFT, '\r'
 		}
 	);
 TUT_TEARDOWN()

@@ -53,7 +53,7 @@ HTestWindow::HTestWindow( const char* title_, yaal::dbwrapper::HDataBase::ptr_t 
 	, _name( nullptr )
 	, _logPad( nullptr ) {
 	M_PROLOG
-	register_postprocess_handler( KEY_CODES::DELETE, nullptr, call( &HTestWindow::handler_delete, this, _1 ) );
+	register_postprocess_handler( KEY_CODE::DELETE, nullptr, call( &HTestWindow::handler_delete, this, _1 ) );
 	register_postprocess_handler( '\r', nullptr, call( &HTestWindow::handler_enter, this, _1 ) );
 	return;
 	M_EPILOG
@@ -162,21 +162,21 @@ void HTestWindow::do_init( void ) {
 	_editableList->enable( true );
 	_logPad = create_widget<HLogPad>( this, -10, 52, -3, -1, "&Log pad", HWidgetAttributes().label_decoration( HWidget::LABEL::DECORATION::AUTO ).label_position( HWidget::LABEL::POSITION::STACKED ) );
 	_logPad->add( "Color test:\n" );
-	_logPad->add( COLORS::FG_RED, "red" );
-	_logPad->add( COLORS::FG_GREEN, " green" );
-	_logPad->add( COLORS::FG_BLUE, " blue\n" );
-	_logPad->add( COLORS::FG_BRIGHTRED, "brightred" );
-	_logPad->add( COLORS::FG_BRIGHTGREEN, " brightgreen" );
-	_logPad->add( COLORS::FG_BRIGHTBLUE, " brightblue\n" );
-	_logPad->add( COLORS::FG_CYAN, "cyan" );
-	_logPad->add( COLORS::FG_BRIGHTCYAN, " brigthcyan\n" );
-	_logPad->add( COLORS::FG_MAGENTA, "magenta" );
-	_logPad->add( COLORS::FG_BRIGHTMAGENTA, " brigthmagenta\n" );
-	_logPad->add( COLORS::FG_BROWN, "brown" );
-	_logPad->add( COLORS::FG_YELLOW, " yellow\n" );
-	_logPad->add( COLORS::FG_GRAY, "gray" );
-	_logPad->add( COLORS::FG_LIGHTGRAY, " lightgray" );
-	_logPad->add( COLORS::FG_WHITE, " white" );
+	_logPad->add( COLOR::FG_RED, "red" );
+	_logPad->add( COLOR::FG_GREEN, " green" );
+	_logPad->add( COLOR::FG_BLUE, " blue\n" );
+	_logPad->add( COLOR::FG_BRIGHTRED, "brightred" );
+	_logPad->add( COLOR::FG_BRIGHTGREEN, " brightgreen" );
+	_logPad->add( COLOR::FG_BRIGHTBLUE, " brightblue\n" );
+	_logPad->add( COLOR::FG_CYAN, "cyan" );
+	_logPad->add( COLOR::FG_BRIGHTCYAN, " brigthcyan\n" );
+	_logPad->add( COLOR::FG_MAGENTA, "magenta" );
+	_logPad->add( COLOR::FG_BRIGHTMAGENTA, " brigthmagenta\n" );
+	_logPad->add( COLOR::FG_BROWN, "brown" );
+	_logPad->add( COLOR::FG_YELLOW, " yellow\n" );
+	_logPad->add( COLOR::FG_GRAY, "gray" );
+	_logPad->add( COLOR::FG_LIGHTGRAY, " lightgray" );
+	_logPad->add( COLOR::FG_WHITE, " white" );
 	_logPad->enable( true );
 	M_ENSURE( _widgets.get_widget_by_no( 9 ) == _logPad, "get_widget_by_no(9) failed" );
 	M_ENSURE( _widgets.get_widget_by_no( 8 ) == _editableList, "get_widget_by_no(8) failed" );

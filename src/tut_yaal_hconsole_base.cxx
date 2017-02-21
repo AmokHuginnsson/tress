@@ -72,7 +72,7 @@ void tut_yaal_hconsole_base::play( char const* name_, int_array_t input_ ) {
 	reverse( input_.begin(), input_.end() );
 	int skip( 0 );
 	for ( int key : input_ ) {
-		if ( key == KEY_CODES::MOUSE ) {
+		if ( key == KEY_CODE::MOUSE ) {
 			skip += 3;
 		} else if ( key == KEY<'l'>::ctrl ) {
 			cons.ungetch( -1 );

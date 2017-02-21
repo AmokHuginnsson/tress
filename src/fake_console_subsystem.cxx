@@ -85,7 +85,7 @@ void HFakeConsole::activate( void ) {
 
 int HFakeConsole::attr( chtype_t attr_ ) const {
 	HLock l( _mutex );
-	int a( COLORS::ATTR_DEFAULT );
+	int a( COLOR::ATTR_DEFAULT );
 	attribute_map_t::const_iterator it( _attributes.find( attr_ ) );
 	if ( it != _attributes.end() ) {
 		a = it->second;
@@ -95,7 +95,7 @@ int HFakeConsole::attr( chtype_t attr_ ) const {
 
 int HFakeConsole::bg( chtype_t bg_ ) const {
 	HLock l( _mutex );
-	int b( COLORS::BG_BLACK );
+	int b( COLOR::BG_BLACK );
 	attribute_map_t::const_iterator it( _background.find( bg_ ) );
 	if ( it != _background.end() ) {
 		b = it->second;
@@ -321,7 +321,7 @@ void HFakeConsole::build_attribute_maps( WINDOW* win_ ) {
 	HScopedValueReplacement<chtype_t> a( win_->_attr, 0 );
 	_inputQueue.clear();
 	_background.clear();
-	for ( int col( COLORS::BG_BLACK ); col <= COLORS::BG_WHITE; col += 16 ) {
+	for ( int col( COLOR::BG_BLACK ); col <= COLOR::BG_WHITE; col += 16 ) {
 		cons.set_background( col );
 		_background[win_->_background] = col;
 	}
