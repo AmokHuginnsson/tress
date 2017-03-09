@@ -1982,6 +1982,10 @@ TUT_UNIT_TEST( "incremental mode" )
 		{ "@(x){x;};" }
 	};
 	ENSURE_EQUALS( "bug in incremental mode management of statement counter resurfaced", execute_incremental( l3 ), "@2:1@3:1" );
+	lines_t l4{
+		{ "main();" }
+	};
+	ENSURE_EQUALS( "bug in incremental mode management recursive main resurfaced", execute_incremental( l4 ), "*anonymous stream*:2:1: Referencing main() function in incremental mode is forbidden." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "max call stack size" )
