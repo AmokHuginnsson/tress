@@ -174,6 +174,8 @@ TUT_UNIT_TEST( "construction from characters" )
 		ENSURE_EQUALS( "construction from char failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) ) );
 		ENSURE_EQUALS( "construction from char failed (capacity)", str.capacity(), max( 1, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "construction from char failed (is_empty)", str.empty(), false );
+		HString nil( '\0' );
+		ENSURE_EQUALS( "construction from nil char failed (is_empty)", nil.is_empty(), true );
 	}
 	/* char unsigned */ {
 		static char unsigned const INIT = static_cast<char unsigned>( '±' );
