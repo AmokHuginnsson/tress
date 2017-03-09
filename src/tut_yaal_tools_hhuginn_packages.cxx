@@ -1206,6 +1206,16 @@ TUT_UNIT_TEST( "Mathematics" )
 		),
 		"*anonymous stream*:3:28: Invalid range specified: 0.0"
 	);
+	ENSURE_EQUALS(
+		"Mathematics.randomizer invalid cap succeeded",
+		execute_except(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"math.matrix(real,0x40000000,1);\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:12: yaal::memory::new: new returned NULL"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "matrix err" )
