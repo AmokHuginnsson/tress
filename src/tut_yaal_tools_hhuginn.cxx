@@ -583,6 +583,7 @@ TUT_UNIT_TEST( "string()" )
 	ENSURE_EQUALS( "string.strip() failed", execute( "main(){s=\"~huginn~\";return(s.strip(\"~\"));}" ), "\"huginn\"" );
 	ENSURE_EQUALS( "string.clear() failed", execute( "main(){s=\"ala ma kota\";s.clear();return(s);}" ), "\"\"" );
 	ENSURE_EQUALS( "string reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed(\"Huginn\"),list);}" ), "['n', 'n', 'i', 'g', 'u', 'H']" );
+	ENSURE_EQUALS( "string reversed() copy/size failed", execute( "import Algorithms as algo;main(){x=algo.reversed(\"Huginn\");algo.materialize(copy(x),list).add(size(x));}" ), "['n', 'n', 'i', 'g', 'u', 'H', 6]" );
 	ENSURE_EQUALS(
 		"string.format() failed",
 		execute(
@@ -764,6 +765,7 @@ TUT_UNIT_TEST( "list()" )
 		"[]"
 	);
 	ENSURE_EQUALS( "list reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed([2,3,5,7]),list);}" ), "[7, 5, 3, 2]" );
+	ENSURE_EQUALS( "list size/copy reversed() failed", execute( "import Algorithms as algo;main(){x=algo.reversed([2,3,5,7]);algo.materialize(copy(x),list).add(size(x));}" ), "[7, 5, 3, 2, 4]" );
 	ENSURE_EQUALS(
 		"list equals failed",
 		execute(
@@ -844,6 +846,7 @@ TUT_UNIT_TEST( "deque()" )
 		"deque()"
 	);
 	ENSURE_EQUALS( "deque reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed(deque(2,3,5,7)),deque);}" ), "deque(7, 5, 3, 2)" );
+	ENSURE_EQUALS( "deque reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed(deque(2,3,5,7));algo.materialize(copy(x),deque).add(size(x));}" ), "deque(7, 5, 3, 2, 4)" );
 	ENSURE_EQUALS(
 		"deque equals failed",
 		execute(
@@ -914,6 +917,7 @@ TUT_UNIT_TEST( "dict()" )
 		"[{}, {\"Ala\": 0, \"kota.\": 2, \"ma\": 1}]"
 	);
 	ENSURE_EQUALS( "dict reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed({2:0,3:1,5:-1,7:-2}),list);}" ), "[7, 5, 3, 2]" );
+	ENSURE_EQUALS( "dict reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed({2:0,3:1,5:-1,7:-2});algo.materialize(copy(x),list).add(size(x));}" ), "[7, 5, 3, 2, 4]" );
 	ENSURE_EQUALS(
 		"dict equals failed",
 		execute(
@@ -982,6 +986,7 @@ TUT_UNIT_TEST( "lookup()" )
 		"[5, 0]"
 	);
 	ENSURE_EQUALS( "lookup reversed() failed", execute( "import Algorithms as algo;main(){x=lookup();x[2]=0;x[3]=1;x[5]=-1;x[7]=-2;algo.materialize(algo.reversed(x),list);}" ), "[7, 5, 3, 2]" );
+	ENSURE_EQUALS( "lookup reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=lookup();x[2]=0;x[3]=1;x[5]=-1;x[7]=-2;y=algo.reversed(x);algo.materialize(copy(y),list).add(size(y));}" ), "[7, 5, 3, 2, 4]" );
 	ENSURE_EQUALS(
 		"lookup() erase failed",
 		execute( "d(x){v=\"\";for(e:x){v+=string(e);v+=string(x[e]);}return(v);}main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;v=d(x);v+=\"|\";x.erase(none);x.erase(true);v+=d(x);return(v);}" ),
@@ -1065,6 +1070,7 @@ TUT_UNIT_TEST( "order()" )
 		"[order(), order(1, 2, 3, 4, 5, 7), 6]"
 	);
 	ENSURE_EQUALS( "order reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed(order(2,3,5,7)),list);}" ), "[7, 5, 3, 2]" );
+	ENSURE_EQUALS( "order reversed() copy/size failed", execute( "import Algorithms as algo;main(){x=algo.reversed(order(2,3,5,7));algo.materialize(copy(x),list).add(size(x));}" ), "[7, 5, 3, 2, 4]" );
 	ENSURE_EQUALS(
 		"order on non-uniform succeeded",
 		execute_except( "main(){order(1,2.);}" ),
@@ -1137,6 +1143,7 @@ TUT_UNIT_TEST( "set()" )
 		std::vector<hcore::HString>({ "[{}, {$7.34, 2, 3.14, 'Q', \"ala\"}, 5]", "[{}, {$7.34, 2, 'Q', \"ala\", 3.14}, 5]" } )
 	);
 	ENSURE_EQUALS( "set reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed({2,3,5,7}),list);}" ), "[7, 5, 3, 2]" );
+	ENSURE_EQUALS( "set reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed({2,3,5,7});algo.materialize(copy(x),list).add(size(x));}" ), "[7, 5, 3, 2, 4]" );
 	ENSURE_EQUALS(
 		"set update failed",
 		execute(
