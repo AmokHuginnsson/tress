@@ -1206,16 +1206,6 @@ TUT_UNIT_TEST( "Mathematics" )
 		),
 		"*anonymous stream*:3:28: Invalid range specified: 0.0"
 	);
-	ENSURE_EQUALS(
-		"Mathematics.randomizer invalid cap succeeded",
-		execute_except(
-			"import Mathematics as math;\n"
-			"main(){\n"
-			"math.matrix(real,0x40000000,1);\n"
-			"}\n"
-		),
-		"*anonymous stream*:3:12: yaal::memory::new: new returned NULL"
-	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "matrix err" )
@@ -1498,6 +1488,21 @@ TUT_UNIT_TEST( "matrix err" )
 			"}"
 		),
 		"*anonymous stream*:1:76: Applied transformation function shall return `real', but result was a `number' instead."
+	);
+#if SIZEOF_INT_LONG == 8
+	char const err[] = "*anonymous stream*:3:12: yaal::memory::new: new returned NULL";
+#else
+	char const err[] = "*anonymous stream*:3:12: Signed integer multiplication overflow.";
+#endif
+	ENSURE_EQUALS(
+		"Allocation Matrix of absurd size succeeded",
+		execute_except(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"math.matrix(real,0x40000000,1);\n"
+			"}\n"
+		),
+		err
 	);
 TUT_TEARDOWN()
 
