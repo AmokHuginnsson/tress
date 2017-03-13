@@ -41,10 +41,31 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hmatrix );
 TUT_TEST_GROUP( tut_yaal_hcore_hmatrix, "yaal::hcore::HMatrix" );
 
+TUT_UNIT_TEST( "matrix determinant, non-triwial row swap" )
+	HMatrix<double long> m( 3, 3 );
+	m[0][2] = m[1][0] = m[1][1] = m[2][0] = 1.;
+	ENSURE_DISTANCE( "failed to find determinant 1", m.det(), -1.L, epsilon );
+	m[0][2] = m[1][0] = m[1][1] = m[2][0] = 0.;
+	m[0][2] = m[2][0] = m[2][1] = m[1][0] = 1.;
+	ENSURE_DISTANCE( "failed to find determinant 2", m.det(), 1.L, epsilon );
+	m[0][2] = m[2][0] = m[2][1] = m[1][0] = 0.;
+	m[1][2] = m[0][0] = m[0][1] = m[2][0] = 1.;
+	ENSURE_DISTANCE( "failed to find determinant 3", m.det(), 1.L, epsilon );
+	m[1][2] = m[0][0] = m[0][1] = m[2][0] = 0.;
+	m[1][2] = m[2][0] = m[2][1] = m[0][0] = 1.;
+	ENSURE_DISTANCE( "failed to find determinant 4", m.det(), -1.L, epsilon );
+	m[1][2] = m[2][0] = m[2][1] = m[0][0] = 0.;
+	m[2][2] = m[0][0] = m[0][1] = m[1][0] = 1.;
+	ENSURE_DISTANCE( "failed to find determinant 5", m.det(), -1.L, epsilon );
+	m[2][2] = m[0][0] = m[0][1] = m[1][0] = 0.;
+	m[2][2] = m[1][0] = m[1][1] = m[0][0] = 1.;
+	ENSURE_DISTANCE( "failed to find determinant 6", m.det(), 1.L, epsilon );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "basic matrix operations" )
-	HMatrix < double > V ( 3, 3 );
-	HMatrix < double > W ( 3, 3 );
-	HMatrix < double > X ( 2, 2 );
+	HMatrix<double> V( 3, 3 );
+	HMatrix<double> W( 3, 3 );
+	HMatrix<double> X( 2, 2 );
 	std::cout << "<<< matrix >>>" << std::endl;
 	V [ 0 ] [ 0 ] = 1.2, V [ 0 ] [ 1 ] = 2.3, V [ 0 ] [ 2 ] = 3.4;
 	V [ 1 ] [ 0 ] = 4.3, V [ 1 ] [ 1 ] = 3.2, V [ 1 ] [ 2 ] = 2.1;

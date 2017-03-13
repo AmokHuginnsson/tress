@@ -1000,7 +1000,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"import Mathematics as math;"
 			"main(){"
 			"m1=math.matrix([$1,$2],[$3,$4]);"
-			"return(m1.det());"
+			"return(math.round(m1.det(),50));"
 			"}"
 		),
 		"$-2"
@@ -1011,10 +1011,10 @@ TUT_UNIT_TEST( "Mathematics" )
 			"import Mathematics as math;"
 			"main(){"
 			"m=math.matrix([1.,2.],[3.,4.]);"
-			"return(string(m*m.inverse()));"
+			"return(string((m*m.inverse()).apply(@(x,y,v){x;y;math.round(v,9);})));"
 			"}"
 		),
-		"\"Matrix([1.0, 0.0], [0.0, 1.0])\""
+		"\"Matrix([1.0, 0.0], [-0.0, 1.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.matrix (inverse) failed",
@@ -1022,7 +1022,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"import Mathematics as math;"
 			"main(){"
 			"m=math.matrix([$1.,$2.],[$3.,$4.]);"
-			"return(string(m*m.inverse()));"
+			"return(string((m*m.inverse()).apply(@(x,y,v){x;y;math.round(v,7);})));"
 			"}"
 		),
 		"\"Matrix([$1, $0], [$0, $1])\""
