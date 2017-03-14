@@ -62,6 +62,26 @@ TUT_UNIT_TEST( "matrix determinant, non-triwial row swap" )
 	ENSURE_DISTANCE( "failed to find determinant 6", m.det(), 1.L, epsilon );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "det 0" )
+	HMatrix<double long> m( 8, 8 );
+	double long const data[][8] = {
+		{  32, -30, -29,  29,  28, -26, -25,  25 },
+		{ -23,  23,  22, -20, -19,  19,  18, -16 },
+		{ -15,  15,  14, -12, -11,  11,  10,  -8 },
+		{   8,  -6,  -5,   5,   4,  -2,  -1,   1 },
+		{   0,   2,   3,  -3,  -4,   6,   7,  -7 },
+		{   9,  -9, -10,  12,  13, -13, -14,  16 },
+		{  17, -17, -18,  20,  21, -21, -22,  24 },
+		{ -24,  26,  27, -27, -28,  30,  31, -31 }
+	};
+	for ( int r( 0 ); r < 8; ++ r ) {
+		for ( int c( 0 ); c < 8; ++ c ) {
+			m[r][c] = data[r][c];
+		}
+	}
+	ENSURE_DISTANCE( "det failed", m.det(), 0.L, epsilon );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "inverse" )
 	HMatrix<double long> m( 5, 5 );
 	double long const data[][5] = {
