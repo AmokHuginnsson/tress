@@ -38,11 +38,28 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-TUT_SIMPLE_MOCK( tut_yaal_hcore_hmatrix );
+
+struct tut_yaal_hcore_hmatrix : public simple_mock<tut_yaal_hcore_hmatrix> {
+	virtual ~tut_yaal_hcore_hmatrix( void ) {}
+	typedef HMatrix<double long> matrix_t;
+	void eq( matrix_t const& m1_, matrix_t const& m2_ ) {
+		ENSURE_EQUALS( "bad row", m1_.row(), m2_.row() );
+		ENSURE_EQUALS( "bad col", m1_.col(), m2_.col() );
+		for ( int r( 0 ); r < m1_.row(); ++ r ) {
+			for ( int c( 0 ); c < m1_.col(); ++ c ) {
+				ENSURE_DISTANCE( "sum failed", m1_[r][c], m2_[r][c], epsilon );
+			}
+		}
+	}
+};
 TUT_TEST_GROUP( tut_yaal_hcore_hmatrix, "yaal::hcore::HMatrix" );
 
+TUT_UNIT_TEST( "ctor" )
+	ENSURE_THROW( "initializer list failed to detect malformed source", matrix_t( { {1, 2}, {3} } ), HExceptionT<matrix_t> );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "matrix determinant, non-triwial row swap" )
-	HMatrix<double long> m( 3, 3 );
+	matrix_t m( 3, 3 );
 	m[0][2] = m[1][0] = m[1][1] = m[2][0] = 1.;
 	ENSURE_DISTANCE( "failed to find determinant 1", m.det(), -1.L, epsilon );
 	m[0][2] = m[1][0] = m[1][1] = m[2][0] = 0.;
@@ -63,8 +80,7 @@ TUT_UNIT_TEST( "matrix determinant, non-triwial row swap" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "det 0" )
-	HMatrix<double long> m( 8, 8 );
-	double long const data[][8] = {
+	matrix_t m( {
 		{  32, -30, -29,  29,  28, -26, -25,  25 },
 		{ -23,  23,  22, -20, -19,  19,  18, -16 },
 		{ -15,  15,  14, -12, -11,  11,  10,  -8 },
@@ -73,50 +89,35 @@ TUT_UNIT_TEST( "det 0" )
 		{   9,  -9, -10,  12,  13, -13, -14,  16 },
 		{  17, -17, -18,  20,  21, -21, -22,  24 },
 		{ -24,  26,  27, -27, -28,  30,  31, -31 }
-	};
-	for ( int r( 0 ); r < 8; ++ r ) {
-		for ( int c( 0 ); c < 8; ++ c ) {
-			m[r][c] = data[r][c];
-		}
-	}
+	} );
 	ENSURE_DISTANCE( "det failed", m.det(), 0.L, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "inverse" )
-	HMatrix<double long> m( 5, 5 );
-	double long const data[][5] = {
+	matrix_t m( {
 		{  6, 13, -10, -3,  4 },
 		{ 12, -6,  -4,  3,  5 },
 		{ -7, -5,   2,  9, 11 },
 		{ -1,  1,   8, 10, -8 },
 		{  0,  7,  14, -9, -2 }
-	};
-	for ( int r( 0 ); r < 5; ++ r ) {
-		for ( int c( 0 ); c < 5; ++ c ) {
-			m[r][c] = data[r][c];
-		}
-	}
+	} );
 	ENSURE_DISTANCE( "det failed", m.det(), 780000.L, epsilon );
-	double long const res[][5] = {
+	matrix_t res( {
 		{  0.011987,  0.068077, -0.018462,  0.018077,  0.020321 },
 		{  0.060064, -0.020385,  0.012308,  0.029615,  0.018397 },
 		{ -0.013333,  0.020000,  0.020000,  0.020000,  0.053333 },
 		{  0.021603,  0.010385,  0.027692,  0.060385, -0.020064 },
 		{  0.019679,  0.021923,  0.058462, -0.028077,  0.028013 }
-	};
-	HMatrix<double long> im( m._1() );
-	for ( int r( 0 ); r < 5; ++ r ) {
-		for ( int c( 0 ); c < 5; ++ c ) {
-			ENSURE_DISTANCE( "inverse failed", im[r][c], res[r][c], epsilon );
-		}
-	}
+	} );
+	matrix_t im( m._1() );
+	eq( im, res );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "basic matrix operations" )
-	HMatrix<double> V( 3, 3 );
-	HMatrix<double> W( 3, 3 );
-	HMatrix<double> X( 2, 2 );
-	std::cout << "<<< matrix >>>" << std::endl;
+	matrix_t V( 3, 3 );
+	matrix_t W( 3, 3 );
+	matrix_t X( 2, 2 );
+	std::clog << "<<< matrix >>>" << std::endl;
 	V [ 0 ] [ 0 ] = 1.2, V [ 0 ] [ 1 ] = 2.3, V [ 0 ] [ 2 ] = 3.4;
 	V [ 1 ] [ 0 ] = 4.3, V [ 1 ] [ 1 ] = 3.2, V [ 1 ] [ 2 ] = 2.1;
 	V [ 2 ] [ 0 ] = 2.4, V [ 2 ] [ 1 ] = 5.6, V [ 2 ] [ 2 ] = 7.7;
@@ -124,14 +125,47 @@ TUT_UNIT_TEST( "basic matrix operations" )
 	X [ 1 ] [ 0 ] = 4.3, X [ 1 ] [ 1 ] = 3.2;
 	W = V;
 	W *= 2;
-	std::cout << "V = ..." << std::endl << V << std::endl;
-	std::cout << "W = ..." << std::endl << W << std::endl;
-	std::cout << "V + W = ..." << std::endl << V + W << std::endl;
-	std::cout << "X = ..." << std::endl << X << std::endl;
-	std::cout << "X ^ - 1 = ..." << std::endl << X._1 ( ) << std::endl;
-	std::cout << "X * X ^ - 1 = ..." << std::endl << X * X._1 ( ) << std::endl;
-	std::cout << "V ^ - 1 = ..." << std::endl << V._1 ( ) << std::endl;
-	std::cout << "V * V ^ - 1 = ..." << std::endl << V * V._1 ( ) << std::endl;
+	std::clog << "V = ..." << std::endl << V << std::endl;
+	std::clog << "W = ..." << std::endl << W << std::endl;
+	matrix_t sum( V + W );
+	std::clog << "V + W = ..." << std::endl << sum << std::endl;
+	matrix_t sumRes( {
+		{  3.6000,  6.9000, 10.2000 },
+		{ 12.9000,  9.6000,  6.3000 },
+		{  7.2000, 16.8000, 23.1000 }
+	} );
+	eq( sum, sumRes );
+	std::clog << "X = ..." << std::endl << X << std::endl;
+	matrix_t inv( X._1() );
+	std::clog << "X ^ - 1 = ..." << std::endl << inv << std::endl;
+	matrix_t invRes( {
+		{ -0.528926,  0.380165 },
+		{  0.710744, -0.198347 }
+	} );
+	eq( inv, invRes );
+	matrix_t id( X * inv );
+	std::clog << "X * X ^ - 1 = ..." << std::endl << id << std::endl;
+	matrix_t idRes( {
+		{ 1, 0 },
+		{ 0, 1 }
+	} );
+	eq( id, idRes );
+	matrix_t invV( V._1() );
+	std::clog << "V ^ - 1 = ..." << std::endl << invV << std::endl;
+	matrix_t invVRes( {
+		{  1.93538693,  0.199849737, -0.909090909 },
+		{ -4.21788129,  0.162283997,  1.818181818 },
+		{  2.46431255, -0.180315552, -0.909090909 }
+	} );
+	eq( invV, invVRes );
+	matrix_t idV( V * invV );
+	std::clog << "V * V ^ - 1 = ..." << std::endl << idV << std::endl;
+	matrix_t idVRes( {
+		{ 1, 0, 0 },
+		{ 0, 1, 0 },
+		{ 0, 0, 1 }
+	} );
+	eq( idV, idVRes );
 TUT_TEARDOWN()
 
 }
