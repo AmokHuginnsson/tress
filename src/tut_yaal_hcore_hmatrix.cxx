@@ -43,10 +43,10 @@ struct tut_yaal_hcore_hmatrix : public simple_mock<tut_yaal_hcore_hmatrix> {
 	virtual ~tut_yaal_hcore_hmatrix( void ) {}
 	typedef HMatrix<double long> matrix_t;
 	void eq( matrix_t const& m1_, matrix_t const& m2_ ) {
-		ENSURE_EQUALS( "bad row", m1_.row(), m2_.row() );
-		ENSURE_EQUALS( "bad col", m1_.col(), m2_.col() );
-		for ( int r( 0 ); r < m1_.row(); ++ r ) {
-			for ( int c( 0 ); c < m1_.col(); ++ c ) {
+		ENSURE_EQUALS( "bad row", m1_.rows(), m2_.rows() );
+		ENSURE_EQUALS( "bad col", m1_.columns(), m2_.columns() );
+		for ( int r( 0 ); r < m1_.rows(); ++ r ) {
+			for ( int c( 0 ); c < m1_.columns(); ++ c ) {
 				ENSURE_DISTANCE( "sum failed", m1_[r][c], m2_[r][c], epsilon );
 			}
 		}
@@ -109,7 +109,7 @@ TUT_UNIT_TEST( "inverse" )
 		{  0.021603,  0.010385,  0.027692,  0.060385, -0.020064 },
 		{  0.019679,  0.021923,  0.058462, -0.028077,  0.028013 }
 	} );
-	matrix_t im( m._1() );
+	matrix_t im( m.inverse() );
 	eq( im, res );
 TUT_TEARDOWN()
 
@@ -136,7 +136,7 @@ TUT_UNIT_TEST( "basic matrix operations" )
 	} );
 	eq( sum, sumRes );
 	std::clog << "X = ..." << std::endl << X << std::endl;
-	matrix_t inv( X._1() );
+	matrix_t inv( X.inverse() );
 	std::clog << "X ^ - 1 = ..." << std::endl << inv << std::endl;
 	matrix_t invRes( {
 		{ -0.528926,  0.380165 },
@@ -150,7 +150,7 @@ TUT_UNIT_TEST( "basic matrix operations" )
 		{ 0, 1 }
 	} );
 	eq( id, idRes );
-	matrix_t invV( V._1() );
+	matrix_t invV( V.inverse() );
 	std::clog << "V ^ - 1 = ..." << std::endl << invV << std::endl;
 	matrix_t invVRes( {
 		{  1.93538693,  0.199849737, -0.909090909 },

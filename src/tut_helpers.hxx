@@ -276,7 +276,8 @@ inline std::ostream& operator << ( std::ostream& out,
 		yaal::hcore::HMatrix<tType> const& matrix_ ) {
 	M_PROLOG
 	int ctr = 0, ctrLoc = 0;
-	int rows = matrix_.row ( ), cols = matrix_.col ( );
+	int rows( matrix_.rows() );
+	int cols( matrix_.columns() );
 #ifdef __DEBUG__
 /*	out << "rows = " << rows << ", cols = " << cols << endl; */
 #endif /* __DEBUG__ */
