@@ -62,6 +62,36 @@ TUT_UNIT_TEST( "matrix determinant, non-triwial row swap" )
 	ENSURE_DISTANCE( "failed to find determinant 6", m.det(), 1.L, epsilon );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "inverse" )
+	HMatrix<double long> m( 5, 5 );
+	double long const data[][5] = {
+		{  6, 13, -10, -3,  4 },
+		{ 12, -6,  -4,  3,  5 },
+		{ -7, -5,   2,  9, 11 },
+		{ -1,  1,   8, 10, -8 },
+		{  0,  7,  14, -9, -2 }
+	};
+	for ( int r( 0 ); r < 5; ++ r ) {
+		for ( int c( 0 ); c < 5; ++ c ) {
+			m[r][c] = data[r][c];
+		}
+	}
+	ENSURE_DISTANCE( "det failed", m.det(), 780000.L, epsilon );
+	double long const res[][5] = {
+		{  0.011987,  0.068077, -0.018462,  0.018077,  0.020321 },
+		{  0.060064, -0.020385,  0.012308,  0.029615,  0.018397 },
+		{ -0.013333,  0.020000,  0.020000,  0.020000,  0.053333 },
+		{  0.021603,  0.010385,  0.027692,  0.060385, -0.020064 },
+		{  0.019679,  0.021923,  0.058462, -0.028077,  0.028013 }
+	};
+	HMatrix<double long> im( m._1() );
+	for ( int r( 0 ); r < 5; ++ r ) {
+		for ( int c( 0 ); c < 5; ++ c ) {
+			ENSURE_DISTANCE( "inverse failed", im[r][c], res[r][c], epsilon );
+		}
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "basic matrix operations" )
 	HMatrix<double> V( 3, 3 );
 	HMatrix<double> W( 3, 3 );
