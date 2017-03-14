@@ -1005,7 +1005,7 @@ TUT_UNIT_TEST( "Mathematics" )
 		),
 		"$-2"
 	);
-	ENSURE_EQUALS(
+	ENSURE_IN(
 		"Mathematics.matrix (inverse) failed",
 		execute(
 			"import Mathematics as math;"
@@ -1014,7 +1014,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"return(string((m*m.inverse()).apply(@(x,y,v){x;y;math.round(v,9);})));"
 			"}"
 		),
-		"\"Matrix([1.0, 0.0], [-0.0, 1.0])\""
+		std::vector<char const*>( { "\"Matrix([1.0, 0.0], [-0.0, 1.0])\"", "\"Matrix([1.0, 0.0], [0.0, 1.0])\"" } )
 	);
 	ENSURE_EQUALS(
 		"Mathematics.matrix (inverse) failed",
