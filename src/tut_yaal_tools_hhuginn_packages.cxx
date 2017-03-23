@@ -811,7 +811,7 @@ TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){return(math.square_root($7));}" ), "$2.6457513110645905905016157536392604257102591830824501803683344592010688232302836277603928864745436106" );
 	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){try{math.square_root(-1.);}catch(MathematicsException e){return(e.what());}}" ), "\"bad domain\"" );
 	ENSURE_EQUALS( "Mathematics.natural_exponential failed", execute( "import Mathematics as math;main(){return(math.natural_exponential(7.));}" ), "1096.633158428459" );
-	ENSURE_EQUALS( "Mathematics.natural_exponential failed", execute( "import Mathematics as math;main(){return(math.natural_exponential($7));}" ), "$1096.6331584284585992637202382881214324422191348336131437827392407761217693312331290224785687872498437141" );
+	ENSURE_EQUALS( "Mathematics.natural_exponential failed", execute( "import Mathematics as math;main(){return(math.natural_exponential($7));}" ), "$1096.6331584284585992637202382881214324422191348336131437827392407761217693312331290224785687872498438842" );
 	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){return(math.natural_logarithm(7.));}" ), "1.945910149055" );
 	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){return(math.natural_logarithm($7));}" ), "$1.945910149055313305105352743443179729637084729581861188459390149937579862752069267787658498587871527" );
 	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){try{math.natural_logarithm(0.);}catch(MathematicsException e){return(e.what());}}" ), "\"bad domain\"" );
@@ -834,9 +834,9 @@ TUT_UNIT_TEST( "Mathematics" )
 	hcore::HString hyperbolicSinusRes( execute( "import Mathematics as math;main(){return(math.hyperbolic_sinus(7.0));}" ) );
 	hyperbolicSinusRes.pop_back();
 	ENSURE_EQUALS( "Mathematics.hyperbolic_sinus failed", hyperbolicSinusRes, "548.31612327324" );
-	ENSURE_EQUALS( "Mathematics.hyperbolic_sinus failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_sinus($7));}" ), "$548.3161232732465223737561175760185115797963305545428538644492123213499399256719093579746212541216894908" );
+	ENSURE_EQUALS( "Mathematics.hyperbolic_sinus failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_sinus($7));}" ), "$548.3161232732465223737561175760185115797963305545428538644492123213499399256719093579746212541216894919" );
 	ENSURE_EQUALS( "Mathematics.hyperbolic_cosinus failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_cosinus(7.0));}" ), "548.317035155212" );
-	ENSURE_EQUALS( "Mathematics.hyperbolic_cosinus failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_cosinus($7));}" ), "$548.3170351552120768899641207121029208624228042790702899182900284547718294055612196645039475331281543912" );
+	ENSURE_EQUALS( "Mathematics.hyperbolic_cosinus failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_cosinus($7));}" ), "$548.3170351552120768899641207121029208624228042790702899182900284547718294055612196645039475331281543923" );
 	ENSURE_EQUALS( "Mathematics.hyperbolic_tangens failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_tangens(7.));}" ), "0.999998336944" );
 	ENSURE_EQUALS( "Mathematics.hyperbolic_tangens failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_tangens($7));}" ), "$0.9999983369439446717357164159506671128820569920922747109692404742809110481696115057511479211747076493" );
 	ENSURE_EQUALS( "Mathematics.hyperbolic_cotangens failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_cotangens(7.));}" ), "1.000001663059" );
