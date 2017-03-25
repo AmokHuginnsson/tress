@@ -1,9 +1,9 @@
 SET NAMES 'latin2';
 use mysql;
-GRANT USAGE ON *.* TO 'tress'@'localhost';
-DROP USER 'tress'@'localhost';
+DROP USER IF EXISTS 'tress'@'localhost';
 DROP DATABASE IF EXISTS tress;
 CREATE USER 'tress'@'localhost' IDENTIFIED BY 'tr3ss';
+GRANT USAGE ON *.* TO 'tress'@'localhost';
 FLUSH PRIVILEGES;
 
 CREATE DATABASE tress DEFAULT CHARACTER SET latin2;
