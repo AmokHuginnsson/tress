@@ -174,6 +174,28 @@ TUT_UNIT_TEST( "eq ==, neq !=" )
 	ENSURE( "!= failed", a != u2 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "iterator" )
+	char const data[] = "MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!";
+	HUTF8String s( data );
+	int_array_t a( s.begin(), s.end() );
+	ENSURE_EQUALS( "bad character count", a.get_size(), 41 );
+	int_array_t r( s.rbegin(), s.rend() );
+	reverse( r.begin(), r.end() );
+	ENSURE_EQUALS( "iter/riter failed", r, a );
+	char const c[] = "Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!";
+	int_array_t d( begin( c ), end( c ) - 1 );
+	d[1]  = 281;
+	d[2]  = 380;
+	d[7]  = 261;
+	d[9]  = 378;
+	d[16] = 324;
+	d[20] = 322;
+	d[25] = 243;
+	d[33] = 347;
+	d[34] = 263;
+	ENSURE_EQUALS( "decode failed", a, d );
+TUT_TEARDOWN()
+
 }
 
 
