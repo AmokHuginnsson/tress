@@ -147,6 +147,7 @@ yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface&, str
 std::ostream& operator << ( std::ostream&, yaal::hcore::HComplex const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HNumber const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HString const& );
+std::ostream& operator << ( std::ostream&, yaal::hcore::HUTF8String const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HTime const& );
 template<typename first_t, typename second_t>
 std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second_t> const& p ) {

@@ -196,6 +196,14 @@ TUT_UNIT_TEST( "iterator" )
 	ENSURE_EQUALS( "decode failed", a, d );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "substr" )
+	char const data[] = "Mężny bądź, chroń pułk twój i sześć flag!";
+	HUTF8String s( data );
+	HUTF8String ss( s.substr( 6, 4 ) );
+	char const res[] = "bądź";
+	ENSURE_EQUALS( "decode failed", ss, res );
+TUT_TEARDOWN()
+
 }
 
 
