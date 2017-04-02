@@ -257,7 +257,7 @@ public:
 				if ( i == _groups.end() ) {
 					test_result tr;
 					tr.set_meta( test_result::setup, "", *k );
-					tr.set_location( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( group_names.begin(), k ) ) );
+					tr.set_location( tress::setup._testGroupListFilePath.c_str(), "-", static_cast<int>( std::distance( group_names.begin(), k ) ) );
 					_callback->test_completed( tr );
 				} else {
 					if ( !! w )
@@ -296,7 +296,7 @@ public:
 				if ( i == _groups.end() ) {
 					test_result tr;
 					tr.set_meta( test_result::setup, "", k->first );
-					tr.set_location( tress::setup._testGroupListFilePath.raw(), "-", static_cast<int>( std::distance( testSets_.begin(), k ) ) );
+					tr.set_location( tress::setup._testGroupListFilePath.c_str(), "-", static_cast<int>( std::distance( testSets_.begin(), k ) ) );
 					_callback->test_completed( tr );
 				} else {
 					if ( !! w )

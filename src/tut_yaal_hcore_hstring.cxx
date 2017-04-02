@@ -379,7 +379,7 @@ TUT_UNIT_TEST( "replace(patter, str)" )
 		ENSURE_EQUALS( "replace A1->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT_1AB ) - 1 ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), MIN_CAPACITY );
 		ENSURE_EQUALS( "replace A1->B1 failed (is_empty)", str.empty(), false );
-		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
+		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.c_str() ) ) );
 	} {
 		static char const INIT1[] = "c@cc@cc@cc@cc@cc@cc";
 		static char const PAT1A[] = "@";
@@ -391,7 +391,7 @@ TUT_UNIT_TEST( "replace(patter, str)" )
 		ENSURE_EQUALS( "replace A1->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT_1AB ) - 1 ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), max( 31, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (is_empty)", str.empty(), false );
-		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
+		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.c_str() ) ) );
 	}
 	/* noop */ {
 		static char const INIT1[] = "abecad³o";
@@ -401,7 +401,7 @@ TUT_UNIT_TEST( "replace(patter, str)" )
 		ENSURE_EQUALS( "replace ''->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( INIT1 ) - 1 ) );
 		ENSURE_EQUALS( "replace ''->B1 failed (capacity)", str.capacity(), MIN_CAPACITY );
 		ENSURE_EQUALS( "replace ''->B1 failed (is_empty)", str.empty(), false );
-		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.raw() ) ) );
+		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.c_str() ) ) );
 	}
 	/* front */
 	ENSURE_EQUALS( "front repalce to same length failed", "'main()'"_ys.replace( "'", "#" ), "#main()#" );
@@ -711,7 +711,7 @@ int confirm( char const* const str, int size, char const* const pat, int len ) {
 	fastpat = pat;
 	if ( len < fastpat.get_length() )
 		fastpat.set_at( len, 0 );
-	char const* p = ( len <= size ) ? strstr( str, fastpat.raw() ) : NULL;
+	char const* p = ( len <= size ) ? strstr( str, fastpat.c_str() ) : NULL;
 	return ( p ? static_cast<int>( p - str ) : -1 );
 }
 

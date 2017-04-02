@@ -62,7 +62,7 @@ std::ostream& operator << ( std::ostream& out, HComplex const& complex_ ) {
 }
 
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s ) {
-	out << s.raw();
+	out << s.c_str();
 	return ( out );
 }
 
@@ -77,7 +77,7 @@ std::ostream& operator << ( std::ostream& out, yaal::hcore::HNumber const& n ) {
 }
 
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HTime const& t ) {
-	out << t.string().raw();
+	out << t.string().c_str();
 	return ( out );
 }
 

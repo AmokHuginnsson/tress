@@ -166,14 +166,14 @@ int main( int argc_, char* argv_[] ) {
 					tut::test_runner::test_sets_t testSets( prepare_testsets( sets ) );
 					runner.get().run_tests( testSets );
 				} else if ( ! setup._testGroupPattern.is_empty() )
-					runner.get().run_pattern_tests( setup._testGroupPattern.raw() );
+					runner.get().run_pattern_tests( setup._testGroupPattern.c_str() );
 				else if ( ! setup._testGroups.is_empty() && setup._testNumber )
-					runner.get().run_test( setup._testGroups.begin()->raw(),
+					runner.get().run_test( setup._testGroups.begin()->c_str(),
 							setup._testNumber );
 				else if ( ! setup._testGroups.is_empty() ) {
 					string_list_t groupNames;
 					for ( OSetup::group_names_t::iterator it( setup._testGroups.begin() ), end( setup._testGroups.end() ); it != end; ++ it )
-						groupNames.push_back( it->raw() );
+						groupNames.push_back( it->c_str() );
 					runner.get().run_tests( groupNames );
 				} else if ( ! setup._testSets.is_empty() ) {
 					tut::test_runner::test_sets_t testSets( prepare_testsets( setup._testSets ) );
@@ -218,7 +218,7 @@ void gather_groups_from_file( OSetup::set_definitions_t& lst ) {
 	while ( file.read_line( line, ( setup._testGroupListFilePath == "-" ) ? HFile::READ::UNBUFFERED_READS : HFile::READ::BUFFERED_READS ) >= 0 ) {
 		line.trim_left();
 		line.trim_right();
-		lst.push_back( line.raw() );
+		lst.push_back( line.c_str() );
 	}
 	file.close();
 	return;
@@ -272,7 +272,7 @@ tut::test_runner::test_sets_t prepare_testsets( OSetup::set_definitions_t const&
 		if ( token->is_empty() )
 			tools::util::failure( setIdx, "empty set name\n" );
 		tut::test_runner::test_set_t ts;
-		ts.first = token->raw();
+		ts.first = token->c_str();
 		++ token;
 		if ( token != tokenizer.end() ) {
 			noTokenizer.assign( *token );

@@ -43,7 +43,7 @@ void ensure_real( char const* file, int line, char const*, char const* msg, bool
 }
 void ensure_real( char const*, int, char const*, yaal::hcore::HString const&, bool ) __attribute__((used));
 void ensure_real( char const* file, int line, char const*, yaal::hcore::HString const& msg, bool cond ) {
-	ensure_real( file, line, msg.raw(), cond );
+	ensure_real( file, line, msg.c_str(), cond );
 }
 template<typename T>
 void ensure( T const& msg, bool cond ) {
@@ -117,7 +117,7 @@ void ensure_equals_real( char const* file,
 	yaal::hcore::HString const& msg,
 	const Q& actual,
 	const T& expected ) {
-	ensure_equals_real<>( file, line, NULL, msg.raw(), actual, expected );
+	ensure_equals_real<>( file, line, NULL, msg.c_str(), actual, expected );
 }
 template<class T, class Q>
 void ensure_equals( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
@@ -160,7 +160,7 @@ void ensure_in_real( char const* file,
 	yaal::hcore::HString const& msg,
 	const Q& actual,
 	const std::vector<T>& expected ) {
-	ensure_in_real<>( file, line, NULL, msg.raw(), actual, expected );
+	ensure_in_real<>( file, line, NULL, msg.c_str(), actual, expected );
 }
 template<class T, class Q>
 void ensure_in( yaal::hcore::HString const& msg, const Q& actual, const std::vector<T>& expected ) {
@@ -203,7 +203,7 @@ void ensure_less_real( char const* file,
 	yaal::hcore::HString const& msg,
 	const Q& actual,
 	const T& expected ) {
-	ensure_less_real<>( file, line, NULL, msg.raw(), actual, expected );
+	ensure_less_real<>( file, line, NULL, msg.c_str(), actual, expected );
 }
 template<class T, class Q>
 void ensure_less( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
@@ -246,7 +246,7 @@ void ensure_greater_real( char const* file,
 	yaal::hcore::HString const& msg,
 	const Q& actual,
 	const T& expected ) {
-	ensure_greater_real<>( file, line, NULL, msg.raw(), actual, expected );
+	ensure_greater_real<>( file, line, NULL, msg.c_str(), actual, expected );
 }
 template<class T, class Q>
 void ensure_greater( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
@@ -289,7 +289,7 @@ void ensure_less_or_equal_real( char const* file,
 	yaal::hcore::HString const& msg,
 	const Q& actual,
 	const T& expected ) {
-	ensure_less_or_equal_real<>( file, line, NULL, msg.raw(), actual, expected );
+	ensure_less_or_equal_real<>( file, line, NULL, msg.c_str(), actual, expected );
 }
 template<class T, class Q>
 void ensure_less_or_equal( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
@@ -332,7 +332,7 @@ void ensure_greater_or_equal_real( char const* file,
 	yaal::hcore::HString const& msg,
 	const Q& actual,
 	const T& expected ) {
-	ensure_greater_or_equal_real<>( file, line, NULL, msg.raw(), actual, expected );
+	ensure_greater_or_equal_real<>( file, line, NULL, msg.c_str(), actual, expected );
 }
 template<class T, class Q>
 void ensure_greater_or_equal( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
