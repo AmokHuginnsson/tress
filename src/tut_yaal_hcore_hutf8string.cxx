@@ -56,6 +56,12 @@ TUT_UNIT_TEST( "pure ascii data" )
 	ENSURE_EQUALS( "bad c_str", s.c_str(), "HUTF8String"_ys );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "ctor from HString" )
+	HString s( "Ala ma kota" );
+	HUTF8String u( s );
+	ENSURE_EQUALS( "bad HString ctor", u, s.c_str() );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "utf8 data" )
 	char const data[] = "Mężny bądź, chroń pułk twój i sześć flag!";
 	HUTF8String s( data );
@@ -172,6 +178,11 @@ TUT_UNIT_TEST( "eq ==, neq !=" )
 	ENSURE( "!= failed", a1 != u1 );
 	ENSURE( "!= failed", a1 != u );
 	ENSURE( "!= failed", a != u2 );
+
+	ENSURE_NOT( "== failed", a1 == HUTF8String() );
+	ENSURE( "!= failed", a1 != HUTF8String() );
+	ENSURE_NOT( "== failed", a == HUTF8String() );
+	ENSURE( "!= failed", a != HUTF8String() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "iterator" )
@@ -194,6 +205,15 @@ TUT_UNIT_TEST( "iterator" )
 	d[33] = 347;
 	d[34] = 263;
 	ENSURE_EQUALS( "decode failed", a, d );
+	HUTF8String x( "aąࠀ𐀀" );
+	HUTF8String::HIterator it;
+	it = x.cbegin();
+	int_array_t q( it, x.cend() );
+	int_array_t v( x.crbegin(), x.crend() );
+	reverse( v.begin(), v.end() );
+	int_array_t u( { 0x61, 0x105, 0x800, 0x10000 } );
+	ENSURE_EQUALS( "decode all range failed", q, u );
+	ENSURE_EQUALS( "decode all range failed", v, u );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "substr" )
