@@ -207,6 +207,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HFormatter" )
 	ENSURE_EQUALS( "format failed", format( "%d %f %c %s", 1, 2.3, '4', "piec" ), "1 2.300000 4 piec" );
+	ENSURE_EQUALS( "format failed", hcore::format( "%d %f %c %s", 1, 2.3, '4', "piec" ), "1 2.300000 4 piec" );
 TUT_TEARDOWN()
 
 }
