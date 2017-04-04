@@ -59,8 +59,8 @@ TUT_TEST_GROUP( tut_yaal_hconsole, "yaal::hconsole" );
 TUT_UNIT_TEST( "Enter and leave" )
 	HConsole& cons( HConsole::get_instance() );
 	ENSURE_THROW( "leave_curses on non initialized succeeded", cons.leave_curses(), HConsoleException );
-	ENSURE_THROW( "set_attr on non initialized succeeded", cons.set_attr( 0 ), HConsoleException );
-	ENSURE_THROW( "set_background on non initialized succeeded", cons.set_background( 0 ), HConsoleException );
+	ENSURE_THROW( "set_attr on non initialized succeeded", cons.set_attr( COLOR::ATTR_DEFAULT ), HConsoleException );
+	ENSURE_THROW( "set_background on non initialized succeeded", cons.set_background( COLOR::BG_BLACK ), HConsoleException );
 	ENSURE_THROW( "addch on non initialized succeeded", cons.addch( 0 ), HConsoleException );
 	ENSURE_THROW( "addstr on non initialized succeeded", cons.addstr( "" ), HConsoleException );
 	ENSURE_THROW( "get_key on non initialized succeeded", cons.get_key(), HConsoleException );
@@ -70,7 +70,7 @@ TUT_UNIT_TEST( "Enter and leave" )
 	ENSURE_THROW( "clear_terminal on non initialized succeeded", cons.clear_terminal(), HConsoleException );
 	ENSURE_THROW( "printf on non initialized succeeded", cons.printf( "" ), HConsoleException );
 	ENSURE_THROW( "mvprintf on non initialized succeeded", cons.mvprintf( 0, 0, "" ), HConsoleException );
-	ENSURE_THROW( "cmvprintf on non initialized succeeded", cons.cmvprintf( 0, 0, 0, "" ), HConsoleException );
+	ENSURE_THROW( "cmvprintf on non initialized succeeded", cons.cmvprintf( 0, 0, COLOR::ATTR_DEFAULT, "" ), HConsoleException );
 	cons.enter_curses();
 	ENSURE_EQUALS( "bad width", cons.get_width(), CONSOLE_WIDTH );
 	ENSURE_EQUALS( "bad height", cons.get_height(), CONSOLE_HEIGHT );
@@ -97,21 +97,21 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "set/get_attr" )
 	HConsole& cons( HConsole::get_instance() );
 	cons.enter_curses();
-	int attr( COLOR::ATTR_NORMAL );
+	COLOR::color_t attr( COLOR::ATTR_NORMAL );
 	cons.set_attr( attr );
-	ENSURE_EQUALS( "ATTR_NORMAL failed", cons.get_attr(), attr );
-	attr = COLOR::BG_BLUE | COLOR::FG_CYAN;
+	ENSURE_EQUALS( "ATTR_NORMAL failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
+	attr = COLOR::combine( COLOR::BG_BLUE, COLOR::FG_CYAN );
 	cons.set_attr( attr );
-	ENSURE_EQUALS( "ATTR_NORMAL failed", cons.get_attr(), attr );
-	attr = COLOR::BG_BLUE | COLOR::FG_YELLOW;
+	ENSURE_EQUALS( "ATTR_NORMAL failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
+	attr = COLOR::combine( COLOR::BG_BLUE, COLOR::FG_YELLOW );
 	cons.set_attr( attr );
-	ENSURE_EQUALS( "ATTR_NORMAL failed", cons.get_attr(), attr );
-	attr = COLOR::BG_BRIGHTGREEN | COLOR::FG_RED;
+	ENSURE_EQUALS( "ATTR_NORMAL failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
+	attr = COLOR::combine( COLOR::BG_BRIGHTGREEN, COLOR::FG_RED );
 	cons.set_attr( attr );
-	ENSURE_EQUALS( "ATTR_NORMAL failed", cons.get_attr(), attr );
-	attr = COLOR::BG_BRIGHTGREEN | COLOR::FG_BRIGHTCYAN;
+	ENSURE_EQUALS( "ATTR_NORMAL failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
+	attr = COLOR::combine( COLOR::BG_BRIGHTGREEN, COLOR::FG_BRIGHTCYAN );
 	cons.set_attr( attr );
-	ENSURE_EQUALS( "ATTR_NORMAL failed", cons.get_attr(), attr );
+	ENSURE_EQUALS( "ATTR_NORMAL failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
 	cons.leave_curses();
 TUT_TEARDOWN()
 

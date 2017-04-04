@@ -322,12 +322,12 @@ void HFakeConsole::build_attribute_maps( WINDOW* win_ ) {
 	_inputQueue.clear();
 	_background.clear();
 	for ( int col( COLOR::BG_BLACK ); col <= COLOR::BG_WHITE; col += 16 ) {
-		cons.set_background( col );
+		cons.set_background( static_cast<COLOR::color_t>( col ) );
 		_background[win_->_background] = col;
 	}
 	_attributes.clear();
 	for ( int col( 0 ); col < 256; ++ col ) {
-		cons.set_attr( col );
+		cons.set_attr( static_cast<COLOR::color_t>( col ) );
 		_attributes[win_->_attr] = col;
 	}
 }
