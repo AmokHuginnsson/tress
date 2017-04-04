@@ -38,13 +38,17 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_hcore_hformat : public simple_mock<tut_yaal_hcore_hformat> {
+struct tut_yaal_hcore_hformat : public simple_mock<tut_yaal_hcore_hformat>, HFormatter {
 	typedef simple_mock<tut_yaal_hcore_hformat> base_type;
 	static double long PI;
 	static double long E;
 	static char const* const STR;
 	virtual ~tut_yaal_hcore_hformat( void )
 		{}
+	template<typename... T>
+	HString format( T const&... a_ ) {
+		return ( do_format( a_... ) );
+	}
 };
 
 double long tut_yaal_hcore_hformat::PI = 3.141592653589793;
@@ -97,10 +101,10 @@ TUT_UNIT_TEST( "int long long" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "format and streams interaction" )
-	typedef HFormat format;
-	cout << "PI: " << format( "[%2$*1$.*3$Lf]" ) % 30 % PI % 15 << endl;
+	typedef HFormat format_t;
+	cout << "PI: " << format_t( "[%2$*1$.*3$Lf]" ) % 30 % PI % 15 << endl;
 	HStringStream ss;
-	ss << format( "[%2$*1$.*3$Lf]" ) % 30 % PI % 15 << flush;
+	ss << format_t( "[%2$*1$.*3$Lf]" ) % 30 % PI % 15 << flush;
 	ENSURE_EQUALS( "format feeded stream with garbage", ss.string(), "[             3.141592653589793]" );
 TUT_TEARDOWN()
 
@@ -199,6 +203,10 @@ TUT_UNIT_TEST( "swap" )
 	swap( f1, f2 );
 	ENSURE_EQUALS( "format failed", f1.string(), o2 );
 	ENSURE_EQUALS( "format failed", f2.string(), o1 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "HFormatter" )
+	ENSURE_EQUALS( "format failed", format( "%d %f %c %s", 1, 2.3, '4', "piec" ), "1 2.300000 4 piec" );
 TUT_TEARDOWN()
 
 }
