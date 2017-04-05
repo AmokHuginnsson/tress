@@ -13,62 +13,6 @@ NO_MORE_BUGS_STATUS = 1
 WRONG_STATUS = 2
 verbose = 0
 
-class Uber( object ):
-	__name = "Unnamed"
-	def __init__( self, name = None ):
-		if ( name != None ):
-			self.__name = name
-		print "An instance of class " + Uber.__name__ + " named `" + self.__name + "' created."
-
-	def __del__( self ):
-		print "An instance of class " + Uber.__name__ + " named `" + self.__name + "' destroyed."
-
-	def __repr__( self ):
-		return self.__class__.__name__ + "(" + self.__name + ")"
-
-	def name( self ):
-		return ( self.__name )
-
-	def foo( self, *argv, **keywords ):
-		for arg in argv:
-			print arg
-		for key in keywords:
-			print key + "=>" + keywords[key]
-
-	def bar( self, first, second ):
-		return ( first, second )
-
-
-class Hyper( Uber ):
-	def __init__( self, name = None ):
-		super( Hyper, self ).__init__( name )
-		print "An instance of class " + Hyper.__name__ + " named `" + super( Hyper, self ).name() + "' created."
-
-	def __del__( self ):
-		print "An instance of class " + Hyper.__name__ + " named `" + self.name() + "' destroyed."
-		super( Hyper, self ).__del__()
-
-
-class PebkacError(Exception):
-	__message = ""
-	def __init__( self, msg ):
-		self.__message = msg
-	def __str__( self ):
-		return "PEBKAC Exception occured: " + self.__message
-
-
-# Lets learn something about python programming.
-
-def learn():
-	print "Program starts here."
-	a = Hyper( "core" )
-	print a
-	a.foo( 1, "ala", 3.14159265, first = "ox" )
-	c, d = a.bar( 1, 2 )
-	print c
-	print d
-	print "Program ends here."
-
 def msg( str, nonl = 0 ):
 	if ( verbose ):
 		print str,
