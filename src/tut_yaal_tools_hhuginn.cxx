@@ -583,7 +583,7 @@ TUT_UNIT_TEST( "string()" )
 	ENSURE_EQUALS( "string.strip() failed", execute( "main(){s=\"~huginn~\";return(s.strip(\"~\"));}" ), "\"huginn\"" );
 	ENSURE_EQUALS( "string.clear() failed", execute( "main(){s=\"ala ma kota\";s.clear();return(s);}" ), "\"\"" );
 	ENSURE_EQUALS( "string reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed(\"Huginn\"),list);}" ), "['n', 'n', 'i', 'g', 'u', 'H']" );
-	ENSURE_EQUALS( "string reversed() copy/size failed", execute( "import Algorithms as algo;main(){x=algo.reversed(\"Huginn\");algo.materialize(copy(x),list).add(size(x));}" ), "['n', 'n', 'i', 'g', 'u', 'H', 6]" );
+	ENSURE_EQUALS( "string reversed() copy/size failed", execute( "import Algorithms as algo;main(){x=algo.reversed(\"Huginn\");algo.materialize(copy(x),list).push(size(x));}" ), "['n', 'n', 'i', 'g', 'u', 'H', 6]" );
 	ENSURE_EQUALS(
 		"string.format() failed",
 		execute(
@@ -735,8 +735,8 @@ TUT_UNIT_TEST( "list()" )
 		"[2, 3, 5, 7]"
 	);
 	ENSURE_EQUALS(
-		"list add failed",
-		execute( "main(){x=list(2,3,5,7);x.add(0);return(x);}" ),
+		"list push failed",
+		execute( "main(){x=list(2,3,5,7);x.push(0);return(x);}" ),
 		"[2, 3, 5, 7, 0]"
 	);
 	ENSURE_EQUALS(
@@ -765,7 +765,7 @@ TUT_UNIT_TEST( "list()" )
 		"[]"
 	);
 	ENSURE_EQUALS( "list reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed([2,3,5,7]),list);}" ), "[7, 5, 3, 2]" );
-	ENSURE_EQUALS( "list size/copy reversed() failed", execute( "import Algorithms as algo;main(){x=algo.reversed([2,3,5,7]);algo.materialize(copy(x),list).add(size(x));}" ), "[7, 5, 3, 2, 4]" );
+	ENSURE_EQUALS( "list size/copy reversed() failed", execute( "import Algorithms as algo;main(){x=algo.reversed([2,3,5,7]);algo.materialize(copy(x),list).push(size(x));}" ), "[7, 5, 3, 2, 4]" );
 	ENSURE_EQUALS(
 		"list equals failed",
 		execute(
@@ -784,7 +784,7 @@ TUT_UNIT_TEST( "list()" )
 	);
 	ENSURE_EQUALS(
 		"list copy failed",
-		execute( "main(){x=list(2,3,5);y=copy(x);x.add(7);return([x,y]);}" ),
+		execute( "main(){x=list(2,3,5);y=copy(x);x.push(7);return([x,y]);}" ),
 		"[[2, 3, 5, 7], [2, 3, 5]]"
 	);
 TUT_TEARDOWN()
@@ -801,13 +801,13 @@ TUT_UNIT_TEST( "deque()" )
 		"deque(2, 3, 5, 7)"
 	);
 	ENSURE_EQUALS(
-		"deque add failed",
-		execute( "main(){x=deque(2,3,5,7);x.add(0);return(x);}" ),
+		"deque push failed",
+		execute( "main(){x=deque(2,3,5,7);x.push(0);return(x);}" ),
 		"deque(2, 3, 5, 7, 0)"
 	);
 	ENSURE_EQUALS(
-		"deque add_front failed",
-		execute( "main(){x=deque(2,3,5,7);x.add_front(0);return(x);}" ),
+		"deque push_front failed",
+		execute( "main(){x=deque(2,3,5,7);x.push_front(0);return(x);}" ),
 		"deque(0, 2, 3, 5, 7)"
 	);
 	ENSURE_EQUALS(
@@ -846,7 +846,7 @@ TUT_UNIT_TEST( "deque()" )
 		"deque()"
 	);
 	ENSURE_EQUALS( "deque reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed(deque(2,3,5,7)),deque);}" ), "deque(7, 5, 3, 2)" );
-	ENSURE_EQUALS( "deque reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed(deque(2,3,5,7));algo.materialize(copy(x),deque).add(size(x));}" ), "deque(7, 5, 3, 2, 4)" );
+	ENSURE_EQUALS( "deque reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed(deque(2,3,5,7));algo.materialize(copy(x),deque).push(size(x));}" ), "deque(7, 5, 3, 2, 4)" );
 	ENSURE_EQUALS(
 		"deque equals failed",
 		execute(
@@ -865,7 +865,7 @@ TUT_UNIT_TEST( "deque()" )
 	);
 	ENSURE_EQUALS(
 		"deque copy failed",
-		execute( "main(){x=deque(2,3,5);y=copy(x);x.add_front(7);return([x,y]);}" ),
+		execute( "main(){x=deque(2,3,5);y=copy(x);x.push_front(7);return([x,y]);}" ),
 		"[deque(7, 2, 3, 5), deque(2, 3, 5)]"
 	);
 TUT_TEARDOWN()
@@ -917,7 +917,7 @@ TUT_UNIT_TEST( "dict()" )
 		"[{}, {\"Ala\": 0, \"kota.\": 2, \"ma\": 1}]"
 	);
 	ENSURE_EQUALS( "dict reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed({2:0,3:1,5:-1,7:-2}),list);}" ), "[7, 5, 3, 2]" );
-	ENSURE_EQUALS( "dict reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed({2:0,3:1,5:-1,7:-2});algo.materialize(copy(x),list).add(size(x));}" ), "[7, 5, 3, 2, 4]" );
+	ENSURE_EQUALS( "dict reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed({2:0,3:1,5:-1,7:-2});algo.materialize(copy(x),list).push(size(x));}" ), "[7, 5, 3, 2, 4]" );
 	ENSURE_EQUALS(
 		"dict equals failed",
 		execute(
@@ -986,7 +986,7 @@ TUT_UNIT_TEST( "lookup()" )
 		"[5, 0]"
 	);
 	ENSURE_EQUALS( "lookup reversed() failed", execute( "import Algorithms as algo;main(){x=lookup();x[2]=0;x[3]=1;x[5]=-1;x[7]=-2;algo.materialize(algo.reversed(x),list);}" ), "[7, 5, 3, 2]" );
-	ENSURE_EQUALS( "lookup reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=lookup();x[2]=0;x[3]=1;x[5]=-1;x[7]=-2;y=algo.reversed(x);algo.materialize(copy(y),list).add(size(y));}" ), "[7, 5, 3, 2, 4]" );
+	ENSURE_EQUALS( "lookup reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=lookup();x[2]=0;x[3]=1;x[5]=-1;x[7]=-2;y=algo.reversed(x);algo.materialize(copy(y),list).push(size(y));}" ), "[7, 5, 3, 2, 4]" );
 	ENSURE_EQUALS(
 		"lookup() erase failed",
 		execute( "d(x){v=\"\";for(e:x){v+=string(e);v+=string(x[e]);}return(v);}main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;v=d(x);v+=\"|\";x.erase(none);x.erase(true);v+=d(x);return(v);}" ),
@@ -1035,7 +1035,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "order()" )
 	ENSURE_EQUALS(
 		"order() failed",
-		execute( "main(){x=order(2,3,1,4,7,5);x.add(10).add(0);return(x);}" ),
+		execute( "main(){x=order(2,3,1,4,7,5);x.insert(10).insert(0);return(x);}" ),
 		"order(0, 1, 2, 3, 4, 5, 7, 10)"
 	);
 	ENSURE_EQUALS(
@@ -1070,7 +1070,7 @@ TUT_UNIT_TEST( "order()" )
 		"[order(), order(1, 2, 3, 4, 5, 7), 6]"
 	);
 	ENSURE_EQUALS( "order reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed(order(2,3,5,7)),list);}" ), "[7, 5, 3, 2]" );
-	ENSURE_EQUALS( "order reversed() copy/size failed", execute( "import Algorithms as algo;main(){x=algo.reversed(order(2,3,5,7));algo.materialize(copy(x),list).add(size(x));}" ), "[7, 5, 3, 2, 4]" );
+	ENSURE_EQUALS( "order reversed() copy/size failed", execute( "import Algorithms as algo;main(){x=algo.reversed(order(2,3,5,7));algo.materialize(copy(x),list).push(size(x));}" ), "[7, 5, 3, 2, 4]" );
 	ENSURE_EQUALS(
 		"order on non-uniform succeeded",
 		execute_except( "main(){order(1,2.);}" ),
@@ -1108,7 +1108,7 @@ TUT_UNIT_TEST( "set()" )
 #endif
 	ENSURE_EQUALS(
 		"set() failed",
-		execute( "main(){x=set(2,\"ala\",3.14);x.add($7.34).add('Q');return(x);}" ),
+		execute( "main(){x=set(2,\"ala\",3.14);x.insert($7.34).insert('Q');return(x);}" ),
 		expected
 	);
 	ENSURE_EQUALS(
@@ -1143,7 +1143,7 @@ TUT_UNIT_TEST( "set()" )
 		std::vector<hcore::HString>({ "[{}, {$7.34, 2, 3.14, 'Q', \"ala\"}, 5]", "[{}, {$7.34, 2, 'Q', \"ala\", 3.14}, 5]" } )
 	);
 	ENSURE_EQUALS( "set reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed({2,3,5,7}),list);}" ), "[7, 5, 3, 2]" );
-	ENSURE_EQUALS( "set reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed({2,3,5,7});algo.materialize(copy(x),list).add(size(x));}" ), "[7, 5, 3, 2, 4]" );
+	ENSURE_EQUALS( "set reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed({2,3,5,7});algo.materialize(copy(x),list).push(size(x));}" ), "[7, 5, 3, 2, 4]" );
 	ENSURE_EQUALS(
 		"set update failed",
 		execute(
@@ -1429,11 +1429,11 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "class" )
 	ENSURE_EQUALS( "class failed", execute( "class A{_d=none;}main(){o=A();o._d=\"ok\";return(o._d);}" ), "\"ok\"" );
 	ENSURE_EQUALS( "constructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}}main(){o=A(\"ok\");return(o._d);}" ), "\"ok\"" );
-	ENSURE_EQUALS( "destructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"ok\");}}main(){l=list();{o=A(l);type(o);}return(l[0]);}" ), "\"ok\"" );
+	ENSURE_EQUALS( "destructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}destructor(){_d.push(\"ok\");}}main(){l=list();{o=A(l);type(o);}return(l[0]);}" ), "\"ok\"" );
 	ENSURE_EQUALS(
 		"super failed",
 		execute(
-			"class B{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"ok\");}}\n"
+			"class B{_d=none;constructor(d_){_d=d_;}destructor(){_d.push(\"ok\");}}\n"
 			"class D:B{_n=none;constructor(l_,n_){super.constructor(l_);_n=n_;}}\n"
 			"main(){\n"
 			"s=none;\n"
@@ -1450,8 +1450,8 @@ TUT_UNIT_TEST( "class" )
 	ENSURE_EQUALS(
 		"destructor chain failed",
 		execute(
-			"class B{_d=none;constructor(d_){_d=d_;}destructor(){_d.add(\"base\");}}"
-			"class D:B{constructor(l_){super.constructor(l_);}destructor(){_d.add(\"derived\");}}"
+			"class B{_d=none;constructor(d_){_d=d_;}destructor(){_d.push(\"base\");}}"
+			"class D:B{constructor(l_){super.constructor(l_);}destructor(){_d.push(\"derived\");}}"
 			"main(){l=list();{o=D(l);type(o);}return(l[0]+l[1]);}"
 		),
 		"\"derivedbase\""
@@ -1634,9 +1634,9 @@ TUT_UNIT_TEST( "empty return" )
 		"empty return failed",
 		execute(
 			"f(l_) {\n"
-			"l_.add(1);\n"
+			"l_.push(1);\n"
 			"return;\n"
-			"l_.add(2);\n"
+			"l_.push(2);\n"
 			"return(3);\n"
 			"}\n"
 			"main(){\n"
@@ -1857,7 +1857,7 @@ TUT_UNIT_TEST( "Stream" )
 			"main() {\n"
 			"res=[];"
 			"for ( l : fs.open(\"./data/nl.txt\",fs.reading())) {\n"
-			"res.add(l.strip());"
+			"res.push(l.strip());"
 			"}\n"
 			"return(res);\n"
 			"}\n"
@@ -2014,14 +2014,14 @@ TUT_UNIT_TEST( "observe/use" )
 			"x=none;"
 			"y=7;"
 			"x=observe(y);"
-			"r.add(type(x));"
+			"r.push(type(x));"
 			"z=use(x);"
-			"r.add(type(z));"
-			"r.add(copy(z));"
+			"r.push(type(z));"
+			"r.push(copy(z));"
 			"z=none;"
 			"y=none;"
 			"z=use(x);"
-			"r.add(type(z));"
+			"r.push(type(z));"
 			"return(r);"
 			"}"
 		),
