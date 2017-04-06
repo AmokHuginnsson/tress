@@ -25,6 +25,7 @@ Copyright:
 */
 
 #include <TUT/tut.hpp>
+#include <fstream> /* *FIXME* *TODO* Remove after HString UCS is complete. */
 
 #include <yaal/tools/hxml.hxx>
 #include <yaal/tools/streamtools.hxx>
@@ -146,9 +147,9 @@ void resort_entities( yaal::hcore::HString const& path_ ) {
 	if ( ( entitiesStart != -1 ) && ( entitiesEnd > entitiesStart ) ) {
 		sort( lines.begin() + entitiesStart, lines.begin() + entitiesEnd );
 	}
-	HFile out( path_, HFile::OPEN::WRITING );
+	std::ofstream out( path_.c_str(), std::ios::binary ); /* *FIXME* *TODO* Recode using yaal after HString UCS is complete. */
 	for ( yaal::hcore::HString const& l : lines ) {
-		out << l << endl;
+		out << l.c_str() << "\n";
 	}
 }
 
