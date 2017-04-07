@@ -8,6 +8,6 @@ test: $(TARGET)
 
 memcheck: $(TARGET)
 	@cd $(if $(DIR_ROOT),$(DIR_ROOT),.) && mkdir -p out && sqlite3 out/tress.sqlite < data/sqlite.sql && \
-	. _aux/set-limits.sh && $(TRESS_ENV) valgrind ./build/$(if $(TARGET),$(TARGET),debug)/tress/1exec $(TRESS_ARG) > /dev/null; \
+	. _aux/set-limits.sh && $(TRESS_ENV) valgrind --gen-suppressions=all ./build/$(if $(TARGET),$(TARGET),debug)/tress/1exec $(TRESS_ARG) > /dev/null; \
 	test $$? -ne 255
 
