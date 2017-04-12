@@ -963,7 +963,7 @@ TUT_UNIT_TEST( "lookup()" )
 	ENSURE_EQUALS(
 		"lookup() iterator failed",
 		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;v=\"\";for(e:x){v=v+string(e);v=v+string(x[e]);}return(v);}" ),
-		"\"none7Ala0truefalse1makota.2\""
+		"\"none7truefalse1maAla0kota.2\""
 	);
 	ENSURE_EQUALS(
 		"hash on user succeeded",
@@ -990,7 +990,7 @@ TUT_UNIT_TEST( "lookup()" )
 	ENSURE_EQUALS(
 		"lookup() erase failed",
 		execute( "d(x){v=\"\";for(e:x){v+=string(e);v+=string(x[e]);}return(v);}main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;v=d(x);v+=\"|\";x.erase(none);x.erase(true);v+=d(x);return(v);}" ),
-		"\"none7Ala0truefalse1makota.2|Ala01makota.2\""
+		"\"none7truefalse1maAla0kota.2|1maAla0kota.2\""
 	);
 	ENSURE_EQUALS(
 		"lookup() get failed",
@@ -1012,7 +1012,7 @@ TUT_UNIT_TEST( "lookup()" )
 	ENSURE_EQUALS(
 		"lookup() copy() failed",
 		execute( "d(x){v=\"\";for(e:x){v+=string(e);v+=string(x[e]);}return(v);}main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;y=copy(x);x.erase(none);x.erase(true);return([d(x),d(y)]);}" ),
-		"[\"Ala01makota.2\", \"none7Ala01matruefalsekota.2\"]"
+		"[\"1maAla0kota.2\", \"none7truefalse1maAla0kota.2\"]"
 	);
 	ENSURE_EQUALS(
 		"lookup update failed",
