@@ -960,10 +960,15 @@ TUT_UNIT_TEST( "dict()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "lookup()" )
+#if ( TARGET_CPU_BITS == 64 )
+	char const expected1[] = "\"none7truefalse1maAla0kota.2\"";
+#else
+	char const expected1[] = "\"none7truefalse1makota.2Ala0\"";
+#endif
 	ENSURE_EQUALS(
 		"lookup() iterator failed",
 		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;v=\"\";for(e:x){v=v+string(e);v=v+string(x[e]);}return(v);}" ),
-		"\"none7truefalse1maAla0kota.2\""
+		expected1
 	);
 	ENSURE_EQUALS(
 		"hash on user succeeded",
@@ -987,10 +992,15 @@ TUT_UNIT_TEST( "lookup()" )
 	);
 	ENSURE_EQUALS( "lookup reversed() failed", execute( "import Algorithms as algo;main(){x=lookup();x[2]=0;x[3]=1;x[5]=-1;x[7]=-2;algo.materialize(algo.reversed(x),list);}" ), "[7, 5, 3, 2]" );
 	ENSURE_EQUALS( "lookup reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=lookup();x[2]=0;x[3]=1;x[5]=-1;x[7]=-2;y=algo.reversed(x);algo.materialize(copy(y),list).push(size(y));}" ), "[7, 5, 3, 2, 4]" );
+#if ( TARGET_CPU_BITS == 64 )
+	char const expected2[] = "\"none7truefalse1maAla0kota.2|1maAla0kota.2\"";
+#else
+	char const expected2[] = "\"none7truefalse1makota.2Ala0|1makota.2Ala0\"";
+#endif
 	ENSURE_EQUALS(
 		"lookup() erase failed",
 		execute( "d(x){v=\"\";for(e:x){v+=string(e);v+=string(x[e]);}return(v);}main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;v=d(x);v+=\"|\";x.erase(none);x.erase(true);v+=d(x);return(v);}" ),
-		"\"none7truefalse1maAla0kota.2|1maAla0kota.2\""
+		expected2
 	);
 	ENSURE_EQUALS(
 		"lookup() get failed",
@@ -1009,10 +1019,15 @@ TUT_UNIT_TEST( "lookup()" )
 		),
 		"[true, false, false]"
 	);
+#if ( TARGET_CPU_BITS == 64 )
+	char const expected3[] = "[\"1maAla0kota.2\", \"none7truefalse1maAla0kota.2\"]";
+#else
+	char const expected3[] = "[\"1makota.2Ala0\", \"none7truefalse1makota.2Ala0\"]";
+#endif
 	ENSURE_EQUALS(
 		"lookup() copy() failed",
 		execute( "d(x){v=\"\";for(e:x){v+=string(e);v+=string(x[e]);}return(v);}main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;y=copy(x);x.erase(none);x.erase(true);return([d(x),d(y)]);}" ),
-		"[\"1maAla0kota.2\", \"none7truefalse1maAla0kota.2\"]"
+		expected3
 	);
 	ENSURE_EQUALS(
 		"lookup update failed",
