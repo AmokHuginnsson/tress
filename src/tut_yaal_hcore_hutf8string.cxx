@@ -24,6 +24,8 @@ Copyright:
  FITNESS FOR A PARTICULAR PURPOSE. Use it at your own risk.
 */
 
+#include <cstring>
+
 #include <TUT/tut.hpp>
 
 M_VCSID( "$Id: " __ID__ " $" )
@@ -45,7 +47,8 @@ TUT_UNIT_TEST( "default (trivial) ctor" )
 	ENSURE( "non-empty empty", s.is_empty() && s.empty() );
 	ENSURE_EQUALS( "bad byte count", s.byte_count(), 0 );
 	ENSURE_EQUALS( "bad character count", s.character_count(), 0 );
-	ENSURE_EQUALS( "bad x_str", s.x_str(), static_cast<char const*>( nullptr ) );
+	ENSURE_EQUALS( "bad x_str", strcmp( s.x_str(), "" ), 0 );
+	ENSURE_EQUALS( "bad rank", s.rank(), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "pure ascii data" )
@@ -54,6 +57,7 @@ TUT_UNIT_TEST( "pure ascii data" )
 	ENSURE_EQUALS( "bad byte count", s.byte_count(), 11 );
 	ENSURE_EQUALS( "bad character count", s.character_count(), 11 );
 	ENSURE_EQUALS( "bad x_str", s.x_str(), "HUTF8String"_ys );
+	ENSURE_EQUALS( "bad rank", s.rank(), 1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ctor from HString" )
@@ -69,6 +73,7 @@ TUT_UNIT_TEST( "utf8 data" )
 	ENSURE_EQUALS( "bad byte count", s.byte_count(), 50 );
 	ENSURE_EQUALS( "bad character count", s.character_count(), 41 );
 	ENSURE_EQUALS( "bad x_str", s.x_str(), to_string( data ) );
+	ENSURE_EQUALS( "bad rank", s.rank(), 2 );
 	ENSURE_EQUALS( "bad raw", s.raw(), to_string( data ) );
 	ENSURE_THROW( "bad utf-8 accepted (head)", HUTF8String( "\xff" ), HUTF8StringException );
 	ENSURE_THROW( "bad utf-8 accepted (tail)", HUTF8String( "Äa" ), HUTF8StringException );
@@ -111,7 +116,7 @@ TUT_UNIT_TEST( "move ctor" )
 	ENSURE( "non-empty empty", s.is_empty() && s.empty() );
 	ENSURE_EQUALS( "bad byte count", s.byte_count(), 0 );
 	ENSURE_EQUALS( "bad character count", s.character_count(), 0 );
-	ENSURE_EQUALS( "bad x_str", s.x_str(), static_cast<char const*>( nullptr ) );
+	ENSURE_EQUALS( "bad x_str", strcmp( s.x_str(), "" ), 0  );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "copy assignment" )
@@ -148,7 +153,7 @@ TUT_UNIT_TEST( "move assignment" )
 		ENSURE( "non-empty empty", s.is_empty() && s.empty() );
 		ENSURE_EQUALS( "bad byte count", s.byte_count(), 0 );
 		ENSURE_EQUALS( "bad character count", s.character_count(), 0 );
-		ENSURE_EQUALS( "bad x_str", s.x_str(), static_cast<char const*>( nullptr ) );
+		ENSURE_EQUALS( "bad x_str", strcmp( s.x_str(), "" ), 0 );
 	}
 	ENSURE_NOT( "non-empty empty", x.is_empty() || x.empty() );
 	ENSURE_EQUALS( "bad byte count", x.byte_count(), 50 );
