@@ -227,6 +227,9 @@ TUT_UNIT_TEST( "substr" )
 	HUTF8String ss( s.substr( 6, 4 ) );
 	char const res[] = "bądź";
 	ENSURE_EQUALS( "decode failed", ss, res );
+	s = "Ala i pies"_ys;
+	ss = s.substr( 6 );
+	ENSURE_EQUALS( "decode failed", ss, "pies" );
 TUT_TEARDOWN()
 
 }
