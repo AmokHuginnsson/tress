@@ -66,6 +66,15 @@ TUT_UNIT_TEST( "ctor from HString" )
 	ENSURE_EQUALS( "bad HString ctor", u, s.c_str() );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "ctor from iterators" )
+	char const data[] = "Mężny bądź, chroń pułk twój i sześć flag!";
+	HUTF8String s( data );
+	HUTF8String::const_iterator beg( s.begin() );
+	HUTF8String::const_iterator end( s.end() );
+	HUTF8String sub( beg + 12, end - 14 );
+	ENSURE_EQUALS( "bad iter ctor", sub, HUTF8String( "chroń pułk twój" ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "utf8 data" )
 	char const data[] = "Mężny bądź, chroń pułk twój i sześć flag!";
 	HUTF8String s( data );
