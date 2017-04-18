@@ -55,6 +55,20 @@ TUT_UNIT_TEST( "simple match" )
 	clog << r.error() << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "multiple occurrences UTF-8" )
+	char const dataUTF8[] = "MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!";
+//	char const dataUTF8[] = "Mezny badz, chron pulk twoj i szesc flag!";
+	char const data[] = "Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!";
+	HUTF8String s( dataUTF8 );
+	HRegex r( "\\p{L}+" );
+	HString res;
+	for ( HRegex::HMatch const& m : r.matches( s ) ) {
+		res.append( "{" ).append( data + m.start(), m.size() ).append( "}" );
+	}
+	ENSURE_EQUALS( "bad match", res, "{Mê¿ny}{b±d¼}{chroñ}{pu³k}{twój}{i}{sze¶æ}{flag}" );
+	clog << r.error() << ": " << res << endl;
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "multiple occurrences" )
 	HRegex r( "A.a" );
 	char const str[] = "xxxAlayyyAgazzz";
