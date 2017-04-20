@@ -138,7 +138,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "replace(backref)" )
 	HRegex r( "([0-9]+)" );
-	ENSURE_EQUALS( "replace(backref) failed (matching)", r.replace( "abc012def789ghi", "$$$1}" ), "abc$012}def$789}ghi" );
+	ENSURE_EQUALS( "replace(backref) failed (matching)", r.replace( "abc012def789ghi456rst", "$$$1}" ), "abc$012}def$789}ghi$456}rst" );
 	ENSURE_EQUALS( "replace(backref) failed (non-matching)", r.replace( "abc!@#def&*(ghi", "{$1}" ), "abc!@#def&*(ghi" );
 	ENSURE_THROW( "invlid backref succeeded", r.replace( "abc012def789ghi", "{$" ), HRegexException );
 	ENSURE_THROW( "invlid backref succeeded", r.replace( "abc012def789ghi", "a$a" ), HRegexException );
