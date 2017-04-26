@@ -100,6 +100,12 @@ TUT_UNIT_TEST( "int long long" )
 	ENSURE_EQUALS( "bad int long long format output", f.string(), "[718281828459045]" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "%% case" )
+	HFormat f( "%% %ds" );
+	f % 7;
+	ENSURE_EQUALS( "bad handling of %% case", f.string(), "% 7s" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "format and streams interaction" )
 	typedef HFormat format_t;
 	cout << "PI: " << format_t( "[%2$*1$.*3$Lf]" ) % 30 % PI % 15 << endl;
