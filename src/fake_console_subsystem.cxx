@@ -283,13 +283,6 @@ struct WINDOW {
 			_x = _mx;
 		}
 	}
-	void print( char const* format_, void* ap_ ) __attribute__(( format(printf, 2, 0) )) {
-		HString s;
-		s.vformat( format_, ap_ );
-		for ( char c : s ) {
-			addch( c );
-		}
-	}
 	void addnstr( char const* str_, int len_ ) {
 		if ( len_ < 0 ) {
 			len_ = static_cast<int>( strlen( str_ ) );
@@ -645,26 +638,6 @@ int wrefresh( WINDOW* ) {
 int waddch( WINDOW*, int );
 int waddch( WINDOW* win_, int ch_ ) {
 	win_->addch( ch_ );
-	return ( 0 );
-}
-
-int wprintw( WINDOW*, char const*, ... ) __attribute__(( format(printf, 2, 3) ));
-int wprintw( WINDOW* win_, char const* format_, ... ) {
-	::std::va_list ap;
-	va_start( ap, format_ );
-	try {
-		win_->print( format_, &ap );
-	} catch ( ... ) {
-		va_end( ap );
-		throw;
-	}
-	va_end( ap );
-	return ( 0 );
-}
-
-int vwprintw( WINDOW*, char const*, void* ) __attribute__(( format(printf, 2, 0) ));
-int vwprintw( WINDOW* win_, char const* format_, void* ap_ ) {
-	win_->print( format_, ap_ );
 	return ( 0 );
 }
 

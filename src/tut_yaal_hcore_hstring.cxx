@@ -29,6 +29,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hstring.hxx>
+#include <yaal/hcore/hformat.hxx>
 #include <yaal/hcore/hrandomizer.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
@@ -507,66 +508,66 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "find" )
 	HString str = "abcXYdeYXf";
 	char failed[] = "find failed[%d]";
-	ENSURE_EQUALS( HString().format( failed, 0 ), str.find( 'A' ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 1 ), str.find( 'X' ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 2 ), str.find( 'Y' ), 4 );
-	ENSURE_EQUALS( HString().format( failed, 3 ), str.find( 'X', -10 ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 4 ), str.find( 'Y', -10 ), 4 );
-	ENSURE_EQUALS( HString().format( failed, 5 ), str.find( 'X', 3 ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 6 ), str.find( 'Y', 3 ), 4 );
-	ENSURE_EQUALS( HString().format( failed, 7 ), str.find( 'X', 5 ), 8 );
-	ENSURE_EQUALS( HString().format( failed, 8 ), str.find( 'Y', 5 ), 7 );
-	ENSURE_EQUALS( HString().format( failed, 9 ), str.find( 'X', 9 ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 10 ), str.find( 'Y', 9 ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 11 ), str.find( 'X', 90 ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 12 ), str.find( 'Y', 90 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 0 ), str.find( 'A' ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 1 ), str.find( 'X' ), 3 );
+	ENSURE_EQUALS( format( failed, 2 ), str.find( 'Y' ), 4 );
+	ENSURE_EQUALS( format( failed, 3 ), str.find( 'X', -10 ), 3 );
+	ENSURE_EQUALS( format( failed, 4 ), str.find( 'Y', -10 ), 4 );
+	ENSURE_EQUALS( format( failed, 5 ), str.find( 'X', 3 ), 3 );
+	ENSURE_EQUALS( format( failed, 6 ), str.find( 'Y', 3 ), 4 );
+	ENSURE_EQUALS( format( failed, 7 ), str.find( 'X', 5 ), 8 );
+	ENSURE_EQUALS( format( failed, 8 ), str.find( 'Y', 5 ), 7 );
+	ENSURE_EQUALS( format( failed, 9 ), str.find( 'X', 9 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 10 ), str.find( 'Y', 9 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 11 ), str.find( 'X', 90 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 12 ), str.find( 'Y', 90 ), HString::npos + 0 );
 	static char const* const PREF = "---> group: ";
 	static char const* const SUFF = "yaal, tra la la";
 	HString line( PREF );
 	line += SUFF;
-	ENSURE_EQUALS( HString().format( failed, 13 ), line.find( PREF ), 0 );
+	ENSURE_EQUALS( format( failed, 13 ), line.find( PREF ), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "find_last" )
 	HString str = "abcXYdeYXf012";
 	char failed[] = "find_last failed[%d]";
-	ENSURE_EQUALS( HString().format( failed, 0 ), str.find_last( 'A' ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 1 ), str.find_last( 'X' ), 8 );
-	ENSURE_EQUALS( HString().format( failed, 2 ), str.find_last( 'Y' ), 7 );
-	ENSURE_EQUALS( HString().format( failed, 3 ), str.find_last( 'X', 100 ), 8 );
-	ENSURE_EQUALS( HString().format( failed, 4 ), str.find_last( 'Y', 100 ), 7 );
-	ENSURE_EQUALS( HString().format( failed, 5 ), str.find_last( 'X', 8 ), 8 );
-	ENSURE_EQUALS( HString().format( failed, 6 ), str.find_last( 'Y', 8 ), 7 );
-	ENSURE_EQUALS( HString().format( failed, 7 ), str.find_last( 'X', 5 ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 8 ), str.find_last( 'Y', 5 ), 4 );
-	ENSURE_EQUALS( HString().format( failed, 7 ), str.find_last( 'X', 3 ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 8 ), str.find_last( 'Y', 3 ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 9 ), str.find_last( 'X', 2 ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 10 ), str.find_last( 'Y', 2 ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 11 ), str.find_last( 'X', -2 ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 12 ), str.find_last( 'Y', -2 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 0 ), str.find_last( 'A' ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 1 ), str.find_last( 'X' ), 8 );
+	ENSURE_EQUALS( format( failed, 2 ), str.find_last( 'Y' ), 7 );
+	ENSURE_EQUALS( format( failed, 3 ), str.find_last( 'X', 100 ), 8 );
+	ENSURE_EQUALS( format( failed, 4 ), str.find_last( 'Y', 100 ), 7 );
+	ENSURE_EQUALS( format( failed, 5 ), str.find_last( 'X', 8 ), 8 );
+	ENSURE_EQUALS( format( failed, 6 ), str.find_last( 'Y', 8 ), 7 );
+	ENSURE_EQUALS( format( failed, 7 ), str.find_last( 'X', 5 ), 3 );
+	ENSURE_EQUALS( format( failed, 8 ), str.find_last( 'Y', 5 ), 4 );
+	ENSURE_EQUALS( format( failed, 7 ), str.find_last( 'X', 3 ), 3 );
+	ENSURE_EQUALS( format( failed, 8 ), str.find_last( 'Y', 3 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 9 ), str.find_last( 'X', 2 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 10 ), str.find_last( 'Y', 2 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 11 ), str.find_last( 'X', -2 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 12 ), str.find_last( 'Y', -2 ), HString::npos + 0 );
 
-	ENSURE_EQUALS( HString().format( failed, 13 ), str.find_last( "A" ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 14 ), str.find_last( "X" ), 8 );
-	ENSURE_EQUALS( HString().format( failed, 15 ), str.find_last( "Y" ), 7 );
-	ENSURE_EQUALS( HString().format( failed, 16 ), str.find_last( "X", 100 ), 8 );
-	ENSURE_EQUALS( HString().format( failed, 17 ), str.find_last( "Y", 100 ), 7 );
-	ENSURE_EQUALS( HString().format( failed, 18 ), str.find_last( "X", 8 ), 8 );
-	ENSURE_EQUALS( HString().format( failed, 19 ), str.find_last( "Y", 8 ), 7 );
-	ENSURE_EQUALS( HString().format( failed, 20 ), str.find_last( "X", 5 ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 21 ), str.find_last( "Y", 5 ), 4 );
-	ENSURE_EQUALS( HString().format( failed, 22 ), str.find_last( "X", 3 ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 23 ), str.find_last( "Y", 3 ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 24 ), str.find_last( "X", 2 ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 25 ), str.find_last( "Y", 2 ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 26 ), str.find_last( "X", -2 ), HString::npos + 0 );
-	ENSURE_EQUALS( HString().format( failed, 27 ), str.find_last( "Y", -2 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 13 ), str.find_last( "A" ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 14 ), str.find_last( "X" ), 8 );
+	ENSURE_EQUALS( format( failed, 15 ), str.find_last( "Y" ), 7 );
+	ENSURE_EQUALS( format( failed, 16 ), str.find_last( "X", 100 ), 8 );
+	ENSURE_EQUALS( format( failed, 17 ), str.find_last( "Y", 100 ), 7 );
+	ENSURE_EQUALS( format( failed, 18 ), str.find_last( "X", 8 ), 8 );
+	ENSURE_EQUALS( format( failed, 19 ), str.find_last( "Y", 8 ), 7 );
+	ENSURE_EQUALS( format( failed, 20 ), str.find_last( "X", 5 ), 3 );
+	ENSURE_EQUALS( format( failed, 21 ), str.find_last( "Y", 5 ), 4 );
+	ENSURE_EQUALS( format( failed, 22 ), str.find_last( "X", 3 ), 3 );
+	ENSURE_EQUALS( format( failed, 23 ), str.find_last( "Y", 3 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 24 ), str.find_last( "X", 2 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 25 ), str.find_last( "Y", 2 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 26 ), str.find_last( "X", -2 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 27 ), str.find_last( "Y", -2 ), HString::npos + 0 );
 	static char const* const PREF = "---> group: ";
 	static char const* const SUFF = "yaal, tra la la";
 	HString line( PREF );
 	line += SUFF;
-	ENSURE_EQUALS( HString().format( failed, 28 ), line.find_last( PREF ), 0 );
-	ENSURE_EQUALS( HString().format( failed, 29 ), line.find_last( SUFF ), 12 );
+	ENSURE_EQUALS( format( failed, 28 ), line.find_last( PREF ), 0 );
+	ENSURE_EQUALS( format( failed, 29 ), line.find_last( SUFF ), 12 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "find_one_of" )
@@ -590,118 +591,118 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "find_other_than" )
 	HString str = "abcXYdeYXfg";
 	char failed[] = "find_other_than failed[%d]";
-	ENSURE_EQUALS( HString().format( failed, 0 ), str.find_other_than( "abcXYdeYXfg" ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 1 ), str.find_other_than( "abXYdeYXfg" ), 2 );
-	ENSURE_EQUALS( HString().format( failed, 2 ), str.find_other_than( "abXYdeYXfg", 2 ), 2 );
-	ENSURE_EQUALS( HString().format( failed, 3 ), str.find_other_than( "abXYdeYXfg", 3 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 4 ), str.find_other_than( "abcdefg" ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 5 ), str.find_other_than( "abcdefg", 5 ), 7 );
+	ENSURE_EQUALS( format( failed, 0 ), str.find_other_than( "abcXYdeYXfg" ), -1 );
+	ENSURE_EQUALS( format( failed, 1 ), str.find_other_than( "abXYdeYXfg" ), 2 );
+	ENSURE_EQUALS( format( failed, 2 ), str.find_other_than( "abXYdeYXfg", 2 ), 2 );
+	ENSURE_EQUALS( format( failed, 3 ), str.find_other_than( "abXYdeYXfg", 3 ), -1 );
+	ENSURE_EQUALS( format( failed, 4 ), str.find_other_than( "abcdefg" ), 3 );
+	ENSURE_EQUALS( format( failed, 5 ), str.find_other_than( "abcdefg", 5 ), 7 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "reverse_find" )
 	HString str = "fXYedYXcba";
 	char failed[] = "reverse_find failed[%d]";
-	ENSURE_EQUALS( HString().format( failed, 0 ), str.reverse_find( 'A' ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 1 ), str.reverse_find( 'X' ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 2 ), str.reverse_find( 'Y' ), 4 );
-	ENSURE_EQUALS( HString().format( failed, 3 ), str.reverse_find( 'X', -10 ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 4 ), str.reverse_find( 'Y', -10 ), 4 );
-	ENSURE_EQUALS( HString().format( failed, 5 ), str.reverse_find( 'X', 3 ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 6 ), str.reverse_find( 'Y', 3 ), 4 );
-	ENSURE_EQUALS( HString().format( failed, 7 ), str.reverse_find( 'X', 5 ), 8 );
-	ENSURE_EQUALS( HString().format( failed, 8 ), str.reverse_find( 'Y', 5 ), 7 );
-	ENSURE_EQUALS( HString().format( failed, 9 ), str.reverse_find( 'X', 9 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 10 ), str.reverse_find( 'Y', 9 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 11 ), str.reverse_find( 'X', 90 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 12 ), str.reverse_find( 'Y', 90 ), -1 );
+	ENSURE_EQUALS( format( failed, 0 ), str.reverse_find( 'A' ), -1 );
+	ENSURE_EQUALS( format( failed, 1 ), str.reverse_find( 'X' ), 3 );
+	ENSURE_EQUALS( format( failed, 2 ), str.reverse_find( 'Y' ), 4 );
+	ENSURE_EQUALS( format( failed, 3 ), str.reverse_find( 'X', -10 ), 3 );
+	ENSURE_EQUALS( format( failed, 4 ), str.reverse_find( 'Y', -10 ), 4 );
+	ENSURE_EQUALS( format( failed, 5 ), str.reverse_find( 'X', 3 ), 3 );
+	ENSURE_EQUALS( format( failed, 6 ), str.reverse_find( 'Y', 3 ), 4 );
+	ENSURE_EQUALS( format( failed, 7 ), str.reverse_find( 'X', 5 ), 8 );
+	ENSURE_EQUALS( format( failed, 8 ), str.reverse_find( 'Y', 5 ), 7 );
+	ENSURE_EQUALS( format( failed, 9 ), str.reverse_find( 'X', 9 ), -1 );
+	ENSURE_EQUALS( format( failed, 10 ), str.reverse_find( 'Y', 9 ), -1 );
+	ENSURE_EQUALS( format( failed, 11 ), str.reverse_find( 'X', 90 ), -1 );
+	ENSURE_EQUALS( format( failed, 12 ), str.reverse_find( 'Y', 90 ), -1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "reverse_find_one_of" )
 	HString str = "fXYedYXcba";
 	char failed[] = "reverse_find_one_of failed[%d]";
-	ENSURE_EQUALS( HString().format( failed, 0 ), str.reverse_find_one_of( "ABCD" ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 1 ), str.reverse_find_one_of( "AXYB" ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 2 ), str.reverse_find_one_of( "AYD" ), 4 );
-	ENSURE_EQUALS( HString().format( failed, 3 ), str.reverse_find_one_of( "AXYB", -10 ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 4 ), str.reverse_find_one_of( "AYD", -10 ), 4 );
-	ENSURE_EQUALS( HString().format( failed, 5 ), str.reverse_find_one_of( "AXYB", 3 ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 6 ), str.reverse_find_one_of( "AYD", 3 ), 4 );
-	ENSURE_EQUALS( HString().format( failed, 7 ), str.reverse_find_one_of( "AXYB", 5 ), 7 );
-	ENSURE_EQUALS( HString().format( failed, 8 ), str.reverse_find_one_of( "AYD", 5 ), 7 );
-	ENSURE_EQUALS( HString().format( failed, 9 ), str.reverse_find_one_of( "AXYB", 9 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 10 ), str.reverse_find_one_of( "AYD", 9 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 11 ), str.reverse_find_one_of( "AXYB", 90 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 12 ), str.reverse_find_one_of( "AYD", 90 ), -1 );
+	ENSURE_EQUALS( format( failed, 0 ), str.reverse_find_one_of( "ABCD" ), -1 );
+	ENSURE_EQUALS( format( failed, 1 ), str.reverse_find_one_of( "AXYB" ), 3 );
+	ENSURE_EQUALS( format( failed, 2 ), str.reverse_find_one_of( "AYD" ), 4 );
+	ENSURE_EQUALS( format( failed, 3 ), str.reverse_find_one_of( "AXYB", -10 ), 3 );
+	ENSURE_EQUALS( format( failed, 4 ), str.reverse_find_one_of( "AYD", -10 ), 4 );
+	ENSURE_EQUALS( format( failed, 5 ), str.reverse_find_one_of( "AXYB", 3 ), 3 );
+	ENSURE_EQUALS( format( failed, 6 ), str.reverse_find_one_of( "AYD", 3 ), 4 );
+	ENSURE_EQUALS( format( failed, 7 ), str.reverse_find_one_of( "AXYB", 5 ), 7 );
+	ENSURE_EQUALS( format( failed, 8 ), str.reverse_find_one_of( "AYD", 5 ), 7 );
+	ENSURE_EQUALS( format( failed, 9 ), str.reverse_find_one_of( "AXYB", 9 ), -1 );
+	ENSURE_EQUALS( format( failed, 10 ), str.reverse_find_one_of( "AYD", 9 ), -1 );
+	ENSURE_EQUALS( format( failed, 11 ), str.reverse_find_one_of( "AXYB", 90 ), -1 );
+	ENSURE_EQUALS( format( failed, 12 ), str.reverse_find_one_of( "AYD", 90 ), -1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "reverse_find_other_than" )
 	HString str = "gfXYedYXcba";
 	char failed[] = "reverse_find_other_than failed[%d]";
-	ENSURE_EQUALS( HString().format( failed, 0 ), str.reverse_find_other_than( "abcXYdeYXfg" ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 1 ), str.reverse_find_other_than( "abXYdeYXfg" ), 2 );
-	ENSURE_EQUALS( HString().format( failed, 2 ), str.reverse_find_other_than( "abXYdeYXfg", 2 ), 2 );
-	ENSURE_EQUALS( HString().format( failed, 3 ), str.reverse_find_other_than( "abXYdeYXfg", 3 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 4 ), str.reverse_find_other_than( "abcdefg" ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 5 ), str.reverse_find_other_than( "abcdefg", 5 ), 7 );
+	ENSURE_EQUALS( format( failed, 0 ), str.reverse_find_other_than( "abcXYdeYXfg" ), -1 );
+	ENSURE_EQUALS( format( failed, 1 ), str.reverse_find_other_than( "abXYdeYXfg" ), 2 );
+	ENSURE_EQUALS( format( failed, 2 ), str.reverse_find_other_than( "abXYdeYXfg", 2 ), 2 );
+	ENSURE_EQUALS( format( failed, 3 ), str.reverse_find_other_than( "abXYdeYXfg", 3 ), -1 );
+	ENSURE_EQUALS( format( failed, 4 ), str.reverse_find_other_than( "abcdefg" ), 3 );
+	ENSURE_EQUALS( format( failed, 5 ), str.reverse_find_other_than( "abcdefg", 5 ), 7 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "find_last" )
 	HString str = "fXYedYXcba";
 	char failed[] = "find_last failed[%d]";
-	ENSURE_EQUALS( HString().format( failed, 0 ), str.find_last( 'A' ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 1 ), str.find_last( 'X' ), 6 );
-	ENSURE_EQUALS( HString().format( failed, 2 ), str.find_last( 'Y' ), 5 );
-	ENSURE_EQUALS( HString().format( failed, 3 ), str.find_last( 'X', -10 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 4 ), str.find_last( 'Y', -10 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 5 ), str.find_last( 'X', 3 ), 1 );
-	ENSURE_EQUALS( HString().format( failed, 6 ), str.find_last( 'Y', 3 ), 2 );
-	ENSURE_EQUALS( HString().format( failed, 7 ), str.find_last( 'X', 5 ), 1 );
-	ENSURE_EQUALS( HString().format( failed, 8 ), str.find_last( 'Y', 5 ), 5 );
-	ENSURE_EQUALS( HString().format( failed, 9 ), str.find_last( 'X', 6 ), 6 );
-	ENSURE_EQUALS( HString().format( failed, 9 ), str.find_last( 'X', 9 ), 6 );
-	ENSURE_EQUALS( HString().format( failed, 10 ), str.find_last( 'Y', 9 ), 5 );
-	ENSURE_EQUALS( HString().format( failed, 11 ), str.find_last( 'X', 90 ), 6 );
-	ENSURE_EQUALS( HString().format( failed, 12 ), str.find_last( 'Y', 90 ), 5 );
+	ENSURE_EQUALS( format( failed, 0 ), str.find_last( 'A' ), -1 );
+	ENSURE_EQUALS( format( failed, 1 ), str.find_last( 'X' ), 6 );
+	ENSURE_EQUALS( format( failed, 2 ), str.find_last( 'Y' ), 5 );
+	ENSURE_EQUALS( format( failed, 3 ), str.find_last( 'X', -10 ), -1 );
+	ENSURE_EQUALS( format( failed, 4 ), str.find_last( 'Y', -10 ), -1 );
+	ENSURE_EQUALS( format( failed, 5 ), str.find_last( 'X', 3 ), 1 );
+	ENSURE_EQUALS( format( failed, 6 ), str.find_last( 'Y', 3 ), 2 );
+	ENSURE_EQUALS( format( failed, 7 ), str.find_last( 'X', 5 ), 1 );
+	ENSURE_EQUALS( format( failed, 8 ), str.find_last( 'Y', 5 ), 5 );
+	ENSURE_EQUALS( format( failed, 9 ), str.find_last( 'X', 6 ), 6 );
+	ENSURE_EQUALS( format( failed, 9 ), str.find_last( 'X', 9 ), 6 );
+	ENSURE_EQUALS( format( failed, 10 ), str.find_last( 'Y', 9 ), 5 );
+	ENSURE_EQUALS( format( failed, 11 ), str.find_last( 'X', 90 ), 6 );
+	ENSURE_EQUALS( format( failed, 12 ), str.find_last( 'Y', 90 ), 5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "find_last_one_of" )
 	HString str = "fXYedYXcba";
 	char failed[] = "find_last_one_of failed[%d]";
-	ENSURE_EQUALS( HString().format( failed, 0 ), str.find_last_one_of( "ABCD" ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 1 ), str.find_last_one_of( "AXYB" ), 6 );
-	ENSURE_EQUALS( HString().format( failed, 2 ), str.find_last_one_of( "AYD" ), 5 );
-	ENSURE_EQUALS( HString().format( failed, 3 ), str.find_last_one_of( "AXYB", -10 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 4 ), str.find_last_one_of( "AYD", -10 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 5 ), str.find_last_one_of( "AXYB", 3 ), 2 );
-	ENSURE_EQUALS( HString().format( failed, 6 ), str.find_last_one_of( "AXB", 3 ), 1 );
-	ENSURE_EQUALS( HString().format( failed, 7 ), str.find_last_one_of( "AYD", 3 ), 2 );
-	ENSURE_EQUALS( HString().format( failed, 8 ), str.find_last_one_of( "AXYB", 5 ), 5 );
-	ENSURE_EQUALS( HString().format( failed, 9 ), str.find_last_one_of( "AXB", 5 ), 1 );
-	ENSURE_EQUALS( HString().format( failed, 10 ), str.find_last_one_of( "AYD", 5 ), 5 );
-	ENSURE_EQUALS( HString().format( failed, 11 ), str.find_last_one_of( "AXYB", 9 ), 6 );
-	ENSURE_EQUALS( HString().format( failed, 12 ), str.find_last_one_of( "AYD", 9 ), 5 );
-	ENSURE_EQUALS( HString().format( failed, 13 ), str.find_last_one_of( "AXYB", 90 ), 6 );
-	ENSURE_EQUALS( HString().format( failed, 14 ), str.find_last_one_of( "AYD", 90 ), 5 );
+	ENSURE_EQUALS( format( failed, 0 ), str.find_last_one_of( "ABCD" ), -1 );
+	ENSURE_EQUALS( format( failed, 1 ), str.find_last_one_of( "AXYB" ), 6 );
+	ENSURE_EQUALS( format( failed, 2 ), str.find_last_one_of( "AYD" ), 5 );
+	ENSURE_EQUALS( format( failed, 3 ), str.find_last_one_of( "AXYB", -10 ), -1 );
+	ENSURE_EQUALS( format( failed, 4 ), str.find_last_one_of( "AYD", -10 ), -1 );
+	ENSURE_EQUALS( format( failed, 5 ), str.find_last_one_of( "AXYB", 3 ), 2 );
+	ENSURE_EQUALS( format( failed, 6 ), str.find_last_one_of( "AXB", 3 ), 1 );
+	ENSURE_EQUALS( format( failed, 7 ), str.find_last_one_of( "AYD", 3 ), 2 );
+	ENSURE_EQUALS( format( failed, 8 ), str.find_last_one_of( "AXYB", 5 ), 5 );
+	ENSURE_EQUALS( format( failed, 9 ), str.find_last_one_of( "AXB", 5 ), 1 );
+	ENSURE_EQUALS( format( failed, 10 ), str.find_last_one_of( "AYD", 5 ), 5 );
+	ENSURE_EQUALS( format( failed, 11 ), str.find_last_one_of( "AXYB", 9 ), 6 );
+	ENSURE_EQUALS( format( failed, 12 ), str.find_last_one_of( "AYD", 9 ), 5 );
+	ENSURE_EQUALS( format( failed, 13 ), str.find_last_one_of( "AXYB", 90 ), 6 );
+	ENSURE_EQUALS( format( failed, 14 ), str.find_last_one_of( "AYD", 90 ), 5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "find_last_other_than" )
 	HString str = "gfXYedYXcba";
 	char failed[] = "find_last_other_than failed[%d]";
-	ENSURE_EQUALS( HString().format( failed, 0 ), str.find_last_other_than( "abcXYdeYXfg" ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 1 ), str.find_last_other_than( "abXYdeYXfg" ), 8 );
-	ENSURE_EQUALS( HString().format( failed, 2 ), str.find_last_other_than( "abXYdeYXfg", 2 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 3 ), str.find_last_other_than( "abXYdeYXfg", 7 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 4 ), str.find_last_other_than( "abXYdeYXfg", 8 ), 8 );
-	ENSURE_EQUALS( HString().format( failed, 5 ), str.find_last_other_than( "abXYdeYXfg", 100 ), 8 );
-	ENSURE_EQUALS( HString().format( failed, 6 ), str.find_last_other_than( "abcdefg" ), 7 );
-	ENSURE_EQUALS( HString().format( failed, 7 ), str.find_last_other_than( "abcdefg", 1 ), -1 );
-	ENSURE_EQUALS( HString().format( failed, 8 ), str.find_last_other_than( "abcdefg", 2 ), 2 );
-	ENSURE_EQUALS( HString().format( failed, 9 ), str.find_last_other_than( "abcdefg", 3 ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 10 ), str.find_last_other_than( "abcdefg", 4 ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 11 ), str.find_last_other_than( "abcdefg", 5 ), 3 );
-	ENSURE_EQUALS( HString().format( failed, 12 ), str.find_last_other_than( "abcdefg", 6 ), 6 );
-	ENSURE_EQUALS( HString().format( failed, 13 ), str.find_last_other_than( "abcdefg", 7 ), 7 );
-	ENSURE_EQUALS( HString().format( failed, 14 ), str.find_last_other_than( "abcdefg", 8 ), 7 );
+	ENSURE_EQUALS( format( failed, 0 ), str.find_last_other_than( "abcXYdeYXfg" ), -1 );
+	ENSURE_EQUALS( format( failed, 1 ), str.find_last_other_than( "abXYdeYXfg" ), 8 );
+	ENSURE_EQUALS( format( failed, 2 ), str.find_last_other_than( "abXYdeYXfg", 2 ), -1 );
+	ENSURE_EQUALS( format( failed, 3 ), str.find_last_other_than( "abXYdeYXfg", 7 ), -1 );
+	ENSURE_EQUALS( format( failed, 4 ), str.find_last_other_than( "abXYdeYXfg", 8 ), 8 );
+	ENSURE_EQUALS( format( failed, 5 ), str.find_last_other_than( "abXYdeYXfg", 100 ), 8 );
+	ENSURE_EQUALS( format( failed, 6 ), str.find_last_other_than( "abcdefg" ), 7 );
+	ENSURE_EQUALS( format( failed, 7 ), str.find_last_other_than( "abcdefg", 1 ), -1 );
+	ENSURE_EQUALS( format( failed, 8 ), str.find_last_other_than( "abcdefg", 2 ), 2 );
+	ENSURE_EQUALS( format( failed, 9 ), str.find_last_other_than( "abcdefg", 3 ), 3 );
+	ENSURE_EQUALS( format( failed, 10 ), str.find_last_other_than( "abcdefg", 4 ), 3 );
+	ENSURE_EQUALS( format( failed, 11 ), str.find_last_other_than( "abcdefg", 5 ), 3 );
+	ENSURE_EQUALS( format( failed, 12 ), str.find_last_other_than( "abcdefg", 6 ), 6 );
+	ENSURE_EQUALS( format( failed, 13 ), str.find_last_other_than( "abcdefg", 7 ), 7 );
+	ENSURE_EQUALS( format( failed, 14 ), str.find_last_other_than( "abcdefg", 8 ), 7 );
 TUT_TEARDOWN()
 
 namespace {
@@ -742,7 +743,7 @@ TUT_UNIT_TEST( "find("")" )
 						SAMPLE_SIZE - ( where + 1 ), sample + offset, len ) : -1;
 				if ( newwhere >= 0 )
 					newwhere += ( where + 1 );
-				msg.format( "find(\"\") failed: %d,%d,%d", len, offset, where );
+				msg = format( "find(\"\") failed: %d,%d,%d", len, offset, where );
 				ENSURE_EQUALS( msg,
 						where = ( offset + len <= SAMPLE_SIZE ) ? static_cast<int>( str.nfind( sample + offset, len, where + 1 ) ) : -1,
 						newwhere );

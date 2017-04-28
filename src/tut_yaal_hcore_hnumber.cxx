@@ -30,6 +30,7 @@ Copyright:
 #include <yaal/hcore/hnumber.hxx>
 #include <yaal/hcore/hrandomizer.hxx>
 #include <yaal/hcore/hcore.hxx>
+#include <yaal/hcore/hformat.hxx>
 #include <yaal/tools/hpipedchild.hxx>
 #include <yaal/tools/hfsitem.hxx>
 #include <yaal/tools/xmath.hxx>
@@ -1669,13 +1670,13 @@ TUT_UNIT_TEST( "round<HNumber>()" )
 	for ( int i( 0 ); i < countof ( numsU ); ++ i ) {
 		HNumber U( "0.123456789123456789" );
 		int round( ( countof ( numsU ) ) - i - 1 );
-		msg.format( "round( U, %d ) failed", round );
+		msg = format( "round( U, %d ) failed", round );
 		ENSURE_EQUALS( msg, U.round( round ), numsU[i] );
 	}
 	for ( int i( 0 ); i < countof ( numsD ); ++ i ) {
 		HNumber D( "0.987654321987654321" );
 		int round( ( countof ( numsD ) ) - i - 1 );
-		msg.format( "round( D, %d ) failed", round );
+		msg = format( "round( D, %d ) failed", round );
 		ENSURE_EQUALS( msg, D.round( round ), numsD[i] );
 	}
 
