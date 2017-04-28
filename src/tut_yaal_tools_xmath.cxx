@@ -116,14 +116,14 @@ TUT_UNIT_TEST( "number set stats: average" )
 			e );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "number set stats: variance" )
-	ENSURE_DISTANCE( "number_set_stats().variance() failed",
-			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).variance(), 25865.7586868687L, epsilon );
+TUT_UNIT_TEST( "number set stats: sample_variance" )
+	ENSURE_DISTANCE( "number_set_stats().sample_variance() failed",
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).sample_variance(), 25865.7586868687L, epsilon );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "number set stats: standard_deviation" )
-	ENSURE_DISTANCE( "number_set_stats().standard_deviation() failed",
-			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).standard_deviation(), 160.828351626412L, epsilon );
+TUT_UNIT_TEST( "number set stats: sample_standard_deviation" )
+	ENSURE_DISTANCE( "number_set_stats().sample_standard_deviation() failed",
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).sample_standard_deviation(), 160.828351626412L, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "number set stats: population_variance" )
@@ -152,9 +152,9 @@ TUT_UNIT_TEST( "stats on dice" )
 		<< "sum                           = " << diceStats.sum() << endl
 		<< "count                         = " << diceStats.count() << endl
 		<< "average                       = " << diceStats.average() << endl
-		<< "variance                      = " << diceStats.variance() << endl
-		<< "standard deviation            = " << diceStats.standard_deviation() << endl
-		<< "population variance           = " << diceStats.population_variance() << endl
+		<< "sample_variance                      = " << diceStats.sample_variance() << endl
+		<< "standard deviation            = " << diceStats.sample_standard_deviation() << endl
+		<< "population sample_variance           = " << diceStats.population_variance() << endl
 		<< "population standard deviation = " << diceStats.population_standard_deviation() << endl
 		<< "median                        = " << diceStats.median() << endl;
 TUT_TEARDOWN()

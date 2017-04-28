@@ -1160,10 +1160,14 @@ TUT_UNIT_TEST( "Mathematics" )
 			"import Mathematics as math;"
 			"main(){"
 			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), real),list));"
-			"return([nss.minimum(),nss.maximum(),nss.sum(),nss.average(),nss.median(),nss.variance(),nss.population_variance(),nss.standard_deviation(),nss.population_standard_deviation()]);"
+			"return([nss.minimum(),nss.maximum(),nss.sum(),nss.average(),nss.median(),nss.sample_variance(),nss.population_variance(),nss.sample_standard_deviation(),nss.population_standard_deviation()]);"
 			"}"
 		),
-	  std::vector<hcore::HString>({ "[1.0, 239.0, 1800.0, 120.0, 120.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956]", "[1.0, 239.0, 1800.0, 120.0, 120.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956]" })
+	  std::vector<hcore::HString>({
+			"[1.0, 239.0, 1800.0, 120.0, 120.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956]",
+			"[1.0, 239.0, 1800.0, 120.0, 120.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956]",
+			"[1.0, 239.0, 1800.0, 120.0, 120.0, 5780.0, 5394.666666666668, 76.026311234993, 73.448394581956]"
+		})
 	);
 	ENSURE_EQUALS(
 		"Mathematics.randomizer failed",
