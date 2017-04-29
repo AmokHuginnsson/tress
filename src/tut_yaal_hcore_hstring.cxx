@@ -75,8 +75,8 @@ TUT_UNIT_TEST( "copy construction" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "construction from (const) iterator" )
-	char const str[] = "Ala ma kota, a nie psa";
-	HString s1( str + 7, str + 10 );
+	HString const str( "Ala ma kota, a nie psa" );
+	HString s1( str.begin() + 7, str.begin() + 10 );
 	ENSURE_EQUALS( "construction form const_iterator failed", s1, "kot" );
 	HString src( str );
 	HString s2( src.begin() + 7, src.begin() + 10 );
@@ -823,7 +823,7 @@ TUT_UNIT_TEST( "assign( HString ... )" )
 	ENSURE_EQUALS( err, dest.assign( source, static_cast<int>( sizeof ( ss ) ) - 2, 5 ), "." );
 	ENSURE_EQUALS( err, dest.assign( source, static_cast<int>( sizeof ( ss ) ) - 1, 5 ), "" );
 	ENSURE_EQUALS( err, dest.assign( source, static_cast<int>( sizeof ( ss ) ), 5 ), "" );
-	ENSURE_EQUALS( err, dest.assign( ss + 3, ss + static_cast<int>( sizeof ( ss ) ) - 4 ), " ma ko" );
+	ENSURE_EQUALS( err, dest.assign( source.begin() + 3, source.begin() + static_cast<int>( sizeof ( ss ) ) - 4 ), " ma ko" );
 	ENSURE_THROW( "assign with negative offset succeeded", dest.assign( source, -1, 2 ), HStringException );
 	ENSURE_THROW( "assign with negative lenght succeeded", dest.assign( source, 0, -2 ), HStringException );
 	ENSURE_THROW( "assign with negative lenght succeeded", dest.assign( source, -2 ), HStringException );
@@ -905,7 +905,7 @@ TUT_UNIT_TEST( "append( HString ... )" )
 	ENSURE_EQUALS( err, dest.append( source, static_cast<int>( sizeof ( ss ) ) - 2, 5 ), "dummy" + source + "Ala mma kokota.ota.." );
 	ENSURE_EQUALS( err, dest.append( source, static_cast<int>( sizeof ( ss ) ) - 1, 5 ), "dummy" + source + "Ala mma kokota.ota.." );
 	ENSURE_EQUALS( err, dest.append( source, static_cast<int>( sizeof ( ss ) ), 5 ), "dummy" + source + "Ala mma kokota.ota.." );
-	ENSURE_EQUALS( err, dest.append( ss + 3, ss + static_cast<int>( sizeof ( ss ) ) - 4 ), "dummy" + source + "Ala mma kokota.ota.. ma ko" );
+	ENSURE_EQUALS( err, dest.append( source.begin() + 3, source.begin() + static_cast<int>( sizeof ( ss ) ) - 4 ), "dummy" + source + "Ala mma kokota.ota.. ma ko" );
 	ENSURE_EQUALS( err, dest.append( source, 9 ), "dummy" + source + "Ala mma kokota.ota.. ma kota." );
 	ENSURE_THROW( "append with negative offset succeeded", dest.append( source, -1, 2 ), HStringException );
 	ENSURE_THROW( "append with negative lenght succeeded", dest.append( source, 0, -2 ), HStringException );
