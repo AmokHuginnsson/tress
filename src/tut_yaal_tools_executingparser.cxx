@@ -1433,10 +1433,11 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	 	| ( lambda >> -( functionCallOperator >> dereference ) )
 	);
 	HRule factorial( atom >> -( ( character( '!' ) & "==" ) | ( character( '!' ) ^ '=' ) ) );
-	HRule negation( ( '-' >> factorial ) | factorial );
-	HRule booleanNot( ( '-' >> negation ) | negation );
-	HRule power( booleanNot >> ( * ( '^' >> booleanNot ) ) );
-	HRule multiplication( power >> ( * ( '*' >> power ) ) );
+	HRule booleanNot( ( '-' >> factorial ) | factorial );
+	HRule negation;
+	HRule power( booleanNot >> ( * ( '^' >> negation ) ) );
+	negation %= ( ( '-' >> negation ) | power );
+	HRule multiplication( negation >> ( * ( '*' >> negation ) ) );
 	HRule sum( multiplication >> ( * ( '+' >> multiplication ) ) );
 	HRule compare( sum >> -( ( string( "<=" ) | ">=" | "<" | ">" ) >> sum ) );
 	HRule equals( compare >> -( ( string( "==" ) | "!=" ) >> compare ) );
@@ -1509,15 +1510,13 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AC_ = ( AD_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> AD_ ) )",
 		"AD_ = ( AE_ >> *( '+' >> AE_ ) )",
 		"AE_ = ( AF_ >> *( '*' >> AF_ ) )",
-		"AF_ = ( AG_ >> *( '^' >> AG_ ) )",
-		"AG_ = ( ( '-' >> AH_ ) | AH_ )",
-		"AH_ = ( ( '-' >> AI_ ) | AI_ )",
-		"AI_ = ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( K_ >> AJ_ ) ) | real | integer | ( ( ( '$' >> real ) | character_literal ) >> -( K_ >> J_ ) ) "
-			"| ( ( ( '[' >> -Y_ >> ']' ) | ( '{' >> -( AK_ >> *( ',' >> AK_ ) ) >> '}' ) | string_literal ) >> -( ( I_ | K_ ) >> AJ_ ) ) "
-			"| ( ( '{' >> C_ >> *( ',' >> C_ ) >> '}' ) >> -( K_ >> AJ_ ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> AJ_ ) "
-			"| ( ( '@' >> -( '[' >> B_ >> *( ',' >> B_ ) >> ']' ) >> '(' >> -G_ >> ')' >> '{' >> *H_ >> '}' ) >> -( J_ >> AJ_ ) ) ) >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
-		"AJ_ = *( I_ | J_ | K_ )",
-		"AK_ = ( C_ >> ':' >> C_ )"
+		"AF_ = ( ( '-' >> AF_ ) | ( ( ( '-' >> AG_ ) | AG_ ) >> *( '^' >> AF_ ) ) )",
+		"AG_ = ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( K_ >> AH_ ) ) | real | integer | ( ( ( '$' >> real ) | character_literal ) >> -( K_ >> J_ ) ) "
+			"| ( ( ( '[' >> -Y_ >> ']' ) | ( '{' >> -( AI_ >> *( ',' >> AI_ ) ) >> '}' ) | string_literal ) >> -( ( I_ | K_ ) >> AH_ ) ) "
+			"| ( ( '{' >> C_ >> *( ',' >> C_ ) >> '}' ) >> -( K_ >> AH_ ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> AH_ ) "
+			"| ( ( '@' >> -( '[' >> B_ >> *( ',' >> B_ ) >> ']' ) >> '(' >> -G_ >> ')' >> '{' >> *H_ >> '}' ) >> -( J_ >> AH_ ) ) ) >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
+		"AH_ = *( I_ | J_ | K_ )",
+		"AI_ = ( C_ >> ':' >> C_ )"
 	};
 	cout << "hg:" << endl;
 	HGrammarDescription gd( hg );
