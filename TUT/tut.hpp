@@ -477,13 +477,13 @@ public:
 			tr.set_meta( ex.result(), typeid( ex ).name(), ex.what() );
 		} catch ( const std::exception& ex ) {
 			// test failed with std::exception
-			tr.set_meta( test_result::ex, yaal::hcore::demangle( typeid( ex ).name() ).c_str(), ex.what() );
+			tr.set_meta( test_result::ex, yaal::lexical_cast<std::string>( yaal::hcore::demangle( typeid( ex ).name() ) ), ex.what() );
 			if ( obj.get() ) {
 				line = obj->get_current_line();
 			}
 		} catch ( const yaal::hcore::HException& ex ) {
 			// test failed with yaal::hcore::HException
-			tr.set_meta( test_result::ex, yaal::hcore::demangle( typeid( ex ).name() ).c_str(), ex.what() );
+			tr.set_meta( test_result::ex, yaal::lexical_cast<std::string>( yaal::hcore::demangle( typeid( ex ).name() ) ), ex.what() );
 			if ( obj.get() ) {
 				line = obj->get_current_line();
 			}

@@ -147,9 +147,9 @@ void resort_entities( yaal::hcore::HString const& path_ ) {
 	if ( ( entitiesStart != -1 ) && ( entitiesEnd > entitiesStart ) ) {
 		sort( lines.begin() + entitiesStart, lines.begin() + entitiesEnd );
 	}
-	std::ofstream out( path_.c_str(), std::ios::binary ); /* *FIXME* *TODO* Recode using yaal after HString UCS is complete. */
+	std::ofstream out( lexical_cast<std::string>( path_ ), std::ios::binary ); /* *FIXME* *TODO* Recode using yaal after HString UCS is complete. */
 	for ( yaal::hcore::HString const& l : lines ) {
-		out << l.c_str() << "\n";
+		out << lexical_cast<std::string>( l ) << "\n";
 	}
 }
 

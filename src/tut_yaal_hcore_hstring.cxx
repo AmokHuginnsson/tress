@@ -377,10 +377,9 @@ TUT_UNIT_TEST( "replace(patter, str)" )
 		str = INIT1;
 		str.replace( PAT1A, PAT1B );
 		ENSURE_EQUALS( "replace A1->B1 does not work", str, CORRECT_1AB );
-		ENSURE_EQUALS( "replace A1->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT_1AB ) - 1 ) );
+		ENSURE_EQUALS( "replace A1->B1 failed (size)", str.get_length(), static_cast<int long>( sizeof ( CORRECT_1AB ) - 1 ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), MIN_CAPACITY );
 		ENSURE_EQUALS( "replace A1->B1 failed (is_empty)", str.empty(), false );
-		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.c_str() ) ) );
 	} {
 		static char const INIT1[] = "c@cc@cc@cc@cc@cc@cc";
 		static char const PAT1A[] = "@";
@@ -389,20 +388,18 @@ TUT_UNIT_TEST( "replace(patter, str)" )
 		str = INIT1;
 		str.replace( PAT1A, PAT1B );
 		ENSURE_EQUALS( "replace A1->B1 does not work", str, CORRECT_1AB );
-		ENSURE_EQUALS( "replace A1->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT_1AB ) - 1 ) );
+		ENSURE_EQUALS( "replace A1->B1 failed (size)", str.get_length(), static_cast<int long>( sizeof ( CORRECT_1AB ) - 1 ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), max( 31, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (is_empty)", str.empty(), false );
-		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.c_str() ) ) );
 	}
 	/* noop */ {
 		static char const INIT1[] = "abecad³o";
 		str = INIT1;
 		str.replace( "", "z pieca" );
 		ENSURE_EQUALS( "replace ''->B1 does not work", str, INIT1 );
-		ENSURE_EQUALS( "replace ''->B1 failed (size)", str.size(), static_cast<int long>( sizeof ( INIT1 ) - 1 ) );
+		ENSURE_EQUALS( "replace ''->B1 failed (size)", str.get_length(), static_cast<int long>( sizeof ( INIT1 ) - 1 ) );
 		ENSURE_EQUALS( "replace ''->B1 failed (capacity)", str.capacity(), MIN_CAPACITY );
 		ENSURE_EQUALS( "replace ''->B1 failed (is_empty)", str.empty(), false );
-		ENSURE_EQUALS( "bad lenght calculations", str.get_length(), static_cast<int long>( ::strlen( str.c_str() ) ) );
 	}
 	/* front */
 	ENSURE_EQUALS( "front repalce to same length failed", "'main()'"_ys.replace( "'", "#" ), "#main()#" );
@@ -707,12 +704,14 @@ TUT_TEARDOWN()
 
 namespace {
 
+static int const SAMPLE_SIZE = 128;
+
 int confirm( char const* const str, int size, char const* const pat, int len ) {
-	static HString fastpat;
-	fastpat = pat;
-	if ( len < fastpat.get_length() )
-		fastpat.set_at( len, 0 );
-	char const* p = ( len <= size ) ? strstr( str, fastpat.c_str() ) : NULL;
+	char fastpat[SAMPLE_SIZE + 1];
+	len = min( len, SAMPLE_SIZE );
+	strncpy( fastpat, pat, static_cast<size_t>( len ) );
+	fastpat[len] = 0;
+	char const* p = ( len <= size ) ? strstr( str, fastpat ) : NULL;
 	return ( p ? static_cast<int>( p - str ) : -1 );
 }
 
@@ -728,7 +727,6 @@ struct gen_char {
 };
 
 TUT_UNIT_TEST( "find("")" )
-	static int const SAMPLE_SIZE = 128;
 	char sample[ SAMPLE_SIZE + 1 ];
 	sample[ SAMPLE_SIZE ] = 0;
 	yaal::generate( sample, sample + SAMPLE_SIZE, gen_char() );

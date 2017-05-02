@@ -362,7 +362,7 @@ public:
 	}
 	HInstanceTracker( HInstanceTracker const& itrck )
 		: _id( itrck._id )
-		, _origin( itrck._origin + ":" + yaal::hcore::HString( itrck._id ).c_str() )
+		, _origin( itrck._origin + ":" + std::to_string( itrck._id ) )
 		, _self( this )
 		, _forcedSize() {
 		if ( _stopCopying ) {

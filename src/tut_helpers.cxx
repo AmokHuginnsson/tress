@@ -32,18 +32,66 @@ Copyright:
 #include "config.hxx"
 #include <yaal/hcore/macro.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
-#include "tut_helpers.hxx"
 #include <yaal/hcore/hcomplex.hxx>
 #include <yaal/hcore/hnumber.hxx>
 #include <yaal/hcore/htime.hxx>
 #include <yaal/tools/hterminal.hxx>
-
-#include "setup.hxx"
+#include <yaal/hcore/hcharacterencodingconverter.hxx>
 
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace yaal::tools;
+
+namespace yaal {
+
+namespace {
+
+yaal::hcore::HString const& output_encoding( void ) {
+	static HString encoding;
+	static bool iniialized( false );
+	char const DEF_ENC[] = "ISO-8859-2";
+	if ( ! iniialized ) {
+		iniialized = true;
+		char const* ctype( ::getenv( "LC_CTYPE" ) );
+		if ( ! ctype ) {
+			ctype = ::getenv( "LC_ALL" );
+		}
+		if ( ! ctype ) {
+			ctype = DEF_ENC;
+		}
+		encoding = ctype;
+		int long pos( encoding.find( '.' ) );
+		if ( pos != yaal::hcore::HString::npos ) {
+			encoding = encoding.substr( pos + 1 );
+		}
+		try {
+			HCharacterEncodingConverter( "utf-8", encoding );
+		} catch ( ... ) {
+			encoding = DEF_ENC;
+		}
+	}
+	return ( encoding );
+}
+
+HString const& _outputEncoding_( output_encoding() );
+
+}
+
+template<>
+std::string lexical_cast( yaal::hcore::HString const& str_ ) {
+	yaal::hcore::HChunk out;
+	yaal::hcore::HCharacterEncodingConverter encConv( "utf8", _outputEncoding_ );
+	yaal::hcore::HUTF8String utf8( str_ );
+	encConv.convert( utf8.x_str(), utf8.byte_count(), out );
+	return ( out.get_size() > 0 ? out.get<char>() : "" );
+}
+
+}
+
+#include "tut_helpers.hxx"
+#include "setup.hxx"
+
 using namespace tress::tut_helpers;
 
 namespace std {
@@ -62,7 +110,7 @@ std::ostream& operator << ( std::ostream& out, HComplex const& complex_ ) {
 }
 
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s ) {
-	out << s.c_str();
+	out << lexical_cast<std::string>( s );
 	return ( out );
 }
 
@@ -77,7 +125,7 @@ std::ostream& operator << ( std::ostream& out, yaal::hcore::HNumber const& n ) {
 }
 
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HTime const& t ) {
-	out << t.string().c_str();
+	out << lexical_cast<std::string>( t.string() );
 	return ( out );
 }
 

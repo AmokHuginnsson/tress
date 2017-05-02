@@ -138,7 +138,7 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 					};
 					for ( char const* kw : kws ) {
 						int len( static_cast<int>( strlen( kw ) ) );
-						if ( ( strncmp( kw, src_.c_str() + n, static_cast<size_t>( len ) ) == 0 ) && ! islower( src_.c_str()[ n + len ] ) ) {
+						if ( ( src_.substr( n, len ) == kw ) && ! islower( src_[ n + len ] ) ) {
 							keyword = true;
 							break;
 						}
@@ -163,7 +163,7 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 				bool keyword( false );
 				for ( char const* kw : kws ) {
 					int len( static_cast<int>( strlen( kw ) ) );
-					if ( ( i > ( len + 1 ) ) && ( ! islower( src_[i - len] ) ) && ( strncmp( kw, src_.c_str() + i + 1 - len, static_cast<size_t>( len ) ) == 0 ) ) {
+					if ( ( i > ( len + 1 ) ) && ( ! islower( src_[i - len] ) ) && ( src_.substr( i + 1 - len, len ) == kw ) ) {
 						keyword = true;
 						break;
 					}
@@ -186,7 +186,7 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 			} else {
 				out.push_back( curr );
 				if ( curr == '\n' ) {
-					out.append( nl.c_str() + 1 );
+					out.append( nl.substr( 1 ) );
 				}
 			}
 		} else {

@@ -61,9 +61,10 @@ TUT_UNIT_TEST( "pure ascii data" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ctor from HString" )
-	HString s( "Ala ma kota" );
+	char d[] = "Ala ma kota";
+	HString s( d );
 	HUTF8String u( s );
-	ENSURE_EQUALS( "bad HString ctor", u, s.c_str() );
+	ENSURE_EQUALS( "bad HString ctor", ::strncmp(	u.x_str(), d, sizeof ( d ) ), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ctor from iterators" )

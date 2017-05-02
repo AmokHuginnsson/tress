@@ -165,21 +165,22 @@ int main( int argc_, char* argv_[] ) {
 					gather_groups_from_file( sets );
 					tut::test_runner::test_sets_t testSets( prepare_testsets( sets ) );
 					runner.get().run_tests( testSets );
-				} else if ( ! setup._testGroupPattern.is_empty() )
-					runner.get().run_pattern_tests( setup._testGroupPattern.c_str() );
-				else if ( ! setup._testGroups.is_empty() && setup._testNumber )
-					runner.get().run_test( setup._testGroups.begin()->c_str(),
-							setup._testNumber );
-				else if ( ! setup._testGroups.is_empty() ) {
+				} else if ( ! setup._testGroupPattern.is_empty() ) {
+					runner.get().run_pattern_tests( yaal::lexical_cast<std::string>( setup._testGroupPattern ) );
+				} else if ( ! setup._testGroups.is_empty() && setup._testNumber ) {
+					runner.get().run_test( yaal::lexical_cast<std::string>( setup._testGroups.front() ), setup._testNumber );
+				} else if ( ! setup._testGroups.is_empty() ) {
 					string_list_t groupNames;
-					for ( OSetup::group_names_t::iterator it( setup._testGroups.begin() ), end( setup._testGroups.end() ); it != end; ++ it )
-						groupNames.push_back( it->c_str() );
+					for ( OSetup::group_names_t::iterator it( setup._testGroups.begin() ), end( setup._testGroups.end() ); it != end; ++ it ) {
+						groupNames.push_back( lexical_cast<std::string>( *it ) );
+					}
 					runner.get().run_tests( groupNames );
 				} else if ( ! setup._testSets.is_empty() ) {
 					tut::test_runner::test_sets_t testSets( prepare_testsets( setup._testSets ) );
 					runner.get().run_tests( testSets );
-				} else
+				} else {
 					runner.get().run_tests();
+				}
 			}
 			if ( ! setup._listGroups )
 				cout << "TUT: " << now_local() << endl;
@@ -218,7 +219,7 @@ void gather_groups_from_file( OSetup::set_definitions_t& lst ) {
 	while ( file.read_line( line, ( setup._testGroupListFilePath == "-" ) ? HFile::READ::UNBUFFERED_READS : HFile::READ::BUFFERED_READS ) >= 0 ) {
 		line.trim_left();
 		line.trim_right();
-		lst.push_back( line.c_str() );
+		lst.push_back( line );
 	}
 	file.close();
 	return;
@@ -272,7 +273,7 @@ tut::test_runner::test_sets_t prepare_testsets( OSetup::set_definitions_t const&
 		if ( token->is_empty() )
 			tools::util::failure( setIdx, "empty set name\n" );
 		tut::test_runner::test_set_t ts;
-		ts.first = token->c_str();
+		ts.first = lexical_cast<std::string>( *token );
 		++ token;
 		if ( token != tokenizer.end() ) {
 			noTokenizer.assign( *token );
