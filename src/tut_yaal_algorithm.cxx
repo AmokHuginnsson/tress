@@ -53,6 +53,40 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_algorithm );
 TUT_TEST_GROUP( tut_yaal_algorithm, "yaal::algorithm" );
 
+TUT_UNIT_TEST( "lexicographical_compare" )
+	HString s1( "abcd" );
+	HString s1b( "abcd" );
+	HString s2( "abcde" );
+	HString s3( "abdd" );
+	ENSURE_NOT( "lexicographical_compare on rand-acc eq failed", lexicographical_compare( s1.begin(), s1.end(), s1b.begin(), s1b.end() ) );
+	ENSURE( "lexicographical_compare rand-acc abcd < abdd failed", lexicographical_compare( s1.begin(), s1.end(), s3.begin(), s3.end() ) );
+	ENSURE_NOT( "lexicographical_compare rand-acc abdd < abcd failed", lexicographical_compare( s3.begin(), s3.end(), s1.begin(), s1.end() ) );
+	ENSURE( "lexicographical_compare rand-acc abcd < abcde failed", lexicographical_compare( s1.begin(), s1.end(), s2.begin(), s2.end() ) );
+	ENSURE_NOT( "lexicographical_compare rand-acc abcde < abcd failed", lexicographical_compare( s2.begin(), s2.end(), s1.begin(), s1.end() ) );
+
+	ENSURE_NOT( "lexicographical_compare rand-acc (op) on eq failed", lexicographical_compare( s1.begin(), s1.end(), s1b.begin(), s1b.end(), yaal::less<yaal::u32_t>() ) );
+	ENSURE( "lexicographical_compare rand-acc abcd (op) abdd failed", lexicographical_compare( s1.begin(), s1.end(), s3.begin(), s3.end(), yaal::less<yaal::u32_t>() ) );
+	ENSURE_NOT( "lexicographical_compare rand-acc abdd (op) abcd failed", lexicographical_compare( s3.begin(), s3.end(), s1.begin(), s1.end(), yaal::less<yaal::u32_t>() ) );
+	ENSURE( "lexicographical_compare rand-acc abcd (op) abcde failed", lexicographical_compare( s1.begin(), s1.end(), s2.begin(), s2.end(), yaal::less<yaal::u32_t>() ) );
+	ENSURE_NOT( "lexicographical_compare rand-acc abcde (op) abcd failed", lexicographical_compare( s2.begin(), s2.end(), s1.begin(), s1.end(), yaal::less<yaal::u32_t>() ) );
+
+	int_list_t l1( { 'a', 'b', 'c', 'd' } );
+	int_list_t l1b( { 'a', 'b', 'c', 'd' } );
+	int_list_t l2( { 'a', 'b', 'c', 'd', 'e' } );
+	int_list_t l3( { 'a', 'b', 'd', 'd' } );
+	ENSURE_NOT( "lexicographical_compare fwd on eq failed", lexicographical_compare( l1.begin(), l1.end(), l1b.begin(), l1b.end() ) );
+	ENSURE( "lexicographical_compare fwd abcd < abdd failed", lexicographical_compare( l1.begin(), l1.end(), l3.begin(), l3.end() ) );
+	ENSURE_NOT( "lexicographical_compare fwd abdd < abcd failed", lexicographical_compare( l3.begin(), l3.end(), l1.begin(), l1.end() ) );
+	ENSURE( "lexicographical_compare fwd abcd < abcde failed", lexicographical_compare( l1.begin(), l1.end(), l2.begin(), l2.end() ) );
+	ENSURE_NOT( "lexicographical_compare fwd abcde < abcd failed", lexicographical_compare( l2.begin(), l2.end(), l1.begin(), l1.end() ) );
+
+	ENSURE_NOT( "lexicographical_compare fwd (op) on eq failed", lexicographical_compare( l1.begin(), l1.end(), l1b.begin(), l1b.end(), yaal::less<yaal::u32_t>() ) );
+	ENSURE( "lexicographical_compare fwd abcd (op) abdd failed", lexicographical_compare( l1.begin(), l1.end(), l3.begin(), l3.end(), yaal::less<yaal::u32_t>() ) );
+	ENSURE_NOT( "lexicographical_compare fwd abdd (op) abcd failed", lexicographical_compare( l3.begin(), l3.end(), l1.begin(), l1.end(), yaal::less<yaal::u32_t>() ) );
+	ENSURE( "lexicographical_compare fwd abcd (op) abcde failed", lexicographical_compare( l1.begin(), l1.end(), l2.begin(), l2.end(), yaal::less<yaal::u32_t>() ) );
+	ENSURE_NOT( "lexicographical_compare fwd abcde (op) abcd failed", lexicographical_compare( l2.begin(), l2.end(), l1.begin(), l1.end(), yaal::less<yaal::u32_t>() ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "reverse" )
 	int const LENE = 4;
 	HPointer<char[]> spe( new char[ LENE + 1 ] );
