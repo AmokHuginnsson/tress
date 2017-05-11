@@ -743,7 +743,7 @@ TUT_UNIT_TEST( "find("")" )
 					newwhere += ( where + 1 );
 				msg = format( "find(\"\") failed: %d,%d,%d", len, offset, where );
 				ENSURE_EQUALS( msg,
-						where = ( offset + len <= SAMPLE_SIZE ) ? static_cast<int>( str.nfind( sample + offset, len, where + 1 ) ) : -1,
+						where = ( offset + len <= SAMPLE_SIZE ) ? static_cast<int>( str.find( HString( sample + offset, len ), where + 1 ) ) : -1,
 						newwhere );
 			} while ( where >= 0 );
 		}
