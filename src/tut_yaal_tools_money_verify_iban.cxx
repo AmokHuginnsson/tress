@@ -66,7 +66,7 @@ TUT_UNIT_TEST( "verifing ad-hoc IBANs" )
 		if ( unknown < 0 )
 			FAIL( "No unknown characters." );
 		for ( int i = 0; i < 10; ++ i ) {
-			string.set_at( unknown, static_cast<char>( i + '0' ) );
+			string.set_at( unknown, static_cast<code_point_t>( i + '0' ) );
 			cout << string << ": " << ( ! verify_IBAN( string ) ? "OK" : "WRONG" ) << endl;
 		}
 	}

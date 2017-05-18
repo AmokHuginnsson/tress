@@ -179,7 +179,7 @@ TUT_UNIT_TEST( "program return types and values" )
 	/* character */ {
 		OHuginnResult hr( execute_result( "main(){return('X');}" ) );
 		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::CHARACTER );
-		ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HCharacter*>( hr._result.raw() )->value(), 'X' );
+		ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HCharacter*>( hr._result.raw() )->value(), code_point_t( 'X' ) );
 	}
 	/* number */ {
 		OHuginnResult hr( execute_result( "main(){return($7);}" ) );

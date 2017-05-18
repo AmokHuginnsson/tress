@@ -258,7 +258,7 @@ TUT_UNIT_TEST( "subscript" )
 	char const data[] = "abecad³o";
 	HString s( data );
 	for ( int i( 0 ); i < static_cast<int>( sizeof ( data ) ); ++ i ) {
-		ENSURE_EQUALS( "bad value from subscript", s[i], data[i] );
+		ENSURE_EQUALS( "bad value from subscript", s[i], static_cast<code_point_t>( data[i] ) );
 	}
 	ENSURE_THROW( "subscript on bad index succeeded", s[-1], HStringException );
 	ENSURE_THROW( "subscript on bad index succeeded", s[static_cast<int>( sizeof ( data ) )], HStringException );
@@ -266,8 +266,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "front/back" )
 	HString s( "abesad³o" );
-	ENSURE_EQUALS( "front failed", s.front(), 'a' );
-	ENSURE_EQUALS( "back failed", s.back(), 'o' );
+	ENSURE_EQUALS( "front failed", s.front(), static_cast<code_point_t>( 'a' ) );
+	ENSURE_EQUALS( "back failed", s.back(), static_cast<code_point_t>( 'o' ) );
 	s.clear();
 	ENSURE_THROW( "front on empty succeeded", s.front(), HStringException );
 	ENSURE_THROW( "back on empty succeeded", s.back(), HStringException );
@@ -289,7 +289,7 @@ TUT_UNIT_TEST( "set_at" )
 	};
 	HString s( data );
 	for ( int i( 0 ); i < countof( dataOut ); ++ i ) {
-		s.set_at( repl[i][0], static_cast<char>( repl[i][1] ) );
+		s.set_at( repl[i][0], static_cast<code_point_t>( repl[i][1] ) );
 		ENSURE_EQUALS( "set_at failed", s, dataOut[i] );
 	}
 	ENSURE_THROW( "set_at on bad index succeeded", s.set_at( -1, 0 ), HStringException );
@@ -473,29 +473,29 @@ TUT_UNIT_TEST( "insert" )
 	char insert_failed[] = "insert failed";
 	char overflow[] = "overflow passed";
 	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( 0, 3, "ABCD" ), "ABCabcdef" );
+	ENSURE_EQUALS( insert_failed, str.insert( 0, "ABCD", 3 ), "ABCabcdef" );
 	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( 2, 3, "ABCD" ), "abABCcdef" );
+	ENSURE_EQUALS( insert_failed, str.insert( 2, "ABCD", 3 ), "abABCcdef" );
 	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( -2, 2, "ABCD" ), "abcdef" );
+	ENSURE_EQUALS( insert_failed, str.insert( -2, "ABCD", 2 ), "abcdef" );
 	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( -2, 4, "ABCD" ), "CDabcdef" );
+	ENSURE_EQUALS( insert_failed, str.insert( -2, "ABCD", 4 ), "CDabcdef" );
 	str = s;
-	ENSURE_THROW( overflow, str.insert( -5, 3, "ABCD" ), HStringException );
+	ENSURE_THROW( overflow, str.insert( -5, "ABCD", 3 ), HStringException );
 	str = s;
-	ENSURE_THROW( overflow, str.insert( 0, 5, "ABCD" ), HStringException );
+	ENSURE_THROW( overflow, str.insert( 0, "ABCD", 5 ), HStringException );
 	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( 20, 3, "ABCD" ), "abcdef" );
+	ENSURE_EQUALS( insert_failed, str.insert( 20, "ABCD", 3 ), "abcdef" );
 	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( 2, -5, "ABCD" ), "abcdef" );
+	ENSURE_EQUALS( insert_failed, str.insert( 2, "ABCD", -5 ), "abcdef" );
 	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( 5, 3, "ABCD" ), "abcdeABCf" );
+	ENSURE_EQUALS( insert_failed, str.insert( 5, "ABCD", 3 ), "abcdeABCf" );
 	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( 6, 3, "ABCD" ), "abcdefABC" );
+	ENSURE_EQUALS( insert_failed, str.insert( 6, "ABCD", 3 ), "abcdefABC" );
 	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( 7, 3, "ABCD" ), "abcdef" );
+	ENSURE_EQUALS( insert_failed, str.insert( 7, "ABCD", 3 ), "abcdef" );
 	HString str2( "|==--|[]" );
-	ENSURE_EQUALS( insert_failed, str2.insert( 7, 4, "done" ), "|==--|[done]" );
+	ENSURE_EQUALS( insert_failed, str2.insert( 7, "done", 4 ), "|==--|[done]" );
 	str = s;
 	ENSURE_EQUALS( insert_failed, str.insert( 2, "ABCD", 2 ), "abABcdef" );
 	str = s;

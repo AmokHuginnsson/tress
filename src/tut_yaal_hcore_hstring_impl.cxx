@@ -65,7 +65,7 @@ TUT_UNIT_TEST( "0 reserve on empty: S(0, 1) -> reserve(0, 1) = S(0, 1)" )
 	ENSURE_EQUALS( "bad rank from default ctor", EXT_GET_RANK( s ), 1 );
 	s.reserve( 0, 1 );
 	ENSURE_EQUALS( "bad rank from reserve", EXT_GET_RANK( s ), 1 );
-	ENSURE_EQUALS( "bad capacity from reserve", s.get_capacity(), HString::MAX_INPLACE_CAPACITY );
+	ENSURE_EQUALS( "bad capacity from reserve", s.get_capacity(), HString::MAX_INPLACE_CAPACITY + 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "0 reserve with rank 2 on empty: S(0, 1) -> reserve(0, 2) = S(0, 1)" )
@@ -73,7 +73,7 @@ TUT_UNIT_TEST( "0 reserve with rank 2 on empty: S(0, 1) -> reserve(0, 2) = S(0, 
 	ENSURE_EQUALS( "bad rank from default ctor", EXT_GET_RANK( s ), 1 );
 	s.reserve( 0, 2 );
 	ENSURE_EQUALS( "bad rank from reserve", EXT_GET_RANK( s ), 1 );
-	ENSURE_EQUALS( "bad capacity from reserve", s.get_capacity(), HString::MAX_INPLACE_CAPACITY );
+	ENSURE_EQUALS( "bad capacity from reserve", s.get_capacity(), HString::MAX_INPLACE_CAPACITY + 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "non 0 reserve with rank 2 on empty: S(0, 1) -> reserve(1, 2) = S(1, 2)" )
@@ -81,7 +81,7 @@ TUT_UNIT_TEST( "non 0 reserve with rank 2 on empty: S(0, 1) -> reserve(1, 2) = S
 	ENSURE_EQUALS( "bad rank from default ctor", EXT_GET_RANK( s ), 1 );
 	s.reserve( 1, 2 );
 	ENSURE_EQUALS( "bad rank reserve", EXT_GET_RANK( s ), 2 );
-	ENSURE_EQUALS( "bad capacity from reserve", s.get_capacity(), HString::MAX_INPLACE_CAPACITY );
+	ENSURE_EQUALS( "bad capacity from reserve", s.get_capacity(), HString::MAX_INPLACE_CAPACITY + 0 );
 	s.reserve( 1000, 2 );
 	ENSURE_EQUALS( "bad rank reserve", EXT_GET_RANK( s ), 2 );
 	ENSURE_EQUALS( "bad capacity from reserve", s.get_capacity(), 2048 );

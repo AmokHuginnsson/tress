@@ -231,8 +231,9 @@ struct WINDOW {
 	chtype_t _attr;
 	chtype_t _background;
 	char dummy[16];
-	static int const BUF_SIZE = 2 * ROWS * COLS;
-	char _buf[BUF_SIZE];
+	static int const CELL_COUNT = ROWS * COLS;
+	code_point_t _dataBuffer[CELL_COUNT];
+	char _attrBuffer[CELL_COUNT];
 	WINDOW( void )
 		: _y( 0 )
 		, _x( 0 )
@@ -244,7 +245,8 @@ struct WINDOW {
 		, _attr( 0 )
 		, _background( 0 )
 		, dummy()
-		, _buf() {
+		, _dataBuffer()
+		, _attrBuffer() {
 	}
 	void init( void ) {
 		_x = 0;
@@ -257,22 +259,27 @@ struct WINDOW {
 		_attr = 0;
 		_background = 0;
 		memset( dummy, 0, sizeof ( dummy ) );
-		memset( _buf, 0, BUF_SIZE );
+		memset( _dataBuffer, 0, sizeof ( _dataBuffer ) );
+		memset( _attrBuffer, 0, sizeof ( _attrBuffer ) );
 	}
 	void wbkgd( chtype_t bkgd_ ) {
 		_background = bkgd_;
 	}
-	char* at( int row_, int col_ ) {
-		return ( _buf + 2 * ( row_ * ( _mx + 1 ) + col_ ) );
+	code_point_t* dataAt( int row_, int col_ ) {
+		return ( _dataBuffer + ( row_ * ( _mx + 1 ) + col_ ) );
 	}
-	char* cur( void ) {
-		return ( _buf + 2 * ( _y * ( _mx + 1 ) + _x ) );
+	char* attrAt( int row_, int col_ ) {
+		return ( _attrBuffer + ( row_ * ( _mx + 1 ) + col_ ) );
+	}
+	code_point_t* dataCur( void ) {
+		return ( _dataBuffer + ( _y * ( _mx + 1 ) + _x ) );
+	}
+	char* attrCur( void ) {
+		return ( _attrBuffer + ( _y * ( _mx + 1 ) + _x ) );
 	}
 	void addch( int ch_ ) {
-		char* p( cur() );
-		*p = static_cast<char>( ch_ );
-		++p;
-		*p = static_cast<char>( _fakeConsole_.attr( _attr ) );
+		*dataCur() = static_cast<code_point_t>( ch_ );
+		*attrCur() = static_cast<char>( _fakeConsole_.attr( _attr ) );
 		++ _x;
 		if ( _x > _mx ) {
 			_x = 0;
@@ -293,17 +300,13 @@ struct WINDOW {
 	}
 	void clrtoeol( void ) {
 		for ( int i( _x ); i <= _mx; ++ i ) {
-			char* p = at( _y, i );
-			*p = static_cast<char>( '\0' );
-			++p;
-			*p = static_cast<char>( _fakeConsole_.bg( _background ) );
+			*dataAt( _y, i ) = static_cast<code_point_t>( '\0' );
+			*attrAt( _y, i ) = static_cast<char>( _fakeConsole_.bg( _background ) );
 		}
 	}
 	void clear() {
-		for ( int i( 0 ); i < BUF_SIZE; i += 2 ) {
-			_buf[i] = 0;
-			_buf[i + 1] = static_cast<char>( _fakeConsole_.bg( _background ) );
-		}
+		memset( _dataBuffer, 0, sizeof ( _dataBuffer ) );
+		memset( _attrBuffer, static_cast<char>( _fakeConsole_.bg( _background ) ), sizeof ( _attrBuffer ) );
 	}
 } stdscr;
 
@@ -442,10 +445,8 @@ yaal::hcore::HString term_dump( void ) {
 	for ( int r( 0 ); r <= stdscr._my; ++ r ) {
 		ss << '|';
 		for ( int c( 0 ); c <= stdscr._mx; ++ c ) {
-			char* p( stdscr.at( r, c ) );
-			int ch( *p );
-			++ p;
-			int attr( *p );
+			int ch( static_cast<int>( *stdscr.dataAt( r, c ) ) );
+			int attr( static_cast<int>( *stdscr.attrAt( r, c ) ) );
 			if ( attr != lastAttr ) {
 				ss << col( attr );
 				lastAttr = attr;
@@ -465,10 +466,11 @@ yaal::hcore::HString term_dump( void ) {
 }
 
 yaal::hcore::HString packed_dump( void ) {
-	int attr( -1 );
+	int curAttr( -1 );
 	HStringStream ss;
-	char const* p( stdscr.at( 0, 0 ) );
-	char lastChar( static_cast<char>( 255 ) );
+	code_point_t* data( stdscr.dataAt( 0, 0 ) );
+	char* attr( stdscr.attrAt( 0, 0 ) );
+	code_point_t lastChar( static_cast<code_point_t>( -1 ) );
 	int repeat( 0 );
 	HString s;
 	auto f = [&repeat, &lastChar, &ss, &s]() {
@@ -483,20 +485,19 @@ yaal::hcore::HString packed_dump( void ) {
 		}
 	};
 	for ( int i( 0 ); i < ( WINDOW::ROWS * WINDOW::COLS ); ++ i ) {
-		char ch( *p ? *p : ' ' );
-		++ p;
-		int a( *p );
-		++ p;
-		if ( a != attr ) {
-			attr = a;
+		code_point_t ch( *data ? *data : ' ' );
+		if ( *attr != curAttr ) {
+			curAttr = *attr;
 			f();
-			ss << attr_name_short( attr );
+			ss << attr_name_short( curAttr );
 		}
 		if ( ch != lastChar ) {
 			f();
 			lastChar = ch;
 		}
 		++ repeat;
+		++ data;
+		++ attr;
 	}
 	f();
 	return ( ss.str() );

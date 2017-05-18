@@ -396,15 +396,15 @@ TUT_UNIT_TEST( "HStringLiteral" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HCharacterLiteral" )
-	typedef HArray<char> characters_t;
+	typedef HArray<code_point_t> characters_t;
 	characters_t c;
-	HRule cl( character_literal[push_back<char>( c )] );
+	HRule cl( character_literal[push_back<code_point_t>( c )] );
 	HRule r( cl >> *( ',' >> cl ) );
 	HExecutingParser ep( r );
 	/* simple */ {
 		ENSURE( "HCharacterLiteral failed to parse correct input", ep( "'A','\\t'" ) );
 		ep();
-		char const expected[] = {
+		char unsigned const expected[] = {
 			'A',
 			'\t'
 		};
@@ -420,7 +420,7 @@ TUT_UNIT_TEST( "HCharacterLiteral" )
 					"'\\n',' ','	','\\t','\\b','\\e','\\\\','\\'','x'" ) );
 		c.clear();
 		ep();
-		char const expected[] = "\n \t\t\b\033\\'x";
+		char unsigned const expected[] = "\n \t\t\b\033\\'x";
 		int i( 0 );
 		for ( characters_t::const_iterator it( c.begin() ), end( c.end() ); it != end; ++ it, ++ i ) {
 			ENSURE( "too many elements acquired", i < ( countof ( expected ) - 1 ) );
@@ -453,18 +453,18 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HCharacter" )
 	/* char (any) */ {
-		char val( 0 );
-		HExecutingParser ep( character[HCharacter::action_character_t( call( &defer<char>::set, ref( val ), _1 ) )] );
+		code_point_t val( 0 );
+		HExecutingParser ep( character[HCharacter::action_character_t( call( &defer<code_point_t>::set, ref( val ), _1 ) )] );
 		ENSURE( "HCharacter failed to parse correct input.", ep( "a" ) );
 		ep();
-		ENSURE_EQUALS( "char value not set by ExecutingParser.", val, 'a' );
+		ENSURE_EQUALS( "char value not set by ExecutingParser.", val, code_point_t( 'a' ) );
 	}
 	/* char (specific ok) */ {
-		char val( 0 );
-		HExecutingParser ep( e_p::constant( 'a', HCharacter::action_character_t( call( &defer<char>::set, ref( val ), _1 ) ) ) );
+		code_point_t val( 0 );
+		HExecutingParser ep( e_p::constant( 'a', HCharacter::action_character_t( call( &defer<code_point_t>::set, ref( val ), _1 ) ) ) );
 		ENSURE( "HCharacter failed to parse correct input.", ep( "a" ) );
 		ep();
-		ENSURE_EQUALS( "char not captured", val, 'a' );
+		ENSURE_EQUALS( "char not captured", val, code_point_t( 'a' ) );
 	}
 	/* char (specific ok) action_t */ {
 		bool actionCalled( false );
@@ -474,11 +474,11 @@ TUT_UNIT_TEST( "HCharacter" )
 		ENSURE( "action was not called by ExecutingParser.", actionCalled );
 	}
 	/* char (specific, any of ok) */ {
-		char val( 0 );
-		HExecutingParser ep( characters( "ab", HCharacter::action_character_t( call( &defer<char>::set, ref( val ), _1 ) ) ) );
+		code_point_t val( 0 );
+		HExecutingParser ep( characters( "ab", HCharacter::action_character_t( call( &defer<code_point_t>::set, ref( val ), _1 ) ) ) );
 		ENSURE( "HCharacter failed to parse correct input.", ep( "b" ) );
 		ep();
-		ENSURE_EQUALS( "char not captured", val, 'b' );
+		ENSURE_EQUALS( "char not captured", val, code_point_t( 'b' ) );
 	}
 	/* char (specific, any of ok) action_position_t */ {
 		e_p::position_t pos( -1 );
@@ -499,18 +499,18 @@ TUT_UNIT_TEST( "HCharacter" )
 		ENSURE( "HCharacter failed to parse correct input.", ep( "b" ) );
 	}
 	/* char (specific fail) */ {
-		char val( 0 );
-		HExecutingParser ep( character( 'X' )[HCharacter::action_character_t( call( &defer<char>::set, ref( val ), _1 ) )] );
+		code_point_t val( 0 );
+		HExecutingParser ep( character( 'X' )[HCharacter::action_character_t( call( &defer<code_point_t>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "HCharacter parsed invalid input.", ep( "a" ) );
 	}
 	/* char (specific any of fail) */ {
-		char val( 0 );
-		HExecutingParser ep( character( "ab" )[HCharacter::action_character_t( call( &defer<char>::set, ref( val ), _1 ) )] );
+		code_point_t val( 0 );
+		HExecutingParser ep( character( "ab" )[HCharacter::action_character_t( call( &defer<code_point_t>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "HCharacter parsed invalid input.", ep( "c" ) );
 	}
 	/* char WS */ {
-		char val( 0 );
-		HExecutingParser ep( character( "ab " )[HCharacter::action_character_t( call( &defer<char>::set, ref( val ), _1 ) )]( HCharacter::WHITE_SPACE::AUTO ) );
+		code_point_t val( 0 );
+		HExecutingParser ep( character( "ab " )[HCharacter::action_character_t( call( &defer<code_point_t>::set, ref( val ), _1 ) )]( HCharacter::WHITE_SPACE::AUTO ) );
 		ENSURE_NOT( "HCharacter parsed invalid input.", ep( "c" ) );
 		ENSURE( "HCharacter parsed invalid input.", ep( " " ) );
 	}
@@ -817,16 +817,16 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HFollows" )
 	/* parsed */ {
-		char fcData( 0 );
-		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( fcData ), _1 ) )] );
-		char scData( 0 );
-		HRule sc( character( 'b' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( scData ), _1 ) )] );
+		code_point_t fcData( 0 );
+		HRule fc( character( 'a' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( fcData ), _1 ) )] );
+		code_point_t scData( 0 );
+		HRule sc( character( 'b' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( scData ), _1 ) )] );
 		bool followsCalled( false );
 		HExecutingParser ep( ( fc >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( followsCalled ), true ) ) ] );
 		ENSURE( "parse on correct failed", ep( "ab" ) );
 		ep();
-		ENSURE_EQUALS( "predecessor in follows not called", fcData, 'a' );
-		ENSURE_EQUALS( "successor in follows not called", scData, 'b' );
+		ENSURE_EQUALS( "predecessor in follows not called", fcData, static_cast<code_point_t>( 'a' ) );
+		ENSURE_EQUALS( "successor in follows not called", scData, static_cast<code_point_t>( 'b' ) );
 		ENSURE( "follows not called", followsCalled );
 	}
 	/* From string. */ {
@@ -836,10 +836,10 @@ TUT_UNIT_TEST( "HFollows" )
 		ENSURE( "parse on correct failed", ep2( "num 123" ) );
 	}
 	/* failed on successor */ {
-		char fcData( 0 );
-		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( fcData ), _1 ) )] );
-		char scData( 0 );
-		HRule sc( character( 'b' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( scData ), _1 ) )] );
+		code_point_t fcData( 0 );
+		HRule fc( character( 'a' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( fcData ), _1 ) )] );
+		code_point_t scData( 0 );
+		HRule sc( character( 'b' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( scData ), _1 ) )] );
 		bool followsCalled( false );
 		HExecutingParser ep( ( fc >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( followsCalled ), true ) ) ] );
 		ENSURE_NOT( "parse on invalid succeeded", ep( "aa" ) );
@@ -1015,13 +1015,13 @@ TUT_UNIT_TEST( "HAnd" )
 	/* parsed */ {
 		bool actionCalled( false );
 		executing_parser::position_t pos( -1 );
-		char fcData( '_' );
-		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( fcData ), _1 ) )] );
-		char scData( '_' );
-		char data( '_' );
+		code_point_t fcData( '_' );
+		HRule fc( character( 'a' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( fcData ), _1 ) )] );
+		code_point_t scData( '_' );
+		code_point_t data( '_' );
 		char trailerChar[] = "b";
-		HRule trailer( character( trailerChar )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( scData ), _1 ) )] );
-		HRule sc( character( trailerChar )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( data ), _1 ) )] );
+		HRule trailer( character( trailerChar )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( scData ), _1 ) )] );
+		HRule sc( character( trailerChar )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( data ), _1 ) )] );
 		bool andCalled( false );
 		HExecutingParser ep( ( ( fc & trailer )[HAnd::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
 		HExecutingParser epp( ( ( fc & trailerChar )[HAnd::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
@@ -1030,9 +1030,9 @@ TUT_UNIT_TEST( "HAnd" )
 		ENSURE( "parse on correct failed pos", epp( "ab" ) );
 		ENSURE( "parse on correct failed pos", epS( "ab" ) );
 		ep();
-		ENSURE_EQUALS( "predecessor in AND not called", fcData, 'a' );
-		ENSURE_EQUALS( "successor in AND called", scData, '_' );
-		ENSURE_EQUALS( "following rule of AND not called", data, 'b' );
+		ENSURE_EQUALS( "predecessor in AND not called", fcData, static_cast<code_point_t>( 'a' ) );
+		ENSURE_EQUALS( "successor in AND called", scData, static_cast<code_point_t>( '_' ) );
+		ENSURE_EQUALS( "following rule of AND not called", data, static_cast<code_point_t>( 'b' ) );
 		ENSURE( "action on AND was not called", actionCalled );
 		epp();
 		ENSURE_EQUALS( "bad position from and's action", pos.get(), 0 );
@@ -1057,13 +1057,13 @@ TUT_UNIT_TEST( "HNot" )
 	/* parsed */ {
 		bool actionCalled( false );
 		executing_parser::position_t pos( -1 );
-		char fcData( '_' );
-		HRule fc( character( 'a' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( fcData ), _1 ) )] );
-		char scData( '_' );
-		char data( '_' );
+		code_point_t fcData( '_' );
+		HRule fc( character( 'a' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( fcData ), _1 ) )] );
+		code_point_t scData( '_' );
+		code_point_t data( '_' );
 		char trailerChar[] = "b";
-		HRule trailer( character( trailerChar )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( scData ), _1 ) )] );
-		HRule sc( character( 'c' )[HBoundCall<void ( char )>( call( &defer<char>::set, ref( data ), _1 ) )] );
+		HRule trailer( character( trailerChar )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( scData ), _1 ) )] );
+		HRule sc( character( 'c' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( data ), _1 ) )] );
 		bool notCalled( false );
 		HExecutingParser ep( ( ( fc ^ trailer )[HNot::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
 		HExecutingParser epp( ( ( fc ^ trailerChar )[HNot::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
@@ -1072,9 +1072,9 @@ TUT_UNIT_TEST( "HNot" )
 		ENSURE( "parse on correct failed pos", epp( "ac" ) );
 		ENSURE( "parse on correct failed pos", epS( "ac" ) );
 		ep();
-		ENSURE_EQUALS( "predecessor in NOT not called", fcData, 'a' );
-		ENSURE_EQUALS( "successor in NOT called", scData, '_' );
-		ENSURE_EQUALS( "following rule of NOT not called", data, 'c' );
+		ENSURE_EQUALS( "predecessor in NOT not called", fcData, static_cast<code_point_t>( 'a' ) );
+		ENSURE_EQUALS( "successor in NOT called", scData, static_cast<code_point_t>( '_' ) );
+		ENSURE_EQUALS( "following rule of NOT not called", data, static_cast<code_point_t>( 'c' ) );
 		epp();
 		ENSURE_EQUALS( "bad position from NOT's action", pos.get(), 0 );
 		ENSURE( "follows not called", notCalled );
@@ -1744,7 +1744,7 @@ struct calc {
 	void deferred_action( action_t action_ ) {
 		_deferred.push_back( call( action_, this ) );
 	}
-	void oper( char op_ ) {
+	void oper( code_point_t op_ ) {
 		clog << __PRETTY_FUNCTION__ << ": " << op_ << endl;
 		oper_t o( NONE );
 		switch ( op_ ) {
@@ -1762,7 +1762,7 @@ struct calc {
 		M_ENSURE( _opers.top() == PAREN );
 		_opers.pop();
 	}
-	void deferred_oper( char op_ ) {
+	void deferred_oper( code_point_t op_ ) {
 		_deferred.push_back( call( &calc::oper, this, op_ ) );
 	}
 	void val( double long v_ ) {
@@ -1831,10 +1831,10 @@ TUT_UNIT_TEST( "calc, (plus, minus, mul, div, recursion)" )
 	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
 	HRule atom( realVal | paren );
 	HRule mulExec( HBoundCall<void ( executing_parser::position_t )>( call( &calc::mul_div_p, &c, _1 ) ) );
-	mulExec %= ( character( "*/" )[HBoundCall<void ( char )>( call( &calc::oper, &c, _1 ) )] >> atom );
+	mulExec %= ( character( "*/" )[HBoundCall<void ( code_point_t )>( call( &calc::oper, &c, _1 ) )] >> atom );
 	HRule multiply( atom >> *( mulExec ) );
 	HRule addExec( HBoundCall<void ( void )>( call( &calc::plus_minus, &c ) ) );
-	addExec %= ( character( "+-" )[HBoundCall<void ( char )>( call( &calc::oper, &c, _1 ) )] >> multiply );
+	addExec %= ( character( "+-" )[HBoundCall<void ( code_point_t )>( call( &calc::oper, &c, _1 ) )] >> multiply );
 	HRule r( multiply >> *( addExec ) );
 	expr %= r;
 	HExecutingParser ep( r );
@@ -1850,8 +1850,8 @@ TUT_UNIT_TEST( "calc(deferred), (plus, minus, mul, div, recursion)" )
 	HRule paren( '(' >> expr >> ')' );
 	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::deferred_val, &c, _1 ) )] );
 	HRule atom( realVal | paren );
-	HRule multiply( atom >> *( ( character( "*/" )[HBoundCall<void ( char )>( call( &calc::deferred_oper, &c, _1 ) )] >> atom )[HBoundCall<void ( void )>( call( &calc::deferred_action, &c, &calc::mul_div ) )] ) );
-	HRule r( multiply >> *( ( character( "+-" )[HBoundCall<void ( char )>( call( &calc::deferred_oper, &c, _1 ) )] >> multiply )[HBoundCall<void ( void )>( call( &calc::deferred_action,  &c, &calc::plus_minus ) )] ) );
+	HRule multiply( atom >> *( ( character( "*/" )[HBoundCall<void ( code_point_t )>( call( &calc::deferred_oper, &c, _1 ) )] >> atom )[HBoundCall<void ( void )>( call( &calc::deferred_action, &c, &calc::mul_div ) )] ) );
+	HRule r( multiply >> *( ( character( "+-" )[HBoundCall<void ( code_point_t )>( call( &calc::deferred_oper, &c, _1 ) )] >> multiply )[HBoundCall<void ( void )>( call( &calc::deferred_action,  &c, &calc::plus_minus ) )] ) );
 	expr %= r;
 	HExecutingParser ep( r );
 
@@ -1869,8 +1869,8 @@ TUT_UNIT_TEST( "associativity: calc(deferred), (plus, minus, mul, div, power, re
 	HRule realVal( real[HReal::action_double_long_t( call( &calc::deferred_val, &c, _1 ) )] );
 	HRule atom( realVal | paren );
 	HRule power( atom >> *( ( character( "^" )[HCharacterLiteral::action_character_t( call( &calc::deferred_oper, &c, _1 ) )] >> atom ) ), HBoundCall<void ( void )>( call( &calc::deferred_action, &c, &calc::power ) ) );
-	HRule multiply( power >> *( ( character( "*/" )[HBoundCall<void ( char )>( call( &calc::deferred_oper, &c, _1 ) )] >> power )[HBoundCall<void ( void )>( call( &calc::deferred_action, &c, &calc::mul_div ) )] ) );
-	HRule r( multiply >> *( ( character( "+-" )[HBoundCall<void ( char )>( call( &calc::deferred_oper, &c, _1 ) )] >> multiply )[HBoundCall<void ( void )>( call( &calc::deferred_action,  &c, &calc::plus_minus ) )] ) );
+	HRule multiply( power >> *( ( character( "*/" )[HBoundCall<void ( code_point_t )>( call( &calc::deferred_oper, &c, _1 ) )] >> power )[HBoundCall<void ( void )>( call( &calc::deferred_action, &c, &calc::mul_div ) )] ) );
+	HRule r( multiply >> *( ( character( "+-" )[HBoundCall<void ( code_point_t )>( call( &calc::deferred_oper, &c, _1 ) )] >> multiply )[HBoundCall<void ( void )>( call( &calc::deferred_action,  &c, &calc::plus_minus ) )] ) );
 	expr %= r;
 	HExecutingParser ep( r );
 	ep( "(1.7*(2+2.4)+-7+2*3-5)/2" );

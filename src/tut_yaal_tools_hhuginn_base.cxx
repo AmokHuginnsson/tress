@@ -93,18 +93,18 @@ void tut_yaal_tools_hhuginn_base::test_file( hcore::HString const& name_ ) {
 }
 
 namespace {
-bool is_op( char c ) {
+bool is_op( code_point_t c ) {
 	char const ops[] = "+-*/%|&^!=:?<>";
-	return ( strchr( ops, c ) != nullptr );
+	return ( isascii( static_cast<int>( c ) ) && ( strchr( ops, static_cast<char>( c ) ) != nullptr ) );
 }
 hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 	HString out;
 	int tabs( 0 );
 	HString nl;
 	for ( int i( 0 ); i < src_.get_length(); ++ i ) {
-		char curr( src_[i] );
+		code_point_t curr( src_[i] );
 		if ( ( i + 1 ) < src_.get_length() ) {
-			char next( src_[i + 1] );
+			code_point_t next( src_[i + 1] );
 			if ( curr == '{' ) {
 				++ tabs;
 			} else if ( next == '}' ) {
@@ -123,7 +123,7 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 				out.push_back( curr );
 				int n( i + 1 );
 				while ( n < src_.get_length() ) {
-					char next2( src_[n] );
+					code_point_t next2( src_[n] );
 					if ( ( next2 != ' ' ) && ( next2 != '\t' ) ) {
 						break;
 					}
@@ -138,7 +138,7 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 					};
 					for ( char const* kw : kws ) {
 						int len( static_cast<int>( strlen( kw ) ) );
-						if ( ( src_.substr( n, len ) == kw ) && ! islower( src_[ n + len ] ) ) {
+						if ( ( src_.substr( n, len ) == kw ) && ! islower( static_cast<int>( src_[ n + len ] ) ) ) {
 							keyword = true;
 							break;
 						}
@@ -163,7 +163,7 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 				bool keyword( false );
 				for ( char const* kw : kws ) {
 					int len( static_cast<int>( strlen( kw ) ) );
-					if ( ( i > ( len + 1 ) ) && ( ! islower( src_[i - len] ) ) && ( src_.substr( i + 1 - len, len ) == kw ) ) {
+					if ( ( i > ( len + 1 ) ) && ( ! islower( static_cast<int>( src_[i - len] ) ) ) && ( src_.substr( i + 1 - len, len ) == kw ) ) {
 						keyword = true;
 						break;
 					}
