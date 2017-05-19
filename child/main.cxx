@@ -59,8 +59,9 @@ int main( int argc_, char* argv_[] ) {
 		if ( !! setup._script ) {
 			HString nonWord;
 			for ( int c = 1; c < 256; ++ c ) {
-				if ( ! ::memchr( _word_.data(), c, static_cast<size_t>( _word_.size() ) ) )
+				if ( ! character_class( CHARACTER_CLASS::WORD ).has( static_cast<code_point_t>( c ) ) ) {
 					nonWord += static_cast<char>( c );
+				}
 			}
 			HTokenizer t( setup._script, ";", HTokenizer::SKIP_EMPTY );
 			for ( HTokenizer::HIterator it = t.begin(), end = t.end(); it != end; ++ it ) {
