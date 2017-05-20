@@ -48,7 +48,7 @@ using namespace tress::tut_helpers;
 static yaal::u8_t const RANK_BIT_MASK =  meta::obinary<001100000>::value;
 
 #undef EXT_GET_RANK
-#define EXT_GET_RANK( base ) ( ( base._mem[ HString::ALLOC_FLAG_INDEX ] & RANK_BIT_MASK ) >> 5 )
+#define EXT_GET_RANK( base ) ( ( ( base._mem[ HString::ALLOC_FLAG_INDEX ] & RANK_BIT_MASK ) >> 5 ) + 1 )
 
 namespace tut {
 

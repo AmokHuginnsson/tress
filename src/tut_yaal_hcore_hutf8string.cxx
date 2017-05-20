@@ -27,6 +27,7 @@ Copyright:
 #include <cstring>
 
 #include <TUT/tut.hpp>
+#include <yaal/hcore/unicode.hxx>
 
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
@@ -210,15 +211,15 @@ TUT_UNIT_TEST( "iterator" )
 	ENSURE_EQUALS( "iter/riter failed", r, a );
 	char const c[] = "MÍøny b±dº, chroÒ pu≥k twÛj i sze∂Ê flag!";
 	int_array_t d( begin( c ), end( c ) - 1 );
-	d[1]  = 281;
-	d[2]  = 380;
-	d[7]  = 261;
-	d[9]  = 378;
-	d[16] = 324;
-	d[20] = 322;
-	d[25] = 243;
-	d[33] = 347;
-	d[34] = 263;
+	d[1]  = unicode::CODE_POINTS::LATIN_SMALL_LETTER_E_WITH_OGONEK;
+	d[2]  = unicode::CODE_POINTS::LATIN_SMALL_LETTER_Z_WITH_DOT_ABOVE;
+	d[7]  = unicode::CODE_POINTS::LATIN_SMALL_LETTER_A_WITH_OGONEK;
+	d[9]  = unicode::CODE_POINTS::LATIN_SMALL_LETTER_Z_WITH_ACUTE;
+	d[16] = unicode::CODE_POINTS::LATIN_SMALL_LETTER_N_WITH_ACUTE;
+	d[20] = unicode::CODE_POINTS::LATIN_SMALL_LETTER_L_WITH_STROKE;
+	d[25] = unicode::CODE_POINTS::LATIN_SMALL_LETTER_O_WITH_ACUTE;
+	d[33] = unicode::CODE_POINTS::LATIN_SMALL_LETTER_S_WITH_ACUTE;
+	d[34] = unicode::CODE_POINTS::LATIN_SMALL_LETTER_C_WITH_ACUTE;
 	ENSURE_EQUALS( "decode failed", a, d );
 	HUTF8String x( "aƒÖ‡†ÄêÄÄ" );
 	HUTF8String::HIterator it;

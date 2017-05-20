@@ -31,6 +31,7 @@ Copyright:
 #include <yaal/hcore/hstring.hxx>
 #include <yaal/hcore/hformat.hxx>
 #include <yaal/hcore/hrandomizer.hxx>
+#include <yaal/hcore/unicode.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -42,7 +43,7 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-static int const MIN_CAPACITY( static_cast<int>( sizeof ( HString ) ) - 2 );
+static int const MIN_CAPACITY( static_cast<int>( sizeof ( HString ) ) - 1 );
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hstring );
 TUT_TEST_GROUP( tut_yaal_hcore_hstring, "yaal::hcore::HString" );
@@ -179,13 +180,13 @@ TUT_UNIT_TEST( "construction from characters" )
 		ENSURE_EQUALS( "construction from nil char failed (is_empty)", nil.is_empty(), true );
 	}
 	/* char unsigned */ {
-		static char unsigned const INIT = static_cast<char unsigned>( '±' );
-		static char const CORRECT[] = "±";
+		static char unsigned const INIT = static_cast<char unsigned>( unicode::CODE_POINTS::LATIN_SMALL_LETTER_O_WITH_ACUTE );
+		static char const CORRECT[] = "√≥";
 		HString str( INIT );
-		ENSURE_EQUALS( "construction from int long does not work", str, CORRECT );
-		ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 1, MIN_CAPACITY ) );
-		ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
+		ENSURE_EQUALS( "construction from char unsigned does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from char unsigned failed (size)", str.size(), 1 );
+		ENSURE_EQUALS( "construction from char unsigned failed (capacity)", str.capacity(), max( 1, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from char unsigned failed (is_empty)", str.empty(), false );
 	}
 TUT_TEARDOWN()
 
@@ -255,17 +256,32 @@ TUT_UNIT_TEST( "operator +=" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "subscript" )
-	char const data[] = "abecad≥o";
-	HString s( data );
-	for ( int i( 0 ); i < static_cast<int>( sizeof ( data ) ); ++ i ) {
-		ENSURE_EQUALS( "bad value from subscript", s[i], static_cast<code_point_t>( data[i] ) );
+	/* UCS-1 */ {
+		char const data[] = "abecadlo";
+		HString s( data );
+		for ( int i( 0 ); i < static_cast<int>( sizeof ( data ) - 1 ); ++ i ) {
+			ENSURE_EQUALS( "bad value from subscript", s[i], static_cast<code_point_t>( data[i] ) );
+		}
+		ENSURE_THROW( "subscript on bad index succeeded", s[-1], HStringException );
+		ENSURE_THROW( "subscript on bad index succeeded", s[static_cast<int>( sizeof ( data ) )], HStringException );
 	}
-	ENSURE_THROW( "subscript on bad index succeeded", s[-1], HStringException );
-	ENSURE_THROW( "subscript on bad index succeeded", s[static_cast<int>( sizeof ( data ) )], HStringException );
+	/* UCS-2 */ {
+		char const data[] = "abecad≈Ço";
+		code_point_t const res[] = { 'a', 'b', 'e', 'c', 'a', 'd', unicode::CODE_POINTS::LATIN_SMALL_LETTER_L_WITH_STROKE, 'o' };
+		HString s( data );
+		for ( int i( 0 ); i < static_cast<int>( countof ( res ) ); ++ i ) {
+			ENSURE_EQUALS( "bad value from subscript", s[i], res[i] );
+		}
+		ENSURE_THROW( "subscript on bad index succeeded", s[-1], HStringException );
+		ENSURE_THROW( "subscript on bad index succeeded", s[static_cast<int>( sizeof ( data ) )], HStringException );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "front/back" )
-	HString s( "abesad≥o" );
+	HString s( "abesadlo" );
+	ENSURE_EQUALS( "front failed", s.front(), static_cast<code_point_t>( 'a' ) );
+	ENSURE_EQUALS( "back failed", s.back(), static_cast<code_point_t>( 'o' ) );
+	s.assign( "abesad≈Ço" );
 	ENSURE_EQUALS( "front failed", s.front(), static_cast<code_point_t>( 'a' ) );
 	ENSURE_EQUALS( "back failed", s.back(), static_cast<code_point_t>( 'o' ) );
 	s.clear();
@@ -274,26 +290,52 @@ TUT_UNIT_TEST( "front/back" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set_at" )
-	char const data[] = "abecad≥o";
-	char const dataOut[][10] = {
-		"abec4d≥o",
-		"abec4d≥0",
-		"4bec4d≥0",
-		"4be"
-	};
-	int repl[][3] = {
-		{ 4, '4' },
-		{ 7, '0' },
-		{ 0, '4' },
-		{ 3, 0 }
-	};
-	HString s( data );
-	for ( int i( 0 ); i < countof( dataOut ); ++ i ) {
-		s.set_at( repl[i][0], static_cast<code_point_t>( repl[i][1] ) );
-		ENSURE_EQUALS( "set_at failed", s, dataOut[i] );
+	/* UCS-1 */ {
+		char const data[] = "abecadlo";
+		char const dataOut[][10] = {
+			"abec4dlo",
+			"abec4dl0",
+			"4bec4dl0",
+			"4bec4d≈Ç0",
+			"4be"
+		};
+		int repl[][3] = {
+			{ 4, '4' },
+			{ 7, '0' },
+			{ 0, '4' },
+			{ 6, unicode::CODE_POINTS::LATIN_SMALL_LETTER_L_WITH_STROKE },
+			{ 3, 0 }
+		};
+		HString s( data );
+		for ( int i( 0 ); i < countof( dataOut ); ++ i ) {
+			s.set_at( repl[i][0], static_cast<code_point_t>( repl[i][1] ) );
+			ENSURE_EQUALS( "set_at failed", s, dataOut[i] );
+		}
+		ENSURE_THROW( "set_at on bad index succeeded", s.set_at( -1, 0 ), HStringException );
+		ENSURE_THROW( "set_at on bad index succeeded", s.set_at( static_cast<int>( sizeof ( data ) - 1 ), 0 ), HStringException );
 	}
-	ENSURE_THROW( "set_at on bad index succeeded", s.set_at( -1, 0 ), HStringException );
-	ENSURE_THROW( "set_at on bad index succeeded", s.set_at( static_cast<int>( sizeof ( data ) - 1 ), 0 ), HStringException );
+	/* UCS-2 */ {
+		char const data[] = "abecad≈Ço";
+		char const dataOut[][10] = {
+			"abec4d≈Ço",
+			"abec4d≈Ç0",
+			"4bec4d≈Ç0",
+			"4be"
+		};
+		int repl[][3] = {
+			{ 4, '4' },
+			{ 7, '0' },
+			{ 0, '4' },
+			{ 3, 0 }
+		};
+		HString s( data );
+		for ( int i( 0 ); i < countof( dataOut ); ++ i ) {
+			s.set_at( repl[i][0], static_cast<code_point_t>( repl[i][1] ) );
+			ENSURE_EQUALS( "set_at failed", s, dataOut[i] );
+		}
+		ENSURE_THROW( "set_at on bad index succeeded", s.set_at( -1, 0 ), HStringException );
+		ENSURE_THROW( "set_at on bad index succeeded", s.set_at( static_cast<int>( sizeof ( data ) - 1 ), 0 ), HStringException );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "clear" )
@@ -389,15 +431,15 @@ TUT_UNIT_TEST( "replace(patter, str)" )
 		str.replace( PAT1A, PAT1B );
 		ENSURE_EQUALS( "replace A1->B1 does not work", str, CORRECT_1AB );
 		ENSURE_EQUALS( "replace A1->B1 failed (size)", str.get_length(), static_cast<int long>( sizeof ( CORRECT_1AB ) - 1 ) );
-		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), max( 31, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "replace A1->B1 failed (capacity)", str.capacity(), max( 32, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "replace A1->B1 failed (is_empty)", str.empty(), false );
 	}
 	/* noop */ {
-		static char const INIT1[] = "abecad≥o";
+		static char const INIT1[] = "abecad≈Ço";
 		str = INIT1;
 		str.replace( "", "z pieca" );
 		ENSURE_EQUALS( "replace ''->B1 does not work", str, INIT1 );
-		ENSURE_EQUALS( "replace ''->B1 failed (size)", str.get_length(), static_cast<int long>( sizeof ( INIT1 ) - 1 ) );
+		ENSURE_EQUALS( "replace ''->B1 failed (size)", str.get_length(), 8 );
 		ENSURE_EQUALS( "replace ''->B1 failed (capacity)", str.capacity(), MIN_CAPACITY );
 		ENSURE_EQUALS( "replace ''->B1 failed (is_empty)", str.empty(), false );
 	}
@@ -477,23 +519,21 @@ TUT_UNIT_TEST( "insert" )
 	str = s;
 	ENSURE_EQUALS( insert_failed, str.insert( 2, "ABCD", 3 ), "abABCcdef" );
 	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( -2, "ABCD", 2 ), "abcdef" );
+	ENSURE_EQUALS( insert_failed, str.insert( 0, "ABCD", 0 ), "abcdef" );
 	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( -2, "ABCD", 4 ), "CDabcdef" );
+	ENSURE_EQUALS( insert_failed, str.insert( 0, "CD", 2 ), "CDabcdef" );
 	str = s;
-	ENSURE_THROW( overflow, str.insert( -5, "ABCD", 3 ), HStringException );
+	ENSURE_THROW( overflow, str.insert( 0, "ABCD", -1 ), HStringException );
 	str = s;
-	ENSURE_THROW( overflow, str.insert( 0, "ABCD", 5 ), HStringException );
+	ENSURE_EQUALS( overflow, str.insert( 3, "ABCD", 10000 ), "abcABCDdef" );
 	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( 20, "ABCD", 3 ), "abcdef" );
-	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( 2, "ABCD", -5 ), "abcdef" );
+	ENSURE_THROW( insert_failed, str.insert( 20, "ABCD", 3 ), HStringException );
 	str = s;
 	ENSURE_EQUALS( insert_failed, str.insert( 5, "ABCD", 3 ), "abcdeABCf" );
 	str = s;
 	ENSURE_EQUALS( insert_failed, str.insert( 6, "ABCD", 3 ), "abcdefABC" );
 	str = s;
-	ENSURE_EQUALS( insert_failed, str.insert( 7, "ABCD", 3 ), "abcdef" );
+	ENSURE_THROW( insert_failed, str.insert( 7, "ABCDEFGHIJK", 3 ), HStringException );
 	HString str2( "|==--|[]" );
 	ENSURE_EQUALS( insert_failed, str2.insert( 7, "done", 4 ), "|==--|[done]" );
 	str = s;
@@ -726,7 +766,7 @@ struct gen_char {
 		{ return ( static_cast<char>( _rnd( 1 + 'z' - 'a' ) + 'a' ) ); }
 };
 
-TUT_UNIT_TEST( "find("")" )
+TUT_UNIT_TEST( "find(\"\")" )
 	char sample[ SAMPLE_SIZE + 1 ];
 	sample[ SAMPLE_SIZE ] = 0;
 	yaal::generate( sample, sample + SAMPLE_SIZE, gen_char() );
@@ -750,7 +790,7 @@ TUT_UNIT_TEST( "find("")" )
 	}
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "trim_left("")" )
+TUT_UNIT_TEST( "trim_left(\"\")" )
 	static char const* const SPACE = "   ";
 	static HString const TEXT = "ala ma";
 	static char const* const FINE = "1234";
@@ -762,7 +802,7 @@ TUT_UNIT_TEST( "trim_left("")" )
 	ENSURE_EQUALS( "trim failed", space.trim_left(), "" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "trim_right("")" )
+TUT_UNIT_TEST( "trim_right(\"\")" )
 	static char const* const SPACE = "   ";
 	static HString const TEXT = "ala ma";
 	static char const* const FINE = "1234";
