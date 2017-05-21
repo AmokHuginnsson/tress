@@ -63,15 +63,15 @@ TUT_UNIT_TEST( "HSynchronizedStream::reset" )
 	_ss << 13 << endl;
 	HString s;
 	ss.read_until( s );
-	ENSURE_EQUALS( "reset (unowning) failed", s, "13" );
+	ENSURE_EQUALS( "read (unowning) failed", s, "13" );
 	_ss << "xxx" << endl;
 	_ss.reset( nss );
-	ENSURE_EQUALS( "reset (owning) failed", data(), "" );
+	ENSURE_EQUALS( "read (owning) failed", data(), "" );
 	ss.read_until( s );
-	ENSURE_EQUALS( "reset (owning) failed", s, "xxx" );
+	ENSURE_EQUALS( "read (owning) failed", s, "xxx" );
 	_ss << "abc" << endl;
 	nss->read_until( s );
-	ENSURE_EQUALS( "reset (owning) failed", s, "abc" );
+	ENSURE_EQUALS( "read (owning) failed", s, "abc" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "manipulators" )

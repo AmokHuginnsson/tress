@@ -943,7 +943,7 @@ TUT_UNIT_TEST( "append( HString ... )" )
 	ENSURE_EQUALS( err, dest.append( source, 8, 5 ), "dummy" + source + "Ala mma kokota.ota." );
 	ENSURE_EQUALS( err, dest.append( source, static_cast<int>( sizeof ( ss ) ) - 2, 5 ), "dummy" + source + "Ala mma kokota.ota.." );
 	ENSURE_EQUALS( err, dest.append( source, static_cast<int>( sizeof ( ss ) ) - 1, 5 ), "dummy" + source + "Ala mma kokota.ota.." );
-	ENSURE_EQUALS( err, dest.append( source, static_cast<int>( sizeof ( ss ) ), 5 ), "dummy" + source + "Ala mma kokota.ota.." );
+	ENSURE_THROW( "append with off by one offset succeeded", dest.append( source, static_cast<int>( sizeof ( ss ) ), 5 ), HStringException );
 	ENSURE_EQUALS( err, dest.append( source.begin() + 3, source.begin() + static_cast<int>( sizeof ( ss ) ) - 4 ), "dummy" + source + "Ala mma kokota.ota.. ma ko" );
 	ENSURE_EQUALS( err, dest.append( source, 9 ), "dummy" + source + "Ala mma kokota.ota.. ma kota." );
 	ENSURE_THROW( "append with negative offset succeeded", dest.append( source, -1, 2 ), HStringException );
