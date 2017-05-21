@@ -86,7 +86,7 @@ TUT_UNIT_TEST( "non 0 reserve with rank 2 on empty: S(0, 1) -> reserve(1, 2) = S
 	ENSURE_EQUALS( "bad rank reserve", EXT_GET_RANK( s ), 2 );
 	ENSURE_EQUALS( "bad capacity from reserve", s.get_capacity(), 2048 );
 	s.reserve( 1000, 4 );
-	ENSURE_EQUALS( "bad rank reserve", EXT_GET_RANK( s ), 2 );
+	ENSURE_EQUALS( "bad rank reserve", EXT_GET_RANK( s ), 4 );
 	ENSURE_EQUALS( "bad capacity from reserve", s.get_capacity(), 4096 );
 TUT_TEARDOWN()
 
@@ -148,9 +148,9 @@ TUT_UNIT_TEST( "down-ranking: S(2, 2)[12] -> reserve(1, 1) = S(2, 1)" )
 	ENSURE_EQUALS( "bad rank from push_back", EXT_GET_RANK( s ), 1 );
 	s.push_back( 1001 );
 	ENSURE_EQUALS( "bad rank from push_back", EXT_GET_RANK( s ), 2 );
+	s.pop_back(); // trimming
 	s.reserve( 1, 1 );
 	ENSURE_EQUALS( "bad rank from reserve", EXT_GET_RANK( s ), 1 );
-	ENSURE_EQUALS( "bad size from reserve", s.get_length(), 2 );
 	s.resize( 1, 1 );
 	ENSURE_EQUALS( "bad rank from resize", EXT_GET_RANK( s ), 1 );
 	ENSURE_EQUALS( "bad size from resize", s.get_length(), 1 );

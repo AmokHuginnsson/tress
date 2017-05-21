@@ -746,7 +746,7 @@ namespace {
 
 static int const SAMPLE_SIZE = 128;
 
-int confirm( char const* const str, int size, char const* const pat, int len ) {
+int find_substr_raw( char const* const str, int size, char const* const pat, int len ) {
 	char fastpat[SAMPLE_SIZE + 1];
 	len = min( len, SAMPLE_SIZE );
 	strncpy( fastpat, pat, static_cast<size_t>( len ) );
@@ -773,18 +773,19 @@ TUT_UNIT_TEST( "find(\"\")" )
 	yaal::copy( sample, sample + SAMPLE_SIZE, stream_iterator( cout ) ); cout << endl;
 	HString str( sample );
 	HString msg;
-	for ( int len = 1; len <= SAMPLE_SIZE; ++ len ) {
+	for ( int len = 1; len < SAMPLE_SIZE; ++ len ) {
 		for ( int offset = 0; offset < SAMPLE_SIZE; ++ offset ) {
 			int where = -1;
 			do {
-				int newwhere = ( ( len + offset ) <= SAMPLE_SIZE ) ? confirm( sample + where + 1,
+				int newWhere = ( ( len + offset ) <= SAMPLE_SIZE ) ? find_substr_raw( sample + where + 1,
 						SAMPLE_SIZE - ( where + 1 ), sample + offset, len ) : -1;
-				if ( newwhere >= 0 )
-					newwhere += ( where + 1 );
+				if ( newWhere >= 0 ) {
+					newWhere += ( where + 1 );
+				}
 				msg = format( "find(\"\") failed: %d,%d,%d", len, offset, where );
 				ENSURE_EQUALS( msg,
 						where = ( offset + len <= SAMPLE_SIZE ) ? static_cast<int>( str.find( HString( sample + offset, len ), where + 1 ) ) : -1,
-						newwhere );
+						newWhere );
 			} while ( where >= 0 );
 		}
 	}
@@ -834,11 +835,11 @@ TUT_UNIT_TEST( "reserve( size )" )
 	str.reserve( MIN_CAPACITY );
 	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), MIN_CAPACITY );
 	str.reserve( MIN_CAPACITY + 1 );
-	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), ( MIN_CAPACITY < 16 ? 15 : 31 ) );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), ( MIN_CAPACITY <= 16 ? 16 : 32 ) );
 	str.reserve( 100 );
-	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 127 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 128 );
 	str.reserve( 50 );
-	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 127 );
+	ENSURE_EQUALS( "bad capacity after reallocation", str.get_capacity(), 128 );
 	ENSURE_THROW( "absurd reallocation size allowed", str.reserve( -1 ), HStringException );
 	ENSURE_THROW( "huge (too big) reallocation size allowed", str.reserve( str.get_max_size() + 2 ), HStringException );
 	ENSURE_EQUALS( "bad capacity after reallocation", str.get_max_size(), str.max_size() );
@@ -901,7 +902,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "replace(pos, len, str)" )
 	HString s( "Ala ma kota." );
 	int long origLen( s.get_length() );
-	s.replace( 7, 4, "psa" );
+	TUT_EVAL( s.replace( 7, 4, "psa" ) );
 	ENSURE_EQUALS( "bad lenght", s.get_length(), origLen - 1 );
 	ENSURE_EQUALS( "bad content", s, "Ala ma psa." );
 	HString uri( "%4f%6b" );
@@ -934,7 +935,7 @@ TUT_UNIT_TEST( "append( HString ... )" )
 	HString dest( "dummy" );
 	char const err[] = "append failed";
 	ENSURE_EQUALS( err, dest.append( source, 0, 0 ), "dummy" );
-	ENSURE_EQUALS( err, dest.append( source, source.get_length() * 2, source.get_length() ), "dummy" );
+	ENSURE_THROW( "append with anormous offset succeeded", dest.append( source, source.get_length() * 2, source.get_length() ), HStringException );
 	ENSURE_EQUALS( err, dest.append( source, 0, HString::MAX_STRING_LENGTH ), "dummy" + source );
 	ENSURE_EQUALS( err, dest.append( source, 0, 5 ), "dummy" + source + "Ala m" );
 	ENSURE_EQUALS( err, dest.append( source, 4, 5 ), "dummy" + source + "Ala mma ko" );
@@ -1062,7 +1063,7 @@ TUT_UNIT_TEST( "conversions" )
 	ENSURE_EQUALS( "to_string int unsigned failed", to_string( 4234567890U ), "4234567890" );
 	ENSURE_EQUALS( "to_string int short failed", to_string( static_cast<int short>( 32145 ) ), "32145" );
 	ENSURE_EQUALS( "to_string int short unsigned failed", to_string( static_cast<int short unsigned>( 54321 ) ), "54321" );
-	ENSURE_EQUALS( "to_string char unsigned failed", to_string( static_cast<char unsigned>( 'ฑ' ) ), "ฑ" );
+	ENSURE_EQUALS( "to_string char unsigned failed", to_string( static_cast<char unsigned>( '๓' ) ), "รณ" );
 	ENSURE_EQUALS( "stoi failed", stoi( "-2147483647"_ys ), -2147483647 );
 	ENSURE_EQUALS( "stoi failed", stoi( "-7FFFFFFF"_ys, nullptr, 16 ), -2147483647 );
 	ENSURE_THROW( "stoi overflow succeeded", stoi( "2147483648" ), HOutOfRangeException );
