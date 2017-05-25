@@ -69,12 +69,8 @@ TUT_UNIT_TEST( "all tests" )
 	ENSURE(u1 != u2);
 
 	u1 << 1;
-	VERIFY_EXPRESSION_TYPE( u1 && u2, bool );
-	VERIFY_EXPRESSION_TYPE( u1 || u2, bool );
 	VERIFY_EXPRESSION_TYPE( !u1, bool );
 //	VERIFY_TYPES_EQUAL(~u1, u1);
-	ENSURE_EQUALS( ( u1 && u2 ), u1.get() && u2.get() );
-	ENSURE_EQUALS( ( u1 || u2 ), u1.get() || u2.get() );
 	ENSURE_EQUALS( ( ~u1 ).get(), ~( u1.get() ) );
 	ENSURE_EQUALS( !u1, !( u1.get() ) );
 	ENSURE_EQUALS( u1 << 1, ( u1.get() ) << 1 );

@@ -395,35 +395,6 @@ TUT_UNIT_TEST( "logical not" )
 	ENSURE_NOT( "lambda not failed", ( !( _1 == _2 ) )( 1, 1 ) );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "logical and" )
-	ENSURE( "lambda and failed", ( _1 && true )( true ) );
-	ENSURE( "lambda and failed", ( true && _1 )( true ) );
-	ENSURE_NOT( "lambda and failed", ( _1 && false )( false ) );
-	ENSURE_NOT( "lambda and failed", ( _1 && false )( true ) );
-	ENSURE_NOT( "lambda and failed", ( _1 && true )( false ) );
-	ENSURE( "lambda and failed", ( ( !_1 ) && true )( false ) );
-	ENSURE( "lambda and failed", ( true && ( !_1 ) )( false ) );
-	ENSURE( "lambda and failed", ( _1 && _2 )( true, true ) );
-	ENSURE_NOT( "lambda and failed", ( _1 && _2 )( true, false ) );
-	ENSURE( "lambda and failed", ( _1 && ( !_2 ) )( true, false ) );
-	ENSURE( "lambda and failed", ( ( !_1 ) && _2 )( false, true ) );
-	ENSURE( "lambda and failed", ( ( !_1 ) && ( !_2 ) )( false, false ) );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "logical or" )
-	ENSURE( "lambda or failed", ( _1 || true )( false ) );
-	ENSURE( "lambda or failed", ( _1 || false )( true ) );
-	ENSURE( "lambda or failed", ( false || _1 )( true ) );
-	ENSURE( "lambda or failed", ( true || _1 )( false ) );
-	ENSURE( "lambda or failed", ( ( !_1 ) || false )( false ) );
-	ENSURE( "lambda or failed", ( false || ( !_1 ) )( false ) );
-	ENSURE( "lambda or failed", ( _1 || _2 )( false, true ) );
-	ENSURE( "lambda or failed", ( _1 || _2 )( true, false ) );
-	ENSURE( "lambda or failed", ( _1 || ( !_2 ) )( false, false ) );
-	ENSURE( "lambda or failed", ( ( !_1 ) || _2 )( false, false ) );
-	ENSURE( "lambda or failed", ( ( !_1 ) || ( !_2 ) )( true, false ) );
-TUT_TEARDOWN()
-
 TUT_UNIT_TEST( "bit and" )
 	ENSURE_EQUALS( "lambda bit and failed", ( _1 & 4 )( 5 ), 4 );
 	ENSURE_EQUALS( "lambda bit and failed", ( 4 & _1 )( 5 ), 4 );
