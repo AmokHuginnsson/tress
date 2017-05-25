@@ -169,6 +169,16 @@ TUT_UNIT_TEST( "construction from integers" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "construction from characters" )
+	/* code point */ {
+		static code_point_t const CORRECT = unicode::CODE_POINTS::SYMBOL_WHITE_SMILING_FACE;
+		HString str( CORRECT );
+		ENSURE_EQUALS( "construction from code_point_t does not work", str, CORRECT );
+		ENSURE_EQUALS( "construction from code_point_t failed (size)", str.size(), 1 );
+		ENSURE_EQUALS( "construction from code_point_t failed (capacity)", str.capacity(), max( 1, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from code_point_t failed (is_empty)", str.empty(), false );
+		HString nil( code_point_t( 0 ) );
+		ENSURE_EQUALS( "construction from nil code_point_t failed (is_empty)", nil.is_empty(), true );
+	}
 	/* char */ {
 		static char const CORRECT = '1';
 		HString str( CORRECT );
@@ -180,7 +190,7 @@ TUT_UNIT_TEST( "construction from characters" )
 		ENSURE_EQUALS( "construction from nil char failed (is_empty)", nil.is_empty(), true );
 	}
 	/* char unsigned */ {
-		static char unsigned const INIT = static_cast<char unsigned>( unicode::CODE_POINTS::LATIN_SMALL_LETTER_O_WITH_ACUTE );
+		static char unsigned const INIT = static_cast<char unsigned>( unicode::CODE_POINTS::LATIN_SMALL_LETTER_O_WITH_ACUTE.get() );
 		static char const CORRECT[] = "ó";
 		HString str( INIT );
 		ENSURE_EQUALS( "construction from char unsigned does not work", str, CORRECT );
@@ -260,14 +270,14 @@ TUT_UNIT_TEST( "subscript" )
 		char const data[] = "abecadlo";
 		HString s( data );
 		for ( int i( 0 ); i < static_cast<int>( sizeof ( data ) - 1 ); ++ i ) {
-			ENSURE_EQUALS( "bad value from subscript", s[i], static_cast<code_point_t>( data[i] ) );
+			ENSURE_EQUALS( "bad value from subscript", s[i], code_point_t( static_cast<yaal::u32_t>( data[i] ) ) );
 		}
 		ENSURE_THROW( "subscript on bad index succeeded", s[-1], HStringException );
 		ENSURE_THROW( "subscript on bad index succeeded", s[static_cast<int>( sizeof ( data ) )], HStringException );
 	}
 	/* UCS-2 */ {
 		char const data[] = "abecadło";
-		code_point_t const res[] = { 'a', 'b', 'e', 'c', 'a', 'd', unicode::CODE_POINTS::LATIN_SMALL_LETTER_L_WITH_STROKE, 'o' };
+		code_point_t const res[] = { 'a'_ycp, 'b'_ycp, 'e'_ycp, 'c'_ycp, 'a'_ycp, 'd'_ycp, unicode::CODE_POINTS::LATIN_SMALL_LETTER_L_WITH_STROKE, 'o'_ycp };
 		HString s( data );
 		for ( int i( 0 ); i < static_cast<int>( countof ( res ) ); ++ i ) {
 			ENSURE_EQUALS( "bad value from subscript", s[i], res[i] );
@@ -303,16 +313,16 @@ TUT_UNIT_TEST( "set_at" )
 			{ 4, '4' },
 			{ 7, '0' },
 			{ 0, '4' },
-			{ 6, unicode::CODE_POINTS::LATIN_SMALL_LETTER_L_WITH_STROKE },
+			{ 6, static_cast<int>( unicode::CODE_POINTS::LATIN_SMALL_LETTER_L_WITH_STROKE.get() ) },
 			{ 3, 0 }
 		};
 		HString s( data );
 		for ( int i( 0 ); i < countof( dataOut ); ++ i ) {
-			s.set_at( repl[i][0], static_cast<code_point_t>( repl[i][1] ) );
+			s.set_at( repl[i][0], code_point_t( static_cast<code_point_t::value_type>( repl[i][1] ) ) );
 			ENSURE_EQUALS( "set_at failed", s, dataOut[i] );
 		}
-		ENSURE_THROW( "set_at on bad index succeeded", s.set_at( -1, 0 ), HStringException );
-		ENSURE_THROW( "set_at on bad index succeeded", s.set_at( static_cast<int>( sizeof ( data ) - 1 ), 0 ), HStringException );
+		ENSURE_THROW( "set_at on bad index succeeded", s.set_at( -1, 0_ycp ), HStringException );
+		ENSURE_THROW( "set_at on bad index succeeded", s.set_at( static_cast<int>( sizeof ( data ) - 1 ), 0_ycp ), HStringException );
 	}
 	/* UCS-2 */ {
 		char const data[] = "abecadło";
@@ -330,11 +340,11 @@ TUT_UNIT_TEST( "set_at" )
 		};
 		HString s( data );
 		for ( int i( 0 ); i < countof( dataOut ); ++ i ) {
-			s.set_at( repl[i][0], static_cast<code_point_t>( repl[i][1] ) );
+			s.set_at( repl[i][0], code_point_t( static_cast<code_point_t::value_type>( repl[i][1] ) ) );
 			ENSURE_EQUALS( "set_at failed", s, dataOut[i] );
 		}
-		ENSURE_THROW( "set_at on bad index succeeded", s.set_at( -1, 0 ), HStringException );
-		ENSURE_THROW( "set_at on bad index succeeded", s.set_at( static_cast<int>( sizeof ( data ) - 1 ), 0 ), HStringException );
+		ENSURE_THROW( "set_at on bad index succeeded", s.set_at( -1, 0_ycp ), HStringException );
+		ENSURE_THROW( "set_at on bad index succeeded", s.set_at( static_cast<int>( sizeof ( data ) - 1 ), 0_ycp ), HStringException );
 	}
 TUT_TEARDOWN()
 
@@ -639,19 +649,19 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "reverse_find" )
 	HString str = "fXYedYXcba";
 	char failed[] = "reverse_find failed[%d]";
-	ENSURE_EQUALS( format( failed, 0 ), str.reverse_find( 'A' ), -1 );
-	ENSURE_EQUALS( format( failed, 1 ), str.reverse_find( 'X' ), 3 );
-	ENSURE_EQUALS( format( failed, 2 ), str.reverse_find( 'Y' ), 4 );
-	ENSURE_EQUALS( format( failed, 3 ), str.reverse_find( 'X', -10 ), 3 );
-	ENSURE_EQUALS( format( failed, 4 ), str.reverse_find( 'Y', -10 ), 4 );
-	ENSURE_EQUALS( format( failed, 5 ), str.reverse_find( 'X', 3 ), 3 );
-	ENSURE_EQUALS( format( failed, 6 ), str.reverse_find( 'Y', 3 ), 4 );
-	ENSURE_EQUALS( format( failed, 7 ), str.reverse_find( 'X', 5 ), 8 );
-	ENSURE_EQUALS( format( failed, 8 ), str.reverse_find( 'Y', 5 ), 7 );
-	ENSURE_EQUALS( format( failed, 9 ), str.reverse_find( 'X', 9 ), -1 );
-	ENSURE_EQUALS( format( failed, 10 ), str.reverse_find( 'Y', 9 ), -1 );
-	ENSURE_EQUALS( format( failed, 11 ), str.reverse_find( 'X', 90 ), -1 );
-	ENSURE_EQUALS( format( failed, 12 ), str.reverse_find( 'Y', 90 ), -1 );
+	ENSURE_EQUALS( format( failed, 0 ), str.reverse_find( 'A'_ycp ), -1 );
+	ENSURE_EQUALS( format( failed, 1 ), str.reverse_find( 'X'_ycp ), 3 );
+	ENSURE_EQUALS( format( failed, 2 ), str.reverse_find( 'Y'_ycp ), 4 );
+	ENSURE_EQUALS( format( failed, 3 ), str.reverse_find( 'X'_ycp, -10 ), 3 );
+	ENSURE_EQUALS( format( failed, 4 ), str.reverse_find( 'Y'_ycp, -10 ), 4 );
+	ENSURE_EQUALS( format( failed, 5 ), str.reverse_find( 'X'_ycp, 3 ), 3 );
+	ENSURE_EQUALS( format( failed, 6 ), str.reverse_find( 'Y'_ycp, 3 ), 4 );
+	ENSURE_EQUALS( format( failed, 7 ), str.reverse_find( 'X'_ycp, 5 ), 8 );
+	ENSURE_EQUALS( format( failed, 8 ), str.reverse_find( 'Y'_ycp, 5 ), 7 );
+	ENSURE_EQUALS( format( failed, 9 ), str.reverse_find( 'X'_ycp, 9 ), -1 );
+	ENSURE_EQUALS( format( failed, 10 ), str.reverse_find( 'Y'_ycp, 9 ), -1 );
+	ENSURE_EQUALS( format( failed, 11 ), str.reverse_find( 'X'_ycp, 90 ), -1 );
+	ENSURE_EQUALS( format( failed, 12 ), str.reverse_find( 'Y'_ycp, 90 ), -1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "reverse_find_one_of" )
@@ -686,20 +696,20 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "find_last" )
 	HString str = "fXYedYXcba";
 	char failed[] = "find_last failed[%d]";
-	ENSURE_EQUALS( format( failed, 0 ), str.find_last( 'A' ), -1 );
-	ENSURE_EQUALS( format( failed, 1 ), str.find_last( 'X' ), 6 );
-	ENSURE_EQUALS( format( failed, 2 ), str.find_last( 'Y' ), 5 );
-	ENSURE_EQUALS( format( failed, 3 ), str.find_last( 'X', -10 ), -1 );
-	ENSURE_EQUALS( format( failed, 4 ), str.find_last( 'Y', -10 ), -1 );
-	ENSURE_EQUALS( format( failed, 5 ), str.find_last( 'X', 3 ), 1 );
-	ENSURE_EQUALS( format( failed, 6 ), str.find_last( 'Y', 3 ), 2 );
-	ENSURE_EQUALS( format( failed, 7 ), str.find_last( 'X', 5 ), 1 );
-	ENSURE_EQUALS( format( failed, 8 ), str.find_last( 'Y', 5 ), 5 );
-	ENSURE_EQUALS( format( failed, 9 ), str.find_last( 'X', 6 ), 6 );
-	ENSURE_EQUALS( format( failed, 9 ), str.find_last( 'X', 9 ), 6 );
-	ENSURE_EQUALS( format( failed, 10 ), str.find_last( 'Y', 9 ), 5 );
-	ENSURE_EQUALS( format( failed, 11 ), str.find_last( 'X', 90 ), 6 );
-	ENSURE_EQUALS( format( failed, 12 ), str.find_last( 'Y', 90 ), 5 );
+	ENSURE_EQUALS( format( failed, 0 ), str.find_last( 'A'_ycp ), -1 );
+	ENSURE_EQUALS( format( failed, 1 ), str.find_last( 'X'_ycp ), 6 );
+	ENSURE_EQUALS( format( failed, 2 ), str.find_last( 'Y'_ycp ), 5 );
+	ENSURE_EQUALS( format( failed, 3 ), str.find_last( 'X'_ycp, -10 ), -1 );
+	ENSURE_EQUALS( format( failed, 4 ), str.find_last( 'Y'_ycp, -10 ), -1 );
+	ENSURE_EQUALS( format( failed, 5 ), str.find_last( 'X'_ycp, 3 ), 1 );
+	ENSURE_EQUALS( format( failed, 6 ), str.find_last( 'Y'_ycp, 3 ), 2 );
+	ENSURE_EQUALS( format( failed, 7 ), str.find_last( 'X'_ycp, 5 ), 1 );
+	ENSURE_EQUALS( format( failed, 8 ), str.find_last( 'Y'_ycp, 5 ), 5 );
+	ENSURE_EQUALS( format( failed, 9 ), str.find_last( 'X'_ycp, 6 ), 6 );
+	ENSURE_EQUALS( format( failed, 9 ), str.find_last( 'X'_ycp, 9 ), 6 );
+	ENSURE_EQUALS( format( failed, 10 ), str.find_last( 'Y'_ycp, 9 ), 5 );
+	ENSURE_EQUALS( format( failed, 11 ), str.find_last( 'X'_ycp, 90 ), 6 );
+	ENSURE_EQUALS( format( failed, 12 ), str.find_last( 'Y'_ycp, 90 ), 5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "find_last_one_of" )
@@ -867,34 +877,34 @@ TUT_UNIT_TEST( "assign( HString ... )" )
 	ENSURE_THROW( "assign with negative lenght succeeded", dest.assign( source, 0, -2 ), HStringException );
 	ENSURE_THROW( "assign with negative lenght succeeded", dest.assign( source, -2 ), HStringException );
 	ENSURE_THROW( "assign with null data succeeded", dest.assign( static_cast<char const*>( nullptr), 0l ), HStringException );
-	ENSURE_THROW( "assign with negative lenght succeeded", dest.assign( -2, ' ' ), HStringException );
+	ENSURE_THROW( "assign with negative lenght succeeded", dest.assign( -2, ' '_ycp ), HStringException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "fill()" )
-	HString s( 16, 0 );
-	s.fill( '0', 0, 16 );
+	HString s( 16, 0_ycp );
+	s.fill( '0'_ycp, 0, 16 );
 	ENSURE_EQUALS( "bad lenght", s.get_length(), 16 );
 	ENSURE_EQUALS( "bad content", s, "0000000000000000" );
-	s.fill( 'x', 4, 8 );
+	s.fill( 'x'_ycp, 4, 8 );
 	ENSURE_EQUALS( "bad lenght", s.get_length(), 16 );
 	ENSURE_EQUALS( "bad content", s, "0000xxxxxxxx0000" );
-	ENSURE_THROW( "bad len succeeded", s.fill( 'x', 0, -2 ), HStringException );
-	ENSURE_THROW( "bad offset succeeded", s.fill( 'x', -1, 1 ), HStringException );
-	ENSURE_THROW( "bad offset succeeded", s.fill( 'x', 17, 1 ), HStringException );
-	s.fill( 'y', 16, 4 );
+	ENSURE_THROW( "bad len succeeded", s.fill( 'x'_ycp, 0, -2 ), HStringException );
+	ENSURE_THROW( "bad offset succeeded", s.fill( 'x'_ycp, -1, 1 ), HStringException );
+	ENSURE_THROW( "bad offset succeeded", s.fill( 'x'_ycp, 17, 1 ), HStringException );
+	s.fill( 'y'_ycp, 16, 4 );
 	ENSURE_EQUALS( "bad lenght", s.get_length(), 20 );
 	ENSURE_EQUALS( "bad content", s, "0000xxxxxxxx0000yyyy" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "fillz()" )
-	HString s( 16, 0 );
-	s.fillz( '0', 0, 16 );
+	HString s( 16, 0_ycp );
+	s.fillz( '0'_ycp, 0, 16 );
 	ENSURE_EQUALS( "bad lenght", s.get_length(), 16 );
 	ENSURE_EQUALS( "bad content", s, "0000000000000000" );
-	s.fillz( 'x', 4, 8 );
+	s.fillz( 'x'_ycp, 4, 8 );
 	ENSURE_EQUALS( "bad lenght", s.get_length(), 12 );
 	ENSURE_EQUALS( "bad content", s, "0000xxxxxxxx" );
-	s.fillz( 'y', 8 );
+	s.fillz( 'y'_ycp, 8 );
 	ENSURE_EQUALS( "bad lenght", s.get_length(), 12 );
 	ENSURE_EQUALS( "bad content", s, "0000xxxxyyyy" );
 TUT_TEARDOWN()
@@ -984,29 +994,29 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "push_back" )
 	HString s;
 	ENSURE_EQUALS( "bad empty", s, "" );
-	s.push_back( 'A' );
+	s.push_back( 'A'_ycp );
 	ENSURE_EQUALS( "push_back failed", s, "A" );
-	s.push_back( 'l' );
+	s.push_back( 'l'_ycp );
 	ENSURE_EQUALS( "push_back failed", s, "Al" );
-	s.push_back( 'a' );
+	s.push_back( 'a'_ycp );
 	ENSURE_EQUALS( "push_back failed", s, "Ala" );
-	s.push_back( ' ' );
+	s.push_back( ' '_ycp );
 	ENSURE_EQUALS( "push_back failed", s, "Ala " );
-	s.push_back( 'm' );
+	s.push_back( 'm'_ycp );
 	ENSURE_EQUALS( "push_back failed", s, "Ala m" );
-	s.push_back( 'a' );
+	s.push_back( 'a'_ycp );
 	ENSURE_EQUALS( "push_back failed", s, "Ala ma" );
-	s.push_back( ' ' );
+	s.push_back( ' '_ycp );
 	ENSURE_EQUALS( "push_back failed", s, "Ala ma " );
-	s.push_back( 'k' );
+	s.push_back( 'k'_ycp );
 	ENSURE_EQUALS( "push_back failed", s, "Ala ma k" );
-	s.push_back( 'o' );
+	s.push_back( 'o'_ycp );
 	ENSURE_EQUALS( "push_back failed", s, "Ala ma ko" );
-	s.push_back( 't' );
+	s.push_back( 't'_ycp );
 	ENSURE_EQUALS( "push_back failed", s, "Ala ma kot" );
-	s.push_back( 'a' );
+	s.push_back( 'a'_ycp );
 	ENSURE_EQUALS( "push_back failed", s, "Ala ma kota" );
-	s.push_back( '.' );
+	s.push_back( '.'_ycp );
 	ENSURE_EQUALS( "push_back failed", s, "Ala ma kota." );
 TUT_TEARDOWN()
 
@@ -1105,13 +1115,13 @@ TUT_UNIT_TEST( "conversions" )
 	ENSURE_DISTANCE( "stof failed", stof( "3.141592"_ys ), 3.141592f, static_cast<float>( epsilon ) );
 	ENSURE_DISTANCE( "stod failed", stod( "3.1415926535"_ys ), 3.1415926535, static_cast<double>( epsilon ) );
 	ENSURE_DISTANCE( "stold failed", stold( "2.718281828459045"_ys ), 2.718281828459045L, epsilon );
-	ENSURE( "is_digit failed", is_digit( '0' ) );
-	ENSURE( "is_digit failed", is_digit( '9' ) );
-	ENSURE_NOT( "is_digit failed", is_digit( 'a' ) );
-	ENSURE( "is_letter failed", is_letter( 'a' ) && is_letter( 'z' ) && is_letter( 'A' ) && is_letter( 'Z' ) );
-	ENSURE_NOT( "is_letter failed", is_letter( '0' ) );
-	ENSURE( "is_alpha failed", is_alpha( 'a' ) && is_alpha( 'z' ) && is_alpha( 'A' ) && is_alpha( 'Z' ) && is_alpha( '0' ) && is_alpha( '9' ) && is_alpha( '_' ) );
-	ENSURE_NOT( "is_alpha failed", is_alpha( '\b' ) );
+	ENSURE( "is_digit failed", is_digit( '0'_ycp ) );
+	ENSURE( "is_digit failed", is_digit( '9'_ycp ) );
+	ENSURE_NOT( "is_digit failed", is_digit( 'a'_ycp ) );
+	ENSURE( "is_letter failed", is_letter( 'a'_ycp ) && is_letter( 'z'_ycp ) && is_letter( 'A'_ycp ) && is_letter( 'Z'_ycp ) );
+	ENSURE_NOT( "is_letter failed", is_letter( '0'_ycp ) );
+	ENSURE( "is_alpha failed", is_alpha( 'a'_ycp ) && is_alpha( 'z'_ycp ) && is_alpha( 'A'_ycp ) && is_alpha( 'Z'_ycp ) && is_alpha( '0'_ycp ) && is_alpha( '9'_ycp ) && is_alpha( '_'_ycp ) );
+	ENSURE_NOT( "is_alpha failed", is_alpha( '\b'_ycp ) );
 TUT_TEARDOWN()
 
 }

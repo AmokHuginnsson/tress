@@ -92,8 +92,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "resize non 0 to 0 with rank 1 (valid): S(2, 1) -> resize(0, 1) = S(0, 1)" )
 	HString s;
-	s.push_back( 'a' );
-	s.push_back( 'b' );
+	s.push_back( 'a'_ycp );
+	s.push_back( 'b'_ycp );
 	ENSURE_EQUALS( "bad rank from push_back", EXT_GET_RANK( s ), 1 );
 	s.resize( 0, 1 ); /* resize is private */
 	ENSURE_EQUALS( "bad rank resize", EXT_GET_RANK( s ), 1 );
@@ -103,8 +103,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "resize non-empty with rank 2 to 0: S(2, 2) -> resize(0, 1) = S(0, 1)" )
 	HString s;
-	s.push_back( 1000 );
-	s.push_back( 1001 );
+	s.push_back( 1000_ycp );
+	s.push_back( 1001_ycp );
 	ENSURE_EQUALS( "bad rank from push_back", EXT_GET_RANK( s ), 2 );
 	s.resize( 0, 1 );
 	ENSURE_EQUALS( "bad rank resize", EXT_GET_RANK( s ), 1 );
@@ -114,8 +114,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "resize non-empty with rank 2 to 0: S(2, 2) -> resize(0, 2) = S(0, 1)" )
 	HString s;
-	s.push_back( 1000 );
-	s.push_back( 1001 );
+	s.push_back( 1000_ycp );
+	s.push_back( 1001_ycp );
 	ENSURE_EQUALS( "bad rank from push_back", EXT_GET_RANK( s ), 2 );
 	s.resize( 0, 2 );
 	ENSURE_EQUALS( "bad rank resize", EXT_GET_RANK( s ), 1 );
@@ -126,8 +126,8 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "data losing reranking: S(2, 2)[22] -> reserve(2, 1) = ex" )
 	HString s;
 	ENSURE_EQUALS( "bad rank from default ctor", EXT_GET_RANK( s ), 1 );
-	s.push_back( 1000 );
-	s.push_back( 1001 );
+	s.push_back( 1000_ycp );
+	s.push_back( 1001_ycp );
 	ENSURE_EQUALS( "bad rank from push_back", EXT_GET_RANK( s ), 2 );
 	ENSURE_THROW( "reserve lost data", s.reserve( 2, 1 ), HOutOfRangeException );
 TUT_TEARDOWN()
@@ -135,8 +135,8 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "data losing reranking: S(2, 2)[22] -> reserve(1, 1) = ex" )
 	HString s;
 	ENSURE_EQUALS( "bad rank from default ctor", EXT_GET_RANK( s ), 1 );
-	s.push_back( 1000 );
-	s.push_back( 1001 );
+	s.push_back( 1000_ycp );
+	s.push_back( 1001_ycp );
 	ENSURE_EQUALS( "bad rank from push_back", EXT_GET_RANK( s ), 2 );
 	ENSURE_THROW( "reserve lost data", s.reserve( 1, 1 ), HOutOfRangeException );
 TUT_TEARDOWN()
@@ -144,9 +144,9 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "down-ranking: S(2, 2)[12] -> reserve(1, 1) = S(2, 1)" )
 	HString s;
 	ENSURE_EQUALS( "bad rank from default ctor", EXT_GET_RANK( s ), 1 );
-	s.push_back( 'a' );
+	s.push_back( 'a'_ycp );
 	ENSURE_EQUALS( "bad rank from push_back", EXT_GET_RANK( s ), 1 );
-	s.push_back( 1001 );
+	s.push_back( 1001_ycp );
 	ENSURE_EQUALS( "bad rank from push_back", EXT_GET_RANK( s ), 2 );
 	s.pop_back(); // trimming
 	s.reserve( 1, 1 );
@@ -160,8 +160,8 @@ TUT_UNIT_TEST( "down-ranking: S(2, 2)[11] -> reserve(2, 1) = S(2, 1)" )
 	HString s;
 	s.reserve( 2, 2 );
 	ENSURE_EQUALS( "bad rank from default ctor", EXT_GET_RANK( s ), 2 );
-	s.push_back( 'a' );
-	s.push_back( 'b' );
+	s.push_back( 'a'_ycp );
+	s.push_back( 'b'_ycp );
 	ENSURE_EQUALS( "bad rank from push_back", EXT_GET_RANK( s ), 2 );
 	s.reserve( 2, 1 );
 	ENSURE_EQUALS( "bad rank from reserve", EXT_GET_RANK( s ), 1 );
@@ -172,8 +172,8 @@ TUT_UNIT_TEST( "down-ranking: S(2, 2)[11] -> reserve(1, 1) = S(2, 1)" )
 	HString s;
 	s.reserve( 2, 2 );
 	ENSURE_EQUALS( "bad rank from default ctor", EXT_GET_RANK( s ), 2 );
-	s.push_back( 'a' );
-	s.push_back( 'b' );
+	s.push_back( 'a'_ycp );
+	s.push_back( 'b'_ycp );
 	ENSURE_EQUALS( "bad rank from push_back", EXT_GET_RANK( s ), 2 );
 	s.reserve( 1, 1 );
 	ENSURE_EQUALS( "bad rank from reserve", EXT_GET_RANK( s ), 1 );

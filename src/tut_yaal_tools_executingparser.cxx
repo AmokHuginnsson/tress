@@ -1747,7 +1747,7 @@ struct calc {
 	void oper( code_point_t op_ ) {
 		clog << __PRETTY_FUNCTION__ << ": " << op_ << endl;
 		oper_t o( NONE );
-		switch ( op_ ) {
+		switch ( op_.get() ) {
 			case ( '+' ): o = PLUS; break;
 			case ( '-' ): o = MINUS; break;
 			case ( '*' ): o = MULTIPLY; break;

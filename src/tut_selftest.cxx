@@ -197,7 +197,7 @@ TUT_UNIT_TEST( tut_selftest_mixed, 2, "mixed two" )
 	HString a( "  aa " );
 	ENSURE_EQUALS( "both sides", a.trim(), "aa" );
 	HString s( "aa" );
-	s.set_at( 2, 'q' );
+	s.set_at( 2, yaal::code_point_t( 'q' ) );
 	ENSURE_EQUALS( "[] operator", s, "aaq" );
 	ENSURE_EQUALS( "sum16", sum_mock( 8, 8 ), 16 );
 TUT_TEARDOWN()

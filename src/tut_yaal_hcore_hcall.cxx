@@ -116,7 +116,7 @@ void tut_yaal_hcore_hcall::file_header( void ) {
 "namespace tut\n"
 "{\n"
 "\n"
-"TUT_SIMPLE_MOCK( tut_yaal_hcore_hcall_" << setfill( '0' ) << setw( 3 ) << _fileNo << " );\n"
+"TUT_SIMPLE_MOCK( tut_yaal_hcore_hcall_" << setfill( '0'_ycp ) << setw( 3 ) << _fileNo << " );\n"
 "TUT_TEST_GROUP( tut_yaal_hcore_hcall_" << setw( 3 ) << _fileNo << " , \"yaal::hcore::HCall::" << setw( 3 ) << _fileNo << "\" );\n"
 "\n" << flush;
 }

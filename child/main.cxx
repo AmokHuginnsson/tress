@@ -58,9 +58,9 @@ int main( int argc_, char* argv_[] ) {
 		setup.test_setup();
 		if ( !! setup._script ) {
 			HString nonWord;
-			for ( int c = 1; c < 256; ++ c ) {
-				if ( ! character_class( CHARACTER_CLASS::WORD ).has( static_cast<code_point_t>( c ) ) ) {
-					nonWord += static_cast<char>( c );
+			for ( code_point_t::value_type c = 1; c < 256; ++ c ) {
+				if ( ! character_class( CHARACTER_CLASS::WORD ).has( code_point_t( c ) ) ) {
+					nonWord.push_back( code_point_t( c ) );
 				}
 			}
 			HTokenizer t( setup._script, ";", HTokenizer::SKIP_EMPTY );

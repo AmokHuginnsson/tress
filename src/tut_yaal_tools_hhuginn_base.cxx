@@ -95,7 +95,7 @@ void tut_yaal_tools_hhuginn_base::test_file( hcore::HString const& name_ ) {
 namespace {
 bool is_op( code_point_t c ) {
 	char const ops[] = "+-*/%|&^!=:?<>";
-	return ( isascii( static_cast<int>( c ) ) && ( strchr( ops, static_cast<char>( c ) ) != nullptr ) );
+	return ( is_ascii( c ) && ( strchr( ops, static_cast<char>( c.get() ) ) != nullptr ) );
 }
 hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 	HString out;
@@ -112,7 +112,7 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 			}
 			nl.assign( "\n", 1 );
 			if ( tabs > 0 ) {
-				nl.append( tabs, '\t' );
+				nl.append( tabs, '\t'_ycp );
 			}
 			if ( ( curr == '{' ) || ( curr == ';' ) ) {
 				out.push_back( curr );
@@ -138,7 +138,7 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 					};
 					for ( char const* kw : kws ) {
 						int len( static_cast<int>( strlen( kw ) ) );
-						if ( ( src_.substr( n, len ) == kw ) && ! islower( static_cast<int>( src_[ n + len ] ) ) ) {
+						if ( ( src_.substr( n, len ) == kw ) && ! is_lower( src_[ n + len ] ) ) {
 							keyword = true;
 							break;
 						}
@@ -149,13 +149,13 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 				}
 			} else if ( ( curr == '(' ) && ( next != ' ' ) && ( next != ')' ) ) {
 				out.push_back( curr );
-				out.push_back( ' ' );
+				out.push_back( ' '_ycp );
 			} else if ( ( curr != '(' ) && ( curr != ' ' ) && ( next == ')' ) ) {
 				out.push_back( curr );
-				out.push_back( ' ' );
+				out.push_back( ' '_ycp );
 			} else if ( ( curr == ')' ) && ( next == '{' ) ) {
 				out.push_back( curr );
-				out.push_back( ' ' );
+				out.push_back( ' '_ycp );
 			} else if ( ( curr != ' ' ) && ( next == '(' ) ) {
 				char const kws[][8] = {
 					"if", "for", "catch", "return", "switch", "case", "while"
@@ -163,24 +163,24 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 				bool keyword( false );
 				for ( char const* kw : kws ) {
 					int len( static_cast<int>( strlen( kw ) ) );
-					if ( ( i > ( len + 1 ) ) && ( ! islower( static_cast<int>( src_[i - len] ) ) ) && ( src_.substr( i + 1 - len, len ) == kw ) ) {
+					if ( ( i > ( len + 1 ) ) && ( ! is_lower( src_[i - len] ) ) && ( src_.substr( i + 1 - len, len ) == kw ) ) {
 						keyword = true;
 						break;
 					}
 				}
 				out.push_back( curr );
 				if ( keyword ) {
-					out.push_back( ' ' );
+					out.push_back( ' '_ycp );
 				}
 			} else if ( curr == ',' ) {
 				out.push_back( curr );
-				out.push_back( ' ' );
+				out.push_back( ' '_ycp );
 			} else if ( ( curr != ' ' ) && ( ! is_op( curr ) ) && is_op( next ) ) {
 				out.push_back( curr );
-				out.push_back( ' ' );
+				out.push_back( ' '_ycp );
 			} else if ( is_op( curr ) && ( ! is_op( next ) ) && ( next != ' ' ) ) {
 				out.push_back( curr );
-				out.push_back( ' ' );
+				out.push_back( ' '_ycp );
 			} else if ( curr == '\t' ) {
 				/* skip */
 			} else {

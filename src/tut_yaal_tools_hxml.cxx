@@ -55,7 +55,7 @@ struct tut_yaal_tools_hxml : public simple_mock<tut_yaal_tools_hxml> {
 		{}
 	static std::ostream& dump( std::ostream& out, HXml::HConstNodeProxy const& node_ ) {
 		_varTmpBuffer.reserve( node_.get_level() * 2 + 2 );
-		_varTmpBuffer.fillz( ' ', 0, node_.get_level() * 2 + 1 );
+		_varTmpBuffer.fillz( ' '_ycp, 0, node_.get_level() * 2 + 1 );
 		if ( node_.get_type() == HXml::HNode::TYPE::NODE ) {
 			if ( ! node_.get_name().is_empty() ) {
 				out << _varTmpBuffer << "[" << node_.get_name() << "]<" << node_.get_level() << ">: - " << node_.get_line() << std::endl;
@@ -65,13 +65,13 @@ struct tut_yaal_tools_hxml : public simple_mock<tut_yaal_tools_hxml> {
 				out << it->second << ") - " << node_.get_line() << std::endl;
 			}
 			if ( node_.has_children() ) {
-				_varTmpBuffer.fillz( ' ', 0, node_.get_level() * 2 + 2 );
+				_varTmpBuffer.fillz( ' '_ycp, 0, node_.get_level() * 2 + 2 );
 				out << _varTmpBuffer << "{ - " << node_.get_line() << std::endl;
 				for ( HXml::const_iterator it = node_.begin(); it != node_.end(); ++ it ) {
 					HXml::HConstNodeProxy np;
 					np = *it;
 					dump( out, np );
-					_varTmpBuffer.set_at( node_.get_level() * 2 + 2, 0 );
+					_varTmpBuffer.set_at( node_.get_level() * 2 + 2, 0_ycp );
 				}
 				out << _varTmpBuffer << "}" << std::endl;
 			}

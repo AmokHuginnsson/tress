@@ -64,11 +64,11 @@ TUT_UNIT_TEST( "lexicographical_compare" )
 	ENSURE( "lexicographical_compare rand-acc abcd < abcde failed", lexicographical_compare( s1.begin(), s1.end(), s2.begin(), s2.end() ) );
 	ENSURE_NOT( "lexicographical_compare rand-acc abcde < abcd failed", lexicographical_compare( s2.begin(), s2.end(), s1.begin(), s1.end() ) );
 
-	ENSURE_NOT( "lexicographical_compare rand-acc (op) on eq failed", lexicographical_compare( s1.begin(), s1.end(), s1b.begin(), s1b.end(), yaal::less<yaal::u32_t>() ) );
-	ENSURE( "lexicographical_compare rand-acc abcd (op) abdd failed", lexicographical_compare( s1.begin(), s1.end(), s3.begin(), s3.end(), yaal::less<yaal::u32_t>() ) );
-	ENSURE_NOT( "lexicographical_compare rand-acc abdd (op) abcd failed", lexicographical_compare( s3.begin(), s3.end(), s1.begin(), s1.end(), yaal::less<yaal::u32_t>() ) );
-	ENSURE( "lexicographical_compare rand-acc abcd (op) abcde failed", lexicographical_compare( s1.begin(), s1.end(), s2.begin(), s2.end(), yaal::less<yaal::u32_t>() ) );
-	ENSURE_NOT( "lexicographical_compare rand-acc abcde (op) abcd failed", lexicographical_compare( s2.begin(), s2.end(), s1.begin(), s1.end(), yaal::less<yaal::u32_t>() ) );
+	ENSURE_NOT( "lexicographical_compare rand-acc (op) on eq failed", lexicographical_compare( s1.begin(), s1.end(), s1b.begin(), s1b.end(), yaal::less<code_point_t>() ) );
+	ENSURE( "lexicographical_compare rand-acc abcd (op) abdd failed", lexicographical_compare( s1.begin(), s1.end(), s3.begin(), s3.end(), yaal::less<code_point_t>() ) );
+	ENSURE_NOT( "lexicographical_compare rand-acc abdd (op) abcd failed", lexicographical_compare( s3.begin(), s3.end(), s1.begin(), s1.end(), yaal::less<code_point_t>() ) );
+	ENSURE( "lexicographical_compare rand-acc abcd (op) abcde failed", lexicographical_compare( s1.begin(), s1.end(), s2.begin(), s2.end(), yaal::less<code_point_t>() ) );
+	ENSURE_NOT( "lexicographical_compare rand-acc abcde (op) abcd failed", lexicographical_compare( s2.begin(), s2.end(), s1.begin(), s1.end(), yaal::less<code_point_t>() ) );
 
 	int_list_t l1( { 'a', 'b', 'c', 'd' } );
 	int_list_t l1b( { 'a', 'b', 'c', 'd' } );

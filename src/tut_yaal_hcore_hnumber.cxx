@@ -1116,10 +1116,11 @@ TUT_UNIT_TEST( "division" )
 			int len = static_cast<int>( res.get_length() );
 			( len >= ( M + M ) ) && ( len = M + M );
 			res = res.left( len );
-			if ( res[0] == '.' )
-				res.insert( 0, 1, '0' );
-			else if ( ( res[0] == '-' ) && ( res[1] == '.' ) )
-				res.insert( 1, 1, '0' );
+			if ( res[0] == '.' ) {
+				res.insert( 0, 1, '0'_ycp );
+			} else if ( ( res[0] == '-' ) && ( res[1] == '.' ) ) {
+				res.insert( 1, 1, '0'_ycp );
+			}
 			int z( static_cast<int>( res.find( '.' ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
 			ENSURE_EQUALS( msg, div.to_string().left( len - z ), res.left( len - z ) );
 		}
@@ -1141,10 +1142,11 @@ TUT_UNIT_TEST( "division" )
 		int len = static_cast<int>( res.get_length() );
 		( len >= ( scale + 1 ) ) && ( len = scale + 1 );
 		res = res.left( len );
-		if ( res[0] == '.' )
-			res.insert( 0, 1, '0' );
-		else if ( ( res[0] == '-' ) && ( res[1] == '.' ) )
-			res.insert( 1, 1, '0' );
+		if ( res[0] == '.' ) {
+			res.insert( 0, 1, '0'_ycp );
+		} else if ( ( res[0] == '-' ) && ( res[1] == '.' ) ) {
+			res.insert( 1, 1, '0'_ycp );
+		}
 		int z( static_cast<int>( res.find( '.' ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
 		ENSURE_EQUALS( msg, div.to_string().left( len - z ), res.left( len - z ) );
 	}
@@ -1288,8 +1290,9 @@ void tut_yaal_hcore_hnumber::run_square_test( HString const& random_, int natura
 	( len >= ( naturalScale_ + 1 ) ) && ( len = naturalScale_ + 1 );
 	res = res.left( len );
 	res.trim_right( "0." );
-	if ( res[0] == '.' )
-		res.insert( 0, 1, '0' );
+	if ( res.is_empty() || ( res[0] == '.' ) ) {
+		res.insert( 0, 1, '0'_ycp );
+	}
 	len = static_cast<int>( res.get_length() );
 	int long dot( res.find( '.' ) );
 	int z( static_cast<int>( dot != HString::npos ? res.reverse_find_other_than( "0." ) : res.get_length() ) );

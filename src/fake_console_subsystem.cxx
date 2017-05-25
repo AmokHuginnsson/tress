@@ -278,7 +278,7 @@ struct WINDOW {
 		return ( _attrBuffer + ( _y * ( _mx + 1 ) + _x ) );
 	}
 	void addch( int ch_ ) {
-		*dataCur() = static_cast<code_point_t>( ch_ );
+		*dataCur() = code_point_t( static_cast<yaal::u32_t>( ch_ ) );
 		*attrCur() = static_cast<char>( _fakeConsole_.attr( _attr ) );
 		++ _x;
 		if ( _x > _mx ) {
@@ -445,7 +445,7 @@ yaal::hcore::HString term_dump( void ) {
 	for ( int r( 0 ); r <= stdscr._my; ++ r ) {
 		ss << '|';
 		for ( int c( 0 ); c <= stdscr._mx; ++ c ) {
-			int ch( static_cast<int>( *stdscr.dataAt( r, c ) ) );
+			int ch( static_cast<int>( stdscr.dataAt( r, c )->get() ) );
 			int attr( static_cast<int>( *stdscr.attrAt( r, c ) ) );
 			if ( attr != lastAttr ) {
 				ss << col( attr );
@@ -470,7 +470,7 @@ yaal::hcore::HString packed_dump( void ) {
 	HStringStream ss;
 	code_point_t* data( stdscr.dataAt( 0, 0 ) );
 	char* attr( stdscr.attrAt( 0, 0 ) );
-	code_point_t lastChar( static_cast<code_point_t>( -1 ) );
+	code_point_t lastChar( static_cast<yaal::u32_t>( -1 ) );
 	int repeat( 0 );
 	HString s;
 	auto f = [&repeat, &lastChar, &ss, &s]() {
@@ -485,7 +485,7 @@ yaal::hcore::HString packed_dump( void ) {
 		}
 	};
 	for ( int i( 0 ); i < ( WINDOW::ROWS * WINDOW::COLS ); ++ i ) {
-		code_point_t ch( *data ? *data : ' ' );
+		code_point_t ch( data->get() ? *data : ' '_ycp );
 		if ( *attr != curAttr ) {
 			curAttr = *attr;
 			f();

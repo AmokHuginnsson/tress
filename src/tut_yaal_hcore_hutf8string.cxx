@@ -202,15 +202,16 @@ TUT_UNIT_TEST( "eq ==, neq !=" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "iterator" )
+	typedef yaal::hcore::HArray<code_point_t> code_point_array_t;
 	char const data[] = "Mƒô≈ºny bƒÖd≈∫, chro≈Ñ pu≈Çk tw√≥j i sze≈õƒá flag!";
 	HUTF8String s( data );
-	int_array_t a( s.begin(), s.end() );
+	code_point_array_t a( s.begin(), s.end() );
 	ENSURE_EQUALS( "bad character count", a.get_size(), 41 );
-	int_array_t r( s.rbegin(), s.rend() );
+	code_point_array_t r( s.rbegin(), s.rend() );
 	reverse( r.begin(), r.end() );
 	ENSURE_EQUALS( "iter/riter failed", r, a );
 	char const c[] = "MÍøny b±dº, chroÒ pu≥k twÛj i sze∂Ê flag!";
-	int_array_t d( begin( c ), end( c ) - 1 );
+	code_point_array_t d( begin( c ), end( c ) - 1 );
 	d[1]  = unicode::CODE_POINTS::LATIN_SMALL_LETTER_E_WITH_OGONEK;
 	d[2]  = unicode::CODE_POINTS::LATIN_SMALL_LETTER_Z_WITH_DOT_ABOVE;
 	d[7]  = unicode::CODE_POINTS::LATIN_SMALL_LETTER_A_WITH_OGONEK;
@@ -224,10 +225,10 @@ TUT_UNIT_TEST( "iterator" )
 	HUTF8String x( "aƒÖ‡†ÄêÄÄ" );
 	HUTF8String::HIterator it;
 	it = x.cbegin();
-	int_array_t q( it, x.cend() );
-	int_array_t v( x.crbegin(), x.crend() );
+	code_point_array_t q( it, x.cend() );
+	code_point_array_t v( x.crbegin(), x.crend() );
 	reverse( v.begin(), v.end() );
-	int_array_t u( { 0x61, 0x105, 0x800, 0x10000 } );
+	code_point_array_t u( { 0x61_ycp, 0x105_ycp, 0x800_ycp, 0x10000_ycp } );
 	ENSURE_EQUALS( "decode all range failed", q, u );
 	ENSURE_EQUALS( "decode all range failed", v, u );
 TUT_TEARDOWN()

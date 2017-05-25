@@ -80,13 +80,13 @@ TUT_UNIT_TEST( "manipulators" )
 	ENSURE_EQUALS( "plain int", data(), "i = '7'" );
 	_ss << "i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
 	ENSURE_EQUALS( "setw() int", data(), "i = '    7' \tsetw( 5 )" );
-	_ss << "i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
+	_ss << "i = '" << setfill( '0'_ycp ) << i << "'" << " \tsetfill( '0' )" << endl;
 	ENSURE_EQUALS( "setfill() int", data(), "i = '7' \tsetfill( '0' )" );
-	_ss << "i = '" << setfill( '0' ) << setw( 5 ) << i << "'" << " \tsetfill( '0' ), setw( 5 )" << endl;
+	_ss << "i = '" << setfill( '0'_ycp ) << setw( 5 ) << i << "'" << " \tsetfill( '0' ), setw( 5 )" << endl;
 	ENSURE_EQUALS( "setfill() setw() int", data(), "i = '00007' \tsetfill( '0' ), setw( 5 )" );
 	_ss << "i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
 	ENSURE_EQUALS( "setw() int", data(), "i = '00007' \tsetw( 5 )" );
-	_ss << "i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
+	_ss << "i = '" << setfill( '0'_ycp ) << i << "'" << " \tsetfill( '0' )" << endl;
 	ENSURE_EQUALS( "setfill() int", data(), "i = '7' \tsetfill( '0' )" );
 	int k( 103 );
 	_ss << "k = '" << k << "'" << endl;

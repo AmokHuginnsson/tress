@@ -116,7 +116,7 @@ void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n ) {
 	std::cout << *n << std::endl;
 	for ( tree_t::HNode::const_iterator it = n.begin(); it != n.end(); ++ it )
 		draw_node( *it );
-	_cache.set_at( len, 0 );
+	_cache.set_at( len, 0_ycp );
 }
 
 template<typename T>
