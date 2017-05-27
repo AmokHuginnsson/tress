@@ -78,7 +78,7 @@ TUT_UNIT_TEST( "call field operator overloading with generic HCall<>" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "call field bind in algorithm" )
-	person_t a[] = { person_t( "Ala", "Kowalska" ), person_t( "Diana", "B³aszczyk" ), person_t( "Marcin", "Konarski" ), person_t( "Magdalena", "Rêbowska" ), person_t( "Wojciech", "Peisert" ) };
+	person_t a[] = { person_t( "Ala", "Kowalska" ), person_t( "Gall", "Anonim" ), person_t( "Marcin", "Konarski" ), person_t( "Magdalena", "Nowak" ), person_t( "Wojciech", "Igrekowski" ) };
 	transform( a, a + countof( a ), stream_iterator( cout, " " ), call( &person_t::first, _1 ) );
 	cout << endl;
 	transform( a, a + countof( a ), stream_iterator( cout, " " ), call( &person_t::second, _1 ) );

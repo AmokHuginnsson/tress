@@ -61,7 +61,7 @@ yaal::hcore::HString const& output_encoding( void ) {
 			ctype = DEF_ENC;
 		}
 		encoding = ctype;
-		int long pos( encoding.find( '.' ) );
+		int long pos( encoding.find( '.'_ycp ) );
 		if ( pos != yaal::hcore::HString::npos ) {
 			encoding = encoding.substr( pos + 1 );
 		}

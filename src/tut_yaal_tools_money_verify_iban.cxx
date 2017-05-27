@@ -62,7 +62,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "verifing ad-hoc IBANs" )
 	if ( setup._verbose && ( setup._argc > 1 ) ) {
 		HString string( setup._argv[ 1 ] );
-		int unknown = static_cast<int>( string.find( '?' ) );
+		int unknown = static_cast<int>( string.find( '?'_ycp ) );
 		if ( unknown < 0 )
 			FAIL( "No unknown characters." );
 		for ( int i = 0; i < 10; ++ i ) {

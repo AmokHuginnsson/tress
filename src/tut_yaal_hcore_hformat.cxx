@@ -197,9 +197,9 @@ TUT_UNIT_TEST( "well-formed format tests [%2$*1$.*3$s]" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "swap" )
-	HFormat f1( "%s ma kota, %d lat, %f wagi, %Lf d≥ugi, ze z≥otym '%c' na obrÛøce, wart %lld!" );
+	HFormat f1( "%s ma kota, %d lat, %f wagi, %Lf d≈Çugi, ze z≈Çotym '%c' na obr√≥≈ºce, wart %lld!" );
 	f1 % "Ala" % 5 % 3.1415 % 2.718281828459045L % 'K' % meta::max_signed<int long long>::value;
-	char const o1[] = "Ala ma kota, 5 lat, 3.141500 wagi, 2.718282 d≥ugi, ze z≥otym 'K' na obrÛøce, wart 9223372036854775807!";
+	char const o1[] = "Ala ma kota, 5 lat, 3.141500 wagi, 2.718282 d≈Çugi, ze z≈Çotym 'K' na obr√≥≈ºce, wart 9223372036854775807!";
 	ENSURE_EQUALS( "format failed", f1.string(), o1 );
 	HFormat f2( "num char %hhd, num uchar %hhu, int short %hi, int short unsigned %hu, int long long %qd" );
 	f2 % 'a' % 'Û' % static_cast<int short>( 32767 ) % static_cast<int short unsigned>( 54321 ) % 1234567890123456789LL;

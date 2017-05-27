@@ -27,6 +27,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/base.hxx>
+#include <yaal/hcore/unicode.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -413,7 +414,9 @@ TUT_UNIT_TEST( "conversions" )
 	ENSURE_EQUALS( "lexical_cast<HString> int unsigned failed", lexical_cast<HString>( 4234567890U ), "4234567890" );
 	ENSURE_EQUALS( "lexical_cast<HString> int short failed", lexical_cast<HString>( static_cast<int short>( 32145 ) ), "32145" );
 	ENSURE_EQUALS( "lexical_cast<HString> int short unsigned failed", lexical_cast<HString>( static_cast<int short unsigned>( 54321 ) ), "54321" );
-	ENSURE_EQUALS( "lexical_cast<HString> char unsigned failed", lexical_cast<HString>( static_cast<char unsigned>( 'ฑ' ) ), "ฑ" );
+	static char unsigned const UC_INIT = static_cast<char unsigned>( unicode::CODE_POINTS::LATIN_SMALL_LETTER_O_WITH_ACUTE.get() );
+	static char const UC_OK[] = "รณ";
+	ENSURE_EQUALS( "lexical_cast<HString> char unsigned failed", lexical_cast<HString>( static_cast<char unsigned>( UC_INIT ) ), UC_OK );
 	ENSURE_EQUALS( "lexical_cast<int> failed", lexical_cast<int>( static_cast<char const*>( "-2147483647" ) ), -2147483647 );
 	ENSURE_EQUALS( "lexical_cast<int> failed", lexical_cast<int>( static_cast<char const*>( "-0x7FFFFFFF" ) ), -2147483647 );
 	ENSURE_THROW( "lexical_cast<int> overflow succeeded", lexical_cast<int>( static_cast<char const*>( "2147483648" ) ), HOutOfRangeException );

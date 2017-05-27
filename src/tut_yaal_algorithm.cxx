@@ -1108,7 +1108,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "find_first_of(cond)" )
 	typedef HPair<HString, HString> person_t;
-	person_t a[] = { person_t( "Ala", "Kowalska" ), person_t( "Diana", "B³aszczyk" ), person_t( "Marcin", "Konarski" ), person_t( "Magdalena", "Rêbowska" ), person_t( "Wojciech", "Peisert" ) };
+	person_t a[] = { person_t( "Ala", "Kowalska" ), person_t( "Gall", "Anonim" ), person_t( "Marcin", "Konarski" ), person_t( "Magdalena", "Nowak" ), person_t( "Wojciech", "Igrekowski" ) };
 	HString n[] = { "Marcin", "Wojciech", "Magdalena" };
 	person_t* p( find_first_of( a, a + countof( a ), n, n + countof ( n ), compose_binary( equal_to<HString>(), select1st<person_t>(), identity<HString>() ) ) );
 	ENSURE_EQUALS( "find_first_of failed (word)", p, a + 2 );
@@ -1126,8 +1126,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "find_first_not_of(cond)" )
 	typedef HPair<HString, HString> person_t;
-	person_t a[] = { person_t( "Ala", "Kowalska" ), person_t( "Diana", "B³aszczyk" ), person_t( "Marcin", "Konarski" ), person_t( "Magdalena", "Rêbowska" ), person_t( "Wojciech", "Peisert" ) };
-	HString n[] = { "Ala", "Diana", "Magdalena" };
+	person_t a[] = { person_t( "Ala", "Kowalska" ), person_t( "Gall", "Anonim" ), person_t( "Marcin", "Konarski" ), person_t( "Magdalena", "Nowak" ), person_t( "Wojciech", "Igrekowski" ) };
+	HString n[] = { "Ala", "Gall", "Magdalena" };
 	person_t* p( find_first_not_of( a, a + countof( a ), n, n + countof ( n ), compose_binary( equal_to<HString>(), select1st<person_t>(), identity<HString>() ) ) );
 	ENSURE_EQUALS( "find_first_not_of failed (word)", p, a + 2 );
 TUT_TEARDOWN()

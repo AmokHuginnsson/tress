@@ -1121,7 +1121,7 @@ TUT_UNIT_TEST( "division" )
 			} else if ( ( res[0] == '-' ) && ( res[1] == '.' ) ) {
 				res.insert( 1, 1, '0'_ycp );
 			}
-			int z( static_cast<int>( res.find( '.' ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
+			int z( static_cast<int>( res.find( '.'_ycp ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
 			ENSURE_EQUALS( msg, div.to_string().left( len - z ), res.left( len - z ) );
 		}
 	}
@@ -1147,7 +1147,7 @@ TUT_UNIT_TEST( "division" )
 		} else if ( ( res[0] == '-' ) && ( res[1] == '.' ) ) {
 			res.insert( 1, 1, '0'_ycp );
 		}
-		int z( static_cast<int>( res.find( '.' ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
+		int z( static_cast<int>( res.find( '.'_ycp ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
 		ENSURE_EQUALS( msg, div.to_string().left( len - z ), res.left( len - z ) );
 	}
 TUT_TEARDOWN()
@@ -1294,12 +1294,12 @@ void tut_yaal_hcore_hnumber::run_square_test( HString const& random_, int natura
 		res.insert( 0, 1, '0'_ycp );
 	}
 	len = static_cast<int>( res.get_length() );
-	int long dot( res.find( '.' ) );
+	int long dot( res.find( '.'_ycp ) );
 	int z( static_cast<int>( dot != HString::npos ? res.reverse_find_other_than( "0." ) : res.get_length() ) );
 	/* We need to take rounding in to account here. */
 	if ( ( dot != HString::npos ) && ( ( res.get_length() - dot ) > ( naturalScale_ - 4 ) ) )
 		z += 4;
-	z = static_cast<int>( res.find( '.' ) != HString::npos ? res.reverse_find_other_than( "0.", z ) : z );
+	z = static_cast<int>( res.find( '.'_ycp ) != HString::npos ? res.reverse_find_other_than( "0.", z ) : z );
 	ENSURE_EQUALS( msg, root.to_string().left( len - z ), res.left( len - z ) );
 }
 

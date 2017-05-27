@@ -555,19 +555,19 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "find" )
 	HString str = "abcXYdeYXf";
 	char failed[] = "find failed[%d]";
-	ENSURE_EQUALS( format( failed, 0 ), str.find( 'A' ), HString::npos + 0 );
-	ENSURE_EQUALS( format( failed, 1 ), str.find( 'X' ), 3 );
-	ENSURE_EQUALS( format( failed, 2 ), str.find( 'Y' ), 4 );
-	ENSURE_EQUALS( format( failed, 3 ), str.find( 'X', -10 ), 3 );
-	ENSURE_EQUALS( format( failed, 4 ), str.find( 'Y', -10 ), 4 );
-	ENSURE_EQUALS( format( failed, 5 ), str.find( 'X', 3 ), 3 );
-	ENSURE_EQUALS( format( failed, 6 ), str.find( 'Y', 3 ), 4 );
-	ENSURE_EQUALS( format( failed, 7 ), str.find( 'X', 5 ), 8 );
-	ENSURE_EQUALS( format( failed, 8 ), str.find( 'Y', 5 ), 7 );
-	ENSURE_EQUALS( format( failed, 9 ), str.find( 'X', 9 ), HString::npos + 0 );
-	ENSURE_EQUALS( format( failed, 10 ), str.find( 'Y', 9 ), HString::npos + 0 );
-	ENSURE_EQUALS( format( failed, 11 ), str.find( 'X', 90 ), HString::npos + 0 );
-	ENSURE_EQUALS( format( failed, 12 ), str.find( 'Y', 90 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 0 ), str.find( 'A'_ycp ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 1 ), str.find( 'X'_ycp ), 3 );
+	ENSURE_EQUALS( format( failed, 2 ), str.find( 'Y'_ycp ), 4 );
+	ENSURE_EQUALS( format( failed, 3 ), str.find( 'X'_ycp, -10 ), 3 );
+	ENSURE_EQUALS( format( failed, 4 ), str.find( 'Y'_ycp, -10 ), 4 );
+	ENSURE_EQUALS( format( failed, 5 ), str.find( 'X'_ycp, 3 ), 3 );
+	ENSURE_EQUALS( format( failed, 6 ), str.find( 'Y'_ycp, 3 ), 4 );
+	ENSURE_EQUALS( format( failed, 7 ), str.find( 'X'_ycp, 5 ), 8 );
+	ENSURE_EQUALS( format( failed, 8 ), str.find( 'Y'_ycp, 5 ), 7 );
+	ENSURE_EQUALS( format( failed, 9 ), str.find( 'X'_ycp, 9 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 10 ), str.find( 'Y'_ycp, 9 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 11 ), str.find( 'X'_ycp, 90 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 12 ), str.find( 'Y'_ycp, 90 ), HString::npos + 0 );
 	static char const* const PREF = "---> group: ";
 	static char const* const SUFF = "yaal, tra la la";
 	HString line( PREF );
@@ -578,21 +578,21 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "find_last" )
 	HString str = "abcXYdeYXf012";
 	char failed[] = "find_last failed[%d]";
-	ENSURE_EQUALS( format( failed, 0 ), str.find_last( 'A' ), HString::npos + 0 );
-	ENSURE_EQUALS( format( failed, 1 ), str.find_last( 'X' ), 8 );
-	ENSURE_EQUALS( format( failed, 2 ), str.find_last( 'Y' ), 7 );
-	ENSURE_EQUALS( format( failed, 3 ), str.find_last( 'X', 100 ), 8 );
-	ENSURE_EQUALS( format( failed, 4 ), str.find_last( 'Y', 100 ), 7 );
-	ENSURE_EQUALS( format( failed, 5 ), str.find_last( 'X', 8 ), 8 );
-	ENSURE_EQUALS( format( failed, 6 ), str.find_last( 'Y', 8 ), 7 );
-	ENSURE_EQUALS( format( failed, 7 ), str.find_last( 'X', 5 ), 3 );
-	ENSURE_EQUALS( format( failed, 8 ), str.find_last( 'Y', 5 ), 4 );
-	ENSURE_EQUALS( format( failed, 7 ), str.find_last( 'X', 3 ), 3 );
-	ENSURE_EQUALS( format( failed, 8 ), str.find_last( 'Y', 3 ), HString::npos + 0 );
-	ENSURE_EQUALS( format( failed, 9 ), str.find_last( 'X', 2 ), HString::npos + 0 );
-	ENSURE_EQUALS( format( failed, 10 ), str.find_last( 'Y', 2 ), HString::npos + 0 );
-	ENSURE_EQUALS( format( failed, 11 ), str.find_last( 'X', -2 ), HString::npos + 0 );
-	ENSURE_EQUALS( format( failed, 12 ), str.find_last( 'Y', -2 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 0 ), str.find_last( 'A'_ycp ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 1 ), str.find_last( 'X'_ycp ), 8 );
+	ENSURE_EQUALS( format( failed, 2 ), str.find_last( 'Y'_ycp ), 7 );
+	ENSURE_EQUALS( format( failed, 3 ), str.find_last( 'X'_ycp, 100 ), 8 );
+	ENSURE_EQUALS( format( failed, 4 ), str.find_last( 'Y'_ycp, 100 ), 7 );
+	ENSURE_EQUALS( format( failed, 5 ), str.find_last( 'X'_ycp, 8 ), 8 );
+	ENSURE_EQUALS( format( failed, 6 ), str.find_last( 'Y'_ycp, 8 ), 7 );
+	ENSURE_EQUALS( format( failed, 7 ), str.find_last( 'X'_ycp, 5 ), 3 );
+	ENSURE_EQUALS( format( failed, 8 ), str.find_last( 'Y'_ycp, 5 ), 4 );
+	ENSURE_EQUALS( format( failed, 7 ), str.find_last( 'X'_ycp, 3 ), 3 );
+	ENSURE_EQUALS( format( failed, 8 ), str.find_last( 'Y'_ycp, 3 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 9 ), str.find_last( 'X'_ycp, 2 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 10 ), str.find_last( 'Y'_ycp, 2 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 11 ), str.find_last( 'X'_ycp, -2 ), HString::npos + 0 );
+	ENSURE_EQUALS( format( failed, 12 ), str.find_last( 'Y'_ycp, -2 ), HString::npos + 0 );
 
 	ENSURE_EQUALS( format( failed, 13 ), str.find_last( "A" ), HString::npos + 0 );
 	ENSURE_EQUALS( format( failed, 14 ), str.find_last( "X" ), 8 );
@@ -1120,8 +1120,14 @@ TUT_UNIT_TEST( "conversions" )
 	ENSURE_NOT( "is_digit failed", is_digit( 'a'_ycp ) );
 	ENSURE( "is_letter failed", is_letter( 'a'_ycp ) && is_letter( 'z'_ycp ) && is_letter( 'A'_ycp ) && is_letter( 'Z'_ycp ) );
 	ENSURE_NOT( "is_letter failed", is_letter( '0'_ycp ) );
-	ENSURE( "is_alpha failed", is_alpha( 'a'_ycp ) && is_alpha( 'z'_ycp ) && is_alpha( 'A'_ycp ) && is_alpha( 'Z'_ycp ) && is_alpha( '0'_ycp ) && is_alpha( '9'_ycp ) && is_alpha( '_'_ycp ) );
-	ENSURE_NOT( "is_alpha failed", is_alpha( '\b'_ycp ) );
+	ENSURE( "is_alpha failed", is_alpha( 'a'_ycp ) && is_alpha( 'z'_ycp ) && is_alpha( 'A'_ycp ) && is_alpha( 'Z'_ycp ) );
+	ENSURE_NOT( "is_alpha failed", is_alpha( '\b'_ycp ) || is_alpha( '0'_ycp ) || is_alpha( '9'_ycp ) || is_alpha( '_'_ycp ) );
+	ENSURE(
+		"is_ascii failed",
+		is_ascii( 'a'_ycp ) && is_ascii( 'z'_ycp ) && is_ascii( 'A'_ycp ) && is_ascii( 'Z'_ycp )
+		&& is_ascii( '\b'_ycp ) && is_ascii( '0'_ycp ) && is_ascii( '9'_ycp ) && is_ascii( '_'_ycp )
+	);
+	ENSURE_NOT( "is_ascii failed", is_ascii( 'ó'_ycp ) );
 TUT_TEARDOWN()
 
 }

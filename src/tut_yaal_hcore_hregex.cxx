@@ -56,16 +56,17 @@ TUT_UNIT_TEST( "simple match" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "multiple occurrences UTF-8" )
-	char const dataUTF8[] = "MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!";
-//	char const dataUTF8[] = "Mezny badz, chron pulk twoj i szesc flag!";
-	char const data[] = "Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!";
-	HUTF8String s( dataUTF8 );
+	HString data( "MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!" );
+	HString expect( "{MÄ™Å¼ny}{bÄ…dÅº}{chroÅ„}{puÅ‚k}{twÃ³j}{i}{szeÅ›Ä‡}{flag}" );
 	HRegex r( "\\p{L}+" );
 	HString res;
-	for ( HRegex::HMatch const& m : r.matches( s ) ) {
-		res.append( "{" ).append( data + m.start(), m.size() ).append( "}" );
+	int i( 0 );
+	for ( HRegex::HMatch const& m : r.matches( data ) ) {
+		clog << "match[" << i << "] = ( " << m.start() << ", " << m.size() << " ) = " << data.substr( m.start(), m.size() ) << endl;
+		res.append( "{" ).append( data, m.start(), m.size() ).append( "}" );
+		++ i;
 	}
-	ENSURE_EQUALS( "bad match", res, "{Mê¿ny}{b±d¼}{chroñ}{pu³k}{twój}{i}{sze¶æ}{flag}" );
+	ENSURE_EQUALS( "bad match", res, expect );
 	clog << r.error() << ": " << res << endl;
 TUT_TEARDOWN()
 
