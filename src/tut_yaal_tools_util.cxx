@@ -99,7 +99,7 @@ TUT_UNIT_TEST( "(atof_ex) simple but invalid number" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "usun_ogonki" )
-	HString s( "Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!" );
+	HString s( "MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!" );
 	ENSURE_EQUALS( "usun_ogonki failed", usun_ogonki( s ), "Mezny badz, chron pulk twoj i szesc flag!" );
 TUT_TEARDOWN()
 

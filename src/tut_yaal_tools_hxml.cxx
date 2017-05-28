@@ -25,7 +25,8 @@ Copyright:
 */
 
 #include <TUT/tut.hpp>
-#include <fstream> /* *FIXME* *TODO* Remove after HString UCS is complete. */
+#include <fstream> /* *FIXME* *TODO* Remove after 8-bit encodings are supported again. */
+#include <cstring> /* *FIXME* *TODO* Remove after 8-bit encodings are supported again. */
 
 #include <yaal/tools/hxml.hxx>
 #include <yaal/tools/streamtools.hxx>
@@ -126,30 +127,31 @@ bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const
 	return ( equals );
 }
 
-void resort_entities( yaal::hcore::HString const& path_ ) {
-	typedef yaal::hcore::HArray<yaal::hcore::HString> lines_t;
+/* We need to use std library because we no longer suppoer 8-bit encodings. */
+void resort_entities( std::string const& path_ ) {
+	typedef std::vector<std::string> lines_t;
 	lines_t lines;
-	HFile in( path_, HFile::OPEN::READING );
-	HString line;
+	std::ifstream in( path_ );
+	std::string line;
 	int entitiesStart( -1 );
 	int entitiesEnd( -1 );
-	while ( getline( in, line ).good() ) {
+	while ( std::getline( in, line ).good() ) {
 		if ( line.find( "<!ENTITY " ) == 0 ) {
 			if ( entitiesStart == -1 ) {
-				entitiesStart = static_cast<int>( lines.get_size() );
+				entitiesStart = static_cast<int>( lines.size() );
 			}
 		} else if ( ( entitiesStart != -1 ) && ( entitiesEnd == -1 ) ) {
-			entitiesEnd = static_cast<int>( lines.get_size() );
+			entitiesEnd = static_cast<int>( lines.size() );
 		}
 		lines.push_back( line );
 	}
 	in.close();
 	if ( ( entitiesStart != -1 ) && ( entitiesEnd > entitiesStart ) ) {
-		sort( lines.begin() + entitiesStart, lines.begin() + entitiesEnd );
+		std::sort( lines.begin() + entitiesStart, lines.begin() + entitiesEnd );
 	}
-	std::ofstream out( lexical_cast<std::string>( path_ ), std::ios::binary ); /* *FIXME* *TODO* Recode using yaal after HString UCS is complete. */
-	for ( yaal::hcore::HString const& l : lines ) {
-		out << lexical_cast<std::string>( l ) << "\n";
+	std::ofstream out( path_, std::ios::binary ); /* *FIXME* *TODO* Reimplement using yaal after 8-bit encodings are supported again. */
+	for ( std::string const& l : lines ) {
+		out << l << "\n";
 	}
 }
 
@@ -393,19 +395,19 @@ TUT_UNIT_TEST( "build, apply stylesheet" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "init, parse, apply, save" )
-	HString string;
-	HFile file;
 	char const* doc = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/xml.xml";
 	char const* style = ( setup._argc > 2 ) ? setup._argv[ 2 ] : "./data/style.xml";
 	char const* out = ( setup._argc > 3 ) ? setup._argv[ 3 ] : "./out/tut.xml";
-	char const* path = ( setup._argc > 4 ) ? setup._argv[ 4 ] : NULL;
+	char const* path = ( setup._argc > 4 ) ? setup._argv[ 4 ] : "";
 	if ( setup._verbose ) {
-		if ( file.open( doc, HFile::OPEN::READING ) )
-			cout << file.get_error() << ": " << file.get_path() << endl;
-		else {
-			while ( file.read_line( string ) >= 0 )
-				cout << string << endl;
-			file.close();
+		std::ifstream file( doc ); /* *FIXME* *TODO* Reimplement using yaal after 8-bit encodings are supported again. */
+		if ( ! file ) {
+			cout << strerror( errno ) << ": " << doc << endl;
+		} else {
+			std::string line;
+			while ( getline( file, line ).good() ) {
+				std::cout << line << std::endl;
+			}
 		}
 	}
 	_xml.init( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
