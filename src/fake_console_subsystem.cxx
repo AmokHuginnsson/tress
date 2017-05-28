@@ -278,6 +278,9 @@ struct WINDOW {
 		return ( _attrBuffer + ( _y * ( _mx + 1 ) + _x ) );
 	}
 	void addch( int ch_ ) {
+		if ( ch_ < 0 ) {
+			throw HRuntimeException( "Ooops" );
+		}
 		*dataCur() = code_point_t( static_cast<yaal::u32_t>( ch_ ) );
 		*attrCur() = static_cast<char>( _fakeConsole_.attr( _attr ) );
 		++ _x;
@@ -291,11 +294,9 @@ struct WINDOW {
 		}
 	}
 	void addnstr( char const* str_, int len_ ) {
-		if ( len_ < 0 ) {
-			len_ = static_cast<int>( strlen( str_ ) );
-		}
-		for ( int i( 0 ); i < len_; ++ i ) {
-			addch( str_[i] );
+		HString text( str_, len_ < 0 ? static_cast<int>( strlen( str_ ) ) : len_ );
+		for ( code_point_t cp : text ) {
+			addch( static_cast<int>( cp.get() ) );
 		}
 	}
 	void clrtoeol( void ) {
@@ -445,14 +446,14 @@ yaal::hcore::HString term_dump( void ) {
 	for ( int r( 0 ); r <= stdscr._my; ++ r ) {
 		ss << '|';
 		for ( int c( 0 ); c <= stdscr._mx; ++ c ) {
-			int ch( static_cast<int>( stdscr.dataAt( r, c )->get() ) );
+			code_point_t ch( stdscr.dataAt( r, c )->get() );
 			int attr( static_cast<int>( *stdscr.attrAt( r, c ) ) );
 			if ( attr != lastAttr ) {
 				ss << col( attr );
 				lastAttr = attr;
 			}
-			if ( ch ) {
-				ss << static_cast<char>( ch );
+			if ( ch.get() ) {
+				ss << ch;
 			} else {
 				ss << ' ';
 			}

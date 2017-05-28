@@ -57,9 +57,9 @@ void tut_yaal_dbwrapper_hrecordset::dump_query_result( HDataBase::ptr_t db, char
 	ENSURE_EQUALS( "bad result size", rs->get_size(), 3 );
 	char const* const COLUMN_NAMES[] = { "id", "name", "data" };
 	char const* const DATA[][3] = {
-		{ "1", "one", NULL },
+		{ "1", "one", dbType_ },
 		{ "2", "two", NULL },
-		{ "3", "three", "Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!" }
+		{ "3", "three", "MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!" }
 	};
 	cout << "|";
 	for ( int i( 0 ), COUNT( rs->get_field_count() ); i < COUNT; ++ i ) {
@@ -76,16 +76,12 @@ void tut_yaal_dbwrapper_hrecordset::dump_query_result( HDataBase::ptr_t db, char
 		int fc( rs->get_field_count() );
 		for ( int i = 0; i < fc; ++ i ) {
 			HRecordSet::value_t v( it[i] );
-			if ( ( row == 0 ) && ( i == 2 ) ) {
-				if ( dbType_ ) {
-					ENSURE_EQUALS( "wrong database accessed", *v, dbType_ );
+			if ( !!v ) {
+				if ( dbType_ || ( row != 0 ) || ( i != 2 ) ) {
+					ENSURE_EQUALS( "wrong value", *v, DATA[row][i] );
 				}
 			} else {
-				if ( !!v ) {
-					ENSURE_EQUALS( "wrong value", *v, DATA[row][i] );
-				} else {
-					ENSURE_EQUALS( "wrong value", static_cast<char const*>( NULL ), DATA[row][i] );
-				}
+				ENSURE_EQUALS( "wrong value", static_cast<char const*>( NULL ), DATA[row][i] );
 			}
 			cout << ( !v ? HString( "(NULL)" ) : *v ) << "|";
 		}
@@ -338,9 +334,9 @@ void tut_yaal_dbwrapper_hrecordset::row_by_row_test( HDataBase::ptr_t db, char c
 	ENSURE_THROW( "recieved record count in row-by-row mode", rs->get_size(), HRecordSetException );
 	char const* const COLUMN_NAMES[] = { "id", "name", "data" };
 	char const* const DATA[][3] = {
-		{ "1", "one", NULL },
+		{ "1", "one", dbType_ },
 		{ "2", "two", NULL },
-		{ "3", "three", "Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!" }
+		{ "3", "three", "MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!" }
 	};
 	cout << "|";
 	for ( int i( 0 ), COUNT( rs->get_field_count() ); i < COUNT; ++ i ) {
@@ -356,14 +352,12 @@ void tut_yaal_dbwrapper_hrecordset::row_by_row_test( HDataBase::ptr_t db, char c
 		int fc( rs->get_field_count() );
 		for ( int i = 0; i < fc; ++ i ) {
 			HRecordSet::value_t v( it[i] );
-			if ( ( row == 0 ) && ( i == 2 ) ) {
-				if ( dbType_ )
-					ENSURE_EQUALS( "wrong database accessed", *v, dbType_ );
-			} else {
-				if ( !!v )
+			if ( !!v ) {
+				if ( dbType_ || ( row != 0 ) || ( i != 2 ) ) {
 					ENSURE_EQUALS( "wrong value", *v, DATA[row][i] );
-				else
-					ENSURE_EQUALS( "wrong value", static_cast<char const*>( NULL ), DATA[row][i] );
+				}
+			} else {
+				ENSURE_EQUALS( "wrong value", static_cast<char const*>( nullptr ), DATA[row][i] );
 			}
 			cout << ( !v ? HString( "(NULL)" ) : *v ) << "|";
 		}

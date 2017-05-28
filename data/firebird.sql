@@ -60,11 +60,11 @@ set term ; !!
 
 INSERT INTO config ( id, name, data ) VALUES( 1, 'one', 'Firebird' );
 INSERT INTO config ( id, name, data ) VALUES( 2, 'two', NULL );
-INSERT INTO config ( id, name, data ) VALUES( 3, 'three', 'Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!' );
+INSERT INTO config ( id, name, data ) VALUES( 3, 'three', 'MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!' );
 
 INSERT INTO crud ( id, name, data ) VALUES( 1, 'one', 'Firebird' );
 INSERT INTO crud ( id, name, data ) VALUES( 2, 'two', NULL );
-INSERT INTO crud ( id, name, data ) VALUES( 3, 'three', 'Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!' );
+INSERT INTO crud ( id, name, data ) VALUES( 3, 'three', 'MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!' );
 
 SET GENERATOR gen_config_id TO 3;
 SET GENERATOR gen_crud_id TO 3;

@@ -2,7 +2,7 @@ DROP DATABASE tress;
 DROP USER tress;
 
 CREATE USER tress WITH ENCRYPTED PASSWORD 'tr3ss' NOCREATEDB NOCREATEUSER;
-CREATE DATABASE tress WITH OWNER tress ENCODING 'latin2';
+CREATE DATABASE tress WITH OWNER tress ENCODING 'UTF-8';
 
 \connect tress
 
@@ -20,11 +20,11 @@ CREATE TABLE crud (
 
 INSERT INTO config ( id, name, data ) VALUES( 1, 'one', 'PostgreSQL' );
 INSERT INTO config ( id, name, data ) VALUES( 2, 'two', NULL );
-INSERT INTO config ( id, name, data ) VALUES( 3, 'three', 'Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!' );
+INSERT INTO config ( id, name, data ) VALUES( 3, 'three', 'MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!' );
 
 INSERT INTO crud ( id, name, data ) VALUES( 1, 'one', 'sqlite3' );
 INSERT INTO crud ( id, name, data ) VALUES( 2, 'two', NULL );
-INSERT INTO crud ( id, name, data ) VALUES( 3, 'three', 'Mê¿ny b±d¼, chroñ pu³k twój i sze¶æ flag!' );
+INSERT INTO crud ( id, name, data ) VALUES( 3, 'three', 'MÄ™Å¼ny bÄ…dÅº, chroÅ„ puÅ‚k twÃ³j i szeÅ›Ä‡ flag!' );
 
 SELECT setval( 'config_id_seq', 3 );
 SELECT setval( 'crud_id_seq', 3 );
