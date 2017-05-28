@@ -48,7 +48,7 @@ TUT_UNIT_TEST( "default (trivial) ctor" )
 	ENSURE( "non-empty empty", s.is_empty() && s.empty() );
 	ENSURE_EQUALS( "bad byte count", s.byte_count(), 0 );
 	ENSURE_EQUALS( "bad character count", s.character_count(), 0 );
-	ENSURE_EQUALS( "bad x_str", strcmp( s.x_str(), "" ), 0 );
+	ENSURE_EQUALS( "bad c_str", strcmp( s.c_str(), "" ), 0 );
 	ENSURE_EQUALS( "bad rank", s.rank(), 0 );
 TUT_TEARDOWN()
 
@@ -57,7 +57,7 @@ TUT_UNIT_TEST( "pure ascii data" )
 	ENSURE_NOT( "non-empty empty", s.is_empty() || s.empty() );
 	ENSURE_EQUALS( "bad byte count", s.byte_count(), 11 );
 	ENSURE_EQUALS( "bad character count", s.character_count(), 11 );
-	ENSURE_EQUALS( "bad x_str", s.x_str(), "HUTF8String"_ys );
+	ENSURE_EQUALS( "bad c_str", s.c_str(), "HUTF8String"_ys );
 	ENSURE_EQUALS( "bad rank", s.rank(), 1 );
 TUT_TEARDOWN()
 
@@ -65,7 +65,7 @@ TUT_UNIT_TEST( "ctor from HString" )
 	char d[] = "Ala ma kota";
 	HString s( d );
 	HUTF8String u( s );
-	ENSURE_EQUALS( "bad HString ctor", ::strncmp(	u.x_str(), d, sizeof ( d ) ), 0 );
+	ENSURE_EQUALS( "bad HString ctor", ::strncmp(	u.c_str(), d, sizeof ( d ) ), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ctor from iterators" )
@@ -83,7 +83,7 @@ TUT_UNIT_TEST( "utf8 data" )
 	ENSURE_NOT( "non-empty empty", s.is_empty() || s.empty() );
 	ENSURE_EQUALS( "bad byte count", s.byte_count(), 50 );
 	ENSURE_EQUALS( "bad character count", s.character_count(), 41 );
-	ENSURE_EQUALS( "bad x_str", s.x_str(), to_string( data ) );
+	ENSURE_EQUALS( "bad c_str", s.c_str(), to_string( data ) );
 	ENSURE_EQUALS( "bad rank", s.rank(), 2 );
 	ENSURE_EQUALS( "bad raw", s.raw(), to_string( data ) );
 	ENSURE_THROW( "bad utf-8 accepted (head)", HUTF8String( "\xff" ), HUTF8StringException );
@@ -96,18 +96,18 @@ TUT_UNIT_TEST( "copy ctor" )
 	ENSURE_NOT( "non-empty empty", s.is_empty() || s.empty() );
 	ENSURE_EQUALS( "bad byte count", s.byte_count(), 50 );
 	ENSURE_EQUALS( "bad character count", s.character_count(), 41 );
-	ENSURE_EQUALS( "bad x_str", s.x_str(), to_string( data ) );
+	ENSURE_EQUALS( "bad c_str", s.c_str(), to_string( data ) );
 	/* scope */ {
 		HUTF8String x( s );
 		ENSURE_NOT( "non-empty empty", x.is_empty() || x.empty() );
 		ENSURE_EQUALS( "bad byte count", x.byte_count(), 50 );
 		ENSURE_EQUALS( "bad character count", x.character_count(), 41 );
-		ENSURE_EQUALS( "bad x_str", x.x_str(), to_string( data ) );
+		ENSURE_EQUALS( "bad c_str", x.c_str(), to_string( data ) );
 	}
 	ENSURE_NOT( "non-empty empty", s.is_empty() || s.empty() );
 	ENSURE_EQUALS( "bad byte count", s.byte_count(), 50 );
 	ENSURE_EQUALS( "bad character count", s.character_count(), 41 );
-	ENSURE_EQUALS( "bad x_str", s.x_str(), to_string( data ) );
+	ENSURE_EQUALS( "bad c_str", s.c_str(), to_string( data ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "move ctor" )
@@ -116,18 +116,18 @@ TUT_UNIT_TEST( "move ctor" )
 	ENSURE_NOT( "non-empty empty", s.is_empty() || s.empty() );
 	ENSURE_EQUALS( "bad byte count", s.byte_count(), 50 );
 	ENSURE_EQUALS( "bad character count", s.character_count(), 41 );
-	ENSURE_EQUALS( "bad x_str", s.x_str(), to_string( data ) );
+	ENSURE_EQUALS( "bad c_str", s.c_str(), to_string( data ) );
 	/* scope */ {
 		HUTF8String x( yaal::move( s ) );
 		ENSURE_NOT( "non-empty empty", x.is_empty() || x.empty() );
 		ENSURE_EQUALS( "bad byte count", x.byte_count(), 50 );
 		ENSURE_EQUALS( "bad character count", x.character_count(), 41 );
-		ENSURE_EQUALS( "bad x_str", x.x_str(), to_string( data ) );
+		ENSURE_EQUALS( "bad c_str", x.c_str(), to_string( data ) );
 	}
 	ENSURE( "non-empty empty", s.is_empty() && s.empty() );
 	ENSURE_EQUALS( "bad byte count", s.byte_count(), 0 );
 	ENSURE_EQUALS( "bad character count", s.character_count(), 0 );
-	ENSURE_EQUALS( "bad x_str", strcmp( s.x_str(), "" ), 0  );
+	ENSURE_EQUALS( "bad c_str", strcmp( s.c_str(), "" ), 0  );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "copy assignment" )
@@ -138,17 +138,17 @@ TUT_UNIT_TEST( "copy assignment" )
 		ENSURE_NOT( "non-empty empty", s.is_empty() || s.empty() );
 		ENSURE_EQUALS( "bad byte count", s.byte_count(), 50 );
 		ENSURE_EQUALS( "bad character count", s.character_count(), 41 );
-		ENSURE_EQUALS( "bad x_str", s.x_str(), to_string( data ) );
+		ENSURE_EQUALS( "bad c_str", s.c_str(), to_string( data ) );
 		x = s;
 		ENSURE_NOT( "non-empty empty", s.is_empty() || s.empty() );
 		ENSURE_EQUALS( "bad byte count", s.byte_count(), 50 );
 		ENSURE_EQUALS( "bad character count", s.character_count(), 41 );
-		ENSURE_EQUALS( "bad x_str", s.x_str(), to_string( data ) );
+		ENSURE_EQUALS( "bad c_str", s.c_str(), to_string( data ) );
 	}
 	ENSURE_NOT( "non-empty empty", x.is_empty() || x.empty() );
 	ENSURE_EQUALS( "bad byte count", x.byte_count(), 50 );
 	ENSURE_EQUALS( "bad character count", x.character_count(), 41 );
-	ENSURE_EQUALS( "bad x_str", x.x_str(), to_string( data ) );
+	ENSURE_EQUALS( "bad c_str", x.c_str(), to_string( data ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "move assignment" )
@@ -159,17 +159,17 @@ TUT_UNIT_TEST( "move assignment" )
 		ENSURE_NOT( "non-empty empty", s.is_empty() || s.empty() );
 		ENSURE_EQUALS( "bad byte count", s.byte_count(), 50 );
 		ENSURE_EQUALS( "bad character count", s.character_count(), 41 );
-		ENSURE_EQUALS( "bad x_str", s.x_str(), to_string( data ) );
+		ENSURE_EQUALS( "bad c_str", s.c_str(), to_string( data ) );
 		x = yaal::move( s );
 		ENSURE( "non-empty empty", s.is_empty() && s.empty() );
 		ENSURE_EQUALS( "bad byte count", s.byte_count(), 0 );
 		ENSURE_EQUALS( "bad character count", s.character_count(), 0 );
-		ENSURE_EQUALS( "bad x_str", strcmp( s.x_str(), "" ), 0 );
+		ENSURE_EQUALS( "bad c_str", strcmp( s.c_str(), "" ), 0 );
 	}
 	ENSURE_NOT( "non-empty empty", x.is_empty() || x.empty() );
 	ENSURE_EQUALS( "bad byte count", x.byte_count(), 50 );
 	ENSURE_EQUALS( "bad character count", x.character_count(), 41 );
-	ENSURE_EQUALS( "bad x_str", x.x_str(), to_string( data ) );
+	ENSURE_EQUALS( "bad c_str", x.c_str(), to_string( data ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "eq ==, neq !=" )

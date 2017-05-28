@@ -83,7 +83,7 @@ std::string lexical_cast( yaal::hcore::HString const& str_ ) {
 	yaal::hcore::HCharacterEncodingConversionResult out;
 	yaal::hcore::HCharacterEncodingConverter encConv( "utf8", _outputEncoding_ );
 	yaal::hcore::HUTF8String utf8( str_ );
-	encConv.convert( utf8.x_str(), utf8.byte_count(), out );
+	encConv.convert( utf8.c_str(), utf8.byte_count(), out );
 	return ( out.size() > 0 ? out.c_str() : "" );
 }
 
