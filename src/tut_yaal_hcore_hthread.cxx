@@ -228,7 +228,7 @@ TUT_UNIT_TEST( "Starting new thread and finishing it prematurely (sleeping body)
 	HTime start( now_utc() ), stop( now_utc() );
 	HCool ca( "sleeping" );
 	HThread a;
-	ca.set( 160 );
+	ca.set( 320 );
 	a.spawn( call( &HCool::run, &ca, &a ) );
 	ENSURE_EQUALS( "thread failed to start", a.is_alive(), true );
 	sleep_for( duration( 8 * 100, time::UNIT::MILLISECOND ) );
@@ -239,7 +239,7 @@ TUT_UNIT_TEST( "Starting new thread and finishing it prematurely (sleeping body)
 	stop -= start;
 	ENSURE_EQUALS( "thread failed to stop", a.is_alive(), false );
 	ENSURE_DISTANCE( "thread failed to interrupt",
-			stop.get_second(), 0, TOLERANCE );
+			stop.get_second(), 0, TOLERANCE * 2 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Starting new thread and finishing it prematurely (busy body)" )
