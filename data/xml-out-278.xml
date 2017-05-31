@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="ISO-8859-2"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE my_root [
 <!ENTITY fake "<xml:my_fake>three</xml:my_fake>">
 <!ENTITY trade "<xml:entity_reference>&amp;trade;</xml:entity_reference>">
 <!ENTITY v_data "my precious data">
 ]>
 <my_root xmlns:yaal="http://codestation.org/yaal" xmlns:xi="http://www.w3.org/2003/XInclude" my_type="my_fancy">
-	<my_node my_property="Żółwiątko">
+	<my_node my_property="ĹťĂłĹwiÄtko">
 		<my_sub>node</my_sub>
 
-		Zażółcić gęsią jaźń. my precious data
-Filmuj rzeź żądań, pość, gnęb chłystków!
-Mężny bądź, chroń pułk twój i sześć flag.
+		ZaĹźĂłĹciÄ gÄsiÄ jaĹşĹ. my precious data
+Filmuj rzeĹş ĹźÄdaĹ, poĹÄ, gnÄb chĹystkĂłw!
+MÄĹźny bÄdĹş, chroĹ puĹk twĂłj i szeĹÄ flag.
 				<my_empty my_prop="my_p_val"/>
 	</my_node>
 	<xi:include xmlns:xi="http://www.w3.org/2003/XInclude" href="./bit.xml"/>

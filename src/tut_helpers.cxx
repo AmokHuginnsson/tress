@@ -50,7 +50,7 @@ namespace {
 yaal::hcore::HString const& output_encoding( void ) {
 	static HString encoding;
 	static bool iniialized( false );
-	char const DEF_ENC[] = "ISO-8859-2";
+	char const DEF_ENC[] = "UTF-8";
 	if ( ! iniialized ) {
 		iniialized = true;
 		char const* ctype( ::getenv( "LC_CTYPE" ) );
