@@ -90,6 +90,7 @@ TUT_UNIT_TEST( "non 0 reserve with rank 2 on empty: S(0, 1) -> reserve(1, 2) = S
 	ENSURE_EQUALS( "bad capacity from reserve", s.get_capacity(), 4096 );
 TUT_TEARDOWN()
 
+#ifndef __MSVCXX__
 TUT_UNIT_TEST( "resize non 0 to 0 with rank 1 (valid): S(2, 1) -> resize(0, 1) = S(0, 1)" )
 	HString s;
 	s.push_back( 'a'_ycp );
@@ -122,6 +123,7 @@ TUT_UNIT_TEST( "resize non-empty with rank 2 to 0: S(2, 2) -> resize(0, 2) = S(0
 	ENSURE_EQUALS( "bad size from resize", s.get_length(), 0 );
 	ENSURE( "bad empty state from resize", s.is_empty() );
 TUT_TEARDOWN()
+#endif /* #ifndef __MSVCXX__ */
 
 TUT_UNIT_TEST( "data losing reranking: S(2, 2)[22] -> reserve(2, 1) = ex" )
 	HString s;
@@ -151,9 +153,11 @@ TUT_UNIT_TEST( "down-ranking: S(2, 2)[12] -> reserve(1, 1) = S(2, 1)" )
 	s.pop_back(); // trimming
 	s.reserve( 1, 1 );
 	ENSURE_EQUALS( "bad rank from reserve", EXT_GET_RANK( s ), 1 );
+#ifndef __MSVCXX__
 	s.resize( 1, 1 );
 	ENSURE_EQUALS( "bad rank from resize", EXT_GET_RANK( s ), 1 );
 	ENSURE_EQUALS( "bad size from resize", s.get_length(), 1 );
+#endif /* #ifndef __MSVCXX__ */
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "down-ranking: S(2, 2)[11] -> reserve(2, 1) = S(2, 1)" )
@@ -178,9 +182,11 @@ TUT_UNIT_TEST( "down-ranking: S(2, 2)[11] -> reserve(1, 1) = S(2, 1)" )
 	s.reserve( 1, 1 );
 	ENSURE_EQUALS( "bad rank from reserve", EXT_GET_RANK( s ), 1 );
 	ENSURE_EQUALS( "bad size from reserve", s.get_length(), 2 );
+#ifndef __MSVCXX__
 	s.resize( 1, 1 );
 	ENSURE_EQUALS( "bad rank from resize", EXT_GET_RANK( s ), 1 );
 	ENSURE_EQUALS( "bad size from resize", s.get_length(), 1 );
+#endif /* #ifndef __MSVCXX__ */
 TUT_TEARDOWN()
 
 }
