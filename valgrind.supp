@@ -4823,3 +4823,87 @@
    fun:_dl_init
    obj:/lib/x86_64-linux-gnu/ld-2.23.so
 }
+{
+   libxml2 with ICU
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:UDataMemory_createNewInstance_57
+   fun:_ZL16setCommonICUDataP11UDataMemoryaP10UErrorCode
+   fun:setCommonICUDataPointer
+   fun:_ZL14openCommonDataPKciP10UErrorCode
+   fun:_ZL20doLoadFromCommonDataaPKcS0_S0_S0_S0_S0_S0_PFaPvS0_S0_PK9UDataInfoES1_P10UErrorCodeS8_.constprop.7
+   fun:_ZL12doOpenChoicePKcS0_S0_PFaPvS0_S0_PK9UDataInfoES1_P10UErrorCode
+   fun:_ZL13initAliasDataR10UErrorCode
+   fun:umtx_initOnce
+   fun:haveAliasData
+   fun:ucnv_io_getConverterName_57
+   fun:ucnv_loadSharedData_57
+   fun:ucnv_createConverter_57
+   fun:openIcuConverter
+   fun:xmlFindCharEncodingHandler
+}
+{
+   libxml2 with ICU (2)
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:UDataMemory_createNewInstance_57
+   fun:_ZL13checkDataItemPK10DataHeaderPFaPvPKcS4_PK9UDataInfoES2_S4_S4_P10UErrorCodeSB_
+   fun:_ZL20doLoadFromCommonDataaPKcS0_S0_S0_S0_S0_S0_PFaPvS0_S0_PK9UDataInfoES1_P10UErrorCodeS8_.constprop.7
+   fun:_ZL12doOpenChoicePKcS0_S0_PFaPvS0_S0_PK9UDataInfoES1_P10UErrorCode
+   fun:_ZL13initAliasDataR10UErrorCode
+   fun:umtx_initOnce
+   fun:haveAliasData
+   fun:ucnv_io_getConverterName_57
+   fun:ucnv_loadSharedData_57
+   fun:ucnv_createConverter_57
+   fun:openIcuConverter
+   fun:xmlFindCharEncodingHandler
+}
+{
+   libxml2 with ICU (3)
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_uhash_create.part.2
+   fun:_ZL19udata_initHashTablev
+   fun:umtx_initOnce
+   fun:udata_getHashTable
+   fun:_ZL20udata_findCachedDataPKc
+   fun:_ZL14openCommonDataPKciP10UErrorCode
+   fun:extendICUData
+   fun:_ZL20doLoadFromCommonDataaPKcS0_S0_S0_S0_S0_S0_PFaPvS0_S0_PK9UDataInfoES1_P10UErrorCodeS8_.constprop.7
+   fun:_ZL12doOpenChoicePKcS0_S0_PFaPvS0_S0_PK9UDataInfoES1_P10UErrorCode
+   fun:_ZL23createConverterFromFileP18UConverterLoadArgsP10UErrorCode.part.0
+   fun:createConverterFromFile
+   fun:ucnv_load_57
+   fun:ucnv_loadSharedData_57
+   fun:ucnv_createConverter_57
+   fun:openIcuConverter
+   fun:xmlFindCharEncodingHandler
+}
+{
+   libxml2 with ICU (4)
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_uhash_allocate
+   fun:_uhash_init
+   fun:_uhash_create.part.2
+   fun:_ZL19udata_initHashTablev
+   fun:umtx_initOnce
+   fun:udata_getHashTable
+   fun:_ZL20udata_findCachedDataPKc
+   fun:_ZL14openCommonDataPKciP10UErrorCode
+   fun:extendICUData
+   fun:_ZL20doLoadFromCommonDataaPKcS0_S0_S0_S0_S0_S0_PFaPvS0_S0_PK9UDataInfoES1_P10UErrorCodeS8_.constprop.7
+   fun:_ZL12doOpenChoicePKcS0_S0_PFaPvS0_S0_PK9UDataInfoES1_P10UErrorCode
+   fun:_ZL23createConverterFromFileP18UConverterLoadArgsP10UErrorCode.part.0
+   fun:createConverterFromFile
+   fun:ucnv_load_57
+   fun:ucnv_loadSharedData_57
+   fun:ucnv_createConverter_57
+   fun:openIcuConverter
+   fun:xmlFindCharEncodingHandler
+}
