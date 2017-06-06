@@ -36,6 +36,7 @@ Copyright:
 
 #include <TUT/tut.hpp>
 
+#include <yaal/hcore/unicode.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -187,6 +188,37 @@ TUT_UNIT_TEST( "down-ranking: S(2, 2)[11] -> reserve(1, 1) = S(2, 1)" )
 	ENSURE_EQUALS( "bad rank from resize", EXT_GET_RANK( s ), 1 );
 	ENSURE_EQUALS( "bad size from resize", s.get_length(), 1 );
 #endif /* #ifndef __MSVCXX__ */
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "copy_n_unpack" )
+	HString ucs2( "equation: " );
+	ucs2.push_back( unicode::CODE_POINT::GREEK_CAPITAL_LETTER_DELTA );
+	ucs2.append( " = b^2 - 4*a*c" );
+	HUTF8String utf8( ucs2 );
+	HString fromUtf8( utf8 );
+	ENSURE_EQUALS( "UCS-2 unpack failed", fromUtf8, ucs2 );
+	HString ucs4( "catchphrase: " );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_STOP_SIGN );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_PERSON_WALKING );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_SNAKE );
+	utf8 = ucs4;
+	fromUtf8 = utf8;
+	ENSURE_EQUALS( "UCS-4 unpack failed", fromUtf8, ucs4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "find_last_impl" )
+	HString ucs2( "equation: " );
+	ucs2.push_back( unicode::CODE_POINT::GREEK_CAPITAL_LETTER_DELTA );
+	ucs2.append( " = b^2 - 4*a*c" );
+	ENSURE_EQUALS( "UCS-2 find_last failed", ucs2.find_last( ' '_ycp ), 19 );
+	ENSURE_EQUALS( "UCS-2 find_last(pos) failed", ucs2.find_last( ' '_ycp, 18 ), 17 );
+
+	HString ucs4( "catchphrase: " );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_STOP_SIGN );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_PERSON_WALKING );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_SNAKE );
+	ENSURE_EQUALS( "UCS-4 find_last failed", ucs4.find_last( 'a'_ycp ), 8 );
+	ENSURE_EQUALS( "UCS-4 find_last(pos) failed", ucs4.find_last( 'a'_ycp, 7 ), 1 );
 TUT_TEARDOWN()
 
 }
