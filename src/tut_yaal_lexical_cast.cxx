@@ -414,7 +414,7 @@ TUT_UNIT_TEST( "conversions" )
 	ENSURE_EQUALS( "lexical_cast<HString> int unsigned failed", lexical_cast<HString>( 4234567890U ), "4234567890" );
 	ENSURE_EQUALS( "lexical_cast<HString> int short failed", lexical_cast<HString>( static_cast<int short>( 32145 ) ), "32145" );
 	ENSURE_EQUALS( "lexical_cast<HString> int short unsigned failed", lexical_cast<HString>( static_cast<int short unsigned>( 54321 ) ), "54321" );
-	static char unsigned const UC_INIT = static_cast<char unsigned>( unicode::CODE_POINTS::LATIN_SMALL_LETTER_O_WITH_ACUTE.get() );
+	static char unsigned const UC_INIT = static_cast<char unsigned>( unicode::CODE_POINT::LATIN_SMALL_LETTER_O_WITH_ACUTE.get() );
 	static char const UC_OK[] = "ó";
 	ENSURE_EQUALS( "lexical_cast<HString> char unsigned failed", lexical_cast<HString>( static_cast<char unsigned>( UC_INIT ) ), UC_OK );
 	ENSURE_EQUALS( "lexical_cast<int> failed", lexical_cast<int>( static_cast<char const*>( "-2147483647" ) ), -2147483647 );

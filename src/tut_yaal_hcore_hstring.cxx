@@ -170,7 +170,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "construction from characters" )
 	/* code point */ {
-		static code_point_t const CORRECT = unicode::CODE_POINTS::SYMBOL_WHITE_SMILING_FACE;
+		static code_point_t const CORRECT = unicode::CODE_POINT::SYMBOL_WHITE_SMILING_FACE;
 		HString str( CORRECT );
 		ENSURE_EQUALS( "construction from code_point_t does not work", str, CORRECT );
 		ENSURE_EQUALS( "construction from code_point_t failed (size)", str.size(), 1 );
@@ -190,7 +190,7 @@ TUT_UNIT_TEST( "construction from characters" )
 		ENSURE_EQUALS( "construction from nil char failed (is_empty)", nil.is_empty(), true );
 	}
 	/* char unsigned */ {
-		static char unsigned const INIT = static_cast<char unsigned>( unicode::CODE_POINTS::LATIN_SMALL_LETTER_O_WITH_ACUTE.get() );
+		static char unsigned const INIT = static_cast<char unsigned>( unicode::CODE_POINT::LATIN_SMALL_LETTER_O_WITH_ACUTE.get() );
 		static char const CORRECT[] = "ó";
 		HString str( INIT );
 		ENSURE_EQUALS( "construction from char unsigned does not work", str, CORRECT );
@@ -277,7 +277,7 @@ TUT_UNIT_TEST( "subscript" )
 	}
 	/* UCS-2 */ {
 		char const data[] = "abecadło";
-		code_point_t const res[] = { 'a'_ycp, 'b'_ycp, 'e'_ycp, 'c'_ycp, 'a'_ycp, 'd'_ycp, unicode::CODE_POINTS::LATIN_SMALL_LETTER_L_WITH_STROKE, 'o'_ycp };
+		code_point_t const res[] = { 'a'_ycp, 'b'_ycp, 'e'_ycp, 'c'_ycp, 'a'_ycp, 'd'_ycp, unicode::CODE_POINT::LATIN_SMALL_LETTER_L_WITH_STROKE, 'o'_ycp };
 		HString s( data );
 		for ( int i( 0 ); i < static_cast<int>( countof ( res ) ); ++ i ) {
 			ENSURE_EQUALS( "bad value from subscript", s[i], res[i] );
@@ -313,7 +313,7 @@ TUT_UNIT_TEST( "set_at" )
 			{ 4, '4' },
 			{ 7, '0' },
 			{ 0, '4' },
-			{ 6, static_cast<int>( unicode::CODE_POINTS::LATIN_SMALL_LETTER_L_WITH_STROKE.get() ) },
+			{ 6, static_cast<int>( unicode::CODE_POINT::LATIN_SMALL_LETTER_L_WITH_STROKE.get() ) },
 			{ 3, 0 }
 		};
 		HString s( data );
