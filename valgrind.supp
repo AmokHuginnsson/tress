@@ -4907,3 +4907,73 @@
    fun:openIcuConverter
    fun:xmlFindCharEncodingHandler
 }
+{
+   libxml2 with ICU (5)
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:UDataMemory_createNewInstance_55
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   fun:ucnv_io_getConverterName_55
+   fun:ucnv_loadSharedData_55
+   fun:ucnv_createConverter_55
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   fun:xmlFindCharEncodingHandler
+}
+{
+   libxml2 with ICU (6)
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:UDataMemory_createNewInstance_55
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   fun:ucnv_io_getConverterName_55
+   fun:ucnv_loadSharedData_55
+   fun:ucnv_createConverter_55
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   fun:xmlFindCharEncodingHandler
+}
+{
+   libxml2 with ICU (7)
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   fun:ucnv_load_55
+   fun:ucnv_loadSharedData_55
+   fun:ucnv_createConverter_55
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   fun:xmlFindCharEncodingHandler
+}
+{
+   libxml2 with ICU (8)
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   obj:/usr/lib/x86_64-linux-gnu/libicuuc.so.55.1
+   fun:ucnv_load_55
+   fun:ucnv_loadSharedData_55
+   fun:ucnv_createConverter_55
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   fun:xmlFindCharEncodingHandler
+}
