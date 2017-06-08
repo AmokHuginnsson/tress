@@ -285,5 +285,153 @@ TUT_UNIT_TEST( "adapitve::copy" )
 	ENSURE_EQUALS( "copy UCS-2 to UCS-4 failed", ucs4, catchphrase );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "adaptive::equal" )
+	HString s11a( "abcdefgho" );
+	HString s21a( "abcdefgho" );
+	s21a.reserve( s21a.get_capacity(), 2 );
+	HString s22a( "abcdefgho" );
+	s22a.set_at( 8, unicode::CODE_POINT::GREEK_SMALL_LETTER_OMEGA );
+	HString s41a( "abcdefgho" );
+	s41a.reserve( s41a.get_capacity(), 4 );
+	HString s42a( "abcdefgho" );
+	s42a.reserve( s42a.get_capacity(), 4 );
+	s42a.set_at( 8, unicode::CODE_POINT::GREEK_SMALL_LETTER_OMEGA );
+	HString s44a( "abcdefgho" );
+	s44a.set_at( 8, unicode::CODE_POINT::EMOJI_PENGUIN );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s11a ), 1 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s21a ), 2 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s22a ), 2 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s41a ), 4 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s42a ), 4 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s44a ), 4 );
+	HString s11b( s11a );
+	s11b.set_at( 8, 'O'_ycp );
+	HString s21b( s21a );
+	s21b.set_at( 8, 'O'_ycp );
+	HString s22b( s22a );
+	s22b.set_at( 8, unicode::CODE_POINT::GREEK_CAPITAL_LETTER_OMEGA );
+	HString s41b( s41a );
+	s41b.set_at( 8, 'O'_ycp );
+	HString s42b( s42a );
+	s42b.set_at( 8, unicode::CODE_POINT::GREEK_CAPITAL_LETTER_OMEGA );
+	HString s44b( s44a );
+	s44b.set_at( 8, unicode::CODE_POINT::EMOJI_SNAKE );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s11b ), 1 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s21b ), 2 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s22b ), 2 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s41b ), 4 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s42b ), 4 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s44b ), 4 );
+
+	HString s11c( s11a );
+	HString s21c( s21a );
+	HString s22c( s22a );
+	HString s41c( s41a );
+	HString s42c( s42a );
+	HString s44c( s44a );
+
+	ENSURE( "eq 11 11 failed", s11a == s11c );
+	ENSURE( "eq 21 21 failed", s21a == s21c );
+	ENSURE( "eq 22 22 failed", s22a == s22c );
+	ENSURE( "eq 41 41 failed", s41a == s41c );
+	ENSURE( "eq 42 42 failed", s42a == s42c );
+	ENSURE( "eq 44 44 failed", s44a == s44c );
+
+	ENSURE_NOT( "eq 11 11 failed", s11a == s11b );
+	ENSURE_NOT( "eq 21 21 failed", s21a == s21b );
+	ENSURE_NOT( "eq 22 22 failed", s22a == s22b );
+	ENSURE_NOT( "eq 41 41 failed", s41a == s41b );
+	ENSURE_NOT( "eq 42 42 failed", s42a == s42b );
+	ENSURE_NOT( "eq 44 44 failed", s44a == s44b );
+
+	ENSURE( "eq 21 11 failed", s21a == s11c );
+	ENSURE( "eq 11 21 failed", s11a == s21c );
+	ENSURE( "eq 41 11 failed", s41a == s11c );
+	ENSURE( "eq 11 41 failed", s11a == s41c );
+	ENSURE( "eq 42 22 failed", s42a == s22c );
+	ENSURE( "eq 22 42 failed", s22a == s42c );
+
+	ENSURE_NOT( "eq 21 11 failed", s21a == s11b );
+	ENSURE_NOT( "eq 11 21 failed", s11a == s21b );
+	ENSURE_NOT( "eq 41 11 failed", s41a == s11b );
+	ENSURE_NOT( "eq 11 41 failed", s11a == s41b );
+	ENSURE_NOT( "eq 42 22 failed", s42a == s22b );
+	ENSURE_NOT( "eq 22 42 failed", s22a == s42b );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "adaptive::less" )
+	HString s11a( "abcdefgho" );
+	HString s21a( "abcdefgho" );
+	s21a.reserve( s21a.get_capacity(), 2 );
+	HString s22a( "abcdefgho" );
+	s22a.set_at( 8, unicode::CODE_POINT::GREEK_SMALL_LETTER_OMICRON );
+	HString s41a( "abcdefgho" );
+	s41a.reserve( s41a.get_capacity(), 4 );
+	HString s42a( "abcdefgho" );
+	s42a.reserve( s42a.get_capacity(), 4 );
+	s42a.set_at( 8, unicode::CODE_POINT::GREEK_SMALL_LETTER_OMICRON );
+	HString s44a( "abcdefgho" );
+	s44a.set_at( 8, unicode::CODE_POINT::EMOJI_SNAKE );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s11a ), 1 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s21a ), 2 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s22a ), 2 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s41a ), 4 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s42a ), 4 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s44a ), 4 );
+	HString s11b( s11a );
+	s11b.set_at( 8, 'p'_ycp );
+	HString s21b( s21a );
+	s21b.set_at( 8, 'p'_ycp );
+	HString s22b( s22a );
+	s22b.set_at( 8, unicode::CODE_POINT::GREEK_SMALL_LETTER_OMEGA );
+	HString s41b( s41a );
+	s41b.set_at( 8, 'p'_ycp );
+	HString s42b( s42a );
+	s42b.set_at( 8, unicode::CODE_POINT::GREEK_SMALL_LETTER_OMEGA );
+	HString s44b( s44a );
+	s44b.set_at( 8, unicode::CODE_POINT::EMOJI_PENGUIN );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s11b ), 1 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s21b ), 2 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s22b ), 2 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s41b ), 4 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s42b ), 4 );
+	ENSURE_EQUALS( "bad rank", EXT_GET_RANK( s44b ), 4 );
+
+	HString s11c( s11a );
+	HString s21c( s21a );
+	HString s22c( s22a );
+	HString s41c( s41a );
+	HString s42c( s42a );
+	HString s44c( s44a );
+
+	ENSURE_NOT( "less 11 11 failed", s11a < s11c );
+	ENSURE_NOT( "less 21 21 failed", s21a < s21c );
+	ENSURE_NOT( "less 22 22 failed", s22a < s22c );
+	ENSURE_NOT( "less 41 41 failed", s41a < s41c );
+	ENSURE_NOT( "less 42 42 failed", s42a < s42c );
+	ENSURE_NOT( "less 44 44 failed", s44a < s44c );
+
+	ENSURE( "less 11 11 failed", s11a < s11b );
+	ENSURE( "less 21 21 failed", s21a < s21b );
+	ENSURE( "less 22 22 failed", s22a < s22b );
+	ENSURE( "less 41 41 failed", s41a < s41b );
+	ENSURE( "less 42 42 failed", s42a < s42b );
+	ENSURE( "less 44 44 failed", s44a < s44b );
+
+	ENSURE_NOT( "less 21 11 failed", s21a < s11c );
+	ENSURE_NOT( "less 11 21 failed", s11a < s21c );
+	ENSURE_NOT( "less 41 11 failed", s41a < s11c );
+	ENSURE_NOT( "less 11 41 failed", s11a < s41c );
+	ENSURE_NOT( "less 42 22 failed", s42a < s22c );
+	ENSURE_NOT( "less 22 42 failed", s22a < s42c );
+
+	ENSURE( "less 21 11 failed", s21a < s11b );
+	ENSURE( "less 11 21 failed", s11a < s21b );
+	ENSURE( "less 41 11 failed", s41a < s11b );
+	ENSURE( "less 11 41 failed", s11a < s41b );
+	ENSURE( "less 42 22 failed", s42a < s22b );
+	ENSURE( "less 22 42 failed", s22a < s42b );
+TUT_TEARDOWN()
+
 }
 
