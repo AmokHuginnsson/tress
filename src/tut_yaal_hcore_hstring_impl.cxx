@@ -159,6 +159,32 @@ TUT_UNIT_TEST( "down-ranking: S(2, 2)[12] -> reserve(1, 1) = S(2, 1)" )
 	ENSURE_EQUALS( "bad rank from resize", EXT_GET_RANK( s ), 1 );
 	ENSURE_EQUALS( "bad size from resize", s.get_length(), 1 );
 #endif /* #ifndef __MSVCXX__ */
+	/* UCS-4 */
+	s.push_back( unicode::CODE_POINT::GREEK_SMALL_LETTER_ALPHA );
+	ENSURE_EQUALS( "bad rank from resize", EXT_GET_RANK( s ), 2 );
+	s.push_back( unicode::CODE_POINT::EMOJI_PENGUIN );
+	ENSURE_EQUALS( "bad rank from resize", EXT_GET_RANK( s ), 4 );
+	ENSURE_THROW( "reserve lost data", s.reserve( 2, 2 ), HOutOfRangeException );
+	s.pop_back(); // trimming
+	s.reserve( 2, 2 );
+	ENSURE_EQUALS( "bad rank from reserve", EXT_GET_RANK( s ), 2 );
+#ifndef __MSVCXX__
+	s.resize( 2, 2 );
+	ENSURE_EQUALS( "bad rank from resize", EXT_GET_RANK( s ), 2 );
+	ENSURE_EQUALS( "bad size from resize", s.get_length(), 2 );
+#endif /* #ifndef __MSVCXX__ */
+	s.pop_back(); // trimming
+	s.push_back( unicode::CODE_POINT::EMOJI_PENGUIN );
+	ENSURE_EQUALS( "bad rank from resize", EXT_GET_RANK( s ), 4 );
+	ENSURE_THROW( "reserve lost data", s.reserve( 1, 1 ), HOutOfRangeException );
+	s.pop_back(); // trimming
+	s.reserve( 1, 1 );
+	ENSURE_EQUALS( "bad rank from reserve", EXT_GET_RANK( s ), 1 );
+#ifndef __MSVCXX__
+	s.resize( 1, 1 );
+	ENSURE_EQUALS( "bad rank from resize", EXT_GET_RANK( s ), 1 );
+	ENSURE_EQUALS( "bad size from resize", s.get_length(), 1 );
+#endif /* #ifndef __MSVCXX__ */
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "down-ranking: S(2, 2)[11] -> reserve(2, 1) = S(2, 1)" )
@@ -212,6 +238,7 @@ TUT_UNIT_TEST( "find_last_impl" )
 	ucs2.append( " = b^2 - 4*a*c" );
 	ENSURE_EQUALS( "UCS-2 find_last failed", ucs2.find_last( ' '_ycp ), 19 );
 	ENSURE_EQUALS( "UCS-2 find_last(pos) failed", ucs2.find_last( ' '_ycp, 18 ), 17 );
+	ENSURE_EQUALS( "UCS-2 find_last ?= npos failed", ucs2.find_last( ' '_ycp, 5 ), HString::npos + 0 );
 
 	HString ucs4( "catchphrase: " );
 	ucs4.push_back( unicode::CODE_POINT::EMOJI_STOP_SIGN );
@@ -219,6 +246,43 @@ TUT_UNIT_TEST( "find_last_impl" )
 	ucs4.push_back( unicode::CODE_POINT::EMOJI_SNAKE );
 	ENSURE_EQUALS( "UCS-4 find_last failed", ucs4.find_last( 'a'_ycp ), 8 );
 	ENSURE_EQUALS( "UCS-4 find_last(pos) failed", ucs4.find_last( 'a'_ycp, 7 ), 1 );
+	ENSURE_EQUALS( "UCS-4 find_last ?= npos failed", ucs4.find_last( 'A'_ycp ), HString::npos + 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "adaptive::set" )
+	HString s( "abcdefgh" );
+	s.set_at( 0, unicode::CODE_POINT::GREEK_SMALL_LETTER_ALPHA );
+	HString expect;
+	expect.push_back( unicode::CODE_POINT::GREEK_SMALL_LETTER_ALPHA );
+	expect.append( "bcdefgh" );
+	ENSURE_EQUALS( "UCS-2 set failed", s, expect );
+	s.set_at( 1, unicode::CODE_POINT::EMOJI_PENGUIN );
+	expect.clear();
+	expect.push_back( unicode::CODE_POINT::GREEK_SMALL_LETTER_ALPHA );
+	expect.push_back( unicode::CODE_POINT::EMOJI_PENGUIN );
+	expect.append( "cdefgh" );
+	ENSURE_EQUALS( "UCS-4 set failed", s, expect );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "adapitve::copy" )
+	HString ucs4( "catchphrase: " );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_STOP_SIGN );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_PERSON_WALKING );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_SNAKE );
+	ucs4.append( ", don't tread on me"_ys );
+	HString catchphrase( "catchphrase: 123, don't tread on me" );
+	catchphrase.set_at( 13, unicode::CODE_POINT::EMOJI_STOP_SIGN );
+	catchphrase.set_at( 14, unicode::CODE_POINT::EMOJI_PERSON_WALKING );
+	catchphrase.set_at( 15, unicode::CODE_POINT::EMOJI_SNAKE );
+	ENSURE_EQUALS( "copy UCS-1 to UCS-4 failed", ucs4, catchphrase );
+	HString ucs2( ", jeżozwierz" );
+	ucs4.append( ucs2 );
+	catchphrase = "catchphrase: 123, don't tread on me, jezozwierz";
+	catchphrase.set_at( 13, unicode::CODE_POINT::EMOJI_STOP_SIGN );
+	catchphrase.set_at( 14, unicode::CODE_POINT::EMOJI_PERSON_WALKING );
+	catchphrase.set_at( 15, unicode::CODE_POINT::EMOJI_SNAKE );
+	catchphrase.set_at( 39, unicode::CODE_POINT::LATIN_SMALL_LETTER_Z_WITH_DOT_ABOVE );
+	ENSURE_EQUALS( "copy UCS-2 to UCS-4 failed", ucs4, catchphrase );
 TUT_TEARDOWN()
 
 }
