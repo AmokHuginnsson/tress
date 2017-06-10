@@ -40,6 +40,16 @@ Copyright:
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
+char const SOME_TEXT[] =
+	"I do not want it to be nice, warm and cozy,\n"
+	"I want it to hurt like hell,\n"
+	"I want to be scared every day that it will end,\n"
+	"So I would drink it greedily like I were dying of thirst.\n"
+	"I want to loose my mind and myself from the need,\n"
+	"and to be small and vulnerable and human.\n"
+	"I want nothing else and nothing less.\n"
+;
+
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
@@ -431,6 +441,73 @@ TUT_UNIT_TEST( "adaptive::less" )
 	ENSURE( "less 11 41 failed", s11a < s41b );
 	ENSURE( "less 42 22 failed", s42a < s22b );
 	ENSURE( "less 22 42 failed", s22a < s42b );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "adaptive::find" )
+	HString ucs2( "equation: " );
+	ucs2.push_back( unicode::CODE_POINT::GREEK_CAPITAL_LETTER_DELTA );
+	ucs2.append( " = b^2 - 4*a*c" );
+	ENSURE_EQUALS( "UCS-2 find_last failed", ucs2.find( ' '_ycp ), 9 );
+	ENSURE_EQUALS( "UCS-2 find_last(pos) failed", ucs2.find( ' '_ycp, 10 ), 11 );
+	ENSURE_EQUALS( "UCS-2 find_last ?= npos failed", ucs2.find( ' '_ycp, 20 ), HString::npos + 0 );
+
+	HString ucs4( "catchphrase: " );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_STOP_SIGN );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_PERSON_WALKING );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_SNAKE );
+	ENSURE_EQUALS( "UCS-4 find_last failed", ucs4.find( 'a'_ycp ), 1 );
+	ENSURE_EQUALS( "UCS-4 find_last(pos) failed", ucs4.find( 'a'_ycp, 2 ), 8 );
+	ENSURE_EQUALS( "UCS-4 find_last ?= npos failed", ucs4.find( 'A'_ycp ), HString::npos + 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "adaptive::kmpsearch" )
+	HString ucs1( SOME_TEXT );
+	HString ucs2( SOME_TEXT );
+	ucs2.reserve( ucs2.get_length(), 2 );
+	HString ucs4( SOME_TEXT );
+	ucs4.reserve( ucs4.get_length(), 4 );
+	char const word[] = "want";
+	HString word1( word );
+	HString word2( word );
+	word2.reserve( word2.get_length(), 2 );
+	HString word4( word );
+	word4.reserve( word4.get_length(), 4 );
+
+	ENSURE_EQUALS( "kmpsearch 1-1 failed", ucs1.find( word1 ), 9 );
+	ENSURE_EQUALS( "kmpsearch( pos ) 1-1 failed", ucs1.find( word1, 10 ), 46 );
+	ENSURE_EQUALS( "kmpsearch( pos ) missing 1-1 failed", ucs1.find( word1, 274 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch 2-2 failed", ucs2.find( word2 ), 9 );
+	ENSURE_EQUALS( "kmpsearch( pos ) 2-2 failed", ucs2.find( word2, 10 ), 46 );
+	ENSURE_EQUALS( "kmpsearch( pos ) missing 2-2 failed", ucs2.find( word2, 274 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch 4-4 failed", ucs4.find( word4 ), 9 );
+	ENSURE_EQUALS( "kmpsearch( pos ) 4-4 failed", ucs4.find( word4, 10 ), 46 );
+	ENSURE_EQUALS( "kmpsearch( pos ) missing 4-4 failed", ucs4.find( word4, 274 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch 1-2 failed", ucs1.find( word2 ), 9 );
+	ENSURE_EQUALS( "kmpsearch( pos ) 1-2 failed", ucs1.find( word2, 10 ), 46 );
+	ENSURE_EQUALS( "kmpsearch( pos ) missing 1-2 failed", ucs1.find( word2, 274 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch 1-4 failed", ucs1.find( word4 ), 9 );
+	ENSURE_EQUALS( "kmpsearch( pos ) 1-4 failed", ucs1.find( word4, 10 ), 46 );
+	ENSURE_EQUALS( "kmpsearch( pos ) missing 1-4 failed", ucs1.find( word4, 274 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch 2-1 failed", ucs2.find( word1 ), 9 );
+	ENSURE_EQUALS( "kmpsearch( pos ) 2-1 failed", ucs2.find( word1, 10 ), 46 );
+	ENSURE_EQUALS( "kmpsearch( pos ) missing 2-1 failed", ucs2.find( word1, 274 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch 2-4 failed", ucs2.find( word4 ), 9 );
+	ENSURE_EQUALS( "kmpsearch( pos ) 2-4 failed", ucs2.find( word4, 10 ), 46 );
+	ENSURE_EQUALS( "kmpsearch( pos ) missing 2-4 failed", ucs2.find( word4, 274 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch 4-1 failed", ucs4.find( word1 ), 9 );
+	ENSURE_EQUALS( "kmpsearch( pos ) 4-1 failed", ucs4.find( word1, 10 ), 46 );
+	ENSURE_EQUALS( "kmpsearch( pos ) missing 4-1 failed", ucs4.find( word1, 274 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch 4-2 failed", ucs4.find( word2 ), 9 );
+	ENSURE_EQUALS( "kmpsearch( pos ) 4-2 failed", ucs4.find( word2, 10 ), 46 );
+	ENSURE_EQUALS( "kmpsearch( pos ) missing 4-2 failed", ucs4.find( word2, 274 ), HString::npos + 0 );
 TUT_TEARDOWN()
 
 }
