@@ -510,5 +510,55 @@ TUT_UNIT_TEST( "adaptive::kmpsearch" )
 	ENSURE_EQUALS( "kmpsearch( pos ) missing 4-2 failed", ucs4.find( word2, 274 ), HString::npos + 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "adaptive::kmpsearch_last" )
+	HString ucs1( SOME_TEXT );
+	HString ucs2( SOME_TEXT );
+	ucs2.reserve( ucs2.get_length(), 2 );
+	HString ucs4( SOME_TEXT );
+	ucs4.reserve( ucs4.get_length(), 4 );
+	char const word[] = "want";
+	HString word1( word );
+	HString word2( word );
+	word2.reserve( word2.get_length(), 2 );
+	HString word4( word );
+	word4.reserve( word4.get_length(), 4 );
+
+	ENSURE_EQUALS( "kmpsearch_last 1-1 failed", ucs1.find_last( word1 ), 273 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) 1-1 failed", ucs1.find_last( word1, 272 ), 181 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) missing 1-1 failed", ucs1.find_last( word1, 8 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch_last 2-2 failed", ucs2.find_last( word2 ), 273 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) 2-2 failed", ucs2.find_last( word2, 272 ), 181 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) missing 2-2 failed", ucs2.find_last( word2, 8 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch_last 4-4 failed", ucs4.find_last( word4 ), 273 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) 4-4 failed", ucs4.find_last( word4, 272 ), 181 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) missing 4-4 failed", ucs4.find_last( word4, 8 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch_last 1-2 failed", ucs1.find_last( word2 ), 273 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) 1-2 failed", ucs1.find_last( word2, 272 ), 181 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) missing 1-2 failed", ucs1.find_last( word2, 8 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch_last 1-4 failed", ucs1.find_last( word4 ), 273 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) 1-4 failed", ucs1.find_last( word4, 272 ), 181 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) missing 1-4 failed", ucs1.find_last( word4, 8 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch_last 2-1 failed", ucs2.find_last( word1 ), 273 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) 2-1 failed", ucs2.find_last( word1, 272 ), 181 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) missing 2-1 failed", ucs2.find_last( word1, 8 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch_last 2-4 failed", ucs2.find_last( word4 ), 273 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) 2-4 failed", ucs2.find_last( word4, 272 ), 181 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) missing 2-4 failed", ucs2.find_last( word4, 8 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch_last 4-1 failed", ucs4.find_last( word1 ), 273 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) 4-1 failed", ucs4.find_last( word1, 272 ), 181 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) missing 4-1 failed", ucs4.find_last( word1, 8 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "kmpsearch_last 4-2 failed", ucs4.find_last( word2 ), 273 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) 4-2 failed", ucs4.find_last( word2, 272 ), 181 );
+	ENSURE_EQUALS( "kmpsearch_last( pos ) missing 4-2 failed", ucs4.find_last( word2, 8 ), HString::npos + 0 );
+TUT_TEARDOWN()
+
 }
 
