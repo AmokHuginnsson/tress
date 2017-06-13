@@ -662,5 +662,107 @@ TUT_UNIT_TEST( "adaptive::find_last_one_of" )
 	ENSURE_EQUALS( "find_last_one_of(pos) missing 4-4 failed", ucs4.find_last_one_of( set4, 2 ), HString::npos + 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "adaptive::find_other_than" )
+	char const text[] = "Don't tread on me";
+	char const* const set( character_class( CHARACTER_CLASS::LETTER ).data() );
+	HString ucs1( text );
+	HString ucs2( text );
+	ucs2.reserve( ucs2.get_length(), 2 );
+	HString ucs4( text );
+	ucs4.reserve( ucs4.get_length(), 4 );
+	HString set1( set );
+	HString set2( set );
+	set2.reserve( set2.get_length(), 2 );
+	HString set4( set );
+	set4.reserve( set4.get_length(), 4 );
+
+	ENSURE_EQUALS( "find_other_than 1-1 failed", ucs1.find_other_than( set1 ), 3 );
+	ENSURE_EQUALS( "find_other_than(pos) 1-1 failed", ucs1.find_other_than( set1, 6 ), 11 );
+	ENSURE_EQUALS( "find_other_than(pos) missing 1-1 failed", ucs1.find_other_than( set1, 15 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_other_than 1-2 failed", ucs1.find_other_than( set2 ), 3 );
+	ENSURE_EQUALS( "find_other_than(pos) 1-2 failed", ucs1.find_other_than( set2, 6 ), 11 );
+	ENSURE_EQUALS( "find_other_than(pos) missing 1-2 failed", ucs1.find_other_than( set2, 15 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_other_than 1-4 failed", ucs1.find_other_than( set4 ), 3 );
+	ENSURE_EQUALS( "find_other_than(pos) 1-4 failed", ucs1.find_other_than( set4, 6 ), 11 );
+	ENSURE_EQUALS( "find_other_than(pos) missing 1-4 failed", ucs1.find_other_than( set4, 15 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_other_than 2-1 failed", ucs2.find_other_than( set1 ), 3 );
+	ENSURE_EQUALS( "find_other_than(pos) 2-1 failed", ucs2.find_other_than( set1, 6 ), 11 );
+	ENSURE_EQUALS( "find_other_than(pos) missing 2-1 failed", ucs2.find_other_than( set1, 15 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_other_than 2-2 failed", ucs2.find_other_than( set2 ), 3 );
+	ENSURE_EQUALS( "find_other_than(pos) 2-2 failed", ucs2.find_other_than( set2, 6 ), 11 );
+	ENSURE_EQUALS( "find_other_than(pos) missing 2-2 failed", ucs2.find_other_than( set2, 15 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_other_than 2-4 failed", ucs2.find_other_than( set4 ), 3 );
+	ENSURE_EQUALS( "find_other_than(pos) 2-4 failed", ucs2.find_other_than( set4, 6 ), 11 );
+	ENSURE_EQUALS( "find_other_than(pos) missing 2-4 failed", ucs2.find_other_than( set4, 15 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_other_than 4-1 failed", ucs4.find_other_than( set1 ), 3 );
+	ENSURE_EQUALS( "find_other_than(pos) 4-1 failed", ucs4.find_other_than( set1, 6 ), 11 );
+	ENSURE_EQUALS( "find_other_than(pos) missing 4-1 failed", ucs4.find_other_than( set1, 15 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_other_than 4-2 failed", ucs4.find_other_than( set2 ), 3 );
+	ENSURE_EQUALS( "find_other_than(pos) 4-2 failed", ucs4.find_other_than( set2, 6 ), 11 );
+	ENSURE_EQUALS( "find_other_than(pos) missing 4-2 failed", ucs4.find_other_than( set2, 15 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_other_than 4-4 failed", ucs4.find_other_than( set4 ), 3 );
+	ENSURE_EQUALS( "find_other_than(pos) 4-4 failed", ucs4.find_other_than( set4, 6 ), 11 );
+	ENSURE_EQUALS( "find_other_than(pos) missing 4-4 failed", ucs4.find_other_than( set4, 15 ), HString::npos + 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "adaptive::find_last_other_than" )
+	char const text[] = "Don't tread on me";
+	char const* const set( character_class( CHARACTER_CLASS::LETTER ).data() );
+	HString ucs1( text );
+	HString ucs2( text );
+	ucs2.reserve( ucs2.get_length(), 2 );
+	HString ucs4( text );
+	ucs4.reserve( ucs4.get_length(), 4 );
+	HString set1( set );
+	HString set2( set );
+	set2.reserve( set2.get_length(), 2 );
+	HString set4( set );
+	set4.reserve( set4.get_length(), 4 );
+
+	ENSURE_EQUALS( "find_last_other_than 1-1 failed", ucs1.find_last_other_than( set1 ), 14 );
+	ENSURE_EQUALS( "find_last_other_than(pos) 1-1 failed", ucs1.find_last_other_than( set1, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_other_than(pos) missing 1-1 failed", ucs1.find_last_other_than( set1, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_other_than 1-2 failed", ucs1.find_last_other_than( set2 ), 14 );
+	ENSURE_EQUALS( "find_last_other_than(pos) 1-2 failed", ucs1.find_last_other_than( set2, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_other_than(pos) missing 1-2 failed", ucs1.find_last_other_than( set2, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_other_than 1-4 failed", ucs1.find_last_other_than( set4 ), 14 );
+	ENSURE_EQUALS( "find_last_other_than(pos) 1-4 failed", ucs1.find_last_other_than( set4, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_other_than(pos) missing 1-4 failed", ucs1.find_last_other_than( set4, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_other_than 2-1 failed", ucs2.find_last_other_than( set1 ), 14 );
+	ENSURE_EQUALS( "find_last_other_than(pos) 2-1 failed", ucs2.find_last_other_than( set1, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_other_than(pos) missing 2-1 failed", ucs2.find_last_other_than( set1, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_other_than 2-2 failed", ucs2.find_last_other_than( set2 ), 14 );
+	ENSURE_EQUALS( "find_last_other_than(pos) 2-2 failed", ucs2.find_last_other_than( set2, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_other_than(pos) missing 2-2 failed", ucs2.find_last_other_than( set2, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_other_than 2-4 failed", ucs2.find_last_other_than( set4 ), 14 );
+	ENSURE_EQUALS( "find_last_other_than(pos) 2-4 failed", ucs2.find_last_other_than( set4, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_other_than(pos) missing 2-4 failed", ucs2.find_last_other_than( set4, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_other_than 4-1 failed", ucs4.find_last_other_than( set1 ), 14 );
+	ENSURE_EQUALS( "find_last_other_than(pos) 4-1 failed", ucs4.find_last_other_than( set1, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_other_than(pos) missing 4-1 failed", ucs4.find_last_other_than( set1, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_other_than 4-2 failed", ucs4.find_last_other_than( set2 ), 14 );
+	ENSURE_EQUALS( "find_last_other_than(pos) 4-2 failed", ucs4.find_last_other_than( set2, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_other_than(pos) missing 4-2 failed", ucs4.find_last_other_than( set2, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_other_than 4-4 failed", ucs4.find_last_other_than( set4 ), 14 );
+	ENSURE_EQUALS( "find_last_other_than(pos) 4-4 failed", ucs4.find_last_other_than( set4, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_other_than(pos) missing 4-4 failed", ucs4.find_last_other_than( set4, 2 ), HString::npos + 0 );
+TUT_TEARDOWN()
+
 }
 
