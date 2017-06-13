@@ -565,14 +565,14 @@ TUT_UNIT_TEST( "adaptive::find_one_of" )
 	char const set[] = "@ +'-";
 	HString ucs1( text );
 	HString ucs2( text );
-	ucs2.replace( ucs2.get_length(), 2 );
+	ucs2.reserve( ucs2.get_length(), 2 );
 	HString ucs4( text );
-	ucs4.replace( ucs4.get_length(), 4 );
+	ucs4.reserve( ucs4.get_length(), 4 );
 	HString set1( set );
 	HString set2( set );
-	set2.replace( set2.get_length(), 2 );
+	set2.reserve( set2.get_length(), 2 );
 	HString set4( set );
-	set4.replace( set4.get_length(), 4 );
+	set4.reserve( set4.get_length(), 4 );
 
 	ENSURE_EQUALS( "find_one_of 1-1 failed", ucs1.find_one_of( set1 ), 3 );
 	ENSURE_EQUALS( "find_one_of(pos) 1-1 failed", ucs1.find_one_of( set1, 6 ), 11 );
@@ -609,6 +609,57 @@ TUT_UNIT_TEST( "adaptive::find_one_of" )
 	ENSURE_EQUALS( "find_one_of 4-4 failed", ucs4.find_one_of( set4 ), 3 );
 	ENSURE_EQUALS( "find_one_of(pos) 4-4 failed", ucs4.find_one_of( set4, 6 ), 11 );
 	ENSURE_EQUALS( "find_one_of(pos) missing 4-4 failed", ucs4.find_one_of( set4, 15 ), HString::npos + 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "adaptive::find_last_one_of" )
+	char const text[] = "Don't tread on me";
+	char const set[] = "@ +'-";
+	HString ucs1( text );
+	HString ucs2( text );
+	ucs2.reserve( ucs2.get_length(), 2 );
+	HString ucs4( text );
+	ucs4.reserve( ucs4.get_length(), 4 );
+	HString set1( set );
+	HString set2( set );
+	set2.reserve( set2.get_length(), 2 );
+	HString set4( set );
+	set4.reserve( set4.get_length(), 4 );
+
+	ENSURE_EQUALS( "find_last_one_of 1-1 failed", ucs1.find_last_one_of( set1 ), 14 );
+	ENSURE_EQUALS( "find_last_one_of(pos) 1-1 failed", ucs1.find_last_one_of( set1, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_one_of(pos) missing 1-1 failed", ucs1.find_last_one_of( set1, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_one_of 1-2 failed", ucs1.find_last_one_of( set2 ), 14 );
+	ENSURE_EQUALS( "find_last_one_of(pos) 1-2 failed", ucs1.find_last_one_of( set2, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_one_of(pos) missing 1-2 failed", ucs1.find_last_one_of( set2, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_one_of 1-4 failed", ucs1.find_last_one_of( set4 ), 14 );
+	ENSURE_EQUALS( "find_last_one_of(pos) 1-4 failed", ucs1.find_last_one_of( set4, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_one_of(pos) missing 1-4 failed", ucs1.find_last_one_of( set4, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_one_of 2-1 failed", ucs2.find_last_one_of( set1 ), 14 );
+	ENSURE_EQUALS( "find_last_one_of(pos) 2-1 failed", ucs2.find_last_one_of( set1, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_one_of(pos) missing 2-1 failed", ucs2.find_last_one_of( set1, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_one_of 2-2 failed", ucs2.find_last_one_of( set2 ), 14 );
+	ENSURE_EQUALS( "find_last_one_of(pos) 2-2 failed", ucs2.find_last_one_of( set2, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_one_of(pos) missing 2-2 failed", ucs2.find_last_one_of( set2, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_one_of 2-4 failed", ucs2.find_last_one_of( set4 ), 14 );
+	ENSURE_EQUALS( "find_last_one_of(pos) 2-4 failed", ucs2.find_last_one_of( set4, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_one_of(pos) missing 2-4 failed", ucs2.find_last_one_of( set4, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_one_of 4-1 failed", ucs4.find_last_one_of( set1 ), 14 );
+	ENSURE_EQUALS( "find_last_one_of(pos) 4-1 failed", ucs4.find_last_one_of( set1, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_one_of(pos) missing 4-1 failed", ucs4.find_last_one_of( set1, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_one_of 4-2 failed", ucs4.find_last_one_of( set2 ), 14 );
+	ENSURE_EQUALS( "find_last_one_of(pos) 4-2 failed", ucs4.find_last_one_of( set2, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_one_of(pos) missing 4-2 failed", ucs4.find_last_one_of( set2, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_one_of 4-4 failed", ucs4.find_last_one_of( set4 ), 14 );
+	ENSURE_EQUALS( "find_last_one_of(pos) 4-4 failed", ucs4.find_last_one_of( set4, 4 ), 3 );
+	ENSURE_EQUALS( "find_last_one_of(pos) missing 4-4 failed", ucs4.find_last_one_of( set4, 2 ), HString::npos + 0 );
 TUT_TEARDOWN()
 
 }
