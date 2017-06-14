@@ -764,5 +764,19 @@ TUT_UNIT_TEST( "adaptive::find_last_other_than" )
 	ENSURE_EQUALS( "find_last_other_than(pos) missing 4-4 failed", ucs4.find_last_other_than( set4, 2 ), HString::npos + 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "adaptive::transform" )
+	char const text[] = "Mężny bądź, chroń pułk twój i sześć flag!";
+	char const expectRaw[] = "MĘŻNY BĄDŹ, CHROŃ PUŁK TWÓJ I SZEŚĆ FLAG!";
+	HString s( text );
+	HString expect( expectRaw );
+	clog << s.upper() << endl;
+	ENSURE_EQUALS( "transform ucs2 failed", s, expect );
+	s = text;
+	s.reserve( s.get_length(), 4 );
+	s.upper();
+	ENSURE_EQUALS( "transform ucs4 failed", s, expect );
+TUT_TEARDOWN()
+
+
 }
 
