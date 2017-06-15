@@ -509,6 +509,8 @@ TUT_UNIT_TEST( "adaptive::kmpsearch" )
 	ENSURE_EQUALS( "kmpsearch 4-2 failed", ucs4.find( word2 ), 9 );
 	ENSURE_EQUALS( "kmpsearch( pos ) 4-2 failed", ucs4.find( word2, 10 ), 46 );
 	ENSURE_EQUALS( "kmpsearch( pos ) missing 4-2 failed", ucs4.find( word2, 274 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find with empty pattern failed", ucs1.find( HString() ), HString::npos + 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "adaptive::kmpsearch_last" )
@@ -559,6 +561,8 @@ TUT_UNIT_TEST( "adaptive::kmpsearch_last" )
 	ENSURE_EQUALS( "kmpsearch_last 4-2 failed", ucs4.find_last( word2 ), 273 );
 	ENSURE_EQUALS( "kmpsearch_last( pos ) 4-2 failed", ucs4.find_last( word2, 272 ), 181 );
 	ENSURE_EQUALS( "kmpsearch_last( pos ) missing 4-2 failed", ucs4.find_last( word2, 8 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last with empty pattern failed", ucs1.find_last( HString() ), HString::npos + 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "adaptive::find_one_of" )
@@ -610,6 +614,9 @@ TUT_UNIT_TEST( "adaptive::find_one_of" )
 	ENSURE_EQUALS( "find_one_of 4-4 failed", ucs4.find_one_of( set4 ), 3 );
 	ENSURE_EQUALS( "find_one_of(pos) 4-4 failed", ucs4.find_one_of( set4, 6 ), 11 );
 	ENSURE_EQUALS( "find_one_of(pos) missing 4-4 failed", ucs4.find_one_of( set4, 15 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_one_of with empty set failed", ucs1.find_one_of( HString() ), HString::npos + 0 );
+	ENSURE_EQUALS( "reverse_find_one_of with empty set failed", ucs1.reverse_find_one_of( HString() ), HString::npos + 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "adaptive::find_last_one_of" )
@@ -677,6 +684,7 @@ TUT_UNIT_TEST( "adaptive::find_other_than" )
 	HString set4( set );
 	set4.reserve( set4.get_length(), 4 );
 
+	ENSURE_EQUALS( "find_other_than 1-1 failed", ucs1.find_other_than( set1, -1 ), 3 );
 	ENSURE_EQUALS( "find_other_than 1-1 failed", ucs1.find_other_than( set1 ), 3 );
 	ENSURE_EQUALS( "find_other_than(pos) 1-1 failed", ucs1.find_other_than( set1, 6 ), 11 );
 	ENSURE_EQUALS( "find_other_than(pos) missing 1-1 failed", ucs1.find_other_than( set1, 15 ), HString::npos + 0 );
@@ -712,6 +720,13 @@ TUT_UNIT_TEST( "adaptive::find_other_than" )
 	ENSURE_EQUALS( "find_other_than 4-4 failed", ucs4.find_other_than( set4 ), 3 );
 	ENSURE_EQUALS( "find_other_than(pos) 4-4 failed", ucs4.find_other_than( set4, 6 ), 11 );
 	ENSURE_EQUALS( "find_other_than(pos) missing 4-4 failed", ucs4.find_other_than( set4, 15 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_other_than with empty set failed", ucs1.find_other_than( HString(), 7 ), 7 );
+
+	ENSURE_EQUALS( "revese_find_other_than with neg before failed", ucs1.reverse_find_other_than( set1, -1 ), 2 );
+
+	ENSURE_EQUALS( "reverse_find_other_than with empty set failed", ucs1.reverse_find_other_than( HString(), 7 ), 7 );
+	ENSURE_EQUALS( "reverse_find_other_than with empty set failed", ucs1.reverse_find_other_than( HString(), 100 ), HString::npos + 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "adaptive::find_last_other_than" )
@@ -763,6 +778,8 @@ TUT_UNIT_TEST( "adaptive::find_last_other_than" )
 	ENSURE_EQUALS( "find_last_other_than 4-4 failed", ucs4.find_last_other_than( set4 ), 14 );
 	ENSURE_EQUALS( "find_last_other_than(pos) 4-4 failed", ucs4.find_last_other_than( set4, 4 ), 3 );
 	ENSURE_EQUALS( "find_last_other_than(pos) missing 4-4 failed", ucs4.find_last_other_than( set4, 2 ), HString::npos + 0 );
+
+	ENSURE_EQUALS( "find_last_other_than with empty set failed", ucs1.find_last_other_than( HString(), 7 ), 7 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "adaptive::transform" )
@@ -779,6 +796,54 @@ TUT_UNIT_TEST( "adaptive::transform" )
 	ENSURE_EQUALS( "transform ucs4 failed", s, expect );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "invalid UTF-8" )
+	ENSURE_THROW( "invalid UTF-8 succeeded", HString( "ą", 1 ), HStringException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "invalid reserve" )
+	HString s;
+	ENSURE_THROW( "invalid reserve succeeded", s.reserve( -1 ), HStringException );
+	ENSURE_THROW( "invalid reserve succeeded", s.reserve( HString::MAX_STRING_LENGTH - 10, 4 ), HStringException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "from_utf8" )
+	HString ucs4( "catchphrase: " );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_STOP_SIGN );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_PERSON_WALKING );
+	ucs4.push_back( unicode::CODE_POINT::EMOJI_SNAKE );
+	HUTF8String utf8( ucs4 );
+	HString s( utf8.c_str(), utf8.byte_count() );
+	ENSURE_EQUALS( "from_utf8 ucs4 failed", s, ucs4 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "bad [] index" )
+	HString s( "ala" );
+	ENSURE_THROW( "neg [] index succeeded", s[ -1 ], HStringException );
+	ENSURE_THROW( "too big [] index succeeded", s[ s.get_length() ], HStringException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "cbegin, cend" )
+	HString s( "żółwiątko" );
+	HString r;
+	for ( HString::const_iterator it( s.cbegin() ), end( s.cend() ); it != end; ++ it ) {
+		r.push_back( *it );
+	}
+	ENSURE_EQUALS( "cbegin/cend failed", r, s );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "bad assign" )
+	HString s( "żółwiątko" );
+	ENSURE_THROW( "neg size assign succeeded", s.assign( "", -1 ), HStringException );
+	ENSURE_THROW( "invalid iter assign succeeded", s.assign( HString::const_iterator(), s.end() ), HStringException );
+	ENSURE_THROW( "invalid iter assign succeeded", s.assign( s.begin(), HString::const_iterator() ), HStringException );
+	ENSURE_THROW( "invalid iter assign succeeded", s.assign( s.end(), s.begin() ), HStringException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "fill with NIL code point" )
+	HString s( "żółwiątko" );
+	s.fill( 0_ycp, 4, 100 );
+	ENSURE_EQUALS( "fill with NIL code point failed", s, HString( "żółw" ) );
+TUT_TEARDOWN()
 
 }
 
