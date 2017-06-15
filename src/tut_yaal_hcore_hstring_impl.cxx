@@ -37,6 +37,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/unicode.hxx>
+#include <yaal/tools/hmonitor.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -765,6 +766,7 @@ TUT_UNIT_TEST( "adaptive::find_last_other_than" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "adaptive::transform" )
+	yaal::hcore::HLock l( yaal::tools::HMonitor::get_instance().acquire( "locale" ) );
 	char const text[] = "Mężny bądź, chroń pułk twój i sześć flag!";
 	char const expectRaw[] = "MĘŻNY BĄDŹ, CHROŃ PUŁK TWÓJ I SZEŚĆ FLAG!";
 	HString s( text );

@@ -112,11 +112,9 @@ void dump_dir( path const& dir ) {
 
 TUT_UNIT_TEST( "filesystem" )
 	yaal::hcore::HLock l( yaal::tools::HMonitor::get_instance().acquire( "locale" ) );
-	char const* locale( setlocale( LC_ALL, "C" ) );
-	yaal::hcore::set_env( "LC_ALL", "C" );
-	cout << ( locale ? locale : "(NULL)" ) << endl;
+	setlocale( LC_ALL, "C" );
 	dump_dir( path( "./build" ) );
-	yaal::hcore::unset_env( "LC_ALL" );
+	setlocale( LC_ALL, "" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "date_time" )
