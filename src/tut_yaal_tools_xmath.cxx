@@ -103,15 +103,15 @@ TUT_UNIT_TEST( "number set stats: sum" )
 	ENSURE_EQUALS( "number_set_stats().sum() failed", number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).sum(), 24133 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "number set stats: average" )
+TUT_UNIT_TEST( "number set stats: arithmetic_mean" )
 #ifdef __HOST_OS_TYPE_CYGWIN__
 	double long e( epsilon * 100 );
 #else /* #ifdef __HOST_OS_TYPE_CYGWIN__ */
 	double long e( epsilon );
 #endif /* #else #ifdef __HOST_OS_TYPE_CYGWIN__ */
 	double long expected( 24133 / 100.l );
-	ENSURE_DISTANCE( "number_set_stats().average() failed",
-			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).average(),
+	ENSURE_DISTANCE( "number_set_stats().arithmetic_mean() failed",
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).arithmetic_mean(),
 			expected,
 			e );
 TUT_TEARDOWN()
@@ -151,10 +151,10 @@ TUT_UNIT_TEST( "stats on dice" )
 		<< "maximum                       = " << diceStats.maximum() << endl
 		<< "sum                           = " << diceStats.sum() << endl
 		<< "count                         = " << diceStats.count() << endl
-		<< "average                       = " << diceStats.average() << endl
-		<< "sample_variance                      = " << diceStats.sample_variance() << endl
+		<< "arithmetic_mean               = " << diceStats.arithmetic_mean() << endl
+		<< "sample_variance               = " << diceStats.sample_variance() << endl
 		<< "standard deviation            = " << diceStats.sample_standard_deviation() << endl
-		<< "population sample_variance           = " << diceStats.population_variance() << endl
+		<< "population sample_variance    = " << diceStats.population_variance() << endl
 		<< "population standard deviation = " << diceStats.population_standard_deviation() << endl
 		<< "median                        = " << diceStats.median() << endl;
 TUT_TEARDOWN()

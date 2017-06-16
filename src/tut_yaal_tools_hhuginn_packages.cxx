@@ -1160,7 +1160,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"import Mathematics as math;"
 			"main(){"
 			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), real),list));"
-			"return([nss.minimum(),nss.maximum(),nss.sum(),nss.average(),nss.median(),nss.sample_variance(),nss.population_variance(),nss.sample_standard_deviation(),nss.population_standard_deviation()]);"
+			"return([nss.minimum(),nss.maximum(),nss.sum(),nss.arithmetic_mean(),nss.median(),nss.sample_variance(),nss.population_variance(),nss.sample_standard_deviation(),nss.population_standard_deviation()]);"
 			"}"
 		),
 	  std::vector<hcore::HString>({
