@@ -137,10 +137,16 @@ TUT_UNIT_TEST( "number set stats: population_standard_deviation" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "number set stats: median" )
-	ENSURE_EQUALS( "number_set_stats().median() failed",
-			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ).median(), 229 );
-	ENSURE_EQUALS( "number_set_stats().median() failed",
-			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) - 1, AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ).median(), 229 );
+	int_array_t even( begin( _testData_[0] ), end( _testData_[0] ) );
+	int_array_t odd( begin( _testData_[0] ), end( _testData_[0] ) - 1 );
+	for ( int i( 0 ); i < 100; ++ i ) {
+		yaal::random_shuffle( even.begin(), even.end() );
+		yaal::random_shuffle( odd.begin(), odd.end() );
+		ENSURE_EQUALS( "number_set_stats().median() failed",
+				number_set_stats( even.begin(), even.end(), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ).median(), 231 );
+		ENSURE_EQUALS( "number_set_stats().median() failed",
+				number_set_stats( odd.begin(), odd.end(), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN ).median(), 229 );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "stats on dice" )
