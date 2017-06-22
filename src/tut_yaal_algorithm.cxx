@@ -38,6 +38,7 @@ Copyright:
 #include <yaal/hcore/algorithm.hxx>
 #include <yaal/hcore/hhashset.hxx>
 #include <yaal/hcore/hrandomizer.hxx>
+#include <yaal/hcore/hformat.hxx>
 #include <yaal/tools/streamtools.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 
@@ -1307,27 +1308,48 @@ TUT_UNIT_TEST( "partition" )
 	static int const range = 100;
 	int_array_t a( range );
 	HRandomizer r( randomizer_helper::make_randomizer( range ) );
-	for ( int_array_t::iterator it( a.begin() ), end( a.end() ); it != end; ++ it )
-		*it = static_cast<int>( r() ) - range / 2;
-	clog << a << endl;
-	int_array_t::iterator m( partition( a.begin(), a.end(), bind1st( less<int>(), 0 ) ) );
-	clog << a << endl;
-	for ( int_array_t::iterator it( a.begin() ); it != m; ++ it )
-		ENSURE( "partition failed (*it > 0)", *it > 0 );
-	for ( int_array_t::iterator it( m ), end( a.end() ); it != end; ++ it )
-		ENSURE( "partition failed (*it <= 0)", *it <= 0 );
-	generate( a.begin(), a.end(), inc( -50 ) );
-	clog << a << endl;
-	for ( int i( 0 ); i < ( range / 2 ); i += 20 ) {
-		swap_ranges( a.begin() + i, a.begin() + i + 10, a.begin() + i + 50 );
+	for ( int n( -range / 3 ); n < range / 3; n += 3 ) {
+		for ( int_array_t::iterator it( a.begin() ), end( a.end() ); it != end; ++ it ) {
+			*it = static_cast<int>( r() ) - range / 2 + n;
+		}
+		clog << "pre: " << a << endl;
+		int_array_t::iterator m( partition( a.begin(), a.end(), bind2nd( less<int>(), 0 ) ) );
+		clog << "pos: " << a << endl;
+		for ( int_array_t::iterator it( a.begin() ); it != m; ++ it ) {
+			ENSURE( "partition failed (*it < 0)", *it < 0 );
+		}
+		for ( int_array_t::iterator it( m ), end( a.end() ); it != end; ++ it ) {
+			ENSURE( "partition failed (*it >= 0)", *it >= 0 );
+		}
+		generate( a.begin(), a.end(), inc( -50 + n ) );
+		for ( int i( 0 ); i < ( range / 2 ); i += 20 ) {
+			swap_ranges( a.begin() + i, a.begin() + i + 10, a.begin() + i + 50 );
+		}
+		clog << "pre: " << a << endl;
+		m = partition( a.begin(), a.end(), bind2nd( less<int>(), 0 ) );
+		clog << "pos: " << a << endl;
+		for ( int_array_t::iterator it( a.begin() ); it != m; ++ it ) {
+			ENSURE( "partition failed (*it < 0)", *it < 0 );
+		}
+		for ( int_array_t::iterator it( m ), end( a.end() ); it != end; ++ it ) {
+			ENSURE( "partition failed (*it >= 0)", *it >= 0 );
+		}
 	}
-	clog << a << endl;
-	m = partition( a.begin(), a.end(), bind1st( less<int>(), 0 ) );
-	clog << a << endl;
-	for ( int_array_t::iterator it( a.begin() ); it != m; ++ it )
-		ENSURE( "partition failed (*it > 0)", *it > 0 );
-	for ( int_array_t::iterator it( m ), end( a.end() ); it != end; ++ it )
-		ENSURE( "partition failed (*it <= 0)", *it <= 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "nth_element" )
+	int tt[] = { 0, 2 };
+	for ( int t( 0 ); t < 2; ++ t ) {
+		int_array_t src( begin( _testData_[tt[t]] ), end( _testData_[tt[t]] ) );
+		for ( int k( 0 ); k < 10; ++ k ) {
+			yaal::random_shuffle( src.begin(), src.end() );
+			for ( int i( 0 ); i < static_cast<int>( src.get_size() ); ++ i ) {
+				int_array_t data( src );
+				nth_element( data.begin(), data.begin() + i, data.end() );
+				ENSURE_EQUALS( format( "nth_element %d failed", i ), data[i], _testData_[tt[t]][i] );
+			}
+		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "stable_partition" )
