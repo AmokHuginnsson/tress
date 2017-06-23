@@ -146,7 +146,7 @@ HString const& tut_yaal_hcore_hnumber::expand_leafs( HString const& template_ ) 
 	return ( _cache );
 }
 
-TUT_TEST_GROUP( tut_yaal_hcore_hnumber, "yaal::hcore::HNumber", 60 );
+TUT_TEST_GROUP( tut_yaal_hcore_hnumber, "yaal::hcore::HNumber", 70 );
 
 TUT_UNIT_TEST( "default constructor / check default precision" )
 	HNumber n;
@@ -1431,6 +1431,14 @@ TUT_UNIT_TEST( "sigmoid<HNumber>()" )
 	ENSURE_EQUALS( "sigmoid( 0 ) failed", sigmoid( number::N0 ), number::N0_5 );
 	ENSURE_EQUALS( "sigmoid( 1000 ) failed", sigmoid( 1000_yn ), "1" );
 	ENSURE_EQUALS( "sigmoid( -1000 ) failed", sigmoid( -1000_yn ), "0" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "error_function<HNumber>()" )
+	ENSURE_EQUALS( "error_function( 0 ) failed", error_function( number::N0 ), number::N0 );
+	ENSURE_EQUALS( "error_function( 1000 ) failed", error_function( 1000_yn ), number::N1 );
+	ENSURE_EQUALS( "error_function( -1000 ) failed", error_function( -1000_yn ), number::N_1 );
+	ENSURE_EQUALS( "error_function( 0.5 ) failed", error_function( number::N0_5 ), "0.520499877813" );
+	ENSURE_EQUALS( "error_function( -0.5 ) failed", error_function( -number::N0_5 ), "-0.520499877813" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "factorial<HNumber>()" )
