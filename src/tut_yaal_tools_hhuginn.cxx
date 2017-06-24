@@ -56,20 +56,22 @@ TUT_UNIT_TEST( "grammar test" )
 	HRule hg( h.make_engine() );
 	HGrammarDescription gd( hg );
 
+#define IDENTIFIER "[a-zA-Z\\x{0391}-\\x{03c9}_][a-zA-Z\\x{0391}-\\x{03c9}0-9_]*"
+
 	char const expected[][460] = {
 		"huginnGrammar = +( classDefinition | functionDefinition | importStatement )",
 		"classDefinition = ( \"class\" >> classIdentifier >> -( ':' >> baseIdentifier ) >> '{' >> +( field | functionDefinition ) >> '}' )",
 		"functionDefinition = ( functionDefinitionIdentifier >> '(' >> -nameList >> ')' >> '{' >> *statement >> '}' )",
 		"importStatement = ( \"import\" >> packageName >> \"as\" >> importName >> ';' )",
-		"classIdentifier = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
-		"baseIdentifier = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
+		"classIdentifier = regex( \"" IDENTIFIER "\" )",
+		"baseIdentifier = regex( \"" IDENTIFIER "\" )",
 		"field = ( fieldIdentifier >> '=' >> expression >> ';' )",
-		"functionDefinitionIdentifier = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
+		"functionDefinitionIdentifier = regex( \"" IDENTIFIER "\" )",
 		"nameList = ( parameter >> *( ',' >> parameter ) )",
 		"statement = ( ifStatement | whileStatement | forStatement | switchStatement | tryCatchStatement | throwStatement | breakStatement | continueStatement | returnStatement | expressionStatement | scope )",
-		"packageName = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
-		"importName = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
-		"fieldIdentifier = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
+		"packageName = regex( \"" IDENTIFIER "\" )",
+		"importName = regex( \"" IDENTIFIER "\" )",
+		"fieldIdentifier = regex( \"" IDENTIFIER "\" )",
 		"expression = ( *( ( assignable >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> value )",
 		"parameter = ( parameterIdentifier >> -( '=' >> expression ) )",
 		"ifStatement = ( ifClause >> *( \"else\" >> ifClause ) >> -( \"else\" >> scope ) )",
@@ -85,16 +87,16 @@ TUT_UNIT_TEST( "grammar test" )
 		"scope = ( '{' >> *statement >> '}' )",
 		"assignable = ( subscript | variableSetter )",
 		"value = ternary",
-		"parameterIdentifier = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
+		"parameterIdentifier = regex( \"" IDENTIFIER "\" )",
 		"ifClause = ( \"if\" >> '(' >> expression >> ')' >> scope )",
 		"caseStatement = ( \"case\" >> '(' >> expression >> ')' >> ':' >> scope >> -breakStatement )",
 		"defaultStatement = ( \"default\" >> ':' >> scope )",
 		"catchStatement = ( \"catch\" >> '(' >> exceptionType >> assignable >> ')' >> scope )",
 		"subscript = ( reference >> +( subscriptOperator | functionCallOperator | memberAccess ) )",
-		"variableSetter = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
+		"variableSetter = regex( \"" IDENTIFIER "\" )",
 		"ternary = ( ( booleanOr >> -( \"^^\" >> booleanOr ) ) >> -( '?' >> expression >> ':' >> expression ) )",
-		"exceptionType = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
-		"reference = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
+		"exceptionType = regex( \"" IDENTIFIER "\" )",
+		"reference = regex( \"" IDENTIFIER "\" )",
 		"subscriptOperator = ( '[' >> ( ( ( rangeOper >> -argument ) | ( argument >> -( rangeOper >> -argument ) ) ) >> -( rangeOper >> -argument ) ) >> ']' )",
 		"functionCallOperator = ( '(' >> -argList >> ')' )",
 		"memberAccess = ( '.' >> member )",
@@ -102,7 +104,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"rangeOper = ':'",
 		"argument = expression",
 		"argList = ( argument >> *( ',' >> argument ) )",
-		"member = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
+		"member = regex( \"" IDENTIFIER "\" )",
 		"booleanAnd = ( equality >> *( \"&&\" >> equality ) )",
 		"equality = ( compare >> -( ( \"==\" | \"!=\" ) >> compare ) )",
 		"compare = ( sum >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> sum ) )",
@@ -127,7 +129,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"lambda = ( ( '@' >> -( '[' >> captureList >> ']' ) ) >> '(' >> -nameList >> ')' >> '{' >> *statement >> '}' )",
 		"dictLiteralElement = ( argument >> ':' >> argument )",
 		"captureList = ( capture >> *( ',' >> capture ) )",
-		"capture = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )"
+		"capture = regex( \"" IDENTIFIER "\" )"
 	};
 
 	int i( 0 );
