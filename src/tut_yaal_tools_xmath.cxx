@@ -149,6 +149,11 @@ TUT_UNIT_TEST( "number set stats: median" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "mean_absolute_deviation" )
+	ENSURE_EQUALS( "number_set_stats().mean_absolute_deviation() failed",
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEAN_ABSOLUTE_DEVIATION ).mean_absolute_deviation(), 139.2098L );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "stats on dice" )
 	double long dice[] = { 1, 2, 3, 4, 5, 6 };
 	HNumberSetStats<double long> diceStats( dice, dice + countof ( dice ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN );
