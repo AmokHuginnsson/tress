@@ -150,8 +150,8 @@ TUT_UNIT_TEST( "number set stats: median" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mean_absolute_deviation" )
-	ENSURE_EQUALS( "number_set_stats().mean_absolute_deviation() failed",
-			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEAN_ABSOLUTE_DEVIATION ).mean_absolute_deviation(), 139.2098L );
+	ENSURE_DISTANCE( "number_set_stats().mean_absolute_deviation() failed",
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEAN_ABSOLUTE_DEVIATION ).mean_absolute_deviation(), 139.2098L, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "stats on dice" )
