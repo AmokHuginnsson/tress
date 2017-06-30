@@ -88,6 +88,9 @@ TUT_UNIT_TEST( "manipulators" )
 	ENSURE_EQUALS( "setw() int", data(), "i = '00007' \tsetw( 5 )" );
 	_ss << "i = '" << setfill( '0'_ycp ) << i << "'" << " \tsetfill( '0' )" << endl;
 	ENSURE_EQUALS( "setfill() int", data(), "i = '7' \tsetfill( '0' )" );
+	int prec( _ss.get_precision() );
+	_ss << fixed << setprecision( 2 ) << "pi = " << math::PI << setprecision( prec ) << natural << " \tsetprecision( 2 )" << endl;
+	ENSURE_EQUALS( "setprecicion() int", data(), "pi = 3.14 \tsetprecision( 2 )" );
 	int k( 103 );
 	_ss << "k = '" << k << "'" << endl;
 	ENSURE_EQUALS( "dec int", data(), "k = '103'" );
@@ -252,6 +255,13 @@ TUT_UNIT_TEST( "outputs" )
 	ENSURE_EQUALS( "bool output failed", data(), "0" );
 	_ss << boolalpha << false;
 	ENSURE_EQUALS( "bool output failed", data(), "false" );
+#ifdef __MSVCXX__
+	code_point_t cp( 945_ycp );
+#else
+	code_point_t cp( U'α'_ycp );
+#endif
+	_ss << cp;
+	ENSURE_EQUALS( "char output failed", data(), "α" );
 	_ss << 'a';
 	ENSURE_EQUALS( "char output failed", data(), "a" );
 	_ss << static_cast<char unsigned>( 'a' );
@@ -295,15 +305,23 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "inputs" )
 #if SIZEOF_INT_LONG == 8
-	_ss << "true false ol 32767 32768 32768 2147483647 2147483648 2147483648 9223372036854775807 9223372036854775808 9223372036854775808 9223372036854775807 9223372036854775808 9223372036854775808 3.1415 2.7182828 1.414213562373 Ala+ma|kota; 0x1234";
+	_ss << "true false αol 32767 32768 32768 2147483647 2147483648 2147483648 9223372036854775807 9223372036854775808 9223372036854775808 9223372036854775807 9223372036854775808 9223372036854775808 3.1415 2.7182828 1.414213562373 Ala+ma|kota; 0x1234";
 #else
-	_ss << "true false ol 32767 32768 32768 2147483647 2147483648 2147483648 2147483647 2147483648 2147483648 9223372036854775807 9223372036854775808 9223372036854775808 3.1415 2.7182818 1.414213562373 Ala+ma|kota; 0x1234";
+	_ss << "true false αol 32767 32768 32768 2147483647 2147483648 2147483648 2147483647 2147483648 2147483648 9223372036854775807 9223372036854775808 9223372036854775808 3.1415 2.7182818 1.414213562373 Ala+ma|kota; 0x1234";
 #endif
 	bool b( false );
 	_ss >> b;
 	ENSURE( "bool input failed", b );
 	_ss >> b;
 	ENSURE_NOT( "bool input failed", b );
+	code_point_t cp( 0 );
+	_ss >> cp;
+#ifdef __MSVCXX__
+	code_point_t exp( 945_ycp );
+#else
+	code_point_t exp( U'α'_ycp );
+#endif
+	ENSURE_EQUALS( "char input failed", cp, exp );
 	char c( 0 );
 	_ss >> c;
 	ENSURE_EQUALS( "char input failed", c, 'o' );
