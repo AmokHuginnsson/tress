@@ -27,7 +27,6 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hstreaminterface.hxx>
-#include <yaal/tools/hmemory.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -50,6 +49,11 @@ struct tut_yaal_hcore_hstreaminterface : public tress::tut_helpers::simple_mock<
 		HString s;
 		_ss.read_until( s );
 		return ( s );
+	}
+	yaal::tools::HStringStream& string_stream( void ) {
+		HStreamInterface::ptr_t si( make_pointer<HStringStream>() );
+		_ss.reset( si );
+		return ( static_cast<HStringStream&>( *si ) );
 	}
 };
 TUT_TEST_GROUP( tut_yaal_hcore_hstreaminterface, "yaal::hcore::HStreamInterface" );
@@ -105,39 +109,90 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until (delims stripped)" )
 	static char src[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
-	HMemory m( mo );
+	HStringStream& ss( string_stream() );
+	ss.str( src );
 	HString line;
 	int long nRead( 0 );
-	nRead = m.read_until( line );
+	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 4 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 3 );
 	ENSURE_EQUALS( "bad data read", line, "Ala" );
-	nRead = m.read_until( line );
+	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 3 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 2 );
 	ENSURE_EQUALS( "bad data read", line, "ma" );
-	nRead = m.read_until( line );
+	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "read_until (delims not stripped)" )
+TUT_UNIT_TEST( "read_while()" )
 	static char src[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
-	HMemory m( mo );
+	HStringStream& ss( string_stream() );
+	ss.str( src );
 	HString line;
 	int long nRead( 0 );
-	nRead = m.read_until( line, HStreamInterface::eols, false );
+	char sink( 0 );
+	char peek( 0 );
+	nRead = _ss.read_while( line, character_class( CHARACTER_CLASS::LETTER ).data() );
+	ENSURE_EQUALS( "wrong read size", nRead, 3 );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 3 );
+	ENSURE_EQUALS( "bad data read", line, "Ala" );
+	peek = static_cast<char>( _ss.peek() );
+	_ss.read( &sink, 1 );
+	ENSURE_EQUALS( "bad peek", peek, sink );
+	nRead = _ss.read_while( line, character_class( CHARACTER_CLASS::LETTER ).data() );
+	ENSURE_EQUALS( "wrong read size", nRead, 2 );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 2 );
+	ENSURE_EQUALS( "bad data read", line, "ma" );
+	peek = static_cast<char>( _ss.peek() );
+	_ss.read( &sink, 1 );
+	ENSURE_EQUALS( "bad peek", peek, sink );
+	nRead = _ss.read_while( line, character_class( CHARACTER_CLASS::LETTER ).data() );
+	ENSURE_EQUALS( "wrong read size", nRead, 4 );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 4 );
+	ENSURE_EQUALS( "bad data read", line, "kota" );
+	peek = static_cast<char>( _ss.peek() );
+	_ss.read( &sink, 1 );
+	ENSURE_EQUALS( "bad peek", peek, sink );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "read_while_n()" )
+	static char src[] = "Alamakotaxxx";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	HString line;
+	int long nRead( 0 );
+	nRead = _ss.read_while_n( line, 3, character_class( CHARACTER_CLASS::LETTER ).data() );
+	ENSURE_EQUALS( "wrong read size", nRead, 3 );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 3 );
+	ENSURE_EQUALS( "bad data read", line, "Ala" );
+	nRead = _ss.read_while_n( line, 2, character_class( CHARACTER_CLASS::LETTER ).data() );
+	ENSURE_EQUALS( "wrong read size", nRead, 2 );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 2 );
+	ENSURE_EQUALS( "bad data read", line, "ma" );
+	nRead = _ss.read_while_n( line, 4, character_class( CHARACTER_CLASS::LETTER ).data() );
+	ENSURE_EQUALS( "wrong read size", nRead, 4 );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 4 );
+	ENSURE_EQUALS( "bad data read", line, "kota" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "read_until (delims not stripped)" )
+	static char src[] = "Ala\nma\nkota.";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	HString line;
+	int long nRead( 0 );
+	nRead = _ss.read_until( line, HStreamInterface::eols, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 4 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 4 );
 	ENSURE_EQUALS( "bad data read", line, "Ala\n" );
-	nRead = m.read_until( line, HStreamInterface::eols, false );
+	nRead = _ss.read_until( line, HStreamInterface::eols, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 3 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 3 );
 	ENSURE_EQUALS( "bad data read", line, "ma\n" );
-	nRead = m.read_until( line, HStreamInterface::eols, false );
+	nRead = _ss.read_until( line, HStreamInterface::eols, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
@@ -145,19 +200,19 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until_n (delim stripped, by delim)" )
 	static char src[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
-	HMemory m( mo );
+	HStringStream& ss( string_stream() );
+	ss.str( src );
 	HString line;
 	int long nRead( 0 );
-	nRead = m.read_until_n( line, 4 );
+	nRead = _ss.read_until_n( line, 4 );
 	ENSURE_EQUALS( "wrong read size", nRead, 4 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 3 );
 	ENSURE_EQUALS( "bad data read", line, "Ala" );
-	nRead = m.read_until_n( line, 3 );
+	nRead = _ss.read_until_n( line, 3 );
 	ENSURE_EQUALS( "wrong read size", nRead, 3 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 2 );
 	ENSURE_EQUALS( "bad data read", line, "ma" );
-	nRead = m.read_until_n( line, 5 );
+	nRead = _ss.read_until_n( line, 5 );
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
@@ -165,25 +220,25 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until_n (delim stripped, by size)" )
 	static char src[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
-	HMemory m( mo );
+	HStringStream& ss( string_stream() );
+	ss.str( src );
 	HString line;
 	int long nRead( 0 );
-	nRead = m.read_until_n( line, 3 );
+	nRead = _ss.read_until_n( line, 3 );
 	ENSURE_EQUALS( "wrong read size", nRead, 3 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 3 );
 	ENSURE_EQUALS( "bad data read", line, "Ala" );
-	nRead = m.read_until( line );
+	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 1 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 0 );
-	nRead = m.read_until_n( line, 2 );
+	nRead = _ss.read_until_n( line, 2 );
 	ENSURE_EQUALS( "wrong read size", nRead, 2 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 2 );
 	ENSURE_EQUALS( "bad data read", line, "ma" );
-	nRead = m.read_until( line );
+	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 1 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 0 );
-	nRead = m.read_until_n( line, 5 );
+	nRead = _ss.read_until_n( line, 5 );
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
@@ -191,19 +246,19 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until_n (delim not stripped, by delim)" )
 	static char src[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
-	HMemory m( mo );
+	HStringStream& ss( string_stream() );
+	ss.str( src );
 	HString line;
 	int long nRead( 0 );
-	nRead = m.read_until_n( line, 4, HStreamInterface::eols, false );
+	nRead = _ss.read_until_n( line, 4, HStreamInterface::eols, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 4 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 4 );
 	ENSURE_EQUALS( "bad data read", line, "Ala\n" );
-	nRead = m.read_until_n( line, 3, HStreamInterface::eols, false );
+	nRead = _ss.read_until_n( line, 3, HStreamInterface::eols, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 3 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 3 );
 	ENSURE_EQUALS( "bad data read", line, "ma\n" );
-	nRead = m.read_until_n( line, 5, HStreamInterface::eols, false );
+	nRead = _ss.read_until_n( line, 5, HStreamInterface::eols, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
@@ -211,25 +266,25 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until_n (delim not stripped, by size)" )
 	static char src[] = "Ala\nma\nkota.";
-	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
-	HMemory m( mo );
+	HStringStream& ss( string_stream() );
+	ss.str( src );
 	HString line;
 	int long nRead( 0 );
-	nRead = m.read_until_n( line, 3, HStreamInterface::eols, false );
+	nRead = _ss.read_until_n( line, 3, HStreamInterface::eols, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 3 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 3 );
 	ENSURE_EQUALS( "bad data read", line, "Ala" );
-	nRead = m.read_until( line );
+	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 1 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 0 );
-	nRead = m.read_until_n( line, 2, HStreamInterface::eols, false );
+	nRead = _ss.read_until_n( line, 2, HStreamInterface::eols, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 2 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 2 );
 	ENSURE_EQUALS( "bad data read", line, "ma" );
-	nRead = m.read_until( line );
+	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 1 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 0 );
-	nRead = m.read_until_n( line, 5, HStreamInterface::eols, false );
+	nRead = _ss.read_until_n( line, 5, HStreamInterface::eols, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
@@ -237,12 +292,12 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "input float" )
 	static char src[] = "3.1415 -2.7182";
-	HMemoryObserver mo( src, static_cast<int>( sizeof( src ) ) - 1 );
-	HMemory m( mo );
+	HStringStream& ss( string_stream() );
+	ss.str( src );
 	float val( 0 );
-	m >> val;
+	_ss >> val;
 	ENSURE_DISTANCE( "float value read fail", val, static_cast<float>( 3.1415 ), static_cast<float>( epsilon ) );
-	m >> val;
+	_ss >> val;
 	ENSURE_DISTANCE( "float negative value read fail", val, static_cast<float>( -2.7182 ), static_cast<float>( epsilon ) );
 TUT_TEARDOWN()
 
