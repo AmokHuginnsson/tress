@@ -99,12 +99,24 @@ TUT_UNIT_TEST( "manipulators" )
 	_ss << "k = '" << k << "'" << endl;
 	ENSURE_EQUALS( "dec int", data(), "k = '103'" );
 	_ss << "k = '" << hex << k << "' \thex" << endl;
+	ENSURE_EQUALS( "get_base", static_cast<int>( _ss.get_base() ), static_cast<int>( HStreamInterface::BASE::HEX ) );
 	ENSURE_EQUALS( "dec int hex", data(), "k = '67' \thex" );
 	_ss << "k = '" << k << "'" << endl;
 	ENSURE_EQUALS( "dec int", data(), "k = '67'" );
 	_ss << dec;
+	ENSURE_EQUALS( "set_base/get_base", static_cast<int>( _ss.get_base() ), static_cast<int>( HStreamInterface::BASE::DEC ) );
 	_ss << "k = '" << k << "'" << endl;
 	ENSURE_EQUALS( "dec int", data(), "k = '103'" );
+	ENSURE_EQUALS( "getfill/setfill", _ss.get_fill(), '0'_ycp );
+	_ss << setfill( ' '_ycp ) << "[" << setw( 10 ) << right << "yaal" << "]" << endl;
+	ENSURE_EQUALS( "right", data(), "[      yaal]" );
+	ENSURE_EQUALS( "get_adjustment", static_cast<int>( _ss.get_adjust() ), static_cast<int>( HStreamInterface::ADJUST::RIGHT ) );
+	_ss << setw( 13 );
+	ENSURE_EQUALS( "setw/get_width", _ss.get_width(), 13 );
+	_ss << left << setw( 0 ) << "[" << setw( 10 ) << center << "yaal" << "]" << endl;
+	ENSURE_EQUALS( "center", data(), "[   yaal   ]" );
+	_ss << left << "[" << setw( 10 ) << "yaal" << "]" << endl;
+	ENSURE_EQUALS( "left", data(), "[yaal      ]" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read_until (delims stripped)" )
