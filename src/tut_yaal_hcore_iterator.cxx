@@ -42,6 +42,12 @@ namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_iterator );
 TUT_TEST_GROUP( tut_yaal_hcore_iterator, "yaal::hcore::iterators" );
+typedef HResource<int> int_res_t;
+typedef HArray<int_res_t> int_res_array_t;
+auto int_res_cmp = []( int_res_t const& left_, int_res_t const& right_ ){ return ( *left_ < *right_ ); };
+typedef decltype( int_res_cmp ) int_res_cmp_t;
+typedef HSet<int_res_t, int_res_cmp_t> int_res_set_t;
+typedef HDeque<int_res_t> int_res_deque_t;
 
 TUT_UNIT_TEST( "unordered sequence back_insert_iterator, continuous" )
 	int_array_t ui;
@@ -53,6 +59,32 @@ TUT_UNIT_TEST( "unordered sequence back_insert_iterator, continuous" )
 	*iui = 1;
 	*iui = 9;
 	ENSURE_EQUALS( "back_insert_iterator failed", ui, array( 5, 3, 7, 1, 9 ) );
+	int_res_array_t ir;
+	HBackInsertIterator<int_res_array_t> iri( back_insert_iterator<int_res_array_t>( ir ) );
+	*iri = make_resource<int>( 7 );
+	*iri = make_resource<int>( 3 );
+	ENSURE_EQUALS( "bad size after iter back insert", ir.get_size(), 2 );
+	ENSURE_EQUALS( "first elem after iter back insert", *ir.front(), 7 );
+	ENSURE_EQUALS( "bad last after iter back insert", *ir.back(), 3 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "unordered sequence front_insert_iterator, continuous" )
+	int_deque_t ui;
+	HFrontInsertIterator<int_deque_t> iui( front_insert_iterator<int_deque_t>( ui ) );
+	ENSURE_EQUALS( "front_insert_iterator constructor failed", ui, int_deque_t() );
+	*iui = 5;
+	*iui = 3;
+	*iui = 7;
+	*iui = 1;
+	*iui = 9;
+	ENSURE_EQUALS( "front_insert_iterator failed", ui, int_deque_t({ 9, 1, 7, 3, 5 }) );
+	int_res_deque_t ir;
+	HFrontInsertIterator<int_res_deque_t> iri( front_insert_iterator<int_res_deque_t>( ir ) );
+	*iri = make_resource<int>( 3 );
+	*iri = make_resource<int>( 7 );
+	ENSURE_EQUALS( "bad size after iter back insert", ir.get_size(), 2 );
+	ENSURE_EQUALS( "first elem after iter back insert", *ir.front(), 7 );
+	ENSURE_EQUALS( "bad last after iter back insert", *ir.back(), 3 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ordered sequence insert_iterator, continuous" )
@@ -65,6 +97,13 @@ TUT_UNIT_TEST( "ordered sequence insert_iterator, continuous" )
 	*ioi = 1;
 	*ioi = 9;
 	ENSURE_EQUALS( "insert_iterator failed", oi, static_cast<int_set_t const&>( sequence( 5 )( 3 )( 7 )( 1 )( 9 ) ) );
+	int_res_set_t ir( int_res_cmp );
+	HInsertIterator<int_res_set_t> iri( insert_iterator<int_res_set_t>( ir ) );
+	*iri = make_resource<int>( 3 );
+	*iri = make_resource<int>( 7 );
+	ENSURE_EQUALS( "bad size after iter back insert", ir.get_size(), 2 );
+	ENSURE_EQUALS( "first elem after iter back insert", **ir.begin(), 3 );
+	ENSURE_EQUALS( "bad last after iter back insert", **ir.rbegin(), 7 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "unordered sequence, back_insert_iterator, intermittent" )
