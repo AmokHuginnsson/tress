@@ -26,3 +26,23 @@ rectangle( a_, b_ ) {
 	return ( a_ * b_ );
 }
 
+/*
+ * ( *a_*, *b_* ) - calculate length of a diagonal of a rectangle given by *a_* and *b_* dimensions.
+ */
+diagonal( a_, b_ ) {
+	a = real( a_ );
+	b = real( b_ );
+	d = math.square_root( a ^ 2. + b ^ 2. );
+	return ( d );
+}
+
+helper( data_, delim_ ) {
+	s = "{}{}{}".format( delim_, data_, delim_ );
+	return ( s );
+}
+
+wrap( data_ ) {
+	s = helper( data_, '#' );
+	return ( s );
+}
+

@@ -1970,7 +1970,7 @@ TUT_UNIT_TEST( "modules" )
 		"import Mathematics as M;"
 		"import Tress as tress;"
 		"main() {"
-		"return ([tress.rectangle(2,3), tress.math().floor(3.14), string(tress.Object($7)), type(M)]);"
+		"return ([tress.rectangle(2,3), tress.diagonal(3,4), tress.wrap(\"yaal\"), tress.math().floor(3.14), string(tress.Object($7)), type(M)]);"
 		"}"
 	);
 	h.load( src );
@@ -1981,7 +1981,7 @@ TUT_UNIT_TEST( "modules" )
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::LIST );
-	ENSURE_EQUALS( "using module failed", to_string( r, &h ), "[6, 3.0, \"7\", Mathematics]" );
+	ENSURE_EQUALS( "using module failed", to_string( r, &h ), "[6, 5.0, \"#yaal#\", 3.0, \"7\", Mathematics]" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "incremental mode" )
