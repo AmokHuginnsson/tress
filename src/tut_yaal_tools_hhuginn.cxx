@@ -1982,6 +1982,19 @@ TUT_UNIT_TEST( "modules" )
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::LIST );
 	ENSURE_EQUALS( "using module failed", to_string( r, &h ), "[6, 5.0, \"#yaal#\", 3.0, \"7\", Mathematics]" );
+#if 0 /* *TODO* *FIXME* Reenable this test. */
+	ENSURE_EQUALS(
+		"invalid field access failure",
+		execute_except(
+			"import Tress as tress;\n"
+			"main() {\n"
+			"tress.bug(0);\n"
+			"}\n",
+			{ "./data/" }
+		),
+		""
+	);
+#endif
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "incremental mode" )

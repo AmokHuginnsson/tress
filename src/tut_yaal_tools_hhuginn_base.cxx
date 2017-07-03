@@ -233,6 +233,7 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 
 hcore::HString const& tut_yaal_tools_hhuginn_base::execute_except(
 	hcore::HString const& source_,
+	yaal::tools::HHuginn::paths_t const& modulePaths_,
 	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_
 ) {
 	if ( setup._verbose ) {
@@ -250,7 +251,7 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute_except(
 		clog << h.error_message() << endl;
 	}
 	ENSURE( "parse failed", p );
-	bool c( h.compile( huginnCompilerSetup_ ) );
+	bool c( h.compile( modulePaths_, huginnCompilerSetup_ ) );
 	if ( !c ) {
 		clog << h.error_message() << endl;
 	}
@@ -259,6 +260,13 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute_except(
 	ENSURE_NOT( "execution did not fail!", e );
 	_resultCache.assign( h.error_message() );
 	return ( _resultCache );
+}
+
+hcore::HString const& tut_yaal_tools_hhuginn_base::execute_except(
+	hcore::HString const& source_,
+	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_
+) {
+	return ( execute_except( source_, {}, huginnCompilerSetup_ ) );
 }
 
 tut_yaal_tools_hhuginn_base::OHuginnResult tut_yaal_tools_hhuginn_base::execute_result( yaal::hcore::HString const& source_ ) {

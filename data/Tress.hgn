@@ -46,3 +46,7 @@ wrap( data_ ) {
 	return ( s );
 }
 
+bug( data_ ) {
+	return ( math.square_foot( real( data_ ) ) );
+}
+
