@@ -39,24 +39,32 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
+struct ErrInfo {
+	int _pos;
+	int _line;
+	int _col;
+	char const* _msg;
+};
+
 struct tut_yaal_tools_hhuginn_compiler : public tress::tut_yaal_tools_hhuginn_base {
 	virtual ~tut_yaal_tools_hhuginn_compiler( void ) {}
-	void test_compile( prog_src_t, int const[3], int );
+	void test_compile( prog_src_t, ErrInfo const&, int );
 };
 
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn_compiler, "yaal::tools::HHuginn,compiler" );
 
-void tut_yaal_tools_hhuginn_compiler::test_compile( prog_src_t prog_, int const err_[3], int index_ ) {
+void tut_yaal_tools_hhuginn_compiler::test_compile( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
 	h.load( prog );
 	h.preprocess();
 	ENSURE( "failed to parse valid", h.parse() );
 	clog << "compiling: " << index_ << endl;
-	ENSURE_NOT( "compiled invalid", h.compile() );
-	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_[0] );
-	ENSURE_EQUALS( "reporting error line failed " + to_string( index_ ), h.error_coordinate().line(), err_[1] );
-	ENSURE_EQUALS( "reporting error column failed " + to_string( index_ ), h.error_coordinate().column(), err_[2] );
+	ENSURE_NOT( "compiled invalid", h.compile( { "./data" } ) );
+	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_._pos );
+	ENSURE_EQUALS( "reporting error line failed " + to_string( index_ ), h.error_coordinate().line(), err_._line );
+	ENSURE_EQUALS( "reporting error column failed " + to_string( index_ ), h.error_coordinate().column(), err_._col );
+	ENSURE_EQUALS( "reporting error message failed " + to_string( index_ ), h.error_message(), err_._msg );
 	clog << h.error_message() << endl;
 }
 
@@ -831,6 +839,21 @@ char const progCompileErr101[] =
 	"}\n"
 ;
 
+
+char const progCompileErr102[] =
+	"import CannotParse as cp;\n"
+	"main() {\n"
+	"foo();\n"
+	"}\n"
+;
+
+char const progCompileErr103[] =
+	"import CannotCompile as cc;\n"
+	"main() {\n"
+	"foo();\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -935,114 +958,119 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr99,
 		progCompileErr100,
 		progCompileErr101,
+		progCompileErr102,
+		progCompileErr103,
 		NULL
 	};
-	int const err[][3] = {
-		{ 16, 2, 8 },   // 0
-		{ 16, 2, 8 },   // 1
-		{ 16, 2, 8 },   // 2
-		{ 16, 2, 8 },   // 3
-		{ 16, 2, 8 },   // 4
-		{ 16, 2, 8 },   // 5
-		{ 20, 2, 12 },  // 6
-		{ 22, 2, 14 },  // 7
-		{ 18, 2, 10 },  // 8
-		{ 16, 2, 8 },   // 9
-		{ 16, 2, 8 },   // 10
-		{ 16, 2, 8 },   // 11
-		{ 16, 2, 8 },   // 12
-		{ 16, 2, 8 },   // 13
-		{ 16, 2, 8 },   // 14
-		{ 10, 2, 2 },   // 15
-		{ 10, 2, 2 },   // 16
-		{ 51, 5, 4 },   // 17
-		{ 27, 3, 8 },   // 18
-		{ 18, 2, 10 },  // 19
-		{ 18, 2, 10 },  // 20
-		{ 18, 2, 10 },  // 21
-		{ 18, 2, 10 },  // 22
-		{ 18, 2, 10 },  // 23
-		{ 18, 2, 10 },  // 24
-		{ 24, 3, 8 },   // 25
-		{ 24, 3, 8 },   // 26
-		{ 24, 3, 8 },   // 27
-		{ 24, 3, 8 },   // 28
-		{ 24, 3, 8 },   // 29
-		{ 24, 3, 8 },   // 30
-		{ 24, 3, 8 },   // 31
-		{ 24, 3, 8 },   // 32
-		{ 24, 3, 8 },   // 33
-		{ 24, 3, 8 },   // 34
-		{ 24, 3, 8 },   // 35
-		{ 24, 3, 8 },   // 36
-		{ 24, 3, 8 },   // 37
-		{ 10, 2, 2 },   // 38
-		{ 10, 2, 2 },   // 39
-		{ 52, 5, 4 },   // 40
-		{ 12, 1, 13 },  // 41
-		{ 22, 2, 7 },   // 42
-		{ 10, 1, 11 },  // 43
-		{ 0, 1, 1 },    // 44
-		{ 6, 1, 7 },    // 45
-		{ 7, 1, 8 },    // 46
-		{ 10, 1, 11 },  // 47
-		{ 10, 1, 11 },  // 48
-		{ 12, 2, 5 },   // 49
-		{ 12, 2, 5 },   // 50
-		{ 14, 2, 7 },   // 51
-		{ 14, 2, 7 },   // 52
-		{ 8, 2, 1 },    // 53
-		{ 8, 2, 1 },    // 54
-		{ 13, 2, 6 },   // 55
-		{ 16, 2, 9 },   // 56
-		{ 16, 2, 9 },   // 57
-		{ 23, 2, 16 },  // 58
-		{ 23, 2, 16 },  // 59
-		{ 21, 2, 14 },  // 60
-		{ 16, 3, 1 },   // 61
-		{ 21, 2, 14 },  // 62
-		{ 28, 2, 21 },  // 63
-		{ 7, 1, 8 },    // 64
-		{ 34, 2, 8 },   // 65
-		{ 33, 2, 8 },   // 66
-		{ 32, 2, 7 },   // 67
-		{ 32, 2, 7 },   // 68
-		{ 7, 1, 8 },    // 69
-		{ 21, 1, 22 },  // 70
-		{ 44, 2, 22 },  // 71
-		{ 49, 2, 24 },  // 72
-		{ 20, 3, 4 },   // 73
-		{ 20, 3, 4 },   // 74
-		{ 20, 3, 4 },   // 75
-		{ 20, 3, 4 },   // 76
-		{ 20, 3, 4 },   // 77
-		{ 20, 3, 4 },   // 78
-		{ 14, 2, 6 },   // 79
-		{ 10, 2, 2 },   // 80
-		{ 16, 2, 7 },   // 81
-		{ 18, 2, 9 },   // 82
-		{ 46, 3, 11 },  // 83
-		{ 14, 2, 6 },   // 84
-		{ 22, 2, 14 },  // 85
-		{ 24, 2, 16 },  // 86
-		{ 23, 3, 6 },   // 87
-		{ 39, 5, 6 },   // 88
-		{ 11, 3, 1 },   // 89
-		{ 6, 1, 7 },    // 90
-		{ 22, 3, 8 },   // 91
-		{ 23, 3, 9 },   // 92
-		{ 9, 2, 1 },    // 93
-		{ 6, 1, 7 },    // 94
-		{ 8, 1, 9 },    // 95
-		{ 0, 1, 1 },    // 96
-		{ 21, 1, 22 },  // 97
-		{ 17, 3, 1 },   // 98
-		{ 12, 2, 4 },   // 99
-		{ 17, 3, 2 },   // 100
-		{ 17, 3, 2 },   // 101
-		{ 0, 0, 0 }
+
+	ErrInfo const err[] = {
+/*   0 */ { 16, 2, 8,  "*anonymous stream*:2:8: Operand types for `+' do not match: `integer' vs `real'." },
+/*   1 */ { 16, 2, 8,  "*anonymous stream*:2:8: Operand types for `-' do not match: `integer' vs `real'." },
+/*   2 */ { 16, 2, 8,  "*anonymous stream*:2:8: Operand types for `*' do not match: `integer' vs `real'." },
+/*   3 */ { 16, 2, 8,  "*anonymous stream*:2:8: Operand types for `/' do not match: `integer' vs `real'." },
+/*   4 */ { 16, 2, 8,  "*anonymous stream*:2:8: Operand types for `%' do not match: `integer' vs `real'." },
+/*   5 */ { 16, 2, 8,  "*anonymous stream*:2:8: Operand types for `^' do not match: `integer' vs `real'." },
+/*   6 */ { 20, 2, 12, "*anonymous stream*:2:12: Operand types for `^' do not match: `integer' vs `real'." },
+/*   7 */ { 22, 2, 14, "*anonymous stream*:2:14: Operand types for `^' do not match: `real' vs `integer'." },
+/*   8 */ { 18, 2, 10, "*anonymous stream*:2:10: Operand types for `^' do not match: `real' vs `integer'." },
+/*   9 */ { 16, 2, 8,  "*anonymous stream*:2:8: Operand types for `==' do not match: `integer' vs `real'." },
+/*  10 */ { 16, 2, 8,  "*anonymous stream*:2:8: Operand types for `!=' do not match: `integer' vs `real'." },
+/*  11 */ { 16, 2, 8,  "*anonymous stream*:2:8: Operand types for `<' do not match: `integer' vs `real'." },
+/*  12 */ { 16, 2, 8,  "*anonymous stream*:2:8: Operand types for `>' do not match: `integer' vs `real'." },
+/*  13 */ { 16, 2, 8,  "*anonymous stream*:2:8: Operand types for `<=' do not match: `integer' vs `real'." },
+/*  14 */ { 16, 2, 8,  "*anonymous stream*:2:8: Operand types for `>=' do not match: `integer' vs `real'." },
+/*  15 */ { 10, 2, 2,  "*anonymous stream*:2:2: Invalid context for `break' statement." },
+/*  16 */ { 10, 2, 2,  "*anonymous stream*:2:2: Invalid context for `continue' statement." },
+/*  17 */ { 51, 5, 4,  "*anonymous stream*:5:4: Invalid context for `continue' statement." },
+/*  18 */ { 27, 3, 8,  "*anonymous stream*:3:8: Operands are not comparable: boolean, boolean" },
+/*  19 */ { 18, 2, 10, "*anonymous stream*:2:10: Operands are not summable: character, character" },
+/*  20 */ { 18, 2, 10, "*anonymous stream*:2:10: Operands are not subtractable: character, character" },
+/*  21 */ { 18, 2, 10, "*anonymous stream*:2:10: Operands are not multipliable: character, character" },
+/*  22 */ { 18, 2, 10, "*anonymous stream*:2:10: Operands are not divisible: character, character" },
+/*  23 */ { 18, 2, 10, "*anonymous stream*:2:10: Operands are not divisible: character, character" },
+/*  24 */ { 18, 2, 10, "*anonymous stream*:2:10: Operands are not exponentiationable: character, character" },
+/*  25 */ { 24, 3, 8,  "*anonymous stream*:3:8: Operand types for `+' do not match: `integer' vs `real'." },
+/*  26 */ { 24, 3, 8,  "*anonymous stream*:3:8: Operand types for `-' do not match: `integer' vs `real'." },
+/*  27 */ { 24, 3, 8,  "*anonymous stream*:3:8: Operand types for `*' do not match: `integer' vs `real'." },
+/*  28 */ { 24, 3, 8,  "*anonymous stream*:3:8: Operand types for `/' do not match: `integer' vs `real'." },
+/*  29 */ { 24, 3, 8,  "*anonymous stream*:3:8: Operand types for `%' do not match: `integer' vs `real'." },
+/*  30 */ { 24, 3, 8,  "*anonymous stream*:3:8: Operand types for `^' do not match: `integer' vs `real'." },
+/*  31 */ { 24, 3, 8,  "*anonymous stream*:3:8: Operand types for `^' do not match: `integer' vs `real'." },
+/*  32 */ { 24, 3, 8,  "*anonymous stream*:3:8: Operand types for `==' do not match: `integer' vs `real'." },
+/*  33 */ { 24, 3, 8,  "*anonymous stream*:3:8: Operand types for `!=' do not match: `integer' vs `real'." },
+/*  34 */ { 24, 3, 8,  "*anonymous stream*:3:8: Operand types for `<' do not match: `integer' vs `real'." },
+/*  35 */ { 24, 3, 8,  "*anonymous stream*:3:8: Operand types for `>' do not match: `integer' vs `real'." },
+/*  36 */ { 24, 3, 8,  "*anonymous stream*:3:8: Operand types for `<=' do not match: `integer' vs `real'." },
+/*  37 */ { 24, 3, 8,  "*anonymous stream*:3:8: Operand types for `>=' do not match: `integer' vs `real'." },
+/*  38 */ { 10, 2, 2,  "*anonymous stream*:2:2: Invalid context for `break' statement." },
+/*  39 */ { 10, 2, 2,  "*anonymous stream*:2:2: Invalid context for `continue' statement." },
+/*  40 */ { 52, 5, 4,  "*anonymous stream*:5:4: Invalid context for `continue' statement." },
+/*  41 */ { 12, 1, 13, "*anonymous stream*:1:13: Parameter `a' was already defined." },
+/*  42 */ { 22, 2, 7,  "*anonymous stream*:2:7: Class `A' is already defined." },
+/*  43 */ { 10, 1, 11, "*anonymous stream*:1:11: Base class `B' was not defined." },
+/*  44 */ { 0, 1, 1,   "*anonymous stream*:1:1: `integer' is a restricted name." },
+/*  45 */ { 6, 1, 7,   "*anonymous stream*:1:7: `integer' is a restricted name." },
+/*  46 */ { 7, 1, 8,   "*anonymous stream*:1:8: Missing default argument." },
+/*  47 */ { 10, 1, 11, "*anonymous stream*:1:11: `integer' is a restricted keyword." },
+/*  48 */ { 10, 1, 11, "*anonymous stream*:1:11: `integer' is a restricted name." },
+/*  49 */ { 12, 2, 5,  "*anonymous stream*:2:5: `return' is a restricted keyword." },
+/*  50 */ { 12, 2, 5,  "*anonymous stream*:2:5: Keyword `this' can be used only in class context." },
+/*  51 */ { 14, 2, 7,  "*anonymous stream*:2:7: `return' is a restricted keyword." },
+/*  52 */ { 14, 2, 7,  "*anonymous stream*:2:7: Keyword `constructor' can be used only in class context." },
+/*  53 */ { 8, 2, 1,   "*anonymous stream*:2:1: `if' is a restricted name." },
+/*  54 */ { 8, 2, 1,   "*anonymous stream*:2:1: Assignment to function result." },
+/*  55 */ { 13, 2, 6,  "*anonymous stream*:2:6: Operand is not a boolean value: integer" },
+/*  56 */ { 16, 2, 9,  "*anonymous stream*:2:9: Operand is not a numeric value: character" },
+/*  57 */ { 16, 2, 9,  "*anonymous stream*:2:9: Operand is not a numeric value: character" },
+/*  58 */ { 23, 2, 16, "*anonymous stream*:2:16: `assert' is a restricted keyword." },
+/*  59 */ { 23, 2, 16, "*anonymous stream*:2:16: `assert' is a restricted keyword." },
+/*  60 */ { 21, 2, 14, "*anonymous stream*:2:14: Range specifier is not an integer." },
+/*  61 */ { 16, 3, 1,  "*anonymous stream*:3:1: Field `_x' is already defined in `A'." },
+/*  62 */ { 21, 2, 14, "*anonymous stream*:2:14: Operand is not a boolean value: character" },
+/*  63 */ { 28, 2, 21, "*anonymous stream*:2:21: Operands are not boolean values: boolean, integer" },
+/*  64 */ { 7, 1, 8,   "*anonymous stream*:1:8: `return' is a restricted name." },
+/*  65 */ { 34, 2, 8,  "*anonymous stream*:2:8: Class `Package' named is already defined." },
+/*  66 */ { 33, 2, 8,  "*anonymous stream*:2:8: Package `Algorithms' was already imported." },
+/*  67 */ { 32, 2, 7,  "*anonymous stream*:2:7: Package of the same name `Algorithms' is already imported." },
+/*  68 */ { 32, 2, 7,  "*anonymous stream*:2:7: Package alias of the same name `pck' is already defined." },
+/*  69 */ { 7, 1, 8,   "*anonymous stream*:1:8: Package `NonExisting' does not exist." },
+/*  70 */ { 21, 1, 22, "*anonymous stream*:1:22: `return' is a restricted name." },
+/*  71 */ { 44, 2, 22, "*anonymous stream*:2:22: Class `pck' named is already defined." },
+/*  72 */ { 49, 2, 24, "*anonymous stream*:2:24: Import alias `pck' is already defined." },
+/*  73 */ { 20, 3, 4,  "*anonymous stream*:3:4: Operand types for `+=' do not match: `integer' vs `real'." },
+/*  74 */ { 20, 3, 4,  "*anonymous stream*:3:4: Operand types for `-=' do not match: `integer' vs `real'." },
+/*  75 */ { 20, 3, 4,  "*anonymous stream*:3:4: Operand types for `*=' do not match: `integer' vs `real'." },
+/*  76 */ { 20, 3, 4,  "*anonymous stream*:3:4: Operand types for `/=' do not match: `integer' vs `real'." },
+/*  77 */ { 20, 3, 4,  "*anonymous stream*:3:4: Operand types for `%=' do not match: `integer' vs `real'." },
+/*  78 */ { 20, 3, 4,  "*anonymous stream*:3:4: Operand types for `^=' do not match: `integer' vs `real'." },
+/*  79 */ { 14, 2, 6,  "*anonymous stream*:2:6: Symbol `y' is not defined in this context (did you mean `x'?)." },
+/*  80 */ { 10, 2, 2,  "*anonymous stream*:2:2: Symbol `x' is not defined in this context (did you mean `use'?)." },
+/*  81 */ { 16, 2, 7,  "*anonymous stream*:2:7: Dereferencing symbol `a' in field definition is forbidden." },
+/*  82 */ { 18, 2, 9,  "*anonymous stream*:2:9: Defining symbol `a' in field definition is forbidden." },
+/*  83 */ { 46, 3, 11, "*anonymous stream*:3:11: Making a direct reference to a package is forbidden." },
+/*  84 */ { 14, 2, 6,  "*anonymous stream*:2:6: Symbol `x' is not yet defined in this expression." },
+/*  85 */ { 22, 2, 14, "*anonymous stream*:2:14: Symbol `x' is not yet defined in this expression." },
+/*  86 */ { 24, 2, 16, "*anonymous stream*:2:16: Symbol `x' is not yet defined in this expression." },
+/*  87 */ { 23, 3, 6,  "*anonymous stream*:3:6: Method argument name `x' conflicts with class `A' field name." },
+/*  88 */ { 39, 5, 6,  "*anonymous stream*:5:6: Method argument name `x' conflicts with class `B' field name." },
+/*  89 */ { 11, 3, 1,  "*anonymous stream*:3:1: Function `main' was already defined." },
+/*  90 */ { 6, 1, 7,   "*anonymous stream*:1:7: Function of the same name `main' is already defined." },
+/*  91 */ { 22, 3, 8,  "*anonymous stream*:3:8: Capture `a' was already defined." },
+/*  92 */ { 23, 3, 9,  "*anonymous stream*:3:9: Symbol `a' is a already used as a capture." },
+/*  93 */ { 9, 2, 1,   "*anonymous stream*:2:1: Variable `x' is never used (did you mean `use'?)." },
+/*  94 */ { 6, 1, 7,   "*anonymous stream*:1:7: Class `C' is never used (did you mean `use'?)." },
+/*  95 */ { 8, 1, 9,   "*anonymous stream*:1:9: Field `_x' is never used (did you mean `C'?)." },
+/*  96 */ { 0, 1, 1,   "*anonymous stream*:1:1: Function `f' is never used (did you mean `use'?)." },
+/*  97 */ { 21, 1, 22, "*anonymous stream*:1:22: Package `algo' is never used (did you mean `add'?)." },
+/*  98 */ { 17, 3, 1,  "*anonymous stream*:3:1: Statement is unreachable." },
+/*  99 */ { 12, 2, 4,  "*anonymous stream*:2:4: Operand is not a numeric value: character" },
+/* 100 */ { 17, 3, 2,  "*anonymous stream*:3:2: Operands are not summable: character, character" },
+/* 101 */ { 17, 3, 2,  "*anonymous stream*:3:2: Operands are not multipliable: character, character" },
+/* 102 */ { 7, 1, 8,   "*anonymous stream*:1:8: ./data/CannotParse.hgn:3:1: expected one of characters: -" },
+/* 103 */ { 7, 1, 8,   "*anonymous stream*:1:8: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: `integer' vs `real'." },
+		{ 0, 0, 0, nullptr }
 	};
-	int const (*e)[3]( err );
+	ErrInfo const* e( err );
 	for ( prog_src_t* prog( begin( progCompileErr ) ), * progEnd( end( progCompileErr ) ); prog != progEnd; ++ prog, ++ e ) {
 		if ( *prog ) {
 			test_compile( *prog, *e, static_cast<int>( prog - begin( progCompileErr ) ) );
