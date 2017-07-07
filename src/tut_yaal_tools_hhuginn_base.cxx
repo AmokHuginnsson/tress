@@ -306,6 +306,7 @@ hcore::HString tut_yaal_tools_hhuginn_base::execute_incremental(
 	HHuginn h;
 	hcore::HString head( "main(){\n" );
 	hcore::HString foot( "}\n" );
+	hcore::HString okImports;
 	hcore::HString okDefinitions;
 	hcore::HString okBody;
 	HStringStream src;
@@ -314,15 +315,18 @@ hcore::HString tut_yaal_tools_hhuginn_base::execute_incremental(
 	hcore::HString res;
 	h.reset();
 	for ( OLine const& line : lines_ ) {
+		hcore::HString imports( okImports );
 		hcore::HString definitions( okDefinitions );
 		hcore::HString body( okBody );
 		if ( line._type == OLine::TYPE::CODE ) {
 			body.append( line._text ).append( ! line._text.is_empty() && ( line._text.back() != '\n' ) ? "\n" : "" );
+		} else if ( line._type == OLine::TYPE::IMPORT ) {
+			imports.append( line._text ).append( ! line._text.is_empty() && ( line._text.back() != '\n' ) ? "\n" : "" );
 		} else if ( line._type == OLine::TYPE::DEFINITION ) {
 			definitions.append( line._text ).append( ! line._text.is_empty() && ( line._text.back() != '\n' ) ? "\n" : "" );
 		}
 		src.clear();
-		src << definitions << head << body << foot;
+		src << imports << definitions << head << body << foot;
 		h.reset();
 		h.load( src );
 		h.preprocess();
@@ -331,7 +335,7 @@ hcore::HString tut_yaal_tools_hhuginn_base::execute_incremental(
 			clog << h.error_message() << endl;
 		}
 		ENSURE( "parse failed", p );
-		bool c( h.compile( huginnCompilerSetup_ ) );
+		bool c( h.compile( { "./data" }, huginnCompilerSetup_ ) );
 		if ( !c ) {
 			res.append( h.error_message() );
 			continue;
@@ -345,6 +349,7 @@ hcore::HString tut_yaal_tools_hhuginn_base::execute_incremental(
 		ENSURE( "execution failed!", e );
 		HHuginn::value_t r( h.result() );
 		ENSURE( "nothing returned", !! r );
+		okImports = imports;
 		okDefinitions = definitions;
 		okBody = body;
 		res.append( out.string() );

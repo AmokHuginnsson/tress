@@ -2021,6 +2021,18 @@ TUT_UNIT_TEST( "incremental mode" )
 		{ "main();" }
 	};
 	ENSURE_EQUALS( "bug in incremental mode management recursive main resurfaced", execute_incremental( l4 ), "*anonymous stream*:2:1: Referencing main() function in incremental mode is forbidden." );
+	lines_t l5{
+		{ "2+2;" },
+		{ "import CannotParse as cp;", OLine::TYPE::IMPORT },
+		{ "3*4;" }
+	};
+	ENSURE_EQUALS( "Parser errors in incemental mode while importing user defined submodule", execute_incremental( l5 ), "4*anonymous stream*:1:8: ./data/CannotParse.hgn:3:1: expected one of characters: -12" );
+	lines_t l6{
+		{ "2+2;" },
+		{ "import CannotCompile as cp;", OLine::TYPE::IMPORT },
+		{ "3*4;" }
+	};
+	ENSURE_EQUALS( "Compiler errors in incemental mode while importing user defined submodule", execute_incremental( l6 ), "4*anonymous stream*:1:8: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: `integer' vs `real'.12" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "max call stack size" )

@@ -50,7 +50,8 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 	struct OLine {
 		enum class TYPE {
 			CODE,
-			DEFINITION
+			DEFINITION,
+			IMPORT
 		};
 		yaal::hcore::HString _text;
 		TYPE _type;
