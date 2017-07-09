@@ -1899,7 +1899,7 @@ TUT_UNIT_TEST( "Stream" )
 			"return(copy(fs.open(\"./data/nl.txt\",fs.reading())));\n"
 			"}\n"
 		),
-		"*anonymous stream*:3:8: Copy semantics is not supported on Stream."
+		"*anonymous stream*:3:12: Copy semantics is not supported on Stream."
 	);
 	ENSURE_EQUALS(
 		"Stream size succeeded",
@@ -1909,7 +1909,7 @@ TUT_UNIT_TEST( "Stream" )
 			"return(size(fs.open(\"./data/nl.txt\",fs.reading())));\n"
 			"}\n"
 		),
-		"*anonymous stream*:3:8: Getting size of `Stream' is an invalid operation."
+		"*anonymous stream*:3:12: Getting size of `Stream' is an invalid operation."
 	);
 TUT_TEARDOWN()
 

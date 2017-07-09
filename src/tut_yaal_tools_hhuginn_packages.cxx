@@ -212,7 +212,7 @@ TUT_UNIT_TEST( "Algorithms" )
 			"return(size(f));\n"
 			"}"
 		),
-		"*anonymous stream*:4:8: Getting size of `Filter' is an invalid operation."
+		"*anonymous stream*:4:12: Getting size of `Filter' is an invalid operation."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.filter (function) failed",
@@ -571,7 +571,7 @@ TUT_UNIT_TEST( "FileSystem" )
 			"return(size(ds));\n"
 			"}"
 		),
-		"*anonymous stream*:4:8: Getting size of `DirectoryScan' is an invalid operation."
+		"*anonymous stream*:4:12: Getting size of `DirectoryScan' is an invalid operation."
 	);
 	HFSItem fi( "./data/karatsuba.bc" );
 #ifdef __MSVCXX__
@@ -1608,13 +1608,13 @@ TUT_UNIT_TEST( "Database" )
 	ENSURE_EQUALS(
 		"DatabaseConnection.copy exception",
 		execute_except(
-			"import Database as db;"
-			"main(){"
-			"dbc=db.connect(\"sqlite3:///out/tress\");"
-			"copy(dbc);"
-			"}"
+			"import Database as db;\n"
+			"main(){\n"
+			"dbc=db.connect(\"sqlite3:///out/tress\");\n"
+			"copy(dbc);\n"
+			"}\n"
 		),
-		"*anonymous stream*:1:69: Copy semantics is not supported on DatabaseConnection."
+		"*anonymous stream*:4:5: Copy semantics is not supported on DatabaseConnection."
 	);
 	ENSURE_EQUALS(
 		"DatabaseConnection.query exception",
@@ -1775,12 +1775,12 @@ TUT_UNIT_TEST( "OperatingSystem" )
 	ENSURE_EQUALS(
 		"Subprocess bad wait succeded",
 		execute_except(
-			"import OperatingSystem as os;"
-			"main(){"
+			"import OperatingSystem as os;\n"
+			"main(){\n"
 			"copy(os.spawn(\"" + CHILD + "\"));\n"
-			"}"
+			"}\n"
 		),
-		"*anonymous stream*:1:37: Copy semantics is not supported on Subprocess."
+		"*anonymous stream*:3:5: Copy semantics is not supported on Subprocess."
 	);
 #endif /* #ifndef __HOST_OS_TYPE_CYGWIN__ */
 TUT_TEARDOWN()
