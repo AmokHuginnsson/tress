@@ -195,6 +195,9 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "well-formed format tests [%2$*1$.*3$s]" )
 	ENSURE_EQUALS( "bad format output", ( HFormat( "[%2$*1$.*3$s]" ) % 8 % STR % 30 ).string(), "[     ala]" );
 TUT_TEARDOWN()
+TUT_UNIT_TEST( "octal tests [%05o]" )
+	ENSURE_EQUALS( "bad format output", ( HFormat( "[%05o]" ) % 0755 ).string(), "[00755]" );
+TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "swap" )
 	HFormat f1( "%s ma kota, %d lat, %f wagi, %Lf długi, ze złotym '%c' na obróżce, wart %lld!" );
