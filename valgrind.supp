@@ -4977,3 +4977,51 @@
    obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
    fun:xmlFindCharEncodingHandler
 }
+{
+   Ubuntu libxml2 error report 1
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmlStrdup
+   fun:xmlCopyError
+   fun:__xmlRaiseError
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   fun:xmlParseChunk
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   fun:xmlOutputBufferFlush
+   fun:xmlTextWriterEndDocument
+}
+{
+   Ubuntu libxml2 error report 2
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmlStrdup
+   fun:xmlCopyError
+   fun:__xmlRaiseError
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   fun:xmlParseChunk
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   fun:xmlOutputBufferFlush
+   fun:xmlTextWriterEndDocument
+}
+{
+   Ubuntu libxml2 error report 3
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmlStrdup
+   fun:xmlCopyError
+   fun:__xmlRaiseError
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   fun:xmlParseChunk
+   obj:/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.3
+   fun:xmlOutputBufferFlush
+   fun:xmlTextWriterEndDocument
+}
