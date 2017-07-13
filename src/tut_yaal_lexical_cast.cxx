@@ -47,6 +47,7 @@ TUT_UNIT_TEST( "0" )
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 0 );
+	ENSURE_EQUALS( "overlong string with short int", lexical_cast<int>( "0abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"_ys ), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "-0" )
