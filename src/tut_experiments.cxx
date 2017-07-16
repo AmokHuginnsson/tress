@@ -156,7 +156,10 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and MSVC++ [Visualisers] testing." )
 	HString shortStr( "huginn" );
-	HString str( "Ala ma kota, a kot ma mleczko." );
+	HString str( "Ala ma żółwia, a żółw ma skorupę." );
+	HUTF8String utf8Short( shortStr );
+	HUTF8String utf8( str );
+	HUTF8String sub( utf8.substr( 7, 4 ) );
 	HNumber pi( "3.141592653589793" );
 	HNumber e( "2.718281828459045" );
 	HNumber a( "0.7" );
