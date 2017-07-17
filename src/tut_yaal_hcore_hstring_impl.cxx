@@ -845,5 +845,13 @@ TUT_UNIT_TEST( "fill with NIL code point" )
 	ENSURE_EQUALS( "fill with NIL code point failed", s, HString( "żółw" ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "yen ucs>1 as last char" )
+	HString src( "¥" );
+	HUTF8String utf8( src );
+	HString s( utf8 );
+	clog << "yen = " << s << endl;
+	ENSURE_EQUALS( "ucs>1 as last char failed", s, "¥" );
+TUT_TEARDOWN()
+
 }
 
