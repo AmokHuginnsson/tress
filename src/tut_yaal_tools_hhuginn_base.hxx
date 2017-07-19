@@ -46,6 +46,18 @@ inline std::ostream& operator << ( std::ostream& out, yaal::tools::HHuginn::TYPE
 
 namespace tress {
 
+class HIntrospector : public yaal::tools::HIntrospectorInterface {
+public:
+	typedef yaal::hcore::HArray<yaal::tools::HIntrospecteeInterface::call_stack_t> call_stacks_t;
+private:
+	call_stacks_t _callStacks;
+public:
+	HIntrospector( void );
+	yaal::tools::HIntrospecteeInterface::call_stack_t const* get_stack( yaal::hcore::HString const&, int );
+protected:
+	virtual void do_introspect( yaal::tools::HIntrospecteeInterface& ) override;
+};
+
 struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_tools_hhuginn_base> {
 	struct OLine {
 		enum class TYPE {
@@ -77,7 +89,8 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 	void test_file( yaal::hcore::HString const& );
 	yaal::hcore::HString const& execute(
 		yaal::hcore::HString const&,
-		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::DEFAULT
+		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::DEFAULT,
+		HIntrospector* = nullptr
 	);
 	yaal::hcore::HString const& execute_except(
 		yaal::hcore::HString const&,

@@ -47,6 +47,29 @@ namespace tress {
 int tut_yaal_tools_hhuginn_base::_refCount = 0;
 yaal::hcore::HMutex tut_yaal_tools_hhuginn_base::_refCountMutex;
 
+HIntrospector::HIntrospector( void )
+	: _callStacks() {
+}
+
+void HIntrospector::do_introspect( yaal::tools::HIntrospecteeInterface& introspectee_ ) {
+	yaal::tools::HIntrospecteeInterface::call_stack_t callStack( introspectee_.get_call_stack() );
+	_callStacks.push_back( yaal::move( callStack ) );
+}
+
+yaal::tools::HIntrospecteeInterface::call_stack_t const* HIntrospector::get_stack( yaal::hcore::HString const& file_, int line_ ) {
+	yaal::tools::HIntrospecteeInterface::call_stack_t const* callStack( nullptr );
+	for ( yaal::tools::HIntrospecteeInterface::call_stack_t const& cs : _callStacks ) {
+		if ( ! cs.is_empty() ) {
+			yaal::tools::HIntrospecteeInterface::HCallSite const& callSite( cs.back() );
+			if ( ( callSite.file() == file_ ) && ( callSite.line() == line_ ) ) {
+				callStack = &cs;
+				break;
+			}
+		}
+	}
+	return ( callStack );
+}
+
 tut_yaal_tools_hhuginn_base::tut_yaal_tools_hhuginn_base( void )
 	: _resultCache()
 	, _sourceCache()
@@ -199,7 +222,8 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 
 hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 	hcore::HString const& source_,
-	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_
+	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_,
+	HIntrospector* introspector_
 ) {
 	if ( setup._verbose ) {
 		clog << prettify( source_ ) << endl;
@@ -215,7 +239,7 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 		clog << h.error_message() << endl;
 	}
 	ENSURE( "parse failed", p );
-	bool c( h.compile( huginnCompilerSetup_ ) );
+	bool c( h.compile( huginnCompilerSetup_, introspector_ ) );
 	if ( !c ) {
 		clog << h.error_message() << endl;
 	}

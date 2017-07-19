@@ -40,6 +40,7 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace yaal::tools::huginn;
 using namespace yaal::tools::executing_parser;
+using namespace tress;
 using namespace tress::tut_helpers;
 
 namespace tut {
@@ -2033,6 +2034,30 @@ TUT_UNIT_TEST( "incremental mode" )
 		{ "3*4;" }
 	};
 	ENSURE_EQUALS( "Compiler errors in incemental mode while importing user defined submodule", execute_incremental( l6 ), "4*anonymous stream*:1:8: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: `integer' vs `real'.12" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "introspection" )
+	HIntrospector introspector;
+	ENSURE_EQUALS(
+		"Stream.read failed",
+		execute(
+			"foo(x) {\n"
+			"\tx + 1;\n"
+			"}\n\n"
+			"main() {\n"
+			"\tfoo( 0 );\n"
+			"}\n",
+			HHuginn::COMPILER::DEFAULT,
+			&introspector
+		),
+		"1"
+	);
+	HIntrospecteeInterface::call_stack_t const* callStack( introspector.get_stack( "*anonymous stream*", 6 ) );
+	if ( callStack ) {
+		for ( HIntrospecteeInterface::HCallSite const& cs : *callStack ) {
+			clog << cs.file() << ":" << cs.line() << ":" << cs.column() << ":" << cs.context() << endl;
+		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "max call stack size" )
