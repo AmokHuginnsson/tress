@@ -2053,10 +2053,17 @@ TUT_UNIT_TEST( "introspection" )
 		"1"
 	);
 	HIntrospecteeInterface::call_stack_t const* callStack( introspector.get_stack( "*anonymous stream*", 6 ) );
-	if ( callStack ) {
-		for ( HIntrospecteeInterface::HCallSite const& cs : *callStack ) {
-			clog << cs.file() << ":" << cs.line() << ":" << cs.column() << ":" << cs.context() << endl;
-		}
+	char const expected[][64] = {
+		"*anonymous stream*:2:2:foo",
+		"*anonymous stream*:6:5:main"
+	};
+	HStringStream ss;
+	int row( 0 );
+	for ( HIntrospecteeInterface::HCallSite const& cs : *callStack ) {
+		ss << cs.file() << ":" << cs.line() << ":" << cs.column() << ":" << cs.context();
+		ENSURE_EQUALS( "getting call stack failed", ss.str(), expected[row] );
+		ss.reset();
+		++ row;
 	}
 TUT_TEARDOWN()
 

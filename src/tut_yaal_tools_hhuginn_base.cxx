@@ -53,6 +53,13 @@ HIntrospector::HIntrospector( void )
 
 void HIntrospector::do_introspect( yaal::tools::HIntrospecteeInterface& introspectee_ ) {
 	yaal::tools::HIntrospecteeInterface::call_stack_t callStack( introspectee_.get_call_stack() );
+	if ( setup._verbose && setup._debug ) {
+		clog << "-------------------------------------------------------------------" << endl;
+		for ( yaal::tools::HIntrospecteeInterface::HCallSite const& cs : callStack ) {
+			clog << cs.file() << ":" << cs.line() << ":" << cs.column() << ":" << cs.context() << endl;
+		}
+		clog << "-------------------------------------------------------------------" << endl;
+	}
 	_callStacks.push_back( yaal::move( callStack ) );
 }
 
