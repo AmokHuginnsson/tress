@@ -712,12 +712,22 @@ TUT_UNIT_TEST( "exceptions()" )
 			"try{\n"
 			"1/0;\n"
 			"}catch(ArithmeticException e) {\n"
-			"f=e.trace()[0];"
-			"r=[e.message(),e.where(),e.what(),f.file(),f.line(),f.column(),f.context(),string(f)];\n"
+			"ce = copy(e);\n"
+			"f=ce.trace()[0];"
+			"r=[ce.message(),ce.where(),ce.what(),f.file(),f.line(),f.column(),f.context(),string(f)];\n"
 			"}\n"
 			"return(r);\n"
 			"}\n" ),
 		"[\"*anonymous stream*:4:2: Division by zero.\", \"*anonymous stream*:4:2\", \"Division by zero.\", \"*anonymous stream*\", 4, 2, \"main\", \"*anonymous stream*:4:2:main\"]"
+	);
+	ENSURE_EQUALS(
+		"StackFrameInfo copy succeeded",
+		execute_except(
+			"main() {\n"
+			"\tcopy(Exception(\"\").trace()[0]);\n"
+			"}\n"
+		),
+		"*anonymous stream*:2:6: Copy semantics is not supported on StackFrameInfo."
 	);
 TUT_TEARDOWN()
 
