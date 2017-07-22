@@ -712,11 +712,12 @@ TUT_UNIT_TEST( "exceptions()" )
 			"try{\n"
 			"1/0;\n"
 			"}catch(ArithmeticException e) {\n"
-			"r=[e.message(),e.where(),e.what()];\n"
+			"f=e.trace()[0];"
+			"r=[e.message(),e.where(),e.what(),f.file(),f.line(),f.column(),f.context(),string(f)];\n"
 			"}\n"
 			"return(r);\n"
 			"}\n" ),
-		"[\"*anonymous stream*:4:2: Division by zero.\", \"*anonymous stream*:4:2\", \"Division by zero.\"]"
+		"[\"*anonymous stream*:4:2: Division by zero.\", \"*anonymous stream*:4:2\", \"Division by zero.\", \"*anonymous stream*\", 4, 2, \"main\", \"*anonymous stream*:4:2:main\"]"
 	);
 TUT_TEARDOWN()
 
