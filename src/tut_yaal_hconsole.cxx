@@ -32,6 +32,7 @@ Copyright:
 #if TARGET_CPU_BITS == 64
 
 #include <TUT/tut.hpp>
+#include <yaal/hconsole/hwindow.hxx>
 
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
@@ -483,6 +484,61 @@ TUT_UNIT_TEST( "XML Window" )
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Bad HEditWidget" )
+	HConsole& cons( HConsole::get_instance() );
+	cons.enter_curses();
+	tress::fake_console_subsystem::build_attribute_maps();
+	HWindow w( "Bad HEditWidget" );
+	ENSURE_THROW(
+		"edit-widget right aligned and multiline at the same time",
+		create_widget<HEditWidget>(
+			&w, -13, 1, 1, 18, "&Int",
+			HEditWidgetAttributes().rightaligned( true ).multiline( true )
+		),
+		HEditWidgetException
+	);
+	ENSURE_THROW(
+		"edit-widget buffer size is ridiculously low",
+		create_widget<HEditWidget>(
+			&w, -13, 1, 1, 18, "&Int",
+			HEditWidgetAttributes().max_string_size( 0 )
+		),
+		HEditWidgetException
+	);
+	ENSURE_THROW(
+		"edit-widget initial value too big",
+		create_widget<HEditWidget>(
+			&w, -13, 1, 1, 18, "&Int",
+			HEditWidgetAttributes().max_string_size( 16 ).text( "a string way too long" )
+		),
+		HEditWidgetException
+	);
+	ENSURE_THROW(
+		"edit-widget invalid mask",
+		create_widget<HEditWidget>(
+			&w, -13, 1, 1, 18, "&Int",
+			HEditWidgetAttributes().mask( "[a-z" )
+		),
+		HEditWidgetException
+	);
+	ENSURE_THROW(
+		"edit-widget value does not match mask",
+		create_widget<HEditWidget>(
+			&w, -13, 1, 1, 18, "&Int",
+			HEditWidgetAttributes().mask( "^[a-z]*$" ).text( "abc4" )
+		),
+		HEditWidgetException
+	);
+	HEditWidget* e(
+		create_widget<HEditWidget>(
+			&w, -13, 1, 1, 18, "&Int",
+			HEditWidgetAttributes().text( "abc4" )
+		)
+	);
+	ENSURE_EQUALS( "set/get text failed", e->get_text(), "abc4" );
+	cons.leave_curses();
 TUT_TEARDOWN()
 
 }

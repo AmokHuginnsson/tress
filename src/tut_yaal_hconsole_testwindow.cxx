@@ -97,12 +97,19 @@ void HTestWindow::do_init( void ) {
 	_list->set_focus();
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Name", 16, HWidget::BITS::ALIGN::LEFT, TYPE::HSTRING, "", _name ) );
 	HWidget* control( nullptr );
-	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Text", 32, HWidget::BITS::ALIGN::LEFT, TYPE::HSTRING, "",
-			control = create_widget<HEditWidget>( this, -16, 27, 1, -1, "Te&xt",
+	_list->add_column(
+		-1, make_resource<HListWidget::HColumnInfo>(
+			"Text", 32, HWidget::BITS::ALIGN::LEFT, TYPE::HSTRING, "",
+			control = create_widget<HEditWidget>(
+				this, -16, 27, 1, -1, "Te&xt",
 				HEditWidgetAttributes()
-				.max_string_size( 64 )
-				.mask( "^[a-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ !,-]*$" )
-				.label_position( HWidget::LABEL::POSITION::STACKED ) ) ) );
+					.max_string_size( 256 )
+					.mask( "^[a-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ !,\\.-]*$" )
+					.text( "some very long text, way longer then widget visible space, I mean, really, really absurdly long line of text..." )
+					.label_position( HWidget::LABEL::POSITION::STACKED )
+			)
+		)
+	);
 	control->enable( true );
 	_list->add_column( -1, make_resource<HListWidget::HColumnInfo>( "Int", 8, HWidget::BITS::ALIGN::RIGHT, TYPE::INT_LONG_LONG, "",
 			control = _edit = create_widget<HEditWidget>( this, -13, 1, 1, 18, "&Int",
