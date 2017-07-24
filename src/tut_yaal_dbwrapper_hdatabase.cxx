@@ -103,7 +103,7 @@ TUT_UNIT_TEST( "MySQL schema" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 
-#if defined( HAVE_IBASE_H )
+#if defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H )
 TUT_UNIT_TEST( "Firebird schema" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
@@ -111,7 +111,7 @@ TUT_UNIT_TEST( "Firebird schema" )
 	db->connect( "tress", "tress", "tr3ss" );
 	test_schema( db );
 TUT_TEARDOWN()
-#endif /* defined( HAVE_IBASE_H ) */
+#endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */
 
 #if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
 TUT_UNIT_TEST( "Oracle schema" )

@@ -1737,7 +1737,7 @@ TUT_UNIT_TEST( "OperatingSystem" )
 		HThread::call_t(
 			[&h, &result]() {
 				try {
-					result = h.execute();
+					result = h.execute() ? 1 : 0;
 				} catch ( HException const& e ) {
 					result = e.what();
 				} catch ( std::exception const& e ) {

@@ -220,7 +220,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "find" )
 	filesystem::find_result fr( filesystem::find( "./data", ".*\\.sql" ) );
 	sort( fr.begin(), fr.end() );
-	filesystem::find_result expected = array<HString>( "./data/firebird.sql", "./data/mysql.sql", "./data/oracle.sql", "./data/postgresql.sql", "./data/sqlite.sql" );
+	filesystem::find_result expected = array<HString>( "./data/firebirdV2.sql", "./data/firebirdV3.sql", "./data/mysql.sql", "./data/oracle.sql", "./data/postgresql.sql", "./data/sqlite.sql" );
 	ENSURE_EQUALS( "filesystem::find failed", fr, expected );
 TUT_TEARDOWN()
 
