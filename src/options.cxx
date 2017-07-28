@@ -79,7 +79,8 @@ void version( void ) {
 int handle_program_options( int argc_, char** argv_ ) {
 	M_PROLOG
 	HProgramOptionsHandler po;
-	OOptionInfo info( po, setup._programName, "yaal stress testing suite", NULL );
+	HOptionInfo info( po );
+	info.name( setup._programName ).intro( "yaal stress testing suite" );
 	bool help( false );
 	bool dumpConf( false );
 	bool vers( false );

@@ -276,7 +276,7 @@ TUT_UNIT_TEST( "allocate full block, free in random order, reallocate full block
 		allocated.push_back( p.alloc() );
 		check_consistency( p );
 	}
-	reverse( allocated.begin(), allocated.end() );
+	yaal::reverse( allocated.begin(), allocated.end() );
 	ENSURE_EQUALS( "bad free list", allocated, freeOrder );
 	for ( void* v : allocated ) {
 		p.free( v );
@@ -787,7 +787,7 @@ TUT_UNIT_TEST( "allocate two full blocks, free second in random order, reallocat
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
-	reverse( allocatedB1.begin(), allocatedB1.end() );
+	yaal::reverse( allocatedB1.begin(), allocatedB1.end() );
 	ENSURE_EQUALS( "bad free list", allocatedB1, freeOrder );
 	for ( void* v : allocatedB1 ) {
 		p.free( v );
@@ -850,8 +850,8 @@ TUT_UNIT_TEST( "allocate 3 blocks, free all but one in first and second in rando
 		allocatedB0.push_back( p.alloc() );
 		check_consistency( p );
 	}
-	reverse( allocatedB0.begin(), allocatedB0.end() );
-	reverse( allocatedB1.begin(), allocatedB1.end() );
+	yaal::reverse( allocatedB0.begin(), allocatedB0.end() );
+	yaal::reverse( allocatedB1.begin(), allocatedB1.end() );
 	ENSURE_EQUALS( "bad free list b0", allocatedB0, freeOrderB0 );
 	ENSURE_EQUALS( "bad free list b1", allocatedB1, freeOrderB1 );
 	p.free( allocatedB0[0] );

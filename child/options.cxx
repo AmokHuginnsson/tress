@@ -58,7 +58,8 @@ void version( void ) {
 int handle_program_options( int argc_, char** argv_ ) {
 	M_PROLOG
 	HProgramOptionsHandler po( "child" );
-	OOptionInfo info( po, setup._programName, "does very much usefull things ... really", NULL );
+	HOptionInfo info( po );
+	info.name( setup._programName ).intro( "does very much usefull things ... really" );
 	bool help( false );
 	bool conf( false );
 	bool vers( false );

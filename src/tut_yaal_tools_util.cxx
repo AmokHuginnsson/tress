@@ -128,7 +128,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "show help" )
 	HProgramOptionsHandler po;
-	OOptionInfo info( po, "tress", "yaal stress testing suite", "Footer..." );
+	HOptionInfo info( po );
+	info.name( "tress" ).intro( "yaal stress testing suite" ).note( "Footer..." );
 	int i( 0 );
 	double d( 0 );
 	HString s;
@@ -181,13 +182,16 @@ TUT_UNIT_TEST( "show help" )
 "  -r, --ratio=value    expected pass/fail ratio (default: 0.5)\n"
 "  -R, --restartable    run tests in restartable mode\n"
 "\n"
+"All long form options can be used in program configuration file: tressrc.\n"
+"\n"
 "Footer...\n";
 	ENSURE_EQUALS( "show_help failed", ss.string(), exp );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "dump_configuration" )
 	HProgramOptionsHandler po;
-	OOptionInfo info( po, "tress", "yaal stress testing suite", "Footer..." );
+	HOptionInfo info( po );
+	info.name( "tress" ).intro( "yaal stress testing suite" ).note( "Footer..." );
 	int i( 0 );
 	double d( 0 );
 	HString s;

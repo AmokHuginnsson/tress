@@ -96,7 +96,7 @@ TUT_UNIT_TEST( "reverse" )
 	char const* revdatae = "4321\0";
 	copy_n( datae, LENE + 1, se );
 	ENSURE_EQUALS( "test init failed (even)", HString( se ), HString( datae ) );
-	reverse( se, se + LENE );
+	yaal::reverse( se, se + LENE );
 	ENSURE_EQUALS( "reverse of even number of elements failed", HString( se ), HString( revdatae ) );
 
 	int const LENO = 5;
@@ -106,11 +106,11 @@ TUT_UNIT_TEST( "reverse" )
 	char const* revdatao = "54321\0";
 	copy_n( datao, LENO + 1, so );
 	ENSURE_EQUALS( "test init failed (odd)", HString( so ), HString( datao ) );
-	reverse( so, so + LENO );
+	yaal::reverse( so, so + LENO );
 	ENSURE_EQUALS( "reverse of even number of elements failed", HString( so ), HString( revdatao ) );
 	HString s1( "!ABCa#$q%^&w0def1ghi2@" );
 	HString s2( "@2ihg1fed0w&^%q$#aCBA!" );
-	reverse( s2.begin(), s2.end() );
+	yaal::reverse( s2.begin(), s2.end() );
 	ENSURE_EQUALS( "reverse on HString failed", s2, s1 );
 TUT_TEARDOWN()
 
@@ -1410,7 +1410,7 @@ TUT_UNIT_TEST( "random_shuffle" )
 	ENSURE_EQUALS( "random_shuffle lost some elements!", a, b );
 	random_shuffle( a.begin(), a.end(), incUnary( 0 ) );
 	clog << a << endl;
-	reverse( a.begin(), a.end() );
+	yaal::reverse( a.begin(), a.end() );
 	ENSURE_EQUALS( "random_shuffle did not use given randomizer properly", a, b );
 TUT_TEARDOWN()
 

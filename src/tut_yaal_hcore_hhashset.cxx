@@ -139,7 +139,7 @@ TUT_UNIT_TEST( "iteration" )
 	set.insert( 3 );
 	HArray<hashset_t::value_type> forward( set.begin(), set.end() );
 	HArray<hashset_t::value_type> backward( set.rbegin(), set.rend() );
-	reverse( backward.begin(), backward.end() );
+	yaal::reverse( backward.begin(), backward.end() );
 	ENSURE_EQUALS( "bad teration", backward, forward );
 TUT_TEARDOWN()
 

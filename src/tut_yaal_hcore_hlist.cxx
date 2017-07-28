@@ -2096,7 +2096,7 @@ TUT_UNIT_TEST( "reverse()" )
 	int const val( *it );
 	l.reverse();
 	check_consistency( l );
-	reverse( data, data + ( countof ( data ) - 1 ) );
+	yaal::reverse( data, data + ( countof ( data ) - 1 ) );
 	ENSURE_EQUALS( "reverse failed", _stringifier.to_string<char>( l ), data );
 	ENSURE_EQUALS( "reverse preserving iterators failed", *it, val );
 TUT_TEARDOWN()
