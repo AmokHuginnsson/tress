@@ -129,7 +129,11 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "show help" )
 	HProgramOptionsHandler po;
 	HOptionInfo info( po );
-	info.name( "tress" ).intro( "yaal stress testing suite" ).note( "Footer..." );
+	info.name( "tress" )
+		.intro( "yaal stress testing suite" )
+		.note( "Footer..." )
+		.color( false )
+		.markdown( false );
 	int i( 0 );
 	double d( 0 );
 	HString s;
@@ -167,6 +171,14 @@ TUT_UNIT_TEST( "show help" )
 		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::NONE )
 		.description( "run tests in restartable mode" )
 		.recipient( b )
+	)(
+		HProgramOptionsHandler::HOption()
+		.long_form( "framework" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::OPTIONAL )
+		.description( "a framework to use =(*abc*|very|long|string|as|one|word|should|be|printed|alone) in this app" )
+		.recipient( s )
+		.default_value( "work" )
+		.argument_name( "fw" )
 	);
 	HStringStream ss;
 	show_help( info, ss );
@@ -176,11 +188,14 @@ TUT_UNIT_TEST( "show help" )
 "\n"
 "Mandatory arguments to long options are mandatory for short options too.\n"
 "Options:\n"
-"      --log-path=path  path pointing to file for application logs (default: \n"
-"                         log.txt)\n"
-"  -j, --jobs=count     number of concurrent jobs (default: 7)\n"
-"  -r, --ratio=value    expected pass/fail ratio (default: 0.5)\n"
-"  -R, --restartable    run tests in restartable mode\n"
+"      --log-path=path   path pointing to file for application logs (default:\n"
+"                          log.txt)\n"
+"  -j, --jobs=count      number of concurrent jobs (default: 7)\n"
+"  -r, --ratio=value     expected pass/fail ratio (default: 0.5)\n"
+"  -R, --restartable     run tests in restartable mode\n"
+"      --framework[=fw]  a framework to use\n"
+"                          =(abc|very|long|string|as|one|word|should|be|printed|alone)\n"
+"                          in this app (default: work)\n"
 "\n"
 "All long form options can be used in program configuration file: tressrc.\n"
 "\n"

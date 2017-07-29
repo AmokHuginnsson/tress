@@ -349,10 +349,15 @@ int handle_program_options( int argc_, char** argv_ ) {
 	po.process_rc_file( "", set_variables );
 	int unknown( 0 );
 	int nonOption( po.process_command_line( argc_, argv_, &unknown ) );
+	if ( noColor ) {
+		setup._color = false;
+	}
 	if ( help || dumpConf || vers || ( unknown > 0 ) ) {
+		info.color( setup._color ).markdown( setup._verbose );
 		if ( unknown > 0 ) {
-			if ( setup._reporter == "qt" )
+			if ( setup._reporter == "qt" ) {
 				cerr << "NOTICE: Remember to add options terminator `--' as last argument while using QT reporter." << endl;
+			}
 			util::show_help( info );
 		} else if ( help ) {
 			util::show_help( info );
@@ -364,17 +369,17 @@ int handle_program_options( int argc_, char** argv_ ) {
 		HLog::disable_auto_rehash();
 		throw unknown;
 	}
-	if ( noColor )
-		setup._color = false;
 	if ( !testFilter.is_empty() ) {
 		int long dot( testFilter.find_one_of( "./" ) );
 		if ( dot != HString::npos ) {
 			setup._testGroups.push_back( testFilter.left( dot ) );
 			HString no( testFilter.mid( dot + 2 ) );
-			if ( ! no.is_empty() && ( testFilter[dot + 1] == '<' ) )
+			if ( ! no.is_empty() && ( testFilter[dot + 1] == '<' ) ) {
 				setup._testNumber = lexical_cast<int>( no );
-		} else
+			}
+		} else {
 			setup._testGroups.push_back( testFilter );
+		}
 	}
 	if ( setup._debug ) {
 		hcore::log << "arguments:";
