@@ -905,5 +905,17 @@ TUT_UNIT_TEST( "report execution error" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "bad number of arguments to main()" )
+	HHuginn h;
+	HStringStream s( "main(){}" );
+	h.load( s );
+	h.preprocess();
+	h.parse();
+	h.compile();
+	h.add_argument( "dummy" );
+	h.execute();
+	ENSURE_EQUALS( "would crash", h.error_message(), "*anonymous stream*:1:1: Bad number of parameters in call to: `main()', expected exactly: 0, got: 1." );
+TUT_TEARDOWN()
+
 }
 
