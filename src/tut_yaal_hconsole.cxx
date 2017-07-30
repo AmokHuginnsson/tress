@@ -189,46 +189,6 @@ TUT_UNIT_TEST( "ungetch/getch" )
 	cons.leave_curses();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "fg_to_bg" )
-	ENSURE_EQUALS( "red", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_RED ) ), static_cast<int>( COLOR::BG_RED ) );
-	ENSURE_EQUALS( "green", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_GREEN ) ), static_cast<int>( COLOR::BG_GREEN ) );
-	ENSURE_EQUALS( "blue", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_BLUE ) ), static_cast<int>( COLOR::BG_BLUE ) );
-	ENSURE_EQUALS( "brown", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_BROWN ) ), static_cast<int>( COLOR::BG_BROWN ) );
-	ENSURE_EQUALS( "black", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_BLACK ) ), static_cast<int>( COLOR::BG_BLACK ) );
-	ENSURE_EQUALS( "cyan", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_CYAN ) ), static_cast<int>( COLOR::BG_CYAN ) );
-	ENSURE_EQUALS( "magenta", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_MAGENTA ) ), static_cast<int>( COLOR::BG_MAGENTA ) );
-	ENSURE_EQUALS( "gray", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_GRAY ) ), static_cast<int>( COLOR::BG_GRAY ) );
-	ENSURE_EQUALS( "brightred", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_BRIGHTRED ) ), static_cast<int>( COLOR::BG_BRIGHTRED ) );
-	ENSURE_EQUALS( "brightgreen", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_BRIGHTGREEN ) ), static_cast<int>( COLOR::BG_BRIGHTGREEN ) );
-	ENSURE_EQUALS( "brightblue", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_BRIGHTBLUE ) ), static_cast<int>( COLOR::BG_BRIGHTBLUE ) );
-	ENSURE_EQUALS( "brightcyan", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_BRIGHTCYAN ) ), static_cast<int>( COLOR::BG_BRIGHTCYAN ) );
-	ENSURE_EQUALS( "brightmagenta", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_BRIGHTMAGENTA ) ), static_cast<int>( COLOR::BG_BRIGHTMAGENTA ) );
-	ENSURE_EQUALS( "yellow", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_YELLOW ) ), static_cast<int>( COLOR::BG_YELLOW ) );
-	ENSURE_EQUALS( "white", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_WHITE ) ), static_cast<int>( COLOR::BG_WHITE ) );
-	ENSURE_EQUALS( "lightgray", static_cast<int>( COLOR::fg_to_bg( COLOR::FG_LIGHTGRAY ) ), static_cast<int>( COLOR::BG_LIGHTGRAY ) );
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "to_ansi" )
-	ENSURE_EQUALS( "default", *COLOR::to_ansi( COLOR::ATTR_DEFAULT ), *ansi::reset );
-	ENSURE_EQUALS( "default", *COLOR::to_ansi( static_cast<COLOR::color_t>( 100 ) ), *ansi::reset );
-	ENSURE_EQUALS( "red", *COLOR::to_ansi( COLOR::FG_RED ), *ansi::red );
-	ENSURE_EQUALS( "green", *COLOR::to_ansi( COLOR::FG_GREEN ), *ansi::green );
-	ENSURE_EQUALS( "blue", *COLOR::to_ansi( COLOR::FG_BLUE ), *ansi::blue );
-	ENSURE_EQUALS( "brown", *COLOR::to_ansi( COLOR::FG_BROWN ), *ansi::brown );
-	ENSURE_EQUALS( "black", *COLOR::to_ansi( COLOR::FG_BLACK ), *ansi::black );
-	ENSURE_EQUALS( "cyan", *COLOR::to_ansi( COLOR::FG_CYAN ), *ansi::cyan );
-	ENSURE_EQUALS( "magenta", *COLOR::to_ansi( COLOR::FG_MAGENTA ), *ansi::magenta );
-	ENSURE_EQUALS( "gray", *COLOR::to_ansi( COLOR::FG_GRAY ), *ansi::gray );
-	ENSURE_EQUALS( "brightred", *COLOR::to_ansi( COLOR::FG_BRIGHTRED ), *ansi::brightred );
-	ENSURE_EQUALS( "brightgreen", *COLOR::to_ansi( COLOR::FG_BRIGHTGREEN ), *ansi::brightgreen );
-	ENSURE_EQUALS( "brightblue", *COLOR::to_ansi( COLOR::FG_BRIGHTBLUE ), *ansi::brightblue );
-	ENSURE_EQUALS( "brightcyan", *COLOR::to_ansi( COLOR::FG_BRIGHTCYAN ), *ansi::brightcyan );
-	ENSURE_EQUALS( "brightmagenta", *COLOR::to_ansi( COLOR::FG_BRIGHTMAGENTA ), *ansi::brightmagenta );
-	ENSURE_EQUALS( "yellow", *COLOR::to_ansi( COLOR::FG_YELLOW ), *ansi::yellow );
-	ENSURE_EQUALS( "white", *COLOR::to_ansi( COLOR::FG_WHITE ), *ansi::white );
-	ENSURE_EQUALS( "lightgray", *COLOR::to_ansi( COLOR::FG_LIGHTGRAY ), *ansi::lightgray );
-TUT_TEARDOWN()
-
 TUT_UNIT_TEST( "notify_keyboard" )
 	HConsole& cons( HConsole::get_instance() );
 	cons.enter_curses();

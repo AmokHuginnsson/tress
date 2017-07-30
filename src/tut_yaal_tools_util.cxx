@@ -134,6 +134,7 @@ TUT_UNIT_TEST( "show help" )
 		.note( "Footer..." )
 		.color( false )
 		.markdown( false );
+	ENSURE_NOT( "color failed", info.color() );
 	int i( 0 );
 	double d( 0 );
 	HString s;
@@ -295,6 +296,35 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "failure" )
 	ENSURE_THROW( "failure failed :)", util::failure( 7, "doh!" ), int );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "highlight" )
+	HTheme t( COLOR::ATTR_BOLD, COLOR::ATTR_UNDERLINE, COLOR::ATTR_REVERSE, COLOR::ATTR_BLINK );
+	ENSURE_EQUALS(
+		"highlight bold failed",
+		highlight( "highlight **bold** text", t ),
+		"highlight \033[1mbold\033[0m\033[0m text"
+	);
+	ENSURE_EQUALS(
+		"highlight underline failed",
+		highlight( "highlight *underline* text", t ),
+		"highlight \033[4munderline\033[0m\033[0m text"
+	);
+	ENSURE_EQUALS(
+		"highlight code failed",
+		highlight( "highlight `code` text", t ),
+		"highlight \033[7mcode\033[0m\033[0m text"
+	);
+	ENSURE_EQUALS(
+		"highlight special failed",
+		highlight( "highlight $special$ text", t ),
+		"highlight \033[5mspecial\033[0m\033[0m text"
+	);
+	ENSURE_EQUALS(
+		"highlight mixing failed",
+		highlight( "highlight	**x** = `foo( $pi$ )` *// comment* text", t ),
+		"highlight	[1mx[0m[0m = [7mfoo( [5mpi[0m[7m )[0m[0m [4m// comment[0m[0m text"
+	);
 TUT_TEARDOWN()
 
 }
