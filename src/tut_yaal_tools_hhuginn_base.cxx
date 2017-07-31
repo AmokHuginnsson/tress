@@ -64,8 +64,16 @@ void HIntrospector::do_introspect( yaal::tools::HIntrospecteeInterface& introspe
 	}
 	_callStacks.push_back( yaal::move( callStack ) );
 	yaal::tools::HIntrospecteeInterface::HCallSite const& cs( _callStacks.back().front() );
-	_identifierNamesLog.insert( make_pair( make_pair( cs.file(), cs.line() ), introspectee_.get_locals( 0 ) ) );
-	_identifierNamesLogUp.insert( make_pair( make_pair( cs.file(), cs.line() ), introspectee_.get_locals( 1 ) ) );
+	identifier_names_t in;
+	for ( HIntrospecteeInterface::HVariableView const& vv : introspectee_.get_locals( 0 ) ) {
+		in.push_back( vv.name() );
+	}
+	_identifierNamesLog.insert( make_pair( make_pair( cs.file(), cs.line() ), in ) );
+	in.clear();
+	for ( HIntrospecteeInterface::HVariableView const& vv : introspectee_.get_locals( 1 ) ) {
+		in.push_back( vv.name() );
+	}
+	_identifierNamesLogUp.insert( make_pair( make_pair( cs.file(), cs.line() ), in ) );
 }
 
 yaal::tools::HIntrospecteeInterface::call_stack_t const* HIntrospector::get_stack( yaal::hcore::HString const& file_, int line_ ) {
@@ -82,12 +90,12 @@ yaal::tools::HIntrospecteeInterface::call_stack_t const* HIntrospector::get_stac
 	return ( callStack );
 }
 
-yaal::tools::HIntrospecteeInterface::identifier_names_t const* HIntrospector::get_locals( yaal::hcore::HString const& file_, int line_ ) {
+HIntrospector::identifier_names_t const* HIntrospector::get_locals( yaal::hcore::HString const& file_, int line_ ) {
 	identifier_names_log_t::const_iterator it( _identifierNamesLog.find( make_pair( file_, line_ ) ) );
 	return ( it != _identifierNamesLog.end() ?  &it->second : nullptr );
 }
 
-yaal::tools::HIntrospecteeInterface::identifier_names_t const* HIntrospector::get_locals_up( yaal::hcore::HString const& file_, int line_ ) {
+HIntrospector::identifier_names_t const* HIntrospector::get_locals_up( yaal::hcore::HString const& file_, int line_ ) {
 	identifier_names_log_t::const_iterator it( _identifierNamesLogUp.find( make_pair( file_, line_ ) ) );
 	return ( it != _identifierNamesLogUp.end() ?  &it->second : nullptr );
 }

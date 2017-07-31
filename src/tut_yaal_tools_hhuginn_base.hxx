@@ -49,8 +49,9 @@ namespace tress {
 class HIntrospector : public yaal::tools::HIntrospectorInterface {
 public:
 	typedef yaal::hcore::HArray<yaal::tools::HIntrospecteeInterface::call_stack_t> call_stacks_t;
-	typedef yaal::hcore::HPair<yaal::hcore::HString, int> locastion_t;
-	typedef yaal::hcore::HHashMap<locastion_t, yaal::tools::HIntrospecteeInterface::identifier_names_t> identifier_names_log_t;
+	typedef yaal::hcore::HPair<yaal::hcore::HString, int> location_t;
+	typedef yaal::hcore::HArray<yaal::hcore::HString> identifier_names_t;
+	typedef yaal::hcore::HHashMap<location_t, identifier_names_t> identifier_names_log_t;
 private:
 	call_stacks_t _callStacks;
 	identifier_names_log_t _identifierNamesLog;
@@ -58,8 +59,8 @@ private:
 public:
 	HIntrospector( void );
 	yaal::tools::HIntrospecteeInterface::call_stack_t const* get_stack( yaal::hcore::HString const&, int );
-	yaal::tools::HIntrospecteeInterface::identifier_names_t const* get_locals( yaal::hcore::HString const&, int );
-	yaal::tools::HIntrospecteeInterface::identifier_names_t const* get_locals_up( yaal::hcore::HString const&, int );
+	identifier_names_t const* get_locals( yaal::hcore::HString const&, int );
+	identifier_names_t const* get_locals_up( yaal::hcore::HString const&, int );
 protected:
 	virtual void do_introspect( yaal::tools::HIntrospecteeInterface& ) override;
 };

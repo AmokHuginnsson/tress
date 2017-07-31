@@ -2085,7 +2085,7 @@ TUT_UNIT_TEST( "introspection" )
 		++ row;
 	}
 	/* top frame */ {
-		HIntrospecteeInterface::identifier_names_t const* identifierNames( introspector.get_locals( "*anonymous stream*", 2 ) );
+		HIntrospector::identifier_names_t const* identifierNames( introspector.get_locals( "*anonymous stream*", 2 ) );
 		hcore::HString names;
 		for ( hcore::HString const& n : *identifierNames ) {
 			if ( ! names.is_empty() ) {
@@ -2096,7 +2096,7 @@ TUT_UNIT_TEST( "introspection" )
 		ENSURE_EQUALS( "get_locals failed", names, "x y" );
 	}
 	/* second frame */ {
-		HIntrospecteeInterface::identifier_names_t const* identifierNames( introspector.get_locals_up( "*anonymous stream*", 2 ) );
+		HIntrospector::identifier_names_t const* identifierNames( introspector.get_locals_up( "*anonymous stream*", 2 ) );
 		hcore::HString names;
 		for ( hcore::HString const& n : *identifierNames ) {
 			if ( ! names.is_empty() ) {
