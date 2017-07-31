@@ -2052,21 +2052,29 @@ TUT_UNIT_TEST( "introspection" )
 	ENSURE_EQUALS(
 		"Stream.read failed",
 		execute(
-			"foo(x) {\n"
-			"\tx + 1;\n"
-			"}\n\n"
+			"foo( x ) {\n"
+			"\ty = x + 1;\n"
+			"\treturn ( y );\n"
+			"}\n"
+			"\n"
+			"bar( p ) {\n"
+			"\tq = foo( p ) * 2;\n"
+			"\treturn ( q );\n"
+			"}\n"
+			"\n"
 			"main() {\n"
-			"\tfoo( 0 );\n"
+			"\tbar( 0 );\n"
 			"}\n",
 			HHuginn::COMPILER::DEFAULT,
 			&introspector
 		),
-		"1"
+		"2"
 	);
-	HIntrospecteeInterface::call_stack_t const* callStack( introspector.get_stack( "*anonymous stream*", 6 ) );
+	HIntrospecteeInterface::call_stack_t const* callStack( introspector.get_stack( "*anonymous stream*", 2 ) );
 	char const expected[][64] = {
 		"*anonymous stream*:2:2:foo",
-		"*anonymous stream*:6:5:main"
+		"*anonymous stream*:7:9:bar",
+		"*anonymous stream*:12:5:main"
 	};
 	HStringStream ss;
 	int row( 0 );
@@ -2075,6 +2083,28 @@ TUT_UNIT_TEST( "introspection" )
 		ENSURE_EQUALS( "getting call stack failed", ss.str(), expected[row] );
 		ss.reset();
 		++ row;
+	}
+	/* top frame */ {
+		HIntrospecteeInterface::identifier_names_t const* identifierNames( introspector.get_locals( "*anonymous stream*", 2 ) );
+		hcore::HString names;
+		for ( hcore::HString const& n : *identifierNames ) {
+			if ( ! names.is_empty() ) {
+				names.append( " " );
+			}
+			names.append( n );
+		}
+		ENSURE_EQUALS( "get_locals failed", names, "x y" );
+	}
+	/* second frame */ {
+		HIntrospecteeInterface::identifier_names_t const* identifierNames( introspector.get_locals_up( "*anonymous stream*", 2 ) );
+		hcore::HString names;
+		for ( hcore::HString const& n : *identifierNames ) {
+			if ( ! names.is_empty() ) {
+				names.append( " " );
+			}
+			names.append( n );
+		}
+		ENSURE_EQUALS( "get_locals failed", names, "p q" );
 	}
 TUT_TEARDOWN()
 

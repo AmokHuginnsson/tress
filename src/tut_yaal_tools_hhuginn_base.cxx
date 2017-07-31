@@ -48,7 +48,9 @@ int tut_yaal_tools_hhuginn_base::_refCount = 0;
 yaal::hcore::HMutex tut_yaal_tools_hhuginn_base::_refCountMutex;
 
 HIntrospector::HIntrospector( void )
-	: _callStacks() {
+	: _callStacks()
+	, _identifierNamesLog()
+	, _identifierNamesLogUp() {
 }
 
 void HIntrospector::do_introspect( yaal::tools::HIntrospecteeInterface& introspectee_ ) {
@@ -61,13 +63,16 @@ void HIntrospector::do_introspect( yaal::tools::HIntrospecteeInterface& introspe
 		clog << "-------------------------------------------------------------------" << endl;
 	}
 	_callStacks.push_back( yaal::move( callStack ) );
+	yaal::tools::HIntrospecteeInterface::HCallSite const& cs( _callStacks.back().front() );
+	_identifierNamesLog.insert( make_pair( make_pair( cs.file(), cs.line() ), introspectee_.get_locals( 0 ) ) );
+	_identifierNamesLogUp.insert( make_pair( make_pair( cs.file(), cs.line() ), introspectee_.get_locals( 1 ) ) );
 }
 
 yaal::tools::HIntrospecteeInterface::call_stack_t const* HIntrospector::get_stack( yaal::hcore::HString const& file_, int line_ ) {
 	yaal::tools::HIntrospecteeInterface::call_stack_t const* callStack( nullptr );
 	for ( yaal::tools::HIntrospecteeInterface::call_stack_t const& cs : _callStacks ) {
 		if ( ! cs.is_empty() ) {
-			yaal::tools::HIntrospecteeInterface::HCallSite const& callSite( cs.back() );
+			yaal::tools::HIntrospecteeInterface::HCallSite const& callSite( cs.front() );
 			if ( ( callSite.file() == file_ ) && ( callSite.line() == line_ ) ) {
 				callStack = &cs;
 				break;
@@ -75,6 +80,16 @@ yaal::tools::HIntrospecteeInterface::call_stack_t const* HIntrospector::get_stac
 		}
 	}
 	return ( callStack );
+}
+
+yaal::tools::HIntrospecteeInterface::identifier_names_t const* HIntrospector::get_locals( yaal::hcore::HString const& file_, int line_ ) {
+	identifier_names_log_t::const_iterator it( _identifierNamesLog.find( make_pair( file_, line_ ) ) );
+	return ( it != _identifierNamesLog.end() ?  &it->second : nullptr );
+}
+
+yaal::tools::HIntrospecteeInterface::identifier_names_t const* HIntrospector::get_locals_up( yaal::hcore::HString const& file_, int line_ ) {
+	identifier_names_log_t::const_iterator it( _identifierNamesLogUp.find( make_pair( file_, line_ ) ) );
+	return ( it != _identifierNamesLogUp.end() ?  &it->second : nullptr );
 }
 
 tut_yaal_tools_hhuginn_base::tut_yaal_tools_hhuginn_base( void )
