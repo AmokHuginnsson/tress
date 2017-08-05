@@ -315,6 +315,13 @@ TUT_UNIT_TEST( "edit widget edit and motion" )
 			KEY<'q'>::command, KEY<'x'>::command
 		}
 	);
+	play(
+		"find_eow", {
+			KEY_CODE::DOWN, KEY_CODE::RIGHT, KEY_CODE::DOWN, '\r', '\t',
+			KEY_CODE::END, KEY_CODE::ESCAPE, 'b', KEY_CODE::ESCAPE, 'f',
+			KEY<'q'>::command, KEY<'x'>::command
+		}
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "logpad motion" )
