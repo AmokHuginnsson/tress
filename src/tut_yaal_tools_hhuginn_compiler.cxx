@@ -31,10 +31,13 @@ M_VCSID( "$Id: " __ID__ " $" )
 
 #include "tut_yaal_tools_hhuginn_base.hxx"
 
+#include "setup.hxx"
+
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
+using namespace tress;
 using namespace tress::tut_helpers;
 
 namespace tut {
@@ -54,6 +57,11 @@ struct tut_yaal_tools_hhuginn_compiler : public tress::tut_yaal_tools_hhuginn_ba
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn_compiler, "yaal::tools::HHuginn,compiler" );
 
 void tut_yaal_tools_hhuginn_compiler::test_compile( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
+	if ( setup._verbose && setup._debug ) {
+		clog << "// HUGINN TEST CASE START" << endl;
+		clog << prog_ << endl;
+		clog << "// HUGINN TEST CASE FINISH" << endl;
+	}
 	HStringStream prog( prog_ );
 	HHuginn h;
 	h.load( prog );

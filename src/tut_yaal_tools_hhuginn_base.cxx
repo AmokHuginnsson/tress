@@ -256,7 +256,13 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 	HIntrospector* introspector_
 ) {
 	if ( setup._verbose ) {
+		if ( setup._debug ) {
+			clog << "// HUGINN TEST CASE START" << endl;
+		}
 		clog << prettify( source_ ) << endl;
+		if ( setup._debug ) {
+			clog << "// HUGINN TEST CASE FINISH" << endl;
+		}
 	}
 	HHuginn h;
 	HLock l( _mutex );
@@ -291,7 +297,13 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute_except(
 	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_
 ) {
 	if ( setup._verbose ) {
+		if ( setup._debug ) {
+			clog << "// HUGINN TEST CASE START" << endl;
+		}
 		clog << prettify( source_ ) << endl;
+		if ( setup._debug ) {
+			clog << "// HUGINN TEST CASE FINISH" << endl;
+		}
 	}
 	HHuginn h;
 	h.set_max_call_stack_size( 128 );
@@ -325,7 +337,13 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute_except(
 
 tut_yaal_tools_hhuginn_base::OHuginnResult tut_yaal_tools_hhuginn_base::execute_result( yaal::hcore::HString const& source_ ) {
 	if ( setup._verbose ) {
+		if ( setup._debug ) {
+			clog << "// HUGINN TEST CASE START" << endl;
+		}
 		clog << prettify( source_ ) << endl;
+		if ( setup._debug ) {
+			clog << "// HUGINN TEST CASE FINISH" << endl;
+		}
 	}
 	HHuginn::ptr_t h( make_pointer<HHuginn>() );
 	HLock l( _mutex );

@@ -1,0 +1,59 @@
+#! /usr/bin/python3
+
+import os, errno
+import sys
+import argparse
+
+try:
+	import subprocess
+except:
+	print( "Importing `subprocess' module failed!" )
+	sys.exit( 1 )
+
+def extract_huginn_samples( path_ ):
+	with subprocess.Popen( [ "./build/debug/tress/1exec", "-j0", "-P", "HHuginn", "-v", "-d" ], bufsize = 1, stdout = subprocess.PIPE, stderr = os.open( os.devnull, os.O_RDWR ) ) as child:
+		testCaseNo = 0
+		f = None
+		while True:
+			line = child.stdout.readline()
+			if not line:
+				break
+			if line == b"// HUGINN TEST CASE START\n":
+				p = "{}/{:03d}.hgn".format( path_, testCaseNo )
+				f = open( p, "wb" )
+				testCaseNo += 1
+				print( ".", end = "" )
+				sys.stdout.flush()
+			elif line == b"// HUGINN TEST CASE FINISH\n":
+				f.close()
+				f = None
+			elif f:
+				f.write( line )
+		print( "\ntotal numer of test cases {}".format( testCaseNo ) )
+
+def main():
+	parser = argparse.ArgumentParser( description = "Extract Huginn samples from tress suite." )
+	parser.add_argument( "-D", "--directory", metavar="destPath", type = str, required = True, help = "Destination directory for extracted Huginn samples." )
+	args = parser.parse_args()
+	print( "Extracting Huginn samples into `{}` directory.".format( args.directory ) )
+	if not os.path.exists( args.directory ):
+		try:
+			os.makedirs( args.directory )
+		except OSError as e:
+			if e.errno != errno.EEXiSTS:
+				raise
+	for i in range( 2000 ):
+		n = "{:03d}.hgn".format( i )
+		try:
+			os.unlink( "{}/{}".format( args.directory, n ) )
+		except OSError as e:
+			if e.errno != errno.ENOENT:
+				raise
+	extract_huginn_samples( args.directory )
+
+if __name__ == "__main__":
+	try:
+		main()
+	except Exception as e:
+		print( "{}".format( e ) )
+
