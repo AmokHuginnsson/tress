@@ -156,6 +156,25 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 	HString nl;
 	for ( int i( 0 ); i < src_.get_length(); ++ i ) {
 		code_point_t curr( src_[i] );
+		if ( ( curr == '"' ) || ( curr == '\'' ) ) {
+			out.push_back( curr );
+			for ( int s( i + 1 ); i < src_.get_length(); ++ s ) {
+				code_point_t scan( src_[s] );
+				if ( scan == '\\' ) {
+					out.push_back( scan );
+					++ s;
+					if ( s < src_.get_length() ) {
+						out.push_back( src_[s] );
+					}
+					continue;
+				}
+				if ( scan == curr ) {
+					i = s;
+					break;
+				}
+				out.push_back( scan );
+			}
+		}
 		if ( ( i + 1 ) < src_.get_length() ) {
 			code_point_t next( src_[i + 1] );
 			if ( curr == '{' ) {

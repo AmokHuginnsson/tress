@@ -19,7 +19,7 @@ def extract_huginn_samples( path_ ):
 			if not line:
 				break
 			if line == b"// HUGINN TEST CASE START\n":
-				p = "{}/{:03d}.hgn".format( path_, testCaseNo )
+				p = "{}/{:04d}.hgn".format( path_, testCaseNo )
 				f = open( p, "wb" )
 				testCaseNo += 1
 				print( ".", end = "" )
@@ -43,7 +43,7 @@ def main():
 			if e.errno != errno.EEXiSTS:
 				raise
 	for i in range( 2000 ):
-		n = "{:03d}.hgn".format( i )
+		n = "{:04d}.hgn".format( i )
 		try:
 			os.unlink( "{}/{}".format( args.directory, n ) )
 		except OSError as e:
