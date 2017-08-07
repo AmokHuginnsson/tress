@@ -681,7 +681,7 @@ char const progExecuteErr63[] =
 char const progExecuteErr64[] =
 	"f(x){x;}\n"
 	"main(){\n"
-	"f(size)<f(type);\n"
+	"f(\"\".to_upper)<f(\"\".to_lower);\n"
 	"}\n"
 ;
 
@@ -894,7 +894,7 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 23, 3, 6 },    // 61
 		{ 35, 5, 4 },    // 62
 		{ 34, 5, 4 },    // 63
-		{ 24, 3, 8 },    // 64
+		{ 31, 3, 15 },   // 64
 		{ 11, 2, 4 },    // 65
 		{ 14, 3, 2 },    // 66
 		{ 14, 3, 2 },    // 67

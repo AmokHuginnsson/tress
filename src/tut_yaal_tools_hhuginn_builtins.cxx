@@ -45,7 +45,7 @@ namespace tut {
 struct tut_yaal_tools_hhuginn_builtins : public tress::tut_yaal_tools_hhuginn_base {
 };
 
-TUT_TEST_GROUP( tut_yaal_tools_hhuginn_builtins, "yaal::tools::HHuginn,buildins" );
+TUT_TEST_GROUP( tut_yaal_tools_hhuginn_builtins, "yaal::tools::HHuginn,builtins" );
 
 TUT_UNIT_TEST( "size" )
 	ENSURE_EQUALS( "size failed", execute( "class A{get_size(){7;}}main(){return([size(\"Ala\"),size([1,2,3,4]),size(A())]);}" ), "[3, 4, 7]" );
@@ -396,6 +396,11 @@ TUT_UNIT_TEST( "list()" )
 		execute( "main(){x=list(2,3,5);y=copy(x);x.push(7);return([x,y]);}" ),
 		"[[2, 3, 5, 7], [2, 3, 5]]"
 	);
+	ENSURE_EQUALS(
+		"list hash failed",
+		execute( "main(){[[].hash(),[1].hash()];}" ),
+		"[7, 22]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "deque()" )
@@ -476,6 +481,11 @@ TUT_UNIT_TEST( "deque()" )
 		"deque copy failed",
 		execute( "main(){x=deque(2,3,5);y=copy(x);x.push_front(7);return([x,y]);}" ),
 		"[deque(7, 2, 3, 5), deque(2, 3, 5)]"
+	);
+	ENSURE_EQUALS(
+		"deque hash failed",
+		execute( "main(){[deque().hash(),deque(1).hash()];}" ),
+		"[8, 25]"
 	);
 TUT_TEARDOWN()
 
@@ -566,6 +576,11 @@ TUT_UNIT_TEST( "dict()" )
 		execute_except( "main(){{1:2}.update({2.:3.});}" ),
 		"*anonymous stream*:1:20: Non-uniform key types, got a `real' instead of an `integer'."
 	);
+	ENSURE_EQUALS(
+		"dict hash failed",
+		execute( "main(){[dict().hash(),{1:2}.hash()];}" ),
+		"[9, 86]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "lookup()" )
@@ -654,6 +669,11 @@ TUT_UNIT_TEST( "lookup()" )
 		),
 		"\"2 -> 2, 3 -> 3, 4 -> 4, 5 -> 5, 8 -> 8, \""
 	);
+	ENSURE_EQUALS(
+		"lookup hash failed",
+		execute( "main(){l = lookup();l[1] = 2;[lookup().hash(),l.hash()];}" ),
+		"[11, 104]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "order()" )
@@ -722,6 +742,11 @@ TUT_UNIT_TEST( "order()" )
 		execute_except( "main(){order(1).update(order(2.));}" ),
 		"*anonymous stream*:1:23: Non-uniform key types, got a `real' instead of an `integer'."
 	);
+	ENSURE_EQUALS(
+		"order hash failed",
+		execute( "main(){[order().hash(),order(1).hash()];}" ),
+		"[10, 31]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set()" )
@@ -779,6 +804,11 @@ TUT_UNIT_TEST( "set()" )
 			"}\n"
 		),
 		"{2, 3, 4, 5, 8}"
+	);
+	ENSURE_EQUALS(
+		"set hash failed",
+		execute( "main(){[set().hash(),{1}.hash()];}" ),
+		"[12, 37]"
 	);
 TUT_TEARDOWN()
 
