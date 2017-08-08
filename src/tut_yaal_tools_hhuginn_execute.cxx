@@ -579,8 +579,10 @@ char const progExecuteErr52[] =
 ;
 
 char const progExecuteErr53[] =
+	"class A { _x = none; }\n"
 	"main() {\n"
-	"switch([]){case(0):{}}\n"
+	"a = A();\n"
+	"switch(A()){case(a):{a._x;}}\n"
 	"}\n"
 ;
 
@@ -883,7 +885,7 @@ TUT_UNIT_TEST( "report execution error" )
 		{ 41, 3, 9 },    // 50
 		{ 14, 2, 6 },    // 51
 		{ 12, 2, 4 },    // 52
-		{ 16, 2, 8 },    // 53
+		{ 58, 4, 18 },   // 53
 		{ 25, 3, 6 },    // 54
 		{ 16, 3, 2 },    // 55
 		{ 60, 6, 6 },    // 56
