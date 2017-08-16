@@ -110,12 +110,19 @@ void dump_dir( path const& dir ) {
 
 }
 
+#ifndef __HOST_OS_TYPE_SOLARIS__
 TUT_UNIT_TEST( "filesystem" )
 	yaal::hcore::HLock l( yaal::tools::HMonitor::get_instance().acquire( "locale" ) );
 	setlocale( LC_ALL, "C" );
-	dump_dir( path( "./build" ) );
+	try {
+		dump_dir( path( "./build" ) );
+	} catch ( ... ) {
+		setlocale( LC_ALL, "" );
+		throw;
+	}
 	setlocale( LC_ALL, "" );
 TUT_TEARDOWN()
+#endif /* #ifndef __HOST_OS_TYPE_SOLARIS__ */
 
 TUT_UNIT_TEST( "date_time" )
 	try {
