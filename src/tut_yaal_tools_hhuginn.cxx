@@ -1388,6 +1388,16 @@ TUT_UNIT_TEST( "incremental mode" )
 		{ "3*4;" }
 	};
 	ENSURE_EQUALS( "Compiler errors in incemental mode while importing user defined submodule", execute_incremental( l6 ), "4*anonymous stream*:1:8: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: `integer' vs `real'.12" );
+	lines_t l7{
+		{ "solve(){a;}", OLine::TYPE::DEFINITION },
+		{ "solve();" }
+	};
+	ENSURE_EQUALS( "Crash trigger", execute_incremental( l7 ), "*anonymous stream*:1:9: Symbol `a' is not defined in this context (did you mean `add'?).*anonymous stream*:2:1: Symbol `solve' is not defined in this context (did you mean `size'?)." );
+	lines_t l8{
+		{ "class A { constructor(){a;} }", OLine::TYPE::DEFINITION },
+		{ "A();" }
+	};
+	ENSURE_EQUALS( "Crash trigger", execute_incremental( l8 ), "*anonymous stream*:1:25: Symbol `a' is not defined in this context (did you mean `A'?).*anonymous stream*:2:1: Symbol `A' is not defined in this context (did you mean `a'?)." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "introspection" )
