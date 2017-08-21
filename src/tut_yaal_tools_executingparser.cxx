@@ -393,6 +393,13 @@ TUT_UNIT_TEST( "HStringLiteral" )
 		epa();
 		ENSURE_EQUALS( "bad position from string_literal's action", pos.get(), 0 );
 	}
+	/* hex codes */ {
+		s.clear();
+		ep( "\"a\\x20b\\\\x20c\\x0\",\"a\\x\"" );
+		ep();
+		ENSURE_EQUALS( "bad hex code parse 1", s[0], "a b\\x20cx0" );
+		ENSURE_EQUALS( "bad hex code parse 2", s[1], "ax" );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HCharacterLiteral" )
