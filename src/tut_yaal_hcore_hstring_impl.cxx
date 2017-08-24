@@ -853,5 +853,11 @@ TUT_UNIT_TEST( "yen ucs>1 as last char" )
 	ENSURE_EQUALS( "ucs>1 as last char failed", s, "¥" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "lower size, increase rank" )
+	HString s( "0123456789" );
+	s.replace( 0, 10, 1, code_point_t( 0x102345 ) );
+	ENSURE_EQUALS( "replace succeeded", s, "􂍅" );
+TUT_TEARDOWN()
+
 }
 
