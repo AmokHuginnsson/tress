@@ -395,10 +395,19 @@ TUT_UNIT_TEST( "HStringLiteral" )
 	}
 	/* hex codes */ {
 		s.clear();
-		ep( "\"a\\x20b\\\\x20c\\x0\",\"a\\x\"" );
+		ep( "\"a\\x20b\\\\x20c\\x0\",\"a\\x\",\"\\u1234\",\"\\U00102345\"" );
 		ep();
-		ENSURE_EQUALS( "bad hex code parse 1", s[0], "a b\\x20cx0" );
-		ENSURE_EQUALS( "bad hex code parse 2", s[1], "ax" );
+		char const expected[][16] = {
+			"a b\\x20cx0",
+			"ax",
+			"ሴ",
+			"􂍅"
+		};
+		int i( 0 );
+		for ( strings_t::const_iterator it( s.begin() ), end( s.end() ); it != end; ++ it, ++ i ) {
+			ENSURE( "too many elements acquired", i < countof ( expected ) );
+			ENSURE_EQUALS( "Failed to acquire string from string literal", *it, expected[i] );
+		}
 	}
 TUT_TEARDOWN()
 
