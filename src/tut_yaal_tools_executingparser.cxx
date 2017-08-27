@@ -465,6 +465,27 @@ TUT_UNIT_TEST( "HCharacterLiteral" )
 		epa();
 		ENSURE_EQUALS( "bad position from character_literal's action", pos.get(), 0 );
 	}
+	/* hex codes */ {
+		c.clear();
+		ep( "'\\x20','\\x','\\u1234','\\U00102345'" );
+		ep();
+		code_point_t const expected[] = {
+			' '_ycp,
+			'x'_ycp,
+#ifndef __MSVCXX__
+			U'ሴ'_ycp,
+			U'􂍅'_ycp
+#else
+			4660_ycp,
+			1057605_ycp
+#endif
+		};
+		int i( 0 );
+		for ( characters_t::const_iterator it( c.begin() ), end( c.end() ); it != end; ++ it, ++ i ) {
+			ENSURE( "too many elements acquired", i < countof ( expected ) );
+			ENSURE_EQUALS( "Failed to acquire string from string literal", *it, expected[i] );
+		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HCharacter" )
