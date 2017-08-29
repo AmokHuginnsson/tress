@@ -393,15 +393,16 @@ TUT_UNIT_TEST( "HStringLiteral" )
 		epa();
 		ENSURE_EQUALS( "bad position from string_literal's action", pos.get(), 0 );
 	}
-	/* hex codes */ {
+	/* hex and octal codes */ {
 		s.clear();
-		ep( "\"a\\x20b\\\\x20c\\x0\",\"a\\x\",\"\\u1234\",\"\\U00102345\"" );
+		ep( "\"a\\x20b\\\\x20c\\x0\",\"a\\x\",\"\\u1234\",\"\\U00102345\", \"\\1234\"" );
 		ep();
 		char const expected[][16] = {
 			"a b\\x20cx0",
 			"ax",
 			"ሴ",
-			"􂍅"
+			"􂍅",
+			"S4"
 		};
 		int i( 0 );
 		for ( strings_t::const_iterator it( s.begin() ), end( s.end() ); it != end; ++ it, ++ i ) {
