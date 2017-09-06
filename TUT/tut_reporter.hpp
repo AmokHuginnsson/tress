@@ -23,6 +23,8 @@
  */
 namespace {
 
+static int const _maxWidth_( yaal::tools::_terminal_.exists() ? yaal::tools::xmath::clip( 80, yaal::tools::_terminal_.size().second, 128 ) : 0x10000 );
+
 std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 	char const* tags[][2] = {
 			{ ".", "OK" },
@@ -313,13 +315,12 @@ public:
 		yaal::hcore::HLock l( _mutex );
 
 		std::string const& name( tr._group ? tr._group->get_name() : tr._message );
-		static int const maxWidth( yaal::tools::_terminal_.exists() ? yaal::tools::xmath::clip( 80, yaal::tools::_terminal_.size().second, 128 ) : 0x10000 );
 
 		if ( ! tress::setup._verbose && ( name != _currentGroup ) ) {
 			if ( ! _currentGroup.empty() )
 				_os << "\n";
 			if ( ( _errorLine == console_error_line ) && tress::setup._fancy )
-				_os << "\r" << std::string( static_cast<size_t>( maxWidth - 1 ), ' ' ) << "\r" << name << std::flush;
+				_os << "\r" << std::string( static_cast<size_t>( _maxWidth_ - 1 ), ' ' ) << "\r" << name << std::flush;
 			else
 				_os << name << ": " << std::flush;
 			_currentGroup = name;
@@ -348,7 +349,7 @@ public:
 
 		if ( tress::setup._fancy ) {
 			_groupTestLog << tr << std::flush;
-			int progressMax( maxWidth - 12 );
+			int progressMax( _maxWidth_ - 12 );
 			int total( _terminationsCount + _exceptionsCount + _failuresCount + _skippedCount + _warningsCount + _setupCount + _okCount );
 			int progressCur( ( progressMax * total ) / _totalTestCount );
 			if ( total )
@@ -373,7 +374,7 @@ public:
 			std::stringstream ss;
 			ss << '(' << tr._group->get_time_elapsed() << ')';
 			std::string timeElapsed( ss.str() );
-			int spaceCount( maxWidth - ( 9 + static_cast<int>( name.length() ) + _currentGroupTestCount + static_cast<int>( timeElapsed.length() ) ) );
+			int spaceCount( _maxWidth_ - ( 9 + static_cast<int>( name.length() ) + _currentGroupTestCount + static_cast<int>( timeElapsed.length() ) ) );
 			if ( spaceCount > 0 ) {
 				std::string space( static_cast<size_t>( spaceCount ), ' ' );
 				_os << space;
