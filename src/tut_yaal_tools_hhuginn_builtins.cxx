@@ -230,6 +230,16 @@ TUT_UNIT_TEST( "string()" )
 		),
 		"\"a 13 } 7 b\""
 	);
+	ENSURE_EQUALS(
+		"string.format() failed",
+		execute(
+			"main(){\n"
+			"s=\"a {:#7x} {:02d} b\";\n"
+			"return(s.format(123, 1));\n"
+			"}\n"
+		),
+		"\"a    0x7b 01 b\""
+	);
 	ENSURE_EQUALS( "string.format() on too few args succeeded", execute_except( "main(){s=\"a {} b\";s.format();}" ), "*anonymous stream*:1:27: Wrong value index at: 3" );
 	ENSURE_EQUALS( "string.format() on too many args succeeded", execute_except( "main(){s=\"a b\";s.format(1);}" ), "*anonymous stream*:1:24: Not all values used in format at: 3" );
 	ENSURE_EQUALS( "string.format() on too many args succeeded", execute_except( "main(){s=\"a {\";s.format();}" ), "*anonymous stream*:1:24: Single '{' encountered in format string at: 3" );
@@ -238,6 +248,12 @@ TUT_UNIT_TEST( "string()" )
 	ENSURE_EQUALS( "string.format() on too many args succeeded", execute_except( "main(){s=\"a {} {{}} {0} b\";s.format(0, 0);}" ), "*anonymous stream*:1:36: Cannot mix manual and automatic field numbering at: 12" );
 	ENSURE_EQUALS( "string.format() on too few args succeeded", execute_except( "main(){s=\"a {9999999999999999999} b\";s.format();}" ), "*anonymous stream*:1:46: Out of range value in conversion: 9999999999999999999" );
 	ENSURE_EQUALS( "string.format() on too few args succeeded", execute_except( "main(){s=\"a {99999999999999999} b\";s.format();}" ), "*anonymous stream*:1:44: Cast would lose data." );
+	ENSURE_EQUALS( "string.format() invalid type (int) succeeded", execute_except( "main(){s=\"a {:d} b\";s.format(1.);}" ), "*anonymous stream*:1:29: Expected an `integer` type at: 5" );
+	ENSURE_EQUALS( "string.format() invalid type (real) succeeded", execute_except( "main(){s=\"a {:f} b\";s.format(1);}" ), "*anonymous stream*:1:29: Expected a `real` type at: 5" );
+	ENSURE_EQUALS( "string.format() invalid type (str) succeeded", execute_except( "main(){s=\"a {:s} b\";s.format(1);}" ), "*anonymous stream*:1:29: Expected a `string` type at: 5" );
+	ENSURE_EQUALS( "string.format() invalid type (char) succeeded", execute_except( "main(){s=\"a {:c} b\";s.format(1);}" ), "*anonymous stream*:1:29: Expected a `character` type at: 5" );
+	ENSURE_EQUALS( "string.format() invalid type succeeded", execute_except( "main(){s=\"a {:q} b\";s.format(1);}" ), "*anonymous stream*:1:29: Invalid type specification at: 5" );
+	ENSURE_EQUALS( "string.format() invalid width succeeded", execute_except( "main(){s=\"a {:kd} b\";s.format(1);}" ), "*anonymous stream*:1:30: not a number: k at: 6" );
 	ENSURE_EQUALS( "user to str failed", execute( "class A{_x=none;constructor(x){_x=x;}to_string(){return(\"~\"+string(_x)+\"~\");}}main(){return(string(A(7)));}" ), "\"~7~\"" );
 	ENSURE_EQUALS( "bad user to str succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:59: Class `A' does not have `to_string' method." );
 	ENSURE_EQUALS( "bad user to str (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_string(){return(this);}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:85: User conversion method returned invalid type an `A' instead of a `string'." );
