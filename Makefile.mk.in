@@ -37,7 +37,10 @@ $(eval $(call NEW_TARGET,tress,src,-D__TRESS__ -Wno-variadic-macros,@RDYNAMIC@))
 $(eval $(call NEW_TARGET,child,child,-D__CHILD__))
 NAME = tressplugin
 SONAME_tressplugin = $(LIB_PREFIX)tressplugin$(LIB_INFIX).$(LIB_SUFFIX)-0.0
-$(eval $(call NEW_TARGET,tressplugin,data,,-lc -shared $(call quotecomma,@SONAME_FLAG@)))
+$(eval $(call NEW_TARGET,tressplugin,data/plugin,,-lc -shared $(call quotecomma,@SONAME_FLAG@)))
+NAME = huginn_greeter
+SONAME_huginn_greeter = $(LIB_PREFIX)huginn_greeter$(LIB_INFIX).$(LIB_SUFFIX)-0.0
+$(eval $(call NEW_TARGET,huginn_greeter,data/huginn_greeter,,-lc -shared $(call quotecomma,@SONAME_FLAG@)))
 EXEC_NAME    = 1exec
 DO_@DO_TARGET@=1
 ifdef NODEBUG

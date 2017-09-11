@@ -99,6 +99,12 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::DEFAULT,
 		HIntrospector* = nullptr
 	);
+	yaal::hcore::HString const& execute(
+		yaal::hcore::HString const&,
+		yaal::tools::HHuginn::paths_t const&,
+		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::DEFAULT,
+		HIntrospector* = nullptr
+	);
 	yaal::hcore::HString const& execute_except(
 		yaal::hcore::HString const&,
 		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::DEFAULT

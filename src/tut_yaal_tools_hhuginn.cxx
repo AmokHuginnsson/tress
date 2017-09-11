@@ -27,6 +27,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/hhuginn.hxx>
+#include <yaal/hcore/hcore.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -1347,6 +1348,20 @@ TUT_UNIT_TEST( "modules" )
 			{ "./data/" }
 		),
 		"./data//Tress.hgn:50:15: `Mathematics' does not have `square_foot' member (did you mean `square_root'?)."
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "binary packages" )
+	ENSURE_EQUALS(
+		"binary package failed",
+		execute(
+			"import Greeter as g;\n"
+			"main() {\n"
+			"return( g.greet(\"Huginn\") );\n"
+			"}\n",
+			{ "./data" }
+		),
+		"\"Hello, Huginn\""
 	);
 TUT_TEARDOWN()
 

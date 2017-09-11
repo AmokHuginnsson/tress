@@ -271,6 +271,7 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 
 hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 	hcore::HString const& source_,
+	yaal::tools::HHuginn::paths_t const& modulePaths_,
 	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_,
 	HIntrospector* introspector_
 ) {
@@ -294,7 +295,7 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 		clog << h.error_message() << endl;
 	}
 	ENSURE( "parse failed", p );
-	bool c( h.compile( huginnCompilerSetup_, introspector_ ) );
+	bool c( h.compile( modulePaths_, huginnCompilerSetup_, introspector_ ) );
 	if ( !c ) {
 		clog << h.error_message() << endl;
 	}
@@ -308,6 +309,14 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 	l.lock();
 	_resultCache.assign( to_string( res, &h ) );
 	return ( _resultCache );
+}
+
+hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
+	hcore::HString const& source_,
+	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_,
+	HIntrospector* introspector_
+) {
+	return ( execute( source_, {}, huginnCompilerSetup_, introspector_ ) );
 }
 
 hcore::HString const& tut_yaal_tools_hhuginn_base::execute_except(
