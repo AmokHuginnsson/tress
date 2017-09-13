@@ -61,6 +61,7 @@ file( GLOB TUT ./TUT/*.hpp )
 add_executable( ${PROJECT_NAME} ${SRCS} ${HDRS} ../yaal/_aux/cmake/client-config.hxx )
 add_executable( child ${CHILD_SRCS} ${CHILD_HDRS} )
 add_library( tressplugin MODULE data/plugin.cxx )
+add_library( huginn_greeter MODULE data/huginn_greeter.cxx )
 add_library( TUT ${TUT} )
 set_target_properties(
 	${PROJECT_NAME} PROPERTIES
@@ -84,10 +85,12 @@ set_target_properties(
 )
 set_target_properties( TUT PROPERTIES LINKER_LANGUAGE CXX )
 set_target_properties( tressplugin PROPERTIES LINKER_LANGUAGE CXX )
+set_target_properties( huginn_greeter PROPERTIES LINKER_LANGUAGE CXX )
 if ( CMAKE_HOST_WIN32 )
 	add_executable( child-simple ${CMAKE_HOME_DIRECTORY}/data/child.cxx )
 	set_target_properties( child-simple PROPERTIES LINKER_LANGUAGE CXX OUTPUT_NAME child RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_HOME_DIRECTORY}/data )
 	set_target_properties( tressplugin PROPERTIES OUTPUT_NAME tressplugin${LIB_INFIX} LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_HOME_DIRECTORY}/data )
+	set_target_properties( huginn_greeter PROPERTIES OUTPUT_NAME huginn_greeter${LIB_INFIX} LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_HOME_DIRECTORY}/data )
 	set_target_properties( child PROPERTIES COMPILE_DEFINITIONS "_SIGNAL_H=1" )
 	set_source_files_properties( ${CHILD_SRCS} PROPERTIES COMPILE_FLAGS "/FI../yaal/_aux/msvcxx/csignal /FIyaal/fix.hxx" )
 	target_link_libraries( ${PROJECT_NAME} ${Yaal_LIBRARIES} libintl )
@@ -169,7 +172,8 @@ if ( CMAKE_HOST_WIN32 )
 
 	add_dependencies( tress install_yaal )
 	add_dependencies( tressplugin install_yaal )
-
+	add_dependencies( huginn_greeter install_yaal )
+	target_link_libraries( huginn_greeter ${Yaal_LIBRARIES} )
 else()
 	set_target_properties( ${PROJECT_NAME} PROPERTIES COMPILE_FLAGS -Wno-variadic-macros )
 	set_target_properties(
@@ -182,6 +186,17 @@ else()
 		LIBRARY_OUTPUT_DIRECTORY_RELEASE ${TARGET_PATH}/tressplugin
 		LIBRARY_OUTPUT_DIRECTORY_COV ${TARGET_PATH}/tressplugin
 		LIBRARY_OUTPUT_DIRECTORY_PROF ${TARGET_PATH}/tressplugin
+	)
+	set_target_properties(
+		huginn_greeter PROPERTIES
+		OUTPUT_NAME 1exec
+		PREFIX ""
+		SUFFIX ""
+		LIBRARY_OUTPUT_DIRECTORY ${TARGET_PATH}/huginn_greeter
+		LIBRARY_OUTPUT_DIRECTORY_DEBUG ${TARGET_PATH}/huginn_greeter
+		LIBRARY_OUTPUT_DIRECTORY_RELEASE ${TARGET_PATH}/huginn_greeter
+		LIBRARY_OUTPUT_DIRECTORY_COV ${TARGET_PATH}/huginn_greeter
+		LIBRARY_OUTPUT_DIRECTORY_PROF ${TARGET_PATH}/huginn_greeter
 	)
 	add_dependencies( ${PROJECT_NAME} commit_id )
 	target_link_libraries( ${PROJECT_NAME} ${Yaal_LIBRARIES} ${Boost_LIBRARIES} dl )
