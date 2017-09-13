@@ -121,6 +121,24 @@ char const progParse10[] =
 	"}\n"
 ;
 
+char const progParse11[] =
+	"main() {\n"
+	"#     \n"
+	"}\n"
+;
+
+char const progParse12[] =
+	"main() {\n"
+	"    #\n"
+	"}\n"
+;
+
+char const progParse13[] =
+	"main() {\n"
+	"\t\"\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_parsing::test_parse( prog_src_t prog_, int const err_[3], int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
@@ -147,6 +165,9 @@ TUT_UNIT_TEST( "report parsing error" )
 		progParse8,
 		progParse9,
 		progParse10,
+		progParse11,
+		progParse12,
+		progParse13,
 		NULL
 	};
 	int const err[][3] = {
@@ -161,6 +182,9 @@ TUT_UNIT_TEST( "report parsing error" )
 		{ 9, 2, 1 },   // 8
 		{ 10, 2, 1 },  // 9
 		{ 7, 1, 8 },   // 10
+		{ 9, 2, 1 },   // 11
+		{ 13, 2, 5 },  // 12
+		{ 11, 2, 3 },  // 13
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
