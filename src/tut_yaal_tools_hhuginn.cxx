@@ -60,7 +60,7 @@ TUT_UNIT_TEST( "grammar test" )
 
 #define IDENTIFIER "[a-zA-Z\\x{0391}-\\x{03c9}_][a-zA-Z\\x{0391}-\\x{03c9}0-9_]*"
 
-	char const expected[][460] = {
+	char const expected[][480] = {
 		"huginnGrammar = +( classDefinition | functionDefinition | importStatement )",
 		"classDefinition = ( \"class\" >> classIdentifier >> -( ':' >> baseIdentifier ) >> '{' >> +( field | functionDefinition ) >> '}' )",
 		"functionDefinition = ( functionDefinitionIdentifier >> '(' >> -nameList >> ')' >> '{' >> *statement >> '}' )",
@@ -116,11 +116,12 @@ TUT_UNIT_TEST( "grammar test" )
 		"power = ( booleanNot >> *( '^' >> negation ) )",
 		"booleanNot = ( ( '!' >> factorial ) | factorial )",
 		"factorial = ( atom >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
-		"atom = ( absoluteValue | ( parenthesis >> -( memberAccess >> dereference ) ) | real | integer | ( ( numberLiteral | character_literal ) >> -( memberAccess >> functionCallOperator ) ) | ( ( listLiteral | dictLiteral | stringLiteral ) >> -( ( subscriptOperator | memberAccess ) >> dereference ) ) | ( setLiteral >> -( memberAccess >> dereference ) ) | none | true | false | ( reference >> dereference ) | ( lambda >> -( functionCallOperator >> dereference ) ) )",
+		"atom = ( absoluteValue | ( parenthesis >> -( memberAccess >> dereference ) ) | real | integer | ( ( numberLiteral | character_literal ) >> -( memberAccess >> functionCallOperator ) ) | ( ( tupleLiteral | listLiteral | dictLiteral | stringLiteral ) >> -( ( subscriptOperator | memberAccess ) >> dereference ) ) | ( setLiteral >> -( memberAccess >> dereference ) ) | none | true | false | ( reference >> dereference ) | ( lambda >> -( functionCallOperator >> dereference ) ) )",
 		"absoluteValue = ( '|' >> expression >> '|' )",
 		"parenthesis = ( '(' >> expression >> ')' )",
 		"dereference = *( subscriptOperator | functionCallOperator | memberAccess )",
 		"numberLiteral = ( '$' >> real )",
+		"tupleLiteral = ( '(' >> -argList >> ')' )",
 		"listLiteral = ( '[' >> -argList >> ']' )",
 		"dictLiteral = ( '{' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> '}' )",
 		"stringLiteral = string_literal",

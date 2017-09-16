@@ -426,7 +426,7 @@ TUT_UNIT_TEST( "list()" )
 	ENSURE_EQUALS(
 		"list hash failed",
 		execute( "main(){[[].hash(),[1].hash()];}" ),
-		"[7, 22]"
+		"[8, 25]"
 	);
 TUT_TEARDOWN()
 
@@ -523,7 +523,7 @@ TUT_UNIT_TEST( "deque()" )
 	ENSURE_EQUALS(
 		"deque hash failed",
 		execute( "main(){[deque().hash(),deque(1).hash()];}" ),
-		"[8, 25]"
+		"[9, 28]"
 	);
 TUT_TEARDOWN()
 
@@ -617,7 +617,7 @@ TUT_UNIT_TEST( "dict()" )
 	ENSURE_EQUALS(
 		"dict hash failed",
 		execute( "main(){[dict().hash(),{1:2}.hash()];}" ),
-		"[9, 86]"
+		"[10, 95]"
 	);
 TUT_TEARDOWN()
 
@@ -710,7 +710,7 @@ TUT_UNIT_TEST( "lookup()" )
 	ENSURE_EQUALS(
 		"lookup hash failed",
 		execute( "main(){l = lookup();l[1] = 2;[lookup().hash(),l.hash()];}" ),
-		"[11, 104]"
+		"[12, 113]"
 	);
 TUT_TEARDOWN()
 
@@ -783,7 +783,7 @@ TUT_UNIT_TEST( "order()" )
 	ENSURE_EQUALS(
 		"order hash failed",
 		execute( "main(){[order().hash(),order(1).hash()];}" ),
-		"[10, 31]"
+		"[11, 34]"
 	);
 TUT_TEARDOWN()
 
@@ -846,7 +846,7 @@ TUT_UNIT_TEST( "set()" )
 	ENSURE_EQUALS(
 		"set hash failed",
 		execute( "main(){[set().hash(),{1}.hash()];}" ),
-		"[12, 37]"
+		"[13, 40]"
 	);
 TUT_TEARDOWN()
 
