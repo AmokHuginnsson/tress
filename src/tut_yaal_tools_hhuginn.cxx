@@ -121,7 +121,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"parenthesis = ( '(' >> expression >> ')' )",
 		"dereference = *( subscriptOperator | functionCallOperator | memberAccess )",
 		"numberLiteral = ( '$' >> real )",
-		"tupleLiteral = ( '(' >> -argList >> ')' )",
+		"tupleLiteral = ( '(' >> -argList >> -',' >> ')' )",
 		"listLiteral = ( '[' >> -argList >> ']' )",
 		"dictLiteral = ( '{' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> '}' )",
 		"stringLiteral = string_literal",
@@ -460,8 +460,11 @@ void tut_yaal_tools_hhuginn::test_subscript( HHuginn::TYPE type_, char const* in
 		case ( HHuginn::TYPE::STRING ): {
 			src.append( "\"abcdefghijklmnopqrstuvwxyz\"" );
 		} break;
+		case ( HHuginn::TYPE::TUPLE ): {
+			src.append( "('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z')" );
+		} break;
 		case ( HHuginn::TYPE::LIST ): {
-			src.append( "list('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z')" );
+			src.append( "['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']" );
 		} break;
 		case ( HHuginn::TYPE::DEQUE ): {
 			src.append( "deque('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z')" );
@@ -478,6 +481,7 @@ void tut_yaal_tools_hhuginn::test_subscript( HHuginn::TYPE type_, char const* in
 TUT_UNIT_TEST( "subscript" )
 	HHuginn::TYPE types[] = {
 		HHuginn::TYPE::STRING,
+		HHuginn::TYPE::TUPLE,
 		HHuginn::TYPE::LIST,
 		HHuginn::TYPE::DEQUE
 	};
@@ -503,12 +507,16 @@ TUT_TEARDOWN()
 
 void tut_yaal_tools_hhuginn::test_range( HHuginn::TYPE type_, char const* range_, char const* result_ ) {
 	hcore::HString src;
-	if ( type_ == HHuginn::TYPE::STRING ) {
+	char const x[] = "('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z')";
+	if ( type_ == HHuginn::TYPE::TUPLE ) {
+		src.append( "import Text as T;import Algorithms as A;main(){return(T.join(A.materialize(A.map(" ).append( x ).append( "[" ).append( range_ ).append( "],string),list),\"\"));}" );
+	} else if ( type_ == HHuginn::TYPE::STRING ) {
 		src.append( "main(){return(\"abcdefghijklmnopqrstuvwxyz\"[" ).append( range_ ).append( "]);}" );
 	} else {
 		src.append( "import Text as t;apply(x,T){i=0;s=size(x);while(i<s){x[i]=T(x[i]);i+=1;}return(x);}main(){return(t.join(apply(" )
 			.append( type_ == HHuginn::TYPE::LIST ? "list" : "deque" )
-			.append( "('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z')[" )
+			.append( x )
+			.append( "[" )
 			.append( range_ )
 			.append( "],string),\"\"));}" );
 	}
@@ -519,6 +527,7 @@ void tut_yaal_tools_hhuginn::test_range( HHuginn::TYPE type_, char const* range_
 TUT_UNIT_TEST( "range(slice)" )
 	HHuginn::TYPE types[] = {
 		HHuginn::TYPE::STRING,
+		HHuginn::TYPE::TUPLE,
 		HHuginn::TYPE::LIST,
 		HHuginn::TYPE::DEQUE
 	};

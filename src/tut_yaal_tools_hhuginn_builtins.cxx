@@ -342,6 +342,64 @@ TUT_UNIT_TEST( "character()" )
 	ENSURE_EQUALS( "bad user to character (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_character(){return(this);}}main(){return(character(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:91: User conversion method returned invalid type an `A' instead of a `character'." );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "tuple()" )
+	ENSURE_EQUALS(
+		"tuple failed (explicit)",
+		execute( "main(){x=tuple(\"a\",\"b\",\"c\");v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ),
+		"\"3abc\""
+	);
+	ENSURE_EQUALS(
+		"tuple failed (literal)",
+		execute( "main(){x=(\"a\",\"b\",\"c\");v=\"\";v=v+string(size(x));v=v+x[0];v=v+x[1];v=v+x[2];return(v);}" ),
+		"\"3abc\""
+	);
+	ENSURE_EQUALS( "tuple failed (crazy)", execute( "f(a){return(\"X\"+a+\"X\");}main(){return((f,)[0](\"hi\"));}" ), "\"XhiX\"" );
+	ENSURE_EQUALS(
+		"tuple to_string failed",
+		execute( "main(){x=tuple(2,3,5,7);return(x);}" ),
+		"(2, 3, 5, 7)"
+	);
+	ENSURE_EQUALS( "tuple reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed((2,3,5,7)),tuple);}" ), "(7, 5, 3, 2)" );
+	ENSURE_EQUALS( "tuple size/copy reversed() failed", execute( "import Algorithms as algo;main(){x=algo.reversed((2,3,5,7));(algo.materialize(copy(x),tuple),size(x));}" ), "((7, 5, 3, 2), 4)" );
+	ENSURE_EQUALS(
+		"tuple equals failed",
+		execute(
+			"main(){"
+			"t1=(1,2,3);"
+			"t2=(1,2,3);"
+			"t3=(1,2,4);"
+			"return((t1==t2,t1==t3));}"
+		),
+		"(true, false)"
+	);
+	ENSURE_EQUALS(
+		"tuple equals failed",
+		execute(
+			"main(){"
+			"t1=(1,2,3);"
+			"t2=(1,2,3);"
+			"t3=(1,2,4);"
+			"return((t1<t2,t1<t3));}"
+		),
+		"(false, true)"
+	);
+	ENSURE_EQUALS(
+		"tuple() iterator failed",
+		execute( "main(){x=(2,3,5,7);v=\"\";for(e:x){v+=string(e);v+=\":\";}return(v);}" ),
+		"\"2:3:5:7:\""
+	);
+	ENSURE_EQUALS(
+		"tuple copy failed",
+		execute( "main(){s=\"orig\";x=tuple(2,3,s);y=copy(x);s+=\"new\";return((x,y));}" ),
+		"((2, 3, \"orignew\"), (2, 3, \"orig\"))"
+	);
+	ENSURE_EQUALS(
+		"tuple hash failed",
+		execute( "main(){(().hash(),(1,).hash());}" ),
+		"(7, 22)"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "list()" )
 	ENSURE_EQUALS(
 		"list failed (explicit)",
