@@ -359,6 +359,11 @@ TUT_UNIT_TEST( "tuple()" )
 		execute( "main(){x=tuple(2,3,5,7);return(x);}" ),
 		"(2, 3, 5, 7)"
 	);
+	ENSURE_EQUALS(
+		"tuple append failed",
+		execute( "main(){x=(2,3,5,7);x += (4,8,16);return(x);}" ),
+		"(2, 3, 5, 7, 4, 8, 16)"
+	);
 	ENSURE_EQUALS( "tuple reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed((2,3,5,7)),tuple);}" ), "(7, 5, 3, 2)" );
 	ENSURE_EQUALS( "tuple size/copy reversed() failed", execute( "import Algorithms as algo;main(){x=algo.reversed((2,3,5,7));(algo.materialize(copy(x),tuple),size(x));}" ), "((7, 5, 3, 2), 4)" );
 	ENSURE_EQUALS(
@@ -424,8 +429,8 @@ TUT_UNIT_TEST( "list()" )
 	);
 	ENSURE_EQUALS(
 		"list append failed",
-		execute( "main(){x=[2,3,5,7];x.append([4,8,16]).append(deque(20)).append(order(30)).append({40});return(x);}" ),
-		"[2, 3, 5, 7, 4, 8, 16, 20, 30, 40]"
+		execute( "main(){x=[2,3,5,7];x.append([4,8,16]).append(deque(20)).append(order(30)).append({40}).append((11,22,33));return(x);}" ),
+		"[2, 3, 5, 7, 4, 8, 16, 20, 30, 40, 11, 22, 33]"
 	);
 	ENSURE_EQUALS(
 		"list insert failed",
@@ -516,13 +521,13 @@ TUT_UNIT_TEST( "deque()" )
 	);
 	ENSURE_EQUALS(
 		"deque append failed",
-		execute( "main(){x=deque(2,3,5,7);x.append([4,8,16]).append(deque(20)).append(order(30)).append({40});return(x);}" ),
-		"deque(2, 3, 5, 7, 4, 8, 16, 20, 30, 40)"
+		execute( "main(){x=deque(2,3,5,7);x.append([4,8,16]).append(deque(20)).append(order(30)).append({40}).append((11,22,33));return(x);}" ),
+		"deque(2, 3, 5, 7, 4, 8, 16, 20, 30, 40, 11, 22, 33)"
 	);
 	ENSURE_EQUALS(
 		"deque prepend failed",
-		execute( "main(){x=deque(2,3,5,7);x.prepend([4,8,16]).prepend(deque(20)).prepend(order(30)).prepend({40});return(x);}" ),
-		"deque(40, 30, 20, 4, 8, 16, 2, 3, 5, 7)"
+		execute( "main(){x=deque(2,3,5,7);x.prepend([4,8,16]).prepend(deque(20)).prepend(order(30)).prepend({40}).prepend((11,22,33));return(x);}" ),
+		"deque(11, 22, 33, 40, 30, 20, 4, 8, 16, 2, 3, 5, 7)"
 	);
 	ENSURE_EQUALS(
 		"deque insert failed",
