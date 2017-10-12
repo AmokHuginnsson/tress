@@ -7,6 +7,7 @@ m4_include([_aux/client-configure.m4])
 YAAL_CONFIGURE_CLIENT_INIT(tress, MY_PACKAGE_VERSION)
 YAAL_DETECT_FLAGS(SONAME_FLAG, [-Wl,-soname,foo], [C++])
 YAAL_DETECT_FLAGS(EXTRA_LXXFLAGS, [-Wl,--export-all-symbols], [C++])
+YAAL_DETECT_FLAGS(EXTRA_LXXFLAGS, [-Wl,--exclude-all-symbols], [C++])
 if test ["x${SONAME_FLAG}"] != ["x"] ; then
 	SONAME_FLAG="-Wl,-soname,\$(SONAME_\$(NAME))"
 fi
