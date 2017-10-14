@@ -33,7 +33,7 @@ include $(DIR_ROOT)/_aux/mk/00_sanity.mk
 include $(DIR_ROOT)/_aux/mk/10_basic.mk
 include $(DIR_BUILD)/configure.mk
 LIBS           = @BOOST_FILESYSTEM_LIB@ @BOOST_SYSTEM_LIB@ @BOOST_DATE_TIME_LIB@
-$(eval $(call NEW_TARGET,tress,src,-D__TRESS__ -Wno-variadic-macros,@RDYNAMIC@))
+$(eval $(call NEW_TARGET,tress,src,-D__TRESS__ -Wno-variadic-macros,@RDYNAMIC@ $(call quotecomma,@EXCLUDE_ALL_SYMBOLS@)))
 $(eval $(call NEW_TARGET,child,child,-D__CHILD__))
 NAME = tressplugin
 SONAME_tressplugin = $(LIB_PREFIX)tressplugin$(LIB_INFIX).$(LIB_SUFFIX)-0.0
