@@ -323,11 +323,13 @@ struct HSTDGlobalScopeExceptionHandlingPolicy {
 	static void handle_exception( void ) __attribute__(( __noreturn__ ));
 };
 
+#ifndef __HOST_OS_TYPE_RASPBIAN__
 #ifndef __sun__
 #pragma pack( push, 1 )
 #else /* #ifndef __sun__ */
 #pragma pack( 1 )
 #endif /* #else #ifndef __sun__ */
+#endif /* #ifndef __HOST_OS_TYPE_RASPBIAN__ */
 template<int const size>
 struct Sizer {
 	char _buf[size];
@@ -486,11 +488,13 @@ public:
 		_stopCopying = false;
 	}
 };
+#ifndef __HOST_OS_TYPE_RASPBIAN__
 #ifndef __sun__
 #pragma pack( pop )
 #else /* #ifndef __sun__ */
 #pragma pack()
 #endif /* #else #ifndef __sun__ */
+#endif /* #ifndef __HOST_OS_TYPE_RASPBIAN__ */
 
 template<typename owner_t, int const forced_size>
 int HInstanceTracker<owner_t, forced_size>::_copyCount = 0;

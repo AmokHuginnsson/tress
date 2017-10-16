@@ -122,6 +122,7 @@ AC_DEFUN([_AX_BOOST_BASE_RUNDETECT],[
     dnl are almost assuredly the ones desired.
     AS_CASE([${host_cpu}],
       [i?86],[multiarch_libsubdir="lib/i386-${host_os}"],
+      [armv7l],[libsubdirs="lib/arm-linux-gnueabihf"],
       [multiarch_libsubdir="lib/${host_cpu}-${host_os}"]
     )
 
