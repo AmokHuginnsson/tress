@@ -686,13 +686,13 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "lookup()" )
 #if ( TARGET_CPU_BITS == 64 )
-	char const expected1[] = "\"none7truefalse1maAla0kota.2\"";
+	char const expected1[] = "[none: 7, true: false, 1: \"ma\", \"Ala\": 0, \"kota.\": 2]";
 #else
-	char const expected1[] = "\"none7truefalse1makota.2Ala0\"";
+	char const expected1[] = "[none: 7, true: false, 1: \"ma\", \"kota.\": 2, \"Ala\": 0]";
 #endif
 	ENSURE_EQUALS(
 		"lookup() iterator failed",
-		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;v=\"\";for(e:x){v=v+string(e);v=v+string(x[e]);}return(v);}" ),
+		execute( "main(){x=[\"Ala\":0,1:\"ma\",\"kota.\":2,none:7,true:false];return(x);}" ),
 		expected1
 	);
 	ENSURE_EQUALS(
