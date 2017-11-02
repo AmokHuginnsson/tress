@@ -1450,7 +1450,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule parameter( name >> -( '=' >> expression ) );
 	HRule nameList( parameter >> ( * ( ',' >> parameter ) ) );
 	HRule statement;
-	HRule lambda( e_p::constant( '@' ) >> -( '[' >> name >> *( ',' >> name ) >> ']' ) >> '(' >> -nameList >> ')' >> '{' >> *statement >> '}' );
+	HRule callable( e_p::constant( '(' ) >> -nameList >> ')' >> '{' >> *statement >> '}' );
+	HRule lambda( e_p::constant( '@' ) >> -( '[' >> name >> *( ',' >> name ) >> ']' ) >> callable );
 	HRule subscriptOperator( '[' >> ( ( ( ':' >> -expression ) | ( expression >> -( ':' >> -expression ) ) ) >> -( ':' >> -expression ) ) >> ']' );
 	HRule literalNone( e_p::constant( "none" ) );
 	HRule booleanLiteralTrue( e_p::constant( "true" ) );
@@ -1512,7 +1513,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	statement %= ( ifStatement | whileStatement | forStatement | switchStatement | tryCatchStatement | throwStatement | breakStatement | continueStatement | returnStatement | expressionStatement | scope );
 	HRule loopStatement( ifStatement | whileStatement | forStatement | switchStatement | tryCatchStatement | throwStatement | breakStatement | continueStatement | returnStatement | expressionStatement | scope );
 	loopScope %= ( '{' >> *loopStatement >> '}' );
-	HRule functionDefinition( name >> '(' >> -nameList >> ')' >> '{' >> *statement >> '}' );
+	HRule functionDefinition( name >> callable );
 	HRule field( name >> '=' >> ( expression ) >> ';' );
 	HRule classDefinition( e_p::constant( "class" ) >> name >> -( ':' >> name ) >> '{' >> +( field | functionDefinition ) >> '}' );
 	HRule importStatement( e_p::constant( "import" ) >> name >> "as" >> name >> ';' );
@@ -1522,40 +1523,43 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ | ( \"import\" >> B_ >> \"as\" >> B_ >> ';' ) )",
 		"B_ = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
 		"C_ = ( *( ( E_ >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> ( ( F_ >> -( \"^^\" >> F_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
-		"D_ = ( B_ >> '(' >> -G_ >> ')' >> '{' >> *H_ >> '}' )",
-		"E_ = ( ( B_ >> +( I_ | J_ | K_ ) ) | B_ )",
-		"F_ = ( L_ >> *( \"||\" >> L_ ) )",
-		"G_ = ( M_ >> *( ',' >> M_ ) )",
-		"H_ = ( N_ | O_ | P_ | Q_ | R_ | S_ | T_ | U_ | V_ | W_ | X_ )",
-		"I_ = ( '[' >> ( ( ( ':' >> -C_ ) | ( C_ >> -( ':' >> -C_ ) ) ) >> -( ':' >> -C_ ) ) >> ']' )",
-		"J_ = ( '(' >> -Y_ >> ')' )",
-		"K_ = ( '.' >> B_ )",
-		"L_ = ( Z_ >> *( \"&&\" >> Z_ ) )",
-		"M_ = ( B_ >> -( '=' >> C_ ) )",
-		"N_ = ( AA_ >> *( \"else\" >> AA_ ) >> -( \"else\" >> X_ ) )",
-		"O_ = ( \"while\" >> '(' >> C_ >> ')' >> AB_ )",
-		"P_ = ( \"for\" >> '(' >> E_ >> ':' >> C_ >> ')' >> AB_ )",
-		"Q_ = ( \"switch\" >> '(' >> C_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> X_ ) >> '}' )",
-		"R_ = ( \"try\" >> X_ >> +( \"catch\" >> '(' >> B_ >> E_ >> ')' >> X_ ) )",
-		"S_ = ( \"throw\" >> C_ >> ';' )",
-		"T_ = ( \"break\" >> ';' )",
-		"U_ = ( \"continue\" >> ';' )",
-		"V_ = ( \"return\" >> '(' >> C_ >> ')' >> ';' )",
-		"W_ = ( C_ >> ';' )",
-		"X_ = ( '{' >> *H_ >> '}' )",
-		"Y_ = ( C_ >> *( ',' >> C_ ) )",
-		"Z_ = ( AC_ >> -( ( \"==\" | \"!=\" ) >> AC_ ) )",
-		"AA_ = ( \"if\" >> '(' >> C_ >> ')' >> X_ )",
-		"AB_ = ( '{' >> *( N_ | O_ | P_ | Q_ | R_ | S_ | T_ | U_ | V_ | W_ | X_ ) >> '}' )",
-		"AC_ = ( AD_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> AD_ ) )",
+		"D_ = ( B_ >> G_ )",
+		"E_ = ( ( B_ >> +( H_ | I_ | J_ ) ) | B_ )",
+		"F_ = ( K_ >> *( \"||\" >> K_ ) )",
+		"G_ = ( '(' >> -( L_ >> *( ',' >> L_ ) ) >> ')' >> '{' >> *M_ >> '}' )",
+		"H_ = ( '[' >> ( ( ( ':' >> -C_ ) | ( C_ >> -( ':' >> -C_ ) ) ) >> -( ':' >> -C_ ) ) >> ']' )",
+		"I_ = ( '(' >> -N_ >> ')' )",
+		"J_ = ( '.' >> B_ )",
+		"K_ = ( O_ >> *( \"&&\" >> O_ ) )",
+		"L_ = ( B_ >> -( '=' >> C_ ) )",
+		"M_ = ( P_ | Q_ | R_ | S_ | T_ | U_ | V_ | W_ | X_ | Y_ | Z_ )",
+		"N_ = ( C_ >> *( ',' >> C_ ) )",
+		"O_ = ( AA_ >> -( ( \"==\" | \"!=\" ) >> AA_ ) )",
+		"P_ = ( AB_ >> *( \"else\" >> AB_ ) >> -( \"else\" >> Z_ ) )",
+		"Q_ = ( \"while\" >> '(' >> C_ >> ')' >> AC_ )",
+		"R_ = ( \"for\" >> '(' >> E_ >> ':' >> C_ >> ')' >> AC_ )",
+		"S_ = ( \"switch\" >> '(' >> C_ >> ')' >> '{' >> +( \"case\" >> '(' >> integer >> ')' >> ':' >> Z_ ) >> '}' )",
+		"T_ = ( \"try\" >> Z_ >> +( \"catch\" >> '(' >> B_ >> E_ >> ')' >> Z_ ) )",
+		"U_ = ( \"throw\" >> C_ >> ';' )",
+		"V_ = ( \"break\" >> ';' )",
+		"W_ = ( \"continue\" >> ';' )",
+		"X_ = ( \"return\" >> '(' >> C_ >> ')' >> ';' )",
+		"Y_ = ( C_ >> ';' )",
+		"Z_ = ( '{' >> *M_ >> '}' )",
+		"AA_ = ( AD_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> AD_ ) )",
+		"AB_ = ( \"if\" >> '(' >> C_ >> ')' >> Z_ )",
+		"AC_ = ( '{' >> *( P_ | Q_ | R_ | S_ | T_ | U_ | V_ | W_ | X_ | Y_ | Z_ ) >> '}' )",
 		"AD_ = ( AE_ >> *( '+' >> AE_ ) )",
 		"AE_ = ( AF_ >> *( '*' >> AF_ ) )",
 		"AF_ = ( ( '-' >> AF_ ) | ( ( ( '-' >> AG_ ) | AG_ ) >> *( '^' >> AF_ ) ) )",
-		"AG_ = ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( K_ >> AH_ ) ) | real | integer | ( ( ( '$' >> real ) | character_literal ) >> -( K_ >> J_ ) ) "
-			"| ( ( ( '(' >> -Y_ >> -',' >> ')' ) | ( '[' >> -Y_ >> ']' ) | ( '{' >> -( AI_ >> *( ',' >> AI_ ) ) >> '}' ) | ( '[' >> -( AI_ >> *( ',' >> AI_ ) ) >> ']' ) | string_literal ) >> -( ( I_ | K_ ) >> AH_ ) ) "
-			"| ( ( '{' >> C_ >> *( ',' >> C_ ) >> '}' ) >> -( K_ >> AH_ ) ) | \"none\" | \"true\" | \"false\" | ( B_ >> AH_ ) "
-			"| ( ( '@' >> -( '[' >> B_ >> *( ',' >> B_ ) >> ']' ) >> '(' >> -G_ >> ')' >> '{' >> *H_ >> '}' ) >> -( J_ >> AH_ ) ) ) >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
-		"AH_ = *( I_ | J_ | K_ )",
+		"AG_ = ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( J_ >> AH_ ) ) | real | integer"
+			" | ( ( ( '$' >> real ) | character_literal ) >> -( J_ >> I_ ) ) | ( ( ( '(' >> -N_ >> -',' >> ')' )"
+			" | ( '[' >> -N_ >> ']' ) | ( '{' >> -( AI_ >> *( ',' >> AI_ ) ) >> '}' )"
+			" | ( '[' >> -( AI_ >> *( ',' >> AI_ ) ) >> ']' ) | string_literal ) >> -( ( H_ | J_ ) >> AH_ ) )"
+			" | ( ( '{' >> C_ >> *( ',' >> C_ ) >> '}' ) >> -( J_ >> AH_ ) ) | \"none\" | \"true\" | \"false\""
+			" | ( B_ >> AH_ ) | ( ( '@' >> -( '[' >> B_ >> *( ',' >> B_ ) >> ']' ) >> G_ ) >> -( I_ >> AH_ ) ) ) >> -( ( '!' & \"==\" )"
+			" | ( '!' ^ '=' ) ) )",
+		"AH_ = *( H_ | I_ | J_ )",
 		"AI_ = ( C_ >> ':' >> C_ )"
 	};
 	cout << "hg:" << endl;
@@ -1953,116 +1957,6 @@ TUT_UNIT_TEST( 50, "the test" )
 	ENSURE_EQUALS( "bad error message", ep.error_messages()[0], "expected real number" );
 	copy( v.begin(), v.end(), stream_iterator( cout, endl ) );
 TUT_TEARDOWN()
-
-#if 0
-
-namespace {
-void dummy_call_v( void ) {
-}
-void dummy_call_s( yaal::hcore::HString const& ) {
-}
-void dummy_call_c( char ) {
-}
-void dummy_call_i( int long long ) {
-}
-void dummy_call_d( double long ) {
-}
-}
-
-TUT_UNIT_TEST( "full Huginn grammar with semantic actions" )
-	HBoundCall<> cv( call( &dummy_call_v ) );
-	HBoundCall<void ( char )> cc( call( &dummy_call_c, _1 ) );
-	HBoundCall<void ( double long )> cd( call( &dummy_call_d, _1 ) );
-	HBoundCall<void ( int long long )> ci( call( &dummy_call_i, _1 ) );
-	HBoundCall<void ( yaal::hcore::HString const& )> cs( call( &dummy_call_s, _1 ) );
-	hcore::HString identifierPattern( "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b" );
-	HRule expression( "expression", cv );
-	HRule absoluteValue( "absoluteValue", e_p::constant( '|', cc ) >> expression >> e_p::constant( '|', cv ) );
-	HRule parenthesis( "parenthesis", e_p::constant( '(', cc ) >> expression >> e_p::constant( ')', cc ) );
-	HRule arg( "argument", expression, cv );
-	HRule argList( "argList", arg >> ( * ( ',' >> arg ) ) );
-	HRule functionCallOperator( "functionCallOperator", e_p::constant( '(', cv ) >> -argList >> e_p::constant( ')', cv ), cv );
-	HRule stringLiteral( "stringLiteral", string_literal[cs] );
-	HRule literalNone( "none", e_p::constant( "none", cv ) );
-	HRule booleanLiteralTrue( "true", e_p::constant( "true", cv ) );
-	HRule booleanLiteralFalse( "false", e_p::constant( "false", cv ) );
-	HRule numberLiteral( "numberLiteral", e_p::constant( '$' ) >> real[cs] );
-	HRule listLiteral( "listLiteral", e_p::constant( '[', cv ) >> -argList >> ']', cv );
-	HRule dictLiteralElement( "dictLiteralElement", arg >> ':' >> arg );
-	HRule dictLiteral( "dictLiteral", e_p::constant( '{', cv ) >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> '}', cv );
-	HRule parameter( "parameter", regex( "parameterIdentifier", identifierPattern, cs ) >> -( e_p::constant( '=' ) >> HRule( expression, cv ) ) );
-	HRule nameList( "nameList", parameter >> ( * ( ',' >> parameter ) ) );
-	HRule scope( "scope" );
-	HRule lambda( "lambda", e_p::constant( '@', cv ) >> '(' >> -nameList >> e_p::constant( ')', cv )>> scope, cv );
-	HRule rangeOper( "rangeOper", e_p::constant( ':', cv ) );
-	HRule subscriptOperator( "subscriptOperator", e_p::constant( '[', cv ) >> ( ( ( rangeOper >> -arg ) | ( arg >> -( rangeOper >> -arg ) ) ) >> -( rangeOper >> -arg ) ) >> ']', cv );
-	HRule reference( regex( "reference", identifierPattern, cs ) );
-	HRule memberAccess( "memberAccess", e_p::constant( '.' )[cv] >> regex( "member", identifierPattern, cs ), cv );
-	HRule dereference( "dereference", *( subscriptOperator | functionCallOperator | memberAccess ) );
-	HRule atom( "atom",
-		absoluteValue
-		| ( parenthesis >> -( memberAccess >> dereference ) )
-		| real( e_p::HReal::PARSE::STRICT )[cd]
-		| integer[ci]
-		| ( ( numberLiteral | character_literal[cc] ) >> -( memberAccess >> functionCallOperator ) )
-		| ( ( listLiteral | dictLiteral | stringLiteral ) >> -( ( subscriptOperator | memberAccess ) >> dereference ) )
-		| literalNone | booleanLiteralTrue | booleanLiteralFalse
-		| ( reference >> dereference )
-		| ( lambda >> -( functionCallOperator >> dereference ) )
-	);
-	HRule factorial( "factorial", atom >> -( ( ( e_p::constant( '!' ) & "==" ) | ( e_p::constant( '!' ) ^ '=' ) )[cv] ) );
-	HRule negation( "negation", ( e_p::constant( '-' )[cv] >> factorial )[cv] | factorial );
-	HRule booleanNot( "booleanNot", ( e_p::constant( '!' )[cv] >> negation )[cv] | negation );
-	HRule power( "power", booleanNot >> ( * ( e_p::constant( '^', cc ) >> booleanNot ) ), cv );
-	HRule multiplication( "multiplication", power >> ( * ( ( characters( "*/%", cc ) >> power )[cv] ) ) );
-	HRule sum( "sum", multiplication >> ( * ( ( characters( "+-", cc ) >> multiplication )[cv] ) ) );
-	HRule compare( "compare", sum >> -( /* compare action */ ( /* comparator operator */ ( e_p::constant( "<=" ) | ">=" | "<" | ">" )[cs] >> sum )[cv] ) );
-	HRule equality( "equality", compare >> -( /* compare action */ ( /* comparator operator */ ( e_p::constant( "==" ) | "!=" )[cs] >> compare )[cv] ) );
-	HRule booleanAnd( "booleanAnd", equality[cv] >> *( /* compare action */ ( e_p::constant( "&&" )[cv] >> equality )[cv] ), cv );
-	HRule booleanOr( "booleanOr", HRule( booleanAnd, cv ) >> *( /* compare action */ ( e_p::constant( "||" )[cv] >> booleanAnd )[cv] ), cv );
-	HRule booleanXor( "booleanXor", booleanOr >> -( /* compare action */ ( e_p::constant( "^^" )[cs] >> booleanOr )[cv] ) );
-	HRule ternary( "ternary", HRule( booleanXor, cv ) >> -( /* ternary action */ ( e_p::constant( '?' )[cv] >> expression >> e_p::constant( ':' )[cv] >> expression )[cv] ), cv );
-	HRule value( "value", ternary );
-	HRule subscript( "subscript", ( reference >> +( subscriptOperator | functionCallOperator | memberAccess ) ) );
-	HRule assignable( "assignable", subscript[cv] | regex( "variableSetter", identifierPattern, cs ) );
-	expression %= HRule( * ( assignable >> ( e_p::constant( "=" ) | "+=" | "-=" | "*=" | "/=" | "%=" | "^=" )[ cs ] ^ '=' ) >> value, cv );
-	HRule expressionStatement( "expressionStatement", HRule( expression, cv ) >> ';' );
-	HRule catchStatement( "catchStatement", e_p::constant( "catch" ) >> '(' >> regex( "exceptionType", identifierPattern, cs ) >> assignable[cv] >> ')' >> scope[cv] );
-	HRule tryCatchStatement( "tryCatchStatement", e_p::constant( "try", cv ) >> scope >> +catchStatement );
-	HRule ifClause( "ifClause", e_p::constant( "if", cv ) >> '(' >> expression >> ')' >> scope, cv );
-	HRule ifStatement( "ifStatement", 	ifClause >> *( e_p::constant( "else" ) >> ifClause ) >> -( ( e_p::constant( "else" ) >> scope )[cv] ) );
-	HRule continueStatement( "continueStatement", e_p::constant( "continue" ) >> ';' );
-	HRule throwStatement( "throwStatement", e_p::constant( "throw" ) >> expression >> ';' );
-	HRule breakStatement( "breakStatement", e_p::constant( "break" ) >> ';' );
-	HRule whileStatement( "whileStatement", e_p::constant( "while", cv ) >> '(' >> expression >> ')' >> scope );
-	HRule forStatement( "forStatement", e_p::constant( "for", cv ) >> '(' >> assignable[cv] >> ':' >> expression >> ')' >> scope );
-	HRule caseStatement( "caseStatement", e_p::constant( "case" ) >> '(' >> expression >> ')' >> ':' >> scope >> -( breakStatement[cv] ), cv );
-	HRule defaultStatement( "defaultStatement", e_p::constant( "default" ) >> ':' >> scope );
-	HRule switchStatement( "switchStatement", e_p::constant( "switch", cv ) >> '(' >> expression >> ')' >> e_p::constant( '{', cv ) >> +caseStatement >> -( defaultStatement[cv] ) >> '}' );
-	HRule returnStatement( "returnStatement", e_p::constant( "return" ) >> -( '(' >> expression >> ')' ) >> ';' );
-	HRule statement( "statement",
-		ifStatement[cv]
-		| whileStatement[cv]
-		| forStatement[cv]
-		| switchStatement[cv]
-		| tryCatchStatement[cv]
-		| throwStatement[cv]
-		| breakStatement[cv]
-		| continueStatement[cv]
-		| returnStatement[cv]
-		| expressionStatement
-		| scope[cv]
-	);
-	scope %= ( e_p::constant( '{', cv ) >> *statement >> '}' );
-	HRule functionDefinition( "functionDefinition", regex( "functionDefinitionIdentifier", identifierPattern, cs ) >> '(' >> -nameList >> e_p::constant( ')', cv ) >> scope, cv );
-	HRule field( "field", regex( "fieldIdentifier", identifierPattern, cs ) >> '=' >> HRule( expression, cv ) >> ';' );
-	HRule classDefinition( "classDefinition", e_p::constant( "class" ) >> regex(  "classIdentifier", identifierPattern, cs ) >> -(  ':' >> regex( "baseIdentifier", identifierPattern, cs ) ) >> '{' >> +( field | functionDefinition ) >> '}', cv );
-	HRule importStatement( "importStatement", e_p::constant( "import" ) >> regex( "packageName", identifierPattern, cs ) >> "as" >> regex( "importName", identifierPattern, cs ) >> ';', cv );
-	HRule huginnGrammar( "huginnGrammar", + ( classDefinition | functionDefinition | importStatement ) );
-	HExecutingParser ep( huginnGrammar );
-TUT_TEARDOWN()
-
-#endif
 
 }
 
