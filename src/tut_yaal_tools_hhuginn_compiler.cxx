@@ -1018,7 +1018,7 @@ TUT_UNIT_TEST( "report compilation error" )
 /*  43 */ { 10, 1, 11, "*anonymous stream*:1:11: Base class `B' was not defined." },
 /*  44 */ { 0, 1, 1,   "*anonymous stream*:1:1: `integer' is a restricted name." },
 /*  45 */ { 6, 1, 7,   "*anonymous stream*:1:7: `integer' is a restricted name." },
-/*  46 */ { 7, 1, 8,   "*anonymous stream*:1:8: Missing default argument." },
+/*  46 */ { 6, 1, 7,   "*anonymous stream*:1:7: Missing default argument." },
 /*  47 */ { 10, 1, 11, "*anonymous stream*:1:11: `integer' is a restricted keyword." },
 /*  48 */ { 10, 1, 11, "*anonymous stream*:1:11: `integer' is a restricted name." },
 /*  49 */ { 12, 2, 5,  "*anonymous stream*:2:5: `return' is a restricted keyword." },
