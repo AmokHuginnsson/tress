@@ -208,7 +208,11 @@ TUT_UNIT_TEST( "set variable" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "functions (definition)" )
-	ENSURE_EQUALS( "function result failed", execute( "f(){return(7);}main(){return(f());}" ), 7 );
+	ENSURE_EQUALS(
+		"function result failed",
+		execute( "f(){return(7);}main(){return(f());}" ),
+		7
+	);
 	ENSURE_EQUALS(
 		"dafult arguments failed",
 		execute(
@@ -230,6 +234,18 @@ TUT_UNIT_TEST( "functions (definition)" )
 			"}\n"
 		),
 		"[1, 3, 7, 39]"
+	);
+	ENSURE_EQUALS(
+		"variadic failed",
+		execute(
+			"f( x, y = 7, args... ){\n"
+			"\treturn([x, y, args]);\n"
+			"}\n"
+			"main(){\n"
+			"\treturn((f(1), f(1,2), f(1,2,3,4)));\n"
+			"}\n"
+		),
+		"([1, 7, ()], [1, 2, ()], [1, 2, (3, 4)])"
 	);
 TUT_TEARDOWN()
 

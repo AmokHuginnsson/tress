@@ -862,6 +862,11 @@ char const progCompileErr103[] =
 	"}\n"
 ;
 
+char const progCompileErr104[] =
+	"f( a, b = 0, c, d... ) {}\n"
+	"main(){}"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -968,6 +973,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr101,
 		progCompileErr102,
 		progCompileErr103,
+		progCompileErr104,
 		NULL
 	};
 
@@ -1076,6 +1082,7 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 101 */ { 17, 3, 2,  "*anonymous stream*:3:2: Operands are not multipliable: character, character" },
 /* 102 */ { 7, 1, 8,   "*anonymous stream*:1:8: ./data/CannotParse.hgn:3:1: expected one of characters: -" },
 /* 103 */ { 7, 1, 8,   "*anonymous stream*:1:8: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: `integer' vs `real'." },
+/* 104 */ { 13, 1, 14, "*anonymous stream*:1:14: Missing default argument." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
