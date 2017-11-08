@@ -890,7 +890,7 @@ TUT_UNIT_TEST( "set()" )
 	ENSURE_IN(
 		"set copy/clear failed",
 		execute( "main(){x=set(2,\"ala\",3.14,$7.34,'Q');y=copy(x);x.clear();return([x,y,size(y)]);}" ),
-		std::vector<hcore::HString>({ "[{}, {$7.34, 2, 3.14, 'Q', \"ala\"}, 5]", "[{}, {$7.34, 2, 'Q', \"ala\", 3.14}, 5]" } )
+		std::vector<hcore::HString>({ "[set(), {$7.34, 2, 3.14, 'Q', \"ala\"}, 5]", "[set(), {$7.34, 2, 'Q', \"ala\", 3.14}, 5]" } )
 	);
 	ENSURE_EQUALS( "set reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed({2,3,5,7}),list);}" ), "[7, 5, 3, 2]" );
 	ENSURE_EQUALS( "set reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed({2,3,5,7});algo.materialize(copy(x),list).push(size(x));}" ), "[7, 5, 3, 2, 4]" );
