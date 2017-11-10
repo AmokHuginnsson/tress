@@ -1434,6 +1434,13 @@ TUT_UNIT_TEST( "follows with recursion bug" )
 	HExecutingParser ep( A ); /* <--- Must not throw! */
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "repeated follows invoking alternative recursion bug" )
+	HRule B;
+	HRule A( ( '(' >> B >> ')' ) | integer );
+	B %= ( A >> A );
+	HExecutingParser ep( A ); /* <--- Must not throw! */
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule name( regex( "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b" ) );
 	HRule expression;
