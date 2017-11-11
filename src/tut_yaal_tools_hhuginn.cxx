@@ -108,7 +108,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"rangeOper = ':'",
 		"argument = expression",
 		"argList = ( functionArgument >> *( ',' >> functionArgument ) )",
-		"namedParameters = (  >> namedParameter >> *( ',' >> namedParameter ) >>  )",
+		"namedParameters = ( () >> namedParameter >> *( ',' >> namedParameter ) >> () )",
 		"member = regex( \"" IDENTIFIER "\" )",
 		"booleanAnd = ( equality >> *( \"&&\" >> equality ) )",
 		"functionArgument = ( argument ^ ':' )",
