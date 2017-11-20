@@ -46,7 +46,7 @@ public:
 		: HValue( class_ ) {
 		return;
 	}
-	static HHuginn::value_t greet( huginn::HThread* thread_, HHuginn::value_t*, HHuginn::values_t const& values_, int position_ ) {
+	static HHuginn::value_t greet( huginn::HThread* thread_, HHuginn::value_t*, HHuginn::values_t& values_, int position_ ) {
 		M_PROLOG
 		char const name[] = "Greeter.greet";
 		verify_arg_count( name, values_, 1, 2, thread_, position_ );
