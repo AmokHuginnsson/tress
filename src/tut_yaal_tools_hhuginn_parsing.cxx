@@ -141,14 +141,49 @@ char const progParse13[] =
 
 char const progParse14[] =
 	"f(a, b..., c) {\n"
-	"\n"
+	"}\n"
 	"main() {\n"
 	"}\n"
 ;
 
 char const progParse15[] =
 	"f(a, b... = 0) {\n"
-	"\n"
+	"}\n"
+	"main() {\n"
+	"}\n"
+;
+
+char const progParse16[] =
+	"f(a, b:::, c) {\n"
+	"}\n"
+	"main() {\n"
+	"}\n"
+;
+
+char const progParse17[] =
+	"f(a, b::: = 0) {\n"
+	"}\n"
+	"main() {\n"
+	"}\n"
+;
+
+char const progParse18[] =
+	"f(a, b:::, c...) {\n"
+	"}\n"
+	"main() {\n"
+	"}\n"
+;
+
+char const progParse19[] =
+	"f(a, b..., c...) {\n"
+	"}\n"
+	"main() {\n"
+	"}\n"
+;
+
+char const progParse20[] =
+	"f(a, b:::, c:::) {\n"
+	"}\n"
 	"main() {\n"
 	"}\n"
 ;
@@ -184,6 +219,11 @@ TUT_UNIT_TEST( "report parsing error" )
 		progParse13,
 		progParse14,
 		progParse15,
+		progParse16,
+		progParse17,
+		progParse18,
+		progParse19,
+		progParse20,
 		NULL
 	};
 	int const err[][3] = {
@@ -201,8 +241,13 @@ TUT_UNIT_TEST( "report parsing error" )
 		{ 9, 2, 1 },   // 11
 		{ 13, 2, 5 },  // 12
 		{ 11, 2, 3 },  // 13
-		{  9, 1, 10 }, // 14
+		{ 12, 1, 13 }, // 14
 		{ 10, 1, 11 }, // 15
+		{ 9, 1, 10 },  // 16
+		{ 10, 1, 11 }, // 17
+		{ 9, 1, 10 },  // 18
+		{ 12, 1, 13 }, // 19
+		{ 9, 1, 10 },  // 20
 		{ 0, 0, 0 }
 	};
 	int const (*e)[3]( err );
