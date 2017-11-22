@@ -1181,7 +1181,7 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 			"	return ( 0 );\n"
 			"}\n"
 		),
-		"*anonymous stream*:1:1: Bad number of parameters in call to: `destructor()', expected exactly: 1, got: 0."
+		"*anonymous stream*:1:1: In call to `destructor()`, missing required positional argument: `name_`."
 	);
 	ENSURE_EQUALS(
 		"throw from destructor",

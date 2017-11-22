@@ -923,7 +923,7 @@ TUT_UNIT_TEST( "bad number of arguments to main()" )
 	h.compile();
 	h.add_argument( "dummy" );
 	h.execute();
-	ENSURE_EQUALS( "would crash", h.error_message(), "*anonymous stream*:1:1: Bad number of parameters in call to: `main()', expected exactly: 0, got: 1." );
+	ENSURE_EQUALS( "would crash", h.error_message(), "*anonymous stream*:1:1: Function `main` accepts from 0 positional parameters, but 1 were given." );
 TUT_TEARDOWN()
 
 }
