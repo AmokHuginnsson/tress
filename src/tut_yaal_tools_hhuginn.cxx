@@ -122,7 +122,11 @@ TUT_UNIT_TEST( "grammar test" )
 		"power = ( booleanNot >> *( '^' >> negation ) )",
 		"booleanNot = ( ( '!' >> factorial ) | factorial )",
 		"factorial = ( atom >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
-		"atom = ( absoluteValue | ( parenthesis >> -( memberAccess >> dereference ) ) | real | integer | ( ( numberLiteral | character_literal ) >> -( memberAccess >> functionCallOperator ) ) | ( ( tupleLiteral | listLiteral | dictLiteral | lookupLiteral | stringLiteral ) >> -( ( subscriptOperator | memberAccess ) >> dereference ) ) | ( setLiteral >> -( memberAccess >> dereference ) ) | none | true | false | ( reference >> dereference ) | ( lambda >> -( functionCallOperator >> dereference ) ) )",
+		"atom = ( absoluteValue | ( parenthesis >> -( memberAccess >> dereference ) ) | real | integer"
+			" | ( ( numberLiteral | character_literal ) >> -( memberAccess >> functionCallOperator ) )"
+			" | ( ( tupleLiteral | listLiteral | dictLiteral | lookupLiteral | stringLiteral ) >> -( ( subscriptOperator | memberAccess ) >> dereference ) )"
+			" | ( setLiteral >> -( memberAccess >> dereference ) ) | none | true | false"
+			" | ( reference >> dereference ) | ( lambda >> -( functionCallOperator >> dereference ) ) )",
 		"absoluteValue = ( '|' >> expression >> '|' )",
 		"parenthesis = ( '(' >> expression >> ')' )",
 		"dereference = *( subscriptOperator | functionCallOperator | memberAccess )",
@@ -250,6 +254,30 @@ TUT_UNIT_TEST( "functions (definition)" )
 			"}\n"
 		),
 		"([1, 7, ()], [1, 2, ()], [1, 2, (3, 4)])"
+	);
+	ENSURE_EQUALS(
+		"keyword arguments failed",
+		execute(
+			"f( x, y = 7, kwArgs::: ){\n"
+			"\treturn([x, y, kwArgs]);\n"
+			"}\n"
+			"main(){\n"
+			"\treturn((f(1), f(1,2), f(1,2,a:3,b:4)));\n"
+			"}\n"
+		),
+		"([1, 7, lookup()], [1, 2, lookup()], [1, 2, [\"a\": 3, \"b\": 4]])"
+	);
+	ENSURE_EQUALS(
+		"variadic and keyword arguments failed",
+		execute(
+			"f( x, y = 7, args..., kwArgs::: ){\n"
+			"\treturn([x, y, args, kwArgs]);\n"
+			"}\n"
+			"main(){\n"
+			"\treturn((f(1), f(1,2), f(1,2,3,4), f(1,a:3), f(1,2,3,4,a:5,b:6)));\n"
+			"}\n"
+		),
+		"([1, 7, (), lookup()], [1, 2, (), lookup()], [1, 2, (3, 4), lookup()], [1, 7, (), [\"a\": 3]], [1, 2, (3, 4), [\"a\": 5, \"b\": 6]])"
 	);
 TUT_TEARDOWN()
 

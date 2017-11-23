@@ -731,6 +731,138 @@ char const progExecuteErr71[] =
 	"}\n"
 ;
 
+char const progExecuteErr72[] =
+	"f(x,y,a...) {\n"
+	"[x,y,a];\n"
+	"}\n"
+	"main() {\n"
+	"f(0);\n"
+	"}\n"
+;
+
+char const progExecuteErr73[] =
+	"f(x,y,z = 0, a...) {\n"
+	"[x,y,z,a];\n"
+	"}\n"
+	"main() {\n"
+	"f(0);\n"
+	"}\n"
+;
+
+char const progExecuteErr74[] =
+	"f(x,y,k:::) {\n"
+	"[x,y,k];\n"
+	"}\n"
+	"main() {\n"
+	"f(0);\n"
+	"}\n"
+;
+
+char const progExecuteErr75[] =
+	"f(x,y,z = 0, k:::) {\n"
+	"[x,y,z,k];\n"
+	"}\n"
+	"main() {\n"
+	"f(0);\n"
+	"}\n"
+;
+
+char const progExecuteErr76[] =
+	"f(x,y,a...) {\n"
+	"[x,y,a];\n"
+	"}\n"
+	"main() {\n"
+	"f(y:0);\n"
+	"}\n"
+;
+
+char const progExecuteErr77[] =
+	"f(x,y,z = 0, a...) {\n"
+	"[x,y,z,a];\n"
+	"}\n"
+	"main() {\n"
+	"f(y:0);\n"
+	"}\n"
+;
+
+char const progExecuteErr78[] =
+	"f(x,y,k:::) {\n"
+	"[x,y,k];\n"
+	"}\n"
+	"main() {\n"
+	"f(y:0);\n"
+	"}\n"
+;
+
+char const progExecuteErr79[] =
+	"f(x,y,z = 0, k:::) {\n"
+	"[x,y,z,k];\n"
+	"}\n"
+	"main() {\n"
+	"f(y:0);\n"
+	"}\n"
+;
+
+char const progExecuteErr80[] =
+	"f(x,y) {\n"
+	"[x,y];\n"
+	"}\n"
+	"main() {\n"
+	"f(1,x:0);\n"
+	"}\n"
+;
+
+char const progExecuteErr81[] =
+	"f(x) {\n"
+	"[x];\n"
+	"}\n"
+	"main() {\n"
+	"f(1,y:0);\n"
+	"}\n"
+;
+
+char const progExecuteErr82[] =
+	"f(x) {\n"
+	"[x];\n"
+	"}\n"
+	"main() {\n"
+	"f(0,0);\n"
+	"}\n"
+;
+
+char const progExecuteErr83[] =
+	"f(x,y=0) {\n"
+	"[x,y];\n"
+	"}\n"
+	"main() {\n"
+	"f(0,0,0);\n"
+	"}\n"
+;
+
+char const progExecuteErr84[] =
+	"main() {\n"
+	"size();\n"
+	"}\n"
+;
+
+char const progExecuteErr85[] =
+	"main() {\n"
+	"\"\".find(0,0,0);\n"
+	"}\n"
+;
+
+char const progExecuteErr86[] =
+	"main() {\n"
+	"\"\".find();\n"
+	"}\n"
+;
+
+char const progExecuteErr87[] =
+	"main() {\n"
+	"\"\".find(0);\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -830,6 +962,22 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr69,
 		progExecuteErr70,
 		progExecuteErr71,
+		progExecuteErr72,
+		progExecuteErr73,
+		progExecuteErr74,
+		progExecuteErr75,
+		progExecuteErr76,
+		progExecuteErr77,
+		progExecuteErr78,
+		progExecuteErr79,
+		progExecuteErr80,
+		progExecuteErr81,
+		progExecuteErr82,
+		progExecuteErr83,
+		progExecuteErr84,
+		progExecuteErr85,
+		progExecuteErr86,
+		progExecuteErr87,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -870,8 +1018,8 @@ TUT_UNIT_TEST( "report execution error" )
 /*  34 */ { 60, 8, 3,    "*tress*:8:3: Operand types for `+=' do not match: `*observer*' vs `integer'." },
 /*  35 */ { 37, 4, 10,   "*tress*:4:10: Making an *observer* out of an *observer*." },
 /*  36 */ { 19, 3, 6,    "*tress*:3:6: use() argument must be an `*observer*', not an `integer'." },
-/*  37 */ { 16, 3, 2,    "*tress*:3:2: Function `f` accepts from 0 positional parameters, but 1 were given." },
-/*  38 */ { 21, 3, 2,    "*tress*:3:2: Function `f` accepts from 0 to 1 positional parameters, but 2 were given." },
+/*  37 */ { 16, 3, 2,    "*tress*:3:2: Function `f()` accepts exactly 0 positional arguments, but 1 were given." },
+/*  38 */ { 21, 3, 2,    "*tress*:3:2: Function `f()` accepts from 0 to 1 positional arguments, but 2 were given." },
 /*  39 */ { 25, 3, 2,    "*tress*:3:2: In call to `f()`, missing required positional argument: `a`." },
 /*  40 */ { 16, 2, 8,    "*tress*:2:8: string.find() first argument must be a `string', not an `integer'." },
 /*  41 */ { 27, 2, 19,   "*tress*:2:19: number.set_precision() argument must be an `integer', not a `real'." },
@@ -905,6 +1053,22 @@ TUT_UNIT_TEST( "report execution error" )
 /*  69 */ { 9, 2, 1,     "*tress*:2:1: Operand is not a boolean value: *none*" },
 /*  70 */ { 15, 2, 7,    "*tress*:2:7: `While' argument is not a boolean." },
 /*  71 */ { 19, 2, 11,   "*tress*:2:11: Direct creation of instances of `*function_reference*' is not allowed." },
+/*  72 */ { 35, 5, 2,    "*tress*:5:2: In call to `f()`, missing required positional argument: `y`." },
+/*  73 */ { 44, 5, 2,    "*tress*:5:2: In call to `f()`, missing required positional argument: `y`." },
+/*  74 */ { 35, 5, 2,    "*tress*:5:2: In call to `f()`, missing required positional argument: `y`." },
+/*  75 */ { 44, 5, 2,    "*tress*:5:2: In call to `f()`, missing required positional argument: `y`." },
+/*  76 */ { 35, 5, 2,    "*tress*:5:2: In call to `f()`, missing required positional argument: `x`." },
+/*  77 */ { 44, 5, 2,    "*tress*:5:2: In call to `f()`, missing required positional argument: `x`." },
+/*  78 */ { 35, 5, 2,    "*tress*:5:2: In call to `f()`, missing required positional argument: `x`." },
+/*  79 */ { 44, 5, 2,    "*tress*:5:2: In call to `f()`, missing required positional argument: `x`." },
+/*  80 */ { 28, 5, 2,    "*tress*:5:2: In call to `f()`, positional argument `x` was already set." },
+/*  81 */ { 24, 5, 2,    "*tress*:5:2: Call to `f()` got unexpected keyword arguments." },
+/*  82 */ { 24, 5, 2,    "*tress*:5:2: Function `f()` accepts exactly 1 positional argument, but 2 were given." },
+/*  83 */ { 30, 5, 2,    "*tress*:5:2: Function `f()` accepts from 1 to 2 positional arguments, but 3 were given." },
+/*  84 */ { 13, 2, 5,    "*tress*:2:5: Bad number of parameters in call to: `size()', expected exactly: 1, got: 0." },
+/*  85 */ { 16, 2, 8,    "*tress*:2:8: Bad number of parameters in call to: `string.find()', expected at most: 2, got: 3." },
+/*  86 */ { 16, 2, 8,    "*tress*:2:8: Bad number of parameters in call to: `string.find()', expected at least: 1, got: 0." },
+/*  87 */ { 16, 2, 8,    "*tress*:2:8: string.find() first argument must be a `string', not an `integer'." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
@@ -924,7 +1088,7 @@ TUT_UNIT_TEST( "bad number of arguments to main()" )
 	h.compile();
 	h.add_argument( "dummy" );
 	h.execute();
-	ENSURE_EQUALS( "would crash", h.error_message(), "*anonymous stream*:1:1: Function `main` accepts from 0 positional parameters, but 1 were given." );
+	ENSURE_EQUALS( "would crash", h.error_message(), "*anonymous stream*:1:1: Function `main()` accepts exactly 0 positional arguments, but 1 were given." );
 TUT_TEARDOWN()
 
 }
