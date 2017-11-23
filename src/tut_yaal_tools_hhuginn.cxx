@@ -1266,6 +1266,18 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 		),
 		"*anonymous stream*:4:8: Explicit construction of class `Matrix' objects (instances) is forbidden."
 	);
+	ENSURE_EQUALS(
+		"order of operations failed",
+		execute(
+			"f(a,b,μ,σ){"
+			"[a,b,μ,σ];"
+			"}"
+			"main(){"
+			"return(f(1,2,μ:3,σ:4));"
+			"}"
+		),
+		"[1, 2, 3, 4]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "bound call as field value" )
