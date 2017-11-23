@@ -1267,7 +1267,7 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 		"*anonymous stream*:4:8: Explicit construction of class `Matrix' objects (instances) is forbidden."
 	);
 	ENSURE_EQUALS(
-		"order of operations failed",
+		"out of order named parameter hash",
 		execute(
 			"f(a,b,μ,σ){"
 			"[a,b,μ,σ];"
@@ -1277,6 +1277,18 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 			"}"
 		),
 		"[1, 2, 3, 4]"
+	);
+	ENSURE_EQUALS(
+		"skipped positional argument with named parameters",
+		execute(
+			"long(x,y,p=0,q=1,r=2,s=3,t=4,args...,kwArgs:::) {"
+			"[x,y,p,q,r,s,t,args,kwArgs];"
+			"}"
+			"main(){"
+			"return(long(11,22,q:7,s:9));"
+			"}"
+		),
+		"[11, 22, 0, 7, 2, 9, 4, (), {}]"
 	);
 TUT_TEARDOWN()
 
