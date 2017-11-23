@@ -42,13 +42,6 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct ErrInfo {
-	int _pos;
-	int _line;
-	int _col;
-	char const* _msg;
-};
-
 struct tut_yaal_tools_hhuginn_compiler : public tress::tut_yaal_tools_hhuginn_base {
 	virtual ~tut_yaal_tools_hhuginn_compiler( void ) {}
 	void test_compile( prog_src_t, ErrInfo const&, int );

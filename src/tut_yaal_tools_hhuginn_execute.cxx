@@ -43,7 +43,7 @@ namespace tut {
 
 struct tut_yaal_tools_hhuginn_execute : public tress::tut_yaal_tools_hhuginn_base {
 	virtual ~tut_yaal_tools_hhuginn_execute( void ) {}
-	void test_execute( prog_src_t, int const[3], int );
+	void test_execute( prog_src_t, ErrInfo const&, int );
 };
 
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn_execute, "yaal::tools::HHuginn,execution" );
@@ -731,7 +731,7 @@ char const progExecuteErr71[] =
 	"}\n"
 ;
 
-void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, int const err_[3], int index_ ) {
+void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
 		clog << prog_ << endl;
@@ -749,9 +749,10 @@ void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, int const e
 	ENSURE( "failed to compile valid", compiled );
 	clog << "executing: " << index_ << endl;
 	ENSURE_NOT( "executed invalid", h.execute() );
-	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_[0] );
-	ENSURE_EQUALS( "reporting error line failed " + to_string( index_ ), h.error_coordinate().line(), err_[1] );
-	ENSURE_EQUALS( "reporting error column failed " + to_string( index_ ), h.error_coordinate().column(), err_[2] );
+	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_._pos );
+	ENSURE_EQUALS( "reporting error line failed " + to_string( index_ ), h.error_coordinate().line(), err_._line );
+	ENSURE_EQUALS( "reporting error column failed " + to_string( index_ ), h.error_coordinate().column(), err_._col );
+	ENSURE_EQUALS( "reporting error message failed " + to_string( index_ ), h.error_message(), err_._msg );
 	clog << h.error_message() << endl;
 }
 
@@ -831,82 +832,82 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr71,
 		NULL
 	};
-	int const err[][3] = {
-		{ 44, 3, 10 },   // 0
-		{ 44, 3, 10 },   // 1
-		{ 44, 3, 10 },   // 2
-		{ 44, 3, 10 },   // 3
-		{ 44, 3, 10 },   // 4
-		{ 44, 3, 10 },   // 5
-		{ 44, 3, 10 },   // 6
-		{ 44, 3, 10 },   // 7
-		{ 44, 3, 10 },   // 8
-		{ 44, 3, 10 },   // 9
-		{ 44, 3, 10 },   // 10
-		{ 44, 3, 10 },   // 11
-		{ 44, 3, 10 },   // 12
-		{ 0, 1, 1 },     // 13
-		{ 15, 2, 7 },    // 14
-		{ 31, 4, 5 },    // 15
-		{ 23, 3, 5 },    // 16
-		{ 23, 3, 5 },    // 17
-		{ 19, 3, 5 },    // 18
-		{ 61, 5, 5 },    // 19
-		{ 61, 5, 5 },    // 20
-		{ 61, 5, 5 },    // 21
-		{ 32, 3, 5 },    // 22
-		{ 19, 3, 5 },    // 23
-		{ 49, 7, 3 },    // 24
-		{ 46, 5, 11 },   // 25
-		{ 79, 8, 11 },   // 25
-		{ 157, 14, 11 }, // 27
-		{ 175, 15, 11 }, // 28
-		{ 190, 17, 11 }, // 29
-		{ 389, 31, 11 }, // 30
-		{ 423, 34, 11 }, // 31
-		{ 19, 2, 11 },   // 32
-		{ 29, 3, 12 },   // 33
-		{ 60, 8, 3 },    // 34
-		{ 37, 4, 10 },   // 35
-		{ 19, 3, 6 },    // 36
-		{ 16, 3, 2 },    // 37
-		{ 21, 3, 2 },    // 38
-		{ 25, 3, 2 },    // 39
-		{ 16, 2, 8 },    // 40
-		{ 27, 2, 19 },   // 41
-		{ 47, 3, 14 },   // 42
-		{ 41, 3, 8 },    // 43
-		{ 46, 3, 13 },   // 44
-		{ 41, 3, 9 },    // 45
-		{ 46, 3, 13 },   // 46
-		{ 46, 3, 13 },   // 47
-		{ 46, 3, 13 },   // 48
-		{ 46, 3, 13 },   // 49
-		{ 41, 3, 9 },    // 50
-		{ 14, 2, 6 },    // 51
-		{ 12, 2, 4 },    // 52
-		{ 58, 4, 18 },   // 53
-		{ 25, 3, 6 },    // 54
-		{ 16, 3, 2 },    // 55
-		{ 60, 6, 6 },    // 56
-		{ 60, 6, 6 },    // 57
-		{ 15, 3, 2 },    // 58
-		{ 16, 3, 2 },    // 59
-		{ 29, 5, 4 },    // 60
-		{ 19, 3, 2 },    // 61
-		{ 35, 5, 4 },    // 62
-		{ 34, 5, 4 },    // 63
-		{ 31, 3, 15 },   // 64
-		{ 11, 2, 4 },    // 65
-		{ 14, 3, 2 },    // 66
-		{ 14, 3, 2 },    // 67
-		{ 14, 2, 6 },    // 68
-		{ 9, 2, 1 },     // 69
-		{ 15, 2, 7 },    // 70
-		{ 19, 2, 11 },   // 71
-		{ 0, 0, 0 }
+	ErrInfo const err[] = {
+/*   0 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `+' do not match: `integer' vs `real'." },
+/*   1 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `-' do not match: `integer' vs `real'." },
+/*   2 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `*' do not match: `integer' vs `real'." },
+/*   3 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `/' do not match: `integer' vs `real'." },
+/*   4 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `%' do not match: `integer' vs `real'." },
+/*   5 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `^' do not match: `integer' vs `real'." },
+/*   6 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `^' do not match: `integer' vs `real'." },
+/*   7 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `==' do not match: `integer' vs `real'." },
+/*   8 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `!=' do not match: `integer' vs `real'." },
+/*   9 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `<' do not match: `integer' vs `real'." },
+/*  10 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `>' do not match: `integer' vs `real'." },
+/*  11 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `<=' do not match: `integer' vs `real'." },
+/*  12 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `>=' do not match: `integer' vs `real'." },
+/*  13 */ { 0, 1, 1,     "*tress*:1:1: Function `main(...)' is not defined." },
+/*  14 */ { 15, 2, 7,    "*tress*:2:7: Non-uniform key types, got a `real' instead of an `integer'." },
+/*  15 */ { 31, 4, 5,    "*tress*:4:5: Subscript is not an integer: character" },
+/*  16 */ { 23, 3, 5,    "*tress*:3:5: Bad index." },
+/*  17 */ { 23, 3, 5,    "*tress*:3:5: Bad index." },
+/*  18 */ { 19, 3, 5,    "*tress*:3:5: Subscript is not supported on `integer'." },
+/*  19 */ { 61, 5, 5,    "*tress*:5:5: Range operand `from' is not an integer." },
+/*  20 */ { 61, 5, 5,    "*tress*:5:5: Range operand `to' is not an integer." },
+/*  21 */ { 61, 5, 5,    "*tress*:5:5: Range operand `step' is not an integer." },
+/*  22 */ { 32, 3, 5,    "*tress*:3:5: Range step cannot be zero." },
+/*  23 */ { 19, 3, 5,    "*tress*:3:5: Range operator is not supported on `integer'." },
+/*  24 */ { 49, 7, 3,    "*tress*:7:3: Operand types for `+' do not match: `*unknown*' vs `integer'." },
+/*  25 */ { 46, 5, 11,   "*tress*:5:11: Class `L' does not have `iterator' method." },
+/*  25 */ { 79, 8, 11,   "*tress*:8:11: `For' source returned invalid iterator object." },
+/*  27 */ { 157, 14, 11, "*tress*:14:11: Class `LI' does not have `is_valid' method." },
+/*  28 */ { 175, 15, 11, "*tress*:15:11: `is_valid' in class `LI' is not a method." },
+/*  29 */ { 190, 17, 11, "*tress*:17:11: Class `LI' does not have `value' method." },
+/*  30 */ { 389, 31, 11, "*tress*:31:11: Class `LI' does not have `next' method." },
+/*  31 */ { 423, 34, 11, "*tress*:34:11: `For' source iterator is_valid returned non-boolean value." },
+/*  32 */ { 19, 2, 11,   "*tress*:2:11: `For' source is not an iterable." },
+/*  33 */ { 29, 3, 12,   "*tress*:3:12: `A' does not have superclass." },
+/*  34 */ { 60, 8, 3,    "*tress*:8:3: Operand types for `+=' do not match: `*observer*' vs `integer'." },
+/*  35 */ { 37, 4, 10,   "*tress*:4:10: Making an *observer* out of an *observer*." },
+/*  36 */ { 19, 3, 6,    "*tress*:3:6: use() argument must be an `*observer*', not an `integer'." },
+/*  37 */ { 16, 3, 2,    "*tress*:3:2: Function `f` accepts from 0 positional parameters, but 1 were given." },
+/*  38 */ { 21, 3, 2,    "*tress*:3:2: Function `f` accepts from 0 to 1 positional parameters, but 2 were given." },
+/*  39 */ { 25, 3, 2,    "*tress*:3:2: In call to `f()`, missing required positional argument: `a`." },
+/*  40 */ { 16, 2, 8,    "*tress*:2:8: string.find() first argument must be a `string', not an `integer'." },
+/*  41 */ { 27, 2, 19,   "*tress*:2:19: number.set_precision() argument must be an `integer', not a `real'." },
+/*  42 */ { 47, 3, 14,   "*tress*:3:14: Mathematics.square_root() argument must be a numeric type, either a `number' or a `real', not an `integer'." },
+/*  43 */ { 41, 3, 8,    "*tress*:3:8: Mathematics.round() first argument must be a numeric type, either a `number' or a `real', not an `integer'." },
+/*  44 */ { 46, 3, 13,   "*tress*:3:13: NumberSetStatistics.constructor() argument must be a `list', not an `integer'." },
+/*  45 */ { 41, 3, 9,    "*tress*:3:9: Algorithms.sorted() first argument must be a collection type, not an `integer'." },
+/*  46 */ { 46, 3, 13,   "*tress*:3:13: NumberSetStatistics.constructor() a collection contains value of an unexpected type: an `integer', at position: 0" },
+/*  47 */ { 46, 3, 13,   "*tress*:3:13: NumberSetStatistics.constructor() a collection is not uniformly typed: a `number', at position: 1" },
+/*  48 */ { 46, 3, 13,   "*tress*:3:13: NumberSetStatistics.constructor() argument must be a `list', not a `deque'." },
+/*  49 */ { 46, 3, 13,   "*tress*:3:13: NumberSetStatistics.constructor() argument must be a `list', not a `set'." },
+/*  50 */ { 41, 3, 9,    "*tress*:3:9: Algorithms.reduce() second argument must be one of {a `*function_reference*', a `*bound_method*'}, not an `integer'." },
+/*  51 */ { 14, 2, 6,    "*tress*:2:6: Operands are not boolean values: *none*" },
+/*  52 */ { 12, 2, 4,    "*tress*:2:4: `If' argument is not a boolean." },
+/*  53 */ { 58, 4, 18,   "*tress*:4:18: Class `A' does not have `equals' method." },
+/*  54 */ { 25, 3, 6,    "*tress*:3:6: Case type does not match switch type." },
+/*  55 */ { 16, 3, 2,    "*tress*:3:2: `number' does not have `clear' member (did you mean `is_exact'?)." },
+/*  56 */ { 60, 6, 6,    "*tress*:6:6: `*object_reference*' does not have `bar' member (did you mean `real'?)." },
+/*  57 */ { 60, 6, 6,    "*tress*:6:6: Changing upcasted reference." },
+/*  58 */ { 15, 3, 2,    "*tress*:3:2: `integer' is not a compound object." },
+/*  59 */ { 16, 3, 2,    "*tress*:3:2: Assignment to read-only location." },
+/*  60 */ { 29, 5, 4,    "*tress*:5:4: Assignment to temporary." },
+/*  61 */ { 19, 3, 2,    "*tress*:3:2: `string` does not support item assignment." },
+/*  62 */ { 35, 5, 4,    "*tress*:5:4: Arithmetic method `add' on an `A' returned result of incompatible type an `integer'." },
+/*  63 */ { 34, 5, 4,    "*tress*:5:4: User supplied `hash' function returned an invalid type a `real' instead of an `integer'." },
+/*  64 */ { 31, 3, 15,   "*tress*:3:15: There is no `<' operator for `*bound_method*'." },
+/*  65 */ { 11, 2, 4,    "*tress*:2:4: There is no `hash' operator for a `*bound_method*'." },
+/*  66 */ { 14, 3, 2,    "*tress*:3:2: Reference `integer' is not a function." },
+/*  67 */ { 14, 3, 2,    "*tress*:3:2: Range operator is not supported on `integer'." },
+/*  68 */ { 14, 2, 6,    "*tress*:2:6: Operands are not boolean values: boolean, *none*" },
+/*  69 */ { 9, 2, 1,     "*tress*:2:1: Operand is not a boolean value: *none*" },
+/*  70 */ { 15, 2, 7,    "*tress*:2:7: `While' argument is not a boolean." },
+/*  71 */ { 19, 2, 11,   "*tress*:2:11: Direct creation of instances of `*function_reference*' is not allowed." },
+		{ 0, 0, 0, nullptr }
 	};
-	int const (*e)[3]( err );
+	ErrInfo const* e( err );
 	for ( prog_src_t* prog( begin( progExecuteErr ) ), * progEnd( end( progExecuteErr ) ); prog != progEnd; ++ prog, ++ e ) {
 		if ( *prog ) {
 			test_execute( *prog, *e, static_cast<int>( prog - begin( progExecuteErr ) ) );

@@ -65,6 +65,13 @@ protected:
 	virtual void do_introspect( yaal::tools::HIntrospecteeInterface& ) override;
 };
 
+struct ErrInfo {
+	int _pos;
+	int _line;
+	int _col;
+	char const* _msg;
+};
+
 struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_tools_hhuginn_base> {
 	struct OLine {
 		enum class TYPE {
