@@ -133,8 +133,8 @@ TUT_UNIT_TEST( "grammar test" )
 		"numberLiteral = ( '$' >> real )",
 		"tupleLiteral = ( '(' >> -argList >> -',' >> ')' )",
 		"listLiteral = ( '[' >> -argList >> ']' )",
-		"dictLiteral = ( '{' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> '}' )",
-		"lookupLiteral = ( '[' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> ']' )",
+		"dictLiteral = ( '[' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> ']' )",
+		"lookupLiteral = ( '{' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> '}' )",
 		"stringLiteral = string_literal",
 		"setLiteral = ( '{' >> argument >> *( ',' >> argument ) >> '}' )",
 		"none = \"none\"",
@@ -265,7 +265,7 @@ TUT_UNIT_TEST( "functions (definition)" )
 			"\treturn((f(1), f(1,2), f(1,2,a:3,b:4)));\n"
 			"}\n"
 		),
-		"([1, 7, lookup()], [1, 2, lookup()], [1, 2, [\"a\": 3, \"b\": 4]])"
+		"([1, 7, {}], [1, 2, {}], [1, 2, {\"a\": 3, \"b\": 4}])"
 	);
 	ENSURE_EQUALS(
 		"variadic and keyword arguments failed",
@@ -277,7 +277,7 @@ TUT_UNIT_TEST( "functions (definition)" )
 			"\treturn((f(1), f(1,2), f(1,2,3,4), f(1,a:3), f(1,2,3,4,a:5,b:6)));\n"
 			"}\n"
 		),
-		"([1, 7, (), lookup()], [1, 2, (), lookup()], [1, 2, (3, 4), lookup()], [1, 7, (), [\"a\": 3]], [1, 2, (3, 4), [\"a\": 5, \"b\": 6]])"
+		"([1, 7, (), {}], [1, 2, (), {}], [1, 2, (3, 4), {}], [1, 7, (), {\"a\": 3}], [1, 2, (3, 4), {\"a\": 5, \"b\": 6}])"
 	);
 TUT_TEARDOWN()
 

@@ -160,7 +160,7 @@ char const progExecuteErr13[] =
 
 char const progExecuteErr14[] =
 	"main() {\n"
-	"\t{1:2,1.5:3};\n"
+	"\t[1:2,1.5:3];\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;

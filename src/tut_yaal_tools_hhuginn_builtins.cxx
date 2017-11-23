@@ -593,106 +593,106 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "dict()" )
 	ENSURE_EQUALS(
 		"dict() iterator failed",
-		execute( "main(){x=dict();x={\"Ala\":0,\"ma\":1,\"kota.\":2};v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ),
+		execute( "main(){x=[\"Ala\":0,\"ma\":1,\"kota.\":2];v=\"\";for(e:x){v=v+e;v=v+string(x[e]);}return(v);}" ),
 		"\"Ala0kota.2ma1\""
 	);
 	ENSURE_EQUALS(
 		"dict() failed (explicit)",
 		execute( "main(){x=dict();x[\"Ala\"]=0;x[\"ma\"]=1;x[\"kota.\"]=2;return(x);}" ),
-		"{\"Ala\": 0, \"kota.\": 2, \"ma\": 1}"
+		"[\"Ala\": 0, \"kota.\": 2, \"ma\": 1]"
 	);
 	ENSURE_EQUALS(
 		"dict() failed (literal)",
-		execute( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};return(x);}" ),
-		"{\"Ala\": 0, \"kota.\": 2, \"ma\": 1}"
+		execute( "main(){x=[\"Ala\":0,\"ma\":1,\"kota.\":2];return(x);}" ),
+		"[\"Ala\": 0, \"kota.\": 2, \"ma\": 1]"
 	);
 	ENSURE_EQUALS(
 		"dict() size() failed",
-		execute( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};return(size(x));}" ),
+		execute( "main(){x=[\"Ala\":0,\"ma\":1,\"kota.\":2];return(size(x));}" ),
 		"3"
 	);
 	ENSURE_EQUALS(
 		"dict.kas_key() failed",
-		execute( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};return([x.has_key(\"kota.\"),x.has_key(\"psa.\")]);}" ),
+		execute( "main(){x=[\"Ala\":0,\"ma\":1,\"kota.\":2];return([x.has_key(\"kota.\"),x.has_key(\"psa.\")]);}" ),
 		"[true, false]"
 	);
 	ENSURE_EQUALS(
 		"dict.get()/dict.try_get() failed",
-		execute( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};return([x.get(\"ma\"),x.get(\"psa.\",3)]);}" ),
+		execute( "main(){x=[\"Ala\":0,\"ma\":1,\"kota.\":2];return([x.get(\"ma\"),x.get(\"psa.\",3)]);}" ),
 		"[1, 3]"
 	);
 	ENSURE_EQUALS(
 		"dict.get() on non existing succeeded",
-		execute_except( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};return(x.get(\"psa\"));}" ),
+		execute_except( "main(){x=[\"Ala\":0,\"ma\":1,\"kota.\":2];return(x.get(\"psa\"));}" ),
 		"*anonymous stream*:1:49: Key does not exist in `dict'."
 	);
 	ENSURE_EQUALS(
 		"dict.erase() failed",
-		execute( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};x.erase(\"kota.\");return(x);}" ),
-		"{\"Ala\": 0, \"ma\": 1}"
+		execute( "main(){x=[\"Ala\":0,\"ma\":1,\"kota.\":2];x.erase(\"kota.\");return(x);}" ),
+		"[\"Ala\": 0, \"ma\": 1]"
 	);
 	ENSURE_EQUALS(
 		"dict.clear()/dict.clone() failed",
-		execute( "main(){x={\"Ala\":0,\"ma\":1,\"kota.\":2};y=copy(x);x.clear();return([x,y]);}" ),
-		"[{}, {\"Ala\": 0, \"kota.\": 2, \"ma\": 1}]"
+		execute( "main(){x=[\"Ala\":0,\"ma\":1,\"kota.\":2];y=copy(x);x.clear();return([x,y]);}" ),
+		"[dict(), [\"Ala\": 0, \"kota.\": 2, \"ma\": 1]]"
 	);
-	ENSURE_EQUALS( "dict reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed({2:0,3:1,5:-1,7:-2}),list);}" ), "[7, 5, 3, 2]" );
-	ENSURE_EQUALS( "dict reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed({2:0,3:1,5:-1,7:-2});algo.materialize(copy(x),list).push(size(x));}" ), "[7, 5, 3, 2, 4]" );
+	ENSURE_EQUALS( "dict reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed([2:0,3:1,5:-1,7:-2]),list);}" ), "[7, 5, 3, 2]" );
+	ENSURE_EQUALS( "dict reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed([2:0,3:1,5:-1,7:-2]);algo.materialize(copy(x),list).push(size(x));}" ), "[7, 5, 3, 2, 4]" );
 	ENSURE_EQUALS(
 		"dict equals failed",
 		execute(
 			"main(){"
-			"d1={1:1,2:2,3:3};"
-			"d2={1:1,2:2,3:3};"
-			"d3f={1:1,2:2,4:3};"
-			"d3s={1:1,2:2,3:4};"
+			"d1=[1:1,2:2,3:3];"
+			"d2=[1:1,2:2,3:3];"
+			"d3f=[1:1,2:2,4:3];"
+			"d3s=[1:1,2:2,3:4];"
 			"return([d1==d2,d1==d3f,d1==d3s]);}"
 		),
 		"[true, false, false]"
 	);
 	ENSURE_EQUALS(
 		"dict on non-uniform succeeded",
-		execute_except( "main(){{1:2,2.:3.};}" ),
+		execute_except( "main(){[1:2,2.:3.];}" ),
 		"*anonymous stream*:1:13: Non-uniform key types, got a `real' instead of an `integer'."
 	);
 	ENSURE_EQUALS(
 		"dict on non-comparable succeeded",
-		execute_except( "class A{_x=none;}main(){x={A():0};return(x);}", HHuginn::COMPILER::BE_SLOPPY ),
+		execute_except( "class A{_x=none;}main(){x=[A():0];return(x);}", HHuginn::COMPILER::BE_SLOPPY ),
 		"*anonymous stream*:1:28: Key type `A' is not a comparable."
 	);
 	ENSURE_EQUALS(
 		"dict update failed",
 		execute(
 			"main(){\n"
-			"d1={2:2,3:3,5:5};\n"
-			"d2={2:2,4:4,8:8};\n"
+			"d1=[2:2,3:3,5:5];\n"
+			"d2=[2:2,4:4,8:8];\n"
 			"d1.update(d2);\n"
 			"return(d1);\n"
 			"}\n"
 		),
-		"{2: 2, 3: 3, 4: 4, 5: 5, 8: 8}"
+		"[2: 2, 3: 3, 4: 4, 5: 5, 8: 8]"
 	);
 	ENSURE_EQUALS(
 		"dict.update on non-uniform succeeded",
-		execute_except( "main(){{1:2}.update({2.:3.});}" ),
+		execute_except( "main(){[1:2].update([2.:3.]);}" ),
 		"*anonymous stream*:1:20: Non-uniform key types, got a `real' instead of an `integer'."
 	);
 	ENSURE_EQUALS(
 		"dict hash failed",
-		execute( "main(){[dict().hash(),{1:2}.hash()];}" ),
+		execute( "main(){[dict().hash(),[1:2].hash()];}" ),
 		"[10, 95]"
 	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "lookup()" )
 #if ( TARGET_CPU_BITS == 64 )
-	char const expected1[] = "[none: 7, true: false, 1: \"ma\", \"Ala\": 0, \"kota.\": 2]";
+	char const expected1[] = "{none: 7, true: false, 1: \"ma\", \"Ala\": 0, \"kota.\": 2}";
 #else
-	char const expected1[] = "[none: 7, true: false, 1: \"ma\", \"kota.\": 2, \"Ala\": 0]";
+	char const expected1[] = "{none: 7, true: false, 1: \"ma\", \"kota.\": 2, \"Ala\": 0}";
 #endif
 	ENSURE_EQUALS(
 		"lookup() iterator failed",
-		execute( "main(){x=[\"Ala\":0,1:\"ma\",\"kota.\":2,none:7,true:false];return(x);}" ),
+		execute( "main(){x={\"Ala\":0,1:\"ma\",\"kota.\":2,none:7,true:false};return(x);}" ),
 		expected1
 	);
 	ENSURE_EQUALS(

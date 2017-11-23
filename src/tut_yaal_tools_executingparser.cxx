@@ -1478,8 +1478,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule tupleLiteral( '(' >> -argList >> -e_p::constant( ',' ) >> ')' );
 	HRule setLiteral( '{' >> expression >> *( ',' >> expression ) >> '}' );
 	HRule dictLiteralElement( expression >> ':' >> expression );
-	HRule dictLiteral( '{' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> '}' );
-	HRule lookupLiteral( '[' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> ']' );
+	HRule dictLiteral( '[' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> ']' );
+	HRule lookupLiteral( '{' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> '}' );
 	HRule parameter( ( name ^ ( e_p::constant( "..." ) | ":::" ) ) >> -( '=' >> expression ) );
 	HRule variadicParameter( name >> "..." );
 	HRule namedParameterCapture( name >> ":::" );
@@ -1594,8 +1594,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AK_ = ( ( '-' >> AK_ ) | ( ( ( '-' >> AL_ ) | AL_ ) >> *( '^' >> AK_ ) ) )",
 		"AL_ = ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( J_ >> AM_ ) ) | real | integer"
 			" | ( ( ( '$' >> real ) | character_literal ) >> -( J_ >> I_ ) ) | ( ( ( '(' >> -P_ >> -',' >> ')' )"
-			" | ( '[' >> -P_ >> ']' ) | ( '{' >> -( AN_ >> *( ',' >> AN_ ) ) >> '}' )"
-			" | ( '[' >> -( AN_ >> *( ',' >> AN_ ) ) >> ']' )"
+			" | ( '[' >> -P_ >> ']' ) | ( '[' >> -( AN_ >> *( ',' >> AN_ ) ) >> ']' )"
+			" | ( '{' >> -( AN_ >> *( ',' >> AN_ ) ) >> '}' )"
 			" | string_literal ) >> -( ( H_ | J_ ) >> AM_ ) )"
 			" | ( ( '{' >> C_ >> *( ',' >> C_ ) >> '}' ) >> -( J_ >> AM_ ) )"
 			" | \"none\" | \"true\" | \"false\" | ( B_ >> AM_ )"
