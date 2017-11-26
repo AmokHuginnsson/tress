@@ -863,6 +863,13 @@ char const progExecuteErr87[] =
 	"}\n"
 ;
 
+char const progExecuteErr88[] =
+	"f(){0;}\n"
+	"main() {\n"
+	"f()[0:1];\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -978,6 +985,7 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr85,
 		progExecuteErr86,
 		progExecuteErr87,
+		progExecuteErr88,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1069,6 +1077,7 @@ TUT_UNIT_TEST( "report execution error" )
 /*  85 */ { 16, 2, 8,    "*tress*:2:8: Bad number of parameters in call to: `string.find()', expected at most: 2, got: 3." },
 /*  86 */ { 16, 2, 8,    "*tress*:2:8: Bad number of parameters in call to: `string.find()', expected at least: 1, got: 0." },
 /*  87 */ { 16, 2, 8,    "*tress*:2:8: string.find() first argument must be a `string', not an `integer'." },
+/*  87 */ { 20, 3, 4,    "*tress*:3:4: Range operator is not supported on `integer'." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

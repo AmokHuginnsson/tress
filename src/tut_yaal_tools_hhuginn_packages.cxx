@@ -240,6 +240,17 @@ TUT_UNIT_TEST( "Algorithms" )
 		"[3, 15, 27, 39]"
 	);
 	ENSURE_EQUALS(
+		"Algorithms.sorted (tuple) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"t=(2,7,3,9,0,-5);\n"
+			"return(algo.sorted(t));\n"
+			"}"
+		),
+		"[-5, 0, 2, 3, 7, 9]"
+	);
+	ENSURE_EQUALS(
 		"Algorithms.sorted (list) failed",
 		execute(
 			"import Algorithms as algo;\n"
@@ -288,7 +299,7 @@ TUT_UNIT_TEST( "Algorithms" )
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
-			"d={2:0,7:0,3:0,9:0,0:0,-5:0};\n"
+			"d=[2:0,7:0,3:0,9:0,0:0,-5:0];\n"
 			"return(algo.sorted(d));\n"
 			"}"
 		),
@@ -299,7 +310,7 @@ TUT_UNIT_TEST( "Algorithms" )
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
-			"l=lookup();l[2]=l[7]=l[3]=l[9]=l[0]=l[-5]=0;\n"
+			"l={2:0,7:0,3:0,9:0,0:0,-5:0};\n"
 			"return(algo.sorted(l));\n"
 			"}"
 		),
