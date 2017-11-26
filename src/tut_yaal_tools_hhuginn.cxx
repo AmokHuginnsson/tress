@@ -58,21 +58,13 @@ TUT_UNIT_TEST( "grammar test" )
 	HRule hg( h.make_engine() );
 	HGrammarDescription gd( hg );
 
-#define IDENTIFIER "[a-zA-Z\\x{0391}-\\x{03c9}_][a-zA-Z\\x{0391}-\\x{03c9}0-9_]*"
-
 	char const expected[][500] = {
 		"huginnGrammar = +( classDefinition | functionDefinition | importStatement )",
 		"classDefinition = ( \"class\" >> classIdentifier >> -( ':' >> baseIdentifier ) >> '{' >> +( field | functionDefinition ) >> '}' )",
 		"functionDefinition = ( functionDefinitionIdentifier >> callable )",
 		"importStatement = ( \"import\" >> packageName >> \"as\" >> importName >> ';' )",
-		"classIdentifier = regex( \"" IDENTIFIER "\" )",
-		"baseIdentifier = regex( \"" IDENTIFIER "\" )",
 		"field = ( fieldIdentifier >> '=' >> expression >> ';' )",
-		"functionDefinitionIdentifier = regex( \"" IDENTIFIER "\" )",
 		"callable = ( '(' >> -( ( nameList >> -( ',' >> variadicParameter ) >> -( ',' >> namedParameterCapture ) ) | ( variadicParameter >> -( ',' >> namedParameterCapture ) ) | namedParameterCapture ) >> ')' >> '{' >> *statement >> '}' )",
-		"packageName = regex( \"" IDENTIFIER "\" )",
-		"importName = regex( \"" IDENTIFIER "\" )",
-		"fieldIdentifier = regex( \"" IDENTIFIER "\" )",
 		"expression = ( *( ( assignable >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> value )",
 		"nameList = ( parameter >> *( ',' >> parameter ) )",
 		"variadicParameter = ( parameterIdentifier >> \"...\" )",
@@ -81,7 +73,6 @@ TUT_UNIT_TEST( "grammar test" )
 		"assignable = ( subscript | variableSetter )",
 		"value = ternary",
 		"parameter = ( ( parameterIdentifier ^ ( \"...\" | \":::\" ) ) >> -( '=' >> expression ) )",
-		"parameterIdentifier = regex( \"" IDENTIFIER "\" )",
 		"ifStatement = ( ifClause >> *( \"else\" >> ifClause ) >> -( \"else\" >> scope ) )",
 		"whileStatement = ( \"while\" >> '(' >> expression >> ')' >> scope )",
 		"forStatement = ( \"for\" >> '(' >> assignable >> ':' >> expression >> ')' >> scope )",
@@ -94,26 +85,22 @@ TUT_UNIT_TEST( "grammar test" )
 		"expressionStatement = ( expression >> ';' )",
 		"scope = ( '{' >> *statement >> '}' )",
 		"subscript = ( reference >> +( subscriptOperator | functionCallOperator | memberAccess ) )",
-		"variableSetter = regex( \"" IDENTIFIER "\" )",
 		"ternary = ( ( booleanOr >> -( \"^^\" >> booleanOr ) ) >> -( '?' >> expression >> ':' >> expression ) )",
 		"ifClause = ( \"if\" >> '(' >> expression >> ')' >> scope )",
 		"caseStatement = ( \"case\" >> '(' >> expression >> ')' >> ':' >> scope >> -breakStatement )",
 		"defaultStatement = ( \"default\" >> ':' >> scope )",
 		"catchStatement = ( \"catch\" >> '(' >> exceptionType >> assignable >> ')' >> scope )",
-		"reference = regex( \"" IDENTIFIER "\" )",
 		"subscriptOperator = ( '[' >> ( ( ( rangeOper >> -argument ) | ( argument >> -( rangeOper >> -argument ) ) ) >> -( rangeOper >> -argument ) ) >> ']' )",
 		"functionCallOperator = ( '(' >> -( ( argList >> -( ',' >> namedParameters ) ) | namedParameters ) >> ')' )",
 		"memberAccess = ( '.' >> member )",
 		"booleanOr = ( booleanAnd >> *( \"||\" >> booleanAnd ) )",
-		"exceptionType = regex( \"" IDENTIFIER "\" )",
 		"rangeOper = ':'",
 		"argument = expression",
 		"argList = ( functionArgument >> *( ',' >> functionArgument ) )",
 		"namedParameters = ( () >> namedParameter >> *( ',' >> namedParameter ) >> () >> () )",
-		"member = regex( \"" IDENTIFIER "\" )",
 		"booleanAnd = ( equality >> *( \"&&\" >> equality ) )",
 		"functionArgument = ( argument ^ ':' )",
-		"namedParameter = ( regex( \"[a-zA-Z\\x{0391}-\\x{03c9}_][a-zA-Z\\x{0391}-\\x{03c9}0-9_]*\" ) >> ':' >> functionArgument )",
+		"namedParameter = ( parameterName >> ':' >> functionArgument )",
 		"equality = ( compare >> -( ( \"==\" | \"!=\" ) >> compare ) )",
 		"compare = ( sum >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> sum ) )",
 		"sum = ( multiplication >> *( '+-' >> multiplication ) )",
@@ -142,8 +129,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"false = \"false\"",
 		"lambda = ( ( '@' >> -( '[' >> captureList >> ']' ) ) >> callable )",
 		"dictLiteralElement = ( argument >> ':' >> argument )",
-		"captureList = ( capture >> *( ',' >> capture ) )",
-		"capture = regex( \"" IDENTIFIER "\" )"
+		"captureList = ( capture >> *( ',' >> capture ) )"
 	};
 
 	int i( 0 );
