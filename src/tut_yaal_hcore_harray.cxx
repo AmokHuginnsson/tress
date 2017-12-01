@@ -105,12 +105,23 @@ TUT_UNIT_TEST( "Copy constructor." )
 		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "Operator [ ]." )
+TUT_UNIT_TEST( "operator []" )
+	item_t::set_start_id( 0 );
+	array_t array( { 0, 1, 2, 3, 4, 5, 6 } );
+	ENSURE_EQUALS( "access normal failed", array[ 0 ], 0 );
+	ENSURE_EQUALS( "access normal failed", array[ 6 ], 6 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "at()" )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
-	array_t array ( SIZE );
-	ENSURE_THROW( "access beyond size succed", array [ SIZE ] = 0, HException );
-	ENSURE_THROW( "access with negative index succed", array[ - SIZE - 1 ] = 0, HException );
+	array_t array( { 0, 1, 2, 3, 4, 5, 6 } );
+	ENSURE_EQUALS( "access normal failed", array.at( 0 ), 0 );
+	ENSURE_EQUALS( "access normal failed", array.at( 6 ), 6 );
+	ENSURE_EQUALS( "access from end failed", array.at( -1 ), 6 );
+	ENSURE_EQUALS( "access from end failed", array.at( -SIZE ), 0 );
+	ENSURE_THROW( "access beyond size succed", array.at( SIZE ) = 0, HOutOfRangeException );
+	ENSURE_THROW( "access with negative index succed", array.at( - SIZE - 1 ) = 0, HOutOfRangeException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Operator bool." )
