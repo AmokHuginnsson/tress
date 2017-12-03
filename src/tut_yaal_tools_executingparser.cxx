@@ -1517,9 +1517,9 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule sum( multiplication >> ( * ( '+' >> multiplication ) ) );
 	HRule compare( sum >> -( ( string( "<=" ) | ">=" | "<" | ">" ) >> sum ) );
 	HRule equals( compare >> -( ( string( "==" ) | "!=" ) >> compare ) );
-	HRule booleanAnd( equals >> *( "&&" >> equals ) );
-	HRule booleanOr( booleanAnd >> *( string( "||" ) >> booleanAnd ) );
-	HRule booleanXor( booleanOr >> -( string( "^^" ) >> booleanOr ) );
+	HRule booleanAnd( equals >> *( ( string( "&&" ) | "⋀" ) >> equals ) );
+	HRule booleanOr( booleanAnd >> *( ( string( "||" ) | "⋁" ) >> booleanAnd ) );
+	HRule booleanXor( booleanOr >> -( ( string( "^^" ) | "⊕" ) >> booleanOr ) );
 	HRule ternary( booleanXor >> -( '?' >> expression >> ':' >> expression ) );
 	HRule value( ternary );
 	HRule subscript( name >> +( subscriptOperator | functionCallOperator | memberAccess ) );
@@ -1557,15 +1557,15 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	char const huginnDesc[][640] = {
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ | ( \"import\" >> B_ >> \"as\" >> B_ >> ';' ) )",
 		"B_ = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
-		"C_ = ( *( ( E_ >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> ( ( F_ >> -( \"^^\" >> F_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
+		"C_ = ( *( ( E_ >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> ( ( F_ >> -( ( \"^^\" | \"⊕\" ) >> F_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
 		"D_ = ( B_ >> G_ )",
 		"E_ = ( ( B_ >> +( H_ | I_ | J_ ) ) | B_ )",
-		"F_ = ( K_ >> *( \"||\" >> K_ ) )",
+		"F_ = ( K_ >> *( ( \"||\" | \"⋁\" ) >> K_ ) )",
 		"G_ = ( '(' >> -( ( ( L_ >> *( ',' >> L_ ) ) >> -( ',' >> M_ ) >> -( ',' >> N_ ) ) | ( M_ >> -( ',' >> N_ ) ) | N_ ) >> ')' >> '{' >> *O_ >> '}' )",
 		"H_ = ( '[' >> ( ( ( ':' >> -C_ ) | ( C_ >> -( ':' >> -C_ ) ) ) >> -( ':' >> -C_ ) ) >> ']' )",
 		"I_ = ( ( '(' >> -( P_ >> -( ',' >> Q_ ) ) >> ')' ) | ( '(' >> -Q_ >> ')' ) )",
 		"J_ = ( '.' >> B_ )",
-		"K_ = ( R_ >> *( \"&&\" >> R_ ) )",
+		"K_ = ( R_ >> *( ( \"&&\" | \"⋀\" ) >> R_ ) )",
 		"L_ = ( ( B_ ^ ( \"...\" | \":::\" ) ) >> -( '=' >> C_ ) )",
 		"M_ = ( B_ >> \"...\" )",
 		"N_ = ( B_ >> \":::\" )",
