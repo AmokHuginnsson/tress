@@ -27,6 +27,7 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/system.hxx>
+#include <yaal/hcore/hcore.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -67,6 +68,32 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "available core count" )
 	cout << "\nAvailable CPU cores: " << hcore::system::get_core_count_info() << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "substitute_environment" )
+	/* one layer */ {
+		HString s( "HOME=${HOME}:/path/${DEFAULT_TARGET}/subdir/" );
+		substitute_environment( s, ENV_SUBST_MODE::ONE_LAYER );
+		HString expected( "HOME=" );
+		char const* HOME( getenv( "HOME" ) );
+		expected.append( HOME ? HOME : "" ).append( ":/path/debug/subdir/" );
+		ENSURE_EQUALS( "substitute_environment( ONE_LAYER ) failed", s, expected );
+	}
+	/* one layer but recursive in nature */ {
+		set_env( "LAYER", "${HOME}:/path/" );
+		HString s( "HOME=${LAYER}${DEFAULT_TARGET}/subdir/" );
+		substitute_environment( s, ENV_SUBST_MODE::ONE_LAYER );
+		ENSURE_EQUALS( "substitute_environment( ONE_LAYER ) failed", s, "HOME=${HOME}:/path/debug/subdir/" );
+	}
+	/* recursive  */ {
+		set_env( "LAYER", "${HOME}:/path/" );
+		HString s( "HOME=${LAYER}${DEFAULT_TARGET}/subdir/" );
+		substitute_environment( s, ENV_SUBST_MODE::RECURSIVE );
+		HString expected( "HOME=" );
+		char const* HOME( getenv( "HOME" ) );
+		expected.append( HOME ? HOME : "" ).append( ":/path/debug/subdir/" );
+		ENSURE_EQUALS( "substitute_environment( ONE_LAYER ) failed", s, expected );
+	}
 TUT_TEARDOWN()
 
 }
