@@ -1244,13 +1244,13 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 	ENSURE_EQUALS(
 		"invalid construction from type(expr)(...) succeeded",
 		execute_except(
-			"import Mathematics as M;\n"
+			"import OperatingSystem as os;\n"
 			"main(){\n"
-			"m=M.matrix(real,1,1);\n"
-			"type(m)();\n"
+			"s=os.stdout();\n"
+			"type(s)();\n"
 			"}\n"
 		),
-		"*anonymous stream*:4:8: Explicit construction of class `Matrix' objects (instances) is forbidden."
+		"*anonymous stream*:4:8: Explicit construction of class `Stream' objects (instances) is forbidden."
 	);
 	ENSURE_EQUALS(
 		"out of order named parameter hash",
