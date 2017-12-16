@@ -1145,6 +1145,15 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "bugs regressions checks" )
 	ENSURE_EQUALS(
+		"function arguments caching mechanism",
+		execute(
+			"main(){"
+			"{[0],string};"
+			"}"
+		),
+		"{[0], string}"
+	);
+	ENSURE_EQUALS(
 		"recursive user destructor",
 		execute(
 			"class Crash {\n"
