@@ -651,6 +651,29 @@ TUT_UNIT_TEST( "dict()" )
 		"[true, false, false]"
 	);
 	ENSURE_EQUALS(
+		"dict values() failed",
+		execute(
+			"import Algorithms as algo;"
+			"main(){"
+			"d = [0:1,1:2,2:4,3:8];"
+			"algo.materialize(d.values(),list);"
+			"}"
+		),
+		"[(0, 1), (1, 2), (2, 4), (3, 8)]"
+	);
+	ENSURE_EQUALS(
+		"dict values() size/copy failed",
+		execute(
+			"import Algorithms as algo;"
+			"main(){"
+			"d = [0:1,1:2,2:4,3:8];"
+			"v = copy(d.values());"
+			"algo.materialize(v,list).push(size(v));"
+			"}"
+		),
+		"[(0, 1), (1, 2), (2, 4), (3, 8), 4]"
+	);
+	ENSURE_EQUALS(
 		"dict on non-uniform succeeded",
 		execute_except( "main(){[1:2,2.:3.];}" ),
 		"*anonymous stream*:1:13: Non-uniform key types, got a `real' instead of an `integer'."
