@@ -738,8 +738,52 @@ TUT_UNIT_TEST( "lookup()" )
 		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;s=size(x);x.clear();return([s,size(x)]);}" ),
 		"[5, 0]"
 	);
-	ENSURE_EQUALS( "lookup reversed() failed", execute( "import Algorithms as algo;main(){x=lookup();x[2]=0;x[3]=1;x[5]=-1;x[7]=-2;algo.materialize(algo.reversed(x),list);}" ), "[7, 5, 3, 2]" );
-	ENSURE_EQUALS( "lookup reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=lookup();x[2]=0;x[3]=1;x[5]=-1;x[7]=-2;y=algo.reversed(x);algo.materialize(copy(y),list).push(size(y));}" ), "[7, 5, 3, 2, 4]" );
+	ENSURE_EQUALS(
+		"lookup reversed() failed",
+		execute(
+			"import Algorithms as algo;"
+			"main(){"
+			"x={2: 0, 3: 1, 5: -1, 7: -2};"
+			"algo.materialize(algo.reversed(x),list);"
+			"}"
+		),
+		"[7, 5, 3, 2]"
+	);
+	ENSURE_EQUALS(
+		"lookup reversed() size/copy failed",
+		execute(
+			"import Algorithms as algo;"
+			"main(){"
+			"x={2: 0, 3: 1, 5: -1, 7: -2};"
+			"y=algo.reversed(x);"
+			"algo.materialize(copy(y),list).push(size(y));"
+			"}"
+		),
+		"[7, 5, 3, 2, 4]"
+	);
+	ENSURE_EQUALS(
+		"lookup values() failed",
+		execute(
+			"import Algorithms as algo;"
+			"main(){"
+			"x={2: 0, 3: 1, 5: -1, 7: -2};"
+			"algo.materialize(x.values(),list);"
+			"}"
+		),
+		"[(2, 0), (3, 1), (5, -1), (7, -2)]"
+	);
+	ENSURE_EQUALS(
+		"lookup values() size/copy failed",
+		execute(
+			"import Algorithms as algo;"
+			"main(){"
+			"x={2: 0, 3: 1, 5: -1, 7: -2};"
+			"y=x.values();"
+			"algo.materialize(copy(y),list).push(size(y));"
+			"}"
+		),
+		"[(2, 0), (3, 1), (5, -1), (7, -2), 4]"
+	);
 #if ( TARGET_CPU_BITS == 64 )
 	char const expected2[] = "\"none7truefalse1maAla0kota.2|1maAla0kota.2\"";
 #else
