@@ -445,6 +445,16 @@ TUT_UNIT_TEST( "list()" )
 		"*anonymous stream*:1:28: invalid insertion position: 5"
 	);
 	ENSURE_EQUALS(
+		"list resize failed",
+		execute( "main(){x=[].resize(5,0);x[0]+=1;y=copy(x).resize(3,none);return((x,y));}" ),
+		"([1, 0, 0, 0, 0], [1, 0, 0])"
+	);
+	ENSURE_EQUALS(
+		"list resize with invalid size succeeded",
+		execute_except( "main(){[].resize(-1,none);}" ),
+		"*anonymous stream*:1:17: invalid new size: -1"
+	);
+	ENSURE_EQUALS(
 		"list pop failed",
 		execute( "main(){x=list(2,3,5,7);x.pop();return(x);}" ),
 		"[2, 3, 5]"
