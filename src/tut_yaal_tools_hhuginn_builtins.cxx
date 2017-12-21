@@ -113,6 +113,8 @@ TUT_UNIT_TEST( "pow" )
 	ENSURE_EQUALS( "pow user succeeded", execute_except( "class A{_x=none;}main(){return(A()^A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `power' method." );
 	ENSURE_EQUALS( "pow char succeeded", execute_except( "main(){c=character;return(c('2')^c('3'));}" ), "*anonymous stream*:1:33: There is no `^' operator for a `character'." );
 	ENSURE_EQUALS( "too big exponent succeeded", execute_except( "main(){x=$2;x^=x;x^=x;x^=x;x^=x;}" ), "*anonymous stream*:1:29: Uncaught exception: Exponent too big: 32317006071311007300714876688669951960444102669715484032130345427524655138867890893197201411522913463688717960921898019494119559150490921095088152386448283120630877367300996091750197750389652106796057638384067568276792218642619756161838094338476170470581645852036305042887575891541065808607552399123930385521914333389668342420684974786564569494856176035326322058077805659331026192708460314150258592864177116725943603718461857357598351152301645904403697613233287231227125684710820209725157101726931323469678542580656697935045997268352998638215525166389437335543602135433229604645318478604952148193555853611059596230656" );
+	ENSURE_EQUALS( "pow 0^0 real succeeded", execute_except( "main(){return(0.^0.);}" ), "*anonymous stream*:1:17: Uncaught exception: indeterminate form 0^0" );
+	ENSURE_EQUALS( "pow 0^0 number succeeded", execute_except( "main(){return($0^$0);}" ), "*anonymous stream*:1:17: Uncaught exception: indeterminate form 0^0" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "factorial" )
