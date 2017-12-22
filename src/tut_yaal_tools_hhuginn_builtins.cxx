@@ -460,6 +460,37 @@ TUT_UNIT_TEST( "list()" )
 		"[2, 3, 5]"
 	);
 	ENSURE_EQUALS(
+		"list sort failed",
+		execute(
+			"main(){\n"
+			"l=[2,7,3,9,0,-5];\n"
+			"return(l.sort());\n"
+			"}"
+		),
+		"[-5, 0, 2, 3, 7, 9]"
+	);
+	ENSURE_EQUALS(
+		"list sort (key retr func) failed",
+		execute(
+			"class Pair {\n"
+			"_first = none;\n"
+			"_second = none;\n"
+			"constructor( first_, second_ ) {\n"
+			"_first = first_;\n"
+			"_second = second_;\n"
+			"}\n"
+			"to_string() {\n"
+			"return(\"{{{}, {}}}\".format(_first,_second));\n"
+			"}\n"
+			"}\n"
+			"main(){\n"
+			"l=[Pair(2,9),Pair(7,3),Pair(3,-1),Pair(9,4),Pair(0,2),Pair(-5,7)];\n"
+			"return((copy(l).sort(@(x){x._first;}),l.sort(@(x){x._second;})));\n"
+			"}"
+		),
+		"([{-5, 7}, {0, 2}, {2, 9}, {3, -1}, {7, 3}, {9, 4}], [{3, -1}, {0, 2}, {7, 3}, {9, 4}, {-5, 7}, {2, 9}])"
+	);
+	ENSURE_EQUALS(
 		"list clear failed",
 		execute( "main(){x=list(2,3,5,7);x.clear();return(x);}" ),
 		"[]"
