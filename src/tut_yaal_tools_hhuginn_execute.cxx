@@ -1045,7 +1045,7 @@ TUT_UNIT_TEST( "report execution error" )
 /*  53 */ { 58, 4, 18,   "*tress*:4:18: Class `A' does not have `equals' method." },
 /*  54 */ { 25, 3, 6,    "*tress*:3:6: Case type does not match switch type." },
 /*  55 */ { 16, 3, 2,    "*tress*:3:2: `number' does not have `clear' member (did you mean `is_exact'?)." },
-/*  56 */ { 60, 6, 6,    "*tress*:6:6: `*object_reference*' does not have `bar' member (did you mean `real'?)." },
+/*  56 */ { 60, 6, 6,    "*tress*:6:6: `*object_reference*' does not have `bar' member (did you mean `add'?)." },
 /*  57 */ { 60, 6, 6,    "*tress*:6:6: Changing upcasted reference." },
 /*  58 */ { 15, 3, 2,    "*tress*:3:2: `integer' is not a compound object." },
 /*  59 */ { 16, 3, 2,    "*tress*:3:2: Assignment to read-only location." },

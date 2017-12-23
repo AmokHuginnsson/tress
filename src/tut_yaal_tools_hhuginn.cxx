@@ -1492,7 +1492,12 @@ TUT_UNIT_TEST( "incremental mode" )
 		{ "class A { constructor(){a;} }", OLine::TYPE::DEFINITION },
 		{ "A();" }
 	};
-	ENSURE_EQUALS( "Crash trigger", execute_incremental( l8 ), "*anonymous stream*:1:25: Symbol `a' is not defined in this context (did you mean `A'?).*anonymous stream*:2:1: Symbol `A' is not defined in this context (did you mean `a'?)." );
+	ENSURE_EQUALS(
+		"Crash trigger",
+		execute_incremental( l8 ),
+		"*anonymous stream*:1:25: Symbol `a' is not defined in this context (did you mean `add'?)."
+		"*anonymous stream*:2:1: Symbol `A' is not defined in this context (did you mean `a'?)."
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "introspection" )

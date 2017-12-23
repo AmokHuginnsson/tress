@@ -46,18 +46,33 @@ TUT_TEST_GROUP( tut_yaal_tools_string, "yaal::tools::string" );
 
 TUT_UNIT_TEST( "levenshtein distance same strings" )
 	ENSURE_EQUALS( msgLevFail,
-			distance::levenshtein_damerau( "tut_yaal_tools_string", "tut_yaal_tools_string", true ), 0 );
+			distance( "tut_yaal_tools_string", "tut_yaal_tools_string", DISTANCE_METRIC::LEVENSHTEIN ), 0 );
 	ENSURE_EQUALS( msgLevFail,
-			distance::levenshtein_damerau( "tut_yaal_tools_string", "tut_yaal_tools_string", false ), 0 );
+			distance( "tut_yaal_tools_string", "tut_yaal_tools_string", DISTANCE_METRIC::DAMERAU_LEVENSHTEIN ), 0 );
+	ENSURE_EQUALS( msgLevFail,
+			distance( "tut_yaal_tools_string", "tut_yaal_tools_string", DISTANCE_METRIC::QWERTY ), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "levenshtein distance different strings" )
-	ENSURE_EQUALS( msgLevFail,
-			distance::levenshtein_damerau( "ala", "ola" ), 1 );
-	ENSURE_EQUALS( msgLevFail,
-			distance::levenshtein_damerau( "ala", "Cola" ), 2 );
-	ENSURE_EQUALS( msgLevFail,
-			distance::levenshtein_damerau( "Sunday", "Saturday" ), 3 );
+	ENSURE_EQUALS( msgLevFail, distance( "abcdef", "abpdef", DISTANCE_METRIC::LEVENSHTEIN ), 1 );
+	ENSURE_EQUALS( msgLevFail, distance( "abcdef", "abpdef", DISTANCE_METRIC::DAMERAU_LEVENSHTEIN ), 1 );
+	ENSURE_EQUALS( msgLevFail, distance( "abcdef", "abpdef", DISTANCE_METRIC::QWERTY ), 2 );
+
+	ENSURE_EQUALS( msgLevFail, distance( "abcdef", "abdcef", DISTANCE_METRIC::LEVENSHTEIN ), 2 );
+	ENSURE_EQUALS( msgLevFail, distance( "abcdef", "abdcef", DISTANCE_METRIC::DAMERAU_LEVENSHTEIN ), 1 );
+	ENSURE_EQUALS( msgLevFail, distance( "abcdef", "abdcef", DISTANCE_METRIC::QWERTY ), 1 );
+
+	ENSURE_EQUALS( msgLevFail, distance( "abcdef", "adcbef", DISTANCE_METRIC::LEVENSHTEIN ), 2 );
+	ENSURE_EQUALS( msgLevFail, distance( "abcdef", "adcbef", DISTANCE_METRIC::DAMERAU_LEVENSHTEIN ), 2 );
+	ENSURE_EQUALS( msgLevFail, distance( "abcdef", "adcbef", DISTANCE_METRIC::QWERTY ), 3 );
+
+	ENSURE_EQUALS( msgLevFail, distance( "abcdef", "abvdef", DISTANCE_METRIC::LEVENSHTEIN ), 1 );
+	ENSURE_EQUALS( msgLevFail, distance( "abcdef", "abvdef", DISTANCE_METRIC::DAMERAU_LEVENSHTEIN ), 1 );
+	ENSURE_EQUALS( msgLevFail, distance( "abcdef", "abvdef", DISTANCE_METRIC::QWERTY ), 1 );
+
+	ENSURE_EQUALS( msgLevFail, distance( "Sunday", "Saturday", DISTANCE_METRIC::LEVENSHTEIN ), 3 );
+	ENSURE_EQUALS( msgLevFail, distance( "Sunday", "Saturday", DISTANCE_METRIC::DAMERAU_LEVENSHTEIN ), 3 );
+	ENSURE_EQUALS( msgLevFail, distance( "Sunday", "Saturday", DISTANCE_METRIC::QWERTY ), 4 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "split" )
