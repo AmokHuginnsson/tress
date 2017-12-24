@@ -99,7 +99,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"argList = ( functionArgument >> *( ',' >> functionArgument ) )",
 		"namedParameters = ( () >> namedParameter >> *( ',' >> namedParameter ) >> () >> () )",
 		"booleanAnd = ( equality >> *( ( \"&&\" | \"⋀\" ) >> equality ) )",
-		"functionArgument = ( argument ^ ':' )",
+		"functionArgument = ( ( argument ^ ':' ) >> -\"...\" )",
 		"namedParameter = ( parameterName >> ':' >> functionArgument )",
 		"equality = ( compare >> -( ( \"==\" | \"!=\" ) >> compare ) )",
 		"compare = ( sum >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> sum ) )",
