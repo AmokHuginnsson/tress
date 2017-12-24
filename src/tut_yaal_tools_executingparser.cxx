@@ -1467,7 +1467,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule name( regex( "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b" ) );
 	HRule expression;
-	HRule absoluteValue( '|' >> expression >> '|' );
+	HRule modulus( '|' >> expression >> '|' );
 	HRule parenthesis( '(' >> expression >> ')' );
 	HRule functionArgument( expression ^ ':' );
 	HRule argList( functionArgument >> ( * ( ',' >> functionArgument ) ) );
@@ -1495,7 +1495,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule memberAccess( '.' >> name );
 	HRule dereference( *( subscriptOperator | functionCallOperator | memberAccess ) );
 	HRule atom(
-	 	absoluteValue
+	 	modulus
 	 	| ( parenthesis >> -( memberAccess >> dereference ) )
 	 	| real
 	 	| integer

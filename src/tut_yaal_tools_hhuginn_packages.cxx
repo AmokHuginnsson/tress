@@ -873,12 +873,12 @@ TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($7.1234567, $7.1235567));}" ), "3" );
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($2234.1234567, $1234.1234567));}" ), "-4" );
 	ENSURE_EQUALS(
-		"Mathematics.matrix (add) failed",
+		"Mathematics.Matrix (add) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([1.,2.],[3.,4.]);"
-			"m2=math.matrix([9.,8.],[7.,6.]);"
+			"m1=math.Matrix([1.,2.],[3.,4.]);"
+			"m2=math.Matrix([9.,8.],[7.,6.]);"
 			"m1+=m2;"
 			"return(string(m1));"
 			"}"
@@ -886,12 +886,12 @@ TUT_UNIT_TEST( "Mathematics" )
 		"\"Matrix([10.0, 10.0], [10.0, 10.0])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (add) failed",
+		"Mathematics.Matrix (add) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([$1.,$2.],[$3.,$4.]);"
-			"m2=math.matrix([$7.,$6.],[$9.,$8.]);"
+			"m1=math.Matrix([$1.,$2.],[$3.,$4.]);"
+			"m2=math.Matrix([$7.,$6.],[$9.,$8.]);"
 			"m1+=m2;"
 			"return(string(m1));"
 			"}"
@@ -899,12 +899,12 @@ TUT_UNIT_TEST( "Mathematics" )
 		"\"Matrix([$8, $8], [$12, $12])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (sub) failed",
+		"Mathematics.Matrix (sub) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([1.,2.],[3.,4.]);"
-			"m2=math.matrix([9.,8.],[7.,6.]);"
+			"m1=math.Matrix([1.,2.],[3.,4.]);"
+			"m2=math.Matrix([9.,8.],[7.,6.]);"
 			"m1-=m2;"
 			"return(string(m1));"
 			"}"
@@ -912,12 +912,12 @@ TUT_UNIT_TEST( "Mathematics" )
 		"\"Matrix([-8.0, -6.0], [-4.0, -2.0])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (sub) failed",
+		"Mathematics.Matrix (sub) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([$1.,$2.],[$3.,$4.]);"
-			"m2=math.matrix([$9.,$8.],[$7.,$6.]);"
+			"m1=math.Matrix([$1.,$2.],[$3.,$4.]);"
+			"m2=math.Matrix([$9.,$8.],[$7.,$6.]);"
 			"m1-=m2;"
 			"return(string(m1));"
 			"}"
@@ -925,12 +925,12 @@ TUT_UNIT_TEST( "Mathematics" )
 		"\"Matrix([$-8, $-6], [$-4, $-2])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (mul) failed",
+		"Mathematics.Matrix (mul) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([1.,2.],[3.,4.]);"
-			"m2=math.matrix([9.,8.],[7.,6.]);"
+			"m1=math.Matrix([1.,2.],[3.,4.]);"
+			"m2=math.Matrix([9.,8.],[7.,6.]);"
 			"m1*=m2;"
 			"return(string(m1));"
 			"}"
@@ -938,12 +938,12 @@ TUT_UNIT_TEST( "Mathematics" )
 		"\"Matrix([23.0, 20.0], [55.0, 48.0])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (mul) failed",
+		"Mathematics.Matrix (mul) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([$1.,$2.],[$3.,$4.]);"
-			"m2=math.matrix([$9.,$8.],[$7.,$6.]);"
+			"m1=math.Matrix([$1.,$2.],[$3.,$4.]);"
+			"m2=math.Matrix([$9.,$8.],[$7.,$6.]);"
 			"m1*=m2;"
 			"return(string(m1));"
 			"}"
@@ -951,11 +951,11 @@ TUT_UNIT_TEST( "Mathematics" )
 		"\"Matrix([$23, $20], [$55, $48])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (scale) failed",
+		"Mathematics.Matrix (scale) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([1.,2.],[3.,4.]);"
+			"m1=math.Matrix([1.,2.],[3.,4.]);"
 			"m1.scale(2.);"
 			"return(string(m1));"
 			"}"
@@ -963,11 +963,11 @@ TUT_UNIT_TEST( "Mathematics" )
 		"\"Matrix([2.0, 4.0], [6.0, 8.0])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (scale) failed",
+		"Mathematics.Matrix (scale) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([$1.,$2.],[$3.,$4.]);"
+			"m1=math.Matrix([$1.,$2.],[$3.,$4.]);"
 			"m1.scale($2);"
 			"return(string(m1));"
 			"}"
@@ -975,11 +975,11 @@ TUT_UNIT_TEST( "Mathematics" )
 		"\"Matrix([$2, $4], [$6, $8])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (scale_to) failed",
+		"Mathematics.Matrix (scale_to) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([1.,2.],[3.,4.]);"
+			"m1=math.Matrix([1.,2.],[3.,4.]);"
 			"m1.scale_to(12.);"
 			"return(string(m1));"
 			"}"
@@ -987,11 +987,11 @@ TUT_UNIT_TEST( "Mathematics" )
 		"\"Matrix([3.0, 6.0], [9.0, 12.0])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (scale_to) failed",
+		"Mathematics.Matrix (scale_to) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([$1.,$2.],[$3.,$4.]);"
+			"m1=math.Matrix([$1.,$2.],[$3.,$4.]);"
 			"m1.scale_to($12);"
 			"return(string(m1));"
 			"}"
@@ -999,77 +999,77 @@ TUT_UNIT_TEST( "Mathematics" )
 		"\"Matrix([$3, $6], [$9, $12])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (det) failed",
+		"Mathematics.Matrix (det) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([1.,2.],[3.,4.]);"
+			"m1=math.Matrix([1.,2.],[3.,4.]);"
 			"return(m1.det());"
 			"}"
 		),
 		"-2.0"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (det) failed",
+		"Mathematics.Matrix (det) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix([$1,$2],[$3,$4]);"
+			"m1=math.Matrix([$1,$2],[$3,$4]);"
 			"return(math.round(m1.det(),50));"
 			"}"
 		),
 		"$-2"
 	);
 	ENSURE_IN(
-		"Mathematics.matrix (inverse) failed",
+		"Mathematics.Matrix (inverse) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m=math.matrix([1.,2.],[3.,4.]);"
+			"m=math.Matrix([1.,2.],[3.,4.]);"
 			"return(string((m*m.inverse()).apply(@(x,y,v){x;y;math.round(v,9);})));"
 			"}"
 		),
 		std::vector<char const*>( { "\"Matrix([1.0, 0.0], [-0.0, 1.0])\"", "\"Matrix([1.0, 0.0], [0.0, 1.0])\"" } )
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (inverse) failed",
+		"Mathematics.Matrix (inverse) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m=math.matrix([$1.,$2.],[$3.,$4.]);"
+			"m=math.Matrix([$1.,$2.],[$3.,$4.]);"
 			"return(string((m*m.inverse()).apply(@(x,y,v){x;y;math.round(v,7);})));"
 			"}"
 		),
 		"\"Matrix([$1, $0], [$0, $1])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (transpose) failed",
+		"Mathematics.Matrix (transpose) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m=math.matrix([1.,2.],[3.,4.],[5.,6.]);"
+			"m=math.Matrix([1.,2.],[3.,4.],[5.,6.]);"
 			"return(string(m.transpose()));"
 			"}"
 		),
 		"\"Matrix([1.0, 3.0, 5.0], [2.0, 4.0, 6.0])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (transpose) failed",
+		"Mathematics.Matrix (transpose) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m=math.matrix([$1.,$2.],[$3.,$4.],[$5,$6]);"
+			"m=math.Matrix([$1.,$2.],[$3.,$4.],[$5,$6]);"
 			"return(string(m.transpose()));"
 			"}"
 		),
 		"\"Matrix([$1, $3, $5], [$2, $4, $6])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (set/get) failed",
+		"Mathematics.Matrix (set/get) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix(real,2,2);"
+			"m1=math.Matrix(real,2,2);"
 			"m1.set(0,0,1.);"
 			"m1.set(0,1,2.);"
 			"m1.set(1,0,3.);"
@@ -1081,11 +1081,11 @@ TUT_UNIT_TEST( "Mathematics" )
 		"\"Matrix([2.0, 4.0], [6.0, 8.0])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix (set/get) failed",
+		"Mathematics.Matrix (set/get) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m1=math.matrix(number,2,2);"
+			"m1=math.Matrix(number,2,2);"
 			"m1.set(0,0,$1.);"
 			"m1.set(0,1,$2.);"
 			"m1.set(1,0,$3.);"
@@ -1097,39 +1097,39 @@ TUT_UNIT_TEST( "Mathematics" )
 		"\"Matrix([$2, $4], [$6, $8])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix rows/columns (real) failed",
+		"Mathematics.Matrix rows/columns (real) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m=math.matrix(real,3,2);"
+			"m=math.Matrix(real,3,2);"
 			"return([m.rows(),m.columns()]);"
 			"}"
 		),
 		"[3, 2]"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix rows/columns (number) failed",
+		"Mathematics.Matrix rows/columns (number) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"m=math.matrix(number,3,2);"
+			"m=math.Matrix(number,3,2);"
 			"return([m.rows(),m.columns()]);"
 			"}"
 		),
 		"[3, 2]"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix apply (real) failed",
+		"Mathematics.Matrix apply (real) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"return(string(math.matrix(real,2,2).apply(@(r,c,z){real(c+1+r*2)+z;})));"
+			"return(string(math.Matrix(real,2,2).apply(@(r,c,z){real(c+1+r*2)+z;})));"
 			"}"
 		),
 		"\"Matrix([1.0, 2.0], [3.0, 4.0])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix apply (real) (meth) failed",
+		"Mathematics.Matrix apply (real) (meth) failed",
 		execute(
 			"import Mathematics as math;"
 			"class Apply {"
@@ -1138,23 +1138,23 @@ TUT_UNIT_TEST( "Mathematics" )
 			"}"
 			"}"
 			"main(){"
-			"return(string(math.matrix(real,2,2).apply(Apply().do)));"
+			"return(string(math.Matrix(real,2,2).apply(Apply().do)));"
 			"}"
 		),
 		"\"Matrix([1.0, 2.0], [3.0, 4.0])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix apply (number) failed",
+		"Mathematics.Matrix apply (number) failed",
 		execute(
 			"import Mathematics as math;"
 			"main(){"
-			"return(string(math.matrix(number,2,2).apply(@(r,c,z){number(c+1+r*2)+z;})));"
+			"return(string(math.Matrix(number,2,2).apply(@(r,c,z){number(c+1+r*2)+z;})));"
 			"}"
 		),
 		"\"Matrix([$1, $2], [$3, $4])\""
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix apply (number) (meth) failed",
+		"Mathematics.Matrix apply (number) (meth) failed",
 		execute(
 			"import Mathematics as math;"
 			"class Apply {"
@@ -1163,7 +1163,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"}"
 			"}"
 			"main(){"
-			"return(string(math.matrix(number,2,2).apply(Apply().do)));"
+			"return(string(math.Matrix(number,2,2).apply(Apply().do)));"
 			"}"
 		),
 		"\"Matrix([$1, $2], [$3, $4])\""
@@ -1247,283 +1247,283 @@ TUT_UNIT_TEST( "Mathematics" )
 	);
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "matrix err" )
+TUT_UNIT_TEST( "Matrix err" )
 	ENSURE_EQUALS(
-		"Mathematics.matrix invalid rows succeeded",
+		"Mathematics.Matrix invalid rows succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix(real,0,1);"
+			"math.Matrix(real,0,1);"
 			"}"
 		),
 		"*anonymous stream*:1:46: Invalid number of rows in matrix specification: 0."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix invalid cols succeeded",
+		"Mathematics.Matrix invalid cols succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix(real,1,0);"
+			"math.Matrix(real,1,0);"
 			"}"
 		),
 		"*anonymous stream*:1:46: Invalid number of columns in matrix specification: 0."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad type succeeded",
+		"Mathematics.Matrix bad type succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix(integer,1,1);"
+			"math.Matrix(integer,1,1);"
 			"}"
 		),
 		"*anonymous stream*:1:46: Bad matrix type: `integer'."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix invalid cols from list succeeded",
+		"Mathematics.Matrix invalid cols from list succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([]);"
+			"math.Matrix([]);"
 			"}"
 		),
 		"*anonymous stream*:1:46: Invalid number of columns in matrix specification: 0."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix invalid type from list succeeded",
+		"Mathematics.Matrix invalid type from list succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([0]);"
+			"math.Matrix([0]);"
 			"}"
 		),
 		"*anonymous stream*:1:46: Matrix must have numeric data, either `number' or `real'."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix col count mismatch from list succeeded",
+		"Mathematics.Matrix col count mismatch from list succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([0.],[0.,0.]);"
+			"math.Matrix([0.],[0.,0.]);"
 			"}"
 		),
 		"*anonymous stream*:1:46: Inconsistent number of columns across rows: 2 vs 1."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix non-uniform type from list succeeded",
+		"Mathematics.Matrix non-uniform type from list succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([0.,$0]);"
+			"math.Matrix([0.,$0]);"
 			"}"
 		),
 		"*anonymous stream*:1:46: Non uniformly typed data in matrix definition, in row: 0, column: 1."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad row in get succeeded",
+		"Mathematics.Matrix bad row in get succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([0.]).get(-1,0);"
+			"math.Matrix([0.]).get(-1,0);"
 			"}"
 		),
 		"*anonymous stream*:1:56: Bad row: -1"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad row in get succeeded",
+		"Mathematics.Matrix bad row in get succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([$0]).get(-1,0);"
+			"math.Matrix([$0]).get(-1,0);"
 			"}"
 		),
 		"*anonymous stream*:1:56: Bad row: -1"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad column in get succeeded",
+		"Mathematics.Matrix bad column in get succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([0.]).get(0,-1);"
+			"math.Matrix([0.]).get(0,-1);"
 			"}"
 		),
 		"*anonymous stream*:1:56: Bad column: -1"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad column in get succeeded",
+		"Mathematics.Matrix bad column in get succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([$0]).get(0,-1);"
+			"math.Matrix([$0]).get(0,-1);"
 			"}"
 		),
 		"*anonymous stream*:1:56: Bad column: -1"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad row in set succeeded",
+		"Mathematics.Matrix bad row in set succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([0.]).set(-1,0,0.);"
+			"math.Matrix([0.]).set(-1,0,0.);"
 			"}"
 		),
 		"*anonymous stream*:1:56: Bad row: -1"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad row in set succeeded",
+		"Mathematics.Matrix bad row in set succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([$0]).set(-1,0,$0);"
+			"math.Matrix([$0]).set(-1,0,$0);"
 			"}"
 		),
 		"*anonymous stream*:1:56: Bad row: -1"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad column in set succeeded",
+		"Mathematics.Matrix bad column in set succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([0.]).set(0,-1,0.);"
+			"math.Matrix([0.]).set(0,-1,0.);"
 			"}"
 		),
 		"*anonymous stream*:1:56: Bad column: -1"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad column in set succeeded",
+		"Mathematics.Matrix bad column in set succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([$0]).set(0,-1,$0);"
+			"math.Matrix([$0]).set(0,-1,$0);"
 			"}"
 		),
 		"*anonymous stream*:1:56: Bad column: -1"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad type in set succeeded",
+		"Mathematics.Matrix bad type in set succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([0.]).set(0,0,$0);"
+			"math.Matrix([0.]).set(0,0,$0);"
 			"}"
 		),
 		"*anonymous stream*:1:56: Matrix.set() third argument must be a `real', not a `number'."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad type in set succeeded",
+		"Mathematics.Matrix bad type in set succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([$0]).set(0,0,0.);"
+			"math.Matrix([$0]).set(0,0,0.);"
 			"}"
 		),
 		"*anonymous stream*:1:56: Matrix.set() third argument must be a `number', not a `real'."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad type in add succeeded",
+		"Mathematics.Matrix bad type in add succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([$0])+math.matrix([0.]);"
+			"math.Matrix([$0])+math.Matrix([0.]);"
 			"}"
 		),
 		"*anonymous stream*:1:52: Non matching data types."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix dim mismatch in add succeeded",
+		"Mathematics.Matrix dim mismatch in add succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([0.])+math.matrix([0.,0.]);"
+			"math.Matrix([0.])+math.Matrix([0.,0.]);"
 			"}"
 		),
 		"*anonymous stream*:1:52: columns dimensions do not match"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad type in sub succeeded",
+		"Mathematics.Matrix bad type in sub succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([$0])-math.matrix([0.]);"
+			"math.Matrix([$0])-math.Matrix([0.]);"
 			"}"
 		),
 		"*anonymous stream*:1:52: Non matching data types."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix dim mismatch in sub succeeded",
+		"Mathematics.Matrix dim mismatch in sub succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([0.])-math.matrix([0.,0.]);"
+			"math.Matrix([0.])-math.Matrix([0.,0.]);"
 			"}"
 		),
 		"*anonymous stream*:1:52: columns dimensions do not match"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad type in mul succeeded",
+		"Mathematics.Matrix bad type in mul succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([$0])*math.matrix([0.]);"
+			"math.Matrix([$0])*math.Matrix([0.]);"
 			"}"
 		),
 		"*anonymous stream*:1:52: Non matching data types."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix dim mismatch in mul succeeded",
+		"Mathematics.Matrix dim mismatch in mul succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([0.,0.])*math.matrix([0.]);"
+			"math.Matrix([0.,0.])*math.Matrix([0.]);"
 			"}"
 		),
 		"*anonymous stream*:1:55: columns does not match rows"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix det on non-square succeeded",
+		"Mathematics.Matrix det on non-square succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([0.,0.]).det();"
+			"math.Matrix([0.,0.]).det();"
 			"}"
 		),
 		"*anonymous stream*:1:59: matrix is not square"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix scale on zero matrix succeeded",
+		"Mathematics.Matrix scale on zero Matrix succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([0.]).scale_to(1.);"
+			"math.Matrix([0.]).scale_to(1.);"
 			"}"
 		),
 		"*anonymous stream*:1:61: Zeroed matrix cannot be scaled."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix scale on zero matrix succeeded",
+		"Mathematics.Matrix scale on zero Matrix succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([$0]).scale_to($1);"
+			"math.Matrix([$0]).scale_to($1);"
 			"}"
 		),
 		"*anonymous stream*:1:61: Zeroed matrix cannot be scaled."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix type mismatch on scale succeeded",
+		"Mathematics.Matrix type mismatch on scale succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.matrix([1.]).scale_to($1);"
+			"math.Matrix([1.]).scale_to($1);"
 			"}"
 		),
 		"*anonymous stream*:1:61: Matrix.scale_to() argument must be a `real', not a `number'."
 	);
 	ENSURE_EQUALS(
-		"Mathematics.matrix bad apply return type succeeded",
+		"Mathematics.Matrix bad apply return type succeeded",
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"return(string(math.matrix(real,2,2).apply(@(r,c,z){number(c+1+r*2)+number(z);})));"
+			"return(string(math.Matrix(real,2,2).apply(@(r,c,z){number(c+1+r*2)+number(z);})));"
 			"}"
 		),
 		"*anonymous stream*:1:76: Applied transformation function shall return `real', but result was a `number' instead."
@@ -1538,7 +1538,7 @@ TUT_UNIT_TEST( "matrix err" )
 		execute_except(
 			"import Mathematics as math;\n"
 			"main(){\n"
-			"math.matrix(real,0x40000000,1);\n"
+			"math.Matrix(real,0x40000000,1);\n"
 			"}\n"
 		),
 		err

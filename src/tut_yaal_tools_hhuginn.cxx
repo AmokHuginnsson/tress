@@ -109,12 +109,12 @@ TUT_UNIT_TEST( "grammar test" )
 		"power = ( booleanNot >> *( '^' >> negation ) )",
 		"booleanNot = ( ( '!' >> factorial ) | factorial )",
 		"factorial = ( atom >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
-		"atom = ( absoluteValue | ( parenthesis >> -( memberAccess >> dereference ) ) | real | integer"
+		"atom = ( modulus | ( parenthesis >> -( memberAccess >> dereference ) ) | real | integer"
 			" | ( ( numberLiteral | character_literal ) >> -( memberAccess >> functionCallOperator ) )"
 			" | ( ( tupleLiteral | listLiteral | dictLiteral | lookupLiteral | stringLiteral ) >> -( ( subscriptOperator | memberAccess ) >> dereference ) )"
 			" | ( setLiteral >> -( memberAccess >> dereference ) ) | none | true | false"
 			" | ( reference >> dereference ) | ( lambda >> -( functionCallOperator >> dereference ) ) )",
-		"absoluteValue = ( '|' >> expression >> '|' )",
+		"modulus = ( '|' >> expression >> '|' )",
 		"parenthesis = ( '(' >> expression >> ')' )",
 		"dereference = *( subscriptOperator | functionCallOperator | memberAccess )",
 		"numberLiteral = ( '$' >> real )",
