@@ -1482,7 +1482,11 @@ TUT_UNIT_TEST( "incremental mode" )
 		{ "import CannotCompile as cp;", OLine::TYPE::IMPORT },
 		{ "3*4;" }
 	};
-	ENSURE_EQUALS( "Compiler errors in incemental mode while importing user defined submodule", execute_incremental( l6 ), "4*anonymous stream*:1:8: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: `integer' vs `real'.12" );
+	ENSURE_EQUALS(
+		"Compiler errors in incemental mode while importing user defined submodule",
+		execute_incremental( l6 ),
+		"4*anonymous stream*:1:8: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: an `integer' vs a `real'.12"
+	);
 	lines_t l7{
 		{ "solve(){a;}", OLine::TYPE::DEFINITION },
 		{ "solve();" }
