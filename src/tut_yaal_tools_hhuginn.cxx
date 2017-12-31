@@ -1502,6 +1502,16 @@ TUT_UNIT_TEST( "incremental mode" )
 		"*anonymous stream*:1:25: Symbol `a' is not defined in this context (did you mean `add'?)."
 		"*anonymous stream*:2:1: Symbol `A' is not defined in this context (did you mean `a'?)."
 	);
+	lines_t l9{
+		{ "x = 1 / 0;" },
+		{ "x;" }
+	};
+	ENSURE_EQUALS(
+		"Crash trigger",
+		execute_incremental( l9 ),
+		"*anonymous stream*:2:7: Uncaught exception: Division by zero."
+		"*anonymous stream*:2:1: Symbol `x' is not defined in this context (did you mean `use'?)."
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "introspection" )
