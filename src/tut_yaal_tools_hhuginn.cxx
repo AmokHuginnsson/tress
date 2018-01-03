@@ -832,6 +832,50 @@ TUT_UNIT_TEST( "class" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "inheritance from built-in" )
+	ENSURE_EQUALS(
+		"inheritance from built-in failed",
+		execute(
+			"class TressException : Exception {"
+			"constructor(){"
+			"super.constructor( \"TressException\" );"
+			"}"
+			"}"
+			"main(){"
+			"res = none;"
+			"try{"
+			"throw TressException();"
+			"} catch ( Exception e ) {"
+			"res = e;"
+			"}"
+			"return([res.message(),res.trace()]);"
+			"}"
+		),
+		"[\"*anonymous stream*:1:66: TressException\", [*anonymous stream*:1:66:constructor, *anonymous stream*:1:131:main]]"
+	);
+	ENSURE_EQUALS(
+		"method on uninitialized base succeded",
+		execute_except(
+			"class TressException : Exception {"
+			"create(){"
+			"super.constructor( \"TressException\" );"
+			"create;"
+			"}"
+			"}"
+			"main(){"
+			"res = none;"
+			"try{"
+			"throw TressException();"
+			"} catch ( Exception e ) {"
+			"res = e;"
+			"}"
+			"return([res.message(),res.trace()]);"
+			"}"
+		),
+		"*anonymous stream*:1:189: Base class `Exception' is not initialized."
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "throw,try,catch" )
 	ENSURE_EQUALS(
 		"throw,try,catch failed",
