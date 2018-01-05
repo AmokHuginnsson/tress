@@ -65,23 +65,23 @@ public:
 struct Base : public HVisitorInterface {
 	virtual ~Base( void ) {}
 	virtual void foo( void )
-		{ cout << __PRETTY_FUNCTION__ << endl; }
+		{ clog << __PRETTY_FUNCTION__ << endl; }
 };
 
 struct Derived : public Base {
 	virtual void foo( void )
-		{ cout << __PRETTY_FUNCTION__ << endl; }
+		{ clog << __PRETTY_FUNCTION__ << endl; }
 	void baz( void ) const
-		{ cout << __PRETTY_FUNCTION__ << endl; }
+		{ clog << __PRETTY_FUNCTION__ << endl; }
 	virtual void accept( Visitor const& call ) const
 		{ call.visitDerived( *this ); }
 };
 
 struct FunkyDerived : public Base {
 	virtual void foo( void )
-		{ cout << __PRETTY_FUNCTION__ << endl; }
+		{ clog << __PRETTY_FUNCTION__ << endl; }
 	void bar( void ) const
-		{ cout << __PRETTY_FUNCTION__ << endl; }
+		{ clog << __PRETTY_FUNCTION__ << endl; }
 	virtual void accept( Visitor const& call ) const
 		{ call.visitFunkyDerived( *this ); }
 };
@@ -109,20 +109,20 @@ TUT_UNIT_TEST( "visitor pattern" )
 	if ( dynamic_cast<FunkyDerived*>( a.raw() ) )
 		dynamic_cast<FunkyDerived*>( a.raw() )->bar();
 	else
-		cout << "a is not proper type" << endl;
+		clog << "a is not proper type" << endl;
 	if ( dynamic_cast<FunkyDerived*>( b.raw() ) )
 		dynamic_cast<FunkyDerived*>( b.raw() )->bar();
 	else
-		cout << "b is not proper type" << endl;
+		clog << "b is not proper type" << endl;
 	if ( dynamic_cast<Derived*>( a.raw() ) )
 		dynamic_cast<Derived*>( a.raw() )->baz();
 	else
-		cout << "a is not proper type" << endl;
+		clog << "a is not proper type" << endl;
 	if ( dynamic_cast<Derived*>( b.raw() ) )
 		dynamic_cast<Derived*>( b.raw() )->baz();
 	else
-		cout << "b is not proper type" << endl;
-	cout << "now the same but without dynamic cast" << endl;
+		clog << "b is not proper type" << endl;
+	clog << "now the same but without dynamic cast" << endl;
 	a->accept( FunkyDerivedBarCall() );
 	b->accept( FunkyDerivedBarCall() );
 	a->accept( DerivedBazCall() );
@@ -199,31 +199,31 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	HResource<HString> ppr( new HString( result ) );
 	HResource<HArray<int> > ppa;
 	ppa = HResource<HArray<int> >( new HArray<int>( _testData_[0], _testData_[0] + 7 ) );
-	cout << shortStr << endl;
-	cout << str << endl;
-	cout << pi << endl;
-	cout << e << endl;
-	cout << p << endl;
-	cout << array << endl;
-	cout << emptyArray << endl;
-	cout << deque << endl;
-	cout << emptyDeque << endl;
-	cout << list << endl;
-	cout << emptyList << endl;
-	cout << set << endl;
-	cout << emptySet << endl;
-	cout << map << endl;
-	cout << lookup << endl;
-	cout << emptyMap << endl;
-	cout << emptyLookup << endl;
-	cout << hashSet << endl;
-	cout << emptyHashSet << endl;
-	cout << hashMap << endl;
-	cout << emptyHashMap << endl;
-	cout << ring << endl;
-	cout << emptyRing << endl;
-	cout << result << endl;
-	cout << birth << endl;
+	clog << shortStr << endl;
+	clog << str << endl;
+	clog << pi << endl;
+	clog << e << endl;
+	clog << p << endl;
+	clog << array << endl;
+	clog << emptyArray << endl;
+	clog << deque << endl;
+	clog << emptyDeque << endl;
+	clog << list << endl;
+	clog << emptyList << endl;
+	clog << set << endl;
+	clog << emptySet << endl;
+	clog << map << endl;
+	clog << lookup << endl;
+	clog << emptyMap << endl;
+	clog << emptyLookup << endl;
+	clog << hashSet << endl;
+	clog << emptyHashSet << endl;
+	clog << hashMap << endl;
+	clog << emptyHashMap << endl;
+	clog << ring << endl;
+	clog << emptyRing << endl;
+	clog << result << endl;
+	clog << birth << endl;
 TUT_TEARDOWN()
 
 }

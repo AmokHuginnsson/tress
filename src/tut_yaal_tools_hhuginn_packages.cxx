@@ -616,7 +616,7 @@ TUT_UNIT_TEST( "FileSystem" )
 		"id", "name", "size", "mode", "user", "group", "modified"
 	};
 	for ( char const* m : methods ) {
-		cout << "m = " << m << endl;
+		clog << "m = " << m << endl;
 		ENSURE_EQUALS(
 			"invalid stat succeeded",
 			execute(

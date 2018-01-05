@@ -61,18 +61,18 @@ void tut_yaal_dbwrapper_hrecordset::dump_query_result( HDataBase::ptr_t db, char
 		{ "2", "two", NULL },
 		{ "3", "three", "Mężny bądź, chroń pułk twój i sześć flag!" }
 	};
-	cout << "|";
+	clog << "|";
 	for ( int i( 0 ), COUNT( rs->get_field_count() ); i < COUNT; ++ i ) {
 		HString cn( rs->get_column_name( i ) );
 		cn.lower();
 		ENSURE_EQUALS( "bad column name", cn, COLUMN_NAMES[i] );
-		cout << cn << "|";
+		clog << cn << "|";
 	}
-	cout << endl;
+	clog << endl;
 	int row( 0 );
 	ENSURE_NOT( "is_empty() failed", rs->is_empty() );
 	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); it ++, ++ row ) {
-		cout << "|";
+		clog << "|";
 		int fc( rs->get_field_count() );
 		for ( int i = 0; i < fc; ++ i ) {
 			HRecordSet::value_t v( it[i] );
@@ -83,9 +83,9 @@ void tut_yaal_dbwrapper_hrecordset::dump_query_result( HDataBase::ptr_t db, char
 			} else {
 				ENSURE_EQUALS( "wrong value", static_cast<char const*>( NULL ), DATA[row][i] );
 			}
-			cout << ( !v ? HString( "(NULL)" ) : *v ) << "|";
+			clog << ( !v ? HString( "(NULL)" ) : *v ) << "|";
 		}
-		cout << endl;
+		clog << endl;
 	}
 	int fc( rs->get_field_count() );
 	for ( int r( 0 ), count( static_cast<int>( rs->get_size() ) ); r < count; ++ r ) {
@@ -338,17 +338,17 @@ void tut_yaal_dbwrapper_hrecordset::row_by_row_test( HDataBase::ptr_t db, char c
 		{ "2", "two", NULL },
 		{ "3", "three", "Mężny bądź, chroń pułk twój i sześć flag!" }
 	};
-	cout << "|";
+	clog << "|";
 	for ( int i( 0 ), COUNT( rs->get_field_count() ); i < COUNT; ++ i ) {
 		HString cn( rs->get_column_name( i ) );
 		cn.lower();
 		ENSURE_EQUALS( "bad column name", cn, COLUMN_NAMES[i] );
-		cout << cn << "|";
+		clog << cn << "|";
 	}
-	cout << endl;
+	clog << endl;
 	int row( 0 );
 	for ( HRecordSet::iterator it = rs->begin(); it != rs->end(); ++ it, ++ row ) {
-		cout << "|";
+		clog << "|";
 		int fc( rs->get_field_count() );
 		for ( int i = 0; i < fc; ++ i ) {
 			HRecordSet::value_t v( it[i] );
@@ -359,9 +359,9 @@ void tut_yaal_dbwrapper_hrecordset::row_by_row_test( HDataBase::ptr_t db, char c
 			} else {
 				ENSURE_EQUALS( "wrong value", static_cast<char const*>( nullptr ), DATA[row][i] );
 			}
-			cout << ( !v ? HString( "(NULL)" ) : *v ) << "|";
+			clog << ( !v ? HString( "(NULL)" ) : *v ) << "|";
 		}
-		cout << endl;
+		clog << endl;
 	}
 	return;
 	M_EPILOG

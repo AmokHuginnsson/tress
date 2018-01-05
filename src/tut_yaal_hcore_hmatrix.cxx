@@ -42,12 +42,12 @@ namespace tut {
 struct tut_yaal_hcore_hmatrix : public simple_mock<tut_yaal_hcore_hmatrix> {
 	virtual ~tut_yaal_hcore_hmatrix( void ) {}
 	typedef HMatrix<double long> matrix_t;
-	void eq( matrix_t const& m1_, matrix_t const& m2_ ) {
+	void eq( char const* oper_, matrix_t const& m1_, matrix_t const& m2_ ) {
 		ENSURE_EQUALS( "bad row", m1_.rows(), m2_.rows() );
 		ENSURE_EQUALS( "bad col", m1_.columns(), m2_.columns() );
 		for ( int r( 0 ); r < m1_.rows(); ++ r ) {
 			for ( int c( 0 ); c < m1_.columns(); ++ c ) {
-				ENSURE_DISTANCE( "sum failed", m1_[r][c], m2_[r][c], epsilon );
+				ENSURE_DISTANCE( to_string( oper_ ).append( " failed" ), m1_[r][c], m2_[r][c], epsilon );
 			}
 		}
 	}
@@ -110,7 +110,7 @@ TUT_UNIT_TEST( "inverse" )
 		{  0.019679,  0.021923,  0.058462, -0.028077,  0.028013 }
 	} );
 	matrix_t im( m.inverse() );
-	eq( im, res );
+	eq( "inverse", im, res );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "basic matrix operations" )
@@ -134,7 +134,7 @@ TUT_UNIT_TEST( "basic matrix operations" )
 		{ 12.9000,  9.6000,  6.3000 },
 		{  7.2000, 16.8000, 23.1000 }
 	} );
-	eq( sum, sumRes );
+	eq( "sum", sum, sumRes );
 	std::clog << "X = ..." << std::endl << X << std::endl;
 	matrix_t inv( X.inverse() );
 	std::clog << "X ^ - 1 = ..." << std::endl << inv << std::endl;
@@ -142,14 +142,14 @@ TUT_UNIT_TEST( "basic matrix operations" )
 		{ -0.528926,  0.380165 },
 		{  0.710744, -0.198347 }
 	} );
-	eq( inv, invRes );
+	eq( "inv sum", inv, invRes );
 	matrix_t id( X * inv );
 	std::clog << "X * X ^ - 1 = ..." << std::endl << id << std::endl;
 	matrix_t idRes( {
 		{ 1, 0 },
 		{ 0, 1 }
 	} );
-	eq( id, idRes );
+	eq( "inv( sum ) mul", id, idRes );
 	matrix_t invV( V.inverse() );
 	std::clog << "V ^ - 1 = ..." << std::endl << invV << std::endl;
 	matrix_t invVRes( {
@@ -157,7 +157,7 @@ TUT_UNIT_TEST( "basic matrix operations" )
 		{ -4.21788129,  0.162283997,  1.818181818 },
 		{  2.46431255, -0.180315552, -0.909090909 }
 	} );
-	eq( invV, invVRes );
+	eq( "inverse 3", invV, invVRes );
 	matrix_t idV( V * invV );
 	std::clog << "V * V ^ - 1 = ..." << std::endl << idV << std::endl;
 	matrix_t idVRes( {
@@ -165,7 +165,7 @@ TUT_UNIT_TEST( "basic matrix operations" )
 		{ 0, 1, 0 },
 		{ 0, 0, 1 }
 	} );
-	eq( idV, idVRes );
+	eq( "inverse 3 mul", idV, idVRes );
 TUT_TEARDOWN()
 
 }

@@ -44,30 +44,30 @@ TUT_TEST_GROUP( tut_yaal_hcore_system, "yaal::hcore::system" );
 
 TUT_UNIT_TEST( "free memory" )
 	hcore::system::HResourceInfo ri( hcore::system::get_memory_size_info() );
-	cout << "\nTotal memory:           " << setw( 14 ) << ri.total() << " (" << setw( 8 ) << ( ri.total() / 1024 ) << " KiB)" << " (" << setw( 5 ) << ( ri.total() / ( 1024ll * 1024ll ) ) << " MiB)" << endl;
-	cout << "Free memory:            " << setw( 14 ) << ri.free() << " (" << setw( 8 ) << ( ri.free() / 1024 ) << " KiB)" << " (" << setw( 5 ) << ( ri.free() / ( 1024ll * 1024ll ) ) << " MiB)" << endl;
-	cout << "Available memory:       " << setw( 14 ) << ri.available() << " (" << setw( 8 ) << ( ri.available() / 1024 ) << " KiB)" << " (" << setw( 5 ) << ( ri.available() / ( 1024ll * 1024ll ) ) << " MiB)" << endl;
+	clog << "\nTotal memory:           " << setw( 14 ) << ri.total() << " (" << setw( 8 ) << ( ri.total() / 1024 ) << " KiB)" << " (" << setw( 5 ) << ( ri.total() / ( 1024ll * 1024ll ) ) << " MiB)" << endl;
+	clog << "Free memory:            " << setw( 14 ) << ri.free() << " (" << setw( 8 ) << ( ri.free() / 1024 ) << " KiB)" << " (" << setw( 5 ) << ( ri.free() / ( 1024ll * 1024ll ) ) << " MiB)" << endl;
+	clog << "Available memory:       " << setw( 14 ) << ri.available() << " (" << setw( 8 ) << ( ri.available() / 1024 ) << " KiB)" << " (" << setw( 5 ) << ( ri.available() / ( 1024ll * 1024ll ) ) << " MiB)" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "free disk space" )
 	char const fspath[] = "/";
 	hcore::system::HResourceInfo ri( hcore::system::get_disk_space_info( fspath ) );
-	cout << "\nTotal space on `" << fspath << "':     "
+	clog << "\nTotal space on `" << fspath << "':     "
 		<< setw( 14 ) << ri.total()
 		<< " (" << setw( 8 ) << ( ri.total() / ( 1024 * 1024 ) ) << " MiB)"
 		<< " (" << setw( 5 ) << ( ri.total() / ( 1024ll * 1024ll * 1024ll ) ) << " GiB)" << endl;
-	cout << "Free space on `" << fspath << "':      "
+	clog << "Free space on `" << fspath << "':      "
 		<< setw( 14 ) << ri.free()
 		<< " (" << setw( 8 ) << ( ri.free() / ( 1024 * 1024 ) ) << " MiB)"
 		<< " (" << setw( 5 ) << ( ri.free() / ( 1024ll * 1024ll * 1024ll ) ) << " GiB)" << endl;
-	cout << "Available space on `" << fspath << "': "
+	clog << "Available space on `" << fspath << "': "
 		<< setw( 14 ) << ri.available()
 		<< " (" << setw( 8 ) << ( ri.available() / ( 1024 * 1024 ) ) << " MiB)"
 		<< " (" << setw( 5 ) << ( ri.available() / ( 1024ll * 1024ll * 1024ll ) ) << " GiB)" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "available core count" )
-	cout << "\nAvailable CPU cores: " << hcore::system::get_core_count_info() << endl;
+	clog << "\nAvailable CPU cores: " << hcore::system::get_core_count_info() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "substitute_environment" )

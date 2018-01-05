@@ -349,7 +349,7 @@ int cf( a0_t = trait::no_type(), a1_t = trait::no_type(),
 }
 
 inline void show_rectangle( int a, int b ) {
-	cout << "a: " << a << ", b: " << b << endl;
+	clog << "a: " << a << ", b: " << b << endl;
 }
 
 TUT_UNIT_TEST( "(hand written) no arg" )
@@ -474,7 +474,7 @@ TUT_TEARDOWN()
 
 namespace {
 void foobar( tut_yaal_hcore_hcall::item_t const& item_, HString const& name_ ) {
-	cout << name_ << " = " << item_.to_string() << endl;
+	clog << name_ << " = " << item_.to_string() << endl;
 }
 }
 
@@ -561,11 +561,11 @@ TUT_UNIT_TEST( "call() and const call on ptr and on ref" )
 	HStringStream ss;
 	transform( nl.begin(), nl.end(), stream_iterator( ss, " " ), call( &MemFunTest::value, _1 ) );
 	ENSURE_EQUALS( "call failed", ss.string(), "0 1 3 7 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 	ss.reset();
 	transform( cnl.begin(), cnl.end(), stream_iterator( ss, " " ), call( &MemFunTest::value_const, _1 ) );
 	ENSURE_EQUALS( "call failed", ss.string(), "0 1 3 7 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "call(arg) const and non-const ref and ptr." )
@@ -588,11 +588,11 @@ TUT_UNIT_TEST( "call(arg) const and non-const ref and ptr." )
 	HStringStream ss;
 	transform( nl.begin(), nl.end(), a, stream_iterator( ss, " " ), call( &MemFunTest::calc, _1, _2 ) );
 	ENSURE_EQUALS( "call failed", ss.string(), "1 5 12 23 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 	ss.reset();
 	transform( cnl.begin(), cnl.end(), a, stream_iterator( ss, " " ), call( &MemFunTest::calc_const, _1, _2 ) );
 	ENSURE_EQUALS( "call failed", ss.string(), "1 5 12 23 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "call(arg) ref" )
@@ -608,7 +608,7 @@ TUT_UNIT_TEST( "call(arg) ref" )
 	HStringStream ss;
 	transform( l.begin(), l.end(), a, stream_iterator( ss, " " ), call( &MemFunTest::calc, _1, _2 ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "1 5 12 23 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 struct ArgumentReturnValueType {

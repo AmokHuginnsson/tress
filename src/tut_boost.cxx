@@ -81,29 +81,30 @@ inline pair_t make_multi( void ) {
 }
 
 TUT_UNIT_TEST( "binding" )
-	cout << "sort by field using binding" << endl;
-	cout << "{" << endl;
+	clog << "sort by field using binding" << endl;
+	clog << "{" << endl;
 	typedef vector<pair_t> T;
 	T v;
 	generate_n( back_insert_iterator<T>( v ), 3, make_multi );
-	copy( v.begin(), v.end(), ostream_iterator<pair_t>( cout ) );
-	cout << endl;
+	copy( v.begin(), v.end(), ostream_iterator<pair_t>( clog ) );
+	clog << endl;
 	sort( v.begin(), v.end(), boost::bind( &pair_t::first, _1 ) < boost::bind( &pair_t::first, _2 ) );
-	copy( v.begin(), v.end(), ostream_iterator<pair_t>( cout ) );
-	cout << endl;
-	cout << "}" << endl;
+	copy( v.begin(), v.end(), ostream_iterator<pair_t>( clog ) );
+	clog << endl;
+	clog << "}" << endl;
 TUT_TEARDOWN()
 
 namespace {
 
 void dump_dir( path const& dir ) {
-	cout << "dir: " << dir.string() << endl;
+	clog << "dir: " << dir.string() << endl;
 	directory_iterator end;
 	for ( directory_iterator it( dir ); it != end; ++ it ) {
-		if ( is_directory( *it ) )
+		if ( is_directory( *it ) ) {
 			dump_dir( *it );
-		else
-			cout << "file: " << (*it).path() << endl;
+		} else {
+			clog << "file: " << (*it).path() << endl;
+		}
 	}
 	return;
 }
@@ -130,12 +131,13 @@ TUT_UNIT_TEST( "date_time" )
 		date birthday( from_simple_string( birthday_s ) );
 		date now = day_clock::local_day();
 		days alive = now - birthday;
-		if ( alive == days( 1 ) )
-			cout << "born yeasterday" << endl;
-		else if ( alive < days( 0 ) )
-			cout << "not yet born" << endl;
-		else
-			cout << "you live " << alive.days() << " days" << endl;
+		if ( alive == days( 1 ) ) {
+			clog << "born yeasterday" << endl;
+		} else if ( alive < days( 0 ) ) {
+			clog << "not yet born" << endl;
+		} else {
+			clog << "you live " << alive.days() << " days" << endl;
+		}
 	} catch ( ... ) {
 		cerr << "bad date" << endl;
 	}
@@ -216,20 +218,20 @@ result_t plus( el1_t const& el1, el2_t const& el2 )
 	{ return ( el1 + el2 ); }
 
 TUT_UNIT_TEST( "boost::bind, accumulate, plus" )
-	cout << "accumulate all values returned by some\n"
+	clog << "accumulate all values returned by some\n"
 		"method of class that represent values in map" << endl;
-	cout << "{" << endl;
+	clog << "{" << endl;
 	typedef map<int,test4helper> T;
 	T m;
 	typedef generator<test4helper, inc> t4gh_t;
 	generate_n( std::insert_iterator<T>( m, m.begin() ), 3,
 			generator<t4h_t, inc, t4gh_t>( inc( 1 ), t4gh_t( inc( 7 ) ) ) );
-	copy( m.begin(), m.end(), ostream_iterator<t4h_t>( cout ) );
-	cout << endl;
+	copy( m.begin(), m.end(), ostream_iterator<t4h_t>( clog ) );
+	clog << endl;
 	int sum = accumulate( m.begin(), m.end(), 0,
 			boost::bind( std::plus<int>(), _1, boost::bind( &test4helper::get_val, boost::bind( &t4h_t::second, _2 ) ) ) );
-	cout << sum << endl;
-	cout << "}" << endl;
+	clog << sum << endl;
+	clog << "}" << endl;
 TUT_TEARDOWN()
 
 inline pair_t foo( int first, int second ) {
@@ -245,10 +247,10 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "boost::bind filed assign" )
 	person_t p( "Ala", "Nowak" );
-	cout << p << endl;
+	clog << p << endl;
 	string const s( "Kowalska" );
-	cout << ( boost::bind( &person_t::second, &p )() < s ) << endl;
-	cout << ( boost::bind( &person_t::second, &p )() > s ) << endl;
+	clog << ( boost::bind( &person_t::second, &p )() < s ) << endl;
+	clog << ( boost::bind( &person_t::second, &p )() > s ) << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "compare with constant." )
@@ -256,8 +258,8 @@ TUT_UNIT_TEST( "compare with constant." )
 	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ), boost::bind( &item_t::id, _1 ) < 50 );
-	copy( l.begin(), l.end(), ostream_iterator<item_t>( cout, " " ) );
-	cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<item_t>( clog, " " ) );
+	clog << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "lambda test." )
@@ -266,19 +268,19 @@ TUT_UNIT_TEST( "lambda test." )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ), _1 < 50 );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
-	cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( clog, " " ) );
+	clog << endl;
 	l.clear();
 	transform( a, a + countof( a ), back_insert_iterator<list_t>( l ), _1 + 10 );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
-	cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( clog, " " ) );
+	clog << endl;
 	l.clear();
 	transform( a, a + countof( a ), back_insert_iterator<list_t>( l ), _1 * 2 + 10 );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
-	cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( clog, " " ) );
+	clog << endl;
 	l.clear();
-	for_each( a, a + countof( a ), cout << ( _1 << 1 ) << " " );
-	cout << endl;
+	for_each( a, a + countof( a ), clog << ( _1 << 1 ) << " " );
+	clog << endl;
 TUT_TEARDOWN()
 
 }

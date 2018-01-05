@@ -346,8 +346,8 @@ void ensure_greater_or_equal_real( char const* file, int line, char const*, std:
 	if ( ! ( actual >= expected ) ) {
 		std::stringstream ss;
 		ss << msg
-		<< ( ! msg.empty() ? ":" : "" )
-		<< " expected [" << stream_escape( actual ) << "] being greater or equal than [" << stream_escape( expected ) << "]";
+			<< ( ! msg.empty() ? ":" : "" )
+			<< " expected [" << stream_escape( actual ) << "] being greater or equal than [" << stream_escape( expected ) << "]";
 		throw failure( file, line, ss.str().c_str() );
 	}
 }
@@ -393,15 +393,15 @@ void ensure_greater_or_equal_real( char const* file, int const& line, char const
  * operators + and -, and be comparable.
  */
 template<class T>
-void ensure_distance_real( char const* file, int const& line, char const*, const char* msg, const T& actual,
+void ensure_distance_real( char const* file, int const& line, char const*, std::string const& msg, const T& actual,
 	const T& expected, const T& distance ) {
 	if ( ( ( expected - distance ) >= actual ) || ( ( expected + distance ) <= actual ) ) {
 		std::stringstream ss;
-		ss << ( msg ? msg : "" )
-		<< ( msg ? ":" : "" )
-		<< " expected ("
-		<< expected - distance
-		<< ";" << expected + distance << ") actual [" << actual << "] distance <" << distance << ">";
+		ss << msg
+			<< ( msg.empty() ? ":" : "" )
+			<< " expected ("
+			<< expected - distance
+			<< ";" << expected + distance << ") actual [" << actual << "] distance <" << distance << ">";
 		throw failure( file, line, ss.str().c_str() );
 	}
 }
@@ -409,6 +409,23 @@ void ensure_distance_real( char const* file, int const& line, char const*, const
 template<class T>
 void ensure_distance( const char* msg, const T& actual, const T& expected, const T& distance ) {
 	ensure_distance_real( NULL, 0, NULL, msg, actual, expected, distance );
+}
+
+template<class T>
+void ensure_distance_real( char const* file, int const& line, char const*,
+	yaal::hcore::HString const& msg, const T& actual,
+	const T& expected, const T& distance ) {
+	ensure_distance_real<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected, distance );
+}
+template<class T>
+void ensure_distance( yaal::hcore::HString const& msg, const T& actual, const T& expected, const T& distance ) {
+	ensure_distance_real( nullptr, 0, nullptr, msg, actual, expected, distance );
+}
+
+template<class T>
+void ensure_distance_real( char const* file, int line, char const*, const char* msg, const T& actual,
+	const T& expected, const T& distance ) {
+	ensure_distance_real<>( file, line, NULL, std::string( msg ), actual, expected, distance );
 }
 
 template<class T>

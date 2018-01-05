@@ -51,18 +51,18 @@ namespace {
 
 void recurse( HString const& path_ ) {
 	HFSItem dir( path_ );
-	cout << "dir: " << blue << bold << dir.get_path() << reset << endl;
+	clog << "dir: " << blue << bold << dir.get_path() << reset << endl;
 	M_ENSURE( dir.is_directory() );
 	for ( HFSItem::HIterator it = dir.begin(); it != dir.end(); ++ it ) {
-		cout << yellow << ( it->is_directory() ? "[dir]" : "     " ) << " " << ( it->is_executable() ? "[exec]" : "      " )
+		clog << yellow << ( it->is_directory() ? "[dir]" : "     " ) << " " << ( it->is_executable() ? "[exec]" : "      " )
 			<< " [" << setw( 10 ) << it->get_size() << "] "
 			<< white << setw( 8 ) << it->get_user() << " " << setw( 8 ) << it->get_group()
 			<< " " << brightmagenta << oct << setw( 4 ) << ( it->get_permissions() & 0777 ) << dec
 			<< reset << " " << it->get_path() << " " << it->modified().string() << endl;
 		if ( it->is_directory() ) {
-			cout << "descending into ";
+			clog << "descending into ";
 			recurse( it->get_path() );
-			cout << "back at: " << blue << bold << dir.get_path() << reset << endl;
+			clog << "back at: " << blue << bold << dir.get_path() << reset << endl;
 		}
 	}
 }

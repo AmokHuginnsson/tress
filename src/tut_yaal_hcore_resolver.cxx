@@ -65,8 +65,8 @@ TUT_UNIT_TEST( "get_name" )
 	HTokenizer t( hcore::system::get_host_name(), "." );
 	HString localhost( t[0] );
 	HString resolved( resolver::get_name( HIP( 127, 0, 0, 1 ) ) );
-	cout << localhost << endl;
-	cout << resolved << endl;
+	clog << localhost << endl;
+	clog << resolved << endl;
 	ENSURE( "get_name failure", ( resolved == "localhost" ) || ( resolved == localhost ) );
 TUT_TEARDOWN()
 

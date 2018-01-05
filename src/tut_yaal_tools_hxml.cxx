@@ -363,10 +363,14 @@ TUT_UNIT_TEST( "init, apply_style, parse, save, clear, handmade, save" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "apply stylesheet" )
+	static char const* const OUT_POST_PATH = "out/xml-post-style.xml";
 	_xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	_xml.apply_style( "data/style.xml" );
 	_xml.parse();
-	std::cout << _xml;
+	_xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( OUT_POST_PATH, HFile::OPEN::WRITING ) ) ) );
+	resort_entities( OUT_POST_PATH );
+	ENSURE( "apply style failed", file_compare( OUT_POST_PATH, "data/xml-post-style.xml" ) );
+	std::clog << _xml;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "build, apply stylesheet" )
@@ -406,7 +410,7 @@ TUT_UNIT_TEST( "init, parse, apply, save" )
 		} else {
 			std::string line;
 			while ( getline( file, line ).good() ) {
-				std::cout << line << std::endl;
+				std::clog << line << std::endl;
 			}
 		}
 	}
@@ -420,9 +424,9 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "load -> console dump" )
 	char const* doc = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./data/xml.xml";
 	_xml.load( HStreamInterface::ptr_t( new HFile( doc, HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
-	if ( cout.is_valid() )
-		_xml.save( cout );
-	std::clog << _xml;
+	if ( clog.is_valid() ) {
+		_xml.save( clog );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "parse bofere apply_style and after apply_style" )

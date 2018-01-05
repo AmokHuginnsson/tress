@@ -64,7 +64,7 @@ TUT_UNIT_TEST( "1 mili-second accuraLcy" )
 	TUT_EVAL( sleep_for( duration( SLEEP, time::UNIT::SECOND ) ) );
 	int long elapsed( 0 );
 	ENSURE_DISTANCE( "time measured incorrectly", elapsed = static_cast<int long>( clk.get_time_elapsed( time::UNIT::MILLISECOND ) ), PASSED, QUALITY );
-	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
+	clog << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "1 micro-second accuraLcy" )
@@ -76,7 +76,7 @@ TUT_UNIT_TEST( "1 micro-second accuraLcy" )
 	TUT_EVAL( sleep_for( duration( SLEEP, time::UNIT::SECOND ) ) );
 	i64_t elapsed( 0 );
 	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( time::UNIT::MICROSECOND ), PASSED, QUALITY );
-	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
+	clog << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "1 nano-second accuraLcy" )
@@ -88,7 +88,7 @@ TUT_UNIT_TEST( "1 nano-second accuraLcy" )
 	TUT_EVAL( sleep_for( duration( SLEEP, time::UNIT::SECOND ) ) );
 	i64_t elapsed( 0 );
 	ENSURE_DISTANCE( "time measured incorrectly", elapsed = clk.get_time_elapsed( time::UNIT::NANOSECOND ), PASSED, QUALITY );
-	cout << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
+	clog << "expected: " << PASSED << ", elapsed: " << elapsed << ", quality: " << QUALITY << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "measured twice without reset" )

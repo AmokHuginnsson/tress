@@ -218,7 +218,7 @@ TUT_UNIT_TEST( "sample data" )
 	copy( setCopy.begin(), setCopy.end(), stream_iterator( ssCopy ) );
 	ENSURE_EQUALS( "copy through iters failed size", setCopy.size(), set.size() );
 	ENSURE_EQUALS( "copy through iters failed data", ssCopy.string(), ssSet.string() );
-	copy( set.begin(), set.end(), stream_iterator( cout ) );
+	copy( set.begin(), set.end(), stream_iterator( clog ) );
 TUT_TEARDOWN()
 
 }

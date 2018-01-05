@@ -134,7 +134,7 @@ TUT_UNIT_TEST( "grammar test" )
 
 	int i( 0 );
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
-		cout << *it << endl;
+		clog << *it << endl;
 		ENSURE( "too many rules in Huginn grammar", i < countof ( expected ) );
 		ENSURE_EQUALS( "bad rule in Huginn grammar", *it, expected[i] );
 	}

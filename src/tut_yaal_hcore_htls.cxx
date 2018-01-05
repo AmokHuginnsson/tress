@@ -42,10 +42,10 @@ namespace tut {
 class TLSTest {
 public:
 	TLSTest( void ) {
-		cout << __PRETTY_FUNCTION__ << endl;
+		clog << __PRETTY_FUNCTION__ << endl;
 	}
 	~TLSTest( void ) {
-		cout << __PRETTY_FUNCTION__ << endl;
+		clog << __PRETTY_FUNCTION__ << endl;
 	}
 	void foo( void ) const {}
 };

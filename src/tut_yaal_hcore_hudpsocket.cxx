@@ -94,14 +94,14 @@ HUDPServer::HUDPServer( HUDPSocket::MODE type_ )
 void HUDPServer::bind( int port_, ip_t ip_ ) {
 	M_PROLOG
 	_socket.bind( port_, ip_ );
-	cout << "bound to: " << resolver::ip_to_string( ip_ ) << ":" << port_ << endl;
+	clog << "bound to: " << resolver::ip_to_string( ip_ ) << ":" << port_ << endl;
 	return;
 	M_EPILOG
 }
 
 void HUDPServer::start( void ) {
 	M_PROLOG
-	cout << "starting server thread ..." << endl;
+	clog << "starting server thread ..." << endl;
 	HRawFile::ptr_t wakeable( make_pointer<HRawFile>( _socket.get_file_descriptor(), HRawFile::OWNERSHIP::EXTERNAL ) );
 	_dispatcher.register_file_descriptor_handler( wakeable, call( &HUDPServer::handler_message, this, _1 ) );
 	_thread.spawn( call( &HUDPServer::run, this ) );
@@ -113,16 +113,16 @@ void HUDPServer::stop( void ) {
 	M_PROLOG
 	_dispatcher.stop();
 	_thread.finish();
-	cout << "server thread stopped ..." << endl;
+	clog << "server thread stopped ..." << endl;
 	return;
 	M_EPILOG
 }
 
 void HUDPServer::wait( void ) {
 	M_PROLOG
-	cout << "waiting for event ..." << endl;
+	clog << "waiting for event ..." << endl;
 	_event.wait();
-	cout << "event arrived ..." << endl;
+	clog << "event arrived ..." << endl;
 	return;
 	M_EPILOG
 }
@@ -130,11 +130,11 @@ void HUDPServer::wait( void ) {
 void HUDPServer::handler_message( HIODispatcher::stream_t& ) {
 	M_PROLOG
 	ODatagram datagram( 100 );
-	cout << "reading data ..." << endl;
+	clog << "reading data ..." << endl;
 	int long nRead( _socket.receive( datagram ) );
 	if ( nRead > 0 ) {
 		_buffer += datagram._data.get<char>();
-		cout << "<-" << datagram._data.get<char>() << endl;
+		clog << "<-" << datagram._data.get<char>() << endl;
 		_event.signal();
 		_signaled = true;
 	} /* else nRead < 0 => REPEAT */
@@ -151,9 +151,9 @@ HString const& HUDPServer::buffer( void ) const {
 void HUDPServer::run( void ) {
 	HThread::set_name( "tut::HUDPocket(serv)" );
 	try {
-		cout << "starting dispatcher ..." << endl;
+		clog << "starting dispatcher ..." << endl;
 		_dispatcher.run();
-		cout << "dispatcher finished ..." << endl;
+		clog << "dispatcher finished ..." << endl;
 	} catch ( HUDPSocketException& e ) {
 		_thread.stack_exception( e.what(), e.code() );
 	} catch ( ... ) {
@@ -191,7 +191,7 @@ void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool nonBloc
 	char test_data[] = "Ala ma kota.";
 	const int size( static_cast<int>( sizeof ( test_data ) ) );
 	TUT_DECLARE( HUDPServer serv( nonBlockingServer_ ? HUDPSocket::MODE::NONBLOCKING : HUDPSocket::MODE::DEFAULT ); );
-	TUT_INVOKE( cout << sizeof ( serv ) << endl; );
+	TUT_INVOKE( clog << sizeof ( serv ) << endl; );
 	TUT_DECLARE( HUDPSocket client( nonBlockingClient_ ? HUDPSocket::MODE::NONBLOCKING : HUDPSocket::MODE::DEFAULT ); );
 	TUT_INVOKE( serv.bind( port_, ip_ ); );
 	try {
@@ -204,7 +204,7 @@ void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool nonBloc
 		}
 		TUT_INVOKE( serv.wait(); );
 	} catch ( HUDPSocketException const& e ) {
-		cout << e.what() << endl;
+		clog << e.what() << endl;
 		serv.do_not_signal();
 		TUT_INVOKE( serv.stop(); );
 		throw;
@@ -215,7 +215,7 @@ void tut_yaal_hcore_hudpsocket::play_scenario( int port_, ip_t ip_, bool nonBloc
 	}
 	TUT_INVOKE( serv.stop(); );
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
-	cout << serv.buffer() << endl;
+	clog << serv.buffer() << endl;
 	return;
 }
 

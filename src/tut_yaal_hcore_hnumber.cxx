@@ -152,14 +152,14 @@ TUT_UNIT_TEST( "default constructor / check default precision" )
 	HNumber n;
 	ENSURE_EQUALS( "bad default number", n.to_string(), "0" );
 	ENSURE_EQUALS( "bad dafault precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << n.to_string() << endl;
+	clog << n.to_string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "construct from double" )
 	HNumber n( 3.14159265 );
 	ENSURE_EQUALS( "number not created correctly", n.to_string(), "3.14159265" );
 	ENSURE_EQUALS( "bad dafault precision", n.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << n.to_string() << endl;
+	clog << n.to_string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "construct from double and specify precision / get precision" )
@@ -167,7 +167,7 @@ TUT_UNIT_TEST( "construct from double and specify precision / get precision" )
 	HNumber n( 3.14159265, P1 );
 	ENSURE_EQUALS( "number not created correctly", n.to_string(), "3.14159265" );
 	ENSURE_EQUALS( "bad specified precision", n.get_precision(), P1 );
-	cout << n.to_string() << endl;
+	clog << n.to_string() << endl;
 	int const M = 16;
 	int const P2 = 4;
 	HNumber n2( 3.14159265, P2 );
@@ -179,7 +179,7 @@ TUT_UNIT_TEST( "construct from string" )
 	HNumber n0( pn0 );
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0 );
 	ENSURE_EQUALS( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n0 = " << n0.to_string() << " |" << endl;
+	clog << "| n0 = " << n0.to_string() << " |" << endl;
 	ENSURE_THROW( "empty number created", HNumber n( "" ), HNumberException );
 	ENSURE_THROW( "number that is a minus created", HNumber n( "-" ), HNumberException );
 	ENSURE_THROW( "number that is a dot created", HNumber n( "." ), HNumberException );
@@ -191,27 +191,27 @@ TUT_UNIT_TEST( "construct from string" )
 	HNumber n1( pn1 );
 	ENSURE_EQUALS( "number not created correctly", n1.to_string(), pn1 );
 	ENSURE_EQUALS( "bad dafault precision", n1.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n1 =" << n1.to_string() << " |" << endl;
+	clog << "| n1 =" << n1.to_string() << " |" << endl;
 
 	char const* const pn2 = ".5";
 	char const* const pn2e = "0.5";
 	HNumber n2( pn2 );
 	ENSURE_EQUALS( "number not created correctly", n2.to_string(), pn2e );
 	ENSURE_EQUALS( "bad dafault precision", n2.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n2 =" << n2.to_string() << " |" << endl;
+	clog << "| n2 =" << n2.to_string() << " |" << endl;
 
 	char const* const pn3 = "-.7";
 	char const* const pn3e = "-0.7";
 	HNumber n3( pn3 );
 	ENSURE_EQUALS( "number not created correctly", n3.to_string(), pn3e );
 	ENSURE_EQUALS( "bad dafault precision", n3.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n3 =" << n3.to_string() << " |" << endl;
+	clog << "| n3 =" << n3.to_string() << " |" << endl;
 
 	char const* const pn4 = "-2.7";
 	HNumber n4( pn4 );
 	ENSURE_EQUALS( "number not created correctly", n4.to_string(), pn4 );
 	ENSURE_EQUALS( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n4 =" << n4.to_string() << " |" << endl;
+	clog << "| n4 =" << n4.to_string() << " |" << endl;
 
 	ENSURE_THROW( "phony number created", HNumber nx( "--2.7" ), HNumberException );
 	ENSURE_THROW( "phony number created", HNumber nx( "..27" ), HNumberException );
@@ -221,31 +221,31 @@ TUT_UNIT_TEST( "construct from string" )
 	HNumber n5( pn5 );
 	ENSURE_EQUALS( "number not created correctly", n5.to_string(), "0.2" );
 	ENSURE_EQUALS( "bad dafault precision", n5.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n5 =" << n5.to_string() << " |" << endl;
+	clog << "| n5 =" << n5.to_string() << " |" << endl;
 
 	char const* const pn6 = "2.7.44";
 	HNumber n6( pn6 );
 	ENSURE_EQUALS( "number not created correctly", n6.to_string(), "2.7" );
 	ENSURE_EQUALS( "bad dafault precision", n6.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n6 =" << n6.to_string() << " |" << endl;
+	clog << "| n6 =" << n6.to_string() << " |" << endl;
 
 	char const* const pn7 = "7-44";
 	HNumber n7( pn7 );
 	ENSURE_EQUALS( "number not created correctly", n7.to_string(), "7" );
 	ENSURE_EQUALS( "bad dafault precision", n7.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n7 =" << n7.to_string() << " |" << endl;
+	clog << "| n7 =" << n7.to_string() << " |" << endl;
 
 	char const* const pn8 = "2.7.44";
 	HNumber n8( pn8 );
 	ENSURE_EQUALS( "number not created correctly", n8.to_string(), "2.7" );
 	ENSURE_EQUALS( "bad dafault precision", n8.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n8 =" << n8.to_string() << " |" << endl;
+	clog << "| n8 =" << n8.to_string() << " |" << endl;
 
 	char const* const pn9 = "2.700.566-7576-7657";
 	HNumber n9( pn9 );
 	ENSURE_EQUALS( "number not created correctly", n9.to_string(), "2.7" );
 	ENSURE_EQUALS( "bad dafault precision", n9.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n9 =" << n9.to_string() << " |" << endl;
+	clog << "| n9 =" << n9.to_string() << " |" << endl;
 	ENSURE_EQUALS( "number 0 not created correctly", HNumber( "0001200" ).to_string(), "1200" );
 	ENSURE_EQUALS( "number 1 not created correctly", HNumber( "-00.200" ).to_string(), "-0.2" );
 	ENSURE_EQUALS( "number 2 not created correctly", HNumber( "-00100" ).to_string(), "-100" );
@@ -341,7 +341,7 @@ TUT_UNIT_TEST( "construct from string (prefixes)" )
 	HNumber n0( pn0 );
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0 + 3 );
 	ENSURE_EQUALS( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n0 = " << n0.to_string() << " |" << endl;
+	clog << "| n0 = " << n0.to_string() << " |" << endl;
 	ENSURE_THROW( "empty number created", HNumber n( "???" ), HNumberException );
 	ENSURE_THROW( "number that is a minus created", HNumber n( "$$$-" ), HNumberException );
 	ENSURE_THROW( "number that is a dot created", HNumber n( "???." ), HNumberException );
@@ -351,25 +351,25 @@ TUT_UNIT_TEST( "construct from string (prefixes)" )
 	HNumber n1( pn1 );
 	ENSURE_EQUALS( "number not created correctly", n1.to_string(), pn1 + 3 );
 	ENSURE_EQUALS( "bad dafault precision", n1.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n1 =" << n1.to_string() << " |" << endl;
+	clog << "| n1 =" << n1.to_string() << " |" << endl;
 
 	char const* const pn2 = "???.5";
 	HNumber n2( pn2 );
 	ENSURE_EQUALS( "number not created correctly", n2.to_string(), "0.5" );
 	ENSURE_EQUALS( "bad dafault precision", n2.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n2 =" << n2.to_string() << " |" << endl;
+	clog << "| n2 =" << n2.to_string() << " |" << endl;
 
 	char const* const pn3 = "$$$-.7";
 	HNumber n3( pn3 );
 	ENSURE_EQUALS( "number not created correctly", n3.to_string(), "-0.7" );
 	ENSURE_EQUALS( "bad dafault precision", n3.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n3 =" << n3.to_string() << " |" << endl;
+	clog << "| n3 =" << n3.to_string() << " |" << endl;
 
 	char const* const pn4 = "$$$-2.7";
 	HNumber n4( pn4 );
 	ENSURE_EQUALS( "number not created correctly", n4.to_string(), pn4 + 3 );
 	ENSURE_EQUALS( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n4 =" << n4.to_string() << " |" << endl;
+	clog << "| n4 =" << n4.to_string() << " |" << endl;
 
 	ENSURE_THROW( "phony number created", HNumber nx( "$$$--2.7" ), HNumberException );
 	ENSURE_THROW( "phony number created", HNumber nx( "???..27" ), HNumberException );
@@ -379,25 +379,25 @@ TUT_UNIT_TEST( "construct from string (prefixes)" )
 	HNumber n5( pn5 );
 	ENSURE_EQUALS( "number not created correctly", n5.to_string(), "0.2" );
 	ENSURE_EQUALS( "bad dafault precision", n5.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n5 =" << n5.to_string() << " |" << endl;
+	clog << "| n5 =" << n5.to_string() << " |" << endl;
 
 	char const* const pn6 = "???2.7.44";
 	HNumber n6( pn6 );
 	ENSURE_EQUALS( "number not created correctly", n6.to_string(), "2.7" );
 	ENSURE_EQUALS( "bad dafault precision", n6.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n6 =" << n6.to_string() << " |" << endl;
+	clog << "| n6 =" << n6.to_string() << " |" << endl;
 
 	char const* const pn7 = "???7-44";
 	HNumber n7( pn7 );
 	ENSURE_EQUALS( "number not created correctly", n7.to_string(), "7" );
 	ENSURE_EQUALS( "bad dafault precision", n7.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n7 =" << n7.to_string() << " |" << endl;
+	clog << "| n7 =" << n7.to_string() << " |" << endl;
 
 	char const* const pn8 = "???2.7.44";
 	HNumber n8( pn8 );
 	ENSURE_EQUALS( "number not created correctly", n8.to_string(), "2.7" );
 	ENSURE_EQUALS( "bad dafault precision", n8.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n8 =" << n8.to_string() << " |" << endl;
+	clog << "| n8 =" << n8.to_string() << " |" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "construct from string (postfixes)" )
@@ -406,7 +406,7 @@ TUT_UNIT_TEST( "construct from string (postfixes)" )
 	HNumber n0( pn0 );
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0ok );
 	ENSURE_EQUALS( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n0 = " << n0.to_string() << " |" << endl;
+	clog << "| n0 = " << n0.to_string() << " |" << endl;
 	ENSURE_THROW( "empty number created", HNumber n( "???" ), HNumberException );
 	ENSURE_THROW( "number that is a minus created", HNumber n( "-???" ), HNumberException );
 	ENSURE_THROW( "number that is a dot created", HNumber n( ".???" ), HNumberException );
@@ -417,28 +417,28 @@ TUT_UNIT_TEST( "construct from string (postfixes)" )
 	HNumber n1( pn1 );
 	ENSURE_EQUALS( "number not created correctly", n1.to_string(), pn1ok );
 	ENSURE_EQUALS( "bad dafault precision", n1.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n1 =" << n1.to_string() << " |" << endl;
+	clog << "| n1 =" << n1.to_string() << " |" << endl;
 
 	char const* const pn2ok = "0.5";
 	char const* const pn2 = ".5???";
 	HNumber n2( pn2 );
 	ENSURE_EQUALS( "number not created correctly", n2.to_string(), pn2ok );
 	ENSURE_EQUALS( "bad dafault precision", n2.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n2 =" << n2.to_string() << " |" << endl;
+	clog << "| n2 =" << n2.to_string() << " |" << endl;
 
 	char const* const pn3ok = "-0.7";
 	char const* const pn3 = "-.7???";
 	HNumber n3( pn3 );
 	ENSURE_EQUALS( "number not created correctly", n3.to_string(), pn3ok );
 	ENSURE_EQUALS( "bad dafault precision", n3.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n3 =" << n3.to_string() << " |" << endl;
+	clog << "| n3 =" << n3.to_string() << " |" << endl;
 
 	char const* const pn4ok = "-2.7";
 	char const* const pn4 = "-2.7???";
 	HNumber n4( pn4 );
 	ENSURE_EQUALS( "number not created correctly", n4.to_string(), pn4ok );
 	ENSURE_EQUALS( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n4 =" << n4.to_string() << " |" << endl;
+	clog << "| n4 =" << n4.to_string() << " |" << endl;
 	ENSURE_THROW( "phony number created", HNumber nx( "--2.7???" ), HNumberException );
 	ENSURE_THROW( "phony number created", HNumber nx( "..27???" ), HNumberException );
 	ENSURE_THROW( "phony number created", HNumber nx( "-.-2.7???" ), HNumberException );
@@ -447,25 +447,25 @@ TUT_UNIT_TEST( "construct from string (postfixes)" )
 	HNumber n5( pn5 );
 	ENSURE_EQUALS( "number not created correctly", n5.to_string(), "0.2" );
 	ENSURE_EQUALS( "bad dafault precision", n5.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n5 =" << n5.to_string() << " |" << endl;
+	clog << "| n5 =" << n5.to_string() << " |" << endl;
 
 	char const* const pn6 = "2.7.44???";
 	HNumber n6( pn6 );
 	ENSURE_EQUALS( "number not created correctly", n6.to_string(), "2.7" );
 	ENSURE_EQUALS( "bad dafault precision", n6.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n6 =" << n6.to_string() << " |" << endl;
+	clog << "| n6 =" << n6.to_string() << " |" << endl;
 
 	char const* const pn7 = "7-44???";
 	HNumber n7( pn7 );
 	ENSURE_EQUALS( "number not created correctly", n7.to_string(), "7" );
 	ENSURE_EQUALS( "bad dafault precision", n7.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n7 =" << n7.to_string() << " |" << endl;
+	clog << "| n7 =" << n7.to_string() << " |" << endl;
 
 	char const* const pn8 = "2.7.44???";
 	HNumber n8( pn8 );
 	ENSURE_EQUALS( "number not created correctly", n8.to_string(), "2.7" );
 	ENSURE_EQUALS( "bad dafault precision", n8.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n8 =" << n8.to_string() << " |" << endl;
+	clog << "| n8 =" << n8.to_string() << " |" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "construct from string (prepostfixes)" )
@@ -474,7 +474,7 @@ TUT_UNIT_TEST( "construct from string (prepostfixes)" )
 	HNumber n0( pn0 );
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0ok );
 	ENSURE_EQUALS( "bad dafault precision", n0.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n0 = " << n0.to_string() << " |" << endl;
+	clog << "| n0 = " << n0.to_string() << " |" << endl;
 	ENSURE_THROW( "empty number created", HNumber n( "???" ), HNumberException );
 	ENSURE_THROW( "number that is a minus created", HNumber n( "$$$-???" ), HNumberException );
 	ENSURE_THROW( "number that is a dot created", HNumber n( "???.???" ), HNumberException );
@@ -485,28 +485,28 @@ TUT_UNIT_TEST( "construct from string (prepostfixes)" )
 	HNumber n1( pn1 );
 	ENSURE_EQUALS( "number not created correctly", n1.to_string(), pn1ok );
 	ENSURE_EQUALS( "bad dafault precision", n1.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n1 =" << n1.to_string() << " |" << endl;
+	clog << "| n1 =" << n1.to_string() << " |" << endl;
 
 	char const* const pn2ok = "0.5";
 	char const* const pn2 = "$$$.5???";
 	HNumber n2( pn2 );
 	ENSURE_EQUALS( "number not created correctly", n2.to_string(), pn2ok );
 	ENSURE_EQUALS( "bad dafault precision", n2.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n2 =" << n2.to_string() << " |" << endl;
+	clog << "| n2 =" << n2.to_string() << " |" << endl;
 
 	char const* const pn3ok = "-0.7";
 	char const* const pn3 = "$$$-.7???";
 	HNumber n3( pn3 );
 	ENSURE_EQUALS( "number not created correctly", n3.to_string(), pn3ok );
 	ENSURE_EQUALS( "bad dafault precision", n3.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n3 =" << n3.to_string() << " |" << endl;
+	clog << "| n3 =" << n3.to_string() << " |" << endl;
 
 	char const* const pn4ok = "-2.7";
 	char const* const pn4 = "$$$-2.7???";
 	HNumber n4( pn4 );
 	ENSURE_EQUALS( "number not created correctly", n4.to_string(), pn4ok );
 	ENSURE_EQUALS( "bad dafault precision", n4.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n4 =" << n4.to_string() << " |" << endl;
+	clog << "| n4 =" << n4.to_string() << " |" << endl;
 
 	ENSURE_THROW( "phony number created", HNumber nx( "$$$--2.7???" ), HNumberException );
 	ENSURE_THROW( "phony number created", HNumber nx( "???..27???" ), HNumberException );
@@ -516,25 +516,25 @@ TUT_UNIT_TEST( "construct from string (prepostfixes)" )
 	HNumber n5( pn5 );
 	ENSURE_EQUALS( "number not created correctly", n5.to_string(), "0.2" );
 	ENSURE_EQUALS( "bad dafault precision", n5.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n5 =" << n5.to_string() << " |" << endl;
+	clog << "| n5 =" << n5.to_string() << " |" << endl;
 
 	char const* const pn6 = "???2.7.44???";
 	HNumber n6( pn6 );
 	ENSURE_EQUALS( "number not created correctly", n6.to_string(), "2.7" );
 	ENSURE_EQUALS( "bad dafault precision", n6.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n6 =" << n6.to_string() << " |" << endl;
+	clog << "| n6 =" << n6.to_string() << " |" << endl;
 
 	char const* const pn7 = "???7-44???";
 	HNumber n7( pn7 );
 	ENSURE_EQUALS( "number not created correctly", n7.to_string(), "7" );
 	ENSURE_EQUALS( "bad dafault precision", n7.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n7 =" << n7.to_string() << " |" << endl;
+	clog << "| n7 =" << n7.to_string() << " |" << endl;
 
 	char const* const pn8 = "???2.7.44???";
 	HNumber n8( pn8 );
 	ENSURE_EQUALS( "number not created correctly", n8.to_string(), "2.7" );
 	ENSURE_EQUALS( "bad dafault precision", n8.get_precision(), HNumber::DEFAULT_PRECISION );
-	cout << "| n8 =" << n8.to_string() << " |" << endl;
+	clog << "| n8 =" << n8.to_string() << " |" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "construct from string and specify precision" )
@@ -543,7 +543,7 @@ TUT_UNIT_TEST( "construct from string and specify precision" )
 	HNumber n0( pn0, P1 );
 	ENSURE_EQUALS( "number not created correctly", n0.to_string(), pn0 );
 	ENSURE_EQUALS( "bad dafault precision", n0.get_precision(), P1 );
-	cout << "| n0 = " << n0.to_string() << " |" << endl;
+	clog << "| n0 = " << n0.to_string() << " |" << endl;
 	int const M = 16;
 	int const P2 = 4;
 	HNumber n2( pn0, P2 );

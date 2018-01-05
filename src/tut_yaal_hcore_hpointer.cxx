@@ -53,11 +53,11 @@ struct tut_yaal_hcore_hpointer : public simple_mock<tut_yaal_hcore_hpointer> {
 		int _tab[0x100];
 		Base( void )
 			: _tab()
-			{	cout << __PRETTY_FUNCTION__ << ": " << this << endl;	}
+			{	clog << __PRETTY_FUNCTION__ << ": " << this << endl;	}
 		virtual ~Base( void )
-			{	cout << __PRETTY_FUNCTION__ << ": " << this << endl;	}
+			{	clog << __PRETTY_FUNCTION__ << ": " << this << endl;	}
 		virtual int foo( char const* const by ) {
-			cout << __PRETTY_FUNCTION__ << ": " << this << ", by: " << by << endl;
+			clog << __PRETTY_FUNCTION__ << ": " << this << ", by: " << by << endl;
 			return ( -1 );
 		}
 	};
@@ -66,13 +66,13 @@ struct tut_yaal_hcore_hpointer : public simple_mock<tut_yaal_hcore_hpointer> {
 		int _one;
 		A ( int one )
 			: Base(), _one ( one )
-			{	cout << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray << ", " << _one << endl;	}
+			{	clog << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray << ", " << _one << endl;	}
 		virtual ~A ( void )
-			{	cout << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray <<  ", " << _one << endl;	}
+			{	clog << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray <<  ", " << _one << endl;	}
 		void bar( char const* const by )
-			{ cout << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray << ", " << _one << ", by: " << by << endl; }
+			{ clog << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray << ", " << _one << ", by: " << by << endl; }
 		virtual int foo( char const* const by ) {
-			cout << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray << ", " << _one << ", by: " << by << endl;
+			clog << __PRETTY_FUNCTION__ << ": " << brightblue << this << lightgray << ", " << _one << ", by: " << by << endl;
 			return ( _one );
 		}
 	};
@@ -91,11 +91,11 @@ struct tut_yaal_hcore_hpointer : public simple_mock<tut_yaal_hcore_hpointer> {
 			: _quality( 0 ), _quality1( -1 ), _quality2( -2 ), _quality3( -3 ),
 			_quality4( -4 ), _quality5( -5 ), _quality6( -6 ), _quality7( -7 ),
 			_quality8( -8 )
-			{ cout << __PRETTY_FUNCTION__ << ": " << yellow << this << lightgray << endl; }
+			{ clog << __PRETTY_FUNCTION__ << ": " << yellow << this << lightgray << endl; }
 		virtual ~X ( void )
-			{ cout << __PRETTY_FUNCTION__ << ": " << yellow << this << lightgray << endl; }
+			{ clog << __PRETTY_FUNCTION__ << ": " << yellow << this << lightgray << endl; }
 		virtual int foo( char const* const by ) {
-			cout << __PRETTY_FUNCTION__ << ": " << yellow << this << lightgray << ", by: " << by << endl;
+			clog << __PRETTY_FUNCTION__ << ": " << yellow << this << lightgray << ", by: " << by << endl;
 			return ( 0 );
 		}
 	};
@@ -104,11 +104,11 @@ struct tut_yaal_hcore_hpointer : public simple_mock<tut_yaal_hcore_hpointer> {
 		HString _four;
 		E ( int one, HString const& four )
 			: X(), A( one ), _four ( four )
-			{ cout << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << endl; }
+			{ clog << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << endl; }
 		virtual ~E ( void )
-			{ cout << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << endl; }
+			{ clog << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << endl; }
 		virtual int foo( char const* const by ) {
-			cout << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << ", by: " << by << endl;
+			clog << __PRETTY_FUNCTION__ << ": " << brightred << this << lightgray << ", " << _four << ", by: " << by << endl;
 			return ( _one );
 		}
 	};
@@ -131,7 +131,7 @@ TUT_UNIT_TEST( "Constructor." ) {
 		counter_t* p = NULL;
 		ptr_t ptr( p = new counter_t() );
 		ENSURE_EQUALS( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
-		cout << ptr->to_string() << endl;
+		clog << ptr->to_string() << endl;
 	}
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -140,7 +140,7 @@ TUT_UNIT_TEST( "Copy constructor." ) {
 		counter_t* p = NULL;
 		ptr_t ptr = ptr_t( p = new counter_t() );
 		ENSURE_EQUALS( "smart pointer does not hold proper raw pointer", ptr.raw(), p );
-		cout << ptr->to_string() << endl;
+		clog << ptr->to_string() << endl;
 	}
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -149,13 +149,13 @@ TUT_UNIT_TEST( "Assign operator." ) {
 		counter_t* p = NULL;
 		ptr_t sp1 = ptr_t( new counter_t() );
 		ptr_t sp2 = ptr_t( p = new counter_t() );
-		cout << sp1->to_string() << endl;
-		cout << sp2->to_string() << endl;
+		clog << sp1->to_string() << endl;
+		clog << sp2->to_string() << endl;
 		sp1 = sp2;
 		ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 1 );
 		ENSURE_EQUALS( "failed to assign pointer", sp1->get_id(), sp2->get_id() );
 		ENSURE_EQUALS( "failed to assign pointer", sp1.raw(), p );
-		cout << sp1->to_string() << endl;
+		clog << sp1->to_string() << endl;
 	}
 	ENSURE_EQUALS( "failed to invoke destructor", counter_t::get_instance_count(), 0 );
 TUT_TEARDOWN()

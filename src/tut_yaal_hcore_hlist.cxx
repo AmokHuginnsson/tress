@@ -87,10 +87,10 @@ private:
 
 void tut_yaal_hcore_hlist::dump( list_t& l ) {
 	int long s = l.size();
-	cout << "l(" << s << "): [";
+	clog << "l(" << s << "): [";
 	for ( list_t::iterator it = l.begin(); it != l.end(); ++ it )
-		cout << *it << ( s -- > 1 ? "," : "" );
-	cout << "]" << endl;
+		clog << *it << ( s -- > 1 ? "," : "" );
+	clog << "]" << endl;
 }
 
 template<typename T>
@@ -338,7 +338,7 @@ TUT_UNIT_TEST( "cyclic_iterator on list" )
 	check_consistency( l );
 	char const* const vec = "abcabc";
 	for ( size_t i = 0; i < strlen( vec ); ++ i ) {
-		cout << i;
+		clog << i;
 		ENSURE_EQUALS( "cyclic_iterator failed", static_cast<char>( *it ), vec[ i ] );
 		++ it;
 	}
@@ -346,11 +346,11 @@ TUT_UNIT_TEST( "cyclic_iterator on list" )
 	it = cyclic_iterator( l );
 	check_consistency( l );
 	for ( size_t i = 0; i < strlen( vec ); ++ i ) {
-		cout << i;
+		clog << i;
 		ENSURE_EQUALS( "cyclic_iterator failed", static_cast<char>( *it ), vec2[ i ] );
 		-- it;
 	}
-	cout << endl;
+	clog << endl;
 	it = cyclic_iterator( l );
 	check_consistency( l );
 	ENSURE_EQUALS( "hook is not head", *it, l.head() );
@@ -974,7 +974,7 @@ TUT_UNIT_TEST( "sort serious" )
 	char buf[10];
 	list_t l;
 	check_consistency( l );
-	std::cout << std::setprecision( 2 ) << std::fixed;
+	std::clog << std::setprecision( 2 ) << std::fixed;
 	for ( int long unsigned i = 0; i < count; ++ i ) {
 		snprintf( buf, 9, "%08lo", i );
 		for ( int k = 0; k < 8; ++ k )
@@ -987,14 +987,14 @@ TUT_UNIT_TEST( "sort serious" )
 			check_consistency( l );
 			check_sorted( l, list_widget_helper::OSortHelper::DESCENDING );
 		} catch ( ... ) {
-			std::cout << "(" << std::setw( 8 ) << std::setfill( '0' ) << std::oct << i << ")[" << _stringifier.to_string<char>( l ) << "]" << std::endl;
+			std::clog << "(" << std::setw( 8 ) << std::setfill( '0' ) << std::oct << i << ")[" << _stringifier.to_string<char>( l ) << "]" << std::endl;
 			throw;
 		}
 		check_consistency( l );
 		l.clear();
 		check_consistency( l );
 		if ( ! ( i % 8192 ) )
-			std::cout << "\r               \r" << std::setw( 6 ) << 100. * ( static_cast<double>( i ) / static_cast<double>( count ) ) << '%' << std::flush;
+			std::clog << "\r               \r" << std::setw( 6 ) << 100. * ( static_cast<double>( i ) / static_cast<double>( count ) ) << '%' << std::flush;
 	}
 TUT_TEARDOWN()
 

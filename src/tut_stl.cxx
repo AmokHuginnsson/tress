@@ -191,14 +191,14 @@ TUT_UNIT_TEST( "remove_if algorithm" )
 	typedef list<int> list_t;
 	int a[] = { 1, -2, 3, -4, 9, -8, 7, -6, 5 };
 	list_t l( a, a + countof( a ) );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
-	cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( clog, " " ) );
+	clog << endl;
 	list_t::iterator end( remove_if( l.begin(), l.end(), bind2nd( less<int>(), 0 ) ) );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
-	cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( clog, " " ) );
+	clog << endl;
 	l.erase( end, l.end() );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout, " " ) );
-	cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( clog, " " ) );
+	clog << endl;
 	int b[] = { 1, 3, 9, 7, 5 };
 	ENSURE( "remove_if failed", equal( l.begin(), l.end(), b ) );
 TUT_TEARDOWN()
@@ -221,7 +221,7 @@ TUT_UNIT_TEST( "transform" )
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "transform failed", ss.str(), "1 2 3 4 5 6 7 8 9 10 " );
-	cout << ss.str() << endl;
+	clog << ss.str() << endl;
 TUT_TEARDOWN()
 
 #endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
@@ -234,7 +234,7 @@ TUT_UNIT_TEST( "negate" )
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "negate failed", ss.str(), "-1 -4 -9 -16 -25 -36 -49 -64 -81 -100 " );
-	cout << ss.str() << endl;
+	clog << ss.str() << endl;
 TUT_TEARDOWN()
 
 #ifdef HAVE_SGI_STL_EXTENSIONS
@@ -247,7 +247,7 @@ TUT_UNIT_TEST( "compose1" )
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "compose1 failed", ss.str(), "-2 -5 -10 -17 -26 -37 -50 -65 -82 -101 " );
-	cout << ss.str() << endl;
+	clog << ss.str() << endl;
 TUT_TEARDOWN()
 
 #endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
@@ -261,7 +261,7 @@ TUT_UNIT_TEST( "remove_copy_if" )
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "remove_copy_if failed", ss.str(), "1 4 9 16 25 " );
-	cout << ss.str() << endl;
+	clog << ss.str() << endl;
 TUT_TEARDOWN()
 
 #ifdef HAVE_SGI_STL_EXTENSIONS
@@ -278,7 +278,7 @@ TUT_UNIT_TEST( "compose2" )
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "compose2 failed", ss.str(), "1 4 9 16 25 64 81 100 " );
-	cout << ss.str() << endl;
+	clog << ss.str() << endl;
 TUT_TEARDOWN()
 
 #endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
@@ -315,7 +315,7 @@ TUT_UNIT_TEST( "not2" )
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "not2 failed", ss.str(), "36 49 " );
-	cout << ss.str() << endl;
+	clog << ss.str() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "identity" )
@@ -330,7 +330,7 @@ TUT_UNIT_TEST( "identity" )
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "identity failed", ss.str(), "36 49 " );
-	cout << ss.str() << endl;
+	clog << ss.str() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ptr_fun" )
@@ -345,7 +345,7 @@ TUT_UNIT_TEST( "ptr_fun" )
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "ptr_fun failed", ss.str(), "36 49 " );
-	cout << ss.str() << endl;
+	clog << ss.str() << endl;
 TUT_TEARDOWN()
 
 #endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
@@ -384,7 +384,7 @@ TUT_UNIT_TEST( "mem_fun, mem_fun_ref" )
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.str(), "0 1 3 7 " );
 	ss.flush();
 	transform( l.begin(), l.end(), ostream_iterator<int>( ss, " " ), mem_fun_ref( &MemFunTest::value ) );
-	cout << ss.str() << endl;
+	clog << ss.str() << endl;
 TUT_TEARDOWN()
 
 #ifdef HAVE_SGI_STL_EXTENSIONS
@@ -404,7 +404,7 @@ TUT_UNIT_TEST( "mem_fun1" )
 	stringstream ss;
 	transform( nl.begin(), nl.end(), a, ostream_iterator<int>( ss, " " ), mem_fun1( &MemFunTest::calc ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.str(), "1 5 12 23 " );
-	cout << ss.str() << endl;
+	clog << ss.str() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mem_fun1_ref" )
@@ -420,7 +420,7 @@ TUT_UNIT_TEST( "mem_fun1_ref" )
 	stringstream ss;
 	transform( l.begin(), l.end(), a, ostream_iterator<int>( ss, " " ), mem_fun1_ref( &MemFunTest::calc ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.str(), "1 5 12 23 " );
-	cout << ss.str() << endl;
+	clog << ss.str() << endl;
 TUT_TEARDOWN()
 #endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 
@@ -432,29 +432,29 @@ TUT_UNIT_TEST( "replace" )
 	stringstream ss;
 	copy( a, a + countof ( a ), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "replace failed", ss.str(), "7 1 4 9 16 25 7 49 64 81 100 7 " );
-	cout << ss.str() << endl;
+	clog << ss.str() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "transform (negate) container content automatically" )
-	cout << "negate container content ..." << endl;
-	cout << "{" << endl;
+	clog << "negate container content ..." << endl;
+	clog << "{" << endl;
 	typedef list<int> T;
 	T l;
 	generate_n( std::back_insert_iterator<T>( l ), 20, inc( 1 ) );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( clog ) ); clog << endl;
 	replace_if(l.begin(), l.end(), std::bind2nd( less<int>(), 10 ), 10);
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( clog ) ); clog << endl;
 	transform( l.begin(), l.end(), l.begin(), negate<int>() );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( clog ) ); clog << endl;
 	transform( l.begin(), l.end(), l.begin(), bind2nd( plus<int>(), 7 ) );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
-	cout << "}" << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( clog ) ); clog << endl;
+	clog << "}" << endl;
 	vector<string> vs;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "max_size of string" )
 	string str;
-	cout << str.max_size() << endl;
+	clog << str.max_size() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "map insert of already existing key")
@@ -465,73 +465,73 @@ TUT_UNIT_TEST( "map insert of already existing key")
 	typedef pair<i2i_t::iterator, bool> insert_result_t;
 	insert_result_t ir = m.insert( std::make_pair( 1, 3 ) );
 	ENSURE_EQUALS( "element with already existing key inserted", ir.second, false );
-	cout << (*ir.first).second << endl;
+	clog << (*ir.first).second << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "manipulators" )
 	string str;
 	int i( 7 );
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setfill( '0' ) << setw( 5 ) << i << "'" << " \tsetfill( '0' ), setw( 5 )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
-	cout << "[M] i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
-	cout << "[O] i = '" << i << "'" << endl;
+	clog << "[O] i = '" << i << "'" << endl;
+	clog << "[M] i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
+	clog << "[O] i = '" << i << "'" << endl;
+	clog << "[M] i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
+	clog << "[O] i = '" << i << "'" << endl;
+	clog << "[M] i = '" << setfill( '0' ) << setw( 5 ) << i << "'" << " \tsetfill( '0' ), setw( 5 )" << endl;
+	clog << "[O] i = '" << i << "'" << endl;
+	clog << "[M] i = '" << setw( 5 ) << i << "'" << " \tsetw( 5 )" << endl;
+	clog << "[O] i = '" << i << "'" << endl;
+	clog << "[M] i = '" << setfill( '0' ) << i << "'" << " \tsetfill( '0' )" << endl;
+	clog << "[O] i = '" << i << "'" << endl;
 	int k( 103 );
-	cout << "[O] k = '" << k << "'" << endl;
-	cout << "[M] k = '" << hex << k << "' \thex" << endl;
-	cout << "[O] k = '" << k << "'" << endl;
-	cout << dec << flush;
+	clog << "[O] k = '" << k << "'" << endl;
+	clog << "[M] k = '" << hex << k << "' \thex" << endl;
+	clog << "[O] k = '" << k << "'" << endl;
+	clog << dec << flush;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "display automatically" )
-	cout << "display container contents automatically ..." << endl;
-	cout << "{" << endl;
+	clog << "display container contents automatically ..." << endl;
+	clog << "{" << endl;
 	typedef set<int> T;
 	T s;
 	s.insert( 1 );
 	s.insert( 2 );
 	s.insert( 3 );
-	copy( s.begin(), s.end(), ostream_iterator<int>( cout ) );
-	cout << endl;
-	cout << "}" << endl;
+	copy( s.begin(), s.end(), ostream_iterator<int>( clog ) );
+	clog << endl;
+	clog << "}" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "create contents automatically" )
-	cout << "create container contents automatically ..." << endl;
-	cout << "{" << endl;
+	clog << "create container contents automatically ..." << endl;
+	clog << "{" << endl;
 	typedef set<int> T;
 	T s;
 	generate_n( std::insert_iterator<T>( s, s.begin() ), 3, inc( 1 ) );
-	copy( s.begin(), s.end(), ostream_iterator<int>( cout ) );
-	cout << endl;
-	cout << "}" << endl;
+	copy( s.begin(), s.end(), ostream_iterator<int>( clog ) );
+	clog << endl;
+	clog << "}" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "reverse container content automatically" )
-	cout << "reverse container content ..." << endl;
-	cout << "{" << endl;
+	clog << "reverse container content ..." << endl;
+	clog << "{" << endl;
 	typedef list<int> T;
 	T l;
 	generate_n( std::back_insert_iterator<T>( l ), 3, inc( 1 ) );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( clog ) ); clog << endl;
 	reverse( l.begin(), l.end() );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( clog ) ); clog << endl;
 	T lc;
 	reverse_copy( l.begin(), l.end(), std::back_insert_iterator<T>( lc ) );
-	copy( l.begin(), l.end(), ostream_iterator<int>( cout ) ); cout << endl;
-	copy( lc.begin(), lc.end(), ostream_iterator<int>( cout ) ); cout << endl;
-	cout << "}" << endl;
+	copy( l.begin(), l.end(), ostream_iterator<int>( clog ) ); clog << endl;
+	copy( lc.begin(), lc.end(), ostream_iterator<int>( clog ) ); clog << endl;
+	clog << "}" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "create by_hand" )
-	cout << "lets do everything by hand ..." << endl;
-	cout << "{" << endl;
+	clog << "lets do everything by hand ..." << endl;
+	clog << "{" << endl;
 	typedef set<int> T;
 	T s;
 	s.insert( 1 );
@@ -539,10 +539,10 @@ TUT_UNIT_TEST( "create by_hand" )
 	s.insert( 3 );
 
 	for ( T::const_iterator it = s.begin(); it != s.end(); ++ it )
-		cout << *it;
-	cout << endl;
+		clog << *it;
+	clog << endl;
 
-	cout << "}" << endl;
+	clog << "}" << endl;
 TUT_TEARDOWN()
 
 }

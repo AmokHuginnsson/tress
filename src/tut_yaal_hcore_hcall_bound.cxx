@@ -57,16 +57,16 @@ TUT_UNIT_TEST( "compare with constant less." )
 	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ), call( &item_t::id, _1 ) < 50 );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	copy( l.begin(), l.end(), stream_iterator( clog, " " ) );
+	clog << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "compare with constant greater." )
 	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
 	remove_copy_if( a, a + countof( a ), back_insert_iterator( l ), call( &item_t::id, _1 ) > 50 );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	copy( l.begin(), l.end(), stream_iterator( clog, " " ) );
+	clog << endl;
 TUT_TEARDOWN()
 
 }

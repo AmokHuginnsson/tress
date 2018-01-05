@@ -780,7 +780,7 @@ TUT_UNIT_TEST( "find(\"\")" )
 	char sample[ SAMPLE_SIZE + 1 ];
 	sample[ SAMPLE_SIZE ] = 0;
 	yaal::generate( sample, sample + SAMPLE_SIZE, gen_char() );
-	yaal::copy( sample, sample + SAMPLE_SIZE, stream_iterator( cout ) ); cout << endl;
+	yaal::copy( sample, sample + SAMPLE_SIZE, stream_iterator( clog ) ); clog << endl;
 	HString str( sample );
 	HString msg;
 	for ( int len = 1; len < SAMPLE_SIZE; ++ len ) {

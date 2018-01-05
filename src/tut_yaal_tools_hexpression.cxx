@@ -201,13 +201,13 @@ TUT_UNIT_TEST( "complex and valid expression" )
 	x2 *= x2;
 	x2 *= x2;
 	ENSURE_DISTANCE( "wrong computation", x1, x2, epsilon * 4 );
-	std::cout << eq << "=" << std::setprecision( 20 ) << x1 << std::endl;
+	std::clog << eq << "=" << std::setprecision( 20 ) << x1 << std::endl;
 	eq = "Y";
 	x.compile( eq );
-	x [ 'Y' ] = 3.;
-	cout << eq << "=" << x.evaluate() << endl;
-	x [ 'Y' ] = 2.;
-	cout << eq << "=" << x.evaluate() << endl;
+	x[ 'Y' ] = 3.;
+	ENSURE_DISTANCE( "referencing variable failed", x.evaluate(), 3.L, epsilon );
+	x[ 'Y' ] = 2.;
+	ENSURE_DISTANCE( "reseting variable failed", x.evaluate(), 2.L, epsilon );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "invalid expression" )

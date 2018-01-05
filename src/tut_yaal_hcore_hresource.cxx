@@ -61,7 +61,7 @@ TUT_UNIT_TEST( "freeing the new allocated object" ) {
 		item_t* p = new item_t();
 		ptr_t ptr( p );
 		ENSURE_EQUALS( "smart pointer does not hold proper get pointer", ptr.get(), p );
-		cout << ptr->to_string() << endl;
+		clog << ptr->to_string() << endl;
 	}
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -70,7 +70,7 @@ TUT_UNIT_TEST( "Copy constructor." ) {
 		item_t* p = NULL;
 		ptr_t ptr = ptr_t( p = new item_t() );
 		ENSURE_EQUALS( "smart pointer does not hold proper get pointer", ptr.get(), p );
-		cout << ptr->to_string() << endl;
+		clog << ptr->to_string() << endl;
 	}
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
@@ -80,13 +80,13 @@ TUT_UNIT_TEST( "Assign operator." ) {
 		ptr_t sp1 = ptr_t( new item_t() );
 		ptr_t sp2 = ptr_t( p = new item_t() );
 		ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 2 );
-		cout << sp1->to_string() << endl;
-		cout << sp2->to_string() << endl;
+		clog << sp1->to_string() << endl;
+		clog << sp2->to_string() << endl;
 		sp1 = yaal::move( sp2 );
 		ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 1 );
 		ENSURE_EQUALS( "failed to pass pointer", sp2.get(), static_cast<item_t*>( NULL ) );
 		ENSURE_EQUALS( "failed to assign pointer", sp1.get(), p );
-		cout << sp1->to_string() << endl;
+		clog << sp1->to_string() << endl;
 	}
 	ENSURE_EQUALS( "failed to invoke destructor", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()

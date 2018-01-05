@@ -171,14 +171,14 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "remove_if algorithm" )
 	int a[] = { 1, -2, 3, -4, 9, -8, 7, -6, 5 };
 	int_list_t l( begin( a ), end( a ) );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	copy( l.begin(), l.end(), stream_iterator( clog, " " ) );
+	clog << endl;
 	int_list_t::iterator end( remove_if( l.begin(), l.end(), bind2nd( less<int>(), 0 ) ) );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	copy( l.begin(), l.end(), stream_iterator( clog, " " ) );
+	clog << endl;
 	l.erase( end, l.end() );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	copy( l.begin(), l.end(), stream_iterator( clog, " " ) );
+	clog << endl;
 	int b[] = { 1, 3, 9, 7, 5 };
 	ENSURE( "remove_if failed", safe_equal( l.begin(), l.end(), begin( b ), yaal::end( b ) ) );
 TUT_TEARDOWN()
@@ -190,7 +190,7 @@ TUT_UNIT_TEST( "transform" )
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "transform failed", ss.string(), "1 2 3 4 5 6 7 8 9 10 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "negate" )
@@ -200,7 +200,7 @@ TUT_UNIT_TEST( "negate" )
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "negate failed", ss.string(), "-1 -4 -9 -16 -25 -36 -49 -64 -81 -100 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "compose1" )
@@ -210,7 +210,7 @@ TUT_UNIT_TEST( "compose1" )
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "compose1 failed", ss.string(), "-2 -5 -10 -17 -26 -37 -50 -65 -82 -101 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "remove_copy_if" )
@@ -221,7 +221,7 @@ TUT_UNIT_TEST( "remove_copy_if" )
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "remove_copy_if failed", ss.string(), "1 4 9 16 25 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "compose2" )
@@ -235,7 +235,7 @@ TUT_UNIT_TEST( "compose2" )
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "compose2 failed", ss.string(), "1 4 9 16 25 64 81 100 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "count" )
@@ -267,7 +267,7 @@ TUT_UNIT_TEST( "not2" )
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "not2 failed", ss.string(), "36 49 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "identity" )
@@ -281,7 +281,7 @@ TUT_UNIT_TEST( "identity" )
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "identity failed", ss.string(), "36 49 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ptr_fun" )
@@ -295,7 +295,7 @@ TUT_UNIT_TEST( "ptr_fun" )
 	HStringStream ss;
 	copy( l.begin(), l.end(), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "ptr_fun failed", ss.string(), "36 49 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "call as bind1st/bind2nd" )
@@ -317,8 +317,8 @@ TUT_UNIT_TEST( "call in superposition" )
 				logical_and<bool>(),
 				call( less<int>(), 30, _1 ),
 				call( greater<int>(), 60, _1 ) ) );
-	copy( l.begin(), l.end(), stream_iterator( cout, " " ) );
-	cout << endl;
+	copy( l.begin(), l.end(), stream_iterator( clog, " " ) );
+	clog << endl;
 TUT_TEARDOWN()
 
 namespace {
@@ -360,11 +360,11 @@ TUT_UNIT_TEST( "mem_fun, mem_fun_ref" )
 	HStringStream ss;
 	transform( nl.begin(), nl.end(), stream_iterator( ss, " " ), mem_fun( &MemFunTest::value ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "0 1 3 7 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 	ss.reset();
 	transform( cnl.begin(), cnl.end(), stream_iterator( ss, " " ), mem_fun( &MemFunTest::value_const ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "0 1 3 7 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mem_fun1" )
@@ -387,11 +387,11 @@ TUT_UNIT_TEST( "mem_fun1" )
 	HStringStream ss;
 	transform( nl.begin(), nl.end(), a, stream_iterator( ss, " " ), mem_fun1( &MemFunTest::calc ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "1 5 12 23 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 	ss.reset();
 	transform( cnl.begin(), cnl.end(), a, stream_iterator( ss, " " ), mem_fun1( &MemFunTest::calc_const ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "1 5 12 23 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mem_fun1_ref" )
@@ -407,7 +407,7 @@ TUT_UNIT_TEST( "mem_fun1_ref" )
 	HStringStream ss;
 	transform( l.begin(), l.end(), a, stream_iterator( ss, " " ), mem_fun1_ref( &MemFunTest::calc ) );
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.string(), "1 5 12 23 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "replace" )
@@ -416,7 +416,7 @@ TUT_UNIT_TEST( "replace" )
 	HStringStream ss;
 	copy( begin( a ), end( a ), stream_iterator( ss, " " ) );
 	ENSURE_EQUALS( "replace failed", ss.string(), "7 1 4 9 16 25 7 49 64 81 100 7 " );
-	cout << ss.string() << endl;
+	clog << ss.string() << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "for_each of for_each" )
@@ -429,7 +429,7 @@ TUT_UNIT_TEST( "for_each of for_each" )
 	m.push_back( a0 );
 	transform( a0.begin(), a0.end(), a, a0.begin(), minus<int>() );
 	m.push_back( a0 );
-	copy( m.begin(), m.end(), stream_iterator( cout, endl ) );
+	copy( m.begin(), m.end(), stream_iterator( clog, endl ) );
 TUT_TEARDOWN()
 
 

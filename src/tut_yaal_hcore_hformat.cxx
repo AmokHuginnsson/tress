@@ -108,7 +108,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "format and streams interaction" )
 	typedef HFormat format_t;
-	cout << "PI: " << format_t( "[%2$*1$.*3$Lf]" ) % 30 % PI % 15 << endl;
+	clog << "PI: " << format_t( "[%2$*1$.*3$Lf]" ) % 30 % PI % 15 << endl;
 	HStringStream ss;
 	ss << format_t( "[%2$*1$.*3$Lf]" ) % 30 % PI % 15 << flush;
 	ENSURE_EQUALS( "format feeded stream with garbage", ss.string(), "[             3.141592653589793]" );

@@ -65,7 +65,7 @@ TUT_TEST_GROUP( tut_yaal_tool_hfuture, "yaal::tools::HFuture" );
 
 TUT_UNIT_TEST( "slow operation" )
 	HFuture<int long long> f( call( &tut_yaal_tool_hfuture::power_of_three, this, 7 ) );
-	cout << "3 ^ 7 = " << f.get() << endl;
+	ENSURE_EQUALS( "slow operation (3 ^ 7) failed", f.get(), 2187 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "reference returned" )

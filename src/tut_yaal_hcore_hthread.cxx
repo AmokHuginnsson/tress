@@ -68,14 +68,14 @@ public:
 HCool::HCool( char const* name_ )
 	: _wasStarted( false ), _lifeLength( 0 ), _name( name_ ) {
 	M_PROLOG
-	cout << "Object [" << _name << "] constructed." << endl;
+	clog << "Object [" << _name << "] constructed." << endl;
 	return;
 	M_EPILOG
 }
 
 HCool::~HCool( void ) {
 	M_PROLOG
-	cout << "Object [" << _name << "] destructed." << endl;
+	clog << "Object [" << _name << "] destructed." << endl;
 	return;
 	M_DESTRUCTOR_EPILOG
 }
@@ -85,13 +85,13 @@ namespace {
 void simple( HThread const* const caller_ ) {
 	M_PROLOG
 	HThread::set_name( "tut::HThread(simple)" );
-	cout << "Thread [simple] started." << endl;
+	clog << "Thread [simple] started." << endl;
 	int ctr = 50;
 	while ( caller_->is_alive() && ctr -- ) {
-		cout << ctr << ' ' << flush;
+		clog << ctr << ' ' << flush;
 		sleep_for( duration( 1 * 100, time::UNIT::MILLISECOND ) );
 	}
-	cout << "Thread [simple] finished." << endl;
+	clog << "Thread [simple] finished." << endl;
 	return;
 	M_EPILOG
 }
@@ -119,15 +119,15 @@ void HCool::run( HThread const* caller_ ) {
 	HThread::set_name( "tut::HThread(cool)" );
 	int ctr = _lifeLength;
 	_wasStarted = true;
-	cout << "Thread [" << _name << "] started ... ";
+	clog << "Thread [" << _name << "] started ... ";
 	while ( caller_->is_alive() && ctr -- ) {
-		cout << ctr << ' ' << flush;
+		clog << ctr << ' ' << flush;
 		if ( _name == "busy" )
 			busy_wait();
 		else
 			sleep_for( duration( 1 * 100, time::UNIT::MILLISECOND ) );
 	}
-	cout << " ... and finished" << endl;
+	clog << " ... and finished" << endl;
 	return;
 	M_EPILOG
 }
@@ -166,12 +166,12 @@ void CVTest::run( void ) {
 			HLock l( _mutex );
 			_cV.signal();
 		}
-		cout << "+" << flush;
+		clog << "+" << flush;
 		/**/ {
 			HLock l( _mutex );
 			_cV.signal();
 		}
-		cout << "+" << flush;
+		clog << "+" << flush;
 		ctr += 2;
 	}
 	return;
@@ -183,7 +183,7 @@ void CVTest::eat( void ) {
 	_thread.spawn( call( &CVTest::run, this ) );
 	while ( cnt -- ) {
 		_cV.wait_for( duration( 1, time::UNIT::SECOND ) );
-		cout << "\b" << flush;
+		clog << "\b" << flush;
 	}
 	_loop = false;
 }
@@ -331,7 +331,7 @@ TUT_UNIT_TEST( "Very short living thread." )
 	HTime start( now_utc() ), stop( now_utc() );
 	HThread a;
 	a.spawn( call( a_fast_one, &a ) );
-	cout << __PRETTY_FUNCTION__ << endl;
+	clog << __PRETTY_FUNCTION__ << endl;
 	a.finish();
 	/* In case of wrong implementation this test case will hang foreveer. */
 TUT_TEARDOWN()
@@ -341,7 +341,7 @@ TUT_UNIT_TEST( "Very short living thread, spawned delayed." )
 	HThread a;
 	a.spawn( call( a_fast_one, &a ) );
 	sleep_for( duration( 1 * 100, time::UNIT::MILLISECOND ) );
-	cout << __PRETTY_FUNCTION__ << endl;
+	clog << __PRETTY_FUNCTION__ << endl;
 	a.finish();
 	/* In case of wrong implementation this test case will hang foreveer. */
 TUT_TEARDOWN()

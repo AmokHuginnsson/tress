@@ -98,14 +98,14 @@ HServer::HServer( HSocket::socket_type_t type_, int maxConn_ )
 void HServer::listen( yaal::hcore::HString const& path_, int const port_ ) {
 	M_PROLOG
 	_socket->listen( path_, port_ );
-	cout << "listening on: " << path_ << ( port_ ? ":" : "" ) << ( port_ ? HString( port_ ) : HString() ) << endl;
+	clog << "listening on: " << path_ << ( port_ ? ":" : "" ) << ( port_ ? HString( port_ ) : HString() ) << endl;
 	return;
 	M_EPILOG
 }
 
 void HServer::start( void ) {
 	M_PROLOG
-	cout << "starting server thread ..." << endl;
+	clog << "starting server thread ..." << endl;
 	_dispatcher.register_file_descriptor_handler( _socket, call( &HServer::handler_connection, this, _1 ) );
 	_thread.spawn( call( &HServer::run, this ) );
 	return;
@@ -116,16 +116,16 @@ void HServer::stop( void ) {
 	M_PROLOG
 	_dispatcher.stop();
 	_thread.finish();
-	cout << "server thread stopped ..." << endl;
+	clog << "server thread stopped ..." << endl;
 	return;
 	M_EPILOG
 }
 
 void HServer::wait( void ) {
 	M_PROLOG
-	cout << "waiting for event ..." << endl;
+	clog << "waiting for event ..." << endl;
 	_event.wait();
-	cout << "event arrived ..." << endl;
+	clog << "event arrived ..." << endl;
 	return;
 	M_EPILOG
 }
@@ -135,7 +135,7 @@ void HServer::handler_connection( HIODispatcher::stream_t& ) {
 	HSocket::ptr_t client = _socket->accept();
 	M_ASSERT( !! client );
 	_dispatcher.register_file_descriptor_handler( client, call( &HServer::handler_message, this, _1 ) );
-	cout << green << "new connection" << lightgray << endl;
+	clog << green << "new connection" << lightgray << endl;
 	return;
 	M_EPILOG
 }
@@ -145,10 +145,10 @@ void HServer::handler_message( HIODispatcher::stream_t& stream_ ) {
 	HString message;
 	if ( !! stream_ ) {
 		int long nRead( 0 );
-		cout << "reading data ..." << endl;
+		clog << "reading data ..." << endl;
 		if ( ( nRead = stream_->read_until( message ) ) > 0 ) {
 			_buffer += message;
-			cout << "<-" << message << endl;
+			clog << "<-" << message << endl;
 			_event.signal();
 			_signaled = true;
 		} else if ( ! nRead )
@@ -162,9 +162,9 @@ void HServer::handler_message( HIODispatcher::stream_t& stream_ ) {
 void HServer::disconnect_client( HIODispatcher::stream_t& client_ ) {
 	M_PROLOG
 	M_ASSERT( !! client_ );
-	cout << "closing client connection ..." << endl;
+	clog << "closing client connection ..." << endl;
 	_dispatcher.unregister_file_descriptor_handler( client_ );
-	cout << "client closed connection ..." << endl;
+	clog << "client closed connection ..." << endl;
 	return;
 	M_EPILOG
 }
@@ -179,13 +179,13 @@ void HServer::run( void ) {
 	HThread::set_name( "tut::HSocket(serv)" );
 	try {
 		try {
-			cout << "starting dispatcher ..." << endl;
+			clog << "starting dispatcher ..." << endl;
 			_dispatcher.run();
-			cout << "dispatcher finished ..." << endl;
+			clog << "dispatcher finished ..." << endl;
 			_socket->close();
-			cout << "socket closed ..." << endl;
+			clog << "socket closed ..." << endl;
 		} catch ( HOpenSSLException& e ) {
-			cout << e.what() << endl;
+			clog << e.what() << endl;
 		}
 	} catch ( HSocketException& e ) {
 		_thread.stack_exception( e.what(), e.code() );
@@ -268,7 +268,7 @@ void tut_yaal_hcore_hsocket::play_scenario( HSocket::socket_type_t type_,
 	char test_data[] = "Ala ma kota.";
 	const int size( static_cast<int>( sizeof ( test_data ) ) );
 	TUT_DECLARE( HServer serv( type_ | HSocket::TYPE::SERVER | ( withSsl_ ? HSocket::TYPE::SSL : HSocket::TYPE::DEFAULT ) | ( nonBlockingServer_ ? HSocket::TYPE::NONBLOCKING : HSocket::TYPE::DEFAULT ), 1 ); );
-	TUT_INVOKE( cout << sizeof ( serv ) << endl; );
+	TUT_INVOKE( clog << sizeof ( serv ) << endl; );
 	TUT_DECLARE( HSocket client( type_ | HSocket::TYPE::CLIENT | ( withSsl_ ? HSocket::TYPE::SSL : HSocket::TYPE::DEFAULT ) | ( nonBlockingClient_ ? HSocket::TYPE::NONBLOCKING : HSocket::TYPE::DEFAULT ) ); );
 	TUT_INVOKE( serv.listen( path_, port_ ); );
 	try {
@@ -277,12 +277,12 @@ void tut_yaal_hcore_hsocket::play_scenario( HSocket::socket_type_t type_,
 		TUT_EVAL( client.write( test_data, size ) );
 		TUT_INVOKE( serv.wait(); );
 	} catch ( HOpenSSLException const& e ) {
-		cout << e.what() << endl;
+		clog << e.what() << endl;
 		serv.do_not_signal();
 		TUT_INVOKE( serv.stop(); );
 		throw;
 	} catch ( HSocketException const& e ) {
-		cout << e.what() << endl;
+		clog << e.what() << endl;
 		serv.do_not_signal();
 		TUT_INVOKE( serv.stop(); );
 		throw;
@@ -293,7 +293,7 @@ void tut_yaal_hcore_hsocket::play_scenario( HSocket::socket_type_t type_,
 	}
 	TUT_INVOKE( serv.stop(); );
 	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
-	cout << serv.buffer() << endl;
+	clog << serv.buffer() << endl;
 	return;
 }
 

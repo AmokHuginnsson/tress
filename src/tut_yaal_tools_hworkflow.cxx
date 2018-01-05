@@ -85,18 +85,18 @@ public:
 		, _slots( slots_ ) {
 	}
 	void foo( int id, char symbol, int waitTime ) {
-		cout << "foo" << id << flush;
+		clog << "foo" << id << flush;
 		register_runner();
 		HClock c;
 		for ( int i = 0; i < ( _sleep / waitTime ); ++ i ) {
 			sleep_for( duration( waitTime, time::UNIT::MILLISECOND ) );
-			cout << symbol << flush;
+			clog << symbol << flush;
 		}
-		cout << "[" << id << "]" << endl;
+		clog << "[" << id << "]" << endl;
 	}
 	void bar( counter_t c ) {
 		do_work();
-		cout << c.to_string() << endl;
+		clog << c.to_string() << endl;
 	}
 	void do_work( void ) {
 		/* scope */ {

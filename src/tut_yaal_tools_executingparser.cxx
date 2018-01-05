@@ -1177,7 +1177,7 @@ TUT_UNIT_TEST( "left recursion (follows)" )
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
 		ENSURE( "bad ruie count", i < 1 );
 		ENSURE_EQUALS( "wrong description", *it, "A_ = ( A_ >> '$' >> integer )" );
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 	ENSURE_THROW( "Grammar with left recursion accepted (follows).", HExecutingParser ep( S ), HExecutingParserException );
 TUT_TEARDOWN()
@@ -1190,7 +1190,7 @@ TUT_UNIT_TEST( "left recursion (alternative)" )
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
 		ENSURE( "bad ruie count", i < 1 );
 		ENSURE_EQUALS( "wrong description", *it, "A_ = ( integer | A_ )" );
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 	ENSURE_THROW( "Grammar with left recursion accepted (alternative).", HExecutingParser ep( S ), HExecutingParserException );
 TUT_TEARDOWN()
@@ -1203,7 +1203,7 @@ TUT_UNIT_TEST( "left recursion (optional)" )
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
 		ENSURE( "bad ruie count", i < 1 );
 		ENSURE_EQUALS( "wrong description", *it, "A_ = ( -integer >> A_ )" );
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 	ENSURE_THROW( "Grammar with left recursion accepted (optional).", HExecutingParser ep( S ), HExecutingParserException );
 TUT_TEARDOWN()
@@ -1216,7 +1216,7 @@ TUT_UNIT_TEST( "left recursion (kleene star)" )
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
 		ENSURE( "bad ruie count", i < 1 );
 		ENSURE_EQUALS( "wrong description", *it, "A_ = ( *integer >> A_ )" );
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 	ENSURE_THROW( "Grammar with left recursion accepted (kleene star).", HExecutingParser ep( S ), HExecutingParserException );
 TUT_TEARDOWN()
@@ -1229,7 +1229,7 @@ TUT_UNIT_TEST( "left recursion (kleene plus)" )
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
 		ENSURE( "bad ruie count", i < 1 );
 		ENSURE_EQUALS( "wrong description", *it, "A_ = ( +A_ >> integer )" );
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 	ENSURE_THROW( "Grammar with left recursion accepted (kleene plus).", HExecutingParser ep( S ), HExecutingParserException );
 TUT_TEARDOWN()
@@ -1242,7 +1242,7 @@ TUT_UNIT_TEST( "left recursion (and)" )
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
 		ENSURE( "bad ruie count", i < 1 );
 		ENSURE_EQUALS( "wrong description", *it, "A_ = ( ( A_ & '$' ) >> integer )" );
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 	ENSURE_THROW( "Grammar with left recursion accepted (and).", HExecutingParser ep( S ), HExecutingParserException );
 TUT_TEARDOWN()
@@ -1255,7 +1255,7 @@ TUT_UNIT_TEST( "left recursion (not)" )
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
 		ENSURE( "bad ruie count", i < 1 );
 		ENSURE_EQUALS( "wrong description", *it, "A_ = ( ( A_ ^ '$' ) >> integer )" );
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 	ENSURE_THROW( "Grammar with left recursion accepted (not).", HExecutingParser ep( S ), HExecutingParserException );
 TUT_TEARDOWN()
@@ -1273,12 +1273,12 @@ TUT_UNIT_TEST( "simple recursive rule" )
 		"A_ = ( real | ( '(' >> ( B_ >> *( '+' >> B_ ) ) >> ')' ) )",
 		"B_ = ( A_ >> *( '*' >> A_ ) )"
 	};
-	cout << "elem:" << endl;
+	clog << "elem:" << endl;
 	HGrammarDescription gd( elem );
 	int i( 0 );
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
 		ENSURE_EQUALS( "wrong description", *it, epDesc[i] );
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 TUT_TEARDOWN()
 
@@ -1295,12 +1295,12 @@ TUT_UNIT_TEST( "non-trivial recursive rule" )
 		"B_ = ( real | ( '(' >> ( C_ >> *( '+' >> C_ ) ) >> ')' ) )",
 		"C_ = ( B_ >> *( '*' >> B_ ) )"
 	};
-	cout << "eq:" << endl;
+	clog << "eq:" << endl;
 	HGrammarDescription gd( eq );
 	int i( 0 );
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
 		ENSURE_EQUALS( "wrong description", *it, epDesc[i] );
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 TUT_TEARDOWN()
 
@@ -1316,12 +1316,12 @@ TUT_UNIT_TEST( "ad-hoc root rule name" )
 		"B_ = ( real | ( '(' >> ( C_ >> *( '+' >> C_ ) ) >> ')' ) )",
 		"C_ = ( B_ >> *( '*' >> B_ ) )"
 	};
-	cout << "ad-hoc:" << endl;
+	clog << "ad-hoc:" << endl;
 	HGrammarDescription gd( elem >> extra );
 	int i( 0 );
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
 		ENSURE_EQUALS( "wrong description", *it, epDesc[i] );
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 TUT_TEARDOWN()
 
@@ -1337,12 +1337,12 @@ TUT_UNIT_TEST( "ad-hoc root rule name with action" )
 		"B_ = ( real | ( '(' >> ( C_ >> *( '+' >> C_ ) ) >> ')' ) )",
 		"C_ = ( B_ >> *( '*' >> B_ ) )"
 	};
-	cout << "ad-hoc:" << endl;
+	clog << "ad-hoc:" << endl;
 	HGrammarDescription gd( elem >> extra );
 	int i( 0 );
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
 		ENSURE_EQUALS( "wrong description", *it, epDesc[i] );
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 TUT_TEARDOWN()
 
@@ -1361,12 +1361,12 @@ TUT_UNIT_TEST( "two inter-locking recursion loops" )
 		"B_ = ( real | ( '(' >> ( C_ >> *( '+' >> C_ ) >> B_ ) >> ')' ) )",
 		"C_ = ( integer | ( '(' >> ( B_ >> *( '*' >> B_ ) >> C_ ) >> ')' ) )"
 	};
-	cout << "eq:" << endl;
+	clog << "eq:" << endl;
 	HGrammarDescription gd( eq );
 	int i( 0 );
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
 		ENSURE_EQUALS( "wrong description", *it, epDesc[i] );
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 TUT_TEARDOWN()
 
@@ -1604,12 +1604,12 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AM_ = *( H_ | I_ | J_ )",
 		"AN_ = ( C_ >> ':' >> C_ )"
 	};
-	cout << "hg:" << endl;
+	clog << "hg:" << endl;
 	HGrammarDescription gd( hg );
 	static int const COUNT( static_cast<int>( end( huginnDesc ) - begin( huginnDesc ) ) );
 	int i( 0 );
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
-		cout << *it << endl;
+		clog << *it << endl;
 		if ( i < COUNT ) {
 			ENSURE_EQUALS( "wrong grammar description", *it, huginnDesc[i] );
 		}
@@ -1634,7 +1634,7 @@ TUT_UNIT_TEST( "forwarding rules: A = B, C = B, C = regex() >> '=' >> real" )
 			if ( i < COUNT ) {
 				ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
 			}
-			cout << *it << endl;
+			clog << *it << endl;
 		}
 		ENSURE_EQUALS( "wrong grammar description", i, COUNT );
 	}
@@ -1654,7 +1654,7 @@ TUT_UNIT_TEST( "forwarding rules: A = B, C = B, C = regex() >> '=' >> real" )
 			if ( i < COUNT ) {
 				ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
 			}
-			cout << *it << endl;
+			clog << *it << endl;
 		}
 		ENSURE_EQUALS( "wrong grammar description", i, COUNT );
 	}
@@ -1674,7 +1674,7 @@ TUT_UNIT_TEST( "forwarding rules: A = B, C = B, C = regex() >> '=' >> real" )
 			if ( i < COUNT ) {
 				ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
 			}
-			cout << *it << endl;
+			clog << *it << endl;
 		}
 		ENSURE_EQUALS( "wrong grammar description", i, COUNT );
 	}
@@ -1696,7 +1696,7 @@ TUT_UNIT_TEST( "forwarding rules: A = B, C = B, C = regex() >> '=' >> real" )
 			if ( i < COUNT ) {
 				ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
 			}
-			cout << *it << endl;
+			clog << *it << endl;
 		}
 		ENSURE_EQUALS( "wrong grammar description", i, COUNT );
 	}
@@ -1718,7 +1718,7 @@ TUT_UNIT_TEST( "two names for one rule" )
 		if ( i < COUNT ) {
 			ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
 		}
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 	ENSURE_EQUALS( "wrong grammar description", i, COUNT );
 TUT_TEARDOWN()
@@ -1740,7 +1740,7 @@ TUT_UNIT_TEST( "two names for one rule with recursion" )
 		if ( i < COUNT ) {
 			ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
 		}
-		cout << *it << endl;
+		clog << *it << endl;
 	}
 	ENSURE_EQUALS( "wrong grammar description", i, COUNT );
 TUT_TEARDOWN()
@@ -1997,7 +1997,12 @@ TUT_UNIT_TEST( 50, "the test" )
 	ENSURE_NOT( "parsing incorrect input (coma separated set of reals plus trash) succeeded", ep( data ) );
 	ENSURE_EQUALS( "error position given incorrectly", ep.error_position(), bad );
 	ENSURE_EQUALS( "bad error message", ep.error_messages()[0], "expected real number" );
-	copy( v.begin(), v.end(), stream_iterator( cout, endl ) );
+	double expected[] = { 3.141592653589793, -2.718281828459045, 17. };
+	ENSURE_EQUALS( "bad number of items gathered", v.get_size(), countof( expected ) );
+	for ( int i( 0 ); i < countof( expected ); ++ i ) {
+		ENSURE_DISTANCE( "real parser failed", v[i], expected[i], static_cast<double>( epsilon ) );
+	}
+	copy( v.begin(), v.end(), stream_iterator( clog, endl ) );
 TUT_TEARDOWN()
 
 }
