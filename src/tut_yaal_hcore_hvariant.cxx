@@ -125,13 +125,13 @@ TUT_TEST_GROUP( tut_yaal_hcore_hvariant, "yaal::hcore::HVariant" );
 
 TUT_UNIT_TEST( "PoC of HVariant<>" )
 	variant_t v( "ala ma kota"_ys );
-	cout << "\"" << v.get<HString>() << "\" of type: " << v.type() << endl;
-	cout << "sizeof ( variant_t ): " << sizeof ( v ) << endl;
-	cout << "sizeof ( HString ): " << sizeof ( HString ) << endl;
-	cout << "sizeof ( HNumber ): " << sizeof ( HNumber ) << endl;
-	cout << "sizeof ( double long ): " << sizeof ( double long ) << endl;
-	cout << "sizeof ( instance_tracker_t ): " << sizeof ( instance_tracker_t ) << endl;
-	ENSURE( "bad variant size", sizeof ( v ) >= max( sizeof ( HString ), sizeof( HNumber ), sizeof ( double long ), sizeof ( instance_tracker_t ) ) );
+	clog << "\"" << v.get<HString>() << "\" of type: " << v.type() << endl;
+	clog << "sizeof ( variant_t ): " << sizeof ( v ) << endl;
+	clog << "sizeof ( HString ): " << sizeof ( HString ) << endl;
+	clog << "sizeof ( HNumber ): " << sizeof ( HNumber ) << endl;
+	clog << "sizeof ( double long ): " << sizeof ( double long ) << endl;
+	clog << "sizeof ( instance_tracker_t ): " << sizeof ( instance_tracker_t ) << endl;
+	ENSURE_GREATER_OR_EQUAL( "bad variant size", sizeof ( v ), max( sizeof ( HString ), sizeof( HNumber ), sizeof ( double long ), sizeof ( instance_tracker_t ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "uninitialized HVariant<>" )

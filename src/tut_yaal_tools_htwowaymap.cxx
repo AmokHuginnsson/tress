@@ -251,15 +251,15 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "left()" )
 	int2int_t twm;
 	ENSURE( "empty left view iterators", twm.left().begin() == twm.left().end() );
-	twm.insert( make_pair( 4, 5) );
+	twm.insert( make_pair( 4, 2) );
 	ENSURE( "empty range on view when twowaymap not empty", twm.left().begin() != twm.left().end() );
-	twm.insert( make_pair( 1, 2) );
-	twm.insert( make_pair( 3, 4) );
-	twm.insert( make_pair( 2, 3) );
-	copy( twm.left().begin(), twm.left().end(), stream_iterator( cout ) );
-	cout << endl;
-	copy( twm.right().begin(), twm.right().end(), stream_iterator( cout ) );
-	cout << endl;
+	twm.insert( make_pair( 1, 5) );
+	twm.insert( make_pair( 3, 3) );
+	twm.insert( make_pair( 2, 4) );
+	int2int_t::value_type expLeft[] = { { 1, 5 }, { 2, 4 }, { 3, 3 }, { 4, 2 } };
+	ENSURE( "left failed", safe_equal( twm.left().begin(), twm.left().end(), expLeft, expLeft + countof( expLeft ) ) );
+	int2int_t::value_type expRight[] = { { 4, 2 }, { 3, 3 }, { 2, 4 }, { 1, 5 } };
+	ENSURE( "right failed", safe_equal( twm.right().begin(), twm.right().end(), expRight, expRight + countof( expRight ) ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "view methods" )

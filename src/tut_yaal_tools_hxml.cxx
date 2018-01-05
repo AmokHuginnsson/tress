@@ -363,13 +363,18 @@ TUT_UNIT_TEST( "init, apply_style, parse, save, clear, handmade, save" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "apply stylesheet" )
+#ifndef __MSVCXX__
+	char const expected[] = "data/xml-post-style.xml";
+#else
+	char const expected[] = "data/xml-post-style-278.xml";
+#endif
 	static char const* const OUT_POST_PATH = "out/xml-post-style.xml";
 	_xml.init( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES );
 	_xml.apply_style( "data/style.xml" );
 	_xml.parse();
 	_xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( OUT_POST_PATH, HFile::OPEN::WRITING ) ) ) );
 	resort_entities( OUT_POST_PATH );
-	ENSURE( "apply style failed", file_compare( OUT_POST_PATH, "data/xml-post-style.xml" ) );
+	ENSURE( "apply style failed", file_compare( OUT_POST_PATH, expected ) );
 	std::clog << _xml;
 TUT_TEARDOWN()
 

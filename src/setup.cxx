@@ -98,7 +98,6 @@ void OSetup::test_setup( void ) {
 		std::clog.rdbuf( &cnull_obj );
 	}
 	if ( _quiet ) {
-		cout.reset();
 		std::cout.rdbuf( &cnull_obj );
 	}
 	if ( _fancy && _verbose ) {

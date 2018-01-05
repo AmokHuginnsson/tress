@@ -69,12 +69,14 @@ TUT_UNIT_TEST( "simple use" )
 	HBitmap bmp;
 	bmp.copy( BUFF, BUFF_BIT_SIZE );
 	HBitmap const x( bmp );
-	cout << endl;
-	yaal::copy( x.begin(), x.end(), stream_iterator( cout ) );
+	HStringStream ss;
+	yaal::copy( x.begin(), x.end(), stream_iterator( ss ) );
+	ENSURE_EQUALS( "bitmap init failed", ss.str(), "0110000101101100011000010010000001101101011000010010000001101011011011110111010001100001" );
 	yaal::fill_n( bmp.begin(), BUFF_BIT_SIZE / 2, true );
 	HBitmap const y( bmp );
-	cout << endl;
-	yaal::copy( y.begin(), y.end(), stream_iterator( cout ) );
+	ss.reset();
+	yaal::copy( y.begin(), y.end(), stream_iterator( ss ) );
+	ENSURE_EQUALS( "bitmap partial fill failed", ss.str(), "1111111111111111111111111111111111111111111100010010000001101011011011110111010001100001" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Default constructor" )

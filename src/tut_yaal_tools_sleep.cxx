@@ -53,10 +53,10 @@ TUT_UNIT_TEST( "the 1 second granularity sleep" )
 	static int long const SHOULD_SLEEP_MS = power<10,3>::value;
 	int long SKEW( 2 );
 	HClock clk;
-	cout << "E" << sleep_for( duration( SLEEP, time::UNIT::SECOND ), true ) << "E" << endl;
-	cout << "$" << clk.get_time_elapsed( time::UNIT::MILLISECOND ) << "$" << endl;
+	clog << "E" << sleep_for( duration( SLEEP, time::UNIT::SECOND ), true ) << "E" << endl;
+	clog << "$" << clk.get_time_elapsed( time::UNIT::MILLISECOND ) << "$" << endl;
 	ENSURE_DISTANCE( "under slept by miliseconds", yaal::max( SHOULD_SLEEP_MS - static_cast<int long>( clk.get_time_elapsed( time::UNIT::MILLISECOND ) ), 0l ), SKEW, SKEW + 1 );
-	cout << "$" << clk.get_time_elapsed( time::UNIT::MILLISECOND ) << "$" << endl;
+	clog << "$" << clk.get_time_elapsed( time::UNIT::MILLISECOND ) << "$" << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "the 1 milisecond granularity sleep" )
@@ -64,10 +64,10 @@ TUT_UNIT_TEST( "the 1 milisecond granularity sleep" )
 	static int long const SHOULD_SLEEP_MS = 333;
 	int long SKEW( 3 );
 	HClock clk;
-	cout << "E" << sleep_for( duration( SLEEP, time::UNIT::MILLISECOND ), true ) << "E" << endl;
-	cout << "$" << clk.get_time_elapsed( time::UNIT::MILLISECOND ) << "$" << endl;
+	clog << "E" << sleep_for( duration( SLEEP, time::UNIT::MILLISECOND ), true ) << "E" << endl;
+	clog << "$" << clk.get_time_elapsed( time::UNIT::MILLISECOND ) << "$" << endl;
 	ENSURE_DISTANCE( "under slept by miliseconds", yaal::max( SHOULD_SLEEP_MS - static_cast<int long>( clk.get_time_elapsed( time::UNIT::MILLISECOND ) ), 0l ), SKEW, SKEW + 1 );
-	cout << "$" << clk.get_time_elapsed( time::UNIT::MILLISECOND ) << "$" << endl;
+	clog << "$" << clk.get_time_elapsed( time::UNIT::MILLISECOND ) << "$" << endl;
 TUT_TEARDOWN()
 
 }

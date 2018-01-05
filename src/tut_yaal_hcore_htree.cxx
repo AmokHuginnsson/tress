@@ -98,8 +98,9 @@ void tut_yaal_hcore_htree::to_string_node( T const& n ) {
 
 void tut_yaal_hcore_htree::draw_tree( tree_t const& t ) {
 	_cache.clear();
-	if ( t.get_root() )
+	if ( t.get_root() ) {
 		draw_node( *t.get_root() );
+	}
 	return;
 }
 
@@ -107,15 +108,17 @@ void tut_yaal_hcore_htree::draw_node( tree_t::HNode const& n ) {
 	int len = static_cast<int>( _cache.get_length() );
 	tree_t::const_node_t pn = NULL;
 	if ( ( pn = n.get_parent() ) ) {
-		cout << _cache << "\\_ ";
-		if ( ( pn->child_count() > 1 ) && ( &*( pn->rbegin() ) != &n ) )
+		clog << _cache << "\\_ ";
+		if ( ( pn->child_count() > 1 ) && ( &*( pn->rbegin() ) != &n ) ) {
 			_cache += "|  ";
-		else
+		} else {
 			_cache += "   ";
+		}
 	}
-	std::cout << *n << std::endl;
-	for ( tree_t::HNode::const_iterator it = n.begin(); it != n.end(); ++ it )
+	std::clog << *n << std::endl;
+	for ( tree_t::HNode::const_iterator it = n.begin(); it != n.end(); ++ it ) {
 		draw_node( *it );
+	}
 	_cache.set_at( len, 0_ycp );
 }
 
@@ -1016,8 +1019,8 @@ TUT_UNIT_TEST( "get_parent" ) {
 		HString backward;
 		for ( tree_t::const_reverse_iterator tit( t.rbegin() ), end( t.rend() ); tit != end; ++ tit )
 			backward += static_cast<char>( tit->id() );
-		cout << forward << endl;
-		cout << backward << endl;
+		clog << forward << endl;
+		clog << backward << endl;
 		reverse( backward.begin(), backward.end() );
 		ENSURE_EQUALS( "forward/backward iteration failed", backward, forward );
 	}
@@ -1055,8 +1058,8 @@ TUT_UNIT_TEST( "tree with explicit system allocator" ) {
 		HString backward;
 		for ( sys_tree_t::const_reverse_iterator tit( t.rbegin() ), end( t.rend() ); tit != end; ++ tit )
 			backward += static_cast<char>( tit->id() );
-		cout << forward << endl;
-		cout << backward << endl;
+		clog << forward << endl;
+		clog << backward << endl;
 		reverse( backward.begin(), backward.end() );
 		ENSURE_EQUALS( "forward/backward iteration failed", backward, forward );
 	}
@@ -1094,8 +1097,8 @@ TUT_UNIT_TEST( "tree with explicit pool allocator" ) {
 		HString backward;
 		for ( pool_tree_t::const_reverse_iterator tit( t.rbegin() ), end( t.rend() ); tit != end; ++ tit )
 			backward += static_cast<char>( tit->id() );
-		cout << forward << endl;
-		cout << backward << endl;
+		clog << forward << endl;
+		clog << backward << endl;
 		reverse( backward.begin(), backward.end() );
 		ENSURE_EQUALS( "forward/backward iteration failed", backward, forward );
 	}

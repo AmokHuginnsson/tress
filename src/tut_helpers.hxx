@@ -107,8 +107,8 @@ typedef void M_CONCAT( void_type, __COUNTER__ )
 }
 #define TIME_CONSTRAINT_EXEMPT time_constraint_exempt
 
-#define TUT_DECLARE( statement ) clog << ansi::brightgreen << ">> " << #statement << ansi::reset << endl; this->set_current_line( __LINE__ ); statement this->set_current_line( __LINE__ + 1 ); clog << ansi::green << ">> end" << ansi::reset << endl;
-#define TUT_INVOKE( statement ) do { clog << ansi::brightcyan << ">> " << #statement << ansi::reset << endl; do { this->set_current_line( __LINE__ ); statement this->set_current_line( __LINE__ + 1 ); } while ( 0 ); clog << ansi::cyan << ">> end" << ansi::reset << endl; } while ( 0 )
+#define TUT_DECLARE( statement ) clog << ansi::brightgreen << ">> " << #statement << ansi::reset << endl; this->set_current_line( __LINE__ ); statement; this->set_current_line( __LINE__ + 1 ); clog << ansi::green << ">> end" << ansi::reset << endl;
+#define TUT_INVOKE( statement ) do { clog << ansi::brightcyan << ">> " << #statement << ansi::reset << endl; do { this->set_current_line( __LINE__ ); statement; this->set_current_line( __LINE__ + 1 ); } while ( 0 ); clog << ansi::cyan << ">> end" << ansi::reset << endl; } while ( 0 )
 #define TUT_EVAL( statement ) do { this->set_current_line( __LINE__ ); clog << ansi::brightcyan << ">> " << #statement << ansi::reset << " = " << ansi::yellow << ( statement ) << ansi::reset << endl; this->set_current_line( __LINE__ + 1 ); } while ( 0 )
 
 template<typename T1, typename T2>

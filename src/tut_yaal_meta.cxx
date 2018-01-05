@@ -66,12 +66,12 @@ TUT_UNIT_TEST( "min" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "integer_cast<>" )
-	cout << integer_cast<int, 4>::value << endl;
-	cout << integer_cast<char signed, 127>::value << endl;
+	clog << integer_cast<int, 4>::value << endl;
+	clog << integer_cast<char signed, 127>::value << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "unsigned_integer_cast<>" )
-	cout << unsigned_integer_cast<int unsigned, static_cast<int unsigned>( 4 )>::value << endl;
+	clog << unsigned_integer_cast<int unsigned, static_cast<int unsigned>( 4 )>::value << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "xor" )

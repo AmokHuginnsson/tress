@@ -88,7 +88,7 @@ TUT_UNIT_TEST( "spawn, write and read (stdout)" )
 	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
 	pc.in() << MSG_OUT << endl;
 	HString ack;
-	TUT_INVOKE( cout << pc.out().read_until( ack ) << endl; );
+	TUT_EVAL( pc.out().read_until( ack ) );
 	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
 	pc.finish();
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
@@ -101,7 +101,7 @@ TUT_UNIT_TEST( "spawn, write and read (stderr)" )
 	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
 	pc.in() << MSG_ERR << endl;
 	HString ack;
-	TUT_INVOKE( cout << pc.err().read_until( ack ) << endl; );
+	TUT_EVAL( pc.err().read_until( ack ) );
 	ENSURE_EQUALS( "bad ack ERR", ack, ACK_ERR );
 	pc.finish();
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );

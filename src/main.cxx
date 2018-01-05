@@ -111,39 +111,44 @@ int main( int argc_, char* argv_[] ) {
 		handle_program_options( argc_, argv_ );
 		hcore::log.rehash( setup._logPath, setup._programName );
 		setup.test_setup();
-		if ( setup._quiet && !! errorDump )
+		if ( setup._quiet && !! errorDump ) {
 			HException::set_error_stream( errorDump.raw() );
+		}
 		if ( setup._reporter == "tut" ) {
 			typedef tut::reporter<HLog> reporter_console;
 			reporter_console* rep( NULL );
 			visitor = reporter_ptr( rep = new reporter_console( std::cerr, hcore::log ) );
-			if ( setup._errorLine == "vim" )
+			if ( setup._errorLine == "vim" ) {
 				rep->set_error_line( &vim_error_line );
-			else if ( setup._errorLine == "eclipse" )
+			} else if ( setup._errorLine == "eclipse" ) {
 				rep->set_error_line( &vim_error_line );
-			else if ( setup._errorLine == "visualstudio" )
+			} else if ( setup._errorLine == "visualstudio" ) {
 				rep->set_error_line( &visual_studio_error_line );
-			else
+			} else {
 				rep->set_error_line( &console_error_line );
+			}
 		} else {
 			setup._fancy = false;
-			if ( setup._jobs > 1 )
+			if ( setup._jobs > 1 ) {
 				setup._jobs = 1;
-			if ( setup._reporter == "boost" )
+			}
+			if ( setup._reporter == "boost" ) {
 				visitor = reporter_ptr( new tut::reporter_boost<HLog>( std::cerr, hcore::log ) );
-			else if ( setup._reporter == "google" )
+			} else if ( setup._reporter == "google" ) {
 				visitor = reporter_ptr( new tut::reporter_google<HLog>( std::cerr, hcore::log ) );
-			else if ( setup._reporter == "cppunit" )
+			} else if ( setup._reporter == "cppunit" ) {
 				visitor = reporter_ptr( new tut::reporter_cppunit( std::cerr ) );
-			else if ( setup._reporter == "xml" )
+			} else if ( setup._reporter == "xml" ) {
 				visitor = reporter_ptr( new tut::reporter_xml( std::cerr ) );
-			else if ( setup._reporter == "qt" )
+			} else if ( setup._reporter == "qt" ) {
 				visitor = reporter_ptr( new tut::reporter_qt<HLog>( std::cerr, hcore::log ) );
-			else if ( setup._reporter == "cute" )
+			} else if ( setup._reporter == "cute" ) {
 				visitor = reporter_ptr( new tut::reporter_cute<HLog>( std::cerr, hcore::log ) );
+			}
 		}
-		if ( setup._selftest )
+		if ( setup._selftest ) {
 			register_selftest();
+		}
 		tut::runner.get().set_time_constraint( static_cast<int long>( time::in_units<time::UNIT::MILLISECOND>( setup._timeConstraint ) ) );
 /* *BOOM* */
 		try {
@@ -209,8 +214,9 @@ namespace tress {
 void gather_groups_from_file( OSetup::set_definitions_t& lst ) {
 	M_PROLOG
 	HFile file;
-	if ( setup._testGroupListFilePath == "-" )
+	if ( setup._testGroupListFilePath == "-" ) {
 		file.open( stdin, HFile::OWNERSHIP::EXTERNAL );
+	}
 	if ( ! file && file.open( setup._testGroupListFilePath, HFile::OPEN::READING ) ) {
 		cout << file.get_error() << ": " << file.get_path() << endl;
 		throw 0;
@@ -238,8 +244,9 @@ void list_groups( void ) {
 			int realTestCount( i->second->get_real_test_count() );
 			totalTestsCount += realTestCount;
 			std::cout << "  " << std::setw( 36 ) << std::left << i->first;
-			if ( setup._verbose && realTestCount )
+			if ( setup._verbose && realTestCount ) {
 				std::cout << " " << std::right << std::setw( 2 ) << realTestCount;
+			}
 			if ( setup._debug ) {
 				tut::group_base::titles_t const& titles( i->second->get_test_titles() );
 				for ( tut::group_base::titles_t::const_iterator t( titles.begin() ), te( titles.end() ); t != te; ++ t ) {
@@ -266,19 +273,22 @@ tut::test_runner::test_sets_t prepare_testsets( OSetup::set_definitions_t const&
 	HTokenizer noTokenizer( ",", HTokenizer::SKIP_EMPTY );
 	int setIdx( 1 );
 	for ( OSetup::set_definitions_t::const_iterator it( sets_.begin() ), end( sets_.end() ); it != end; ++ it, ++ setIdx ) {
-		if ( it->is_empty() )
+		if ( it->is_empty() ) {
 			tools::util::failure( setIdx, "empty set\n" );
+		}
 		tokenizer.assign( *it );
 		HTokenizer::iterator token( tokenizer.begin() );
-		if ( token->is_empty() )
+		if ( token->is_empty() ) {
 			tools::util::failure( setIdx, "empty set name\n" );
+		}
 		tut::test_runner::test_set_t ts;
 		ts.first = lexical_cast<std::string>( *token );
 		++ token;
 		if ( token != tokenizer.end() ) {
 			noTokenizer.assign( *token );
-			for ( HTokenizer::iterator no( noTokenizer.begin() ), noEnd( noTokenizer.end() ); no != noEnd; ++ no )
+			for ( HTokenizer::iterator no( noTokenizer.begin() ), noEnd( noTokenizer.end() ); no != noEnd; ++ no ) {
 				ts.second.push_back( lexical_cast<int>( *no ) );
+			}
 		}
 		tss.push_back( ts );
 	}
