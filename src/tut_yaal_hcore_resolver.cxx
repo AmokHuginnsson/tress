@@ -63,11 +63,17 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "get_name" )
 	HTokenizer t( hcore::system::get_host_name(), "." );
-	HString localhost( t[0] );
+	std::vector<HString> expected(
+		{ "localhost", "ip6-localhost", t[0] }
+	);
+	char const* HOSTNAME( getenv( "HOSTNAME" ) );
+	if ( HOSTNAME ) {
+		expected.push_back( HOSTNAME );
+		t = HTokenizer( HOSTNAME, "." );
+		expected.push_back( t[0] );
+	}
 	HString resolved( resolver::get_name( HIP( 127, 0, 0, 1 ) ) );
-	clog << localhost << endl;
-	clog << resolved << endl;
-	ENSURE( "get_name failure", ( resolved == "localhost" ) || ( resolved == localhost ) );
+	ENSURE_IN( "get_name failure", resolved, expected );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "get_name on invalid" )

@@ -151,7 +151,11 @@ void ensure_in_real( char const* file, int line, char const*, std::string const&
 		std::stringstream ss;
 		ss << msg
 			<< ( ! msg.empty() ? ":" : "" )
-			<< " expected [" << stream_escape( expected.front() ) << "] actual [" << stream_escape( actual ) << "]";
+			<< " expected one of";
+		for ( T const& v : expected ) {
+			ss << " [" << stream_escape( v ) << "]";
+		}
+		ss << " actual [" << stream_escape( actual ) << "]";
 		throw failure( file, line, ss.str().c_str() );
 	}
 }
