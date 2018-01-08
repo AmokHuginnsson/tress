@@ -1205,20 +1205,20 @@ TUT_UNIT_TEST( "Mathematics" )
 		"[15, $1, $239, $238, $120, $1800, $120, $120, $136, $5780, $5394.6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666, $76.026311234992849677911904736863392004981024226791874625210506343957711471685366580090089884878597349, $73.448394581955749284280964275663962120658982146661260896728683175175663615565836209204090274863582671, $63.4666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666]"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.randomizer failed",
+		"Mathematics.Randomizer failed",
 		execute(
 			"import Mathematics as math;\n"
 			"main(){\n"
-			"r=math.randomizer(100);\n"
+			"r=math.Randomizer(100);\n"
 			"d=r.next(10);\n"
 			"f=r.next_real(.5);\n"
-			"return([d>=0,d<10,f>=0.,f<.5]);\n"
+			"return([r,d>=0,d<10,f>=0.,f<.5]);\n"
 			"}\n"
 		),
-		"[true, true, true, true]"
+		"[math.Randomizer(100), true, true, true, true]"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.randomizer copy failed",
+		"Mathematics.Randomizer copy failed",
 		execute(
 			"import Mathematics as math;\n"
 			"import Algorithms as algo;\n"
@@ -1226,7 +1226,7 @@ TUT_UNIT_TEST( "Mathematics" )
 			"main(){\n"
 			"range1=algo.range(100);\n"
 			"range2=copy(range1);\n"
-			"rnd1=math.randomizer();\n"
+			"rnd1=math.Randomizer();\n"
 			"rnd2=copy(rnd1);\n"
 			"res1=algo.materialize(algo.map(range1,RndGen(rnd1).do),list);\n"
 			"res2=algo.materialize(algo.map(range2,RndGen(rnd2).do),list);\n"
@@ -1236,11 +1236,11 @@ TUT_UNIT_TEST( "Mathematics" )
 		"true"
 	);
 	ENSURE_EQUALS(
-		"Mathematics.randomizer invalid cap succeeded",
+		"Mathematics.Randomizer invalid cap succeeded",
 		execute_except(
 			"import Mathematics as math;\n"
 			"main(){\n"
-			"math.randomizer().next_real(0.);\n"
+			"math.Randomizer().next_real(0.);\n"
 			"}\n"
 		),
 		"*anonymous stream*:3:28: Invalid range specified: 0.0"
