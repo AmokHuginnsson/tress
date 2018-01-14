@@ -17,3 +17,4 @@ DIRS += $(DIR_BUILD)/must_not_compile
 	$(call msg,&& printf "%b$(NL)" "done.$(CL)")
 
 EXTRA_DEPS_TARGET_tress=$(AOBJS)
+

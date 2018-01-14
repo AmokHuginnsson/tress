@@ -46,26 +46,16 @@ DO_@DO_TARGET@=1
 ifdef NODEBUG
 	TARGET     = $(PRJNAME)
 endif
-include $(DIR_ROOT)/_aux/mk/20_term.mk
-include $(DIR_ROOT)/_aux/mk/30_suffix.mk
-include $(DIR_ROOT)/_aux/mk/40_commit-id.mk
-include $(DIR_ROOT)/_aux/mk/50_wrapper.mk
-include $(DIR_ROOT)/_aux/mk/60_flags.mk
+include $(DIR_ROOT)/_aux/inc-helper-pre.mk
 -include $(DIR_ROOT)/local.mk
 
 override CXXFLAGS += @DEFS@ -Wno-missing-noreturn
 override LXXFLAGS += @BOOST_LDFLAGS@
 override EXTRA_LIBRARY_PATHS=$(EXTRA_LXXFLAGS) -L$(PREFIX)/lib
 
-include $(DIR_ROOT)/_aux/mk/70_int-libs.mk
 include $(DIR_ROOT)/FCTF/make.mk
-include $(DIR_ROOT)/FCTF/d0_target-default.mk
-include $(DIR_ROOT)/_aux/mk/80_func.mk
-include $(DIR_ROOT)/_aux/mk/90_prepare-target.mk
-include $(DIR_ROOT)/_aux/mk/a0_common-targets.mk
-include $(DIR_ROOT)/_aux/mk/b0_filenames.mk
-include $(DIR_ROOT)/_aux/mk/e0_target-tools.mk
-include $(DIR_ROOT)/_aux/mk/f0_deps.mk
+include $(DIR_ROOT)/FCTF/a0_target-default.mk
+include $(DIR_ROOT)/_aux/inc-helper-post.mk
 
 include $(DIR_ROOT)/tress.mk
 

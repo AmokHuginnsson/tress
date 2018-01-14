@@ -552,7 +552,7 @@ TUT_UNIT_TEST( "FileSystem" )
 			"return(algo.sorted(fs.dir(\"./FCTF\")));"
 			"}"
 		),
-		"[\"acxx\", \"d0_target-default.mk\", \"make.mk\"]"
+		"[\"a0_target-default.mk\", \"acxx\", \"make.mk\"]"
 	);
 #ifdef __MSVCXX__
 	char const dirExpect[] = "\"*anonymous stream*:1:42: non-existing: The system cannot find the file specified.\r\n\"";
