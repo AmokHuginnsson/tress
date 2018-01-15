@@ -93,26 +93,26 @@ TUT_TEST_GROUP( tut_yaal_hcore_hpool, "yaal::hcore::HPool" );
 
 TUT_UNIT_TEST( "object space size" )
 /* First test if tut_helpers::Sizer works as intentded. */
-	STATIC_ASSERT( sizeof ( Sizer<1> ) == 1 );
-	STATIC_ASSERT( sizeof ( Sizer<2> ) == 2 );
-	STATIC_ASSERT( sizeof ( Sizer<3> ) == 3 );
-	STATIC_ASSERT( sizeof ( Sizer<4> ) == 4 );
-	STATIC_ASSERT( sizeof ( Sizer<5> ) == 5 );
-	STATIC_ASSERT( sizeof ( Sizer<6> ) == 6 );
-	STATIC_ASSERT( sizeof ( Sizer<7> ) == 7 );
-	STATIC_ASSERT( sizeof ( Sizer<8> ) == 8 );
-	STATIC_ASSERT( sizeof ( Sizer<9> ) == 9 );
-	STATIC_ASSERT( sizeof ( Sizer<10> ) == 10 );
-	STATIC_ASSERT( sizeof ( Sizer<11> ) == 11 );
-	STATIC_ASSERT( sizeof ( Sizer<12> ) == 12 );
-	STATIC_ASSERT( sizeof ( Sizer<13> ) == 13 );
-	STATIC_ASSERT( sizeof ( Sizer<14> ) == 14 );
-	STATIC_ASSERT( sizeof ( Sizer<15> ) == 15 );
-	STATIC_ASSERT( sizeof ( Sizer<16> ) == 16 );
-	STATIC_ASSERT( sizeof ( Sizer<17> ) == 17 );
-	STATIC_ASSERT( sizeof ( Sizer<18> ) == 18 );
-	STATIC_ASSERT( sizeof ( Sizer<19> ) == 19 );
-	STATIC_ASSERT( sizeof ( Sizer<20> ) == 20 );
+	static_assert( sizeof ( Sizer<1> ) == 1, "tut_helpers::sizer<1> failed" );
+	static_assert( sizeof ( Sizer<2> ) == 2, "tut_helpers::sizer<2> failed" );
+	static_assert( sizeof ( Sizer<3> ) == 3, "tut_helpers::sizer<3> failed" );
+	static_assert( sizeof ( Sizer<4> ) == 4, "tut_helpers::sizer<4> failed" );
+	static_assert( sizeof ( Sizer<5> ) == 5, "tut_helpers::sizer<5> failed" );
+	static_assert( sizeof ( Sizer<6> ) == 6, "tut_helpers::sizer<6> failed" );
+	static_assert( sizeof ( Sizer<7> ) == 7, "tut_helpers::sizer<7> failed" );
+	static_assert( sizeof ( Sizer<8> ) == 8, "tut_helpers::sizer<8> failed" );
+	static_assert( sizeof ( Sizer<9> ) == 9, "tut_helpers::sizer<9> failed" );
+	static_assert( sizeof ( Sizer<10> ) == 10, "tut_helpers::sizer<10> failed" );
+	static_assert( sizeof ( Sizer<11> ) == 11, "tut_helpers::sizer<11> failed" );
+	static_assert( sizeof ( Sizer<12> ) == 12, "tut_helpers::sizer<12> failed" );
+	static_assert( sizeof ( Sizer<13> ) == 13, "tut_helpers::sizer<13> failed" );
+	static_assert( sizeof ( Sizer<14> ) == 14, "tut_helpers::sizer<14> failed" );
+	static_assert( sizeof ( Sizer<15> ) == 15, "tut_helpers::sizer<15> failed" );
+	static_assert( sizeof ( Sizer<16> ) == 16, "tut_helpers::sizer<16> failed" );
+	static_assert( sizeof ( Sizer<17> ) == 17, "tut_helpers::sizer<17> failed" );
+	static_assert( sizeof ( Sizer<18> ) == 18, "tut_helpers::sizer<18> failed" );
+	static_assert( sizeof ( Sizer<19> ) == 19, "tut_helpers::sizer<19> failed" );
+	static_assert( sizeof ( Sizer<20> ) == 20, "tut_helpers::sizer<20> failed" );
 /* tut_helpers::Sizer works as intentded. */
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( char )>::OBJECT_SPACE + 0, 2 );
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( short )>::OBJECT_SPACE + 0, 4 );

@@ -27,7 +27,6 @@ Copyright:
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/macro.hxx>
-#include <yaal/hcore/static_assert.hxx>
 #include <yaal/tools/lambda.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
@@ -41,7 +40,7 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 static int const MAX_DATA = 9;
-STATIC_ASSERT(( MAX_DATA <= countof ( _testData_[0] ) ));
+static_assert( MAX_DATA <= countof ( _testData_[0] ), "bad _testData_[0]_ size detected" );
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_lambda );
 TUT_TEST_GROUP( tut_yaal_tools_lambda, "yaal::tools::lambda" );

@@ -53,7 +53,7 @@ struct tut_yaal_hcore_hdeque : public tut_yaal_hcore_hdeque_base<0> {
 TUT_TEST_GROUP( tut_yaal_hcore_hdeque, "yaal::hcore::HDeque" );
 
 TUT_UNIT_TEST( "CHUNK_SIZE, VALUES_PER_CHUNK and Constructor." )
-	STATIC_ASSERT( sizeof ( FixedArray<1> ) == 1 );
+	static_assert( sizeof ( FixedArray<1> ) == 1, "FixedArray<1> got bad size" );
 	ENSURE_EQUALS( "2CHUNK_SIZE not optimal", HDeque<FixedArray<1> >::CHUNK_SIZE, 512 );
 	ENSURE_EQUALS( "VALUES_PER_CHUNK not optimal", HDeque<FixedArray<1> >::VALUES_PER_CHUNK, 512 );
 	ENSURE_EQUALS( "CHUNK_SIZE not optimal", HDeque<FixedArray<2> >::CHUNK_SIZE, 512 );
