@@ -105,7 +105,8 @@ TUT_UNIT_TEST( "grammar test" )
 		"false = \"false\"",
 		"lambda = ( ( '@' >> -( '[' >> captureList >> ']' ) ) >> callable )",
 		"dictLiteralElement = ( argument >> ':' >> argument )",
-		"captureList = ( capture >> *( ',' >> capture ) )"
+		"captureList = ( capture >> *( ',' >> capture ) )",
+		"capture = ( captureIdentifier >> -( ':' >> expression ) )"
 	};
 
 	int i( 0 );
@@ -594,12 +595,22 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "lambda, closure" )
 	ENSURE_EQUALS( "lambda failed", execute( "main(){s=[\"fail\"];l=@(x){x[0]=\"ok\";};l(s);return(s[0]);}" ), "\"ok\"" );
 	ENSURE_EQUALS(
-		"lambda failed",
+		"closure failed",
 		execute(
 			"main(){\n"
 			"a=2;\n"
 			"b=7;\n"
 			"x=@[a,b](c){(a-b)*c;};\n"
+			"return(x(4));\n"
+			"}\n"
+		),
+		"-20"
+	);
+	ENSURE_EQUALS(
+		"inline closure failed",
+		execute(
+			"main(){\n"
+			"x=@[a:2,b:7](c){(a-b)*c;};\n"
 			"return(x(4));\n"
 			"}\n"
 		),
