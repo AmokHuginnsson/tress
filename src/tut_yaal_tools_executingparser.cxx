@@ -1111,7 +1111,7 @@ TUT_UNIT_TEST( "HNot" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HAction" )
-	/* parsed */ {
+	/* action >> rule */ {
 		bool prefixAction( false );
 		code_point_t fcData( 0 );
 		HRule fc( character( 'a' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( fcData ), _1 ) )] );
@@ -1123,6 +1123,26 @@ TUT_UNIT_TEST( "HAction" )
 		 	HRuleBase::action_t( call( &defer<bool>::set, ref( prefixAction ), true ) )
 		 	>> fc >> sc >>
 		 	HRuleBase::action_position_t( call( &match_value_position_val<bool>, ref( followsCalled ), true, ref( pos ), _1 ) )
+	 	);
+		ENSURE( "parse on correct failed", ep( "ab" ) );
+		ep();
+		ENSURE_EQUALS( "predecessor in follows not called", fcData, static_cast<code_point_t>( 'a' ) );
+		ENSURE_EQUALS( "successor in follows not called", scData, static_cast<code_point_t>( 'b' ) );
+		ENSURE( "prefixAction not called", prefixAction );
+		ENSURE( "suffixAction not called", followsCalled );
+	}
+	/* rule >> action */ {
+		bool prefixAction( false );
+		code_point_t fcData( 0 );
+		HRule fc( character( 'a' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( fcData ), _1 ) )] );
+		code_point_t scData( 0 );
+		HRule sc( character( 'b' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( scData ), _1 ) )] );
+		bool followsCalled( false );
+		executing_parser::position_t pos( -1 );
+		HExecutingParser ep(
+		 	HRuleBase::action_position_t( call( &match_value_position_val<bool>, ref( followsCalled ), true, ref( pos ), _1 ) )
+		 	>> fc >> sc >>
+		 	HRuleBase::action_t( call( &defer<bool>::set, ref( prefixAction ), true ) )
 	 	);
 		ENSURE( "parse on correct failed", ep( "ab" ) );
 		ep();
@@ -1462,7 +1482,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule nameList( parameter >> ( * ( ',' >> parameter ) ) );
 	HRule statement;
 	HRule callable( e_p::constant( '(' ) >> -( ( nameList >> -( ',' >> variadicParameter ) >> -( ',' >> namedParameterCapture ) ) | ( variadicParameter >> -( ',' >>  namedParameterCapture ) ) | namedParameterCapture ) >> ')' >> '{' >> *statement >> '}' );
-	HRule lambda( e_p::constant( '@' ) >> -( '[' >> name >> *( ',' >> name ) >> ']' ) >> callable );
+	HRule capture( name >> -( e_p::constant( ':' ) >> expression ) );
+	HRule lambda( e_p::constant( '@' ) >> -( '[' >> capture >> *( ',' >> capture ) >> ']' ) >> callable );
 	HRule subscriptOperator( '[' >> ( ( ( ':' >> -expression ) | ( expression >> -( ':' >> -expression ) ) ) >> -( ':' >> -expression ) ) >> ']' );
 	HRule literalNone( e_p::constant( "none" ) );
 	HRule booleanLiteralTrue( e_p::constant( "true" ) );
@@ -1575,10 +1596,11 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 			" | string_literal ) >> -( ( H_ | J_ ) >> AM_ ) )"
 			" | ( ( '{' >> C_ >> *( ',' >> C_ ) >> '}' ) >> -( J_ >> AM_ ) )"
 			" | \"none\" | \"true\" | \"false\" | ( B_ >> AM_ )"
-			" | ( ( '@' >> -( '[' >> B_ >> *( ',' >> B_ ) >> ']' ) >> G_ ) >> -( I_ >> AM_ ) ) ) >> -( ( '!' & \"==\" )"
+			" | ( ( '@' >> -( '[' >> AO_ >> *( ',' >> AO_ ) >> ']' ) >> G_ ) >> -( I_ >> AM_ ) ) ) >> -( ( '!' & \"==\" )"
 			" | ( '!' ^ '=' ) ) )",
 		"AM_ = *( H_ | I_ | J_ )",
-		"AN_ = ( C_ >> ':' >> C_ )"
+		"AN_ = ( C_ >> ':' >> C_ )",
+		"AO_ = ( B_ >> -( ':' >> C_ ) )"
 	};
 	clog << "hg:" << endl;
 	HGrammarDescription gd( hg );
