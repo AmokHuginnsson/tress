@@ -1053,7 +1053,7 @@ TUT_UNIT_TEST( "report execution error" )
 /*  85 */ { 16, 2, 8,    "*tress*:2:8: Bad number of parameters in call to: `string.find()', expected at most: 2, got: 3." },
 /*  86 */ { 16, 2, 8,    "*tress*:2:8: Bad number of parameters in call to: `string.find()', expected at least: 1, got: 0." },
 /*  87 */ { 16, 2, 8,    "*tress*:2:8: string.find() first argument must be a `string', not an `integer'." },
-/*  87 */ { 20, 3, 4,    "*tress*:3:4: Range operator is not supported on `integer'." },
+/*  88 */ { 20, 3, 4,    "*tress*:3:4: Range operator is not supported on `integer'." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

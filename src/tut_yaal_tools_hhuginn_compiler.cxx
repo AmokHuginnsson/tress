@@ -836,6 +836,13 @@ char const progCompileErr104[] =
 	"main(){}"
 ;
 
+char const progCompileErr105[] =
+	"main() {\n"
+	"x = [1,2,3,4,5,6,7,8,9];\n"
+	"x[2:5] = 0;"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -943,6 +950,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr102,
 		progCompileErr103,
 		progCompileErr104,
+		progCompileErr105,
 		NULL
 	};
 
@@ -1052,6 +1060,7 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 102 */ { 7, 1, 8,   "*anonymous stream*:1:8: ./data/CannotParse.hgn:3:1: expected one of characters: -" },
 /* 103 */ { 7, 1, 8,   "*anonymous stream*:1:8: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: an `integer' vs a `real'." },
 /* 104 */ { 13, 1, 14, "*anonymous stream*:1:14: Missing default argument." },
+/* 105 */ { 34, 3, 1,  "*anonymous stream*:3:1: Assignment to slice view." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
