@@ -218,6 +218,7 @@ TUT_UNIT_TEST( "string()" )
 		),
 		"\"a    0x7b 01 b\""
 	);
+	ENSURE_EQUALS( "string.format() n-ary with format spec failed", execute( "main(){return(\"{:4d} {}\".format(17,\"q\"));}" ), "\"  17 q\"" );
 	ENSURE_EQUALS( "string.format() on too few args succeeded", execute_except( "main(){s=\"a {} b\";s.format();}" ), "*anonymous stream*:1:27: Wrong value index at: 3" );
 	ENSURE_EQUALS( "string.format() on too many args succeeded", execute_except( "main(){s=\"a b\";s.format(1);}" ), "*anonymous stream*:1:24: Not all values used in format at: 3" );
 	ENSURE_EQUALS( "string.format() on too many args succeeded", execute_except( "main(){s=\"a {\";s.format();}" ), "*anonymous stream*:1:24: Single '{' encountered in format string at: 3" );
@@ -641,6 +642,11 @@ TUT_UNIT_TEST( "dict()" )
 		"[1, 3]"
 	);
 	ENSURE_EQUALS(
+		"dict.ensure() failed",
+		execute( "main(){x=[\"Ala\":0,\"ma\":1,\"kota.\":2];return((x.ensure(\"data\", 7),x.ensure( \"ma\", 99 ),x));}" ),
+		"(7, 1, [\"Ala\": 0, \"data\": 7, \"kota.\": 2, \"ma\": 1])"
+	);
+	ENSURE_EQUALS(
 		"dict.get() on non existing succeeded",
 		execute_except( "main(){x=[\"Ala\":0,\"ma\":1,\"kota.\":2];return(x.get(\"psa\"));}" ),
 		"*anonymous stream*:1:49: Key does not exist in `dict'."
@@ -817,6 +823,16 @@ TUT_UNIT_TEST( "lookup()" )
 		"lookup() get failed",
 		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;return([x.get(1),x.get(2,7)]);}" ),
 		"[\"ma\", 7]"
+	);
+#if ( TARGET_CPU_BITS == 64 )
+	char const expected4[] = "(\"data\", \"ma\", {1: \"ma\", 7: \"data\", \"Ala\": 0, \"kota.\": 2})";
+#else
+	char const expected4[] = "(\"data\", \"ma\", {1: \"ma\", \"kota.\": 2, 7: \"data\", \"Ala\": 0})";
+#endif
+	ENSURE_EQUALS(
+		"lookup.ensure() failed",
+		execute( "main(){x={\"Ala\":0,1:\"ma\",\"kota.\":2};return((x.ensure(7,\"data\"),x.ensure( 1, \"je\" ),x));}" ),
+		expected4
 	);
 	ENSURE_EQUALS(
 		"lookup equals failed",
