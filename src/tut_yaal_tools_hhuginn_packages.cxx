@@ -35,6 +35,22 @@ TUT_TEST_GROUP( tut_yaal_tools_hhuginn_packages, "yaal::tools::HHuginn,packages"
 
 TUT_UNIT_TEST( "Algorithms" )
 	ENSURE_EQUALS(
+		"Algorithms.enumerate failed",
+		execute(
+			"import Algorithms as algo;"
+			"main(){"
+			"l=[2,3,5,7,11,13,17,19];"
+			"e=algo.enumerate(l,100);"
+			"r = [];"
+			"for(x : copy(e)) {"
+			"r.push(x);"
+			"}"
+			"return((r,size(e)));"
+			"}"
+		),
+		"([(100, 2), (101, 3), (102, 5), (103, 7), (104, 11), (105, 13), (106, 17), (107, 19)], 8)"
+	);
+	ENSURE_EQUALS(
 		"Algorithms.map (fun) failed",
 		execute(
 			"import Algorithms as algo;"
