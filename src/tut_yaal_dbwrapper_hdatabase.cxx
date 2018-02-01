@@ -99,5 +99,17 @@ TUT_UNIT_TEST( "Oracle schema" )
 TUT_TEARDOWN()
 #endif /* defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE ) */
 
+namespace {
+HString gen( int no ) {
+	return ( to_string( '$' ) + no );
+}
+}
+
+TUT_UNIT_TEST( "transform_sql" )
+	ENSURE_EQUALS( "transform_sql failed",
+			transform_sql( "SELECT * FROM t WHERE a = ? AND b = '?' OR c = ? AND d = \"?\" OR f = ?;", &gen ),
+			"SELECT * FROM t WHERE a = $1 AND b = '?' OR c = $2 AND d = \"?\" OR f = $3;" );
+TUT_TEARDOWN()
+
 }
 
