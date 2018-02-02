@@ -1193,6 +1193,21 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "bugs regressions checks" )
 	ENSURE_EQUALS(
+		"session id assignment for inlined scopes (scheme)",
+		execute(
+			"main() {"
+			"	if ( false ) {"
+			"		@(){};"
+			"	} else {"
+			"		x = 7;"
+			"		return ( x );"
+			"	}"
+			"	return ( 0 );"
+			"}"
+		),
+		"7"
+	);
+	ENSURE_EQUALS(
 		"function arguments caching mechanism",
 		execute(
 			"main(){"
