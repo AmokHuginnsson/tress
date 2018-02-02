@@ -958,6 +958,23 @@ TUT_UNIT_TEST( "throw,try,catch" )
 		),
 		"\"Division by zero.\""
 	);
+	ENSURE_EQUALS(
+		"throw from return did return",
+		execute(
+			"atom( token ) {"
+			"a = token;"
+			"try {"
+			"return ( integer( token ) );"
+			"} catch ( Exception e ) {"
+			"}"
+			"return ( a );"
+			"}"
+			"main() {"
+			"return(atom(\"ala\"));"
+			"}"
+		),
+		"\"ala\""
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "assert" )
