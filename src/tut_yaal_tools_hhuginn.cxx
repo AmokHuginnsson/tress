@@ -1575,6 +1575,17 @@ TUT_UNIT_TEST( "incremental mode" )
 		"*anonymous stream*:2:7: Uncaught exception: Division by zero."
 		"*anonymous stream*:2:1: Symbol `x' is not defined in this context (did you mean `use'?)."
 	);
+	lines_t l10{
+		{ "inc(x){x+1;}", OLine::TYPE::DEFINITION },
+		{ "class CC { u(x){inc(x);}}", OLine::TYPE::DEFINITION },
+		{ "(c = CC()) != none;" },
+		{ "c.u(0);" }
+	};
+	ENSURE_EQUALS(
+		"Crash trigger, reference to old function (inc) lost",
+		execute_incremental( l10 ),
+		"nonenonetrue1"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "introspection" )
