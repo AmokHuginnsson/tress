@@ -3,6 +3,7 @@
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hpointer.hxx>
+#include <yaal/hcore/htuple.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -28,10 +29,12 @@ struct tut_yaal_hcore_hpointer : public simple_mock<tut_yaal_hcore_hpointer> {
 	struct Base {
 		int _tab[0x100];
 		Base( void )
-			: _tab()
-			{	clog << __PRETTY_FUNCTION__ << ": " << this << endl;	}
-		virtual ~Base( void )
-			{	clog << __PRETTY_FUNCTION__ << ": " << this << endl;	}
+			: _tab() {
+			clog << __PRETTY_FUNCTION__ << ": " << this << endl;
+		}
+		virtual ~Base( void ) {
+			clog << __PRETTY_FUNCTION__ << ": " << this << endl;
+		}
 		virtual int foo( char const* const by ) {
 			clog << __PRETTY_FUNCTION__ << ": " << this << ", by: " << by << endl;
 			return ( -1 );
@@ -382,6 +385,42 @@ TUT_UNIT_TEST( "allocate_pointer" ) {
 		ENSURE_EQUALS( "cast failed", p->get_id(), 7 );
 	}
 	ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "array" ) {
+		typedef HPointer<item_t[]> arr_t;
+		arr_t arr( new item_t[5] );
+		ENSURE_EQUALS( "construction failed???", item_t::get_instance_count(), 5 );
+	}
+	ENSURE_EQUALS( "leak !!!", item_t::get_instance_count(), 0 );
+	/* copy smart pointer */ {
+		typedef HPointer<item_t[]> arr_t;
+		arr_t arr( new item_t[5] );
+		arr_t copy;
+		copy = arr;
+		ENSURE_EQUALS( "construction failed???", item_t::get_instance_count(), 5 );
+	}
+	ENSURE_EQUALS( "leak !!!", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "array in pair" ) {
+		typedef HPointer<item_t[]> arr_t;
+		typedef HPair<int, arr_t> pair_t;
+		pair_t p;
+		p.second = arr_t( new item_t[5] );
+		ENSURE_EQUALS( "construction failed???", item_t::get_instance_count(), 5 );
+	}
+	ENSURE_EQUALS( "leak !!!", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "array in tuple" ) {
+		typedef HPointer<item_t[]> arr_t;
+		typedef HTuple<int, arr_t> tuple_t;
+		tuple_t t;
+		t.get<1>() = arr_t( new item_t[5] );
+		ENSURE_EQUALS( "construction failed???", item_t::get_instance_count(), 5 );
+	}
+	ENSURE_EQUALS( "leak !!!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
 }
