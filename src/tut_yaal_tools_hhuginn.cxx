@@ -4,6 +4,10 @@
 
 #include <yaal/tools/hhuginn.hxx>
 #include <yaal/hcore/hcore.hxx>
+#include <yaal/tools/huginn/runtime.hxx>
+#include <yaal/tools/huginn/thread.hxx>
+#include <yaal/tools/huginn/objectfactory.hxx>
+#include <yaal/tools/huginn/helper.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -1505,6 +1509,46 @@ TUT_UNIT_TEST( "binary packages" )
 			{ "./data" }
 		),
 		"\"Hello, Huginn\""
+	);
+TUT_TEARDOWN()
+
+namespace {
+HHuginn::value_t native_add( huginn::HThread* thread_, HHuginn::value_t*, HHuginn::values_t& values_, int position_ ) {
+	verify_signature( "native_add", values_, { HHuginn::TYPE::INTEGER, HHuginn::TYPE::INTEGER }, thread_, position_ );
+	return ( thread_->runtime().object_factory()->create_integer( get_integer( values_[0] ) + get_integer( values_[1] ) ) );
+}
+}
+
+TUT_UNIT_TEST( "native functions" )
+	HHuginn::ptr_t h( make_pointer<HHuginn>() );
+	char const doc[] = "( *x*, *y* ) - return sum of *x* and *y*";
+	ENSURE_THROW(
+		"registering function with restricted name succeeded",
+		h->register_function( "print", call( &native_add, _1, _2, _3, _4 ), doc ),
+		HHuginn::HHuginnRuntimeException
+	);
+
+	h->register_function( "native_add", call( &native_add, _1, _2, _3, _4 ), doc );
+	ENSURE_EQUALS(
+		"native function failed",
+		execute(
+			h,
+			"main() {\n"
+			"return( native_add( 3, 19 ) );\n"
+			"}\n"
+		),
+		"22"
+	);
+	h->reset();
+	ENSURE_EQUALS(
+		"native function failed",
+		execute_except(
+			h,
+			"main() {\n"
+			"return( native_add( 3, 19. ) );\n"
+			"}\n"
+		),
+		"*anonymous stream*:2:19: native_add() second argument must be an `integer', not a `real'."
 	);
 TUT_TEARDOWN()
 

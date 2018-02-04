@@ -246,6 +246,7 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 }
 
 hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
+	yaal::tools::HHuginn::ptr_t huginn_,
 	hcore::HString const& source_,
 	yaal::tools::HHuginn::paths_t const& modulePaths_,
 	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_,
@@ -260,31 +261,39 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 			clog << "// HUGINN TEST CASE FINISH" << endl;
 		}
 	}
-	HHuginn h;
 	HLock l( _mutex );
 	_sourceCache.set_buffer( source_ );
-	h.load( _sourceCache );
+	huginn_->load( _sourceCache );
 	l.unlock();
-	h.preprocess();
-	bool p( h.parse() );
+	huginn_->preprocess();
+	bool p( huginn_->parse() );
 	if ( !p ) {
-		clog << h.error_message() << endl;
+		clog << huginn_->error_message() << endl;
 	}
 	ENSURE( "parse failed", p );
-	bool c( h.compile( modulePaths_, huginnCompilerSetup_, introspector_ ) );
+	bool c( huginn_->compile( modulePaths_, huginnCompilerSetup_, introspector_ ) );
 	if ( !c ) {
-		clog << h.error_message() << endl;
+		clog << huginn_->error_message() << endl;
 	}
 	ENSURE( "compilation failed", c );
-	bool e( h.execute() );
+	bool e( huginn_->execute() );
 	if ( !e ) {
-		clog << h.error_message() << endl;
+		clog << huginn_->error_message() << endl;
 	}
 	ENSURE( "execution failed", e );
-	HHuginn::value_t res( h.result() );
+	HHuginn::value_t res( huginn_->result() );
 	l.lock();
-	_resultCache.assign( to_string( res, &h ) );
+	_resultCache.assign( to_string( res, huginn_.raw() ) );
 	return ( _resultCache );
+}
+
+hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
+	hcore::HString const& source_,
+	yaal::tools::HHuginn::paths_t const& modulePaths_,
+	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_,
+	HIntrospector* introspector_
+) {
+	return ( execute( make_pointer<HHuginn>(), source_, modulePaths_, huginnCompilerSetup_, introspector_ ) );
 }
 
 hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
@@ -292,10 +301,11 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_,
 	HIntrospector* introspector_
 ) {
-	return ( execute( source_, {}, huginnCompilerSetup_, introspector_ ) );
+	return ( execute( make_pointer<HHuginn>(), source_, {}, huginnCompilerSetup_, introspector_ ) );
 }
 
 hcore::HString const& tut_yaal_tools_hhuginn_base::execute_except(
+	yaal::tools::HHuginn::ptr_t huginn_,
 	hcore::HString const& source_,
 	yaal::tools::HHuginn::paths_t const& modulePaths_,
 	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_
@@ -309,34 +319,41 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute_except(
 			clog << "// HUGINN TEST CASE FINISH" << endl;
 		}
 	}
-	HHuginn h;
-	h.set_max_call_stack_size( 128 );
+	huginn_->set_max_call_stack_size( 128 );
 	HLock l( _mutex );
 	_sourceCache.set_buffer( source_ );
-	h.load( _sourceCache );
+	huginn_->load( _sourceCache );
 	l.unlock();
-	h.preprocess();
-	bool p( h.parse() );
+	huginn_->preprocess();
+	bool p( huginn_->parse() );
 	if ( !p ) {
-		clog << h.error_message() << endl;
+		clog << huginn_->error_message() << endl;
 	}
 	ENSURE( "parse failed", p );
-	bool c( h.compile( modulePaths_, huginnCompilerSetup_ ) );
+	bool c( huginn_->compile( modulePaths_, huginnCompilerSetup_ ) );
 	if ( !c ) {
-		clog << h.error_message() << endl;
+		clog << huginn_->error_message() << endl;
 	}
 	ENSURE( "compilation failed", c );
-	bool e( h.execute() );
+	bool e( huginn_->execute() );
 	ENSURE_NOT( "execution did not fail!", e );
-	_resultCache.assign( h.error_message() );
+	_resultCache.assign( huginn_->error_message() );
 	return ( _resultCache );
+}
+
+hcore::HString const& tut_yaal_tools_hhuginn_base::execute_except(
+	hcore::HString const& source_,
+	yaal::tools::HHuginn::paths_t const& modulePaths_,
+	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_
+) {
+	return ( execute_except( make_pointer<HHuginn>(), source_, modulePaths_, huginnCompilerSetup_ ) );
 }
 
 hcore::HString const& tut_yaal_tools_hhuginn_base::execute_except(
 	hcore::HString const& source_,
 	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_
 ) {
-	return ( execute_except( source_, {}, huginnCompilerSetup_ ) );
+	return ( execute_except( make_pointer<HHuginn>(), source_, {}, huginnCompilerSetup_ ) );
 }
 
 tut_yaal_tools_hhuginn_base::OHuginnResult tut_yaal_tools_hhuginn_base::execute_result( yaal::hcore::HString const& source_ ) {

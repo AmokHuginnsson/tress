@@ -78,6 +78,13 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 	virtual ~tut_yaal_tools_hhuginn_base( void );
 	void test_file( yaal::hcore::HString const& );
 	yaal::hcore::HString const& execute(
+		yaal::tools::HHuginn::ptr_t,
+		yaal::hcore::HString const&,
+		yaal::tools::HHuginn::paths_t const& = {},
+		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::DEFAULT,
+		HIntrospector* = nullptr
+	);
+	yaal::hcore::HString const& execute(
 		yaal::hcore::HString const&,
 		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::DEFAULT,
 		HIntrospector* = nullptr
@@ -90,6 +97,12 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 	);
 	yaal::hcore::HString const& execute_except(
 		yaal::hcore::HString const&,
+		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::DEFAULT
+	);
+	yaal::hcore::HString const& execute_except(
+		yaal::tools::HHuginn::ptr_t,
+		yaal::hcore::HString const&,
+		yaal::tools::HHuginn::paths_t const& = {},
 		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::DEFAULT
 	);
 	yaal::hcore::HString const& execute_except(
