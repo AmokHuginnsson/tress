@@ -4,6 +4,7 @@
 
 #include <yaal/tools/hpipedchild.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
+#include <yaal/hcore/hpipe.hxx>
 #include <yaal/tools/sleep.hxx>
 #include "tut_helpers.hxx"
 
@@ -114,6 +115,40 @@ TUT_UNIT_TEST( "read after very short lived process ends" )
 	}
 	pc.finish();
 	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "spawn, write stream and read stream" )
+	HPipedChild pc;
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
+	HPipe inPipe;
+	HPipe outPipe;
+	HStreamInterface::ptr_t in( inPipe.in() );
+	HStreamInterface::ptr_t out( outPipe.out() );
+	pc.spawn( CHILD, {}, inPipe.out().raw(), outPipe.in().raw() );
+	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
+	*in << MSG_OUT << endl;
+	HString ack;
+	TUT_EVAL( out->read_until( ack ) );
+	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
+	pc.finish();
+	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "spawn, write stream and read stream" )
+	HPipe inPipe;
+	HPipe outPipe;
+	HStreamInterface::ptr_t in( inPipe.in() );
+	HStreamInterface::ptr_t out( outPipe.out() );
+	HPipedChild pc( inPipe.out(), outPipe.in() );
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
+	pc.spawn( CHILD, {} );
+	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
+	*in << MSG_OUT << endl;
+	HString ack;
+	TUT_EVAL( out->read_until( ack ) );
+	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
+	pc.finish();
+	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
 TUT_TEARDOWN()
 
 }
