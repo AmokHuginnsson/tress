@@ -209,9 +209,21 @@ TUT_UNIT_TEST( "find" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "glob" )
-	filesystem::paths_t gr( filesystem::glob( "./*d*/*.cxx" ) );
-	filesystem::paths_t expected = array<HString>( "child/main.cxx", "child/options.cxx", "child/setup.cxx", "data/child.cxx", "data/huginn_greeter.cxx", "data/plugin.cxx" );
-	ENSURE_EQUALS( "filesystem::glob failed", gr, expected );
+	/* ./ prefix */ {
+		filesystem::paths_t gr( filesystem::glob( "./*d*/*.cxx" ) );
+		filesystem::paths_t expected = array<HString>( "child/main.cxx", "child/options.cxx", "child/setup.cxx", "data/child.cxx", "data/huginn_greeter.cxx", "data/plugin.cxx" );
+		ENSURE_EQUALS( "filesystem::glob failed", gr, expected );
+	}
+	/* no prefix */ {
+		filesystem::paths_t gr( filesystem::glob( "*d*/*.cxx" ) );
+		filesystem::paths_t expected = array<HString>( "child/main.cxx", "child/options.cxx", "child/setup.cxx", "data/child.cxx", "data/huginn_greeter.cxx", "data/plugin.cxx" );
+		ENSURE_EQUALS( "filesystem::glob failed", gr, expected );
+	}
+	/* no prefix, no glob on path */ {
+		filesystem::paths_t gr( filesystem::glob( "data/*.cxx" ) );
+		filesystem::paths_t expected = array<HString>( "data/child.cxx", "data/huginn_greeter.cxx", "data/plugin.cxx" );
+		ENSURE_EQUALS( "filesystem::glob failed", gr, expected );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "current_working_directory" )
