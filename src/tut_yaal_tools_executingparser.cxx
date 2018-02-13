@@ -1120,10 +1120,10 @@ TUT_UNIT_TEST( "HAction" )
 		bool followsCalled( false );
 		executing_parser::position_t pos( -1 );
 		HExecutingParser ep(
-		 	HRuleBase::action_t( call( &defer<bool>::set, ref( prefixAction ), true ) )
-		 	>> fc >> sc >>
-		 	HRuleBase::action_position_t( call( &match_value_position_val<bool>, ref( followsCalled ), true, ref( pos ), _1 ) )
-	 	);
+			HRuleBase::action_t( call( &defer<bool>::set, ref( prefixAction ), true ) )
+			>> fc >> sc >>
+			HRuleBase::action_position_t( call( &match_value_position_val<bool>, ref( followsCalled ), true, ref( pos ), _1 ) )
+		);
 		ENSURE( "parse on correct failed", ep( "ab" ) );
 		ep();
 		ENSURE_EQUALS( "predecessor in follows not called", fcData, static_cast<code_point_t>( 'a' ) );
@@ -1140,10 +1140,30 @@ TUT_UNIT_TEST( "HAction" )
 		bool followsCalled( false );
 		executing_parser::position_t pos( -1 );
 		HExecutingParser ep(
-		 	HRuleBase::action_position_t( call( &match_value_position_val<bool>, ref( followsCalled ), true, ref( pos ), _1 ) )
-		 	>> fc >> sc >>
-		 	HRuleBase::action_t( call( &defer<bool>::set, ref( prefixAction ), true ) )
-	 	);
+			HRuleBase::action_position_t( call( &match_value_position_val<bool>, ref( followsCalled ), true, ref( pos ), _1 ) )
+			>> fc >> sc >>
+			HRuleBase::action_t( call( &defer<bool>::set, ref( prefixAction ), true ) )
+		);
+		ENSURE( "parse on correct failed", ep( "ab" ) );
+		ep();
+		ENSURE_EQUALS( "predecessor in follows not called", fcData, static_cast<code_point_t>( 'a' ) );
+		ENSURE_EQUALS( "successor in follows not called", scData, static_cast<code_point_t>( 'b' ) );
+		ENSURE( "prefixAction not called", prefixAction );
+		ENSURE( "suffixAction not called", followsCalled );
+	}
+	/* action >> ( fail | success ) */ {
+		bool prefixAction( false );
+		code_point_t fcData( 0 );
+		HRule fc( character( 'a' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( fcData ), _1 ) )] );
+		code_point_t scData( 0 );
+		HRule sc( character( 'b' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( scData ), _1 ) )] );
+		bool followsCalled( false );
+		executing_parser::position_t pos( -1 );
+		HExecutingParser ep(
+			HRuleBase::action_t( call( &defer<bool>::set, ref( prefixAction ), true ) )
+			>> ( real | ( fc >> sc ) ) >>
+			HRuleBase::action_position_t( call( &match_value_position_val<bool>, ref( followsCalled ), true, ref( pos ), _1 ) )
+		);
 		ENSURE( "parse on correct failed", ep( "ab" ) );
 		ep();
 		ENSURE_EQUALS( "predecessor in follows not called", fcData, static_cast<code_point_t>( 'a' ) );
