@@ -1541,7 +1541,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule value( ternary );
 	HRule subscript( name >> +( subscriptOperator | functionCallOperator | memberAccess ) );
 	HRule assignable( subscript | name );
-	expression %= ( *( ( assignable >> ( string( "=" ) | "+=" | "-=" | "*=" | "/=" | "%=" | "^=" ) ) ^ '=' ) >> value );
+	HRule assignablePack( assignable >> * ( ',' >> assignable ) );
+	expression %= ( *( ( assignablePack >> ( string( "=" ) | "+=" | "-=" | "*=" | "/=" | "%=" | "^=" ) ) ^ '=' ) >> value );
 	HRule expressionStatement( expression >> ';' );
 	HRule loopScope;
 	HRule scope( '{' >> *statement >> '}' );
@@ -1574,7 +1575,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	char const huginnDesc[][640] = {
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ | ( \"import\" >> B_ >> \"as\" >> B_ >> ';' ) )",
 		"B_ = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
-		"C_ = ( *( ( E_ >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> ( ( F_ >> -( ( \"^^\" | \"⊕\" ) >> F_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
+		"C_ = ( *( ( ( E_ >> *( ',' >> E_ ) ) >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> ( ( F_ >> -( ( \"^^\" | \"⊕\" ) >> F_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
 		"D_ = ( B_ >> G_ )",
 		"E_ = ( ( B_ >> +( H_ | I_ | J_ ) ) | B_ )",
 		"F_ = ( K_ >> *( ( \"||\" | \"⋁\" ) >> K_ ) )",
