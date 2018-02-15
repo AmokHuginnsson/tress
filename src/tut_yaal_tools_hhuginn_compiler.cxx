@@ -843,6 +843,18 @@ char const progCompileErr105[] =
 	"}\n"
 ;
 
+char const progCompileErr106[] =
+	"main() {\n"
+	"x = y, z = 0;\n"
+	"}\n"
+;
+
+char const progCompileErr107[] =
+	"main() {\n"
+	"x, y += 0;\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -951,6 +963,8 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr103,
 		progCompileErr104,
 		progCompileErr105,
+		progCompileErr106,
+		progCompileErr107,
 		NULL
 	};
 
@@ -1061,6 +1075,8 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 103 */ { 7, 1, 8,   "*anonymous stream*:1:8: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: an `integer' vs a `real'." },
 /* 104 */ { 13, 1, 14, "*anonymous stream*:1:14: Missing default argument." },
 /* 105 */ { 34, 3, 1,  "*anonymous stream*:3:1: Assignment to slice view." },
+/* 106 */ { 11, 2, 3,  "*anonymous stream*:2:3: Assignee pack must be final assignment." },
+/* 107 */ { 14, 2, 6,  "*anonymous stream*:2:6: Mutating variable pack is not supported." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

@@ -628,6 +628,29 @@ TUT_UNIT_TEST( "ternary" )
 	ENSURE_EQUALS( "ternary failed", execute( "main(){a=\"A\";b=\"B\";q=7;x=q<5?(a=\"1\"):(b=\"2\");return(a+b+x);}" ), "\"A22\"" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "tuple unpacking" )
+	ENSURE_EQUALS(
+		execute(
+			"main(){\n"
+			"x, y = ( 0, 1 );\n"
+			"return([x, y]);\n"
+			"}\n"
+		),
+		"[0, 1]"
+	);
+	ENSURE_EQUALS(
+		execute(
+			"main(){\n"
+			"x = 0;\n"
+			"y = 1;\n"
+			"x, y = ( y, x );\n"
+			"return([x, y]);\n"
+			"}\n"
+		),
+		"[1, 0]"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "short circuit in boolean `and'" )
 	char const p0[] =
 		"main() {"

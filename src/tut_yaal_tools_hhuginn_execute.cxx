@@ -846,6 +846,27 @@ char const progExecuteErr88[] =
 	"}\n"
 ;
 
+char const progExecuteErr89[] =
+	"main() {\n"
+	"x, y = 0;\n"
+	"return ( x + y );\n"
+	"}\n"
+;
+
+char const progExecuteErr90[] =
+	"main() {\n"
+	"x, y = (0,);\n"
+	"return ( x + y );\n"
+	"}\n"
+;
+
+char const progExecuteErr91[] =
+	"main() {\n"
+	"x, y = (0,1,2);\n"
+	"return ( x + y );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -962,6 +983,9 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr86,
 		progExecuteErr87,
 		progExecuteErr88,
+		progExecuteErr89,
+		progExecuteErr90,
+		progExecuteErr91,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1054,6 +1078,9 @@ TUT_UNIT_TEST( "report execution error" )
 /*  86 */ { 16, 2, 8,    "*tress*:2:8: Bad number of parameters in call to: `string.find()', expected at least: 1, got: 0." },
 /*  87 */ { 16, 2, 8,    "*tress*:2:8: string.find() first argument must be a `string', not an `integer'." },
 /*  88 */ { 20, 3, 4,    "*tress*:3:4: Range operator is not supported on `integer'." },
+/*  89 */ { 14, 2, 6,    "*tress*:2:6: Assigner is not a `tuple` object." },
+/*  90 */ { 14, 2, 6,    "*tress*:2:6: Not enough values to unpack, expected: 2, got: 1." },
+/*  91 */ { 14, 2, 6,    "*tress*:2:6: Too many values to unpack, expected: 2, got: 3." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
