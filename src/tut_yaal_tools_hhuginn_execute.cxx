@@ -867,6 +867,36 @@ char const progExecuteErr91[] =
 	"}\n"
 ;
 
+char const progExecuteErr92[] =
+	"main() {\n"
+	"s = 0;\n"
+	"for ( x, y : [0] ) {\n"
+	"s += ( x + y );\n"
+	"}\n"
+	"return ( s ); \n"
+	"}\n"
+;
+
+char const progExecuteErr93[] =
+	"main() {\n"
+	"s = 0;\n"
+	"for ( x, y : [(0,)] ) {\n"
+	"s += ( x + y );\n"
+	"}\n"
+	"return ( s ); \n"
+	"}\n"
+;
+
+char const progExecuteErr94[] =
+	"main() {\n"
+	"s = 0;\n"
+	"for ( x, y : [(0,1,2)] ) {\n"
+	"s += ( x + y );\n"
+	"}\n"
+	"return ( s ); \n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -986,6 +1016,9 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr89,
 		progExecuteErr90,
 		progExecuteErr91,
+		progExecuteErr92,
+		progExecuteErr93,
+		progExecuteErr94,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1081,6 +1114,9 @@ TUT_UNIT_TEST( "report execution error" )
 /*  89 */ { 14, 2, 6,    "*tress*:2:6: Assigner is not a `tuple` object." },
 /*  90 */ { 14, 2, 6,    "*tress*:2:6: Not enough values to unpack, expected: 2, got: 1." },
 /*  91 */ { 14, 2, 6,    "*tress*:2:6: Too many values to unpack, expected: 2, got: 3." },
+/*  92 */ { 28, 3, 13,   "*tress*:3:13: `For` source did not return a `tuple` object." },
+/*  93 */ { 28, 3, 13,   "*tress*:3:13: Not enough values to unpack, expected: 2, got: 1." },
+/*  94 */ { 28, 3, 13,   "*tress*:3:13: Too many values to unpack, expected: 2, got: 3." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

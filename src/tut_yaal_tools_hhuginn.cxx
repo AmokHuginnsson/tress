@@ -342,6 +342,20 @@ TUT_UNIT_TEST( "for" )
 		),
 		"\"three+two+one+\""
 	);
+	ENSURE_EQUALS(
+		"tuple unpacking failed",
+		execute(
+			"main(){\n"
+			"\td = [(0,1),(2,3),(4,5),(6,7)];\n"
+			"\tr = [];\n"
+			"\tfor( x, y : d ) {\n"
+			"\tr.push([x,y]);\n"
+			"\t}\n"
+			"\treturn ( r );\n"
+			"}\n"
+		),
+		"[[0, 1], [2, 3], [4, 5], [6, 7]]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "switch" )
