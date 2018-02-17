@@ -730,6 +730,30 @@ TUT_UNIT_TEST( "dict()" )
 		execute( "main(){[dict().hash(),[1:2].hash()];}" ),
 		"[10, 95]"
 	);
+	ENSURE_EQUALS(
+		"dict clear in for",
+		execute(
+			"main(){\n"
+			"d=[2:2,3:3,5:5];\n"
+			"r = [];"
+			"for(e:d){d.clear();r.push(e);}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[2]"
+	);
+	ENSURE_EQUALS(
+		"dict erase in for",
+		execute(
+			"main(){\n"
+			"d=[2:2,3:3,5:5];\n"
+			"r = [];"
+			"for(e:d){d.erase(e);r.push(e);}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[2, 3, 5]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "lookup()" )
@@ -877,6 +901,30 @@ TUT_UNIT_TEST( "lookup()" )
 		execute( "main(){l = lookup();l[1] = 2;[lookup().hash(),l.hash()];}" ),
 		"[12, 113]"
 	);
+	ENSURE_EQUALS(
+		"lookup clear in for",
+		execute(
+			"main(){\n"
+			"l={2:2,3:3,5:5};\n"
+			"r = [];"
+			"for(e:l){l.clear();r.push(e);}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[3]"
+	);
+	ENSURE_EQUALS(
+		"lookup erase in for",
+		execute(
+			"main(){\n"
+			"l={2:2,3:3,5:5};\n"
+			"r = [];"
+			"for(e:l){l.erase(e);r.push(e);}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[3, 5, 2]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "order()" )
@@ -950,6 +998,30 @@ TUT_UNIT_TEST( "order()" )
 		execute( "main(){[order().hash(),order(1).hash()];}" ),
 		"[11, 34]"
 	);
+	ENSURE_EQUALS(
+		"order clear in for",
+		execute(
+			"main(){\n"
+			"o=order(2,3,5);\n"
+			"r = [];"
+			"for(e:o){o.clear();r.push(e);}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[2]"
+	);
+	ENSURE_EQUALS(
+		"order erase in for",
+		execute(
+			"main(){\n"
+			"o=order(2,3,5);\n"
+			"r = [];"
+			"for(e:o){o.erase(e);r.push(e);}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[2, 3, 5]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set()" )
@@ -1012,6 +1084,30 @@ TUT_UNIT_TEST( "set()" )
 		"set hash failed",
 		execute( "main(){[set().hash(),{1}.hash()];}" ),
 		"[13, 40]"
+	);
+	ENSURE_EQUALS(
+		"set clear in for",
+		execute(
+			"main(){\n"
+			"s={2,3,5};\n"
+			"r = [];"
+			"for(e:s){s.clear();r.push(e);}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[3]"
+	);
+	ENSURE_EQUALS(
+		"set erase in for",
+		execute(
+			"main(){\n"
+			"s={2,3,5};\n"
+			"r = [];"
+			"for(e:s){s.erase(e);r.push(e);}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[3, 5, 2]"
 	);
 TUT_TEARDOWN()
 
