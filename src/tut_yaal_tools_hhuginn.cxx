@@ -1335,7 +1335,7 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 			"	return ( res );\n"
 			"}\n"
 		),
-		"*anonymous stream*:7:3: Uncaught exception from destructor: Boom!: one"
+		"*anonymous stream*:7:3: Uncaught Exception from destructor: Boom!: one"
 	);
 	ENSURE_EQUALS(
 		"definition of many variables in one expression failed",
@@ -1655,7 +1655,7 @@ TUT_UNIT_TEST( "incremental mode" )
 	ENSURE_EQUALS(
 		"Crash trigger",
 		execute_incremental( l9 ),
-		"*anonymous stream*:2:7: Uncaught exception: Division by zero."
+		"*anonymous stream*:2:7: Uncaught ArithmeticException: Division by zero."
 		"*anonymous stream*:2:1: Symbol `x' is not defined in this context (did you mean `use'?)."
 	);
 	lines_t l10{

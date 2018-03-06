@@ -63,10 +63,10 @@ TUT_UNIT_TEST( "div" )
 	ENSURE_EQUALS( "div number failed", execute( "main(){return($7/$2);}" ), "$3.5" );
 	ENSURE_EQUALS( "div user succeeded", execute_except( "class A{_x=none;}main(){return(A()/A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `divide' method." );
 	ENSURE_EQUALS( "div char succeeded", execute_except( "main(){c=character;return(c('7')/c('2'));}" ), "*anonymous stream*:1:33: There is no `/' operator for a `character'." );
-	ENSURE_EQUALS( "div 0 int succeeded", execute_except( "main(){return(1/0);}" ), "*anonymous stream*:1:16: Uncaught exception: Division by zero." );
-	ENSURE_EQUALS( "div min_int/-1 int succeeded", execute_except( "main(){return(-9223372036854775808/-1);}" ), "*anonymous stream*:1:35: Uncaught exception: Division overflow." );
-	ENSURE_EQUALS( "div 0 real succeeded", execute_except( "main(){return(1./0.);}" ), "*anonymous stream*:1:17: Uncaught exception: Division by zero." );
-	ENSURE_EQUALS( "div 0 num succeeded", execute_except( "main(){return($1/$0);}" ), "*anonymous stream*:1:17: Uncaught exception: Division by zero." );
+	ENSURE_EQUALS( "div 0 int succeeded", execute_except( "main(){return(1/0);}" ), "*anonymous stream*:1:16: Uncaught ArithmeticException: Division by zero." );
+	ENSURE_EQUALS( "div min_int/-1 int succeeded", execute_except( "main(){return(-9223372036854775808/-1);}" ), "*anonymous stream*:1:35: Uncaught ArithmeticException: Division overflow." );
+	ENSURE_EQUALS( "div 0 real succeeded", execute_except( "main(){return(1./0.);}" ), "*anonymous stream*:1:17: Uncaught ArithmeticException: Division by zero." );
+	ENSURE_EQUALS( "div 0 num succeeded", execute_except( "main(){return($1/$0);}" ), "*anonymous stream*:1:17: Uncaught ArithmeticException: Division by zero." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mod" )
@@ -76,10 +76,10 @@ TUT_UNIT_TEST( "mod" )
 	ENSURE_EQUALS( "mod number failed", execute( "main(){return($11%$3);}" ), "$2" );
 	ENSURE_EQUALS( "mod user succeeded", execute_except( "class A{_x=none;}main(){return(A()%A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `modulo' method." );
 	ENSURE_EQUALS( "mod char succeeded", execute_except( "main(){c=character;return(c('8')%c('3'));}" ), "*anonymous stream*:1:33: There is no `%' operator for a `character'." );
-	ENSURE_EQUALS( "mod 0 int succeeded", execute_except( "main(){return(1%0);}" ), "*anonymous stream*:1:16: Uncaught exception: Division by zero." );
-	ENSURE_EQUALS( "mod min_int%-1 int succeeded", execute_except( "main(){return(-9223372036854775808%-1);}" ), "*anonymous stream*:1:35: Uncaught exception: Division overflow." );
-	ENSURE_EQUALS( "mod 0 real succeeded", execute_except( "main(){return(1.%0.);}" ), "*anonymous stream*:1:17: Uncaught exception: Division by zero." );
-	ENSURE_EQUALS( "mod 0 num succeeded", execute_except( "main(){return($1%$0);}" ), "*anonymous stream*:1:17: Uncaught exception: Division by zero." );
+	ENSURE_EQUALS( "mod 0 int succeeded", execute_except( "main(){return(1%0);}" ), "*anonymous stream*:1:16: Uncaught ArithmeticException: Division by zero." );
+	ENSURE_EQUALS( "mod min_int%-1 int succeeded", execute_except( "main(){return(-9223372036854775808%-1);}" ), "*anonymous stream*:1:35: Uncaught ArithmeticException: Division overflow." );
+	ENSURE_EQUALS( "mod 0 real succeeded", execute_except( "main(){return(1.%0.);}" ), "*anonymous stream*:1:17: Uncaught ArithmeticException: Division by zero." );
+	ENSURE_EQUALS( "mod 0 num succeeded", execute_except( "main(){return($1%$0);}" ), "*anonymous stream*:1:17: Uncaught ArithmeticException: Division by zero." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "pow" )
@@ -88,20 +88,20 @@ TUT_UNIT_TEST( "pow" )
 	ENSURE_EQUALS( "pow-assign number failed", execute( "main(){x=$2;x^=$3;return(x);}" ), "$8" );
 	ENSURE_EQUALS( "pow user succeeded", execute_except( "class A{_x=none;}main(){return(A()^A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `power' method." );
 	ENSURE_EQUALS( "pow char succeeded", execute_except( "main(){c=character;return(c('2')^c('3'));}" ), "*anonymous stream*:1:33: There is no `^' operator for a `character'." );
-	ENSURE_EQUALS( "too big exponent succeeded", execute_except( "main(){x=$2;x^=x;x^=x;x^=x;x^=x;}" ), "*anonymous stream*:1:29: Uncaught exception: Exponent too big: 32317006071311007300714876688669951960444102669715484032130345427524655138867890893197201411522913463688717960921898019494119559150490921095088152386448283120630877367300996091750197750389652106796057638384067568276792218642619756161838094338476170470581645852036305042887575891541065808607552399123930385521914333389668342420684974786564569494856176035326322058077805659331026192708460314150258592864177116725943603718461857357598351152301645904403697613233287231227125684710820209725157101726931323469678542580656697935045997268352998638215525166389437335543602135433229604645318478604952148193555853611059596230656" );
-	ENSURE_EQUALS( "pow 0^0 real succeeded", execute_except( "main(){return(0.^0.);}" ), "*anonymous stream*:1:17: Uncaught exception: indeterminate form 0^0" );
-	ENSURE_EQUALS( "pow 0^0 number succeeded", execute_except( "main(){return($0^$0);}" ), "*anonymous stream*:1:17: Uncaught exception: indeterminate form 0^0" );
+	ENSURE_EQUALS( "too big exponent succeeded", execute_except( "main(){x=$2;x^=x;x^=x;x^=x;x^=x;}" ), "*anonymous stream*:1:29: Uncaught ArithmeticException: Exponent too big: 32317006071311007300714876688669951960444102669715484032130345427524655138867890893197201411522913463688717960921898019494119559150490921095088152386448283120630877367300996091750197750389652106796057638384067568276792218642619756161838094338476170470581645852036305042887575891541065808607552399123930385521914333389668342420684974786564569494856176035326322058077805659331026192708460314150258592864177116725943603718461857357598351152301645904403697613233287231227125684710820209725157101726931323469678542580656697935045997268352998638215525166389437335543602135433229604645318478604952148193555853611059596230656" );
+	ENSURE_EQUALS( "pow 0^0 real succeeded", execute_except( "main(){return(0.^0.);}" ), "*anonymous stream*:1:17: Uncaught ArithmeticException: indeterminate form 0^0" );
+	ENSURE_EQUALS( "pow 0^0 number succeeded", execute_except( "main(){return($0^$0);}" ), "*anonymous stream*:1:17: Uncaught ArithmeticException: indeterminate form 0^0" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "factorial" )
-	ENSURE_EQUALS( "neg factorial succeeded", execute_except( "main(){return($-1!);}" ), "*anonymous stream*:1:18: Uncaught exception: Factorial from negative." );
-	ENSURE_EQUALS( "fractional factorial succeeded", execute_except( "main(){return($1.5!);}" ), "*anonymous stream*:1:19: Uncaught exception: Factorial from fraction." );
+	ENSURE_EQUALS( "neg factorial succeeded", execute_except( "main(){return($-1!);}" ), "*anonymous stream*:1:18: Uncaught ArithmeticException: Factorial from negative." );
+	ENSURE_EQUALS( "fractional factorial succeeded", execute_except( "main(){return($1.5!);}" ), "*anonymous stream*:1:19: Uncaught ArithmeticException: Factorial from fraction." );
 	ENSURE_EQUALS( "int factorial succeeded", execute_except( "main(){return(1!);}" ), "*anonymous stream*:1:16: There is no `!` operator for `integer'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "absolute" )
 	ENSURE_EQUALS( "abs int failed", execute( "main(){return([|1|,|-1|]);}" ), "[1, 1]" );
-	ENSURE_EQUALS( "abs min_int succeeded", execute_except( "main(){return(|-9223372036854775808|);}" ), "*anonymous stream*:1:36: Uncaught exception: Integer overflow." );
+	ENSURE_EQUALS( "abs min_int succeeded", execute_except( "main(){return(|-9223372036854775808|);}" ), "*anonymous stream*:1:36: Uncaught ArithmeticException: Integer overflow." );
 	ENSURE_EQUALS( "abs real failed", execute( "main(){return([|1.|,|-1.|]);}" ), "[1.0, 1.0]" );
 	ENSURE_EQUALS( "abs num failed", execute( "main(){return([|$1|,|$-1|]);}" ), "[$1, $1]" );
 	ENSURE_EQUALS( "abs char succeeded", execute_except( "main(){c=character;return(|c('1')|);}" ), "*anonymous stream*:1:34: There is no `|...|' operator for a `character'." );
@@ -110,7 +110,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "neg" )
 	ENSURE_EQUALS( "neg user succeeded", execute_except( "class A{_x=none;}main(){return(-A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:32: Class `A' does not have `negate' method." );
 	ENSURE_EQUALS( "neg char succeeded", execute_except( "main(){c=character;return(-c('1'));}" ), "*anonymous stream*:1:27: There is no `-x' operator for a `character'." );
-	ENSURE_EQUALS( "neg min_int succeeded", execute_except( "main(){return(--9223372036854775808);}" ), "*anonymous stream*:1:15: Uncaught exception: Integer overflow." );
+	ENSURE_EQUALS( "neg min_int succeeded", execute_except( "main(){return(--9223372036854775808);}" ), "*anonymous stream*:1:15: Uncaught ArithmeticException: Integer overflow." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "equals" )
@@ -240,7 +240,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "integer()" )
 	ENSURE_EQUALS( "int to int failed", execute( "main(){return(integer(7));}" ), "7" );
-	ENSURE_EQUALS( "bad string to int succeeded", execute_except( "main(){return(integer(\"bad\"));}" ), "*anonymous stream*:1:22: Uncaught exception: not a number: bad" );
+	ENSURE_EQUALS( "bad string to int succeeded", execute_except( "main(){return(integer(\"bad\"));}" ), "*anonymous stream*:1:22: Uncaught ConversionException: not a number: bad" );
 	ENSURE_EQUALS( "real to int failed", execute( "main(){return(integer(7.));}" ), "7" );
 	ENSURE_EQUALS( "num to int failed", execute( "main(){return(integer($7));}" ), "7" );
 	ENSURE_EQUALS( "char to int failed", execute( "main(){return(integer('7'));}" ), "55" );
@@ -259,7 +259,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "real()" )
 	ENSURE_EQUALS( "real to real failed", execute( "main(){return(real(7));}" ), "7.0" );
-	ENSURE_EQUALS( "bad string to real succeeded", execute_except( "main(){return(real(\"bad\"));}" ), "*anonymous stream*:1:19: Uncaught exception: syntax error - unknown mnemonic for: bad, at: 0" );
+	ENSURE_EQUALS( "bad string to real succeeded", execute_except( "main(){return(real(\"bad\"));}" ), "*anonymous stream*:1:19: Uncaught ConversionException: syntax error - unknown mnemonic for: bad, at: 0" );
 	ENSURE_EQUALS( "real to real failed", execute( "main(){return(real(7.));}" ), "7.0" );
 	ENSURE_EQUALS( "num to real failed", execute( "main(){return(real($7));}" ), "7.0" );
 	ENSURE_EQUALS( "string to real failed", execute( "main(){return(real(\"7\"));}" ), "7.0" );
@@ -271,8 +271,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "number()" )
 	ENSURE_EQUALS( "number to number failed", execute( "main(){return(number(7));}" ), "$7" );
-	ENSURE_EQUALS( "bad string to number succeeded", execute_except( "main(){return(number(\"bad\"));}" ), "*anonymous stream*:1:21: Uncaught exception: Not a number." );
-	ENSURE_EQUALS( "bad real to number succeeded", execute_except( "import Text as T;main(){return(number(real(T.repeat(\"9\",5000))));}" ), "*anonymous stream*:1:38: Uncaught exception: Not a number." );
+	ENSURE_EQUALS( "bad string to number succeeded", execute_except( "main(){return(number(\"bad\"));}" ), "*anonymous stream*:1:21: Uncaught ConversionException: Not a number." );
+	ENSURE_EQUALS( "bad real to number succeeded", execute_except( "import Text as T;main(){return(number(real(T.repeat(\"9\",5000))));}" ), "*anonymous stream*:1:38: Uncaught ConversionException: Not a number." );
 	ENSURE_EQUALS( "number to number failed", execute( "main(){return(number(7.));}" ), "$7" );
 	ENSURE_EQUALS( "num to number failed", execute( "main(){return(number($7));}" ), "$7" );
 	ENSURE_EQUALS( "string to number failed", execute( "main(){return(number(\"7\"));}" ), "$7" );

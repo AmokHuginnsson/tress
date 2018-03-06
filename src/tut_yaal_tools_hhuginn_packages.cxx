@@ -804,7 +804,7 @@ TUT_UNIT_TEST( "RegularExpressions" )
 			"cre.replace(\"abc012def789ghj\",\"{$2}\");\n"
 			"}"
 		),
-		"*anonymous stream*:4:12: Uncaught exception: Invalid back-reference number in replacement string: 2."
+		"*anonymous stream*:4:12: Uncaught RegularExpressionsException: Invalid back-reference number in replacement string: 2."
 	);
 TUT_TEARDOWN()
 
@@ -2004,7 +2004,7 @@ TUT_UNIT_TEST( "Network" )
 			"net.connect( \"127.0.0.1\", -1 );\n"
 			"}\n"
 		),
-		"*anonymous stream*:3:12: Uncaught exception: Bad port: -1"
+		"*anonymous stream*:3:12: Uncaught NetworkException: Bad port: -1"
 	);
 #ifdef __MSVCXX__
 	char const errExpect[] = "No connection could be made because the target machine actively refused it.\r\n";
