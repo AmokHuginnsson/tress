@@ -1072,7 +1072,7 @@ TUT_UNIT_TEST( "report execution error" )
 /*  47 */ { 46, 3, 13,   "*tress*:3:13: NumberSetStatistics.constructor() a collection is not uniformly typed: a `number', at position: 1" },
 /*  48 */ { 46, 3, 13,   "*tress*:3:13: NumberSetStatistics.constructor() argument must be a `list', not a `deque'." },
 /*  49 */ { 46, 3, 13,   "*tress*:3:13: NumberSetStatistics.constructor() argument must be a `list', not a `set'." },
-/*  50 */ { 41, 3, 9,    "*tress*:3:9: Algorithms.reduce() second argument must be one of {a `*function_reference*', a `*bound_method*'}, not an `integer'." },
+/*  50 */ { 41, 3, 9,    "*tress*:3:9: Algorithms.reduce() second argument must be one of {a `*function_reference*', a `*method*', a `*bound_method*'}, not an `integer'." },
 /*  51 */ { 14, 2, 6,    "*tress*:2:6: Operands are not boolean values: *none*" },
 /*  52 */ { 12, 2, 4,    "*tress*:2:4: `If' argument is not a boolean." },
 /*  53 */ { 58, 4, 18,   "*tress*:4:18: Class `A' does not have `equals' method." },
