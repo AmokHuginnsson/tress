@@ -51,12 +51,13 @@ HHuginn::value_t HGreeterCreator::do_new_instance( HRuntime* runtime_ ) {
 		runtime_->create_class(
 			"Greeter",
 			nullptr,
-			HHuginn::field_definitions_t{
-				{ "greet", runtime_->object_factory()->create<HHuginn::HClass::HMethod>( hcore::call( &HGreeter::greet, _1, _2, _3, _4 ) ), "( *who*, *how* = \"Hello, \" ) - greet *who* with *how*" },
-			},
 			"The `Greeter` package provides greeting functionality."
 		)
 	);
+	HHuginn::field_definitions_t fd{
+		{ "greet", runtime_->create_method( c.raw(), &HGreeter::greet ), "( *who*, *how* = \"Hello, \" ) - greet *who* with *how*" },
+	};
+	c->redefine( nullptr, fd );
 	runtime_->huginn()->register_class( c );
 	return ( runtime_->object_factory()->create<HGreeter>( c.raw() ) );
 	M_EPILOG
