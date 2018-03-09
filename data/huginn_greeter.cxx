@@ -55,7 +55,7 @@ HHuginn::value_t HGreeterCreator::do_new_instance( HRuntime* runtime_ ) {
 		)
 	);
 	HHuginn::field_definitions_t fd{
-		{ "greet", runtime_->create_method( c.raw(), &HGreeter::greet ), "( *who*, *how* = \"Hello, \" ) - greet *who* with *how*" },
+		{ "greet", runtime_->create_method( &HGreeter::greet ), "( *who*, *how* = \"Hello, \" ) - greet *who* with *how*" },
 	};
 	c->redefine( nullptr, fd );
 	runtime_->huginn()->register_class( c );
