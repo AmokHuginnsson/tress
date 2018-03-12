@@ -158,7 +158,7 @@ TUT_UNIT_TEST( "HFile::seek()" )
 	ENSURE_EQUALS( "bad tell() after RW open", f.tell(), 0 );
 	f << "XXXXXX" << endl;
 	ENSURE_EQUALS( "bad tell() after line write", f.tell(), 7 );
-	f.seek( 7, HFile::SEEK::CUR );
+	f.seek( 7, HFile::SEEK::CURRENT );
 	ENSURE_EQUALS( "bad tell() after line write", f.tell(), 14 );
 	f << "YYYYYY" << endl;
 	ENSURE_EQUALS( "bad tell() after line write", f.tell(), 21 );
@@ -166,7 +166,7 @@ TUT_UNIT_TEST( "HFile::seek()" )
 	ENSURE_EQUALS( "bad tell() after line write", f.tell(), 56 - 14 );
 	f << "ZZZZZZ" << endl;
 	ENSURE_EQUALS( "bad tell() after line write", f.tell(), 56 - 7 );
-	f.seek( 0, HFile::SEEK::SET );
+	f.seek( 0, HFile::SEEK::BEGIN );
 	char const dataOut[][8] = {
 		"XXXXXX",
 		"huginn",
