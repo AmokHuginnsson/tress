@@ -1415,7 +1415,7 @@ TUT_UNIT_TEST( "Stream" )
 			"import FileSystem as fs;\n"
 			"main() {\n"
 			"res=[];"
-			"for ( l : fs.open(\"./data/nl.txt\",fs.reading())) {\n"
+			"for ( l : fs.open(\"./data/nl.txt\",fs.OPEN_MODE.READ)) {\n"
 			"res.push(l.strip());"
 			"}\n"
 			"return(res);\n"
@@ -1428,7 +1428,7 @@ TUT_UNIT_TEST( "Stream" )
 		execute(
 			"import FileSystem as fs;\n"
 			"main() {\n"
-			"return(fs.open(\"./data/nl.txt\",fs.reading()).read(100));\n"
+			"return(fs.open(\"./data/nl.txt\",fs.OPEN_MODE.READ).read(100));\n"
 			"}\n"
 		),
 		"\"Ala\nma\nkota.\n\n\""
@@ -1438,7 +1438,7 @@ TUT_UNIT_TEST( "Stream" )
 		execute_except(
 			"import FileSystem as fs;\n"
 			"main() {\n"
-			"return(copy(fs.open(\"./data/nl.txt\",fs.reading())));\n"
+			"return(copy(fs.open(\"./data/nl.txt\",fs.OPEN_MODE.READ)));\n"
 			"}\n"
 		),
 		"*anonymous stream*:3:12: Copy semantics is not supported on Stream."
@@ -1448,7 +1448,7 @@ TUT_UNIT_TEST( "Stream" )
 		execute_except(
 			"import FileSystem as fs;\n"
 			"main() {\n"
-			"return(size(fs.open(\"./data/nl.txt\",fs.reading())));\n"
+			"return(size(fs.open(\"./data/nl.txt\",fs.OPEN_MODE.READ)));\n"
 			"}\n"
 		),
 		"*anonymous stream*:3:12: Getting size of `Stream' is an invalid operation."

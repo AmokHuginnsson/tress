@@ -368,7 +368,7 @@ TUT_UNIT_TEST( "FileSystem" )
 			"import FileSystem as fs;"
 			"main() {"
 			"try{"
-			"fs.open( \"./out/non-existing\", fs.reading() );"
+			"fs.open( \"./out/non-existing\", fs.OPEN_MODE.READ );"
 			"}catch(FileSystemException e){"
 			"return ( e.message() );"
 			"}"
@@ -386,7 +386,7 @@ TUT_UNIT_TEST( "FileSystem" )
 	execute(
 		"import FileSystem as fs;"
 		"main(){"
-		"f=fs.open(\""_ys.append( filename ).append( "\",fs.writing());"
+		"f=fs.open(\""_ys.append( filename ).append( "\",fs.OPEN_MODE.WRITE);"
 		"f.write(\"" ).append( data ).append( "\");"
 		"return(0);"
 		"}" )
@@ -401,7 +401,7 @@ TUT_UNIT_TEST( "FileSystem" )
 		execute(
 			"import FileSystem as fs;"
 			"main(){"
-			"f=fs.open(\""_ys.append( filename ).append( "\",fs.reading());"
+			"f=fs.open(\""_ys.append( filename ).append( "\",fs.OPEN_MODE.READ);"
 			"return(f.read_line());"
 			"}" )
 		),
