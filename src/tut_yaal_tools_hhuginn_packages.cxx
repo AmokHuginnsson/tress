@@ -387,7 +387,7 @@ TUT_UNIT_TEST( "FileSystem" )
 		"import FileSystem as fs;"
 		"main(){"
 		"f=fs.open(\""_ys.append( filename ).append( "\",fs.OPEN_MODE.WRITE);"
-		"f.write(\"" ).append( data ).append( "\");"
+		"f.write_line(\"" ).append( data ).append( "\");"
 		"return(0);"
 		"}" )
 	);
@@ -1693,12 +1693,12 @@ TUT_UNIT_TEST( "OperatingSystem" )
 			"main(){\n"
 			"c=os.spawn(\"" + CHILD + "\");\n"
 			"a0=c.is_alive();\n"
-			"c.in().write(\"out\\n\");\n"
+			"c.in().write_line(\"out\\n\");\n"
 			"ro=c.out().read_line().strip();\n"
 			"s=c.wait(8);\n"
 			"a1=c.is_alive();\n"
 			"c=os.spawn(\"" + CHILD + "\");\n"
-			"c.in().write(\"err\\n\");\n"
+			"c.in().write_line(\"err\\n\");\n"
 			"re=c.err().read_line().strip();\n"
 			"return([a0,ro,re,a1,s]);\n"
 			"}\n"
@@ -1728,7 +1728,7 @@ TUT_UNIT_TEST( "OperatingSystem" )
 		"import OperatingSystem as os;"
 		"main(){"
 		"c=os.spawn(\"/bin/sleep\", \"10\");"
-		"os.stdout().write( \"{}\\n\".format( c.get_pid() ) );\n"
+		"os.stdout().write_line( \"{}\\n\".format( c.get_pid() ) );\n"
 		"c.wait(5);\n"
 		"}"
 	);
@@ -1988,7 +1988,7 @@ TUT_UNIT_TEST( "Network" )
 			"import Network as net;\n"
 			"main() {\n"
 			"s = net.connect( \"127.0.0.1\", 61930 );\n"
-			"s.write( \"Huginn is best!\\n\" );\n"
+			"s.write_line( \"Huginn is best!\\n\" );\n"
 			"return ( s.read_line() );\n"
 			"}\n"
 		),

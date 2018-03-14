@@ -1428,7 +1428,7 @@ TUT_UNIT_TEST( "Stream" )
 		execute(
 			"import FileSystem as fs;\n"
 			"main() {\n"
-			"return(fs.open(\"./data/nl.txt\",fs.OPEN_MODE.READ).read(100));\n"
+			"return(fs.open(\"./data/nl.txt\",fs.OPEN_MODE.READ).read_string(100));\n"
 			"}\n"
 		),
 		"\"Ala\nma\nkota.\n\n\""
@@ -1460,9 +1460,9 @@ TUT_UNIT_TEST( "standard streams" )
 	HStringStream src(
 		"import OperatingSystem as os;"
 		"main() {"
-		"os.stdout().write(\"stdout\");"
-		"os.stderr().write(\"stderr\");"
-		"os.stdlog().write(\"stdlog\");"
+		"os.stdout().write_line(\"stdout\");"
+		"os.stderr().write_line(\"stderr\");"
+		"os.stdlog().write_line(\"stdlog\");"
 		"return (integer(os.stdin().read_line()));"
 		"}"
 	);
