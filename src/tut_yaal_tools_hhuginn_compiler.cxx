@@ -855,6 +855,14 @@ char const progCompileErr107[] =
 	"}\n"
 ;
 
+char const progCompileErr108[] =
+	"import Mathematics as Algorithms;\n"
+	"import Algorithms as algo;\n"
+	"main() {\n"
+	"algo;\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -965,6 +973,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr105,
 		progCompileErr106,
 		progCompileErr107,
+		progCompileErr108,
 		NULL
 	};
 
@@ -1077,6 +1086,7 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 105 */ { 34, 3, 1,  "*anonymous stream*:3:1: Assignment to slice view." },
 /* 106 */ { 11, 2, 3,  "*anonymous stream*:2:3: Assignee pack must be final assignment." },
 /* 107 */ { 14, 2, 6,  "*anonymous stream*:2:6: Mutating variable pack is not supported." },
+/* 108 */ { 41, 2, 8,  "*anonymous stream*:2:8: Package `Algorithms' name was used as an alias." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
