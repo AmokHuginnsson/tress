@@ -863,6 +863,27 @@ char const progCompileErr108[] =
 	"}\n"
 ;
 
+char const progCompileErr109[] =
+	"import Mathematics as main;\n"
+	"main() {\n"
+	"}\n"
+;
+
+char const progCompileErr110[] =
+	"math(){}\n"
+	"import Mathematics as math;\n"
+	"main() {\n"
+	"math;"
+	"}\n"
+;
+
+char const progCompileErr111[] =
+	"Mathematics(){}\n"
+	"import Mathematics as math;\n"
+	"main() {\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -974,6 +995,9 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr106,
 		progCompileErr107,
 		progCompileErr108,
+		progCompileErr109,
+		progCompileErr110,
+		progCompileErr111,
 		NULL
 	};
 
@@ -1020,7 +1044,7 @@ TUT_UNIT_TEST( "report compilation error" )
 /*  39 */ { 10, 2, 2,  "*anonymous stream*:2:2: Invalid context for `continue' statement." },
 /*  40 */ { 52, 5, 4,  "*anonymous stream*:5:4: Invalid context for `continue' statement." },
 /*  41 */ { 12, 1, 13, "*anonymous stream*:1:13: Parameter `a' was already defined." },
-/*  42 */ { 22, 2, 7,  "*anonymous stream*:2:7: Class `A' is already defined." },
+/*  42 */ { 22, 2, 7,  "*anonymous stream*:2:7: Class of the same name `A' is already defined." },
 /*  43 */ { 10, 1, 11, "*anonymous stream*:1:11: Base class `B' was not defined." },
 /*  44 */ { 0, 1, 1,   "*anonymous stream*:1:1: `integer' is a restricted name." },
 /*  45 */ { 6, 1, 7,   "*anonymous stream*:1:7: `integer' is a restricted name." },
@@ -1043,14 +1067,14 @@ TUT_UNIT_TEST( "report compilation error" )
 /*  62 */ { 21, 2, 14, "*anonymous stream*:2:14: Operand is not a boolean value: a `character'" },
 /*  63 */ { 28, 2, 21, "*anonymous stream*:2:21: Operands are not boolean values: a `boolean', an `integer'" },
 /*  64 */ { 7, 1, 8,   "*anonymous stream*:1:8: `return' is a restricted name." },
-/*  65 */ { 34, 2, 8,  "*anonymous stream*:2:8: Class `Package' named is already defined." },
-/*  66 */ { 33, 2, 8,  "*anonymous stream*:2:8: Package `Algorithms' was already imported." },
+/*  65 */ { 34, 2, 8,  "*anonymous stream*:2:8: Class of the same name `Package' is already defined." },
+/*  66 */ { 33, 2, 8,  "*anonymous stream*:2:8: Package of the same name `Algorithms' is already imported." },
 /*  67 */ { 32, 2, 7,  "*anonymous stream*:2:7: Package of the same name `Algorithms' is already imported." },
 /*  68 */ { 32, 2, 7,  "*anonymous stream*:2:7: Package alias of the same name `pck' is already defined." },
 /*  69 */ { 7, 1, 8,   "*anonymous stream*:1:8: Package `NonExisting' does not exist." },
 /*  70 */ { 21, 1, 22, "*anonymous stream*:1:22: `return' is a restricted name." },
-/*  71 */ { 44, 2, 22, "*anonymous stream*:2:22: Class `pck' named is already defined." },
-/*  72 */ { 49, 2, 24, "*anonymous stream*:2:24: Import alias `pck' is already defined." },
+/*  71 */ { 44, 2, 22, "*anonymous stream*:2:22: Class of the same name `pck' is already defined." },
+/*  72 */ { 49, 2, 24, "*anonymous stream*:2:24: Package alias of the same name `pck' is already defined." },
 /*  73 */ { 20, 3, 4,  "*anonymous stream*:3:4: Operand types for `+=' do not match: an `integer' vs a `real'." },
 /*  74 */ { 20, 3, 4,  "*anonymous stream*:3:4: Operand types for `-=' do not match: an `integer' vs a `real'." },
 /*  75 */ { 20, 3, 4,  "*anonymous stream*:3:4: Operand types for `*=' do not match: an `integer' vs a `real'." },
@@ -1068,7 +1092,7 @@ TUT_UNIT_TEST( "report compilation error" )
 /*  87 */ { 23, 3, 6,  "*anonymous stream*:3:6: Method argument name `x' conflicts with class `A' field name." },
 /*  88 */ { 39, 5, 6,  "*anonymous stream*:5:6: Method argument name `x' conflicts with class `B' field name." },
 /*  89 */ { 11, 3, 1,  "*anonymous stream*:3:1: Function `main' was already defined." },
-/*  90 */ { 6, 1, 7,   "*anonymous stream*:1:7: Function of the same name `main' is already defined." },
+/*  90 */ { 27, 4, 1,  "*anonymous stream*:4:1: Class of the same name `main' is already defined." },
 /*  91 */ { 22, 3, 8,  "*anonymous stream*:3:8: Capture `a' was already defined." },
 /*  92 */ { 23, 3, 9,  "*anonymous stream*:3:9: Symbol `a' is a already used as a capture." },
 /*  93 */ { 9, 2, 1,   "*anonymous stream*:2:1: Variable `x' is never used (did you mean `use'?)." },
@@ -1086,7 +1110,10 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 105 */ { 34, 3, 1,  "*anonymous stream*:3:1: Assignment to slice view." },
 /* 106 */ { 11, 2, 3,  "*anonymous stream*:2:3: Assignee pack must be final assignment." },
 /* 107 */ { 14, 2, 6,  "*anonymous stream*:2:6: Mutating variable pack is not supported." },
-/* 108 */ { 41, 2, 8,  "*anonymous stream*:2:8: Package `Algorithms' name was used as an alias." },
+/* 108 */ { 41, 2, 8,  "*anonymous stream*:2:8: Package alias of the same name `Algorithms' is already defined." },
+/* 109 */ { 28, 2, 1,  "*anonymous stream*:2:1: Package alias of the same name `main' is already defined." },
+/* 110 */ { 31, 2, 23, "*anonymous stream*:2:23: Function `math' was already defined." },
+/* 111 */ { 23, 2, 8,  "*anonymous stream*:2:8: Function `Mathematics' was already defined." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
