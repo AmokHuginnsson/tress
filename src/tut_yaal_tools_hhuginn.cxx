@@ -39,12 +39,14 @@ TUT_UNIT_TEST( "grammar test" )
 	HGrammarDescription gd( hg );
 
 	char const expected[][500] = {
-		"huginnGrammar = +( classDefinition | functionDefinition | importStatement )",
+		"huginnGrammar = +( classDefinition | functionDefinition | enumDefinition | importStatement )",
 		"classDefinition = ( \"class\" >> classIdentifier >> -( ':' >> baseIdentifier ) >> '{' >> +( field | functionDefinition ) >> '}' )",
 		"functionDefinition = ( functionDefinitionIdentifier >> callable )",
+		"enumDefinition = ( \"enum\" >> enumIdentifier >> '{' >> enumeral >> *( ',' >> enumeral ) >> '}' )",
 		"importStatement = ( \"import\" >> packageName >> \"as\" >> importName >> ';' )",
 		"field = ( fieldIdentifier >> '=' >> expression >> ';' )",
 		"callable = ( '(' >> -( ( nameList >> -( ',' >> variadicParameter ) >> -( ',' >> namedParameterCapture ) ) | ( variadicParameter >> -( ',' >> namedParameterCapture ) ) | namedParameterCapture ) >> ')' >> '{' >> *statement >> '}' )",
+		"enumeral = fieldIdentifier",
 		"expression = ( *( ( assignablePack >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> value )",
 		"nameList = ( parameter >> *( ',' >> parameter ) )",
 		"variadicParameter = ( parameterIdentifier >> \"...\" )",
