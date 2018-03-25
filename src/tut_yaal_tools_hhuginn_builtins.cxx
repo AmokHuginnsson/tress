@@ -1111,5 +1111,45 @@ TUT_UNIT_TEST( "set()" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Stream" )
+	ENSURE_IN(
+		"serialization",
+		execute(
+			"import Algorithms as algo;\n"
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"myDict = [1:2,2:4,3:8];"
+			"myLookup = {1:2,\"abc\":3,2.718281828459045:type,'π':$3.1415926535897932};\n"
+			"myList = [1,2,3,4,5];\n"
+			"str = \"Huginn\";\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE )"
+			".serialize(13)"
+			".serialize('✓')"
+			".serialize(str)"
+			".serialize($123456789012345678901234567890)"
+			".serialize(myList)"
+			".serialize(9.87654321)"
+			".serialize(myDict)"
+			".serialize((7,6,5))"
+			".serialize(myLookup);\n"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [];"
+			"for( i : algo.range( 9 ) ) {\n"
+			"try {\n"
+			"res.push(f.deserialize());\n"
+			"}catch(Exception e) {\n"
+			"res.push(\"{} {}\".format(e.what(),i));\n"
+			"}\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		std::vector<hcore::HString>({
+			"[13, '✓', \"Huginn\", $123456789012345678901234567890, [1, 2, 3, 4, 5], 9.87654321, [1: 2, 2: 4, 3: 8], (7, 6, 5), {1: 2, \"abc\": 3, 2.718281828459: type, 'π': $3.1415926535897932}]",
+			"[13, '✓', \"Huginn\", $123456789012345678901234567890, [1, 2, 3, 4, 5], 9.87654321, [1: 2, 2: 4, 3: 8], (7, 6, 5), {1: 2, 2.718281828459: type, \"abc\": 3, 'π': $3.1415926535897932}]"
+		} )
+	);
+TUT_TEARDOWN()
+
 }
 
