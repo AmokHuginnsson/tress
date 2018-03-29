@@ -1941,7 +1941,7 @@ TUT_UNIT_TEST( "Network" )
 	iod.register_file_descriptor_handler(
 		serv,
 		HIODispatcher::callback_t(
-			[this, &iod, &serv]( HIODispatcher::stream_t& ) {
+			[&iod, &serv]( HIODispatcher::stream_t& ) {
 				clog << "ENTER: acceptor" << endl;
 				HSocket::ptr_t client( serv->accept() );
 				iod.register_file_descriptor_handler(
@@ -1967,7 +1967,7 @@ TUT_UNIT_TEST( "Network" )
 	);
 	serverRunner.spawn(
 		HThread::call_t(
-			[this, &iod]() -> void {
+			[&iod]() -> void {
 				try {
 					clog << "ENTER: server" << endl;
 					iod.run();

@@ -350,7 +350,7 @@ public:
 		++ _autoIncrement;
 		++ _copyCount;
 	}
-	HInstanceTracker( HInstanceTracker&& itrck )
+	HInstanceTracker( HInstanceTracker&& itrck ) noexcept
 		: _id( itrck._id )
 		, _origin( itrck._origin + "'" )
 		, _self( this )
