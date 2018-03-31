@@ -1099,7 +1099,7 @@ TUT_UNIT_TEST( "report compilation error" )
 /*  94 */ { 6, 1, 7,   "*anonymous stream*:1:7: Class `C' is never used (did you mean `use'?)." },
 /*  95 */ { 8, 1, 9,   "*anonymous stream*:1:9: Field `_x' is never used (did you mean `C'?)." },
 /*  96 */ { 0, 1, 1,   "*anonymous stream*:1:1: Function `f' is never used (did you mean `set'?)." },
-/*  97 */ { 21, 1, 22, "*anonymous stream*:1:22: Package `algo' is never used (did you mean `real'?)." },
+/*  97 */ { 21, 1, 22, "*anonymous stream*:1:22: Package `algo' is never used (did you mean `call'?)." },
 /*  98 */ { 17, 3, 1,  "*anonymous stream*:3:1: Statement is unreachable." },
 /*  99 */ { 12, 2, 4,  "*anonymous stream*:2:4: Operand is not a numeric value: a `character'" },
 /* 100 */ { 17, 3, 2,  "*anonymous stream*:3:2: Operands are not summable: a `character', a `character'" },
