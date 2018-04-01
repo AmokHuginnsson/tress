@@ -1112,6 +1112,276 @@ TUT_UNIT_TEST( "set()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Stream" )
+	ENSURE_EQUALS(
+		"(de)serialization - none",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize(none);"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[none, \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - boolean",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize(true).serialize(false);"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[true, false, \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - integer",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize( -1000000000000000000 ).serialize( 0 ).serialize( 1000000000000000000 );"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[-1000000000000000000, 0, 1000000000000000000, \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - real",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize( -3.1415926535897932 ).serialize( 0. ).serialize( 2.718281828459045 );"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[-3.14159265359, 0.0, 2.718281828459, \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - string",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize(\"Huginn ✓\").serialize(\"\");"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[\"Huginn ✓\", \"\", \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - number",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize( $-123456789012345678901234567890.012345678901234567890123456789 ).serialize( $0 ).serialize( $123456789012345678901234567890.012345678901234567890123456789 );"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[$-123456789012345678901234567890.012345678901234567890123456789, $0, $123456789012345678901234567890.012345678901234567890123456789, \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - character",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize('H').serialize('✓');"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"['H', '✓', \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - function",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize(type);"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[type, \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - tuple",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize((1,2,3)).serialize(());"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[(1, 2, 3), (), \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - list",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize([1,2,3]).serialize([]);"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[[1, 2, 3], [], \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - deque",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize(deque(1,2,3)).serialize(deque());"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[deque(1, 2, 3), deque(), \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - dict",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize([1:2,2:4,3:8]).serialize(dict());"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[[1: 2, 2: 4, 3: 8], dict(), \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - lookup",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize({1:2,2:4,3:8}).serialize({});"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[{3: 8, 1: 2, 2: 4}, {}, \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - order",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize(order(1,2,3)).serialize(order());"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[order(1, 2, 3), order(), \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - set",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize({1,2,3}).serialize(set());"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[{3, 1, 2}, set(), \"Not enough data in the stream.\"]"
+	);
 	ENSURE_IN(
 		"serialization",
 		execute(
