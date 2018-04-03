@@ -853,10 +853,10 @@ TUT_UNIT_TEST( "class" )
 			"_x=none;"
 			"constructor(x_){_x=x_;}"
 			"to_string(){return(string(_x));}"
-			"mod(x_){_x=x_;}"
+			"fv0(x_){_x=x_;}"
 			"}"
 			"main(){"
-			"a=A(7);b=a;c=copy(a);a.mod(3);"
+			"a=A(7);b=a;c=copy(a);a.fv0(3);"
 			"return([string(a),string(b),string(c)]);"
 			"}"
 		),
@@ -1591,6 +1591,258 @@ TUT_UNIT_TEST( "native functions" )
 		),
 		"*anonymous stream*:2:19: native_add() second argument must be an `integer', not a `real'."
 	);
+TUT_TEARDOWN()
+
+namespace {
+int short add( int short unsigned a, int unsigned b ) {
+	return ( static_cast<int short>( a + b ) );
+}
+double quadratic_equation( double long a, double b, float c ) {
+	double d( static_cast<double>( b * b - 4 * a * c ) );
+	return ( ( -b - math::square_root( d ) ) / 2. );
+}
+double long area( int long long x0, int long long unsigned y0, int long x1, int long unsigned y1 ) {
+	int w( max( static_cast<int>( x0 ), static_cast<int>( x1 ) ) - min( static_cast<int>( x0 ), static_cast<int>( x1 ) ) );
+	int h( max( static_cast<int>( y0 ), static_cast<int>( y1 ) ) - min( static_cast<int>( y0 ), static_cast<int>( y1 ) ) );
+	return ( w * h );
+}
+hcore::HString title( hcore::HString text_ ) {
+	if ( ! text_.is_empty() ) {
+		text_.lower();
+		text_.set_at( 0, code_point_t( static_cast<code_point_t::value_type>( toupper( static_cast<int>( text_.front().get() ) ) ) ) );
+	}
+	return ( text_ );
+}
+char const* mid( char const* text_, int short idx_ ) {
+	return ( text_ + idx_ );
+}
+yaal::hcore::HNumber square( yaal::hcore::HNumber const& n_ ) {
+	return ( n_ ^ 2 );
+}
+code_point_t next_cp( code_point_t cp_ ) {
+	return ( code_point_t( cp_.get() + 1 ) );
+}
+char next_ch( char ch_ ) {
+	return ( static_cast<char>( ch_ + 1 ) );
+}
+int short foo5( int short a, int b, int c, int d, int e ) {
+	return ( static_cast<int short>( a * b * c * d * e ) );
+}
+float foo6( int a, int b, int c, int d, int e, int f ) {
+	return ( static_cast<float>( a * b * c * d * e * f ) );
+}
+int unsigned foo7( int a, int b, int c, int d, int e, int f, int g ) {
+	return ( static_cast<int unsigned>( a * b * c * d * e * f * g ) );
+}
+int long unsigned foo8( int long a, int long b, int long c, int long d, int long e, int long f, int long g, int long h ) {
+	return ( static_cast<int long unsigned>( a * b * c * d * e * f * g * h ) );
+}
+int long long unsigned foo9(
+	int long long a, int long long b, int long long c, int long long d, int long long e,
+	int long long f, int long long g, int long long h, int long long i
+) {
+	return ( static_cast<int long long unsigned>( a * b * c * d * e * f * g * h * i ) );
+}
+int long long unsigned foo10(
+	int long long a, int long long b, int long long c, int long long d, int long long e,
+	int long long f, int long long g, int long long h, int long long i, int long long j
+) {
+	return ( static_cast<int long long unsigned>( a * b * c * d * e * f * g * h * i * j ) );
+}
+void fv0( int* r ) {
+	*r = 1;
+}
+void fv1( int* r, int a ) {
+	*r = a;
+}
+void fv2( int* r, int a, int b ) {
+	*r = a * b;
+}
+void fv3( int* r, int a, int b, int c ) {
+	*r = a * b * c;
+}
+void fv4( int* r, int a, int b, int c, int d ) {
+	*r = a * b * c * d;
+}
+void fv5( int* r, int a, int b, int c, int d, int e ) {
+	*r = a * b * c * d * e;
+}
+void fv6( int* r, int a, int b, int c, int d, int e, int f ) {
+	*r = a * b * c * d * e * f;
+}
+void fv7( int* r, int a, int b, int c, int d, int e, int f, int g ) {
+	*r = a * b * c * d * e * f * g;
+}
+void fv8( int* r, int a, int b, int c, int d, int e, int f, int g, int h ) {
+	*r = a * b * c * d * e * f * g * h;
+}
+void fv9(
+	int long long* r,
+	int long long a, int long long b, int long long c, int long long d, int long long e,
+	int long long f, int long long g, int long long h, int long long i
+) {
+	*r = a * b * c * d * e * f * g * h * i;
+}
+struct S {
+	static int long long r;
+	static void fv10(
+		int long long a, int long long b, int long long c, int long long d, int long long e,
+		int long long f, int long long g, int long long h, int long long i, int long long j
+	) {
+		r = a * b * c * d * e * f * g * h * i * j;
+	}
+};
+int long long S::r = 0;
+}
+
+TUT_UNIT_TEST( "easy function registration" )
+	/* getpid */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "getpid", system::getpid, "getpid" );
+		ENSURE_EQUALS( "getpid failed", execute( h, "main() { return ( getpid() ); }" ), to_string( system::getpid() ) );
+	}
+	/* min */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "mid", mid, "get right part of the string" );
+		ENSURE_EQUALS( "mid failed", execute( h, "main() { return ( mid( \"acdefghijk\", 6 ) ); }" ), "\"hijk\"" );
+	}
+	/* square */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "square", square, "calculate square of a number" );
+		ENSURE_EQUALS( "square failed", execute( h, "main() { return ( square( $7 ) ); }" ), "$49" );
+	}
+	/* title */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "title", title, "make string title case" );
+		ENSURE_EQUALS( "title failed", execute( h, "main() { return ( title( \"hUgInN\" ) ); }" ), "\"Huginn\"" );
+	}
+	/* add */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "add", add, "add two objects" );
+		ENSURE_EQUALS( "add failed", execute( h, "main() { return ( add( 1, 2 ) ); }" ), "3" );
+	}
+	/* quadratic_equation */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "quadratic_equation", quadratic_equation, "calculate solution to quadratic equation" );
+		ENSURE_EQUALS( "quadratic_equation failed", execute( h, "main() { return ( quadratic_equation( 1., 2., -8. ) ); }" ), "-4.0" );
+	}
+	/* area */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "area", area, "calculate rectangle area" );
+		ENSURE_EQUALS( "area failed", execute( h, "main() { return ( area( 1, 2, 3, 4 ) ); }" ), "4.0" );
+	}
+	/* next_(cp|ch) */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "next_cp", next_cp, "next code point" );
+		register_function( *h, "next_ch", next_ch, "next character" );
+		ENSURE_EQUALS( "next_(cp|ch) failed", execute( h, "main() { return ( ( next_cp( 'a' ), next_ch( 'b' ) ) ); }" ), "('b', 'c')" );
+	}
+	/* foo5 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "foo5", foo5, "foo 5 numbers" );
+		ENSURE_EQUALS( "foo5 failed", execute( h, "main() { return ( foo5( 2, 3, 5, 7, 11 ) ); }" ), "2310" );
+	}
+	/* foo6 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "foo6", foo6, "foo 6 numbers" );
+		ENSURE_EQUALS( "foo6 failed", execute( h, "main() { return ( foo6( 2, 3, 5, 7, 11, 13 ) ); }" ), "30030.0" );
+	}
+	/* foo7 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "foo7", foo7, "foo 7 numbers" );
+		ENSURE_EQUALS( "foo7 failed", execute( h, "main() { return ( foo7( 2, 3, 5, 7, 11, 13, 17 ) ); }" ), "510510" );
+	}
+	/* foo8 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "foo8", foo8, "foo 8 numbers" );
+		ENSURE_EQUALS( "foo8 failed", execute( h, "main() { return ( foo8( 2, 3, 5, 7, 11, 13, 17, 19 ) ); }" ), "9699690" );
+	}
+	/* foo9 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "foo9", foo9, "foo 9 numbers" );
+		ENSURE_EQUALS( "foo9 failed", execute( h, "main() { return ( foo9( 2, 3, 5, 7, 11, 13, 17, 19, 23 ) ); }" ), "223092870" );
+	}
+	/* foo10 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "foo10", foo10, "foo 10 numbers" );
+		ENSURE_EQUALS( "foo10 failed", execute( h, "main() { return ( foo10( 2, 3, 5, 7, 11, 13, 17, 19, 23, 29 ) ); }" ), "6469693230" );
+	}
+	/* fv0 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int i( 0 );
+		register_function( *h, "fv0", call( &fv0, &i ), "no return value" );
+		ENSURE_EQUALS( "fv0 failed", execute( h, "main() { return ( fv0() ); }" ), "none" );
+		ENSURE_EQUALS( "fv0 call failed", i, 1 );
+	}
+	/* fv1 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int i( 0 );
+		register_function( *h, "fv1", call( &fv1, &i, _1 ), "no return value" );
+		ENSURE_EQUALS( "fv1 failed", execute( h, "main() { return ( fv1( 2 ) ); }" ), "none" );
+		ENSURE_EQUALS( "fv1 call failed", i, 2 );
+	}
+	/* fv2 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int i( 0 );
+		register_function( *h, "fv2", call( &fv2, &i, _1, _2 ), "no return value" );
+		ENSURE_EQUALS( "fv2 failed", execute( h, "main() { return ( fv2( 2, 3 ) ); }" ), "none" );
+		ENSURE_EQUALS( "fv2 call failed", i, 6 );
+	}
+	/* fv3 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int i( 0 );
+		register_function( *h, "fv3", call( &fv3, &i, _1, _2, _3 ), "no return value" );
+		ENSURE_EQUALS( "fv3 failed", execute( h, "main() { return ( fv3( 2, 3, 5 ) ); }" ), "none" );
+		ENSURE_EQUALS( "fv3 call failed", i, 30 );
+	}
+	/* fv4 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int i( 0 );
+		register_function( *h, "fv4", call( &fv4, &i, _1, _2, _3, _4 ), "no return value" );
+		ENSURE_EQUALS( "fv4 failed", execute( h, "main() { return ( fv4( 2, 3, 5, 7 ) ); }" ), "none" );
+		ENSURE_EQUALS( "fv4 call failed", i, 210 );
+	}
+	/* fv5 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int i( 0 );
+		register_function( *h, "fv5", call( &fv5, &i, _1, _2, _3, _4, _5 ), "no return value" );
+		ENSURE_EQUALS( "fv5 failed", execute( h, "main() { return ( fv5( 2, 3, 5, 7, 11 ) ); }" ), "none" );
+		ENSURE_EQUALS( "fv5 call failed", i, 2310 );
+	}
+	/* fv6 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int i( 0 );
+		register_function( *h, "fv6", call( &fv6, &i, _1, _2, _3, _4, _5, _6 ), "no return value" );
+		ENSURE_EQUALS( "fv6 failed", execute( h, "main() { return ( fv6( 2, 3, 5, 7, 11, 13 ) ); }" ), "none" );
+		ENSURE_EQUALS( "fv6 call failed", i, 30030 );
+	}
+	/* fv7 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int i( 0 );
+		register_function( *h, "fv7", call( &fv7, &i, _1, _2, _3, _4, _5, _6, _7 ), "no return value" );
+		ENSURE_EQUALS( "fv7 failed", execute( h, "main() { return ( fv7( 2, 3, 5, 7, 11, 13, 17 ) ); }" ), "none" );
+		ENSURE_EQUALS( "fv7 call failed", i, 510510 );
+	}
+	/* fv8 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int i( 0 );
+		register_function( *h, "fv8", call( &fv8, &i, _1, _2, _3, _4, _5, _6, _7, _8 ), "no return value" );
+		ENSURE_EQUALS( "fv8 failed", execute( h, "main() { return ( fv8( 2, 3, 5, 7, 11, 13, 17, 19 ) ); }" ), "none" );
+		ENSURE_EQUALS( "fv8 call failed", i, 9699690 );
+	}
+	/* fv9 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int long long i( 0 );
+		register_function( *h, "fv9", call( &fv9, &i, _1, _2, _3, _4, _5, _6, _7, _8, _9 ), "no return value" );
+		ENSURE_EQUALS( "fv9 failed", execute( h, "main() { return ( fv9( 2, 3, 5, 7, 11, 13, 17, 19, 23 ) ); }" ), "none" );
+		ENSURE_EQUALS( "fv9 call failed", i, 223092870LL );
+	}
+	/* fv10 */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "fv10", &S::fv10, "no return value" );
+		ENSURE_EQUALS( "fv10 failed", execute( h, "main() { return ( fv10( 2, 3, 5, 7, 11, 13, 17, 19, 23, 29 ) ); }" ), "none" );
+		ENSURE_EQUALS( "fv10 call failed", S::r, 6469693230LL );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "incremental mode" )
