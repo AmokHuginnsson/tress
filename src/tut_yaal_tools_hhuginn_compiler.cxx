@@ -884,6 +884,14 @@ char const progCompileErr111[] =
 	"}\n"
 ;
 
+char const progCompileErr112[] =
+	"class A { constructor(){} }\n"
+	"main() {\n"
+	"A = 0;\n"
+	"A;\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -998,6 +1006,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr109,
 		progCompileErr110,
 		progCompileErr111,
+		progCompileErr112,
 		NULL
 	};
 
@@ -1114,6 +1123,7 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 109 */ { 28, 2, 1,  "*anonymous stream*:2:1: Package alias of the same name `main' is already defined." },
 /* 110 */ { 31, 2, 23, "*anonymous stream*:2:23: Function `math' was already defined." },
 /* 111 */ { 23, 2, 8,  "*anonymous stream*:2:8: Function `Mathematics' was already defined." },
+/* 112 */ { 37, 3, 1,  "*anonymous stream*:3:1: `A' is a class name." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
