@@ -908,6 +908,44 @@ TUT_UNIT_TEST( "inheritance from built-in" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "enum" )
+	ENSURE_EQUALS(
+		"user enum failed",
+		execute(
+			"enum COLOR {\n"
+			"RED,\n"
+			"GREEN,\n"
+			"BLUE\n"
+			"}\n"
+			"main(){\n"
+			"return((COLOR.RED,COLOR.GREEN,COLOR.BLUE));\n"
+			"}"
+		),
+		"(COLOR.RED, COLOR.GREEN, COLOR.BLUE)"
+	);
+	ENSURE_EQUALS(
+		"built-in enum failed",
+		execute(
+			"import FileSystem as fs;"
+			"main(){\n"
+			"fs;\n"
+			"return((Stream.SEEK.BEGIN, Stream.SEEK.CURRENT, Stream.SEEK.END));\n"
+			"}"
+		),
+		"(SEEK.BEGIN, SEEK.CURRENT, SEEK.END)"
+	);
+	ENSURE_EQUALS(
+		"built-in enum failed",
+		execute(
+			"import FileSystem as fs;"
+			"main(){\n"
+			"return((fs.OPEN_MODE.READ, fs.OPEN_MODE.WRITE));\n"
+			"}"
+		),
+		"(OPEN_MODE.READ, OPEN_MODE.WRITE)"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "throw,try,catch" )
 	ENSURE_EQUALS(
 		"throw,try,catch failed",
