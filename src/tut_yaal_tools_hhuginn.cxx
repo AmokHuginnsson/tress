@@ -1961,6 +1961,28 @@ TUT_UNIT_TEST( "incremental mode" )
 		execute_incremental( l10 ),
 		"nonenonetrue1"
 	);
+	lines_t l11{
+		{ "import Introspection as intro;", OLine::TYPE::IMPORT  },
+		{ "class A{x = 0;}", OLine::TYPE::DEFINITION },
+		{ "cp = intro.import(\"CannotParse\");" },
+		{ "0;" },
+	};
+	ENSURE_EQUALS(
+		"unparsable runtime import",
+		execute_incremental( l11 ),
+		"nonenone*anonymous stream*:4:18: ./data/CannotParse.hgn:3:1: expected one of characters: -0"
+	);
+	lines_t l12{
+		{ "import Introspection as intro;", OLine::TYPE::IMPORT  },
+		{ "class A{x = 0;}", OLine::TYPE::DEFINITION },
+		{ "cc = intro.import(\"CannotCompile\");" },
+		{ "0;" },
+	};
+	ENSURE_EQUALS(
+		"uncompilable runtime import",
+		execute_incremental( l12 ),
+		"nonenone*anonymous stream*:4:18: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: an `integer' vs a `real'.0"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "introspection" )

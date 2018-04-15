@@ -5,11 +5,14 @@
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hsocket.hxx>
+#include <yaal/hcore/hformat.hxx>
+#include <yaal/hcore/hcore.hxx>
 #include <yaal/tools/hhuginn.hxx>
 #include <yaal/tools/hiodispatcher.hxx>
 #include <yaal/tools/hmonitor.hxx>
 #include <yaal/tools/filesystem.hxx>
 #include <yaal/tools/hfsitem.hxx>
+#include <yaal/tools/stringalgo.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -2107,6 +2110,164 @@ TUT_UNIT_TEST( "Text" )
 			"}\n"
 		),
 		"[\"0x64\", \"0o144\", \"0b1100100\"]"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Introspection" )
+	typedef yaal::hcore::HArray<yaal::hcore::HString> tokens_t;
+	tokens_t yaalVersion( string::split<tokens_t>( yaal_version( true ), character_class( CHARACTER_CLASS::WHITESPACE ).data(), HTokenizer::DELIMITED_BY_ANY_OF ) );
+	ENSURE_EQUALS(
+		"Introspection.version failed",
+		execute(
+			"import Introspection as intro;\n"
+			"main() {\n"
+			"return ( intro.version() );"
+			"}\n"
+		),
+		format( "(\"%s\", \"%s\")", yaalVersion[0], yaalVersion[1] )
+	);
+	ENSURE_EQUALS(
+		"Introspection.symbol (built-in function) failed",
+		execute(
+			"import Introspection as intro;\n"
+			"main() {\n"
+			"s = intro.symbol(\"size\");\n"
+			"return ( s(\"Huginn\") );"
+			"}\n"
+		),
+		"6"
+	);
+	ENSURE_EQUALS(
+		"Introspection.symbol (user function) failed",
+		execute(
+			"import Introspection as intro;\n"
+			"triple(x){x*3;}\n"
+			"main() {\n"
+			"triple;\n"
+			"t = intro.symbol(\"triple\");\n"
+			"return ( t(7) );"
+			"}\n"
+		),
+		"21"
+	);
+	ENSURE_EQUALS(
+		"Introspection.symbol (package) failed",
+		execute(
+			"import Algorithms as algo;"
+			"import Introspection as intro;\n"
+			"main() {\n"
+			"algo;\n"
+			"a = intro.symbol(\"algo\");\n"
+			"return ( a.max(1,3) );"
+			"}\n"
+		),
+		"3"
+	);
+	ENSURE_EQUALS(
+		"Introspection.attribute (built-in, unbound) failed",
+		execute(
+			"import Introspection as intro;\n"
+			"main() {\n"
+			"tu = intro.attribute(string, \"to_upper\");\n"
+			"return ( tu( \"Huginn\" ) );"
+			"}\n"
+		),
+		"\"HUGINN\""
+	);
+	ENSURE_EQUALS(
+		"Introspection.attribute (built-in, bound) failed",
+		execute(
+			"import Introspection as intro;\n"
+			"main() {\n"
+			"h = \"Huginn\";\n"
+			"H = intro.attribute(h, \"to_upper\");\n"
+			"return ( H() );"
+			"}\n"
+		),
+		"\"HUGINN\""
+	);
+	ENSURE_EQUALS(
+		"Introspection.attribute (user, unbound) failed",
+		execute(
+			"import Introspection as intro;\n"
+			"class A { x = 17; }"
+			"main() {\n"
+			"A().x;\n"
+			"f = intro.attribute(A, \"x\");\n"
+			"return ( f );"
+			"}\n"
+		),
+		"17"
+	);
+	ENSURE_EQUALS(
+		"Introspection.attribute (user, bound) failed",
+		execute(
+			"import Introspection as intro;\n"
+			"class A { x = 17; }"
+			"main() {\n"
+			"A().x;\n"
+			"a = A();\n"
+			"f = intro.attribute(a, \"x\");\n"
+			"return ( f );"
+			"}\n"
+		),
+		"17"
+	);
+	ENSURE_EQUALS(
+		"Introspection.list_attributes (built-in unbound) failed",
+		execute(
+			"import Introspection as intro;\n"
+			"main() {\n"
+			"return ( intro.list_attributes(number) );"
+			"}\n"
+		),
+		"(\"is_exact\", \"is_integral\", \"get_precision\", \"set_precision\")"
+	);
+	ENSURE_EQUALS(
+		"Introspection.list_attributes (built-in bound) failed",
+		execute(
+			"import Introspection as intro;\n"
+			"main() {\n"
+			"return ( intro.list_attributes($0) );"
+			"}\n"
+		),
+		"(\"is_exact\", \"is_integral\", \"get_precision\", \"set_precision\")"
+	);
+	ENSURE_EQUALS(
+		"Introspection.list_attributes (user unbound) failed",
+		execute(
+			"import Introspection as intro;\n"
+			"class A { x = 17; y = none; }\n"
+			"main() {\n"
+			"a=A();a.x;a.y;\n"
+			"return ( intro.list_attributes(A) );"
+			"}\n"
+		),
+		"(\"x\", \"y\")"
+	);
+	ENSURE_EQUALS(
+		"Introspection.list_attributes (user bound) failed",
+		execute(
+			"import Introspection as intro;\n"
+			"class A { x = 17; y = none; }\n"
+			"main() {\n"
+			"a=A();a.x;a.y;\n"
+			"return ( intro.list_attributes(a) );"
+			"}\n"
+		),
+		"(\"x\", \"y\")"
+	);
+	ENSURE_EQUALS(
+		"Introspection.import failed",
+		execute(
+			"import Introspection as intro;\n"
+			"main() {\n"
+			"t = intro.import(\"Tress\");\n"
+			"return ( t.diagonal(3., 4.) );"
+			"}\n",
+			{ "./data/" }
+		),
+		"5.0"
 	);
 TUT_TEARDOWN()
 

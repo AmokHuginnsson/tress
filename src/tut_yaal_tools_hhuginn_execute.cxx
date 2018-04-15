@@ -897,6 +897,19 @@ char const progExecuteErr94[] =
 	"}\n"
 ;
 
+char const progExecuteErr95[] =
+	"import Introspection as intro;\n"
+	"class A {\n"
+	"constructor() {}\n"
+	"}\n"
+	"main() {\n"
+	"A();\n"
+	"intro.import( \"CannotParse\" );\n"
+	"return ( 0 );\n"
+	"}\n"
+;
+
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -908,7 +921,7 @@ void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo con
 	h.load( prog, "*tress*" );
 	h.preprocess();
 	ENSURE( "failed to parse valid", h.parse() );
-	bool compiled( h.compile() );
+	bool compiled( h.compile( { "./data/" } ) );
 	if ( ! compiled ) {
 		clog << "COMPILATION ERROR: " << h.error_message() << endl;
 	}
@@ -1019,6 +1032,7 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr92,
 		progExecuteErr93,
 		progExecuteErr94,
+		progExecuteErr95,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1117,6 +1131,7 @@ TUT_UNIT_TEST( "report execution error" )
 /*  92 */ { 28, 3, 13,   "*tress*:3:13: `For` source did not return a `tuple` object." },
 /*  93 */ { 28, 3, 13,   "*tress*:3:13: Not enough values to unpack, expected: 2, got: 1." },
 /*  94 */ { 28, 3, 13,   "*tress*:3:13: Too many values to unpack, expected: 2, got: 3." },
+/*  95 */ { 86, 7, 13,   "*tress*:7:13: ./data//CannotParse.hgn:3:1: expected one of characters: -" },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
