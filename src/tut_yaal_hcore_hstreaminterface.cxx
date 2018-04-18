@@ -3,6 +3,7 @@
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hstreaminterface.hxx>
+#include <yaal/hcore/hstring.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -431,6 +432,109 @@ TUT_UNIT_TEST( "inputs" )
 	void const* p( nullptr );
 	_ss >> hex >>  p;
 	ENSURE_EQUALS( "pointer input failed", p, reinterpret_cast<void*>( static_cast<size_t>( 0x1234 ) ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "binary I/O" )
+	char const PATH[] = "./out/binary.bin";
+	HFile f( PATH, HFile::OPEN::WRITING );
+	bool cBool1( false );
+	bool cBool2( true );
+	char cChar( 0 );
+	char unsigned cCharUnsigned( 0 );
+	int short cIntShort( 0 );
+	int short unsigned cIntShortUnsigned( 0 );
+	int cInt( 0 );
+	int unsigned cIntUnsigned( 0 );
+	int long cIntLong( 0 );
+	int long unsigned cIntLongUnsigned( 0 );
+	int long long cIntLongLong( 0 );
+	int long long unsigned cIntLongLongUnsigned( 0 );
+	code_point_t cCodePoint( 0 );
+	double long cDoubleLong( 0 );
+	double cDouble( 0 );
+	float cFloat( 0 );
+	HString cString;
+	void const* cPointer( nullptr );
+	f << binary
+		<< ( cBool1 = true )
+		<< ( cBool2 = false )
+		<< ( cChar = 7 )
+		<< ( cCharUnsigned = 77 )
+		<< ( cIntShort = -1024 )
+		<< ( cIntShortUnsigned = 2048 )
+		<< ( cInt = -87654 )
+		<< ( cIntUnsigned = 87654 )
+		<< ( cIntLong = -9876543 )
+		<< ( cIntLongUnsigned = 9876543 )
+		<< ( cIntLongLong = -987654321098765432LL )
+		<< ( cIntLongLongUnsigned = 987654321098765432LL )
+#ifndef __MSVCXX__
+		<< ( cCodePoint = code_point_t( U'✓'_ycp ) )
+#else
+		<< ( cCodePoint = code_point_t( 10003_ycp ) )
+#endif
+		<< ( cDoubleLong = 3.1415926535798932L )
+		<< ( cDouble = 2.718281828459045 )
+		<< ( cFloat = 123.456f )
+		<< ( cString = "Yet Another Abstraction Layer ✓" )
+		<< ( cPointer = static_cast<void const*>( &f ) );
+	f.close();
+	f.open( PATH, HFile::OPEN::READING );
+	bool vBool1( false );
+	bool vBool2( true );
+	char vChar( 0 );
+	char unsigned vCharUnsigned( 0 );
+	int short vIntShort( 0 );
+	int short unsigned vIntShortUnsigned( 0 );
+	int vInt( 0 );
+	int unsigned vIntUnsigned( 0 );
+	int long vIntLong( 0 );
+	int long unsigned vIntLongUnsigned( 0 );
+	int long long vIntLongLong( 0 );
+	int long long unsigned vIntLongLongUnsigned( 0 );
+	code_point_t vCodePoint( 0 );
+	double long vDoubleLong( 0 );
+	double vDouble( 0 );
+	float vFloat( 0 );
+	HString vString;
+	void const* vPointer( nullptr );
+	f >> binary
+		>> vBool1
+		>> vBool2
+		>> vChar
+		>> vCharUnsigned
+		>> vIntShort
+		>> vIntShortUnsigned
+		>> vInt
+		>> vIntUnsigned
+		>> vIntLong
+		>> vIntLongUnsigned
+		>> vIntLongLong
+		>> vIntLongLongUnsigned
+		>> vCodePoint
+		>> vDoubleLong
+		>> vDouble
+		>> vFloat
+		>> vString
+		>> vPointer;
+	ENSURE_EQUALS( "bool bin I/O failed", vBool1, cBool1 );
+	ENSURE_EQUALS( "bool bin I/O failed", vBool2, cBool2 );
+	ENSURE_EQUALS( "char bin I/O failed", vChar, cChar );
+	ENSURE_EQUALS( "char unsigned bin I/O failed", vCharUnsigned, cCharUnsigned );
+	ENSURE_EQUALS( "int short bin I/O failed", vIntShort, cIntShort );
+	ENSURE_EQUALS( "int short unsigned bin I/O failed", vIntShortUnsigned, cIntShortUnsigned );
+	ENSURE_EQUALS( "int bin I/O failed", vInt, cInt );
+	ENSURE_EQUALS( "int unsigned bin I/O failed", vIntUnsigned, cIntUnsigned );
+	ENSURE_EQUALS( "int long bin I/O failed", vIntLong, cIntLong );
+	ENSURE_EQUALS( "int long unsigned bin I/O failed", vIntLongUnsigned, cIntLongUnsigned );
+	ENSURE_EQUALS( "int long long bin I/O failed", vIntLongLong, cIntLongLong );
+	ENSURE_EQUALS( "int long long unsigned bin I/O failed", vIntLongLongUnsigned, cIntLongLongUnsigned );
+	ENSURE_EQUALS( "code_point_t bin I/O failed", vCodePoint, cCodePoint );
+	ENSURE_EQUALS( "double long bin I/O failed", vDoubleLong, cDoubleLong );
+	ENSURE_EQUALS( "double bin I/O failed", vDouble, cDouble );
+	ENSURE_EQUALS( "float bin I/O failed", vFloat, cFloat );
+	ENSURE_EQUALS( "HString bin I/O failed", vString, cString );
+	ENSURE_EQUALS( "void* bin I/O failed", vPointer, cPointer );
 TUT_TEARDOWN()
 
 }
