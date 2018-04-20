@@ -6,6 +6,10 @@
 
 #include <yaal/tools/streamtools.hxx>
 #include <yaal/hcore/hlog.hxx>
+#include <yaal/hcore/hnumber.hxx>
+#include <yaal/hcore/hcomplex.hxx>
+#include <yaal/hcore/htime.hxx>
+#include <yaal/tools/hmemory.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -82,6 +86,64 @@ TUT_UNIT_TEST( "ensure" )
 tools::ensure( f );
 	f.close();
 	ENSURE_THROW( "ensure on closed succeeded", tools::ensure( f ), HException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "stream + HNumber" )
+	HStringStream ss;
+	HNumber exp( "3.1415926535897932"_yn );
+	ss << "ala " << exp << " kot";
+	HString s;
+	ss >> s;
+	HNumber n;
+	ss >> n;
+	ENSURE_EQUALS( "HNumber text streams failed", n, "3.141593"_yn );
+	HChunk c;
+	HMemoryProvider mp( c, 100 );
+	HMemory m( mp );
+	m << binary << exp;
+	m >> n;
+	ENSURE_EQUALS( "HNumber binary streams failed", n, exp );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "stream + HTime" )
+	HStringStream ss;
+	HTime exp( 1978, 5, 24, 23, 30, 17 );
+	ss << "ala " << exp << " kot";
+	HString s;
+	ss >> s;
+	HTime t( HTime::TZ::LOCAL );
+	ss >> t;
+	t.set_time( 0, 0, 0 );
+	ENSURE_EQUALS( "HTime text streams failed", t, HTime( exp ).set_time( 0, 0, 0 ) );
+	HChunk buf;
+	HMemoryProvider mp( buf, 100 );
+	HMemory m( mp );
+	m << binary << exp;
+	t.set_now();
+	m >> t;
+	ENSURE_EQUALS( "HTime binary streams failed", t, exp );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "stream + HComplex" )
+	HStringStream ss;
+	HComplex exp( -3.14159265, 2.718281828 );
+	ss << "ala " << exp << " kot";
+	HString s;
+	ss >> s;
+	HComplex c;
+	ss >> c;
+	ENSURE_EQUALS( "HComplex text streams failed", c, exp );
+	HChunk buf;
+	HMemoryProvider mp( buf, 100 );
+	HMemory m( mp );
+	m << binary << exp;
+	c.set( 0, 0 );
+	m >> c;
+	ENSURE_EQUALS( "HComplex binary streams failed", c, exp );
+	ss.reset();
+	ss << "(1+2i)";
+	ss >> c;
+	ENSURE_EQUALS( "HComplex text minimal streams failed", c, HComplex( 1, 2 ) );
 TUT_TEARDOWN()
 
 }

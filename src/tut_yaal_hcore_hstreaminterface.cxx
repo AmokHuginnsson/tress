@@ -473,7 +473,7 @@ TUT_UNIT_TEST( "binary I/O" )
 #else
 		<< ( cCodePoint = code_point_t( 10003_ycp ) )
 #endif
-		<< ( cDoubleLong = 3.1415926535798932L )
+		<< ( cDoubleLong = 3.1415926535897932L )
 		<< ( cDouble = 2.718281828459045 )
 		<< ( cFloat = 123.456f )
 		<< ( cString = "Yet Another Abstraction Layer ✓" )

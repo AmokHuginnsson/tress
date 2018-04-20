@@ -61,7 +61,7 @@ TUT_UNIT_TEST( "read from empty" )
 	HMemoryObserver mo( _buf, SIZE );
 	HMemory m( mo, HMemory::INITIAL_STATE::INVALID );
 	HString line;
-	ENSURE_EQUALS( "read byte count from empty", m.read_until( line ), 0 );
+	ENSURE_EQUALS( "read byte count from empty", m.read_until( line ), -1 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "equality operator" )
