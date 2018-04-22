@@ -23,7 +23,7 @@
  */
 namespace {
 
-static int const _maxWidth_( yaal::tools::_terminal_.exists() ? yaal::tools::xmath::clip( 80, yaal::tools::_terminal_.size().second, 128 ) : 0x10000 );
+static int const _maxWidth_( yaal::tools::HTerminal::get_instance().exists() ? yaal::tools::xmath::clip( 80, yaal::tools::HTerminal::get_instance().size().second, 128 ) : 0x10000 );
 
 std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 	char const* tags[][2] = {
