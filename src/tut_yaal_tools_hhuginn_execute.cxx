@@ -1107,7 +1107,7 @@ TUT_UNIT_TEST( "report execution error" )
 /*  68 */ { 14, 2, 6,    "*tress*:2:6: Operands are not boolean values: a `boolean', a `*none*'" },
 /*  69 */ { 9, 2, 1,     "*tress*:2:1: Operand is not a boolean value: *none*" },
 /*  70 */ { 15, 2, 7,    "*tress*:2:7: `While' argument is not a boolean." },
-/*  71 */ { 19, 2, 11,   "*tress*:2:11: Direct creation of instances of `*function_reference*' is not allowed." },
+/*  71 */ { 19, 2, 11,   "*tress*:2:11: Explicit construction of class `*function_reference*' objects (instances) is forbidden." },
 /*  72 */ { 35, 5, 2,    "*tress*:5:2: In call to `f()`, missing required positional argument: `y`." },
 /*  73 */ { 44, 5, 2,    "*tress*:5:2: In call to `f()`, missing required positional argument: `y`." },
 /*  74 */ { 35, 5, 2,    "*tress*:5:2: In call to `f()`, missing required positional argument: `y`." },

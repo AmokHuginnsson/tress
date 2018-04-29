@@ -47,6 +47,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"field = ( fieldIdentifier >> '=' >> expression >> ';' )",
 		"callable = ( '(' >> -( ( nameList >> -( ',' >> variadicParameter ) >> -( ',' >> namedParameterCapture ) ) | ( variadicParameter >> -( ',' >> namedParameterCapture ) ) | namedParameterCapture ) >> ')' >> '{' >> *statement >> '}' )",
 		"enumeral = fieldIdentifier",
+		"packageName = ( moduleName >> *( '.' >> moduleName ) )",
 		"expression = ( *( ( assignablePack >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> value )",
 		"nameList = ( parameter >> *( ',' >> parameter ) )",
 		"variadicParameter = ( parameterIdentifier >> \"...\" )",

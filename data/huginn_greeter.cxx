@@ -50,8 +50,8 @@ HHuginn::value_t HGreeterCreator::do_new_instance( HRuntime* runtime_ ) {
 	HHuginn::class_t c(
 		runtime_->create_class(
 			"Greeter",
-			nullptr,
-			"The `Greeter` package provides greeting functionality."
+			"The `Greeter` package provides greeting functionality.",
+			HHuginn::ACCESS::PUBLIC
 		)
 	);
 	HHuginn::field_definitions_t fd{
