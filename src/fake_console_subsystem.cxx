@@ -206,7 +206,7 @@ struct WINDOW {
 	int short _flags;
 	chtype_t _attr;
 	chtype_t _background;
-	char dummy[16];
+	char dummy[128];
 	static int const CELL_COUNT = ROWS * COLS;
 	code_point_t _dataBuffer[CELL_COUNT];
 	char _attrBuffer[CELL_COUNT];

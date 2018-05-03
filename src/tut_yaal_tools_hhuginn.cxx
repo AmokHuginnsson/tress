@@ -1548,23 +1548,18 @@ TUT_UNIT_TEST( "standard streams" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "modules" )
-	HHuginn h;
-	HStringStream src(
-		"import Mathematics as M;"
-		"import Tress as tress;"
-		"main() {"
-		"return ([tress.rectangle(2,3), tress.diagonal(3,4), tress.wrap(\"yaal\"), tress.math().floor(3.14), string(tress.Object($7)), type(M)]);"
-		"}"
+	ENSURE_EQUALS(
+		"using module failed",
+		execute(
+			"import Mathematics as M;"
+			"import Tress as tress;"
+			"main() {"
+			"return ([tress.rectangle(2,3), tress.diagonal(3,4), tress.wrap(\"yaal\"), tress.math().floor(3.14), string(tress.Object($7)), type(M)]);"
+			"}",
+			{ "./data/" }
+		),
+		"[6, 5.0, \"#yaal#\", 3.0, \"7\", Mathematics]"
 	);
-	h.load( src );
-	h.preprocess();
-	ENSURE( "parse failed", h.parse() );
-	ENSURE( "compile", h.compile( { "./data/" } ) );
-	ENSURE( "execute", h.execute() );
-	HHuginn::value_t r( h.result() );
-	ENSURE( "nothing returned", !! r );
-	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::LIST );
-	ENSURE_EQUALS( "using module failed", to_string( r, &h ), "[6, 5.0, \"#yaal#\", 3.0, \"7\", Mathematics]" );
 	ENSURE_EQUALS(
 		"invalid field access failure",
 		execute_except(
@@ -1575,6 +1570,17 @@ TUT_UNIT_TEST( "modules" )
 			{ "./data/" }
 		),
 		"./data//Tress.hgn:50:15: `Mathematics' does not have `square_foot' member (did you mean `square_root'?)."
+	);
+	ENSURE_EQUALS(
+		"using subtree module failed",
+		execute(
+			"import sub.Sub as ss;"
+			"main() {"
+			"return ( \"{}: {}\".format( type( ss ), ss.main() ) );"
+			"}",
+			{ "./data/" }
+		),
+		"\"sub.Sub: 7\""
 	);
 TUT_TEARDOWN()
 
