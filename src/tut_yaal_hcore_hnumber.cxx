@@ -1419,10 +1419,10 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "factorial<HNumber>()" )
 	ENSURE_EQUALS( "bad 52! factorial", number::factorial( 52 ), "80658175170943878571660636856403766975289505440883277824000000000000"_yn );
-	ENSURE_EQUALS( "bad 4400!", tools::hash::sha1( number::factorial( 4400 ).to_string() ), "fb32c81331a015d6c14b20423029ce3b251ebb3c" );
-	ENSURE_EQUALS( "bad 4400!", tools::hash::sha1( number::factorial( 4250 ).to_string() ), "086f7c9e103d5fd73e11145975bd259602d6dd3f" );
-	ENSURE_EQUALS( "bad 4400!", tools::hash::sha1( number::factorial( 4500 ).to_string() ), "dc4364413ae03d05f50cc5f879b7d7cf2284ccce" );
-	ENSURE_EQUALS( "bad 4400!", tools::hash::sha1( number::factorial( 4400 ).to_string() ), "fb32c81331a015d6c14b20423029ce3b251ebb3c" );
+	ENSURE_EQUALS( "bad 4400!", tools::hash::string( tools::hash::FUNCTION::SHA1, number::factorial( 4400 ).to_string() ), "fb32c81331a015d6c14b20423029ce3b251ebb3c" );
+	ENSURE_EQUALS( "bad 4400!", tools::hash::string( tools::hash::FUNCTION::SHA1, number::factorial( 4250 ).to_string() ), "086f7c9e103d5fd73e11145975bd259602d6dd3f" );
+	ENSURE_EQUALS( "bad 4400!", tools::hash::string( tools::hash::FUNCTION::SHA1, number::factorial( 4500 ).to_string() ), "dc4364413ae03d05f50cc5f879b7d7cf2284ccce" );
+	ENSURE_EQUALS( "bad 4400!", tools::hash::string( tools::hash::FUNCTION::SHA1, number::factorial( 4400 ).to_string() ), "fb32c81331a015d6c14b20423029ce3b251ebb3c" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "binomial_coefficient<HNumber>()" )
