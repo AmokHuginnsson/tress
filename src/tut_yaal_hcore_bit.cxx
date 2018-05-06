@@ -18,7 +18,7 @@ TUT_SIMPLE_MOCK( tut_yaal_hcore_bit );
 TUT_TEST_GROUP( tut_yaal_hcore_bit, "yaal::hcore::bit" );
 
 #define BIT_COUNT_TEST( pattern, cnt ) \
-	ENSURE_EQUALS( "bit count failed on pattern " M_STRINGIFY( pattern ), bit::count( meta::obinary<pattern>::value ), cnt );
+	ENSURE_EQUALS( "bit count failed on pattern " M_STRINGIFY( pattern ), bit::count( static_cast<u64_t>( meta::obinary<pattern>::value ) ), cnt );
 
 TUT_UNIT_TEST( "bit count" )
 	BIT_COUNT_TEST( 0, 0 );
