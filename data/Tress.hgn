@@ -20,6 +20,15 @@ class Object {
 }
 
 /*
+ * Enumeration.
+ */
+enum ENUM {
+	ONE,
+	TWO,
+	THREE
+}
+
+/*
  * ( *a_*, *b_* ) - calculate area of rectangle given by *a_* and *b_* dimensions.
  */
 rectangle( a_, b_ ) {

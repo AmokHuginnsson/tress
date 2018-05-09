@@ -1551,14 +1551,21 @@ TUT_UNIT_TEST( "modules" )
 	ENSURE_EQUALS(
 		"using module failed",
 		execute(
-			"import Mathematics as M;"
-			"import Tress as tress;"
-			"main() {"
-			"return ([tress.rectangle(2,3), tress.diagonal(3,4), tress.wrap(\"yaal\"), tress.math().floor(3.14), string(tress.Object($7)), type(M)]);"
+			"import Mathematics as M;\n"
+			"import Tress as tress;\n"
+			"main() {\n"
+			"return ([\n"
+			"tress.rectangle(2,3),\n"
+			"tress.diagonal(3,4),\n"
+			"tress.wrap(\"yaal\"),\n"
+			"tress.ENUM.TWO,\n"
+			"tress.Object($7),\n"
+			"type(M)\n"
+			"]);"
 			"}",
 			{ "./data/" }
 		),
-		"[6, 5.0, \"#yaal#\", 3.0, \"7\", Mathematics]"
+		"[6, 5.0, \"#yaal#\", ENUM.TWO, 7, Mathematics]"
 	);
 	ENSURE_EQUALS(
 		"invalid field access failure",
@@ -1569,7 +1576,7 @@ TUT_UNIT_TEST( "modules" )
 			"}\n",
 			{ "./data/" }
 		),
-		"./data//Tress.hgn:50:15: `Mathematics' does not have `square_foot' member (did you mean `square_root'?)."
+		"./data//Tress.hgn:59:15: `Mathematics' does not have `square_foot' member (did you mean `square_root'?)."
 	);
 	ENSURE_EQUALS(
 		"using subtree module failed",

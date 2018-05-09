@@ -5025,3 +5025,12 @@
    fun:xmlOutputBufferFlush
    fun:xmlTextWriterEndDocument
 }
+{
+   Memory leak in dlerror(malloc) (bionic).
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:vasprintf
+   fun:asprintf
+   fun:dlerror
+}
