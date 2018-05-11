@@ -183,11 +183,39 @@ TUT_UNIT_TEST( "string()" )
 	ENSURE_EQUALS( "string.find_one_of(), string.find_last_one_of() failed", execute( "main(){s=\"ala ma kota i kotka\";return([s.find_one_of(\"mk\"),s.find_last_one_of(\"mk\"),s.find_one_of(\"xyz\"),s.find_last_one_of(\"xyz\")]);}" ), "[4, 17, -1, -1]" );
 	ENSURE_EQUALS( "string.find_one_of(), string.find_last_one_of() failed", execute( "main(){s=\"ala ma kota i kotka\";return([s.find_one_of(\"mk\"),s.find_one_of(\"mk\",8)]);}" ), "[4, 14]" );
 	ENSURE_EQUALS( "string.find_other_than(), string.find_last_other_than() failed", execute( "main(){s=\"ala ma kota i kotka\";return([s.find_other_than(\"akmil \"),s.find_last_other_than(\"akmil \"),s.find_other_than(\"akmotil \"),s.find_last_other_than(\"akmotil \")]);}" ), "[8, 16, -1, -1]" );
+	ENSURE_EQUALS(
+		"string.starts_with() failed",
+		execute(
+			"main(){\n"
+			"s=\"abcdefghij\";\n"
+			"return([s.starts_with(\"abc\"), s.starts_with(\"abd\"), s.starts_with(\"bcd\"), s.starts_with(\"\")]);\n"
+			"}"
+		),
+		"[true, false, false, true]"
+	);
+	ENSURE_EQUALS(
+		"string.ends_with() failed",
+		execute(
+			"main(){\n"
+			"s=\"abcdefghij\";\n"
+			"return([s.ends_with(\"hij\"), s.ends_with(\"gij\"), s.ends_with(\"ghi\"), s.ends_with(\"\")]);\n"
+			"}"
+		),
+		"[true, false, false, true]"
+	);
 	ENSURE_EQUALS( "copy( str ) failed", execute( "main(){x=\"a\";y=x;z=copy(x);x+=\"b\";return([x,y,z]);}" ), "[\"ab\", \"ab\", \"a\"]" );
 	ENSURE_EQUALS( "string.strip() failed", execute( "main(){s=\"~huginn~\";return(s.strip(\"~\"));}" ), "\"huginn\"" );
 	ENSURE_EQUALS( "string.clear() failed", execute( "main(){s=\"ala ma kota\";s.clear();return(s);}" ), "\"\"" );
-	ENSURE_EQUALS( "string reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed(\"Huginn\"),list);}" ), "['n', 'n', 'i', 'g', 'u', 'H']" );
-	ENSURE_EQUALS( "string reversed() copy/size failed", execute( "import Algorithms as algo;main(){x=algo.reversed(\"Huginn\");algo.materialize(copy(x),list).push(size(x));}" ), "['n', 'n', 'i', 'g', 'u', 'H', 6]" );
+	ENSURE_EQUALS(
+		"string reversed() failed",
+		execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed(\"Huginn\"),list);}" ),
+		"['n', 'n', 'i', 'g', 'u', 'H']"
+	);
+	ENSURE_EQUALS(
+		"string reversed() copy/size failed",
+		execute( "import Algorithms as algo;main(){x=algo.reversed(\"Huginn\");algo.materialize(copy(x),list).push(size(x));}" ),
+		"['n', 'n', 'i', 'g', 'u', 'H', 6]"
+	);
 	ENSURE_EQUALS(
 		"string.format() failed",
 		execute(
