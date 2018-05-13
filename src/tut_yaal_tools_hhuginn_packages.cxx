@@ -38,6 +38,23 @@ TUT_TEST_GROUP( tut_yaal_tools_hhuginn_packages, "yaal::tools::HHuginn,packages"
 
 TUT_UNIT_TEST( "Algorithms" )
 	ENSURE_EQUALS(
+		"Algorithms.zip failed",
+		execute(
+			"import Algorithms as algo;"
+			"main(){"
+			"l1=[2,3,5,7,11,13,17,19];"
+			"l2=[2,4,8,16,32,64,128,256];"
+			"e=algo.zip(l1,l2);"
+			"r = [];"
+			"for(x : copy(e)) {"
+			"r.push(x);"
+			"}"
+			"return((r,size(e)));"
+			"}"
+		),
+		"([(2, 2), (3, 4), (5, 8), (7, 16), (11, 32), (13, 64), (17, 128), (19, 256)], 8)"
+	);
+	ENSURE_EQUALS(
 		"Algorithms.enumerate failed",
 		execute(
 			"import Algorithms as algo;"
