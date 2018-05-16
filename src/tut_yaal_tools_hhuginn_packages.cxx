@@ -38,18 +38,47 @@ TUT_TEST_GROUP( tut_yaal_tools_hhuginn_packages, "yaal::tools::HHuginn,packages"
 
 TUT_UNIT_TEST( "Algorithms" )
 	ENSURE_EQUALS(
+		"Algorithms.iterator failed",
+		execute(
+			"import Algorithms as algo;"
+			"main(){"
+			"l=[2,3,5,7,11,13,17,19];"
+			"i = algo.iterator(l);"
+			"return(algo.materialize(algo.zip(i,i), list));"
+			"}"
+		),
+		"[(2, 3), (5, 7), (11, 13), (17, 19)]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.iterator failed",
+		execute(
+			"import Algorithms as algo;"
+			"main(){"
+			"l=[2,3,5,7,11,13,17,19];"
+			"i = algo.iterator(l);"
+			"res = [];"
+			"while(i.is_valid()) {"
+			"res.push(i.value());"
+			"i.next();"
+			"}"
+			"return(res);"
+			"}"
+		),
+		"[2, 3, 5, 7, 11, 13, 17, 19]"
+	);
+	ENSURE_EQUALS(
 		"Algorithms.zip failed",
 		execute(
 			"import Algorithms as algo;"
 			"main(){"
 			"l1=[2,3,5,7,11,13,17,19];"
 			"l2=[2,4,8,16,32,64,128,256];"
-			"e=algo.zip(l1,l2);"
+			"z=algo.zip(l1,l2);"
 			"r = [];"
-			"for(x : copy(e)) {"
+			"for(x : copy(z)) {"
 			"r.push(x);"
 			"}"
-			"return((r,size(e)));"
+			"return((r,size(z)));"
 			"}"
 		),
 		"([(2, 2), (3, 4), (5, 8), (7, 16), (11, 32), (13, 64), (17, 128), (19, 256)], 8)"
