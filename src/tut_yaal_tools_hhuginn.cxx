@@ -802,9 +802,92 @@ TUT_UNIT_TEST( "input" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "class" )
-	ENSURE_EQUALS( "class failed", execute( "class A{_d=none;}main(){o=A();o._d=\"ok\";return(o._d);}" ), "\"ok\"" );
-	ENSURE_EQUALS( "constructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}}main(){o=A(\"ok\");return(o._d);}" ), "\"ok\"" );
-	ENSURE_EQUALS( "destructor failed", execute( "class A{_d=none;constructor(d_){_d=d_;}destructor(){_d.push(\"ok\");}}main(){l=list();{o=A(l);type(o);}return(l[0]);}" ), "\"ok\"" );
+	ENSURE_EQUALS(
+		"class failed",
+		execute(
+			"class A{_d=none;}"
+			"main(){"
+			"o=A();"
+			"o._d=\"ok\";"
+			"return(o._d);"
+			"}"
+		),
+		"\"ok\""
+	);
+	ENSURE_EQUALS(
+		"default constructor failed",
+		execute(
+			"class A{"
+			"_d=none;"
+			"}"
+			"main(){"
+			"o=A(\"ok\");"
+			"return(o._d);"
+			"}"
+		),
+		"\"ok\""
+	);
+	ENSURE_EQUALS(
+		"default constructor failed",
+		execute(
+			"class A{"
+			"_a=none;"
+			"_b=none;"
+			"}"
+			"main(){"
+			"o=A(\"ok\");"
+			"return(\"{}{}\".format(o._a, o._b));"
+			"}"
+		),
+		"\"oknone\""
+	);
+	ENSURE_EQUALS(
+		"default constructor failed",
+		execute(
+			"class A{"
+			"foo(){_a;}"
+			"_a=none;"
+			"_b=none;"
+			"}"
+			"main(){"
+			"o=A(\"ok\");"
+			"return(\"{}{}\".format(o.foo(), o._b));"
+			"}"
+		),
+		"\"oknone\""
+	);
+	ENSURE_EQUALS(
+		"constructor failed",
+		execute(
+			"class A{"
+			"_d=none;"
+			"constructor(d_){"
+			"_d=d_ + d_;"
+			"}"
+			"}"
+			"main(){"
+			"o=A(\"ok\");"
+			"return(o._d);"
+			"}"
+		),
+		"\"okok\""
+	);
+	ENSURE_EQUALS(
+		"destructor failed",
+		execute(
+			"class A{"
+			"_d=none;"
+			"constructor(d_){_d=d_;}"
+			"destructor(){_d.push(\"ok\");}"
+			"}"
+			"main(){"
+			"l=list();"
+			"{o=A(l);type(o);}"
+			"return(l[0]);"
+			"}"
+		),
+		"\"ok\""
+	);
 	ENSURE_EQUALS(
 		"super failed",
 		execute(

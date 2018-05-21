@@ -909,6 +909,15 @@ char const progExecuteErr95[] =
 	"}\n"
 ;
 
+char const progExecuteErr96[] =
+	"class A {\n"
+	"_a = none; _b = none;\n"
+	"}\n"
+	"main() {\n"
+	"a = A( 0, 1, 2 );\n"
+	"return ( a._a + a._b );\n"
+	"}\n"
+;
 
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
@@ -1033,6 +1042,7 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr93,
 		progExecuteErr94,
 		progExecuteErr95,
+		progExecuteErr96,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1132,6 +1142,7 @@ TUT_UNIT_TEST( "report execution error" )
 /*  93 */ { 28, 3, 13,   "*tress*:3:13: Not enough values to unpack, expected: 2, got: 1." },
 /*  94 */ { 28, 3, 13,   "*tress*:3:13: Too many values to unpack, expected: 2, got: 3." },
 /*  95 */ { 86, 7, 13,   "*tress*:7:13: ./data//CannotParse.hgn:3:1: expected one of characters: -" },
+/*  96 */ { 48, 5, 6,    "*tress*:5:6: Too many arguments for class initializer, expected at most: 2." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
