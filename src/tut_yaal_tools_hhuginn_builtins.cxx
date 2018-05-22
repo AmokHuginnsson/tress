@@ -246,6 +246,36 @@ TUT_UNIT_TEST( "string()" )
 		),
 		"\"a    0x7b 01 b\""
 	);
+	ENSURE_EQUALS(
+		"string.format() alignment failed",
+		execute(
+			"main(){\n"
+			"s=\"[{:<10s}] [{:>10s}] [{:^10s}]\";\n"
+			"return(s.format(\"ala\", \"kot\", \"pies\"));\n"
+			"}\n"
+		),
+		"\"[ala       ] [       kot] [   pies   ]\""
+	);
+	ENSURE_EQUALS(
+		"string.format() def align failed",
+		execute(
+			"main(){\n"
+			"s=\"[{:10s}] [{:10d}] [{:10c}] [{:10n}]\";\n"
+			"return(s.format(\"ala\", 678, '✓', $345));\n"
+			"}\n"
+		),
+		"\"[ala       ] [       678] [✓         ] [       345]\""
+	);
+	ENSURE_EQUALS(
+		"string.format() fill failed",
+		execute(
+			"main(){\n"
+			"s=\"[{:~>7s}] [{:06d}] [{:6d}]\";\n"
+			"return(s.format(\"ala\", 567, 234));\n"
+			"}\n"
+		),
+		"\"[~~~~ala] [000567] [   234]\""
+	);
 	ENSURE_EQUALS( "string.format() n-ary with format spec failed", execute( "main(){return(\"{:4d} {}\".format(17,\"q\"));}" ), "\"  17 q\"" );
 	ENSURE_EQUALS( "string.format() on too few args succeeded", execute_except( "main(){s=\"a {} b\";s.format();}" ), "*anonymous stream*:1:27: Wrong value index at: 3" );
 	ENSURE_EQUALS( "string.format() on too many args succeeded", execute_except( "main(){s=\"a b\";s.format(1);}" ), "*anonymous stream*:1:24: Not all values used in format at: 3" );
