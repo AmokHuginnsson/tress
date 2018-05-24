@@ -55,7 +55,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"statement = ( ifStatement | whileStatement | forStatement | switchStatement | tryCatchStatement | throwStatement | breakStatement | continueStatement | returnStatement | expressionStatement | scope )",
 		"assignablePack = ( () >> assignable >> *( ',' >> assignable ) >> () )",
 		"value = ternary",
-		"parameter = ( ( parameterIdentifier ^ ( \"...\" | \":::\" ) ) >> -( '=' >> expression ) )",
+		"parameter = ( ( parameterIdentifier ^ ( \"...\" | \":::\" ) ) >> -( '=' >> value ) )",
 		"ifStatement = ( ifClause >> *( \"else\" >> ifClause ) >> -( \"else\" >> scope ) )",
 		"whileStatement = ( \"while\" >> '(' >> expression >> ')' >> scope )",
 		"forStatement = ( \"for\" >> '(' >> forCtrlVar >> *( ',' >> forCtrlVar ) >> ':' >> expression >> ')' >> scope )",
@@ -68,25 +68,26 @@ TUT_UNIT_TEST( "grammar test" )
 		"expressionStatement = ( expression >> ';' )",
 		"scope = ( '{' >> *statement >> '}' )",
 		"assignable = ( subscript | variableSetter )",
-		"ternary = ( ( booleanOr >> -( ( \"^^\" | \"⊕\" ) >> booleanOr ) ) >> -( '?' >> expression >> ':' >> expression ) )",
+		"ternary = ( booleanXor >> -( '?' >> expression >> ':' >> expression ) )",
 		"ifClause = ( \"if\" >> '(' >> expression >> ')' >> scope )",
 		"forCtrlVar = assignable",
 		"caseStatement = ( \"case\" >> '(' >> expression >> ')' >> ':' >> scope >> -breakStatement )",
 		"defaultStatement = ( \"default\" >> ':' >> scope )",
 		"catchStatement = ( \"catch\" >> '(' >> exceptionType >> assignable >> ')' >> scope )",
 		"subscript = ( reference >> +( subscriptOperator | functionCallOperator | memberAccess ) )",
-		"booleanOr = ( booleanAnd >> *( ( \"||\" | \"⋁\" ) >> booleanAnd ) )",
+		"booleanXor = ( booleanOr >> -( ( \"^^\" | \"⊕\" ) >> booleanOr ) )",
 		"subscriptOperator = ( '[' >> ( ( ( rangeOper >> -argument ) | ( argument >> -( rangeOper >> -argument ) ) ) >> -( rangeOper >> -argument ) ) >> ']' )",
 		"functionCallOperator = ( '(' >> -( ( argList >> -( ',' >> namedParameters ) ) | namedParameters ) >> ')' )",
 		"memberAccess = ( '.' >> member )",
-		"booleanAnd = ( equality >> *( ( \"&&\" | \"⋀\" ) >> equality ) )",
+		"booleanOr = ( booleanAnd >> *( ( \"||\" | \"⋁\" ) >> booleanAnd ) )",
 		"rangeOper = ':'",
 		"argument = expression",
 		"argList = ( functionArgument >> *( ',' >> functionArgument ) )",
 		"namedParameters = ( () >> namedParameter >> *( ',' >> namedParameter ) >> () >> () )",
-		"equality = ( compare >> -( ( \"==\" | \"!=\" ) >> compare ) )",
+		"booleanAnd = ( equality >> *( ( \"&&\" | \"⋀\" ) >> equality ) )",
 		"functionArgument = ( ( argument ^ ':' ) >> -\"...\" )",
 		"namedParameter = ( parameterName >> ':' >> functionArgument )",
+		"equality = ( compare >> -( ( \"==\" | \"!=\" ) >> compare ) )",
 		"compare = ( sum >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> sum ) )",
 		"sum = ( multiplication >> *( '+-' >> multiplication ) )",
 		"multiplication = ( negation >> *( '*/%' >> negation ) )",
@@ -250,6 +251,16 @@ TUT_UNIT_TEST( "functions (definition)" )
 			"}\n"
 		),
 		"([1, 7, (), {}], [1, 2, (), {}], [1, 2, (3, 4), {}], [1, 7, (), {\"a\": 3}], [1, 2, (3, 4), {\"a\": 5, \"b\": 6}])"
+	);
+	ENSURE_EQUALS(
+		"none as default argument failed",
+		execute(
+			"f( x,y = none, z = none ) {(x, y, z);}\n"
+			"main(){\n"
+			"return([f(1)+f(2,3)+f(4,5,6)]);"
+			"}\n"
+		),
+		"[(1, none, none, 2, 3, none, 4, 5, 6)]"
 	);
 TUT_TEARDOWN()
 
