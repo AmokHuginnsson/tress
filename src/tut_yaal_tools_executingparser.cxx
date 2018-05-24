@@ -1483,6 +1483,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule name( regex( "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b" ) );
 	HRule expression;
+	HRule value;
 	HRule modulus( '|' >> expression >> '|' );
 	HRule parenthesis( '(' >> expression >> ')' );
 	HRule functionArgument( expression ^ ':' );
@@ -1496,7 +1497,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule dictLiteralElement( expression >> ':' >> expression );
 	HRule dictLiteral( '[' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> ']' );
 	HRule lookupLiteral( '{' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> '}' );
-	HRule parameter( ( name ^ ( e_p::constant( "..." ) | ":::" ) ) >> -( '=' >> expression ) );
+	HRule parameter( ( name ^ ( e_p::constant( "..." ) | ":::" ) ) >> -( '=' >> value ) );
 	HRule variadicParameter( name >> "..." );
 	HRule namedParameterCapture( name >> ":::" );
 	HRule nameList( parameter >> ( * ( ',' >> parameter ) ) );
@@ -1538,7 +1539,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule booleanOr( booleanAnd >> *( ( string( "||" ) | "⋁" ) >> booleanAnd ) );
 	HRule booleanXor( booleanOr >> -( ( string( "^^" ) | "⊕" ) >> booleanOr ) );
 	HRule ternary( booleanXor >> -( '?' >> expression >> ':' >> expression ) );
-	HRule value( ternary );
+	value %= ternary;
 	HRule subscript( name >> +( subscriptOperator | functionCallOperator | memberAccess ) );
 	HRule assignable( subscript | name );
 	HRule assignablePack( assignable >> * ( ',' >> assignable ) );
@@ -1576,22 +1577,22 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	char const huginnDesc[][640] = {
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ | ( \"enum\" >> B_ >> '{' >> B_ >> *( ',' >> B_ ) >> '}' ) | ( \"import\" >> B_ >> \"as\" >> B_ >> ';' ) )",
 		"B_ = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
-		"C_ = ( *( ( ( E_ >> *( ',' >> E_ ) ) >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> ( ( F_ >> -( ( \"^^\" | \"⊕\" ) >> F_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) ) )",
+		"C_ = ( *( ( ( E_ >> *( ',' >> E_ ) ) >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> F_ )",
 		"D_ = ( B_ >> G_ )",
 		"E_ = ( ( B_ >> +( H_ | I_ | J_ ) ) | B_ )",
-		"F_ = ( K_ >> *( ( \"||\" | \"⋁\" ) >> K_ ) )",
+		"F_ = ( ( K_ >> -( ( \"^^\" | \"⊕\" ) >> K_ ) ) >> -( '?' >> C_ >> ':' >> C_ ) )",
 		"G_ = ( '(' >> -( ( ( L_ >> *( ',' >> L_ ) ) >> -( ',' >> M_ ) >> -( ',' >> N_ ) ) | ( M_ >> -( ',' >> N_ ) ) | N_ ) >> ')' >> '{' >> *O_ >> '}' )",
 		"H_ = ( '[' >> ( ( ( ':' >> -C_ ) | ( C_ >> -( ':' >> -C_ ) ) ) >> -( ':' >> -C_ ) ) >> ']' )",
 		"I_ = ( ( '(' >> -( P_ >> -( ',' >> Q_ ) ) >> ')' ) | ( '(' >> -Q_ >> ')' ) )",
 		"J_ = ( '.' >> B_ )",
-		"K_ = ( R_ >> *( ( \"&&\" | \"⋀\" ) >> R_ ) )",
-		"L_ = ( ( B_ ^ ( \"...\" | \":::\" ) ) >> -( '=' >> C_ ) )",
+		"K_ = ( R_ >> *( ( \"||\" | \"⋁\" ) >> R_ ) )",
+		"L_ = ( ( B_ ^ ( \"...\" | \":::\" ) ) >> -( '=' >> F_ ) )",
 		"M_ = ( B_ >> \"...\" )",
 		"N_ = ( B_ >> \":::\" )",
 		"O_ = ( S_ | T_ | U_ | V_ | W_ | X_ | Y_ | Z_ | AA_ | AB_ | AC_ )",
 		"P_ = ( AD_ >> *( ',' >> AD_ ) )",
 		"Q_ = ( AE_ >> *( ',' >> AE_ ) )",
-		"R_ = ( AF_ >> -( ( \"==\" | \"!=\" ) >> AF_ ) )",
+		"R_ = ( AF_ >> *( ( \"&&\" | \"⋀\" ) >> AF_ ) )",
 		"S_ = ( AG_ >> *( \"else\" >> AG_ ) >> -( \"else\" >> AC_ ) )",
 		"T_ = ( \"while\" >> '(' >> C_ >> ')' >> AH_ )",
 		"U_ = ( \"for\" >> '(' >> E_ >> ':' >> C_ >> ')' >> AH_ )",
@@ -1605,24 +1606,25 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AC_ = ( '{' >> *O_ >> '}' )",
 		"AD_ = ( C_ ^ ':' )",
 		"AE_ = ( B_ >> ':' >> C_ )",
-		"AF_ = ( AI_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> AI_ ) )",
+		"AF_ = ( AI_ >> -( ( \"==\" | \"!=\" ) >> AI_ ) )",
 		"AG_ = ( \"if\" >> '(' >> C_ >> ')' >> AC_ )",
 		"AH_ = ( '{' >> *( S_ | T_ | U_ | V_ | W_ | X_ | Y_ | Z_ | AA_ | AB_ | AC_ ) >> '}' )",
-		"AI_ = ( AJ_ >> *( '+' >> AJ_ ) )",
-		"AJ_ = ( AK_ >> *( '*' >> AK_ ) )",
-		"AK_ = ( ( '-' >> AK_ ) | ( ( ( '-' >> AL_ ) | AL_ ) >> *( '^' >> AK_ ) ) )",
-		"AL_ = ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( J_ >> AM_ ) ) | real | integer"
+		"AI_ = ( AJ_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> AJ_ ) )",
+		"AJ_ = ( AK_ >> *( '+' >> AK_ ) )",
+		"AK_ = ( AL_ >> *( '*' >> AL_ ) )",
+		"AL_ = ( ( '-' >> AL_ ) | ( ( ( '-' >> AM_ ) | AM_ ) >> *( '^' >> AL_ ) ) )",
+		"AM_ = ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( J_ >> AN_ ) ) | real | integer"
 			" | ( ( ( '$' >> real ) | character_literal ) >> -( J_ >> I_ ) ) | ( ( ( '(' >> -P_ >> -',' >> ')' )"
-			" | ( '[' >> -P_ >> ']' ) | ( '[' >> -( AN_ >> *( ',' >> AN_ ) ) >> ']' )"
-			" | ( '{' >> -( AN_ >> *( ',' >> AN_ ) ) >> '}' )"
-			" | string_literal ) >> -( ( H_ | J_ ) >> AM_ ) )"
-			" | ( ( '{' >> C_ >> *( ',' >> C_ ) >> '}' ) >> -( J_ >> AM_ ) )"
-			" | \"none\" | \"true\" | \"false\" | ( B_ >> AM_ )"
-			" | ( ( '@' >> -( '[' >> AO_ >> *( ',' >> AO_ ) >> ']' ) >> G_ ) >> -( I_ >> AM_ ) ) ) >> -( ( '!' & \"==\" )"
+			" | ( '[' >> -P_ >> ']' ) | ( '[' >> -( AO_ >> *( ',' >> AO_ ) ) >> ']' )"
+			" | ( '{' >> -( AO_ >> *( ',' >> AO_ ) ) >> '}' )"
+			" | string_literal ) >> -( ( H_ | J_ ) >> AN_ ) )"
+			" | ( ( '{' >> C_ >> *( ',' >> C_ ) >> '}' ) >> -( J_ >> AN_ ) )"
+			" | \"none\" | \"true\" | \"false\" | ( B_ >> AN_ )"
+			" | ( ( '@' >> -( '[' >> AP_ >> *( ',' >> AP_ ) >> ']' ) >> G_ ) >> -( I_ >> AN_ ) ) ) >> -( ( '!' & \"==\" )"
 			" | ( '!' ^ '=' ) ) )",
-		"AM_ = *( H_ | I_ | J_ )",
-		"AN_ = ( C_ >> ':' >> C_ )",
-		"AO_ = ( B_ >> -( ':' >> C_ ) )"
+		"AN_ = *( H_ | I_ | J_ )",
+		"AO_ = ( C_ >> ':' >> C_ )",
+		"AP_ = ( B_ >> -( ':' >> C_ ) )"
 	};
 	clog << "hg:" << endl;
 	HGrammarDescription gd( hg );
