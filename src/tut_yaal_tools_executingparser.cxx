@@ -79,7 +79,7 @@ using namespace ll;
 namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_hllexecutingparser );
-TUT_TEST_GROUP( tut_yaal_tools_hllexecutingparser, "yaal::tools::executing_parser" );
+TUT_TEST_GROUP( tut_yaal_tools_hllexecutingparser, "yaal::tools::executing_parser", 64 );
 
 TUT_UNIT_TEST( "empty parser" )
 	HRule r;
@@ -2004,7 +2004,55 @@ TUT_UNIT_TEST( "associativity: calc(deferred), (plus, minus, mul, div, power, re
 	c.reset();
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( 50, "the test" )
+TUT_UNIT_TEST( "named grammar (root problem)" )
+	HRule expr( "expr" );
+	HRule paren( "paren", '(' >> expr >> ')' );
+	HRule atom( "atom", integer | paren );
+	HRule sum( "sum", atom >> *( '+' >> atom ) );
+	expr %= sum;
+	HGrammarDescription gd( sum );
+	char const desc[][64] = {
+		"sum = ( atom >> *( '+' >> atom ) )",
+		"atom = ( integer | paren )",
+		"paren = ( '(' >> expr >> ')' )",
+		"expr = sum"
+	};
+	static int const COUNT( static_cast<int>( end( desc ) - begin( desc ) ) );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		clog << *it << endl;
+		if ( i < COUNT ) {
+			ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
+		}
+	}
+	ENSURE_EQUALS( "wrong grammar description", i, COUNT );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "named grammar (leaf problem)" )
+	HRule expr( "expr" );
+	HRule paren( "paren", '(' >> HRule( expr, HRuleBase::action_t( call( &noop ) ) ) >> ')' );
+	HRule atom( "atom", integer | paren );
+	HRule sum( "sum", atom >> *( '+' >> atom ) );
+	expr %= sum;
+	HGrammarDescription gd( sum );
+	char const desc[][64] = {
+		"sum = ( atom >> *( '+' >> atom ) )",
+		"atom = ( integer | paren )",
+		"paren = ( '(' >> expr >> ')' )",
+		"expr = sum"
+	};
+	static int const COUNT( static_cast<int>( end( desc ) - begin( desc ) ) );
+	int i( 0 );
+	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
+		clog << *it << endl;
+		if ( i < COUNT ) {
+			ENSURE_EQUALS( "wrong grammar description", *it, desc[i] );
+		}
+	}
+	ENSURE_EQUALS( "wrong grammar description", i, COUNT );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "the test" )
 	HArray<double> v;
 	HRule realNo( real[push_back<double>( v )] );
 	ENSURE( "parsing correct input (single real) failed", HExecutingParser( realNo )( "3.141592653589793" ) );
