@@ -892,6 +892,13 @@ char const progCompileErr112[] =
 	"}\n"
 ;
 
+char const progCompileErr113[] =
+	"import RecursiveImport as ri;\n"
+	"main() {\n"
+	"ri;\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -1007,6 +1014,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr110,
 		progCompileErr111,
 		progCompileErr112,
+		progCompileErr113,
 		NULL
 	};
 
@@ -1124,6 +1132,7 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 110 */ { 31, 2, 23, "*anonymous stream*:2:23: Function `math' was already defined." },
 /* 111 */ { 23, 2, 8,  "*anonymous stream*:2:8: Function `Mathematics' was already defined." },
 /* 112 */ { 37, 3, 1,  "*anonymous stream*:3:1: `A' is a class name." },
+/* 113 */ { 7, 1, 8,   "*anonymous stream*:1:8: ./data/RecursiveImport.hgn:1:8: Package `RecursiveImport' is already being imported." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
