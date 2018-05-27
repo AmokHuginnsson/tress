@@ -2348,6 +2348,25 @@ TUT_UNIT_TEST( "Introspection" )
 		),
 		"5.0"
 	);
+	ENSURE_EQUALS(
+		"Introspection.call_stack failed",
+		execute(
+			"import Introspection as intro;\n"
+			"foo( n ) {\n"
+			"r = none;\n"
+			"if ( n > 0 ) {\n"
+			"r = foo( n - 1 );\n"
+			"} else {\n"
+			"r = intro.call_stack();\n"
+			"}\n"
+			"return ( r );\n"
+			"}\n"
+			"main() {\n"
+			"return ( foo( 3 ) );"
+			"}\n"
+		),
+		"[*anonymous stream*:7:21:foo, *anonymous stream*:5:8:foo, *anonymous stream*:5:8:foo, *anonymous stream*:5:8:foo, *anonymous stream*:12:13:main]"
+	);
 TUT_TEARDOWN()
 
 }
