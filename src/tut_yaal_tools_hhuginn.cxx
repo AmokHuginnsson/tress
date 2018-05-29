@@ -2078,7 +2078,7 @@ TUT_UNIT_TEST( "incremental mode" )
 	ENSURE_EQUALS(
 		"unparsable runtime import",
 		execute_incremental( l11 ),
-		"nonenone*anonymous stream*:4:18: ./data/CannotParse.hgn:3:1: expected one of characters: -0"
+		"nonenone*anonymous stream*:4:18: Uncaught IntrospectionException: ./data/CannotParse.hgn:3:1: expected one of characters: -0"
 	);
 	lines_t l12{
 		{ "import Introspection as intro;", OLine::TYPE::IMPORT  },
@@ -2089,7 +2089,7 @@ TUT_UNIT_TEST( "incremental mode" )
 	ENSURE_EQUALS(
 		"uncompilable runtime import",
 		execute_incremental( l12 ),
-		"nonenone*anonymous stream*:4:18: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: an `integer' vs a `real'.0"
+		"nonenone*anonymous stream*:4:18: Uncaught IntrospectionException: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: an `integer' vs a `real'.0"
 	);
 TUT_TEARDOWN()
 

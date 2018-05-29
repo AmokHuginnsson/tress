@@ -1141,7 +1141,7 @@ TUT_UNIT_TEST( "report execution error" )
 /*  92 */ { 28, 3, 13,   "*tress*:3:13: `For` source did not return a `tuple` object." },
 /*  93 */ { 28, 3, 13,   "*tress*:3:13: Not enough values to unpack, expected: 2, got: 1." },
 /*  94 */ { 28, 3, 13,   "*tress*:3:13: Too many values to unpack, expected: 2, got: 3." },
-/*  95 */ { 86, 7, 13,   "*tress*:7:13: ./data//CannotParse.hgn:3:1: expected one of characters: -" },
+/*  95 */ { 86, 7, 13,   "*tress*:7:13: Uncaught IntrospectionException: ./data//CannotParse.hgn:3:1: expected one of characters: -" },
 /*  96 */ { 48, 5, 6,    "*tress*:5:6: Too many arguments for class initializer, expected at most: 2." },
 		{ 0, 0, 0, nullptr }
 	};
