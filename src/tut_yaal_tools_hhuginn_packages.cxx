@@ -946,6 +946,9 @@ TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil($-7.123456));}" ), "$-7" );
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($7.1234567, $7.1235567));}" ), "3" );
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($2234.1234567, $1234.1234567));}" ), "-4" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Matrix" )
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (add) failed",
 		execute(
@@ -1619,6 +1622,124 @@ TUT_UNIT_TEST( "Matrix err" )
 		err
 	);
 #endif /* #ifndef CONTINUOUS_INTEGRATION_TRAVIS */
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Mathematics Complex" )
+	ENSURE_EQUALS(
+		"Mathematics.Complex add",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"a = math.Complex(1.,2.);\n"
+			"b = math.Complex(3.,4.);\n"
+			"return(a + b);\n"
+			"}\n"
+		),
+		"math.Complex(4.0, 6.0)"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Complex sub",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"a = math.Complex(1.,2.);\n"
+			"b = math.Complex(3.,4.);\n"
+			"return(a - b);\n"
+			"}\n"
+		),
+		"math.Complex(-2.0, -2.0)"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Complex mul",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"a = math.Complex(1.,2.);\n"
+			"b = math.Complex(3.,4.);\n"
+			"return(a * b);\n"
+			"}\n"
+		),
+		"math.Complex(-5.0, 10.0)"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Complex div",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"a = math.Complex(1.,2.);\n"
+			"b = math.Complex(3.,4.);\n"
+			"return(a / b);\n"
+			"}\n"
+		),
+		"math.Complex(0.44, 0.08)"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Complex mod",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"b = math.Complex(3.,4.);\n"
+			"return(|b|);\n"
+			"}\n"
+		),
+		"5.0"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Complex neg",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"b = math.Complex(3.,4.);\n"
+			"return( - b );\n"
+			"}\n"
+		),
+		"math.Complex(-3.0, -4.0)"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Complex argument",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"b = math.Complex(3.,4.);\n"
+			"return( b.argument() );\n"
+			"}\n"
+		),
+		"0.927295218002"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Complex real/imaginary",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"b = math.Complex(3.,4.);\n"
+			"return( ( b.real(), b.imaginary() ) );\n"
+			"}\n"
+		),
+		"(3.0, 4.0)"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Complex get",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"b = math.Complex(3.,4.);\n"
+			"return( b.get() );\n"
+			"}\n"
+		),
+		"(3.0, 4.0)"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Complex set",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"b = math.Complex(0.,0.);\n"
+			"b.set(3.,4.);\n"
+			"return( b.get() );\n"
+			"}\n"
+		),
+		"(3.0, 4.0)"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Database" )
