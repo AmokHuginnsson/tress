@@ -1169,6 +1169,20 @@ TUT_UNIT_TEST( "set()" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "blob" )
+	ENSURE_EQUALS(
+		"blob copy",
+		execute(
+			"main(){\n"
+			"b=blob(100);\n"
+			"bc = copy( b );"
+			"return(size(bc));\n"
+			"}\n"
+		),
+		"100"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "Stream" )
 	ENSURE_EQUALS(
 		"(de)serialization - none",
@@ -1476,6 +1490,50 @@ TUT_UNIT_TEST( "Stream" )
 			"[13, '✓', \"Huginn\", $123456789012345678901234567890, [1, 2, 3, 4, 5], 9.87654321, [1: 2, 2: 4, 3: 8], (7, 6, 5), {1: 2, \"abc\": 3, 2.718281828459: type, 'π': $3.1415926535897932}]",
 			"[13, '✓', \"Huginn\", $123456789012345678901234567890, [1, 2, 3, 4, 5], 9.87654321, [1: 2, 2: 4, 3: 8], (7, 6, 5), {1: 2, 2.718281828459: type, \"abc\": 3, 'π': $3.1415926535897932}]"
 		} )
+	);
+TUT_TEARDOWN()
+
+// 012345678901234567890
+// tppppcccciiiisddddddd
+
+TUT_UNIT_TEST( "Stream deserialize number errors" )
+	ENSURE_EQUALS(
+		"deserialization - number (1)",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"{fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize($3.141592653589793);}\n"
+			"b = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ).read_blob(1000);\n"
+			"res = [];\n"
+			"for( l : [1, 5, 9, 12, 13, 24, 25 ] ) {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).write_blob(b, l + 1);\n"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"try {\n"
+			"res.push(f.deserialize());\n"
+			"}catch(Exception e) {\n"
+			"res.push( e.what() );\n"
+			"}\n"
+			"}\n"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"t = f.read_integer(1);"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).write_integer(t,1).write_integer(24,4).write_integer(3,4).write_integer(7,4).write_integer(3,4).write_integer(14159265,4).write_integer(3589793,4);\n"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"try {\n"
+			"res.push(f.deserialize());\n"
+			"}catch(Exception e) {\n"
+			"res.push( e.what() );\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[\"Not enough data in the stream.\", "
+		"\"Not enough data in the stream.\", "
+		"\"Not enough data in the stream.\", "
+		"\"Not enough data in the stream.\", "
+		"\"Not enough data in the stream.\", "
+		"\"Not enough data in the stream.\", "
+		"$3.141592653589793, "
+		"\"Malformed Huginn data stream.\"]"
 	);
 TUT_TEARDOWN()
 
