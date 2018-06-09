@@ -1674,6 +1674,18 @@ TUT_UNIT_TEST( "Mathematics Complex" )
 		"math.Complex(0.44, 0.08)"
 	);
 	ENSURE_EQUALS(
+		"Mathematics.Complex div (0+0i)",
+		execute_except(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"a = math.Complex(1.,2.);\n"
+			"b = math.Complex(0.,0.);\n"
+			"return(a / b);\n"
+			"}\n"
+		),
+		"*anonymous stream*:5:10: Uncaught ArithmeticException: denominator equals 0"
+	);
+	ENSURE_EQUALS(
 		"Mathematics.Complex mod",
 		execute(
 			"import Mathematics as math;\n"
@@ -1705,6 +1717,17 @@ TUT_UNIT_TEST( "Mathematics Complex" )
 			"}\n"
 		),
 		"0.927295218002"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Complex argument (0+0i)",
+		execute_except(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"b = math.Complex(0.,0.);\n"
+			"return( b.argument() );\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:19: Uncaught ArithmeticException: Argument for 0 + 0i is undefined."
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Complex real/imaginary",
