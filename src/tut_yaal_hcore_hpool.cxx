@@ -97,7 +97,6 @@ TUT_UNIT_TEST( "object space size" )
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<5> )>::OBJECT_SPACE + 0, 8 );
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<6> )>::OBJECT_SPACE + 0, 8 );
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<7> )>::OBJECT_SPACE + 0, 8 );
-#if TARGET_CPU_BITS == 64
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( int long long )>::OBJECT_SPACE + 0, 16 );
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<9> )>::OBJECT_SPACE + 0, 16 );
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<10> )>::OBJECT_SPACE + 0, 16 );
@@ -115,27 +114,6 @@ TUT_UNIT_TEST( "object space size" )
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<23> )>::OBJECT_SPACE + 0, 24 );
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<24> )>::OBJECT_SPACE + 0, 32 );
 	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<25> )>::OBJECT_SPACE + 0, 32 );
-#elif TARGET_CPU_BITS == 32 /* #if TARGET_CPU_BITS == 64 */
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( int long long )>::OBJECT_SPACE + 0, 12 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<9> )>::OBJECT_SPACE + 0, 12 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<10> )>::OBJECT_SPACE + 0, 12 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<11> )>::OBJECT_SPACE + 0, 12 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<12> )>::OBJECT_SPACE + 0, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<13> )>::OBJECT_SPACE + 0, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<14> )>::OBJECT_SPACE + 0, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<15> )>::OBJECT_SPACE + 0, 16 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<16> )>::OBJECT_SPACE + 0, 20 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<18> )>::OBJECT_SPACE + 0, 20 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<19> )>::OBJECT_SPACE + 0, 20 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<20> )>::OBJECT_SPACE + 0, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<21> )>::OBJECT_SPACE + 0, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<22> )>::OBJECT_SPACE + 0, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<23> )>::OBJECT_SPACE + 0, 24 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<24> )>::OBJECT_SPACE + 0, 28 );
-	ENSURE_EQUALS( "bad object space size of char", HPool<sizeof ( Sizer<25> )>::OBJECT_SPACE + 0, 28 );
-#else /* #elif TARGET_CPU_BITS == 32 #if TARGET_CPU_BITS == 64 */
-#error Unsupported CPU bitness.
-#endif /* #else #elif TARGET_CPU_BITS == 32 #if TARGET_CPU_BITS == 64 */
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "constructor" )
