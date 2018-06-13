@@ -168,6 +168,22 @@ TUT_UNIT_TEST( "Algorithms" )
 		"[[9, 289, 16], 3]"
 	);
 	ENSURE_EQUALS(
+		"Algorithms.map (ubound method) failed",
+		execute(
+			"import Algorithms as algo;"
+			"main(){"
+			"l=[\"ala\",\"ma\",\"kota\"];"
+			"m=algo.map(l,string.to_upper);"
+			"l=[];\n"
+			"for(x : copy(m)) {"
+			"l.push(x);"
+			"}"
+			"return([l,size(m)]);"
+			"}"
+		),
+		"[[\"ALA\", \"MA\", \"KOTA\"], 3]"
+	);
+	ENSURE_EQUALS(
 		"Algorithms.range failed",
 		execute(
 			"import Algorithms as algo;"
@@ -191,6 +207,16 @@ TUT_UNIT_TEST( "Algorithms" )
 			"}"
 		),
 		"*anonymous stream*:1:44: Invalid range."
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize (to tuple) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.range(3, 17, 4),tuple));\n"
+			"}"
+		),
+		"(3, 7, 11, 15)"
 	);
 	ENSURE_EQUALS(
 		"Algorithms.materialize (to list) failed",
@@ -262,6 +288,16 @@ TUT_UNIT_TEST( "Algorithms" )
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
+			"return(algo.reduce(algo.range(3, 17, 4),list.push,[]));\n"
+			"}"
+		),
+		"[3, 7, 11, 15]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.reduce (method) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
 			"return(algo.reduce(algo.range(3, 17, 4),@(x,y){x+y;}));\n"
 			"}"
 		),
@@ -289,6 +325,16 @@ TUT_UNIT_TEST( "Algorithms" )
 		"*anonymous stream*:4:12: Getting size of `Filter' is an invalid operation."
 	);
 	ENSURE_EQUALS(
+		"Algorithms.filter (invalid function) failed",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.filter(algo.range(3, 44, 4),@(x){x;}),list));\n"
+			"}"
+		),
+		"*anonymous stream*:3:24: Filter function returned wrong type, expected `boolean' got: `integer'."
+	);
+	ENSURE_EQUALS(
 		"Algorithms.filter (function) failed",
 		execute(
 			"import Algorithms as algo;\n"
@@ -312,6 +358,40 @@ TUT_UNIT_TEST( "Algorithms" )
 			"}"
 		),
 		"[3, 15, 27, 39]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.filter (invalid bound method) failed",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.filter(algo.range(3, 44, 4),[].push),list));\n"
+			"}"
+		),
+		"*anonymous stream*:3:24: Filter functor returned wrong type, expected `boolean' got: `list'."
+	);
+	ENSURE_EQUALS(
+		"Algorithms.filter (unbound method) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"q = \"a1b2c3d4efgh78iop9zzz\";\n"
+			"f = algo.filter(q,character.is_digit);\n"
+			"F = copy(f);\n"
+			"q += \"0\";\n"
+			"return(algo.reduce(algo.materialize(f,list)+algo.materialize(F,list), @(x,y){x+string(y);},\"\"));\n"
+			"}"
+		),
+		"\"123478901234789\""
+	);
+	ENSURE_EQUALS(
+		"Algorithms.filter (invalid unbound method) failed",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.filter(['a','b','c'],character.to_upper),list));\n"
+			"}"
+		),
+		"*anonymous stream*:3:24: Filter functor returned wrong type, expected `boolean' got: `character'."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.sorted (tuple) failed",
@@ -435,6 +515,26 @@ TUT_UNIT_TEST( "Algorithms" )
 			"}"
 		),
 		"['0', '2', '3', '5', '7', '9']"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.max failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.max(77, 7, 39, 57, 80, 16, 72, 70, 87, 33));\n"
+			"}"
+		),
+		"87"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.min failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.min(77, 7, 39, 57, 80, 16, 72, 70, 87, 33));\n"
+			"}"
+		),
+		"7"
 	);
 TUT_TEARDOWN()
 
