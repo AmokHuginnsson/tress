@@ -67,6 +67,24 @@ TUT_UNIT_TEST( "Algorithms" )
 		"[2, 3, 5, 7, 11, 13, 17, 19]"
 	);
 	ENSURE_EQUALS(
+		"Algorithms.iterator failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"l=[2,3,5];\n"
+			"i = algo.iterator(l);\n"
+			"ci = copy( i );\n"
+			"l.push(7);\n"
+			"res = [];"
+			"res.push( size( i ) );\n"
+			"res.push( algo.materialize( i, list ) );\n"
+			"res.push( algo.materialize( ci, list ) );\n"
+			"return(res);"
+			"}"
+		),
+		"[4, [2, 3, 5, 7], [2, 3, 5]]"
+	);
+	ENSURE_EQUALS(
 		"Algorithms.zip failed",
 		execute(
 			"import Algorithms as algo;"
@@ -1413,6 +1431,22 @@ TUT_UNIT_TEST( "Matrix" )
 		"true"
 	);
 	ENSURE_EQUALS(
+		"Mathematics.Randomizer.seed failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"r=math.Randomizer(100);\n"
+			"r.seed(0);\n"
+			"l1 = algo.materialize(algo.map(algo.range(16),@[r](_){_;r.next();}),list);\n"
+			"r.seed(0);\n"
+			"l2 = algo.materialize(algo.map(algo.range(16),@[r](_){_;r.next();}),list);\n"
+			"return((l1,l2, l1 == l2));\n"
+			"}\n"
+		),
+		"([64, 52, 17, 53, 94, 11, 29, 1, 26, 25, 73, 11, 22, 98, 46, 38], [64, 52, 17, 53, 94, 11, 29, 1, 26, 25, 73, 11, 22, 98, 46, 38], true)"
+	);
+	ENSURE_EQUALS(
 		"Mathematics.Randomizer invalid cap succeeded",
 		execute_except(
 			"import Mathematics as math;\n"
@@ -1990,6 +2024,36 @@ TUT_UNIT_TEST( "OperatingSystem" )
 			"}"
 		),
 		"\"debug\""
+	);
+	ENSURE_EQUALS(
+		"OperatingSystem.getuid",
+		execute(
+			"import OperatingSystem as os;"
+			"main(){"
+			"return(os.getuid());"
+			"}"
+		),
+		to_string( system::get_user_id() )
+	);
+	ENSURE_EQUALS(
+		"OperatingSystem.getgid",
+		execute(
+			"import OperatingSystem as os;"
+			"main(){"
+			"return(os.getgid());"
+			"}"
+		),
+		to_string( system::get_group_id() )
+	);
+	ENSURE_EQUALS(
+		"OperatingSystem.getpid",
+		execute(
+			"import OperatingSystem as os;"
+			"main(){"
+			"return(os.getpid());"
+			"}"
+		),
+		to_string( system::getpid() )
 	);
 #ifndef __MSVCXX__
 	char const expectedExec[] = "No such file or directory";
