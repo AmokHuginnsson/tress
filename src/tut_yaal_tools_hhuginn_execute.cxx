@@ -919,6 +919,44 @@ char const progExecuteErr96[] =
 	"}\n"
 ;
 
+char const progExecuteErr97[] =
+	"import OperatingSystem as os;\n"
+	"main() {\n"
+	"return ( os.stdout().SEEK );\n"
+	"}\n"
+;
+
+char const progExecuteErr98[] =
+	"enum COLOR {\n"
+	"\tRED\n"
+	"}\n"
+	"main() {\n"
+	"return ( COLOR.BLUE );\n"
+	"}\n"
+;
+
+char const progExecuteErr99[] =
+	"enum COLOR {\n"
+	"\tRED\n"
+	"}\n"
+	"main() {\n"
+	"COLOR.RED = 0;\n"
+	"}\n"
+;
+
+char const progExecuteErr100[] =
+	"main() {\n"
+	"return ( type.x );\n"
+	"}\n"
+;
+
+char const progExecuteErr101[] =
+	"main() {\n"
+	"x = 0;\n"
+	"return ( x[:] );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1043,6 +1081,11 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr94,
 		progExecuteErr95,
 		progExecuteErr96,
+		progExecuteErr97,
+		progExecuteErr98,
+		progExecuteErr99,
+		progExecuteErr100,
+		progExecuteErr101,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1143,6 +1186,11 @@ TUT_UNIT_TEST( "report execution error" )
 /*  94 */ { 28, 3, 13,   "*tress*:3:13: Too many values to unpack, expected: 2, got: 3." },
 /*  95 */ { 86, 7, 13,   "*tress*:7:13: Uncaught IntrospectionException: ./data//CannotParse.hgn:3:1: expected one of characters: -" },
 /*  96 */ { 48, 5, 6,    "*tress*:5:6: Too many arguments for class initializer, expected at most: 2." },
+/*  97 */ { 59, 3, 21,   "*tress*:3:21: `SEEK' member of `Stream' must be accessed from static context." },
+/*  98 */ { 43, 5, 15,   "*tress*:5:15: `COLOR' does not have `BLUE' member (did you mean `RED'?)." },
+/*  99 */ { 34, 5, 6,    "*tress*:5:6: Assignment to read-only location." },
+/* 100 */ { 22, 2, 14,   "*tress*:2:14: `type' is not a compound object." },
+/* 100 */ { 26, 3, 11,   "*tress*:3:11: Range operator not supported on `integer'." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

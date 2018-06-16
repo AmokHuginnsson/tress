@@ -229,6 +229,19 @@ TUT_UNIT_TEST( "functions (definition)" )
 		"([1, 7, ()], [1, 2, ()], [1, 2, (3, 4)])"
 	);
 	ENSURE_EQUALS(
+		"variadic unpacking failed",
+		execute(
+			"f( a, b, c ){\n"
+			"\treturn([a, b, c]);\n"
+			"}\n"
+			"main(){\n"
+			"x = ( 1, 2, 3 );\n"
+			"\treturn(f(x...));\n"
+			"}\n"
+		),
+		"[1, 2, 3]"
+	);
+	ENSURE_EQUALS(
 		"keyword arguments failed",
 		execute(
 			"f( x, y = 7, kwArgs::: ){\n"
@@ -240,6 +253,21 @@ TUT_UNIT_TEST( "functions (definition)" )
 		),
 		"([1, 7, {}], [1, 2, {}], [1, 2, {\"a\": 3, \"b\": 4}])"
 	);
+#if 0 /* *TODO* *FIXME* Uncomment after keyword arguments unpacking is implemented */
+	ENSURE_EQUALS(
+		"keyword arguments unpacking failed",
+		execute(
+			"f( a, b, c ){\n"
+			"\treturn([a, b, c]);\n"
+			"}\n"
+			"main(){\n"
+			"x = { \"a\": 1, \"b\": 2, \"c\": 3 };\n"
+			"\treturn(f(x:::));\n"
+			"}\n"
+		),
+		"[1, 2, 3]"
+	);
+#endif
 	ENSURE_EQUALS(
 		"variadic and keyword arguments failed",
 		execute(
@@ -261,6 +289,21 @@ TUT_UNIT_TEST( "functions (definition)" )
 			"}\n"
 		),
 		"[(1, none, none, 2, 3, none, 4, 5, 6)]"
+	);
+	ENSURE_EQUALS(
+		"user defined functor",
+		execute(
+			"class Functor {\n"
+			"call(x) {\n"
+			"return ( x * x );\n"
+			"}\n"
+			"}\n"
+			"main(){\n"
+			"f = Functor();\n"
+			"return(f(2));"
+			"}\n"
+		),
+		"4"
 	);
 TUT_TEARDOWN()
 
