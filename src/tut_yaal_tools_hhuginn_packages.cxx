@@ -579,6 +579,7 @@ TUT_UNIT_TEST( "FileSystem" )
 	hcore::HString filename( "./out/huginn-file.dat" );
 	hcore::HString filenameMoved( "./out/huginn-file.alt" );
 	hcore::HString data( "huginn-data" );
+	hcore::HString dataAppend( "huginn-data-append" );
 	try {
 		filesystem::remove( filename );
 	} catch ( HFileSystemException const& ) {
@@ -607,6 +608,18 @@ TUT_UNIT_TEST( "FileSystem" )
 		),
 		"\""_ys.append( data ).append( '"' )
 	);
+	execute(
+		"import FileSystem as fs;"
+		"main(){"
+		"f=fs.open(\""_ys.append( filename ).append( "\",fs.OPEN_MODE.APPEND);"
+		"f.write_line(\"" ).append( dataAppend ).append( "\");"
+		"return(0);"
+		"}" )
+	);
+	f.open( filename, HFile::OPEN::READING );
+	getline( f, line );
+	f.close();
+	ENSURE_EQUALS( "bad append from Huginn.FileSystem", line, data + dataAppend );
 	execute(
 		"import FileSystem as fs;"
 		"main(){"
