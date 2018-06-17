@@ -957,6 +957,22 @@ char const progExecuteErr101[] =
 	"}\n"
 ;
 
+char const progExecuteErr102[] =
+	"f(){}\n"
+	"main() {\n"
+	"x = 0;\n"
+	"return ( f(x...) );\n"
+	"}\n"
+;
+
+char const progExecuteErr103[] =
+	"f(){}\n"
+	"main() {\n"
+	"x = 0;\n"
+	"return ( f(x:::) );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1086,6 +1102,8 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr99,
 		progExecuteErr100,
 		progExecuteErr101,
+		progExecuteErr102,
+		progExecuteErr103,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1190,7 +1208,9 @@ TUT_UNIT_TEST( "report execution error" )
 /*  98 */ { 43, 5, 15,   "*tress*:5:15: `COLOR' does not have `BLUE' member (did you mean `RED'?)." },
 /*  99 */ { 34, 5, 6,    "*tress*:5:6: Assignment to read-only location." },
 /* 100 */ { 22, 2, 14,   "*tress*:2:14: `type' is not a compound object." },
-/* 100 */ { 26, 3, 11,   "*tress*:3:11: Range operator not supported on `integer'." },
+/* 101 */ { 26, 3, 11,   "*tress*:3:11: Range operator not supported on `integer'." },
+/* 102 */ { 34, 4, 13,   "*tress*:4:13: Unpacked parameter is an `integer' instead of a `tuple`." },
+/* 103 */ { 34, 4, 13,   "*tress*:4:13: Packed parameter is an `integer' instead of a `lookup`." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

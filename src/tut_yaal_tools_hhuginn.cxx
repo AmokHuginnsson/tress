@@ -191,7 +191,7 @@ TUT_UNIT_TEST( "set variable" )
 	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( hr._result.raw() )->value(), 7 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "functions (definition)" )
+TUT_UNIT_TEST( "function definitions/calls/default arguments/variadic paramaters/named parameters" )
 	ENSURE_EQUALS(
 		"function result failed",
 		execute( "f(){return(7);}main(){return(f());}" ),
@@ -256,7 +256,6 @@ TUT_UNIT_TEST( "functions (definition)" )
 		),
 		"([1, 7, {}], [1, 2, {}], [1, 2, {\"a\": 3, \"b\": 4}])"
 	);
-#if 0 /* *TODO* *FIXME* Uncomment after keyword arguments unpacking is implemented */
 	ENSURE_EQUALS(
 		"keyword arguments unpacking failed",
 		execute(
@@ -270,7 +269,6 @@ TUT_UNIT_TEST( "functions (definition)" )
 		),
 		"[1, 2, 3]"
 	);
-#endif
 	ENSURE_EQUALS(
 		"variadic and keyword arguments failed",
 		execute(
@@ -307,6 +305,36 @@ TUT_UNIT_TEST( "functions (definition)" )
 			"}\n"
 		),
 		"4"
+	);
+	ENSURE_EQUALS(
+		"forwarding failed",
+		execute(
+			"bar( a, b, args..., kwArgs::: ) {\n"
+			"return ((a, b, args, kwArgs));\n"
+			"}\n"
+			"foo( a, b, args..., kwArgs::: ) {\n"
+			"return (bar(a, b, args..., kwArgs:::));\n"
+			"}\n"
+			"main(){\n"
+			"return(foo(1, 2, 3, 4, x:5, y: 6));"
+			"}\n"
+		),
+		"(1, 2, (3, 4), {\"x\": 5, \"y\": 6})"
+	);
+	ENSURE_EQUALS(
+		"forward and expand failed",
+		execute(
+			"bar( a, b, args..., kwArgs::: ) {\n"
+			"return ((a, b, args, kwArgs));\n"
+			"}\n"
+			"foo( a, b, c, d, e, f, args..., kwArgs::: ) {\n"
+			"return (bar(a, b, c, d, args..., kwArgs:::, e: e, f: f));\n"
+			"}\n"
+			"main(){\n"
+			"return(foo(1, 2, 3, 4, 5, 6, 7, 8, x:9, y: 0));"
+			"}\n"
+		),
+		"(1, 2, (3, 4, 7, 8), {\"x\": 9, \"y\": 0, \"e\": 5, \"f\": 6})"
 	);
 TUT_TEARDOWN()
 
