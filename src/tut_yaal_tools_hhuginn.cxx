@@ -1093,6 +1093,21 @@ TUT_UNIT_TEST( "enum" )
 		"(COLOR.RED, COLOR.GREEN, COLOR.BLUE)"
 	);
 	ENSURE_EQUALS(
+		"user enum failed",
+		execute(
+			"enum COLOR {\n"
+			"RED,\n"
+			"GREEN,\n"
+			"BLUE\n"
+			"}\n"
+			"main(){\n"
+			"r = COLOR.RED;"
+			"return((r == COLOR.RED, r == COLOR.BLUE));\n"
+			"}"
+		),
+		"(true, false)"
+	);
+	ENSURE_EQUALS(
 		"built-in enum failed",
 		execute(
 			"import FileSystem as fs;"

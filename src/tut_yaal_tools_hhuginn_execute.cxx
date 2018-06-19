@@ -927,17 +927,18 @@ char const progExecuteErr97[] =
 ;
 
 char const progExecuteErr98[] =
-	"enum COLOR {\n"
-	"\tRED\n"
+	"class COLOR {\n"
+	"\tRED = 0;\n"
 	"}\n"
 	"main() {\n"
+	"COLOR.RED;\n"
 	"return ( COLOR.BLUE );\n"
 	"}\n"
 ;
 
 char const progExecuteErr99[] =
-	"enum COLOR {\n"
-	"\tRED\n"
+	"class COLOR {\n"
+	"\tRED = 0;\n"
 	"}\n"
 	"main() {\n"
 	"COLOR.RED = 0;\n"
@@ -970,6 +971,32 @@ char const progExecuteErr103[] =
 	"main() {\n"
 	"x = 0;\n"
 	"return ( f(x:::) );\n"
+	"}\n"
+;
+
+char const progExecuteErr104[] =
+	"main() {\n"
+	"x = (0, 0);\n"
+	"x[0] = 0;\n"
+	"}\n"
+;
+
+char const progExecuteErr105[] =
+	"class A {\n"
+	"negate() {\n"
+	"return ( 0 );\n"
+	"}\n"
+	"}\n"
+	"main() {\n"
+	"a = A();\n"
+	"return ( -a );\n"
+	"}\n"
+;
+
+char const progExecuteErr106[] =
+	"main() {\n"
+	"a = $123456789012345678901234567890;\n"
+	"return ( integer( a ) );\n"
 	"}\n"
 ;
 
@@ -1104,6 +1131,9 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr101,
 		progExecuteErr102,
 		progExecuteErr103,
+		progExecuteErr104,
+		progExecuteErr105,
+		progExecuteErr106,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1205,12 +1235,15 @@ TUT_UNIT_TEST( "report execution error" )
 /*  95 */ { 86, 7, 13,   "*tress*:7:13: Uncaught IntrospectionException: ./data//CannotParse.hgn:3:1: expected one of characters: -" },
 /*  96 */ { 48, 5, 6,    "*tress*:5:6: Too many arguments for class initializer, expected at most: 2." },
 /*  97 */ { 59, 3, 21,   "*tress*:3:21: `SEEK' member of `Stream' must be accessed from static context." },
-/*  98 */ { 43, 5, 15,   "*tress*:5:15: `COLOR' does not have `BLUE' member (did you mean `RED'?)." },
-/*  99 */ { 34, 5, 6,    "*tress*:5:6: Assignment to read-only location." },
+/*  98 */ { 60, 6, 15,   "*tress*:6:15: `COLOR' does not have `BLUE' member (did you mean `RED'?)." },
+/*  99 */ { 40, 5, 6,    "*tress*:5:6: Assignment to read-only location." },
 /* 100 */ { 22, 2, 14,   "*tress*:2:14: `type' is not a compound object." },
 /* 101 */ { 26, 3, 11,   "*tress*:3:11: Range operator not supported on `integer'." },
 /* 102 */ { 34, 4, 13,   "*tress*:4:13: Unpacked parameter is an `integer' instead of a `tuple`." },
 /* 103 */ { 34, 4, 13,   "*tress*:4:13: Packed parameter is an `integer' instead of a `lookup`." },
+/* 104 */ { 22, 3, 2,    "*tress*:3:2: `tuple` does not support item assignment." },
+/* 105 */ { 66, 8, 10,   "*tress*:8:10: Arithmetic method `negate' on an `A' returned result of incompatible type an `integer'." },
+/* 105 */ { 62, 3, 17,   "*tress*:3:17: Uncaught ConversionException: integer overflow" },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
