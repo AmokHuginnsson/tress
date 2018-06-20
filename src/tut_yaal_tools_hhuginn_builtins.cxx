@@ -131,6 +131,15 @@ TUT_UNIT_TEST( "less" )
 	ENSURE_EQUALS( "less number failed", execute( "main(){return([$0<$1,$0<$0]);}" ), "[true, false]" );
 	ENSURE_EQUALS( "less character failed", execute( "main(){return(['0'<'1','0'<'0']);}" ), "[true, false]" );
 	ENSURE_EQUALS( "less string failed", execute( "main(){return([\"0\"<\"1\",\"0\"<\"0\"]);}" ), "[true, false]" );
+	ENSURE_EQUALS(
+		"less on *function reference*",
+		execute(
+			"main() {\n"
+			"return((size < type, type < copy, size < copy, type < size, copy < type, copy < size ));\n"
+			"}\n"
+		),
+		"(true, true, true, false, false, false)"
+	);
 	ENSURE_EQUALS( "bad less user succeeded", execute_except( "class A{less(x){return(none);}}main(){return(A()<A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:49: Comparison method `less' returned non-boolean result of a `*none*' type." );
 	ENSURE_EQUALS( "missing less user succeeded", execute_except( "class A{_x=none;}main(){return(A()<A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `less' method." );
 TUT_TEARDOWN()
@@ -1535,6 +1544,50 @@ TUT_UNIT_TEST( "Stream deserialize number errors" )
 		"$3.141592653589793, "
 		"\"Malformed Huginn data stream.\"]"
 	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "to_string" )
+	ENSURE_EQUALS(
+		"cycle detection failed",
+		execute(
+			"main() {\n"
+			"t = ( 0, 1 );\n"
+			"x = [t];\n"
+			"l = [ 0, 1 ];\n"
+			"d = [ 0: 3.14159, 1: 2.71828 ];\n"
+			"h = { 0: 3.14159, 1: 2.71828 };\n"
+			"t += ( x, );\n"
+			"l.push( l );\n"
+			"d[2] = d;\n"
+			"h[2] = h;\n"
+			"s = string( ( t, l, d, h ) );\n"
+			"x.clear();\n"
+			"l[2] = none;\n"
+			"d.erase( 2 );\n"
+			"h.erase( 2 );\n"
+			"return ( s );\n"
+			"}\n"
+		),
+		"\"((0, 1, [none/*(cycle)*/]), [0, 1, none/*[cycle]*/], [0: 3.14159, 1: 2.71828, 2: none/*cycle*/], {0: 3.14159, 1: 2.71828, 2: none/*{cycle}*/})\""
+	);
+	ENSURE_EQUALS(
+		"to_string function_reference with origin failed",
+		execute(
+			"import Mathematics as math;"
+			"main() {\n"
+			"return ( type( math.Complex( 0., 0. ) ) );\n"
+			"}\n"
+		),
+		"math.Complex"
+	);
+	HHuginn h;
+	HStringStream ss( "class A{x=none;}main(){x=A();return((x,type));}" );
+	h.load( ss );
+	h.preprocess();
+	h.parse();
+	h.compile();
+	h.execute();
+	ENSURE_EQUALS( "to_string out of Huginn failed", tools::to_string( h.result() ), "(A, *function_reference*)" );
 TUT_TEARDOWN()
 
 }
