@@ -1788,6 +1788,59 @@ TUT_UNIT_TEST( "binary packages" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "create Huginn value from C++" )
+	/* main types */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		h->add_argument( h->value( 7LL ) );
+		h->add_argument( h->value( 3.14159L ) );
+		h->add_argument( h->value( "2.718281828459045"_yn ) );
+		h->add_argument( h->value( "Huginn"_ys ) );
+		h->add_argument( h->value( 10003_ycp ) );
+		h->add_argument( h->value( true ) );
+		h->add_argument( h->value( false ) );
+		h->add_argument( h->value( static_cast<void const*>( 0 ) ) );
+		h->add_argument( h->value( int_array_t{ 1, 2, 3, 4 } ) );
+		h->add_argument( h->value( int_deque_t{ 5, 6, 7, 8 } ) );
+		ENSURE_EQUALS(
+			"binary package failed",
+			execute(
+				h,
+				"main( argv_ ) {\n"
+				"return( argv_ );\n"
+				"}\n"
+			),
+			"[7, 3.14159, $2.718281828459045, \"Huginn\", '✓', true, false, none, [1, 2, 3, 4], deque(5, 6, 7, 8)]"
+		);
+	}
+	/* forwarded types */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		h->add_argument( h->value( static_cast<int short>( 1 ) ) );
+		h->add_argument( h->value( static_cast<int short unsigned>( 2 ) ) );
+		h->add_argument( h->value( static_cast<int>( 3 ) ) );
+		h->add_argument( h->value( static_cast<int unsigned>( 4 ) ) );
+		h->add_argument( h->value( static_cast<int long>( 5 ) ) );
+		h->add_argument( h->value( static_cast<int long unsigned>( 6 ) ) );
+		h->add_argument( h->value( static_cast<int long long>( 7 ) ) );
+		h->add_argument( h->value( static_cast<int long long unsigned>( 8 ) ) );
+		h->add_argument( h->value( static_cast<float>( 3.14 ) ) );
+		h->add_argument( h->value( static_cast<double>( 3.1415 ) ) );
+		h->add_argument( h->value( static_cast<double long>( 3.14159265 ) ) );
+		h->add_argument( h->value( "yaal" ) );
+		h->add_argument( h->value( nullptr ) );
+		ENSURE_EQUALS(
+			"binary package failed",
+			execute(
+				h,
+				"main( argv_ ) {\n"
+				"argv_[8] = real(string(argv_[8])[:4]);\n"
+				"return( argv_ );\n"
+				"}\n"
+			),
+			"[1, 2, 3, 4, 5, 6, 7, 8, 3.14, 3.1415, 3.14159265, \"yaal\", none]"
+		);
+	}
+TUT_TEARDOWN()
+
 namespace {
 HHuginn::value_t native_add( huginn::HThread* thread_, HHuginn::value_t*, HHuginn::values_t& values_, int position_ ) {
 	verify_signature( "native_add", values_, { HHuginn::TYPE::INTEGER, HHuginn::TYPE::INTEGER }, thread_, position_ );
