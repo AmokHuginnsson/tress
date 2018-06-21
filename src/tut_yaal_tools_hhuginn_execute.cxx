@@ -1000,6 +1000,25 @@ char const progExecuteErr106[] =
 	"}\n"
 ;
 
+char const progExecuteErr107[] =
+	"main() {\n"
+	"return ( size( type ) );\n"
+	"}\n"
+;
+
+char const progExecuteErr108[] =
+	"main() {\n"
+	"type( type )();\n"
+	"}\n"
+;
+
+char const progExecuteErr109[] =
+	"import Algorithms as algo;\n"
+	"main() {\n"
+	"algo.materialize([],print);\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1134,6 +1153,9 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr104,
 		progExecuteErr105,
 		progExecuteErr106,
+		progExecuteErr107,
+		progExecuteErr108,
+		progExecuteErr109,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1243,7 +1265,10 @@ TUT_UNIT_TEST( "report execution error" )
 /* 103 */ { 34, 4, 13,   "*tress*:4:13: Packed parameter is an `integer' instead of a `lookup`." },
 /* 104 */ { 22, 3, 2,    "*tress*:3:2: `tuple` does not support item assignment." },
 /* 105 */ { 66, 8, 10,   "*tress*:8:10: Arithmetic method `negate' on an `A' returned result of incompatible type an `integer'." },
-/* 105 */ { 62, 3, 17,   "*tress*:3:17: Uncaught ConversionException: integer overflow" },
+/* 106 */ { 62, 3, 17,   "*tress*:3:17: Uncaught ConversionException: integer overflow" },
+/* 107 */ { 22, 2, 14,   "*tress*:2:14: Getting size of a `*function_reference*'s is not supported." },
+/* 108 */ { 21, 2, 13,   "*tress*:2:13: Explicit construction of class `*function_reference*' objects (instances) is forbidden." },
+/* 109 */ { 52, 3, 17,   "*tress*:3:17: Invalid materialized type: `print'." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

@@ -1743,12 +1743,13 @@ TUT_UNIT_TEST( "modules" )
 			"tress.wrap(\"yaal\"),\n"
 			"tress.ENUM.TWO,\n"
 			"tress.Object($7),\n"
-			"type(M)\n"
+			"type(M),\n"
+			"tress.algo().max( 1, 2, 3 )\n"
 			"]);"
 			"}",
 			{ "./data/" }
 		),
-		"[6, 5.0, \"#yaal#\", ENUM.TWO, 7, Mathematics]"
+		"[6, 5.0, \"#yaal#\", ENUM.TWO, 7, Mathematics, 3]"
 	);
 	ENSURE_EQUALS(
 		"invalid field access failure",
@@ -1759,7 +1760,7 @@ TUT_UNIT_TEST( "modules" )
 			"}\n",
 			{ "./data/" }
 		),
-		"./data//Tress.hgn:59:15: `Mathematics' does not have `square_foot' member (did you mean `square_root'?)."
+		"./data//Tress.hgn:60:15: `Mathematics' does not have `square_foot' member (did you mean `square_root'?)."
 	);
 	ENSURE_EQUALS(
 		"using subtree module failed",
@@ -1814,6 +1815,8 @@ TUT_UNIT_TEST( "create Huginn value from C++" )
 	}
 	/* forwarded types */ {
 		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		h->add_argument( "wrong" );
+		h->clear_arguments();
 		h->add_argument( h->value( static_cast<int short>( 1 ) ) );
 		h->add_argument( h->value( static_cast<int short unsigned>( 2 ) ) );
 		h->add_argument( h->value( static_cast<int>( 3 ) ) );

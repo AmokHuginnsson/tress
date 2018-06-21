@@ -3,6 +3,7 @@
  */
 
 import Mathematics as math;
+import Algorithms as algo;
 
 /*
  * Data holder.

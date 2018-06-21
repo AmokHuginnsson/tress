@@ -1190,6 +1190,29 @@ TUT_UNIT_TEST( "blob" )
 		),
 		"100"
 	);
+	ENSURE_EQUALS(
+		"blob bad size",
+		execute_except(
+			"main(){\n"
+			"blob(0);\n"
+			"}\n"
+		),
+		"*anonymous stream*:2:5: Invalid `blob` size requested: 0"
+	);
+#if ( SIZEOF_INT_LONG == 8 )
+	char const errMsg[] = "*anonymous stream*:2:5: Uncaught RuntimeException: memory::realloc: realloc returned NULL";
+#else
+	char const errMsg[] = "*anonymous stream*:2:5: Requested `blob` size is too big: 2305843009213693952";
+#endif
+	ENSURE_EQUALS(
+		"blob bad size",
+		execute_except(
+			"main(){\n"
+			"blob(2305843009213693952);\n"
+			"}\n"
+		),
+		errMsg
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Stream" )
