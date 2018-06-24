@@ -2372,6 +2372,19 @@ TUT_UNIT_TEST( "observe/use" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "helpers" )
+	ENSURE_EQUALS(
+		"verify_arg_collection_value_type order invalid succeeded",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.statistics(order('a','b','c'));"
+			"}"
+		),
+		"*anonymous stream*:1:50: NumberSetStatistics.constructor() a collection contains value of an unexpected type: a `character'."
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "simple program" )
 	clog << simpleProg << endl;
 	HHuginn h;
