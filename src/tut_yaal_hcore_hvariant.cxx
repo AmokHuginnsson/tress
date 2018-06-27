@@ -658,5 +658,131 @@ TUT_UNIT_TEST( "Copy ctor/swap/move" )
 	ENSURE_EQUALS( "bad value v", v.get<type20_t>(), -20 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "equality" )
+	variant_type_t v0a( c0 );
+	variant_type_t v0b( c0 );
+	ENSURE( v0a == v0b );
+	ENSURE_NOT( v0a != v0b );
+
+	variant_type_t v1a( c1 );
+	variant_type_t v1b( c1 );
+	ENSURE( v1a == v1b );
+	ENSURE_NOT( v1a != v1b );
+
+	variant_type_t v2a( c2 );
+	variant_type_t v2b( c2 );
+	ENSURE( v2a == v2b );
+	ENSURE_NOT( v2a != v2b );
+
+	variant_type_t v3a( c3 );
+	variant_type_t v3b( c3 );
+	ENSURE( v3a == v3b );
+	ENSURE_NOT( v3a != v3b );
+
+	variant_type_t v4a( c4 );
+	variant_type_t v4b( c4 );
+	ENSURE( v4a == v4b );
+	ENSURE_NOT( v4a != v4b );
+
+	variant_type_t v5a( c5 );
+	variant_type_t v5b( c5 );
+	ENSURE( v5a == v5b );
+	ENSURE_NOT( v5a != v5b );
+
+	variant_type_t v6a( c6 );
+	variant_type_t v6b( c6 );
+	ENSURE( v6a == v6b );
+	ENSURE_NOT( v6a != v6b );
+
+	variant_type_t v7a( c7 );
+	variant_type_t v7b( c7 );
+	ENSURE( v7a == v7b );
+	ENSURE_NOT( v7a != v7b );
+
+	variant_type_t v8a( c8 );
+	variant_type_t v8b( c8 );
+	ENSURE( v8a == v8b );
+	ENSURE_NOT( v8a != v8b );
+
+	variant_type_t v9a( c9 );
+	variant_type_t v9b( c9 );
+	ENSURE( v9a == v9b );
+	ENSURE_NOT( v9a != v9b );
+
+	variant_type_t v10a( c10 );
+	variant_type_t v10b( c10 );
+	ENSURE( v10a == v10b );
+	ENSURE_NOT( v10a != v10b );
+
+	variant_type_t v11a( c11 );
+	variant_type_t v11b( c11 );
+	ENSURE( v11a == v11b );
+	ENSURE_NOT( v11a != v11b );
+
+	variant_type_t v12a( c12 );
+	variant_type_t v12b( c12 );
+	ENSURE( v12a == v12b );
+	ENSURE_NOT( v12a != v12b );
+
+	variant_type_t v13a( c13 );
+	variant_type_t v13b( c13 );
+	ENSURE( v13a == v13b );
+	ENSURE_NOT( v13a != v13b );
+
+	variant_type_t v14a( c14 );
+	variant_type_t v14b( c14 );
+	ENSURE( v14a == v14b );
+	ENSURE_NOT( v14a != v14b );
+
+	variant_type_t v15a( c15 );
+	variant_type_t v15b( c15 );
+	ENSURE( v15a == v15b );
+	ENSURE_NOT( v15a != v15b );
+
+	variant_type_t v16a( c16 );
+	variant_type_t v16b( c16 );
+	ENSURE( v16a == v16b );
+	ENSURE_NOT( v16a != v16b );
+
+	variant_type_t v17a( c17 );
+	variant_type_t v17b( c17 );
+	ENSURE( v17a == v17b );
+	ENSURE_NOT( v17a != v17b );
+
+	variant_type_t v18a( c18 );
+	variant_type_t v18b( c18 );
+	ENSURE( v18a == v18b );
+	ENSURE_NOT( v18a != v18b );
+
+	variant_type_t v19a( c19 );
+	variant_type_t v19b( c19 );
+	ENSURE( v19a == v19b );
+	ENSURE_NOT( v19a != v19b );
+
+	variant_type_t v20a( c20 );
+	variant_type_t v20b( c20 );
+	ENSURE( v20a == v20b );
+	ENSURE_NOT( v20a != v20b );
+
+	type0_t const c00( 0 );
+	type0_t const c01( 1 );
+	type1_t const c10( 0 );
+	type1_t const c11( 1 );
+	variant_type_t v00( c00 );
+	variant_type_t v01( c01 );
+	variant_type_t v10( c10 );
+	variant_type_t v11( c11 );
+
+	ENSURE_NOT( v00 == v01 );
+	ENSURE_NOT( v10 == v11 );
+	ENSURE( v00 != v01 );
+	ENSURE( v10 != v11 );
+
+	ENSURE_NOT( v00 == v10 );
+	ENSURE_NOT( v01 == v11 );
+	ENSURE( v00 != v10 );
+	ENSURE( v01 != v11 );
+TUT_TEARDOWN()
+
 }
 
