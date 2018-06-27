@@ -2820,6 +2820,49 @@ TUT_UNIT_TEST( "Introspection" )
 		"5.0"
 	);
 	ENSURE_EQUALS(
+		"Introspection.import restricted succeeded",
+		execute_except(
+			"import Introspection as intro;\n"
+			"main() {\n"
+			"intro.import(\"return\");\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:13: `return' is restricted keyword."
+	);
+	ENSURE_EQUALS(
+		"Introspection.import existing class succeeded",
+		execute_except(
+			"import Introspection as intro;\n"
+			"main() {\n"
+			"intro.import(\"Introspection\");\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:13: Class of the same name already exists."
+	);
+	ENSURE_EQUALS(
+		"Introspection.import existing package succeeded",
+		execute_except(
+			"import Introspection as intro;\n"
+			"main() {\n"
+			"intro.import(\"intro\");\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:13: Package alias of the same name already exists."
+	);
+	ENSURE_EQUALS(
+		"Introspection.import existing enum succeeded",
+		execute_except(
+			"import Introspection as intro;\n"
+			"enum E {\n"
+			"E\n"
+			"}\n"
+			"main() {\n"
+			"intro.import(\"E\");\n"
+			"}\n"
+		),
+		"*anonymous stream*:6:13: Enumeration of the same name already exists."
+	);
+	ENSURE_EQUALS(
 		"Introspection.call_stack failed",
 		execute(
 			"import Introspection as intro;\n"
@@ -2837,6 +2880,52 @@ TUT_UNIT_TEST( "Introspection" )
 			"}\n"
 		),
 		"[*anonymous stream*:7:21:foo, *anonymous stream*:5:8:foo, *anonymous stream*:5:8:foo, *anonymous stream*:5:8:foo, *anonymous stream*:12:13:main]"
+	);
+	ENSURE_EQUALS(
+		"Introspection.kind failed",
+		execute(
+			"import Introspection as intro;\n"
+			"import Mathematics as math;\n"
+			"import FileSystem as fs;\n"
+			"import Tress as tress;\n"
+			"class A {\n"
+			"x = 0;\n"
+			"}\n"
+			"enum E {\n"
+			"E\n"
+			"}\n"
+			"main() {\n"
+			"x = 7;x;\n"
+			"return ( (\n"
+			"intro.kind( x ),\n"
+			"intro.kind( main ), \n"
+			"intro.kind( A ), \n"
+			"intro.kind( E ), \n"
+			"intro.kind( math.pi ), \n"
+			"intro.kind( math.Matrix ), \n"
+			"intro.kind( fs.OPEN_MODE ), \n"
+			"intro.kind( tress ), \n"
+			"intro.kind( tress.bug ), \n"
+			"intro.kind( tress.Object ), \n"
+			"intro.kind( tress.ENUM ), \n"
+			"intro.kind( tress.algo ), \n"
+			") );"
+			"}\n",
+			{ "./data/" }
+		),
+		"(KIND.LOCAL, KIND.FUNCTION, KIND.CLASS, KIND.ENUM, KIND.FUNCTION, KIND.CLASS, KIND.ENUM, KIND.PACKAGE, KIND.FUNCTION, KIND.CLASS, KIND.ENUM, KIND.PACKAGE)"
+	);
+	ENSURE_EQUALS(
+		"Introspection.import failed",
+		execute(
+			"import Introspection as intro;\n"
+			"main() {\n"
+			"s = \"Huginn\";\n"
+			"bc = s.to_upper;\n"
+			"return ( intro.subject( bc ) );"
+			"}\n"
+		),
+		"\"Huginn\""
 	);
 TUT_TEARDOWN()
 
