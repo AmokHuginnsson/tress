@@ -163,6 +163,17 @@ TUT_UNIT_TEST( "id" )
 	ENSURE( "id failed", bc.id() == &b );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "equality" )
+	HBoundCall<int(int)> bc( call( &id_test, _1 ) );
+	HBoundCall<int(int)> bc2( call( &id_test, _1 ) );
+	HBoundCall<int(int)> bc3( bc );
+	ENSURE( "eq on func failed", bc == bc3 );
+	ENSURE_NOT( "eq on func failed", bc == bc2 );
+
+	ENSURE_NOT( "eq on func failed", bc != bc3 );
+	ENSURE( "eq on func failed", bc != bc2 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "C++ builtin lambda" )
 	HBoundCall<int ( int )> pow( []( int x ){ return ( x * x ); } );
 	ENSURE_EQUALS( "bounding C++ builtin lambda failed", pow( 7 ), 7 * 7 );
