@@ -2215,7 +2215,7 @@ TUT_UNIT_TEST( "incremental mode" )
 		"nonenonetrue1"
 	);
 	lines_t l11{
-		{ "import Introspection as intro;", OLine::TYPE::IMPORT  },
+		{ "import Introspection as intro;", OLine::TYPE::IMPORT },
 		{ "class A{x = 0;}", OLine::TYPE::DEFINITION },
 		{ "cp = intro.import(\"CannotParse\");" },
 		{ "0;" },
@@ -2226,7 +2226,7 @@ TUT_UNIT_TEST( "incremental mode" )
 		"nonenone*anonymous stream*:4:18: Uncaught IntrospectionException: ./data/CannotParse.hgn:3:1: expected one of characters: -0"
 	);
 	lines_t l12{
-		{ "import Introspection as intro;", OLine::TYPE::IMPORT  },
+		{ "import Introspection as intro;", OLine::TYPE::IMPORT },
 		{ "class A{x = 0;}", OLine::TYPE::DEFINITION },
 		{ "cc = intro.import(\"CannotCompile\");" },
 		{ "0;" },
@@ -2235,6 +2235,25 @@ TUT_UNIT_TEST( "incremental mode" )
 		"uncompilable runtime import",
 		execute_incremental( l12 ),
 		"nonenone*anonymous stream*:4:18: Uncaught IntrospectionException: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: an `integer' vs a `real'.0"
+	);
+	lines_t l13{
+		{ "import Tress as tress;", OLine::TYPE::IMPORT },
+		{ "tress.runtime_error();" }
+	};
+	ENSURE_EQUALS(
+		"runtime error from submodule",
+		execute_incremental( l13 ),
+		"none./data/Tress.hgn:64:2: Uncaught Exception: Ouch!"
+	);
+	lines_t l14{
+		{ "import Short as short;", OLine::TYPE::IMPORT },
+		{ "bar() { \"foo(x,y){x+y;}\"; }", OLine::TYPE::DEFINITION },
+		{ "2+2;" }
+	};
+	ENSURE_EQUALS(
+		"multiple imports and docs",
+		execute_incremental( l14 ),
+		"nonenone4"
 	);
 TUT_TEARDOWN()
 

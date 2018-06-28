@@ -60,3 +60,7 @@ bug( data_ ) {
 	return ( math.square_foot( real( data_ ) ) );
 }
 
+runtime_error() {
+	throw Exception( "Ouch!" );
+}
+

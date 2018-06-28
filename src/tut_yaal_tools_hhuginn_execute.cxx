@@ -1019,6 +1019,13 @@ char const progExecuteErr109[] =
 	"}\n"
 ;
 
+char const progExecuteErr110[] =
+	"import Tress as tress;\n"
+	"main() {\n"
+	"tress.runtime_error();\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1156,6 +1163,7 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr107,
 		progExecuteErr108,
 		progExecuteErr109,
+		progExecuteErr110,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1269,6 +1277,7 @@ TUT_UNIT_TEST( "report execution error" )
 /* 107 */ { 22, 2, 14,   "*tress*:2:14: Getting size of a `*function_reference*'s is not supported." },
 /* 108 */ { 21, 2, 13,   "*tress*:2:13: Explicit construction of class `*function_reference*' objects (instances) is forbidden." },
 /* 109 */ { 52, 3, 17,   "*tress*:3:17: Invalid materialized type: `print'." },
+/* 110 */ { 976, 64, 2,  "./data//Tress.hgn:64:2: Uncaught Exception: Ouch!" },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

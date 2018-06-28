@@ -421,6 +421,9 @@ hcore::HString tut_yaal_tools_hhuginn_base::execute_incremental(
 		src.clear();
 		src << imports << definitions << head << body << foot;
 		h.reset();
+		if ( setup._verbose ) {
+			clog << prettify( src.string() ) << endl;
+		}
 		h.load( src );
 		h.preprocess();
 		bool p( h.parse() );
