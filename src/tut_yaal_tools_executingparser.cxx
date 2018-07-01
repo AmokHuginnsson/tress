@@ -49,24 +49,24 @@ void noop( void ) {
 }
 }
 
-void match_position( executing_parser::position_t&, executing_parser::position_t );
-void match_position( executing_parser::position_t& out_, executing_parser::position_t in_ ) {
+void match_position( executing_parser::range_t&, executing_parser::range_t );
+void match_position( executing_parser::range_t& out_, executing_parser::range_t in_ ) {
 	out_ = in_;
 }
 
 template<typename T>
-void match_value_position_ref( T&, T const&, executing_parser::position_t&, executing_parser::position_t );
+void match_value_position_ref( T&, T const&, executing_parser::range_t&, executing_parser::range_t );
 template<typename T>
-void match_value_position_ref( T& valueOut_, T const& valueIn_, executing_parser::position_t& positionOut_, executing_parser::position_t positionIn_ ) {
+void match_value_position_ref( T& valueOut_, T const& valueIn_, executing_parser::range_t& positionOut_, executing_parser::range_t positionIn_ ) {
 	valueOut_ = valueIn_;
 	positionOut_ = positionIn_;
 	return;
 }
 
 template<typename T>
-void match_value_position_val( T&, T, executing_parser::position_t&, executing_parser::position_t );
+void match_value_position_val( T&, T, executing_parser::range_t&, executing_parser::range_t );
 template<typename T>
-void match_value_position_val( T& valueOut_, T valueIn_, executing_parser::position_t& positionOut_, executing_parser::position_t positionIn_ ) {
+void match_value_position_val( T& valueOut_, T valueIn_, executing_parser::range_t& positionOut_, executing_parser::range_t positionIn_ ) {
 	valueOut_ = valueIn_;
 	positionOut_ = positionIn_;
 	return;
@@ -98,12 +98,14 @@ TUT_UNIT_TEST( "HReal" )
 		ep();
 		ENSURE( "action was not called by ExecutingParser.", actionCalled );
 	}
-	/* action_position_t */ {
-		executing_parser::position_t pos( -1 );
-		HExecutingParser ep( real[HReal::action_position_t( call( &match_position, ref( pos ), _1 ) )] );
+	/* action_range_t */ {
+		executing_parser::range_t rng( -1, -1 );
+		HExecutingParser ep( real[HReal::action_range_t( call( &match_position, ref( rng ), _1 ) )] );
 		ENSURE( "HReal failed to parse correct input (double).", ep( "3.14" ) );
 		ep();
-		ENSURE_EQUALS( "bad position from real's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from real's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range end from real's action", rng.end(), 4 );
+		ENSURE_EQUALS( "bad range size from real's action", rng.size(), 4 );
 	}
 	/* double */ {
 		double val( 0 );
@@ -112,14 +114,15 @@ TUT_UNIT_TEST( "HReal" )
 		ep();
 		ENSURE_DISTANCE( "double value not set by ExecutingParser.", static_cast<double long>( val ), 3.14l, epsilon );
 	}
-	/* double_position_t */ {
+	/* double_range_t */ {
 		double val( 0 );
-		executing_parser::position_t pos( -1 );
-		HExecutingParser ep( real[HReal::action_double_position_t( call( &match_value_position_val<double>, ref( val ), _1, ref( pos ), _2 ) )] );
+		executing_parser::range_t rng( -1, -1 );
+		HExecutingParser ep( real[HReal::action_double_range_t( call( &match_value_position_val<double>, ref( val ), _1, ref( rng ), _2 ) )] );
 		ENSURE( "HReal failed to parse correct input (double).", ep( "3.14" ) );
 		ep();
 		ENSURE_DISTANCE( "double value not set by ExecutingParser.", static_cast<double long>( val ), 3.14l, epsilon );
-		ENSURE_EQUALS( "bad position from real's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from real's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from real's action", rng.size(), 4 );
 	}
 	/* double long */ {
 		double long val( 0 );
@@ -152,12 +155,13 @@ TUT_UNIT_TEST( "HReal" )
 	}
 	/* HNumber position */ {
 		HNumber val( 0 );
-		executing_parser::position_t pos( -1 );
-		HExecutingParser ep( real[HReal::action_number_position_t( call( &match_value_position_ref<HNumber>, ref( val ), _1, ref( pos ), _2 ) )] );
+		executing_parser::range_t rng( -1, -1 );
+		HExecutingParser ep( real[HReal::action_number_range_t( call( &match_value_position_ref<HNumber>, ref( val ), _1, ref( rng ), _2 ) )] );
 		ENSURE( "HReal failed to parse correct input (HNumber).", ep( "3.141592653589793" ) );
 		ep();
 		ENSURE_EQUALS( "HNumber value not set by ExecutingParser.", val, "3.141592653589793" );
-		ENSURE_EQUALS( "bad position from real's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from real's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from real's action", rng.size(), 17 );
 	}
 	/* HString */ {
 		hcore::HString val( 0 );
@@ -190,12 +194,13 @@ TUT_UNIT_TEST( "HInteger" )
 	}
 	/* int position */ {
 		int val( 0 );
-		executing_parser::position_t pos( -1 );
-		HExecutingParser ep( integer[HInteger::action_int_position_t( call( &match_value_position_val<int>, ref( val ), _1, ref( pos ), _2 ) )] );
+		executing_parser::range_t rng( -1, -1 );
+		HExecutingParser ep( integer[HInteger::action_int_range_t( call( &match_value_position_val<int>, ref( val ), _1, ref( rng ), _2 ) )] );
 		ENSURE( "HInteger failed to parse correct input (int).", ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "int value not set by ExecutingParser.", val, 7 );
-		ENSURE_EQUALS( "bad position from int's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from int's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from int's action", rng.size(), 1 );
 	}
 	/* action_t */ {
 		bool actionCalled( false );
@@ -204,12 +209,13 @@ TUT_UNIT_TEST( "HInteger" )
 		ep();
 		ENSURE( "action was not called by ExecutingParser.", actionCalled );
 	}
-	/* action_position_t */ {
-		executing_parser::position_t pos( -1 );
-		HExecutingParser ep( integer[HInteger::action_position_t( call( &match_position, ref( pos ), _1 ) )] );
+	/* action_range_t */ {
+		executing_parser::range_t rng( -1, -1 );
+		HExecutingParser ep( integer[HInteger::action_range_t( call( &match_position, ref( rng ), _1 ) )] );
 		ENSURE( "HReal failed to parse correct input (double).", ep( "7" ) );
 		ep();
-		ENSURE_EQUALS( "bad position from int's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from int's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from int's action", rng.size(), 1 );
 	}
 	/* int long */ {
 		int long val( 0 );
@@ -220,12 +226,13 @@ TUT_UNIT_TEST( "HInteger" )
 	}
 	/* int long position */ {
 		int long val( 0 );
-		executing_parser::position_t pos( -1 );
-		HExecutingParser ep( integer[HInteger::action_int_long_position_t( call( &match_value_position_val<int long>, ref( val ), _1, ref( pos ), _2 ) )] );
+		executing_parser::range_t rng( -1, -1 );
+		HExecutingParser ep( integer[HInteger::action_int_long_range_t( call( &match_value_position_val<int long>, ref( val ), _1, ref( rng ), _2 ) )] );
 		ENSURE( "HInteger failed to parse correct input (int long).", ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "int long value not set by ExecutingParser.", val, 7l );
-		ENSURE_EQUALS( "bad position from int's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from int's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from int's action", rng.size(), 1 );
 	}
 	/* int long long */ {
 		int long long val( 0 );
@@ -243,12 +250,13 @@ TUT_UNIT_TEST( "HInteger" )
 	}
 	/* HNumber position */ {
 		HNumber val( 0 );
-		executing_parser::position_t pos( -1 );
-		HExecutingParser ep( integer[HInteger::action_number_position_t( call( &match_value_position_ref<HNumber>, ref( val ), _1, ref( pos ), _2 ) )] );
+		executing_parser::range_t rng( -1, -1 );
+		HExecutingParser ep( integer[HInteger::action_number_range_t( call( &match_value_position_ref<HNumber>, ref( val ), _1, ref( rng ), _2 ) )] );
 		ENSURE( "HInteger failed to parse correct input (HNumber).", ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "HNumber value not set by ExecutingParser.", val, 7 );
-		ENSURE_EQUALS( "bad position from int's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from int's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from int's action", rng.size(), 1 );
 	}
 	/* HString */ {
 		hcore::HString val( 0 );
@@ -259,12 +267,13 @@ TUT_UNIT_TEST( "HInteger" )
 	}
 	/* HString position */ {
 		hcore::HString val( 0 );
-		executing_parser::position_t pos( -1 );
-		HExecutingParser ep( integer[HInteger::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) )] );
+		executing_parser::range_t rng( -1, -1 );
+		HExecutingParser ep( integer[HInteger::action_string_range_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( rng ), _2 ) )] );
 		ENSURE( "HInteger failed to parse correct input (HString).", ep( "7" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "7" );
-		ENSURE_EQUALS( "bad position from int's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from int's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from int's action", rng.size(), 1 );
 	}
 	/* hex */ {
 		int val( 0 );
@@ -362,12 +371,13 @@ TUT_UNIT_TEST( "HStringLiteral" )
 		epa();
 		ENSURE( "action was not called by ExecutingParser.", actionCalled );
 	}
-	/* action_position_t */ {
-		executing_parser::position_t pos( -1 );
-		HExecutingParser epa( string_literal[HStringLiteral::action_position_t( call( &match_position, ref( pos ), _1 ) )] );
+	/* action_range_t */ {
+		executing_parser::range_t rng( -1, -1 );
+		HExecutingParser epa( string_literal[HStringLiteral::action_range_t( call( &match_position, ref( rng ), _1 ) )] );
 		ENSURE( "HReal failed to parse correct input (string_literal).", epa( "\"aaa\"" ) );
 		epa();
-		ENSURE_EQUALS( "bad position from string_literal's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from string_literal's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from string_literal's action", rng.size(), 5 );
 	}
 	/* hex and octal codes */ {
 		s.clear();
@@ -435,12 +445,13 @@ TUT_UNIT_TEST( "HCharacterLiteral" )
 		epa();
 		ENSURE( "action was not called by ExecutingParser.", actionCalled );
 	}
-	/* action_position_t */ {
-		executing_parser::position_t pos( -1 );
-		HExecutingParser epa( character_literal[HCharacterLiteral::action_position_t( call( &match_position, ref( pos ), _1 ) )] );
+	/* action_range_t */ {
+		executing_parser::range_t rng( -1, -1 );
+		HExecutingParser epa( character_literal[HCharacterLiteral::action_range_t( call( &match_position, ref( rng ), _1 ) )] );
 		ENSURE( "HReal failed to parse correct input (character_literal).", epa( "'a'" ) );
 		epa();
-		ENSURE_EQUALS( "bad position from character_literal's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from character_literal's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from character_literal's action", rng.size(), 3 );
 	}
 	/* hex codes */ {
 		c.clear();
@@ -494,12 +505,13 @@ TUT_UNIT_TEST( "HCharacter" )
 		ep();
 		ENSURE_EQUALS( "char not captured", val, code_point_t( 'b' ) );
 	}
-	/* char (specific, any of ok) action_position_t */ {
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( characters( "ab", e_p::HString::action_position_t( call( &match_position, ref( pos ), _1 ) ) ) );
+	/* char (specific, any of ok) action_range_t */ {
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( characters( "ab", e_p::HString::action_range_t( call( &match_position, ref( rng ), _1 ) ) ) );
 		ENSURE( "HCharacter failed to parse correct input.", ep( "b" ) );
 		ep();
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from character's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from character's action", rng.size(), 1 );
 	}
 	/* char (specific, any of ok) action_t */ {
 		bool actionCalled( false );
@@ -571,79 +583,87 @@ TUT_UNIT_TEST( "HString" )
 	}
 	/* action_string_position */ {
 		hcore::HString val;
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ) ) );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_range_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( rng ), _2 ) ) ) );
 		ENSURE_NOT( "HString parsed input with trailing garbage.", ep( "  alaX" ) );
 		ENSURE( "HString failed to parse correct input.", ep( "  ala" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 2 );
+		ENSURE_EQUALS( "bad range start from string's action", rng.start(), 2 );
+		ENSURE_EQUALS( "bad range size from string's action", rng.size(), 3 );
 	}
 	/* string() action_string_position */ {
 		hcore::HString val;
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ) ) );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_string_range_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( rng ), _2 ) ) ) );
 		ENSURE_NOT( "HString parsed input with trailing garbage.", ep( "  alaX" ) );
 		ENSURE( "HString failed to parse correct input.", ep( "  ala" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 2 );
+		ENSURE_EQUALS( "bad range start from string's action", rng.start(), 2 );
+		ENSURE_EQUALS( "bad range size from string's action", rng.size(), 3 );
 	}
 	/* action_string_position no skip ws */ {
 		hcore::HString val;
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ), e_p::HString::WHITE_SPACE::KEEP ) );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_range_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( rng ), _2 ) ), e_p::HString::WHITE_SPACE::KEEP ) );
 		ENSURE_NOT( "HString parsed whitespace leading input (skip WS disabled).", ep( "  ala" ) );
 		ENSURE( "HString failed to parse correct input.", ep( "ala" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from string's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from string's action", rng.size(), 3 );
 	}
 	/* action_string_position WB */ {
 		hcore::HString val;
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_string_range_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( rng ), _2 ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
 		ENSURE( "HString failed to parse correct input.", ep( "  alaX" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 2 );
+		ENSURE_EQUALS( "bad range start from string's action", rng.start(), 2 );
+		ENSURE_EQUALS( "bad range size from string's action", rng.size(), 3 );
 	}
 	/* string() action_string_position WB */ {
 		hcore::HString val;
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_string_range_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( rng ), _2 ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
 		ENSURE( "HString failed to parse correct input.", ep( "  alaX" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "ala" );
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 2 );
+		ENSURE_EQUALS( "bad range start from string's action", rng.start(), 2 );
+		ENSURE_EQUALS( "bad range size from string's action", rng.size(), 3 );
 	}
 	/* action_position */ {
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_position_t( call( &match_position, ref( pos ), _1 ) ) ) );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_range_t( call( &match_position, ref( rng ), _1 ) ) ) );
 		ENSURE( "HString failed to parse correct input.", ep( "ala" ) );
 		ep();
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from string's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from string's action", rng.size(), 3 );
 	}
 	/* string() action_position */ {
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_position_t( call( &match_position, ref( pos ), _1 ) ) ) );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_range_t( call( &match_position, ref( rng ), _1 ) ) ) );
 		ENSURE( "HString failed to parse correct input.", ep( "ala" ) );
 		ep();
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from string's action", rng.start(), 0 );
 	}
 	/* action_position WB */ {
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_position_t( call( &match_position, ref( pos ), _1 ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( e_p::constant( "ala", e_p::HString::action_range_t( call( &match_position, ref( rng ), _1 ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
 		ENSURE( "HString failed to parse correct input.", ep( "  alaX" ) );
 		ep();
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 2 );
+		ENSURE_EQUALS( "bad range start from string's action", rng.start(), 2 );
+		ENSURE_EQUALS( "bad range size from string's action", rng.size(), 3 );
 	}
 	/* string() action_position WB */ {
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_position_t( call( &match_position, ref( pos ), _1 ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( e_p::string( "ala", e_p::HString::action_range_t( call( &match_position, ref( rng ), _1 ) ), e_p::HString::WORD_BOUNDARY::OPTIONAL ) >> *character );
 		ENSURE( "HString failed to parse correct input.", ep( "  alaX" ) );
 		ep();
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 2 );
+		ENSURE_EQUALS( "bad range start from string's action", rng.start(), 2 );
+		ENSURE_EQUALS( "bad range size from string's action", rng.size(), 3 );
 	}
 	/* action */ {
 		bool actionCalled( false );
@@ -735,21 +755,23 @@ TUT_UNIT_TEST( "HRegex" )
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "12.34" );
 	}
-	/* action_string_position_t attached */ {
+	/* action_string_range_t attached */ {
 		hcore::HString val;
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[e_p::HRegex::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) )] );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[e_p::HRegex::action_string_range_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( rng ), _2 ) )] );
 		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "12.34" );
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from regex's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from regex's action", rng.size(), 5 );
 	}
-	/* action_position_t attached */ {
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[e_p::HRegex::action_position_t( call( &match_position, ref( pos ), _1 ) )] );
+	/* action_range_t attached */ {
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}" )[e_p::HRegex::action_range_t( call( &match_position, ref( rng ), _1 ) )] );
 		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
 		ep();
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from regex's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from regex's action", rng.size(), 5 );
 	}
 	/* action_t attached */ {
 		bool actionCalled( false );
@@ -767,35 +789,39 @@ TUT_UNIT_TEST( "HRegex" )
 	}
 	/* name, action_string_position */ {
 		hcore::HString val;
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( regex( "num", "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ) ) );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( regex( "num", "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_string_range_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( rng ), _2 ) ) ) );
 		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "12.34" );
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from regex's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from regex's action", rng.size(), 5 );
 	}
 	/* action_string_position */ {
 		hcore::HString val;
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_string_position_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( pos ), _2 ) ) ) );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_string_range_t( call( &match_value_position_ref<hcore::HString>, ref( val ), _1, ref( rng ), _2 ) ) ) );
 		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "12.34" );
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from regex's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from regex's action", rng.size(), 5 );
 	}
 	/* name, action_position */ {
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( regex( "num", "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_position_t( call( &match_position, ref( pos ), _1 ) ) ) );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( regex( "num", "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_range_t( call( &match_position, ref( rng ), _1 ) ) ) );
 		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
 		ep();
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from regex's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from regex's action", rng.size(), 5 );
 	}
 	/* action_position */ {
-		e_p::position_t pos( -1 );
-		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_position_t( call( &match_position, ref( pos ), _1 ) ) ) );
+		e_p::range_t rng( -1, -1 );
+		HExecutingParser ep( regex( "[0-9]{2}\\.[0-9]{2}", e_p::HRegex::action_range_t( call( &match_position, ref( rng ), _1 ) ) ) );
 		ENSURE( "HRegex failed to parse correct input.", ep( "12.34" ) );
 		ep();
-		ENSURE_EQUALS( "bad position from regex's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from regex's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from regex's action", rng.size(), 5 );
 	}
 	/* name, action */ {
 		bool actionCalled( false );
@@ -888,7 +914,7 @@ struct Kleene {
 	void count( int& out_ ) {
 		out_ = _count;
 	}
-	void count_p( int& out_, executing_parser::position_t ) {
+	void count_p( int& out_, executing_parser::range_t ) {
 		count( out_ );
 		out_ = -out_;
 	}
@@ -912,7 +938,7 @@ TUT_UNIT_TEST( "HKleeneStar" )
 		int count( 0 );
 		Kleene k;
 		HRule i( integer[HBoundCall<void ( int )>( call( &Kleene::sum<int>, &k, ref( val ), _1 ) )] );
-		HRule nums( ( *( ',' >> i ) )[e_p::HRule::action_position_t( call( &Kleene::count_p, &k, ref( count ), _1 ) )] );
+		HRule nums( ( *( ',' >> i ) )[e_p::HRule::action_range_t( call( &Kleene::count_p, &k, ref( count ), _1 ) )] );
 		HExecutingParser ep( string( "nums{" ) >> nums >> "}" );
 		ENSURE( "parse on valid (but empty) failed", ep( "nums{}" ) );
 		ep();
@@ -940,7 +966,7 @@ TUT_UNIT_TEST( "HKleenePlus" )
 		int count( 0 );
 		Kleene k;
 		HRule i( integer[HBoundCall<void ( int )>( call( &Kleene::sum<int>, &k, ref( val ), _1 ) )] );
-		HRule nums( ( +( ',' >> i ) )[e_p::HRule::action_position_t( call( &Kleene::count_p, &k, ref( count ), _1 ) )] );
+		HRule nums( ( +( ',' >> i ) )[e_p::HRule::action_range_t( call( &Kleene::count_p, &k, ref( count ), _1 ) )] );
 		HExecutingParser ep( nums );
 		ENSURE( "parse on valid failed", ep( ", 1" ) );
 		ep();
@@ -964,7 +990,7 @@ TUT_UNIT_TEST( "HAlternative" )
 		bool actionCalled( false );
 		HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
 		HRule ia( integer[HBoundCall<void ( int )>( call( &defer<int>::set_alt, ref( val_alt ), _1 ) )] );
-		HExecutingParser ep( string( "nums{" ) >> ( ( i >> ":pos" ) | ( ia >> ":neg" ) )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> "}" );
+		HExecutingParser ep( string( "nums{" ) >> ( ( i >> ":rng" ) | ( ia >> ":neg" ) )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> "}" );
 		ENSURE( "parse on valid failed", ep( "nums{7:neg}" ) );
 		ep();
 		ENSURE_EQUALS( "execution failed sub-step not removed", val, 0 );
@@ -1013,22 +1039,23 @@ TUT_UNIT_TEST( "HOptional" )
 		ENSURE_EQUALS( "execution of optional failed", val, 7 );
 		ENSURE( "action on optional was not called", actionCalled );
 	}
-	/* parsed (non-empty) action_position_t */ {
+	/* parsed (non-empty) action_range_t */ {
 		int val( 0 );
-		executing_parser::position_t pos( 0 );
+		executing_parser::range_t rng( -1, -1 );
 		HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
-		HExecutingParser ep( string( "nums{" ) >> (-i)[HAlternative::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> "}" );
+		HExecutingParser ep( string( "nums{" ) >> (-i)[HAlternative::action_range_t( call( &match_position, ref( rng ), _1 ) )] >> "}" );
 		ENSURE( "parse on valid failed", ep( "nums{7}" ) );
 		ep();
 		ENSURE_EQUALS( "execution of optional failed", val, 7 );
-		ENSURE_EQUALS( "bad position from optional's action", pos.get(), 5 );
+		ENSURE_EQUALS( "bad range start from optional's action", rng.start(), 5 );
+		ENSURE_EQUALS( "bad range size from optional's action", rng.size(), 1 );
 	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HAnd" )
 	/* parsed */ {
 		bool actionCalled( false );
-		executing_parser::position_t pos( -1 );
+		executing_parser::range_t rng( -1, -1 );
 		code_point_t fcData( '_' );
 		HRule fc( character( 'a' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( fcData ), _1 ) )] );
 		code_point_t scData( '_' );
@@ -1038,22 +1065,27 @@ TUT_UNIT_TEST( "HAnd" )
 		HRule sc( character( trailerChar )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( data ), _1 ) )] );
 		bool andCalled( false );
 		HExecutingParser ep( ( ( fc & trailer )[HAnd::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
-		HExecutingParser epp( ( ( fc & trailerChar )[HAnd::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
-		HExecutingParser epS( ( ( fc & to_string( trailerChar ) )[HAnd::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
+		HExecutingParser epp( ( ( fc & trailerChar )[HAnd::action_range_t( call( &match_position, ref( rng ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
+		HExecutingParser epS( ( ( fc & to_string( trailerChar ) )[HAnd::action_range_t( call( &match_position, ref( rng ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( andCalled ), true ) ) ] );
+
 		ENSURE( "parse on correct failed", ep( "ab" ) );
-		ENSURE( "parse on correct failed pos", epp( "ab" ) );
-		ENSURE( "parse on correct failed pos", epS( "ab" ) );
 		ep();
 		ENSURE_EQUALS( "predecessor in AND not called", fcData, static_cast<code_point_t>( 'a' ) );
 		ENSURE_EQUALS( "successor in AND called", scData, static_cast<code_point_t>( '_' ) );
 		ENSURE_EQUALS( "following rule of AND not called", data, static_cast<code_point_t>( 'b' ) );
 		ENSURE( "action on AND was not called", actionCalled );
+
+		ENSURE( "parse on correct failed rng", epp( "ab" ) );
 		epp();
-		ENSURE_EQUALS( "bad position from and's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from and's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from and's action", rng.size(), 1 );
 		ENSURE( "follows not called", andCalled );
-		pos = executing_parser::position_t( -1 );
+
+		rng = executing_parser::range_t( -1, -1 );
+		ENSURE( "parse on correct failed rng", epS( "ab" ) );
 		epS();
-		ENSURE_EQUALS( "bad position from and's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from and's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from and's action", rng.size(), 1 );
 		HExecutingParser ep2( fc & sc );
 		ENSURE_NOT( "parse on dangling succeeded", ep2( " ab" ) );
 		ENSURE_EQUALS( "bad error position", ep2.error_position(), 2 );
@@ -1070,7 +1102,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "HNot" )
 	/* parsed */ {
 		bool actionCalled( false );
-		executing_parser::position_t pos( -1 );
+		executing_parser::range_t rng( -1, -1 );
 		code_point_t fcData( '_' );
 		HRule fc( character( 'a' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( fcData ), _1 ) )] );
 		code_point_t scData( '_' );
@@ -1080,22 +1112,24 @@ TUT_UNIT_TEST( "HNot" )
 		HRule sc( character( 'c' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( data ), _1 ) )] );
 		bool notCalled( false );
 		HExecutingParser ep( ( ( fc ^ trailer )[HNot::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
-		HExecutingParser epp( ( ( fc ^ trailerChar )[HNot::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
-		HExecutingParser epS( ( ( fc ^ to_string( trailerChar ) )[HNot::action_position_t( call( &match_position, ref( pos ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
+		HExecutingParser epp( ( ( fc ^ trailerChar )[HNot::action_range_t( call( &match_position, ref( rng ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
+		HExecutingParser epS( ( ( fc ^ to_string( trailerChar ) )[HNot::action_range_t( call( &match_position, ref( rng ), _1 ) )] >> sc )[HBoundCall<void ( void )>( call( &defer<bool>::set, ref( notCalled ), true ) ) ] );
 		ENSURE( "parse on correct failed", ep( "ac" ) );
-		ENSURE( "parse on correct failed pos", epp( "ac" ) );
-		ENSURE( "parse on correct failed pos", epS( "ac" ) );
+		ENSURE( "parse on correct failed rng", epp( "ac" ) );
+		ENSURE( "parse on correct failed rng", epS( "ac" ) );
 		ep();
 		ENSURE_EQUALS( "predecessor in NOT not called", fcData, static_cast<code_point_t>( 'a' ) );
 		ENSURE_EQUALS( "successor in NOT called", scData, static_cast<code_point_t>( '_' ) );
 		ENSURE_EQUALS( "following rule of NOT not called", data, static_cast<code_point_t>( 'c' ) );
 		epp();
-		ENSURE_EQUALS( "bad position from NOT's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from NOT's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from NOT's action", rng.size(), 1 );
 		ENSURE( "follows not called", notCalled );
 		ENSURE( "action on NOT was not called", actionCalled );
-		pos = executing_parser::position_t( -1 );
+		rng = executing_parser::range_t( -1, -1 );
 		epS();
-		ENSURE_EQUALS( "bad position from NOT's action", pos.get(), 0 );
+		ENSURE_EQUALS( "bad range start from NOT's action", rng.start(), 0 );
+		ENSURE_EQUALS( "bad range size from NOT's action", rng.size(), 1 );
 		HExecutingParser ep2( fc ^ sc );
 		ENSURE_NOT( "parse on dangling succeeded", ep2( " ac" ) );
 		ENSURE_EQUALS( "bad error position", ep2.error_position(), 2 );
@@ -1118,11 +1152,11 @@ TUT_UNIT_TEST( "HAction" )
 		code_point_t scData( 0 );
 		HRule sc( character( 'b' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( scData ), _1 ) )] );
 		bool followsCalled( false );
-		executing_parser::position_t pos( -1 );
+		executing_parser::range_t rng( -1, -1 );
 		HExecutingParser ep(
 			HRuleBase::action_t( call( &defer<bool>::set, ref( prefixAction ), true ) )
 			>> fc >> sc >>
-			HRuleBase::action_position_t( call( &match_value_position_val<bool>, ref( followsCalled ), true, ref( pos ), _1 ) )
+			HRuleBase::action_range_t( call( &match_value_position_val<bool>, ref( followsCalled ), true, ref( rng ), _1 ) )
 		);
 		ENSURE( "parse on correct failed", ep( "ab" ) );
 		ep();
@@ -1138,9 +1172,9 @@ TUT_UNIT_TEST( "HAction" )
 		code_point_t scData( 0 );
 		HRule sc( character( 'b' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( scData ), _1 ) )] );
 		bool followsCalled( false );
-		executing_parser::position_t pos( -1 );
+		executing_parser::range_t rng( -1, -1 );
 		HExecutingParser ep(
-			HRuleBase::action_position_t( call( &match_value_position_val<bool>, ref( followsCalled ), true, ref( pos ), _1 ) )
+			HRuleBase::action_range_t( call( &match_value_position_val<bool>, ref( followsCalled ), true, ref( rng ), _1 ) )
 			>> fc >> sc >>
 			HRuleBase::action_t( call( &defer<bool>::set, ref( prefixAction ), true ) )
 		);
@@ -1158,11 +1192,11 @@ TUT_UNIT_TEST( "HAction" )
 		code_point_t scData( 0 );
 		HRule sc( character( 'b' )[HBoundCall<void ( code_point_t )>( call( &defer<code_point_t>::set, ref( scData ), _1 ) )] );
 		bool followsCalled( false );
-		executing_parser::position_t pos( -1 );
+		executing_parser::range_t rng( -1, -1 );
 		HExecutingParser ep(
 			HRuleBase::action_t( call( &defer<bool>::set, ref( prefixAction ), true ) )
 			>> ( real | ( fc >> sc ) ) >>
-			HRuleBase::action_position_t( call( &match_value_position_val<bool>, ref( followsCalled ), true, ref( pos ), _1 ) )
+			HRuleBase::action_range_t( call( &match_value_position_val<bool>, ref( followsCalled ), true, ref( rng ), _1 ) )
 		);
 		ENSURE( "parse on correct failed", ep( "ab" ) );
 		ep();
@@ -1178,7 +1212,7 @@ TUT_UNIT_TEST( "canceling execution steps" )
 	int val_alt( 0 );
 	HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
 	HRule ia( integer[HBoundCall<void ( int )>( call( &defer<int>::set_alt, ref( val_alt ), _1 ) )] );
-	HExecutingParser ep( string( "nums{" ) >> ( -( i >> ":pos" ) ) >> ( -( ia >> ":neg" ) ) >> "}" );
+	HExecutingParser ep( string( "nums{" ) >> ( -( i >> ":rng" ) ) >> ( -( ia >> ":neg" ) ) >> "}" );
 	ENSURE( "parse on valid failed", ep( "nums{7:neg}" ) );
 	ep();
 	ENSURE_EQUALS( "execution failed sub-step not removed", val, 0 );
@@ -1839,7 +1873,7 @@ struct calc {
 		_opers.pop();
 		_vars.push( o == MULTIPLY ? v1 * v2 : v2 / v1 );
 	}
-	void mul_div_p( executing_parser::position_t ) {
+	void mul_div_p( executing_parser::range_t ) {
 		mul_div();
 	}
 	void power( void ) {
@@ -1942,7 +1976,7 @@ TUT_UNIT_TEST( "calc, (plus, minus, mul, div, recursion)" )
 	HRule paren( '(' >> expr >> ')' );
 	HRule realVal( real[HBoundCall<void ( double long )>( call( &calc::val, &c, _1 ) )] );
 	HRule atom( realVal | paren );
-	HRule mulExec( HBoundCall<void ( executing_parser::position_t )>( call( &calc::mul_div_p, &c, _1 ) ) );
+	HRule mulExec( HBoundCall<void ( executing_parser::range_t )>( call( &calc::mul_div_p, &c, _1 ) ) );
 	mulExec %= ( character( "*/" )[HBoundCall<void ( code_point_t )>( call( &calc::oper, &c, _1 ) )] >> atom );
 	HRule multiply( atom >> *( mulExec ) );
 	HRule addExec( HBoundCall<void ( void )>( call( &calc::plus_minus, &c ) ) );
