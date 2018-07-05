@@ -1,0 +1,63 @@
+Huginn VM state for `*anonymous stream*'
+package: algo = Algorithms
+class: -*bound_method* {}
+class: -*function_reference* {}
+class: -*method* {}
+class: -*named_parameters* {}
+class: -*none* {}
+class: -*object_reference* {}
+class: -*observer* {}
+class: -*reference* {}
+class: -*unbound_method* {}
+class: -*variadic_parameters* {}
+class: Algorithms { AlgorithmsException, enumerate, filter, iterator, map, materialize, max, min, range, reduce, reversed, sorted, zip }
+class: AlgorithmsException : Exception { message, trace, what, where }
+class: ArithmeticException : Exception { message, trace, what, where }
+class: Base { bar, foo }
+class: -COLOR.COLOR_ENUMERAL { to_string }
+class: ConversionException : Exception { message, trace, what, where }
+class: Derived : Base { bar, foo, baz }
+class: -Algorithms.Enumerator {}
+class: Exception { message, trace, what, where }
+class: -Algorithms.Filter {}
+class: -Algorithms.Iterator { is_valid, next, value }
+class: -dict.KeyValuesDictView {}
+class: -lookup.KeyValuesLookupView {}
+class: -Algorithms.Mapper {}
+class: -Algorithms.Range {}
+class: -deque.ReversedDequeView {}
+class: -dict.ReversedDictView {}
+class: -list.ReversedListView {}
+class: -lookup.ReversedLookupView {}
+class: -order.ReversedOrderView {}
+class: -set.ReversedSetView {}
+class: -string.ReversedStringView {}
+class: -tuple.ReversedTupleView {}
+class: RuntimeException : Exception { message, trace, what, where }
+class: StackFrameInfo { column, context, file, line, to_string }
+class: -Algorithms.Zip {}
+class: blob {}
+class: boolean {}
+class: character { is_alnum, is_alpha, is_digit, is_lower, is_space, is_upper, is_xdigit, to_lower, to_upper }
+class: deque { add, append, clear, equals, hash, insert, less, pop, pop_front, prepend, push, push_front }
+class: dict { add, clear, ensure, equals, erase, get, has_key, hash, update, values }
+class: integer {}
+class: list { add, append, clear, equals, hash, insert, less, pop, push, resize, sort }
+class: lookup { add, clear, ensure, equals, erase, get, has_key, hash, update, values }
+class: number { get_precision, is_exact, is_integral, set_precision }
+class: order { add, clear, equals, erase, has_key, hash, insert, update }
+class: real {}
+class: set { add, clear, equals, erase, has_key, hash, insert, update }
+class: string { clear, ends_with, find, find_last, find_last_one_of, find_last_other_than, find_one_of, find_other_than, format, replace, starts_with, strip, strip_left, strip_right, to_lower, to_upper }
+class: tuple { add, equals, hash, less }
+enum: COLOR { BLUE, GREEN, RED }
+function: add
+function: assert
+function: copy
+function: input
+function: main
+function: observe
+function: print
+function: size
+function: type
+function: use

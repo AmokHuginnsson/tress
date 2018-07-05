@@ -45,35 +45,6 @@ void tut_yaal_tools_hhuginn_compiler::test_compile( prog_src_t prog_, ErrInfo co
 	clog << h.error_message() << endl;
 }
 
-char const progCompile0[] =
-	"import Algorithms as algo;\n"
-	"class Base {\n"
-	"\tfoo() {\n"
-	"\t}\n"
-	"\tbar() {\n"
-	"\t}\n"
-	"}\n"
-	"class Derived : Base {\n"
-	"\tfoo() {\n"
-	"\t}\n"
-	"\tbaz() {\n"
-	"\t}\n"
-	"}\n"
-	"main() {\n"
-	"\treturn ( [ algo, Derived().foo().bar().baz() ] );\n"
-	"}\n"
-;
-
-TUT_UNIT_TEST( "compile" )
-	HStringStream prog( progCompile0 );
-	HHuginn h;
-	h.load( prog );
-	h.preprocess();
-	TUT_EVAL( h.parse() );
-	h.compile();
-	h.dump_vm_state( clog );
-TUT_TEARDOWN()
-
 char const progCompileErr0[] =
 	"main() {\n"
 	"\tx = 1 + 1.5;\n"
@@ -1161,6 +1132,46 @@ TUT_UNIT_TEST( "detect derivation cycle" )
 	ENSURE( "reporting error line failed", ( h.error_coordinate().line() == 1 ) || ( h.error_coordinate().line() == 2 ) || ( h.error_coordinate().line() == 3 ) );
 	ENSURE_EQUALS( "reporting error column failed", h.error_coordinate().column(), 11 );
 	clog << h.error_message() << endl;
+TUT_TEARDOWN()
+
+char const progCompile0[] =
+	"import Algorithms as algo;\n"
+	"class Base {\n"
+	"\tfoo() {\n"
+	"\t}\n"
+	"\tbar() {\n"
+	"\t}\n"
+	"}\n"
+	"class Derived : Base {\n"
+	"\tfoo() {\n"
+	"\t}\n"
+	"\tbaz() {\n"
+	"\t}\n"
+	"}\n"
+	"enum COLOR {\n"
+	"\tRED,\n"
+	"\tGREEN,\n"
+	"\tBLUE\n"
+	"}\n"
+	"add( x, y ) {\n"
+	"\treturn ( x + y );\n"
+	"}\n"
+	"main() {\n"
+	"\treturn ( [ algo, Derived().foo().bar().baz(), add, COLOR.RED ] );\n"
+	"}\n"
+;
+
+TUT_UNIT_TEST( "compile - dump_vm_state" )
+	HStringStream prog( progCompile0 );
+	HHuginn h;
+	h.load( prog );
+	h.preprocess();
+	TUT_EVAL( h.parse() );
+	h.compile();
+	HFile vmDump( "out/huginn-vm-dump.txt", HFile::OPEN::WRITING );
+	h.dump_vm_state( vmDump );
+	vmDump.close();
+	ENSURE_SAME_CONTENT( "Huginn vm state dump failed", "out/huginn-vm-dump.txt", "data/huginn-vm-dump.txt" );
 TUT_TEARDOWN()
 
 }
