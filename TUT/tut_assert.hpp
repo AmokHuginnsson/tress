@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <fstream>
 
 #include <yaal/hcore/hclock.hxx>
 
@@ -402,7 +403,7 @@ void ensure_distance_real( char const* file, int const& line, char const*, std::
 	if ( ( ( expected - distance ) >= actual ) || ( ( expected + distance ) <= actual ) ) {
 		std::stringstream ss;
 		ss << msg
-			<< ( msg.empty() ? ":" : "" )
+			<< ( ! msg.empty() ? ":" : "" )
 			<< " expected ("
 			<< expected - distance
 			<< ";" << expected + distance << ") actual [" << actual << "] distance <" << distance << ">";
@@ -436,6 +437,60 @@ template<class T>
 void ensure_distance_real( char const* file, int line, const char* msg, const T& actual,
 	const T& expected, const T& distance ) {
 	ensure_distance_real<>( file, line, NULL, msg, actual, expected, distance );
+}
+
+void ensure_same_content_real( char const* file, int const& line, char const*, std::string const& msg, std::string const& actual_, std::string const& expected_ ) {
+	std::ifstream actual( actual_.c_str() );
+	std::ifstream expected( expected_.c_str() );
+	std::string actualLine;
+	std::string expectedLine;
+	int lineNo( 1 );
+	std::stringstream ss;
+	while ( true ) {
+		bool actualStatus( std::getline( actual, actualLine ).good() );
+		bool expectedStatus( std::getline( expected, expectedLine ).good() );
+		if ( actualStatus && expectedStatus ) {
+			if ( actualLine == expectedLine ) {
+				++ lineNo;
+				continue;
+			}
+			ss << msg
+				<< ( ! msg.empty() ? ": " : " " )
+				<< "line [" << lineNo << "] expected [" << stream_escape( expectedLine ) << "] actual [" << stream_escape( actualLine ) << "]";
+		} else if ( expectedStatus && ! actualStatus ) {
+			ss << msg
+				<< ( ! msg.empty() ? ": " : " " )
+				<< actual_ << " is missing data, expected [" << stream_escape( expectedLine ) << "]";
+		} else if ( actualStatus && ! expectedStatus ) {
+			ss << msg
+				<< ( ! msg.empty() ? ": " : " " )
+				<< actual_ << " conatins extra data: [" << stream_escape( actualLine ) << "]";
+		} else {
+			break;
+		}
+		throw failure( file, line, ss.str().c_str() );
+	}
+	return;
+}
+
+inline void ensure_same_content( std::string const& msg, std::string const& actual_, std::string const& expected_ ) {
+	ensure_same_content_real( nullptr, 0, nullptr, msg, actual_, expected_ );
+}
+
+void ensure_same_content_real( char const* file, int const& line, char const*, yaal::hcore::HString const& msg, std::string const& actual_, std::string const& expected_ ) {
+	ensure_same_content_real( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual_, expected_ );
+}
+
+inline void ensure_same_content( yaal::hcore::HString const& msg, std::string const& actual_, std::string const& expected_ ) {
+	ensure_same_content_real( nullptr, 0, nullptr, msg, actual_, expected_ );
+}
+
+inline void ensure_same_content_real( char const* file, int const& line, char const*, char const* msg, std::string const& actual_, std::string const& expected_ ) {
+	ensure_same_content_real( file, line, nullptr, std::string( msg ), actual_, expected_ );
+}
+
+inline void ensure_same_content_real( char const* file, int const& line, char const* msg, std::string const& actual_, std::string const& expected_ ) {
+	ensure_same_content_real( file, line, nullptr, std::string( msg ), actual_, expected_ );
 }
 
 void ensure_errno_real( char const* file, int const& line, char const*, char const* msg, bool cond ) {

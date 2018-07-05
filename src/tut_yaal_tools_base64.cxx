@@ -294,7 +294,7 @@ TUT_UNIT_TEST( "decode from file (no newlines)" )
 		HFile o( OUTPUT, HFile::OPEN::WRITING );
 		base64::decode( ss, o, true );
 		o.close();
-		ENSURE( "badly encoded", file_compare( OUTPUT, "./data/karatsuba.bc" ) );
+		ENSURE( "badly encoded", file_binary_compare( OUTPUT, "./data/karatsuba.bc" ) );
 	}
 TUT_TEARDOWN()
 
@@ -336,7 +336,7 @@ TUT_UNIT_TEST( "decode from file (with newlines)" )
 		HFile o( OUTPUT, HFile::OPEN::WRITING );
 		base64::decode( ss, o, true );
 		o.close();
-		ENSURE( "badly encoded", file_compare( OUTPUT, "./data/karatsuba.bc" ) );
+		ENSURE( "badly encoded", file_binary_compare( OUTPUT, "./data/karatsuba.bc" ) );
 	}
 TUT_TEARDOWN()
 

@@ -43,7 +43,7 @@ bool test_zipstream( int long zipBufSize_, int long clientBufSize_ ) {
 		while ( ( nRead = zIn.read( buf.raw(), buf.get_size() ) ) > 0 )
 			outRaw.write( buf.raw(), nRead );
 	}
-	return ( file_compare( INPUT, OUTPUT_RAW ) );
+	return ( file_binary_compare( INPUT, OUTPUT_RAW ) );
 }
 
 void zpipe_compress( HString const& src_, HString const& dst_ ) {

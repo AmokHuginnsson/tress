@@ -292,7 +292,7 @@ static double long const epsilon = 0.000001L;
 #endif /* #else #if defined( _MSC_VER ) || defined( __HOST_OS_TYPE_CYGWIN__ ) */
 extern int const _testData_[3][ 100 ];
 struct inc { int _n; inc( int n ) : _n( n ){} int operator()() { return ( _n ++ ); } };
-bool file_compare( yaal::hcore::HString const&, yaal::hcore::HString const& );
+bool file_binary_compare( yaal::hcore::HString const&, yaal::hcore::HString const& );
 int long get_speed( yaal::hcore::time::UNIT );
 
 struct HSTDGlobalScopeExceptionHandlingPolicy {

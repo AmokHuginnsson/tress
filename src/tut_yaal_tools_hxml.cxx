@@ -217,7 +217,7 @@ TUT_UNIT_TEST( "node operations" )
 	root.insert_node( it, "quick", "data" );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 	resort_entities( "out/tut.xml" );
-	ENSURE( "load xinclude failed", file_compare( "out/tut.xml", "data/xml-node-opers.xml" ) );
+	ENSURE_SAME_CONTENT( "load xinclude failed", "out/tut.xml", "data/xml-node-opers.xml" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "node operations (move,replace,copy,remove)" )
@@ -239,7 +239,7 @@ TUT_UNIT_TEST( "node operations (move,replace,copy,remove)" )
 	(*copied).set_name( "copiedId" );
 	(*(*copied).begin()).set_value( "modified value" );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
-	ENSURE( "copy_node failed", file_compare( "out/tut.xml", "data/xml-copy.xml" ) );
+	ENSURE_SAME_CONTENT( "copy_node failed", "out/tut.xml", "data/xml-copy.xml" );
 	child[0].move_node( *child[0].begin() );
 	++ copied;
 	copied = child[0].move_node( child[0].begin(), *copied );
@@ -256,14 +256,14 @@ TUT_UNIT_TEST( "node operations (move,replace,copy,remove)" )
 	(*copied).set_name( "moved" );
 	ENSURE( "bad xml from node", (*copied).xml() == &xml );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
-	ENSURE( "move_node failed", file_compare( "out/tut.xml", "data/xml-move.xml" ) );
+	ENSURE_SAME_CONTENT( "move_node failed", "out/tut.xml", "data/xml-move.xml" );
 	ENSURE_THROW( "cycle created by move", (*copied).replace_node( (*copied).begin(), child[0] ), HXmlException );
 	child[0].replace_node( copied, *child[0].rbegin() );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
-	ENSURE( "replace_node failed", file_compare( "out/tut.xml", "data/xml-replace.xml" ) );
+	ENSURE_SAME_CONTENT( "replace_node failed", "out/tut.xml", "data/xml-replace.xml" );
 	child[0].remove_node( child[0].begin() );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
-	ENSURE( "replace_node failed", file_compare( "out/tut.xml", "data/xml-remove.xml" ) );
+	ENSURE_SAME_CONTENT( "replace_node failed", "out/tut.xml", "data/xml-remove.xml" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "load, save" )
@@ -286,7 +286,7 @@ TUT_UNIT_TEST( "load(file), save" )
 #else
 	char const expected[] = "data/xml-out-278.xml";
 #endif
-	ENSURE( "load xinclude failed", file_compare( "out/tut.xml", expected ) );
+	ENSURE_SAME_CONTENT( "load xinclude failed", "out/tut.xml", expected );
 	ENSURE_THROW( "empty document loaded", xml.load( HStreamInterface::ptr_t( new HFile( "data/xml-empty.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE ), HXmlException );
 TUT_TEARDOWN()
 
@@ -295,7 +295,7 @@ TUT_UNIT_TEST( "load(XINCLUDE) (resolve entities), save" )
 	xml.load( HStreamInterface::ptr_t( new HFile( "data/xml.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 	resort_entities( "out/tut-xi.xml" );
-	ENSURE( "load xinclude failed", file_compare( "out/tut-xi.xml", "data/xml-xi-out.xml" ) );
+	ENSURE_SAME_CONTENT( "load xinclude failed", "out/tut-xi.xml", "data/xml-xi-out.xml" );
 	HXml fail;
 	ENSURE_THROW( "bad xinclude loaded", fail.load( HStreamInterface::ptr_t( new HFile( "data/xml-fail-xi.xml", HFile::OPEN::READING ) ), HXml::PARSER::RESOLVE_ENTITIES | HXml::PARSER::AUTO_XINCLUDE ), HXmlException );
 TUT_TEARDOWN()
@@ -310,7 +310,7 @@ TUT_UNIT_TEST( "load(XINCLUDE) (no resolve entities), save" )
 	ENSURE_EQUALS( "try_attr_val(it) failed", xml::attr_val( special.begin(), "prop" ), "value" );
 	xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( "out/tut-xi.xml", HFile::OPEN::WRITING ) ) ), HXml::GENERATOR::INDENT );
 	resort_entities( "out/tut-xi.xml" );
-	ENSURE( "load xinclude failed", file_compare( "out/tut-xi.xml", "data/xml-xi-noent-out.xml" ) );
+	ENSURE_SAME_CONTENT( "load xinclude failed", "out/tut-xi.xml", "data/xml-xi-noent-out.xml" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "load, save, clear, handmade, save" )
@@ -350,7 +350,7 @@ TUT_UNIT_TEST( "apply stylesheet" )
 	_xml.parse();
 	_xml.save( tools::ensure( HStreamInterface::ptr_t( new HFile( OUT_POST_PATH, HFile::OPEN::WRITING ) ) ) );
 	resort_entities( OUT_POST_PATH );
-	ENSURE( "apply style failed", file_compare( OUT_POST_PATH, expected ) );
+	ENSURE_SAME_CONTENT( "apply style failed", OUT_POST_PATH, expected );
 	std::clog << _xml;
 TUT_TEARDOWN()
 

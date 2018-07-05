@@ -239,7 +239,7 @@ void HSTDGlobalScopeExceptionHandlingPolicy::handle_exception( void ) {
 	exit( 1 );
 }
 
-bool file_compare( yaal::hcore::HString const& path1_, yaal::hcore::HString const& path2_ ) {
+bool file_binary_compare( yaal::hcore::HString const& path1_, yaal::hcore::HString const& path2_ ) {
 	HFile f1( path1_, HFile::OPEN::READING );
 	HFile f2( path2_, HFile::OPEN::READING );
 	static int const BUF_SIZE( 1024 );
