@@ -401,6 +401,16 @@ TUT_UNIT_TEST( "tuple()" )
 	);
 	ENSURE_EQUALS( "tuple failed (crazy)", execute( "f(a){return(\"X\"+a+\"X\");}main(){return((f,)[0](\"hi\"));}" ), "\"XhiX\"" );
 	ENSURE_EQUALS(
+		"list find failed",
+		execute(
+			"main(){"
+			"x=(2,3,2,5,3,2,7);"
+			"return((x.find(2),x.find(3),x.find(5),x.find(7),x.find(0),x.find(2,2), x.find(2,3), x.find(2,2,2)));"
+			"}"
+		),
+		"(0, 1, 3, 6, -1, 2, 5, -1)"
+	);
+	ENSURE_EQUALS(
 		"tuple to_string failed",
 		execute( "main(){x=tuple(2,3,5,7);return(x);}" ),
 		"(2, 3, 5, 7)"
@@ -539,6 +549,16 @@ TUT_UNIT_TEST( "list()" )
 		execute( "main(){x=list(2,3,5,7);x.clear();return(x);}" ),
 		"[]"
 	);
+	ENSURE_EQUALS(
+		"list find failed",
+		execute(
+			"main(){"
+			"x=[2,3,2,5,3,2,7];"
+			"return([x.find(2),x.find(3),x.find(5),x.find(7),x.find(0),x.find(2,2), x.find(2,3), x.find(2,2,2)]);"
+			"}"
+		),
+		"[0, 1, 3, 6, -1, 2, 5, -1]"
+	);
 	ENSURE_EQUALS( "list reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed([2,3,5,7]),list);}" ), "[7, 5, 3, 2]" );
 	ENSURE_EQUALS( "list size/copy reversed() failed", execute( "import Algorithms as algo;main(){x=algo.reversed([2,3,5,7]);algo.materialize(copy(x),list).push(size(x));}" ), "[7, 5, 3, 2, 4]" );
 	ENSURE_EQUALS(
@@ -635,6 +655,16 @@ TUT_UNIT_TEST( "deque()" )
 		"deque clear failed",
 		execute( "main(){x=deque(2,3,5,7);x.clear();return(x);}" ),
 		"deque()"
+	);
+	ENSURE_EQUALS(
+		"deque find failed",
+		execute(
+			"main(){"
+			"x=deque(2,3,2,5,3,2,7);"
+			"return(deque(x.find(2),x.find(3),x.find(5),x.find(7),x.find(0),x.find(2,2), x.find(2,3), x.find(2,2,2)));"
+			"}"
+		),
+		"deque(0, 1, 3, 6, -1, 2, 5, -1)"
 	);
 	ENSURE_EQUALS( "deque reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed(deque(2,3,5,7)),deque);}" ), "deque(7, 5, 3, 2)" );
 	ENSURE_EQUALS( "deque reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed(deque(2,3,5,7));algo.materialize(copy(x),deque).push(size(x));}" ), "deque(7, 5, 3, 2, 4)" );
