@@ -332,14 +332,14 @@ TUT_UNIT_TEST( "dereference iterator for single token" )
 	}
 	/* delim by whole multi character */ {
 		HString text( "list_commands" );
-		HTokenizer tokenizer( text, character_class( CHARACTER_CLASS::WHITESPACE ).data() );
+		HTokenizer tokenizer( text, character_class<CHARACTER_CLASS::WHITESPACE>().data() );
 		HTokenizer::HIterator it( tokenizer.begin() );
 		ENSURE( "begin failed", it != tokenizer.end() );
 		ENSURE_EQUALS( "dereferencing token iterator failed", *it, text );
 	}
 	/* delim by any */ {
 		HString text( "list_commands" );
-		HTokenizer tokenizer( text, character_class( CHARACTER_CLASS::WHITESPACE ).data(), HTokenizer::DELIMITED_BY_ANY_OF );
+		HTokenizer tokenizer( text, character_class<CHARACTER_CLASS::WHITESPACE>().data(), HTokenizer::DELIMITED_BY_ANY_OF );
 		HTokenizer::HIterator it( tokenizer.begin() );
 		ENSURE( "begin failed", it != tokenizer.end() );
 		ENSURE_EQUALS( "dereferencing token iterator failed", *it, text );

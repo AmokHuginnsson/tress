@@ -228,8 +228,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "not1" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	ENSURE_EQUALS( "misscounted 16", count_if( begin( a ), end( a ), not1( bind2nd( less<int>(), 50 ) ) ), countof( a ) - 7 );
-	ENSURE_EQUALS( "misscounted 16", count_if( begin( a ), end( a ), not1( bind2nd( less<int>(), 1 ) ) ), countof( a ) - 0 );
+	ENSURE_EQUALS( "misscounted 16", count_if( begin( a ), end( a ), not1( bind2nd( less<int>(), 50 ) ) ), yaal::size( a ) - 7 );
+	ENSURE_EQUALS( "misscounted 16", count_if( begin( a ), end( a ), not1( bind2nd( less<int>(), 1 ) ) ), yaal::size( a ) - 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "not2" )

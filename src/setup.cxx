@@ -132,7 +132,7 @@ void OSetup::test_setup( void ) {
 		M_THROW( _( "bad time constraint" ), time::in_units<time::UNIT::MILLISECOND>( _timeConstraint ) );
 	}
 	char const* FRAMEWORK[] = { "tut", "boost", "google", "cppunit", "xml", "qt", "cute" };
-	if ( ! count( FRAMEWORK, FRAMEWORK + countof ( FRAMEWORK ), _reporter ) ) {
+	if ( ! count( FRAMEWORK, FRAMEWORK + yaal::size( FRAMEWORK ), _reporter ) ) {
 		M_THROW( _( "invalid framework specified: " ) + _reporter, 0 );
 	}
 	if ( ( _reporter == "qt" ) && ( _argc > 1 ) ) {
@@ -142,7 +142,7 @@ void OSetup::test_setup( void ) {
 	if ( ( _reporter != FRAMEWORK[0] ) && ( _errorLine != IDE[0] ) ) {
 		M_THROW( _( "specifing IDE for reporter `" ) + _reporter + _( "' is illegal" ), 0 );
 	}
-	if ( ! count( IDE, IDE + countof ( IDE ), _errorLine ) ) {
+	if ( ! count( IDE, IDE + yaal::size( IDE ), _errorLine ) ) {
 		M_THROW( _( "invalid IDE specified: " ) + _errorLine, 0 );
 	}
 	if ( ( _errorLine != IDE[0] ) || ! ::getenv( "TERM" ) ) {
@@ -156,7 +156,7 @@ void OSetup::test_setup( void ) {
 #ifdef __TRESS__
 		if ( _debug ) {
 			clog << "test data: ";
-			copy( tut_helpers::_testData_[0], tut_helpers::_testData_[0] + countof ( tut_helpers::_testData_[0] ), stream_iterator( clog, " " ) );
+			copy( tut_helpers::_testData_[0], tut_helpers::_testData_[0] + yaal::size( tut_helpers::_testData_[0] ), stream_iterator( clog, " " ) );
 			clog << endl;
 		}
 #endif /* #ifdef __TRESS__ */

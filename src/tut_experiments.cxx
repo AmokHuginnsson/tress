@@ -141,15 +141,15 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	HNumber a( "0.7" );
 	HPair<HString, double> p( make_pair<HString>( "PI", pi.to_floating_point() ) );
 	HArray<int> emptyArray;
-	HArray<int> array( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HArray<int> array( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
 	HDeque<int> emptyDeque;
-	HDeque<int short> dequeShort( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	HDeque<int> deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	HDeque<int long> dequeLong( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HDeque<int short> dequeShort( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
+	HDeque<int> deque( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
+	HDeque<int long> dequeLong( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
 	HList<int> emptyList;
-	HList<int> list( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HList<int> list( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
 	HSet<int> emptySet;
-	HSet<int> set( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HSet<int> set( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
 	HMap<int, int> map;
 	HLookupMap<int, int> lookup;
 	HTime birth( 1978, 5, 24, 23, 30, 00 );
@@ -160,10 +160,10 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	HMap<int, int> emptyMap;
 	HLookupMap<int, int> emptyLookup;
 	HHashSet<int> emptyHashSet;
-	HHashSet<int> hashSet( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HHashSet<int> hashSet( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
 	HRing<int> emptyRing;
-	HRing<int> ring( ring::capacity_type( countof ( _testData_[0] ) * 2 ),
-		_testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	HRing<int> ring( ring::capacity_type( yaal::size( _testData_[0] ) * 2 ),
+		_testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
 	HHashMap<int, int> hashMap;
 	HHashMap<int, int> emptyHashMap;
 	for ( int i( 0 ); i < 10; ++ i )

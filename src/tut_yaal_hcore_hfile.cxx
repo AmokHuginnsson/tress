@@ -90,7 +90,7 @@ TUT_UNIT_TEST( "HFile::write (overwrite)" )
 			ENSURE_EQUALS( "bad data written to file", line, data[i] );
 			++ i;
 		}
-		ENSURE_EQUALS( "bad line count", i, countof ( data ) );
+		ENSURE_EQUALS( "bad line count", i, yaal::size( data ) );
 	}
 TUT_TEARDOWN()
 
@@ -124,7 +124,7 @@ TUT_UNIT_TEST( "HFile::write (append)" )
 		ENSURE_EQUALS( "bad data written to file", line, dataOut[i] );
 		++ i;
 	}
-	ENSURE_EQUALS( "bad line count", i, countof ( dataOut ) );
+	ENSURE_EQUALS( "bad line count", i, yaal::size( dataOut ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "HFile::tell()" )
@@ -153,7 +153,7 @@ TUT_UNIT_TEST( "HFile::seek()" )
 		ENSURE_EQUALS( "bad data written to file", line, data[i] );
 		++ i;
 	}
-	ENSURE_EQUALS( "bad line count", i, countof ( data ) );
+	ENSURE_EQUALS( "bad line count", i, yaal::size( data ) );
 	HFile f( "./out/file.dat", HFile::OPEN::READING | HFile::OPEN::WRITING );
 	ENSURE_EQUALS( "bad tell() after RW open", f.tell(), 0 );
 	f << "XXXXXX" << endl;
@@ -182,7 +182,7 @@ TUT_UNIT_TEST( "HFile::seek()" )
 		ENSURE_EQUALS( "bad data written to file", line, dataOut[i] );
 		++ i;
 	}
-	ENSURE_EQUALS( "bad line count", i, countof ( dataOut ) );
+	ENSURE_EQUALS( "bad line count", i, yaal::size( dataOut ) );
 TUT_TEARDOWN()
 
 }

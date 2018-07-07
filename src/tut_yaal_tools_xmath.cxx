@@ -68,7 +68,7 @@ TUT_UNIT_TEST( "number set stats: minimum" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "number set stats: maximum" )
-	ENSURE_EQUALS( "number_set_stats().maximum() failed", number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).maximum(), _testData_[0][countof ( _testData_[0] ) - 1] );
+	ENSURE_EQUALS( "number_set_stats().maximum() failed", number_set_stats( begin( _testData_[0] ), end( _testData_[0] ) ).maximum(), _testData_[0][yaal::size( _testData_[0] ) - 1] );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "number set stats: count" )
@@ -132,7 +132,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "stats on dice" )
 	double long dice[] = { 1, 2, 3, 4, 5, 6 };
-	HNumberSetStats<double long> diceStats( dice, dice + countof ( dice ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN );
+	HNumberSetStats<double long> diceStats( dice, dice + yaal::size( dice ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN );
 	clog << "dice stats: " << endl
 		<< "minimum                       = " << diceStats.minimum() << endl
 		<< "maximum                       = " << diceStats.maximum() << endl
@@ -178,11 +178,11 @@ TUT_UNIT_TEST( "central_moving_average" )
 			data[idx ++] = ( triangleWidth  / 2 ) - j;
 	}
 	data_t expect( dataCount );
-	data_t cma[countof ( testRanges )];
+	data_t cma[yaal::size( testRanges )];
 	HFile o;
 	if ( tress::setup._debug )
 		o.open( "./out/data.txt", HFile::OPEN::WRITING );
-	for ( int t( 0 ); t < countof ( testRanges ); ++ t ) {
+	for ( int t( 0 ); t < yaal::size( testRanges ); ++ t ) {
 		cma[t].resize( dataCount );
 		central_moving_average( data.begin(), data.end(), cma[t].begin(), testRanges[t] );
 		for ( int i( 0 ); i < dataCount; ++ i )
@@ -193,7 +193,7 @@ TUT_UNIT_TEST( "central_moving_average" )
 	if ( tress::setup._debug ) {
 		for ( int i( 0 ); i < dataCount; ++ i ) {
 			o << data[i];
-			for ( int t( 0 ); t < countof ( testRanges ); ++ t )
+			for ( int t( 0 ); t < yaal::size( testRanges ); ++ t )
 				o << " " << cma[t][i];
 			o << endl;
 		}
@@ -233,11 +233,11 @@ TUT_UNIT_TEST( "moving_average" )
 			data[idx ++] = ( triangleWidth  / 2 ) - j;
 	}
 	data_t expect( dataCount );
-	data_t ma[countof ( testRanges )];
+	data_t ma[yaal::size( testRanges )];
 	HFile o;
 	if ( tress::setup._debug )
 		o.open( "./out/data.txt", HFile::OPEN::WRITING );
-	for ( int t( 0 ); t < countof ( testRanges ); ++ t ) {
+	for ( int t( 0 ); t < yaal::size( testRanges ); ++ t ) {
 		ma[t].resize( dataCount );
 		moving_average( data.begin(), data.end(), ma[t].begin(), testRanges[t] );
 		for ( int i( 0 ); i < dataCount; ++ i )
@@ -248,7 +248,7 @@ TUT_UNIT_TEST( "moving_average" )
 	if ( tress::setup._debug ) {
 		for ( int i( 0 ); i < dataCount; ++ i ) {
 			o << data[i];
-			for ( int t( 0 ); t < countof ( testRanges ); ++ t )
+			for ( int t( 0 ); t < yaal::size( testRanges ); ++ t )
 				o << " " << ma[t][i];
 			o << endl;
 		}

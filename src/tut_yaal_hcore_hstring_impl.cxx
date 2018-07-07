@@ -648,7 +648,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "adaptive::find_other_than" )
 	char const text[] = "Don't tread on me";
-	char const* const set( character_class( CHARACTER_CLASS::LETTER ).data() );
+	char const* const set( character_class<CHARACTER_CLASS::LETTER>().data() );
 	HString ucs1( text );
 	HString ucs2( text );
 	ucs2.reserve( ucs2.get_length(), 2 );
@@ -707,7 +707,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "adaptive::find_last_other_than" )
 	char const text[] = "Don't tread on me";
-	char const* const set( character_class( CHARACTER_CLASS::LETTER ).data() );
+	char const* const set( character_class<CHARACTER_CLASS::LETTER>().data() );
 	HString ucs1( text );
 	HString ucs2( text );
 	ucs2.reserve( ucs2.get_length(), 2 );

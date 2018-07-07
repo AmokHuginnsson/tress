@@ -325,7 +325,7 @@ TUT_UNIT_TEST( "mostly zeros en" )
 		10001000LL, 10100000LL, 100000000LL, 1000000000LL, 10000000000LL
 	};
 	HString s;
-	for ( int i( 0 ); i < countof( v ); ++ i ) {
+	for ( int i( 0 ); i < yaal::size( v ); ++ i ) {
 		ENSURE_EQUALS( "en "_ys.append( v[i] ).append( " failed" ), s = in_words_en( v[i], CURRENCY::DOLLAR ), expected[i] );
 		clog << v[i] << " = [" << s << "]" << endl;
 	}
@@ -370,7 +370,7 @@ TUT_UNIT_TEST( "Iwona" )
 		{ "3423854923.02", "trzy miliardy czterysta dwadzieścia trzy miliony osiemset pięćdziesiąt cztery tysiące dziewięćset dwadzieścia trzy dollary dwa centy" }
 	};
 	HString s;
-	for ( int i( 0 ); i < countof ( trials ); ++ i ) {
+	for ( int i( 0 ); i < yaal::size( trials ); ++ i ) {
 		ENSURE_EQUALS( "pl "_ys.append( trials[i][0] ).append( " failed" ), s = in_words_pl( trials[i][0], CURRENCY::DOLLAR ), trials[i][1] );
 		clog << trials[i][0] << " = [" << s << "]" << endl;
 	}

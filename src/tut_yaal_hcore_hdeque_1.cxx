@@ -34,13 +34,13 @@ TUT_TEST_GROUP( tut_yaal_hcore_hdeque_1, "yaal::hcore::HDeque,1" );
 
 TUT_UNIT_TEST( "Constructor with range initialization." )
 	item_t::set_start_id( 0 );
-	deque_t deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-	proto_t proto( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	deque_t deque( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
+	proto_t proto( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
 	check_consistency( deque );
 	ENSURE_EQUALS( "range initialization failed", deque, proto );
 	typedef HInstanceTracker<tut_yaal_hcore_hdeque_1, 128> big_item_t;
 	typedef HDeque<big_item_t> big_deque_t;
-	big_deque_t big_deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+	big_deque_t big_deque( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
 	check_consistency( deque );
 	check_consistency( big_deque );
 	ENSURE_EQUALS( "range initialization failed", big_deque, proto );
@@ -101,9 +101,9 @@ void tut_yaal_hcore_hdeque_1::test_erase( int first_, int last_ ) {
 	typedef HDeque<item_type> deque_type; {
 		clog << "testing erase: " << item_size << ", first: " << first_ << ", last: " << last_ << endl;
 		item_type::set_start_id( 0 );
-		deque_type deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		deque_type deque( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
 		check_consistency( deque );
-		proto_t proto( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		proto_t proto( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
 		proto.erase( proto.begin() + first_, proto.begin() + last_ );
 		deque.erase( deque.begin() + first_, deque.begin() + last_ );
 		check_consistency( deque );
@@ -115,19 +115,19 @@ void tut_yaal_hcore_hdeque_1::test_erase( int first_, int last_ ) {
 
 template<int const item_size>
 void tut_yaal_hcore_hdeque_1::test_erase( void ) {
-	test_erase<item_size>( 0, countof( _testData_[0] ) / 2 );
-	test_erase<item_size>( countof( _testData_[0] ) / 2, countof( _testData_[0] ) );
-	test_erase<item_size>( 0, countof( _testData_[0] ) );
+	test_erase<item_size>( 0, yaal::size( _testData_[0] ) / 2 );
+	test_erase<item_size>( yaal::size( _testData_[0] ) / 2, yaal::size( _testData_[0] ) );
+	test_erase<item_size>( 0, yaal::size( _testData_[0] ) );
 	test_erase<item_size>( 0, 1 );
-	test_erase<item_size>( countof ( _testData_[0] ) - 1, countof ( _testData_[0] ) );
-	test_erase<item_size>( 1, countof ( _testData_[0] ) - 1 );
+	test_erase<item_size>( yaal::size( _testData_[0] ) - 1, yaal::size( _testData_[0] ) );
+	test_erase<item_size>( 1, yaal::size( _testData_[0] ) - 1 );
 	test_erase<item_size>( 3, 6 );
-	test_erase<item_size>( countof ( _testData_[0] ) - 6, countof ( _testData_[0] ) - 3 );
-	test_erase<item_size>( countof ( _testData_[0] ) / 2 - 3, countof ( _testData_[0] ) / 2 + 3 );
-	test_erase<item_size>( 0, countof( _testData_[0] ) / 2 + countof ( _testData_[0] ) / 4 );
-	test_erase<item_size>( 3, countof( _testData_[0] ) / 2 + countof ( _testData_[0] ) / 4 );
-	test_erase<item_size>( countof ( _testData_[0] ) / 4, countof( _testData_[0] ) );
-	test_erase<item_size>( countof ( _testData_[0] ) / 4, countof( _testData_[0] ) - 3 );
+	test_erase<item_size>( yaal::size( _testData_[0] ) - 6, yaal::size( _testData_[0] ) - 3 );
+	test_erase<item_size>( yaal::size( _testData_[0] ) / 2 - 3, yaal::size( _testData_[0] ) / 2 + 3 );
+	test_erase<item_size>( 0, yaal::size( _testData_[0] ) / 2 + yaal::size( _testData_[0] ) / 4 );
+	test_erase<item_size>( 3, yaal::size( _testData_[0] ) / 2 + yaal::size( _testData_[0] ) / 4 );
+	test_erase<item_size>( yaal::size( _testData_[0] ) / 4, yaal::size( _testData_[0] ) );
+	test_erase<item_size>( yaal::size( _testData_[0] ) / 4, yaal::size( _testData_[0] ) - 3 );
 }
 
 TUT_UNIT_TEST( "range erase" )
@@ -225,8 +225,8 @@ TUT_UNIT_TEST( "roll forward (push_back/pop_front) insert erase" )
 	int shift[] = { 1, 2, 3, 4, 5, 6, 7, 8, 16, 32 };
 	int pack[] = { 1, 2, 3, 4, 5, 7, 8 };
 	int distance( 1024 );
-	for ( int s( 0 ); s < countof ( shift ); ++ s ) {
-		for ( int p( 0 ); p < countof ( pack ); ++ p ) {
+	for ( int s( 0 ); s < yaal::size( shift ); ++ s ) {
+		for ( int p( 0 ); p < yaal::size( pack ); ++ p ) {
 			test_roll_forward_insert_erase<1>( shift[s], pack[p], distance );
 			test_roll_forward_insert_erase<2>( shift[s], pack[p], distance );
 			test_roll_forward_insert_erase<3>( shift[s], pack[p], distance );
@@ -243,7 +243,7 @@ TUT_UNIT_TEST( "roll forward (push_back/pop_front) insert erase" )
 			test_roll_forward_insert_erase<640>( shift[s], pack[p], distance );
 		}
 	}
-	for ( int s( 0 ); s < countof ( shift ); ++ s ) {
+	for ( int s( 0 ); s < yaal::size( shift ); ++ s ) {
 		test_roll_forward_greedy_insert_erase<1>( shift[s], distance );
 		test_roll_forward_greedy_insert_erase<2>( shift[s], distance );
 		test_roll_forward_greedy_insert_erase<3>( shift[s], distance );

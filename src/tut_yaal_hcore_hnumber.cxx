@@ -1654,15 +1654,15 @@ TUT_UNIT_TEST( "round<HNumber>()" )
 		"1"
 	};
 	HString msg;
-	for ( int i( 0 ); i < countof ( numsU ); ++ i ) {
+	for ( int i( 0 ); i < yaal::size( numsU ); ++ i ) {
 		HNumber U( "0.123456789123456789" );
-		int round( ( countof ( numsU ) ) - i - 1 );
+		int round( ( yaal::size( numsU ) ) - i - 1 );
 		msg = format( "round( U, %d ) failed", round );
 		ENSURE_EQUALS( msg, U.round( round ), numsU[i] );
 	}
-	for ( int i( 0 ); i < countof ( numsD ); ++ i ) {
+	for ( int i( 0 ); i < yaal::size( numsD ); ++ i ) {
 		HNumber D( "0.987654321987654321" );
-		int round( ( countof ( numsD ) ) - i - 1 );
+		int round( ( yaal::size( numsD ) ) - i - 1 );
 		msg = format( "round( D, %d ) failed", round );
 		ENSURE_EQUALS( msg, D.round( round ), numsD[i] );
 	}

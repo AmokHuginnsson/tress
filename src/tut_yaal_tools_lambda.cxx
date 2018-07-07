@@ -16,7 +16,7 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 static int const MAX_DATA = 9;
-static_assert( MAX_DATA <= countof ( _testData_[0] ), "bad _testData_[0]_ size detected" );
+static_assert( MAX_DATA <= yaal::size( _testData_[0] ), "bad _testData_[0]_ size detected" );
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_lambda );
 TUT_TEST_GROUP( tut_yaal_tools_lambda, "yaal::tools::lambda" );

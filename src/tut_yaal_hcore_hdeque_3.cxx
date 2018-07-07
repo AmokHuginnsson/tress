@@ -140,8 +140,8 @@ TUT_UNIT_TEST( "roll forward (push_back/pop_front)" )
 	int shift[] = { 1, 2, 3, 4, 5, 6, 7, 8, 16, 32 };
 	int pack[] = { 1, 2, 3, 4, 5, 7, 8 };
 	int distance( 1024 );
-	for ( int s( 0 ); s < countof ( shift ); ++ s ) {
-		for ( int p( 0 ); p < countof ( pack ); ++ p ) {
+	for ( int s( 0 ); s < yaal::size( shift ); ++ s ) {
+		for ( int p( 0 ); p < yaal::size( pack ); ++ p ) {
 			test_roll_forward<1>( shift[s], pack[p], distance );
 			test_roll_forward<2>( shift[s], pack[p], distance );
 			test_roll_forward<3>( shift[s], pack[p], distance );
@@ -158,7 +158,7 @@ TUT_UNIT_TEST( "roll forward (push_back/pop_front)" )
 			test_roll_forward<640>( shift[s], pack[p], distance );
 		}
 	}
-	for ( int s( 0 ); s < countof ( shift ); ++ s ) {
+	for ( int s( 0 ); s < yaal::size( shift ); ++ s ) {
 		test_roll_forward_greedy<1>( shift[s], distance );
 		test_roll_forward_greedy<2>( shift[s], distance );
 		test_roll_forward_greedy<3>( shift[s], distance );

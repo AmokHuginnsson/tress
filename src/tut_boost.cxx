@@ -233,7 +233,7 @@ TUT_UNIT_TEST( "compare with constant." )
 	typedef list<item_t> list_t;
 	item_t a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ), boost::bind( &item_t::id, _1 ) < 50 );
+	remove_copy_if( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ), boost::bind( &item_t::id, _1 ) < 50 );
 	copy( l.begin(), l.end(), ostream_iterator<item_t>( clog, " " ) );
 	clog << endl;
 TUT_TEARDOWN()
@@ -243,19 +243,19 @@ TUT_UNIT_TEST( "lambda test." )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ), _1 < 50 );
+	remove_copy_if( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ), _1 < 50 );
 	copy( l.begin(), l.end(), ostream_iterator<int>( clog, " " ) );
 	clog << endl;
 	l.clear();
-	transform( a, a + countof( a ), back_insert_iterator<list_t>( l ), _1 + 10 );
+	transform( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ), _1 + 10 );
 	copy( l.begin(), l.end(), ostream_iterator<int>( clog, " " ) );
 	clog << endl;
 	l.clear();
-	transform( a, a + countof( a ), back_insert_iterator<list_t>( l ), _1 * 2 + 10 );
+	transform( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ), _1 * 2 + 10 );
 	copy( l.begin(), l.end(), ostream_iterator<int>( clog, " " ) );
 	clog << endl;
 	l.clear();
-	for_each( a, a + countof( a ), clog << ( _1 << 1 ) << " " );
+	for_each( a, a + yaal::size( a ), clog << ( _1 << 1 ) << " " );
 	clog << endl;
 TUT_TEARDOWN()
 

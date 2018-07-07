@@ -35,7 +35,7 @@ int main( int argc_, char* argv_[] ) {
 		if ( !! setup._script ) {
 			HString nonWord;
 			for ( code_point_t::value_type c = 1; c < 256; ++ c ) {
-				if ( ! character_class( CHARACTER_CLASS::WORD ).has( code_point_t( c ) ) ) {
+				if ( ! character_class<CHARACTER_CLASS::WORD>().has( code_point_t( c ) ) ) {
 					nonWord.push_back( code_point_t( c ) );
 				}
 			}

@@ -2690,7 +2690,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Introspection" )
 	typedef yaal::hcore::HArray<yaal::hcore::HString> tokens_t;
-	tokens_t yaalVersion( string::split<tokens_t>( yaal_version( true ), character_class( CHARACTER_CLASS::WHITESPACE ).data(), HTokenizer::DELIMITED_BY_ANY_OF ) );
+	tokens_t yaalVersion( string::split<tokens_t>( yaal_version( true ), character_class<CHARACTER_CLASS::WHITESPACE>().data(), HTokenizer::DELIMITED_BY_ANY_OF ) );
 	ENSURE_EQUALS(
 		"Introspection.version failed",
 		execute(

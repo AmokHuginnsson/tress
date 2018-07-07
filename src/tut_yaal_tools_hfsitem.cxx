@@ -68,7 +68,7 @@ TUT_UNIT_TEST( "exists" )
 			{ "./data///", true },
 			{ "//", true }
 	};
-	for ( int i( 0 ); i < countof ( pathTest ); ++ i ) {
+	for ( int i( 0 ); i < yaal::size( pathTest ); ++ i ) {
 		HFSItem fit( pathTest[i]._path );
 		ENSURE( err + pathTest[i]._path, xnor( !! fit, pathTest[i]._exists ) );
 	}

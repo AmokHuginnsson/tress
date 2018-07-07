@@ -365,20 +365,20 @@ TUT_UNIT_TEST( "command line" )
 		"nonOpt2",
 		"--option"
 	};
-	char* cmdLine[countof ( cmdLineData )];
+	char* cmdLine[yaal::size( cmdLineData )];
 	int n( 0 );
 	for ( char const* p : cmdLineData ) {
 		cmdLine[n] = const_cast<char*>( p );
 		++ n;
 	}
-	int nonOpt( po.process_command_line( countof ( cmdLine ), cmdLine ) );
+	int nonOpt( po.process_command_line( yaal::size( cmdLine ), cmdLine ) );
 	ENSURE( "flag not set", flag );
 	ENSURE( "switch not set", optS );
 	ENSURE_NOT( "restartable set", b );
 	ENSURE_DISTANCE( "bad ratio", d, 7., static_cast<double>( epsilon ) );
 	ENSURE_EQUALS( "bad param", optP, "XX" );
 	ENSURE_EQUALS( "bad param", optO, "" );
-	ENSURE_EQUALS( "bad nonOpt score", nonOpt, countof ( cmdLineData ) - 2 );
+	ENSURE_EQUALS( "bad nonOpt score", nonOpt, yaal::size( cmdLineData ) - 2 );
 TUT_TEARDOWN()
 
 }

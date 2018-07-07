@@ -49,7 +49,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "Constructor with range initialization." )
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 ); {
-		HStaticArray<item_t, countof ( a )> array( begin( a ), end( a ) );
+		HStaticArray<item_t, yaal::size( a )> array( begin( a ), end( a ) );
 		ENSURE( "range initialization failed", safe_equal( array.begin(), array.end(), begin( a ), end( a ) ) );
 	}
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
@@ -87,8 +87,8 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "assign operator (=)" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	item_t::set_start_id( 0 );
-	HStaticArray<item_t, countof ( a0 )> array( begin( a0 ), end( a0 ) );
-	HStaticArray<item_t, countof ( a0 )> other( -1 );
+	HStaticArray<item_t, yaal::size( a0 )> array( begin( a0 ), end( a0 ) );
+	HStaticArray<item_t, yaal::size( a0 )> other( -1 );
 	other = array;
 	ENSURE_EQUALS( "assgin failed", array, other );
 TUT_TEARDOWN()
@@ -97,15 +97,15 @@ TUT_UNIT_TEST( "swap" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { 37, 12, 234, 29, 6, 5, 326, 149, 654, 12, 10, 306 };
 	item_t::set_start_id( 0 );
-	HStaticArray<item_t, countof ( a0 )> sa0( a0, countof ( a0 ) );
-	HStaticArray<item_t, countof ( a0 )> t( a0, countof ( a0 ) );
+	HStaticArray<item_t, yaal::size( a0 )> sa0( a0, yaal::size( a0 ) );
+	HStaticArray<item_t, yaal::size( a0 )> t( a0, yaal::size( a0 ) );
 	ENSURE_EQUALS( "init failed", sa0, t );
-	HStaticArray<item_t, countof ( a0 )> sa1( a1, countof ( a1 ) );
-	t.assign( a1, countof ( a1 ) );
+	HStaticArray<item_t, yaal::size( a0 )> sa1( a1, yaal::size( a1 ) );
+	t.assign( a1, yaal::size( a1 ) );
 	ENSURE_EQUALS( "init failed", sa1, t );
 	sa0.swap( sa1 );
 	ENSURE_EQUALS( "swap failed", sa0, t );
-	t.assign( a0, countof ( a0 ) );
+	t.assign( a0, yaal::size( a0 ) );
 	ENSURE_EQUALS( "swap failed", sa1, t );
 TUT_TEARDOWN()
 

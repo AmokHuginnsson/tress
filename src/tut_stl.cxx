@@ -166,7 +166,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "remove_if algorithm" )
 	typedef list<int> list_t;
 	int a[] = { 1, -2, 3, -4, 9, -8, 7, -6, 5 };
-	list_t l( a, a + countof( a ) );
+	list_t l( a, a + yaal::size( a ) );
 	copy( l.begin(), l.end(), ostream_iterator<int>( clog, " " ) );
 	clog << endl;
 	list_t::iterator end( remove_if( l.begin(), l.end(), bind2nd( less<int>(), 0 ) ) );
@@ -193,7 +193,7 @@ TUT_UNIT_TEST( "transform" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	transform( static_cast<int*>( a ), a + countof( a ), back_insert_iterator<list_t>( l ), compose1( cast<int, double>(), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ) );
+	transform( static_cast<int*>( a ), a + yaal::size( a ), back_insert_iterator<list_t>( l ), compose1( cast<int, double>(), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ) );
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "transform failed", ss.str(), "1 2 3 4 5 6 7 8 9 10 " );
@@ -206,7 +206,7 @@ TUT_UNIT_TEST( "negate" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	transform( a, a + countof( a ), back_insert_iterator<list_t>( l ), negate<int>() );
+	transform( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ), negate<int>() );
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "negate failed", ss.str(), "-1 -4 -9 -16 -25 -36 -49 -64 -81 -100 " );
@@ -219,7 +219,7 @@ TUT_UNIT_TEST( "compose1" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	transform( a, a + countof( a ), back_insert_iterator<list_t>( l ), compose1( negate<int>(), bind1st( plus<int>(), 1 ) ) );
+	transform( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ), compose1( negate<int>(), bind1st( plus<int>(), 1 ) ) );
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "compose1 failed", ss.str(), "-2 -5 -10 -17 -26 -37 -50 -65 -82 -101 " );
@@ -232,7 +232,7 @@ TUT_UNIT_TEST( "remove_copy_if" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ),
+	remove_copy_if( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ),
 				bind1st( less<int>(), 30 ) );
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
@@ -246,7 +246,7 @@ TUT_UNIT_TEST( "compose2" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ),
+	remove_copy_if( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ),
 			compose2(
 				logical_and<bool>(),
 				bind1st( less<int>(), 30 ),
@@ -261,20 +261,20 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "count" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 16, 49, 64, 81, 100, 16 };
-	ENSURE_EQUALS( "misscounted 16", count( a, a + countof( a ), 16 ), 3 );
-	ENSURE_EQUALS( "misscounted 16", count( a, a + countof( a ), 17 ), 0 );
+	ENSURE_EQUALS( "misscounted 16", count( a, a + yaal::size( a ), 16 ), 3 );
+	ENSURE_EQUALS( "misscounted 16", count( a, a + yaal::size( a ), 17 ), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "count_if" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), bind2nd( less<int>(), 50 ) ), 7 );
-	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), bind2nd( less<int>(), 1 ) ), 0 );
+	ENSURE_EQUALS( "misscounted 16", count_if( a, a + yaal::size( a ), bind2nd( less<int>(), 50 ) ), 7 );
+	ENSURE_EQUALS( "misscounted 16", count_if( a, a + yaal::size( a ), bind2nd( less<int>(), 1 ) ), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "not1" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
-	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), not1( bind2nd( less<int>(), 50 ) ) ), countof( a ) - 7 );
-	ENSURE_EQUALS( "misscounted 16", count_if( a, a + countof( a ), not1( bind2nd( less<int>(), 1 ) ) ), countof( a ) - 0 );
+	ENSURE_EQUALS( "misscounted 16", count_if( a, a + yaal::size( a ), not1( bind2nd( less<int>(), 50 ) ) ), yaal::size( a ) - 7 );
+	ENSURE_EQUALS( "misscounted 16", count_if( a, a + yaal::size( a ), not1( bind2nd( less<int>(), 1 ) ) ), yaal::size( a ) - 0 );
 TUT_TEARDOWN()
 
 #ifdef HAVE_SGI_STL_EXTENSIONS
@@ -283,7 +283,7 @@ TUT_UNIT_TEST( "not2" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ),
+	remove_copy_if( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ),
 			compose2(
 				not2(	logical_and<bool>() ),
 				bind1st( less<int>(), 30 ),
@@ -298,7 +298,7 @@ TUT_UNIT_TEST( "identity" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ),
+	remove_copy_if( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ),
 			compose2(
 				not2(	logical_and<bool>() ),
 				compose1( bind1st( less<int>(), 30 ), identity<int>() ),
@@ -313,7 +313,7 @@ TUT_UNIT_TEST( "ptr_fun" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	remove_copy_if( a, a + countof( a ), back_insert_iterator<list_t>( l ),
+	remove_copy_if( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ),
 			compose2(
 				not2(	logical_and<bool>() ),
 				compose1( compose1( bind1st( less<int>(), 5 ), compose1( cast<int, double>(), ptr_fun( static_cast<double (*)( double )>( sqrt ) ) ) ), cast<int, int>() ),
@@ -404,9 +404,9 @@ TUT_UNIT_TEST( "replace" )
 	typedef list<int> list_t;
 	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	list_t l;
-	replace( a, a + countof ( a ), 36, 7 );
+	replace( a, a + yaal::size( a ), 36, 7 );
 	stringstream ss;
-	copy( a, a + countof ( a ), ostream_iterator<int>( ss, " " ) );
+	copy( a, a + yaal::size( a ), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "replace failed", ss.str(), "7 1 4 9 16 25 7 49 64 81 100 7 " );
 	clog << ss.str() << endl;
 TUT_TEARDOWN()

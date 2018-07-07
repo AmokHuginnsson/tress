@@ -125,10 +125,10 @@ TUT_UNIT_TEST( "grammar test" )
 	int i( 0 );
 	for ( HGrammarDescription::const_iterator it( gd.begin() ), end( gd.end() ); it != end; ++ it, ++ i ) {
 		clog << *it << endl;
-		ENSURE( "too many rules in Huginn grammar", i < countof ( expected ) );
+		ENSURE( "too many rules in Huginn grammar", i < yaal::size( expected ) );
 		ENSURE_EQUALS( "bad rule in Huginn grammar", *it, expected[i] );
 	}
-	ENSURE_EQUALS( "not all rules found for Huginn grammar", i, countof ( expected ) );
+	ENSURE_EQUALS( "not all rules found for Huginn grammar", i, yaal::size( expected ) );
 TUT_TEARDOWN()
 
 char const simpleProg[] =

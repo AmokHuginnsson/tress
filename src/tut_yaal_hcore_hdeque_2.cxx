@@ -45,8 +45,8 @@ void tut_yaal_hcore_hdeque_2::test_insert_pos( void ) {
 	typedef HDeque<item_type> deque_type;
 	clog << "testing insert(pos): " << item_size << endl;
 	item_t::set_start_id( 0 ); {
-		proto_t proto( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
-		deque_type deque( _testData_[0], _testData_[0] + countof ( _testData_[0] ) );
+		proto_t proto( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
+		deque_type deque( _testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
 		check_consistency( deque );
 		ENSURE_EQUALS( "insertion failed", deque, proto );
 		deque.insert( deque.begin(), -7 );
@@ -90,14 +90,14 @@ TUT_UNIT_TEST( "assign operator (=)" )
 	int a0[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
 	int a1[] = { -36, -1, -4, -9 };
 	item_t::set_start_id( 0 ); {
-		deque_t deque( a0, a0 + countof ( a0 ) );
+		deque_t deque( a0, a0 + yaal::size( a0 ) );
 		check_consistency( deque );
-		deque_t small( a1, a1 + countof ( a1 ) );
+		deque_t small( a1, a1 + yaal::size( a1 ) );
 		check_consistency( small, deque.get_size() );
 		deque = small;
 		check_consistency( deque, small.get_size() );
 		ENSURE_EQUALS( "assgin failed", deque, small );
-		deque_t big( a0, a0 + countof ( a0 ) );
+		deque_t big( a0, a0 + yaal::size( a0 ) );
 		check_consistency( big, deque.get_size() + small.get_size() );
 		deque = big;
 		check_consistency( deque, big.get_size() + small.get_size() );
@@ -112,8 +112,8 @@ void tut_yaal_hcore_hdeque_2::test_insert( void ) {
 	typedef HDeque<item_type> deque_type;
 	clog << "testing insert range: " << item_size << endl;
 	item_t::set_start_id( 0 ); {
-		int const len0( countof ( _testData_[0] ) );
-		int const len1( countof ( _testData_[1] ) );
+		int const len0( yaal::size( _testData_[0] ) );
+		int const len1( yaal::size( _testData_[1] ) );
 		proto_t proto( _testData_[0], _testData_[0] + len0 );
 		deque_type deque( _testData_[0], _testData_[0] + len0 );
 		check_consistency( deque );
@@ -167,8 +167,8 @@ void tut_yaal_hcore_hdeque_2::test_insert( void ) {
 		check_consistency( deque );
 		ENSURE_EQUALS( "range insertion failed", deque, proto );
 	} {
-		int const len0( countof ( _testData_[0] ) );
-		int const len1( countof ( _testData_[1] ) );
+		int const len0( yaal::size( _testData_[0] ) );
+		int const len1( yaal::size( _testData_[1] ) );
 		proto_t proto( _testData_[0], _testData_[0] + len0 );
 		deque_type deque( _testData_[0], _testData_[0] + len0 );
 		check_consistency( deque );
@@ -356,8 +356,8 @@ TUT_UNIT_TEST( "roll backward (push_front/pop_back) insert erase" )
 	int shift[] = { 1, 2, 3, 4, 5, 6, 7, 8, 16, 32 };
 	int pack[] = { 1, 2, 3, 4, 5, 7, 8 };
 	int distance( 1024 );
-	for ( int s( 0 ); s < countof ( shift ); ++ s ) {
-		for ( int p( 0 ); p < countof ( pack ); ++ p ) {
+	for ( int s( 0 ); s < yaal::size( shift ); ++ s ) {
+		for ( int p( 0 ); p < yaal::size( pack ); ++ p ) {
 			test_roll_backward_insert_erase<1>( shift[s], pack[p], distance );
 			test_roll_backward_insert_erase<2>( shift[s], pack[p], distance );
 			test_roll_backward_insert_erase<3>( shift[s], pack[p], distance );
@@ -374,7 +374,7 @@ TUT_UNIT_TEST( "roll backward (push_front/pop_back) insert erase" )
 			test_roll_backward_insert_erase<640>( shift[s], pack[p], distance );
 		}
 	}
-	for ( int s( 0 ); s < countof ( shift ); ++ s ) {
+	for ( int s( 0 ); s < yaal::size( shift ); ++ s ) {
 		test_roll_backward_greedy_insert_erase<1>( shift[s], distance );
 		test_roll_backward_greedy_insert_erase<2>( shift[s], distance );
 		test_roll_backward_greedy_insert_erase<3>( shift[s], distance );

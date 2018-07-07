@@ -244,7 +244,7 @@ void tut_yaal_dbwrapper_hquery::fetch_result_after_query_reset( HDataBase::ptr_t
 		}
 		clog << endl;
 	}
-	ENSURE_EQUALS( "bad number of rows returned", row, countof ( DATA ) );
+	ENSURE_EQUALS( "bad number of rows returned", row, yaal::size( DATA ) );
 	return;
 }
 
@@ -339,7 +339,7 @@ void tut_yaal_dbwrapper_hquery::execute_twice( HDataBase::ptr_t db_, char const*
 		}
 		clog << endl;
 	}
-	ENSURE_EQUALS( "bad number of rows returned", row, countof ( DATA ) );
+	ENSURE_EQUALS( "bad number of rows returned", row, yaal::size( DATA ) );
 	return;
 }
 

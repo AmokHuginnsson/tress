@@ -322,10 +322,10 @@ TUT_UNIT_TEST( "HStringLiteral" )
 		};
 		int i( 0 );
 		for ( strings_t::const_iterator it( s.begin() ), end( s.end() ); it != end; ++ it, ++ i ) {
-			ENSURE( "too many elements acquired", i < countof ( expected ) );
+			ENSURE( "too many elements acquired", i < yaal::size( expected ) );
 			ENSURE_EQUALS( "Failed to acquire string from string literal", *it, expected[i] );
 		}
-		ENSURE_EQUALS( "not all elemets acquired", i, countof ( expected ) );
+		ENSURE_EQUALS( "not all elemets acquired", i, yaal::size( expected ) );
 	}
 	/* special */ {
 		ENSURE( "HStringLiteral failed to parse correct input", ep(
@@ -353,10 +353,10 @@ TUT_UNIT_TEST( "HStringLiteral" )
 		};
 		int i( 0 );
 		for ( strings_t::const_iterator it( s.begin() ), end( s.end() ); it != end; ++ it, ++ i ) {
-			ENSURE( "too many elements acquired", i < countof ( expected ) );
+			ENSURE( "too many elements acquired", i < yaal::size( expected ) );
 			ENSURE_EQUALS( "Failed to acquire string from string literal", *it, expected[i] );
 		}
-		ENSURE_EQUALS( "not all elemets acquired", i, countof ( expected ) );
+		ENSURE_EQUALS( "not all elemets acquired", i, yaal::size( expected ) );
 	}
 	ENSURE_NOT( "non-string literal parsed", ep( "Ala" ) );
 	ENSURE_NOT( "unfinished string literal parsed", ep( "\"Ala" ) );
@@ -392,7 +392,7 @@ TUT_UNIT_TEST( "HStringLiteral" )
 		};
 		int i( 0 );
 		for ( strings_t::const_iterator it( s.begin() ), end( s.end() ); it != end; ++ it, ++ i ) {
-			ENSURE( "too many elements acquired", i < countof ( expected ) );
+			ENSURE( "too many elements acquired", i < yaal::size( expected ) );
 			ENSURE_EQUALS( "Failed to acquire string from string literal", *it, expected[i] );
 		}
 	}
@@ -413,10 +413,10 @@ TUT_UNIT_TEST( "HCharacterLiteral" )
 		};
 		int i( 0 );
 		for ( characters_t::const_iterator it( c.begin() ), end( c.end() ); it != end; ++ it, ++ i ) {
-			ENSURE( "too many elements acquired", i < countof ( expected ) );
+			ENSURE( "too many elements acquired", i < yaal::size( expected ) );
 			ENSURE_EQUALS( "Failed to acquire character from character literal", *it, expected[i] );
 		}
-		ENSURE_EQUALS( "not all elemets acquired", i, countof ( expected ) );
+		ENSURE_EQUALS( "not all elemets acquired", i, yaal::size( expected ) );
 	}
 	/* special */ {
 		ENSURE( "HCharacterLiteral failed to parse correct input", ep(
@@ -426,10 +426,10 @@ TUT_UNIT_TEST( "HCharacterLiteral" )
 		char unsigned const expected[] = "\n \t\t\b\033\\'x";
 		int i( 0 );
 		for ( characters_t::const_iterator it( c.begin() ), end( c.end() ); it != end; ++ it, ++ i ) {
-			ENSURE( "too many elements acquired", i < ( countof ( expected ) - 1 ) );
+			ENSURE( "too many elements acquired", i < ( yaal::size( expected ) - 1 ) );
 			ENSURE_EQUALS( "Failed to acquire character from character literal", *it, expected[i] );
 		}
-		ENSURE_EQUALS( "not all elemets acquired", i, countof ( expected ) - 1 );
+		ENSURE_EQUALS( "not all elemets acquired", i, yaal::size( expected ) - 1 );
 	}
 	ENSURE_NOT( "non-character literal parsed", ep( "Ala" ) );
 	ENSURE_NOT( "unfinished character literal parsed", ep( "'A" ) );
@@ -470,7 +470,7 @@ TUT_UNIT_TEST( "HCharacterLiteral" )
 		};
 		int i( 0 );
 		for ( characters_t::const_iterator it( c.begin() ), end( c.end() ); it != end; ++ it, ++ i ) {
-			ENSURE( "too many elements acquired", i < countof ( expected ) );
+			ENSURE( "too many elements acquired", i < yaal::size( expected ) );
 			ENSURE_EQUALS( "Failed to acquire string from string literal", *it, expected[i] );
 		}
 	}
@@ -2106,8 +2106,8 @@ TUT_UNIT_TEST( "the test" )
 	ENSURE_EQUALS( "error position given incorrectly", ep.error_position(), bad );
 	ENSURE_EQUALS( "bad error message", ep.error_messages()[0], "expected real number" );
 	double expected[] = { 3.141592653589793, -2.718281828459045, 17. };
-	ENSURE_EQUALS( "bad number of items gathered", v.get_size(), countof( expected ) );
-	for ( int i( 0 ); i < countof( expected ); ++ i ) {
+	ENSURE_EQUALS( "bad number of items gathered", v.get_size(), yaal::size( expected ) );
+	for ( int i( 0 ); i < yaal::size( expected ); ++ i ) {
 		ENSURE_DISTANCE( "real parser failed", v[i], expected[i], static_cast<double>( epsilon ) );
 	}
 	copy( v.begin(), v.end(), stream_iterator( clog, endl ) );

@@ -977,9 +977,9 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "reverse iterator" )
 	int a[] = { 2, 3, 5, 7 };
 	int ra[] = { 7, 5, 3, 2 };
-	list_t l( a, a + countof ( a ) );
+	list_t l( a, a + yaal::size( a ) );
 	list_t r( l.rbegin(), l.rend() );
-	list_t proto( ra, ra + countof ( ra ) );
+	list_t proto( ra, ra + yaal::size( ra ) );
 	ENSURE_EQUALS( "reverse iterarion failed", r, proto );
 TUT_TEARDOWN()
 
@@ -2072,7 +2072,7 @@ TUT_UNIT_TEST( "reverse()" )
 	int const val( *it );
 	l.reverse();
 	check_consistency( l );
-	yaal::reverse( data, data + ( countof ( data ) - 1 ) );
+	yaal::reverse( data, data + ( yaal::size( data ) - 1 ) );
 	ENSURE_EQUALS( "reverse failed", _stringifier.to_string<char>( l ), data );
 	ENSURE_EQUALS( "reverse preserving iterators failed", *it, val );
 TUT_TEARDOWN()

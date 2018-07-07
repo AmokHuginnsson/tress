@@ -55,9 +55,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "call field bind in algorithm" )
 	person_t a[] = { person_t( "Ala", "Kowalska" ), person_t( "Gall", "Anonim" ), person_t( "Marcin", "Konarski" ), person_t( "Magdalena", "Nowak" ), person_t( "Wojciech", "Igrekowski" ) };
-	transform( a, a + countof( a ), stream_iterator( clog, " " ), call( &person_t::first, _1 ) );
+	transform( a, a + yaal::size( a ), stream_iterator( clog, " " ), call( &person_t::first, _1 ) );
 	clog << endl;
-	transform( a, a + countof( a ), stream_iterator( clog, " " ), call( &person_t::second, _1 ) );
+	transform( a, a + yaal::size( a ), stream_iterator( clog, " " ), call( &person_t::second, _1 ) );
 	clog << endl;
 TUT_TEARDOWN()
 

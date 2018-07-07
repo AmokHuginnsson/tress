@@ -32,13 +32,41 @@ TUT_UNIT_TEST( "trivial constructor" )
 	ENSURE_EQUALS( "trivial construction failed (is_empty)", str.empty(), true );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "construction from char*" )
-	static char const CORRECT[] = "1024";
+TUT_UNIT_TEST( "construction from char* [and size]" )
+	static char const CORRECT[] = "yaal";
 	HString str( CORRECT );
 	ENSURE_EQUALS( "construction from c-string does not work", str, CORRECT );
 	ENSURE_EQUALS( "construction from char* failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "construction from char* failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "construction from char* failed (capacity)", str.capacity(), max( 8, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from char* failed (is_empty)", str.empty(), false );
+	ENSURE_EQUALS( "construction from char* and size failed (rank)", HUTF8String( str ).rank(), 0 );
+
+	static char const SRC8[] = "yaal ó very long string";
+	static char const EXP8[] = "yaal ó";
+	HString str8( SRC8, 7 );
+	ENSURE_EQUALS( "construction from char8-string and size does not work", str8, EXP8 );
+	ENSURE_EQUALS( "construction from char* and size failed (size)", str8.size(), 6 );
+	ENSURE_EQUALS( "construction from char* and size failed (capacity)", str8.capacity(), max( 8, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "construction from char* and size failed (is_empty)", str8.empty(), false );
+	ENSURE_EQUALS( "construction from char* and size failed (rank)", HUTF8String( str8 ).rank(), 1 );
+
+	static char16_t const SRC16[] = u"yaal α very long string";
+	static char const EXP16[] = "yaal α";
+	HString str16( SRC16, 6 );
+	ENSURE_EQUALS( "construction from char16-string and size does not work", str16, EXP16 );
+	ENSURE_EQUALS( "construction from char16* and size failed (size)", str16.size(), 6 );
+	ENSURE_EQUALS( "construction from char16* and size failed (capacity)", str16.capacity(), max( 16, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "construction from char16* and size failed (is_empty)", str16.empty(), false );
+	ENSURE_EQUALS( "construction from char16* and size failed (rank)", HUTF8String( str16 ).rank(), 2 );
+
+	static char32_t const SRC32[] = U"yaal 🐍 very long string";
+	static char const EXP32[] = "yaal 🐍";
+	HString str32( SRC32, 6 );
+	ENSURE_EQUALS( "construction from char32-string and size does not work", str32, EXP32 );
+	ENSURE_EQUALS( "construction from char32* and size failed (size)", str32.size(), 6 );
+	ENSURE_EQUALS( "construction from char32* and size failed (capacity)", str32.capacity(), 32 );
+	ENSURE_EQUALS( "construction from char32* and size failed (is_empty)", str32.empty(), false );
+	ENSURE_EQUALS( "construction from char32* and size failed (rank)", HUTF8String( str32 ).rank(), 4 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "copy construction" )
@@ -47,7 +75,7 @@ TUT_UNIT_TEST( "copy construction" )
 	HString copy( str );
 	ENSURE_EQUALS( "copy construction does not work", copy, CORRECT );
 	ENSURE_EQUALS( "copy construction failed (size)", copy.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-	ENSURE_EQUALS( "copy construction failed (capacity)", copy.capacity(), max( 7, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "copy construction failed (capacity)", copy.capacity(), max( 8, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "copy construction failed (is_empty)", copy.empty(), false );
 TUT_TEARDOWN()
 
@@ -67,7 +95,7 @@ TUT_UNIT_TEST( "construction from integers" )
 		HString str( INIT );
 		ENSURE_EQUALS( "construction from int long does not work", str, CORRECT );
 		ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 8, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 	}
 
@@ -77,7 +105,7 @@ TUT_UNIT_TEST( "construction from integers" )
 		HString str( INIT );
 		ENSURE_EQUALS( "construction from int long does not work", str, CORRECT );
 		ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 8, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 	}
 	/* int */ {
@@ -87,7 +115,7 @@ TUT_UNIT_TEST( "construction from integers" )
 		ENSURE_EQUALS( "construction from int does not work", str, CORRECT );
 		ENSURE_EQUALS( "construction from int failed (size)",
 				str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-		ENSURE_EQUALS( "construction from int failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int failed (capacity)", str.capacity(), max( 8, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "construction from int failed (is_empty)", str.empty(), false );
 	}
 	/* int unsigned */ {
@@ -97,7 +125,7 @@ TUT_UNIT_TEST( "construction from integers" )
 		ENSURE_EQUALS( "construction from int unsigned does not work", str, CORRECT );
 		ENSURE_EQUALS( "construction from int unsigned failed (size)",
 				str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-		ENSURE_EQUALS( "construction from int unsigned failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int unsigned failed (capacity)", str.capacity(), max( 8, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "construction from int unsigned failed (is_empty)", str.empty(), false );
 	}
 	/* int long */ {
@@ -106,7 +134,7 @@ TUT_UNIT_TEST( "construction from integers" )
 		HString str( INIT );
 		ENSURE_EQUALS( "construction from int long does not work", str, CORRECT );
 		ENSURE_EQUALS( "construction from int long failed (size)", str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int long failed (capacity)", str.capacity(), max( 8, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "construction from int long failed (is_empty)", str.empty(), false );
 	}
 	/* int long unsigned */ {
@@ -116,7 +144,7 @@ TUT_UNIT_TEST( "construction from integers" )
 		ENSURE_EQUALS( "construction from int long unsigned does not work", str, CORRECT );
 		ENSURE_EQUALS( "construction from int long unsigned failed (size)",
 				str.size(), static_cast<int long>( sizeof ( CORRECT ) - 1 ) );
-		ENSURE_EQUALS( "construction from int long unsigned failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+		ENSURE_EQUALS( "construction from int long unsigned failed (capacity)", str.capacity(), max( 8, MIN_CAPACITY ) );
 		ENSURE_EQUALS( "construction from int long unsigned failed (is_empty)", str.empty(), false );
 	}
 
@@ -232,7 +260,7 @@ TUT_UNIT_TEST( "operator +=" )
 	HString str( INIT );
 	ENSURE_EQUALS( "char* constructor does not work", str, INIT );
 	ENSURE_EQUALS( "char* constructor failed (size)", str.size(), static_cast<int long>( sizeof ( INIT ) - 1 ) );
-	ENSURE_EQUALS( "char* constructor failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "char* constructor failed (capacity)", str.capacity(), max( 8, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "char* constructor failed (is_empty)", str.empty(), false );
 	str += TEST;
 	ENSURE_EQUALS( "operator+= does not work", str, CORRECT );
@@ -255,7 +283,7 @@ TUT_UNIT_TEST( "subscript" )
 		char const data[] = "abecadło";
 		code_point_t const res[] = { 'a'_ycp, 'b'_ycp, 'e'_ycp, 'c'_ycp, 'a'_ycp, 'd'_ycp, unicode::CODE_POINT::LATIN_SMALL_LETTER_L_WITH_STROKE, 'o'_ycp };
 		HString s( data );
-		for ( int i( 0 ); i < static_cast<int>( countof ( res ) ); ++ i ) {
+		for ( int i( 0 ); i < static_cast<int>( yaal::size( res ) ); ++ i ) {
 			ENSURE_EQUALS( "bad value from subscript", s[i], res[i] );
 		}
 		ENSURE_THROW( "subscript on bad index succeeded", s[-1], HStringException );
@@ -267,7 +295,7 @@ TUT_UNIT_TEST( "front/back" )
 	HString s( "abesadlo" );
 	ENSURE_EQUALS( "front failed", s.front(), static_cast<code_point_t>( 'a' ) );
 	ENSURE_EQUALS( "back failed", s.back(), static_cast<code_point_t>( 'o' ) );
-	s.assign( "abesadło" );
+	s.assign( "abesadÅo" );
 	ENSURE_EQUALS( "front failed", s.front(), static_cast<code_point_t>( 'a' ) );
 	ENSURE_EQUALS( "back failed", s.back(), static_cast<code_point_t>( 'o' ) );
 	s.clear();
@@ -293,7 +321,7 @@ TUT_UNIT_TEST( "set_at" )
 			{ 3, 0 }
 		};
 		HString s( data );
-		for ( int i( 0 ); i < countof( dataOut ); ++ i ) {
+		for ( int i( 0 ); i < yaal::size( dataOut ); ++ i ) {
 			s.set_at( repl[i][0], code_point_t( static_cast<code_point_t::value_type>( repl[i][1] ) ) );
 			ENSURE_EQUALS( "set_at failed", s, dataOut[i] );
 		}
@@ -315,7 +343,7 @@ TUT_UNIT_TEST( "set_at" )
 			{ 3, 0 }
 		};
 		HString s( data );
-		for ( int i( 0 ); i < countof( dataOut ); ++ i ) {
+		for ( int i( 0 ); i < yaal::size( dataOut ); ++ i ) {
 			s.set_at( repl[i][0], code_point_t( static_cast<code_point_t::value_type>( repl[i][1] ) ) );
 			ENSURE_EQUALS( "set_at failed", s, dataOut[i] );
 		}
@@ -334,12 +362,12 @@ TUT_UNIT_TEST( "clear" )
 	str += INIT;
 	ENSURE_EQUALS( "operator+= does not work", str, INIT );
 	ENSURE_EQUALS( "operator+= failed (size)", str.size(), static_cast<int long>( sizeof ( INIT ) - 1 ) );
-	ENSURE_EQUALS( "operator+= failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "operator+= failed (capacity)", str.capacity(), max( 8, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "operator+= failed (is_empty)", str.empty(), false );
 	str.clear();
 	ENSURE_EQUALS( "clear does not work", str, "" );
 	ENSURE_EQUALS( "clear failed (size)", str.size(), 0 );
-	ENSURE_EQUALS( "clear failed (capacity)", str.capacity(), max( 7, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "clear failed (capacity)", str.capacity(), max( 8, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "clear failed (is_empty)", str.empty(), true );
 TUT_TEARDOWN()
 
@@ -1049,7 +1077,7 @@ TUT_UNIT_TEST( "conversions" )
 	ENSURE_EQUALS( "to_string int unsigned failed", to_string( 4234567890U ), "4234567890" );
 	ENSURE_EQUALS( "to_string int short failed", to_string( static_cast<int short>( 32145 ) ), "32145" );
 	ENSURE_EQUALS( "to_string int short unsigned failed", to_string( static_cast<int short unsigned>( 54321 ) ), "54321" );
-	ENSURE_EQUALS( "to_string char unsigned failed", to_string( static_cast<char unsigned>( '�' ) ), "ó" );
+	ENSURE_EQUALS( "to_string char unsigned failed", to_string( static_cast<char unsigned>( u'ó' ) ), "ó" );
 	ENSURE_EQUALS( "stoi failed", stoi( "-2147483647"_ys ), -2147483647 );
 	ENSURE_EQUALS( "stoi failed", stoi( "-7FFFFFFF"_ys, nullptr, 16 ), -2147483647 );
 	ENSURE_THROW( "stoi overflow succeeded", stoi( "2147483648" ), HOutOfRangeException );
@@ -1091,19 +1119,87 @@ TUT_UNIT_TEST( "conversions" )
 	ENSURE_DISTANCE( "stof failed", stof( "3.141592"_ys ), 3.141592f, static_cast<float>( epsilon ) );
 	ENSURE_DISTANCE( "stod failed", stod( "3.1415926535"_ys ), 3.1415926535, static_cast<double>( epsilon ) );
 	ENSURE_DISTANCE( "stold failed", stold( "2.718281828459045"_ys ), 2.718281828459045L, epsilon );
-	ENSURE( "is_digit failed", is_digit( '0'_ycp ) );
-	ENSURE( "is_digit failed", is_digit( '9'_ycp ) );
-	ENSURE_NOT( "is_digit failed", is_digit( 'a'_ycp ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "character classes" )
+	ENSURE( "is_whitespace failed", is_whitespace( ' '_ycp ) && is_whitespace( '\t'_ycp ) && is_whitespace( '\n'_ycp ) && is_whitespace( '\r'_ycp ) );
+	ENSURE_NOT( "is_whitespace failed", is_whitespace( '_'_ycp ) || is_whitespace( '!'_ycp ) || is_whitespace( 'a'_ycp ) );
+
+	ENSURE( "is_digit failed", is_digit( '0'_ycp ) && is_digit( '9'_ycp ) );
+	ENSURE_NOT( "is_digit failed", is_digit( '0'_ycp - 1 ) || is_digit( '9'_ycp + 1 ) || is_digit( 'a'_ycp ) );
+
+	ENSURE( "is_dec_digit failed", is_dec_digit( '0'_ycp ) && is_dec_digit( '9'_ycp ) );
+	ENSURE_NOT( "is_dec_digit failed", is_dec_digit( '0'_ycp - 1 ) || is_dec_digit( '9'_ycp + 1 ) || is_dec_digit( 'a'_ycp ) );
+
+	ENSURE(
+		"is_hex_digit failed",
+		is_hex_digit( '0'_ycp ) && is_hex_digit( '9'_ycp )
+			&& is_hex_digit( 'a'_ycp ) && is_hex_digit( 'f'_ycp )
+			&& is_hex_digit( 'A'_ycp ) && is_hex_digit( 'F'_ycp )
+	);
+	ENSURE_NOT(
+		"is_hex_digit failed",
+		is_hex_digit( '0'_ycp - 1 ) || is_hex_digit( '9'_ycp + 1 )
+			|| is_hex_digit( 'a'_ycp - 1 ) || is_hex_digit( 'f'_ycp + 1 )
+			|| is_hex_digit( 'A'_ycp - 1 ) || is_hex_digit( 'F'_ycp + 1 )
+	);
+
+	ENSURE( "is_oct_digit failed", is_oct_digit( '0'_ycp ) && is_oct_digit( '7'_ycp ) );
+	ENSURE_NOT( "is_oct_digit failed", is_oct_digit( '0'_ycp - 1 ) || is_oct_digit( '7'_ycp + 1 ) || is_oct_digit( 'a'_ycp ) );
+
+	ENSURE( "is_bin_digit failed", is_bin_digit( '0'_ycp ) && is_bin_digit( '1'_ycp ) );
+	ENSURE_NOT( "is_bin_digit failed", is_bin_digit( '0'_ycp - 1 ) || is_bin_digit( '1'_ycp + 1 ) || is_bin_digit( 'a'_ycp ) );
+
 	ENSURE( "is_letter failed", is_letter( 'a'_ycp ) && is_letter( 'z'_ycp ) && is_letter( 'A'_ycp ) && is_letter( 'Z'_ycp ) );
-	ENSURE_NOT( "is_letter failed", is_letter( '0'_ycp ) );
+	ENSURE_NOT( "is_letter failed", is_letter( 'a'_ycp - 1 ) || is_letter( 'z'_ycp + 1 ) || is_letter( 'A'_ycp - 1 ) || is_letter( 'Z'_ycp + 1 ) );
+
+	ENSURE( "is_lower failed", is_lower( 'a'_ycp ) && is_lower( 'z'_ycp ) );
+	ENSURE_NOT( "is_lower failed", is_lower( 'a'_ycp - 1 ) || is_lower( 'z'_ycp + 1 ) || is_lower( 'A'_ycp ) || is_lower( 'Z'_ycp ) );
+
+	ENSURE( "is_upper failed", is_upper( 'A'_ycp ) && is_upper( 'Z'_ycp ) );
+	ENSURE_NOT( "is_upper failed", is_upper( 'a'_ycp ) || is_upper( 'z'_ycp ) || is_upper( 'A'_ycp - 1 ) || is_upper( 'Z'_ycp + 1 ) );
+
 	ENSURE( "is_alpha failed", is_alpha( 'a'_ycp ) && is_alpha( 'z'_ycp ) && is_alpha( 'A'_ycp ) && is_alpha( 'Z'_ycp ) );
 	ENSURE_NOT( "is_alpha failed", is_alpha( '\b'_ycp ) || is_alpha( '0'_ycp ) || is_alpha( '9'_ycp ) || is_alpha( '_'_ycp ) );
+
+	ENSURE(
+		"is_alnum failed",
+		is_alnum( 'a'_ycp ) && is_alnum( 'z'_ycp ) && is_alnum( 'A'_ycp ) && is_alnum( 'Z'_ycp ) && is_alnum( '0'_ycp ) && is_alnum( '9'_ycp )
+	);
+	ENSURE_NOT(
+		"is_alnum failed",
+		is_alnum( 'a'_ycp - 1 ) || is_alnum( 'z'_ycp + 1 )
+		|| is_alnum( 'A'_ycp - 1 ) || is_alnum( 'Z'_ycp + 1 )
+		|| is_alnum( '0'_ycp - 1 ) || is_alnum( '9'_ycp + 1 )
+		|| is_alnum( '\b'_ycp ) || is_alnum( '_'_ycp )
+	);
+
 	ENSURE(
 		"is_ascii failed",
 		is_ascii( 'a'_ycp ) && is_ascii( 'z'_ycp ) && is_ascii( 'A'_ycp ) && is_ascii( 'Z'_ycp )
 		&& is_ascii( '\b'_ycp ) && is_ascii( '0'_ycp ) && is_ascii( '9'_ycp ) && is_ascii( '_'_ycp )
 	);
-	ENSURE_NOT( "is_ascii failed", is_ascii( '�'_ycp ) );
+	ENSURE_NOT( "is_ascii failed", is_ascii( L'ó'_ycp ) );
+
+	ENSURE( "is_lower_greek failed", is_lower_greek( L'α'_ycp ) && is_lower_greek( L'ω'_ycp ) );
+	ENSURE_NOT( "is_lower_greek failed", is_lower_greek( L'α'_ycp - 1 ) || is_lower_greek( L'ω'_ycp + 1 ) );
+
+	ENSURE( "is_upper_greek failed", is_upper_greek( L'Α'_ycp ) && is_upper_greek( L'Ω'_ycp ) );
+	ENSURE_NOT( "is_upper_greek failed", is_upper_greek( L'Α'_ycp - 1 ) || is_upper_greek( L'Ω'_ycp + 1 ) );
+
+	ENSURE( "is_greek failed", is_greek( L'α'_ycp ) && is_greek( L'ω'_ycp ) && is_greek( L'Α'_ycp ) && is_greek( L'Ω'_ycp ) );
+	ENSURE_NOT( "is_greek failed", is_greek( L'Α'_ycp - 1 ) || is_greek( L'ω'_ycp + 1 ) );
+
+	ENSURE( "is_subscript failed", is_subscript( L'ₐ'_ycp ) && is_subscript( L'ₓ'_ycp ) && is_subscript( L'₀'_ycp ) && is_subscript( L'₉'_ycp ) );
+	ENSURE_NOT( "is_subscript failed", is_subscript( L'a'_ycp ) || is_subscript( L'z'_ycp ) || is_subscript( '0'_ycp ) );
+
+	ENSURE(
+		"is_superscript failed",
+		is_superscript( L'ᵃ'_ycp ) && is_superscript( L'ᶻ'_ycp )
+		&& is_superscript( L'ᴬ'_ycp ) && is_superscript( L'ᵂ'_ycp )
+		&& is_superscript( L'⁰'_ycp ) && is_superscript( L'⁹'_ycp )
+	);
+	ENSURE_NOT( "is_superscript failed", is_superscript( L'a'_ycp ) || is_superscript( L'z'_ycp ) || is_superscript( 'A'_ycp ) || is_superscript( '0'_ycp ) );
 TUT_TEARDOWN()
 
 }

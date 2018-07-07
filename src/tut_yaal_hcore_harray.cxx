@@ -313,24 +313,24 @@ void tut_yaal_hcore_harray::test_erase( int first_, int last_ ) { {
 }
 
 TUT_UNIT_TEST( "ranged erase" )
-	test_erase( 0, countof( _testData_[0] ) / 2 );
-	test_erase( countof( _testData_[0] ) / 2, countof( _testData_[0] ) );
-	test_erase( 0, countof( _testData_[0] ) );
+	test_erase( 0, yaal::size( _testData_[0] ) / 2 );
+	test_erase( yaal::size( _testData_[0] ) / 2, yaal::size( _testData_[0] ) );
+	test_erase( 0, yaal::size( _testData_[0] ) );
 	test_erase( 0, 1 );
-	test_erase( countof ( _testData_[0] ) - 1, countof ( _testData_[0] ) );
-	test_erase( 1, countof ( _testData_[0] ) - 1 );
+	test_erase( yaal::size( _testData_[0] ) - 1, yaal::size( _testData_[0] ) );
+	test_erase( 1, yaal::size( _testData_[0] ) - 1 );
 	test_erase( 3, 6 );
-	test_erase( countof ( _testData_[0] ) - 6, countof ( _testData_[0] ) - 3 );
-	test_erase( countof ( _testData_[0] ) / 2 - 3, countof ( _testData_[0] ) / 2 + 3 );
-	test_erase( 0, countof( _testData_[0] ) / 2 + countof ( _testData_[0] ) / 4 );
-	test_erase( 3, countof( _testData_[0] ) / 2 + countof ( _testData_[0] ) / 4 );
-	test_erase( countof ( _testData_[0] ) / 4, countof( _testData_[0] ) );
-	test_erase( countof ( _testData_[0] ) / 4, countof( _testData_[0] ) - 3 );
+	test_erase( yaal::size( _testData_[0] ) - 6, yaal::size( _testData_[0] ) - 3 );
+	test_erase( yaal::size( _testData_[0] ) / 2 - 3, yaal::size( _testData_[0] ) / 2 + 3 );
+	test_erase( 0, yaal::size( _testData_[0] ) / 2 + yaal::size( _testData_[0] ) / 4 );
+	test_erase( 3, yaal::size( _testData_[0] ) / 2 + yaal::size( _testData_[0] ) / 4 );
+	test_erase( yaal::size( _testData_[0] ) / 4, yaal::size( _testData_[0] ) );
+	test_erase( yaal::size( _testData_[0] ) / 4, yaal::size( _testData_[0] ) - 3 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ranged insert" )
 	item_t::set_start_id( 0 ); {
-		int const len1( countof ( _testData_[1] ) );
+		int const len1( yaal::size( _testData_[1] ) );
 		proto_t proto( begin( _testData_[0] ), end( _testData_[0] ) );
 		array_t array( begin( _testData_[0] ), end( _testData_[0] ) );
 		ENSURE_EQUALS( "range insertion failed", array, proto );
@@ -372,7 +372,7 @@ TUT_UNIT_TEST( "ranged insert" )
 		ENSURE_EQUALS( "range insertion failed", array, proto );
 	}
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 ); {
-		int const len1( countof ( _testData_[1] ) );
+		int const len1( yaal::size( _testData_[1] ) );
 		proto_t proto( begin( _testData_[0] ), end( _testData_[0] ) );
 		array_t array( begin( _testData_[0] ), end( _testData_[0] ) );
 		ENSURE_EQUALS( "range insertion failed", array, proto );
