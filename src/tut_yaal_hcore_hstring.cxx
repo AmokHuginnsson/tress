@@ -41,12 +41,21 @@ TUT_UNIT_TEST( "construction from char* [and size]" )
 	ENSURE_EQUALS( "construction from char* failed (is_empty)", str.empty(), false );
 	ENSURE_EQUALS( "construction from char* and size failed (rank)", HUTF8String( str ).rank(), 0 );
 
-	static char const SRC8[] = "yaal ó very long string";
-	static char const EXP8[] = "yaal ó";
-	HString str8( SRC8, 7 );
+	static char const SRC7[] = "yaal ó very long string";
+	static char const EXP7[] = "yaal ó";
+	HString str7( SRC7, 7 );
+	ENSURE_EQUALS( "construction from char8-string and size does not work", str7, EXP7 );
+	ENSURE_EQUALS( "construction from char* and size failed (size)", str7.size(), 6 );
+	ENSURE_EQUALS( "construction from char* and size failed (capacity)", str7.capacity(), max( 7, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "construction from char* and size failed (is_empty)", str7.empty(), false );
+	ENSURE_EQUALS( "construction from char* and size failed (rank)", HUTF8String( str7 ).rank(), 1 );
+
+	static char const SRC8[] = "yaalyaalyaalyaalyaalyaalyaal@ ó very long string";
+	static char const EXP8[] = "yaalyaalyaalyaalyaalyaalyaal@ ó";
+	HString str8( SRC8, 32 );
 	ENSURE_EQUALS( "construction from char8-string and size does not work", str8, EXP8 );
-	ENSURE_EQUALS( "construction from char* and size failed (size)", str8.size(), 6 );
-	ENSURE_EQUALS( "construction from char* and size failed (capacity)", str8.capacity(), max( 8, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "construction from char* and size failed (size)", str8.size(), 31 );
+	ENSURE_EQUALS( "construction from char* and size failed (capacity)", str8.capacity(), 32 );
 	ENSURE_EQUALS( "construction from char* and size failed (is_empty)", str8.empty(), false );
 	ENSURE_EQUALS( "construction from char* and size failed (rank)", HUTF8String( str8 ).rank(), 1 );
 
@@ -58,6 +67,15 @@ TUT_UNIT_TEST( "construction from char* [and size]" )
 	ENSURE_EQUALS( "construction from char16* and size failed (capacity)", str16.capacity(), max( 16, MIN_CAPACITY ) );
 	ENSURE_EQUALS( "construction from char16* and size failed (is_empty)", str16.empty(), false );
 	ENSURE_EQUALS( "construction from char16* and size failed (rank)", HUTF8String( str16 ).rank(), 2 );
+
+	static char const SRC16_3[] = "yaal ￿ very long string";
+	static char const EXP16_3[] = "yaal ￿";
+	HString str16_3( SRC16_3, 8 );
+	ENSURE_EQUALS( "construction from char16-string and size does not work", str16_3, EXP16_3 );
+	ENSURE_EQUALS( "construction from char16* and size failed (size)", str16_3.size(), 6 );
+	ENSURE_EQUALS( "construction from char16* and size failed (capacity)", str16_3.capacity(), max( 16, MIN_CAPACITY ) );
+	ENSURE_EQUALS( "construction from char16* and size failed (is_empty)", str16_3.empty(), false );
+	ENSURE_EQUALS( "construction from char16* and size failed (rank)", HUTF8String( str16_3 ).rank(), 2 );
 
 	static char32_t const SRC32[] = U"yaal 🐍 very long string";
 	static char const EXP32[] = "yaal 🐍";
