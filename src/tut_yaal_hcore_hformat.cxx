@@ -181,7 +181,7 @@ TUT_UNIT_TEST( "swap" )
 	char const o1[] = "Ala ma kota, 5 lat, 3.141500 wagi, 2.718282 długi, ze złotym 'K' na obróżce, wart 9223372036854775807!";
 	ENSURE_EQUALS( "format failed", f1.string(), o1 );
 	HFormat f2( "num char %hhd, num uchar %hhu, int short %hi, int short unsigned %hu, int long long %qd" );
-	f2 % 'a' % '�' % static_cast<int short>( 32767 ) % static_cast<int short unsigned>( 54321 ) % 1234567890123456789LL;
+	f2 % 'a' % static_cast<char unsigned>( u'ó' ) % static_cast<int short>( 32767 ) % static_cast<int short unsigned>( 54321 ) % 1234567890123456789LL;
 	char const o2[] = "num char 97, num uchar 243, int short 32767, int short unsigned 54321, int long long 1234567890123456789";
 	ENSURE_EQUALS( "format failed", f2.string(), o2 );
 	using yaal::swap;
