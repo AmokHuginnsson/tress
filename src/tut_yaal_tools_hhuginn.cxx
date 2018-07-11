@@ -96,7 +96,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"multiplication = ( negation >> *( '*/%' >> negation ) )",
 		"negation = ( ( '-' >> negation ) | power )",
 		"power = ( booleanNot >> *( '^' >> negation ) )",
-		"booleanNot = ( ( '!' >> factorial ) | factorial )",
+		"booleanNot = ( ( '!¬' >> factorial ) | factorial )",
 		"factorial = ( atom >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
 		"atom = ( modulus | ( parenthesis >> -( memberAccess >> dereference ) ) | real | integer"
 			" | ( ( numberLiteral | character_literal ) >> -( memberAccess >> functionCallOperator ) )"
