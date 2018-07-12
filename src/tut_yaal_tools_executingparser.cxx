@@ -1893,17 +1893,17 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	 	| ( lambda >> -( functionCallOperator >> dereference ) )
 	);
 	HRule factorial( atom >> -( ( character( '!' ) & "==" ) | ( character( '!' ) ^ '=' ) ) );
-	HRule booleanNot( ( '-' >> factorial ) | factorial );
 	HRule negation;
-	HRule power( booleanNot >> ( * ( '^' >> negation ) ) );
+	HRule power( factorial >> ( * ( '^' >> negation ) ) );
 	negation %= ( ( '-' >> negation ) | power );
 	HRule multiplication( negation >> ( * ( '*' >> negation ) ) );
 	HRule sum( multiplication >> ( * ( '+' >> multiplication ) ) );
-	HRule compare( sum >> -( ( string( "<=" ) | ">=" | "<" | ">" ) >> sum ) );
-	HRule equals( compare >> -( ( string( "==" ) | "!=" ) >> compare ) );
-	HRule booleanAnd( equals >> *( ( string( "&&" ) | "⋀" ) >> equals ) );
-	HRule booleanOr( booleanAnd >> *( ( string( "||" ) | "⋁" ) >> booleanAnd ) );
-	HRule booleanXor( booleanOr >> -( ( string( "^^" ) | "⊕" ) >> booleanOr ) );
+	HRule compare( sum >> -( string( { "<=", ">=", "<", ">", "≤", "≥" } ) >> sum ) );
+	HRule equals( compare >> -( string( { "==", "!=", "≠" } ) >> compare ) );
+	HRule booleanNot( ( '-' >> equals ) | equals );
+	HRule booleanAnd( booleanNot >> *( string( { "&&", "⋀" } ) >> booleanNot ) );
+	HRule booleanOr( booleanAnd >> *( string( { "||", "⋁" } ) >> booleanAnd ) );
+	HRule booleanXor( booleanOr >> -( string( { "^^", "⊕" } ) >> booleanOr ) );
 	HRule ternary( booleanXor >> -( '?' >> expression >> ':' >> expression ) );
 	value %= ternary;
 	HRule subscript( name >> +( subscriptOperator | functionCallOperator | memberAccess ) );
@@ -1972,23 +1972,21 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AC_ = ( '{' >> *O_ >> '}' )",
 		"AD_ = ( ( C_ ^ ':' ) >> -\"...\" )",
 		"AE_ = ( ( AI_ >> *( ',' >> AI_ ) ) | ( C_ >> \":::\" ) )",
-		"AF_ = ( AJ_ >> -( ( \"==\" | \"!=\" ) >> AJ_ ) )",
+		"AF_ = ( ( '-' >> AJ_ ) | AJ_ )",
 		"AG_ = ( \"if\" >> '(' >> C_ >> ')' >> AC_ )",
 		"AH_ = ( '{' >> *( S_ | T_ | U_ | V_ | W_ | X_ | Y_ | Z_ | AA_ | AB_ | AC_ ) >> '}' )",
 		"AI_ = ( B_ >> ':' >> C_ )",
-		"AJ_ = ( AK_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" ) >> AK_ ) )",
-		"AK_ = ( AL_ >> *( '+' >> AL_ ) )",
-		"AL_ = ( AM_ >> *( '*' >> AM_ ) )",
-		"AM_ = ( ( '-' >> AM_ ) | ( ( ( '-' >> AN_ ) | AN_ ) >> *( '^' >> AM_ ) ) )",
-		"AN_ = ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( J_ >> AO_ ) ) | real | integer"
-			" | ( ( ( '$' >> real ) | character_literal ) >> -( J_ >> I_ ) ) | ( ( ( '(' >> -P_ >> -',' >> ')' )"
-			" | ( '[' >> -P_ >> ']' ) | ( '[' >> -( AP_ >> *( ',' >> AP_ ) ) >> ']' )"
-			" | ( '{' >> -( AP_ >> *( ',' >> AP_ ) ) >> '}' )"
-			" | string_literal ) >> -( ( H_ | J_ ) >> AO_ ) )"
-			" | ( ( '{' >> C_ >> *( ',' >> C_ ) >> '}' ) >> -( J_ >> AO_ ) )"
-			" | \"none\" | \"true\" | \"false\" | ( B_ >> AO_ )"
-			" | ( ( '@' >> -( '[' >> AQ_ >> *( ',' >> AQ_ ) >> ']' ) >> G_ ) >> -( I_ >> AO_ ) ) ) >> -( ( '!' & \"==\" )"
-			" | ( '!' ^ '=' ) ) )",
+		"AJ_ = ( AK_ >> -( ( \"==\" | \"!=\" | \"≠\" ) >> AK_ ) )",
+		"AK_ = ( AL_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" | \"≤\" | \"≥\" ) >> AL_ ) )",
+		"AL_ = ( AM_ >> *( '+' >> AM_ ) )",
+		"AM_ = ( AN_ >> *( '*' >> AN_ ) )",
+		"AN_ = ( ( '-' >> AN_ ) | ( ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( J_ >> AO_ ) )"
+			" | real | integer | ( ( ( '$' >> real ) | character_literal ) >> -( J_ >> I_ ) )"
+			" | ( ( ( '(' >> -P_ >> -',' >> ')' ) | ( '[' >> -P_ >> ']' ) | ( '[' >> -( AP_ >> *( ',' >> AP_ ) ) >> ']' )"
+			" | ( '{' >> -( AP_ >> *( ',' >> AP_ ) ) >> '}' ) | string_literal ) >> -( ( H_ | J_ ) >> AO_ ) )"
+			" | ( ( '{' >> C_ >> *( ',' >> C_ ) >> '}' ) >> -( J_ >> AO_ ) ) | \"none\" | \"true\" | \"false\""
+			" | ( B_ >> AO_ ) | ( ( '@' >> -( '[' >> AQ_ >> *( ',' >> AQ_ ) >> ']' ) >> G_ ) >> -( I_ >> AO_ ) ) ) >> -( ( '!' & \"==\" )"
+			" | ( '!' ^ '=' ) ) ) >> *( '^' >> AN_ ) ) )",
 		"AO_ = *( H_ | I_ | J_ )",
 		"AP_ = ( C_ >> ':' >> C_ )",
 		"AQ_ = ( B_ >> -( ':' >> C_ ) )"
