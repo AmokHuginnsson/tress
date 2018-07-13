@@ -92,7 +92,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"unpackedNamedParameters = ( argument >> \":::\" )",
 		"equality = ( compare >> -( ( \"==\" | \"!=\" | \"≠\" ) >> compare ) )",
 		"namedParameter = ( parameterName >> ':' >> functionArgument )",
-		"compare = ( sum >> -( ( \"<=\" | \">=\" | \"<\" | \">\" | \"≤\" | \"≥\" ) >> sum ) )",
+		"compare = ( sum >> -( ( \"<=\" | \">=\" | \"<\" | \">\" | \"≤\" | \"≥\" | \"∈\" ) >> sum ) )",
 		"sum = ( multiplication >> *( '+-' >> multiplication ) )",
 		"multiplication = ( negation >> *( '*/%' >> negation ) )",
 		"negation = ( ( '-' >> negation ) | power )",

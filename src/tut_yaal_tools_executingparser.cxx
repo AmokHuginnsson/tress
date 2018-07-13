@@ -1898,7 +1898,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	negation %= ( ( '-' >> negation ) | power );
 	HRule multiplication( negation >> ( * ( '*' >> negation ) ) );
 	HRule sum( multiplication >> ( * ( '+' >> multiplication ) ) );
-	HRule compare( sum >> -( string( { "<=", ">=", "<", ">", "≤", "≥" } ) >> sum ) );
+	HRule compare( sum >> -( string( { "<=", ">=", "<", ">", "≤", "≥", "∈" } ) >> sum ) );
 	HRule equals( compare >> -( string( { "==", "!=", "≠" } ) >> compare ) );
 	HRule booleanNot( ( '-' >> equals ) | equals );
 	HRule booleanAnd( booleanNot >> *( string( { "&&", "⋀" } ) >> booleanNot ) );
@@ -1977,7 +1977,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AH_ = ( '{' >> *( S_ | T_ | U_ | V_ | W_ | X_ | Y_ | Z_ | AA_ | AB_ | AC_ ) >> '}' )",
 		"AI_ = ( B_ >> ':' >> C_ )",
 		"AJ_ = ( AK_ >> -( ( \"==\" | \"!=\" | \"≠\" ) >> AK_ ) )",
-		"AK_ = ( AL_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" | \"≤\" | \"≥\" ) >> AL_ ) )",
+		"AK_ = ( AL_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" | \"≤\" | \"≥\" | \"∈\" ) >> AL_ ) )",
 		"AL_ = ( AM_ >> *( '+' >> AM_ ) )",
 		"AM_ = ( AN_ >> *( '*' >> AN_ ) )",
 		"AN_ = ( ( '-' >> AN_ ) | ( ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( J_ >> AO_ ) )"

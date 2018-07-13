@@ -96,7 +96,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "factorial" )
 	ENSURE_EQUALS( "neg factorial succeeded", execute_except( "main(){return($-1!);}" ), "*anonymous stream*:1:18: Uncaught ArithmeticException: Factorial from negative." );
 	ENSURE_EQUALS( "fractional factorial succeeded", execute_except( "main(){return($1.5!);}" ), "*anonymous stream*:1:19: Uncaught ArithmeticException: Factorial from fraction." );
-	ENSURE_EQUALS( "int factorial succeeded", execute_except( "main(){return(1!);}" ), "*anonymous stream*:1:16: There is no `!` operator for `integer'." );
+	ENSURE_EQUALS( "int factorial succeeded", execute_except( "main(){return(1!);}" ), "*anonymous stream*:1:16: There is no `!` operator for an `integer'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "absolute" )
@@ -172,6 +172,18 @@ TUT_UNIT_TEST( "greater_or_equal" )
 	ENSURE_EQUALS( "greater_or_equal string failed", execute( "main(){return([\"1\">=\"0\",\"0\">=\"0\",\"0\">=\"1\"]);}" ), "[true, true, false]" );
 	ENSURE_EQUALS( "bad greater_or_equal user succeeded", execute_except( "class A{greater_or_equal(x){return(none);}}main(){return(A()>=A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:61: Comparison method `greater_or_equal' returned non-boolean result of a `*none*' type." );
 	ENSURE_EQUALS( "missing greater_or_equal user succeeded", execute_except( "class A{_x=none;}main(){return(A()>=A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A' does not have `greater_or_equal' method." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "is_element_of" )
+	ENSURE_EQUALS( "is_element_of tuple failed", execute( "main(){x = (2, 3, 5, 7, 11, 17 );return([7 ∈ x, 8 ∈ x]);}" ), "[true, false]" );
+	ENSURE_EQUALS( "is_element_of list failed", execute( "main(){x = [2, 3, 5, 7, 11, 17 ];return([7 ∈ x, 8 ∈ x]);}" ), "[true, false]" );
+	ENSURE_EQUALS( "is_element_of deque failed", execute( "main(){x = deque(2, 3, 5, 7, 11, 17 );return([7 ∈ x, 8 ∈ x]);}" ), "[true, false]" );
+	ENSURE_EQUALS( "is_element_of dict failed", execute( "main(){x = [2:1, 3:2, 5:3, 7:4, 11:5, 17:6];return([7 ∈ x, 8 ∈ x]);}" ), "[true, false]" );
+	ENSURE_EQUALS( "is_element_of lookup failed", execute( "main(){x = {2:1, 3:2, 5:3, 7:4, 11:5, 17:6};return([7 ∈ x, 8 ∈ x]);}" ), "[true, false]" );
+	ENSURE_EQUALS( "is_element_of order failed", execute( "main(){x = order(2, 3, 5, 7, 11, 17 );return([7 ∈ x, 8 ∈ x]);}" ), "[true, false]" );
+	ENSURE_EQUALS( "is_element_of set failed", execute( "main(){x = {2, 3, 5, 7, 11, 17 };return([7 ∈ x, 8 ∈ x]);}" ), "[true, false]" );
+	ENSURE_EQUALS( "is_element_of string failed", execute( "main(){x = \"2 3 5 7 11 17\";return(['7' ∈ x, '8' ∈ x]);}" ), "[true, false]" );
+	ENSURE_EQUALS( "missing is_element_of user succeeded", execute_except( "class A{_x=none;}main(){return(0∈A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:33: There is no `∈' operator for an `A'." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "string()" )
@@ -320,7 +332,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "boolean()" )
 	ENSURE_EQUALS( "boolean to boolean failed", execute( "main(){return([boolean(true),boolean(false)]);}" ), "[true, false]" );
-	ENSURE_EQUALS( "int to boolean succeeded", execute_except( "main(){return(boolean(7));}" ), "*anonymous stream*:1:22: Conversion from `integer' to `boolean' is not supported." );
+	ENSURE_EQUALS( "int to boolean succeeded", execute_except( "main(){return(boolean(7));}" ), "*anonymous stream*:1:22: Conversion from an `integer' to a `boolean' is not supported." );
 	ENSURE_EQUALS( "bad user to int succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(boolean(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:60: Class `A' does not have `to_boolean' method." );
 TUT_TEARDOWN()
 
@@ -333,7 +345,7 @@ TUT_UNIT_TEST( "real()" )
 	ENSURE_EQUALS( "copy( real ) failed", execute( "main(){x=0.;y=x;z=copy(x);x+=1.;return([x,y,z]);}" ), "[1.0, 1.0, 0.0]" );
 	ENSURE_EQUALS( "user to real failed", execute( "class A{_x=none;constructor(x){_x=x;}to_real(){return(_x);}}main(){return(real(A(7.)));}" ), "7.0" );
 	ENSURE_EQUALS( "bad user to real succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(real(A(7.)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:57: Class `A' does not have `to_real' method." );
-	ENSURE_EQUALS( "char to real succeeded", execute_except( "main(){return(real('7'));}" ), "*anonymous stream*:1:19: Conversion from `character' to `real' is not supported." );
+	ENSURE_EQUALS( "char to real succeeded", execute_except( "main(){return(real('7'));}" ), "*anonymous stream*:1:19: Conversion from a `character' to a `real' is not supported." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "number()" )
@@ -346,7 +358,7 @@ TUT_UNIT_TEST( "number()" )
 	ENSURE_EQUALS( "copy( number ) failed", execute( "main(){x=$0;y=x;z=copy(x);x+=$1;return([x,y,z]);}" ), "[$1, $1, $0]" );
 	ENSURE_EQUALS( "user to number failed", execute( "class A{_x=none;constructor(x){_x=x;}to_number(){return(_x);}}main(){return(number(A($7)));}" ), "$7" );
 	ENSURE_EQUALS( "bad user to number succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(number(A(7.)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:59: Class `A' does not have `to_number' method." );
-	ENSURE_EQUALS( "char to number succeeded", execute_except( "main(){return(number('7'));}" ), "*anonymous stream*:1:21: Conversion from `character' to `number' is not supported." );
+	ENSURE_EQUALS( "char to number succeeded", execute_except( "main(){return(number('7'));}" ), "*anonymous stream*:1:21: Conversion from a `character' to a `number' is not supported." );
 	ENSURE_EQUALS( "number.is_exact() failed", execute( "main(){return([($2/$5).is_exact(),($2/$3).is_exact()]);}" ), "[true, false]" );
 	ENSURE_EQUALS( "number.is_integral() failed", execute( "main(){return([($15/$5).is_integral(),($15/$6).is_integral()]);}" ), "[true, false]" );
 	ENSURE_EQUALS( "number.set_precision()/number.get_precision() failed", execute( "main(){a=$1;a.set_precision(200);b=$3;b.set_precision(300);return([a.get_precision(),b.get_precision()]);}" ), "[200, 300]" );
@@ -356,7 +368,7 @@ TUT_UNIT_TEST( "character()" )
 	ENSURE_EQUALS( "character to character failed", execute( "main(){return(character('7'));}" ), "'7'" );
 	ENSURE_EQUALS( "integer to character failed", execute( "main(){return(character(97));}" ), "'a'" );
 	ENSURE_EQUALS( "copy( character ) failed", execute( "main(){x='a';y=x;z=copy(x);x.to_upper();return([x,y,z]);}" ), "['A', 'A', 'a']" );
-	ENSURE_EQUALS( "real to character succeeded", execute_except( "main(){return(character(7.));}" ), "*anonymous stream*:1:24: Conversion from `real' to `character' is not supported." );
+	ENSURE_EQUALS( "real to character succeeded", execute_except( "main(){return(character(7.));}" ), "*anonymous stream*:1:24: Conversion from a `real' to a `character' is not supported." );
 	ENSURE_EQUALS( "character.to_upper() failed", execute( "main(){x='a';x.to_upper();return(x);}" ), "'A'" );
 	ENSURE_EQUALS( "character.to_lower() failed", execute( "main(){x='A';x.to_lower();return(x);}" ), "'a'" );
 	ENSURE_EQUALS(

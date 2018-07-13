@@ -1026,6 +1026,19 @@ char const progExecuteErr110[] =
 	"}\n"
 ;
 
+char const progExecuteErr111[] =
+	"f() { return ( 0 ); }\n"
+	"main() {\n"
+	"0 ∈ f();\n"
+	"}\n"
+;
+
+char const progExecuteErr112[] =
+	"main() {\n"
+	"0 ∈ \"\";\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1164,6 +1177,8 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr108,
 		progExecuteErr109,
 		progExecuteErr110,
+		progExecuteErr111,
+		progExecuteErr112,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1182,15 +1197,15 @@ TUT_UNIT_TEST( "report execution error" )
 /*  12 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `>=' do not match: an `integer' vs a `real'." },
 /*  13 */ { 0, 1, 1,     "*tress*:1:1: Function `main(...)' is not defined." },
 /*  14 */ { 15, 2, 7,    "*tress*:2:7: Non-uniform key types, got a `real' instead of an `integer'." },
-/*  15 */ { 31, 4, 5,    "*tress*:4:5: Subscript is not an integer: character" },
+/*  15 */ { 31, 4, 5,    "*tress*:4:5: Subscript is not an integer: a `character'" },
 /*  16 */ { 23, 3, 5,    "*tress*:3:5: Bad index." },
 /*  17 */ { 23, 3, 5,    "*tress*:3:5: Bad index." },
-/*  18 */ { 19, 3, 5,    "*tress*:3:5: Subscript is not supported on `integer'." },
+/*  18 */ { 19, 3, 5,    "*tress*:3:5: Subscript is not supported on an `integer'." },
 /*  19 */ { 61, 5, 5,    "*tress*:5:5: Range operand `from' is not an integer." },
 /*  20 */ { 61, 5, 5,    "*tress*:5:5: Range operand `to' is not an integer." },
 /*  21 */ { 61, 5, 5,    "*tress*:5:5: Range operand `step' is not an integer." },
 /*  22 */ { 32, 3, 5,    "*tress*:3:5: Range step cannot be zero." },
-/*  23 */ { 19, 3, 5,    "*tress*:3:5: Range operator is not supported on `integer'." },
+/*  23 */ { 19, 3, 5,    "*tress*:3:5: Range operator is not supported on an `integer'." },
 /*  24 */ { 49, 7, 3,    "*tress*:7:3: Operand types for `+' do not match: an `A' vs an `integer'." },
 /*  25 */ { 46, 5, 11,   "*tress*:5:11: Class `L' does not have `iterator' method." },
 /*  25 */ { 79, 8, 11,   "*tress*:8:11: `For' source returned invalid iterator object." },
@@ -1231,10 +1246,10 @@ TUT_UNIT_TEST( "report execution error" )
 /*  61 */ { 19, 3, 2,    "*tress*:3:2: `string` does not support item assignment." },
 /*  62 */ { 35, 5, 4,    "*tress*:5:4: Arithmetic method `add' on an `A' returned result of incompatible type an `integer'." },
 /*  63 */ { 34, 5, 4,    "*tress*:5:4: User supplied `hash' function returned an invalid type a `real' instead of an `integer'." },
-/*  64 */ { 31, 3, 15,   "*tress*:3:15: There is no `<' operator for `*bound_method*'." },
+/*  64 */ { 31, 3, 15,   "*tress*:3:15: There is no `<' operator for a `*bound_method*'." },
 /*  65 */ { 11, 2, 4,    "*tress*:2:4: There is no `hash' operator for a `*bound_method*'." },
 /*  66 */ { 14, 3, 2,    "*tress*:3:2: Reference `integer' is not a callable." },
-/*  67 */ { 14, 3, 2,    "*tress*:3:2: Range operator is not supported on `integer'." },
+/*  67 */ { 14, 3, 2,    "*tress*:3:2: Range operator is not supported on an `integer'." },
 /*  68 */ { 14, 2, 6,    "*tress*:2:6: Operands are not boolean values: a `boolean', a `*none*'" },
 /*  69 */ { 9, 2, 1,     "*tress*:2:1: Operand is not a boolean value: *none*" },
 /*  70 */ { 15, 2, 7,    "*tress*:2:7: `While' argument is not a boolean." },
@@ -1255,7 +1270,7 @@ TUT_UNIT_TEST( "report execution error" )
 /*  85 */ { 16, 2, 8,    "*tress*:2:8: Bad number of parameters in call to: `string.find()', expected at most: 2, got: 3." },
 /*  86 */ { 16, 2, 8,    "*tress*:2:8: Bad number of parameters in call to: `string.find()', expected at least: 1, got: 0." },
 /*  87 */ { 16, 2, 8,    "*tress*:2:8: string.find() first argument must be a `string', not an `integer'." },
-/*  88 */ { 20, 3, 4,    "*tress*:3:4: Range operator is not supported on `integer'." },
+/*  88 */ { 20, 3, 4,    "*tress*:3:4: Range operator is not supported on an `integer'." },
 /*  89 */ { 14, 2, 6,    "*tress*:2:6: Assigner is not a `tuple` object." },
 /*  90 */ { 14, 2, 6,    "*tress*:2:6: Not enough values to unpack, expected: 2, got: 1." },
 /*  91 */ { 14, 2, 6,    "*tress*:2:6: Too many values to unpack, expected: 2, got: 3." },
@@ -1278,6 +1293,8 @@ TUT_UNIT_TEST( "report execution error" )
 /* 108 */ { 21, 2, 13,   "*tress*:2:13: Explicit construction of class `*function_reference*' objects (instances) is forbidden." },
 /* 109 */ { 52, 3, 17,   "*tress*:3:17: Invalid materialized type: `print'." },
 /* 110 */ { 976, 64, 2,  "./data//Tress.hgn:64:2: Uncaught Exception: Ouch!" },
+/* 111 */ { 33, 3, 3,    "*tress*:3:3: Operand is not a collection type: an `integer'" },
+/* 112 */ { 11, 2, 3,    "*tress*:2:3: Only `character`s can be elements of `string`s." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
