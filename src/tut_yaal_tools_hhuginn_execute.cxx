@@ -1039,6 +1039,13 @@ char const progExecuteErr112[] =
 	"}\n"
 ;
 
+char const progExecuteErr113[] =
+	"f() { return ( 0 ); }\n"
+	"main() {\n"
+	"0 ∉ f();\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1295,6 +1302,7 @@ TUT_UNIT_TEST( "report execution error" )
 /* 110 */ { 976, 64, 2,  "./data//Tress.hgn:64:2: Uncaught Exception: Ouch!" },
 /* 111 */ { 33, 3, 3,    "*tress*:3:3: Operand is not a collection type: an `integer'" },
 /* 112 */ { 11, 2, 3,    "*tress*:2:3: Only `character`s can be elements of `string`s." },
+/* 113 */ { 33, 3, 3,    "*tress*:3:3: Operand is not a collection type: an `integer'" },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

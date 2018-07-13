@@ -876,6 +876,12 @@ char const progCompileErr114[] =
 	"}\n"
 ;
 
+char const progCompileErr115[] =
+	"main() {\n"
+	"0 ∉ 0;\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -993,6 +999,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr112,
 		progCompileErr113,
 		progCompileErr114,
+		progCompileErr115,
 		NULL
 	};
 
@@ -1112,6 +1119,7 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 112 */ { 37, 3, 1,  "*anonymous stream*:3:1: `A' is a class name." },
 /* 113 */ { 7, 1, 8,   "*anonymous stream*:1:8: ./data/RecursiveImport.hgn:1:8: Package `RecursiveImport' is already being imported." },
 /* 114 */ { 11, 2, 3,  "*anonymous stream*:2:3: Operand is not a collection type: an `integer'" },
+/* 115 */ { 11, 2, 3,  "*anonymous stream*:2:3: Operand is not a collection type: an `integer'" },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

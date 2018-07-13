@@ -186,6 +186,18 @@ TUT_UNIT_TEST( "is_element_of" )
 	ENSURE_EQUALS( "missing is_element_of user succeeded", execute_except( "class A{_x=none;}main(){return(0∈A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:33: There is no `∈' operator for an `A'." );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "is_not_element_of" )
+	ENSURE_EQUALS( "is_not_element_of tuple failed", execute( "main(){x = (2, 3, 5, 7, 11, 17 );return([7 ∉ x, 8 ∉ x]);}" ), "[false, true]" );
+	ENSURE_EQUALS( "is_not_element_of list failed", execute( "main(){x = [2, 3, 5, 7, 11, 17 ];return([7 ∉ x, 8 ∉ x]);}" ), "[false, true]" );
+	ENSURE_EQUALS( "is_not_element_of deque failed", execute( "main(){x = deque(2, 3, 5, 7, 11, 17 );return([7 ∉ x, 8 ∉ x]);}" ), "[false, true]" );
+	ENSURE_EQUALS( "is_not_element_of dict failed", execute( "main(){x = [2:1, 3:2, 5:3, 7:4, 11:5, 17:6];return([7 ∉ x, 8 ∉ x]);}" ), "[false, true]" );
+	ENSURE_EQUALS( "is_not_element_of lookup failed", execute( "main(){x = {2:1, 3:2, 5:3, 7:4, 11:5, 17:6};return([7 ∉ x, 8 ∉ x]);}" ), "[false, true]" );
+	ENSURE_EQUALS( "is_not_element_of order failed", execute( "main(){x = order(2, 3, 5, 7, 11, 17 );return([7 ∉ x, 8 ∉ x]);}" ), "[false, true]" );
+	ENSURE_EQUALS( "is_not_element_of set failed", execute( "main(){x = {2, 3, 5, 7, 11, 17 };return([7 ∉ x, 8 ∉ x]);}" ), "[false, true]" );
+	ENSURE_EQUALS( "is_not_element_of string failed", execute( "main(){x = \"2 3 5 7 11 17\";return(['7' ∉ x, '8' ∉ x]);}" ), "[false, true]" );
+	ENSURE_EQUALS( "missing is_not_element_of user succeeded", execute_except( "class A{_x=none;}main(){return(0∉A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:33: There is no `∉' operator for an `A'." );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "string()" )
 	ENSURE_EQUALS( "str to str failed", execute( "main(){return(string(\"7\"));}" ), "\"7\"" );
 	ENSURE_EQUALS( "int to str failed", execute( "main(){return(string(7));}" ), "\"7\"" );
