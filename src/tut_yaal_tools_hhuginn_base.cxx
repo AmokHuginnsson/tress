@@ -42,12 +42,12 @@ void HIntrospector::do_introspect( yaal::tools::HIntrospecteeInterface& introspe
 	yaal::tools::HIntrospecteeInterface::HCallSite const& cs( _callStacks.back().front() );
 	identifier_names_t in;
 	for ( HIntrospecteeInterface::HVariableView const& vv : introspectee_.get_locals( 0 ) ) {
-		in.push_back( vv.name() );
+		in.emplace_back( vv.name(), !! vv.value() ? to_string( vv.value() ) : "<undefined>" );
 	}
 	_identifierNamesLog.insert( make_pair( make_pair( cs.file(), cs.line() ), in ) );
 	in.clear();
 	for ( HIntrospecteeInterface::HVariableView const& vv : introspectee_.get_locals( 1 ) ) {
-		in.push_back( vv.name() );
+		in.emplace_back( vv.name(), !! vv.value() ? to_string( vv.value() ) : "<undefined>" );
 	}
 	_identifierNamesLogUp.insert( make_pair( make_pair( cs.file(), cs.line() ), in ) );
 }
@@ -392,11 +392,13 @@ tut_yaal_tools_hhuginn_base::OHuginnResult tut_yaal_tools_hhuginn_base::execute_
 	return ( OHuginnResult{ h, r } );
 }
 
-hcore::HString tut_yaal_tools_hhuginn_base::execute_incremental(
+hcore::HString const& tut_yaal_tools_hhuginn_base::execute_incremental(
+	yaal::tools::HHuginn::ptr_t huginn_,
 	lines_t const& lines_,
-	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_
+	yaal::tools::HHuginn::paths_t const& modulePaths_,
+	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_,
+	HIntrospector* introspector_
 ) {
-	HHuginn h;
 	hcore::HString head( "main(){\n" );
 	hcore::HString foot( "}\n" );
 	hcore::HString okImports;
@@ -404,9 +406,9 @@ hcore::HString tut_yaal_tools_hhuginn_base::execute_incremental(
 	hcore::HString okBody;
 	HStringStream src;
 	HStringStream out;
-	h.set_output_stream( out );
-	hcore::HString res;
-	h.reset();
+	_resultCache.clear();
+	huginn_->set_output_stream( out );
+	huginn_->reset();
 	for ( OLine const& line : lines_ ) {
 		hcore::HString imports( okImports );
 		hcore::HString definitions( okDefinitions );
@@ -420,40 +422,57 @@ hcore::HString tut_yaal_tools_hhuginn_base::execute_incremental(
 		}
 		src.clear();
 		src << imports << definitions << head << body << foot;
-		h.reset();
+		huginn_->reset();
 		if ( setup._verbose ) {
 			clog << prettify( src.string() ) << endl;
 		}
-		h.load( src );
-		h.preprocess();
-		bool p( h.parse() );
+		huginn_->load( src );
+		huginn_->preprocess();
+		bool p( huginn_->parse() );
 		if ( !p ) {
-			clog << h.error_message() << endl;
+			clog << huginn_->error_message() << endl;
 		}
 		ENSURE( "parse failed", p );
-		bool c( h.compile( { "./data" }, huginnCompilerSetup_ ) );
+		bool c( huginn_->compile( modulePaths_, huginnCompilerSetup_, introspector_ ) );
 		if ( !c ) {
-			res.append( h.error_message() );
+			_resultCache.append( huginn_->error_message() );
 			continue;
 		}
 		ENSURE( "compilation failed", c );
-		bool e( h.execute() );
+		bool e( huginn_->execute() );
 		if ( !e ) {
-			res.append( h.error_message() );
+			_resultCache.append( huginn_->error_message() );
 			continue;
 		}
 		ENSURE( "execution failed!", e );
-		HHuginn::value_t r( h.result() );
+		HHuginn::value_t r( huginn_->result() );
 		ENSURE( "nothing returned", !! r );
 		okImports = imports;
 		okDefinitions = definitions;
 		okBody = body;
-		res.append( out.string() );
-		res.trim_right();
+		_resultCache.append( out.string() );
+		_resultCache.trim_right();
 		out.reset();
-		res.append( to_string( r, &h ) );
+		_resultCache.append( to_string( r, huginn_.raw() ) );
 	}
-	return ( res );
+	return ( _resultCache );
+}
+
+hcore::HString const& tut_yaal_tools_hhuginn_base::execute_incremental(
+	lines_t const& lines_,
+	yaal::tools::HHuginn::paths_t const& modulePaths_,
+	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_,
+	HIntrospector* introspector_
+) {
+	return ( execute_incremental( make_pointer<HHuginn>(), lines_, modulePaths_, huginnCompilerSetup_, introspector_ ) );
+}
+
+hcore::HString const& tut_yaal_tools_hhuginn_base::execute_incremental(
+	lines_t const& lines_,
+	yaal::tools::HHuginn::compiler_setup_t huginnCompilerSetup_,
+	HIntrospector* introspector_
+) {
+	return ( execute_incremental( make_pointer<HHuginn>(), lines_, {}, huginnCompilerSetup_, introspector_ ) );
 }
 
 }

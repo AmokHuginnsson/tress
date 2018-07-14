@@ -24,9 +24,17 @@ namespace tress {
 
 class HIntrospector : public yaal::tools::HIntrospectorInterface {
 public:
+	struct OVar {
+		yaal::hcore::HString name;
+		yaal::hcore::HString value;
+		OVar( yaal::hcore::HString const& name_, yaal::hcore::HString const& value_ )
+			: name( name_ )
+			, value( value_ ) {
+		}
+	};
 	typedef yaal::hcore::HArray<yaal::tools::HIntrospecteeInterface::call_stack_t> call_stacks_t;
 	typedef yaal::hcore::HPair<yaal::hcore::HString, int> location_t;
-	typedef yaal::hcore::HArray<yaal::hcore::HString> identifier_names_t;
+	typedef yaal::hcore::HArray<OVar> identifier_names_t;
 	typedef yaal::hcore::HHashMap<location_t, identifier_names_t> identifier_names_log_t;
 private:
 	call_stacks_t _callStacks;
@@ -111,9 +119,23 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::DEFAULT
 	);
 	OHuginnResult execute_result( yaal::hcore::HString const& );
-	yaal::hcore::HString execute_incremental(
+	yaal::hcore::HString const& execute_incremental(
+		yaal::tools::HHuginn::ptr_t,
 		lines_t const&,
-		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::BE_SLOPPY
+		yaal::tools::HHuginn::paths_t const&,
+		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::BE_SLOPPY,
+		HIntrospector* = nullptr
+	);
+	yaal::hcore::HString const& execute_incremental(
+		lines_t const&,
+		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::BE_SLOPPY,
+		HIntrospector* = nullptr
+	);
+	yaal::hcore::HString const& execute_incremental(
+		lines_t const&,
+		yaal::tools::HHuginn::paths_t const&,
+		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::BE_SLOPPY,
+		HIntrospector* = nullptr
 	);
 };
 

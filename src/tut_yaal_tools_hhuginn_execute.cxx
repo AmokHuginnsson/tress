@@ -1186,6 +1186,7 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr110,
 		progExecuteErr111,
 		progExecuteErr112,
+		progExecuteErr113,
 		NULL
 	};
 	ErrInfo const err[] = {

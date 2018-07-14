@@ -2148,7 +2148,11 @@ TUT_UNIT_TEST( "incremental mode" )
 		{ "class X{x=0;}", OLine::TYPE::DEFINITION },
 		{ "X(){}", OLine::TYPE::DEFINITION }
 	};
-	ENSURE_EQUALS( "creation of function of name that is used by class succeeded", execute_incremental( l1 ), "none*anonymous stream*:2:1: Class of the same name `X' is already defined." );
+	ENSURE_EQUALS(
+		"creation of function of name that is used by class succeeded",
+		execute_incremental( l1 ),
+		"none*anonymous stream*:2:1: Class of the same name `X' is already defined."
+	);
 	lines_t l2{
 		{ "x=0;x+=1;" }
 	};
@@ -2161,13 +2165,21 @@ TUT_UNIT_TEST( "incremental mode" )
 	lines_t l4{
 		{ "main();" }
 	};
-	ENSURE_EQUALS( "bug in incremental mode management recursive main resurfaced", execute_incremental( l4 ), "*anonymous stream*:2:1: Referencing main() function in incremental mode is forbidden." );
+	ENSURE_EQUALS(
+		"bug in incremental mode management recursive main resurfaced",
+		execute_incremental( l4 ),
+		"*anonymous stream*:2:1: Referencing main() function in incremental mode is forbidden."
+	);
 	lines_t l5{
 		{ "2+2;" },
 		{ "import CannotParse as cp;", OLine::TYPE::IMPORT },
 		{ "3*4;" }
 	};
-	ENSURE_EQUALS( "Parser errors in incemental mode while importing user defined submodule", execute_incremental( l5 ), "4*anonymous stream*:1:8: ./data/CannotParse.hgn:3:1: expected one of characters: -12" );
+	ENSURE_EQUALS(
+		"Parser errors in incemental mode while importing user defined submodule",
+		execute_incremental( l5, { "./data" } ),
+		"4*anonymous stream*:1:8: ./data/CannotParse.hgn:3:1: expected one of characters: -12"
+	);
 	lines_t l6{
 		{ "2+2;" },
 		{ "import CannotCompile as cp;", OLine::TYPE::IMPORT },
@@ -2175,14 +2187,18 @@ TUT_UNIT_TEST( "incremental mode" )
 	};
 	ENSURE_EQUALS(
 		"Compiler errors in incemental mode while importing user defined submodule",
-		execute_incremental( l6 ),
+		execute_incremental( l6, { "./data" } ),
 		"4*anonymous stream*:1:8: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: an `integer' vs a `real'.12"
 	);
 	lines_t l7{
 		{ "solve(){a;}", OLine::TYPE::DEFINITION },
 		{ "solve();" }
 	};
-	ENSURE_EQUALS( "Crash trigger", execute_incremental( l7 ), "*anonymous stream*:1:9: Symbol `a' is not defined in this context (did you mean `add'?).*anonymous stream*:2:1: Symbol `solve' is not defined in this context (did you mean `size'?)." );
+	ENSURE_EQUALS(
+		"Crash trigger",
+		execute_incremental( l7 ),
+		"*anonymous stream*:1:9: Symbol `a' is not defined in this context (did you mean `add'?).*anonymous stream*:2:1: Symbol `solve' is not defined in this context (did you mean `size'?)."
+	);
 	lines_t l8{
 		{ "class A { constructor(){a;} }", OLine::TYPE::DEFINITION },
 		{ "A();" }
@@ -2222,7 +2238,7 @@ TUT_UNIT_TEST( "incremental mode" )
 	};
 	ENSURE_EQUALS(
 		"unparsable runtime import",
-		execute_incremental( l11 ),
+		execute_incremental( l11, { "./data" } ),
 		"nonenone*anonymous stream*:4:18: Uncaught IntrospectionException: ./data/CannotParse.hgn:3:1: expected one of characters: -0"
 	);
 	lines_t l12{
@@ -2233,7 +2249,7 @@ TUT_UNIT_TEST( "incremental mode" )
 	};
 	ENSURE_EQUALS(
 		"uncompilable runtime import",
-		execute_incremental( l12 ),
+		execute_incremental( l12, { "./data" } ),
 		"nonenone*anonymous stream*:4:18: Uncaught IntrospectionException: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: an `integer' vs a `real'.0"
 	);
 	lines_t l13{
@@ -2242,7 +2258,7 @@ TUT_UNIT_TEST( "incremental mode" )
 	};
 	ENSURE_EQUALS(
 		"runtime error from submodule",
-		execute_incremental( l13 ),
+		execute_incremental( l13, { "./data" } ),
 		"none./data/Tress.hgn:64:2: Uncaught Exception: Ouch!"
 	);
 	lines_t l14{
@@ -2252,7 +2268,7 @@ TUT_UNIT_TEST( "incremental mode" )
 	};
 	ENSURE_EQUALS(
 		"multiple imports and docs",
-		execute_incremental( l14 ),
+		execute_incremental( l14, { "./data" } ),
 		"nonenone4"
 	);
 TUT_TEARDOWN()
@@ -2264,6 +2280,7 @@ TUT_UNIT_TEST( "introspection" )
 		execute(
 			"foo( x ) {\n"
 			"\ty = x + 1;\n"
+			"\ty += 2;\n"
 			"\treturn ( y );\n"
 			"}\n"
 			"\n"
@@ -2273,18 +2290,20 @@ TUT_UNIT_TEST( "introspection" )
 			"}\n"
 			"\n"
 			"main() {\n"
-			"\tbar( 0 );\n"
+			"\tz = bar( 0 );\n"
+			"\tz = z + bar( 1 );\n"
+			"\treturn ( z );\n"
 			"}\n",
 			HHuginn::COMPILER::DEFAULT,
 			&introspector
 		),
-		"2"
+		"14"
 	);
 	HIntrospecteeInterface::call_stack_t const* callStack( introspector.get_stack( "*anonymous stream*", 2 ) );
 	char const expected[][64] = {
 		"*anonymous stream*:2:2:foo",
-		"*anonymous stream*:7:9:bar",
-		"*anonymous stream*:12:5:main"
+		"*anonymous stream*:8:9:bar",
+		"*anonymous stream*:13:9:main"
 	};
 	HStringStream ss;
 	int row( 0 );
@@ -2297,24 +2316,111 @@ TUT_UNIT_TEST( "introspection" )
 	/* top frame */ {
 		HIntrospector::identifier_names_t const* identifierNames( introspector.get_locals( "*anonymous stream*", 2 ) );
 		hcore::HString names;
-		for ( hcore::HString const& n : *identifierNames ) {
+		for ( HIntrospector::OVar const& v : *identifierNames ) {
 			if ( ! names.is_empty() ) {
 				names.append( " " );
 			}
-			names.append( n );
+			names.append( v.name ).append( " " ).append( v.value );
 		}
-		ENSURE_EQUALS( "get_locals failed", names, "x y" );
+		ENSURE_EQUALS( "get_locals failed", names, "x 0 y 1" );
+	}
+	/* top frame, next line */ {
+		HIntrospector::identifier_names_t const* identifierNames( introspector.get_locals( "*anonymous stream*", 3 ) );
+		hcore::HString names;
+		for ( HIntrospector::OVar const& v : *identifierNames ) {
+			if ( ! names.is_empty() ) {
+				names.append( " " );
+			}
+			names.append( v.name ).append( " " ).append( v.value );
+		}
+		ENSURE_EQUALS( "get_locals failed", names, "x 0 y 3" );
 	}
 	/* second frame */ {
 		HIntrospector::identifier_names_t const* identifierNames( introspector.get_locals_up( "*anonymous stream*", 2 ) );
 		hcore::HString names;
-		for ( hcore::HString const& n : *identifierNames ) {
+		for ( HIntrospector::OVar const& v : *identifierNames ) {
 			if ( ! names.is_empty() ) {
 				names.append( " " );
 			}
-			names.append( n );
+			names.append( v.name ).append( " " ).append( v.value );
 		}
-		ENSURE_EQUALS( "get_locals failed", names, "p q" );
+		ENSURE_EQUALS( "get_locals failed", names, "p 0 q <undefined>" );
+	}
+	/* bottom frame */ {
+		HIntrospector::identifier_names_t const* identifierNames( introspector.get_locals( "*anonymous stream*", 13 ) );
+		hcore::HString names;
+		for ( HIntrospector::OVar const& v : *identifierNames ) {
+			if ( ! names.is_empty() ) {
+				names.append( " " );
+			}
+			names.append( v.name ).append( " " ).append( v.value );
+		}
+		ENSURE_EQUALS( "get_locals failed", names, "z 6" );
+	}
+	/* bottom frame, next line */ {
+		HIntrospector::identifier_names_t const* identifierNames( introspector.get_locals( "*anonymous stream*", 14 ) );
+		hcore::HString names;
+		for ( HIntrospector::OVar const& v : *identifierNames ) {
+			if ( ! names.is_empty() ) {
+				names.append( " " );
+			}
+			names.append( v.name ).append( " " ).append( v.value );
+		}
+		ENSURE_EQUALS( "get_locals failed", names, "z 14" );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "incremental introspection" )
+	HIntrospector introspector;
+	lines_t lines{
+		{ "foo( x ) { y = x + 1; y += 2; return ( y ); }", OLine::TYPE::DEFINITION },
+		{ "bar( p ) { q = foo( p ) * 2; return ( q ); }", OLine::TYPE::DEFINITION },
+		{ "bar( 0 );" }
+	};
+	ENSURE_EQUALS(
+		"Stream.read failed",
+		execute_incremental(
+			lines,
+			HHuginn::COMPILER::BE_SLOPPY,
+			&introspector
+		),
+		"nonenone6"
+	);
+	HIntrospecteeInterface::call_stack_t const* callStack( introspector.get_stack( "*anonymous stream*", 1 ) );
+	char const expected[][64] = {
+		"*anonymous stream*:1:12:foo",
+		"*anonymous stream*:2:19:bar",
+		"*anonymous stream*:4:4:main"
+	};
+	HStringStream ss;
+	int row( 0 );
+	for ( HIntrospecteeInterface::HCallSite const& cs : *callStack ) {
+		ss << cs.file() << ":" << cs.line() << ":" << cs.column() << ":" << cs.context();
+		ENSURE_EQUALS( "getting call stack failed", ss.str(), expected[row] );
+		ss.reset();
+		++ row;
+	}
+	/* top frame */ {
+		HIntrospector::identifier_names_t const* identifierNames( introspector.get_locals( "*anonymous stream*", 1 ) );
+		hcore::HString names;
+		for ( HIntrospector::OVar const& v : *identifierNames ) {
+			if ( ! names.is_empty() ) {
+				names.append( " " );
+			}
+			names.append( v.name ).append( " " ).append( v.value );
+		}
+		ENSURE_EQUALS( "get_locals failed", names, "x 0 y 1" );
+	}
+	/* second frame */ {
+		HIntrospector::identifier_names_t const* identifierNames( introspector.get_locals_up( "*anonymous stream*", 1 ) );
+		hcore::HString names;
+		for ( HIntrospector::OVar const& v : *identifierNames ) {
+			if ( ! names.is_empty() ) {
+				names.append( " " );
+			}
+			names.append( v.name ).append( " " ).append( v.value );
+		}
+		ENSURE_EQUALS( "get_locals failed", names, "p 0 q <undefined>" );
 	}
 TUT_TEARDOWN()
 
