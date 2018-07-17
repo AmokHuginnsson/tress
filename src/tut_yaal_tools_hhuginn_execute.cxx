@@ -1046,6 +1046,20 @@ char const progExecuteErr113[] =
 	"}\n"
 ;
 
+char const progExecuteErr114[] =
+	"class A{clone = 0;}\n"
+	"main() {\n"
+	"copy(A());\n"
+	"}\n"
+;
+
+char const progExecuteErr115[] =
+	"class A{clone(){ 0; }}\n"
+	"main() {\n"
+	"copy(A());\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1187,6 +1201,8 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr111,
 		progExecuteErr112,
 		progExecuteErr113,
+		progExecuteErr114,
+		progExecuteErr115,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1304,6 +1320,8 @@ TUT_UNIT_TEST( "report execution error" )
 /* 111 */ { 33, 3, 3,    "*tress*:3:3: Operand is not a collection type: an `integer'" },
 /* 112 */ { 11, 2, 3,    "*tress*:2:3: Only `character`s can be elements of `string`s." },
 /* 113 */ { 33, 3, 3,    "*tress*:3:3: Operand is not a collection type: an `integer'" },
+/* 114 */ { 33, 3, 5,    "*tress*:3:5: `clone' in class an `A' is not a method." },
+/* 115 */ { 36, 3, 5,    "*tress*:3:5: `clone' in class an `A' returned object of an invalid type: an `integer'." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
