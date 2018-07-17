@@ -1060,6 +1060,36 @@ char const progExecuteErr115[] =
 	"}\n"
 ;
 
+char const progExecuteErr116[] =
+	"enum COLOR { RED }\n"
+	"main() {\n"
+	"COLOR.RED;\n"
+	"type(COLOR)();\n"
+	"}\n"
+;
+
+char const progExecuteErr117[] =
+	"enum COLOR { RED }\n"
+	"main() {\n"
+	"COLOR.RED;\n"
+	"COLOR_ENUMERAL();\n"
+	"}\n"
+;
+
+char const progExecuteErr118[] =
+	"enum COLOR { RED }\n"
+	"main() {\n"
+	"copy( COLOR.RED );\n"
+	"}\n"
+;
+
+char const progExecuteErr119[] =
+	"enum COLOR { RED }\n"
+	"main() {\n"
+	"copy( COLOR );\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1203,6 +1233,10 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr113,
 		progExecuteErr114,
 		progExecuteErr115,
+		progExecuteErr116,
+		progExecuteErr117,
+		progExecuteErr118,
+		progExecuteErr119,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1322,6 +1356,10 @@ TUT_UNIT_TEST( "report execution error" )
 /* 113 */ { 33, 3, 3,    "*tress*:3:3: Operand is not a collection type: an `integer'" },
 /* 114 */ { 33, 3, 5,    "*tress*:3:5: `clone' in class an `A' is not a method." },
 /* 115 */ { 36, 3, 5,    "*tress*:3:5: `clone' in class an `A' returned object of an invalid type: an `integer'." },
+/* 116 */ { 50, 4, 12,   "*tress*:4:12: Explicit construction of class `COLOR' objects (instances) is forbidden." },
+/* 117 */ { 53, 4, 15,   "*tress*:4:15: Explicit construction of class `COLOR_ENUMERAL' objects (instances) is forbidden." },
+/* 118 */ { 32, 3, 5,    "*tress*:3:5: Copy semantics is not supported on enumerals." },
+/* 119 */ { 32, 3, 5,    "*tress*:3:5: Copy semantics is not supported on enumerations." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
