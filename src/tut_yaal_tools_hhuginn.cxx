@@ -2508,6 +2508,60 @@ TUT_UNIT_TEST( "helpers" )
 		),
 		"*anonymous stream*:1:50: NumberSetStatistics.constructor() a collection contains value of an unexpected type: a `character'."
 	);
+	ENSURE_EQUALS(
+		"did not detect a cycle",
+		execute_except(
+			"class D{_x=none;constructor(x){_x=x;}destructor(){_x.clear();}}"
+			"import FileSystem as fs;"
+			"main(){"
+			"x=[];"
+			"d=D(x);"
+			"x.push(x);"
+			"f = fs.open(\"out/cycle.hgd\", fs.OPEN_MODE.WRITE);"
+			"f.serialize(x);"
+			"d;"
+			"}"
+		),
+		"*anonymous stream*:1:177: Cycle detected on type: list"
+	);
+	ENSURE_EQUALS(
+		"did not detect a cycle",
+		execute_except(
+			"import FileSystem as fs;"
+			"main(){"
+			"fs.open(\"out/cycle.hgd\", 0);"
+			"}"
+		),
+		"*anonymous stream*:1:39: FileSystem.open() second argument must be an `OPEN_MODE_ENUMERAL', not an `integer'."
+	);
+	HHuginn::ptr_t h( make_pointer<HHuginn>() );
+	execute( h, "main(){7;}" );
+	ENSURE_EQUALS( "get_integer(HValue const*) failed", get_integer( h->result().raw() ), 7LL );
+	h = make_pointer<HHuginn>();
+	execute( h, "main(){7.;}" );
+	ENSURE_EQUALS( "get_real(HValue const*) failed", get_real( h->result().raw() ), 7.L );
+	h = make_pointer<HHuginn>();
+	execute( h, "main(){$7;}" );
+	ENSURE_EQUALS( "get_number(HValue const*) failed", get_number( h->result().raw() ), "7"_yn );
+	h = make_pointer<HHuginn>();
+	execute( h, "main(){true;}" );
+	ENSURE_EQUALS( "get_boolean(HValue const*) failed", get_boolean( h->result().raw() ), true );
+	h = make_pointer<HHuginn>();
+	execute( h, "main(){'a';}" );
+	ENSURE_EQUALS( "get_character(HValue const*) failed", get_character( h->result().raw() ), 'a'_ycp );
+	h = make_pointer<HHuginn>();
+	execute( h, "import FileSystem as fs;main(){fs.OPEN_MODE.READ;}" );
+	ENSURE_EQUALS( "get_enumeral(HValue const*) failed", get_enumeral( h->result().raw() ), static_cast<int>( HFile::OPEN::READING.value() ) );
+	h = make_pointer<HHuginn>();
+	execute( h, "main(){7.;}" );
+	HHuginn::value_t v( h->result() );
+	ENSURE_EQUALS( "get_by_type<double long>(...) failed", get_by_type<HHuginn::HReal::value_type>( v ), 7.L );
+	v.reset();
+	h = make_pointer<HHuginn>();
+	execute( h, "main(){$7;}" );
+	v = h->result();
+	ENSURE_EQUALS( "get_by_type<HNumber>(...) failed", get_by_type<HHuginn::HNumber::value_type&>( v ), "7"_yn );
+	v.reset();
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "simple program" )

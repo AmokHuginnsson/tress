@@ -2677,14 +2677,14 @@ TUT_UNIT_TEST( "Text" )
 		"4"
 	);
 	ENSURE_EQUALS(
-		"Text.distance failed",
+		"Text.hex, oct, bin failed",
 		execute(
 			"import Text as text;\n"
 			"main() {\n"
-			"[text.hex(100),text.oct(100),text.bin(100)];"
+			"[text.hex(100),text.oct(100),text.bin(100), text.bin(0)];"
 			"}\n"
 		),
-		"[\"0x64\", \"0o144\", \"0b1100100\"]"
+		"[\"0x64\", \"0o144\", \"0b1100100\", \"0b0\"]"
 	);
 TUT_TEARDOWN()
 
