@@ -2517,7 +2517,7 @@ TUT_UNIT_TEST( "helpers" )
 			"x=[];"
 			"d=D(x);"
 			"x.push(x);"
-			"f = fs.open(\"out/cycle.hgd\", fs.OPEN_MODE.WRITE);"
+			"f = fs.open(\"out/cycle.hds\", fs.OPEN_MODE.WRITE);"
 			"f.serialize(x);"
 			"d;"
 			"}"
@@ -2529,7 +2529,7 @@ TUT_UNIT_TEST( "helpers" )
 		execute_except(
 			"import FileSystem as fs;"
 			"main(){"
-			"fs.open(\"out/cycle.hgd\", 0);"
+			"fs.open(\"out/cycle.hds\", 0);"
 			"}"
 		),
 		"*anonymous stream*:1:39: FileSystem.open() second argument must be an `OPEN_MODE_ENUMERAL', not an `integer'."

@@ -1623,6 +1623,234 @@ TUT_UNIT_TEST( "Stream deserialize number errors" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Stream read/write integer" )
+	ENSURE_EQUALS(
+		"serialization/deserialization of integers failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer(127,1);\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.READ);\n"
+			"return((f.read_integer(1), fs.stat(\"./out/integer.hds\").size()));"
+			"}\n"
+		),
+		"(127, 1)"
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of integers failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer(128,1);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:16: Uncaught FileSystemException: Cast would lose data."
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of integers failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer(32767,2);\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.READ);\n"
+			"return((f.read_integer(2), fs.stat(\"./out/integer.hds\").size()));"
+			"}\n"
+		),
+		"(32767, 2)"
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of integers failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer(32768,2);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:16: Uncaught FileSystemException: Cast would lose data."
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of integers failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer(2147483647,4);\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.READ);\n"
+			"return((f.read_integer(4), fs.stat(\"./out/integer.hds\").size()));"
+			"}\n"
+		),
+		"(2147483647, 4)"
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of integers failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer(2147483648,4);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:16: Uncaught FileSystemException: Cast would lose data."
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of integers failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer(9223372036854775807,8);\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.READ);\n"
+			"return((f.read_integer(8), fs.stat(\"./out/integer.hds\").size()));"
+			"}\n"
+		),
+		"(9223372036854775807, 8)"
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of integers failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer(100,3);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:16: Invalid write size."
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of unsigned integers failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.READ);\n"
+			"f.read_integer(3);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:15: Invalid read size."
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Stream read/write unsigned integer" )
+	ENSURE_EQUALS(
+		"serialization/deserialization of unsigned integers failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer_unsigned(255,1);\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.READ);\n"
+			"return((f.read_integer_unsigned(1), fs.stat(\"./out/integer.hds\").size()));"
+			"}\n"
+		),
+		"(255, 1)"
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of unsigned integers failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer_unsigned(256,1);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:25: Uncaught FileSystemException: Cast would lose data."
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of unsigned integers failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer_unsigned(65535,2);\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.READ);\n"
+			"return((f.read_integer_unsigned(2), fs.stat(\"./out/integer.hds\").size()));"
+			"}\n"
+		),
+		"(65535, 2)"
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of unsigned integers failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer_unsigned(65536,2);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:25: Uncaught FileSystemException: Cast would lose data."
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of unsigned integers failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer_unsigned(4294967295,4);\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.READ);\n"
+			"return((f.read_integer_unsigned(4), fs.stat(\"./out/integer.hds\").size()));"
+			"}\n"
+		),
+		"(4294967295, 4)"
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of unsigned integers failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer_unsigned(4294967296,4);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:25: Uncaught FileSystemException: Cast would lose data."
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of unsigned integers failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer_unsigned(9223372036854775807,8);\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.READ);\n"
+			"return((f.read_integer_unsigned(8), fs.stat(\"./out/integer.hds\").size()));"
+			"}\n"
+		),
+		"(9223372036854775807, 8)"
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of unsigned integers failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_integer_unsigned(100,3);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:25: Invalid write size."
+	);
+	ENSURE_EQUALS(
+		"serialization/deserialization of unsigned integers failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/integer.hds\", fs.OPEN_MODE.READ);\n"
+			"f.read_integer_unsigned(3);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:24: Invalid read size."
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "to_string" )
 	ENSURE_EQUALS(
 		"cycle detection failed",
