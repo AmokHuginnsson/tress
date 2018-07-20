@@ -1625,7 +1625,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Stream read/write integer" )
 	ENSURE_EQUALS(
-		"serialization/deserialization of integers failed",
+		"read/write of integers 1 byte failed",
 		execute(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1639,7 +1639,7 @@ TUT_UNIT_TEST( "Stream read/write integer" )
 		"(127, 1)"
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of integers failed",
+		"read/write of integers 1 byte overflow failed",
 		execute_except(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1650,7 +1650,7 @@ TUT_UNIT_TEST( "Stream read/write integer" )
 		"*anonymous stream*:4:16: Uncaught FileSystemException: Cast would lose data."
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of integers failed",
+		"read/write of integers 2 bytes failed",
 		execute(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1664,7 +1664,7 @@ TUT_UNIT_TEST( "Stream read/write integer" )
 		"(32767, 2)"
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of integers failed",
+		"read/write of integers 2 bytes overflow failed",
 		execute_except(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1675,7 +1675,7 @@ TUT_UNIT_TEST( "Stream read/write integer" )
 		"*anonymous stream*:4:16: Uncaught FileSystemException: Cast would lose data."
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of integers failed",
+		"read/write of integers 4 bytes failed",
 		execute(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1689,7 +1689,7 @@ TUT_UNIT_TEST( "Stream read/write integer" )
 		"(2147483647, 4)"
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of integers failed",
+		"read/write of integers 4 bytes overflow failed",
 		execute_except(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1700,7 +1700,7 @@ TUT_UNIT_TEST( "Stream read/write integer" )
 		"*anonymous stream*:4:16: Uncaught FileSystemException: Cast would lose data."
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of integers failed",
+		"read/write of integers 8 bytes failed",
 		execute(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1714,7 +1714,7 @@ TUT_UNIT_TEST( "Stream read/write integer" )
 		"(9223372036854775807, 8)"
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of integers failed",
+		"read/write of integers, bad write size failed",
 		execute_except(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1725,7 +1725,7 @@ TUT_UNIT_TEST( "Stream read/write integer" )
 		"*anonymous stream*:4:16: Invalid write size."
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of unsigned integers failed",
+		"read/write of unsigned integers, bad read size failed",
 		execute_except(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1737,9 +1737,9 @@ TUT_UNIT_TEST( "Stream read/write integer" )
 	);
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "Stream read/write unsigned integer" )
+TUT_UNIT_TEST( "Stream read/write unsigned 1 byte integer" )
 	ENSURE_EQUALS(
-		"serialization/deserialization of unsigned integers failed",
+		"read/write of unsigned integers failed",
 		execute(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1753,7 +1753,7 @@ TUT_UNIT_TEST( "Stream read/write unsigned integer" )
 		"(255, 1)"
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of unsigned integers failed",
+		"read/write of unsigned integers 1 byte overflow failed",
 		execute_except(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1764,7 +1764,7 @@ TUT_UNIT_TEST( "Stream read/write unsigned integer" )
 		"*anonymous stream*:4:25: Uncaught FileSystemException: Cast would lose data."
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of unsigned integers failed",
+		"read/write of unsigned integers 2 bytes failed",
 		execute(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1778,7 +1778,7 @@ TUT_UNIT_TEST( "Stream read/write unsigned integer" )
 		"(65535, 2)"
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of unsigned integers failed",
+		"read/write of unsigned integers 2 bytes overflow failed",
 		execute_except(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1789,7 +1789,7 @@ TUT_UNIT_TEST( "Stream read/write unsigned integer" )
 		"*anonymous stream*:4:25: Uncaught FileSystemException: Cast would lose data."
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of unsigned integers failed",
+		"read/write of unsigned integers 4 bytes failed",
 		execute(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1803,7 +1803,7 @@ TUT_UNIT_TEST( "Stream read/write unsigned integer" )
 		"(4294967295, 4)"
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of unsigned integers failed",
+		"read/write of unsigned integers 4 bytes overflow failed",
 		execute_except(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1814,7 +1814,7 @@ TUT_UNIT_TEST( "Stream read/write unsigned integer" )
 		"*anonymous stream*:4:25: Uncaught FileSystemException: Cast would lose data."
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of unsigned integers failed",
+		"read/write of unsigned integers 8 bytes failed",
 		execute(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1828,7 +1828,7 @@ TUT_UNIT_TEST( "Stream read/write unsigned integer" )
 		"(9223372036854775807, 8)"
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of unsigned integers failed",
+		"read/write of unsigned integers, invalid write size failed",
 		execute_except(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1839,7 +1839,7 @@ TUT_UNIT_TEST( "Stream read/write unsigned integer" )
 		"*anonymous stream*:4:25: Invalid write size."
 	);
 	ENSURE_EQUALS(
-		"serialization/deserialization of unsigned integers failed",
+		"read/write of unsigned integers, invalid read size failed",
 		execute_except(
 			"import FileSystem as fs;\n"
 			"main() {\n"
@@ -1848,6 +1848,164 @@ TUT_UNIT_TEST( "Stream read/write unsigned integer" )
 			"}\n"
 		),
 		"*anonymous stream*:4:24: Invalid read size."
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Stream read/write character" )
+	ENSURE_EQUALS(
+		"read/write of character 8-bit failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/character.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_character('ó',1);\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/character.hds\", fs.OPEN_MODE.READ);\n"
+			"return((f.read_character(1), fs.stat(\"./out/character.hds\").size()));"
+			"}\n"
+		),
+		"('ó', 1)"
+	);
+	ENSURE_EQUALS(
+		"read/write of character 8-bit overflow failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/character.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_character('ą',1);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:18: Uncaught FileSystemException: Cast would lose data."
+	);
+	ENSURE_EQUALS(
+		"read/write of character 16 bits failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/character.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_character('ą',2);\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/character.hds\", fs.OPEN_MODE.READ);\n"
+			"return((f.read_character(2), fs.stat(\"./out/character.hds\").size()));"
+			"}\n"
+		),
+		"('ą', 2)"
+	);
+	ENSURE_EQUALS(
+		"read/write of character 16-bits overflow failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/character.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_character('🐍',2);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:18: Uncaught FileSystemException: Cast would lose data."
+	);
+	ENSURE_EQUALS(
+		"read/write of character 32-bits failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/character.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_character('🐍',4);\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/character.hds\", fs.OPEN_MODE.READ);\n"
+			"return((f.read_character(4), fs.stat(\"./out/character.hds\").size()));"
+			"}\n"
+		),
+		"('🐍', 4)"
+	);
+	ENSURE_EQUALS(
+		"read/write of character, invalid write size failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/character.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_character('🐍',3);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:18: Invalid write size."
+	);
+	ENSURE_EQUALS(
+		"read/write of character, invalid read size failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/character.hds\", fs.OPEN_MODE.READ);\n"
+			"f.read_character(3);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:17: Invalid read size."
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Stream read/write real" )
+	ENSURE_EQUALS(
+		"read/write of real (float) failed",
+		execute(
+			"import Mathematics as math;\n"
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/real.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_real(3.141592653589793," M_STRINGIFY( SIZEOF_FLOAT ) ");\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/real.hds\", fs.OPEN_MODE.READ);\n"
+			"return((math.round(f.read_real(" M_STRINGIFY( SIZEOF_FLOAT ) "), 5), fs.stat(\"./out/real.hds\").size()));"
+			"}\n"
+		),
+		"(3.14159, " M_STRINGIFY( SIZEOF_FLOAT ) ")"
+	);
+	ENSURE_EQUALS(
+		"read/write of real (double) failed",
+		execute(
+			"import Mathematics as math;\n"
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/real.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_real(3.141592653589793," M_STRINGIFY( SIZEOF_DOUBLE ) ");\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/real.hds\", fs.OPEN_MODE.READ);\n"
+			"return((math.round(f.read_real(" M_STRINGIFY( SIZEOF_DOUBLE ) "), 8), fs.stat(\"./out/real.hds\").size()));"
+			"}\n"
+		),
+		"(3.14159265, " M_STRINGIFY( SIZEOF_DOUBLE ) ")"
+	);
+	ENSURE_EQUALS(
+		"read/write of real (doble long) failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/real.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_real(3.141592653589793," M_STRINGIFY( SIZEOF_DOUBLE_LONG ) ");\n"
+			"f = none;\n"
+			"f = fs.open(\"./out/real.hds\", fs.OPEN_MODE.READ);\n"
+			"return((f.read_real(" M_STRINGIFY( SIZEOF_DOUBLE_LONG ) "), fs.stat(\"./out/real.hds\").size()));"
+			"}\n"
+		),
+		"(3.14159265359, " M_STRINGIFY( SIZEOF_DOUBLE_LONG ) ")"
+	);
+	ENSURE_EQUALS(
+		"read/write of real, invalid write size failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/real.hds\", fs.OPEN_MODE.WRITE);\n"
+			"f.write_real(3.141592653589793,3);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:13: Invalid write size."
+	);
+	ENSURE_EQUALS(
+		"read/write of real, invalid read size failed",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./out/real.hds\", fs.OPEN_MODE.READ);\n"
+			"f.read_real(3);\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:12: Invalid read size."
 	);
 TUT_TEARDOWN()
 
