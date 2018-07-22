@@ -55,6 +55,18 @@ TUT_UNIT_TEST( "Constructor with range initialization." )
 	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Constructor with initializer list." )
+	int a[] = { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 };
+	item_t::set_start_id( 0 ); {
+		HStaticArray<item_t, yaal::size( a )> array( { 36, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 36 } );
+		ENSURE( "range initialization failed", safe_equal( array.begin(), array.end(), begin( a ), end( a ) ) );
+	}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+	typedef HStaticArray<item_t, yaal::size( a )> static_array_t;
+	typedef HExceptionT<static_array_t> StaticArrayException;
+	ENSURE_THROW( "bad initializer size succeeded", (static_array_t( { 1, 2, 3 } )), StaticArrayException );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "Copy constructor." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
@@ -63,8 +75,9 @@ TUT_UNIT_TEST( "Copy constructor." )
 		array [ i ] = i;
 	HStaticArray<item_t, SIZE> copy( array );
 	ENSURE_EQUALS( "inconsistient size after copy constructor", copy.get_size(), SIZE );
-	for ( int i = 0; i < SIZE; ++ i )
+	for ( int i = 0; i < SIZE; ++ i ) {
 		ENSURE_EQUALS( "wrong content after copy constructor", copy[ i ], i );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Operator [ ]." )
