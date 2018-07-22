@@ -308,7 +308,7 @@ struct HSTDGlobalScopeExceptionHandlingPolicy {
 #endif /* #ifndef __HOST_OS_TYPE_RASPBIAN__ */
 template<int const size>
 struct Sizer {
-	char _buf[size];
+	char _buf[yaal::trait::to_unsigned<int, size>::value];
 };
 template<typename owner_t, int const forced_size = 1>
 class HInstanceTracker {

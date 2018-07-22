@@ -764,14 +764,14 @@ TUT_UNIT_TEST( "equality" )
 	ENSURE( v20a == v20b );
 	ENSURE_NOT( v20a != v20b );
 
-	type0_t const c00( 0 );
-	type0_t const c01( 1 );
-	type1_t const c10( 0 );
-	type1_t const c11( 1 );
-	variant_type_t v00( c00 );
-	variant_type_t v01( c01 );
-	variant_type_t v10( c10 );
-	variant_type_t v11( c11 );
+	type0_t const k00( 0 );
+	type0_t const k01( 1 );
+	type1_t const k10( 0 );
+	type1_t const k11( 1 );
+	variant_type_t v00( k00 );
+	variant_type_t v01( k01 );
+	variant_type_t v10( k10 );
+	variant_type_t v11( k11 );
 
 	ENSURE_NOT( v00 == v01 );
 	ENSURE_NOT( v10 == v11 );

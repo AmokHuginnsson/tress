@@ -79,7 +79,7 @@ TUT_UNIT_TEST( "crypt file" )
 		HDes d( "kotek" );
 		char const prototype[] = "test1234";
 		char buf[ sizeof ( prototype ) ];
-		strncpy( buf, prototype, sizeof ( prototype ) );
+		strncpy( buf, prototype, sizeof ( buf ) );
 		d.crypt( reinterpret_cast<u8_t*>( buf ), 8, HDes::CRYPT );
 		for ( int i( 0 ); i < ( static_cast<int>( sizeof ( prototype ) ) - 1 ); ++ i )
 			ENSURE_NOT( "crypto failed", buf[i] == prototype[i] );
@@ -99,8 +99,8 @@ TUT_UNIT_TEST( "decrypt file" )
 		HMemory src( srcMo, HMemory::INITIAL_STATE::VALID );
 		HMemoryObserver dstMo( buf, sizeof ( buf ) );
 		HMemory dst( dstMo );
-		strncpy( buf, prototype, sizeof ( prototype ) );
-		strncpy( buf2, prototype, sizeof ( prototype ) );
+		strncpy( buf, prototype, sizeof ( buf ) );
+		strncpy( buf2, prototype, sizeof ( buf2 ) );
 		crypto::crypt_3des( src, dst, "kotek" );
 		HDes d( "kotek" );
 		d.crypt( reinterpret_cast<u8_t*>( buf2 ), 8, HDes::CRYPT );

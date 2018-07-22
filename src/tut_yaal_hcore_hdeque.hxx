@@ -122,7 +122,7 @@ void tut_yaal_hcore_hdeque_base<pack>::check_consistency( deque_type const& dequ
 #endif /* #else #ifndef __sun__ */
 	template<int const SIZE>
 	class FixedArray {
-		char _data[SIZE];
+		char _data[yaal::trait::to_unsigned<int, SIZE>::value];
 	};
 #ifndef __sun__
 #pragma pack( pop )
