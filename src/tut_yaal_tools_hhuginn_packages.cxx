@@ -2954,5 +2954,44 @@ TUT_UNIT_TEST( "Introspection" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "XML" )
+	ENSURE_EQUALS(
+		"XML.load failed",
+		execute(
+			"import XML as xml;\n"
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"file = fs.open(\"data/xml.xml\", fs.OPEN_MODE.READ);\n"
+			"doc = xml.load(file);\n"
+			"return ( doc.root().name() );\n"
+			"}\n"
+		),
+		"\"my_root\""
+	);
+	ENSURE_EQUALS(
+		"XML.load failed",
+		execute_except(
+			"import XML as xml;\n"
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"file = fs.open(\"data/nl.txt\", fs.OPEN_MODE.READ);\n"
+			"xml.load(file);\n"
+			"}\n"
+		),
+		"*anonymous stream*:5:9: Uncaught XMLException: cannot parse `data/nl.txt'"
+	);
+	ENSURE_EQUALS(
+		"XML.load failed",
+		execute(
+			"import XML as xml;\n"
+			"main() {\n"
+			"doc = xml.create(\"DOM\");\n"
+			"return ( doc.root().name() );\n"
+			"}\n"
+		),
+		"\"DOM\""
+	);
+TUT_TEARDOWN()
+
 }
 
