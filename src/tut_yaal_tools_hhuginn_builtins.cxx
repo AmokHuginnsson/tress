@@ -875,6 +875,19 @@ TUT_UNIT_TEST( "dict()" )
 		),
 		"[2, 3, 5]"
 	);
+	ENSURE_EQUALS(
+		"dict erase in reversed for",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"d=[2:2,3:3,5:5];\n"
+			"r = [];"
+			"for(e:algo.reversed(d)){d.erase(e);r.push(e);}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[5, 3, 2]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "lookup()" )
@@ -1046,6 +1059,19 @@ TUT_UNIT_TEST( "lookup()" )
 		),
 		"[3, 5, 2]"
 	);
+	ENSURE_EQUALS(
+		"lookup erase in reversed for",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"l={2:2,3:3,5:5};\n"
+			"r = [];"
+			"for(e:algo.reversed(l)){l.erase(e);r.push(e);}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[2, 5, 3]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "order()" )
@@ -1143,6 +1169,19 @@ TUT_UNIT_TEST( "order()" )
 		),
 		"[2, 3, 5]"
 	);
+	ENSURE_EQUALS(
+		"order erase in reversed for",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"o=order(2,3,5);\n"
+			"r = [];"
+			"for(e:algo.reversed(o)){o.erase(e);r.push(e);}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[5, 3, 2]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set()" )
@@ -1229,6 +1268,19 @@ TUT_UNIT_TEST( "set()" )
 			"}\n"
 		),
 		"[3, 5, 2]"
+	);
+	ENSURE_EQUALS(
+		"set erase in reversed for",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"s={2,3,5};\n"
+			"r = [];"
+			"for(e:algo.reversed(s)){s.erase(e);r.push(e);}\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[2, 5, 3]"
 	);
 TUT_TEARDOWN()
 
