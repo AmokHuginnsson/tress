@@ -2862,7 +2862,7 @@ TUT_UNIT_TEST( "Introspection" )
 			"intro.import(\"Introspection\");\n"
 			"}\n"
 		),
-		"*anonymous stream*:3:13: Class of the same name already exists."
+		"*anonymous stream*:3:13: Package of the same name already exists."
 	);
 	ENSURE_EQUALS(
 		"Introspection.import existing package succeeded",
