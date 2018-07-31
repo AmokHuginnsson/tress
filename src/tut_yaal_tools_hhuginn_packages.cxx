@@ -2991,6 +2991,57 @@ TUT_UNIT_TEST( "XML" )
 		),
 		"\"DOM\""
 	);
+	ENSURE_EQUALS(
+		"tree walk failed",
+		execute(
+			"import XML as xml;\n"
+			"import FileSystem as fs;\n"
+			"dump_node( log, n ) {\n"
+			"	log.push( ( type( n ), n.name() ) );\n"
+			"	for ( e : n ) {\n"
+			"		if ( type( e ) == xml.Element ) {\n"
+			"			dump_node( log, e );\n"
+			"		} else {\n"
+			"			log.push( ( type( e ), string( e ).strip() ) );\n"
+			"		}\n"
+			"	}\n"
+			"}\n"
+			"main() {\n"
+			"file = fs.open(\"data/xml.xml\", fs.OPEN_MODE.READ);\n"
+			"doc = xml.load(file);\n"
+			"log = [];\n"
+			"dump_node( log, doc.root() );\n"
+			"return ( log );\n"
+			"}\n"
+		),
+		"[(xml.Element, \"my_root\"),"
+		" (xml.Element, \"my_node\"),"
+		" (xml.Element, \"my_sub\"),"
+		" (xml.Text, \"node\"),"
+		" (xml.Text, \"Zażółcić gęsią jaźń.\"),"
+		" (xml.Entity, \"my precious data\"),"
+		" (xml.Text, \"Filmuj rzeź żądań, pość, gnęb chłystków!\nMężny bądź, chroń pułk twój i sześć flag.\"),"
+		" (xml.Element, \"my_empty\"),"
+		" (xml.Element, \"xi:include\"),"
+		" (xml.Element, \"my_set\"),"
+		" (xml.Element, \"my_item\"),"
+		" (xml.Text, \"one\"),"
+		" (xml.Entity, \"<xml:entity_reference>&amp;trade;</xml:entity_reference>\"),"
+		" (xml.Element, \"my_item\"),"
+		" (xml.Text, \"two\"),"
+		" (xml.Element, \"my_fake\"),"
+		" (xml.Text, \"three\"),"
+		" (xml.Element, \"my_item\"),"
+		" (xml.Text, \"four\"),"
+		" (xml.Comment, \"my_item>hidden</my_item\"),"
+		" (xml.Element, \"my_special\"),"
+		" (xml.Element, \"my_sub\"),"
+		" (xml.Element, \"my_element\"),"
+		" (xml.Element, \"my_sub\"),"
+		" (xml.Text, \"data\"),"
+		" (xml.Element, \"my_sub\"),"
+		" (xml.Entity, \"my precious data\")]"
+	);
 TUT_TEARDOWN()
 
 }
