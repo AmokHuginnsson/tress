@@ -2686,6 +2686,17 @@ TUT_UNIT_TEST( "Text" )
 		),
 		"[\"0x64\", \"0o144\", \"0b1100100\", \"0b0\"]"
 	);
+	ENSURE_EQUALS(
+		"Text.stream failed",
+		execute(
+			"import Text as text;\n"
+			"main() {\n"
+			"s = text.stream(\"Ala ma kota.\\nKot pije mleko.\");"
+			"return ( ( s.read_line(), s.read_line(), s.read_line() ) );\n"
+			"}\n"
+		),
+		"(\"Ala ma kota.\n\", \"Kot pije mleko.\", none)"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Introspection" )
@@ -2981,7 +2992,7 @@ TUT_UNIT_TEST( "XML" )
 		"*anonymous stream*:5:9: Uncaught XMLException: cannot parse `data/nl.txt'"
 	);
 	ENSURE_EQUALS(
-		"XML.load failed",
+		"XML.create failed",
 		execute(
 			"import XML as xml;\n"
 			"main() {\n"
@@ -3041,6 +3052,64 @@ TUT_UNIT_TEST( "XML" )
 		" (xml.Text, \"data\"),"
 		" (xml.Element, \"my_sub\"),"
 		" (xml.Entity, \"my precious data\")]"
+	);
+	ENSURE_EQUALS(
+		"XML.Element.append or XML.Document.save failed",
+		execute(
+			"import XML as xml;\n"
+			"import Text as text;\n"
+			"main() {\n"
+			"doc = xml.create(\"DOM\");\n"
+			"doc.root().append( xml.Text, \"Huginn\" );\n"
+			"s = text.stream();\n"
+			"doc.save( s );\n"
+			"return ( s.read_string( 1000 ) );\n"
+			"}\n"
+		),
+		"\"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DOM>Huginn</DOM>\n\""
+	);
+	ENSURE_EQUALS(
+		"copy on XML.Element succeeded",
+		execute_except(
+			"import XML as xml;\n"
+			"main() {\n"
+			"doc = xml.create(\"DOM\");\n"
+			"copy( doc.root() );\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:5: Copy semantics is not supported on `XML.Element`s."
+	);
+	ENSURE_EQUALS(
+		"copy on XML.Document failed",
+		execute(
+			"import XML as xml;\n"
+			"import Text as text;\n"
+			"main() {\n"
+			"doc = xml.create(\"DOM\");\n"
+			"doc.root().append( xml.Text, \"Huginn\" );\n"
+			"doc2 = copy( doc );\n"
+			"doc.root().append( xml.Element, \"child\" );\n"
+			"s = text.stream();\n"
+			"doc.save( s );\n"
+			"res = [];\n"
+			"res.push(s.read_string( 1000 ));\n"
+			"doc2.save( s );\n"
+			"res.push(s.read_string( 1000 ));\n"
+			"return ( res );\n"
+			"}\n"
+		),
+		"[\"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DOM>Huginn\t<child/>\n</DOM>\n\", \"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DOM>Huginn</DOM>\n\"]"
+	);
+	ENSURE_EQUALS(
+		"XML.Element.append of integer succeeded",
+		execute_except(
+			"import XML as xml;\n"
+			"main() {\n"
+			"doc = xml.create(\"DOM\");\n"
+			"doc.root().append(integer,\"\");\n"
+			"}\n"
+		),
+		"*anonymous stream*:4:18: Node type must be one of: `XML.Element`, `XML.Text`, `XML.Comment` or `XML.Entity`, not `integer`."
 	);
 TUT_TEARDOWN()
 
