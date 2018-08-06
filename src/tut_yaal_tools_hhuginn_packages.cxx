@@ -3111,6 +3111,36 @@ TUT_UNIT_TEST( "XML" )
 		),
 		"*anonymous stream*:4:18: Node type must be one of: `XML.Element`, `XML.Text`, `XML.Comment` or `XML.Entity`, not `integer`."
 	);
+	ENSURE_EQUALS(
+		"XML.Element.parent or XML.Element.subscript or XML.Element.document failed",
+		execute(
+			"import XML as xml;\n"
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"file = fs.open(\"data/xml.xml\", fs.OPEN_MODE.READ);\n"
+			"doc = xml.load(file);\n"
+			"r = doc.root();\n"
+			"docRef = r.document();\n"
+			"root = docRef.root();\n"
+			"child = root[0];\n"
+			"return ( [child.name(), child.parent().name()] );\n"
+			"}\n"
+		),
+		"[\"my_node\", \"my_root\"]"
+	);
+	ENSURE_EQUALS(
+		"invalid XML.Element.subscript index succeeded",
+		execute_except(
+			"import XML as xml;\n"
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"file = fs.open(\"data/xml.xml\", fs.OPEN_MODE.READ);\n"
+			"root = xml.load(file).root();\n"
+			"root[5];\n"
+			"}\n"
+		),
+		"*anonymous stream*:6:5: Invalid `XML.Element` child index: 5"
+	);
 TUT_TEARDOWN()
 
 }
