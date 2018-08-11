@@ -1417,6 +1417,26 @@ TUT_UNIT_TEST( "max" )
 	ENSURE_EQUALS( "max failed", yaal::max({ 2, 13, 2, 31, 7, 5 }), 31 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "set_intersection" )
+	int_array_t a( { 1, 3, 5, 7, 9, 11, 13, 15, 17 } );
+	int_array_t b( { 0, 2, 4, 6, 8, 10, 12, 14, 16 } );
+	int_array_t c( { 0, 2, 4, 5, 6, 8, 9, 10, 12, 14, 16 } );
+	int_array_t e;
+	int_array_t s;
+	set_intersection( a.begin(), a.end(), b.begin(), b.end(), back_insert_iterator<int_array_t>( e ) );
+	ENSURE( "set_intersection failed", e.is_empty() );
+	set_intersection( a.begin(), a.end(), c.begin(), c.end(), back_insert_iterator<int_array_t>( s ) );
+	ENSURE_EQUALS( "set_intersection failed", s, int_array_t( { 5, 9 } ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "does_intersect" )
+	int_array_t a( { 1, 3, 5, 7, 9 } );
+	int_array_t b( { 0, 2, 4, 6, 8 } );
+	int_array_t c( { 0, 2, 4, 5, 6, 8 } );
+	ENSURE_NOT( "does_intersect failed", does_intersect( a.begin(), a.end(), b.begin(), b.end() ) );
+	ENSURE( "does_intersect failed", does_intersect( a.begin(), a.end(), c.begin(), c.end() ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "sort speed" )
 	TIME_CONSTRAINT_EXEMPT();
 	double long st( 0 );
