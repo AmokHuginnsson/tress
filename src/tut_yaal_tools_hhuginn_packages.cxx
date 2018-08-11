@@ -3141,6 +3141,53 @@ TUT_UNIT_TEST( "XML" )
 		),
 		"*anonymous stream*:6:5: Invalid `XML.Element` child index: 5"
 	);
+	ENSURE_EQUALS(
+		"XML.Element.remove or XML.Element.remove_nth failed",
+		execute(
+			"import XML as xml;\n"
+			"import Text as text;\n"
+			"main() {\n"
+			"xmlStr = text.stream( \"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?><r><n1><c1></c1><c2></c2></n1><n2><c1></c1><c2><l>text</l></c2></n2><n3><c1></c1><c2></c2></n3></r>\" );\n"
+			"doc = xml.load(xmlStr);\n"
+			"s = text.stream();\n"
+			"res = [];"
+			"doc.save( s );\n"
+			"res.push( s.read_string( 1000 ).replace( \"\\t\", \"\" ).replace( \"\\n\", \"\" ) );\n"
+			"r = doc.root();\n"
+			"r.remove( r[2] );\n"
+			"doc.save( s );\n"
+			"res.push( s.read_string( 1000 ).replace( \"\\t\", \"\" ).replace( \"\\n\", \"\" ) );\n"
+			"r.remove_nth( 0 );\n"
+			"doc.save( s );\n"
+			"res.push( s.read_string( 1000 ).replace( \"\\t\", \"\" ).replace( \"\\n\", \"\" ) );\n"
+			"return ( res );\n"
+			"}\n"
+		),
+		"[\"<?xml version=\"1.0\" encoding=\"UTF-8\"?><r><n1><c1/><c2/></n1><n2><c1/><c2><l>text</l></c2></n2><n3><c1/><c2/></n3></r>\","
+		" \"<?xml version=\"1.0\" encoding=\"UTF-8\"?><r><n1><c1/><c2/></n1><n2><c1/><c2><l>text</l></c2></n2></r>\","
+		" \"<?xml version=\"1.0\" encoding=\"UTF-8\"?><r><n2><c1/><c2><l>text</l></c2></n2></r>\"]"
+	);
+	ENSURE_EQUALS(
+		"remove during for loop failed",
+		execute(
+			"import XML as xml;\n"
+			"import Text as text;\n"
+			"main() {\n"
+			"xmlStr = text.stream( \"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?><r><n1><c1></c1><c2></c2></n1><n2><c1></c1><c2><l>text</l></c2></n2><n3><c1></c1><c2></c2></n3></r>\" );\n"
+			"doc = xml.load(xmlStr);\n"
+			"res = [];"
+			"for ( e : doc.root() ) {\n"
+			"res.push( e.name() );\n"
+			"e.parent().remove( e );\n"
+			"}\n"
+			"s = text.stream();\n"
+			"doc.save( s );\n"
+			"res.push( s.read_string( 1000 ).replace( \"\\t\", \"\" ).replace( \"\\n\", \"\" ) );\n"
+			"return ( res );\n"
+			"}\n"
+		),
+		"[\"n1\", \"n2\", \"n3\", \"<?xml version=\"1.0\" encoding=\"UTF-8\"?><r/>\"]"
+	);
 TUT_TEARDOWN()
 
 }

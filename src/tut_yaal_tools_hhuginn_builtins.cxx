@@ -858,10 +858,11 @@ TUT_UNIT_TEST( "dict()" )
 			"d=[2:2,3:3,5:5];\n"
 			"r = [];"
 			"for(e:d){d.clear();r.push(e);}\n"
+			"r.push(d);\n"
 			"return(r);\n"
 			"}\n"
 		),
-		"[2]"
+		"[2, dict()]"
 	);
 	ENSURE_EQUALS(
 		"dict erase in for",
@@ -870,10 +871,11 @@ TUT_UNIT_TEST( "dict()" )
 			"d=[2:2,3:3,5:5];\n"
 			"r = [];"
 			"for(e:d){d.erase(e);r.push(e);}\n"
+			"r.push(d);\n"
 			"return(r);\n"
 			"}\n"
 		),
-		"[2, 3, 5]"
+		"[2, 3, 5, dict()]"
 	);
 	ENSURE_EQUALS(
 		"dict erase in reversed for",
@@ -1042,10 +1044,11 @@ TUT_UNIT_TEST( "lookup()" )
 			"l={2:2,3:3,5:5};\n"
 			"r = [];"
 			"for(e:l){l.clear();r.push(e);}\n"
+			"r.push(l);\n"
 			"return(r);\n"
 			"}\n"
 		),
-		"[3]"
+		"[3, {}]"
 	);
 	ENSURE_EQUALS(
 		"lookup erase in for",
@@ -1054,10 +1057,11 @@ TUT_UNIT_TEST( "lookup()" )
 			"l={2:2,3:3,5:5};\n"
 			"r = [];"
 			"for(e:l){l.erase(e);r.push(e);}\n"
+			"r.push(l);\n"
 			"return(r);\n"
 			"}\n"
 		),
-		"[3, 5, 2]"
+		"[3, 5, 2, {}]"
 	);
 	ENSURE_EQUALS(
 		"lookup erase in reversed for",
@@ -1152,10 +1156,11 @@ TUT_UNIT_TEST( "order()" )
 			"o=order(2,3,5);\n"
 			"r = [];"
 			"for(e:o){o.clear();r.push(e);}\n"
+			"r.push(o);\n"
 			"return(r);\n"
 			"}\n"
 		),
-		"[2]"
+		"[2, order()]"
 	);
 	ENSURE_EQUALS(
 		"order erase in for",
@@ -1164,10 +1169,11 @@ TUT_UNIT_TEST( "order()" )
 			"o=order(2,3,5);\n"
 			"r = [];"
 			"for(e:o){o.erase(e);r.push(e);}\n"
+			"r.push(o);\n"
 			"return(r);\n"
 			"}\n"
 		),
-		"[2, 3, 5]"
+		"[2, 3, 5, order()]"
 	);
 	ENSURE_EQUALS(
 		"order erase in reversed for",
@@ -1252,10 +1258,11 @@ TUT_UNIT_TEST( "set()" )
 			"s={2,3,5};\n"
 			"r = [];"
 			"for(e:s){s.clear();r.push(e);}\n"
+			"r.push(s);\n"
 			"return(r);\n"
 			"}\n"
 		),
-		"[3]"
+		"[3, set()]"
 	);
 	ENSURE_EQUALS(
 		"set erase in for",
@@ -1264,10 +1271,11 @@ TUT_UNIT_TEST( "set()" )
 			"s={2,3,5};\n"
 			"r = [];"
 			"for(e:s){s.erase(e);r.push(e);}\n"
+			"r.push(s);\n"
 			"return(r);\n"
 			"}\n"
 		),
-		"[3, 5, 2]"
+		"[3, 5, 2, set()]"
 	);
 	ENSURE_EQUALS(
 		"set erase in reversed for",
