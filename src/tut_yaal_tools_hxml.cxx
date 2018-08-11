@@ -33,7 +33,7 @@ struct tut_yaal_tools_hxml : public simple_mock<tut_yaal_tools_hxml> {
 	static std::ostream& dump( std::ostream& out, HXml::HConstNodeProxy const& node_ ) {
 		_varTmpBuffer.reserve( node_.get_level() * 2 + 2 );
 		_varTmpBuffer.fillz( ' '_ycp, 0, node_.get_level() * 2 + 1 );
-		if ( node_.get_type() == HXml::HNode::TYPE::NODE ) {
+		if ( node_.get_type() == HXml::HNode::TYPE::ELEMENT ) {
 			if ( ! node_.get_name().is_empty() ) {
 				out << _varTmpBuffer << "[" << node_.get_name() << "]<" << node_.get_level() << ">: - " << node_.get_line() << std::endl;
 			}
@@ -72,17 +72,17 @@ bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const
 	HXml::HNode::TYPE type = left.get_type();
 	bool equals = ( type == right.get_type() );
 
-	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
+	if ( equals && ( type == HXml::HNode::TYPE::ELEMENT ) )
 		equals = ( left.get_name() == right.get_name() );
 	if ( equals && ( type == HXml::HNode::TYPE::CONTENT ) )
 		equals = ( left.get_value() == right.get_value() );
-	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
+	if ( equals && ( type == HXml::HNode::TYPE::ELEMENT ) )
 		equals = ( left.has_children() == right.has_children() );
-	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
+	if ( equals && ( type == HXml::HNode::TYPE::ELEMENT ) )
 		equals = ( left.child_count() == right.child_count() );
-	if ( equals && ( type == HXml::HNode::TYPE::NODE ) )
+	if ( equals && ( type == HXml::HNode::TYPE::ELEMENT ) )
 		equals = ( left.get_level() == right.get_level() );
-	if ( equals && ( type == HXml::HNode::TYPE::NODE ) ) {
+	if ( equals && ( type == HXml::HNode::TYPE::ELEMENT ) ) {
 		HXml::HNode::properties_t const& propLeft = left.properties();
 		HXml::HNode::properties_t const& propRight = right.properties();
 		HXml::HNode::properties_t::const_iterator itLeft = propLeft.begin();
@@ -92,7 +92,7 @@ bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const
 		for ( ;( itLeft != endLeft ) && equals; ++ itLeft, ++ itRight )
 			equals = ( itRight != endRight ) && ( *itLeft == *itRight );
 	}
-	if ( equals && ( type == HXml::HNode::TYPE::NODE ) ) {
+	if ( equals && ( type == HXml::HNode::TYPE::ELEMENT ) ) {
 		HXml::const_iterator itLeft = left.begin();
 		HXml::const_iterator endLeft = left.end();
 		HXml::const_iterator itRight = right.begin();
@@ -170,7 +170,7 @@ TUT_UNIT_TEST( "Root node." )
 	x.create_root( ROOT );
 	HXml::HNodeProxy n = x.get_root();
 	ENSURE( "initialized DOM empty", !! n );
-	ENSURE( "bad type of root element", n.get_type() == HXml::HNode::TYPE::NODE );
+	ENSURE( "bad type of root element", n.get_type() == HXml::HNode::TYPE::ELEMENT );
 	ENSURE_EQUALS( "root value not stored", n.get_name(), ROOT );
 	ENSURE_EQUALS( "bad level of root element", n.get_level(), 0 );
 	ENSURE( "fresh node not empty", n.begin() == n.end() );
@@ -189,16 +189,16 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "build, save, load" )
 	HXml x;
 	static char const* const ROOT = "root";
-	static char const* const NODE = "node";
+	static char const* const ELEMENT = "node";
 	static char const* const CHILD = "child";
 	static char const* const PROP = "prop";
 	static char const* const PROP_VALUE = "prop_value";
 	static char const* const OUT_PATH = "out/y_test.xml";
 	x.create_root( ROOT );
 	HXml::HNodeProxy n = x.get_root();
-	n.add_node( HXml::HNode::TYPE::NODE, NODE );
-	HXml::HIterator it = n.add_node( HXml::HNode::TYPE::NODE, NODE );
-	HXml::HIterator child = (*it).add_node( HXml::HNode::TYPE::NODE, CHILD );
+	n.add_node( HXml::HNode::TYPE::ELEMENT, ELEMENT );
+	HXml::HIterator it = n.add_node( HXml::HNode::TYPE::ELEMENT, ELEMENT );
+	HXml::HIterator child = (*it).add_node( HXml::HNode::TYPE::ELEMENT, CHILD );
 	(*child).properties().insert( yaal::hcore::make_pair( PROP, PROP_VALUE ) );
 	n.copy_node( *it );
 	x.save( tools::ensure( HStreamInterface::ptr_t( new HFile( OUT_PATH, HFile::OPEN::WRITING ) ) ) );
@@ -357,7 +357,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "build, apply stylesheet" )
 	HXml x;
 	static char const* const ROOT = "root";
-	static char const* const NODE = "node";
+	static char const* const ELEMENT = "node";
 	static char const* const CHILD = "my_item";
 	static char const* const PROP = "prop";
 	static char const* const PROP_VALUE = "prop_value";
@@ -365,9 +365,9 @@ TUT_UNIT_TEST( "build, apply stylesheet" )
 	static char const* const OUT_POST_PATH = "out/post_style.xml";
 	x.create_root( ROOT );
 	HXml::HNodeProxy n = x.get_root();
-	n.add_node( HXml::HNode::TYPE::NODE, NODE );
-	HXml::HIterator it = n.add_node( HXml::HNode::TYPE::NODE, NODE );
-	HXml::HIterator child = (*it).add_node( HXml::HNode::TYPE::NODE, CHILD );
+	n.add_node( HXml::HNode::TYPE::ELEMENT, ELEMENT );
+	HXml::HIterator it = n.add_node( HXml::HNode::TYPE::ELEMENT, ELEMENT );
+	HXml::HIterator child = (*it).add_node( HXml::HNode::TYPE::ELEMENT, CHILD );
 	(*child).properties().insert( yaal::hcore::make_pair( PROP, PROP_VALUE ) );
 	n.copy_node( *it );
 	x.save( tools::ensure( HStreamInterface::ptr_t( new HFile( OUT_PRE_PATH, HFile::OPEN::WRITING ) ) ) );
@@ -566,7 +566,7 @@ TUT_UNIT_TEST( "reverse iteration" )
 		"one"
 	};
 	for ( HXml::HConstNodeProxy::const_reverse_iterator it( nodeSetConst[0].rbegin() ), end( nodeSetConst[0].rend() ); it != end; ++ it ) {
-		if ( (*it).get_type() == HXml::HNode::TYPE::NODE ) {
+		if ( (*it).get_type() == HXml::HNode::TYPE::ELEMENT ) {
 			ENSURE_EQUALS(
 				"bad rev it",
 				(*find_if( (*it).begin(), (*it).end(), call( &HXml::HConstNodeProxy::get_type, _1 ) == HXml::HNode::TYPE::CONTENT )).get_value(),
@@ -577,7 +577,7 @@ TUT_UNIT_TEST( "reverse iteration" )
 	HXml::HNodeSet nodeSet = xml.get_elements_by_path( "/my_root/my_set" );
 	i = 0;
 	for ( HXml::HNodeProxy::reverse_iterator it( nodeSet[0].rbegin() ), end( nodeSet[0].rend() ); it != end; ++ it ) {
-		if ( (*it).get_type() == HXml::HNode::TYPE::NODE ) {
+		if ( (*it).get_type() == HXml::HNode::TYPE::ELEMENT ) {
 			ENSURE_EQUALS(
 				"bad rev it",
 				(*find_if( (*it).begin(), (*it).end(), call( &HXml::HNodeProxy::get_type, _1 ) == HXml::HNode::TYPE::CONTENT )).get_value(),
