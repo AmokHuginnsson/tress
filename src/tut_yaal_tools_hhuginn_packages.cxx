@@ -277,6 +277,27 @@ TUT_UNIT_TEST( "Algorithms" )
 		"{15, 3, 7, 11}"
 	);
 	ENSURE_EQUALS(
+		"Algorithms.materialize of non uniform keys succeeded",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"algo.materialize([0,1.],order);\n"
+			"}"
+		),
+		"*anonymous stream*:3:17: Invalid key type: a `real'."
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize of oreder did not set key type",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"o = algo.materialize([0],order);\n"
+			"o.insert(1.);\n"
+			"}"
+		),
+		"*anonymous stream*:4:9: Non-uniform key types, got a `real' instead of an `integer'."
+	);
+	ENSURE_EQUALS(
 		"Algorithms.materialize on invalid succeeded",
 		execute_except(
 			"import Algorithms as algo;\n"
