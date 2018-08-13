@@ -267,6 +267,27 @@ TUT_UNIT_TEST( "Algorithms" )
 		"order(3, 7, 11, 15)"
 	);
 	ENSURE_EQUALS(
+		"Algorithms.materialize of non uniform keys (to order) succeeded",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"algo.materialize([0,1.],order);\n"
+			"}"
+		),
+		"*anonymous stream*:3:17: Invalid key type: a `real'."
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize to order did not set key type",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"o = algo.materialize([0],order);\n"
+			"o.insert(1.);\n"
+			"}"
+		),
+		"*anonymous stream*:4:9: Non-uniform key types, got a `real' instead of an `integer'."
+	);
+	ENSURE_EQUALS(
 		"Algorithms.materialize (to set) failed",
 		execute(
 			"import Algorithms as algo;\n"
@@ -277,25 +298,85 @@ TUT_UNIT_TEST( "Algorithms" )
 		"{15, 3, 7, 11}"
 	);
 	ENSURE_EQUALS(
-		"Algorithms.materialize of non uniform keys succeeded",
+		"Algorithms.materialize (to dict) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize([(0,1),(2,3),(4,5)],dict));\n"
+			"}"
+		),
+		"[0: 1, 2: 3, 4: 5]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize of non tuple (to dict) succeeded",
 		execute_except(
 			"import Algorithms as algo;\n"
 			"main(){\n"
-			"algo.materialize([0,1.],order);\n"
+			"algo.materialize([0],dict);\n"
+			"}"
+		),
+		"*anonymous stream*:3:17: Each value materialized into a `dict` must be a `tuple` not an `integer'."
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize of wrong tuple size (to dict) succeeded",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"algo.materialize([(0,0,0)],dict);\n"
+			"}"
+		),
+		"*anonymous stream*:3:17: Each `tuple` materialized into a `dict` must be a key-value pair, i.e. contain exactly two elements."
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize of non uniform keys (to dict) succeeded",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"algo.materialize([(0,0),(1.,0)],dict);\n"
 			"}"
 		),
 		"*anonymous stream*:3:17: Invalid key type: a `real'."
 	);
 	ENSURE_EQUALS(
-		"Algorithms.materialize of oreder did not set key type",
+		"Algorithms.materialize to dict did not set key type",
 		execute_except(
 			"import Algorithms as algo;\n"
 			"main(){\n"
-			"o = algo.materialize([0],order);\n"
-			"o.insert(1.);\n"
+			"d = algo.materialize([(0,0)],dict);\n"
+			"d[1.];\n"
 			"}"
 		),
-		"*anonymous stream*:4:9: Non-uniform key types, got a `real' instead of an `integer'."
+		"*anonymous stream*:4:2: Non-uniform key types, got a `real' instead of an `integer'."
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize (to lookup) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize([(0,1),(2,3),(4,5)],lookup));\n"
+			"}"
+		),
+		"{0: 1, 4: 5, 2: 3}"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize of non tuple (to lookup) succeeded",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"algo.materialize([0],lookup);\n"
+			"}"
+		),
+		"*anonymous stream*:3:17: Each value materialized into a `lookup` must be a `tuple` not an `integer'."
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize of wrong tuple size (to lookup) succeeded",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"algo.materialize([(0,0,0)],lookup);\n"
+			"}"
+		),
+		"*anonymous stream*:3:17: Each `tuple` materialized into a `lookup` must be a key-value pair, i.e. contain exactly two elements."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.materialize on invalid succeeded",
