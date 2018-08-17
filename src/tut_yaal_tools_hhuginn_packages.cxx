@@ -2316,6 +2316,19 @@ TUT_UNIT_TEST( "OperatingSystem" )
 		"\"debug\""
 	);
 	ENSURE_EQUALS(
+		"OperatingSystem.set_env failed",
+		execute(
+			"import OperatingSystem as os;\n"
+			"main(){\n"
+			"res = [os.env(\"NEW_ENV_VAR\")];\n"
+			"os.set_env(\"NEW_ENV_VAR\", \"value\");\n"
+			"res.push(os.env(\"NEW_ENV_VAR\"));\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[none, \"value\"]"
+	);
+	ENSURE_EQUALS(
 		"OperatingSystem.getuid",
 		execute(
 			"import OperatingSystem as os;"
@@ -2854,6 +2867,18 @@ TUT_UNIT_TEST( "Text" )
 		" \"ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᴿᵀᵁⱽᵂ\","
 		" \"ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻ\","
 		" \"ᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᴿᵀᵁⱽᵂ\"]"
+	);
+	ENSURE_EQUALS(
+		"substitute_environment() failed",
+		execute(
+			"import Text as text;\n"
+			"import OperatingSystem as os;\n"
+			"main(){\n"
+			"os.set_env(\"NEW_ENV_VAR\", \"value\");\n"
+			"return(text.substitute_environment(\"some${NEW_ENV_VAR}text\", true));\n"
+			"}\n"
+		),
+		"\"somevaluetext\""
 	);
 TUT_TEARDOWN()
 
