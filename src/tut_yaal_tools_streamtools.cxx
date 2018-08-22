@@ -146,5 +146,28 @@ TUT_UNIT_TEST( "stream + HComplex" )
 	ENSURE_EQUALS( "HComplex text minimal streams failed", c, HComplex( 1, 2 ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "stream + HPair" )
+	HStringStream ss;
+	typedef HPair<int, int> pair_t;
+	pair_t exp( 7, -13 );
+	ss << "ala " << exp << " kot";
+	HString s;
+	ss >> s;
+	pair_t p;
+	ss >> p;
+	ENSURE_EQUALS( "HComplex text streams failed", p, exp );
+	HChunk buf;
+	HMemoryProvider mp( buf, 100 );
+	HMemory m( mp );
+	m << binary << exp;
+	p = make_pair( 0, 0 );
+	m >> p;
+	ENSURE_EQUALS( "HComplex binary streams failed", p, exp );
+	ss.reset();
+	ss << "pair<1,2>";
+	ss >> p;
+	ENSURE_EQUALS( "HComplex text minimal streams failed", p, make_pair( 1, 2 ) );
+TUT_TEARDOWN()
+
 }
 
