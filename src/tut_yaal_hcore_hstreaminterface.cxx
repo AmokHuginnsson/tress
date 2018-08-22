@@ -718,5 +718,35 @@ TUT_UNIT_TEST( "binary I/O" )
 	ENSURE_EQUALS( "void* bin I/O failed", vPointer, cPointer );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "ignore" )
+	static char src[] = "1 a 2";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	int i0( 0 );
+	int i1( 0 );
+	_ss >> i0;
+	_ss.ignore( 2 );
+	_ss >> i1;
+	ENSURE_EQUALS( "int value read fail", i0, 1 );
+	ENSURE_EQUALS( "int value read fail", i1, 2 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "consume" )
+	static char src[] = "1kot2";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	int i0( 0 );
+	int i1( 0 );
+	_ss >> i0;
+	_ss.consume( "ala" );
+	_ss >> i1;
+	ENSURE_EQUALS( "int value read fail", i0, 1 );
+	ENSURE_EQUALS( "consume failed", i1, 0 );
+	_ss.clear();
+	_ss.consume( "kot" );
+	_ss >> i1;
+	ENSURE_EQUALS( "int value read fail", i1, 2 );
+TUT_TEARDOWN()
+
 }
 
