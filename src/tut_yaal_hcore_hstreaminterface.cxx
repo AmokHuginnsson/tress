@@ -290,6 +290,182 @@ TUT_UNIT_TEST( "input float" )
 	ENSURE_DISTANCE( "float negative value read fail", val, static_cast<float>( -2.7182 ), static_cast<float>( epsilon ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "input double long after fail" )
+	static char src[] = "1 a 2";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	double long dl[3] = { 0.L, 0.L, 0.L };
+	for ( double long& d : dl ) {
+		try {
+			_ss >> d;
+		} catch ( ... ) {
+		}
+	}
+	ENSURE_DISTANCE( "double long value read fail", dl[0], 1.L, epsilon );
+	ENSURE_DISTANCE( "spurious double long value read", dl[1], 0.L, epsilon );
+	ENSURE_DISTANCE( "spurious double long value read", dl[2], 0.L, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "input double after fail" )
+	static char src[] = "1 a 2";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	double d[3] = { 0.L, 0.L, 0.L };
+	for ( double& x : d ) {
+		try {
+			_ss >> x;
+		} catch ( ... ) {
+		}
+	}
+	ENSURE_DISTANCE( "double value read fail", d[0], 1., static_cast<double>( epsilon ) );
+	ENSURE_DISTANCE( "spurious double value read", d[1], 0., static_cast<double>( epsilon ) );
+	ENSURE_DISTANCE( "spurious double value read", d[2], 0., static_cast<double>( epsilon ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "input float after fail" )
+	static char src[] = "1 a 2";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	float d[3] = { 0.L, 0.L, 0.L };
+	for ( float& x : d ) {
+		try {
+			_ss >> x;
+		} catch ( ... ) {
+		}
+	}
+	ENSURE_DISTANCE( "float value read fail", d[0], 1.F, static_cast<float>( epsilon ) );
+	ENSURE_DISTANCE( "spurious float value read", d[1], 0.F, static_cast<float>( epsilon ) );
+	ENSURE_DISTANCE( "spurious float value read", d[2], 0.F, static_cast<float>( epsilon ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "input int long long after fail" )
+	static char src[] = "1 a 2";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	int long long ill[3] = { 0, 0, 0 };
+	for ( int long long& x : ill ) {
+		try {
+			_ss >> x;
+		} catch ( ... ) {
+		}
+	}
+	ENSURE_EQUALS( "int long long value read fail", ill[0], 1 );
+	ENSURE_EQUALS( "spurious int long long value read", ill[1], 0 );
+	ENSURE_EQUALS( "spurious int long lomg value read", ill[2], 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "input int long long unsigned after fail" )
+	static char src[] = "1 a 2";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	int long long unsigned ill[3] = { 0, 0, 0 };
+	for ( int long long unsigned& x : ill ) {
+		try {
+			_ss >> x;
+		} catch ( ... ) {
+		}
+	}
+	ENSURE_EQUALS( "int long long unsigned value read fail", ill[0], 1ULL );
+	ENSURE_EQUALS( "spurious int long long unsigned value read", ill[1], 0ULL );
+	ENSURE_EQUALS( "spurious int long lomg value read", ill[2], 0ULL );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "input int long after fail" )
+	static char src[] = "1 a 2";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	int long il[3] = { 0, 0, 0 };
+	for ( int long& x : il ) {
+		try {
+			_ss >> x;
+		} catch ( ... ) {
+		}
+	}
+	ENSURE_EQUALS( "int long value read fail", il[0], 1 );
+	ENSURE_EQUALS( "spurious int long value read", il[1], 0 );
+	ENSURE_EQUALS( "spurious int long value read", il[2], 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "input int long unsigned after fail" )
+	static char src[] = "1 a 2";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	int long unsigned il[3] = { 0, 0, 0 };
+	for ( int long unsigned& x : il ) {
+		try {
+			_ss >> x;
+		} catch ( ... ) {
+		}
+	}
+	ENSURE_EQUALS( "int long unsigned value read fail", il[0], 1UL );
+	ENSURE_EQUALS( "spurious int long unsigned value read", il[1], 0UL );
+	ENSURE_EQUALS( "spurious int long unsigned value read", il[2], 0UL );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "input int after fail" )
+	static char src[] = "1 a 2";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	int i[3] = { 0, 0, 0 };
+	for ( int& ii : i ) {
+		try {
+			_ss >> ii;
+		} catch ( ... ) {
+		}
+	}
+	ENSURE_EQUALS( "int value read fail", i[0], 1 );
+	ENSURE_EQUALS( "spurious int value read", i[1], 0 );
+	ENSURE_EQUALS( "spurious int value read", i[2], 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "input int unsigned after fail" )
+	static char src[] = "1 a 2";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	int unsigned i[3] = { 0, 0, 0 };
+	for ( int unsigned& ii : i ) {
+		try {
+			_ss >> ii;
+		} catch ( ... ) {
+		}
+	}
+	ENSURE_EQUALS( "int unsigned value read fail", i[0], 1u );
+	ENSURE_EQUALS( "spurious int unsigned value read", i[1], 0u );
+	ENSURE_EQUALS( "spurious int unsigned value read", i[2], 0u );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "input int short after fail" )
+	static char src[] = "1 a 2";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	int short is[3] = { 0, 0, 0 };
+	for ( int short& x : is ) {
+		try {
+			_ss >> x;
+		} catch ( ... ) {
+		}
+	}
+	ENSURE_EQUALS( "int short value read fail", is[0], 1 );
+	ENSURE_EQUALS( "spurious int short value read", is[1], 0 );
+	ENSURE_EQUALS( "spurious int short value read", is[2], 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "input int short unsigned after fail" )
+	static char src[] = "1 a 2";
+	HStringStream& ss( string_stream() );
+	ss.str( src );
+	int short unsigned is[3] = { 0, 0, 0 };
+	for ( int short unsigned& x : is ) {
+		try {
+			_ss >> x;
+		} catch ( ... ) {
+		}
+	}
+	ENSURE_EQUALS( "int short unsigned value read fail", is[0], 1 );
+	ENSURE_EQUALS( "spurious int short unsigned value read", is[1], 0 );
+	ENSURE_EQUALS( "spurious int short unsigned value read", is[2], 0 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "outputs" )
 	_ss << true;
 	ENSURE_EQUALS( "bool output failed", data(), "1" );
@@ -377,6 +553,7 @@ TUT_UNIT_TEST( "inputs" )
 	ENSURE_EQUALS( "int short input failed", is, 32767 );
 	ENSURE_THROW( "data clobbered", _ss >> is, HOutOfRangeException );
 	int short unsigned isu( 0 );
+	_ss.clear();
 	_ss >> isu;
 	ENSURE_EQUALS( "int short unsigned input failed", isu, 32768 );
 	int i( 0 );
@@ -384,6 +561,7 @@ TUT_UNIT_TEST( "inputs" )
 	ENSURE_EQUALS( "int input failed", i, 2147483647 );
 	ENSURE_THROW( "data clobbered", _ss >> i, HOutOfRangeException );
 	int unsigned iu( 0 );
+	_ss.clear();
 	_ss >> iu;
 	ENSURE_EQUALS( "int unsigned input failed", iu, 2147483648u );
 
@@ -393,6 +571,7 @@ TUT_UNIT_TEST( "inputs" )
 	ENSURE_EQUALS( "int long input failed", il, 9223372036854775807LL );
 	ENSURE_THROW( "data clobbered", _ss >> il, HOutOfRangeException );
 	int long unsigned ilu( 0 );
+	_ss.clear();
 	_ss >> ilu;
 	ENSURE_EQUALS( "int long unsigned input failed", ilu, 9223372036854775808ULL );
 #else
@@ -401,6 +580,7 @@ TUT_UNIT_TEST( "inputs" )
 	ENSURE_EQUALS( "int long input failed", il, 2147483647 );
 	ENSURE_THROW( "data clobbered", _ss >> il, HOutOfRangeException );
 	int long unsigned ilu( 0 );
+	_ss.clear();
 	_ss >> ilu;
 	ENSURE_EQUALS( "int long unsigned input failed", ilu, 2147483648u );
 #endif
@@ -410,6 +590,7 @@ TUT_UNIT_TEST( "inputs" )
 	ENSURE_EQUALS( "int long long input failed", ill, 9223372036854775807LL );
 	ENSURE_THROW( "data clobbered", _ss >> ill, HOutOfRangeException );
 	int long long unsigned illu( 0 );
+	_ss.clear();
 	_ss >> illu;
 	ENSURE_EQUALS( "int long long unsigned input failed", illu, 9223372036854775808ULL );
 
