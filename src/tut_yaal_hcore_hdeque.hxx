@@ -77,18 +77,18 @@ void tut_yaal_hcore_hdeque_base<pack>::check_consistency( deque_type const& dequ
 				&& ( ( ( firstChunkIndex < chunksCount )
 						&& ( firstChunkIndex != _statePreserver._firstChunkIndex )
 						&& ( chunks[ firstChunkIndex ] == _statePreserver._firstChunk )
-						&& ( ( _statePreserver._lastChunkIndex + 1 + yaal::abs( usedChunks - _statePreserver._usedChunks ) ) >= _statePreserver._availChunks ) )
+						&& ( ( _statePreserver._lastChunkIndex + 1 + yaal::math::abs( usedChunks - _statePreserver._usedChunks ) ) >= _statePreserver._availChunks ) )
 					|| ( ( lastChunkIndex < chunksCount )
 						&& ( lastChunkIndex != _statePreserver._lastChunkIndex )
 						&& ( chunks[ lastChunkIndex ] == _statePreserver._lastChunk )
-						&& ( ( _statePreserver._firstChunkIndex - yaal::abs( usedChunks - _statePreserver._usedChunks ) ) < 0 ) )
+						&& ( ( _statePreserver._firstChunkIndex - yaal::math::abs( usedChunks - _statePreserver._usedChunks ) ) < 0 ) )
 					) ) ) {
 		int long startGap( firstChunkIndex );
 		int long endGap( ( chunksCount - lastChunkIndex ) - 1 );
 		if ( setup._debug )
 			yaal::hcore::clog << "startGap: " << startGap << ", endGap: " << endGap << yaal::hcore::endl;
 		if ( deque_._size > 0 )
-			ENSURE_DISTANCE( "chunks are not centered", yaal::abs( endGap - startGap ), 0l, 2l );
+			ENSURE_DISTANCE( "chunks are not centered", yaal::math::abs( endGap - startGap ), 0l, 2l );
 	} else if ( _statePreserver._size
 			&& ( chunksCount >= _statePreserver._availChunks )
 			&& ( ( firstChunkIndex > _statePreserver._firstChunkIndex ) || ( lastChunkIndex < _statePreserver._lastChunkIndex ) ) ) {

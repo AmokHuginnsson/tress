@@ -60,7 +60,7 @@ void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ ) {
 		int long localCollisions( 0 );
 		while ( a ) {
 			ENSURE_EQUALS( "atom in wrong bucket", i,
-					abs( map_._engine._hasher( a->_value.first ) ) % map_._engine._prime );
+					math::abs( map_._engine._hasher( a->_value.first ) ) % map_._engine._prime );
 			a = static_cast<atom_t*>( a->_next );
 			if ( a ) {
 				++ collisions;
