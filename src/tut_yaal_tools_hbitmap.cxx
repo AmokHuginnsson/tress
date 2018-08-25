@@ -23,6 +23,16 @@ inline bool operator == ( HBitmap const& bmp_, HString const& pat_ ) {
 	return ( ss.str() == pat_ );
 }
 
+inline HStreamInterface& operator << ( HStreamInterface& stream_, HBitmap::HBit const& bit_ ) {
+	stream_ << static_cast<bool>( bit_ );
+	return ( stream_ );
+}
+
+inline std::ostream& operator << ( std::ostream& stream_, HBitmap::HBit const& bit_ ) {
+	stream_ << static_cast<bool>( bit_ );
+	return ( stream_ );
+}
+
 inline std::ostream& operator << ( std::ostream& stream_, HBitmap const& bmp_ ) {
 	HStringStream ss;
 	ss << bmp_;
