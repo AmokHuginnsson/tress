@@ -1429,6 +1429,10 @@ TUT_UNIT_TEST( "binomial_coefficient<HNumber>()" )
 	ENSURE_EQUALS( "bad binomial(52, 1&)", number::binomial_coefficient( 52, 17 ), HNumber( "21945588357420" ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "greatest_common_divisor()" )
+	ENSURE_EQUALS( "greatest_common_divisor failed", greatest_common_divisor( "923090048436318902677028845148129025191"_yn, "921677335697990140168149321344815984979"_yn ), "117726061527396875739960316942753351"_yn );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "PI" )
 	ENSURE_EQUALS(
 		"1000 digits of PI failed",
