@@ -1177,6 +1177,19 @@ TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil($7.123456));}" ), "$8" );
 	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil(-7.1234));}" ), "-7.0" );
 	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil($-7.123456));}" ), "$-7" );
+	ENSURE_EQUALS(
+		"Mathematics.greatest_common_divisor (integer) failed",
+		execute( "import Mathematics as math;main(){return(math.greatest_common_divisor(814001929, 6324168833));}" ),
+		"62615533"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.greatest_common_divisor (number) failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){return(math.greatest_common_divisor($923090048436318902677028845148129025191, $921677335697990140168149321344815984979));}"
+		),
+		"$117726061527396875739960316942753351"
+	);
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($7.1234567, $7.1235567));}" ), "3" );
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($2234.1234567, $1234.1234567));}" ), "-4" );
 TUT_TEARDOWN()
