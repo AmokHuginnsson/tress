@@ -155,18 +155,40 @@ TUT_UNIT_TEST( "stream + HPair" )
 	ss >> s;
 	pair_t p;
 	ss >> p;
-	ENSURE_EQUALS( "HComplex text streams failed", p, exp );
+	ENSURE_EQUALS( "HArray text streams failed", p, exp );
 	HChunk buf;
 	HMemoryProvider mp( buf, 100 );
 	HMemory m( mp );
 	m << binary << exp;
 	p = make_pair( 0, 0 );
 	m >> p;
-	ENSURE_EQUALS( "HComplex binary streams failed", p, exp );
+	ENSURE_EQUALS( "HArray binary streams failed", p, exp );
 	ss.reset();
 	ss << "pair<1,2>";
 	ss >> p;
-	ENSURE_EQUALS( "HComplex text minimal streams failed", p, make_pair( 1, 2 ) );
+	ENSURE_EQUALS( "HArray text minimal streams failed", p, make_pair( 1, 2 ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "stream + HArray" )
+	HStringStream ss;
+	int_array_t exp( { 1, 2, 3, 7, 19 } );
+	ss << "ala " << exp << " kot";
+	HString s;
+	ss >> s;
+	int_array_t a;
+	ss >> a;
+	ENSURE_EQUALS( "HArray text streams failed", a, exp );
+	HChunk buf;
+	HMemoryProvider mp( buf, 100 );
+	HMemory m( mp );
+	m << binary << exp;
+	a.clear();
+	m >> a;
+	ENSURE_EQUALS( "HArray binary streams failed", a, exp );
+	ss.reset();
+	ss << "array(13)";
+	ss >> a;
+	ENSURE_EQUALS( "HArray text minimal streams failed", a, int_array_t( { 13 } ) );
 TUT_TEARDOWN()
 
 }
