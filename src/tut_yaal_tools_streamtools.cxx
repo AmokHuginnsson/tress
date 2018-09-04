@@ -191,5 +191,28 @@ TUT_UNIT_TEST( "stream + HArray" )
 	ENSURE_EQUALS( "HArray text minimal streams failed", a, int_array_t( { 13 } ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "stream + HStaticArray" )
+	typedef HStaticArray<int, 5> int_static_array_t;
+	HStringStream ss;
+	int_static_array_t exp( { 1, 2, 3, 7, 19 } );
+	ss << "ala " << exp << " kot";
+	HString s;
+	ss >> s;
+	int_static_array_t a;
+	ss >> a;
+	ENSURE_EQUALS( "HStaticArray text streams failed", a, exp );
+	HChunk buf;
+	HMemoryProvider mp( buf, 100 );
+	HMemory m( mp );
+	m << binary << exp;
+	fill( a.begin(), a.end(), 0 );
+	m >> a;
+	ENSURE_EQUALS( "HStaticArray binary streams failed", a, exp );
+	ss.reset();
+	ss << "staticarray(13 17 13 17 13)";
+	ss >> a;
+	ENSURE_EQUALS( "HStaticArray text minimal streams failed", a, int_static_array_t( { 13, 17, 13, 17, 13 } ) );
+TUT_TEARDOWN()
+
 }
 
