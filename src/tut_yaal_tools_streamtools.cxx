@@ -214,5 +214,27 @@ TUT_UNIT_TEST( "stream + HStaticArray" )
 	ENSURE_EQUALS( "HStaticArray text minimal streams failed", a, int_static_array_t( { 13, 17, 13, 17, 13 } ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "stream + HDeque" )
+	HStringStream ss;
+	int_deque_t exp( { 1, 2, 3, 7, 19 } );
+	ss << "ala " << exp << " kot";
+	HString s;
+	ss >> s;
+	int_deque_t d;
+	ss >> d;
+	ENSURE_EQUALS( "HDeque text streams failed", d, exp );
+	HChunk buf;
+	HMemoryProvider mp( buf, 100 );
+	HMemory m( mp );
+	m << binary << exp;
+	d.clear();
+	m >> d;
+	ENSURE_EQUALS( "HDeque binary streams failed", d, exp );
+	ss.reset();
+	ss << "deque(13)";
+	ss >> d;
+	ENSURE_EQUALS( "HDeque text minimal streams failed", d, int_deque_t( { 13 } ) );
+TUT_TEARDOWN()
+
 }
 
