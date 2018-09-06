@@ -236,5 +236,27 @@ TUT_UNIT_TEST( "stream + HDeque" )
 	ENSURE_EQUALS( "HDeque text minimal streams failed", d, int_deque_t( { 13 } ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "stream + HList" )
+	HStringStream ss;
+	int_list_t exp( { 1, 2, 3, 7, 19 } );
+	ss << "ala " << exp << " kot";
+	HString s;
+	ss >> s;
+	int_list_t l;
+	ss >> l;
+	ENSURE_EQUALS( "HList text streams failed", l, exp );
+	HChunk buf;
+	HMemoryProvider mp( buf, 100 );
+	HMemory m( mp );
+	m << binary << exp;
+	l.clear();
+	m >> l;
+	ENSURE_EQUALS( "HList binary streams failed", l, exp );
+	ss.reset();
+	ss << "list(13)";
+	ss >> l;
+	ENSURE_EQUALS( "HList text minimal streams failed", l, int_list_t( { 13 } ) );
+TUT_TEARDOWN()
+
 }
 
