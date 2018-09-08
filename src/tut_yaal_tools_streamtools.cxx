@@ -258,5 +258,27 @@ TUT_UNIT_TEST( "stream + HList" )
 	ENSURE_EQUALS( "HList text minimal streams failed", l, int_list_t( { 13 } ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "stream + HSet" )
+	HStringStream ss;
+	int_set_t exp( { 1, 2, 3, 7, 19 } );
+	ss << "ala " << exp << " kot";
+	HString s;
+	ss >> s;
+	int_set_t l;
+	ss >> l;
+	ENSURE_EQUALS( "HSet text streams failed", l, exp );
+	HChunk buf;
+	HMemoryProvider mp( buf, 100 );
+	HMemory m( mp );
+	m << binary << exp;
+	l.clear();
+	m >> l;
+	ENSURE_EQUALS( "HSet binary streams failed", l, exp );
+	ss.reset();
+	ss << "set(13)";
+	ss >> l;
+	ENSURE_EQUALS( "HSet text minimal streams failed", l, int_set_t( { 13 } ) );
+TUT_TEARDOWN()
+
 }
 
