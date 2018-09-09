@@ -262,22 +262,49 @@ TUT_UNIT_TEST( "stream + HSet" )
 	HStringStream ss;
 	int_set_t exp( { 1, 2, 3, 7, 19 } );
 	ss << "ala " << exp << " kot";
-	HString s;
+	HString str;
+	ss >> str;
+	int_set_t s;
 	ss >> s;
-	int_set_t l;
-	ss >> l;
-	ENSURE_EQUALS( "HSet text streams failed", l, exp );
+	ENSURE_EQUALS( "HSet text streams failed", s, exp );
 	HChunk buf;
 	HMemoryProvider mp( buf, 100 );
 	HMemory m( mp );
 	m << binary << exp;
-	l.clear();
-	m >> l;
-	ENSURE_EQUALS( "HSet binary streams failed", l, exp );
+	s.clear();
+	m >> s;
+	ENSURE_EQUALS( "HSet binary streams failed", s, exp );
 	ss.reset();
 	ss << "set(13)";
-	ss >> l;
-	ENSURE_EQUALS( "HSet text minimal streams failed", l, int_set_t( { 13 } ) );
+	ss >> s;
+	ENSURE_EQUALS( "HSet text minimal streams failed", s, int_set_t( { 13 } ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "stream + HHashSet" )
+	HStringStream ss;
+	int_array_t exp( { 1, 2, 3, 7, 19 } );
+	int_hash_set_t data( exp.begin(), exp.end() );
+	ss << "ala " << data << " kot";
+	HString str;
+	ss >> str;
+	int_hash_set_t hs;
+	ss >> hs;
+	int_array_t sorted( hs.begin(), hs.end() );
+	sort( sorted.begin(), sorted.end() );
+	ENSURE_EQUALS( "HHashSet text streams failed", sorted, exp );
+	HChunk buf;
+	HMemoryProvider mp( buf, 100 );
+	HMemory m( mp );
+	m << binary << data;
+	hs.clear();
+	m >> hs;
+	sorted.assign( hs.begin(), hs.end() );
+	sort( sorted.begin(), sorted.end() );
+	ENSURE_EQUALS( "HHashSet binary streams failed", sorted, exp );
+	ss.reset();
+	ss << "hash_set(13)";
+	ss >> hs;
+	ENSURE_EQUALS( "HHashSet text minimal streams failed", hs, int_hash_set_t( { 13 } ) );
 TUT_TEARDOWN()
 
 }

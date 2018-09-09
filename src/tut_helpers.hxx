@@ -19,6 +19,7 @@
 #include <yaal/hcore/harray.hxx>
 #include <yaal/hcore/hdeque.hxx>
 #include <yaal/hcore/hset.hxx>
+#include <yaal/hcore/hhashset.hxx>
 #include <yaal/hcore/hlist.hxx>
 #include <yaal/hcore/hstaticarray.hxx>
 #include <yaal/hcore/hvector.hxx>
@@ -179,6 +180,11 @@ inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HList<tType> 
 template<typename tType>
 inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HSet<tType> const& s ) {
 	return ( container_dump( out, s, "set" ) );
+}
+
+template<typename tType>
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HHashSet<tType> const& hs ) {
+	return ( container_dump( out, hs, "hash_set" ) );
 }
 
 template<typename key_t, typename value_t>
@@ -497,6 +503,7 @@ struct simple_mock {
 	typedef yaal::hcore::HArray<int> int_array_t;
 	typedef yaal::hcore::HDeque<int> int_deque_t;
 	typedef yaal::hcore::HSet<int> int_set_t;
+	typedef yaal::hcore::HHashSet<int> int_hash_set_t;
 	typedef yaal::tools::HRing<int> int_ring_t;
 	typedef std::list<int> std_list_t;
 	typedef std::vector<int> std_vector_t;
