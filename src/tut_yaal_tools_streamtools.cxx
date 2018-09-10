@@ -19,6 +19,15 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
+namespace std {
+
+template<typename key_t, typename value_t>
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HHashMap<key_t, value_t> const& m ) {
+	return ( container_dump( out, m, "hash_map" ) );
+}
+
+}
+
 namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_streamtools );
@@ -328,6 +337,36 @@ TUT_UNIT_TEST( "stream + HMap" )
 	ss << "map(pair<13,7>)";
 	ss >> s;
 	ENSURE_EQUALS( "HMap text minimal streams failed", s, int_map_t( { { 13, 7 } } ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "stream + HHashMap" )
+	typedef yaal::hcore::HPair<int, int> int_pair_t;
+	typedef yaal::hcore::HArray<int_pair_t> int_pair_array_t;
+	typedef yaal::hcore::HHashMap<int, int> int_hash_map_t;
+	HStringStream ss;
+	int_pair_array_t exp( { { 1, 0 }, { 2, 1 }, { 3, 2 }, { 7, 3 }, { 19, 4 } } );
+	int_hash_map_t data( exp.begin(), exp.end() );
+	ss << "ala " << data << " kot";
+	HString str;
+	ss >> str;
+	int_hash_map_t hs;
+	ss >> hs;
+	int_pair_array_t sorted( hs.begin(), hs.end() );
+	sort( sorted.begin(), sorted.end() );
+	ENSURE_EQUALS( "HHashSet text streams failed", sorted, exp );
+	HChunk buf;
+	HMemoryProvider mp( buf, 100 );
+	HMemory m( mp );
+	m << binary << data;
+	hs.clear();
+	m >> hs;
+	sorted.assign( hs.begin(), hs.end() );
+	sort( sorted.begin(), sorted.end() );
+	ENSURE_EQUALS( "HHashSet binary streams failed", sorted, exp );
+	ss.reset();
+	ss << "hash_map(pair<13,7>))";
+	ss >> hs;
+	ENSURE_EQUALS( "HHashSet text minimal streams failed", hs, int_hash_map_t( { { 13, 7 } } ) );
 TUT_TEARDOWN()
 
 }
