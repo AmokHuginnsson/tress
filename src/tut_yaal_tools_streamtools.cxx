@@ -307,5 +307,28 @@ TUT_UNIT_TEST( "stream + HHashSet" )
 	ENSURE_EQUALS( "HHashSet text minimal streams failed", hs, int_hash_set_t( { 13 } ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "stream + HMap" )
+	typedef yaal::hcore::HMap<int, int> int_map_t;
+	HStringStream ss;
+	int_map_t exp( { { 1, 0 }, { 2, 1 }, { 3, 2 }, { 7, 3 }, { 19, 4 } } );
+	ss << "ala " << exp << " kot";
+	HString str;
+	ss >> str;
+	int_map_t s;
+	ss >> s;
+	ENSURE_EQUALS( "HMap text streams failed", s, exp );
+	HChunk buf;
+	HMemoryProvider mp( buf, 100 );
+	HMemory m( mp );
+	m << binary << exp;
+	s.clear();
+	m >> s;
+	ENSURE_EQUALS( "HMap binary streams failed", s, exp );
+	ss.reset();
+	ss << "map(pair<13,7>)";
+	ss >> s;
+	ENSURE_EQUALS( "HMap text minimal streams failed", s, int_map_t( { { 13, 7 } } ) );
+TUT_TEARDOWN()
+
 }
 
