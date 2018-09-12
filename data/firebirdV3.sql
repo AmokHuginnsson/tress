@@ -1,7 +1,6 @@
 -- Allow RemoteAccess to security.db before running this script.
 
 COMMIT;
-CONNECT 'localhost:security.db' USER 'sysdba' ROLE 'RDB$ADMIN';
 
 DROP USER tress;
 
@@ -9,20 +8,21 @@ COMMIT;
 CREATE DATABASE 'localhost:firebird_context'; -- Fallback for DROP DATABASE if CONNECT to tress fails.
 
 COMMIT;
-CONNECT 'localhost:firebird_context' USER 'sysdba' ROLE 'RDB$ADMIN';
-CONNECT 'localhost:tress' USER 'sysdba' ROLE 'RDB$ADMIN';
+CONNECT 'localhost:firebird_context' USER 'root' ROLE 'RDB$ADMIN';
+CONNECT 'localhost:tress' USER 'root' ROLE 'RDB$ADMIN';
 
 DROP DATABASE;
 
 COMMIT;
-CONNECT 'localhost:' USER 'sysdba' ROLE 'RDB$ADMIN';
+CONNECT 'localhost:template' USER 'root' ROLE 'RDB$ADMIN';
 
 CREATE DATABASE 'localhost:tress';
+CREATE USER tress PASSWORD 'tr3ss';
 
 COMMIT;
-CONNECT 'localhost:tress' USER 'sysdba' ROLE 'RDB$ADMIN';
+CONNECT 'localhost:tress' USER 'root' ROLE 'RDB$ADMIN';
 
-CREATE USER tress PASSWORD 'tr3ss';
+COMMIT;
 GRANT RDB$ADMIN TO tress;
 
 COMMIT;
@@ -68,11 +68,11 @@ set term ; !!
 
 COMMIT;
 
-CONNECT 'localhost:tress' USER 'sysdba' ROLE 'RDB$ADMIN';
+CONNECT 'localhost:tress' USER 'root' ROLE 'RDB$ADMIN';
 REVOKE RDB$ADMIN FROM tress;
 COMMIT;
 
-CONNECT 'localhost:firebird_context' USER 'sysdba' ROLE 'RDB$ADMIN';
+CONNECT 'localhost:firebird_context' USER 'root' ROLE 'RDB$ADMIN';
 DROP DATABASE;
 COMMIT;
 
