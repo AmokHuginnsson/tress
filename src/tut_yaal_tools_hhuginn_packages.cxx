@@ -1190,6 +1190,21 @@ TUT_UNIT_TEST( "Mathematics" )
 		),
 		"$117726061527396875739960316942753351"
 	);
+	ENSURE_EQUALS(
+		"Mathematics.greatest_common_divisor number on non-integral succeeded",
+		execute_except( "import Mathematics as math;main(){return(math.greatest_common_divisor($1.5, $1));}" ),
+		"*anonymous stream*:1:70: Invalid argument."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.binomial_coefficient failed",
+		execute( "import Mathematics as math;main(){return(math.binomial_coefficient($10, $3));}" ),
+		"$120"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.binomial_coefficient number on non-integral succeeded",
+		execute_except( "import Mathematics as math;main(){return(math.binomial_coefficient($1.5, $1));}" ),
+		"*anonymous stream*:1:67: Invalid argument."
+	);
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($7.1234567, $7.1235567));}" ), "3" );
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($2234.1234567, $1234.1234567));}" ), "-4" );
 TUT_TEARDOWN()
