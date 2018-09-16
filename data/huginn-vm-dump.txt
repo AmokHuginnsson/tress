@@ -10,7 +10,7 @@ class: -*observer* {}
 class: -*reference* {}
 class: -*unbound_method* {}
 class: -*variadic_parameters* {}
-class: Algorithms { AlgorithmsException, enumerate, filter, iterator, map, materialize, max, min, range, reduce, reversed, sorted, zip }
+class: Algorithms { AlgorithmsException, enumerate, filter, iterator, map, materialize, max, min, range, reduce, reversed, slice, sorted, zip }
 class: AlgorithmsException : Exception { message, trace, what, where }
 class: ArithmeticException : Exception { message, trace, what, where }
 class: Base { bar, foo }
@@ -34,6 +34,7 @@ class: -set.ReversedSetView {}
 class: -string.ReversedStringView {}
 class: -tuple.ReversedTupleView {}
 class: RuntimeException : Exception { message, trace, what, where }
+class: -Algorithms.Slice {}
 class: StackFrameInfo { column, context, file, line, to_string }
 class: -Algorithms.Zip {}
 class: blob {}
