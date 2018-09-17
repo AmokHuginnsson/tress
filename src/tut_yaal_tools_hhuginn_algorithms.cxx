@@ -387,6 +387,26 @@ TUT_UNIT_TEST( "materialize" )
 		),
 		"*anonymous stream*:3:17: Invalid materialized type: `integer'."
 	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize (to string) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.reversed(\"Huginn\"),string));\n"
+			"}"
+		),
+		"\"nniguH\""
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize (to string) failed",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(['a','b','c',0],string));\n"
+			"}"
+		),
+		"*anonymous stream*:3:24: A non-`character` type value materialized into a `string`."
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "reduce" )
