@@ -490,7 +490,7 @@ TUT_UNIT_TEST( "epoch" )
 	HTime epochRaw( HTime::TZ::UTC, 0LL, _iso8601DateTimeFormat_ );
 	ENSURE_EQUALS( "bad epoch", epoch, epochRaw );
 	HTime now( HTime::TZ::LOCAL );
-	now -= now;
+	now -= static_cast<HTime&>( now );
 	ENSURE_EQUALS( "bad zero duration", now, epochRaw );
 #undef unix
 	HTime unix( 1970_yY );

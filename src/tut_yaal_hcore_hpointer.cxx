@@ -189,7 +189,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Checks assignment with itself." ) {
 		ptr_t sp1( new counter_t() );
-		sp1 = sp1;
+		sp1 = static_cast<ptr_t&>( sp1 );
 		ENSURE( "get", sp1.raw() != 0 );
 		ENSURE_EQUALS( "leak !!!", counter_t::get_instance_count(), 1 );
 		ENSURE_EQUALS( "not destructed", counter_t::get_instance_count(), 1 );
