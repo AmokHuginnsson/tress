@@ -167,7 +167,7 @@ void OSetup::test_setup( void ) {
 	char const* CLOCK_QUALITY_MULTIPLIER( ::getenv( "TRESS_CLOCK_QUALITY_MULTIPLIER" ) );
 	if ( CLOCK_QUALITY_MULTIPLIER ) {
 		_clockQualityMultiplier = lexical_cast<int>( CLOCK_QUALITY_MULTIPLIER );
-		if ( ( _clockQualityMultiplier < 1 ) || ( _clockQualityMultiplier > 100 ) ) {
+		if ( ( _clockQualityMultiplier < 1 ) || ( _clockQualityMultiplier > 1024 ) ) {
 			M_THROW( _( "bad clock quality multiplier" ), _clockQualityMultiplier );
 		}
 	}
