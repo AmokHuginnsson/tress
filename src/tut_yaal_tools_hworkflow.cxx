@@ -350,7 +350,11 @@ TUT_UNIT_TEST( "schedule_windup" )
 		 * If .schedule_windup() fails to work properly then .can_join() loop takes at least 320 ms.
 		 */
 #ifdef __MSVCXX__
+#	ifdef CONTINUOUS_INTEGRATION_APPVEYOR
+		int expectJoin( 640 );
+#	else
 		int expectJoin( 160 );
+#	endif
 #elif defined( __HOST_OS_TYPE_FREEBSD__ )
 		int expectJoin( 80 );
 #else
