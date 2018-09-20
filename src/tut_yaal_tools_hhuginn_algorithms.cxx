@@ -746,5 +746,18 @@ TUT_UNIT_TEST( "slice" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "chain" )
+	ENSURE_EQUALS(
+		"Algorithms.chain failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.sorted(algo.materialize(algo.chain([1,2,3],(4,5,6),{7,8,9}),list)));\n"
+			"}"
+		),
+		"[1, 2, 3, 4, 5, 6, 7, 8, 9]"
+	);
+TUT_TEARDOWN()
+
 }
 

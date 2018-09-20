@@ -10,11 +10,12 @@ class: -*observer* {}
 class: -*reference* {}
 class: -*unbound_method* {}
 class: -*variadic_parameters* {}
-class: Algorithms { AlgorithmsException, enumerate, filter, iterator, map, materialize, max, min, range, reduce, reversed, slice, sorted, zip }
+class: Algorithms { AlgorithmsException, chain, enumerate, filter, iterator, map, materialize, max, min, range, reduce, reversed, slice, sorted, zip }
 class: AlgorithmsException : Exception { message, trace, what, where }
 class: ArithmeticException : Exception { message, trace, what, where }
 class: Base { bar, foo }
 class: -COLOR.COLOR_ENUMERAL { to_string }
+class: -Algorithms.Chain {}
 class: ConversionException : Exception { message, trace, what, where }
 class: Derived : Base { bar, foo, baz }
 class: -Algorithms.Enumerator {}
