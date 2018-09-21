@@ -223,7 +223,7 @@ TUT_UNIT_TEST( "readlink" )
 		"[\"tress\", \"./out\", \"non-existing\"]"
 	);
 #ifdef __MSVCXX__
-	char const readlinkExpect[] = "\"*anonymous stream*:1:47: readlink failed: `non-existing': The data is invalid.\r\n\"";
+	char const readlinkExpect[] = "\"*anonymous stream*:1:47: readlink failed: `non-existing': The operation completed successfully.\r\n\"";
 #else
 	char const readlinkExpect[] = "\"*anonymous stream*:1:47: readlink failed: `non-existing': No such file or directory\"";
 #endif

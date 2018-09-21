@@ -21,7 +21,6 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
-using namespace yaal::tools::executing_parser;
 using namespace tress::tut_helpers;
 
 namespace tut {
@@ -31,112 +30,6 @@ struct tut_yaal_tools_hhuginn_packages : public tress::tut_yaal_tools_hhuginn_ba
 };
 
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn_packages, "yaal::tools::HHuginn,packages" );
-
-
-TUT_UNIT_TEST( "RegularExpressions" )
-	ENSURE_EQUALS(
-		"RegularExpressions.match failed",
-		execute(
-			"import RegularExpressions as re;\n"
-			"main(){\n"
-			"rec = re.compile( \"[0-9]-[0-9]\" );\n"
-			"r = \"\";\n"
-			"m = rec.match(\"[123+123+3123]\");\n"
-			"if (m.matched()) {\n"
-			"r = r + \"fail match\";\n"
-			"} else {\n"
-			"r = r + \"ok\";\n"
-			"}\n"
-			"m = rec.match(\"[123-456-789]\");"
-			"if (m.matched()) {\n"
-			"for ( w : m ) {\n"
-			"r = r + w;\n"
-			"}\n"
-			"} else {\n"
-			"r = r + \"fail no match\";\n"
-			"}\n"
-			"return(r);\n"
-			"}"
-		),
-		"\"ok3-46-7\""
-	);
-	ENSURE_EQUALS(
-		"RegularExpressions copy failed",
-		execute(
-			"import RegularExpressions as re;\n"
-			"main(){\n"
-			"rec = re.compile( \"[0-9]-[0-9]\" );\n"
-			"r = \"\";\n"
-			"for( rg : [rec,copy(rec)] ) {\n"
-			"m = rg.match(\"[123+123+3123]\");\n"
-			"if (m.matched()) {\n"
-			"r = r + \"fail match\";\n"
-			"} else {\n"
-			"r = r + \"ok\";\n"
-			"}\n"
-			"m = rg.match(\"[123-456-789]\");"
-			"if (m.matched()) {\n"
-			"for ( w : m ) {\n"
-			"r = r + w;\n"
-			"}\n"
-			"} else {\n"
-			"r = r + \"fail no match\";\n"
-			"}\n"
-			"}\n"
-			"return(r);\n"
-			"}"
-		),
-		"\"ok3-46-7ok3-46-7\""
-	);
-	ENSURE_EQUALS(
-		"RegularExpressions.groups failed",
-		execute(
-			"import RegularExpressions as re;\n"
-			"main(){\n"
-			"rec = re.compile( \"^([a-z]*)@([a-z.]*)$\" );\n"
-			"r = \"\";\n"
-			"g = rec.groups(\"user@example2.com\");\n"
-			"if ( g != none ) {\n"
-			"r = r + \"fail groups\";\n"
-			"} else {\n"
-			"r = r + \"ok\";\n"
-			"}\n"
-			"g = rec.groups(\"user@example.com\");\n"
-			"if ( g != none ) {\n"
-			"for ( w : g ) {\n"
-			"r = r + \"|\" + w;\n"
-			"}\n"
-			"} else {\n"
-			"r = r + \"fail no groups\";\n"
-			"}\n"
-			"return(r);\n"
-			"}"
-		),
-		"\"ok|user@example.com|user|example.com\""
-	);
-	ENSURE_EQUALS(
-		"RegularExpressions.replace failed",
-		execute(
-			"import RegularExpressions as re;\n"
-			"main(){\n"
-			"cre=re.compile(\"([0-9]+)\");\n"
-			"return(cre.replace(\"abc012def789ghj\",\"$$$1}\"));\n"
-			"}"
-		),
-		"\"abc$012}def$789}ghj\""
-	);
-	ENSURE_EQUALS(
-		"RegularExpressions.replace failed",
-		execute_except(
-			"import RegularExpressions as re;\n"
-			"main(){\n"
-			"cre=re.compile(\"([0-9]+)\");\n"
-			"cre.replace(\"abc012def789ghj\",\"{$2}\");\n"
-			"}"
-		),
-		"*anonymous stream*:4:12: Uncaught RegularExpressionsException: Invalid back-reference number in replacement string: 2."
-	);
-TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.{pi, e} failed", execute( "import Mathematics as math;main(){return([math.pi(real),math.e(number,200)]);}" ), "[3.14159265359, $2.71828182845904523536028747135266249775724709369995957496696762772407663035354759457138217852516642742746639193200305992181741359662904357290033429526059563073813232862794349076323382988075319525101901]" );
