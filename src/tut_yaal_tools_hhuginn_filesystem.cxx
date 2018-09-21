@@ -228,7 +228,7 @@ TUT_UNIT_TEST( "readlink" )
 	char const readlinkExpect[] = "\"*anonymous stream*:1:47: readlink failed: `non-existing': No such file or directory\"";
 #endif
 	ENSURE_EQUALS(
-		"invalid chmod succeeded",
+		"invalid readlink succeeded",
 		execute(
 			"import FileSystem as fs;"
 			"main(){"
@@ -349,6 +349,19 @@ TUT_UNIT_TEST( "stat" )
 			"}\n"
 		),
 		"\"*anonymous stream*:3:33: Cannot acquire metadata for `non-existing': "_ys.append( nonExtErr ).append( "\"" )
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "exists" )
+	ENSURE_EQUALS(
+		"invalid exists",
+		execute(
+			"import FileSystem as fs;\n"
+			"main(){\n"
+			"return ( [fs.exists(\"data/karatsuba.bc\"), fs.exists(\"data/non-existing\")] );"
+			"}\n"
+		),
+		"[true, false]"
 	);
 TUT_TEARDOWN()
 
