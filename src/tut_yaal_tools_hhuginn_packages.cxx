@@ -8,7 +8,6 @@
 #include <yaal/hcore/hcore.hxx>
 #include <yaal/tools/hhuginn.hxx>
 #include <yaal/tools/hiodispatcher.hxx>
-#include <yaal/tools/hmonitor.hxx>
 #include <yaal/tools/stringalgo.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
@@ -1120,121 +1119,6 @@ TUT_UNIT_TEST( "Mathematics Complex" )
 			"}\n"
 		),
 		"(3.0, 4.0)"
-	);
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "Database" )
-	HLock dl( HMonitor::get_instance().acquire( "database" ) );
-	ENSURE_EQUALS(
-		"DatabaseConnection.table_names",
-		execute(
-			"import Database as db;"
-			"main(){"
-			"dbc=db.connect(\"sqlite3:///out/tress\");"
-			"return(dbc.table_names());"
-			"}"
-		),
-		"[\"config\", \"crud\", \"test\", \"test_dict\", \"test_item\"]"
-	);
-	ENSURE_EQUALS(
-		"DatabaseConnection.column_names",
-		execute(
-			"import Database as db;"
-			"main(){"
-			"dbc=db.connect(\"sqlite3:///out/tress\");"
-			"return(dbc.column_names(\"config\"));"
-			"}"
-		),
-		"[\"id\", \"name\", \"data\"]"
-	);
-	ENSURE_EQUALS(
-		"DatabaseConnection.query, Query, QueryResult",
-		execute(
-			"import Database as db;"
-			"main(){"
-			"dbc=db.connect(\"sqlite3:///out/tress\");"
-			"q=dbc.query(\"SELECT name FROM config WHERE id != ?;\");"
-			"q.bind(1, \"2\");"
-			"qr=q.execute();"
-			"res=\"\";"
-			"i=0;"
-			"fc=qr.field_count();"
-			"while(i<fc){"
-			"res+=qr.column_name(i);"
-			"res+=\",\";"
-			"i+=1;"
-			"}"
-			"if(qr.has_next()){"
-			"for(r:qr){"
-			"for(v:r){"
-			"res+=v;"
-			"res+=\",\";"
-			"}"
-			"}"
-			"}"
-			"q=dbc.query(\"SELECT name, data FROM config WHERE id = ?;\");"
-			"q.bind(1, \"2\");"
-			"qr=q.execute();"
-			"while(qr.has_next()){"
-			"for(v:qr.fetch_row()){"
-			"res+=(v!=none ? v : \"none\");"
-			"res+=\",\";"
-			"}"
-			"}"
-			"q=dbc.query(\"INSERT INTO config ( name, data ) VALUES ( ?, ? );\");"
-			"q.bind(1, \"special\");"
-			"q.bind(2, \"special_value\");"
-			"qr=q.execute();"
-			"res += string(qr.insert_id());"
-			"q=dbc.query(\"DELETE FROM config WHERE name = ?;\");"
-			"q.bind(1, \"special\");"
-			"qr = q.execute();"
-			"res += \",\";"
-			"res += string(size(qr));"
-			"return(res);"
-			"}"
-		),
-		"\"name,one,three,two,none,4,1\""
-	);
-	ENSURE_EQUALS(
-		"DatabaseConnection.connect exception",
-		execute(
-			"import Database as db;"
-			"main(){"
-			"try{"
-			"db.connect(\"sqlite3:///out/tress-non-existing\");"
-			"}catch(DatabaseException  e){"
-			"return ( e.message() );"
-			"}"
-			"}"
-		),
-		"\"*anonymous stream*:1:44: Database file `out/tress-non-existing.sqlite' is not accessible.\""
-	);
-	ENSURE_EQUALS(
-		"DatabaseConnection.copy exception",
-		execute_except(
-			"import Database as db;\n"
-			"main(){\n"
-			"dbc=db.connect(\"sqlite3:///out/tress\");\n"
-			"copy(dbc);\n"
-			"}\n"
-		),
-		"*anonymous stream*:4:5: Copy semantics is not supported on DatabaseConnection."
-	);
-	ENSURE_EQUALS(
-		"DatabaseConnection.query exception",
-		execute(
-			"import Database as db;"
-			"main(){"
-			"try{"
-			"dbc=db.connect(\"sqlite3:///out/tress\");"
-			"dbc.query(\"invalid;\");"
-			"}catch(DatabaseException  e){"
-			"return ( e.message() );"
-			"}"
-			"}"
-		),
-		"\"*anonymous stream*:1:82: SQL prepare error: 'invalid;': near \"invalid\": syntax error\""
 	);
 TUT_TEARDOWN()
 

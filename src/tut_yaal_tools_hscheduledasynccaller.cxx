@@ -40,14 +40,14 @@ TUT_UNIT_TEST( "call_at" )
 	int const expect( 7 );
 	_val = 0;
 	_sac.call_at(
-		now_local().mod_second( 1 ),
+		now_local().mod_second( 2 ),
 		call( &tut_yaal_tools_hscheduledasynccaller::action, this, expect )
 	);
 	ENSURE_EQUALS( "scheduled call did not wait", _val, 0 );
 #ifdef _MSC_VER
 	static int const WAIT( 32 );
 #else /* #ifdef _MSC_VER */
-	static int const WAIT( 8 );
+	static int const WAIT( 16 );
 #endif /* #else #ifdef _MSC_VER */
 	for ( int i( 0 ); i < WAIT; ++ i ) {
 		if ( ! sleep_for( duration( 500, time::UNIT::MILLISECOND ) ) ) {
