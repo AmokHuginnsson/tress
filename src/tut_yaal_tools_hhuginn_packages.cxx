@@ -13,8 +13,6 @@
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
-#include <yaal/tools/hstringstream.hxx>
-
 #include "tut_yaal_tools_hhuginn_base.hxx"
 
 using namespace tut;
@@ -1240,201 +1238,6 @@ TUT_UNIT_TEST( "Database" )
 	);
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "OperatingSystem" )
-	ENSURE_EQUALS(
-		"OperatingSystem.env",
-		execute(
-			"import OperatingSystem as os;"
-			"main(){"
-			"return(os.env(\"DEFAULT_TARGET\"));"
-			"}"
-		),
-		"\"debug\""
-	);
-	ENSURE_EQUALS(
-		"OperatingSystem.set_env failed",
-		execute(
-			"import OperatingSystem as os;\n"
-			"main(){\n"
-			"res = [os.env(\"NEW_ENV_VAR\")];\n"
-			"os.set_env(\"NEW_ENV_VAR\", \"value\");\n"
-			"res.push(os.env(\"NEW_ENV_VAR\"));\n"
-			"return(res);\n"
-			"}\n"
-		),
-		"[none, \"value\"]"
-	);
-	ENSURE_EQUALS(
-		"OperatingSystem.getuid",
-		execute(
-			"import OperatingSystem as os;"
-			"main(){"
-			"return(os.getuid());"
-			"}"
-		),
-		to_string( system::get_user_id() )
-	);
-	ENSURE_EQUALS(
-		"OperatingSystem.getgid",
-		execute(
-			"import OperatingSystem as os;"
-			"main(){"
-			"return(os.getgid());"
-			"}"
-		),
-		to_string( system::get_group_id() )
-	);
-	ENSURE_EQUALS(
-		"OperatingSystem.getpid",
-		execute(
-			"import OperatingSystem as os;"
-			"main(){"
-			"return(os.getpid());"
-			"}"
-		),
-		to_string( system::getpid() )
-	);
-#ifndef __MSVCXX__
-	char const expectedExec[] = "No such file or directory";
-#else /* #ifndef __MSVCXX__ */
-	char const expectedExec[] = "The system cannot find the file specified.\r\n";
-#endif /* #else #ifndef __MSVCXX__ */
-	ENSURE_EQUALS(
-		"OperatingSystem.exec",
-		execute(
-			"import OperatingSystem as os;"
-			"main(){"
-			"try{"
-			"os.exec(\"/non/existing\",\"arg1\");"
-			"}catch(OperatingSystemException  e){"
-			"return ( e.message() );"
-			"}"
-			"}"
-		),
-		"\"*anonymous stream*:1:48: "_ys.append( expectedExec ).append( "\"" )
-	);
-	/* It is impossible to test exit(). */
-	hcore::HString CHILD( "./data/child" EXE_SUFFIX );
-	ENSURE_EQUALS(
-		"OperatingSystem.spawn, is_alive, wait, in, out, err",
-		execute(
-			"import OperatingSystem as os;\n"
-			"main(){\n"
-			"c=os.spawn(\"" + CHILD + "\");\n"
-			"a0=c.is_alive();\n"
-			"c.in().write_line(\"out\\n\");\n"
-			"ro=c.out().read_line().strip();\n"
-			"s=c.wait(8);\n"
-			"a1=c.is_alive();\n"
-			"c=os.spawn(\"" + CHILD + "\");\n"
-			"c.in().write_line(\"err\\n\");\n"
-			"re=c.err().read_line().strip();\n"
-			"return([a0,ro,re,a1,s]);\n"
-			"}\n"
-		),
-		"[true, \"hello-OUT\", \"hello-ERR\", false, 0]"
-	);
-	ENSURE_EQUALS(
-		"OperatingSystem.spawn",
-		execute(
-			"import OperatingSystem as os;"
-			"main(){"
-			"try{"
-			"os.spawn(\"non-existing\");"
-			"}catch(OperatingSystemException e){"
-			"return ( e.message() );"
-			"}"
-			"}"
-		),
-		"\"*anonymous stream*:1:49: "_ys.append( expectedExec ).append( ": non-existing\"" )
-	);
-#ifndef __MSVCXX__
-	HClock c;
-	HHuginn h;
-	HPipe io;
-	h.set_output_stream( io.in() );
-	HStringStream source(
-		"import OperatingSystem as os;"
-		"main(){"
-		"c=os.spawn(\"/bin/sleep\", \"10\");"
-		"os.stdout().write_line( \"{}\\n\".format( c.get_pid() ) );\n"
-		"c.wait(5);\n"
-		"}"
-	);
-	h.load( source );
-	h.preprocess();
-	ENSURE( "parsing failed", h.parse() );
-	ENSURE( "compilation failed", h.compile() );
-	HThread t;
-	hcore::HString result;
-	t.spawn(
-		HThread::call_t(
-			[&h, &result]() {
-				try {
-					result = h.execute() ? 1 : 0;
-				} catch ( HException const& e ) {
-					result = e.what();
-				} catch ( std::exception const& e ) {
-					result = e.what();
-				} catch ( ... ) {
-					result = "unknown exception type";
-				}
-			}
-		)
-	);
-	HStreamInterface::ptr_t out( io.out() );
-	hcore::HString line;
-	getline( *out, line );
-	int pid( lexical_cast<int>( line ) );
-#ifndef SIGKILL
-#define SIGKILL 9
-#endif
-	system::kill( pid, SIGKILL );
-	t.finish();
-	ENSURE_EQUALS( "Subprocess.wait() failed", result, "1" );
-#ifndef __HOST_OS_TYPE_CYGWIN__ /* Cygwin implementation of process handling is buggy as hell. */
-	ENSURE_EQUALS( "Subprocess.get_pid() failed", c.get_time_elapsed( time::UNIT::SECOND ), 0 );
-	c.reset();
-	ENSURE_EQUALS(
-		"Subprocess.kill() failed",
-		execute(
-			"import OperatingSystem as os;"
-			"main(){"
-			"c=os.spawn(\"/bin/sleep\", \"10\");"
-			"c.kill();\n"
-			"}"
-		),
-		to_string( SIGKILL )
-	);
-	ENSURE( "Subprocess.kill() failed", c.get_time_elapsed( time::UNIT::SECOND ) <= 1 );
-#endif /* #ifndef __HOST_OS_TYPE_CYGWIN__ */
-#undef SIGKILL
-#endif /* #ifndef __MSVCXX__ */
-	ENSURE_EQUALS(
-		"Subprocess bad wait succeded",
-		execute_except(
-			"import OperatingSystem as os;\n"
-			"main(){\n"
-			"c=os.spawn(\"" + CHILD + "\");\n"
-			"c.wait(-1);\n"
-			"}\n"
-		),
-		"*anonymous stream*:4:7: invalid wait time: -1"
-	);
-#ifndef __HOST_OS_TYPE_CYGWIN__ /* Cygwin implementation of process handling is buggy as hell. */
-	ENSURE_EQUALS(
-		"Subprocess bad wait succeded",
-		execute_except(
-			"import OperatingSystem as os;\n"
-			"main(){\n"
-			"copy(os.spawn(\"" + CHILD + "\"));\n"
-			"}\n"
-		),
-		"*anonymous stream*:3:5: Copy semantics is not supported on Subprocess."
-	);
-#endif /* #ifndef __HOST_OS_TYPE_CYGWIN__ */
-TUT_TEARDOWN()
-
 TUT_UNIT_TEST( "DateTime" )
 #if defined( __HOST_OS_TYPE_FREEBSD__ ) || defined( __HOST_OS_TYPE_SOLARIS__ )
 	char const setterExpect[] = "[\"1979-05-24 23:30:17\", \"1978-05-24 01:02:03\", \"0001-02-03 23:30:17\", 1978, 5, 24, 23, 30, 17, \"0011-04-02 14:55:14\"]";
@@ -1507,15 +1310,22 @@ TUT_UNIT_TEST( "DateTime" )
 		),
 		"\"*anonymous stream*:1:60: Could not parse `invalid' as `%Y-%m-%d %T'.\""
 	);
+#ifdef CONTINUOUS_INTEGRATION_APPVEYOR
+char const WAIT[] = "dt.sleep(10000000000);m = c.milliseconds()/1000;";
+#else
+char const WAIT[] = "dt.sleep(1000000000);m = c.milliseconds()/100;";
+#endif
 	ENSURE_EQUALS(
 		"DateTime.clock, DateTime.sleep falied",
 		execute(
 			"import DateTime as dt;"
 			"main(){"
-			"c = dt.clock();"
-			"dt.sleep(1000000000);"
-			"return(c.milliseconds()/100);"
-			"}"
+			"c = dt.clock();"_ys.append(
+				WAIT
+			).append(
+				"return(m);"
+				"}"
+			)
 		),
 		"10"
 	);
@@ -1524,13 +1334,14 @@ TUT_UNIT_TEST( "DateTime" )
 		execute(
 			"import DateTime as dt;"
 			"main(){"
-			"c = dt.clock();"
-			"dt.sleep(1000000000);"
-			"m = c.milliseconds()/100;"
-			"c.reset();"
-			"s=string(c);"
-			"return([m,s.find(\"second\")>0 || s == \"0s\"]);"
-			"}"
+			"c = dt.clock();"_ys.append(
+				WAIT
+			).append(
+				"c.reset();"
+				"s=string(c);"
+				"return([m,s.find(\"second\")>0 || s == \"0s\"]);"
+				"}"
+			)
 		),
 		"[10, true]"
 	);

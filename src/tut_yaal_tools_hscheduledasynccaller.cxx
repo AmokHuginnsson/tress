@@ -45,7 +45,7 @@ TUT_UNIT_TEST( "call_at" )
 	);
 	ENSURE_EQUALS( "scheduled call did not wait", _val, 0 );
 #ifdef _MSC_VER
-	static int const WAIT( 16 );
+	static int const WAIT( 32 );
 #else /* #ifdef _MSC_VER */
 	static int const WAIT( 8 );
 #endif /* #else #ifdef _MSC_VER */
