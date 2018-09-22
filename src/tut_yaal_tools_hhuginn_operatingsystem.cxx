@@ -54,9 +54,9 @@ TUT_UNIT_TEST( "set_env" )
 		execute(
 			"import OperatingSystem as os;\n"
 			"main(){\n"
-			"res = [os.env(\"NEW_ENV_VAR\")];\n"
-			"os.set_env(\"NEW_ENV_VAR\", \"value\");\n"
-			"res.push(os.env(\"NEW_ENV_VAR\"));\n"
+			"res = [os.env(\"NEW_ENV_HUGINN_VAR\")];\n"
+			"os.set_env(\"NEW_ENV_HUGINN_VAR\", \"value\");\n"
+			"res.push(os.env(\"NEW_ENV_HUGINN_VAR\"));\n"
 			"return(res);\n"
 			"}\n"
 		),
