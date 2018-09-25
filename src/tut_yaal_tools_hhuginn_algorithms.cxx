@@ -757,6 +757,39 @@ TUT_UNIT_TEST( "chain" )
 		),
 		"[1, 2, 3, 4, 5, 6, 7, 8, 9]"
 	);
+	ENSURE_EQUALS(
+		"size(Chain) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(size(algo.chain([1,2,3],(4,5,6),{7,8,9})));\n"
+			"}"
+		),
+		"9"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "product" )
+	ENSURE_EQUALS(
+		"Algorithms.product failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.product([1,2,3],(4,5,6)),list));\n"
+			"}"
+		),
+		"[(1, 4), (1, 5), (1, 6), (2, 4), (2, 5), (2, 6), (3, 4), (3, 5), (3, 6)]"
+	);
+	ENSURE_EQUALS(
+		"size(Product) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(size(algo.product([1,2,3],(4,5,6))));\n"
+			"}"
+		),
+		"9"
+	);
 TUT_TEARDOWN()
 
 }

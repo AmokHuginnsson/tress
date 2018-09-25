@@ -10,7 +10,7 @@ class: -*observer* {}
 class: -*reference* {}
 class: -*unbound_method* {}
 class: -*variadic_parameters* {}
-class: Algorithms { AlgorithmsException, chain, enumerate, filter, iterator, map, materialize, max, min, range, reduce, reversed, slice, sorted, zip }
+class: Algorithms { AlgorithmsException, chain, enumerate, filter, iterator, map, materialize, max, min, product, range, reduce, reversed, slice, sorted, zip }
 class: AlgorithmsException : Exception { message, trace, what, where }
 class: ArithmeticException : Exception { message, trace, what, where }
 class: Base { bar, foo }
@@ -25,6 +25,7 @@ class: -Algorithms.Iterator { is_valid, next, value }
 class: -dict.KeyValuesDictView {}
 class: -lookup.KeyValuesLookupView {}
 class: -Algorithms.Mapper {}
+class: -Algorithms.Product {}
 class: -Algorithms.Range {}
 class: -deque.ReversedDequeView {}
 class: -dict.ReversedDictView {}
