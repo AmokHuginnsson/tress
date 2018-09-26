@@ -2197,7 +2197,7 @@ TUT_UNIT_TEST( "incremental mode" )
 	ENSURE_EQUALS(
 		"Crash trigger",
 		execute_incremental( l7 ),
-		"*anonymous stream*:1:9: Symbol `a' is not defined in this context (did you mean `add'?).*anonymous stream*:2:1: Symbol `solve' is not defined in this context (did you mean `size'?)."
+		"*anonymous stream*:1:9: Symbol `a' is not defined in this context (did you mean `add'?).*anonymous stream*:2:1: Symbol `solve' is not defined in this context (did you mean `set'?)."
 	);
 	lines_t l8{
 		{ "class A { constructor(){a;} }", OLine::TYPE::DEFINITION },
@@ -2217,7 +2217,7 @@ TUT_UNIT_TEST( "incremental mode" )
 		"Crash trigger",
 		execute_incremental( l9 ),
 		"*anonymous stream*:2:7: Uncaught ArithmeticException: Division by zero."
-		"*anonymous stream*:2:1: Symbol `x' is not defined in this context (did you mean `use'?)."
+		"*anonymous stream*:2:1: Symbol `x' is not defined in this context (did you mean `set'?)."
 	);
 	lines_t l10{
 		{ "inc(x){x+1;}", OLine::TYPE::DEFINITION },
