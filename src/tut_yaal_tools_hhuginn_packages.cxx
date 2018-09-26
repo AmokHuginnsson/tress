@@ -29,7 +29,7 @@ TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.{pi, e} failed", execute( "import Mathematics as math;main(){return([math.pi(real),math.e(number,200)]);}" ), "[3.14159265359, $2.71828182845904523536028747135266249775724709369995957496696762772407663035354759457138217852516642742746639193200305992181741359662904357290033429526059563073813232862794349076323382988075319525101901]" );
 	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){return(math.square_root(7.));}" ), "2.645751311065" );
 	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){return(math.square_root($7));}" ), "$2.6457513110645905905016157536392604257102591830824501803683344592010688232302836277603928864745436106" );
-	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){try{math.square_root(-1.);}catch(MathematicsException e){return(e.what());}}" ), "\"bad domain\"" );
+	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){try{math.square_root(-1.);}catch(ArithmeticException e){return(e.what());}}" ), "\"bad domain\"" );
 	ENSURE_EQUALS( "Mathematics.natural_exponential failed", execute( "import Mathematics as math;main(){return(math.natural_exponential(7.));}" ), "1096.633158428459" );
 	ENSURE_EQUALS( "Mathematics.natural_exponential failed", execute( "import Mathematics as math;main(){return(math.natural_exponential($7));}" ), "$1096.6331584284585992637202382881214324422191348336131437827392407761217693312331290224785687872498438842" );
 	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){return(math.natural_logarithm(7.));}" ), "1.945910149055" );
