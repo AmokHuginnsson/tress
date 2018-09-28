@@ -22,6 +22,7 @@ using namespace yaal::hcore::number;
 using namespace yaal::math;
 using namespace yaal::tools;
 using namespace yaal::ansi;
+using namespace tress;
 using namespace tress::tut_helpers;
 
 namespace tut {
@@ -36,6 +37,7 @@ struct tut_yaal_hcore_hnumber : public simple_mock<tut_yaal_hcore_hnumber> {
 	HString const& expand_leafs( HString const& );
 	HString const& random_real( void );
 	HString read_result( void );
+  void run_div_test( HString const&, char const*, char const*, char const*, int = 0 );
 	void run_square_test( HString const&, int );
 	virtual ~tut_yaal_hcore_hnumber( void )
 		{}
@@ -903,21 +905,44 @@ TUT_UNIT_TEST( "substraction" )
 	}
 TUT_TEARDOWN()
 
+void tut_yaal_hcore_hnumber::run_div_test( HString const& msg_, char const* dividend_, char const* divisor_, char const* quotient_, int precision_ ) {
+	HNumber quot( dividend_ );
+	HNumber div( divisor_ );
+	if ( precision_ ) {
+		quot.set_precision( precision_ );
+		div.set_precision( precision_ );
+	}
+	clog << ansi::brightcyan << ">> " << dividend_ << " / " << divisor_ << ansi::reset << " = " << flush;
+	quot /= div;
+	clog << ansi::yellow << quot.to_string() << ansi::reset << endl;
+	ENSURE_EQUALS( msg_ + ": `" + dividend_ + " / " + divisor_ + " = " + quotient_ + "'", quot.to_string(), HNumber( quotient_ ).to_string() );
+}
+
 #define DIV_TEST_MSG( msg, dividend, divisor, quotient ) \
-	do { \
-		HNumber quot( #dividend ); \
-		HNumber div( #divisor ); \
-		clog << ansi::brightcyan << ">> " << #dividend << " / " << #divisor << ansi::reset << " = " << flush; \
-		quot /= div; \
-		clog << ansi::yellow << quot.to_string() << ansi::reset << endl; \
-		ENSURE_EQUALS( msg ": `" #dividend " / " #divisor " = " #quotient "'", quot.to_string(), HNumber( #quotient ).to_string() ); \
-	} while ( false )
+	run_div_test( msg, #dividend, #divisor, #quotient )
 
 #define DIV_TEST_MSG_LIM( msg, dividend, divisor, quotient, lim ) \
 	ENSURE_EQUALS( msg ": `" #dividend " / " #divisor " = " #quotient "'", ( HNumber( #dividend ) / HNumber( #divisor ) ).to_string().left( lim ), HNumber( #quotient ).to_string() )
 
 #define DIV_TEST( dividend, divisor, quotient ) \
 	DIV_TEST_MSG( "division failed", dividend, divisor, quotient )
+
+#define DIV_TEST_PREC( dividend, divisor, quotient, prec ) \
+	run_div_test( "division failed", #dividend, #divisor, #quotient, prec )
+
+inline HNumber from_int( int n_ ) {
+	HString s;
+	while ( n_ ) {
+		if ( ! s.is_empty() ) {
+			static int const DECIMAL_DIGITS_IN_LEAF = 9;
+			s.append( DECIMAL_DIGITS_IN_LEAF, '0'_ycp );
+		}
+		s.push_back( code_point_t( static_cast<u32_t>( ( n_ % 10 ) + '0' ) ) );
+		n_ /= 10;
+	}
+	yaal::reverse( s.begin(), s.end() );
+	return ( s );
+}
 
 TUT_UNIT_TEST( "division" )
 	ENSURE_THROW( "division by zero performed", do { HNumber n( "1" ); HNumber x; n /= x; } while ( false ), HNumberException );
@@ -997,6 +1022,9 @@ TUT_UNIT_TEST( "division" )
 	DIV_TEST( 31.44, .03, 1048 );
 	DIV_TEST( 12351235.57, 1234, 10009.105 );
 	DIV_TEST( 401734511064747568885490523085290650630550748445698208825344, 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000401734511064747568885490523085290650630550748445698208825344, 1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 );
+	DIV_TEST_PREC( 200000000000000000000000000, 100000000000000000000000001, 1.9999999999999999999999999800000000000000000000000001999999999999999999999999980000000000000000000000000199999999999999999999999998000000000000000000000000019999999999999999999999999800000000000000000000000001999999999999999999999999980000000000000000000000, 256 );
+	DIV_TEST_PREC( 300000000000000000000000002, 100000000000000000000000001, 2.9999999999999999999999999900000000000000000000000000999999999999999999999999990000000000000000000000000099999999999999999999999999000000000000000000000000009999999999999999999999999900000000000000000000000000999999999999999999999999990000000000000000000000, 256 );
+	DIV_TEST_PREC( 11111111111111111111111111111111, 3333333333333333.33333333333333331666666666666666666666666666666662499999999999999999999999999999979166666666666666666666666666666536458333333333333333333333337107547432879665777118334806098422408734298783827014733354520791906769671077720169702923529945705799126670429933182, 3333333333333333.3333333333333333166666666666666666666666666666666249999999999999999999999999999997916666666666666666666666666666653645833333333333333333333332955729631712033422288166519390157757759382621617298526664547920809312290704727983029707647005429420000052683569181, 256 );
 	HNumber numerator( "1" );
 	HNumber denominator( "3" );
 	int const MIN = 16;
@@ -1052,6 +1080,42 @@ TUT_UNIT_TEST( "division" )
 	DIV_TEST_MSG_LIM( "padding front zeros failed", .160963010792, 100264.285714286, 0.000001605387298, 17 );
 	DIV_TEST_MSG_LIM( "padding front zeros failed", 1.180629342051, -3.6, -0.327952595014166666666666666666, 33 );
 
+	_bc.spawn( BC_PATH );
+	HString msg;
+	HString res;
+	HString as;
+	HString bs;
+	int const M = 16;
+	_bc.in() << "scale=" << M + M << endl;
+
+	int step( setup._debug ? 1 : 7 );
+	for ( int dividend( 1 ); dividend <= 1000; dividend += step ) {
+		for ( int divisor( 1 ); divisor <= 1000; divisor += step ) {
+			HNumber a( from_int( dividend ) );
+			HNumber b( from_int( divisor ) );
+			a.set_precision( M * 2 );
+			b.set_precision( M * 2 );
+			as = a.to_string();
+			bs = b.to_string();
+			_bc.in() << as << "/ " << bs << endl;
+			res = read_result();
+			msg = "division of large leaf a = " + as + " and b = " + bs + " failed";
+			HNumber div = a / b;
+			int len = static_cast<int>( res.get_length() );
+			( len >= ( M + M ) ) && ( len = M + M );
+			res = res.left( len );
+			if ( res[0] == '.' ) {
+				res.insert( 0, 1, '0'_ycp );
+			} else if ( ( res[0] == '-' ) && ( res[1] == '.' ) ) {
+				res.insert( 1, 1, '0'_ycp );
+			}
+			int z( static_cast<int>( res.find( '.'_ycp ) != HString::npos ?  res.reverse_find_other_than( "0." ) : res.get_length() ) );
+			ENSURE_EQUALS( msg, div.to_string().left( len - z ), res.left( len - z ) );
+		}
+		clog << "\r    \r" << dividend << flush;
+	}
+	clog << endl;
+
 	char const pdividend[] = "0001201440012000144000012000";
 	char const pdivisor[] = "00012000";
 	char const pquotient[] = "0000000010012000100001200000100000000";
@@ -1060,14 +1124,6 @@ TUT_UNIT_TEST( "division" )
 	HString quotient;
 	int const dividendLen( static_cast<int>( sizeof ( pdividend ) - 1 ) );
 	int const divisorLen( static_cast<int>( sizeof ( pdivisor ) - 1 ) );
-
-	_bc.spawn( BC_PATH );
-	HString msg;
-	HString res;
-	HString as;
-	HString bs;
-	int const M = 16;
-	_bc.in() << "scale=" << M + M << endl;
 
 	for ( int dividendPos( 0 ); dividendPos <= dividendLen; ++ dividendPos ) {
 		for ( int divisorPos( 0 ); divisorPos <= divisorLen; ++ divisorPos ) {
@@ -1243,11 +1299,17 @@ TUT_TEARDOWN()
 #define SQRT_TEST_MSG( msg, value, root ) \
 	ENSURE_EQUALS( msg ": `sqrt(" #value ") = " #root "'", square_root( HNumber( #value ) ).to_string(), HNumber( #root ).to_string() )
 
+#define SQRT_TEST_MSG_PREC( msg, value, root, prec ) \
+	do { HNumber sqrtTestMsgPrec( #value ); sqrtTestMsgPrec.set_precision( prec ); ENSURE_EQUALS( msg ": `sqrt(" #value ") = " #root "'", square_root( sqrtTestMsgPrec ).to_string(), HNumber( #root ).to_string() ); } while ( false )
+
 #define SQRT_TEST_MSG_LIM( msg, value, root, lim ) \
 	ENSURE_EQUALS( msg ": `sqrt(" #value ") = " #root "'", square_root( HNumber( #value ) ).to_string().left( lim ), HNumber( #root ).to_string().left( lim ) )
 
 #define SQRT_TEST( value, root ) \
 	SQRT_TEST_MSG( "square root failed", value, root )
+
+#define SQRT_TEST_PREC( value, root, proc ) \
+	SQRT_TEST_MSG_PREC( "square root failed", value, root, proc )
 
 void tut_yaal_hcore_hnumber::run_square_test( HString const& random_, int naturalScale_ ) {
 	HString s;
@@ -1300,6 +1362,7 @@ TUT_UNIT_TEST( "square_root<HNumber>()" )
 	SQRT_TEST( 64, 8 );
 	SQRT_TEST( 81, 9 );
 	SQRT_TEST( 100, 10 );
+	SQRT_TEST_PREC( 11111111111111111111111111111111, 3333333333333333.333333333333333316666666666666666666666666666666624999999999999999999999999999999791666666666666666666666666666665364583333333333333333333333333324218749999999999999999999999999931640624999999999999999999999999462890624999999999999999999999995635986328125, 256 );
 	_bc.spawn( BC_PATH );
 	static int const naturalScale = 100;
 	_bc.in() << "scale=" << naturalScale << endl;
@@ -1318,6 +1381,7 @@ TUT_UNIT_TEST( "square_root<HNumber>()" )
 	run_square_test( "9302945.043645631010370512592371599", naturalScale );
 	run_square_test( "5508311834368.2665603595147574712755661911122611", naturalScale );
 	run_square_test( "0.9999999999999999999999999800000000000000000000000001", naturalScale );
+	run_square_test( "11111111111111111111111111111111", naturalScale );
 	for ( int long i = 0; i < 256; ++ i ) {
 		run_square_test( random_real(), naturalScale );
 	}
