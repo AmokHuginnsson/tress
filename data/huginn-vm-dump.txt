@@ -64,4 +64,5 @@ function: print
 function: size
 function: type
 function: use
+function: ∑
 function: √
