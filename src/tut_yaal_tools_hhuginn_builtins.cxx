@@ -2113,5 +2113,11 @@ TUT_UNIT_TEST( "to_string" )
 	ENSURE_EQUALS( "to_string out of Huginn failed", tools::to_string( h.result() ), "(A, *function_reference*)" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "√" )
+	ENSURE_EQUALS( "√ failed", execute( "main() {\n√(4.);\n}\n" ), "2.0" );
+	ENSURE_EQUALS( "√ on bad domain succeeded", execute_except( "main() {\n√(-4.);\n}\n" ), "*anonymous stream*:2:2: Uncaught ArithmeticException: bad domain" );
+	ENSURE_EQUALS( "√ on bad type succeeded", execute_except( "main() {\n√(4);\n}\n" ), "*anonymous stream*:2:2: √() argument must be a numeric type, either a `number' or a `real', not an `integer'." );
+TUT_TEARDOWN()
+
 }
 
