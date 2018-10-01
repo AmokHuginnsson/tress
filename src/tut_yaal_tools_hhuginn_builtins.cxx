@@ -2125,5 +2125,11 @@ TUT_UNIT_TEST( "∑" )
 	ENSURE_EQUALS( "∑ on bad type succeeded", execute_except( "main() {\n∑([1,2.]);\n}\n" ), "*anonymous stream*:2:2: A non-uniform set under ∑." );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "∏" )
+	ENSURE_EQUALS( "∏ failed", execute( "main() {\n∏([1, 2, 4]);\n}\n" ), "8" );
+	ENSURE_EQUALS( "∏ on bad domain succeeded", execute_except( "main() {\n∏([]);\n}\n" ), "*anonymous stream*:2:2: ∏ on empty." );
+	ENSURE_EQUALS( "∏ on bad type succeeded", execute_except( "main() {\n∏([1,2.]);\n}\n" ), "*anonymous stream*:2:2: A non-uniform set under ∏." );
+TUT_TEARDOWN()
+
 }
 
