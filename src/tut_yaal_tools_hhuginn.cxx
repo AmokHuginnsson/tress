@@ -39,11 +39,12 @@ TUT_UNIT_TEST( "grammar test" )
 	HGrammarDescription gd( hg );
 
 	char const expected[][500] = {
-		"huginnGrammar = +( classDefinition | functionDefinition | enumDefinition | importStatement )",
+		"huginnGrammar = +( classDefinition | functionDefinition | enumDefinition | importStatement | fromStatement )",
 		"classDefinition = ( \"class\" >> classIdentifier >> -( ':' >> baseIdentifier ) >> '{' >> +( field | functionDefinition ) >> '}' )",
 		"functionDefinition = ( functionDefinitionIdentifier >> callable )",
 		"enumDefinition = ( \"enum\" >> enumIdentifier >> '{' >> enumeral >> *( ',' >> enumeral ) >> '}' )",
 		"importStatement = ( \"import\" >> packageName >> \"as\" >> importName >> ';' )",
+		"fromStatement = ( \"from\" >> packageName >> \"import\" >> ( ( importedSymbol >> *( ',' >> importedSymbol ) ) | \"*\" ) >> ';' )",
 		"field = ( fieldIdentifier >> '=' >> expression >> ';' )",
 		"callable = ( '(' >> -( ( nameList >> -( ',' >> variadicParameter ) >> -( ',' >> namedParameterCapture ) ) | ( variadicParameter >> -( ',' >> namedParameterCapture ) ) | namedParameterCapture ) >> ')' >> '{' >> *statement >> '}' )",
 		"enumeral = fieldIdentifier",
@@ -1772,6 +1773,29 @@ TUT_UNIT_TEST( "modules" )
 			{ "./data/" }
 		),
 		"\"sub.Sub: 7\""
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "from ... import ..." )
+	ENSURE_EQUALS(
+		"from ... import sym, sym  failed",
+		execute(
+			"from Algorithms import materialize, range;"
+			"main() {"
+			"return ( materialize( range( 5 ), list ) );"
+			"}"
+		),
+		"[0, 1, 2, 3, 4]"
+	);
+	ENSURE_EQUALS(
+		"from ... import *  failed",
+		execute(
+			"from Algorithms import *;"
+			"main() {"
+			"return ( materialize( range( 5 ), list ) );"
+			"}"
+		),
+		"[0, 1, 2, 3, 4]"
 	);
 TUT_TEARDOWN()
 

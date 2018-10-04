@@ -42,10 +42,10 @@ namespace package_factory {
 
 class HGreeterCreator : public HPackageCreatorInterface {
 protected:
-	virtual HHuginn::value_t do_new_instance( HRuntime* );
+	virtual HInstance do_new_instance( HRuntime* );
 } greetCreator;
 
-HHuginn::value_t HGreeterCreator::do_new_instance( HRuntime* runtime_ ) {
+HPackageCreatorInterface::HInstance HGreeterCreator::do_new_instance( HRuntime* runtime_ ) {
 	M_PROLOG
 	HHuginn::class_t c(
 		runtime_->create_class(
@@ -58,8 +58,7 @@ HHuginn::value_t HGreeterCreator::do_new_instance( HRuntime* runtime_ ) {
 		{ "greet", runtime_->create_method( &HGreeter::greet ), "( *who*, *how* = \"Hello, \" ) - greet *who* with *how*" },
 	};
 	c->redefine( nullptr, fd );
-	runtime_->huginn()->register_class( c );
-	return ( runtime_->object_factory()->create<HGreeter>( c.raw() ) );
+	return { c, runtime_->object_factory()->create<HGreeter>( c.raw() ) };
 	M_EPILOG
 }
 

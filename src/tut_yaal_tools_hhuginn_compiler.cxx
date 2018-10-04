@@ -882,6 +882,48 @@ char const progCompileErr115[] =
 	"}\n"
 ;
 
+char const progCompileErr116[] =
+	"class A{x=0;}\n"
+	"from Algorithms import A;\n"
+	"main() {\n"
+	"x = 0;\n"
+	"}\n"
+;
+
+char const progCompileErr117[] =
+	"from Algorithms import A;\n"
+	"class A{x=0;}\n"
+	"main() {\n"
+	"x = 0;\n"
+	"}\n"
+;
+
+char const progCompileErr118[] =
+	"from Algorithms import nonExisting;\n"
+	"main() {\n"
+	"}\n"
+;
+
+char const progCompileErr119[] =
+	"from NonExisting import nonExisting;\n"
+	"main() {\n"
+	"}\n"
+;
+
+char const progCompileErr120[] =
+	"from Algorithms import materialize;\n"
+	"main() {\n"
+	"materialize( range( 5 ), list );\n"
+	"}\n"
+;
+
+char const progCompileErr121[] =
+	"from Algorithms import materialize, range, map;\n"
+	"main() {\n"
+	"materialize( range( 5 ), list );\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -1000,6 +1042,12 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr113,
 		progCompileErr114,
 		progCompileErr115,
+		progCompileErr116,
+		progCompileErr117,
+		progCompileErr118,
+		progCompileErr119,
+		progCompileErr120,
+		progCompileErr121,
 		NULL
 	};
 
@@ -1120,6 +1168,12 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 113 */ { 7, 1, 8,   "*anonymous stream*:1:8: ./data/RecursiveImport.hgn:1:8: Package `RecursiveImport' is already being imported." },
 /* 114 */ { 11, 2, 3,  "*anonymous stream*:2:3: Operand is not a collection type: an `integer'" },
 /* 115 */ { 11, 2, 3,  "*anonymous stream*:2:3: Operand is not a collection type: an `integer'" },
+/* 116 */ { 37, 2, 24, "*anonymous stream*:2:24: Class of the same name `A' is already defined." },
+/* 117 */ { 32, 2, 7,  "*anonymous stream*:2:7: Symbol `A' was already brought into the global namespace." },
+/* 118 */ { 5, 1, 6,   "*anonymous stream*:1:6: Symbol `nonExisting' does not exist in `Algorithms' package." },
+/* 119 */ { 5, 1, 6,   "*anonymous stream*:1:6: Package `NonExisting' does not exist." },
+/* 120 */ { 58, 3, 14, "*anonymous stream*:3:14: Symbol `range' is not defined in this context (did you mean `Range'?)." },
+/* 121 */ { 43, 1, 44, "*anonymous stream*:1:44: Symbol `map' is never used (did you mean `max'?)." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
