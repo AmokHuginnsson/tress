@@ -2173,6 +2173,17 @@ TUT_UNIT_TEST( "incremental mode" )
 		execute_incremental( l14, { "./data" } ),
 		"nonenone4"
 	);
+	lines_t l15{
+		{ "from Algorithms import materialize, zip;", OLine::TYPE::IMPORT },
+		{ "keys = [1, 2, 3];" },
+		{ "values = ['a', 'b', 'c'];" },
+		{ "materialize( zip( keys, values ), dict );" }
+	};
+	ENSURE_EQUALS(
+		"from Pkg import sym failed",
+		execute_incremental( l15 ),
+		"none[1, 2, 3]['a', 'b', 'c'][1: 'a', 2: 'b', 3: 'c']"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "introspection" )
