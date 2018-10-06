@@ -204,5 +204,18 @@ TUT_UNIT_TEST( "substitute_environment" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "capitalize" )
+	ENSURE_EQUALS(
+		"capitalize() failed",
+		execute(
+			"import Text as text;\n"
+			"main(){\n"
+			"return(text.capitalize(\"caPiTaliZeD\"));\n"
+			"}\n"
+		),
+		"\"Capitalized\""
+	);
+TUT_TEARDOWN()
+
 }
 
