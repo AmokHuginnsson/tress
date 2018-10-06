@@ -210,10 +210,10 @@ TUT_UNIT_TEST( "capitalize" )
 		execute(
 			"import Text as text;\n"
 			"main(){\n"
-			"return(text.capitalize(\"caPiTaliZeD\"));\n"
+			"return((text.capitalize(\"caPiTaliZeD\"), text.capitalize(\"\")));\n"
 			"}\n"
 		),
-		"\"Capitalized\""
+		"(\"Capitalized\", \"\")"
 	);
 TUT_TEARDOWN()
 
