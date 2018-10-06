@@ -27,6 +27,7 @@ TUT_UNIT_TEST( "size" )
 	ENSURE_EQUALS( "size failed", execute( "class A{get_size(){7;}}main(){return([size(\"Ala\"),size([1,2,3,4]),size(A())]);}" ), "[3, 4, 7]" );
 	ENSURE_EQUALS( "invalid get_size succeeded (type)", execute_except( "class A{get_size(){0.;}}main(){size(A());}" ), "*anonymous stream*:1:36: User supplied `get_size' method returned an invalid type a `real' instead of an `integer'." );
 TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "string()" )
 	ENSURE_EQUALS( "str to str failed", execute( "main(){return(string(\"7\"));}" ), "\"7\"" );
 	ENSURE_EQUALS( "int to str failed", execute( "main(){return(string(7));}" ), "\"7\"" );
@@ -139,6 +140,11 @@ TUT_UNIT_TEST( "string()" )
 		"\"[~~~~ala] [000567] [   234]\""
 	);
 	ENSURE_EQUALS( "string.format() n-ary with format spec failed", execute( "main(){return(\"{:4d} {}\".format(17,\"q\"));}" ), "\"  17 q\"" );
+	ENSURE_EQUALS(
+		"string.format() float with prec spec failed",
+		execute( "main(){return(\"[{:6.2f}, {:6.2f}, {:12.6f}, {:6.0f}, {:6.2n}, {:6.0n}]\".format(13.5, 3.1415, 3.1415, 3.1415, $3, $3.1415));}" ),
+		"\"[ 13.50,   3.14,     3.141500,     3.,   3.00,     3.]\""
+	);
 	ENSURE_EQUALS( "string.format() on too few args succeeded", execute_except( "main(){s=\"a {} b\";s.format();}" ), "*anonymous stream*:1:27: Wrong value index at: 3" );
 	ENSURE_EQUALS( "string.format() on too many args succeeded", execute_except( "main(){s=\"a b\";s.format(1);}" ), "*anonymous stream*:1:24: Not all values used in format at: 3" );
 	ENSURE_EQUALS( "string.format() on too many args succeeded", execute_except( "main(){s=\"a {\";s.format();}" ), "*anonymous stream*:1:24: Single '{' encountered in format string at: 3" );
@@ -152,7 +158,7 @@ TUT_UNIT_TEST( "string()" )
 	ENSURE_EQUALS( "string.format() invalid type (str) succeeded", execute_except( "main(){s=\"a {:s} b\";s.format(1);}" ), "*anonymous stream*:1:29: Expected a `string` type at: 5" );
 	ENSURE_EQUALS( "string.format() invalid type (char) succeeded", execute_except( "main(){s=\"a {:c} b\";s.format(1);}" ), "*anonymous stream*:1:29: Expected a `character` type at: 5" );
 	ENSURE_EQUALS( "string.format() invalid type succeeded", execute_except( "main(){s=\"a {:q} b\";s.format(1);}" ), "*anonymous stream*:1:29: Invalid type specification at: 5" );
-	ENSURE_EQUALS( "string.format() invalid width succeeded", execute_except( "main(){s=\"a {:kd} b\";s.format(1);}" ), "*anonymous stream*:1:30: not a number: k at: 6" );
+	ENSURE_EQUALS( "string.format() invalid width succeeded", execute_except( "main(){s=\"a {:kd} b\";s.format(1);}" ), "*anonymous stream*:1:30: Invalid argument in conversion: k at: 6" );
 	ENSURE_EQUALS( "user to str failed", execute( "class A{_x=none;constructor(x){_x=x;}to_string(){return(\"~\"+string(_x)+\"~\");}}main(){return(string(A(7)));}" ), "\"~7~\"" );
 	ENSURE_EQUALS( "bad user to str succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:59: Class `A' does not have `to_string' method." );
 	ENSURE_EQUALS( "bad user to str (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_string(){return(this);}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:85: User conversion method returned invalid type an `A' instead of a `string'." );
