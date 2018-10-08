@@ -164,5 +164,61 @@ TUT_UNIT_TEST( "Clock.reset" )
 	ENSURE( "DateTime.now falied", ( res == nowS0 ) || ( res == nowSP ) || ( res == nowSN ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "get_day_of_week invalid" )
+	ENSURE_EQUALS(
+		"get_day_of_week failed",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"t=dt.now();"
+			"return (("
+			" t.set_date(1978,5,24).get_day_of_week(),"
+			" t.set_date(1,1,1).get_day_of_week()"
+			"));"
+			"}"
+		),
+		"(2, 0)"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "get_days_in_month invalid" )
+	ENSURE_EQUALS(
+		"get_days_in_month failed",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"t=dt.now();"
+			"return (("
+			" t.set_date(2012,2,1).get_days_in_month(),"
+			" t.set_date(1900,2,1).get_days_in_month(),"
+			" t.set_date(2000,2,1).get_days_in_month(),"
+			" t.set_date(2011,2,1).get_days_in_month(),"
+			" t.set_date(1,1,1).get_days_in_month(),"
+			" t.set_date(1989,4,1).get_days_in_month()"
+			"));"
+			"}"
+		),
+		"(29, 28, 29, 28, 31, 30)"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "format invalid" )
+	ENSURE_EQUALS(
+		"format failed",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"t=dt.now().set_datetime(1978,5,24,23,30,17);"
+			"return (("
+			" dt.format(\"%Y %B %d\",t),"
+			" dt.format(\"%A %T\",t),"
+			" dt.format(\"%FT%T\",t)"
+			"));"
+			"}"
+		),
+		"(\"1978 May 24\", \"Wednesday 23:30:17\", \"1978-05-24T23:30:17\")"
+	);
+TUT_TEARDOWN()
+
 }
 
