@@ -220,5 +220,63 @@ TUT_UNIT_TEST( "format invalid" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "equals invalid" )
+	ENSURE_EQUALS(
+		"equals failed",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"t1=dt.now().set_datetime(1978,5,24,23,30,17);"
+			"t2=dt.now().set_datetime(1978,5,24,23,30,17);"
+			"t3=dt.now();"
+			"return (("
+			" t1 == t2,"
+			" t1 == t3"
+			"));"
+			"}"
+		),
+		"(true, false)"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "less invalid" )
+	ENSURE_EQUALS(
+		"less failed",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"t1=dt.now().set_datetime(1978,5,24,23,30,17);"
+			"t2=dt.now().set_datetime(1978,5,24,23,30,17);"
+			"t3=dt.now();"
+			"return (("
+			" t1 < t2,"
+			" t1 < t3"
+			"));"
+			"}"
+		),
+		"(false, true)"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "hash invalid" )
+#if defined( __MSVCXX__ ) || defined( __HOST_OS_TYPE_RASPBIAN__ ) || defined( __HOST_OS_TYPE_FREEBSD__ )
+	char const expect[] = "(62432112617, 62167219199)";
+#else
+	char const expect[] = "(62432112617, 31617360)";
+#endif
+	ENSURE_EQUALS(
+		"hash failed",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"t1=dt.now().set_datetime(1978,5,24,23,30,17);"
+			"t2=dt.now().set_datetime(1,1,1,0,0,0);"
+			"return (( t1.hash(), t2.hash() ));"
+			"}"
+		),
+		expect
+	);
+TUT_TEARDOWN()
+
 }
 
