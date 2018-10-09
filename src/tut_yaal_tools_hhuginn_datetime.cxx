@@ -259,12 +259,7 @@ TUT_UNIT_TEST( "less invalid" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "hash invalid" )
-#if defined( __MSVCXX__ ) || defined( __HOST_OS_TYPE_RASPBIAN__ ) || defined( __HOST_OS_TYPE_FREEBSD__ )
-	char const expect[] = "(62432112617, 62167219199)";
-#else
-	char const expect[] = "(62432112617, 31617360)";
-#endif
-	ENSURE_EQUALS(
+	ENSURE_IN(
 		"hash failed",
 		execute(
 			"import DateTime as dt;"
@@ -274,7 +269,7 @@ TUT_UNIT_TEST( "hash invalid" )
 			"return (( t1.hash(), t2.hash() ));"
 			"}"
 		),
-		expect
+		std::vector<HString>({ "(62432112617, 62167219199)", "(62432112617, 31617360)", "(62432112617, 31621839)" })
 	);
 TUT_TEARDOWN()
 
