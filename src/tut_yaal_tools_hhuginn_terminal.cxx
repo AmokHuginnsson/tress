@@ -4,10 +4,13 @@
 
 #include <yaal/tools/hterminal.hxx>
 #include <yaal/tools/ansi.hxx>
+#include <yaal/tools/hmonitor.hxx>
+#include <yaal/hcore/hcore.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 #include "tut_yaal_tools_hhuginn_base.hxx"
+#include "fake_console_subsystem.hxx"
 
 using namespace tut;
 using namespace yaal;
@@ -18,6 +21,12 @@ using namespace tress::tut_helpers;
 namespace tut {
 
 struct tut_yaal_tools_hhuginn_terminal : public tress::tut_yaal_tools_hhuginn_base {
+#if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
+	tress::fake_console_subsystem::HFakeConsoleGuard _fakeConoleGuard;
+	tut_yaal_tools_hhuginn_terminal( void )
+		: _fakeConoleGuard() {
+	}
+#endif /* #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 ) */
 	virtual ~tut_yaal_tools_hhuginn_terminal( void ) {}
 };
 
@@ -36,24 +45,34 @@ TUT_UNIT_TEST( "is_valid" )
 	);
 TUT_TEARDOWN()
 
+#if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
 TUT_UNIT_TEST( "lines columns" )
-	HTerminal& term( HTerminal::get_instance() );
-	if ( term.exists() ) {
-		ENSURE_EQUALS(
-			"Terminal.lines and Terminal.columns failed",
-			execute(
-				"import Terminal as term;\n"
-				"main(){\n"
-				"return((term.lines(),term.columns()));\n"
-				"}"
-			),
-			"("_ys.append( term.size().first ).append( ", " ).append( term.size().second ).append( ')' )
-		);
-	}
+	ENSURE_EQUALS(
+		"Terminal.lines and Terminal.columns failed",
+		execute_except(
+			"import Terminal as term;\n"
+			"main(){\n"
+			"return((term.lines(),term.columns()));\n"
+			"}"
+		),
+		"*anonymous stream*:3:19: Inappropriate ioctl for device"
+	);
+	set_env( "LINES", "25" );
+	set_env( "COLUMNS", "80" );
+	ENSURE_EQUALS(
+		"Terminal.lines and Terminal.columns failed",
+		execute(
+			"import Terminal as term;\n"
+			"main(){\n"
+			"return((term.lines(),term.columns()));\n"
+			"}"
+		),
+		"(25, 80)"
+	);
 TUT_TEARDOWN()
+#endif /* #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 ) */
 
 TUT_UNIT_TEST( "attribute" )
-	HTerminal& term( HTerminal::get_instance() );
 	ENSURE_EQUALS(
 		"Terminal.attribute failed",
 		execute(
@@ -62,12 +81,11 @@ TUT_UNIT_TEST( "attribute" )
 			"return(term.attribute(term.ATTRIBUTE.BOLD,\"bold\"));\n"
 			"}"
 		),
-		term.exists() ? "\""_ys.append( *ansi::bold ).append( "bold" ).append( *ansi::reset ).append( '"' ) : "\"bold\""
+		"\""_ys.append( *ansi::bold ).append( "bold" ).append( *ansi::reset ).append( '"' )
 	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "color" )
-	HTerminal& term( HTerminal::get_instance() );
 	ENSURE_EQUALS(
 		"Terminal.color failed",
 		execute(
@@ -76,10 +94,11 @@ TUT_UNIT_TEST( "color" )
 			"return(term.color(term.COLOR.BRIGHTBLUE,\"brightblue\"));\n"
 			"}"
 		),
-		term.exists() ? "\""_ys.append( *ansi::brightblue ).append( "brightblue" ).append( *ansi::reset ).append( '"' ) : "\"brightblue\""
+		"\""_ys.append( *ansi::brightblue ).append( "brightblue" ).append( *ansi::reset ).append( '"' )
 	);
 TUT_TEARDOWN()
 
+#if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
 TUT_UNIT_TEST( "move" )
 	ENSURE_EQUALS(
 		"Terminal.move failed",
@@ -92,6 +111,7 @@ TUT_UNIT_TEST( "move" )
 		"\"\033[8;14H\""
 	);
 TUT_TEARDOWN()
+#endif /* #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 ) */
 
 TUT_UNIT_TEST( "save, clear, restore, reset" )
 	ENSURE_EQUALS(

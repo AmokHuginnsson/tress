@@ -108,8 +108,8 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "terminal size" )
 	HLock l( HMonitor::get_instance().acquire( "terminal" ) );
 	if ( HTerminal::get_instance().exists() ) {
-		HTerminal::coord_t c( HTerminal::get_instance().size() );
-		clog << "Terminal size: " << c.second << "x" << c.first << "." << endl;
+		HTerminal::HSize s( HTerminal::get_instance().size() );
+		clog << "Terminal size: " << s.columns() << "x" << s.lines() << "." << endl;
 	} else
 		clog << "Terminal is not available." << endl;
 TUT_TEARDOWN()

@@ -255,6 +255,24 @@ TUT_UNIT_TEST( "moving_average" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "historgram" )
+	int_array_t data( begin( _testData_[0] ), end( _testData_[0] ) );
+	HNumberSetStats<double long> ns10( number_set_stats( data.begin(), data.end(), AGGREGATE_TYPE::HISTOGRAM, 10 ) );
+	int_array_t exp10( { 16, 13, 9, 9, 11, 8, 9, 9, 9, 7 } );
+	ENSURE_EQUALS( "historgram (10 buckets) failed", ns10.histogram(), exp10 );
+	ENSURE_EQUALS( "histogram(10) sum is invalid", yaal::accumulate( ns10.histogram().begin(), ns10.histogram().end(), 0 ), 100 );
+
+	HNumberSetStats<double long> ns7( number_set_stats( data.begin(), data.end(), AGGREGATE_TYPE::HISTOGRAM, 7 ) );
+	int_array_t exp7( { 21, 15, 14, 13, 13, 14, 10 } );
+	ENSURE_EQUALS( "historgram (7 buckets) failed", ns7.histogram(), exp7 );
+	ENSURE_EQUALS( "histogram(7) sum is invalid", yaal::accumulate( ns7.histogram().begin(), ns7.histogram().end(), 0 ), 100 );
+
+	HNumberSetStats<double long> ns13( number_set_stats( data.begin(), data.end(), AGGREGATE_TYPE::HISTOGRAM, 13 ) );
+	int_array_t exp13( { 14, 9, 7, 9, 7, 7, 8, 6, 7, 6, 8, 7, 5 } );
+	ENSURE_EQUALS( "historgram (13 buckets) failed", ns13.histogram(), exp13 );
+	ENSURE_EQUALS( "histogram(13) sum is invalid", yaal::accumulate( ns13.histogram().begin(), ns13.histogram().end(), 0 ), 100 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "big factorial" )
 	ENSURE_EQUALS( "factorial(10) failed", factorial( HNumber( 100 ) ), "93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000" );
 TUT_TEARDOWN()

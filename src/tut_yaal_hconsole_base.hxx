@@ -6,7 +6,6 @@
 #include <yaal/hconsole/hconsole.hxx>
 #include <yaal/hconsole/htuiprocess.hxx>
 
-#include "config.hxx"
 #include "tut_helpers.hxx"
 #include "fake_console_subsystem.hxx"
 

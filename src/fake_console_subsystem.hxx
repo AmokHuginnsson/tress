@@ -7,6 +7,8 @@
 #include <yaal/hcore/hstack.hxx>
 #include <yaal/hcore/hhashmap.hxx>
 
+#include "config.hxx"
+
 namespace tress {
 
 namespace fake_console_subsystem {
