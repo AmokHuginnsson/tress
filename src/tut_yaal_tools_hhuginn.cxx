@@ -1494,6 +1494,17 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 		),
 		"[11, 22, 0, 7, 2, 9, 4, (), {}]"
 	);
+	ENSURE_EQUALS(
+		"package defined enumeration hidden by enum in global namespace",
+		execute(
+			"import Terminal as term;"
+			"enum COLOR { RED, GREEN, BLUE }"
+			"main(){"
+			"return( ( term.COLOR.BRIGHTBLUE, COLOR.BLUE ) );"
+			"}"
+		),
+		"(COLOR.BRIGHTBLUE, COLOR.BLUE)"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "bound call as field value" )
