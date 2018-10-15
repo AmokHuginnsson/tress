@@ -17,21 +17,33 @@ using namespace tress::tut_helpers;
 
 namespace tut {
 
-struct tut_yaal_tools_hhuginn_packages : public tress::tut_yaal_tools_hhuginn_base {
+struct tut_yaal_tools_hhuginn_mathematics : public tress::tut_yaal_tools_hhuginn_base {
 };
 
-TUT_TEST_GROUP( tut_yaal_tools_hhuginn_packages, "yaal::tools::HHuginn,packages" );
+TUT_TEST_GROUP( tut_yaal_tools_hhuginn_mathematics, "yaal::tools::HHuginn.Mathematics" );
 
-TUT_UNIT_TEST( "Mathematics" )
+TUT_UNIT_TEST( "constants pi and e" )
 	ENSURE_EQUALS( "Mathematics.{pi, e} failed", execute( "import Mathematics as math;main(){return([math.pi(real),math.e(number,200)]);}" ), "[3.14159265359, $2.71828182845904523536028747135266249775724709369995957496696762772407663035354759457138217852516642742746639193200305992181741359662904357290033429526059563073813232862794349076323382988075319525101901]" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "square_root" )
 	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){return(math.square_root(7.));}" ), "2.645751311065" );
 	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){return(math.square_root($7));}" ), "$2.6457513110645905905016157536392604257102591830824501803683344592010688232302836277603928864745436106" );
 	ENSURE_EQUALS( "Mathematics.square_root failed", execute( "import Mathematics as math;main(){try{math.square_root(-1.);}catch(ArithmeticException e){return(e.what());}}" ), "\"bad domain\"" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "natural_exponential" )
 	ENSURE_EQUALS( "Mathematics.natural_exponential failed", execute( "import Mathematics as math;main(){return(math.natural_exponential(7.));}" ), "1096.633158428459" );
 	ENSURE_EQUALS( "Mathematics.natural_exponential failed", execute( "import Mathematics as math;main(){return(math.natural_exponential($7));}" ), "$1096.6331584284585992637202382881214324422191348336131437827392407761217693312331290224785687872498438842" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "natural_logarithm" )
 	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){return(math.natural_logarithm(7.));}" ), "1.945910149055" );
 	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){return(math.natural_logarithm($7));}" ), "$1.945910149055313305105352743443179729637084729581861188459390149937579862752069267787658498587871527" );
 	ENSURE_EQUALS( "Mathematics.natural_logarithm failed", execute( "import Mathematics as math;main(){try{math.natural_logarithm(0.);}catch(MathematicsException e){return(e.what());}}" ), "\"bad domain\"" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "trigonometric" )
 	ENSURE_EQUALS( "Mathematics.sinus failed", execute( "import Mathematics as math;main(){return(math.sinus(7.));}" ), "0.656986598719" );
 	ENSURE_EQUALS( "Mathematics.sinus failed", execute( "import Mathematics as math;main(){return(math.sinus($7));}" ), "$0.6569865987187890903969990915936351779368700104974900746578543341892928371312270315099351216010552127" );
 	ENSURE_EQUALS( "Mathematics.cosinus failed", execute( "import Mathematics as math;main(){return(math.cosinus(7.));}" ), "0.753902254343" );
@@ -40,6 +52,9 @@ TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.tangens failed", execute( "import Mathematics as math;main(){return(math.tangens($7));}" ), "$0.8714479827243187364564508896003135663222034245984200644480154523301674476556679351044748556811165168" );
 	ENSURE_EQUALS( "Mathematics.cotangens failed", execute( "import Mathematics as math;main(){return(math.cotangens(7.));}" ), "1.147515422405" );
 	ENSURE_EQUALS( "Mathematics.cotangens failed", execute( "import Mathematics as math;main(){return(math.cotangens($7));}" ), "$1.1475154224051356850571278335968690125843802678361633445170108981521966892555002012462107148960973854" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "arcus (inverse trigonometric)" )
 	ENSURE_EQUALS( "Mathematics.arcus_sinus failed", execute( "import Mathematics as math;main(){return(math.arcus_sinus(.7));}" ), "0.775397496611" );
 	ENSURE_EQUALS( "Mathematics.arcus_sinus failed", execute( "import Mathematics as math;main(){return(math.arcus_sinus($0.7));}" ), "$0.7753974966107530637403533527149871135557887386411619935977199637327202118807111988654109034943728765" );
 	ENSURE_EQUALS( "Mathematics.arcus_cosinus failed", execute( "import Mathematics as math;main(){return(math.arcus_cosinus(.7));}" ), "0.795398830184" );
@@ -48,6 +63,9 @@ TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.arcus_tangens failed", execute( "import Mathematics as math;main(){return(math.arcus_tangens($7));}" ), "$1.4288992721907326964184700745371983590908029409590888381093422667904665763831733383698255510368120159" );
 	ENSURE_EQUALS( "Mathematics.arcus_cotangens failed", execute( "import Mathematics as math;main(){return(math.arcus_cotangens(7.));}" ), "0.141897054604" );
 	ENSURE_EQUALS( "Mathematics.arcus_cotangens failed", execute( "import Mathematics as math;main(){return(math.arcus_cotangens($7));}" ), "$0.1418970546041639228128516171025530830077817587284640723781300293634416267599311609441918616342465181" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "hyperbolic trigonometric" )
 	hcore::HString hyperbolicSinusRes( execute( "import Mathematics as math;main(){return(math.hyperbolic_sinus(7.0));}" ) );
 	hyperbolicSinusRes.pop_back();
 	ENSURE_EQUALS( "Mathematics.hyperbolic_sinus failed", hyperbolicSinusRes, "548.31612327324" );
@@ -58,12 +76,24 @@ TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.hyperbolic_tangens failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_tangens($7));}" ), "$0.9999983369439446717357164159506671128820569920922747109692404742809110481696115057511479211747076493" );
 	ENSURE_EQUALS( "Mathematics.hyperbolic_cotangens failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_cotangens(7.));}" ), "1.000001663059" );
 	ENSURE_EQUALS( "Mathematics.hyperbolic_cotangens failed", execute( "import Mathematics as math;main(){return(math.hyperbolic_cotangens($7));}" ), "$1.0000016630588210883070615776102514764913523331922228239871821889401302787085050299163985440938683564" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "sigmoid" )
 	ENSURE_EQUALS( "Mathematics.sigmoid failed", execute( "import Mathematics as math;main(){return(math.sigmoid(7.0));}" ), "0.999088948806" );
 	ENSURE_EQUALS( "Mathematics.sigmoid failed", execute( "import Mathematics as math;main(){return(math.sigmoid($7));}" ), "$0.9990889488055993546421366762253058586758519397386814335751812177406547366392254595319805404147834436" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "error_function" )
 	ENSURE_EQUALS( "Mathematics.error_function failed", execute( "import Mathematics as math;main(){return(math.error_function(0.7));}" ), "0.677801193837" );
 	ENSURE_EQUALS( "Mathematics.error_function failed", execute( "import Mathematics as math;main(){return(math.error_function($0.7));}" ), "$0.677801193837" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "cumulative_distribution_function" )
 	ENSURE_EQUALS( "Mathematics.cumulative_distribution_function failed", execute( "import Mathematics as math;main(){return(math.cumulative_distribution_function(1.,-1.,2.));}" ), "0.841344746069" );
 	ENSURE_EQUALS( "Mathematics.cumulative_distribution_function failed", execute( "import Mathematics as math;main(){return(math.cumulative_distribution_function($1,$-1,$2));}" ), "$0.8413447460685" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "rounding" )
 	ENSURE_EQUALS( "Mathematics.round failed", execute( "import Mathematics as math;main(){return(math.round(7.1234));}" ), "7.0" );
 	ENSURE_EQUALS( "Mathematics.round failed", execute( "import Mathematics as math;main(){return(math.round($7.12354321,3));}" ), "$7.124" );
 	ENSURE_EQUALS( "Mathematics.round failed", execute( "import Mathematics as math;main(){return(math.round(7.1235, 3));}" ), "7.124" );
@@ -76,6 +106,9 @@ TUT_UNIT_TEST( "Mathematics" )
 	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil($7.123456));}" ), "$8" );
 	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil(-7.1234));}" ), "-7.0" );
 	ENSURE_EQUALS( "Mathematics.ceil failed", execute( "import Mathematics as math;main(){return(math.ceil($-7.123456));}" ), "$-7" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "greatest_common_divisor" )
 	ENSURE_EQUALS(
 		"Mathematics.greatest_common_divisor (integer) failed",
 		execute( "import Mathematics as math;main(){return(math.greatest_common_divisor(814001929, 6324168833));}" ),
@@ -94,6 +127,9 @@ TUT_UNIT_TEST( "Mathematics" )
 		execute_except( "import Mathematics as math;main(){return(math.greatest_common_divisor($1.5, $1));}" ),
 		"*anonymous stream*:1:70: Invalid argument."
 	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "binomial_coefficient" )
 	ENSURE_EQUALS(
 		"Mathematics.binomial_coefficient failed",
 		execute( "import Mathematics as math;main(){return(math.binomial_coefficient($10, $3));}" ),
@@ -104,6 +140,9 @@ TUT_UNIT_TEST( "Mathematics" )
 		execute_except( "import Mathematics as math;main(){return(math.binomial_coefficient($1.5, $1));}" ),
 		"*anonymous stream*:1:67: Invalid argument."
 	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "differs_at" )
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($7.1234567, $7.1235567));}" ), "3" );
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($2234.1234567, $1234.1234567));}" ), "-4" );
 TUT_TEARDOWN()
