@@ -277,5 +277,21 @@ TUT_UNIT_TEST( "big factorial" )
 	ENSURE_EQUALS( "factorial(10) failed", factorial( HNumber( 100 ) ), "93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "modular_multiplicative_inverse" )
+	ENSURE_EQUALS( "mod inv for 101 in 2^61 - 1 failed", modular_multiplicative_inverse( static_cast<int long long>( 1ULL << 61 ) - 1, 101 ).inverse(), 159810901628671858LL );
+	ENSURE_EQUALS( "mod inv for 24 in 54 failed", modular_multiplicative_inverse( 54, 24 ).greatest_common_divisor(), 6 );
+	ENSURE_THROW( "mod inv for 24 in 54 did not throw", modular_multiplicative_inverse( 54, 24 ).inverse(), HInvalidArgumentException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "modular_multiplication" )
+	int long long mod( static_cast<int long long>( 1ULL << 61 ) - 1 );
+	int long long base( 101 );
+	HModularMultiplicativeInverse mmi( modular_multiplicative_inverse( mod, base ) );
+	int long long item1( 497 );
+	int long long item2( 497876343 );
+	ENSURE_EQUALS( "modular_multiplication( 497  ) failed", modular_multiplication( modular_multiplication( item1, base, mod ), mmi.inverse(), mod ), item1 );
+	ENSURE_EQUALS( "modular_multiplication( 497876343  ) failed", modular_multiplication( modular_multiplication( item2, base, mod ), mmi.inverse(), mod ), item2 );
+TUT_TEARDOWN()
+
 }
 
