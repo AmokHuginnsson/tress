@@ -4,6 +4,7 @@
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/hhuginn.hxx>
+#include <yaal/tools/stringalgo.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -446,274 +447,6 @@ TUT_UNIT_TEST( "Matrix" )
 	);
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "Mathematics.NumberSetStatistics" )
-	ENSURE_IN(
-		"tuple real failed",
-		execute(
-			"import Algorithms as algo;"
-			"import Mathematics as math;"
-			"main(){"
-			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), real),tuple));"
-			"return([nss.count(),nss.minimum(),nss.maximum(),"
-							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
-							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
-							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
-							"nss.mean_absolute_deviation()]);"
-			"}"
-		),
-	  std::vector<hcore::HString>({
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956, 63.466666666667]",
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]",
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]"
-		})
-	);
-	ENSURE_EQUALS(
-		"Mathematics.NumberSetStatistics tuple (number) failed",
-		execute(
-			"import Algorithms as algo;"
-			"import Mathematics as math;"
-			"main(){"
-			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), number),tuple));"
-			"return([nss.count(),nss.minimum(),nss.maximum(),"
-							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
-							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
-							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
-							"nss.mean_absolute_deviation()]);"
-			"}"
-		),
-		"[15, $1, $239, $238, $120, $1800, $120, $120, $136, $5780, $5394.6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666, $76.026311234992849677911904736863392004981024226791874625210506343957711471685366580090089884878597349, $73.448394581955749284280964275663962120658982146661260896728683175175663615565836209204090274863582671, $63.4666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666]"
-	);
-	ENSURE_IN(
-		"Mathematics.NumberSetStatistics list (real) failed",
-		execute(
-			"import Algorithms as algo;"
-			"import Mathematics as math;"
-			"main(){"
-			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), real),list));"
-			"return([nss.count(),nss.minimum(),nss.maximum(),"
-							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
-							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
-							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
-							"nss.mean_absolute_deviation()]);"
-			"}"
-		),
-	  std::vector<hcore::HString>({
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956, 63.466666666667]",
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]",
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]"
-		})
-	);
-	ENSURE_EQUALS(
-		"Mathematics.NumberSetStatistics list (number) failed",
-		execute(
-			"import Algorithms as algo;"
-			"import Mathematics as math;"
-			"main(){"
-			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), number),list));"
-			"return([nss.count(),nss.minimum(),nss.maximum(),"
-							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
-							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
-							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
-							"nss.mean_absolute_deviation()]);"
-			"}"
-		),
-		"[15, $1, $239, $238, $120, $1800, $120, $120, $136, $5780, $5394.6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666, $76.026311234992849677911904736863392004981024226791874625210506343957711471685366580090089884878597349, $73.448394581955749284280964275663962120658982146661260896728683175175663615565836209204090274863582671, $63.4666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666]"
-	);
-	ENSURE_IN(
-		"verify_arg_collection_value_type deque failed",
-		execute(
-			"import Algorithms as algo;"
-			"import Mathematics as math;"
-			"main(){"
-			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), real),deque));"
-			"return([nss.count(),nss.minimum(),nss.maximum(),"
-							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
-							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
-							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
-							"nss.mean_absolute_deviation()]);"
-			"}"
-		),
-	  std::vector<hcore::HString>({
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956, 63.466666666667]",
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]",
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]"
-		})
-	);
-	ENSURE_EQUALS(
-		"Mathematics.NumberSetStatistics deque (number) failed",
-		execute(
-			"import Algorithms as algo;"
-			"import Mathematics as math;"
-			"main(){"
-			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), number),deque));"
-			"return([nss.count(),nss.minimum(),nss.maximum(),"
-							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
-							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
-							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
-							"nss.mean_absolute_deviation()]);"
-			"}"
-		),
-		"[15, $1, $239, $238, $120, $1800, $120, $120, $136, $5780, $5394.6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666, $76.026311234992849677911904736863392004981024226791874625210506343957711471685366580090089884878597349, $73.448394581955749284280964275663962120658982146661260896728683175175663615565836209204090274863582671, $63.4666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666]"
-	);
-	ENSURE_IN(
-		"verify_arg_collection_value_type set failed",
-		execute(
-			"import Algorithms as algo;"
-			"import Mathematics as math;"
-			"main(){"
-			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), real),set));"
-			"return([nss.count(),nss.minimum(),nss.maximum(),"
-							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
-							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
-							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
-							"nss.mean_absolute_deviation()]);"
-			"}"
-		),
-	  std::vector<hcore::HString>({
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956, 63.466666666667]",
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]",
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]"
-		})
-	);
-	ENSURE_EQUALS(
-		"Mathematics.NumberSetStatistics set (number) failed",
-		execute(
-			"import Algorithms as algo;"
-			"import Mathematics as math;"
-			"main(){"
-			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), number),set));"
-			"return([nss.count(),nss.minimum(),nss.maximum(),"
-							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
-							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
-							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
-							"nss.mean_absolute_deviation()]);"
-			"}"
-		),
-		"[15, $1, $239, $238, $120, $1800, $120, $120, $136, $5780, $5394.6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666, $76.026311234992849677911904736863392004981024226791874625210506343957711471685366580090089884878597349, $73.448394581955749284280964275663962120658982146661260896728683175175663615565836209204090274863582671, $63.4666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666]"
-	);
-	ENSURE_IN(
-		"verify_arg_collection_value_type order failed",
-		execute(
-			"import Algorithms as algo;"
-			"import Mathematics as math;"
-			"main(){"
-			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), real),order));"
-			"return([nss.count(),nss.minimum(),nss.maximum(),"
-							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
-							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
-							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
-							"nss.mean_absolute_deviation()]);"
-			"}"
-		),
-	  std::vector<hcore::HString>({
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956, 63.466666666667]",
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]",
-			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]"
-		})
-	);
-	ENSURE_EQUALS(
-		"Mathematics.NumberSetStatistics order (number) failed",
-		execute(
-			"import Algorithms as algo;"
-			"import Mathematics as math;"
-			"main(){"
-			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), number),order));"
-			"return([nss.count(),nss.minimum(),nss.maximum(),"
-							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
-							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
-							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
-							"nss.mean_absolute_deviation()]);"
-			"}"
-		),
-		"[15, $1, $239, $238, $120, $1800, $120, $120, $136, $5780, $5394.6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666, $76.026311234992849677911904736863392004981024226791874625210506343957711471685366580090089884878597349, $73.448394581955749284280964275663962120658982146661260896728683175175663615565836209204090274863582671, $63.4666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666]"
-	);
-	ENSURE_EQUALS(
-		"Mathematics.NumberSetStatistics on one element failed",
-		execute(
-			"import Mathematics as math;"
-			"main(){"
-			"nss = math.statistics([1.]);"
-			"return([nss.count(),nss.minimum(),nss.maximum(),"
-							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
-							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
-							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
-							"nss.mean_absolute_deviation()]);"
-			"}"
-		),
-		"[1, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, none, 0.0, none, 0.0, 0.0]"
-	);
-	ENSURE_EQUALS(
-		"Mathematics.NumberSetStatistics on empty failed",
-		execute_except(
-			"import Mathematics as math;"
-			"main(){"
-			"math.statistics([]);"
-			"}"
-		),
-		"*anonymous stream*:1:50: Cannot aggregate statistics over empty set."
-	);
-TUT_TEARDOWN()
-
-TUT_UNIT_TEST( "Randomizer" )
-	ENSURE_EQUALS(
-		"Mathematics.Randomizer failed",
-		execute(
-			"import Mathematics as math;\n"
-			"main(){\n"
-			"r=math.Randomizer(100);\n"
-			"d=r.next(10);\n"
-			"f=r.next_real(.5);\n"
-			"return([r,d>=0,d<10,f>=0.,f<.5]);\n"
-			"}\n"
-		),
-		"[math.Randomizer(100), true, true, true, true]"
-	);
-	ENSURE_EQUALS(
-		"Mathematics.Randomizer copy failed",
-		execute(
-			"import Mathematics as math;\n"
-			"import Algorithms as algo;\n"
-			"class RndGen {_rnd=none;constructor(rnd_){_rnd=rnd_;}do(x){x;_rnd.next();}}"
-			"main(){\n"
-			"range1=algo.range(100);\n"
-			"range2=copy(range1);\n"
-			"rnd1=math.Randomizer();\n"
-			"rnd2=copy(rnd1);\n"
-			"res1=algo.materialize(algo.map(range1,RndGen(rnd1).do),list);\n"
-			"res2=algo.materialize(algo.map(range2,RndGen(rnd2).do),list);\n"
-			"return(res1==res2);\n"
-			"}\n"
-		),
-		"true"
-	);
-	ENSURE_EQUALS(
-		"Mathematics.Randomizer.seed failed",
-		execute(
-			"import Algorithms as algo;\n"
-			"import Mathematics as math;\n"
-			"main(){\n"
-			"r=math.Randomizer(100);\n"
-			"r.seed(0);\n"
-			"l1 = algo.materialize(algo.map(algo.range(16),@[r](_){_;r.next();}),list);\n"
-			"r.seed(0);\n"
-			"l2 = algo.materialize(algo.map(algo.range(16),@[r](_){_;r.next();}),list);\n"
-			"return((l1,l2, l1 == l2));\n"
-			"}\n"
-		),
-		"([64, 52, 17, 53, 94, 11, 29, 1, 26, 25, 73, 11, 22, 98, 46, 38], [64, 52, 17, 53, 94, 11, 29, 1, 26, 25, 73, 11, 22, 98, 46, 38], true)"
-	);
-	ENSURE_EQUALS(
-		"Mathematics.Randomizer invalid cap succeeded",
-		execute_except(
-			"import Mathematics as math;\n"
-			"main(){\n"
-			"math.Randomizer().next_real(0.);\n"
-			"}\n"
-		),
-		"*anonymous stream*:3:28: Invalid range specified: 0.0"
-	);
-TUT_TEARDOWN()
-
 TUT_UNIT_TEST( "Matrix err" )
 	ENSURE_EQUALS(
 		"Mathematics.Matrix invalid rows succeeded",
@@ -1152,6 +885,308 @@ TUT_UNIT_TEST( "Mathematics Complex" )
 			"}\n"
 		),
 		"(3.0, 4.0)"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Randomizer" )
+	ENSURE_EQUALS(
+		"Mathematics.Randomizer failed",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"r=math.Randomizer(100);\n"
+			"d=r.next(10);\n"
+			"f=r.next_real(.5);\n"
+			"return([r,d>=0,d<10,f>=0.,f<.5]);\n"
+			"}\n"
+		),
+		"[math.Randomizer(100), true, true, true, true]"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Randomizer copy failed",
+		execute(
+			"import Mathematics as math;\n"
+			"import Algorithms as algo;\n"
+			"class RndGen {_rnd=none;constructor(rnd_){_rnd=rnd_;}do(x){x;_rnd.next();}}"
+			"main(){\n"
+			"range1=algo.range(100);\n"
+			"range2=copy(range1);\n"
+			"rnd1=math.Randomizer();\n"
+			"rnd2=copy(rnd1);\n"
+			"res1=algo.materialize(algo.map(range1,RndGen(rnd1).do),list);\n"
+			"res2=algo.materialize(algo.map(range2,RndGen(rnd2).do),list);\n"
+			"return(res1==res2);\n"
+			"}\n"
+		),
+		"true"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Randomizer.seed failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"r=math.Randomizer(100);\n"
+			"r.seed(0);\n"
+			"l1 = algo.materialize(algo.map(algo.range(16),@[r](_){_;r.next();}),list);\n"
+			"r.seed(0);\n"
+			"l2 = algo.materialize(algo.map(algo.range(16),@[r](_){_;r.next();}),list);\n"
+			"return((l1,l2, l1 == l2));\n"
+			"}\n"
+		),
+		"([64, 52, 17, 53, 94, 11, 29, 1, 26, 25, 73, 11, 22, 98, 46, 38], [64, 52, 17, 53, 94, 11, 29, 1, 26, 25, 73, 11, 22, 98, 46, 38], true)"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Randomizer invalid cap succeeded",
+		execute_except(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"math.Randomizer().next_real(0.);\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:28: Invalid range specified: 0.0"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "Mathematics.NumberSetStatistics" )
+	ENSURE_IN(
+		"tuple real failed",
+		execute(
+			"import Algorithms as algo;"
+			"import Mathematics as math;"
+			"main(){"
+			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), real),tuple));"
+			"return([nss.count(),nss.minimum(),nss.maximum(),"
+							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
+							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
+							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
+							"nss.mean_absolute_deviation()]);"
+			"}"
+		),
+	  std::vector<hcore::HString>({
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956, 63.466666666667]",
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]",
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]"
+		})
+	);
+	ENSURE_EQUALS(
+		"Mathematics.NumberSetStatistics tuple (number) failed",
+		execute(
+			"import Algorithms as algo;"
+			"import Mathematics as math;"
+			"main(){"
+			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), number),tuple));"
+			"return([nss.count(),nss.minimum(),nss.maximum(),"
+							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
+							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
+							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
+							"nss.mean_absolute_deviation()]);"
+			"}"
+		),
+		"[15, $1, $239, $238, $120, $1800, $120, $120, $136, $5780, $5394.6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666, $76.026311234992849677911904736863392004981024226791874625210506343957711471685366580090089884878597349, $73.448394581955749284280964275663962120658982146661260896728683175175663615565836209204090274863582671, $63.4666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666]"
+	);
+	ENSURE_IN(
+		"Mathematics.NumberSetStatistics list (real) failed",
+		execute(
+			"import Algorithms as algo;"
+			"import Mathematics as math;"
+			"main(){"
+			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), real),list));"
+			"return([nss.count(),nss.minimum(),nss.maximum(),"
+							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
+							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
+							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
+							"nss.mean_absolute_deviation()]);"
+			"}"
+		),
+	  std::vector<hcore::HString>({
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956, 63.466666666667]",
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]",
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]"
+		})
+	);
+	ENSURE_EQUALS(
+		"Mathematics.NumberSetStatistics list (number) failed",
+		execute(
+			"import Algorithms as algo;"
+			"import Mathematics as math;"
+			"main(){"
+			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), number),list));"
+			"return([nss.count(),nss.minimum(),nss.maximum(),"
+							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
+							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
+							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
+							"nss.mean_absolute_deviation()]);"
+			"}"
+		),
+		"[15, $1, $239, $238, $120, $1800, $120, $120, $136, $5780, $5394.6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666, $76.026311234992849677911904736863392004981024226791874625210506343957711471685366580090089884878597349, $73.448394581955749284280964275663962120658982146661260896728683175175663615565836209204090274863582671, $63.4666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666]"
+	);
+	ENSURE_IN(
+		"verify_arg_collection_value_type deque failed",
+		execute(
+			"import Algorithms as algo;"
+			"import Mathematics as math;"
+			"main(){"
+			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), real),deque));"
+			"return([nss.count(),nss.minimum(),nss.maximum(),"
+							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
+							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
+							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
+							"nss.mean_absolute_deviation()]);"
+			"}"
+		),
+	  std::vector<hcore::HString>({
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956, 63.466666666667]",
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]",
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]"
+		})
+	);
+	ENSURE_EQUALS(
+		"Mathematics.NumberSetStatistics deque (number) failed",
+		execute(
+			"import Algorithms as algo;"
+			"import Mathematics as math;"
+			"main(){"
+			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), number),deque));"
+			"return([nss.count(),nss.minimum(),nss.maximum(),"
+							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
+							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
+							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
+							"nss.mean_absolute_deviation()]);"
+			"}"
+		),
+		"[15, $1, $239, $238, $120, $1800, $120, $120, $136, $5780, $5394.6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666, $76.026311234992849677911904736863392004981024226791874625210506343957711471685366580090089884878597349, $73.448394581955749284280964275663962120658982146661260896728683175175663615565836209204090274863582671, $63.4666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666]"
+	);
+	ENSURE_IN(
+		"verify_arg_collection_value_type set failed",
+		execute(
+			"import Algorithms as algo;"
+			"import Mathematics as math;"
+			"main(){"
+			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), real),set));"
+			"return([nss.count(),nss.minimum(),nss.maximum(),"
+							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
+							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
+							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
+							"nss.mean_absolute_deviation()]);"
+			"}"
+		),
+	  std::vector<hcore::HString>({
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956, 63.466666666667]",
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]",
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]"
+		})
+	);
+	ENSURE_EQUALS(
+		"Mathematics.NumberSetStatistics set (number) failed",
+		execute(
+			"import Algorithms as algo;"
+			"import Mathematics as math;"
+			"main(){"
+			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), number),set));"
+			"return([nss.count(),nss.minimum(),nss.maximum(),"
+							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
+							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
+							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
+							"nss.mean_absolute_deviation()]);"
+			"}"
+		),
+		"[15, $1, $239, $238, $120, $1800, $120, $120, $136, $5780, $5394.6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666, $76.026311234992849677911904736863392004981024226791874625210506343957711471685366580090089884878597349, $73.448394581955749284280964275663962120658982146661260896728683175175663615565836209204090274863582671, $63.4666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666]"
+	);
+	ENSURE_IN(
+		"verify_arg_collection_value_type order failed",
+		execute(
+			"import Algorithms as algo;"
+			"import Mathematics as math;"
+			"main(){"
+			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), real),order));"
+			"return([nss.count(),nss.minimum(),nss.maximum(),"
+							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
+							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
+							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
+							"nss.mean_absolute_deviation()]);"
+			"}"
+		),
+	  std::vector<hcore::HString>({
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666667, 76.026311234993, 73.448394581956, 63.466666666667]",
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5779.999999999998, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]",
+			"[15, 1.0, 239.0, 238.0, 120.0, 1800.0, 120.0, 120.0, 136.0, 5780.0, 5394.666666666668, 76.026311234993, 73.448394581956, 63.466666666667]"
+		})
+	);
+	ENSURE_EQUALS(
+		"Mathematics.NumberSetStatistics order (number) failed",
+		execute(
+			"import Algorithms as algo;"
+			"import Mathematics as math;"
+			"main(){"
+			"nss=math.statistics(algo.materialize(algo.map(algo.range(1,256,17), number),order));"
+			"return([nss.count(),nss.minimum(),nss.maximum(),"
+							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
+							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
+							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
+							"nss.mean_absolute_deviation()]);"
+			"}"
+		),
+		"[15, $1, $239, $238, $120, $1800, $120, $120, $136, $5780, $5394.6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666, $76.026311234992849677911904736863392004981024226791874625210506343957711471685366580090089884878597349, $73.448394581955749284280964275663962120658982146661260896728683175175663615565836209204090274863582671, $63.4666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666]"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.NumberSetStatistics on one element failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"nss = math.statistics([1.]);"
+			"return([nss.count(),nss.minimum(),nss.maximum(),"
+							"nss.range(),nss.mid_range(),nss.sum(),nss.arithmetic_mean(),nss.median(),"
+							"nss.interquartile_range(),nss.sample_variance(),nss.population_variance(),"
+							"nss.sample_standard_deviation(),nss.population_standard_deviation(),"
+							"nss.mean_absolute_deviation()]);"
+			"}"
+		),
+		"[1, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, none, 0.0, none, 0.0, 0.0]"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.NumberSetStatistics on empty failed",
+		execute_except(
+			"import Mathematics as math;"
+			"main(){"
+			"math.statistics([]);"
+			"}"
+		),
+		"*anonymous stream*:1:50: Cannot aggregate statistics over empty set."
+	);
+	typedef yaal::hcore::HArray<HString> string_array_t;
+	string_array_t sa;
+	transform( begin( _testData_[0] ), end( _testData_[0] ), back_insert_iterator( sa ), static_cast<HString (*)( double )>( &to_string ) );
+	HString data( string::join( sa, "," ) );
+	ENSURE_EQUALS(
+		"histogram failed",
+		execute(
+			"import Mathematics as math;"
+			"main() {"
+			"data = ["
+			""_ys.append( data ).append(
+				"];"
+				"stats = math.statistics( data, 10 );"
+				"return ( stats.histogram() );"
+				"}"
+			)
+		),
+		"[16, 13, 9, 9, 11, 8, 9, 9, 9, 7]"
+	);
+	ENSURE_EQUALS(
+		"histogram failed",
+		execute_except(
+			"import Mathematics as math;"
+			"main() {"
+			"data = ["
+			""_ys.append( data ).append(
+				"];"
+				"stats = math.statistics( data );"
+				"return ( stats.histogram() );"
+				"}"
+			)
+		),
+		"*anonymous stream*:1:672: No histogram information was requested nor generated."
 	);
 TUT_TEARDOWN()
 
