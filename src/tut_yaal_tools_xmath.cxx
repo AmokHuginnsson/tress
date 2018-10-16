@@ -279,6 +279,8 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "modular_multiplicative_inverse" )
 	ENSURE_EQUALS( "mod inv for 101 in 2^61 - 1 failed", modular_multiplicative_inverse( static_cast<int long long>( 1ULL << 61 ) - 1, 101 ).inverse(), 159810901628671858LL );
+	ENSURE_EQUALS( "mod inv for 17 -> 13 failed", modular_multiplicative_inverse( 17, 13 ).inverse(), 4 );
+	ENSURE_EQUALS( "mod inv for 17 -> 4 failed", modular_multiplicative_inverse( 17, 4 ).inverse(), 13 );
 	ENSURE_EQUALS( "mod inv for 24 in 54 failed", modular_multiplicative_inverse( 54, 24 ).greatest_common_divisor(), 6 );
 	ENSURE_THROW( "mod inv for 24 in 54 did not throw", modular_multiplicative_inverse( 54, 24 ).inverse(), HInvalidArgumentException );
 TUT_TEARDOWN()
@@ -291,6 +293,16 @@ TUT_UNIT_TEST( "modular_multiplication" )
 	int long long item2( 497876343 );
 	ENSURE_EQUALS( "modular_multiplication( 497  ) failed", modular_multiplication( modular_multiplication( item1, base, mod ), mmi.inverse(), mod ), item1 );
 	ENSURE_EQUALS( "modular_multiplication( 497876343  ) failed", modular_multiplication( modular_multiplication( item2, base, mod ), mmi.inverse(), mod ), item2 );
+	ENSURE_EQUALS(
+		"modular_multiplication( 100000000, 100000000 ) failed",
+		modular_multiplication( 100000000LL, 100000000LL, mod ),
+		10000000000000000LL
+	);
+	ENSURE_EQUALS(
+		"modular_multiplication( 1000000000000000000, 1000000000000000000 ) failed",
+		modular_multiplication( 1000000000000000000LL, 1000000000000000000LL, mod ),
+		1824060670036424877LL
+	);
 TUT_TEARDOWN()
 
 }

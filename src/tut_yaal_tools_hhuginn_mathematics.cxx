@@ -143,6 +143,90 @@ TUT_UNIT_TEST( "binomial_coefficient" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "modular_multiplicative_inverse" )
+	ENSURE_EQUALS(
+		"modular_multiplicative_inverse failed",
+		execute( "import Mathematics as math;main(){return(math.modular_multiplicative_inverse(integer( $2 ^ $55 - $55 ), 101));}" ),
+		"12841947452303969"
+	);
+	ENSURE_EQUALS(
+		"modular_multiplicative_inverse failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"return((math.modular_multiplicative_inverse(17, 13),math.modular_multiplicative_inverse(17, 4)));"
+			"}"
+		),
+		"(4, 13)"
+	);
+	ENSURE_EQUALS(
+		"modular_multiplicative_inverse with invalid mod succeeded",
+		execute_except( "import Mathematics as math;main(){return(math.modular_multiplicative_inverse(0, 101));}" ),
+		"*anonymous stream*:1:77: Invalid argument."
+	);
+	ENSURE_EQUALS(
+		"modular_multiplicative_inverse with invalid val succeeded",
+		execute_except( "import Mathematics as math;main(){return(math.modular_multiplicative_inverse(17, 0));}" ),
+		"*anonymous stream*:1:77: Invalid argument."
+	);
+	ENSURE_EQUALS(
+		"modular_multiplicative_inverse with invalid mod - value relation succeeded",
+		execute_except( "import Mathematics as math;main(){return(math.modular_multiplicative_inverse(17, 101));}" ),
+		"*anonymous stream*:1:77: Invalid argument."
+	);
+	ENSURE_EQUALS(
+		"modular_multiplicative_inverse with no inverse succeeded",
+		execute_except( "import Mathematics as math;main(){return(math.modular_multiplicative_inverse(54, 24));}" ),
+		"*anonymous stream*:1:77: Uncaught MathematicsException: Multiplicative inverse does not exist."
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "modular_multiplication" )
+	ENSURE_EQUALS(
+		"modular_multiplication failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"base = 101;"
+			"mod = integer( $2 ^ $55 - $55 );"
+			"inv = math.modular_multiplicative_inverse(mod, base);"
+			"v = 3175387;"
+			"x = math.modular_multiplication( v, base, mod);"
+			"r = math.modular_multiplication( x, inv, mod);"
+			"return((x, r));"
+			"}"
+		),
+		"(320714087, 3175387)"
+	);
+	ENSURE_EQUALS(
+		"modular_multiplication failed",
+		execute(
+			"import Mathematics as math;"
+			"main(){"
+			"m = integer( $2 ^ $61 - $1 );"
+			"x = integer( $2 ^ $55 - $55 );"
+			"return(math.modular_multiplication(x,x,m));"
+			"}"
+		),
+		"649081296294775759"
+	);
+	ENSURE_EQUALS(
+		"modular_multiplication with bad fact1 succeeded",
+		execute_except( "import Mathematics as math;main(){return(math.modular_multiplication(-1, 12, 123));}" ),
+		"*anonymous stream*:1:69: Invalid argument."
+	);
+	ENSURE_EQUALS(
+		"modular_multiplication with bad fact2 succeeded",
+		execute_except( "import Mathematics as math;main(){return(math.modular_multiplication(12, -1, 123));}" ),
+		"*anonymous stream*:1:69: Invalid argument."
+	);
+	ENSURE_EQUALS(
+		"modular_multiplication with bad mod succeeded",
+		execute_except( "import Mathematics as math;main(){return(math.modular_multiplication(12, 12, 0));}" ),
+		"*anonymous stream*:1:69: Invalid argument."
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "differs_at" )
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($7.1234567, $7.1235567));}" ), "3" );
 	ENSURE_EQUALS( "Mathematics.differs_at failed", execute( "import Mathematics as math;main(){return(math.differs_at($2234.1234567, $1234.1234567));}" ), "-4" );
