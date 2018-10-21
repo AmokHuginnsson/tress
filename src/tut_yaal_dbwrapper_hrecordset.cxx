@@ -146,7 +146,7 @@ TUT_UNIT_TEST( "Firebird engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	db->connect( "localhost:tress", "tress", "tr3ss" );
 	dump_query_result( db, QUERY, "Firebird" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */
@@ -182,7 +182,7 @@ TUT_UNIT_TEST( "different engines all in one" )
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 #if defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H )
 	HDataBase::ptr_t dbFirebird( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	dbFirebird->connect( "tress", "tress", "tr3ss" );
+	dbFirebird->connect( "localhost:tress", "tress", "tr3ss" );
 	dump_query_result( dbFirebird, QUERY, "Firebird" );
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */
 #if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
@@ -259,7 +259,7 @@ TUT_UNIT_TEST( "dml on Firebird engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	db->connect( "localhost:tress", "tress", "tr3ss" );
 	test_dml( db );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */
@@ -291,7 +291,7 @@ TUT_UNIT_TEST( "different engines all in one by DSN" )
 	dump_query_result( dbMySQL, QUERY, "MySQL" );
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
 #if defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H )
-	HDataBase::ptr_t dbFirebird( util::connect( "firebird://tress:tr3ss@/tress" ) );
+	HDataBase::ptr_t dbFirebird( util::connect( "firebird://tress:tr3ss@/localhost:tress" ) );
 	dump_query_result( dbFirebird, QUERY, "Firebird" );
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */
 #if defined( HAVE_OCI_H ) && defined( HAVE_ORACLE_INSTANCE )
@@ -376,7 +376,7 @@ TUT_UNIT_TEST( "Firebird engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	db->connect( "localhost:tress", "tress", "tr3ss" );
 	row_by_row_test( db, QUERY, "Firebird" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */

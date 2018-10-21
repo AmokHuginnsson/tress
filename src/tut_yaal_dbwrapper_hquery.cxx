@@ -75,7 +75,7 @@ TUT_UNIT_TEST( "Bind Firebird engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	db->connect( "localhost:tress", "tress", "tr3ss" );
 	bind_test( db, "Firebird" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */
@@ -191,7 +191,7 @@ TUT_UNIT_TEST( "dml bind on Firebird engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	db->connect( "localhost:tress", "tress", "tr3ss" );
 	test_dml_bind( db, true );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */
@@ -283,7 +283,7 @@ TUT_UNIT_TEST( "fetch result after query reset: Firebird engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	db->connect( "localhost:tress", "tress", "tr3ss" );
 	fetch_result_after_query_reset( db, "Firebird" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */
@@ -378,7 +378,7 @@ TUT_UNIT_TEST( "execute twice: Firebird engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	db->connect( "localhost:tress", "tress", "tr3ss" );
 	execute_twice( db, "Firebird" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */

@@ -84,7 +84,7 @@ TUT_UNIT_TEST( "Firebird schema" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	db->connect( "localhost:tress", "tress", "tr3ss" );
 	test_schema( db );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */
