@@ -9,6 +9,7 @@
 #include <yaal/tools/util.hxx>
 #include <yaal/tools/hmonitor.hxx>
 #include <yaal/tools/streamtools.hxx>
+#include <yaal/tools/keycode.hxx>
 #include <yaal/dbwrapper/dbwrapper.hxx>
 
 M_VCSID( "$Id: " __ID__ " $" )

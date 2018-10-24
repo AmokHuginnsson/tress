@@ -9,6 +9,7 @@
 
 #include <TUT/tut.hpp>
 #include <yaal/hconsole/hwindow.hxx>
+#include <yaal/tools/keycode.hxx>
 
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
@@ -286,7 +287,7 @@ TUT_UNIT_TEST( "edit widget edit and motion" )
 			KEY<'w'>::ctrl, KEY_CODE::BACKSPACE, 's', 'e', 'l', 'f', ',', '\t',
 			KEY_CODE::ESCAPE, 'T', KEY_CODE::DOWN, KEY_CODE::ESCAPE, 'x',
 			KEY_CODE::UP,
-			KEY_CODE::END, KEY_CODE::LEFT, KEY_CODE::LEFT, KEY_CODE::DELETE, KEY_CODE::DELETE, KEY_CODE::HOME, KEY_CODE::DELETE, KEY_CODE::DELETE, KEY<'u'>::ctrl,
+			KEY_CODE::END, KEY_CODE::LEFT, KEY_CODE::LEFT, KEY_CODE::DELETE, KEY_CODE::DELETE, KEY_CODE::HOME, KEY_CODE::DELETE, KEY_CODE::DELETE, KEY<'u'>::ctrl, KEY<'u'>::ctrl,
 			KEY_CODE::PAGE_UP, KEY_CODE::PAGE_DOWN, KEY_CODE::UP, KEY_CODE::DOWN,
 			KEY<'q'>::command, KEY<'x'>::command
 		}

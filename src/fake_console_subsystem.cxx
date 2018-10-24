@@ -15,6 +15,7 @@
 #include <yaal/tools/hmonitor.hxx>
 #include <yaal/tools/ansi.hxx>
 #include <yaal/tools/hstringstream.hxx>
+#include <yaal/tools/keycode.hxx>
 #include <yaal/hconsole/console.hxx>
 #include <yaal/hconsole/hconsole.hxx>
 #include <yaal/hconsole/hwindowfactory.hxx>

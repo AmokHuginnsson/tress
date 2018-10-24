@@ -10,6 +10,7 @@
 #include <TUT/tut.hpp>
 
 #include <yaal/hdata/hdataprocess.hxx>
+#include <yaal/tools/keycode.hxx>
 
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"

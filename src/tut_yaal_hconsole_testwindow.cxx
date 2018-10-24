@@ -7,6 +7,7 @@
 M_VCSID( "$Id: " __ID__ " $" )
 #include <yaal/hconsole/hdatewidget.hxx>
 #include <yaal/hconsole/htimewidget.hxx>
+#include <yaal/tools/keycode.hxx>
 
 #include "tut_yaal_hconsole_testset.hxx"
 
