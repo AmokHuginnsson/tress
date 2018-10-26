@@ -30,16 +30,16 @@ HIntrospector::HIntrospector( void )
 }
 
 void HIntrospector::do_introspect( yaal::tools::HIntrospecteeInterface& introspectee_ ) {
-	yaal::tools::HIntrospecteeInterface::call_stack_t callStack( introspectee_.get_call_stack() );
+	yaal::tools::HHuginn::call_stack_t callStack( introspectee_.get_call_stack() );
 	if ( setup._verbose && setup._debug ) {
 		clog << "-------------------------------------------------------------------" << endl;
-		for ( yaal::tools::HIntrospecteeInterface::HCallSite const& cs : callStack ) {
+		for ( yaal::tools::HHuginn::HCallSite const& cs : callStack ) {
 			clog << cs.file() << ":" << cs.line() << ":" << cs.column() << ":" << cs.context() << endl;
 		}
 		clog << "-------------------------------------------------------------------" << endl;
 	}
 	_callStacks.push_back( yaal::move( callStack ) );
-	yaal::tools::HIntrospecteeInterface::HCallSite const& cs( _callStacks.back().front() );
+	yaal::tools::HHuginn::HCallSite const& cs( _callStacks.back().front() );
 	identifier_names_t in;
 	for ( HIntrospecteeInterface::HVariableView const& vv : introspectee_.get_locals( 0 ) ) {
 		in.emplace_back( vv.name(), !! vv.value() ? to_string( vv.value() ) : "<undefined>" );
@@ -52,11 +52,11 @@ void HIntrospector::do_introspect( yaal::tools::HIntrospecteeInterface& introspe
 	_identifierNamesLogUp.insert( make_pair( make_pair( cs.file(), cs.line() ), in ) );
 }
 
-yaal::tools::HIntrospecteeInterface::call_stack_t const* HIntrospector::get_stack( yaal::hcore::HString const& file_, int line_ ) {
-	yaal::tools::HIntrospecteeInterface::call_stack_t const* callStack( nullptr );
-	for ( yaal::tools::HIntrospecteeInterface::call_stack_t const& cs : _callStacks ) {
+yaal::tools::HHuginn::call_stack_t const* HIntrospector::get_stack( yaal::hcore::HString const& file_, int line_ ) {
+	yaal::tools::HHuginn::call_stack_t const* callStack( nullptr );
+	for ( yaal::tools::HHuginn::call_stack_t const& cs : _callStacks ) {
 		if ( ! cs.is_empty() ) {
-			yaal::tools::HIntrospecteeInterface::HCallSite const& callSite( cs.front() );
+			yaal::tools::HHuginn::HCallSite const& callSite( cs.front() );
 			if ( ( callSite.file() == file_ ) && ( callSite.line() == line_ ) ) {
 				callStack = &cs;
 				break;

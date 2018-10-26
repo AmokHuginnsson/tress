@@ -2223,7 +2223,7 @@ TUT_UNIT_TEST( "introspection" )
 		),
 		"14"
 	);
-	HIntrospecteeInterface::call_stack_t const* callStack( introspector.get_stack( "*anonymous stream*", 2 ) );
+	HHuginn::call_stack_t const* callStack( introspector.get_stack( "*anonymous stream*", 2 ) );
 	char const expected[][64] = {
 		"*anonymous stream*:2:2:foo",
 		"*anonymous stream*:8:9:bar",
@@ -2231,7 +2231,7 @@ TUT_UNIT_TEST( "introspection" )
 	};
 	HStringStream ss;
 	int row( 0 );
-	for ( HIntrospecteeInterface::HCallSite const& cs : *callStack ) {
+	for ( HHuginn::HCallSite const& cs : *callStack ) {
 		ss << cs.file() << ":" << cs.line() << ":" << cs.column() << ":" << cs.context();
 		ENSURE_EQUALS( "getting call stack failed", ss.str(), expected[row] );
 		ss.reset();
@@ -2310,7 +2310,7 @@ TUT_UNIT_TEST( "incremental introspection" )
 		),
 		"nonenone6"
 	);
-	HIntrospecteeInterface::call_stack_t const* callStack( introspector.get_stack( "*anonymous stream*", 1 ) );
+	HHuginn::call_stack_t const* callStack( introspector.get_stack( "*anonymous stream*", 1 ) );
 	char const expected[][64] = {
 		"*anonymous stream*:1:12:foo",
 		"*anonymous stream*:2:19:bar",
@@ -2318,7 +2318,7 @@ TUT_UNIT_TEST( "incremental introspection" )
 	};
 	HStringStream ss;
 	int row( 0 );
-	for ( HIntrospecteeInterface::HCallSite const& cs : *callStack ) {
+	for ( HHuginn::HCallSite const& cs : *callStack ) {
 		ss << cs.file() << ":" << cs.line() << ":" << cs.column() << ":" << cs.context();
 		ENSURE_EQUALS( "getting call stack failed", ss.str(), expected[row] );
 		ss.reset();

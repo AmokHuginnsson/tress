@@ -32,7 +32,7 @@ public:
 			, value( value_ ) {
 		}
 	};
-	typedef yaal::hcore::HArray<yaal::tools::HIntrospecteeInterface::call_stack_t> call_stacks_t;
+	typedef yaal::hcore::HArray<yaal::tools::HHuginn::call_stack_t> call_stacks_t;
 	typedef yaal::hcore::HPair<yaal::hcore::HString, int> location_t;
 	typedef yaal::hcore::HArray<OVar> identifier_names_t;
 	typedef yaal::hcore::HHashMap<location_t, identifier_names_t> identifier_names_log_t;
@@ -42,7 +42,7 @@ private:
 	identifier_names_log_t _identifierNamesLogUp;
 public:
 	HIntrospector( void );
-	yaal::tools::HIntrospecteeInterface::call_stack_t const* get_stack( yaal::hcore::HString const&, int );
+	yaal::tools::HHuginn::call_stack_t const* get_stack( yaal::hcore::HString const&, int );
 	identifier_names_t const* get_locals( yaal::hcore::HString const&, int );
 	identifier_names_t const* get_locals_up( yaal::hcore::HString const&, int );
 protected:
