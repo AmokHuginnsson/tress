@@ -1165,6 +1165,33 @@ TUT_UNIT_TEST( "assert" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "OPTIMIZE flag" )
+	ENSURE_EQUALS(
+		"assert did not execute",
+		execute(
+			"main() {\n"
+			"\tx = 13;\n"
+			"\tassert( ( x = 7 ) > 0, \"oops\" );\n"
+			"\treturn( x );\n"
+			"}"
+		),
+		"7"
+	);
+	HHuginn::ptr_t h( make_pointer<HHuginn>( HHuginn::COMPILER::OPTIMIZE ) );
+	ENSURE_EQUALS(
+		"OPTIMIZE flag failed",
+		execute(
+			h,
+			"main() {\n"
+			"\tx = 13;\n"
+			"\tassert( ( x = 7 ) > 0, \"oops\" );\n"
+			"\treturn( x );\n"
+			"}"
+		),
+		"13"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "empty return" )
 	ENSURE_EQUALS(
 		"empty return failed",
