@@ -1536,6 +1536,22 @@ TUT_UNIT_TEST( "HAction" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "HSkip" )
+	int val( 0 );
+	int val_alt( 0 );
+	int val_final( 0 );
+	HRule i( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val ), _1 ) )] );
+	HRule ia( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val_alt ), _1 ) )] );
+	HRule ifin( integer[HBoundCall<void ( int )>( call( &defer<int>::set, ref( val_final ), _1 ) )] );
+	HExecutingParser ep( string( "nums{" ) >> skip( i >> ":rng" ) >> ifin >> ":fin" >> skip( ia >> ":neg" ) >> "}" );
+	ENSURE_NOT( "parse on valid failed", ep( "nums{7:rng 9:neg}" ) );
+	ENSURE( "parse on valid failed", ep( "nums{7:rng 13:fin 9:neg}" ) );
+	ep();
+	ENSURE_EQUALS( "sub-step not skipped", val, 0 );
+	ENSURE_EQUALS( "sub-step not applied", val_final, 13 );
+	ENSURE_EQUALS( "sub-step not skipped", val_alt, 0 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "canceling execution steps" )
 	int val( 0 );
 	int val_alt( 0 );
