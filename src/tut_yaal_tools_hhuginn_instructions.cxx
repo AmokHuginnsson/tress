@@ -180,7 +180,43 @@ TUT_UNIT_TEST( "is_element_of" )
 	ENSURE_EQUALS( "is_element_of order failed", execute( "main(){x = order(2, 3, 5, 7, 11, 17 );return([7 ∈ x, 8 ∈ x]);}" ), "[true, false]" );
 	ENSURE_EQUALS( "is_element_of set failed", execute( "main(){x = {2, 3, 5, 7, 11, 17 };return([7 ∈ x, 8 ∈ x]);}" ), "[true, false]" );
 	ENSURE_EQUALS( "is_element_of string failed", execute( "main(){x = \"2 3 5 7 11 17\";return(['7' ∈ x, '8' ∈ x]);}" ), "[true, false]" );
-	ENSURE_EQUALS( "missing is_element_of user succeeded", execute_except( "class A{_x=none;}main(){return(0∈A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:33: There is no `∈' operator for an `A'." );
+	ENSURE_EQUALS( "missing is_element_of user succeeded", execute_except( "import Algorithms as algo;main(){return(0∈algo.reversed([]));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:42: There is no `∈' operator for a `ReversedListView'." );
+	ENSURE_EQUALS( "missing is_element_of user succeeded", execute_except( "class A{_x=none;}main(){return(0∈A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:33: Class `A' does not have `contains' method." );
+	ENSURE_EQUALS(
+		"is_element_of on user defined (contains) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main()\n{"
+			"x = (\n"
+			"  3 ∈ algo.range( 5 ),\n"          // true
+			"  3 ∈ algo.range( 2, 5 ),\n"       // true
+			"  3 ∈ algo.range( 3, 5 ),\n"       // true
+			"  3 ∈ algo.range( 4, 10 ),\n"      // false
+			"  3 ∈ algo.range( 0, 4 ),\n"       // true
+			"  3 ∈ algo.range( 0, 3 ),\n"       // false
+			"  3 ∈ algo.range( 0, 10, 2 ),\n"   // false
+			"  3 ∈ algo.range( 0, 10, 3 ),\n"   // true
+			"  3 ∈ algo.range( 1, 10, 3 ),\n"   // false
+			"  5 ∈ algo.range( 2, 10, 3 ),\n"   // true
+
+			"  3 ∈ algo.range( 10, 0, -1),\n"   // true
+			" 10 ∈ algo.range( 10, 0, -1),\n"   // true
+			"  0 ∈ algo.range( 10, 0, -1),\n"   // false
+			"  7 ∈ algo.range( 10, 0, -3),\n"   // true
+
+			" -3 ∈ algo.range( -10, 0 ),\n"     // true
+			" -3 ∈ algo.range( -10, 0, 3 ),\n"  // false
+			" -4 ∈ algo.range( -10, 0, 3 ),\n"  // true
+
+			" -3 ∈ algo.range( 0, -10, -1),\n"  // true
+			" -4 ∈ algo.range( -2, -10, -3),\n" // false
+			" -5 ∈ algo.range( -2, -10, -3)\n"  // true
+			");\n"
+			"return(x);\n"
+			"}"
+		),
+		"(true, true, true, false, true, false, false, true, false, true, true, true, false, true, true, false, true, true, false, true)"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "is_not_element_of" )
@@ -192,7 +228,8 @@ TUT_UNIT_TEST( "is_not_element_of" )
 	ENSURE_EQUALS( "is_not_element_of order failed", execute( "main(){x = order(2, 3, 5, 7, 11, 17 );return([7 ∉ x, 8 ∉ x]);}" ), "[false, true]" );
 	ENSURE_EQUALS( "is_not_element_of set failed", execute( "main(){x = {2, 3, 5, 7, 11, 17 };return([7 ∉ x, 8 ∉ x]);}" ), "[false, true]" );
 	ENSURE_EQUALS( "is_not_element_of string failed", execute( "main(){x = \"2 3 5 7 11 17\";return(['7' ∉ x, '8' ∉ x]);}" ), "[false, true]" );
-	ENSURE_EQUALS( "missing is_not_element_of user succeeded", execute_except( "class A{_x=none;}main(){return(0∉A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:33: There is no `∉' operator for an `A'." );
+	ENSURE_EQUALS( "missing is_not_element_of user succeeded", execute_except( "import Algorithms as algo;main(){return(0∉algo.reversed([]));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:42: There is no `∉' operator for a `ReversedListView'." );
+	ENSURE_EQUALS( "missing is_not_element_of user succeeded", execute_except( "class A{_x=none;}main(){return(0∉A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:33: Class `A' does not have `contains' method." );
 TUT_TEARDOWN()
 
 void tut_yaal_tools_hhuginn_instructions::test_subscript( HHuginn::TYPE type_, char const* index_, char const* result_ ) {
