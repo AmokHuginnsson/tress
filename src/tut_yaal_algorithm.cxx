@@ -1136,6 +1136,48 @@ TUT_UNIT_TEST( "lower_bound() on list" )
 		int_list_t::const_iterator last( lower_bound( list.begin(), list.end(), _testData_[2][yaal::size( _testData_[2] ) - 1] + 1 ) );
 		ENSURE( "lower_bound after range failed", last == list.end() );
 	}
+	/* repeating generator (increasing range) */ {
+		int_list_t list;
+		std_list_t data;
+		int const NO_RANGES( 16 );
+		for ( int r( 1 ); r <= NO_RANGES; ++ r ) {
+			for ( int i( 0 ); i < r; ++ i ) {
+				list.push_back( r * 2 );
+				data.push_back( r * 2 );
+			}
+		}
+		for ( int i( 0 ); i <= ( NO_RANGES * 2 ); ++ i ) {
+			int_list_t::const_iterator it( lower_bound( list.begin(), list.end(), i ) );
+			std_list_t::const_iterator p( std::lower_bound( data.begin(), data.end(), i ) );
+			ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_list_t::const_iterator>( list.begin(), it ), std::distance<std_list_t::const_iterator>( data.begin(), p ) );
+		}
+		int_list_t::const_iterator first( lower_bound( list.begin(), list.end(), -1 ) );
+		ENSURE( "lower_bound before range failed", first == list.begin() );
+		int_list_t::const_iterator last( lower_bound( list.begin(), list.end(), NO_RANGES * 2 + 1 ) );
+		ENSURE( "lower_bound after range failed", last == list.end() );
+	}
+	/* repeating generator (decreasing range) */ {
+		int_list_t list;
+		std_list_t data;
+		int const NO_RANGES( 16 );
+		for ( int r( 0 ); r < NO_RANGES; ++ r ) {
+			for ( int i( 0 ); i < ( NO_RANGES - r ); ++ i ) {
+				list.push_back( r * 2 );
+				data.push_back( r * 2 );
+			}
+		}
+		for ( int i( 0 ); i < ( NO_RANGES * 2 - 1 ); ++ i ) {
+			int_list_t::const_iterator it( lower_bound( list.begin(), list.end(), i ) );
+			std_list_t::const_iterator p( std::lower_bound( data.begin(), data.end(), i ) );
+			ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_list_t::const_iterator>( list.begin(), it ), std::distance<std_list_t::const_iterator>( data.begin(), p ) );
+		}
+		int_list_t::const_iterator first( lower_bound( list.begin(), list.end(), -1 ) );
+		ENSURE( "lower_bound before range failed", first == list.begin() );
+		int_list_t::const_iterator last( lower_bound( list.begin(), list.end(), NO_RANGES * 2 + 1 ) );
+		ENSURE( "lower_bound after range failed", last == list.end() );
+	}
 	int_list_t empty;
 	int_list_t::const_iterator it( lower_bound( empty.begin(), empty.end(), 0 ) );
 	ENSURE( "lower_bound on empty failed", it == empty.begin() );
@@ -1168,6 +1210,48 @@ TUT_UNIT_TEST( "lower_bound() on array" )
 		int_array_t::const_iterator last( lower_bound( array.begin(), array.end(), _testData_[2][yaal::size( _testData_[2] ) - 1] + 1 ) );
 		ENSURE( "lower_bound after range failed", last == array.end() );
 	}
+	/* repeating generator (increasing range) */ {
+		int_array_t array;
+		std_vector_t data;
+		int const NO_RANGES( 16 );
+		for ( int r( 1 ); r <= NO_RANGES; ++ r ) {
+			for ( int i( 0 ); i < r; ++ i ) {
+				array.push_back( r * 2 );
+				data.push_back( r * 2 );
+			}
+		}
+		for ( int i( 0 ); i <= ( NO_RANGES * 2 ); ++ i ) {
+			int_array_t::const_iterator it( lower_bound( array.begin(), array.end(), i ) );
+			std_vector_t::const_iterator p( std::lower_bound( data.begin(), data.end(), i ) );
+			ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_array_t::const_iterator>( array.begin(), it ), std::distance<std_vector_t::const_iterator>( data.begin(), p ) );
+		}
+		int_array_t::const_iterator first( lower_bound( array.begin(), array.end(), -1 ) );
+		ENSURE( "lower_bound before range failed", first == array.begin() );
+		int_array_t::const_iterator last( lower_bound( array.begin(), array.end(), NO_RANGES * 2 + 1 ) );
+		ENSURE( "lower_bound after range failed", last == array.end() );
+	}
+	/* repeating generator (decreasing range) */ {
+		int_array_t array;
+		std_vector_t data;
+		int const NO_RANGES( 16 );
+		for ( int r( 0 ); r < NO_RANGES; ++ r ) {
+			for ( int i( 0 ); i < ( NO_RANGES - r ); ++ i ) {
+				array.push_back( r * 2 );
+				data.push_back( r * 2 );
+			}
+		}
+		for ( int i( 0 ); i < NO_RANGES; ++ i ) {
+			int_array_t::const_iterator it( lower_bound( array.begin(), array.end(), i ) );
+			std_vector_t::const_iterator p( std::lower_bound( data.begin(), data.end(), i ) );
+			ENSURE_EQUALS( "lower_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "lower_bound on repeating failed", distance<int_array_t::const_iterator>( array.begin(), it ), std::distance<std_vector_t::const_iterator>( data.begin(), p ) );
+		}
+		int_array_t::const_iterator first( lower_bound( array.begin(), array.end(), -1 ) );
+		ENSURE( "lower_bound before range failed", first == array.begin() );
+		int_array_t::const_iterator last( lower_bound( array.begin(), array.end(), NO_RANGES * 2 + 1 ) );
+		ENSURE( "lower_bound after range failed", last == array.end() );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "upper_bound() on list" )
@@ -1196,6 +1280,48 @@ TUT_UNIT_TEST( "upper_bound() on list" )
 		ENSURE( "upper_bound before range failed", first == list.begin() );
 		int_list_t::const_iterator last( upper_bound( list.begin(), list.end(), _testData_[2][yaal::size( _testData_[2] ) - 1] ) );
 		ENSURE( "lower_bound after range failed", last == list.end() );
+	}
+	/* repeating generator (increasing range) */ {
+		int_list_t list;
+		std_list_t data;
+		int const NO_RANGES( 16 );
+		for ( int r( 1 ); r <= NO_RANGES; ++ r ) {
+			for ( int i( 0 ); i < r; ++ i ) {
+				list.push_back( r * 2 );
+				data.push_back( r * 2 );
+			}
+		}
+		for ( int i( 0 ); i < ( NO_RANGES * 2 ); ++ i ) {
+			int_list_t::const_iterator it( upper_bound( list.begin(), list.end(), i ) );
+			std_list_t::const_iterator p( std::upper_bound( data.begin(), data.end(), i ) );
+			ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "upper_bound on repeating failed", distance<int_list_t::const_iterator>( list.begin(), it ), std::distance<std_list_t::const_iterator>( data.begin(), p ) );
+		}
+		int_list_t::const_iterator first( upper_bound( list.begin(), list.end(), -1 ) );
+		ENSURE( "upper_bound before range failed", first == list.begin() );
+		int_list_t::const_iterator last( upper_bound( list.begin(), list.end(), ( NO_RANGES * 2 ) ) );
+		ENSURE( "upper_bound after range failed", last == list.end() );
+	}
+	/* repeating generator (decreasing range) */ {
+		int_list_t list;
+		std_list_t data;
+		int const NO_RANGES( 16 );
+		for ( int r( 0 ); r < NO_RANGES; ++ r ) {
+			for ( int i( 0 ); i < ( NO_RANGES - r ); ++ i ) {
+				list.push_back( r * 2 );
+				data.push_back( r * 2 );
+			}
+		}
+		for ( int i( 0 ); i < ( NO_RANGES * 2 ) - 2; ++ i ) {
+			int_list_t::const_iterator it( upper_bound( list.begin(), list.end(), i ) );
+			std_list_t::const_iterator p( std::upper_bound( data.begin(), data.end(), i ) );
+			ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "upper_bound on repeating failed", distance<int_list_t::const_iterator>( list.begin(), it ), std::distance<std_list_t::const_iterator>( data.begin(), p ) );
+		}
+		int_list_t::const_iterator first( upper_bound( list.begin(), list.end(), -1 ) );
+		ENSURE( "upper_bound before range failed", first == list.begin() );
+		int_list_t::const_iterator last( upper_bound( list.begin(), list.end(), ( NO_RANGES * 2 ) ) );
+		ENSURE( "upper_bound after range failed", last == list.end() );
 	}
 	int_list_t empty;
 	int_list_t::const_iterator it( upper_bound( empty.begin(), empty.end(), 0 ) );
@@ -1227,6 +1353,48 @@ TUT_UNIT_TEST( "upper_bound() on array" )
 		ENSURE( "upper_bound before range failed", first == array.begin() );
 		int_array_t::const_iterator last( upper_bound( array.begin(), array.end(), _testData_[2][yaal::size( _testData_[2] ) - 1] ) );
 		ENSURE( "lower_bound after range failed", last == array.end() );
+	}
+	/* repeating generator (increasing range) */ {
+		int_array_t array;
+		std_vector_t data;
+		int const NO_RANGES( 16 );
+		for ( int r( 1 ); r <= NO_RANGES; ++ r ) {
+			for ( int i( 0 ); i < r; ++ i ) {
+				array.push_back( r * 2 );
+				data.push_back( r * 2 );
+			}
+		}
+		for ( int i( 0 ); i < ( NO_RANGES * 2 ); ++ i ) {
+			int_array_t::const_iterator it( upper_bound( array.begin(), array.end(), i ) );
+			std_vector_t::const_iterator p( std::upper_bound( data.begin(), data.end(), i ) );
+			ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "upper_bound on repeating failed", distance<int_array_t::const_iterator>( array.begin(), it ), std::distance<std_vector_t::const_iterator>( data.begin(), p ) );
+		}
+		int_array_t::const_iterator first( upper_bound( array.begin(), array.end(), -1 ) );
+		ENSURE( "upper_bound before range failed", first == array.begin() );
+		int_array_t::const_iterator last( upper_bound( array.begin(), array.end(), ( NO_RANGES * 2 ) ) );
+		ENSURE( "upper_bound after range failed", last == array.end() );
+	}
+	/* repeating generator (decreasing range) */ {
+		int_array_t array;
+		std_vector_t data;
+		int const NO_RANGES( 16 );
+		for ( int r( 0 ); r < NO_RANGES; ++ r ) {
+			for ( int i( 0 ); i < ( NO_RANGES - r ); ++ i ) {
+				array.push_back( r * 2 );
+				data.push_back( r * 2 );
+			}
+		}
+		for ( int i( 0 ); i < ( NO_RANGES * 2 ) - 2; ++ i ) {
+			int_array_t::const_iterator it( upper_bound( array.begin(), array.end(), i ) );
+			std_vector_t::const_iterator p( std::upper_bound( data.begin(), data.end(), i ) );
+			ENSURE_EQUALS( "upper_bound in range failed", *it, *p );
+			ENSURE_EQUALS( "upper_bound on repeating failed", distance<int_array_t::const_iterator>( array.begin(), it ), std::distance<std_vector_t::const_iterator>( data.begin(), p ) );
+		}
+		int_array_t::const_iterator first( upper_bound( array.begin(), array.end(), -1 ) );
+		ENSURE( "upper_bound before range failed", first == array.begin() );
+		int_array_t::const_iterator last( upper_bound( array.begin(), array.end(), ( NO_RANGES * 2 ) ) );
+		ENSURE( "upper_bound after range failed", last == array.end() );
 	}
 TUT_TEARDOWN()
 
