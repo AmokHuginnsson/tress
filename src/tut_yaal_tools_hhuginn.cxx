@@ -1366,6 +1366,25 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "bugs regressions checks" )
 	ENSURE_EQUALS(
+		"exception while new key-value pair is created via multiple assignment",
+		execute(
+			"main(){"
+			"a = {};"
+			"try {"
+			"a[0] = a[1/0] = 0;"
+			"} catch ( Exception e ) {"
+			"}"
+			"b = dict();"
+			"try {"
+			"b[0] = b[1/0] = 0;"
+			"} catch ( Exception e ) {"
+			"}"
+			"return ( (a,b) );"
+			"}"
+		),
+		"({0: none}, [0: none])"
+	);
+	ENSURE_EQUALS(
 		"session id assignment for inlined scopes (scheme)",
 		execute(
 			"main() {"
