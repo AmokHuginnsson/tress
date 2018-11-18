@@ -116,7 +116,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "connect to closed port" )
 #ifdef __MSVCXX__
-	char const errExpect[] = "No connection could be made because the target machine actively refused it.\r\n";
+	char const errExpect[] = "No connection could be made because the target machine actively refused it";
 #else
 	char const errExpect[] = "Connection refused";
 #endif

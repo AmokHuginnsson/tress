@@ -40,6 +40,11 @@ TUT_UNIT_TEST( "free disk space" )
 		<< setw( 14 ) << ri.available()
 		<< " (" << setw( 8 ) << ( ri.available() / ( 1024 * 1024 ) ) << " MiB)"
 		<< " (" << setw( 5 ) << ( ri.available() / ( 1024ll * 1024ll * 1024ll ) ) << " GiB)" << endl;
+	try {
+		hcore::system::get_disk_space_info( "invalid" );
+	} catch ( HException const& e ) {
+		clog << e.what() << endl;
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "available core count" )

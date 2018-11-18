@@ -104,6 +104,7 @@ set_target_properties( huginn_greeter PROPERTIES LINKER_LANGUAGE CXX )
 
 target_link_libraries( huginn_greeter ${Yaal_LIBRARIES} )
 if ( CMAKE_HOST_WIN32 )
+	set_property( DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" PROPERTY VS_STARTUP_PROJECT tress )
 	add_executable( child-simple ${CMAKE_HOME_DIRECTORY}/data/child.cxx )
 	set_target_properties( child-simple PROPERTIES LINKER_LANGUAGE CXX OUTPUT_NAME child RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_HOME_DIRECTORY}/data )
 	set_target_properties( tressplugin PROPERTIES OUTPUT_NAME tressplugin${LIB_INFIX} LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_HOME_DIRECTORY}/data )

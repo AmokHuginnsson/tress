@@ -36,7 +36,7 @@ char const DATA_APPEND[] = "huginn-data-append";
 
 TUT_UNIT_TEST( "FileSystem" )
 #ifdef __MSVCXX__
-	char const openRes[] = "\"*anonymous stream*:1:44: The system cannot find the file specified.\r\n: ./out/non-existing\"";
+	char const openRes[] = "\"*anonymous stream*:1:44: The system cannot find the file specified: ./out/non-existing\"";
 #else
 	char const openRes[] = "\"*anonymous stream*:1:44: No such file or directory: ./out/non-existing\"";
 #endif
@@ -114,7 +114,7 @@ TUT_UNIT_TEST( "rename" )
 	ENSURE_NOT( "Huginn.FileSystem.rename failed (src)", filesystem::exists( FILENAME ) );
 	ENSURE( "Huginn.FileSystem.rename failed (dst)", filesystem::exists( FILENAME_MOVED ) );
 #ifdef __MSVCXX__
-	char const renameExpect[] = "\"*anonymous stream*:1:45: Failed to rename: `non-existing-a' to `non-existing-b': The system cannot find the file specified.\r\n\"";
+	char const renameExpect[] = "\"*anonymous stream*:1:45: Failed to rename: `non-existing-a' to `non-existing-b': The system cannot find the file specified\"";
 #else
 	char const renameExpect[] = "\"*anonymous stream*:1:45: Failed to rename: `non-existing-a' to `non-existing-b': No such file or directory\"";
 #endif
@@ -157,7 +157,7 @@ TUT_UNIT_TEST( "chmod" )
 		"*anonymous stream*:1:40: Bad mode: 8191"
 	);
 #ifdef __MSVCXX__
-	char const chmodExpect[] = "\"*anonymous stream*:1:44: chmod failed: `non-existing': The system cannot find the file specified.\r\n\"";
+	char const chmodExpect[] = "\"*anonymous stream*:1:44: chmod failed: `non-existing': The system cannot find the file specified\"";
 #else
 	char const chmodExpect[] = "\"*anonymous stream*:1:44: chmod failed: `non-existing': No such file or directory\"";
 #endif
@@ -189,7 +189,7 @@ TUT_UNIT_TEST( "remove" )
 #if defined( __HOST_OS_TYPE_FREEBSD__ ) || defined( __HOST_OS_TYPE_CYGWIN__ )
 		char const removeRes[] = "\"*anonymous stream*:1:45: Failed to remove: `./out': Operation not permitted\"";
 #elif defined( __MSVCXX__ )
-		char const removeRes[] = "\"*anonymous stream*:1:45: Failed to remove: `./out': The data is invalid.\r\n\"";
+		char const removeRes[] = "\"*anonymous stream*:1:45: Failed to remove: `./out': The data is invalid\"";
 #elif defined( __HOST_OS_TYPE_SOLARIS__ )
 		char const removeRes[] = "\"*anonymous stream*:1:45: Failed to remove: `./out': Not owner\"";
 #else
@@ -223,7 +223,7 @@ TUT_UNIT_TEST( "readlink" )
 		"[\"tress\", \"./out\", \"non-existing\"]"
 	);
 #ifdef __MSVCXX__
-	char const readlinkExpect[] = "\"*anonymous stream*:1:47: readlink failed: `non-existing': The operation completed successfully.\r\n\"";
+	char const readlinkExpect[] = "\"*anonymous stream*:1:47: readlink failed: `non-existing': The operation completed successfully\"";
 #else
 	char const readlinkExpect[] = "\"*anonymous stream*:1:47: readlink failed: `non-existing': No such file or directory\"";
 #endif
@@ -256,7 +256,7 @@ TUT_UNIT_TEST( "dir" )
 		"[\"a0_target-default.mk\", \"acxx\", \"make.mk\"]"
 	);
 #ifdef __MSVCXX__
-	char const dirExpect[] = "\"*anonymous stream*:1:42: non-existing: The system cannot find the file specified.\r\n\"";
+	char const dirExpect[] = "\"*anonymous stream*:1:42: non-existing: The system cannot find the file specified\"";
 #else
 	char const dirExpect[] = "\"*anonymous stream*:1:42: non-existing: No such file or directory\"";
 #endif
@@ -291,7 +291,7 @@ TUT_UNIT_TEST( "stat" )
 	HFSItem fi( "./data/karatsuba.bc" );
 #ifdef __MSVCXX__
 	int perm( 0666 );
-	char const nonExtErr[] = "The system cannot find the file specified.\r\n";
+	char const nonExtErr[] = "The system cannot find the file specified";
 #else
 	int perm( 0600 );
 	char const nonExtErr[] = "No such file or directory";

@@ -30,7 +30,7 @@ char const CHILD[] = "./data/child" EXE_SUFFIX;
 #ifndef __MSVCXX__
 	char const EXPECTED_EXEC[] = "No such file or directory";
 #else /* #ifndef __MSVCXX__ */
-	char const EXPECTED_EXEC[] = "The system cannot find the file specified.\r\n";
+	char const EXPECTED_EXEC[] = "The system cannot find the file specified";
 #endif /* #else #ifndef __MSVCXX__ */
 
 }
