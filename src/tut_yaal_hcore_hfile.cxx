@@ -56,6 +56,19 @@ TUT_UNIT_TEST( "HFile::READ::BUFFERED_READS (nl)" )
 	ENSURE_EQUALS( "bad line count for buffered reads nl", lineCount, 4 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "HFile::read_line() regression check" )
+	HFile in( "./data/slowa-tiny.txt", HFile::OPEN::READING );
+	HString line;
+	HString res;
+	int lineCount( 0 );
+	while ( in.read_line( line, HFile::READ::BUFFERED_READS ) >= 0 ) {
+		res.append( line );
+		++ lineCount;
+	}
+	ENSURE_EQUALS( "buffered reads nl failed", res, "aaaaaabaceabaciabacieabadańscyabadańskaabadańską" );
+	ENSURE_EQUALS( "bad line count for buffered reads nl", lineCount, 8 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "HFile::READ::BUFFERED_READS (crnl)" )
 	HFile in( "./data/crnl.txt", HFile::OPEN::READING );
 	HString line;
