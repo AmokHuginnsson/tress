@@ -22,7 +22,7 @@ TUT_UNIT_TEST( "HFile::READ::UNBUFFERED_READS (nl)" )
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line, HFile::READ::UNBUFFERED_READS ) >= 0 ) {
+	while ( in.read_line( line, HFile::READ::UNBUFFERED_READS ).good() ) {
 		res.append( line );
 		++ lineCount;
 	}
@@ -35,7 +35,7 @@ TUT_UNIT_TEST( "HFile::READ::UNBUFFERED_READS (crnl)" )
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line, HFile::READ::UNBUFFERED_READS ) >= 0 ) {
+	while ( in.read_line( line, HFile::READ::UNBUFFERED_READS ).good() ) {
 		res.append( line );
 		++ lineCount;
 	}
@@ -48,7 +48,7 @@ TUT_UNIT_TEST( "HFile::READ::BUFFERED_READS (nl)" )
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line, HFile::READ::BUFFERED_READS ) >= 0 ) {
+	while ( in.read_line( line, HFile::READ::BUFFERED_READS ).good() ) {
 		res.append( line );
 		++ lineCount;
 	}
@@ -61,7 +61,7 @@ TUT_UNIT_TEST( "HFile::read_line() regression check" )
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line, HFile::READ::BUFFERED_READS ) >= 0 ) {
+	while ( in.read_line( line, HFile::READ::BUFFERED_READS ).good() ) {
 		res.append( line );
 		++ lineCount;
 	}
@@ -74,7 +74,7 @@ TUT_UNIT_TEST( "HFile::READ::BUFFERED_READS (crnl)" )
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line, HFile::READ::BUFFERED_READS ) >= 0 ) {
+	while ( in.read_line( line, HFile::READ::BUFFERED_READS ).good() ) {
 		res.append( line );
 		++ lineCount;
 	}

@@ -198,7 +198,7 @@ void gather_groups_from_file( OSetup::set_definitions_t& lst ) {
 		throw 0;
 	}
 	HString line;
-	while ( file.read_line( line, ( setup._testGroupListFilePath == "-" ) ? HFile::READ::UNBUFFERED_READS : HFile::READ::BUFFERED_READS ) >= 0 ) {
+	while ( file.read_line( line, ( setup._testGroupListFilePath == "-" ) ? HFile::READ::UNBUFFERED_READS : HFile::READ::BUFFERED_READS ).good() ) {
 		line.trim_left();
 		line.trim_right();
 		lst.push_back( line );
