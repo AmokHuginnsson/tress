@@ -1364,6 +1364,34 @@ TUT_UNIT_TEST( "are constants constant? (immutable)" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "assignment/subscript regressions check" )
+	ENSURE_EQUALS(
+		"assignment subscript mix failed",
+		execute(
+			"main() {"
+			"  H = {none:0};"
+			"  h0 = {};"
+			"  h1 = {};"
+			"  h2 = {};"
+			"  h3 = {};"
+			"  h4 = {};"
+			"  h5 = {};"
+			"  h6 = {};"
+			"  h7 = {};"
+			"  h8 = {};"
+			"  h9 = {};"
+			"  zero = 0;"
+			""
+			"  a = h0[1] = b = h1[h2[zero + 2] = H[none]] = c = h3[d = h4[3 + zero] = h5[h6[4] = e = H[zero + 5] = h7[6] = H[none]] = h8[H[none]] = 7 + zero] = f = g = h9[8] = h = 9;"
+			""
+			"  r = ( H, h0, h1, h2, h3, h4, h5, h6, h7, h8, h9, a, b, c, d, e, f, g, h );"
+			"  return ( r );"
+			"}"
+		),
+		"({none: 0, 5: 0}, {1: 9}, {0: 9}, {2: 0}, {7: 9}, {3: 7}, {0: 7}, {4: 0}, {6: 0}, {0: 7}, {8: 9}, 9, 9, 9, 7, 0, 9, 9, 9)"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "bugs regressions checks" )
 	ENSURE_EQUALS(
 		"exception while new key-value pair is created via multiple assignment",
