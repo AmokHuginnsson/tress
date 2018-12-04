@@ -80,12 +80,27 @@ TUT_UNIT_TEST( "Copy constructor." )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "at()" )
+	item_t::set_start_id( 0 );
+	int const SIZE = 7;
+	typedef HStaticArray<item_t, SIZE> static_array_t;
+	typedef HExceptionT<static_array_t> StaticArrayException;
+	static_array_t array;
+	array.at( 1 ) = 100;
+	array.at( -1 ) = -100;
+	ENSURE_THROW( "access beyond size succed", array.at( SIZE ) = 0, StaticArrayException );
+	ENSURE_THROW( "access with negative index succed", array.at( - SIZE - 1 ) = 0, StaticArrayException );
+	ENSURE_EQUALS( "at() failed", array, static_array_t{ 0, 100, 2, 3, 4, 5, -100 } );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "Operator [ ]." )
 	item_t::set_start_id( 0 );
 	int const SIZE = 7;
-	HStaticArray<item_t, SIZE> array;
-	ENSURE_THROW( "access beyond size succed", array[ SIZE ] = 0, HException );
-	ENSURE_THROW( "access with negative index succed", array[ - SIZE - 1 ] = 0, HException );
+	typedef HStaticArray<item_t, SIZE> static_array_t;
+	static_array_t array;
+	array[1] = 100;
+	array[6] = 600;
+	ENSURE_EQUALS( "at() failed", array, static_array_t{ 0, 100, 2, 3, 4, 5, 600 } );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "is_empty()" )
