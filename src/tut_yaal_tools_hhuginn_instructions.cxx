@@ -273,6 +273,37 @@ TUT_UNIT_TEST( "subscript" )
 		test_subscript( t, "12", "m" );
 		test_subscript( t, "-12", "o" );
 	}
+	ENSURE_EQUALS(
+		"user subscript failed",
+		execute(
+			"class A{_x=[2,4,8]; subscript(idx_){_x[idx_];}}main(){a = A();return((a[0],a[1],a[2]));}"
+		),
+		"(2, 4, 8)"
+	);
+	ENSURE_EQUALS(
+		"user subscript with invalid key succeeded",
+		execute_except(
+			"class A{_x=[2,4,8]; subscript(idx_){_x[idx_];}}main(){a = A();return(a[3]);}"
+		),
+		"*anonymous stream*:1:39: Bad index."
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "member" )
+	ENSURE_EQUALS(
+		"user member failed",
+		execute(
+			"class A{_x=none;constructor(){_x = {\"a\":2,\"test\": \"value\",\"sum\":@(x,y){x+y;}};}member(name_){_x[name_];}}main(){a = A();return((a.a,a.test,a.sum(7,12)));}"
+		),
+		"(2, \"value\", 19)"
+	);
+	ENSURE_EQUALS(
+		"user member with invalid name succeeded",
+		execute_except(
+			"class A{_x=none;constructor(){_x = {\"a\":2,\"test\": \"value\",\"sum\":@(x,y){x+y;}};}member(name_){_x[name_];}}main(){a = A();return(a.b);}"
+		),
+		"*anonymous stream*:1:96: Key does not exist in `lookup'."
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "subscript repeat" )

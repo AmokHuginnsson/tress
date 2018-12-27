@@ -1098,6 +1098,14 @@ char const progExecuteErr120[] =
 	"}\n"
 ;
 
+char const progExecuteErr121[] =
+	"class A { x = 0; }\n"
+	"main() {\n"
+	"y = A();\n"
+	"y.x + y.y;\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1246,6 +1254,7 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr118,
 		progExecuteErr119,
 		progExecuteErr120,
+		progExecuteErr121,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1370,6 +1379,7 @@ TUT_UNIT_TEST( "report execution error" )
 /* 118 */ { 32, 3, 5,    "*tress*:3:5: Copy semantics is not supported on enumerals." },
 /* 119 */ { 32, 3, 5,    "*tress*:3:5: Copy semantics is not supported on enumerations." },
 /* 120 */ { 38, 4, 2,    "*tress*:4:2: Class `A' does not have `subscript' method." },
+/* 121 */ { 44, 4, 8,    "*tress*:4:8: Class `A' does not have `member' method." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
