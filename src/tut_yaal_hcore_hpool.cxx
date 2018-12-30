@@ -13,11 +13,12 @@
 #include <yaal/hcore/hpool.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
-#include <yaal/hcore/hrandomizer.hxx>
+#include <yaal/hcore/random.hxx>
 
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
+using namespace yaal::random;
 using namespace yaal::tools;
 using namespace yaal::ansi;
 using namespace tress::tut_helpers;
@@ -215,7 +216,7 @@ TUT_UNIT_TEST( "allocate full block, free in random order, reallocate full block
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
-	HRandomizer r( randomizer_helper::make_randomizer() );
+	HRandomNumberGenerator r( rng_helper::make_random_number_generator() );
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
 		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
@@ -725,7 +726,7 @@ TUT_UNIT_TEST( "allocate two full blocks, free second in random order, reallocat
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
-	HRandomizer r( randomizer_helper::make_randomizer() );
+	HRandomNumberGenerator r( rng_helper::make_random_number_generator() );
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
 		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
@@ -775,7 +776,7 @@ TUT_UNIT_TEST( "allocate 3 blocks, free all but one in first and second in rando
 	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
-	HRandomizer r( randomizer_helper::make_randomizer() );
+	HRandomNumberGenerator r( rng_helper::make_random_number_generator() );
 	for ( int i( 0 ); i < ( pool_t::OBJECTS_PER_BLOCK - 1 ); ++ i ) {
 		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
 		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
@@ -846,7 +847,7 @@ TUT_UNIT_TEST( "make N full blocks, make room in all of them in random order" )
 		ENSURE_EQUALS( "bad block count", p._poolBlockCount, b + 1 );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, N );
-	HRandomizer r( randomizer_helper::make_randomizer() );
+	HRandomNumberGenerator r( rng_helper::make_random_number_generator() );
 	for ( int b( 0 ); b < N; ++ b ) {
 		int toFreeCount( ( N - 1 ) - b );
 		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
@@ -874,7 +875,7 @@ TUT_UNIT_TEST( "make N full blocks, free them in random order" )
 		}
 		ENSURE_EQUALS( "bad block count", p._poolBlockCount, b + 1 );
 	}
-	HRandomizer r( randomizer_helper::make_randomizer() );
+	HRandomNumberGenerator r( rng_helper::make_random_number_generator() );
 	for ( int b( 0 ); b < N; ++ b ) {
 		int toFreeCount( ( N - 1 ) - b );
 		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
@@ -901,7 +902,7 @@ TUT_UNIT_TEST( "make N full blocks, make room in them in random order, free them
 		}
 		ENSURE_EQUALS( "bad block count", p._poolBlockCount, b + 1 );
 	}
-	HRandomizer r( randomizer_helper::make_randomizer() );
+	HRandomNumberGenerator r( rng_helper::make_random_number_generator() );
 	for ( int b( 0 ); b < N; ++ b )
 		representants[b] = allocated[b][0];
 	for ( int b( 0 ); b < N; ++ b ) {

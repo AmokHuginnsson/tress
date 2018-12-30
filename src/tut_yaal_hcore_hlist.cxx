@@ -21,7 +21,7 @@
 #include <TUT/tut.hpp>
 
 M_VCSID( "$Id: " __ID__ " $" )
-#include <yaal/hcore/hrandomizer.hxx>
+#include <yaal/hcore/random.hxx>
 #include <yaal/tools/collections.hxx>
 #include <yaal/tools/streamtools.hxx>
 #include <yaal/hconsole/hlistwidget.hxx>
@@ -29,6 +29,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
+using namespace yaal::random;
 using namespace yaal::tools;
 using namespace yaal::tools::collections;
 using namespace yaal::ansi;
@@ -2080,7 +2081,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "sort on large set" )
 	static int long const SIZE = 100000;
 	int_list_t l;
-	yaal::generate_n( back_insert_iterator( l ), SIZE, HRandomizer( 0, SIZE / 16 ) );
+	yaal::generate_n( back_insert_iterator( l ), SIZE, HRandomNumberGenerator( 0, SIZE / 16 ) );
 	*l.rbegin() = -1;
 	std_vector_t v( SIZE );
 	yaal::copy( l.begin(), l.end(), v.begin() );

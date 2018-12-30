@@ -6,7 +6,7 @@
 
 #include <yaal/hcore/hstring.hxx>
 #include <yaal/hcore/hformat.hxx>
-#include <yaal/hcore/hrandomizer.hxx>
+#include <yaal/hcore/random.hxx>
 #include <yaal/hcore/unicode.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
@@ -14,6 +14,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
+using namespace yaal::random;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
@@ -790,9 +791,9 @@ int find_substr_raw( char const* const str, int size, char const* const pat, int
 }
 
 struct gen_char {
-	HRandomizer _rnd;
+	HRandomNumberGenerator _rnd;
 	gen_char( void )
-		: _rnd( randomizer_helper::make_randomizer() )
+		: _rnd( rng_helper::make_random_number_generator() )
 		{ }
 	char operator()( void )
 		{ return ( static_cast<char>( _rnd( 1 + 'z' - 'a' ) + 'a' ) ); }

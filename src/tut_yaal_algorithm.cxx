@@ -13,7 +13,7 @@
 
 #include <yaal/hcore/algorithm.hxx>
 #include <yaal/hcore/hhashset.hxx>
-#include <yaal/hcore/hrandomizer.hxx>
+#include <yaal/hcore/random.hxx>
 #include <yaal/hcore/hformat.hxx>
 #include <yaal/tools/streamtools.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
@@ -21,6 +21,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
+using namespace yaal::random;
 using namespace yaal::ansi;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
@@ -845,10 +846,10 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "sort_heap" )
 	std_vector_t v( 100 );
 	int_array_t a( 100 );
-	HRandomizer r( 0, 255 );
+	HRandomNumberGenerator r( 0, 255 );
 	ENSURE_EQUALS( "bad range on randomizer", r.range(), static_cast<u64_t>( 255 ) );
 	std::generate( v.begin(), v.end(), r );
-	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
+	yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0, 255 ) );
 	*v.rbegin() = -1;
 	*a.rbegin() = -1;
 	ENSURE_EQUALS( "wrong generation", a, v );
@@ -866,7 +867,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "sort" )
 	int_array_t a( 100 );
-	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
+	yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0, 255 ) );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	clog << a << endl;
@@ -879,7 +880,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "unique" )
 	int_array_t a( 100 );
-	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
+	yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0, 255 ) );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	clog << a << endl;
@@ -948,7 +949,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "insert_sort" )
 	TIME_CONSTRAINT_EXEMPT(); {
 	int_array_t a( 8000 );
-	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
+	yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0 ) );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	std::sort( v.begin(), v.end() ); {
@@ -964,7 +965,7 @@ TUT_UNIT_TEST( "insert_sort" )
 	ENSURE_EQUALS( "yaal::insert_sort(forward) wrong", a, v );
 } {
 	int_array_t a( 8000 );
-	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
+	yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0 ) );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	std::sort( v.begin(), v.end() ); {
@@ -984,7 +985,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "selection_sort" )
 	TIME_CONSTRAINT_EXEMPT();
 	int_array_t a( 8000 );
-	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
+	yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0 ) );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	std::sort( v.begin(), v.end() );
@@ -996,7 +997,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "heap_sort" )
 	int_array_t a( 8000 );
-	yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
+	yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0 ) );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	std::sort( v.begin(), v.end() );
@@ -1009,7 +1010,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "stable_sort" )
 	int_array_t a( 100 );
-	yaal::generate( a.begin(), a.end(), HRandomizer( 0, 255 ) );
+	yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0, 255 ) );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	clog << a << endl;
@@ -1451,7 +1452,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "partition" )
 	static int const range = 100;
 	int_array_t a( range );
-	HRandomizer r( randomizer_helper::make_randomizer( range ) );
+	HRandomNumberGenerator r( rng_helper::make_random_number_generator( range ) );
 	for ( int n( -range / 3 ); n < range / 3; n += 3 ) {
 		for ( int_array_t::iterator it( a.begin() ), end( a.end() ); it != end; ++ it ) {
 			*it = static_cast<int>( r() ) - range / 2 + n;
@@ -1499,7 +1500,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "stable_partition" )
 	static int const range( 100 );
 	int_array_t a( range );
-	HRandomizer r( randomizer_helper::make_randomizer( range ) );
+	HRandomNumberGenerator r( rng_helper::make_random_number_generator( range ) );
 	for ( int_array_t::iterator it( a.begin() ), end( a.end() ); it != end; ++ it )
 		*it = static_cast<int>( r() ) - range / 2;
 	clog << a << endl;
@@ -1566,7 +1567,7 @@ TUT_UNIT_TEST( "random_sample" )
 	int loTotal( 0 );
 	static int const tries( 256 );
 	for ( int t( 0 ); t < tries; ++ t ) {
-		random_sample( a.begin(), a.end(), b.begin(), b.end(), HRandomizer( static_cast<u64_t>( t ) ) );
+		random_sample( a.begin(), a.end(), b.begin(), b.end(), HRandomNumberGenerator( static_cast<u64_t>( t ) ) );
 		int lo( static_cast<int>( count_if( b.begin(), b.end(), bind1st( less<int>(), range / 2 ) ) ) );
 		loTotal += lo;
 	}
@@ -1610,7 +1611,7 @@ TUT_UNIT_TEST( 50, "sort speed" )
 	double long st( 0 );
 	double long yt( 0 );
 	int_array_t a( 100000 ); {
-		yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
+		yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0 ) );
 		*a.rbegin() = -1;
 		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() ); {
 			HClock c;
@@ -1634,7 +1635,7 @@ TUT_UNIT_TEST( 50, "sort speed" )
 		ENSURE_EQUALS( "yaal::stable_sort (on sorted) wrong", a, v );
 		clog << "*speed* stable_sort (on sorted) result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 	} {
-		yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
+		yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0 ) );
 		*a.rbegin() = -1;
 		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() ); {
 			HClock c;
@@ -1658,7 +1659,7 @@ TUT_UNIT_TEST( 50, "sort speed" )
 		ENSURE_EQUALS( "yaal::sort (on sorted) wrong", a, v );
 		clog << "*speed* sort (on sorted) result = " << ( ( st > yt ) ? green : red ) << ( yt / st ) << lightgray << endl;
 	} {
-		yaal::generate( a.begin(), a.end(), HRandomizer( 0 ) );
+		yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0 ) );
 		*a.rbegin() = -1;
 		std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() ); {
 			HClock c;

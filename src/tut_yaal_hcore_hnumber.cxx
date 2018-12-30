@@ -4,7 +4,7 @@
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hnumber.hxx>
-#include <yaal/hcore/hrandomizer.hxx>
+#include <yaal/hcore/random.hxx>
 #include <yaal/hcore/hcore.hxx>
 #include <yaal/hcore/hformat.hxx>
 #include <yaal/tools/hpipedchild.hxx>
@@ -18,6 +18,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
+using namespace yaal::random;
 using namespace yaal::hcore::number;
 using namespace yaal::math;
 using namespace yaal::tools;
@@ -30,7 +31,7 @@ namespace tut {
 struct tut_yaal_hcore_hnumber : public simple_mock<tut_yaal_hcore_hnumber> {
 	typedef simple_mock<tut_yaal_hcore_hnumber> base_type;
 	static HString BC_PATH;
-	HRandomizer _rnd;
+	HRandomNumberGenerator _rnd;
 	HPipedChild _bc;
 	HString _cache;
 	tut_yaal_hcore_hnumber( void );
@@ -46,7 +47,7 @@ struct tut_yaal_hcore_hnumber : public simple_mock<tut_yaal_hcore_hnumber> {
 HString tut_yaal_hcore_hnumber::BC_PATH = ::getenv( "BC_PATH" ) ? ::getenv( "BC_PATH" ) : "/usr/bin/bc";
 
 tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void )
-	: _rnd( randomizer_helper::make_randomizer() ), _bc(), _cache() {
+	: _rnd( rng_helper::make_random_number_generator() ), _bc(), _cache() {
 	set_env( "BC_LINE_LENGTH", "10000000" );
 	HScopedValueReplacement<int> saveErrno( errno, 0 );
 #ifdef __MSVCXX__

@@ -14,7 +14,7 @@
 
 #include <TUT/tut.hpp>
 
-#include <yaal/hcore/hrandomizer.hxx>
+#include <yaal/hcore/random.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 #include "tut_yaal_hcore_hsbbstree.hxx"
@@ -22,6 +22,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
+using namespace yaal::random;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
@@ -200,7 +201,7 @@ TUT_UNIT_TEST( "Adding keys in descending order." )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Adding keys in random order." )
-	HRandomizer r;
+	HRandomNumberGenerator r;
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_test_insert( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );
@@ -333,7 +334,7 @@ TUT_UNIT_TEST( "Removing keys in descending order from upper half of the tree th
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Removing keys in ascending order from lower half of the tree that was created by adding keys in random order." )
-	HRandomizer r;
+	HRandomNumberGenerator r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		helper_stress_just_insert( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );
@@ -348,7 +349,7 @@ TUT_UNIT_TEST( "Removing keys in ascending order from lower half of the tree tha
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Removing keys in ascending order from upper half of the tree that was created by adding keys in random order." )
-	HRandomizer r;
+	HRandomNumberGenerator r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		helper_stress_just_insert( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );
@@ -363,7 +364,7 @@ TUT_UNIT_TEST( "Removing keys in ascending order from upper half of the tree tha
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Removing keys in descending order from lower half of the tree that was created by adding keys in random order." )
-	HRandomizer r;
+	HRandomNumberGenerator r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i >= 0; -- i )
 		helper_stress_just_insert( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );
@@ -378,7 +379,7 @@ TUT_UNIT_TEST( "Removing keys in descending order from lower half of the tree th
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Removing keys in descending order from upper half of the tree that was created by adding keys in random order." )
-	HRandomizer r;
+	HRandomNumberGenerator r;
 	set_t s;
 	for ( int i = NUMBER_OF_TEST_NODES; i > 0; -- i )
 		helper_stress_just_insert( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );
@@ -394,7 +395,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Removing keys in random order from upper half of the tree that was created by adding keys in random order." )
 	TIME_CONSTRAINT_EXEMPT();
-	HRandomizer r;
+	HRandomNumberGenerator r;
 	set_t s;
 	for ( int i = 0; i < NUMBER_OF_TEST_NODES; ++ i )
 		helper_stress_just_insert( s, static_cast<int>( r( KEY_POOL_SIZE ) ) );

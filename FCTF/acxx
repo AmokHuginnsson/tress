@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 import sys
 from os import unlink, access, F_OK
@@ -13,11 +13,11 @@ NO_MORE_BUGS_STATUS = 1
 WRONG_STATUS = 2
 verbose = 0
 
-def msg( str, nonl = 0 ):
+def msg( str, nonl = False ):
 	if ( verbose ):
-		print str,
+		print( str, end = "" )
 		if ( not nonl ):
-			print ""
+			print( "" )
 
 def has_opt( opts, short, long ):
 	return ( opts.count( short ) + opts.count( long ) )
@@ -48,7 +48,7 @@ def get_input_path( opts ):
 			input_path = opt
 			break
 	if ( input_path == "" ):
-		raise PebkacError( "no input path found" )
+		raise Exception( "no input path found" )
 	return input_path
 
 def verify_bug( input_path, line_no ):
@@ -66,7 +66,7 @@ def check_bug( lines, input_path ):
 	required_from_here = re.compile( "^" + input_path + ":([0-9]+):([0-9]+:)* +required from " )
 	ret = WRONG_STATUS
 	for line in lines:
-		msg( line, 1 )
+		msg( line, True )
 		if ( ret == WRONG_STATUS ):
 			match = no_more_bugs_match.match( line )
 			if ( match ):
@@ -84,14 +84,14 @@ def check_bug( lines, input_path ):
 def acxx( argv ):
 	try:
 		if ( has_opt( argv, "-h", "--help" ) ):
-			print "acxx -o output/path/object.ao some/dir/source.acxx"
-			print "options:"
-			print "-o, --output output/path/object.ao - output path for ao files"
-			print "-h, --help - this help screen"
-			print "-v, --verbose - print some informational messages"
+			print( "acxx -o output/path/object.ao some/dir/source.acxx" )
+			print( "options:" )
+			print( "-o, --output output/path/object.ao - output path for ao files" )
+			print( "-h, --help - this help screen" )
+			print( "-v, --verbose - print some informational messages" )
 			return
 		if ( not has_opt( argv, "-o", "--output" ) ):
-			raise PebkacError( "Output path option required and not specified" )
+			raise Exception( "Output path option required and not specified" )
 		global verbose
 		verbose = has_opt( argv, "-v", "--verbose" )
 		erase_opt( argv, "-v", "--verbose" )
@@ -113,20 +113,20 @@ def acxx( argv ):
 			except:
 				msg( COMPILER_ALT + " -xc++" + " -D" + BUG_TEMPLATE + str( bug_no ) + " " + " ".join( argv ) )
 				out = Popen( [ COMPILER_ALT, "-xc++", "-D" + BUG_TEMPLATE + str( bug_no ) ] + argv, stderr = PIPE ).stderr;
-			lines = out.readlines()
+			lines = map( lambda x: x.decode(), out.readlines() )
 			bug_status = check_bug( lines, input_path )
 			out.close()
 			bug_no += 1
 		if ( access( output_path, F_OK ) ):
 			unlink( output_path )
 		if ( bug_status == WRONG_STATUS ):
-			print >> sys.stderr, "Anti-compilation of BUG number " + str( bug_no - 1 ) + " failed!"
-			print "\n".join( lines )
+			print( sys.stderr, "Anti-compilation of BUG number " + str( bug_no - 1 ) + " failed!", file = sys.stderr )
+			print( "\n".join( lines ) )
 		else:
 			f = open( output_path, 'w' )
 			f.close()
-	except PebkacError, e:
-		print e
+	except Exception as e:
+		print( e )
 
 def main():
 	acxx( sys.argv[1:] )
