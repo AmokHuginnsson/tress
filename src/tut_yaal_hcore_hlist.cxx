@@ -2081,7 +2081,9 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "sort on large set" )
 	static int long const SIZE = 100000;
 	int_list_t l;
-	yaal::generate_n( back_insert_iterator( l ), SIZE, HRandomNumberGenerator( 0, SIZE / 16 ) );
+	distribution::HDiscrete rng( 0, SIZE / 16 );
+	rng.set_seed( 0 );
+	yaal::generate_n( back_insert_iterator( l ), SIZE, rng );
 	*l.rbegin() = -1;
 	std_vector_t v( SIZE );
 	yaal::copy( l.begin(), l.end(), v.begin() );

@@ -216,10 +216,10 @@ TUT_UNIT_TEST( "allocate full block, free in random order, reallocate full block
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
-	HRandomNumberGenerator r( rng_helper::make_random_number_generator() );
+	distribution::HDiscrete r( rng_helper::make_random_number_generator() );
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( static_cast<u64_t>( r() ) % static_cast<u64_t>( toFreeCount ) ) : 0 );
 		void* toFree( allocated[ toFreeIdx ] );
 		freeOrder[i] = toFree;
 		allocated.erase( allocated.begin() + toFreeIdx );
@@ -726,10 +726,10 @@ TUT_UNIT_TEST( "allocate two full blocks, free second in random order, reallocat
 		check_consistency( p );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 2 );
-	HRandomNumberGenerator r( rng_helper::make_random_number_generator() );
+	distribution::HDiscrete r( rng_helper::make_random_number_generator() );
 	for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( static_cast<u64_t>( r() ) % static_cast<u64_t>( toFreeCount ) ) : 0 );
 		void* toFree( allocatedB1[ toFreeIdx ] );
 		freeOrder[i] = toFree;
 		allocatedB1.erase( allocatedB1.begin() + toFreeIdx );
@@ -776,16 +776,16 @@ TUT_UNIT_TEST( "allocate 3 blocks, free all but one in first and second in rando
 	void* p0( p.alloc() );
 	check_consistency( p );
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 3 );
-	HRandomNumberGenerator r( rng_helper::make_random_number_generator() );
+	distribution::HDiscrete r( rng_helper::make_random_number_generator() );
 	for ( int i( 0 ); i < ( pool_t::OBJECTS_PER_BLOCK - 1 ); ++ i ) {
 		int toFreeCount( ( pool_t::OBJECTS_PER_BLOCK - 1 ) - i );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( static_cast<u64_t>( r() ) % static_cast<u64_t>( toFreeCount ) ) : 0 );
 		void* toFree( allocatedB0[ toFreeIdx ] );
 		freeOrderB0[i] = toFree;
 		allocatedB0.erase( allocatedB0.begin() + toFreeIdx );
 		p.free( toFree );
 		check_consistency( p );
-		toFreeIdx = ( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
+		toFreeIdx = ( toFreeCount > 0 ? static_cast<int>( r() % static_cast<i64_t>( toFreeCount ) ) : 0 );
 		toFree = allocatedB1[ toFreeIdx ];
 		freeOrderB1[i] = toFree;
 		allocatedB1.erase( allocatedB1.begin() + toFreeIdx );
@@ -847,10 +847,10 @@ TUT_UNIT_TEST( "make N full blocks, make room in all of them in random order" )
 		ENSURE_EQUALS( "bad block count", p._poolBlockCount, b + 1 );
 	}
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, N );
-	HRandomNumberGenerator r( rng_helper::make_random_number_generator() );
+	distribution::HDiscrete r( rng_helper::make_random_number_generator() );
 	for ( int b( 0 ); b < N; ++ b ) {
 		int toFreeCount( ( N - 1 ) - b );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r() % static_cast<i64_t>( toFreeCount ) ) : 0 );
 		p.free( representants[toFreeIdx] );
 		representants.erase( representants.begin() + toFreeIdx );
 		check_consistency( p );
@@ -875,10 +875,10 @@ TUT_UNIT_TEST( "make N full blocks, free them in random order" )
 		}
 		ENSURE_EQUALS( "bad block count", p._poolBlockCount, b + 1 );
 	}
-	HRandomNumberGenerator r( rng_helper::make_random_number_generator() );
+distribution::HDiscrete r( rng_helper::make_random_number_generator() );
 	for ( int b( 0 ); b < N; ++ b ) {
 		int toFreeCount( ( N - 1 ) - b );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r() % static_cast<i64_t>( toFreeCount ) ) : 0 );
 		for ( int i( 0 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 			p.free( allocated[toFreeIdx][i] );
 			check_consistency( p );
@@ -902,12 +902,12 @@ TUT_UNIT_TEST( "make N full blocks, make room in them in random order, free them
 		}
 		ENSURE_EQUALS( "bad block count", p._poolBlockCount, b + 1 );
 	}
-	HRandomNumberGenerator r( rng_helper::make_random_number_generator() );
+distribution::HDiscrete r( rng_helper::make_random_number_generator() );
 	for ( int b( 0 ); b < N; ++ b )
 		representants[b] = allocated[b][0];
 	for ( int b( 0 ); b < N; ++ b ) {
 		int toFreeCount( ( N - 1 ) - b );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r() % static_cast<i64_t>( toFreeCount ) ) : 0 );
 		p.free( representants[toFreeIdx] );
 		representants.erase( representants.begin() + toFreeIdx );
 		check_consistency( p );
@@ -915,7 +915,7 @@ TUT_UNIT_TEST( "make N full blocks, make room in them in random order, free them
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, N );
 	for ( int b( 0 ); b < N; ++ b ) {
 		int toFreeCount( ( N - 1 ) - b );
-		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r( static_cast<u64_t>( toFreeCount ) ) ) : 0 );
+		int toFreeIdx( toFreeCount > 0 ? static_cast<int>( r() % static_cast<i64_t>( toFreeCount ) ) : 0 );
 		for ( int i( 1 ); i < pool_t::OBJECTS_PER_BLOCK; ++ i ) {
 			p.free( allocated[toFreeIdx][i] );
 			check_consistency( p );

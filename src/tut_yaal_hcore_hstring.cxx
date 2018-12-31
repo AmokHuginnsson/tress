@@ -791,12 +791,12 @@ int find_substr_raw( char const* const str, int size, char const* const pat, int
 }
 
 struct gen_char {
-	HRandomNumberGenerator _rnd;
+	distribution::HDiscrete _rnd;
 	gen_char( void )
-		: _rnd( rng_helper::make_random_number_generator() )
+		: _rnd( rng_helper::make_random_number_generator( 1 + 'z' - 'a' ) )
 		{ }
 	char operator()( void )
-		{ return ( static_cast<char>( _rnd( 1 + 'z' - 'a' ) + 'a' ) ); }
+		{ return ( static_cast<char>( _rnd() + 'a' ) ); }
 };
 
 TUT_UNIT_TEST( "find(\"\")" )

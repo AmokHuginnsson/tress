@@ -31,7 +31,7 @@ namespace tut {
 struct tut_yaal_hcore_hnumber : public simple_mock<tut_yaal_hcore_hnumber> {
 	typedef simple_mock<tut_yaal_hcore_hnumber> base_type;
 	static HString BC_PATH;
-	HRandomNumberGenerator _rnd;
+	distribution::HDiscrete _rnd;
 	HPipedChild _bc;
 	HString _cache;
 	tut_yaal_hcore_hnumber( void );
@@ -78,8 +78,8 @@ tut_yaal_hcore_hnumber::tut_yaal_hcore_hnumber( void )
 
 
 HString const& tut_yaal_hcore_hnumber::random_real( void ) {
-	int integralPart( static_cast<int>( _rnd( 40 ) ) );
-	int decimalPart( static_cast<int>( _rnd( 40 ) ) );
+	int integralPart( static_cast<int>( _rnd() % 40 ) );
+	int decimalPart( static_cast<int>( _rnd() % 40 ) );
 	_cache = "0";
 	if ( integralPart || decimalPart ) {
 		_cache.clear();

@@ -846,10 +846,12 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "sort_heap" )
 	std_vector_t v( 100 );
 	int_array_t a( 100 );
-	HRandomNumberGenerator r( 0, 255 );
-	ENSURE_EQUALS( "bad range on randomizer", r.range(), static_cast<u64_t>( 255 ) );
+	distribution::HDiscrete r( 0, 255 );
+	r.set_seed( 0 );
+	ENSURE_EQUALS( "bad range on randomizer", r.range(), static_cast<u64_t>( 256 ) );
 	std::generate( v.begin(), v.end(), r );
-	yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0, 255 ) );
+	r.set_seed( 0 );
+	yaal::generate( a.begin(), a.end(), r );
 	*v.rbegin() = -1;
 	*a.rbegin() = -1;
 	ENSURE_EQUALS( "wrong generation", a, v );
@@ -867,7 +869,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "sort" )
 	int_array_t a( 100 );
-	yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0, 255 ) );
+	distribution::HDiscrete rng( 0, 255 );
+	rng.set_seed( 0 );
+	yaal::generate( a.begin(), a.end(), rng );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	clog << a << endl;
@@ -880,7 +884,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "unique" )
 	int_array_t a( 100 );
-	yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0, 255 ) );
+	distribution::HDiscrete rng( 0, 255 );
+	rng.set_seed( 0 );
+	yaal::generate( a.begin(), a.end(), rng );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	clog << a << endl;
@@ -1010,7 +1016,9 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "stable_sort" )
 	int_array_t a( 100 );
-	yaal::generate( a.begin(), a.end(), HRandomNumberGenerator( 0, 255 ) );
+	distribution::HDiscrete rng( 0, 255 );
+	rng.set_seed( 0 );
+	yaal::generate( a.begin(), a.end(), rng );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
 	clog << a << endl;
@@ -1452,7 +1460,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "partition" )
 	static int const range = 100;
 	int_array_t a( range );
-	HRandomNumberGenerator r( rng_helper::make_random_number_generator( range ) );
+	distribution::HDiscrete r( rng_helper::make_random_number_generator( range ) );
 	for ( int n( -range / 3 ); n < range / 3; n += 3 ) {
 		for ( int_array_t::iterator it( a.begin() ), end( a.end() ); it != end; ++ it ) {
 			*it = static_cast<int>( r() ) - range / 2 + n;
@@ -1500,7 +1508,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "stable_partition" )
 	static int const range( 100 );
 	int_array_t a( range );
-	HRandomNumberGenerator r( rng_helper::make_random_number_generator( range ) );
+	distribution::HDiscrete r( rng_helper::make_random_number_generator( range ) );
 	for ( int_array_t::iterator it( a.begin() ), end( a.end() ); it != end; ++ it )
 		*it = static_cast<int>( r() ) - range / 2;
 	clog << a << endl;
@@ -1529,19 +1537,22 @@ TUT_UNIT_TEST( "stable_partition" )
 	ENSURE( "stable_partition failed (right is_sorted)", is_sorted( m, a.end() ) );
 TUT_TEARDOWN()
 
-struct incUnary {
+struct IncGen {
 	int _n;
-	incUnary( int n )
+	int _lim;
+	IncGen( int n, int lim )
 		: _n( n )
-		{}
-	template<typename T>
-	int operator()( T const& lim_ ) {
-		int lim( static_cast<int>( lim_ - 1 ) );
+		, _lim( lim ) {
+	}
+	int operator()( void ) {
+		int lim( static_cast<int>( _lim - 1 ) );
 		int val( _n < lim ? _n : lim );
 		++ _n;
+		-- _lim;
 		return ( val );
 	}
 };
+
 
 TUT_UNIT_TEST( "random_shuffle" )
 	static int const range( 100 );
@@ -1553,7 +1564,7 @@ TUT_UNIT_TEST( "random_shuffle" )
 	clog << a << endl;
 	sort( a.begin(), a.end() );
 	ENSURE_EQUALS( "random_shuffle lost some elements!", a, b );
-	random_shuffle( a.begin(), a.end(), incUnary( 0 ) );
+	random_shuffle( a.begin(), a.end(), IncGen( 0, range ) );
 	clog << a << endl;
 	yaal::reverse( a.begin(), a.end() );
 	ENSURE_EQUALS( "random_shuffle did not use given randomizer properly", a, b );
@@ -1566,8 +1577,10 @@ TUT_UNIT_TEST( "random_sample" )
 	int_array_t b( range / 2, -1 );
 	int loTotal( 0 );
 	static int const tries( 256 );
+	HRandomNumberGenerator rng;
 	for ( int t( 0 ); t < tries; ++ t ) {
-		random_sample( a.begin(), a.end(), b.begin(), b.end(), HRandomNumberGenerator( static_cast<u64_t>( t ) ) );
+		rng.set_seed( static_cast<u64_t>( t ) );
+		random_sample( a.begin(), a.end(), b.begin(), b.end(), rng );
 		int lo( static_cast<int>( count_if( b.begin(), b.end(), bind1st( less<int>(), range / 2 ) ) ) );
 		loTotal += lo;
 	}
