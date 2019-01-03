@@ -219,8 +219,10 @@ TUT_UNIT_TEST( "kill" )
 		"Subprocess.kill() failed",
 		execute(
 			"import OperatingSystem as os;"
+			"import DateTime as dt;"
 			"main(){"
 			"c=os.spawn(\"/bin/sleep\", \"10\");"
+			"dt.sleep(100000000);\n"
 			"c.kill();\n"
 			"}"
 		),
