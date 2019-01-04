@@ -847,10 +847,10 @@ TUT_UNIT_TEST( "sort_heap" )
 	std_vector_t v( 100 );
 	int_array_t a( 100 );
 	distribution::HDiscrete r( 0, 255 );
-	r.set_seed( 0 );
+	r.generator()->set_seed( 0 );
 	ENSURE_EQUALS( "bad range on randomizer", r.range(), static_cast<u64_t>( 256 ) );
 	std::generate( v.begin(), v.end(), r );
-	r.set_seed( 0 );
+	r.generator()->set_seed( 0 );
 	yaal::generate( a.begin(), a.end(), r );
 	*v.rbegin() = -1;
 	*a.rbegin() = -1;
@@ -870,7 +870,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "sort" )
 	int_array_t a( 100 );
 	distribution::HDiscrete rng( 0, 255 );
-	rng.set_seed( 0 );
+	rng.generator()->set_seed( 0 );
 	yaal::generate( a.begin(), a.end(), rng );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
@@ -885,7 +885,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "unique" )
 	int_array_t a( 100 );
 	distribution::HDiscrete rng( 0, 255 );
-	rng.set_seed( 0 );
+	rng.generator()->set_seed( 0 );
 	yaal::generate( a.begin(), a.end(), rng );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
@@ -1017,7 +1017,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "stable_sort" )
 	int_array_t a( 100 );
 	distribution::HDiscrete rng( 0, 255 );
-	rng.set_seed( 0 );
+	rng.generator()->set_seed( 0 );
 	yaal::generate( a.begin(), a.end(), rng );
 	*a.rbegin() = -1;
 	std_vector_t v( &*a.begin(), &*a.begin() + a.get_size() );
