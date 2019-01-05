@@ -973,22 +973,73 @@ TUT_UNIT_TEST( "Mathematics Complex" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Randomizer" )
-#if 0
-FIXME
 	ENSURE_EQUALS(
-		"Mathematics.Randomizer failed",
+		"Mathematics.Randomizer( DISCRETE ) failed",
 		execute(
 			"import Mathematics as math;\n"
 			"main(){\n"
-			"r=math.Randomizer(100);\n"
-			"d=r.next(10);\n"
-			"f=r.next_real(.5);\n"
-			"return([r,d>=0,d<10,f>=0.,f<.5]);\n"
+			"r=math.Randomizer(math.Randomizer.DISTRIBUTION.DISCRETE, 1, 10);\n"
+			"d=r.next();\n"
+			"return([r,d>=1,d<=10]);\n"
 			"}\n"
 		),
-		"[math.Randomizer(100), true, true, true, true]"
+		"[math.Randomizer(math.Randomizer.DISTRIBUTION.DISCRETE, 1, 10), true, true]"
 	);
-#endif
+	ENSURE_EQUALS(
+		"Mathematics.Randomizer( UNIFORM ) failed",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"r=math.Randomizer(math.Randomizer.DISTRIBUTION.UNIFORM, -1., 1.);\n"
+			"u=r.next();\n"
+			"return([r,u>=-1.,u<=1.]);\n"
+			"}\n"
+		),
+		"[math.Randomizer(math.Randomizer.DISTRIBUTION.UNIFORM, -1.0, 1.0), true, true]"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Randomizer( TRIANGLE ) failed",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"r=math.Randomizer(math.Randomizer.DISTRIBUTION.TRIANGLE, 1., 4., 3.);\n"
+			"t=r.next();\n"
+			"return([r,t>=1.,t<=4.]);\n"
+			"}\n"
+		),
+		"[math.Randomizer(math.Randomizer.DISTRIBUTION.TRIANGLE, 1.0, 4.0, 3.0), true, true]"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Randomizer( NORMAL ) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"r=math.Randomizer(math.Randomizer.DISTRIBUTION.NORMAL, 0., 1.);\n"
+			"l=[];\n"
+			"for(i : algo.range(100000)){\n"
+			"x=r.next();\n"
+			"if((x>-3.)&&(x<3.)) {\n"
+			"l.push(x);\n"
+			"}\n"
+			"}\n"
+			"bucketCount = 31;\n"
+			"midBucketIdx = bucketCount / 2;\n"
+			"halfMidBucketIdx = midBucketIdx / 2;\n"
+			"s=math.statistics(l,bucketCount);\n"
+			"h=algo.materialize(algo.map(s.histogram(),real), list);\n"
+			"leftTail = h[1] - h[0];\n"
+			"leftSlope = h[halfMidBucketIdx] - h[halfMidBucketIdx - 1];\n"
+			"leftPeak = h[midBucketIdx] - h[midBucketIdx - 1];\n"
+			"rightTail = h[-1-1] - h[-0-1];\n"
+			"rightSlope = h[-halfMidBucketIdx-1] - h[-(halfMidBucketIdx - 1)-1];\n"
+			"rightPeak = h[-midBucketIdx-1] - h[-(midBucketIdx - 1)-1];\n"
+			"s = [leftTail < leftSlope, leftSlope > leftPeak, rightPeak < rightSlope, rightSlope > rightTail];\n"
+			"return([r,s]);\n"
+			"}\n"
+		),
+		"[math.Randomizer(math.Randomizer.DISTRIBUTION.NORMAL, 0.0, 1.0), [true, true, true, true]]"
+	);
 	ENSURE_EQUALS(
 		"Mathematics.Randomizer copy failed",
 		execute(
@@ -998,7 +1049,7 @@ FIXME
 			"main(){\n"
 			"range1=algo.range(100);\n"
 			"range2=copy(range1);\n"
-			"rnd1=math.Randomizer();\n"
+			"rnd1=math.Randomizer(math.Randomizer.DISTRIBUTION.DISCRETE, -1000000,1000000);\n"
 			"rnd2=copy(rnd1);\n"
 			"res1=algo.materialize(algo.map(range1,RndGen(rnd1).do),list);\n"
 			"res2=algo.materialize(algo.map(range2,RndGen(rnd2).do),list);\n"
@@ -1013,7 +1064,7 @@ FIXME
 			"import Algorithms as algo;\n"
 			"import Mathematics as math;\n"
 			"main(){\n"
-			"r=math.Randomizer(100);\n"
+			"r=math.Randomizer(math.Randomizer.DISTRIBUTION.DISCRETE, 0,100);\n"
 			"r.seed(0);\n"
 			"l1 = algo.materialize(algo.map(algo.range(16),@[r](_){_;r.next();}),list);\n"
 			"r.seed(0);\n"
@@ -1021,21 +1072,48 @@ FIXME
 			"return((l1,l2, l1 == l2));\n"
 			"}\n"
 		),
-		"([64, 52, 17, 53, 94, 11, 29, 1, 26, 25, 73, 11, 22, 98, 46, 38], [64, 52, 17, 53, 94, 11, 29, 1, 26, 25, 73, 11, 22, 98, 46, 38], true)"
+		"([50, 34, 77, 98, 11, 13, 12, 64, 50, 25, 44, 81, 92, 91, 47, 96], [50, 34, 77, 98, 11, 13, 12, 64, 50, 25, 44, 81, 92, 91, 47, 96], true)"
 	);
-#if 0
-FIXME
 	ENSURE_EQUALS(
-		"Mathematics.Randomizer invalid cap succeeded",
+		"Mathematics.Randomizer( DISCRETE ) invalid definition succeeded",
 		execute_except(
 			"import Mathematics as math;\n"
 			"main(){\n"
-			"math.Randomizer().next_real(0.);\n"
+			"math.Randomizer(math.Randomizer.DISTRIBUTION.DISCRETE, 1, 0);\n"
 			"}\n"
 		),
-		"*anonymous stream*:3:28: Invalid range specified: 0.0"
+		"*anonymous stream*:3:16: Invalid DISCRETE parametrization."
 	);
-#endif
+	ENSURE_EQUALS(
+		"Mathematics.Randomizer( UNIFORM ) invalid definition succeeded",
+		execute_except(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"math.Randomizer(math.Randomizer.DISTRIBUTION.UNIFORM, 0., 1);\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:16: Randomizer.constructor() third argument must be a `real', not an `integer'."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Randomizer( TRIANGLE ) invalid definition succeeded",
+		execute_except(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"math.Randomizer(math.Randomizer.DISTRIBUTION.TRIANGLE, -1., 1., 2.);\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:16: Invalid TRIANGLE parametrization."
+	);
+	ENSURE_EQUALS(
+		"Mathematics.Randomizer( NORMAL ) invalid definition succeeded",
+		execute_except(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"math.Randomizer(math.Randomizer.DISTRIBUTION.NORMAL, 0., 0.);\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:16: Invalid NORMAL parametrization."
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Mathematics.NumberSetStatistics" )

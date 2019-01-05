@@ -1553,7 +1553,6 @@ struct IncGen {
 	}
 };
 
-
 TUT_UNIT_TEST( "random_shuffle" )
 	static int const range( 100 );
 	int_array_t a( range );
