@@ -924,6 +924,13 @@ char const progCompileErr121[] =
 	"}\n"
 ;
 
+char const progCompileErr122[] =
+	"import Short as short;\n"
+	"main() {\n"
+	"short.foo(x,y);\n"
+	"}"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -1048,6 +1055,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr119,
 		progCompileErr120,
 		progCompileErr121,
+		progCompileErr122,
 		NULL
 	};
 
@@ -1174,6 +1182,7 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 119 */ { 5, 1, 6,   "*anonymous stream*:1:6: Package `NonExisting' does not exist." },
 /* 120 */ { 58, 3, 14, "*anonymous stream*:3:14: Symbol `range' is not defined in this context (did you mean `Range'?)." },
 /* 121 */ { 43, 1, 44, "*anonymous stream*:1:44: Symbol `map' is never used (did you mean `max'?)." },
+/* 122 */ { 42, 3, 11, "*anonymous stream*:3:11: Symbol `x' is not defined in this context (did you mean `√'?)." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
