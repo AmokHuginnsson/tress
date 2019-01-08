@@ -36,6 +36,24 @@ TUT_UNIT_TEST( "resolve" )
 	ENSURE( "Network.resolve falied", ( res == "\"127.0.0.1\"" ) || ( res == "\"0.0.0.0\"" ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "resolve invalid" )
+	ENSURE_IN(
+		"resolve of invalid hostname succeeded",
+		execute_except(
+			"import Network as net;"
+			"main(){"
+			"return(net.resolve(\"example.invalid\"));"
+			"}"
+		),
+	  std::vector<hcore::HString>({
+			"*anonymous stream*:1:48: Uncaught NetworkException: No such host is known: example.invalid",
+			"*anonymous stream*:1:48: Uncaught NetworkException: No address associated with hostname: example.invalid",
+			"*anonymous stream*:1:48: Uncaught NetworkException: hostname nor servname provided, or not known: example.invalid",
+			"*anonymous stream*:1:48: Uncaught NetworkException: Name or service not known: example.invalid"
+		})
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "connect" )
 	HThread serverRunner;
 	HIODispatcher iod( 11, 1000 );
