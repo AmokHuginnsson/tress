@@ -1005,7 +1005,7 @@ TUT_UNIT_TEST( "enum" )
 			"return((fs.OPEN_MODE.READ, fs.OPEN_MODE.WRITE));\n"
 			"}"
 		),
-		"(OPEN_MODE.READ, OPEN_MODE.WRITE)"
+		"(fs.OPEN_MODE.READ, fs.OPEN_MODE.WRITE)"
 	);
 TUT_TEARDOWN()
 
@@ -1577,7 +1577,7 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 			"return( ( term.COLOR.BRIGHTBLUE, COLOR.BLUE ) );"
 			"}"
 		),
-		"(COLOR.BRIGHTBLUE, COLOR.BLUE)"
+		"(term.COLOR.BRIGHTBLUE, COLOR.BLUE)"
 	);
 TUT_TEARDOWN()
 
@@ -1713,7 +1713,7 @@ TUT_UNIT_TEST( "modules" )
 			"}",
 			{ "./data/" }
 		),
-		"[6, 5.0, \"#yaal#\", ENUM.TWO, 7, Mathematics, 3]"
+		"[6, 5.0, \"#yaal#\", tress.ENUM.TWO, 7, Mathematics, 3]"
 	);
 	ENSURE_EQUALS(
 		"invalid field access failure",

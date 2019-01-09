@@ -244,7 +244,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([10.0, 10.0], [10.0, 10.0])\""
+		"\"math.Matrix([10.0, 10.0], [10.0, 10.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (add) failed",
@@ -257,7 +257,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([$8, $8], [$12, $12])\""
+		"\"math.Matrix([$8, $8], [$12, $12])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (sub) failed",
@@ -270,7 +270,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([-8.0, -6.0], [-4.0, -2.0])\""
+		"\"math.Matrix([-8.0, -6.0], [-4.0, -2.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (sub) failed",
@@ -283,7 +283,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([$-8, $-6], [$-4, $-2])\""
+		"\"math.Matrix([$-8, $-6], [$-4, $-2])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (mul) failed",
@@ -296,7 +296,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([23.0, 20.0], [55.0, 48.0])\""
+		"\"math.Matrix([23.0, 20.0], [55.0, 48.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (mul) failed",
@@ -309,7 +309,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([$23, $20], [$55, $48])\""
+		"\"math.Matrix([$23, $20], [$55, $48])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (scale) failed",
@@ -321,7 +321,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([2.0, 4.0], [6.0, 8.0])\""
+		"\"math.Matrix([2.0, 4.0], [6.0, 8.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (scale) failed",
@@ -333,7 +333,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([$2, $4], [$6, $8])\""
+		"\"math.Matrix([$2, $4], [$6, $8])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (scale_to) failed",
@@ -345,7 +345,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([3.0, 6.0], [9.0, 12.0])\""
+		"\"math.Matrix([3.0, 6.0], [9.0, 12.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (scale_to) failed",
@@ -357,7 +357,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([$3, $6], [$9, $12])\""
+		"\"math.Matrix([$3, $6], [$9, $12])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (det) failed",
@@ -390,7 +390,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string((m*m.inverse()).apply(@(x,y,v){x;y;math.round(v,9);})));"
 			"}"
 		),
-		std::vector<char const*>( { "\"Matrix([1.0, 0.0], [-0.0, 1.0])\"", "\"Matrix([1.0, 0.0], [0.0, 1.0])\"" } )
+		std::vector<char const*>( { "\"math.Matrix([1.0, 0.0], [-0.0, 1.0])\"", "\"math.Matrix([1.0, 0.0], [0.0, 1.0])\"" } )
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (inverse) failed",
@@ -401,7 +401,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string((m*m.inverse()).apply(@(x,y,v){x;y;math.round(v,7);})));"
 			"}"
 		),
-		"\"Matrix([$1, $0], [$0, $1])\""
+		"\"math.Matrix([$1, $0], [$0, $1])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (transpose) failed",
@@ -412,7 +412,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m.transpose()));"
 			"}"
 		),
-		"\"Matrix([1.0, 3.0, 5.0], [2.0, 4.0, 6.0])\""
+		"\"math.Matrix([1.0, 3.0, 5.0], [2.0, 4.0, 6.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (transpose) failed",
@@ -423,7 +423,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m.transpose()));"
 			"}"
 		),
-		"\"Matrix([$1, $3, $5], [$2, $4, $6])\""
+		"\"math.Matrix([$1, $3, $5], [$2, $4, $6])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (set/get) failed",
@@ -439,7 +439,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([2.0, 4.0], [6.0, 8.0])\""
+		"\"math.Matrix([2.0, 4.0], [6.0, 8.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix (set/get) failed",
@@ -455,7 +455,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(m1));"
 			"}"
 		),
-		"\"Matrix([$2, $4], [$6, $8])\""
+		"\"math.Matrix([$2, $4], [$6, $8])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix rows/columns (real) failed",
@@ -487,7 +487,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(math.Matrix(real,2,2).apply(@(r,c,z){real(c+1+r*2)+z;})));"
 			"}"
 		),
-		"\"Matrix([1.0, 2.0], [3.0, 4.0])\""
+		"\"math.Matrix([1.0, 2.0], [3.0, 4.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix apply (real) (meth) failed",
@@ -502,7 +502,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(math.Matrix(real,2,2).apply(Apply().do)));"
 			"}"
 		),
-		"\"Matrix([1.0, 2.0], [3.0, 4.0])\""
+		"\"math.Matrix([1.0, 2.0], [3.0, 4.0])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix apply (number) failed",
@@ -512,7 +512,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(math.Matrix(number,2,2).apply(@(r,c,z){number(c+1+r*2)+z;})));"
 			"}"
 		),
-		"\"Matrix([$1, $2], [$3, $4])\""
+		"\"math.Matrix([$1, $2], [$3, $4])\""
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix apply (number) (meth) failed",
@@ -527,7 +527,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"return(string(math.Matrix(number,2,2).apply(Apply().do)));"
 			"}"
 		),
-		"\"Matrix([$1, $2], [$3, $4])\""
+		"\"math.Matrix([$1, $2], [$3, $4])\""
 	);
 TUT_TEARDOWN()
 
