@@ -995,7 +995,7 @@ TUT_UNIT_TEST( "enum" )
 			"return((Stream.SEEK.BEGIN, Stream.SEEK.CURRENT, Stream.SEEK.END));\n"
 			"}"
 		),
-		"(SEEK.BEGIN, SEEK.CURRENT, SEEK.END)"
+		"(Stream.SEEK.BEGIN, Stream.SEEK.CURRENT, Stream.SEEK.END)"
 	);
 	ENSURE_EQUALS(
 		"built-in enum failed",
@@ -1759,6 +1759,17 @@ TUT_UNIT_TEST( "from ... import ..." )
 			"}"
 		),
 		"[0, 1, 2, 3, 4]"
+	);
+	ENSURE_EQUALS(
+		"from ... import * (enum)",
+		execute(
+			"from Mathematics import *;"
+			"from Text import *;"
+			"main() {"
+			"return ( ( Randomizer.DISTRIBUTION.NORMAL, CHARACTER_CLASS.GREEK ) );"
+			"}"
+		),
+		"(Randomizer.DISTRIBUTION.NORMAL, CHARACTER_CLASS.GREEK)"
 	);
 TUT_TEARDOWN()
 
