@@ -180,6 +180,7 @@ TUT_UNIT_TEST( "is_element_of" )
 	ENSURE_EQUALS( "is_element_of order failed", execute( "main(){x = order(2, 3, 5, 7, 11, 17 );return([7 ∈ x, 8 ∈ x]);}" ), "[true, false]" );
 	ENSURE_EQUALS( "is_element_of set failed", execute( "main(){x = {2, 3, 5, 7, 11, 17 };return([7 ∈ x, 8 ∈ x]);}" ), "[true, false]" );
 	ENSURE_EQUALS( "is_element_of string failed", execute( "main(){x = \"2 3 5 7 11 17\";return(['7' ∈ x, '8' ∈ x]);}" ), "[true, false]" );
+	ENSURE_EQUALS( "is_element_of enumeral failed", execute( "from FileSystem import *;main(){return([Stream.SEEK.BEGIN ∈ Stream.SEEK, OPEN_MODE.READ ∈ Stream.SEEK]);}" ), "[true, false]" );
 	ENSURE_EQUALS( "missing is_element_of user succeeded", execute_except( "import Algorithms as algo;main(){return(0∈algo.reversed([]));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:42: There is no `∈' operator for a `ReversedListView'." );
 	ENSURE_EQUALS( "missing is_element_of user succeeded", execute_except( "class A{_x=none;}main(){return(0∈A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:33: Class `A' does not have `contains' method." );
 	ENSURE_EQUALS(

@@ -1106,6 +1106,13 @@ char const progExecuteErr121[] =
 	"}\n"
 ;
 
+char const progExecuteErr122[] =
+	"from FileSystem import *;\n"
+	"main() {\n"
+	"0 ∈ Stream.SEEK;\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1255,6 +1262,7 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr119,
 		progExecuteErr120,
 		progExecuteErr121,
+		progExecuteErr122,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1380,6 +1388,7 @@ TUT_UNIT_TEST( "report execution error" )
 /* 119 */ { 32, 3, 5,    "*tress*:3:5: Copy semantics is not supported on enumerations." },
 /* 120 */ { 38, 4, 2,    "*tress*:4:2: Class `A' does not have `subscript' method." },
 /* 121 */ { 44, 4, 8,    "*tress*:4:8: Class `A' does not have `member' method." },
+/* 122 */ { 37, 3, 3,    "*tress*:3:3: Only `ENUMERAL`s can be elements of `ENUMERATION`s." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
