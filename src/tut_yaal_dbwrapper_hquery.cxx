@@ -55,7 +55,8 @@ TUT_UNIT_TEST( "Bind PostgreSQL engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_POSTGRESQL_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "" );
 	bind_test( db, "PostgreSQL" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
@@ -65,7 +66,8 @@ TUT_UNIT_TEST( "Bind MySQL engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_MYSQL_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "" );
 	bind_test( db, "MySQL" );
 TUT_TEARDOWN()
 #endif /* not defined( HAVE_MYSQL_MYSQL_H ) */
@@ -75,7 +77,8 @@ TUT_UNIT_TEST( "Bind Firebird engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	db->connect( "localhost:tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_FIREBIRD_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "localhost" );
 	bind_test( db, "Firebird" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */
@@ -171,7 +174,8 @@ TUT_UNIT_TEST( "dml bind on PostgreSQL engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_POSTGRESQL_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "" );
 	test_dml_bind( db );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
@@ -181,7 +185,8 @@ TUT_UNIT_TEST( "dml bind on MySQL engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_MYSQL_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "" );
 	test_dml_bind( db );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
@@ -191,7 +196,8 @@ TUT_UNIT_TEST( "dml bind on Firebird engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	db->connect( "localhost:tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_FIREBIRD_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "localhost" );
 	test_dml_bind( db, true );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */
@@ -263,7 +269,8 @@ TUT_UNIT_TEST( "fetch result after query reset: PostgreSQL engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_POSTGRESQL_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "" );
 	fetch_result_after_query_reset( db, "PostgreSQL" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
@@ -273,7 +280,8 @@ TUT_UNIT_TEST( "fetch result after query reset: MySQL engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_MYSQL_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "" );
 	fetch_result_after_query_reset( db, "MySQL" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
@@ -283,7 +291,8 @@ TUT_UNIT_TEST( "fetch result after query reset: Firebird engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	db->connect( "localhost:tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_FIREBIRD_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "localhost" );
 	fetch_result_after_query_reset( db, "Firebird" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */
@@ -358,7 +367,8 @@ TUT_UNIT_TEST( "execute twice: PostgreSQL engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_POSTGRESQL_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "" );
 	execute_twice( db, "PostgreSQL" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
@@ -368,7 +378,8 @@ TUT_UNIT_TEST( "execute twice: MySQL engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_MYSQL_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "" );
 	execute_twice( db, "MySQL" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
@@ -378,7 +389,8 @@ TUT_UNIT_TEST( "execute twice: Firebird engine" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	db->connect( "localhost:tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_FIREBIRD_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "localhost" );
 	execute_twice( db, "Firebird" );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */

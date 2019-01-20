@@ -64,7 +64,8 @@ TUT_UNIT_TEST( "PostgreSQL schema" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::POSTGRESQL ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_POSTGRESQL_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "" );
 	test_schema( db );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_POSTGRESQL_LIBPQ_FE_H ) || defined( HAVE_LIBPQ_FE_H ) */
@@ -74,7 +75,8 @@ TUT_UNIT_TEST( "MySQL schema" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::MYSQL ) );
-	db->connect( "tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_MYSQL_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "" );
 	test_schema( db );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_MYSQL_MYSQL_H ) */
@@ -84,7 +86,8 @@ TUT_UNIT_TEST( "Firebird schema" )
 	HLock l( HMonitor::get_instance().acquire( "locale" ) );
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector( ODBConnector::DRIVER::FIREBIRD ) );
-	db->connect( "localhost:tress", "tress", "tr3ss" );
+	char const* host( getenv( "TRESS_FIREBIRD_HOST" ) );
+	db->connect( "tress", "tress", "tr3ss", host ? host : "localhost" );
 	test_schema( db );
 TUT_TEARDOWN()
 #endif /* defined( HAVE_IBASE_H ) || defined( HAVE_FIREBIRD_IBASE_H ) */
