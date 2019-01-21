@@ -1,9 +1,9 @@
 SET NAMES 'utf8';
 use mysql;
-DROP USER IF EXISTS 'tress'@'localhost';
+DROP USER IF EXISTS 'tress'@'%';
 DROP DATABASE IF EXISTS tress;
-CREATE USER 'tress'@'localhost' IDENTIFIED BY 'tr3ss';
-GRANT USAGE ON *.* TO 'tress'@'localhost';
+CREATE USER 'tress'@'%' IDENTIFIED BY 'tr3ss';
+GRANT USAGE ON *.* TO 'tress'@'%';
 FLUSH PRIVILEGES;
 
 CREATE DATABASE tress DEFAULT CHARACTER SET 'utf8';
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS crud (
 	data VARCHAR( 255 )
 ) CHARACTER SET = 'utf8';
 
-GRANT SELECT,INSERT,UPDATE,DELETE ON tress.* TO tress@localhost;
+GRANT SELECT,INSERT,UPDATE,DELETE ON tress.* TO 'tress'@'%';
 FLUSH PRIVILEGES;
 
 INSERT INTO config ( id, name, data ) VALUES( 1, 'one', 'MySQL' );
