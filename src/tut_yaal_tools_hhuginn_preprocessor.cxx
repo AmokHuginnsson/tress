@@ -413,5 +413,61 @@ TUT_UNIT_TEST( "comments" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "direct load" )
+	ENSURE_EQUALS(
+		"direct load failed",
+		execute(
+			"import RunnableDirect as rd;\n"
+			"main(){\n"
+			"return(rd.avg(1, 2, 3));\n"
+			"}",
+			{ "data" }
+		),
+		"2.0"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "shell script load" )
+	ENSURE_EQUALS(
+		"shell script load failed",
+		execute(
+			"import RunnableShellScript as rss;\n"
+			"main(){\n"
+			"return(rss.avg(1, 2, 3));\n"
+			"}",
+			{ "data" }
+		),
+		"2.0"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "shell script comments load" )
+	ENSURE_EQUALS(
+		"shell script comments load failed",
+		execute(
+			"import RunnableShellScriptComments as rssc;\n"
+			"main(){\n"
+			"return(rssc.avg(1, 2, 3));\n"
+			"}",
+			{ "data" }
+		),
+		"2.0"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "embedded script load" )
+	ENSURE_EQUALS(
+		"embedded script load failed",
+		execute(
+			"import RunnableEmbedded as re;\n"
+			"main(){\n"
+			"return(re.avg(1, 2, 3));\n"
+			"}",
+			{ "data" }
+		),
+		"2.0"
+	);
+TUT_TEARDOWN()
+
 }
 

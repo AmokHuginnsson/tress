@@ -1,0 +1,21 @@
+#! /usr/bin/huginn
+# This is a Huginn script. (Shell like comment)
+
+/* Huginn like comment. */
+
+avg( argv... ) {
+	sum = 0.0;
+	for ( a : argv ) {
+		sum += real( a );
+	}
+	return ( sum / real( size( argv ) ) );
+}
+
+from Algorithms import materialize;
+
+main( argv_ ) {
+	mean = avg( materialize( argv_[1:], tuple )... );
+	print( "avg = {}\n".format( mean ) );
+	return ( integer( mean ) );
+}
+
