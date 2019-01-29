@@ -824,6 +824,19 @@ TUT_UNIT_TEST( "find(\"\")" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "compare()" )
+	ENSURE_EQUALS( "\"abcdefghijklmnopqrstuvwxyz\".compare(0, 3, \"abc\")", "abcdefghijklmnopqrstuvwxyz"_ys.compare( 0, 3, "abc" ), 0 );
+	ENSURE_EQUALS( "\"abcdefghijklmnopqrstuvwxyz\".compare(0, 3, \"abd\")", "abcdefghijklmnopqrstuvwxyz"_ys.compare( 0, 3, "abd" ), -1 );
+	ENSURE_EQUALS( "\"abcdefghijklmnopqrstuvwxyz\".compare(0, 3, \"abb\")", "abcdefghijklmnopqrstuvwxyz"_ys.compare( 0, 3, "abb" ), 1 );
+	ENSURE_EQUALS( "\"abcdefghijklmnopqrstuvwxyz\".compare(0, 3, \"abc\")", "abcdefghijklmnopqrstuvwxyz"_ys.compare( 0, 4, "abc" ), 1 );
+	ENSURE_EQUALS( "\"abcdefghijklmnopqrstuvwxyz\".compare(0, 3, \"abc\")", "abcdefghijklmnopqrstuvwxyz"_ys.compare( "abc" ), 1 );
+	ENSURE_EQUALS( "\"abc\".compare(\"abcdefghijklmnopqrstuvwxyz\", 0, 3)", "abc"_ys.compare( "abcdefghijklmnopqrstuvwxyz", 0, 3 ), 0 );
+	ENSURE_EQUALS( "\"abc\".compare(\"abcdefghijklmnopqrstuvwxyz\", 0, 3)", "abb"_ys.compare( "abcdefghijklmnopqrstuvwxyz", 0, 3 ), -1 );
+	ENSURE_EQUALS( "\"abc\".compare(\"abcdefghijklmnopqrstuvwxyz\", 0, 3)", "abd"_ys.compare( "abcdefghijklmnopqrstuvwxyz", 0, 3 ), 1 );
+	ENSURE_EQUALS( "\"abc\".compare(\"abcdefghijklmnopqrstuvwxyz\", 0, 3)", "abc"_ys.compare( "abcdefghijklmnopqrstuvwxyz", 0, 4 ), -1 );
+	ENSURE_EQUALS( "\"abc\".compare(\"abcdefghijklmnopqrstuvwxyz\", 0, 3)", "abc"_ys.compare( "abcdefghijklmnopqrstuvwxyz" ), -1 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "trim_left(\"\")" )
 	static char const* const SPACE = "   ";
 	static HString const TEXT = "ala ma";
