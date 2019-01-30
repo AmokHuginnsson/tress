@@ -195,13 +195,13 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "find" )
 	/* ./ prefix */ {
-		filesystem::paths_t fr( filesystem::find( "./data", ".*\\.sql" ) );
+		filesystem::paths_t fr( filesystem::find( "./data", ".*\\.sql$" ) );
 		sort( fr.begin(), fr.end() );
 		filesystem::paths_t expected = array<HString>( "./data/firebirdV2.sql", "./data/firebirdV3.sql", "./data/mysql.sql", "./data/oracle.sql", "./data/postgresql.sql", "./data/sqlite.sql" );
 		ENSURE_EQUALS( "filesystem::find failed", fr, expected );
 	}
 	/* no prefix */ {
-		filesystem::paths_t fr( filesystem::find( "data", ".*\\.sql" ) );
+		filesystem::paths_t fr( filesystem::find( "data", ".*\\.sql$" ) );
 		sort( fr.begin(), fr.end() );
 		filesystem::paths_t expected = array<HString>( "data/firebirdV2.sql", "data/firebirdV3.sql", "data/mysql.sql", "data/oracle.sql", "data/postgresql.sql", "data/sqlite.sql" );
 		ENSURE_EQUALS( "filesystem::find failed", fr, expected );
