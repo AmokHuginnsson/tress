@@ -45,7 +45,7 @@ char const progParse2[] =
 ;
 
 char const progParse3[] =
-	"#main() {\n"
+	"~main() {\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
