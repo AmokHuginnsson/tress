@@ -93,6 +93,17 @@ TUT_UNIT_TEST( "string()" )
 		"string.format() failed",
 		execute(
 			"main(){\n"
+			"s = \"[{:f}] [{:3f}] [{:.3f}] [{:0.3f}] [{:5.3f}] [{:6.3f}]\";\n"
+			"x = 7.312584;\n"
+			"return(s.format(x,x,x,x,x,x));\n"
+			"}\n"
+		),
+		"\"[7.312584] [7.312584] [7.313] [7.313] [7.313] [ 7.313]\""
+	);
+	ENSURE_EQUALS(
+		"string.format() failed",
+		execute(
+			"main(){\n"
 			"s=\"a {1} }} {0} b\";\n"
 			"return(s.format(7,13));\n"
 			"}\n"
