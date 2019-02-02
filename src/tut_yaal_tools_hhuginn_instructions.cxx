@@ -288,6 +288,20 @@ TUT_UNIT_TEST( "subscript" )
 		),
 		"*anonymous stream*:1:39: Bad index."
 	);
+	ENSURE_EQUALS(
+		"user subscript assign failed",
+		execute(
+			"class A{_x=[2,4,8]; set_subscript(idx_, val_){_x[idx_]=val_;} subscript(idx_){_x[idx_];}}main(){a = A();a[1]=7;return((a[0],a[1],a[2]));}"
+		),
+		"(2, 7, 8)"
+	);
+	ENSURE_EQUALS(
+		"user subscript assign with invalid key succeeded",
+		execute_except(
+			"class A{\n_x=[2,4,8];\nset_subscript(idx_, val_){_x[idx_]=val_;}\nsubscript(idx_){_x[idx_];}\n}\nmain(){\na = A();\nreturn(a[3] = 0);\n}"
+		),
+		"*anonymous stream*:3:29: Bad index."
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "member" )

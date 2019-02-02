@@ -1390,6 +1390,32 @@ TUT_UNIT_TEST( "assignment/subscript regressions check" )
 		),
 		"({none: 0, 5: 0}, {1: 9}, {0: 9}, {2: 0}, {7: 9}, {3: 7}, {0: 7}, {4: 0}, {6: 0}, {0: 7}, {8: 9}, 9, 9, 9, 7, 0, 9, 9, 9)"
 	);
+	ENSURE_EQUALS(
+		"assignment subscript mix on user defined failed",
+		execute(
+			"class Sub {_d = {};constructor(d={}){_d=d;}subscript(k){_d[k];}set_subscript(k,v){_d[k]=v;} to_string(){string(_d);}}"
+			"main() {"
+			"  H = Sub({none:0});"
+			"  h0 = Sub();"
+			"  h1 = Sub();"
+			"  h2 = Sub();"
+			"  h3 = Sub();"
+			"  h4 = Sub();"
+			"  h5 = Sub();"
+			"  h6 = Sub();"
+			"  h7 = Sub();"
+			"  h8 = Sub();"
+			"  h9 = Sub();"
+			"  zero = 0;"
+			""
+			"  a = h0[1] = b = h1[h2[zero + 2] = H[none]] = c = h3[d = h4[3 + zero] = h5[h6[4] = e = H[zero + 5] = h7[6] = H[none]] = h8[H[none]] = 7 + zero] = f = g = h9[8] = h = 9;"
+			""
+			"  r = ( H, h0, h1, h2, h3, h4, h5, h6, h7, h8, h9, a, b, c, d, e, f, g, h );"
+			"  return ( r );"
+			"}"
+		),
+		"({none: 0, 5: 0}, {1: 9}, {0: 9}, {2: 0}, {7: 9}, {3: 7}, {0: 7}, {4: 0}, {6: 0}, {0: 7}, {8: 9}, 9, 9, 9, 7, 0, 9, 9, 9)"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "bugs regressions checks" )
