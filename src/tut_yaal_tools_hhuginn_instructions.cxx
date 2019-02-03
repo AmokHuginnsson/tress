@@ -319,6 +319,33 @@ TUT_UNIT_TEST( "member" )
 		),
 		"*anonymous stream*:1:96: Key does not exist in `lookup'."
 	);
+	ENSURE_EQUALS(
+		"user set_member failed",
+		execute(
+			"class A{_x={};member(name_){_x[name_];}set_member(name_, val_){_x[name_] = val_;}}main(){a = A();a.z=7;a.q=\"ff\";a.z+=4;return((a.q,a.z));}"
+		),
+		"(\"ff\", 11)"
+	);
+	ENSURE_EQUALS(
+		"user set_member with invalid name succeeded",
+		execute_except(
+			"class A{\n"
+			"_x={};\n"
+			"member(name_){\n"
+			"_x[name_];\n"
+			"}\n"
+			"set_member(name_, val_){\n"
+			"val_;\n"
+			"throw Exception(\"forbidden member: \" + name_);\n"
+			"}\n"
+			"}\n"
+			"main(){\n"
+			"a = A();\n"
+			"a.QQQ = 11;\n"
+			"}"
+		),
+		"*anonymous stream*:8:1: Uncaught Exception: forbidden member: QQQ"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "subscript repeat" )
