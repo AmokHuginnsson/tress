@@ -190,6 +190,22 @@ TUT_UNIT_TEST( "swap" )
 	ENSURE_EQUALS( "format failed", f2.string(), o1 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "move" )
+	HFormat f1( "[%u] [%lu] [%llu] [%hf] [%p]" );
+	f1 % static_cast<int unsigned>( 123 ) % static_cast<int long unsigned>( 4567 ) % static_cast<int long long unsigned>( 890123 ) % static_cast<float>( 3.14159 ) % static_cast<void*>( 0 );
+#ifdef __MSVCXX__
+	char const e[] = "[123] [4567] [890123] [3.141590] [00000000]";
+#elif defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_FREEBSD__ )
+	char const e[] = "[123] [4567] [890123] [3.141590] [0x0]";
+#else
+	char const e[] = "[123] [4567] [890123] [3.141590] [(nil)]";
+#endif
+	ENSURE_EQUALS( "format failed", f1.string(), e );
+	HFormat f2( yaal::move( f1 ) );
+	ENSURE_EQUALS( "format failed", f2.string(), e );
+	ENSURE_THROW( "format failed", f1.string(), HFailedAssertion );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "HFormatter" )
 	ENSURE_EQUALS( "format failed", format( "%d %f %c %s", 1, 2.3, '4', "piec" ), "1 2.300000 4 piec" );
 	ENSURE_EQUALS( "format failed", hcore::format( "%d %f %c %s", 1, 2.3, '4', "piec" ), "1 2.300000 4 piec" );
