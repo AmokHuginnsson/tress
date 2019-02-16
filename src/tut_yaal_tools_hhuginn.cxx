@@ -377,55 +377,62 @@ TUT_UNIT_TEST( "while" )
 	ENSURE_EQUALS( "while failed", execute( "main(){x=2;while(x<100){x=x*x;}return(x);}" ), "256" );
 TUT_TEARDOWN()
 
+char const ITERABLE_DEF[] =
+	"class ListNode {\n"
+	"	_data = none;\n"
+	"	_next = none;\n"
+	"	constructor( data_, next_ ) {\n"
+	"		_data = data_;\n"
+	"		_next = next_;\n"
+	"	}\n"
+	"}\n"
+	"\n"
+	"class ListIterator {\n"
+	"	_cur = none;\n"
+	"	constructor( cur_ ) {\n"
+	"		_cur = cur_;\n"
+	"	}\n"
+	"	is_valid() {\n"
+	"		return ( _cur != none );\n"
+	"	}\n"
+	"	value() {\n"
+	"		return ( _cur._data );\n"
+	"	}\n"
+	"	next() {\n"
+	"		_cur = _cur._next;\n"
+	"	}\n"
+	"}\n"
+	"\n"
+	"class List {\n"
+	"	_head = none;\n"
+	"	add( data_ ) {\n"
+	"		_head = ListNode( data_, _head );\n"
+	"		return(this);\n"
+	"	}\n"
+	"	iterator() {\n"
+	"		return ( ListIterator( _head ) );\n"
+	"	}\n"
+	"}\n"
+	"\n";
+
 TUT_UNIT_TEST( "for" )
 	ENSURE_EQUALS( "for failed", execute( "main(){x=list(1,2,3);s=0;for(e:x){s=s+e;}return(s);}" ), "6" );
 	ENSURE_EQUALS( "for(expr:) failed", execute( "main(){x=list(1,2,3);s=0;l=[0];for(l[0]:x){s=s+l[0];}return(string(s)+string(l[0]));}" ), "\"63\"" );
 	ENSURE_EQUALS(
 		"for(user-def) failed",
 		execute(
-			"class LN {"
-			"_data = none;"
-			"_next = none;"
-			"constructor( data_, next_ ) {"
-			"_data = data_;"
-			"_next = next_;"
-			"}"
-			"}"
-			"class LI {"
-			"_cur = none;"
-			"constructor( cur_ ) {"
-			"_cur = cur_;"
-			"}"
-			"is_valid() {"
-			"return ( _cur != none );"
-			"}"
-			"value() {"
-			"return ( _cur._data );"
-			"}"
-			"next() {"
-			"_cur = _cur._next;"
-			"}"
-			"}"
-			"class L {"
-			"_head = none;"
-			"add( data_ ) {"
-			"_head = LN( data_, _head );"
-			"return(this);"
-			"}"
-			"iterator() {"
-			"return ( LI( _head ) );"
-			"}"
-			"}"
-			"main() {"
-			"s=\"\";"
-			"l=L();"
-			"l.add(\"one\").add(\"two\").add(\"three\");"
-			"for ( e : l ) {"
-			"s+=e;"
-			"s+=\"+\";"
-			"}"
-			"return(s);"
-			"}"
+			to_string( ITERABLE_DEF ).append(
+				"main() {"
+				"s=\"\";"
+				"l=List();"
+				"l.add(\"one\").add(\"two\").add(\"three\");"
+				"for ( e : l ) {"
+				"s+=e;"
+				"s+=\"+\";"
+				"}"
+				"return(s);"
+				"}"
+			)
 		),
 		"\"three+two+one+\""
 	);
@@ -442,6 +449,24 @@ TUT_UNIT_TEST( "for" )
 			"}\n"
 		),
 		"[[0, 1], [2, 3], [4, 5], [6, 7]]"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "user defined iterator-adaptor" )
+	ENSURE_EQUALS(
+		"iterator-adaptor in algorithms failed",
+		execute(
+			"import Algorithms as algo;\n"_ys.append(
+				ITERABLE_DEF
+			).append(
+				"main() {"
+				"l=List();"
+				"l.add(0).add(1).add(2);"
+				"return(algo.materialize(l, list));"
+				"}"
+			)
+		),
+		"[2, 1, 0]"
 	);
 TUT_TEARDOWN()
 

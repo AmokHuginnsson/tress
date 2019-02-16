@@ -21,6 +21,7 @@ class: Derived : Base { bar, foo, baz }
 class: -Algorithms.Enumerator {}
 class: Exception { message, trace, what, where }
 class: -Algorithms.Filter {}
+class: IterableAdaptor {}
 class: -Algorithms.Iterator { is_valid, next, value }
 class: -dict.KeyValuesDictView {}
 class: -lookup.KeyValuesLookupView {}

@@ -1113,6 +1113,165 @@ char const progExecuteErr122[] =
 	"}\n"
 ;
 
+char const progExecuteErr123[] =
+	"import Algorithms as algo;\n"
+	"class L {\n"
+	"\t_head = none;\n"
+	"\titerator() {\n"
+	"\t\treturn ( 0 );\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\tl = L();\n"
+	"\talgo.materialize(l, list);\n"
+	"\tl._head;\n"
+	"}\n"
+;
+
+char const progExecuteErr124[] =
+	"import Algorithms as algo;\n"
+	"class LI {\n"
+	"\t_cur = none;\n"
+	"\tconstructor( cur_ ) {\n"
+	"\t\t_cur = cur_;\n"
+	"\t}\n"
+	"}\n"
+	"class L {\n"
+	"\t_head = none;\n"
+	"\titerator() {\n"
+	"\t\treturn ( LI( _head ) );\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\tl = L();\n"
+	"\talgo.materialize(l, list);\n"
+	"\tl._cur;\n"
+	"}\n"
+;
+
+char const progExecuteErr125[] =
+	"import Algorithms as algo;\n"
+	"class LI {\n"
+	"\t_cur = none;\n"
+	"\tconstructor( cur_ ) {\n"
+	"\t\t_cur = cur_;\n"
+	"\t}\n"
+	"\tis_valid = none;\n"
+	"}\n"
+	"class L {\n"
+	"\t_head = none;\n"
+	"\titerator() {\n"
+	"\t\treturn ( LI( _head ) );\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\tl = L();\n"
+	"\talgo.materialize(l, list);\n"
+	"\tl._cur;\n"
+	"}\n"
+;
+
+char const progExecuteErr126[] =
+	"import Algorithms as algo;\n"
+	"class LI {\n"
+	"\t_cur = none;\n"
+	"\tconstructor( cur_ ) {\n"
+	"\t\t_cur = cur_;\n"
+	"\t}\n"
+	"\tis_valid() {\n"
+	"\t\treturn ( 0 );\n"
+	"\t}\n"
+	"}\n"
+	"class L {\n"
+	"\t_head = none;\n"
+	"\titerator() {\n"
+	"\t\treturn ( LI( _head ) );\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\tl = L();\n"
+	"\talgo.materialize(l, list);\n"
+	"\tl._cur;\n"
+	"}\n"
+;
+
+char const progExecuteErr127[] =
+	"import Algorithms as algo;\n"
+	"class LN {\n"
+	"\t_data = none;\n"
+	"\t_next = none;\n"
+	"\tconstructor( data_, next_ ) {\n"
+	"\t\t_data = data_;\n"
+	"\t\t_next = next_;\n"
+	"\t}\n"
+	"}\n"
+	"class LI {\n"
+	"\t_cur = none;\n"
+	"\tconstructor( cur_ ) {\n"
+	"\t\t_cur = cur_;\n"
+	"\t}\n"
+	"\tis_valid() {\n"
+	"\t\treturn ( 0 );\n"
+	"\t}\n"
+	"\tvalue() {\n"
+	"\t\treturn ( _cur._data );\n"
+	"\t}\n"
+	"}\n"
+	"class L {\n"
+	"\t_head = none;\n"
+	"\tadd( data_ ) {\n"
+	"\t\t_head = LN( data_, _head );\n"
+	"\t}\n"
+	"\titerator() {\n"
+	"\t\treturn ( LI( _head ) );\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\tl = L();\n"
+	"\talgo.materialize(l, list);\n"
+	"\tl._next;\n"
+	"}\n"
+;
+
+char const progExecuteErr128[] =
+	"import Algorithms as algo;\n"
+	"class LN {\n"
+	"\t_data = none;\n"
+	"\t_next = none;\n"
+	"\tconstructor( data_, next_ ) {\n"
+	"\t\t_data = data_;\n"
+	"\t\t_next = next_;\n"
+	"\t}\n"
+	"}\n"
+	"class LI {\n"
+	"\t_cur = none;\n"
+	"\tconstructor( cur_ ) {\n"
+	"\t\t_cur = cur_;\n"
+	"\t}\n"
+	"\tis_valid() {\n"
+	"\t\treturn ( 0 );\n"
+	"\t}\n"
+	"\tvalue() {\n"
+	"\t\treturn ( _cur._data );\n"
+	"\t}\n"
+	"\tnext() {\n"
+	"\t\t_cur = _cur._next;\n"
+	"\t}\n"
+	"}\n"
+	"class L {\n"
+	"\t_head = none;\n"
+	"\tadd( data_ ) {\n"
+	"\t\t_head = LN( data_, _head );\n"
+	"\t}\n"
+	"\titerator() {\n"
+	"\t\treturn ( LI( _head ) );\n"
+	"\t}\n"
+	"}\n"
+	"main() {\n"
+	"\talgo.materialize(L(), list);\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1263,6 +1422,12 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr120,
 		progExecuteErr121,
 		progExecuteErr122,
+		progExecuteErr123,
+		progExecuteErr124,
+		progExecuteErr125,
+		progExecuteErr126,
+		progExecuteErr127,
+		progExecuteErr128,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1389,6 +1554,12 @@ TUT_UNIT_TEST( "report execution error" )
 /* 120 */ { 38, 4, 2,    "*tress*:4:2: Class `A' does not have `subscript' method." },
 /* 121 */ { 44, 4, 8,    "*tress*:4:8: Class `A' does not have `member' method." },
 /* 122 */ { 37, 3, 3,    "*tress*:3:3: Only `ENUMERAL`s can be elements of `ENUMERATION`s." },
+/* 123 */ { 123, 10, 18, "*tress*:10:18: User defined `iterable` a `L' returned invalid iterator object - an `integer'." },
+/* 124 */ { 201, 16, 18, "*tress*:16:18: Class `LI' does not have `is_valid' method." },
+/* 125 */ { 219, 17, 18, "*tress*:17:18: `is_valid' in class `LI' is not a method." },
+/* 126 */ { 234, 19, 18, "*tress*:19:18: Class `LI' does not have `value' method." },
+/* 127 */ { 433, 33, 18, "*tress*:33:18: Class `LI' does not have `next' method." },
+/* 128 */ { 457, 35, 18, "*tress*:35:18: User defined `iterator` a `LI' returned an invalid type an `integer' instead of a `boolean' from supplied `is_valid' method." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
