@@ -200,7 +200,7 @@ TUT_UNIT_TEST( "import" )
 			"intro.import(\"return\");\n"
 			"}\n"
 		),
-		"*anonymous stream*:3:13: `return' is restricted keyword."
+		"*anonymous stream*:3:13: `return` is restricted keyword."
 	);
 	ENSURE_EQUALS(
 		"Introspection.import existing class succeeded",

@@ -1,4 +1,4 @@
-Huginn VM state for `*anonymous stream*'
+Huginn VM state for `*anonymous stream*`
 package: algo = Algorithms
 class: -*bound_method* {}
 class: -*function_reference* {}

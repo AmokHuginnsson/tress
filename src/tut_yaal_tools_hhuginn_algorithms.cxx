@@ -273,7 +273,7 @@ TUT_UNIT_TEST( "materialize" )
 			"algo.materialize([0,1.],order);\n"
 			"}"
 		),
-		"*anonymous stream*:3:17: Invalid key type: a `real'."
+		"*anonymous stream*:3:17: Invalid key type: a `real`."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.materialize to order did not set key type",
@@ -284,7 +284,7 @@ TUT_UNIT_TEST( "materialize" )
 			"o.insert(1.);\n"
 			"}"
 		),
-		"*anonymous stream*:4:9: Non-uniform key types, got a `real' instead of an `integer'."
+		"*anonymous stream*:4:9: Non-uniform key types, got a `real` instead of an `integer`."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.materialize (to set) failed",
@@ -314,7 +314,7 @@ TUT_UNIT_TEST( "materialize" )
 			"algo.materialize([0],dict);\n"
 			"}"
 		),
-		"*anonymous stream*:3:17: Each value materialized into a `dict` must be a `tuple` not an `integer'."
+		"*anonymous stream*:3:17: Each value materialized into a `dict` must be a `tuple` not an `integer`."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.materialize of wrong tuple size (to dict) succeeded",
@@ -334,7 +334,7 @@ TUT_UNIT_TEST( "materialize" )
 			"algo.materialize([(0,0),(1.,0)],dict);\n"
 			"}"
 		),
-		"*anonymous stream*:3:17: Invalid key type: a `real'."
+		"*anonymous stream*:3:17: Invalid key type: a `real`."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.materialize to dict did not set key type",
@@ -345,7 +345,7 @@ TUT_UNIT_TEST( "materialize" )
 			"d[1.];\n"
 			"}"
 		),
-		"*anonymous stream*:4:2: Non-uniform key types, got a `real' instead of an `integer'."
+		"*anonymous stream*:4:2: Non-uniform key types, got a `real` instead of an `integer`."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.materialize (to lookup) failed",
@@ -365,7 +365,7 @@ TUT_UNIT_TEST( "materialize" )
 			"algo.materialize([0],lookup);\n"
 			"}"
 		),
-		"*anonymous stream*:3:17: Each value materialized into a `lookup` must be a `tuple` not an `integer'."
+		"*anonymous stream*:3:17: Each value materialized into a `lookup` must be a `tuple` not an `integer`."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.materialize of wrong tuple size (to lookup) succeeded",
@@ -385,7 +385,7 @@ TUT_UNIT_TEST( "materialize" )
 			"algo.materialize([],integer);\n"
 			"}"
 		),
-		"*anonymous stream*:3:17: Invalid materialized type: `integer'."
+		"*anonymous stream*:3:17: Invalid materialized type: `integer`."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.materialize (to string) failed",
@@ -467,7 +467,7 @@ TUT_UNIT_TEST( "filter" )
 			"return(size(f));\n"
 			"}"
 		),
-		"*anonymous stream*:4:12: Getting size of `Filter' is an invalid operation."
+		"*anonymous stream*:4:12: Getting size of `Filter` is an invalid operation."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.filter (invalid function) failed",
@@ -477,7 +477,7 @@ TUT_UNIT_TEST( "filter" )
 			"return(algo.materialize(algo.filter(algo.range(3, 44, 4),@(x){x;}),list));\n"
 			"}"
 		),
-		"*anonymous stream*:3:24: Filter function returned wrong type, expected `boolean' got: `integer'."
+		"*anonymous stream*:3:24: Filter function returned wrong type, expected `boolean` got: `integer`."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.filter (function) failed",
@@ -512,7 +512,7 @@ TUT_UNIT_TEST( "filter" )
 			"return(algo.materialize(algo.filter(algo.range(3, 44, 4),[].push),list));\n"
 			"}"
 		),
-		"*anonymous stream*:3:24: Filter functor returned wrong type, expected `boolean' got: `list'."
+		"*anonymous stream*:3:24: Filter functor returned wrong type, expected `boolean` got: `list`."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.filter (unbound method) failed",
@@ -536,7 +536,7 @@ TUT_UNIT_TEST( "filter" )
 			"return(algo.materialize(algo.filter(['a','b','c'],character.to_upper),list));\n"
 			"}"
 		),
-		"*anonymous stream*:3:24: Filter functor returned wrong type, expected `boolean' got: `character'."
+		"*anonymous stream*:3:24: Filter functor returned wrong type, expected `boolean` got: `character`."
 	);
 TUT_TEARDOWN()
 

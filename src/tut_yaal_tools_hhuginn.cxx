@@ -658,7 +658,7 @@ TUT_UNIT_TEST( "tuple unpacking" )
 	);
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "short circuit in boolean `and'" )
+TUT_UNIT_TEST( "short circuit in boolean `and`" )
 	char const p0[] =
 		"main() {"
 		" a = 0;"
@@ -688,7 +688,7 @@ TUT_UNIT_TEST( "short circuit in boolean `and'" )
 	ENSURE_EQUALS( "ternary failed (F && T)", execute( p2 ), "\"10F\"" );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "short circuit in boolean `or'" )
+TUT_UNIT_TEST( "short circuit in boolean `or`" )
 	char const p0[] =
 		"main() {"
 		" a = 0;"
@@ -767,7 +767,7 @@ TUT_UNIT_TEST( "print" )
 		execute_except(
 			"main(){print(size);}"
 		),
-		"*anonymous stream*:1:13: Printing `*function_reference*'s is not supported."
+		"*anonymous stream*:1:13: Printing `*function_reference*`s is not supported."
 	);
 TUT_TEARDOWN()
 
@@ -977,7 +977,7 @@ TUT_UNIT_TEST( "inheritance from built-in" )
 			"return([res.message(),res.trace()]);"
 			"}"
 		),
-		"*anonymous stream*:1:189: Base class `Exception' is not initialized."
+		"*anonymous stream*:1:189: Base class `Exception` is not initialized."
 	);
 TUT_TEARDOWN()
 
@@ -1593,7 +1593,7 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 			"type(s)();\n"
 			"}\n"
 		),
-		"*anonymous stream*:4:8: Explicit construction of class `Stream' objects (instances) is forbidden."
+		"*anonymous stream*:4:8: Explicit construction of class `Stream` objects (instances) is forbidden."
 	);
 	ENSURE_EQUALS(
 		"out of order named parameter hash",
@@ -1690,7 +1690,7 @@ TUT_UNIT_TEST( "Stream" )
 			"return(size(fs.open(\"./data/nl.txt\",fs.OPEN_MODE.READ)));\n"
 			"}\n"
 		),
-		"*anonymous stream*:3:12: Getting size of `Stream' is an invalid operation."
+		"*anonymous stream*:3:12: Getting size of `Stream` is an invalid operation."
 	);
 TUT_TEARDOWN()
 
@@ -1775,7 +1775,7 @@ TUT_UNIT_TEST( "modules" )
 			"}\n",
 			{ "./data/" }
 		),
-		"./data//Tress.hgn:60:15: `Mathematics' does not have `square_foot' member (did you mean `square_root'?)."
+		"./data//Tress.hgn:60:15: `Mathematics` does not have `square_foot` member (did you mean `square_root`?)."
 	);
 	ENSURE_EQUALS(
 		"using subtree module failed",
@@ -1929,7 +1929,7 @@ TUT_UNIT_TEST( "native functions" )
 			"return( native_add( 3, 19. ) );\n"
 			"}\n"
 		),
-		"*anonymous stream*:2:19: native_add() second argument must be an `integer', not a `real'."
+		"*anonymous stream*:2:19: native_add() second argument must be an `integer`, not a `real`."
 	);
 TUT_TEARDOWN()
 
@@ -2200,7 +2200,7 @@ TUT_UNIT_TEST( "incremental mode" )
 	ENSURE_EQUALS(
 		"creation of function of name that is used by class succeeded",
 		execute_incremental( l1 ),
-		"none*anonymous stream*:2:1: Class of the same name `X' is already defined."
+		"none*anonymous stream*:2:1: Class of the same name `X` is already defined."
 	);
 	lines_t l2{
 		{ "x=0;x+=1;" }
@@ -2237,7 +2237,7 @@ TUT_UNIT_TEST( "incremental mode" )
 	ENSURE_EQUALS(
 		"Compiler errors in incemental mode while importing user defined submodule",
 		execute_incremental( l6, { "./data" } ),
-		"4*anonymous stream*:1:8: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: an `integer' vs a `real'.12"
+		"4*anonymous stream*:1:8: ./data/CannotCompile.hgn:2:4: Operand types for `+` do not match: an `integer` vs a `real`.12"
 	);
 	lines_t l7{
 		{ "solve(){a;}", OLine::TYPE::DEFINITION },
@@ -2246,7 +2246,7 @@ TUT_UNIT_TEST( "incremental mode" )
 	ENSURE_EQUALS(
 		"Crash trigger",
 		execute_incremental( l7 ),
-		"*anonymous stream*:1:9: Symbol `a' is not defined in this context (did you mean `√'?).*anonymous stream*:2:1: Symbol `solve' is not defined in this context (did you mean `set'?)."
+		"*anonymous stream*:1:9: Symbol `a` is not defined in this context (did you mean `√`?).*anonymous stream*:2:1: Symbol `solve` is not defined in this context (did you mean `set`?)."
 	);
 	lines_t l8{
 		{ "class A { constructor(){a;} }", OLine::TYPE::DEFINITION },
@@ -2255,8 +2255,8 @@ TUT_UNIT_TEST( "incremental mode" )
 	ENSURE_EQUALS(
 		"Crash trigger",
 		execute_incremental( l8 ),
-		"*anonymous stream*:1:25: Symbol `a' is not defined in this context (did you mean `√'?)."
-		"*anonymous stream*:2:1: Symbol `A' is not defined in this context (did you mean `√'?)."
+		"*anonymous stream*:1:25: Symbol `a` is not defined in this context (did you mean `√`?)."
+		"*anonymous stream*:2:1: Symbol `A` is not defined in this context (did you mean `√`?)."
 	);
 	lines_t l9{
 		{ "x = 1 / 0;" },
@@ -2266,7 +2266,7 @@ TUT_UNIT_TEST( "incremental mode" )
 		"Crash trigger",
 		execute_incremental( l9 ),
 		"*anonymous stream*:2:7: Uncaught ArithmeticException: Division by zero."
-		"*anonymous stream*:2:1: Symbol `x' is not defined in this context (did you mean `√'?)."
+		"*anonymous stream*:2:1: Symbol `x` is not defined in this context (did you mean `√`?)."
 	);
 	lines_t l10{
 		{ "inc(x){x+1;}", OLine::TYPE::DEFINITION },
@@ -2299,7 +2299,7 @@ TUT_UNIT_TEST( "incremental mode" )
 	ENSURE_EQUALS(
 		"uncompilable runtime import",
 		execute_incremental( l12, { "./data" } ),
-		"nonenone*anonymous stream*:4:18: Uncaught IntrospectionException: ./data/CannotCompile.hgn:2:4: Operand types for `+' do not match: an `integer' vs a `real'.0"
+		"nonenone*anonymous stream*:4:18: Uncaught IntrospectionException: ./data/CannotCompile.hgn:2:4: Operand types for `+` do not match: an `integer` vs a `real`.0"
 	);
 	lines_t l13{
 		{ "import Tress as tress;", OLine::TYPE::IMPORT },
@@ -2566,7 +2566,7 @@ TUT_UNIT_TEST( "helpers" )
 			"math.statistics(order('a','b','c'));"
 			"}"
 		),
-		"*anonymous stream*:1:50: NumberSetStatistics.constructor() a collection contains value of an unexpected type: a `character'."
+		"*anonymous stream*:1:50: NumberSetStatistics.constructor() a collection contains value of an unexpected type: a `character`."
 	);
 	ENSURE_EQUALS(
 		"did not detect a cycle",
@@ -2592,7 +2592,7 @@ TUT_UNIT_TEST( "helpers" )
 			"fs.open(\"out/cycle.hds\", 0);"
 			"}"
 		),
-		"*anonymous stream*:1:39: FileSystem.open() second argument must be an `OPEN_MODE_ENUMERAL', not an `integer'."
+		"*anonymous stream*:1:39: FileSystem.open() second argument must be an `OPEN_MODE_ENUMERAL`, not an `integer`."
 	);
 	HHuginn::ptr_t h( make_pointer<HHuginn>() );
 	execute( h, "main(){7;}" );

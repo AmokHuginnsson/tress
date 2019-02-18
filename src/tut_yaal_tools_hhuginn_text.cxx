@@ -76,7 +76,7 @@ TUT_UNIT_TEST( "join" )
 			"text.join(\"\",\"\");"
 			"}\n"
 		),
-		"*anonymous stream*:3:10: Text.join() first argument must be a flat uniform collection of strings, not a `string'."
+		"*anonymous stream*:3:10: Text.join() first argument must be a flat uniform collection of strings, not a `string`."
 	);
 	ENSURE_EQUALS(
 		"Text.join on non uniform succeeded",
@@ -86,7 +86,7 @@ TUT_UNIT_TEST( "join" )
 			"text.join([\"\",'x'],\"\");"
 			"}\n"
 		),
-		"*anonymous stream*:3:10: Text.join() first argument must be a flat uniform collection of strings, but it contains a `character'."
+		"*anonymous stream*:3:10: Text.join() first argument must be a flat uniform collection of strings, but it contains a `character`."
 	);
 TUT_TEARDOWN()
 

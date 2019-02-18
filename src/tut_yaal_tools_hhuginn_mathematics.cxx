@@ -560,7 +560,7 @@ TUT_UNIT_TEST( "Matrix err" )
 			"math.Matrix(integer,1,1);"
 			"}"
 		),
-		"*anonymous stream*:1:46: Bad matrix type: `integer'."
+		"*anonymous stream*:1:46: Bad matrix type: `integer`."
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix invalid cols from list succeeded",
@@ -580,7 +580,7 @@ TUT_UNIT_TEST( "Matrix err" )
 			"math.Matrix([0]);"
 			"}"
 		),
-		"*anonymous stream*:1:46: Matrix must have numeric data, either `number' or `real'."
+		"*anonymous stream*:1:46: Matrix must have numeric data, either `number` or `real`."
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix col count mismatch from list succeeded",
@@ -690,7 +690,7 @@ TUT_UNIT_TEST( "Matrix err" )
 			"math.Matrix([0.]).set(0,0,$0);"
 			"}"
 		),
-		"*anonymous stream*:1:56: Matrix.set() third argument must be a `real', not a `number'."
+		"*anonymous stream*:1:56: Matrix.set() third argument must be a `real`, not a `number`."
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix bad type in set succeeded",
@@ -700,7 +700,7 @@ TUT_UNIT_TEST( "Matrix err" )
 			"math.Matrix([$0]).set(0,0,0.);"
 			"}"
 		),
-		"*anonymous stream*:1:56: Matrix.set() third argument must be a `number', not a `real'."
+		"*anonymous stream*:1:56: Matrix.set() third argument must be a `number`, not a `real`."
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix bad type in add succeeded",
@@ -800,7 +800,7 @@ TUT_UNIT_TEST( "Matrix err" )
 			"math.Matrix([1.]).scale_to($1);"
 			"}"
 		),
-		"*anonymous stream*:1:61: Matrix.scale_to() argument must be a `real', not a `number'."
+		"*anonymous stream*:1:61: Matrix.scale_to() argument must be a `real`, not a `number`."
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix bad apply return type succeeded",
@@ -810,7 +810,7 @@ TUT_UNIT_TEST( "Matrix err" )
 			"return(string(math.Matrix(real,2,2).apply(@(r,c,z){number(c+1+r*2)+number(z);})));"
 			"}"
 		),
-		"*anonymous stream*:1:76: Applied transformation function shall return `real', but result was a `number' instead."
+		"*anonymous stream*:1:76: Applied transformation function shall return `real`, but result was a `number` instead."
 	);
 #ifndef CONTINUOUS_INTEGRATION_TRAVIS
 #if SIZEOF_INT_LONG == 8
@@ -1092,7 +1092,7 @@ TUT_UNIT_TEST( "Randomizer" )
 			"math.Randomizer(math.Randomizer.DISTRIBUTION.UNIFORM, 0., 1);\n"
 			"}\n"
 		),
-		"*anonymous stream*:3:16: Randomizer.constructor() third argument must be a `real', not an `integer'."
+		"*anonymous stream*:3:16: Randomizer.constructor() third argument must be a `real`, not an `integer`."
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Randomizer( TRIANGLE ) invalid definition succeeded",
