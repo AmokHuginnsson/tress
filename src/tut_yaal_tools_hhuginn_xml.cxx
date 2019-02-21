@@ -264,5 +264,119 @@ TUT_UNIT_TEST( "remove, remove_nth" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "iterate over attributes" )
+	ENSURE_EQUALS(
+		"iterate over attributes failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"import XML as xml;\n"
+			"import Text as text;\n"
+			"main() {\n"
+			"xmlStr = text.stream( \"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?><r attr='val_attr' prop=\\\"val_prop\\\" class=\\\"val_class\\\"></r>\" );\n"
+			"doc = xml.load(xmlStr);\n"
+			"r = doc.root();\n"
+			"return (algo.sorted(r.attributes()));\n"
+			"}\n"
+		),
+		"[(\"attr\", \"val_attr\"), (\"class\", \"val_class\"), (\"prop\", \"val_prop\")]"
+	);
+	ENSURE_EQUALS(
+		"erase while iterate over attributes failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"import XML as xml;\n"
+			"import Text as text;\n"
+			"main() {\n"
+			"xmlStr = text.stream( \"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?><r attr='val_attr' prop=\\\"val_prop\\\" class=\\\"val_class\\\"></r>\" );\n"
+			"doc = xml.load(xmlStr);\n"
+			"r = doc.root();\n"
+			"res = [];\n"
+			"attrs = r.attributes();\n"
+			"for(e:attrs) {\n"
+			"res.push(e);\n"
+			"attrs.remove(e[0]);\n"
+			"}\n"
+			"return (algo.sorted(res));\n"
+			"}\n"
+		),
+		"[(\"attr\", \"val_attr\"), (\"class\", \"val_class\"), (\"prop\", \"val_prop\")]"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "add an attribute" )
+	ENSURE_EQUALS(
+		"adding attribute failed",
+		execute(
+			"import XML as xml;\n"
+			"import Text as text;\n"
+			"main() {\n"
+			"xmlStr = text.stream( \"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?><r attr='val_attr'></r>\" );\n"
+			"doc = xml.load(xmlStr);\n"
+			"r = doc.root();\n"
+			"r.attributes()[\"prop\"] = \"val_prop\";\n"
+			"s = text.stream();\n"
+			"doc.save( s );\n"
+			"res = s.read_string( 1000 ).replace( \"\\t\", \"\" ).replace( \"\\n\", \"\" );\n"
+			"return ( res );\n"
+			"}\n"
+		),
+		"\"<?xml version=\"1.0\" encoding=\"UTF-8\"?><r attr=\"val_attr\" prop=\"val_prop\"/>\""
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "get an attribute by name" )
+	ENSURE_EQUALS(
+		"getting attributes by name failed",
+		execute(
+			"import XML as xml;\n"
+			"import Text as text;\n"
+			"main() {\n"
+			"xmlStr = text.stream( \"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?><r attr='val_attr' prop=\\\"val_prop\\\" class=\\\"val_class\\\"></r>\" );\n"
+			"doc = xml.load(xmlStr);\n"
+			"r = doc.root();\n"
+			"attrs = r.attributes();\n"
+			"return ((attrs[\"attr\"],attrs[\"prop\"],attrs[\"class\"]));\n"
+			"}\n"
+		),
+		"(\"val_attr\", \"val_prop\", \"val_class\")"
+	);
+	ENSURE_EQUALS(
+		"getting non-existing attribute by name succeeded",
+		execute_except(
+			"import XML as xml;\n"
+			"import Text as text;\n"
+			"main() {\n"
+			"xmlStr = text.stream( \"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?><r attr='val_attr' class=\\\"val_class\\\"></r>\" );\n"
+			"doc = xml.load(xmlStr);\n"
+			"r = doc.root();\n"
+			"attrs = r.attributes();\n"
+			"attrs[\"prop\"];\n"
+			"}\n"
+		),
+		"*anonymous stream*:8:6: Dereferencing non-existing key"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "remove an attribute" )
+	ENSURE_EQUALS(
+		"adding attribute failed",
+		execute(
+			"import XML as xml;\n"
+			"import Text as text;\n"
+			"main() {\n"
+			"xmlStr = text.stream( \"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?><r attr='val_attr' prop=\\\"val_prop\\\" class=\\\"val_class\\\"></r>\" );\n"
+			"doc = xml.load(xmlStr);\n"
+			"r = doc.root();\n"
+			"r.attributes().remove(\"prop\");\n"
+			"s = text.stream();\n"
+			"doc.save( s );\n"
+			"res = s.read_string( 1000 ).replace( \"\\t\", \"\" ).replace( \"\\n\", \"\" );\n"
+			"return ( res );\n"
+			"}\n"
+		),
+		"\"<?xml version=\"1.0\" encoding=\"UTF-8\"?><r attr=\"val_attr\" class=\"val_class\"/>\""
+	);
+TUT_TEARDOWN()
+
 }
 
