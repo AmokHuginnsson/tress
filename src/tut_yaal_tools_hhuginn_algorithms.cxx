@@ -414,6 +414,19 @@ TUT_UNIT_TEST( "reduce" )
 		"Algorithms.reduce (function) failed",
 		execute(
 			"import Algorithms as algo;\n"
+			"s(x,y){\n"
+			"return(x+y);\n"
+			"}\n"
+			"main(){\n"
+			"return(algo.reduce(algo.range(3, 17, 4),s));\n"
+			"}"
+		),
+		"36"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.reduce (bound method) failed",
+		execute(
+			"import Algorithms as algo;\n"
 			"class R {\n"
 			"do(x,y){\n"
 			"return(x+y);\n"
@@ -426,7 +439,7 @@ TUT_UNIT_TEST( "reduce" )
 		"36"
 	);
 	ENSURE_EQUALS(
-		"Algorithms.reduce (method) failed",
+		"Algorithms.reduce (unbound method) failed",
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
@@ -436,11 +449,23 @@ TUT_UNIT_TEST( "reduce" )
 		"[3, 7, 11, 15]"
 	);
 	ENSURE_EQUALS(
-		"Algorithms.reduce (method) failed",
+		"Algorithms.reduce (lambda method) failed",
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
 			"return(algo.reduce(algo.range(3, 17, 4),@(x,y){x+y;}));\n"
+			"}"
+		),
+		"36"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.reduce (functor) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"class S{call(x,y){x+y;}}\n"
+			"main(){\n"
+			"s = S();\n"
+			"return(algo.reduce(algo.range(3, 17, 4),s));\n"
 			"}"
 		),
 		"36"

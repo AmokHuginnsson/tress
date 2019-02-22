@@ -1272,6 +1272,22 @@ char const progExecuteErr128[] =
 	"}\n"
 ;
 
+char const progExecuteErr129[] =
+	"import Algorithms as A;\n"
+	"class X{to_string(){}}\n"
+	"main() {\n"
+	"A.reduce([],X());\n"
+	"}\n"
+;
+
+char const progExecuteErr130[] =
+	"import Algorithms as A;\n"
+	"class X{call = none;}\n"
+	"main() {\n"
+	"A.reduce([],X());\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1428,6 +1444,8 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr126,
 		progExecuteErr127,
 		progExecuteErr128,
+		progExecuteErr129,
+		progExecuteErr130,
 		NULL
 	};
 	ErrInfo const err[] = {
@@ -1481,7 +1499,7 @@ TUT_UNIT_TEST( "report execution error" )
 /*  47 */ { 46, 3, 13,   "*tress*:3:13: NumberSetStatistics.constructor() a collection is not uniformly typed: a `number`, at position: 1" },
 /*  48 */ { 46, 3, 13,   "*tress*:3:13: NumberSetStatistics.constructor() first argument must be one of {a `tuple`, a `list`, a `deque`, a `set`, an `order`}, not a `lookup`." },
 /*  49 */ { 46, 3, 13,   "*tress*:3:13: NumberSetStatistics.constructor() first argument must be one of {a `tuple`, a `list`, a `deque`, a `set`, an `order`}, not a `dict`." },
-/*  50 */ { 41, 3, 9,    "*tress*:3:9: Algorithms.reduce() second argument must be one of {a `*function_reference*`, an `*unbound_method*`, a `*bound_method*`}, not an `integer`." },
+/*  50 */ { 41, 3, 9,    "*tress*:3:9: Algorithms.reduce() second argument must be a callable type, either a `*function_reference*` or an `*unbound_method*` or a `*bound_method*` or implementing a `call()` method, not an `integer`." },
 /*  51 */ { 14, 2, 6,    "*tress*:2:6: Operands are not boolean values: *none*" },
 /*  52 */ { 12, 2, 4,    "*tress*:2:4: `If` argument is not a boolean." },
 /*  53 */ { 58, 4, 18,   "*tress*:4:18: Class `A` does not have `equals` method." },
@@ -1560,6 +1578,8 @@ TUT_UNIT_TEST( "report execution error" )
 /* 126 */ { 234, 19, 18, "*tress*:19:18: Class `LI` does not have `value` method." },
 /* 127 */ { 433, 33, 18, "*tress*:33:18: Class `LI` does not have `next` method." },
 /* 128 */ { 457, 35, 18, "*tress*:35:18: User defined `iterator`, a `LI`, returned an invalid type an `integer` instead of a `boolean` from supplied `is_valid` method." },
+/* 129 */ { 64, 4, 9, "*tress*:4:9: Algorithms.reduce() second argument must be a callable type, either a `*function_reference*` or an `*unbound_method*` or a `*bound_method*` or implementing a `call()` method, not a `X`." },
+/* 130 */ { 63, 4, 9, "*tress*:4:9: Algorithms.reduce() second argument must be a callable type, either a `*function_reference*` or an `*unbound_method*` or a `*bound_method*` or implementing a `call()` method, not a `X`." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
