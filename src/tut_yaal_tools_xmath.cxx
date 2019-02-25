@@ -130,6 +130,16 @@ TUT_UNIT_TEST( "mean_absolute_deviation" )
 			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEAN_ABSOLUTE_DEVIATION ).mean_absolute_deviation(), 139.2098L, epsilon );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "number set stats: sample_skewness" )
+	ENSURE_DISTANCE( "number_set_stats().sample_skewness() failed",
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::SAMPLE_SKEWNESS ).sample_skewness(), 0.163549L, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "number set stats: population_skewness" )
+	ENSURE_DISTANCE( "number_set_stats().population_skewness() failed",
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::POPULATION_SKEWNESS ).population_skewness(), 0.161085L, epsilon );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "stats on dice" )
 	double long dice[] = { 1, 2, 3, 4, 5, 6 };
 	HNumberSetStats<double long> diceStats( dice, dice + yaal::size( dice ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN );
