@@ -140,6 +140,16 @@ TUT_UNIT_TEST( "number set stats: population_skewness" )
 			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::POPULATION_SKEWNESS ).population_skewness(), 0.161085L, epsilon );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "number set stats: sample_kurtosis" )
+	ENSURE_DISTANCE( "number_set_stats().sample_kurtosis() failed",
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::SAMPLE_KURTOSIS ).sample_kurtosis(), -1.234055L, epsilon );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "number set stats: population_kurtosis" )
+	ENSURE_DISTANCE( "number_set_stats().population_kurtosis() failed",
+			number_set_stats( begin( _testData_[0] ), end( _testData_[0] ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::POPULATION_KURTOSIS ).population_kurtosis(), -1.23261591359L, epsilon );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "stats on dice" )
 	double long dice[] = { 1, 2, 3, 4, 5, 6 };
 	HNumberSetStats<double long> diceStats( dice, dice + yaal::size( dice ), AGGREGATE_TYPE::BASIC | AGGREGATE_TYPE::MEDIAN );
