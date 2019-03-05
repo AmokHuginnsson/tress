@@ -8,6 +8,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 #include <yaal/tools/filesystem.hxx>
+#include <yaal/tools/huginn/string.hxx>
 
 #include "tut_yaal_tools_hhuginn_base.hxx"
 
@@ -117,7 +118,7 @@ void tut_yaal_tools_hhuginn_base::test_file( hcore::HString const& name_ ) {
 	l.lock();
 	HHuginn::value_t res( h.result() );
 	ENSURE_EQUALS( "bad result type", res->type_id(), HHuginn::TYPE::STRING );
-	ENSURE_EQUALS( "bad result value", static_cast<HHuginn::HString*>( res.raw() )->value(), _resultCache );
+	ENSURE_EQUALS( "bad result value", static_cast<huginn::HString*>( res.raw() )->value(), _resultCache );
 	return;
 }
 
@@ -127,9 +128,9 @@ bool is_op( code_point_t c ) {
 	return ( is_ascii( c ) && ( strchr( ops, static_cast<char>( c.get() ) ) != nullptr ) );
 }
 hcore::HString prettify( yaal::hcore::HString const& src_ ) {
-	HString out;
+	hcore::HString out;
 	int tabs( 0 );
-	HString nl;
+	hcore::HString nl;
 	for ( int i( 0 ); i < src_.get_length(); ++ i ) {
 		code_point_t curr( src_[i] );
 		if ( ( curr == '"' ) || ( curr == '\'' ) ) {

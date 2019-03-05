@@ -16,9 +16,9 @@ using namespace yaal::tools::huginn;
 
 namespace tress {
 
-class HGreeter : public HHuginn::HValue {
+class HGreeter : public HValue {
 public:
-	HGreeter( HHuginn::HClass* class_ )
+	HGreeter( HClass* class_ )
 		: HValue( class_ ) {
 		return;
 	}
@@ -27,7 +27,7 @@ public:
 		char const name[] = "Greeter.greet";
 		verify_arg_count( name, values_, 1, 2, thread_, position_ );
 		verify_arg_type( name, values_, 0, HHuginn::TYPE::STRING, ARITY::MULTIPLE, thread_, position_ );
-		HString how( "Hello, " );
+		hcore::HString how( "Hello, " );
 		if ( values_.get_size() == 2 ) {
 			verify_arg_type( name, values_, 1, HHuginn::TYPE::STRING, ARITY::MULTIPLE, thread_, position_ );
 			how = get_string( values_[1] );

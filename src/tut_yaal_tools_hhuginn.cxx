@@ -155,39 +155,39 @@ TUT_UNIT_TEST( "program return types and values" )
 	/* integer */ {
 		OHuginnResult hr( execute_result( "main(){return(0);}" ) );
 		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::INTEGER );
-		ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( hr._result.raw() )->value(), 0 );
+		ENSURE_EQUALS( "bad value returned", static_cast<huginn::HInteger*>( hr._result.raw() )->value(), 0 );
 	}
 	/* real */ {
 		OHuginnResult hr( execute_result( "main(){return(3.14);}" ) );
 		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::REAL );
-		ENSURE_DISTANCE( "bad value returned", static_cast<HHuginn::HReal*>( hr._result.raw() )->value(), 3.14L, epsilon );
+		ENSURE_DISTANCE( "bad value returned", static_cast<huginn::HReal*>( hr._result.raw() )->value(), 3.14L, epsilon );
 	}
 	/* string */ {
 		OHuginnResult hr( execute_result( "main(){return(\"hello world\");}" ) );
 		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::STRING );
-		ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HString*>( hr._result.raw() )->value(), "hello world" );
+		ENSURE_EQUALS( "bad value returned", static_cast<huginn::HString*>( hr._result.raw() )->value(), "hello world" );
 	}
 	/* character */ {
 		OHuginnResult hr( execute_result( "main(){return('X');}" ) );
 		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::CHARACTER );
-		ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HCharacter*>( hr._result.raw() )->value(), code_point_t( 'X' ) );
+		ENSURE_EQUALS( "bad value returned", static_cast<huginn::HCharacter*>( hr._result.raw() )->value(), code_point_t( 'X' ) );
 	}
 	/* number */ {
 		OHuginnResult hr( execute_result( "main(){return($7);}" ) );
 		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::NUMBER );
-		ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HNumber*>( hr._result.raw() )->value(), 7_yn );
+		ENSURE_EQUALS( "bad value returned", static_cast<huginn::HNumber*>( hr._result.raw() )->value(), 7_yn );
 	}
 	/* boolean */ {
 		OHuginnResult hr( execute_result( "main(){return(true);}" ) );
 		ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::BOOLEAN );
-		ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HBoolean*>( hr._result.raw() )->value(), true );
+		ENSURE_EQUALS( "bad value returned", static_cast<huginn::HBoolean*>( hr._result.raw() )->value(), true );
 	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set variable" )
 	OHuginnResult hr( execute_result( "main(){a=7;return(a);}" ) );
 	ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::INTEGER );
-	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( hr._result.raw() )->value(), 7 );
+	ENSURE_EQUALS( "bad value returned", static_cast<huginn::HInteger*>( hr._result.raw() )->value(), 7 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "function definitions/calls/default arguments/variadic paramaters/named parameters" )
@@ -760,7 +760,7 @@ TUT_UNIT_TEST( "print" )
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::INTEGER );
-	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 7 );
+	ENSURE_EQUALS( "bad value returned", static_cast<huginn::HInteger*>( r.raw() )->value(), 7 );
 	ENSURE_EQUALS( "print failed", out.string(), "Hello World!\n133.142.71X1" );
 	ENSURE_EQUALS(
 		"print of bad type succeded",
@@ -786,7 +786,7 @@ TUT_UNIT_TEST( "input" )
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::INTEGER );
-	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 13 );
+	ENSURE_EQUALS( "bad value returned", static_cast<huginn::HInteger*>( r.raw() )->value(), 13 );
 	ENSURE_EQUALS( "print failed", out.string(), "[Amok]" );
 TUT_TEARDOWN()
 
@@ -1739,7 +1739,7 @@ TUT_UNIT_TEST( "standard streams" )
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::INTEGER );
-	ENSURE_EQUALS( "stdin", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 123 );
+	ENSURE_EQUALS( "stdin", static_cast<huginn::HInteger*>( r.raw() )->value(), 123 );
 	ENSURE_EQUALS( "stdout failed", out.string(), "stdout" );
 	ENSURE_EQUALS( "stderr failed", err.string(), "stderr" );
 	ENSURE_EQUALS( "stdlog failed", log.string(), "stdlog" );
@@ -2615,12 +2615,12 @@ TUT_UNIT_TEST( "helpers" )
 	h = make_pointer<HHuginn>();
 	execute( h, "main(){7.;}" );
 	HHuginn::value_t v( h->result() );
-	ENSURE_EQUALS( "get_by_type<double long>(...) failed", get_by_type<HHuginn::HReal::value_type>( v ), 7.L );
+	ENSURE_EQUALS( "get_by_type<double long>(...) failed", get_by_type<huginn::HReal::value_type>( v ), 7.L );
 	v.reset();
 	h = make_pointer<HHuginn>();
 	execute( h, "main(){$7;}" );
 	v = h->result();
-	ENSURE_EQUALS( "get_by_type<HNumber>(...) failed", get_by_type<HHuginn::HNumber::value_type&>( v ), "7"_yn );
+	ENSURE_EQUALS( "get_by_type<HNumber>(...) failed", get_by_type<huginn::HNumber::value_type&>( v ), "7"_yn );
 	v.reset();
 TUT_TEARDOWN()
 
@@ -2640,7 +2640,7 @@ TUT_UNIT_TEST( "simple program" )
 	HHuginn::value_t r( h.result() );
 	ENSURE( "nothing returned", !! r );
 	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::INTEGER );
-	ENSURE_EQUALS( "bad value returned", static_cast<HHuginn::HInteger*>( r.raw() )->value(), 42 );
+	ENSURE_EQUALS( "bad value returned", static_cast<huginn::HInteger*>( r.raw() )->value(), 42 );
 TUT_TEARDOWN()
 
 
