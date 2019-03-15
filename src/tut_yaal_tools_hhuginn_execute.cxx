@@ -1,6 +1,7 @@
 /* Read tress/LICENSE.md file for copyright and licensing information. */
 
 #include <TUT/tut.hpp>
+#include <yaal/tools/huginn/helper.hxx>
 
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
@@ -12,6 +13,7 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
+using namespace yaal::tools::huginn;
 using namespace tress;
 using namespace tress::tut_helpers;
 
@@ -22,7 +24,7 @@ struct tut_yaal_tools_hhuginn_execute : public tress::tut_yaal_tools_hhuginn_bas
 	void test_execute( prog_src_t, ErrInfo const&, int );
 };
 
-TUT_TEST_GROUP( tut_yaal_tools_hhuginn_execute, "yaal::tools::HHuginn,execution" );
+TUT_TEST_GROUP( tut_yaal_tools_hhuginn_execute, "yaal::tools::HHuginn,execute" );
 
 char const progExecuteErr0[] =
 	"main() {\n"
@@ -1600,6 +1602,35 @@ TUT_UNIT_TEST( "bad number of arguments to main()" )
 	h.add_argument( "dummy" );
 	h.execute();
 	ENSURE_EQUALS( "would crash", h.error_message(), "*anonymous stream*:1:1: Function `main()` accepts exactly 0 positional arguments, but 1 were given." );
+TUT_TEARDOWN()
+
+namespace {
+
+int foo( int ) {
+	return ( 0 );
+}
+
+}
+
+TUT_UNIT_TEST( "bad call to auto-registered native function" )
+	/**/ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "foo", foo, "foo" );
+		ENSURE_EQUALS(
+			"method on uninitialized base succeded",
+			execute_except( h, "main(){\nfoo();\n}" ),
+			"*anonymous stream*:2:4: Bad number of parameters in call to: `foo()`, expected exactly: 1, got: 0."
+		);
+	}
+	/**/ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "foo", foo, "foo" );
+		ENSURE_EQUALS(
+			"method on uninitialized base succeded",
+			execute_except( h, "main(){\nfoo(1.);\n}" ),
+			"*anonymous stream*:2:4: foo() argument must be an `integer`, not a `real`."
+		);
+	}
 TUT_TEARDOWN()
 
 }
