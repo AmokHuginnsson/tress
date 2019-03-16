@@ -33,8 +33,7 @@ struct tut_yaal_hcore_hpool : public simple_mock<tut_yaal_hcore_hpool> {
 	virtual ~tut_yaal_hcore_hpool( void ) {}
 	template <int const size>
 	void check_consistency( HPool<size>& );
-	void gc( pool_t&, void**, int );
-	static void gc_dispatch( pool_t&, void**, int, void* );
+	int gc( pool_t&, void**, int );
 };
 
 template <int const size>
@@ -928,7 +927,7 @@ TUT_UNIT_TEST( "make N full blocks, make room in them in random order, free them
 	ENSURE_EQUALS( "bad block count", p._poolBlockCount, 1 );
 TUT_TEARDOWN()
 
-void tut_yaal_hcore_hpool::gc( pool_t& p_, void** data_, int size_ ) {
+int tut_yaal_hcore_hpool::gc( pool_t& p_, void** data_, int size_ ) {
 	int_array_t vals;
 	for ( int i( 0 ); i < size_; ++ i ) {
 		vals.push_back( *static_cast<int*>( data_[i] ) );
@@ -936,10 +935,7 @@ void tut_yaal_hcore_hpool::gc( pool_t& p_, void** data_, int size_ ) {
 	}
 	sort( vals.begin(), vals.end() );
 	ENSURE( "bad data in gc store", equal( vals.begin(), vals.end(), begin( _testData_[0] ) ) );
-}
-
-void tut_yaal_hcore_hpool::gc_dispatch( pool_t& p_, void** data_, int size_, void* self_ ) {
-	static_cast<tut_yaal_hcore_hpool*>( self_ )->gc( p_, data_, size_ );
+	return ( size_ );
 }
 
 TUT_UNIT_TEST( "garbage collection" )
@@ -955,7 +951,7 @@ TUT_UNIT_TEST( "garbage collection" )
 			p.free( nums[i] );
 		}
 	}
-	p.run_gc( &gc_dispatch, this );
+	p.run_gc( call( &tut_yaal_hcore_hpool::gc, this, ref( p ), _1, _2 ) );
 TUT_TEARDOWN()
 
 }

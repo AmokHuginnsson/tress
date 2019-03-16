@@ -937,6 +937,138 @@ TUT_UNIT_TEST( "class" )
 	);
 TUT_TEARDOWN()
 
+namespace {
+void notify( int val_, int& dest_ ) {
+	dest_ = val_;
+}
+}
+
+TUT_UNIT_TEST( "reference cycle garbage collection" )
+	/* `list` */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int val( 0 );
+		register_function( *h, "notify", call( notify, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"garbage collection of `list` failed",
+			execute(
+				h,
+				"class A{destructor(){notify(1);}}"
+				"main(){"
+				"l=[A()];"
+				"l.push(l);"
+				"none;"
+				"}"
+			),
+			"none"
+		);
+		h.reset();
+		ENSURE_EQUALS( "destuctor from `list` was not invoked", val, 1 );
+	}
+	/* `deque` */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int val( 0 );
+		register_function( *h, "notify", call( notify, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"garbage collection of `deque` failed",
+			execute(
+				h,
+				"class A{destructor(){notify(2);}}"
+				"main(){"
+				"d=deque(A());"
+				"d.push(d);"
+				"none;"
+				"}"
+			),
+			"none"
+		);
+		h.reset();
+		ENSURE_EQUALS( "destuctor from `deque` was not invoked", val, 2 );
+	}
+	/* `dict` */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int val( 0 );
+		register_function( *h, "notify", call( notify, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"garbage collection of `dict` (by value) failed",
+			execute(
+				h,
+				"class A{destructor(){notify(3);}}"
+				"main(){"
+				"d=[0:A()];"
+				"d[1] = d;"
+				"none;"
+				"}"
+			),
+			"none"
+		);
+		h.reset();
+		ENSURE_EQUALS( "destuctor from `dict` was not invoked", val, 3 );
+	}
+	/* `lookup` */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int val( 0 );
+		register_function( *h, "notify", call( notify, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"garbage collection of `lookup` (by value) failed",
+			execute(
+				h,
+				"class A{destructor(){notify(4);}}"
+				"main(){"
+				"l={0:A()};"
+				"l[none] = l;"
+				"none;"
+				"}"
+			),
+			"none"
+		);
+		h.reset();
+		ENSURE_EQUALS( "destuctor from `lookup` was not invoked", val, 4 );
+	}
+	/* `set` */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int val( 0 );
+		register_function( *h, "notify", call( notify, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"garbage collection of `set` failed",
+			execute(
+				h,
+				"class A{destructor(){notify(5);}hash(){77777;}}"
+				"main(){"
+				"s=set(A());"
+				"s.insert(s);"
+				"none;"
+				"}"
+			),
+			"none"
+		);
+		h.reset();
+		ENSURE_EQUALS( "destuctor from `set` was not invoked", val, 5 );
+	}
+	/* `set` */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int val( 0 );
+		register_function( *h, "notify", call( notify, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"garbage collection of `Objects` failed",
+			execute(
+				h,
+				"class Node {"
+				"_other = none;"
+				"destructor(){notify(6);}"
+				"}"
+				"main(){"
+				"n=Node();"
+				"n._other = n;"
+				"none;"
+				"}"
+			),
+			"none"
+		);
+		h.reset();
+		ENSURE_EQUALS( "destuctor from `Objects` was not invoked", val, 6 );
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "inheritance from built-in" )
 	ENSURE_EQUALS(
 		"inheritance from built-in failed",
