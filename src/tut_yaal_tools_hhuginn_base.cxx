@@ -246,6 +246,36 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 }
 }
 
+yaal::tools::HHuginn::ptr_t tut_yaal_tools_hhuginn_base::compile_function( yaal::hcore::HString const& source_ ) {
+	if ( setup._verbose ) {
+		if ( setup._debug ) {
+			clog << "// HUGINN TEST CASE START" << endl;
+		}
+		clog << prettify( source_ ) << endl;
+		if ( setup._debug ) {
+			clog << "// HUGINN TEST CASE FINISH" << endl;
+		}
+	}
+	HHuginn::ptr_t h( make_pointer<HHuginn>() );
+	/* load code */ {
+		HLock l( _mutex );
+		_sourceCache.set_buffer( source_ );
+		h->load( _sourceCache );
+	}
+	h->preprocess();
+	bool p( h->parse() );
+	if ( !p ) {
+		clog << h->error_message() << endl;
+	}
+	ENSURE( "parse failed", p );
+	bool c( h->compile() );
+	if ( !c ) {
+		clog << h->error_message() << endl;
+	}
+	ENSURE( "compilation failed", c );
+	return ( h );
+}
+
 hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 	yaal::tools::HHuginn::ptr_t huginn_,
 	hcore::HString const& source_,

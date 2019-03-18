@@ -190,6 +190,33 @@ TUT_UNIT_TEST( "set variable" )
 	ENSURE_EQUALS( "bad value returned", static_cast<huginn::HInteger*>( hr._result.raw() )->value(), 7 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "run non-main function" )
+	HHuginn h;
+	HStringStream ss;
+	ss <<
+		"add(a,b){\n"
+		"return ( a + b );\n"
+		"}\n"
+		"main() {\n"
+		"return ( -1 );\n"
+		"}\n";
+	h.load( ss );
+	h.preprocess();
+	if ( ! h.parse() ) {
+		ENSURE_EQUALS( "parsing failed", h.error_message(), "" );
+	}
+	if ( ! h.compile() ) {
+		ENSURE_EQUALS( "compilation failed", h.error_message(), "" );
+	}
+	HHuginn::values_t args;
+	args.push_back( h.value( 3 ) );
+	args.push_back( h.value( 13 ) );
+	HHuginn::value_t res( h.call( "add", args ) );
+	ENSURE( "call failed", !! res );
+	ENSURE_EQUALS( "call returned wrong type", res->type_id(), HHuginn::TYPE::INTEGER );
+	ENSURE_EQUALS( "call returned wrong value", huginn::get_integer( res ), 16 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "function definitions/calls/default arguments/variadic paramaters/named parameters" )
 	ENSURE_EQUALS(
 		"function result failed",
@@ -2314,6 +2341,21 @@ TUT_UNIT_TEST( "easy function registration" )
 		register_function( *h, "fv10", &S::fv10, "no return value" );
 		ENSURE_EQUALS( "fv10 failed", execute( h, "main() { return ( fv10( 2, 3, 5, 7, 11, 13, 17, 19, 23, 29 ) ); }" ), "none" );
 		ENSURE_EQUALS( "fv10 call failed", S::r, 6469693230LL );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "easy function call" )
+	/* no args */ {
+		HHuginn::ptr_t h( compile_function( "foo() { return ( 17 ); } main(){ foo; }" ) );
+		ENSURE_EQUALS( "getpid failed", to_string( call_function( *h, "foo" ), h.raw() ), "17" );
+	}
+	/* one arg */ {
+		HHuginn::ptr_t h( compile_function( "foo(a) { return ( a * a ); } main(){ foo; }" ) );
+		ENSURE_EQUALS( "getpid failed", to_string( call_function( *h, "foo", 19 ), h.raw() ), "361" );
+	}
+	/* two args */ {
+		HHuginn::ptr_t h( compile_function( "from Text import split;main(){split;}" ) );
+		ENSURE_EQUALS( "getpid failed", to_string( call_function( *h, "split", "a,b,c", "," ), h.raw() ), "[\"a\", \"b\", \"c\"]" );
 	}
 TUT_TEARDOWN()
 
