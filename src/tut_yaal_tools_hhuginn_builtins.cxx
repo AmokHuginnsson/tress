@@ -114,11 +114,11 @@ TUT_UNIT_TEST( "string()" )
 		"string.format() failed",
 		execute(
 			"main(){\n"
-			"s=\"a {:#7x} {:#07x} {:02d} b\";\n"
-			"return(s.format(123, 0x123, 1));\n"
+			"s=\"a {:#7x} {:#07x} {:02d} {:02x} b\";\n"
+			"return(s.format(123, 0x123, 1, 10));\n"
 			"}\n"
 		),
-		"\"a    0x7b 0x00123 01 b\""
+		"\"a    0x7b 0x00123 01 0a b\""
 	);
 	ENSURE_EQUALS(
 		"string.format() alignment failed",
