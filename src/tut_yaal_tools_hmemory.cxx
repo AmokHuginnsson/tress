@@ -92,13 +92,47 @@ TUT_UNIT_TEST( "cycle" )
 	m.read( data, dataSize );
 	ENSURE_EQUALS( "read failed", data, "efgh"_ys );
 	m.write( "012345", 6 );
-	ENSURE_EQUALS( "read failed", buf, "012345ghijk"_ys );
+	ENSURE_EQUALS( "write failed", buf, "012345ghijk"_ys );
 	m.read( data, dataSize );
 	ENSURE_EQUALS( "read failed", data, "ijk0"_ys );
 	m.read( data, dataSize );
 	ENSURE_EQUALS( "read failed", data, "1234"_ys );
 	m.write( "678901", 6 );
-	ENSURE_EQUALS( "read failed", buf, "11234567890"_ys );
+	ENSURE_EQUALS( "write failed", buf, "11234567890"_ys );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "seek" )
+	char buf[] = "abcdefghijk";
+	int const dataSize( 4 );
+	char data[dataSize + 1];
+	::memset( data, 0, dataSize + 1 );
+	HMemoryObserver mo( buf, static_cast<int>( sizeof ( buf ) - 1 ) );
+	HMemory m( mo );
+	m.read( data, dataSize );
+	ENSURE_EQUALS( "read failed", data, "abcd"_ys );
+	m.read( data, dataSize );
+	ENSURE_EQUALS( "read failed", data, "efgh"_ys );
+	m.seek( 0, HStreamInterface::SEEK::BEGIN );
+	m.read( data, dataSize );
+	ENSURE_EQUALS( "seek failed", data, "abcd"_ys );
+	m.read( data, dataSize );
+	ENSURE_EQUALS( "seek failed", data, "efgh"_ys );
+	m.seek( -4, HStreamInterface::SEEK::CURRENT );
+	m.read( data, dataSize );
+	ENSURE_EQUALS( "seek failed", data, "efgh"_ys );
+	m.seek( -4, HStreamInterface::SEEK::END );
+	m.read( data, dataSize );
+	ENSURE_EQUALS( "seek failed", data, "hijk"_ys );
+	m.seek( 0, HStreamInterface::SEEK::BEGIN );
+	ENSURE_THROW( "memory overwrite", m.write( "AB", 2 ), HMemoryException );
+	m.read( data, 2 );
+	m.write( "AB", 2 );
+	m.seek( 2, HStreamInterface::SEEK::CURRENT );
+	m.read( data, 4 );
+	ENSURE_EQUALS( "seek failed", data, "efgh"_ys );
+	ENSURE_THROW( "negative pos after seek", m.seek( -10, HStreamInterface::SEEK::CURRENT ), HMemoryException );
+	ENSURE_THROW( "pos behind end", m.seek( 10, HStreamInterface::SEEK::CURRENT ), HMemoryException );
+	ENSURE_EQUALS( "seek failed", buf, "ABcdefghijk"_ys );
 TUT_TEARDOWN()
 
 }
