@@ -151,5 +151,23 @@ TUT_UNIT_TEST( "spawn, write stream and read stream" )
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "redirect child stdout to file" )
+	static char const PIPED_CHILD_LOG_PATH[] = "./out/piped-child.log";
+	HPipe inPipe;
+	HStreamInterface::ptr_t in( inPipe.in() );
+	HStreamInterface::ptr_t out( make_pointer<HFile>( PIPED_CHILD_LOG_PATH, HFile::OPEN::WRITING ) );
+	HPipedChild pc( inPipe.out(), out );
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
+	pc.spawn( CHILD, {} );
+	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
+	*in << MSG_OUT << endl;
+	pc.finish();
+	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
+	HFile logFile( PIPED_CHILD_LOG_PATH, HFile::OPEN::READING );
+	HString line;
+	getline( logFile, line );
+	ENSURE_EQUALS( "bad redirected data", line, ACK_OUT );
+TUT_TEARDOWN()
+
 }
 
