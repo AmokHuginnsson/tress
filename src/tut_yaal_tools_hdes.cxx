@@ -57,8 +57,7 @@ void tut_yaal_tools_hdes::crypt_decrypt_test( int onSize_ ) {
  {
 		HFile out( "./out/crypted", HFile::OPEN::WRITING );
 		if ( onSize_ > 0 ) {
-			HMemoryObserver mo( m.raw(), onSize_ );
-			HMemory protype( mo, HMemory::INITIAL_STATE::VALID );
+			HMemory protype( make_resource<HMemoryObserver>( m.raw(), onSize_ ), HMemory::INITIAL_STATE::VALID );
 			crypto::crypt_3des( protype, out, "kalafior" );
 		} else
 			crypto::crypt_3des( ss, out, "kalafior" );
@@ -95,10 +94,8 @@ TUT_UNIT_TEST( "decrypt file" )
 		char prototype[] = "test1234";
 		char buf[ sizeof ( prototype ) ];
 		char buf2[ sizeof ( prototype ) ];
-		HMemoryObserver srcMo( prototype, static_cast<int>( sizeof ( prototype ) ) - 1 );
-		HMemory src( srcMo, HMemory::INITIAL_STATE::VALID );
-		HMemoryObserver dstMo( buf, sizeof ( buf ) );
-		HMemory dst( dstMo );
+		HMemory src( make_resource<HMemoryObserver>( prototype, static_cast<int>( sizeof ( prototype ) ) - 1 ), HMemory::INITIAL_STATE::VALID );
+		HMemory dst( make_resource<HMemoryObserver>( buf, sizeof ( buf ) ) );
 		strncpy( buf, prototype, sizeof ( buf ) );
 		strncpy( buf2, prototype, sizeof ( buf2 ) );
 		crypto::crypt_3des( src, dst, "kotek" );

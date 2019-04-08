@@ -348,8 +348,7 @@ TUT_UNIT_TEST( "full encode tests" )
 	for ( int len = 1; len < MAX_TEST_LEN; ++ len ) {
 		for ( int val = 0; val < 256; ++ val ) {
 			fill_n( input, len, val );
-			HMemoryObserver mo( input, len );
-			HMemory m( mo );
+			HMemory m( make_resource<HMemoryObserver>( input, len ) );
 			ss.reset();
 			base64::encode( m, ss, true );
 			msg << "bad encode: len = " << len << ", val = " << val << ", input = " << bin << input;
@@ -367,8 +366,7 @@ TUT_UNIT_TEST( "full decode test" )
 	HStringStream msg;
 	for ( int len = 1; len <= MAX_TEST_LEN; ++ len ) {
 		for ( int val = 0; val < 256; ++ val ) {
-			HMemoryObserver mo( buffer, len );
-			HMemory m( mo );
+			HMemory m( make_resource<HMemoryObserver>( buffer, len ) );
 			ss.reset();
 			ss << cases[ ( len - 1 ) * 256 + val ] << flush;
 			base64::decode( ss, m, true );

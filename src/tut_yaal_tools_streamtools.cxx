@@ -107,8 +107,7 @@ TUT_UNIT_TEST( "stream + HNumber" )
 	ss >> n;
 	ENSURE_EQUALS( "HNumber text streams failed", n, "3.141593"_yn );
 	HChunk c;
-	HMemoryProvider mp( c, 100 );
-	HMemory m( mp );
+	HMemory m( make_resource<HMemoryProvider>( c, 100 ) );
 	m << binary << exp;
 	m >> n;
 	ENSURE_EQUALS( "HNumber binary streams failed", n, exp );
@@ -125,8 +124,7 @@ TUT_UNIT_TEST( "stream + HTime" )
 	t.set_time( 0, 0, 0 );
 	ENSURE_EQUALS( "HTime text streams failed", t, HTime( exp ).set_time( 0, 0, 0 ) );
 	HChunk buf;
-	HMemoryProvider mp( buf, 100 );
-	HMemory m( mp );
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
 	m << binary << exp;
 	t.set_now();
 	m >> t;
@@ -143,8 +141,7 @@ TUT_UNIT_TEST( "stream + HComplex" )
 	ss >> c;
 	ENSURE_EQUALS( "HComplex text streams failed", c, exp );
 	HChunk buf;
-	HMemoryProvider mp( buf, 100 );
-	HMemory m( mp );
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
 	m << binary << exp;
 	c.set( 0, 0 );
 	m >> c;
@@ -166,8 +163,7 @@ TUT_UNIT_TEST( "stream + HPair" )
 	ss >> p;
 	ENSURE_EQUALS( "HArray text streams failed", p, exp );
 	HChunk buf;
-	HMemoryProvider mp( buf, 100 );
-	HMemory m( mp );
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
 	m << binary << exp;
 	p = make_pair( 0, 0 );
 	m >> p;
@@ -188,8 +184,7 @@ TUT_UNIT_TEST( "stream + HArray" )
 	ss >> a;
 	ENSURE_EQUALS( "HArray text streams failed", a, exp );
 	HChunk buf;
-	HMemoryProvider mp( buf, 100 );
-	HMemory m( mp );
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
 	m << binary << exp;
 	a.clear();
 	m >> a;
@@ -211,8 +206,7 @@ TUT_UNIT_TEST( "stream + HStaticArray" )
 	ss >> a;
 	ENSURE_EQUALS( "HStaticArray text streams failed", a, exp );
 	HChunk buf;
-	HMemoryProvider mp( buf, 100 );
-	HMemory m( mp );
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
 	m << binary << exp;
 	fill( a.begin(), a.end(), 0 );
 	m >> a;
@@ -233,8 +227,7 @@ TUT_UNIT_TEST( "stream + HDeque" )
 	ss >> d;
 	ENSURE_EQUALS( "HDeque text streams failed", d, exp );
 	HChunk buf;
-	HMemoryProvider mp( buf, 100 );
-	HMemory m( mp );
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
 	m << binary << exp;
 	d.clear();
 	m >> d;
@@ -255,8 +248,7 @@ TUT_UNIT_TEST( "stream + HList" )
 	ss >> l;
 	ENSURE_EQUALS( "HList text streams failed", l, exp );
 	HChunk buf;
-	HMemoryProvider mp( buf, 100 );
-	HMemory m( mp );
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
 	m << binary << exp;
 	l.clear();
 	m >> l;
@@ -277,8 +269,7 @@ TUT_UNIT_TEST( "stream + HSet" )
 	ss >> s;
 	ENSURE_EQUALS( "HSet text streams failed", s, exp );
 	HChunk buf;
-	HMemoryProvider mp( buf, 100 );
-	HMemory m( mp );
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
 	m << binary << exp;
 	s.clear();
 	m >> s;
@@ -302,8 +293,7 @@ TUT_UNIT_TEST( "stream + HHashSet" )
 	sort( sorted.begin(), sorted.end() );
 	ENSURE_EQUALS( "HHashSet text streams failed", sorted, exp );
 	HChunk buf;
-	HMemoryProvider mp( buf, 100 );
-	HMemory m( mp );
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
 	m << binary << data;
 	hs.clear();
 	m >> hs;
@@ -327,8 +317,7 @@ TUT_UNIT_TEST( "stream + HMap" )
 	ss >> s;
 	ENSURE_EQUALS( "HMap text streams failed", s, exp );
 	HChunk buf;
-	HMemoryProvider mp( buf, 100 );
-	HMemory m( mp );
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
 	m << binary << exp;
 	s.clear();
 	m >> s;
@@ -355,8 +344,7 @@ TUT_UNIT_TEST( "stream + HHashMap" )
 	sort( sorted.begin(), sorted.end() );
 	ENSURE_EQUALS( "HHashSet text streams failed", sorted, exp );
 	HChunk buf;
-	HMemoryProvider mp( buf, 100 );
-	HMemory m( mp );
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
 	m << binary << data;
 	hs.clear();
 	m >> hs;

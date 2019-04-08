@@ -40,8 +40,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "simple write" )
 	char const pattern[] = "Ala ma kota.";
 	::memset( _buf, 0, SIZE );
-	HMemoryObserver mo( _buf, SIZE );
-	HMemory m( mo );
+	HMemory m( make_resource<HMemoryObserver>( _buf, SIZE + 0 ) );
 	m << pattern;
 	ENSURE_EQUALS( "simple write failed", memcmp( _buf, pattern, sizeof ( pattern ) ), 0 );
 TUT_TEARDOWN()
@@ -51,15 +50,13 @@ TUT_UNIT_TEST( "stacked writes" )
 	char const pattern_hi[] = "Ala ma";
 	char const pattern_lo[] = " kota.";
 	::memset( _buf, 0, SIZE );
-	HMemoryObserver mo( _buf, SIZE );
-	HMemory m( mo );
+	HMemory m( make_resource<HMemoryObserver>( _buf, SIZE + 0 ) );
 	m << pattern_hi << pattern_lo;
 	ENSURE_EQUALS( "simple write failed", memcmp( _buf, pattern, sizeof ( pattern ) ), 0 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read from empty" )
-	HMemoryObserver mo( _buf, SIZE );
-	HMemory m( mo, HMemory::INITIAL_STATE::INVALID );
+	HMemory m( make_resource<HMemoryObserver>( _buf, SIZE + 0 ), HMemory::INITIAL_STATE::INVALID );
 	HString line;
 	ENSURE_EQUALS( "read byte count from empty", m.read_until( line ), -1 );
 TUT_TEARDOWN()
@@ -67,14 +64,10 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "equality operator" )
 	static char buf1[] = "abcde";
 	static char buf2[] = "abcdf";
-	HMemoryObserver mo1( buf1, 4 );
-	HMemoryObserver mo2( buf2, 4 );
-	HMemoryObserver mo3( buf1, 5 );
-	HMemoryObserver mo4( buf2, 5 );
-	HMemory m1( mo1 );
-	HMemory m2( mo2 );
-	HMemory m3( mo3 );
-	HMemory m4( mo4 );
+	HMemory m1( make_resource<HMemoryObserver>( buf1, 4 ) );
+	HMemory m2( make_resource<HMemoryObserver>( buf2, 4 ) );
+	HMemory m3( make_resource<HMemoryObserver>( buf1, 5 ) );
+	HMemory m4( make_resource<HMemoryObserver>( buf2, 5 ) );
 	ENSURE( "equality failed on equal", m1 == m2 );
 	ENSURE_NOT( "equality failed on equal", m1 == m3 );
 	ENSURE_NOT( "equality failed on equal", m3 == m4 );
@@ -85,8 +78,7 @@ TUT_UNIT_TEST( "cycle" )
 	int const dataSize( 4 );
 	char data[dataSize + 1];
 	::memset( data, 0, dataSize + 1 );
-	HMemoryObserver mo( buf, static_cast<int>( sizeof ( buf ) - 1 ) );
-	HMemory m( mo );
+	HMemory m( make_resource<HMemoryObserver>( buf, static_cast<int>( sizeof ( buf ) - 1 ) ) );
 	m.read( data, dataSize );
 	ENSURE_EQUALS( "read failed", data, "abcd"_ys );
 	m.read( data, dataSize );
@@ -106,8 +98,7 @@ TUT_UNIT_TEST( "seek" )
 	int const dataSize( 4 );
 	char data[dataSize + 1];
 	::memset( data, 0, dataSize + 1 );
-	HMemoryObserver mo( buf, static_cast<int>( sizeof ( buf ) - 1 ) );
-	HMemory m( mo );
+	HMemory m( make_resource<HMemoryObserver>( buf, static_cast<int>( sizeof ( buf ) - 1 ) ) );
 	m.read( data, dataSize );
 	ENSURE_EQUALS( "read failed", data, "abcd"_ys );
 	m.read( data, dataSize );
