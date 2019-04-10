@@ -1,5 +1,10 @@
 /* Read tress/LICENSE.md file for copyright and licensing information. */
 
+#include <cstdio>
+#include <cstdlib>
+#ifdef __GNUC__
+#include <unistd.h>
+#endif /* #ifdef __GNUC__ */
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/hsocket.hxx>
@@ -19,6 +24,12 @@ namespace tut {
 
 struct tut_yaal_tools_hhuginn_network : public tress::tut_yaal_tools_hhuginn_base {
 	static int const OBSCURE_PORT = 61930;
+	void play_scenario( yaal::hcore::HString const&, HSocket::ptr_t );
+	tut_yaal_tools_hhuginn_network( void )
+		: tress::tut_yaal_tools_hhuginn_base() {
+		::unlink( "/tmp/TUT_huginn_socket" );
+		errno = 0;
+	}
 	virtual ~tut_yaal_tools_hhuginn_network( void ) {}
 };
 
@@ -54,17 +65,15 @@ TUT_UNIT_TEST( "resolve invalid" )
 	);
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "connect" )
+void tut_yaal_tools_hhuginn_network::play_scenario( yaal::hcore::HString const& code_, HSocket::ptr_t serv_ ) {
 	HThread serverRunner;
 	HIODispatcher iod( 11, 1000 );
-	HSocket::ptr_t serv( make_pointer<HSocket>( HSocket::TYPE::NETWORK | HSocket::TYPE::BLOCKING, 1 ) );
-	serv->listen( "127.0.0.1", OBSCURE_PORT );
 	iod.register_file_descriptor_handler(
-		serv,
+		serv_,
 		HIODispatcher::callback_t(
-			[&iod, &serv]( HIODispatcher::stream_t& ) {
+			[&iod, &serv_]( HIODispatcher::stream_t& ) {
 				clog << "ENTER: acceptor" << endl;
-				HSocket::ptr_t client( serv->accept() );
+				HSocket::ptr_t client( serv_->accept() );
 				iod.register_file_descriptor_handler(
 					client,
 					HIODispatcher::callback_t(
@@ -103,20 +112,51 @@ TUT_UNIT_TEST( "connect" )
 			}
 		)
 	);
-	ENSURE_EQUALS(
-		"Network.connect failed",
-		execute(
-			"import Network as net;\n"
-			"main() {\n"
-			"s = net.connect( \"127.0.0.1\", 61930 );\n"
-			"s.write_line( \"Huginn is best!\\n\" );\n"
-			"return ( s.read_line() );\n"
-			"}\n"
-		),
-		"\"!tseb si nniguH\n\""
-	);
+	ENSURE_EQUALS( "Network.connect failed", execute( code_ ), "\"!tseb si nniguH\n\"" );
 	iod.stop();
 	serverRunner.finish();
+}
+
+TUT_UNIT_TEST( "connect[plain]" )
+	HSocket::ptr_t serv( make_pointer<HSocket>( HSocket::TYPE::NETWORK | HSocket::TYPE::BLOCKING, 1 ) );
+	serv->listen( "127.0.0.1", OBSCURE_PORT );
+	play_scenario(
+		"import Network as net;\n"
+		"main() {\n"
+		"s = net.connect( net.CONNECTION_TYPE.PLAIN, \"127.0.0.1\", 61930 );\n"
+		"s.write_line( \"Huginn is best!\\n\" );\n"
+		"return ( s.read_line() );\n"
+		"}\n",
+		serv
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "connect[ssl]" )
+	HSocket::ptr_t serv( make_pointer<HSocket>( HSocket::TYPE::NETWORK | HSocket::TYPE::BLOCKING | HSocket::TYPE::SSL, 1 ) );
+	serv->listen( "127.0.0.1", OBSCURE_PORT );
+	play_scenario(
+		"import Network as net;\n"
+		"main() {\n"
+		"s = net.connect( net.CONNECTION_TYPE.SSL, \"127.0.0.1\", 61930 );\n"
+		"s.write_line( \"Huginn is best!\\n\" );\n"
+		"return ( s.read_line() );\n"
+		"}\n",
+		serv
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "connect[file]" )
+	HSocket::ptr_t serv( make_pointer<HSocket>( HSocket::TYPE::FILE | HSocket::TYPE::BLOCKING, 1 ) );
+	serv->listen( "/tmp/TUT_huginn_socket" );
+	play_scenario(
+		"import Network as net;\n"
+		"main() {\n"
+		"s = net.connect( net.CONNECTION_TYPE.FILE, \"/tmp/TUT_huginn_socket\" );\n"
+		"s.write_line( \"Huginn is best!\\n\" );\n"
+		"return ( s.read_line() );\n"
+		"}\n",
+		serv
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "connect invalid port" )
@@ -125,7 +165,7 @@ TUT_UNIT_TEST( "connect invalid port" )
 		execute_except(
 			"import Network as net;\n"
 			"main() {\n"
-			"net.connect( \"127.0.0.1\", -1 );\n"
+			"net.connect( net.CONNECTION_TYPE.PLAIN, \"127.0.0.1\", -1 );\n"
 			"}\n"
 		),
 		"*anonymous stream*:3:12: Uncaught NetworkException: Bad port: -1"
@@ -144,7 +184,7 @@ TUT_UNIT_TEST( "connect to closed port" )
 			"import Network as net;\n"
 			"main() {\n"
 			"try{"
-			"net.connect( \"127.0.0.1\", 5 );\n"
+			"net.connect( net.CONNECTION_TYPE.PLAIN, \"127.0.0.1\", 5 );\n"
 			"}catch(NetworkException e){\n"
 			"return(e.message());\n"
 			"}\n"
