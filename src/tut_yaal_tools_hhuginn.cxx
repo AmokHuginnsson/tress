@@ -1604,6 +1604,34 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "bugs regressions checks" )
 	ENSURE_EQUALS(
+		"error position from nested algorithms",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"import FileSystem as fs;\n"
+			"\n"
+			"process( stream_ ) {\n"
+			"	processor = algo.filter(\n"
+			"		algo.map(\n"
+			"			stream_,\n"
+			"			string.strip\n"
+			"		),\n"
+			"		@( item ){ size( item ) > 0; }\n"
+			"	);\n"
+			"	return ( processor );\n"
+			"}\n"
+			"\n"
+			"main() {\n"
+			"	f = fs.open( \"./data/lines-latin2.txt\", fs.OPEN_MODE.READ );\n"
+			"	l = algo.materialize(\n"
+			"		process( f ),\n"
+			"		list\n"
+			"	);\n"
+			"	return ( l );\n"
+			"}\n\n"
+		),
+		"*anonymous stream*:17:22: Uncaught ConversionException: Invalid UTF-8 tail sequence at: 6"
+	);
+	ENSURE_EQUALS(
 		"exception while new key-value pair is created via multiple assignment",
 		execute(
 			"main(){"
@@ -2816,7 +2844,6 @@ TUT_UNIT_TEST( "simple program" )
 	ENSURE_EQUALS( "bad result type", r->type_id(), HHuginn::TYPE::INTEGER );
 	ENSURE_EQUALS( "bad value returned", static_cast<huginn::HInteger*>( r.raw() )->value(), 42 );
 TUT_TEARDOWN()
-
 
 }
 
