@@ -75,6 +75,24 @@ TUT_UNIT_TEST( "substitute_environment" )
 		expected.append( HOME ? HOME : "" ).append( ":/path/debug/subdir/" );
 		ENSURE_EQUALS( "substitute_environment( ONE_LAYER ) failed", s, expected );
 	}
+	/* with default but set */ {
+		set_env( "LAYER", "${HOME}:/path/" );
+		HString s( "HOME=${LAYER}${DEFAULT_TARGET:-relassert}/subdir/" );
+		substitute_environment( s, ENV_SUBST_MODE::RECURSIVE );
+		HString expected( "HOME=" );
+		char const* HOME( getenv( "HOME" ) );
+		expected.append( HOME ? HOME : "" ).append( ":/path/debug/subdir/" );
+		ENSURE_EQUALS( "substitute_environment( ONE_LAYER, :-default ) failed", s, expected );
+	}
+	/* with default but *not* set */ {
+		set_env( "LAYER", "${HOME}:/path/" );
+		HString s( "HOME=${LAYER}${THE_TARGET:-relassert}/subdir/" );
+		substitute_environment( s, ENV_SUBST_MODE::RECURSIVE );
+		HString expected( "HOME=" );
+		char const* HOME( getenv( "HOME" ) );
+		expected.append( HOME ? HOME : "" ).append( ":/path/relassert/subdir/" );
+		ENSURE_EQUALS( "substitute_environment( ONE_LAYER, :-default ) (not set) failed", s, expected );
+	}
 TUT_TEARDOWN()
 
 }
