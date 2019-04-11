@@ -41,10 +41,14 @@ TUT_UNIT_TEST( "env" )
 		execute(
 			"import OperatingSystem as os;"
 			"main(){"
-			"return(os.env(\"DEFAULT_TARGET\"));"
+			"return( ["
+			"	os.env(\"DEFAULT_TARGET\"),"
+			"	os.env(\"DEFAULT_TARGET\", \"relassert\"),"
+			"	os.env(\"MY_TARGET\", \"relassert\")"
+			"] );"
 			"}"
 		),
-		"\"debug\""
+		"[\"debug\", \"debug\", \"relassert\"]"
 	);
 TUT_TEARDOWN()
 
