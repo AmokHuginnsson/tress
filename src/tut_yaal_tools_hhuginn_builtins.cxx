@@ -177,7 +177,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "integer()" )
 	ENSURE_EQUALS( "int to int failed", execute( "main(){return(integer(7));}" ), "7" );
-	ENSURE_EQUALS( "bad string to int succeeded", execute_except( "main(){return(integer(\"bad\"));}" ), "*anonymous stream*:1:22: Uncaught ConversionException: not a number: bad" );
+	ENSURE_EQUALS( "bad string to int succeeded", execute_except( "main(){return(integer(\"bad\"));}" ), "*anonymous stream*:1:22: Uncaught ConversionException: not a number: `bad`" );
 	ENSURE_EQUALS( "real to int failed", execute( "main(){return(integer(7.));}" ), "7" );
 	ENSURE_EQUALS( "num to int failed", execute( "main(){return(integer($7));}" ), "7" );
 	ENSURE_EQUALS( "char to int failed", execute( "main(){return(integer('7'));}" ), "55" );
