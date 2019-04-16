@@ -5,6 +5,7 @@
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/http.hxx>
+#include <yaal/hcore/hcore.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
@@ -20,14 +21,56 @@ TUT_SIMPLE_MOCK( tut_yaal_tools_http );
 TUT_TEST_GROUP( tut_yaal_tools_http, "yaal::tools::http" );
 
 TUT_UNIT_TEST( "get binary file (with redirection)" )
-	http::HResponse response( http::get( http::HRequest( "http://codestation.org/img/logo.png" ) ) );
+	http::HResponse response( http::get( http::HRequest( substitute_environment( "http://${TRESS_HTTP_TEST_HOST:-codestation.org}/test/logo.png" ) ) ) );
 	HChunk rempte( response.content_length() );
 	ENSURE_EQUALS( "content_length failed", response.stream().read( rempte.raw(), response.content_length() ), response.content_length() );
-	HFile img( "./data/logo.png", HFile::OPEN::READING );
+	HFile img( "./data/http/logo.png", HFile::OPEN::READING );
 	int const BUF_SIZE( 32000 );
 	HChunk local( BUF_SIZE );
 	ENSURE_EQUALS( "content_length failed", img.read( local.raw(), BUF_SIZE ), response.content_length() );
 	ENSURE_EQUALS( "http::get failed", memcmp( rempte.raw(), local.raw(), static_cast<size_t>( response.content_length() ) ), 0 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "basic authentication" )
+	ENSURE_THROW(
+		"invalid environment for basic auth test",
+		http::get( http::HRequest( substitute_environment( "http://${TRESS_HTTP_TEST_HOST:-codestation.org}/test/private/secret.txt" ) ) ),
+		http::HHTTPException
+	);
+	http::HResponse response(
+		http::get(
+			http::HRequest( substitute_environment( "http://${TRESS_HTTP_TEST_HOST:-codestation.org}/test/private/secret.txt" ) )
+				.login( "test" )
+				.password( "t3st" )
+		)
+	);
+	HString content;
+	HString line;
+	while ( getline( response.stream(), line ).good() ) {
+		content.append( line );
+	}
+	ENSURE_EQUALS( "basic authentication failed", content, "Secret Data" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "transfer-encoding: chunked" )
+	http::HResponse response( http::get( http::HRequest( substitute_environment( "http://${TRESS_HTTP_TEST_HOST:-codestation.org}/test/cgi/cgi" ) ) ) );
+	HChunk rempte( response.content_length() );
+	HString content;
+	HString line;
+	int ignore( 2 );
+	while ( getline( response.stream(), line ).good() ) {
+		if ( ignore == 0 ) {
+			content.append( line );
+		} else {
+			-- ignore;
+		}
+	}
+	HFile src( "./data/http/cgi.cxx", HFile::OPEN::READING );
+	HString code;
+	while ( getline( src, line ).good() ) {
+		code.append( line );
+	}
+	ENSURE_EQUALS( "http::get failed", content, code );
 TUT_TEARDOWN()
 
 }

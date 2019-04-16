@@ -1,0 +1,5 @@
+AuthType basic
+AuthBasicProvider file
+AuthName "Basic Auth Test Realm"
+AuthUserFile /var/www/data/codestation/test/private/.htpasswd
+Require valid-user

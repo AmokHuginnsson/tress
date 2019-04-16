@@ -26,6 +26,7 @@ build.sh
 run_tests
 tress.cbp
 tress.layout
+data/http/cgi/cgi
 .svn
 Debug/
 .ecut
