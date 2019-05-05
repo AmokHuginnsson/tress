@@ -365,5 +365,18 @@ TUT_UNIT_TEST( "exists" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "glob" )
+	ENSURE_EQUALS(
+		"glob failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main(){\n"
+			"return ( fs.glob(\"data/*.cxx\") );"
+			"}\n"
+		),
+		"[\"data/child.cxx\", \"data/huginn_greeter.cxx\", \"data/plugin.cxx\"]"
+	);
+TUT_TEARDOWN()
+
 }
 

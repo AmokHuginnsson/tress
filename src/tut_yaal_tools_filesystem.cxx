@@ -224,6 +224,13 @@ TUT_UNIT_TEST( "glob" )
 		filesystem::paths_t expected = array<HString>( "data/child.cxx", "data/huginn_greeter.cxx", "data/plugin.cxx" );
 		ENSURE_EQUALS( "filesystem::glob failed", gr, expected );
 	}
+	/* absolute path, no glob on path */ {
+		filesystem::path_t cwd( filesystem::current_working_directory() );
+		cwd.replace( "\\", "/" );
+		filesystem::paths_t gr( filesystem::glob( cwd + "/data/*.cxx" ) );
+		filesystem::paths_t expected = array<HString>( cwd + "/data/child.cxx", cwd + "/data/huginn_greeter.cxx", cwd + "/data/plugin.cxx" );
+		ENSURE_EQUALS( "filesystem::glob failed", gr, expected );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "current_working_directory" )
