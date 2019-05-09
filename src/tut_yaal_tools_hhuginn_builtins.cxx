@@ -1959,6 +1959,20 @@ TUT_UNIT_TEST( "to_string" )
 	ENSURE_EQUALS( "to_string out of Huginn failed", tools::to_string( h.result() ), "(A, *function_reference*)" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Time" )
+	ENSURE_EQUALS( "Time() failed", execute( "main() {\nTime(1978,5,24,23,30,17);\n}\n" ), "1978-05-24 23:30:17" );
+	ENSURE_EQUALS( "invalid month hi Time() succeeded", execute_except( "main() {\nTime(2000,13,1,0,0,0);\n}\n" ), "*anonymous stream*:2:5: Invalid value for `month` in Time constructor: 13." );
+	ENSURE_EQUALS( "invalid month lo Time() succeeded", execute_except( "main() {\nTime(2000,0,1,0,0,0);\n}\n" ), "*anonymous stream*:2:5: Invalid value for `month` in Time constructor: 0." );
+	ENSURE_EQUALS( "invalid day hi Time() succeeded", execute_except( "main() {\nTime(2000,1,32,0,0,0);\n}\n" ), "*anonymous stream*:2:5: Invalid value for `day` in Time constructor: 32." );
+	ENSURE_EQUALS( "invalid day lo Time() succeeded", execute_except( "main() {\nTime(2000,1,0,0,0,0);\n}\n" ), "*anonymous stream*:2:5: Invalid value for `day` in Time constructor: 0." );
+	ENSURE_EQUALS( "invalid hour hi Time() succeeded", execute_except( "main() {\nTime(2000,1,1,24,0,0);\n}\n" ), "*anonymous stream*:2:5: Invalid value for `hour` in Time constructor: 24." );
+	ENSURE_EQUALS( "invalid hour lo Time() succeeded", execute_except( "main() {\nTime(2000,1,1,-1,0,0);\n}\n" ), "*anonymous stream*:2:5: Invalid value for `hour` in Time constructor: -1." );
+	ENSURE_EQUALS( "invalid minute hi Time() succeeded", execute_except( "main() {\nTime(2000,1,1,0,60,0);\n}\n" ), "*anonymous stream*:2:5: Invalid value for `minute` in Time constructor: 60." );
+	ENSURE_EQUALS( "invalid minute lo Time() succeeded", execute_except( "main() {\nTime(2000,1,1,0,-1,0);\n}\n" ), "*anonymous stream*:2:5: Invalid value for `minute` in Time constructor: -1." );
+	ENSURE_EQUALS( "invalid second hi Time() succeeded", execute_except( "main() {\nTime(2000,1,1,0,0,60);\n}\n" ), "*anonymous stream*:2:5: Invalid value for `second` in Time constructor: 60." );
+	ENSURE_EQUALS( "invalid second lo Time() succeeded", execute_except( "main() {\nTime(2000,1,1,0,0,-1);\n}\n" ), "*anonymous stream*:2:5: Invalid value for `second` in Time constructor: -1." );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "√" )
 	ENSURE_EQUALS( "√ failed", execute( "main() {\n√(4.);\n}\n" ), "2.0" );
 	ENSURE_EQUALS( "√ on bad domain succeeded", execute_except( "main() {\n√(-4.);\n}\n" ), "*anonymous stream*:2:2: Uncaught ArithmeticException: bad domain" );
