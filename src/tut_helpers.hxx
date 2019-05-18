@@ -148,7 +148,7 @@ std::ostream& container_dump( std::ostream& out,
 template<typename container>
 std::ostream& container_dump( std::ostream& out,
 		container const& container_, char sep_ ) {
-	return ( container_dump( out, container_, sep_, NULL ) );
+	return ( container_dump( out, container_, sep_, nullptr ) );
 }
 
 template<typename container>
