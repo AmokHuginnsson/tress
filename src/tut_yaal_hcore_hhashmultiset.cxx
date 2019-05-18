@@ -12,6 +12,15 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
+namespace std {
+
+template<typename key_t>
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HHashMultiSet<key_t> const& ms ) {
+	return ( container_dump( out, ms, "hash_multi_set" ) );
+}
+
+}
+
 namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hhashmultiset );
@@ -195,6 +204,38 @@ TUT_UNIT_TEST( "sample data" )
 	ENSURE_EQUALS( "copy through iters failed size", setCopy.size(), set.size() );
 	ENSURE_EQUALS( "copy through iters failed data", ssCopy.string(), ssSet.string() );
 	copy( set.begin(), set.end(), stream_iterator( clog ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "compare equals" )
+	typedef HHashMultiSet<HString> string_hash_multi_set_t;
+	typedef HArray<HString> string_array_t;
+	string_hash_multi_set_t a;
+	int const dataSize( 64 );
+	for ( int i( 0 ); i < dataSize; ++ i ) {
+		for ( int k( 0 ); k < ( ( i / 8 ) + 1 ); ++ k ) {
+			a.insert( i );
+		}
+	}
+	string_hash_multi_set_t b;
+	for ( int i( dataSize - 1 ); i >= 0; -- i ) {
+		for ( int k( 0 ); k < ( ( i / 8 ) + 1 ); ++ k ) {
+			b.insert( i );
+		}
+	}
+	string_array_t ia( a.begin(), a.end() );
+	string_array_t ib( b.begin(), b.end() );
+	ENSURE_NOT( "test preparation failed", ia == ib );
+	ENSURE_EQUALS( "compare equals operator failed", a, b );
+	a.insert( "Ala" );
+	ENSURE_NOT( "compare equals operator failed", a == b );
+	b.insert( "Ala" );
+	ENSURE_EQUALS( "compare equals operator failed", a, b );
+	a.insert( "Ala" );
+	ENSURE_NOT( "compare equals operator failed", a == b );
+	a.insert( "Ala" );
+	b.insert( "Ala" );
+	b.insert( "Ola" );
+	ENSURE( "compare equals operator failed", a != b );
 TUT_TEARDOWN()
 
 }

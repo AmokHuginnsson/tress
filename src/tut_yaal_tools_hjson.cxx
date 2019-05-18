@@ -67,6 +67,7 @@ HJSON make_json( void ) {
 	return ( json );
 }
 
+#if TARGET_CPU_BITS == 64
 char const complexJSONnl[] =
 	"{\n"
 	"\t\"number_like\": {\n"
@@ -114,6 +115,55 @@ char const complexJSON[] =
 	"}]"
 	"}"
 ;
+#else
+char const complexJSONnl[] =
+	"{\n"
+	"\t\"records\": [{\n"
+	"\t\t\"id\": \"int\",\n"
+	"\t\t\"data\": 9\n"
+	"\t}, {\n"
+	"\t\t\"id\": \"float\",\n"
+	"\t\t\"data\": 12.345\n"
+	"\t}, {\n"
+	"\t\t\"id\": \"str\",\n"
+	"\t\t\"data\": \"yaal-JSON\"\n"
+	"\t}],\n"
+	"\t\"literals\": [true, false, null],\n"
+	"\t\"banner\": \"yaal's JSON generator\",\n"
+	"\t\"number_like\": {\n"
+	"\t\t\"number\": 2.718281828459045235360287471,\n"
+	"\t\t\"int\": 13,\n"
+	"\t\t\"real\": 3.14159265359\n"
+	"\t},\n"
+	"\t\"name\": \"nameValue\",\n"
+	"\t\"date\": \"1978-05-24\"\n"
+	"}\n"
+;
+
+char const complexJSON[] =
+	"{"
+	"\"records\": [{"
+	"\"id\": \"int\", "
+	"\"data\": 9"
+	"}, {"
+	"\"id\": \"float\", "
+	"\"data\": 12.345"
+	"}, {"
+	"\"id\": \"str\", "
+	"\"data\": \"yaal-JSON\""
+	"}], "
+	"\"literals\": [true, false, null], "
+	"\"banner\": \"yaal's JSON generator\", "
+	"\"number_like\": {"
+	"\"number\": 2.718281828459045235360287471, "
+	"\"int\": 13, "
+	"\"real\": 3.14159265359"
+	"}, "
+	"\"name\": \"nameValue\", "
+	"\"date\": \"1978-05-24\""
+	"}"
+;
+#endif
 
 }
 
@@ -216,9 +266,8 @@ TUT_UNIT_TEST( "generate object" )
 	json.element()["null"] = HJSON::HValue::LITERAL::NULL;
 	HStringStream ss;
 	json.save( ss );
-	ENSURE_EQUALS(
-		"[JSON] just an object generation failed",
-		ss.string(),
+#if TARGET_CPU_BITS == 64
+	char const expectedNL[] =
 		"{\n"
 		"\t\"false\": false,\n"
 		"\t\"pi\": 3.14159265359,\n"
@@ -228,7 +277,21 @@ TUT_UNIT_TEST( "generate object" )
 		"\t\"e\": 2.718281828459045,\n"
 		"\t\"null\": null\n"
 		"}\n"
-	);
+	;
+#else
+	char const expectedNL[] =
+		"{\n"
+		"\t\"banner\": \"yaal's JSON generator\",\n"
+		"\t\"pi\": 3.14159265359,\n"
+		"\t\"bad_luck\": 13,\n"
+		"\t\"false\": false,\n"
+		"\t\"true\": true,\n"
+		"\t\"e\": 2.718281828459045,\n"
+		"\t\"null\": null\n"
+		"}\n"
+	;
+#endif
+	ENSURE_EQUALS( "[JSON] just an object generation failed", ss.string(), expectedNL );
 	ss.reset();
 	json.save( ss, false );
 	ENSURE_EQUALS(

@@ -142,6 +142,28 @@ TUT_UNIT_TEST( "sample data" )
 	ENSURE_EQUALS( "failed to insert .insert() (size)", set.size(), 7 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "compare equals" )
+	typedef HHashSet<HString> hashset_t;
+	typedef HArray<HString> string_array_t;
+	hashset_t a;
+	int const dataSize( 64 );
+	for ( int i( 0 ); i < dataSize; ++ i ) {
+		a.insert( i );
+	}
+	hashset_t b;
+	for ( int i( dataSize - 1 ); i >= 0; -- i ) {
+		b.insert( i );
+	}
+	string_array_t ia( a.begin(), a.end() );
+	string_array_t ib( b.begin(), b.end() );
+	ENSURE_NOT( "test preparation failed", ia == ib );
+	ENSURE_EQUALS( "compare equals operator failed", a, b );
+	a.insert( "Ala" );
+	ENSURE_NOT( "compare equals operator failed", a == b );
+	b.insert( "Ola" );
+	ENSURE( "compare equals operator failed", a != b );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( 50, "speed test" )
 	TIME_CONSTRAINT_EXEMPT();
 	typedef std::unordered_set<int> proto_t;

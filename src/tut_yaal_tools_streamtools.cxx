@@ -19,15 +19,6 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
-namespace std {
-
-template<typename key_t, typename value_t>
-inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HHashMap<key_t, value_t> const& m ) {
-	return ( container_dump( out, m, "hash_map" ) );
-}
-
-}
-
 namespace tut {
 
 TUT_SIMPLE_MOCK( tut_yaal_tools_streamtools );

@@ -20,6 +20,7 @@
 #include <yaal/hcore/hdeque.hxx>
 #include <yaal/hcore/hset.hxx>
 #include <yaal/hcore/hhashset.hxx>
+#include <yaal/hcore/hhashmap.hxx>
 #include <yaal/hcore/hlist.hxx>
 #include <yaal/hcore/hstaticarray.hxx>
 #include <yaal/hcore/hvector.hxx>
@@ -190,6 +191,11 @@ inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HHashSet<tTyp
 template<typename key_t, typename value_t>
 inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HMap<key_t, value_t> const& m ) {
 	return ( container_dump( out, m, "map" ) );
+}
+
+template<typename key_t, typename value_t>
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HHashMap<key_t, value_t> const& m ) {
+	return ( container_dump( out, m, "hash_map" ) );
 }
 
 template<typename tType>

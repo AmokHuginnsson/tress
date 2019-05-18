@@ -361,5 +361,29 @@ TUT_UNIT_TEST( "sample data" )
 	ENSURE_EQUALS( "failed to insert [] (size)", map.size(), 7 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "compare equals" )
+	typedef HHashMap<HString, HString> hashmap_t;
+	typedef HArray<HString> string_array_t;
+	hashmap_t a;
+	int const dataSize( 64 );
+	for ( int i( 0 ); i < dataSize; ++ i ) {
+		a.insert( make_pair( i, i * i ) );
+	}
+	hashmap_t b;
+	for ( int i( dataSize - 1 ); i >= 0; -- i ) {
+		b.insert( make_pair( i, i * i ) );
+	}
+	string_array_t ia;
+	transform( a.begin(), a.end(), back_insert_iterator( ia ), select1st<hashmap_t::value_type>() );
+	string_array_t ib;
+	transform( b.begin(), b.end(), back_insert_iterator( ib ), select1st<hashmap_t::value_type>() );
+	ENSURE_NOT( "test preparation failed", ia == ib );
+	ENSURE_EQUALS( "compare equals operator failed", a, b );
+	a.insert( make_pair( "kot", "Ala" ) );
+	ENSURE_NOT( "compare equals operator failed", a == b );
+	b.insert( make_pair( "kot", "Ola" ) );
+	ENSURE( "compare equals operator failed", a != b );
+TUT_TEARDOWN()
+
 
 }

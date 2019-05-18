@@ -12,6 +12,15 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
+namespace std {
+
+template<typename key_t, typename value_t>
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HHashMultiMap<key_t, value_t> const& mm ) {
+	return ( container_dump( out, mm, "hash_multi_map" ) );
+}
+
+}
+
 namespace tut {
 
 struct tut_yaal_hcore_hhashmultimap : public simple_mock<tut_yaal_hcore_hhashmultimap> {
@@ -449,6 +458,36 @@ TUT_UNIT_TEST( "sample data" )
 	ENSURE_EQUALS( "failed to insert insert (data)", map.count( "seven" ), 7 );
 	ENSURE_EQUALS( "failed to insert insert (data)", map.lower_bound( "seven" )->second, 7 );
 	ENSURE_EQUALS( "failed to insert insert (size)", map.size(), 1 + 2 + 3 + 4 + 5 + 6 + 7 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "compare equals" )
+	typedef HHashMultiMap<HString, HString> hashmap_t;
+	typedef HArray<HString> string_array_t;
+	hashmap_t a;
+	int const dataSize( 64 );
+	for ( int i( 0 ); i < dataSize; ++ i ) {
+		for ( int k( 0 ); k < 2; ++ k ) {
+			a.insert( make_pair( i, i * i + k ) );
+		}
+	}
+	hashmap_t b;
+	for ( int i( dataSize - 1 ); i >= 0; -- i ) {
+		for ( int k( 0 ); k < 2; ++ k ) {
+			b.insert( make_pair( i, i * i + k ) );
+		}
+	}
+	string_array_t ia;
+	transform( a.begin(), a.end(), back_insert_iterator( ia ), select1st<hashmap_t::value_type>() );
+	string_array_t ib;
+	transform( b.begin(), b.end(), back_insert_iterator( ib ), select1st<hashmap_t::value_type>() );
+	ENSURE_NOT( "test preparation failed", ia == ib );
+	ENSURE_EQUALS( "compare equals operator failed", a, b );
+	a.insert( make_pair( "kot", "Ala" ) );
+	a.insert( make_pair( "kot", "Ola" ) );
+	ENSURE_NOT( "compare equals operator failed", a == b );
+	b.insert( make_pair( "kot", "Ola" ) );
+	b.insert( make_pair( "kot", "Ala" ) );
+	ENSURE( "compare equals operator failed", a != b );
 TUT_TEARDOWN()
 
 }
