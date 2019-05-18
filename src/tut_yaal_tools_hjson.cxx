@@ -115,7 +115,7 @@ char const complexJSON[] =
 	"}]"
 	"}"
 ;
-#else
+#elif defined( __HOST_OS_TYPE_RASPBIAN__ )
 char const complexJSONnl[] =
 	"{\n"
 	"\t\"records\": [{\n"
@@ -131,8 +131,8 @@ char const complexJSONnl[] =
 	"\t\"literals\": [true, false, null],\n"
 	"\t\"banner\": \"yaal's JSON generator\",\n"
 	"\t\"number_like\": {\n"
-	"\t\t\"number\": 2.718281828459045235360287471,\n"
 	"\t\t\"int\": 13,\n"
+	"\t\t\"number\": 2.718281828459045235360287471,\n"
 	"\t\t\"real\": 3.14159265359\n"
 	"\t},\n"
 	"\t\"name\": \"nameValue\",\n"
@@ -155,10 +155,58 @@ char const complexJSON[] =
 	"\"literals\": [true, false, null], "
 	"\"banner\": \"yaal's JSON generator\", "
 	"\"number_like\": {"
-	"\"number\": 2.718281828459045235360287471, "
 	"\"int\": 13, "
+	"\"number\": 2.718281828459045235360287471, "
 	"\"real\": 3.14159265359"
 	"}, "
+	"\"name\": \"nameValue\", "
+	"\"date\": \"1978-05-24\""
+	"}"
+;
+#else
+char const complexJSONnl[] =
+	"{\n"
+	"\t\"records\": [{\n"
+	"\t\t\"id\": \"int\",\n"
+	"\t\t\"data\": 9\n"
+	"\t}, {\n"
+	"\t\t\"id\": \"float\",\n"
+	"\t\t\"data\": 12.345\n"
+	"\t}, {\n"
+	"\t\t\"id\": \"str\",\n"
+	"\t\t\"data\": \"yaal-JSON\"\n"
+	"\t}],\n"
+	"\t\"number_like\": {\n"
+	"\t\t\"int\": 13,\n"
+	"\t\t\"real\": 3.14159265359,\n"
+	"\t\t\"number\": 2.718281828459045235360287471\n"
+	"\t},\n"
+	"\t\"banner\": \"yaal's JSON generator\",\n"
+	"\t\"literals\": [true, false, null],\n"
+	"\t\"name\": \"nameValue\",\n"
+	"\t\"date\": \"1978-05-24\"\n"
+	"}\n"
+;
+
+char const complexJSON[] =
+	"{"
+	"\"records\": [{"
+	"\"id\": \"int\", "
+	"\"data\": 9"
+	"}, {"
+	"\"id\": \"float\", "
+	"\"data\": 12.345"
+	"}, {"
+	"\"id\": \"str\", "
+	"\"data\": \"yaal-JSON\""
+	"}], "
+	"\"number_like\": {"
+	"\"int\": 13, "
+	"\"real\": 3.14159265359, "
+	"\"number\": 2.718281828459045235360287471"
+	"}, "
+	"\"banner\": \"yaal's JSON generator\", "
+	"\"literals\": [true, false, null], "
 	"\"name\": \"nameValue\", "
 	"\"date\": \"1978-05-24\""
 	"}"
@@ -257,13 +305,14 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "generate object" )
 	HJSON json;
-	json.element()["bad_luck"] = 13;
-	json.element()["pi"] = 3.141592653589793L;
-	json.element()["e"] = "2.718281828459045"_yn;
-	json.element()["banner"] = "yaal's JSON generator";
-	json.element()["true"] = HJSON::HValue::LITERAL::TRUE;
-	json.element()["false"] = HJSON::HValue::LITERAL::FALSE;
-	json.element()["null"] = HJSON::HValue::LITERAL::NULL;
+	HJSON::HValue::members_t& m( json.element().get_members() );
+	m["bad_luck"] = 13;
+	m["pi"] = 3.141592653589793L;
+	m["e"] = "2.718281828459045"_yn;
+	m["banner"] = "yaal's JSON generator";
+	m["true"] = HJSON::HValue::LITERAL::TRUE;
+	m["false"] = HJSON::HValue::LITERAL::FALSE;
+	m["null"] = HJSON::HValue::LITERAL::NULL;
 	HStringStream ss;
 	json.save( ss );
 #if TARGET_CPU_BITS == 64
@@ -294,11 +343,30 @@ TUT_UNIT_TEST( "generate object" )
 	ENSURE_EQUALS( "[JSON] just an object generation failed", ss.string(), expectedNL );
 	ss.reset();
 	json.save( ss, false );
-	ENSURE_EQUALS(
-		"[JSON] just an object generation failed",
-		ss.string(),
-		"{\"false\": false, \"pi\": 3.14159265359, \"bad_luck\": 13, \"banner\": \"yaal's JSON generator\", \"true\": true, \"e\": 2.718281828459045, \"null\": null}"
-	);
+#if TARGET_CPU_BITS == 64
+	char const expected[] =
+		"{"
+		"\"false\": false, "
+		"\"pi\": 3.14159265359, "
+		"\"bad_luck\": 13, "
+		"\"banner\": \"yaal's JSON generator\", "
+		"\"true\": true, "
+		"\"e\": 2.718281828459045, "
+		"\"null\": null}"
+	;
+#else
+	char const expected[] =
+		"{"
+		"\"banner\": \"yaal's JSON generator\", "
+		"\"pi\": 3.14159265359, "
+		"\"bad_luck\": 13, "
+		"\"false\": false, "
+		"\"true\": true, "
+		"\"e\": 2.718281828459045, "
+		"\"null\": null}"
+	;
+#endif
+	ENSURE_EQUALS( "[JSON] just an object generation failed", ss.string(), expected );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "generate complex JSON" )
@@ -460,6 +528,77 @@ TUT_UNIT_TEST( "parse complex JSON" )
 	ss.str( complexJSONnl );
 	json.load( ss );
 	ENSURE_EQUALS( "[JSON] parsing complex JSON nl failed", json, expected );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "compare JSON (==)" )
+	HJSON a( make_json() );
+	HJSON b( make_json() );
+	ENSURE_EQUALS( "[JSON] equality operator failed", a, b );
+	a.element()["records"][1]["data"] = 12.3456L;
+	ENSURE_NOT( "[JSON] equality operator failed", a == b );
+	b.element()["records"][1]["data"] = 12.3456L;
+	ENSURE_EQUALS( "[JSON] equality operator failed", a, b );
+	a.element()["records"][1]["data"] = "12.3456";
+	ENSURE_NOT( "[JSON] equality operator failed", a == b );
+	b.element()["records"][1]["data"] = "12.3456";
+	ENSURE_EQUALS( "[JSON] equality operator failed", a, b );
+	a.element()["records"][1]["data"] = "12.3457";
+	ENSURE_NOT( "[JSON] equality operator failed", a == b );
+	a.element()["records"][1]["data"] = HJSON::HValue::LITERAL::TRUE;
+	b.element()["records"][1]["data"] = HJSON::HValue::LITERAL::TRUE;
+	ENSURE_EQUALS( "[JSON] equality operator failed", a, b );
+	a.element()["records"][1]["data"] = HJSON::HValue::LITERAL::FALSE;
+	ENSURE_NOT( "[JSON] equality operator failed", a == b );
+	a.element()["records"][1]["data"] = 7;
+	b.element()["records"][1]["data"] = 7;
+	ENSURE_EQUALS( "[JSON] equality operator failed", a, b );
+	a.element()["records"][1]["data"] = -7;
+	ENSURE_NOT( "[JSON] equality operator failed", a == b );
+	HJSON c;
+	HJSON d;
+	ENSURE_EQUALS( "[JSON] equality operator failed", c, d );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "node type guards" )
+	HJSON json;
+	HJSON::HValue& r( json.element() );
+	r = 7;
+	HJSON::HValue const& cr( r );
+	ENSURE_EQUALS( "integer getter failed", r.get_integer(), 7 );
+	ENSURE_THROW( "array access type guard failed", r.push_back( 0 ), HJSONException );
+	ENSURE_THROW( "array access type guard failed", r[0], HJSONException );
+	ENSURE_THROW( "member access type guard failed", r["json"], HJSONException );
+	ENSURE_THROW( "array access type guard failed", cr[0], HJSONException );
+	ENSURE_THROW( "member access type guard failed", cr["json"], HJSONException );
+	ENSURE_THROW( "array access type guard failed", r.get_elements(), HJSONException );
+	ENSURE_THROW( "member access type guard failed", r.get_members(), HJSONException );
+	ENSURE_THROW( "array access type guard failed", cr.get_elements(), HJSONException );
+	ENSURE_THROW( "member access type guard failed", cr.get_members(), HJSONException );
+	ENSURE_THROW( "real getter type guard failed", r.get_real(), HJSONException );
+	ENSURE_THROW( "number getter type guard failed", r.get_number(), HJSONException );
+	ENSURE_THROW( "string getter type guard failed", r.get_string(), HJSONException );
+	ENSURE_THROW( "literal getter type guard failed", r.get_literal(), HJSONException );
+	r = 0.0;
+	ENSURE_THROW( "integer getter type guard failed", r.get_integer(), HJSONException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "generator errors" )
+	HJSON json;
+	HStringStream ss;
+	json.save( ss );
+	ENSURE_EQUALS( "serialization of empty JSON failed", ss.string(), "" );
+	HJSON::HValue& r( json.element() );
+	r["elem"];
+	ENSURE_THROW( "serialization of uninitialized node succeeded", json.save( ss ), HJSONException );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "parser errors" )
+	HJSON json;
+	HStringStream ss( "{\"almost\": \"a\" }" );
+	json.load( ss );
+	json.clear();
+	ss.str( "{\"almost\": \"a\", 7 }" );
+	ENSURE_THROW( "serialization of uninitialized node succeeded", json.load( ss ), HJSONException );
 TUT_TEARDOWN()
 
 }
