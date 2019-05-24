@@ -169,11 +169,31 @@ TUT_UNIT_TEST( "HReal" )
 		ENSURE( "HReal failed to parse correct input (HString).", ep( "3.141592653589793" ) );
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "3.141592653589793" );
+
+		ENSURE( "HReal failed to parse correct input (HString).", ep( "1e10" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "1e10" );
+
+		ENSURE( "HReal failed to parse correct input (HString).", ep( "1e+10" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "1e+10" );
+
+		ENSURE( "HReal failed to parse correct input (HString).", ep( "1e-10" ) );
+		ep();
+		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "1e-10" );
 	}
 	/* bad real */ {
 		HExecutingParser ep( real );
 		ENSURE_NOT( "Invalid input parsed by HReal", ep( "bad" ) );
 		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14bad" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14ebad" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14e10a" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14e-10a" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14e" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14e-" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14e+" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14e+z" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14e*10" ) );
 		ENSURE_NOT( "whitespace only input parsed by HReal", ep( " " ) );
 		ENSURE_NOT( "empty input parsed by HReal", ep( "" ) );
 	}

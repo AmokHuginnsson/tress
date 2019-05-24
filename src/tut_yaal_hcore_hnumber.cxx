@@ -516,6 +516,59 @@ TUT_UNIT_TEST( "construct from string (prepostfixes)" )
 	clog << "| n8 =" << n8.to_string() << " |" << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "construct from string with exponential form" )
+	/* normalized fractional */ {
+		HString templS( "xx_12.345e" );
+		HNumber templN( "12.345" );
+		HNumber ten( 10 );
+		HString s;
+		HNumber e;
+		for ( int i( -64 ); i < 64; ++ i ) {
+			s.assign( templS ).append( ( i > 0 ) && ( i % 5 ) != 0 ? "+" : "" ).append( i ).append( ".5" );
+			e = templN;
+			e *= ( ten ^ i );
+			HNumber n( s );
+			ENSURE_EQUALS( "exponential form failed", n, e );
+		}
+	}
+	/* denormalized fractional */ {
+		HString templS( "xx_12.345000e" );
+		HNumber templN( "12.345" );
+		HNumber ten( 10 );
+		HString s;
+		HNumber e;
+		for ( int i( -64 ); i < 64; ++ i ) {
+			s.assign( templS ).append( ( i > 0 ) && ( i % 5 ) != 0 ? "+" : "" ).append( i ).append( ".5" );
+			e = templN;
+			e *= ( ten ^ i );
+			HNumber n( s );
+			ENSURE_EQUALS( "exponential form failed", n, e );
+		}
+	}
+	/* integral */ {
+		HString templS( "xx_12345e" );
+		HNumber templN( "12345" );
+		HNumber ten( 10 );
+		HString s;
+		HNumber e;
+		for ( int i( -64 ); i < 64; ++ i ) {
+			s.assign( templS ).append( ( i > 0 ) && ( i % 5 ) != 0 ? "+" : "" ).append( i ).append( ".5" );
+			e = templN;
+			e *= ( ten ^ i );
+			HNumber n( s );
+			ENSURE_EQUALS( "exponential form failed", n, e );
+		}
+	}
+	/* Invalid exponents */ {
+		ENSURE_THROW( "invalid exponent accepted", HNumber( "12.345e" ), HNumberException );
+		ENSURE_THROW( "invalid exponent accepted", HNumber( "12.345e+" ), HNumberException );
+		ENSURE_THROW( "invalid exponent accepted", HNumber( "12.345e-" ), HNumberException );
+		ENSURE_THROW( "invalid exponent accepted", HNumber( "12.345eZ" ), HNumberException );
+		ENSURE_THROW( "invalid exponent accepted", HNumber( "12.345e+Z" ), HNumberException );
+		ENSURE_THROW( "invalid exponent accepted", HNumber( "12.345e-Z" ), HNumberException );
+	}
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "construct from string and specify precision" )
 	char const* const pn0 = "3.14159265";
 	int const P1 = 20;
