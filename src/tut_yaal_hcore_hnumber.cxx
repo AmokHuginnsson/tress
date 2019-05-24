@@ -1249,6 +1249,8 @@ TUT_UNIT_TEST( "power" )
 	ENSURE_EQUALS( "power failed 0^7", HNumber( "0" ) ^ 7, HNumber( 0 ) );
 	ENSURE_EQUALS( "power failed 7^0", HNumber( "7" ) ^ 0, HNumber( 1 ) );
 	ENSURE_EQUALS( "power failed 7^1", HNumber( "7" ) ^ 1, HNumber( 7 ) );
+	ENSURE_EQUALS( "power failed 7^1", HNumber( "2" ) ^ -1, HNumber( "0.5" ) );
+	ENSURE_EQUALS( "power failed 7^1", HNumber( "2" ) ^ -2, HNumber( "0.25" ) );
 	ENSURE_EQUALS( "power failed 7^7", HNumber( "7" ) ^ 7, HNumber( "823543" ) );
 	ENSURE_EQUALS( "power failed 7^-7", HNumber( "7" ) ^ -7, HNumber( "0.0000012142656789020124025096443051546792335069328498936910398121288141602806410837078331064680289918" ) );
 	ENSURE_EQUALS( "power failed -7^7", HNumber( "-7" ) ^ 7, HNumber( "-823543" ) );
