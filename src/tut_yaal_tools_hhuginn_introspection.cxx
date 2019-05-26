@@ -311,5 +311,21 @@ TUT_UNIT_TEST( "subject" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "list_imports" )
+	ENSURE_EQUALS(
+		"Introspection.list_imports failed",
+		execute(
+			"import Introspection as intro;\n"
+			"import Algorithms as algo;\n"
+			"enum COLOR { RED, GREEN, BLUE }\n"
+			"foo() { return ( ( foo, COLOR.RED ) ); }\n"
+			"main() {\n"
+			"return ( algo.sorted( intro.list_imports() ) );"
+			"}\n"
+		),
+		"[(\"algo\", \"Algorithms\"), (\"intro\", \"Introspection\")]"
+	);
+TUT_TEARDOWN()
+
 }
 
