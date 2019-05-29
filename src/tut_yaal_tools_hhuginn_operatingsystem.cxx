@@ -165,8 +165,8 @@ TUT_UNIT_TEST( "spawn" )
 	);
 TUT_TEARDOWN()
 
-#ifndef SIGKILL
-#define SIGKILL 9
+#ifndef SIGTERM
+#define SIGTERM 15
 #endif
 #ifndef __MSVCXX__
 
@@ -208,7 +208,7 @@ TUT_UNIT_TEST( "wait" )
 	hcore::HString line;
 	getline( *out, line );
 	int pid( lexical_cast<int>( line ) );
-	system::kill( pid, SIGKILL );
+	system::kill( pid, SIGTERM );
 	t.finish();
 	ENSURE_EQUALS( "Subprocess.wait() failed", result, "1" );
 #ifndef __HOST_OS_TYPE_CYGWIN__ /* Cygwin implementation of process handling is buggy as hell. */
@@ -230,12 +230,12 @@ TUT_UNIT_TEST( "kill" )
 			"c.kill();\n"
 			"}"
 		),
-		to_string( SIGKILL )
+		to_string( SIGTERM )
 	);
 	ENSURE( "Subprocess.kill() failed", c.get_time_elapsed( time::UNIT::SECOND ) <= 1 );
 TUT_TEARDOWN()
 
-#undef SIGKILL
+#undef SIGTERM
 #endif /* #ifndef __HOST_OS_TYPE_CYGWIN__ */
 #endif /* #ifndef __MSVCXX__ */
 
