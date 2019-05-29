@@ -37,7 +37,7 @@ class: -set.ReversedSetView {}
 class: -string.ReversedStringView {}
 class: -tuple.ReversedTupleView {}
 class: RuntimeException : Exception { message, trace, what, where }
-class: -SEEK.SEEK_ENUMERAL { to_string }
+class: -Stream.SEEK.SEEK_ENUMERAL { to_string }
 class: -Algorithms.Slice {}
 class: StackFrameInfo { column, context, file, line, to_string }
 class: Stream { SEEK, StreamException, deserialize, read_blob, read_character, read_integer, read_integer_unsigned, read_line, read_real, read_string, seek, serialize, write_blob, write_character, write_integer, write_integer_unsigned, write_line, write_real, write_string }
