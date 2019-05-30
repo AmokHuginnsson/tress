@@ -1,11 +1,18 @@
 /* Read tress/LICENSE.md file for copyright and licensing information. */
 
+#include <cstdio>
+#include <cstdlib>
+#ifdef __GNUC__
+#include <unistd.h>
+#endif /* #ifdef __GNUC__ */
+
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/hpipedchild.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include <yaal/hcore/hpipe.hxx>
 #include <yaal/tools/sleep.hxx>
+#include <yaal/tools/hfsitem.hxx>
 #include "tut_helpers.hxx"
 
 using namespace tut;
@@ -153,6 +160,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "redirect child stdout to file" )
 	static char const PIPED_CHILD_LOG_PATH[] = "./out/piped-child.log";
+	::unlink( PIPED_CHILD_LOG_PATH );
 	HPipe inPipe;
 	HStreamInterface::ptr_t in( inPipe.in() );
 	HStreamInterface::ptr_t out( make_pointer<HFile>( PIPED_CHILD_LOG_PATH, HFile::OPEN::WRITING ) );
@@ -161,6 +169,13 @@ TUT_UNIT_TEST( "redirect child stdout to file" )
 	pc.spawn( CHILD, {} );
 	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
 	*in << MSG_OUT << endl;
+	for ( int i( 0 ); i < 32; ++ i ) {
+		HFSItem fi( PIPED_CHILD_LOG_PATH );
+		if ( !! fi && fi.get_size() > 0 ) {
+			break;
+		}
+		sleep_for( duration( 100, time::UNIT::MILLISECOND ) );
+	}
 	pc.finish();
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
 	HFile logFile( PIPED_CHILD_LOG_PATH, HFile::OPEN::READING );

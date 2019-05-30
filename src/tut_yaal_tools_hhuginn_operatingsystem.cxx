@@ -7,6 +7,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 #include <yaal/tools/hstringstream.hxx>
+#include <yaal/tools/sleep.hxx>
 
 #include "tut_yaal_tools_hhuginn_base.hxx"
 
@@ -208,7 +209,12 @@ TUT_UNIT_TEST( "wait" )
 	hcore::HString line;
 	getline( *out, line );
 	int pid( lexical_cast<int>( line ) );
-	system::kill( pid, SIGTERM );
+	for ( int i( 0 ); i < 256; ++ i ) {
+		if ( system::kill( pid, SIGTERM ) != 0 ) {
+			break;
+		}
+		sleep_for( time::duration( 256, time::UNIT::MICROSECOND ) );
+	}
 	t.finish();
 	ENSURE_EQUALS( "Subprocess.wait() failed", result, "1" );
 #ifndef __HOST_OS_TYPE_CYGWIN__ /* Cygwin implementation of process handling is buggy as hell. */
