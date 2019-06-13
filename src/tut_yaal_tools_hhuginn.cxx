@@ -2533,6 +2533,34 @@ TUT_UNIT_TEST( "incremental mode" )
 		execute_incremental( l15 ),
 		"none[1, 2, 3]['a', 'b', 'c'][1: 'a', 2: 'b', 3: 'c']"
 	);
+	lines_t l16{
+		{ "f(){@(x){z;};}", OLine::TYPE::DEFINITION },
+		{ "f()(0);" }
+	};
+	ENSURE_EQUALS(
+		"function definition with invalid lambda not cleared",
+		execute_incremental( l16 ),
+		"*anonymous stream*:1:10: Symbol `z` is not defined in this context (did you mean `√`?).*anonymous stream*:2:1: Symbol `f` is not defined in this context (did you mean `√`?)."
+	);
+	lines_t l17{
+		{ "f(){@(x){x + 7;};}", OLine::TYPE::DEFINITION },
+		{ "f(){@(x){z;};}", OLine::TYPE::DEFINITION },
+		{ "f()(0);" }
+	};
+	ENSURE_EQUALS(
+		"function definition with invalid lambda not cleared",
+		execute_incremental( l17 ),
+		"none*anonymous stream*:2:10: Symbol `z` is not defined in this context (did you mean `√`?).7"
+	);
+	lines_t l18{
+		{ "f(){@(){@(x){z;};};}", OLine::TYPE::DEFINITION },
+		{ "f()(0);" }
+	};
+	ENSURE_EQUALS(
+		"function definition with invalid lambda not cleared",
+		execute_incremental( l18 ),
+		"*anonymous stream*:1:14: Symbol `z` is not defined in this context (did you mean `√`?).*anonymous stream*:2:4: Function `@1:5()` accepts exactly 0 positional arguments, but 1 were given."
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "introspection" )
