@@ -1546,6 +1546,40 @@ TUT_UNIT_TEST( "are constants constant? (immutable)" )
 		),
 		"\"0\""
 	);
+	ENSURE_EQUALS(
+		"constant from ternary true path was modified",
+		execute(
+			"f() {\n"
+			"  x = true ? 0 : 7;\n"
+			"  x += 1;\n"
+			"  x;\n"
+			"}\n"
+			"\n"
+			"main() {\n"
+			"  f();\n"
+			"  f();\n"
+			"  return (f());\n"
+			"}\n"
+		),
+		"1"
+	);
+	ENSURE_EQUALS(
+		"constant from ternary false path was modified",
+		execute(
+			"f() {\n"
+			"  x = false ? 7 : 0;\n"
+			"  x += 1;\n"
+			"  x;\n"
+			"}\n"
+			"\n"
+			"main() {\n"
+			"  f();\n"
+			"  f();\n"
+			"  return (f());\n"
+			"}\n"
+		),
+		"1"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "assignment/subscript regressions check" )
