@@ -931,6 +931,34 @@ char const progCompileErr122[] =
 	"}"
 ;
 
+char const progCompileErr123[] =
+	"main() {\n"
+	"true ? x = 0 : 0;\n"
+	"x;\n"
+	"}"
+;
+
+char const progCompileErr124[] =
+	"main() {\n"
+	"true ? 0 : x = 0;\n"
+	"x;\n"
+	"}"
+;
+
+char const progCompileErr125[] =
+	"main() {\n"
+	"false && ( x = 0 ) > 0;\n"
+	"x;\n"
+	"}"
+;
+
+char const progCompileErr126[] =
+	"main() {\n"
+	"true || ( x = 0 ) > 0;\n"
+	"x;\n"
+	"}"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -1056,6 +1084,10 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr120,
 		progCompileErr121,
 		progCompileErr122,
+		progCompileErr123,
+		progCompileErr124,
+		progCompileErr125,
+		progCompileErr126,
 		NULL
 	};
 
@@ -1183,6 +1215,10 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 120 */ { 58, 3, 14, "*anonymous stream*:3:14: Symbol `range` is not defined in this context (did you mean `Range`?)." },
 /* 121 */ { 43, 1, 44, "*anonymous stream*:1:44: Symbol `map` is never used (did you mean `max`?)." },
 /* 122 */ { 42, 3, 11, "*anonymous stream*:3:11: Symbol `x` is not defined in this context (did you mean `√`?)." },
+/* 123 */ { 16, 2, 8,  "*anonymous stream*:2:8: `x` is defined in short-circuitable context." },
+/* 124 */ { 20, 2, 12, "*anonymous stream*:2:12: `x` is defined in short-circuitable context." },
+/* 125 */ { 20, 2, 12, "*anonymous stream*:2:12: `x` is defined in short-circuitable context." },
+/* 126 */ { 19, 2, 11, "*anonymous stream*:2:11: `x` is defined in short-circuitable context." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

@@ -1638,6 +1638,19 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "bugs regressions checks" )
 	ENSURE_EQUALS(
+		"access to variable defined in unused (due to short-circuiting) path of expression",
+		execute(
+			"main() {\n"
+			"x = 0;\n"
+			"y = 0;\n"
+			"true ? 0 : x = 1;\n"
+			"false ? 0 : y = 1;\n"
+			"(x,y);\n"
+			"}\n"
+		),
+		"(0, 1)"
+	);
+	ENSURE_EQUALS(
 		"error position from nested algorithms",
 		execute_except(
 			"import Algorithms as algo;\n"
