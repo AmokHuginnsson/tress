@@ -1695,7 +1695,7 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 			"return ( (a,b) );"
 			"}"
 		),
-		"({0: none}, [0: none])"
+		"({}, dict())"
 	);
 	ENSURE_EQUALS(
 		"session id assignment for inlined scopes (scheme)",

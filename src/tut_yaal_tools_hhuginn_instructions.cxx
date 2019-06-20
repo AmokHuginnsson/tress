@@ -298,9 +298,19 @@ TUT_UNIT_TEST( "subscript" )
 	ENSURE_EQUALS(
 		"user subscript assign with invalid key succeeded",
 		execute_except(
-			"class A{\n_x=[2,4,8];\nset_subscript(idx_, val_){_x[idx_]=val_;}\nsubscript(idx_){_x[idx_];}\n}\nmain(){\na = A();\nreturn(a[3] = 0);\n}"
+			"class A{\n"
+			"_x=[2,4,8];\n"
+			"set_subscript(idx_, val_){\n"
+			"_x[idx_]=val_;\n"
+			"}\n"
+			"subscript(idx_){_x[idx_];}\n"
+			"}\n"
+			"main(){\n"
+			"a = A();\n"
+			"return(a[3] = 0);\n"
+			"}"
 		),
-		"*anonymous stream*:3:29: Bad index."
+		"*anonymous stream*:4:3: Bad index."
 	);
 TUT_TEARDOWN()
 
