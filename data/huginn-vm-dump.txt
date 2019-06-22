@@ -57,7 +57,7 @@ class: order { add, clear, equals, erase, has_key, hash, insert, update }
 class: real {}
 class: set { add, clear, equals, erase, has_key, hash, insert, update }
 class: string { clear, ends_with, find, find_last, find_last_one_of, find_last_other_than, find_one_of, find_other_than, format, replace, starts_with, strip, strip_left, strip_right, to_lower, to_upper }
-class: tuple { add, equals, find, greater, greater_or_equal, hash, less, less_or_equal }
+class: tuple { find }
 enum: COLOR { BLUE, GREEN, RED }
 enum: -Stream.SEEK { BEGIN, CURRENT, END }
 function: add

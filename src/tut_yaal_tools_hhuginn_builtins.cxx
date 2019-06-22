@@ -326,7 +326,7 @@ TUT_UNIT_TEST( "tuple()" )
 	);
 	ENSURE_EQUALS(
 		"tuple hash failed",
-		execute( "main(){(().hash(),(1,).hash());}" ),
+		execute( "import Introspection as intro;main(){(intro.hash(()),intro.hash((1,)));}" ),
 		"(7, 22)"
 	);
 TUT_TEARDOWN()
