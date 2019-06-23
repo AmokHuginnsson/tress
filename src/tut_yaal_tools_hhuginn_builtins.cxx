@@ -465,7 +465,7 @@ TUT_UNIT_TEST( "list()" )
 	);
 	ENSURE_EQUALS(
 		"list hash failed",
-		execute( "main(){[[].hash(),[1].hash()];}" ),
+		execute( "import Introspection as intro;main(){[intro.hash([]),intro.hash([1])];}" ),
 		"[8, 25]"
 	);
 TUT_TEARDOWN()
