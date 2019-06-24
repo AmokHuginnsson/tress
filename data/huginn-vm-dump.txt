@@ -47,7 +47,7 @@ class: -Algorithms.Zip {}
 class: blob { io }
 class: boolean {}
 class: character { is_alnum, is_alpha, is_digit, is_lower, is_space, is_upper, is_xdigit, to_lower, to_upper }
-class: deque { add, append, clear, equals, find, greater, greater_or_equal, hash, insert, less, less_or_equal, pop, pop_front, prepend, push, push_front }
+class: deque { append, clear, find, insert, pop, pop_front, prepend, push, push_front }
 class: dict { add, clear, ensure, equals, erase, get, has_key, hash, update, values }
 class: integer {}
 class: list { append, clear, find, insert, pop, push, resize, sort }

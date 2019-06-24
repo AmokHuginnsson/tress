@@ -572,7 +572,7 @@ TUT_UNIT_TEST( "deque()" )
 	);
 	ENSURE_EQUALS(
 		"deque hash failed",
-		execute( "main(){[deque().hash(),deque(1).hash()];}" ),
+		execute( "import Introspection as intro;main(){[intro.hash(deque()),intro.hash(deque(1))];}" ),
 		"[9, 28]"
 	);
 TUT_TEARDOWN()
