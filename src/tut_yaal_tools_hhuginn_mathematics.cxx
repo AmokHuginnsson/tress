@@ -365,7 +365,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"import Mathematics as math;"
 			"main(){"
 			"m1=math.Matrix([1.,2.],[3.,4.]);"
-			"return(m1.det());"
+			"return(|m1|);"
 			"}"
 		),
 		"-2.0"
@@ -376,7 +376,7 @@ TUT_UNIT_TEST( "Matrix" )
 			"import Mathematics as math;"
 			"main(){"
 			"m1=math.Matrix([$1,$2],[$3,$4]);"
-			"return(math.round(m1.det(),50));"
+			"return(math.round(|m1|,50));"
 			"}"
 		),
 		"$-2"
@@ -767,10 +767,10 @@ TUT_UNIT_TEST( "Matrix err" )
 		execute_except(
 			"import Mathematics as math;"
 			"main(){"
-			"math.Matrix([0.,0.]).det();"
+			"|math.Matrix([0.,0.])|;"
 			"}"
 		),
-		"*anonymous stream*:1:59: matrix is not square"
+		"*anonymous stream*:1:56: matrix is not square"
 	);
 	ENSURE_EQUALS(
 		"Mathematics.Matrix scale on zero Matrix succeeded",
