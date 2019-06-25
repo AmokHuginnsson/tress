@@ -263,13 +263,14 @@ TUT_UNIT_TEST( "hash invalid" )
 		"hash failed",
 		execute(
 			"import DateTime as dt;"
+			"import Introspection as intro;"
 			"main(){"
 			"t1=dt.now().set_datetime(1978,5,24,23,30,17);"
 			"t2=dt.now().set_datetime(1,1,1,0,0,0);"
-			"return (( t1.hash(), t2.hash() ));"
+			"return (( intro.hash(t1), intro.hash(t2) ));"
 			"}"
 		),
-		std::vector<HString>({ "(62432112617, 62167219199)", "(62432112617, 31617360)", "(62432112617, 31621839)" })
+		std::vector<HString>({ "(62432112617, 62167219199)", "(62432112617, 31617360)", "(62432112617, 31621839)", "(-1992396823, 2037677055)" })
 	);
 TUT_TEARDOWN()
 
