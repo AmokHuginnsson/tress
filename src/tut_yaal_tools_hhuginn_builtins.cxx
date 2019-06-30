@@ -172,7 +172,7 @@ TUT_UNIT_TEST( "string()" )
 	ENSURE_EQUALS( "string.format() invalid width succeeded", execute_except( "main(){s=\"a {:kd} b\";s.format(1);}" ), "*anonymous stream*:1:30: Invalid argument in conversion: k at: 6" );
 	ENSURE_EQUALS( "user to str failed", execute( "class A{_x=none;constructor(x){_x=x;}to_string(){return(\"~\"+string(_x)+\"~\");}}main(){return(string(A(7)));}" ), "\"~7~\"" );
 	ENSURE_EQUALS( "bad user to str succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:59: Class `A` does not have `to_string` method." );
-	ENSURE_EQUALS( "bad user to str (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_string(){return(this);}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:85: User conversion method returned invalid type an `A` instead of a `string`." );
+	ENSURE_EQUALS( "bad user to str (invalid type) succeeded", execute_except( "class A{_x=none;constructor(x){_x=x;}to_string(){return(this);}}main(){return(string(A(7)));}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:85: User supplied `to_string` function returned an invalid type an `A` instead of a `string`." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "integer()" )
@@ -1960,7 +1960,7 @@ TUT_UNIT_TEST( "to_string" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Time" )
-	ENSURE_EQUALS( "Time() failed", execute( "main() {\nTime(1978,5,24,23,30,17);\n}\n" ), "1978-05-24 23:30:17" );
+	ENSURE_EQUALS( "Time() failed", execute( "main() {\nTime(1978,5,24,23,30,17);\n}\n" ), "Time(1978, 5, 24, 23, 30, 17)" );
 	ENSURE_EQUALS( "invalid month hi Time() succeeded", execute_except( "main() {\nTime(2000,13,1,0,0,0);\n}\n" ), "*anonymous stream*:2:5: Invalid value for `month` in Time constructor: 13." );
 	ENSURE_EQUALS( "invalid month lo Time() succeeded", execute_except( "main() {\nTime(2000,0,1,0,0,0);\n}\n" ), "*anonymous stream*:2:5: Invalid value for `month` in Time constructor: 0." );
 	ENSURE_EQUALS( "invalid day hi Time() succeeded", execute_except( "main() {\nTime(2000,1,32,0,0,0);\n}\n" ), "*anonymous stream*:2:5: Invalid value for `day` in Time constructor: 32." );

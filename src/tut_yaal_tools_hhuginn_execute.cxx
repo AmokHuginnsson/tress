@@ -1516,7 +1516,7 @@ TUT_UNIT_TEST( "report execution error" )
 /*  62 */ { 35, 5, 4,    "*tress*:5:4: Arithmetic method `add` on an `A` returned result of incompatible type an `integer`." },
 /*  63 */ { 34, 5, 4,    "*tress*:5:4: User supplied `hash` function returned an invalid type a `real` instead of an `integer`." },
 /*  64 */ { 31, 3, 15,   "*tress*:3:15: There is no `<` operator for a `*bound_method*`." },
-/*  65 */ { 11, 2, 4,    "*tress*:2:4: There is no `hash` operator for a `*bound_method*`." },
+/*  65 */ { 11, 2, 4,    "*tress*:2:4: There is no `hash` method in a `*bound_method*`." },
 /*  66 */ { 14, 3, 2,    "*tress*:3:2: Reference `integer` is not a callable." },
 /*  67 */ { 14, 3, 2,    "*tress*:3:2: Range operator is not supported on an `integer`." },
 /*  68 */ { 14, 2, 6,    "*tress*:2:6: Operands are not boolean values: a `boolean`, a `*none*`" },
