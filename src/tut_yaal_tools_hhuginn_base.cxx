@@ -43,12 +43,12 @@ void HIntrospector::do_introspect( yaal::tools::HIntrospecteeInterface& introspe
 	yaal::tools::HHuginn::HCallSite const& cs( _callStacks.back().front() );
 	identifier_names_t in;
 	for ( HIntrospecteeInterface::HVariableView const& vv : introspectee_.get_locals( 0 ) ) {
-		in.emplace_back( vv.name(), !! vv.value() ? to_string( vv.value() ) : "<undefined>" );
+		in.emplace_back( vv.name(), !! vv.value() ? code( vv.value() ) : "<undefined>" );
 	}
 	_identifierNamesLog.insert( make_pair( make_pair( cs.file(), cs.line() ), in ) );
 	in.clear();
 	for ( HIntrospecteeInterface::HVariableView const& vv : introspectee_.get_locals( 1 ) ) {
-		in.emplace_back( vv.name(), !! vv.value() ? to_string( vv.value() ) : "<undefined>" );
+		in.emplace_back( vv.name(), !! vv.value() ? code( vv.value() ) : "<undefined>" );
 	}
 	_identifierNamesLogUp.insert( make_pair( make_pair( cs.file(), cs.line() ), in ) );
 }
@@ -314,7 +314,7 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute(
 	ENSURE( "execution failed", e );
 	HHuginn::value_t res( huginn_->result() );
 	l.lock();
-	_resultCache.assign( to_string( res, huginn_.raw() ) );
+	_resultCache.assign( code( res, huginn_.raw() ) );
 	return ( _resultCache );
 }
 
@@ -484,7 +484,7 @@ hcore::HString const& tut_yaal_tools_hhuginn_base::execute_incremental(
 		_resultCache.append( out.string() );
 		_resultCache.trim_right();
 		out.reset();
-		_resultCache.append( to_string( r, huginn_.raw() ) );
+		_resultCache.append( code( r, huginn_.raw() ) );
 	}
 	return ( _resultCache );
 }

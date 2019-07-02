@@ -2430,7 +2430,7 @@ TUT_UNIT_TEST( "easy function call" )
 	}
 	/* two args */ {
 		HHuginn::ptr_t h( compile_function( "from Text import split;main(){split;}" ) );
-		ENSURE_EQUALS( "getpid failed", to_string( call_function( *h, "split", "a,b,c", "," ), h.raw() ), "[\"a\", \"b\", \"c\"]" );
+		ENSURE_EQUALS( "getpid failed", code( call_function( *h, "split", "a,b,c", "," ), h.raw() ), "[\"a\", \"b\", \"c\"]" );
 	}
 TUT_TEARDOWN()
 
