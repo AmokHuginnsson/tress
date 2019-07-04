@@ -185,6 +185,7 @@ TUT_UNIT_TEST( "HReal" )
 	/* bad real */ {
 		HExecutingParser ep( real );
 		ENSURE_NOT( "Invalid input parsed by HReal", ep( "bad" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "." ) );
 		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14bad" ) );
 		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14ebad" ) );
 		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14e10a" ) );
