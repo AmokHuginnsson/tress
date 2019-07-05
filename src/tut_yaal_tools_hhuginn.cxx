@@ -1810,6 +1810,22 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 		"26"
 	);
 	ENSURE_EQUALS(
+		"definition of many variables in one expression after dynamic import of simplistic code failed",
+		execute(
+			"import Introspection as intro;"
+			"foo(){"
+			"a=b=c=d=e=f=g=h=i=j=k=l=m=n=o=p=q=r=s=t=u=v=w=x=y=z=1;"
+			"return(a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+q+r+s+t+u+v+w+x+y+z);"
+			"}"
+			"main() {"
+			"intro.import(\"Short\").foo(0,0);"
+			"foo();"
+			"}",
+			{ "data" }
+		),
+		"26"
+	);
+	ENSURE_EQUALS(
 		"order of operations failed",
 		execute(
 			"main(){"
