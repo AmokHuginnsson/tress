@@ -46,6 +46,21 @@ TUT_UNIT_TEST( "multiple occurrences UTF-8" )
 	clog << r.error() << ": " << res << endl;
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "multiple mateches with some empty" )
+	HString data( "ala ma kota a kot ma mleczko" );
+	HString expect( "{a}{}{a}{}{}{a}{}{}{}{}{a}{}{a}{}{}{}{}{}{}{a}{}{}{}{ec}{}{}{}{}" );
+	HRegex r( "([a-f]*)" );
+	HString res;
+	int i( 0 );
+	for ( HRegex::HMatch const& m : r.matches( data ) ) {
+		clog << "match[" << i << "] = ( " << m.start() << ", " << m.size() << " ) = " << data.substr( m.start(), m.size() ) << endl;
+		res.append( "{" ).append( data, m.start(), m.size() ).append( "}" );
+		++ i;
+	}
+	ENSURE_EQUALS( "bad match", res, expect );
+	clog << r.error() << ": " << res << endl;
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "multiple occurrences" )
 	HRegex r( "A.a" );
 	char const str[] = "xxxAlayyyAgazzz";
@@ -126,6 +141,14 @@ TUT_UNIT_TEST( "replace(fun)" )
 	HRegex r( "[0-9]+" );
 	ENSURE_EQUALS( "replace(fun) failed (matching)", r.replace( "abc012def789ghi", HRegex::replacer_t( []( yaal::hcore::HString const& s ){ return ( "{" + s + "}" ); } ) ), "abc{012}def{789}ghi" );
 	ENSURE_EQUALS( "replace(fun) failed (non-matching)", r.replace( "abc!@#def&*(ghi", HRegex::replacer_t( []( yaal::hcore::HString const& s ){ return ( "{" + s + "}" ); } ) ), "abc!@#def&*(ghi" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "replace empty match" )
+	HRegex r( "([a-f]*)" );
+	char const str[] = "ala ma kota a kot ma mleczko";
+	HString s( r.replace( str, "X" ) );
+	char const expected[] = "XlX mX kotX X kot mX mlXzko";
+	ENSURE_EQUALS( "replace with empty match failed", s, expected );
 TUT_TEARDOWN()
 
 }
