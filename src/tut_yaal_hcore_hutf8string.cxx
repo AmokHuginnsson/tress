@@ -220,6 +220,16 @@ TUT_UNIT_TEST( "substr" )
 	ENSURE_EQUALS( "decode failed", ss, "pies" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "front" )
+	char const data[] = "Mężny";
+	HUTF8String s( data );
+	ENSURE_EQUALS( "front failed", s.front(), 'M'_ycp );
+	HUTF8String ss( s.substr( 1 ) );
+	ENSURE_EQUALS( "front failed", ss.front(), unicode::CODE_POINT::LATIN_SMALL_LETTER_E_WITH_OGONEK );
+	ss = ss.substr( 1 );
+	ENSURE_EQUALS( "front failed", ss.front(), unicode::CODE_POINT::LATIN_SMALL_LETTER_Z_WITH_DOT_ABOVE );
+TUT_TEARDOWN()
+
 }
 
 

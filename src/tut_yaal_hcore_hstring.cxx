@@ -837,6 +837,22 @@ TUT_UNIT_TEST( "compare()" )
 	ENSURE_EQUALS( "\"abc\".compare(\"abcdefghijklmnopqrstuvwxyz\", 0, 3)", "abc"_ys.compare( "abcdefghijklmnopqrstuvwxyz" ), -1 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "starts_with()" )
+	ENSURE( "positive failed", "Ala ma kota"_ys.starts_with( "Ala" ) );
+	ENSURE( "positive eq failed", "Ala"_ys.starts_with( "Ala" ) );
+	ENSURE_NOT( "negative failed", "Ala ma kota"_ys.starts_with( "Ola" ) );
+	ENSURE_NOT( "negative eq len failed", "Ala"_ys.starts_with( "Ola" ) );
+	ENSURE_NOT( "negative failed", "Ala"_ys.starts_with( "Ala ma kota" ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "ends_with()" )
+	ENSURE( "positive failed", "Ala ma kota"_ys.ends_with( "kota" ) );
+	ENSURE( "positive eq failed", "Ala"_ys.ends_with( "Ala" ) );
+	ENSURE_NOT( "negative failed", "Ala ma kota"_ys.ends_with( "psa" ) );
+	ENSURE_NOT( "negative eq len failed", "Ala"_ys.ends_with( "Ola" ) );
+	ENSURE_NOT( "negative failed", "kota"_ys.ends_with( "Ala ma kota" ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "trim_left(\"\")" )
 	static char const* const SPACE = "   ";
 	static HString const TEXT = "ala ma";
