@@ -39,9 +39,9 @@ TUT_UNIT_TEST( "load external library and resolve symbol" )
 	HPlugin p;
 	p.load( TRESS_PLUGIN );
 	ENSURE( "failed to load plugin", p.is_loaded() );
-	sumator_t my_sum( NULL );
+	sumator_t my_sum( nullptr );
 	p.resolve( "tut_yaal_tools_hplugin_sum", my_sum );
-	ENSURE( "failed to resolve symbol", my_sum != NULL );
+	ENSURE( "failed to resolve symbol", my_sum != nullptr );
 	ENSURE_EQUALS( "cound not utilize plugin", my_sum( T1, T2 ), T1 + T2 );
 TUT_TEARDOWN()
 
@@ -69,7 +69,7 @@ TUT_UNIT_TEST( "resolve non-existing symbol" )
 	HPlugin p;
 	p.load( TRESS_PLUGIN );
 	loaded = p.is_loaded();
-	void (*sym)(void) = NULL;
+	void (*sym)(void) = nullptr;
 	ENSURE_THROW( "non-existing plugin loaded", p.resolve( "non_existing_symbol", sym ), HPluginException );
 	ENSURE( "failed to load plugin", loaded );
 TUT_TEARDOWN()

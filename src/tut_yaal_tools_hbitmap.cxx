@@ -68,7 +68,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "Default constructor" )
 	HBitmap bmp;
 	ENSURE_EQUALS( "size", bmp.get_size(), 0 );
-	ENSURE_EQUALS( "raw", bmp.raw(), static_cast<void*>( NULL ) );
+	ENSURE_EQUALS( "raw", bmp.raw(), static_cast<void*>( nullptr ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "assign" )
@@ -88,8 +88,8 @@ TUT_UNIT_TEST( "constructor from size" )
 	static int const SIZE = 7;
 	HBitmap bmp( SIZE );
 	ENSURE_EQUALS( "constructor from size size", bmp.get_size(), SIZE );
-	ENSURE( "default constructor raw", bmp.raw() != static_cast<void*>( NULL ) );
-	ENSURE( "default constructor ", bmp.raw() != static_cast<void*>( NULL ) );
+	ENSURE( "default constructor raw", bmp.raw() != static_cast<void*>( nullptr ) );
+	ENSURE( "default constructor ", bmp.raw() != static_cast<void*>( nullptr ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set" )

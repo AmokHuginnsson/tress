@@ -19,9 +19,13 @@ struct OSetup {
 	yaal::hcore::HString _script;
 	/* self-sufficient */
 	OSetup( void )
-		: _quiet( false ), _verbose( false ),
-		_programName( NULL ), _logPath(), _exitStatus( 0 ),
-		_terminate(), _script() {}
+		: _quiet( false )
+		, _verbose( false )
+		, _programName( nullptr )
+		, _logPath()
+		, _exitStatus( 0 )
+		, _terminate()
+		, _script() {}
 	void test_setup( void );
 private:
 	OSetup( OSetup const& );

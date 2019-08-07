@@ -44,7 +44,7 @@ public:
 		, _mutex()
 		, _ls( std::cerr )
 		, _run( 0 )
-		, _testRunner( NULL )
+		, _testRunner( nullptr )
 		, _notPassed()
 		, _groupNames() {
 		clear();
@@ -55,7 +55,7 @@ public:
 		, _mutex()
 		, _ls( &out == &std::cout ? std::cerr : std::cout )
 		, _run( 0 )
-		, _testRunner( NULL )
+		, _testRunner( nullptr )
 		, _notPassed()
 		, _groupNames() {
 	}
@@ -65,7 +65,7 @@ public:
 		, _mutex()
 		, _ls( logger )
 		, _run( 0 )
-		, _testRunner( NULL )
+		, _testRunner( nullptr )
 		, _notPassed()
 		, _groupNames() {
 	}

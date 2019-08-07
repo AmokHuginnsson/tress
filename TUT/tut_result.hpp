@@ -71,7 +71,7 @@ struct test_result : public test_result_posix {
 	 */
 	test_result()
 		: test_result_posix()
-		, _group( NULL )
+		, _group( nullptr )
 		, _testNo( 0 )
 		, _name()
 		, _result( ok )
@@ -114,7 +114,7 @@ struct test_result : public test_result_posix {
 	/**
 	 * Set addtional per-exception information (that is always available/meaningful.
 	 */
-	void set_location( std::string const& testName_, char const* const file = NULL, int const& line = -1 ) {
+	void set_location( std::string const& testName_, char const* const file = nullptr, int const& line = -1 ) {
 		_name = testName_;
 		if ( file )
 			_file = file;

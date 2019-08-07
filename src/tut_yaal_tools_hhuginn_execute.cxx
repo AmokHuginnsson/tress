@@ -1448,7 +1448,7 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr128,
 		progExecuteErr129,
 		progExecuteErr130,
-		NULL
+		nullptr
 	};
 	ErrInfo const err[] = {
 /*   0 */ { 44, 3, 10,   "*tress*:3:10: Operand types for `+` do not match: an `integer` vs a `real`." },

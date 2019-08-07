@@ -222,7 +222,7 @@ void tut_yaal_dbwrapper_hquery::fetch_result_after_query_reset( HDataBase::ptr_t
 	char const* const COLUMN_NAMES[] = { "id", "name", "data" };
 	char const* const DATA[][3] = {
 		{ "1", "one", dbType_ },
-		{ "2", "two", NULL },
+		{ "2", "two", nullptr },
 		{ "3", "three", "Mężny bądź, chroń pułk twój i sześć flag!" }
 	};
 	clog << "|";
@@ -246,7 +246,7 @@ void tut_yaal_dbwrapper_hquery::fetch_result_after_query_reset( HDataBase::ptr_t
 			} else {
 				ENSURE_EQUALS( "wrong value", static_cast<char const*>( nullptr ), DATA[row][i] );
 			}
-			clog << ( !v ? HString( "(NULL)" ) : *v ) << "|";
+			clog << ( !v ? HString( "(nullptr)" ) : *v ) << "|";
 		}
 		clog << endl;
 	}
@@ -320,7 +320,7 @@ void tut_yaal_dbwrapper_hquery::execute_twice( HDataBase::ptr_t db_, char const*
 	char const* const COLUMN_NAMES[] = { "id", "name", "data" };
 	char const* const DATA[][3] = {
 		{ "1", "one", dbType_ },
-		{ "2", "two", NULL },
+		{ "2", "two", nullptr },
 		{ "3", "three", "Mężny bądź, chroń pułk twój i sześć flag!" }
 	};
 	clog << "|";
@@ -344,7 +344,7 @@ void tut_yaal_dbwrapper_hquery::execute_twice( HDataBase::ptr_t db_, char const*
 			} else {
 				ENSURE_EQUALS( "wrong value", static_cast<char const*>( nullptr ), DATA[row][i] );
 			}
-			clog << ( !v ? HString( "(NULL)" ) : *v ) << "|";
+			clog << ( !v ? HString( "(nullptr)" ) : *v ) << "|";
 		}
 		clog << endl;
 	}

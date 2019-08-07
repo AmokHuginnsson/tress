@@ -350,7 +350,7 @@ TUT_UNIT_TEST( "preprocessor" )
 		progPre16,
 		progPre17,
 		progPre18,
-		NULL
+		nullptr
 	};
 	prog_src_t progPost[] = {
 		progPost0,
@@ -372,7 +372,7 @@ TUT_UNIT_TEST( "preprocessor" )
 		progPost16,
 		progPost17,
 		progPost18,
-		NULL
+		nullptr
 	};
 	for ( prog_src_t* pre( begin( progPre ) ), * preEnd( end( progPre ) ), * post( begin( progPost ) ); pre != preEnd; ++ pre, ++ post ) {
 		if ( *pre ) {

@@ -92,7 +92,7 @@ int main( int argc_, char* argv_[] ) {
 		}
 		if ( setup._reporter == "tut" ) {
 			typedef tut::reporter<HLog> reporter_console;
-			reporter_console* rep( NULL );
+			reporter_console* rep( nullptr );
 			visitor = reporter_ptr( rep = new reporter_console( std::cerr, hcore::log ) );
 			if ( setup._errorLine == "vim" ) {
 				rep->set_error_line( &vim_error_line );

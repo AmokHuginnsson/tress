@@ -20,7 +20,7 @@ public:
 
 int main( int, char** ) {
 	RCAttrLoad rcal;
-	void* p( NULL );
+	void* p( nullptr );
 	HBoundCall<void( int& )> f( call( &RCAttrLoad::SavePackThread, &rcal, p ) ); /* MUST_FAIL_HERE */
 	return ( 0 );
 }

@@ -135,15 +135,15 @@ public:
 	*/
 	test_runner( void )
 		: _groups()
-		, _callback( NULL )
-		, _tutListener( NULL ) {
+		, _callback( nullptr )
+		, _tutListener( nullptr ) {
 	}
 
 	/**
 	* Stores another group for getting by name.
 	*/
 	void register_group( const std::string& name, group_base* gr ) {
-		if ( gr == 0 )
+		if ( gr == nullptr )
 			throw std::invalid_argument( "group shall be non-null" );
 
 		if ( _groups.find( name ) != _groups.end() ) {
@@ -202,7 +202,7 @@ public:
 
 	group_base* get_group( std::string const& name_ ) {
 		iterator it( _groups.find( name_ ) );
-		return ( it != _groups.end() ? it->second : NULL );
+		return ( it != _groups.end() ? it->second : nullptr );
 	}
 
 	void set_time_constraint( int long timeConstraint_ ) {

@@ -200,7 +200,7 @@ TUT_UNIT_TEST( "report parsing error" )
 		progParse18,
 		progParse19,
 		progParse20,
-		NULL
+		nullptr
 	};
 	int const err[][3] = {
 		{ 17, 2, 9 },  // 0

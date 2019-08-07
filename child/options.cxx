@@ -113,7 +113,7 @@ int handle_program_options( int argc_, char** argv_ ) {
 		.description( "output version information and stop" )
 		.recipient( vers )
 	);
-	po.process_rc_file( "", NULL );
+	po.process_rc_file( "", nullptr );
 	if ( setup._logPath.is_empty() )
 		setup._logPath = "child.log";
 	int unknown = 0, nonOption = 0;

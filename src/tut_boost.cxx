@@ -173,12 +173,12 @@ struct generator {
 	tType operator()() {
 		return (
 				make(
-					static_cast<init0_t*>( NULL ),
-					static_cast<init1_t*>( NULL ),
-					static_cast<init2_t*>( NULL ),
-					static_cast<init3_t*>( NULL ),
-					static_cast<init4_t*>( NULL ),
-					static_cast<init5_t*>( NULL ) ) );
+					static_cast<init0_t*>( nullptr ),
+					static_cast<init1_t*>( nullptr ),
+					static_cast<init2_t*>( nullptr ),
+					static_cast<init3_t*>( nullptr ),
+					static_cast<init4_t*>( nullptr ),
+					static_cast<init5_t*>( nullptr ) ) );
 	}
 };
 

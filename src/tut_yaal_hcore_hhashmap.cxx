@@ -51,7 +51,7 @@ void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ ) {
 	int long bucketCount( map_._engine._buckets.get_size() / static_cast<int>( sizeof ( atom_t* ) ) );
 	ENSURE( "wrong bucket count/prime", bucketCount >= map_._engine._prime );
 	ENSURE( "wrong bucket prime/size", map_._engine._prime >= map_._engine._size );
-	ENSURE( "wrong prime / alloc status", xnor( buckets != NULL, map_._engine._prime != 0 ) );
+	ENSURE( "wrong prime / alloc status", xnor( buckets != nullptr, map_._engine._prime != 0 ) );
 	int long realSize( 0 );
 	int long collisions( 0 );
 	int long longestCollision( 0 );
@@ -72,7 +72,7 @@ void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ ) {
 			longestCollision = localCollisions;
 	}
 	for ( int long i( map_._engine._prime ); i < bucketCount; ++ i )
-		ENSURE_EQUALS( "dirty bucket", buckets[ i ], static_cast<atom_t*>( NULL ) );
+		ENSURE_EQUALS( "dirty bucket", buckets[ i ], static_cast<atom_t*>( nullptr ) );
 	ENSURE_EQUALS( "size inconsistent", map_._engine._size, realSize );
 	if ( collisions )
 		clog << "collisions: " << collisions << ", longest collision: " << longestCollision << endl;

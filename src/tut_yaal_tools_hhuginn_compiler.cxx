@@ -1088,7 +1088,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr124,
 		progCompileErr125,
 		progCompileErr126,
-		NULL
+		nullptr
 	};
 
 	ErrInfo const err[] = {

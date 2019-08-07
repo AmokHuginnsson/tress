@@ -32,7 +32,7 @@ void tut_yaal_dbwrapper_hrecordset::dump_query_result( HDataBase::ptr_t db, char
 	char const* const COLUMN_NAMES[] = { "id", "name", "data" };
 	char const* const DATA[][3] = {
 		{ "1", "one", dbType_ },
-		{ "2", "two", NULL },
+		{ "2", "two", nullptr },
 		{ "3", "three", "Mężny bądź, chroń pułk twój i sześć flag!" }
 	};
 	clog << "|";
@@ -55,9 +55,9 @@ void tut_yaal_dbwrapper_hrecordset::dump_query_result( HDataBase::ptr_t db, char
 					ENSURE_EQUALS( "wrong value", *v, DATA[row][i] );
 				}
 			} else {
-				ENSURE_EQUALS( "wrong value", static_cast<char const*>( NULL ), DATA[row][i] );
+				ENSURE_EQUALS( "wrong value", static_cast<char const*>( nullptr ), DATA[row][i] );
 			}
-			clog << ( !v ? HString( "(NULL)" ) : *v ) << "|";
+			clog << ( !v ? HString( "(nullptr)" ) : *v ) << "|";
 		}
 		clog << endl;
 	}
@@ -73,7 +73,7 @@ void tut_yaal_dbwrapper_hrecordset::dump_query_result( HDataBase::ptr_t db, char
 				if ( !!v ) {
 					ENSURE_EQUALS( "wrong value", *v, DATA[r][i] );
 				} else {
-					ENSURE_EQUALS( "wrong value", static_cast<char const*>( NULL ), DATA[r][i] );
+					ENSURE_EQUALS( "wrong value", static_cast<char const*>( nullptr ), DATA[r][i] );
 				}
 			}
 		}
@@ -92,7 +92,7 @@ void tut_yaal_dbwrapper_hrecordset::dump_query_result( HDataBase::ptr_t db, char
 				if ( !!v ) {
 					ENSURE_EQUALS( "wrong value", *v, DATA[row][i] );
 				} else {
-					ENSURE_EQUALS( "wrong value", static_cast<char const*>( NULL ), DATA[row][i] );
+					ENSURE_EQUALS( "wrong value", static_cast<char const*>( nullptr ), DATA[row][i] );
 				}
 			}
 		}
@@ -108,7 +108,7 @@ TUT_UNIT_TEST( "simple query on default engine" )
 	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	HDataBase::ptr_t db( HDataBase::get_connector() );
 	db->connect( "./out/tress", "", "" );
-	dump_query_result( db, QUERY, NULL );
+	dump_query_result( db, QUERY, nullptr );
 TUT_TEARDOWN()
 
 #if defined( HAVE_SQLITE3_H )
@@ -321,7 +321,7 @@ void tut_yaal_dbwrapper_hrecordset::row_by_row_test( HDataBase::ptr_t db, char c
 	char const* const COLUMN_NAMES[] = { "id", "name", "data" };
 	char const* const DATA[][3] = {
 		{ "1", "one", dbType_ },
-		{ "2", "two", NULL },
+		{ "2", "two", nullptr },
 		{ "3", "three", "Mężny bądź, chroń pułk twój i sześć flag!" }
 	};
 	clog << "|";
@@ -345,7 +345,7 @@ void tut_yaal_dbwrapper_hrecordset::row_by_row_test( HDataBase::ptr_t db, char c
 			} else {
 				ENSURE_EQUALS( "wrong value", static_cast<char const*>( nullptr ), DATA[row][i] );
 			}
-			clog << ( !v ? HString( "(NULL)" ) : *v ) << "|";
+			clog << ( !v ? HString( "(nullptr)" ) : *v ) << "|";
 		}
 		clog << endl;
 	}

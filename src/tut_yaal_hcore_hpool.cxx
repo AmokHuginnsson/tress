@@ -40,12 +40,12 @@ template <int const size>
 void tut_yaal_hcore_hpool::check_consistency( HPool<size>& pool_ ) {
 	ENSURE( "inconsistent blocks-count - blocks-capacity relation", pool_._poolBlockCount <= pool_._poolBlockCapacity );
 	ENSURE( "inconsistent free - blocks-count relation", pool_._free < pool_._poolBlockCount );
-	ENSURE( "inconsistent buffer state", ( ( pool_._poolBlocks == NULL ) && ( pool_._poolBlockCapacity == 0 ) ) || ( ( pool_._poolBlockCapacity > 0 ) && ( pool_._poolBlocks != NULL ) ) );
+	ENSURE( "inconsistent buffer state", ( ( pool_._poolBlocks == nullptr ) && ( pool_._poolBlockCapacity == 0 ) ) || ( ( pool_._poolBlockCapacity > 0 ) && ( pool_._poolBlocks != nullptr ) ) );
 	bool freeFound( false );
 	HArray<bool> exists( pool_t::OBJECTS_PER_BLOCK );
 	for ( int i( 0 ); i < pool_._poolBlockCount; ++ i ) {
 		typename pool_t::HPoolBlock* pb( pool_._poolBlocks[i] );
-		ENSURE( "null pool block", pb != NULL );
+		ENSURE( "null pool block", pb != nullptr );
 		ENSURE_EQUALS( "bad block index", pb->_index, i );
 		if ( freeFound )
 			ENSURE_NOT( "pool blocks out of order", pb->_used == pool_t::OBJECTS_PER_BLOCK );

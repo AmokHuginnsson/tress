@@ -208,7 +208,7 @@ class test_group : public group_base, public test_group_posix {
 		safe_holder& operator =( const safe_holder& );
 
 	public:
-		safe_holder() : _obj( 0 ), permit_throw_in_dtor( false )
+		safe_holder() : _obj( nullptr ), permit_throw_in_dtor( false )
 			{}
 
 		~safe_holder() {
@@ -267,7 +267,7 @@ class test_group : public group_base, public test_group_posix {
 
 		bool delete_obj() {
 			T* p = _obj;
-			_obj = 0;
+			_obj = nullptr;
 			delete p;
 			return ( true ) ;
 		}
@@ -447,7 +447,7 @@ public:
 	test_result run_test( const tests_iterator& ti, safe_holder<object>& obj ) {
 		test_result tr( this, ti->first );
 
-		char const* file = NULL;
+		char const* file = nullptr;
 		int line = -1;
 		yaal::hcore::HClock clock( yaal::hcore::HClock::TYPE::CPU );
 		try {
@@ -509,7 +509,7 @@ public:
 	* Runs one.
 	*/
 	bool run_test( testmethod tm, safe_holder<object>&obj ) {
-		if ( obj.get() == 0 ) {
+		if ( obj.get() == nullptr ) {
 			reset_holder_( obj );
 		}
 

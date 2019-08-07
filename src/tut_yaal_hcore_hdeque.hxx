@@ -95,11 +95,11 @@ void tut_yaal_hcore_hdeque_base<pack>::check_consistency( deque_type const& dequ
 		ENSURE( "unnecesarry chunks move", ( deque_._size < _statePreserver._size ) || ( chunksCount > _statePreserver._availChunks ) );
 	}
 	for ( int long i( 0 ); i < firstChunkIndex; ++ i )
-		ENSURE_EQUALS( "not used chunks at the begining not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
+		ENSURE_EQUALS( "not used chunks at the begining not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( nullptr ) );
 	for ( int long i( lastChunkIndex + 1 ); i < chunksCount; ++ i )
-		ENSURE_EQUALS( "not used chunks at the end not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( NULL ) );
+		ENSURE_EQUALS( "not used chunks at the end not cleared", chunks[ i ], static_cast<typename deque_type::value_type*>( nullptr ) );
 	if ( ( chunksCount > 0 ) && ! deque_._size )
-		ENSURE_EQUALS( "not all chunks are nulled after resize( 0 )", chunks[ firstChunkIndex ], static_cast<typename deque_type::value_type*>( NULL ) );
+		ENSURE_EQUALS( "not all chunks are nulled after resize( 0 )", chunks[ firstChunkIndex ], static_cast<typename deque_type::value_type*>( nullptr ) );
 	if ( deque_._size > 0 ) {
 		for ( int long i( firstChunkIndex ); i < ( lastChunkIndex + 1 ); ++ i )
 			ENSURE_EQUALS( "a nil in used chunks range", chunks[ i ] ? true : false, true );

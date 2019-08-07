@@ -88,7 +88,7 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list ) {
 		ENSURE_EQUALS( "links broken", it._current->_next->_previous, it._current );
 		ENSURE_EQUALS( "links broken", it._current->_previous->_next, it._current );
 	}
-	if ( ! ctr && ( list._hook == NULL ) )
+	if ( ! ctr && ( list._hook == nullptr ) )
 		hook_valid = true;
 	ENSURE_EQUALS( "forward cycle", ctr, list._size );
 	ENSURE( "no hook", hook_valid );
@@ -103,7 +103,7 @@ void tut_yaal_hcore_hlist::check_consistency( T const& list ) {
 		ENSURE_EQUALS( "links broken", i._current->_next->_previous, i._current );
 		ENSURE_EQUALS( "links broken", i._current->_previous->_next, i._current );
 	}
-	if ( ! ctr && ( list._hook == NULL ) ) {
+	if ( ! ctr && ( list._hook == nullptr ) ) {
 		hook_valid = true;
 	}
 	ENSURE_EQUALS( "backward cycle", ctr, list._size );

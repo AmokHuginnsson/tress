@@ -30,7 +30,7 @@ void ensure_real( char const* file, int line, std::string const& msg, bool cond 
 }
 void ensure( char const*, bool ) __attribute__((used));
 void ensure( char const* msg, bool cond ) {
-	ensure_real( NULL, 0, msg, cond );
+	ensure_real( nullptr, 0, msg, cond );
 }
 
 /**
@@ -49,7 +49,7 @@ void ensure_real( char const* file, int line, char const*, yaal::hcore::HString 
 }
 template<typename T>
 void ensure( T const& msg, bool cond ) {
-	ensure_real( NULL, 0, NULL, msg, cond );
+	ensure_real( nullptr, 0, nullptr, msg, cond );
 }
 
 /**
@@ -64,7 +64,7 @@ void ensure_not_real( char const* file, int const& line, char const* msg, bool c
 }
 void ensure_not( char const*, bool ) __attribute__((used));
 void ensure_not( char const* msg, bool cond ) {
-	ensure_not_real( NULL, 0, msg, cond );
+	ensure_not_real( nullptr, 0, msg, cond );
 }
 
 /**
@@ -78,7 +78,7 @@ void ensure_not_real( char const* file, int line, char const*, T const& msg, boo
 }
 template<typename T>
 void ensure_not( T const& msg, bool cond ) {
-	ensure_not_real( NULL, 0, NULL, msg, cond );
+	ensure_not_real( nullptr, 0, nullptr, msg, cond );
 }
 
 template<typename T>
@@ -109,7 +109,7 @@ void ensure_equals_real( char const* file, int line, char const*, std::string co
 }
 template<class T, class Q>
 void ensure_equals( const char* msg, const Q& actual, const T& expected ) {
-	ensure_equals_real( NULL, 0, NULL, msg, actual, expected );
+	ensure_equals_real( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
@@ -119,23 +119,23 @@ void ensure_equals_real( char const* file,
 	yaal::hcore::HString const& msg,
 	const Q& actual,
 	const T& expected ) {
-	ensure_equals_real<>( file, line, NULL, yaal::lexical_cast<std::string>( msg ), actual, expected );
+	ensure_equals_real<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected );
 }
 template<class T, class Q>
 void ensure_equals( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
-	ensure_equals_real( NULL, 0, NULL, msg, actual, expected );
+	ensure_equals_real( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
 void ensure_equals_real( char const* file, int line, char const*, char const* msg, const Q& actual,
 	const T& expected ) {
-	ensure_equals_real<>( file, line, NULL, std::string( msg ), actual, expected );
+	ensure_equals_real<>( file, line, nullptr, std::string( msg ), actual, expected );
 }
 
 template<class T, class Q>
 void ensure_equals_real( char const* file, int line, char const* msg, const Q& actual,
 	const T& expected ) {
-	ensure_equals_real<>( file, line, NULL, std::string( msg ), actual, expected );
+	ensure_equals_real<>( file, line, nullptr, std::string( msg ), actual, expected );
 }
 
 /**
@@ -162,7 +162,7 @@ void ensure_in_real( char const* file, int line, char const*, std::string const&
 }
 template<class T, class Q>
 void ensure_in( const char* msg, const Q& actual, const std::vector<T>& expected ) {
-	ensure_in_real( NULL, 0, NULL, msg, actual, expected );
+	ensure_in_real( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
@@ -172,23 +172,23 @@ void ensure_in_real( char const* file,
 	yaal::hcore::HString const& msg,
 	const Q& actual,
 	const std::vector<T>& expected ) {
-	ensure_in_real<>( file, line, NULL, yaal::lexical_cast<std::string>( msg ), actual, expected );
+	ensure_in_real<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected );
 }
 template<class T, class Q>
 void ensure_in( yaal::hcore::HString const& msg, const Q& actual, const std::vector<T>& expected ) {
-	ensure_in_real( NULL, 0, NULL, msg, actual, expected );
+	ensure_in_real( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
 void ensure_in_real( char const* file, int const& line, char const*, char const* msg, const Q& actual,
 	const std::vector<T>& expected ) {
-	ensure_in_real<>( file, line, NULL, std::string( msg ), actual, expected );
+	ensure_in_real<>( file, line, nullptr, std::string( msg ), actual, expected );
 }
 
 template<class T, class Q>
 void ensure_in_real( char const* file, int const& line, char const* msg, const Q& actual,
 	const std::vector<T>& expected ) {
-	ensure_in_real<>( file, line, NULL, msg, actual, expected );
+	ensure_in_real<>( file, line, nullptr, msg, actual, expected );
 }
 
 /**
@@ -211,7 +211,7 @@ void ensure_less_real( char const* file, int line, char const*, std::string cons
 }
 template<class T, class Q>
 void ensure_less( const char* msg, const Q& actual, const T& expected ) {
-	ensure_less_real( NULL, 0, NULL, msg, actual, expected );
+	ensure_less_real( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
@@ -221,23 +221,23 @@ void ensure_less_real( char const* file,
 	yaal::hcore::HString const& msg,
 	const Q& actual,
 	const T& expected ) {
-	ensure_less_real<>( file, line, NULL, yaal::lexical_cast<std::string>( msg ), actual, expected );
+	ensure_less_real<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected );
 }
 template<class T, class Q>
 void ensure_less( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
-	ensure_less_real( NULL, 0, NULL, msg, actual, expected );
+	ensure_less_real( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
 void ensure_less_real( char const* file, int const& line, char const*, char const* msg, const Q& actual,
 	const T& expected ) {
-	ensure_less_real<>( file, line, NULL, std::string( msg ), actual, expected );
+	ensure_less_real<>( file, line, nullptr, std::string( msg ), actual, expected );
 }
 
 template<class T, class Q>
 void ensure_less_real( char const* file, int const& line, char const* msg, const Q& actual,
 	const T& expected ) {
-	ensure_less_real<>( file, line, NULL, msg, actual, expected );
+	ensure_less_real<>( file, line, nullptr, msg, actual, expected );
 }
 
 /**
@@ -260,7 +260,7 @@ void ensure_greater_real( char const* file, int line, char const*, std::string c
 }
 template<class T, class Q>
 void ensure_greater( const char* msg, const Q& actual, const T& expected ) {
-	ensure_greater_real( NULL, 0, NULL, msg, actual, expected );
+	ensure_greater_real( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
@@ -270,23 +270,23 @@ void ensure_greater_real( char const* file,
 	yaal::hcore::HString const& msg,
 	const Q& actual,
 	const T& expected ) {
-	ensure_greater_real<>( file, line, NULL, yaal::lexical_cast<std::string>( msg ), actual, expected );
+	ensure_greater_real<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected );
 }
 template<class T, class Q>
 void ensure_greater( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
-	ensure_greater_real( NULL, 0, NULL, msg, actual, expected );
+	ensure_greater_real( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
 void ensure_greater_real( char const* file, int const& line, char const*, char const* msg, const Q& actual,
 	const T& expected ) {
-	ensure_greater_real<>( file, line, NULL, std::string( msg ), actual, expected );
+	ensure_greater_real<>( file, line, nullptr, std::string( msg ), actual, expected );
 }
 
 template<class T, class Q>
 void ensure_greater_real( char const* file, int const& line, char const* msg, const Q& actual,
 	const T& expected ) {
-	ensure_greater_real<>( file, line, NULL, msg, actual, expected );
+	ensure_greater_real<>( file, line, nullptr, msg, actual, expected );
 }
 
 /**
@@ -309,7 +309,7 @@ void ensure_less_or_equal_real( char const* file, int line, char const*, std::st
 }
 template<class T, class Q>
 void ensure_less_or_equal( const char* msg, const Q& actual, const T& expected ) {
-	ensure_less_or_equal_real( NULL, 0, NULL, msg, actual, expected );
+	ensure_less_or_equal_real( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
@@ -319,23 +319,23 @@ void ensure_less_or_equal_real( char const* file,
 	yaal::hcore::HString const& msg,
 	const Q& actual,
 	const T& expected ) {
-	ensure_less_or_equal_real<>( file, line, NULL, yaal::lexical_cast<std::string>( msg ), actual, expected );
+	ensure_less_or_equal_real<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected );
 }
 template<class T, class Q>
 void ensure_less_or_equal( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
-	ensure_less_or_equal_real( NULL, 0, NULL, msg, actual, expected );
+	ensure_less_or_equal_real( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
 void ensure_less_or_equal_real( char const* file, int const& line, char const*, char const* msg, const Q& actual,
 	const T& expected ) {
-	ensure_less_or_equal_real<>( file, line, NULL, std::string( msg ), actual, expected );
+	ensure_less_or_equal_real<>( file, line, nullptr, std::string( msg ), actual, expected );
 }
 
 template<class T, class Q>
 void ensure_less_or_equal_real( char const* file, int const& line, char const* msg, const Q& actual,
 	const T& expected ) {
-	ensure_less_or_equal_real<>( file, line, NULL, msg, actual, expected );
+	ensure_less_or_equal_real<>( file, line, nullptr, msg, actual, expected );
 }
 
 /**
@@ -359,7 +359,7 @@ void ensure_greater_or_equal_real( char const* file, int line, char const*, std:
 
 template<class T, class Q>
 void ensure_greater_or_equal( const char* msg, const Q& actual, const T& expected ) {
-	ensure_greater_or_equal_real( NULL, 0, NULL, msg, actual, expected );
+	ensure_greater_or_equal_real( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
@@ -369,23 +369,23 @@ void ensure_greater_or_equal_real( char const* file,
 	yaal::hcore::HString const& msg,
 	const Q& actual,
 	const T& expected ) {
-	ensure_greater_or_equal_real<>( file, line, NULL, yaal::lexical_cast<std::string>( msg ), actual, expected );
+	ensure_greater_or_equal_real<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected );
 }
 template<class T, class Q>
 void ensure_greater_or_equal( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
-	ensure_greater_or_equal_real( NULL, 0, NULL, msg, actual, expected );
+	ensure_greater_or_equal_real( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
 void ensure_greater_or_equal_real( char const* file, int const& line, char const*, char const* msg, const Q& actual,
 	const T& expected ) {
-	ensure_greater_or_equal_real<>( file, line, NULL, std::string( msg ), actual, expected );
+	ensure_greater_or_equal_real<>( file, line, nullptr, std::string( msg ), actual, expected );
 }
 
 template<class T, class Q>
 void ensure_greater_or_equal_real( char const* file, int const& line, char const* msg, const Q& actual,
 	const T& expected ) {
-	ensure_greater_or_equal_real<>( file, line, NULL, msg, actual, expected );
+	ensure_greater_or_equal_real<>( file, line, nullptr, msg, actual, expected );
 }
 
 /**
@@ -413,7 +413,7 @@ void ensure_distance_real( char const* file, int const& line, char const*, std::
 
 template<class T>
 void ensure_distance( const char* msg, const T& actual, const T& expected, const T& distance ) {
-	ensure_distance_real( NULL, 0, NULL, msg, actual, expected, distance );
+	ensure_distance_real( nullptr, 0, nullptr, msg, actual, expected, distance );
 }
 
 template<class T>
@@ -430,13 +430,13 @@ void ensure_distance( yaal::hcore::HString const& msg, const T& actual, const T&
 template<class T>
 void ensure_distance_real( char const* file, int line, char const*, const char* msg, const T& actual,
 	const T& expected, const T& distance ) {
-	ensure_distance_real<>( file, line, NULL, std::string( msg ), actual, expected, distance );
+	ensure_distance_real<>( file, line, nullptr, std::string( msg ), actual, expected, distance );
 }
 
 template<class T>
 void ensure_distance_real( char const* file, int line, const char* msg, const T& actual,
 	const T& expected, const T& distance ) {
-	ensure_distance_real<>( file, line, NULL, msg, actual, expected, distance );
+	ensure_distance_real<>( file, line, nullptr, msg, actual, expected, distance );
 }
 
 void ensure_same_content_real( char const* file, int const& line, char const*, std::string const& msg, std::string const& actual_, std::string const& expected_ ) {
@@ -509,7 +509,7 @@ void ensure_errno_real( char const* file, int const& line, char const*, char con
 }
 void ensure_errno( char const*, bool ) __attribute__((used));
 void ensure_errno( char const* msg, bool cond ) {
-	ensure_errno_real( NULL, 0, NULL, msg, cond );
+	ensure_errno_real( nullptr, 0, nullptr, msg, cond );
 }
 
 /**
@@ -521,7 +521,7 @@ void fail_real( char const* file, int line, const char* msg ) {
 }
 void fail( const char* ) __attribute__((used));
 void fail( const char* msg ) {
-	fail_real( NULL, 0, msg );
+	fail_real( nullptr, 0, msg );
 }
 
 void fail_real( char const* file, int line, std::string const& msg ) {
@@ -534,7 +534,7 @@ class time_constraint {
 	int _line;
 	yaal::hcore::HClock _timer;
 public:
-	time_constraint( int long ms_, char const* path_ = NULL, int line_ = 0 )
+	time_constraint( int long ms_, char const* path_ = nullptr, int line_ = 0 )
 		: _constraint( ms_ )
 		, _path( path_ )
 		, _line( line_ )
@@ -569,7 +569,7 @@ void skip_real( char const* file, int line, const char* msg ) {
 }
 void skip( const char* ) __attribute__((used));
 void skip( const char* msg ) {
-	skip_real( NULL, 0, msg );
+	skip_real( nullptr, 0, msg );
 }
 
 void skip_real( char const*, int, std::string const& ) __attribute__((__noreturn__, __used__));

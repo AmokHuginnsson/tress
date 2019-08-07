@@ -33,7 +33,12 @@ struct tut_yaal_hcore_hsbbstree : public tress::tut_helpers::simple_mock<tut_yaa
 	static int const NUMBER_OF_TEST_NODES = 1000;
 	static int const KEY_POOL_SIZE = 30000;
 	tut_yaal_hcore_hsbbstree( void )
-		: base_type(), _testedNodes( 0 ), _blackHeight( 0 ), _redNodeExists( false ), _blackNodeExists( false ), _root( NULL )
+		: base_type()
+		, _testedNodes( 0 )
+		, _blackHeight( 0 )
+		, _redNodeExists( false )
+		, _blackNodeExists( false )
+		, _root( nullptr )
 		{}
 	virtual ~tut_yaal_hcore_hsbbstree( void )
 		{}

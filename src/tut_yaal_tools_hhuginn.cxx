@@ -2098,7 +2098,7 @@ TUT_UNIT_TEST( "create Huginn value from C++" )
 		h->add_argument( h->value( 10003_ycp ) );
 		h->add_argument( h->value( true ) );
 		h->add_argument( h->value( false ) );
-		h->add_argument( h->value( static_cast<void const*>( 0 ) ) );
+		h->add_argument( h->value( static_cast<void const*>( nullptr ) ) );
 		h->add_argument( h->value( int_array_t{ 1, 2, 3, 4 } ) );
 		h->add_argument( h->value( int_deque_t{ 5, 6, 7, 8 } ) );
 		ENSURE_EQUALS(

@@ -22,8 +22,8 @@ TUT_SIMPLE_MOCK( tut_yaal_tools_util );
 TUT_TEST_GROUP( tut_yaal_tools_util, "yaal::tools::util" );
 
 TUT_UNIT_TEST( "(escape) EscapeTable constrctor" )
-	ENSURE_THROW( "bad 1 parameter accepted", EscapeTable et( NULL, 1, "n", 1 ), HFailedAssertion );
-	ENSURE_THROW( "bad 3 parameter accepted", EscapeTable et( "\n", 1, NULL, 1 ), HFailedAssertion );
+	ENSURE_THROW( "bad 1 parameter accepted", EscapeTable et( nullptr, 1, "n", 1 ), HFailedAssertion );
+	ENSURE_THROW( "bad 3 parameter accepted", EscapeTable et( "\n", 1, nullptr, 1 ), HFailedAssertion );
 	ENSURE_THROW( "size mismatch accepted", EscapeTable et( "\n", 1, "nm", 2 ), HFailedAssertion );
 	EscapeTable et( "\n", 1, "n", 1 );
 	ENSURE_EQUALS( "escape table preparaton failed", et._rawToSafe[ static_cast<int>( 'a' ) ], 'a' );

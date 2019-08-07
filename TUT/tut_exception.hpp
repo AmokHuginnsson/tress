@@ -98,7 +98,7 @@ struct bad_ctor : public tut_error {
 struct failure : public tut_error {
 	int _line;
 	char const* _file;
-	failure( char const* const file, int const& line, const std::string& msg )
+	failure( char const* const file, int line, const std::string& msg )
 		: tut_error( msg )
 		, _line( line )
 		, _file( file ) {
@@ -143,7 +143,7 @@ struct warning : public tut_error {
  */
 struct rethrown : public failure {
 	explicit rethrown( const test_result& res )
-		: failure( 0, 0, res._message )
+		: failure( nullptr, 0, res._message )
 		, _tr( res ) {
 	}
 

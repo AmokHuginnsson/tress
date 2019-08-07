@@ -191,8 +191,11 @@ public:
 	 * @param dir Directory where to search/put log and journal files
 	 */
 	restartable_wrapper( const std::string& dir = "." )
-		: _runner( runner.get() ), _callback( 0 ), _dir( dir ),
-		_log( _dir + '/' + "log.tut" ), _journal( _dir + '/' + "journal.tut" ) {
+		: _runner( runner.get() )
+		, _callback( nullptr )
+		, _dir( dir )
+		, _log( _dir + '/' + "log.tut" )
+		, _journal( _dir + '/' + "journal.tut" ) {
 		_runner.set_listener( this );
 		// dozen: it works, but it would be better to use system path separator
 	}
