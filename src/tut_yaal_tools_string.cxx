@@ -66,5 +66,29 @@ TUT_UNIT_TEST( "join" )
 	ENSURE_EQUALS( "join failed", join( sa, " " ), "Ala ma kota." );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "longest_common_prefix<HArray>" )
+	typedef HArray<HString> str_arr_t;
+	str_arr_t sa( { "forth", "fortran", "formula" } );
+	ENSURE_EQUALS( "longest_common_prefix<HArray> failed", longest_common_prefix( sa ), "for" );
+	str_arr_t sza( { "forth", "fortran", "formula", "zork" } );
+	ENSURE_EQUALS( "longest_common_prefix<HArray> failed", longest_common_prefix( sza ), "" );
+	str_arr_t sea;
+	ENSURE_EQUALS( "longest_common_prefix<HArray> failed", longest_common_prefix( sea ), "" );
+	str_arr_t soa( { "forth" } );
+	ENSURE_EQUALS( "longest_common_prefix<HArray> failed", longest_common_prefix( soa ), "forth" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "longest_common_prefix<HList>" )
+	typedef HList<HString> str_lst_t;
+	str_lst_t sl( { "forth", "fortran", "formula" } );
+	ENSURE_EQUALS( "longest_common_prefix<HList> failed", longest_common_prefix( sl ), "for" );
+	str_lst_t szl( { "forth", "fortran", "formula", "zork" } );
+	ENSURE_EQUALS( "longest_common_prefix<HList> failed", longest_common_prefix( szl ), "" );
+	str_lst_t sel;
+	ENSURE_EQUALS( "longest_common_prefix<HList> failed", longest_common_prefix( sel ), "" );
+	str_lst_t sol( { "forth" } );
+	ENSURE_EQUALS( "longest_common_prefix<HList> failed", longest_common_prefix( sol ), "forth" );
+TUT_TEARDOWN()
+
 }
 
