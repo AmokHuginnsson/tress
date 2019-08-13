@@ -75,6 +75,8 @@ namespace {
 void dump_dir( path const& dir ) {
 	clog << "dir: " << dir.string() << endl;
 	directory_iterator end;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	for ( directory_iterator it( dir ); it != end; ++ it ) {
 		if ( is_directory( *it ) ) {
 			dump_dir( *it );
@@ -82,6 +84,7 @@ void dump_dir( path const& dir ) {
 			clog << "file: " << (*it).path() << endl;
 		}
 	}
+#pragma GCC diagnostic pop
 	return;
 }
 
