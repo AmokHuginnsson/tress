@@ -345,7 +345,7 @@ void tut_yaal_hcore_hdeque::test_pop_back( void ) {
 		proto_t proto( 2048 );
 		/* Bug in GCC 4.2.1 enforces namespace prefix here. */
 		yaal::generate( deque.begin(), deque.end(), inc( 0 ) );
-		yaal::generate( proto.begin(), proto.end(), inc( 0 ) );
+		std::generate( proto.begin(), proto.end(), inc( 0 ) );
 		for ( int long i( 0 ); i < 2048; ++ i ) {
 			proto.pop_back();
 			deque.pop_back();
@@ -385,7 +385,7 @@ void tut_yaal_hcore_hdeque::test_pop_front( void ) {
 		proto_t proto( 2048 );
 		/* Bug in GCC 4.2.1 enforces namespace prefix here. */
 		yaal::generate( deque.begin(), deque.end(), inc( 0 ) );
-		yaal::generate( proto.begin(), proto.end(), inc( 0 ) );
+		std::generate( proto.begin(), proto.end(), inc( 0 ) );
 		for ( int long i( 0 ); i < 2048; ++ i ) {
 			proto.pop_front();
 			deque.pop_front();

@@ -288,7 +288,7 @@ TUT_UNIT_TEST( "push_back on resized" ) {
 		proto_t proto( 2048 );
 		/* Bug in GCC 4.2.1 enforces namespace prefix here. */
 		yaal::generate( array.begin(), array.end(), inc( 0 ) );
-		yaal::generate( proto.begin(), proto.end(), inc( 0 ) );
+		std::generate( proto.begin(), proto.end(), inc( 0 ) );
 		for ( int long i( 0 ); i < 2048; ++ i ) {
 			proto.pop_back();
 			array.pop_back();

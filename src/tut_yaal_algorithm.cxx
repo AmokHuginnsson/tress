@@ -785,15 +785,17 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "is_heap" )
 	std_vector_t v( begin( _testData_[0] ), end( _testData_[0] ) );
+	int_array_t a( begin( _testData_[0] ), end( _testData_[0] ) );
 	for ( int i( 2 ); i < yaal::size( _testData_[0] ); ++ i ) {
 #ifndef _MSC_VER
 #ifdef HAVE_SGI_STL_EXTENSIONS
 		ENSURE_EQUALS( "stdext::is_heap false positive: " + lexical_cast<HString>( i ), stdext::is_heap( v.begin(), v.begin() + i ), false );
 #endif /* #ifdef HAVE_SGI_STL_EXTENSIONS */
 #endif /* #ifndef _MSC_VER */
-		ENSURE_EQUALS( "yaal::is_heap false positive: " + lexical_cast<HString>( i ), yaal::is_heap( v.begin(), v.begin() + i ), false );
+		ENSURE_EQUALS( "yaal::is_heap false positive: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), false );
 		std::push_heap( v.begin(), v.begin() + i );
-		ENSURE_EQUALS( "yaal::is_heap false negative: " + lexical_cast<HString>( i ), yaal::is_heap( v.begin(), v.begin() + i ), true );
+		yaal::push_heap( a.begin(), a.begin() + i );
+		ENSURE_EQUALS( "yaal::is_heap false negative: " + lexical_cast<HString>( i ), yaal::is_heap( a.begin(), a.begin() + i ), true );
 	}
 TUT_TEARDOWN()
 
