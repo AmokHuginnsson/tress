@@ -672,8 +672,8 @@ TUT_UNIT_TEST( "dict()" )
 	);
 	ENSURE_EQUALS(
 		"dict on non-comparable succeeded",
-		execute_except( "class A{_x=none;}main(){x=[A():0];return(x);}", HHuginn::COMPILER::BE_SLOPPY ),
-		"*anonymous stream*:1:28: Key type `A` is not a comparable."
+		execute_except( "class A{_x=none;}main(){x=[A():0, A():1];return(x);}", HHuginn::COMPILER::BE_SLOPPY ),
+		"*anonymous stream*:1:35: Class `A` does not have `less` method."
 	);
 	ENSURE_EQUALS(
 		"dict update failed",
@@ -970,8 +970,8 @@ TUT_UNIT_TEST( "order()" )
 	);
 	ENSURE_EQUALS(
 		"order on non-comparable succeeded",
-		execute_except( "class A{_x=none;}main(){order(A());}", HHuginn::COMPILER::BE_SLOPPY ),
-		"*anonymous stream*:1:30: Key type `A` is not a comparable."
+		execute_except( "class A{_x=none;}main(){order(A(),A());}", HHuginn::COMPILER::BE_SLOPPY ),
+		"*anonymous stream*:1:30: Class `A` does not have `less` method."
 	);
 	ENSURE_EQUALS(
 		"order update failed",
@@ -1216,6 +1216,16 @@ TUT_UNIT_TEST( "heap()" )
 			"}\n"
 		),
 		"[9, 8, 7, 2, 1, heap(3, 2, 1)]"
+	);
+	ENSURE_EQUALS(
+		"heap on non-uniform succeeded",
+		execute_except( "main(){heap(1,2.);}" ),
+		"*anonymous stream*:1:12: Non-uniform key types, got a `real` instead of an `integer`."
+	);
+	ENSURE_EQUALS(
+		"heap on non-comparable succeeded",
+		execute_except( "class A{_x=none;}main(){heap(A(),A());}", HHuginn::COMPILER::BE_SLOPPY ),
+		"*anonymous stream*:1:29: Class `A` does not have `less` method."
 	);
 TUT_TEARDOWN()
 
