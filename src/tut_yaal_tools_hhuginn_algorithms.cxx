@@ -287,6 +287,37 @@ TUT_UNIT_TEST( "materialize" )
 		"*anonymous stream*:4:9: Non-uniform key types, got a `real` instead of an `integer`."
 	);
 	ENSURE_EQUALS(
+		"Algorithms.materialize (to heap) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.range(3, 17, 4),heap));\n"
+			"}"
+		),
+		"heap(15, 11, 7, 3)"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize of non uniform keys (to heap) succeeded",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"algo.materialize([0,1.],heap);\n"
+			"}"
+		),
+		"*anonymous stream*:3:17: Invalid key type: a `real`."
+	);
+	ENSURE_EQUALS(
+		"Algorithms.materialize to heap did not set key type",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"h = algo.materialize([0],heap);\n"
+			"h.push(1.);\n"
+			"}"
+		),
+		"*anonymous stream*:4:7: Non-uniform key types, got a `real` instead of an `integer`."
+	);
+	ENSURE_EQUALS(
 		"Algorithms.materialize (to set) failed",
 		execute(
 			"import Algorithms as algo;\n"
@@ -642,6 +673,17 @@ TUT_UNIT_TEST( "sorted" )
 			"}"
 		),
 		"[-5, 0, 2, 3, 7, 9]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.sorted (heap) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"h=heap(2,5,1,8,3);\n"
+			"return(algo.sorted(h));\n"
+			"}"
+		),
+		"[1, 2, 3, 5, 8]"
 	);
 	ENSURE_EQUALS(
 		"Algorithms.sorted (key retr func) failed",

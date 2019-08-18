@@ -1138,6 +1138,87 @@ TUT_UNIT_TEST( "set()" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "heap()" )
+	ENSURE_EQUALS(
+		"heap() failed",
+		execute( "main(){x=heap(7, 19, 4);x.push(0).push(11);return(x);}" ),
+		"heap(19, 11, 7, 4, 0)"
+	);
+	ENSURE_EQUALS(
+		"heap() iterator failed",
+		execute( "main(){x=heap(2,3,5,7);v=\"\";for(e:x){v+=string(e);v+=\":\";}return(v);}" ),
+		"\"7:5:3:2:\""
+	);
+	ENSURE_EQUALS(
+		"heap top failed",
+		execute( "main(){x=heap(1,2,3,4);return(x.top());}" ),
+		"4"
+	);
+	ENSURE_EQUALS(
+		"heap pop failed",
+		execute( "main(){x=heap(1, 4, 2, 3);return([x.pop(),x]);}" ),
+		"[4, heap(3, 2, 1)]"
+	);
+	ENSURE_EQUALS(
+		"heap equals failed",
+		execute(
+			"main(){"
+			"h1=heap(1,2,3);"
+			"h2=heap(1,2,3);"
+			"h3=heap(1,2,4);"
+			"return([h1==h2,h1==h3]);}"
+		),
+		"[true, false]"
+	);
+	ENSURE_EQUALS(
+		"heap copy/clear failed",
+		execute( "main(){x=heap(1,2,3,5);y=copy(x);x.clear();return([x,y,size(y)]);}" ),
+		"[heap(), heap(5, 3, 2, 1), 4]"
+	);
+	ENSURE_EQUALS(
+		"heap hash failed",
+		execute( "main(){[set().hash(),heap(1).hash()];}" ),
+		"[13, 43]"
+	);
+	ENSURE_EQUALS(
+		"heap clear in for",
+		execute(
+			"main(){\n"
+			"h=heap(2,3,5);\n"
+			"r = [];"
+			"for(e:h){h.clear();r.push(e);}\n"
+			"r.push(h);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[5, heap()]"
+	);
+	ENSURE_EQUALS(
+		"heap pop in for",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"h=heap(1,2,3,4,5,6,7,8,9);\n"
+			"i = 0;\n"
+			"r = [];\n"
+			"for(e:h){\n"
+			"if(i > 1){\n"
+			"for (_:algo.range(6)) {\n"
+			"h.pop();\n"
+			"}\n"
+			"i=-100;\n"
+			"}\n"
+			"r.push(e);\n"
+			"i += 1;\n"
+			"}\n"
+			"r.push(h);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[9, 8, 7, 2, 1, heap(3, 2, 1)]"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "blob" )
 	ENSURE_EQUALS(
 		"blob copy",
@@ -1445,6 +1526,24 @@ TUT_UNIT_TEST( "Stream" )
 			"}\n"
 		),
 		"[{3, 1, 2}, set(), \"Not enough data in the stream.\"]"
+	);
+	ENSURE_EQUALS(
+		"(de)serialization - heap",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"fs.open( \"./out/huginn.hds\", fs.OPEN_MODE.WRITE ).serialize(heap(1,2,3)).serialize(heap());"
+			"f = fs.open(\"./out/huginn.hds\",fs.OPEN_MODE.READ);\n"
+			"res = [f.deserialize(),f.deserialize()];"
+			"try {\n"
+			"f.deserialize();\n"
+			"}catch(Exception e) {\n"
+			"res.push(e.what());\n"
+			"}\n"
+			"return(res);\n"
+			"}\n"
+		),
+		"[heap(3, 2, 1), heap(), \"Not enough data in the stream.\"]"
 	);
 	ENSURE_IN(
 		"serialization",
