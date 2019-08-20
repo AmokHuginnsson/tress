@@ -533,7 +533,7 @@ TUT_UNIT_TEST( "filter" )
 			"return(algo.materialize(algo.filter(algo.range(3, 44, 4),@(x){x;}),list));\n"
 			"}"
 		),
-		"*anonymous stream*:3:24: Filter function returned wrong type, expected `boolean` got: `integer`."
+		"*anonymous stream*:3:24: Filter functor returned wrong type, expected `boolean` got: `integer`."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.filter (function) failed",
