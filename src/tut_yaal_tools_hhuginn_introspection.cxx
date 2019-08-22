@@ -72,7 +72,7 @@ TUT_UNIT_TEST( "symbol" )
 			"main() {\n"
 			"algo;\n"
 			"a = intro.symbol(\"algo\");\n"
-			"return ( a.max(1,3) );"
+			"return ( a.max([1,3]) );"
 			"}\n"
 		),
 		"3"

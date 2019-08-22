@@ -2009,7 +2009,7 @@ TUT_UNIT_TEST( "modules" )
 			"tress.ENUM.TWO,\n"
 			"tress.Object($7),\n"
 			"type(M),\n"
-			"tress.algo().max( 1, 2, 3 )\n"
+			"tress.algo().max([ 1, 2, 3 ])\n"
 			"]);"
 			"}",
 			{ "./data/" }

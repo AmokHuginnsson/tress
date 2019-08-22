@@ -739,10 +739,50 @@ TUT_UNIT_TEST( "max" )
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
-			"return(algo.max(77, 7, 39, 57, 80, 16, 72, 70, 87, 33));\n"
+			"return(algo.max([77, 7, 39, 57, 80, 16, 72, 70, 87, 33]));\n"
 			"}"
 		),
 		"87"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.max (functor) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.max([77, 7, 39, 57, 80, 16, 72, 70, 87, 33],@(x){-x;}));\n"
+			"}"
+		),
+		"7"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.max failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.max(order(77, 7, 39, 57, 80, 16, 72, 70, 87, 33)));\n"
+			"}"
+		),
+		"87"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.max failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.max([77:0, 7:0, 39:0, 57:0, 80:0, 16:0, 72:0, 70:0, 87:0, 33:0]));\n"
+			"}"
+		),
+		"(87, 0)"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.max failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.max([77:0, 7:0, 39:0, 57:0, 80:7, 16:0, 72:0, 70:0, 87:0, 33:0],@(x){x[1];}));\n"
+			"}"
+		),
+		"(80, 7)"
 	);
 TUT_TEARDOWN()
 
@@ -752,10 +792,50 @@ TUT_UNIT_TEST( "min" )
 		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
-			"return(algo.min(77, 7, 39, 57, 80, 16, 72, 70, 87, 33));\n"
+			"return(algo.min([77, 7, 39, 57, 80, 16, 72, 70, 87, 33]));\n"
 			"}"
 		),
 		"7"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.min (functor) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.min([77, 7, 39, 57, 80, 16, 72, 70, 87, 33],@(x){-x;}));\n"
+			"}"
+		),
+		"87"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.min failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.min(order(77, 7, 39, 57, 80, 16, 72, 70, 87, 33)));\n"
+			"}"
+		),
+		"7"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.min failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.min([77:0, 7:0, 39:0, 57:0, 80:0, 16:0, 72:0, 70:0, 87:0, 33:0]));\n"
+			"}"
+		),
+		"(7, 0)"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.min failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.min([77:0, 7:0, 39:0, 57:0, 80:-7, 16:0, 72:0, 70:0, 87:0, 33:0],@(x){x[1];}));\n"
+			"}"
+		),
+		"(80, -7)"
 	);
 TUT_TEARDOWN()
 
