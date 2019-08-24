@@ -745,6 +745,16 @@ TUT_UNIT_TEST( "max" )
 		"87"
 	);
 	ENSURE_EQUALS(
+		"Algorithms.max failed",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.max([1,2.]));\n"
+			"}"
+		),
+		"*anonymous stream*:3:16: Operand types for `<` do not match: an `integer` vs a `real`."
+	);
+	ENSURE_EQUALS(
 		"Algorithms.max (functor) failed",
 		execute(
 			"import Algorithms as algo;\n"
@@ -796,6 +806,16 @@ TUT_UNIT_TEST( "min" )
 			"}"
 		),
 		"7"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.min failed",
+		execute_except(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.min([1,2.]));\n"
+			"}"
+		),
+		"*anonymous stream*:3:16: Operand types for `<` do not match: an `integer` vs a `real`."
 	);
 	ENSURE_EQUALS(
 		"Algorithms.min (functor) failed",

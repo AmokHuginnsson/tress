@@ -1116,6 +1116,52 @@ TUT_UNIT_TEST( "Randomizer" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "max" )
+	ENSURE_EQUALS(
+		"Mathematics.max failed",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"return(math.max(77, 7, 39, 57, 80, 16, 72, 70, 87, 33));\n"
+			"}"
+		),
+		"87"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.max failed",
+		execute_except(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"return(math.max(1,2.));\n"
+			"}"
+		),
+		"*anonymous stream*:3:16: Operand types for `<` do not match: an `integer` vs a `real`."
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "min" )
+	ENSURE_EQUALS(
+		"Mathematics.min failed",
+		execute(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"return(math.min(77, 7, 39, 57, 80, 16, 72, 70, 87, 33));\n"
+			"}"
+		),
+		"7"
+	);
+	ENSURE_EQUALS(
+		"Mathematics.min failed",
+		execute_except(
+			"import Mathematics as math;\n"
+			"main(){\n"
+			"return(math.min(1,2.));\n"
+			"}"
+		),
+		"*anonymous stream*:3:16: Operand types for `<` do not match: a `real` vs an `integer`."
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "Mathematics.NumberSetStatistics" )
 	ENSURE_IN(
 		"tuple real failed",
