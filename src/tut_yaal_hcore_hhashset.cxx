@@ -25,8 +25,8 @@ TUT_TEST_GROUP( tut_yaal_hcore_hhashset, "yaal::hcore::HHashSet" );
 namespace yaal {
 namespace hcore {
 template<>
-int long hash<tress::tut_helpers::HInstanceTracker<tut_yaal_hcore_hhashset>>::operator () ( tress::tut_helpers::HInstanceTracker<tut_yaal_hcore_hhashset> const& key_ ) const {
-	return ( key_.id() );
+hash_value_t hash<tress::tut_helpers::HInstanceTracker<tut_yaal_hcore_hhashset>>::operator () ( tress::tut_helpers::HInstanceTracker<tut_yaal_hcore_hhashset> const& key_ ) const {
+	return ( static_cast<hash_value_t>( key_.id() ) );
 }
 }
 }

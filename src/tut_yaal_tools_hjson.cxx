@@ -128,7 +128,6 @@ char const complexJSONnl[] =
 	"\t\t\"id\": \"str\",\n"
 	"\t\t\"data\": \"yaal-JSON\"\n"
 	"\t}],\n"
-	"\t\"literals\": [true, false, null],\n"
 	"\t\"banner\": \"yaal's JSON generator\",\n"
 	"\t\"number_like\": {\n"
 	"\t\t\"int\": 13,\n"
@@ -136,7 +135,8 @@ char const complexJSONnl[] =
 	"\t\t\"real\": 3.14159265359\n"
 	"\t},\n"
 	"\t\"name\": \"nameValue\",\n"
-	"\t\"date\": \"1978-05-24\"\n"
+	"\t\"date\": \"1978-05-24\",\n"
+	"\t\"literals\": [true, false, null]\n"
 	"}\n"
 ;
 
@@ -152,7 +152,6 @@ char const complexJSON[] =
 	"\"id\": \"str\", "
 	"\"data\": \"yaal-JSON\""
 	"}], "
-	"\"literals\": [true, false, null], "
 	"\"banner\": \"yaal's JSON generator\", "
 	"\"number_like\": {"
 	"\"int\": 13, "
@@ -160,7 +159,8 @@ char const complexJSON[] =
 	"\"real\": 3.14159265359"
 	"}, "
 	"\"name\": \"nameValue\", "
-	"\"date\": \"1978-05-24\""
+	"\"date\": \"1978-05-24\", "
+	"\"literals\": [true, false, null]"
 	"}"
 ;
 #else
@@ -182,9 +182,9 @@ char const complexJSONnl[] =
 	"\t\t\"number\": 2.718281828459045235360287471\n"
 	"\t},\n"
 	"\t\"banner\": \"yaal's JSON generator\",\n"
-	"\t\"literals\": [true, false, null],\n"
 	"\t\"name\": \"nameValue\",\n"
-	"\t\"date\": \"1978-05-24\"\n"
+	"\t\"date\": \"1978-05-24\",\n"
+	"\t\"literals\": [true, false, null]\n"
 	"}\n"
 ;
 
@@ -206,9 +206,9 @@ char const complexJSON[] =
 	"\"number\": 2.718281828459045235360287471"
 	"}, "
 	"\"banner\": \"yaal's JSON generator\", "
-	"\"literals\": [true, false, null], "
 	"\"name\": \"nameValue\", "
-	"\"date\": \"1978-05-24\""
+	"\"date\": \"1978-05-24\", "
+	"\"literals\": [true, false, null]"
 	"}"
 ;
 #endif

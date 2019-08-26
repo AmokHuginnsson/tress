@@ -24,11 +24,11 @@ TUT_TEST_GROUP( tut_yaal_tools_hhuginn_json, "yaal::tools::HHuginn.JSON" );
 TUT_UNIT_TEST( "save" )
 #if TARGET_CPU_BITS == 32
 	char const expected[] =
-		"\"{\"order\": [1, 2, 3, 4], \"character\": \"h\", \"set\": [1, 2, 3, 4], "
-		"\"lookup\": {\"one\": 1, \"two\": 2, \"four\": 4, \"three\": 3}, \"string\": \"Huginn-JSON\", "
-		"\"array\": [1, 2, 3, 4], \"deque\": [1, 2, 3, 4], \"null\": null, \"tuple\": [1, 2, 3, 4], "
-		"\"true\": true, \"dict\": {\"one\": 1, \"two\": 2, \"four\": 4, \"three\": 3}, \"real\": 3.1415, "
-		"\"false\": false, \"number\": 2.71828182845904523536028747, \"int\": 7}\""
+		"\"{\"order\": [1, 2, 3, 4], \"set\": [1, 2, 3, 4], "
+		"\"lookup\": {\"one\": 1, \"two\": 2, \"three\": 3, \"four\": 4}, \"string\": \"Huginn-JSON\", "
+		"\"array\": [1, 2, 3, 4], \"tuple\": [1, 2, 3, 4], \"deque\": [1, 2, 3, 4], \"null\": null, \"true\": true, "
+		"\"dict\": {\"one\": 1, \"two\": 2, \"three\": 3, \"four\": 4}, \"false\": false, "
+		"\"number\": 2.71828182845904523536028747, \"real\": 3.1415, \"int\": 7, \"character\": \"h\"}\""
 	;
 #elif defined ( __HOST_OS_TYPE_FREEBSD__ )
 	char const expected[] =

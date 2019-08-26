@@ -1037,15 +1037,14 @@ TUT_UNIT_TEST( "order()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set()" )
-#if ( TARGET_CPU_BITS == 64 )
-	char const expected[] = "{2, 'Q', 3.14, $7.34, \"ala\"}";
-#else
-	char const expected[] = "{2, 'Q', $7.34, \"ala\", 3.14}";
-#endif
-	ENSURE_EQUALS(
+	ENSURE_IN(
 		"set() failed",
 		execute( "main(){x=set(2,\"ala\",3.14);x.insert($7.34).insert('Q');return(x);}" ),
-		expected
+		std::vector<hcore::HString>({
+			"{2, 'Q', 3.14, $7.34, \"ala\"}",
+			"{2, 'Q', $7.34, \"ala\", 3.14}",
+			"{2, 'Q', 3.14, \"ala\", $7.34}"
+		})
 	);
 	ENSURE_EQUALS(
 		"set() iterator failed",
@@ -1076,7 +1075,11 @@ TUT_UNIT_TEST( "set()" )
 	ENSURE_IN(
 		"set copy/clear failed",
 		execute( "main(){x=set(2,\"ala\",3.14,$7.34,'Q');y=copy(x);x.clear();return([x,y,size(y)]);}" ),
-		std::vector<hcore::HString>({ "[set(), {2, 3.14, 'Q', $7.34, \"ala\"}, 5]", "[set(), {2, 'Q', $7.34, \"ala\", 3.14}, 5]" } )
+		std::vector<hcore::HString>({
+			"[set(), {2, 3.14, 'Q', $7.34, \"ala\"}, 5]",
+			"[set(), {2, 'Q', $7.34, \"ala\", 3.14}, 5]",
+			"[set(), {2, 3.14, 'Q', \"ala\", $7.34}, 5]"
+		})
 	);
 	ENSURE_EQUALS( "set reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed({2,3,5,7}),list);}" ), "[7, 5, 3, 2]" );
 	ENSURE_EQUALS( "set reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed({2,3,5,7});algo.materialize(copy(x),list).push(size(x));}" ), "[7, 5, 3, 2, 4]" );

@@ -59,8 +59,10 @@ void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ ) {
 		atom_t* a( buckets[ i ] );
 		int long localCollisions( 0 );
 		while ( a ) {
-			ENSURE_EQUALS( "atom in wrong bucket", i,
-					math::abs( map_._engine._hasher( a->_value.first ) ) % map_._engine._prime );
+			ENSURE_EQUALS(
+				"atom in wrong bucket", i,
+				static_cast<hash_map_t::size_type>( static_cast<hash_value_t>( map_._engine._hasher( a->_value.first ) ) % static_cast<hash_value_t>( map_._engine._prime ) )
+			);
 			a = static_cast<atom_t*>( a->_next );
 			if ( a ) {
 				++ collisions;
@@ -68,8 +70,9 @@ void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ ) {
 			}
 			++ realSize;
 		}
-		if ( localCollisions > longestCollision )
+		if ( localCollisions > longestCollision ) {
 			longestCollision = localCollisions;
+		}
 	}
 	for ( int long i( map_._engine._prime ); i < bucketCount; ++ i )
 		ENSURE_EQUALS( "dirty bucket", buckets[ i ], static_cast<atom_t*>( nullptr ) );
