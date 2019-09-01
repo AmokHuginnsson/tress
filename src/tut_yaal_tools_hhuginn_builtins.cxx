@@ -694,7 +694,10 @@ TUT_UNIT_TEST( "dict()" )
 	);
 	ENSURE_EQUALS(
 		"dict hash failed",
-		execute( "main(){[dict().hash(),[1:2].hash()];}" ),
+		execute(
+			"import Introspection as intro;"
+			"main(){[intro.hash(dict()),intro.hash([1:2])];}"
+		),
 		"[10, 95]"
 	);
 	ENSURE_EQUALS(
@@ -880,7 +883,10 @@ TUT_UNIT_TEST( "lookup()" )
 	);
 	ENSURE_EQUALS(
 		"lookup hash failed",
-		execute( "main(){l = lookup();l[1] = 2;[lookup().hash(),l.hash()];}" ),
+		execute(
+			"import Introspection as intro;"
+			"main(){[intro.hash({}),intro.hash({1:2})];}"
+		),
 		"[12, 113]"
 	);
 	ENSURE_EQUALS(
@@ -992,7 +998,10 @@ TUT_UNIT_TEST( "order()" )
 	);
 	ENSURE_EQUALS(
 		"order hash failed",
-		execute( "main(){[order().hash(),order(1).hash()];}" ),
+		execute(
+			"import Introspection as intro;"
+			"main(){[intro.hash(order()),intro.hash(order(1))];}"
+		),
 		"[11, 34]"
 	);
 	ENSURE_EQUALS(
@@ -1097,7 +1106,10 @@ TUT_UNIT_TEST( "set()" )
 	);
 	ENSURE_EQUALS(
 		"set hash failed",
-		execute( "main(){[set().hash(),{1}.hash()];}" ),
+		execute(
+			"import Introspection as intro;"
+			"main(){[intro.hash(set()),intro.hash({1})];}"
+		),
 		"[13, 40]"
 	);
 	ENSURE_EQUALS(
@@ -1180,8 +1192,11 @@ TUT_UNIT_TEST( "heap()" )
 	);
 	ENSURE_EQUALS(
 		"heap hash failed",
-		execute( "main(){[set().hash(),heap(1).hash()];}" ),
-		"[13, 43]"
+		execute(
+			"import Introspection as intro;"
+			"main(){[intro.hash(heap()),intro.hash(heap(1))];}"
+		),
+		"[14, 43]"
 	);
 	ENSURE_EQUALS(
 		"heap clear in for",

@@ -48,15 +48,15 @@ class: blob { io }
 class: boolean {}
 class: character { is_alnum, is_alpha, is_digit, is_lower, is_space, is_upper, is_xdigit, to_lower, to_upper }
 class: deque { append, clear, find, insert, pop, pop_front, prepend, push, push_front }
-class: dict { add, clear, ensure, equals, erase, get, has_key, hash, update, values }
-class: heap { add, clear, equals, hash, pop, push, top, update }
+class: dict { clear, ensure, erase, get, has_key, update, values }
+class: heap { clear, pop, push, top, update }
 class: integer {}
 class: list { append, clear, find, insert, pop, push, resize, sort }
-class: lookup { add, clear, ensure, equals, erase, get, has_key, hash, update, values }
+class: lookup { clear, ensure, erase, get, has_key, update, values }
 class: number { get_precision, is_exact, is_integral, set_precision }
-class: order { add, clear, equals, erase, has_key, hash, insert, update }
+class: order { clear, erase, has_key, insert, update }
 class: real {}
-class: set { add, clear, equals, erase, has_key, hash, insert, update }
+class: set { clear, erase, has_key, insert, update }
 class: string { clear, ends_with, find, find_last, find_last_one_of, find_last_other_than, find_one_of, find_other_than, format, replace, starts_with, strip, strip_left, strip_right, to_lower, to_upper }
 class: tuple { find }
 enum: COLOR { BLUE, GREEN, RED }
