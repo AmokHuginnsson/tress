@@ -47,7 +47,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
 TUT_UNIT_TEST( "lines columns" )
-	ENSURE_EQUALS(
+	ENSURE_IN(
 		"Terminal.lines and Terminal.columns failed",
 		execute_except(
 			"import Terminal as term;\n"
@@ -55,7 +55,11 @@ TUT_UNIT_TEST( "lines columns" )
 			"return((term.lines(),term.columns()));\n"
 			"}"
 		),
-		"*anonymous stream*:3:19: Inappropriate ioctl for device"
+	  std::vector<hcore::HString>({
+			"*anonymous stream*:3:19: Inappropriate ioctl for device",
+			"*anonymous stream*:3:19: No such device or address",
+			"*anonymous stream*:3:19: Invalid argument"
+		})
 	);
 	set_env( "LINES", "25" );
 	set_env( "COLUMNS", "80" );

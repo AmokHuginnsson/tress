@@ -202,6 +202,8 @@ TUT_UNIT_TEST( "move" )
 	char const e[] = "[123] [4567] [890123] [3.141590] [00000000]";
 #elif defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_FREEBSD__ )
 	char const e[] = "[123] [4567] [890123] [3.141590] [0x0]";
+#elif defined( __HOST_OS_TYPE_SOLARIS__ )
+	char const e[] = "[123] [4567] [890123] [3.141590] [0]";
 #else
 	char const e[] = "[123] [4567] [890123] [3.141590] [(nil)]";
 #endif
