@@ -1636,6 +1636,63 @@ TUT_UNIT_TEST( "assignment/subscript regressions check" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "optimized out scopes regressions checks" )
+	ENSURE_EQUALS(
+		"`break` from `while` with optimized-out scope",
+		execute(
+			"main() {"
+			"	while ( true ) {"
+			"		if ( true ) {"
+			"			break;"
+			"		}"
+			"	}"
+			"}"
+		),
+		"none"
+	);
+	ENSURE_EQUALS(
+		"`throw` from `while` with optimized-out scope",
+		execute_except(
+			"foo() {"
+			"	while ( true ) {"
+			"		if ( true ) {"
+			"			throw Exception(\"EX\");"
+			"		}"
+			"	}"
+			"}"
+			"main(){foo();}"
+		),
+		"*anonymous stream*:1:43: Uncaught Exception: EX"
+	);
+	ENSURE_EQUALS(
+		"`return` from `while` with optimized-out scope",
+		execute(
+			"foo() {"
+			"	while ( true ) {"
+			"		if ( true ) {"
+			"			return ( 7 );"
+			"		}"
+			"	}"
+			"}"
+			"main(){foo();}"
+		),
+		"7"
+	);
+	ENSURE_EQUALS(
+		"`break` from `for` with optimized-out scope",
+		execute(
+			"main() {"
+			"	for ( a : [0] ) {"
+			"		if ( true ) {"
+			"			break;"
+			"		}"
+			"	}"
+			"}"
+		),
+		"none"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "bugs regressions checks" )
 	ENSURE_EQUALS(
 		"access to variable defined in unused (due to short-circuiting) path of expression",
