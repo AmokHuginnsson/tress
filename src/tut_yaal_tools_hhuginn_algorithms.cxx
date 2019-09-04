@@ -934,6 +934,17 @@ TUT_UNIT_TEST( "chain" )
 		),
 		"9"
 	);
+	ENSURE_EQUALS(
+		"contains in Algorithms.chain failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"c = algo.chain([1,2,3],(7,8,9));"
+			"return([2 ∈ c,5 ∈ c, 8 ∈ c]);\n"
+			"}"
+		),
+		"[true, false, true]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "product" )
