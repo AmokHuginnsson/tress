@@ -959,6 +959,13 @@ char const progCompileErr126[] =
 	"}"
 ;
 
+char const progCompileErr127[] =
+	"id(x){x;}\n"
+	"main() {\n"
+	"set()/id(0);\n"
+	"}"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -1088,6 +1095,7 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr124,
 		progCompileErr125,
 		progCompileErr126,
+		progCompileErr127,
 		nullptr
 	};
 
@@ -1219,6 +1227,7 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 124 */ { 20, 2, 12, "*anonymous stream*:2:12: `x` is defined in short-circuitable context." },
 /* 125 */ { 20, 2, 12, "*anonymous stream*:2:12: `x` is defined in short-circuitable context." },
 /* 126 */ { 19, 2, 11, "*anonymous stream*:2:11: `x` is defined in short-circuitable context." },
+/* 127 */ { 24, 3, 6,  "*anonymous stream*:3:6: Operands are not divisible: a `set`, an `*unknown*`" },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

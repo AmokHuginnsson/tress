@@ -1151,6 +1151,69 @@ TUT_UNIT_TEST( "set()" )
 		),
 		"[2, 5, 3]"
 	);
+	ENSURE_EQUALS(
+		"set operator `+` failed",
+		execute(
+			"main(){\n"
+			"s1={2,3,5};\n"
+			"s2={2,4,8};\n"
+			"return(s1 + s2);\n"
+			"}\n"
+		),
+		"{2, 3, 4, 5, 8}"
+	);
+	ENSURE_EQUALS(
+		"set operator `-` failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"s1={2,3,5};\n"
+			"s2={2,4,8};\n"
+			"s3={2,4,8};\n"
+			"s4={1,7,11};\n"
+			"return(algo.materialize(algo.map([s1 - s2, s2 - s3, s1 - s4], algo.sorted), list));\n"
+			"}\n"
+		),
+		"[[3, 5], [], [2, 3, 5]]"
+	);
+	ENSURE_EQUALS(
+		"set operator `-` (subject set is bigger) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"s1={2,3,5,4,7};\n"
+			"s2={2,4,8};\n"
+			"return(algo.sorted(s1 - s2));\n"
+			"}\n"
+		),
+		"[3, 5, 7]"
+	);
+	ENSURE_EQUALS(
+		"set operator `-` (object set is bigger) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"s1={2,3,5};\n"
+			"s2={2,4,8,16,32};\n"
+			"return(algo.sorted(s1 - s2));\n"
+			"}\n"
+		),
+		"[3, 5]"
+	);
+	ENSURE_EQUALS(
+		"set operator `*` failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"s1={2,3,5};\n"
+			"s2={2,4,8};\n"
+			"s3={2,4,8};\n"
+			"s4={1,7,11};\n"
+			"return(algo.materialize(algo.map([s1 * s2, s2 * s3, s1 * s4], algo.sorted), list));\n"
+			"}\n"
+		),
+		"[[2], [2, 4, 8], []]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "heap()" )
