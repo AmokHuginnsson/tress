@@ -278,5 +278,32 @@ TUT_UNIT_TEST( "spawn no wait" )
 TUT_TEARDOWN()
 #endif /* #ifndef __HOST_OS_TYPE_CYGWIN__ */
 
+TUT_UNIT_TEST( "umask" )
+	ENSURE_EQUALS(
+		"umask (valid) failed",
+		execute(
+			"import OperatingSystem as os;\n"
+			"main(){\n"
+			"m = os.umask();\n"
+			"os.set_umask(0o372);\n"
+			"r = [m, os.umask()];\n"
+			"os.set_umask(0o77);\n"
+			"return(r);\n"
+			"}"
+		),
+		"[63, 250]"
+	);
+	ENSURE_EQUALS(
+		"umask (invalid) succeded",
+		execute_except(
+			"import OperatingSystem as os;\n"
+			"main(){\n"
+			"os.set_umask(123456);\n"
+			"}"
+		),
+		"*anonymous stream*:3:13: Bad umask value: 123456"
+	);
+TUT_TEARDOWN()
+
 }
 
