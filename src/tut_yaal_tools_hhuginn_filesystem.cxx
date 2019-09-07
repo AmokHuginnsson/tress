@@ -378,5 +378,24 @@ TUT_UNIT_TEST( "glob" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "update_times" )
+	ENSURE_EQUALS(
+		"update_times failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main(){\n"
+			"bday = Time(1978,5,24,23,30,17);\n"
+			"cons = Time(1989,8,25,14,11,22);\n"
+			"p = \"out/utimes-h.ext\";\n"
+			"fs.open(p, fs.OPEN_MODE.WRITE);\n"
+			"fs.update_times(p,bday,cons);\n"
+			"s = fs.stat(p);\n"
+			"return ( [s.modified(), s.accessed()] );"
+			"}\n"
+		),
+		"[Time(1978, 5, 24, 23, 30, 17), Time(1989, 8, 25, 14, 11, 22)]"
+	);
+TUT_TEARDOWN()
+
 }
 
