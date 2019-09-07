@@ -3,6 +3,7 @@
 #include <TUT/tut.hpp>
 
 #include <yaal/tools/filesystem.hxx>
+#include <yaal/tools/hfsitem.hxx>
 #include <yaal/tools/assign.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
@@ -267,6 +268,18 @@ TUT_UNIT_TEST( "rename" )
 	filesystem::rename( nf, nt );
 	ENSURE_NOT( "rename failed", exists( nf ) );
 	ENSURE( "rename failed", exists( nt ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "update_times" )
+	char const n[] = "./out/utimes.ext";
+	HFile f( n, HFile::OPEN::WRITING );
+	f.close();
+	HTime bday( 1978, 5, 24, 23, 30, 17 );
+	HTime cons( 1989, 8, 25, 14, 11, 22 );
+	filesystem::update_times( n, bday, cons );
+	HFSItem fi( n );
+	ENSURE_EQUALS( "update_times (mod) failed", fi.modified(), bday );
+	ENSURE_EQUALS( "update_times (access) failed", fi.accessed(), cons );
 TUT_TEARDOWN()
 
 }
