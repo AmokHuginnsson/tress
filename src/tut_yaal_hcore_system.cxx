@@ -95,5 +95,14 @@ TUT_UNIT_TEST( "substitute_environment" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "get_umask()/set_umask()" )
+	system::mode_t orig( 077u );
+	ENSURE_EQUALS( "get_umask() failed", system::get_umask(), orig );
+	system::mode_t m( 021 );
+	system::set_umask( m );
+	ENSURE_EQUALS( "set_umask() failed", system::get_umask(), m );
+	system::set_umask( orig );
+TUT_TEARDOWN()
+
 }
 
