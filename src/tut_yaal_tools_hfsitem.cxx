@@ -123,13 +123,13 @@ TUT_UNIT_TEST( "get_name()" )
 	ENSURE_EQUALS( "bad size", f.get_name(), PATH );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "created()" )
+TUT_UNIT_TEST( "status_changed()" )
 	static char const PATH[] = "./out/file.txt";
 	filesystem::remove( PATH );
 	HFile f( PATH, HFile::OPEN::WRITING );
 	HTime now( now_local() );
 	HFSItem fi( PATH );
-	ENSURE_EQUALS( "bad created", fi.created(), now );
+	ENSURE_EQUALS( "bad status_changed", fi.status_changed(), now );
 	ENSURE_EQUALS( "bad modified", fi.modified(), now );
 	ENSURE_EQUALS( "bad accessed", fi.accessed(), now );
 TUT_TEARDOWN()
@@ -143,7 +143,7 @@ TUT_UNIT_TEST( "modified()" )
 	HTime now( now_local() );
 	HFSItem fi( PATH );
 	ENSURE_EQUALS( "bad modified", fi.modified(), now );
-	ENSURE_EQUALS( "bad created", fi.created(), now );
+	ENSURE_EQUALS( "bad status_changed", fi.status_changed(), now );
 /* this test will fail on file systems with noatime option enabled */
 	ENSURE( "bad accessed", fi.accessed() != now );
 TUT_TEARDOWN()
@@ -157,7 +157,7 @@ TUT_UNIT_TEST( "accessed()" )
 	f.close();
 	HTime now( now_local() );
 	HFSItem fi( PATH );
-	ENSURE( "bad created", fi.created() != now );
+	ENSURE( "bad status_changed", fi.status_changed() != now );
 	ENSURE( "bad modified", fi.modified() != now );
 /* Linux: This test will fail on file systems with noatime option enabled */
 /* Windows: To save system resources in Vista, Microsoft disabled the Last Access Time Stamp. */
