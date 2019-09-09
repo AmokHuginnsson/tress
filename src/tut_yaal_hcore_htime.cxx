@@ -89,10 +89,10 @@ TUT_UNIT_TEST( "mkgmtime" )
 	int end( 4000 );
 #else /* #if SIZEOF_TIME_T == 8 */
 	int end( 2038 );
-	start = HTime::SECONDS_TO_UNIX_EPOCH;
+	start = unix_epoch_to_yaal_epoch( 0 );
 #endif /* #else #if SIZEOF_TIME_T == 8 */
 	for ( i64_t i( start ); years < end; i += 7193 ) {
-		time_t t( static_cast<time_t>( i - HTime::SECONDS_TO_UNIX_EPOCH ) );
+		time_t t( static_cast<time_t>( i - unix_epoch_to_yaal_epoch( 0 ) ) );
 		gmtime_r( &t, &b );
 		if ( years != ( b.tm_year + 1900 ) ) {
 			years = b.tm_year + 1900;
@@ -100,7 +100,7 @@ TUT_UNIT_TEST( "mkgmtime" )
 				clog << ",";
 			clog << years << flush;
 		}
-		i64_t res( mkgmtime( &b ) + HTime::SECONDS_TO_UNIX_EPOCH );
+		i64_t res( mkgmtime( &b ) + unix_epoch_to_yaal_epoch( 0 ) );
 		if ( res != i ) {
 			cout << endl << "ex: " << HTime( i ).to_string() << "\nac: " << HTime( res ).to_string() << endl;
 		}
@@ -112,7 +112,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "get current time" )
 	HTime nowLocal( now_local() );
 	HTime nowUTC( now_utc() );
-	i64_t now( ::time( nullptr ) + HTime::SECONDS_TO_UNIX_EPOCH );
+	i64_t now( ::time( nullptr ) + unix_epoch_to_yaal_epoch( 0 ) );
 	i64_t nowLocalRaw( nowLocal.raw() );
 	i64_t nowUTCRaw( nowUTC.raw() );
 	nowLocalRaw -= ( nowLocalRaw % 100 );
@@ -494,7 +494,7 @@ TUT_UNIT_TEST( "epoch" )
 	ENSURE_EQUALS( "bad zero duration", now, epochRaw );
 #undef unix
 	HTime unix( 1970_yY );
-	ENSURE_EQUALS( "bad diff from unix", unix.raw(), static_cast<i64_t>( HTime::SECONDS_TO_UNIX_EPOCH ) );
+	ENSURE_EQUALS( "bad diff from unix", unix.raw(), unix_epoch_to_yaal_epoch( 0 ) );
 	ENSURE_EQUALS( "bad week day", epoch.get_day_of_week(), HTime::DAY_OF_WEEK::SATURDAY );
 TUT_TEARDOWN()
 
