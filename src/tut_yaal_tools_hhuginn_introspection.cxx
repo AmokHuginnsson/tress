@@ -204,16 +204,17 @@ TUT_UNIT_TEST( "import" )
 	);
 	ENSURE_EQUALS(
 		"Introspection.import existing class succeeded",
-		execute_except(
+		execute(
 			"import Introspection as intro;\n"
 			"main() {\n"
-			"intro.import(\"Introspection\");\n"
+			"i = intro.import(\"Introspection\");\n"
+			"return ( [type(i) == type(intro),i.KIND.ENUM == intro.KIND.ENUM] );"
 			"}\n"
 		),
-		"*anonymous stream*:3:13: Package of the same name already exists."
+		"[true, true]"
 	);
 	ENSURE_EQUALS(
-		"Introspection.import existing package succeeded",
+		"Introspection.import existing package failed",
 		execute_except(
 			"import Introspection as intro;\n"
 			"main() {\n"
