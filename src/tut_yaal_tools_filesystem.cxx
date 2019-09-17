@@ -209,6 +209,14 @@ TUT_UNIT_TEST( "find" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "glob_to_re" )
+	ENSURE_EQUALS( "glob_to_re 'ab' failed", glob_to_re( "ab" ), "^[a][b]$" );
+	ENSURE_EQUALS( "glob_to_re 'a*b' failed", glob_to_re( "a*b" ), "^[a].*[b]$" );
+	ENSURE_EQUALS( "glob_to_re 'a?b' failed", glob_to_re( "a?b" ), "^[a].[b]$" );
+	ENSURE_EQUALS( "glob_to_re 'a\\*b' failed", glob_to_re( "a\\*b" ), "^[a][*][b]$" );
+	ENSURE_EQUALS( "glob_to_re 'a\\?b' failed", glob_to_re( "a\\?b" ), "^[a][?][b]$" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "glob" )
 	/* ./ prefix */ {
 		filesystem::paths_t gr( filesystem::glob( "./*d*/*.cxx" ) );
