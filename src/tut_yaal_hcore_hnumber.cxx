@@ -1258,6 +1258,10 @@ TUT_UNIT_TEST( "power" )
 	ENSURE_EQUALS( "power failed -7^77", HNumber( "-7" ) ^ 77, HNumber( "-118181386580595879976868414312001964434038548836769923458287039207" ) );
 	ENSURE_EQUALS( "power failed -7^88", HNumber( "-7" ) ^ 88, HNumber( "233683216210633558353880137011125430143959282107856711392134007594290612801" ) );
 	ENSURE_THROW( "power failed 0^0", HNumber( 0 ) ^ 0, HNumberException );
+	ENSURE_EQUALS( "power failed 3^4", math::power( HNumber( "3" ), "4"_yn ), HNumber( 81 ) );
+	ENSURE_EQUALS( "power failed 4^0.5", math::power( HNumber( "4" ), "0.5"_yn ), HNumber( 2 ) );
+	ENSURE_EQUALS( "power failed e^pi", math::power( HNumber( "2.718281828459045" ), HNumber( "3.1415926535897932" ) ), HNumber( "23.1406926327792618211233587994430580853117392264108446397539237467221280149162056082245784178746760255" ) );
+	ENSURE_THROW( "humongous exponent accepted", math::power( 2_yn, "123456789012345678901234567890"_yn ), HNumberException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "to_integer" )
