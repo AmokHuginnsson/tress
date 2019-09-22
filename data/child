@@ -10,22 +10,34 @@ log( ) {
 
 log "child start ..."
 
-read LINE
+limit=1
+i=0
+if [ ${#} -gt 0 ] ; then
+	limit=${1}
+fi
 
-log "read input: ${LINE}"
+while read LINE ; do
 
-case "${LINE}" in
-	"out")
-		echo "hello-OUT"
-	;;
-	"err")
-		echo "hello-ERR" >&2
-	;;
-	*)
-		echo "error"
-		echo "error" >&2
-	;;
-esac
+	log "read input: ${LINE}"
+
+	case "${LINE}" in
+		"out")
+			echo "hello-OUT"
+		;;
+		"err")
+			echo "hello-ERR" >&2
+		;;
+		*)
+			echo "error"
+			echo "error" >&2
+		;;
+	esac
+	i=$((${i} + 1))
+	if [ ${i} -ge ${limit} ] ; then
+		break
+	fi
+
+done
 
 log "written output ..."
 log "exiting"

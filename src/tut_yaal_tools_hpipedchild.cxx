@@ -158,7 +158,7 @@ TUT_UNIT_TEST( "spawn, write stream and read stream" )
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "redirect child stdout to file" )
+TUT_UNIT_TEST( "redirect child stdout to file (passing ownership)" )
 	static char const PIPED_CHILD_LOG_PATH[] = "./out/piped-child.log";
 	::unlink( PIPED_CHILD_LOG_PATH );
 	HPipe inPipe;
@@ -182,6 +182,92 @@ TUT_UNIT_TEST( "redirect child stdout to file" )
 	HString line;
 	getline( logFile, line );
 	ENSURE_EQUALS( "bad redirected data", line, ACK_OUT );
+	ENSURE_NOT( "spurious data in log file", getline( logFile, line ).good() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "redirect child stdout to file (keep ownership)" )
+	static char const PIPED_CHILD_LOG_PATH[] = "./out/piped-child.log";
+	::unlink( PIPED_CHILD_LOG_PATH );
+	HPipe inPipe;
+	HStreamInterface::ptr_t in( inPipe.in() );
+	HStreamInterface::ptr_t out( make_pointer<HFile>( PIPED_CHILD_LOG_PATH, HFile::OPEN::WRITING ) );
+	HPipedChild pc( inPipe.out() );
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
+	pc.spawn( CHILD, {}, nullptr, out.raw() );
+	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
+	*in << MSG_OUT << endl;
+	for ( int i( 0 ); i < 32; ++ i ) {
+		HFSItem fi( PIPED_CHILD_LOG_PATH );
+		if ( !! fi && fi.get_size() > 0 ) {
+			break;
+		}
+		sleep_for( duration( 100, time::UNIT::MILLISECOND ) );
+	}
+	pc.finish();
+	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
+	HFile logFile( PIPED_CHILD_LOG_PATH, HFile::OPEN::READING );
+	HString line;
+	getline( logFile, line );
+	ENSURE_EQUALS( "bad redirected data", line, ACK_OUT );
+	ENSURE_NOT( "spurious data in log file", getline( logFile, line ).good() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "redirect child stdout and stderr to the same file (passing ownership)" )
+	static char const PIPED_CHILD_LOG_PATH[] = "./out/piped-child.log";
+	::unlink( PIPED_CHILD_LOG_PATH );
+	HPipe inPipe;
+	HStreamInterface::ptr_t in( inPipe.in() );
+	HStreamInterface::ptr_t out( make_pointer<HFile>( PIPED_CHILD_LOG_PATH, HFile::OPEN::WRITING ) );
+	HPipedChild pc( inPipe.out(), out, out );
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
+	pc.spawn( CHILD, { "2" } );
+	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
+	*in << MSG_OUT << endl;
+	*in << MSG_ERR << endl;
+	for ( int i( 0 ); i < 32; ++ i ) {
+		HFSItem fi( PIPED_CHILD_LOG_PATH );
+		if ( !! fi && fi.get_size() > 10 ) {
+			break;
+		}
+		sleep_for( duration( 100, time::UNIT::MILLISECOND ) );
+	}
+	pc.finish();
+	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
+	HFile logFile( PIPED_CHILD_LOG_PATH, HFile::OPEN::READING );
+	HString line;
+	getline( logFile, line );
+	ENSURE_EQUALS( "bad redirected stdout data", line, ACK_OUT );
+	getline( logFile, line );
+	ENSURE_EQUALS( "bad redirected stderr data", line, ACK_ERR );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "redirect child stdout and stderr to the same file (keeping ownership)" )
+	static char const PIPED_CHILD_LOG_PATH[] = "./out/piped-child.log";
+	::unlink( PIPED_CHILD_LOG_PATH );
+	HPipe inPipe;
+	HStreamInterface::ptr_t in( inPipe.in() );
+	HStreamInterface::ptr_t out( make_pointer<HFile>( PIPED_CHILD_LOG_PATH, HFile::OPEN::WRITING ) );
+	HPipedChild pc( inPipe.out() );
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
+	pc.spawn( CHILD, { "2" }, nullptr, out.raw(), out.raw() );
+	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
+	*in << MSG_OUT << endl;
+	*in << MSG_ERR << endl;
+	for ( int i( 0 ); i < 32; ++ i ) {
+		HFSItem fi( PIPED_CHILD_LOG_PATH );
+		if ( !! fi && fi.get_size() > 10 ) {
+			break;
+		}
+		sleep_for( duration( 100, time::UNIT::MILLISECOND ) );
+	}
+	pc.finish();
+	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
+	HFile logFile( PIPED_CHILD_LOG_PATH, HFile::OPEN::READING );
+	HString line;
+	getline( logFile, line );
+	ENSURE_EQUALS( "bad redirected stdout data", line, ACK_OUT );
+	getline( logFile, line );
+	ENSURE_EQUALS( "bad redirected stderr data", line, ACK_ERR );
 TUT_TEARDOWN()
 
 }

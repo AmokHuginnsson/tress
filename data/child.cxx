@@ -27,7 +27,7 @@ string now( void ) {
 
 }
 
-int main( int, char** ) {
+int main( int argc_, char** argv_ ) {
 #ifdef __MSVCXX__
 	/* DebugBreak(); */
 #endif
@@ -35,23 +35,35 @@ int main( int, char** ) {
 	try {
 		string const path( "./out/hpipedchild.log" );
 		ofstream log( path.c_str() );
-		if ( ! log )
+		if ( ! log ) {
 			throw runtime_error( "Cannot open file: " + path );
+		}
 
 		log << now() << ": child start ..." << endl;
 		string line;
-		cin >> line;
-		log << now() << ": read input: " << line << endl;
-		string output;
-		if ( line == "out" )
-			cout << ( output = "hello-OUT" ) << endl;
-		else if ( line == "err" )
-			cerr << ( output = "hello-ERR" ) << endl;
-		else {
-			cout << ( output = "error" ) << endl;
-			cerr << output << endl;
+
+		int i( 0 );
+		int limit( 1 );
+		if ( argc_ > 1 ) {
+			limit = stoi( argv_[1] );
 		}
-		log << now() << ": written output [" << output << "]" << endl;
+		while ( getline( cin, line ).good() ) {
+			log << now() << ": read input: " << line << endl;
+			string output;
+			if ( line == "out" ) {
+				cout << ( output = "hello-OUT" ) << endl;
+			} else if ( line == "err" ) {
+				cerr << ( output = "hello-ERR" ) << endl;
+			} else {
+				cout << ( output = "error" ) << endl;
+				cerr << output << endl;
+			}
+			log << now() << ": written output [" << output << "]" << endl;
+			++ i;
+			if ( i >= limit ) {
+				break;
+			}
+		}
 		log << now() << ": exiting" << endl;
 	} catch ( exception const& e ) {
 		cerr << "Exception caught: " << e.what() << endl;
