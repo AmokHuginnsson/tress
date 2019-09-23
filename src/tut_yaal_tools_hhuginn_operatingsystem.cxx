@@ -133,7 +133,7 @@ TUT_UNIT_TEST( "spawn" )
 			"import OperatingSystem as os;\n"
 			"main(){\n"
 			"c=os.spawn(\""_ys.append( CHILD ).append(
-				"\");\n"
+				"\", []);\n"
 				"a0=c.is_alive();\n"
 				"c.in().write_line(\"out\\n\");\n"
 				"ro=c.out().read_line().strip();\n"
@@ -141,7 +141,7 @@ TUT_UNIT_TEST( "spawn" )
 				"a1=c.is_alive();\n"
 				"c=os.spawn(\""
 			).append( CHILD ).append(
-				"\");\n"
+				"\", []);\n"
 				"c.in().write_line(\"err\\n\");\n"
 				"re=c.err().read_line().strip();\n"
 				"return([a0,ro,re,a1,s]);\n"
@@ -156,7 +156,7 @@ TUT_UNIT_TEST( "spawn" )
 			"import OperatingSystem as os;"
 			"main(){"
 			"try{"
-			"os.spawn(\"non-existing\");"
+			"os.spawn(\"non-existing\", []);"
 			"}catch(OperatingSystemException e){"
 			"return ( e.message() );"
 			"}"
@@ -179,7 +179,7 @@ TUT_UNIT_TEST( "wait" )
 	HStringStream source(
 		"import OperatingSystem as os;"
 		"main(){"
-		"c=os.spawn(\"/bin/sleep\", \"10\");"
+		"c=os.spawn(\"/bin/sleep\", [\"10\"]);"
 		"os.stdout().write_line( \"{}\\n\".format( c.get_pid() ) );\n"
 		"c.wait(5);\n"
 		"}"
@@ -231,7 +231,7 @@ TUT_UNIT_TEST( "kill" )
 			"import OperatingSystem as os;"
 			"import DateTime as dt;"
 			"main(){"
-			"c=os.spawn(\"/bin/sleep\", \"10\");"
+			"c=os.spawn(\"/bin/sleep\", [\"10\"]);"
 			"dt.sleep(100000000);\n"
 			"c.kill();\n"
 			"}"
@@ -252,7 +252,7 @@ TUT_UNIT_TEST( "invalid wait" )
 			"import OperatingSystem as os;\n"
 			"main(){\n"
 			"c=os.spawn(\""_ys.append( CHILD ).append(
-				"\");\n"
+				"\", []);\n"
 				"c.wait(-1);\n"
 				"}\n"
 			)
@@ -269,7 +269,7 @@ TUT_UNIT_TEST( "spawn no wait" )
 			"import OperatingSystem as os;\n"
 			"main(){\n"
 			"copy(os.spawn(\""_ys.append( CHILD ).append(
-				"\"));\n"
+				"\", []));\n"
 				"}\n"
 			)
 		),
