@@ -166,6 +166,35 @@ TUT_UNIT_TEST( "spawn" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "spawn redirection" )
+	ENSURE_EQUALS(
+		"OperatingSystem.spawn, is_alive, wait, in, out, err",
+		execute(
+			"import OperatingSystem as os;\n"
+			"import FileSystem as fs;\n"
+			"main(){\n"
+			"c=os.spawn(\""_ys.append( CHILD ).append(
+				"\", [\"2\"], false, none, fs.open(\"./out/huginn-spawn-out.log\", fs.OPEN_MODE.WRITE), fs.open(\"./out/huginn-spawn-err.log\", fs.OPEN_MODE.WRITE));\n"
+				"a0=c.is_alive();\n"
+				"c.in().write_line(\"out\\n\");\n"
+				"c.in().write_line(\"err\\n\");\n"
+				"s=c.wait(8);\n"
+				"a1=c.is_alive();\n"
+				"return([a0,a1,s]);\n"
+				"}\n"
+			)
+		),
+		"[true, false, 0]"
+	);
+	HString line;
+	HFile out( "./out/huginn-spawn-out.log", HFile::OPEN::READING );
+	HFile err( "./out/huginn-spawn-err.log", HFile::OPEN::READING );
+	getline( out, line );
+	ENSURE_EQUALS( "invalid out redir", line, "hello-OUT" );
+	getline( err, line );
+	ENSURE_EQUALS( "invalid err redir", line, "hello-ERR" );
+TUT_TEARDOWN()
+
 #ifndef SIGTERM
 #define SIGTERM 15
 #endif
