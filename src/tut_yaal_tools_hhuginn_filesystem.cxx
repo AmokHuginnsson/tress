@@ -243,30 +243,30 @@ TUT_UNIT_TEST( "readlink" )
 	);
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "dir" )
+TUT_UNIT_TEST( "list_directory" )
 	ENSURE_EQUALS(
-		"FileSystem.dir failed",
+		"FileSystem.list_directory failed",
 		execute(
 			"import FileSystem as fs;"
 			"import Algorithms as algo;"
 			"main(){"
-			"return(algo.sorted(fs.dir(\"./FCTF\")));"
+			"return(algo.sorted(fs.list_directory(\"./FCTF\")));"
 			"}"
 		),
 		"[\"a0_target-default.mk\", \"acxx\", \"make.mk\"]"
 	);
 #ifdef __MSVCXX__
-	char const dirExpect[] = "\"*anonymous stream*:1:42: non-existing: The system cannot find the file specified\"";
+	char const dirExpect[] = "\"*anonymous stream*:1:53: non-existing: The system cannot find the file specified\"";
 #else
-	char const dirExpect[] = "\"*anonymous stream*:1:42: non-existing: No such file or directory\"";
+	char const dirExpect[] = "\"*anonymous stream*:1:53: non-existing: No such file or directory\"";
 #endif
 	ENSURE_EQUALS(
-		"invalid dir succeeded",
+		"invalid list_directory succeeded",
 		execute(
 			"import FileSystem as fs;"
 			"main(){"
 			"try{"
-			"fs.dir(\"non-existing\");"
+			"fs.list_directory(\"non-existing\");"
 			"}catch(FileSystemException e){"
 			"return ( e.message() );"
 			"}"
@@ -275,11 +275,11 @@ TUT_UNIT_TEST( "dir" )
 		dirExpect
 	);
 	ENSURE_EQUALS(
-		"FileSystem.dir size succeeded",
+		"FileSystem.list_directory size succeeded",
 		execute_except(
 			"import FileSystem as fs;\n"
 			"main(){\n"
-			"ds = fs.dir(\"./FCTF\");\n"
+			"ds = fs.list_directory(\"./FCTF\");\n"
 			"return(size(ds));\n"
 			"}"
 		),
