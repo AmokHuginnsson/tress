@@ -8,6 +8,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 
 #include <yaal/tools/hterminal.hxx>
 #include <yaal/hcore/hnumber.hxx>
+#include <yaal/hcore/math.hxx>
 #include <yaal/tools/hmonitor.hxx>
 
 using namespace tut;
@@ -128,6 +129,50 @@ TUT_UNIT_TEST( "terminal colors" )
 			<< brightcyan << " brightcyan " << brightmagenta << " brightmagenta " << yellow << " yellow "
 			<< white << "  white  " << ansi::reset << endl;
 	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "terminal colors 256 (gray scale)" )
+	clog << black << "  ";
+	for ( int i( 0 ); i < 24; ++ i ) {
+		clog << gray_scale( PLANE::BACKGROUND, i ) << "  ";
+	}
+	clog << white << "  " << ansi::reset << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "terminal colors 256 (6x6x6 color cube)" )
+	for ( int g( 0 ); g < 6; ++ g ) {
+		for ( int r( 0 ); r < 6; ++ r ) {
+			for ( int b( 0 ); b < 6; ++ b ) {
+				clog << color256( PLANE::BACKGROUND, r, g, b ) << "  ";
+			}
+			clog << ansi::reset << " ";
+		}
+		clog << ansi::reset << endl;
+	}
+	clog << ansi::reset << endl;
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "terminal colors RGB" )
+	HLock l( HMonitor::get_instance().acquire( "terminal" ) );
+	if ( ! HTerminal::get_instance().exists() ) {
+		return;
+	}
+	HTerminal::HSize s( HTerminal::get_instance().size() );
+	if ( ( s.lines() <= 0 ) || ( s.columns() <= 0 ) ) {
+		return;
+	}
+	double gi( 1. / static_cast<double>( s.lines() - 8 ) );
+	double bi( 1. / math::square_root( static_cast<double>( s.columns() - 1 ) ) );
+	double ri( 1. / ( ( 1. / bi ) - 1 ) );
+	for ( double g( 0 ); g < 1.; g += gi ) {
+		for ( double r( 0 ); r < 1.; r += ri ) {
+			for ( double b( 0 ); b < 1.; b += bi ) {
+				clog << rgb( PLANE::BACKGROUND, static_cast<int>( r * 256. ), static_cast<int>( g * 256. ), static_cast<int>( b * 256. ) ) << " ";
+			}
+		}
+		clog << ansi::reset << endl;
+	}
+	clog << ansi::reset << endl;
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and MSVC++ [Visualisers] testing." )
