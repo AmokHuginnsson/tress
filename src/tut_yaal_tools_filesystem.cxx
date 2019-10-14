@@ -210,11 +210,13 @@ TUT_UNIT_TEST( "find" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "glob_to_re" )
-	ENSURE_EQUALS( "glob_to_re 'ab' failed", glob_to_re( "ab" ), "^[a][b]$" );
-	ENSURE_EQUALS( "glob_to_re 'a*b' failed", glob_to_re( "a*b" ), "^[a].*[b]$" );
-	ENSURE_EQUALS( "glob_to_re 'a?b' failed", glob_to_re( "a?b" ), "^[a].[b]$" );
-	ENSURE_EQUALS( "glob_to_re 'a\\*b' failed", glob_to_re( "a\\*b" ), "^[a][*][b]$" );
-	ENSURE_EQUALS( "glob_to_re 'a\\?b' failed", glob_to_re( "a\\?b" ), "^[a][?][b]$" );
+	ENSURE_EQUALS( "glob_to_re 'ab' failed", glob_to_re( "ab" ), "^ab$" );
+	ENSURE_EQUALS( "glob_to_re 'a*b' failed", glob_to_re( "a*b" ), "^a.*b$" );
+	ENSURE_EQUALS( "glob_to_re 'a?b' failed", glob_to_re( "a?b" ), "^a.b$" );
+	ENSURE_EQUALS( "glob_to_re 'a\\*b' failed", glob_to_re( "a\\*b" ), "^a[*]b$" );
+	ENSURE_EQUALS( "glob_to_re 'a\\?b' failed", glob_to_re( "a\\?b" ), "^a[?]b$" );
+	ENSURE_EQUALS( "glob_to_re 'ab.txt' failed", glob_to_re( "ab.txt" ), "^ab[.]txt$" );
+	ENSURE_EQUALS( "glob_to_re 'h[135].txt' failed", glob_to_re( "ab[135].txt" ), "^ab[135][.]txt$" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "glob" )
