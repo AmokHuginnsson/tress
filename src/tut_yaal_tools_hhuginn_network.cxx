@@ -53,15 +53,15 @@ TUT_UNIT_TEST( "resolve invalid" )
 		execute_except(
 			"import Network as net;"
 			"main(){"
-			"return(net.resolve(\"example.invalid\"));"
+			"return(net.resolve(\"invalid.example.com\"));"
 			"}"
 		),
 	  std::vector<hcore::HString>({
-			"*anonymous stream*:1:48: Uncaught NetworkException: No such host is known: example.invalid",
-			"*anonymous stream*:1:48: Uncaught NetworkException: No address associated with hostname: example.invalid",
-			"*anonymous stream*:1:48: Uncaught NetworkException: hostname nor servname provided, or not known: example.invalid",
-			"*anonymous stream*:1:48: Uncaught NetworkException: Name or service not known: example.invalid",
-			"*anonymous stream*:1:48: Uncaught NetworkException: node name or service name not known: example.invalid"
+			"*anonymous stream*:1:48: Uncaught NetworkException: No such host is known: invalid.example.com",
+			"*anonymous stream*:1:48: Uncaught NetworkException: No address associated with hostname: invalid.example.com",
+			"*anonymous stream*:1:48: Uncaught NetworkException: hostname nor servname provided, or not known: invalid.example.com",
+			"*anonymous stream*:1:48: Uncaught NetworkException: Name or service not known: invalid.example.com",
+			"*anonymous stream*:1:48: Uncaught NetworkException: node name or service name not known: invalid.example.com"
 		})
 	);
 TUT_TEARDOWN()
