@@ -158,12 +158,17 @@ TUT_UNIT_TEST( "terminal colors RGB" )
 		return;
 	}
 	HTerminal::HSize s( HTerminal::get_instance().size() );
-	if ( ( s.lines() <= 0 ) || ( s.columns() <= 0 ) ) {
+	int lines( s.lines() );
+	int columns( s.columns() );
+	static int const EXTRA_LINS( 8 );
+	static int const EXTRA_COLUMNS( 1 );
+	if ( ( lines <= EXTRA_LINS ) || ( columns <= EXTRA_COLUMNS ) ) {
 		return;
 	}
-	double gi( 1. / static_cast<double>( s.lines() - 8 ) );
-	double bi( 1. / math::square_root( static_cast<double>( s.columns() - 1 ) ) );
+	double gi( 1. / static_cast<double>( lines - EXTRA_LINS ) );
+	double bi( 1. / math::square_root( static_cast<double>( columns - EXTRA_COLUMNS ) ) );
 	double ri( 1. / ( ( 1. / bi ) - 1 ) );
+	M_ASSERT( ( gi > 0. ) && ( ri > 0. ) && ( bi > 0. ) );
 	for ( double g( 0 ); g < 1.; g += gi ) {
 		for ( double r( 0 ); r < 1.; r += ri ) {
 			for ( double b( 0 ); b < 1.; b += bi ) {
