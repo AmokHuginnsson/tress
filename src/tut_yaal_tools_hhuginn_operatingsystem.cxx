@@ -184,7 +184,7 @@ TUT_UNIT_TEST( "spawn redirection" )
 				"}\n"
 			)
 		),
-		"[true, false, 0]"
+		"[true, false, 7]"
 	);
 	HString line;
 	HFile out( "./out/huginn-spawn-out.log", HFile::OPEN::READING );

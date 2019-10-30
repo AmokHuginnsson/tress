@@ -54,9 +54,11 @@ int main( int argc_, char** argv_ ) {
 				cout << ( output = "hello-OUT" ) << endl;
 			} else if ( line == "err" ) {
 				cerr << ( output = "hello-ERR" ) << endl;
+				ret = 7;
 			} else {
 				cout << ( output = "error" ) << endl;
 				cerr << output << endl;
+				ret = 13;
 			}
 			log << now() << ": written output [" << output << "]" << endl;
 			++ i;

@@ -2,9 +2,12 @@
 
 #include <cstdio>
 #include <cstdlib>
-#ifdef __GNUC__
+#ifndef _MSC_VER
+#include <csignal>
 #include <unistd.h>
-#endif /* #ifdef __GNUC__ */
+#else
+#define SIGTERM 15
+#endif /* #ifndef _MSC_VER */
 
 #include <TUT/tut.hpp>
 
@@ -20,6 +23,21 @@ using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
+
+namespace yaal {
+namespace tools {
+
+inline bool operator == ( HPipedChild::STATUS left_, HPipedChild::STATUS right_ ) {
+	return ( ( left_.type == right_.type ) && ( left_.value == right_.value ) );
+}
+
+inline std::ostream& operator << ( std::ostream& out, HPipedChild::STATUS const& s ) {
+	out << "(" << static_cast<int>( s.type ) << "," << s.value << ")";
+	return ( out );
+}
+
+}
+}
 
 namespace tut {
 
@@ -47,16 +65,86 @@ TUT_TEST_GROUP( tut_yaal_tools_hpipedchild, "yaal::tools::HPipedChild" );
 TUT_UNIT_TEST( "simple constructor" )
 	HPipedChild pc;
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
+	ENSURE_EQUALS( "bad status on simple construction", pc.get_status(), HPipedChild::STATUS() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "spawn and finish" )
 	HPipedChild pc;
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
+	ENSURE_EQUALS( "bad status on simple construction", pc.get_status(), HPipedChild::STATUS() );
 	pc.spawn( CHILD );
 	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
+	HPipedChild::STATUS s;
+	s.type = HPipedChild::STATUS::TYPE::RUNNING;
+	ENSURE_EQUALS( "bad status after spawn", pc.get_status(), s );
 	pc.finish();
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
+#ifndef __HOST_OS_TYPE_CYGWIN__
+#ifndef _MSC_VER
+	s.type = HPipedChild::STATUS::TYPE::ABORTED;
+#else
+	s.type = HPipedChild::STATUS::TYPE::FINISHED;
+#endif
+	s.value = SIGTERM;
+	ENSURE_EQUALS( "bad status after finish", pc.get_status(), s );
+#endif
 TUT_TEARDOWN()
+
+#ifndef _MSC_VER
+TUT_UNIT_TEST( "spawn, pause, continue and finish" )
+	HPipedChild pc;
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
+	ENSURE_EQUALS( "bad status on simple construction", pc.get_status(), HPipedChild::STATUS() );
+	pc.spawn( CHILD );
+	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
+	HPipedChild::STATUS s;
+	s.type = HPipedChild::STATUS::TYPE::RUNNING;
+	ENSURE_EQUALS( "bad status after pause", pc.get_status(), s );
+	system::kill( pc.get_pid(), SIGSTOP );
+	sleep_for( duration( 1, time::UNIT::SECOND ) );
+#ifndef __HOST_OS_TYPE_CYGWIN__
+	s.type = HPipedChild::STATUS::TYPE::PAUSED;
+	s.value = SIGSTOP;
+	ENSURE_EQUALS( "bad status after stop", pc.get_status(), s );
+#endif
+	system::kill( pc.get_pid(), SIGCONT );
+	sleep_for( duration( 1, time::UNIT::SECOND ) );
+	s.type = HPipedChild::STATUS::TYPE::RUNNING;
+	ENSURE_EQUALS( "bad status after cont", pc.get_status(), s );
+	pc.finish();
+	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
+#ifndef __HOST_OS_TYPE_CYGWIN__
+	s.type = HPipedChild::STATUS::TYPE::ABORTED;
+	s.value = SIGTERM;
+	ENSURE_EQUALS( "bad status after finish", pc.get_status(), s );
+#endif
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "spawn, pause and finish" )
+	HPipedChild pc;
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
+	ENSURE_EQUALS( "bad status on simple construction", pc.get_status(), HPipedChild::STATUS() );
+	pc.spawn( CHILD );
+	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
+	HPipedChild::STATUS s;
+	s.type = HPipedChild::STATUS::TYPE::RUNNING;
+	ENSURE_EQUALS( "bad status after pause", pc.get_status(), s );
+	system::kill( pc.get_pid(), SIGSTOP );
+	sleep_for( duration( 1, time::UNIT::SECOND ) );
+#ifndef __HOST_OS_TYPE_CYGWIN__
+	s.type = HPipedChild::STATUS::TYPE::PAUSED;
+	s.value = SIGSTOP;
+	ENSURE_EQUALS( "bad status after stop", pc.get_status(), s );
+#endif
+	pc.finish();
+	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
+#ifndef __HOST_OS_TYPE_CYGWIN__
+	s.type = HPipedChild::STATUS::TYPE::ABORTED;
+	s.value = SIGTERM;
+	ENSURE_EQUALS( "bad status after finish", pc.get_status(), s );
+#endif
+TUT_TEARDOWN()
+#endif
 
 TUT_UNIT_TEST( "spawn on non-execuable" )
 	HPipedChild pc;
@@ -68,14 +156,27 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "spawn, write and read (stdout)" )
 	HPipedChild pc;
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
+	ENSURE_EQUALS( "bad status on simple construction", pc.get_status(), HPipedChild::STATUS() );
 	pc.spawn( CHILD );
 	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
+	HPipedChild::STATUS s;
+	s.type = HPipedChild::STATUS::TYPE::RUNNING;
+	ENSURE_EQUALS( "bad status after spawn", pc.get_status(), s );
 	pc.in() << MSG_OUT << endl;
 	HString ack;
 	TUT_EVAL( pc.out().read_until( ack ) );
 	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
 	pc.finish();
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
+#ifndef __HOST_OS_TYPE_CYGWIN__
+#ifndef _MSC_VER
+	s.type = HPipedChild::STATUS::TYPE::ABORTED;
+	s.value = SIGTERM;
+#else
+	s.type = HPipedChild::STATUS::TYPE::FINISHED;
+#endif
+	ENSURE_EQUALS( "bad status after finish", pc.get_status(), s );
+#endif
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "spawn, write and read (stderr)" )
@@ -83,6 +184,7 @@ TUT_UNIT_TEST( "spawn, write and read (stderr)" )
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
 	pc.spawn( CHILD );
 	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
+	HPipedChild::STATUS s;
 	pc.in() << MSG_ERR << endl;
 	HString ack;
 	TUT_EVAL( pc.err().read_until( ack ) );
@@ -93,18 +195,47 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "finish after very short lived process ends" )
 	HPipedChild pc;
+	ENSURE_EQUALS( "bad status on simple construction", pc.get_status(), HPipedChild::STATUS() );
 	pc.spawn( CHILD );
+	HPipedChild::STATUS s;
+	s.type = HPipedChild::STATUS::TYPE::RUNNING;
+	ENSURE_EQUALS( "bad status on simple construction", pc.get_status(), s );
 	pc.in() << MSG_OUT << endl;
 	HString ack;
 	HString line;
 	while ( pc.out().read_until( line ) > 0 ) {
 		if ( ! line.is_empty() ) {
-			ack = line;
+			ack.append( line );
 		}
 	}
 	/* Without proper fix on Cygwin this test throws exception from pc.finish() */
 	pc.finish();
 	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
+	s.type = HPipedChild::STATUS::TYPE::FINISHED;
+	ENSURE_EQUALS( "bad status on simple construction", pc.get_status(), s );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "exit status" )
+	HPipedChild pc;
+	ENSURE_EQUALS( "bad status on simple construction", pc.get_status(), HPipedChild::STATUS() );
+	pc.spawn( CHILD );
+	HPipedChild::STATUS s;
+	s.type = HPipedChild::STATUS::TYPE::RUNNING;
+	ENSURE_EQUALS( "bad status on simple construction", pc.get_status(), s );
+	pc.in() << MSG_ERR << endl;
+	HString ack;
+	HString line;
+	while ( pc.err().read_until( line ) > 0 ) {
+		if ( ! line.is_empty() ) {
+			ack.append( line );
+		}
+	}
+	/* Without proper fix on Cygwin this test throws exception from pc.finish() */
+	pc.finish();
+	ENSURE_EQUALS( "bad ack ERR", ack, ACK_ERR );
+	s.type = HPipedChild::STATUS::TYPE::FINISHED;
+	s.value = 7;
+	ENSURE_EQUALS( "bad status on simple construction", pc.get_status(), s );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "read after very short lived process ends" )
@@ -117,7 +248,7 @@ TUT_UNIT_TEST( "read after very short lived process ends" )
 	/* Without proper fix on MSVCXX next line will hang indefinetly. */
 	while ( pc.out().read_until( line ) > 0 ) {
 		if ( ! line.is_empty() ) {
-			ack = line;
+			ack.append( line );
 		}
 	}
 	pc.finish();
