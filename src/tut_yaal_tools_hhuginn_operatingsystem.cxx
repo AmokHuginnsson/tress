@@ -137,7 +137,7 @@ TUT_UNIT_TEST( "spawn" )
 				"a0=c.is_alive();\n"
 				"c.in().write_line(\"out\\n\");\n"
 				"ro=c.out().read_line().strip();\n"
-				"s=c.wait(8);\n"
+				"s=c.wait(8000);\n"
 				"a1=c.is_alive();\n"
 				"c=os.spawn(\""
 			).append( CHILD ).append(
@@ -178,7 +178,7 @@ TUT_UNIT_TEST( "spawn redirection" )
 				"a0=c.is_alive();\n"
 				"c.in().write_line(\"out\\n\");\n"
 				"c.in().write_line(\"err\\n\");\n"
-				"s=c.wait(8);\n"
+				"s=c.wait(8000);\n"
 				"a1=c.is_alive();\n"
 				"return([a0,a1,s]);\n"
 				"}\n"
@@ -210,7 +210,7 @@ TUT_UNIT_TEST( "wait" )
 		"main(){"
 		"c=os.spawn(\"/bin/sleep\", [\"10\"]);"
 		"os.stdout().write_line( \"{}\\n\".format( c.get_pid() ) );\n"
-		"c.wait(5);\n"
+		"c.wait(5000);\n"
 		"}"
 	);
 	h.load( source );
