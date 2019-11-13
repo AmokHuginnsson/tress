@@ -172,10 +172,13 @@ TUT_UNIT_TEST( "spawn, write and read (stdout)" )
 #ifndef _MSC_VER
 	s.type = HPipedChild::STATUS::TYPE::ABORTED;
 	s.value = SIGTERM;
+	ENSURE_EQUALS( "bad status after finish", pc.get_status(), s );
 #else
 	s.type = HPipedChild::STATUS::TYPE::FINISHED;
+	HPipedChild::STATUS sa( s );
+	sa.value = SIGTERM;
+	ENSURE_IN( "bad status after finish", pc.get_status(), std::vector<HPipedChild::STATUS>({ s, sa }) );
 #endif
-	ENSURE_EQUALS( "bad status after finish", pc.get_status(), s );
 #endif
 TUT_TEARDOWN()
 
