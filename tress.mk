@@ -7,10 +7,10 @@ test: $(TARGET)
 	chmod 600 ./data/karatsuba.bc && \
 	PROC_LIMIT=1024 . _aux/set-limits.sh && \
 	$(TRESS_ENV) TZ="Europe/Warsaw" TRESSRC="tressrc" YAAL_LOG_LEVEL="info" DEFAULT_TARGET="debug" \
-	./build/$(if $(TARGET),$(TARGET),debug)/tress/1exec -q $(TRESS_ARG)
+	./build/$(if $(TARGET),$(TARGET),debug)/tress/1exec -q $(TRESS_ARG) < /dev/null > /dev/null
 
 memcheck: $(TARGET)
 	@cd $(if $(DIR_ROOT),$(DIR_ROOT),.) && mkdir -p out && sqlite3 out/tress.sqlite < data/sqlite.sql && \
-	. _aux/set-limits.sh && $(TRESS_ENV) valgrind --gen-suppressions=all ./build/$(if $(TARGET),$(TARGET),debug)/tress/1exec -q $(TRESS_ARG); \
+	. _aux/set-limits.sh && $(TRESS_ENV) valgrind --gen-suppressions=all ./build/$(if $(TARGET),$(TARGET),debug)/tress/1exec -q $(TRESS_ARG) < /dev/null > /dev/null; \
 	test $$? -ne 255
 
