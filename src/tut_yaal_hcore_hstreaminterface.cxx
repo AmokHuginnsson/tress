@@ -29,24 +29,24 @@ struct tut_yaal_hcore_hstreaminterface : public tress::tut_helpers::simple_mock<
 	}
 	yaal::tools::HStringStream& string_stream( void ) {
 		HStreamInterface::ptr_t si( make_pointer<HStringStream>() );
-		_ss.reset( si );
+		_ss.reset_owned( si );
 		return ( static_cast<HStringStream&>( *si ) );
 	}
 };
 TUT_TEST_GROUP( tut_yaal_hcore_hstreaminterface, "yaal::hcore::HStreamInterface" );
 
-TUT_UNIT_TEST( "HSynchronizedStream::reset" )
+TUT_UNIT_TEST( "HSynchronizedStream::reset_owned" )
 	HStringStream ss;
 	HStringStream::ptr_t nss( make_pointer<HStringStream>() );
 	_ss << 7 << endl;
-	_ss.reset( ss );
-	ENSURE_EQUALS( "reset (unowning) failed", data(), "" );
+	_ss.reset_referenced( ss );
+	ENSURE_EQUALS( "reset_owned (unowning) failed", data(), "" );
 	_ss << 13 << endl;
 	HString s;
 	ss.read_until( s );
 	ENSURE_EQUALS( "read (unowning) failed", s, "13" );
 	_ss << "xxx" << endl;
-	_ss.reset( nss );
+	_ss.reset_owned( nss );
 	ENSURE_EQUALS( "read (owning) failed", data(), "" );
 	ss.read_until( s );
 	ENSURE_EQUALS( "read (owning) failed", s, "xxx" );

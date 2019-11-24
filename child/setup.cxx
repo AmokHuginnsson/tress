@@ -17,10 +17,12 @@ void OSetup::test_setup( void ) {
 	if ( _quiet && _verbose )
 		yaal::tools::util::failure( 1, "%s",
 				_( "quiet and verbose options are exclusive\n" ) );
-	if ( _verbose )
-		clog.reset( make_pointer<HFile>( stdout, HFile::OWNERSHIP::ACQUIRED ) );
-	if ( _quiet )
-		cout.reset();
+	if ( _verbose ) {
+		clog.reset_owned( make_pointer<HFile>( stdout, HFile::OWNERSHIP::ACQUIRED ) );
+	}
+	if ( _quiet ) {
+		cout.reset_owned();
+	}
 	return;
 	M_EPILOG
 }
