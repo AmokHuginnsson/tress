@@ -511,7 +511,7 @@ TUT_TEARDOWN()
 #endif /* #ifndef __HOST_OS_TYPE_SOLARIS__ */
 
 TUT_UNIT_TEST( "duration" )
-#define ENSURE_DURATION( x, y ) ENSURE_EQUALS( x " failed", lexical_cast<HString>( lexical_cast<time::duration_t>( to_string( x ) ) ), y )
+#define ENSURE_DURATION( x, y ) ENSURE_EQUALS( x " failed", time::duration_to_string( lexical_cast<time::duration_t>( to_string( x ) ), time::UNIT::NANOSECOND ), y )
 #define ENSURE_DURATION_UNIT( x, y, z ) ENSURE_EQUALS( x " failed for " #z, time::duration_to_string( lexical_cast<time::duration_t>( to_string( x ) ), time::UNIT::z ), y )
 	ENSURE_DURATION( "3s 4 m 5hour", "5 hours 4 minutes 3 seconds" );
 	ENSURE_DURATION_UNIT( "3s 4 m 5hour", "5 hours 4 minutes", MINUTE );
