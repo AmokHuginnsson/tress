@@ -1717,7 +1717,7 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 			"	processor = algo.filter(\n"
 			"		algo.map(\n"
 			"			stream_,\n"
-			"			string.strip\n"
+			"			integer\n"
 			"		),\n"
 			"		@( item ){ size( item ) > 0; }\n"
 			"	);\n"
@@ -1733,7 +1733,7 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 			"	return ( l );\n"
 			"}\n\n"
 		),
-		"*anonymous stream*:17:22: Uncaught ConversionException: Invalid UTF-8 tail sequence at: 6"
+		"*anonymous stream*:17:22: Uncaught ConversionException: not a number: `\tabc\t\t\n`"
 	);
 	ENSURE_EQUALS(
 		"exception while new key-value pair is created via multiple assignment",

@@ -13,6 +13,7 @@
 #include <TUT/tut.hpp>
 
 #include <yaal/hcore/unicode.hxx>
+#include <yaal/hcore/hcore.hxx>
 #include <yaal/tools/hmonitor.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
@@ -833,6 +834,40 @@ TUT_UNIT_TEST( "lower size, increase rank" )
 	HString s( "0123456789" );
 	s.replace( 0, 10, 1, code_point_t( 0x102345 ) );
 	ENSURE_EQUALS( "replace succeeded", s, "􂍅" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "bytes_to_string" )
+	ENSURE_EQUALS( "empty", bytes_to_string( "" ), "" );
+	ENSURE_EQUALS( "ascii", bytes_to_string( "abc" ), "abc" );
+	ENSURE_EQUALS( "utf8", bytes_to_string( "Żółwiątko" ), "Żółwiątko" );
+	ENSURE_EQUALS( "utf8-truncated", bytes_to_string( "abć", 3 ), "ab\\xc4" );
+	ENSURE_EQUALS( "utf8-invalid tail seq", bytes_to_string( "ab\304\304de" ), "ab\\xc4\\xc4de" );
+	ENSURE_EQUALS( "utf8-invalid head seq", bytes_to_string( "ab\370de" ), "ab\\xf8de" );
+TUT_TEARDOWN()
+
+namespace {
+
+typedef yaal::hcore::HArray<u8_t> octets_t;
+
+inline bytes_t mb( octets_t const& os ) {
+	bytes_t b;
+	for ( u8_t o : os ) {
+		b.push_back( static_cast<char>( o ) );
+	}
+	return ( b );
+}
+
+}
+
+TUT_UNIT_TEST( "string_to_bytes" )
+	ENSURE_EQUALS( "empty", string_to_bytes( "" ), bytes_t( { 0 } ) );
+	ENSURE_EQUALS( "ascii", string_to_bytes( "abc" ), bytes_t{ { 'a', 'b', 'c', 0 } } );
+	ENSURE_EQUALS( "utf8", string_to_bytes( "Żółwiątko" ), mb( { 0xc5, 0xbb, 0xc3, 0xb3, 0xc5, 0x82, 0x77, 0x69, 0xc4, 0x85, 0x74, 0x6b, 0x6f, 0 } ) );
+	ENSURE_EQUALS( "utf8-truncated", string_to_bytes( "ab\\xc4" ), mb( { 'a', 'b', 0xc4, 0 } ) );
+	ENSURE_EQUALS( "utf8-invalid tail seq", string_to_bytes( "ab\\xc4\\xc4de" ), mb( { 'a', 'b', 0xc4, 0xc4, 'd', 'e', 0 } ) );
+	ENSURE_EQUALS( "utf8-invalid head seq", string_to_bytes( "ab\\xf8de" ), mb( { 'a', 'b', 0xf8, 'd', 'e', 0 } ) );
+	ENSURE_EQUALS( "not realy a escape", string_to_bytes( "ab\\xfzde" ), mb( { 'a', 'b', '\\', 'x', 'f', 'z', 'd', 'e', 0 } ) );
+	ENSURE_EQUALS( "not realy a escape", string_to_bytes( "ab\\xc" ), mb( { 'a', 'b', '\\', 'x', 'c', 0 } ) );
 TUT_TEARDOWN()
 
 }
