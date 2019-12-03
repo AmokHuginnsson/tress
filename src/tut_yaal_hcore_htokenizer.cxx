@@ -62,6 +62,13 @@ TUT_UNIT_TEST( "direct split include empty set[a]*/" )
 		ENSURE_EQUALS( split_inc_any_failed, t[ 2 ], "bb" );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 3 ], "" );
 	}
+	/* delim by any, escape */ {
+		HTokenizer t( ",aa\\:zz;bb\\;cc", ",:;", HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 0 ], "" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 1 ], "aa\\:zz" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 2 ], "bb\\;cc" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 3 ], "" );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "direct split include empty set[b]*/" )
@@ -83,6 +90,13 @@ TUT_UNIT_TEST( "direct split include empty set[b]*/" )
 		HTokenizer t( "aa,bb", ",", HTokenizer::DELIMITED_BY_ANY_OF );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 0 ], "aa" );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 1 ], "bb" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 2 ], "" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 3 ], "" );
+	}
+	/* delim by any, escape */ {
+		HTokenizer t( "aa\\,zz,bb\\,cc", ",", HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 0 ], "aa\\,zz" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 1 ], "bb\\,cc" );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 2 ], "" );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 3 ], "" );
 	}
@@ -110,6 +124,13 @@ TUT_UNIT_TEST( "direct split include empty set[c]*/" )
 		ENSURE_EQUALS( split_inc_any_failed, t[ 2 ], "" );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 3 ], "" );
 	}
+	/* delim by any, escape */ {
+		HTokenizer t( "aa\\:zz,bb\\:cc;", ";:,", HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 0 ], "aa\\:zz" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 1 ], "bb\\:cc" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 2 ], "" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 3 ], "" );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "direct split include empty set[d]*/" )
@@ -131,6 +152,13 @@ TUT_UNIT_TEST( "direct split include empty set[d]*/" )
 		HTokenizer t( ";aa,", ",:;", HTokenizer::DELIMITED_BY_ANY_OF );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 0 ], "" );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 1 ], "aa" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 2 ], "" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 3 ], "" );
+	}
+	/* delim by any */ {
+		HTokenizer t( ";aa\\:zz,", ",:;", HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 0 ], "" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 1 ], "aa\\:zz" );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 2 ], "" );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 3 ], "" );
 	}
@@ -161,6 +189,15 @@ TUT_UNIT_TEST( "direct split include empty set[e]*/" )
 		ENSURE_EQUALS( split_inc_any_failed, t[ 1 ], "" );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 2 ], "" );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 3 ], "aa" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 4 ], "" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 5 ], "" );
+	}
+	/* delim by any, escape */ {
+		HTokenizer t( ",;,aa\\:zz;,", ",:;", HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 0 ], "" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 1 ], "" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 2 ], "" );
+		ENSURE_EQUALS( split_inc_any_failed, t[ 3 ], "aa\\:zz" );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 4 ], "" );
 		ENSURE_EQUALS( split_inc_any_failed, t[ 5 ], "" );
 	}
@@ -197,6 +234,16 @@ TUT_UNIT_TEST( "direct split include empty set[f]*/" )
 		ENSURE_EQUALS( split_inc_any_failed, t2[ 1 ], "" );
 		ENSURE_EQUALS( split_inc_any_failed, t2[ 2 ], "" );
 	}
+	/* delim by any */ {
+		HTokenizer t1( "a\\:z", ";:,", HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		HTokenizer t2( "a\\:z", "a", HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		ENSURE_EQUALS( split_inc_any_failed, t1[ 0 ], "a\\:z" );
+		ENSURE_EQUALS( split_inc_any_failed, t1[ 1 ], "" );
+		ENSURE_EQUALS( split_inc_any_failed, t1[ 2 ], "" );
+		ENSURE_EQUALS( split_inc_any_failed, t2[ 0 ], "" );
+		ENSURE_EQUALS( split_inc_any_failed, t2[ 1 ], "\\:z" );
+		ENSURE_EQUALS( split_inc_any_failed, t2[ 2 ], "" );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "direct split skip empty set[a]*/" )
@@ -216,6 +263,12 @@ TUT_UNIT_TEST( "direct split skip empty set[a]*/" )
 		HTokenizer t( ",aa,bb", ",", HTokenizer::behavior_t( HTokenizer::SKIP_EMPTY ) | HTokenizer::DELIMITED_BY_ANY_OF );
 		ENSURE_EQUALS( split_skip_any_failed, t[ 0 ], "aa" );
 		ENSURE_EQUALS( split_skip_any_failed, t[ 1 ], "bb" );
+		ENSURE_THROW( split_skip_any_invalid_success, t[ 2 ], HTokenizerException );
+	}
+	/* delim by any, escape */ {
+		HTokenizer t( ",aa\\:zz,bb\\:cc", ",", HTokenizer::behavior_t( HTokenizer::SKIP_EMPTY ) | HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		ENSURE_EQUALS( split_skip_any_failed, t[ 0 ], "aa\\:zz" );
+		ENSURE_EQUALS( split_skip_any_failed, t[ 1 ], "bb\\:cc" );
 		ENSURE_THROW( split_skip_any_invalid_success, t[ 2 ], HTokenizerException );
 	}
 TUT_TEARDOWN()
@@ -239,6 +292,12 @@ TUT_UNIT_TEST( "direct split skip empty set[b]*/" )
 		ENSURE_EQUALS( split_skip_any_failed, t[ 1 ], "bb" );
 		ENSURE_THROW( split_skip_any_invalid_success, t[ 2 ], HTokenizerException );
 	}
+	/* delim by any, escape */ {
+		HTokenizer t( "aa\\:zz,bb\\:cc", ";:,", HTokenizer::behavior_t( HTokenizer::SKIP_EMPTY ) | HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		ENSURE_EQUALS( split_skip_any_failed, t[ 0 ], "aa\\:zz" );
+		ENSURE_EQUALS( split_skip_any_failed, t[ 1 ], "bb\\:cc" );
+		ENSURE_THROW( split_skip_any_invalid_success, t[ 2 ], HTokenizerException );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "direct split skip empty set[c]*/" )
@@ -260,6 +319,12 @@ TUT_UNIT_TEST( "direct split skip empty set[c]*/" )
 		ENSURE_EQUALS( split_skip_any_failed, t[ 1 ], "bb" );
 		ENSURE_THROW( split_skip_any_invalid_success, t[ 2 ], HTokenizerException );
 	}
+	/* delim by any, escape */ {
+		HTokenizer t( "aa\\:zz,bb\\:cc,", ",", HTokenizer::behavior_t( HTokenizer::SKIP_EMPTY ) | HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		ENSURE_EQUALS( split_skip_any_failed, t[ 0 ], "aa\\:zz" );
+		ENSURE_EQUALS( split_skip_any_failed, t[ 1 ], "bb\\:cc" );
+		ENSURE_THROW( split_skip_any_invalid_success, t[ 2 ], HTokenizerException );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "direct split skip empty set[d]*/" )
@@ -278,6 +343,11 @@ TUT_UNIT_TEST( "direct split skip empty set[d]*/" )
 		ENSURE_EQUALS( split_skip_any_failed, t[ 0 ], "aa" );
 		ENSURE_THROW( split_skip_any_invalid_success, t[ 1 ], HTokenizerException );
 	}
+	/* delim by any, escape */ {
+		HTokenizer t( ";aa\\:zz,", ",:;", HTokenizer::behavior_t( HTokenizer::SKIP_EMPTY ) | HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		ENSURE_EQUALS( split_skip_any_failed, t[ 0 ], "aa\\:zz" );
+		ENSURE_THROW( split_skip_any_invalid_success, t[ 1 ], HTokenizerException );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "direct split skip empty set[e]*/" )
@@ -294,6 +364,11 @@ TUT_UNIT_TEST( "direct split skip empty set[e]*/" )
 	/* delim by any */ {
 		HTokenizer t( ",;,aa;,", ",:;", HTokenizer::behavior_t( HTokenizer::SKIP_EMPTY ) | HTokenizer::DELIMITED_BY_ANY_OF );
 		ENSURE_EQUALS( split_skip_any_failed, t[ 0 ], "aa" );
+		ENSURE_THROW( split_skip_any_invalid_success, t[ 1 ], HTokenizerException );
+	}
+	/* delim by any */ {
+		HTokenizer t( ",;,aa\\:zz;,", ",:;", HTokenizer::behavior_t( HTokenizer::SKIP_EMPTY ) | HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		ENSURE_EQUALS( split_skip_any_failed, t[ 0 ], "aa\\:zz" );
 		ENSURE_THROW( split_skip_any_invalid_success, t[ 1 ], HTokenizerException );
 	}
 TUT_TEARDOWN()
@@ -320,6 +395,13 @@ TUT_UNIT_TEST( "direct split skip empty set[f]*/" )
 		ENSURE_THROW( split_skip_any_invalid_success, t1[ 1 ], HTokenizerException );
 		ENSURE_THROW( split_skip_any_invalid_success, t2[ 0 ], HTokenizerException );
 	}
+	/* delim by any, escape */ {
+		HTokenizer t1( "a\\:z", ";:,", HTokenizer::SKIP_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		HTokenizer t2( "a\\:z", "a", HTokenizer::SKIP_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+		ENSURE_EQUALS( split_skip_any_failed, t1[ 0 ], "a\\:z" );
+		ENSURE_THROW( split_skip_any_invalid_success, t1[ 1 ], HTokenizerException );
+		ENSURE_EQUALS( split_skip_any_failed, t2[ 0 ], "\\:z" );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "dereference iterator for single token" )
@@ -340,6 +422,13 @@ TUT_UNIT_TEST( "dereference iterator for single token" )
 	/* delim by any */ {
 		HString text( "list_commands" );
 		HTokenizer tokenizer( text, character_class<CHARACTER_CLASS::WHITESPACE>().data(), HTokenizer::DELIMITED_BY_ANY_OF );
+		HTokenizer::HIterator it( tokenizer.begin() );
+		ENSURE( "begin failed", it != tokenizer.end() );
+		ENSURE_EQUALS( "dereferencing token iterator failed", *it, text );
+	}
+	/* delim by any, escape */ {
+		HString text( "list_commands" );
+		HTokenizer tokenizer( text, character_class<CHARACTER_CLASS::WHITESPACE>().data(), HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
 		HTokenizer::HIterator it( tokenizer.begin() );
 		ENSURE( "begin failed", it != tokenizer.end() );
 		ENSURE_EQUALS( "dereferencing token iterator failed", *it, text );
@@ -389,6 +478,20 @@ TUT_UNIT_TEST( "tokenize on empty (skip empty)" )
 			ENSURE( "bogus tokens on empty", ! ( tokenizer.begin() != tokenizer.end() ) );
 		}
 	}
+	/* delim by any, escape */ {
+		/* scope */ {
+			HTokenizer tokenizer( "", ".:;", HTokenizer::SKIP_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+			ENSURE( "bogus tokens on empty", ! ( tokenizer.begin() != tokenizer.end() ) );
+		} {
+			HTokenizer tokenizer( ",:;", HTokenizer::SKIP_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+			tokenizer.assign( "" );
+			ENSURE( "bogus tokens on empty", ! ( tokenizer.begin() != tokenizer.end() ) );
+		} {
+			HTokenizer tokenizer( "Ala;ma,kota.", ",:;", HTokenizer::SKIP_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+			tokenizer.assign( "" );
+			ENSURE( "bogus tokens on empty", ! ( tokenizer.begin() != tokenizer.end() ) );
+		}
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "tokenize on empty (include empty)" )
@@ -430,6 +533,20 @@ TUT_UNIT_TEST( "tokenize on empty (include empty)" )
 			ENSURE( "no tokens on sep-only", tokenizer.begin() != tokenizer.end() );
 		} {
 			HTokenizer tokenizer( "Ala;ma,kota.", ",:;", HTokenizer::INCLUDE_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF );
+			tokenizer.assign( "" );
+			ENSURE( "no tokens on non-empty", tokenizer.begin() != tokenizer.end() );
+		}
+	}
+	/* delim by any, escape */ {
+		/* scope */ {
+			HTokenizer tokenizer( "", ",:;", HTokenizer::INCLUDE_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+			ENSURE( "no tokens on sep-only", tokenizer.begin() != tokenizer.end() );
+		} {
+			HTokenizer tokenizer( ",:;", HTokenizer::INCLUDE_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
+			tokenizer.assign( "" );
+			ENSURE( "no tokens on sep-only", tokenizer.begin() != tokenizer.end() );
+		} {
+			HTokenizer tokenizer( "Ala;ma,kota.", ",:;", HTokenizer::INCLUDE_EMPTY | HTokenizer::DELIMITED_BY_ANY_OF, '\\'_ycp );
 			tokenizer.assign( "" );
 			ENSURE( "no tokens on non-empty", tokenizer.begin() != tokenizer.end() );
 		}
