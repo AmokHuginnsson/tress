@@ -356,29 +356,58 @@ TUT_UNIT_TEST( "command line" )
 		.description( "switches argument is forbidden" )
 		.recipient(	optS )
 	);
-	char const cmdLineData[][20] = {
-		"prog",
-		"-FS",
-		"-r7",
-		"nonOpt",
-		"--parameter=XX",
-		"nonOpt2",
-		"--option"
-	};
-	char* cmdLine[yaal::size( cmdLineData )];
-	int n( 0 );
-	for ( char const* p : cmdLineData ) {
-		cmdLine[n] = const_cast<char*>( p );
-		++ n;
+	/* raw */ {
+		char const cmdLineData[][20] = {
+			"prog",
+			"-FS",
+			"-r7",
+			"nonOpt",
+			"--parameter=XX",
+			"nonOpt2",
+			"--option"
+		};
+		char* cmdLine[yaal::size( cmdLineData )];
+		int n( 0 );
+		for ( char const* p : cmdLineData ) {
+			cmdLine[n] = const_cast<char*>( p );
+			++ n;
+		}
+		int nonOpt( po.process_command_line( yaal::size( cmdLine ), cmdLine ) );
+		ENSURE( "flag not set", flag );
+		ENSURE( "switch not set", optS );
+		ENSURE_NOT( "restartable set", b );
+		ENSURE_DISTANCE( "bad ratio", d, 7., static_cast<double>( epsilon ) );
+		ENSURE_EQUALS( "bad param", optP, "XX" );
+		ENSURE_EQUALS( "bad param", optO, "" );
+		ENSURE_EQUALS( "bad nonOpt score", nonOpt, yaal::size( cmdLineData ) - 2 );
+		ENSURE_EQUALS( "bad nonOpt1", cmdLine[nonOpt], "nonOpt"_ys );
+		ENSURE_EQUALS( "bad nonOpt2", cmdLine[nonOpt + 1], "nonOpt2"_ys );
 	}
-	int nonOpt( po.process_command_line( yaal::size( cmdLine ), cmdLine ) );
-	ENSURE( "flag not set", flag );
-	ENSURE( "switch not set", optS );
-	ENSURE_NOT( "restartable set", b );
-	ENSURE_DISTANCE( "bad ratio", d, 7., static_cast<double>( epsilon ) );
-	ENSURE_EQUALS( "bad param", optP, "XX" );
-	ENSURE_EQUALS( "bad param", optO, "" );
-	ENSURE_EQUALS( "bad nonOpt score", nonOpt, yaal::size( cmdLineData ) - 2 );
+	/* high-level */ {
+		d = 0.;
+		b = false;
+		optS = false;
+		flag = false;
+		optP.clear();
+		optO.assign( "aaa" );
+		HProgramOptionsHandler::argv_t cmdLineData( {
+			"prog",
+			"-FS",
+			"-r7",
+			"nonOpt",
+			"--parameter=XX",
+			"nonOpt2",
+			"--option"
+		} );
+		cmdLineData = po.process_command_line( yaal::move( cmdLineData ) );
+		ENSURE( "flag not set", flag );
+		ENSURE( "switch not set", optS );
+		ENSURE_NOT( "restartable set", b );
+		ENSURE_DISTANCE( "bad ratio", d, 7., static_cast<double>( epsilon ) );
+		ENSURE_EQUALS( "bad param", optP, "XX" );
+		ENSURE_EQUALS( "bad param", optO, "" );
+		ENSURE_EQUALS( "bad non opts", cmdLineData, HProgramOptionsHandler::argv_t( { "prog", "nonOpt", "nonOpt2" } ) );
+	}
 TUT_TEARDOWN()
 
 }
