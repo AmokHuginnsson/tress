@@ -10,7 +10,7 @@ class: -*observer* {}
 class: -*reference* {}
 class: -*unbound_method* {}
 class: -*variadic_parameters* {}
-class: Algorithms { AlgorithmsException, chain, enumerate, filter, iterator, map, materialize, max, min, product, range, reduce, reversed, slice, sorted, zip }
+class: Algorithms { AlgorithmsException, Chain, Enumerator, Filter, Iterator, Mapper, Product, Range, Slice, Zip, chain, enumerate, filter, iterator, map, materialize, max, min, product, range, reduce, reversed, slice, sorted, zip }
 class: AlgorithmsException : Exception { message, trace, what, where }
 class: ArithmeticException : Exception { message, trace, what, where }
 class: Base { bar, foo }
@@ -47,18 +47,18 @@ class: -Algorithms.Zip {}
 class: blob { io }
 class: boolean {}
 class: character { is_alnum, is_alpha, is_digit, is_lower, is_space, is_upper, is_xdigit, to_lower, to_upper }
-class: deque { append, clear, find, insert, pop, pop_front, prepend, push, push_front }
-class: dict { clear, ensure, erase, get, has_key, update, values }
+class: deque { ReversedDequeView, append, clear, find, insert, pop, pop_front, prepend, push, push_front }
+class: dict { KeyValuesDictView, ReversedDictView, clear, ensure, erase, get, has_key, update, values }
 class: heap { clear, pop, push, top, update }
 class: integer {}
-class: list { append, clear, find, insert, pop, push, resize, sort }
-class: lookup { clear, ensure, erase, get, has_key, update, values }
+class: list { ReversedListView, append, clear, find, insert, pop, push, resize, sort }
+class: lookup { KeyValuesLookupView, ReversedLookupView, clear, ensure, erase, get, has_key, update, values }
 class: number { get_precision, is_exact, is_integral, set_precision }
-class: order { clear, erase, has_key, insert, update }
+class: order { ReversedOrderView, clear, erase, has_key, insert, update }
 class: real {}
-class: set { clear, erase, has_key, insert, update }
-class: string { clear, ends_with, find, find_last, find_last_one_of, find_last_other_than, find_one_of, find_other_than, format, replace, starts_with, strip, strip_left, strip_right, to_lower, to_upper }
-class: tuple { find }
+class: set { ReversedSetView, clear, erase, has_key, insert, update }
+class: string { ReversedStringView, clear, ends_with, find, find_last, find_last_one_of, find_last_other_than, find_one_of, find_other_than, format, replace, starts_with, strip, strip_left, strip_right, to_lower, to_upper }
+class: tuple { ReversedTupleView, find }
 enum: COLOR { BLUE, GREEN, RED }
 enum: -Stream.SEEK { BEGIN, CURRENT, END }
 function: add
