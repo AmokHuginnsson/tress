@@ -7,6 +7,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
 #include <yaal/tools/hstringstream.hxx>
+#include <yaal/hcore/system.hxx>
 #include <yaal/tools/sleep.hxx>
 
 #include "tut_yaal_tools_hhuginn_base.hxx"
@@ -29,9 +30,11 @@ namespace {
 
 char const CHILD[] = "./data/child" EXE_SUFFIX;
 #ifndef __MSVCXX__
-	char const EXPECTED_EXEC[] = "No such file or directory";
+	char const EXPECTED_EXEC[] = "exec: `/non/existing`: No such file or directory";
+	char const EXPECTED_SPAWN[] = "No such file or directory";
 #else /* #ifndef __MSVCXX__ */
-	char const EXPECTED_EXEC[] = "The system cannot find the file specified";
+	char const EXPECTED_EXEC[] = "exec: `/non/existing`: The system cannot find the file specified";
+	char const EXPECTED_SPAWN[] = "The system cannot find the file specified";
 #endif /* #else #ifndef __MSVCXX__ */
 
 }
@@ -162,7 +165,7 @@ TUT_UNIT_TEST( "spawn" )
 			"}"
 			"}"
 		),
-		"\"*anonymous stream*:1:49: "_ys.append( EXPECTED_EXEC ).append( ": non-existing\"" )
+		"\"*anonymous stream*:1:49: "_ys.append( EXPECTED_SPAWN ).append( ": non-existing\"" )
 	);
 TUT_TEARDOWN()
 

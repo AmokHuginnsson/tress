@@ -4,6 +4,7 @@
 
 #include <yaal/tools/hhuginn.hxx>
 #include <yaal/hcore/hcore.hxx>
+#include <yaal/hcore/system.hxx>
 #include <yaal/tools/huginn/runtime.hxx>
 #include <yaal/tools/huginn/thread.hxx>
 #include <yaal/tools/huginn/objectfactory.hxx>

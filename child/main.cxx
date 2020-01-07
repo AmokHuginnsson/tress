@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <csignal>
 
+#include <yaal/hcore/system.hxx>
 #include <yaal/hcore/hfile.hxx>
 #include <yaal/hcore/htokenizer.hxx>
 #include <yaal/hcore/hlog.hxx>

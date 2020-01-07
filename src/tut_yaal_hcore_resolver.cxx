@@ -6,6 +6,7 @@
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 #include <yaal/hcore/htokenizer.hxx>
+#include <yaal/hcore/system.hxx>
 
 using namespace tut;
 using namespace yaal;

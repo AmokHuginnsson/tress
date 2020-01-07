@@ -390,7 +390,7 @@ TUT_UNIT_TEST( "command line" )
 		flag = false;
 		optP.clear();
 		optO.assign( "aaa" );
-		HProgramOptionsHandler::argv_t cmdLineData( {
+		system::argv_t cmdLineData( {
 			"prog",
 			"-FS",
 			"-r7",
@@ -406,7 +406,7 @@ TUT_UNIT_TEST( "command line" )
 		ENSURE_DISTANCE( "bad ratio", d, 7., static_cast<double>( epsilon ) );
 		ENSURE_EQUALS( "bad param", optP, "XX" );
 		ENSURE_EQUALS( "bad param", optO, "" );
-		ENSURE_EQUALS( "bad non opts", cmdLineData, HProgramOptionsHandler::argv_t( { "prog", "nonOpt", "nonOpt2" } ) );
+		ENSURE_EQUALS( "bad non opts", cmdLineData, system::argv_t( { "prog", "nonOpt", "nonOpt2" } ) );
 	}
 TUT_TEARDOWN()
 
