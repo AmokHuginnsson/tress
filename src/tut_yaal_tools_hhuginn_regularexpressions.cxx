@@ -135,5 +135,30 @@ TUT_UNIT_TEST( "replace" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "map" )
+	ENSURE_EQUALS(
+		"RegularExpressions.map failed",
+		execute(
+			"import RegularExpressions as re;\n"
+			"main(){\n"
+			"cre=re.compile(\"([0-9]+)\");\n"
+			"return(cre.map(\"abc012def789ghj\",@(x){string(integer(x)*2);}));\n"
+			"}"
+		),
+		"\"abc20def1578ghj\""
+	);
+	ENSURE_EQUALS(
+		"RegularExpressions.map failed",
+		execute_except(
+			"import RegularExpressions as re;\n"
+			"main(){\n"
+			"cre=re.compile(\"([0-9]+)\");\n"
+			"return(cre.map(\"abc012def789ghj\",@(x){integer(x)*2;}));\n"
+			"}"
+		),
+		"*anonymous stream*:4:15: User supplied `replacer` function must return a string type instead of an `integer`."
+	);
+TUT_TEARDOWN()
+
 }
 
