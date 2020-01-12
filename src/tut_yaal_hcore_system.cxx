@@ -73,7 +73,7 @@ TUT_UNIT_TEST( "substitute_environment" )
 		HString expected( "HOME=" );
 		char const* HOME( getenv( "HOME" ) );
 		expected.append( HOME ? HOME : "" ).append( ":/path/debug/subdir/" );
-		ENSURE_EQUALS( "substitute_environment( ONE_LAYER ) failed", s, expected );
+		ENSURE_EQUALS( "substitute_environment( RECURSIVE ) failed", s, expected );
 	}
 	/* with default but set */ {
 		set_env( "LAYER", "${HOME}:/path/" );
@@ -82,7 +82,7 @@ TUT_UNIT_TEST( "substitute_environment" )
 		HString expected( "HOME=" );
 		char const* HOME( getenv( "HOME" ) );
 		expected.append( HOME ? HOME : "" ).append( ":/path/debug/subdir/" );
-		ENSURE_EQUALS( "substitute_environment( ONE_LAYER, :-default ) failed", s, expected );
+		ENSURE_EQUALS( "substitute_environment( RECURSIVE, :-default ) failed", s, expected );
 	}
 	/* with default but *not* set */ {
 		set_env( "LAYER", "${HOME}:/path/" );
@@ -91,7 +91,36 @@ TUT_UNIT_TEST( "substitute_environment" )
 		HString expected( "HOME=" );
 		char const* HOME( getenv( "HOME" ) );
 		expected.append( HOME ? HOME : "" ).append( ":/path/relassert/subdir/" );
-		ENSURE_EQUALS( "substitute_environment( ONE_LAYER, :-default ) (not set) failed", s, expected );
+		ENSURE_EQUALS( "substitute_environment( RECURSIVE, :-default ) (not set) failed", s, expected );
+	}
+	/* recursive with-no-escping */ {
+		set_env( "LAYER", "${HOME}:/path/" );
+		HString s( "HOME=\\${LAYER}${DEFAULT_TARGET}/subdir/" );
+		substitute_environment( s, ENV_SUBST_MODE::RECURSIVE, 0_ycp );
+		HString expected( "HOME=\\" );
+		char const* HOME( getenv( "HOME" ) );
+		expected.append( HOME ? HOME : "" ).append( ":/path/debug/subdir/" );
+		ENSURE_EQUALS( "substitute_environment( RECURSIVE ) failed", s, expected );
+	}
+	/* recursive with-escping */ {
+		set_env( "LAYER", "${HOME}:/path/" );
+		HString s( "HOME=\\${LAYER}${DEFAULT_TARGET}/subdir/" );
+		substitute_environment( s, ENV_SUBST_MODE::RECURSIVE );
+		ENSURE_EQUALS( "substitute_environment( RECURSIVE ) failed", s, "HOME=\\${LAYER}debug/subdir/" );
+	}
+	/* one layer nested, no-escape */ {
+		set_env( "INSIDE", "OM" );
+		HString s( "HOME=${H${INSIDE}E}:/path/${DEFAULT_TARGET}/subdir/" );
+		substitute_environment( s, ENV_SUBST_MODE::ONE_LAYER, 0_ycp );
+		HString expected( "HOME=${HOME}:/path/debug/subdir/" );
+		ENSURE_EQUALS( "substitute_environment( ONE_LAYER (nested, no-escape) ) failed", s, expected );
+	}
+	/* one layer nested, escape */ {
+		set_env( "INSIDE", "OM" );
+		HString s( "HOME=${H${INSIDE}E}:/path/${DEFAULT_TARGET}/subdir/" );
+		substitute_environment( s, ENV_SUBST_MODE::ONE_LAYER );
+		HString expected( "HOME=${HOME}:/path/debug/subdir/" );
+		ENSURE_EQUALS( "substitute_environment( ONE_LAYER (nested, escape) ) failed", s, expected );
 	}
 TUT_TEARDOWN()
 
