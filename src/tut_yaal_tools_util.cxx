@@ -2,6 +2,7 @@
 
 #include <TUT/tut.hpp>
 
+#include <yaal/hcore/unicode.hxx>
 #include <yaal/hcore/hprogramoptionshandler.hxx>
 #include <yaal/tools/util.hxx>
 #include <yaal/tools/escape.hxx>
@@ -61,6 +62,40 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "unescape_copy with escaper as literal" )
 	ENSURE_EQUALS( "unescaping (copy) with escaper as literal failed",
 			unescape_copy( "Alan\\nna\\nkontach.", EscapeTable( "\n", 1, "n", 1 ) ), "Alan\nna\nkontach." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "mask_escape/unmask_escape" )
+	/* u8 */ {
+		HString s( "some text \\${HOME} more" );
+		HString escaped( s );
+		escape_mask_map_t emm;
+		mask_escape( escaped, emm );
+		ENSURE_EQUALS( "mangled normal char", escaped[10], '\\'_ycp );
+		ENSURE_EQUALS( "escaped char not masked", escaped[11], unicode::CODE_POINT::SUPPLEMENTARY_PRIVATE_USE_AREA_B );
+		unmask_escape( escaped, emm );
+		ENSURE_EQUALS( "failed to unmask", escaped, s );
+	}
+	/* u16 */ {
+		HString s( "some text \\${HOME} moreąż" );
+		HString escaped( s );
+		escape_mask_map_t emm;
+		mask_escape( escaped, emm );
+		ENSURE_EQUALS( "mangled normal char", escaped[10], '\\'_ycp );
+		ENSURE_EQUALS( "escaped char not masked", escaped[11], unicode::CODE_POINT::SUPPLEMENTARY_PRIVATE_USE_AREA_B );
+		unmask_escape( escaped, emm );
+		ENSURE_EQUALS( "failed to unmask", escaped, s );
+	}
+	/* u32 */ {
+		HString s( "some text \\${HOME} more" );
+		s.push_back( unicode::CODE_POINT::EMOJI_SNAKE );
+		HString escaped( s );
+		escape_mask_map_t emm;
+		mask_escape( escaped, emm );
+		ENSURE_EQUALS( "mangled normal char", escaped[10], '\\'_ycp );
+		ENSURE_EQUALS( "escaped char not masked", escaped[11], unicode::CODE_POINT::SUPPLEMENTARY_PRIVATE_USE_AREA_B );
+		unmask_escape( escaped, emm );
+		ENSURE_EQUALS( "failed to unmask", escaped, s );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "(atof_ex) complex and valid number" )
