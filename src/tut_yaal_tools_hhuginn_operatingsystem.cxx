@@ -337,5 +337,59 @@ TUT_UNIT_TEST( "umask" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "set_locale" )
+#ifndef __MSVCXX__
+	ENSURE_EQUALS(
+		"set_locale (COLLATE) failed",
+		execute(
+			"import OperatingSystem as os;\n"
+			"main(){\n"
+			"origLocale = os.set_locale(os.LOCALE_FACET.COLLATE,none);\n"
+			"os.set_locale(os.LOCALE_FACET.COLLATE,\"C.UTF-8\");\n"
+			"res = [\"ą\" < \"o\", 'ą' < 'o'];\n"
+			"os.set_locale(os.LOCALE_FACET.COLLATE,\"pl_PL.UTF-8\");\n"
+			"res += [\"ą\" < \"o\", 'ą' < 'o'];\n"
+			"os.set_locale(os.LOCALE_FACET.COLLATE,\"C.UTF-8\");\n"
+			"res += [\"ą\" < \"o\", 'ą' < 'o'];\n"
+			"os.set_locale(os.LOCALE_FACET.COLLATE,origLocale);\n"
+			"return(res);\n"
+			"}"
+		),
+		"[false, false, true, true, false, false]"
+	);
+#endif
+#ifdef __MSVCXX__
+#	define LOCALE_C "English_United States"
+#	define LOCALE_PL "Polish_Poland"
+#elif defined( __HOST_OS_TYPE_FREEBSD__ )
+#	define LOCALE_C "C"
+#	define LOCALE_PL "pl_PL.UTF-8"
+#else
+#	define LOCALE_C "C.UTF-8"
+#	define LOCALE_PL "pl_PL.UTF-8"
+#endif
+	ENSURE_EQUALS(
+		"set_locale (TIME) failed",
+		execute(
+			"import OperatingSystem as os;\n"
+			"import DateTime as dt;\n"
+			"main(){\n"
+			"e = Time(1978,5,24,23,30,17);\n"
+			"origLocale = os.set_locale(os.LOCALE_FACET.TIME,none);\n"
+			"res = [];\n"
+			"os.set_locale(os.LOCALE_FACET.TIME,\"" LOCALE_C "\");\n"
+			"res.push(dt.format(\"%b\", e));\n"
+			"os.set_locale(os.LOCALE_FACET.TIME,\"" LOCALE_PL "\");\n"
+			"res.push(dt.format(\"%b\", e));\n"
+			"os.set_locale(os.LOCALE_FACET.TIME,\"" LOCALE_C "\");\n"
+			"res.push(dt.format(\"%b\", e));\n"
+			"os.set_locale(os.LOCALE_FACET.TIME,origLocale);\n"
+			"return(res);\n"
+			"}"
+		),
+		"[\"May\", \"maj\", \"May\"]"
+	);
+TUT_TEARDOWN()
+
 }
 

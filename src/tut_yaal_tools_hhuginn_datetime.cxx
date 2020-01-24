@@ -280,5 +280,55 @@ TUT_UNIT_TEST( "hash invalid" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "epochs" )
+	HTime epoch( unix_epoch_to_yaal_epoch( 0 ) );
+	HString epochStr;
+	epochStr
+		.assign( "Time(" )
+		.append( epoch.get_year() )
+		.append( ", " ).append( static_cast<int>( epoch.get_month() ) )
+		.append( ", " ).append( epoch.get_day() )
+		.append( ", " ).append( epoch.get_hour() )
+		.append( ", " ).append( epoch.get_minute() )
+		.append( ", " ).append( epoch.get_second() )
+		.append( ")" );
+	ENSURE_EQUALS(
+		"epochs (unix) failed",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"return (("
+			"dt.unix_epoch_to_time(0),"
+			"dt.time_to_unix_epoch(Time(1970,1,1,0,0,0))"
+			"));"
+			"}"
+		),
+		"("_ys.append( epochStr ).append( ", " ).append( yaal_epoch_to_unix_epoch( HTime( 1970, 1, 1, 0, 0, 0 ).raw() ) ).append( ")" )
+	);
+	epoch.set( 0 );
+	epochStr
+		.assign( "Time(" )
+		.append( epoch.get_year() )
+		.append( ", " ).append( static_cast<int>( epoch.get_month() ) )
+		.append( ", " ).append( epoch.get_day() )
+		.append( ", " ).append( epoch.get_hour() )
+		.append( ", " ).append( epoch.get_minute() )
+		.append( ", " ).append( epoch.get_second() )
+		.append( ")" );
+	ENSURE_EQUALS(
+		"epochs (AD) failed",
+		execute(
+			"import DateTime as dt;"
+			"main(){"
+			"return (("
+			"dt.ad_epoch_to_time(0),"
+			"dt.time_to_ad_epoch(Time(0,1,1,0,0,0))"
+			"));"
+			"}"
+		),
+		"("_ys.append( epochStr ).append( ", " ).append( HTime( 0, 1, 1, 0, 0, 0 ).raw() ).append( ")" )
+	);
+TUT_TEARDOWN()
+
 }
 
