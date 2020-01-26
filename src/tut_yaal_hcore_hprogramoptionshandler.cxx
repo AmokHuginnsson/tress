@@ -410,5 +410,46 @@ TUT_UNIT_TEST( "command line" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "command line" )
+	HProgramOptionsHandler po;
+	HString optO;
+	HString optP;
+	po(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'O' )
+		.long_form( "option" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "argument is required" )
+		.recipient(	optO )
+		.argument_name( "arg" )
+		.default_value( "defArg" )
+	)(
+		HProgramOptionsHandler::HOption()
+		.short_form( 'P' )
+		.long_form( "parameter" )
+		.switch_type( HProgramOptionsHandler::HOption::ARGUMENT::REQUIRED )
+		.description( "argument is required" )
+		.recipient(	optP )
+		.argument_name( "arg" )
+		.default_value( "defParam" )
+		.verbatim( true )
+	);
+	char const cmdLineData[][32] = {
+		"prog",
+		"--parameter=${DEFAULT_TARGET}",
+		"--option=${DEFAULT_TARGET}"
+	};
+	char* cmdLine[yaal::size( cmdLineData )];
+	int n( 0 );
+	for ( char const* p : cmdLineData ) {
+		cmdLine[n] = const_cast<char*>( p );
+		++ n;
+	}
+	int nonOpt( po.process_command_line( yaal::size( cmdLine ), cmdLine ) );
+	ENSURE_EQUALS( "bad param", optO, "debug" );
+	ENSURE_EQUALS( "bad param", optP, "${DEFAULT_TARGET}" );
+	ENSURE_EQUALS( "bad nonOpt score", nonOpt, yaal::size( cmdLineData ) );
+TUT_TEARDOWN()
+
 }
 
