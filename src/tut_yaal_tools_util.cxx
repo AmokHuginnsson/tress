@@ -98,6 +98,14 @@ TUT_UNIT_TEST( "mask_escape/unmask_escape" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "hide/unhide" )
+	HString s( "yyXXzzXXXXqqXXmm" );
+	hide( s, "XXXX" );
+	s.replace( "XX", "ZZ" );
+	unhide( s, "XXXX" );
+	ENSURE_EQUALS( "hide/unhide failed", s, "yyZZzzXXXXqqZZmm" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "(atof_ex) complex and valid number" )
 	HString formula = "2*(3+5)/sin(3.1415926535/2)";
 	ENSURE_DISTANCE( "Wrong counting.", atof_ex( formula, true ), 16.L, epsilon );

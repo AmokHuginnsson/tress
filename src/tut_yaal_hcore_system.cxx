@@ -122,6 +122,24 @@ TUT_UNIT_TEST( "substitute_environment" )
 		HString expected( "HOME=${HOME}:/path/debug/subdir/" );
 		ENSURE_EQUALS( "substitute_environment( ONE_LAYER (nested, escape) ) failed", s, expected );
 	}
+	/* with alternative but set */ {
+		set_env( "LAYER", "${HOME}:/path/" );
+		HString s( "HOME=${LAYER}${DEFAULT_TARGET:+relassert}/subdir/" );
+		substitute_environment( s, ENV_SUBST_MODE::RECURSIVE );
+		HString expected( "HOME=" );
+		char const* HOME( getenv( "HOME" ) );
+		expected.append( HOME ? HOME : "" ).append( ":/path/relassert/subdir/" );
+		ENSURE_EQUALS( "substitute_environment( RECURSIVE, :+alt ) failed", s, expected );
+	}
+	/* with alternative but *not* set */ {
+		set_env( "LAYER", "${HOME}:/path/" );
+		HString s( "HOME=${LAYER}${THE_TARGET:+relassert}/subdir/" );
+		substitute_environment( s, ENV_SUBST_MODE::RECURSIVE );
+		HString expected( "HOME=" );
+		char const* HOME( getenv( "HOME" ) );
+		expected.append( HOME ? HOME : "" ).append( ":/path//subdir/" );
+		ENSURE_EQUALS( "substitute_environment( RECURSIVE, :+alt ) (not set) failed", s, expected );
+	}
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "get_umask()/set_umask()" )
