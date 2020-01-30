@@ -534,9 +534,14 @@ TUT_UNIT_TEST( "suspend" )
 	ENSURE_EQUALS( "work not done", t.get_slot_fill(), SLOTS );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "start_task" )
+TUT_UNIT_TEST( "start_task (expanting slots)" )
 	TIME_CONSTRAINT_EXEMPT();
 	static int const SLOTS( 16 );
+#ifdef __MSVCXX__
+	static int const SLEEP( 2560 );
+#else
+	static int const SLEEP( 640 );
+#endif
 	Task t( SLEEP, SLOTS );
 	/* HWorkFlow scope */ {
 		HWorkFlow w( 1 );
@@ -545,6 +550,26 @@ TUT_UNIT_TEST( "start_task" )
 		}
 	}
 	ENSURE_EQUALS( "workflow size not expanded", t.get_runner_count(), SLOTS );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "start_task (reusing slots)" )
+	TIME_CONSTRAINT_EXEMPT();
+	static int const SLOTS( 16 );
+	static int const SLEEP_IN_TASK( 1 );
+#ifdef __MSVCXX__
+	static int const SLEEP_BETWEEN_TASKS( 640 );
+#else
+	static int const SLEEP_BETWEEN_TASKS( 64 );
+#endif
+	Task t( SLEEP_IN_TASK, SLOTS );
+	/* HWorkFlow scope */ {
+		HWorkFlow w( 1 );
+		for ( int i( 0 ); i < SLOTS; ++ i ) {
+			w.start_task( call( &Task::do_slot_work, &t, i ) );
+			sleep_for( duration( SLEEP_BETWEEN_TASKS, time::UNIT::MILLISECOND ) );
+		}
+	}
+	ENSURE_EQUALS( "workflow size was expanded", t.get_runner_count(), 1 );
 TUT_TEARDOWN()
 
 namespace {
