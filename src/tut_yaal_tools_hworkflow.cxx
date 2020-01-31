@@ -188,7 +188,7 @@ TUT_UNIT_TEST( "Pushing tasks (functional test)." )
 	static int const MAX_RETRIES( 16 );
 	do {
 		for ( char m : mark ) {
-			w.schedule_task( call( &Task::foo, &t, id, m, slp ) );
+			w.schedule_task( HWorkFlow::SCHEDULE_POLICY::LAZY, call( &Task::foo, &t, id, m, slp ) );
 			++ id;
 			slp += ( SLEEP / WORKER_COUNT );
 		}
@@ -206,7 +206,7 @@ TUT_UNIT_TEST( "Cleanup of finished tasks." ) {
 	/* Order of Task and HWorkFlow matters. */
 	Task t;
 	HWorkFlow w( 3 );
-	w.schedule_task( call( &Task::bar, &t, Task::counter_t() ) );
+	w.schedule_task( HWorkFlow::SCHEDULE_POLICY::LAZY, call( &Task::bar, &t, Task::counter_t() ) );
 	if ( ! sleep_for( duration( 400, time::UNIT::MILLISECOND ) ) ) {
 		log_trace << "sleep interrupted!" << endl;
 	}
@@ -224,6 +224,7 @@ TUT_UNIT_TEST( "interrupt and explicit continue" )
 		HWorkFlow w( WORKER_COUNT );
 		for ( Task::Fiber*& f : fibers ) {
 			w.schedule_task(
+				HWorkFlow::SCHEDULE_POLICY::LAZY,
 				call( &Task::worker, &t, &f, TARGET ),
 				call( &Task::async_stop, &t, &f ),
 				call( &Task::want_restart, &t, &f, TARGET )
@@ -257,6 +258,7 @@ TUT_UNIT_TEST( "interrupt and implicit continue" )
 		HWorkFlow w( WORKER_COUNT );
 		for ( Task::Fiber*& f : fibers ) {
 			w.schedule_task(
+				HWorkFlow::SCHEDULE_POLICY::LAZY,
 				call( &Task::worker, &t, &f, TARGET ),
 				call( &Task::async_stop, &t, &f ),
 				call( &Task::want_restart, &t, &f, TARGET )
@@ -290,6 +292,7 @@ TUT_UNIT_TEST( "abort" )
 		HWorkFlow w( WORKER_COUNT );
 		for ( Task::Fiber*& f : fibers ) {
 			w.schedule_task(
+				HWorkFlow::SCHEDULE_POLICY::LAZY,
 				call( &Task::worker, &t, &f, TARGET ),
 				call( &Task::async_stop, &t, &f ),
 				call( &Task::want_restart, &t, &f, TARGET )
@@ -323,6 +326,7 @@ TUT_UNIT_TEST( "schedule_windup" )
 		HWorkFlow w( WORKER_COUNT );
 		for ( Task::Fiber*& f : fibers ) {
 			w.schedule_task(
+				HWorkFlow::SCHEDULE_POLICY::LAZY,
 				call( &Task::worker, &t, &f, TARGET ),
 				call( &Task::async_stop, &t, &f ),
 				call( &Task::want_restart, &t, &f, TARGET )
@@ -395,6 +399,7 @@ TUT_UNIT_TEST( "add task during interrupt (implicit restart)" )
 		HWorkFlow w( WORKER_COUNT );
 		for ( Task::Fiber*& f : fibers ) {
 			w.schedule_task(
+				HWorkFlow::SCHEDULE_POLICY::LAZY,
 				call( &Task::worker, &t, &f, TARGET ),
 				call( &Task::async_stop, &t, &f ),
 				call( &Task::want_restart, &t, &f, TARGET )
@@ -415,7 +420,7 @@ TUT_UNIT_TEST( "add task during interrupt (implicit restart)" )
 		}
 		t.clear_fibers();
 		fill( begin( fibers ), end( fibers ), nullptr );
-		w.schedule_task( call( &std::function<void()>::operator(), make_pointer<std::function<void()>>( [&done](){ done = 1; } ) ) );
+		w.schedule_task( HWorkFlow::SCHEDULE_POLICY::LAZY, call( &std::function<void()>::operator(), make_pointer<std::function<void()>>( [&done](){ done = 1; } ) ) );
 	}
 	ENSURE_GREATER_OR_EQUAL( "work was not performed", t.get_performed_work_units(), TARGET );
 	ENSURE_EQUALS( "additional task not executed", done, 1 );
@@ -429,6 +434,7 @@ TUT_UNIT_TEST( "task in worker after interrupt, implicit restart" )
 		HWorkFlow w( WORKER_COUNT );
 		for ( int i( 0 ); i < ( WORKER_COUNT / 2 ); ++ i ) {
 			w.schedule_task(
+				HWorkFlow::SCHEDULE_POLICY::LAZY,
 				call( &Task::worker, &t, &fibers[i], TARGET ),
 				call( &Task::async_stop, &t, &fibers[i] ),
 				call( &Task::want_restart, &t, &fibers[i], TARGET )
@@ -468,6 +474,7 @@ TUT_UNIT_TEST( "spawn more task directly during resume" )
 		HWorkFlow w( WORKER_COUNT );
 		for ( int i( 0 ); i < ( WORKER_COUNT / 2 ); ++ i ) {
 			w.schedule_task(
+				HWorkFlow::SCHEDULE_POLICY::LAZY,
 				call( &Task::worker, &t, &fibers[i], TARGET ),
 				call( &Task::async_stop, &t, &fibers[i] ),
 				call( &Task::want_restart, &t, &fibers[i], TARGET )
@@ -490,7 +497,7 @@ TUT_UNIT_TEST( "spawn more task directly during resume" )
 		t.clear_fibers();
 		fill( begin( fibers ), end( fibers ), nullptr );
 		for ( int i( 0 ); i < SLOTS; ++ i ) {
-			w.schedule_task( call( &Task::do_slot_work, &t, i ) );
+			w.schedule_task( HWorkFlow::SCHEDULE_POLICY::LAZY, call( &Task::do_slot_work, &t, i ) );
 		}
 	}
 	clog << "runnerCount = " << t.get_runner_count() << endl;
@@ -507,7 +514,7 @@ TUT_UNIT_TEST( "many tasks" )
 	/* HWorkFlow scope */ {
 		HWorkFlow w( WORKER_COUNT );
 		for ( int i( 0 ); i < SLOTS; ++ i ) {
-			w.schedule_task( call( &Task::do_slot_work, &t, i ) );
+			w.schedule_task( HWorkFlow::SCHEDULE_POLICY::LAZY, call( &Task::do_slot_work, &t, i ) );
 		}
 		w.windup( HWorkFlow::WINDUP_MODE::INTERRUPT );
 	}
@@ -523,12 +530,12 @@ TUT_UNIT_TEST( "suspend" )
 		HWorkFlow w( WORKER_COUNT );
 		int halve( SLOTS / 2 );
 		for ( int i( 0 ); i < halve; ++ i ) {
-			w.schedule_task( call( &Task::do_slot_work, &t, i ) );
+			w.schedule_task( HWorkFlow::SCHEDULE_POLICY::LAZY, call( &Task::do_slot_work, &t, i ) );
 		}
 		w.windup( HWorkFlow::WINDUP_MODE::SUSPEND );
 		ENSURE_EQUALS( "work not done", t.get_slot_fill(), halve );
 		for ( int i( halve ); i < SLOTS; ++ i ) {
-			w.schedule_task( call( &Task::do_slot_work, &t, i ) );
+			w.schedule_task( HWorkFlow::SCHEDULE_POLICY::LAZY, call( &Task::do_slot_work, &t, i ) );
 		}
 	}
 	ENSURE_EQUALS( "work not done", t.get_slot_fill(), SLOTS );
@@ -546,7 +553,7 @@ TUT_UNIT_TEST( "start_task (expanting slots)" )
 	/* HWorkFlow scope */ {
 		HWorkFlow w( 1 );
 		for ( int i( 0 ); i < SLOTS; ++ i ) {
-			w.start_task( call( &Task::do_slot_work, &t, i ) );
+			w.schedule_task( HWorkFlow::SCHEDULE_POLICY::EAGER, call( &Task::do_slot_work, &t, i ) );
 		}
 	}
 	ENSURE_EQUALS( "workflow size not expanded", t.get_runner_count(), SLOTS );
@@ -565,7 +572,7 @@ TUT_UNIT_TEST( "start_task (reusing slots)" )
 	/* HWorkFlow scope */ {
 		HWorkFlow w( 1 );
 		for ( int i( 0 ); i < SLOTS; ++ i ) {
-			w.start_task( call( &Task::do_slot_work, &t, i ) );
+			w.schedule_task( HWorkFlow::SCHEDULE_POLICY::EAGER, call( &Task::do_slot_work, &t, i ) );
 			sleep_for( duration( SLEEP_BETWEEN_TASKS, time::UNIT::MILLISECOND ) );
 		}
 	}
@@ -579,7 +586,7 @@ void dummy() {}
 TUT_UNIT_TEST( "schedule after close" )
 	HWorkFlow w;
 	w.windup( HWorkFlow::WINDUP_MODE::CLOSE );
-	ENSURE_THROW( "schedule after close acceptrd", w.schedule_task( call( &dummy ) ), HWorkFlowException );
+	ENSURE_THROW( "schedule after close acceptrd", w.schedule_task( HWorkFlow::SCHEDULE_POLICY::LAZY, call( &dummy ) ), HWorkFlowException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "parallel start" )
@@ -597,7 +604,7 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "start while suspended" )
 	HWorkFlow w;
 	w.windup( HWorkFlow::WINDUP_MODE::SUSPEND );
-	ENSURE_THROW( "tast started while suspended", w.start_task( call( &dummy ) ), HWorkFlowException );
+	ENSURE_THROW( "tast started while suspended", w.schedule_task( HWorkFlow::SCHEDULE_POLICY::EAGER, call( &dummy ) ), HWorkFlowException );
 TUT_TEARDOWN()
 
 }

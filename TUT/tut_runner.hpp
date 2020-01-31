@@ -224,10 +224,11 @@ public:
 				total += i->second->get_real_test_count();
 			_callback->run_started( static_cast<int>( _groups.size() ), total );
 			for ( const_iterator i( _groups.begin() ), e( _groups.end() ); ! yaal::_isKilled_ && ( i != e ); ++ i ) {
-				if ( !! w )
-					w->schedule_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
-				else
+				if ( !! w ) {
+					w->schedule_task( yaal::tools::HWorkFlow::SCHEDULE_POLICY::LAZY, yaal::hcore::call( &test_runner::run_group, this, i ) );
+				} else {
 					run_group( i );
+				}
 			}
 		}
 		_callback->run_completed();
@@ -260,10 +261,11 @@ public:
 					tr.set_location( yaal::lexical_cast<std::string>( tress::setup._testGroupListFilePath ), "-", static_cast<int>( std::distance( group_names.begin(), k ) ) );
 					_callback->test_completed( tr );
 				} else {
-					if ( !! w )
-						w->schedule_task( yaal::hcore::call( &test_runner::run_group, this, i ) );
-					else
+					if ( !! w ) {
+						w->schedule_task( yaal::tools::HWorkFlow::SCHEDULE_POLICY::LAZY, yaal::hcore::call( &test_runner::run_group, this, i ) );
+					} else {
 						run_group( i );
+					}
 				}
 			}
 		}
@@ -299,10 +301,11 @@ public:
 					tr.set_location( yaal::lexical_cast<std::string>( tress::setup._testGroupListFilePath ), "-", static_cast<int>( std::distance( testSets_.begin(), k ) ) );
 					_callback->test_completed( tr );
 				} else {
-					if ( !! w )
-						w->schedule_task( yaal::hcore::call( &test_runner::run_in_group, this, i, yaal::move( k->second ) ) );
-					else
+					if ( !! w ) {
+						w->schedule_task( yaal::tools::HWorkFlow::SCHEDULE_POLICY::LAZY, yaal::hcore::call( &test_runner::run_in_group, this, i, yaal::move( k->second ) ) );
+					} else {
 						run_in_group( i, k->second );
+					}
 				}
 			}
 		}
