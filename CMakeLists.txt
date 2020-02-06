@@ -24,7 +24,7 @@ else()
 	use_cxx_compiler_flag( -rdynamic )
 endif()
 
-find_package( Boost COMPONENTS filesystem date_time system REQUIRED )
+find_package( Boost COMPONENTS filesystem date_time system )
 find_package( Yaal COMPONENTS hcore tools dbwrapper hconsole hdata REQUIRED )
 
 check_cxx_source_compiles( "

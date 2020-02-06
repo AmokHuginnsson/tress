@@ -125,7 +125,13 @@ HString const& tut_yaal_hcore_hnumber::expand_leafs( HString const& template_ ) 
 	return ( _cache );
 }
 
-TUT_TEST_GROUP( tut_yaal_hcore_hnumber, "yaal::hcore::HNumber", 70 );
+#ifdef __HOST_OS_TYPE_CYGWIN__
+#	define TUT_SUITE_PREFIX "000"
+#else
+#	define TUT_SUITE_PREFIX ""
+#endif
+
+TUT_TEST_GROUP( tut_yaal_hcore_hnumber, TUT_SUITE_PREFIX "yaal::hcore::HNumber", 70 );
 
 TUT_UNIT_TEST( "default constructor / check default precision" )
 	HNumber n;

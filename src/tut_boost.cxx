@@ -7,6 +7,10 @@
 #include <numeric>
 #include <math.h>
 
+#include "config.hxx"
+
+#ifdef HAVE_BOOST
+
 #include <yaal/config.hxx>
 #ifdef __HOST_OS_TYPE_SOLARIS__
 #define BOOST_MATH_DISABLE_STD_FPCLASSIFY 1
@@ -264,3 +268,4 @@ TUT_TEARDOWN()
 
 }
 
+#endif /* #ifdef HAVE_BOOST */

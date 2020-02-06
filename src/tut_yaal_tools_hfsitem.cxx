@@ -145,7 +145,11 @@ TUT_UNIT_TEST( "modified()" )
 	ENSURE_EQUALS( "bad modified", fi.modified(), now );
 	ENSURE_EQUALS( "bad status_changed", fi.status_changed(), now );
 /* this test will fail on file systems with noatime option enabled */
+#ifndef __MSVCXX__
+#ifndef __HOST_OS_TYPE_CYGWIN__
 	ENSURE( "bad accessed", fi.accessed() != now );
+#endif
+#endif
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "accessed()" )

@@ -60,7 +60,13 @@ HString tut_yaal_tools_hpipedchild::MSG_ERR( "err" );
 HString tut_yaal_tools_hpipedchild::ACK_OUT( "hello-OUT" );
 HString tut_yaal_tools_hpipedchild::ACK_ERR( "hello-ERR" );
 
-TUT_TEST_GROUP( tut_yaal_tools_hpipedchild, "yaal::tools::HPipedChild" );
+#ifdef __HOST_OS_TYPE_CYGWIN__
+#	define TUT_SUITE_PREFIX "000"
+#else
+#	define TUT_SUITE_PREFIX ""
+#endif
+
+TUT_TEST_GROUP( tut_yaal_tools_hpipedchild, TUT_SUITE_PREFIX "yaal::tools::HPipedChild" );
 
 TUT_UNIT_TEST( "simple constructor" )
 	HPipedChild pc;
@@ -100,6 +106,9 @@ TUT_UNIT_TEST( "spawn, pause, continue and finish" )
 	HPipedChild::STATUS s;
 	s.type = HPipedChild::STATUS::TYPE::RUNNING;
 	ENSURE_EQUALS( "bad status after pause", pc.get_status(), s );
+#ifdef __HOST_OS_TYPE_CYGWIN__
+	sleep_for( duration( 1, time::UNIT::SECOND ) );
+#endif
 	system::kill( pc.get_pid(), SIGSTOP );
 	sleep_for( duration( 1, time::UNIT::SECOND ) );
 #ifndef __HOST_OS_TYPE_CYGWIN__
@@ -129,6 +138,9 @@ TUT_UNIT_TEST( "spawn, pause and finish" )
 	HPipedChild::STATUS s;
 	s.type = HPipedChild::STATUS::TYPE::RUNNING;
 	ENSURE_EQUALS( "bad status after pause", pc.get_status(), s );
+#ifdef __HOST_OS_TYPE_CYGWIN__
+	sleep_for( duration( 1, time::UNIT::SECOND ) );
+#endif
 	system::kill( pc.get_pid(), SIGSTOP );
 	sleep_for( duration( 1, time::UNIT::SECOND ) );
 #ifndef __HOST_OS_TYPE_CYGWIN__

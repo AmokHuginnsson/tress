@@ -24,7 +24,13 @@ struct tut_yaal_tools_hhuginn_operatingsystem : public tress::tut_yaal_tools_hhu
 	virtual ~tut_yaal_tools_hhuginn_operatingsystem( void ) {}
 };
 
-TUT_TEST_GROUP( tut_yaal_tools_hhuginn_operatingsystem, "yaal::tools::HHuginn.OperatingSystem" );
+#ifdef __HOST_OS_TYPE_CYGWIN__
+#	define TUT_SUITE_PREFIX "001"
+#else
+#	define TUT_SUITE_PREFIX ""
+#endif
+
+TUT_TEST_GROUP( tut_yaal_tools_hhuginn_operatingsystem, TUT_SUITE_PREFIX "yaal::tools::HHuginn.OperatingSystem" );
 
 namespace {
 
