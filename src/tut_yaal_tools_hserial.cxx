@@ -36,7 +36,14 @@ struct tut_yaal_tools_hserial : public simple_mock<tut_yaal_tools_hserial> {
 		}
 	}
 };
-TUT_TEST_GROUP( tut_yaal_tools_hserial, "yaal::tools::HSerial" );
+
+#ifdef __HOST_OS_TYPE_CYGWIN__
+#	define TUT_SUITE_PREFIX "000"
+#else
+#	define TUT_SUITE_PREFIX ""
+#endif
+
+TUT_TEST_GROUP( tut_yaal_tools_hserial, TUT_SUITE_PREFIX "yaal::tools::HSerial" );
 
 #ifndef __HOST_OS_TYPE_CYGWIN__
 
