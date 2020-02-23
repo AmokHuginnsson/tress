@@ -173,6 +173,32 @@ TUT_UNIT_TEST( "spawn" )
 		),
 		"\"*anonymous stream*:1:49: "_ys.append( EXPECTED_SPAWN ).append( ": non-existing\"" )
 	);
+#ifdef __MSVCXX__
+	char const expected[] = "[true, [\"hello-OUT\r\n\"], false, 0]";
+#else
+	char const expected[] = "[true, [\"hello-OUT\n\"], false, 0]";
+#endif
+	ENSURE_EQUALS(
+		"OperatingSystem.spawn, continuous read_line for stdout",
+		execute(
+			"import OperatingSystem as os;\n"
+			"main(){\n"
+			"c=os.spawn(\""_ys.append( CHILD ).append(
+				"\", []);\n"
+				"a0=c.is_alive();\n"
+				"c.in().write_line(\"out\\n\");\n"
+				"ro = [];\n"
+				"for(l:c.out()) {\n"
+				"ro.push(l);\n"
+				"}\n"
+				"s=c.wait(8000);\n"
+				"a1=c.is_alive();\n"
+				"return([a0,ro,a1,s]);\n"
+				"}\n"
+			)
+		),
+		expected
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "spawn redirection" )

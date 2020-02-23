@@ -15,6 +15,7 @@
 M_VCSID( "$Id: " __ID__ " $" )
 #include <yaal/hcore/hpipe.hxx>
 #include <yaal/tools/sleep.hxx>
+#include <yaal/tools/stringalgo.hxx>
 #include <yaal/tools/hfsitem.hxx>
 #include "tut_helpers.hxx"
 
@@ -176,7 +177,7 @@ TUT_UNIT_TEST( "spawn, write and read (stdout)" )
 	ENSURE_EQUALS( "bad status after spawn", pc.get_status(), s );
 	pc.in() << MSG_OUT << endl;
 	HString ack;
-	TUT_EVAL( pc.out().read_until( ack ) );
+	TUT_EVAL( getline( pc.out(), ack ).good() );
 	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
 	pc.finish();
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
@@ -194,6 +195,32 @@ TUT_UNIT_TEST( "spawn, write and read (stdout)" )
 #endif
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "spawn, write and continuous read (stdout)" )
+	HPipedChild pc;
+	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
+	ENSURE_EQUALS( "bad status on simple construction", pc.get_status(), HPipedChild::STATUS() );
+	pc.spawn( CHILD );
+	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
+	HPipedChild::STATUS s;
+	s.type = HPipedChild::STATUS::TYPE::RUNNING;
+	ENSURE_EQUALS( "bad status after spawn", pc.get_status(), s );
+	pc.in() << MSG_OUT << endl;
+	HString ack;
+	string::tokens_t lines;
+	while ( pc.out().good() ) {
+		TUT_EVAL( getline( pc.out(), ack ).good() );
+		lines.push_back( ack );
+	}
+	ENSURE_EQUALS( "bad OUT", lines, string::tokens_t( { ACK_OUT, "" } ) );
+	pc.finish();
+	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
+#ifndef __HOST_OS_TYPE_CYGWIN__
+	s.type = HPipedChild::STATUS::TYPE::FINISHED;
+	s.value = 0;
+	ENSURE_EQUALS( "bad status after finish", pc.get_status(), s );
+#endif
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "spawn, write and read (stderr)" )
 	HPipedChild pc;
 	ENSURE_EQUALS( "bad state on simple construction", pc.is_running(), false );
@@ -202,7 +229,7 @@ TUT_UNIT_TEST( "spawn, write and read (stderr)" )
 	HPipedChild::STATUS s;
 	pc.in() << MSG_ERR << endl;
 	HString ack;
-	TUT_EVAL( pc.err().read_until( ack ) );
+	TUT_EVAL( getline( pc.err(), ack ).good() );
 	ENSURE_EQUALS( "bad ack ERR", ack, ACK_ERR );
 	pc.finish();
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
@@ -220,6 +247,7 @@ TUT_UNIT_TEST( "finish after very short lived process ends" )
 	HString line;
 	while ( pc.out().read_until( line ) > 0 ) {
 		if ( ! line.is_empty() ) {
+			line.trim_right( "\r" );
 			ack.append( line );
 		}
 	}
@@ -242,6 +270,7 @@ TUT_UNIT_TEST( "exit status" )
 	HString line;
 	while ( pc.err().read_until( line ) > 0 ) {
 		if ( ! line.is_empty() ) {
+			line.trim_right( "\r" );
 			ack.append( line );
 		}
 	}
@@ -263,6 +292,7 @@ TUT_UNIT_TEST( "read after very short lived process ends" )
 	/* Without proper fix on MSVCXX next line will hang indefinetly. */
 	while ( pc.out().read_until( line ) > 0 ) {
 		if ( ! line.is_empty() ) {
+			line.trim_right( "\r" );
 			ack.append( line );
 		}
 	}
@@ -281,7 +311,7 @@ TUT_UNIT_TEST( "spawn, write stream and read stream" )
 	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
 	*in << MSG_OUT << endl;
 	HString ack;
-	TUT_EVAL( out->read_until( ack ) );
+	TUT_EVAL( getline( *out, ack ).good() );
 	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
 	pc.finish();
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
@@ -298,7 +328,7 @@ TUT_UNIT_TEST( "spawn, write stream and read stream" )
 	ENSURE_EQUALS( "bad state after spawn", pc.is_running(), true );
 	*in << MSG_OUT << endl;
 	HString ack;
-	TUT_EVAL( out->read_until( ack ) );
+	TUT_EVAL( getline( *out, ack ).good() );
 	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );
 	pc.finish();
 	ENSURE_EQUALS( "bad state after finish", pc.is_running(), false );
