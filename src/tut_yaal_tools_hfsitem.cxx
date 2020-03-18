@@ -9,6 +9,7 @@
 #include <yaal/tools/sleep.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
+#include "setup.hxx"
 
 using namespace tut;
 using namespace yaal;
@@ -16,6 +17,7 @@ using namespace yaal::hcore;
 using namespace yaal::tools;
 using namespace yaal::tools::filesystem;
 using namespace yaal::ansi;
+using namespace tress;
 using namespace tress::tut_helpers;
 
 namespace tut {
@@ -102,7 +104,8 @@ TUT_UNIT_TEST( "is_directory" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "recurively scan directories" )
-	recurse( "./build/" );
+	char const* dir = ( setup._argc > 1 ) ? setup._argv[ 1 ] : "./build/";
+	recurse( dir );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "is_file()" )
