@@ -2,6 +2,7 @@ param (
 	[Parameter(Mandatory=$True)] [string]$target,
 	[Parameter(Mandatory=$False)] [string]$prefix = "$pwd/build/windows",
 	[Parameter(Mandatory=$False)] [string]$EXTRA_FLAGS,
+	[Parameter(Mandatory=$False)] [string]$TRESS_ARG,
 	[Parameter(Mandatory=$False)] [switch]$auto_setup
 )
 
@@ -26,6 +27,24 @@ function build( [string]$config, [string]$extraFlags ) {
 	Pop-Location
 }
 
+function test {
+	build "debug"
+	New-Item -ItemType Directory -Force -Path "out" > $null
+	Remove-Item "out/tress.sqlite" -ErrorAction Ignore
+	chcp 65001
+	sqlite3 -init "data/sqlite.sql" "out/tress.sqlite" ".exit"
+	$env:TZ="Europe/Warsaw"
+	$env:TRESSRC="tressrc"
+	$env:YAAL_AUTO_SANITY=1
+	$env:YAAL_LOG_LEVEL="info"
+	$env:DEFAULT_TARGET="debug"
+	$env:TRESS_CLOCK_QUALITY_MULTIPLIER="256"
+	if ( -Not( Test-Path env:BC_PATH ) ) {
+		$env:BC_PATH="../windows/bin/bc.exe"
+	}
+	$null | .\build\debug\tress\1exec.exe -q $TRESS_ARG > $null
+}
+
 function debug( [string]$extraFlags = $EXTRA_FLAGS ) {
 	build "debug" $extraFlags
 }
@@ -37,6 +56,7 @@ function release( [string]$extraFlags = $EXTRA_FLAGS ) {
 if (
 	( $target -ne "debug" ) -and
 	( $target -ne "release" ) -and
+	( $target -ne "test" ) -and
 	( $target -ne "purge" )
 ) {
 	Write-Error "Unknown target: ``$target``"
@@ -76,10 +96,12 @@ try {
 	&$target
 } catch {
 	Write-Error "$_"
+	$LASTEXITCODE = 1
 } finally {
 	while ( ( Get-Location -Stack ).Count -gt $stackSize ) {
 		Pop-Location
 	}
 	$env:Path=$origEnvPath
+	exit $LASTEXITCODE
 }
 

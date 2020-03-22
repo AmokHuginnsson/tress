@@ -1,3 +1,6 @@
+-- SQLite test dn init script.
+
+PRAGMA encoding="UTF-8";
 DROP TABLE IF EXISTS test_item;
 DROP TABLE IF EXISTS test;
 DROP TABLE IF EXISTS test_dict;
