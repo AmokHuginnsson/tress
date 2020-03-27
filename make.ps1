@@ -1,5 +1,5 @@
 param (
-	[Parameter(Mandatory=$True)] [string]$target,
+	[Parameter(Mandatory=$True)] [string[]]$target,
 	[Parameter(Mandatory=$False)] [string]$prefix = "$pwd/build/windows",
 	[Parameter(Mandatory=$False)] [string]$EXTRA_FLAGS,
 	[Parameter(Mandatory=$False)] [string]$TRESS_ARG,
@@ -53,14 +53,16 @@ function release( [string]$extraFlags = $EXTRA_FLAGS ) {
 	build "release" $extraFlags
 }
 
-if (
-	( $target -ne "debug" ) -and
-	( $target -ne "release" ) -and
-	( $target -ne "test" ) -and
-	( $target -ne "purge" )
-) {
-	Write-Error "Unknown target: ``$target``"
-	exit 1
+foreach ( $t in $target ) {
+	if (
+		( $t -ne "debug" ) -and
+		( $t -ne "release" ) -and
+		( $t -ne "test" ) -and
+		( $t -ne "purge" )
+	) {
+		Write-Error "Unknown target: ``$t``"
+		exit 1
+	}
 }
 
 try {
@@ -93,7 +95,9 @@ try {
 	}
 	$env:Path = ( $env:Path.Split( ';')  | Where-Object { -Not( $_.ToLower().Contains( "cygwin" ) ) } ) -join ';'
 	$env:Path = "$prefix\bin;$env:Path"
-	&$target
+	foreach ( $t in $target ) {
+		&$t
+	}
 } catch {
 	Write-Error "$_"
 	$LASTEXITCODE = 1
