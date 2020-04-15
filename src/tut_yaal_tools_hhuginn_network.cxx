@@ -61,6 +61,7 @@ TUT_UNIT_TEST( "resolve invalid" )
 			"*anonymous stream*:1:48: Uncaught NetworkException: No address associated with hostname: invalid.example.com",
 			"*anonymous stream*:1:48: Uncaught NetworkException: hostname nor servname provided, or not known: invalid.example.com",
 			"*anonymous stream*:1:48: Uncaught NetworkException: Name or service not known: invalid.example.com",
+			"*anonymous stream*:1:48: Uncaught NetworkException: Name does not resolve: invalid.example.com",
 			"*anonymous stream*:1:48: Uncaught NetworkException: node name or service name not known: invalid.example.com"
 		})
 	);
