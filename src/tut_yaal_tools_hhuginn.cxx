@@ -1696,6 +1696,49 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "bugs regressions checks" )
 	ENSURE_EQUALS(
+		"using module failed",
+		execute(
+			"import Introspection as intro;\n"
+			"lo( level_ ) {\n"
+			"	if ( level_ > 0 ) {\n"
+			"		return ( lo( level_ - 1 ) );\n"
+			"	}\n"
+			"	return ( 0 );\n"
+			"}\n"
+			"main() {\n"
+			"lo( 10 );\n"
+			"mlvc = intro.import(\"MaxLocalVarCount\");\n"
+			"mlvc.hi( 10 );\n"
+			"return ( none );\n"
+			"}",
+			{ "./data/" }
+		),
+		"none"
+	);
+	ENSURE_EQUALS(
+		"using module failed",
+		execute(
+			"import Introspection as intro;\n"
+			"lo( level_ ) {\n"
+			"	if ( level_ == 8 ) {\n"
+			"		lo( level_ - 1 );\n"
+			"		return ( intro.import(\"MaxLocalVarCount\") );\n"
+			"	}\n"
+			"	if ( level_ > 0 ) {\n"
+			"		return ( lo( level_ - 1 ) );\n"
+			"	}\n"
+			"	return ( 0 );\n"
+			"}\n"
+			"main() {\n"
+			"mlvc = lo( 10 );\n"
+			"mlvc.hi( 10 );\n"
+			"return ( none );\n"
+			"}",
+			{ "./data/" }
+		),
+		"none"
+	);
+	ENSURE_EQUALS(
 		"access to variable defined in unused (due to short-circuiting) path of expression",
 		execute(
 			"main() {\n"
