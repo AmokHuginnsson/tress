@@ -1886,7 +1886,8 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule value;
 	HRule modulus( '|' >> expression >> '|' );
 	HRule parenthesis( '(' >> expression >> ')' );
-	HRule functionArgument( ( expression ^ ':' ) >> -e_p::constant( "..." ) );
+	HRule unbound( '~' >> -integer );
+	HRule functionArgument( ( ( expression ^ ':' ) >> -e_p::constant( "..." ) ) | unbound );
 	HRule unpackedNamedParameters( expression >> ":::" );
 	HRule argList( functionArgument >> ( * ( ',' >> functionArgument ) ) );
 	HRule namedParameter( name >> ':' >> expression );
@@ -2007,7 +2008,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AA_ = ( \"return\" >> '(' >> C_ >> ')' >> ';' )",
 		"AB_ = ( C_ >> ';' )",
 		"AC_ = ( '{' >> *O_ >> '}' )",
-		"AD_ = ( ( C_ ^ ':' ) >> -\"...\" )",
+		"AD_ = ( ( ( C_ ^ ':' ) >> -\"...\" ) | ( '~' >> -integer ) )",
 		"AE_ = ( ( AI_ >> *( ',' >> AI_ ) ) | ( C_ >> \":::\" ) )",
 		"AF_ = ( ( '-' >> AJ_ ) | AJ_ )",
 		"AG_ = ( \"if\" >> '(' >> C_ >> ')' >> AC_ )",
