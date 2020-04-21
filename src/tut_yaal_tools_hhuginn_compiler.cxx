@@ -966,6 +966,90 @@ char const progCompileErr127[] =
 	"}"
 ;
 
+char const progCompileErr128[] =
+	"main() {\n"
+	"main(~-1);\n"
+	"}"
+;
+
+char const progCompileErr129[] =
+	"main() {\n"
+	"main(7, ~-1, 7);\n"
+	"}"
+;
+
+char const progCompileErr130[] =
+	"main() {\n"
+	"main(~0);\n"
+	"}"
+;
+
+char const progCompileErr131[] =
+	"main() {\n"
+	"main(7, ~0, 7);\n"
+	"}"
+;
+
+char const progCompileErr132[] =
+	"main() {\n"
+	"main(~2);\n"
+	"}"
+;
+
+char const progCompileErr133[] =
+	"main() {\n"
+	"main(7, ~2, 7);\n"
+	"}"
+;
+
+char const progCompileErr134[] =
+	"main() {\n"
+	"main(~, ~1);\n"
+	"}"
+;
+
+char const progCompileErr135[] =
+	"main() {\n"
+	"main(7, ~, 7, ~1, 7);\n"
+	"}"
+;
+
+char const progCompileErr136[] =
+	"main() {\n"
+	"main(~1, ~);\n"
+	"}"
+;
+
+char const progCompileErr137[] =
+	"main() {\n"
+	"main(7, ~1, 7, ~, 7);\n"
+	"}"
+;
+
+char const progCompileErr138[] =
+	"main() {\n"
+	"main(~1, ~3);\n"
+	"}"
+;
+
+char const progCompileErr139[] =
+	"main() {\n"
+	"main(7, ~1, 7, ~3, 7);\n"
+	"}"
+;
+
+char const progCompileErr140[] =
+	"main() {\n"
+	"main(~3, ~1);\n"
+	"}"
+;
+
+char const progCompileErr141[] =
+	"main() {\n"
+	"main(7, ~3, 7, ~1, 7);\n"
+	"}"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -1096,6 +1180,20 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr125,
 		progCompileErr126,
 		progCompileErr127,
+		progCompileErr128,
+		progCompileErr129,
+		progCompileErr130,
+		progCompileErr131,
+		progCompileErr132,
+		progCompileErr133,
+		progCompileErr134,
+		progCompileErr135,
+		progCompileErr136,
+		progCompileErr137,
+		progCompileErr138,
+		progCompileErr139,
+		progCompileErr140,
+		progCompileErr141,
 		nullptr
 	};
 
@@ -1228,6 +1326,20 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 125 */ { 20, 2, 12, "*anonymous stream*:2:12: `x` is defined in short-circuitable context." },
 /* 126 */ { 19, 2, 11, "*anonymous stream*:2:11: `x` is defined in short-circuitable context." },
 /* 127 */ { 24, 3, 6,  "*anonymous stream*:3:6: Operands are not divisible: a `set`, an `*unknown*`" },
+/* 128 */ { 15, 2, 7,  "*anonymous stream*:2:7: Invalid explicit unbound index value: -1" },
+/* 129 */ { 18, 2, 10, "*anonymous stream*:2:10: Invalid explicit unbound index value: -1" },
+/* 130 */ { 15, 2, 7,  "*anonymous stream*:2:7: Invalid explicit unbound index value: 0" },
+/* 131 */ { 18, 2, 10, "*anonymous stream*:2:10: Invalid explicit unbound index value: 0" },
+/* 132 */ { 13, 2, 5,  "*anonymous stream*:2:5: A hole in explicit unbound indexing." },
+/* 133 */ { 13, 2, 5,  "*anonymous stream*:2:5: A hole in explicit unbound indexing." },
+/* 134 */ { 13, 2, 5,  "*anonymous stream*:2:5: Implicit and explicit unbound indexes cannot be mixed." },
+/* 135 */ { 13, 2, 5,  "*anonymous stream*:2:5: Implicit and explicit unbound indexes cannot be mixed." },
+/* 136 */ { 13, 2, 5,  "*anonymous stream*:2:5: Implicit and explicit unbound indexes cannot be mixed." },
+/* 137 */ { 13, 2, 5,  "*anonymous stream*:2:5: Implicit and explicit unbound indexes cannot be mixed." },
+/* 138 */ { 13, 2, 5,  "*anonymous stream*:2:5: A hole in explicit unbound indexing." },
+/* 139 */ { 13, 2, 5,  "*anonymous stream*:2:5: A hole in explicit unbound indexing." },
+/* 140 */ { 13, 2, 5,  "*anonymous stream*:2:5: A hole in explicit unbound indexing." },
+/* 141 */ { 13, 2, 5,  "*anonymous stream*:2:5: A hole in explicit unbound indexing." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

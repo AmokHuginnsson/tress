@@ -1290,6 +1290,13 @@ char const progExecuteErr130[] =
 	"}\n"
 ;
 
+char const progExecuteErr131[] =
+	"f(a,b,c){a+b+c;}\n"
+	"main() {\n"
+	"f(0,~,2)(4, 5);\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1448,6 +1455,7 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr128,
 		progExecuteErr129,
 		progExecuteErr130,
+		progExecuteErr131,
 		nullptr
 	};
 	ErrInfo const err[] = {
@@ -1582,6 +1590,7 @@ TUT_UNIT_TEST( "report execution error" )
 /* 128 */ { 457, 35, 18, "*tress*:35:18: User defined `iterator`, a `LI`, returned an invalid type an `integer` instead of a `boolean` from supplied `is_valid` method." },
 /* 129 */ { 64, 4, 9, "*tress*:4:9: Algorithms.reduce() second argument must be a callable type, either a `*function_reference*` or an `*unbound_method*` or a `*bound_method*` or implementing a `call()` method, not a `X`." },
 /* 130 */ { 63, 4, 9, "*tress*:4:9: Algorithms.reduce() second argument must be a callable type, either a `*function_reference*` or an `*unbound_method*` or a `*bound_method*` or implementing a `call()` method, not a `X`." },
+/* 131 */ { 34, 3, 9, "*tress*:3:9: Bad number of parameters in call to: `*partial*`, expected exactly: 1, got: 2." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

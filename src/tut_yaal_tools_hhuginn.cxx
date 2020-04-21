@@ -366,6 +366,74 @@ TUT_UNIT_TEST( "function definitions/calls/default arguments/variadic paramaters
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "partial" )
+	ENSURE_EQUALS(
+		"nth",
+		execute(
+			"f(a, b, c, d){[a, b, c, d];}"
+			"main(){"
+			"[f(0,~,2,~)(1,3),f(0,~2,2,~1)(1, 3)];"
+			"}"
+		),
+		"[[0, 1, 2, 3], [0, 3, 2, 1]]"
+	);
+	ENSURE_EQUALS(
+		"spread",
+		execute(
+			"f(a, b, c, d){[a, b, c, d];}"
+			"main(){"
+			"[f(~1,~1,~1,~1)(7),f(~2,~2,~1,~1)(7, 13)];"
+			"}"
+		),
+		"[[7, 7, 7, 7], [13, 13, 7, 7]]"
+	);
+	ENSURE_EQUALS(
+		"fast_call(nth)",
+		execute(
+			"class X{f(a, b, c, d){[a, b, c, d];}}"
+			"main(){"
+			"x = X();"
+			"[x.f(0,~,2,~)(1,3),x.f(0,~2,2,~1)(1, 3)];"
+			"}"
+		),
+		"[[0, 1, 2, 3], [0, 3, 2, 1]]"
+	);
+	ENSURE_EQUALS(
+		"fast_call(spread)",
+		execute(
+			"class X{ f(a, b, c, d){[a, b, c, d];}}"
+			"main(){"
+			"x = X();"
+			"[x.f(~1,~1,~1,~1)(7),x.f(~2,~2,~1,~1)(7, 13)];"
+			"}"
+		),
+		"[[7, 7, 7, 7], [13, 13, 7, 7]]"
+	);
+	ENSURE_EQUALS(
+		"variadic",
+		execute(
+			"f(a, b, c, d, e, f){[a, b, c, d, e, f];}"
+			"main(){"
+			"t=(7,8);"
+			"[f(0,t...,~,2,~)(1,3),f(0,~2,2,t...,~1)(1, 3)];"
+			"}"
+		),
+		"[[0, 7, 8, 1, 2, 3], [0, 3, 2, 7, 8, 1]]"
+	);
+	ENSURE_EQUALS(
+		"repeating of unbound method",
+		execute(
+			"import Algorithms as algo;"
+			"main(){"
+			"words = [\"ala\", \"ma\", \"kota\"];"
+			"p=string.replace(~,\"a\", \"Z\");"
+			"algo.materialize(algo.map(words,p),list);"
+			"}"
+		),
+		"[\"ZlZ\", \"mZ\", \"kotZ\"]"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "if" )
 	ENSURE_EQUALS( "if (true) failed", execute( "main(){x=2;if(x>0){x=x*x;}return(x);}" ), "4" );
 	ENSURE_EQUALS( "if (false) failed", execute( "main(){x=2;if(x>2){x=x*x;}return(x);}" ), "2" );
@@ -773,7 +841,7 @@ TUT_UNIT_TEST( "boolean xor" )
 		" return ( s );"
 		"}"
 	;
-	ENSURE_EQUALS( "boolean xor fqailed", execute( p ), "\"FTTF\"" );
+	ENSURE_EQUALS( "boolean xor failed", execute( p ), "\"FTTF\"" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "print" )
