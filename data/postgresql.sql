@@ -10,13 +10,13 @@ CREATE TABLE config (
 	id SERIAL,
 	name VARCHAR(16) UNIQUE NOT NULL,
 	data VARCHAR( 255 )
-) WITH OIDS;
+); -- WITH OIDS; -- dropped in v12
 
 CREATE TABLE crud (
 	id SERIAL,
 	name VARCHAR(16) UNIQUE NOT NULL,
 	data VARCHAR( 255 )
-) WITH OIDS;
+); -- WITH OIDS; -- dropped in v12
 
 INSERT INTO config ( id, name, data ) VALUES( 1, 'one', 'PostgreSQL' );
 INSERT INTO config ( id, name, data ) VALUES( 2, 'two', NULL );
