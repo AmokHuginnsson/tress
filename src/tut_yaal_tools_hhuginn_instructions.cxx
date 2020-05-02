@@ -26,29 +26,39 @@ struct tut_yaal_tools_hhuginn_instructions : public tress::tut_yaal_tools_hhugin
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn_instructions, "yaal::tools::HHuginn,instructions" );
 
 TUT_UNIT_TEST( "add" )
-	ENSURE_EQUALS( "add int failed", execute( "main(){return(1+2);}" ), "3" );
+	ENSURE_EQUALS( "add int const failed", execute( "main(){return(1+2);}" ), "3" );
+	ENSURE_EQUALS( "add int var failed", execute( "main(){x = 1;y = 2;return(x+y);}" ), "3" );
 	ENSURE_EQUALS( "add-assign int failed", execute( "main(){x=1;x+=2;return(x);}" ), "3" );
-	ENSURE_EQUALS( "add real failed", execute( "main(){return(1.+2.);}" ), "3.0" );
-	ENSURE_EQUALS( "add number failed", execute( "main(){return($1+$2);}" ), "$3" );
-	ENSURE_EQUALS( "add string failed", execute( "main(){return(\"1\"+\"2\");}" ), "\"12\"" );
+	ENSURE_EQUALS( "add real const failed", execute( "main(){return(1.+2.);}" ), "3.0" );
+	ENSURE_EQUALS( "add real var failed", execute( "main(){x=1.;y=2.;return(x+y);}" ), "3.0" );
+	ENSURE_EQUALS( "add number const failed", execute( "main(){return($1+$2);}" ), "$3" );
+	ENSURE_EQUALS( "add number var failed", execute( "main(){x=$1;y=$2;return(x+y);}" ), "$3" );
+	ENSURE_EQUALS( "add string const failed", execute( "main(){return(\"1\"+\"2\");}" ), "\"12\"" );
+	ENSURE_EQUALS( "add string var failed", execute( "main(){x=\"1\";y=\"2\";return(x+y);}" ), "\"12\"" );
 	ENSURE_EQUALS( "add user succeeded", execute_except( "class A{_x=none;}main(){return(A()+A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A` does not have `add` method." );
 	ENSURE_EQUALS( "add char succeeded", execute_except( "main(){c=character;return(c('1')+c('2'));}" ), "*anonymous stream*:1:33: There is no `+` operator for a `character`." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "sub" )
-	ENSURE_EQUALS( "sub int failed", execute( "main(){return(7-3);}" ), "4" );
+	ENSURE_EQUALS( "sub int const failed", execute( "main(){return(7-3);}" ), "4" );
+	ENSURE_EQUALS( "sub int var failed", execute( "main(){x=7;y=3;return(x-y);}" ), "4" );
 	ENSURE_EQUALS( "sub-assign int failed", execute( "main(){x=7;x-=3;return(x);}" ), "4" );
-	ENSURE_EQUALS( "sub real failed", execute( "main(){return(7.-3.);}" ), "4.0" );
-	ENSURE_EQUALS( "sub number failed", execute( "main(){return($7-$3);}" ), "$4" );
+	ENSURE_EQUALS( "sub real const failed", execute( "main(){return(7.-3.);}" ), "4.0" );
+	ENSURE_EQUALS( "sub real var failed", execute( "main(){x=7.;y=3.;return(x-y);}" ), "4.0" );
+	ENSURE_EQUALS( "sub number const failed", execute( "main(){return($7-$3);}" ), "$4" );
+	ENSURE_EQUALS( "sub number var failed", execute( "main(){x=$7;y=$3;return(x-y);}" ), "$4" );
 	ENSURE_EQUALS( "sub user succeeded", execute_except( "class A{_x=none;}main(){return(A()-A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A` does not have `subtract` method." );
 	ENSURE_EQUALS( "sub char succeeded", execute_except( "main(){c=character;return(c('7')-c('3'));}" ), "*anonymous stream*:1:33: There is no `-` operator for a `character`." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mul" )
-	ENSURE_EQUALS( "mul int failed", execute( "main(){return(2*3);}" ), "6" );
+	ENSURE_EQUALS( "mul int const failed", execute( "main(){return(2*3);}" ), "6" );
+	ENSURE_EQUALS( "mul int var failed", execute( "main(){x=2;y=3;return(x*y);}" ), "6" );
 	ENSURE_EQUALS( "mul-assign int failed", execute( "main(){x=2;x*=3;return(x);}" ), "6" );
-	ENSURE_EQUALS( "mul real failed", execute( "main(){return(2.*3.);}" ), "6.0" );
-	ENSURE_EQUALS( "mul number failed", execute( "main(){return($2*$3);}" ), "$6" );
+	ENSURE_EQUALS( "mul real const failed", execute( "main(){return(2.*3.);}" ), "6.0" );
+	ENSURE_EQUALS( "mul real var failed", execute( "main(){x=2.;y=3.;return(x*y);}" ), "6.0" );
+	ENSURE_EQUALS( "mul number const failed", execute( "main(){return($2*$3);}" ), "$6" );
+	ENSURE_EQUALS( "mul number var failed", execute( "main(){x=$2;y=$3;return(x*y);}" ), "$6" );
 	ENSURE_EQUALS( "mul user succeeded", execute_except( "class A{_x=none;}main(){return(A()*A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A` does not have `multiply` method." );
 	ENSURE_EQUALS( "mul char succeeded", execute_except( "main(){c=character;return(c('2')*c('3'));}" ), "*anonymous stream*:1:33: There is no `*` operator for a `character`." );
 TUT_TEARDOWN()
