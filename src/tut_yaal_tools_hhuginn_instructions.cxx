@@ -64,29 +64,35 @@ TUT_UNIT_TEST( "mul" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "div" )
-	ENSURE_EQUALS( "div int failed", execute( "main(){return(7/2);}" ), "3" );
+	ENSURE_EQUALS( "div int const failed", execute( "main(){return(7/2);}" ), "3" );
+	ENSURE_EQUALS( "div int var failed", execute( "main(){x=7;y=2;return(x/y);}" ), "3" );
 	ENSURE_EQUALS( "div-assign int failed", execute( "main(){x=7;x/=2;return(x);}" ), "3" );
-	ENSURE_EQUALS( "div real failed", execute( "main(){return(7./2.);}" ), "3.5" );
-	ENSURE_EQUALS( "div number failed", execute( "main(){return($7/$2);}" ), "$3.5" );
+	ENSURE_EQUALS( "div real const failed", execute( "main(){return(7./2.);}" ), "3.5" );
+	ENSURE_EQUALS( "div real var failed", execute( "main(){x=7.;y=2.;return(x/y);}" ), "3.5" );
+	ENSURE_EQUALS( "div number const failed", execute( "main(){return($7/$2);}" ), "$3.5" );
+	ENSURE_EQUALS( "div number var failed", execute( "main(){x=$7;y=$2;return(x/y);}" ), "$3.5" );
 	ENSURE_EQUALS( "div user succeeded", execute_except( "class A{_x=none;}main(){return(A()/A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A` does not have `divide` method." );
 	ENSURE_EQUALS( "div char succeeded", execute_except( "main(){c=character;return(c('7')/c('2'));}" ), "*anonymous stream*:1:33: There is no `/` operator for a `character`." );
-	ENSURE_EQUALS( "div 0 int succeeded", execute_except( "main(){return(1/0);}" ), "*anonymous stream*:1:16: Uncaught ArithmeticException: Division by zero." );
-	ENSURE_EQUALS( "div min_int/-1 int succeeded", execute_except( "main(){return(-9223372036854775808/-1);}" ), "*anonymous stream*:1:35: Uncaught ArithmeticException: Division overflow." );
-	ENSURE_EQUALS( "div 0 real succeeded", execute_except( "main(){return(1./0.);}" ), "*anonymous stream*:1:17: Uncaught ArithmeticException: Division by zero." );
-	ENSURE_EQUALS( "div 0 num succeeded", execute_except( "main(){return($1/$0);}" ), "*anonymous stream*:1:17: Uncaught ArithmeticException: Division by zero." );
+	ENSURE_EQUALS( "div 0 int succeeded", execute_except( "main(){x = 1;return(x/0);}" ), "*anonymous stream*:1:22: Uncaught ArithmeticException: Division by zero." );
+	ENSURE_EQUALS( "div min_int/-1 int succeeded", execute_except( "main(){x = -1;return(-9223372036854775808/x);}" ), "*anonymous stream*:1:42: Uncaught ArithmeticException: Division overflow." );
+	ENSURE_EQUALS( "div 0 real succeeded", execute_except( "main(){x = 1.;return(x/0.);}" ), "*anonymous stream*:1:23: Uncaught ArithmeticException: Division by zero." );
+	ENSURE_EQUALS( "div 0 num succeeded", execute_except( "main(){x=$1;return(x/$0);}" ), "*anonymous stream*:1:21: Uncaught ArithmeticException: Division by zero." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "mod" )
-	ENSURE_EQUALS( "mod int failed", execute( "main(){return(11%3);}" ), "2" );
+	ENSURE_EQUALS( "mod int const failed", execute( "main(){return(11%3);}" ), "2" );
+	ENSURE_EQUALS( "mod int var failed", execute( "main(){x=11;y=3;return(x%y);}" ), "2" );
 	ENSURE_EQUALS( "mod-assign int failed", execute( "main(){x=11;x%=3;return(x);}" ), "2" );
-	ENSURE_EQUALS( "mod real failed", execute( "main(){return(11.%3.);}" ), "2.0" );
-	ENSURE_EQUALS( "mod number failed", execute( "main(){return($11%$3);}" ), "$2" );
+	ENSURE_EQUALS( "mod real const failed", execute( "main(){return(11.%3.);}" ), "2.0" );
+	ENSURE_EQUALS( "mod real var failed", execute( "main(){x=11.;y=3.;return(x%y);}" ), "2.0" );
+	ENSURE_EQUALS( "mod number const failed", execute( "main(){return($11%$3);}" ), "$2" );
+	ENSURE_EQUALS( "mod number var failed", execute( "main(){x=$11;y=$3;return(x%y);}" ), "$2" );
 	ENSURE_EQUALS( "mod user succeeded", execute_except( "class A{_x=none;}main(){return(A()%A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A` does not have `modulo` method." );
 	ENSURE_EQUALS( "mod char succeeded", execute_except( "main(){c=character;return(c('8')%c('3'));}" ), "*anonymous stream*:1:33: There is no `%` operator for a `character`." );
-	ENSURE_EQUALS( "mod 0 int succeeded", execute_except( "main(){return(1%0);}" ), "*anonymous stream*:1:16: Uncaught ArithmeticException: Division by zero." );
-	ENSURE_EQUALS( "mod min_int%-1 int succeeded", execute_except( "main(){return(-9223372036854775808%-1);}" ), "*anonymous stream*:1:35: Uncaught ArithmeticException: Division overflow." );
-	ENSURE_EQUALS( "mod 0 real succeeded", execute_except( "main(){return(1.%0.);}" ), "*anonymous stream*:1:17: Uncaught ArithmeticException: Division by zero." );
-	ENSURE_EQUALS( "mod 0 num succeeded", execute_except( "main(){return($1%$0);}" ), "*anonymous stream*:1:17: Uncaught ArithmeticException: Division by zero." );
+	ENSURE_EQUALS( "mod 0 int succeeded", execute_except( "main(){x=1;return(x%0);}" ), "*anonymous stream*:1:20: Uncaught ArithmeticException: Division by zero." );
+	ENSURE_EQUALS( "mod min_int%-1 int succeeded", execute_except( "main(){x=-1;return(-9223372036854775808%x);}" ), "*anonymous stream*:1:40: Uncaught ArithmeticException: Division overflow." );
+	ENSURE_EQUALS( "mod 0 real succeeded", execute_except( "main(){x=1.;return(x%0.);}" ), "*anonymous stream*:1:21: Uncaught ArithmeticException: Division by zero." );
+	ENSURE_EQUALS( "mod 0 num succeeded", execute_except( "main(){x=$1;return(x%$0);}" ), "*anonymous stream*:1:21: Uncaught ArithmeticException: Division by zero." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "pow" )
@@ -115,9 +121,11 @@ TUT_UNIT_TEST( "absolute" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "neg" )
+	ENSURE_EQUALS( "neg int const, real const, number const failed", execute( "main(){return([-1,-1.,-$1]);}" ), "[-1, -1.0, $-1]" );
+	ENSURE_EQUALS( "neg int var, real var, number var failed", execute( "main(){x=1;y=1.;z=$1;return([-x,-y,-z]);}" ), "[-1, -1.0, $-1]" );
 	ENSURE_EQUALS( "neg user succeeded", execute_except( "class A{_x=none;}main(){return(-A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:32: Class `A` does not have `negate` method." );
 	ENSURE_EQUALS( "neg char succeeded", execute_except( "main(){c=character;return(-c('1'));}" ), "*anonymous stream*:1:27: There is no `-x` operator for a `character`." );
-	ENSURE_EQUALS( "neg min_int succeeded", execute_except( "main(){return(--9223372036854775808);}" ), "*anonymous stream*:1:15: Uncaught ArithmeticException: Integer overflow." );
+	ENSURE_EQUALS( "neg min_int succeeded", execute_except( "main(){return(-(-9223372036854775800-8));}" ), "*anonymous stream*:1:15: Uncaught ArithmeticException: Integer overflow." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "equals" )

@@ -1050,6 +1050,60 @@ char const progCompileErr141[] =
 	"}"
 ;
 
+char const progCompileErr142[] =
+	"main() {\n"
+	"1/0;\n"
+	"}"
+;
+
+char const progCompileErr143[] =
+	"main() {\n"
+	"-9223372036854775808/-1;\n"
+	"}"
+;
+
+char const progCompileErr144[] =
+	"main() {\n"
+	"1./0.;\n"
+	"}"
+;
+
+char const progCompileErr145[] =
+	"main() {\n"
+	"$1/$0;\n"
+	"}"
+;
+
+char const progCompileErr146[] =
+	"main() {\n"
+	"1%0;\n"
+	"}"
+;
+
+char const progCompileErr147[] =
+	"main() {\n"
+	"-9223372036854775808%-1;\n"
+	"}"
+;
+
+char const progCompileErr148[] =
+	"main() {\n"
+	"1.%0.;\n"
+	"}"
+;
+
+char const progCompileErr149[] =
+	"main() {\n"
+	"$1%$0;\n"
+	"}"
+;
+
+char const progCompileErr150[] =
+	"main() {\n"
+	"--9223372036854775808;\n"
+	"}"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -1194,6 +1248,15 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr139,
 		progCompileErr140,
 		progCompileErr141,
+		progCompileErr142,
+		progCompileErr143,
+		progCompileErr144,
+		progCompileErr145,
+		progCompileErr146,
+		progCompileErr147,
+		progCompileErr148,
+		progCompileErr149,
+		progCompileErr150,
 		nullptr
 	};
 
@@ -1340,6 +1403,15 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 139 */ { 13, 2, 5,  "*anonymous stream*:2:5: A hole in explicit unbound indexing." },
 /* 140 */ { 13, 2, 5,  "*anonymous stream*:2:5: A hole in explicit unbound indexing." },
 /* 141 */ { 13, 2, 5,  "*anonymous stream*:2:5: A hole in explicit unbound indexing." },
+/* 142 */ { 10, 2, 2,  "*anonymous stream*:2:2: Division by zero." },
+/* 143 */ { 29, 2, 21, "*anonymous stream*:2:21: Division overflow." },
+/* 144 */ { 11, 2, 3,  "*anonymous stream*:2:3: Division by zero." },
+/* 145 */ { 11, 2, 3,  "*anonymous stream*:2:3: Division by zero." },
+/* 146 */ { 10, 2, 2,  "*anonymous stream*:2:2: Division by zero." },
+/* 147 */ { 29, 2, 21, "*anonymous stream*:2:21: Division overflow." },
+/* 148 */ { 11, 2, 3,  "*anonymous stream*:2:3: Division by zero." },
+/* 149 */ { 11, 2, 3,  "*anonymous stream*:2:3: Division by zero." },
+/* 150 */ { 9, 2, 1,   "*anonymous stream*:2:1: Integer overflow." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

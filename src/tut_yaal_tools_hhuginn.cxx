@@ -676,7 +676,8 @@ TUT_UNIT_TEST( "exceptions" )
 			"main(){\n"
 			"r=none;\n"
 			"try{\n"
-			"1/0;\n"
+			"z=0;\n"
+			"1/z;\n"
 			"}catch(ArithmeticException e) {\n"
 			"ce = copy(e);\n"
 			"f=ce.trace()[0];"
@@ -684,7 +685,7 @@ TUT_UNIT_TEST( "exceptions" )
 			"}\n"
 			"return(r);\n"
 			"}\n" ),
-		"[\"*anonymous stream*:4:2: Division by zero.\", \"*anonymous stream*:4:2\", \"Division by zero.\", \"*anonymous stream*\", 4, 2, \"main\", \"*anonymous stream*:4:2:main\"]"
+		"[\"*anonymous stream*:5:2: Division by zero.\", \"*anonymous stream*:5:2\", \"Division by zero.\", \"*anonymous stream*\", 5, 2, \"main\", \"*anonymous stream*:5:2:main\"]"
 	);
 	ENSURE_EQUALS(
 		"StackFrameInfo copy succeeded",
@@ -1349,7 +1350,8 @@ TUT_UNIT_TEST( "throw,try,catch" )
 			"main() {"
 			"v=\"\";"
 			"try {"
-			"1/0;"
+			"z=0;"
+			"1/z;"
 			"} catch( Exception e ) {"
 			"v = e.what();"
 			"}"
@@ -1853,13 +1855,14 @@ TUT_UNIT_TEST( "bugs regressions checks" )
 		execute(
 			"main(){"
 			"a = {};"
+			"z = 0;"
 			"try {"
-			"a[0] = a[1/0] = 0;"
+			"a[0] = a[1/z] = 0;"
 			"} catch ( Exception e ) {"
 			"}"
 			"b = dict();"
 			"try {"
-			"b[0] = b[1/0] = 0;"
+			"b[0] = b[1/z] = 0;"
 			"} catch ( Exception e ) {"
 			"}"
 			"return ( (a,b) );"
@@ -2694,14 +2697,15 @@ TUT_UNIT_TEST( "incremental mode" )
 		"*anonymous stream*:2:1: Symbol `A` is not defined in this context (did you mean `√`?)."
 	);
 	lines_t l9{
-		{ "x = 1 / 0;" },
+		{ "z = 0;" },
+		{ "x = 1 / z;" },
 		{ "x;" }
 	};
 	ENSURE_EQUALS(
 		"Crash trigger",
 		execute_incremental( l9 ),
-		"*anonymous stream*:2:7: Uncaught ArithmeticException: Division by zero."
-		"*anonymous stream*:2:1: Symbol `x` is not defined in this context (did you mean `√`?)."
+		"0*anonymous stream*:3:7: Uncaught ArithmeticException: Division by zero."
+		"*anonymous stream*:3:1: Symbol `x` is not defined in this context (did you mean `√`?)."
 	);
 	lines_t l10{
 		{ "inc(x){x+1;}", OLine::TYPE::DEFINITION },
