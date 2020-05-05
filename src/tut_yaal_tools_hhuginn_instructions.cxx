@@ -96,27 +96,34 @@ TUT_UNIT_TEST( "mod" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "pow" )
-	ENSURE_EQUALS( "pow real failed", execute( "main(){return(2.^3.);}" ), "8.0" );
-	ENSURE_EQUALS( "pow number failed", execute( "main(){return($2^$3);}" ), "$8" );
+	ENSURE_EQUALS( "pow real const failed", execute( "main(){return(2.^3.);}" ), "8.0" );
+	ENSURE_EQUALS( "pow real var failed", execute( "main(){x=2.;y=3.;return(x^y);}" ), "8.0" );
+	ENSURE_EQUALS( "pow number const failed", execute( "main(){return($2^$3);}" ), "$8" );
+	ENSURE_EQUALS( "pow number var failed", execute( "main(){x=$2;y=$3;return(x^y);}" ), "$8" );
 	ENSURE_EQUALS( "pow-assign number failed", execute( "main(){x=$2;x^=$3;return(x);}" ), "$8" );
 	ENSURE_EQUALS( "pow user succeeded", execute_except( "class A{_x=none;}main(){return(A()^A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A` does not have `power` method." );
 	ENSURE_EQUALS( "pow char succeeded", execute_except( "main(){c=character;return(c('2')^c('3'));}" ), "*anonymous stream*:1:33: There is no `^` operator for a `character`." );
 	ENSURE_EQUALS( "too big exponent succeeded", execute_except( "main(){x=$2;x^=x;x^=x;x^=x;x^=x;}" ), "*anonymous stream*:1:29: Uncaught ArithmeticException: Exponent too big: 32317006071311007300714876688669951960444102669715484032130345427524655138867890893197201411522913463688717960921898019494119559150490921095088152386448283120630877367300996091750197750389652106796057638384067568276792218642619756161838094338476170470581645852036305042887575891541065808607552399123930385521914333389668342420684974786564569494856176035326322058077805659331026192708460314150258592864177116725943603718461857357598351152301645904403697613233287231227125684710820209725157101726931323469678542580656697935045997268352998638215525166389437335543602135433229604645318478604952148193555853611059596230656" );
-	ENSURE_EQUALS( "pow 0^0 real succeeded", execute_except( "main(){return(0.^0.);}" ), "*anonymous stream*:1:17: Uncaught ArithmeticException: indeterminate form 0^0" );
-	ENSURE_EQUALS( "pow 0^0 number succeeded", execute_except( "main(){return($0^$0);}" ), "*anonymous stream*:1:17: Uncaught ArithmeticException: indeterminate form 0^0" );
+	ENSURE_EQUALS( "pow 0^0 real succeeded", execute_except( "main(){x=0.;return(x^0.);}" ), "*anonymous stream*:1:21: Uncaught ArithmeticException: indeterminate form 0^0" );
+	ENSURE_EQUALS( "pow 0^0 number succeeded", execute_except( "main(){x=$0;return(x^$0);}" ), "*anonymous stream*:1:21: Uncaught ArithmeticException: indeterminate form 0^0" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "factorial" )
-	ENSURE_EQUALS( "neg factorial succeeded", execute_except( "main(){return($-1!);}" ), "*anonymous stream*:1:18: Uncaught ArithmeticException: Factorial from negative." );
-	ENSURE_EQUALS( "fractional factorial succeeded", execute_except( "main(){return($1.5!);}" ), "*anonymous stream*:1:19: Uncaught ArithmeticException: Factorial from fraction." );
-	ENSURE_EQUALS( "int factorial succeeded", execute_except( "main(){return(1!);}" ), "*anonymous stream*:1:16: There is no `!` operator for an `integer`." );
+	ENSURE_EQUALS( "factorial const", execute( "main(){$6!;}" ), "$720" );
+	ENSURE_EQUALS( "factorial var", execute( "main(){x = $6;x!;}" ), "$720" );
+	ENSURE_EQUALS( "neg factorial succeeded", execute_except( "main(){x=$-1;return(x!);}" ), "*anonymous stream*:1:22: Uncaught ArithmeticException: Factorial from negative." );
+	ENSURE_EQUALS( "fractional factorial succeeded", execute_except( "main(){x=$1.5;return(x!);}" ), "*anonymous stream*:1:23: Uncaught ArithmeticException: Factorial from fraction." );
+	ENSURE_EQUALS( "int factorial succeeded", execute_except( "main(){x=[1];return(x[0]!);}" ), "*anonymous stream*:1:25: There is no `!` operator for an `integer`." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "absolute" )
-	ENSURE_EQUALS( "abs int failed", execute( "main(){return([|1|,|-1|]);}" ), "[1, 1]" );
-	ENSURE_EQUALS( "abs min_int succeeded", execute_except( "main(){return(|-9223372036854775808|);}" ), "*anonymous stream*:1:36: Uncaught ArithmeticException: Integer overflow." );
-	ENSURE_EQUALS( "abs real failed", execute( "main(){return([|1.|,|-1.|]);}" ), "[1.0, 1.0]" );
-	ENSURE_EQUALS( "abs num failed", execute( "main(){return([|$1|,|$-1|]);}" ), "[$1, $1]" );
+	ENSURE_EQUALS( "abs int const failed", execute( "main(){return([|1|,|-1|]);}" ), "[1, 1]" );
+	ENSURE_EQUALS( "abs int var failed", execute( "main(){x=1;y=-1;return([|x|,|y|]);}" ), "[1, 1]" );
+	ENSURE_EQUALS( "abs min_int succeeded", execute_except( "main(){x=-9223372036854775808;return(|x|);}" ), "*anonymous stream*:1:40: Uncaught ArithmeticException: Integer overflow." );
+	ENSURE_EQUALS( "abs real const failed", execute( "main(){return([|1.|,|-1.|]);}" ), "[1.0, 1.0]" );
+	ENSURE_EQUALS( "abs real var failed", execute( "main(){x=1.;y=-1.;return([|x|,|y|]);}" ), "[1.0, 1.0]" );
+	ENSURE_EQUALS( "abs num const failed", execute( "main(){return([|$1|,|$-1|]);}" ), "[$1, $1]" );
+	ENSURE_EQUALS( "abs num var failed", execute( "main(){x=$1;y=$-1;return([|x|,|y|]);}" ), "[$1, $1]" );
 	ENSURE_EQUALS( "abs char succeeded", execute_except( "main(){c=character;return(|c('1')|);}" ), "*anonymous stream*:1:34: There is no `|...|` operator for a `character`." );
 TUT_TEARDOWN()
 

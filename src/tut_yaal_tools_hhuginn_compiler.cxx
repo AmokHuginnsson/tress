@@ -103,7 +103,7 @@ char const progCompileErr7[] =
 
 char const progCompileErr8[] =
 	"main() {\n"
-	"\tx = 2.5 ^ 2 ^ 2;\n"
+	"\tx = 2.5 ^ 2;\n"
 	"\treturn ( 0 );\n"
 	"}\n"
 ;
@@ -1104,6 +1104,83 @@ char const progCompileErr150[] =
 	"}"
 ;
 
+char const progCompileErr151[] =
+	"main() {\n"
+	"0.^0.;\n"
+	"}"
+;
+
+char const progCompileErr152[] =
+	"main() {\n"
+	"0.^0.;\n"
+	"}"
+;
+
+char const progCompileErr153[] =
+	"main() {\n"
+	"|-9223372036854775808|;\n"
+	"}"
+;
+
+char const progCompileErr154[] =
+	"main() {\n"
+	"\tx = \"a\" - \"b\";\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr155[] =
+	"main() {\n"
+	"\tx = \"a\" * \"b\";\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr156[] =
+	"main() {\n"
+	"\tx = \"a\" / \"b\";\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr157[] =
+	"main() {\n"
+	"\tx = \"a\" % \"b\";\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr158[] =
+	"main() {\n"
+	"\tx = \"a\" ^ \"b\";\n"
+	"\treturn ( 0 );\n"
+	"}\n"
+;
+
+char const progCompileErr159[] =
+	"main() {\n"
+	"\t1 ^ 1;\n"
+	"}\n"
+;
+
+char const progCompileErr160[] =
+	"main() {\n"
+	"\t1!;\n"
+	"}\n"
+;
+
+char const progCompileErr161[] =
+	"main() {\n"
+	"\t$-1!;\n"
+	"}\n"
+;
+
+char const progCompileErr162[] =
+	"main() {\n"
+	"\t$1.5!;\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -1257,6 +1334,18 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr148,
 		progCompileErr149,
 		progCompileErr150,
+		progCompileErr151,
+		progCompileErr152,
+		progCompileErr153,
+		progCompileErr154,
+		progCompileErr155,
+		progCompileErr156,
+		progCompileErr157,
+		progCompileErr158,
+		progCompileErr159,
+		progCompileErr160,
+		progCompileErr161,
+		progCompileErr162,
 		nullptr
 	};
 
@@ -1412,6 +1501,18 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 148 */ { 11, 2, 3,  "*anonymous stream*:2:3: Division by zero." },
 /* 149 */ { 11, 2, 3,  "*anonymous stream*:2:3: Division by zero." },
 /* 150 */ { 9, 2, 1,   "*anonymous stream*:2:1: Integer overflow." },
+/* 151 */ { 12, 2, 4,  "*anonymous stream*:2:4: indeterminate form 0^0" },
+/* 152 */ { 12, 2, 4,  "*anonymous stream*:2:4: indeterminate form 0^0" },
+/* 153 */ { 9, 2, 1,   "*anonymous stream*:2:1: Integer overflow." },
+/* 154 */ { 18, 2, 10, "*anonymous stream*:2:10: Operands are not subtractable: a `string`, a `string`" },
+/* 155 */ { 18, 2, 10, "*anonymous stream*:2:10: Operands are not multipliable: a `string`, a `string`" },
+/* 156 */ { 18, 2, 10, "*anonymous stream*:2:10: Operands are not divisible: a `string`, a `string`" },
+/* 157 */ { 18, 2, 10, "*anonymous stream*:2:10: Operands are not divisible: a `string`, a `string`" },
+/* 158 */ { 18, 2, 10, "*anonymous stream*:2:10: Operands are not exponentiationable: a `string`, a `string`" },
+/* 159 */ { 12, 2, 4,  "*anonymous stream*:2:4: Operands are not exponentiationable: an `integer`, an `integer`" },
+/* 160 */ { 11, 2, 3,  "*anonymous stream*:2:3: Operand is not a numeric value: an `integer`" },
+/* 161 */ { 13, 2, 5,  "*anonymous stream*:2:5: Factorial from negative." },
+/* 162 */ { 14, 2, 6,  "*anonymous stream*:2:6: Factorial from fraction." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );

@@ -1500,7 +1500,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "operator precedence" )
 	ENSURE_EQUALS(
-		"boolean not failed",
+		"precedence failed",
 		execute(
 			"main(){"
 			"s=\"\";"
@@ -1521,7 +1521,7 @@ TUT_UNIT_TEST( "operator precedence" )
 		"\"4:17:245:486:1953125:15:5:-6:-1:8:\""
 	);
 	ENSURE_EQUALS(
-		"boolean not failed",
+		"precedence failed",
 		execute(
 			"main(){"
 			"s=\"\";"
@@ -1540,6 +1540,12 @@ TUT_UNIT_TEST( "operator precedence" )
 		),
 		"\"-6:25:3125:7776:32768:1:3:6:120:\""
 	);
+	ENSURE_EQUALS( "precedence failed", execute( "main(){return($9+$4^$3^$2+$7);}" ), "$262160" );
+	ENSURE_EQUALS( "precedence failed", execute( "main(){x=$4;return($9+x^$3^$2+$7);}" ), "$262160" );
+	ENSURE_EQUALS( "precedence failed", execute( "main(){x=$3;return($9+$4^x^$2+$7);}" ), "$262160" );
+	ENSURE_EQUALS( "precedence failed", execute( "main(){x=$2;return($9+$4^$3^x+$7);}" ), "$262160" );
+	ENSURE_EQUALS( "precedence failed", execute( "main(){x=$3;y=$2;return($9+$4^x^y+$7);}" ), "$262160" );
+	ENSURE_EQUALS( "precedence failed", execute( "main(){x=$4;y=$3;z=$2;return($9+x^y^z+$7);}" ), "$262160" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "are constants constant? (immutable)" )
