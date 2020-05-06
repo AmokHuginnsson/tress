@@ -1546,6 +1546,18 @@ TUT_UNIT_TEST( "operator precedence" )
 	ENSURE_EQUALS( "precedence failed", execute( "main(){x=$2;return($9+$4^$3^x+$7);}" ), "$262160" );
 	ENSURE_EQUALS( "precedence failed", execute( "main(){x=$3;y=$2;return($9+$4^x^y+$7);}" ), "$262160" );
 	ENSURE_EQUALS( "precedence failed", execute( "main(){x=$4;y=$3;z=$2;return($9+x^y^z+$7);}" ), "$262160" );
+	ENSURE_EQUALS(
+		"precedence paren failed",
+		execute(
+			"main(){return(["
+			"$7+$4^$3^($2+$1),"
+			"$7+$4^($3^$2)+$1,"
+			"$7+($4^$3)^$2+$1,"
+			"($7+$4)^$3^$2+$1"
+			"]);}"
+		),
+		"[$18014398509481991, $262152, $4104, $2357947692]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "are constants constant? (immutable)" )
