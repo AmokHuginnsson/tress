@@ -1558,6 +1558,20 @@ TUT_UNIT_TEST( "operator precedence" )
 		),
 		"[$18014398509481991, $262152, $4104, $2357947692]"
 	);
+	ENSURE_EQUALS(
+		"precedence paren failed",
+		execute(
+			"main(){"
+			"a=$7;b=$4;c=$3;d=$2;e=$1;"
+			"return(["
+			"a+b^c^(d+e),"
+			"a+b^(c^d)+e,"
+			"a+(b^c)^d+e,"
+			"(a+b)^c^d+e"
+			"]);}"
+		),
+		"[$18014398509481991, $262152, $4104, $2357947692]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "are constants constant? (immutable)" )

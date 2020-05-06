@@ -132,7 +132,7 @@ TUT_UNIT_TEST( "neg" )
 	ENSURE_EQUALS( "neg int var, real var, number var failed", execute( "main(){x=1;y=1.;z=$1;return([-x,-y,-z]);}" ), "[-1, -1.0, $-1]" );
 	ENSURE_EQUALS( "neg user succeeded", execute_except( "class A{_x=none;}main(){return(-A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:32: Class `A` does not have `negate` method." );
 	ENSURE_EQUALS( "neg char succeeded", execute_except( "main(){c=character;return(-c('1'));}" ), "*anonymous stream*:1:27: There is no `-x` operator for a `character`." );
-	ENSURE_EQUALS( "neg min_int succeeded", execute_except( "main(){return(-(-9223372036854775800-8));}" ), "*anonymous stream*:1:15: Uncaught ArithmeticException: Integer overflow." );
+	ENSURE_EQUALS( "neg min_int succeeded", execute_except( "main(){x=8;return(-(-9223372036854775800-x));}" ), "*anonymous stream*:1:19: Uncaught ArithmeticException: Integer overflow." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "equals" )
