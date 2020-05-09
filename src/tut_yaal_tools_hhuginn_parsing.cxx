@@ -11,13 +11,14 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
+using namespace tress;
 using namespace tress::tut_helpers;
 
 namespace tut {
 
 struct tut_yaal_tools_hhuginn_parsing : public tress::tut_yaal_tools_hhuginn_base {
 	virtual ~tut_yaal_tools_hhuginn_parsing( void ) {}
-	void test_parse( prog_src_t, int const[3], int );
+	void test_parse( prog_src_t, ErrInfo const&, int );
 };
 
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn_parsing, "yaal::tools::HHuginn,parsing" );
@@ -164,16 +165,23 @@ char const progParse20[] =
 	"}\n"
 ;
 
-void tut_yaal_tools_hhuginn_parsing::test_parse( prog_src_t prog_, int const err_[3], int index_ ) {
+char const progParse21[] =
+	"main() {\n"
+	"$ 2;\n"
+	"}\n"
+;
+
+void tut_yaal_tools_hhuginn_parsing::test_parse( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	HStringStream prog( prog_ );
 	HHuginn h;
 	h.load( prog );
 	h.preprocess();
 	clog << "parsing: " << index_ << endl;
 	ENSURE_NOT( "parsed invalid", h.parse() );
-	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_[0] );
-	ENSURE_EQUALS( "reporting error line failed " + to_string( index_ ), h.error_coordinate().line(), err_[1] );
-	ENSURE_EQUALS( "reporting error column failed " + to_string( index_ ), h.error_coordinate().column(), err_[2] );
+	ENSURE_EQUALS( "reporting error position failed " + to_string( index_ ), h.error_position(), err_._pos );
+	ENSURE_EQUALS( "reporting error line failed " + to_string( index_ ), h.error_coordinate().line(), err_._line );
+	ENSURE_EQUALS( "reporting error column failed " + to_string( index_ ), h.error_coordinate().column(), err_._col );
+	ENSURE_EQUALS( "reporting error message failed " + to_string( index_ ), h.error_message(), err_._msg );
 	clog << h.error_message() << endl;
 }
 
@@ -200,33 +208,35 @@ TUT_UNIT_TEST( "report parsing error" )
 		progParse18,
 		progParse19,
 		progParse20,
+		progParse21,
 		nullptr
 	};
-	int const err[][3] = {
-		{ 17, 2, 9 },  // 0
-		{ 29, 2, 9 },  // 1
-		{ 63, 6, 9 },  // 2
-		{ 0, 1, 1 },   // 3
-		{ 29, 2, 21 }, // 4
-		{ 17, 2, 9 },  // 5
-		{ 29, 2, 21 }, // 6
-		{ 8, 1, 9 },   // 7
-		{ 9, 2, 1 },   // 8
-		{ 10, 2, 1 },  // 9
-		{ 7, 1, 8 },   // 10
-		{ 9, 2, 1 },   // 11
-		{ 13, 2, 5 },  // 12
-		{ 11, 2, 3 },  // 13
-		{ 12, 1, 13 }, // 14
-		{ 10, 1, 11 }, // 15
-		{ 9, 1, 10 },  // 16
-		{ 10, 1, 11 }, // 17
-		{ 9, 1, 10 },  // 18
-		{ 12, 1, 13 }, // 19
-		{ 9, 1, 10 },  // 20
-		{ 0, 0, 0 }
+	ErrInfo const err[] = {
+		/*  0 */ { 17, 2, 9, "*anonymous stream*:2:9: expected one of characters: (" },
+		/*  1 */ { 29, 2, 9, "*anonymous stream*:2:9: expected one of characters: (" },
+		/*  2 */ { 63, 6, 9, "*anonymous stream*:6:9: expected one of characters: (" },
+		/*  3 */ { 0, 1, 1, "*anonymous stream*:1:1: expected string: \"class\"" },
+		/*  4 */ { 29, 2, 21, "*anonymous stream*:2:21: expected one of characters: (" },
+		/*  5 */ { 17, 2, 9, "*anonymous stream*:2:9: expected one of characters: (" },
+		/*  6 */ { 29, 2, 21, "*anonymous stream*:2:21: expected one of characters: (" },
+		/*  7 */ { 8, 1, 9, "*anonymous stream*:1:9: expected string: \"if\"" },
+		/*  8 */ { 9, 2, 1, "*anonymous stream*:2:1: expected string: \"if\"" },
+		/*  9 */ { 10, 2, 1, "*anonymous stream*:2:1: expected a fieldIdentifier" },
+		/* 10 */ { 7, 1, 8, "*anonymous stream*:1:8: expected one of characters: (" },
+		/* 11 */ { 9, 2, 1, "*anonymous stream*:2:1: expected string: \"if\"" },
+		/* 12 */ { 13, 2, 5, "*anonymous stream*:2:5: expected string: \"if\"" },
+		/* 13 */ { 11, 2, 3, "*anonymous stream*:2:3: expected literal string" },
+		/* 14 */ { 12, 1, 13, "*anonymous stream*:1:13: expected string: \":::\"" },
+		/* 15 */ { 10, 1, 11, "*anonymous stream*:1:11: expected one of characters: ," },
+		/* 16 */ { 9, 1, 10, "*anonymous stream*:1:10: expected one of characters: )" },
+		/* 17 */ { 10, 1, 11, "*anonymous stream*:1:11: expected one of characters: )" },
+		/* 18 */ { 9, 1, 10, "*anonymous stream*:1:10: expected one of characters: )" },
+		/* 19 */ { 12, 1, 13, "*anonymous stream*:1:13: expected string: \":::\"" },
+		/* 20 */ { 9, 1, 10, "*anonymous stream*:1:10: expected one of characters: )" },
+		/* 21 */ { 10, 2, 2, "*anonymous stream*:2:2: expected real number" },
+		/**/ { 0, 0, 0, nullptr }
 	};
-	int const (*e)[3]( err );
+	ErrInfo const* e( err );
 	for ( prog_src_t* prog( begin( progParse ) ), * progEnd( end( progParse ) ); prog != progEnd; ++ prog, ++ e ) {
 		if ( *prog ) {
 			test_parse( *prog, *e, static_cast<int>( prog - begin( progParse ) ) );

@@ -100,14 +100,13 @@ TUT_UNIT_TEST( "grammar test" )
 		"power = ( factorial >> *( '^' >> negation ) )",
 		"factorial = ( atom >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
 		"atom = ( modulus | ( parenthesis >> -( memberAccess >> dereference ) ) | real | integer"
-			" | ( ( numberLiteral | character_literal ) >> -( memberAccess >> functionCallOperator ) )"
+			" | ( ( number | character_literal ) >> -( memberAccess >> functionCallOperator ) )"
 			" | ( ( tupleLiteral | listLiteral | dictLiteral | lookupLiteral | stringLiteral ) >> -( ( subscriptOperator | memberAccess ) >> dereference ) )"
 			" | ( setLiteral >> -( memberAccess >> dereference ) ) | none | true | false"
 			" | ( reference >> dereference ) | ( lambda >> -( functionCallOperator >> dereference ) ) )",
 		"modulus = ( '|' >> expression >> '|' )",
 		"parenthesis = ( '(' >> expression >> ')' )",
 		"dereference = *( subscriptOperator | functionCallOperator | memberAccess )",
-		"numberLiteral = ( '$' >> real )",
 		"tupleLiteral = ( '(' >> -argList >> -',' >> ')' )",
 		"listLiteral = ( '[' >> -argList >> ']' )",
 		"dictLiteral = ( '[' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> ']' )",
