@@ -1035,6 +1035,161 @@ TUT_UNIT_TEST( "class" )
 TUT_TEARDOWN()
 
 namespace {
+void notify_vec( int val_, tut_yaal_tools_hhuginn::int_array_t& dest_ ) {
+	dest_.push_back( val_ );
+}
+}
+
+TUT_UNIT_TEST( "scopes - order of destruction" )
+#define N "class A{_log = none;_id=0;destructor(){_log.push(_id);notify(_id);}}main(){log=[];"
+	/* simple scope */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (simple scope)",
+			execute( h, N "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;" "log;" "}" ),
+			"[3, 2, 1]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (simple scope)", val, int_array_t{ 3, 2, 1 } );
+	}
+	/* for scope (one iter) */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (for scope 1 iter)",
+			execute( h, N "for(x:[0]) {" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;" "}log;}" ),
+			"[3, 2, 1]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (for scope 1 iter)", val, int_array_t{ 3, 2, 1 } );
+	}
+	/* for scope (two iter) */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (for scope 2 iters)",
+			execute( h, N "for(x:[0,0]) {" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;" "}log;}" ),
+			"[1, 2, 3, 3, 2, 1]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (for scope 2 iters)", val, int_array_t{ 1, 2, 3, 3, 2, 1 } );
+	}
+	/* while scope (one iter) */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (while scope 1 iter)",
+			execute( h, N "x=0;while(x<1) {" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;x+=1;" "}log;}" ),
+			"[3, 2, 1]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (while scope 1 iter)", val, int_array_t{ 3, 2, 1 } );
+	}
+	/* while scope (two iter) */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (while scope 2 iters)",
+			execute( h, N "x=0;while(x<2) {" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;x+=1;" "}log;}" ),
+			"[1, 2, 3, 3, 2, 1]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (while scope 2 iters)", val, int_array_t{ 1, 2, 3, 3, 2, 1 } );
+	}
+	/* if scope */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (if scope)",
+			execute( h, N "x=0;if(x<1) {" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;x+=1;" "}log;}" ),
+			"[3, 2, 1]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (if scope)", val, int_array_t{ 3, 2, 1 } );
+	}
+	/* else scope */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (else scope)",
+			execute( h, N "x=1;if(x<0){}else{" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;x+=1;" "}log;}" ),
+			"[3, 2, 1]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (else scope)", val, int_array_t{ 3, 2, 1 } );
+	}
+	/* switch scope */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (switch scope)",
+			execute( h, N "switch(0) { case ( 0 ): {" "a = A(log, 1);a;} case ( 1 ): {" "b = A(log, 2);" "c = A(log, 3);b;c;}" "}log;}" ),
+			"[1, 3, 2]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (switch scope)", val, int_array_t{ 1, 3, 2 } );
+	}
+	/* try scope no except */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (try scope no except)",
+			execute( h, N "try{" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;" "}catch(Exception e){" "}log;}" ),
+			"[3, 2, 1]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (try scope no expect)", val, int_array_t{ 3, 2, 1 } );
+	}
+	/* catch scope */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (catch scope)",
+			execute( h, N "try{x=0;1/x;}catch(Exception e){" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;" "}log;}" ),
+			"[3, 2, 1]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (catch scope)", val, int_array_t{ 3, 2, 1 } );
+	}
+	/* try scope catchable except */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (try scope catchable except)",
+			execute( h, N "try{" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;x=0;1/x;" "}catch(Exception e){" "}log;}" ),
+			"[3, 2, 1]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (try scope catchable expect)", val, int_array_t{ 3, 2, 1 } );
+	}
+	/* try scope non-catchable except */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (try scope non-catchable except)",
+			execute_except( h, N "try{" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;a._id+1.0;" "}catch(Exception e){" "}log;}" ),
+			"*anonymous stream*:1:140: Operand types for `+` do not match: an `integer` vs a `real`."
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (try scope non-catchable expect)", val, int_array_t{ 3, 2, 1 } );
+	}
+#undef N
+TUT_TEARDOWN()
+
+namespace {
 void notify( int val_, int& dest_ ) {
 	dest_ = val_;
 }
