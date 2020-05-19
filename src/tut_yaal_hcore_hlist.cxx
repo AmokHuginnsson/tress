@@ -1348,6 +1348,16 @@ TUT_UNIT_TEST( "splice( pos, list, elem )" )
 			l.splice( to, l, from );
 			check_consistency( l );
 			ENSURE_EQUALS( "splice(pos, list, elem) self to head failed", _stringifier.to_string<char>( l ), "412356789" );
+			from = l.begin();
+			advance( from, 1 );
+			l.splice( l.begin(), l, from );
+			check_consistency( l );
+			ENSURE_EQUALS( "splice(pos, list, elem) self to head failed", _stringifier.to_string<char>( l ), "142356789" );
+			from = l.begin();
+			advance( from, -2 );
+			l.splice( l.begin(), l, from );
+			check_consistency( l );
+			ENSURE_EQUALS( "splice(pos, list, elem) self to head failed", _stringifier.to_string<char>( l ), "914235678" );
 		}
 		/* from head */ {
 			list_t l( from_string( "123456789" ) );
