@@ -27,17 +27,23 @@ struct tut_yaal_hcore_hstreaminterface : public tress::tut_helpers::simple_mock<
 		_ss.read_until( s );
 		return ( s );
 	}
-	yaal::tools::HStringStream& string_stream( void ) {
+	yaal::tools::HStringStream& string_stream( bool buffered_ ) {
 		HStreamInterface::ptr_t si( make_pointer<HStringStream>() );
+		si->set_buffered_io( buffered_ );
 		_ss.reset_owned( si );
+		_ss.set_buffered_io( buffered_ );
 		return ( static_cast<HStringStream&>( *si ) );
 	}
 };
 TUT_TEST_GROUP( tut_yaal_hcore_hstreaminterface, "yaal::hcore::HStreamInterface" );
+#define TUT_UNIT_TEST_S( ... ) TUT_UNIT_TEST( __VA_ARGS__ ) for ( int buffered( 0 ); buffered < 2; ++ buffered ) { string_stream( buffered );
+#define TUT_TEARDOWN_S( ... ) } TUT_TEARDOWN( __VA_ARGS__ )
 
-TUT_UNIT_TEST( "HSynchronizedStream::reset_owned" )
+TUT_UNIT_TEST_S( "HSynchronizedStream::reset_owned" )
 	HStringStream ss;
 	HStringStream::ptr_t nss( make_pointer<HStringStream>() );
+	ss.set_buffered_io( buffered ? true : false );
+	nss->set_buffered_io( buffered ? true : false );
 	_ss << 7 << endl;
 	_ss.reset_referenced( ss );
 	ENSURE_EQUALS( "reset_owned (unowning) failed", data(), "" );
@@ -53,9 +59,9 @@ TUT_UNIT_TEST( "HSynchronizedStream::reset_owned" )
 	_ss << "abc" << endl;
 	nss->read_until( s );
 	ENSURE_EQUALS( "read (owning) failed", s, "abc" );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "manipulators" )
+TUT_UNIT_TEST_S( "manipulators" )
 	int i( 7 );
 	_ss << "i = '" << i << "'" << endl;
 	ENSURE_EQUALS( "plain int", data(), "i = '7'" );
@@ -94,11 +100,11 @@ TUT_UNIT_TEST( "manipulators" )
 	ENSURE_EQUALS( "center", data(), "[   yaal   ]" );
 	_ss << left << "[" << setw( 10 ) << "yaal" << "]" << endl;
 	ENSURE_EQUALS( "left", data(), "[yaal      ]" );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "read_until (delims stripped)" )
+TUT_UNIT_TEST_S( "read_until (delims stripped)" )
 	static char src[] = "Ala\nma\nkota.";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	HString line;
 	int long nRead( 0 );
@@ -114,11 +120,11 @@ TUT_UNIT_TEST( "read_until (delims stripped)" )
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "read_while()" )
+TUT_UNIT_TEST_S( "read_while()" )
 	static char src[] = "Ala\nma\nkota.";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	HString line;
 	int long nRead( 0 );
@@ -145,11 +151,11 @@ TUT_UNIT_TEST( "read_while()" )
 	peek = static_cast<char>( _ss.peek() );
 	_ss.read( &sink, 1 );
 	ENSURE_EQUALS( "bad peek", peek, sink );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "read_while_n()" )
+TUT_UNIT_TEST_S( "read_while_n()" )
 	static char src[] = "Alamakotaxxx";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	HString line;
 	int long nRead( 0 );
@@ -165,11 +171,11 @@ TUT_UNIT_TEST( "read_while_n()" )
 	ENSURE_EQUALS( "wrong read size", nRead, 4 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 4 );
 	ENSURE_EQUALS( "bad data read", line, "kota" );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "read_until (delims not stripped)" )
+TUT_UNIT_TEST_S( "read_until (delims not stripped)" )
 	static char src[] = "Ala\nma\nkota.";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	HString line;
 	int long nRead( 0 );
@@ -185,11 +191,11 @@ TUT_UNIT_TEST( "read_until (delims not stripped)" )
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "read_until_n (delim stripped, by delim)" )
+TUT_UNIT_TEST_S( "read_until_n (delim stripped, by delim)" )
 	static char src[] = "Ala\nma\nkota.";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	HString line;
 	int long nRead( 0 );
@@ -205,11 +211,11 @@ TUT_UNIT_TEST( "read_until_n (delim stripped, by delim)" )
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "read_until_n (delim stripped, by size)" )
+TUT_UNIT_TEST_S( "read_until_n (delim stripped, by size)" )
 	static char src[] = "Ala\nma\nkota.";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	HString line;
 	int long nRead( 0 );
@@ -231,11 +237,11 @@ TUT_UNIT_TEST( "read_until_n (delim stripped, by size)" )
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "read_until_n (delim not stripped, by delim)" )
+TUT_UNIT_TEST_S( "read_until_n (delim not stripped, by delim)" )
 	static char src[] = "Ala\nma\nkota.";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	HString line;
 	int long nRead( 0 );
@@ -251,11 +257,11 @@ TUT_UNIT_TEST( "read_until_n (delim not stripped, by delim)" )
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "read_until_n (delim not stripped, by size)" )
+TUT_UNIT_TEST_S( "read_until_n (delim not stripped, by size)" )
 	static char src[] = "Ala\nma\nkota.";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	HString line;
 	int long nRead( 0 );
@@ -277,22 +283,22 @@ TUT_UNIT_TEST( "read_until_n (delim not stripped, by size)" )
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "input float" )
+TUT_UNIT_TEST_S( "input float" )
 	static char src[] = "3.1415 -2.7182";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	float val( 0 );
 	_ss >> val;
 	ENSURE_DISTANCE( "float value read fail", val, static_cast<float>( 3.1415 ), static_cast<float>( epsilon ) );
 	_ss >> val;
 	ENSURE_DISTANCE( "float negative value read fail", val, static_cast<float>( -2.7182 ), static_cast<float>( epsilon ) );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "input double long after fail" )
+TUT_UNIT_TEST_S( "input double long after fail" )
 	static char src[] = "1 a 2";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	double long dl[3] = { 0.L, 0.L, 0.L };
 	for ( double long& d : dl ) {
@@ -304,11 +310,11 @@ TUT_UNIT_TEST( "input double long after fail" )
 	ENSURE_DISTANCE( "double long value read fail", dl[0], 1.L, epsilon );
 	ENSURE_DISTANCE( "spurious double long value read", dl[1], 0.L, epsilon );
 	ENSURE_DISTANCE( "spurious double long value read", dl[2], 0.L, epsilon );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "input double after fail" )
+TUT_UNIT_TEST_S( "input double after fail" )
 	static char src[] = "1 a 2";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	double d[3] = { 0.L, 0.L, 0.L };
 	for ( double& x : d ) {
@@ -320,11 +326,11 @@ TUT_UNIT_TEST( "input double after fail" )
 	ENSURE_DISTANCE( "double value read fail", d[0], 1., static_cast<double>( epsilon ) );
 	ENSURE_DISTANCE( "spurious double value read", d[1], 0., static_cast<double>( epsilon ) );
 	ENSURE_DISTANCE( "spurious double value read", d[2], 0., static_cast<double>( epsilon ) );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "input float after fail" )
+TUT_UNIT_TEST_S( "input float after fail" )
 	static char src[] = "1 a 2";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	float d[3] = { 0.L, 0.L, 0.L };
 	for ( float& x : d ) {
@@ -336,11 +342,11 @@ TUT_UNIT_TEST( "input float after fail" )
 	ENSURE_DISTANCE( "float value read fail", d[0], 1.F, static_cast<float>( epsilon ) );
 	ENSURE_DISTANCE( "spurious float value read", d[1], 0.F, static_cast<float>( epsilon ) );
 	ENSURE_DISTANCE( "spurious float value read", d[2], 0.F, static_cast<float>( epsilon ) );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "input int long long after fail" )
+TUT_UNIT_TEST_S( "input int long long after fail" )
 	static char src[] = "1 a 2";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	int long long ill[3] = { 0, 0, 0 };
 	for ( int long long& x : ill ) {
@@ -352,11 +358,11 @@ TUT_UNIT_TEST( "input int long long after fail" )
 	ENSURE_EQUALS( "int long long value read fail", ill[0], 1 );
 	ENSURE_EQUALS( "spurious int long long value read", ill[1], 0 );
 	ENSURE_EQUALS( "spurious int long lomg value read", ill[2], 0 );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "input int long long unsigned after fail" )
+TUT_UNIT_TEST_S( "input int long long unsigned after fail" )
 	static char src[] = "1 a 2";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	int long long unsigned ill[3] = { 0, 0, 0 };
 	for ( int long long unsigned& x : ill ) {
@@ -368,11 +374,11 @@ TUT_UNIT_TEST( "input int long long unsigned after fail" )
 	ENSURE_EQUALS( "int long long unsigned value read fail", ill[0], 1ULL );
 	ENSURE_EQUALS( "spurious int long long unsigned value read", ill[1], 0ULL );
 	ENSURE_EQUALS( "spurious int long lomg value read", ill[2], 0ULL );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "input int long after fail" )
+TUT_UNIT_TEST_S( "input int long after fail" )
 	static char src[] = "1 a 2";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	int long il[3] = { 0, 0, 0 };
 	for ( int long& x : il ) {
@@ -384,11 +390,11 @@ TUT_UNIT_TEST( "input int long after fail" )
 	ENSURE_EQUALS( "int long value read fail", il[0], 1 );
 	ENSURE_EQUALS( "spurious int long value read", il[1], 0 );
 	ENSURE_EQUALS( "spurious int long value read", il[2], 0 );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "input int long unsigned after fail" )
+TUT_UNIT_TEST_S( "input int long unsigned after fail" )
 	static char src[] = "1 a 2";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	int long unsigned il[3] = { 0, 0, 0 };
 	for ( int long unsigned& x : il ) {
@@ -400,11 +406,11 @@ TUT_UNIT_TEST( "input int long unsigned after fail" )
 	ENSURE_EQUALS( "int long unsigned value read fail", il[0], 1UL );
 	ENSURE_EQUALS( "spurious int long unsigned value read", il[1], 0UL );
 	ENSURE_EQUALS( "spurious int long unsigned value read", il[2], 0UL );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "input int after fail" )
+TUT_UNIT_TEST_S( "input int after fail" )
 	static char src[] = "1 a 2";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	int i[3] = { 0, 0, 0 };
 	for ( int& ii : i ) {
@@ -416,11 +422,11 @@ TUT_UNIT_TEST( "input int after fail" )
 	ENSURE_EQUALS( "int value read fail", i[0], 1 );
 	ENSURE_EQUALS( "spurious int value read", i[1], 0 );
 	ENSURE_EQUALS( "spurious int value read", i[2], 0 );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "input int unsigned after fail" )
+TUT_UNIT_TEST_S( "input int unsigned after fail" )
 	static char src[] = "1 a 2";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	int unsigned i[3] = { 0, 0, 0 };
 	for ( int unsigned& ii : i ) {
@@ -432,11 +438,11 @@ TUT_UNIT_TEST( "input int unsigned after fail" )
 	ENSURE_EQUALS( "int unsigned value read fail", i[0], 1u );
 	ENSURE_EQUALS( "spurious int unsigned value read", i[1], 0u );
 	ENSURE_EQUALS( "spurious int unsigned value read", i[2], 0u );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "input int short after fail" )
+TUT_UNIT_TEST_S( "input int short after fail" )
 	static char src[] = "1 a 2";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	int short is[3] = { 0, 0, 0 };
 	for ( int short& x : is ) {
@@ -448,11 +454,11 @@ TUT_UNIT_TEST( "input int short after fail" )
 	ENSURE_EQUALS( "int short value read fail", is[0], 1 );
 	ENSURE_EQUALS( "spurious int short value read", is[1], 0 );
 	ENSURE_EQUALS( "spurious int short value read", is[2], 0 );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "input int short unsigned after fail" )
+TUT_UNIT_TEST_S( "input int short unsigned after fail" )
 	static char src[] = "1 a 2";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	int short unsigned is[3] = { 0, 0, 0 };
 	for ( int short unsigned& x : is ) {
@@ -464,9 +470,9 @@ TUT_UNIT_TEST( "input int short unsigned after fail" )
 	ENSURE_EQUALS( "int short unsigned value read fail", is[0], 1 );
 	ENSURE_EQUALS( "spurious int short unsigned value read", is[1], 0 );
 	ENSURE_EQUALS( "spurious int short unsigned value read", is[2], 0 );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "outputs" )
+TUT_UNIT_TEST_S( "outputs" )
 	_ss << true;
 	ENSURE_EQUALS( "bool output failed", data(), "1" );
 	_ss << boolalpha << true;
@@ -521,9 +527,10 @@ TUT_UNIT_TEST( "outputs" )
 	ENSURE_EQUALS( "HString output failed", data(), "Ala ma kota" );
 	_ss << static_cast<void*>( nullptr );
 	ENSURE_EQUALS( "HString output failed", data(), "0x0" );
-TUT_TEARDOWN()
+	_ss.set_boolalpha( false );
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "inputs" )
+TUT_UNIT_TEST_S( "inputs" )
 #if SIZEOF_INT_LONG == 8
 	_ss << "true false αol 32767 32768 32768 2147483647 2147483648 2147483648 9223372036854775807 9223372036854775808 9223372036854775808 9223372036854775807 9223372036854775808 9223372036854775808 3.1415 2.7182828 1.414213562373 Ala+ma|kota; 0x1234";
 #else
@@ -613,9 +620,9 @@ TUT_UNIT_TEST( "inputs" )
 	void const* p( nullptr );
 	_ss >> hex >>  p;
 	ENSURE_EQUALS( "pointer input failed", p, reinterpret_cast<void*>( static_cast<size_t>( 0x1234 ) ) );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "binary I/O" )
+TUT_UNIT_TEST_S( "binary I/O" )
 	char const PATH[] = "./out/binary.bin";
 	HFile f( PATH, HFile::OPEN::WRITING );
 	bool cBool1( false );
@@ -716,11 +723,11 @@ TUT_UNIT_TEST( "binary I/O" )
 	ENSURE_EQUALS( "float bin I/O failed", vFloat, cFloat );
 	ENSURE_EQUALS( "HString bin I/O failed", vString, cString );
 	ENSURE_EQUALS( "void* bin I/O failed", vPointer, cPointer );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "ignore" )
+TUT_UNIT_TEST_S( "ignore" )
 	static char src[] = "1 a 2";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	int i0( 0 );
 	int i1( 0 );
@@ -729,11 +736,11 @@ TUT_UNIT_TEST( "ignore" )
 	_ss >> i1;
 	ENSURE_EQUALS( "int value read fail", i0, 1 );
 	ENSURE_EQUALS( "int value read fail", i1, 2 );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST( "consume" )
+TUT_UNIT_TEST_S( "consume" )
 	static char src[] = "1kot2";
-	HStringStream& ss( string_stream() );
+	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	int i0( 0 );
 	int i1( 0 );
@@ -746,7 +753,7 @@ TUT_UNIT_TEST( "consume" )
 	_ss.consume( "kot" );
 	_ss >> i1;
 	ENSURE_EQUALS( "int value read fail", i1, 2 );
-TUT_TEARDOWN()
+TUT_TEARDOWN_S()
 
 }
 
