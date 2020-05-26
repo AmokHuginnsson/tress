@@ -15,6 +15,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
+using namespace yaal::hcore::system;
 using namespace yaal::tools;
 using namespace yaal::ansi;
 using namespace tress::tut_helpers;
@@ -54,8 +55,8 @@ public:
 	void wait( void );
 	void do_not_signal( void );
 private:
-	void handler_connection( HIODispatcher::stream_t& );
-	void handler_message( HIODispatcher::stream_t& );
+	void handler_connection( HIODispatcher::stream_t&, IO_EVENT_TYPE );
+	void handler_message( HIODispatcher::stream_t&, IO_EVENT_TYPE );
 	void disconnect_client( HIODispatcher::stream_t& );
 	HServer( HServer const& );
 	HServer& operator = ( HServer const& );
@@ -82,7 +83,7 @@ void HServer::listen( yaal::hcore::HString const& path_, int const port_ ) {
 void HServer::start( void ) {
 	M_PROLOG
 	clog << "starting server thread ..." << endl;
-	_dispatcher.register_file_descriptor_handler( _socket, call( &HServer::handler_connection, this, _1 ) );
+	_dispatcher.register_file_descriptor_handler( _socket, call( &HServer::handler_connection, this, _1, _2 ), IO_EVENT_TYPE::READ );
 	_thread.spawn( call( &HServer::run, this ) );
 	return;
 	M_EPILOG
@@ -106,17 +107,17 @@ void HServer::wait( void ) {
 	M_EPILOG
 }
 
-void HServer::handler_connection( HIODispatcher::stream_t& ) {
+void HServer::handler_connection( HIODispatcher::stream_t&, IO_EVENT_TYPE ) {
 	M_PROLOG
 	HSocket::ptr_t client = _socket->accept();
 	M_ASSERT( !! client );
-	_dispatcher.register_file_descriptor_handler( client, call( &HServer::handler_message, this, _1 ) );
+	_dispatcher.register_file_descriptor_handler( client, call( &HServer::handler_message, this, _1, _2 ), IO_EVENT_TYPE::READ );
 	clog << green << "new connection" << lightgray << endl;
 	return;
 	M_EPILOG
 }
 
-void HServer::handler_message( HIODispatcher::stream_t& stream_ ) {
+void HServer::handler_message( HIODispatcher::stream_t& stream_, IO_EVENT_TYPE ) {
 	M_PROLOG
 	HString message;
 	if ( !! stream_ ) {

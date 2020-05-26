@@ -17,6 +17,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
+using namespace yaal::hcore::system;
 using namespace yaal::tools;
 using namespace tress::tut_helpers;
 
@@ -73,13 +74,13 @@ void tut_yaal_tools_hhuginn_network::play_scenario( yaal::hcore::HString const& 
 	iod.register_file_descriptor_handler(
 		serv_,
 		HIODispatcher::callback_t(
-			[&iod, &serv_]( HIODispatcher::stream_t& ) {
+			[&iod, &serv_]( HIODispatcher::stream_t&, IO_EVENT_TYPE ) {
 				clog << "ENTER: acceptor" << endl;
 				HSocket::ptr_t client( serv_->accept() );
 				iod.register_file_descriptor_handler(
 					client,
 					HIODispatcher::callback_t(
-						[&iod]( HIODispatcher::stream_t& stream_ ) {
+						[&iod]( HIODispatcher::stream_t& stream_, IO_EVENT_TYPE ) {
 							clog << "ENTER: message hangler" << endl;
 							hcore::HString line;
 							if ( stream_->read_until( line ) > 0 ) {
@@ -91,11 +92,13 @@ void tut_yaal_tools_hhuginn_network::play_scenario( yaal::hcore::HString const& 
 							}
 							clog << "LEAVE: message hangler" << endl;
 						}
-					)
+					),
+					IO_EVENT_TYPE::READ
 				);
 				clog << "LEAVE: acceptor" << endl;
 			}
-		)
+		),
+		IO_EVENT_TYPE::READ
 	);
 	serverRunner.spawn(
 		HThread::call_t(

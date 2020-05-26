@@ -13,6 +13,7 @@ M_VCSID( "$Id: " __ID__ " $" )
 using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
+using namespace yaal::hcore::system;
 using namespace yaal::tools;
 using namespace yaal::ansi;
 using namespace tress::tut_helpers;
@@ -52,7 +53,7 @@ public:
 	void wait( void );
 	void do_not_signal( void );
 private:
-	void handler_message( HIODispatcher::stream_t& );
+	void handler_message( HIODispatcher::stream_t&, IO_EVENT_TYPE );
 	HUDPServer( HUDPServer const& );
 	HUDPServer& operator = ( HUDPServer const& );
 };
@@ -79,7 +80,7 @@ void HUDPServer::start( void ) {
 	M_PROLOG
 	clog << "starting server thread ..." << endl;
 	HRawFile::ptr_t wakeable( make_pointer<HRawFile>( _socket.get_file_descriptor(), HRawFile::OWNERSHIP::EXTERNAL ) );
-	_dispatcher.register_file_descriptor_handler( wakeable, call( &HUDPServer::handler_message, this, _1 ) );
+	_dispatcher.register_file_descriptor_handler( wakeable, call( &HUDPServer::handler_message, this, _1, _2 ), IO_EVENT_TYPE::READ );
 	_thread.spawn( call( &HUDPServer::run, this ) );
 	return;
 	M_EPILOG
@@ -103,7 +104,7 @@ void HUDPServer::wait( void ) {
 	M_EPILOG
 }
 
-void HUDPServer::handler_message( HIODispatcher::stream_t& ) {
+void HUDPServer::handler_message( HIODispatcher::stream_t&, IO_EVENT_TYPE ) {
 	M_PROLOG
 	ODatagram datagram( 100 );
 	clog << "reading data ..." << endl;
