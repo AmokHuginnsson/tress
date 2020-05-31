@@ -33,22 +33,34 @@ TUT_UNIT_TEST( "(escape) EscapeTable constrctor" )
 	ENSURE_EQUALS( "escape table preparaton failed", et._safeToRaw[ static_cast<int>( 'n' ) ], '\n' );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "escape" )
-	EscapeTable et( "\n", 1, "n", 1 );
-	HString s( "Ala\nma\nkota." );
-	HString es( s );
-	escape( es, et );
-	ENSURE_EQUALS( "escaping failed", es, "Ala\\nma\\nkota." );
+TUT_UNIT_TEST( "escape set" )
+	EscapeSet es( "*", 1 );
+	HString s( "Ala*ma*kota." );
+	escape( s, es );
+	ENSURE_EQUALS( "escaping (set) failed", s, "Ala\\*ma\\*kota." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "unescape" )
+	HString s( "Ala\\*ma\\*kota.\\" );
+	unescape( s );
+	ENSURE_EQUALS( "unescaping failed", s, "Ala*ma*kota." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "escape map" )
+	EscapeTable et( "\n", 1, "n", 1 );
+	HString s( "Ala\nma\nkota." );
+	escape( s, et );
+	ENSURE_EQUALS( "escaping (map) failed", s, "Ala\\nma\\nkota." );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "unescape map" )
 	EscapeTable et( "\n", 1, "n", 1 );
 	HString s( "Ala\nma\nkota." );
 	HString es( s );
 	escape( es, et );
-	ENSURE_EQUALS( "escaping failed", es, "Ala\\nma\\nkota." );
+	ENSURE_EQUALS( "escaping (map) failed", es, "Ala\\nma\\nkota." );
 	unescape( es, et );
-	ENSURE_EQUALS( "unescaping failed", es, s );
+	ENSURE_EQUALS( "unescaping (map) failed", es, s );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "escape_copy" )
