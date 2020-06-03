@@ -252,6 +252,7 @@ void tut_yaal_hcore_hsocket::play_scenario( HSocket::socket_type_t type_,
 		TUT_INVOKE( serv.start(); );
 		TUT_INVOKE( client.connect( path_, port_ ); );
 		TUT_EVAL( client.write( test_data, size ) );
+		client.flush();
 		TUT_INVOKE( serv.wait(); );
 	} catch ( HOpenSSLException const& e ) {
 		clog << e.what() << endl;

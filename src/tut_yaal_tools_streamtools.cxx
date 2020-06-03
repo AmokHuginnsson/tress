@@ -83,7 +83,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ensure" )
 	HFile f( "./data/karatsuba.bc", HFile::OPEN::READING );
-tools::ensure( f );
+	tools::ensure( f );
 	f.close();
 	ENSURE_THROW( "ensure on closed succeeded", tools::ensure( f ), HException );
 TUT_TEARDOWN()
