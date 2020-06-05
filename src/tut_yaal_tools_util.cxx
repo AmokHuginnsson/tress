@@ -61,6 +61,12 @@ TUT_UNIT_TEST( "unescape map" )
 	ENSURE_EQUALS( "escaping (map) failed", es, "Ala\\nma\\nkota." );
 	unescape( es, et );
 	ENSURE_EQUALS( "unescaping (map) failed", es, s );
+	es.assign( "Ala\\nma\\nk\\ot\\ę." );
+	unescape( es, et );
+	ENSURE_EQUALS( "unescaping (map) failed", es, "Ala\nma\nk\\ot\\ę." );
+	es.assign( "Ala\\nma\\nk\\ot\\ę." );
+	unescape( es, et, '\\'_ycp, true );
+	ENSURE_EQUALS( "unescaping (map) failed", es, "Ala\nma\nkotę." );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "escape_copy" )
