@@ -126,10 +126,13 @@ void HServer::handler_message( HIODispatcher::stream_t& stream_, IO_EVENT_TYPE )
 		if ( ( nRead = stream_->read_until( message ) ) > 0 ) {
 			_buffer += message;
 			clog << "<-" << message << endl;
-			_event.signal();
-			_signaled = true;
-		} else if ( ! nRead )
+			if ( message == "stop" ) {
+				_event.signal();
+				_signaled = true;
+			}
+		} else if ( ! nRead ) {
 			disconnect_client( stream_ );
+		}
 		/* else nRead < 0 => REPEAT */
 	}
 	return;
@@ -242,8 +245,8 @@ TUT_TEARDOWN()
 void tut_yaal_hcore_hsocket::play_scenario( HSocket::socket_type_t type_,
 		HString const& path_, int port_, bool withSsl_,
 		bool nonBlockingServer_, bool nonBlockingClient_ ) {
-	char test_data[] = "Ala ma kota.";
-	const int size( static_cast<int>( sizeof ( test_data ) ) );
+	char test_data[] = "Ala ma kota." "\n" "A kot ma mleczko." "\n" "Even more data to..." "\n" "...read" "\n" "stop";
+	char test_exp[]  = "Ala ma kota."      "A kot ma mleczko."      "Even more data to..."      "...read"      "stop";
 	TUT_DECLARE( HServer serv( type_ | HSocket::TYPE::SERVER | ( withSsl_ ? HSocket::TYPE::SSL : HSocket::TYPE::DEFAULT ) | ( nonBlockingServer_ ? HSocket::TYPE::NONBLOCKING : HSocket::TYPE::DEFAULT ), 1 ); );
 	TUT_INVOKE( clog << sizeof ( serv ) << endl; );
 	TUT_DECLARE( HSocket client( type_ | HSocket::TYPE::CLIENT | ( withSsl_ ? HSocket::TYPE::SSL : HSocket::TYPE::DEFAULT ) | ( nonBlockingClient_ ? HSocket::TYPE::NONBLOCKING : HSocket::TYPE::DEFAULT ) ); );
@@ -251,7 +254,7 @@ void tut_yaal_hcore_hsocket::play_scenario( HSocket::socket_type_t type_,
 	try {
 		TUT_INVOKE( serv.start(); );
 		TUT_INVOKE( client.connect( path_, port_ ); );
-		TUT_EVAL( client.write( test_data, size ) );
+		TUT_EVAL( client.write( test_data, static_cast<int>( sizeof ( test_data ) ) ) );
 		client.flush();
 		TUT_INVOKE( serv.wait(); );
 	} catch ( HOpenSSLException const& e ) {
@@ -270,7 +273,7 @@ void tut_yaal_hcore_hsocket::play_scenario( HSocket::socket_type_t type_,
 		throw;
 	}
 	TUT_INVOKE( serv.stop(); );
-	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_data );
+	ENSURE_EQUALS( "data broken during transfer", serv.buffer(), test_exp );
 	clog << serv.buffer() << endl;
 	return;
 }
