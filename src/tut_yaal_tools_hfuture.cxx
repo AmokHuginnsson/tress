@@ -42,6 +42,21 @@ TUT_TEST_GROUP( tut_yaal_tool_hfuture, "yaal::tools::HFuture" );
 TUT_UNIT_TEST( "slow operation" )
 	HFuture<int long long> f( call( &tut_yaal_tool_hfuture::power_of_three, this, 7 ) );
 	ENSURE_EQUALS( "slow operation (3 ^ 7) failed", f.get(), 2187 );
+	ENSURE( "is_ready (3 ^ 7) failed", f.is_ready() );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "is_ready" )
+	HFuture<int long long> f( call( &tut_yaal_tool_hfuture::power_of_three, this, 7 ) );
+	ENSURE_NOT( "is_ready (3 ^ 7) failed", f.is_ready() );
+#if defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_WINDOWS__ )
+	static int const delay( 2800 );
+#else
+	static int const delay( 700 );
+#endif
+	sleep_for( duration( delay, time::UNIT::MILLISECOND ) );
+	ENSURE( "is_ready (3 ^ 7) failed", f.is_ready() );
+	ENSURE_EQUALS( "slow operation (3 ^ 7) failed", f.get(), 2187 );
+	ENSURE( "is_ready (3 ^ 7) failed", f.is_ready() );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "reference returned" )
