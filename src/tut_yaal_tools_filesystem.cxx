@@ -165,10 +165,10 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "create_directory" )
 	char const dirA[] = "../tress/out/a";
 	char const dirAB[] = "../tress/out/a/b";
-	ENSURE_THROW( "nested dir created", create_directory( dirAB, 0700, DIRECTORY_MODIFICATION::EXACT ), HFileSystemException );
-	create_directory( dirA, 0700, DIRECTORY_MODIFICATION::EXACT );
+	ENSURE_THROW( "nested dir created", create_directory( dirAB, DIRECTORY_MODIFICATION::EXACT, 0700 ), HFileSystemException );
+	create_directory( dirA, DIRECTORY_MODIFICATION::EXACT, 0700 );
 	ENSURE( "failed to create directory a", is_directory( dirA ) );
-	create_directory( dirAB, 0700, DIRECTORY_MODIFICATION::EXACT );
+	create_directory( dirAB, DIRECTORY_MODIFICATION::EXACT, 0700 );
 	ENSURE( "failed to create directory a/b", is_directory( dirAB ) );
 TUT_TEARDOWN()
 
@@ -184,7 +184,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "create_directory (recursive)" )
 	char const dir[] = "../tress/out/a/b";
-	create_directory( dir, 0700, DIRECTORY_MODIFICATION::RECURSIVE );
+	create_directory( dir, DIRECTORY_MODIFICATION::RECURSIVE, 0700 );
 	ENSURE( "failed to create directory", is_directory( dir ) );
 TUT_TEARDOWN()
 

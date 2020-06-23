@@ -378,6 +378,70 @@ TUT_UNIT_TEST( "glob" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "create_directory" )
+	ENSURE_EQUALS(
+		"create_directory failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main(){\n"
+			"res = [];\n"
+			"res.push( fs.exists(\"out/new\") );"
+			"fs.create_directory(\"out/new/dir/made\");\n"
+			"res.push( fs.exists(\"out/new/dir/made\") );"
+			"return ( res );"
+			"}\n"
+		),
+		"[false, true]"
+	);
+#ifdef __MSVCXX__
+	char const expect[] = "*anonymous stream*:3:20: Uncaught FileSystemException: Failed to create directory `data/nl.txt': The system cannot move the file to a different disk drive";
+#else
+	char const expect[] = "*anonymous stream*:3:20: Uncaught FileSystemException: Failed to create directory `data/nl.txt': File exists";
+#endif
+	ENSURE_EQUALS(
+		"create_directory succeeded",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main(){\n"
+			"fs.create_directory(\"./data/nl.txt/new-dir\");\n"
+			"}\n"
+		),
+		expect
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "remove_directory" )
+	ENSURE_EQUALS(
+		"remove_directory failed",
+		execute(
+			"import FileSystem as fs;\n"
+			"main(){\n"
+			"res = [];\n"
+			"res.push( fs.exists(\"out/new/dir/made\") );"
+			"fs.remove_directory(\"out/new\");\n"
+			"res.push( fs.exists(\"out/new\") );"
+			"return ( res );"
+			"}\n"
+		),
+		"[true, false]"
+	);
+#ifdef __MSVCXX__
+	char const expect[] = "*anonymous stream*:3:20: Uncaught FileSystemException: Cannot acquire metadata for `/non-existing': The system cannot find the file specified";
+#else
+	char const expect[] = "*anonymous stream*:3:20: Uncaught FileSystemException: Cannot acquire metadata for `/non-existing': No such file or directory";
+#endif
+	ENSURE_EQUALS(
+		"remove_directory succeeded",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main(){\n"
+			"fs.remove_directory(\"/non-existing\");\n"
+			"}\n"
+		),
+		expect
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "update_times" )
 	ENSURE_EQUALS(
 		"update_times failed",
