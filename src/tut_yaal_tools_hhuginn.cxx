@@ -2544,7 +2544,17 @@ TUT_TEARDOWN()
 
 namespace {
 int short add( int short unsigned a, int unsigned b ) {
-	return ( static_cast<int short>( a + b ) );
+	int short sum( static_cast<int short>( a + b ) );
+	if ( sum < 0 ) {
+		throw HRuntimeException( "overflow" );
+	}
+	if ( sum > 128 ) {
+		throw std::runtime_error( "too big value" );
+	}
+	if ( sum > 64 ) {
+		throw 0;
+	}
+	return ( sum );
 }
 double quadratic_equation( double long a, double b, float c ) {
 	double d( static_cast<double>( b * b - 4 * a * c ) );
@@ -2669,6 +2679,33 @@ TUT_UNIT_TEST( "easy function registration" )
 		HHuginn::ptr_t h( make_pointer<HHuginn>() );
 		register_function( *h, "add", add, "add two objects" );
 		ENSURE_EQUALS( "add failed", execute( h, "main() { return ( add( 1, 2 ) ); }" ), "3" );
+	}
+	/* add throws HException */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "add", add, "add two objects" );
+		ENSURE_EQUALS(
+			"add failed",
+			execute( h, "main() { try { add( 32000, 32000 ); } catch ( Exception e ) { return ( e.message() ); } }" ),
+			"\"*anonymous stream*:1:19: Callback `add` throws an exception: overflow\""
+		);
+	}
+	/* add throws std::exception */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "add", add, "add two objects" );
+		ENSURE_EQUALS(
+			"add failed",
+			execute( h, "main() { try { add( 99, 33 ); } catch ( Exception e ) { return ( e.message() ); } }" ),
+			"\"*anonymous stream*:1:19: Callback `add` throws an exception: too big value\""
+		);
+	}
+	/* add throws unknown exception */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		register_function( *h, "add", add, "add two objects" );
+		ENSURE_EQUALS(
+			"add failed",
+			execute( h, "main() { try { add( 33, 33 ); } catch ( Exception e ) { return ( e.message() ); } }" ),
+			"\"*anonymous stream*:1:19: Callback `add` throws an unknown exception!\""
+		);
 	}
 	/* quadratic_equation */ {
 		HHuginn::ptr_t h( make_pointer<HHuginn>() );
