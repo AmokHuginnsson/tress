@@ -242,6 +242,13 @@ TUT_UNIT_TEST( "glob" )
 		filesystem::paths_t expected = array<HString>( cwd + "/data/child.cxx", cwd + "/data/huginn_greeter.cxx", cwd + "/data/plugin.cxx" );
 		ENSURE_EQUALS( "filesystem::glob failed", gr, expected );
 	}
+#ifndef __MSVCXX__
+	/* unreadable */ {
+		filesystem::paths_t gr( filesystem::glob( "./out/glob/*/a*" ) );
+		filesystem::paths_t expected = array<HString>( "out/glob/1/abc", "out/glob/3/abe" );
+		ENSURE_EQUALS( "filesystem::glob failed", gr, expected );
+	}
+#endif
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "current_working_directory" )
