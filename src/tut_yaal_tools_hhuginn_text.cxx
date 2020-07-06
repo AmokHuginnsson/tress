@@ -217,5 +217,127 @@ TUT_UNIT_TEST( "capitalize" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "parse_boolean_flag" )
+	ENSURE_EQUALS(
+		"parse_boolean_flag() failed",
+		execute(
+			"import Text as text;\n"
+			"main(){\n"
+			"return((text.parse_boolean_flag(\"yEs\"), text.parse_boolean_flag(\"falSe\")));\n"
+			"}\n"
+		),
+		"(true, false)"
+	);
+	ENSURE_EQUALS(
+		"parse_boolean_flag() failed",
+		execute_except(
+			"import Text as text;\n"
+			"main(){\n"
+			"text.parse_boolean_flag(\"zoom\");\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:24: Uncaught ConversionException: not a boolean value: zoom"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "parse_integer" )
+	ENSURE_EQUALS(
+		"parse_integer() failed",
+		execute(
+			"import Text as text;\n"
+			"main(){\n"
+			"return((text.parse_integer(\"13\"), text.parse_integer(\"75K\"), text.parse_integer(\"42 M\"), text.parse_integer(\"2KiB\")));\n"
+			"}\n"
+		),
+		"(13, 75000, 42000000, 2048)"
+	);
+	ENSURE_EQUALS(
+		"parse_integer() failed",
+		execute_except(
+			"import Text as text;\n"
+			"main(){\n"
+			"text.parse_integer(\"zoom\");\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:19: Uncaught ConversionException: Invalid argument in conversion: zoom"
+	);
+	ENSURE_EQUALS(
+		"parse_integer() failed",
+		execute_except(
+			"import Text as text;\n"
+			"main(){\n"
+			"text.parse_integer(\"2Ke\");\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:19: Uncaught ConversionException: Not a SI unit suffix: `Ke`"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "parse_real" )
+	ENSURE_EQUALS(
+		"parse_real() failed",
+		execute(
+			"import Text as text;\n"
+			"main(){\n"
+			"return((text.parse_real(\"13\"), text.parse_real(\"75K\"), text.parse_real(\"42 M\"), text.parse_real(\"2KiB\")));\n"
+			"}\n"
+		),
+		"(13.0, 75000.0, 42000000.0, 2048.0)"
+	);
+	ENSURE_EQUALS(
+		"parse_real() failed",
+		execute_except(
+			"import Text as text;\n"
+			"main(){\n"
+			"text.parse_real(\"zoom\");\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:16: Uncaught ConversionException: syntax error - unknown mnemonic for: zoom, at: 0"
+	);
+	ENSURE_EQUALS(
+		"parse_real() failed",
+		execute_except(
+			"import Text as text;\n"
+			"main(){\n"
+			"text.parse_real(\"2Ke\");\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:16: Uncaught ConversionException: Not a SI unit suffix: `Ke`"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "parse_number" )
+	ENSURE_EQUALS(
+		"parse_number() failed",
+		execute(
+			"import Text as text;\n"
+			"main(){\n"
+			"return((text.parse_number(\"13\"), text.parse_number(\"75K\"), text.parse_number(\"42 M\"), text.parse_number(\"2KiB\")));\n"
+			"}\n"
+		),
+		"($13, $75000, $42000000, $2048)"
+	);
+	ENSURE_EQUALS(
+		"parse_number() failed",
+		execute_except(
+			"import Text as text;\n"
+			"main(){\n"
+			"text.parse_number(\"zoom\");\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:18: Uncaught ConversionException: Invalid argument: no digits found"
+	);
+	ENSURE_EQUALS(
+		"parse_number() failed",
+		execute_except(
+			"import Text as text;\n"
+			"main(){\n"
+			"text.parse_number(\"2Ke\");\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:18: Uncaught ConversionException: Not a SI unit suffix: `Ke`"
+	);
+TUT_TEARDOWN()
+
 }
 

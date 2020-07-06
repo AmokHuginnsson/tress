@@ -135,6 +135,22 @@ TUT_UNIT_TEST( "(atof_ex) simple but invalid number" )
 	ENSURE_THROW( "invalid formula accepted", atof_ex( formula, true ), HExpressionException );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "unit_str_to_integer" )
+	ENSURE_EQUALS( "K", unit_str_to_integer( "1K" ), 1000LL );
+	ENSURE_EQUALS( "M", unit_str_to_integer( "1M" ), 1000000LL );
+	ENSURE_EQUALS( "G", unit_str_to_integer( "1G" ), 1000000000LL );
+	ENSURE_EQUALS( "T", unit_str_to_integer( "1T" ), 1000000000000LL );
+	ENSURE_EQUALS( "P", unit_str_to_integer( "1P" ), 1000000000000000LL );
+	ENSURE_EQUALS( "E", unit_str_to_integer( "1E" ), 1000000000000000000LL );
+
+	ENSURE_EQUALS( "K", unit_str_to_integer( "1Ki" ), 1024LL );
+	ENSURE_EQUALS( "M", unit_str_to_integer( "1Mi" ), 1024LL * 1024LL );
+	ENSURE_EQUALS( "G", unit_str_to_integer( "1Gi" ), 1024LL * 1024LL * 1024LL );
+	ENSURE_EQUALS( "T", unit_str_to_integer( "1Ti" ), 1024LL * 1024LL * 1024LL * 1024LL );
+	ENSURE_EQUALS( "P", unit_str_to_integer( "1Pi" ), 1024LL * 1024LL * 1024LL * 1024LL * 1024LL );
+	ENSURE_EQUALS( "E", unit_str_to_integer( "1Ei" ), 1024LL * 1024LL * 1024LL * 1024LL * 1024LL * 1024LL );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "usun_ogonki" )
 	HString s( "Mężny bądź, chroń pułk twój i sześć flag!" );
 	ENSURE_EQUALS( "usun_ogonki failed", usun_ogonki( s ), "Mezny badz, chron pulk twoj i szesc flag!" );
