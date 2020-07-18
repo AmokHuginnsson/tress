@@ -101,25 +101,38 @@ tut_yaal_tools_hhuginn_base::~tut_yaal_tools_hhuginn_base( void ) {
 	M_DESTRUCTOR_EPILOG
 }
 
-void tut_yaal_tools_hhuginn_base::test_file( hcore::HString const& name_ ) {
-	filesystem::path_t p( "./data/" );
+hcore::HString tut_yaal_tools_hhuginn_base::run_file( hcore::HString const& name_ ) {
+	filesystem::path_t p( "./data/hgn/" );
 	p.append( name_ );
 	HFile s( p, HFile::OPEN::READING );
 	HHuginn h;
 	HLock l( _mutex );
-	s.read_until( _resultCache );
-	_resultCache.shift_left( 2 );
 	l.unlock();
 	h.load( s );
 	h.preprocess();
 	h.parse();
 	h.compile();
 	h.execute();
-	l.lock();
 	HHuginn::value_t res( h.result() );
-	ENSURE_EQUALS( "bad result type", res->type_id(), HHuginn::TYPE::STRING );
-	ENSURE_EQUALS( "bad result value", static_cast<huginn::HString*>( res.raw() )->value(), _resultCache );
-	return;
+	l.lock();
+	_resultCache.assign( code( res, &h ) );
+	return ( _resultCache );
+}
+
+hcore::HString tut_yaal_tools_hhuginn_base::expect_file( hcore::HString const& name_ ) {
+	filesystem::path_t p( "./data/hgn/" );
+	p.append( name_ );
+	HFile s( p, HFile::OPEN::READING );
+	HLock l( _mutex );
+	while ( getline( s, _resultCache ).good() ) {
+		hcore::HString::size_type pos( _resultCache.find( "EXPECTED:" ) );
+		if ( pos != hcore::HString::npos ) {
+			_resultCache.shift_left( pos + 9 );
+			return ( _resultCache );
+		}
+	}
+	_resultCache.assign( "missing `EXPECTED:`" );
+	return ( _resultCache );
 }
 
 namespace {

@@ -1,0 +1,121 @@
+/*
+ * EXPECTED:["ctr:main-scope", "ctr:if-control", "ctr:if-scope", "dtr:if-scope", "dtr:if-control", "ctr:between-ifs", "ctr:if-control", "ctr:else-scope", "dtr:else-scope", "dtr:if-control", "ctr:first", "ctr:for-scope", "ctr:second", "ctr:for-scope", "dtr:for-scope", "dtr:first", "dtr:for-scope", "dtr:second", "ctr:while-control", "ctr:while-scope", "ctr:while-control", "dtr:while-control", "ctr:while-scope", "dtr:while-scope", "ctr:while-control", "dtr:while-control", "dtr:while-scope", "dtr:while-control", "ctr:switch-control", "ctr:case-scope", "dtr:case-scope", "dtr:switch-control", "ctr:level-0", "ctr:level-1a", "ctr:level-a2a", "dtr:level-a2a", "ctr:level-a2b", "dtr:level-a2b", "dtr:level-1a", "ctr:level-1b", "ctr:level-b2a", "dtr:level-b2a", "ctr:level-b2b", "dtr:level-b2b", "dtr:level-1b", "dtr:level-0", "ctr:level-0", "ctr:level-1a", "ctr:level-a1a", "dtr:level-a1a", "ctr:level-a1b", "dtr:level-a1b", "dtr:level-1a", "ctr:level-1b", "ctr:level-b1a", "dtr:level-b1a", "ctr:level-b1b", "dtr:level-b1b", "dtr:level-1b", "dtr:level-0", "dtr:between-ifs", "dtr:main-scope"]
+ */
+import Algorithms as algo;
+
+class ScopeTracer {
+	_log = none;
+	_name = none;
+	constructor( log_, name_ ) {
+		_name = name_;
+		_log = log_;
+		_log.push( "ctr:{}".format( _name ) );
+	}
+	destructor() {
+		_log.push( "dtr:{}".format( _name ) );
+	}
+	name() {
+		return ( copy( _name ) );
+	}
+	pass( value_ ) {
+		return ( value_ );
+	}
+}
+
+main() {
+	st = ScopeTracer;
+	log = [];
+	/* main scope */ {
+		mainScope = st( log, "main-scope" );
+		if ( ( ifControl = st( log, "if-control" ) ).pass( true ) ) {
+			ifScope = st( log, "if-scope" );
+			assert( ifScope.name() == "if-scope" );
+			assert( ifControl.name() == "if-control" );
+		}
+		betweenIfs = st( log, "between-ifs" );
+		if ( ( ifControl = st( log, "if-control" ) ).pass( false ) ) {
+		} else {
+			elseScope = st( log, "else-scope" );
+			assert( elseScope.name() == "else-scope" );
+			assert( ifControl.name() == "if-control" );
+		}
+		for ( forControl : algo.map( [ "first", "second" ], @[log, st]( x ) { st( log, x ); } ) ) {
+			forScope = st( log, "for-scope" );
+			assert( forScope.name() == "for-scope" );
+		}
+		i = 0;
+		while ( ( whileControl = st( log, "while-control" ) ).pass( i < 2 ) ) {
+			whileScope = st( log, "while-scope" );
+			assert( whileScope.name() == "while-scope" );
+			assert( whileControl.name() == "while-control" );
+			i += 1;
+		}
+		switch ( ( switchControl = st( log, "switch-control" ) ).name()[0] ) {
+			case ( 's' ): {
+				caseScope = st( log, "case-scope" );
+				assert( caseScope.name() == "case-scope" );
+				assert( switchControl.name() == "switch-control" );
+			} break;
+		}
+		/* level 0 */ {
+			level0 = st( log, "level-0" );
+			/* level 1a */ {
+				level1a = st( log, "level-1a" );
+				/* level a2a */ {
+					levela2a = st( log, "level-a2a" );
+					assert( levela2a.name() == "level-a2a" );
+				}
+				/* level a2b */ {
+					levela2b = st( log, "level-a2b" );
+					assert( levela2b.name() == "level-a2b" );
+				}
+				assert( level1a.name() == "level-1a" );
+			}
+			/* level 1b */ {
+				level1b = st( log, "level-1b" );
+				/* level b2a */ {
+					levelb2a = st( log, "level-b2a" );
+					assert( levelb2a.name() == "level-b2a" );
+				}
+				/* level b2b */ {
+					levelb2b = st( log, "level-b2b" );
+					assert( levelb2b.name() == "level-b2b" );
+				}
+				assert( level1b.name() == "level-1b" );
+			}
+			assert( level0.name() == "level-0" );
+		}
+		/* level 0 */ {
+			level0 = st( log, "level-0" );
+			/* level 1a */ {
+				level1 = st( log, "level-1a" );
+				/* level a2a */ {
+					level2 = st( log, "level-a1a" );
+					assert( level2.name() == "level-a1a" );
+				}
+				/* level a2b */ {
+					level2 = st( log, "level-a1b" );
+					assert( level2.name() == "level-a1b" );
+				}
+				assert( level1.name() == "level-1a" );
+			}
+			/* level 1b */ {
+				level1 = st( log, "level-1b" );
+				/* level b2a */ {
+					level2 = st( log, "level-b1a" );
+					assert( level2.name() == "level-b1a" );
+				}
+				/* level b2b */ {
+					level2 = st( log, "level-b1b" );
+					assert( level2.name() == "level-b1b" );
+				}
+				assert( level1.name() == "level-1b" );
+			}
+			assert( level0.name() == "level-0" );
+		}
+		assert( betweenIfs.name() == "between-ifs" );
+		assert( mainScope.name() == "main-scope" );
+	}
+	return ( log );
+}
+

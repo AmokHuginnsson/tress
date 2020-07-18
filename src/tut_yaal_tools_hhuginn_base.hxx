@@ -4,6 +4,7 @@
 #define TUT_YAAL_TOOLS_HHUGINN_HXX_INCLUDED 1
 
 #include <yaal/tools/hhuginn.hxx>
+#include <yaal/tools/filesystem.hxx>
 #include "tut_helpers.hxx"
 #include <TUT/tut.hpp>
 
@@ -84,7 +85,8 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 	static yaal::hcore::HMutex _refCountMutex;
 	tut_yaal_tools_hhuginn_base( void );
 	virtual ~tut_yaal_tools_hhuginn_base( void );
-	void test_file( yaal::hcore::HString const& );
+	yaal::hcore::HString run_file( yaal::hcore::HString const& );
+	yaal::hcore::HString expect_file( yaal::hcore::HString const& );
 	yaal::tools::HHuginn::ptr_t compile_function( yaal::hcore::HString const& );
 	yaal::hcore::HString const& execute(
 		yaal::tools::HHuginn::ptr_t,
@@ -141,6 +143,8 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 };
 
 }
+
+#define ENSURE_HUGINN( message, name ) do { ENSURE_EQUALS( ( message ), run_file( name ), expect_file( name ) ); } while ( false )
 
 #endif /* not TUT_YAAL_TOOLS_HHUGINN_HXX_INCLUDED */
 

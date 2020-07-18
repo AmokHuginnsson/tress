@@ -148,6 +148,10 @@ char const simpleProg[] =
 	"\n"
 ;
 
+TUT_UNIT_TEST( "variables in scopes" )
+	ENSURE_HUGINN( "variables in scopes failed", "variables-in-scopes.hgn" );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "program return types and values" )
 	/* none */ {
 		OHuginnResult hr( execute_result( "main(){return(none);}" ) );
