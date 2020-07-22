@@ -236,7 +236,7 @@ struct WINDOW {
 		_attr = 0;
 		_background = 0;
 		memset( dummy, 0, sizeof ( dummy ) );
-		memset( _dataBuffer, 0, sizeof ( _dataBuffer ) );
+		fill_n( _dataBuffer, CELL_COUNT, 0_ycp );
 		memset( _attrBuffer, 0, sizeof ( _attrBuffer ) );
 	}
 	void wbkgd( chtype_t bkgd_ ) {
@@ -283,7 +283,7 @@ struct WINDOW {
 		}
 	}
 	void clear() {
-		memset( _dataBuffer, 0, sizeof ( _dataBuffer ) );
+		fill_n( _dataBuffer, CELL_COUNT, 0_ycp );
 		memset( _attrBuffer, static_cast<char>( _fakeConsole_.bg( _background ) ), sizeof ( _attrBuffer ) );
 	}
 } stdscr;
