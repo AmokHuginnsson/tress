@@ -1,5 +1,5 @@
 /*
- * EXPECTED:["ctr:main-scope:1", "ctr:if-control:1", "ctr:if-scope:1", "dtr:if-scope:1", "dtr:if-control:1", "ctr:between-ifs:1", "ctr:if-control:1", "ctr:else-scope:1", "dtr:else-scope:1", "dtr:if-control:1", "ctr:first:1", "ctr:for-scope:1", "ctr:second:1", "ctr:for-scope:1", "dtr:for-scope:1", "dtr:first:1", "dtr:for-scope:1", "dtr:second:1", "ctr:while-control:1", "ctr:while-scope:1", "ctr:while-control:1", "dtr:while-control:1", "ctr:while-scope:1", "dtr:while-scope:1", "ctr:while-control:1", "dtr:while-control:1", "dtr:while-scope:1", "dtr:while-control:1", "ctr:switch-control:1", "ctr:case-scope:1", "dtr:case-scope:1", "dtr:switch-control:1", "ctr:main-scope:0", "ctr:if-control:0", "ctr:if-scope:0", "dtr:if-scope:0", "dtr:if-control:0", "ctr:between-ifs:0", "ctr:if-control:0", "ctr:else-scope:0", "dtr:else-scope:0", "dtr:if-control:0", "ctr:first:0", "ctr:for-scope:0", "ctr:second:0", "ctr:for-scope:0", "dtr:for-scope:0", "dtr:first:0", "dtr:for-scope:0", "dtr:second:0", "ctr:while-control:0", "ctr:while-scope:0", "ctr:while-control:0", "dtr:while-control:0", "ctr:while-scope:0", "dtr:while-scope:0", "ctr:while-control:0", "dtr:while-control:0", "dtr:while-scope:0", "dtr:while-control:0", "ctr:switch-control:0", "ctr:case-scope:0", "dtr:case-scope:0", "dtr:switch-control:0", "ctr:level-0:0", "ctr:level-1a:0", "ctr:level-a2a:0", "dtr:level-a2a:0", "ctr:level-a2b:0", "dtr:level-a2b:0", "dtr:level-1a:0", "ctr:level-1b:0", "ctr:level-b2a:0", "dtr:level-b2a:0", "ctr:level-b2b:0", "dtr:level-b2b:0", "dtr:level-1b:0", "dtr:level-0:0", "ctr:level-0:0", "ctr:level-1a:0", "ctr:level-a1a:0", "dtr:level-a1a:0", "ctr:level-a1b:0", "dtr:level-a1b:0", "dtr:level-1a:0", "ctr:level-1b:0", "ctr:level-b1a:0", "dtr:level-b1a:0", "ctr:level-b1b:0", "dtr:level-b1b:0", "dtr:level-1b:0", "dtr:level-0:0", "dtr:between-ifs:0", "dtr:main-scope:0", "ctr:level-0:1", "ctr:level-1a:1", "ctr:level-a2a:1", "dtr:level-a2a:1", "ctr:level-a2b:1", "dtr:level-a2b:1", "dtr:level-1a:1", "ctr:level-1b:1", "ctr:level-b2a:1", "dtr:level-b2a:1", "ctr:level-b2b:1", "dtr:level-b2b:1", "dtr:level-1b:1", "dtr:level-0:1", "ctr:level-0:1", "ctr:level-1a:1", "ctr:level-a1a:1", "dtr:level-a1a:1", "ctr:level-a1b:1", "dtr:level-a1b:1", "dtr:level-1a:1", "ctr:level-1b:1", "ctr:level-b1a:1", "dtr:level-b1a:1", "ctr:level-b1b:1", "dtr:level-b1b:1", "dtr:level-1b:1", "dtr:level-0:1", "dtr:between-ifs:1", "dtr:main-scope:1"]
+ * EXPECTED:["ctr:main-scope:1", "ctr:if-control:1", "ctr:if-scope:1", "ctr:if-scope-last:1", "dtr:if-scope-last:1", "dtr:if-scope:1", "dtr:if-control:1", "ctr:between-ifs:1", "ctr:if-control:1", "ctr:else-scope:1", "ctr:else-scope-last:1", "dtr:else-scope-last:1", "dtr:else-scope:1", "dtr:if-control:1", "ctr:first:1", "ctr:for-scope:1", "ctr:for-scope-last:1", "ctr:second:1", "ctr:for-scope:1", "dtr:for-scope:1", "ctr:for-scope-last:1", "dtr:for-scope-last:1", "dtr:first:1", "dtr:for-scope-last:1", "dtr:for-scope:1", "dtr:second:1", "ctr:while-control:1", "ctr:while-scope:1", "ctr:while-scope-last:1", "ctr:while-control:1", "dtr:while-control:1", "ctr:while-scope:1", "dtr:while-scope:1", "ctr:while-scope-last:1", "dtr:while-scope-last:1", "ctr:while-control:1", "dtr:while-control:1", "dtr:while-scope-last:1", "dtr:while-scope:1", "dtr:while-control:1", "ctr:switch-control:1", "ctr:case-scope:1", "ctr:case-scope-last:1", "dtr:case-scope-last:1", "dtr:case-scope:1", "dtr:switch-control:1", "ctr:main-scope:0", "ctr:if-control:0", "ctr:if-scope:0", "ctr:if-scope-last:0", "dtr:if-scope-last:0", "dtr:if-scope:0", "dtr:if-control:0", "ctr:between-ifs:0", "ctr:if-control:0", "ctr:else-scope:0", "ctr:else-scope-last:0", "dtr:else-scope-last:0", "dtr:else-scope:0", "dtr:if-control:0", "ctr:first:0", "ctr:for-scope:0", "ctr:for-scope-last:0", "ctr:second:0", "ctr:for-scope:0", "dtr:for-scope:0", "ctr:for-scope-last:0", "dtr:for-scope-last:0", "dtr:first:0", "dtr:for-scope-last:0", "dtr:for-scope:0", "dtr:second:0", "ctr:while-control:0", "ctr:while-scope:0", "ctr:while-scope-last:0", "ctr:while-control:0", "dtr:while-control:0", "ctr:while-scope:0", "dtr:while-scope:0", "ctr:while-scope-last:0", "dtr:while-scope-last:0", "ctr:while-control:0", "dtr:while-control:0", "dtr:while-scope-last:0", "dtr:while-scope:0", "dtr:while-control:0", "ctr:switch-control:0", "ctr:case-scope:0", "ctr:case-scope-last:0", "dtr:case-scope-last:0", "dtr:case-scope:0", "dtr:switch-control:0", "ctr:level-0:0", "ctr:level-1a:0", "ctr:level-a2a:0", "dtr:level-a2a:0", "ctr:level-a2b:0", "dtr:level-a2b:0", "dtr:level-1a:0", "ctr:level-1b:0", "ctr:level-b2a:0", "dtr:level-b2a:0", "ctr:level-b2b:0", "dtr:level-b2b:0", "dtr:level-1b:0", "dtr:level-0:0", "ctr:level-0:0", "ctr:level-1a:0", "ctr:level-a1a:0", "dtr:level-a1a:0", "ctr:level-a1b:0", "dtr:level-a1b:0", "dtr:level-1a:0", "ctr:level-1b:0", "ctr:level-b1a:0", "dtr:level-b1a:0", "ctr:level-b1b:0", "dtr:level-b1b:0", "dtr:level-1b:0", "dtr:level-0:0", "dtr:between-ifs:0", "dtr:main-scope:0", "ctr:level-0:1", "ctr:level-1a:1", "ctr:level-a2a:1", "dtr:level-a2a:1", "ctr:level-a2b:1", "dtr:level-a2b:1", "dtr:level-1a:1", "ctr:level-1b:1", "ctr:level-b2a:1", "dtr:level-b2a:1", "ctr:level-b2b:1", "dtr:level-b2b:1", "dtr:level-1b:1", "dtr:level-0:1", "ctr:level-0:1", "ctr:level-1a:1", "ctr:level-a1a:1", "dtr:level-a1a:1", "ctr:level-a1b:1", "dtr:level-a1b:1", "dtr:level-1a:1", "ctr:level-1b:1", "ctr:level-b1a:1", "dtr:level-b1a:1", "ctr:level-b1b:1", "dtr:level-b1b:1", "dtr:level-1b:1", "dtr:level-0:1", "dtr:between-ifs:1", "dtr:main-scope:1"]
  */
 import Algorithms as algo;
 
@@ -30,6 +30,8 @@ fun( log_, nest_ ) {
 	if ( ( ifControl = st( log_, "if-control", nest_ ) ).pass( true ) ) {
 		ifScope = st( log_, "if-scope", nest_ );
 		assert( ifScope.id() == "if-scope:{}".format( nest_ ) );
+		ifScopeLast = st( log_, "if-scope-last", nest_ );
+		assert( ifScopeLast.id() == "if-scope-last:{}".format( nest_ ) );
 		assert( ifControl.id() == "if-control:{}".format( nest_ ) );
 	}
 	betweenIfs = st( log_, "between-ifs", nest_ );
@@ -37,16 +39,22 @@ fun( log_, nest_ ) {
 	} else {
 		elseScope = st( log_, "else-scope", nest_ );
 		assert( elseScope.id() == "else-scope:{}".format( nest_ ) );
+		elseScopeLast = st( log_, "else-scope-last", nest_ );
+		assert( elseScopeLast.id() == "else-scope-last:{}".format( nest_ ) );
 		assert( ifControl.id() == "if-control:{}".format( nest_ ) );
 	}
 	for ( forControl : algo.map( [ "first", "second" ], @[log_, st, nest_]( x ) { st( log_, x, nest_ ); } ) ) {
 		forScope = st( log_, "for-scope", nest_ );
 		assert( forScope.id() == "for-scope:{}".format( nest_ ) );
+		forScopeLast = st( log_, "for-scope-last", nest_ );
+		assert( forScopeLast.id() == "for-scope-last:{}".format( nest_ ) );
 	}
 	i = 0;
 	while ( ( whileControl = st( log_, "while-control", nest_ ) ).pass( i < 2 ) ) {
 		whileScope = st( log_, "while-scope", nest_ );
 		assert( whileScope.id() == "while-scope:{}".format( nest_ ) );
+		whileScopeLast = st( log_, "while-scope-last", nest_ );
+		assert( whileScopeLast.id() == "while-scope-last:{}".format( nest_ ) );
 		assert( whileControl.id() == "while-control:{}".format( nest_ ) );
 		i += 1;
 	}
@@ -54,6 +62,8 @@ fun( log_, nest_ ) {
 		case ( 's' ): {
 			caseScope = st( log_, "case-scope", nest_ );
 			assert( caseScope.id() == "case-scope:{}".format( nest_ ) );
+			caseScopeLast = st( log_, "case-scope-last", nest_ );
+			assert( caseScopeLast.id() == "case-scope-last:{}".format( nest_ ) );
 			assert( switchControl.id() == "switch-control:{}".format( nest_ ) );
 		} break;
 	}
