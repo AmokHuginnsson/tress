@@ -46,7 +46,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "split" )
 	ENSURE_EQUALS(
-		"Text.split failed",
+		"Text.split on ' ' failed",
 		execute(
 			"import Text as text;\n"
 			"main() {\n"
@@ -54,6 +54,36 @@ TUT_UNIT_TEST( "split" )
 			"}\n"
 		),
 		"[\"Ala\", \"ma\", \"kota.\"]"
+	);
+	ENSURE_EQUALS(
+		"Text.split on ' ' with \\t failed",
+		execute(
+			"import Text as text;\n"
+			"main() {\n"
+			"text.split(\"Ala m\\ta kota.\",\" \");"
+			"}\n"
+		),
+		"[\"Ala\", \"m\ta\", \"kota.\"]"
+	);
+	ENSURE_EQUALS(
+		"Text.split with no `by` arg failed",
+		execute(
+			"import Text as text;\n"
+			"main() {\n"
+			"text.split(\"Ala m\\ta kota.\");"
+			"}\n"
+		),
+		"[\"Ala\", \"m\", \"a\", \"kota.\"]"
+	);
+	ENSURE_EQUALS(
+		"Text.split with explicit `none` `by` arg failed",
+		execute(
+			"import Text as text;\n"
+			"main() {\n"
+			"text.split(\"Ala m\\ta kota.\", none);"
+			"}\n"
+		),
+		"[\"Ala\", \"m\", \"a\", \"kota.\"]"
 	);
 TUT_TEARDOWN()
 
