@@ -113,5 +113,97 @@ TUT_UNIT_TEST( "and" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "is_element_of" )
+	ENSURE_EQUALS(
+		"Operators.is_element_of failed",
+		execute(
+			"import Operators as oper;\n"
+			"main(){\n"
+			"return((oper.is_element_of(1,[0,1,2]), oper.is_element_of(1,[0,2])));\n"
+			"}"
+		),
+		"(true, false)"
+	);
+	ENSURE_EQUALS(
+		"Operators.is_element_of failed",
+		execute_except(
+			"import Operators as oper;\n"
+			"main(){\n"
+			"return(oper.is_element_of(1,2));\n"
+			"}"
+		),
+		"*anonymous stream*:3:26: Operand is not a collection type: an `integer`"
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "negate" )
+	ENSURE_EQUALS(
+		"Operators.negate failed",
+		execute(
+			"import Operators as oper;\n"
+			"main(){\n"
+			"return(oper.negate(1));\n"
+			"}"
+		),
+		"-1"
+	);
+	ENSURE_EQUALS(
+		"Operators.negate failed",
+		execute_except(
+			"import Operators as oper;\n"
+			"main(){\n"
+			"return(oper.negate('a'));\n"
+			"}"
+		),
+		"*anonymous stream*:3:19: There is no `-x` operator for a `character`."
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "not" )
+	ENSURE_EQUALS(
+		"Operators.not failed",
+		execute(
+			"import Operators as oper;\n"
+			"main(){\n"
+			"return(oper.not(true));\n"
+			"}"
+		),
+		"false"
+	);
+	ENSURE_EQUALS(
+		"Operators.not failed",
+		execute_except(
+			"import Operators as oper;\n"
+			"main(){\n"
+			"return(oper.not('a'));\n"
+			"}"
+		),
+		"*anonymous stream*:3:16: Operators.not() argument must be a `boolean`, not a `character`."
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "subscript" )
+	ENSURE_EQUALS(
+		"Operators.subscript failed",
+		execute(
+			"import Operators as oper;\n"
+			"main(){\n"
+			"return(oper.subscript(\"Huginn\",3));\n"
+			"}"
+		),
+		"'i'"
+	);
+	ENSURE_EQUALS(
+		"Operators.subscript failed",
+		execute_except(
+			"import Operators as oper;\n"
+			"main(){\n"
+			"return(oper.subscript(1,2));\n"
+			"}"
+		),
+		"*anonymous stream*:3:22: Subscript is not supported on an `integer`."
+	);
+TUT_TEARDOWN()
+
 }
 
