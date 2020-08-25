@@ -189,6 +189,27 @@ TUT_UNIT_TEST( "program return types and values" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "return from nested scopes" )
+	ENSURE_EQUALS(
+		"return from nested scopes failed",
+		execute(
+			"main() {\n"
+			"	if ( true ) {\n"
+			"		x = 1;\n"
+			"		if ( x > 0 ) {\n"
+			"			y = 2;\n"
+			"			if ( y > 0 ) {\n"
+			"				return ( 7 );\n"
+			"			}\n"
+			"		}\n"
+			"	}\n"
+			"	return ( 0 );\n"
+			"}\n"
+		),
+		"7"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "set variable" )
 	OHuginnResult hr( execute_result( "main(){a=7;return(a);}" ) );
 	ENSURE_EQUALS( "bad result type", hr._result->type_id(), HHuginn::TYPE::INTEGER );

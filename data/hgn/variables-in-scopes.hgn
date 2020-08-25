@@ -44,6 +44,7 @@ fun( log_, nest_ ) {
 		assert( ifControl.id() == "if-control:{}".format( nest_ ) );
 	}
 	for ( forControl : algo.map( [ "first", "second" ], @[log_, st, nest_]( x ) { st( log_, x, nest_ ); } ) ) {
+		assert( ( forControl.id() == "first:{}".format( nest_ ) ) || ( forControl.id() == "second:{}".format( nest_ ) ) );
 		forScope = st( log_, "for-scope", nest_ );
 		assert( forScope.id() == "for-scope:{}".format( nest_ ) );
 		forScopeLast = st( log_, "for-scope-last", nest_ );
