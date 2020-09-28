@@ -205,5 +205,48 @@ TUT_UNIT_TEST( "subscript" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "range" )
+	ENSURE_EQUALS(
+		"Operators.range failed",
+		execute(
+			"import Operators as oper;\n"
+			"main(){\n"
+			"return(oper.range(\"Huginn\",2));\n"
+			"}"
+		),
+		"\"ginn\""
+	);
+	ENSURE_EQUALS(
+		"Operators.range failed",
+		execute(
+			"import Operators as oper;\n"
+			"main(){\n"
+			"return(oper.range(\"abcdefghijk\",2,5));\n"
+			"}"
+		),
+		"\"cde\""
+	);
+	ENSURE_EQUALS(
+		"Operators.range failed",
+		execute(
+			"import Operators as oper;\n"
+			"main(){\n"
+			"return(oper.range(\"abcdefghijk\",2,12,2));\n"
+			"}"
+		),
+		"\"cegik\""
+	);
+	ENSURE_EQUALS(
+		"Operators.range failed",
+		execute_except(
+			"import Operators as oper;\n"
+			"main(){\n"
+			"return(oper.range(1,2));\n"
+			"}"
+		),
+		"*anonymous stream*:3:18: Range operator is not supported on an `integer`."
+	);
+TUT_TEARDOWN()
+
 }
 
