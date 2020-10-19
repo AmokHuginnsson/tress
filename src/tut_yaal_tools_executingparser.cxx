@@ -349,16 +349,20 @@ TUT_UNIT_TEST( "HStringLiteral" )
 		ENSURE_EQUALS( "not all elemets acquired", i, yaal::size( expected ) );
 	}
 	/* special */ {
-		ENSURE( "HStringLiteral failed to parse correct input", ep(
-					"\"Ola\\n\","
-					"\"m\\ra\","
-					"\"\\ekota.\","
-					"\"\\\"\","
-					"\"\\\\\","
-					"\"\","
-					"\"x\\\"\","
-					"\"\\\"x\","
-					"\"\\\"x\\\"\"" ) );
+		ENSURE(
+			"HStringLiteral failed to parse correct input",
+			ep(
+				"\"Ola\\n\","
+				"\"m\\ra\","
+				"\"\\ekota.\","
+				"\"\\\"\","
+				"\"\\\\\","
+				"\"\","
+				"\"x\\\"\","
+				"\"\\\"x\","
+				"\"\\\"x\\\"\""
+			)
+		);
 		s.clear();
 		ep();
 		char const expected[][8] = {
@@ -415,6 +419,64 @@ TUT_UNIT_TEST( "HStringLiteral" )
 		for ( strings_t::const_iterator it( s.begin() ), end( s.end() ); it != end; ++ it, ++ i ) {
 			ENSURE( "too many elements acquired", i < yaal::size( expected ) );
 			ENSURE_EQUALS( "Failed to acquire string from string literal", *it, expected[i] );
+		}
+	}
+	/**/ {
+		strings_t rs;
+		HRule rsl( string_literal( HStringLiteral::SEMANTIC::RAW )[push_back( rs )] );
+		HRule rr( rsl >> *( ',' >> rsl ) );
+		HExecutingParser rep( rr );
+		rep( "\"a\\x20b\\\\x20c\\x0\",\"a\\x\",\"\\u1234\",\"\\U00102345\", \"\\1234\"" );
+		rep();
+		/* numbers */ {
+			char const expected[][16] = {
+				"a\\x20b\\\\x20c\\x0",
+				"a\\x",
+				"\\u1234",
+				"\\U00102345",
+				"\\1234"
+			};
+			int i( 0 );
+			for ( strings_t::const_iterator it( rs.begin() ), end( rs.end() ); it != end; ++ it, ++ i ) {
+				ENSURE( "too many elements acquired", i < yaal::size( expected ) );
+				ENSURE_EQUALS( "Failed to acquire raw string from string literal", *it, expected[i] );
+			}
+		}
+
+		/* escape */ {
+			ENSURE(
+				"HStringLiteral failed to parse correct input",
+				rep(
+					"\"Ola\\n\","
+					"\"m\\ra\","
+					"\"\\ekota.\","
+					"\"\\\"\","
+					"\"\\\\\","
+					"\"\","
+					"\"x\\\"\","
+					"\"\\\"x\","
+					"\"\\\"x\\\"\""
+				)
+			);
+			rs.clear();
+			rep();
+			char const expected[][12] = {
+				"Ola\\n",
+				"m\\ra",
+				"\\ekota.",
+				"\\\"",
+				"\\\\",
+				"",
+				"x\\\"",
+				"\\\"x",
+				"\\\"x\\\""
+			};
+			int i( 0 );
+			for ( strings_t::const_iterator it( rs.begin() ), end( rs.end() ); it != end; ++ it, ++ i ) {
+				ENSURE( "too many elements acquired", i < yaal::size( expected ) );
+				ENSURE_EQUALS( "Failed to acquire string from string literal", *it, expected[i] );
+			}
+			ENSURE_EQUALS( "not all elemets acquired", i, yaal::size( expected ) );
 		}
 	}
 TUT_TEARDOWN()
@@ -494,6 +556,62 @@ TUT_UNIT_TEST( "HCharacterLiteral" )
 			ENSURE( "too many elements acquired", i < yaal::size( expected ) );
 			ENSURE_EQUALS( "Failed to acquire string from string literal", *it, expected[i] );
 		}
+	}
+	typedef HArray<hcore::HString> raw_strings_t;
+	/* store evaluated in string */ {
+		raw_strings_t s;
+		HRule rcl( character_literal[push_back( s )] );
+		HRule rr( rcl >> *( ',' >> rcl ) );
+		HExecutingParser rep( rr );
+		ENSURE( "HCharacterLiteral failed to parse correct input", rep( "'A','\\t'" ) );
+		rep();
+		char const expected[][2] = {
+			"A",
+			"\t"
+		};
+		int i( 0 );
+		for ( raw_strings_t::const_iterator it( s.begin() ), end( s.end() ); it != end; ++ it, ++ i ) {
+			ENSURE( "too many elements acquired", i < yaal::size( expected ) );
+			ENSURE_EQUALS( "Failed to acquire character from character literal", *it, expected[i] );
+		}
+		ENSURE_EQUALS( "not all elemets acquired", i, yaal::size( expected ) );
+	}
+	/* store raw in string */ {
+		raw_strings_t s;
+		HRule rcl( character_literal( HCharacterLiteral::SEMANTIC::RAW )[push_back( s )] );
+		HRule rr( rcl >> *( ',' >> rcl ) );
+		HExecutingParser rep( rr );
+		ENSURE( "HCharacterLiteral failed to parse correct input", rep( "'A','\\t'" ) );
+		rep();
+		char const expected[][4] = {
+			"A",
+			"\\t"
+		};
+		int i( 0 );
+		for ( raw_strings_t::const_iterator it( s.begin() ), end( s.end() ); it != end; ++ it, ++ i ) {
+			ENSURE( "too many elements acquired", i < yaal::size( expected ) );
+			ENSURE_EQUALS( "Failed to acquire character from character literal", *it, expected[i] );
+		}
+		ENSURE_EQUALS( "not all elemets acquired", i, yaal::size( expected ) );
+	}
+	/* store raw in code_point */ {
+		characters_t rc;
+		HRule rcl( character_literal( HCharacterLiteral::SEMANTIC::RAW )[push_back<code_point_t>( rc )] );
+		HRule rr( rcl >> *( ',' >> rcl ) );
+		HExecutingParser rep( rr );
+		ENSURE_NOT( "HCharacterLiteral parsed invalid input", rep( "'A','\\t'" ) );
+		ENSURE( "HCharacterLiteral failed to parse correct input", rep( "'A','t'" ) );
+		rep();
+		char unsigned const expected[] = {
+			'A',
+			't'
+		};
+		int i( 0 );
+		for ( characters_t::const_iterator it( rc.begin() ), end( rc.end() ); it != end; ++ it, ++ i ) {
+			ENSURE( "too many elements acquired", i < yaal::size( expected ) );
+			ENSURE_EQUALS( "Failed to acquire character from character literal", *it, expected[i] );
+		}
+		ENSURE_EQUALS( "not all elemets acquired", i, yaal::size( expected ) );
 	}
 TUT_TEARDOWN()
 
