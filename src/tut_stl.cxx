@@ -22,6 +22,9 @@
 M_VCSID( "$Id: " __ID__ " $" )
 #include "tut_helpers.hxx"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 using namespace tut;
 using namespace std;
 #ifdef HAVE_SGI_STL_EXTENSIONS
@@ -522,4 +525,6 @@ TUT_UNIT_TEST( "create by_hand" )
 TUT_TEARDOWN()
 
 }
+
+#pragma GCC diagnostic pop
 
