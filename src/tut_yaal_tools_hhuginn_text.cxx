@@ -203,7 +203,7 @@ TUT_UNIT_TEST( "character_class" )
 		" \"abcdefghijklmnopqrstuvwxyz\","
 		" \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\","
 		" \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_\","
-		" \"`~!@#$%^&*()-=+[{]};:'\",<.>/?\","
+		" \"`~!@#$%^&*()-=+[{]}\\|;:'\",<.>/?\","
 		" \"aAeEiIoOuUyY\","
 		" \"αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ\","
 		" \"αβγδεζηθικλμνξοπρστυφχψω\","
