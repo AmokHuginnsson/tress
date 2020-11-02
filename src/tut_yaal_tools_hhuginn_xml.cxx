@@ -93,7 +93,7 @@ TUT_UNIT_TEST( "tree walk" )
 		" (xml.Text, \"node\"),"
 		" (xml.Text, \"Zażółcić gęsią jaźń.\"),"
 		" (xml.Entity, \"my precious data\"),"
-		" (xml.Text, \"Filmuj rzeź żądań, pość, gnęb chłystków!\nMężny bądź, chroń pułk twój i sześć flag.\"),"
+		" (xml.Text, \"Filmuj rzeź żądań, pość, gnęb chłystków!\\nMężny bądź, chroń pułk twój i sześć flag.\"),"
 		" (xml.Element, \"my_empty\"),"
 		" (xml.Element, \"xi:include\"),"
 		" (xml.Element, \"my_set\"),"
@@ -131,7 +131,7 @@ TUT_UNIT_TEST( "Element.append" )
 			"return ( s.read_string( 1000 ) );\n"
 			"}\n"
 		),
-		"\"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DOM>Huginn</DOM>\n\""
+		"\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<DOM>Huginn</DOM>\\n\""
 	);
 	ENSURE_EQUALS(
 		"XML.Element.append of integer succeeded",
@@ -177,7 +177,7 @@ TUT_UNIT_TEST( "copy(Doc), copy(Element)" )
 			"return ( res );\n"
 			"}\n"
 		),
-		"[\"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DOM>Huginn\t<child/>\n</DOM>\n\", \"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DOM>Huginn</DOM>\n\"]"
+		"[\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<DOM>Huginn\\t<child/>\\n</DOM>\\n\", \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?>\\n<DOM>Huginn</DOM>\\n\"]"
 	);
 TUT_TEARDOWN()
 
@@ -237,9 +237,9 @@ TUT_UNIT_TEST( "remove, remove_nth" )
 			"return ( res );\n"
 			"}\n"
 		),
-		"[\"<?xml version=\"1.0\" encoding=\"UTF-8\"?><r><n1><c1/><c2/></n1><n2><c1/><c2><l>text</l></c2></n2><n3><c1/><c2/></n3></r>\","
-		" \"<?xml version=\"1.0\" encoding=\"UTF-8\"?><r><n1><c1/><c2/></n1><n2><c1/><c2><l>text</l></c2></n2></r>\","
-		" \"<?xml version=\"1.0\" encoding=\"UTF-8\"?><r><n2><c1/><c2><l>text</l></c2></n2></r>\"]"
+		"[\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><r><n1><c1/><c2/></n1><n2><c1/><c2><l>text</l></c2></n2><n3><c1/><c2/></n3></r>\","
+		" \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><r><n1><c1/><c2/></n1><n2><c1/><c2><l>text</l></c2></n2></r>\","
+		" \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><r><n2><c1/><c2><l>text</l></c2></n2></r>\"]"
 	);
 	ENSURE_EQUALS(
 		"remove during for loop failed",
@@ -260,7 +260,7 @@ TUT_UNIT_TEST( "remove, remove_nth" )
 			"return ( res );\n"
 			"}\n"
 		),
-		"[\"n1\", \"n2\", \"n3\", \"<?xml version=\"1.0\" encoding=\"UTF-8\"?><r/>\"]"
+		"[\"n1\", \"n2\", \"n3\", \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><r/>\"]"
 	);
 TUT_TEARDOWN()
 
@@ -320,7 +320,7 @@ TUT_UNIT_TEST( "add an attribute" )
 			"return ( res );\n"
 			"}\n"
 		),
-		"\"<?xml version=\"1.0\" encoding=\"UTF-8\"?><r attr=\"val_attr\" prop=\"val_prop\"/>\""
+		"\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><r attr=\\\"val_attr\\\" prop=\\\"val_prop\\\"/>\""
 	);
 TUT_TEARDOWN()
 
@@ -374,7 +374,7 @@ TUT_UNIT_TEST( "remove an attribute" )
 			"return ( res );\n"
 			"}\n"
 		),
-		"\"<?xml version=\"1.0\" encoding=\"UTF-8\"?><r attr=\"val_attr\" class=\"val_class\"/>\""
+		"\"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><r attr=\\\"val_attr\\\" class=\\\"val_class\\\"/>\""
 	);
 TUT_TEARDOWN()
 

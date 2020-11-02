@@ -85,7 +85,7 @@ TUT_UNIT_TEST( "attribute" )
 			"return(term.attribute(term.ATTRIBUTE.BOLD,\"bold\"));\n"
 			"}"
 		),
-		"\""_ys.append( *ansi::bold ).append( "bold" ).append( *ansi::reset ).append( '"' )
+		"\""_ys.append( to_string( *ansi::bold ).replace( "\033", "\\e" ) ).append( "bold" ).append( to_string( *ansi::reset ).replace( "\033", "\\e" ) ).append( '"' )
 	);
 TUT_TEARDOWN()
 
@@ -98,7 +98,7 @@ TUT_UNIT_TEST( "color" )
 			"return(term.color(term.COLOR.BRIGHTBLUE,\"brightblue\"));\n"
 			"}"
 		),
-		"\""_ys.append( *ansi::brightblue ).append( "brightblue" ).append( *ansi::reset ).append( '"' )
+		"\""_ys.append( to_string( *ansi::brightblue ).replace( "\033", "\\e" ) ).append( "brightblue" ).append( to_string( *ansi::reset ).replace( "\033", "\\e" ) ).append( '"' )
 	);
 TUT_TEARDOWN()
 
@@ -112,7 +112,7 @@ TUT_UNIT_TEST( "move" )
 			"return(term.move(7,13));\n"
 			"}"
 		),
-		"\"\033[8;14H\""
+		"\"\\e[8;14H\""
 	);
 TUT_TEARDOWN()
 #endif /* #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 ) */
@@ -126,7 +126,7 @@ TUT_UNIT_TEST( "save, clear, restore, reset" )
 			"return((term.save(),term.clear(),term.restore(),term.reset()));\n"
 			"}"
 		),
-		"(\"\033[s\", \"\033[2J\", \"\033[u\", \"\033[0m\")"
+		"(\"\\e[s\", \"\\e[2J\", \"\\e[u\", \"\\e[0m\")"
 	);
 TUT_TEARDOWN()
 

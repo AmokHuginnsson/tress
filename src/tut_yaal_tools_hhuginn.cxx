@@ -2304,7 +2304,7 @@ TUT_UNIT_TEST( "Stream" )
 			"return(fs.open(\"./data/nl.txt\",fs.OPEN_MODE.READ).read_string(100));\n"
 			"}\n"
 		),
-		"\"Ala\nma\nkota.\n\n\""
+		"\"Ala\\nma\\nkota.\\n\\n\""
 	);
 	ENSURE_EQUALS(
 		"Stream copy succeeded",

@@ -24,28 +24,28 @@ TUT_TEST_GROUP( tut_yaal_tools_hhuginn_json, "yaal::tools::HHuginn.JSON" );
 TUT_UNIT_TEST( "save" )
 #if TARGET_CPU_BITS == 32
 	char const expected[] =
-		"\"{\"order\": [1, 2, 3, 4], \"set\": [1, 2, 3, 4], "
-		"\"lookup\": {\"one\": 1, \"two\": 2, \"three\": 3, \"four\": 4}, \"string\": \"Huginn-JSON\", "
-		"\"array\": [1, 2, 3, 4], \"tuple\": [1, 2, 3, 4], \"deque\": [1, 2, 3, 4], \"null\": null, \"true\": true, "
-		"\"dict\": {\"one\": 1, \"two\": 2, \"three\": 3, \"four\": 4}, \"false\": false, "
-		"\"number\": 2.71828182845904523536028747, \"real\": 3.1415, \"int\": 7, \"character\": \"h\"}\""
+		"\"{\\\"order\\\": [1, 2, 3, 4], \\\"set\\\": [1, 2, 3, 4], "
+		"\\\"lookup\\\": {\\\"one\\\": 1, \\\"two\\\": 2, \\\"three\\\": 3, \\\"four\\\": 4}, \\\"string\\\": \\\"Huginn-JSON\\\", "
+		"\\\"array\\\": [1, 2, 3, 4], \\\"tuple\\\": [1, 2, 3, 4], \\\"deque\\\": [1, 2, 3, 4], \\\"null\\\": null, \\\"true\\\": true, "
+		"\\\"dict\\\": {\\\"one\\\": 1, \\\"two\\\": 2, \\\"three\\\": 3, \\\"four\\\": 4}, \\\"false\\\": false, "
+		"\\\"number\\\": 2.71828182845904523536028747, \\\"real\\\": 3.1415, \\\"int\\\": 7, \\\"character\\\": \\\"h\\\"}\""
 	;
 #elif defined ( __HOST_OS_TYPE_FREEBSD__ )
 	char const expected[] =
-		"\"{\"string\": \"Huginn-JSON\", \"false\": false, \"set\": [1, 2, 3, 4], "
-		"\"order\": [1, 2, 3, 4], \"character\": \"h\", \"array\": [1, 2, 3, 4], "
-		"\"dict\": {\"three\": 3, \"one\": 1, \"two\": 2, \"four\": 4}, \"true\": true, \"null\": null, "
-		"\"tuple\": [1, 2, 3, 4], \"deque\": [1, 2, 3, 4], "
-		"\"lookup\": {\"three\": 3, \"one\": 1, \"two\": 2, \"four\": 4}, "
-		"\"real\": 3.1415, \"int\": 7, \"number\": 2.71828182845904523536028747}\""
+		"\"{\\\"string\\\": \\\"Huginn-JSON\\\", \\\"false\\\": false, \\\"set\\\": [1, 2, 3, 4], "
+		"\\\"order\\\": [1, 2, 3, 4], \\\"character\\\": \\\"h\\\", \\\"array\\\": [1, 2, 3, 4], "
+		"\\\"dict\\\": {\\\"three\\\": 3, \\\"one\\\": 1, \\\"two\\\": 2, \\\"four\\\": 4}, \\\"true\\\": true, \\\"null\\\": null, "
+		"\\\"tuple\\\": [1, 2, 3, 4], \\\"deque\\\": [1, 2, 3, 4], "
+		"\\\"lookup\\\": {\\\"three\\\": 3, \\\"one\\\": 1, \\\"two\\\": 2, \\\"four\\\": 4}, "
+		"\\\"real\\\": 3.1415, \\\"int\\\": 7, \\\"number\\\": 2.71828182845904523536028747}\""
 	;
 #else
 	char const expected[] =
-		"\"{\"string\": \"Huginn-JSON\", \"false\": false, \"set\": [1, 2, 3, 4], \"character\": \"h\", "
-		"\"order\": [1, 2, 3, 4], \"array\": [1, 2, 3, 4], \"null\": null, \"true\": true, "
-		"\"dict\": {\"three\": 3, \"one\": 1, \"two\": 2, \"four\": 4}, \"tuple\": [1, 2, 3, 4], "
-		"\"deque\": [1, 2, 3, 4], \"lookup\": {\"three\": 3, \"one\": 1, \"two\": 2, \"four\": 4}, "
-		"\"real\": 3.1415, \"int\": 7, \"number\": 2.71828182845904523536028747}\""
+		"\"{\\\"string\\\": \\\"Huginn-JSON\\\", \\\"false\\\": false, \\\"set\\\": [1, 2, 3, 4], \\\"character\\\": \\\"h\\\", "
+		"\\\"order\\\": [1, 2, 3, 4], \\\"array\\\": [1, 2, 3, 4], \\\"null\\\": null, \\\"true\\\": true, "
+		"\\\"dict\\\": {\\\"three\\\": 3, \\\"one\\\": 1, \\\"two\\\": 2, \\\"four\\\": 4}, \\\"tuple\\\": [1, 2, 3, 4], "
+		"\\\"deque\\\": [1, 2, 3, 4], \\\"lookup\\\": {\\\"three\\\": 3, \\\"one\\\": 1, \\\"two\\\": 2, \\\"four\\\": 4}, "
+		"\\\"real\\\": 3.1415, \\\"int\\\": 7, \\\"number\\\": 2.71828182845904523536028747}\""
 	;
 #endif
 	ENSURE_EQUALS(

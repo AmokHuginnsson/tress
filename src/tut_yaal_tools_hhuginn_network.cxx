@@ -117,7 +117,7 @@ void tut_yaal_tools_hhuginn_network::play_scenario( yaal::hcore::HString const& 
 			}
 		)
 	);
-	ENSURE_EQUALS( "Network.connect failed", execute( code_ ), "\"!tseb si nniguH\n\"" );
+	ENSURE_EQUALS( "Network.connect failed", execute( code_ ), "\"!tseb si nniguH\\n\"" );
 	iod.stop();
 	serverRunner.finish();
 }

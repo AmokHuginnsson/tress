@@ -63,7 +63,7 @@ TUT_UNIT_TEST( "split" )
 			"text.split(\"Ala m\\ta kota.\",\" \");"
 			"}\n"
 		),
-		"[\"Ala\", \"m\ta\", \"kota.\"]"
+		"[\"Ala\", \"m\\ta\", \"kota.\"]"
 	);
 	ENSURE_EQUALS(
 		"Text.split with no `by` arg failed",
@@ -156,7 +156,7 @@ TUT_UNIT_TEST( "stream" )
 			"return ( ( s.read_line(), s.read_line(), s.read_line() ) );\n"
 			"}\n"
 		),
-		"(\"Ala ma kota.\n\", \"Kot pije mleko.\", none)"
+		"(\"Ala ma kota.\\n\", \"Kot pije mleko.\", none)"
 	);
 TUT_TEARDOWN()
 
@@ -194,7 +194,7 @@ TUT_UNIT_TEST( "character_class" )
 			" ]);\n"
 			"}\n"
 		),
-		"[\"\a\b \t\v\f\r\n\","
+		"[\"\\a\\b \\t\\v\\f\\r\\n\","
 		" \"01\","
 		" \"01234567\","
 		" \"0123456789\","
@@ -203,7 +203,7 @@ TUT_UNIT_TEST( "character_class" )
 		" \"abcdefghijklmnopqrstuvwxyz\","
 		" \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\","
 		" \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_\","
-		" \"`~!@#$%^&*()-=+[{]}\\|;:'\",<.>/?\","
+		" \"`~!@#$%^&*()-=+[{]}\\\\|;:'\\\",<.>/?\","
 		" \"aAeEiIoOuUyY\","
 		" \"αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ\","
 		" \"αβγδεζηθικλμνξοπρστυφχψω\","

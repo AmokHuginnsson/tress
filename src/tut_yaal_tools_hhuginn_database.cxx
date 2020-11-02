@@ -134,7 +134,7 @@ TUT_UNIT_TEST( "query invalid" )
 			"}"
 			"}"
 		),
-		"\"*anonymous stream*:1:82: SQL prepare error: 'invalid;': near \"invalid\": syntax error\""
+		"\"*anonymous stream*:1:82: SQL prepare error: 'invalid;': near \\\"invalid\\\": syntax error\""
 	);
 TUT_TEARDOWN()
 

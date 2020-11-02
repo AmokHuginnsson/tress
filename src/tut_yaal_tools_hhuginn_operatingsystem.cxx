@@ -174,9 +174,9 @@ TUT_UNIT_TEST( "spawn" )
 		"\"*anonymous stream*:1:49: "_ys.append( EXPECTED_SPAWN ).append( ": non-existing\"" )
 	);
 #ifdef __MSVCXX__
-	char const expected[] = "[true, [\"hello-OUT\r\n\"], false, 0]";
+	char const expected[] = "[true, [\"hello-OUT\\r\\n\"], false, 0]";
 #else
-	char const expected[] = "[true, [\"hello-OUT\n\"], false, 0]";
+	char const expected[] = "[true, [\"hello-OUT\\n\"], false, 0]";
 #endif
 	ENSURE_EQUALS(
 		"OperatingSystem.spawn, continuous read_line for stdout",
