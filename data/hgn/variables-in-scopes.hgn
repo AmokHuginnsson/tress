@@ -1,5 +1,44 @@
 /*
- * EXPECTED:["ctr:main-scope:1", "ctr:if-control:1", "ctr:if-scope:1", "ctr:if-scope-last:1", "dtr:if-scope-last:1", "dtr:if-scope:1", "dtr:if-control:1", "ctr:between-ifs:1", "ctr:if-control:1", "ctr:else-scope:1", "ctr:else-scope-last:1", "dtr:else-scope-last:1", "dtr:else-scope:1", "dtr:if-control:1", "ctr:first:1", "ctr:for-scope:1", "ctr:for-scope-last:1", "ctr:second:1", "ctr:for-scope:1", "dtr:for-scope:1", "ctr:for-scope-last:1", "dtr:for-scope-last:1", "dtr:first:1", "dtr:for-scope-last:1", "dtr:for-scope:1", "dtr:second:1", "ctr:while-control:1", "ctr:while-scope:1", "ctr:while-scope-last:1", "ctr:while-control:1", "dtr:while-control:1", "ctr:while-scope:1", "dtr:while-scope:1", "ctr:while-scope-last:1", "dtr:while-scope-last:1", "ctr:while-control:1", "dtr:while-control:1", "dtr:while-scope-last:1", "dtr:while-scope:1", "dtr:while-control:1", "ctr:switch-control:1", "ctr:case-scope:1", "ctr:case-scope-last:1", "dtr:case-scope-last:1", "dtr:case-scope:1", "dtr:switch-control:1", "ctr:main-scope:0", "ctr:if-control:0", "ctr:if-scope:0", "ctr:if-scope-last:0", "dtr:if-scope-last:0", "dtr:if-scope:0", "dtr:if-control:0", "ctr:between-ifs:0", "ctr:if-control:0", "ctr:else-scope:0", "ctr:else-scope-last:0", "dtr:else-scope-last:0", "dtr:else-scope:0", "dtr:if-control:0", "ctr:first:0", "ctr:for-scope:0", "ctr:for-scope-last:0", "ctr:second:0", "ctr:for-scope:0", "dtr:for-scope:0", "ctr:for-scope-last:0", "dtr:for-scope-last:0", "dtr:first:0", "dtr:for-scope-last:0", "dtr:for-scope:0", "dtr:second:0", "ctr:while-control:0", "ctr:while-scope:0", "ctr:while-scope-last:0", "ctr:while-control:0", "dtr:while-control:0", "ctr:while-scope:0", "dtr:while-scope:0", "ctr:while-scope-last:0", "dtr:while-scope-last:0", "ctr:while-control:0", "dtr:while-control:0", "dtr:while-scope-last:0", "dtr:while-scope:0", "dtr:while-control:0", "ctr:switch-control:0", "ctr:case-scope:0", "ctr:case-scope-last:0", "dtr:case-scope-last:0", "dtr:case-scope:0", "dtr:switch-control:0", "ctr:level-0:0", "ctr:level-1a:0", "ctr:level-a2a:0", "dtr:level-a2a:0", "ctr:level-a2b:0", "dtr:level-a2b:0", "dtr:level-1a:0", "ctr:level-1b:0", "ctr:level-b2a:0", "dtr:level-b2a:0", "ctr:level-b2b:0", "dtr:level-b2b:0", "dtr:level-1b:0", "dtr:level-0:0", "ctr:level-0:0", "ctr:level-1a:0", "ctr:level-a1a:0", "dtr:level-a1a:0", "ctr:level-a1b:0", "dtr:level-a1b:0", "dtr:level-1a:0", "ctr:level-1b:0", "ctr:level-b1a:0", "dtr:level-b1a:0", "ctr:level-b1b:0", "dtr:level-b1b:0", "dtr:level-1b:0", "dtr:level-0:0", "dtr:between-ifs:0", "dtr:main-scope:0", "ctr:level-0:1", "ctr:level-1a:1", "ctr:level-a2a:1", "dtr:level-a2a:1", "ctr:level-a2b:1", "dtr:level-a2b:1", "dtr:level-1a:1", "ctr:level-1b:1", "ctr:level-b2a:1", "dtr:level-b2a:1", "ctr:level-b2b:1", "dtr:level-b2b:1", "dtr:level-1b:1", "dtr:level-0:1", "ctr:level-0:1", "ctr:level-1a:1", "ctr:level-a1a:1", "dtr:level-a1a:1", "ctr:level-a1b:1", "dtr:level-a1b:1", "dtr:level-1a:1", "ctr:level-1b:1", "ctr:level-b1a:1", "dtr:level-b1a:1", "ctr:level-b1b:1", "dtr:level-b1b:1", "dtr:level-1b:1", "dtr:level-0:1", "dtr:between-ifs:1", "dtr:main-scope:1"]
+ * FROM:(, |[\[\]])
+ * TO:\n
+ * EXPECTED:["ctr:main-scope:1", "ctr:if-control:1", "ctr:if-scope:1", "ctr:if-scope-last:1",
+ * EXPECTED: "dtr:if-scope-last:1", "dtr:if-scope:1", "dtr:if-control:1", "ctr:between-ifs:1",
+ * EXPECTED: "ctr:if-control:1", "ctr:else-scope:1", "ctr:else-scope-last:1", "dtr:else-scope-last:1",
+ * EXPECTED: "dtr:else-scope:1", "dtr:if-control:1", "ctr:first:1", "ctr:for-scope:1",
+ * EXPECTED: "ctr:for-scope-last:1", "ctr:second:1", "ctr:for-scope:1", "dtr:for-scope:1",
+ * EXPECTED: "ctr:for-scope-last:1", "dtr:for-scope-last:1", "dtr:first:1", "dtr:for-scope-last:1",
+ * EXPECTED: "dtr:for-scope:1", "dtr:second:1", "ctr:while-control:1", "ctr:while-scope:1",
+ * EXPECTED: "ctr:while-scope-last:1", "ctr:while-control:1", "dtr:while-control:1", "ctr:while-scope:1",
+ * EXPECTED: "dtr:while-scope:1", "ctr:while-scope-last:1", "dtr:while-scope-last:1", "ctr:while-control:1",
+ * EXPECTED: "dtr:while-control:1", "dtr:while-scope-last:1", "dtr:while-scope:1", "dtr:while-control:1",
+ * EXPECTED: "ctr:switch-control:1", "ctr:case-scope:1", "ctr:case-scope-last:1", "dtr:case-scope-last:1",
+ * EXPECTED: "dtr:case-scope:1", "dtr:switch-control:1", "ctr:main-scope:0", "ctr:if-control:0",
+ * EXPECTED: "ctr:if-scope:0", "ctr:if-scope-last:0", "dtr:if-scope-last:0", "dtr:if-scope:0",
+ * EXPECTED: "dtr:if-control:0", "ctr:between-ifs:0", "ctr:if-control:0", "ctr:else-scope:0",
+ * EXPECTED: "ctr:else-scope-last:0", "dtr:else-scope-last:0", "dtr:else-scope:0", "dtr:if-control:0",
+ * EXPECTED: "ctr:first:0", "ctr:for-scope:0", "ctr:for-scope-last:0", "ctr:second:0",
+ * EXPECTED: "ctr:for-scope:0", "dtr:for-scope:0", "ctr:for-scope-last:0", "dtr:for-scope-last:0",
+ * EXPECTED: "dtr:first:0", "dtr:for-scope-last:0", "dtr:for-scope:0", "dtr:second:0",
+ * EXPECTED: "ctr:while-control:0", "ctr:while-scope:0", "ctr:while-scope-last:0", "ctr:while-control:0",
+ * EXPECTED: "dtr:while-control:0", "ctr:while-scope:0", "dtr:while-scope:0", "ctr:while-scope-last:0",
+ * EXPECTED: "dtr:while-scope-last:0", "ctr:while-control:0", "dtr:while-control:0", "dtr:while-scope-last:0",
+ * EXPECTED: "dtr:while-scope:0", "dtr:while-control:0", "ctr:switch-control:0", "ctr:case-scope:0",
+ * EXPECTED: "ctr:case-scope-last:0", "dtr:case-scope-last:0", "dtr:case-scope:0", "dtr:switch-control:0",
+ * EXPECTED: "ctr:level-0:0", "ctr:level-1a:0", "ctr:level-a2a:0", "dtr:level-a2a:0",
+ * EXPECTED: "ctr:level-a2b:0", "dtr:level-a2b:0", "dtr:level-1a:0", "ctr:level-1b:0",
+ * EXPECTED: "ctr:level-b2a:0", "dtr:level-b2a:0", "ctr:level-b2b:0", "dtr:level-b2b:0",
+ * EXPECTED: "dtr:level-1b:0", "dtr:level-0:0", "ctr:level-0:0", "ctr:level-1a:0",
+ * EXPECTED: "ctr:level-a1a:0", "dtr:level-a1a:0", "ctr:level-a1b:0", "dtr:level-a1b:0",
+ * EXPECTED: "dtr:level-1a:0", "ctr:level-1b:0", "ctr:level-b1a:0", "dtr:level-b1a:0",
+ * EXPECTED: "ctr:level-b1b:0", "dtr:level-b1b:0", "dtr:level-1b:0", "dtr:level-0:0",
+ * EXPECTED: "dtr:between-ifs:0", "dtr:main-scope:0", "ctr:level-0:1", "ctr:level-1a:1",
+ * EXPECTED: "ctr:level-a2a:1", "dtr:level-a2a:1", "ctr:level-a2b:1", "dtr:level-a2b:1",
+ * EXPECTED: "dtr:level-1a:1", "ctr:level-1b:1", "ctr:level-b2a:1", "dtr:level-b2a:1",
+ * EXPECTED: "ctr:level-b2b:1", "dtr:level-b2b:1", "dtr:level-1b:1", "dtr:level-0:1",
+ * EXPECTED: "ctr:level-0:1", "ctr:level-1a:1", "ctr:level-a1a:1", "dtr:level-a1a:1",
+ * EXPECTED: "ctr:level-a1b:1", "dtr:level-a1b:1", "dtr:level-1a:1", "ctr:level-1b:1",
+ * EXPECTED: "ctr:level-b1a:1", "dtr:level-b1a:1", "ctr:level-b1b:1", "dtr:level-b1b:1",
+ * EXPECTED: "dtr:level-1b:1", "dtr:level-0:1", "dtr:between-ifs:1", "dtr:main-scope:1"]
  */
 import Algorithms as algo;
 

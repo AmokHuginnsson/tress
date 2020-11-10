@@ -86,7 +86,7 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 	tut_yaal_tools_hhuginn_base( void );
 	virtual ~tut_yaal_tools_hhuginn_base( void );
 	yaal::hcore::HString run_file( yaal::hcore::HString const& );
-	yaal::hcore::HString expect_file( yaal::hcore::HString const& );
+	yaal::hcore::HString expect_file( yaal::hcore::HString const&, yaal::hcore::HString&, yaal::hcore::HString& );
 	yaal::tools::HHuginn::ptr_t compile_function( yaal::hcore::HString const& );
 	yaal::hcore::HString const& execute(
 		yaal::tools::HHuginn::ptr_t,
@@ -140,11 +140,18 @@ struct tut_yaal_tools_hhuginn_base : public tut_helpers::simple_mock<tut_yaal_to
 		yaal::tools::HHuginn::compiler_setup_t = yaal::tools::HHuginn::COMPILER::BE_SLOPPY,
 		HIntrospector* = nullptr
 	);
+	static yaal::hcore::HString reformat( yaal::hcore::HString const&, yaal::hcore::HString const&, yaal::hcore::HString const& );
 };
 
 }
 
-#define ENSURE_HUGINN( message, name ) do { ENSURE_EQUALS( ( message ), run_file( name ), expect_file( name ) ); } while ( false )
+#define ENSURE_HUGINN( message, name ) do { \
+	hcore::HString actual( run_file( name ) ); \
+	hcore::HString from; \
+	hcore::HString to; \
+	hcore::HString expected( expect_file( name, from, to ) ); \
+	ENSURE_EQUALS( ( message ), reformat( actual, from, to ), expected ); \
+} while ( false )
 
 #endif /* not TUT_YAAL_TOOLS_HHUGINN_HXX_INCLUDED */
 

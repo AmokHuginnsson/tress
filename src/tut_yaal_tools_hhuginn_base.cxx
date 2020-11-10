@@ -119,20 +119,49 @@ hcore::HString tut_yaal_tools_hhuginn_base::run_file( hcore::HString const& name
 	return ( _resultCache );
 }
 
-hcore::HString tut_yaal_tools_hhuginn_base::expect_file( hcore::HString const& name_ ) {
+yaal::hcore::HString tut_yaal_tools_hhuginn_base::reformat( yaal::hcore::HString const& s_, yaal::hcore::HString const& from_, yaal::hcore::HString const& to_ ) {
+	hcore::HString reformatted( s_ );
+	if ( ! from_.is_empty() ) {
+		HRegex re( from_ );
+		hcore::HString to( to_ );
+		util::unescape( to, util::cxx_escape_table() );
+		reformatted = re.replace( reformatted, to );
+	}
+	return ( reformatted );
+}
+
+hcore::HString tut_yaal_tools_hhuginn_base::expect_file( hcore::HString const& name_, hcore::HString& from_, hcore::HString& to_ ) {
 	filesystem::path_t p( "./data/hgn/" );
 	p.append( name_ );
 	HFile s( p, HFile::OPEN::READING );
 	HLock l( _mutex );
+	hcore::HString expected;
+	bool foundExpected( false );
+	bool foundFrom( false );
+	bool foundTo( false );
 	while ( getline( s, _resultCache ).good() ) {
-		hcore::HString::size_type pos( _resultCache.find( "EXPECTED:" ) );
-		if ( pos != hcore::HString::npos ) {
-			_resultCache.shift_left( pos + 9 );
-			return ( _resultCache );
+		hcore::HString::size_type posFrom( _resultCache.find( "FROM:" ) );
+		if ( ! foundFrom && ( posFrom != hcore::HString::npos ) ) {
+			_resultCache.shift_left( posFrom + 5 );
+			from_.assign( _resultCache );
+			continue;
+		}
+		hcore::HString::size_type posTo( _resultCache.find( "TO:" ) );
+		if ( ! foundTo && ( posTo != hcore::HString::npos ) ) {
+			_resultCache.shift_left( posTo + 3 );
+			to_.assign( _resultCache );
+			continue;
+		}
+		hcore::HString::size_type posExpected( _resultCache.find( "EXPECTED:" ) );
+		if ( posExpected != hcore::HString::npos ) {
+			_resultCache.shift_left( posExpected + 9 );
+			expected.append( _resultCache );
+			foundExpected = true;
+		} else if ( ! expected.is_empty() ) {
+			break;
 		}
 	}
-	_resultCache.assign( "missing `EXPECTED:`" );
-	return ( _resultCache );
+	return ( foundExpected ? reformat( expected, from_, to_ ) : "missing `EXPECTED:`" );
 }
 
 namespace {
