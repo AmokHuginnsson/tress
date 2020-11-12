@@ -5,24 +5,24 @@
  * EXPECTED: "dtr:if-scope-last:1", "dtr:if-scope:1", "dtr:if-control:1", "ctr:between-ifs:1",
  * EXPECTED: "ctr:if-control:1", "ctr:else-scope:1", "ctr:else-scope-last:1", "dtr:else-scope-last:1",
  * EXPECTED: "dtr:else-scope:1", "dtr:if-control:1", "ctr:first:1", "ctr:for-scope:1",
- * EXPECTED: "ctr:for-scope-last:1", "ctr:second:1", "ctr:for-scope:1", "dtr:for-scope:1",
- * EXPECTED: "ctr:for-scope-last:1", "dtr:for-scope-last:1", "dtr:first:1", "dtr:for-scope-last:1",
- * EXPECTED: "dtr:for-scope:1", "dtr:second:1", "ctr:while-control:1", "ctr:while-scope:1",
- * EXPECTED: "ctr:while-scope-last:1", "ctr:while-control:1", "dtr:while-control:1", "ctr:while-scope:1",
- * EXPECTED: "dtr:while-scope:1", "ctr:while-scope-last:1", "dtr:while-scope-last:1", "ctr:while-control:1",
- * EXPECTED: "dtr:while-control:1", "dtr:while-scope-last:1", "dtr:while-scope:1", "dtr:while-control:1",
+ * EXPECTED: "ctr:for-scope-last:1", "dtr:for-scope-last:1", "dtr:for-scope:1",
+ * EXPECTED: "ctr:second:1", "ctr:for-scope:1", "ctr:for-scope-last:1", "dtr:for-scope-last:1",
+ * EXPECTED: "dtr:for-scope:1", "dtr:first:1", "dtr:second:1", "ctr:while-control-0:1", "ctr:while-scope:1",
+ * EXPECTED: "ctr:while-scope-last:1", "dtr:while-scope-last:1", "dtr:while-scope:1", "ctr:while-control-1:1",
+ * EXPECTED: "dtr:while-control-0:1", "ctr:while-scope:1", "ctr:while-scope-last:1", "dtr:while-scope-last:1",
+ * EXPECTED: "dtr:while-scope:1", "ctr:while-control-2:1", "dtr:while-control-1:1", "dtr:while-control-2:1",
  * EXPECTED: "ctr:switch-control:1", "ctr:case-scope:1", "ctr:case-scope-last:1", "dtr:case-scope-last:1",
  * EXPECTED: "dtr:case-scope:1", "dtr:switch-control:1", "ctr:main-scope:0", "ctr:if-control:0",
  * EXPECTED: "ctr:if-scope:0", "ctr:if-scope-last:0", "dtr:if-scope-last:0", "dtr:if-scope:0",
  * EXPECTED: "dtr:if-control:0", "ctr:between-ifs:0", "ctr:if-control:0", "ctr:else-scope:0",
  * EXPECTED: "ctr:else-scope-last:0", "dtr:else-scope-last:0", "dtr:else-scope:0", "dtr:if-control:0",
- * EXPECTED: "ctr:first:0", "ctr:for-scope:0", "ctr:for-scope-last:0", "ctr:second:0",
- * EXPECTED: "ctr:for-scope:0", "dtr:for-scope:0", "ctr:for-scope-last:0", "dtr:for-scope-last:0",
- * EXPECTED: "dtr:first:0", "dtr:for-scope-last:0", "dtr:for-scope:0", "dtr:second:0",
- * EXPECTED: "ctr:while-control:0", "ctr:while-scope:0", "ctr:while-scope-last:0", "ctr:while-control:0",
- * EXPECTED: "dtr:while-control:0", "ctr:while-scope:0", "dtr:while-scope:0", "ctr:while-scope-last:0",
- * EXPECTED: "dtr:while-scope-last:0", "ctr:while-control:0", "dtr:while-control:0", "dtr:while-scope-last:0",
- * EXPECTED: "dtr:while-scope:0", "dtr:while-control:0", "ctr:switch-control:0", "ctr:case-scope:0",
+ * EXPECTED: "ctr:first:0", "ctr:for-scope:0", "ctr:for-scope-last:0", "dtr:for-scope-last:0",
+ * EXPECTED: "dtr:for-scope:0", "ctr:second:0", "ctr:for-scope:0", "ctr:for-scope-last:0",
+ * EXPECTED: "dtr:for-scope-last:0", "dtr:for-scope:0", "dtr:first:0", "dtr:second:0",
+ * EXPECTED: "ctr:while-control-0:0", "ctr:while-scope:0", "ctr:while-scope-last:0", "dtr:while-scope-last:0",
+ * EXPECTED: "dtr:while-scope:0", "ctr:while-control-1:0", "dtr:while-control-0:0", "ctr:while-scope:0",
+ * EXPECTED: "ctr:while-scope-last:0", "dtr:while-scope-last:0", "dtr:while-scope:0", "ctr:while-control-2:0",
+ * EXPECTED: "dtr:while-control-1:0", "dtr:while-control-2:0", "ctr:switch-control:0", "ctr:case-scope:0",
  * EXPECTED: "ctr:case-scope-last:0", "dtr:case-scope-last:0", "dtr:case-scope:0", "dtr:switch-control:0",
  * EXPECTED: "ctr:level-0:0", "ctr:level-1a:0", "ctr:level-a2a:0", "dtr:level-a2a:0",
  * EXPECTED: "ctr:level-a2b:0", "dtr:level-a2b:0", "dtr:level-1a:0", "ctr:level-1b:0",
@@ -90,12 +90,12 @@ fun( log_, nest_ ) {
 		assert( forScopeLast.id() == "for-scope-last:{}".format( nest_ ) );
 	}
 	i = 0;
-	while ( ( whileControl = st( log_, "while-control", nest_ ) ).pass( i < 2 ) ) {
+	while ( ( whileControl = st( log_, "while-control-{}".format( i ), nest_ ) ).pass( i < 2 ) ) {
 		whileScope = st( log_, "while-scope", nest_ );
 		assert( whileScope.id() == "while-scope:{}".format( nest_ ) );
 		whileScopeLast = st( log_, "while-scope-last", nest_ );
 		assert( whileScopeLast.id() == "while-scope-last:{}".format( nest_ ) );
-		assert( whileControl.id() == "while-control:{}".format( nest_ ) );
+		assert( whileControl.id() == "while-control-{}:{}".format( i, nest_ ) );
 		i += 1;
 	}
 	switch ( ( switchControl = st( log_, "switch-control", nest_ ) ).id()[0] ) {

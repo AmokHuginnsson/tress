@@ -1098,10 +1098,10 @@ TUT_UNIT_TEST( "scopes - order of destruction" )
 		ENSURE_EQUALS(
 			"exec failed (for scope 2 iters)",
 			execute( h, N "for(x:[0,0]) {" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;" "}log;}" ),
-			"[1, 2, 3, 3, 2, 1]"
+			"[3, 2, 1, 3, 2, 1]"
 		);
 		h.reset();
-		ENSURE_EQUALS( "wrong oreder of destruction (for scope 2 iters)", val, int_array_t{ 1, 2, 3, 3, 2, 1 } );
+		ENSURE_EQUALS( "wrong oreder of destruction (for scope 2 iters)", val, int_array_t{ 3, 2, 1, 3, 2, 1 } );
 	}
 	/* while scope (one iter) */ {
 		HHuginn::ptr_t h( make_pointer<HHuginn>() );
@@ -1122,10 +1122,10 @@ TUT_UNIT_TEST( "scopes - order of destruction" )
 		ENSURE_EQUALS(
 			"exec failed (while scope 2 iters)",
 			execute( h, N "x=0;while(x<2) {" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;x+=1;" "}log;}" ),
-			"[1, 2, 3, 3, 2, 1]"
+			"[3, 2, 1, 3, 2, 1]"
 		);
 		h.reset();
-		ENSURE_EQUALS( "wrong oreder of destruction (while scope 2 iters)", val, int_array_t{ 1, 2, 3, 3, 2, 1 } );
+		ENSURE_EQUALS( "wrong oreder of destruction (while scope 2 iters)", val, int_array_t{ 3, 2, 1, 3, 2, 1 } );
 	}
 	/* if scope */ {
 		HHuginn::ptr_t h( make_pointer<HHuginn>() );
@@ -1138,6 +1138,66 @@ TUT_UNIT_TEST( "scopes - order of destruction" )
 		);
 		h.reset();
 		ENSURE_EQUALS( "wrong oreder of destruction (if scope)", val, int_array_t{ 3, 2, 1 } );
+	}
+	/* if with control var and two vars in the scope */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (if scope)",
+			execute( h, N "z = A(log,-1);if((x = A(log, 0))._id<1) {" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;x;" "}z;log;}" ),
+			"[3, 2, 1, 0, -1]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (if scope)", val, int_array_t{ 3, 2, 1, 0, -1 } );
+	}
+	/* sequential ifs with control var and two vars in the scope */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (if scope)",
+			execute(
+				h,
+				N "z1 = A(log,-1);if((x = A(log, 0))._id<1) {" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;x;" "}"
+				"z2 = A(log,-2);if((x = A(log, 4))._id<10) {" "a = A(log, 5);" "b = A(log, 6);" "c = A(log, 7);" "a;b;c;x;" "}z2;z1;log;}"
+			),
+			"[3, 2, 1, 0, 7, 6, 5, 4, -2, -1]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (if scope)", val, int_array_t{ 3, 2, 1, 0, 7, 6, 5, 4, -2, -1 } );
+	}
+	/* if with control var and one extra var after if scope */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (if scope)",
+			execute(
+				h,
+				"class A{_log = none;_id=0;constructor(log_, id_){_log = log_; _id = id_;_log.push(-_id);notify(-_id);}destructor(){_log.push(_id);notify(_id);}}"
+				"main(){log=[];if((x = A(log, 10))._id<11) {" "x;" "} z = A(log, 77);z;log;}"
+			),
+			"[-10, 10, -77, 77]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (if scope)", val, int_array_t{ -10, 10, -77, 77 } );
+	}
+	/* sequential ifs with control var and two vars in the scope and one extra var after if scope */ {
+		HHuginn::ptr_t h( make_pointer<HHuginn>() );
+		int_array_t val;
+		register_function( *h, "notify", call( notify_vec, _1, ref( val ) ), "notify" );
+		ENSURE_EQUALS(
+			"exec failed (if scope)",
+			execute(
+				h,
+				"class A{_log = none;_id=0;constructor(log_, id_){_log = log_; _id = id_;_log.push(-_id);notify(-_id);}destructor(){_log.push(_id);notify(_id);}}"
+				"main(){log=[];z1 = A(log,7);if((x = A(log, 10))._id<11) {" "a = A(log, 1);" "b = A(log, 2);" "c = A(log, 3);" "a;b;c;x;" "} z2 = A(log, 77);z2;z1;log;}"
+			),
+			"[-7, -10, -1, -2, -3, 3, 2, 1, 10, -77, 77, 7]"
+		);
+		h.reset();
+		ENSURE_EQUALS( "wrong oreder of destruction (if scope)", val, int_array_t{ -7, -10, -1, -2, -3, 3, 2, 1, 10, -77, 77, 7 } );
 	}
 	/* else scope */ {
 		HHuginn::ptr_t h( make_pointer<HHuginn>() );
@@ -1977,6 +2037,22 @@ TUT_UNIT_TEST( "optimized out scopes regressions checks" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "bugs regressions checks" )
+	ENSURE_EQUALS(
+		"updating arg failed",
+		execute(
+			"f( s_ ) {\n"
+			"	if ( false ) {\n"
+			"	} else {\n"
+			"		s_ = s_ + \"!\";\n"
+			"	}\n"
+			"	return ( s_ );\n"
+			"}\n"
+			"main() {\n"
+			"return ( f(\"ok\") );\n"
+			"}"
+		),
+		"\"ok!\""
+	);
 	ENSURE_EQUALS(
 		"using module failed",
 		execute(
