@@ -2,7 +2,7 @@
 
 VER=`echo | isql-fb -q -z | awk -F '[ .-]' '/Version:/{print $4}'`
 
-DB=""
+DB="security2.fdb"
 if [ "x${VER}" = "xV3" ] ; then
 	DB="template"
 fi
