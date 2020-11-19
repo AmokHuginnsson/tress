@@ -203,7 +203,7 @@ TUT_UNIT_TEST( "import" )
 		"*anonymous stream*:3:13: `return` is restricted keyword."
 	);
 	ENSURE_EQUALS(
-		"Introspection.import existing class succeeded",
+		"Introspection.import previously imported packgage failed",
 		execute(
 			"import Introspection as intro;\n"
 			"main() {\n"
@@ -235,6 +235,30 @@ TUT_UNIT_TEST( "import" )
 			"}\n"
 		),
 		"*anonymous stream*:6:13: Enumeration of the same name already exists."
+	);
+	ENSURE_EQUALS(
+		"Introspection.import existing class succeeded",
+		execute_except(
+			"import Introspection as intro;\n"
+			"class C {\n"
+			"f=0;\n"
+			"}\n"
+			"main() {\n"
+			"intro.import(\"C\");\n"
+			"C().f;\n"
+			"}\n"
+		),
+		"*anonymous stream*:6:13: Class of the same name already exists."
+	);
+	ENSURE_EQUALS(
+		"Introspection.import existing function succeeded",
+		execute_except(
+			"import Introspection as intro;\n"
+			"main() {\n"
+			"intro.import(\"main\");\n"
+			"}\n"
+		),
+		"*anonymous stream*:3:13: Function of the same name already exists."
 	);
 TUT_TEARDOWN()
 
