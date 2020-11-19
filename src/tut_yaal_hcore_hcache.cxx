@@ -121,5 +121,26 @@ TUT_UNIT_TEST( "retire entries" )
 	ENSURE_EQUALS( "getting, new, value, failed", ds.requested_keys(), int_array_t{ 0, 1, 2, 3, 4, 0, 1, 2, 3, 5, 0, 1, 2, 3, 5, 0, 1, 2, 3, 5, 0, 1, 2, 3, 5 } );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "clear" )
+	HDataSource ds;
+	cache_t cache( call( &HDataSource::generate, &ds, _1 ), 10 );
+	ENSURE_EQUALS( "getting new value failed", cache.obtain( 0 ), "[0]" );
+	ENSURE_EQUALS( "getting new value failed", cache.obtain( 2 ), "[2]" );
+	ENSURE_EQUALS( "getting new value failed", cache.obtain( 3 ), "[3]" );
+	ENSURE_EQUALS( "getting new value failed", cache.obtain( 5 ), "[5]" );
+	ENSURE_EQUALS( "getting new value failed", ds.requested_keys(), int_array_t{ 0, 2, 3, 5 } );
+	ENSURE_EQUALS( "getting new value failed", cache.obtain( 0 ), "[0]" );
+	ENSURE_EQUALS( "getting new value failed", cache.obtain( 2 ), "[2]" );
+	ENSURE_EQUALS( "getting new value failed", cache.obtain( 3 ), "[3]" );
+	ENSURE_EQUALS( "getting new value failed", cache.obtain( 5 ), "[5]" );
+	ENSURE_EQUALS( "getting new value failed", ds.requested_keys(), int_array_t{ 0, 2, 3, 5 } );
+	cache.clear();
+	ENSURE_EQUALS( "getting new value failed", cache.obtain( 0 ), "[0]" );
+	ENSURE_EQUALS( "getting new value failed", cache.obtain( 2 ), "[2]" );
+	ENSURE_EQUALS( "getting new value failed", cache.obtain( 3 ), "[3]" );
+	ENSURE_EQUALS( "getting new value failed", cache.obtain( 5 ), "[5]" );
+	ENSURE_EQUALS( "getting new value failed", ds.requested_keys(), int_array_t{ 0, 2, 3, 5, 0, 2, 3, 5 } );
+TUT_TEARDOWN()
+
 }
 
