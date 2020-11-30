@@ -111,11 +111,11 @@ HStreamInterface& operator << ( HStreamInterface& os, std::string const& s ) {
 }
 
 yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& os, stream_mod_t const& mod ) {
-	if ( mod == static_cast<stream_mod_t const&>( std::endl ) )
+	if ( mod == static_cast<stream_mod_t const&>( std::endl ) ) {
 		os << hcore::endl;
-	else if ( mod == static_cast<stream_mod_t const&>( std::flush ) )
+	} else if ( mod == static_cast<stream_mod_t const&>( std::flush ) ) {
 		os << hcore::flush;
-	else {
+	} else {
 		M_ASSERT( !"unsupported stream modifier"[0] );
 	}
 	return ( os );

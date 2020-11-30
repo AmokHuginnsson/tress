@@ -784,7 +784,7 @@ int find_substr_raw( char const* const str, int size, char const* const pat, int
 	len = min( len, SAMPLE_SIZE );
 	strncpy( fastpat, pat, static_cast<size_t>( len ) );
 	fastpat[len] = 0;
-	char const* p = ( len <= size ) ? strstr( str, fastpat ) : NULL;
+	char const* p = ( len <= size ) ? strstr( str, fastpat ) : nullptr;
 	return ( p ? static_cast<int>( p - str ) : -1 );
 }
 
