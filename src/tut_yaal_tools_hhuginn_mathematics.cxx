@@ -812,6 +812,7 @@ TUT_UNIT_TEST( "Matrix err" )
 		),
 		"*anonymous stream*:1:76: Applied transformation function shall return `real`, but result was a `number` instead."
 	);
+#ifndef __HOST_OS_TYPE_DARWIN__
 #ifndef CONTINUOUS_INTEGRATION_TRAVIS
 #if SIZEOF_INT_LONG == 8
 	char const err[] = "*anonymous stream*:3:12: yaal::memory::new: new returned NULL";
@@ -829,6 +830,7 @@ TUT_UNIT_TEST( "Matrix err" )
 		err
 	);
 #endif /* #ifndef CONTINUOUS_INTEGRATION_TRAVIS */
+#endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "Mathematics Complex" )

@@ -30,7 +30,7 @@ TUT_UNIT_TEST( "save" )
 		"\\\"dict\\\": {\\\"one\\\": 1, \\\"two\\\": 2, \\\"three\\\": 3, \\\"four\\\": 4}, \\\"false\\\": false, "
 		"\\\"number\\\": 2.71828182845904523536028747, \\\"real\\\": 3.1415, \\\"int\\\": 7, \\\"character\\\": \\\"h\\\"}\""
 	;
-#elif defined ( __HOST_OS_TYPE_FREEBSD__ )
+#elif defined ( __HOST_OS_TYPE_FREEBSD__ ) || defined( __HOST_OS_TYPE_DARWIN__ )
 	char const expected[] =
 		"\"{\\\"string\\\": \\\"Huginn-JSON\\\", \\\"false\\\": false, \\\"set\\\": [1, 2, 3, 4], "
 		"\\\"order\\\": [1, 2, 3, 4], \\\"character\\\": \\\"h\\\", \\\"array\\\": [1, 2, 3, 4], "

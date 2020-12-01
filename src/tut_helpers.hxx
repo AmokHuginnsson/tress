@@ -121,7 +121,16 @@ namespace std {
 
 yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface&, std::string const& );
 typedef std::ostream& ( *stream_mod_t )( std::ostream& );
-yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface&, stream_mod_t const& );
+inline yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& os, stream_mod_t const& mod ) {
+	if ( mod == static_cast<stream_mod_t const&>( std::endl ) ) {
+		os << yaal::hcore::endl;
+	} else if ( mod == static_cast<stream_mod_t const&>( std::flush ) ) {
+		os << yaal::hcore::flush;
+	} else {
+		M_ASSERT( !"unsupported stream modifier"[0] );
+	}
+	return ( os );
+}
 std::ostream& operator << ( std::ostream&, yaal::hcore::HComplex const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HNumber const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HString const& );

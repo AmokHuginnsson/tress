@@ -172,6 +172,9 @@ void OSetup::test_setup( void ) {
 		}
 	}
 	hcore::log << "clock quality multiplier = " << _clockQualityMultiplier << endl;
+#ifdef __APPLE__
+	yaal::hcore::HThread::_threadStackSize = 4194304;
+#endif
 	return;
 	M_EPILOG
 }

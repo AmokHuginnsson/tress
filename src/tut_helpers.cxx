@@ -110,17 +110,6 @@ HStreamInterface& operator << ( HStreamInterface& os, std::string const& s ) {
 	return ( os );
 }
 
-yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& os, stream_mod_t const& mod ) {
-	if ( mod == static_cast<stream_mod_t const&>( std::endl ) ) {
-		os << hcore::endl;
-	} else if ( mod == static_cast<stream_mod_t const&>( std::flush ) ) {
-		os << hcore::flush;
-	} else {
-		M_ASSERT( !"unsupported stream modifier"[0] );
-	}
-	return ( os );
-}
-
 }
 
 namespace yaal {

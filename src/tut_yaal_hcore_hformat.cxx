@@ -200,7 +200,7 @@ TUT_UNIT_TEST( "move" )
 		% static_cast<void*>( nullptr );
 #ifdef __MSVCXX__
 	char const e[] = "[123] [4567] [890123] [3.141590] [00000000]";
-#elif defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_FREEBSD__ )
+#elif defined( __HOST_OS_TYPE_CYGWIN__ ) || defined( __HOST_OS_TYPE_FREEBSD__ ) || defined( __HOST_OS_TYPE_DARWIN__ )
 	char const e[] = "[123] [4567] [890123] [3.141590] [0x0]";
 #elif defined( __HOST_OS_TYPE_SOLARIS__ )
 	char const e[] = "[123] [4567] [890123] [3.141590] [0]";

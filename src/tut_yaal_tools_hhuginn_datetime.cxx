@@ -32,7 +32,7 @@ char const WAIT[] = "dt.sleep(1000000000);m = c.milliseconds()/100;";
 }
 
 TUT_UNIT_TEST( "setters & getters" )
-#if defined( __HOST_OS_TYPE_FREEBSD__ ) || defined( __HOST_OS_TYPE_SOLARIS__ )
+#if defined( __HOST_OS_TYPE_FREEBSD__ ) || defined( __HOST_OS_TYPE_SOLARIS__ ) || defined( __HOST_OS_TYPE_DARWIN__ )
 	char const setterExpect[] = "[\"1979-05-24 23:30:17\", \"1978-05-24 01:02:03\", \"0001-02-03 23:30:17\", 1978, 5, 24, 23, 30, 17, \"0011-04-02 14:55:14\"]";
 #elif SIZEOF_TIME_T == 8
 	char const setterExpect[] = "[\"1979-05-24 23:30:17\", \"1978-05-24 01:02:03\", \"1-02-03 23:30:17\", 1978, 5, 24, 23, 30, 17, \"11-04-02 14:55:14\"]";

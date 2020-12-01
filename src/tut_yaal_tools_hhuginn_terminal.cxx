@@ -47,6 +47,7 @@ TUT_TEARDOWN()
 
 #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
 TUT_UNIT_TEST( "lines columns" )
+#ifndef __HOST_OS_TYPE_DARWIN__
 	ENSURE_IN(
 		"Terminal.lines and Terminal.columns failed",
 		execute_except(
@@ -61,6 +62,7 @@ TUT_UNIT_TEST( "lines columns" )
 			"*anonymous stream*:3:19: Invalid argument"
 		})
 	);
+#endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
 	set_env( "LINES", "25" );
 	set_env( "COLUMNS", "80" );
 	ENSURE_EQUALS(

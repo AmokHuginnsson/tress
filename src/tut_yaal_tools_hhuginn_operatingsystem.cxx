@@ -369,6 +369,7 @@ TUT_UNIT_TEST( "umask" )
 	);
 TUT_TEARDOWN()
 
+#ifndef __HOST_OS_TYPE_DARWIN__ /* POSIX locales on OSX are completely broken. */
 TUT_UNIT_TEST( "set_locale" )
 #ifndef __MSVCXX__
 	ENSURE_EQUALS(
@@ -422,6 +423,7 @@ TUT_UNIT_TEST( "set_locale" )
 		"[\"May\", \"maj\", \"May\"]"
 	);
 TUT_TEARDOWN()
+#endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
 
 }
 

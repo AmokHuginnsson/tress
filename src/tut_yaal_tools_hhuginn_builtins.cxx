@@ -1331,6 +1331,11 @@ TUT_UNIT_TEST( "blob" )
 		),
 		"*anonymous stream*:2:5: Invalid `blob` size requested: 0"
 	);
+#ifdef __HOST_OS_TYPE_DARWIN__
+	if ( setup._jobs > 1 ) {
+		return;
+	}
+#endif /* #ifdef __HOST_OS_TYPE_DARWIN__ */
 #if ( SIZEOF_INT_LONG == 8 )
 	char const errMsg[] = "*anonymous stream*:2:5: Uncaught RuntimeException: memory::realloc: realloc returned NULL";
 #else

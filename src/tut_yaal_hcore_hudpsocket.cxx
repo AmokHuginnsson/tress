@@ -153,9 +153,16 @@ TUT_UNIT_TEST( "Simple construction and destruction." )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "bind on reserved port." )
-	ENSURE_THROW( "bind on reserved port possible",
-			HUDPSocket socket( ( ::getenv( "windir" ) || ::getenv( "WINDIR" ) ? 137 : 22 ) ),
-			HUDPSocketException );
+#ifdef __HOST_OS_TYPE_DARWIN__
+	static int const BUSY_PORT( 137 );
+#else
+	static int const BUSY_PORT( 22 );
+#endif
+	ENSURE_THROW(
+		"bind on reserved port possible",
+		HUDPSocket socket( ( ::getenv( "windir" ) || ::getenv( "WINDIR" ) ? 137 : BUSY_PORT ) ),
+		HUDPSocketException
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "bind on port in use." )

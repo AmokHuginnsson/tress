@@ -170,7 +170,9 @@ TUT_UNIT_TEST( "accessed()" )
 /* Windows: To save system resources in Vista, Microsoft disabled the Last Access Time Stamp. */
 #ifndef __MSVCXX__
 #ifndef __HOST_OS_TYPE_CYGWIN__
+#ifndef __HOST_OS_TYPE_DARWIN__
 	ENSURE_EQUALS( "bad accessed", fi.accessed(), now );
+#endif
 #endif
 #endif
 TUT_TEARDOWN()
