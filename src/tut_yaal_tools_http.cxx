@@ -77,7 +77,8 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "post" )
 	char const testData[] = "yaal-post\r\ntest-data\r\n0\r\n-working";
 	HStringStream ss( testData );
-	http::HRequest request( http::HTTP::POST, substitute_environment( "http://httpbin.org/post" ), &ss );
+
+	http::HRequest request( http::HTTP::POST, substitute_environment( "http://httpbin.org/post" ), "", "", { http::HRequest::HPayload( &ss ) } );
 	http::HResponse response( http::call( request ) );
 	HJSON json;
 	json.load( response.stream() );
