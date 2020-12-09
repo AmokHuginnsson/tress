@@ -78,11 +78,52 @@ TUT_UNIT_TEST( "post" )
 	char const testData[] = "yaal-post\r\ntest-data\r\n0\r\n-working";
 	HStringStream ss( testData );
 
-	http::HRequest request( http::HTTP::POST, substitute_environment( "http://httpbin.org/post" ), "", "", { http::HRequest::HPayload( &ss ) } );
+	http::HRequest request( http::HTTP::POST, substitute_environment( "http://${TRESS_HTTP_TEST_HOST:-httpbin.org}/post" ), "", "", { http::HRequest::HPayload( &ss ) } );
 	http::HResponse response( http::call( request ) );
 	HJSON json;
 	json.load( response.stream() );
 	ENSURE_EQUALS( "post failed", json.element()["data"].get_string(), testData );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "post - mime" )
+	char const testData[] = "{\"key\": \"value\"}";
+	HStringStream ss( testData );
+
+	http::HRequest request( http::HTTP::POST, substitute_environment( "http://${TRESS_HTTP_TEST_HOST:-httpbin.org}/post" ), "", "", { http::HRequest::HPayload( &ss ).mime_type( "application/json" ) } );
+	http::HResponse response( http::call( request ) );
+	HJSON json;
+	json.load( response.stream() );
+	ENSURE_EQUALS( "post failed", json.element()["json"]["key"].get_string(), "value" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "post - multipart" )
+	char const testData[] = "yaal-post\r\ntest-data\r\n0\r\n-working";
+	HStringStream ss( testData );
+
+	char const TestData[] = "{\"key\": \"value\"}";
+	HStringStream SS( TestData );
+
+	http::HRequest request(
+		http::HTTP::POST,
+		substitute_environment( "http://${TRESS_HTTP_TEST_HOST:-httpbin.org}/post" ),
+		"",
+		"",
+		/* payloads */ {
+			http::HRequest::HPayload( &ss ).filename( "first.ext" ),
+			http::HRequest::HPayload( &SS ).mime_type( "application/json" ).filename( "żółw.ość" )
+		}
+	);
+	http::HResponse response( http::call( request ) );
+#if 0
+	HString l;
+	while ( getline( response.stream(), l ).good() ) {
+		cout << l << endl;
+	}
+#endif
+	HJSON json;
+	json.load( response.stream() );
+	ENSURE_EQUALS( "post failed", json.element()["files"]["żółw.ość"].get_string(), TestData );
+	ENSURE_EQUALS( "post failed", json.element()["files"]["first.ext"].get_string(), testData );
 TUT_TEARDOWN()
 
 }
