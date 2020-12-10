@@ -200,5 +200,20 @@ TUT_UNIT_TEST( "connect to closed port" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "http post" )
+	ENSURE_EQUALS(
+		"Network.post failed",
+		execute(
+			"import Network as net;\n"
+			"import JSON as json;\n"
+			"main() {\n"
+			"resp = json.load(net.post( \"http://httpbin.org/post\", [1,2,3] ).stream);\n"
+			"return(resp[\"json\"]);\n"
+			"}\n"
+		),
+		"[1, 2, 3]"
+	);
+TUT_TEARDOWN()
+
 }
 
