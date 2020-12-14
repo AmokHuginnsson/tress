@@ -1297,6 +1297,20 @@ char const progExecuteErr131[] =
 	"}\n"
 ;
 
+char const progExecuteErr132[] =
+	"import Network as net;\n"
+	"main() {\n"
+	"net.get(\"\", login:0);\n"
+	"}\n"
+;
+
+char const progExecuteErr133[] =
+	"import Network as net;\n"
+	"main() {\n"
+	"net.get(\"\", cookie:\"\");\n"
+	"}\n"
+;
+
 void tut_yaal_tools_hhuginn_execute::test_execute( prog_src_t prog_, ErrInfo const& err_, int index_ ) {
 	if ( setup._verbose && setup._debug ) {
 		clog << "// HUGINN TEST CASE START" << endl;
@@ -1456,6 +1470,8 @@ TUT_UNIT_TEST( "report execution error" )
 		progExecuteErr129,
 		progExecuteErr130,
 		progExecuteErr131,
+		progExecuteErr132,
+		progExecuteErr133,
 		nullptr
 	};
 	ErrInfo const err[] = {
@@ -1588,9 +1604,11 @@ TUT_UNIT_TEST( "report execution error" )
 /* 126 */ { 234, 19, 18, "*tress*:19:18: Class `LI` does not have `value` method." },
 /* 127 */ { 433, 33, 18, "*tress*:33:18: Class `LI` does not have `next` method." },
 /* 128 */ { 457, 35, 18, "*tress*:35:18: User defined `iterator`, a `LI`, returned an invalid type an `integer` instead of a `boolean` from supplied `is_valid` method." },
-/* 129 */ { 64, 4, 9, "*tress*:4:9: Algorithms.reduce() second argument must be a callable type, either a `*function_reference*` or an `*unbound_method*` or a `*bound_method*` or implementing a `call()` method, not a `X`." },
-/* 130 */ { 63, 4, 9, "*tress*:4:9: Algorithms.reduce() second argument must be a callable type, either a `*function_reference*` or an `*unbound_method*` or a `*bound_method*` or implementing a `call()` method, not a `X`." },
-/* 131 */ { 34, 3, 9, "*tress*:3:9: Bad number of parameters in call to: `*partial*`, expected exactly: 1, got: 2." },
+/* 129 */ { 64, 4, 9,    "*tress*:4:9: Algorithms.reduce() second argument must be a callable type, either a `*function_reference*` or an `*unbound_method*` or a `*bound_method*` or implementing a `call()` method, not a `X`." },
+/* 130 */ { 63, 4, 9,    "*tress*:4:9: Algorithms.reduce() second argument must be a callable type, either a `*function_reference*` or an `*unbound_method*` or a `*bound_method*` or implementing a `call()` method, not a `X`." },
+/* 131 */ { 34, 3, 9,    "*tress*:3:9: Bad number of parameters in call to: `*partial*`, expected exactly: 1, got: 2." },
+/* 132 */ { 39, 3, 8,    "*tress*:3:8: In call to `Network.get()`, a named parameter `login` argument has an invalid type, got an `integer`, but expected a `string`." },
+/* 133 */ { 39, 3, 8,    "*tress*:3:8: In call to `Network.get()`, an unknown named parameter `cookie` was encountered." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
