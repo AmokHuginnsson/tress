@@ -7,6 +7,7 @@
 #endif /* #ifdef __GNUC__ */
 #include <TUT/tut.hpp>
 
+#include <yaal/hcore/hcore.hxx>
 #include <yaal/hcore/hsocket.hxx>
 #include <yaal/tools/hiodispatcher.hxx>
 M_VCSID( "$Id: " __ID__ " $" )
@@ -197,6 +198,22 @@ TUT_UNIT_TEST( "connect to closed port" )
 			"}\n"
 		),
 		"\"*anonymous stream*:3:16: "_ys.append( errExpect ).append( ": 127.0.0.1:5\"" )
+	);
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "http get" )
+	ENSURE_EQUALS(
+		"Network.get failed",
+		execute(
+			substitute_environment(
+				"import Network as net;\n"
+				"main() {\n"
+				"resp = net.get( \"http://${TRESS_HTTP_TEST_HOST:-codestation.org}/test/private/secret.txt\", login:\"test\", password:\"t3st\");\n"
+				"return(resp.stream.read_line().strip());\n"
+				"}\n"
+			)
+		),
+		"\"Secret Data\""
 	);
 TUT_TEARDOWN()
 
