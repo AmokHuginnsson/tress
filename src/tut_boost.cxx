@@ -17,7 +17,7 @@
 #endif /* #ifdef __HOST_OS_TYPE_SOLARIS__ */
 #define BOOST_ALL_DYN_LINK 1
 #include <boost/config/user.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/convenience.hpp>
 #include <boost/date_time/gregorian/gregorian.hpp>
@@ -37,6 +37,7 @@ using namespace boost;
 using namespace boost;
 using namespace boost::filesystem;
 using namespace boost::gregorian;
+using namespace boost::placeholders;
 using namespace tress::tut_helpers;
 
 namespace tut {
