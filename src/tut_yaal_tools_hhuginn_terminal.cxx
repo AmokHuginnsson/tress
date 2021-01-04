@@ -46,8 +46,8 @@ TUT_UNIT_TEST( "is_valid" )
 TUT_TEARDOWN()
 
 #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
-TUT_UNIT_TEST( "lines columns" )
 #ifndef __HOST_OS_TYPE_DARWIN__
+TUT_UNIT_TEST( "lines columns" )
 	ENSURE_IN(
 		"Terminal.lines and Terminal.columns failed",
 		execute_except(
@@ -62,7 +62,6 @@ TUT_UNIT_TEST( "lines columns" )
 			"*anonymous stream*:3:19: Invalid argument"
 		})
 	);
-#endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
 	set_env( "LINES", "25" );
 	set_env( "COLUMNS", "80" );
 	ENSURE_EQUALS(
@@ -76,6 +75,7 @@ TUT_UNIT_TEST( "lines columns" )
 		"(25, 80)"
 	);
 TUT_TEARDOWN()
+#endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
 #endif /* #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 ) */
 
 TUT_UNIT_TEST( "attribute" )
@@ -105,6 +105,7 @@ TUT_UNIT_TEST( "color" )
 TUT_TEARDOWN()
 
 #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 )
+#ifndef __HOST_OS_TYPE_DARWIN__
 TUT_UNIT_TEST( "move" )
 	ENSURE_EQUALS(
 		"Terminal.move failed",
@@ -117,6 +118,7 @@ TUT_UNIT_TEST( "move" )
 		"\"\\e[8;14H\""
 	);
 TUT_TEARDOWN()
+#endif /* #ifndef __HOST_OS_TYPE_DARWIN__ */
 #endif /* #if defined( HAVE_DECL_RTLD_NEXT ) && ( HAVE_DECL_RTLD_NEXT == 1 ) */
 
 TUT_UNIT_TEST( "save, clear, restore, reset" )
