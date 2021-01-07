@@ -11,7 +11,7 @@ class: -*partial* {}
 class: -*reference* {}
 class: -*unbound_method* {}
 class: -*variadic_parameters* {}
-class: Algorithms { AlgorithmsException, Chain, Enumerator, Filter, Iterator, Mapper, Product, Range, Slice, Zip, chain, enumerate, filter, iterator, map, materialize, max, min, product, range, reduce, reversed, slice, sorted, zip }
+class: Algorithms { AlgorithmsException, Chain, Enumerator, Filter, Iterator, Mapper, Permutation, Product, Range, Slice, Zip, chain, enumerate, filter, iterator, map, materialize, max, min, permutation, product, range, reduce, reversed, slice, sorted, zip }
 class: AlgorithmsException : Exception { message, trace, what, where }
 class: ArithmeticException : Exception { message, trace, what, where }
 class: Base { bar, foo }
@@ -27,6 +27,7 @@ class: -Algorithms.Iterator { is_valid, next, value }
 class: -dict.KeyValuesDictView {}
 class: -lookup.KeyValuesLookupView {}
 class: -Algorithms.Mapper {}
+class: -Algorithms.Permutation {}
 class: -Algorithms.Product {}
 class: -Algorithms.Range { contains }
 class: -deque.ReversedDequeView {}

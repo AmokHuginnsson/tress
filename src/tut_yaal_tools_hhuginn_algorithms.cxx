@@ -970,5 +970,48 @@ TUT_UNIT_TEST( "product" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "permutation" )
+	ENSURE_EQUALS(
+		"Algorithms.permutation failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.permutation((1,2,3)),list));\n"
+			"}"
+		),
+		"[(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.permutation failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.permutation([1,2,3]),list));\n"
+			"}"
+		),
+		"[[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]"
+	);
+	ENSURE_EQUALS(
+		"Algorithms.permutation failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(algo.materialize(algo.permutation(deque(1,2,3)),list));\n"
+			"}"
+		),
+		"[deque(1, 2, 3), deque(1, 3, 2), deque(2, 1, 3), deque(2, 3, 1), deque(3, 1, 2), deque(3, 2, 1)]"
+	);
+	ENSURE_EQUALS(
+		"size(Product) failed",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"return(size(algo.permutation([1,2,3,4,5])));\n"
+			"}"
+		),
+		"120"
+	);
+TUT_TEARDOWN()
+
 }
 
