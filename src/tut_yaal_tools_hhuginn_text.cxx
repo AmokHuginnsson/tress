@@ -176,7 +176,7 @@ TUT_UNIT_TEST( "character_class" )
 			"text.character_class( text.CHARACTER_CLASS.LOWER_CASE_LETTER ),\n"
 			"text.character_class( text.CHARACTER_CLASS.UPPER_CASE_LETTER ),\n"
 			"text.character_class( text.CHARACTER_CLASS.WORD ),\n"
-			"text.character_class( text.CHARACTER_CLASS.PUNCTATION ),\n"
+			"text.character_class( text.CHARACTER_CLASS.PUNCTUATION ),\n"
 			"text.character_class( text.CHARACTER_CLASS.VOWEL ),\n"
 			"text.character_class( text.CHARACTER_CLASS.GREEK ),\n"
 			"text.character_class( text.CHARACTER_CLASS.LOWER_CASE_GREEK ),\n"
