@@ -37,6 +37,18 @@ struct tut_yaal_tools_hhuginn_network : public tress::tut_yaal_tools_hhuginn_bas
 
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn_network, "yaal::tools::HHuginn.Network" );
 
+TUT_UNIT_TEST( "hostname" )
+	hcore::HString res(
+		execute(
+			"import Network as net;"
+			"main(){"
+			"return(net.hostname());"
+			"}"
+		)
+	);
+	ENSURE_EQUALS( "Network.resolve falied", res, "\""_ys.append( system::get_host_name() ).append( '"'_ycp ) );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "resolve" )
 	hcore::HString res(
 		execute(
