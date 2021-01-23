@@ -28,7 +28,8 @@ TUT_TEST_GROUP( tut_yaal_tools_hhuginn_instructions, "yaal::tools::HHuginn,instr
 TUT_UNIT_TEST( "add" )
 	ENSURE_EQUALS( "add int const failed", execute( "main(){return(1+2);}" ), "3" );
 	ENSURE_EQUALS( "add int var failed", execute( "main(){x = 1;y = 2;return(x+y);}" ), "3" );
-	ENSURE_EQUALS( "add-assign int failed", execute( "main(){x=1;x+=2;return(x);}" ), "3" );
+	ENSURE_EQUALS( "add-assign int const failed", execute( "main(){x=1;x+=2;return(x);}" ), "3" );
+	ENSURE_EQUALS( "add-assign int var failed", execute( "main(){x=1;y=2;x+=y;return(x);}" ), "3" );
 	ENSURE_EQUALS( "add real const failed", execute( "main(){return(1.+2.);}" ), "3.0" );
 	ENSURE_EQUALS( "add real var failed", execute( "main(){x=1.;y=2.;return(x+y);}" ), "3.0" );
 	ENSURE_EQUALS( "add number const failed", execute( "main(){return($1+$2);}" ), "$3" );
