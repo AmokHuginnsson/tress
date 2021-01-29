@@ -32,6 +32,8 @@ TUT_UNIT_TEST( "add" )
 	ENSURE_EQUALS( "add-assign int var failed", execute( "main(){x=1;y=2;x+=y;return(x);}" ), "3" );
 	ENSURE_EQUALS( "add real const failed", execute( "main(){return(1.+2.);}" ), "3.0" );
 	ENSURE_EQUALS( "add real var failed", execute( "main(){x=1.;y=2.;return(x+y);}" ), "3.0" );
+	ENSURE_EQUALS( "add-assign real const failed", execute( "main(){x=1.;x+=2.;return(x);}" ), "3.0" );
+	ENSURE_EQUALS( "add-assign real var failed", execute( "main(){x=1.;y=2.;x+=y;return(x);}" ), "3.0" );
 	ENSURE_EQUALS( "add number const failed", execute( "main(){return($1+$2);}" ), "$3" );
 	ENSURE_EQUALS( "add number var failed", execute( "main(){x=$1;y=$2;return(x+y);}" ), "$3" );
 	ENSURE_EQUALS( "add string const failed", execute( "main(){return(\"1\"+\"2\");}" ), "\"12\"" );
@@ -43,9 +45,12 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "sub" )
 	ENSURE_EQUALS( "sub int const failed", execute( "main(){return(7-3);}" ), "4" );
 	ENSURE_EQUALS( "sub int var failed", execute( "main(){x=7;y=3;return(x-y);}" ), "4" );
-	ENSURE_EQUALS( "sub-assign int failed", execute( "main(){x=7;x-=3;return(x);}" ), "4" );
+	ENSURE_EQUALS( "sub-assign int const failed", execute( "main(){x=7;x-=3;return(x);}" ), "4" );
+	ENSURE_EQUALS( "sub-assign int var failed", execute( "main(){x=7;y=3;x-=y;return(x);}" ), "4" );
 	ENSURE_EQUALS( "sub real const failed", execute( "main(){return(7.-3.);}" ), "4.0" );
 	ENSURE_EQUALS( "sub real var failed", execute( "main(){x=7.;y=3.;return(x-y);}" ), "4.0" );
+	ENSURE_EQUALS( "sub-assign real const failed", execute( "main(){x=7.;x-=3.;return(x);}" ), "4.0" );
+	ENSURE_EQUALS( "sub-assign real var failed", execute( "main(){x=7.;y=3.;x-=y;return(x);}" ), "4.0" );
 	ENSURE_EQUALS( "sub number const failed", execute( "main(){return($7-$3);}" ), "$4" );
 	ENSURE_EQUALS( "sub number var failed", execute( "main(){x=$7;y=$3;return(x-y);}" ), "$4" );
 	ENSURE_EQUALS( "sub user succeeded", execute_except( "class A{_x=none;}main(){return(A()-A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A` does not have `subtract` method." );
@@ -55,9 +60,12 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "mul" )
 	ENSURE_EQUALS( "mul int const failed", execute( "main(){return(2*3);}" ), "6" );
 	ENSURE_EQUALS( "mul int var failed", execute( "main(){x=2;y=3;return(x*y);}" ), "6" );
-	ENSURE_EQUALS( "mul-assign int failed", execute( "main(){x=2;x*=3;return(x);}" ), "6" );
+	ENSURE_EQUALS( "mul-assign int const failed", execute( "main(){x=2;x*=3;return(x);}" ), "6" );
+	ENSURE_EQUALS( "mul-assign int var failed", execute( "main(){x=2;y=3;x*=y;return(x);}" ), "6" );
 	ENSURE_EQUALS( "mul real const failed", execute( "main(){return(2.*3.);}" ), "6.0" );
 	ENSURE_EQUALS( "mul real var failed", execute( "main(){x=2.;y=3.;return(x*y);}" ), "6.0" );
+	ENSURE_EQUALS( "mul-assign real const failed", execute( "main(){x=2.;x*=3.;return(x);}" ), "6.0" );
+	ENSURE_EQUALS( "mul-assign real var failed", execute( "main(){x=2.;y=3.;x*=y;return(x);}" ), "6.0" );
 	ENSURE_EQUALS( "mul number const failed", execute( "main(){return($2*$3);}" ), "$6" );
 	ENSURE_EQUALS( "mul number var failed", execute( "main(){x=$2;y=$3;return(x*y);}" ), "$6" );
 	ENSURE_EQUALS( "mul user succeeded", execute_except( "class A{_x=none;}main(){return(A()*A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A` does not have `multiply` method." );
@@ -67,9 +75,12 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "div" )
 	ENSURE_EQUALS( "div int const failed", execute( "main(){return(7/2);}" ), "3" );
 	ENSURE_EQUALS( "div int var failed", execute( "main(){x=7;y=2;return(x/y);}" ), "3" );
-	ENSURE_EQUALS( "div-assign int failed", execute( "main(){x=7;x/=2;return(x);}" ), "3" );
+	ENSURE_EQUALS( "div-assign int const failed", execute( "main(){x=7;x/=2;return(x);}" ), "3" );
+	ENSURE_EQUALS( "div-assign int var failed", execute( "main(){x=7;y=2;x/=y;return(x);}" ), "3" );
 	ENSURE_EQUALS( "div real const failed", execute( "main(){return(7./2.);}" ), "3.5" );
 	ENSURE_EQUALS( "div real var failed", execute( "main(){x=7.;y=2.;return(x/y);}" ), "3.5" );
+	ENSURE_EQUALS( "div-assign real const failed", execute( "main(){x=7.;x/=2.;return(x);}" ), "3.5" );
+	ENSURE_EQUALS( "div-assign real var failed", execute( "main(){x=7.;y=2.;x/=y;return(x);}" ), "3.5" );
 	ENSURE_EQUALS( "div number const failed", execute( "main(){return($7/$2);}" ), "$3.5" );
 	ENSURE_EQUALS( "div number var failed", execute( "main(){x=$7;y=$2;return(x/y);}" ), "$3.5" );
 	ENSURE_EQUALS( "div user succeeded", execute_except( "class A{_x=none;}main(){return(A()/A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A` does not have `divide` method." );
@@ -83,9 +94,12 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "mod" )
 	ENSURE_EQUALS( "mod int const failed", execute( "main(){return(11%3);}" ), "2" );
 	ENSURE_EQUALS( "mod int var failed", execute( "main(){x=11;y=3;return(x%y);}" ), "2" );
-	ENSURE_EQUALS( "mod-assign int failed", execute( "main(){x=11;x%=3;return(x);}" ), "2" );
+	ENSURE_EQUALS( "mod-assign int const failed", execute( "main(){x=11;x%=3;return(x);}" ), "2" );
+	ENSURE_EQUALS( "mod-assign int var failed", execute( "main(){x=11;y=3;x%=y;return(x);}" ), "2" );
 	ENSURE_EQUALS( "mod real const failed", execute( "main(){return(11.%3.);}" ), "2.0" );
 	ENSURE_EQUALS( "mod real var failed", execute( "main(){x=11.;y=3.;return(x%y);}" ), "2.0" );
+	ENSURE_EQUALS( "mod-assign real const failed", execute( "main(){x=11.;x%=3.;return(x);}" ), "2.0" );
+	ENSURE_EQUALS( "mod-assign real var failed", execute( "main(){x=11.;y=3.;x%=y;return(x);}" ), "2.0" );
 	ENSURE_EQUALS( "mod number const failed", execute( "main(){return($11%$3);}" ), "$2" );
 	ENSURE_EQUALS( "mod number var failed", execute( "main(){x=$11;y=$3;return(x%y);}" ), "$2" );
 	ENSURE_EQUALS( "mod user succeeded", execute_except( "class A{_x=none;}main(){return(A()%A());}", HHuginn::COMPILER::BE_SLOPPY ), "*anonymous stream*:1:35: Class `A` does not have `modulo` method." );
