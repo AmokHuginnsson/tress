@@ -1181,6 +1181,34 @@ char const progCompileErr162[] =
 	"}\n"
 ;
 
+char const progCompileErr163[] =
+	"main() {\n"
+	"\tx=1;\n"
+	"\tx/=0;\n"
+	"}\n"
+;
+
+char const progCompileErr164[] =
+	"main() {\n"
+	"\tx=1.;\n"
+	"\tx/=0.;\n"
+	"}\n"
+;
+
+char const progCompileErr165[] =
+	"main() {\n"
+	"\tx=1;\n"
+	"\tx%=0;\n"
+	"}\n"
+;
+
+char const progCompileErr166[] =
+	"main() {\n"
+	"\tx=1.;\n"
+	"\tx%=0.;\n"
+	"}\n"
+;
+
 TUT_UNIT_TEST( "report compilation error" )
 	prog_src_t progCompileErr[] = {
 		progCompileErr0,
@@ -1346,6 +1374,10 @@ TUT_UNIT_TEST( "report compilation error" )
 		progCompileErr160,
 		progCompileErr161,
 		progCompileErr162,
+		progCompileErr163,
+		progCompileErr164,
+		progCompileErr165,
+		progCompileErr166,
 		nullptr
 	};
 
@@ -1513,6 +1545,10 @@ TUT_UNIT_TEST( "report compilation error" )
 /* 160 */ { 11, 2, 3,  "*anonymous stream*:2:3: Operand is not a numeric value: an `integer`" },
 /* 161 */ { 13, 2, 5,  "*anonymous stream*:2:5: Factorial from negative." },
 /* 162 */ { 14, 2, 6,  "*anonymous stream*:2:6: Factorial from fraction." },
+/* 163 */ { 16, 3, 2,  "*anonymous stream*:3:2: Division by zero." },
+/* 164 */ { 17, 3, 2,  "*anonymous stream*:3:2: Division by zero." },
+/* 165 */ { 16, 3, 2,  "*anonymous stream*:3:2: Division by zero." },
+/* 166 */ { 17, 3, 2,  "*anonymous stream*:3:2: Division by zero." },
 		{ 0, 0, 0, nullptr }
 	};
 	ErrInfo const* e( err );
