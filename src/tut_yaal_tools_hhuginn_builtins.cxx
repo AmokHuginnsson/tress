@@ -2110,6 +2110,59 @@ TUT_UNIT_TEST( "Stream read/write real" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Stream pump_to" )
+	filesystem::remove( "./out/pump.to" );
+	ENSURE_EQUALS(
+		"pump_to ( default )",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"i = fs.open(\"./data/karatsuba.bc\", fs.OPEN_MODE.READ);\n"
+			"o = fs.open(\"./out/pump.to\", fs.OPEN_MODE.WRITE);\n"
+			"i.pump_to(o);\n"
+			"}\n"
+		),
+		"1137"
+	);
+	filesystem::remove( "./out/pump.to" );
+	ENSURE_EQUALS(
+		"pump_to ( 1 byte buffer )",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"i = fs.open(\"./data/karatsuba.bc\", fs.OPEN_MODE.READ);\n"
+			"o = fs.open(\"./out/pump.to\", fs.OPEN_MODE.WRITE);\n"
+			"i.pump_to(o,1);\n"
+			"}\n"
+		),
+		"1137"
+	);
+	ENSURE_EQUALS(
+		"pump_to ( buffer size too big )",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"i = fs.open(\"./data/karatsuba.bc\", fs.OPEN_MODE.READ);\n"
+			"o = fs.open(\"./out/pump.to\", fs.OPEN_MODE.WRITE);\n"
+			"i.pump_to(o,8589934592);\n"
+			"}\n"
+		),
+		"*anonymous stream*:5:10: Uncaught ArithmeticException: Cast would lose data."
+	);
+	ENSURE_EQUALS(
+		"pump_to ( 0 byte buffer )",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"i = fs.open(\"./data/karatsuba.bc\", fs.OPEN_MODE.READ);\n"
+			"o = fs.open(\"./out/pump.to\", fs.OPEN_MODE.WRITE);\n"
+			"i.pump_to(o,0);\n"
+			"}\n"
+		),
+		"*anonymous stream*:5:10: Invalid buffer size: 0"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "to_string" )
 	ENSURE_EQUALS(
 		"cycle detection failed",
