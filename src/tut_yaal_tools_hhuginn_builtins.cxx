@@ -2163,6 +2163,31 @@ TUT_UNIT_TEST( "Stream pump_to" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Stream read_lines" )
+	ENSURE_EQUALS(
+		"read_lines ( with new line on last line )",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./data/lines-nl.txt\", fs.OPEN_MODE.READ);\n"
+			"f.read_lines();\n"
+			"}\n"
+		),
+		"[\"one\\n\", \"two\\n\", \"three\\n\"]"
+	);
+	ENSURE_EQUALS(
+		"read_lines ( with *NO* new line on last line )",
+		execute(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./data/lines-no-nl.txt\", fs.OPEN_MODE.READ);\n"
+			"f.read_lines();\n"
+			"}\n"
+		),
+		"[\"one\\n\", \"two\\n\", \"three\"]"
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "to_string" )
 	ENSURE_EQUALS(
 		"cycle detection failed",
