@@ -37,7 +37,7 @@ TUT_UNIT_TEST( "grammar test" )
 	HRule hg( h.make_engine() );
 	HGrammarDescription gd( hg );
 
-	char const expected[][500] = {
+	char const expected[][520] = {
 		"huginnGrammar = +( classDefinition | functionDefinition | enumDefinition | importStatement | fromStatement )",
 		"classDefinition = ( \"class\" >> classIdentifier >> -( ':' >> baseIdentifier ) >> '{' >> +( field | functionDefinition ) >> '}' )",
 		"functionDefinition = ( functionDefinitionIdentifier >> callable )",
@@ -99,7 +99,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"negation = ( ( '-' >> negation ) | power )",
 		"power = ( factorial >> *( '^' >> negation ) )",
 		"factorial = ( atom >> -( ( '!' & \"==\" ) | ( '!' ^ '=' ) ) )",
-		"atom = ( modulus | ( parenthesis >> -( memberAccess >> dereference ) ) | real | integer"
+		"atom = ( modulus | ( parenthesis >> -( ( subscriptOperator | memberAccess ) >> dereference ) ) | real | integer"
 			" | ( ( number | character_literal ) >> -( memberAccess >> functionCallOperator ) )"
 			" | ( ( tupleLiteral | listLiteral | dictLiteral | lookupLiteral | stringLiteral ) >> -( ( subscriptOperator | memberAccess ) >> dereference ) )"
 			" | ( setLiteral >> -( memberAccess >> dereference ) ) | none | true | false"

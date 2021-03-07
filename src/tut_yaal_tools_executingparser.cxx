@@ -2036,7 +2036,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule dereference( *( subscriptOperator | functionCallOperator | memberAccess ) );
 	HRule atom(
 	 	modulus
-	 	| ( parenthesis >> -( memberAccess >> dereference ) )
+	 	| ( parenthesis >> -( ( subscriptOperator | memberAccess ) >> dereference ) )
 	 	| real
 	 	| integer
 	 	| ( ( number | character_literal ) >> -( memberAccess >> functionCallOperator ) )
@@ -2096,7 +2096,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 	HRule importStatement( e_p::constant( "import" ) >> name >> "as" >> name >> ';' );
 	HRule hg( + ( classDefinition | functionDefinition | enumDefinition | importStatement ) );
 	HExecutingParser ep( hg ); /* test for infinite recursion */
-	char const huginnDesc[][640] = {
+	char const huginnDesc[][648] = {
 		"A_ = +( ( \"class\" >> B_ >> -( ':' >> B_ ) >> '{' >> +( ( B_ >> '=' >> C_ >> ';' ) | D_ ) >> '}' ) | D_ | ( \"enum\" >> B_ >> '{' >> B_ >> *( ',' >> B_ ) >> '}' ) | ( \"import\" >> B_ >> \"as\" >> B_ >> ';' ) )",
 		"B_ = regex( \"\\b[a-zA-Z_][a-zA-Z0-9_]*\\b\" )",
 		"C_ = ( *( ( ( E_ >> *( ',' >> E_ ) ) >> ( \"=\" | \"+=\" | \"-=\" | \"*=\" | \"/=\" | \"%=\" | \"^=\" ) ) ^ '=' ) >> F_ )",
@@ -2136,7 +2136,7 @@ TUT_UNIT_TEST( "unnamed HHuginn grammar" )
 		"AK_ = ( AL_ >> -( ( \"<=\" | \">=\" | \"<\" | \">\" | \"≤\" | \"≥\" | \"∈\" | \"∉\" ) >> AL_ ) )",
 		"AL_ = ( AM_ >> *( '+' >> AM_ ) )",
 		"AM_ = ( AN_ >> *( '*' >> AN_ ) )",
-		"AN_ = ( ( '-' >> AN_ ) | ( ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( J_ >> AO_ ) )"
+		"AN_ = ( ( '-' >> AN_ ) | ( ( ( ( '|' >> C_ >> '|' ) | ( ( '(' >> C_ >> ')' ) >> -( ( H_ | J_ ) >> AO_ ) )"
 			" | real | integer | ( ( ( '$' >> real ) | character_literal ) >> -( J_ >> I_ ) )"
 			" | ( ( ( '(' >> -P_ >> -',' >> ')' ) | ( '[' >> -P_ >> ']' ) | ( '[' >> -( AP_ >> *( ',' >> AP_ ) ) >> ']' )"
 			" | ( '{' >> -( AP_ >> *( ',' >> AP_ ) ) >> '}' ) | string_literal ) >> -( ( H_ | J_ ) >> AO_ ) )"
