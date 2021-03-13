@@ -193,7 +193,7 @@ public:
 			++ i;
 		}
 
-		return ( ret ) ;
+		return ret ;
 	}
 
 	groups const& get_groups( void ) const {
@@ -367,7 +367,7 @@ public:
 			_callback->test_completed( tr );
 			_callback->group_completed( i->second );
 			_callback->run_completed();
-			return ( tr );
+			return tr;
 		} catch ( const beyond_last_test& ) {
 			_callback->group_completed( i->second );
 			_callback->run_completed();
@@ -462,7 +462,7 @@ class test_runner_singleton {
 	static test_runner& get() {
 		static test_runner tr;
 
-		return ( tr ) ;
+		return tr ;
 	}
 };
 

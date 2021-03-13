@@ -20,7 +20,7 @@ inline std::ostream& operator << ( std::ostream& out, HJSON const& json_ ) {
 	json_.save( ss );
 	HUTF8String utf8( ss.string() );
 	out.write( utf8.c_str(), utf8.byte_count() );
-	return ( out );
+	return out;
 }
 }
 }
@@ -64,7 +64,7 @@ HJSON make_json( void ) {
 	});
 	r["banner"] = "yaal's JSON generator";
 	r["literals"] = HJSON::HValue::array_t({ HJSON::HValue::LITERAL::TRUE, HJSON::HValue::LITERAL::FALSE,	HJSON::HValue::LITERAL::NULL });
-	return ( json );
+	return json;
 }
 
 #if TARGET_CPU_BITS == 64

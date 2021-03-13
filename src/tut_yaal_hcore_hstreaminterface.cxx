@@ -25,7 +25,7 @@ struct tut_yaal_hcore_hstreaminterface : public tress::tut_helpers::simple_mock<
 	yaal::hcore::HString data( void ) {
 		HString s;
 		_ss.read_until( s );
-		return ( s );
+		return s;
 	}
 	yaal::tools::HStringStream& string_stream( bool buffered_ ) {
 		HStreamInterface::ptr_t si( make_pointer<HStringStream>() );

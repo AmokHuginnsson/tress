@@ -935,7 +935,7 @@ int tut_yaal_hcore_hpool::gc( pool_t& p_, void** data_, int size_ ) {
 	}
 	sort( vals.begin(), vals.end() );
 	ENSURE( "bad data in gc store", equal( vals.begin(), vals.end(), begin( _testData_[0] ) ) );
-	return ( size_ );
+	return size_;
 }
 
 TUT_UNIT_TEST( "garbage collection" )

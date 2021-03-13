@@ -121,7 +121,7 @@ int tut_yaal_hcore_hsbbstree::helper_count_exemplar_black_height( engine_type::H
 		n = n->_left;
 	}
 //	cout << bh << " ";
-	return ( bh );
+	return bh;
 }
 
 int tut_yaal_hcore_hsbbstree::helper_check_black_height( engine_type::HAbstractNode* n ) {
@@ -131,7 +131,7 @@ int tut_yaal_hcore_hsbbstree::helper_check_black_height( engine_type::HAbstractN
 			++ bh;
 		n = n->_parent;
 	}
-	return ( bh );
+	return bh;
 }
 
 bool tut_yaal_hcore_hsbbstree::self_test( set_t& ob ) {

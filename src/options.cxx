@@ -367,7 +367,7 @@ int handle_program_options( int argc_, char** argv_ ) {
 	setup._argc = ( argc_ - nonOption ) + 1;
 	setup._argv = argv_ + nonOption - 1;
 	argv_[ nonOption - 1 ] = argv_[ 0 ];
-	return ( nonOption );
+	return nonOption;
 	M_EPILOG
 }
 

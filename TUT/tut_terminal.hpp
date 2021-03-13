@@ -18,7 +18,7 @@ inline std::ostream& operator << ( std::ostream& os_, yaal::ansi::HSequence cons
 	) {
 		os_  << *seq_;
 	}
-	return ( os_ );
+	return os_;
 }
 
 }

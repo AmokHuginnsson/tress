@@ -67,7 +67,7 @@ int HFakeConsole::attr( chtype_t attr_ ) const {
 	if ( it != _attributes.end() ) {
 		a = it->second;
 	}
-	return ( a );
+	return a;
 }
 
 int HFakeConsole::bg( chtype_t bg_ ) const {
@@ -77,7 +77,7 @@ int HFakeConsole::bg( chtype_t bg_ ) const {
 	if ( it != _background.end() ) {
 		b = it->second;
 	}
-	return ( b );
+	return b;
 }
 
 void HFakeConsole::ungetch( int key_ ) {
@@ -103,7 +103,7 @@ int HFakeConsole::getch( void ) {
 		key = -1;
 	}
 
-	return ( key );
+	return key;
 }
 
 void HFakeConsole::getmouse( MEVENT* ev_ ) {
@@ -346,7 +346,7 @@ HString col( int attr_ ) {
 		case ( 14 ): c.append( *ansi::bgbrightcyan );    break;
 		case ( 15 ): c.append( *ansi::bgwhite );         break;
 	}
-	return ( c );
+	return c;
 }
 
 HString attr_name( int attr_ ) {
@@ -376,7 +376,7 @@ HString attr_name( int attr_ ) {
 			case ( 15 ): an.append( "white" );         break;
 		}
 	}
-	return ( an );
+	return an;
 }
 
 HString attr_name_short( int attr_ ) {
@@ -385,7 +385,7 @@ HString attr_name_short( int attr_ ) {
 	ans.append( colorSymbols[attr_ & 0xf] );
 	ans.append( colorSymbols[( attr_ >> 4 ) & 0xf] );
 	ans.append( '}' );
-	return ( ans );
+	return ans;
 }
 
 }
@@ -595,7 +595,7 @@ int assume_default_colors( int, int ) {
 
 int long unsigned mousemask( int long unsigned, int long unsigned* );
 int long unsigned mousemask( int long unsigned newmask, int long unsigned* ) {
-	return ( newmask );
+	return newmask;
 }
 
 int getmouse( MEVENT* );

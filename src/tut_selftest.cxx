@@ -75,7 +75,7 @@ typedef mock##_group::object mock##_module; \
 namespace { \
 mock##_group& mock##_instance( void ) { \
 	static mock##_group group_instance( ( name ) ); \
-	return ( group_instance ); \
+	return group_instance; \
 } \
 void register_test_##mock( int no, char const* title ) { \
 	mock##_instance().register_test( no, title ); \
@@ -90,13 +90,13 @@ template<> template<> void suite##_module::test<(no)>( void ) { do { set_test_me
 
 namespace {
 int id_mock( int a_ ) {
-	return ( a_ );
+	return a_;
 }
 int sum_mock( int a_, int b_ ) {
 	int sum( a_ + b_ );
 	if ( sum > 9 )
 		throw HRuntimeException( "digit overflow" );
-	return ( sum );
+	return sum;
 }
 int sub_mock( int a_, int b_ ) {
 	return ( a_ - b_ );

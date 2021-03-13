@@ -116,7 +116,7 @@ tut_yaal_hcore_hlist::list_t tut_yaal_hcore_hlist::from_string( char const* data
 	list_t l;
 	for ( int i( 0 ); i < LEN; ++ i )
 		l.push_back( data_[i] );
-	return ( l );
+	return l;
 }
 
 TUT_TEST_GROUP( tut_yaal_hcore_hlist, "yaal::hcore::HList" );

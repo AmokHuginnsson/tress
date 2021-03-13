@@ -30,7 +30,7 @@ namespace tut {
 struct tut_yaal_hdata : public tut_yaal_hconsole_base {
 	tui_t do_make_tui( void ) override {
 		tui_t tui( new HDataProcess() );
-		return ( tui );
+		return tui;
 	}
 };
 

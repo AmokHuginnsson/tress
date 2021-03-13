@@ -95,7 +95,7 @@ std::ostream& operator << ( std::ostream& os_, const tut::test_result& tr ) {
 	}
 	if ( tress::setup._verbose )
 		os_ << std::endl;
-	return ( os_ );
+	return os_;
 }
 
 }         // end of namespace

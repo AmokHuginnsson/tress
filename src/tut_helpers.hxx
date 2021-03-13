@@ -129,7 +129,7 @@ inline yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterfac
 	} else {
 		M_ASSERT( !"unsupported stream modifier"[0] );
 	}
-	return ( os );
+	return os;
 }
 std::ostream& operator << ( std::ostream&, yaal::hcore::HComplex const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HNumber const& );
@@ -139,7 +139,7 @@ std::ostream& operator << ( std::ostream&, yaal::hcore::HTime const& );
 template<typename first_t, typename second_t>
 std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second_t> const& p ) {
 	os << "pair(" << p.first << "," << p.second << ")";
-	return ( os );
+	return os;
 }
 
 template<typename container>
@@ -152,7 +152,7 @@ std::ostream& container_dump( std::ostream& out,
 	if ( container_.empty() )
 		out << sep;
 	out << ")" << std::flush;
-	return ( out );
+	return out;
 }
 
 template<typename container>
@@ -220,13 +220,13 @@ inline std::ostream& operator << ( std::ostream& out, yaal::tools::HTwoWayMap<le
 template<typename type, typename tag>
 inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HTaggedPOD<type, tag> const& tp_ ) {
 	out << tp_.get();
-	return ( out );
+	return out;
 }
 
 template<typename first_t, typename second_t>
 inline std::ostream& operator << ( std::ostream& os, std::pair<first_t, second_t> const& p ) {
 	os << "pair(" << p.first << "," << p.second << ")";
-	return ( os );
+	return os;
 }
 
 template<typename tType>
@@ -234,7 +234,7 @@ inline std::ostream& operator << ( std::ostream& out, std::list<tType> const& l 
 	out << "list(";
 	yaal::copy( l.begin(), l.end(), std::ostream_iterator<tType>( out, " " ) );
 	out << ( ( l.begin() != l.end() ) ? "\b)" : ")" ) << std::flush;
-	return ( out );
+	return out;
 }
 
 template<typename tType>
@@ -242,7 +242,7 @@ inline std::ostream& operator << ( std::ostream& out, std::vector<tType> const& 
 	out << "vector(";
 	yaal::copy( v.begin(), v.end(), std::ostream_iterator<tType>( out, " " ) );
 	out << ( ( v.begin() != v.end() ) ? "\b)" : ")" ) << std::flush;
-	return ( out );
+	return out;
 }
 
 template<typename tType>
@@ -250,7 +250,7 @@ inline std::ostream& operator << ( std::ostream& out, std::deque<tType> const& v
 	out << "deque(";
 	yaal::copy( v.begin(), v.end(), std::ostream_iterator<tType>( out, " " ) );
 	out << ( ( v.begin() != v.end() ) ? "\b)" : ")" ) << std::flush;
-	return ( out );
+	return out;
 }
 
 template<typename tType>
@@ -265,7 +265,7 @@ inline std::ostream& operator << ( std::ostream& out,
 		out << vector_ [ ctr ];
 	}
 	out << " >";
-	return ( out );
+	return out;
 	M_EPILOG
 }
 
@@ -296,7 +296,7 @@ inline std::ostream& operator << ( std::ostream& out,
 	for ( ctr = 1; ctr < cols; ctr ++ )
 		out << "            ";
 	out << "    --+" << std::endl;
-	return ( out );
+	return out;
 	M_EPILOG
 }
 
@@ -616,19 +616,19 @@ bool operator != ( int long left, HInstanceTracker<owner_t, forced_size> const& 
 template<typename owner_t, int const forced_size>
 yaal::hcore::HString& operator += ( yaal::hcore::HString& str, HInstanceTracker<owner_t, forced_size> const& itrck ) {
 	str += itrck.to_string();
-	return ( str );
+	return str;
 }
 
 template<typename owner_t, int const forced_size>
 std::ostream& operator << ( std::ostream& stream, HInstanceTracker<owner_t, forced_size> const& itrck ) {
 	stream << itrck.to_string();
-	return ( stream );
+	return stream;
 }
 
 template<typename owner_t, int const forced_size>
 yaal::hcore::HStreamInterface& operator << ( yaal::hcore::HStreamInterface& stream, HInstanceTracker<owner_t, forced_size> const& itrck ) {
 	stream << itrck.to_string();
-	return ( stream );
+	return stream;
 }
 
 template<typename owner_t, int const forced_size>

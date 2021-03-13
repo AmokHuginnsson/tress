@@ -18,7 +18,7 @@ namespace std {
 template<int const SIZE>
 inline std::ostream& operator << ( std::ostream& stream, HBitset<SIZE> const& bs_ ) {
 	stream << bs_.to_string();
-	return ( stream );
+	return stream;
 }
 }
 

@@ -2655,7 +2655,7 @@ int short add( int short unsigned a, int unsigned b ) {
 	if ( sum > 64 ) {
 		throw 0;
 	}
-	return ( sum );
+	return sum;
 }
 double quadratic_equation( double long a, double b, float c ) {
 	double d( static_cast<double>( b * b - 4 * a * c ) );
@@ -2671,7 +2671,7 @@ hcore::HString title( hcore::HString text_ ) {
 		text_.lower();
 		text_.set_at( 0, code_point_t( static_cast<code_point_t::value_type>( toupper( static_cast<int>( text_.front().get() ) ) ) ) );
 	}
-	return ( text_ );
+	return text_;
 }
 char const* mid( char const* text_, int short idx_ ) {
 	return ( text_ + idx_ );

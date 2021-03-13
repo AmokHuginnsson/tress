@@ -16,7 +16,7 @@ using namespace tress::tut_helpers;
 #ifdef __MSVCXX__
 inline struct tm *gmtime_r(const time_t *timep, struct tm *result) {
 	gmtime_s( result, timep );
-	return ( result );
+	return result;
 }
 #endif /* #ifdef __MSVCXX__ */
 
@@ -37,7 +37,7 @@ std::ostream& operator << ( std::ostream& out, HTime::DAY_OF_WEEK wd ) {
 		case ( HTime::DAY_OF_WEEK::SUNDAY ): name = "sunday"; break;
 	}
 	out << name;
-	return ( out );
+	return out;
 }
 std::ostream& operator << ( std::ostream&, HTime::MONTH::month_t );
 std::ostream& operator << ( std::ostream& out, HTime::MONTH::month_t mon ) {
@@ -57,7 +57,7 @@ std::ostream& operator << ( std::ostream& out, HTime::MONTH::month_t mon ) {
 		case ( HTime::MONTH::DECEMBER ): name = "december"; break;
 	}
 	out << name;
-	return ( out );
+	return out;
 }
 
 }

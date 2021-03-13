@@ -38,12 +38,12 @@ struct booking_allocator {
 	pointer allocate( size_type n ) {
 		pointer p( reinterpret_cast<pointer>( ::operator new ( sizeof ( T ) * n ) ) );
 		_book.insert( p );
-		return ( p );
+		return p;
 	}
 	pointer allocate( size_type n, const_pointer ) {
 		pointer p( reinterpret_cast<pointer>( ::operator new ( sizeof ( T ) * n ) ) );
 		_book.insert( p );
-		return ( p );
+		return p;
 	}
 	void deallocate( pointer p, size_type ) {
 		typename book_t::iterator it( _book.find( p ) );

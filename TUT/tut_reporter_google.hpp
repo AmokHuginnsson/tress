@@ -187,7 +187,7 @@ private:
 					out += c;
 			}
 		}
-		return ( out );
+		return out;
 	}
 };
 

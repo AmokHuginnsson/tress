@@ -268,7 +268,7 @@ tut::test_runner::test_sets_t prepare_testsets( OSetup::set_definitions_t const&
 		}
 		tss.push_back( ts );
 	}
-	return ( tss );
+	return tss;
 	M_EPILOG
 }
 

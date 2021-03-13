@@ -25,19 +25,19 @@ inline bool operator == ( HBitmap const& bmp_, HString const& pat_ ) {
 
 inline HStreamInterface& operator << ( HStreamInterface& stream_, HBitmap::HBit const& bit_ ) {
 	stream_ << static_cast<bool>( bit_ );
-	return ( stream_ );
+	return stream_;
 }
 
 inline std::ostream& operator << ( std::ostream& stream_, HBitmap::HBit const& bit_ ) {
 	stream_ << static_cast<bool>( bit_ );
-	return ( stream_ );
+	return stream_;
 }
 
 inline std::ostream& operator << ( std::ostream& stream_, HBitmap const& bmp_ ) {
 	HStringStream ss;
 	ss << bmp_;
 	stream_ << ss.string();
-	return ( stream_ );
+	return stream_;
 }
 
 }

@@ -58,7 +58,7 @@ struct tut_yaal_tools_hxml : public simple_mock<tut_yaal_tools_hxml> {
 			out << _varTmpBuffer << node_.get_value() << "(" << node_.get_name() << ")" << std::endl;
 		else if ( ! node_.get_value().is_empty() )
 			out << _varTmpBuffer << node_.get_value() << std::endl;
-		return ( out );
+		return out;
 	}
 };
 
@@ -100,7 +100,7 @@ bool deep_equals( HXml::HConstNodeProxy const& left, HXml::HConstNodeProxy const
 		for ( ;( itLeft != endLeft ) && equals; ++ itLeft, ++ itRight )
 			equals = ( itRight != endRight ) && deep_equals( *itLeft, *itRight );
 	}
-	return ( equals );
+	return equals;
 }
 
 /* We need to use std library because we no longer suppoer 8-bit encodings. */

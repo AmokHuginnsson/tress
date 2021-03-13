@@ -194,7 +194,7 @@ typedef pair<int const, test4helper> t4h_t;
 
 inline ostream& operator << ( ostream& os, t4h_t const& p ) {
 	os << "(" << p.first << "," << p.second.get_val() << ")";
-	return ( os );
+	return os;
 }
 
 template<typename result_t, typename el1_t, typename el2_t>

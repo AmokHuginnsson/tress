@@ -46,7 +46,7 @@ std::string escape( const std::string& orig ) {
 		++ i;
 	}
 
-	return ( rc );
+	return rc;
 }
 
 /**
@@ -82,7 +82,7 @@ std::string unescape( const std::string& orig ) {
 		++ i;
 	}
 
-	return ( rc );
+	return rc;
 }
 
 /**

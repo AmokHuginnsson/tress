@@ -27,7 +27,7 @@ struct tut_yaal_tool_hfuture : public simple_mock<tut_yaal_tool_hfuture> {
 			sleep_for( duration( 50, time::UNIT::MILLISECOND ) );
 			val *= 3;
 		}
-		return ( val );
+		return val;
 	}
 	int& give_val( void ) {
 		return ( _data );

@@ -386,7 +386,7 @@ public:
 		int n( _currentTitle != _titles.end() ? _currentTitle->first : -1 );
 		if ( _currentTitle != _titles.end() )
 			++ _currentTitle;
-		return ( n );
+		return n;
 	}
 
 	/**
@@ -405,7 +405,7 @@ public:
 
 				test_result tr( run_test( current_test, obj ) );
 
-				return ( tr ) ;
+				return tr ;
 			} catch ( const no_such_test& ) {
 				continue;
 			}
@@ -437,7 +437,7 @@ public:
 		safe_holder<object> obj;
 		test_result tr = run_test( _currentTest, obj );
 
-		return ( tr ) ;
+		return tr ;
 	}
 
 	/**
@@ -502,7 +502,7 @@ public:
 		tr.set_time( timeElapsed );
 		// test passed
 
-		return ( tr );
+		return tr;
 	}
 
 	/**

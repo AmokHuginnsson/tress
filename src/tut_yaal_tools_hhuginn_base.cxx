@@ -64,7 +64,7 @@ yaal::tools::HHuginn::call_stack_t const* HIntrospector::get_stack( yaal::hcore:
 			}
 		}
 	}
-	return ( callStack );
+	return callStack;
 }
 
 HIntrospector::identifier_names_t const* HIntrospector::get_locals( yaal::hcore::HString const& file_, int line_ ) {
@@ -127,7 +127,7 @@ yaal::hcore::HString tut_yaal_tools_hhuginn_base::reformat( yaal::hcore::HString
 		util::unescape( to, util::cxx_escape_table() );
 		reformatted = re.replace( reformatted, to );
 	}
-	return ( reformatted );
+	return reformatted;
 }
 
 hcore::HString tut_yaal_tools_hhuginn_base::expect_file( hcore::HString const& name_, hcore::HString& from_, hcore::HString& to_ ) {
@@ -284,7 +284,7 @@ hcore::HString prettify( yaal::hcore::HString const& src_ ) {
 			out.push_back( curr );
 		}
 	}
-	return ( out );
+	return out;
 }
 }
 
@@ -315,7 +315,7 @@ yaal::tools::HHuginn::ptr_t tut_yaal_tools_hhuginn_base::compile_function( yaal:
 		clog << h->error_message() << endl;
 	}
 	ENSURE( "compilation failed", c );
-	return ( h );
+	return h;
 }
 
 hcore::HString const& tut_yaal_tools_hhuginn_base::execute(

@@ -34,7 +34,7 @@ inline bool operator == ( HPipedChild::STATUS left_, HPipedChild::STATUS right_ 
 
 inline std::ostream& operator << ( std::ostream& out, HPipedChild::STATUS const& s ) {
 	out << "(" << static_cast<int>( s.type ) << "," << s.value << ")";
-	return ( out );
+	return out;
 }
 
 }

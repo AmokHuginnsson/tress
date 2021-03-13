@@ -854,7 +854,7 @@ inline bytes_t mb( octets_t const& os ) {
 	for ( u8_t o : os ) {
 		b.push_back( static_cast<char>( o ) );
 	}
-	return ( b );
+	return b;
 }
 
 }

@@ -83,7 +83,7 @@ void ensure_not( T const& msg, bool cond ) {
 
 template<typename T>
 T const& stream_escape( T const& val_ ) {
-	return ( val_ );
+	return val_;
 }
 char const* stream_escape( char const* ) __attribute__((used));
 char const* stream_escape( char const* val_ ) {

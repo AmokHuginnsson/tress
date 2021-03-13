@@ -15,7 +15,7 @@ using namespace tress::tut_helpers;
 
 inline std::ostream& operator << ( std::ostream& stream, ip_t const& ip_ ) {
 	stream << resolver::ip_to_string( ip_ );
-	return ( stream );
+	return stream;
 }
 
 namespace tut {

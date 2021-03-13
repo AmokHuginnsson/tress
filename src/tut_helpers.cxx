@@ -47,7 +47,7 @@ yaal::hcore::HString const& output_encoding( void ) {
 			encoding = DEF_ENC;
 		}
 	}
-	return ( encoding );
+	return encoding;
 }
 
 HString const& _outputEncoding_( output_encoding() );
@@ -81,33 +81,33 @@ std::ostream& operator << ( std::ostream& out, HComplex const& complex_ ) {
 		out << re << "+i" << im;
 	else
 		out << re << "-i" << - im;
-	return ( out );
+	return out;
 	M_EPILOG
 }
 
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HString const& s ) {
 	out << lexical_cast<std::string>( s );
-	return ( out );
+	return out;
 }
 
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HUTF8String const& s ) {
 	out.write( s.raw(), s.byte_count() );
-	return ( out );
+	return out;
 }
 
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HNumber const& n ) {
 	out << n.to_string();
-	return ( out );
+	return out;
 }
 
 std::ostream& operator << ( std::ostream& out, yaal::hcore::HTime const& t ) {
 	out << lexical_cast<std::string>( t.string() );
-	return ( out );
+	return out;
 }
 
 HStreamInterface& operator << ( HStreamInterface& os, std::string const& s ) {
 	os << s.c_str();
-	return ( os );
+	return os;
 }
 
 }
@@ -123,7 +123,7 @@ bool is_a_tty( std::ostream const& stream_ ) {
 		isTty = yaal::tools::is_a_tty( yaal::hcore::cout ) ? true : false;
 	else if ( &stream_ == &std::cerr )
 		isTty = yaal::tools::is_a_tty( yaal::hcore::cerr ) ? true : false;
-	return ( isTty );
+	return isTty;
 }
 
 template<>
@@ -131,7 +131,7 @@ bool is_a_tty( std::istream const& stream_ ) {
 	bool isTty( false );
 	if ( &stream_ == &std::cin )
 		isTty = yaal::tools::is_a_tty( yaal::hcore::cin ) ? true : false;
-	return ( isTty );
+	return isTty;
 }
 
 }

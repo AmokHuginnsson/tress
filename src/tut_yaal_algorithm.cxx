@@ -1551,7 +1551,7 @@ struct IncGen {
 		int val( _n < lim ? _n : lim );
 		++ _n;
 		-- _lim;
-		return ( val );
+		return val;
 	}
 };
 

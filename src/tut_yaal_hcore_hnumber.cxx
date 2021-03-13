@@ -110,7 +110,7 @@ HString tut_yaal_hcore_hnumber::read_result( void ) {
 	if ( result.find_other_than( "0." ) == HString::npos ) {
 		result = "0";
 	}
-	return ( result );
+	return result;
 }
 
 HString const& tut_yaal_hcore_hnumber::expand_leafs( HString const& template_ ) {
@@ -1001,7 +1001,7 @@ inline HNumber from_int( int n_ ) {
 		n_ /= 10;
 	}
 	yaal::reverse( s.begin(), s.end() );
-	return ( s );
+	return s;
 }
 
 TUT_UNIT_TEST( "division" )
