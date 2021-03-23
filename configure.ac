@@ -37,6 +37,17 @@ int main( int, char** ) {
 }
 ]])], [AC_DEFINE([HAVE_SGI_STL_EXTENSIONS],[],[Do you have SGI STL extensions?])] RESULT=["yes"])
 AC_MSG_RESULT([$RESULT])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+#include <functional>
+
+using namespace std;
+
+int main( int, char** ) {
+	std::bind2nd( std::less<int>(), 0 );
+	return ( 0 );
+}
+]])], [AC_DEFINE([HAVE_PRE_CXX17_STL],[],[Do you have pre C++17 parts of Standard Template Library?])] RESULT=["yes"])
+AC_MSG_RESULT([$RESULT])
 AC_CHECK_DECLS([RTLD_NEXT],[],[],[#include <dlfcn.h>])
 AC_CHECK_HEADERS([ncurses/curses.h],_NCURSES_HEADER=['ncurses/curses.h'],
 	[AC_CHECK_HEADERS([curses.h],_NCURSES_HEADER=['curses.h'],

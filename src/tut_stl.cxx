@@ -50,6 +50,8 @@ TUT_UNIT_TEST( "swap" )
 	ENSURE_EQUALS( "swap failed", b, 7 );
 TUT_TEARDOWN()
 
+
+#ifdef HAVE_PRE_CXX17_STL
 TUT_UNIT_TEST( "bind1st" )
 	bool p = bind1st( less<int>(), 4 )( 3 );
 	ENSURE_NOT( "greater functor binded incorrectly", p );
@@ -63,6 +65,7 @@ TUT_UNIT_TEST( "bind2nd" )
 	bool q = bind2nd( greater<int>(), 1 )( 3 );
 	ENSURE( "greater functor binded incorrectly", q );
 TUT_TEARDOWN()
+#endif
 
 TUT_UNIT_TEST( "copy algorithm" )
 	int tab1[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
@@ -172,7 +175,11 @@ TUT_UNIT_TEST( "remove_if algorithm" )
 	list_t l( a, a + yaal::size( a ) );
 	copy( l.begin(), l.end(), ostream_iterator<int>( clog, " " ) );
 	clog << endl;
+#ifdef HAVE_PRE_CXX17_STL
 	list_t::iterator end( remove_if( l.begin(), l.end(), bind2nd( less<int>(), 0 ) ) );
+#else
+	list_t::iterator end( std::remove_if( l.begin(), l.end(), yaal::bind2nd( less<int>(), 0 ) ) );
+#endif
 	copy( l.begin(), l.end(), ostream_iterator<int>( clog, " " ) );
 	clog << endl;
 	l.erase( end, l.end() );
@@ -235,8 +242,11 @@ TUT_UNIT_TEST( "remove_copy_if" )
 	typedef list<int> list_t;
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
 	list_t l;
-	remove_copy_if( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ),
-				bind1st( less<int>(), 30 ) );
+#ifdef HAVE_PRE_CXX17_STL
+	remove_copy_if( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ), bind1st( less<int>(), 30 ) );
+#else
+	std::remove_copy_if( a, a + yaal::size( a ), back_insert_iterator<list_t>( l ), yaal::bind1st( less<int>(), 30 ) );
+#endif
 	stringstream ss;
 	copy( l.begin(), l.end(), ostream_iterator<int>( ss, " " ) );
 	ENSURE_EQUALS( "remove_copy_if failed", ss.str(), "1 4 9 16 25 " );
@@ -270,14 +280,24 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "count_if" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+#ifdef HAVE_PRE_CXX17_STL
 	ENSURE_EQUALS( "misscounted 16", count_if( a, a + yaal::size( a ), bind2nd( less<int>(), 50 ) ), 7 );
 	ENSURE_EQUALS( "misscounted 16", count_if( a, a + yaal::size( a ), bind2nd( less<int>(), 1 ) ), 0 );
+#else
+	ENSURE_EQUALS( "misscounted 16", std::count_if( a, a + yaal::size( a ), yaal::bind2nd( less<int>(), 50 ) ), 7 );
+	ENSURE_EQUALS( "misscounted 16", std::count_if( a, a + yaal::size( a ), yaal::bind2nd( less<int>(), 1 ) ), 0 );
+#endif
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "not1" )
 	int a[] = { 1, 4, 9, 16, 25, 36, 49, 64, 81, 100 };
+#ifdef HAVE_PRE_CXX17_STL
 	ENSURE_EQUALS( "misscounted 16", count_if( a, a + yaal::size( a ), not1( bind2nd( less<int>(), 50 ) ) ), yaal::size( a ) - 7 );
 	ENSURE_EQUALS( "misscounted 16", count_if( a, a + yaal::size( a ), not1( bind2nd( less<int>(), 1 ) ) ), yaal::size( a ) - 0 );
+#else
+	ENSURE_EQUALS( "misscounted 16", std::count_if( a, a + yaal::size( a ), std::not1( yaal::bind2nd( less<int>(), 50 ) ) ), yaal::size( a ) - 7 );
+	ENSURE_EQUALS( "misscounted 16", std::count_if( a, a + yaal::size( a ), std::not1( yaal::bind2nd( less<int>(), 1 ) ) ), yaal::size( a ) - 0 );
+#endif
 TUT_TEARDOWN()
 
 #ifdef HAVE_SGI_STL_EXTENSIONS
@@ -357,12 +377,20 @@ TUT_UNIT_TEST( "mem_fun, mem_fun_ref" )
 	l.push_back( MemFunTest( 7 ) );
 
 	naked_list_t nl;
-	transform( l.begin(), l.end(), back_insert_iterator<naked_list_t>( nl ), get_pointer<MemFunTest> );
+	std::transform( l.begin(), l.end(), back_insert_iterator<naked_list_t>( nl ), get_pointer<MemFunTest> );
 	stringstream ss;
+#ifdef HAVE_PRE_CXX17_STL
 	transform( nl.begin(), nl.end(), ostream_iterator<int>( ss, " " ), mem_fun( &MemFunTest::value ) );
+#else
+	std::transform( nl.begin(), nl.end(), ostream_iterator<int>( ss, " " ), yaal::mem_fun( &MemFunTest::value ) );
+#endif
 	ENSURE_EQUALS( "mem_fun1_ref failed", ss.str(), "0 1 3 7 " );
 	ss.flush();
+#ifdef HAVE_PRE_CXX17_STL
 	transform( l.begin(), l.end(), ostream_iterator<int>( ss, " " ), mem_fun_ref( &MemFunTest::value ) );
+#else
+	std::transform( l.begin(), l.end(), ostream_iterator<int>( ss, " " ), yaal::mem_fun_ref( &MemFunTest::value ) );
+#endif
 	clog << ss.str() << endl;
 TUT_TEARDOWN()
 
@@ -421,11 +449,19 @@ TUT_UNIT_TEST( "transform (negate) container content automatically" )
 	T l;
 	generate_n( std::back_insert_iterator<T>( l ), 20, inc( 1 ) );
 	copy( l.begin(), l.end(), ostream_iterator<int>( clog ) ); clog << endl;
-	replace_if(l.begin(), l.end(), std::bind2nd( less<int>(), 10 ), 10);
+#ifdef HAVE_PRE_CXX17_STL
+	replace_if( l.begin(), l.end(), bind2nd( less<int>(), 10 ), 10 );
+#else
+	std::replace_if( l.begin(), l.end(), yaal::bind2nd( less<int>(), 10 ), 10 );
+#endif
 	copy( l.begin(), l.end(), ostream_iterator<int>( clog ) ); clog << endl;
 	transform( l.begin(), l.end(), l.begin(), negate<int>() );
 	copy( l.begin(), l.end(), ostream_iterator<int>( clog ) ); clog << endl;
+#ifdef HAVE_PRE_CXX17_STL
 	transform( l.begin(), l.end(), l.begin(), bind2nd( plus<int>(), 7 ) );
+#else
+	std::transform( l.begin(), l.end(), l.begin(), yaal::bind2nd( plus<int>(), 7 ) );
+#endif
 	copy( l.begin(), l.end(), ostream_iterator<int>( clog ) ); clog << endl;
 	clog << "}" << endl;
 	vector<string> vs;
