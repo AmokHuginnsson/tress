@@ -38,12 +38,22 @@ using namespace __gnu_cxx;
 
 using namespace std;
 
-int main( int, char** )
-	{
+int main( int, char** ) {
 	compose1( negate<int>(), negate<int>() )( 7 );
 	return ( 0 );
-	}
+}
 " HAVE_SGI_STL_EXTENSIONS )
+
+check_cxx_source_compiles( "
+#include <functional>
+
+using namespace std;
+
+int main( int, char** ) {
+	std::bind2nd( std::less<int>(), 0 );
+	return ( 0 );
+}
+" HAVE_PRE_CXX17_STL )
 
 check_symbol_exists( RTLD_NEXT dlfcn.h HAVE_DECL_RTLD_NEXT )
 set( CMAKE_EXTRA_INCLUDE_FILES_ORIG "${CMAKE_EXTRA_INCLUDE_FILES}" )
