@@ -366,29 +366,36 @@ public:
 			_os << tr << std::flush;
 		}
 
-		if ( tr._result == tut::test_result::ok )
+		if ( tr._result == tut::test_result::ok ) {
 			++ _currentGroupTestCount;
-		else
+		} else {
 			_currentGroupTestCount += ( tr._testNo < 10 ? 5 : ( tr._testNo < 100 ? 6 : 7 ) );
+		}
 
-		if ( tr._result != tut::test_result::ok )
+		if ( tr._result != tut::test_result::ok ) {
 			_notPassed.push_back( tr );
+		}
 		group_base::run_stat_t status( tr._group ? tr._group->get_stat() : group_base::run_stat_t( 0, 0 ) );
-		if ( tress::setup._fancy && tr._group && ( ( status.second + tr._group->skipped() ) == tr._group->get_real_test_count() ) ) {
-			std::stringstream ss;
-			ss << '(' << tr._group->get_time_elapsed() << ')';
-			std::string timeElapsed( ss.str() );
-			int spaceCount( _maxWidth_ - ( 9 + static_cast<int>( name.length() ) + _currentGroupTestCount + static_cast<int>( timeElapsed.length() ) ) );
-			if ( spaceCount > 0 ) {
-				std::string space( static_cast<size_t>( spaceCount ), ' ' );
-				_os << space;
-			}
-			_os << timeElapsed;
-			if ( status.first == status.second ) {
-				_os << " [" << ( tr._group->skipped() ? yaal::ansi::yellow : yaal::ansi::green ) << "Pass" << yaal::ansi::reset << "]" << std::flush;
-			} else {
-				_os << " [" << yaal::ansi::red << "Fail" << yaal::ansi::reset << "]" << std::flush;
-			}
+		if ( ! tr._group || ( ( status.second + tr._group->skipped() ) < tr._group->get_real_test_count() ) ) {
+			return;
+		}
+		std::stringstream ss;
+		ss << '(' << tr._group->get_time_elapsed() << ')';
+		std::string timeElapsed( ss.str() );
+		if ( ! tress::setup._fancy ) {
+			_os << " " << timeElapsed;
+			return;
+		}
+		int spaceCount( _maxWidth_ - ( 9 + static_cast<int>( name.length() ) + _currentGroupTestCount + static_cast<int>( timeElapsed.length() ) ) );
+		if ( spaceCount > 0 ) {
+			std::string space( static_cast<size_t>( spaceCount ), ' ' );
+			_os << space;
+		}
+		_os << timeElapsed;
+		if ( status.first == status.second ) {
+			_os << " [" << ( tr._group->skipped() ? yaal::ansi::yellow : yaal::ansi::green ) << "Pass" << yaal::ansi::reset << "]" << std::flush;
+		} else {
+			_os << " [" << yaal::ansi::red << "Fail" << yaal::ansi::reset << "]" << std::flush;
 		}
 	}
 
