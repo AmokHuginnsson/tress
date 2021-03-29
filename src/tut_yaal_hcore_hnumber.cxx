@@ -167,10 +167,18 @@ TUT_UNIT_TEST( "construct from string" )
 	clog << "| n0 = " << n0.to_string() << " |" << endl;
 	ENSURE_THROW( "empty number created", HNumber n( "" ), HNumberException );
 	ENSURE_THROW( "number that is a minus created", HNumber n( "-" ), HNumberException );
+	ENSURE_THROW( "number that is a spacer created", HNumber n( "_" ), HNumberException );
+	ENSURE_THROW( "number that is a minus spacer created", HNumber n( "-_1" ), HNumberException );
 	ENSURE_THROW( "number that is a dot created", HNumber n( "." ), HNumberException );
+	ENSURE_THROW( "number that is a minus spacer dot created", HNumber n( "-_.1" ), HNumberException );
+	ENSURE_THROW( "number that is a minus dot spacer created", HNumber n( "-._1" ), HNumberException );
 	ENSURE_THROW( "number that is a minus-dot and nothing created", HNumber n( "-." ), HNumberException );
 	ENSURE_THROW( "number that is a minus-dot-dot created", HNumber n( "-..1" ), HNumberException );
 	ENSURE_THROW( "number that is a dot-dot created", HNumber n( "..1" ), HNumberException );
+	ENSURE_THROW( "number that is a with double spacer in integral part created", HNumber n( "23__45" ), HNumberException );
+	ENSURE_THROW( "number that is a with trailing spacer in integral part created", HNumber n( "23_" ), HNumberException );
+	ENSURE_THROW( "number that is a with double spacer in fractional part created", HNumber n( "23.45__67" ), HNumberException );
+	ENSURE_THROW( "number that is a with leading spacer in fractional part created", HNumber n( "23._45" ), HNumberException );
 
 	char const* const pn1 = "-1";
 	HNumber n1( pn1 );
@@ -199,7 +207,9 @@ TUT_UNIT_TEST( "construct from string" )
 	clog << "| n4 =" << n4.to_string() << " |" << endl;
 
 	ENSURE_THROW( "phony number created", HNumber nx( "--2.7" ), HNumberException );
+	ENSURE_THROW( "phony number created", HNumber nx( "-_-2.7" ), HNumberException );
 	ENSURE_THROW( "phony number created", HNumber nx( "..27" ), HNumberException );
+	ENSURE_THROW( "phony number created", HNumber nx( "._.27" ), HNumberException );
 	ENSURE_THROW( "phony number created", HNumber nx( "-.-2.7" ), HNumberException );
 
 	char const* const pn5 = ".2.7";
@@ -232,9 +242,18 @@ TUT_UNIT_TEST( "construct from string" )
 	ENSURE_EQUALS( "bad dafault precision", n9.get_precision(), HNumber::DEFAULT_PRECISION );
 	clog << "| n9 =" << n9.to_string() << " |" << endl;
 	ENSURE_EQUALS( "number 0 not created correctly", HNumber( "0001200" ).to_string(), "1200" );
+	ENSURE_EQUALS( "number 0 not created correctly", HNumber( "000_1200" ).to_string(), "1200" );
+	ENSURE_EQUALS( "number 0 not created correctly", HNumber( "0_00_1200" ).to_string(), "1200" );
+	ENSURE_EQUALS( "number 0 not created correctly", HNumber( "00000000000000_00000000000000_1200" ).to_string(), "1200" );
 	ENSURE_EQUALS( "number 1 not created correctly", HNumber( "-00.200" ).to_string(), "-0.2" );
+	ENSURE_EQUALS( "number 1 not created correctly", HNumber( "-0_0.2_0_0" ).to_string(), "-0.2" );
 	ENSURE_EQUALS( "number 2 not created correctly", HNumber( "-00100" ).to_string(), "-100" );
+	ENSURE_EQUALS( "number 2 not created correctly", HNumber( "-0_0100" ).to_string(), "-100" );
 	ENSURE_EQUALS( "number 3 not created correctly", HNumber( "00012.3200" ).to_string(), "12.32" );
+	ENSURE_EQUALS( "number 3 not created correctly", HNumber( "0_0012.320_0" ).to_string(), "12.32" );
+	ENSURE_EQUALS( "number 3 not created correctly", HNumber( "0_0_012.32_0_0" ).to_string(), "12.32" );
+	ENSURE_EQUALS( "number 3 not created correctly", HNumber( "0_0_0_12.3_2_0_0" ).to_string(), "12.32" );
+	ENSURE_EQUALS( "number 3 not created correctly", HNumber( "0_0_0_1_2.3_2_0_0" ).to_string(), "12.32" );
 	ENSURE_EQUALS( "number 4 not created correctly", HNumber( "-000034.212000" ).to_string(), "-34.212" );
 	ENSURE_EQUALS( "number 5 not created correctly", HNumber( "-000" ).to_string(), "0" );
 	ENSURE_EQUALS( "number 6 not created correctly", HNumber( "000" ).to_string(), "0" );
@@ -286,6 +305,10 @@ TUT_UNIT_TEST( "construct from string" )
 	char const* const lns10r = "12345678901234567890.1234567890123456789";
 	HNumber ln10( lns10 );
 	ENSURE_EQUALS( "number ln10 not created correctly", ln10.to_string(), lns10r );
+
+	char const* const lnsws10 = "12_345_678_901_234_567_890.123_456_789_012_345_678_90";
+	HNumber lnws10( lnsws10 );
+	ENSURE_EQUALS( "number lnws10 not created correctly", lnws10.to_string(), lns10r );
 
 	char const* const lns11 = "-12345678901234567890.12345678901234567890";
 	char const* const lns11r = "-12345678901234567890.1234567890123456789";
