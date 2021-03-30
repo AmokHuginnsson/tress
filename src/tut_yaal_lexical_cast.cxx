@@ -26,6 +26,34 @@ TUT_UNIT_TEST( "0" )
 	ENSURE_EQUALS( "overlong string with short int", lexical_cast<int>( "0abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"_ys ), 0 );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "1_234" )
+	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 1234 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "0xdead_c0de" )
+	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), true );
+	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int long long>( get_test_name().c_str() ), 0xdeadc0deLL );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "0b1010_0101_1100_0011" )
+	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), true );
+	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 42435 );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "0o1_757" )
+	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), true );
+	ENSURE_EQUALS( "bad base 2 recognition", is_binary( get_test_name().c_str() ), false );
+	ENSURE_EQUALS( "bad 10 based cast", lexical_cast<int>( get_test_name().c_str() ), 01757 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "-0" )
 	ENSURE_EQUALS( "bad base 16 recognition", is_hexadecimal( get_test_name().c_str() ), false );
 	ENSURE_EQUALS( "bad base 8 recognition", is_octal( get_test_name().c_str() ), false );
@@ -439,6 +467,11 @@ TUT_UNIT_TEST( "conversions" )
 	ENSURE( "is_binary failed", is_binary( static_cast<char const*>( "0b11010101" ) ) );
 	ENSURE_NOT( "is_binary failed", is_binary( static_cast<char const*>( "0o12345" ) ) );
 	ENSURE_NOT( "is_binary failed", is_binary( static_cast<char const*>( "0b234" ) ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "spacers" )
+	ENSURE_THROW( "lexical_cast to an int from a double spacer succeeded", lexical_cast<int>( "1__000"_ys ), HLexicalCastException );
+	ENSURE_THROW( "lexical_cast to an int from a trailing spacer succeeded", lexical_cast<int>( "1000_"_ys ), HLexicalCastException );
 TUT_TEARDOWN()
 
 }
