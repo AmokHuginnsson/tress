@@ -1127,6 +1127,7 @@ TUT_UNIT_TEST( "conversions" )
 	ENSURE_EQUALS( "to_string int short unsigned failed", to_string( static_cast<int short unsigned>( 54321 ) ), "54321" );
 	ENSURE_EQUALS( "to_string char unsigned failed", to_string( static_cast<char unsigned>( u'ó' ) ), "ó" );
 	ENSURE_EQUALS( "stoi failed", stoi( "-2147483647"_ys ), -2147483647 );
+	ENSURE_EQUALS( "stoi failed", stoi( "123_456"_ys ), 123 );
 	ENSURE_EQUALS( "stoi failed", stoi( "-7FFFFFFF"_ys, nullptr, 16 ), -2147483647 );
 	ENSURE_THROW( "stoi overflow succeeded", stoi( "2147483648" ), HOutOfRangeException );
 #if SIZEOF_INT_LONG == 8
