@@ -43,6 +43,19 @@ TUT_UNIT_TEST( "variable index range" )
 	ENSURE_THROW( "bad variable index accepted", e[ HExpression::MAX_VARIABLE_COUNT ], HExpressionException );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "numbers" )
+	HExpression e( "-0" );
+	ENSURE_EQUALS( "addition failed", e.evaluate(), 0.L );
+	e.compile( "123" );
+	ENSURE_EQUALS( "addition failed", e.evaluate(), 123.L );
+	e.compile( "123.456" );
+	ENSURE_EQUALS( "addition failed", e.evaluate(), 123.456L );
+	e.compile( "123_456" );
+	ENSURE_EQUALS( "addition failed", e.evaluate(), 123456L );
+	e.compile( "123_456.789_543" );
+	ENSURE_EQUALS( "addition failed", e.evaluate(), 123456.789543L );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "addition" )
 	HExpression e( "2+3" );
 	ENSURE_EQUALS( "addition failed", e.evaluate(), 5l );
@@ -207,6 +220,9 @@ TUT_UNIT_TEST( "parser errors" )
 	ENSURE_ERROR( "(0+)", "unexpected token" );
 	ENSURE_ERROR( "sin|0|", "opening function bracket expected" );
 	ENSURE_ERROR( "|sin(0|", "closing function bracket expected" );
+	ENSURE_ERROR( "1__0", "double spacer" );
+	ENSURE_ERROR( "1_.0", "trailing spacer" );
+	ENSURE_ERROR( "1._0", "leading spacer" );
 	ENSURE_THROW( "eval on not compiled succeded", e.evaluate(), HExpressionException );
 #undef ENSURE_ERROR
 TUT_TEARDOWN()
