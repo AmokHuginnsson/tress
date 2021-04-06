@@ -48,6 +48,14 @@ TUT_UNIT_TEST( "numbers" )
 	ENSURE_EQUALS( "addition failed", e.evaluate(), 0.L );
 	e.compile( "123" );
 	ENSURE_EQUALS( "addition failed", e.evaluate(), 123.L );
+	e.compile( "1.23e3" );
+	ENSURE_EQUALS( "addition failed", e.evaluate(), 1230.L );
+	e.compile( "1.23E3" );
+	ensure_equals( "addition failed", e.evaluate(), 1230.l );
+	e.compile( "1.23e+3" );
+	ENSURE_EQUALS( "addition failed", e.evaluate(), 1230.L );
+	e.compile( "1.23e-3" );
+	ENSURE_EQUALS( "addition failed", e.evaluate(), 0.00123L );
 	e.compile( "123.456" );
 	ENSURE_EQUALS( "addition failed", e.evaluate(), 123.456L );
 	e.compile( "123_456" );
@@ -221,6 +229,8 @@ TUT_UNIT_TEST( "parser errors" )
 	ENSURE_ERROR( "sin|0|", "opening function bracket expected" );
 	ENSURE_ERROR( "|sin(0|", "closing function bracket expected" );
 	ENSURE_ERROR( "1__0", "double spacer" );
+	ENSURE_ERROR( "sin(1e)", "digit expected" );
+	ENSURE_ERROR( "sin(1e-)", "digit expected" );
 	ENSURE_ERROR( "1_.0", "trailing spacer" );
 	ENSURE_ERROR( "1._0", "leading spacer" );
 	ENSURE_THROW( "eval on not compiled succeded", e.evaluate(), HExpressionException );
