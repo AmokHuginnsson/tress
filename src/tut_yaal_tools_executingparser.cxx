@@ -317,11 +317,21 @@ TUT_UNIT_TEST( "HInteger" )
 		ep();
 		ENSURE_EQUALS( "int value not set by ExecutingParser.", val, 51 );
 	}
+	/* spacers */ {
+		int long val( 0 );
+		HExecutingParser ep( integer[HBoundCall<void ( int long )>( call( &defer<int long>::set, ref( val ), _1 ) )] );
+		ENSURE( "HInteger failed to parse correct input (int long).", ep( "1_234" ) );
+		ep();
+		ENSURE_EQUALS( "int long value not set by ExecutingParser.", val, 1234l );
+	}
 	/* bad integer */ {
 		int long long val( 0 );
 		HExecutingParser ep( integer[HBoundCall<void ( int long long )>( call( &defer<int long long>::set, ref( val ), _1 ) )] );
 		ENSURE_NOT( "Invalid input parsed by HInteger", ep( "bad" ) );
 		ENSURE_NOT( "Invalid input parsed by HInteger", ep( "7bad" ) );
+		ENSURE_NOT( "Invalid input parsed by HInteger", ep( "1__0" ) );
+		ENSURE_NOT( "Invalid input parsed by HInteger", ep( "_10" ) );
+		ENSURE_NOT( "Invalid input parsed by HInteger", ep( "10_" ) );
 		ENSURE_NOT( "whitespace only input parsed by HInteger", ep( " " ) );
 		ENSURE_NOT( "empty input parsed by HInteger", ep( "" ) );
 	}
