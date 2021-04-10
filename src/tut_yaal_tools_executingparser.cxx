@@ -182,11 +182,33 @@ TUT_UNIT_TEST( "HReal" )
 		ep();
 		ENSURE_EQUALS( "HString value not set by ExecutingParser.", val, "1e-10" );
 	}
+	/* spacers */ {
+		double long val( 0 );
+		HExecutingParser ep( real[HBoundCall<void ( double long )>( call( &defer<double long>::set, ref( val ), _1 ) )] );
+		hcore::HString input( "1_2.34" );
+		ENSURE( "HReal failed to parse correct input (double long).", ep( input.begin(), input.end() ) );
+		ep();
+		ENSURE_DISTANCE( "double long value not set by ExecutingParser.", val, 12.34L, epsilon );
+
+		ENSURE( "HReal failed to parse correct input (double long).", ep( "56.7_8" ) );
+		ep();
+		ENSURE_DISTANCE( "double long value not set by ExecutingParser.", val, 56.78L, epsilon );
+
+		ENSURE( "HReal failed to parse correct input (double long).", ep( "9_1_2_3.4_5_6" ) );
+		ep();
+		ENSURE_DISTANCE( "double long value not set by ExecutingParser.", val, 9123.456L, epsilon );
+	}
 	/* bad real */ {
 		HExecutingParser ep( real );
 		ENSURE_NOT( "Invalid input parsed by HReal", ep( "bad" ) );
 		ENSURE_NOT( "Invalid input parsed by HReal", ep( "." ) );
 		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14bad" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "1__2.34" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "12.3__4" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "12_.34" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "12._34" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "12.34_" ) );
+		ENSURE_NOT( "Invalid input parsed by HReal", ep( "1_2_.34" ) );
 		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14ebad" ) );
 		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14e10a" ) );
 		ENSURE_NOT( "Invalid input parsed by HReal", ep( "3.14e-10a" ) );
