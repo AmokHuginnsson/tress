@@ -362,10 +362,10 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "HStringLiteral" )
 	typedef HArray<hcore::HString> strings_t;
 	strings_t s;
-	HRule sl( string_literal[push_back( s )] );
-	HRule r( sl >> *( ',' >> sl ) );
-	HExecutingParser ep( r );
 	/* simple */ {
+		HRule sl( string_literal[push_back( s )] );
+		HRule r( sl >> *( ',' >> sl ) );
+		HExecutingParser ep( r );
 		ENSURE( "HStringLiteral failed to parse correct input", ep( "\"Ala\",\"ma\",\"kota.\"" ) );
 		ep();
 		char const expected[][6] = {
@@ -380,7 +380,29 @@ TUT_UNIT_TEST( "HStringLiteral" )
 		}
 		ENSURE_EQUALS( "not all elemets acquired", i, yaal::size( expected ) );
 	}
+	/* quoting character */ {
+		HRule sl( string_literal( '\''_ycp )[push_back( s )] );
+		HRule r( sl >> *( ',' >> sl ) );
+		HExecutingParser ep( r );
+		ENSURE( "HStringLiteral failed to parse correct input", ep( "'Ala','ma','kota.'" ) );
+		s.clear();
+		ep();
+		char const expected[][6] = {
+			"Ala",
+			"ma",
+			"kota."
+		};
+		int i( 0 );
+		for ( strings_t::const_iterator it( s.begin() ), end( s.end() ); it != end; ++ it, ++ i ) {
+			ENSURE( "too many elements acquired", i < yaal::size( expected ) );
+			ENSURE_EQUALS( "Failed to acquire string from string literal", *it, expected[i] );
+		}
+		ENSURE_EQUALS( "not all elemets acquired", i, yaal::size( expected ) );
+	}
 	/* special */ {
+		HRule sl( string_literal[push_back( s )] );
+		HRule r( sl >> *( ',' >> sl ) );
+		HExecutingParser ep( r );
 		ENSURE(
 			"HStringLiteral failed to parse correct input",
 			ep(
@@ -415,12 +437,17 @@ TUT_UNIT_TEST( "HStringLiteral" )
 		}
 		ENSURE_EQUALS( "not all elemets acquired", i, yaal::size( expected ) );
 	}
-	ENSURE_NOT( "non-string literal parsed", ep( "Ala" ) );
-	ENSURE_NOT( "unfinished string literal parsed", ep( "\"Ala" ) );
-	ENSURE_NOT( "unfinished escape sequence string literal parsed", ep( "\"Ala\\" ) );
-	ENSURE_NOT( "string literal with invalid character parsed", ep( "\"Al\ba\"" ) );
-	ENSURE_NOT( "whitespace only input parsed", ep( " " ) );
-	ENSURE_NOT( "empty input parsed", ep( "" ) );
+	/* Invalid inputs */ {
+		HRule sl( string_literal[push_back( s )] );
+		HRule r( sl >> *( ',' >> sl ) );
+		HExecutingParser ep( r );
+		ENSURE_NOT( "non-string literal parsed", ep( "Ala" ) );
+		ENSURE_NOT( "unfinished string literal parsed", ep( "\"Ala" ) );
+		ENSURE_NOT( "unfinished escape sequence string literal parsed", ep( "\"Ala\\" ) );
+		ENSURE_NOT( "string literal with invalid character parsed", ep( "\"Al\ba\"" ) );
+		ENSURE_NOT( "whitespace only input parsed", ep( " " ) );
+		ENSURE_NOT( "empty input parsed", ep( "" ) );
+	}
 	/* action_t */ {
 		bool actionCalled( false );
 		HExecutingParser epa( string_literal[HStringLiteral::action_t( call( &defer<bool>::set, ref( actionCalled ), true ) )] );
@@ -437,6 +464,9 @@ TUT_UNIT_TEST( "HStringLiteral" )
 		ENSURE_EQUALS( "bad range size from string_literal's action", rng.size(), 5 );
 	}
 	/* hex and octal codes */ {
+		HRule sl( string_literal[push_back( s )] );
+		HRule r( sl >> *( ',' >> sl ) );
+		HExecutingParser ep( r );
 		s.clear();
 		ep( "\"a\\x20b\\\\x20c\\x0\",\"a\\x\",\"\\u1234\",\"\\U00102345\", \"\\1234\"" );
 		ep();
