@@ -111,7 +111,7 @@ TUT_UNIT_TEST( "grammar test" )
 		"listLiteral = ( '[' >> -argList >> ']' )",
 		"dictLiteral = ( '[' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> ']' )",
 		"lookupLiteral = ( '{' >> -( dictLiteralElement >> *( ',' >> dictLiteralElement ) ) >> '}' )",
-		"stringLiteral = string_literal",
+		"stringLiteral = string_literal<\">",
 		"setLiteral = ( '{' >> argument >> *( ',' >> argument ) >> '}' )",
 		"none = \"none\"",
 		"true = \"true\"",
