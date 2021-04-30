@@ -38,6 +38,7 @@ TUT_UNIT_TEST( "table_names" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "column_names" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	ENSURE_EQUALS(
 		"DatabaseConnection.column_names",
 		execute(
@@ -52,6 +53,7 @@ TUT_UNIT_TEST( "column_names" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "query" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	ENSURE_EQUALS(
 		"DatabaseConnection.query, Query, QueryResult",
 		execute(
@@ -104,6 +106,7 @@ TUT_UNIT_TEST( "query" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "connect invalid" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	ENSURE_EQUALS(
 		"DatabaseConnection.connect exception",
 		execute(
@@ -121,6 +124,7 @@ TUT_UNIT_TEST( "connect invalid" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "query invalid" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	ENSURE_EQUALS(
 		"DatabaseConnection.query exception",
 		execute(
@@ -139,6 +143,7 @@ TUT_UNIT_TEST( "query invalid" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "copy connection exception" )
+	HLock dl( HMonitor::get_instance().acquire( "database" ) );
 	ENSURE_EQUALS(
 		"DatabaseConnection.copy exception",
 		execute_except(
