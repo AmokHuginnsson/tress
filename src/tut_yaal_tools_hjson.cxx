@@ -62,6 +62,9 @@ HJSON make_json( void ) {
 		{ "real", 3.14159265359L },
 		{ "number", "2.718281828459045235360287471"_yn }
 	});
+	HJSON::HValue::members_t& empty( r["empty"].get_members() );
+	empty.insert( make_pair( "arr", HJSON::HValue::array_t() ) );
+	empty.insert( make_pair( "obj", HJSON::HValue::members_t() ) );
 	r["banner"] = "yaal's JSON generator";
 	r["literals"] = HJSON::HValue::array_t({ HJSON::HValue::LITERAL::TRUE, HJSON::HValue::LITERAL::FALSE,	HJSON::HValue::LITERAL::NULL });
 	return json;
@@ -70,6 +73,11 @@ HJSON make_json( void ) {
 #if TARGET_CPU_BITS == 64
 char const complexJSONnl[] =
 	"{\n"
+	"\t\"empty\": {\n"
+	"\t\t\"arr\": [],\n"
+	"\t\t\"obj\": {\n"
+	"\t\t}\n"
+	"\t},\n"
 	"\t\"number_like\": {\n"
 	"\t\t\"number\": 2.718281828459045235360287471,\n"
 	"\t\t\"int\": 13,\n"
@@ -94,6 +102,10 @@ char const complexJSONnl[] =
 
 char const complexJSON[] =
 	"{"
+	"\"empty\": {"
+	"\"arr\": [], "
+	"\"obj\": {}"
+	"}, "
 	"\"number_like\": {"
 	"\"number\": 2.718281828459045235360287471, "
 	"\"int\": 13, "
@@ -136,7 +148,12 @@ char const complexJSONnl[] =
 	"\t},\n"
 	"\t\"name\": \"nameValue\",\n"
 	"\t\"date\": \"1978-05-24\",\n"
-	"\t\"literals\": [true, false, null]\n"
+	"\t\"literals\": [true, false, null],\n"
+	"\t\"empty\": {\n"
+	"\t\t\"arr\": [],\n"
+	"\t\t\"obj\": {\n"
+	"\t\t}\n"
+	"\t}\n"
 	"}\n"
 ;
 
@@ -160,7 +177,11 @@ char const complexJSON[] =
 	"}, "
 	"\"name\": \"nameValue\", "
 	"\"date\": \"1978-05-24\", "
-	"\"literals\": [true, false, null]"
+	"\"literals\": [true, false, null], "
+	"\"empty\": {"
+	"\"arr\": [], "
+	"\"obj\": {}"
+	"}"
 	"}"
 ;
 #else
@@ -184,7 +205,12 @@ char const complexJSONnl[] =
 	"\t\"banner\": \"yaal's JSON generator\",\n"
 	"\t\"name\": \"nameValue\",\n"
 	"\t\"date\": \"1978-05-24\",\n"
-	"\t\"literals\": [true, false, null]\n"
+	"\t\"literals\": [true, false, null],\n"
+	"\t\"empty\": {\n"
+	"\t\t\"arr\": [],\n"
+	"\t\t\"obj\": {\n"
+	"\t\t}\n"
+	"\t}\n"
 	"}\n"
 ;
 
@@ -208,7 +234,11 @@ char const complexJSON[] =
 	"\"banner\": \"yaal's JSON generator\", "
 	"\"name\": \"nameValue\", "
 	"\"date\": \"1978-05-24\", "
-	"\"literals\": [true, false, null]"
+	"\"literals\": [true, false, null], "
+	"\"empty\": {"
+	"\"arr\": [], "
+	"\"obj\": {}"
+	"}"
 	"}"
 ;
 #endif
