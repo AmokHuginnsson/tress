@@ -127,6 +127,34 @@ char const complexJSON[] =
 	"}]"
 	"}"
 ;
+
+char const relaxedJSON[] =
+	"{"
+	"\"records\": [{"
+	"\"id\": 'int', "
+	"\"data\": 9"
+	"}, {"
+	"\"id\": \"float\", "
+	"\"data\": 12.345"
+	"}, {"
+	"\"id\": \"str\", "
+	"\"data\": \"yaal-JSON\","
+	"}], "
+	"\"banner\": \"yaal's JSON generator\", "
+	"\"number_like\": {"
+	"\"int\": 13, "
+	"'number': 2.718281828459045235360287471, "
+	"\"real\": 3.14159265359"
+	"}, "
+	"'name': \"nameValue\", "
+	"\"date\": \"1978-05-24\", "
+	"\"literals\": [true, false, null,], "
+	"\"empty\": {"
+	"\"arr\": [], "
+	"\"obj\": {}"
+	"}"
+	"}"
+;
 #elif defined( __HOST_OS_TYPE_RASPBIAN__ )
 char const complexJSONnl[] =
 	"{\n"
@@ -178,6 +206,34 @@ char const complexJSON[] =
 	"\"name\": \"nameValue\", "
 	"\"date\": \"1978-05-24\", "
 	"\"literals\": [true, false, null], "
+	"\"empty\": {"
+	"\"arr\": [], "
+	"\"obj\": {}"
+	"}"
+	"}"
+;
+
+char const relaxedJSON[] =
+	"{"
+	"\"records\": [{"
+	"\"id\": 'int', "
+	"\"data\": 9"
+	"}, {"
+	"\"id\": \"float\", "
+	"\"data\": 12.345"
+	"}, {"
+	"\"id\": \"str\", "
+	"\"data\": \"yaal-JSON\","
+	"}], "
+	"\"banner\": \"yaal's JSON generator\", "
+	"\"number_like\": {"
+	"\"int\": 13, "
+	"'number': 2.718281828459045235360287471, "
+	"\"real\": 3.14159265359"
+	"}, "
+	"'name': \"nameValue\", "
+	"\"date\": \"1978-05-24\", "
+	"\"literals\": [true, false, null,], "
 	"\"empty\": {"
 	"\"arr\": [], "
 	"\"obj\": {}"
@@ -239,6 +295,34 @@ char const complexJSON[] =
 	"\"arr\": [], "
 	"\"obj\": {}"
 	"}"
+	"}"
+;
+
+char const relaxedJSON[] =
+	"{"
+	"\"empty\": {"
+	"\"arr\": [], "
+	"\"obj\": {}"
+	"}, "
+	"\"records\": [{"
+	"\"id\": 'int', "
+	"\"data\": 9"
+	"}, {"
+	"\"id\": \"float\", "
+	"\"data\": 12.345"
+	"}, {"
+	"\"id\": \"str\", "
+	"\"data\": \"yaal-JSON\","
+	"}], "
+	"\"banner\": \"yaal's JSON generator\", "
+	"\"number_like\": {"
+	"\"int\": 13, "
+	"'number': 2.718281828459045235360287471, "
+	"\"real\": 3.14159265359"
+	"}, "
+	"'name': \"nameValue\", "
+	"\"date\": \"1978-05-24\", "
+	"\"literals\": [true, false, null,]"
 	"}"
 ;
 #endif
@@ -558,6 +642,17 @@ TUT_UNIT_TEST( "parse complex JSON" )
 	ss.str( complexJSONnl );
 	json.load( ss );
 	ENSURE_EQUALS( "[JSON] parsing complex JSON nl failed", json, expected );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "parse relaxed JSON" )
+	HJSON expected( make_json() );
+	HStringStream ss( relaxedJSON );
+	HJSON json;
+	ENSURE_THROW( "paring relaxed JSON with strict parser succeeded", json.load( ss ), HJSONException );
+	ss.str( relaxedJSON );
+	clog << "JSON: `" << ss.string() << "`" << endl;
+	json.load( ss, HJSON::PARSER::RELAXED );
+	ENSURE_EQUALS( "[JSON] parsing relaxed JSON failed", json, expected );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "compare JSON (==)" )
