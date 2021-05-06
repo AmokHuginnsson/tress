@@ -453,6 +453,18 @@ TUT_UNIT_TEST( "dict()" )
 		"[2: 2, 3: 3, 4: 4, 5: 5, 8: 8]"
 	);
 	ENSURE_EQUALS(
+		"dict sum of empty failed",
+		execute(
+			"main(){\n"
+			"d1=dict();\n"
+			"d2=dict();\n"
+			"d1.update(d2);\n"
+			"return(d1);\n"
+			"}\n"
+		),
+		"dict()"
+	);
+	ENSURE_EQUALS(
 		"dict.update on non-uniform succeeded",
 		execute_except( "main(){[1:2].update([2.:3.]);}" ),
 		"*anonymous stream*:1:20: Non-uniform key types, got a `real` instead of an `integer`."
