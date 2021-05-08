@@ -453,7 +453,7 @@ TUT_UNIT_TEST( "dict()" )
 		"[2: 2, 3: 3, 4: 4, 5: 5, 8: 8]"
 	);
 	ENSURE_EQUALS(
-		"dict sum of empty failed",
+		"dict update from empty failed",
 		execute(
 			"main(){\n"
 			"d1=dict();\n"
@@ -767,6 +767,18 @@ TUT_UNIT_TEST( "order()" )
 			"}\n"
 		),
 		"order(2, 3, 4, 5, 8)"
+	);
+	ENSURE_EQUALS(
+		"order update from empty failed",
+		execute(
+			"main(){\n"
+			"o1=order();\n"
+			"o2=order();\n"
+			"o1.update(o2);\n"
+			"return(o1);\n"
+			"}\n"
+		),
+		"order()"
 	);
 	ENSURE_EQUALS(
 		"order.update on non-uniform succeeded",
