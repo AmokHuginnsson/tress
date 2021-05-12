@@ -171,5 +171,34 @@ TUT_UNIT_TEST( "load" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "load (relaxed)" )
+	ENSURE_EQUALS(
+		"JSON.load of invalid JSON succeeded",
+		execute_except(
+			"import JSON as json;\n"
+			"import Text as text;\n"
+			"main(){\n"
+			"s = \"[{'data':\\\"text\\\"},{other:3.14}]\";\n"
+			"d = json.load(text.stream(s));\n"
+			"return(d);\n"
+			"}"
+		),
+		"*anonymous stream*:5:14: Uncaught JSONException: Invalid JSON data at position 2 in input stream, expected literal string"
+	);
+	ENSURE_EQUALS(
+		"JSON.load of invalid JSON succeeded",
+		execute(
+			"import JSON as json;\n"
+			"import Text as text;\n"
+			"main(){\n"
+			"s = \"[{'data':\\\"text\\\"},{other:3.14}]\";\n"
+			"d = json.load(text.stream(s), parser:json.PARSER.RELAXED);\n"
+			"return(d);\n"
+			"}"
+		),
+		"[{\"data\": \"text\"}, {\"other\": 3.14}]"
+	);
+TUT_TEARDOWN()
+
 }
 
