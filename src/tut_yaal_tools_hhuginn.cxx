@@ -456,6 +456,21 @@ TUT_UNIT_TEST( "partial" )
 		),
 		"[\"ZlZ\", \"mZ\", \"kotZ\"]"
 	);
+	ENSURE_EQUALS(
+		"partial mixed with list literal",
+		execute(
+			"import Algorithms as algo;\n"
+			"import Operators as oper;\n"
+			"scale(f, v) {\n"
+			"algo.materialize(algo.map(v, oper.multiply(~,f)),list);\n"
+			"}\n"
+			"main(){\n"
+			"p = scale( ~, [1., 2., 3.] );\n"
+			"p( 3. );\n"
+			"}\n"
+		),
+		"[3.0, 6.0, 9.0]"
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "exceptions" )
