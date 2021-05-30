@@ -376,5 +376,13 @@ TUT_UNIT_TEST( "Iwona" )
 	}
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Mensa 1601.51" )
+	ENSURE_EQUALS( "en 1601.51 failed", in_words_en( "1601.51", CURRENCY::DOLLAR ), "one thousand six hundred one dollars and fifty-one cents" );
+	ENSURE_EQUALS( "pl 1601.51 failed", in_words_pl( "1601.51", CURRENCY::PLN ), "jeden tysiąc sześćset jeden złotych pięćdziesiąt jeden groszy" );
+	ENSURE_EQUALS( "en 1001.51 failed", in_words_en( "1001.51", CURRENCY::DOLLAR ), "one thousand one dollars and fifty-one cents" );
+	ENSURE_EQUALS( "pl 1001.51 failed", in_words_pl( "1001.51", CURRENCY::PLN ), "jeden tysiąc jeden złoty pięćdziesiąt jeden groszy" );
+	ENSURE_EQUALS( "pl 1001001001001001001.01 failed", in_words_pl( "1001001001001001001.01", CURRENCY::PLN ), "jeden trylion jeden biliard jeden bilion jeden miliard jeden milion jeden tysiąc jeden złoty jeden grosz" );
+TUT_TEARDOWN()
+
 }
 
