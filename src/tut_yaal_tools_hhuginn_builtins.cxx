@@ -1021,7 +1021,7 @@ TUT_UNIT_TEST( "Stream read/write real" )
 		"(3.14159265, " M_STRINGIFY( SIZEOF_DOUBLE ) ")"
 	);
 	ENSURE_EQUALS(
-		"read/write of real (doble long) failed",
+		"read/write of real (double long) failed",
 		execute(
 			"import FileSystem as fs;\n"
 			"main() {\n"

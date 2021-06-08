@@ -56,7 +56,7 @@ TUT_UNIT_TEST( "binary manipulator for stream" )
 	::memcpy( &dl, &pattern64, 8 );
 	::memcpy( static_cast<char*>( static_cast<void*>( &dl ) ) + 8, &pattern64, 8 );
 	ss << bin << dl;
-	ENSURE_EQUALS( "double long failed", ss.consume(), "01011001010110010101100101011001010110010101100101011001010110010101100101011001" );
+	ENSURE_EQUALS( "double long failed", ss.consume(), "01011001010110011011001010110010101100101011001010110010101100101011001010110010000000000000000000000000000000000000000000000000" );
 #endif
 TUT_TEARDOWN()
 
