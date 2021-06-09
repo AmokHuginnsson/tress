@@ -22,7 +22,11 @@ struct tut_yaal_tools_hhuginn_base64 : public tress::tut_yaal_tools_hhuginn_base
 TUT_TEST_GROUP( tut_yaal_tools_hhuginn_base64, "yaal::tools::HHuginn.Base64" );
 
 #if SIZEOF_DOUBLE_LONG > SIZEOF_DOUBLE
+#	ifdef __aarch64__
+char const base64data[] = "\"5wMAAAAAAADlPVd4jRvSe9FCRLUfkgBASHVnaW5uLWJhc2U2NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==\"";
+#	else /* #	ifdef __aarch64__ */
 char const base64data[] = "\"5wMAAAAAAAAAAAAAAADSe9FCRLUfkgBASHVnaW5uLWJhc2U2NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==\"";
+#	endif /* #	else #	ifdef __aarch64__ */
 #else
 char const base64data[] = "\"5wMAAAAAAAAYLURU-yEJQEh1Z2lubi1iYXNlNjQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==\"";
 #endif
