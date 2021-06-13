@@ -56,7 +56,7 @@ void ensure( T const& msg, bool cond ) {
  * Tests provided condition.
  * Throws if true.
  */
-void ensure_not_impl( char const* file, int const& line, char const* msg, bool cond ) {
+void ensure_not_impl( char const* file, int line, char const* msg, bool cond ) {
 	if ( cond ) {
 		// TODO: default ctor?
 		throw failure( file, line, msg );
@@ -144,11 +144,11 @@ void ensure_equals( const char* msg, T const& actual, Q const& expected ) {
 }
 
 template<class T, class Q>
-void ensure_equals_impl( char const* file,
-	int line,
-	char const*,
+void ensure_equals_impl(
+	char const* file, int line, char const*,
 	yaal::hcore::HString const& msg,
-	T const& actual, Q const& expected ) {
+	T const& actual, Q const& expected
+) {
 	ensure_equals_impl<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected );
 }
 template<class T, class Q>
@@ -174,8 +174,10 @@ void ensure_equals_impl( char const* file, int line, char const* msg, T const& a
  * client code will not compile at all!
  */
 template<class T, class Q>
-void ensure_in_impl( char const* file, int line, char const*, std::string const& msg, const Q& actual,
-	const std::vector<T>& expected ) {
+void ensure_in_impl(
+	char const* file, int line, char const*, std::string const& msg,
+	T const& actual, std::vector<Q> const& expected
+) {
 	if ( ! ( std::find( expected.begin(), expected.end(), actual ) != expected.end() ) ) {
 		std::stringstream ss;
 		ss << msg
@@ -189,33 +191,30 @@ void ensure_in_impl( char const* file, int line, char const*, std::string const&
 	}
 }
 template<class T, class Q>
-void ensure_in( const char* msg, const Q& actual, const std::vector<T>& expected ) {
+void ensure_in( const char* msg, T const& actual, std::vector<Q> const& expected ) {
 	ensure_in_impl( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
-void ensure_in_impl( char const* file,
-	int const& line,
-	char const*,
+void ensure_in_impl(
+	char const* file, int line, char const*,
 	yaal::hcore::HString const& msg,
-	const Q& actual,
-	const std::vector<T>& expected ) {
+	T const& actual, std::vector<Q> const& expected
+) {
 	ensure_in_impl<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected );
 }
 template<class T, class Q>
-void ensure_in( yaal::hcore::HString const& msg, const Q& actual, const std::vector<T>& expected ) {
+void ensure_in( yaal::hcore::HString const& msg, T const& actual, std::vector<Q> const& expected ) {
 	ensure_in_impl( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
-void ensure_in_impl( char const* file, int const& line, char const*, char const* msg, const Q& actual,
-	const std::vector<T>& expected ) {
+void ensure_in_impl( char const* file, int line, char const*, char const* msg, T const& actual, std::vector<Q> const& expected ) {
 	ensure_in_impl<>( file, line, nullptr, std::string( msg ), actual, expected );
 }
 
 template<class T, class Q>
-void ensure_in_impl( char const* file, int const& line, char const* msg, const Q& actual,
-	const std::vector<T>& expected ) {
+void ensure_in_impl( char const* file, int line, char const* msg, T const& actual, std::vector<Q> const& expected ) {
 	ensure_in_impl<>( file, line, nullptr, msg, actual, expected );
 }
 
@@ -227,44 +226,59 @@ void ensure_in_impl( char const* file, int const& line, char const* msg, const Q
  * client code will not compile at all!
  */
 template<class T, class Q>
-void ensure_less_impl( char const* file, int line, char const*, std::string const& msg, const Q& actual,
-	const T& expected ) {
-	if ( ! ( actual < expected ) ) {
-		std::stringstream ss;
-		ss << msg
-		<< ( ! msg.empty() ? ":" : "" )
-		<< " [" << stream_escape( actual ) << "] expected being less than [" << stream_escape( expected ) << "]";
-		throw failure( file, line, ss.str().c_str() );
+void ensure_less_impl(
+	char const* file, int line, std::string const& msg,
+	char const* actualExpr, char const* expectedExpr,
+	T const& actual, Q const& expected
+) {
+	if ( actual < expected ) {
+		return;
 	}
+	std::stringstream ss;
+	ss << msg
+		<< ( ! msg.empty() ? ":" : "" )
+		<< " [" << stream_escape( actual ) << "] expected being less than [" << stream_escape( expected ) << "] ( " << actualExpr << " < " << expectedExpr << " )";
+	throw failure( file, line, ss.str().c_str() );
 }
 template<class T, class Q>
-void ensure_less( const char* msg, const Q& actual, const T& expected ) {
+void ensure_less_impl(
+	char const* file, int line, char const*, std::string const& msg,
+	T const& actual, Q const& expected
+) {
+	if ( actual < expected ) {
+		return;
+	}
+	std::stringstream ss;
+	ss << msg
+		<< ( ! msg.empty() ? ":" : "" )
+		<< " [" << stream_escape( actual ) << "] expected being less than [" << stream_escape( expected ) << "]";
+	throw failure( file, line, ss.str().c_str() );
+}
+template<class T, class Q>
+void ensure_less( const char* msg, T const& actual, Q const& expected ) {
 	ensure_less_impl( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
-void ensure_less_impl( char const* file,
-	int const& line,
-	char const*,
+void ensure_less_impl(
+	char const* file, int line, char const*,
 	yaal::hcore::HString const& msg,
-	const Q& actual,
-	const T& expected ) {
+	T const& actual, Q const& expected
+) {
 	ensure_less_impl<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected );
 }
 template<class T, class Q>
-void ensure_less( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
+void ensure_less( yaal::hcore::HString const& msg, T const& actual, Q const& expected ) {
 	ensure_less_impl( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
-void ensure_less_impl( char const* file, int const& line, char const*, char const* msg, const Q& actual,
-	const T& expected ) {
+void ensure_less_impl( char const* file, int line, char const*, char const* msg, T const& actual, Q const& expected ) {
 	ensure_less_impl<>( file, line, nullptr, std::string( msg ), actual, expected );
 }
 
 template<class T, class Q>
-void ensure_less_impl( char const* file, int const& line, char const* msg, const Q& actual,
-	const T& expected ) {
+void ensure_less_impl( char const* file, int line, char const* msg, T const& actual, Q const& expected ) {
 	ensure_less_impl<>( file, line, nullptr, msg, actual, expected );
 }
 
@@ -276,8 +290,7 @@ void ensure_less_impl( char const* file, int const& line, char const* msg, const
  * client code will not compile at all!
  */
 template<class T, class Q>
-void ensure_greater_impl( char const* file, int line, char const*, std::string const& msg, const Q& actual,
-	const T& expected ) {
+void ensure_greater_impl( char const* file, int line, char const*, std::string const& msg, T const& actual, Q const& expected ) {
 	if ( ! ( actual > expected ) ) {
 		std::stringstream ss;
 		ss << msg
@@ -287,33 +300,30 @@ void ensure_greater_impl( char const* file, int line, char const*, std::string c
 	}
 }
 template<class T, class Q>
-void ensure_greater( const char* msg, const Q& actual, const T& expected ) {
+void ensure_greater( const char* msg, T const& actual, Q const& expected ) {
 	ensure_greater_impl( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
-void ensure_greater_impl( char const* file,
-	int const& line,
-	char const*,
+void ensure_greater_impl(
+	char const* file, int line, char const*,
 	yaal::hcore::HString const& msg,
-	const Q& actual,
-	const T& expected ) {
+	T const& actual, Q const& expected
+) {
 	ensure_greater_impl<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected );
 }
 template<class T, class Q>
-void ensure_greater( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
+void ensure_greater( yaal::hcore::HString const& msg, T const& actual, Q const& expected ) {
 	ensure_greater_impl( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
-void ensure_greater_impl( char const* file, int const& line, char const*, char const* msg, const Q& actual,
-	const T& expected ) {
+void ensure_greater_impl( char const* file, int line, char const*, char const* msg, T const& actual, Q const& expected ) {
 	ensure_greater_impl<>( file, line, nullptr, std::string( msg ), actual, expected );
 }
 
 template<class T, class Q>
-void ensure_greater_impl( char const* file, int const& line, char const* msg, const Q& actual,
-	const T& expected ) {
+void ensure_greater_impl( char const* file, int line, char const* msg, T const& actual, Q const& expected ) {
 	ensure_greater_impl<>( file, line, nullptr, msg, actual, expected );
 }
 
@@ -325,8 +335,7 @@ void ensure_greater_impl( char const* file, int const& line, char const* msg, co
  * client code will not compile at all!
  */
 template<class T, class Q>
-void ensure_less_or_equal_impl( char const* file, int line, char const*, std::string const& msg, const Q& actual,
-	const T& expected ) {
+void ensure_less_or_equal_impl( char const* file, int line, char const*, std::string const& msg, T const& actual, Q const& expected ) {
 	if ( ! ( actual <= expected ) ) {
 		std::stringstream ss;
 		ss << msg
@@ -341,28 +350,25 @@ void ensure_less_or_equal( const char* msg, const Q& actual, const T& expected )
 }
 
 template<class T, class Q>
-void ensure_less_or_equal_impl( char const* file,
-	int const& line,
-	char const*,
+void ensure_less_or_equal_impl(
+	char const* file, int line, char const*,
 	yaal::hcore::HString const& msg,
-	const Q& actual,
-	const T& expected ) {
+	T const& actual, Q const& expected
+) {
 	ensure_less_or_equal_impl<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected );
 }
 template<class T, class Q>
-void ensure_less_or_equal( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
+void ensure_less_or_equal( yaal::hcore::HString const& msg, Q const& actual, T const& expected ) {
 	ensure_less_or_equal_impl( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
-void ensure_less_or_equal_impl( char const* file, int const& line, char const*, char const* msg, const Q& actual,
-	const T& expected ) {
+void ensure_less_or_equal_impl( char const* file, int line, char const*, char const* msg, T const& actual, Q const& expected ) {
 	ensure_less_or_equal_impl<>( file, line, nullptr, std::string( msg ), actual, expected );
 }
 
 template<class T, class Q>
-void ensure_less_or_equal_impl( char const* file, int const& line, char const* msg, const Q& actual,
-	const T& expected ) {
+void ensure_less_or_equal_impl( char const* file, int line, char const* msg, T const& actual, Q const& expected ) {
 	ensure_less_or_equal_impl<>( file, line, nullptr, msg, actual, expected );
 }
 
@@ -374,8 +380,7 @@ void ensure_less_or_equal_impl( char const* file, int const& line, char const* m
  * client code will not compile at all!
  */
 template<class T, class Q>
-void ensure_greater_or_equal_impl( char const* file, int line, char const*, std::string const& msg, const Q& actual,
-	const T& expected ) {
+void ensure_greater_or_equal_impl( char const* file, int line, char const*, std::string const& msg, T const& actual, Q const& expected ) {
 	if ( ! ( actual >= expected ) ) {
 		std::stringstream ss;
 		ss << msg
@@ -386,33 +391,30 @@ void ensure_greater_or_equal_impl( char const* file, int line, char const*, std:
 }
 
 template<class T, class Q>
-void ensure_greater_or_equal( const char* msg, const Q& actual, const T& expected ) {
+void ensure_greater_or_equal( const char* msg, T const& actual, Q const& expected ) {
 	ensure_greater_or_equal_impl( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
-void ensure_greater_or_equal_impl( char const* file,
-	int const& line,
-	char const*,
+void ensure_greater_or_equal_impl(
+	char const* file, int line, char const*,
 	yaal::hcore::HString const& msg,
-	const Q& actual,
-	const T& expected ) {
+	T const& actual, Q const& expected
+) {
 	ensure_greater_or_equal_impl<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected );
 }
 template<class T, class Q>
-void ensure_greater_or_equal( yaal::hcore::HString const& msg, const Q& actual, const T& expected ) {
+void ensure_greater_or_equal( yaal::hcore::HString const& msg, T const& actual, Q const& expected ) {
 	ensure_greater_or_equal_impl( nullptr, 0, nullptr, msg, actual, expected );
 }
 
 template<class T, class Q>
-void ensure_greater_or_equal_impl( char const* file, int const& line, char const*, char const* msg, const Q& actual,
-	const T& expected ) {
+void ensure_greater_or_equal_impl( char const* file, int line, char const*, char const* msg, T const& actual, Q const& expected ) {
 	ensure_greater_or_equal_impl<>( file, line, nullptr, std::string( msg ), actual, expected );
 }
 
 template<class T, class Q>
-void ensure_greater_or_equal_impl( char const* file, int const& line, char const* msg, const Q& actual,
-	const T& expected ) {
+void ensure_greater_or_equal_impl( char const* file, int line, char const* msg, T const& actual, Q const& expected ) {
 	ensure_greater_or_equal_impl<>( file, line, nullptr, msg, actual, expected );
 }
 
@@ -426,8 +428,7 @@ void ensure_greater_or_equal_impl( char const* file, int const& line, char const
  * operators + and -, and be comparable.
  */
 template<class T>
-void ensure_distance_impl( char const* file, int const& line, char const*, std::string const& msg, const T& actual,
-	const T& expected, const T& distance ) {
+void ensure_distance_impl( char const* file, int line, char const*, std::string const& msg, T const& actual, T const& expected, T const& distance ) {
 	if ( ( ( expected - distance ) >= actual ) || ( ( expected + distance ) <= actual ) ) {
 		std::stringstream ss;
 		ss << msg
@@ -440,18 +441,19 @@ void ensure_distance_impl( char const* file, int const& line, char const*, std::
 }
 
 template<class T>
-void ensure_distance( const char* msg, const T& actual, const T& expected, const T& distance ) {
+void ensure_distance( const char* msg, T const& actual, T const& expected, T const& distance ) {
 	ensure_distance_impl( nullptr, 0, nullptr, msg, actual, expected, distance );
 }
 
 template<class T>
-void ensure_distance_impl( char const* file, int const& line, char const*,
-	yaal::hcore::HString const& msg, const T& actual,
-	const T& expected, const T& distance ) {
+void ensure_distance_impl(
+	char const* file, int line, char const*, yaal::hcore::HString const& msg,
+	T const& actual, T const& expected, T const& distance
+) {
 	ensure_distance_impl<>( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual, expected, distance );
 }
 template<class T>
-void ensure_distance( yaal::hcore::HString const& msg, const T& actual, const T& expected, const T& distance ) {
+void ensure_distance( yaal::hcore::HString const& msg, T const& actual, T const& expected, T const& distance ) {
 	ensure_distance_impl( nullptr, 0, nullptr, msg, actual, expected, distance );
 }
 
@@ -467,7 +469,7 @@ void ensure_distance_impl( char const* file, int line, const char* msg, const T&
 	ensure_distance_impl<>( file, line, nullptr, msg, actual, expected, distance );
 }
 
-void ensure_same_content_impl( char const* file, int const& line, char const*, std::string const& msg, std::string const& actual_, std::string const& expected_ ) {
+void ensure_same_content_impl( char const* file, int line, char const*, std::string const& msg, std::string const& actual_, std::string const& expected_ ) {
 	std::ifstream actual( actual_.c_str() );
 	std::ifstream expected( expected_.c_str() );
 	std::string actualLine;
@@ -505,7 +507,7 @@ inline void ensure_same_content( std::string const& msg, std::string const& actu
 	ensure_same_content_impl( nullptr, 0, nullptr, msg, actual_, expected_ );
 }
 
-void ensure_same_content_impl( char const* file, int const& line, char const*, yaal::hcore::HString const& msg, std::string const& actual_, std::string const& expected_ ) {
+void ensure_same_content_impl( char const* file, int line, char const*, yaal::hcore::HString const& msg, std::string const& actual_, std::string const& expected_ ) {
 	ensure_same_content_impl( file, line, nullptr, yaal::lexical_cast<std::string>( msg ), actual_, expected_ );
 }
 
@@ -513,15 +515,15 @@ inline void ensure_same_content( yaal::hcore::HString const& msg, std::string co
 	ensure_same_content_impl( nullptr, 0, nullptr, msg, actual_, expected_ );
 }
 
-inline void ensure_same_content_impl( char const* file, int const& line, char const*, char const* msg, std::string const& actual_, std::string const& expected_ ) {
+inline void ensure_same_content_impl( char const* file, int line, char const*, char const* msg, std::string const& actual_, std::string const& expected_ ) {
 	ensure_same_content_impl( file, line, nullptr, std::string( msg ), actual_, expected_ );
 }
 
-inline void ensure_same_content_impl( char const* file, int const& line, char const* msg, std::string const& actual_, std::string const& expected_ ) {
+inline void ensure_same_content_impl( char const* file, int line, char const* msg, std::string const& actual_, std::string const& expected_ ) {
 	ensure_same_content_impl( file, line, nullptr, std::string( msg ), actual_, expected_ );
 }
 
-void ensure_errno_impl( char const* file, int const& line, char const*, char const* msg, bool cond ) {
+void ensure_errno_impl( char const* file, int line, char const*, char const* msg, bool cond ) {
 	if( ! cond ) {
 #if defined(TUT_USE_POSIX)
 		char e[512];
