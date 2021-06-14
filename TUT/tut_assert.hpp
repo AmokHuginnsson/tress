@@ -290,14 +290,30 @@ void ensure_less_impl( char const* file, int line, char const* msg, T const& act
  * client code will not compile at all!
  */
 template<class T, class Q>
+void ensure_greater_impl(
+	char const* file, int line, std::string const& msg,
+	char const* actualExpr, char const* expectedExpr,
+	T const& actual, Q const& expected
+) {
+	if ( actual > expected ) {
+		return;
+	}
+	std::stringstream ss;
+	ss << msg
+		<< ( ! msg.empty() ? ":" : "" )
+		<< " [" << stream_escape( actual ) << "] expected being greater than [" << stream_escape( expected ) << "] ( " << actualExpr << " > " << expectedExpr << " )";
+	throw failure( file, line, ss.str().c_str() );
+}
+template<class T, class Q>
 void ensure_greater_impl( char const* file, int line, char const*, std::string const& msg, T const& actual, Q const& expected ) {
-	if ( ! ( actual > expected ) ) {
-		std::stringstream ss;
-		ss << msg
+	if ( actual > expected ) {
+		return;
+	}
+	std::stringstream ss;
+	ss << msg
 		<< ( ! msg.empty() ? ":" : "" )
 		<< " [" << stream_escape( actual ) << "] expected being greater than [" << stream_escape( expected ) << "]";
-		throw failure( file, line, ss.str().c_str() );
-	}
+	throw failure( file, line, ss.str().c_str() );
 }
 template<class T, class Q>
 void ensure_greater( const char* msg, T const& actual, Q const& expected ) {
