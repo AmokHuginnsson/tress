@@ -73,8 +73,9 @@ void ensure_not( char const* msg, bool cond ) {
  */
 template<typename T>
 void ensure_not_impl( char const* file, int line, char const*, T const& msg, bool cond ) {
-	if ( cond )
+	if ( cond ) {
 		throw failure( file, line, msg );
+	}
 }
 template<typename T>
 void ensure_not( T const& msg, bool cond ) {
@@ -362,7 +363,7 @@ void ensure_less_or_equal_impl(
 	std::stringstream ss;
 	ss << msg
 		<< ( ! msg.empty() ? ":" : "" )
-		<< " [" << stream_escape( actual ) << "] expected being less or equal than [" << stream_escape( expected ) << "] ( " << actualExpr << " > " << expectedExpr << " )";
+		<< " [" << stream_escape( actual ) << "] expected being less or equal than [" << stream_escape( expected ) << "] ( " << actualExpr << " <= " << expectedExpr << " )";
 	throw failure( file, line, ss.str().c_str() );
 }
 template<class T, class Q>
@@ -412,14 +413,30 @@ void ensure_less_or_equal_impl( char const* file, int line, char const* msg, T c
  * client code will not compile at all!
  */
 template<class T, class Q>
-void ensure_greater_or_equal_impl( char const* file, int line, char const*, std::string const& msg, T const& actual, Q const& expected ) {
-	if ( ! ( actual >= expected ) ) {
-		std::stringstream ss;
-		ss << msg
-			<< ( ! msg.empty() ? ":" : "" )
-			<< " [" << stream_escape( actual ) << "] expected being greater or equal than [" << stream_escape( expected ) << "]";
-		throw failure( file, line, ss.str().c_str() );
+void ensure_greater_or_equal_impl(
+	char const* file, int line, std::string const& msg,
+	char const* actualExpr, char const* expectedExpr,
+	T const& actual, Q const& expected
+) {
+	if ( actual >= expected ) {
+		return;
 	}
+	std::stringstream ss;
+	ss << msg
+		<< ( ! msg.empty() ? ":" : "" )
+		<< " [" << stream_escape( actual ) << "] expected being greater or equal than [" << stream_escape( expected ) << "] ( " << actualExpr << " >= " << expectedExpr << " )";
+	throw failure( file, line, ss.str().c_str() );
+}
+template<class T, class Q>
+void ensure_greater_or_equal_impl( char const* file, int line, char const*, std::string const& msg, T const& actual, Q const& expected ) {
+	if ( actual >= expected ) {
+		return;
+	}
+	std::stringstream ss;
+	ss << msg
+		<< ( ! msg.empty() ? ":" : "" )
+		<< " [" << stream_escape( actual ) << "] expected being greater or equal than [" << stream_escape( expected ) << "]";
+	throw failure( file, line, ss.str().c_str() );
 }
 
 template<class T, class Q>
