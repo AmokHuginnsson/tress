@@ -49,7 +49,10 @@
 #define ENSURE_EQUALS_NARG_N__( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_equals_impl( __FILE__, __LINE__, TUT_STRINGIFY( # __VA_ARGS__ ), __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
 #define ENSURE_EQUALS( ... ) TUT_MACRO_ARGC( 2_3, ENSURE_EQUALS_NARG_, __VA_ARGS__ )
 
-#define ENSURE_IN( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_in_impl( __FILE__, __LINE__, TUT_STRINGIFY( # __VA_ARGS__ ), __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
+#define ENSURE_IN_NARG_2( actual, expected ) do { this->set_current_line( __LINE__ );  tut::ensure_in_impl( __FILE__, __LINE__, # actual " ∈ " # expected, ( actual ), ( expected ) ); this->set_current_line( __LINE__ + 1 ); } while ( false )
+#define ENSURE_IN_NARG_3( message, actual, expected ) do { this->set_current_line( __LINE__ );  tut::ensure_in_impl( __FILE__, __LINE__, message, #actual, #expected, ( actual ), ( expected ) ); this->set_current_line( __LINE__ + 1 ); } while ( false )
+#define ENSURE_IN_NARG_N__( ... ) do { this->set_current_line( __LINE__ );  tut::ensure_in_impl( __FILE__, __LINE__, TUT_STRINGIFY( # __VA_ARGS__ ), __VA_ARGS__ ); this->set_current_line( __LINE__ + 1 ); } while ( false )
+#define ENSURE_IN( ... ) TUT_MACRO_ARGC( 2_3, ENSURE_IN_NARG_, __VA_ARGS__ )
 
 #define ENSURE_LESS_NARG_2( actual, expected ) do { this->set_current_line( __LINE__ );  tut::ensure_less_impl( __FILE__, __LINE__, # actual " < " # expected, ( actual ), ( expected ) ); this->set_current_line( __LINE__ + 1 ); } while ( false )
 #define ENSURE_LESS_NARG_3( message, actual, expected ) do { this->set_current_line( __LINE__ );  tut::ensure_less_impl( __FILE__, __LINE__, message, #actual, #expected, ( actual ), ( expected ) ); this->set_current_line( __LINE__ + 1 ); } while ( false )

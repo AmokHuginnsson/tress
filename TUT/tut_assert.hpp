@@ -176,20 +176,32 @@ void ensure_equals_impl( char const* file, int line, char const* msg, T const& a
  */
 template<class T, class Q>
 void ensure_in_impl(
+	char const* file, int line, std::string const& msg,
+	char const* actualExpr, char const* expectedExpr,
+	T const& actual, std::vector<Q> const& expected
+) {
+	if ( std::find( expected.begin(), expected.end(), actual ) != expected.end() ) {
+		return;
+	}
+	std::stringstream ss;
+	ss << msg
+		<< ( ! msg.empty() ? ":" : "" )
+		<< " actual [" << stream_escape( actual ) << "]"
+		<< " expected to be one of";
+	for ( T const& v : expected ) {
+		ss << " [" << stream_escape( v ) << "]";
+	}
+	if ( actualExpr && expectedExpr ) {
+		ss << " (" << actualExpr << " ∈ " << expectedExpr << ")";
+	}
+	throw failure( file, line, ss.str().c_str() );
+}
+template<class T, class Q>
+void ensure_in_impl(
 	char const* file, int line, char const*, std::string const& msg,
 	T const& actual, std::vector<Q> const& expected
 ) {
-	if ( ! ( std::find( expected.begin(), expected.end(), actual ) != expected.end() ) ) {
-		std::stringstream ss;
-		ss << msg
-			<< ( ! msg.empty() ? ":" : "" )
-			<< " expected one of";
-		for ( T const& v : expected ) {
-			ss << " [" << stream_escape( v ) << "]";
-		}
-		ss << " actual [" << stream_escape( actual ) << "]";
-		throw failure( file, line, ss.str().c_str() );
-	}
+	ensure_in_impl( file, line, msg, nullptr, nullptr, actual, expected );
 }
 template<class T, class Q>
 void ensure_in( const char* msg, T const& actual, std::vector<Q> const& expected ) {
