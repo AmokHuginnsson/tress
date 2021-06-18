@@ -130,14 +130,7 @@ void ensure_equals_impl(
 }
 template<class T, class Q>
 void ensure_equals_impl( char const* file, int line, char const*, std::string const& msg, T const& actual, Q const& expected ) {
-	if ( actual == expected ) {
-		return;
-	}
-	std::stringstream ss;
-	ss << msg
-		<< ( ! msg.empty() ? ":" : "" )
-		<< " actual [" << stream_escape( actual ) << "] expected [" << stream_escape( expected ) << "]";
-	throw failure( file, line, ss.str().c_str() );
+	ensure_equals_impl( file, line, msg, nullptr, nullptr, actual, expected );
 }
 template<class T, class Q>
 void ensure_equals( const char* msg, T const& actual, Q const& expected ) {
@@ -258,14 +251,7 @@ void ensure_less_impl(
 	char const* file, int line, char const*, std::string const& msg,
 	T const& actual, Q const& expected
 ) {
-	if ( actual < expected ) {
-		return;
-	}
-	std::stringstream ss;
-	ss << msg
-		<< ( ! msg.empty() ? ":" : "" )
-		<< " [" << stream_escape( actual ) << "] expected being less than [" << stream_escape( expected ) << "]";
-	throw failure( file, line, ss.str().c_str() );
+	ensure_less_impl( file, line, msg, nullptr, nullptr, actual, expected );
 }
 template<class T, class Q>
 void ensure_less( const char* msg, T const& actual, Q const& expected ) {
@@ -319,14 +305,7 @@ void ensure_greater_impl(
 }
 template<class T, class Q>
 void ensure_greater_impl( char const* file, int line, char const*, std::string const& msg, T const& actual, Q const& expected ) {
-	if ( actual > expected ) {
-		return;
-	}
-	std::stringstream ss;
-	ss << msg
-		<< ( ! msg.empty() ? ":" : "" )
-		<< " [" << stream_escape( actual ) << "] expected being greater than [" << stream_escape( expected ) << "]";
-	throw failure( file, line, ss.str().c_str() );
+	ensure_greater_impl( file, line, msg, nullptr, nullptr, actual, expected );
 }
 template<class T, class Q>
 void ensure_greater( const char* msg, T const& actual, Q const& expected ) {
@@ -380,14 +359,7 @@ void ensure_less_or_equal_impl(
 }
 template<class T, class Q>
 void ensure_less_or_equal_impl( char const* file, int line, char const*, std::string const& msg, T const& actual, Q const& expected ) {
-	if ( actual <= expected ) {
-		return;
-	}
-	std::stringstream ss;
-	ss << msg
-		<< ( ! msg.empty() ? ":" : "" )
-		<< " [" << stream_escape( actual ) << "] expected being less or equal than [" << stream_escape( expected ) << "]";
-	throw failure( file, line, ss.str().c_str() );
+	ensure_less_or_equal_impl( file, line, msg, nullptr, nullptr, actual, expected );
 }
 template<class T, class Q>
 void ensure_less_or_equal( const char* msg, const Q& actual, const T& expected ) {
@@ -441,14 +413,7 @@ void ensure_greater_or_equal_impl(
 }
 template<class T, class Q>
 void ensure_greater_or_equal_impl( char const* file, int line, char const*, std::string const& msg, T const& actual, Q const& expected ) {
-	if ( actual >= expected ) {
-		return;
-	}
-	std::stringstream ss;
-	ss << msg
-		<< ( ! msg.empty() ? ":" : "" )
-		<< " [" << stream_escape( actual ) << "] expected being greater or equal than [" << stream_escape( expected ) << "]";
-	throw failure( file, line, ss.str().c_str() );
+	ensure_greater_or_equal_impl( file, line, msg, nullptr, nullptr, actual, expected );
 }
 
 template<class T, class Q>
