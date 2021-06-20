@@ -181,7 +181,7 @@ void ensure_in_impl(
 		<< ( ! msg.empty() ? ":" : "" )
 		<< " actual [" << stream_escape( actual ) << "]"
 		<< " expected to be one of";
-	for ( T const& v : expected ) {
+	for ( Q const& v : expected ) {
 		ss << " [" << stream_escape( v ) << "]";
 	}
 	if ( actualExpr && expectedExpr ) {

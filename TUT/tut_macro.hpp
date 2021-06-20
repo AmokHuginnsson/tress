@@ -33,8 +33,8 @@
 #define TUT_STRINGIFY( ... ) TUT_STRINGIFY_REAL( __VA_ARGS__ )
 #endif
 #define TUT_EXPAND( x ) x
-#define TUT_ARG_COUNT_2_3(...) TUT_ARG_COUNT_2_3_( , ##__VA_ARGS__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, 3, 2, N__, N__ )
-#define TUT_ARG_COUNT_2_3_( z, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, cnt, ... ) cnt
+#define TUT_ARG_COUNT_2_3(...) TUT_ARG_COUNT_2_3_( __VA_ARGS__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, N__, 3, 2, N__, N__ )
+#define TUT_ARG_COUNT_2_3_( a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, cnt, ... ) cnt
 #define TUT_CONCAT_REAL( a, b ) a ## b
 #define TUT_CONCAT( a, b ) TUT_CONCAT_REAL( a, b )
 #define TUT_MACRO_ARGC_HELPER_2( MACRO, NUM, ... ) TUT_EXPAND( TUT_CONCAT( MACRO, NUM )( __VA_ARGS__ ) )
