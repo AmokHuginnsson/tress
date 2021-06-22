@@ -342,6 +342,11 @@ TUT_UNIT_TEST( "construct from string" )
 	char const* const lns17 = "12345678901234567890.00000000000123456789";
 	HNumber ln17( lns17 );
 	ENSURE_EQUALS( "number ln17 not created correctly", ln17.to_string(), lns17 );
+
+	char const* const lns18 = "123_456_789";
+	char const* const lns18r = "123456789";
+	HNumber ln18( lns18 );
+	ENSURE_EQUALS( "number ln18 not created correctly", ln18.to_string(), lns18r );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "construct from string (prefixes)" )
