@@ -454,16 +454,48 @@ void ensure_greater_or_equal_impl( char const* file, int line, char const* msg, 
  * operators + and -, and be comparable.
  */
 template<class T>
-void ensure_distance_impl( char const* file, int line, char const*, std::string const& msg, T const& actual, T const& expected, T const& distance ) {
-	if ( ( ( expected - distance ) >= actual ) || ( ( expected + distance ) <= actual ) ) {
-		std::stringstream ss;
-		ss << msg
-			<< ( ! msg.empty() ? ":" : "" )
-			<< " expected ("
-			<< expected - distance
-			<< ";" << expected + distance << ") actual [" << actual << "] distance <" << distance << ">";
-		throw failure( file, line, ss.str().c_str() );
+void ensure_distance_impl(
+	char const* file, int line, std::string const& msg,
+	char const* actualExpr, char const* expectedExpr, char const* distanceExpr,
+	T const& actual, T const& expected, T const& distance
+) {
+	if ( std::abs( expected - actual ) < distance ) {
+		return;
 	}
+	std::stringstream ss;
+	ss << msg
+		<< ( ! msg.empty() ? ":" : "" )
+		<< " expected ("
+		<< expected - distance
+		<< ";" << expected + distance << ") actual [" << actual << "] distance <" << distance << ">";
+	if ( actualExpr && expectedExpr && distanceExpr ) {
+		ss << " (|" << actualExpr << " - " << expectedExpr << "| < " << distanceExpr << ")";
+	}
+	throw failure( file, line, ss.str().c_str() );
+}
+template<class T>
+void ensure_distance_impl(
+	char const* file, int line, yaal::hcore::HString const& msg,
+	char const* actualExpr, char const* expectedExpr, char const* distanceExpr,
+	T const& actual, T const& expected, T const& distance
+) {
+	ensure_distance_impl( file, line, yaal::lexical_cast<std::string>( msg ), actualExpr, expectedExpr, distanceExpr, actual, expected, distance );
+}
+template<class T>
+void ensure_distance_impl(
+	char const* file, int line, char const* msg,
+	char const* actualExpr, char const* expectedExpr, char const* distanceExpr,
+	T const& actual, T const& expected, T const& distance
+) {
+	ensure_distance_impl( file, line, std::string( msg ), actualExpr, expectedExpr, distanceExpr, actual, expected, distance );
+}
+
+template<class T>
+void ensure_distance_impl(
+	char const* file, int line, char const*, std::string const& msg,
+	T const& actual, T const& expected, T const& distance
+) {
+	ensure_distance_impl( file, line, msg, nullptr, nullptr, nullptr, actual, expected, distance );
 }
 
 template<class T>
