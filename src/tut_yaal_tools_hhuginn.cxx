@@ -1246,6 +1246,40 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "bugs regressions checks" )
 	ENSURE_EQUALS(
+		"return from (switch) `case` with \"unreachable\" statement",
+		execute(
+			"main() {\n"
+			"switch ( 1 ) {\n"
+			"case ( 0 ): { } break;\n"
+			"case ( 1 ): {\n"
+			"if ( true ) { return ( 7 ); }\n"
+			"} break;\n"
+			"case ( 2 ): { } break;\n"
+			"default: { return ( 13 ); }\n"
+			"}\n"
+			"return ( 0 );\n"
+			"}"
+		),
+		"7"
+	);
+	ENSURE_EQUALS(
+		"return from (switch) `default` with \"unreachable\" statement",
+		execute(
+			"main() {\n"
+			"switch ( 3 ) {\n"
+			"case ( 0 ): { } break;\n"
+			"case ( 1 ): { return ( 7 ); }\n"
+			"case ( 2 ): { } break;\n"
+			"default: {\n"
+			"return ( 13 );\n"
+			"}\n"
+			"}\n"
+			"return ( 0 );\n"
+			"}"
+		),
+		"13"
+	);
+	ENSURE_EQUALS(
 		"updating arg failed",
 		execute(
 			"f( s_ ) {\n"
