@@ -33,4 +33,5 @@ Debug/
 .ecut-sources/
 local.mk.off
 tress.suites
+huginn-samples
 
