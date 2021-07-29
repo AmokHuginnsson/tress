@@ -622,6 +622,14 @@ TUT_UNIT_TEST_S( "inputs" )
 	ENSURE_EQUALS( "pointer input failed", p, reinterpret_cast<void*>( static_cast<size_t>( 0x1234 ) ) );
 TUT_TEARDOWN_S()
 
+TUT_UNIT_TEST( "full text from stream to string" )
+	char const expected[] = "żółćżółćżółćżółćżółćżółćżółćżółć";
+	HStringStream ss( expected );
+	HString s;
+	ss >> s;
+	ENSURE_EQUALS( "getting full text to single string from stream failed", s, expected );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST_S( "binary I/O" )
 	char const PATH[] = "./out/binary.bin";
 	HFile f( PATH, HFile::OPEN::WRITING );
