@@ -65,6 +65,16 @@ TUT_UNIT_TEST( "binary manipulator for stream" )
 #endif
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "cat" )
+	HString s1( "żółćżółćżółćżółćżółćżółćżółćżółćżółćżółćżółćżółćżółćżółćżółćżółćżółćżółćżółć" );
+	HString s2( "ŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆŻÓŁĆ" );
+	HStringStream ss1( s1 );
+	HStringStream ss2( s2 );
+	HString s;
+	cat( &ss1, &ss2 ) >> s;
+	ENSURE_EQUALS( "cat failed", s, s1 + s2 );
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "tee" )
 	HStringStream ss1;
 	HStringStream ss2;
