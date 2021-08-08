@@ -763,5 +763,47 @@ TUT_UNIT_TEST_S( "consume" )
 	ENSURE_EQUALS( "int value read fail", i1, 2 );
 TUT_TEARDOWN_S()
 
+TUT_UNIT_TEST_S( "unread" )
+	static char src[] = "ot2";
+	HStringStream& ss( string_stream( buffered ? true : false ) );
+	ss.str( src );
+	int i0( 0 );
+	int i1( 0 );
+	_ss.unread( "1k", 2 );
+	_ss >> i0;
+	_ss.consume( "ala" );
+	_ss >> i1;
+	ENSURE_EQUALS( "int value read fail", i0, 1 );
+	ENSURE_EQUALS( "consume failed", i1, 0 );
+	_ss.clear();
+	_ss.consume( "kot" );
+	_ss >> i1;
+	ENSURE_EQUALS( "int value read fail", i1, 2 );
+TUT_TEARDOWN_S()
+
+TUT_UNIT_TEST( "unread after unflushed write" )
+	HFile f( "out/unflushed-unread.txt", HFile::OPEN::WRITING );
+	f << "prev text next word";
+	f.close();
+	f.open( "out/unflushed-unread.txt", HFile::OPEN::READING | HFile::OPEN::WRITING );
+	f.set_buffered_io( true );
+	f << "some data";
+	HString s;
+	f >> s;
+	ENSURE_EQUALS( "read in RW mode failed", s, "next" );
+	f.close();
+	f.open( "out/unflushed-unread.txt", HFile::OPEN::READING | HFile::OPEN::WRITING );
+	f << "SOME DATA";
+	f.unread( " byte", 5 );
+	f >> s;
+	ENSURE_EQUALS( "read of unread after write in RW mode failed", s, "byte" );
+	f >> s;
+	ENSURE_EQUALS( "read after unread in RW mode failed", s, "next" );
+	f.close();
+	f.open( "out/unflushed-unread.txt", HFile::OPEN::READING );
+	getline( f, s );
+	ENSURE_EQUALS( "auto-flush after unread in RW mode failed", s, "SOME DATA next word" );
+TUT_TEARDOWN()
+
 }
 
