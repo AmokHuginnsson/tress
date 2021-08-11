@@ -192,13 +192,14 @@ void gather_groups_from_file( OSetup::set_definitions_t& lst ) {
 	HFile file;
 	if ( setup._testGroupListFilePath == "-" ) {
 		file.open( stdin, HFile::OWNERSHIP::EXTERNAL );
+		file.set_buffered_io( false );
 	}
 	if ( ! file && file.open( setup._testGroupListFilePath, HFile::OPEN::READING ) ) {
 		cout << file.get_error() << ": " << file.get_path() << endl;
 		throw 0;
 	}
 	HString line;
-	while ( file.read_line( line, ( setup._testGroupListFilePath == "-" ) ? HFile::READ::UNBUFFERED_READS : HFile::READ::BUFFERED_READS ).good() ) {
+	while ( getline( file, line ).good() ) {
 		line.trim();
 		if ( line.is_empty() ) {
 			continue;

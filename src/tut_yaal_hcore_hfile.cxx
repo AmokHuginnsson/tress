@@ -17,12 +17,13 @@ namespace tut {
 TUT_SIMPLE_MOCK( tut_yaal_hcore_hfile );
 TUT_TEST_GROUP( tut_yaal_hcore_hfile, "yaal::hcore::HFile" );
 
-TUT_UNIT_TEST( "HFile::READ::UNBUFFERED_READS (nl)" )
+TUT_UNIT_TEST( "getline() unbuffered IO (nl)" )
 	HFile in( "./data/nl.txt", HFile::OPEN::READING );
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line, HFile::READ::UNBUFFERED_READS ).good() ) {
+	in.set_buffered_io( false );
+	while ( getline( in, line ).good() ) {
 		res.append( line );
 		++ lineCount;
 	}
@@ -30,12 +31,13 @@ TUT_UNIT_TEST( "HFile::READ::UNBUFFERED_READS (nl)" )
 	ENSURE_EQUALS( "bad line count for unbuffered reads nl", lineCount, 4 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "HFile::READ::UNBUFFERED_READS (crnl)" )
+TUT_UNIT_TEST( "getline() unbuffered IO (crnl)" )
 	HFile in( "./data/crnl.txt", HFile::OPEN::READING );
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line, HFile::READ::UNBUFFERED_READS ).good() ) {
+	in.set_buffered_io( false );
+	while ( getline( in, line ).good() ) {
 		res.append( line );
 		++ lineCount;
 	}
@@ -43,12 +45,13 @@ TUT_UNIT_TEST( "HFile::READ::UNBUFFERED_READS (crnl)" )
 	ENSURE_EQUALS( "bad line count for unbuffered reads crnl", lineCount, 4 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "HFile::READ::BUFFERED_READS (nl)" )
+TUT_UNIT_TEST( "getline() buffered IO (nl)" )
 	HFile in( "./data/nl.txt", HFile::OPEN::READING );
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line, HFile::READ::BUFFERED_READS ).good() ) {
+	in.set_buffered_io( true );
+	while ( getline( in, line ).good() ) {
 		res.append( line );
 		++ lineCount;
 	}
@@ -56,12 +59,13 @@ TUT_UNIT_TEST( "HFile::READ::BUFFERED_READS (nl)" )
 	ENSURE_EQUALS( "bad line count for buffered reads nl", lineCount, 4 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "HFile::read_line() regression check" )
+TUT_UNIT_TEST( "getline() regression check" )
 	HFile in( "./data/slowa-tiny.txt", HFile::OPEN::READING );
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line, HFile::READ::BUFFERED_READS ).good() ) {
+	in.set_buffered_io( true );
+	while ( getline( in, line ).good() ) {
 		res.append( line );
 		++ lineCount;
 	}
@@ -69,12 +73,13 @@ TUT_UNIT_TEST( "HFile::read_line() regression check" )
 	ENSURE_EQUALS( "bad line count for buffered reads nl", lineCount, 8 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "HFile::read_line() - reause file object." )
+TUT_UNIT_TEST( "getline() - reause file object." )
 	HFile in( "./data/slowa-tiny.txt", HFile::OPEN::READING );
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line, HFile::READ::BUFFERED_READS ).good() ) {
+	in.set_buffered_io( true );
+	while ( getline( in, line ).good() ) {
 		res.append( line );
 		++ lineCount;
 	}
@@ -84,7 +89,8 @@ TUT_UNIT_TEST( "HFile::read_line() - reause file object." )
 	lineCount = 0;
 	res.clear();
 	in.open( "./data/nl.txt", HFile::OPEN::READING );
-	while ( in.read_line( line, HFile::READ::BUFFERED_READS ).good() ) {
+	in.set_buffered_io( true );
+	while ( getline( in, line ).good() ) {
 		res.append( line );
 		++ lineCount;
 	}
@@ -92,12 +98,13 @@ TUT_UNIT_TEST( "HFile::read_line() - reause file object." )
 	ENSURE_EQUALS( "bad line count for buffered reads nl", lineCount, 4 );
 TUT_TEARDOWN()
 
-TUT_UNIT_TEST( "HFile::READ::BUFFERED_READS (crnl)" )
+TUT_UNIT_TEST( "getline() buffered IO (crnl)" )
 	HFile in( "./data/crnl.txt", HFile::OPEN::READING );
 	HString line;
 	HString res;
 	int lineCount( 0 );
-	while ( in.read_line( line, HFile::READ::BUFFERED_READS ).good() ) {
+	in.set_buffered_io( true );
+	while ( getline( in, line ).good() ) {
 		res.append( line );
 		++ lineCount;
 	}
