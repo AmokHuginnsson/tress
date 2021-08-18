@@ -805,5 +805,34 @@ TUT_UNIT_TEST( "unread after unflushed write" )
 	ENSURE_EQUALS( "auto-flush after unread in RW mode failed", s, "SOME DATA next word" );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST_S( "input skipws fail bit" )
+	static char src[] = "1 2 3";
+	HStringStream& ss( string_stream( buffered ? true : false ) );
+	ss.str( src );
+	int i[3] = { 0, 0, 0 };
+	_ss >> noskipws;
+	for ( int& ii : i ) {
+		try {
+			_ss >> ii;
+		} catch ( ... ) {
+		}
+	}
+	ENSURE_EQUALS( "int value read fail", i[0], 1 );
+	ENSURE_EQUALS( "spurious int value read", i[1], 0 );
+	ENSURE_EQUALS( "spurious int value read", i[2], 0 );
+	ss.str( src );
+	i[0] = 0;
+	_ss >> skipws;
+	for ( int& ii : i ) {
+		try {
+			_ss >> ii;
+		} catch ( ... ) {
+		}
+	}
+	ENSURE_EQUALS( "int value read fail", i[0], 1 );
+	ENSURE_EQUALS( "int value read fail", i[1], 2 );
+	ENSURE_EQUALS( "int value read fail", i[2], 3 );
+TUT_TEARDOWN_S()
+
 }
 
