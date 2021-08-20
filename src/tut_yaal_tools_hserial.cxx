@@ -27,7 +27,7 @@ struct tut_yaal_tools_hserial : public simple_mock<tut_yaal_tools_hserial> {
 		, _path() {
 		try {
 			_socat.spawn( "/usr/bin/socat", { "-d", "-d", "pty,raw,echo=0", "pty,raw,echo=0" } );
-			_socat.err().read_until( _path );
+			getline( _socat.err(), _path );
 			int long pathStart( _path.find_last( ' '_ycp ) );
 			M_ENSURE( pathStart != HString::npos );
 			_path.shift_left( pathStart + 1 );

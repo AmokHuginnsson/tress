@@ -98,6 +98,7 @@ void tut_yaal_tools_hhuginn_network::play_scenario( yaal::hcore::HString const& 
 							clog << "ENTER: message hangler" << endl;
 							hcore::HString line;
 							if ( stream_->read_until( line ) > 0 ) {
+								line.trim_right();
 								clog << "serv got: [" << line << "]" << endl;
 								reverse( line.begin(), line.end() );
 								*stream_ << line << endl;

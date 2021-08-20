@@ -24,7 +24,7 @@ struct tut_yaal_hcore_hstreaminterface : public tress::tut_helpers::simple_mock<
 	}
 	yaal::hcore::HString data( void ) {
 		HString s;
-		_ss.read_until( s );
+		getline( _ss, s );
 		return s;
 	}
 	yaal::tools::HStringStream& string_stream( bool buffered_ ) {
@@ -36,7 +36,7 @@ struct tut_yaal_hcore_hstreaminterface : public tress::tut_helpers::simple_mock<
 	}
 };
 TUT_TEST_GROUP( tut_yaal_hcore_hstreaminterface, "yaal::hcore::HStreamInterface" );
-#define TUT_UNIT_TEST_S( ... ) TUT_UNIT_TEST( __VA_ARGS__ ) for ( int buffered( 0 ); buffered < 2; ++ buffered ) { string_stream( buffered );
+#define TUT_UNIT_TEST_S( ... ) TUT_UNIT_TEST( __VA_ARGS__ ) for ( int buffered( 0 ); buffered < 2; ++ buffered ) { clog << "buffered: " << buffered << endl; string_stream( buffered );
 #define TUT_TEARDOWN_S( ... ) } TUT_TEARDOWN( __VA_ARGS__ )
 
 TUT_UNIT_TEST_S( "HSynchronizedStream::reset_owned" )
@@ -49,15 +49,15 @@ TUT_UNIT_TEST_S( "HSynchronizedStream::reset_owned" )
 	ENSURE_EQUALS( "reset_owned (unowning) failed", data(), "" );
 	_ss << 13 << endl;
 	HString s;
-	ss.read_until( s );
+	getline( ss, s );
 	ENSURE_EQUALS( "read (unowning) failed", s, "13" );
 	_ss << "xxx" << endl;
 	_ss.reset_owned( nss );
 	ENSURE_EQUALS( "read (owning) failed", data(), "" );
-	ss.read_until( s );
+	getline( ss, s );
 	ENSURE_EQUALS( "read (owning) failed", s, "xxx" );
 	_ss << "abc" << endl;
-	nss->read_until( s );
+	getline( *nss, s );
 	ENSURE_EQUALS( "read (owning) failed", s, "abc" );
 TUT_TEARDOWN_S()
 
@@ -102,7 +102,7 @@ TUT_UNIT_TEST_S( "manipulators" )
 	ENSURE_EQUALS( "left", data(), "[yaal      ]" );
 TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST_S( "read_until (delims stripped)" )
+TUT_UNIT_TEST_S( "read_until (delims extracted)" )
 	static char src[] = "Ala\nma\nkota.";
 	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
@@ -110,12 +110,12 @@ TUT_UNIT_TEST_S( "read_until (delims stripped)" )
 	int long nRead( 0 );
 	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 4 );
-	ENSURE_EQUALS( "delim not stripped", line.get_length(), 3 );
-	ENSURE_EQUALS( "bad data read", line, "Ala" );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 4 );
+	ENSURE_EQUALS( "bad data read", line, "Ala\n" );
 	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 3 );
-	ENSURE_EQUALS( "delim not stripped", line.get_length(), 2 );
-	ENSURE_EQUALS( "bad data read", line, "ma" );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 3 );
+	ENSURE_EQUALS( "bad data read", line, "ma\n" );
 	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 5 );
@@ -173,27 +173,33 @@ TUT_UNIT_TEST_S( "read_while_n()" )
 	ENSURE_EQUALS( "bad data read", line, "kota" );
 TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST_S( "read_until (delims not stripped)" )
+TUT_UNIT_TEST_S( "read_until (delims not extracted)" )
 	static char src[] = "Ala\nma\nkota.";
 	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	HString line;
 	int long nRead( 0 );
 	nRead = _ss.read_until( line, HStreamInterface::eol, false );
-	ENSURE_EQUALS( "wrong read size", nRead, 4 );
-	ENSURE_EQUALS( "delim stripped", line.get_length(), 4 );
-	ENSURE_EQUALS( "bad data read", line, "Ala\n" );
-	nRead = _ss.read_until( line, HStreamInterface::eol, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 3 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 3 );
-	ENSURE_EQUALS( "bad data read", line, "ma\n" );
+	ENSURE_EQUALS( "bad data read", line, "Ala" );
+	char nl( 0 );
+	ENSURE_EQUALS( "bad len of delim read",  _ss.read( &nl, 1 ), 1 );
+	ENSURE_EQUALS( "bad delim read", nl, '\n' );
+	nRead = _ss.read_until( line, HStreamInterface::eol, false );
+	ENSURE_EQUALS( "wrong read size", nRead, 2 );
+	ENSURE_EQUALS( "delim stripped", line.get_length(), 2 );
+	ENSURE_EQUALS( "bad data read", line, "ma" );
+	nl = 0;
+	ENSURE_EQUALS( "bad len of delim read",  _ss.read( &nl, 1 ), 1 );
+	ENSURE_EQUALS( "bad delim read", nl, '\n' );
 	nRead = _ss.read_until( line, HStreamInterface::eol, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
 TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST_S( "read_until_n (delim stripped, by delim)" )
+TUT_UNIT_TEST_S( "read_until_n (delim extracted, by delim)" )
 	static char src[] = "Ala\nma\nkota.";
 	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
@@ -201,19 +207,19 @@ TUT_UNIT_TEST_S( "read_until_n (delim stripped, by delim)" )
 	int long nRead( 0 );
 	nRead = _ss.read_until_n( line, 4 );
 	ENSURE_EQUALS( "wrong read size", nRead, 4 );
-	ENSURE_EQUALS( "delim not stripped", line.get_length(), 3 );
-	ENSURE_EQUALS( "bad data read", line, "Ala" );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 4 );
+	ENSURE_EQUALS( "bad data read", line, "Ala\n" );
 	nRead = _ss.read_until_n( line, 3 );
 	ENSURE_EQUALS( "wrong read size", nRead, 3 );
-	ENSURE_EQUALS( "delim not stripped", line.get_length(), 2 );
-	ENSURE_EQUALS( "bad data read", line, "ma" );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 3 );
+	ENSURE_EQUALS( "bad data read", line, "ma\n" );
 	nRead = _ss.read_until_n( line, 5 );
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
 TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST_S( "read_until_n (delim stripped, by size)" )
+TUT_UNIT_TEST_S( "read_until_n (delim extracted, by size)" )
 	static char src[] = "Ala\nma\nkota.";
 	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
@@ -225,41 +231,47 @@ TUT_UNIT_TEST_S( "read_until_n (delim stripped, by size)" )
 	ENSURE_EQUALS( "bad data read", line, "Ala" );
 	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 1 );
-	ENSURE_EQUALS( "delim not stripped", line.get_length(), 0 );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 1 );
 	nRead = _ss.read_until_n( line, 2 );
 	ENSURE_EQUALS( "wrong read size", nRead, 2 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 2 );
 	ENSURE_EQUALS( "bad data read", line, "ma" );
 	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 1 );
-	ENSURE_EQUALS( "delim not stripped", line.get_length(), 0 );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 1 );
 	nRead = _ss.read_until_n( line, 5 );
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim not stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
 TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST_S( "read_until_n (delim not stripped, by delim)" )
+TUT_UNIT_TEST_S( "read_until_n (delim not extracted, by delim)" )
 	static char src[] = "Ala\nma\nkota.";
 	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
 	HString line;
 	int long nRead( 0 );
 	nRead = _ss.read_until_n( line, 4, HStreamInterface::eol, false );
-	ENSURE_EQUALS( "wrong read size", nRead, 4 );
-	ENSURE_EQUALS( "delim stripped", line.get_length(), 4 );
-	ENSURE_EQUALS( "bad data read", line, "Ala\n" );
-	nRead = _ss.read_until_n( line, 3, HStreamInterface::eol, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 3 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 3 );
-	ENSURE_EQUALS( "bad data read", line, "ma\n" );
+	ENSURE_EQUALS( "bad data read", line, "Ala" );
+	char nl( 0 );
+	ENSURE_EQUALS( "bad len of delim read",  _ss.read( &nl, 1 ), 1 );
+	ENSURE_EQUALS( "bad delim read", nl, '\n' );
+	nRead = _ss.read_until_n( line, 3, HStreamInterface::eol, false );
+	ENSURE_EQUALS( "wrong read size", nRead, 2 );
+	ENSURE_EQUALS( "delim stripped", line.get_length(), 2 );
+	ENSURE_EQUALS( "bad data read", line, "ma" );
+	nl = 0;
+	ENSURE_EQUALS( "bad len of delim read",  _ss.read( &nl, 1 ), 1 );
+	ENSURE_EQUALS( "bad delim read", nl, '\n' );
 	nRead = _ss.read_until_n( line, 5, HStreamInterface::eol, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 5 );
 	ENSURE_EQUALS( "bad data read", line, "kota." );
 TUT_TEARDOWN_S()
 
-TUT_UNIT_TEST_S( "read_until_n (delim not stripped, by size)" )
+TUT_UNIT_TEST_S( "read_until_n (delim not extracted, by size)" )
 	static char src[] = "Ala\nma\nkota.";
 	HStringStream& ss( string_stream( buffered ? true : false ) );
 	ss.str( src );
@@ -271,14 +283,14 @@ TUT_UNIT_TEST_S( "read_until_n (delim not stripped, by size)" )
 	ENSURE_EQUALS( "bad data read", line, "Ala" );
 	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 1 );
-	ENSURE_EQUALS( "delim not stripped", line.get_length(), 0 );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 1 );
 	nRead = _ss.read_until_n( line, 2, HStreamInterface::eol, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 2 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 2 );
 	ENSURE_EQUALS( "bad data read", line, "ma" );
 	nRead = _ss.read_until( line );
 	ENSURE_EQUALS( "wrong read size", nRead, 1 );
-	ENSURE_EQUALS( "delim not stripped", line.get_length(), 0 );
+	ENSURE_EQUALS( "delim not stripped", line.get_length(), 1 );
 	nRead = _ss.read_until_n( line, 5, HStreamInterface::eol, false );
 	ENSURE_EQUALS( "wrong read size", nRead, 5 );
 	ENSURE_EQUALS( "delim stripped", line.get_length(), 5 );

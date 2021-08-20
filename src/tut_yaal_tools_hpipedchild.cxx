@@ -246,10 +246,8 @@ TUT_UNIT_TEST( "finish after very short lived process ends" )
 	HString ack;
 	HString line;
 	while ( pc.out().read_until( line ) > 0 ) {
-		if ( ! line.is_empty() ) {
-			line.trim_right( "\r" );
-			ack.append( line );
-		}
+		line.trim_right();
+		ack.append( line );
 	}
 	/* Without proper fix on Cygwin this test throws exception from pc.finish() */
 	pc.finish();
@@ -269,10 +267,8 @@ TUT_UNIT_TEST( "exit status" )
 	HString ack;
 	HString line;
 	while ( pc.err().read_until( line ) > 0 ) {
-		if ( ! line.is_empty() ) {
-			line.trim_right( "\r" );
-			ack.append( line );
-		}
+		line.trim_right();
+		ack.append( line );
 	}
 	/* Without proper fix on Cygwin this test throws exception from pc.finish() */
 	pc.finish();
@@ -291,10 +287,8 @@ TUT_UNIT_TEST( "read after very short lived process ends" )
 	sleep_for( duration( 1, time::UNIT::SECOND ) );
 	/* Without proper fix on MSVCXX next line will hang indefinetly. */
 	while ( pc.out().read_until( line ) > 0 ) {
-		if ( ! line.is_empty() ) {
-			line.trim_right( "\r" );
-			ack.append( line );
-		}
+		line.trim_right();
+		ack.append( line );
 	}
 	pc.finish();
 	ENSURE_EQUALS( "bad ack OUT", ack, ACK_OUT );

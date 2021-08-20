@@ -124,6 +124,7 @@ void HServer::handler_message( HIODispatcher::stream_t& stream_, IO_EVENT_TYPE )
 		int long nRead( 0 );
 		clog << "reading data ..." << endl;
 		if ( ( nRead = stream_->read_until( message ) ) > 0 ) {
+			message.trim_right();
 			_buffer += message;
 			clog << "<-" << message << endl;
 			if ( message == "stop" ) {
