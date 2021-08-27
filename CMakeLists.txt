@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.4 )
+cmake_minimum_required( VERSION 3.13 )
 file( TO_CMAKE_PATH "$ENV{YAAL_SOURCE_PATH}" YAAL_SOURCE_PATH )
 if ( "${YAAL_SOURCE_PATH}" STREQUAL "" )
 	set( YAAL_SOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../yaal" )
@@ -119,6 +119,11 @@ set_target_properties( huginn_greeter PROPERTIES LINKER_LANGUAGE CXX )
 target_link_libraries( huginn_greeter ${Yaal_LIBRARIES} )
 if ( CMAKE_HOST_WIN32 )
 	set_property( DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" PROPERTY VS_STARTUP_PROJECT tress )
+	set_target_properties(
+		tress PROPERTIES
+		VS_DEBUGGER_ENVIRONMENT "PATH=%PATH%;${CMAKE_INSTALL_PREFIX}/bin\nYAAL_AUTO_SANITY=1"
+		VS_DEBUGGER_COMMAND_ARGUMENTS "-E"
+	)
 	add_executable( child-simple ${CMAKE_HOME_DIRECTORY}/data/child.cxx )
 	set_target_properties( child-simple PROPERTIES LINKER_LANGUAGE CXX OUTPUT_NAME child RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_HOME_DIRECTORY}/data )
 	set_target_properties( tressplugin PROPERTIES OUTPUT_NAME tressplugin${LIB_INFIX} LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_HOME_DIRECTORY}/data )
