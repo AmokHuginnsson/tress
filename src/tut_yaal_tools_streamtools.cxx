@@ -363,5 +363,103 @@ TUT_UNIT_TEST( "stream + HHashMap" )
 	ENSURE_EQUALS( "HHashSet text minimal streams failed", hs, int_hash_map_t( { { 13, 7 } } ) );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "time::duruation_t write to stream in text mode" )
+	time::duration_t d(
+		time::duration( 7, time::UNIT::WEEK )
+		+ time::duration( 2, time::UNIT::DAY )
+		+ time::duration( 13, time::UNIT::HOUR )
+		+ time::duration( 47, time::UNIT::MINUTE )
+		+ time::duration( 51, time::UNIT::SECOND )
+		+ time::duration( 389, time::UNIT::MILLISECOND )
+		+ time::duration( 612, time::UNIT::MICROSECOND )
+		+ time::duration( 707, time::UNIT::NANOSECOND )
+	);
+	HStringStream ss;
+	ss << d;
+	char const expected[] = "7 weeks 2 days 13 hours 47 minutes 51 seconds 389 milliseconds 612 microseconds 707 nanoseconds";
+	ENSURE_EQUALS( "duration text output conversion failed", ss.str(), expected );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "time::duruation_t write to stream in binary mode" )
+	time::duration_t d(
+		time::duration( 7, time::UNIT::WEEK )
+		+ time::duration( 2, time::UNIT::DAY )
+		+ time::duration( 13, time::UNIT::HOUR )
+		+ time::duration( 47, time::UNIT::MINUTE )
+		+ time::duration( 51, time::UNIT::SECOND )
+		+ time::duration( 389, time::UNIT::MILLISECOND )
+		+ time::duration( 612, time::UNIT::MICROSECOND )
+		+ time::duration( 707, time::UNIT::NANOSECOND )
+	);
+	HChunk buf;
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
+	m << binary << d;
+	time::duration_t::value_type expected(
+		707
+		+ 612 * 1000
+		+ 389 * 1000000
+		+ 51 * 1000000000LL
+		+ 47 * 60 * 1000000000LL
+		+ 13 * 60 * 60 * 1000000000LL
+		+  2 * 24 * 60 * 60 * 1000000000LL
+		+  7 * 7 * 24 * 60 * 60 * 1000000000LL
+	);
+	time::duration_t::value_type actual( 0 );
+	m >> actual;
+	ENSURE_EQUALS( "duration binary output conversion failed", actual, expected );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "time::duruation_t read from stream in binary mode" )
+	time::duration_t expected(
+		time::duration( 7, time::UNIT::WEEK )
+		+ time::duration( 2, time::UNIT::DAY )
+		+ time::duration( 13, time::UNIT::HOUR )
+		+ time::duration( 47, time::UNIT::MINUTE )
+		+ time::duration( 51, time::UNIT::SECOND )
+		+ time::duration( 389, time::UNIT::MILLISECOND )
+		+ time::duration( 612, time::UNIT::MICROSECOND )
+		+ time::duration( 707, time::UNIT::NANOSECOND )
+	);
+	time::duration_t::value_type data(
+		707
+		+ 612 * 1000
+		+ 389 * 1000000
+		+ 51 * 1000000000LL
+		+ 47 * 60 * 1000000000LL
+		+ 13 * 60 * 60 * 1000000000LL
+		+  2 * 24 * 60 * 60 * 1000000000LL
+		+  7 * 7 * 24 * 60 * 60 * 1000000000LL
+	);
+	HChunk buf;
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
+	m << binary << data;
+	time::duration_t actual( 0 );
+	m >> actual;
+	ENSURE_EQUALS( "duration binary input conversion failed", actual, expected );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "time::duruation_t read from stream in text mode" )
+	time::duration_t expected(
+		time::duration( 7, time::UNIT::WEEK )
+		+ time::duration( 2, time::UNIT::DAY )
+		+ time::duration( 13, time::UNIT::HOUR )
+		+ time::duration( 47, time::UNIT::MINUTE )
+		+ time::duration( 51, time::UNIT::SECOND )
+		+ time::duration( 389, time::UNIT::MILLISECOND )
+		+ time::duration( 612, time::UNIT::MICROSECOND )
+		+ time::duration( 707, time::UNIT::NANOSECOND )
+	);
+	char const data[] = "7 \t\t weeks \t \t 2 days 13 hours 47 \t \t\t \t minutes 51 seconds 389 milliseconds 612 microseconds 707 nanoseconds";
+	char const tail[] = " \t 888 hoursq 333";
+	HStringStream ss;
+	ss << data << tail;
+	time::duration_t d;
+	ss >> d;
+	HString s;
+	getline( ss, s );
+	ENSURE_EQUALS( "duration text input conversion failed", d, expected );
+	ENSURE_EQUALS( "duration text input conversion consumed too much from stream", s, tail );
+TUT_TEARDOWN()
+
 }
 

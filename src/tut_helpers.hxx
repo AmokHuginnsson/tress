@@ -136,6 +136,8 @@ std::ostream& operator << ( std::ostream&, yaal::hcore::HNumber const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HString const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HUTF8String const& );
 std::ostream& operator << ( std::ostream&, yaal::hcore::HTime const& );
+std::ostream& operator << ( std::ostream&, yaal::hcore::time::duration_t const& );
+
 template<typename first_t, typename second_t>
 std::ostream& operator << ( std::ostream& os, yaal::hcore::HPair<first_t, second_t> const& p ) {
 	os << "pair(" << p.first << "," << p.second << ")";

@@ -105,6 +105,11 @@ std::ostream& operator << ( std::ostream& out, yaal::hcore::HTime const& t ) {
 	return out;
 }
 
+std::ostream& operator << ( std::ostream& out, yaal::hcore::time::duration_t const& d ) {
+	out << duration_to_string( d, time::UNIT::NANOSECOND );
+	return out;
+}
+
 HStreamInterface& operator << ( HStreamInterface& os, std::string const& s ) {
 	os << s.c_str();
 	return os;
