@@ -510,16 +510,23 @@ TUT_TEARDOWN()
 #endif /* #if SIZEOF_TIME_T == 8 */
 #endif /* #ifndef __HOST_OS_TYPE_SOLARIS__ */
 
-TUT_UNIT_TEST( "duration" )
-#define ENSURE_DURATION( x, y ) ENSURE_EQUALS( x " failed", time::duration_to_string( lexical_cast<time::duration_t>( to_string( x ) ), time::UNIT::NANOSECOND ), y )
+#define ENSURE_DURATION( x, y, z ) ENSURE_EQUALS( x " failed", time::duration_to_string( lexical_cast<time::duration_t>( to_string( x ) ), time::UNIT::NANOSECOND, z ), y )
 #define ENSURE_DURATION_UNIT( x, y, z ) ENSURE_EQUALS( x " failed for " #z, time::duration_to_string( lexical_cast<time::duration_t>( to_string( x ) ), time::UNIT::z ), y )
-	ENSURE_DURATION( "3s 4 m 5hour", "5 hours 4 minutes 3 seconds" );
+TUT_UNIT_TEST( "duration" )
+	ENSURE_DURATION( "3s 4 m 5hour", "5 hours 4 minutes 3 seconds", time::UNIT_FORM::FULL );
 	ENSURE_DURATION_UNIT( "3s 4 m 5hour", "5 hours 4 minutes", MINUTE );
-	ENSURE_DURATION( "1 sec 2 hour 3 milliseconds 4us 5min 8 nanosecond 6 days 7 week", "7 weeks 6 days 2 hours 5 minutes 1 second 3 milliseconds 4 microseconds 8 nanoseconds" );
+	ENSURE_DURATION( "1 sec 2 hour 3 milliseconds 4us 5min 8 nanosecond 6 days 7 week", "7 weeks 6 days 2 hours 5 minutes 1 second 3 milliseconds 4 microseconds 8 nanoseconds", time::UNIT_FORM::FULL );
 	ENSURE_DURATION_UNIT( "1 sec 2 hour 3 milliseconds 4us 5min 8 nanosecond 6 days 7 w", "7 weeks 6 days 2 hours 5 minutes 1 second 3 milliseconds", MILLISECOND );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "duration abbreviated" )
+	ENSURE_DURATION( "3s 4 m 5hour", "5h 4m 3s", time::UNIT_FORM::ABBREVIATED );
+	ENSURE_DURATION_UNIT( "3s 4 m 5hour", "5 hours 4 minutes", MINUTE );
+	ENSURE_DURATION( "1 sec 2 hour 3 milliseconds 4us 5min 8 nanosecond 6 days 7 week", "7w 6d 2h 5m 1s 3ms 4μs 8ns", time::UNIT_FORM::ABBREVIATED );
+	ENSURE_DURATION_UNIT( "1 sec 2 hour 3 milliseconds 4μs 5min 8 nanosecond 6 days 7 w", "7 weeks 6 days 2 hours 5 minutes 1 second 3 milliseconds", MILLISECOND );
+TUT_TEARDOWN()
 #undef ENSURE_DURATION_UNIT
 #undef ENSURE_DURATION
-TUT_TEARDOWN()
 
 }
 
