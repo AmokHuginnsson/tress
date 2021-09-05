@@ -376,7 +376,7 @@ TUT_UNIT_TEST( "time::duruation_t write to stream in text mode" )
 	);
 	HStringStream ss;
 	ss << d;
-	char const expected[] = "7 weeks 2 days 13 hours 47 minutes 51 seconds 389 milliseconds 612 microseconds 707 nanoseconds";
+	char const expected[] = "7 weeks 2 days";
 	ENSURE_EQUALS( "duration text output conversion failed", ss.str(), expected );
 TUT_TEARDOWN()
 
@@ -459,6 +459,48 @@ TUT_UNIT_TEST( "time::duruation_t read from stream in text mode" )
 	getline( ss, s );
 	ENSURE_EQUALS( "duration text input conversion failed", d, expected );
 	ENSURE_EQUALS( "duration text input conversion consumed too much from stream", s, tail );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "use HDurationFormatter to write time::duruation_t to stream in text mode (auto scale)" )
+	time::duration_t d(
+		time::duration( 7, time::UNIT::WEEK )
+		+ time::duration( 2, time::UNIT::DAY )
+		+ time::duration( 13, time::UNIT::HOUR )
+		+ time::duration( 47, time::UNIT::MINUTE )
+		+ time::duration( 51, time::UNIT::SECOND )
+		+ time::duration( 389, time::UNIT::MILLISECOND )
+		+ time::duration( 612, time::UNIT::MICROSECOND )
+		+ time::duration( 707, time::UNIT::NANOSECOND )
+	);
+	HStringStream ss;
+	ss << d;
+	char const expectedLong[] = "7 weeks 2 days";
+	ENSURE_EQUALS( "duration text output conversion failed", ss.str(), expectedLong );
+	ss.reset();
+	ss << durationformat( time::UNIT_FORM::ABBREVIATED ) << d;
+	char const expectedShort[] = "7w 2d";
+	ENSURE_EQUALS( "duration text output conversion failed", ss.str(), expectedShort );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "use HDurationFormatter to write time::duruation_t to stream in text mode (forced scale)" )
+	time::duration_t d(
+		time::duration( 7, time::UNIT::WEEK )
+		+ time::duration( 2, time::UNIT::DAY )
+		+ time::duration( 13, time::UNIT::HOUR )
+		+ time::duration( 47, time::UNIT::MINUTE )
+		+ time::duration( 51, time::UNIT::SECOND )
+		+ time::duration( 389, time::UNIT::MILLISECOND )
+		+ time::duration( 612, time::UNIT::MICROSECOND )
+		+ time::duration( 707, time::UNIT::NANOSECOND )
+	);
+	HStringStream ss;
+	ss << durationformat( time::UNIT::NANOSECOND ) << d;
+	char const expectedLong[] = "7 weeks 2 days 13 hours 47 minutes 51 seconds 389 milliseconds 612 microseconds 707 nanoseconds";
+	ENSURE_EQUALS( "duration text output conversion failed", ss.str(), expectedLong );
+	ss.reset();
+	ss << durationformat( time::UNIT::NANOSECOND, time::UNIT_FORM::ABBREVIATED ) << d;
+	char const expectedShort[] = "7w 2d 13h 47m 51s 389ms 612μs 707ns";
+	ENSURE_EQUALS( "duration text output conversion failed", ss.str(), expectedShort );
 TUT_TEARDOWN()
 
 }
