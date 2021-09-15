@@ -11,6 +11,7 @@ using namespace tut;
 using namespace yaal;
 using namespace yaal::hcore;
 using namespace yaal::tools;
+using namespace yaal::tools::model;
 using namespace tress::tut_helpers;
 
 namespace yaal {
@@ -35,38 +36,38 @@ namespace {
 
 HJSON make_json( void ) {
 	HJSON json;
-	HJSON::HValue& r( json.element() );
+	HValue& r( json.element() );
 	r["name"] = "nameValue";
 	r["date"] = "1978-05-24";
-	HJSON::HValue::array_t& records( r["records"].get_elements() );
+	HValue::array_t& records( r["records"].get_elements() );
 	records.push_back(
-		HJSON::HValue::members_t({
+		HValue::members_t({
 			{ "id", "int" },
 			{ "data", 9 }
 		})
 	);
 	records.push_back(
-		HJSON::HValue::members_t({
+		HValue::members_t({
 			{ "id", "float" },
 			{ "data", 12.345L }
 		})
 	);
 	records.push_back(
-		HJSON::HValue::members_t({
+		HValue::members_t({
 			{ "id", "str" },
 			{ "data", "yaal-JSON" }
 		})
 	);
-	r["number_like"] = HJSON::HValue::members_t({
+	r["number_like"] = HValue::members_t({
 		{ "int", 13 },
 		{ "real", 3.14159265359L },
 		{ "number", "2.718281828459045235360287471"_yn }
 	});
-	HJSON::HValue::members_t& empty( r["empty"].get_members() );
-	empty.insert( make_pair( "arr", HJSON::HValue::array_t() ) );
-	empty.insert( make_pair( "obj", HJSON::HValue::members_t() ) );
+	HValue::members_t& empty( r["empty"].get_members() );
+	empty.insert( make_pair( "arr", HValue::array_t() ) );
+	empty.insert( make_pair( "obj", HValue::members_t() ) );
 	r["banner"] = "yaal's JSON generator";
-	r["literals"] = HJSON::HValue::array_t({ HJSON::HValue::LITERAL::TRUE, HJSON::HValue::LITERAL::FALSE,	HJSON::HValue::LITERAL::NULL });
+	r["literals"] = HValue::array_t({ HValue::LITERAL::TRUE, HValue::LITERAL::FALSE,	HValue::LITERAL::NULL });
 	return json;
 }
 
@@ -377,21 +378,21 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "generate literal" )
 	HJSON json;
-	json.element() = HJSON::HValue::LITERAL::TRUE;
+	json.element() = HValue::LITERAL::TRUE;
 	HStringStream ss;
 	json.save( ss );
 	ENSURE_EQUALS( "[JSON] just a literal generation failed", ss.string(), "true\n" );
 	ss.reset();
 	json.save( ss, false );
 	ENSURE_EQUALS( "[JSON] just a literal generation failed", ss.string(), "true" );
-	json.element() = HJSON::HValue::LITERAL::FALSE;
+	json.element() = HValue::LITERAL::FALSE;
 	ss.reset();
 	json.save( ss );
 	ENSURE_EQUALS( "[JSON] just a literal generation failed", ss.string(), "false\n" );
 	ss.reset();
 	json.save( ss, false );
 	ENSURE_EQUALS( "[JSON] just a literal generation failed", ss.string(), "false" );
-	json.element() = HJSON::HValue::LITERAL::NULL;
+	json.element() = HValue::LITERAL::NULL;
 	ss.reset();
 	json.save( ss );
 	ENSURE_EQUALS( "[JSON] just a literal generation failed", ss.string(), "null\n" );
@@ -406,9 +407,9 @@ TUT_UNIT_TEST( "generate array" )
 	json.element().push_back( 3.141592653589793L );
 	json.element().push_back( "2.718281828459045"_yn );
 	json.element().push_back( "yaal's JSON generator" );
-	json.element().push_back( HJSON::HValue::LITERAL::TRUE );
-	json.element().push_back( HJSON::HValue::LITERAL::FALSE );
-	json.element().push_back( HJSON::HValue::LITERAL::NULL );
+	json.element().push_back( HValue::LITERAL::TRUE );
+	json.element().push_back( HValue::LITERAL::FALSE );
+	json.element().push_back( HValue::LITERAL::NULL );
 	HStringStream ss;
 	json.save( ss );
 	ENSURE_EQUALS( "[JSON] just an array generation failed", ss.string(), "[13, 3.14159265359, 2.718281828459045, \"yaal's JSON generator\", true, false, null]\n" );
@@ -419,14 +420,14 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "generate object" )
 	HJSON json;
-	HJSON::HValue::members_t& m( json.element().get_members() );
+	HValue::members_t& m( json.element().get_members() );
 	m["bad_luck"] = 13;
 	m["pi"] = 3.141592653589793L;
 	m["e"] = "2.718281828459045"_yn;
 	m["banner"] = "yaal's JSON generator";
-	m["true"] = HJSON::HValue::LITERAL::TRUE;
-	m["false"] = HJSON::HValue::LITERAL::FALSE;
-	m["null"] = HJSON::HValue::LITERAL::NULL;
+	m["true"] = HValue::LITERAL::TRUE;
+	m["false"] = HValue::LITERAL::FALSE;
+	m["null"] = HValue::LITERAL::NULL;
 	HStringStream ss;
 	json.save( ss );
 #if TARGET_CPU_BITS == 64
@@ -555,7 +556,7 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "parse literal" )
 	HJSON expected;
-	expected.element() = HJSON::HValue::LITERAL::TRUE;
+	expected.element() = HValue::LITERAL::TRUE;
 	HStringStream ss( "true" );
 	HJSON json;
 	json.load( ss );
@@ -565,7 +566,7 @@ TUT_UNIT_TEST( "parse literal" )
 	json.load( ss );
 	ENSURE_EQUALS( "[JSON] parsing alone literal(true) failed", json, expected );
 
-	expected.element() = HJSON::HValue::LITERAL::FALSE;
+	expected.element() = HValue::LITERAL::FALSE;
 	json.clear();
 	ss << "false";
 	json.load( ss );
@@ -575,7 +576,7 @@ TUT_UNIT_TEST( "parse literal" )
 	json.load( ss );
 	ENSURE_EQUALS( "[JSON] parsing alone literal(false) failed", json, expected );
 
-	expected.element() = HJSON::HValue::LITERAL::NULL;
+	expected.element() = HValue::LITERAL::NULL;
 	json.clear();
 	ss << "null";
 	json.load( ss );
@@ -592,9 +593,9 @@ TUT_UNIT_TEST( "parse array" )
 	expected.element().push_back( 3.14159265359L );
 	expected.element().push_back( "2.718281828459045235360287471"_yn );
 	expected.element().push_back( "yaal's JSON generator" );
-	expected.element().push_back( HJSON::HValue::LITERAL::TRUE );
-	expected.element().push_back( HJSON::HValue::LITERAL::FALSE );
-	expected.element().push_back( HJSON::HValue::LITERAL::NULL );
+	expected.element().push_back( HValue::LITERAL::TRUE );
+	expected.element().push_back( HValue::LITERAL::FALSE );
+	expected.element().push_back( HValue::LITERAL::NULL );
 	char const data[] = "[13, 3.14159265359, 2.718281828459045235360287471, \"yaal's JSON generator\", true, false, null]\n";
 	HStringStream ss( data );
 	HJSON json;
@@ -611,9 +612,9 @@ TUT_UNIT_TEST( "parse object" )
 	expected.element()["pi"] = 3.14159265359L;
 	expected.element()["e"] = "2.718281828459045235360287471"_yn;
 	expected.element()["banner"] = "yaal's JSON generator";
-	expected.element()["true"] = HJSON::HValue::LITERAL::TRUE;
-	expected.element()["false"] = HJSON::HValue::LITERAL::FALSE;
-	expected.element()["null"] = HJSON::HValue::LITERAL::NULL;
+	expected.element()["true"] = HValue::LITERAL::TRUE;
+	expected.element()["false"] = HValue::LITERAL::FALSE;
+	expected.element()["null"] = HValue::LITERAL::NULL;
 	HStringStream ss( "{\"false\": false, \"pi\": 3.14159265359, \"bad_luck\": 13, \"banner\": \"yaal's JSON generator\", \"true\": true, \"e\": 2.718281828459045235360287471, \"null\": null}" );
 	HJSON json;
 	json.load( ss );
@@ -669,10 +670,10 @@ TUT_UNIT_TEST( "compare JSON (==)" )
 	ENSURE_EQUALS( "[JSON] equality operator failed", a, b );
 	a.element()["records"][1]["data"] = "12.3457";
 	ENSURE_NOT( "[JSON] equality operator failed", a == b );
-	a.element()["records"][1]["data"] = HJSON::HValue::LITERAL::TRUE;
-	b.element()["records"][1]["data"] = HJSON::HValue::LITERAL::TRUE;
+	a.element()["records"][1]["data"] = HValue::LITERAL::TRUE;
+	b.element()["records"][1]["data"] = HValue::LITERAL::TRUE;
 	ENSURE_EQUALS( "[JSON] equality operator failed", a, b );
-	a.element()["records"][1]["data"] = HJSON::HValue::LITERAL::FALSE;
+	a.element()["records"][1]["data"] = HValue::LITERAL::FALSE;
 	ENSURE_NOT( "[JSON] equality operator failed", a == b );
 	a.element()["records"][1]["data"] = 7;
 	b.element()["records"][1]["data"] = 7;
@@ -686,25 +687,25 @@ TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "node type guards" )
 	HJSON json;
-	HJSON::HValue& r( json.element() );
+	HValue& r( json.element() );
 	r = 7;
-	HJSON::HValue const& cr( r );
+	HValue const& cr( r );
 	ENSURE_EQUALS( "integer getter failed", r.get_integer(), 7 );
-	ENSURE_THROW( "array access type guard failed", r.push_back( 0 ), HJSONException );
-	ENSURE_THROW( "array access type guard failed", r[0], HJSONException );
-	ENSURE_THROW( "member access type guard failed", r["json"], HJSONException );
-	ENSURE_THROW( "array access type guard failed", cr[0], HJSONException );
-	ENSURE_THROW( "member access type guard failed", cr["json"], HJSONException );
-	ENSURE_THROW( "array access type guard failed", r.get_elements(), HJSONException );
-	ENSURE_THROW( "member access type guard failed", r.get_members(), HJSONException );
-	ENSURE_THROW( "array access type guard failed", cr.get_elements(), HJSONException );
-	ENSURE_THROW( "member access type guard failed", cr.get_members(), HJSONException );
-	ENSURE_THROW( "real getter type guard failed", r.get_real(), HJSONException );
-	ENSURE_THROW( "number getter type guard failed", r.get_number(), HJSONException );
-	ENSURE_THROW( "string getter type guard failed", r.get_string(), HJSONException );
-	ENSURE_THROW( "literal getter type guard failed", r.get_literal(), HJSONException );
+	ENSURE_THROW( "array access type guard failed", r.push_back( 0 ), HModelException );
+	ENSURE_THROW( "array access type guard failed", r[0], HModelException );
+	ENSURE_THROW( "member access type guard failed", r["json"], HModelException );
+	ENSURE_THROW( "array access type guard failed", cr[0], HModelException );
+	ENSURE_THROW( "member access type guard failed", cr["json"], HModelException );
+	ENSURE_THROW( "array access type guard failed", r.get_elements(), HModelException );
+	ENSURE_THROW( "member access type guard failed", r.get_members(), HModelException );
+	ENSURE_THROW( "array access type guard failed", cr.get_elements(), HModelException );
+	ENSURE_THROW( "member access type guard failed", cr.get_members(), HModelException );
+	ENSURE_THROW( "real getter type guard failed", r.get_real(), HModelException );
+	ENSURE_THROW( "number getter type guard failed", r.get_number(), HModelException );
+	ENSURE_THROW( "string getter type guard failed", r.get_string(), HModelException );
+	ENSURE_THROW( "literal getter type guard failed", r.get_literal(), HModelException );
 	r = 0.0;
-	ENSURE_THROW( "integer getter type guard failed", r.get_integer(), HJSONException );
+	ENSURE_THROW( "integer getter type guard failed", r.get_integer(), HModelException );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "generator errors" )
@@ -712,7 +713,7 @@ TUT_UNIT_TEST( "generator errors" )
 	HStringStream ss;
 	json.save( ss );
 	ENSURE_EQUALS( "serialization of empty JSON failed", ss.string(), "" );
-	HJSON::HValue& r( json.element() );
+	HValue& r( json.element() );
 	r["elem"];
 	ENSURE_THROW( "serialization of uninitialized node succeeded", json.save( ss ), HJSONException );
 TUT_TEARDOWN()
