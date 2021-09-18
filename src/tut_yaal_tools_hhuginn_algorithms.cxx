@@ -516,14 +516,14 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "filter" )
 	ENSURE_EQUALS(
 		"Algorithms.filter (function) failed",
-		execute_except(
+		execute(
 			"import Algorithms as algo;\n"
 			"main(){\n"
 			"f=algo.filter(algo.range(3, 44, 4),@(x){x%3==0;});\n"
 			"return(size(f));\n"
 			"}"
 		),
-		"*anonymous stream*:4:12: Getting size of `Filter` is an invalid operation."
+		"4"
 	);
 	ENSURE_EQUALS(
 		"Algorithms.filter (invalid function) failed",
