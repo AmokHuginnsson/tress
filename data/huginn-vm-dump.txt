@@ -49,11 +49,11 @@ class: -Algorithms.Zip {}
 class: blob { io }
 class: boolean {}
 class: character { is_alnum, is_alpha, is_digit, is_lower, is_space, is_upper, is_xdigit, to_lower, to_upper }
-class: deque { ReversedDequeView, append, clear, find, insert, pop, pop_front, prepend, push, push_front }
+class: deque { ReversedDequeView, append, clear, erase, find, insert, pop, pop_front, prepend, push, push_front }
 class: dict { KeyValuesDictView, ReversedDictView, clear, ensure, erase, get, has_key, update, values }
 class: heap { clear, pop, push, top, update }
 class: integer {}
-class: list { ReversedListView, append, clear, find, insert, pop, push, resize, sort }
+class: list { ReversedListView, append, clear, erase, find, insert, pop, push, resize, sort }
 class: lookup { KeyValuesLookupView, ReversedLookupView, clear, ensure, erase, get, has_key, update, values }
 class: number { get_precision, is_exact, is_integral, set_precision }
 class: order { ReversedOrderView, clear, erase, has_key, insert, update }

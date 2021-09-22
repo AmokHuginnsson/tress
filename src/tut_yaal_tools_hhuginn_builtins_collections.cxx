@@ -134,6 +134,21 @@ TUT_UNIT_TEST( "list()" )
 		"*anonymous stream*:1:28: invalid insertion position: 5"
 	);
 	ENSURE_EQUALS(
+		"list erase failed",
+		execute( "main(){x=[2,3,2,3,5,2,3,7,2,3];x.erase(3);return(x);}" ),
+		"[2, 2, 5, 2, 7, 2]"
+	);
+	ENSURE_EQUALS(
+		"list erase limited by count failed",
+		execute( "main(){x=[2,3,2,3,5,2,3,7,2,3];x.erase(3,2);return(x);}" ),
+		"[2, 2, 5, 2, 3, 7, 2, 3]"
+	);
+	ENSURE_EQUALS(
+		"list erase with bad count succeeded",
+		execute_except( "main(){x=[2,3,2,3,5,2,3,7,2,3];x.erase(3,0);return(x);}" ),
+		"*anonymous stream*:1:39: invalid erase count: 0"
+	);
+	ENSURE_EQUALS(
 		"list resize failed",
 		execute( "main(){x=[].resize(5,0);x[0]+=1;y=copy(x).resize(3,none);return((x,y));}" ),
 		"([1, 0, 0, 0, 0], [1, 0, 0])"
