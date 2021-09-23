@@ -297,6 +297,21 @@ TUT_UNIT_TEST( "deque()" )
 		"*anonymous stream*:1:33: invalid insertion position: 5"
 	);
 	ENSURE_EQUALS(
+		"deque erase failed",
+		execute( "main(){x=deque(2,3,2,3,5,2,3,7,2,3);x.erase(3);return(x);}" ),
+		"deque(2, 2, 5, 2, 7, 2)"
+	);
+	ENSURE_EQUALS(
+		"deque erase limited by count failed",
+		execute( "main(){x=deque(2,3,2,3,5,2,3,7,2,3);x.erase(3,2);return(x);}" ),
+		"deque(2, 2, 5, 2, 3, 7, 2, 3)"
+	);
+	ENSURE_EQUALS(
+		"deque erase with bad count succeeded",
+		execute_except( "main(){x=deque(2,3,2,3,5,2,3,7,2,3);x.erase(3,0);return(x);}" ),
+		"*anonymous stream*:1:44: invalid erase count: 0"
+	);
+	ENSURE_EQUALS(
 		"deque pop_front failed",
 		execute( "main(){x=deque(2,3,5,7);x.pop_front();return(x);}" ),
 		"deque(3, 5, 7)"
