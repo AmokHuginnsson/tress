@@ -149,6 +149,61 @@ TUT_UNIT_TEST( "list()" )
 		"*anonymous stream*:1:39: invalid erase count: 0"
 	);
 	ENSURE_EQUALS(
+		"list erase in for",
+		execute(
+			"main(){\n"
+			"l=[2,3,2,3,5,2,3,7,2,3];\n"
+			"r = [];"
+			"for(e:l){\n"
+			"if(e==5){\n"
+			"l.erase(3);\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(l);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[2, 3, 2, 3, 5, 2, 7, 2, [2, 2, 5, 2, 7, 2]]"
+	);
+	ENSURE_EQUALS(
+		"list erase in reversed for",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"l=[2,3,2,3,5,2,3,7,2,3];\n"
+			"r = [];"
+			"for(e:algo.reversed(l)){\n"
+			"if(e==5){\n"
+			"l.erase(3);\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(l);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[3, 2, 7, 3, 2, 5, 2, 2, [2, 2, 5, 2, 7, 2]]"
+	);
+	ENSURE_EQUALS(
+		"list clear in for",
+		execute(
+			"main(){\n"
+			"l=[2,3,2,3,5,2,3,7,2,3];\n"
+			"r = [];"
+			"for(e:l){\n"
+			"if(e==5){\n"
+			"l.clear();\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(l);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[2, 3, 2, 3, 5, []]"
+	);
+	ENSURE_EQUALS(
 		"list resize failed",
 		execute( "main(){x=[].resize(5,0);x[0]+=1;y=copy(x).resize(3,none);return((x,y));}" ),
 		"([1, 0, 0, 0, 0], [1, 0, 0])"

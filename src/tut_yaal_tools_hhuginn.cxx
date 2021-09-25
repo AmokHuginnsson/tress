@@ -799,7 +799,7 @@ TUT_UNIT_TEST( "reference cycle garbage collection" )
 		h.reset();
 		ENSURE_EQUALS( "destuctor from `set` was not invoked", val, 5 );
 	}
-	/* `set` */ {
+	/* `user defined class` */ {
 		HHuginn::ptr_t h( make_pointer<HHuginn>() );
 		int val( 0 );
 		register_function( *h, "notify", call( notify, _1, ref( val ) ), "notify" );
