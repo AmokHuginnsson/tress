@@ -367,6 +367,61 @@ TUT_UNIT_TEST( "deque()" )
 		"*anonymous stream*:1:44: invalid erase count: 0"
 	);
 	ENSURE_EQUALS(
+		"deque erase in for",
+		execute(
+			"main(){\n"
+			"d=deque(2,3,2,3,5,2,3,7,2,3);\n"
+			"r = [];"
+			"for(e:d){\n"
+			"if(e==5){\n"
+			"d.erase(3);\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(d);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[2, 3, 2, 3, 5, 2, 7, 2, deque(2, 2, 5, 2, 7, 2)]"
+	);
+	ENSURE_EQUALS(
+		"deque erase in reversed for",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"d=deque(2,3,2,3,5,2,3,7,2,3);\n"
+			"r = [];"
+			"for(e:algo.reversed(d)){\n"
+			"if(e==5){\n"
+			"d.erase(3);\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(d);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[3, 2, 7, 3, 2, 5, 2, 2, deque(2, 2, 5, 2, 7, 2)]"
+	);
+	ENSURE_EQUALS(
+		"deque clear in for",
+		execute(
+			"main(){\n"
+			"d=deque(2,3,2,3,5,2,3,7,2,3);\n"
+			"r = [];"
+			"for(e:d){\n"
+			"if(e==5){\n"
+			"d.clear();\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(d);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[2, 3, 2, 3, 5, deque()]"
+	);
+	ENSURE_EQUALS(
 		"deque pop_front failed",
 		execute( "main(){x=deque(2,3,5,7);x.pop_front();return(x);}" ),
 		"deque(3, 5, 7)"
