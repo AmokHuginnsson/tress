@@ -2250,7 +2250,7 @@ TUT_UNIT_TEST( "incremental mode" )
 	ENSURE_EQUALS(
 		"Crash trigger",
 		execute_incremental( l7 ),
-		"*anonymous stream*:1:9: Symbol `a` is not defined in this context (did you mean `√`?).*anonymous stream*:2:1: Symbol `solve` is not defined in this context (did you mean `set`?)."
+		"*anonymous stream*:1:9: Symbol `a` is not defined in this context (did you mean `√`?).*anonymous stream*:2:1: Symbol `solve` is not defined in this context (did you mean `splice`?)."
 	);
 	lines_t l8{
 		{ "class A { constructor(){a;} }", OLine::TYPE::DEFINITION },

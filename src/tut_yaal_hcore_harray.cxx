@@ -326,6 +326,7 @@ TUT_UNIT_TEST( "ranged erase" )
 	test_erase( 3, yaal::size( _testData_[0] ) / 2 + yaal::size( _testData_[0] ) / 4 );
 	test_erase( yaal::size( _testData_[0] ) / 4, yaal::size( _testData_[0] ) );
 	test_erase( yaal::size( _testData_[0] ) / 4, yaal::size( _testData_[0] ) - 3 );
+	test_erase( 5, 5 );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "ranged insert" )

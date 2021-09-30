@@ -204,6 +204,110 @@ TUT_UNIT_TEST( "list()" )
 		"[2, 3, 2, 3, 5, []]"
 	);
 	ENSURE_EQUALS(
+		"list splice (by 1) failed",
+		execute( "main(){l=[1,2,3,4,5,6,7,8,9];l.splice(3);return(l);}" ),
+		"[1, 2, 3, 5, 6, 7, 8, 9]"
+	);
+	ENSURE_EQUALS(
+		"list splice failed",
+		execute( "main(){l=[1,2,3,4,5,6,7,8,9];l.splice(3,7);return(l);}" ),
+		"[1, 2, 3, 8, 9]"
+	);
+	ENSURE_EQUALS(
+		"list splice failed",
+		execute( "main(){l=[1,2,3,4,5,6,7,8,9];l.splice(11,12);return(l);}" ),
+		"[1, 2, 3, 4, 5, 6, 7, 8, 9]"
+	);
+	ENSURE_EQUALS(
+		"list splice failed",
+		execute( "main(){l=[1,2,3,4,5,6,7,8,9];l.splice(4,4);return(l);}" ),
+		"[1, 2, 3, 4, 5, 6, 7, 8, 9]"
+	);
+	ENSURE_EQUALS(
+		"list splice failed",
+		execute_except( "main(){l=[1,2,3,4,5,6,7,8,9];l.splice(-1);return(l);}" ),
+		"*anonymous stream*:1:38: invalid `from` in splice: -1"
+	);
+	ENSURE_EQUALS(
+		"list splice failed",
+		execute_except( "main(){l=[1,2,3,4,5,6,7,8,9];l.splice(4,3);return(l);}" ),
+		"*anonymous stream*:1:38: invalid `to` in splice: 3"
+	);
+	ENSURE_EQUALS(
+		"list splice in for",
+		execute(
+			"main(){\n"
+			"l=[1,2,3,4,5,6,7,8,9];\n"
+			"r = [];"
+			"for(e:l){\n"
+			"if(e==5){\n"
+			"l.splice(3,7);\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(l);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[1, 2, 3, 4, 5, 8, 9, [1, 2, 3, 8, 9]]"
+	);
+	ENSURE_EQUALS(
+		"list splice in for",
+		execute(
+			"main(){\n"
+			"l=[1,2,3,4,5,6,7,8,9];\n"
+			"r = [];"
+			"for(e:l){\n"
+			"if(e==5){\n"
+			"l.splice(1,4);\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(l);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[1, 2, 3, 4, 5, 6, 7, 8, 9, [1, 5, 6, 7, 8, 9]]"
+	);
+	ENSURE_EQUALS(
+		"list splice in reversed for",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"l=[1,2,3,4,5,6,7,8,9];\n"
+			"r = [];"
+			"for(e:algo.reversed(l)){\n"
+			"if(e==5){\n"
+			"l.splice(3,7);\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(l);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[9, 8, 7, 6, 5, 2, 1, [1, 2, 3, 8, 9]]"
+	);
+	ENSURE_EQUALS(
+		"list splice in reversed for",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"l=[1,2,3,4,5,6,7,8,9];\n"
+			"r = [];"
+			"for(e:algo.reversed(l)){\n"
+			"if(e==7){\n"
+			"l.splice(1,3);\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(l);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[9, 8, 7, 6, 5, 4, 1, [1, 4, 5, 6, 7, 8, 9]]"
+	);
+	ENSURE_EQUALS(
 		"list resize failed",
 		execute( "main(){x=[].resize(5,0);x[0]+=1;y=copy(x).resize(3,none);return((x,y));}" ),
 		"([1, 0, 0, 0, 0], [1, 0, 0])"

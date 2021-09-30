@@ -128,6 +128,7 @@ void tut_yaal_hcore_hdeque_1::test_erase( void ) {
 	test_erase<item_size>( 3, yaal::size( _testData_[0] ) / 2 + yaal::size( _testData_[0] ) / 4 );
 	test_erase<item_size>( yaal::size( _testData_[0] ) / 4, yaal::size( _testData_[0] ) );
 	test_erase<item_size>( yaal::size( _testData_[0] ) / 4, yaal::size( _testData_[0] ) - 3 );
+	test_erase<item_size>( 5, 5 );
 }
 
 TUT_UNIT_TEST( "range erase" )

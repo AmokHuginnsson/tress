@@ -53,7 +53,7 @@ class: deque { ReversedDequeView, append, clear, erase, find, insert, pop, pop_f
 class: dict { KeyValuesDictView, ReversedDictView, clear, ensure, erase, get, has_key, update, values }
 class: heap { clear, pop, push, top, update }
 class: integer {}
-class: list { ReversedListView, append, clear, erase, find, insert, pop, push, resize, sort }
+class: list { ReversedListView, append, clear, erase, find, insert, pop, push, resize, sort, splice }
 class: lookup { KeyValuesLookupView, ReversedLookupView, clear, ensure, erase, get, has_key, update, values }
 class: number { get_precision, is_exact, is_integral, set_precision }
 class: order { ReversedOrderView, clear, erase, has_key, insert, update }
