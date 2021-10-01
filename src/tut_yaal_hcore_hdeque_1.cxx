@@ -148,6 +148,19 @@ TUT_UNIT_TEST( "range erase" )
 	test_erase<640>();
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "erase bug regression check" )
+	typedef HInstanceTracker<tut_yaal_hcore_hdeque_1, 17> item_type;
+	typedef HDeque<item_type> deque_type; {
+		deque_type deque({1, 2, 3, 4, 5, 6, 7, 8, 9});
+		proto_t proto({1, 2, 3, 4, 5, 6, 7, 8, 9});
+		deque.erase( deque.begin() + 3, deque.begin() + 4 );
+		proto.erase( proto.begin() + 3, proto.begin() + 4 );
+		check_consistency( deque );
+		ENSURE_EQUALS( "erase( k, k + 1) failed", deque, proto );
+	}
+	ENSURE_EQUALS( "object leak!", item_t::get_instance_count(), 0 );
+TUT_TEARDOWN()
+
 template<int const item_size>
 void tut_yaal_hcore_hdeque_1::test_roll_forward_insert_erase( int shift_, int pack_, int distance_ ) {
 	clog << "testing roll forward insert erase: " << item_size << ", " << shift_ << ", " << pack_ << endl;
