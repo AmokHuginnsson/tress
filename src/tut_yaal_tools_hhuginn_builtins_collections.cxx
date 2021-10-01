@@ -508,6 +508,110 @@ TUT_UNIT_TEST( "deque()" )
 		"[3, 2, 7, 3, 2, 5, 2, 2, deque(2, 2, 5, 2, 7, 2)]"
 	);
 	ENSURE_EQUALS(
+		"deque splice (by 1) failed",
+		execute( "main(){d=deque(1,2,3,4,5,6,7,8,9);d.splice(3);return(d);}" ),
+		"deque(1, 2, 3, 5, 6, 7, 8, 9)"
+	);
+	ENSURE_EQUALS(
+		"deque splice failed",
+		execute( "main(){d=deque(1,2,3,4,5,6,7,8,9);d.splice(3,7);return(d);}" ),
+		"deque(1, 2, 3, 8, 9)"
+	);
+	ENSURE_EQUALS(
+		"deque splice failed",
+		execute( "main(){d=deque(1,2,3,4,5,6,7,8,9);d.splice(11,12);return(d);}" ),
+		"deque(1, 2, 3, 4, 5, 6, 7, 8, 9)"
+	);
+	ENSURE_EQUALS(
+		"deque splice failed",
+		execute( "main(){d=deque(1,2,3,4,5,6,7,8,9);d.splice(4,4);return(d);}" ),
+		"deque(1, 2, 3, 4, 5, 6, 7, 8, 9)"
+	);
+	ENSURE_EQUALS(
+		"deque splice failed",
+		execute_except( "main(){d=deque(1,2,3,4,5,6,7,8,9);d.splice(-1);return(d);}" ),
+		"*anonymous stream*:1:43: invalid `from` in splice: -1"
+	);
+	ENSURE_EQUALS(
+		"deque splice failed",
+		execute_except( "main(){d=deque(1,2,3,4,5,6,7,8,9);d.splice(4,3);return(d);}" ),
+		"*anonymous stream*:1:43: invalid `to` in splice: 3"
+	);
+	ENSURE_EQUALS(
+		"deque splice in for",
+		execute(
+			"main(){\n"
+			"d=deque(1,2,3,4,5,6,7,8,9);\n"
+			"r = [];"
+			"for(e:d){\n"
+			"if(e==5){\n"
+			"d.splice(3,7);\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(d);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[1, 2, 3, 4, 5, 8, 9, deque(1, 2, 3, 8, 9)]"
+	);
+	ENSURE_EQUALS(
+		"deque splice in for",
+		execute(
+			"main(){\n"
+			"d=deque(1,2,3,4,5,6,7,8,9);\n"
+			"r = [];"
+			"for(e:d){\n"
+			"if(e==5){\n"
+			"d.splice(1,4);\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(d);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[1, 2, 3, 4, 5, 6, 7, 8, 9, deque(1, 5, 6, 7, 8, 9)]"
+	);
+	ENSURE_EQUALS(
+		"deque splice in reversed for",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"d=deque(1,2,3,4,5,6,7,8,9);\n"
+			"r = [];"
+			"for(e:algo.reversed(d)){\n"
+			"if(e==5){\n"
+			"d.splice(3,7);\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(d);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[9, 8, 7, 6, 5, 2, 1, deque(1, 2, 3, 8, 9)]"
+	);
+	ENSURE_EQUALS(
+		"deque splice in reversed for",
+		execute(
+			"import Algorithms as algo;\n"
+			"main(){\n"
+			"d=deque(1,2,3,4,5,6,7,8,9);\n"
+			"r = [];"
+			"for(e:algo.reversed(d)){\n"
+			"if(e==7){\n"
+			"d.splice(1,3);\n"
+			"}\n"
+			"r.push(e);\n"
+			"}\n"
+			"r.push(d);\n"
+			"return(r);\n"
+			"}\n"
+		),
+		"[9, 8, 7, 6, 5, 4, 1, deque(1, 4, 5, 6, 7, 8, 9)]"
+	);
+	ENSURE_EQUALS(
 		"deque clear in for",
 		execute(
 			"main(){\n"
