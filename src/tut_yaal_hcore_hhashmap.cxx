@@ -46,7 +46,7 @@ int long const tut_yaal_hcore_hhashmap::HUGE_TABLE = sizeof ( int long ) > 4 ? 2
 int long const tut_yaal_hcore_hhashmap::FEW_ELEMENTS = 4;
 
 void tut_yaal_hcore_hhashmap::check_consitency( hash_map_t const& map_ ) {
-	typedef hash_map_t::engine_t::HAtom atom_t;
+	typedef hash_map_t::engine_type::HAtom atom_t;
 	atom_t* const* buckets = map_._engine._buckets.get<atom_t*>();
 	int long bucketCount( map_._engine._buckets.get_size() / static_cast<int>( sizeof ( atom_t* ) ) );
 	ENSURE( "wrong bucket count/prime", bucketCount >= map_._engine._prime );
