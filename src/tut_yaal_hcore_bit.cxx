@@ -43,10 +43,17 @@ TUT_TEARDOWN()
 
 #undef BIT_COUNT_TEST
 
-TUT_UNIT_TEST( "least_significant" )
-	ENSURE_EQUALS( "least_significant failed on 0", bit::least_significant( 0 ), -1 );
+TUT_UNIT_TEST( "most_significant_lookup" )
+	ENSURE_EQUALS( "most_significant_lookup failed on 0", bit::most_significant_lookup( 0 ), -1 );
 	for ( int i( 0 ); i < 63; ++ i ) {
-		ENSURE_EQUALS( "least_significant failed on value 2^" + to_string( i ), bit::least_significant( 1ull << i ), i );
+		ENSURE_EQUALS( "most_significant_lookup failed on value 2^" + to_string( i ), bit::most_significant_lookup( 1ull << i ), i );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "most_significant" )
+	ENSURE_EQUALS( "most_significant failed on 0", bit::most_significant( 0 ), -1 );
+	for ( int i( 0 ); i < 63; ++ i ) {
+		ENSURE_EQUALS( "most_significant failed on value 2^" + to_string( i ), bit::most_significant( 1ull << i ), i );
 	}
 TUT_TEARDOWN()
 
