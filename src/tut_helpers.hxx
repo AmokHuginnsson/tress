@@ -205,8 +205,18 @@ inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HMap<key_t, v
 }
 
 template<typename key_t, typename value_t>
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HLookupMap<key_t, value_t> const& m ) {
+	return ( container_dump( out, m, "lookup_map" ) );
+}
+
+template<typename key_t, typename value_t>
 inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HHashMap<key_t, value_t> const& m ) {
 	return ( container_dump( out, m, "hash_map" ) );
+}
+
+template<typename key_t, typename value_t>
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HOrderedHashMap<key_t, value_t> const& m ) {
+	return ( container_dump( out, m, "ordered_hash_map" ) );
 }
 
 template<typename tType>
