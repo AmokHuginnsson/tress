@@ -71,179 +71,10 @@ HJSON make_json( void ) {
 	return json;
 }
 
-#if TARGET_CPU_BITS == 64
 char const complexJSONnl[] =
 	"{\n"
-	"\t\"empty\": {\n"
-	"\t\t\"arr\": [],\n"
-	"\t\t\"obj\": {\n"
-	"\t\t}\n"
-	"\t},\n"
-	"\t\"number_like\": {\n"
-	"\t\t\"number\": 2.718281828459045235360287471,\n"
-	"\t\t\"int\": 13,\n"
-	"\t\t\"real\": 3.14159265359\n"
-	"\t},\n"
-	"\t\"name\": \"nameValue\",\n"
-	"\t\"literals\": [true, false, null],\n"
-	"\t\"date\": \"1978-05-24\",\n"
-	"\t\"banner\": \"yaal's JSON generator\",\n"
-	"\t\"records\": [{\n"
-	"\t\t\"id\": \"int\",\n"
-	"\t\t\"data\": 9\n"
-	"\t}, {\n"
-	"\t\t\"id\": \"float\",\n"
-	"\t\t\"data\": 12.345\n"
-	"\t}, {\n"
-	"\t\t\"id\": \"str\",\n"
-	"\t\t\"data\": \"yaal-JSON\"\n"
-	"\t}]\n"
-	"}\n"
-;
-
-char const complexJSON[] =
-	"{"
-	"\"empty\": {"
-	"\"arr\": [], "
-	"\"obj\": {}"
-	"}, "
-	"\"number_like\": {"
-	"\"number\": 2.718281828459045235360287471, "
-	"\"int\": 13, "
-	"\"real\": 3.14159265359"
-	"}, "
-	"\"name\": \"nameValue\", "
-	"\"literals\": [true, false, null], "
-	"\"date\": \"1978-05-24\", "
-	"\"banner\": \"yaal's JSON generator\", "
-	"\"records\": [{"
-	"\"id\": \"int\", "
-	"\"data\": 9"
-	"}, {"
-	"\"id\": \"float\", "
-	"\"data\": 12.345"
-	"}, {"
-	"\"id\": \"str\", "
-	"\"data\": \"yaal-JSON\""
-	"}]"
-	"}"
-;
-
-char const relaxedJSON[] =
-	"{"
-	"\"records\": [{"
-	"\"id\": 'int', "
-	"\"data\": 9"
-	"}, {"
-	"\"id\": \"float\", "
-	"data: 12.345"
-	"}, {"
-	"\"id\": \"str\", "
-	"\"data\": \"yaal-JSON\","
-	"}], "
-	"banner: \"yaal's JSON generator\", "
-	"\"number_like\": {"
-	"\"int\": 13, "
-	"'number': 2.718281828459045235360287471, "
-	"\"real\": 3.14159265359"
-	"}, "
-	"'name': \"nameValue\", "
-	"\"date\": \"1978-05-24\", "
-	"\"literals\": [true, false, null,], "
-	"\"empty\": {"
-	"\"arr\": [], "
-	"\"obj\": {}"
-	"}"
-	"}"
-;
-#elif defined( __HOST_OS_TYPE_RASPBIAN__ )
-char const complexJSONnl[] =
-	"{\n"
-	"\t\"records\": [{\n"
-	"\t\t\"id\": \"int\",\n"
-	"\t\t\"data\": 9\n"
-	"\t}, {\n"
-	"\t\t\"id\": \"float\",\n"
-	"\t\t\"data\": 12.345\n"
-	"\t}, {\n"
-	"\t\t\"id\": \"str\",\n"
-	"\t\t\"data\": \"yaal-JSON\"\n"
-	"\t}],\n"
-	"\t\"banner\": \"yaal's JSON generator\",\n"
-	"\t\"number_like\": {\n"
-	"\t\t\"int\": 13,\n"
-	"\t\t\"number\": 2.718281828459045235360287471,\n"
-	"\t\t\"real\": 3.14159265359\n"
-	"\t},\n"
 	"\t\"name\": \"nameValue\",\n"
 	"\t\"date\": \"1978-05-24\",\n"
-	"\t\"literals\": [true, false, null],\n"
-	"\t\"empty\": {\n"
-	"\t\t\"arr\": [],\n"
-	"\t\t\"obj\": {\n"
-	"\t\t}\n"
-	"\t}\n"
-	"}\n"
-;
-
-char const complexJSON[] =
-	"{"
-	"\"records\": [{"
-	"\"id\": \"int\", "
-	"\"data\": 9"
-	"}, {"
-	"\"id\": \"float\", "
-	"\"data\": 12.345"
-	"}, {"
-	"\"id\": \"str\", "
-	"\"data\": \"yaal-JSON\""
-	"}], "
-	"\"banner\": \"yaal's JSON generator\", "
-	"\"number_like\": {"
-	"\"int\": 13, "
-	"\"number\": 2.718281828459045235360287471, "
-	"\"real\": 3.14159265359"
-	"}, "
-	"\"name\": \"nameValue\", "
-	"\"date\": \"1978-05-24\", "
-	"\"literals\": [true, false, null], "
-	"\"empty\": {"
-	"\"arr\": [], "
-	"\"obj\": {}"
-	"}"
-	"}"
-;
-
-char const relaxedJSON[] =
-	"{"
-	"\"records\": [{"
-	"\"id\": 'int', "
-	"\"data\": 9"
-	"}, {"
-	"\"id\": \"float\", "
-	"data: 12.345"
-	"}, {"
-	"\"id\": \"str\", "
-	"\"data\": \"yaal-JSON\","
-	"}], "
-	"banner: \"yaal's JSON generator\", "
-	"\"number_like\": {"
-	"\"int\": 13, "
-	"'number': 2.718281828459045235360287471, "
-	"\"real\": 3.14159265359"
-	"}, "
-	"'name': \"nameValue\", "
-	"\"date\": \"1978-05-24\", "
-	"\"literals\": [true, false, null,], "
-	"\"empty\": {"
-	"\"arr\": [], "
-	"\"obj\": {}"
-	"}"
-	"}"
-;
-#else
-char const complexJSONnl[] =
-	"{\n"
 	"\t\"records\": [{\n"
 	"\t\t\"id\": \"int\",\n"
 	"\t\t\"data\": 9\n"
@@ -259,20 +90,20 @@ char const complexJSONnl[] =
 	"\t\t\"real\": 3.14159265359,\n"
 	"\t\t\"number\": 2.718281828459045235360287471\n"
 	"\t},\n"
-	"\t\"banner\": \"yaal's JSON generator\",\n"
-	"\t\"name\": \"nameValue\",\n"
-	"\t\"date\": \"1978-05-24\",\n"
-	"\t\"literals\": [true, false, null],\n"
 	"\t\"empty\": {\n"
 	"\t\t\"arr\": [],\n"
 	"\t\t\"obj\": {\n"
 	"\t\t}\n"
-	"\t}\n"
+	"\t},\n"
+	"\t\"banner\": \"yaal's JSON generator\",\n"
+	"\t\"literals\": [true, false, null]\n"
 	"}\n"
 ;
 
 char const complexJSON[] =
 	"{"
+	"\"name\": \"nameValue\", "
+	"\"date\": \"1978-05-24\", "
 	"\"records\": [{"
 	"\"id\": \"int\", "
 	"\"data\": 9"
@@ -288,23 +119,17 @@ char const complexJSON[] =
 	"\"real\": 3.14159265359, "
 	"\"number\": 2.718281828459045235360287471"
 	"}, "
-	"\"banner\": \"yaal's JSON generator\", "
-	"\"name\": \"nameValue\", "
-	"\"date\": \"1978-05-24\", "
-	"\"literals\": [true, false, null], "
 	"\"empty\": {"
 	"\"arr\": [], "
 	"\"obj\": {}"
-	"}"
+	"}, "
+	"\"banner\": \"yaal's JSON generator\", "
+	"\"literals\": [true, false, null]"
 	"}"
 ;
 
 char const relaxedJSON[] =
 	"{"
-	"\"empty\": {"
-	"\"arr\": [], "
-	"\"obj\": {}"
-	"}, "
 	"\"records\": [{"
 	"\"id\": 'int', "
 	"\"data\": 9"
@@ -323,10 +148,13 @@ char const relaxedJSON[] =
 	"}, "
 	"'name': \"nameValue\", "
 	"\"date\": \"1978-05-24\", "
-	"\"literals\": [true, false, null,]"
+	"\"literals\": [true, false, null,], "
+	"\"empty\": {"
+	"\"arr\": [], "
+	"\"obj\": {}"
+	"}"
 	"}"
 ;
-#endif
 
 }
 
@@ -430,57 +258,30 @@ TUT_UNIT_TEST( "generate object" )
 	m["null"] = HValue::LITERAL::NULL;
 	HStringStream ss;
 	json.save( ss );
-#if TARGET_CPU_BITS == 64
 	char const expectedNL[] =
 		"{\n"
-		"\t\"false\": false,\n"
-		"\t\"pi\": 3.14159265359,\n"
 		"\t\"bad_luck\": 13,\n"
+		"\t\"pi\": 3.14159265359,\n"
+		"\t\"e\": 2.718281828459045,\n"
 		"\t\"banner\": \"yaal's JSON generator\",\n"
 		"\t\"true\": true,\n"
-		"\t\"e\": 2.718281828459045,\n"
+		"\t\"false\": false,\n"
 		"\t\"null\": null\n"
 		"}\n"
 	;
-#else
-	char const expectedNL[] =
-		"{\n"
-		"\t\"banner\": \"yaal's JSON generator\",\n"
-		"\t\"pi\": 3.14159265359,\n"
-		"\t\"bad_luck\": 13,\n"
-		"\t\"false\": false,\n"
-		"\t\"true\": true,\n"
-		"\t\"e\": 2.718281828459045,\n"
-		"\t\"null\": null\n"
-		"}\n"
-	;
-#endif
 	ENSURE_EQUALS( "[JSON] just an object generation failed", ss.string(), expectedNL );
 	ss.reset();
 	json.save( ss, false );
-#if TARGET_CPU_BITS == 64
 	char const expected[] =
 		"{"
-		"\"false\": false, "
-		"\"pi\": 3.14159265359, "
 		"\"bad_luck\": 13, "
+		"\"pi\": 3.14159265359, "
+		"\"e\": 2.718281828459045, "
 		"\"banner\": \"yaal's JSON generator\", "
 		"\"true\": true, "
-		"\"e\": 2.718281828459045, "
-		"\"null\": null}"
-	;
-#else
-	char const expected[] =
-		"{"
-		"\"banner\": \"yaal's JSON generator\", "
-		"\"pi\": 3.14159265359, "
-		"\"bad_luck\": 13, "
 		"\"false\": false, "
-		"\"true\": true, "
-		"\"e\": 2.718281828459045, "
 		"\"null\": null}"
 	;
-#endif
 	ENSURE_EQUALS( "[JSON] just an object generation failed", ss.string(), expected );
 TUT_TEARDOWN()
 
