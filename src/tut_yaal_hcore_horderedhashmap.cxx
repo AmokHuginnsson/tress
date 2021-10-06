@@ -51,27 +51,12 @@ void tut_yaal_hcore_horderedhashmap::check_consitency( ordered_hash_map_t const&
 	typedef ordered_hash_map_t::engine_type::HAtom atom_t;
 	int long slotCount( map_._engine._size + map_._engine._erased );
 	int long storeSize( map_._engine._store.count_of<atom_t>() );
-	int long indexMapSize(
-		static_cast<hash_value_t>( map_._engine._cover ) <= ( 1ULL << 7 )
-			? map_._engine._indexMap.count_of<i8_t>()
-			: (
-				static_cast<hash_value_t>( map_._engine._cover ) <= ( 1ULL << 15 )
-					? map_._engine._indexMap.count_of<i16_t>()
-					: (
-						static_cast<hash_value_t>( map_._engine._cover ) <= ( 1ULL << 31 )
-							? map_._engine._indexMap.count_of<i32_t>()
-							: map_._engine._indexMap.count_of<ordered_hash_map_t::engine_type::size_type>()
-					)
-			)
-	);
-	ENSURE_EQUALS( "wrong indexMap/cover size", map_._engine._cover, indexMapSize );
 	ENSURE_GREATER_OR_EQUAL( "indexMap has more than of 2/3 slots taken", map_._engine._cover, slotCount * 3 / 2 );
-	ENSURE_GREATER_OR_EQUAL( "wrong bucket prime/size", map_._engine._prime, slotCount );
-	ENSURE_GREATER( "wrong prime/cover size", map_._engine._cover, map_._engine._prime );
+	ENSURE_GREATER_OR_EQUAL( "wrong bucket prime/size", map_._engine._cover, slotCount );
 	ENSURE_GREATER_OR_EQUAL( "wronge storage size", storeSize, slotCount );
 	int valid( 0 );
 	int erased( 0 );
-	for ( int i( 0 ); i < indexMapSize; ++ i ) {
+	for ( int i( 0 ); i < map_._engine._cover; ++ i ) {
 		int long storeIndex( map_._engine.get_index( static_cast<hash_value_t>( i ) ) );
 		if ( storeIndex == ordered_hash_map_t::engine_type::ERASED ) {
 			++ erased;
@@ -96,7 +81,7 @@ void tut_yaal_hcore_horderedhashmap::check_consitency( ordered_hash_map_t const&
 		}
 		hash_value_t actualHash( static_cast<hash_value_t>( map_._engine._hasher( atom._value.first ) ) & ordered_hash_map_t::engine_type::HASH_MASK );
 		ENSURE_EQUALS( "bad hash in store", atom._hash, actualHash );
-		hash_value_t mapIndex( atom._hash % static_cast<hash_value_t>( map_._engine._prime ) );
+		hash_value_t mapIndex( atom._hash % static_cast<hash_value_t>( map_._engine._cover ) );
 		ENSURE_NOT( "bad indexMap content", map_._engine.get_index( mapIndex ) == ordered_hash_map_t::engine_type::INVALID );
 		int collision( 0 );
 		hash_value_t perturb( atom._hash );
@@ -113,7 +98,7 @@ void tut_yaal_hcore_horderedhashmap::check_consitency( ordered_hash_map_t const&
 		++ validInStore;
 	}
 	ENSURE_EQUALS( "invalid store content", validInStore, map_._engine._size );
-	clog << "size = " << ( validInStore + erased ) << ", prime = " << map_._engine._prime << ", longest collision = " << longestCollision << ", totalCollisions = " << totalCollisions << endl;
+	clog << "size = " << ( validInStore + erased ) << ", cover = " << map_._engine._cover << ", longest collision = " << longestCollision << ", totalCollisions = " << totalCollisions << endl;
 }
 
 TUT_TEST_GROUP( tut_yaal_hcore_horderedhashmap, "yaal::hcore::HOrderedHashMap" );
