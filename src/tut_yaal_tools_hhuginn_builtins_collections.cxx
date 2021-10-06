@@ -867,11 +867,7 @@ TUT_UNIT_TEST( "dict()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "lookup()" )
-#if ( TARGET_CPU_BITS == 64 )
-	char const expected1[] = "{none: 7, true: false, 1: \"ma\", \"Ala\": 0, \"kota.\": 2}";
-#else
-	char const expected1[] = "{none: 7, true: false, 1: \"ma\", \"kota.\": 2, \"Ala\": 0}";
-#endif
+	char const expected1[] = "{\"Ala\": 0, 1: \"ma\", \"kota.\": 2, none: 7, true: false}";
 	ENSURE_EQUALS(
 		"lookup() iterator failed",
 		execute( "main(){x={\"Ala\":0,1:\"ma\",\"kota.\":2,none:7,true:false};return(x);}" ),
@@ -943,11 +939,7 @@ TUT_UNIT_TEST( "lookup()" )
 		),
 		"[(2, 0), (3, 1), (5, -1), (7, -2), 4]"
 	);
-#if ( TARGET_CPU_BITS == 64 )
-	char const expected2[] = "\"none7truefalse1maAla0kota.2|1maAla0kota.2\"";
-#else
-	char const expected2[] = "\"none7truefalse1makota.2Ala0|1makota.2Ala0\"";
-#endif
+	char const expected2[] = "\"Ala01makota.2none7truefalse|Ala01makota.2\"";
 	ENSURE_EQUALS(
 		"lookup() erase failed",
 		execute( "d(x){v=\"\";for(e:x){v+=string(e);v+=string(x[e]);}return(v);}main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;v=d(x);v+=\"|\";x.erase(none);x.erase(true);v+=d(x);return(v);}" ),
@@ -958,11 +950,7 @@ TUT_UNIT_TEST( "lookup()" )
 		execute( "main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;return([x.get(1),x.get(2,7)]);}" ),
 		"[\"ma\", 7]"
 	);
-#if ( TARGET_CPU_BITS == 64 )
-	char const expected4[] = "(\"data\", \"ma\", {1: \"ma\", 7: \"data\", \"Ala\": 0, \"kota.\": 2})";
-#else
-	char const expected4[] = "(\"data\", \"ma\", {1: \"ma\", \"kota.\": 2, 7: \"data\", \"Ala\": 0})";
-#endif
+	char const expected4[] = "(\"data\", \"ma\", {\"Ala\": 0, 1: \"ma\", \"kota.\": 2, 7: \"data\"})";
 	ENSURE_EQUALS(
 		"lookup.ensure() failed",
 		execute( "main(){x={\"Ala\":0,1:\"ma\",\"kota.\":2};return((x.ensure(7,\"data\"),x.ensure( 1, \"je\" ),x));}" ),
@@ -980,11 +968,7 @@ TUT_UNIT_TEST( "lookup()" )
 		),
 		"[true, false, false]"
 	);
-#if ( TARGET_CPU_BITS == 64 )
-	char const expected3[] = "[\"1maAla0kota.2\", \"none7truefalse1maAla0kota.2\"]";
-#else
-	char const expected3[] = "[\"1makota.2Ala0\", \"none7truefalse1makota.2Ala0\"]";
-#endif
+	char const expected3[] = "[\"Ala01makota.2\", \"Ala01makota.2none7truefalse\"]";
 	ENSURE_EQUALS(
 		"lookup() copy() failed",
 		execute( "d(x){v=\"\";for(e:x){v+=string(e);v+=string(x[e]);}return(v);}main(){x=lookup();x[\"Ala\"]=0;x[1]=\"ma\";x[\"kota.\"]=2;x[none]=7;x[true]=false;y=copy(x);x.erase(none);x.erase(true);return([d(x),d(y)]);}" ),
@@ -1004,7 +988,7 @@ TUT_UNIT_TEST( "lookup()" )
 			"return(r);\n"
 			"}\n"
 		),
-		"\"2 -> 2, 3 -> 3, 4 -> 4, 5 -> 5, 8 -> 8, \""
+		"\"2 -> 2, 3 -> 3, 5 -> 5, 4 -> 4, 8 -> 8, \""
 	);
 	ENSURE_EQUALS(
 		"lookup hash failed",
@@ -1025,7 +1009,7 @@ TUT_UNIT_TEST( "lookup()" )
 			"return(r);\n"
 			"}\n"
 		),
-		"[3, {}]"
+		"[2, {}]"
 	);
 	ENSURE_EQUALS(
 		"lookup erase in for",
@@ -1038,7 +1022,7 @@ TUT_UNIT_TEST( "lookup()" )
 			"return(r);\n"
 			"}\n"
 		),
-		"[3, 5, 2, {}]"
+		"[2, 3, 5, {}]"
 	);
 	ENSURE_EQUALS(
 		"lookup erase in reversed for",
@@ -1051,7 +1035,7 @@ TUT_UNIT_TEST( "lookup()" )
 			"return(r);\n"
 			"}\n"
 		),
-		"[2, 5, 3]"
+		"[5, 3, 2]"
 	);
 TUT_TEARDOWN()
 

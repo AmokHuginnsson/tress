@@ -23,13 +23,22 @@ TUT_TEST_GROUP( tut_yaal_tools_hhuginn_json, "yaal::tools::HHuginn.JSON" );
 
 TUT_UNIT_TEST( "save" )
 	char const expected[] =
-		"\"{\\\"string\\\": \\\"Huginn-JSON\\\", \\\"false\\\": false, \\\"set\\\": [1, 2, 3, 4], \\\"character\\\": \\\"h\\\", "
-		"\\\"order\\\": [1, 2, 3, 4], \\\"array\\\": [1, 2, 3, 4], "
-		"\\\"dict\\\": {\\\"four\\\": 4, \\\"one\\\": 1, \\\"three\\\": 3, \\\"two\\\": 2}, "
-		"\\\"null\\\": null, \\\"true\\\": true, "
-		"\\\"tuple\\\": [1, 2, 3, 4], \\\"deque\\\": [1, 2, 3, 4], "
-		"\\\"lookup\\\": {\\\"three\\\": 3, \\\"one\\\": 1, \\\"two\\\": 2, \\\"four\\\": 4}, "
-		"\\\"real\\\": 3.1415, \\\"int\\\": 7, \\\"number\\\": 2.71828182845904523536028747}\""
+		"\"{"
+		"\\\"int\\\": 7, "
+		"\\\"real\\\": 3.1415, "
+		"\\\"number\\\": 2.71828182845904523536028747, "
+		"\\\"string\\\": \\\"Huginn-JSON\\\", "
+		"\\\"true\\\": true, "
+		"\\\"false\\\": false, "
+		"\\\"null\\\": null, "
+		"\\\"character\\\": \\\"h\\\", "
+		"\\\"array\\\": [1, 2, 3, 4], "
+		"\\\"lookup\\\": {\\\"one\\\": 1, \\\"two\\\": 2, \\\"three\\\": 3, \\\"four\\\": 4}, "
+		"\\\"tuple\\\": [1, 2, 3, 4], "
+		"\\\"deque\\\": [1, 2, 3, 4], "
+		"\\\"order\\\": [1, 2, 3, 4], "
+		"\\\"set\\\": [1, 2, 3, 4], "
+		"\\\"dict\\\": {\\\"four\\\": 4, \\\"one\\\": 1, \\\"three\\\": 3, \\\"two\\\": 2}}\""
 	;
 	ENSURE_EQUALS(
 		"JSON.save failed",

@@ -533,7 +533,7 @@ TUT_UNIT_TEST( "Stream" )
 			"return(res);\n"
 			"}\n"
 		),
-		"[{3: 8, 1: 2, 2: 4}, {}, \"Not enough data in the stream.\"]"
+		"[{1: 2, 2: 4, 3: 8}, {}, \"Not enough data in the stream.\"]"
 	);
 	ENSURE_EQUALS(
 		"(de)serialization - order",

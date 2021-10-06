@@ -386,7 +386,7 @@ TUT_UNIT_TEST( "materialize" )
 			"return(algo.materialize([(0,1),(2,3),(4,5)],lookup));\n"
 			"}"
 		),
-		"{0: 1, 4: 5, 2: 3}"
+		"{0: 1, 2: 3, 4: 5}"
 	);
 	ENSURE_EQUALS(
 		"Algorithms.materialize of non tuple (to lookup) succeeded",
