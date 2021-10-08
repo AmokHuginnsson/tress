@@ -561,6 +561,7 @@ TUT_UNIT_TEST( "construct from string with exponential form" )
 			s.assign( templS ).append( ( i > 0 ) && ( i % 5 ) != 0 ? "+" : "" ).append( i ).append( ".5" );
 			e = templN;
 			e *= ( ten ^ i );
+			clog << "s = " << s << endl;
 			HNumber n( s );
 			ENSURE_EQUALS( "exponential form failed", n, e );
 		}
