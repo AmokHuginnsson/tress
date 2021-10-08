@@ -234,16 +234,17 @@ TUT_UNIT_TEST( "generate array" )
 	json.element().push_back( 13 );
 	json.element().push_back( 3.141592653589793L );
 	json.element().push_back( "2.718281828459045"_yn );
+	json.element().push_back( HTime( 1978, 5, 24, 23, 30, 17 ) );
 	json.element().push_back( "yaal's JSON generator" );
 	json.element().push_back( HValue::LITERAL::TRUE );
 	json.element().push_back( HValue::LITERAL::FALSE );
 	json.element().push_back( HValue::LITERAL::NULL );
 	HStringStream ss;
 	json.save( ss );
-	ENSURE_EQUALS( "[JSON] just an array generation failed", ss.string(), "[13, 3.14159265359, 2.718281828459045, \"yaal's JSON generator\", true, false, null]\n" );
+	ENSURE_EQUALS( "[JSON] just an array generation failed", ss.string(), "[13, 3.14159265359, 2.718281828459045, \"1978-05-24 23:30:17\", \"yaal's JSON generator\", true, false, null]\n" );
 	ss.reset();
 	json.save( ss, false );
-	ENSURE_EQUALS( "[JSON] just an array generation failed", ss.string(), "[13, 3.14159265359, 2.718281828459045, \"yaal's JSON generator\", true, false, null]" );
+	ENSURE_EQUALS( "[JSON] just an array generation failed", ss.string(), "[13, 3.14159265359, 2.718281828459045, \"1978-05-24 23:30:17\", \"yaal's JSON generator\", true, false, null]" );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "generate object" )
