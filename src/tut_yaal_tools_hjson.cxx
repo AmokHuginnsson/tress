@@ -529,5 +529,24 @@ TUT_UNIT_TEST( "parser errors" )
 	ENSURE_THROW( "serialization of uninitialized node succeeded", json.load( ss ), HJSONException );
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "embedded quotes on parsing" )
+	HJSON json;
+	HStringStream ss( "{\"quote\": \"text \\\"citation\\\" epilog\", \"newline\": \"text\\nnext line\", \"mixed\": \"text \\\"Q\\\"\\n\\\"Q\\\"\"}" );
+	json.load( ss );
+	ENSURE_EQUALS( "embedded quotes failed during parsing", json.element()["quote"].get_string(), "text \"citation\" epilog" );
+	ENSURE_EQUALS( "embedded newline failed during parsing", json.element()["newline"].get_string(), "text\nnext line" );
+	ENSURE_EQUALS( "embedded quotes and newline failed during parsing", json.element()["mixed"].get_string(), "text \"Q\"\n\"Q\"" );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "embedded quotes during emiting" )
+	HJSON json;
+	json.element()["quote"] = "text \"citation\" epilog";
+	json.element()["newline"] = "text\nnext line";
+	json.element()["mixed"] = "text \"Q\"\n\"Q\"";
+	HStringStream ss;
+	json.save( ss, false );
+	ENSURE_EQUALS( "embedded quotes failed during embedded", ss.str(), "{\"quote\": \"text \\\"citation\\\" epilog\", \"newline\": \"text\\nnext line\", \"mixed\": \"text \\\"Q\\\"\\n\\\"Q\\\"\"}" );
+TUT_TEARDOWN()
+
 }
 
