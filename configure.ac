@@ -69,7 +69,7 @@ fi
 if test ["x${CONTINUOUS_INTEGRATION_SYSTEM}"] != ["x"] ; then
 	define(
 		CONTINUOUS_INTEGRATION_SYSTEM,
-		esyscmd(echo -n ["CONTINUOUS_INTEGRATION_${CONTINUOUS_INTEGRATION_SYSTEM}"] | awk '{ printf( toupper( $0 ) ) }')) dnl No newline is significant.
+		esyscmd(echo -n ["CONTINUOUS_INTEGRATION_${CONTINUOUS_INTEGRATION_SYSTEM}"] | tr ["a-z-"] ["A-Z_"] )) dnl No newline is significant.
 	AC_DEFINE_UNQUOTED(
 		[CONTINUOUS_INTEGRATION_SYSTEM],
 		[],
