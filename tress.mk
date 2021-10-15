@@ -14,6 +14,7 @@ test: $(TARGET)
 		TZ="Europe/Warsaw" \
 		TRESSRC="tressrc" \
 		PATH="${PATH}" \
+		HOME="${HOME}" \
 		LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" \
 		$${QEMU_RESERVED_VA:+QEMU_RESERVED_VA=}${QEMU_RESERVED_VA} \
 		$${LC_CTYPE:+LC_CTYPE=}${LC_CTYPE} \
