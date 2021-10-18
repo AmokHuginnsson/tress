@@ -75,21 +75,21 @@ TUT_TEARDOWN()
 TUT_UNIT_TEST( "set/get_attr" )
 	HConsole& cons( HConsole::get_instance() );
 	cons.enter_curses();
-	COLOR::color_t attr( COLOR::ATTR_NORMAL );
+	COLOR::color_t attr( COLOR::ATTR_DEFAULT );
 	cons.set_attr( attr );
-	ENSURE_EQUALS( "ATTR_NORMAL failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
+	ENSURE_EQUALS( "ATTR_DEFAULT failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
 	attr = COLOR::combine( COLOR::BG_BLUE, COLOR::FG_CYAN );
 	cons.set_attr( attr );
-	ENSURE_EQUALS( "ATTR_NORMAL failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
+	ENSURE_EQUALS( "BG_BLUE | FG_CYAN failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
 	attr = COLOR::combine( COLOR::BG_BLUE, COLOR::FG_YELLOW );
 	cons.set_attr( attr );
-	ENSURE_EQUALS( "ATTR_NORMAL failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
+	ENSURE_EQUALS( "BG_BLUE | FG_YELLOW failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
 	attr = COLOR::combine( COLOR::BG_BRIGHTGREEN, COLOR::FG_RED );
 	cons.set_attr( attr );
-	ENSURE_EQUALS( "ATTR_NORMAL failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
+	ENSURE_EQUALS( "BG_BRIGHTGREEN | FG_RED failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
 	attr = COLOR::combine( COLOR::BG_BRIGHTGREEN, COLOR::FG_BRIGHTCYAN );
 	cons.set_attr( attr );
-	ENSURE_EQUALS( "ATTR_NORMAL failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
+	ENSURE_EQUALS( "BG_BRIGHTGREEN | FG_BRIGHTCYAN failed", static_cast<int>( cons.get_attr() ), static_cast<int>( attr ) );
 	cons.leave_curses();
 TUT_TEARDOWN()
 
