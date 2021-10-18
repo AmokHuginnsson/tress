@@ -216,8 +216,12 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 		_testData_[0], _testData_[0] + yaal::size( _testData_[0] ) );
 	HHashMap<int, int> hashMap;
 	HHashMap<int, int> emptyHashMap;
-	for ( int i( 0 ); i < 10; ++ i )
+	HOrderedHashMap<int, int> orderedHashMap;
+	HOrderedHashMap<int, int> emptyOrderedHashMap;
+	for ( int i( 0 ); i < 10; ++ i ) {
 		hashMap[i] = i * i;
+		orderedHashMap[i] = i * i;
+	}
 	HString result( ( pi * e ).to_string() );
 	HPointer<HString> pr( new HString( result ) );
 	HPointer<HArray<int> > pa;
@@ -246,6 +250,8 @@ TUT_UNIT_TEST( 50, "yaal data types instantiations for gdb-pretty-printers and M
 	clog << emptyHashSet << endl;
 	clog << hashMap << endl;
 	clog << emptyHashMap << endl;
+	clog << orderedHashMap << endl;
+	clog << emptyOrderedHashMap << endl;
 	clog << ring << endl;
 	clog << emptyRing << endl;
 	clog << result << endl;

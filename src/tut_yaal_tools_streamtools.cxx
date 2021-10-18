@@ -344,23 +344,52 @@ TUT_UNIT_TEST( "stream + HHashMap" )
 	ss << "ala " << data << " kot";
 	HString str;
 	ss >> str;
-	int_hash_map_t hs;
-	ss >> hs;
-	int_pair_array_t sorted( hs.begin(), hs.end() );
+	int_hash_map_t hm;
+	ss >> hm;
+	int_pair_array_t sorted( hm.begin(), hm.end() );
 	sort( sorted.begin(), sorted.end() );
-	ENSURE_EQUALS( "HHashSet text streams failed", sorted, exp );
+	ENSURE_EQUALS( "HHashMap text streams failed", sorted, exp );
 	HChunk buf;
 	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
 	m << binary << data;
-	hs.clear();
-	m >> hs;
-	sorted.assign( hs.begin(), hs.end() );
+	hm.clear();
+	m >> hm;
+	sorted.assign( hm.begin(), hm.end() );
 	sort( sorted.begin(), sorted.end() );
-	ENSURE_EQUALS( "HHashSet binary streams failed", sorted, exp );
+	ENSURE_EQUALS( "HHashMap binary streams failed", sorted, exp );
 	ss.reset();
 	ss << "hash_map(pair<13,7>))";
-	ss >> hs;
-	ENSURE_EQUALS( "HHashSet text minimal streams failed", hs, int_hash_map_t( { { 13, 7 } } ) );
+	ss >> hm;
+	ENSURE_EQUALS( "HHashMap text minimal streams failed", hm, int_hash_map_t( { { 13, 7 } } ) );
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "stream + HOrderedHashMap" )
+	typedef yaal::hcore::HPair<int, int> int_pair_t;
+	typedef yaal::hcore::HArray<int_pair_t> int_pair_array_t;
+	typedef yaal::hcore::HOrderedHashMap<int, int> int_ordered_hash_map_t;
+	HStringStream ss;
+	int_pair_array_t exp( { { 1, 0 }, { 2, 1 }, { 3, 2 }, { 7, 3 }, { 19, 4 } } );
+	int_ordered_hash_map_t data( exp.begin(), exp.end() );
+	ss << "ala " << data << " kot";
+	HString str;
+	ss >> str;
+	int_ordered_hash_map_t ohm;
+	ss >> ohm;
+	int_pair_array_t sorted( ohm.begin(), ohm.end() );
+	sort( sorted.begin(), sorted.end() );
+	ENSURE_EQUALS( "HOrderedHashMap text streams failed", sorted, exp );
+	HChunk buf;
+	HMemory m( make_resource<HMemoryProvider>( buf, 100 ) );
+	m << binary << data;
+	ohm.clear();
+	m >> ohm;
+	sorted.assign( ohm.begin(), ohm.end() );
+	sort( sorted.begin(), sorted.end() );
+	ENSURE_EQUALS( "HOrderedHashMap binary streams failed", sorted, exp );
+	ss.reset();
+	ss << "ordered_hash_map(pair<13,7>))";
+	ss >> ohm;
+	ENSURE_EQUALS( "HOrderedHashMap text minimal streams failed", ohm, int_ordered_hash_map_t( { { 13, 7 } } ) );
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "time::duruation_t write to stream in text mode" )
