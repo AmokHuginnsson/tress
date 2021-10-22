@@ -2364,6 +2364,15 @@ TUT_UNIT_TEST( "incremental mode" )
 		execute_incremental( l18 ),
 		"*anonymous stream*:1:14: Symbol `z` is not defined in this context (did you mean `√`?).*anonymous stream*:2:4: Function `@1:5()` accepts exactly 0 positional arguments, but 1 were given."
 	);
+	lines_t l19{
+		{ "handle = none;\n0; // break the cycle" },
+		{ "res = \"\";\nres;" }
+	};
+	ENSURE_EQUALS(
+		"comment",
+		execute_incremental( l19 ),
+		"0\"\""
+	);
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "introspection" )
@@ -2514,6 +2523,47 @@ TUT_UNIT_TEST( "incremental introspection" )
 			names.append( v.name ).append( " " ).append( v.value );
 		}
 		ENSURE_EQUALS( "get_locals failed", names, "p 0 q <undefined>" );
+	}
+TUT_TEARDOWN()
+
+TUT_UNIT_TEST( "incremental introspection local variables after scope" )
+	HIntrospector introspector;
+	lines_t lines{
+		{ "x = 0;" },
+		{ "{ a0 = 0; a1 = 1; a2 = 2; a3 = 3; a4 = 4; a5 = 5; }" },
+		{ "o = \"\";" }
+	};
+	ENSURE_EQUALS(
+		"Stream.read failed",
+		execute_incremental(
+			lines,
+			HHuginn::COMPILER::BE_SLOPPY,
+			&introspector
+		),
+		"0none\"\""
+	);
+	HHuginn::call_stack_t const* callStack( introspector.get_stack( "*anonymous stream*", 3 ) );
+	char const expected[][64] = {
+		"*anonymous stream*:3:3:main"
+	};
+	HStringStream ss;
+	int row( 0 );
+	for ( HHuginn::HCallSite const& cs : *callStack ) {
+		ss << cs.file() << ":" << cs.line() << ":" << cs.column() << ":" << cs.context();
+		ENSURE_EQUALS( "getting call stack failed", ss.str(), expected[row] );
+		ss.reset();
+		++ row;
+	}
+	/* top frame */ {
+		HIntrospector::identifier_names_t const* identifierNames( introspector.get_locals( "*anonymous stream*", 4 ) );
+		hcore::HString names;
+		for ( HIntrospector::OVar const& v : *identifierNames ) {
+			if ( ! names.is_empty() ) {
+				names.append( " " );
+			}
+			names.append( v.name ).append( " " ).append( v.value );
+		}
+		ENSURE_EQUALS( "get_locals failed", names, "x 0 o \"\"" );
 	}
 TUT_TEARDOWN()
 
