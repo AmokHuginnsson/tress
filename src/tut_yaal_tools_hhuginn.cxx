@@ -2446,7 +2446,18 @@ TUT_UNIT_TEST( "introspection" )
 			}
 			names.append( v.name ).append( " " ).append( v.value );
 		}
-		ENSURE_EQUALS( "get_locals failed", names, "p 0 q <undefined>" );
+		ENSURE_EQUALS( "get_locals failed", names, "p 0" );
+	}
+	/* second frame next line */ {
+		HIntrospector::identifier_names_t const* identifierNames( introspector.get_locals( "*anonymous stream*", 9 ) );
+		hcore::HString names;
+		for ( HIntrospector::OVar const& v : *identifierNames ) {
+			if ( ! names.is_empty() ) {
+				names.append( " " );
+			}
+			names.append( v.name ).append( " " ).append( v.value );
+		}
+		ENSURE_EQUALS( "get_locals failed", names, "p 0 q 6" );
 	}
 	/* bottom frame */ {
 		HIntrospector::identifier_names_t const* identifierNames( introspector.get_locals( "*anonymous stream*", 13 ) );
@@ -2476,7 +2487,7 @@ TUT_UNIT_TEST( "incremental introspection" )
 	HIntrospector introspector;
 	lines_t lines{
 		{ "foo( x ) { y = x + 1; y += 2; return ( y ); }", OLine::TYPE::DEFINITION },
-		{ "bar( p ) { q = foo( p ) * 2; return ( q ); }", OLine::TYPE::DEFINITION },
+		{ "bar( p ) {\nq = foo( p ) * 2;\nreturn ( q );\n}", OLine::TYPE::DEFINITION },
 		{ "bar( 0 );" }
 	};
 	ENSURE_EQUALS(
@@ -2491,8 +2502,8 @@ TUT_UNIT_TEST( "incremental introspection" )
 	HHuginn::call_stack_t const* callStack( introspector.get_stack( "*anonymous stream*", 1 ) );
 	char const expected[][64] = {
 		"*anonymous stream*:1:12:foo",
-		"*anonymous stream*:2:19:bar",
-		"*anonymous stream*:4:4:main"
+		"*anonymous stream*:3:8:bar",
+		"*anonymous stream*:7:4:main"
 	};
 	HStringStream ss;
 	int row( 0 );
@@ -2522,7 +2533,18 @@ TUT_UNIT_TEST( "incremental introspection" )
 			}
 			names.append( v.name ).append( " " ).append( v.value );
 		}
-		ENSURE_EQUALS( "get_locals failed", names, "p 0 q <undefined>" );
+		ENSURE_EQUALS( "get_locals failed", names, "p 0" );
+	}
+	/* second frame next line */ {
+		HIntrospector::identifier_names_t const* identifierNames( introspector.get_locals( "*anonymous stream*", 4 ) );
+		hcore::HString names;
+		for ( HIntrospector::OVar const& v : *identifierNames ) {
+			if ( ! names.is_empty() ) {
+				names.append( " " );
+			}
+			names.append( v.name ).append( " " ).append( v.value );
+		}
+		ENSURE_EQUALS( "get_locals failed", names, "p 0 q 6" );
 	}
 TUT_TEARDOWN()
 
