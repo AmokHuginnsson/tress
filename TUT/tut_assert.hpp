@@ -109,7 +109,10 @@ void ensure_equals_impl(
 	std::stringstream ss;
 	ss << msg
 		<< ( ! msg.empty() ? ":" : "" )
-		<< " actual [" << stream_escape( actual ) << "] expected [" << stream_escape( expected ) << "] (" << actualExpr << " == " << expectedExpr << ")";
+		<< " actual [" << stream_escape( actual ) << "] expected [" << stream_escape( expected ) << "]";
+	if ( actualExpr && expectedExpr ) {
+		ss << " (" << actualExpr << " == " << expectedExpr << ")";
+	}
 	throw failure( file, line, ss.str().c_str() );
 }
 template<class T, class Q>
@@ -243,7 +246,10 @@ void ensure_less_impl(
 	std::stringstream ss;
 	ss << msg
 		<< ( ! msg.empty() ? ":" : "" )
-		<< " [" << stream_escape( actual ) << "] expected being less than [" << stream_escape( expected ) << "] ( " << actualExpr << " < " << expectedExpr << " )";
+		<< " [" << stream_escape( actual ) << "] expected being less than [" << stream_escape( expected ) << "]";
+	if ( actualExpr && expectedExpr ) {
+		ss << " ( " << actualExpr << " < " << expectedExpr << " )";
+	}
 	throw failure( file, line, ss.str().c_str() );
 }
 template<class T, class Q>
@@ -300,7 +306,10 @@ void ensure_greater_impl(
 	std::stringstream ss;
 	ss << msg
 		<< ( ! msg.empty() ? ":" : "" )
-		<< " [" << stream_escape( actual ) << "] expected being greater than [" << stream_escape( expected ) << "] ( " << actualExpr << " > " << expectedExpr << " )";
+		<< " [" << stream_escape( actual ) << "] expected being greater than [" << stream_escape( expected ) << "]";
+	if ( actualExpr && expectedExpr ) {
+		ss << " ( " << actualExpr << " > " << expectedExpr << " )";
+	}
 	throw failure( file, line, ss.str().c_str() );
 }
 template<class T, class Q>
@@ -354,7 +363,10 @@ void ensure_less_or_equal_impl(
 	std::stringstream ss;
 	ss << msg
 		<< ( ! msg.empty() ? ":" : "" )
-		<< " [" << stream_escape( actual ) << "] expected being less or equal than [" << stream_escape( expected ) << "] ( " << actualExpr << " <= " << expectedExpr << " )";
+		<< " [" << stream_escape( actual ) << "] expected being less or equal than [" << stream_escape( expected ) << "]";
+	if ( actualExpr && expectedExpr ) {
+		ss << " ( " << actualExpr << " <= " << expectedExpr << " )";
+	}
 	throw failure( file, line, ss.str().c_str() );
 }
 template<class T, class Q>
@@ -408,7 +420,10 @@ void ensure_greater_or_equal_impl(
 	std::stringstream ss;
 	ss << msg
 		<< ( ! msg.empty() ? ":" : "" )
-		<< " [" << stream_escape( actual ) << "] expected being greater or equal than [" << stream_escape( expected ) << "] ( " << actualExpr << " >= " << expectedExpr << " )";
+		<< " [" << stream_escape( actual ) << "] expected being greater or equal than [" << stream_escape( expected ) << "]";
+	if ( actualExpr && expectedExpr ) {
+		ss << " ( " << actualExpr << " >= " << expectedExpr << " )";
+	}
 	throw failure( file, line, ss.str().c_str() );
 }
 template<class T, class Q>

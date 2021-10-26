@@ -1111,6 +1111,33 @@ TUT_UNIT_TEST( "Stream pump_to" )
 	);
 TUT_TEARDOWN()
 
+TUT_UNIT_TEST( "Stream close" )
+#if defined( __HOST_OS_TYPE_FREEBSD__ )
+	char const expected[] = "*anonymous stream*:6:12: Uncaught FileSystemException: No error: 0: file is not opened";
+#elif defined( __HOST_OS_TYPE_DARWIN__ )
+	char const expected[] = "*anonymous stream*:6:12: Uncaught FileSystemException: Undefined error: 0: file is not opened";
+#elif defined( __HOST_OS_TYPE_CYGWIN__ )
+	char const expected[] = "*anonymous stream*:6:12: Uncaught FileSystemException: No error: file is not opened";
+#elif defined( __HOST_OS_TYPE_WINDOWS__ )
+	char const expected[] = "*anonymous stream*:6:12: Uncaught FileSystemException: The operation completed successfully: file is not opened";
+#else
+	char const expected[] = "*anonymous stream*:6:12: Uncaught FileSystemException: Success: file is not opened";
+#endif
+	ENSURE_EQUALS(
+		"close()",
+		execute_except(
+			"import FileSystem as fs;\n"
+			"main() {\n"
+			"f = fs.open(\"./data/karatsuba.bc\", fs.OPEN_MODE.READ);\n"
+			"f.read_line();\n"
+			"f.close();\n"
+			"f.read_line();\n"
+			"}\n"
+		),
+		expected
+	);
+TUT_TEARDOWN()
+
 TUT_UNIT_TEST( "Stream read_lines" )
 	ENSURE_EQUALS(
 		"read_lines ( with new line on last line )",

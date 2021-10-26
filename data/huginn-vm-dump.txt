@@ -42,7 +42,7 @@ class: RuntimeException : Exception { message, trace, what, where }
 class: -Stream.SEEK.SEEK_ENUMERAL {}
 class: -Algorithms.Slice {}
 class: StackFrameInfo { column, context, file, line }
-class: Stream { SEEK, StreamException, deserialize, flush, pump_to, read_blob, read_character, read_integer, read_integer_unsigned, read_line, read_lines, read_real, read_string, seek, serialize, write_blob, write_character, write_integer, write_integer_unsigned, write_line, write_real, write_string }
+class: Stream { SEEK, StreamException, close, deserialize, flush, pump_to, read_blob, read_character, read_integer, read_integer_unsigned, read_line, read_lines, read_real, read_string, seek, serialize, write_blob, write_character, write_integer, write_integer_unsigned, write_line, write_real, write_string }
 class: StreamException : Exception { message, trace, what, where }
 class: Time { from_string, get_day, get_day_of_week, get_days_in_month, get_hour, get_minute, get_month, get_second, get_year, mod_day, mod_hour, mod_minute, mod_month, mod_second, mod_year, set_date, set_datetime, set_time }
 class: -Algorithms.Zip {}
