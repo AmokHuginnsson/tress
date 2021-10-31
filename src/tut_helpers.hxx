@@ -219,6 +219,11 @@ inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HOrderedHashM
 	return ( container_dump( out, m, "ordered_hash_map" ) );
 }
 
+template<typename key_t>
+inline std::ostream& operator << ( std::ostream& out, yaal::hcore::HOrderedHashSet<key_t> const& m ) {
+	return ( container_dump( out, m, "ordered_hash_set" ) );
+}
+
 template<typename tType>
 inline std::ostream& operator << ( std::ostream& out, yaal::tools::HRing<tType> const& r ) {
 	return ( container_dump( out, r, "ring" ) );
