@@ -569,7 +569,7 @@ TUT_UNIT_TEST( "Stream" )
 			"return(res);\n"
 			"}\n"
 		),
-		"[{3, 1, 2}, set(), \"Not enough data in the stream.\"]"
+		"[{1, 2, 3}, set(), \"Not enough data in the stream.\"]"
 	);
 	ENSURE_EQUALS(
 		"(de)serialization - heap",

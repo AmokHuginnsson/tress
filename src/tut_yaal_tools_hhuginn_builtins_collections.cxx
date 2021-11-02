@@ -1167,14 +1167,10 @@ TUT_UNIT_TEST( "order()" )
 TUT_TEARDOWN()
 
 TUT_UNIT_TEST( "set()" )
-	ENSURE_IN(
+	ENSURE_EQUALS(
 		"set() failed",
 		execute( "main(){x=set(2,\"ala\",3.14);x.insert($7.34).insert('Q');return(x);}" ),
-		std::vector<hcore::HString>({
-			"{2, 'Q', 3.14, $7.34, \"ala\"}",
-			"{2, 'Q', $7.34, \"ala\", 3.14}",
-			"{2, 'Q', 3.14, \"ala\", $7.34}"
-		})
+		"{2, \"ala\", 3.14, $7.34, 'Q'}"
 	);
 	ENSURE_EQUALS(
 		"set() iterator failed",
@@ -1189,7 +1185,7 @@ TUT_UNIT_TEST( "set()" )
 	ENSURE_EQUALS(
 		"set erase failed",
 		execute( "main(){x=set(2,\"ala\",3.14,$7.34,'Q');x.erase($7.34).erase(\"ala\");return(x);}" ),
-		"{2, 'Q', 3.14}"
+		"{2, 3.14, 'Q'}"
 	);
 	ENSURE_EQUALS(
 		"set equals failed",
@@ -1202,17 +1198,17 @@ TUT_UNIT_TEST( "set()" )
 		),
 		"[true, false]"
 	);
-	ENSURE_IN(
+	ENSURE_EQUALS(
 		"set copy/clear failed",
 		execute( "main(){x=set(2,\"ala\",3.14,$7.34,'Q');y=copy(x);x.clear();return([x,y,size(y)]);}" ),
-		std::vector<hcore::HString>({
-			"[set(), {2, 3.14, 'Q', $7.34, \"ala\"}, 5]",
-			"[set(), {2, 'Q', $7.34, \"ala\", 3.14}, 5]",
-			"[set(), {2, 3.14, 'Q', \"ala\", $7.34}, 5]"
-		})
+		"[set(), {2, \"ala\", 3.14, $7.34, 'Q'}, 5]"
 	);
 	ENSURE_EQUALS( "set reversed() failed", execute( "import Algorithms as algo;main(){algo.materialize(algo.reversed({2,3,5,7}),list);}" ), "[7, 5, 3, 2]" );
-	ENSURE_EQUALS( "set reversed() size/copy failed", execute( "import Algorithms as algo;main(){x=algo.reversed({2,3,5,7});algo.materialize(copy(x),list).push(size(x));}" ), "[7, 5, 3, 2, 4]" );
+	ENSURE_EQUALS(
+		"set reversed() size/copy failed",
+		execute( "import Algorithms as algo;main(){x=algo.reversed({2,3,5,7});algo.materialize(copy(x),list).push(size(x));}" ),
+		"[7, 5, 3, 2, 4]"
+	);
 	ENSURE_EQUALS(
 		"set update failed",
 		execute(
@@ -1223,7 +1219,7 @@ TUT_UNIT_TEST( "set()" )
 			"return(s1);\n"
 			"}\n"
 		),
-		"{2, 3, 4, 5, 8}"
+		"{2, 3, 5, 4, 8}"
 	);
 	ENSURE_EQUALS(
 		"set hash failed",
@@ -1244,7 +1240,7 @@ TUT_UNIT_TEST( "set()" )
 			"return(r);\n"
 			"}\n"
 		),
-		"[3, set()]"
+		"[2, set()]"
 	);
 	ENSURE_EQUALS(
 		"set erase in for",
@@ -1257,7 +1253,7 @@ TUT_UNIT_TEST( "set()" )
 			"return(r);\n"
 			"}\n"
 		),
-		"[3, 5, 2, set()]"
+		"[2, 3, 5, set()]"
 	);
 	ENSURE_EQUALS(
 		"set erase in reversed for",
@@ -1270,7 +1266,7 @@ TUT_UNIT_TEST( "set()" )
 			"return(r);\n"
 			"}\n"
 		),
-		"[2, 5, 3]"
+		"[5, 3, 2]"
 	);
 	ENSURE_EQUALS(
 		"set operator `+` failed",
@@ -1281,7 +1277,7 @@ TUT_UNIT_TEST( "set()" )
 			"return(s1 + s2);\n"
 			"}\n"
 		),
-		"{2, 3, 4, 5, 8}"
+		"{2, 3, 5, 4, 8}"
 	);
 	ENSURE_EQUALS(
 		"set operator `-` failed",

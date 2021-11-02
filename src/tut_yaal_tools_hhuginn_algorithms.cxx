@@ -325,7 +325,7 @@ TUT_UNIT_TEST( "materialize" )
 			"return(algo.materialize(algo.range(3, 17, 4),set));\n"
 			"}"
 		),
-		"{15, 3, 7, 11}"
+		"{3, 7, 11, 15}"
 	);
 	ENSURE_EQUALS(
 		"Algorithms.materialize (to dict) failed",
